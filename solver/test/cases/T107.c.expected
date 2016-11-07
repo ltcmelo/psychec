@@ -1,0 +1,2 @@
+int ENC_BLOCKSIZE ;
+uintptr_t fread (uintptr_t,int) ;

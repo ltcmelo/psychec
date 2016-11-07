@@ -1,0 +1,1 @@
+typedef struct __T__ {char* c;int* i;} T ;

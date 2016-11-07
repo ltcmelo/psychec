@@ -1,0 +1,2 @@
+typedef  struct __link__ {int v;struct __link__ * next;}* link ;
+int V ;

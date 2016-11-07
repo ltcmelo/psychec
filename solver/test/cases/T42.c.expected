@@ -1,0 +1,2 @@
+typedef  double T2 ;
+typedef  struct __T1__ {double x;} T1 ;

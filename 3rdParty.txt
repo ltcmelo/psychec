@@ -1,0 +1,3 @@
+The parser we use, located inside directory `parser', comes from the Qt Creator
+IDE. Even though we're targeting only C, we kept it in its original form. But
+we have extended it for ambiguity handling and implemented a few other changes.

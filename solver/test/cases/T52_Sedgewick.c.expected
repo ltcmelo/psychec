@@ -1,0 +1,2 @@
+typedef  struct __link__ {int N;struct __link__ * r;struct __link__ * l;}* link ;
+struct __link__ * partR (struct __link__ *,double) ;

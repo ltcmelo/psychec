@@ -1,0 +1,1 @@
+typedef  struct __link__ {char token;struct __link__ * r;struct __link__ * l;}* link ;

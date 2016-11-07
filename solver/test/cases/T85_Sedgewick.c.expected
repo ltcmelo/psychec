@@ -1,0 +1,4 @@
+typedef  uintptr_t Graph ;
+uintptr_t EDGE (int,int) ;
+uintptr_t GRAPHinit (int) ;
+uintptr_t GRAPHinsertE (uintptr_t,uintptr_t) ;

@@ -1,0 +1,2 @@
+struct __T0__ {double x;} a ;
+struct __T1__ {struct __T0__ y;} b ;

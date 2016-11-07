@@ -1,0 +1,3 @@
+typedef  double T ;
+int g (double) ;
+double h(int,char const*) ;

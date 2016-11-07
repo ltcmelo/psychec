@@ -1,0 +1,2 @@
+typedef int u8;
+typedef int u32;

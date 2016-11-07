@@ -1,0 +1,6 @@
+typedef  struct T2 {} T2 ;
+typedef  struct T1 {} T1 ;
+uintptr_t g1 (struct T1*) ;
+uintptr_t g2 (struct T2*) ;
+struct T1 x1 ;
+struct T2* x2 ;

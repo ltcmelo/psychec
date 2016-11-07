@@ -1,0 +1,5 @@
+typedef  uintptr_t Complex ;
+uintptr_t COMPLEXinit (double,double) ;
+uintptr_t COMPLEXmult (uintptr_t,uintptr_t) ;
+double Im (uintptr_t) ;
+double Re (uintptr_t) ;

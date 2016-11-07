@@ -1,0 +1,7 @@
+typedef uintptr_t const T1 ;
+uintptr_t g (char const*) ;
+uintptr_t h (char const*) ;
+uintptr_t j (char const* const) ;
+uintptr_t k (uintptr_t const) ;
+uintptr_t l (uintptr_t const) ;
+uintptr_t m (uintptr_t const) ;

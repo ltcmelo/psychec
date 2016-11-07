@@ -1,0 +1,5 @@
+int N ;
+struct __T0__ {int size;int val;}* itemKnown ;
+struct __T0__ * items ;
+int* maxKnown ;
+int unknown ;

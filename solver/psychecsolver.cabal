@@ -1,0 +1,64 @@
+name:                psychecsolver
+version:             0.1.0.0
+synopsis:            Type inference for C
+description:         See README.md
+homepage:            http://github.com/ltcmelo/psychec
+license:             LGPL
+license-file:        ../LICENSE
+author:              Author name here
+maintainer:          example@example.com
+copyright:           2016 Rodrigo Ribeiro, Leandro T. C. Melo, Marcus Rodrigues
+category:            Web
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Data.Type
+                     , Data.Constraints
+                     , Data.BuiltIn
+                     , Data.STDLib
+                     , Solver.ConstraintSolver
+                     , Solver.SolverMonad
+                     , Solver.Unification
+                     , Solver.ConversionRules
+                     , Parser.ConstraintParser
+                     , Utils.Pretty
+                     , Utils.Writer
+  build-depends:       base >= 4.7 && < 5
+                     , pretty
+                     , syb
+                     , mtl
+                     , containers
+                     , parsec
+                     , process
+  default-language:    Haskell2010
+
+executable psychecsolver-exe
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                       , optparse-applicative
+                       , filepath
+                       , psychecsolver
+                       , containers
+  default-language:    Haskell2010
+
+test-suite psychecsolver-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , psychecsolver
+                     , HUnit
+                     , tasty
+                     , containers
+                     , tasty-hunit
+                     , process
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/ltcmelo/psychec

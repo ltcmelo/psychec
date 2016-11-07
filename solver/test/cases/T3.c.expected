@@ -1,0 +1,2 @@
+typedef struct __T2__ {int i; struct __T2__ * next;} T2 ;
+typedef struct __T__ {struct __T__ * next;uintptr_t i; } T ;

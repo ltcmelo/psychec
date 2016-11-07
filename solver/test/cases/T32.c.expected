@@ -1,0 +1,2 @@
+typedef uintptr_t T ;
+typedef struct __A__ {uintptr_t b;} A ;

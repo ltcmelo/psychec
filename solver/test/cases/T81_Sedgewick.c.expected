@@ -1,0 +1,4 @@
+typedef  uintptr_t Graph ;
+int GRAPHcc (uintptr_t) ;
+uintptr_t GRAPHrand (int,int) ;
+uintptr_t GRAPHshow (uintptr_t) ;

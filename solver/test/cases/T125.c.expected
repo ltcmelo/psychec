@@ -1,0 +1,2 @@
+uintptr_t uid ;
+int uid_set (uintptr_t) ;

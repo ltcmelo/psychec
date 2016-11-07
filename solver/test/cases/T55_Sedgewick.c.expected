@@ -1,0 +1,3 @@
+typedef  struct __Graph__ {int V;int** adj;uintptr_t E;}* Graph ;
+typedef  struct __Edge__ {int v;int w;} Edge ;
+int** MATRIXint (int, int, uintptr_t);

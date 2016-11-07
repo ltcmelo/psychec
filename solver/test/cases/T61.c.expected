@@ -1,0 +1,2 @@
+typedef double T3;
+typedef uintptr_t Foo;

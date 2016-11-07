@@ -1,0 +1,4 @@
+typedef  char const* T3 ;
+typedef  char const* T2 ;
+uintptr_t f1 (char const*) ;
+uintptr_t f3 (char const*) ;

@@ -1,0 +1,2 @@
+typedef  struct __Graph__ {int V;}* Graph ;
+int GRAPHdeg (struct __Graph__ *,int) ;

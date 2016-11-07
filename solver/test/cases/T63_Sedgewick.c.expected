@@ -1,0 +1,1 @@
+typedef  struct __point__ {uintptr_t y; uintptr_t x;} point ;

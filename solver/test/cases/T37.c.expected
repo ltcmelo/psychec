@@ -1,0 +1,2 @@
+typedef struct __link__ {uintptr_t y;}* link ;
+typedef uintptr_t A ;

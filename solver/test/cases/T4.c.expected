@@ -1,0 +1,2 @@
+typedef float (*T) (double, int);
+ 

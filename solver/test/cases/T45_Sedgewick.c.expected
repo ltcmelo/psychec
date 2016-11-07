@@ -1,0 +1,3 @@
+typedef  struct __link__ {int item;struct __link__ * next;}* link ;
+struct __link__ * deleteNext (struct __link__ *) ;
+void insertNext (struct __link__ *,struct __link__ *) ;

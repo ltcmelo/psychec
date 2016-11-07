@@ -1,0 +1,5 @@
+typedef  enum E { ____Placeholder } E ;
+#define W 131
+int X ;
+#define Y 129
+int Z ;

@@ -1,0 +1,3 @@
+typedef  struct __T2__ {double x;} T2 ;
+typedef  struct __T1__ {int x;} T1 ;
+double c ;

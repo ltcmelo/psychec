@@ -1,0 +1,1 @@
+typedef  struct __T1__ { double fpval; int ival; } T1 ;

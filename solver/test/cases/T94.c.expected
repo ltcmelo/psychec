@@ -1,0 +1,6 @@
+typedef  int_least32_t F ;
+typedef  int_fast32_t E ;
+typedef  int_fast16_t D ;
+typedef  int8_t C ;
+typedef  intmax_t B ;
+typedef  uintmax_t A ;

@@ -1,0 +1,9 @@
+typedef  int T8 ;
+typedef  int T7 ;
+typedef  int T6 ;
+typedef  int T5 ;
+typedef  int T4 ;
+typedef  int T3 ;
+typedef  int T2 ;
+typedef  int T1 ;
+int i ;

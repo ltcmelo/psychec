@@ -1,0 +1,2 @@
+uintptr_t parse_long_options (int,uintptr_t (*) (int),double) ; 
+uintptr_t usage (int) ; 

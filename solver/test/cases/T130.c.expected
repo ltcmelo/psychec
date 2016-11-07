@@ -1,0 +1,2 @@
+typedef struct T {} T;
+typedef struct T Chain;

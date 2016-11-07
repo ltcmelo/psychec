@@ -1,0 +1,2 @@
+
+typedef  struct linebuffer {} const linebuffer ;

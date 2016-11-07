@@ -1,0 +1,3 @@
+typedef  enum E { ____Placeholder } E ;
+int X ;
+int Z ;

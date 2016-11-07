@@ -1,0 +1,3 @@
+typedef uintptr_t C ;
+typedef uintptr_t B ;
+typedef int A ;

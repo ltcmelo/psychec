@@ -1,0 +1,3 @@
+int BASE_TYPE ;
+char* _ (char const*) ;
+char* program_name ;

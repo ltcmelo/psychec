@@ -1,0 +1,4 @@
+uintptr_t a;
+#define b 131
+#define c 130
+#define d 129
