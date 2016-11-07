@@ -13,12 +13,11 @@ Psyche-c is a compiler for incomplete C code. It features a Hindley/Milner-inspi
 
 $cmake CMakeLists.txt  
 $make  
-$cd ..  
 $cd solver  
 $stack setup  
 $stack build  
 $cd ..  
-$python Reconstruct path/to/file.c  
+$python Reconstruct.py path/to/file.c
 
 ## About
 
