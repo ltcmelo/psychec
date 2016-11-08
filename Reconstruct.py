@@ -33,7 +33,7 @@ class PartialProgramAnalyser:
         # If there's an old generated file, delete it.
         if os.path.isfile("../%s" % self.gen_file_name):
             os.remove("../%s" % self.gen_file_name)
-        call(["stack", "exec", "typedefsolver-exe", "--",
+        call(["stack", "exec", "psychecsolver-exe", "--",
               "-i", "../%s" % self.out_file_name,
               "-o", "../%s" % self.gen_file_name])
         os.chdir("..")
