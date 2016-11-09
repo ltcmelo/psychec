@@ -735,14 +735,17 @@ bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
         return false;
     }
 
-    // Not much to infer out of a pointer because when we don't know the
-    // underlying element type.
+    // We don't know the underlying element type of the pointer, but we can
+    // at least constrain the left-hand-side as a pointer.
     ExpressionAST* left = stripParen(ast->left_expression);
     ExpressionAST* right = stripParen(ast->right_expression);
     if (right->asPointerLiteral()) {
-        const std::string& alpha = supply_.createTypeVar1();
-        writer_->writeNewTypeVar(alpha);
-        collectExpression(alpha, left);
+        std::tuple<std::string, std::string> a1a2 = supply_.createTypeVar2();
+        writer_->writeNewTypeVar(std::get<0>(a1a2));
+        writer_->writeNewTypeVar(std::get<1>(a1a2));
+        collectExpression(std::get<0>(a1a2), left);
+        writer_->writeAnd();
+        writer_->writePointerRelation(std::get<0>(a1a2), std::get<1>(a1a2));
         return false;
     }
 
