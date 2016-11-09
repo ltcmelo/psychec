@@ -67,6 +67,7 @@ void ConstraintStreamWriter::writeTypedef(const std::string &ty1, const std::str
     HONOR_BLOCKING_STATE;
 
     os_ << kTypeDef << ty1 << kAlias << ty2;
+    ++cnt_;
 }
 
 void ConstraintStreamWriter::writeVarDecl(const std::string &name,
@@ -76,6 +77,7 @@ void ConstraintStreamWriter::writeVarDecl(const std::string &name,
 
     os_ << kDecl << name << kDeclDelim << type << kContainment << "\n";
     indent();
+    ++cnt_;
 }
 
 void ConstraintStreamWriter::
@@ -93,6 +95,7 @@ writeFuncDecl(const std::string &name,
     indent();
     if(!params.empty())
         writeFuncParams(params);
+    ++cnt_;
 }
 
 void ConstraintStreamWriter::writeFuncParams(const std::vector<ParamPair> params)
@@ -108,6 +111,7 @@ void ConstraintStreamWriter::writeTypeof(const std::string &sym)
     HONOR_BLOCKING_STATE;
 
     os_ << kTypeOf << "(" << sym << ")";
+    ++cnt_;
 }
 
 void ConstraintStreamWriter::writeNewTypeVar(const std::string &ty)
@@ -116,6 +120,7 @@ void ConstraintStreamWriter::writeNewTypeVar(const std::string &ty)
 
     os_ << kExistence << ty << ".\n";
     indent();
+    ++cnt_;
 }
 
 void ConstraintStreamWriter::writeTypeEquiv()
@@ -137,6 +142,7 @@ void ConstraintStreamWriter::writeReadOnly(const std::string &ty)
     HONOR_BLOCKING_STATE;
 
     os_ << kReadOnly << "(" << ty << ")";
+    ++cnt_;
 }
 
 void ConstraintStreamWriter::writeTypeNames(const std::vector<std::string> &tys)
@@ -149,6 +155,7 @@ void ConstraintStreamWriter::writeTypeNames(const std::vector<std::string> &tys)
         if (i != tys.size() - 1)
             writeAnd();
     }
+    ++cnt_;
 }
 
 void ConstraintStreamWriter::writeMemberRelation(const std::string &baseTy,
@@ -164,6 +171,7 @@ void ConstraintStreamWriter::writeMemberRelation(const std::string &baseTy,
     writeColon();
     writeTypeName(symTy);
     os_ << ")";
+    ++cnt_;
 }
 
 void ConstraintStreamWriter::writePointerRelation(const std::string &ty1,
@@ -175,6 +183,7 @@ void ConstraintStreamWriter::writePointerRelation(const std::string &ty1,
     writeTypeEquiv();
     writeTypeName(ty2);
     os_ << "*";
+    ++cnt_;
 }
 
 void ConstraintStreamWriter::writeEquivRelation(const std::string &ty1,
@@ -185,6 +194,7 @@ void ConstraintStreamWriter::writeEquivRelation(const std::string &ty1,
     writeTypeName(ty1);
     writeTypeEquiv();
     writeTypeName(ty2);
+    ++cnt_;
 }
 
 void ConstraintStreamWriter::writeTruth()

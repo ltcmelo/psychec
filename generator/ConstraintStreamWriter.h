@@ -200,6 +200,12 @@ public:
 
     void clearIndent();
 
+    /*!
+     * \brief totalConstraints
+     * \return
+     */
+    size_t totalConstraints() const { return cnt_; }
+
 private:
     void indent();
     void dedent();
@@ -207,6 +213,7 @@ private:
     std::ostream& os_;
     int indent_ { 0 };
     bool blocked_ { false };
+    size_t cnt_ { 0 };
 };
 
 } // namespace psyche

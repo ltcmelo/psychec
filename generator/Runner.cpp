@@ -40,6 +40,7 @@ using namespace CPlusPlus;
 namespace psyche {
 
 extern bool debugEnabled;
+bool displayStats;
 
 /*!
  * \brief analyseProgram
@@ -102,9 +103,9 @@ std::unique_ptr<TranslationUnit> analyseProgram(const std::string& source,
     // Disambiguate eventual ambiguities.
     AstFixer astFixer(program.get());
     astFixer.fix(ast);
-    if (debugEnabled) {
-        printDebug("Ambiguities stats\n");
-        std::cout << astFixer.stats() << std::endl;
+    if (displayStats) {
+        std::cout << "Ambiguities stats" << std::endl
+                  << astFixer.stats() << std::endl;
     }
     Dumper(program.get()).dump(ast, ".ast.fixed.dot");
 
@@ -119,7 +120,10 @@ std::unique_ptr<TranslationUnit> analyseProgram(const std::string& source,
     if (options.flag_.handleGNUerrorFunc_)
         generator.addPrintfVariety("error", 2);
     generator.generate(ast->asTranslationUnit(), globalNs);
-    printDebug("constraints file:\n%s\n", oss.str().c_str());
+    if (displayStats)
+        std::cout << "Constraints stats: " << writer.totalConstraints() << std::endl;
+    if (debugEnabled)
+        printDebug("Constraints:\n%s\n", oss.str().c_str());
 
     // If the caller expects the constraints back, copy them.
     if (options.flag_.writeConstraints_)

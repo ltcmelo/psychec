@@ -32,6 +32,12 @@
 using namespace CPlusPlus;
 using namespace psyche;
 
+namespace psyche {
+
+extern bool displayStats;
+
+} // namespace psyche
+
 /*!
  * \brief sourceFromFile
  * \param fileName
@@ -95,21 +101,25 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    bool safeRun = true;
-    bool cleanRun = false;
-    bool checkRun = false;
+    enum { CleanRun, StatsRun, DebugRun, PlainRun } runMode;
     if (argc == 3) {
-        cleanRun = !strcmp("clean", argv[2]);
-        if (!cleanRun)
-            checkRun = !strcmp("check", argv[2]);
-        if (cleanRun || checkRun)
-            safeRun = false;
+        if(!strcmp("clean", argv[2])) {
+            runMode = CleanRun;
+        } else if (!strcmp("stats", argv[2])) {
+            runMode = StatsRun;
+            displayStats = true;
+        } else if (!strcmp("debug", argv[2])) {
+            runMode = DebugRun;
+            debugEnabled = true;
+        } else {
+            runMode = PlainRun;
+        }
+    } else {
+        runMode = PlainRun;
     }
 
-    // A malevolent "trick" to enforce us to constantly run the tests, unless
-    // `notest` is specified. But do not abuse this flag, so we make sure things
-    // don't get broken (and unperceived) along the way.
-    if (safeRun) {
+    // Run the tests by default.
+    if (runMode == PlainRun) {
         try {
             runTests();
             std::cout << "Tests passed successfully!" << std::endl;
@@ -124,10 +134,6 @@ int main(int argc, char* argv[])
     if (argc == 1)
         return 0;
 
-    // Debug is enabled after tests, not to clutter the console.
-    if (argc == 3 && (!strcmp("debug", argv[2]) || checkRun))
-        debugEnabled = true;
-
     const std::string& inFileName = argv[1];
     StringLiteral name(inFileName.c_str(), inFileName.length());
     const std::string& source = sourceFromFile(inFileName);
@@ -137,7 +143,7 @@ int main(int argc, char* argv[])
     if (analyseProgram(source, control, name, options)) {
         const std::string& outFileName = inFileName + ".ctr";
         sourceToFile(options.constraints_, outFileName);
-        if (safeRun)
+        if (runMode != CleanRun)
             std::cout << "Constraints written to " << outFileName << std::endl;
     }
 
