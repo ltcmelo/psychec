@@ -1,2 +1,1 @@
-
-typedef  struct linebuffer {} const linebuffer ;
+typedef  struct linebuffer {int dummy;} const linebuffer ;

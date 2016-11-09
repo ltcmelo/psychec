@@ -1,5 +1,5 @@
-typedef  struct T2 {} T2 ;
-typedef  struct T1 {} T1 ;
+typedef  struct T2 { int dummy;} T2 ;
+typedef  struct T1 { int dummy;} T1 ;
 uintptr_t g1 (struct T1*) ;
 uintptr_t g2 (struct T2*) ;
 struct T1 x1 ;

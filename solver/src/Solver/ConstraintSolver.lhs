@@ -373,7 +373,8 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 >   | isVar v = case Map.lookup v acc of
 >                   Just t -> (acc, t)
 >                   Nothing -> if isElabStructName k
->                              then (Map.insert v (TyCon k) acc, Struct [] k)
+>                              then (Map.insert v (TyCon k) acc,
+>                                    Struct [ Field (Name "dummy") Data.BuiltIn.int ] k)
 >                              else if isElabEnumName k
 >                                   then (Map.insert v (TyCon k) acc, EnumTy k)
 >                                   else (acc, f v)

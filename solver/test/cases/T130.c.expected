@@ -1,2 +1,2 @@
-typedef struct T {} T;
+typedef struct T {int dummy;} T;
 typedef struct T Chain;
