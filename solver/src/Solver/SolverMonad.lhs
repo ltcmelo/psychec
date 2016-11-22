@@ -57,17 +57,22 @@ Context definitions
 > instance Pretty TyCtx where
 >    pprint = printer "is" . Map.map fst . tyctx
 
-> newtype VarCtx = VarCtx { varctx :: Map Name (Ty, Bool) }
+> newtype VarCtx = VarCtx { varctx :: Map Name VarInfo }
 >                  deriving Eq
 
 > instance Pretty VarCtx where
->    pprint = printer "::" . Map.map fst . varctx
+>    pprint = printer "::" . Map.map varty . varctx
 
-> undefVars :: Map k (a, Bool) -> Map k (a, Bool)
-> undefVars = Map.filter (not . snd)
+
+Context-related functions
+-------------------------
+
+> undefVars :: Map k VarInfo -> Map k VarInfo
+> undefVars = Map.filter (not . declared)
 
 > undefTys :: Map k (a, Bool) -> Map k (a, Bool)
-> undefTys = undefVars
+> undefTys = Map.filter (not . snd)
+
 
 Substitution definition
 -----------------------

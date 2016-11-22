@@ -80,7 +80,7 @@ Constraint parser
 > isConstParser = build <$> reserved "$read_only$" <*>
 >                         (parens nameParser)
 >                    where
->                      build _ n = Const n
+>                      build _ n = ReadOnly n
 
 > hasParser :: Parser Constraint
 > hasParser = reserved "$has$" *>

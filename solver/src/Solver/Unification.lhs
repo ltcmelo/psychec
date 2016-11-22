@@ -29,7 +29,7 @@ Unification algorithm
 
 > import Data.Type
 > import Data.Constraints
-> import qualified Data.BuiltIn as BuiltIn
+> import Data.BuiltIn
 > import Solver.SolverMonad
 > import Solver.ConversionRules
 > import Utils.Pretty
@@ -41,6 +41,9 @@ A type class for the unification algorithm
 
 > instance Apply a => Apply [a] where
 >     apply s = map (apply s)
+
+> instance Apply VarInfo where
+>     apply s (VarInfo t b ro) = VarInfo (apply s t) b ro
 
 > (@@) :: Subst -> Subst -> Subst
 > s1 @@ s2 = Subst $ (Map.map (apply s1) (subs s2))
@@ -100,11 +103,11 @@ A type class for the unification algorithm
 >
 >     unify (TyVar v) (QualTy t') = varBind v (QualTy $ dropQual t')
 >     unify (TyVar v) t
->           | t == (Pointer BuiltIn.void) = return nullSubst
+>           | t == (Pointer Data.BuiltIn.void) = return nullSubst
 >           | otherwise = varBind v t
 >     unify (QualTy t') (TyVar v) = varBind v (QualTy $ dropQual t')
 >     unify t (TyVar v)
->           | t == (Pointer BuiltIn.void) = return nullSubst
+>           | t == (Pointer Data.BuiltIn.void) = return nullSubst
 >           | otherwise = varBind v t
 >     unify (TyCon c) (TyCon c')
 >           | convertible (TyCon c) (TyCon c') = return nullSubst
@@ -147,7 +150,6 @@ A type class for the unification algorithm
 >           | n == n' = unify t t'
 >           | otherwise = unifyDifferentFields n n'
 
-
 > instance Apply Constraint where
 >     apply s (t :=: t') = (apply s t) :=: (apply s t')
 >     apply s (n :<-: t) = n :<-: (apply s t)
@@ -156,7 +158,7 @@ A type class for the unification algorithm
 >     apply s (c :&: c') = (apply s c) :&: (apply s c')
 >     apply s (Exists n c) = Exists n (apply s c)
 >     apply s (TypeDef t t') = TypeDef (apply s t) (apply s t')
->     apply s c@(Const _) = c
+>     apply s c@(ReadOnly _) = c
 >     apply s Truth = Truth
 
 > instance Unifiable Constraint where
@@ -168,8 +170,9 @@ A type class for the unification algorithm
 >     fv (c :&: c') = fv c `union` fv c'
 >     fv (Exists n c) = n : fv c
 >     fv (TypeDef t t') = fv t `union` fv t'
->     fv (Const _) = []
+>     fv (ReadOnly _) = []
 >     fv t = []
+
 
 > wrongArgumentNumberError :: SolverM a
 > wrongArgumentNumberError = throwError "Error! Wrong argument number."

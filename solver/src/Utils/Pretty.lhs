@@ -66,7 +66,7 @@ Utilities for pretty printing
 >     pprint (Exists n ctr) = text "exists" <+> pprint n <+> char '.'
 >                                           <+> pprint ctr
 >     pprint (ctr :&: ctr') = pprint ctr <+> char ',' <+> pprint ctr'
->     pprint (Const n) = text "const" <+> pprint n
+>     pprint (ReadOnly n) = text "const" <+> pprint n
 >     pprint Truth = text "Truth"
 
 Name of a type

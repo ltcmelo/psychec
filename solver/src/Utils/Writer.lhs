@@ -58,28 +58,33 @@ code. We claim this is a fair adaptation based on de facto knowledge.
 
 > writeDecls :: (TyCtx, VarCtx) -> String
 > writeDecls (tcx,vcx) = t ++ v
->                      where
->                         -- Constant counter begins at 128 to avoid colisions with
->                         -- ASCII characters. This will change in the future,
->                         -- with the generator sending the values, so there's no
->                         -- duplication in case statements for example.
->                         t = foldr gentydef [] (sortTypeDefinitions tcx)
->                         (v, _) = Map.foldrWithKey genvardef ([], 128) (varctx vcx)
->                         gentydef (n, t) ac = (show $ text "typedef " <+>
->                                                 writeTyDecl t n <+>
->                                                 text ";\n") ++ ac
->                         genvardef n (t,_) (l, cnt)
->                           = ((show $ writeVarDecl t n cnt <+> text "\n") ++ l, cnt + 1)
+>     where
+>         t = foldr gentydef [] (sortTypeDefinitions tcx)
+>         gentydef (n, t) ac = (show $ text "typedef " <+>
+>                               writeTyDecl t n <+>
+>                               text ";\n") ++ ac
+>         -- Constant counter begins at 128 to avoid colisions with
+>         -- ASCII characters. This will change in the future,
+>         -- with the generator sending the values, so there's no
+>         -- duplication risk in case statements for example.
+>         (v, _) = Map.foldrWithKey genvardef ([], 128) (varctx vcx)
+>         genvardef n (VarInfo t _ ro) (l, cnt)
+>             = if ro then
+>                   ((show $ writeDefine n cnt <+> text "\n") ++ l, cnt + 1)
+>               else
+>                   ((show $ writeVarDecl t n <+> text "\n") ++ l, cnt)
 
 
 Write declaration of missing values.
 
-> writeVarDecl :: Show a => Ty -> Name -> a -> Doc
-> writeVarDecl (FunTy ret params) n _
+> writeVarDecl :: Ty -> Name -> Doc
+> writeVarDecl (FunTy ret params) n
 >   =  pprint ret <+> pprint n <+> parens (hcat $ punctuate comma (map pprint params))
 >      <+> text ";"
-> writeVarDecl t@(QualTy _) n cnt = text "#define " <+> pprint n <+> text (show cnt)
-> writeVarDecl t n _ = pprint t <+> pprint n <+> text ";"
+> writeVarDecl t n = pprint t <+> pprint n <+> text ";"
+
+> writeDefine :: Show a => Name -> a -> Doc
+> writeDefine n cnt = text "#define " <+> pprint n <+> text (show cnt)
 
 
 Write declaration of missing types.
@@ -89,15 +94,6 @@ Write declaration of missing types.
 >       = pprint ret <+> text "(*" <+> pprint n <+> text ")"
 >             <+> parens (hcat $ punctuate comma (map pprint params))
 > writeTyDecl t n = pprint t <+> pprint (ensurePlainName n)
-
-
-Clear-out types that are not to be typedefed.
-
-> clearOut :: [(Name, Ty)] -> [(Name, Ty)]
-> clearOut xs = filter (\(_, t) -> case t of { (QualTy t') -> nonQual t'; _ -> True }) xs
->               where
->                 nonQual (QualTy t'') = nonQual t''
->                 nonQual _ = True
 
 
 Sort declarations that depend one on another

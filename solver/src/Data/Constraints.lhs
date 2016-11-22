@@ -33,6 +33,6 @@ Definition of constraints
 >                 | Def Name Ty Constraint    -- symbol definition
 >                 | Constraint :&: Constraint -- conjunction
 >                 | Exists Name Constraint    -- fresh variable introduction
->                 | Const Name                -- constant variable
+>                 | ReadOnly Name             -- static values
 >                 | Truth
 >                 deriving (Eq, Ord, Show, Data, Typeable)

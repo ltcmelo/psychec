@@ -16,6 +16,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this library; if not, write to the Free Software Foundation,
 Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
+
 Built-in types, operators and contexts
 
 > module Data.BuiltIn where
@@ -27,12 +28,18 @@ Built-in types, operators and contexts
 > import Utils.Pretty (nameOf)
 
 
+> data VarInfo = VarInfo { varty :: Ty
+>                        , declared :: Bool
+>                        , readOnly :: Bool }
+>                deriving (Eq, Ord, Show)
+
+
 Helpers to operate on contexts
 
 > typesToCtx :: [Ty] -> Map Name (Ty, Bool)
 > typesToCtx = Map.fromList . map (\t -> (nameOf t, (t, True)))
-> valuesToCtx :: [(Name, Ty)] -> Map Name (Ty, Bool)
-> valuesToCtx = Map.fromList . map (\(n,t) -> (n, (t, True)))
+> valuesToCtx :: [(Name, Ty)] -> Map Name VarInfo
+> valuesToCtx = Map.fromList . map (\(n,t) -> (n, VarInfo t True False))
 
 Contexts of C's builtin types and values
 
@@ -48,7 +55,7 @@ Contexts of C's builtin types and values
 >                 , float, double, longDouble
 >                 ]
 
-> builtinVarCtx :: Map Name (Ty, Bool)
+> builtinVarCtx :: Map Name VarInfo
 > builtinVarCtx
 >     = Map.fromList types
 >       where
@@ -58,14 +65,14 @@ Contexts of C's builtin types and values
 >                  -- lead to overunification. Those operadors are handled in
 >                  -- the generator through the pointer x integers lattice.
 >                  -- Therefore only non-polymorphic operators are builtin.
->                    (Name "*", (FunTy int [int, int], True))
->                  , (Name "/", (FunTy double [double, double], True))
->                  , (Name "%", (FunTy int [int, int], True))
->                  , (Name "<<", (FunTy int [int, int], True))
->                  , (Name ">>", (FunTy int [int, int], True))
->                  , (Name "&", (FunTy int [int, int], True))
->                  , (Name "|", (FunTy int [int, int], True))
->                  , (Name "^", (FunTy int [int, int], True))
+>                    (Name "*", VarInfo (FunTy int [int, int]) True False)
+>                  , (Name "/", VarInfo (FunTy double [double, double]) True False)
+>                  , (Name "%", VarInfo (FunTy int [int, int]) True False)
+>                  , (Name "<<", VarInfo (FunTy int [int, int]) True False)
+>                  , (Name ">>", VarInfo (FunTy int [int, int]) True False)
+>                  , (Name "&", VarInfo (FunTy int [int, int]) True False)
+>                  , (Name "|", VarInfo (FunTy int [int, int]) True False)
+>                  , (Name "^", VarInfo (FunTy int [int, int]) True False)
 >                  ]
 
 
@@ -74,7 +81,7 @@ Contexts of C's builtin types and values
 >   = typesToCtx stdintTypes `Map.union` typesToCtx stddefTypes
 >     `Map.union` typesToCtx sysTypesTypes `Map.union` typesToCtx sysStatTypes
 
-> stdVarCtx :: Map Name (Ty, Bool)
+> stdVarCtx :: Map Name VarInfo
 > stdVarCtx
 >   = valuesToCtx stdintValues `Map.union` valuesToCtx stdlibValues
 >     `Map.union` valuesToCtx stringValues `Map.union` valuesToCtx sysStatValues

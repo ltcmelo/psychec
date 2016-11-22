@@ -68,6 +68,8 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 >
 >             return (TyCtx tcx2_, VarCtx vcx2_)
 
+> p vcx1 = VarCtx $ undefVars (varctx vcx1) Map.\\ builtinVarCtx Map.\\ stdVarCtx
+
 
 > appendlName :: String -> Name -> Name
 > appendlName str (Name name) = Name (str ++ name)
@@ -96,7 +98,7 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 >        = do
 >           (tcx, c')  <- stage1 tctx c
 >           return (tcx, Def n (replaceTy tctx t) c')
-> stage1 tctx c@(Const _)
+> stage1 tctx c@(ReadOnly _)
 >        = return (tctx, c)
 > stage1 tctx Truth
 >        = return (tctx, Truth)
@@ -170,21 +172,21 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 > stage2 :: VarCtx -> Constraint -> SolverM (VarCtx, Constraint)
 > stage2 vtx (n :<-: t)
 >     = case Map.lookup n (varctx vtx) of
->         Just (t',_) -> return (vtx, t :=: t')
+>         Just info -> return (vtx, t :=: varty info)
 >         Nothing ->
 >             do
 >               v <- fresh
->               return (VarCtx $ Map.insert n (v,False) (varctx vtx)
+>               return (VarCtx $ Map.insert n (VarInfo v False False) (varctx vtx)
 >                      , v :=: t)
 > stage2 vtx (Def n t c)
->     = stage2 (VarCtx $ Map.insert n (t, True) (varctx vtx)) c
+>     = stage2 (VarCtx $ Map.insert n (VarInfo t True False) (varctx vtx)) c
 > stage2 vtx (c :&: c')
 >     = do
 >         (vtx1, c1) <- stage2 vtx c
 >         (vtx2, c2) <- stage2 vtx1 c'
 >         let
->           preferQualTy (lt@(QualTy _), b) _ = (lt, b)
->           preferQualTy _ (rt@(QualTy _), b) = (rt, b)
+>           preferQualTy (VarInfo lt@(QualTy _) b ro) _ = VarInfo lt b ro
+>           preferQualTy _ (VarInfo rt@(QualTy _) b ro) = VarInfo rt b ro
 >           preferQualTy l r = l
 >         return (VarCtx $ Map.unionWith preferQualTy (varctx vtx1) (varctx vtx2)
 >                , c1 :&: c2)
@@ -192,14 +194,16 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 >     = return (vtx, c)
 > stage2 vtx c@(_ :=: _)
 >     = return (vtx, c)
-> stage2 vtx (Const n)
+> stage2 vtx (ReadOnly n)
 >     = case Map.lookup n (varctx vtx) of
 >         Nothing -> error "const can only be applied on known values"
->         Just (t', b) ->
+>         Just info ->
 >           do
 >             v <- fresh
->             return (VarCtx $ Map.insert n (QualTy t', b) (varctx vtx)
->                     , Truth)
+>             return (VarCtx $ Map.insert n
+>                              (VarInfo (QualTy (varty info)) (declared info) True)
+>                              (varctx vtx)
+>                    , Truth)
 > stage2 vtx Truth
 >     = return (vtx, Truth)
 
@@ -252,83 +256,94 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 >
 >           -- Apply substitutions.
 >           tcx_ = Map.map (\(t,b) -> (apply s'' t, b)) (tyctx tcx)
->           vcx_ = Map.map (\(t,b) -> (apply s'' t, b)) (varctx vcx)
+>           vcx_ = Map.map (\varInfo -> apply s'' varInfo) (varctx vcx)
 >
->           -- Combine the fields into the structs. On the first time, we
->           -- operate on known structs (declared in the original program) and
->           -- keep track of them. On the second time, we re-combine the fields
->           -- for variables which we know are of some struct time, but along
->           -- the way we might discover new structs which were not declared.
->           -- Finally, we pass again over the type and variable environments
->           -- in order to combine the newly discovered structs which can
->           -- potentially be fields of any other struct.
->           (declaredStructs, tcx_') = Map.mapAccumWithKey combine Map.empty tcx_
->           (knownStructs', vcx_') = Map.mapAccum recombine (0, declaredStructs) $ undefVars vcx_
->           (knownStructs'', tcx_'') = Map.mapAccum recombine knownStructs' tcx_'
->           (_, vcx_'') = Map.mapAccum recombine knownStructs'' vcx_'
+>           -- We now need to combine type variables which are of struct types
+>           -- to their corresponding structs. If the given structs are declared
+>           -- in the program, their names are supplied to the type constructor.
+>           -- Otherwise, we create fake names for them. Still, there will
+>           -- remain "orphan" variables, which might contain an avaialble
+>           -- declaration or not. If such declaration is of a complex type
+>           -- we must respect it and generate an according orphan. Otherwise,
+>           -- we use uintptr_t. The accumulator below represents a counter
+>           -- (for the artificial names), the non-orphans, and the orphans.
+>           acc = (0, Map.empty, Map.empty)
+>           keepType acc k t = (acc, t)
+>           makeElabStruct acc@(cnt, nonOrphan, orphan) n v fs
+>               = ((cnt, Map.insert v (ensureElabStructName n) nonOrphan, orphan),
+>                   apply (v +-> (TyCon (ensureElabStructName n))) $ Struct fs (ensureElabStructName n))
+>           (pending, tcx_') = Map.mapAccumWithKey
+>                   (retype keepType makeElabStruct) acc tcx_
 >
->           -- Deal with "orphan" types. As above, we make this in a two-phase
->           -- stage: first, to discover compound types orphans and, aferwards,
->           -- orphans that can be a plain uintptr_t.
->           wrapReplace acc k (t, b) = (acc', (t', b))
->             where (acc', t') = replaceOrphan acc k t id
->           (knownOrphans, tcx_''') = Map.mapAccumWithKey wrapReplace Map.empty tcx_''
->           (knownOrphans', vcx_''') = Map.mapAccumWithKey wrapReplace knownOrphans vcx_''
->           wrapReplace2 acc k (t, b) = (acc', (t', b))
->             where (acc', t') = replaceOrphan acc k t (const uintptr_t)
->           (knownOrphans'', tcx_'''') = Map.mapAccumWithKey wrapReplace2 knownOrphans' tcx_'''
->           (_, vcx_'''') = Map.mapAccumWithKey wrapReplace2 knownOrphans'' vcx_'''
+>           -- Fake structs
+>           makeFakeStruct acc@(cnt, nonOrphan, orphan) _ v fs'
+>               = ((cnt + 1, Map.insert v fakeName nonOrphan, orphan),
+>                   apply (v +-> (TyCon fakeName)) $ Struct fs' fakeName)
+>               where fakeName = ensureElabStructName (Name ("T" ++ (show cnt)))
+>           typefy acc@(_, nonOrphan, orphan) k t
+>               = case Map.lookup (nameOf t) nonOrphan of
+>                    Just n -> (acc, TyCon n)
+>                    Nothing -> (acc, t)
+>           (pending1, vcx_') = Map.mapAccumWithKey
+>               (retypeVar typefy makeFakeStruct) pending $ undefVars vcx_
+>           (pending2, tcx_'') = Map.mapAccumWithKey
+>               (retype typefy makeFakeStruct) pending1 tcx_'
+>           (pending3, vcx_'') = Map.mapAccumWithKey
+>               (retypeVar typefy makeFakeStruct) pending2 vcx_'
+>
+>           -- Deal with orphans
+>           orphanize f acc@(cnt, nonOrphan, orphan) k v
+>               = case Map.lookup v orphan of
+>                   Just t -> (acc, t)
+>                   Nothing -> if isElabStructName k
+>                       then ((cnt, nonOrphan, Map.insert v (TyCon k) orphan),
+>                              Struct [ Field (Name "dummy") Data.BuiltIn.int ] k)
+>                       else if isElabEnumName k
+>                          then ((cnt, nonOrphan, Map.insert v (TyCon k) orphan),
+>                                 EnumTy k)
+>                          else (acc, f v)
+>           (pending4, tcx_''') = Map.mapAccumWithKey
+>               (retype (orphanize id) (error "error")) pending3 tcx_''
+>           (pending5, vcx_''') = Map.mapAccumWithKey
+>               (retypeVar (orphanize id) (error "error")) pending4 vcx_''
+>           (pending6, tcx_'''') = Map.mapAccumWithKey
+>               (retype (orphanize (const uintptr_t)) (error "error")) pending5 tcx_'''
+>           (_, vcx_'''') = Map.mapAccumWithKey
+>               (retypeVar (orphanize (const uintptr_t)) (error "error")) pending6 vcx_'''
 >
 >         return (TyCtx tcx_'''', VarCtx vcx_'''', s'')
 
-> -- TODO: Merge combine/recombine.
-> combine acc n ((Struct fs v), b) -- TODO: Fields.
->   | isVar v = case Map.lookup v acc of
->                 Nothing -> (Map.insert v (ensureElabStructName n) acc,
->                             (apply (v +-> (TyCon (ensureElabStructName n))) $ Struct fs (ensureElabStructName n), b))
->                 Just n' -> (acc, (TyCon n', b))
->   | otherwise = (acc, (Struct fs v, b))
-> combine acc n (t@(FunTy rt ps), b) = (acc'', (FunTy rt' ps', b))
->   where (acc', (rt', _)) = combine acc (nameOf rt) (rt, b)
->         (acc'', ps') = combineParams acc' ps
->         combineParams pacc [] = (pacc, [])
->         combineParams pacc (x:xs) = (pacc'', x':xs')
->           where (pacc', (x', _)) = combine pacc (nameOf x) (x, False)
->                 (pacc'', xs') = combineParams pacc' xs
-> combine acc n ((Pointer t), b) = (acc', (Pointer t', b))
->   where (acc', (t', _)) = combine acc n (t, b)
-> combine acc n ((QualTy t), b) = (acc', (QualTy t', b))
->   where (acc', (t', _)) = combine acc n (t, b)
-> combine acc n (t, b) = (acc, (t, b))
+> retype f g acc k (t, b) = (acc', (t', b))
+>     where (acc', t') = combine acc k t f g
 
-> recombine acc@(cnt, table) (t@(Struct fs v), b)
->   | isVar v = case Map.lookup v table of
->                   Nothing -> ((cnt + 1, Map.insert v newName table),
->                               (apply (v +-> (TyCon newName)) $ Struct fs' newName, b))
->                   Just n -> (acc, (TyCon n, b))
->   | otherwise = (acc, ((Struct fs' v), b))
->   where newName = ensureElabStructName (Name ("T" ++ (show cnt)))
->         (_, fs') = combineFields acc fs
->         combineFields facc [] = (facc, [])
->         combineFields facc (x@(Field fn ft):xs) = (facc'', (Field fn ft'):xs')
->            where (facc', (ft', _)) = recombine facc (ft, False)
->                  (facc'', xs') = combineFields facc' xs
-> recombine acc (t@(FunTy rt ps), b) = (acc'', (FunTy rt' ps', b))
->   where (acc', (rt', _)) = recombine acc (rt, b)
->         (acc'', ps') = combineParams acc' ps
->         combineParams pacc [] = (pacc, [])
->         combineParams pacc (x:xs) = (pacc'', x':xs')
->           where (pacc', (x', _)) = recombine pacc (x, False)
->                 (pacc'', xs') = combineParams pacc' xs
-> recombine acc (t@(Pointer t'), b) = (acc', (Pointer t'', b))
->   where (acc', (t'', _)) = recombine acc (t', b)
-> recombine acc (t@(QualTy t'), b) = (acc', (QualTy t'', b))
->   where (acc', (t'', _)) = recombine acc (t', b)
-> recombine acc@(_, table) (t, b)
->   | isVar t = case Map.lookup (nameOf t) table of
->                    Nothing -> (acc, (t, b))
->                    Just n -> (acc, (TyCon n, b))
->   | otherwise = (acc, (t, b))
+> retypeVar f g acc k (VarInfo t b ro) = (acc', VarInfo t' b ro)
+>     where (acc', t') = combine acc k t f g
+
+
+> combine acc@(_, nonOrphan, _) k t@(Struct fs v) f g
+>   | isVar v = case Map.lookup v nonOrphan of
+>                   Just n -> (acc, TyCon n)
+>                   Nothing -> g acc k v fs'
+>   | otherwise = (acc', Struct fs' v)
+>   where (acc', fs') = combine' acc fs
+>         combine' facc [] = (facc, [])
+>         combine' facc (x@(Field fn ft):xs) = (facc'', (Field fn ft'):xs')
+>            where (facc', ft') = combine facc (nameOf ft) ft f g
+>                  (facc'', xs') = combine' facc' xs
+> combine acc k t@(FunTy rt ps) f g = (acc'', FunTy rt' ps')
+>   where (acc', rt') = combine acc k rt f g
+>         (acc'', ps') = combine' acc' ps
+>         combine' pacc [] = (pacc, [])
+>         combine' pacc (x:xs) = (pacc'', x':xs')
+>           where (pacc', x') = combine pacc (nameOf x) x f g
+>                 (pacc'', xs') = combine' pacc' xs
+> combine acc k t@(Pointer t') f g = (acc', Pointer t'')
+>   where (acc', t'') = combine acc k t' f g
+> combine acc k t@(QualTy t') f g = (acc', QualTy t'')
+>   where (acc', t'') = combine acc k t' f g
+> combine acc k t f g
+>   | isVar t = f acc k t
+>   | otherwise = (acc, t)
 
 
 > unifyList :: [Constraint] -> SolverM Subst
@@ -348,37 +363,6 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 >                 eqlist [ (Has _ t) ] = [ ]
 >                 eqlist (h@(Has _ t@(Field n ty)) : h'@(Has _ t'@(Field n' ty')) : fs)
 >                   = if n == n' then (((typeFrom t) :=: (typeFrom t')) : eqlist (h':fs)) else (eqlist (h':fs))
-
-
-> -- TODO: Extract a common function to encapsulate the functionality  of
-> -- replaceOrphan, replaceTy, recombine.
-> replaceOrphan acc k (Struct fs n) f = (acc', Struct fs' n)
->   where (acc', fs') = combineFields acc fs
->         combineFields facc [] = (facc, [])
->         combineFields facc (x@(Field fn ft):xs) = (facc'', (Field fn ft'):xs')
->            where (facc', ft') = replaceOrphan facc (nameOf ft) ft f
->                  (facc'', xs') = combineFields facc' xs
-> replaceOrphan acc k (FunTy rt ps) f = (acc'', FunTy rt' ps')
->   where (acc', rt') = replaceOrphan acc (nameOf rt) rt f
->         (acc'', ps') = combineParams acc' ps
->         combineParams pacc [] = (pacc, [])
->         combineParams pacc (x:xs) = (pacc'', x':xs')
->           where (pacc', x') = replaceOrphan pacc (nameOf x) x f
->                 (pacc'', xs') = combineParams pacc' xs
-> replaceOrphan acc k (Pointer t) f = (acc', Pointer t')
->   where (acc', t') = replaceOrphan acc k t f
-> replaceOrphan acc k (QualTy t) f = (acc', QualTy t')
->   where (acc', t') = replaceOrphan acc k (dropQual t) f
-> replaceOrphan acc k v f
->   | isVar v = case Map.lookup v acc of
->                   Just t -> (acc, t)
->                   Nothing -> if isElabStructName k
->                              then (Map.insert v (TyCon k) acc,
->                                    Struct [ Field (Name "dummy") Data.BuiltIn.int ] k)
->                              else if isElabEnumName k
->                                   then (Map.insert v (TyCon k) acc, EnumTy k)
->                                   else (acc, f v)
->   | otherwise = (acc, v)
 
 
 > isVar :: Pretty a => a -> Bool
