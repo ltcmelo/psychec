@@ -401,6 +401,33 @@ string.h - String utility functions.
 >     ]
 
 
+stdio.h - Input/output
+
+> file :: Ty
+> file = TyCon (Name "FILE")
+> stdioTypes :: [Ty]
+> stdioTypes = [file]
+> stdioValues :: [(Name, Ty)]
+> stdioValues =
+>     [ (Name "fclose", FunTy int [Pointer file])
+>     , (Name "feof", FunTy int [Pointer file])
+>     , (Name "ferror", FunTy int [Pointer file])
+>     , (Name "fputc", FunTy int [int, Pointer file])
+>     , (Name "fputs", FunTy int [Pointer (QualTy char), Pointer file])
+>     , (Name "putchar", FunTy int [int])
+>     , (Name "fopen", FunTy (Pointer file) [Pointer (QualTy char), Pointer (QualTy char)])
+>     , (Name "fread", FunTy size_t [Pointer void, size_t, size_t, Pointer file])
+>     , (Name "fwrite", FunTy size_t [Pointer (QualTy void), size_t, size_t, Pointer file])
+>     , (Name "setvbuf", FunTy int [Pointer file, Pointer char, int, size_t])
+>     , (Name "stdout", Pointer file)
+>     , (Name "EOF", int)
+>     , (Name "SEEK_CUR", int)
+>     , (Name "_IOFBF", int)
+>     , (Name "_IOLBF", int)
+>     , (Name "_IONBF", int)
+>     ]
+
+
 math.h - Mathematical stuff.
 
 > mathValues :: [(Name, Ty)]
@@ -432,6 +459,7 @@ sys/stat.h - Things related to stat.
 >   = [ (Name "stat", FunTy int [Pointer (QualTy char), Pointer struct_stat])
 >     , (Name "fstat", FunTy int [int, Pointer struct_stat])
 >     , (Name "lstat", FunTy int [Pointer (QualTy char), Pointer struct_stat])
+>     , (Name "fstatat", FunTy int [int, Pointer (QualTy char), Pointer struct_stat, int])
 >     ]
 
 
