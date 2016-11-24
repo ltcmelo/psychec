@@ -60,7 +60,7 @@ instance Apply Ty where
     apply s (Pointer t) = Pointer (apply s t)
     apply s (FunTy t ts) = FunTy (apply s t) (apply s ts)
     apply s (Struct fs n) = Struct (apply s fs) n
-    apply s (QualTy t) = QualTy (apply s (dropQual t))
+    apply s (QualTy t) = QualTy (apply s t)
     apply s t@(EnumTy n) = t
 
 instance Apply Field where
@@ -70,22 +70,25 @@ instance Apply VarInfo where
     apply s (VarInfo t b ro) = VarInfo (apply s t) b ro
 
 
+data Constness = Relax | Enforce
+                 deriving (Eq, Ord, Show)
+
 class Apply a => Unifiable a where
     fv :: a -> [Name]
-    unify :: a -> a -> SolverM Subst
+    unify :: a -> a -> Constness -> SolverM Subst
 
 instance Unifiable a => Unifiable [a] where
     fv = foldr (union . fv) []
-    unify [] [] = return nullSubst
-    unify _ [] = wrongArgumentNumberError
-    unify [] _ = wrongArgumentNumberError
-    unify (t:ts) (t':ts') = do
-        s <- unify t t'
-        s' <- unify (apply s ts) (apply s ts')
+    unify [] [] _ = return nullSubst
+    unify _  [] _ = wrongArgumentNumberError
+    unify []  _ _ = wrongArgumentNumberError
+    unify (t:ts) (t':ts') _ = do
+        s <- unify t t' Relax
+        s' <- unify (apply s ts) (apply s ts') Relax
         return (s' @@ s)
 
 instance Unifiable Constraint where
-    unify _ _ = error "Impossible! Unify Constraint"
+    unify _ _ _ = error "Impossible! Unify Constraint"
     fv (t :=: t') = fv t `union` fv t'
     fv ( _ :<-: t) = fv t
     fv (Has t (Field _ t')) = fv t `union` fv t'
@@ -105,53 +108,59 @@ instance Unifiable Ty where
     fv (QualTy t) = fv t
     fv (EnumTy _) = []
 
-    -- When unifying qualified types we simply discard the qualifier. This
-    -- works because programs we analyse are by premisse correct, so we won't
-    -- break things like const-corretness.
-
-    unify (TyVar v) (QualTy t') = varBind v (QualTy $ dropQual t')
-    unify (TyVar v) t
-        | t == (Pointer Data.BuiltIn.void) = return nullSubst
-        | otherwise = varBind v t
-    unify (QualTy t') (TyVar v) = varBind v (QualTy $ dropQual t')
-    unify t (TyVar v)
-        | t == (Pointer Data.BuiltIn.void) = return nullSubst
-        | otherwise = varBind v t
-    unify (TyCon c) (TyCon c')
+    unify t'@(TyVar v) t m
+        | convertible t t' = return nullSubst
+        | m == Relax = varBind v (dropQual t)
+        | otherwise = varBind v (QualTy (dropQual t))
+    unify t t'@(TyVar v) m
+        | convertible t t' = return nullSubst
+        | m == Relax = varBind v (dropQual t)
+        | otherwise = varBind v (QualTy (dropQual t))
+    unify (TyCon c) (TyCon c') _
         | convertible (TyCon c) (TyCon c') = return nullSubst
         | otherwise = differentTypeConstructorsError c c'
-    unify (Pointer t) (Pointer t')
-        | convertible (Pointer t) (Pointer t') = return nullSubst
-        | otherwise = unify t t'
-    unify f@(FunTy t ts) (Pointer f'@(FunTy t' ts')) = unify f f'
-    unify (Pointer f@(FunTy t ts)) f'@(FunTy t' ts') = unify f' f
-    unify (FunTy t ts) (FunTy t' ts') = do
-        s <- unify t t'
-        s' <- unify (apply s ts) (apply s ts')
+    unify p@(Pointer (QualTy t)) p'@(Pointer (QualTy t')) _
+        | convertible p p' = return nullSubst
+        | otherwise = unify t t' Relax
+    unify p@(Pointer t) p'@(Pointer t'@(QualTy _)) _
+        | convertible p p' = return nullSubst
+        | otherwise = unify t t' Enforce
+    unify p@(Pointer t@(QualTy _)) p'@(Pointer t') _
+        | convertible p p' = return nullSubst
+        | otherwise = unify t t' Enforce
+    unify p@(Pointer t) p'@(Pointer t') m
+        | convertible p p' = return nullSubst
+        | otherwise = unify t t' m
+    unify f@(FunTy t ts) (Pointer f'@(FunTy t' ts')) m = unify f f' m
+    unify (Pointer f@(FunTy t ts)) f'@(FunTy t' ts') m = unify f' f m
+    unify (FunTy t ts) (FunTy t' ts') _ = do
+        s <- unify t t' Relax
+        s' <- unify (apply s ts) (apply s ts') Relax
         return (s' @@ s)
-    unify (Struct fs n) (Struct fs' n')
-        | n == n' = unify (sort fs) (sort fs')
+    unify (Struct fs n) (Struct fs' n') _
+        | n == n' = unify (sort fs) (sort fs') Relax
         | otherwise = differentTypeConstructorsError n n'
-    unify (QualTy t) (QualTy t') = unify t t'
-    unify (QualTy t) t' = unify t t'
-    unify t (QualTy t') = unify t t'
-    unify t@(EnumTy _) t'
+    unify (QualTy t) (QualTy t') m = unify t t' m
+    unify (QualTy t) t' _ = unify t t' Enforce
+    unify t (QualTy t') _ = unify t t' Enforce
+    unify t@(EnumTy _) t' _
         | convertible t t' = return nullSubst
         | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
                                                      (Name $ show $ pprint t')
-    unify t t'@(EnumTy _)
+    unify t t'@(EnumTy _) _
         | convertible t t' = return nullSubst
         | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
                                                      (Name $ show $ pprint t')
-    unify t t'
+    unify t t' _
         | convertible t t' = return nullSubst
         | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
                                                      (Name $ show $ pprint t')
+
 
 instance Unifiable Field where
     fv = fv . ty
-    unify (Field n t) (Field n' t')
-          | n == n' = unify t t'
+    unify (Field n t) (Field n' t') m
+          | n == n' = unify t t' m
           | otherwise = unifyDifferentFields n n'
 
 

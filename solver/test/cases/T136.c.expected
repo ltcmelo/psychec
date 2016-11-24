@@ -1,0 +1,2 @@
+typedef  int const* T2 ;
+typedef  int T1 ;

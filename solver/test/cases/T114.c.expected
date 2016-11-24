@@ -1,2 +1,2 @@
-typedef  struct option {char const* member_0;char member_3;uintptr_t* member_2;uintptr_t member_1;} option ;
-#define no_argument 128
+typedef  struct option {char const* member_0;char member_3;uintptr_t* member_2;uintptr_t member_1;} const option ;
+#define  no_argument 128

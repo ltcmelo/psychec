@@ -179,6 +179,7 @@ tests = testGroup "Unit tests"
                   , doTest "T133.c"
                   , doTest "T134.c"
                   , doTest "T135.c"
+                  , doTest "T136.c"
 
                   -- TODO: Create expected files for those.
                   -- , doTest "TGNU_base64.c"

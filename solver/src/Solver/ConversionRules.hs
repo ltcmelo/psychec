@@ -27,9 +27,14 @@ import Data.BuiltIn
 convertible :: Ty -> Ty -> Bool
 convertible t t' =
     or [ t == t'
+       -- Arithmetic types convert among themselves.
        , and [isArithTy t, isArithTy t']
+
+       -- Enumerators are fundamentally integers.
        , and [isArithTy t, isEnum t']
        , and [isEnum t, isArithTy t']
+
+       -- We consider void* a top-type.
        , or [t == Pointer void, t' == Pointer void]
        , or [t == Pointer (QualTy void), t' == Pointer (QualTy void)]
 

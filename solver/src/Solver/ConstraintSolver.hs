@@ -133,7 +133,7 @@ replaceTy :: TyCtx -> Ty -> Ty
 replaceTy tctx t@(TyCon n) = maybe t fst (Map.lookup n (tyctx tctx))
 replaceTy tctx t@(TyVar _) = t
 replaceTy tctx (FunTy t ts) = FunTy (replaceTy tctx t) (map (replaceTy tctx) ts)
-replaceTy tctx (QualTy t) = QualTy (replaceTy tctx (dropQual t))
+replaceTy tctx (QualTy t) = QualTy (replaceTy tctx t)
 replaceTy tctx (Pointer t) = Pointer (replaceTy tctx t)
 replaceTy tctx (Struct fs n) =
     Struct (map (\f -> f{ty = replaceTy tctx (ty f)}) fs) n
@@ -319,7 +319,7 @@ combine acc k t f g
 unifyList :: [Constraint] -> SolverM Subst
 unifyList [] = return nullSubst
 unifyList ((t :=: t') : ts) = do
-    s <- unify t t'
+    s <- unify t t' Relax
     --liftIO (print $ pprint (t :=: t') <+> text "|" <+> pprint s)
     s' <- unifyList (apply s ts)
     return (s' @@ s)
