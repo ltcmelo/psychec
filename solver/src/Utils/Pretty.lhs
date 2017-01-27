@@ -48,7 +48,8 @@ Utilities for pretty printing
 >                            braces (hcat $ (map pprint fs))
 >     pprint (Pointer t) = pprint t <> char '*'
 >     pprint (QualTy t) = pprint t <+> text "const"
->     pprint (EnumTy n) = pprint n <+> text "{ ____Placeholder }" -- TODO: Implement enumerators.
+>     pprint (EnumTy n) = pprint n <+> text "{ ____Placeholder_"
+>         <> pprint (ensurePlainName n) <+> text "}" -- TODO: Implement enumerators.
 
 
 > instance Pretty Constraint where

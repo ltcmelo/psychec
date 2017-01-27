@@ -1,4 +1,4 @@
-typedef  enum E { ____Placeholder } E ;
+typedef  enum E { ____Placeholder_E } E ;
 #define W 129
 int X ;
 #define Y 128
