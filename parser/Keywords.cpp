@@ -387,8 +387,8 @@ static inline int classify6(const char *s, LanguageFeatures features)
     }
   }
   else if (s[0] == 'e') {
-    if (!features.cMode && s[1] == 'x') {
-      if (s[2] == 'p') {
+    if (s[1] == 'x') {
+      if (!features.cMode && s[2] == 'p') {
         if (s[3] == 'o') {
           if (s[4] == 'r') {
             if (s[5] == 't') {
