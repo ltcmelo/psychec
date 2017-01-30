@@ -23,7 +23,20 @@
 *.status
 *.swp
 *.thm
+
+# Qt Creator project files
+*.creator
+*.creator.user
+*.config
+*.files
+*.includes
+
 .DS_Store
+
+# The test file! ;-)
+test.c
+test.c.ctr
+test.c.gen.h
 
 solver/dist
 solver/cabal-dev
