@@ -1,0 +1,4 @@
+typedef  uintptr_t (* T2 ) () ;
+typedef  uintptr_t (* T1 ) () ;
+uintptr_t f () ;
+uintptr_t g () ;

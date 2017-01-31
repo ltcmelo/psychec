@@ -131,8 +131,8 @@ instance Unifiable Ty where
     unify p@(Pointer t) p'@(Pointer t') m
         | convertible p p' = return nullSubst
         | otherwise = unify t t' m
-    unify f@(FunTy t ts) (Pointer f'@(FunTy t' ts')) m = unify f f' m
-    unify (Pointer f@(FunTy t ts)) f'@(FunTy t' ts') m = unify f' f m
+    unify f@(FunTy t ts) (Pointer p) m = unify f p m
+    unify (Pointer p) f'@(FunTy t' ts') m = unify f' p m
     unify (FunTy t ts) (FunTy t' ts') _ = do
         s <- unify t t' Relax
         s' <- unify (apply s ts) (apply s ts') Relax

@@ -1,0 +1,15 @@
+typedef  uintptr_t (* T4 ) () ;
+typedef  uintptr_t (* T3 ) () ;
+typedef  uintptr_t (* T2 ) () ;
+typedef  uintptr_t (* T1 ) () ;
+typedef  uintptr_t (* S4 ) () ;
+typedef  uintptr_t (* S3 ) () ;
+typedef  uintptr_t (* S2 ) () ;
+typedef  uintptr_t (* S1 ) () ;
+typedef  uintptr_t (* Q4 ) () ;
+typedef  uintptr_t (* Q3 ) () ;
+typedef  uintptr_t (* Q2 ) () ;
+typedef  uintptr_t (* Q1 ) () ;
+uintptr_t f () ;
+uintptr_t g () ;
+uintptr_t h () ;

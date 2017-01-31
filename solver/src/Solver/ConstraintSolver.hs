@@ -35,6 +35,7 @@ import Control.Monad.Except hiding (void)
 import Solver.SolverMonad
 import Solver.Unification
 import Solver.ConversionRules
+import Solver.Decaying
 import Utils.Pretty
 
 
@@ -56,12 +57,15 @@ solve c = do
     s <- unifyList eqs
 
     -- Build record structures.
-    (tcx1, vcx1, ss) <- stage4 tc0 vcx fds s
+    (tcx1, vcx1, _) <- stage4 tc0 vcx fds s
+
+    -- Decay function pointers.
+    (tcx2, vcx2) <- decay tcx1 vcx1
 
     -- Remove builtins and standard library components.
     let
-        tcx2_ = undefTys (tyctx tcx1) Map.\\ builtinTyCtx Map.\\ stdTyCtx
-        vcx2_ = undefVars (varctx vcx1) Map.\\ builtinVarCtx Map.\\ stdVarCtx
+        tcx2_ = undefTys (tyctx tcx2) Map.\\ builtinTyCtx Map.\\ stdTyCtx
+        vcx2_ = undefVars (varctx vcx2) Map.\\ builtinVarCtx Map.\\ stdVarCtx
 
     return (TyCtx tcx2_, VarCtx vcx2_)
 

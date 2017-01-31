@@ -22,6 +22,7 @@ library
                      , Solver.SolverMonad
                      , Solver.Unification
                      , Solver.ConversionRules
+                     , Solver.Decaying
                      , Parser.ConstraintParser
                      , Utils.Pretty
                      , Utils.Writer
