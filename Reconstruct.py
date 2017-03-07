@@ -6,6 +6,9 @@ import os
 from subprocess import call
 
 
+log_enabled = False
+
+
 class PartialProgramAnalyser:
     """ Partial program analyser """
 
@@ -17,7 +20,8 @@ class PartialProgramAnalyser:
 
     @staticmethod
     def write_log(msg):
-        print "[Reconstructor] %s" % msg
+        if log_enabled:
+            print "[Reconstructor] %s" % msg
 
     def gen_constraints(self):
         """ Invoke our constraint generator """

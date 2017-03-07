@@ -40,7 +40,8 @@ void f() {
 
     // x8 must be an int**
     T8 x8;
-    x8 = &x8; // because of this
+    int* y8;
+    x8 = &y8; // because of this
     **x8 = 10;
 
     // x9 must a pointer, but the underlying element type can be any

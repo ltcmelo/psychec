@@ -38,6 +38,8 @@ import Solver.ConversionRules
 import Solver.Decaying
 import Utils.Pretty
 
+import Debug.Trace
+
 
 solver :: Constraint -> IO (Either String (TyCtx, VarCtx))
 solver c = runSolverM (solve c) ((length $ fv c) + 1)
@@ -50,14 +52,22 @@ solve c = do
     -- Expand variable types and create missing variables.
     (vcx,c'') <- stage2 (VarCtx $ Map.union builtinVarCtx stdVarCtx) c'
 
-    -- Split constraints into equality and field acess.
-    let (eqs, fds) = stage3 c''
+    -- Split constraints into equality, inequality, and field acess.
+    let (eqs, iqs, fds) = stage3 c''
 
-    -- Unify equalities.
-    s <- unifyList eqs
+    -- Run plain unification on equalities and apply substitutions on the inequalities. This will
+    -- instantiate types and make it possible to sort the inequalities according to a desired
+    -- directionality criteria. Therefore, once directional unification is run on the inequalities
+    -- type variables are bound in a proper order, that corresponds to a subtyping order.
+    s <- punifyList eqs
+    let iqs' = apply s iqs
+        (iq1, iq2, iq3) = dsort iqs'
+        iqs'' = iq1 ++ iq2 ++ iq3
+    s' <- dunifyList iqs''
+    let s'' = s' @@ s
 
     -- Build record structures.
-    (tcx1, vcx1, _) <- stage4 tc0 vcx fds s
+    (tcx1, vcx1, _) <- stage4 tc0 vcx fds s''
 
     -- Decay function pointers.
     (tcx2, vcx2) <- decay tcx1 vcx1
@@ -70,9 +80,14 @@ solve c = do
     return (TyCtx tcx2_, VarCtx vcx2_)
 
 
+-- cleanv c = VarCtx $  (varctx c) Map.\\ builtinVarCtx Map.\\ stdVarCtx
+-- cleant c = TyCtx $  (tyctx c) Map.\\ builtinTyCtx Map.\\ stdTyCtx
+
 stage1 :: TyCtx -> Constraint -> SolverM (TyCtx, Constraint)
 stage1 tctx (t :=: t') =
     return (tctx, (replaceTy tctx t) :=: (replaceTy tctx t'))
+stage1 tctx (t :>: t') =
+    return (tctx, (replaceTy tctx t) :>: (replaceTy tctx t'))
 stage1 tctx (n :<-: t) =
     return (tctx, n :<-: (replaceTy tctx t))
 stage1 tctx (Has n (Field n' t)) =
@@ -147,7 +162,7 @@ replaceTy tctx t@(EnumTy _) = Data.BuiltIn.int
 stage2 :: VarCtx -> Constraint -> SolverM (VarCtx, Constraint)
 stage2 vtx (n :<-: t) =
     case Map.lookup n (varctx vtx) of
-        Just info -> return (vtx, t :=: varty info)
+        Just info -> return (vtx, varty info :=: t)
         Nothing -> do
             v <- fresh
             return ( VarCtx $ Map.insert n (VarInfo v False False) (varctx vtx)
@@ -165,6 +180,7 @@ stage2 vtx (c :&: c') = do
            , c1 :&: c2 )
 stage2 vtx c@(Has _ _) = return (vtx, c)
 stage2 vtx c@(_ :=: _) = return (vtx, c)
+stage2 vtx c@(_ :>: _) = return (vtx, c)
 stage2 vtx (ReadOnly n) =
     case Map.lookup n (varctx vtx) of
         Nothing -> error "const can only be applied on known values"
@@ -177,15 +193,36 @@ stage2 vtx (ReadOnly n) =
 stage2 vtx Truth = return (vtx, Truth)
 
 
-stage3 :: Constraint -> ([Constraint], [Constraint])
+stage3 :: Constraint -> ([Constraint], [Constraint], [Constraint])
 stage3 (c :&: c') =
-    (eq ++ eq', fs ++ fs')
+    (eq ++ eq', iq ++ iq', fs ++ fs')
   where
-    (eq,fs) = stage3 c
-    (eq',fs') = stage3 c'
-stage3 c@(Has _ _) = ([], [c])
-stage3 c@(_ :=: _) = ([c],[])
-stage3 Truth = ([],[])
+    (eq, iq, fs) = stage3 c
+    (eq',iq', fs') = stage3 c'
+stage3 c@(Has _ _) = ([], [], [c])
+stage3 c@(_ :=: _) = ([c], [], [])
+stage3 c@(_ :>: _) = ([], [c], [])
+stage3 Truth = ([], [], [])
+
+
+dsort :: [Constraint] -> ([Constraint], [Constraint], [Constraint])
+dsort [] = ([], [], [])
+dsort (x:xs) =
+    (eq1 ++ eq1', eq2 ++ eq2', eq3 ++ eq3')
+  where
+    (eq1, eq2, eq3) = dsort' x
+    (eq1', eq2', eq3') = dsort xs
+
+dsort' :: Constraint -> ([Constraint], [Constraint], [Constraint])
+dsort' c@(_ :>: (Pointer (QualTy t)))
+    | isTyVarDep t = ([], [], [c])
+    | otherwise = ([c], [], [])
+dsort' c@((Pointer t) :>: _)
+    | isTyVarDep t = ([], [], [c])
+    | otherwise = case t of
+        QualTy _ -> ([], [], [c])
+        _ -> ([], [c], [])
+dsort' c = ([], [], [c])
 
 
 stage4 :: TyCtx -> VarCtx -> [Constraint] -> Subst -> SolverM (TyCtx, VarCtx, Subst)
@@ -200,7 +237,7 @@ stage4 tcx vcx fs s = do
             tn = (nameOf t)
             tn' = (nameOf t')
         sortedByTyAndFields = List.sortBy tyAndFieldPred fsubs
-    s1 <- unifyFields sortedByTyAndFields
+    s1 <- punifyFields sortedByTyAndFields
 
     -- Build a map of fields using as key a type name.
     let
@@ -320,16 +357,25 @@ combine acc k t f g
     | otherwise = (acc, t)
 
 
-unifyList :: [Constraint] -> SolverM Subst
-unifyList [] = return nullSubst
-unifyList ((t :=: t') : ts) = do
-    s <- unify t t' Relax
+punifyList :: [Constraint] -> SolverM Subst
+punifyList [] = return nullSubst
+punifyList ((t :=: t') : ts) = do
+    s <- punify t t'
     --liftIO (print $ pprint (t :=: t') <+> text "|" <+> pprint s)
-    s' <- unifyList (apply s ts)
+    s' <- punifyList (apply s ts)
     return (s' @@ s)
 
-unifyFields :: [Constraint] -> SolverM Subst
-unifyFields = unifyList . eqlist
+
+dunifyList :: [Constraint] -> SolverM Subst
+dunifyList [] = return nullSubst
+dunifyList ((t :>: t') : ts) = do
+    s <- dunify t t' Relax
+    s' <- dunifyList (apply s ts)
+    return (s' @@ s)
+
+
+punifyFields :: [Constraint] -> SolverM Subst
+punifyFields = punifyList . eqlist
   where
     typeFrom (Field _ t) = t
     eqlist [] = []

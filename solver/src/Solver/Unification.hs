@@ -32,6 +32,8 @@ import Solver.SolverMonad
 import Solver.ConversionRules
 import Utils.Pretty
 
+import Debug.Trace
+
 
 (@@) :: Subst -> Subst -> Subst
 s1 @@ s2 = Subst $ (Map.map (apply s1) (subs s2)) `Map.union` (subs s1)
@@ -45,6 +47,7 @@ instance Apply a => Apply [a] where
 
 instance Apply Constraint where
     apply s (t :=: t') = (apply s t) :=: (apply s t')
+    apply s (t :>: t') = (apply s t) :>: (apply s t')
     apply s (n :<-: t) = n :<-: (apply s t)
     apply s (Has t f) = Has (apply s t) (apply s f)
     apply s (Def n t c) = Def n (apply s t) (apply s c)
@@ -60,7 +63,7 @@ instance Apply Ty where
     apply s (Pointer t) = Pointer (apply s t)
     apply s (FunTy t ts) = FunTy (apply s t) (apply s ts)
     apply s (Struct fs n) = Struct (apply s fs) n
-    apply s (QualTy t) = QualTy (apply s t)
+    apply s (QualTy t) = QualTy (apply s (dropTopQual t))
     apply s t@(EnumTy n) = t
 
 instance Apply Field where
@@ -74,21 +77,32 @@ data Constness = Relax | Enforce
                  deriving (Eq, Ord, Show)
 
 class Apply a => Unifiable a where
+    -- | Free variables
     fv :: a -> [Name]
-    unify :: a -> a -> Constness -> SolverM Subst
+    -- | Plain (standard) unification
+    punify :: a -> a -> SolverM Subst
+    -- | Directional unification
+    dunify :: a -> a -> Constness -> SolverM Subst
+
 
 instance Unifiable a => Unifiable [a] where
     fv = foldr (union . fv) []
-    unify [] [] _ = return nullSubst
-    unify _  [] _ = wrongArgumentNumberError
-    unify []  _ _ = wrongArgumentNumberError
-    unify (t:ts) (t':ts') _ = do
-        s <- unify t t' Relax
-        s' <- unify (apply s ts) (apply s ts') Relax
+    punify [] [] = return nullSubst
+    punify _  [] = wrongArgumentNumberError
+    punify []  _ = wrongArgumentNumberError
+    punify (t:ts) (t':ts') = do
+        s <- punify t t'
+        s' <- punify (apply s ts) (apply s ts')
         return (s' @@ s)
+    dunify (t:ts) (t':ts') _ = do
+        s <- dunify t t' Relax
+        s' <- dunify (apply s ts) (apply s ts') Relax
+        return (s' @@ s)
+    dunify ts ts' _ = punify ts ts'
 
 instance Unifiable Constraint where
-    unify _ _ _ = error "Impossible! Unify Constraint"
+    punify _ _ = error "Impossible (plain) unify constraint"
+    dunify _ _ _ = error "Impossible (directionaly) unify constraint"
     fv (t :=: t') = fv t `union` fv t'
     fv ( _ :<-: t) = fv t
     fv (Has t (Field _ t')) = fv t `union` fv t'
@@ -100,6 +114,8 @@ instance Unifiable Constraint where
     fv t = []
 
 instance Unifiable Ty where
+    -- Free variables
+
     fv (TyVar v) = [v]
     fv (TyCon _) = []
     fv (Pointer t) = fv t
@@ -108,50 +124,98 @@ instance Unifiable Ty where
     fv (QualTy t) = fv t
     fv (EnumTy _) = []
 
-    unify t'@(TyVar v) t m
+    -- Plain unification
+
+    punify t'@(TyVar v) t
         | convertible t t' = return nullSubst
-        | m == Relax = varBind v (dropQual t)
-        | otherwise = varBind v (QualTy (dropQual t))
-    unify t t'@(TyVar v) m
+        | otherwise = varBind v t
+    punify t t'@(TyVar v)
         | convertible t t' = return nullSubst
-        | m == Relax = varBind v (dropQual t)
-        | otherwise = varBind v (QualTy (dropQual t))
-    unify (TyCon c) (TyCon c') _
+        | otherwise = varBind v t
+
+    punify (TyCon c) (TyCon c')
         | convertible (TyCon c) (TyCon c') = return nullSubst
         | otherwise = differentTypeConstructorsError c c'
-    unify p@(Pointer (QualTy t)) p'@(Pointer (QualTy t')) _
+
+    punify p@(Pointer t) p'@(Pointer t')
         | convertible p p' = return nullSubst
-        | otherwise = unify t t' Relax
-    unify p@(Pointer t) p'@(Pointer t'@(QualTy _)) _
-        | convertible p p' = return nullSubst
-        | otherwise = unify t t' Enforce
-    unify p@(Pointer t@(QualTy _)) p'@(Pointer t') _
-        | convertible p p' = return nullSubst
-        | otherwise = unify t t' Enforce
-    unify p@(Pointer t) p'@(Pointer t') m
-        | convertible p p' = return nullSubst
-        | otherwise = unify t t' m
-    unify f@(FunTy t ts) (Pointer p) m = unify f p m
-    unify (Pointer p) f'@(FunTy t' ts') m = unify f' p m
-    unify (FunTy t ts) (FunTy t' ts') _ = do
-        s <- unify t t' Relax
-        s' <- unify (apply s ts) (apply s ts') Relax
+        | otherwise = punify t t'
+        
+    punify f@(FunTy t ts) (Pointer p) = punify f p
+    punify (Pointer p) f'@(FunTy t' ts') = punify f' p
+
+    punify (FunTy t ts) (FunTy t' ts') = do
+        s <- punify t t'
+        s' <- punify (apply s ts) (apply s ts')
         return (s' @@ s)
-    unify (Struct fs n) (Struct fs' n') _
-        | n == n' = unify (sort fs) (sort fs') Relax
+
+    punify (Struct fs n) (Struct fs' n')
+        | n == n' = punify (sort fs) (sort fs')
         | otherwise = differentTypeConstructorsError n n'
-    unify (QualTy t) (QualTy t') m = unify t t' m
-    unify (QualTy t) t' _ = unify t t' Enforce
-    unify t (QualTy t') _ = unify t t' Enforce
-    unify t@(EnumTy _) t' _
+
+    punify (QualTy t) (QualTy t') = punify t t'
+    punify (QualTy t) t' = punify t t'
+
+    punify t@(EnumTy _) t'
         | convertible t t' = return nullSubst
         | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
                                                      (Name $ show $ pprint t')
-    unify t t'@(EnumTy _) _
+    punify t t'@(EnumTy _)
         | convertible t t' = return nullSubst
         | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
                                                      (Name $ show $ pprint t')
-    unify t t' _
+    punify t t'
+        | convertible t t' = return nullSubst
+        | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
+                                                     (Name $ show $ pprint t')
+
+    -- Directional unification
+    
+    dunify t@(TyVar v) t'@(Pointer _) _ = varBind v t'
+
+    dunify t'@(TyVar v) t m
+        | convertible t t' = return nullSubst
+        | m == Relax = varBind v (dropQual t)
+        | otherwise = varBind v t
+    dunify t t'@(TyVar v) m
+        | convertible t t' = return nullSubst
+        | otherwise = varBind v (dropQual t)
+
+    dunify (TyCon c) (TyCon c') _
+        | convertible (TyCon c) (TyCon c') = return nullSubst
+        | otherwise = differentTypeConstructorsError c c'
+
+    dunify p@(Pointer t) p'@(Pointer t') m
+        | convertible p p' = return nullSubst
+        | otherwise = dunify t t' Enforce
+
+    dunify f@(FunTy t ts) (Pointer p) m = dunify f p m
+    dunify (Pointer p) f'@(FunTy t' ts') m = dunify f' p m
+
+    dunify (FunTy t ts) (FunTy t' ts') _ = do
+        s <- dunify t t' Relax
+        s' <- dunify (apply s ts) (apply s ts') Relax
+        return (s' @@ s)
+
+    dunify (Struct fs n) (Struct fs' n') _
+        | n == n' = dunify (sort fs) (sort fs') Relax
+        | otherwise = differentTypeConstructorsError n n'
+
+    dunify (QualTy t) (QualTy t') m = dunify t t' m
+    dunify (QualTy t) t' _ = dunify t t' Relax
+    dunify t (QualTy t') m
+        | m == Relax = dunify t t' Relax
+        | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
+                                                     (Name $ show $ pprint (QualTy t'))
+    dunify t@(EnumTy _) t' _
+        | convertible t t' = return nullSubst
+        | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
+                                                     (Name $ show $ pprint t')
+    dunify t t'@(EnumTy _) _
+        | convertible t t' = return nullSubst
+        | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
+                                                     (Name $ show $ pprint t')
+    dunify t t' _
         | convertible t t' = return nullSubst
         | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
                                                      (Name $ show $ pprint t')
@@ -159,9 +223,12 @@ instance Unifiable Ty where
 
 instance Unifiable Field where
     fv = fv . ty
-    unify (Field n t) (Field n' t') m
-          | n == n' = unify t t' m
-          | otherwise = unifyDifferentFields n n'
+    punify (Field n t) (Field n' t')
+          | n == n' = punify t t'
+          | otherwise = punifyDifferentFields n n'
+    dunify (Field n t) (Field n' t') m
+          | n == n' = dunify t t' m
+          | otherwise = punifyDifferentFields n n'
 
 
 varBind :: Name -> Ty -> SolverM Subst
@@ -169,12 +236,24 @@ varBind n t = return (n +-> t)
     -- | n `elem` fv t = occursCheckError n t
     -- | otherwise = return $ Subst (Map.singleton n t)
 
+
 dropQual :: Ty -> Ty
 dropQual (QualTy t) = dropQual t
+dropQual (Pointer t) = Pointer (dropQual t)
 dropQual t = t
+
+dropTopQual (QualTy t) = t
+dropTopQual t = t
+
 
 isTyVar :: Pretty a => a -> Bool
 isTyVar = (== "#alpha") . take 6 . show . pprint
+
+isTyVarDep (Pointer t) = isTyVarDep t
+isTyVarDep (QualTy t) = isTyVarDep t
+isTyVarDep (TyVar _) = True
+isTyVarDep _ = False
+
 
 wrongArgumentNumberError :: SolverM a
 wrongArgumentNumberError = throwError "Error! Wrong argument number."
@@ -191,7 +270,7 @@ differentTypeConstructorsError v v'
          text "Cannot unify types with different constructors:\n" <>
          pprint v <+> text "and" <+> pprint v'
 
-unifyDifferentFields :: Name -> Name -> SolverM a
-unifyDifferentFields n n' = throwError $ show $
+punifyDifferentFields :: Name -> Name -> SolverM a
+punifyDifferentFields n n' = throwError $ show $
                                 text "Cannot unify different fields:\n" <+>
                                 pprint n <+> text "\nwith\n" <+> pprint n'

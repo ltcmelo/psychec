@@ -1,5 +1,5 @@
 // example 1
-m() {} // gen alpha = int
+whatever() {} // gen alpha = int
 
 // example 2
 void h() { /* no ret */ } // alpha = void

@@ -1,2 +1,2 @@
 typedef int T2;
-typedef int T1;
+typedef double T1;

@@ -46,3 +46,5 @@ solver/.cabal-sandbox/
 solver/.stack-work/
 solver/cabal.sandbox.config
 solver/test/cases/*.ctr
+solver/test/cases/*.fixed.c
+solver/test/cases/*.gen.h

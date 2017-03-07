@@ -517,7 +517,6 @@ const std::string nonPolyOprtrName(int opTk)
  */
 bool isPolyOprtr(int opTk)
 {
-
     switch (opTk) {
         // Assignment operators
     case T_EQUAL:
@@ -542,13 +541,13 @@ bool isPolyOprtr(int opTk)
     case T_STAR:
     case T_SLASH:
     case T_PERCENT:
-        return false;
+        return true;
 
         // Bitwise operators
     case T_AMPER:
     case T_PIPE:
     case T_CARET:
-        return false;
+        return true;
 
         // Shift operators
     case T_LESS_LESS:
@@ -642,6 +641,7 @@ void ConstraintGenerator::applyTypeLattice(const ScalarTypeLattice::Class& lhsCl
     // type, then both are, we only need to pick a double or an int.
     std::string actualArithTy = (lhsClass > rhsClass) ? lhsClass.arithName_
                                                       : rhsClass.arithName_;
+
     if (actualArithTy.empty()) {
         if (lhsClass == ScalarTypeLattice::Integral
                 || rhsClass == ScalarTypeLattice::Integral
@@ -658,7 +658,11 @@ void ConstraintGenerator::applyTypeLattice(const ScalarTypeLattice::Class& lhsCl
     // they work on both pointers and integers. A constraint for a concrete
     // type may only be generated in the case both operands are compatible.
     if (isPolyOprtr(opTk)) {
-        writer_->writeEquivRelation(lhsAlpha, rhsAlpha);
+        if (opTk == T_EQUAL)
+            writer_->writeSubtypeRelation(lhsAlpha, rhsAlpha);
+        else
+            writer_->writeEquivRelation(lhsAlpha, rhsAlpha);
+
         if (!actualArithTy.empty()) {
             writer_->writeAnd();
             writer_->writeEquivRelation(lhsAlpha, actualArithTy);
@@ -928,8 +932,7 @@ void ConstraintGenerator::castExpressionHelper(const std::string& inputTy,
             && resultTy != kDoubleTy
             && resultTy != kLongDouble
             && resultTy != kVoidTy
-            && resultTy != kDefaultStrTy
-            && resultTy != kDefaultConstStrTy) {
+            && resultTy != kDefaultStrTy) {
         ensureTypeIsKnown(resultTy);
     }
     ENSURE_NONEMPTY_TYPE_STACK(return );
@@ -1048,7 +1051,7 @@ bool ConstraintGenerator::visit(StringLiteralAST *ast)
     CLASSIFY(ast);
 
     ENSURE_NONEMPTY_TYPE_STACK(return false);
-    writer_->writeEquivRelation(kDefaultConstStrTy, types_.top());
+    writer_->writeEquivRelation(kDefaultStrTy, types_.top());
 
     return false;
 }

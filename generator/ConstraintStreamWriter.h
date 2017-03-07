@@ -206,6 +206,9 @@ public:
      */
     size_t totalConstraints() const { return cnt_; }
 
+    void writeSubtypeMark();
+    void writeSubtypeRelation(const std::string &ty, const std::string &subTy);
+
 private:
     void indent();
     void dedent();

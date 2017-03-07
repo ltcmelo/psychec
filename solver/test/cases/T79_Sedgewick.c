@@ -6,3 +6,5 @@ link joinLR(link a, link b)
          { a->r = joinLR(a->r, b); return a; }
     else { b->l = joinLR(a, b->l); return b; }
   }
+
+/* int rand(); */

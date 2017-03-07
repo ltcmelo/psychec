@@ -31,6 +31,7 @@ const char* const kExistence = "$exists$ ";
 const char* const kContainment = " $in$ ";
 const char* const kDeclDelim = " : ";
 const char* const kEquiv = " = ";
+const char* const kSubtype = " > ";
 const char* const kAlias = " $as$ ";
 const char* const kTypeOf = "$typeof$";
 const char* const kReadOnly = "$read_only$";
@@ -128,6 +129,24 @@ void ConstraintStreamWriter::writeTypeEquiv()
     HONOR_BLOCKING_STATE;
 
     os_ << kEquiv;
+}
+
+void ConstraintStreamWriter::writeSubtypeMark()
+{
+    HONOR_BLOCKING_STATE;
+
+    os_ << kSubtype;
+}
+
+void ConstraintStreamWriter::writeSubtypeRelation(const std::string& ty,
+                                                  const std::string& subTy)
+{
+    HONOR_BLOCKING_STATE;
+
+    writeTypeName(ty);
+    writeSubtypeMark();
+    writeTypeName(subTy);
+    ++cnt_;
 }
 
 void ConstraintStreamWriter::writeTypeName(const std::string& ty)

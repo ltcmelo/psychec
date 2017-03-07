@@ -7,7 +7,7 @@ typedef int T5;
 typedef int T4;
 typedef int* T3;
 typedef double* T2;
-typedef int T16;
+typedef double T16;
 typedef double* T15;
 typedef double* T14;
 typedef int* T13;

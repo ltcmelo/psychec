@@ -1,10 +1,10 @@
-typedef  int TUS ;
-typedef  int TUL ;
+typedef  short TUS ;
+typedef  long TUL ;
 typedef  int TUI ;
-typedef  int TSIU ;
-typedef  int TS ;
+typedef  short TSIU ;
+typedef  short TS ;
 typedef  double TLD ;
-typedef  int TL ;
+typedef  long TL ;
 typedef  int TIU ;
 typedef  int TI ;
 

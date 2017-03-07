@@ -1,2 +1,2 @@
 typedef  struct __point__ {float x;float y;} point ;
-double distance (struct __point__ ,struct __point__ ) ;
+float distance (struct __point__ ,struct __point__ ) ;

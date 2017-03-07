@@ -65,8 +65,12 @@ Constraint parser
 >                    ]
 
 > eqParser :: Parser Constraint
-> eqParser = (:=:) <$> typeParser <* reservedOp "="
->                                 <*> typeParser
+> eqParser =
+>     f <$> typeParser <*> ((Left <$> reservedOp "=") <|> (Right <$> reservedOp ">"))
+>         <*> typeParser
+>   where
+>     f t (Left _) t' = t :=: t'
+>     f t (Right _) t' = t :>: t'
 
 > ascriptionParser :: Parser Constraint
 > ascriptionParser = build <$> reserved "$typeof$" <*>

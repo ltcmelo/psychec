@@ -483,19 +483,29 @@ bool ScalarTypeLattice::visit(UnaryExpressionAST *ast)
 
 bool ScalarTypeLattice::visit(NumericLiteralAST *ast)
 {
-    const NumericLiteral *numLit =
-            numericLiteral(ast->asNumericLiteral()->literal_token);
-    PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
-    if (numLit->isDouble()
-            || numLit->isFloat()
-            || numLit->isLongDouble()) {
-        switchClass(FloatingPoint);
+    const Token& tk = tokenAt(ast->literal_token);
+    if (tk.is(T_CHAR_LITERAL)) {
+        switchClass(Class(kIntegralClassName, kCharTy));
     } else {
-        if (!strcmp(numLit->chars(), kZero)) {
-            printDebug("Found null constant, 0, an integer or a pointer\n");
-            switchClass(Scalar);
+        const NumericLiteral *numLit = numericLiteral(ast->literal_token);
+        PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
+        if (numLit->isDouble()) {
+            switchClass(Class(kFloatPointClassName, kDoubleTy));
+        } else if (numLit->isFloat()) {
+            switchClass(Class(kFloatPointClassName, kFloatTy));
+        } else if (numLit->isLongDouble()) {
+            switchClass(Class(kFloatPointClassName, kLongDouble));
+        } else if (numLit->isLong()) {
+            switchClass(Class(kIntegralClassName, kLongTy));
+        } else if (numLit->isLongLong()) {
+            switchClass(Class(kIntegralClassName, kLongLongTy));
         } else {
-            switchClass(Integral);
+            if (!strcmp(numLit->chars(), kZero)) {
+                printDebug("Found null constant, 0, an integer or a pointer\n");
+                switchClass(Scalar);
+            } else {
+                switchClass(Integral);
+            }
         }
     }
 

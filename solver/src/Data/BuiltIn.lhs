@@ -59,20 +59,9 @@ Contexts of C's builtin types and values
 > builtinVarCtx
 >     = Map.fromList types
 >       where
->          types = [
->                  -- Operators in which operands are allowed to be either
->                  -- integrals or pointers may NOT be listed here, since they
->                  -- lead to overunification. Those operadors are handled in
->                  -- the generator through the pointer x integers lattice.
->                  -- Therefore only non-polymorphic operators are builtin.
->                    (Name "*", VarInfo (FunTy int [int, int]) True False)
->                  , (Name "/", VarInfo (FunTy double [double, double]) True False)
->                  , (Name "%", VarInfo (FunTy int [int, int]) True False)
->                  , (Name "<<", VarInfo (FunTy int [int, int]) True False)
+>          types = [ -- Shift operators trigger int promotion.
+>                    (Name "<<", VarInfo (FunTy int [int, int]) True False)
 >                  , (Name ">>", VarInfo (FunTy int [int, int]) True False)
->                  , (Name "&", VarInfo (FunTy int [int, int]) True False)
->                  , (Name "|", VarInfo (FunTy int [int, int]) True False)
->                  , (Name "^", VarInfo (FunTy int [int, int]) True False)
 >                  ]
 
 

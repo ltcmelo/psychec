@@ -155,17 +155,21 @@ bool TypeOfExpr::visit(MemberAccessAST *ast)
 
 bool TypeOfExpr::visit(NumericLiteralAST *ast)
 {
-    const NumericLiteral *numLit =
-            numericLiteral(ast->asNumericLiteral()->literal_token);
-    PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
-    if (numLit->isDouble()) {
-        fullType_.push_back(control()->floatType(FloatType::Double));
-    } else if (numLit->isLongDouble()) {
-        fullType_.push_back(control()->floatType(FloatType::LongDouble));
-    } else if (numLit->isFloat()) {
-        fullType_.push_back(control()->floatType(FloatType::Float));
+    const Token& tk = tokenAt(ast->literal_token);
+    if (tk.is(T_CHAR_LITERAL)) {
+        fullType_.push_back(control()->integerType(IntegerType::Char));
     } else {
-        fullType_.push_back(control()->integerType(IntegerType::Int));
+        const NumericLiteral *numLit = numericLiteral(ast->literal_token);
+        PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
+        if (numLit->isDouble()) {
+            fullType_.push_back(control()->floatType(FloatType::Double));
+        } else if (numLit->isLongDouble()) {
+            fullType_.push_back(control()->floatType(FloatType::LongDouble));
+        } else if (numLit->isFloat()) {
+            fullType_.push_back(control()->floatType(FloatType::Float));
+        } else {
+            fullType_.push_back(control()->integerType(IntegerType::Int));
+        }
     }
 
     return false;

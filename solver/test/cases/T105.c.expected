@@ -1,2 +1,2 @@
-typedef  struct __set__ {unsigned int* vector;unsigned int size;} set ;
-double INT_BITS ;
+typedef  struct __set__ {unsigned int* vector;int size;} set ;
+unsigned int INT_BITS ;

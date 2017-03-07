@@ -54,6 +54,7 @@ Utilities for pretty printing
 
 > instance Pretty Constraint where
 >     pprint (t :=: t') = pprint t <+> char '=' <+> pprint t'
+>     pprint (t :>: t') = pprint t <+> char '>' <+> pprint t'
 >     pprint (n :<-: t) = text "typeof" <> (parens $ pprint n) <+>
 >                         char '=' <+> pprint t
 >     pprint (Has t f)  = text "has" <> parens (pprint t        <> comma <>
