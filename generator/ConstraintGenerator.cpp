@@ -70,12 +70,13 @@ std::string extractId(const Name* name)
                   "expected simple name");
 
     const Identifier *id = name->asNameId()->identifier();
-    return std::string (id->chars(), id->size());
+    return std::string(id->chars(), id->size());
 }
 
-} // anonymous
+}
 
-std::string ConstraintGenerator::unnamedParamPrefix_ = "unnamed";
+std::string ConstraintGenerator::paramPrefix_ = "param";
+std::string ConstraintGenerator::stubPrefix_ = "stub";
 
 ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
                                          ConstraintStreamWriter* writer)
@@ -84,10 +85,10 @@ ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
     , scope_(nullptr)
     , writer_(writer)
     , typeSpeller_(writer)
-    , unnamedCount_(0)
+    , lattice_(unit)
     , staticDecl_(false)
     , preprocess_(true)
-    , lattice_(unit)
+    , unnamedCount_(0)
 {
     addPrintfVariety("printf", 0);
     addPrintfVariety("printf_s", 0);
@@ -176,10 +177,10 @@ std::string ConstraintGenerator::popType()
     return ty;
 }
 
-std::string ConstraintGenerator::createUnnamed()
+std::string ConstraintGenerator::createUnnamed(const std::string& prefix)
 {
     int count = ++unnamedCount_;
-    return unnamedParamPrefix_ + std::to_string(count);
+    return prefix + std::to_string(count);
 }
 
 std::string ConstraintGenerator::processSymbol(const std::string& name)
@@ -229,7 +230,7 @@ bool ConstraintGenerator::visit(FunctionDefinitionAST *ast)
                 std::string declarator(idArgName->begin(), idArgName->end());
                 params.emplace_back(specifier, declarator);
             } else {
-                params.emplace_back(specifier, createUnnamed());
+                params.emplace_back(specifier, createUnnamed(paramPrefix_));
             }
         }
 
@@ -800,13 +801,27 @@ bool ConstraintGenerator::visit(CallAST *ast)
     DEBUG_VISIT(CallAST);
     CLASSIFY(ast);
 
-    const std::string& funcName = trivialName(ast->base_expression->asIdExpression());
-
-    // Detect whether we have a function from the printf family.
+    std::string funcName;
     int varArgPos = -1;
-    auto fit = printfs_.find(funcName);
-    if (fit != printfs_.end())
-        varArgPos = fit->second;
+    if (ast->base_expression->asIdExpression()) {
+        funcName = trivialName(ast->base_expression->asIdExpression());
+
+        // Detect whether the function is registered as a variadic one.
+        auto fit = printfs_.find(funcName);
+        if (fit != printfs_.end())
+            varArgPos = fit->second;
+    } else {
+        const std::string& funcVar = supply_.createTypeVar1();
+        writer_->writeNewTypeVar(funcVar);
+        collectExpression(funcVar, ast->base_expression);
+
+        funcName = createUnnamed(stubPrefix_);
+        writer_->writeAnd();
+        writer_->writeTypeof(funcName);
+        writer_->writeTypeEquiv();
+        writer_->writeTypeName(funcVar);
+        writer_->writeAnd();
+    }
 
     // Deal with "regular" functions, for which we generate constraints through
     // the normal expression inspection process.
@@ -996,7 +1011,7 @@ bool ConstraintGenerator::visit(IdExpressionAST *ast)
     processSymbol(extractId(ast->name->name));
 
     if (staticDecl_) {
-        // Static initialization requires this to be a compile-time constant.
+        // Static initialization requires a compile-time constant.
         writer_->writeAnd();
         writer_->writeReadOnly(extractId(ast->name->name));
     }
@@ -1340,7 +1355,8 @@ bool ConstraintGenerator::visit(ExpressionStatementAST *ast)
     // return type because, even though the function declaration may be absent,
     // the function definition may be present in later in the code. In such
     // case we use the return type for functions we know about.
-    if (ast->expression->asCall()) {
+    if (ast->expression->asCall()
+            && ast->expression->asCall()->base_expression->asIdExpression()) {
         const std::string& funcName =
                 trivialName(ast->expression->asCall()->base_expression->asIdExpression());
         const auto it = knownFuncNames_.find(funcName);

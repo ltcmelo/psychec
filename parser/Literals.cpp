@@ -106,7 +106,7 @@ NumericLiteral::NumericLiteral(const char *chars, unsigned size)
             } // switch
         }
 
-        for (const char *dot = it; it != begin - 1; --it) {
+        for (const char *dot = it; dot != begin - 1; --dot) {
             if (*dot == '.')
                 f._type = NumericLiteralIsDouble;
         }

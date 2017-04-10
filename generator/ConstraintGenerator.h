@@ -111,7 +111,7 @@ private:
      * another. But through the visitor we can't see ahead: either 1) we look
      * behind if there's been a valid statement or 2) we mark whenever a valid
      * statement has been visited. The approach originally implemented was
-     * option 1, but it can get tricky. Current implementaiton is option 2.
+     * option 1, but it can get tricky. Current implementation is option 2.
      */
     void maybeFollowStmt();
     bool seenStmt_;
@@ -133,20 +133,14 @@ private:
     //! Pointer x integers lattice.
     ScalarTypeLattice lattice_;
 
-    //! Inside static initialization area.
+    //! Inside static initialization.
     bool staticDecl_;
-
-    /*!
-     * The generator performs two passes over the input, the first one is a
-     * sort of preprocessing step (not to be confused with the compiler's
-     * macro preprocessor) in which the scalar lattice is constructed.
-     */
-    bool preprocess_;
 
     //!@{
     /*!
      * Pointer x scalar lattice related processing.
      */
+    bool preprocess_;
     void applyTypeLattice(const ScalarTypeLattice::Class &lhsClass,
                           const ScalarTypeLattice::Class &rhsClass,
                           const std::string &lhsAlpha,
@@ -180,11 +174,12 @@ private:
 
     //!@{
     /*!
-     * Prefix and counter for unamed names.
+     * Prefix and counter for anonymous stuff.
      */
     int unnamedCount_;
-    std::string createUnnamed();
-    static std::string unnamedParamPrefix_;
+    std::string createUnnamed(const std::string &prefix);
+    static std::string paramPrefix_;
+    static std::string stubPrefix_;
     //!@}
 
     /*!

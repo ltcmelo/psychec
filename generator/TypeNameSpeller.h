@@ -65,7 +65,6 @@ private:
     void visit(CPlusPlus::Enum *) override;
     void visit(CPlusPlus::ForwardClassDeclaration *) override;
 
-    ConstraintStreamWriter *writer_;
     std::string spelling_;
     const CPlusPlus::Scope* scope_;
 };

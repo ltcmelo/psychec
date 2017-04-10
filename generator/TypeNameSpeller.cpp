@@ -30,8 +30,7 @@ using namespace CPlusPlus;
 using namespace psyche;
 
 TypeNameSpeller::TypeNameSpeller(ConstraintStreamWriter *writer)
-    : writer_(writer)
-    , scope_(nullptr)
+    : scope_(nullptr)
 {}
 
 std::string TypeNameSpeller::spellTypeName(const FullySpecifiedType& fullType,
