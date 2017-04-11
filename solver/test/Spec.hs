@@ -186,6 +186,7 @@ tests = testGroup "Unit tests"
                   , doTest "T140.c"
                   , doTest "T141.c"
                   , doTest "T142.c"
+                  , doTest "T143.c" -- Non-trivial function calls.
 
                   -- TODO: Create expected files for those.
                   -- , doTest "TGNU_base64.c"
