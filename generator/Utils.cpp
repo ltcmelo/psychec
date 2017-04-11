@@ -66,7 +66,7 @@ ExpressionAST* stripParen(ExpressionAST *ast)
 {
     while (ast->asNestedExpression())
         ast = ast->asNestedExpression()->expression;
-    return striped;
+    return ast;
 }
 
 bool isProgramAmbiguous(TranslationUnit *program, const TranslationUnitAST *ast)
