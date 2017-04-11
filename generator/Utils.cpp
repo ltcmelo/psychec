@@ -64,9 +64,8 @@ namespace psyche {
 
 ExpressionAST* stripParen(ExpressionAST *ast)
 {
-    ExpressionAST* striped = ast;
-    while (striped->asNestedExpression())
-        striped = ast->asNestedExpression()->expression;
+    while (ast->asNestedExpression())
+        ast = ast->asNestedExpression()->expression;
     return striped;
 }
 
