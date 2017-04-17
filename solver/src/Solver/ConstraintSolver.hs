@@ -20,6 +20,8 @@ module Solver.ConstraintSolver where
 
 import Data.Map (Map)
 import qualified Data.Map as Map
+import Data.Set (Set)
+import qualified Data.Set as Set
 import qualified Data.List as List
 import Data.Maybe (isJust, fromJust)
 
@@ -80,8 +82,8 @@ solve c = do
     return (TyCtx tcx2_, VarCtx vcx2_)
 
 
--- cleanv c = VarCtx $  (varctx c) Map.\\ builtinVarCtx Map.\\ stdVarCtx
--- cleant c = TyCtx $  (tyctx c) Map.\\ builtinTyCtx Map.\\ stdTyCtx
+--cleanv c = VarCtx $  (varctx c) Map.\\ builtinVarCtx Map.\\ stdVarCtx
+--cleant c = TyCtx $  (tyctx c) Map.\\ builtinTyCtx Map.\\ stdTyCtx
 
 stage1 :: TyCtx -> Constraint -> SolverM (TyCtx, Constraint)
 stage1 tctx (t :=: t') =
@@ -160,6 +162,21 @@ replaceTy tctx t@(EnumTy _) = Data.BuiltIn.int
 
 
 stage2 :: VarCtx -> Constraint -> SolverM (VarCtx, Constraint)
+stage2 vtx (n :<-: t@(FunTy rt pts)) =
+    case Map.lookup n (varctx vtx) of
+        Just info ->
+            case varty info of
+                FunTy rt' pts' -> do
+                    let pcs = zipWith (\t t' -> (t' :>: t)) pts pts'
+                        pcs' = foldr (\c acc -> c :&: acc) Truth pcs
+                        rtc = rt' :>: rt
+                    return (vtx, pcs' :&: rtc)
+                -- FIXME: Verify scoping.
+                t' -> return (vtx, t' :=: t) -- error (show $ pprint t)
+        Nothing -> do
+            v <- fresh
+            return ( VarCtx $ Map.insert n (VarInfo v False False) (varctx vtx)
+                    , v :=: t )
 stage2 vtx (n :<-: t) =
     case Map.lookup n (varctx vtx) of
         Just info -> return (vtx, varty info :=: t)
@@ -285,6 +302,16 @@ stage4 tcx vcx fs s = do
           where
             fakeName = ensureElabStructName (Name ("T" ++ (show cnt)))
 
+        -- TODO: Store nested structs names in non-orphans map.
+        -- This has gotten messy... Need to refactor and split this stage.
+        structonly t@(Struct fs n) = Struct (map (applyCore2 s'' Set.empty) fs) n
+        structonly t@(Pointer t') = Pointer (structonly t')
+        structonly t = t
+        structonly' (t, b) = (structonly t, b)
+        tcx_2 = Map.map structonly' tcx_'
+        structonly'' (VarInfo t b ro) = (VarInfo (structonly t) b ro)
+        vcx_2 = Map.map structonly'' vcx_'
+
         typefy acc@(_, nonOrphan, orphan) k t =
             case Map.lookup (nameOf t) nonOrphan of
                 Just n -> (acc, TyCon n)
@@ -292,9 +319,9 @@ stage4 tcx vcx fs s = do
         (pending1, vcx_') = Map.mapAccumWithKey
             (retypeVar typefy makeFakeStruct) pending $ undefVars vcx_
         (pending2, tcx_'') = Map.mapAccumWithKey
-            (retype typefy makeFakeStruct) pending1 tcx_'
+            (retype typefy makeFakeStruct) pending1 tcx_2
         (pending3, vcx_'') = Map.mapAccumWithKey
-            (retypeVar typefy makeFakeStruct) pending2 vcx_'
+            (retypeVar typefy makeFakeStruct) pending2 vcx_2
 
         -- Deal with orphans
         orphanize f acc@(cnt, nonOrphan, orphan) k v =
@@ -335,7 +362,7 @@ combine acc@(_, nonOrphan, _) k t@(Struct fs v) f g
     combine' facc (x@(Field fn ft):xs) =
         (facc'', (Field fn ft'):xs')
       where
-        (facc', ft') = combine facc (nameOf ft) ft f g
+        (facc', ft') = combine facc fn ft f g
         (facc'', xs') = combine' facc' xs
 combine acc k t@(FunTy rt ps) f g =
     (acc'', FunTy rt' ps')

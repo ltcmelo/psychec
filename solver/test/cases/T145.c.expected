@@ -1,0 +1,3 @@
+typedef  struct __T__ {struct __T2__ {double z;}* y;}* T ;
+typedef  struct __R__ {struct __T1__ {int u;} k;} R ;
+typedef  struct __Q__ {struct __T0__ {int p;} n;} Q ;

@@ -24,6 +24,8 @@ import Control.Monad.State
 import Data.List (union, sort)
 import Data.Map (Map)
 import qualified Data.Map as Map
+import Data.Set (Set)
+import qualified Data.Set as Set
 
 import Data.Type
 import Data.Constraints
@@ -56,6 +58,27 @@ instance Apply Constraint where
     apply s (TypeDef t t') = TypeDef (apply s t) (apply s t')
     apply s c@(ReadOnly _) = c
     apply s Truth = Truth
+
+
+-- TODO: Refactor this together with stage 4.
+applyCore s h t@(TyVar v) =
+    maybe t (recOrNot) (Map.lookup v (subs s))
+  where
+    recOrNot t'@(TyVar v') =
+        if Set.member v'  h
+            then t'
+            else applyCore s (Set.insert v' h) t'
+    recOrNot t' = t'
+
+applyCore s h t@(TyCon c) = t
+applyCore s h (Pointer t) = Pointer (applyCore s h t)
+applyCore s h (FunTy t ts) = FunTy (applyCore s h t) (map (applyCore s h) ts)
+applyCore s h (Struct fs n) = Struct (map (applyCore2 s h) fs) n
+applyCore s h (QualTy t) = QualTy (applyCore s h (dropTopQual t))
+applyCore s h t@(EnumTy n) = t
+
+applyCore2 s h (Field n t) = Field n (applyCore s h t)
+
 
 instance Apply Ty where
     apply s t@(TyVar v) = maybe t id (Map.lookup v (subs s))
@@ -140,7 +163,7 @@ instance Unifiable Ty where
     punify p@(Pointer t) p'@(Pointer t')
         | convertible p p' = return nullSubst
         | otherwise = punify t t'
-        
+
     punify f@(FunTy t ts) (Pointer p) = punify f p
     punify (Pointer p) f'@(FunTy t' ts') = punify f' p
 
@@ -155,6 +178,7 @@ instance Unifiable Ty where
 
     punify (QualTy t) (QualTy t') = punify t t'
     punify (QualTy t) t' = punify t t'
+    punify t'(QualTy t) = punify t t'
 
     punify t@(EnumTy _) t'
         | convertible t t' = return nullSubst
@@ -170,7 +194,7 @@ instance Unifiable Ty where
                                                      (Name $ show $ pprint t')
 
     -- Directional unification
-    
+
     dunify t@(TyVar v) t'@(Pointer _) _ = varBind v t'
 
     dunify t'@(TyVar v) t m

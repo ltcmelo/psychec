@@ -187,18 +187,9 @@ tests = testGroup "Unit tests"
                   , doTest "T141.c"
                   , doTest "T142.c"
                   , doTest "T143.c" -- Non-trivial function calls.
-
-                  -- TODO: Create expected files for those.
-                  -- , doTest "TGNU_base64.c"
-                  -- , doTest "TGNU_basename.c"
-                  -- , doTest "TGNU_cat.c"
-                  -- , doTest "TGNU_chcon.c"
-                  -- , doTest "TGNU_chgrp.c"
-                  -- , doTest "TGNU_chmod.c"
-                  -- , doTest "TGNU_chown.c"
-                  -- , doTest "TGNU_chroot.c"
-                  -- , doTest "TGNU_cksum.c"
-                  -- , doTest "TGNU_comm.c"
+                  , doTest "T144.c" -- const qualification on function args.
+                  , doTest "T145.c" -- Nested anonymous struct with declaration.
+                  , doTest "T146.c" -- Nested anonymous struct without declaration.
                   ]
 
 doTest s

@@ -1,0 +1,4 @@
+struct __T0__ {struct __T3__ {int u;} k;} j ;
+struct __T1__ {struct __T4__ {int p;} n;} m ;
+struct __T2__ {struct __T5__ {double z;}* y;}* x ;
+
