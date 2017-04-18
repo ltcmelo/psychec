@@ -169,7 +169,7 @@ void ConstraintStreamWriter::writeTypeNames(const std::vector<std::string> &tys)
     HONOR_BLOCKING_STATE;
 
     const auto size = tys.size();
-    for (auto i = 0; i < size; ++i) {
+    for (auto i = 0u; i < size; ++i) {
         writeTypeName(tys[i]);
         if (i != tys.size() - 1)
             writeAnd();

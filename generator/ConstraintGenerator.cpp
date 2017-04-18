@@ -220,7 +220,7 @@ bool ConstraintGenerator::visit(FunctionDefinitionAST *ast)
     // Deal with parameters.
     std::vector<ConstraintStreamWriter::ParamPair> params;
     if (func->hasArguments()) {
-        for (int i = 0; i < func->argumentCount(); i++) {
+        for (auto i = 0u; i < func->argumentCount(); i++) {
             Symbol *arg = func->argumentAt(i);
             std::string specifier = typeSpeller_.spellTypeName(arg->type(), scope_);
 
@@ -906,7 +906,7 @@ bool ConstraintGenerator::visit(CallAST *ast)
         }
 
         if (argCnt >= varArgPos) {
-            PSYCHE_ASSERT(it->value && argCnt < specs.size(), return false,
+            PSYCHE_ASSERT(it->value && argCnt < static_cast<int>(specs.size()), return false,
                           "expected matching number of exprs/specs");
             switch (specs[argCnt]) {
             case PrintfScanner::Char:

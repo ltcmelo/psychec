@@ -141,7 +141,7 @@ void TypeNameSpeller::visit(NamedType *ty)
 void TypeNameSpeller::visit(Function *ty)
 {
     spelling_.append("(");
-    for (int i = 0; i < ty->argumentCount(); i++) {
+    for (auto i = 0u; i < ty->argumentCount(); i++) {
         visitType(ty->argumentAt(i)->type());
         spelling_.append(",");
     }
