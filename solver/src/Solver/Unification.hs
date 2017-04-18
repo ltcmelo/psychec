@@ -198,12 +198,9 @@ instance Unifiable Ty where
     dunify t@(TyVar v) t'@(Pointer _) _ = varBind v t'
 
     dunify t'@(TyVar v) t m
-        | convertible t t' = return nullSubst
         | m == Relax = varBind v (dropQual t)
         | otherwise = varBind v t
-    dunify t t'@(TyVar v) m
-        | convertible t t' = return nullSubst
-        | otherwise = varBind v (dropQual t)
+    dunify t t'@(TyVar v) m = varBind v (dropQual t)
 
     dunify (TyCon c) (TyCon c') _
         | convertible (TyCon c) (TyCon c') = return nullSubst

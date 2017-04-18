@@ -1,2 +1,2 @@
-typedef uintptr_t T;
+typedef void* T;
 

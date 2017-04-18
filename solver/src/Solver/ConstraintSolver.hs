@@ -63,16 +63,26 @@ solve c = do
     -- type variables are bound in a proper order, that corresponds to a subtyping order.
     s <- punifyList eqs
     let iqs' = apply s iqs
-        (iq1, iq2, iq3) = dsort iqs'
+        (iq1, iq2, iq3, iq4) = dsort iqs'
         iqs'' = iq1 ++ iq2 ++ iq3
     s' <- dunifyList iqs''
     let s'' = s' @@ s
 
-    -- Build record structures.
-    (tcx1, vcx1, _) <- stage4 tc0 vcx fds s''
+    -- Assemble records.
+    (tcx1, vcx1, s''', cnt) <- stage4 tc0 vcx fds s''
+
+    -- Unify against the top type: void*.
+    let vqs = apply s''' iq4
+    ss <- dunifyList vqs
+    let ss' = ss @@ s'''
+        tcx11 = TyCtx $ Map.map (\(t,b) -> (apply ss' t, b)) (tyctx tcx1)
+        vcx11 = VarCtx $ Map.map (\varInfo -> apply ss' varInfo) (varctx vcx1)
+
+     -- Orphanification.
+    (tcx1', vcx1') <- stage5 tcx11 vcx11 cnt
 
     -- Decay function pointers.
-    (tcx2, vcx2) <- decay tcx1 vcx1
+    (tcx2, vcx2) <- decay tcx1' vcx1'
 
     -- Remove builtins and standard library components.
     let
@@ -222,27 +232,32 @@ stage3 c@(_ :>: _) = ([], [c], [])
 stage3 Truth = ([], [], [])
 
 
-dsort :: [Constraint] -> ([Constraint], [Constraint], [Constraint])
-dsort [] = ([], [], [])
+dsort :: [Constraint] -> ([Constraint], [Constraint], [Constraint], [Constraint])
+dsort [] = ([], [], [], [])
 dsort (x:xs) =
-    (eq1 ++ eq1', eq2 ++ eq2', eq3 ++ eq3')
+    (eq1 ++ eq1', eq2 ++ eq2', eq3 ++ eq3', eq4 ++ eq4')
   where
-    (eq1, eq2, eq3) = dsort' x
-    (eq1', eq2', eq3') = dsort xs
+    (eq1, eq2, eq3, eq4) = dsort' x
+    (eq1', eq2', eq3', eq4') = dsort xs
 
-dsort' :: Constraint -> ([Constraint], [Constraint], [Constraint])
+dsort' :: Constraint -> ([Constraint], [Constraint], [Constraint], [Constraint])
 dsort' c@(_ :>: (Pointer (QualTy t)))
-    | isTyVarDep t = ([], [], [c])
-    | otherwise = ([c], [], [])
+    | isTyVarDep t = ([], [], [c], [])
+    | t == Data.BuiltIn.void = ([], [], [], [c])
+    | otherwise = ([c], [], [], [])
+dsort' c@(_ :>: (Pointer t))
+    | t == Data.BuiltIn.void = ([], [], [], [c])
+    | otherwise =  ([], [], [c], [])
 dsort' c@((Pointer t) :>: _)
-    | isTyVarDep t = ([], [], [c])
+    | isTyVarDep t = ([], [], [c], [])
+    | t == Data.BuiltIn.void = ([], [], [], [c])
     | otherwise = case t of
-        QualTy _ -> ([], [], [c])
-        _ -> ([], [c], [])
-dsort' c = ([], [], [c])
+        QualTy _ -> ([], [], [c], [])
+        _ -> ([], [c], [], [])
+dsort' c = ([], [], [c], [])
 
 
-stage4 :: TyCtx -> VarCtx -> [Constraint] -> Subst -> SolverM (TyCtx, VarCtx, Subst)
+stage4 :: TyCtx -> VarCtx -> [Constraint] -> Subst -> SolverM (TyCtx, VarCtx, Subst, Int)
 stage4 tcx vcx fs s = do
     -- We must sort fields by struct and by name.
     let
@@ -283,23 +298,23 @@ stage4 tcx vcx fs s = do
         -- We now need to combine type variables which are of struct types to
         -- their corresponding structs. If the given structs are declared in the
         -- program, their names are supplied to the type constructor. Otherwise,
-        -- we create fake names for them. Still, there will remain "orphan"
-        -- variables, which might contain an avaialble declaration or not. If
-        -- such declaration is of a complex type we must respect it and generate
-        -- an according orphan. The accumulator below represents a counter (for
-        -- the artificial names), the non-orphans, and the orphans.
+        -- we create fake names for them. TODO: Refactor this little mess...
         acc = (0, Map.empty, Map.empty)
         keepType acc k t = (acc, t)
         makeElabStruct acc@(cnt, nonOrphan, orphan) n v fs =
-            ( (cnt, Map.insert v (ensureElabStructName n) nonOrphan, orphan)
-            , apply (v +-> (TyCon (ensureElabStructName n))) $ Struct fs (ensureElabStructName n))
+            ( (cnt, Map.insert v t' nonOrphan, orphan)
+            , apply (v +-> t') $ Struct fs n')
+          where
+            n' = ensureElabStructName n
+            t' = TyCon n'
         (pending, tcx_') = Map.mapAccumWithKey (retype keepType makeElabStruct) acc tcx_
 
         -- Fake structs
         makeFakeStruct acc@(cnt, nonOrphan, orphan) _ v fs' =
-            ( (cnt + 1, Map.insert v fakeName nonOrphan, orphan)
-            , apply (v +-> (TyCon fakeName)) $ Struct fs' fakeName)
+            ( (cnt + 1, Map.insert v t' nonOrphan, orphan)
+            , apply (v +-> t') $ Struct fs' fakeName)
           where
+            t' = TyCon fakeName
             fakeName = ensureElabStructName (Name ("T" ++ (show cnt)))
 
         -- TODO: Store nested structs names in non-orphans map.
@@ -314,7 +329,7 @@ stage4 tcx vcx fs s = do
 
         typefy acc@(_, nonOrphan, orphan) k t =
             case Map.lookup (nameOf t) nonOrphan of
-                Just n -> (acc, TyCon n)
+                Just t' -> (acc, t')
                 Nothing -> (acc, t)
         (pending1, vcx_') = Map.mapAccumWithKey
             (retypeVar typefy makeFakeStruct) pending $ undefVars vcx_
@@ -323,6 +338,15 @@ stage4 tcx vcx fs s = do
         (pending3, vcx_'') = Map.mapAccumWithKey
             (retypeVar typefy makeFakeStruct) pending2 vcx_2
 
+        s''' = Subst $ ((\(_, x, _) -> x) pending3)
+        cnt = (\(x, _, _) -> x) pending3
+
+    return (TyCtx tcx_'', VarCtx vcx_'', s''', cnt)
+
+
+stage5 :: TyCtx -> VarCtx -> Int -> SolverM (TyCtx, VarCtx)
+stage5 tcx vcx cnt = do
+    let
         -- Deal with orphans
         orphanize f acc@(cnt, nonOrphan, orphan) k v =
             case Map.lookup v orphan of
@@ -334,16 +358,18 @@ stage4 tcx vcx fs s = do
                         then ( (cnt, nonOrphan, Map.insert v (TyCon k) orphan)
                              , EnumTy k)
                         else (acc, f v)
+
+        pending3 = (cnt, Map.empty, Map.empty)
         (pending4, tcx_''') = Map.mapAccumWithKey
-            (retype (orphanize id) (error "error")) pending3 tcx_''
+            (retype (orphanize id) (error "error")) pending3 (tyctx tcx)
         (pending5, vcx_''') = Map.mapAccumWithKey
-            (retypeVar (orphanize id) (error "error")) pending4 vcx_''
+            (retypeVar (orphanize id) (error "error")) pending4 (varctx vcx)
         (pending6, tcx_'''') = Map.mapAccumWithKey
             (retype (orphanize (const uintptr_t)) (error "error")) pending5 tcx_'''
         (_, vcx_'''') = Map.mapAccumWithKey
             (retypeVar (orphanize (const uintptr_t)) (error "error")) pending6 vcx_'''
 
-    return (TyCtx tcx_'''', VarCtx vcx_'''', s'')
+    return (TyCtx tcx_'''', VarCtx vcx_'''')
 
 
 retype f g acc k (t, b) = (acc', (t', b))
@@ -353,7 +379,7 @@ retypeVar f g acc k (VarInfo t b ro) = (acc', VarInfo t' b ro)
 
 combine acc@(_, nonOrphan, _) k t@(Struct fs v) f g
     | isVar v = case Map.lookup v nonOrphan of
-                    Just n -> (acc, TyCon n)
+                    Just t' -> (acc, t')
                     Nothing -> g acc k v fs'
     | otherwise = (acc', Struct fs' v)
   where
