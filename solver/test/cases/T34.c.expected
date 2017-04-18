@@ -1,2 +1,2 @@
-typedef struct node { int w; struct node* z;struct node* y; uintptr_t x; } node ;
+typedef struct node { int w; struct node* z;struct node* y; int /*<<< orphan or scalar*/ x; } node ;
 typedef struct data { struct data * m; } data ;

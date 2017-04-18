@@ -1,2 +1,2 @@
 int ENC_BLOCKSIZE ;
-uintptr_t fread (uintptr_t,int) ;
+int /*<<< orphan or scalar*/ fread (int /*<<< orphan or scalar*/,int) ;

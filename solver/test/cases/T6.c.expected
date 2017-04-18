@@ -1,3 +1,3 @@
 typedef int D ;
-typedef struct __C__ {uintptr_t y; uintptr_t x;} C ;
+typedef struct __C__ {int /*<<< orphan or scalar*/ y; int /*<<< orphan or scalar*/ x;} C ;
 typedef int A ;

@@ -1,5 +1,5 @@
-typedef  uintptr_t Complex ;
-uintptr_t COMPLEXinit (double,double) ;
-uintptr_t COMPLEXmult (uintptr_t,uintptr_t) ;
-double Im (uintptr_t) ;
-double Re (uintptr_t) ;
+typedef  int /*<<< orphan or scalar*/ Complex ;
+int /*<<< orphan or scalar*/ COMPLEXinit (double,double) ;
+int /*<<< orphan or scalar*/ COMPLEXmult (int /*<<< orphan or scalar*/,int /*<<< orphan or scalar*/) ;
+double Im (int /*<<< orphan or scalar*/) ;
+double Re (int /*<<< orphan or scalar*/) ;

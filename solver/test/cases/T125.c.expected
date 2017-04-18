@@ -1,2 +1,2 @@
-uintptr_t uid ;
-int uid_set (uintptr_t) ;
+int /*<<< orphan or scalar*/ uid ;
+int uid_set (int /*<<< orphan or scalar*/) ;

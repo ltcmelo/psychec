@@ -1,4 +1,4 @@
-typedef  uintptr_t Graph ;
-uintptr_t EDGE (int,int) ;
-uintptr_t GRAPHinit (int) ;
-uintptr_t GRAPHinsertE (uintptr_t,uintptr_t) ;
+typedef  int /*<<< orphan or scalar*/ Graph ;
+int /*<<< orphan or scalar*/ EDGE (int,int) ;
+int /*<<< orphan or scalar*/ GRAPHinit (int) ;
+int /*<<< orphan or scalar*/ GRAPHinsertE (int /*<<< orphan or scalar*/,int /*<<< orphan or scalar*/) ;

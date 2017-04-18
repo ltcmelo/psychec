@@ -1,2 +1,2 @@
-typedef  struct __Graph__ {int V;int** adj;uintptr_t E;}* Graph ;
+typedef  struct __Graph__ {int V;int** adj;int /*<<< orphan or scalar*/ E;}* Graph ;
 typedef  struct __Edge__ {int v;int w;} Edge ;

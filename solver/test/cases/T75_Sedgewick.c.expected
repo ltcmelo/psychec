@@ -1,6 +1,6 @@
-typedef  uintptr_t Q ;
+typedef  int /*<<< orphan or scalar*/ Q ;
 int M ;
-uintptr_t QUEUEempty (uintptr_t) ;
-int QUEUEget (uintptr_t) ;
-uintptr_t QUEUEinit (int) ;
-uintptr_t QUEUEput (uintptr_t,int) ;
+int /*<<< orphan or scalar*/ QUEUEempty (int /*<<< orphan or scalar*/) ;
+int QUEUEget (int /*<<< orphan or scalar*/) ;
+int /*<<< orphan or scalar*/ QUEUEinit (int) ;
+int /*<<< orphan or scalar*/ QUEUEput (int /*<<< orphan or scalar*/,int) ;

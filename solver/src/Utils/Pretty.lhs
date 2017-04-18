@@ -38,7 +38,7 @@ Utilities for pretty printing
 >     pprint (Field n (FunTy r p)) =
 >         pprint r <+> text "(*" <+> pprint n <+> text ")"
 >             <+> parens (hcat $ punctuate comma (map pprint p)) <+> semi
->     pprint (Field n t) = pprint t <+> pprint n <> semi
+>     pprint (Field n t) = pprint t <+> pprint n <> semi <> char ' '
 
 
 > instance Pretty Ty where

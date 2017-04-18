@@ -1,3 +1,3 @@
-typedef  struct __link__ {int index;int d;uintptr_t* r;uintptr_t* m;uintptr_t* l;}* link ;
-uintptr_t N ;
-uintptr_t* head ;
+typedef  struct __link__ {int index;int d;int /*<<< orphan or scalar*/* r;int /*<<< orphan or scalar*/* m;int /*<<< orphan or scalar*/* l;}* link ;
+int /*<<< orphan or scalar*/ N ;
+int /*<<< orphan or scalar*/* head ;

@@ -1,2 +1,2 @@
-typedef  struct __T1__ {int member_0;uintptr_t member_1;}  T1 ;
+typedef  struct __T1__ {int member_0;int /*<<< orphan or scalar*/ member_1;}  T1 ;
 #define  x1 128

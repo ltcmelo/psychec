@@ -1,4 +1,4 @@
-typedef  uintptr_t Graph ;
-int GRAPHcc (uintptr_t) ;
-uintptr_t GRAPHrand (int,int) ;
-uintptr_t GRAPHshow (uintptr_t) ;
+typedef  int /*<<< orphan or scalar*/ Graph ;
+int GRAPHcc (int /*<<< orphan or scalar*/) ;
+int /*<<< orphan or scalar*/ GRAPHrand (int,int) ;
+int /*<<< orphan or scalar*/ GRAPHshow (int /*<<< orphan or scalar*/) ;

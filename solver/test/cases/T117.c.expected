@@ -1,4 +1,4 @@
-uintptr_t a;
+int /*<<< orphan or scalar*/ a;
 #define b 130
 #define c 129
 #define d 128

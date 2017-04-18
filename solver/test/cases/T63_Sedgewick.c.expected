@@ -1,1 +1,1 @@
-typedef  struct __point__ {uintptr_t y; uintptr_t x;} point ;
+typedef  struct __point__ {int /*<<< orphan or scalar*/ y; int /*<<< orphan or scalar*/ x;} point ;

@@ -1,2 +1,2 @@
-typedef uintptr_t T2;
+typedef int /*<<< orphan or scalar*/ T2;
 typedef void* T1;

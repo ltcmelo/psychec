@@ -1,1 +1,1 @@
-typedef uintptr_t VOID;
+typedef int /*<<< orphan or scalar*/ VOID;

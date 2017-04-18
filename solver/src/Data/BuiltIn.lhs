@@ -77,17 +77,10 @@ Contexts of C's builtin types and values
 >     `Map.union` valuesToCtx sysTypesValues `Map.union` valuesToCtx mathValues
 
 
-Builtin types
-
-> uintptr_t :: Ty
-> uintptr_t = TyCon (Name "uintptr_t")
-
-void
+Builtins
 
 > void :: Ty
 > void = TyCon (Name "void")
-
-character types
 
 > char :: Ty
 > char = TyCon (Name "char")
@@ -96,21 +89,15 @@ character types
 > unsignedChar :: Ty
 > unsignedChar = TyCon (Name "unsigned char")
 
-short types
-
 > short :: Ty
 > short = TyCon (Name "short")
 > unsignedShort :: Ty
 > unsignedShort = TyCon (Name "unsigned short")
 
-int types
-
 > int :: Ty
 > int = TyCon (Name "int")
 > unsignedInt :: Ty
 > unsignedInt = TyCon (Name "unsigned int")
-
-long types
 
 > long :: Ty
 > long = TyCon (Name "long")
@@ -121,14 +108,19 @@ long types
 > unsignedLongLong :: Ty
 > unsignedLongLong = TyCon (Name "unsigned long long")
 
-floating-point types
-
 > float :: Ty
 > float = TyCon (Name "float")
 > double :: Ty
 > double = TyCon (Name "double")
 > longDouble :: Ty
 > longDouble = TyCon (Name "long double")
+
+
+A type for orphans and scalars (we could eventually separate those).
+
+> orphan :: Ty
+> orphan = TyCon (Name "int /*<<< orphan or scalar*/")
+
 
 type inspection helpers
 
@@ -289,6 +281,8 @@ stdint.h - Particularly important to preserve platform-specific arithmetic types
 > uintmax_t = TyCon (Name "uintmax_t")
 > intptr_t :: Ty
 > intptr_t = TyCon (Name "intptr_t")
+> uintptr_t :: Ty
+> uintptr_t = TyCon (Name "uintptr_t")
 > stdintTypes :: [Ty]
 > stdintTypes =
 >         [ int8_t, int16_t, int32_t, int64_t

@@ -1,6 +1,6 @@
-typedef  struct __Graph__ {int V;uintptr_t** adj;uintptr_t E;}* Graph ;
-uintptr_t EDGE (int,int) ;
-uintptr_t GRAPHinsertE (struct __Graph__ *,uintptr_t) ;
-uintptr_t GRAPHiso (struct __Graph__ *,int) ;
-uintptr_t GRAPHpath (struct __Graph__ *,int,int) ;
-uintptr_t GRAPHremoveE (struct __Graph__ *,uintptr_t) ;
+typedef  struct __Graph__ {int V;int /*<<< orphan or scalar*/** adj;int /*<<< orphan or scalar*/ E;}* Graph ;
+int /*<<< orphan or scalar*/ EDGE (int,int) ;
+int /*<<< orphan or scalar*/ GRAPHinsertE (struct __Graph__ *,int /*<<< orphan or scalar*/) ;
+int /*<<< orphan or scalar*/ GRAPHiso (struct __Graph__ *,int) ;
+int /*<<< orphan or scalar*/ GRAPHpath (struct __Graph__ *,int,int) ;
+int /*<<< orphan or scalar*/ GRAPHremoveE (struct __Graph__ *,int /*<<< orphan or scalar*/) ;

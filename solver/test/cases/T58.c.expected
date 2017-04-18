@@ -1,2 +1,2 @@
 typedef float T;
-uintptr_t e;
+int /*<<< orphan or scalar*/ e;

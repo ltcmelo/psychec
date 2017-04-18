@@ -1,8 +1,8 @@
-struct __T0__ {uintptr_t (* b ) (int,double) ;} a ;
-uintptr_t g (int,double) ;
-struct __T1__ {uintptr_t (* y ) (int,double) ;}* m ;
-uintptr_t stub1 (int,double) ;
-uintptr_t stub2 (int,double) ;
-uintptr_t stub3 (int,double) ;
-uintptr_t stub4 (int,double) ;
-struct __T2__ {uintptr_t (* y ) (int,double) ;}* x ;
+struct __T0__ {int /*<<< orphan or scalar*/ (* b ) (int,double) ;} a ;
+int /*<<< orphan or scalar*/ g (int,double) ;
+struct __T1__ {int /*<<< orphan or scalar*/ (* y ) (int,double) ;}* m ;
+int /*<<< orphan or scalar*/ stub1 (int,double) ;
+int /*<<< orphan or scalar*/ stub2 (int,double) ;
+int /*<<< orphan or scalar*/ stub3 (int,double) ;
+int /*<<< orphan or scalar*/ stub4 (int,double) ;
+struct __T2__ {int /*<<< orphan or scalar*/ (* y ) (int,double) ;}* x ;

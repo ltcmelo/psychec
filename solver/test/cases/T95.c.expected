@@ -1,1 +1,1 @@
-typedef uintptr_t T;
+typedef int /*<<< orphan or scalar*/ T;

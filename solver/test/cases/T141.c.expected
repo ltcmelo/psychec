@@ -1,2 +1,2 @@
-typedef  uintptr_t (* FT ) () ;
-uintptr_t f () ;
+typedef  int /*<<< orphan or scalar*/ (* FT ) () ;
+int /*<<< orphan or scalar*/ f () ;

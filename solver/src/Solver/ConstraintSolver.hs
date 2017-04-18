@@ -365,9 +365,9 @@ stage5 tcx vcx cnt = do
         (pending5, vcx_''') = Map.mapAccumWithKey
             (retypeVar (orphanize id) (error "error")) pending4 (varctx vcx)
         (pending6, tcx_'''') = Map.mapAccumWithKey
-            (retype (orphanize (const uintptr_t)) (error "error")) pending5 tcx_'''
+            (retype (orphanize (const orphan)) (error "error")) pending5 tcx_'''
         (_, vcx_'''') = Map.mapAccumWithKey
-            (retypeVar (orphanize (const uintptr_t)) (error "error")) pending6 vcx_'''
+            (retypeVar (orphanize (const orphan)) (error "error")) pending6 vcx_'''
 
     return (TyCtx tcx_'''', VarCtx vcx_'''')
 

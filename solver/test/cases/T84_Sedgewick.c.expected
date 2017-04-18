@@ -1,4 +1,4 @@
 typedef  struct __Graph__ {int V;int E;}* Graph ;
-uintptr_t EDGE (int,int) ;
+int /*<<< orphan or scalar*/ EDGE (int,int) ;
 struct __Graph__ * GRAPHinit (int) ;
-uintptr_t GRAPHinsertE (struct __Graph__ *,uintptr_t) ;
+int /*<<< orphan or scalar*/ GRAPHinsertE (struct __Graph__ *,int /*<<< orphan or scalar*/) ;

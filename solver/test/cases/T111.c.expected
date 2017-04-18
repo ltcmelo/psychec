@@ -1,7 +1,7 @@
-typedef uintptr_t const T1 ;
-uintptr_t g (char const*) ;
-uintptr_t h (char const*) ;
-uintptr_t j (char const* const) ;
-uintptr_t k (uintptr_t const) ;
-uintptr_t l (uintptr_t const) ;
-uintptr_t m (uintptr_t const) ;
+typedef int /*<<< orphan or scalar*/ const T1 ;
+int /*<<< orphan or scalar*/ g (char const*) ;
+int /*<<< orphan or scalar*/ h (char const*) ;
+int /*<<< orphan or scalar*/ j (char const* const) ;
+int /*<<< orphan or scalar*/ k (int /*<<< orphan or scalar*/ const) ;
+int /*<<< orphan or scalar*/ l (int /*<<< orphan or scalar*/ const) ;
+int /*<<< orphan or scalar*/ m (int /*<<< orphan or scalar*/ const) ;

@@ -1,4 +1,4 @@
-typedef  struct __link__ {int sz;struct __link__ ** next;uintptr_t item;}* link ;
-typedef  uintptr_t Item ;
-uintptr_t NULLitem ;
+typedef  struct __link__ {int sz;struct __link__ ** next;int /*<<< orphan or scalar*/ item;}* link ;
+typedef  int /*<<< orphan or scalar*/ Item ;
+int /*<<< orphan or scalar*/ NULLitem ;
 int lgNmax ;

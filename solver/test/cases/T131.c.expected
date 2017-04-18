@@ -1,4 +1,4 @@
-typedef  uintptr_t Result ;
+typedef  int /*<<< orphan or scalar*/ Result ;
 typedef  struct __List__ {double data;struct __List__* next;}* List ;
 typedef  struct __List__* Chain ;
-uintptr_t analyse (struct __List__*) ; 
+int /*<<< orphan or scalar*/ analyse (struct __List__*) ; 
