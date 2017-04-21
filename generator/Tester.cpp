@@ -1399,3 +1399,25 @@ n21 -> t33
 
     checkAst(source, expectedAst);
 }
+
+void Tester::testCase16()
+{
+    std::string source = R"raw(
+void f() {
+    unsigned b;
+    (a)-b; // Binary expression.
+    a+b;
+}
+    )raw";
+}
+
+void Tester::testCase17()
+{
+    std::string source = R"raw(
+void f() {
+    unsigned b;
+    (a)-b; // Coercion.
+    a c;
+}
+    )raw";
+}
