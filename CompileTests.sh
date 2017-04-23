@@ -13,8 +13,10 @@ for C_FILE in solver/test/cases/*.c ; do
     "$CC" -c "$FIXED_FILE" &> /dev/null
     OK=$?
     if [ $OK -ne 0 ]; then
-        echo "*** Error compiling $FIXED_FILE"
+        printf "\n*** Error compiling $FIXED_FILE\n"
     else
-        echo "."
+        echo -n "."
     fi
 done
+
+echo "Done"
