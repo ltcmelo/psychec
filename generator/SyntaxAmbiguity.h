@@ -41,12 +41,10 @@ public:
 
     enum class Variety : char
     {
-
         OneArgCall_X_VarDecl,    //! a(b);
         MulExpr_X_PointerDecl,   //! a*b;
         // TODO: Implement remaining case below.
         BinExpr_X_Coercion       //! (a)*b; (a)-b;
-
     };
 
     AmbiguityInfo(Variety variety,
