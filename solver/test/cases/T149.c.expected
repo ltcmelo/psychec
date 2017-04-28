@@ -3,3 +3,4 @@ typedef  double T2 ;
 typedef  double T3 ;
 typedef  float T1 ;
 typedef  short T0 ;
+int /*<<< orphan or scalar*/ k (int,double) ;
