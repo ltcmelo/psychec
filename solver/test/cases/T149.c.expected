@@ -1,0 +1,5 @@
+typedef  int /*<<< orphan or scalar*/ T4 ;
+typedef  double T2 ;
+typedef  double T3 ;
+typedef  float T1 ;
+typedef  short T0 ;

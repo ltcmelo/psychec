@@ -183,14 +183,12 @@ std::string ConstraintGenerator::createUnnamed(const std::string& prefix)
     return prefix + std::to_string(count);
 }
 
-std::string ConstraintGenerator::processSymbol(const std::string& name)
+void ConstraintGenerator::assignTop(const std::string& name)
 {
     writer_->writeTypeof(name);
     writer_->writeTypeEquiv();
-    ENSURE_NONEMPTY_TYPE_STACK(return std::string());
+    ENSURE_NONEMPTY_TYPE_STACK(return);
     writer_->writeTypeName(types_.top());
-
-    return name;
 }
 
 void ConstraintGenerator::collectExpression(const std::string &ty,
@@ -217,7 +215,28 @@ bool ConstraintGenerator::visit(FunctionDefinitionAST *ast)
     if (!func->name()->isNameId())
         return false;
 
-    // Deal with parameters.
+    visitSymbol(func, ast->function_body);
+
+    // Time to write any pending equivalences.
+    auto writePending = [this]() {
+        const EquivPair& equiv = pendingEquivs_.top();
+        writer_->writeEquivRelation(equiv.first, equiv.second);
+        pendingEquivs_.pop();
+    };
+    while (!pendingEquivs_.empty()) {
+        maybeFollowStmt();
+        writePending();
+    }
+
+    writer_->clearIndent();
+    writer_->breakLine();
+    seenStmt_ = false;
+
+    return false;
+}
+
+void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
+{
     std::vector<ConstraintStreamWriter::ParamPair> params;
     if (func->hasArguments()) {
         for (auto i = 0u; i < func->argumentCount(); i++) {
@@ -248,61 +267,47 @@ bool ConstraintGenerator::visit(FunctionDefinitionAST *ast)
         }
     }
 
-    // Write the function prototype. If no return type is specified, we adopt
-    // old-style C rule to assume it as an `int'.
+    // Write the function prototype. If no return type is specified, we adopt old-style C
+    // rule and assume it's `int'.
     std::string funcRet;
-    if (func->returnType()) {
+    if (func->returnType())
         funcRet = typeSpeller_.spellTypeName(func->returnType(), scope_);
-    } else {
+    else
         funcRet = kDefaultIntTy;
-    }
+
     const std::string& alpha = ensureTypeIsKnown(funcRet);
     const Identifier *id = func->name()->asNameId()->identifier();
     const std::string funcName(id->begin(), id->end());
     writer_->writeFuncDecl(funcName, params, funcRet);
 
-    // Enter the function's body.
+    // Flag that we have no return value information about this function.
     valuedRets_.push(false);
-    pushType(funcRet);
-    Scope *previousScope = switchScope(func->asScope());
-    visitStatement(ast->function_body);
-    switchScope(previousScope);
-    popType();
 
-    // If no valued return was detected for this function and its return is of
-    // an unknown type, we add an equivalence between it and its alpha.
-    ENSURE_NONEMPTY_ALPHA_RET_STACK(return false);
+    // Enter the function's body, if a definition.
+    if (body) {
+        pushType(funcRet);
+        Scope *previousScope = switchScope(func->asScope());
+        visitStatement(body);
+        switchScope(previousScope);
+        popType();
+    }
+
+    // If no valued return was detected and its return is of an unknown type, we add an
+    // equivalence between it and its alpha.
+    ENSURE_NONEMPTY_ALPHA_RET_STACK(return);
     bool hasValue = valuedRets_.top();
     valuedRets_.pop();
     if (!hasValue && !alpha.empty())
         pendingEquivs_.push(EquivPair(alpha, funcRet));
 
-    // Keep track of function return types, since we can use this information
-    // for function calls that are expression statements.
+    // Keep track of function return types, since we can use this information for function
+    // calls that are expression statements.
     knownFuncNames_.insert(std::make_pair(funcName, funcRet));
     auto it = knownFuncRets_.find(funcName);
     if (it != knownFuncRets_.end()) {
-        for (const auto& ignored : it->second) {
+        for (const auto& ignored : it->second)
             pendingEquivs_.push(EquivPair(ignored, funcRet));
-        }
     }
-
-    // Time to write any pending equivalences.
-    auto writePending = [this]() {
-        const EquivPair& equiv = pendingEquivs_.top();
-        writer_->writeEquivRelation(equiv.first, equiv.second);
-        pendingEquivs_.pop();
-    };
-    while (!pendingEquivs_.empty()) {
-        maybeFollowStmt();
-        writePending();
-    }
-
-    writer_->clearIndent();
-    writer_->breakLine();
-    seenStmt_ = false;
-
-    return false;
 }
 
 bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
@@ -329,15 +334,17 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
         // Just as we do for function definitions, in the case this is a function
         // declaration but with no return type, we use old-style C rules to
         // consider it as returning int.
-        if ((decl->asFunction() && !decl->asFunction()->returnType())
-                || (decl->type()->asFunctionType()
-                    && !decl->type()->asFunctionType()->returnType())) {
-            Function* func = decl->asFunction();
-            if (!func)
-                func = decl->type()->asFunctionType();
-            FullySpecifiedType retTy(control()->integerType(IntegerType::Int));
-            func->setReturnType(retTy);
-        }
+//        if ((decl->asFunction() && !decl->asFunction()->returnType())
+//                || (decl->type()->asFunctionType()
+//                    && !decl->type()->asFunctionType()->returnType())) {
+//            std::cout << "\n\n\n**\n**\n**\n\n";
+//            Function* func = decl->asFunction();
+//            if (!func)
+//                func = decl->type()->asFunctionType();
+//            FullySpecifiedType retTy(control()->integerType(IntegerType::Int));
+//            func->setReturnType(retTy);
+//        }
+
         std::string declTy = typeSpeller_.spellTypeName(decl->type(), scope_);
 
         // Altough a `typedef` is parsed as a simple declaration, its contraint
@@ -379,6 +386,13 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             const std::string& structTy = structs_.top();
             writer_->writeMemberRelation(structTy, declName, alpha);
             writer_->writeAnd(true);
+        }
+
+        // Type a function declaration just as we do for a function definition.
+        if (decl->asDeclaration()
+                && decl->asDeclaration()->type()
+                && decl->asDeclaration()->type()->asFunctionType()) {
+            visitSymbol(decl->asDeclaration()->type()->asFunctionType()->asFunction(), nullptr);
         }
 
         // When we have an array with an initializer, we use the individual
@@ -1008,7 +1022,7 @@ bool ConstraintGenerator::visit(IdExpressionAST *ast)
     DEBUG_VISIT(IdExpressionAST);
     CLASSIFY(ast);
 
-    processSymbol(extractId(ast->name->name));
+    assignTop(extractId(ast->name->name));
 
     if (staticDecl_) {
         // Static initialization requires a compile-time constant.

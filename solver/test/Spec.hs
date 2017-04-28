@@ -192,6 +192,7 @@ tests = testGroup "Unit tests"
                   , doTest "T146.c" -- Nested anonymous struct without declaration.
                   , doTest "T147.c" -- Duplicate definition.
                   , doTest "T148.c" -- Ordering or declarations.
+                  , doTest "T149.c" -- Redeclaration of functions already declared.
                   ]
 
 doTest s

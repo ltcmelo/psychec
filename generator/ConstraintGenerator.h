@@ -105,6 +105,9 @@ private:
     bool visit(CPlusPlus::SwitchStatementAST *ast) override;
     bool visit(CPlusPlus::WhileStatementAST *ast) override;
 
+    // Symbol visits.
+    void visitSymbol(CPlusPlus::Function* func, CPlusPlus::StatementAST* body);
+
     //!@{
     /*!
      * The constraints rules requires that statements are `and`ed one to
@@ -192,11 +195,9 @@ private:
     std::stack<EquivPair> pendingEquivs_;
 
     /*!
-     * Convenience function to process a program symbol we're interested on,
-     * whever we need to write a type equivalence for it. This will return
-     * the symbol name as a string.
+     * Assign the name to type on top of the stack.
      */
-    std::string processSymbol(const std::string& name);
+    void assignTop(const std::string& name);
 
     // Helpers
     void castExpressionHelper(const std::string &inputTy, std::string& resultTy);

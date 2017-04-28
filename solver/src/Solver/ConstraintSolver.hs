@@ -154,7 +154,9 @@ defineTypeDef t t' tctx = do
                case Map.lookup n (tyctx tctx) of
                     Nothing -> (tc, True)
                     Just tinfo -> tinfo
-             _ -> (td, False)
+             -- We don't want to have declared (but undefined) functions in the context
+             -- marked as undeclared.
+             _ -> (td, case tn of { FunTy _ _ ->  True; _ -> False; })
       tctx' = TyCtx $ maybe (Map.insert (nameOf t) (actualTyDef t t') (tyctx tctx))
                             (const (tyctx tctx))
                             (Map.lookup (nameOf t) (tyctx tctx))
