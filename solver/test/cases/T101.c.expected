@@ -1,0 +1,5 @@
+typedef  struct T1 {int member_0; int /*<<< orphan or scalar*/ member_1; } T1 ;
+typedef  struct __T2__ {double member_0; double member_1; } T2 ;
+#define  x1 130
+#define  x2 129
+#define  y2 128

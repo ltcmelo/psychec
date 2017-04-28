@@ -1,5 +1,5 @@
-typedef int T2;
 typedef int T1;
+typedef int T2;
 int other;
 #define val 130
 #define val2 129

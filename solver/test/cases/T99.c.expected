@@ -1,1 +1,1 @@
-typedef  struct __T1__ { double fpval; int ival; } T1 ;
+typedef  struct __T1__ {double member_0; int member_1; double fpval; int ival; } T1 ;

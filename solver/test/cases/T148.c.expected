@@ -1,0 +1,8 @@
+typedef  struct __T7__ {int zz; } T7 ;
+typedef  struct __T8__ {struct __T7__ ww; }* T8 ;
+typedef  struct __T6__ {int yy; } T6 ;
+typedef  struct __T5__ {struct __T6__ xx; }* T5 ;
+typedef  struct __T3__ {int z; } T3 ;
+typedef  struct __T4__ {struct __T3__ w; } T4 ;
+typedef  struct __T2__ {int y; } T2 ;
+typedef  struct __T1__ {struct __T2__ x; } T1 ;

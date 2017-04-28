@@ -1,0 +1,2 @@
+typedef  struct gl_oset_node_impl {int dummy; } gl_oset_node_impl ;
+typedef  struct gl_oset_node_impl* gl_oset_node_t ;

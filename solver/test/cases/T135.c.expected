@@ -1,3 +1,2 @@
-struct __T1__ { int v; };
-struct __T0__ {struct __T1__** adj;}* G ;
+struct __T0__ {struct __T1__ { int v; }** adj;}* G ;
 int i ;

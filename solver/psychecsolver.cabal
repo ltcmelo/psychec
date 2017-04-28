@@ -1,5 +1,5 @@
 name:                psychecsolver
-version:             0.1.0.0
+version:             0.1.0
 synopsis:            Type inference for C
 description:         See README.md
 homepage:            http://github.com/ltcmelo/psychec
@@ -26,6 +26,7 @@ library
                      , Parser.ConstraintParser
                      , Utils.Pretty
                      , Utils.Writer
+                     , Utils.DeclSorter
   build-depends:       base >= 4.7 && < 5
                      , pretty
                      , syb

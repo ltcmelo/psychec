@@ -241,8 +241,8 @@ void f31() {
 }
 
 void f32() {
-    const int* x32;
-    T32 x32 = x32;
+    const int* a32;
+    T32 x32 = a32;
     int* y32;
     T32 t32 = y32;
 }

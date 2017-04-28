@@ -1,2 +1,2 @@
-typedef  struct __link__ {struct __link__ * next;int /*<<< orphan or scalar*/ item;}* link ;
 typedef  int /*<<< orphan or scalar*/ Item ;
+typedef  struct __link__ {struct __link__ * next;int /*<<< orphan or scalar*/ item;}* link ;

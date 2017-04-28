@@ -25,9 +25,11 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 > import Solver.SolverMonad (TyCtx (..), VarCtx(..))
 > import Text.PrettyPrint.HughesPJ
 > import Utils.Pretty (pprint, (<+>), text)
+> import Utils.DeclSorter
 > import qualified Data.Map as Map
 > import qualified Data.List as List
-> import qualified Data.Graph as Graph
+
+> import Debug.Trace
 
 > writeCFile :: (TyCtx, VarCtx) -> String
 > writeCFile ctxs = writeIncs ++ writeBoolDef ++ writeDecls ctxs
@@ -59,7 +61,7 @@ code. We claim this is a fair adaptation based on de facto knowledge.
 > writeDecls :: (TyCtx, VarCtx) -> String
 > writeDecls (tcx,vcx) = t ++ v
 >     where
->         t = foldr gentydef [] (sortTypeDefinitions tcx)
+>         t = foldr gentydef [] (sortDecls tcx)
 >         gentydef (n, t) ac = (show $ text "typedef " <+>
 >                               writeTyDecl t n <+>
 >                               text ";\n") ++ ac
@@ -94,38 +96,3 @@ Write declaration of missing types.
 >       = pprint ret <+> text "(*" <+> pprint n <+> text ")"
 >             <+> parens (hcat $ punctuate comma (map pprint params))
 > writeTyDecl t n = pprint t <+> pprint (ensurePlainName n)
-
-
-Sort declarations that depend one on another
-
-> sortTypeDefinitions :: TyCtx -> [(Name, Ty)]
-> sortTypeDefinitions tcx = typeDeclarationList
->   where
->     allTypeNames = map (\(x, y) -> (TyCon x, fst y)) $ Map.toList (tyctx tcx) -- get all the type names
->     typeNames = List.nub . foldl (\acc (x, y) -> x:y:acc) [] $ allTypeNames -- remove repeated types
->     numberOfDifferentTypes = length typeNames -- get the number of diferent type names
->     typeIdMap = Map.fromList $ zip typeNames [1..numberOfDifferentTypes] -- create an map (typename, id)
->     idTypeMap = Map.fromList $ zip [1..numberOfDifferentTypes] typeNames -- create an map (id, typename)
->     typeToId acc (type1, type2) = (typeId1, typeId2) : acc
->       where
->         typeId1 = maybe (-1) id $ Map.lookup type1 typeIdMap
->         typeId2 = maybe (-1) id $ Map.lookup type2 typeIdMap
->     typeDependenceEdges = foldl typeToId [] allTypeNames
->     -- TODO: increase the number of edges in the typeDependenceGraph (add constraints to the types inside of structs)
->     typeDependenceGraph = Graph.buildG (1, numberOfDifferentTypes) typeDependenceEdges
->     typeDeclarationOrder = reverse . Graph.topSort $ typeDependenceGraph
->     shouldIDefineThisType typeName = and $ restrictions <*> [typeName]
->       where
->         restrictions = [(\ty -> not . elem (nameOf ty) $ Map.keys builtinTyCtx)
->                        ,(\ty -> not . typeIsStruct $ ty)
->                        ,(\ty -> not . typeIsEnum $ ty)
->                        ,(\ty -> not . typeIsFunction $ ty)]
->     insertTypeDeclaration typeId acc =
->       case Map.lookup typeId idTypeMap of
->         Nothing -> acc
->         Just t' -> case Map.lookup (nameOf t') (tyctx tcx) of
->           Nothing -> acc
->           Just (t'', _) -> if (shouldIDefineThisType t')
->             then (nameOf t', t''):acc
->             else acc
->     typeDeclarationList = foldr insertTypeDeclaration [] typeDeclarationOrder

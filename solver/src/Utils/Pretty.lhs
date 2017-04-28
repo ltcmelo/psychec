@@ -80,7 +80,7 @@ Name of a type
 > nameOf (TyCon n) = n
 > nameOf (TyVar n) = n
 > nameOf (Struct _ n) = n
-> nameOf (Pointer t) = Name ((show $ pprint t))
+> nameOf t@(Pointer _) = Name (show $ pprint t)
 > nameOf x@(FunTy t ts) = Name (show $ pprint x)
 > nameOf (QualTy t) = nameOf t
 > nameOf (EnumTy n) = n

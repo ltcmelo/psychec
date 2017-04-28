@@ -190,6 +190,8 @@ tests = testGroup "Unit tests"
                   , doTest "T144.c" -- const qualification on function args.
                   , doTest "T145.c" -- Nested anonymous struct with declaration.
                   , doTest "T146.c" -- Nested anonymous struct without declaration.
+                  , doTest "T147.c" -- Duplicate definition.
+                  , doTest "T148.c" -- Ordering or declarations.
                   ]
 
 doTest s

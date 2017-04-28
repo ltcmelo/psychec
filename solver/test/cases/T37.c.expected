@@ -1,2 +1,2 @@
-typedef struct __link__ {int /*<<< orphan or scalar*/ y;}* link ;
 typedef int /*<<< orphan or scalar*/ A ;
+typedef struct __link__ {int /*<<< orphan or scalar*/ y;}* link ;
