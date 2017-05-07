@@ -1,40 +1,40 @@
 /******************************************************************************
- * Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- * USA
+ Copyright (c) 2016-17 Leandro T. C. Melo (ltcmelo@gmail.com)
+
+ This library is free software; you can redistribute it and/or modify it under
+ the terms of the GNU Lesser General Public License as published by the Free
+ Software Foundation; either version 2.1 of the License, or (at your option)
+ any later version.
+
+ This library is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+ for more details.
+
+ You should have received a copy of the GNU Lesser General Public License along
+ with this library; if not, write to the Free Software Foundation, Inc., 51
+ Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#include "TypeNameSpeller.h"
+#include "TypeSpeller.h"
 #include "Assert.h"
-#include "ConstraintStreamWriter.h"
 #include "CoreTypes.h"
+#include "ConstraintSyntax.h"
 #include "Literals.h"
 #include "Symbols.h"
-#include "FreshVarSupply.h"
 #include "Utils.h"
 
 using namespace CPlusPlus;
 using namespace psyche;
 
-TypeNameSpeller::TypeNameSpeller(ConstraintStreamWriter *writer)
+template <class SyntaxT>
+TypeSpeller<SyntaxT>::TypeSpeller()
     : scope_(nullptr)
 {}
 
-std::string TypeNameSpeller::spellTypeName(const FullySpecifiedType& fullType,
-                                           const Scope* scope)
+template <class SyntaxT>
+std::string TypeSpeller<SyntaxT>::spell(const FullySpecifiedType& fullType,
+                                        const Scope* scope)
 {
     spelling_.clear();
     scope_ = scope;
@@ -42,7 +42,8 @@ std::string TypeNameSpeller::spellTypeName(const FullySpecifiedType& fullType,
     return spelling_;
 }
 
-void TypeNameSpeller::visitType(const FullySpecifiedType& fullType)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visitType(const FullySpecifiedType& fullType)
 {
     if (fullType.isUnsigned())
         spelling_.append(" unsigned ");
@@ -51,17 +52,20 @@ void TypeNameSpeller::visitType(const FullySpecifiedType& fullType)
         spelling_.append(" const ");
 }
 
-void TypeNameSpeller::visit(UndefinedType *)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(UndefinedType *)
 {
     spelling_.append("int");
 }
 
-void TypeNameSpeller::visit(VoidType *)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(VoidType *)
 {
     spelling_.append("void");
 }
 
-void TypeNameSpeller::visit(IntegerType *ty)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(IntegerType *ty)
 {
     switch (ty->kind()) {
     case IntegerType::Char:
@@ -86,7 +90,8 @@ void TypeNameSpeller::visit(IntegerType *ty)
     }
 }
 
-void TypeNameSpeller::visit(FloatType *ty)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(FloatType *ty)
 {
     switch (ty->kind()) {
     case FloatType::Float:
@@ -103,30 +108,35 @@ void TypeNameSpeller::visit(FloatType *ty)
     }
 }
 
-void TypeNameSpeller::visit(PointerToMemberType *ty)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(PointerToMemberType *ty)
 {
     spelling_.append(".*");
     visitType(ty->elementType());
 }
 
-void TypeNameSpeller::visit(PointerType *ty)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(PointerType *ty)
 {
     visitType(ty->elementType());
     spelling_.append("*");
 }
 
-void TypeNameSpeller::visit(ReferenceType *)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(ReferenceType *)
 {
     spelling_.append("&");
 }
 
-void TypeNameSpeller::visit(ArrayType *ty)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(ArrayType *ty)
 {
     visitType(ty->elementType());
     spelling_.append("*"); // We treat arrays as pointers.
 }
 
-void TypeNameSpeller::visit(NamedType *ty)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(NamedType *ty)
 {
     const Identifier *id = ty->name()->asNameId()->identifier();
     std::string name(id->begin(), id->end());
@@ -138,14 +148,23 @@ void TypeNameSpeller::visit(NamedType *ty)
     spelling_.append(name);
 }
 
-void TypeNameSpeller::visit(Function *ty)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::funcParam(Function* ty)
 {
-    spelling_.append("(");
-    for (auto i = 0u; i < ty->argumentCount(); i++) {
-        visitType(ty->argumentAt(i)->type());
-        spelling_.append(",");
+    spelling_.append(SyntaxT::paramLDelim());
+    if (ty->argumentCount()) {
+        visitType(ty->argumentAt(0)->type());
+        for (auto i = 1u; i < ty->argumentCount(); ++i) {
+            spelling_.append(",");
+            visitType(ty->argumentAt(i)->type());
+        }
     }
+    spelling_.append(SyntaxT::paramRDelim());
+}
 
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::funcRet(Function* ty)
+{
     if (ty->returnType()->isNamedType()) {
         const Name *name = ty->returnType()->asNamedType()->name();
         PSYCHE_ASSERT(name->isNameId(), return, "expected a simple name");
@@ -154,10 +173,34 @@ void TypeNameSpeller::visit(Function *ty)
     } else {
         visitType(ty->returnType());
     }
-    spelling_.append(")");
 }
 
-void TypeNameSpeller::visit(Class *ty)
+template<class SyntaxT>
+void TypeSpeller<SyntaxT>::func(Function* ty, RetParam)
+{
+    funcRet(ty);
+    spelling_.append(SyntaxT::retParamSep());
+    funcParam(ty);
+}
+
+template<class SyntaxT>
+void TypeSpeller<SyntaxT>::func(Function* ty, ParamRet)
+{
+    funcParam(ty);
+    spelling_.append(SyntaxT::retParamSep());
+    funcRet(ty);
+}
+
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(Function *ty)
+{
+    spelling_.append(SyntaxT::funcLDelim());
+    func(ty, typename SyntaxT::SigOrder());
+    spelling_.append(SyntaxT::funcRDelim());
+}
+
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(Class *ty)
 {
     const Name *name = ty->name();
     std::string declName;
@@ -184,12 +227,20 @@ void TypeNameSpeller::visit(Class *ty)
     spelling_.append("}");
 }
 
-void TypeNameSpeller::visit(Enum *)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(Enum *)
 {
     spelling_.append("enum ");
 }
 
-void TypeNameSpeller::visit(ForwardClassDeclaration *)
+template <class SyntaxT>
+void TypeSpeller<SyntaxT>::visit(ForwardClassDeclaration *)
 {
     spelling_.append("<forward>");
+}
+
+namespace psyche {
+    // Explicit instantiations.
+    template class TypeSpeller<ConstraintSyntax>;
+    template class TypeSpeller<CSyntax>;
 }

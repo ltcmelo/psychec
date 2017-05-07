@@ -88,6 +88,7 @@ set(PARSER_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/ConstraintGenerator.cpp
     ${PROJECT_SOURCE_DIR}/generator/ConstraintStreamWriter.h
     ${PROJECT_SOURCE_DIR}/generator/ConstraintStreamWriter.cpp
+    ${PROJECT_SOURCE_DIR}/generator/ConstraintSyntax.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.cpp
     ${PROJECT_SOURCE_DIR}/generator/DiagnosticCollector.h
@@ -112,13 +113,20 @@ set(PARSER_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/SymbolPP.cpp
     ${PROJECT_SOURCE_DIR}/generator/Tester.h
     ${PROJECT_SOURCE_DIR}/generator/Tester.cpp
-    ${PROJECT_SOURCE_DIR}/generator/TypeNameSpeller.h
-    ${PROJECT_SOURCE_DIR}/generator/TypeNameSpeller.cpp
     ${PROJECT_SOURCE_DIR}/generator/TypeOfExpr.h
     ${PROJECT_SOURCE_DIR}/generator/TypeOfExpr.cpp
     ${PROJECT_SOURCE_DIR}/generator/Utils.h
     ${PROJECT_SOURCE_DIR}/generator/Utils.cpp
     ${PROJECT_SOURCE_DIR}/generator/VersionedMap.h
+    # Stubber's files
+    ${PROJECT_SOURCE_DIR}/stubber/BasicStubber.h
+    ${PROJECT_SOURCE_DIR}/stubber/BasicStubber.cpp
+    # Utils' files
+    ${PROJECT_SOURCE_DIR}/utils/CSyntax.h
+    ${PROJECT_SOURCE_DIR}/utils/FunctionWriter.h
+    ${PROJECT_SOURCE_DIR}/utils/FunctionWriter.cpp
+    ${PROJECT_SOURCE_DIR}/utils/TypeSpeller.h
+    ${PROJECT_SOURCE_DIR}/utils/TypeSpeller.cpp
 )
 
 foreach(file ${PARSER_SOURCES})
@@ -131,8 +139,10 @@ endforeach()
 include_directories(
     .
     ${PROJECT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/parser
     ${PROJECT_SOURCE_DIR}/generator
+    ${PROJECT_SOURCE_DIR}/parser
+    ${PROJECT_SOURCE_DIR}/stubber
+    ${PROJECT_SOURCE_DIR}/utils
 )
 
 set(GENERATOR Gen)

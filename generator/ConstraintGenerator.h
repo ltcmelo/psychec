@@ -23,8 +23,9 @@
 #include "ASTVisitor.h"
 #include "FreshVarSupply.h"
 #include "FullySpecifiedType.h"
+#include "ConstraintSyntax.h"
 #include "ScalarTypeLattice.h"
-#include "TypeNameSpeller.h"
+#include "TypeSpeller.h"
 #include <stack>
 #include <string>
 #include <unordered_map>
@@ -128,7 +129,7 @@ private:
     ConstraintStreamWriter *writer_;
 
     //! Type name speller.
-    TypeNameSpeller typeSpeller_;
+    TypeSpeller<ConstraintSyntax> typeSpeller_;
 
     //! Type variables supply and properties.
     FreshVarSupply supply_;

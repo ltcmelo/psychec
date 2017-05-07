@@ -84,7 +84,6 @@ ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
     , seenStmt_(false)
     , scope_(nullptr)
     , writer_(writer)
-    , typeSpeller_(writer)
     , lattice_(unit)
     , staticDecl_(false)
     , preprocess_(true)
@@ -241,7 +240,7 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
     if (func->hasArguments()) {
         for (auto i = 0u; i < func->argumentCount(); i++) {
             Symbol *arg = func->argumentAt(i);
-            std::string specifier = typeSpeller_.spellTypeName(arg->type(), scope_);
+            std::string specifier = typeSpeller_.spell(arg->type(), scope_);
 
             const Name *argName = arg->name();
             if(argName) {
@@ -271,7 +270,7 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
     // rule and assume it's `int'.
     std::string funcRet;
     if (func->returnType())
-        funcRet = typeSpeller_.spellTypeName(func->returnType(), scope_);
+        funcRet = typeSpeller_.spell(func->returnType(), scope_);
     else
         funcRet = kDefaultIntTy;
 
@@ -330,22 +329,7 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
         Symbol *decl = symIt->value;
         const Name *name = decl->name();
         std::string declName = extractId(name);
-
-        // Just as we do for function definitions, in the case this is a function
-        // declaration but with no return type, we use old-style C rules to
-        // consider it as returning int.
-//        if ((decl->asFunction() && !decl->asFunction()->returnType())
-//                || (decl->type()->asFunctionType()
-//                    && !decl->type()->asFunctionType()->returnType())) {
-//            std::cout << "\n\n\n**\n**\n**\n\n";
-//            Function* func = decl->asFunction();
-//            if (!func)
-//                func = decl->type()->asFunctionType();
-//            FullySpecifiedType retTy(control()->integerType(IntegerType::Int));
-//            func->setReturnType(retTy);
-//        }
-
-        std::string declTy = typeSpeller_.spellTypeName(decl->type(), scope_);
+        std::string declTy = typeSpeller_.spell(decl->type(), scope_);
 
         // Altough a `typedef` is parsed as a simple declaration, its contraint
         // rule is different. We process it and break out, since there cannot
@@ -973,7 +957,7 @@ bool ConstraintGenerator::visit(CastExpressionAST *ast)
     DEBUG_VISIT(CastExpressionAST);
     CLASSIFY(ast);
 
-    std::string ty = typeSpeller_.spellTypeName(ast->expression_type, scope_);
+    std::string ty = typeSpeller_.spell(ast->expression_type, scope_);
     castExpressionHelper(types_.top(), ty);
 
     writer_->writeAnd();
@@ -1267,7 +1251,7 @@ bool ConstraintGenerator::visit(ClassSpecifierAST* ast)
 
     const std::string record = "struct " + extractId(ast->name->name);
 
-    std::string classTy = typeSpeller_.spellTypeName(ast->symbol->type(), scope_);
+    std::string classTy = typeSpeller_.spell(ast->symbol->type(), scope_);
     writer_->writeTypedef(record, classTy);
     writer_->writeAnd(true);
 
