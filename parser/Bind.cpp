@@ -1734,8 +1734,7 @@ bool Bind::visit(BinaryExpressionAST *ast)
 bool Bind::visit(CastExpressionAST *ast)
 {
     // unsigned lparen_token = ast->lparen_token;
-    ExpressionTy type_id = this->expression(ast->type_id);
-    ast->expression_type = type_id;
+    ast->expression_type = this->expression(ast->type_id);
     // unsigned rparen_token = ast->rparen_token;
     ExpressionTy expression = this->expression(ast->expression);
     return false;
@@ -1851,7 +1850,7 @@ bool Bind::visit(SizeofExpressionAST *ast)
     // unsigned sizeof_token = ast->sizeof_token;
     // unsigned dot_dot_dot_token = ast->dot_dot_dot_token;
     // unsigned lparen_token = ast->lparen_token;
-    ExpressionTy expression = this->expression(ast->expression);
+    ast->expression_type = this->expression(ast->expression);
     // unsigned rparen_token = ast->rparen_token;
     return false;
 }

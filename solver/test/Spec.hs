@@ -194,6 +194,7 @@ tests = testGroup "Unit tests"
                   , doTest "T148.c" -- Ordering or declarations.
                   , doTest "T149.c" -- Redeclaration of functions already declared.
                   , doTest "T150.c" -- Fix bug in declaration's order.
+                  , doTest "T151.c" -- Isolated name inside sizeof.
                   ]
 
 doTest s

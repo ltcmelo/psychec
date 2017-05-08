@@ -1201,6 +1201,8 @@ public:
     ExpressionAST *type_id;
     unsigned rparen_token;
     ExpressionAST *expression;
+
+public: // annotations
     FullySpecifiedType expression_type;
 
 public:
@@ -3115,6 +3117,9 @@ public:
     unsigned lparen_token;
     ExpressionAST *expression;
     unsigned rparen_token;
+
+public: // annotations
+    FullySpecifiedType expression_type;
 
 public:
     SizeofExpressionAST()

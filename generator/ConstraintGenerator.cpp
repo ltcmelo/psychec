@@ -1201,8 +1201,16 @@ bool ConstraintGenerator::visit(SizeofExpressionAST *ast)
     DEBUG_VISIT(SizeofExpressionAST);
     CLASSIFY(ast);
 
-    // We don't traverse neither the expression nor the type specifier
-    // possibly within the size of. There's nothing we can really get for now.
+    // When sizeof's argument is a type, we need to make sure it exists.
+    if (ast->expression->asTypeId()) {
+        const std::string& alpha = supply_.createTypeVar1();
+        writer_->writeNewTypeVar(alpha);
+        const std::string& ty = typeSpeller_.spell(ast->expression_type, scope_);
+        writer_->writeTypedef(ty, alpha);
+        writer_->writeAnd(true);
+    }
+
+    // TODO: Make sizeof and related type as size_t.
     ENSURE_NONEMPTY_TYPE_STACK(return false);
     writer_->writeEquivRelation(types_.top(), kDefaultIntTy);
 

@@ -1,0 +1,2 @@
+typedef  struct A {int dummy; } A ;
+typedef  int /*<<< orphan or scalar*/ A_t ;
