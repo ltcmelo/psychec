@@ -1,8 +1,8 @@
-typedef  int* T7y ;
-typedef  int const T9y ;
 typedef  int* T9x ;
+typedef  int const T9y ;
 typedef  int const* T8y ;
 typedef  int* T8x ;
+typedef  int* T7y ;
 typedef  int* T7x ;
 typedef  int* T6 ;
 typedef  int const* T5 ;

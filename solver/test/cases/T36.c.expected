@@ -1,8 +1,8 @@
-typedef int T6;
+typedef int* T7;
 typedef int TT11;
 typedef int /*<<< orphan or scalar*/* T9;
 typedef int** T8;
-typedef int* T7;
+typedef int T6;
 typedef int T5;
 typedef int T4;
 typedef int* T3;

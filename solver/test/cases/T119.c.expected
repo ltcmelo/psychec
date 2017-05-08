@@ -1,4 +1,4 @@
-typedef  char * T3 ;
 typedef  char const* T2 ;
+typedef  char * T3 ;
 int /*<<< orphan or scalar*/ f1 (char const*) ;
 int /*<<< orphan or scalar*/ f3 (char *) ;

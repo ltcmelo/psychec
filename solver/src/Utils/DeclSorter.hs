@@ -31,7 +31,12 @@ import Solver.SolverMonad (TyCtx (..))
 -- | Populate the graph by mapping each vertice to the type it represents.
 populate :: TyCtx -> Map.Map Name Int
 populate tctx =
-    Map.foldr (\(t, _) acc -> Map.insert (nameOf t) (length acc) acc) Map.empty (tyctx tctx)
+    Map.foldr (\(t, _) acc -> Map.insert (strip t) (length acc) acc) Map.empty (tyctx tctx)
+    --Map.foldr (\(t, _) acc -> trace ("populate " ++ show (strip t)) (Map.insert (strip t) (length acc) acc)) Map.empty (tyctx tctx)
+  where
+    strip (Pointer t) = strip t
+    strip (QualTy t) = strip t
+    strip t = nameOf t
 
 -- | Created edges between types that depend one another.
 buildDeps :: Ty -> Map.Map Name Int -> [Int]
@@ -49,13 +54,13 @@ buildDeps t m =
 sortDecls :: TyCtx -> [(Name, Ty)]
 sortDecls tctx =
     foldr (\v acc -> (flt (vf v)):acc) [] (reverse $ topSort g)
-    --trace (print g vf) (foldr (\v acc -> (flt (vf v)):acc) [] (reverse $ topSort g))
+    --trace (printGraph g vf) (foldr (\v acc -> (flt (vf v)):acc) [] (reverse $ topSort g))
   where
     (el, _) =
       Map.foldrWithKey
         (\n (t, _) (l, m) ->
           (((n, t), length l, buildDeps t m):l, m))
-          --(((n, t), length l, trace(show (pprint t)) (buildDeps t tm)):l, tm))
+          --(((n, t), length l, trace(show (pprint t)) (buildDeps t m)):l, m))
         ([], m)
         (tyctx tctx)
     m = populate tctx
@@ -63,7 +68,7 @@ sortDecls tctx =
     flt (node, _, _) = node
 
 -- | Helper to print the graph.
-print g vf =
+printGraph g vf =
     (show $ edges g)
       ++ "\n"
       ++ foldr (\v acc -> (sortDecls (vf v)) ++ "\n" ++ acc) "" (vertices g)

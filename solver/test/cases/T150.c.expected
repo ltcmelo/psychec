@@ -1,0 +1,2 @@
+typedef  struct __gdsl_rbtree_node_t__ {struct __gdsl_rbtree_node_t__* right; }* gdsl_rbtree_node_t ;
+typedef  struct __gdsl_rbtree_t__ {struct __gdsl_rbtree_node_t__ sent; }* gdsl_rbtree_t ;
