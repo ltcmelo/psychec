@@ -1,1 +1,2 @@
-typedef  struct __point__ {int /*<<< orphan or scalar*/ y; int /*<<< orphan or scalar*/ x;} point ;
+typedef  struct TYPE_6__ {int /*<<< orphan or scalar*/ y; int /*<<< orphan or scalar*/ x; } TYPE_1__ ;
+typedef  TYPE_1__ point ;

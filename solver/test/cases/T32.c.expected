@@ -1,2 +1,3 @@
-typedef int /*<<< orphan or scalar*/ T ;
-typedef struct __A__ {int /*<<< orphan or scalar*/ b;} A ;
+typedef  struct TYPE_3__ {int /*<<< orphan or scalar*/ b; } TYPE_1__ ;
+typedef  int /*<<< orphan or scalar*/ T ;
+typedef  TYPE_1__ A ;

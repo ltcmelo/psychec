@@ -25,3 +25,26 @@ void i() {
     q->ww = p;
     p.zz = 10;
 }
+
+
+void k() {
+    T9 ab;
+    ab->cd = 10;
+    T10* pab = ab;
+    T11 ab2 = ab;
+}
+
+void j() {
+    T12 rt;
+    rt->qs = 10;
+    T13 rt2 = rt;
+}
+
+void l() {
+    struct Elab elab;
+    elab.val = 10;
+    ElabAlias alias = elab;
+
+    struct Bale* bale;
+    bale->lav = 3.14;
+}

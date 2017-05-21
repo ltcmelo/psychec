@@ -1,3 +1,4 @@
-typedef  struct __link__ {int index;int d;int /*<<< orphan or scalar*/* r;int /*<<< orphan or scalar*/* m;int /*<<< orphan or scalar*/* l;}* link ;
+typedef  struct TYPE_4__ {int index; int d; int /*<<< orphan or scalar*/* r; int /*<<< orphan or scalar*/* m; int /*<<< orphan or scalar*/* l; } TYPE_1__ ;
+typedef  TYPE_1__* link ;
 int /*<<< orphan or scalar*/ N ;
 int /*<<< orphan or scalar*/* head ;

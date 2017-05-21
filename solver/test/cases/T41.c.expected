@@ -1,2 +1,4 @@
-struct __T0__ {double x;} a ;
-struct __T1__ {struct __T0__ y;} b ;
+typedef  struct TYPE_4__ {double x; } TYPE_2__ ;
+typedef  struct TYPE_3__ {TYPE_2__ y; } TYPE_1__ ;
+TYPE_2__ a ;
+TYPE_1__ b ;

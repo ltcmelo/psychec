@@ -1,1 +1,2 @@
-typedef struct __T__ {char c;int i;} T ;
+typedef  struct TYPE_3__ {char c; int i; } TYPE_1__ ;
+typedef  TYPE_1__ T ;

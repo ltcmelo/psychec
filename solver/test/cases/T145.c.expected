@@ -1,3 +1,9 @@
-typedef  struct __T__ {struct __T2__ {double z;}* y;}* T ;
-typedef  struct __R__ {struct __T1__ {int u;} k;} R ;
-typedef  struct __Q__ {struct __T0__ {int p;} n;} Q ;
+typedef  struct TYPE_17__ {int u; } TYPE_6__ ;
+typedef  struct TYPE_19__ {TYPE_6__ k; } TYPE_9__ ;
+typedef  struct TYPE_15__ {double z; } TYPE_1__ ;
+typedef  struct TYPE_18__ {TYPE_1__* y; } TYPE_8__ ;
+typedef  struct TYPE_16__ {int p; } TYPE_4__ ;
+typedef  struct TYPE_14__ {TYPE_4__ n; } TYPE_10__ ;
+typedef  TYPE_8__* T ;
+typedef  TYPE_9__ R ;
+typedef  TYPE_10__ Q ;

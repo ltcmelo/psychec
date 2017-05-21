@@ -1,1 +1,2 @@
-typedef  struct __T1__ {double y;} T1 ;
+typedef  struct TYPE_3__ {double y; } TYPE_1__ ;
+typedef  TYPE_1__ T1 ;

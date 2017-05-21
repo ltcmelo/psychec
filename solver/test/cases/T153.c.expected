@@ -1,0 +1,6 @@
+typedef  struct TYPE_15__ {int me; } TYPE_7__ ;
+typedef  struct Foz {TYPE_7__* jil; } Foz ;
+typedef  struct TYPE_13__ {int jack; } TYPE_2__ ;
+typedef  struct Bar {TYPE_2__ bil; } Bar ;
+typedef  struct TYPE_14__ {TYPE_7__* jil; } TYPE_5__ ;
+typedef  struct TYPE_12__ {TYPE_2__ bil; } TYPE_1__ ;

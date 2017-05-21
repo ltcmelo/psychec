@@ -1,3 +1,5 @@
-typedef  struct __Graph__ {int V;int** adj;int /*<<< orphan or scalar*/ E;}* Graph ;
-typedef  struct __Edge__ {int v;int w;} Edge ;
-int** MATRIXint (int, int, int /*<<< orphan or scalar*/);
+typedef  struct TYPE_9__ {int v; int w; } TYPE_2__ ;
+typedef  struct TYPE_8__ {int V; int** adj; int /*<<< orphan or scalar*/ E; } TYPE_1__ ;
+typedef  TYPE_1__* Graph ;
+typedef  TYPE_2__ Edge ;
+int** MATRIXint (int,int,int /*<<< orphan or scalar*/) ;

@@ -23,6 +23,7 @@ module Utils.DeclSorter where
 import Data.Type
 import Data.Graph
 import qualified Data.Map as Map
+import Data.Maybe
 import Debug.Trace
 import Utils.Pretty
 import Solver.SolverMonad (TyCtx (..))
@@ -31,12 +32,10 @@ import Solver.SolverMonad (TyCtx (..))
 -- | Populate the graph by mapping each vertice to the type it represents.
 populate :: TyCtx -> Map.Map Name Int
 populate tctx =
-    Map.foldr (\(t, _) acc -> Map.insert (strip t) (length acc) acc) Map.empty (tyctx tctx)
-    --Map.foldr (\(t, _) acc -> trace ("populate " ++ show (strip t)) (Map.insert (strip t) (length acc) acc)) Map.empty (tyctx tctx)
+    Map.foldrWithKey (\k (t, _) acc -> track k (length acc) acc) Map.empty (tyctx tctx)
   where
-    strip (Pointer t) = strip t
-    strip (QualTy t) = strip t
-    strip t = nameOf t
+    track node id acc = Map.insert node id acc
+    --track node id acc = trace ("node " ++ show id ++ " " ++ (show . pprint) node) Map.insert node id acc
 
 -- | Created edges between types that depend one another.
 buildDeps :: Ty -> Map.Map Name Int -> [Int]
@@ -44,6 +43,7 @@ buildDeps (Struct fs n) m =
     foldr (\(Field _ ft) acc -> (buildDeps ft m) ++ acc) [] fs
 buildDeps (Pointer t) m = buildDeps t m
 buildDeps (QualTy t) m = buildDeps t m
+-- buildDeps (FunTy rt pt)
 buildDeps t m =
     case Map.lookup (nameOf t) m of
         Nothing -> []
@@ -59,7 +59,7 @@ sortDecls tctx =
     (el, _) =
       Map.foldrWithKey
         (\n (t, _) (l, m) ->
-          (((n, t), length l, buildDeps t m):l, m))
+          (((n, t), fromJust (Map.lookup n m), buildDeps t m):l, m))
           --(((n, t), length l, trace(show (pprint t)) (buildDeps t m)):l, m))
         ([], m)
         (tyctx tctx)

@@ -1,2 +1,3 @@
-typedef  struct __point__ {float x;float y;} point ;
-float distance (struct __point__ ,struct __point__ ) ;
+typedef  struct TYPE_5__ {float x; float y; } TYPE_1__ ;
+typedef  TYPE_1__ point ;
+float distance (TYPE_1__,TYPE_1__) ;

@@ -1,1 +1,2 @@
-typedef  struct __Poly__ {int* a;int N;}* Poly ;
+typedef  struct TYPE_13__ {int* a; int N; } TYPE_1__ ;
+typedef  TYPE_1__* Poly ;

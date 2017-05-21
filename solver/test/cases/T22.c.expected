@@ -1,2 +1,4 @@
-typedef struct __List2__ {struct __List2__ * next2;}* List2 ;
-typedef struct __List__ {struct __List__ * next;}* List ;
+typedef  struct TYPE_12__ {struct TYPE_12__* next; } TYPE_2__ ;
+typedef  struct TYPE_11__ {struct TYPE_11__* next2; } TYPE_1__ ;
+typedef  TYPE_1__* List2 ;
+typedef  TYPE_2__* List ;

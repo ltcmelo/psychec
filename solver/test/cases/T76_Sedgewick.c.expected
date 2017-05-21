@@ -1,5 +1,6 @@
+typedef  struct TYPE_3__ {int size; int val; } TYPE_1__ ;
 int N ;
-struct __T0__ {int size;int val;}* itemKnown ;
-struct __T0__ * items ;
+TYPE_1__* itemKnown ;
+TYPE_1__* items ;
 int* maxKnown ;
 int unknown ;

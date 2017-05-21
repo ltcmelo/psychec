@@ -27,7 +27,7 @@ Definition of constraints
 > import Data.Generics
 
 > data Constraint = Ty :=: Ty                 -- equality
->                 | Ty :>: Ty
+>                 | Ty :>: Ty                 -- subtyping
 >                 | Name :<-: Ty              -- type ascription
 >                 | Has Ty Field              -- field constraint
 >                 | TypeDef Ty Ty             -- type definition
@@ -36,4 +36,4 @@ Definition of constraints
 >                 | Exists Name Constraint    -- fresh variable introduction
 >                 | ReadOnly Name             -- static values
 >                 | Truth
->                 deriving (Eq, Ord, Show, Data, Typeable)
+>                 deriving (Eq, Ord, Show)

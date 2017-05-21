@@ -1,2 +1,3 @@
-typedef  struct __link__ {int N;struct __link__ * r;struct __link__ * l;}* link ;
-struct __link__ * partR (struct __link__ *,int /*<<< orphan or scalar*/) ;
+typedef  struct TYPE_7__ {int N; struct TYPE_7__* r; struct TYPE_7__* l; } TYPE_1__ ;
+typedef  TYPE_1__* link ;
+TYPE_1__* partR (TYPE_1__*,int /*<<< orphan or scalar*/) ;

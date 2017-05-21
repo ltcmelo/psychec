@@ -40,7 +40,6 @@ import Debug.Trace
 (@@) :: Subst -> Subst -> Subst
 s1 @@ s2 = Subst $ (Map.map (apply s1) (subs s2)) `Map.union` (subs s1)
 
-
 class Apply a where
     apply :: Subst -> a -> a
 
@@ -59,27 +58,6 @@ instance Apply Constraint where
     apply s c@(ReadOnly _) = c
     apply s Truth = Truth
 
-
--- TODO: Refactor this together with stage 4.
-applyCore s h t@(TyVar v) =
-    maybe t (recOrNot) (Map.lookup v (subs s))
-  where
-    recOrNot t'@(TyVar v') =
-        if Set.member v'  h
-            then t'
-            else applyCore s (Set.insert v' h) t'
-    recOrNot t' = t'
-
-applyCore s h t@(TyCon c) = t
-applyCore s h (Pointer t) = Pointer (applyCore s h t)
-applyCore s h (FunTy t ts) = FunTy (applyCore s h t) (map (applyCore s h) ts)
-applyCore s h (Struct fs n) = Struct (map (applyCore2 s h) fs) n
-applyCore s h (QualTy t) = QualTy (applyCore s h (dropTopQual t))
-applyCore s h t@(EnumTy n) = t
-
-applyCore2 s h (Field n t) = Field n (applyCore s h t)
-
-
 instance Apply Ty where
     apply s t@(TyVar v) = maybe t id (Map.lookup v (subs s))
     apply s t@(TyCon c) = t
@@ -96,8 +74,8 @@ instance Apply VarInfo where
     apply s (VarInfo t b ro) = VarInfo (apply s t) b ro
 
 
-data Constness = Relax | Enforce
-                 deriving (Eq, Ord, Show)
+data Constness = Relax | Enforce  deriving (Eq, Ord, Show)
+
 
 class Apply a => Unifiable a where
     -- | Free variables
@@ -138,7 +116,6 @@ instance Unifiable Constraint where
 
 instance Unifiable Ty where
     -- Free variables
-
     fv (TyVar v) = [v]
     fv (TyCon _) = []
     fv (Pointer t) = fv t
@@ -148,7 +125,6 @@ instance Unifiable Ty where
     fv (EnumTy _) = []
 
     -- Plain unification
-
     punify t'@(TyVar v) t
         | convertible t t' = return nullSubst
         | otherwise = varBind v t
@@ -194,7 +170,6 @@ instance Unifiable Ty where
                                                      (Name $ show $ pprint t')
 
     -- Directional unification
-
     dunify t@(TyVar v) t'@(Pointer _) _ = varBind v t'
 
     dunify t'@(TyVar v) t m

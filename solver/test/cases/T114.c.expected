@@ -1,2 +1,3 @@
-typedef  struct option {char * member_0;char member_3;int /*<<< orphan or scalar*/* member_2;int /*<<< orphan or scalar*/ member_1;}  option ;
+typedef  struct option {char* member_0; char member_3; int /*<<< orphan or scalar*/* member_2; int /*<<< orphan or scalar*/ member_1; } option ;
+typedef  struct TYPE_7__ {char* member_0; char member_3; int /*<<< orphan or scalar*/* member_2; int /*<<< orphan or scalar*/ member_1; } TYPE_1__ ;
 #define  no_argument 128

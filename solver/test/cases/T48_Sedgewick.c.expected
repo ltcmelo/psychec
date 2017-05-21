@@ -1,1 +1,2 @@
-typedef  struct __Complex__ {float Re;float Im;}* Complex ;
+typedef  struct TYPE_10__ {float Re; float Im; } TYPE_1__ ;
+typedef  TYPE_1__* Complex ;

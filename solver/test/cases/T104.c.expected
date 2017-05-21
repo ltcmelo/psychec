@@ -1,4 +1,6 @@
-typedef  struct __set2__ {unsigned int* vector2;int size2;} set2 ;
-typedef  struct __set__ {unsigned int* vector;int size;} set ;
+typedef  struct TYPE_7__ {unsigned int* vector2; int size2; } TYPE_1__ ;
+typedef  TYPE_1__ set2 ;
+typedef  struct TYPE_8__ {unsigned int* vector; int size; } TYPE_2__ ;
+typedef  TYPE_2__ set ;
 unsigned int INT_BITS ;
 unsigned int INT_BITS2 ;

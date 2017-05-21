@@ -85,12 +85,25 @@ Name of a type
 > nameOf (QualTy t) = nameOf t
 > nameOf (EnumTy n) = n
 
+> -- plainNameOf
+> baseNameOf :: Ty -> Name
+> baseNameOf (TyCon n) = n
+> baseNameOf (TyVar n) = n
+> baseNameOf (Struct _ n) = n
+> baseNameOf (Pointer t) = baseNameOf t
+> baseNameOf x@(FunTy t ts) = Name (show $ pprint x)
+> baseNameOf (QualTy t) = baseNameOf t
+> baseNameOf (EnumTy n) = n
+
 
 > isElabStructName :: Pretty a => a -> Bool
 > isElabStructName = (== "struct ") . take 7 . show . pprint
 
 > isElabEnumName :: Pretty a => a -> Bool
 > isElabEnumName = (== "enum ") . take 5 . show . pprint
+
+> isElab k = isElabStructName k || isElabEnumName k
+
 
 > ensurePlainName :: Name -> Name
 > ensurePlainName n

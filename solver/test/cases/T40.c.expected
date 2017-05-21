@@ -1,4 +1,8 @@
-struct __T0__ {double x;} a ;
-struct __T1__ {double y;}* b ;
-struct __T2__ {char* z;int w;}* c ;
-struct __T3__ {double val;struct __T3__ * next;}* d ;
+typedef  struct TYPE_8__ {double x; } TYPE_4__ ;
+typedef  struct TYPE_7__ {double y; } TYPE_3__ ;
+typedef  struct TYPE_6__ {char* z; int w; } TYPE_2__ ;
+typedef  struct TYPE_5__ {double val; struct TYPE_5__* next; } TYPE_1__ ;
+TYPE_4__ a ;
+TYPE_3__* b ;
+TYPE_2__* c ;
+TYPE_1__* d ;

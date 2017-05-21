@@ -23,6 +23,7 @@ library
                      , Solver.Unification
                      , Solver.ConversionRules
                      , Solver.Decaying
+                     , Solver.Retypeable
                      , Parser.ConstraintParser
                      , Utils.Pretty
                      , Utils.Writer

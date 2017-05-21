@@ -1,3 +1,5 @@
-typedef  struct __T2__ {double x;} T2 ;
-typedef  struct __T1__ {int x;} T1 ;
+typedef  struct TYPE_6__ {int x; } TYPE_2__ ;
+typedef  struct TYPE_5__ {double x; } TYPE_1__ ;
+typedef  TYPE_1__ T2 ;
+typedef  TYPE_2__ T1 ;
 double c ;

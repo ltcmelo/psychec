@@ -1,2 +1,3 @@
+typedef  struct TYPE_9__ {int /*<<< orphan or scalar*/ item; struct TYPE_9__* r; struct TYPE_9__* l; } TYPE_1__ ;
+typedef  TYPE_1__* link ;
 typedef  int /*<<< orphan or scalar*/ Item ;
-typedef  struct __link__ {int /*<<< orphan or scalar*/ item;struct __link__ * r;struct __link__ * l;}* link ;

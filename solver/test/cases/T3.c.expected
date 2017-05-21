@@ -1,2 +1,4 @@
-typedef struct __T2__ {int i; struct __T2__ * next;} T2 ;
-typedef struct __T__ {struct __T__ * next;int /*<<< orphan or scalar*/ i; } T ;
+typedef  struct TYPE_6__ {struct TYPE_6__* next; int /*<<< orphan or scalar*/ i; } TYPE_2__ ;
+typedef  struct TYPE_5__ {int i; struct TYPE_5__* next; } TYPE_1__ ;
+typedef  TYPE_1__ T2 ;
+typedef  TYPE_2__ T ;

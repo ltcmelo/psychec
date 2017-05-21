@@ -1,6 +1,9 @@
-typedef  int T1 ;
-typedef  char * T3 ;
-typedef  struct __T6__ {int member_0;char* member_1;} T6 ;
-typedef  struct __T5__ {double member_0;int member_1;} T5 ;
-typedef  struct __T4__ {int member_0;} T4 ;
+typedef  struct TYPE_9__ {int member_0; } TYPE_3__ ;
+typedef  struct TYPE_8__ {double member_0; int member_1; } TYPE_2__ ;
+typedef  struct TYPE_7__ {int member_0; char* member_1; } TYPE_1__ ;
+typedef  TYPE_1__ T6 ;
+typedef  TYPE_2__ T5 ;
+typedef  TYPE_3__ T4 ;
+typedef  char* T3 ;
 typedef  int T2 ;
+typedef  int T1 ;

@@ -1,6 +1,7 @@
-typedef  struct __Graph__ {int V;int /*<<< orphan or scalar*/** adj;int /*<<< orphan or scalar*/ E;}* Graph ;
+typedef  struct TYPE_8__ {int V; int /*<<< orphan or scalar*/** adj; int /*<<< orphan or scalar*/ E; } TYPE_1__ ;
+typedef  TYPE_1__* Graph ;
 int /*<<< orphan or scalar*/ EDGE (int,int) ;
-int /*<<< orphan or scalar*/ GRAPHinsertE (struct __Graph__ *,int /*<<< orphan or scalar*/) ;
-int /*<<< orphan or scalar*/ GRAPHiso (struct __Graph__ *,int) ;
-int /*<<< orphan or scalar*/ GRAPHpath (struct __Graph__ *,int,int) ;
-int /*<<< orphan or scalar*/ GRAPHremoveE (struct __Graph__ *,int /*<<< orphan or scalar*/) ;
+int /*<<< orphan or scalar*/ GRAPHinsertE (TYPE_1__*,int /*<<< orphan or scalar*/) ;
+int /*<<< orphan or scalar*/ GRAPHiso (TYPE_1__*,int) ;
+int /*<<< orphan or scalar*/ GRAPHpath (TYPE_1__*,int,int) ;
+int /*<<< orphan or scalar*/ GRAPHremoveE (TYPE_1__*,int /*<<< orphan or scalar*/) ;

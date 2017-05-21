@@ -195,6 +195,8 @@ tests = testGroup "Unit tests"
                   , doTest "T149.c" -- Redeclaration of functions already declared.
                   , doTest "T150.c" -- Fix bug in declaration's order.
                   , doTest "T151.c" -- Isolated name inside sizeof.
+                  , doTest "T152.c" -- Complex struct nesting.
+                  , doTest "T153.c" -- Multi-level elaborated structs.
                   ]
 
 doTest s

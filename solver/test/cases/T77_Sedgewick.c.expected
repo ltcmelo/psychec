@@ -1,1 +1,2 @@
-typedef  struct __link__ {struct __link__ * r;struct __link__ * l;}* link ;
+typedef  struct TYPE_5__ {struct TYPE_5__* r; struct TYPE_5__* l; } TYPE_1__ ;
+typedef  TYPE_1__* link ;

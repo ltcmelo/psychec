@@ -1,1 +1,2 @@
-typedef  struct __T__ {char * member_0;int /*<<< orphan or scalar*/* member_1;} T ;
+typedef  struct TYPE_3__ {char* member_0; int /*<<< orphan or scalar*/* member_1; } TYPE_1__ ;
+typedef  TYPE_1__ T ;

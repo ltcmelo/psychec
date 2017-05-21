@@ -1,3 +1,4 @@
-typedef  struct __link__ {int v;struct __link__ * next;}* link ;
+typedef  struct TYPE_7__ {int v; struct TYPE_7__* next; } TYPE_1__ ;
+typedef  TYPE_1__* link ;
 int V ;
 int scanf (char*,int*,int*) ;

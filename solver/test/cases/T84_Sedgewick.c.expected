@@ -1,4 +1,5 @@
-typedef  struct __Graph__ {int V;int E;}* Graph ;
+typedef  struct TYPE_7__ {int V; int E; } TYPE_1__ ;
+typedef  TYPE_1__* Graph ;
 int /*<<< orphan or scalar*/ EDGE (int,int) ;
-struct __Graph__ * GRAPHinit (int) ;
-int /*<<< orphan or scalar*/ GRAPHinsertE (struct __Graph__ *,int /*<<< orphan or scalar*/) ;
+TYPE_1__* GRAPHinit (int) ;
+int /*<<< orphan or scalar*/ GRAPHinsertE (TYPE_1__*,int /*<<< orphan or scalar*/) ;

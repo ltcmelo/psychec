@@ -1,2 +1,4 @@
-struct __T0__ {struct __T1__ { int v; }** adj;}* G ;
+typedef  struct TYPE_7__ {int v; } TYPE_1__ ;
+typedef  struct TYPE_8__ {TYPE_1__** adj; } TYPE_6__ ;
+TYPE_6__* G ;
 int i ;

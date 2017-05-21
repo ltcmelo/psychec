@@ -1,1 +1,2 @@
-typedef  struct __link__ {char token;struct __link__ * r;struct __link__ * l;}* link ;
+typedef  struct TYPE_9__ {char token; struct TYPE_9__* r; struct TYPE_9__* l; } TYPE_1__ ;
+typedef  TYPE_1__* link ;

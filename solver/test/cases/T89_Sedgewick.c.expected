@@ -1,2 +1,3 @@
-typedef  struct __Graph__ {int V;}* Graph ;
-int GRAPHdeg (struct __Graph__ *,int) ;
+typedef  struct TYPE_5__ {int V; } TYPE_1__ ;
+typedef  TYPE_1__* Graph ;
+int GRAPHdeg (TYPE_1__*,int) ;

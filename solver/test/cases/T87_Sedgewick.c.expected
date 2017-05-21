@@ -1,1 +1,2 @@
-typedef  struct __Graph__ {int V;int** adj;}* Graph ;
+typedef  struct TYPE_5__ {int V; int** adj; } TYPE_1__ ;
+typedef  TYPE_1__* Graph ;

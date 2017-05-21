@@ -1,3 +1,3 @@
-typedef int /*<<< orphan or scalar*/ B ;
-typedef int /*<<< orphan or scalar*/ C ;
-typedef int A ;
+typedef  int /*<<< orphan or scalar*/ C ;
+typedef  int /*<<< orphan or scalar*/ B ;
+typedef  int A ;

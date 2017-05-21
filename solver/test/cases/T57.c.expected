@@ -1,2 +1,3 @@
-typedef  struct __List3__ {struct __List3__ * next3;}* List3 ;
-struct __List3__ * node3 ;
+typedef  struct TYPE_6__ {struct TYPE_6__* next3; } TYPE_1__ ;
+typedef  TYPE_1__* List3 ;
+TYPE_1__* node3 ;

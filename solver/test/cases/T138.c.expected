@@ -1,4 +1,4 @@
-typedef  int /*<<< orphan or scalar*/ (* T1 ) () ;
 typedef  int /*<<< orphan or scalar*/ (* T2 ) () ;
+typedef  int /*<<< orphan or scalar*/ (* T1 ) () ;
 int /*<<< orphan or scalar*/ f () ;
 int /*<<< orphan or scalar*/ g () ;
