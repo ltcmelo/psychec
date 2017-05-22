@@ -32,13 +32,11 @@ import Utils.Pretty
 class Retypeable a where
   collect :: a -> [Ty]
   canonicalize :: TyIdx -> a -> a
-  degenerate :: TyIdx -> a -> a
   orphanize :: TyIdx -> a -> a
 
 instance Retypeable a => Retypeable [a] where
   collect = concat . map (collect)
   canonicalize idx = map (canonicalize idx)
-  degenerate idx = map (degenerate idx)
   orphanize idx = map (orphanize idx)
 
 instance Retypeable Ty where
@@ -56,15 +54,7 @@ instance Retypeable Ty where
   canonicalize idx (QualTy t) = QualTy (canonicalize idx t)
   canonicalize idx (Pointer t) = Pointer (canonicalize idx t)
   canonicalize idx (FunTy t tx) = FunTy (canonicalize idx t) (canonicalize idx tx)
-  canonicalize idx t@(Struct fs _) = TyCon $ fromJust (Map.lookup t (ty2n idx))
-
-  degenerate _ t@(TyVar _) = t
-  degenerate _ t@(TyCon _) = t
-  degenerate _ t@(EnumTy _) = t
-  degenerate idx (QualTy t) = QualTy (degenerate idx t)
-  degenerate idx (Pointer t) = Pointer (degenerate idx t)
-  degenerate idx (FunTy t tx) = FunTy (degenerate idx t) (degenerate idx tx)
-  degenerate idx t@(Struct fs n) = maybe t (\k -> TyCon k) (Map.lookup t (ty2n idx))
+  canonicalize idx t@(Struct fs _) = maybe t (\k -> TyCon k) (Map.lookup t (ty2n idx))
 
   orphanize idx t@(TyVar v) = maybe orphan TyCon (Map.lookup t (ty2n idx))
   orphanize _ t@(TyCon _) = t
@@ -77,7 +67,6 @@ instance Retypeable Ty where
 instance Retypeable Field where
   collect (Field _ t) = collect t
   canonicalize idx (Field n t) = Field n (canonicalize idx t)
-  degenerate idx (Field n t) = Field n (degenerate idx t)
   orphanize idx (Field n t) = Field n (orphanize idx t)
 
 

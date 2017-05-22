@@ -314,8 +314,8 @@ stage5 tcx vcx s = do
     elabs = Map.foldrWithKey (\k (t, _) acc ->
       if isElabStructName k then acc %% (t %-> k) else acc) nullIdx (tyctx tcx)
     tcxFlt_ = Map.filterWithKey (\k _ -> (not . isElabStructName) k) (tyctx tcx)
-    tcxFlt_' = Map.map (\(t, b) -> (degenerate elabs t , b)) tcxFlt_
-    vcxFlt_ = Map.map (\(VarInfo t b ro) -> VarInfo (degenerate elabs t) b ro) (varctx vcx)
+    tcxFlt_' = Map.map (\(t, b) -> (canonicalize elabs t , b)) tcxFlt_
+    vcxFlt_ = Map.map (\(VarInfo t b ro) -> VarInfo (canonicalize elabs t) b ro) (varctx vcx)
 
     tcxElab_ = (tyctx tcx) Map.\\ tcxFlt_'
     tcxElab_' = Map.mapWithKey (\k (t, b) -> (unalpha2 k t, b)) tcxElab_
