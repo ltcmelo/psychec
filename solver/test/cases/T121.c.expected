@@ -1,6 +1,12 @@
-typedef  struct T2 { int dummy;} T2 ;
-typedef  struct T1 { int dummy;} T1 ;
-int /*<<< orphan or scalar*/ g1 (struct T1*) ;
-int /*<<< orphan or scalar*/ g2 (struct T2*) ;
-struct T1 x1 ;
-struct T2* x2 ;
+/* Forward declarations */
+
+/* Type definitions */
+struct T2 {int dummy; } ;
+struct T1 {int dummy; } ;
+
+/* Variables */
+int /*<<< orphan or scalar*/ g1 (struct T1*) ; 
+int /*<<< orphan or scalar*/ g2 (struct T2*) ; 
+struct T1 x1 ; 
+struct T2* x2 ; 
+

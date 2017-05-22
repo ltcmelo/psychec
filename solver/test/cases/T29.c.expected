@@ -1,1 +1,7 @@
-typedef int INT;
+/* Forward declarations */
+
+/* Type definitions */
+typedef  int INT ;
+
+/* Variables */
+

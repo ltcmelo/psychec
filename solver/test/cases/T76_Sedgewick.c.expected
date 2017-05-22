@@ -1,6 +1,13 @@
-typedef  struct TYPE_3__ {int size; int val; } TYPE_1__ ;
-int N ;
-TYPE_1__* itemKnown ;
-TYPE_1__* items ;
-int* maxKnown ;
-int unknown ;
+/* Forward declarations */
+typedef  struct TYPE_3__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_3__ {int size; int val; } ;
+
+/* Variables */
+int N ; 
+TYPE_1__* itemKnown ; 
+TYPE_1__* items ; 
+int* maxKnown ; 
+int unknown ; 
+

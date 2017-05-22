@@ -1,3 +1,10 @@
-typedef  struct TYPE_3__ {double x; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_3__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_3__ {double x; } ;
 typedef  double T2 ;
 typedef  TYPE_1__ T1 ;
+
+/* Variables */
+

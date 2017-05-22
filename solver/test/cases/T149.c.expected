@@ -1,6 +1,12 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  int /*<<< orphan or scalar*/ T4 ;
 typedef  double T3 ;
 typedef  double T2 ;
 typedef  float T1 ;
 typedef  short T0 ;
-int /*<<< orphan or scalar*/ k (int,double) ;
+
+/* Variables */
+int /*<<< orphan or scalar*/ k (int,double) ; 
+

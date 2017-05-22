@@ -1,2 +1,8 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  int numType ;
-int R ;
+
+/* Variables */
+int R ; 
+

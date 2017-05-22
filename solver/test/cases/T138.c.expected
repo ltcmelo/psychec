@@ -1,4 +1,10 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  int /*<<< orphan or scalar*/ (* T2 ) () ;
 typedef  int /*<<< orphan or scalar*/ (* T1 ) () ;
-int /*<<< orphan or scalar*/ f () ;
-int /*<<< orphan or scalar*/ g () ;
+
+/* Variables */
+int /*<<< orphan or scalar*/ f () ; 
+int /*<<< orphan or scalar*/ g () ; 
+

@@ -1,1 +1,7 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  struct A_str* link ;
+
+/* Variables */
+

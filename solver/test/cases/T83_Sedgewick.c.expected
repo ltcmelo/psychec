@@ -1,2 +1,9 @@
-typedef  struct TYPE_4__ {int V; int E; int** adj; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_4__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_4__ {int V; int E; int** adj; } ;
 typedef  TYPE_1__* Graph ;
+
+/* Variables */
+

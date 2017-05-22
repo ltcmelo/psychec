@@ -1,25 +1,48 @@
-typedef  struct TYPE_77__ {int uuu; } TYPE_55__ ;
+/* Forward declarations */
+typedef  struct TYPE_83__   TYPE_6__ ;
+typedef  struct TYPE_82__   TYPE_66__ ;
+typedef  struct TYPE_81__   TYPE_65__ ;
+typedef  struct TYPE_80__   TYPE_58__ ;
+typedef  struct TYPE_79__   TYPE_57__ ;
+typedef  struct TYPE_78__   TYPE_56__ ;
+typedef  struct TYPE_77__   TYPE_55__ ;
+typedef  struct TYPE_76__   TYPE_52__ ;
+typedef  struct TYPE_75__   TYPE_51__ ;
+typedef  struct TYPE_74__   TYPE_4__ ;
+typedef  struct TYPE_73__   TYPE_48__ ;
+typedef  struct TYPE_72__   TYPE_40__ ;
+typedef  struct TYPE_71__   TYPE_38__ ;
+typedef  struct TYPE_70__   TYPE_28__ ;
+typedef  struct TYPE_69__   TYPE_26__ ;
+typedef  struct TYPE_68__   TYPE_1__ ;
+typedef  struct TYPE_67__   TYPE_10__ ;
+
+/* Type definitions */
 typedef  TYPE_55__* YYY ;
 typedef  int /*<<< orphan or scalar*/ Whatever ;
-typedef  struct TYPE_67__ {char* r; char s; } TYPE_10__ ;
-typedef  struct TYPE_74__ {double p; TYPE_10__ q; } TYPE_4__ ;
-typedef  struct TYPE_83__ {TYPE_4__* n; } TYPE_6__ ;
-typedef  struct TYPE_68__ {int w; } TYPE_1__ ;
-typedef  struct TYPE_78__ {int y; double known; int /*<<< orphan or scalar*/ i; TYPE_55__* xxx; TYPE_6__* m; TYPE_1__* z; } TYPE_56__ ;
-typedef  struct TYPE_75__ {TYPE_56__* g; } TYPE_51__ ;
-typedef  struct TYPE_76__ {TYPE_51__ f; } TYPE_52__ ;
-typedef  struct TYPE_73__ {int d; } TYPE_48__ ;
-typedef  struct TYPE_82__ {int b; TYPE_52__ e; TYPE_48__* c; } TYPE_66__ ;
-typedef  struct TYPE_81__ {struct TYPE_81__* prev; TYPE_56__* big; } TYPE_65__ ;
-typedef  struct TYPE_71__ {int ptrobj; char* ptrobj2; } TYPE_38__ ;
-typedef  struct TYPE_72__ {TYPE_38__* hhhhh; } TYPE_40__ ;
-typedef  struct TYPE_69__ {int xkhi; double abcd; } TYPE_26__ ;
-typedef  struct TYPE_70__ {TYPE_26__* hh; } TYPE_28__ ;
-typedef  struct TYPE_80__ {TYPE_40__ kkkkkk; TYPE_28__* kk; } TYPE_58__ ;
-typedef  struct TYPE_79__ {struct TYPE_79__* next; } TYPE_57__ ;
+struct TYPE_83__ {TYPE_4__* n; } ;
+struct TYPE_75__ {TYPE_56__* g; } ;
+struct TYPE_76__ {TYPE_51__ f; } ;
+struct TYPE_82__ {int b; TYPE_52__ e; TYPE_48__* c; } ;
+struct TYPE_81__ {struct TYPE_81__* prev; TYPE_56__* big; } ;
+struct TYPE_72__ {TYPE_38__* hhhhh; } ;
+struct TYPE_80__ {TYPE_40__ kkkkkk; TYPE_28__* kk; } ;
+struct TYPE_79__ {struct TYPE_79__* next; } ;
+struct TYPE_78__ {int y; double known; int /*<<< orphan or scalar*/ i; TYPE_55__* xxx; TYPE_6__* m; TYPE_1__* z; } ;
+struct TYPE_77__ {int uuu; } ;
+struct TYPE_67__ {char* r; char s; } ;
+struct TYPE_74__ {double p; TYPE_10__ q; } ;
+struct TYPE_73__ {int d; } ;
+struct TYPE_71__ {int ptrobj; char* ptrobj2; } ;
+struct TYPE_70__ {TYPE_26__* hh; } ;
+struct TYPE_69__ {int xkhi; double abcd; } ;
+struct TYPE_68__ {int w; } ;
 typedef  TYPE_56__* T ;
 typedef  TYPE_57__* Rec ;
 typedef  TYPE_58__* JJ ;
 typedef  TYPE_56__* B ;
-TYPE_66__* a ;
-TYPE_65__* cer ;
+
+/* Variables */
+TYPE_66__* a ; 
+TYPE_65__* cer ; 
+

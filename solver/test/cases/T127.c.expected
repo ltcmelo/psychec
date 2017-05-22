@@ -1,2 +1,8 @@
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables */
 int /*<<< orphan or scalar*/ parse_long_options (int,int /*<<< orphan or scalar*/ (*) (int),double) ; 
 int /*<<< orphan or scalar*/ usage (int) ; 
+

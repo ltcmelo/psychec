@@ -1,4 +1,10 @@
-int a;
-int /*<<< orphan or scalar*/ b;
-int /*<<< orphan or scalar*/ c;
-int /*<<< orphan or scalar*/ g(int, int /*<<< orphan or scalar*/);
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables */
+int a ; 
+int /*<<< orphan or scalar*/ b ; 
+int /*<<< orphan or scalar*/ c ; 
+int /*<<< orphan or scalar*/ g (int,int /*<<< orphan or scalar*/) ; 
+

@@ -1,2 +1,8 @@
-typedef double real ;
-typedef int inteiro ;
+/* Forward declarations */
+
+/* Type definitions */
+typedef  double real ;
+typedef  int inteiro ;
+
+/* Variables */
+

@@ -197,6 +197,7 @@ tests = testGroup "Unit tests"
                   , doTest "T151.c" -- Isolated name inside sizeof.
                   , doTest "T152.c" -- Complex struct nesting.
                   , doTest "T153.c" -- Multi-level elaborated structs.
+                  , doTest "T154.c" -- Complex struct nesting and need of forward decl.
                   ]
 
 doTest s
@@ -210,11 +211,11 @@ doTest s
             r <- solver c
             case r of
                 Left err' -> error $ "Error solving constraints:\n" ++ show err'
-                Right ctxs -> do
+                Right ctxs@(tcx, _) -> do
                     expected <- readFile (cases ++ s ++ ".expected")
                     let
                       removeSpaces xs = [ x | x <- xs, not (x `elem` " \n")]
-                      actual = writeDecls ctxs
+                      actual = writeFwdDecls tcx ++ writeDecls ctxs
                       actualNoWS = removeSpaces actual
                       expectedNoWS = removeSpaces expected
 

@@ -1,1 +1,7 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  char* T ;
+
+/* Variables */
+

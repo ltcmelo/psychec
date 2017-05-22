@@ -1,2 +1,8 @@
-typedef float T;
-int /*<<< orphan or scalar*/ e;
+/* Forward declarations */
+
+/* Type definitions */
+typedef  float T ;
+
+/* Variables */
+int /*<<< orphan or scalar*/ e ; 
+

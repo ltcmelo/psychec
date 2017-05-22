@@ -1,1 +1,7 @@
-typedef int /*<<< orphan or scalar*/ VOID;
+/* Forward declarations */
+
+/* Type definitions */
+typedef  int /*<<< orphan or scalar*/ VOID ;
+
+/* Variables */
+

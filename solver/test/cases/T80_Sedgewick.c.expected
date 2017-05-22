@@ -1,5 +1,12 @@
-typedef  struct TYPE_6__ {int sz; struct TYPE_6__** next; int /*<<< orphan or scalar*/ item; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_6__   TYPE_1__ ;
+
+/* Type definitions */
 typedef  TYPE_1__* link ;
+struct TYPE_6__ {int sz; struct TYPE_6__** next; int /*<<< orphan or scalar*/ item; } ;
 typedef  int /*<<< orphan or scalar*/ Item ;
-int /*<<< orphan or scalar*/ NULLitem ;
-int lgNmax ;
+
+/* Variables */
+int /*<<< orphan or scalar*/ NULLitem ; 
+int lgNmax ; 
+

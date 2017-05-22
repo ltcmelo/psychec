@@ -1,1 +1,7 @@
-typedef int T ;
+/* Forward declarations */
+
+/* Type definitions */
+typedef  int T ;
+
+/* Variables */
+

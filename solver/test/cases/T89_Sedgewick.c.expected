@@ -1,3 +1,10 @@
-typedef  struct TYPE_5__ {int V; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_5__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_5__ {int V; } ;
 typedef  TYPE_1__* Graph ;
-int GRAPHdeg (TYPE_1__*,int) ;
+
+/* Variables */
+int GRAPHdeg (TYPE_1__*,int) ; 
+

@@ -1,2 +1,9 @@
-typedef  struct TYPE_4__ {double member_0; int member_1; double fpval; int ival; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_4__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_4__ {double member_0; int member_1; double fpval; int ival; } ;
 typedef  TYPE_1__ T1 ;
+
+/* Variables */
+

@@ -1,3 +1,10 @@
-typedef  struct TYPE_3__ {int /*<<< orphan or scalar*/ y; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_3__   TYPE_1__ ;
+
+/* Type definitions */
 typedef  TYPE_1__* link ;
+struct TYPE_3__ {int /*<<< orphan or scalar*/ y; } ;
 typedef  int /*<<< orphan or scalar*/ A ;
+
+/* Variables */
+

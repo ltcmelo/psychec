@@ -1,2 +1,8 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  int const* T2 ;
 typedef  int T1 ;
+
+/* Variables */
+

@@ -1,1 +1,7 @@
-typedef int A;
+/* Forward declarations */
+
+/* Type definitions */
+typedef  int A ;
+
+/* Variables */
+

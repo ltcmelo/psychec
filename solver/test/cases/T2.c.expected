@@ -1,2 +1,9 @@
-typedef  struct TYPE_3__ {char c; int i; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_3__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_3__ {char c; int i; } ;
 typedef  TYPE_1__ T ;
+
+/* Variables */
+

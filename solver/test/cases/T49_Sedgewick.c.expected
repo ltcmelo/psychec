@@ -1,2 +1,9 @@
-typedef  struct TYPE_13__ {int* a; int N; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_13__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_13__ {int* a; int N; } ;
 typedef  TYPE_1__* Poly ;
+
+/* Variables */
+

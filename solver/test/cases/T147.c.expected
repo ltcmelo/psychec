@@ -1,2 +1,8 @@
-typedef  struct gl_oset_node_impl {int dummy; } gl_oset_node_impl ;
+/* Forward declarations */
+
+/* Type definitions */
+struct gl_oset_node_impl {int dummy; } ;
 typedef  struct gl_oset_node_impl* gl_oset_node_t ;
+
+/* Variables */
+

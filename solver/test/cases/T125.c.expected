@@ -1,2 +1,8 @@
-int /*<<< orphan or scalar*/ uid ;
-int uid_set (int /*<<< orphan or scalar*/) ;
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables */
+int /*<<< orphan or scalar*/ uid ; 
+int uid_set (int /*<<< orphan or scalar*/) ; 
+

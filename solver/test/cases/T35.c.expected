@@ -1,1 +1,7 @@
-double a;
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables */
+double a ; 
+

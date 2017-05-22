@@ -1,3 +1,10 @@
-typedef  struct TYPE_6__ {struct TYPE_6__* next3; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_6__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_6__ {struct TYPE_6__* next3; } ;
 typedef  TYPE_1__* List3 ;
-TYPE_1__* node3 ;
+
+/* Variables */
+TYPE_1__* node3 ; 
+

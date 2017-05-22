@@ -1,3 +1,9 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  enum E { ____Placeholder_E } E ;
-int X ;
-int Z ;
+
+/* Variables */
+int X ; 
+int Z ; 
+

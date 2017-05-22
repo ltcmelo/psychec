@@ -1,2 +1,9 @@
-typedef  struct TYPE_10__ {float Re; float Im; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_10__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_10__ {float Re; float Im; } ;
 typedef  TYPE_1__* Complex ;
+
+/* Variables */
+

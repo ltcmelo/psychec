@@ -1,3 +1,10 @@
-typedef  struct TYPE_9__ {struct TYPE_9__* next; int /*<<< orphan or scalar*/ item; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_9__   TYPE_1__ ;
+
+/* Type definitions */
 typedef  TYPE_1__* link ;
+struct TYPE_9__ {struct TYPE_9__* next; int /*<<< orphan or scalar*/ item; } ;
 typedef  int /*<<< orphan or scalar*/ Item ;
+
+/* Variables */
+

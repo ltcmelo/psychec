@@ -1,3 +1,6 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  short TUS ;
 typedef  long TUL ;
 typedef  int TUI ;
@@ -7,3 +10,6 @@ typedef  double TLD ;
 typedef  long TL ;
 typedef  int TIU ;
 typedef  int TI ;
+
+/* Variables */
+

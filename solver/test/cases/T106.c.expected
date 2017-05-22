@@ -1,3 +1,9 @@
-int A;
-int B;
-int C;
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables */
+int A ; 
+int B ; 
+int C ; 
+

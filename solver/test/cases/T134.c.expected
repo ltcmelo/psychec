@@ -1,2 +1,9 @@
-typedef  struct TYPE_3__ {char* member_0; int /*<<< orphan or scalar*/* member_1; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_3__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_3__ {char* member_0; int /*<<< orphan or scalar*/* member_1; } ;
 typedef  TYPE_1__ T ;
+
+/* Variables */
+

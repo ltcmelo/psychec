@@ -1,6 +1,12 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  int T2 ;
 typedef  int T1 ;
-int other ;
-#define  val 130
-#define  val2 129
-#define  val3 128
+
+/* Variables */
+int other ; 
+#define  val 130 
+#define  val2 129 
+#define  val3 128 
+

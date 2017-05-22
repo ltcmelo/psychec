@@ -1,3 +1,10 @@
-typedef  struct TYPE_8__ {int N; struct TYPE_8__* l; struct TYPE_8__* r; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_8__   TYPE_1__ ;
+
+/* Type definitions */
 typedef  TYPE_1__* link ;
-TYPE_1__* z ;
+struct TYPE_8__ {int N; struct TYPE_8__* l; struct TYPE_8__* r; } ;
+
+/* Variables */
+TYPE_1__* z ; 
+

@@ -1,4 +1,12 @@
-typedef  struct TYPE_9__ {int v; int w; } TYPE_2__ ;
-typedef  struct TYPE_8__ {int V; int** adj; int /*<<< orphan or scalar*/ E; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_9__   TYPE_2__ ;
+typedef  struct TYPE_8__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_9__ {int v; int w; } ;
+struct TYPE_8__ {int V; int** adj; int /*<<< orphan or scalar*/ E; } ;
 typedef  TYPE_1__* Graph ;
 typedef  TYPE_2__ Edge ;
+
+/* Variables */
+

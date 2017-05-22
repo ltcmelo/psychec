@@ -1,2 +1,8 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  int u8 ;
 typedef  int u32 ;
+
+/* Variables */
+

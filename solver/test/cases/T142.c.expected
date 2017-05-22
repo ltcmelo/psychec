@@ -1,3 +1,6 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  int const T9y ;
 typedef  int* T9x ;
 typedef  int const* T8y ;
@@ -43,3 +46,6 @@ typedef  int const T10y ;
 typedef  int* T10x ;
 typedef  int const* T1 ;
 typedef  int* T0 ;
+
+/* Variables */
+

@@ -1,1 +1,7 @@
-typedef  struct linebuffer {int dummy;} linebuffer ;
+/* Forward declarations */
+
+/* Type definitions */
+struct linebuffer {int dummy; } ;
+
+/* Variables */
+

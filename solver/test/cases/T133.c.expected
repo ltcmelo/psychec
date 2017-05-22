@@ -1,4 +1,10 @@
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables */
 char p1 ; 
 char* p2 ; 
 char* p3 ; 
 char* p4 ; 
+

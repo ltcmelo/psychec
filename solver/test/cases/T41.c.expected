@@ -1,4 +1,12 @@
-typedef  struct TYPE_4__ {double x; } TYPE_2__ ;
-typedef  struct TYPE_3__ {TYPE_2__ y; } TYPE_1__ ;
-TYPE_2__ a ;
-TYPE_1__ b ;
+/* Forward declarations */
+typedef  struct TYPE_4__   TYPE_2__ ;
+typedef  struct TYPE_3__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_4__ {double x; } ;
+struct TYPE_3__ {TYPE_2__ y; } ;
+
+/* Variables */
+TYPE_2__ a ; 
+TYPE_1__ b ; 
+

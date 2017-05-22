@@ -1,4 +1,11 @@
-typedef  struct TYPE_7__ {int v; struct TYPE_7__* next; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_7__   TYPE_1__ ;
+
+/* Type definitions */
 typedef  TYPE_1__* link ;
-int V ;
-int scanf (char*,int*,int*) ;
+struct TYPE_7__ {int v; struct TYPE_7__* next; } ;
+
+/* Variables */
+int V ; 
+int scanf (char*,int*,int*) ; 
+

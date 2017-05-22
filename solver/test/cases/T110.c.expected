@@ -1,3 +1,9 @@
-int BASE_TYPE ;
-char* _ (char *) ;
-char* program_name ;
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables */
+int BASE_TYPE ; 
+char* _ (char*) ; 
+char* program_name ; 
+

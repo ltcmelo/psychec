@@ -1,2 +1,8 @@
-typedef  struct A {int dummy; } A ;
+/* Forward declarations */
+
+/* Type definitions */
+struct A {int dummy; } ;
 typedef  int /*<<< orphan or scalar*/ A_t ;
+
+/* Variables */
+

@@ -1,4 +1,10 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  int D ;
 typedef  int C ;
 typedef  int B ;
 typedef  int A ;
+
+/* Variables */
+

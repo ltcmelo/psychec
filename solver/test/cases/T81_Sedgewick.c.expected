@@ -1,4 +1,10 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  int /*<<< orphan or scalar*/ Graph ;
-int GRAPHcc (int /*<<< orphan or scalar*/) ;
-int /*<<< orphan or scalar*/ GRAPHrand (int,int) ;
-int /*<<< orphan or scalar*/ GRAPHshow (int /*<<< orphan or scalar*/) ;
+
+/* Variables */
+int GRAPHcc (int /*<<< orphan or scalar*/) ; 
+int /*<<< orphan or scalar*/ GRAPHrand (int,int) ; 
+int /*<<< orphan or scalar*/ GRAPHshow (int /*<<< orphan or scalar*/) ; 
+

@@ -1,2 +1,8 @@
-typedef double T3;
-typedef int /*<<< orphan or scalar*/ Foo;
+/* Forward declarations */
+
+/* Type definitions */
+typedef  double T3 ;
+typedef  int /*<<< orphan or scalar*/ Foo ;
+
+/* Variables */
+

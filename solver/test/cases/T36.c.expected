@@ -1,3 +1,6 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  int TT11 ;
 typedef  int /*<<< orphan or scalar*/* T9 ;
 typedef  int** T8 ;
@@ -15,4 +18,7 @@ typedef  double* T12 ;
 typedef  int* T11 ;
 typedef  int* T10 ;
 typedef  int* T1 ;
-int y10 ;
+
+/* Variables */
+int y10 ; 
+

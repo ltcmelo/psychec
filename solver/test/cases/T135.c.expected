@@ -1,4 +1,12 @@
-typedef  struct TYPE_7__ {int v; } TYPE_1__ ;
-typedef  struct TYPE_8__ {TYPE_1__** adj; } TYPE_6__ ;
-TYPE_6__* G ;
-int i ;
+/* Forward declarations */
+typedef  struct TYPE_8__   TYPE_6__ ;
+typedef  struct TYPE_7__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_8__ {TYPE_1__** adj; } ;
+struct TYPE_7__ {int v; } ;
+
+/* Variables */
+TYPE_6__* G ; 
+int i ; 
+

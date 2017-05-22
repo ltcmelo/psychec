@@ -1,2 +1,9 @@
-typedef  struct TYPE_4__ {char item; struct TYPE_4__* l; struct TYPE_4__* r; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_4__   TYPE_1__ ;
+
+/* Type definitions */
 typedef  TYPE_1__* link ;
+struct TYPE_4__ {char item; struct TYPE_4__* l; struct TYPE_4__* r; } ;
+
+/* Variables */
+

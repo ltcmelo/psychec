@@ -1,4 +1,11 @@
-typedef  struct TYPE_14__ {int item; struct TYPE_14__* next; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_14__   TYPE_1__ ;
+
+/* Type definitions */
 typedef  TYPE_1__* link ;
-TYPE_1__* deleteNext (TYPE_1__*) ;
-void insertNext (TYPE_1__*,TYPE_1__*) ;
+struct TYPE_14__ {int item; struct TYPE_14__* next; } ;
+
+/* Variables */
+TYPE_1__* deleteNext (TYPE_1__*) ; 
+void insertNext (TYPE_1__*,TYPE_1__*) ; 
+

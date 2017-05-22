@@ -1,3 +1,10 @@
-typedef  struct TYPE_5__ {float x; float y; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_5__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_5__ {float x; float y; } ;
 typedef  TYPE_1__ point ;
-float distance (TYPE_1__,TYPE_1__) ;
+
+/* Variables */
+float distance (TYPE_1__,TYPE_1__) ; 
+

@@ -1,2 +1,8 @@
-int ENC_BLOCKSIZE ;
-int /*<<< orphan or scalar*/ fread (int /*<<< orphan or scalar*/,int) ;
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables */
+int ENC_BLOCKSIZE ; 
+int /*<<< orphan or scalar*/ fread (int /*<<< orphan or scalar*/,int) ; 
+

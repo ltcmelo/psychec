@@ -1,2 +1,7 @@
-typedef float (*T) (double, int);
- 
+/* Forward declarations */
+
+/* Type definitions */
+typedef  float (* T ) (double,int) ;
+
+/* Variables */
+

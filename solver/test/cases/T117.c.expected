@@ -1,4 +1,10 @@
-int /*<<< orphan or scalar*/ a;
-#define b 130
-#define c 129
-#define d 128
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables */
+int /*<<< orphan or scalar*/ a ; 
+#define  b 130 
+#define  c 129 
+#define  d 128 
+

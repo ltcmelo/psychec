@@ -1,4 +1,10 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  char* T3 ;
 typedef  char const* T2 ;
-int /*<<< orphan or scalar*/ f1 (char const*) ;
-int /*<<< orphan or scalar*/ f3 (char*) ;
+
+/* Variables */
+int /*<<< orphan or scalar*/ f1 (char const*) ; 
+int /*<<< orphan or scalar*/ f3 (char*) ; 
+

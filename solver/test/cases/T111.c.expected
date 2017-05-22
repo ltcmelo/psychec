@@ -1,7 +1,13 @@
+/* Forward declarations */
+
+/* Type definitions */
 typedef  int /*<<< orphan or scalar*/ const const T1 ;
-int /*<<< orphan or scalar*/ g (char const*) ;
-int /*<<< orphan or scalar*/ h (char const*) ;
-int /*<<< orphan or scalar*/ j (char const* const) ;
-int /*<<< orphan or scalar*/ k (int /*<<< orphan or scalar*/ const const) ;
-int /*<<< orphan or scalar*/ l (int /*<<< orphan or scalar*/ const const) ;
-int /*<<< orphan or scalar*/ m (int /*<<< orphan or scalar*/ const const) ;
+
+/* Variables */
+int /*<<< orphan or scalar*/ g (char const*) ; 
+int /*<<< orphan or scalar*/ h (char const*) ; 
+int /*<<< orphan or scalar*/ j (char const* const) ; 
+int /*<<< orphan or scalar*/ k (int /*<<< orphan or scalar*/ const const) ; 
+int /*<<< orphan or scalar*/ l (int /*<<< orphan or scalar*/ const const) ; 
+int /*<<< orphan or scalar*/ m (int /*<<< orphan or scalar*/ const const) ; 
+

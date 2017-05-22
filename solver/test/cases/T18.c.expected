@@ -1,2 +1,7 @@
-typedef void* T;
+/* Forward declarations */
+
+/* Type definitions */
+typedef  void* T ;
+
+/* Variables */
 

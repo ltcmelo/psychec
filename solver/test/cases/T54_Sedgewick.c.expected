@@ -1,2 +1,9 @@
-typedef  struct TYPE_8__ {int index; int d; struct TYPE_8__* r; struct TYPE_8__* m; struct TYPE_8__* l; } TYPE_1__ ;
+/* Forward declarations */
+typedef  struct TYPE_8__   TYPE_1__ ;
+
+/* Type definitions */
 typedef  TYPE_1__* link ;
+struct TYPE_8__ {int index; int d; struct TYPE_8__* r; struct TYPE_8__* m; struct TYPE_8__* l; } ;
+
+/* Variables */
+
