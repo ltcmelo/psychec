@@ -59,11 +59,11 @@ instance Apply Constraint where
     apply s Truth = Truth
 
 instance Apply Ty where
-    apply s t@(TyVar v) = maybe t id (Map.lookup v (subs s))
-    apply s t@(TyCon c) = t
-    apply s (Pointer t) = Pointer (apply s t)
+    apply s t@(VarTy v) = maybe t id (Map.lookup v (subs s))
+    apply s t@(NamedTy c) = t
+    apply s (PtrTy t) = PtrTy (apply s t)
     apply s (FunTy t ts) = FunTy (apply s t) (apply s ts)
-    apply s (Struct fs n) = Struct (apply s fs) n
+    apply s (RecTy fs n) = RecTy (apply s fs) n
     apply s (QualTy t) = QualTy (apply s (dropTopQual t))
     apply s t@(EnumTy n) = t
 
@@ -116,39 +116,39 @@ instance Unifiable Constraint where
 
 instance Unifiable Ty where
     -- Free variables
-    fv (TyVar v) = [v]
-    fv (TyCon _) = []
-    fv (Pointer t) = fv t
+    fv (VarTy v) = [v]
+    fv (NamedTy _) = []
+    fv (PtrTy t) = fv t
     fv (FunTy t ts) = fv t `union` fv ts
-    fv (Struct fs _) = fv fs
+    fv (RecTy fs _) = fv fs
     fv (QualTy t) = fv t
     fv (EnumTy _) = []
 
     -- Plain unification
-    punify t'@(TyVar v) t
+    punify t'@(VarTy v) t
         | convertible t t' = return nullSubst
         | otherwise = varBind v t
-    punify t t'@(TyVar v)
+    punify t t'@(VarTy v)
         | convertible t t' = return nullSubst
         | otherwise = varBind v t
 
-    punify (TyCon c) (TyCon c')
-        | convertible (TyCon c) (TyCon c') = return nullSubst
+    punify (NamedTy c) (NamedTy c')
+        | convertible (NamedTy c) (NamedTy c') = return nullSubst
         | otherwise = differentTypeConstructorsError c c'
 
-    punify p@(Pointer t) p'@(Pointer t')
+    punify p@(PtrTy t) p'@(PtrTy t')
         | convertible p p' = return nullSubst
         | otherwise = punify t t'
 
-    punify f@(FunTy t ts) (Pointer p) = punify f p
-    punify (Pointer p) f'@(FunTy t' ts') = punify f' p
+    punify f@(FunTy t ts) (PtrTy p) = punify f p
+    punify (PtrTy p) f'@(FunTy t' ts') = punify f' p
 
     punify (FunTy t ts) (FunTy t' ts') = do
         s <- punify t t'
         s' <- punify (apply s ts) (apply s ts')
         return (s' @@ s)
 
-    punify (Struct fs n) (Struct fs' n')
+    punify (RecTy fs n) (RecTy fs' n')
         | n == n' = punify (sort fs) (sort fs')
         | otherwise = differentTypeConstructorsError n n'
 
@@ -170,30 +170,30 @@ instance Unifiable Ty where
                                                      (Name $ show $ pprint t')
 
     -- Directional unification
-    dunify t@(TyVar v) t'@(Pointer _) _ = varBind v t'
+    dunify t@(VarTy v) t'@(PtrTy _) _ = varBind v t'
 
-    dunify t'@(TyVar v) t m
+    dunify t'@(VarTy v) t m
         | m == Relax = varBind v (dropQual t)
         | otherwise = varBind v t
-    dunify t t'@(TyVar v) m = varBind v (dropQual t)
+    dunify t t'@(VarTy v) m = varBind v (dropQual t)
 
-    dunify (TyCon c) (TyCon c') _
-        | convertible (TyCon c) (TyCon c') = return nullSubst
+    dunify (NamedTy c) (NamedTy c') _
+        | convertible (NamedTy c) (NamedTy c') = return nullSubst
         | otherwise = differentTypeConstructorsError c c'
 
-    dunify p@(Pointer t) p'@(Pointer t') m
+    dunify p@(PtrTy t) p'@(PtrTy t') m
         | convertible p p' = return nullSubst
         | otherwise = dunify t t' Enforce
 
-    dunify f@(FunTy t ts) (Pointer p) m = dunify f p m
-    dunify (Pointer p) f'@(FunTy t' ts') m = dunify f' p m
+    dunify f@(FunTy t ts) (PtrTy p) m = dunify f p m
+    dunify (PtrTy p) f'@(FunTy t' ts') m = dunify f' p m
 
     dunify (FunTy t ts) (FunTy t' ts') _ = do
         s <- dunify t t' Relax
         s' <- dunify (apply s ts) (apply s ts') Relax
         return (s' @@ s)
 
-    dunify (Struct fs n) (Struct fs' n') _
+    dunify (RecTy fs n) (RecTy fs' n') _
         | n == n' = dunify (sort fs) (sort fs') Relax
         | otherwise = differentTypeConstructorsError n n'
 
@@ -235,15 +235,15 @@ varBind n t = return (n +-> t)
 
 dropQual :: Ty -> Ty
 dropQual (QualTy t) = dropQual t
-dropQual (Pointer t) = Pointer (dropQual t)
+dropQual (PtrTy t) = PtrTy (dropQual t)
 dropQual t = t
 
 dropTopQual (QualTy t) = t
 dropTopQual t = t
 
-hasVarDep (Pointer t) = hasVarDep t
+hasVarDep (PtrTy t) = hasVarDep t
 hasVarDep (QualTy t) = hasVarDep t
-hasVarDep (TyVar _) = True
+hasVarDep (VarTy _) = True
 hasVarDep _ = False
 
 wrongArgumentNumberError :: SolverM a

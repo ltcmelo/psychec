@@ -27,18 +27,18 @@ import Solver.SolverMonad
 
 decay :: TyCtx -> VarCtx -> SolverM (TyCtx, VarCtx)
 decay tctx vctx =
-    return ((TyCtx $ Map.map (\(t, b) -> (matchPointer t, b))  (tyctx tctx)),
-            (VarCtx $ Map.map (\(VarInfo t d r) -> VarInfo (matchPointer t) d r) (varctx vctx)))
+    return ((TyCtx $ Map.map (\(t, b) -> (matchPtrTy t, b))  (tyctx tctx)),
+            (VarCtx $ Map.map (\(VarInfo t d r) -> VarInfo (matchPtrTy t) d r) (varctx vctx)))
 
-matchPointer :: Ty -> Ty
-matchPointer t@(Pointer t') = matchFuncPointer t' 1
-matchPointer t = t
+matchPtrTy :: Ty -> Ty
+matchPtrTy t@(PtrTy t') = matchFuncPtrTy t' 1
+matchPtrTy t = t
 
-matchFuncPointer :: (Num a, Eq a) => Ty -> a -> Ty
-matchFuncPointer t@(Pointer t') n = matchFuncPointer t' (n + 1)
-matchFuncPointer t@(FunTy r p) _ = t
-matchFuncPointer t n = rebuildPointer t n
+matchFuncPtrTy :: (Num a, Eq a) => Ty -> a -> Ty
+matchFuncPtrTy t@(PtrTy t') n = matchFuncPtrTy t' (n + 1)
+matchFuncPtrTy t@(FunTy r p) _ = t
+matchFuncPtrTy t n = rebuildPtrTy t n
 
-rebuildPointer :: (Num a, Eq a) => Ty -> a -> Ty
-rebuildPointer t 0 = t
-rebuildPointer t n = rebuildPointer (Pointer t) (n - 1)
+rebuildPtrTy :: (Num a, Eq a) => Ty -> a -> Ty
+rebuildPtrTy t 0 = t
+rebuildPtrTy t n = rebuildPtrTy (PtrTy t) (n - 1)

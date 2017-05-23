@@ -95,7 +95,7 @@ Fresh variable generation
 > fresh = do
 >           (n, n') <- get
 >           put ((n + 1), n')
->           return (TyVar (Name ("#alpha" ++ show n)))
+>           return (VarTy (Name ("#alpha" ++ show n)))
 
 Auxiliar code
 -------------

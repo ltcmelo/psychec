@@ -70,7 +70,7 @@ writeFwdDecls :: TyCtx -> String
 writeFwdDecls tcx =
   cmt ++ Map.foldrWithKey (\k (t, _) acc -> acc ++ (genfwd k t)) [] (tyctx tcx) ++ "\n"
  where
-  genfwd k (Struct _ n)
+  genfwd k (RecTy _ n)
     | isElab k = ""
     | otherwise = show $ text "typedef " <+> pprint n <+> text " " <+> pprint k <+> text ";\n"
   genfwd _ _ = ""
@@ -106,8 +106,8 @@ writeDefine n cnt = text "#define " <+> pprint n <+> text (show cnt)
 
 -- | Write type declarations.
 writeTyDecl :: Ty -> Name -> Doc
-writeTyDecl t@(Struct _ _) n = pprint t
+writeTyDecl t@(RecTy _ _) n = pprint t
 writeTyDecl (FunTy t tx) n =
   text "typedef " <+> pprint t <+> text "(*" <+> pprint n <+> text ")" <+>
     parens (hcat $ punctuate comma (map pprint tx))
-writeTyDecl t n = text "typedef " <+> pprint t <+> pprint (ensurePlainName n)
+writeTyDecl t n = text "typedef " <+> pprint t <+> pprint (ensurePlain n)

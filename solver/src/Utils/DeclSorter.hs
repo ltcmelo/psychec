@@ -37,10 +37,10 @@ populate tctx =
     track node id acc = Map.insert node id acc
     --track node id acc = trace ("node " ++ show id ++ " " ++ (show . pprint) node) Map.insert node id acc
 
--- | Created edges between types that depend one another. Pointer are not considered
+-- | Created edges between types that depend one another. PtrTy are not considered
 -- because we generate forward declarations for all types.
 buildDeps :: Ty -> Map.Map Name Int -> [Int]
-buildDeps (Struct fs n) m =
+buildDeps (RecTy fs n) m =
     foldr (\(Field _ ft) acc -> (buildDeps ft m) ++ acc) [] fs
 buildDeps (QualTy t) m = buildDeps t m
 buildDeps t m =

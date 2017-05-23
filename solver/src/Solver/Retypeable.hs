@@ -41,29 +41,29 @@ instance Retypeable a => Retypeable [a] where
   orphanize idx = map (orphanize idx)
 
 instance Retypeable Ty where
-  collect (TyVar _) = []
-  collect (TyCon _) = []
+  collect (VarTy _) = []
+  collect (NamedTy _) = []
   collect (EnumTy t) = []
   collect (QualTy t) = collect t
-  collect (Pointer t) = collect t
+  collect (PtrTy t) = collect t
   collect (FunTy t tx) = collect t ++ collect tx
-  collect t@(Struct fs _) = [t] ++ collect fs
+  collect t@(RecTy fs _) = [t] ++ collect fs
 
-  canonicalize _ t@(TyVar _) = t
-  canonicalize _ t@(TyCon _) = t
+  canonicalize _ t@(VarTy _) = t
+  canonicalize _ t@(NamedTy _) = t
   canonicalize _ t@(EnumTy _) = t
   canonicalize idx (QualTy t) = QualTy (canonicalize idx t)
-  canonicalize idx (Pointer t) = Pointer (canonicalize idx t)
+  canonicalize idx (PtrTy t) = PtrTy (canonicalize idx t)
   canonicalize idx (FunTy t tx) = FunTy (canonicalize idx t) (canonicalize idx tx)
-  canonicalize idx t@(Struct fs _) = maybe t (\k -> TyCon k) (Map.lookup t (ty2n idx))
+  canonicalize idx t@(RecTy fs _) = maybe t (\k -> NamedTy k) (Map.lookup t (ty2n idx))
 
-  orphanize idx t@(TyVar v) = maybe orphan TyCon (Map.lookup t (ty2n idx))
-  orphanize _ t@(TyCon _) = t
+  orphanize idx t@(VarTy v) = maybe orphan NamedTy (Map.lookup t (ty2n idx))
+  orphanize _ t@(NamedTy _) = t
   orphanize _ t@(EnumTy _) = t
   orphanize idx (QualTy t) = QualTy (orphanize idx t)
-  orphanize idx (Pointer t) = Pointer (orphanize idx t)
+  orphanize idx (PtrTy t) = PtrTy (orphanize idx t)
   orphanize idx (FunTy t tx) = FunTy (orphanize idx t) (orphanize idx tx)
-  orphanize idx (Struct fs n) = Struct (orphanize idx fs) n
+  orphanize idx (RecTy fs n) = RecTy (orphanize idx fs) n
 
 instance Retypeable Field where
   collect (Field _ t) = collect t
@@ -88,11 +88,11 @@ instance Pretty TyIdx where
 
 -- | Elminate top-level (and eventual recursive) alphas with an artificial name.
 unalpha :: (Ty, Bool) -> SolverM (Ty, Bool)
-unalpha p@(t@(Struct fs n), b)
+unalpha p@(t@(RecTy fs n), b)
   | isVar n = do
     n <- fakeName
     let n' = Name ("struct " ++ (unName n))
-    return $ (Struct (check fs n') n', b)
+    return $ (RecTy (check fs n') n', b)
   | otherwise = return p
  where
   check fs k = map (\(Field fn ft) -> Field fn (unalphaHelper k n ft)) fs
@@ -101,19 +101,19 @@ unalpha p = return p
 
 -- | Elminate top-level (and eventual recursive) alphas preserving elaborated names.
 unalpha2 :: Name -> Ty -> Ty
-unalpha2 kn (Struct fs n) =
-  Struct (check fs kn) kn
+unalpha2 kn (RecTy fs n) =
+  RecTy (check fs kn) kn
  where
   check fs k = map (\(Field fn ft) -> Field fn (unalphaHelper k n ft)) fs
 unalpha2 _ t = t
 
 -- Helper function for the unalpha versions above.
-unalphaHelper k n t@(TyVar v)
-  | n == v = TyCon k
+unalphaHelper k n t@(VarTy v)
+  | n == v = NamedTy k
   | otherwise = t
-unalphaHelper _ _ t@(TyCon _) = t
+unalphaHelper _ _ t@(NamedTy _) = t
 unalphaHelper _ _ t@(EnumTy _) = t
 unalphaHelper k n (QualTy t) = QualTy (unalphaHelper k n t)
-unalphaHelper k n (Pointer t) = Pointer (unalphaHelper k n t)
+unalphaHelper k n (PtrTy t) = PtrTy (unalphaHelper k n t)
 unalphaHelper k n t@(FunTy _ _) = t
-unalphaHelper _ _ (Struct _ _) = error "shouldn't have structs at this point"
+unalphaHelper _ _ (RecTy _ _) = error "shouldn't have structs at this point"

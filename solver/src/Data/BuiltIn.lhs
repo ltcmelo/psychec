@@ -80,59 +80,59 @@ Contexts of C's builtin types and values
 Builtins
 
 > void :: Ty
-> void = TyCon (Name "void")
+> void = NamedTy (Name "void")
 
 > char :: Ty
-> char = TyCon (Name "char")
+> char = NamedTy (Name "char")
 > signedChar :: Ty
-> signedChar = TyCon (Name "signed char")
+> signedChar = NamedTy (Name "signed char")
 > unsignedChar :: Ty
-> unsignedChar = TyCon (Name "unsigned char")
+> unsignedChar = NamedTy (Name "unsigned char")
 
 > short :: Ty
-> short = TyCon (Name "short")
+> short = NamedTy (Name "short")
 > unsignedShort :: Ty
-> unsignedShort = TyCon (Name "unsigned short")
+> unsignedShort = NamedTy (Name "unsigned short")
 
 > int :: Ty
-> int = TyCon (Name "int")
+> int = NamedTy (Name "int")
 > unsignedInt :: Ty
-> unsignedInt = TyCon (Name "unsigned int")
+> unsignedInt = NamedTy (Name "unsigned int")
 
 > long :: Ty
-> long = TyCon (Name "long")
+> long = NamedTy (Name "long")
 > longLong :: Ty
-> longLong = TyCon (Name "long long")
+> longLong = NamedTy (Name "long long")
 > unsignedLong :: Ty
-> unsignedLong = TyCon (Name "unsigned long")
+> unsignedLong = NamedTy (Name "unsigned long")
 > unsignedLongLong :: Ty
-> unsignedLongLong = TyCon (Name "unsigned long long")
+> unsignedLongLong = NamedTy (Name "unsigned long long")
 
 > float :: Ty
-> float = TyCon (Name "float")
+> float = NamedTy (Name "float")
 > double :: Ty
-> double = TyCon (Name "double")
+> double = NamedTy (Name "double")
 > longDouble :: Ty
-> longDouble = TyCon (Name "long double")
+> longDouble = NamedTy (Name "long double")
 
 
 A type for orphans and scalars (we could eventually separate those).
 
 > orphan :: Ty
-> orphan = TyCon (Name "int /*<<< orphan or scalar*/")
+> orphan = NamedTy (Name "int /*<<< orphan or scalar*/")
 
 
 type inspection helpers
 
-> isPointer :: Ty -> Bool
-> isPointer (Pointer _) = True
-> isPointer _ = False
+> isPtrTy :: Ty -> Bool
+> isPtrTy (PtrTy _) = True
+> isPtrTy _ = False
 
 
 Whether a given type can be classified as arithmetic type.
 
 > isArithTy :: Ty -> Bool
-> isArithTy (TyCon (Name n)) = isArithName n
+> isArithTy (NamedTy (Name n)) = isArithName n
 >   where
 
 >    -- Variations of char
@@ -216,11 +216,11 @@ Whether a given type can be classified as arithmetic type.
 stddef.h - A few basic types and macro definitions.
 
 > size_t :: Ty
-> size_t = TyCon (Name "size_t")
+> size_t = NamedTy (Name "size_t")
 > ptrdiff_t :: Ty
-> ptrdiff_t = TyCon (Name "ptrdiff_t")
+> ptrdiff_t = NamedTy (Name "ptrdiff_t")
 > max_align_t :: Ty -- C11
-> max_align_t = TyCon (Name "max_align_t")
+> max_align_t = NamedTy (Name "max_align_t")
 > stddefTypes :: [Ty]
 > stddefTypes = [size_t, ptrdiff_t, max_align_t]
 
@@ -228,61 +228,61 @@ stddef.h - A few basic types and macro definitions.
 stdint.h - Particularly important to preserve platform-specific arithmetic types.
 
 > int8_t :: Ty
-> int8_t = TyCon (Name "int8_t")
+> int8_t = NamedTy (Name "int8_t")
 > int16_t :: Ty
-> int16_t = TyCon (Name "int16_t")
+> int16_t = NamedTy (Name "int16_t")
 > int32_t :: Ty
-> int32_t = TyCon (Name "int32_t")
+> int32_t = NamedTy (Name "int32_t")
 > int64_t :: Ty
-> int64_t = TyCon (Name "int64_t")
+> int64_t = NamedTy (Name "int64_t")
 > int_fast8_t :: Ty
-> int_fast8_t = TyCon (Name "int_fast8_t")
+> int_fast8_t = NamedTy (Name "int_fast8_t")
 > int_fast16_t :: Ty
-> int_fast16_t = TyCon (Name "int_fast16_t")
+> int_fast16_t = NamedTy (Name "int_fast16_t")
 > int_fast32_t :: Ty
-> int_fast32_t = TyCon (Name "int_fast32_t")
+> int_fast32_t = NamedTy (Name "int_fast32_t")
 > int_fast64_t :: Ty
-> int_fast64_t = TyCon (Name "int_fast64_t")
+> int_fast64_t = NamedTy (Name "int_fast64_t")
 > int_least8_t :: Ty
-> int_least8_t = TyCon (Name "int_least8_t")
+> int_least8_t = NamedTy (Name "int_least8_t")
 > int_least16_t :: Ty
-> int_least16_t = TyCon (Name "int_least16_t")
+> int_least16_t = NamedTy (Name "int_least16_t")
 > int_least32_t :: Ty
-> int_least32_t = TyCon (Name "int_least32_t")
+> int_least32_t = NamedTy (Name "int_least32_t")
 > int_least64_t :: Ty
-> int_least64_t = TyCon (Name "int_least64_t")
+> int_least64_t = NamedTy (Name "int_least64_t")
 > uint8_t :: Ty
-> uint8_t = TyCon (Name "uint8_t")
+> uint8_t = NamedTy (Name "uint8_t")
 > uint16_t :: Ty
-> uint16_t = TyCon (Name "uint16_t")
+> uint16_t = NamedTy (Name "uint16_t")
 > uint32_t :: Ty
-> uint32_t = TyCon (Name "uint32_t")
+> uint32_t = NamedTy (Name "uint32_t")
 > uint64_t :: Ty
-> uint64_t = TyCon (Name "uint64_t")
+> uint64_t = NamedTy (Name "uint64_t")
 > uint_fast8_t :: Ty
-> uint_fast8_t = TyCon (Name "uint_fast8_t")
+> uint_fast8_t = NamedTy (Name "uint_fast8_t")
 > uint_fast16_t :: Ty
-> uint_fast16_t = TyCon (Name "uint_fast16_t")
+> uint_fast16_t = NamedTy (Name "uint_fast16_t")
 > uint_fast32_t :: Ty
-> uint_fast32_t = TyCon (Name "uint_fast32_t")
+> uint_fast32_t = NamedTy (Name "uint_fast32_t")
 > uint_fast64_t :: Ty
-> uint_fast64_t = TyCon (Name "uint_fast64_t")
+> uint_fast64_t = NamedTy (Name "uint_fast64_t")
 > uint_least8_t :: Ty
-> uint_least8_t = TyCon (Name "uint_least8_t")
+> uint_least8_t = NamedTy (Name "uint_least8_t")
 > uint_least16_t :: Ty
-> uint_least16_t = TyCon (Name "uint_least16_t")
+> uint_least16_t = NamedTy (Name "uint_least16_t")
 > uint_least32_t :: Ty
-> uint_least32_t = TyCon (Name "uint_least32_t")
+> uint_least32_t = NamedTy (Name "uint_least32_t")
 > uint_least64_t :: Ty
-> uint_least64_t = TyCon (Name "uint_least64_t")
+> uint_least64_t = NamedTy (Name "uint_least64_t")
 > intmax_t :: Ty
-> intmax_t = TyCon (Name "intmax_t")
+> intmax_t = NamedTy (Name "intmax_t")
 > uintmax_t :: Ty
-> uintmax_t = TyCon (Name "uintmax_t")
+> uintmax_t = NamedTy (Name "uintmax_t")
 > intptr_t :: Ty
-> intptr_t = TyCon (Name "intptr_t")
+> intptr_t = NamedTy (Name "intptr_t")
 > uintptr_t :: Ty
-> uintptr_t = TyCon (Name "uintptr_t")
+> uintptr_t = NamedTy (Name "uintptr_t")
 > stdintTypes :: [Ty]
 > stdintTypes =
 >         [ int8_t, int16_t, int32_t, int64_t
@@ -346,17 +346,17 @@ stdlib.h - General utilities.
 
 > stdlibValues :: [(Name, Ty)]
 > stdlibValues
->   = [ (Name "malloc", FunTy (Pointer void) [int])
->     , (Name "calloc", FunTy (Pointer void) [int, int])
->     , (Name "realloc", FunTy (Pointer void) [(Pointer void), int])
->     , (Name "free", FunTy void [(Pointer void)])
+>   = [ (Name "malloc", FunTy (PtrTy void) [int])
+>     , (Name "calloc", FunTy (PtrTy void) [int, int])
+>     , (Name "realloc", FunTy (PtrTy void) [(PtrTy void), int])
+>     , (Name "free", FunTy void [(PtrTy void)])
 >     , (Name "abort", FunTy void [])
 >     , (Name "exit", FunTy void [int])
 >     , (Name "atexit", FunTy void [(FunTy void [])])
->     , (Name "atoi", FunTy int [Pointer (QualTy char)])
->     , (Name "atof", FunTy double [Pointer (QualTy char)])
->     , (Name "atol", FunTy long [Pointer (QualTy char)])
->     , (Name "atoll", FunTy longLong [Pointer (QualTy char)])
+>     , (Name "atoi", FunTy int [PtrTy (QualTy char)])
+>     , (Name "atof", FunTy double [PtrTy (QualTy char)])
+>     , (Name "atol", FunTy long [PtrTy (QualTy char)])
+>     , (Name "atoll", FunTy longLong [PtrTy (QualTy char)])
 >     , (Name "rand", FunTy int [])
 >     , (Name "RAND_MAX", int)
 >     , (Name "EXIT_SUCCESS", int)
@@ -367,42 +367,42 @@ stdlib.h - General utilities.
 string.h - String utility functions.
 
 > stringValues
->   = [ (Name "memmove", FunTy (Pointer void) [Pointer void, Pointer (QualTy void), size_t])
->     , (Name "memcpy", FunTy (Pointer void) [Pointer void, Pointer (QualTy void), size_t])
->     , (Name "memcmp", FunTy int [Pointer (QualTy void), Pointer (QualTy void), size_t])
->     , (Name "strlen", FunTy size_t [Pointer (QualTy char)])
->     , (Name "stpcpy", FunTy (Pointer char) [Pointer char, Pointer (QualTy char)])
->     , (Name "strcpy", FunTy (Pointer char) [Pointer char, Pointer (QualTy char)])
->     , (Name "strncpy", FunTy (Pointer char) [Pointer char, Pointer (QualTy char), size_t])
->     , (Name "strcat", FunTy (Pointer char) [Pointer char, Pointer (QualTy char)])
->     , (Name "strncat", FunTy (Pointer char) [Pointer char, Pointer (QualTy char), size_t])
->     , (Name "strcmp", FunTy int [Pointer (QualTy char), Pointer (QualTy char)])
->     , (Name "strtok", FunTy (Pointer char) [Pointer char, Pointer (QualTy char)])
->     , (Name "strtof", FunTy float [Pointer (QualTy char), Pointer (Pointer char)])
->     , (Name "strtod", FunTy double [Pointer (QualTy char), Pointer (Pointer char)])
->     , (Name "strtold", FunTy longDouble [Pointer (QualTy char), Pointer (Pointer char)])
+>   = [ (Name "memmove", FunTy (PtrTy void) [PtrTy void, PtrTy (QualTy void), size_t])
+>     , (Name "memcpy", FunTy (PtrTy void) [PtrTy void, PtrTy (QualTy void), size_t])
+>     , (Name "memcmp", FunTy int [PtrTy (QualTy void), PtrTy (QualTy void), size_t])
+>     , (Name "strlen", FunTy size_t [PtrTy (QualTy char)])
+>     , (Name "stpcpy", FunTy (PtrTy char) [PtrTy char, PtrTy (QualTy char)])
+>     , (Name "strcpy", FunTy (PtrTy char) [PtrTy char, PtrTy (QualTy char)])
+>     , (Name "strncpy", FunTy (PtrTy char) [PtrTy char, PtrTy (QualTy char), size_t])
+>     , (Name "strcat", FunTy (PtrTy char) [PtrTy char, PtrTy (QualTy char)])
+>     , (Name "strncat", FunTy (PtrTy char) [PtrTy char, PtrTy (QualTy char), size_t])
+>     , (Name "strcmp", FunTy int [PtrTy (QualTy char), PtrTy (QualTy char)])
+>     , (Name "strtok", FunTy (PtrTy char) [PtrTy char, PtrTy (QualTy char)])
+>     , (Name "strtof", FunTy float [PtrTy (QualTy char), PtrTy (PtrTy char)])
+>     , (Name "strtod", FunTy double [PtrTy (QualTy char), PtrTy (PtrTy char)])
+>     , (Name "strtold", FunTy longDouble [PtrTy (QualTy char), PtrTy (PtrTy char)])
 >     ]
 
 
 stdio.h - Input/output
 
 > file :: Ty
-> file = TyCon (Name "FILE")
+> file = NamedTy (Name "FILE")
 > stdioTypes :: [Ty]
 > stdioTypes = [file]
 > stdioValues :: [(Name, Ty)]
 > stdioValues =
->     [ (Name "fclose", FunTy int [Pointer file])
->     , (Name "feof", FunTy int [Pointer file])
->     , (Name "ferror", FunTy int [Pointer file])
->     , (Name "fputc", FunTy int [int, Pointer file])
->     , (Name "fputs", FunTy int [Pointer (QualTy char), Pointer file])
+>     [ (Name "fclose", FunTy int [PtrTy file])
+>     , (Name "feof", FunTy int [PtrTy file])
+>     , (Name "ferror", FunTy int [PtrTy file])
+>     , (Name "fputc", FunTy int [int, PtrTy file])
+>     , (Name "fputs", FunTy int [PtrTy (QualTy char), PtrTy file])
 >     , (Name "putchar", FunTy int [int])
->     , (Name "fopen", FunTy (Pointer file) [Pointer (QualTy char), Pointer (QualTy char)])
->     , (Name "fread", FunTy size_t [Pointer void, size_t, size_t, Pointer file])
->     , (Name "fwrite", FunTy size_t [Pointer (QualTy void), size_t, size_t, Pointer file])
->     , (Name "setvbuf", FunTy int [Pointer file, Pointer char, int, size_t])
->     , (Name "stdout", Pointer file)
+>     , (Name "fopen", FunTy (PtrTy file) [PtrTy (QualTy char), PtrTy (QualTy char)])
+>     , (Name "fread", FunTy size_t [PtrTy void, size_t, size_t, PtrTy file])
+>     , (Name "fwrite", FunTy size_t [PtrTy (QualTy void), size_t, size_t, PtrTy file])
+>     , (Name "setvbuf", FunTy int [PtrTy file, PtrTy char, int, size_t])
+>     , (Name "stdout", PtrTy file)
 >     , (Name "EOF", int)
 >     , (Name "SEEK_CUR", int)
 >     , (Name "_IOFBF", int)
@@ -434,47 +434,47 @@ re-typedefining types in an incompatible manner. So far this is mainly POSIX.
 sys/stat.h - Things related to stat.
 
 > struct_stat :: Ty
-> struct_stat = TyCon (Name "struct stat")
+> struct_stat = NamedTy (Name "struct stat")
 > sysStatTypes :: [Ty]
 > sysStatTypes
 >   = [ struct_stat ]
 > sysStatValues
->   = [ (Name "stat", FunTy int [Pointer (QualTy char), Pointer struct_stat])
->     , (Name "fstat", FunTy int [int, Pointer struct_stat])
->     , (Name "lstat", FunTy int [Pointer (QualTy char), Pointer struct_stat])
->     , (Name "fstatat", FunTy int [int, Pointer (QualTy char), Pointer struct_stat, int])
+>   = [ (Name "stat", FunTy int [PtrTy (QualTy char), PtrTy struct_stat])
+>     , (Name "fstat", FunTy int [int, PtrTy struct_stat])
+>     , (Name "lstat", FunTy int [PtrTy (QualTy char), PtrTy struct_stat])
+>     , (Name "fstatat", FunTy int [int, PtrTy (QualTy char), PtrTy struct_stat, int])
 >     ]
 
 
 sys/types.h - Bunch of types.
 
 > mode_t :: Ty
-> mode_t = TyCon (Name "mode_t")
+> mode_t = NamedTy (Name "mode_t")
 > nlink_t :: Ty
-> nlink_t = TyCon (Name "nlink_t")
+> nlink_t = NamedTy (Name "nlink_t")
 > uid_t :: Ty
-> uid_t = TyCon (Name "uid_t")
+> uid_t = NamedTy (Name "uid_t")
 > gid_t :: Ty
-> gid_t = TyCon (Name "gid_t")
+> gid_t = NamedTy (Name "gid_t")
 > id_t :: Ty
-> id_t = TyCon (Name "id_t")
+> id_t = NamedTy (Name "id_t")
 > blkcnt_t :: Ty
-> blkcnt_t = TyCon (Name "blkcnt_t")
+> blkcnt_t = NamedTy (Name "blkcnt_t")
 > fsblkcnt_t :: Ty
-> fsblkcnt_t = TyCon (Name "fsblkcnt_t")
+> fsblkcnt_t = NamedTy (Name "fsblkcnt_t")
 > fsfilcnt_t :: Ty
-> fsfilcnt_t = TyCon (Name "fsfilcnt_t")
+> fsfilcnt_t = NamedTy (Name "fsfilcnt_t")
 > ino_t :: Ty
-> ino_t = TyCon (Name "ino_t")
+> ino_t = NamedTy (Name "ino_t")
 > dev_t :: Ty
-> dev_t = TyCon (Name "dev_t")
+> dev_t = NamedTy (Name "dev_t")
 > sysTypesTypes :: [Ty]
 > sysTypesTypes
 >   = [ mode_t, nlink_t, uid_t, gid_t, id_t, blkcnt_t, fsblkcnt_t
 >     ,  fsfilcnt_t, ino_t, dev_t
 >     ]
 > sysTypesValues
->   = [ (Name "strmode", FunTy void [mode_t, (Pointer char)])
+>   = [ (Name "strmode", FunTy void [mode_t, (PtrTy char)])
 >     , (Name "umask", FunTy mode_t [mode_t])
 >     , (Name "S_ISBLK", FunTy int [int])
 >     , (Name "S_ISCHR", FunTy int [int])

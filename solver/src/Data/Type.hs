@@ -26,13 +26,18 @@ newtype Name = Name { unName :: String } deriving (Eq, Ord, Show)
 emptyName :: Name
 emptyName = Name ""
 
-data Field = Field { name :: Name, ty   :: Ty } deriving (Eq, Ord, Show)
 
-data Ty = TyCon Name
-        | TyVar Name
-        | FunTy Ty [Ty]
-        | Struct [Field] Name
-        | Pointer Ty
-        | QualTy Ty
-        | EnumTy Name -- TODO: Implement enumerators.
+-- | Type constructors
+data Ty = VarTy Name  -- Type variables
+        | NamedTy Name  -- Named types (include primitives, for convenience)
+        | FunTy Ty [Ty]  -- Functions
+        | RecTy [Field] Name  -- Records
+        | SumTy [Field] Name  -- Unions
+        | PtrTy Ty  -- Pointers
+        | QualTy Ty  -- Qualified types (only const supported currently)
+        | EnumTy Name -- Enumerated types
         deriving (Eq, Ord, Show)
+
+
+-- | A record/union field.
+data Field = Field { name :: Name, ty   :: Ty } deriving (Eq, Ord, Show)

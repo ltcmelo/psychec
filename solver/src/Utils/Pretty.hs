@@ -40,15 +40,15 @@ instance Pretty Field where
   pprint (Field n t) = pprint t <+> pprint n <> semi <> char ' '
 
 instance Pretty Ty where
-  pprint (TyCon n) = pprint n
-  pprint (TyVar n) = pprint n
+  pprint (NamedTy n) = pprint n
+  pprint (VarTy n) = pprint n
   pprint (FunTy ret params) = pprint ret <+> text "(*)" <+>
     parens (hcat $ punctuate comma (map pprint (params)))
-  pprint (Struct fs n) = pprint n <+> braces (hcat $ (map pprint fs))
-  pprint (Pointer t) = pprint t <> char '*'
+  pprint (RecTy fs n) = pprint n <+> braces (hcat $ (map pprint fs))
+  pprint (PtrTy t) = pprint t <> char '*'
   pprint (QualTy t) = pprint t <+> text "const"
   pprint (EnumTy n) =
-    pprint n <+> text "{ ____Placeholder_" <> pprint (ensurePlainName n) <+> text "}"
+    pprint n <+> text "{ ____Placeholder_" <> pprint (ensurePlain n) <+> text "}"
 
 instance Pretty Constraint where
   pprint (t :=: t') = pprint t <+> char '=' <+> pprint t'
@@ -67,42 +67,44 @@ instance Pretty Constraint where
   pprint Truth = text "Truth"
 
 
--- Name of a type
-
+-- | The names of types.
 nameOf :: Ty -> Name
-nameOf (TyCon n) = n
-nameOf (TyVar n) = n
-nameOf (Struct _ n) = n
-nameOf (Pointer t) = Name ((unName (nameOf t)) ++ "*")
+nameOf (NamedTy n) = n
+nameOf (VarTy n) = n
+nameOf (RecTy _ n) = n
+nameOf (PtrTy t) = Name ((unName (nameOf t)) ++ "*")
 nameOf x@(FunTy t ts) = Name (show $ pprint x)
 nameOf (QualTy t) = nameOf t
 nameOf (EnumTy n) = n
 
 
-isElabStructName :: Pretty a => a -> Bool
-isElabStructName = (== "struct ") . take 7 . show . pprint
-
-isElabEnumName :: Pretty a => a -> Bool
-isElabEnumName = (== "enum ") . take 5 . show . pprint
-
-isElab k = isElabStructName k || isElabEnumName k
-
-
-ensurePlainName :: Name -> Name
-ensurePlainName n
-  | isElabStructName n = Name (drop 7 (show (pprint n)))
-  | isElabEnumName n = Name (drop 5 (show (pprint n)))
-  | otherwise = n
-
-ensureElabEnumName :: Name -> Name
-ensureElabEnumName n
-  | isElabEnumName n = n
-  | otherwise = Name ("enum " ++ "__" ++ (unName n) ++ "__")
-
-ensureElabStructName :: Name -> Name
-ensureElabStructName n
-  | isElabStructName n = n
-  | otherwise = Name ("struct " ++ "__" ++ (unName n) ++ "__")
-
+-- | Whehther or not we have a type variable.
 isVar :: Pretty a => a -> Bool
 isVar = (== "#alpha") . take 6 . show . pprint
+
+
+-- | Elaborated names stuff.
+isElabRec :: Pretty a => a -> Bool
+isElabRec = (== "struct ") . take 7 . show . pprint
+
+isElabEnum :: Pretty a => a -> Bool
+isElabEnum = (== "enum ") . take 5 . show . pprint
+
+isElab k = isElabRec k || isElabEnum k
+
+ensurePlain :: Name -> Name
+ensurePlain n
+  | isElabRec n = Name (drop 7 (show (pprint n)))
+  | isElabEnum n = Name (drop 5 (show (pprint n)))
+  | otherwise = n
+
+ensurePlainEnum :: Name -> Name
+ensurePlainEnum n
+  | isElabEnum n = n
+  | otherwise = Name ("enum " ++ "__" ++ (unName n) ++ "__")
+
+ensurePlainRec :: Name -> Name
+ensurePlainRec n
+  | isElabRec n = n
+  | otherwise = Name ("struct " ++ "__" ++ (unName n) ++ "__")
+

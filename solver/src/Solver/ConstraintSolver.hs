@@ -123,21 +123,21 @@ stage1 tctx c@(ReadOnly _) = return (tctx, c)
 stage1 tctx Truth = return (tctx, Truth)
 
 defineTypeDef :: Ty -> Ty -> TyCtx -> SolverM (TyCtx, Constraint)
-defineTypeDef (Pointer t) (Pointer t') tctx = do
+defineTypeDef (PtrTy t) (PtrTy t') tctx = do
     (tcx,c) <- defineTypeDef t t' tctx
     return (tcx, (t :=: t') :&: c)
-defineTypeDef t@(Pointer l) t'@(TyVar v) tctx = do
+defineTypeDef t@(PtrTy l) t'@(VarTy v) tctx = do
     v' <- fresh
     (tcx, c) <- defineTypeDef l v' tctx
-    return (tcx, (t' :=: (Pointer v')) :&: c)
+    return (tcx, (t' :=: (PtrTy v')) :&: c)
 defineTypeDef (QualTy t) (QualTy t') tctx = do
     (tcx,c) <- defineTypeDef t t' tctx
     return (tcx, (t :=: t') :&: c)
-defineTypeDef t@(QualTy l) t'@(TyVar v) tctx = do
+defineTypeDef t@(QualTy l) t'@(VarTy v) tctx = do
      v' <- fresh
      (tcx, c) <- defineTypeDef l v' tctx
      return (tcx, (t' :=: (QualTy v')) :&: c)
-defineTypeDef t@(EnumTy n) t'@(TyVar v) tctx = do
+defineTypeDef t@(EnumTy n) t'@(VarTy v) tctx = do
     let
       tctx' = TyCtx $ maybe (Map.insert n (EnumTy n, False) (tyctx tctx))
                             (const (tyctx tctx))
@@ -148,13 +148,13 @@ defineTypeDef t t' tctx = do
     let
       actualTyDef tn td =
         case td of
-             Struct _ n -> ((TyCon $ ensureElabStructName n), True)
-             EnumTy n -> ((TyCon $ ensureElabEnumName n), True)
-             Pointer td' -> (Pointer td'', b)
+             RecTy _ n -> ((NamedTy $ ensurePlainRec n), True)
+             EnumTy n -> ((NamedTy $ ensurePlainEnum n), True)
+             PtrTy td' -> (PtrTy td'', b)
                where (td'', b) = actualTyDef tn td'
              QualTy td' -> (QualTy td'', b)
                where (td'', b) = actualTyDef tn td'
-             tc@(TyCon n) ->
+             tc@(NamedTy n) ->
                case Map.lookup n (tyctx tctx) of
                     Nothing -> (tc, True)
                     Just tinfo -> tinfo
@@ -167,13 +167,13 @@ defineTypeDef t t' tctx = do
     return (tctx' , Truth)
 
 replaceTy :: TyCtx -> Ty -> Ty
-replaceTy tctx t@(TyCon n) = maybe t fst (Map.lookup n (tyctx tctx))
-replaceTy tctx t@(TyVar _) = t
+replaceTy tctx t@(NamedTy n) = maybe t fst (Map.lookup n (tyctx tctx))
+replaceTy tctx t@(VarTy _) = t
 replaceTy tctx (FunTy t ts) = FunTy (replaceTy tctx t) (map (replaceTy tctx) ts)
 replaceTy tctx (QualTy t) = QualTy (replaceTy tctx t)
-replaceTy tctx (Pointer t) = Pointer (replaceTy tctx t)
-replaceTy tctx (Struct fs n) =
-    Struct (map (\f -> f{ty = replaceTy tctx (ty f)}) fs) n
+replaceTy tctx (PtrTy t) = PtrTy (replaceTy tctx t)
+replaceTy tctx (RecTy fs n) =
+    RecTy (map (\f -> f{ty = replaceTy tctx (ty f)}) fs) n
 replaceTy tctx t@(EnumTy _) = Data.BuiltIn.int
 
 
@@ -247,14 +247,14 @@ dsort (x:xs) =
     (eq1', eq2', eq3', eq4') = dsort xs
 
 dsort' :: Constraint -> ([Constraint], [Constraint], [Constraint], [Constraint])
-dsort' c@(_ :>: (Pointer (QualTy t)))
+dsort' c@(_ :>: (PtrTy (QualTy t)))
     | hasVarDep t = ([], [], [c], [])
     | t == Data.BuiltIn.void = ([], [], [], [c])
     | otherwise = ([c], [], [], [])
-dsort' c@(_ :>: (Pointer t))
+dsort' c@(_ :>: (PtrTy t))
     | t == Data.BuiltIn.void = ([], [], [], [c])
     | otherwise =  ([], [], [c], [])
-dsort' c@((Pointer t) :>: _)
+dsort' c@((PtrTy t) :>: _)
     | hasVarDep t = ([], [], [c], [])
     | t == Data.BuiltIn.void = ([], [], [], [c])
     | otherwise = case t of
@@ -294,7 +294,7 @@ stage4 tcx vcx fs s = do
     mergeFields (n, fs) acc = (n, List.nubBy (\f1 f2 -> (name f1) == (name f2)) fs): acc
     fieldMap' = foldr mergeFields [] fieldMapOrd
     fieldMap'' = Map.fromList fieldMap'
-    s' = Subst $ Map.mapWithKey (\v fs -> Struct fs v) fieldMap''
+    s' = Subst $ Map.mapWithKey (\v fs -> RecTy fs v) fieldMap''
     s'' = s' @@ s2
 
     -- Apply substitutions.
@@ -312,8 +312,8 @@ stage5 tcx vcx s = do
     -- We filter types declared through elaborated names and work on them independently,
     -- since we cannot typedef them.
     elabs = Map.foldrWithKey (\k (t, _) acc ->
-      if isElabStructName k then acc %% (t %-> k) else acc) nullIdx (tyctx tcx)
-    tcxFlt_ = Map.filterWithKey (\k _ -> (not . isElabStructName) k) (tyctx tcx)
+      if isElabRec k then acc %% (t %-> k) else acc) nullIdx (tyctx tcx)
+    tcxFlt_ = Map.filterWithKey (\k _ -> (not . isElabRec) k) (tyctx tcx)
     tcxFlt_' = Map.map (\(t, b) -> (canonicalize elabs t , b)) tcxFlt_
     vcxFlt_ = Map.map (\(VarInfo t b ro) -> VarInfo (canonicalize elabs t) b ro) (varctx vcx)
 
@@ -328,7 +328,7 @@ stage5 tcx vcx s = do
 
     m = Set.fromList composite'
     consider [] cs q = (cs, q)
-    consider (t@(Struct _ n):tx) cs q
+    consider (t@(RecTy _ n):tx) cs q
       | Set.member t m = consider tx cs q
       | isVar n = ([t] ++ rest, q'')
       | otherwise = consider tx cs q
@@ -352,14 +352,14 @@ stage5 tcx vcx s = do
 
   let
     -- "De-alphasize" fields from composite types.
-    n2n = Map.foldrWithKey (\(Struct _ n) n' acc -> Map.insert n n' acc) Map.empty (ty2n idx)
-    update t@(TyVar v) = maybe t (TyCon) (Map.lookup v n2n)
-    update t@(TyCon _) = t
+    n2n = Map.foldrWithKey (\(RecTy _ n) n' acc -> Map.insert n n' acc) Map.empty (ty2n idx)
+    update t@(VarTy v) = maybe t (NamedTy) (Map.lookup v n2n)
+    update t@(NamedTy _) = t
     update t@(EnumTy _) = t
     update (QualTy t) = QualTy (update t)
-    update (Pointer t) = Pointer (update t)
+    update (PtrTy t) = PtrTy (update t)
     update (FunTy t tx) = FunTy (update t) (map (\t -> update t) tx)
-    update (Struct fs n) = Struct (map (\(Field fn ft) -> Field fn (update ft)) fs) n
+    update (RecTy fs n) = RecTy (map (\(Field fn ft) -> Field fn (update ft)) fs) n
     tcx_''' = Map.map (\(t, b) -> (update t, b)) tcx_''
     tcxElab_''' = Map.map (\(t, b) -> (update t, b)) tcxElab_''
 
@@ -368,7 +368,7 @@ stage5 tcx vcx s = do
 
 -- | Name a composite type by increasing IDs.
 makeName :: TyIdx -> Ty -> SolverM TyIdx
-makeName idx t@(Struct _ _ ) = do
+makeName idx t@(RecTy _ _ ) = do
   n <- fakeName
   return $ idx %% (t %-> n)
 makeName _ _ = error "cannot happen, only for composite"
@@ -376,8 +376,8 @@ makeName _ _ = error "cannot happen, only for composite"
 
 -- | Enforce that a struct which is referenced by an elaborated name is accordingly named.
 keepElab :: Name -> Ty -> Ty
-keepElab k t@(Struct fs n)
-  | isVar n && isElabStructName k = Struct fs k
+keepElab k t@(RecTy fs n)
+  | isVar n && isElabRec k = RecTy fs k
   | otherwise = t
 keepElab _ t = t
 
@@ -386,14 +386,14 @@ keepElab _ t = t
 stage6 :: TyCtx -> VarCtx -> (TyCtx, VarCtx)
 stage6 tcx vcx =
   let
-    pick k t@(TyVar _) acc
+    pick k t@(VarTy _) acc
       | isElab k = acc %% (t %-> k)
       | otherwise = acc
     pick _ _ acc = acc
     elabOrph = Map.foldrWithKey (\k (t, _) acc -> pick k t acc) nullIdx (tyctx tcx)
 
     dummy n
-      | isElabStructName n = Struct [Field (Name "dummy") Data.BuiltIn.int] n
+      | isElabRec n = RecTy [Field (Name "dummy") Data.BuiltIn.int] n
       | otherwise = EnumTy n
     go k t =
       case Map.lookup t (ty2n elabOrph) of

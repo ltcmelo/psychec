@@ -143,6 +143,8 @@ void TypeSpeller<SyntaxT>::visit(NamedType *ty)
     auto spec = ty->elaborateSpec();
     if (spec == NamedType::Enum)
         spelling_.append("enum ");
+    else if (spec == NamedType::Union)
+        spelling_.append("union ");
     else if (spec != NamedType::None)
         spelling_.append("struct ");
     spelling_.append(name);

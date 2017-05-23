@@ -130,7 +130,7 @@ Type parser
 > typeParser' :: Parser Ty
 > typeParser' = f <$> typeParser'' <*> (many starParser)
 >              where
->                f t ts = foldr (\ _ ac -> Pointer ac) t ts
+>                f t ts = foldr (\ _ ac -> PtrTy ac) t ts
 
 > typeParser'' :: Parser Ty
 > typeParser'' = choice [ tyVarParser
@@ -139,12 +139,13 @@ Type parser
 >                      , constQualParser tyConParser
 >                      , funTyParser
 >                      , constQualParser structTyParser
+>                      , constQualParser unionTyParser
 >                      , constQualParser enumTyParser
 >                     ]
 
 > trivialSpecParser :: Parser Ty
 > trivialSpecParser
->   = TyCon <$> name'
+>   = NamedTy <$> name'
 >   where
 >     name' = try (reserved "short" >> return (Name "short"))
 >               <|> try (reserved "char" >> return (Name "char"))
@@ -159,18 +160,18 @@ Type parser
 > intTyParser
 >   = f <$> trivialSpecParser <*> (many trivialSpecParser)
 >   where
->     f t ts = foldr (\(TyCon t') (TyCon t'') -> TyCon (Name $ unName t'' ++ " " ++ unName t')) t ts
+>     f t ts = foldr (\(NamedTy t') (NamedTy t'') -> NamedTy (Name $ unName t'' ++ " " ++ unName t')) t ts
 
 > floatTyParser :: Parser Ty
 > floatTyParser
->   = TyCon <$> name'
+>   = NamedTy <$> name'
 >   where
 >     name' = try (reserved "float" >> return (Name "float"))
 >               <|> try (reserved "double" >> return (Name "double"))
 >               <* skipMany space
 
 > tyVarParser :: Parser Ty
-> tyVarParser = TyVar <$> name'
+> tyVarParser = VarTy <$> name'
 >               where
 >                  name' = f <$> string "#alpha"
 >                            <*> (show <$> Tk.integer constrLexer)
@@ -179,7 +180,7 @@ Type parser
 > tyConParser :: Parser Ty
 > tyConParser = f <$> (Tk.identifier constrLexer)
 >               where
->                 f n = TyCon (Name n)
+>                 f n = NamedTy (Name n)
 
 > funTyParser :: Parser Ty
 > funTyParser = f <$> parens (typeParser `sepBy1` comma)
@@ -192,9 +193,19 @@ Type parser
 >                      ((Left <$> braces (fieldParser `endBy` semi)) <|>
 >                       (Right <$> many starParser))
 >                where
->                  f _ n (Left fs) = Struct fs (elabName n)
->                  f _ n (Right ts) = foldr (\ _ ac -> Pointer ac) (TyCon (elabName n)) ts
+>                  f _ n (Left fs) = RecTy fs (elabName n)
+>                  f _ n (Right ts) = foldr (\ _ ac -> PtrTy ac) (NamedTy (elabName n)) ts
 >                  elabName n' = Name ("struct " ++ (unName n'))
+
+> unionTyParser :: Parser Ty
+> unionTyParser = f <$> reserved "union" <*>
+>                      ((Name "") `option` nameParser)  <*>
+>                      ((Left <$> braces (fieldParser `endBy` semi)) <|>
+>                       (Right <$> many starParser))
+>                where
+>                  f _ n (Left fs) = SumTy fs (elabName n)
+>                  f _ n (Right ts) = foldr (\ _ ac -> PtrTy ac) (NamedTy (elabName n)) ts
+>                  elabName n' = Name ("union " ++ (unName n'))
 
 > enumTyParser :: Parser Ty
 > enumTyParser = f <$> reserved "enum" <*>
@@ -203,7 +214,7 @@ Type parser
 >                       (Right <$> many starParser))
 >                where
 >                  f _ n (Left _) = EnumTy (elabName n)
->                  f _ n (Right ts) = foldr (\ _ ac -> Pointer ac) (EnumTy (elabName n)) ts
+>                  f _ n (Right ts) = foldr (\ _ ac -> PtrTy ac) (EnumTy (elabName n)) ts
 >                  elabName n' = Name ("enum " ++ (unName n'))
 
 > fieldParser :: Parser Field
@@ -257,6 +268,7 @@ Constraint language definition
 >   , Tk.reservedNames = [
 >                        -- Reserved C names we need to distinguish.
 >                          "struct"
+>                        , "union"
 >                        , "enum"
 >                        , "unsigned"
 >                        , "signed"
