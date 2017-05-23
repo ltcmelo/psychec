@@ -248,14 +248,14 @@ dsort (x:xs) =
 
 dsort' :: Constraint -> ([Constraint], [Constraint], [Constraint], [Constraint])
 dsort' c@(_ :>: (Pointer (QualTy t)))
-    | isTyVarDep t = ([], [], [c], [])
+    | hasVarDep t = ([], [], [c], [])
     | t == Data.BuiltIn.void = ([], [], [], [c])
     | otherwise = ([c], [], [], [])
 dsort' c@(_ :>: (Pointer t))
     | t == Data.BuiltIn.void = ([], [], [], [c])
     | otherwise =  ([], [], [c], [])
 dsort' c@((Pointer t) :>: _)
-    | isTyVarDep t = ([], [], [c], [])
+    | hasVarDep t = ([], [], [c], [])
     | t == Data.BuiltIn.void = ([], [], [], [c])
     | otherwise = case t of
         QualTy _ -> ([], [], [c], [])
@@ -445,7 +445,3 @@ punifyFields =
   eqlist (h@(Has _ t@(Field n ty)) : h'@(Has _ t'@(Field n' ty')) : fs)
     | n == n' = (((typeFrom t) :=: (typeFrom t')) : eqlist (h':fs))
     | otherwise = (eqlist (h':fs))
-
-
-isVar :: Pretty a => a -> Bool
-isVar = (== "#alpha") . take 6 . show . pprint

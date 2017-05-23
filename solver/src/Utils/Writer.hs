@@ -44,7 +44,7 @@ writeCFile ctxs@(tcx, _) =
 -- TODO: Filter includes, write only those that are needed.
 writeIncs :: String
 writeIncs =
-  "/* WIP: In the future, only needed includes will be writen. */\n" ++
+  "/* WIP: In the future, only needed includes will be written. */\n" ++
   "#include <stdint.h>\n" ++
   "#include <stddef.h>\n" ++
   "#include <stdlib.h>\n" ++

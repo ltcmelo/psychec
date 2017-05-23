@@ -241,15 +241,10 @@ dropQual t = t
 dropTopQual (QualTy t) = t
 dropTopQual t = t
 
-
-isTyVar :: Pretty a => a -> Bool
-isTyVar = (== "#alpha") . take 6 . show . pprint
-
-isTyVarDep (Pointer t) = isTyVarDep t
-isTyVarDep (QualTy t) = isTyVarDep t
-isTyVarDep (TyVar _) = True
-isTyVarDep _ = False
-
+hasVarDep (Pointer t) = hasVarDep t
+hasVarDep (QualTy t) = hasVarDep t
+hasVarDep (TyVar _) = True
+hasVarDep _ = False
 
 wrongArgumentNumberError :: SolverM a
 wrongArgumentNumberError = throwError "Error! Wrong argument number."

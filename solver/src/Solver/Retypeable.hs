@@ -14,6 +14,7 @@
 -- along with this library; if not, write to the Free Software Foundation, Inc.,
 -- 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
+
 -- Retyping capabilities.
 
 module Solver.Retypeable where
@@ -88,7 +89,7 @@ instance Pretty TyIdx where
 -- | Elminate top-level (and eventual recursive) alphas with an artificial name.
 unalpha :: (Ty, Bool) -> SolverM (Ty, Bool)
 unalpha p@(t@(Struct fs n), b)
-  | isVar_ n = do
+  | isVar n = do
     n <- fakeName
     let n' = Name ("struct " ++ (unName n))
     return $ (Struct (check fs n') n', b)
@@ -116,8 +117,3 @@ unalphaHelper k n (QualTy t) = QualTy (unalphaHelper k n t)
 unalphaHelper k n (Pointer t) = Pointer (unalphaHelper k n t)
 unalphaHelper k n t@(FunTy _ _) = t
 unalphaHelper _ _ (Struct _ _) = error "shouldn't have structs at this point"
-
-
--- TODO: Reuse...
-isVar_ :: Pretty a => a -> Bool
-isVar_ = (== "#alpha") . take 6 . show . pprint
