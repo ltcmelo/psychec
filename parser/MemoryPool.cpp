@@ -19,9 +19,6 @@
 // THE SOFTWARE.
 
 #include "MemoryPool.h"
-
-#include "cppassert.h"
-
 #include <cstring>
 
 using namespace CPlusPlus;
@@ -54,8 +51,6 @@ void MemoryPool::reset()
 
 void *MemoryPool::allocate_helper(size_t size)
 {
-    CPP_CHECK(size < BLOCK_SIZE);
-
     if (++_blockCount == _allocatedBlocks) {
         if (! _allocatedBlocks)
             _allocatedBlocks = DEFAULT_BLOCK_COUNT;

@@ -46,7 +46,6 @@ public:
 
 protected:
     virtual void accept0(NameVisitor *visitor) const;
-    virtual bool match0(const Name *otherName, Matcher *matcher) const;
 
 private:
     const Name *_base;
@@ -68,7 +67,6 @@ public:
 
 protected:
     virtual void accept0(NameVisitor *visitor) const;
-    virtual bool match0(const Name *otherName, Matcher *matcher) const;
 
 private:
     const Name *_name;
@@ -111,7 +109,6 @@ public:
 
 protected:
     virtual void accept0(NameVisitor *visitor) const;
-    virtual bool match0(const Name *otherName, Matcher *matcher) const;
 
 private:
     const Identifier *_identifier;
@@ -190,7 +187,6 @@ public:
 
 protected:
     virtual void accept0(NameVisitor *visitor) const;
-    virtual bool match0(const Name *otherName, Matcher *matcher) const;
 
 private:
     Kind _kind;
@@ -211,7 +207,6 @@ public:
 
 protected:
     virtual void accept0(NameVisitor *visitor) const;
-    virtual bool match0(const Name *otherName, Matcher *matcher) const;
 
 private:
     FullySpecifiedType _type;
@@ -242,7 +237,6 @@ public:
 
 protected:
     virtual void accept0(NameVisitor *visitor) const;
-    virtual bool match0(const Name *otherName, Matcher *matcher) const;
 
 private:
     std::vector<const Name *> _names;
@@ -264,13 +258,10 @@ public:
 
 protected:
     virtual void accept0(NameVisitor *visitor) const;
-    virtual bool match0(const Name *otherName, Matcher *matcher) const;
 
 private:
     unsigned _classTokenIndex;
 };
-
-
 
 } // namespace CPlusPlus
 

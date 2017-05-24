@@ -22,7 +22,6 @@
 #include "Names.h"
 #include "TypeVisitor.h"
 #include "SymbolVisitor.h"
-#include "Matcher.h"
 #include "Scope.h"
 #include "Templates.h"
 
@@ -257,39 +256,8 @@ int Function::methodKey() const
 void Function::setMethodKey(int key)
 { f._methodKey = key; }
 
-bool Function::isSignatureEqualTo(const Function *other, Matcher *matcher) const
-{
-    if (! other)
-        return false;
-    else if (isConst() != other->isConst())
-        return false;
-    else if (isVolatile() != other->isVolatile())
-        return false;
-    else if (! Matcher::match(unqualifiedName(), other->unqualifiedName(), matcher))
-        return false;
-
-    const unsigned argc = argumentCount();
-    if (argc != other->argumentCount())
-        return false;
-    for (unsigned i = 0; i < argc; ++i) {
-        Symbol *l = argumentAt(i);
-        Symbol *r = other->argumentAt(i);
-        if (! l->type().match(r->type(), matcher))
-            return false;
-    }
-    return true;
-}
-
 void Function::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
-
-bool Function::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const Function *otherTy = otherType->asFunctionType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
 
 FullySpecifiedType Function::type() const
 {
@@ -497,14 +465,6 @@ void Enum::setScoped(bool scoped)
 void Enum::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
 
-bool Enum::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const Enum *otherTy = otherType->asEnumType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
-
 void Enum::visitSymbol0(SymbolVisitor *visitor)
 {
     if (visitor->visit(this)) {
@@ -565,13 +525,6 @@ void Template::visitSymbol0(SymbolVisitor *visitor)
 void Template::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
 
-bool Template::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const Template *otherTy = otherType->asTemplateType())
-        return matcher->match(this, otherTy);
-    return false;
-}
-
 Namespace::Namespace(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
     : Scope(translationUnit, sourceLocation, name)
     , _isInline(false)
@@ -587,14 +540,6 @@ Namespace::~Namespace()
 
 void Namespace::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
-
-bool Namespace::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const Namespace *otherTy = otherType->asNamespaceType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
 
 void Namespace::visitSymbol0(SymbolVisitor *visitor)
 {
@@ -664,14 +609,6 @@ void ForwardClassDeclaration::visitSymbol0(SymbolVisitor *visitor)
 void ForwardClassDeclaration::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
 
-bool ForwardClassDeclaration::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const ForwardClassDeclaration *otherTy = otherType->asForwardClassDeclarationType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
-
 Class::Class(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
     : Scope(translationUnit, sourceLocation, name),
       _key(ClassKey)
@@ -705,14 +642,6 @@ void Class::setClassKey(Key key)
 
 void Class::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
-
-bool Class::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const Class *otherTy = otherType->asClassType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
 
 unsigned Class::baseClassCount() const
 { return unsigned(_baseClasses.size()); }
@@ -766,11 +695,6 @@ void FakeClass::setClassKey(Key key)
 
 void FakeClass::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
-
-bool FakeClass::match0(const Type *otherType, Matcher *matcher) const
-{
-    return false;
-}
 
 FullySpecifiedType FakeClass::type() const
 { return FullySpecifiedType(const_cast<FakeClass *>(this)); }
@@ -939,14 +863,6 @@ void ObjCClass::visitSymbol0(SymbolVisitor *visitor)
 void ObjCClass::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
 
-bool ObjCClass::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const ObjCClass *otherTy = otherType->asObjCClassType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
-
 ObjCProtocol::ObjCProtocol(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name):
         Scope(translationUnit, sourceLocation, name)
 {
@@ -985,13 +901,6 @@ void ObjCProtocol::visitSymbol0(SymbolVisitor *visitor)
 void ObjCProtocol::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
 
-bool ObjCProtocol::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const ObjCProtocol *otherTy = otherType->asObjCProtocolType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
 
 ObjCForwardClassDeclaration::ObjCForwardClassDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation,
                                                          const Name *name):
@@ -1015,14 +924,6 @@ void ObjCForwardClassDeclaration::visitSymbol0(SymbolVisitor *visitor)
 void ObjCForwardClassDeclaration::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
 
-bool ObjCForwardClassDeclaration::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const ObjCForwardClassDeclaration *otherTy = otherType->asObjCForwardClassDeclarationType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
-
 ObjCForwardProtocolDeclaration::ObjCForwardProtocolDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation,
                                                                const Name *name):
         Symbol(translationUnit, sourceLocation, name)
@@ -1045,14 +946,6 @@ void ObjCForwardProtocolDeclaration::visitSymbol0(SymbolVisitor *visitor)
 void ObjCForwardProtocolDeclaration::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
 
-bool ObjCForwardProtocolDeclaration::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const ObjCForwardProtocolDeclaration *otherTy = otherType->asObjCForwardProtocolDeclarationType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
-
 ObjCMethod::ObjCMethod(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
     : Scope(translationUnit, sourceLocation, name),
      _flags(0)
@@ -1069,14 +962,6 @@ ObjCMethod::~ObjCMethod()
 
 void ObjCMethod::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
-
-bool ObjCMethod::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const ObjCMethod *otherTy = otherType->asObjCMethodType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
 
 FullySpecifiedType ObjCMethod::type() const
 { return FullySpecifiedType(const_cast<ObjCMethod *>(this)); }

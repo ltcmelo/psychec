@@ -213,8 +213,3 @@ unsigned FullySpecifiedType::flags() const
 
 void FullySpecifiedType::setFlags(unsigned flags)
 { _flags = flags; }
-
-bool FullySpecifiedType::match(const FullySpecifiedType &otherTy, Matcher *matcher) const
-{
-    return type()->match(otherTy.type(), matcher);
-}

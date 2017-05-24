@@ -36,14 +36,11 @@ set(PARSER_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/FullySpecifiedType.cpp
     ${PROJECT_SOURCE_DIR}/parser/FullySpecifiedType.h
     ${PROJECT_SOURCE_DIR}/parser/Keywords.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Keywords.kwgen
     ${PROJECT_SOURCE_DIR}/parser/Lexer.cpp
     ${PROJECT_SOURCE_DIR}/parser/Lexer.h
     ${PROJECT_SOURCE_DIR}/parser/LiteralTable.h
     ${PROJECT_SOURCE_DIR}/parser/Literals.cpp
     ${PROJECT_SOURCE_DIR}/parser/Literals.h
-    ${PROJECT_SOURCE_DIR}/parser/Matcher.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Matcher.h
     ${PROJECT_SOURCE_DIR}/parser/MemoryPool.cpp
     ${PROJECT_SOURCE_DIR}/parser/MemoryPool.h
     ${PROJECT_SOURCE_DIR}/parser/Name.cpp
@@ -58,8 +55,6 @@ set(PARSER_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Parser.h
     ${PROJECT_SOURCE_DIR}/parser/QtContextKeywords.cpp
     ${PROJECT_SOURCE_DIR}/parser/QtContextKeywords.h
-    ${PROJECT_SOURCE_DIR}/parser/SafeMatcher.cpp
-    ${PROJECT_SOURCE_DIR}/parser/SafeMatcher.h
     ${PROJECT_SOURCE_DIR}/parser/Scope.cpp
     ${PROJECT_SOURCE_DIR}/parser/Scope.h
     ${PROJECT_SOURCE_DIR}/parser/Symbol.cpp
@@ -77,7 +72,6 @@ set(PARSER_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Type.h
     ${PROJECT_SOURCE_DIR}/parser/TypeVisitor.cpp
     ${PROJECT_SOURCE_DIR}/parser/TypeVisitor.h
-    ${PROJECT_SOURCE_DIR}/parser/cppassert.h
     # Generator's file
     ${PROJECT_SOURCE_DIR}/generator/Assert.h
     ${PROJECT_SOURCE_DIR}/generator/AstFixer.h

@@ -279,7 +279,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 };
 
 class CPLUSPLUS_EXPORT Enum: public Scope, public Type
@@ -311,7 +310,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 
 private:
     bool _isScoped;
@@ -373,8 +371,6 @@ public:
     bool isPureVirtual() const;
     void setPureVirtual(bool isPureVirtual);
 
-    bool isSignatureEqualTo(const Function *other, Matcher *matcher = 0) const;
-
     bool isAmbiguous() const; // internal
     void setAmbiguous(bool isAmbiguous); // internal
 
@@ -399,7 +395,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 
 private:
     FullySpecifiedType _returnType;
@@ -450,7 +445,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 };
 
 
@@ -486,7 +480,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 
 private:
     bool _isInline;
@@ -566,7 +559,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 
 private:
     Key _key;
@@ -602,7 +594,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 
 private:
     Key _key;
@@ -743,7 +734,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 };
 
 class CPLUSPLUS_EXPORT ObjCProtocol: public Scope, public Type
@@ -776,7 +766,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 
 private:
     std::vector<ObjCBaseProtocol *> _protocols;
@@ -808,7 +797,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 };
 
 class CPLUSPLUS_EXPORT ObjCClass: public Scope, public Type
@@ -851,7 +839,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 
 private:
     const Name *_categoryName;
@@ -901,7 +888,6 @@ public:
 protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
     virtual void accept0(TypeVisitor *visitor);
-    virtual bool match0(const Type *otherType, Matcher *matcher) const;
 
 private:
     FullySpecifiedType _returnType;

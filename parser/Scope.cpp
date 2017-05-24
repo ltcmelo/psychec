@@ -23,9 +23,6 @@
 #include "Names.h"
 #include "Literals.h"
 #include "Templates.h"
-
-#include "cppassert.h"
-
 #include <cstring>
 
 namespace CPlusPlus {
@@ -109,8 +106,6 @@ SymbolTable::~SymbolTable()
 
 void SymbolTable::enterSymbol(Symbol *symbol)
 {
-    CPP_ASSERT(! symbol->_enclosingScope || symbol->enclosingScope() == _owner, return);
-
     if (++_symbolCount == _allocatedSymbols) {
         _allocatedSymbols <<= 1;
         if (! _allocatedSymbols)
@@ -133,8 +128,17 @@ void SymbolTable::enterSymbol(Symbol *symbol)
     }
 }
 
+
+
+
 Symbol *SymbolTable::lookat(const Identifier *id) const
 {
+    auto check = [id] (auto otherId) {
+        if (id == otherId)
+            return true;
+        return id->equalTo(otherId);
+    };
+
     if (! _hash || ! id)
         return 0;
 
@@ -145,18 +149,18 @@ Symbol *SymbolTable::lookat(const Identifier *id) const
         if (! identity) {
             continue;
         } else if (const Identifier *nameId = identity->asNameId()) {
-            if (nameId->identifier()->match(id))
-                break;
+            if (check(nameId->identifier()))
+                    break;
         } else if (const TemplateNameId *t = identity->asTemplateNameId()) {
-            if (t->identifier()->match(id))
+            if (check(t->identifier()))
                 break;
         } else if (const DestructorNameId *d = identity->asDestructorNameId()) {
-            if (d->identifier()->match(id))
+            if (check(d->identifier()))
                 break;
         } else if (identity->isQualifiedNameId()) {
             return 0;
         } else if (const SelectorNameId *selectorNameId = identity->asSelectorNameId()) {
-            if (selectorNameId->identifier()->match(id))
+            if (check(selectorNameId->identifier()))
                 break;
         }
     }

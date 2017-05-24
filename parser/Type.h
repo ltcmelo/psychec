@@ -99,14 +99,8 @@ public:
     void accept(TypeVisitor *visitor);
     static void accept(Type *type, TypeVisitor *visitor);
 
-    bool match(const Type *other, Matcher *matcher = 0) const;
-
 protected:
     virtual void accept0(TypeVisitor *visitor) = 0;
-
-protected: // for Matcher
-    friend class Matcher;
-    virtual bool match0(const Type *otherType, Matcher *matcher) const = 0;
 };
 
 } // namespace CPlusPlus

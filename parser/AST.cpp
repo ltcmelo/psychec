@@ -22,11 +22,7 @@
 #include "ASTVisitor.h"
 #include "ASTMatcher.h"
 #include "MemoryPool.h"
-
-#include "cppassert.h"
-
 #include <algorithm>
-
 
 /*
    All firstToken/lastToken functions below which have a doxygen comment with
@@ -43,7 +39,7 @@ AST::AST()
 { }
 
 AST::~AST()
-{ CPP_CHECK(0); }
+{ }
 
 void AST::accept(ASTVisitor *visitor)
 {

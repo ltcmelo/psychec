@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 
 #include "Literals.h"
-#include "Matcher.h"
 #include "Name.h"
 #include "Names.h"
 #include "NameVisitor.h"
@@ -70,11 +69,6 @@ void Name::accept(const Name *name, NameVisitor *visitor)
     if (! name)
         return;
     name->accept(visitor);
-}
-
-bool Name::match(const Name *other, Matcher *matcher) const
-{
-    return Matcher::match(this, other, matcher);
 }
 
 bool Name::Compare::operator()(const Name *name, const Name *other) const

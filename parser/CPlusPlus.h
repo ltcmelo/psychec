@@ -49,7 +49,6 @@
 #include "Token.h"
 #include "TranslationUnit.h"
 #include "Type.h"
-#include "Matcher.h"
 #include "TypeVisitor.h"
 #include "Templates.h"
 

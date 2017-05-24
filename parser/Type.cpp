@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Matcher.h"
 #include "Type.h"
 #include "TypeVisitor.h"
 #include "CoreTypes.h"
@@ -105,9 +104,4 @@ void Type::accept(Type *type, TypeVisitor *visitor)
         return;
 
     type->accept(visitor);
-}
-
-bool Type::match(const Type *other, Matcher *matcher) const
-{
-    return Matcher::match(this, other, matcher);
 }

@@ -82,7 +82,6 @@ class QualifiedNameId;
 class SelectorNameId;
 
 // types
-class Matcher;
 class FullySpecifiedType;
 class TypeVisitor;
 class Type;

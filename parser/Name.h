@@ -22,8 +22,6 @@
 #define CPLUSPLUS_NAME_H
 
 #include "CPlusPlusForwardDeclarations.h"
-#include "Matcher.h"
-
 #include <functional>
 
 namespace CPlusPlus {
@@ -57,8 +55,6 @@ public:
     void accept(NameVisitor *visitor) const;
     static void accept(const Name *name, NameVisitor *visitor);
 
-    bool match(const Name *other, Matcher *matcher = 0) const;
-
 public:
     struct Compare: std::binary_function<const Name *, const Name *, bool> {
         bool operator()(const Name *name, const Name *other) const;
@@ -66,10 +62,6 @@ public:
 
 protected:
     virtual void accept0(NameVisitor *visitor) const = 0;
-
-protected: // for Matcher
-    friend class Matcher;
-    virtual bool match0(const Name *otherName, Matcher *matcher) const = 0;
 };
 
 } // namespace CPlusPlus

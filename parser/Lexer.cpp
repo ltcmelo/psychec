@@ -22,9 +22,6 @@
 #include "Control.h"
 #include "TranslationUnit.h"
 #include "Literals.h"
-
-#include "cppassert.h"
-
 #include <cctype>
 
 using namespace CPlusPlus;
@@ -794,8 +791,6 @@ void Lexer::scanCharLiteral(Token *tok, unsigned char hint)
 
 void Lexer::scanUntilQuote(Token *tok, const unsigned char quote)
 {
-    CPP_CHECK(quote == '"' || quote == '\'');
-
     const char *yytext = _currentChar;
     while (_yychar
            && _yychar != quote

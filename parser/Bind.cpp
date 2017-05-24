@@ -27,8 +27,6 @@
 #include "CoreTypes.h"
 #include "Literals.h"
 #include "Scope.h"
-#include "cppassert.h"
-
 #include <algorithm>
 #include <vector>
 #include <string>
@@ -294,10 +292,8 @@ void Bind::postVisit(AST *)
 }
 
 // AST
-bool Bind::visit(ObjCSelectorArgumentAST *ast)
+bool Bind::visit(ObjCSelectorArgumentAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -312,10 +308,8 @@ const Name *Bind::objCSelectorArgument(ObjCSelectorArgumentAST *ast, bool *hasAr
     return identifier(ast->name_token);
 }
 
-bool Bind::visit(GnuAttributeAST *ast)
+bool Bind::visit(GnuAttributeAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -340,10 +334,8 @@ void Bind::attribute(GnuAttributeAST *ast)
     // unsigned rparen_token = ast->rparen_token;
 }
 
-bool Bind::visit(DeclaratorAST *ast)
+bool Bind::visit(DeclaratorAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -389,17 +381,13 @@ FullySpecifiedType Bind::declarator(DeclaratorAST *ast, const FullySpecifiedType
     return type;
 }
 
-bool Bind::visit(QtPropertyDeclarationItemAST *ast)
+bool Bind::visit(QtPropertyDeclarationItemAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
-bool Bind::visit(QtInterfaceNameAST *ast)
+bool Bind::visit(QtInterfaceNameAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -414,10 +402,8 @@ void Bind::qtInterfaceName(QtInterfaceNameAST *ast)
     }
 }
 
-bool Bind::visit(BaseSpecifierAST *ast)
+bool Bind::visit(BaseSpecifierAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -444,10 +430,8 @@ void Bind::baseSpecifier(BaseSpecifierAST *ast, unsigned colon_token, Class *kla
     ast->symbol = baseClass;
 }
 
-bool Bind::visit(CtorInitializerAST *ast)
+bool Bind::visit(CtorInitializerAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -463,10 +447,8 @@ void Bind::ctorInitializer(CtorInitializerAST *ast, Function *fun)
     // unsigned dot_dot_dot_token = ast->dot_dot_dot_token;
 }
 
-bool Bind::visit(EnumeratorAST *ast)
+bool Bind::visit(EnumeratorAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -580,10 +562,8 @@ void Bind::enumerator(EnumeratorAST *ast, Enum *symbol)
     }
 }
 
-bool Bind::visit(DynamicExceptionSpecificationAST *ast)
+bool Bind::visit(DynamicExceptionSpecificationAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -608,10 +588,8 @@ FullySpecifiedType Bind::exceptionSpecification(ExceptionSpecificationAST *ast, 
     return type;
 }
 
-bool Bind::visit(MemInitializerAST *ast)
+bool Bind::visit(MemInitializerAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -627,10 +605,8 @@ void Bind::memInitializer(MemInitializerAST *ast, Function *fun)
     (void) switchScope(previousScope);
 }
 
-bool Bind::visit(NestedNameSpecifierAST *ast)
+bool Bind::visit(NestedNameSpecifierAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -666,10 +642,8 @@ void Bind::newPlacement(ExpressionListParenAST *ast)
     // unsigned rparen_token = ast->rparen_token;
 }
 
-bool Bind::visit(NewArrayDeclaratorAST *ast)
+bool Bind::visit(NewArrayDeclaratorAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -686,10 +660,8 @@ FullySpecifiedType Bind::newArrayDeclarator(NewArrayDeclaratorAST *ast, const Fu
     return type;
 }
 
-bool Bind::visit(NewTypeIdAST *ast)
+bool Bind::visit(NewTypeIdAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -715,8 +687,6 @@ FullySpecifiedType Bind::newTypeId(NewTypeIdAST *ast)
 
 bool Bind::visit(OperatorAST *ast)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -905,10 +875,8 @@ OperatorNameId::Kind Bind::cppOperator(OperatorAST *ast)
     return kind;
 }
 
-bool Bind::visit(ParameterDeclarationClauseAST *ast)
+bool Bind::visit(ParameterDeclarationClauseAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -934,10 +902,8 @@ void Bind::parameterDeclarationClause(ParameterDeclarationClauseAST *ast, unsign
     (void) switchScope(previousScope);
 }
 
-bool Bind::visit(TranslationUnitAST *ast)
+bool Bind::visit(TranslationUnitAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -951,10 +917,8 @@ void Bind::translationUnit(TranslationUnitAST *ast)
     }
 }
 
-bool Bind::visit(ObjCProtocolRefsAST *ast)
+bool Bind::visit(ObjCProtocolRefsAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -973,10 +937,8 @@ void Bind::objCProtocolRefs(ObjCProtocolRefsAST *ast, Symbol *objcClassOrProtoco
     }
 }
 
-bool Bind::visit(ObjCMessageArgumentAST *ast)
+bool Bind::visit(ObjCMessageArgumentAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -988,10 +950,8 @@ void Bind::objCMessageArgument(ObjCMessageArgumentAST *ast)
     ExpressionTy parameter_value_expression = this->expression(ast->parameter_value_expression);
 }
 
-bool Bind::visit(ObjCTypeNameAST *ast)
+bool Bind::visit(ObjCTypeNameAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -1005,10 +965,8 @@ FullySpecifiedType Bind::objCTypeName(ObjCTypeNameAST *ast)
     return type_id;
 }
 
-bool Bind::visit(ObjCInstanceVariablesDeclarationAST *ast)
+bool Bind::visit(ObjCInstanceVariablesDeclarationAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -1026,10 +984,8 @@ void Bind::objCInstanceVariablesDeclaration(ObjCInstanceVariablesDeclarationAST 
     // unsigned rbrace_token = ast->rbrace_token;
 }
 
-bool Bind::visit(ObjCPropertyAttributeAST *ast)
+bool Bind::visit(ObjCPropertyAttributeAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -1043,10 +999,8 @@ void Bind::objCPropertyAttribute(ObjCPropertyAttributeAST *ast)
     /*const Name *method_selector =*/ this->name(ast->method_selector);
 }
 
-bool Bind::visit(ObjCMessageArgumentDeclarationAST *ast)
+bool Bind::visit(ObjCMessageArgumentDeclarationAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -1068,10 +1022,8 @@ void Bind::objCMessageArgumentDeclaration(ObjCMessageArgumentDeclarationAST *ast
     method->addMember(arg);
 }
 
-bool Bind::visit(ObjCMethodPrototypeAST *ast)
+bool Bind::visit(ObjCMethodPrototypeAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -1111,10 +1063,8 @@ ObjCMethod *Bind::objCMethodPrototype(ObjCMethodPrototypeAST *ast)
     return method;
 }
 
-bool Bind::visit(ObjCSynthesizedPropertyAST *ast)
+bool Bind::visit(ObjCSynthesizedPropertyAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -1128,10 +1078,8 @@ void Bind::objCSynthesizedProperty(ObjCSynthesizedPropertyAST *ast)
     // unsigned alias_identifier_token = ast->alias_identifier_token;
 }
 
-bool Bind::visit(LambdaIntroducerAST *ast)
+bool Bind::visit(LambdaIntroducerAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -1145,10 +1093,8 @@ void Bind::lambdaIntroducer(LambdaIntroducerAST *ast)
     // unsigned rbracket_token = ast->rbracket_token;
 }
 
-bool Bind::visit(LambdaCaptureAST *ast)
+bool Bind::visit(LambdaCaptureAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -1163,10 +1109,8 @@ void Bind::lambdaCapture(LambdaCaptureAST *ast)
     }
 }
 
-bool Bind::visit(CaptureAST *ast)
+bool Bind::visit(CaptureAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -1178,10 +1122,8 @@ void Bind::capture(CaptureAST *ast)
     name(ast->identifier);
 }
 
-bool Bind::visit(LambdaDeclaratorAST *ast)
+bool Bind::visit(LambdaDeclaratorAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -1214,10 +1156,8 @@ Function *Bind::lambdaDeclarator(LambdaDeclaratorAST *ast)
     return fun;
 }
 
-bool Bind::visit(TrailingReturnTypeAST *ast)
+bool Bind::visit(TrailingReturnTypeAST *)
 {
-    (void) ast;
-    CPP_CHECK(!"unreachable");
     return false;
 }
 
@@ -1272,7 +1212,6 @@ FullySpecifiedType Bind::trailingReturnType(TrailingReturnTypeAST *ast, const Fu
 
 const StringLiteral *Bind::asStringLiteral(const ExpressionAST *ast)
 {
-    CPP_ASSERT(ast, return 0);
     const unsigned firstToken = ast->firstToken();
     const unsigned lastToken = ast->lastToken();
     std::string buffer;
@@ -2911,17 +2850,8 @@ bool Bind::visit(SimpleSpecifierAST *ast)
 {
     switch (tokenKind(ast->specifier_token)) {
         case T_IDENTIFIER: {
-                const Identifier *id = tokenAt(ast->specifier_token).identifier;
-                if (id->match(control()->cpp11Override())) {
-                    if (_type.isOverride())
-                        translationUnit()->error(ast->specifier_token, "duplicate `override'");
-                    _type.setOverride(true);
-                }
-                else if (id->match(control()->cpp11Final())) {
-                    if (_type.isFinal())
-                        translationUnit()->error(ast->specifier_token, "duplicate `final'");
-                    _type.setFinal(true);
-                }
+                // TODO: Check for contextual keywords override and final and set them.
+                // const Identifier *id = tokenAt(ast->specifier_token).identifier;
             }
             break;
         case T_CONST:

@@ -20,7 +20,6 @@
 
 #include "CoreTypes.h"
 #include "TypeVisitor.h"
-#include "Matcher.h"
 #include "Names.h"
 #include <algorithm>
 
@@ -29,24 +28,8 @@ using namespace CPlusPlus;
 void UndefinedType::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
 
-bool UndefinedType::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const UndefinedType *otherUndefinedTy = otherType->asUndefinedType())
-        return matcher->match(this, otherUndefinedTy);
-
-    return false;
-}
-
 void VoidType::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
-
-bool VoidType::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const VoidType *otherVoidTy = otherType->asVoidType())
-        return matcher->match(this, otherVoidTy);
-
-    return false;
-}
 
 PointerToMemberType::PointerToMemberType(const Name *memberName, const FullySpecifiedType &elementType)
     : _memberName(memberName),
@@ -65,14 +48,6 @@ FullySpecifiedType PointerToMemberType::elementType() const
 void PointerToMemberType::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
 
-bool PointerToMemberType::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const PointerToMemberType *otherTy = otherType->asPointerToMemberType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
-
 PointerType::PointerType(const FullySpecifiedType &elementType)
     : _elementType(elementType)
 { }
@@ -82,14 +57,6 @@ PointerType::~PointerType()
 
 void PointerType::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
-
-bool PointerType::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const PointerType *otherTy = otherType->asPointerType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
 
 FullySpecifiedType PointerType::elementType() const
 { return _elementType; }
@@ -103,14 +70,6 @@ ReferenceType::~ReferenceType()
 
 void ReferenceType::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
-
-bool ReferenceType::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const ReferenceType *otherTy = otherType->asReferenceType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
 
 FullySpecifiedType ReferenceType::elementType() const
 { return _elementType; }
@@ -128,14 +87,6 @@ IntegerType::~IntegerType()
 void IntegerType::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
 
-bool IntegerType::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const IntegerType *otherTy = otherType->asIntegerType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
-
 int IntegerType::kind() const
 { return _kind; }
 
@@ -149,14 +100,6 @@ FloatType::~FloatType()
 void FloatType::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
 
-bool FloatType::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const FloatType *otherTy = otherType->asFloatType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
-
 int FloatType::kind() const
 { return _kind; }
 
@@ -169,14 +112,6 @@ ArrayType::~ArrayType()
 
 void ArrayType::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
-
-bool ArrayType::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const ArrayType *otherTy = otherType->asArrayType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
 
 FullySpecifiedType ArrayType::elementType() const
 { return _elementType; }
@@ -197,14 +132,6 @@ const Name *NamedType::name() const
 
 void NamedType::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
-
-bool NamedType::match0(const Type *otherType, Matcher *matcher) const
-{
-    if (const NamedType *otherTy = otherType->asNamedType())
-        return matcher->match(this, otherTy);
-
-    return false;
-}
 
 NamedType::ElaboratedSpec NamedType::elaborateSpec() const
 { return _elabSpec; }

@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 
 #include "Names.h"
-#include "Matcher.h"
 #include "NameVisitor.h"
 #include "Literals.h"
 #include <algorithm>
@@ -32,13 +31,6 @@ QualifiedNameId::~QualifiedNameId()
 
 void QualifiedNameId::accept0(NameVisitor *visitor) const
 { visitor->visit(this); }
-
-bool QualifiedNameId::match0(const Name *otherName, Matcher *matcher) const
-{
-    if (const QualifiedNameId *name = otherName->asQualifiedNameId())
-        return matcher->match(this, name);
-    return false;
-}
 
 const Identifier *QualifiedNameId::identifier() const
 {
@@ -64,13 +56,6 @@ DestructorNameId::~DestructorNameId()
 void DestructorNameId::accept0(NameVisitor *visitor) const
 { visitor->visit(this); }
 
-bool DestructorNameId::match0(const Name *otherName, Matcher *matcher) const
-{
-    if (const DestructorNameId *name = otherName->asDestructorNameId())
-        return matcher->match(this, name);
-    return false;
-}
-
 const Name *DestructorNameId::name() const
 { return _name; }
 
@@ -82,13 +67,6 @@ TemplateNameId::~TemplateNameId()
 
 void TemplateNameId::accept0(NameVisitor *visitor) const
 { visitor->visit(this); }
-
-bool TemplateNameId::match0(const Name *otherName, Matcher *matcher) const
-{
-    if (const TemplateNameId *other = otherName->asTemplateNameId())
-        return matcher->match(this, other);
-    return false;
-}
 
 const Identifier *TemplateNameId::identifier() const
 { return _identifier; }
@@ -143,13 +121,6 @@ OperatorNameId::~OperatorNameId()
 void OperatorNameId::accept0(NameVisitor *visitor) const
 { visitor->visit(this); }
 
-bool OperatorNameId::match0(const Name *otherName, Matcher *matcher) const
-{
-    if (const OperatorNameId *name = otherName->asOperatorNameId())
-        return matcher->match(this, name);
-    return false;
-}
-
 OperatorNameId::Kind OperatorNameId::kind() const
 { return _kind; }
 
@@ -166,13 +137,6 @@ ConversionNameId::~ConversionNameId()
 void ConversionNameId::accept0(NameVisitor *visitor) const
 { visitor->visit(this); }
 
-bool ConversionNameId::match0(const Name *otherName, Matcher *matcher) const
-{
-    if (const ConversionNameId *name = otherName->asConversionNameId())
-        return matcher->match(this, name);
-    return false;
-}
-
 FullySpecifiedType ConversionNameId::type() const
 { return _type; }
 
@@ -184,13 +148,6 @@ SelectorNameId::~SelectorNameId()
 
 void SelectorNameId::accept0(NameVisitor *visitor) const
 { visitor->visit(this); }
-
-bool SelectorNameId::match0(const Name *otherName, Matcher *matcher) const
-{
-    if (const SelectorNameId *name = otherName->asSelectorNameId())
-        return matcher->match(this, name);
-    return false;
-}
 
 const Identifier *SelectorNameId::identifier() const
 {
@@ -223,13 +180,6 @@ unsigned AnonymousNameId::classTokenIndex() const
 
 void AnonymousNameId::accept0(NameVisitor *visitor) const
 { visitor->visit(this); }
-
-bool AnonymousNameId::match0(const Name *otherName, Matcher *matcher) const
-{
-    if (const AnonymousNameId *id = otherName->asAnonymousNameId())
-        return matcher->match(this, id);
-    return false;
-}
 
 const Identifier *AnonymousNameId::identifier() const
 { return 0; }

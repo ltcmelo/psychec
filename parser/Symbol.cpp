@@ -30,9 +30,6 @@
 #include "Scope.h"
 #include "Templates.h"
 
-#include "cppassert.h"
-
-
 using namespace CPlusPlus;
 
 class Symbol::HashCode: protected NameVisitor
@@ -235,7 +232,6 @@ Scope *Symbol::enclosingScope() const
 
 void Symbol::setEnclosingScope(Scope *scope)
 {
-    CPP_CHECK(! _enclosingScope);
     _enclosingScope = scope;
 }
 

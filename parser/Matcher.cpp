@@ -28,7 +28,6 @@
 **
 ****************************************************************************/
 
-#include "Matcher.h"
 #include "CoreTypes.h"
 #include "Symbols.h"
 #include "Names.h"
