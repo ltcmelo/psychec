@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +24,7 @@
 
 namespace CPlusPlus {
 
-static inline int classify2(const char *s, LanguageFeatures)
+static inline int classify2(const char *s, LanguageOptions)
 {
   if (s[0] == 'd') {
     if (s[1] == 'o') {
@@ -38,9 +39,9 @@ static inline int classify2(const char *s, LanguageFeatures)
   return T_IDENTIFIER;
 }
 
-static inline int classify3(const char *s, LanguageFeatures features)
+static inline int classify3(const char *s, LanguageOptions lang)
 {
-  if (!features.cMode && s[0] == 'a') {
+  if (lang.isCpp() && s[0] == 'a') {
     if (s[1] == 's') {
       if (s[2] == 'm') {
         return T_ASM;
@@ -61,21 +62,21 @@ static inline int classify3(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'n') {
+  else if (lang.isCpp() && s[0] == 'n') {
     if (s[1] == 'e') {
       if (s[2] == 'w') {
         return T_NEW;
       }
     }
   }
-  else if (!features.cMode && s[0] == 't') {
+  else if (lang.isCpp() && s[0] == 't') {
     if (s[1] == 'r') {
       if (s[2] == 'y') {
         return T_TRY;
       }
     }
   }
-  else if (features.qtMocRunEnabled && s[0] == 'Q') {
+  else if (lang.qtMocRun && s[0] == 'Q') {
     if (s[1] == '_') {
       if (s[2] == 'D') {
         return T_Q_D;
@@ -88,7 +89,7 @@ static inline int classify3(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify4(const char *s, LanguageFeatures features)
+static inline int classify4(const char *s, LanguageOptions lang)
 {
   if (s[0] == 'a') {
     if (s[1] == 'u') {
@@ -139,7 +140,7 @@ static inline int classify4(const char *s, LanguageFeatures features)
         }
       }
     }
-    else if (features.qtKeywordsEnabled && s[1] == 'm') {
+    else if (lang.qtKeywords && s[1] == 'm') {
       if (s[2] == 'i') {
         if (s[3] == 't') {
           return T_EMIT;
@@ -165,7 +166,7 @@ static inline int classify4(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.nullptrOnNULL && s[0] == 'N') {
+  else if (lang.nullptrOnNULL && s[0] == 'N') {
     if (s[1] == 'U') {
       if (s[2] == 'L') {
         if (s[3] == 'L') {
@@ -175,7 +176,7 @@ static inline int classify4(const char *s, LanguageFeatures features)
     }
   }
   else if (s[0] == 't') {
-    if (!features.cMode && s[1] == 'h') {
+    if (lang.isCpp() && s[1] == 'h') {
       if (s[2] == 'i') {
         if (s[3] == 's') {
           return T_THIS;
@@ -199,7 +200,7 @@ static inline int classify4(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.qtEnabled && s[0] == 'S') {
+  else if (lang.qt && s[0] == 'S') {
     if (s[1] == 'L') {
       if (s[2] == 'O') {
         if (s[3] == 'T') {
@@ -211,10 +212,10 @@ static inline int classify4(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify5(const char *s, LanguageFeatures features)
+static inline int classify5(const char *s, LanguageOptions lang)
 {
   if (s[0] == '_') {
-    if (!features.cMode && s[1] == '_') {
+    if (lang.isCpp() && s[1] == '_') {
       if (s[2] == 'a') {
         if (s[3] == 's') {
           if (s[4] == 'm') {
@@ -223,7 +224,7 @@ static inline int classify5(const char *s, LanguageFeatures features)
         }
       }
     }
-    else if (features.c11Enabled && s[1] == 'B') {
+    else if (lang.c11 && s[1] == 'B') {
       if (s[2] == 'o') {
         if (s[3] == 'o') {
           if (s[4] == 'l') {
@@ -245,7 +246,7 @@ static inline int classify5(const char *s, LanguageFeatures features)
     }
   }
   else if (s[0] == 'c') {
-    if (!features.cMode && s[1] == 'a') {
+    if (lang.isCpp() && s[1] == 'a') {
       if (s[2] == 't') {
         if (s[3] == 'c') {
           if (s[4] == 'h') {
@@ -254,7 +255,7 @@ static inline int classify5(const char *s, LanguageFeatures features)
         }
       }
     }
-    else if (!features.cMode && s[1] == 'l') {
+    else if (lang.isCpp() && s[1] == 'l') {
       if (s[2] == 'a') {
         if (s[3] == 's') {
           if (s[4] == 's') {
@@ -303,7 +304,7 @@ static inline int classify5(const char *s, LanguageFeatures features)
         }
       }
     }
-    else if (features.qtKeywordsEnabled) {
+    else if (lang.qtKeywords) {
       if (s[1] == 'l') {
         if (s[2] == 'o') {
           if (s[3] == 't') {
@@ -315,7 +316,7 @@ static inline int classify5(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 't') {
+  else if (lang.isCpp() && s[0] == 't') {
     if (s[1] == 'h') {
       if (s[2] == 'r') {
         if (s[3] == 'o') {
@@ -336,7 +337,7 @@ static inline int classify5(const char *s, LanguageFeatures features)
         }
       }
     }
-    else if (!features.cMode && s[1] == 's') {
+    else if (lang.isCpp() && s[1] == 's') {
       if (s[2] == 'i') {
         if (s[3] == 'n') {
           if (s[4] == 'g') {
@@ -360,10 +361,10 @@ static inline int classify5(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify6(const char *s, LanguageFeatures features)
+static inline int classify6(const char *s, LanguageOptions lang)
 {
   if (s[0] == 'd') {
-    if (!features.cMode && s[1] == 'e') {
+    if (lang.isCpp() && s[1] == 'e') {
       if (s[2] == 'l') {
         if (s[3] == 'e') {
           if (s[4] == 't') {
@@ -388,7 +389,7 @@ static inline int classify6(const char *s, LanguageFeatures features)
   }
   else if (s[0] == 'e') {
     if (s[1] == 'x') {
-      if (!features.cMode && s[2] == 'p') {
+      if (lang.isCpp() && s[2] == 'p') {
         if (s[3] == 'o') {
           if (s[4] == 'r') {
             if (s[5] == 't') {
@@ -408,7 +409,7 @@ static inline int classify6(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'f') {
+  else if (lang.isCpp() && s[0] == 'f') {
     if (s[1] == 'r') {
       if (s[2] == 'i') {
         if (s[3] == 'e') {
@@ -421,7 +422,7 @@ static inline int classify6(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.c99Enabled && s[0] == 'i') {
+  else if (lang.c99 && s[0] == 'i') {
     if (s[1] == 'n') {
       if (s[2] == 'l') {
         if (s[3] == 'i') {
@@ -434,7 +435,7 @@ static inline int classify6(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'p') {
+  else if (lang.isCpp() && s[0] == 'p') {
     if (s[1] == 'u') {
       if (s[2] == 'b') {
         if (s[3] == 'l') {
@@ -513,7 +514,7 @@ static inline int classify6(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 't') {
+  else if (lang.isCpp() && s[0] == 't') {
     if (s[1] == 'y') {
       if (s[2] == 'p') {
         if (s[3] == 'e') {
@@ -531,7 +532,7 @@ static inline int classify6(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.qtKeywordsEnabled && s[0] == 'S') {
+  else if (lang.qtKeywords && s[0] == 'S') {
     if (s[1] == 'I') {
       if (s[2] == 'G') {
         if (s[3] == 'N') {
@@ -544,7 +545,7 @@ static inline int classify6(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.qtKeywordsEnabled && s[0] == 'Q') {
+  else if (lang.qtKeywords && s[0] == 'Q') {
     if (s[1] == '_') {
       if (s[2] == 'S') {
         if (s[3] == 'L') {
@@ -569,9 +570,9 @@ static inline int classify6(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify7(const char *s, LanguageFeatures features)
+static inline int classify7(const char *s, LanguageOptions lang)
 {
-  if (!features.cMode && s[0] == '_') {
+  if (lang.isCpp() && s[0] == '_') {
     if (s[1] == '_') {
       if (s[2] == 'a') {
         if (s[3] == 's') {
@@ -597,7 +598,7 @@ static inline int classify7(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if ((features.cxx11Enabled || features.c11Enabled) && s[0] == 'a') {
+  else if ((lang.cpp11 || lang.c11) && s[0] == 'a') {
     if (s[1] == 'l') {
       if (s[2] == 'i') {
         if (s[3] == 'g') {
@@ -617,7 +618,7 @@ static inline int classify7(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'd') {
+  else if (lang.isCpp() && s[0] == 'd') {
     if (s[1] == 'e') {
       if (s[2] == 'f') {
         if (s[3] == 'a') {
@@ -647,7 +648,7 @@ static inline int classify7(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.cxx11Enabled && s[0] == 'n') {
+  else if (lang.cpp11 && s[0] == 'n') {
     if (s[1] == 'u') {
       if (s[2] == 'l') {
         if (s[3] == 'l') {
@@ -662,7 +663,7 @@ static inline int classify7(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'p') {
+  else if (lang.isCpp() && s[0] == 'p') {
     if (s[1] == 'r') {
       if (s[2] == 'i') {
         if (s[3] == 'v') {
@@ -677,7 +678,7 @@ static inline int classify7(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.qtKeywordsEnabled && s[0] == 'f') {
+  else if (lang.qtKeywords && s[0] == 'f') {
     if (s[1] == 'o') {
       if (s[2] == 'r') {
         if (s[3] == 'e') {
@@ -692,7 +693,7 @@ static inline int classify7(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.qtKeywordsEnabled && s[0] == 's') {
+  else if (lang.qtKeywords && s[0] == 's') {
     if (s[1] == 'i') {
       if (s[2] == 'g') {
         if (s[3] == 'n') {
@@ -722,7 +723,7 @@ static inline int classify7(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'v') {
+  else if (lang.isCpp() && s[0] == 'v') {
     if (s[1] == 'i') {
       if (s[2] == 'r') {
         if (s[3] == 't') {
@@ -737,7 +738,7 @@ static inline int classify7(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'w') {
+  else if (lang.isCpp() && s[0] == 'w') {
     if (s[1] == 'c') {
       if (s[2] == 'h') {
         if (s[3] == 'a') {
@@ -752,7 +753,7 @@ static inline int classify7(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.qtEnabled && s[0] == 'Q') {
+  else if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
       if (s[2] == 'S') {
         if (s[3] == 'L') {
@@ -792,9 +793,9 @@ static inline int classify7(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify8(const char *s, LanguageFeatures features)
+static inline int classify8(const char *s, LanguageOptions lang)
 {
-  if (features.c99Enabled && s[0] == '_') {
+  if (lang.c99 && s[0] == '_') {
     if (s[1] == '_') {
       if (s[2] == 'i') {
         if (s[3] == 'n') {
@@ -809,7 +810,7 @@ static inline int classify8(const char *s, LanguageFeatures features)
           }
         }
       }
-      else if (!features.cMode && s[2] == 't') {
+      else if (lang.isCpp() && s[2] == 't') {
         if (s[3] == 'y') {
           if (s[4] == 'p') {
             if (s[5] == 'e') {
@@ -821,7 +822,7 @@ static inline int classify8(const char *s, LanguageFeatures features)
             }
           }
         }
-        else if (!features.cMode && s[3] == 'h') {
+        else if (lang.isCpp() && s[3] == 'h') {
           if (s[4] == 'r') {
             if (s[5] == 'e') {
               if (s[6] == 'a') {
@@ -850,7 +851,7 @@ static inline int classify8(const char *s, LanguageFeatures features)
           }
         }
       }
-    } else if (features.cxx11Enabled && s[1] == 'h') {
+    } else if (lang.cpp11 && s[1] == 'h') {
         if (s[2] == 'a') {
             if (s[3] == 'r') {
                 if (s[4] == '1') {
@@ -874,7 +875,7 @@ static inline int classify8(const char *s, LanguageFeatures features)
         }
     }
   }
-  else if (features.cxx11Enabled && s[0] == 'd') {
+  else if (lang.cpp11 && s[0] == 'd') {
     if (s[1] == 'e') {
       if (s[2] == 'c') {
         if (s[3] == 'l') {
@@ -891,7 +892,7 @@ static inline int classify8(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'e') {
+  else if (lang.isCpp() && s[0] == 'e') {
     if (s[1] == 'x') {
       if (s[2] == 'p') {
         if (s[3] == 'l') {
@@ -908,7 +909,7 @@ static inline int classify8(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.cxx11Enabled && s[0] == 'n') {
+  else if (lang.cpp11 && s[0] == 'n') {
     if (s[1] == 'o') {
       if (s[2] == 'e') {
         if (s[3] == 'x') {
@@ -925,7 +926,7 @@ static inline int classify8(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'o') {
+  else if (lang.isCpp() && s[0] == 'o') {
     if (s[1] == 'p') {
       if (s[2] == 'e') {
         if (s[3] == 'r') {
@@ -959,7 +960,7 @@ static inline int classify8(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 't') {
+  else if (lang.isCpp() && s[0] == 't') {
     if (s[1] == 'e') {
       if (s[2] == 'm') {
         if (s[3] == 'p') {
@@ -975,7 +976,7 @@ static inline int classify8(const char *s, LanguageFeatures features)
         }
       }
     }
-    else if (!features.cMode && s[1] == 'y') {
+    else if (lang.isCpp() && s[1] == 'y') {
       if (s[2] == 'p') {
         if (s[3] == 'e') {
           if (s[4] == 'n') {
@@ -1025,7 +1026,7 @@ static inline int classify8(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.qtEnabled && s[0] == 'Q') {
+  else if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
       if (s[2] == 'G') {
         if (s[3] == 'A') {
@@ -1071,7 +1072,7 @@ static inline int classify8(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify9(const char *s, LanguageFeatures features)
+static inline int classify9(const char *s, LanguageOptions lang)
 {
   if (s[0] == '_') {
     if (s[1] == '_') {
@@ -1092,7 +1093,7 @@ static inline int classify9(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.cxx11Enabled && s[0] == 'c') {
+  else if (lang.cpp11 && s[0] == 'c') {
     if (s[1] == 'o') {
       if (s[2] == 'n') {
         if (s[3] == 's') {
@@ -1111,7 +1112,7 @@ static inline int classify9(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'n') {
+  else if (lang.isCpp() && s[0] == 'n') {
     if (s[1] == 'a') {
       if (s[2] == 'm') {
         if (s[3] == 'e') {
@@ -1130,7 +1131,7 @@ static inline int classify9(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'p') {
+  else if (lang.isCpp() && s[0] == 'p') {
     if (s[1] == 'r') {
       if (s[2] == 'o') {
         if (s[3] == 't') {
@@ -1149,7 +1150,7 @@ static inline int classify9(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.qtEnabled && s[0] == 'Q') {
+  else if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
       if (s[2] == 'S') {
         if (s[3] == 'I') {
@@ -1185,9 +1186,9 @@ static inline int classify9(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify10(const char *s, LanguageFeatures features)
+static inline int classify10(const char *s, LanguageOptions lang)
 {
-  if (features.c99Enabled && s[0] == '_') {
+  if (lang.c99 && s[0] == '_') {
     if (s[1] == '_') {
       if (s[2] == 'i') {
         if (s[3] == 'n') {
@@ -1206,7 +1207,7 @@ static inline int classify10(const char *s, LanguageFeatures features)
           }
         }
       }
-      else if (!features.cMode && s[2] == 'd') {
+      else if (lang.isCpp() && s[2] == 'd') {
         if (s[3] == 'e') {
           if (s[4] == 'c') {
             if (s[5] == 'l') {
@@ -1223,7 +1224,7 @@ static inline int classify10(const char *s, LanguageFeatures features)
           }
         }
       }
-      else if (!features.cMode && s[2] == 't') {
+      else if (lang.isCpp() && s[2] == 't') {
         if (s[3] == 'y') {
           if (s[4] == 'p') {
             if (s[5] == 'e') {
@@ -1259,7 +1260,7 @@ static inline int classify10(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'c') {
+  else if (lang.isCpp() && s[0] == 'c') {
     if (s[1] == 'o') {
       if (s[2] == 'n') {
         if (s[3] == 's') {
@@ -1280,7 +1281,7 @@ static inline int classify10(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.qtEnabled && s[0] == 'Q') {
+  else if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
       if (s[2] == 'O') {
         if (s[3] == 'V') {
@@ -1321,7 +1322,7 @@ static inline int classify10(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify11(const char *s, LanguageFeatures features)
+static inline int classify11(const char *s, LanguageOptions lang)
 {
   if (s[0] == '_') {
     if (s[1] == '_') {
@@ -1342,7 +1343,7 @@ static inline int classify11(const char *s, LanguageFeatures features)
               }
             }
           }
-        } else if (features.c11Enabled && s[3] == 'l') {
+        } else if (lang.c11 && s[3] == 'l') {
           if (s[4] == 'i') {
             if (s[5] == 'g') {
               if (s[6] == 'n') {
@@ -1362,7 +1363,7 @@ static inline int classify11(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 's') {
+  else if (lang.isCpp() && s[0] == 's') {
     if (s[1] == 't') {
       if (s[2] == 'a') {
         if (s[3] == 't') {
@@ -1385,7 +1386,7 @@ static inline int classify11(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.qtEnabled && s[0] == 'Q') {
+  else if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
       if (s[2] == 'I') {
         if (s[3] == 'N') {
@@ -1411,7 +1412,7 @@ static inline int classify11(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify12(const char *s, LanguageFeatures features)
+static inline int classify12(const char *s, LanguageOptions lang)
 {
   if (s[0] == '_') {
     if (s[1] == '_') {
@@ -1438,7 +1439,7 @@ static inline int classify12(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.qtEnabled && s[0] == 'Q') {
+  else if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
       if (s[2] == 'I') {
         if (s[3] == 'N') {
@@ -1463,7 +1464,7 @@ static inline int classify12(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (!features.cMode && s[0] == 'd') {
+  else if (lang.isCpp() && s[0] == 'd') {
     if (s[1] == 'y') {
       if (s[2] == 'n') {
         if (s[3] == 'a') {
@@ -1488,7 +1489,7 @@ static inline int classify12(const char *s, LanguageFeatures features)
       }
     }
   }
-  else if (features.cxx11Enabled && s[0] == 't') {
+  else if (lang.cpp11 && s[0] == 't') {
     if (s[1] == 'h') {
       if (s[2] == 'r') {
         if (s[3] == 'e') {
@@ -1516,7 +1517,7 @@ static inline int classify12(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify13(const char *s, LanguageFeatures features)
+static inline int classify13(const char *s, LanguageOptions lang)
 {
   if (s[0] == '_') {
     if (s[1] == '_') {
@@ -1544,7 +1545,7 @@ static inline int classify13(const char *s, LanguageFeatures features)
         }
       }
     }
-  } else if (features.cxx11Enabled && s[0] == 's') {
+  } else if (lang.cpp11 && s[0] == 's') {
     if (s[1] == 't') {
       if (s[2] == 'a') {
         if (s[3] == 't') {
@@ -1574,9 +1575,9 @@ static inline int classify13(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify16(const char *s, LanguageFeatures features)
+static inline int classify16(const char *s, LanguageOptions lang)
 {
-  if (!features.cMode && s[0] == 'r') {
+  if (lang.isCpp() && s[0] == 'r') {
     if (s[1] == 'e') {
       if (s[2] == 'i') {
         if (s[3] == 'n') {
@@ -1612,9 +1613,9 @@ static inline int classify16(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify14(const char *s, LanguageFeatures features)
+static inline int classify14(const char *s, LanguageOptions lang)
 {
-  if (features.qtEnabled && s[0] == 'Q') {
+  if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
       if (s[2] == 'P') {
         if (s[3] == 'R') {
@@ -1646,9 +1647,9 @@ static inline int classify14(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify18(const char *s, LanguageFeatures features)
+static inline int classify18(const char *s, LanguageOptions lang)
 {
-  if (features.qtEnabled && s[0] == 'Q') {
+  if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
       if (s[2] == 'P') {
         if (s[3] == 'R') {
@@ -1688,9 +1689,9 @@ static inline int classify18(const char *s, LanguageFeatures features)
   return T_IDENTIFIER;
 }
 
-static inline int classify19(const char *s, LanguageFeatures features)
+static inline int classify19(const char *s, LanguageOptions lang)
 {
-  if (features.qtEnabled && s[0] == 'Q') {
+  if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
       if (s[2] == 'D') {
         if (s[3] == 'E') {
@@ -1733,24 +1734,24 @@ static inline int classify19(const char *s, LanguageFeatures features)
 }
 
 
-int Lexer::classify(const char *s, int n, LanguageFeatures features) {
+int Lexer::classify(const char *s, int n, LanguageOptions lang) {
   switch (n) {
-    case 2: return classify2(s, features);
-    case 3: return classify3(s, features);
-    case 4: return classify4(s, features);
-    case 5: return classify5(s, features);
-    case 6: return classify6(s, features);
-    case 7: return classify7(s, features);
-    case 8: return classify8(s, features);
-    case 9: return classify9(s, features);
-    case 10: return classify10(s, features);
-    case 11: return classify11(s, features);
-    case 12: return classify12(s, features);
-    case 13: return classify13(s, features);
-    case 14: return classify14(s, features);
-    case 16: return classify16(s, features);
-    case 18: return classify18(s, features);
-    case 19: return classify19(s, features);
+    case 2: return classify2(s, lang);
+    case 3: return classify3(s, lang);
+    case 4: return classify4(s, lang);
+    case 5: return classify5(s, lang);
+    case 6: return classify6(s, lang);
+    case 7: return classify7(s, lang);
+    case 8: return classify8(s, lang);
+    case 9: return classify9(s, lang);
+    case 10: return classify10(s, lang);
+    case 11: return classify11(s, lang);
+    case 12: return classify12(s, lang);
+    case 13: return classify13(s, lang);
+    case 14: return classify14(s, lang);
+    case 16: return classify16(s, lang);
+    case 18: return classify18(s, lang);
+    case 19: return classify19(s, lang);
     default: return T_IDENTIFIER;
   } // switch
 }

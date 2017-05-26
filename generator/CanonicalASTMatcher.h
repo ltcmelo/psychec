@@ -232,6 +232,14 @@ struct CanonicalASTMatcher final : public CPlusPlus::ASTMatcher
         return !(strcmp(node->name->identifier()->begin(),
                         pattern->name->identifier()->begin()));
     }
+
+    bool match(ElaboratedNameAST* node, ElaboratedNameAST* pattern) override
+    {
+        if (!node || !pattern)
+            return false;
+        return !(strcmp(node->name->identifier()->begin(),
+                        pattern->name->identifier()->begin()));
+    }
 };
 
 } // namespace psyche

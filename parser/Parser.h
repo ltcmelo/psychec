@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -314,7 +315,7 @@ private:
     TranslationUnit *_translationUnit;
     Control *_control;
     MemoryPool *_pool;
-    LanguageFeatures _languageFeatures;
+    LanguageOptions _language;
     unsigned _tokenIndex;
     bool _templateArguments: 1;
     bool _inFunctionBody: 1;

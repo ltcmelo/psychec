@@ -1,0 +1,9 @@
+/* Forward declarations */
+typedef  struct TYPE_5__   TYPE_1__ ;
+
+/* Type definitions */
+struct T {int i; } ;
+struct TYPE_5__ {int i; } ;
+typedef  struct T T ;
+
+/* Variables */

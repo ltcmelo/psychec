@@ -591,7 +591,7 @@ void Lexer::scan_helper(Token *tok)
         break;
 
     default: {
-        if (_languageFeatures.objCEnabled) {
+        if (_languageOptions.objC) {
             if (ch == '@' && _yychar >= 'a' && _yychar <= 'z') {
                 const char *yytext = _currentChar;
 
@@ -869,7 +869,7 @@ bool Lexer::scanOptionalIntegerSuffix(bool allowU)
 
 void Lexer::scanOptionalUserDefinedLiteral(Token *tok)
 {
-    if (_languageFeatures.cxx11Enabled && _yychar == '_') {
+    if (_languageOptions.cpp11 && _yychar == '_') {
         tok->f.userDefinedLiteral = true;
         while (std::isalnum(_yychar) || _yychar == '_' || isByteOfMultiByteCodePoint(_yychar))
             yyinp();
@@ -979,7 +979,7 @@ void Lexer::scanIdentifier(Token *tok, unsigned extraProcessedChars)
     }
     int yylen = _currentChar - yytext;
     if (f._scanKeywords)
-        tok->f.kind = classify(yytext, yylen, _languageFeatures);
+        tok->f.kind = classify(yytext, yylen, _languageOptions);
     else
         tok->f.kind = T_IDENTIFIER;
 

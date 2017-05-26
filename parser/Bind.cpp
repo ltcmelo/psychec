@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -348,7 +349,7 @@ FullySpecifiedType Bind::declarator(DeclaratorAST *ast, const FullySpecifiedType
 
     std::swap(_declaratorId, declaratorId);
     bool isAuto = false;
-    const bool cxx11Enabled = translationUnit()->languageFeatures().cxx11Enabled;
+    const bool cxx11Enabled = translationUnit()->languageFeatures().cpp11;
     if (cxx11Enabled)
         isAuto = type.isAuto();
 
@@ -1324,7 +1325,7 @@ bool Bind::visit(ForeachStatementAST *ast)
     DeclaratorIdAST *declaratorId = 0;
     type = this->declarator(ast->declarator, type, &declaratorId);
     const StringLiteral *initializer = 0;
-    if (type.isAuto() && translationUnit()->languageFeatures().cxx11Enabled) {
+    if (type.isAuto() && translationUnit()->languageFeatures().cpp11) {
         ExpressionTy exprType = this->expression(ast->expression);
 
         ArrayType* arrayType = 0;
@@ -1372,7 +1373,7 @@ bool Bind::visit(RangeBasedForStatementAST *ast)
     DeclaratorIdAST *declaratorId = 0;
     type = this->declarator(ast->declarator, type, &declaratorId);
     const StringLiteral *initializer = 0;
-    if (type.isAuto() && translationUnit()->languageFeatures().cxx11Enabled) {
+    if (type.isAuto() && translationUnit()->languageFeatures().cpp11) {
         ExpressionTy exprType = this->expression(ast->expression);
 
         ArrayType* arrayType = 0;
@@ -1693,7 +1694,7 @@ bool Bind::visit(ConditionAST *ast)
         Declaration *decl = control()->newDeclaration(sourceLocation, declaratorId->name->name);
         decl->setType(type);
 
-        if (type.isAuto() && translationUnit()->languageFeatures().cxx11Enabled)
+        if (type.isAuto() && translationUnit()->languageFeatures().cpp11)
             decl->setInitializer(asStringLiteral(ast->declarator->initializer));
 
         _scope->addMember(decl);
@@ -2814,6 +2815,26 @@ bool Bind::visit(SimpleNameAST *ast)
     return false;
 }
 
+bool Bind::visit(ElaboratedNameAST *ast)
+{
+    if (translationUnit()->languageFeatures().isC()) {
+        unsigned classKey = tokenKind(ast->tag_token);
+        if (classKey == T_CLASS)
+            _name = control()->elaboratedNameId(ElaboratedNameId::Class, name(ast->core_name));
+        else if (classKey == T_STRUCT)
+            _name = control()->elaboratedNameId(ElaboratedNameId::Struct, name(ast->core_name));
+        else if (classKey == T_UNION)
+            _name = control()->elaboratedNameId(ElaboratedNameId::Union, name(ast->core_name));
+        else if (classKey == T_ENUM)
+            _name = control()->elaboratedNameId(ElaboratedNameId::Enum, name(ast->core_name));
+    } else {
+        _name = name(ast->core_name);
+    }
+
+    ast->name = _name;
+    return false;
+}
+
 bool Bind::visit(DestructorNameAST *ast)
 {
     _name = control()->destructorNameId(name(ast->unqualified_name));
@@ -2873,7 +2894,7 @@ bool Bind::visit(SimpleSpecifierAST *ast)
             break;
 
         case T_AUTO:
-            if (!translationUnit()->languageFeatures().cxx11Enabled) {
+            if (!translationUnit()->languageFeatures().cpp11) {
                 if (_type.isAuto())
                     translationUnit()->error(ast->specifier_token, "duplicate `%s'", spell(ast->specifier_token));
             }
@@ -3153,17 +3174,6 @@ bool Bind::visit(ElaboratedTypeSpecifierAST *ast)
         _type = this->specifier(it->value, _type);
     }
     NamedType* ty = control()->namedType(this->name(ast->name));
-
-    unsigned classKey = tokenKind(ast->classkey_token);
-    if (classKey == T_CLASS)
-        ty->setElaborate(NamedType::Class);
-    else if (classKey == T_STRUCT)
-        ty->setElaborate(NamedType::Struct);
-    else if (classKey == T_UNION)
-        ty->setElaborate(NamedType::Union);
-    else if (classKey == T_ENUM)
-        ty->setElaborate(NamedType::Enum);
-
     _type.setType(ty);
     return false;
 }

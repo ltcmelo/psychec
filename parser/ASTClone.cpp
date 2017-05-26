@@ -825,6 +825,15 @@ QualifiedNameAST *QualifiedNameAST::clone(MemoryPool *pool) const
     return ast;
 }
 
+ElaboratedNameAST *ElaboratedNameAST::clone(MemoryPool *pool) const
+{
+    ElaboratedNameAST *ast = new (pool) ElaboratedNameAST;
+    ast->tag_token = tag_token;
+    if (core_name)
+        ast->core_name = core_name->clone(pool);
+    return ast;
+}
+
 OperatorFunctionIdAST *OperatorFunctionIdAST::clone(MemoryPool *pool) const
 {
     OperatorFunctionIdAST *ast = new (pool) OperatorFunctionIdAST;

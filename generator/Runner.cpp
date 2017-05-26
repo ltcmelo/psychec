@@ -58,16 +58,9 @@ std::unique_ptr<TranslationUnit> analyseProgram(const std::string& source,
     std::unique_ptr<TranslationUnit> program(new TranslationUnit(&control, &name));
     program->setSource(source.c_str(), source.length());
 
-    // Set program features.
-    LanguageFeatures features;
-    features.qtEnabled = 0;
-    features.qtMocRunEnabled = 0;
-    features.qtKeywordsEnabled = 0;
-    features.cxx11Enabled = 1; // Enable this just to understand NULL as nullptr.
-    features.objCEnabled = 0;
-    features.c99Enabled = 1;
-    features.c11Enabled = 1;
-    features.cMode = 1;
+    // Set language options.
+    LanguageOptions features;
+    features.c99 = 1;
     features.nullptrOnNULL = 1;
     program->setLanguageFeatures(features);
 

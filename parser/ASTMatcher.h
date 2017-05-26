@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -72,6 +73,7 @@ public:
     virtual bool match(DoStatementAST *node, DoStatementAST *pattern);
     virtual bool match(DotDesignatorAST *node, DotDesignatorAST *pattern);
     virtual bool match(DynamicExceptionSpecificationAST *node, DynamicExceptionSpecificationAST *pattern);
+    virtual bool match(ElaboratedNameAST *node, ElaboratedNameAST *pattern);
     virtual bool match(ElaboratedTypeSpecifierAST *node, ElaboratedTypeSpecifierAST *pattern);
     virtual bool match(EmptyDeclarationAST *node, EmptyDeclarationAST *pattern);
     virtual bool match(EnumSpecifierAST *node, EnumSpecifierAST *pattern);

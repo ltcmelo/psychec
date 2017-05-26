@@ -165,6 +165,16 @@ template <> struct Compare<QualifiedNameId>
     }
 };
 
+template <> struct Compare<ElaboratedNameId>
+{
+    bool operator()(const ElaboratedNameId &name, const ElaboratedNameId &otherName) const
+    {
+        if (name.name() == otherName.name())
+            return name.tag() < otherName.tag();
+        return name.name() < otherName.name();
+    }
+};
+
 template <> struct Compare<SelectorNameId>
 {
     bool operator()(const SelectorNameId &name, const SelectorNameId &otherName) const
@@ -243,6 +253,11 @@ public:
     const DestructorNameId *findOrInsertDestructorNameId(const Name *name)
     {
         return destructorNameIds.intern(DestructorNameId(name));
+    }
+
+    const ElaboratedNameId *findOrInsertElaboratedNameId(ElaboratedNameId::Tag tag, const Name *name)
+    {
+        return elaboratedNameIds.intern(ElaboratedNameId(tag, name));
     }
 
     const OperatorNameId *findOrInsertOperatorNameId(OperatorNameId::Kind kind)
@@ -508,6 +523,7 @@ public:
     Table<TemplateNameId> templateNameIds;
     Table<QualifiedNameId> qualifiedNameIds;
     Table<SelectorNameId> selectorNameIds;
+    Table<ElaboratedNameId> elaboratedNameIds;
 
     // types
     VoidType voidType;
@@ -647,6 +663,11 @@ const TemplateNameId *Control::templateNameId(const Identifier *id,
 
 const DestructorNameId *Control::destructorNameId(const Name *name)
 { return d->findOrInsertDestructorNameId(name); }
+
+const ElaboratedNameId *Control::elaboratedNameId(ElaboratedNameId::Tag tag, const Name *name)
+{
+  return d->findOrInsertElaboratedNameId(tag, name);
+}
 
 const OperatorNameId *Control::operatorNameId(OperatorNameId::Kind kind)
 { return d->findOrInsertOperatorNameId(kind); }

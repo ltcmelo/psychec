@@ -61,6 +61,9 @@ public:
     /// Returns the canonical destructor name id.
     const DestructorNameId *destructorNameId(const Name *name);
 
+    /// Returns the canonical elaborated name id.
+    const ElaboratedNameId *elaboratedNameId(ElaboratedNameId::Tag, const Name *name);
+
     /// Returns the canonical operator name id.
     const OperatorNameId *operatorNameId(OperatorNameId::Kind operatorId);
 

@@ -138,15 +138,20 @@ void TypeSpeller<SyntaxT>::visit(ArrayType *ty)
 template <class SyntaxT>
 void TypeSpeller<SyntaxT>::visit(NamedType *ty)
 {
-    const Identifier *id = ty->name()->asNameId()->identifier();
+    const Identifier *id = nullptr;
+    if (ty->name()->asElaboratedNameId()) {
+        id = ty->name()->asElaboratedNameId()->name()->identifier();
+        auto tag = ty->name()->asElaboratedNameId()->tag();
+        if (tag == ElaboratedNameId::Struct)
+            spelling_.append("struct ");
+        else if (tag == ElaboratedNameId::Enum)
+            spelling_.append("enum ");
+        else
+            spelling_.append("union ");
+    } else {
+        id = ty->name()->asNameId()->identifier();
+    }
     std::string name(id->begin(), id->end());
-    auto spec = ty->elaborateSpec();
-    if (spec == NamedType::Enum)
-        spelling_.append("enum ");
-    else if (spec == NamedType::Union)
-        spelling_.append("union ");
-    else if (spec != NamedType::None)
-        spelling_.append("struct ");
     spelling_.append(name);
 }
 

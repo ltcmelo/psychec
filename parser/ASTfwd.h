@@ -76,6 +76,7 @@ class DestructorNameAST;
 class DoStatementAST;
 class DotDesignatorAST;
 class DynamicExceptionSpecificationAST;
+class ElaboratedNameAST;
 class ElaboratedTypeSpecifierAST;
 class EmptyDeclarationAST;
 class EnumSpecifierAST;

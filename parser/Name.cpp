@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -56,6 +57,9 @@ bool Name::isQualifiedNameId() const
 
 bool Name::isSelectorNameId() const
 { return asSelectorNameId() != 0; }
+
+bool Name::isElaboratedNameId() const
+{ return asElaboratedNameId() != 0; }
 
 void Name::accept(NameVisitor *visitor) const
 {

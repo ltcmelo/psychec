@@ -198,6 +198,7 @@ tests = testGroup "Unit tests"
                   , doTest "T152.c" -- Complex struct nesting.
                   , doTest "T153.c" -- Multi-level elaborated structs.
                   , doTest "T154.c" -- Complex struct nesting and need of forward decl.
+                  , doTest "T155.c" -- Elaborated struct T typedefed as T.
                   ]
 
 doTest s

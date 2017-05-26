@@ -146,8 +146,8 @@ public:
 
     bool maybeSplitGreaterGreaterToken(unsigned tokenIndex);
 
-    LanguageFeatures languageFeatures() const { return _languageFeatures; }
-    void setLanguageFeatures(LanguageFeatures features) { _languageFeatures = features; }
+    LanguageOptions languageFeatures() const { return _languageFeatures; }
+    void setLanguageFeatures(LanguageOptions features) { _languageFeatures = features; }
 
 private:
     struct PPLine {
@@ -209,7 +209,7 @@ private:
         unsigned _flags;
         Flags f;
     };
-    LanguageFeatures _languageFeatures;
+    LanguageOptions _languageFeatures;
 };
 
 } // namespace CPlusPlus

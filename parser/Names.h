@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -190,6 +191,36 @@ protected:
 
 private:
     Kind _kind;
+};
+
+class CPLUSPLUS_EXPORT ElaboratedNameId: public Name
+{
+public:
+    enum Tag {
+        Class,
+        Enum,
+        Struct,
+        Union
+    };
+
+    ElaboratedNameId(Tag tag, const Name* name);
+    virtual ~ElaboratedNameId();
+
+    Tag tag() const;
+
+    virtual const Name *name() const;
+
+    virtual const Identifier *identifier() const;
+
+    virtual const ElaboratedNameId *asElaboratedNameId() const
+    { return this; }
+
+protected:
+    virtual void accept0(NameVisitor *visitor) const;
+
+private:
+    Tag _tag;
+    const Name *_name;
 };
 
 class CPLUSPLUS_EXPORT ConversionNameId: public Name

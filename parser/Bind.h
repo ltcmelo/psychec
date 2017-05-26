@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -245,6 +246,7 @@ protected:
     virtual bool visit(ConversionFunctionIdAST *ast);
     virtual bool visit(AnonymousNameAST *ast);
     virtual bool visit(SimpleNameAST *ast);
+    virtual bool visit(ElaboratedNameAST *ast);
     virtual bool visit(DestructorNameAST *ast);
     virtual bool visit(TemplateIdAST *ast);
 

@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -42,6 +43,7 @@ public:
     bool isConversionNameId() const;
     bool isQualifiedNameId() const;
     bool isSelectorNameId() const;
+    bool isElaboratedNameId() const;
 
     virtual const Identifier *asNameId() const { return 0; }
     virtual const AnonymousNameId *asAnonymousNameId() const { return 0; }
@@ -51,6 +53,7 @@ public:
     virtual const ConversionNameId *asConversionNameId() const { return 0; }
     virtual const QualifiedNameId *asQualifiedNameId() const { return 0; }
     virtual const SelectorNameId *asSelectorNameId() const { return 0; }
+    virtual const ElaboratedNameId *asElaboratedNameId() const { return 0; }
 
     void accept(NameVisitor *visitor) const;
     static void accept(const Name *name, NameVisitor *visitor);

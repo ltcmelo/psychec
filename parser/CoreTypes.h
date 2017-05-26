@@ -225,23 +225,11 @@ public:
     virtual NamedType *asNamedType()
     { return this; }
 
-    enum ElaboratedSpec {
-        None,
-        Class,
-        Struct,
-        Union,
-        Enum
-    };
-
-    ElaboratedSpec elaborateSpec() const;
-    void setElaborate(ElaboratedSpec elabSpec);
-
 protected:
     virtual void accept0(TypeVisitor *visitor);
 
 private:
     const Name *_name;
-    ElaboratedSpec _elabSpec;
 };
 
 } // namespace CPlusPlus

@@ -121,7 +121,6 @@ unsigned ArrayType::size() const
 
 NamedType::NamedType(const Name *name)
     : _name(name)
-    , _elabSpec(None)
 { }
 
 NamedType::~NamedType()
@@ -132,10 +131,3 @@ const Name *NamedType::name() const
 
 void NamedType::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }
-
-NamedType::ElaboratedSpec NamedType::elaborateSpec() const
-{ return _elabSpec; }
-
-void NamedType::setElaborate(ElaboratedSpec spec)
-{ _elabSpec = spec; }
-

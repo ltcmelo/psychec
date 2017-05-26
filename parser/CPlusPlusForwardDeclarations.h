@@ -80,6 +80,7 @@ class OperatorNameId;
 class ConversionNameId;
 class QualifiedNameId;
 class SelectorNameId;
+class ElaboratedNameId;
 
 // types
 class FullySpecifiedType;

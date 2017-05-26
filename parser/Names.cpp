@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -126,6 +127,26 @@ OperatorNameId::Kind OperatorNameId::kind() const
 
 const Identifier *OperatorNameId::identifier() const
 { return 0; }
+
+ElaboratedNameId::ElaboratedNameId(Tag tag, const Name *name)
+    : _tag(tag)
+    , _name(name)
+{ }
+
+ElaboratedNameId::~ElaboratedNameId()
+{ }
+
+void ElaboratedNameId::accept0(NameVisitor *visitor) const
+{ visitor->visit(this); }
+
+ElaboratedNameId::Tag ElaboratedNameId::tag() const
+{ return _tag; }
+
+const Name *ElaboratedNameId::name() const
+{ return _name; }
+
+const Identifier *ElaboratedNameId::identifier() const
+{ return _name->identifier(); }
 
 ConversionNameId::ConversionNameId(const FullySpecifiedType &type)
     : _type(type)

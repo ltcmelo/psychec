@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -114,6 +115,7 @@ public:
     virtual bool visit(DoStatementAST *) { return true; }
     virtual bool visit(DotDesignatorAST *) { return true; }
     virtual bool visit(DynamicExceptionSpecificationAST *) { return true; }
+    virtual bool visit(ElaboratedNameAST *) { return true; }
     virtual bool visit(ElaboratedTypeSpecifierAST *) { return true; }
     virtual bool visit(EmptyDeclarationAST *) { return true; }
     virtual bool visit(EnumSpecifierAST *) { return true; }
@@ -266,6 +268,7 @@ public:
     virtual void endVisit(DoStatementAST *) {}
     virtual void endVisit(DotDesignatorAST *) {}
     virtual void endVisit(DynamicExceptionSpecificationAST *) {}
+    virtual void endVisit(ElaboratedNameAST *) {}
     virtual void endVisit(ElaboratedTypeSpecifierAST *) {}
     virtual void endVisit(EmptyDeclarationAST *) {}
     virtual void endVisit(EnumSpecifierAST *) {}
