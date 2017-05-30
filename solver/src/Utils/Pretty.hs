@@ -45,6 +45,7 @@ instance Pretty Ty where
   pprint (FunTy ret params) = pprint ret <+> text "(*)" <+>
     parens (hcat $ punctuate comma (map pprint (params)))
   pprint (RecTy fs n) = pprint n <+> braces (hcat $ (map pprint fs))
+  pprint (SumTy fs n) = pprint n <+> braces (hcat $ (map pprint fs))
   pprint (PtrTy t) = pprint t <> char '*'
   pprint (QualTy t) = pprint t <+> text "const"
   pprint (EnumTy n) =
@@ -72,6 +73,7 @@ nameOf :: Ty -> Name
 nameOf (NamedTy n) = n
 nameOf (VarTy n) = n
 nameOf (RecTy _ n) = n
+nameOf (SumTy _ n) = n
 nameOf (PtrTy t) = Name ((unName (nameOf t)) ++ "*")
 nameOf x@(FunTy t ts) = Name (show $ pprint x)
 nameOf (QualTy t) = nameOf t
@@ -87,15 +89,19 @@ isVar = (== "#alpha") . take 6 . show . pprint
 isElabRec :: Pretty a => a -> Bool
 isElabRec = (== "struct ") . take 7 . show . pprint
 
+isElabUnion :: Pretty a => a -> Bool
+isElabUnion = (== "union ") . take 6 . show . pprint
+
 isElabEnum :: Pretty a => a -> Bool
 isElabEnum = (== "enum ") . take 5 . show . pprint
 
-isElab k = isElabRec k || isElabEnum k
+isElab k = isElabRec k || isElabEnum k || isElabUnion k
 
 ensurePlain :: Name -> Name
 ensurePlain n
   | isElabRec n = Name (drop 7 (show (pprint n)))
   | isElabEnum n = Name (drop 5 (show (pprint n)))
+  | isElabUnion n = Name (drop 6 (show (pprint n)))
   | otherwise = n
 
 ensurePlainEnum :: Name -> Name
