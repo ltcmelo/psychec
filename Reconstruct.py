@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-
 import sys
 import os
 from subprocess import call
@@ -14,9 +13,8 @@ class PartialProgramAnalyser:
 
     def __init__(self, in_file_name):
         self.in_file_name = in_file_name
-        self.out_file_name = in_file_name + ".ctr"
-        self.gen_file_name = in_file_name + ".gen.h"
-        self.fixed_in_file_name = in_file_name[:-1] + "fixed.c"
+        self.gen_file_name = in_file_name[:-2] + "_gen.h"
+        self.fixed_file_name = in_file_name[:-2] + "_fixed.c"
 
     @staticmethod
     def write_log(msg):
@@ -27,23 +25,24 @@ class PartialProgramAnalyser:
         """ Invoke our constraint generator """
         self.write_log("Generating constraints")
 
-        call(["./Gen", "%s" % self.in_file_name, "clean"])
+        # If there's an old constraints file, delete it.
+        if os.path.isfile("a.cstr"):
+            os.remove("a.cstr")
+
+        call(["./psychecgen", "%s" % self.in_file_name])
 
     def solve_constraints(self):
         """ Invoke our constraint solver """
         self.write_log("Solving constraints")
 
         os.chdir("solver")
-        # If there's an old generated file, delete it.
-        if os.path.isfile("../%s" % self.gen_file_name):
-            os.remove("../%s" % self.gen_file_name)
         call(["stack", "exec", "psychecsolver-exe", "--",
-              "-i", "../%s" % self.out_file_name,
+              "-i", "../a.cstr",
               "-o", "../%s" % self.gen_file_name])
         os.chdir("..")
 
     def fix_program(self):
-        """ Create a new source (based on the original) that includes the solved stuff"""
+        """ Create a new source that includes the solved stuff"""
         self.write_log("Creating new complete source")
 
         content = "/* Reconstructed from %s */\n" % self.in_file_name
@@ -53,7 +52,7 @@ class PartialProgramAnalyser:
         with open(self.in_file_name, "r") as f:
             content += f.read()
 
-        with open(self.fixed_in_file_name, "w") as f:
+        with open(self.fixed_file_name, "w") as f:
             f.write(content)
 
     def analyse(self):

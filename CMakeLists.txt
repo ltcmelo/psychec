@@ -1,15 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(parser)
+project(psychec)
 
-set(PARSER_CXX_FLAGS)
-set(PARSER_CXX_FLAGS "${PARSER_CXX_FLAGS} -std=c++1y -g")
-set(PARSER_CXX_FLAGS "${PARSER_CXX_FLAGS} -Wall -Wsign-compare")
-set(PARSER_CXX_FLAGS "${PARSER_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
+set(PSYCHEC_CXX_FLAGS)
+set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -std=c++1y -g")
+set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall -Wsign-compare")
+set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
-set(PARSER_SOURCES
-    # Main
-    ${PROJECT_SOURCE_DIR}/generator/Main.cpp
+set(PSYCHEC_SOURCES
     # Parser's files
     ${PROJECT_SOURCE_DIR}/parser/AST.cpp
     ${PROJECT_SOURCE_DIR}/parser/AST.h
@@ -119,14 +117,18 @@ set(PARSER_SOURCES
     ${PROJECT_SOURCE_DIR}/utils/CSyntax.h
     ${PROJECT_SOURCE_DIR}/utils/FunctionWriter.h
     ${PROJECT_SOURCE_DIR}/utils/FunctionWriter.cpp
+    ${PROJECT_SOURCE_DIR}/utils/IO.h
+    ${PROJECT_SOURCE_DIR}/utils/IO.cpp
     ${PROJECT_SOURCE_DIR}/utils/TypeSpeller.h
     ${PROJECT_SOURCE_DIR}/utils/TypeSpeller.cpp
 )
 
-foreach(file ${PARSER_SOURCES})
+set(GENERATOR_SOURCES ${PSYCHEC_SOURCES} ${PROJECT_SOURCE_DIR}/Main.cpp)
+
+foreach(file ${PSYCHEC_SOURCES} ${GENERATOR_SOURCES})
     set_source_files_properties(
         ${file} PROPERTIES
-        COMPILE_FLAGS "${PARSER_CXX_FLAGS}"
+        COMPILE_FLAGS "${PSYCHEC_CXX_FLAGS}"
     )
 endforeach()
 
@@ -137,7 +139,8 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/parser
     ${PROJECT_SOURCE_DIR}/stubber
     ${PROJECT_SOURCE_DIR}/utils
+    ${PROJECT_SOURCE_DIR}/command/cxxopts/include
 )
 
-set(GENERATOR Gen)
-add_executable(${GENERATOR} ${PARSER_SOURCES})
+set(GENERATOR psychecgen)
+add_executable(${GENERATOR} ${GENERATOR_SOURCES})

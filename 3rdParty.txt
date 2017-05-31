@@ -1,3 +1,5 @@
-The parser we use, located inside directory `parser', comes from the Qt Creator
-IDE. Even though we're targeting only C, we kept it in its original form. But
-we have extended it for ambiguity handling and implemented a few other changes.
+- The parser we use, located in directory `parser', is the C++ parser from the Qt Creator
+  IDE. We have extended/modified it for ambiguity handling and for C-specific features.
+
+- The command-line processing component, located in directory `command', is written by
+  Jarryd Beck and it's originally from https://github.com/jarro2783/cxxopts.

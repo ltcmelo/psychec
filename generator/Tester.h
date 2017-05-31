@@ -140,7 +140,7 @@ private:
     };
 
     std::string currentTest_;
-    AnalysisOptions options_;
+    ProgramCommand options_;
 };
 
 struct TestFailed {};

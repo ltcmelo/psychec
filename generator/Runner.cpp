@@ -27,6 +27,7 @@
 #include "Debug.h"
 #include "DiagnosticCollector.h"
 #include "Dumper.h"
+#include "IO.h"
 #include "Literals.h"
 #include "RangeAnalysis.h"
 #include "Symbols.h"
@@ -40,20 +41,19 @@ using namespace CPlusPlus;
 namespace psyche {
 
 extern bool debugEnabled;
-bool displayStats;
 
 /*!
- * \brief analyseProgram
+ * \brief process
  * \param source
  * \param control
  * \param name
  *
  * Core function that triggers all the work.
  */
-std::unique_ptr<TranslationUnit> analyseProgram(const std::string& source,
-                                                Control &control,
-                                                StringLiteral &name,
-                                                AnalysisOptions &options)
+std::unique_ptr<TranslationUnit> process(const std::string& source,
+                                         Control &control,
+                                         StringLiteral &name,
+                                         ProgramCommand &cmd)
 {
     std::unique_ptr<TranslationUnit> program(new TranslationUnit(&control, &name));
     program->setSource(source.c_str(), source.length());
@@ -86,7 +86,8 @@ std::unique_ptr<TranslationUnit> analyseProgram(const std::string& source,
     }
 
     TranslationUnitAST* ast = program->ast()->asTranslationUnit();
-    Dumper(program.get()).dump(ast, ".ast.dot");
+    if (cmd.flag_.dumpAst)
+        Dumper(program.get()).dump(ast, ".ast.dot");
 
     // Binding phase, this is when we create symbols.
     Namespace* globalNs = control.newNamespace(0, nullptr);
@@ -96,31 +97,32 @@ std::unique_ptr<TranslationUnit> analyseProgram(const std::string& source,
     // Disambiguate eventual ambiguities.
     AstFixer astFixer(program.get());
     astFixer.fix(ast);
-    if (displayStats) {
-        std::cout << "Ambiguities stats" << std::endl
-                  << astFixer.stats() << std::endl;
-    }
-    Dumper(program.get()).dump(ast, ".ast.fixed.dot");
+    if (cmd.flag_.dumpAst)
+        Dumper(program.get()).dump(ast, ".ast.fixed.dot");
 
     if (isProgramAmbiguous(program.get(), ast)) {
         std::cout << "Code has unresolved ambiguities" << std::endl;
         return nullptr;
     }
 
+    if (cmd.flag_.disambOnly)
+        return program;
+
+    if (cmd.flag_.displayStats)
+        std::cout << "Ambiguities stats" << std::endl << astFixer.stats() << std::endl;
+
     std::ostringstream oss;
     ConstraintStreamWriter writer(oss);
     ConstraintGenerator generator(program.get(), &writer);
-    if (options.flag_.handleGNUerrorFunc_)
+    if (cmd.flag_.handleGNUerrorFunc_)
         generator.addPrintfVariety("error", 2);
     generator.generate(ast->asTranslationUnit(), globalNs);
-    if (displayStats)
-        std::cout << "Constraints stats: " << writer.totalConstraints() << std::endl;
-    if (debugEnabled)
-        printDebug("Constraints:\n%s\n", oss.str().c_str());
+    writeFile(oss.str(), cmd.output_);
 
-    // If the caller expects the constraints back, copy them.
-    if (options.flag_.writeConstraints_)
-        options.constraints_.assign(oss.str());
+    if (cmd.flag_.displayStats)
+        std::cout << "Stats: " << writer.totalConstraints() << std::endl;
+    if (cmd.flag_.displayCstr)
+        std::cout << "Constraints:\n" << oss.str() << std::endl;
 
     return program;
 }

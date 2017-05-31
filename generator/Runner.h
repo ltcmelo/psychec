@@ -24,20 +24,28 @@
 #include <string>
 #include <memory>
 
+namespace cxxopts {
+class Options;
+}
+
 namespace psyche {
 
-struct AnalysisOptions
+struct ProgramCommand
 {
-    AnalysisOptions() : flags_(~0) {}
+    ProgramCommand() : flags_(0) {}
 
     struct Flags
     {
+        uint32_t displayCstr : 1;  //!< Display generated constraints.
+        uint32_t displayStats : 1;  //!< Ambiguity- and constraints-related stats.
+        uint32_t dumpAst : 1;  //!< Both original and fixed one.
+        uint32_t testOnly : 1;  //!< Test-only run.
+        uint32_t disambOnly : 1;  //!< Disambiguatio-only run.
+
         //! Whether to write the generate constraints back.
         uint32_t writeConstraints_   : 1;
         //! Whether to handle GNU's error function as a printf variety.
         uint32_t handleGNUerrorFunc_ : 1;
-        //! For future use.
-        uint32_t unused              : 30;
     };
     union
     {
@@ -45,14 +53,14 @@ struct AnalysisOptions
         uint32_t flags_;
     };
 
-    std::string constraints_;
+    std::string output_;
 };
 
 std::unique_ptr<CPlusPlus::TranslationUnit>
-analyseProgram(const std::string& source,
-               CPlusPlus::Control &control,
-               CPlusPlus::StringLiteral &name,
-               AnalysisOptions &options);
+process(const std::string& source,
+        CPlusPlus::Control &control,
+        CPlusPlus::StringLiteral &name,
+        ProgramCommand &cmd);
 
 } // namespace psyche
 

@@ -58,8 +58,7 @@ StringLiteral name("testfile", strlen("testfile"));
 void Tester::checkAst(const std::string &source, std::string expected)
 {
     Control control;
-    std::unique_ptr<TranslationUnit> program =
-            analyseProgram(source, control, name, options_);
+    std::unique_ptr<TranslationUnit> program = process(source, control, name, options_);
     PSYCHE_EXPECT_TRUE(program);
 
     std::ostringstream oss;
@@ -70,19 +69,17 @@ void Tester::checkAst(const std::string &source, std::string expected)
 
 void Tester::compareText(std::string expected, std::string actual) const
 {
-    // Remove all spaces to avoid silly errors in comparisson. Use a lambda
-    // instead of the function directly because isspace is overloaded as a
-    // template.
-    auto checkSpace = [](const char c) { return std::isspace(c); };
-    expected.erase(std::remove_if(expected.begin(), expected.end(), checkSpace), expected.end());
-    actual.erase(std::remove_if(actual.begin(), actual.end(), checkSpace), actual.end());
+    // Remove all spaces to avoid silly errors in comparisson.
+    auto check = [](const char c) { return std::isspace(c); };
+    expected.erase(std::remove_if(expected.begin(), expected.end(), check), expected.end());
+    actual.erase(std::remove_if(actual.begin(), actual.end(), check), actual.end());
 
     PSYCHE_EXPECT_STR_EQ(expected, actual);
 }
 
 void Tester::reset()
 {
-    options_ = AnalysisOptions();
+    options_ = ProgramCommand();
 }
 
 void Tester::testAll()

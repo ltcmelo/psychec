@@ -204,7 +204,7 @@ tests = testGroup "Unit tests"
 doTest s
     = testCase ("Testing " ++ s) $
       do
-        callProcess "../Gen" [cases ++ s, "clean"]
+        callProcess "../psychecgen" [cases ++ s, "clean"]
         ctr <- readFile (cases ++ s ++ ".ctr")
         case parser ctr of
           Left err -> error $ "Error parsing constraints:\n" ++ err
