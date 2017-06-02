@@ -78,8 +78,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/CanonicalASTMatcher.h
     ${PROJECT_SOURCE_DIR}/generator/ConstraintGenerator.h
     ${PROJECT_SOURCE_DIR}/generator/ConstraintGenerator.cpp
-    ${PROJECT_SOURCE_DIR}/generator/ConstraintStreamWriter.h
-    ${PROJECT_SOURCE_DIR}/generator/ConstraintStreamWriter.cpp
+    ${PROJECT_SOURCE_DIR}/generator/ConstraintWriter.h
+    ${PROJECT_SOURCE_DIR}/generator/ConstraintWriter.cpp
     ${PROJECT_SOURCE_DIR}/generator/ConstraintSyntax.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.cpp

@@ -17,7 +17,7 @@
  * USA
  *****************************************************************************/
 
-#include "ConstraintStreamWriter.h"
+#include "ConstraintWriter.h"
 #include "Assert.h"
 
 using namespace psyche;
@@ -45,25 +45,28 @@ const char* const kReadOnly = "$read_only$";
     } while (false)
 
 
-ConstraintStreamWriter::ConstraintStreamWriter(std::ostream &os)
+ConstraintWriter::ConstraintWriter(std::ostream &os)
     : os_(os)
 {}
 
-bool ConstraintStreamWriter::blockWriting(bool block)
+ConstraintWriter::~ConstraintWriter()
+{}
+
+bool ConstraintWriter::block(bool b)
 {
     bool prev = blocked_;
-    blocked_ = block;
+    blocked_ = b;
     return prev;
 }
 
-void ConstraintStreamWriter::writeText(const std::string &text)
+void ConstraintWriter::writeText(const std::string &text)
 {
     HONOR_BLOCKING_STATE;
 
     os_ << text;
 }
 
-void ConstraintStreamWriter::writeTypedef(const std::string &ty1, const std::string &ty2)
+void ConstraintWriter::writeTypedef(const std::string &ty1, const std::string &ty2)
 {
     HONOR_BLOCKING_STATE;
 
@@ -71,7 +74,7 @@ void ConstraintStreamWriter::writeTypedef(const std::string &ty1, const std::str
     ++cnt_;
 }
 
-void ConstraintStreamWriter::writeVarDecl(const std::string &name,
+void ConstraintWriter::writeVarDecl(const std::string &name,
                                           const std::string &type)
 {
     HONOR_BLOCKING_STATE;
@@ -81,10 +84,9 @@ void ConstraintStreamWriter::writeVarDecl(const std::string &name,
     ++cnt_;
 }
 
-void ConstraintStreamWriter::
-writeFuncDecl(const std::string &name,
-              const std::vector<ParamPair> &params,
-              const std::string& ret)
+void ConstraintWriter::writeFuncDecl(const std::string &name,
+                                     const std::vector<ParamPair> &params,
+                                     const std::string& ret)
 {
     HONOR_BLOCKING_STATE;
 
@@ -99,7 +101,7 @@ writeFuncDecl(const std::string &name,
     ++cnt_;
 }
 
-void ConstraintStreamWriter::writeFuncParams(const std::vector<ParamPair> params)
+void ConstraintWriter::writeFuncParams(const std::vector<ParamPair>& params)
 {
     HONOR_BLOCKING_STATE;
 
@@ -107,7 +109,7 @@ void ConstraintStreamWriter::writeFuncParams(const std::vector<ParamPair> params
         writeVarDecl(param.second, param.first);
 }
 
-void ConstraintStreamWriter::writeTypeof(const std::string &sym)
+void ConstraintWriter::writeTypeof(const std::string &sym)
 {
     HONOR_BLOCKING_STATE;
 
@@ -115,7 +117,7 @@ void ConstraintStreamWriter::writeTypeof(const std::string &sym)
     ++cnt_;
 }
 
-void ConstraintStreamWriter::writeNewTypeVar(const std::string &ty)
+void ConstraintWriter::writeExists(const std::string &ty)
 {
     HONOR_BLOCKING_STATE;
 
@@ -124,22 +126,22 @@ void ConstraintStreamWriter::writeNewTypeVar(const std::string &ty)
     ++cnt_;
 }
 
-void ConstraintStreamWriter::writeTypeEquiv()
+void ConstraintWriter::writeEquivMark()
 {
     HONOR_BLOCKING_STATE;
 
     os_ << kEquiv;
 }
 
-void ConstraintStreamWriter::writeSubtypeMark()
+void ConstraintWriter::writeSubtypeMark()
 {
     HONOR_BLOCKING_STATE;
 
     os_ << kSubtype;
 }
 
-void ConstraintStreamWriter::writeSubtypeRelation(const std::string& ty,
-                                                  const std::string& subTy)
+void ConstraintWriter::writeSubtypeRel(const std::string& ty,
+                                       const std::string& subTy)
 {
     HONOR_BLOCKING_STATE;
 
@@ -149,14 +151,14 @@ void ConstraintStreamWriter::writeSubtypeRelation(const std::string& ty,
     ++cnt_;
 }
 
-void ConstraintStreamWriter::writeTypeName(const std::string& ty)
+void ConstraintWriter::writeTypeName(const std::string& ty)
 {
     HONOR_BLOCKING_STATE;
 
     os_ << ty;
 }
 
-void ConstraintStreamWriter::writeReadOnly(const std::string &ty)
+void ConstraintWriter::writeReadOnly(const std::string &ty)
 {
     HONOR_BLOCKING_STATE;
 
@@ -164,7 +166,7 @@ void ConstraintStreamWriter::writeReadOnly(const std::string &ty)
     ++cnt_;
 }
 
-void ConstraintStreamWriter::writeTypeNames(const std::vector<std::string> &tys)
+void ConstraintWriter::writeTypeNames(const std::vector<std::string> &tys)
 {
     HONOR_BLOCKING_STATE;
 
@@ -177,9 +179,9 @@ void ConstraintStreamWriter::writeTypeNames(const std::vector<std::string> &tys)
     ++cnt_;
 }
 
-void ConstraintStreamWriter::writeMemberRelation(const std::string &baseTy,
-                                                 const std::string &sym,
-                                                 const std::string &symTy)
+void ConstraintWriter::writeMemberRel(const std::string &baseTy,
+                                      const std::string &sym,
+                                      const std::string &symTy)
 {
     HONOR_BLOCKING_STATE;
 
@@ -193,58 +195,58 @@ void ConstraintStreamWriter::writeMemberRelation(const std::string &baseTy,
     ++cnt_;
 }
 
-void ConstraintStreamWriter::writePointerRelation(const std::string &ty1,
-                                                  const std::string &ty2)
+void ConstraintWriter::writePtrRel(const std::string &ty1,
+                                   const std::string &ty2)
 {
     HONOR_BLOCKING_STATE;
 
     writeTypeName(ty1);
-    writeTypeEquiv();
+    writeEquivMark();
     writeTypeName(ty2);
     os_ << "*";
     ++cnt_;
 }
 
-void ConstraintStreamWriter::writeEquivRelation(const std::string &ty1,
-                                                const std::string &ty2)
+void ConstraintWriter::writeEquivRel(const std::string &ty1,
+                                     const std::string &ty2)
 {
     HONOR_BLOCKING_STATE;
 
     writeTypeName(ty1);
-    writeTypeEquiv();
+    writeEquivMark();
     writeTypeName(ty2);
     ++cnt_;
 }
 
-void ConstraintStreamWriter::writeTruth()
+void ConstraintWriter::writeTruth()
 {
-    writeEquivRelation("true", "true");
+    writeEquivRel("true", "true");
 }
 
-void ConstraintStreamWriter::enterGroup()
+void ConstraintWriter::enterGroup()
 {
     HONOR_BLOCKING_STATE;
 
     os_ << "(";
 }
 
-void ConstraintStreamWriter::leaveGroup()
+void ConstraintWriter::leaveGroup()
 {
     HONOR_BLOCKING_STATE;
 
     os_ << ")";
 }
 
-void ConstraintStreamWriter::writeAnd(bool breakIt)
+void ConstraintWriter::writeAnd(bool breakIt)
 {
     HONOR_BLOCKING_STATE;
 
     os_ << ", ";
     if (breakIt)
-        breakLine();
+        writeLineBreak();
 }
 
-void ConstraintStreamWriter::breakLine()
+void ConstraintWriter::writeLineBreak()
 {
     HONOR_BLOCKING_STATE;
 
@@ -252,7 +254,7 @@ void ConstraintStreamWriter::breakLine()
     indent();
 }
 
-void ConstraintStreamWriter::indent()
+void ConstraintWriter::indent()
 {
     HONOR_BLOCKING_STATE;
 
@@ -263,18 +265,18 @@ void ConstraintStreamWriter::indent()
     }
 }
 
-void ConstraintStreamWriter::dedent()
+void ConstraintWriter::dedent()
 {
     --indent_;
     PSYCHE_ASSERT(indent_ >= 0, return, "indent must be >= 0");
 }
 
-void ConstraintStreamWriter::clearIndent()
+void ConstraintWriter::clearIndent()
 {
     indent_ = 0;
 }
 
-void ConstraintStreamWriter::writeColon()
+void ConstraintWriter::writeColon()
 {
     os_ << kDeclDelim;
 }

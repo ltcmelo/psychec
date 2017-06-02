@@ -23,7 +23,7 @@
 #include "Bind.h"
 #include "Control.h"
 #include "ConstraintGenerator.h"
-#include "ConstraintStreamWriter.h"
+#include "ConstraintWriter.h"
 #include "Debug.h"
 #include "DiagnosticCollector.h"
 #include "Dumper.h"
@@ -112,10 +112,10 @@ std::unique_ptr<TranslationUnit> process(const std::string& source,
         std::cout << "Ambiguities stats" << std::endl << astFixer.stats() << std::endl;
 
     std::ostringstream oss;
-    ConstraintStreamWriter writer(oss);
+    ConstraintWriter writer(oss);
     ConstraintGenerator generator(program.get(), &writer);
     if (cmd.flag_.handleGNUerrorFunc_)
-        generator.addPrintfVariety("error", 2);
+        generator.addVariadic("error", 2);
     generator.generate(ast->asTranslationUnit(), globalNs);
     writeFile(oss.str(), cmd.output_);
 

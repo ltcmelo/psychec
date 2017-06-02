@@ -17,8 +17,8 @@
  * USA
  *****************************************************************************/
 
-#ifndef PSYCHE_CONSTRAINTSTREAMWRITER_H__
-#define PSYCHE_CONSTRAINTSTREAMWRITER_H__
+#ifndef PSYCHE_CONSTRAINTWRITER_H__
+#define PSYCHE_CONSTRAINTWRITER_H__
 
 #include <ostream>
 #include <string>
@@ -28,19 +28,19 @@
 namespace psyche {
 
 /*!
- * \brief The ConstraintStreamWriter class
+ * \brief The ConstraintWriter class
  */
-class ConstraintStreamWriter final
+class ConstraintWriter final
 {
 public:
     /*!
-     * \brief ConstraintStreamWriter
+     * \brief ConstraintWriter
      * \param os
      */
-    ConstraintStreamWriter(std::ostream& os);
-
-    ConstraintStreamWriter(const ConstraintStreamWriter&) = delete;
-    ConstraintStreamWriter& operator=(const ConstraintStreamWriter&) = delete;
+    ConstraintWriter(std::ostream& os);
+    ConstraintWriter(const ConstraintWriter&) = delete;
+    ConstraintWriter& operator=(const ConstraintWriter&) = delete;
+    ~ConstraintWriter();
 
     /*!
      * \brief blockWriting
@@ -49,7 +49,7 @@ public:
      *
      * Block (or unblock) actuall writing on the stream.
      */
-    bool blockWriting(bool block);
+    virtual bool block(bool b);
 
     /*!
      * \brief writeText
@@ -57,21 +57,21 @@ public:
      *
      * A "plain" version of write for whatever content.
      */
-    void writeText(const std::string& text);
+    virtual void writeText(const std::string& text);
 
     /*!
      * \brief writeTypedef
      * \param ty1
      * \param ty2
      */
-    void writeTypedef(const std::string& ty1, const std::string& ty2);
+    virtual void writeTypedef(const std::string& ty1, const std::string& ty2);
 
     /*!
      * \brief writeVarDecl
      * \param value
      * \param type
      */
-    void writeVarDecl(const std::string& name, const std::string& type);
+    virtual void writeVarDecl(const std::string& name, const std::string& type);
 
     using ParamPair = std::pair<std::string, std::string>;
 
@@ -83,55 +83,38 @@ public:
      *
      *
      */
-    void writeFuncDecl(const std::string& name,
-                                const std::vector<ParamPair>& params,
-                                const std::string& ret);
+    virtual void writeFuncDecl(const std::string& name,
+                               const std::vector<ParamPair>& params,
+                               const std::string& ret);
 
     /*!
      * \brief writeFunctionParameters
      * \param params
      */
-    void writeFuncParams(const std::vector<ParamPair> params);
+    virtual void writeFuncParams(const std::vector<ParamPair>& params);
 
     /*!
      * \brief writeTypeofExpr
      * \param sym
      */
-    void writeTypeof(const std::string& sym);
+    virtual void writeTypeof(const std::string& sym);
 
     /*!
      * \brief writeNewTypeVar
      * \param ty
      */
-    void writeNewTypeVar(const std::string& ty);
-
-    /*!
-     * \brief writeTypeEquiv
-     *
-     * Write an equivalence. If both types surrounding the equivalence are
-     * known in advance, the equivalence relation can be written at once
-     * through writeEquivRelation.
-     *
-     * \sa writeEquivRelation
-     */
-    void writeTypeEquiv();
+    virtual void writeExists(const std::string& ty);
 
     /*!
      * \brief writeTypeName
      * \param ty
      *
-     * Write a type name. If there's a sequence of names to be written, they
-     * can all be written through writeTypeNames.
+     * Write a type name. If there's a sequence of names to be written, they can all be
+     * written through writeTypeNames.
      *
      * \sa writeTypeNames
      */
-    void writeTypeName(const std::string& ty);
-
-    /*!
-     * \brief writeIsConst
-     * \param ty
-     */
-    void writeReadOnly(const std::string& ty);
+    virtual void writeTypeName(const std::string& ty);
 
     /*!
      * \brief writeTypeNames
@@ -139,75 +122,100 @@ public:
      *
      * Write a sequence of type names.
      */
-    void writeTypeNames(const std::vector<std::string>& tys);
+    virtual void writeTypeNames(const std::vector<std::string>& tys);
 
     /*!
-     * \brief writerMemberRelation
+     * \brief writeReadOnly
+     * \param ty
+     */
+    virtual void writeReadOnly(const std::string& ty);
+
+    /*!
+     * \brief writerMemberRel
      * \param baseTy
      * \param sym
      * \param symTy
      */
-    void writeMemberRelation(const std::string& baseTy,
-                             const std::string& sym,
-                             const std::string& symTy);
+    virtual void writeMemberRel(const std::string& baseTy,
+                                const std::string& sym,
+                                const std::string& symTy);
 
     /*!
-     * \brief writePointerRelation
+     * \brief writePtrRel
      * \param ty1
      * \param ty2
      */
-    void writePointerRelation(const std::string& ty1, const std::string& ty2);
+    virtual void writePtrRel(const std::string& ty1, const std::string& ty2);
 
     /*!
-     * \brief writeEquivRelation
+     * \brief writeEquivRel
      * \param ty1
      * \param ty2
      *
      * Essentially the same of sequentially writing a type, a type equivalence,
      * and another type.
      */
-    void writeEquivRelation(const std::string& ty1, const std::string& ty2);
+    virtual void writeEquivRel(const std::string& ty1, const std::string& ty2);
+
+    /*!
+     * \brief writeSubtypeRelation
+     * \param ty
+     * \param subTy
+     */
+    virtual void writeSubtypeRel(const std::string &ty, const std::string &subTy);
+
+    /*!
+     * \brief writeTypeMark
+     *
+     * Write an equivalence. If both types are known in advance, the equivalence relation
+     * can be written at once through writeEquivRelation.
+     *
+     * \sa writeEquivRelation
+     */
+    virtual void writeEquivMark();
+
+    /*!
+     * \brief writeSubtypeMark
+     */
+    virtual void writeSubtypeMark();
 
     /*!
      * \brief writeTruth
      *
      * Write a filling true=true constraint.
      */
-    void writeTruth();
+    virtual void writeTruth();
 
     /*!
      * \brief writeAnd
      */
-    void writeAnd(bool breakLine = false);
+    virtual void writeAnd(bool writeLineBreak = false);
 
     /*!
      * \brief write a colon
      */
-    void writeColon();
+    virtual void writeColon();
 
     /*!
      * \brief breakLine
      */
-    void breakLine();
+    virtual void writeLineBreak();
 
     //!@{
     /*!
      * Sub-grouping
      */
-    void enterGroup();
-    void leaveGroup();
+    virtual void enterGroup();
+    virtual void leaveGroup();
     //!@}
 
-    void clearIndent();
+    virtual void clearIndent();
 
     /*!
      * \brief totalConstraints
      * \return
      */
     size_t totalConstraints() const { return cnt_; }
-
-    void writeSubtypeMark();
-    void writeSubtypeRelation(const std::string &ty, const std::string &subTy);
 
 private:
     void indent();

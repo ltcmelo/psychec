@@ -33,7 +33,7 @@
 
 namespace psyche {
 
-class ConstraintStreamWriter;
+class ConstraintWriter;
 class Observer;
 
 /*!
@@ -45,13 +45,13 @@ class ConstraintGenerator final : public CPlusPlus::ASTVisitor
 {
 public:
     ConstraintGenerator(CPlusPlus::TranslationUnit *unit,
-                        ConstraintStreamWriter* writer,
+                        ConstraintWriter* writer,
                         Observer* observer = nullptr);
 
     void generate(CPlusPlus::TranslationUnitAST *ast,
                   CPlusPlus::Scope *global);
 
-    void addPrintfVariety(const std::string& funcName, size_t varArgPos);
+    void addVariadic(const std::string& funcName, size_t varArgPos);
 
 private:
     /*!
@@ -128,7 +128,7 @@ private:
     CPlusPlus::Scope *global_;
 
     //! Writer we use to generate the constraints.
-    ConstraintStreamWriter *writer_;
+    ConstraintWriter *writer_;
 
     //! Type name speller.
     TypeSpeller<ConstraintSyntax> typeSpeller_;
@@ -244,7 +244,7 @@ private:
     /*!
      * Functions with "printf style" we understand.
      */
-    std::unordered_map<std::string, size_t> printfs_;
+    std::unordered_map<std::string, size_t> variadic_;
 
     //! Visitor observer.
     Observer* observer_;
