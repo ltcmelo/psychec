@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
             ("o,output", "Output file",
                 cxxopts::value<std::string>()->default_value("a.cstr"))
             ("m,mode", "Run mode: dev, prod",
-                    cxxopts::value<std::string>()->default_value("prod"))
+                cxxopts::value<std::string>()->default_value("prod"))
             ("c,cstr", "Display constraints")
             ("s,stats", "Display stats")
             ("d,debug", "Enable debugging statements",

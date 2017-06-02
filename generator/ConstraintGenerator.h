@@ -34,6 +34,7 @@
 namespace psyche {
 
 class ConstraintStreamWriter;
+class Observer;
 
 /*!
  * \brief The ConstraintGenerator class
@@ -44,7 +45,8 @@ class ConstraintGenerator final : public CPlusPlus::ASTVisitor
 {
 public:
     ConstraintGenerator(CPlusPlus::TranslationUnit *unit,
-                        ConstraintStreamWriter* writer);
+                        ConstraintStreamWriter* writer,
+                        Observer* observer = nullptr);
 
     void generate(CPlusPlus::TranslationUnitAST *ast,
                   CPlusPlus::Scope *global);
@@ -243,6 +245,9 @@ private:
      * Functions with "printf style" we understand.
      */
     std::unordered_map<std::string, size_t> printfs_;
+
+    //! Visitor observer.
+    Observer* observer_;
 };
 
 } // namespace psyche

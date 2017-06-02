@@ -91,8 +91,7 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/FreshVarSupply.cpp
     ${PROJECT_SOURCE_DIR}/generator/Lookup.h
     ${PROJECT_SOURCE_DIR}/generator/Lookup.cpp
-    ${PROJECT_SOURCE_DIR}/generator/ScalarTypeLattice.h
-    ${PROJECT_SOURCE_DIR}/generator/ScalarTypeLattice.cpp
+    ${PROJECT_SOURCE_DIR}/generator/Observer.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
     ${PROJECT_SOURCE_DIR}/generator/Range.h
@@ -101,6 +100,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/RangeAnalysis.cpp
     ${PROJECT_SOURCE_DIR}/generator/Runner.h
     ${PROJECT_SOURCE_DIR}/generator/Runner.cpp
+    ${PROJECT_SOURCE_DIR}/generator/ScalarTypeLattice.h
+    ${PROJECT_SOURCE_DIR}/generator/ScalarTypeLattice.cpp
     ${PROJECT_SOURCE_DIR}/generator/SymbolPP.h
     ${PROJECT_SOURCE_DIR}/generator/SymbolPP.cpp
     ${PROJECT_SOURCE_DIR}/generator/Tester.h
