@@ -95,10 +95,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/Observer.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
-    ${PROJECT_SOURCE_DIR}/generator/Range.h
-    ${PROJECT_SOURCE_DIR}/generator/Range.cpp
-    ${PROJECT_SOURCE_DIR}/generator/RangeAnalysis.h
-    ${PROJECT_SOURCE_DIR}/generator/RangeAnalysis.cpp
     ${PROJECT_SOURCE_DIR}/generator/Runner.h
     ${PROJECT_SOURCE_DIR}/generator/Runner.cpp
     ${PROJECT_SOURCE_DIR}/generator/ScalarTypeLattice.h
@@ -111,7 +107,11 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/TypeOfExpr.cpp
     ${PROJECT_SOURCE_DIR}/generator/Utils.h
     ${PROJECT_SOURCE_DIR}/generator/Utils.cpp
-    ${PROJECT_SOURCE_DIR}/generator/VersionedMap.h
+    # Analysis files
+    ${PROJECT_SOURCE_DIR}/analysis/Range.h
+    ${PROJECT_SOURCE_DIR}/analysis/Range.cpp
+    ${PROJECT_SOURCE_DIR}/analysis/RangeAnalysis.h
+    ${PROJECT_SOURCE_DIR}/analysis/RangeAnalysis.cpp
     # Stubber's files
     ${PROJECT_SOURCE_DIR}/stubber/BasicStubber.h
     ${PROJECT_SOURCE_DIR}/stubber/BasicStubber.cpp
@@ -123,6 +123,7 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/utils/IO.cpp
     ${PROJECT_SOURCE_DIR}/utils/TypeSpeller.h
     ${PROJECT_SOURCE_DIR}/utils/TypeSpeller.cpp
+    ${PROJECT_SOURCE_DIR}/utils/VersionedMap.h
 )
 
 set(GENERATOR_SOURCES
@@ -140,6 +141,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_SOURCE_DIR}/generator
     ${PROJECT_SOURCE_DIR}/parser
+    ${PROJECT_SOURCE_DIR}/analysis
     ${PROJECT_SOURCE_DIR}/stubber
     ${PROJECT_SOURCE_DIR}/utils
     ${PROJECT_SOURCE_DIR}/command/cxxopts/include
