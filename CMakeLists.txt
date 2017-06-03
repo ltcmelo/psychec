@@ -143,5 +143,8 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/command/cxxopts/include
 )
 
+set(LIBRARY psychec)
+add_library(${LIBRARY} STATIC ${PSYCHEC_SOURCES})
+
 set(GENERATOR psychecgen)
 add_executable(${GENERATOR} ${GENERATOR_SOURCES})
