@@ -19,6 +19,7 @@
 #ifndef PSYCHE_TYPENAMESPELLER_H__
 #define PSYCHE_TYPENAMESPELLER_H__
 
+#include "Config.h"
 #include "CSyntax.h"
 #include "Assert.h"
 #include "CoreTypes.h"
@@ -35,7 +36,7 @@ namespace psyche {
  * Spell the name of a type.
  */
 template <class SyntaxT>
-class TypeSpeller : public CPlusPlus::TypeVisitor
+class PSYCHEC_API TypeSpeller : public CPlusPlus::TypeVisitor
 {
 public:
     TypeSpeller();

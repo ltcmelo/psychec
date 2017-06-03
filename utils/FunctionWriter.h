@@ -19,11 +19,12 @@
 #ifndef PSYCHE_FUNCTIONWRITER_H__
 #define PSYCHE_FUNCTIONWRITER_H__
 
+#include "Config.h"
 #include "TypeSpeller.h"
 
 namespace psyche {
 
-class FunctionWriter final : private TypeSpeller<CSyntax>
+class PSYCHEC_API FunctionWriter final : private TypeSpeller<CSyntax>
 {
 public:
     std::string writeFunction(CPlusPlus::Function*, const std::string name);

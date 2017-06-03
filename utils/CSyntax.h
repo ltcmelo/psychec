@@ -19,6 +19,7 @@
 #ifndef PSYCHE_SYNTAXFORMATTER_H__
 #define PSYCHE_SYNTAXFORMATTER_H__
 
+#include "Config.h"
 #include "CPlusPlusForwardDeclarations.h"
 #include <string>
 
@@ -31,7 +32,7 @@ struct ParamRet {};
 /*!
  * \brief The CSyntax class
  */
-class CSyntax
+class PSYCHEC_API CSyntax
 {
 public:
     typedef RetParam SigOrder;

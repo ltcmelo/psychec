@@ -20,13 +20,14 @@
 #ifndef PSYCHE_IO_H__
 #define PSYCHE_IO_H__
 
+#include "Config.h"
 #include <string>
 
 namespace psyche {
 
-std::string readFile(const std::string& filePath);
+PSYCHEC_API std::string readFile(const std::string& filePath);
 
-void writeFile(const std::string& content, const std::string& filePath);
+PSYCHEC_API void writeFile(const std::string& content, const std::string& filePath);
 
 } // namespace psyche
 
