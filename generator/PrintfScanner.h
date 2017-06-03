@@ -20,12 +20,13 @@
 #ifndef PSYCHE_PRINTFSCANNER_H__
 #define PSYCHE_PRINTFSCANNER_H__
 
+#include "Config.h"
 #include <string>
 #include <vector>
 
 namespace psyche {
 
-class PrintfScanner final
+class PSYCHEC_API PrintfScanner final
 {
 public:
     PrintfScanner(const std::string& format);

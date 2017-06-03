@@ -17,6 +17,7 @@
  * USA
  *****************************************************************************/
 
+#include "Config.h"
 #include <iostream>
 #include <string>
 
@@ -55,7 +56,7 @@ inline void printDebug(const char* message)
  *
  * Helper RAII class to debug visitor's visit methods.
  */
-class VisitorDebugger
+class PSYCHEC_API VisitorDebugger
 {
 public:
     VisitorDebugger(const std::string& visit)

@@ -20,6 +20,7 @@
 #ifndef PSYCHE_TESTER_H__
 #define PSYCHE_TESTER_H__
 
+#include "Config.h"
 #include "CPlusPlusForwardDeclarations.h"
 #include "Runner.h"
 #include <algorithm>
@@ -77,7 +78,7 @@ namespace psyche {
  *
  * A very minimal and simple testing infrastructure.
  */
-class Tester final
+class PSYCHEC_API Tester final
 {
 public:
     /*!
@@ -143,7 +144,7 @@ private:
     ProgramCommand options_;
 };
 
-struct TestFailed {};
+struct PSYCHEC_API TestFailed {};
 
 } // namespace psyche
 

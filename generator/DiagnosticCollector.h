@@ -20,11 +20,12 @@
 #ifndef PSYCHE_DIAGNOSTICCOLLECTOR_H__
 #define PSYCHE_DIAGNOSTICCOLLECTOR_H__
 
+#include "Config.h"
 #include "DiagnosticClient.h"
 
 namespace psyche {
 
-class DiagnosticCollector final : public CPlusPlus::DiagnosticClient
+class PSYCHEC_API DiagnosticCollector final : public CPlusPlus::DiagnosticClient
 {
 public:
     void report(int level,

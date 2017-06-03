@@ -8,6 +8,7 @@ set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall -Wsign-compare")
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
 set(PSYCHEC_SOURCES
+    ${PROJECT_SOURCE_DIR}/Config.h
     # Parser's files
     ${PROJECT_SOURCE_DIR}/parser/AST.cpp
     ${PROJECT_SOURCE_DIR}/parser/AST.h
@@ -124,7 +125,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/utils/TypeSpeller.cpp
 )
 
-set(GENERATOR_SOURCES ${PSYCHEC_SOURCES} ${PROJECT_SOURCE_DIR}/Main.cpp)
+set(GENERATOR_SOURCES
+    ${PROJECT_SOURCE_DIR}/Main.cpp)
 
 foreach(file ${PSYCHEC_SOURCES} ${GENERATOR_SOURCES})
     set_source_files_properties(
@@ -148,3 +150,5 @@ add_library(${LIBRARY} STATIC ${PSYCHEC_SOURCES})
 
 set(GENERATOR psychecgen)
 add_executable(${GENERATOR} ${GENERATOR_SOURCES})
+
+target_link_libraries(${GENERATOR} ${LIBRARY})

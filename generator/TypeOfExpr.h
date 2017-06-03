@@ -20,6 +20,7 @@
 #ifndef PSYCHE_TYPEOFEXPR_H__
 #define PSYCHE_TYPEOFEXPR_H__
 
+#include "Config.h"
 #include "ASTVisitor.h"
 #include "CPlusPlusForwardDeclarations.h"
 #include "FullySpecifiedType.h"
@@ -31,7 +32,7 @@ namespace psyche {
 /*!
  * \brief The TypeOfExpr class
  */
-class TypeOfExpr final : CPlusPlus::ASTVisitor
+class PSYCHEC_API TypeOfExpr final : CPlusPlus::ASTVisitor
 {
 public:
     TypeOfExpr(CPlusPlus::TranslationUnit *unit);

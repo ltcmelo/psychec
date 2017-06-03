@@ -20,6 +20,7 @@
 #ifndef PSYCHE_SYNTAXAMBIGUITY_H__
 #define PSYCHE_SYNTAXAMBIGUITY_H__
 
+#include "Config.h"
 #include "Name.h"
 #include "Names.h"
 
@@ -28,7 +29,7 @@ namespace psyche {
 /*!
  * \brief The AmbiguityInfo class
  */
-class AmbiguityInfo
+class PSYCHEC_API AmbiguityInfo
 {
 public:
     enum class Resolution : char

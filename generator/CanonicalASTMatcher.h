@@ -20,6 +20,7 @@
 #ifndef PSYCHE_CANONICALASTMATCHER_
 #define PSYCHE_CANONICALASTMATCHER_
 
+#include "Config.h"
 #include "AST.h"
 #include "ASTMatcher.h"
 #include "Name.h"
@@ -31,7 +32,7 @@ using namespace CPlusPlus;
 
 namespace psyche {
 
-struct CanonicalASTMatcher final : public CPlusPlus::ASTMatcher
+struct PSYCHEC_API CanonicalASTMatcher final : public CPlusPlus::ASTMatcher
 {
     CanonicalASTMatcher(TranslationUnit* unit)
         : unit_(unit)

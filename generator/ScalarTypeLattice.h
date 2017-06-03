@@ -20,6 +20,7 @@
 #ifndef PSYCHE_SCALARTYPELATTICE_H__
 #define PSYCHE_SCALARTYPELATTICE_H__
 
+#include "Config.h"
 #include "ASTfwd.h"
 #include "ASTVisitor.h"
 #include "CPlusPlusForwardDeclarations.h"
@@ -34,7 +35,7 @@ namespace psyche {
 /*!
  * \brief The ScalarTypeLattice class
  */
-class ScalarTypeLattice final : public CPlusPlus::ASTVisitor
+class PSYCHEC_API ScalarTypeLattice final : public CPlusPlus::ASTVisitor
 {
 public:
     ScalarTypeLattice(CPlusPlus::TranslationUnit* unit);

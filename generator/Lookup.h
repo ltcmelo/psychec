@@ -20,22 +20,23 @@
 #ifndef PSYCHE_LOOKUPANDRESOLVE__
 #define PSYCHE_LOOKUPANDRESOLVE__
 
+#include "Config.h"
 #include "ASTfwd.h"
 #include "CPlusPlusForwardDeclarations.h"
 
 namespace psyche {
 
-CPlusPlus::Symbol* lookupSymbol(const CPlusPlus::Identifier* ident,
-                                const CPlusPlus::Scope* scope);
+PSYCHEC_API CPlusPlus::Symbol* lookupSymbol(const CPlusPlus::Identifier* ident,
+                                            const CPlusPlus::Scope* scope);
 
-CPlusPlus::Symbol* lookupSymbol(const CPlusPlus::Name* name,
-                                const CPlusPlus::Scope* scope);
+PSYCHEC_API CPlusPlus::Symbol* lookupSymbol(const CPlusPlus::Name* name,
+                                            const CPlusPlus::Scope* scope);
 
-CPlusPlus::Symbol* lookupTypeSymbol(const CPlusPlus::Name* name,
-                                    const CPlusPlus::Scope* scope);
+PSYCHEC_API CPlusPlus::Symbol* lookupTypeSymbol(const CPlusPlus::Name* name,
+                                                const CPlusPlus::Scope* scope);
 
-CPlusPlus::Symbol* lookupValueSymbol(const CPlusPlus::Name* name,
-                                     const CPlusPlus::Scope* scope);
+PSYCHEC_API CPlusPlus::Symbol* lookupValueSymbol(const CPlusPlus::Name* name,
+                                                 const CPlusPlus::Scope* scope);
 
 } // namespace psyche
 

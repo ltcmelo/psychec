@@ -20,6 +20,7 @@
 #ifndef PSYCHE_CONSTRAINTGENERATOR_H__
 #define PSYCHE_CONSTRAINTGENERATOR_H__
 
+#include "Config.h"
 #include "ASTVisitor.h"
 #include "FreshVarSupply.h"
 #include "FullySpecifiedType.h"
@@ -41,7 +42,7 @@ class Observer;
  *
  * Responsible for generating the constraints.
  */
-class ConstraintGenerator final : public CPlusPlus::ASTVisitor
+class PSYCHEC_API ConstraintGenerator final : public CPlusPlus::ASTVisitor
 {
 public:
     ConstraintGenerator(CPlusPlus::TranslationUnit *unit,

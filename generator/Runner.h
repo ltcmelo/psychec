@@ -20,6 +20,7 @@
 #ifndef PSYCHE_RUNNER_H__
 #define PSYCHE_RUNNER_H__
 
+#include "Config.h"
 #include "CPlusPlusForwardDeclarations.h"
 #include <string>
 #include <memory>
@@ -30,7 +31,7 @@ class Options;
 
 namespace psyche {
 
-struct ProgramCommand
+struct PSYCHEC_API ProgramCommand
 {
     ProgramCommand() : flags_(0) {}
 

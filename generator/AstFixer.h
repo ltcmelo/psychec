@@ -20,12 +20,13 @@
 #ifndef PSYCHE_ASTFIXER_H__
 #define PSYCHE_ASTFIXER_H__
 
+#include "Config.h"
 #include "ASTVisitor.h"
 #include <iostream>
 
 namespace psyche {
 
-class AstFixer final : public CPlusPlus::ASTVisitor
+class PSYCHEC_API AstFixer final : public CPlusPlus::ASTVisitor
 {
 public:
     AstFixer(CPlusPlus::TranslationUnit *unit);

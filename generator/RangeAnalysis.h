@@ -20,6 +20,7 @@
 #ifndef PSYCHE_RANGEANALYSIS_H__
 #define PSYCHE_RANGEANALYSIS_H__
 
+#include "Config.h"
 #include "ASTVisitor.h"
 #include "Range.h"
 #include "Symbol.h"
@@ -30,7 +31,7 @@
 
 namespace psyche {
 
-class RangeAnalysis final : public CPlusPlus::ASTVisitor
+class PSYCHEC_API RangeAnalysis final : public CPlusPlus::ASTVisitor
 {
 public:
     RangeAnalysis(CPlusPlus::TranslationUnit *unit);

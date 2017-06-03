@@ -20,15 +20,16 @@
 #ifndef PSYCHE_UTILS_H__
 #define PSYCHE_UTILS_H__
 
+#include "Config.h"
 #include "ASTfwd.h"
 #include "CPlusPlusForwardDeclarations.h"
 
 namespace psyche {
 
-CPlusPlus::ExpressionAST* stripParen(CPlusPlus::ExpressionAST*);
+PSYCHEC_API CPlusPlus::ExpressionAST* stripParen(CPlusPlus::ExpressionAST*);
 
-bool isProgramAmbiguous(CPlusPlus::TranslationUnit* program,
-                        const CPlusPlus::TranslationUnitAST* ast);
+PSYCHEC_API bool isProgramAmbiguous(CPlusPlus::TranslationUnit* program,
+                                    const CPlusPlus::TranslationUnitAST* ast);
 
 } // namespace psyche
 

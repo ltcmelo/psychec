@@ -20,6 +20,7 @@
 #ifndef PSYCHE_RANGE_H__
 #define PSYCHE_RANGE_H__
 
+#include "Config.h"
 #include "Symbol.h"
 #include <cstdint>
 #include <iostream>
@@ -34,7 +35,7 @@ class AbstractValue;
 /*!
  * \brief The Range class
  */
-class Range final
+class PSYCHEC_API Range final
 {
 public:
     Range(std::unique_ptr<AbstractValue> lower,
@@ -56,7 +57,7 @@ private:
 /*!
  * \brief The AbstractValue class
  */
-class AbstractValue
+class PSYCHEC_API AbstractValue
 {
 public:
     virtual ~AbstractValue() = default;
@@ -77,7 +78,7 @@ protected:
     AbstractValue() = default;
 };
 
-class IntegerValue final : public AbstractValue
+class PSYCHEC_API IntegerValue final : public AbstractValue
 {
 public:
     IntegerValue(int64_t value)
@@ -91,7 +92,7 @@ private:
     int64_t value_;
 };
 
-class SymbolValue final : public AbstractValue
+class PSYCHEC_API SymbolValue final : public AbstractValue
 {
 public:
     SymbolValue(const CPlusPlus::Symbol* symbol)
@@ -105,7 +106,7 @@ private:
     const CPlusPlus::Symbol* symbol_;
 };
 
-class CompositeValue final : public AbstractValue
+class PSYCHEC_API CompositeValue final : public AbstractValue
 {
 public:
     enum Operation : std::uint8_t
