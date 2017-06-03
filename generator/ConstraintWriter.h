@@ -40,7 +40,7 @@ public:
     ConstraintWriter(std::ostream& os);
     ConstraintWriter(const ConstraintWriter&) = delete;
     ConstraintWriter& operator=(const ConstraintWriter&) = delete;
-    ~ConstraintWriter();
+    virtual ~ConstraintWriter();
 
     /*!
      * \brief blockWriting
