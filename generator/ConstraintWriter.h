@@ -30,7 +30,7 @@ namespace psyche {
 /*!
  * \brief The ConstraintWriter class
  */
-class ConstraintWriter final
+class ConstraintWriter
 {
 public:
     /*!
