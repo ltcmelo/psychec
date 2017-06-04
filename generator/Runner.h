@@ -22,8 +22,10 @@
 
 #include "Config.h"
 #include "CPlusPlusForwardDeclarations.h"
-#include <string>
+#include <cstddef>
 #include <memory>
+#include <string>
+#include <utility>
 
 namespace cxxopts {
 class Options;
@@ -33,6 +35,9 @@ namespace psyche {
 
 class Factory;
 
+/*!
+ * \brief The ProgramCommand struct
+ */
 struct PSYCHEC_API ProgramCommand
 {
     ProgramCommand() : flags_(0) {}
@@ -59,11 +64,29 @@ struct PSYCHEC_API ProgramCommand
     std::string output_;
 };
 
-std::unique_ptr<CPlusPlus::TranslationUnit> process(const std::string& source,
-                                                    CPlusPlus::StringLiteral& unitName,
-                                                    CPlusPlus::Control& control,
-                                                    ProgramCommand& cmd,
-                                                    Factory* factory);
+
+//! Return codes.
+const size_t kOK = 0;
+const size_t kUnknownParsingIssue = 1;
+const size_t kSyntaxErrorsFound = 2;
+const size_t kUnavailableAST = 3;
+const size_t kAmbiguousProgram = 4;
+
+/*!
+ * \brief process
+ * \param source
+ * \param unitName
+ * \param control
+ * \param cmd
+ * \param factory
+ * \return
+ */
+std::pair<std::unique_ptr<CPlusPlus::TranslationUnit>, size_t>
+process(const std::string& source,
+        CPlusPlus::StringLiteral& unitName,
+        CPlusPlus::Control& control,
+        ProgramCommand& cmd,
+        Factory* factory);
 
 } // namespace psyche
 

@@ -60,7 +60,7 @@ void Tester::checkAst(const std::string &source, std::string expected)
 {
     Control control;
     Factory factory;
-    std::unique_ptr<TranslationUnit> program = process(source, name, control, options_, &factory);
+    auto program = process(source, name, control, options_, &factory).first;
     PSYCHE_EXPECT_TRUE(program);
 
     std::ostringstream oss;

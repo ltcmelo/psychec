@@ -51,11 +51,12 @@ extern bool debugEnabled;
  *
  * Core function that triggers all the work.
  */
-std::unique_ptr<TranslationUnit> process(const std::string& source,
-                                         StringLiteral &unitName,
-                                         Control &control,
-                                         ProgramCommand &cmd,
-                                         Factory* factory)
+std::pair<std::unique_ptr<TranslationUnit>, size_t>
+process(const std::string& source,
+        StringLiteral &unitName,
+        Control &control,
+        ProgramCommand &cmd,
+        Factory* factory)
 {
     std::unique_ptr<TranslationUnit> unit(new TranslationUnit(&control, &unitName));
     unit->setSource(source.c_str(), source.length());
@@ -66,25 +67,24 @@ std::unique_ptr<TranslationUnit> process(const std::string& source,
     features.nullptrOnNULL = 1;
     unit->setLanguageFeatures(features);
 
-    DiagnosticCollector collector;
-    control.setDiagnosticClient(&collector); // Collector is alive only within this scope.
-
     // Check whether the parser finished successfully.
     if (!unit->parse()) {
         std::cout << "Parsing failed" << std::endl;
-        return nullptr;
+        return std::make_pair(nullptr, kUnknownParsingIssue);
     }
 
     // We only proceed if the source is free from syntax errors.
+    DiagnosticCollector collector;
+    control.setDiagnosticClient(&collector);
     if (!collector.isEmpty()) {
         std::cout << "Source has syntax errors" << std::endl;
-        return nullptr;
+        return std::make_pair(nullptr, kSyntaxErrorsFound);
     }
 
     // If we have no AST, there's nothing to do.
     if (!unit->ast() || !unit->ast()->asTranslationUnit()) {
         std::cout << "No AST" << std::endl;
-        return nullptr;
+        return std::make_pair(nullptr, kUnavailableAST);
     }
 
     TranslationUnitAST* ast = unit->ast()->asTranslationUnit();
@@ -104,11 +104,11 @@ std::unique_ptr<TranslationUnit> process(const std::string& source,
 
     if (isProgramAmbiguous(unit.get(), ast)) {
         std::cout << "Code has unresolved ambiguities" << std::endl;
-        return nullptr;
+        return std::make_pair(nullptr, kAmbiguousProgram);
     }
 
     if (cmd.flag_.disambOnly)
-        return unit;
+        return std::make_pair(std::move(unit), kOK);
 
     if (cmd.flag_.displayStats)
         std::cout << "Ambiguities stats" << std::endl << astFixer.stats() << std::endl;
@@ -127,7 +127,7 @@ std::unique_ptr<TranslationUnit> process(const std::string& source,
     if (cmd.flag_.displayCstr)
         std::cout << "Constraints:\n" << oss.str() << std::endl;
 
-    return unit;
+    return std::make_pair(std::move(unit), kOK);
 }
 
 } // namespace psyche
