@@ -19,6 +19,7 @@
 
 #include "Control.h"
 #include "Debug.h"
+#include "Factory.h"
 #include "IO.h"
 #include "Literals.h"
 #include "Runner.h"
@@ -26,7 +27,6 @@
 #include "TranslationUnit.h"
 #include "cxxopts.hpp"
 #include <iostream>
-#include <memory>
 #include <string.h>
 
 using namespace CPlusPlus;
@@ -108,7 +108,8 @@ int main(int argc, char* argv[])
     StringLiteral name(file.c_str(), file.length());
     const std::string& source = readFile(file);
     Control control;
-    process(source, control, name, cmd);
+    Factory factory;
+    process(source, name, control, cmd, &factory);
 
     return 0;
 }

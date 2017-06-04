@@ -31,6 +31,8 @@ class Options;
 
 namespace psyche {
 
+class Factory;
+
 struct PSYCHEC_API ProgramCommand
 {
     ProgramCommand() : flags_(0) {}
@@ -57,11 +59,11 @@ struct PSYCHEC_API ProgramCommand
     std::string output_;
 };
 
-std::unique_ptr<CPlusPlus::TranslationUnit>
-process(const std::string& source,
-        CPlusPlus::Control &control,
-        CPlusPlus::StringLiteral &name,
-        ProgramCommand &cmd);
+std::unique_ptr<CPlusPlus::TranslationUnit> process(const std::string& source,
+                                                    CPlusPlus::StringLiteral& unitName,
+                                                    CPlusPlus::Control& control,
+                                                    ProgramCommand& cmd,
+                                                    Factory* factory);
 
 } // namespace psyche
 

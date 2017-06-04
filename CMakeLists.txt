@@ -88,6 +88,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/DiagnosticCollector.cpp
     ${PROJECT_SOURCE_DIR}/generator/Dumper.h
     ${PROJECT_SOURCE_DIR}/generator/Dumper.cpp
+    ${PROJECT_SOURCE_DIR}/generator/Factory.h
+    ${PROJECT_SOURCE_DIR}/generator/Factory.cpp
     ${PROJECT_SOURCE_DIR}/generator/FreshVarSupply.h
     ${PROJECT_SOURCE_DIR}/generator/FreshVarSupply.cpp
     ${PROJECT_SOURCE_DIR}/generator/Lookup.h

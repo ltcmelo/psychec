@@ -26,6 +26,7 @@
 #include "AST.h"
 #include "Control.h"
 #include "Dumper.h"
+#include "Factory.h"
 #include "Literals.h"
 #include "TranslationUnit.h"
 #include <cctype>
@@ -58,7 +59,8 @@ StringLiteral name("testfile", strlen("testfile"));
 void Tester::checkAst(const std::string &source, std::string expected)
 {
     Control control;
-    std::unique_ptr<TranslationUnit> program = process(source, control, name, options_);
+    Factory factory;
+    std::unique_ptr<TranslationUnit> program = process(source, name, control, options_, &factory);
     PSYCHE_EXPECT_TRUE(program);
 
     std::ostringstream oss;

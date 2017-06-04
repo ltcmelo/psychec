@@ -27,9 +27,10 @@
 #include "Debug.h"
 #include "DiagnosticCollector.h"
 #include "Dumper.h"
+#include "Factory.h"
 #include "IO.h"
 #include "Literals.h"
-#include "RangeAnalysis.h"
+#include "Observer.h"
 #include "Symbols.h"
 #include "TranslationUnit.h"
 #include "Utils.h"
@@ -51,24 +52,25 @@ extern bool debugEnabled;
  * Core function that triggers all the work.
  */
 std::unique_ptr<TranslationUnit> process(const std::string& source,
+                                         StringLiteral &unitName,
                                          Control &control,
-                                         StringLiteral &name,
-                                         ProgramCommand &cmd)
+                                         ProgramCommand &cmd,
+                                         Factory* factory)
 {
-    std::unique_ptr<TranslationUnit> program(new TranslationUnit(&control, &name));
-    program->setSource(source.c_str(), source.length());
+    std::unique_ptr<TranslationUnit> unit(new TranslationUnit(&control, &unitName));
+    unit->setSource(source.c_str(), source.length());
 
     // Set language options.
     LanguageOptions features;
     features.c99 = 1;
     features.nullptrOnNULL = 1;
-    program->setLanguageFeatures(features);
+    unit->setLanguageFeatures(features);
 
     DiagnosticCollector collector;
     control.setDiagnosticClient(&collector); // Collector is alive only within this scope.
 
     // Check whether the parser finished successfully.
-    if (!program->parse()) {
+    if (!unit->parse()) {
         std::cout << "Parsing failed" << std::endl;
         return nullptr;
     }
@@ -80,51 +82,52 @@ std::unique_ptr<TranslationUnit> process(const std::string& source,
     }
 
     // If we have no AST, there's nothing to do.
-    if (!program->ast() || !program->ast()->asTranslationUnit()) {
+    if (!unit->ast() || !unit->ast()->asTranslationUnit()) {
         std::cout << "No AST" << std::endl;
         return nullptr;
     }
 
-    TranslationUnitAST* ast = program->ast()->asTranslationUnit();
+    TranslationUnitAST* ast = unit->ast()->asTranslationUnit();
     if (cmd.flag_.dumpAst)
-        Dumper(program.get()).dump(ast, ".ast.dot");
+        Dumper(unit.get()).dump(ast, ".ast.dot");
 
     // Binding phase, this is when we create symbols.
     Namespace* globalNs = control.newNamespace(0, nullptr);
-    Bind bind(program.get());
+    Bind bind(unit.get());
     bind(ast, globalNs);
 
     // Disambiguate eventual ambiguities.
-    AstFixer astFixer(program.get());
+    AstFixer astFixer(unit.get());
     astFixer.fix(ast);
     if (cmd.flag_.dumpAst)
-        Dumper(program.get()).dump(ast, ".ast.fixed.dot");
+        Dumper(unit.get()).dump(ast, ".ast.fixed.dot");
 
-    if (isProgramAmbiguous(program.get(), ast)) {
+    if (isProgramAmbiguous(unit.get(), ast)) {
         std::cout << "Code has unresolved ambiguities" << std::endl;
         return nullptr;
     }
 
     if (cmd.flag_.disambOnly)
-        return program;
+        return unit;
 
     if (cmd.flag_.displayStats)
         std::cout << "Ambiguities stats" << std::endl << astFixer.stats() << std::endl;
 
     std::ostringstream oss;
-    ConstraintWriter writer(oss);
-    ConstraintGenerator generator(program.get(), &writer);
+    auto writer = factory->makeWriter(oss);
+    auto observer = factory->makeObserver();
+    ConstraintGenerator generator(unit.get(), writer.get(), observer.get());
     if (cmd.flag_.handleGNUerrorFunc_)
         generator.addVariadic("error", 2);
     generator.generate(ast->asTranslationUnit(), globalNs);
     writeFile(oss.str(), cmd.output_);
 
     if (cmd.flag_.displayStats)
-        std::cout << "Stats: " << writer.totalConstraints() << std::endl;
+        std::cout << "Stats: " << writer->totalConstraints() << std::endl;
     if (cmd.flag_.displayCstr)
         std::cout << "Constraints:\n" << oss.str() << std::endl;
 
-    return program;
+    return unit;
 }
 
 } // namespace psyche
