@@ -23,9 +23,13 @@
 
 namespace psyche {
 
+class ConstraintWriter;
+
 class Observer {
 public:
     ~Observer() {}
+
+    void setConstraintWriter(ConstraintWriter* writer) { writer_ = writer; }
 
     // Declarations
     virtual void enter(CPlusPlus::SimpleDeclarationAST*) {}
@@ -100,6 +104,9 @@ public:
     virtual void leave(CPlusPlus::ReturnStatementAST*) {}
     virtual void leave(CPlusPlus::SwitchStatementAST*) {}
     virtual void leave(CPlusPlus::WhileStatementAST*) {}
+
+protected:
+    ConstraintWriter* writer_;
 };
 
 template <class AstT>

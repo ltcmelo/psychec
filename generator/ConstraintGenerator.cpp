@@ -82,8 +82,7 @@ std::string ConstraintGenerator::paramPrefix_ = "param";
 std::string ConstraintGenerator::stubPrefix_ = "stub";
 
 ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
-                                         ConstraintWriter* writer,
-                                         Observer* observer)
+                                         ConstraintWriter* writer)
     : ASTVisitor(unit)
     , seenStmt_(false)
     , scope_(nullptr)
@@ -92,12 +91,8 @@ ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
     , staticDecl_(false)
     , preprocess_(true)
     , unnamedCount_(0)
-    , observer_(observer)
+    , observer_(nullptr)
 {
-    static Observer dummy;
-    if (!observer_)
-        observer_ = &dummy;
-
     addVariadic("printf", 0);
     addVariadic("printf_s", 0);
     addVariadic("wprintf", 0);
@@ -123,6 +118,11 @@ void ConstraintGenerator::prepareForRun()
     unnamedCount_ = 0;
     knownFuncNames_.clear();
     knownFuncRets_.clear();
+
+    static Observer dummy;
+    if (!observer_)
+        observer_ = &dummy;
+
     printDebug("Let's generate constraints!!!\n");
 }
 
@@ -158,6 +158,14 @@ void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
         }
     }
     switchScope(previousScope);
+}
+
+void ConstraintGenerator::installObserver(Observer *observer)
+{
+    PSYCHE_ASSERT(observer, return, "expected valid observer");
+
+    observer_ = observer;
+    observer_->setConstraintWriter(writer_);
 }
 
 void ConstraintGenerator::addVariadic(const std::string &funcName, size_t varArgPos)

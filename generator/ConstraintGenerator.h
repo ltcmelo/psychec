@@ -46,11 +46,12 @@ class PSYCHEC_API ConstraintGenerator final : public CPlusPlus::ASTVisitor
 {
 public:
     ConstraintGenerator(CPlusPlus::TranslationUnit *unit,
-                        ConstraintWriter* writer,
-                        Observer* observer = nullptr);
+                        ConstraintWriter* writer);
 
     void generate(CPlusPlus::TranslationUnitAST *ast,
                   CPlusPlus::Scope *global);
+
+    void installObserver(Observer* observer);
 
     void addVariadic(const std::string& funcName, size_t varArgPos);
 

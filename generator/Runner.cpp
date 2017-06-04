@@ -115,10 +115,13 @@ process(const std::string& source,
 
     std::ostringstream oss;
     auto writer = factory->makeWriter(oss);
+    ConstraintGenerator generator(unit.get(), writer.get());
     auto observer = factory->makeObserver();
-    ConstraintGenerator generator(unit.get(), writer.get(), observer.get());
+    generator.installObserver(observer.get());
+
     if (cmd.flag_.handleGNUerrorFunc_)
         generator.addVariadic("error", 2);
+
     generator.generate(ast->asTranslationUnit(), globalNs);
     writeFile(oss.str(), cmd.output_);
 
