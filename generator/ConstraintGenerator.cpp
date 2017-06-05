@@ -44,7 +44,7 @@
 
 #define VISITOR_NAME "ConstraintGenerator"
 
-#define OBSERVE(AST_NAME) ObserverInvoker<AST_NAME> invoker(observer_, ast)
+#define OBSERVE(AST_NAME) ObserverInvoker<AST_NAME> invoker(observer_, ast, scope_)
 
 #define ENSURE_NONEMPTY_TYPE_STACK(CODE) \
     PSYCHE_ASSERT(!types_.empty(), CODE, "type stack must be nonempty")

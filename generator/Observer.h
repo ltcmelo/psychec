@@ -20,6 +20,7 @@
 #define PSYCHE_OBSERVER_H__
 
 #include "ASTfwd.h"
+#include "CPlusPlusForwardDeclarations.h"
 
 namespace psyche {
 
@@ -32,41 +33,41 @@ public:
     void setConstraintWriter(ConstraintWriter* writer) { writer_ = writer; }
 
     // Declarations
-    virtual void enter(CPlusPlus::SimpleDeclarationAST*) {}
-    virtual void enter(CPlusPlus::FunctionDefinitionAST*) {}
+    virtual void enter(CPlusPlus::SimpleDeclarationAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::FunctionDefinitionAST*, CPlusPlus::Scope*) {}
 
     // Expressions
-    virtual void enter(CPlusPlus::ArrayAccessAST*) {}
-    virtual void enter(CPlusPlus::BinaryExpressionAST*) {}
-    virtual void enter(CPlusPlus::CallAST*) {}
-    virtual void enter(CPlusPlus::CastExpressionAST*) {}
-    virtual void enter(CPlusPlus::ConditionalExpressionAST*) {}
-    virtual void enter(CPlusPlus::IdExpressionAST*) {}
-    virtual void enter(CPlusPlus::MemberAccessAST*) {}
-    virtual void enter(CPlusPlus::NumericLiteralAST*) {}
-    virtual void enter(CPlusPlus::BoolLiteralAST*) {}
-    virtual void enter(CPlusPlus::StringLiteralAST*) {}
-    virtual void enter(CPlusPlus::UnaryExpressionAST*) {}
-    virtual void enter(CPlusPlus::SizeofExpressionAST*) {}
-    virtual void enter(CPlusPlus::PointerLiteralAST*) {}
-    virtual void enter(CPlusPlus::BracedInitializerAST*) {}
-    virtual void enter(CPlusPlus::PostIncrDecrAST*) {}
+    virtual void enter(CPlusPlus::ArrayAccessAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::BinaryExpressionAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::CallAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::CastExpressionAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::ConditionalExpressionAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::IdExpressionAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::MemberAccessAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::NumericLiteralAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::BoolLiteralAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::StringLiteralAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::UnaryExpressionAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::SizeofExpressionAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::PointerLiteralAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::BracedInitializerAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::PostIncrDecrAST*, CPlusPlus::Scope*) {}
 
     // Specifiers
-    virtual void enter(CPlusPlus::EnumSpecifierAST*) {}
-    virtual void enter(CPlusPlus::ClassSpecifierAST*) {}
+    virtual void enter(CPlusPlus::EnumSpecifierAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::ClassSpecifierAST*, CPlusPlus::Scope*) {}
 
     // Statements
-    virtual void enter(CPlusPlus::CaseStatementAST*) {}
-    virtual void enter(CPlusPlus::CompoundStatementAST*) {}
-    virtual void enter(CPlusPlus::DeclarationStatementAST*) {}
-    virtual void enter(CPlusPlus::DoStatementAST*) {}
-    virtual void enter(CPlusPlus::ForStatementAST*) {}
-    virtual void enter(CPlusPlus::ExpressionStatementAST*) {}
-    virtual void enter(CPlusPlus::IfStatementAST*) {}
-    virtual void enter(CPlusPlus::ReturnStatementAST*) {}
-    virtual void enter(CPlusPlus::SwitchStatementAST*) {}
-    virtual void enter(CPlusPlus::WhileStatementAST*) {}
+    virtual void enter(CPlusPlus::CaseStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::CompoundStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::DeclarationStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::DoStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::ForStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::ExpressionStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::IfStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::ReturnStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::SwitchStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::WhileStatementAST*, CPlusPlus::Scope*) {}
 
     // Declarations
     virtual void leave(CPlusPlus::SimpleDeclarationAST*) {}
@@ -112,7 +113,12 @@ protected:
 template <class AstT>
 struct ObserverInvoker
 {
-    ObserverInvoker(Observer* o, AstT* ast) : o_(o), ast_(ast) { o_->enter(ast_); }
+    ObserverInvoker(Observer* o,
+                    AstT* ast,
+                    CPlusPlus::Scope* scope) : o_(o), ast_(ast)
+    {
+        o_->enter(ast_, scope);
+    }
     ~ObserverInvoker() { o_->leave(ast_); }
 
     Observer* o_;
