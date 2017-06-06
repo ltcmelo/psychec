@@ -199,13 +199,14 @@ tests = testGroup "Unit tests"
                   , doTest "T153.c" -- Multi-level elaborated structs.
                   , doTest "T154.c" -- Complex struct nesting and need of forward decl.
                   , doTest "T155.c" -- Elaborated struct T typedefed as T.
+                  , doTest "T156.c" -- Anonymous struct.
                   ]
 
 doTest s
     = testCase ("Testing " ++ s) $
       do
-        callProcess "../psychecgen" [cases ++ s, "clean"]
-        ctr <- readFile (cases ++ s ++ ".ctr")
+        callProcess "../psychecgen" [cases ++ s, "-o", cases ++ s ++ ".cstr"]
+        ctr <- readFile (cases ++ s ++ ".cstr")
         case parser ctr of
           Left err -> error $ "Error parsing constraints:\n" ++ err
           Right c  -> do

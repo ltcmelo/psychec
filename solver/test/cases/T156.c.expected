@@ -1,0 +1,12 @@
+/* Forward declarations */
+typedef  struct TYPE_10__   TYPE_3__ ;
+typedef  struct TYPE_9__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_9__ {double t; } ;
+struct TYPE_10__ {TYPE_1__ s; } ;
+typedef  double T2 ;
+typedef  char* T1 ;
+typedef  TYPE_3__ Q ;
+
+/* Variables */

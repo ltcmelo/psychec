@@ -118,12 +118,16 @@ void TypeOfExpr::process(const Identifier *id)
 
     if (ty.type()->isNamedType()) {
         id = ty.type()->asNamedType()->name()->identifier();
-    } else if (ty.type()->isClassType()) {
+    } else if (ty.type()->isClassType()
+               && (ty.type()->asClassType()->name()->asNameId()
+                   || ty.type()->asClassType()->name()->asElaboratedNameId())) {
         id = ty.type()->asClassType()->name()->identifier();
     } else {
         return;
     }
 
+
+    PSYCHE_ASSERT(id, return, "expected valid id");
     Symbol* tySym = lookupTypeSymbol(id, scope_);
     if (tySym && tySym->type()->asClassType())
         scope_ = tySym->type()->asClassType();

@@ -23,6 +23,7 @@
 *.status
 *.swp
 *.thm
+*.cstr
 
 # Qt Creator project files
 *.creator
@@ -36,7 +37,10 @@
 # The test file! ;-)
 test.c
 test.c.ctr
+test.c.cstr
 test.c.gen.h
+test_fixed.c
+test_gen.h
 
 solver/dist
 solver/cabal-dev
@@ -46,5 +50,6 @@ solver/.cabal-sandbox/
 solver/.stack-work/
 solver/cabal.sandbox.config
 solver/test/cases/*.ctr
+solver/test/cases/*.cstr
 solver/test/cases/*.fixed.c
 solver/test/cases/*.gen.h

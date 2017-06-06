@@ -211,11 +211,11 @@ void TypeSpeller<SyntaxT>::visit(Class *ty)
 {
     const Name *name = ty->name();
     std::string declName;
-    if (name && name->asNameId()) {
-        const Identifier *id = name->asNameId()->identifier();
+    if (name && (name->asNameId() || name->asElaboratedNameId())) {
+        const Identifier *id = name->identifier();
         declName.assign(id->begin(), id->end());
     } else {
-        declName.assign("anonymous__");
+        declName.assign("");
     }
 
     spelling_.append("struct ");

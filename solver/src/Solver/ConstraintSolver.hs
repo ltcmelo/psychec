@@ -49,51 +49,62 @@ solver c = runSolverM (solve c) (((length $ fv c) + 1), 1)
 
 solve :: Constraint -> SolverM (TyCtx, VarCtx)
 solve c = do
-    -- Expand typedefs.
-    (tc0,c') <- stage1 (TyCtx $ Map.union builtinTyCtx stdTyCtx) c
+  -- Expand typedefs to populate the typing environment.
+  (tcx0,c') <- stage1 (TyCtx $ Map.union builtinTyCtx stdTyCtx) c
 
-    -- Expand variable types and create missing variables.
-    (vcx,c'') <- stage2 (VarCtx $ Map.union builtinVarCtx stdVarCtx) c'
+  -- Expand variable types and create missing variables.
+  (vcx0,c'') <- stage2 (VarCtx $ Map.union builtinVarCtx stdVarCtx) c'
 
-    -- Split constraints into equality, inequality, and field acess.
-    let (eqs, iqs, fds) = stage3 c''
+  -- Split constraints into equality, inequality, and field acess.
+  let (eqs, iqs, fds) = stage3 c''
 
-    -- Run plain unification on equalities and apply substitutions on the inequalities. This will
-    -- instantiate types and make it possible to sort the inequalities according to a desired
-    -- directionality criteria. Therefore, once directional unification is run on the inequalities
-    -- type variables are bound in a proper order, that corresponds to a subtyping order.
-    s <- punifyList eqs
-    let iqs' = apply s iqs
-        (iq1, iq2, iq3, iq4) = dsort iqs'
-        iqs'' = iq1 ++ iq2 ++ iq3
-    s' <- dunifyList iqs''
-    let s'' = s' @@ s
+  -- Run plain unification on equalities. Then, apply the resulting substitutions on the
+  -- inequalities. This will instantiate types and allow us to sort the inequalities
+  -- according to the const-aware directionality criteria. As a consequence, type variables
+  -- are bound in such an order that corresponds to our const-subtyping relation.
+  s <- punifyList eqs
+  let
+    iqs' = apply s iqs
+    (iq1, iq2, iq3, iq4) = dsort iqs'
+    iqs'' = iq1 ++ iq2 ++ iq3
 
-    -- Assemble records.
-    (tcx1, vcx1, s''') <- stage4 tc0 vcx fds s''
+  s' <- dunifyList iqs''
+  let s'' = s' @@ s
 
-    -- Translate structural representation to a nominative one.
-    (tcx_n, vcx_n) <- stage5 tcx1 vcx1 s'''
+  -- Assemble records.
+  (tcx1, vcx1, s''') <- stage4 tcx0 vcx0 fds s''
 
-    -- Unify against the top type: void*.
-    let vqs = apply s''' iq4
-    ss <- dunifyList vqs
-    let ss' = ss @@ s'''
-        tcx11 = TyCtx $ Map.map (\(t,b) -> (apply ss' t, b)) (tyctx tcx_n)
-        vcx11 = VarCtx $ Map.map (\varInfo -> apply ss' varInfo) (varctx vcx_n)
+  -- Translate structural representation to a nominative one.
+  (tcx2, vcx2) <- stage5 tcx1 vcx1 s'''
 
-        -- Orphanification.
-        (tcx1', vcx1') = stage6 tcx11 vcx11
+  -- Unify against the top type, void*, and apply substitions.
+  let vqs = apply s''' iq4
+  ss <- dunifyList vqs
+  let
+    ss' = ss @@ s'''
+    tcx3 = TyCtx $ Map.map (\(t,b) -> (apply ss' t, b)) (tyctx tcx2)
+    vcx3 = VarCtx $ Map.map (\varInfo -> apply ss' varInfo) (varctx vcx2)
 
-    -- Decay function pointers.
-    (tcx2, vcx2) <- decay tcx1' vcx1'
+    -- Orphanize type variables that remain.
+    (tcx4, vcx4) = stage6 tcx3 vcx3
 
+  -- Decay function pointers.
+  (tcx5, vcx5) <- decay tcx4 vcx4
+
+  let
     -- Remove builtins and standard library components.
-    let
-        tcx2_ = undefTys (tyctx tcx2) Map.\\ builtinTyCtx Map.\\ stdTyCtx
-        vcx2_ = undefVars (varctx vcx2) Map.\\ builtinVarCtx Map.\\ stdVarCtx
+    tcx_ = undefTys (tyctx tcx5) Map.\\ builtinTyCtx Map.\\ stdTyCtx
+    vcx_ = undefVars (varctx vcx5) Map.\\ builtinVarCtx Map.\\ stdVarCtx
 
-    return (TyCtx tcx2_, VarCtx vcx2_)
+    -- Remove anonymous types, their definitions are always in the program. Otherwise, we would
+    -- have given them names.
+    nonAnon _ ((RecTy _ n), b)
+      | ensurePlain n == emptyName = False
+      | otherwise = True
+    nonAnon _ _ = True
+    tcx_' = Map.filterWithKey nonAnon tcx_
+
+  return (TyCtx tcx_', VarCtx vcx_)
 
 
 cleanv c = VarCtx $  (varctx c) Map.\\ builtinVarCtx Map.\\ stdVarCtx

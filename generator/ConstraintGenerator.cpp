@@ -1292,15 +1292,22 @@ bool ConstraintGenerator::visit(ClassSpecifierAST* ast)
     DEBUG_VISIT(ClassSpecifierAST);
     OBSERVE(ClassSpecifierAST);
 
-    const std::string record = "struct " + extractId(ast->name->name);
-
     std::string classTy = typeSpeller_.spell(ast->symbol->type(), scope_);
-    writer_->writeTypedef(record, classTy);
+    std::string tyName;
+    if (ast->name->name->asAnonymousNameId()) {
+        tyName = classTy;
+    } else {
+        // We default to struct types. A union will be generate only if it appears in the
+        // program under a type specifier with elaborated name.
+        tyName = "struct " + extractId(ast->name->name);
+    }
+
+    writer_->writeTypedef(tyName, classTy);
     writer_->writeAnd(true);
 
     const std::string& alpha = supply_.createTypeVar1();
     writer_->writeExists(alpha);
-    writer_->writeEquivRel(alpha, record);
+    writer_->writeEquivRel(alpha, tyName);
     writer_->writeAnd(true);
 
     structs_.push(alpha);
