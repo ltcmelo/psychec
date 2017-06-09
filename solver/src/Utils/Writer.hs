@@ -90,7 +90,7 @@ writeDecls (tcx,vcx) =
     | ro = ((show $ writeDefine n cnt <+> text "\n") ++ l, cnt + 1)
     | otherwise = ((show $ writeVarDecl t n <+> text "\n") ++ l, cnt)
   cmt1 = "/* Type definitions */\n"
-  cmt2 = "/* Variables */\n"
+  cmt2 = "/* Variables and functions */\n"
 
 -- | Write variable declarations.
 writeVarDecl :: Ty -> Name -> Doc

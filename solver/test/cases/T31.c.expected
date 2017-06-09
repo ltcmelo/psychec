@@ -4,5 +4,5 @@
 typedef  int /*<<< orphan or scalar*/ T2 ;
 typedef  void* T1 ;
 
-/* Variables */
+/* Variables and functions*/
 

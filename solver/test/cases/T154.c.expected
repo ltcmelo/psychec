@@ -1,17 +1,17 @@
 /* Forward declarations */
-typedef  struct TYPE_13__   TYPE_8__ ;
-typedef  struct TYPE_12__   TYPE_7__ ;
-typedef  struct TYPE_11__   TYPE_1__ ;
+typedef  struct TYPE_8__   TYPE_3__ ;
+typedef  struct TYPE_7__   TYPE_2__ ;
+typedef  struct TYPE_6__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_13__ {TYPE_1__* right; struct TYPE_13__* parent; } ;
-struct TYPE_12__ {TYPE_8__ sent; } ;
-struct TYPE_11__ {int /*<<< orphan or scalar*/ color; TYPE_8__* parent; } ;
+struct TYPE_8__ {TYPE_1__* right; struct TYPE_8__* parent; } ;
+struct TYPE_7__ {TYPE_3__ sent; } ;
+struct TYPE_6__ {int /*<<< orphan or scalar*/ color; TYPE_3__* parent; } ;
 
-/* Variables */
-int /*<<< orphan or scalar*/ BLACK ; 
-TYPE_8__* ln ; 
-TYPE_8__* n ; 
-TYPE_8__* parent ; 
-TYPE_7__* t ; 
+/* Variables and functions*/
+int /*<<< orphan or scalar*/ BLACK ;
+TYPE_3__* ln ;
+TYPE_3__* n ;
+TYPE_3__* parent ;
+TYPE_2__* t ;
 

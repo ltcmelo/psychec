@@ -3,5 +3,5 @@
 /* Type definitions */
 typedef  int /*<<< orphan or scalar*/ Item ;
 
-/* Variables */
+/* Variables and functions*/
 

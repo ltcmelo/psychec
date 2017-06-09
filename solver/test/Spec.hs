@@ -200,6 +200,7 @@ tests = testGroup "Unit tests"
                   , doTest "T154.c" -- Complex struct nesting and need of forward decl.
                   , doTest "T155.c" -- Elaborated struct T typedefed as T.
                   , doTest "T156.c" -- Anonymous struct.
+                  , doTest "T157.c" -- Several union cases.
                   ]
 
 doTest s

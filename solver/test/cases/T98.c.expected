@@ -4,7 +4,7 @@
 typedef  int T2 ;
 typedef  int T1 ;
 
-/* Variables */
+/* Variables and functions*/
 int other ; 
 #define  val 130 
 #define  val2 129 

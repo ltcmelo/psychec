@@ -2,7 +2,7 @@
 
 /* Type definitions */
 
-/* Variables */
+/* Variables and functions*/
 int A ; 
 int B ; 
 int C ; 

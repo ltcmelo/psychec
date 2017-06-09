@@ -2,7 +2,7 @@
 
 /* Type definitions */
 
-/* Variables */
+/* Variables and functions*/
 char p1 ; 
 char* p2 ; 
 char* p3 ; 

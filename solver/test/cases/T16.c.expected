@@ -2,7 +2,7 @@
 
 /* Type definitions */
 
-/* Variables */
+/* Variables and functions*/
 int c ; 
 double d ; 
 

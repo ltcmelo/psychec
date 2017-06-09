@@ -2,7 +2,7 @@
 
 /* Type definitions */
 
-/* Variables */
+/* Variables and functions*/
 int /*<<< orphan or scalar*/ a ; 
 #define  b 130 
 #define  c 129 

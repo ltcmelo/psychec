@@ -6,7 +6,7 @@ typedef  struct TYPE_3__   TYPE_1__ ;
 struct TYPE_4__ {double x; } ;
 struct TYPE_3__ {TYPE_2__ y; } ;
 
-/* Variables */
+/* Variables and functions*/
 TYPE_2__ a ; 
 TYPE_1__ b ; 
 

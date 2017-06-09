@@ -3,7 +3,7 @@
 /* Type definitions */
 typedef  int /*<<< orphan or scalar*/ const const T1 ;
 
-/* Variables */
+/* Variables and functions*/
 int /*<<< orphan or scalar*/ g (char const*) ; 
 int /*<<< orphan or scalar*/ h (char const*) ; 
 int /*<<< orphan or scalar*/ j (char const* const) ; 

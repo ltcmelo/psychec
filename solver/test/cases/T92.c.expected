@@ -11,5 +11,5 @@ typedef  long TL ;
 typedef  int TIU ;
 typedef  int TI ;
 
-/* Variables */
+/* Variables and functions*/
 

@@ -3,7 +3,7 @@
 /* Type definitions */
 typedef  int /*<<< orphan or scalar*/ Graph ;
 
-/* Variables */
+/* Variables and functions*/
 int GRAPHcc (int /*<<< orphan or scalar*/) ; 
 int /*<<< orphan or scalar*/ GRAPHrand (int,int) ; 
 int /*<<< orphan or scalar*/ GRAPHshow (int /*<<< orphan or scalar*/) ; 

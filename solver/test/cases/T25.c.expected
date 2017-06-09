@@ -4,5 +4,5 @@
 typedef  double real ;
 typedef  int inteiro ;
 
-/* Variables */
+/* Variables and functions*/
 

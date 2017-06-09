@@ -5,5 +5,5 @@ typedef  int /*<<< orphan or scalar*/ C ;
 typedef  int /*<<< orphan or scalar*/ B ;
 typedef  int A ;
 
-/* Variables */
+/* Variables and functions*/
 

@@ -2,7 +2,7 @@
 
 /* Type definitions */
 
-/* Variables */
+/* Variables and functions*/
 int ENC_BLOCKSIZE ; 
 int /*<<< orphan or scalar*/ fread (int /*<<< orphan or scalar*/,int) ; 
 

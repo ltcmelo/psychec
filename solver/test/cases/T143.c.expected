@@ -8,7 +8,7 @@ struct TYPE_6__ {int /*<<< orphan or scalar*/ (* b ) (int,double) ;} ;
 struct TYPE_5__ {int /*<<< orphan or scalar*/ (* y ) (int,double) ;} ;
 struct TYPE_4__ {int /*<<< orphan or scalar*/ (* y ) (int,double) ;} ;
 
-/* Variables */
+/* Variables and functions*/
 TYPE_3__ a ; 
 int /*<<< orphan or scalar*/ g (int,double) ; 
 TYPE_2__* m ; 

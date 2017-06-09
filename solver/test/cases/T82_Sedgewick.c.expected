@@ -8,7 +8,7 @@ struct TYPE_14__ {int V; int** adj; int /*<<< orphan or scalar*/ E; } ;
 typedef  TYPE_1__* Graph ;
 typedef  TYPE_2__ Edge ;
 
-/* Variables */
+/* Variables and functions*/
 TYPE_2__ EDGE (int,int) ; 
 int** MATRIXint (int,int,int /*<<< orphan or scalar*/) ; 
 

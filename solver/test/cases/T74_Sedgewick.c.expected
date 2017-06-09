@@ -3,7 +3,7 @@
 /* Type definitions */
 typedef  int /*<<< orphan or scalar*/ Complex ;
 
-/* Variables */
+/* Variables and functions*/
 int /*<<< orphan or scalar*/ COMPLEXinit (double,double) ; 
 int /*<<< orphan or scalar*/ COMPLEXmult (int /*<<< orphan or scalar*/,int /*<<< orphan or scalar*/) ; 
 double Im (int /*<<< orphan or scalar*/) ; 

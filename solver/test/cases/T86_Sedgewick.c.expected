@@ -5,5 +5,5 @@ typedef  struct TYPE_8__   TYPE_1__ ;
 typedef  TYPE_1__* link ;
 struct TYPE_8__ {int index; int d; struct TYPE_8__* r; struct TYPE_8__* m; struct TYPE_8__* l; } ;
 
-/* Variables */
+/* Variables and functions*/
 

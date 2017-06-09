@@ -1,12 +1,7 @@
 /* Forward declarations */
-typedef  struct TYPE_26__   TYPE_1__ ;
-typedef  struct TYPE_25__   TYPE_15__ ;
 
 /* Type definitions */
 struct node {int w; struct node* z; struct node* y; int /*<<< orphan or scalar*/ x; } ;
 struct data {struct data* m; } ;
-struct TYPE_26__ {int w; struct TYPE_26__* z; struct TYPE_26__* y; int /*<<< orphan or scalar*/ x; } ;
-struct TYPE_25__ {struct TYPE_25__* m; } ;
 
-/* Variables */
-
+/* Variables and functions*/

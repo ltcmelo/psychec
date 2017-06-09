@@ -4,5 +4,5 @@
 typedef  int T2 ;
 typedef  char* T ;
 
-/* Variables */
+/* Variables and functions*/
 

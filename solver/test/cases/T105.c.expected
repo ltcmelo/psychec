@@ -5,6 +5,6 @@ typedef  struct TYPE_4__   TYPE_1__ ;
 struct TYPE_4__ {unsigned int* vector; int size; } ;
 typedef  TYPE_1__ set ;
 
-/* Variables */
+/* Variables and functions*/
 unsigned int INT_BITS ; 
 

@@ -4,7 +4,7 @@
 struct T2 {int dummy; } ;
 struct T1 {int dummy; } ;
 
-/* Variables */
+/* Variables and functions*/
 int /*<<< orphan or scalar*/ g1 (struct T1*) ; 
 int /*<<< orphan or scalar*/ g2 (struct T2*) ; 
 struct T1 x1 ; 

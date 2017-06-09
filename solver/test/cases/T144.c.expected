@@ -3,5 +3,5 @@
 /* Type definitions */
 typedef  int* T ;
 
-/* Variables */
+/* Variables and functions*/
 

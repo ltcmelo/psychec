@@ -4,5 +4,5 @@
 struct gl_oset_node_impl {int dummy; } ;
 typedef  struct gl_oset_node_impl* gl_oset_node_t ;
 
-/* Variables */
+/* Variables and functions*/
 

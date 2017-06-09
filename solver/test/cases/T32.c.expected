@@ -6,5 +6,5 @@ struct TYPE_3__ {int /*<<< orphan or scalar*/ b; } ;
 typedef  int /*<<< orphan or scalar*/ T ;
 typedef  TYPE_1__ A ;
 
-/* Variables */
+/* Variables and functions*/
 

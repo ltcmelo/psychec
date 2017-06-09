@@ -32,12 +32,12 @@ import Utils.Pretty
 
 class Retypeable a where
   collect :: a -> [Ty]
-  canonicalize :: TyIdx -> a -> a
+  compact :: TyIdx -> a -> a
   orphanize :: TyIdx -> a -> a
 
 instance Retypeable a => Retypeable [a] where
   collect = concat . map (collect)
-  canonicalize idx = map (canonicalize idx)
+  compact idx = map (compact idx)
   orphanize idx = map (orphanize idx)
 
 instance Retypeable Ty where
@@ -49,13 +49,13 @@ instance Retypeable Ty where
   collect (FunTy t tx) = collect t ++ collect tx
   collect t@(RecTy fs _) = [t] ++ collect fs
 
-  canonicalize _ t@(VarTy _) = t
-  canonicalize _ t@(NamedTy _) = t
-  canonicalize _ t@(EnumTy _) = t
-  canonicalize idx (QualTy t) = QualTy (canonicalize idx t)
-  canonicalize idx (PtrTy t) = PtrTy (canonicalize idx t)
-  canonicalize idx (FunTy t tx) = FunTy (canonicalize idx t) (canonicalize idx tx)
-  canonicalize idx t@(RecTy fs _) = maybe t (\k -> NamedTy k) (Map.lookup t (ty2n idx))
+  compact _ t@(VarTy _) = t
+  compact _ t@(NamedTy _) = t
+  compact _ t@(EnumTy _) = t
+  compact idx (QualTy t) = QualTy (compact idx t)
+  compact idx (PtrTy t) = PtrTy (compact idx t)
+  compact idx (FunTy t tx) = FunTy (compact idx t) (compact idx tx)
+  compact idx t@(RecTy fs _) = maybe t (\k -> NamedTy k) (Map.lookup t (ty2n idx))
 
   orphanize idx t@(VarTy v) = maybe orphan NamedTy (Map.lookup t (ty2n idx))
   orphanize _ t@(NamedTy _) = t
@@ -67,7 +67,7 @@ instance Retypeable Ty where
 
 instance Retypeable Field where
   collect (Field _ t) = collect t
-  canonicalize idx (Field n t) = Field n (canonicalize idx t)
+  compact idx (Field n t) = Field n (compact idx t)
   orphanize idx (Field n t) = Field n (orphanize idx t)
 
 

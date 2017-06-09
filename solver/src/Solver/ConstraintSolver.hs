@@ -55,7 +55,7 @@ solve c = do
   -- Expand variable types and create missing variables.
   (vcx0,c'') <- stage2 (VarCtx $ Map.union builtinVarCtx stdVarCtx) c'
 
-  -- Split constraints into equality, inequality, and field acess.
+  -- Split constraints into equivalence, inequality, and field acess.
   let (eqs, iqs, fds) = stage3 c''
 
   -- Run plain unification on equalities. Then, apply the resulting substitutions on the
@@ -107,87 +107,100 @@ solve c = do
   return (TyCtx tcx_', VarCtx vcx_)
 
 
+-- Debuging helpers
 cleanv c = VarCtx $  (varctx c) Map.\\ builtinVarCtx Map.\\ stdVarCtx
 cleant c = TyCtx $  (tyctx c) Map.\\ builtinTyCtx Map.\\ stdTyCtx
 
+
+-- | Populate the typing context, replacing "duplicate" types so that a single instance of
+-- each one of them exists.
 stage1 :: TyCtx -> Constraint -> SolverM (TyCtx, Constraint)
 stage1 tctx (t :=: t') =
-    return (tctx, (replaceTy tctx t) :=: (replaceTy tctx t'))
+  return (tctx, (findCanonical tctx t) :=: (findCanonical tctx t'))
 stage1 tctx (t :>: t') =
-    return (tctx, (replaceTy tctx t) :>: (replaceTy tctx t'))
+  return (tctx, (findCanonical tctx t) :>: (findCanonical tctx t'))
 stage1 tctx (n :<-: t) =
-    return (tctx, n :<-: (replaceTy tctx t))
+  return (tctx, n :<-: (findCanonical tctx t))
 stage1 tctx (Has n (Field n' t)) =
-    return (tctx, Has n (Field n' (replaceTy tctx t)))
-stage1 tctx (TypeDef t t') = defineTypeDef t t' tctx
+  return (tctx, Has n (Field n' (findCanonical tctx t)))
+stage1 tctx (TypeDef t t') = createEquiv t t' tctx
 stage1 tctx (c :&: c') = do
-    (tcx1, c1) <- stage1 tctx c
-    (tcx2, c1') <- stage1 tcx1 c'
-    return (tcx2, c1 :&: c1')
+  (tcx1, c1) <- stage1 tctx c
+  (tcx2, c1') <- stage1 tcx1 c'
+  return (tcx2, c1 :&: c1')
 stage1 tctx (Exists n c) = do
-    v <- fresh
-    stage1 tctx (apply (n +-> v) c)
+  v <- fresh
+  stage1 tctx (apply (n +-> v) c)
 stage1 tctx (Def n t c) = do
-    (tcx, c')  <- stage1 tctx c
-    return (tcx, Def n (replaceTy tctx t) c')
+  (tcx, c')  <- stage1 tctx c
+  return (tcx, Def n (findCanonical tctx t) c')
 stage1 tctx c@(ReadOnly _) = return (tctx, c)
 stage1 tctx Truth = return (tctx, Truth)
 
-defineTypeDef :: Ty -> Ty -> TyCtx -> SolverM (TyCtx, Constraint)
-defineTypeDef (PtrTy t) (PtrTy t') tctx = do
-    (tcx,c) <- defineTypeDef t t' tctx
-    return (tcx, (t :=: t') :&: c)
-defineTypeDef t@(PtrTy l) t'@(VarTy v) tctx = do
-    v' <- fresh
-    (tcx, c) <- defineTypeDef l v' tctx
-    return (tcx, (t' :=: (PtrTy v')) :&: c)
-defineTypeDef (QualTy t) (QualTy t') tctx = do
-    (tcx,c) <- defineTypeDef t t' tctx
-    return (tcx, (t :=: t') :&: c)
-defineTypeDef t@(QualTy l) t'@(VarTy v) tctx = do
-     v' <- fresh
-     (tcx, c) <- defineTypeDef l v' tctx
-     return (tcx, (t' :=: (QualTy v')) :&: c)
-defineTypeDef t@(EnumTy n) t'@(VarTy v) tctx = do
-    let
-      tctx' = TyCtx $ maybe (Map.insert n (EnumTy n, False) (tyctx tctx))
+
+-- | Find the canonical instance of a type.
+findCanonical :: TyCtx -> Ty -> Ty
+findCanonical tctx t@(NamedTy n) = maybe t fst (Map.lookup n (tyctx tctx))
+findCanonical _ t@(VarTy _) = t
+findCanonical tctx (FunTy t ts) = FunTy (findCanonical tctx t) (map (findCanonical tctx) ts)
+findCanonical tctx (QualTy t) = QualTy (findCanonical tctx t)
+findCanonical tctx (PtrTy t) = PtrTy (findCanonical tctx t)
+findCanonical tctx (RecTy fs n) = RecTy (map (\f -> f{ty = findCanonical tctx (ty f)}) fs) n
+findCanonical tctx (SumTy fs n) = SumTy (map (\f -> f{ty = findCanonical tctx (ty f)}) fs) n
+findCanonical _ t@(EnumTy _) = Data.BuiltIn.int -- We treat enumerations as plain integer.
+
+
+-- | Create type equivalences.
+createEquiv :: Ty -> Ty -> TyCtx -> SolverM (TyCtx, Constraint)
+createEquiv (PtrTy t) (PtrTy t') tctx = do
+  (tcx,c) <- createEquiv t t' tctx
+  return (tcx, (t :=: t') :&: c)
+createEquiv t@(PtrTy l) t'@(VarTy v) tctx = do
+  v' <- fresh
+  (tcx, c) <- createEquiv l v' tctx
+  return (tcx, (t' :=: (PtrTy v')) :&: c)
+createEquiv (QualTy t) (QualTy t') tctx = do
+  (tcx,c) <- createEquiv t t' tctx
+  return (tcx, (t :=: t') :&: c)
+createEquiv t@(QualTy l) t'@(VarTy v) tctx = do
+   v' <- fresh
+   (tcx, c) <- createEquiv l v' tctx
+   return (tcx, (t' :=: (QualTy v')) :&: c)
+createEquiv t@(EnumTy n) t'@(VarTy v) tctx = do
+  let tctx' = TyCtx $ maybe (Map.insert n (EnumTy n, False) (tyctx tctx))
                             (const (tyctx tctx))
                             (Map.lookup n (tyctx tctx))
-    return (tctx', Truth)
-defineTypeDef t@(EnumTy n) t'@(EnumTy _) tctx = error "TODO: Implement me."
-defineTypeDef t t' tctx = do
-    let
-      actualTyDef tn td =
-        case td of
-             RecTy _ n -> ((NamedTy $ ensurePlainRec n), True)
-             EnumTy n -> ((NamedTy $ ensurePlainEnum n), True)
-             PtrTy td' -> (PtrTy td'', b)
-               where (td'', b) = actualTyDef tn td'
-             QualTy td' -> (QualTy td'', b)
-               where (td'', b) = actualTyDef tn td'
-             tc@(NamedTy n) ->
-               case Map.lookup n (tyctx tctx) of
-                    Nothing -> (tc, True)
-                    Just tinfo -> tinfo
-             -- We don't want to have declared (but undefined) functions in the context
-             -- marked as undeclared.
-             _ -> (td, case tn of { FunTy _ _ ->  True; _ -> False; })
-      tctx' = TyCtx $ maybe (Map.insert (nameOf t) (actualTyDef t t') (tyctx tctx))
-                            (const (tyctx tctx))
-                            (Map.lookup (nameOf t) (tyctx tctx))
-    return (tctx' , Truth)
-
-replaceTy :: TyCtx -> Ty -> Ty
-replaceTy tctx t@(NamedTy n) = maybe t fst (Map.lookup n (tyctx tctx))
-replaceTy tctx t@(VarTy _) = t
-replaceTy tctx (FunTy t ts) = FunTy (replaceTy tctx t) (map (replaceTy tctx) ts)
-replaceTy tctx (QualTy t) = QualTy (replaceTy tctx t)
-replaceTy tctx (PtrTy t) = PtrTy (replaceTy tctx t)
-replaceTy tctx (RecTy fs n) =
-    RecTy (map (\f -> f{ty = replaceTy tctx (ty f)}) fs) n
-replaceTy tctx t@(EnumTy _) = Data.BuiltIn.int
+  return (tctx', Truth)
+createEquiv t@(EnumTy n) t'@(EnumTy _) tctx = error "TODO: Implement me."
+createEquiv t t' tcx = do
+  let tctx' = TyCtx $ maybe (Map.insert (nameOf t) (flattenDecl tcx t t') (tyctx tcx))
+                            (const (tyctx tcx))
+                            (Map.lookup (nameOf t) (tyctx tcx))
+  return (tctx' , Truth)
 
 
+-- | Flatten a type declaration, discarding the definition part.
+flattenDecl :: TyCtx -> Ty -> Ty -> (Ty, Bool)
+  -- The declaration of a function is sufficient to make it "declared", even though if
+  -- its definition might be missing. No matter what is its equivalent part.
+flattenDecl _ (FunTy _ _) t = (t, True)
+flattenDecl tctx _ t@(NamedTy n) = maybe (t, True) id (Map.lookup n (tyctx tctx))
+flattenDecl _ _ t@(VarTy _) = (t, False)
+flattenDecl tctx t' (QualTy t) =
+  (QualTy t'', b)
+ where
+  (t'', b) = flattenDecl tctx t' t
+flattenDecl tctx t' (PtrTy t) =
+  (PtrTy t'', b)
+ where
+  (t'', b) = flattenDecl tctx t' t
+flattenDecl _ _ t@(FunTy _ _) = (t, False)
+flattenDecl _ _ (RecTy _ n) = (NamedTy n, True)
+flattenDecl _ _ (SumTy _ n) = (NamedTy n, True)
+flattenDecl _ _ t = (t, False)
+
+
+-- | Collect variable's type.
 stage2 :: VarCtx -> Constraint -> SolverM (VarCtx, Constraint)
 stage2 vtx (n :<-: t@(FunTy rt pts)) =
     case Map.lookup n (varctx vtx) of
@@ -199,7 +212,7 @@ stage2 vtx (n :<-: t@(FunTy rt pts)) =
                         rtc = rt' :>: rt
                     return (vtx, pcs' :&: rtc)
                 -- FIXME: Verify scoping.
-                t' -> return (vtx, t' :=: t) -- error (show $ pprint t)
+                t' -> return (vtx, t' :=: t)
         Nothing -> do
             v <- fresh
             return ( VarCtx $ Map.insert n (VarInfo v False False) (varctx vtx)
@@ -237,6 +250,7 @@ stage2 vtx (ReadOnly n) =
 stage2 vtx Truth = return (vtx, Truth)
 
 
+-- | Split constraints into equivalences, inequalities, and field access.
 stage3 :: Constraint -> ([Constraint], [Constraint], [Constraint])
 stage3 (c :&: c') =
     (eq ++ eq', iq ++ iq', fs ++ fs')
@@ -249,28 +263,27 @@ stage3 c@(_ :>: _) = ([], [c], [])
 stage3 Truth = ([], [], [])
 
 
+-- | Sort constraint relations as according to our modeled subtyping relation.
 dsort :: [Constraint] -> ([Constraint], [Constraint], [Constraint], [Constraint])
 dsort [] = ([], [], [], [])
 dsort (x:xs) =
-    (eq1 ++ eq1', eq2 ++ eq2', eq3 ++ eq3', eq4 ++ eq4')
-  where
-    (eq1, eq2, eq3, eq4) = dsort' x
-    (eq1', eq2', eq3', eq4') = dsort xs
+  (eq1 ++ eq1', eq2 ++ eq2', eq3 ++ eq3', eq4 ++ eq4')
+ where
+  (eq1, eq2, eq3, eq4) = dsort' x
+  (eq1', eq2', eq3', eq4') = dsort xs
 
 dsort' :: Constraint -> ([Constraint], [Constraint], [Constraint], [Constraint])
 dsort' c@(_ :>: (PtrTy (QualTy t)))
-    | hasVarDep t = ([], [], [c], [])
-    | t == Data.BuiltIn.void = ([], [], [], [c])
-    | otherwise = ([c], [], [], [])
+  | hasVarDep t = ([], [], [c], [])
+  | t == Data.BuiltIn.void = ([], [], [], [c])
+  | otherwise = ([c], [], [], [])
 dsort' c@(_ :>: (PtrTy t))
-    | t == Data.BuiltIn.void = ([], [], [], [c])
-    | otherwise =  ([], [], [c], [])
+  | t == Data.BuiltIn.void = ([], [], [], [c])
+  | otherwise =  ([], [], [c], [])
 dsort' c@((PtrTy t) :>: _)
-    | hasVarDep t = ([], [], [c], [])
-    | t == Data.BuiltIn.void = ([], [], [], [c])
-    | otherwise = case t of
-        QualTy _ -> ([], [], [c], [])
-        _ -> ([], [c], [], [])
+  | hasVarDep t = ([], [], [c], [])
+  | t == Data.BuiltIn.void = ([], [], [], [c])
+  | otherwise = case t of { QualTy _ -> ([], [], [c], []); _ -> ([], [c], [], []) }
 dsort' c = ([], [], [c], [])
 
 
@@ -305,6 +318,14 @@ stage4 tcx vcx fs s = do
     mergeFields (n, fs) acc = (n, List.nubBy (\f1 f2 -> (name f1) == (name f2)) fs): acc
     fieldMap' = foldr mergeFields [] fieldMapOrd
     fieldMap'' = Map.fromList fieldMap'
+
+    -- Fields are always assembled into a struct, which is the default behavior associated
+    -- with field access constraints. It's impossible to tell whether such fields would
+    -- have originated from a union, unless the actuall declaration of the type is inside
+    -- the program or the variable has been declared through an elaborated type specifier
+    -- using the the union keyword. Nevertheless, at this stage we're concerned about the
+    -- structural representation of composite types. Later, we handle the cases in which
+    -- such a composite type has actually been declared as a union.
     s' = Subst $ Map.mapWithKey (\v fs -> RecTy fs v) fieldMap''
     s'' = s' @@ s2
 
@@ -320,42 +341,49 @@ stage4 tcx vcx fs s = do
 stage5 :: TyCtx -> VarCtx -> Subst -> SolverM (TyCtx, VarCtx)
 stage5 tcx vcx s = do
   let
-    -- We filter types declared through elaborated names and work on them independently,
-    -- since we cannot typedef them.
-    elabs = Map.foldrWithKey (\k (t, _) acc ->
-      if isElabRec k then acc %% (t %-> k) else acc) nullIdx (tyctx tcx)
-    tcxFlt_ = Map.filterWithKey (\k _ -> (not . isElabRec) k) (tyctx tcx)
-    tcxFlt_' = Map.map (\(t, b) -> (canonicalize elabs t , b)) tcxFlt_
-    vcxFlt_ = Map.map (\(VarInfo t b ro) -> VarInfo (canonicalize elabs t) b ro) (varctx vcx)
+    -- We filter types declared through elaborated specifiers and work on them independently,
+    -- since it's illegal to typedef a type with an elaborated name. In addition, they are kept
+    -- in an index so we are able to identify their definitions so they can be matched.
+    tcxFlt_ = Map.filterWithKey (\k _ -> (not . isElab) k) (tyctx tcx)
+    elabIdx = Map.foldrWithKey (\k (t, _) acc ->
+      if isElab k then acc %% (t %-> k) else acc) nullIdx (tyctx tcx)
+    tcxFlt_' = Map.map (\(t, b) -> (compact elabIdx t , b)) tcxFlt_
+    vcxFlt_ = Map.map (\(VarInfo t b ro) -> VarInfo (compact elabIdx t) b ro) (varctx vcx)
 
     tcxElab_ = (tyctx tcx) Map.\\ tcxFlt_'
-    tcxElab_' = Map.mapWithKey (\k (t, b) -> (unalpha2 k t, b)) tcxElab_
-    tcxElab_'' = Map.mapWithKey (\k (t, b) -> (keepElab k t, b)) tcxElab_'
+    tcxElab_' = Map.filter (not . snd) tcxElab_
+    tcxElab_'' = Map.mapWithKey (\k (t, b) -> (unalpha2 k t, b)) tcxElab_'
+    tcxElab_''' = Map.mapWithKey (\k (t, b) -> (keepElab k t, b)) tcxElab_''
 
-    -- Collect composite types so we can canonicalize them. Througout this process we also
+    -- Collect composite types so we can compact them. Througout this process we also
     -- look into the substitutions because nested structs will only appear there.
-    composite = Map.foldr (\(t, _) acc -> acc ++ collect t) [] tcxFlt_'
-    composite' = Map.foldr (\(VarInfo t _ _) acc -> acc ++ collect t) composite vcxFlt_
+    nonElabCompo = Map.foldr (\(t, _) acc -> acc ++ collect t) [] tcxFlt_'
+    nonElabCompo' = Map.foldr (\(VarInfo t _ _) acc -> acc ++ collect t) nonElabCompo vcxFlt_
+    allCompo = Map.foldr (\(t, _) acc -> t:acc) nonElabCompo' tcxElab_'
+    exclude = Set.fromList allCompo
 
-    m = Set.fromList composite'
-    consider [] cs q = (cs, q)
-    consider (t@(RecTy _ n):tx) cs q
-      | Set.member t m = consider tx cs q
-      | isVar n = ([t] ++ rest, q'')
-      | otherwise = consider tx cs q
+    -- We only check against structs because fields are always assembled as such. Cases
+    -- in which the composite type is actually union only happen if such elaborated type
+    -- specifier is present in the program. Then, those types are filtered out above.
+    consider [] cs h = (cs, h)
+    consider (t@(RecTy _ n):tx) cs h
+      | Set.member t h = consider tx cs h
+      | isVar n = ([t] ++ rest, h'')
+      | otherwise = consider tx cs h
      where
-      q' = Set.insert t q
-      (rest, q'') = consider tx cs q'
-    consider (t:tx) cs q = error "only struct types are collected"
-    (composite'', _) = Map.foldr (\t (xs, q) -> consider (collect t) xs q) (composite', m) (subs s)
+      h' = Set.insert t h
+      (rest, h'') = consider tx cs h'
+    consider _ _ _  = error "only struct types are collected"
+    (nonElabCompo'', _) = Map.foldr
+      (\t (xs, h) -> consider (collect t) xs h) (nonElabCompo', exclude) (subs s)
 
   -- Assign names and keep record of the type/name relation through an index. Those are
   -- inserted into the typing context as well.
-  idx <- foldM (\acc t -> makeName acc t) nullIdx composite''
+  idx <- foldM (\acc t -> makeName acc t) nullIdx nonElabCompo''
 
   let
-    tcx_ = Map.map (\(t, b) -> (canonicalize idx t, b)) tcxFlt_'
-    vcx_ = Map.map (\(VarInfo t b ro) -> VarInfo (canonicalize idx t) b ro) vcxFlt_
+    tcx_ = Map.map (\(t, b) -> (compact idx t, b)) tcxFlt_'
+    vcx_ = Map.map (\(VarInfo t b ro) -> VarInfo (compact idx t) b ro) vcxFlt_
     tcx_' = Map.foldrWithKey (\t n acc -> Map.insert n (t, False) acc) tcx_ (ty2n idx)
 
   -- "De-alphasize" top-level names so they match the ones we created.
@@ -372,9 +400,9 @@ stage5 tcx vcx s = do
     update (FunTy t tx) = FunTy (update t) (map (\t -> update t) tx)
     update (RecTy fs n) = RecTy (map (\(Field fn ft) -> Field fn (update ft)) fs) n
     tcx_''' = Map.map (\(t, b) -> (update t, b)) tcx_''
-    tcxElab_''' = Map.map (\(t, b) -> (update t, b)) tcxElab_''
+    tcxElab_'''' = Map.map (\(t, b) -> (update t, b)) tcxElab_'''
 
-  return (TyCtx $ tcx_''' `Map.union` tcxElab_''', VarCtx vcx_)
+  return (TyCtx $ tcx_''' `Map.union` tcxElab_'''', VarCtx vcx_)
 
 
 -- | Name a composite type by increasing IDs.
@@ -405,6 +433,7 @@ stage6 tcx vcx =
 
     dummy n
       | isElabRec n = RecTy [Field (Name "dummy") Data.BuiltIn.int] n
+      | isElabUnion n = SumTy [Field (Name "dummy") Data.BuiltIn.int] n
       | otherwise = EnumTy n
     go k t =
       case Map.lookup t (ty2n elabOrph) of

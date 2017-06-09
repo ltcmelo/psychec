@@ -14,7 +14,7 @@ typedef  int /*<<< orphan or scalar*/ (* Q3 ) () ;
 typedef  int /*<<< orphan or scalar*/ (* Q2 ) () ;
 typedef  int /*<<< orphan or scalar*/ (* Q1 ) () ;
 
-/* Variables */
+/* Variables and functions*/
 int /*<<< orphan or scalar*/ f () ; 
 int /*<<< orphan or scalar*/ g () ; 
 int /*<<< orphan or scalar*/ h () ; 

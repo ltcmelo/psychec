@@ -4,5 +4,5 @@
 typedef  double T3 ;
 typedef  int /*<<< orphan or scalar*/ Foo ;
 
-/* Variables */
+/* Variables and functions*/
 

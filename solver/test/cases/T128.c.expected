@@ -3,5 +3,5 @@
 /* Type definitions */
 struct linebuffer {int dummy; } ;
 
-/* Variables */
+/* Variables and functions*/
 

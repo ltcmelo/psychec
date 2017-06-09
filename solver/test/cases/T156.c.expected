@@ -1,12 +1,13 @@
 /* Forward declarations */
-typedef  struct TYPE_10__   TYPE_3__ ;
-typedef  struct TYPE_9__   TYPE_1__ ;
+typedef  struct TYPE_9__   TYPE_2__ ;
+typedef  struct TYPE_8__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_9__ {double t; } ;
-struct TYPE_10__ {TYPE_1__ s; } ;
+struct TYPE_8__ {double t; } ;
+struct TYPE_9__ {TYPE_1__ s; } ;
 typedef  double T2 ;
 typedef  char* T1 ;
-typedef  TYPE_3__ Q ;
+typedef  TYPE_2__ Q ;
 
-/* Variables */
+/* Variables and functions*/
+

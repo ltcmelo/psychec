@@ -2,14 +2,14 @@
 
 CC=clang
 
-for FIXED_FILE in solver/test/cases/*.fixed.c; do
+for FIXED_FILE in solver/test/cases/*_fixed.c; do
     rm "$FIXED_FILE"
 done
 
 for C_FILE in solver/test/cases/*.c ; do
     ./Reconstruct.py "$C_FILE" > /dev/null
 
-    FIXED_FILE=$(echo "$C_FILE" | sed -e 's/\.c/.fixed.c/g')
+    FIXED_FILE=$(echo "$C_FILE" | sed -e 's/\.c/_fixed.c/g')
     "$CC" -c "$FIXED_FILE" &> /dev/null
     OK=$?
     if [ $OK -ne 0 ]; then

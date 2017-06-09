@@ -7,6 +7,6 @@ typedef  double T2 ;
 typedef  float T1 ;
 typedef  short T0 ;
 
-/* Variables */
+/* Variables and functions*/
 int /*<<< orphan or scalar*/ k (int,double) ; 
 

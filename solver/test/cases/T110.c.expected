@@ -2,7 +2,7 @@
 
 /* Type definitions */
 
-/* Variables */
+/* Variables and functions*/
 int BASE_TYPE ; 
 char* _ (char*) ; 
 char* program_name ; 

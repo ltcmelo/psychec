@@ -5,7 +5,7 @@ typedef  struct TYPE_8__   TYPE_1__ ;
 struct TYPE_8__ {int V; int /*<<< orphan or scalar*/** adj; int /*<<< orphan or scalar*/ E; } ;
 typedef  TYPE_1__* Graph ;
 
-/* Variables */
+/* Variables and functions*/
 int /*<<< orphan or scalar*/ EDGE (int,int) ; 
 int /*<<< orphan or scalar*/ GRAPHinsertE (TYPE_1__*,int /*<<< orphan or scalar*/) ; 
 int /*<<< orphan or scalar*/ GRAPHiso (TYPE_1__*,int) ; 

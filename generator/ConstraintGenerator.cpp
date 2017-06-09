@@ -1297,9 +1297,10 @@ bool ConstraintGenerator::visit(ClassSpecifierAST* ast)
     if (ast->name->name->asAnonymousNameId()) {
         tyName = classTy;
     } else {
-        // We default to struct types. A union will be generate only if it appears in the
-        // program under a type specifier with elaborated name.
-        tyName = "struct " + extractId(ast->name->name);
+        std::string head = "struct ";
+        if (tokenKind(ast->classkey_token) == T_UNION)
+            head = "union ";
+        tyName = head + extractId(ast->name->name);
     }
 
     writer_->writeTypedef(tyName, classTy);

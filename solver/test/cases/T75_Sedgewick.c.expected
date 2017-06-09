@@ -3,7 +3,7 @@
 /* Type definitions */
 typedef  int /*<<< orphan or scalar*/ Q ;
 
-/* Variables */
+/* Variables and functions*/
 int M ; 
 int /*<<< orphan or scalar*/ QUEUEempty (int /*<<< orphan or scalar*/) ; 
 int QUEUEget (int /*<<< orphan or scalar*/) ; 

@@ -8,5 +8,5 @@ struct TYPE_5__ {int i; struct TYPE_5__* next; } ;
 typedef  TYPE_1__ T2 ;
 typedef  TYPE_2__ T ;
 
-/* Variables */
+/* Variables and functions*/
 

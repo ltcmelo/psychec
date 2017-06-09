@@ -2,7 +2,7 @@
 
 /* Type definitions */
 
-/* Variables */
+/* Variables and functions*/
 int /*<<< orphan or scalar*/ uid ; 
 int uid_set (int /*<<< orphan or scalar*/) ; 
 

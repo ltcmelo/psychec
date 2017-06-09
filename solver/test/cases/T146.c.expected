@@ -1,21 +1,21 @@
 /* Forward declarations */
-typedef  struct TYPE_16__   TYPE_9__ ;
-typedef  struct TYPE_15__   TYPE_8__ ;
-typedef  struct TYPE_14__   TYPE_6__ ;
-typedef  struct TYPE_13__   TYPE_4__ ;
-typedef  struct TYPE_12__   TYPE_1__ ;
-typedef  struct TYPE_11__   TYPE_10__ ;
+typedef  struct TYPE_12__   TYPE_6__ ;
+typedef  struct TYPE_11__   TYPE_5__ ;
+typedef  struct TYPE_10__   TYPE_4__ ;
+typedef  struct TYPE_9__   TYPE_3__ ;
+typedef  struct TYPE_8__   TYPE_2__ ;
+typedef  struct TYPE_7__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_13__ {int p; } ;
-struct TYPE_16__ {TYPE_4__ n; } ;
-struct TYPE_15__ {TYPE_1__* y; } ;
-struct TYPE_14__ {int u; } ;
-struct TYPE_12__ {double z; } ;
-struct TYPE_11__ {TYPE_6__ k; } ;
+struct TYPE_9__ {int u; } ;
+struct TYPE_12__ {TYPE_3__ k; } ;
+struct TYPE_8__ {int p; } ;
+struct TYPE_11__ {TYPE_2__ n; } ;
+struct TYPE_10__ {TYPE_1__* y; } ;
+struct TYPE_7__ {double z; } ;
 
-/* Variables */
-TYPE_10__ j ; 
-TYPE_9__ m ; 
-TYPE_8__* x ; 
+/* Variables and functions*/
+TYPE_6__ j ;
+TYPE_5__ m ;
+TYPE_4__* x ;
 

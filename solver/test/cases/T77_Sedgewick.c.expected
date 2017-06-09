@@ -5,5 +5,5 @@ typedef  struct TYPE_5__   TYPE_1__ ;
 typedef  TYPE_1__* link ;
 struct TYPE_5__ {struct TYPE_5__* r; struct TYPE_5__* l; } ;
 
-/* Variables */
+/* Variables and functions*/
 

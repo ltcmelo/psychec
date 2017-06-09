@@ -8,7 +8,7 @@ typedef  TYPE_1__ set2 ;
 struct TYPE_8__ {unsigned int* vector; int size; } ;
 typedef  TYPE_2__ set ;
 
-/* Variables */
+/* Variables and functions*/
 unsigned int INT_BITS ; 
 unsigned int INT_BITS2 ; 
 

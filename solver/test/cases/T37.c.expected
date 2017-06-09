@@ -6,5 +6,5 @@ typedef  TYPE_1__* link ;
 struct TYPE_3__ {int /*<<< orphan or scalar*/ y; } ;
 typedef  int /*<<< orphan or scalar*/ A ;
 
-/* Variables */
+/* Variables and functions*/
 

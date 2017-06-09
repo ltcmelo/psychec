@@ -3,6 +3,6 @@
 /* Type definitions */
 typedef  int numType ;
 
-/* Variables */
+/* Variables and functions*/
 int R ; 
 

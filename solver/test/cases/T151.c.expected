@@ -4,5 +4,5 @@
 struct A {int dummy; } ;
 typedef  int /*<<< orphan or scalar*/ A_t ;
 
-/* Variables */
+/* Variables and functions*/
 

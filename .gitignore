@@ -53,3 +53,5 @@ solver/test/cases/*.ctr
 solver/test/cases/*.cstr
 solver/test/cases/*.fixed.c
 solver/test/cases/*.gen.h
+solver/test/cases/*_fixed.c
+solver/test/cases/*_gen.h

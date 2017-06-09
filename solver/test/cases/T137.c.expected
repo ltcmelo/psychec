@@ -4,7 +4,7 @@
 typedef  int /*<<< orphan or scalar*/ (* T2 ) () ;
 typedef  int /*<<< orphan or scalar*/ (* T1 ) () ;
 
-/* Variables */
+/* Variables and functions*/
 int /*<<< orphan or scalar*/ f () ; 
 int /*<<< orphan or scalar*/ g () ; 
 

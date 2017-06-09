@@ -5,6 +5,6 @@ typedef  struct TYPE_7__   TYPE_1__ ;
 typedef  TYPE_1__* link ;
 struct TYPE_7__ {int v; struct TYPE_7__* next; } ;
 
-/* Variables */
+/* Variables and functions*/
 int V ; 
 

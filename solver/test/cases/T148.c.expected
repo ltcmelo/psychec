@@ -1,46 +1,42 @@
 /* Forward declarations */
-typedef  struct TYPE_46__   TYPE_9__ ;
-typedef  struct TYPE_45__   TYPE_5__ ;
-typedef  struct TYPE_44__   TYPE_21__ ;
-typedef  struct TYPE_43__   TYPE_1__ ;
-typedef  struct TYPE_42__   TYPE_17__ ;
-typedef  struct TYPE_41__   TYPE_16__ ;
-typedef  struct TYPE_40__   TYPE_15__ ;
-typedef  struct TYPE_39__   TYPE_14__ ;
-typedef  struct TYPE_38__   TYPE_13__ ;
-typedef  struct TYPE_37__   TYPE_12__ ;
-typedef  struct TYPE_36__   TYPE_11__ ;
-typedef  struct TYPE_35__   TYPE_10__ ;
+typedef  struct TYPE_36__   TYPE_9__ ;
+typedef  struct TYPE_35__   TYPE_8__ ;
+typedef  struct TYPE_34__   TYPE_7__ ;
+typedef  struct TYPE_33__   TYPE_6__ ;
+typedef  struct TYPE_32__   TYPE_5__ ;
+typedef  struct TYPE_31__   TYPE_4__ ;
+typedef  struct TYPE_30__   TYPE_3__ ;
+typedef  struct TYPE_29__   TYPE_2__ ;
+typedef  struct TYPE_28__   TYPE_1__ ;
+typedef  struct TYPE_27__   TYPE_13__ ;
 
 /* Type definitions */
 struct Elab {int val; } ;
 struct Bale {double lav; } ;
-struct TYPE_46__ {int cd; } ;
-struct TYPE_45__ {double lav; } ;
-struct TYPE_41__ {int y; } ;
-struct TYPE_44__ {TYPE_16__ x; } ;
-struct TYPE_43__ {int val; } ;
-struct TYPE_42__ {int qs; } ;
-struct TYPE_40__ {int z; } ;
-struct TYPE_39__ {TYPE_15__ w; } ;
-struct TYPE_37__ {int yy; } ;
-struct TYPE_38__ {TYPE_12__ xx; } ;
-struct TYPE_36__ {int zz; } ;
-struct TYPE_35__ {TYPE_11__ ww; } ;
-typedef  TYPE_9__* T9 ;
-typedef  TYPE_10__* T8 ;
-typedef  TYPE_11__ T7 ;
-typedef  TYPE_12__ T6 ;
-typedef  TYPE_13__* T5 ;
-typedef  TYPE_14__ T4 ;
-typedef  TYPE_15__ T3 ;
-typedef  TYPE_16__ T2 ;
-typedef  TYPE_17__* T13 ;
-typedef  TYPE_17__* T12 ;
-typedef  TYPE_9__* T11 ;
-typedef  TYPE_9__ T10 ;
-typedef  TYPE_21__ T1 ;
+struct TYPE_36__ {int qs; } ;
+struct TYPE_35__ {int y; } ;
+struct TYPE_34__ {int z; } ;
+struct TYPE_33__ {TYPE_7__ w; } ;
+struct TYPE_31__ {int yy; } ;
+struct TYPE_32__ {TYPE_4__ xx; } ;
+struct TYPE_30__ {int zz; } ;
+struct TYPE_29__ {TYPE_3__ ww; } ;
+struct TYPE_28__ {int cd; } ;
+struct TYPE_27__ {TYPE_8__ x; } ;
+typedef  TYPE_1__* T9 ;
+typedef  TYPE_2__* T8 ;
+typedef  TYPE_3__ T7 ;
+typedef  TYPE_4__ T6 ;
+typedef  TYPE_5__* T5 ;
+typedef  TYPE_6__ T4 ;
+typedef  TYPE_7__ T3 ;
+typedef  TYPE_8__ T2 ;
+typedef  TYPE_9__* T13 ;
+typedef  TYPE_9__* T12 ;
+typedef  TYPE_1__* T11 ;
+typedef  TYPE_1__ T10 ;
+typedef  TYPE_13__ T1 ;
 typedef  struct Elab ElabAlias ;
 
-/* Variables */
+/* Variables and functions*/
 

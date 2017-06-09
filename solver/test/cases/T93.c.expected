@@ -6,5 +6,5 @@ typedef  int C ;
 typedef  int B ;
 typedef  int A ;
 
-/* Variables */
+/* Variables and functions*/
 

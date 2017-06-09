@@ -3,5 +3,5 @@
 /* Type definitions */
 typedef  float (* T ) (double,int) ;
 
-/* Variables */
+/* Variables and functions*/
 

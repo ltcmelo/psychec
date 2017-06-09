@@ -19,6 +19,6 @@ typedef  int* T11 ;
 typedef  int* T10 ;
 typedef  int* T1 ;
 
-/* Variables */
+/* Variables and functions*/
 int y10 ; 
 

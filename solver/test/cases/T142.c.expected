@@ -47,5 +47,5 @@ typedef  int* T10x ;
 typedef  int const* T1 ;
 typedef  int* T0 ;
 
-/* Variables */
+/* Variables and functions*/
 

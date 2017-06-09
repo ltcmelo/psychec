@@ -5,6 +5,6 @@ typedef  struct TYPE_5__   TYPE_1__ ;
 struct TYPE_5__ {int V; } ;
 typedef  TYPE_1__* Graph ;
 
-/* Variables */
+/* Variables and functions*/
 int GRAPHdeg (TYPE_1__*,int) ; 
 
