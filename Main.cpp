@@ -85,6 +85,9 @@ int main(int argc, char* argv[])
             file = v[0];
         }
 
+        // Handle GNU's error variadic function by default. TODO: POSIX stuff too.
+        cmd.flag_.handleGNUerrorFunc_ = true;
+
         mode = options["mode"].as<std::string>();
         cmd.output_ = options["output"].as<std::string>();
     } catch (const cxxopts::OptionException& e) {

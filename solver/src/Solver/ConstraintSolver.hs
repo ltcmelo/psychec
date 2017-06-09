@@ -482,6 +482,6 @@ punifyFields =
   typeFrom (Field _ t) = t
   eqlist [] = []
   eqlist [ (Has _ t) ] = [ ]
-  eqlist (h@(Has _ t@(Field n ty)) : h'@(Has _ t'@(Field n' ty')) : fs)
-    | n == n' = (((typeFrom t) :=: (typeFrom t')) : eqlist (h':fs))
+  eqlist (h@(Has rt t@(Field n ty)) : h'@(Has rt' t'@(Field n' ty')) : fs)
+    | (nameOf rt) == (nameOf rt') && n == n' = (((typeFrom t) :=: (typeFrom t')) : eqlist (h':fs))
     | otherwise = (eqlist (h':fs))
