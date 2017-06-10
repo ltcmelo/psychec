@@ -145,6 +145,7 @@ void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
 
     // Constraint processing.
     previousScope = switchScope(global);
+    OBSERVE(TranslationUnitAST);
     for (DeclarationListAST *it = ast->declaration_list; it; it = it->next) {
         visitDeclaration(it->value);
         if(it->next && ((it->value->asFunctionDefinition() &&

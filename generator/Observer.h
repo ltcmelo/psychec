@@ -32,6 +32,9 @@ public:
 
     void setConstraintWriter(ConstraintWriter* writer) { writer_ = writer; }
 
+    virtual void enter(CPlusPlus::TranslationUnitAST*, CPlusPlus::Scope*) {}
+    virtual void leave(CPlusPlus::TranslationUnitAST*) {}
+
     // Declarations
     virtual void enter(CPlusPlus::SimpleDeclarationAST*, CPlusPlus::Scope*) {}
     virtual void enter(CPlusPlus::FunctionDefinitionAST*, CPlusPlus::Scope*) {}
