@@ -133,6 +133,13 @@ void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
 
     global_ = global;
 
+    // TODO: Split domain-lattice construction out of generator's implementation,
+    // so we don't worry about "state" of constraint-specific data.
+    auto writer = writer_;
+    std::ostringstream unused;
+    static ConstraintWriter dummy(unused);
+    writer_ = &dummy;
+
     // Build the expression lattice.
     bool prevState = writer_->block(true);
     Scope *previousScope = switchScope(global);
@@ -142,6 +149,7 @@ void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
     writer_->block(prevState);
 
     prepareForRun();
+    writer_ = writer;
 
     // Constraint processing.
     previousScope = switchScope(global);
