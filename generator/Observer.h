@@ -28,7 +28,7 @@ class ConstraintWriter;
 
 class Observer {
 public:
-    ~Observer() {}
+    virtual ~Observer() {}
 
     void setConstraintWriter(ConstraintWriter* writer) { writer_ = writer; }
 
@@ -107,7 +107,7 @@ public:
     virtual void leave(CPlusPlus::WhileStatementAST*) {}
 
 protected:
-    ConstraintWriter* writer_;
+    ConstraintWriter* writer_ { nullptr };
 };
 
 template <class AstT>
