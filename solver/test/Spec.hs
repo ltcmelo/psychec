@@ -202,6 +202,8 @@ tests = testGroup "Unit tests"
                   , doTest "T156.c" -- Anonymous struct.
                   , doTest "T157.c" -- Several union cases.
                   , doTest "T158.c" -- Adjancent structs with equally named fields.
+                  , doTest "T159.c" -- Premature constraint eof.
+                  , doTest "T160.c" -- Broken def/exists constraint.
                   ]
 
 doTest s

@@ -1,0 +1,1 @@
+struct X { T i; };

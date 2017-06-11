@@ -62,7 +62,11 @@ Constraint parser
 >                    , existsParser
 >                    , typeDefParser
 >                    , isConstParser
+>                    , eofParser
 >                    ]
+
+> eofParser = f <$> eof
+>   where f _ = Truth
 
 > eqParser :: Parser Constraint
 > eqParser =
