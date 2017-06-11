@@ -99,13 +99,13 @@ Constraint parser
 > defParser :: Parser Constraint
 > defParser = build <$> reserved "$def$" <*> nameParser <*>
 >                       colon          <*> typeParser <*>
->                       reserved "$in$"  <*> constraintParser
+>                       reserved "$in$"  <*> (Truth `option` constraintParser)
 >             where
 >               build _ n _ t _ ctr = Def n t ctr
 
 > existsParser :: Parser Constraint
 > existsParser = build <$> reserved "$exists$" <*> nameParser <*>
->                          reservedOp "."    <*> constraintParser
+>                          reservedOp "."    <*> (Truth `option` constraintParser)
 >                where
 >                  build _ n _ ctr = Exists n ctr
 
