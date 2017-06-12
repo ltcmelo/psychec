@@ -30,7 +30,7 @@ void DiagnosticCollector::report(int level,
                                  unsigned line, unsigned column,
                                  const char *format, va_list ap)
 {
-    fprintf(stderr, "error at %s:%u:%u, ", fileName->chars(), line, column);
+    fprintf(stderr, "%s:%u:%u: error: ", fileName->chars(), line, column);
     vfprintf(stderr, format, ap);
     std::cout << std::endl;
     hasError_ = true;

@@ -51,6 +51,8 @@ process(const std::string& unitName,
         ExecutionFlags& flags,
         Factory* factory)
 {
+    DiagnosticCollector collector;
+    control.setDiagnosticClient(&collector);
     StringLiteral name(unitName.c_str(), unitName.length());
     std::unique_ptr<TranslationUnit> unit(new TranslationUnit(&control, &name));
     unit->setSource(source.c_str(), source.length());
@@ -66,8 +68,6 @@ process(const std::string& unitName,
         return std::make_tuple(kParsingFailed, nullptr, "");
 
     // We only proceed if the source is free from syntax errors.
-    DiagnosticCollector collector;
-    control.setDiagnosticClient(&collector);
     if (!collector.isEmpty())
         return std::make_tuple(kSyntaxErrors, nullptr, "");
 
