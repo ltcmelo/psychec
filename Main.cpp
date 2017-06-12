@@ -50,14 +50,14 @@ int main(int argc, char* argv[])
         cmdLine.add_options()
             ("o,output", "Output file",
                 cxxopts::value<std::string>()->default_value("a.cstr"))
-            ("m,mode", "Run mode: dev, prod",
-                cxxopts::value<std::string>()->default_value("prod"))
-            ("r,strict", "Disable heuristics on unresolved ambiguities")
+            ("m,mode", "Run mode: dev, pro",
+                cxxopts::value<std::string>()->default_value("pro"))
             ("c,cstr", "Display constraints")
             ("s,stats", "Display stats")
             ("d,debug", "Enable debugging statements",
                 cxxopts::value<bool>(debugEnabled))
-            ("t,test", "Check tests only")
+            ("r,strict", "Disable heuristics on unresolved AST ambiguities")
+            ("t,test", "Test AST disambiguation")
             ("p,dump-ast", "Dump AST in .dot format")
             ("h,help", "Print help")
             ("positional", "Positional arguments",
@@ -103,7 +103,8 @@ int main(int argc, char* argv[])
         try {
             Tester tester;
             tester.testAll();
-            std::cout << "Tests passed successfully!" << std::endl;
+            std::cout << "AST disambiguation tests passed successfully!\n"
+                      << "For type-inference tests: $cd solver && stack test" << std::endl;
             if (flags.flag_.testOnly)
                 return 0;
         } catch (...) {
