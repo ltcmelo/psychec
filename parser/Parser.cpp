@@ -3434,11 +3434,11 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
                     ambig->declarationStmt = new (_pool) DeclarationStatementAST;
                     ambig->declarationStmt->declaration = declaration;
                     ambig->expressionStmt = as_expression;
-                    ambig->info = std::make_unique<AmbiguityInfo>(
-                                AmbiguityInfo::Variety::OneArgCall_X_VarDecl,
+                    ambig->info = std::make_unique<SyntaxAmbiguity>(
+                                SyntaxAmbiguity::Variety::OneArgCall_X_VarDecl,
                                 line,
-                                resolveIt ? AmbiguityInfo::Resolution::DefinitelyDeclaration
-                                          : AmbiguityInfo::Resolution::Unknown);
+                                resolveIt ? SyntaxAmbiguity::Resolution::DefinitelyDeclaration
+                                          : SyntaxAmbiguity::Resolution::Unknown);
                     node = ambig;
                     return true;
                 }
@@ -3531,8 +3531,8 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
                             AmbiguousStatementAST *ambig = new (_pool) AmbiguousStatementAST;
                             ambig->declarationStmt = as_declaration;
                             ambig->expressionStmt = as_expression->asExpressionStatement();
-                            ambig->info = std::make_unique<AmbiguityInfo>(
-                                AmbiguityInfo::Variety::MulExpr_X_PointerDecl,
+                            ambig->info = std::make_unique<SyntaxAmbiguity>(
+                                SyntaxAmbiguity::Variety::MulExpr_X_PointerDecl,
                                 line);
                             node = ambig;
                             (void) blockErrors(blocked);

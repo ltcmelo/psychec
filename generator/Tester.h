@@ -22,7 +22,7 @@
 
 #include "Config.h"
 #include "CPlusPlusForwardDeclarations.h"
-#include "Runner.h"
+#include "Driver.h"
 #include <algorithm>
 #include <functional>
 #include <iostream>
@@ -141,7 +141,7 @@ private:
     };
 
     std::string currentTest_;
-    ProgramCommand options_;
+    ExecutionFlags flags_;
 };
 
 struct PSYCHEC_API TestFailed {};

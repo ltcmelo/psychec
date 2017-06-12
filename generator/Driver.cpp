@@ -17,9 +17,9 @@
  * USA
  *****************************************************************************/
 
-#include "Runner.h"
+#include "Driver.h"
 #include "AST.h"
-#include "AstFixer.h"
+#include "ASTNormalizer.h"
 #include "Bind.h"
 #include "Control.h"
 #include "ConstraintGenerator.h"
@@ -28,7 +28,6 @@
 #include "DiagnosticCollector.h"
 #include "Dumper.h"
 #include "Factory.h"
-#include "IO.h"
 #include "Literals.h"
 #include "Observer.h"
 #include "Symbols.h"
@@ -43,75 +42,63 @@ namespace psyche {
 
 extern bool debugEnabled;
 
-/*!
- * \brief process
- * \param source
- * \param control
- * \param name
- *
- * Core function that triggers all the work.
- */
-std::pair<std::unique_ptr<TranslationUnit>, size_t>
-process(const std::string& source,
-        StringLiteral &unitName,
-        Control &control,
-        ProgramCommand &cmd,
+std::tuple<size_t,
+           std::unique_ptr<CPlusPlus::TranslationUnit>,
+           std::string>
+process(const std::string& unitName,
+        const std::string& source,
+        CPlusPlus::Control& control,
+        ExecutionFlags& flags,
         Factory* factory)
 {
-    std::unique_ptr<TranslationUnit> unit(new TranslationUnit(&control, &unitName));
+    StringLiteral name(unitName.c_str(), unitName.length());
+    std::unique_ptr<TranslationUnit> unit(new TranslationUnit(&control, &name));
     unit->setSource(source.c_str(), source.length());
 
-    // Set language options.
+    // Set language specifics.
     LanguageOptions features;
     features.c99 = 1;
     features.nullptrOnNULL = 1;
     unit->setLanguageFeatures(features);
 
     // Check whether the parser finished successfully.
-    if (!unit->parse()) {
-        std::cout << "Parsing failed" << std::endl;
-        return std::make_pair(nullptr, kUnknownParsingIssue);
-    }
+    if (!unit->parse())
+        return std::make_tuple(kParsingFailed, nullptr, "");
 
     // We only proceed if the source is free from syntax errors.
     DiagnosticCollector collector;
     control.setDiagnosticClient(&collector);
-    if (!collector.isEmpty()) {
-        std::cout << "Source has syntax errors" << std::endl;
-        return std::make_pair(nullptr, kSyntaxErrorsFound);
-    }
+    if (!collector.isEmpty())
+        return std::make_tuple(kSyntaxErrors, nullptr, "");
 
     // If we have no AST, there's nothing to do.
-    if (!unit->ast() || !unit->ast()->asTranslationUnit()) {
-        std::cout << "No AST" << std::endl;
-        return std::make_pair(nullptr, kUnavailableAST);
-    }
+    if (!unit->ast() || !unit->ast()->asTranslationUnit())
+        return std::make_tuple(kInvalidAST, nullptr, "");
 
     TranslationUnitAST* ast = unit->ast()->asTranslationUnit();
-    if (cmd.flag_.dumpAst)
+    if (flags.flag_.dumpAst)
         Dumper(unit.get()).dump(ast, ".ast.dot");
 
-    // Binding phase, this is when we create symbols.
-    Namespace* globalNs = control.newNamespace(0, nullptr);
+    // Bind and try to disambiguate ambiguities, if any.
+    Namespace* global = control.newNamespace(0, nullptr);
     Bind bind(unit.get());
-    bind(ast, globalNs);
+    bind(ast, global);
 
-    // Disambiguate eventual ambiguities.
-    AstFixer astFixer(unit.get());
-    astFixer.fix(ast);
-    if (cmd.flag_.dumpAst)
+    // Normalize the AST based disambiguation resolutions.
+    ASTNormalizer fixer(unit.get(), !flags.flag_.nonHeuristic);
+    fixer.normalize(ast);
+    if (flags.flag_.dumpAst)
         Dumper(unit.get()).dump(ast, ".ast.fixed.dot");
 
-    if (isProgramAmbiguous(unit.get(), ast)) {
-        std::cout << "Code has unresolved ambiguities" << std::endl;
-        return std::make_pair(nullptr, kAmbiguousProgram);
-    }
+    // If the program is inherently ambiguous, it's too bad.
+    if (isProgramAmbiguous(unit.get(), ast))
+        return std::make_tuple(kProgramAmbiguous, nullptr, "");
 
-    if (cmd.flag_.disambOnly)
-        return std::make_pair(std::move(unit), kOK);
+    if (flags.flag_.disambOnly)
+        return std::make_tuple(kOK, std::move(unit), "");
 
-    if (cmd.flag_.displayStats)
-        std::cout << "Ambiguities stats" << std::endl << astFixer.stats() << std::endl;
+    if (flags.flag_.displayStats)
+        std::cout << "Ambiguities stats" << std::endl << fixer.stats() << std::endl;
 
     std::ostringstream oss;
     auto writer = factory->makeWriter(oss);
@@ -119,18 +106,17 @@ process(const std::string& source,
     auto observer = factory->makeObserver();
     generator.installObserver(observer.get());
 
-    if (cmd.flag_.handleGNUerrorFunc_)
+    if (flags.flag_.handleGNUerrorFunc_)
         generator.addVariadic("error", 2);
 
-    generator.generate(ast->asTranslationUnit(), globalNs);
-    writeFile(oss.str(), cmd.output_);
+    generator.generate(ast->asTranslationUnit(), global);
 
-    if (cmd.flag_.displayStats)
+    if (flags.flag_.displayStats)
         std::cout << "Stats: " << writer->totalConstraints() << std::endl;
-    if (cmd.flag_.displayCstr)
+    if (flags.flag_.displayCstr)
         std::cout << "Constraints:\n" << oss.str() << std::endl;
 
-    return std::make_pair(std::move(unit), kOK);
+    return std::make_tuple(kOK, std::move(unit), oss.str());
 }
 
 } // namespace psyche

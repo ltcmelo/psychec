@@ -16,7 +16,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/ASTMatch0.cpp
     ${PROJECT_SOURCE_DIR}/parser/ASTMatcher.cpp
     ${PROJECT_SOURCE_DIR}/parser/ASTMatcher.h
-    ${PROJECT_SOURCE_DIR}/parser/ASTPatternBuilder.cpp
+    ${PROJECT_SOURCE_DIR}/parser/ASTNormalizer.h
+    ${PROJECT_SOURCE_DIR}/parser/ASTNormalizer.cpp
     ${PROJECT_SOURCE_DIR}/parser/ASTPatternBuilder.h
     ${PROJECT_SOURCE_DIR}/parser/ASTVisit.cpp
     ${PROJECT_SOURCE_DIR}/parser/ASTVisitor.cpp
@@ -61,6 +62,7 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/SymbolVisitor.h
     ${PROJECT_SOURCE_DIR}/parser/Symbols.cpp
     ${PROJECT_SOURCE_DIR}/parser/Symbols.h
+    ${PROJECT_SOURCE_DIR}/parser/SyntaxAmbiguity.h
     ${PROJECT_SOURCE_DIR}/parser/Templates.cpp
     ${PROJECT_SOURCE_DIR}/parser/Templates.h
     ${PROJECT_SOURCE_DIR}/parser/Token.cpp
@@ -73,8 +75,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/TypeVisitor.h
     # Generator's file
     ${PROJECT_SOURCE_DIR}/generator/Assert.h
-    ${PROJECT_SOURCE_DIR}/generator/AstFixer.h
-    ${PROJECT_SOURCE_DIR}/generator/AstFixer.cpp
     ${PROJECT_SOURCE_DIR}/generator/BuiltinNames.h
     ${PROJECT_SOURCE_DIR}/generator/CanonicalASTMatcher.h
     ${PROJECT_SOURCE_DIR}/generator/ConstraintGenerator.h
@@ -86,6 +86,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/Debug.cpp
     ${PROJECT_SOURCE_DIR}/generator/DiagnosticCollector.h
     ${PROJECT_SOURCE_DIR}/generator/DiagnosticCollector.cpp
+    ${PROJECT_SOURCE_DIR}/generator/Driver.h
+    ${PROJECT_SOURCE_DIR}/generator/Driver.cpp
     ${PROJECT_SOURCE_DIR}/generator/Dumper.h
     ${PROJECT_SOURCE_DIR}/generator/Dumper.cpp
     ${PROJECT_SOURCE_DIR}/generator/Factory.h
@@ -97,8 +99,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/Observer.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
-    ${PROJECT_SOURCE_DIR}/generator/Runner.h
-    ${PROJECT_SOURCE_DIR}/generator/Runner.cpp
     ${PROJECT_SOURCE_DIR}/generator/ScalarTypeLattice.h
     ${PROJECT_SOURCE_DIR}/generator/ScalarTypeLattice.cpp
     ${PROJECT_SOURCE_DIR}/generator/SymbolPP.h

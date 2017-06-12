@@ -287,7 +287,7 @@ private:
 
     std::vector<AmbiguousStatementAST*> hasAmbiguity(const Scope* scope) const;
     void resolveAmbiguity(const char* msg,
-                          psyche::AmbiguityInfo::Resolution,
+                          psyche::SyntaxAmbiguity::Resolution,
                           AmbiguousStatementAST *ambig);
 
     Scope *_scope;

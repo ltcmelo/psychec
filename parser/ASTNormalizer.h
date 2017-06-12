@@ -1,24 +1,23 @@
 /******************************************************************************
- * Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- * USA
+ Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
+
+ This library is free software; you can redistribute it and/or modify it under
+ the terms of the GNU Lesser General Public License as published by the Free
+ Software Foundation; either version 2.1 of the License, or (at your option)
+ any later version.
+
+ This library is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+ for more details.
+
+ You should have received a copy of the GNU Lesser General Public License along
+ with this library; if not, write to the Free Software Foundation, Inc., 51
+ Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#ifndef PSYCHE_ASTFIXER_H__
-#define PSYCHE_ASTFIXER_H__
+#ifndef PSYCHE_ASTNORMALIZER_H__
+#define PSYCHE_ASTNORMALIZER_H__
 
 #include "Config.h"
 #include "ASTVisitor.h"
@@ -26,12 +25,12 @@
 
 namespace psyche {
 
-class PSYCHEC_API AstFixer final : public CPlusPlus::ASTVisitor
+class PSYCHEC_API ASTNormalizer final : public CPlusPlus::ASTVisitor
 {
 public:
-    AstFixer(CPlusPlus::TranslationUnit *unit);
+    ASTNormalizer(CPlusPlus::TranslationUnit *unit, bool employHeuristic);
 
-    void fix(CPlusPlus::TranslationUnitAST *ast);
+    void normalize(CPlusPlus::TranslationUnitAST *ast);
 
     struct Stats
     {
@@ -62,10 +61,11 @@ private:
 
     void maybeFixAST(CPlusPlus::StatementAST *&ast);
 
+    bool employHeuristic_; // On ambiguities not resolved by further syntax.
     Stats stats_;
 };
 
-std::ostream& operator<<(std::ostream& os, const AstFixer::Stats& s);
+std::ostream& operator<<(std::ostream& os, const ASTNormalizer::Stats& s);
 
 } // namespace psyche
 

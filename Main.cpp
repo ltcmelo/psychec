@@ -19,10 +19,10 @@
 
 #include "Control.h"
 #include "Debug.h"
+#include "Driver.h"
 #include "Factory.h"
 #include "IO.h"
 #include "Literals.h"
-#include "Runner.h"
 #include "Tester.h"
 #include "TranslationUnit.h"
 #include "cxxopts.hpp"
@@ -38,19 +38,21 @@ using namespace psyche;
  */
 int main(int argc, char* argv[])
 {
-    ProgramCommand cmd;
-    std::string file;
+    ExecutionFlags flags;
+    std::string in;
+    std::string out;
     std::string mode;
 
     try {
-        cxxopts::Options options(argv[0], "PsycheC constraint generator");
-        options.positional_help("file");
+        cxxopts::Options cmdLine(argv[0], "PsycheC constraint generator");
+        cmdLine.positional_help("file");
 
-        options.add_options()
+        cmdLine.add_options()
             ("o,output", "Output file",
                 cxxopts::value<std::string>()->default_value("a.cstr"))
             ("m,mode", "Run mode: dev, prod",
                 cxxopts::value<std::string>()->default_value("prod"))
+            ("r,strict", "Disable heuristics on unresolved ambiguities")
             ("c,cstr", "Display constraints")
             ("s,stats", "Display stats")
             ("d,debug", "Enable debugging statements",
@@ -61,46 +63,48 @@ int main(int argc, char* argv[])
             ("positional", "Positional arguments",
                 cxxopts::value<std::vector<std::string>>());
 
-        options.parse_positional(std::vector<std::string>{"file", "positional"});
-        options.parse(argc, argv);
+        cmdLine.parse_positional(std::vector<std::string>{"file", "positional"});
+        cmdLine.parse(argc, argv);
 
-        if (options.count("test"))
-            cmd.flag_.testOnly = 1;
-        if (options.count("dump-ast"))
-            cmd.flag_.dumpAst = 1;
-        if (options.count("cstr"))
-            cmd.flag_.displayCstr = 1;
-        if (options.count("stats"))
-            cmd.flag_.displayStats = 1;
+        if (cmdLine.count("test"))
+            flags.flag_.testOnly = 1;
+        if (cmdLine.count("dump-ast"))
+            flags.flag_.dumpAst = 1;
+        if (cmdLine.count("cstr"))
+            flags.flag_.displayCstr = 1;
+        if (cmdLine.count("stats"))
+            flags.flag_.displayStats = 1;
+        if (cmdLine.count("strict"))
+            flags.flag_.nonHeuristic = 1;
 
-        if (options.count("help")
-                || (!options.count("positional") && (!cmd.flag_.testOnly))) {
-            std::cout << options.help({"", "Group"}) << std::endl;
+        if (cmdLine.count("help")
+                || (!cmdLine.count("positional") && (!flags.flag_.testOnly))) {
+            std::cout << cmdLine.help({"", "Group"}) << std::endl;
             return 0;
         }
 
         // The input file name is the single positional argument.
-        if (options.count("positional")) {
-            auto& v = options["positional"].as<std::vector<std::string>>();
-            file = v[0];
+        if (cmdLine.count("positional")) {
+            auto& v = cmdLine["positional"].as<std::vector<std::string>>();
+            in = v[0];
         }
 
         // Handle GNU's error variadic function by default. TODO: POSIX stuff too.
-        cmd.flag_.handleGNUerrorFunc_ = true;
+        flags.flag_.handleGNUerrorFunc_ = true;
 
-        mode = options["mode"].as<std::string>();
-        cmd.output_ = options["output"].as<std::string>();
+        mode = cmdLine["mode"].as<std::string>();
+        out = cmdLine["output"].as<std::string>();
     } catch (const cxxopts::OptionException& e) {
         std::cout << "Error parsing options: " << e.what() << std::endl;
         return 1;
     }
 
-    if (cmd.flag_.testOnly || mode == "dev") {
+    if (flags.flag_.testOnly || mode == "dev") {
         try {
             Tester tester;
             tester.testAll();
             std::cout << "Tests passed successfully!" << std::endl;
-            if (cmd.flag_.testOnly)
+            if (flags.flag_.testOnly)
                 return 0;
         } catch (...) {
             std::cout << "\nYou BROKE stuff! Take a look at it!" << std::endl;
@@ -108,11 +112,21 @@ int main(int argc, char* argv[])
         }
     }
 
-    StringLiteral name(file.c_str(), file.length());
-    const std::string& source = readFile(file);
+    const std::string& source = readFile(in);
     Control control;
     Factory factory;
-    process(source, name, control, cmd, &factory);
+    auto result = process(in, source, control, flags, &factory);
+    const auto code = std::get<0>(result);
+    if (code == kParsingFailed)
+        std::cout << "Parsing failed" << std::endl;
+    else if (code == kSyntaxErrors)
+        std::cout << "Source has syntax errors" << std::endl;
+    else if (code == kInvalidAST)
+        std::cout << "No AST" << std::endl;
+    else if (code == kProgramAmbiguous)
+        std::cout << "Code has unresolved ambiguities" << std::endl;
+    else
+        writeFile(std::get<2>(result), out);
 
-    return 0;
+    return code;
 }

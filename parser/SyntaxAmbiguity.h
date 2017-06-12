@@ -27,9 +27,9 @@
 namespace psyche {
 
 /*!
- * \brief The AmbiguityInfo class
+ * \brief The SyntaxAmbiguity class
  */
-class PSYCHEC_API AmbiguityInfo
+class PSYCHEC_API SyntaxAmbiguity
 {
 public:
     enum class Resolution : char
@@ -48,7 +48,7 @@ public:
         BinExpr_X_Coercion       //! (a)*b; (a)-b;
     };
 
-    AmbiguityInfo(Variety variety,
+    SyntaxAmbiguity(Variety variety,
                   unsigned line,
                   Resolution status = Resolution::Unknown)
         : variety_(variety)
@@ -60,7 +60,7 @@ public:
 
     Variety variety() const { return variety_; }
 
-    void resolveAs(AmbiguityInfo::Resolution resolution);
+    void resolveAs(SyntaxAmbiguity::Resolution resolution);
     Resolution resolution() const { return resolution_; }
 
     void setLhs(const CPlusPlus::Name* name) { lhs_ = name; }
@@ -78,7 +78,7 @@ private:
     const CPlusPlus::Name* rhs_;
 };
 
-inline void AmbiguityInfo::resolveAs(AmbiguityInfo::Resolution resolution)
+inline void SyntaxAmbiguity::resolveAs(SyntaxAmbiguity::Resolution resolution)
 {
     resolution_ = resolution;
 }

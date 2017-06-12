@@ -1,23 +1,22 @@
 /******************************************************************************
- * Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- * USA
+ Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
+
+ This library is free software; you can redistribute it and/or modify it under
+ the terms of the GNU Lesser General Public License as published by the Free
+ Software Foundation; either version 2.1 of the License, or (at your option)
+ any later version.
+
+ This library is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+ for more details.
+
+ You should have received a copy of the GNU Lesser General Public License along
+ with this library; if not, write to the Free Software Foundation, Inc., 51
+ Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#include "AstFixer.h"
+#include "ASTNormalizer.h"
 #include "AST.h"
 #include "Assert.h"
 #include "CoreTypes.h"
@@ -28,16 +27,17 @@
 #include "SyntaxAmbiguity.h"
 #include "TranslationUnit.h"
 
-#define VISITOR_NAME "AstFixer"
+#define VISITOR_NAME "AstNormalizer"
 
 using namespace CPlusPlus;
 using namespace psyche;
 
-AstFixer::AstFixer(TranslationUnit *unit)
+ASTNormalizer::ASTNormalizer(TranslationUnit *unit, bool employHeuristic)
     : ASTVisitor(unit)
+    , employHeuristic_(employHeuristic)
 {}
 
-void AstFixer::Stats::reset()
+void ASTNormalizer::Stats::reset()
 {
     resolvedAsDecl_ = 0;
     resolvedAsExpr_ = 0;
@@ -45,7 +45,7 @@ void AstFixer::Stats::reset()
     guessedAsPtrDecl_ = 0;
 }
 
-void AstFixer::fix(TranslationUnitAST *ast)
+void ASTNormalizer::normalize(TranslationUnitAST *ast)
 {
     if (!ast)
         return;
@@ -54,7 +54,7 @@ void AstFixer::fix(TranslationUnitAST *ast)
         accept(it->value);
 }
 
-bool AstFixer::visit(CompoundStatementAST *ast)
+bool ASTNormalizer::visit(CompoundStatementAST *ast)
 {
     for (StatementListAST *it = ast->statement_list; it; it = it->next) {
         maybeFixAST(it->value);
@@ -63,7 +63,7 @@ bool AstFixer::visit(CompoundStatementAST *ast)
     return false;
 }
 
-bool AstFixer::visit(IfStatementAST *ast)
+bool ASTNormalizer::visit(IfStatementAST *ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
@@ -72,70 +72,70 @@ bool AstFixer::visit(IfStatementAST *ast)
     return false;
 }
 
-bool AstFixer::visit(ForStatementAST *ast)
+bool ASTNormalizer::visit(ForStatementAST *ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-bool AstFixer::visit(LabeledStatementAST *ast)
+bool ASTNormalizer::visit(LabeledStatementAST *ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-bool AstFixer::visit(WhileStatementAST *ast)
+bool ASTNormalizer::visit(WhileStatementAST *ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-bool AstFixer::visit(SwitchStatementAST *ast)
+bool ASTNormalizer::visit(SwitchStatementAST *ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-bool AstFixer::visit(CaseStatementAST *ast)
+bool ASTNormalizer::visit(CaseStatementAST *ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-bool AstFixer::visit(DoStatementAST *ast)
+bool ASTNormalizer::visit(DoStatementAST *ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-void AstFixer::maybeFixAST(StatementAST *&ast)
+void ASTNormalizer::maybeFixAST(StatementAST *&ast)
 {
     if (!ast || !ast->asAmbiguousStatement())
         return;
 
-    AmbiguityInfo::Resolution resolution = ast->asAmbiguousStatement()->info->resolution();
+    SyntaxAmbiguity::Resolution resolution = ast->asAmbiguousStatement()->info->resolution();
     auto line = ast->asAmbiguousStatement()->info->line();
-    if (resolution == AmbiguityInfo::Resolution::DefinitelyExpression) {
+    if (resolution == SyntaxAmbiguity::Resolution::DefinitelyExpression) {
         ast = ast->asAmbiguousStatement()->expressionStmt;
         printDebug("Ambiguity at %d can be disambiguated as expression\n", line);
         ++stats_.resolvedAsExpr_;
-    } else if (resolution == AmbiguityInfo::Resolution::DefinitelyDeclaration) {
+    } else if (resolution == SyntaxAmbiguity::Resolution::DefinitelyDeclaration) {
         ast = ast->asAmbiguousStatement()->declarationStmt;
         printDebug("Ambiguity at %d can be disambiguated as declaration\n", line);
         ++stats_.resolvedAsDecl_;
-    } else {
+    } else if (employHeuristic_) {
         printDebug("Ambiguity at %d cannot be disambiguated, apply heuristics\n", line);
-        AmbiguityInfo::Variety variety = ast->asAmbiguousStatement()->info->variety();
-        if (variety == AmbiguityInfo::Variety::MulExpr_X_PointerDecl) {
+        SyntaxAmbiguity::Variety variety = ast->asAmbiguousStatement()->info->variety();
+        if (variety == SyntaxAmbiguity::Variety::MulExpr_X_PointerDecl) {
             ast = ast->asAmbiguousStatement()->declarationStmt;
             ++stats_.guessedAsPtrDecl_;
-        } else if (variety == AmbiguityInfo::Variety::OneArgCall_X_VarDecl) {
+        } else if (variety == SyntaxAmbiguity::Variety::OneArgCall_X_VarDecl) {
             ast = ast->asAmbiguousStatement()->expressionStmt;
             ++stats_.guessedAsCall_;
         }
@@ -144,7 +144,7 @@ void AstFixer::maybeFixAST(StatementAST *&ast)
 
 namespace psyche {
 
-std::ostream& operator<<(std::ostream& os, const AstFixer::Stats& s)
+std::ostream& operator<<(std::ostream& os, const ASTNormalizer::Stats& s)
 {
     os << "  Total ambiguities  : " << s.resolvedAsDecl_
           + s.resolvedAsExpr_

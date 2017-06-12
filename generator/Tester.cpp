@@ -38,13 +38,6 @@
 using namespace psyche;
 using namespace CPlusPlus;
 
-namespace {
-
-// The name/file for all test cases.
-StringLiteral name("testfile", strlen("testfile"));
-
-} // anonymous
-
 /*
  * The expected AST is obtained as follows:
  *  - The generator always generates a .dot file for the original program's AST
@@ -60,7 +53,7 @@ void Tester::checkAst(const std::string &source, std::string expected)
 {
     Control control;
     Factory factory;
-    auto program = process(source, name, control, options_, &factory).first;
+    auto program = std::get<1>(process("testfile", source, control, flags_, &factory));
     PSYCHE_EXPECT_TRUE(program);
 
     std::ostringstream oss;
@@ -81,7 +74,7 @@ void Tester::compareText(std::string expected, std::string actual) const
 
 void Tester::reset()
 {
-    options_ = ProgramCommand();
+    flags_ = ExecutionFlags();
 }
 
 void Tester::testAll()
