@@ -86,7 +86,7 @@ writeDecls (tcx,vcx) =
   -- Constant-expression counter begins at 128 to avoid colisions with ASCII characters.
   -- Eventually, the generator will send "best" values (no duplicates risk).
   (v, _) = Map.foldrWithKey genvardef ([], 128) (varctx vcx)
-  genvardef n (VarInfo t _ ro) (l, cnt)
+  genvardef n (ValSym t _ ro) (l, cnt)
     | ro = ((show $ writeDefine n cnt <+> text "\n") ++ l, cnt + 1)
     | otherwise = ((show $ writeVarDecl t n <+> text "\n") ++ l, cnt)
   cmt1 = "/* Type definitions */\n"

@@ -6,7 +6,7 @@ homepage:            http://github.com/ltcmelo/psychec
 license:             LGPL
 license-file:        ../LICENSE
 author:              Author name here
-maintainer:          example@example.com
+maintainer:          LTCMELO@GMAIL.COM
 copyright:           2016 Rodrigo Ribeiro, Leandro T. C. Melo, Marcus Rodrigues
 category:            Web
 build-type:          Simple
@@ -15,15 +15,23 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Data.Type
-                     , Data.Constraints
                      , Data.BuiltIn
-                     , Data.STDLib
+                     , Data.Constraints
+                     , Data.CLang
+                     , Data.CLib
+                     , Data.StdDef
+                     , Data.StdInt
+                     , Data.StdLib
+                     , Data.StdIO
+                     , Data.String
+                     , Data.Math
                      , Solver.ConstraintSolver
                      , Solver.SolverMonad
                      , Solver.Unification
                      , Solver.ConversionRules
                      , Solver.Decaying
                      , Solver.Retypeable
+                     , Solver.ContextAssemble
                      , Parser.ConstraintParser
                      , Utils.Pretty
                      , Utils.Writer

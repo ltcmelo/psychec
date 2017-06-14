@@ -26,34 +26,43 @@ import qualified Data.List as List
 import Data.Maybe (isJust, fromJust)
 
 import Data.Constraints
-import Data.Type
 import Data.BuiltIn
+import Data.CLang
+import Data.CLib
+import Data.Type
 
 import Control.Monad hiding (void)
 import Control.Monad.Trans
 import Control.Monad.State hiding (void)
 import Control.Monad.Except hiding (void)
 
+import Solver.Decaying
+import Solver.ContextAssemble
+import Solver.ConversionRules
+import Solver.Retypeable
 import Solver.SolverMonad
 import Solver.Unification
-import Solver.ConversionRules
-import Solver.Decaying
-import Solver.Retypeable
+
 import Utils.Pretty
 
 import Debug.Trace
 
 
-solver :: Constraint -> IO (Either String (TyCtx, VarCtx))
-solver c = runSolverM (solve c) (((length $ fv c) + 1), 1)
+solver :: Constraint -> CLang -> IO (Either String (TyCtx, VarCtx))
+solver c l = runSolverM (solve c l) (((length $ fv c) + 1), 1)
 
-solve :: Constraint -> SolverM (TyCtx, VarCtx)
-solve c = do
-  -- Expand typedefs to populate the typing environment.
-  (tcx0,c') <- stage1 (TyCtx $ Map.union builtinTyCtx stdTyCtx) c
+solve :: Constraint -> CLang -> SolverM (TyCtx, VarCtx)
+solve c l = do
+  let
+    -- Populate builtin and standard library types and values.
+    tcx = TyCtx $ (builtinTypes l) `Map.union` (stdTypes l)
+    vcx = VarCtx $ (builtinValues l) `Map.union` (stdValues l)
 
-  -- Expand variable types and create missing variables.
-  (vcx0,c'') <- stage2 (VarCtx $ Map.union builtinVarCtx stdVarCtx) c'
+  -- Expand typing context, introducing types appearing in typedefs.
+  (tcx0,c') <- stage1 tcx c
+
+  -- Expand variables context, creating missing variables.
+  (vcx0,c'') <- stage2 vcx c'
 
   -- Split constraints into equivalence, inequality, and field acess.
   let (eqs, iqs, fds) = stage3 c''
@@ -93,8 +102,8 @@ solve c = do
 
   let
     -- Remove builtins and standard library components.
-    tcx_ = undefTys (tyctx tcx5) Map.\\ builtinTyCtx Map.\\ stdTyCtx
-    vcx_ = undefVars (varctx vcx5) Map.\\ builtinVarCtx Map.\\ stdVarCtx
+    tcx_ = undefTys (tyctx tcx5) Map.\\ (builtinTypes l) Map.\\ (stdTypes l)
+    vcx_ = undefVars (varctx vcx5) Map.\\ (builtinValues l) Map.\\ (stdValues l)
 
     -- Remove anonymous types, their definitions are always in the program. Otherwise, we would
     -- have given them names.
@@ -105,11 +114,6 @@ solve c = do
     tcx_' = Map.filterWithKey nonAnon tcx_
 
   return (TyCtx tcx_', VarCtx vcx_)
-
-
--- Debuging helpers
-cleanv c = VarCtx $  (varctx c) Map.\\ builtinVarCtx Map.\\ stdVarCtx
-cleant c = TyCtx $  (tyctx c) Map.\\ builtinTyCtx Map.\\ stdTyCtx
 
 
 -- | Populate the typing context, replacing "duplicate" types so that a single instance of
@@ -205,7 +209,7 @@ stage2 :: VarCtx -> Constraint -> SolverM (VarCtx, Constraint)
 stage2 vtx (n :<-: t@(FunTy rt pts)) =
     case Map.lookup n (varctx vtx) of
         Just info ->
-            case varty info of
+            case valty info of
                 FunTy rt' pts' -> do
                     let pcs = zipWith (\t t' -> (t' :>: t)) pts pts'
                         pcs' = foldr (\c acc -> c :&: acc) Truth pcs
@@ -215,23 +219,23 @@ stage2 vtx (n :<-: t@(FunTy rt pts)) =
                 t' -> return (vtx, t' :=: t)
         Nothing -> do
             v <- fresh
-            return ( VarCtx $ Map.insert n (VarInfo v False False) (varctx vtx)
+            return ( VarCtx $ Map.insert n (ValSym v False False) (varctx vtx)
                     , v :=: t )
 stage2 vtx (n :<-: t) =
     case Map.lookup n (varctx vtx) of
-        Just info -> return (vtx, varty info :=: t)
+        Just info -> return (vtx, valty info :=: t)
         Nothing -> do
             v <- fresh
-            return ( VarCtx $ Map.insert n (VarInfo v False False) (varctx vtx)
+            return ( VarCtx $ Map.insert n (ValSym v False False) (varctx vtx)
                    , v :=: t )
 stage2 vtx (Def n t c) =
-    stage2 (VarCtx $ Map.insert n (VarInfo t True False) (varctx vtx)) c
+    stage2 (VarCtx $ Map.insert n (ValSym t True False) (varctx vtx)) c
 stage2 vtx (c :&: c') = do
     (vtx1, c1) <- stage2 vtx c
     (vtx2, c2) <- stage2 vtx1 c'
     let
-        preferQual (VarInfo lt@(QualTy _) b ro) _ = VarInfo lt b ro
-        preferQual _ (VarInfo rt@(QualTy _) b ro) = VarInfo rt b ro
+        preferQual (ValSym lt@(QualTy _) b ro) _ = ValSym lt b ro
+        preferQual _ (ValSym rt@(QualTy _) b ro) = ValSym rt b ro
         preferQual l r = l
     return ( VarCtx $ Map.unionWith preferQual (varctx vtx1) (varctx vtx2)
            , c1 :&: c2 )
@@ -244,7 +248,7 @@ stage2 vtx (ReadOnly n) =
         Just info -> do
              v <- fresh
              return ( VarCtx $ Map.insert n
-                               (VarInfo (QualTy (varty info)) (declared info) True)
+                               (ValSym (QualTy (valty info)) (declared info) True)
                                (varctx vtx)
                     , Truth)
 stage2 vtx Truth = return (vtx, Truth)
@@ -348,7 +352,7 @@ stage5 tcx vcx s = do
     elabIdx = Map.foldrWithKey (\k (t, _) acc ->
       if isElab k then acc %% (t %-> k) else acc) nullIdx (tyctx tcx)
     tcxFlt_' = Map.map (\(t, b) -> (compact elabIdx t , b)) tcxFlt_
-    vcxFlt_ = Map.map (\(VarInfo t b ro) -> VarInfo (compact elabIdx t) b ro) (varctx vcx)
+    vcxFlt_ = Map.map (\(ValSym t b ro) -> ValSym (compact elabIdx t) b ro) (varctx vcx)
 
     tcxElab_ = (tyctx tcx) Map.\\ tcxFlt_'
     tcxElab_' = Map.filter (not . snd) tcxElab_
@@ -358,7 +362,7 @@ stage5 tcx vcx s = do
     -- Collect composite types so we can compact them. Througout this process we also
     -- look into the substitutions because nested structs will only appear there.
     nonElabCompo = Map.foldr (\(t, _) acc -> acc ++ collect t) [] tcxFlt_'
-    nonElabCompo' = Map.foldr (\(VarInfo t _ _) acc -> acc ++ collect t) nonElabCompo vcxFlt_
+    nonElabCompo' = Map.foldr (\(ValSym t _ _) acc -> acc ++ collect t) nonElabCompo vcxFlt_
     allCompo = Map.foldr (\(t, _) acc -> t:acc) nonElabCompo' tcxElab_'
     exclude = Set.fromList allCompo
 
@@ -383,7 +387,7 @@ stage5 tcx vcx s = do
 
   let
     tcx_ = Map.map (\(t, b) -> (compact idx t, b)) tcxFlt_'
-    vcx_ = Map.map (\(VarInfo t b ro) -> VarInfo (compact idx t) b ro) vcxFlt_
+    vcx_ = Map.map (\(ValSym t b ro) -> ValSym (compact idx t) b ro) vcxFlt_
     tcx_' = Map.foldrWithKey (\t n acc -> Map.insert n (t, False) acc) tcx_ (ty2n idx)
 
   -- "De-alphasize" top-level names so they match the ones we created.
@@ -440,7 +444,7 @@ stage6 tcx vcx =
         Just k' -> if k == k' then dummy k else orphanize elabOrph t
         Nothing -> orphanize elabOrph t
     tcx_ = Map.mapWithKey (\k (t, b) -> (go k t, b)) (tyctx tcx)
-    vcx_ = Map.map (\(VarInfo t b ro) -> VarInfo (orphanize elabOrph t) b ro) (varctx vcx)
+    vcx_ = Map.map (\(ValSym t b ro) -> ValSym (orphanize elabOrph t) b ro) (varctx vcx)
   in
     (TyCtx tcx_, VarCtx vcx_)
 

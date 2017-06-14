@@ -20,6 +20,7 @@ import Test.Tasty
 import Test.Tasty.HUnit
 
 import Control.Monad
+import Data.CLang
 import Data.Constraints
 import Data.Either
 import Data.BuiltIn
@@ -214,7 +215,7 @@ doTest s
         case parser ctr of
           Left err -> error $ "Error parsing constraints:\n" ++ err
           Right c  -> do
-            r <- solver c
+            r <- solver c C99
             case r of
                 Left err' -> error $ "Error solving constraints:\n" ++ show err'
                 Right ctxs@(tcx, _) -> do

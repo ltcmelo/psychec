@@ -18,6 +18,8 @@
 
 module Main where
 
+
+import Data.CLang
 import Options.Applicative hiding ((<+>))
 import System.FilePath
 import Solver.ConstraintSolver
@@ -59,7 +61,7 @@ execSolver fp s = case parser s of
                     Left err -> putStrLn err
                     Right c  ->
                         do
-                          inf <- solver c
+                          inf <- solver c C99
                           case inf of
                             Left err'  -> putStrLn err'
                             Right inf' -> do

@@ -70,8 +70,8 @@ instance Apply Ty where
 instance Apply Field where
     apply s (Field n t) = Field n (apply s t)
 
-instance Apply VarInfo where
-    apply s (VarInfo t b ro) = VarInfo (apply s t) b ro
+instance Apply ValSym where
+    apply s (ValSym t b ro) = ValSym (apply s t) b ro
 
 
 data Constness = Relax | Enforce  deriving (Eq, Ord, Show)
