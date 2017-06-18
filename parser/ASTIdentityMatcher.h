@@ -17,8 +17,8 @@
  * USA
  *****************************************************************************/
 
-#ifndef PSYCHE_CANONICALASTMATCHER_
-#define PSYCHE_CANONICALASTMATCHER_
+#ifndef PSYCHE_IDENTITY_MATCHER_H__
+#define PSYCHE_IDENTITY_MATCHER_H__
 
 #include "Config.h"
 #include "AST.h"
@@ -32,9 +32,9 @@ using namespace CPlusPlus;
 
 namespace psyche {
 
-struct PSYCHEC_API CanonicalASTMatcher final : public CPlusPlus::ASTMatcher
+struct PSYCHEC_API ASTIdentityMatcher final : public CPlusPlus::ASTMatcher
 {
-    CanonicalASTMatcher(TranslationUnit* unit)
+    ASTIdentityMatcher(TranslationUnit* unit)
         : unit_(unit)
     {}
 

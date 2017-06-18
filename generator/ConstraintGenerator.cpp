@@ -633,8 +633,8 @@ bool isPolyOprtrArithRet(int opTk)
 
 } // anonymous
 
-void ConstraintGenerator::applyTypeLattice(const ScalarTypeLattice::Class& lhsClass,
-                                           const ScalarTypeLattice::Class& rhsClass,
+void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
+                                           const DomainLattice::Class& rhsClass,
                                            const std::string& lhsAlpha,
                                            const std::string& rhsAlpha,
                                            int opTk)
@@ -644,16 +644,16 @@ void ConstraintGenerator::applyTypeLattice(const ScalarTypeLattice::Class& lhsCl
     // other is an arithmetic type (integral or floating point), the constraint
     // is dropped so we don't trigger an "overunification".
 
-    if ((lhsClass == ScalarTypeLattice::Pointer
-         && (rhsClass == ScalarTypeLattice::Integral
-             || rhsClass == ScalarTypeLattice::FloatingPoint
-             || rhsClass == ScalarTypeLattice::Arithmetic
-             || rhsClass == ScalarTypeLattice::Scalar))
-            || ((lhsClass == ScalarTypeLattice::Integral
-                 || lhsClass == ScalarTypeLattice::FloatingPoint
-                 || lhsClass == ScalarTypeLattice::Arithmetic
-                 || lhsClass == ScalarTypeLattice::Scalar)
-                && (rhsClass == ScalarTypeLattice::Pointer))) {
+    if ((lhsClass == DomainLattice::Pointer
+         && (rhsClass == DomainLattice::Integral
+             || rhsClass == DomainLattice::FloatingPoint
+             || rhsClass == DomainLattice::Arithmetic
+             || rhsClass == DomainLattice::Scalar))
+            || ((lhsClass == DomainLattice::Integral
+                 || lhsClass == DomainLattice::FloatingPoint
+                 || lhsClass == DomainLattice::Arithmetic
+                 || lhsClass == DomainLattice::Scalar)
+                && (rhsClass == DomainLattice::Pointer))) {
         printDebug("Discard constraint, %s x %s\n",
                    lhsClass.name_.c_str(), rhsClass.name_.c_str());
         writer_->writeTruth();
@@ -670,13 +670,13 @@ void ConstraintGenerator::applyTypeLattice(const ScalarTypeLattice::Class& lhsCl
                                                       : rhsClass.arithName_;
 
     if (actualArithTy.empty()) {
-        if (lhsClass == ScalarTypeLattice::Integral
-                || rhsClass == ScalarTypeLattice::Integral
-                || lhsClass == ScalarTypeLattice::Arithmetic
-                || rhsClass == ScalarTypeLattice::Arithmetic) {
+        if (lhsClass == DomainLattice::Integral
+                || rhsClass == DomainLattice::Integral
+                || lhsClass == DomainLattice::Arithmetic
+                || rhsClass == DomainLattice::Arithmetic) {
             actualArithTy = kDefaultIntTy;
-        } else if (lhsClass == ScalarTypeLattice::FloatingPoint
-                   || rhsClass == ScalarTypeLattice::FloatingPoint) {
+        } else if (lhsClass == DomainLattice::FloatingPoint
+                   || rhsClass == DomainLattice::FloatingPoint) {
             actualArithTy = kDefaultFloatPointTy;
         }
     }
@@ -705,16 +705,16 @@ void ConstraintGenerator::applyTypeLattice(const ScalarTypeLattice::Class& lhsCl
     writer_->writeTruth();
 }
 
-ScalarTypeLattice::Class ConstraintGenerator::classOfExpr(ExpressionAST *ast) const
+DomainLattice::Class ConstraintGenerator::classOfExpr(ExpressionAST *ast) const
 {
     const auto& s = lattice_.fetchText(ast);
     auto clazz = lattice_.recover(ast);
-    if (clazz != ScalarTypeLattice::Undefined) {
+    if (clazz != DomainLattice::Undefined) {
         printDebug("Recovered AST %s as %s\n", s.c_str(), clazz.name_.c_str());
     } else {
         TypeOfExpr typeofExpr(translationUnit());
         FullySpecifiedType ty = typeofExpr.resolve(ast, scope_);
-        clazz = ScalarTypeLattice::classOf(ty);
+        clazz = DomainLattice::classOf(ty);
         printDebug("Typed AST %s as %s\n", s.c_str(), clazz.name_.c_str());
     }
 
@@ -1004,11 +1004,11 @@ void ConstraintGenerator::convertBoolExpression(ExpressionAST *ast)
 {
     std::string ty;
     auto clazz = classOfExpr(ast);
-    if (clazz == ScalarTypeLattice::Arithmetic) {
+    if (clazz == DomainLattice::Arithmetic) {
         ty = kDefaultArithTy;
-    } else if (clazz == ScalarTypeLattice::Integral) {
+    } else if (clazz == DomainLattice::Integral) {
         ty = kDefaultIntTy;
-    } else if (clazz == ScalarTypeLattice::FloatingPoint) {
+    } else if (clazz == DomainLattice::FloatingPoint) {
         ty = kDefaultFloatPointTy;
     } else {
         ty = supply_.createTypeVar1();

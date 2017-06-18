@@ -25,7 +25,7 @@
 #include "FreshVarSupply.h"
 #include "FullySpecifiedType.h"
 #include "ConstraintSyntax.h"
-#include "ScalarTypeLattice.h"
+#include "DomainLattice.h"
 #include "TypeSpeller.h"
 #include <stack>
 #include <string>
@@ -139,7 +139,7 @@ private:
     FreshVarSupply supply_;
 
     //! Pointer x integers lattice.
-    ScalarTypeLattice lattice_;
+    DomainLattice lattice_;
 
     //! Inside static initialization.
     bool staticDecl_;
@@ -149,12 +149,12 @@ private:
      * Pointer x scalar lattice related processing.
      */
     bool preprocess_;
-    void applyTypeLattice(const ScalarTypeLattice::Class &lhsClass,
-                          const ScalarTypeLattice::Class &rhsClass,
+    void applyTypeLattice(const DomainLattice::Class &lhsClass,
+                          const DomainLattice::Class &rhsClass,
                           const std::string &lhsAlpha,
                           const std::string &rhsAlpha,
                           int opTk);
-    ScalarTypeLattice::Class classOfExpr(CPlusPlus::ExpressionAST* ast) const;
+    DomainLattice::Class classOfExpr(CPlusPlus::ExpressionAST* ast) const;
     //!@}
 
     /*!

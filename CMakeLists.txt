@@ -13,6 +13,7 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/AST.cpp
     ${PROJECT_SOURCE_DIR}/parser/AST.h
     ${PROJECT_SOURCE_DIR}/parser/ASTClone.cpp
+    ${PROJECT_SOURCE_DIR}/parser/ASTIdentityMatcher.h
     ${PROJECT_SOURCE_DIR}/parser/ASTMatch0.cpp
     ${PROJECT_SOURCE_DIR}/parser/ASTMatcher.cpp
     ${PROJECT_SOURCE_DIR}/parser/ASTMatcher.h
@@ -76,7 +77,6 @@ set(PSYCHEC_SOURCES
     # Generator's file
     ${PROJECT_SOURCE_DIR}/generator/Assert.h
     ${PROJECT_SOURCE_DIR}/generator/BuiltinNames.h
-    ${PROJECT_SOURCE_DIR}/generator/CanonicalASTMatcher.h
     ${PROJECT_SOURCE_DIR}/generator/ConstraintGenerator.h
     ${PROJECT_SOURCE_DIR}/generator/ConstraintGenerator.cpp
     ${PROJECT_SOURCE_DIR}/generator/ConstraintWriter.h
@@ -86,6 +86,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/Debug.cpp
     ${PROJECT_SOURCE_DIR}/generator/DiagnosticCollector.h
     ${PROJECT_SOURCE_DIR}/generator/DiagnosticCollector.cpp
+    ${PROJECT_SOURCE_DIR}/generator/DomainLattice.h
+    ${PROJECT_SOURCE_DIR}/generator/DomainLattice.cpp
     ${PROJECT_SOURCE_DIR}/generator/Driver.h
     ${PROJECT_SOURCE_DIR}/generator/Driver.cpp
     ${PROJECT_SOURCE_DIR}/generator/Dumper.h
@@ -99,8 +101,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/Observer.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
-    ${PROJECT_SOURCE_DIR}/generator/ScalarTypeLattice.h
-    ${PROJECT_SOURCE_DIR}/generator/ScalarTypeLattice.cpp
     ${PROJECT_SOURCE_DIR}/generator/SymbolPP.h
     ${PROJECT_SOURCE_DIR}/generator/SymbolPP.cpp
     ${PROJECT_SOURCE_DIR}/generator/Tester.h
@@ -115,17 +115,17 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/analysis/RangeAnalysis.h
     ${PROJECT_SOURCE_DIR}/analysis/RangeAnalysis.cpp
     # Stubber's files
-    ${PROJECT_SOURCE_DIR}/stubber/BasicStubber.h
-    ${PROJECT_SOURCE_DIR}/stubber/BasicStubber.cpp
+    ${PROJECT_SOURCE_DIR}/tools/BasicStubber.h
+    ${PROJECT_SOURCE_DIR}/tools/BasicStubber.cpp
     # Utils' files
-    ${PROJECT_SOURCE_DIR}/utils/CSyntax.h
-    ${PROJECT_SOURCE_DIR}/utils/FunctionWriter.h
-    ${PROJECT_SOURCE_DIR}/utils/FunctionWriter.cpp
-    ${PROJECT_SOURCE_DIR}/utils/IO.h
-    ${PROJECT_SOURCE_DIR}/utils/IO.cpp
-    ${PROJECT_SOURCE_DIR}/utils/TypeSpeller.h
-    ${PROJECT_SOURCE_DIR}/utils/TypeSpeller.cpp
-    ${PROJECT_SOURCE_DIR}/utils/VersionedMap.h
+    ${PROJECT_SOURCE_DIR}/utility/CSyntax.h
+    ${PROJECT_SOURCE_DIR}/utility/FunctionWriter.h
+    ${PROJECT_SOURCE_DIR}/utility/FunctionWriter.cpp
+    ${PROJECT_SOURCE_DIR}/utility/IO.h
+    ${PROJECT_SOURCE_DIR}/utility/IO.cpp
+    ${PROJECT_SOURCE_DIR}/utility/TypeSpeller.h
+    ${PROJECT_SOURCE_DIR}/utility/TypeSpeller.cpp
+    ${PROJECT_SOURCE_DIR}/utility/VersionedMap.h
 )
 
 set(GENERATOR_SOURCES
@@ -144,8 +144,8 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/generator
     ${PROJECT_SOURCE_DIR}/parser
     ${PROJECT_SOURCE_DIR}/analysis
-    ${PROJECT_SOURCE_DIR}/stubber
-    ${PROJECT_SOURCE_DIR}/utils
+    ${PROJECT_SOURCE_DIR}/tools
+    ${PROJECT_SOURCE_DIR}/utility
     ${PROJECT_SOURCE_DIR}/command/cxxopts/include
 )
 

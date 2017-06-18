@@ -17,14 +17,14 @@
  * USA
  *****************************************************************************/
 
-#ifndef PSYCHE_SCALARTYPELATTICE_H__
-#define PSYCHE_SCALARTYPELATTICE_H__
+#ifndef PSYCHE_DOMAIN_LATTICE_H__
+#define PSYCHE_DOMAIN_LATTICE_H__
 
 #include "Config.h"
 #include "ASTfwd.h"
 #include "ASTVisitor.h"
+#include "ASTIdentityMatcher.h"
 #include "CPlusPlusForwardDeclarations.h"
-#include "CanonicalASTMatcher.h"
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -33,12 +33,12 @@
 namespace psyche {
 
 /*!
- * \brief The ScalarTypeLattice class
+ * \brief The DomainLattice class
  */
-class PSYCHEC_API ScalarTypeLattice final : public CPlusPlus::ASTVisitor
+class PSYCHEC_API DomainLattice final : public CPlusPlus::ASTVisitor
 {
 public:
-    ScalarTypeLattice(CPlusPlus::TranslationUnit* unit);
+    DomainLattice(CPlusPlus::TranslationUnit* unit);
 
     /*!
      * \brief The class structure
@@ -136,10 +136,10 @@ private:
     AstMap astDB_;
     std::vector<CPlusPlus::ExpressionAST*> knownAsts_;
     const CPlusPlus::Scope* scope_;
-    mutable CanonicalASTMatcher matcher_;
+    mutable ASTIdentityMatcher matcher_;
 };
 
-inline std::ostream& operator<<(std::ostream& os, const ScalarTypeLattice::Class& h)
+inline std::ostream& operator<<(std::ostream& os, const DomainLattice::Class& h)
 {
     os << h.name_;
     return os;

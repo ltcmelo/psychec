@@ -17,7 +17,7 @@
  * USA
  *****************************************************************************/
 
-#include "ScalarTypeLattice.h"
+#include "DomainLattice.h"
 #include "AST.h"
 #include "Assert.h"
 #include "BuiltinNames.h"
@@ -56,14 +56,14 @@ const char* const kZero = "0";
 
 } // anonymous
 
-const ScalarTypeLattice::Class ScalarTypeLattice::Undefined(kUndefinedClassName);
-const ScalarTypeLattice::Class ScalarTypeLattice::Scalar(kScalarClassName);
-const ScalarTypeLattice::Class ScalarTypeLattice::Pointer(kPointerClassName);
-const ScalarTypeLattice::Class ScalarTypeLattice::Integral(kIntegralClassName);
-const ScalarTypeLattice::Class ScalarTypeLattice::FloatingPoint(kFloatPointClassName);
-const ScalarTypeLattice::Class ScalarTypeLattice::Arithmetic(kArithmeticClassName);
+const DomainLattice::Class DomainLattice::Undefined(kUndefinedClassName);
+const DomainLattice::Class DomainLattice::Scalar(kScalarClassName);
+const DomainLattice::Class DomainLattice::Pointer(kPointerClassName);
+const DomainLattice::Class DomainLattice::Integral(kIntegralClassName);
+const DomainLattice::Class DomainLattice::FloatingPoint(kFloatPointClassName);
+const DomainLattice::Class DomainLattice::Arithmetic(kArithmeticClassName);
 
-bool ScalarTypeLattice::Class::operator>(const ScalarTypeLattice::Class& other) const
+bool DomainLattice::Class::operator>(const DomainLattice::Class& other) const
 {
     if (other == Undefined) {
         return name_ == kScalarClassName
@@ -88,30 +88,30 @@ bool ScalarTypeLattice::Class::operator>(const ScalarTypeLattice::Class& other) 
     return false;
 }
 
-bool ScalarTypeLattice::Class::operator==(const ScalarTypeLattice::Class& other) const
+bool DomainLattice::Class::operator==(const DomainLattice::Class& other) const
 {
     return name_ == other.name_;
 }
 
-bool ScalarTypeLattice::Class::operator!=(const ScalarTypeLattice::Class& other) const
+bool DomainLattice::Class::operator!=(const DomainLattice::Class& other) const
 {
     return !(this == &other);
 }
 
-ScalarTypeLattice::ScalarTypeLattice(TranslationUnit *unit)
+DomainLattice::DomainLattice(TranslationUnit *unit)
     : ASTVisitor(unit)
     , clazz_(Undefined)
     , matcher_(unit)
 {}
 
-void ScalarTypeLattice::totalize(ExpressionAST* ast, const Scope *scope)
+void DomainLattice::totalize(ExpressionAST* ast, const Scope *scope)
 {
     scope_ = scope;
     switchClass(Undefined);
     enter(ast);
 }
 
-ScalarTypeLattice::Class ScalarTypeLattice::recover(const Symbol* sym) const
+DomainLattice::Class DomainLattice::recover(const Symbol* sym) const
 {
     auto it = symbolDB_.find(const_cast<Symbol*>(sym));
     if (it != symbolDB_.end())
@@ -119,7 +119,7 @@ ScalarTypeLattice::Class ScalarTypeLattice::recover(const Symbol* sym) const
     return Undefined;
 }
 
-ScalarTypeLattice::Class ScalarTypeLattice::recover(ExpressionAST *ast) const
+DomainLattice::Class DomainLattice::recover(ExpressionAST *ast) const
 {
     auto equivalent = isKnownAST(ast);
     if (!equivalent)
@@ -131,7 +131,7 @@ ScalarTypeLattice::Class ScalarTypeLattice::recover(ExpressionAST *ast) const
     return astDB_.find(equivalent)->second;
 }
 
-ScalarTypeLattice::Class ScalarTypeLattice::classOf(const FullySpecifiedType &ty,
+DomainLattice::Class DomainLattice::classOf(const FullySpecifiedType &ty,
                                                     const Symbol *sym)
 {
     auto debug = [sym] (const char* m) {
@@ -191,7 +191,7 @@ ScalarTypeLattice::Class ScalarTypeLattice::classOf(const FullySpecifiedType &ty
     return Undefined;
 }
 
-void ScalarTypeLattice::classify(ExpressionAST *ast)
+void DomainLattice::classify(ExpressionAST *ast)
 {
     const auto& astText = fetchText(ast);
 
@@ -264,7 +264,7 @@ void ScalarTypeLattice::classify(ExpressionAST *ast)
                astText.c_str(), clazz_.name_.c_str());
 }
 
-ExpressionAST *ScalarTypeLattice::isKnownAST(ExpressionAST *ast) const
+ExpressionAST *DomainLattice::isKnownAST(ExpressionAST *ast) const
 {
     for (auto candidate : knownAsts_) {
         if (ast->match(candidate, &matcher_))
@@ -273,19 +273,19 @@ ExpressionAST *ScalarTypeLattice::isKnownAST(ExpressionAST *ast) const
     return nullptr;
 }
 
-ScalarTypeLattice::Class ScalarTypeLattice::switchClass(ScalarTypeLattice::Class clazz)
+DomainLattice::Class DomainLattice::switchClass(DomainLattice::Class clazz)
 {
     std::swap(clazz_, clazz);
     return clazz;
 }
 
-void ScalarTypeLattice::enter(ExpressionAST *ast)
+void DomainLattice::enter(ExpressionAST *ast)
 {
     accept(ast);
     classify(ast);
 }
 
-bool ScalarTypeLattice::visit(ArrayAccessAST *ast)
+bool DomainLattice::visit(ArrayAccessAST *ast)
 {
     Class prevClass = switchClass(Pointer);
     enter(ast->base_expression);
@@ -296,7 +296,7 @@ bool ScalarTypeLattice::visit(ArrayAccessAST *ast)
     return false;
 }
 
-bool ScalarTypeLattice::visit(BinaryExpressionAST *ast)
+bool DomainLattice::visit(BinaryExpressionAST *ast)
 {
     BinaryExpressionAST* bin = ast->asBinaryExpression();
 
@@ -392,7 +392,7 @@ bool ScalarTypeLattice::visit(BinaryExpressionAST *ast)
     }
 }
 
-bool ScalarTypeLattice::visit(ConditionalExpressionAST *ast)
+bool DomainLattice::visit(ConditionalExpressionAST *ast)
 {
     Class prevClass = switchClass(Scalar);
     enter(ast->condition);
@@ -405,12 +405,12 @@ bool ScalarTypeLattice::visit(ConditionalExpressionAST *ast)
     return false;
 }
 
-bool ScalarTypeLattice::visit(IdExpressionAST *ast)
+bool DomainLattice::visit(IdExpressionAST *ast)
 {
     return false;
 }
 
-bool ScalarTypeLattice::visit(MemberAccessAST *ast)
+bool DomainLattice::visit(MemberAccessAST *ast)
 {
     Class prevClass = clazz_;
     if (tokenKind(ast->access_token) == T_ARROW)
@@ -423,14 +423,14 @@ bool ScalarTypeLattice::visit(MemberAccessAST *ast)
     return false;
 }
 
-bool ScalarTypeLattice::visit(NestedExpressionAST *ast)
+bool DomainLattice::visit(NestedExpressionAST *ast)
 {
     enter(ast->expression);
 
     return false;
 }
 
-bool ScalarTypeLattice::visit(UnaryExpressionAST *ast)
+bool DomainLattice::visit(UnaryExpressionAST *ast)
 {
     switch (tokenKind(ast->unary_op_token)) {
     case T_STAR: {
@@ -481,7 +481,7 @@ bool ScalarTypeLattice::visit(UnaryExpressionAST *ast)
     }
 }
 
-bool ScalarTypeLattice::visit(NumericLiteralAST *ast)
+bool DomainLattice::visit(NumericLiteralAST *ast)
 {
     const Token& tk = tokenAt(ast->literal_token);
     if (tk.is(T_CHAR_LITERAL)) {
@@ -512,25 +512,25 @@ bool ScalarTypeLattice::visit(NumericLiteralAST *ast)
     return false;
 }
 
-bool ScalarTypeLattice::visit(BoolLiteralAST *ast)
+bool DomainLattice::visit(BoolLiteralAST *ast)
 {
     switchClass(Integral); // Booleans are integrals.
     return false;
 }
 
-bool ScalarTypeLattice::visit(StringLiteralAST *ast)
+bool DomainLattice::visit(StringLiteralAST *ast)
 {
     switchClass(Pointer);
     return false;
 }
 
-bool ScalarTypeLattice::visit(PointerLiteralAST *ast)
+bool DomainLattice::visit(PointerLiteralAST *ast)
 {
     switchClass(Pointer);
     return false;
 }
 
-bool ScalarTypeLattice::visit(CallAST *ast)
+bool DomainLattice::visit(CallAST *ast)
 {
     Class prevClass = clazz_;
     enter(ast->base_expression);
@@ -543,14 +543,14 @@ bool ScalarTypeLattice::visit(CallAST *ast)
     return false;
 }
 
-bool ScalarTypeLattice::visit(PostIncrDecrAST* ast)
+bool DomainLattice::visit(PostIncrDecrAST* ast)
 {
     switchClass(Scalar);
     enter(ast->base_expression);
     return false;
 }
 
-std::string ScalarTypeLattice::fetchText(AST *ast) const
+std::string DomainLattice::fetchText(AST *ast) const
 {
     const Token first = tokenAt(ast->firstToken());
     const Token last = tokenAt(ast->lastToken());
