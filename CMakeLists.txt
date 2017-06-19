@@ -32,6 +32,7 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Control.h
     ${PROJECT_SOURCE_DIR}/parser/CoreTypes.cpp
     ${PROJECT_SOURCE_DIR}/parser/CoreTypes.h
+    ${PROJECT_SOURCE_DIR}/parser/Dialect.h
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticClient.cpp
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticClient.h
     ${PROJECT_SOURCE_DIR}/parser/FullySpecifiedType.cpp
@@ -103,6 +104,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
     ${PROJECT_SOURCE_DIR}/generator/SymbolPP.h
     ${PROJECT_SOURCE_DIR}/generator/SymbolPP.cpp
+    ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.h
+    ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.cpp
     ${PROJECT_SOURCE_DIR}/generator/Tester.h
     ${PROJECT_SOURCE_DIR}/generator/Tester.cpp
     ${PROJECT_SOURCE_DIR}/generator/TypeOfExpr.h
@@ -114,7 +117,7 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/analysis/Range.cpp
     ${PROJECT_SOURCE_DIR}/analysis/RangeAnalysis.h
     ${PROJECT_SOURCE_DIR}/analysis/RangeAnalysis.cpp
-    # Stubber's files
+    # Tools' files
     ${PROJECT_SOURCE_DIR}/tools/BasicStubber.h
     ${PROJECT_SOURCE_DIR}/tools/BasicStubber.cpp
     # Utils' files
@@ -126,6 +129,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/utility/TypeSpeller.h
     ${PROJECT_SOURCE_DIR}/utility/TypeSpeller.cpp
     ${PROJECT_SOURCE_DIR}/utility/VersionedMap.h
+    ${PROJECT_SOURCE_DIR}/utility/Process.h
+    ${PROJECT_SOURCE_DIR}/utility/Process.cpp
 )
 
 set(GENERATOR_SOURCES

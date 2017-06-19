@@ -276,7 +276,7 @@ Parser::Parser(TranslationUnit *unit)
     : _translationUnit(unit),
       _control(unit->control()),
       _pool(unit->memoryPool()),
-      _language(unit->languageFeatures()),
+      _language(unit->dialect()),
       _tokenIndex(1),
       _templateArguments(0),
       _inFunctionBody(false),

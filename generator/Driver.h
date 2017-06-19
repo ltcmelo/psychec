@@ -21,15 +21,15 @@
 #define PSYCHE_DRIVER_H__
 
 #include "Config.h"
+#include "ASTfwd.h"
+#include "Control.h"
 #include "CPlusPlusForwardDeclarations.h"
+#include "Dialect.h"
+#include "Factory.h"
 #include <cstddef>
 #include <memory>
 #include <string>
 #include <tuple>
-
-namespace cxxopts {
-class Options;
-}
 
 namespace psyche {
 
@@ -50,9 +50,8 @@ struct PSYCHEC_API ExecutionFlags
         uint32_t testOnly : 1;  //!< Test-only run.
         uint32_t disambOnly : 1;  //!< Disambiguatio-only run.
         uint32_t nonHeuristic : 1;  //!< Disable heuristics on unresolved ambiguities.
+        uint32_t libDetect : 2;  //!< Lib-detection mode.
 
-        //! Whether to write the generate constraints back.
-        uint32_t writeConstraints_   : 1;
         //! Whether to handle GNU's error function as a printf variety.
         uint32_t handleGNUerrorFunc_ : 1;
     };
@@ -63,31 +62,55 @@ struct PSYCHEC_API ExecutionFlags
     };
 };
 
-
-//! Return codes.
-const size_t kOK = 0;
-const size_t kParsingFailed = 1;
-const size_t kSyntaxErrors = 2;
-const size_t kInvalidAST = 3;
-const size_t kProgramAmbiguous = 4;
+/*!
+ * \brief The LibDetectMode enum
+ */
+enum class LibDetectMode : char
+{
+    Ignore,
+    Approx,
+    Strict
+};
 
 /*!
- * \brief process
- * \param unitName
- * \param source
- * \param control
- * \param flags
- * \param factory
- * \return
+ * \brief The Driver class
  */
-std::tuple<size_t,
-           std::unique_ptr<CPlusPlus::TranslationUnit>,
-           std::string>
-process(const std::string& unitName,
-        const std::string& source,
-        CPlusPlus::Control& control,
-        ExecutionFlags& flags,
-        Factory* factory);
+class PSYCHEC_API Driver final
+{
+public:
+    Driver(const Factory& factory);
+
+    size_t process(const std::string& unitName,
+                   const std::string& source,
+                   const ExecutionFlags& flags);
+
+    CPlusPlus::TranslationUnit* tu() const;
+    CPlusPlus::TranslationUnitAST* tuAst() const;
+    const std::string& constraints() const { return constraints_; }
+
+    static constexpr size_t OK = 0;
+    static constexpr size_t ParsingFailed = 10;
+    static constexpr size_t SyntaxErrors = 11;
+    static constexpr size_t InvalidAST = 12;
+    static constexpr size_t ProgramAmbiguous = 13;
+
+private:
+    static CPlusPlus::Dialect specifiedDialect(const ExecutionFlags& exec);
+
+    void configure(const ExecutionFlags& flags);
+    size_t buildAst(const std::string& source);
+    bool annotateSymbols();
+    void generateConstraints();
+    void reparseWithGuessedLibs();
+    void reprocessWithLibs();
+
+    const Factory factory_;
+    CPlusPlus::Control control_;
+    ExecutionFlags flags_;
+    CPlusPlus::Namespace* global_;
+    std::unique_ptr<CPlusPlus::TranslationUnit> unit_;
+    std::string constraints_;
+};
 
 } // namespace psyche
 

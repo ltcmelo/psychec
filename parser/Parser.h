@@ -315,7 +315,7 @@ private:
     TranslationUnit *_translationUnit;
     Control *_control;
     MemoryPool *_pool;
-    LanguageOptions _language;
+    Dialect _language;
     unsigned _tokenIndex;
     bool _templateArguments: 1;
     bool _inFunctionBody: 1;

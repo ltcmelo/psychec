@@ -139,7 +139,7 @@ void TranslationUnit::tokenize()
     f._tokenized = true;
 
     Lexer lex(this);
-    lex.setLanguageFeatures(_languageFeatures);
+    lex.setDialect(_dialect);
     lex.setScanCommentTokens(true);
 
     std::stack<unsigned> braces;

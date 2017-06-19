@@ -349,7 +349,7 @@ FullySpecifiedType Bind::declarator(DeclaratorAST *ast, const FullySpecifiedType
 
     std::swap(_declaratorId, declaratorId);
     bool isAuto = false;
-    const bool cxx11Enabled = translationUnit()->languageFeatures().cpp11;
+    const bool cxx11Enabled = translationUnit()->dialect().cpp11;
     if (cxx11Enabled)
         isAuto = type.isAuto();
 
@@ -1325,7 +1325,7 @@ bool Bind::visit(ForeachStatementAST *ast)
     DeclaratorIdAST *declaratorId = 0;
     type = this->declarator(ast->declarator, type, &declaratorId);
     const StringLiteral *initializer = 0;
-    if (type.isAuto() && translationUnit()->languageFeatures().cpp11) {
+    if (type.isAuto() && translationUnit()->dialect().cpp11) {
         ExpressionTy exprType = this->expression(ast->expression);
 
         ArrayType* arrayType = 0;
@@ -1373,7 +1373,7 @@ bool Bind::visit(RangeBasedForStatementAST *ast)
     DeclaratorIdAST *declaratorId = 0;
     type = this->declarator(ast->declarator, type, &declaratorId);
     const StringLiteral *initializer = 0;
-    if (type.isAuto() && translationUnit()->languageFeatures().cpp11) {
+    if (type.isAuto() && translationUnit()->dialect().cpp11) {
         ExpressionTy exprType = this->expression(ast->expression);
 
         ArrayType* arrayType = 0;
@@ -1694,7 +1694,7 @@ bool Bind::visit(ConditionAST *ast)
         Declaration *decl = control()->newDeclaration(sourceLocation, declaratorId->name->name);
         decl->setType(type);
 
-        if (type.isAuto() && translationUnit()->languageFeatures().cpp11)
+        if (type.isAuto() && translationUnit()->dialect().cpp11)
             decl->setInitializer(asStringLiteral(ast->declarator->initializer));
 
         _scope->addMember(decl);
@@ -2817,7 +2817,7 @@ bool Bind::visit(SimpleNameAST *ast)
 
 bool Bind::visit(ElaboratedNameAST *ast)
 {
-    if (translationUnit()->languageFeatures().isC()) {
+    if (translationUnit()->dialect().isC()) {
         unsigned classKey = tokenKind(ast->tag_token);
         if (classKey == T_CLASS)
             _name = control()->elaboratedNameId(ElaboratedNameId::Class, name(ast->core_name));
@@ -2894,7 +2894,7 @@ bool Bind::visit(SimpleSpecifierAST *ast)
             break;
 
         case T_AUTO:
-            if (!translationUnit()->languageFeatures().cpp11) {
+            if (!translationUnit()->dialect().cpp11) {
                 if (_type.isAuto())
                     translationUnit()->error(ast->specifier_token, "duplicate `%s'", spell(ast->specifier_token));
             }

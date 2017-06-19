@@ -27,96 +27,160 @@
 #include "Debug.h"
 #include "DiagnosticCollector.h"
 #include "Dumper.h"
-#include "Factory.h"
 #include "Literals.h"
 #include "Observer.h"
 #include "Symbols.h"
+#include "StdLibIndex.h"
 #include "TranslationUnit.h"
 #include "Utils.h"
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
+using namespace psyche;
 using namespace CPlusPlus;
 
 namespace psyche {
-
-extern bool debugEnabled;
-
-std::tuple<size_t,
-           std::unique_ptr<CPlusPlus::TranslationUnit>,
-           std::string>
-process(const std::string& unitName,
-        const std::string& source,
-        CPlusPlus::Control& control,
-        ExecutionFlags& flags,
-        Factory* factory)
-{
-    DiagnosticCollector collector;
-    control.setDiagnosticClient(&collector);
-    StringLiteral name(unitName.c_str(), unitName.length());
-    std::unique_ptr<TranslationUnit> unit(new TranslationUnit(&control, &name));
-    unit->setSource(source.c_str(), source.length());
-
-    // Set language specifics.
-    LanguageOptions features;
-    features.c99 = 1;
-    features.nullptrOnNULL = 1;
-    unit->setLanguageFeatures(features);
-
-    // Check whether the parser finished successfully.
-    if (!unit->parse())
-        return std::make_tuple(kParsingFailed, nullptr, "");
-
-    // We only proceed if the source is free from syntax errors.
-    if (!collector.isEmpty())
-        return std::make_tuple(kSyntaxErrors, nullptr, "");
-
-    // If we have no AST, there's nothing to do.
-    if (!unit->ast() || !unit->ast()->asTranslationUnit())
-        return std::make_tuple(kInvalidAST, nullptr, "");
-
-    TranslationUnitAST* ast = unit->ast()->asTranslationUnit();
-    if (flags.flag_.dumpAst)
-        Dumper(unit.get()).dump(ast, ".ast.dot");
-
-    // Bind and try to disambiguate ambiguities, if any.
-    Namespace* global = control.newNamespace(0, nullptr);
-    Bind bind(unit.get());
-    bind(ast, global);
-
-    // Normalize the AST based disambiguation resolutions.
-    ASTNormalizer fixer(unit.get(), !flags.flag_.nonHeuristic);
-    fixer.normalize(ast);
-    if (flags.flag_.dumpAst)
-        Dumper(unit.get()).dump(ast, ".ast.fixed.dot");
-
-    // If the program is inherently ambiguous, it's too bad.
-    if (isProgramAmbiguous(unit.get(), ast))
-        return std::make_tuple(kProgramAmbiguous, nullptr, "");
-
-    if (flags.flag_.disambOnly)
-        return std::make_tuple(kOK, std::move(unit), "");
-
-    if (flags.flag_.displayStats)
-        std::cout << "Ambiguities stats" << std::endl << fixer.stats() << std::endl;
-
-    std::ostringstream oss;
-    auto writer = factory->makeWriter(oss);
-    ConstraintGenerator generator(unit.get(), writer.get());
-    auto observer = factory->makeObserver();
-    generator.installObserver(observer.get());
-
-    if (flags.flag_.handleGNUerrorFunc_)
-        generator.addVariadic("error", 2);
-
-    generator.generate(ast->asTranslationUnit(), global);
-
-    if (flags.flag_.displayStats)
-        std::cout << "Stats: " << writer->totalConstraints() << std::endl;
-    if (flags.flag_.displayCstr)
-        std::cout << "Constraints:\n" << oss.str() << std::endl;
-
-    return std::make_tuple(kOK, std::move(unit), oss.str());
+    extern bool debugEnabled;
 }
 
-} // namespace psyche
+constexpr size_t Driver::OK;
+constexpr size_t Driver::ParsingFailed;
+constexpr size_t Driver::SyntaxErrors;
+constexpr size_t Driver::InvalidAST;
+constexpr size_t Driver::ProgramAmbiguous;
+
+Driver::Driver(const Factory& factory)
+    : factory_(factory)
+    , global_(nullptr)
+{}
+
+size_t Driver::process(const std::string& unitName,
+                       const std::string& source,
+                       const ExecutionFlags& flags)
+{
+    configure(flags);
+
+    StringLiteral name(unitName.c_str(), unitName.length());
+    unit_.reset(new TranslationUnit(&control_, &name));
+
+    auto error = buildAst(source);
+    if (error)
+        return error;
+
+    if (flags_.flag_.libDetect == static_cast<char>(LibDetectMode::Approx))
+        reparseWithGuessedLibs();
+
+    if (!annotateSymbols())
+        return ProgramAmbiguous;
+
+    if (flags_.flag_.libDetect == static_cast<char>(LibDetectMode::Strict))
+        reprocessWithLibs();
+
+    if (flags_.flag_.disambOnly)
+        return OK;
+
+    generateConstraints();
+
+    return OK;
+}
+
+TranslationUnit *Driver::tu() const
+{
+    return unit_.get();
+}
+
+Dialect Driver::specifiedDialect(const ExecutionFlags&)
+{
+    Dialect dialect;
+    dialect.c99 = 1;
+    dialect.nullptrOnNULL = 1;
+    return dialect;
+}
+
+void Driver::configure(const ExecutionFlags& flags)
+{
+    control_.reset();
+    global_ = control_.newNamespace(0, nullptr);
+    flags_ = flags;
+}
+
+size_t Driver::buildAst(const std::string& source)
+{
+    unit_->setDialect(specifiedDialect(flags_));
+
+    static DiagnosticCollector collector;
+    collector.clear();
+    control_.setDiagnosticClient(&collector);
+
+    unit_->setSource(source.c_str(), source.length());
+    if (!unit_->parse())
+        return ParsingFailed;
+
+    if (!collector.isEmpty())
+        return SyntaxErrors;
+
+    if (!unit_->ast() || !tuAst())
+        return InvalidAST;
+
+    if (flags_.flag_.dumpAst)
+        Dumper(tu()).dump(tuAst(), ".ast.dot");
+
+    return OK;
+}
+
+bool Driver::annotateSymbols()
+{
+    // During symbol binding we try to disambiguate ambiguities. Afterwards, it's
+    // necessary to normalize the AST according to the disambiguation resolutions.
+    Bind bind(tu());
+    bind(tuAst(), global_);
+
+    ASTNormalizer fixer(tu(), !flags_.flag_.nonHeuristic);
+    fixer.normalize(tuAst());
+    if (isProgramAmbiguous(tu(), tuAst()))
+        return false;
+
+    if (flags_.flag_.displayStats)
+        std::cout << "Ambiguities stats" << std::endl << fixer.stats() << std::endl;
+
+    if (flags_.flag_.dumpAst)
+        Dumper(tu()).dump(tuAst(), ".ast.fixed.dot");
+
+    return true;
+}
+
+void Driver::generateConstraints()
+{
+    std::ostringstream oss;
+    auto writer = factory_.makeWriter(oss);
+    auto observer = factory_.makeObserver();
+
+    ConstraintGenerator generator(tu(), writer.get());
+    generator.installObserver(observer.get());
+    if (flags_.flag_.handleGNUerrorFunc_)
+        generator.addVariadic("error", 2);
+    generator.generate(tuAst(), global_);
+    constraints_ = oss.str();
+
+    if (flags_.flag_.displayStats)
+        std::cout << "Stats: " << writer->totalConstraints() << std::endl;
+
+    if (flags_.flag_.displayCstr)
+        std::cout << "Constraints:\n" << constraints_ << std::endl;
+}
+
+void Driver::reparseWithGuessedLibs()
+{
+
+}
+
+void Driver::reprocessWithLibs()
+{
+
+}
+
+TranslationUnitAST *Driver::tuAst() const
+{
+    return tu()->ast()->asTranslationUnit();
+}

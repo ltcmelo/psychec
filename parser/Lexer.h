@@ -57,8 +57,8 @@ public:
     int state() const;
     void setState(int state);
 
-    LanguageOptions languageFeatures() const { return _languageOptions; }
-    void setLanguageFeatures(LanguageOptions features) { _languageOptions = features; }
+    Dialect dialect() const { return _languageOptions; }
+    void setDialect(Dialect dialect) { _languageOptions = dialect; }
 
     void setPreprocessorMode(bool onoff)
     { f._ppMode = onoff; }
@@ -89,7 +89,7 @@ private:
     void pushLineStartOffset();
     void scan_helper(Token *tok);
     void setSource(const char *firstChar, const char *lastChar);
-    static int classify(const char *string, int length, LanguageOptions features);
+    static int classify(const char *string, int length, Dialect features);
     static int classifyObjCAtKeyword(const char *s, int n);
     static int classifyOperator(const char *string, int length);
 
@@ -153,7 +153,7 @@ private:
     };
 
     unsigned _currentLine;
-    LanguageOptions _languageOptions;
+    Dialect _languageOptions;
 };
 
 } // namespace CPlusPlus

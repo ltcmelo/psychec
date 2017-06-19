@@ -51,13 +51,13 @@ using namespace CPlusPlus;
  */
 void Tester::checkAst(const std::string &source, std::string expected)
 {
-    Control control;
     Factory factory;
-    auto program = std::get<1>(process("testfile", source, control, flags_, &factory));
-    PSYCHE_EXPECT_TRUE(program);
+    Driver driver(factory);
+    driver.process("testfile", source, flags_);
+    PSYCHE_EXPECT_TRUE(driver.tuAst());
 
     std::ostringstream oss;
-    Dumper(program.get()).dump(program->ast()->asTranslationUnit(), "test", oss);
+    Dumper(driver.tu()).dump(driver.tuAst(), "test", oss);
 
     compareText(expected, oss.str());
 }

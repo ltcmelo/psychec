@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +40,9 @@ class CPLUSPLUS_EXPORT Control
 public:
     Control();
     ~Control();
+
+    Control(const Control&) = delete;
+    Control& operator=(const Control&) = delete;
 
     TranslationUnit *translationUnit() const;
     TranslationUnit *switchTranslationUnit(TranslationUnit *unit);
@@ -229,7 +233,11 @@ public:
 
     void squeeze();
 
+    void reset();
+
 private:
+    void populateBuiltins();
+
     class Data;
     friend class Data;
     Data *d;

@@ -34,6 +34,7 @@ public:
                 const char *format, va_list ap) override;
 
     bool isEmpty() const { return !hasError_; }
+    void clear() { hasError_ = false; }
 
 private:
     bool hasError_ { false };

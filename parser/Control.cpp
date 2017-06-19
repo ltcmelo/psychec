@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -555,9 +556,21 @@ public:
 };
 
 Control::Control()
-{
-    d = new Data(this);
+    : d(new Data(this))
+{}
 
+Control::~Control()
+{ delete d; }
+
+void Control::reset()
+{
+    delete d;
+    d = new Data(this);
+    populateBuiltins();
+}
+
+void Control::populateBuiltins()
+{
     d->deprecatedId = identifier("deprecated");
     d->unavailableId = identifier("unavailable");
 
@@ -573,9 +586,6 @@ Control::Control()
     d->cpp11Override = identifier("override");
     d->cpp11Final = identifier("final");
 }
-
-Control::~Control()
-{ delete d; }
 
 TranslationUnit *Control::translationUnit() const
 { return d->translationUnit; }

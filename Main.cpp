@@ -40,11 +40,9 @@ int main(int argc, char* argv[])
 {
     ExecutionFlags flags;
     std::string in;
-    std::string out;
-    std::string mode;
+    cxxopts::Options cmdLine(argv[0], "PsycheC constraint generator");
 
     try {
-        cxxopts::Options cmdLine(argv[0], "PsycheC constraint generator");
         cmdLine.positional_help("file");
 
         cmdLine.add_options()
@@ -60,46 +58,36 @@ int main(int argc, char* argv[])
             ("t,test", "Test AST disambiguation")
             ("p,dump-ast", "Dump AST in .dot format")
             ("h,help", "Print help")
+            ("l,lib-detect", "Detect library names: ignore, approx, strict",
+                cxxopts::value<std::string>()->default_value("ignore"))
             ("positional", "Positional arguments",
                 cxxopts::value<std::vector<std::string>>());
 
         cmdLine.parse_positional(std::vector<std::string>{"file", "positional"});
         cmdLine.parse(argc, argv);
-
-        if (cmdLine.count("test"))
-            flags.flag_.testOnly = 1;
-        if (cmdLine.count("dump-ast"))
-            flags.flag_.dumpAst = 1;
-        if (cmdLine.count("cstr"))
-            flags.flag_.displayCstr = 1;
-        if (cmdLine.count("stats"))
-            flags.flag_.displayStats = 1;
-        if (cmdLine.count("strict"))
-            flags.flag_.nonHeuristic = 1;
-
-        if (cmdLine.count("help")
-                || (!cmdLine.count("positional") && (!flags.flag_.testOnly))) {
-            std::cout << cmdLine.help({"", "Group"}) << std::endl;
-            return 0;
-        }
-
-        // The input file name is the single positional argument.
-        if (cmdLine.count("positional")) {
-            auto& v = cmdLine["positional"].as<std::vector<std::string>>();
-            in = v[0];
-        }
-
-        // Handle GNU's error variadic function by default. TODO: POSIX stuff too.
-        flags.flag_.handleGNUerrorFunc_ = true;
-
-        mode = cmdLine["mode"].as<std::string>();
-        out = cmdLine["output"].as<std::string>();
     } catch (const cxxopts::OptionException& e) {
         std::cout << "Error parsing options: " << e.what() << std::endl;
         return 1;
     }
 
-    if (flags.flag_.testOnly || mode == "dev") {
+    if (cmdLine.count("test"))
+        flags.flag_.testOnly = 1;
+    if (cmdLine.count("dump-ast"))
+        flags.flag_.dumpAst = 1;
+    if (cmdLine.count("cstr"))
+        flags.flag_.displayCstr = 1;
+    if (cmdLine.count("stats"))
+        flags.flag_.displayStats = 1;
+    if (cmdLine.count("strict"))
+        flags.flag_.nonHeuristic = 1;
+
+    if (cmdLine.count("help")
+            || (!cmdLine.count("positional") && (!flags.flag_.testOnly))) {
+        std::cout << cmdLine.help({"", "Group"}) << std::endl;
+        return 0;
+    }
+
+    if (flags.flag_.testOnly || cmdLine["mode"].as<std::string>() == "dev") {
         try {
             Tester tester;
             tester.testAll();
@@ -113,21 +101,40 @@ int main(int argc, char* argv[])
         }
     }
 
+    // The input file name is the single positional argument.
+    if (cmdLine.count("positional")) {
+        auto& v = cmdLine["positional"].as<std::vector<std::string>>();
+        in = v[0];
+    }
+
+    auto libDetect = cmdLine["lib-detect"].as<std::string>();
+    if (libDetect == "ignore")
+        flags.flag_.libDetect = static_cast<uint32_t>(LibDetectMode::Ignore);
+    else if (libDetect == "approx")
+        flags.flag_.libDetect = static_cast<uint32_t>(LibDetectMode::Approx);
+    else if (libDetect == "strict")
+        flags.flag_.libDetect = static_cast<uint32_t>(LibDetectMode::Strict);
+    else {
+        std::cout << "Unrecognized `lib-detect' value" << std::endl;
+        return 1;
+    }
+
+    flags.flag_.handleGNUerrorFunc_ = true; // TODO: POSIX stuff?
+
     const std::string& source = readFile(in);
-    Control control;
     Factory factory;
-    auto result = process(in, source, control, flags, &factory);
-    const auto code = std::get<0>(result);
-    if (code == kParsingFailed)
+    Driver driver(factory);
+    const auto code = driver.process(in, source, flags);
+    if (code == Driver::ParsingFailed)
         std::cout << "Parsing failed" << std::endl;
-    else if (code == kSyntaxErrors)
+    else if (code == Driver::SyntaxErrors)
         std::cout << "Source has syntax errors" << std::endl;
-    else if (code == kInvalidAST)
+    else if (code == Driver::InvalidAST)
         std::cout << "No AST" << std::endl;
-    else if (code == kProgramAmbiguous)
+    else if (code == Driver::ProgramAmbiguous)
         std::cout << "Code has unresolved ambiguities" << std::endl;
     else
-        writeFile(std::get<2>(result), out);
+        writeFile(driver.constraints(), cmdLine["output"].as<std::string>());
 
     return code;
 }

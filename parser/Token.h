@@ -1,5 +1,4 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +22,7 @@
 #define CPLUSPLUS_TOKEN_H
 
 #include "CPlusPlusForwardDeclarations.h"
+#include "Dialect.h"
 
 namespace CPlusPlus {
 
@@ -394,40 +394,6 @@ public:
         const Identifier *identifier;
         unsigned close_brace;
         unsigned lineno;
-    };
-};
-
-struct LanguageOptions
-{
-    LanguageOptions() : flags(0) {}
-
-    bool isCpp() const { return !isC() && !isObjC(); }
-    bool isC() const { return c89 || c99 || c11; }
-    bool isObjC() const { return objC; }
-
-    union {
-        unsigned int flags;
-        struct {
-            // C++ (default)
-            unsigned int cpp11 : 1;
-            unsigned int cpp14 : 1;
-
-            // C
-            unsigned int c89 : 1;
-            unsigned int c99 : 1;
-            unsigned int c11 : 1;
-
-            // Objective-C
-            unsigned int objC : 1;
-
-            // Qt
-            unsigned int qt : 1;
-            unsigned int qtMocRun : 1;
-            unsigned int qtKeywords : 1; // If Qt is used but QT_NO_KEYWORDS defined.
-
-            // Miscellaneous
-            unsigned int nullptrOnNULL : 1;
-        };
     };
 };
 

@@ -24,7 +24,7 @@
 
 namespace CPlusPlus {
 
-static inline int classify2(const char *s, LanguageOptions)
+static inline int classify2(const char *s, Dialect)
 {
   if (s[0] == 'd') {
     if (s[1] == 'o') {
@@ -39,7 +39,7 @@ static inline int classify2(const char *s, LanguageOptions)
   return T_IDENTIFIER;
 }
 
-static inline int classify3(const char *s, LanguageOptions lang)
+static inline int classify3(const char *s, Dialect lang)
 {
   if (lang.isCpp() && s[0] == 'a') {
     if (s[1] == 's') {
@@ -89,7 +89,7 @@ static inline int classify3(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify4(const char *s, LanguageOptions lang)
+static inline int classify4(const char *s, Dialect lang)
 {
   if (s[0] == 'a') {
     if (s[1] == 'u') {
@@ -212,7 +212,7 @@ static inline int classify4(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify5(const char *s, LanguageOptions lang)
+static inline int classify5(const char *s, Dialect lang)
 {
   if (s[0] == '_') {
     if (lang.isCpp() && s[1] == '_') {
@@ -361,7 +361,7 @@ static inline int classify5(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify6(const char *s, LanguageOptions lang)
+static inline int classify6(const char *s, Dialect lang)
 {
   if (s[0] == 'd') {
     if (lang.isCpp() && s[1] == 'e') {
@@ -570,7 +570,7 @@ static inline int classify6(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify7(const char *s, LanguageOptions lang)
+static inline int classify7(const char *s, Dialect lang)
 {
   if (lang.isCpp() && s[0] == '_') {
     if (s[1] == '_') {
@@ -793,7 +793,7 @@ static inline int classify7(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify8(const char *s, LanguageOptions lang)
+static inline int classify8(const char *s, Dialect lang)
 {
   if (lang.c99 && s[0] == '_') {
     if (s[1] == '_') {
@@ -1072,7 +1072,7 @@ static inline int classify8(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify9(const char *s, LanguageOptions lang)
+static inline int classify9(const char *s, Dialect lang)
 {
   if (s[0] == '_') {
     if (s[1] == '_') {
@@ -1186,7 +1186,7 @@ static inline int classify9(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify10(const char *s, LanguageOptions lang)
+static inline int classify10(const char *s, Dialect lang)
 {
   if (lang.c99 && s[0] == '_') {
     if (s[1] == '_') {
@@ -1322,7 +1322,7 @@ static inline int classify10(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify11(const char *s, LanguageOptions lang)
+static inline int classify11(const char *s, Dialect lang)
 {
   if (s[0] == '_') {
     if (s[1] == '_') {
@@ -1412,7 +1412,7 @@ static inline int classify11(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify12(const char *s, LanguageOptions lang)
+static inline int classify12(const char *s, Dialect lang)
 {
   if (s[0] == '_') {
     if (s[1] == '_') {
@@ -1517,7 +1517,7 @@ static inline int classify12(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify13(const char *s, LanguageOptions lang)
+static inline int classify13(const char *s, Dialect lang)
 {
   if (s[0] == '_') {
     if (s[1] == '_') {
@@ -1575,7 +1575,7 @@ static inline int classify13(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify16(const char *s, LanguageOptions lang)
+static inline int classify16(const char *s, Dialect lang)
 {
   if (lang.isCpp() && s[0] == 'r') {
     if (s[1] == 'e') {
@@ -1613,7 +1613,7 @@ static inline int classify16(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify14(const char *s, LanguageOptions lang)
+static inline int classify14(const char *s, Dialect lang)
 {
   if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
@@ -1647,7 +1647,7 @@ static inline int classify14(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify18(const char *s, LanguageOptions lang)
+static inline int classify18(const char *s, Dialect lang)
 {
   if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
@@ -1689,7 +1689,7 @@ static inline int classify18(const char *s, LanguageOptions lang)
   return T_IDENTIFIER;
 }
 
-static inline int classify19(const char *s, LanguageOptions lang)
+static inline int classify19(const char *s, Dialect lang)
 {
   if (lang.qt && s[0] == 'Q') {
     if (s[1] == '_') {
@@ -1734,7 +1734,7 @@ static inline int classify19(const char *s, LanguageOptions lang)
 }
 
 
-int Lexer::classify(const char *s, int n, LanguageOptions lang) {
+int Lexer::classify(const char *s, int n, Dialect lang) {
   switch (n) {
     case 2: return classify2(s, lang);
     case 3: return classify3(s, lang);
