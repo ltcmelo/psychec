@@ -128,7 +128,7 @@ const StdLibIndex::Index StdLibIndex::c11idx_
     };
 
 
-StdLibIndex::StdLibIndex(StdLibVersion std)
+StdLibIndex::StdLibIndex(Version std)
     : std_(std)
 {}
 
@@ -150,9 +150,9 @@ std::vector<std::string> StdLibIndex::inspect(const Control& control) const
     };
 
     f(c89idx_);
-    if (std_ == StdLibVersion::C99)
+    if (std_ == Version::C99)
         f(c99idx_);
-    if (std_ == StdLibVersion::C11)
+    if (std_ == Version::C11)
         f(c11idx_);
 
     std::vector<std::string> v;

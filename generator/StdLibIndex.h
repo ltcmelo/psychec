@@ -31,14 +31,14 @@ namespace psyche {
 class PSYCHEC_API StdLibIndex final
 {
 public:
-    // TODO: Sync with language options
-    enum class StdLibVersion {
+    enum class Version
+    {
         C89,
         C99,
         C11
     };
 
-    StdLibIndex(StdLibVersion std);
+    StdLibIndex(Version std);
 
     std::vector<std::string> inspect(const CPlusPlus::Control&) const;
 
@@ -51,7 +51,7 @@ private:
     using StdSymbol = std::pair<const char*, SymbolKind>;
     using Index = std::unordered_map<const char*, std::vector<StdSymbol>>;
 
-    StdLibVersion std_;
+    Version std_;
     static const Index c89idx_;
     static const Index c99idx_;
     static const Index c11idx_;

@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
         in = v[0];
     }
 
-    auto libDetect = cmdLine["lib-detect"].as<std::string>();
+    const auto& libDetect = cmdLine["lib-detect"].as<std::string>();
     if (libDetect == "ignore")
         flags.flag_.libDetect = static_cast<uint32_t>(LibDetectMode::Ignore);
     else if (libDetect == "approx")

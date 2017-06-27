@@ -38,6 +38,8 @@ std::string executeCore(const char* cmd)
         if (fgets(buf.data(), 512, out.get()))
             all += buf.data();
     }
+
+    std::cout << "RESULT:" << all << std::endl;
     return all;
 }
 

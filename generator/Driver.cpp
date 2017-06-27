@@ -30,6 +30,7 @@
 #include "DomainLattice.h"
 #include "Literals.h"
 #include "Observer.h"
+#include "Process.h"
 #include "Symbols.h"
 #include "StdLibIndex.h"
 #include "TranslationUnit.h"
@@ -178,7 +179,21 @@ void Driver::generateConstraints()
 
 void Driver::reparseWithGuessedLibs()
 {
+    std::cout << "guess...\n";
+    StdLibIndex index(StdLibIndex::Version::C99);
+    std::vector<std::string> headers = index.inspect(control_);
+    if (headers.empty())
+        return;
 
+    std::string in = R"(echo ")";
+    for (const auto& h : headers)
+        in += "#include <" + h + ">\n";
+    in += R"(" | gcc -E -x c -)";
+
+
+    std::cout << in << std::endl;
+    Process process;
+    process.execute(in);
 }
 
 void Driver::reprocessWithLibs()
