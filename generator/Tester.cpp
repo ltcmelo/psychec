@@ -75,6 +75,7 @@ void Tester::compareText(std::string expected, std::string actual) const
 void Tester::reset()
 {
     flags_ = ExecutionFlags();
+    flags_.flag_.nonHeuristic = true;
 }
 
 void Tester::testAll()
@@ -781,7 +782,7 @@ void Tester::testCase9()
 {
     std::string source = R"raw(
 void f() {
-    a(x) = 1; /* Must be a variable declaration ($in$ C only). */
+    a(x) = 1; /* Must be a variable declaration (in C only). */
 }
     )raw";
 
@@ -1031,10 +1032,10 @@ t15 [shape=rect label = "}"]; t14 -> t15 [arrowhead="vee" color="transparent"];
 void Tester::testCase12()
 {
     // This one is a function declaration with implicit return type. But we
-    // don't handle it yet - some work $in$ the parser is required.
+    // don't handle it yet - some work in the parser is required.
 
     std::string source = R"raw(
-$typedef$ int x;
+typedef int x;
 void f() {
     a(x); /* Function declaration. */
 }
@@ -1401,6 +1402,8 @@ void f() {
     a+b;
 }
     )raw";
+
+    // TODO: Implement this disambiguation.
 }
 
 void Tester::testCase17()
@@ -1412,4 +1415,311 @@ void f() {
     a c;
 }
     )raw";
+
+    // TODO: Implement this disambiguation.
 }
+
+void Tester::testCase18()
+{
+    std::string source = R"raw(
+void f() {
+    x * y, * z, w; // Must be declaration.
+}
+    )raw";
+
+    std::string expectedAst = R"raw(
+digraph AST { ordering=out;
+n1 [label="TranslationUnitAST"];
+n2 [label="FunctionDefinitionAST"];
+n3 [label="SimpleSpecifierAST"];
+n4 [label="DeclaratorAST"];
+n5 [label="DeclaratorIdAST"];
+n6 [label="SimpleNameAST"];
+n7 [label="FunctionDeclaratorAST"];
+n8 [label="CompoundStatementAST"];
+n9 [label="DeclarationStatementAST"];
+n10 [label="SimpleDeclarationAST"];
+n11 [label="NamedTypeSpecifierAST"];
+n12 [label="SimpleNameAST"];
+n13 [label="DeclaratorAST"];
+n14 [label="PointerAST"];
+n15 [label="DeclaratorIdAST"];
+n16 [label="SimpleNameAST"];
+n17 [label="DeclaratorAST"];
+n18 [label="PointerAST"];
+n19 [label="DeclaratorIdAST"];
+n20 [label="SimpleNameAST"];
+n21 [label="DeclaratorAST"];
+n22 [label="DeclaratorIdAST"];
+n23 [label="SimpleNameAST"];
+n1 -> n2
+n2 -> n3
+n3 -> t1
+n2 -> n4
+n4 -> n5
+n5 -> n6
+n6 -> t2
+n4 -> n7
+n7 -> t3
+n7 -> t4
+n2 -> n8
+n8 -> t5
+n8 -> n9
+n9 -> n10
+n10 -> n11
+n11 -> n12
+n12 -> t6
+n10 -> n13
+n13 -> n14
+n14 -> t7
+n13 -> n15
+n15 -> n16
+n16 -> t8
+n10 -> n17
+n17 -> n18
+n18 -> t10
+n17 -> n19
+n19 -> n20
+n20 -> t11
+n10 -> n21
+n21 -> n22
+n22 -> n23
+n23 -> t13
+n10 -> t14
+n8 -> t15
+{ rank=same;
+t1 [shape=rect label = "void"];
+t2 [shape=rect label = "f"]; t1 -> t2 [arrowhead="vee" color="transparent"];
+t3 [shape=rect label = "("]; t2 -> t3 [arrowhead="vee" color="transparent"];
+t4 [shape=rect label = ")"]; t3 -> t4 [arrowhead="vee" color="transparent"];
+t5 [shape=rect label = "{"]; t4 -> t5 [arrowhead="vee" color="transparent"];
+t6 [shape=rect label = "x"]; t5 -> t6 [arrowhead="vee" color="transparent"];
+t7 [shape=rect label = "*"]; t6 -> t7 [arrowhead="vee" color="transparent"];
+t8 [shape=rect label = "y"]; t7 -> t8 [arrowhead="vee" color="transparent"];
+t9 [shape=rect label = ","]; t8 -> t9 [arrowhead="vee" color="transparent"];
+t10 [shape=rect label = "*"]; t9 -> t10 [arrowhead="vee" color="transparent"];
+t11 [shape=rect label = "z"]; t10 -> t11 [arrowhead="vee" color="transparent"];
+t12 [shape=rect label = ","]; t11 -> t12 [arrowhead="vee" color="transparent"];
+t13 [shape=rect label = "w"]; t12 -> t13 [arrowhead="vee" color="transparent"];
+t14 [shape=rect label = ";"]; t13 -> t14 [arrowhead="vee" color="transparent"];
+t15 [shape=rect label = "}"]; t14 -> t15 [arrowhead="vee" color="transparent"];
+}
+}
+    )raw";
+
+    checkAst(source, expectedAst);
+}
+
+void Tester::testCase19()
+{
+    std::string source = R"raw(
+void f() {
+    x * y, z, * w; // Must be declaration.
+}
+    )raw";
+
+    std::string expectedAst = R"raw(
+digraph AST { ordering=out;
+n1 [label="TranslationUnitAST"];
+n2 [label="FunctionDefinitionAST"];
+n3 [label="SimpleSpecifierAST"];
+n4 [label="DeclaratorAST"];
+n5 [label="DeclaratorIdAST"];
+n6 [label="SimpleNameAST"];
+n7 [label="FunctionDeclaratorAST"];
+n8 [label="CompoundStatementAST"];
+n9 [label="DeclarationStatementAST"];
+n10 [label="SimpleDeclarationAST"];
+n11 [label="NamedTypeSpecifierAST"];
+n12 [label="SimpleNameAST"];
+n13 [label="DeclaratorAST"];
+n14 [label="PointerAST"];
+n15 [label="DeclaratorIdAST"];
+n16 [label="SimpleNameAST"];
+n17 [label="DeclaratorAST"];
+n18 [label="DeclaratorIdAST"];
+n19 [label="SimpleNameAST"];
+n20 [label="DeclaratorAST"];
+n21 [label="PointerAST"];
+n22 [label="DeclaratorIdAST"];
+n23 [label="SimpleNameAST"];
+n1 -> n2
+n2 -> n3
+n3 -> t1
+n2 -> n4
+n4 -> n5
+n5 -> n6
+n6 -> t2
+n4 -> n7
+n7 -> t3
+n7 -> t4
+n2 -> n8
+n8 -> t5
+n8 -> n9
+n9 -> n10
+n10 -> n11
+n11 -> n12
+n12 -> t6
+n10 -> n13
+n13 -> n14
+n14 -> t7
+n13 -> n15
+n15 -> n16
+n16 -> t8
+n10 -> n17
+n17 -> n18
+n18 -> n19
+n19 -> t10
+n10 -> n20
+n20 -> n21
+n21 -> t12
+n20 -> n22
+n22 -> n23
+n23 -> t13
+n10 -> t14
+n8 -> t15
+{ rank=same;
+t1 [shape=rect label = "void"];
+t2 [shape=rect label = "f"]; t1 -> t2 [arrowhead="vee" color="transparent"];
+t3 [shape=rect label = "("]; t2 -> t3 [arrowhead="vee" color="transparent"];
+t4 [shape=rect label = ")"]; t3 -> t4 [arrowhead="vee" color="transparent"];
+t5 [shape=rect label = "{"]; t4 -> t5 [arrowhead="vee" color="transparent"];
+t6 [shape=rect label = "x"]; t5 -> t6 [arrowhead="vee" color="transparent"];
+t7 [shape=rect label = "*"]; t6 -> t7 [arrowhead="vee" color="transparent"];
+t8 [shape=rect label = "y"]; t7 -> t8 [arrowhead="vee" color="transparent"];
+t9 [shape=rect label = ","]; t8 -> t9 [arrowhead="vee" color="transparent"];
+t10 [shape=rect label = "z"]; t9 -> t10 [arrowhead="vee" color="transparent"];
+t11 [shape=rect label = ","]; t10 -> t11 [arrowhead="vee" color="transparent"];
+t12 [shape=rect label = "*"]; t11 -> t12 [arrowhead="vee" color="transparent"];
+t13 [shape=rect label = "w"]; t12 -> t13 [arrowhead="vee" color="transparent"];
+t14 [shape=rect label = ";"]; t13 -> t14 [arrowhead="vee" color="transparent"];
+t15 [shape=rect label = "}"]; t14 -> t15 [arrowhead="vee" color="transparent"];
+}
+}
+
+    )raw";
+
+    checkAst(source, expectedAst);
+}
+
+void Tester::testCase20()
+{
+    std::string source = R"raw(
+void f() {
+    x * y, z, w; // Ambiguous: declarations or three expressions.
+}
+    )raw";
+
+    std::string expectedAst = R"raw(
+                              digraph AST { ordering=out;
+                              n1 [label="TranslationUnitAST"];
+                              n2 [label="FunctionDefinitionAST"];
+                              n3 [label="SimpleSpecifierAST"];
+                              n4 [label="DeclaratorAST"];
+                              n5 [label="DeclaratorIdAST"];
+                              n6 [label="SimpleNameAST"];
+                              n7 [label="FunctionDeclaratorAST"];
+                              n8 [label="CompoundStatementAST"];
+                              n9 [label="AmbiguousStatementAST"];
+                              n10 [label="DeclarationStatementAST"];
+                              n11 [label="SimpleDeclarationAST"];
+                              n12 [label="NamedTypeSpecifierAST"];
+                              n13 [label="SimpleNameAST"];
+                              n14 [label="DeclaratorAST"];
+                              n15 [label="PointerAST"];
+                              n16 [label="DeclaratorIdAST"];
+                              n17 [label="SimpleNameAST"];
+                              n18 [label="DeclaratorAST"];
+                              n19 [label="DeclaratorIdAST"];
+                              n20 [label="SimpleNameAST"];
+                              n21 [label="DeclaratorAST"];
+                              n22 [label="DeclaratorIdAST"];
+                              n23 [label="SimpleNameAST"];
+                              n24 [label="ExpressionStatementAST"];
+                              n25 [label="BinaryExpressionAST"];
+                              n26 [label="BinaryExpressionAST"];
+                              n27 [label="BinaryExpressionAST"];
+                              n28 [label="IdExpressionAST"];
+                              n29 [label="SimpleNameAST"];
+                              n30 [label="IdExpressionAST"];
+                              n31 [label="SimpleNameAST"];
+                              n32 [label="IdExpressionAST"];
+                              n33 [label="SimpleNameAST"];
+                              n34 [label="IdExpressionAST"];
+                              n35 [label="SimpleNameAST"];
+                              n1 -> n2
+                              n2 -> n3
+                              n3 -> t1
+                              n2 -> n4
+                              n4 -> n5
+                              n5 -> n6
+                              n6 -> t2
+                              n4 -> n7
+                              n7 -> t3
+                              n7 -> t4
+                              n2 -> n8
+                              n8 -> t5
+                              n8 -> n9
+                              n9 -> n10
+                              n10 -> n11
+                              n11 -> n12
+                              n12 -> n13
+                              n13 -> t6
+                              n11 -> n14
+                              n14 -> n15
+                              n15 -> t7
+                              n14 -> n16
+                              n16 -> n17
+                              n17 -> t8
+                              n11 -> n18
+                              n18 -> n19
+                              n19 -> n20
+                              n20 -> t10
+                              n11 -> n21
+                              n21 -> n22
+                              n22 -> n23
+                              n23 -> t12
+                              n11 -> t13
+                              n9 -> n24
+                              n24 -> n25
+                              n25 -> n26
+                              n26 -> n27
+                              n27 -> n28
+                              n28 -> n29
+                              n29 -> t6
+                              n27 -> t7
+                              n27 -> n30
+                              n30 -> n31
+                              n31 -> t8
+                              n26 -> t9
+                              n26 -> n32
+                              n32 -> n33
+                              n33 -> t10
+                              n25 -> t11
+                              n25 -> n34
+                              n34 -> n35
+                              n35 -> t12
+                              n24 -> t13
+                              n8 -> t14
+                              { rank=same;
+                                t1 [shape=rect label = "void"];
+                                t2 [shape=rect label = "f"]; t1 -> t2 [arrowhead="vee" color="transparent"];
+                                t3 [shape=rect label = "("]; t2 -> t3 [arrowhead="vee" color="transparent"];
+                                t4 [shape=rect label = ")"]; t3 -> t4 [arrowhead="vee" color="transparent"];
+                                t5 [shape=rect label = "{"]; t4 -> t5 [arrowhead="vee" color="transparent"];
+                                t6 [shape=rect label = "x"]; t5 -> t6 [arrowhead="vee" color="transparent"];
+                                t7 [shape=rect label = "*"]; t6 -> t7 [arrowhead="vee" color="transparent"];
+                                t8 [shape=rect label = "y"]; t7 -> t8 [arrowhead="vee" color="transparent"];
+                                t9 [shape=rect label = ","]; t8 -> t9 [arrowhead="vee" color="transparent"];
+                                t10 [shape=rect label = "z"]; t9 -> t10 [arrowhead="vee" color="transparent"];
+                                t11 [shape=rect label = ","]; t10 -> t11 [arrowhead="vee" color="transparent"];
+                                t12 [shape=rect label = "w"]; t11 -> t12 [arrowhead="vee" color="transparent"];
+                                t13 [shape=rect label = ";"]; t12 -> t13 [arrowhead="vee" color="transparent"];
+                                t14 [shape=rect label = "}"]; t13 -> t14 [arrowhead="vee" color="transparent"];
+                              }
+                              }
+    )raw";
+
+    checkAst(source, expectedAst);
+}
+

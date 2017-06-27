@@ -3505,40 +3505,43 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
                         (simple->decl_specifier_list != 0 && simple->declarator_list != 0)) {
 
                     // If there's a ptr operator within the first declarator of
-                    // a simple declaration, and no initializer has been provided,
+                    // a simple declaration, and no initializer or other declarator has been provided,
                     // this could be an expression `x * y`. When this is the case
                     // we create an AST ambiguity node that must be resolved later.
                     if (simple->declarator_list
                             && simple->declarator_list->value->ptr_operator_list
                             && !simple->declarator_list->value->initializer
                             && !simple->declarator_list->value->postfix_declarator_list) {
-                        unsigned afterDeclaration = cursor();
-                        rewind(start);
-                        StatementAST *as_expression;
-                        if (parseExpressionStatement(as_expression)) {
-                            const BinaryExpressionAST* binExpr =
-                                    as_expression->asExpressionStatement()->expression->asBinaryExpression();
-                            PSYCHE_ASSERT(binExpr
-                                          && binExpr->left_expression->asIdExpression()
-                                          && binExpr->right_expression->asIdExpression(),
-                                          return false,
-                                          "cannot be an ambiguity");
-
-                            unsigned line;
-                            _translationUnit->getTokenPosition(start, &line);
-                            printDebug("Ambiguity pointer decl x multiplication at %d\n", line);
-
-                            AmbiguousStatementAST *ambig = new (_pool) AmbiguousStatementAST;
-                            ambig->declarationStmt = as_declaration;
-                            ambig->expressionStmt = as_expression->asExpressionStatement();
-                            ambig->info = std::make_unique<SyntaxAmbiguity>(
-                                SyntaxAmbiguity::Variety::MulExpr_X_PointerDecl,
-                                line);
-                            node = ambig;
-                            (void) blockErrors(blocked);
-                            return true;
+                        bool maybeExpr = true;
+                        // Check other declarators, if any.
+                        for (DeclaratorListAST *it = simple->declarator_list->next; it; it = it->next) {
+                            if (it->value->ptr_operator_list || it->value->ptr_operator_list) {
+                                maybeExpr = false;
+                                break;
+                            }
                         }
-                        rewind(afterDeclaration);
+
+                        if (maybeExpr) {
+                            unsigned afterDeclaration = cursor();
+                            rewind(start);
+                            StatementAST *as_expression;
+                            if (parseExpressionStatement(as_expression)) {
+                                unsigned line;
+                                _translationUnit->getTokenPosition(start, &line);
+                                printDebug("Ambiguity pointer decl x multiplication at %d\n", line);
+
+                                AmbiguousStatementAST *ambig = new (_pool) AmbiguousStatementAST;
+                                ambig->declarationStmt = as_declaration;
+                                ambig->expressionStmt = as_expression->asExpressionStatement();
+                                ambig->info = std::make_unique<SyntaxAmbiguity>(
+                                            SyntaxAmbiguity::Variety::MulExpr_X_PointerDecl,
+                                            line);
+                                node = ambig;
+                                (void) blockErrors(blocked);
+                                return true;
+                            }
+                            rewind(afterDeclaration);
+                        }
                     }
 
                     (void) blockErrors(blocked);

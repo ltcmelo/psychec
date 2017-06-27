@@ -105,6 +105,9 @@ public:
     void testCase15();
     void testCase16();
     void testCase17();
+    void testCase18();
+    void testCase19();
+    void testCase20();
 
 private:
     using TestData = std::pair<std::function<void(Tester*)>, const char*>;
@@ -138,6 +141,9 @@ private:
         PSYCHE_TEST(testCase15),
         // PSYCHE_TEST(testCase16), // Not yet supported
         // PSYCHE_TEST(testCase17)  // Not yet supported
+        PSYCHE_TEST(testCase18),
+        PSYCHE_TEST(testCase19),
+        PSYCHE_TEST(testCase20)
     };
 
     std::string currentTest_;
