@@ -3515,7 +3515,7 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
                         bool maybeExpr = true;
                         // Check other declarators, if any.
                         for (DeclaratorListAST *it = simple->declarator_list->next; it; it = it->next) {
-                            if (it->value->ptr_operator_list || it->value->ptr_operator_list) {
+                            if (it->value->ptr_operator_list) {
                                 maybeExpr = false;
                                 break;
                             }
