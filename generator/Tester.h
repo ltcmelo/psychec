@@ -108,11 +108,13 @@ public:
     void testCase18();
     void testCase19();
     void testCase20();
+    void testCase21();
+    void testCase22();
 
 private:
     using TestData = std::pair<std::function<void(Tester*)>, const char*>;
 
-    void checkAst(const std::string& source, std::string expected);
+    void checkAst(const std::string& source, std::string expected, bool nonHeu = true);
     void checkConstraints(const std::string& source, std::string expected);
 
     void compareText(std::string expected, std::string actual) const;
@@ -143,7 +145,9 @@ private:
         // PSYCHE_TEST(testCase17)  // Not yet supported
         PSYCHE_TEST(testCase18),
         PSYCHE_TEST(testCase19),
-        PSYCHE_TEST(testCase20)
+        PSYCHE_TEST(testCase20),
+        PSYCHE_TEST(testCase21),
+        PSYCHE_TEST(testCase22)
     };
 
     std::string currentTest_;

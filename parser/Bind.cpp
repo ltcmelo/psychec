@@ -1584,6 +1584,10 @@ bool Bind::visit(IdExpressionAST *ast)
 {
     const Name *name = this->name(ast->name);
 
+    // If we're in an ambiguous expression, we can't use it as basis to disambiguate others.
+    if (ambiguity_)
+        return false;
+
     // Perhaps we have an unresolved ambiguity within this scope. In this case,
     // we can try to resolve it because if there's a use as an expression of
     // the right hand side of the ambiguity, it's certainly not a type.

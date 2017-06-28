@@ -49,10 +49,11 @@ using namespace CPlusPlus;
  *
  * Follow the already existing examples for additional info.
  */
-void Tester::checkAst(const std::string &source, std::string expected)
+void Tester::checkAst(const std::string &source, std::string expected, bool nonHeu)
 {
     Factory factory;
     Driver driver(factory);
+    flags_.flag_.nonHeuristic = nonHeu;
     driver.process("testfile", source, flags_);
     PSYCHE_EXPECT_TRUE(driver.tuAst());
 
@@ -1721,5 +1722,232 @@ void f() {
     )raw";
 
     checkAst(source, expectedAst);
+}
+
+void Tester::testCase21()
+{
+    // Without heuristics, it's ambiguous.
+    std::string source = R"raw(
+void f() {
+    A * x;
+    A * y;
+}
+    )raw";
+
+    std::string expectedAst = R"raw(
+  digraph AST { ordering=out;
+  n1 [label="TranslationUnitAST"];
+  n2 [label="FunctionDefinitionAST"];
+  n3 [label="SimpleSpecifierAST"];
+  n4 [label="DeclaratorAST"];
+  n5 [label="DeclaratorIdAST"];
+  n6 [label="SimpleNameAST"];
+  n7 [label="FunctionDeclaratorAST"];
+  n8 [label="CompoundStatementAST"];
+  n9 [label="AmbiguousStatementAST"];
+  n10 [label="DeclarationStatementAST"];
+  n11 [label="SimpleDeclarationAST"];
+  n12 [label="NamedTypeSpecifierAST"];
+  n13 [label="SimpleNameAST"];
+  n14 [label="DeclaratorAST"];
+  n15 [label="PointerAST"];
+  n16 [label="DeclaratorIdAST"];
+  n17 [label="SimpleNameAST"];
+  n18 [label="ExpressionStatementAST"];
+  n19 [label="BinaryExpressionAST"];
+  n20 [label="IdExpressionAST"];
+  n21 [label="SimpleNameAST"];
+  n22 [label="IdExpressionAST"];
+  n23 [label="SimpleNameAST"];
+  n24 [label="AmbiguousStatementAST"];
+  n25 [label="DeclarationStatementAST"];
+  n26 [label="SimpleDeclarationAST"];
+  n27 [label="NamedTypeSpecifierAST"];
+  n28 [label="SimpleNameAST"];
+  n29 [label="DeclaratorAST"];
+  n30 [label="PointerAST"];
+  n31 [label="DeclaratorIdAST"];
+  n32 [label="SimpleNameAST"];
+  n33 [label="ExpressionStatementAST"];
+  n34 [label="BinaryExpressionAST"];
+  n35 [label="IdExpressionAST"];
+  n36 [label="SimpleNameAST"];
+  n37 [label="IdExpressionAST"];
+  n38 [label="SimpleNameAST"];
+  n1 -> n2
+  n2 -> n3
+  n3 -> t1
+  n2 -> n4
+  n4 -> n5
+  n5 -> n6
+  n6 -> t2
+  n4 -> n7
+  n7 -> t3
+  n7 -> t4
+  n2 -> n8
+  n8 -> t5
+  n8 -> n9
+  n9 -> n10
+  n10 -> n11
+  n11 -> n12
+  n12 -> n13
+  n13 -> t6
+  n11 -> n14
+  n14 -> n15
+  n15 -> t7
+  n14 -> n16
+  n16 -> n17
+  n17 -> t8
+  n11 -> t9
+  n9 -> n18
+  n18 -> n19
+  n19 -> n20
+  n20 -> n21
+  n21 -> t6
+  n19 -> t7
+  n19 -> n22
+  n22 -> n23
+  n23 -> t8
+  n18 -> t9
+  n8 -> n24
+  n24 -> n25
+  n25 -> n26
+  n26 -> n27
+  n27 -> n28
+  n28 -> t10
+  n26 -> n29
+  n29 -> n30
+  n30 -> t11
+  n29 -> n31
+  n31 -> n32
+  n32 -> t12
+  n26 -> t13
+  n24 -> n33
+  n33 -> n34
+  n34 -> n35
+  n35 -> n36
+  n36 -> t10
+  n34 -> t11
+  n34 -> n37
+  n37 -> n38
+  n38 -> t12
+  n33 -> t13
+  n8 -> t14
+  { rank=same;
+    t1 [shape=rect label = "void"];
+    t2 [shape=rect label = "f"]; t1 -> t2 [arrowhead="vee" color="transparent"];
+    t3 [shape=rect label = "("]; t2 -> t3 [arrowhead="vee" color="transparent"];
+    t4 [shape=rect label = ")"]; t3 -> t4 [arrowhead="vee" color="transparent"];
+    t5 [shape=rect label = "{"]; t4 -> t5 [arrowhead="vee" color="transparent"];
+    t6 [shape=rect label = "A"]; t5 -> t6 [arrowhead="vee" color="transparent"];
+    t7 [shape=rect label = "*"]; t6 -> t7 [arrowhead="vee" color="transparent"];
+    t8 [shape=rect label = "x"]; t7 -> t8 [arrowhead="vee" color="transparent"];
+    t9 [shape=rect label = ";"]; t8 -> t9 [arrowhead="vee" color="transparent"];
+    t10 [shape=rect label = "A"]; t9 -> t10 [arrowhead="vee" color="transparent"];
+    t11 [shape=rect label = "*"]; t10 -> t11 [arrowhead="vee" color="transparent"];
+    t12 [shape=rect label = "y"]; t11 -> t12 [arrowhead="vee" color="transparent"];
+    t13 [shape=rect label = ";"]; t12 -> t13 [arrowhead="vee" color="transparent"];
+    t14 [shape=rect label = "}"]; t13 -> t14 [arrowhead="vee" color="transparent"];
+  }
+  }
+)raw";
+
+    checkAst(source, expectedAst);
+}
+
+void Tester::testCase22()
+{
+    // With heuristics, those are pointers.
+    std::string source = R"raw(
+void f() {
+    A * x;
+    A * y;
+}
+    )raw";
+
+    std::string expectedAst = R"raw(
+digraph AST { ordering=out;
+n1 [label="TranslationUnitAST"];
+n2 [label="FunctionDefinitionAST"];
+n3 [label="SimpleSpecifierAST"];
+n4 [label="DeclaratorAST"];
+n5 [label="DeclaratorIdAST"];
+n6 [label="SimpleNameAST"];
+n7 [label="FunctionDeclaratorAST"];
+n8 [label="CompoundStatementAST"];
+n9 [label="DeclarationStatementAST"];
+n10 [label="SimpleDeclarationAST"];
+n11 [label="NamedTypeSpecifierAST"];
+n12 [label="SimpleNameAST"];
+n13 [label="DeclaratorAST"];
+n14 [label="PointerAST"];
+n15 [label="DeclaratorIdAST"];
+n16 [label="SimpleNameAST"];
+n17 [label="DeclarationStatementAST"];
+n18 [label="SimpleDeclarationAST"];
+n19 [label="NamedTypeSpecifierAST"];
+n20 [label="SimpleNameAST"];
+n21 [label="DeclaratorAST"];
+n22 [label="PointerAST"];
+n23 [label="DeclaratorIdAST"];
+n24 [label="SimpleNameAST"];
+n1 -> n2
+n2 -> n3
+n3 -> t1
+n2 -> n4
+n4 -> n5
+n5 -> n6
+n6 -> t2
+n4 -> n7
+n7 -> t3
+n7 -> t4
+n2 -> n8
+n8 -> t5
+n8 -> n9
+n9 -> n10
+n10 -> n11
+n11 -> n12
+n12 -> t6
+n10 -> n13
+n13 -> n14
+n14 -> t7
+n13 -> n15
+n15 -> n16
+n16 -> t8
+n10 -> t9
+n8 -> n17
+n17 -> n18
+n18 -> n19
+n19 -> n20
+n20 -> t10
+n18 -> n21
+n21 -> n22
+n22 -> t11
+n21 -> n23
+n23 -> n24
+n24 -> t12
+n18 -> t13
+n8 -> t14
+{ rank=same;
+t1 [shape=rect label = "void"];
+t2 [shape=rect label = "f"]; t1 -> t2 [arrowhead="vee" color="transparent"];
+t3 [shape=rect label = "("]; t2 -> t3 [arrowhead="vee" color="transparent"];
+t4 [shape=rect label = ")"]; t3 -> t4 [arrowhead="vee" color="transparent"];
+t5 [shape=rect label = "{"]; t4 -> t5 [arrowhead="vee" color="transparent"];
+t6 [shape=rect label = "A"]; t5 -> t6 [arrowhead="vee" color="transparent"];
+t7 [shape=rect label = "*"]; t6 -> t7 [arrowhead="vee" color="transparent"];
+t8 [shape=rect label = "x"]; t7 -> t8 [arrowhead="vee" color="transparent"];
+t9 [shape=rect label = ";"]; t8 -> t9 [arrowhead="vee" color="transparent"];
+t10 [shape=rect label = "A"]; t9 -> t10 [arrowhead="vee" color="transparent"];
+t11 [shape=rect label = "*"]; t10 -> t11 [arrowhead="vee" color="transparent"];
+t12 [shape=rect label = "y"]; t11 -> t12 [arrowhead="vee" color="transparent"];
+t13 [shape=rect label = ";"]; t12 -> t13 [arrowhead="vee" color="transparent"];
+t14 [shape=rect label = "}"]; t13 -> t14 [arrowhead="vee" color="transparent"];
+}
+}
+
+    )raw";
+
+    checkAst(source, expectedAst, false);
 }
 
