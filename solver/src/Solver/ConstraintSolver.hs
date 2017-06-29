@@ -251,13 +251,17 @@ stage2 vtx (c :&: c') = do
   (vtx1, c1) <- stage2 vtx c
   (vtx2, c2) <- stage2 vtx1 c'
   let
-    -- Pick the symbol in which attributes have possibly been set already.
+    -- Pick the symbol in which attributes are "enforced" by what's available in the program.
     choose (ValSym t@(QualTy _) dc ce st) (ValSym _ dc' ce' st') =
       ValSym t (dc && dc') (ce || ce') (st || st')
     choose (ValSym _ dc ce st) (ValSym t@(QualTy _) dc' ce' st') =
       ValSym t (dc && dc') (ce || ce') (st || st')
-    choose (ValSym t dc ce st) (ValSym _ dc' ce' st') =
-      ValSym t (dc && dc') (ce || ce') (st || st')
+    -- A function can be defined, but not declared. We wanna pick the type of the one defined,
+    -- available in the program. So we don't risk a mismatching signature due to modulo-
+    -- conversion inferred type.
+    choose (ValSym t dc ce st) (ValSym t' dc' ce' st')
+      | dc = ValSym t (dc && dc) (ce || ce') (st || st')
+      | otherwise = ValSym t' (dc && dc') (ce || ce') (st || st')
   return ( VarCtx $ Map.unionWith choose (varctx vtx1) (varctx vtx2)
            , c1 :&: c2 )
 stage2 vtx c@(Has _ _) = return (vtx, c)
