@@ -62,6 +62,7 @@ Constraint parser
 >                    , existsParser
 >                    , typeDefParser
 >                    , isConstParser
+>                    , staticStorageParser
 >                    , eofParser
 >                    ]
 
@@ -89,6 +90,12 @@ Constraint parser
 >                         (parens nameParser)
 >                    where
 >                      build _ n = ReadOnly n
+
+> staticStorageParser :: Parser Constraint
+> staticStorageParser = build <$> reserved "$static$" <*>
+>                         (parens nameParser)
+>                        where
+>                         build _ n = Static n
 
 > hasParser :: Parser Constraint
 > hasParser = reserved "$has$" *>
@@ -294,5 +301,6 @@ Constraint language definition
 >                        , "$has$"
 >                        , "$typeof$"
 >                        , "$read_only$"
+>                        , "$static$"
 >                        ]
 >                      }

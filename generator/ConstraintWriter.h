@@ -129,7 +129,13 @@ public:
      * \brief writeReadOnly
      * \param ty
      */
-    virtual void writeReadOnly(const std::string& ty);
+    virtual void writeReadOnly(const std::string& val);
+
+    /*!
+     * \brief writeStatic
+     * \param val
+     */
+    virtual void writeStatic(const std::string& val);
 
     /*!
      * \brief writerMemberRel

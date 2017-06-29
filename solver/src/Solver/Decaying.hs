@@ -28,7 +28,7 @@ import Solver.SolverMonad
 decay :: TyCtx -> VarCtx -> SolverM (TyCtx, VarCtx)
 decay tctx vctx =
     return ((TyCtx $ Map.map (\(t, b) -> (matchPtrTy t, b))  (tyctx tctx)),
-            (VarCtx $ Map.map (\(ValSym t d r) -> ValSym (matchPtrTy t) d r) (varctx vctx)))
+            (VarCtx $ Map.map (\(ValSym t d r st) -> ValSym (matchPtrTy t) d r st) (varctx vctx)))
 
 matchPtrTy :: Ty -> Ty
 matchPtrTy t@(PtrTy t') = matchFuncPtrTy t' 1

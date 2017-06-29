@@ -62,8 +62,8 @@ builtinValues l =
   Map.fromList values
  where
   -- Only non-polymorphic operators can be listed here (see ConversionRules.hs).
-  values = [(Name "<<", ValSym (FunTy int [int, int]) True False),  -- Trigger int promotion.
-            (Name ">>", ValSym (FunTy int [int, int]) True False)]
+  values = [(Name "<<", ValSym (FunTy int [int, int]) True False False),  -- Trigger int promotion.
+            (Name ">>", ValSym (FunTy int [int, int]) True False False)]
 
 
 -- | C standard library's types by language version.
@@ -98,4 +98,4 @@ cleanTypes l = (Map.\\ (builtinTypes l)) . (Map.\\ (stdTypes l))
 fillTypes :: [Ty] -> Map Name (Ty, Bool)
 fillTypes = Map.fromList . map (\t -> (nameOf t, (t, True)))
 fillValues :: [(Name, Ty)] -> Map Name ValSym
-fillValues = Map.fromList . map (\(n,t) -> (n, ValSym t True False))
+fillValues = Map.fromList . map (\(n,t) -> (n, ValSym t True False False))

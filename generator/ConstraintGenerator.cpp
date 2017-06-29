@@ -306,6 +306,11 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
     const std::string funcName(id->begin(), id->end());
     writer_->writeFuncDecl(funcName, params, funcRet);
 
+    if (func->storage() == Symbol::Static) {
+        writer_->writeStatic(funcName);
+        writer_->writeAnd(true);
+    }
+
     // Flag that we have no return value information about this function.
     valuedRets_.push(false);
 
@@ -359,6 +364,14 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
         std::string declName = extractId(name);
         std::string declTy = typeSpeller_.spell(decl->type(), scope_);
 
+        // Type a function declaration just as we do for a function definition.
+        if (decl->asDeclaration()
+                && decl->asDeclaration()->type()
+                && decl->asDeclaration()->type()->asFunctionType()) {
+            visitSymbol(decl->asDeclaration()->type()->asFunctionType()->asFunction(), nullptr);
+            return false;
+        }
+
         // Altough a `typedef` is parsed as a simple declaration, its contraint
         // rule is different. We process it and break out, since there cannot
         // exist multiple typedefs within one declaration.
@@ -398,13 +411,6 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             const std::string& structTy = structs_.top();
             writer_->writeMemberRel(structTy, declName, alpha);
             writer_->writeAnd(true);
-        }
-
-        // Type a function declaration just as we do for a function definition.
-        if (decl->asDeclaration()
-                && decl->asDeclaration()->type()
-                && decl->asDeclaration()->type()->asFunctionType()) {
-            visitSymbol(decl->asDeclaration()->type()->asFunctionType()->asFunction(), nullptr);
         }
 
         // When we have an array with an initializer, we use the individual

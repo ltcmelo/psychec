@@ -56,6 +56,7 @@ instance Apply Constraint where
     apply s (Exists n c) = Exists n (apply s c)
     apply s (TypeDef t t') = TypeDef (apply s t) (apply s t')
     apply s c@(ReadOnly _) = c
+    apply s c@(Static _) = c
     apply s Truth = Truth
 
 instance Apply Ty where
@@ -71,7 +72,7 @@ instance Apply Field where
     apply s (Field n t) = Field n (apply s t)
 
 instance Apply ValSym where
-    apply s (ValSym t b ro) = ValSym (apply s t) b ro
+    apply s (ValSym t b ro st) = ValSym (apply s t) b ro st
 
 
 data Constness = Relax | Enforce  deriving (Eq, Ord, Show)
@@ -112,6 +113,7 @@ instance Unifiable Constraint where
     fv (Exists n c) = n : fv c
     fv (TypeDef t t') = fv t `union` fv t'
     fv (ReadOnly _) = []
+    fv (Static _) = []
     fv t = []
 
 instance Unifiable Ty where

@@ -1,0 +1,11 @@
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables and functions */
+static  void g () ;
+ void i () ;
+ void j () ;
+ int /*<<< orphan or scalar*/ m () ;
+static  void n () ;
+

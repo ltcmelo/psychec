@@ -35,6 +35,7 @@ const char* const kSubtype = " > ";
 const char* const kAlias = " $as$ ";
 const char* const kTypeOf = "$typeof$";
 const char* const kReadOnly = "$read_only$";
+const char* const kStatic = "$static$";
 
 } // anonymous
 
@@ -158,11 +159,19 @@ void ConstraintWriter::writeTypeName(const std::string& ty)
     os_ << ty;
 }
 
-void ConstraintWriter::writeReadOnly(const std::string &ty)
+void ConstraintWriter::writeReadOnly(const std::string &val)
 {
     HONOR_BLOCKING_STATE;
 
-    os_ << kReadOnly << "(" << ty << ")";
+    os_ << kReadOnly << "(" << val << ")";
+    ++cnt_;
+}
+
+void ConstraintWriter::writeStatic(const std::string &val)
+{
+    HONOR_BLOCKING_STATE;
+
+    os_ << kStatic << "(" << val << ")";
     ++cnt_;
 }
 

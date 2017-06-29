@@ -24,11 +24,11 @@ import Data.Map (Map)
 import qualified Data.Map as Map
 import Utils.Pretty (nameOf)
 
-
-data ValSym = ValSym { valty :: Ty
-                       , declared :: Bool
-                       , readOnly :: Bool }
-               deriving (Eq, Ord, Show)
+-- Use separate container for symbol attributes?
+data ValSym = ValSym { valty :: Ty,
+                       declared :: Bool,
+                       readOnly :: Bool,
+                       static :: Bool } deriving (Eq, Ord, Show)
 
 
 void :: Ty

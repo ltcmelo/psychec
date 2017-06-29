@@ -64,7 +64,8 @@ instance Pretty Constraint where
                                         pprint ctr
   pprint (Exists n ctr) = text "exists" <+> pprint n <+> char '.' <+> pprint ctr
   pprint (ctr :&: ctr') = pprint ctr <+> char ',' <+> pprint ctr'
-  pprint (ReadOnly n) = text "const" <+> pprint n
+  pprint (ReadOnly n) = text "constexpr" <+> pprint n
+  pprint (Static n) = text "static" <+> pprint n
   pprint Truth = text "Truth"
 
 

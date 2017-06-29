@@ -34,6 +34,7 @@ Definition of constraints
 >                 | Def Name Ty Constraint    -- symbol definition
 >                 | Constraint :&: Constraint -- conjunction
 >                 | Exists Name Constraint    -- fresh variable introduction
->                 | ReadOnly Name             -- static values
+>                 | ReadOnly Name             -- constant-expression values
+>                 | Static Name               -- static storage
 >                 | Truth
 >                 deriving (Eq, Ord, Show)

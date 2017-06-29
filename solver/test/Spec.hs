@@ -205,6 +205,9 @@ tests = testGroup "Unit tests"
                   , doTest "T158.c" -- Adjancent structs with equally named fields.
                   , doTest "T159.c" -- Premature constraint eof.
                   , doTest "T160.c" -- Broken def/exists constraint.
+                  , doTest "T161.c" -- Static function.
+                  , doTest "T162.c" -- Function declaration only (output should be empty).
+                  , doTest "T163.c" -- More static and non-static functions.
                   ]
 
 doTest s

@@ -116,6 +116,15 @@ solve c l = do
   return (TyCtx tcx_', VarCtx vcx_)
 
 
+{-- instance Pretty ValSym where
+  pprint =
+   foo . bar
+    where
+   bar sym = (valty sym, static sym)
+   foo (t, st) = pprint t <+> text (show st)
+--}
+
+
 -- | Populate the typing context, replacing "duplicate" types so that a single instance of
 -- each one of them exists.
 stage1 :: TyCtx -> Constraint -> SolverM (TyCtx, Constraint)
@@ -139,6 +148,7 @@ stage1 tctx (Def n t c) = do
   (tcx, c')  <- stage1 tctx c
   return (tcx, Def n (findCanonical tctx t) c')
 stage1 tctx c@(ReadOnly _) = return (tctx, c)
+stage1 tctx c@(Static _) = return (tctx, c)
 stage1 tctx Truth = return (tctx, Truth)
 
 
@@ -219,38 +229,52 @@ stage2 vtx (n :<-: t@(FunTy rt pts)) =
                 t' -> return (vtx, t' :=: t)
         Nothing -> do
             v <- fresh
-            return ( VarCtx $ Map.insert n (ValSym v False False) (varctx vtx)
+            return ( VarCtx $ Map.insert n (ValSym v False False False) (varctx vtx)
                     , v :=: t )
 stage2 vtx (n :<-: t) =
-    case Map.lookup n (varctx vtx) of
-        Just info -> return (vtx, valty info :=: t)
-        Nothing -> do
-            v <- fresh
-            return ( VarCtx $ Map.insert n (ValSym v False False) (varctx vtx)
-                   , v :=: t )
-stage2 vtx (Def n t c) =
-    stage2 (VarCtx $ Map.insert n (ValSym t True False) (varctx vtx)) c
+  case Map.lookup n (varctx vtx) of
+    Just info -> return (vtx, valty info :=: t)
+    Nothing -> do
+      v <- fresh
+      return ( VarCtx $ Map.insert n (ValSym v False False False) (varctx vtx), v :=: t )
+stage2 vtx (Def n t c) = do
+  -- Functions might have their definition in the program but not their declaration. A function
+  -- call prior to the definition will be inserted into the environment through an ascription
+  -- constraint. Therefore, the care in order to preserve the attributes already defined.
+  let
+    replaceOrInsert decl st  = VarCtx $ Map.insert n (ValSym t True decl st) (varctx vtx)
+    vtx' = case Map.lookup n (varctx vtx) of
+             Just sym -> replaceOrInsert (readOnly sym) (static sym)
+             Nothing -> replaceOrInsert False False
+  stage2 vtx' c
 stage2 vtx (c :&: c') = do
-    (vtx1, c1) <- stage2 vtx c
-    (vtx2, c2) <- stage2 vtx1 c'
-    let
-        preferQual (ValSym lt@(QualTy _) b ro) _ = ValSym lt b ro
-        preferQual _ (ValSym rt@(QualTy _) b ro) = ValSym rt b ro
-        preferQual l r = l
-    return ( VarCtx $ Map.unionWith preferQual (varctx vtx1) (varctx vtx2)
+  (vtx1, c1) <- stage2 vtx c
+  (vtx2, c2) <- stage2 vtx1 c'
+  let
+    -- Pick the symbol in which attributes have possibly been set already.
+    choose (ValSym t@(QualTy _) dc ce st) (ValSym _ dc' ce' st') =
+      ValSym t (dc && dc') (ce || ce') (st || st')
+    choose (ValSym _ dc ce st) (ValSym t@(QualTy _) dc' ce' st') =
+      ValSym t (dc && dc') (ce || ce') (st || st')
+    choose (ValSym t dc ce st) (ValSym _ dc' ce' st') =
+      ValSym t (dc && dc') (ce || ce') (st || st')
+  return ( VarCtx $ Map.unionWith choose (varctx vtx1) (varctx vtx2)
            , c1 :&: c2 )
 stage2 vtx c@(Has _ _) = return (vtx, c)
 stage2 vtx c@(_ :=: _) = return (vtx, c)
 stage2 vtx c@(_ :>: _) = return (vtx, c)
 stage2 vtx (ReadOnly n) =
-    case Map.lookup n (varctx vtx) of
-        Nothing -> error "const can only be applied on known values"
-        Just info -> do
-             v <- fresh
-             return ( VarCtx $ Map.insert n
-                               (ValSym (QualTy (valty info)) (declared info) True)
-                               (varctx vtx)
-                    , Truth)
+  case Map.lookup n (varctx vtx) of
+    Nothing -> error "const can only be applied on known values"
+    Just info -> return (VarCtx $ Map.insert n
+                                  (ValSym (QualTy (valty info)) (declared info) True (static info))
+                                  (varctx vtx), Truth)
+stage2 vtx c@(Static n) =
+  case Map.lookup n (varctx vtx) of
+    Nothing -> error "static can only be applied on known values"
+    Just info -> return (VarCtx $ Map.insert n
+                                  (ValSym (valty info) (declared info) (readOnly info) True)
+                                  (varctx vtx), Truth)
 stage2 vtx Truth = return (vtx, Truth)
 
 
@@ -352,7 +376,7 @@ stage5 tcx vcx s = do
     elabIdx = Map.foldrWithKey (\k (t, _) acc ->
       if isElab k then acc %% (t %-> k) else acc) nullIdx (tyctx tcx)
     tcxFlt_' = Map.map (\(t, b) -> (compact elabIdx t , b)) tcxFlt_
-    vcxFlt_ = Map.map (\(ValSym t b ro) -> ValSym (compact elabIdx t) b ro) (varctx vcx)
+    vcxFlt_ = Map.map (\(ValSym t b ro st) -> ValSym (compact elabIdx t) b ro st) (varctx vcx)
 
     tcxElab_ = (tyctx tcx) Map.\\ tcxFlt_'
     tcxElab_' = Map.filter (not . snd) tcxElab_
@@ -362,7 +386,7 @@ stage5 tcx vcx s = do
     -- Collect composite types so we can compact them. Througout this process we also
     -- look into the substitutions because nested structs will only appear there.
     nonElabCompo = Map.foldr (\(t, _) acc -> acc ++ collect t) [] tcxFlt_'
-    nonElabCompo' = Map.foldr (\(ValSym t _ _) acc -> acc ++ collect t) nonElabCompo vcxFlt_
+    nonElabCompo' = Map.foldr (\(ValSym t _ _ _) acc -> acc ++ collect t) nonElabCompo vcxFlt_
     allCompo = Map.foldr (\(t, _) acc -> t:acc) nonElabCompo' tcxElab_'
     exclude = Set.fromList allCompo
 
@@ -387,7 +411,7 @@ stage5 tcx vcx s = do
 
   let
     tcx_ = Map.map (\(t, b) -> (compact idx t, b)) tcxFlt_'
-    vcx_ = Map.map (\(ValSym t b ro) -> ValSym (compact idx t) b ro) vcxFlt_
+    vcx_ = Map.map (\(ValSym t b ro st) -> ValSym (compact idx t) b ro st) vcxFlt_
     tcx_' = Map.foldrWithKey (\t n acc -> Map.insert n (t, False) acc) tcx_ (ty2n idx)
 
   -- "De-alphasize" top-level names so they match the ones we created.
@@ -444,7 +468,7 @@ stage6 tcx vcx =
         Just k' -> if k == k' then dummy k else orphanize elabOrph t
         Nothing -> orphanize elabOrph t
     tcx_ = Map.mapWithKey (\k (t, b) -> (go k t, b)) (tyctx tcx)
-    vcx_ = Map.map (\(ValSym t b ro) -> ValSym (orphanize elabOrph t) b ro) (varctx vcx)
+    vcx_ = Map.map (\(ValSym t b ro st) -> ValSym (orphanize elabOrph t) b ro st) (varctx vcx)
   in
     (TyCtx tcx_, VarCtx vcx_)
 
