@@ -19,6 +19,7 @@
 #include "StdLibIndex.h"
 #include "Control.h"
 #include <algorithm>
+#include <cstring>
 #include <iterator>
 #include <unordered_set>
 
