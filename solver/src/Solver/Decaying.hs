@@ -20,6 +20,7 @@ module Solver.Decaying where
 
 import Data.Map (Map)
 import qualified Data.Map as Map
+import qualified Data.List as List
 import Data.Type
 import Data.BuiltIn
 import Solver.SolverMonad
@@ -32,7 +33,10 @@ decay tctx vctx =
 
 matchPtrTy :: Ty -> Ty
 matchPtrTy t@(PtrTy t') = matchFuncPtrTy t' 1
+matchPtrTy (RecTy fs n) =
+  RecTy (List.map (\(Field fn ft) -> Field fn (matchPtrTy ft)) fs) n
 matchPtrTy t = t
+
 
 matchFuncPtrTy :: (Num a, Eq a) => Ty -> a -> Ty
 matchFuncPtrTy t@(PtrTy t') n = matchFuncPtrTy t' (n + 1)
