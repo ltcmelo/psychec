@@ -35,6 +35,9 @@ matchPtrTy :: Ty -> Ty
 matchPtrTy t@(PtrTy t') = matchFuncPtrTy t' 1
 matchPtrTy (RecTy fs n) =
   RecTy (List.map (\(Field fn ft) -> Field fn (matchPtrTy ft)) fs) n
+matchPtrTy (SumTy fs n) =
+  SumTy (List.map (\(Field fn ft) -> Field fn (matchPtrTy ft)) fs) n
+matchPtrTy (FunTy rt pt) = FunTy (matchPtrTy rt) (List.map matchPtrTy pt)
 matchPtrTy t = t
 
 
