@@ -1,0 +1,7 @@
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables and functions */
+ int /*<<< orphan or scalar*/ g (int*) ;
+ int /*<<< orphan or scalar*/ show (char*) ;

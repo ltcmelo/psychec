@@ -210,6 +210,7 @@ tests = testGroup "Unit tests"
                   , doTest "T163.c" -- More static and non-static functions.
                   , doTest "T164.c" -- Pick function types from definitions, if available.
                   , doTest "T165.c" -- Function pointers in field.
+                  , doTest "T166.c" -- Always keep arithmetic bin. expr. constraints.
                   ]
 
 doTest s

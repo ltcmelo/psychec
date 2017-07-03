@@ -541,16 +541,41 @@ const std::string nonPolyOprtrName(int opTk)
 }
 
 /*!
- * \brief isPolyOprtr
- * \param opTk
+ * \brief isArithmeticOperator
+ * \param op
+ * \return
+ */
+bool isArithmeticOperator(int op)
+{
+    switch (op) {
+    case T_PLUS:
+    case T_MINUS:
+    case T_STAR:
+    case T_SLASH:
+    case T_PERCENT:
+    case T_AMPER:
+    case T_PIPE:
+    case T_CARET:
+    case T_LESS_LESS:
+    case T_GREATER_GREATER:
+        return true;
+
+    default:
+        return false;
+    }
+}
+
+/*!
+ * \brief isPolymorphicOperator
+ * \param op
  *
  * Return whether the operator is polymorhpic. But we don't consider polymorphism
  * among numeric types themsleves (i.e. between integers and floating points).
  * We are interested on operators in which pointer types can be operands.
  */
-bool isPolyOprtr(int opTk)
+bool isPolymorphicOperator(int op)
 {
-    switch (opTk) {
+    switch (op) {
         // Assignment operators
     case T_EQUAL:
     case T_PLUS_EQUAL:
@@ -645,11 +670,25 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
                                            const std::string& rhsAlpha,
                                            int opTk)
 {
-    // Now we decide whether we generate or discard the constraints for this
-    // binary expression. Whenever one of the operands is a pointer and the
-    // other is an arithmetic type (integral or floating point), the constraint
-    // is dropped so we don't trigger an "overunification".
+    // No need to worry about overunification for arithmetic operators. When both
+    // arithmetic and pointer types are allowed, the result is a pointer type.
+    if (isArithmeticOperator(opTk)) {
+        if (lhsClass == DomainLattice::Pointer) {
+            writer_->writeEquivRel(types_.top(), lhsAlpha);
+            printDebug("Arithmetic operation constraint, no tweak %s x %s\n",
+                       lhsClass.name_.c_str(), rhsClass.name_.c_str());
+            return;
+        }
 
+        if (rhsClass == DomainLattice::Pointer) {
+            writer_->writeEquivRel(types_.top(), rhsAlpha);
+            printDebug("Arithmetic operation constraint, no tweak %s x %s\n",
+                       lhsClass.name_.c_str(), rhsClass.name_.c_str());
+            return;
+        }
+    }
+
+    // Eliminate the risk of overnification for arbitrary binary expressions.
     if ((lhsClass == DomainLattice::Pointer
          && (rhsClass == DomainLattice::Integral
              || rhsClass == DomainLattice::FloatingPoint
@@ -670,8 +709,7 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
                lhsClass.name_.c_str(), rhsClass.name_.c_str());
 
     // At this point, we know there's no conflict between pointers and
-    // arithmetic types. If either one of the sides is of an arithmetic
-    // type, then both are, we only need to pick a double or an int.
+    // arithmetic types. We pick the one with the highest rank.
     std::string actualArithTy = (lhsClass > rhsClass) ? lhsClass.arithName_
                                                       : rhsClass.arithName_;
 
@@ -690,7 +728,7 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
     // We must be careful with polymorphic operators such as `+' or `-' since
     // they work on both pointers and integers. A constraint for a concrete
     // type may only be generated in the case both operands are compatible.
-    if (isPolyOprtr(opTk)) {
+    if (isPolymorphicOperator(opTk)) {
         if (opTk == T_EQUAL)
             writer_->writeSubtypeRel(lhsAlpha, rhsAlpha);
         else
@@ -703,7 +741,7 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
         if (isPolyOprtrArithRet(opTk)) {
             writer_->writeAnd();
             writer_->writeEquivRel(types_.top(),
-                                        actualArithTy.empty() ? kDefaultArithTy : actualArithTy);
+                                   actualArithTy.empty() ? kDefaultArithTy : actualArithTy);
         }
         return;
     }
@@ -800,7 +838,7 @@ bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
                      std::get<0>(a1a2), std::get<1>(a1a2),
                      opTk);
 
-    if (!isPolyOprtr(opTk)) {
+    if (!isPolymorphicOperator(opTk)) {
         writer_->writeAnd();
         writer_->writeTypeof(nonPolyOprtrName(opTk));
         writer_->writeEquivMark();
