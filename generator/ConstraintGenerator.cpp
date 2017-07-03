@@ -957,6 +957,11 @@ bool ConstraintGenerator::visit(CallAST *ast)
                 collectExpression(kDefaultStrTy, it->value);
                 break;
 
+            case PrintfScanner::Pointer:
+                // We don't know the underlying pointer type, nothing interesting to do.
+                writer_->writeTruth();
+                break;
+
             default:
                 PSYCHE_ASSERT(false, return false, "unknown type spec");
                 break;

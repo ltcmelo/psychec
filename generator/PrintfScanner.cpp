@@ -78,6 +78,11 @@ std::vector<PrintfScanner::FormatSpec> PrintfScanner::evaluate() const
                 done = true;
                 break;
 
+            case 'p':
+                specs.push_back(Pointer);
+                done = true;
+                break;
+
             case 'f':
             case 'F':
             case 'e':
