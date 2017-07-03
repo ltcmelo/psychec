@@ -201,10 +201,8 @@ instance Unifiable Ty where
 
     dunify (QualTy t) (QualTy t') m = dunify t t' m
     dunify (QualTy t) t' _ = dunify t t' Relax
-    dunify t (QualTy t') m
-        | m == Relax = dunify t t' Relax
-        | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
-                                                     (Name $ show $ pprint (QualTy t'))
+    dunify t (QualTy t') m = dunify t t' Relax
+
     dunify t@(EnumTy _) t' _
         | convertible t t' = return nullSubst
         | otherwise = differentTypeConstructorsError (Name $ show $ pprint t)
