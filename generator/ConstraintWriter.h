@@ -74,8 +74,6 @@ public:
      */
     virtual void writeVarDecl(const std::string& name, const std::string& type);
 
-    using ParamPair = std::pair<std::string, std::string>;
-
     /*!
      * \brief writeFuncDecl
      * \param name
@@ -85,14 +83,8 @@ public:
      *
      */
     virtual void writeFuncDecl(const std::string& name,
-                               const std::vector<ParamPair>& params,
+                               const std::vector<std::string>& params,
                                const std::string& ret);
-
-    /*!
-     * \brief writeFunctionParameters
-     * \param params
-     */
-    virtual void writeFuncParams(const std::vector<ParamPair>& params);
 
     /*!
      * \brief writeTypeofExpr

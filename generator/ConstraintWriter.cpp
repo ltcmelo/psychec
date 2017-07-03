@@ -86,28 +86,18 @@ void ConstraintWriter::writeVarDecl(const std::string &name,
 }
 
 void ConstraintWriter::writeFuncDecl(const std::string &name,
-                                     const std::vector<ParamPair> &params,
+                                     const std::vector<std::string> &params,
                                      const std::string& ret)
 {
     HONOR_BLOCKING_STATE;
 
     os_ << kDecl << name << kDeclDelim << "(";
     for (const auto& param : params)
-        os_ << param.first << ", ";
+        os_ << param << ", ";
     os_ << ret;
     os_ << ") " << kContainment << "\n";
     indent();
-    if(!params.empty())
-        writeFuncParams(params);
     ++cnt_;
-}
-
-void ConstraintWriter::writeFuncParams(const std::vector<ParamPair>& params)
-{
-    HONOR_BLOCKING_STATE;
-
-    for (const auto& param : params)
-        writeVarDecl(param.second, param.first);
 }
 
 void ConstraintWriter::writeTypeof(const std::string &sym)

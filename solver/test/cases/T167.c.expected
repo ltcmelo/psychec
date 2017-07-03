@@ -1,0 +1,9 @@
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables and functions */
+ int /*<<< orphan or scalar*/ len (char const*) ;
+ int /*<<< orphan or scalar*/ len2 (char const*) ;
+ int /*<<< orphan or scalar*/ len3 (char const*) ;
+

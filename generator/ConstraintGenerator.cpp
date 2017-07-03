@@ -263,33 +263,29 @@ bool ConstraintGenerator::visit(FunctionDefinitionAST *ast)
 
 void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
 {
-    std::vector<ConstraintWriter::ParamPair> params;
+    std::vector<std::string> params;
     if (func->hasArguments()) {
         for (auto i = 0u; i < func->argumentCount(); i++) {
-            Symbol *arg = func->argumentAt(i);
-            std::string specifier = typeSpeller_.spell(arg->type(), scope_);
+            Symbol *sym = func->argumentAt(i);
+            const std::string& ty = typeSpeller_.spell(sym->type(), scope_);
+            params.push_back(ty);
 
-            const Name *argName = arg->name();
-            if(argName) {
-                const Identifier *idArgName = argName->asNameId()->identifier();
-                std::string declarator(idArgName->begin(), idArgName->end());
-                params.emplace_back(specifier, declarator);
-            } else {
-                params.emplace_back(specifier, createUnnamed(paramPrefix_));
-            }
-        }
-
-        // Write their types.
-        std::vector<ConstraintWriter::ParamPair> paramsTypes;
-        std::vector<ConstraintWriter::ParamPair>::const_iterator it;
-        for(it = params.begin(); it != params.end(); ++it) {
             std::string alpha = supply_.createTypeVar1();
-            paramsTypes.emplace_back(alpha, (*it).first);
             writer_->writeExists(alpha);
-        }
-        for(it = paramsTypes.begin(); it != paramsTypes.end(); ++it) {
-            writer_->writeTypedef((*it).second, (*it).first);
+            writer_->writeTypedef(ty, alpha);
             writer_->writeAnd(true);
+
+            const Name *argName = sym->name();
+            std::string var;
+            if(argName) {
+                const Identifier *id = argName->asNameId()->identifier();
+                var.assign(id->begin(), id->end());
+            } else {
+                var = createUnnamed(paramPrefix_);
+            }
+            writer_->writeVarDecl(var, alpha);
+
+            pendingEquivs_.push(EquivPair(alpha, ty));
         }
     }
 

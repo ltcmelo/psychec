@@ -211,6 +211,7 @@ tests = testGroup "Unit tests"
                   , doTest "T164.c" -- Pick function types from definitions, if available.
                   , doTest "T165.c" -- Function pointers in field.
                   , doTest "T166.c" -- Always keep arithmetic bin. expr. constraints.
+                  , doTest "T167.c" -- Normalize decl. of params and variables.
                   ]
 
 doTest s
