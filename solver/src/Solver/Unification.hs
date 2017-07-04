@@ -65,7 +65,8 @@ instance Apply Ty where
     apply s (PtrTy t) = PtrTy (apply s t)
     apply s (FunTy t ts) = FunTy (apply s t) (apply s ts)
     apply s (RecTy fs n) = RecTy (apply s fs) n
-    apply s (QualTy t) = QualTy (apply s (dropTopQual t))
+    -- Duplicate const qualifiers don't make sense, so drop substituted ones.
+    apply s (QualTy t) = QualTy (dropTopQual (apply s t))
     apply s t@(EnumTy n) = t
 
 instance Apply Field where

@@ -93,7 +93,6 @@ solve c l = do
     ss' = ss @@ s'''
     tcx3 = TyCtx $ Map.map (\(t,b) -> (apply ss' t, b)) (tyctx tcx2)
     vcx3 = VarCtx $ Map.map (\varInfo -> apply ss' varInfo) (varctx vcx2)
-
     -- Orphanize type variables that remain.
     (tcx4, vcx4) = stage6 tcx3 vcx3
 
@@ -179,7 +178,7 @@ createEquiv (QualTy t) (QualTy t') tctx = do
 createEquiv t@(QualTy l) t'@(VarTy v) tctx = do
    v' <- fresh
    (tcx, c) <- createEquiv l v' tctx
-   return (tcx, (t' :=: (QualTy v')) :&: c)
+   return (tcx, ((QualTy v') :=: t') :&: c)
 createEquiv t@(EnumTy n) t'@(VarTy v) tctx = do
   let tctx' = TyCtx $ maybe (Map.insert n (EnumTy n, False) (tyctx tctx))
                             (const (tyctx tctx))
@@ -460,7 +459,8 @@ stage6 tcx vcx =
     pick k t@(VarTy _) acc
       | isElab k = acc %% (t %-> k)
       | otherwise = acc
-    pick _ _ acc = acc
+    pick k (QualTy t) acc = pick k t acc
+    pick k _ acc = acc
     elabOrph = Map.foldrWithKey (\k (t, _) acc -> pick k t acc) nullIdx (tyctx tcx)
 
     dummy n
