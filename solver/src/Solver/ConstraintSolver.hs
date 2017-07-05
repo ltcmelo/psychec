@@ -421,8 +421,12 @@ stage5 tcx vcx s = do
   tcx_'' <- mapM (\c -> unalpha c) tcx_'
 
   let
-    -- "De-alphasize" fields from composite types.
-    n2n = Map.foldrWithKey (\(RecTy _ n) n' acc -> Map.insert n n' acc) Map.empty (ty2n idx)
+    -- Create an index to be used for de-alphasizing fields from composite types.
+    fullIdx = (ty2n idx) `Map.union` (ty2n elabIdx)
+    gon2n (RecTy _ n) n' acc = Map.insert n n' acc
+    gon2n _ _ acc = acc
+    n2n = Map.foldrWithKey gon2n Map.empty fullIdx
+
     update t@(VarTy v) = maybe t (NamedTy) (Map.lookup v n2n)
     update t@(NamedTy _) = t
     update t@(EnumTy _) = t

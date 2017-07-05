@@ -214,6 +214,8 @@ tests = testGroup "Unit tests"
                   , doTest "T167.c" -- Normalize decl. of params and variables.
                   , doTest "T168.c" -- Arguments and const enforcing/relaxing.
                   , doTest "T169.c" -- Elaborate const types.
+                  , doTest "T170.c" -- Syntactical unrelated elaborated types fields.
+                  , doTest "T171.c" -- Dont discard scalar constraints, gain precision.
                   ]
 
 doTest s

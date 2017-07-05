@@ -688,12 +688,10 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
     if ((lhsClass == DomainLattice::Pointer
          && (rhsClass == DomainLattice::Integral
              || rhsClass == DomainLattice::FloatingPoint
-             || rhsClass == DomainLattice::Arithmetic
-             || rhsClass == DomainLattice::Scalar))
+             || rhsClass == DomainLattice::Arithmetic))
             || ((lhsClass == DomainLattice::Integral
                  || lhsClass == DomainLattice::FloatingPoint
-                 || lhsClass == DomainLattice::Arithmetic
-                 || lhsClass == DomainLattice::Scalar)
+                 || lhsClass == DomainLattice::Arithmetic)
                 && (rhsClass == DomainLattice::Pointer))) {
         printDebug("Discard constraint, %s x %s\n",
                    lhsClass.name_.c_str(), rhsClass.name_.c_str());
@@ -733,6 +731,8 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
         if (!actualArithTy.empty()) {
             writer_->writeAnd();
             writer_->writeEquivRel(lhsAlpha, actualArithTy);
+            writer_->writeAnd();
+            writer_->writeEquivRel(rhsAlpha, actualArithTy);
         }
         if (isPolyOprtrArithRet(opTk)) {
             writer_->writeAnd();
