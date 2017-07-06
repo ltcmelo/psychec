@@ -202,7 +202,7 @@ instance Unifiable Ty where
 
     dunify (QualTy t) (QualTy t') m = dunify t t' m
     dunify (QualTy t) t' _ = dunify t t' Relax
-    dunify t (QualTy t') m = dunify t t' Relax
+    dunify t (QualTy t') m = dunify t t' m
 
     dunify t@(EnumTy _) t' _
         | convertible t t' = return nullSubst
