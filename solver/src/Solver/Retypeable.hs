@@ -28,6 +28,7 @@ import qualified Data.Set as Set
 import Data.Type
 import Solver.SolverMonad
 import Utils.Pretty
+import Debug.Trace
 
 
 class Retypeable a where
@@ -86,7 +87,7 @@ instance Pretty TyIdx where
   pprint = printer2 "%->" . ty2n
 
 
--- | Elminate top-level (and eventual recursive) alphas with an artificial name.
+-- | Elminate top-level (and eventual recursive) alphas.
 unalpha :: (Ty, Bool) -> SolverM (Ty, Bool)
 unalpha p@(t@(RecTy fs n), b)
   | isVar n = do
@@ -105,6 +106,10 @@ unalpha2 kn (RecTy fs n) =
   RecTy (check fs kn) kn
  where
   check fs k = map (\(Field fn ft) -> Field fn (unalphaHelper k n ft)) fs
+unalpha2 kn (QualTy t) =
+  QualTy t'
+ where
+  t' = unalpha2 kn t
 unalpha2 _ t = t
 
 -- Helper function for the unalpha versions above.

@@ -377,7 +377,7 @@ stage5 tcx vcx s = do
     -- in an index so we are able to identify their definitions so they can be matched.
     tcxFlt_ = Map.filterWithKey (\k _ -> (not . isElab) k) (tyctx tcx)
     elabIdx = Map.foldrWithKey (\k (t, _) acc ->
-      if isElab k then acc %% (t %-> k) else acc) nullIdx (tyctx tcx)
+      if isElab k then acc %% ((dropTopQual t) %-> k) else acc) nullIdx (tyctx tcx)
     tcxFlt_' = Map.map (\(t, b) -> (compact elabIdx t , b)) tcxFlt_
     vcxFlt_ = Map.map (\(ValSym t b ro st) -> ValSym (compact elabIdx t) b ro st) (varctx vcx)
 
@@ -390,7 +390,7 @@ stage5 tcx vcx s = do
     -- look into the substitutions because nested structs will only appear there.
     nonElabCompo = Map.foldr (\(t, _) acc -> acc ++ collect t) [] tcxFlt_'
     nonElabCompo' = Map.foldr (\(ValSym t _ _ _) acc -> acc ++ collect t) nonElabCompo vcxFlt_
-    allCompo = Map.foldr (\(t, _) acc -> t:acc) nonElabCompo' tcxElab_'
+    allCompo = Map.foldr (\(t, _) acc -> (collect t) ++ acc) nonElabCompo' tcxElab_'
     exclude = Set.fromList allCompo
 
     -- We only check against structs because fields are always assembled as such. Cases
@@ -424,6 +424,8 @@ stage5 tcx vcx s = do
     -- Create an index to be used for de-alphasizing fields from composite types.
     fullIdx = (ty2n idx) `Map.union` (ty2n elabIdx)
     gon2n (RecTy _ n) n' acc = Map.insert n n' acc
+    gon2n (QualTy t) n acc = gon2n t n acc
+    gon2n (PtrTy t) n acc = gon2n t n acc
     gon2n _ _ acc = acc
     n2n = Map.foldrWithKey gon2n Map.empty fullIdx
 
