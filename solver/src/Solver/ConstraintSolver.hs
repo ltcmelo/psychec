@@ -67,18 +67,29 @@ solve c l = do
   -- Split constraints into equivalence, inequality, and field acess.
   let (eqs, iqs, fds) = stage3 c''
 
-  -- Run plain unification on equalities. Then, apply the resulting substitutions on the
-  -- inequalities. This will instantiate types and allow us to sort the inequalities
-  -- according to the const-aware directionality criteria. As a consequence, type variables
-  -- are bound in such an order that corresponds to our const-subtyping relation.
+  -- Run plain unification on equalities and apply the substitutions on the inequalities,
+  -- allowing us to sort them in a const-aware manner later.
   s <- punifyList eqs
-  let
-    iqs' = apply s iqs
-    (iq1, iq2, iq3, iq4) = dsort iqs'
-    iqs'' = iq1 ++ iq2 ++ iq3
+  let iqs' = apply s iqs
 
-  s' <- dunifyList iqs''
-  let s'' = s' @@ s
+  -- Identity inconsistent pointer conversions, where the only solution is to bind a type
+  -- variable to void*.
+  let
+    iqs'' = sortBySubTy iqs'
+    sortBySubTy iq = List.sortBy subPred iq
+    subPred (_ :>: t) (_ :>: t') = compare (nameOf t) (nameOf t')
+
+  vs <- instantiateTopPtr iqs''
+
+  -- We want to binding order such that it weakens const when possible, but enforces it
+  -- when necessary.
+  let
+    vs' = vs @@ s
+    (iq1, iq2, iq3, iq4) = dsort iqs''
+    iqs''' = iq1 ++ iq2 ++ iq3
+
+  s' <- dunifyList iqs'''
+  let s'' = s' @@ vs'
 
   -- Assemble records.
   (tcx1, vcx1, s''') <- stage4 tcx0 vcx0 fds s''
@@ -292,6 +303,21 @@ stage3 c@(Has _ _) = ([], [], [c])
 stage3 c@(_ :=: _) = ([c], [], [])
 stage3 c@(_ :>: _) = ([], [c], [])
 stage3 Truth = ([], [], [])
+
+
+-- | Detect and instantiate void*.
+instantiateTopPtr :: [Constraint] -> SolverM Subst
+instantiateTopPtr [] = return nullSubst
+instantiateTopPtr [(_ :>: _)] = return nullSubst
+instantiateTopPtr ((t1 :>: t1'):(t2 :>: t2'):xs) = do
+  let
+    check (PtrTy t) (VarTy n) (PtrTy t') (VarTy n')
+      | n == n' && (dropTopQual t) /= (dropTopQual t') = return (n +-> (PtrTy void))
+      | otherwise = return nullSubst
+    check _ _ _ _  = return nullSubst
+  s <- check t1 t1' t2 t2'
+  s' <- instantiateTopPtr (apply s xs)
+  return (s' @@ s)
 
 
 -- | Sort constraint relations as according to our modeled subtyping relation.

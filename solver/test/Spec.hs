@@ -217,6 +217,7 @@ tests = testGroup "Unit tests"
                   , doTest "T170.c" -- Syntactical unrelated elaborated types fields.
                   , doTest "T171.c" -- Dont discard scalar constraints, gain precision.
                   , doTest "T172.c" -- Const-elaborated type in index.
+                  , doTest "T173.c" -- Detect void* prior to inequalities ordering.
                   ]
 
 doTest s

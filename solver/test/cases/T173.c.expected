@@ -1,0 +1,15 @@
+/* Forward declarations */
+
+/* Type definitions */
+typedef  double U3 ;
+typedef  double U2 ;
+typedef  int T3 ;
+typedef  int T2 ;
+typedef  int T1 ;
+
+/* Variables and functions */
+ void* v ;
+ void* v1 ;
+ void* v2 ;
+ void* v3 ;
+
