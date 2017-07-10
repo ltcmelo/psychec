@@ -4,5 +4,5 @@
 
 /* Variables and functions*/
 int ENC_BLOCKSIZE ; 
-int /*<<< orphan or scalar*/ fread (char*,int) ;
+int /*<<< orphan*/  fread (char*,int) ;
 

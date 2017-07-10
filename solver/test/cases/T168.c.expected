@@ -3,4 +3,4 @@
 /* Type definitions */
 
 /* Variables and functions */
- int /*<<< orphan or scalar*/ quote (char const*) ;
+ int /*<<< orphan*/  quote (char const*) ;

@@ -2,7 +2,7 @@
 
 /* Type definitions */
 typedef  double T3 ;
-typedef  int /*<<< orphan or scalar*/ Foo ;
+typedef  int /*<<< orphan*/  Foo ;
 
 /* Variables and functions*/
 

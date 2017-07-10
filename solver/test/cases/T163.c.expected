@@ -6,6 +6,6 @@
 static  void g () ;
  void i () ;
  void j () ;
- int /*<<< orphan or scalar*/ m () ;
+ int /*<<< orphan*/  m () ;
 static  void n () ;
 

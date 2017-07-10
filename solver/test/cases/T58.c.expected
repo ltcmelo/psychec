@@ -4,5 +4,5 @@
 typedef  float T ;
 
 /* Variables and functions*/
-int /*<<< orphan or scalar*/ e ; 
+int /*<<< orphan*/  e ; 
 

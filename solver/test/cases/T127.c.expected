@@ -3,6 +3,6 @@
 /* Type definitions */
 
 /* Variables and functions*/
-int /*<<< orphan or scalar*/ parse_long_options (int,int /*<<< orphan or scalar*/ (*) (int),double) ; 
-int /*<<< orphan or scalar*/ usage (int) ; 
+int /*<<< orphan*/  parse_long_options (int,int /*<<< orphan*/  (*) (int),double) ; 
+int /*<<< orphan*/  usage (int) ; 
 

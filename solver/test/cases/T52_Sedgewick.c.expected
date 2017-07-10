@@ -6,5 +6,5 @@ typedef  TYPE_1__* link ;
 struct TYPE_7__ {int N; struct TYPE_7__* r; struct TYPE_7__* l; } ;
 
 /* Variables and functions*/
-TYPE_1__* partR (TYPE_1__*,int /*<<< orphan or scalar*/) ; 
+TYPE_1__* partR (TYPE_1__*,int /*<<< orphan*/ ) ; 
 

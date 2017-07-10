@@ -2,8 +2,8 @@
 typedef  struct TYPE_3__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_3__ {int /*<<< orphan or scalar*/ b; } ;
-typedef  int /*<<< orphan or scalar*/ T ;
+struct TYPE_3__ {int /*<<< orphan*/  b; } ;
+typedef  int /*<<< orphan*/  T ;
 typedef  TYPE_1__ A ;
 
 /* Variables and functions*/

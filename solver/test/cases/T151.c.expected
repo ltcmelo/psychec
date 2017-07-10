@@ -2,7 +2,7 @@
 
 /* Type definitions */
 struct A {int dummy; } ;
-typedef  int /*<<< orphan or scalar*/ A_t ;
+typedef  int /*<<< orphan*/  A_t ;
 
 /* Variables and functions*/
 

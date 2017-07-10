@@ -6,9 +6,9 @@ struct TYPE_8__ {int E; int V; int** adj; } ;
 typedef  TYPE_1__* Graph ;
 
 /* Variables and functions */
- int /*<<< orphan or scalar*/ EDGE (int,int) ;
- int /*<<< orphan or scalar*/ GRAPHinsertE (TYPE_1__*,int /*<<< orphan or scalar*/) ;
+ int /*<<< orphan*/  EDGE (int,int) ;
+ int /*<<< orphan*/  GRAPHinsertE (TYPE_1__*,int /*<<< orphan*/ ) ;
  int GRAPHiso (TYPE_1__*,int) ;
  int GRAPHpath (TYPE_1__*,int,int) ;
- int /*<<< orphan or scalar*/ GRAPHremoveE (TYPE_1__*,int /*<<< orphan or scalar*/) ;
+ int /*<<< orphan*/  GRAPHremoveE (TYPE_1__*,int /*<<< orphan*/ ) ;
 

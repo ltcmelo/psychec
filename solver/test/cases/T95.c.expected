@@ -1,7 +1,7 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  int /*<<< orphan or scalar*/ T ;
+typedef  int /*<<< orphan*/  T ;
 
 /* Variables and functions*/
 

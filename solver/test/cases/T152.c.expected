@@ -19,7 +19,7 @@ typedef  struct TYPE_24__   TYPE_10__ ;
 
 /* Type definitions */
 typedef  TYPE_12__* YYY ;
-typedef  int /*<<< orphan or scalar*/ Whatever ;
+typedef  int /*<<< orphan*/  Whatever ;
 struct TYPE_40__ {int d; } ;
 struct TYPE_39__ {TYPE_7__* hhhhh; } ;
 struct TYPE_38__ {int ptrobj; char* ptrobj2; } ;
@@ -35,7 +35,7 @@ struct TYPE_31__ {struct TYPE_31__* prev; TYPE_13__* big; } ;
 struct TYPE_30__ {int w; } ;
 struct TYPE_29__ {TYPE_8__ kkkkkk; TYPE_6__* kk; } ;
 struct TYPE_28__ {struct TYPE_28__* next; } ;
-struct TYPE_27__ {int y; double known; int /*<<< orphan or scalar*/ i; TYPE_12__* xxx; TYPE_4__* m; TYPE_1__* z; } ;
+struct TYPE_27__ {int y; double known; int /*<<< orphan*/  i; TYPE_12__* xxx; TYPE_4__* m; TYPE_1__* z; } ;
 struct TYPE_26__ {int uuu; } ;
 typedef  TYPE_13__* T ;
 typedef  TYPE_14__* Rec ;

@@ -2,10 +2,10 @@
 typedef  struct TYPE_2__   TYPE_1__ ;
 
 /* Type definitions */
-typedef  struct S {int /*<<< orphan or scalar*/ mode; } const S ;
+typedef  struct S {int /*<<< orphan*/  mode; } const S ;
 struct TYPE_2__ {struct S const* weit; } ;
 
 /* Variables and functions */
  TYPE_1__* ent ;
- int /*<<< orphan or scalar*/ g (struct S const*) ;
+ int /*<<< orphan*/  g (struct S const*) ;
 

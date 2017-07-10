@@ -5,8 +5,8 @@ struct T2 {int dummy; } ;
 struct T1 {int dummy; } ;
 
 /* Variables and functions*/
-int /*<<< orphan or scalar*/ g1 (struct T1*) ; 
-int /*<<< orphan or scalar*/ g2 (struct T2*) ; 
+int /*<<< orphan*/  g1 (struct T1*) ; 
+int /*<<< orphan*/  g2 (struct T2*) ; 
 struct T1 x1 ; 
 struct T2* x2 ; 
 

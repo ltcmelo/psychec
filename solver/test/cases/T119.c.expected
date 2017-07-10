@@ -5,6 +5,6 @@ typedef  char* T3 ;
 typedef  char const* T2 ;
 
 /* Variables and functions*/
-int /*<<< orphan or scalar*/ f1 (char const*) ; 
-int /*<<< orphan or scalar*/ f3 (char*) ; 
+int /*<<< orphan*/  f1 (char const*) ; 
+int /*<<< orphan*/  f3 (char*) ; 
 

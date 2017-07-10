@@ -1,7 +1,7 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  int /*<<< orphan or scalar*/ Item ;
+typedef  int /*<<< orphan*/  Item ;
 
 /* Variables and functions*/
 

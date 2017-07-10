@@ -9,5 +9,5 @@ typedef  TYPE_1__* Graph ;
 typedef  TYPE_2__ Edge ;
 
 /* Variables and functions */
- int** MATRIXint (int,int,int /*<<< orphan or scalar*/) ;
+ int** MATRIXint (int,int,int /*<<< orphan*/ ) ;
 

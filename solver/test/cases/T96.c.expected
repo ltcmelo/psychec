@@ -4,7 +4,7 @@
 
 /* Variables and functions*/
 int a ; 
-int /*<<< orphan or scalar*/ b ; 
-int /*<<< orphan or scalar*/ c ; 
-int /*<<< orphan or scalar*/ g (int,int /*<<< orphan or scalar*/) ; 
+int /*<<< orphan*/  b ; 
+int /*<<< orphan*/  c ; 
+int /*<<< orphan*/  g (int,int /*<<< orphan*/ ) ; 
 

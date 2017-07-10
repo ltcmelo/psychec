@@ -7,4 +7,4 @@ struct TYPE_2__ {struct Type const* b; } ;
 
 /* Variables and functions */
  TYPE_1__* a ;
- int /*<<< orphan or scalar*/ g (struct Type const*) ;
+ int /*<<< orphan*/  g (struct Type const*) ;

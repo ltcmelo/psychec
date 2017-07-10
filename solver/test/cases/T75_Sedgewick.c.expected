@@ -1,12 +1,12 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  int /*<<< orphan or scalar*/ Q ;
+typedef  int /*<<< orphan*/  Q ;
 
 /* Variables and functions*/
 int M ; 
-int /*<<< orphan or scalar*/ QUEUEempty (int /*<<< orphan or scalar*/) ; 
-int QUEUEget (int /*<<< orphan or scalar*/) ; 
-int /*<<< orphan or scalar*/ QUEUEinit (int) ; 
-int /*<<< orphan or scalar*/ QUEUEput (int /*<<< orphan or scalar*/,int) ; 
+int /*<<< orphan*/  QUEUEempty (int /*<<< orphan*/ ) ; 
+int QUEUEget (int /*<<< orphan*/ ) ; 
+int /*<<< orphan*/  QUEUEinit (int) ; 
+int /*<<< orphan*/  QUEUEput (int /*<<< orphan*/ ,int) ; 
 

@@ -78,7 +78,7 @@ __uint128 = NamedTy (Name "__uint128")
 
 -- | A type for orphans and scalars (we could eventually separate those).
 orphan :: Ty
-orphan = NamedTy (Name "int /*<<< orphan or scalar*/")
+orphan = NamedTy (Name "int /*<<< orphan*/ ")
 
 
 -- helper

@@ -1,10 +1,10 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  int /*<<< orphan or scalar*/ Graph ;
+typedef  int /*<<< orphan*/  Graph ;
 
 /* Variables and functions*/
-int /*<<< orphan or scalar*/ EDGE (int,int) ; 
-int /*<<< orphan or scalar*/ GRAPHinit (int) ; 
-int /*<<< orphan or scalar*/ GRAPHinsertE (int /*<<< orphan or scalar*/,int /*<<< orphan or scalar*/) ; 
+int /*<<< orphan*/  EDGE (int,int) ; 
+int /*<<< orphan*/  GRAPHinit (int) ; 
+int /*<<< orphan*/  GRAPHinsertE (int /*<<< orphan*/ ,int /*<<< orphan*/ ) ; 
 

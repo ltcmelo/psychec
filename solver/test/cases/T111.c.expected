@@ -1,13 +1,13 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  int /*<<< orphan or scalar*/ const T1 ;
+typedef  int /*<<< orphan*/  const T1 ;
 
 /* Variables and functions*/
-int /*<<< orphan or scalar*/ g (char const*) ; 
-int /*<<< orphan or scalar*/ h (char const*) ; 
-int /*<<< orphan or scalar*/ j (char const* const) ;
-int /*<<< orphan or scalar*/ k (int /*<<< orphan or scalar*/ const) ;
-int /*<<< orphan or scalar*/ l (int /*<<< orphan or scalar*/ const) ;
-int /*<<< orphan or scalar*/ m (int /*<<< orphan or scalar*/ const) ;
+int /*<<< orphan*/  g (char const*) ; 
+int /*<<< orphan*/  h (char const*) ; 
+int /*<<< orphan*/  j (char const* const) ;
+int /*<<< orphan*/  k (int /*<<< orphan*/  const) ;
+int /*<<< orphan*/  l (int /*<<< orphan*/  const) ;
+int /*<<< orphan*/  m (int /*<<< orphan*/  const) ;
 

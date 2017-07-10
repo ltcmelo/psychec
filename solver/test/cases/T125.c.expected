@@ -3,6 +3,6 @@
 /* Type definitions */
 
 /* Variables and functions*/
-int /*<<< orphan or scalar*/ uid ; 
-int uid_set (int /*<<< orphan or scalar*/) ; 
+int /*<<< orphan*/  uid ; 
+int uid_set (int /*<<< orphan*/ ) ; 
 

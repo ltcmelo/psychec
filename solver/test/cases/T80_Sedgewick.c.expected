@@ -3,10 +3,10 @@ typedef  struct TYPE_6__   TYPE_1__ ;
 
 /* Type definitions */
 typedef  TYPE_1__* link ;
-struct TYPE_6__ {int sz; struct TYPE_6__** next; int /*<<< orphan or scalar*/ item; } ;
-typedef  int /*<<< orphan or scalar*/ Item ;
+struct TYPE_6__ {int sz; struct TYPE_6__** next; int /*<<< orphan*/  item; } ;
+typedef  int /*<<< orphan*/  Item ;
 
 /* Variables and functions*/
-int /*<<< orphan or scalar*/ NULLitem ; 
+int /*<<< orphan*/  NULLitem ; 
 int lgNmax ; 
 

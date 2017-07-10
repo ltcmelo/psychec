@@ -2,7 +2,7 @@
 
 /* Type definitions */
 typedef  int TT11 ;
-typedef  int /*<<< orphan or scalar*/* T9 ;
+typedef  int /*<<< orphan*/ * T9 ;
 typedef  int** T8 ;
 typedef  int* T7 ;
 typedef  int T6 ;

@@ -8,10 +8,10 @@ typedef  struct TYPE_6__   TYPE_1__ ;
 struct TYPE_9__ {TYPE_3__* parent; } ;
 struct TYPE_8__ {TYPE_1__* right; } ;
 struct TYPE_7__ {TYPE_3__ sent; } ;
-struct TYPE_6__ {int /*<<< orphan or scalar*/ color; TYPE_4__* parent; } ;
+struct TYPE_6__ {int /*<<< orphan*/  color; TYPE_4__* parent; } ;
 
 /* Variables and functions */
-int /*<<< orphan or scalar*/ BLACK ;
+int /*<<< orphan*/  BLACK ;
 TYPE_3__* ln ;
 TYPE_4__* n ;
 TYPE_3__* parent ;
