@@ -219,6 +219,7 @@ tests = testGroup "Unit tests"
                   , doTest "T172.c" -- Const-elaborated type in index.
                   , doTest "T173.c" -- Detect void* prior to inequalities ordering.
                   , doTest "T174.c" -- Variadic functions.
+                  , doTest "T175.c" -- Composite types and void* conversion.
                   ]
 
 doTest s

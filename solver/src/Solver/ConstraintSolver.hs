@@ -85,7 +85,8 @@ solve c l = do
   -- enforces it when necessary. Therefore, the sorting prior to unifying inequalities.
   let
     vs' = vs @@ s
-    (iq1, iq2, iq3, iq4) = dsort iqs''
+    iqs_'' = apply vs' iqs''
+    (iq1, iq2, iq3, iq4) = dsort iqs_''
     iqs''' = iq1 ++ iq2 ++ iq3
   s' <- dunifyList iqs'''
   let s'' = s' @@ vs'
