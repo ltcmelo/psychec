@@ -218,6 +218,7 @@ tests = testGroup "Unit tests"
                   , doTest "T171.c" -- Dont discard scalar constraints, gain precision.
                   , doTest "T172.c" -- Const-elaborated type in index.
                   , doTest "T173.c" -- Detect void* prior to inequalities ordering.
+                  , doTest "T174.c" -- Variadic functions.
                   ]
 
 doTest s

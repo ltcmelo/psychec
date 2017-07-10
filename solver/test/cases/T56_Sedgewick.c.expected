@@ -5,7 +5,7 @@ typedef  struct TYPE_4__   TYPE_1__ ;
 typedef  TYPE_1__* link ;
 struct TYPE_4__ {int index; int d; int /*<<< orphan or scalar*/* r; int /*<<< orphan or scalar*/* m; int /*<<< orphan or scalar*/* l; } ;
 
-/* Variables and functions*/
-int /*<<< orphan or scalar*/ N ; 
-int /*<<< orphan or scalar*/* head ; 
+/* Variables and functions */
+ int N ;
+ int /*<<< orphan or scalar*/* head ;
 

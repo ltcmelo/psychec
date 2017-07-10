@@ -4,9 +4,9 @@ typedef  struct TYPE_8__   TYPE_1__ ;
 
 /* Type definitions */
 struct TYPE_9__ {int v; int w; } ;
-struct TYPE_8__ {int V; int** adj; int /*<<< orphan or scalar*/ E; } ;
+struct TYPE_8__ {int V; int E; int** adj; } ;
 typedef  TYPE_1__* Graph ;
 typedef  TYPE_2__ Edge ;
 
-/* Variables and functions*/
+/* Variables and functions */
 

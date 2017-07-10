@@ -2,8 +2,7 @@
 typedef  struct TYPE_6__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_6__ {int /*<<< orphan or scalar*/ y; int /*<<< orphan or scalar*/ x; } ;
+struct TYPE_6__ {int x; int y; } ;
 typedef  TYPE_1__ point ;
 
-/* Variables and functions*/
-
+/* Variables and functions */

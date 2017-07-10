@@ -58,10 +58,10 @@ solve c l = do
     tcx = TyCtx $ (builtinTypes l) `Map.union` (stdTypes l)
     vcx = VarCtx $ (builtinValues l) `Map.union` (stdValues l)
 
-  -- Expand typing context, introducing types appearing in typedefs.
+  -- Populate typing context and incorporate typedefs.
   (tcx0,c') <- stage1 tcx c
 
-  -- Expand variables context, creating missing variables.
+  -- Populate value context, create missing variables, generalize types.
   (vcx0,c'') <- stage2 vcx c'
 
   -- Split constraints into equivalence, inequality, and field acess.
@@ -81,21 +81,23 @@ solve c l = do
 
   vs <- instantiateTopPtr iqs''
 
-  -- We want to binding order such that it weakens const when possible, but enforces it
-  -- when necessary.
+  -- We want a binding order such that it weakens type qualifiers when possible, but
+  -- enforces it when necessary. Therefore, the sorting prior to unifying inequalities.
   let
     vs' = vs @@ s
     (iq1, iq2, iq3, iq4) = dsort iqs''
     iqs''' = iq1 ++ iq2 ++ iq3
-
   s' <- dunifyList iqs'''
   let s'' = s' @@ vs'
 
   -- Assemble records.
   (tcx1, vcx1, s''') <- stage4 tcx0 vcx0 fds s''
 
+  let cc' = apply s''' c'
+  vcx1' <- untypeVariadics cc' s''' vcx1
+
   -- Translate structural representation to a nominative one.
-  (tcx2, vcx2) <- stage5 tcx1 vcx1 s'''
+  (tcx2, vcx2) <- stage5 tcx1 vcx1' s'''
 
   -- Unify against the top type, void*, and apply substitions.
   let vqs = apply s''' iq4
@@ -391,6 +393,35 @@ stage4 tcx vcx fs s = do
     vcx_ = Map.map (\varInfo -> apply s'' varInfo) (varctx vcx)
 
   return (TyCtx tcx_, VarCtx vcx_, s'')
+
+
+untypeVariadics :: Constraint -> Subst -> VarCtx -> SolverM (VarCtx)
+untypeVariadics (n :<-: (FunTy _ pv)) s vcx =
+  return vcx'
+ where
+  vcx' = case Map.lookup n (varctx vcx) of
+    Nothing -> error "value must exist"
+    Just (ValSym (FunTy r pt) d ce st) ->
+      let
+        params (t1:xs1) (t2:xs2)
+          | hasVarDep t2 = t1:(params xs1 xs2)
+          | convertible (dropTopQual t1) (dropTopQual t2) = t1:(params xs1 xs2)
+          | otherwise = [AnyTy]
+        params (t:_) [] = [AnyTy]
+        params [] (t:_) = [AnyTy]
+        params [] [] = []
+        f = ValSym (FunTy r (params pt pv)) d ce st
+      in
+       if d then vcx else (VarCtx $ Map.insert n f (varctx vcx))
+    Just _ -> vcx
+
+untypeVariadics (c1 :&: c2) s vcx = do
+  vcx1 <- untypeVariadics c1 s vcx
+  vcx2 <- untypeVariadics c2 s vcx1
+  return vcx2
+untypeVariadics (Def _ _ c) s vcx = untypeVariadics c s vcx
+untypeVariadics c s vcx = return vcx
+
 
 
 -- | Bring structucally represented typing information into C world, by matching types with

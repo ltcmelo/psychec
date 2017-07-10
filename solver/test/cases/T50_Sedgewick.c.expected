@@ -3,8 +3,8 @@ typedef  struct TYPE_9__   TYPE_1__ ;
 
 /* Type definitions */
 typedef  TYPE_1__* link ;
-struct TYPE_9__ {int /*<<< orphan or scalar*/ item; struct TYPE_9__* r; struct TYPE_9__* l; } ;
-typedef  int /*<<< orphan or scalar*/ Item ;
+struct TYPE_9__ {int item; struct TYPE_9__* r; struct TYPE_9__* l; } ;
+typedef  int Item ;
 
-/* Variables and functions*/
+/* Variables and functions */
 

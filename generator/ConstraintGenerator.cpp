@@ -537,31 +537,6 @@ const std::string nonPolyOprtrName(int opTk)
 }
 
 /*!
- * \brief isArithmeticOperator
- * \param op
- * \return
- */
-bool isArithmeticOperator(int op)
-{
-    switch (op) {
-    case T_PLUS:
-    case T_MINUS:
-    case T_STAR:
-    case T_SLASH:
-    case T_PERCENT:
-    case T_AMPER:
-    case T_PIPE:
-    case T_CARET:
-    case T_LESS_LESS:
-    case T_GREATER_GREATER:
-        return true;
-
-    default:
-        return false;
-    }
-}
-
-/*!
  * \brief isPolymorphicOperator
  * \param op
  *
@@ -666,23 +641,32 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
                                            const std::string& rhsAlpha,
                                            int opTk)
 {
-    // No need to worry about overunification for arithmetic operators. When both
-    // arithmetic and pointer types are allowed, the result is a pointer type.
-    if (isArithmeticOperator(opTk)) {
-        if (lhsClass == DomainLattice::Pointer) {
-            writer_->writeEquivRel(types_.top(), lhsAlpha);
-            printDebug("Arithmetic operation constraint, no tweak %s x %s\n",
+    switch (opTk) {
+    case T_MINUS:
+        if (lhsClass == DomainLattice::Pointer && rhsClass == DomainLattice::Pointer) {
+            writer_->writeEquivRel(types_.top(), kDefaultArithTy);
+            printDebug("Keep constraint (subtraction) %s x %s\n",
                        lhsClass.name_.c_str(), rhsClass.name_.c_str());
             return;
         }
+        // Fallthrough
 
+    case T_PLUS:
+        if (lhsClass == DomainLattice::Pointer) {
+            writer_->writeEquivRel(types_.top(), lhsAlpha);
+            printDebug("Keep constraint %s x %s\n",
+                       lhsClass.name_.c_str(), rhsClass.name_.c_str());
+            return;
+        }
         if (rhsClass == DomainLattice::Pointer) {
             writer_->writeEquivRel(types_.top(), rhsAlpha);
-            printDebug("Arithmetic operation constraint, no tweak %s x %s\n",
+            printDebug("Keep constraint %s x %s\n",
                        lhsClass.name_.c_str(), rhsClass.name_.c_str());
             return;
         }
     }
+
+    // TODO: Refactor on per-operator basis.
 
     // Eliminate the risk of overnification for arbitrary binary expressions.
     if ((lhsClass == DomainLattice::Pointer
@@ -707,7 +691,9 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
     std::string actualArithTy = (lhsClass > rhsClass) ? lhsClass.arithName_
                                                       : rhsClass.arithName_;
 
-    if (actualArithTy.empty()) {
+    if (lhsClass != DomainLattice::Scalar
+            && rhsClass != DomainLattice::Scalar
+            && actualArithTy.empty()) {
         if (lhsClass == DomainLattice::Integral
                 || rhsClass == DomainLattice::Integral
                 || lhsClass == DomainLattice::Arithmetic
@@ -751,6 +737,13 @@ DomainLattice::Class ConstraintGenerator::classOfExpr(ExpressionAST *ast) const
     auto clazz = lattice_.recover(ast);
     if (clazz != DomainLattice::Undefined) {
         printDebug("Recovered AST %s as %s\n", s.c_str(), clazz.name_.c_str());
+
+        // Scalar types default to integral. Defaulting is necessary to avoid a scalar
+        // being interpreted as an integral one time and as a pointer another time.
+        if (clazz == DomainLattice::Scalar) {
+            clazz = DomainLattice::Integral;
+            printDebug("Defaulting scalar AST %s to %s\n", s.c_str(), clazz.name_.c_str());
+        }
     } else {
         TypeOfExpr typeofExpr(translationUnit());
         FullySpecifiedType ty = typeofExpr.resolve(ast, scope_);
@@ -1270,6 +1263,9 @@ bool ConstraintGenerator::visit(UnaryExpressionAST* ast)
         const std::string& alpha = supply_.createTypeVar1();
         writer_->writeExists(alpha);
         collectExpression(alpha, ast->expression);
+        writer_->writeAnd();
+        ENSURE_NONEMPTY_TYPE_STACK(return false);
+        writer_->writeEquivRel(types_.top(), kDefaultIntTy);
         break;
     }
 

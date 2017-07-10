@@ -1,7 +1,8 @@
 /* Forward declarations */
 
 /* Type definitions */
-struct node {int w; struct node* z; struct node* y; int /*<<< orphan or scalar*/ x; } ;
+struct node {int x; int w; struct node* z; struct node* y; } ;
 struct data {struct data* m; } ;
 
-/* Variables and functions*/
+/* Variables and functions */
+

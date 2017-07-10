@@ -3,10 +3,9 @@ typedef  struct TYPE_6__   TYPE_2__ ;
 typedef  struct TYPE_5__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_6__ {struct TYPE_6__* next; int /*<<< orphan or scalar*/ i; } ;
+struct TYPE_6__ {int i; struct TYPE_6__* next; } ;
 struct TYPE_5__ {int i; struct TYPE_5__* next; } ;
 typedef  TYPE_1__ T2 ;
 typedef  TYPE_2__ T ;
 
-/* Variables and functions*/
-
+/* Variables and functions */

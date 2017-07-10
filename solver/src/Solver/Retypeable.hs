@@ -49,6 +49,7 @@ instance Retypeable Ty where
   collect (PtrTy t) = collect t
   collect (FunTy t tx) = collect t ++ collect tx
   collect t@(RecTy fs _) = [t] ++ collect fs
+  collect AnyTy = []
 
   compact _ t@(VarTy _) = t
   compact _ t@(NamedTy _) = t
@@ -57,6 +58,7 @@ instance Retypeable Ty where
   compact idx (PtrTy t) = PtrTy (compact idx t)
   compact idx (FunTy t tx) = FunTy (compact idx t) (compact idx tx)
   compact idx t@(RecTy fs _) = maybe t (\k -> NamedTy k) (Map.lookup t (ty2n idx))
+  compact _ t@(AnyTy) = t
 
   orphanize idx t@(VarTy v) = maybe orphan NamedTy (Map.lookup t (ty2n idx))
   orphanize _ t@(NamedTy _) = t
@@ -65,6 +67,7 @@ instance Retypeable Ty where
   orphanize idx (PtrTy t) = PtrTy (orphanize idx t)
   orphanize idx (FunTy t tx) = FunTy (orphanize idx t) (orphanize idx tx)
   orphanize idx (RecTy fs n) = RecTy (orphanize idx fs) n
+  orphanize _ t@(AnyTy) = t
 
 instance Retypeable Field where
   collect (Field _ t) = collect t

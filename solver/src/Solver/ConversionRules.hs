@@ -26,26 +26,12 @@ import Data.BuiltIn
 
 convertible :: Ty -> Ty -> Bool
 convertible t t' =
-    or [ t == t'
-       -- Arithmetic types convert among themselves.
-       , and [isArithTy t, isArithTy t']
-
-       -- Enumerators are fundamentally integers.
-       , and [isArithTy t, isEnum t']
-       , and [isEnum t, isArithTy t']
-
-       -- We consider void* a top-type.
-       , or [t == PtrTy void, t' == PtrTy void]
-       , or [t == PtrTy (QualTy void), t' == PtrTy (QualTy void)]
-
-       -- Attention: The scalar-type lattice prevents overunification issues
-       -- by dropping inconsistent constraints between pointers and arithmetic
-       -- types. But it's not yet working inter-procedurally by matching
-       -- formals x arguments. We'll eventually remove the conversions below.
-       -- Even though we found real programs relying on it.
-       , and [isArithTy t, isPtrTy t']
-       , and [isPtrTy t, isArithTy t']
-       ]
+  or [t == t',
+      and [isArithTy t, isArithTy t'],
+      and [isArithTy t, isEnum t'],
+      and [isEnum t, isArithTy t'],
+      or [t == PtrTy void, t' == PtrTy void],
+      or [t == PtrTy (QualTy void), t' == PtrTy (QualTy void)]]
 
 isEnum :: Ty -> Bool
 isEnum (EnumTy _) = True

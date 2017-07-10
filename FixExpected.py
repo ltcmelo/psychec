@@ -14,7 +14,7 @@ import sys
 def fix():
     dir = "solver/test/cases/"
     all_files = [f for f in listdir(dir) if isfile(join(dir, f))]
-    c_files = [f for f in all_files if f.endswith(".c") and not f.endswith(".fixed.c")]
+    c_files = [f for f in all_files if f.endswith(".c") and not f.endswith("_fixed.c")]
 
     for cfile in c_files:
         full_name = dir + cfile
@@ -23,7 +23,7 @@ def fix():
         print "Invocation: %s" % " ".join(invok)
         subprocess.call(invok)
 
-        generated = full_name + ".gen.h"
+        generated = full_name + "_gen.h"
         with open(generated, "r") as f:
             content = f.read()
 

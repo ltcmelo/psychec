@@ -68,6 +68,7 @@ instance Apply Ty where
     -- Duplicate const qualifiers don't make sense, so drop substituted ones.
     apply s (QualTy t) = QualTy (dropTopQual (apply s t))
     apply s t@(EnumTy n) = t
+    apply s t@(AnyTy) = t
 
 instance Apply Field where
     apply s (Field n t) = Field n (apply s t)
@@ -148,7 +149,7 @@ instance Unifiable Ty where
 
     punify (FunTy t ts) (FunTy t' ts') = do
         s <- punify t t'
-        s' <- punify (apply s ts) (apply s ts')
+        s' <- punify (apply s ts) (apply s ts') `catchError` (\_ -> return s)
         return (s' @@ s)
 
     punify (RecTy fs n) (RecTy fs' n')

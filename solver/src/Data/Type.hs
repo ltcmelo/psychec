@@ -36,6 +36,7 @@ data Ty = VarTy Name  -- Type variables
         | PtrTy Ty  -- Pointers
         | QualTy Ty  -- Qualified types (only const supported currently)
         | EnumTy Name -- Enumerated types
+        | AnyTy  -- Any type, any arity.
         deriving (Eq, Ord, Show)
 
 

@@ -2,7 +2,6 @@
 
 /* Type definitions */
 typedef  int T2 ;
-typedef  int /*<<< orphan or scalar*/ T1 ;
+typedef  int T1 ;
 
-/* Variables and functions*/
-
+/* Variables and functions */

@@ -50,6 +50,7 @@ instance Pretty Ty where
   pprint (QualTy t) = pprint t <+> text "const"
   pprint (EnumTy n) =
     pprint n <+> text "{ ____Placeholder_" <> pprint (ensurePlain n) <+> text "}"
+  pprint AnyTy = text "..."
 
 instance Pretty Constraint where
   pprint (t :=: t') = pprint t <+> char '=' <+> pprint t'
@@ -63,7 +64,7 @@ instance Pretty Constraint where
                                         pprint t <+> text "in" <+>
                                         pprint ctr
   pprint (Exists n ctr) = text "exists" <+> pprint n <+> char '.' <+> pprint ctr
-  pprint (ctr :&: ctr') = pprint ctr <+> char ',' <+> pprint ctr'
+  pprint (ctr :&: ctr') = pprint ctr <+> text " ^ " <+> pprint ctr'
   pprint (ReadOnly n) = text "constexpr" <+> pprint n
   pprint (Static n) = text "static" <+> pprint n
   pprint Truth = text "Truth"
@@ -79,7 +80,7 @@ nameOf (PtrTy t) = Name ((unName (nameOf t)) ++ "*")
 nameOf x@(FunTy t ts) = Name (show $ pprint x)
 nameOf (QualTy t) = nameOf t
 nameOf (EnumTy n) = n
-
+nameOf AnyTy = Name "..."
 
 -- | Whehther or not we have a type variable.
 isVar :: Pretty a => a -> Bool

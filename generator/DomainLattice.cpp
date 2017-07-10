@@ -132,7 +132,7 @@ DomainLattice::Class DomainLattice::recover(ExpressionAST *ast) const
 }
 
 DomainLattice::Class DomainLattice::classOf(const FullySpecifiedType &ty,
-                                                    const Symbol *sym)
+                                            const Symbol *sym)
 {
     auto debug = [sym] (const char* m) {
         if (sym) {
@@ -300,14 +300,6 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
 {
     BinaryExpressionAST* bin = ast->asBinaryExpression();
 
-    auto handleGeneric = [this, bin] (Class entryClass, Class exitClass) {
-        switchClass(entryClass);
-        enter(bin->left_expression);
-        switchClass(entryClass);
-        enter(bin->right_expression);
-        switchClass(exitClass);
-    };
-
     switch (tokenKind(bin->binary_op_token)) {
         // Operators + and - are valid on both arithmetic and pointer types.
     case T_PLUS:
@@ -344,7 +336,11 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_CARET:
     case T_LESS_LESS:
     case T_GREATER_GREATER: {
-        handleGeneric(Arithmetic, Arithmetic);
+        switchClass(Arithmetic);
+        enter(bin->left_expression);
+        switchClass(Arithmetic);
+        enter(bin->right_expression);
+        switchClass(Arithmetic);
         return false;
     }
 
@@ -355,7 +351,10 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_GREATER_EQUAL:
     case T_AMPER_AMPER:
     case T_PIPE_PIPE: {
-        handleGeneric(Scalar, Arithmetic);
+        switchClass(Scalar);
+        enter(bin->left_expression);
+        enter(bin->right_expression);
+        switchClass(Arithmetic);
         return false;
     }
 
@@ -441,8 +440,6 @@ bool DomainLattice::visit(UnaryExpressionAST *ast)
     }
 
     case T_EXCLAIM:
-        if (Scalar > clazz_)
-            switchClass(Scalar);
         switchClass(Scalar);
         enter(ast->expression);
         switchClass(Integral);

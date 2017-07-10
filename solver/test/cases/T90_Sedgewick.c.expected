@@ -2,13 +2,13 @@
 typedef  struct TYPE_8__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_8__ {int V; int /*<<< orphan or scalar*/** adj; int /*<<< orphan or scalar*/ E; } ;
+struct TYPE_8__ {int E; int V; int** adj; } ;
 typedef  TYPE_1__* Graph ;
 
-/* Variables and functions*/
-int /*<<< orphan or scalar*/ EDGE (int,int) ; 
-int /*<<< orphan or scalar*/ GRAPHinsertE (TYPE_1__*,int /*<<< orphan or scalar*/) ; 
-int /*<<< orphan or scalar*/ GRAPHiso (TYPE_1__*,int) ; 
-int /*<<< orphan or scalar*/ GRAPHpath (TYPE_1__*,int,int) ; 
-int /*<<< orphan or scalar*/ GRAPHremoveE (TYPE_1__*,int /*<<< orphan or scalar*/) ; 
+/* Variables and functions */
+ int /*<<< orphan or scalar*/ EDGE (int,int) ;
+ int /*<<< orphan or scalar*/ GRAPHinsertE (TYPE_1__*,int /*<<< orphan or scalar*/) ;
+ int GRAPHiso (TYPE_1__*,int) ;
+ int GRAPHpath (TYPE_1__*,int,int) ;
+ int /*<<< orphan or scalar*/ GRAPHremoveE (TYPE_1__*,int /*<<< orphan or scalar*/) ;
 

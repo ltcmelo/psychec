@@ -1,7 +1,7 @@
 // #include <math.h>
 // #include <stdlib.h>
 // typedef int numType;
-#define R 1000
+//#define R 1000
 numType randNum()
   { return rand() % R; }
 main(int argc, char *argv[])
