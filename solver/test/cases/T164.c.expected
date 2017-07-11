@@ -3,7 +3,7 @@
 /* Type definitions */
 
 /* Variables and functions */
- void g (double) ;
- void h (char const*) ;
- void i (double) ;
+ void g (double) ; 
+ void h (char const*) ; 
+ void i (double) ; 
 

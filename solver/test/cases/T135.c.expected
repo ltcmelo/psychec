@@ -6,7 +6,7 @@ typedef  struct TYPE_3__   TYPE_1__ ;
 struct TYPE_4__ {TYPE_1__** adj; } ;
 struct TYPE_3__ {int v; } ;
 
-/* Variables and functions*/
-TYPE_2__* G ;
-int i ;
+/* Variables and functions */
+ TYPE_2__* G ; 
+ int i ; 
 

@@ -2,8 +2,9 @@
 
 /* Type definitions */
 
-/* Variables and functions*/
-int BASE_TYPE ; 
-char* _ (char*) ; 
-char* program_name ; 
+/* Variables and functions */
+ int BASE_TYPE ; 
+ char* _ (char*) ; 
+ int /*<<< orphan*/  printf (char*,char*,int) ; 
+ char* program_name ; 
 

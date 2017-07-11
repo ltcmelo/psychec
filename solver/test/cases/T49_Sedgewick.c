@@ -1,14 +1,13 @@
 // Sedgewick chap 4, example 23
 // poly example
+// Renamed exp -> expo from the original, so clang/gcc doesn't complain that exp
+// is a function (from std lib) and trigger an error.
 
-// #include <stdlib.h>
-// #include "POLY.h"
-// struct poly { int N; int *a; };
-Poly POLYterm(int coeff, int exp)
+Poly POLYterm(int coeff, int expo)
   { int i; Poly t = malloc(sizeof *t);
-    t->a = malloc((exp+1)*sizeof(int));
-    t->N = exp+1; t->a[exp] = coeff;
-    for (i = 0; i < exp; i++) t->a[i] = 0;    
+    t->a = malloc((expo+1)*sizeof(int));
+    t->N = expo+1; t->a[expo] = coeff;
+    for (i = 0; i < expo; i++) t->a[i] = 0;
     return t;
   }    
 Poly POLYadd(Poly p, Poly q)

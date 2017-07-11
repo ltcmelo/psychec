@@ -3,5 +3,6 @@
 /* Type definitions */
 
 /* Variables and functions */
- int /*<<< orphan*/  g (int*) ;
- int /*<<< orphan*/  show (char*) ;
+ int /*<<< orphan*/  g (int*) ; 
+ int /*<<< orphan*/  show (char*) ; 
+

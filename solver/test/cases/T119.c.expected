@@ -4,7 +4,7 @@
 typedef  char* T3 ;
 typedef  char const* T2 ;
 
-/* Variables and functions*/
-int /*<<< orphan*/  f1 (char const*) ; 
-int /*<<< orphan*/  f3 (char*) ; 
+/* Variables and functions */
+ int /*<<< orphan*/  f1 (char const*) ; 
+ int /*<<< orphan*/  f3 (char*) ; 
 

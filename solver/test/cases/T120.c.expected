@@ -10,6 +10,6 @@ typedef  int T3 ;
 typedef  int T2 ;
 typedef  int T1 ;
 
-/* Variables and functions*/
-int i ; 
+/* Variables and functions */
+ int i ; 
 

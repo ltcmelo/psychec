@@ -140,6 +140,9 @@ instance Unifiable Ty where
         | convertible (NamedTy c) (NamedTy c') = return nullSubst
         | otherwise = differentTypeConstructorsError c c'
 
+    punify p@(PtrTy t@(VarTy n)) p'@(PtrTy t')
+        | p == t' || convertible p p' = return nullSubst
+        | otherwise = punify t t'
     punify p@(PtrTy t) p'@(PtrTy t')
         | convertible p p' = return nullSubst
         | otherwise = punify t t'
@@ -147,6 +150,10 @@ instance Unifiable Ty where
     punify f@(FunTy t ts) (PtrTy p) = punify f p
     punify (PtrTy p) f'@(FunTy t' ts') = punify f' p
 
+    -- During unification of function types, we catch errors arising from inconsistent number
+    -- of arguments or due to incompatible argument types. Those are latter identified as
+    -- variadic functions or generic selections, if the mismatch occurs at the first index.
+    -- TODO: Implementation of generic selections is not yet complete.
     punify (FunTy t ts) (FunTy t' ts') = do
         s <- punify t t'
         s' <- punify (apply s ts) (apply s ts') `catchError` (\_ -> return s)
@@ -194,7 +201,7 @@ instance Unifiable Ty where
 
     dunify (FunTy t ts) (FunTy t' ts') _ = do
         s <- dunify t t' Relax
-        s' <- dunify (apply s ts) (apply s ts') Relax
+        s' <- dunify (apply s ts) (apply s ts') Relax `catchError` (\_ -> return s)
         return (s' @@ s)
 
     dunify (RecTy fs n) (RecTy fs' n') _

@@ -7,4 +7,5 @@ struct ST {int ww; } ;
 typedef  char* TT ;
 typedef  double T ;
 
-/* Variables and functions*/
+/* Variables and functions */
+

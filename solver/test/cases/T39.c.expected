@@ -3,5 +3,6 @@
 /* Type definitions */
 typedef  struct A_str* link ;
 
-/* Variables and functions*/
+/* Variables and functions */
+ struct A_str* malloc (int) ; 
 

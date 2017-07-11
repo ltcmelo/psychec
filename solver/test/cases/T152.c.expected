@@ -42,7 +42,7 @@ typedef  TYPE_14__* Rec ;
 typedef  TYPE_15__* JJ ;
 typedef  TYPE_13__* B ;
 
-/* Variables and functions*/
-TYPE_23__* a ;
-TYPE_22__* cer ;
+/* Variables and functions */
+ TYPE_23__* a ; 
+ TYPE_22__* cer ; 
 

@@ -8,13 +8,13 @@ struct TYPE_6__ {int /*<<< orphan*/  (* b ) (int,double) ;} ;
 struct TYPE_5__ {int /*<<< orphan*/  (* y ) (int,double) ;} ;
 struct TYPE_4__ {int /*<<< orphan*/  (* y ) (int,double) ;} ;
 
-/* Variables and functions*/
-TYPE_3__ a ; 
-int /*<<< orphan*/  g (int,double) ; 
-TYPE_2__* m ; 
-int /*<<< orphan*/  stub1 (int,double) ; 
-int /*<<< orphan*/  stub2 (int,double) ; 
-int /*<<< orphan*/  stub3 (int,double) ; 
-int /*<<< orphan*/  stub4 (int,double) ; 
-TYPE_1__* x ; 
+/* Variables and functions */
+ TYPE_3__ a ; 
+ int /*<<< orphan*/  g (int,double) ; 
+ TYPE_2__* m ; 
+ int /*<<< orphan*/  stub1 (int,double) ; 
+ int /*<<< orphan*/  stub2 (int,double) ; 
+ int /*<<< orphan*/  stub3 (int,double) ; 
+ int /*<<< orphan*/  stub4 (int,double) ; 
+ TYPE_1__* x ; 
 

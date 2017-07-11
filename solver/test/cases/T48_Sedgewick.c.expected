@@ -1,9 +1,10 @@
 /* Forward declarations */
-typedef  struct TYPE_10__   TYPE_1__ ;
+typedef  struct TYPE_11__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_10__ {float Re; float Im; } ;
+struct TYPE_11__ {float Re; float Im; } ;
 typedef  TYPE_1__* Complex ;
 
-/* Variables and functions*/
+/* Variables and functions */
+ TYPE_1__* malloc (int) ; 
 

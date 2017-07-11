@@ -23,7 +23,7 @@ def fix():
         print "Invocation: %s" % " ".join(invok)
         subprocess.call(invok)
 
-        generated = full_name + "_gen.h"
+        generated = full_name[:-2] + "_gen.h"
         with open(generated, "r") as f:
             content = f.read()
 

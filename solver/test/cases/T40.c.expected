@@ -10,9 +10,9 @@ struct TYPE_7__ {double y; } ;
 struct TYPE_6__ {char* z; int w; } ;
 struct TYPE_5__ {double val; struct TYPE_5__* next; } ;
 
-/* Variables and functions*/
-TYPE_4__ a ; 
-TYPE_3__* b ; 
-TYPE_2__* c ; 
-TYPE_1__* d ; 
+/* Variables and functions */
+ TYPE_4__ a ; 
+ TYPE_3__* b ; 
+ TYPE_2__* c ; 
+ TYPE_1__* d ; 
 

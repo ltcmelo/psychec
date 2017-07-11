@@ -1,0 +1,9 @@
+/* Forward declarations */
+typedef  struct TYPE_2__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_2__ {float x; } ;
+
+/* Variables and functions */
+ TYPE_1__* a ; 
+

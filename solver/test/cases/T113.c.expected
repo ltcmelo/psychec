@@ -3,5 +3,5 @@
 /* Type definitions */
 
 /* Variables and functions */
- int remaining_bytes ;
+ int remaining_bytes ; 
 

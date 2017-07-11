@@ -5,5 +5,5 @@ typedef  struct TYPE_3__   TYPE_1__ ;
 struct TYPE_3__ {char* c; int* i; } ;
 typedef  TYPE_1__ T ;
 
-/* Variables and functions*/
+/* Variables and functions */
 

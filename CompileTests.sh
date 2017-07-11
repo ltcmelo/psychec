@@ -6,16 +6,30 @@ for FIXED_FILE in solver/test/cases/*_fixed.c; do
     rm "$FIXED_FILE"
 done
 
+for GEN_FILE in solver/test/cases/*_gen.h; do
+    rm "$GEN_FILE"
+done
+
 for C_FILE in solver/test/cases/*.c ; do
+    FIXED_FILE=$(echo "$C_FILE" | sed -e 's/\.c/_fixed.c/g')
+    echo "$C_FILE"
+
     ./Reconstruct.py "$C_FILE" > /dev/null
 
-    FIXED_FILE=$(echo "$C_FILE" | sed -e 's/\.c/_fixed.c/g')
-    "$CC" -c "$FIXED_FILE" &> /dev/null
+    "$CC" -Wall\
+	  -Wno-incompatible-library-redeclaration\
+          -Wno-uninitialized\
+	  -Wno-unused-variable\
+	  -Wno-unused-function\
+	  -Wno-switch\
+	  -Wno-unused-value\
+	  -Wno-implicit-int\
+	  -Wno-return-type\
+	  -Wno-builtin-requires-header\
+	  -c "$FIXED_FILE" # &> /dev/null
     OK=$?
     if [ $OK -ne 0 ]; then
-        printf "\n*** Error compiling $FIXED_FILE\n"
-    else
-        echo -n "."
+        printf "*****\nError compiling $FIXED_FILE\n*****\n"
     fi
 done
 

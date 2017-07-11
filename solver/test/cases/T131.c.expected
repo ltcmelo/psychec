@@ -1,0 +1,12 @@
+/* Forward declarations */
+typedef  struct TYPE_4__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_4__ {double data; struct TYPE_4__* next; } ;
+typedef  int /*<<< orphan*/  Result ;
+typedef  TYPE_1__* List ;
+typedef  int /*<<< orphan*/  Chain ;
+
+/* Variables and functions */
+ int /*<<< orphan*/  analyse (TYPE_1__*) ; 
+

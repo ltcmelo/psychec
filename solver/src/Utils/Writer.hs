@@ -35,10 +35,11 @@ import Debug.Trace
 
 writeCFile :: (TyCtx, VarCtx) -> String
 writeCFile ctxs@(tcx, _) =
-  writeIncs
-  ++ writeBoolDef
-  ++ writeFwdDecls tcx
-  ++ writeDecls ctxs
+  -- writeIncs ++
+  writeNULL ++
+  writeBoolDef ++
+  writeFwdDecls tcx ++
+  writeDecls ctxs
 
 
 -- TODO: Filter includes, write only those that are needed.
@@ -52,6 +53,11 @@ writeIncs =
   "#include <sys/types.h>\n" ++
   "#include <sys/stat.h>\n" ++
   "\n"
+
+
+-- | Write NULL definition.
+writeNULL :: String
+writeNULL =  "#define NULL ((void*)0)\n"
 
 
 -- TODO: By default, our generator parses a `bool' type and interpret it as an `int'.

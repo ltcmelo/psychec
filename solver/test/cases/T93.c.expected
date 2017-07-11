@@ -1,10 +1,14 @@
 /* Forward declarations */
 
 /* Type definitions */
+typedef  int uintmax_t ;
+typedef  int uint_fast64_t ;
+typedef  int int_least32_t ;
+typedef  int int8_t ;
 typedef  int D ;
 typedef  int C ;
 typedef  int B ;
 typedef  int A ;
 
-/* Variables and functions*/
+/* Variables and functions */
 

@@ -1,9 +1,10 @@
 /* Forward declarations */
-typedef  struct TYPE_9__   TYPE_1__ ;
+typedef  struct TYPE_10__   TYPE_1__ ;
 
 /* Type definitions */
 typedef  TYPE_1__* link ;
-struct TYPE_9__ {char token; struct TYPE_9__* r; struct TYPE_9__* l; } ;
+struct TYPE_10__ {char token; struct TYPE_10__* r; struct TYPE_10__* l; } ;
 
-/* Variables and functions*/
+/* Variables and functions */
+ TYPE_1__* malloc (int) ; 
 

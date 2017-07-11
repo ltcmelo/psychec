@@ -2,5 +2,6 @@
 
 /* Type definitions */
 
-/* Variables and functions*/
+/* Variables and functions */
+ struct A_str* malloc (int) ; 
 

@@ -8,7 +8,8 @@ typedef  TYPE_1__ set2 ;
 struct TYPE_8__ {unsigned int* vector; int size; } ;
 typedef  TYPE_2__ set ;
 
-/* Variables and functions*/
-int INT_BITS ;
-int INT_BITS2 ;
+/* Variables and functions */
+ int INT_BITS ; 
+ int INT_BITS2 ; 
+ int /*<<< orphan*/  malloc (int /*<<< orphan*/ ) ; 
 

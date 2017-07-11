@@ -3,8 +3,10 @@
 /* Type definitions */
 typedef  int /*<<< orphan*/  Graph ;
 
-/* Variables and functions*/
-int /*<<< orphan*/  EDGE (int,int) ; 
-int /*<<< orphan*/  GRAPHinit (int) ; 
-int /*<<< orphan*/  GRAPHinsertE (int /*<<< orphan*/ ,int /*<<< orphan*/ ) ; 
+/* Variables and functions */
+ int /*<<< orphan*/  EDGE (int,int) ; 
+ int /*<<< orphan*/  GRAPHinit (int) ; 
+ int /*<<< orphan*/  GRAPHinsertE (int /*<<< orphan*/ ,int /*<<< orphan*/ ) ; 
+ double RAND_MAX ; 
+ double rand () ; 
 

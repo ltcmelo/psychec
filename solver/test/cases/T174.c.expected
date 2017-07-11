@@ -3,7 +3,8 @@
 /* Type definitions */
 
 /* Variables and functions */
- int /*<<< orphan*/  g (char*,int) ;
- int /*<<< orphan*/  k (char*,...) ;
- int /*<<< orphan*/  m (int,double,...) ;
- int /*<<< orphan*/  n (int,int,...) ;
+ int /*<<< orphan*/  g (char*,double) ; 
+ int /*<<< orphan*/  k (char*,...) ; 
+ int /*<<< orphan*/  m (int,double,...) ; 
+ int /*<<< orphan*/  n (int,int,...) ; 
+

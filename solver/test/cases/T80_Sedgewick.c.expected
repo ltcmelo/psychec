@@ -6,7 +6,8 @@ typedef  TYPE_1__* link ;
 struct TYPE_6__ {int sz; struct TYPE_6__** next; int /*<<< orphan*/  item; } ;
 typedef  int /*<<< orphan*/  Item ;
 
-/* Variables and functions*/
-int /*<<< orphan*/  NULLitem ; 
-int lgNmax ; 
+/* Variables and functions */
+ int /*<<< orphan*/  NULLitem ; 
+ int lgNmax ; 
+ void* malloc (int) ; 
 

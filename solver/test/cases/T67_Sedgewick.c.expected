@@ -1,11 +1,12 @@
 /* Forward declarations */
-typedef  struct TYPE_14__   TYPE_1__ ;
+typedef  struct TYPE_15__   TYPE_1__ ;
 
 /* Type definitions */
 typedef  TYPE_1__* link ;
-struct TYPE_14__ {int item; struct TYPE_14__* next; } ;
+struct TYPE_15__ {int item; struct TYPE_15__* next; } ;
 
-/* Variables and functions*/
-TYPE_1__* deleteNext (TYPE_1__*) ; 
-void insertNext (TYPE_1__*,TYPE_1__*) ; 
+/* Variables and functions */
+ TYPE_1__* deleteNext (TYPE_1__*) ; 
+ void insertNext (TYPE_1__*,TYPE_1__*) ; 
+ TYPE_1__* malloc (int /*<<< orphan*/ ) ; 
 

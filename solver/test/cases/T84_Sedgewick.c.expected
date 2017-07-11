@@ -5,8 +5,10 @@ typedef  struct TYPE_7__   TYPE_1__ ;
 struct TYPE_7__ {int V; int E; } ;
 typedef  TYPE_1__* Graph ;
 
-/* Variables and functions*/
-int /*<<< orphan*/  EDGE (int,int) ; 
-TYPE_1__* GRAPHinit (int) ; 
-int /*<<< orphan*/  GRAPHinsertE (TYPE_1__*,int /*<<< orphan*/ ) ; 
+/* Variables and functions */
+ int /*<<< orphan*/  EDGE (int,int) ; 
+ TYPE_1__* GRAPHinit (int) ; 
+ int /*<<< orphan*/  GRAPHinsertE (TYPE_1__*,int /*<<< orphan*/ ) ; 
+ double RAND_MAX ; 
+ double rand () ; 
 

@@ -3,11 +3,11 @@
 /* Type definitions */
 typedef  int /*<<< orphan*/  const T1 ;
 
-/* Variables and functions*/
-int /*<<< orphan*/  g (char const*) ; 
-int /*<<< orphan*/  h (char const*) ; 
-int /*<<< orphan*/  j (char const* const) ;
-int /*<<< orphan*/  k (int /*<<< orphan*/  const) ;
-int /*<<< orphan*/  l (int /*<<< orphan*/  const) ;
-int /*<<< orphan*/  m (int /*<<< orphan*/  const) ;
+/* Variables and functions */
+ int /*<<< orphan*/  g (char const*) ; 
+ int /*<<< orphan*/  h (char const*) ; 
+ int /*<<< orphan*/  j (char const* const) ; 
+ int /*<<< orphan*/  k (int /*<<< orphan*/  const) ; 
+ int /*<<< orphan*/  l (int /*<<< orphan*/  const) ; 
+ int /*<<< orphan*/  m (int /*<<< orphan*/  const) ; 
 

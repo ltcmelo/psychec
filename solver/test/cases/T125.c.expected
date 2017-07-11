@@ -2,7 +2,7 @@
 
 /* Type definitions */
 
-/* Variables and functions*/
-int /*<<< orphan*/  uid ; 
-int uid_set (int /*<<< orphan*/ ) ; 
+/* Variables and functions */
+ int /*<<< orphan*/  uid ; 
+ int uid_set (int /*<<< orphan*/ ) ; 
 

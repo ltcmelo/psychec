@@ -6,5 +6,6 @@ typedef  struct Type const Type ;
 struct TYPE_2__ {struct Type const* b; } ;
 
 /* Variables and functions */
- TYPE_1__* a ;
- int /*<<< orphan*/  g (struct Type const*) ;
+ TYPE_1__* a ; 
+ int /*<<< orphan*/  g (struct Type const*) ; 
+

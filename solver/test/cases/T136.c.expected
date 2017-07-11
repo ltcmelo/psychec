@@ -4,5 +4,5 @@
 typedef  int const* T2 ;
 typedef  int T1 ;
 
-/* Variables and functions*/
+/* Variables and functions */
 

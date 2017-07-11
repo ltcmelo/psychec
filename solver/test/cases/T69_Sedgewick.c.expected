@@ -3,6 +3,11 @@
 /* Type definitions */
 typedef  int numType ;
 
-/* Variables and functions*/
-int R ; 
+/* Variables and functions */
+ int R ; 
+ int atoi (char*) ; 
+ int* malloc (int /*<<< orphan*/ ) ; 
+ int /*<<< orphan*/  printf (char*,int) ; 
+ int rand () ; 
+ double sqrt (float) ; 
 

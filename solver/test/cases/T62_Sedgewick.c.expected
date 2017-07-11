@@ -3,5 +3,9 @@
 /* Type definitions */
 typedef  int numType ;
 
-/* Variables and functions*/
+/* Variables and functions */
+ int atoi (char*) ; 
+ int /*<<< orphan*/  printf (char*,double) ; 
+ int rand () ; 
+ double sqrt (float) ; 
 

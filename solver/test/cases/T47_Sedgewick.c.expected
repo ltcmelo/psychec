@@ -5,5 +5,5 @@ typedef  struct TYPE_10__   TYPE_1__ ;
 struct TYPE_10__ {float Re; float Im; } ;
 typedef  TYPE_1__ Complex ;
 
-/* Variables and functions*/
+/* Variables and functions */
 

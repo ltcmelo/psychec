@@ -111,6 +111,53 @@ void DomainLattice::totalize(ExpressionAST* ast, const Scope *scope)
     enter(ast);
 }
 
+void DomainLattice::totalize(SimpleDeclarationAST* ast, const Scope* scope)
+{
+    scope_ = scope;
+
+    DeclaratorListAST *declIt = ast->declarator_list;
+    for (const List<Symbol*>* symIt = ast->symbols;
+            symIt;
+            symIt = symIt->next, declIt = declIt->next) {
+        PSYCHE_ASSERT(declIt->value, return, "expected declarator");
+        if (!declIt->value->initializer
+                || declIt->value->initializer->asBracedInitializer())
+            continue;
+
+        Symbol* decl = symIt->value;
+        auto clazz = classOf(decl->type(), decl);
+        if (clazz == Undefined)
+            continue;
+
+        switchClass(clazz);
+        enter(declIt->value->initializer);
+
+        ExpressionAST* equivalent = isKnownAST(declIt->value->initializer);
+        if (!equivalent)
+            continue;
+
+        // We might have used an equivalent AST to type function, so iterate through
+        // all of them and update the rank for coresponding arguments.
+        // TODO: This is too inefficient (use an index).
+        for (auto& p : funcs_) {
+            for (auto& argData : p.second) {
+                bool update = false;
+                for (const auto instance : argData.instances_) {
+                    if (equivalent == isKnownAST(instance)) {
+                        update = true;
+                        break;
+                    }
+                }
+                if (update) {
+                    argData.clazz_ = clazz_;
+                    for (const auto instance : argData.instances_)
+                        enter(instance);
+                }
+            }
+        }
+    }
+}
+
 DomainLattice::Class DomainLattice::recover(const Symbol* sym) const
 {
     auto it = symbolDB_.find(const_cast<Symbol*>(sym));
@@ -301,7 +348,6 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     BinaryExpressionAST* bin = ast->asBinaryExpression();
 
     switch (tokenKind(bin->binary_op_token)) {
-        // Operators + and - are valid on both arithmetic and pointer types.
     case T_PLUS:
     case T_MINUS: {
         switchClass(Scalar);
@@ -327,7 +373,6 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
         return false;
     }
 
-        // The following operators are valid only on arithmetic types.
     case T_STAR:
     case T_SLASH:
     case T_PERCENT:
@@ -344,10 +389,9 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
         return false;
     }
 
-        // Logical operators are valid on both arithmetic and pointer types.
     case T_LESS:
-    case T_GREATER:
     case T_LESS_EQUAL:
+    case T_GREATER:
     case T_GREATER_EQUAL:
     case T_AMPER_AMPER:
     case T_PIPE_PIPE: {
@@ -358,10 +402,26 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
         return false;
     }
 
-        // Valid on any type.
-    case T_EQUAL:
+    case T_EQUAL: {
+        switchClass(Undefined);
+        enter(bin->right_expression);
+        Class rhsClass = clazz_;
+        enter(bin->left_expression);
+        if (clazz_ > rhsClass)
+            enter(bin->right_expression);
+        return false;
+    }
+
     case T_PLUS_EQUAL:
-    case T_MINUS_EQUAL:
+    case T_MINUS_EQUAL: {
+        switchClass(Scalar);
+        enter(bin->right_expression);
+        switchClass(Scalar);
+        accept(bin->left_expression);
+        switchClass(Scalar);
+        return false;
+    }
+
     case T_STAR_EQUAL:
     case T_SLASH_EQUAL:
     case T_PERCENT_EQUAL:
@@ -370,14 +430,22 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_CARET_EQUAL:
     case T_AMPER_EQUAL:
     case T_PIPE_EQUAL: {
-        switchClass(Undefined);
+        switchClass(Arithmetic);
+        enter(bin->left_expression);
+        switchClass(Arithmetic);
+        enter(bin->right_expression);
+        return false;
+    }
+
+    case T_EQUAL_EQUAL:
+    case T_EXCLAIM_EQUAL: {
+        switchClass(Scalar);
         enter(bin->right_expression);
         Class rhsClass = clazz_;
-        accept(bin->left_expression);
-        // The RHS's class is used to classify the LHS.
-        switchClass(rhsClass);
-        classify(bin->left_expression);
-        // Assignment leaves the class of its LHS.
+        enter(bin->left_expression);
+        if (clazz_ > rhsClass)
+            enter(bin->right_expression);
+        switchClass(Integral);
         return false;
     }
 
@@ -395,9 +463,8 @@ bool DomainLattice::visit(ConditionalExpressionAST *ast)
 {
     Class prevClass = switchClass(Scalar);
     enter(ast->condition);
-    switchClass(Undefined);
+    switchClass(prevClass);
     enter(ast->left_expression);
-    switchClass(Undefined);
     enter(ast->right_expression);
     switchClass(prevClass);
 
@@ -531,9 +598,39 @@ bool DomainLattice::visit(CallAST *ast)
 {
     Class prevClass = clazz_;
     enter(ast->base_expression);
-    for (ExpressionListAST* it = ast->expression_list; it; it = it->next) {
+
+    ExpressionAST* equivalent = isKnownAST(ast->base_expression);
+    if (equivalent == nullptr)
+        equivalent = ast->base_expression;
+    auto& data = funcs_[equivalent];
+
+    // Ensure the argument data has the proper size. This must also account for variadic
+    // functions.
+    auto argLength = 0u;
+    for (ExpressionListAST* it = ast->expression_list; it; it = it->next)
+        ++argLength;
+    if (data.size() <= argLength)
+        data.resize(argLength);
+
+    auto idx = 0u;
+    for (ExpressionListAST* it = ast->expression_list; it; it = it->next, ++idx) {
+        const auto seenIdx = data[idx].instances_.size();
+        data[idx].instances_.push_back(it->value);
         switchClass(Undefined);
         enter(it->value);
+
+        // If a higher rank is reached, update the argument data.
+        if (clazz_ > data[idx].clazz_) {
+            data[idx].clazz_ = clazz_;
+
+            // Update already seen arguments with the new higher rank. (This could be
+            // done later, more efficiently, after the entire lattice is computed.)
+            for (auto i = 0u; i < seenIdx; ++i)
+                enter(data[idx].instances_[i]);
+        } else if (data[idx].clazz_ > clazz_) {
+            clazz_ = data[idx].clazz_;
+            enter(it->value);
+        }
     }
     switchClass(prevClass);
 

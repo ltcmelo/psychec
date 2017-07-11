@@ -2,9 +2,10 @@
 
 /* Type definitions */
 
-/* Variables and functions*/
-int a ; 
-int /*<<< orphan*/  b ; 
-int /*<<< orphan*/  c ; 
-int /*<<< orphan*/  g (int,int /*<<< orphan*/ ) ; 
+/* Variables and functions */
+ int a ; 
+ int /*<<< orphan*/  b ; 
+ int /*<<< orphan*/  c ; 
+ int /*<<< orphan*/  fprintf (int /*<<< orphan*/ ,char*,int) ; 
+ int /*<<< orphan*/  g (int,int /*<<< orphan*/ ) ; 
 

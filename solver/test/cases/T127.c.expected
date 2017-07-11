@@ -2,7 +2,8 @@
 
 /* Type definitions */
 
-/* Variables and functions*/
-int /*<<< orphan*/  parse_long_options (int,int /*<<< orphan*/  (*) (int),double) ; 
-int /*<<< orphan*/  usage (int) ; 
+/* Variables and functions */
+ int /*<<< orphan*/  EXIT_FAILURE ; 
+ int /*<<< orphan*/  parse_long_options (int,int /*<<< orphan*/  (*) (int /*<<< orphan*/ ),double) ; 
+ int /*<<< orphan*/  usage (int /*<<< orphan*/ ) ; 
 

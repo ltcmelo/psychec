@@ -6,8 +6,8 @@ struct TYPE_4__ {int (* key_compare ) () ;} ;
 typedef  TYPE_1__ GTree ;
 
 /* Variables and functions */
- int /*<<< orphan*/  g_return_val_if_fail (int /*<<< orphan*/ ) ;
- int key_compare_func () ;
- int stub1 () ;
- TYPE_1__* tree ;
+ int /*<<< orphan*/  g_return_val_if_fail (int /*<<< orphan*/ ) ; 
+ int key_compare_func () ; 
+ int stub1 () ; 
+ TYPE_1__* tree ; 
 

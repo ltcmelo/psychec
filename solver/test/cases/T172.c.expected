@@ -6,6 +6,6 @@ typedef  struct S {int /*<<< orphan*/  mode; } const S ;
 struct TYPE_2__ {struct S const* weit; } ;
 
 /* Variables and functions */
- TYPE_1__* ent ;
- int /*<<< orphan*/  g (struct S const*) ;
+ TYPE_1__* ent ; 
+ int /*<<< orphan*/  g (struct S const*) ; 
 

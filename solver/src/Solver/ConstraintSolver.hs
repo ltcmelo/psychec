@@ -55,8 +55,8 @@ solve :: Constraint -> CLang -> SolverM (TyCtx, VarCtx)
 solve c l = do
   let
     -- Populate builtin and standard library types and values.
-    tcx = TyCtx $ (builtinTypes l) `Map.union` (stdTypes l)
-    vcx = VarCtx $ (builtinValues l) `Map.union` (stdValues l)
+    tcx = TyCtx $ (builtinTypes l) --`Map.union` (stdTypes l)
+    vcx = VarCtx $ (builtinValues l) --`Map.union` (stdValues l)
 
   -- Populate typing context and incorporate typedefs.
   (tcx0,c') <- stage1 tcx c
@@ -67,9 +67,16 @@ solve c l = do
   -- Split constraints into equivalence, inequality, and field acess.
   let (eqs, iqs, fds) = stage3 c''
 
+  -- Move function constraints to last positions, so we get more instantiated types to match
+  -- variadic functions.
+  let moveFun c@((FunTy _ _) :=: _) acc = acc ++ [c]
+      moveFun c@(_ :=: (FunTy _ _)) acc = acc ++ [c]
+      moveFun c acc = c:acc
+      eqs' = List.foldr moveFun [] eqs
+
   -- Run plain unification on equalities and apply the substitutions on the inequalities,
   -- allowing us to sort them in a const-aware manner later.
-  s <- punifyList eqs
+  s <- punifyList eqs'
   let iqs' = apply s iqs
 
   -- Identity inconsistent pointer conversions, where the only solution is to bind a type
@@ -115,8 +122,8 @@ solve c l = do
 
   let
     -- Remove builtins and standard library components.
-    tcx_ = undefTys (tyctx tcx5) Map.\\ (builtinTypes l) Map.\\ (stdTypes l)
-    vcx_ = undefVars (varctx vcx5) Map.\\ (builtinValues l) Map.\\ (stdValues l)
+    tcx_ = undefTys (tyctx tcx5) Map.\\ (builtinTypes l) --Map.\\ (stdTypes l)
+    vcx_ = undefVars (varctx vcx5) Map.\\ (builtinValues l) --Map.\\ (stdValues l)
 
     -- Remove anonymous types, their definitions are always in the program. Otherwise, we would
     -- have given them names.
@@ -236,7 +243,7 @@ stage2 vtx (n :<-: t@(FunTy rt pts)) =
                 FunTy rt' pts' -> do
                     let pcs = zipWith (\t t' -> (t' :>: t)) pts pts'
                         pcs' = foldr (\c acc -> c :&: acc) Truth pcs
-                        rtc = rt' :>: rt
+                        rtc = rt :>: rt'
                     return (vtx, pcs' :&: rtc)
                 -- FIXME: Verify scoping.
                 t' -> return (vtx, t' :=: t)
@@ -312,14 +319,14 @@ stage3 Truth = ([], [], [])
 instantiateTopPtr :: [Constraint] -> SolverM Subst
 instantiateTopPtr [] = return nullSubst
 instantiateTopPtr [(_ :>: _)] = return nullSubst
-instantiateTopPtr ((t1 :>: t1'):(t2 :>: t2'):xs) = do
+instantiateTopPtr ((t1 :>: t1'):c@(t2 :>: t2'):xs) = do
   let
-    check (PtrTy t) (VarTy n) (PtrTy t') (VarTy n')
+    check t (VarTy n) t' (VarTy n')
       | n == n' && (dropTopQual t) /= (dropTopQual t') = return (n +-> (PtrTy void))
       | otherwise = return nullSubst
     check _ _ _ _  = return nullSubst
   s <- check t1 t1' t2 t2'
-  s' <- instantiateTopPtr (apply s xs)
+  s' <- instantiateTopPtr ((apply s c):(apply s xs))
   return (s' @@ s)
 
 
@@ -406,7 +413,10 @@ untypeVariadics (n :<-: (FunTy _ pv)) s vcx =
       let
         params (t1:xs1) (t2:xs2)
           | hasVarDep t2 = t1:(params xs1 xs2)
-          | convertible (dropTopQual t1) (dropTopQual t2) = t1:(params xs1 xs2)
+          | hasVarDep t1 = t2:(params xs1 xs2)
+          | convertible (dropQual t1) t2 = t1:(params xs1 xs2)
+          | convertible t1 (dropQual t2) = t2:(params xs1 xs2)
+          | convertible (dropQual t1) (dropQual t2) = t1:(params xs1 xs2)
           | otherwise = [AnyTy]
         params (t:_) [] = [AnyTy]
         params [] (t:_) = [AnyTy]

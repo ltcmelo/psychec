@@ -341,6 +341,7 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
 {
     DEBUG_VISIT(SimpleDeclarationAST);
     OBSERVE(SimpleDeclarationAST);
+    CLASSIFY(ast);
 
     for (SpecifierListAST *it = ast->decl_specifier_list; it; it = it->next)
         visitSpecifier(it->value);
@@ -381,7 +382,7 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
 
         const std::string& alpha = ensureTypeIsKnown(declTy);
 
-        // If an initializer is provided, visit the expression. Unless, it
+        // If an initializer is provided, visit the expression. Unless, if
         // contains braces. If the declaration is of a record, we'll only
         // generate constraints if one of its fields are accessed. If the
         // declaration if of an array, we'll deal with it further down.
@@ -887,33 +888,32 @@ bool ConstraintGenerator::visit(CallAST *ast)
 
     // Deal with "regular" functions, for which we generate constraints through
     // the normal expression inspection process.
-    if (varArgPos == -1) {
-        std::vector<std::string> typeVars;
-        for (ExpressionListAST* it = ast->expression_list; it; it = it->next) {
-            const std::string& typeVar = supply_.createTypeVar1();
-            writer_->writeExists(typeVar);
-            collectExpression(typeVar, it->value);
-            typeVars.push_back(typeVar);
-            if (it->next)
-                writer_->writeAnd(true);
-        }
-        ENSURE_NONEMPTY_TYPE_STACK(return false);
-        typeVars.push_back(types_.top());
-
-
-        if (ast->expression_list)
-            writer_->writeAnd();
-        writer_->writeTypeof(funcName);
-        writer_->writeEquivMark();
-        writer_->enterGroup();
-        writer_->writeTypeNames(typeVars);
-        writer_->leaveGroup();
-
-        return false;
+    std::vector<std::string> typeVars;
+    for (ExpressionListAST* it = ast->expression_list; it; it = it->next) {
+        const std::string& typeVar = supply_.createTypeVar1();
+        writer_->writeExists(typeVar);
+        collectExpression(typeVar, it->value);
+        typeVars.push_back(typeVar);
+        if (it->next)
+            writer_->writeAnd(true);
     }
+    ENSURE_NONEMPTY_TYPE_STACK(return false);
+    typeVars.push_back(types_.top());
+
+    if (ast->expression_list)
+        writer_->writeAnd();
+    writer_->writeTypeof(funcName);
+    writer_->writeEquivMark();
+    writer_->enterGroup();
+    writer_->writeTypeNames(typeVars);
+    writer_->leaveGroup();
+
+    if (varArgPos == -1)
+        return false;
 
     // Deal with printf family of functions, for which we generate constraints
     // based on format specifiers.
+    writer_->writeAnd();
     int argCnt = 0;
     std::vector<PrintfScanner::FormatSpec> specs;
     for (ExpressionListAST* it = ast->expression_list; it; it = it->next, ++argCnt) {
@@ -1042,15 +1042,19 @@ void ConstraintGenerator::convertBoolExpression(ExpressionAST *ast)
 {
     std::string ty;
     auto clazz = classOfExpr(ast);
-    if (clazz == DomainLattice::Arithmetic) {
-        ty = kDefaultArithTy;
-    } else if (clazz == DomainLattice::Integral) {
-        ty = kDefaultIntTy;
-    } else if (clazz == DomainLattice::FloatingPoint) {
-        ty = kDefaultFloatPointTy;
+    if (!clazz.arithName_.empty()) {
+        ty = clazz.arithName_;
     } else {
-        ty = supply_.createTypeVar1();
-        writer_->writeExists(ty);
+        if (clazz == DomainLattice::Arithmetic) {
+            ty = kDefaultArithTy;
+        } else if (clazz == DomainLattice::Integral) {
+            ty = kDefaultIntTy;
+        } else if (clazz == DomainLattice::FloatingPoint) {
+            ty = kDefaultFloatPointTy;
+        } else {
+            ty = supply_.createTypeVar1();
+            writer_->writeExists(ty);
+        }
     }
 
     collectExpression(ty, ast);
@@ -1103,8 +1107,9 @@ bool ConstraintGenerator::visit(NumericLiteralAST *ast)
         writer_->writeTypeName(kDefaultFloatPointTy);
     } else {
         if (!strcmp(numLit->chars(), "0")) {
-            ENSURE_NONEMPTY_TYPE_STACK(return false);
-            writer_->writeTypeName(types_.top());
+            const std::string& alpha = supply_.createTypeVar1();
+            writer_->writeExists(alpha);
+            writer_->writeTypeName(alpha);
         } else if (tokenKind(ast->literal_token) == T_CHAR_LITERAL) {
             writer_->writeTypeName(kCharTy);
         } else {

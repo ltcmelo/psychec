@@ -3,6 +3,6 @@
 /* Type definitions */
 
 /* Variables and functions */
- char* aa ;
- char* bb ;
+ char* aa ; 
+ char* bb ; 
 

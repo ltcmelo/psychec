@@ -11,9 +11,9 @@ struct TYPE_7__ {TYPE_3__ sent; } ;
 struct TYPE_6__ {int /*<<< orphan*/  color; TYPE_4__* parent; } ;
 
 /* Variables and functions */
-int /*<<< orphan*/  BLACK ;
-TYPE_3__* ln ;
-TYPE_4__* n ;
-TYPE_3__* parent ;
-TYPE_2__* t ;
+ int /*<<< orphan*/  BLACK ; 
+ TYPE_3__* ln ; 
+ TYPE_4__* n ; 
+ TYPE_3__* parent ; 
+ TYPE_2__* t ; 
 

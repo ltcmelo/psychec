@@ -8,6 +8,6 @@ struct TYPE_5__ {double x; } ;
 typedef  TYPE_1__ T2 ;
 typedef  TYPE_2__ T1 ;
 
-/* Variables and functions*/
-double c ; 
+/* Variables and functions */
+ double c ; 
 

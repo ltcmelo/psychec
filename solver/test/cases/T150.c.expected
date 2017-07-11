@@ -8,5 +8,5 @@ typedef  TYPE_2__* gdsl_rbtree_node_t ;
 struct TYPE_8__ {struct TYPE_8__* right; } ;
 struct TYPE_7__ {TYPE_2__ sent; } ;
 
-/* Variables and functions*/
+/* Variables and functions */
 

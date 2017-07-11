@@ -6,6 +6,6 @@ struct S {int /*<<< orphan*/  foo; } ;
 struct TYPE_2__ {struct S* bar; } ;
 
 /* Variables and functions */
- TYPE_1__* o ;
- int /*<<< orphan*/  u ;
+ TYPE_1__* o ; 
+ int /*<<< orphan*/  u ; 
 

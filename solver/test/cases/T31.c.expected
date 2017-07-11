@@ -4,5 +4,6 @@
 typedef  int /*<<< orphan*/  T2 ;
 typedef  void* T1 ;
 
-/* Variables and functions*/
+/* Variables and functions */
+ void* malloc (int) ; 
 

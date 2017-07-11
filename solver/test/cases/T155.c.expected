@@ -4,5 +4,5 @@
 struct T {int i; } ;
 typedef  struct T T ;
 
-/* Variables and functions*/
+/* Variables and functions */
 

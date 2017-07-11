@@ -3,7 +3,7 @@
 /* Type definitions */
 
 /* Variables and functions */
- int /*<<< orphan*/  len (char const*) ;
- int /*<<< orphan*/  len2 (char const*) ;
- int /*<<< orphan*/  len3 (char const*) ;
+ int /*<<< orphan*/  len (char const*) ; 
+ int /*<<< orphan*/  len2 (char const*) ; 
+ int /*<<< orphan*/  len3 (char const*) ; 
 

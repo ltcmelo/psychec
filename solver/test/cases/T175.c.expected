@@ -15,5 +15,5 @@ struct TYPE_9__ {TYPE_1__* y; } ;
 struct TYPE_8__ {double p; } ;
 
 /* Variables and functions */
- void* g () ;
+ void* g () ; 
 

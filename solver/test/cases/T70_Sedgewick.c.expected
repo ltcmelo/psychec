@@ -3,5 +3,6 @@
 /* Type definitions */
 typedef  int /*<<< orphan*/  Item ;
 
-/* Variables and functions*/
+/* Variables and functions */
+ int /*<<< orphan*/ * malloc (int /*<<< orphan*/ ) ; 
 

@@ -3,9 +3,9 @@
 /* Type definitions */
 
 /* Variables and functions */
-static  void g () ;
- void i () ;
- void j () ;
- int /*<<< orphan*/  m () ;
-static  void n () ;
+static  void g () ; 
+ void i () ; 
+ void j () ; 
+ int /*<<< orphan*/  m () ; 
+static  void n () ; 
 

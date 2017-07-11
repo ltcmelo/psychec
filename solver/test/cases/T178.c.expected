@@ -1,0 +1,10 @@
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables and functions */
+ int EXIT_FAILURE ; 
+ int EXIT_SUCCESS ; 
+ int /*<<< orphan*/  error (int,...) ; 
+ int ok ; 
+

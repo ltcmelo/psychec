@@ -3,5 +3,5 @@
 /* Type definitions */
 
 /* Variables and functions */
-static  void g () ;
+static  void g () ; 
 

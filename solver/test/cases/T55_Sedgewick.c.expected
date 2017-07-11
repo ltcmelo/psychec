@@ -1,13 +1,14 @@
 /* Forward declarations */
-typedef  struct TYPE_9__   TYPE_2__ ;
-typedef  struct TYPE_8__   TYPE_1__ ;
+typedef  struct TYPE_10__   TYPE_2__ ;
+typedef  struct TYPE_9__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_9__ {int v; int w; } ;
-struct TYPE_8__ {int V; int E; int** adj; } ;
+struct TYPE_10__ {int v; int w; } ;
+struct TYPE_9__ {int V; int E; int** adj; } ;
 typedef  TYPE_1__* Graph ;
 typedef  TYPE_2__ Edge ;
 
 /* Variables and functions */
- int** MATRIXint (int,int,int /*<<< orphan*/ ) ;
+ int** MATRIXint (int,int,int /*<<< orphan*/ ) ; 
+ TYPE_1__* malloc (int) ; 
 

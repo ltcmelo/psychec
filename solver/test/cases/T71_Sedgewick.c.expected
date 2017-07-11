@@ -1,10 +1,12 @@
 /* Forward declarations */
-typedef  struct TYPE_9__   TYPE_1__ ;
+typedef  struct TYPE_11__   TYPE_1__ ;
 
 /* Type definitions */
 typedef  TYPE_1__* link ;
-struct TYPE_9__ {struct TYPE_9__* next; int /*<<< orphan*/  item; } ;
-typedef  int /*<<< orphan*/  Item ;
+struct TYPE_11__ {struct TYPE_11__* next; void* item; } ;
+typedef  void* Item ;
 
-/* Variables and functions*/
+/* Variables and functions */
+ int /*<<< orphan*/  free (TYPE_1__*) ; 
+ TYPE_1__* malloc (int) ; 
 

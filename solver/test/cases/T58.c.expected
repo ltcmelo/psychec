@@ -3,6 +3,6 @@
 /* Type definitions */
 typedef  float T ;
 
-/* Variables and functions*/
-int /*<<< orphan*/  e ; 
+/* Variables and functions */
+ int /*<<< orphan*/  e ; 
 

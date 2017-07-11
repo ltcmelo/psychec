@@ -3,9 +3,9 @@
 /* Type definitions */
 typedef  enum E { ____Placeholder_E } E ;
 
-/* Variables and functions*/
+/* Variables and functions */
 #define  W 129 
-int X ; 
+ int X ; 
 #define  Y 128 
-int Z ; 
+ int Z ; 
 

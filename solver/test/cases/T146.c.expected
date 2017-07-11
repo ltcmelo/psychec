@@ -14,8 +14,8 @@ struct TYPE_11__ {TYPE_2__ n; } ;
 struct TYPE_10__ {TYPE_1__* y; } ;
 struct TYPE_7__ {double z; } ;
 
-/* Variables and functions*/
-TYPE_6__ j ;
-TYPE_5__ m ;
-TYPE_4__* x ;
+/* Variables and functions */
+ TYPE_6__ j ; 
+ TYPE_5__ m ; 
+ TYPE_4__* x ; 
 

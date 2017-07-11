@@ -2,8 +2,8 @@
 
 /* Type definitions */
 
-/* Variables and functions*/
-int A ; 
-int B ; 
-int C ; 
+/* Variables and functions */
+ int A ; 
+ int B ; 
+ int C ; 
 

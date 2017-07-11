@@ -5,5 +5,5 @@ typedef  struct TYPE_3__   TYPE_1__ ;
 struct TYPE_3__ {char* member_0; int /*<<< orphan*/ * member_1; } ;
 typedef  TYPE_1__ T ;
 
-/* Variables and functions*/
+/* Variables and functions */
 

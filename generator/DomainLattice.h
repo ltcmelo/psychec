@@ -72,9 +72,10 @@ public:
     /*!
      * \brief totalize
      *
-     * Classify the expression parts as according to the lattice.
+     * Classify the AST.
      */
     void totalize(CPlusPlus::ExpressionAST*, const CPlusPlus::Scope*);
+    void totalize(SimpleDeclarationAST*, const CPlusPlus::Scope*);
 
     /*!
      * \brief createBindings
@@ -137,6 +138,15 @@ private:
     std::vector<CPlusPlus::ExpressionAST*> knownAsts_;
     const CPlusPlus::Scope* scope_;
     mutable ASTIdentityMatcher matcher_;
+
+    // Function argument domains, taken from the call with highest rank.
+    struct ArgumentData
+    {
+        Class clazz_;
+        std::vector<CPlusPlus::ExpressionAST*> instances_;
+    };
+
+    std::unordered_map<CPlusPlus::ExpressionAST*, std::vector<ArgumentData>> funcs_;
 };
 
 inline std::ostream& operator<<(std::ostream& os, const DomainLattice::Class& h)

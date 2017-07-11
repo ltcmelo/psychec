@@ -1,0 +1,8 @@
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables and functions */
+ int /*<<< orphan*/  quote (char const*) ; 
+ int /*<<< orphan*/  quote2 (char*) ; 
+
