@@ -57,7 +57,7 @@ writeIncs =
 
 -- | Write NULL definition.
 writeNULL :: String
-writeNULL =  "#define NULL ((void*)0)\n"
+writeNULL = "#define NULL ((void*)0)\n\n"
 
 
 -- TODO: By default, our generator parses a `bool' type and interpret it as an `int'.
