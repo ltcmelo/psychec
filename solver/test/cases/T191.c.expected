@@ -1,0 +1,13 @@
+/* Forward declarations */
+typedef  struct TYPE_5__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_5__ {double data; struct TYPE_5__* next; } ;
+typedef  char* Result ;
+typedef  TYPE_1__* List ;
+
+/* Variables and functions */
+ char* FAIL_MACRO (int) ;
+ int /*<<< orphan*/  analyse (TYPE_1__*) ;
+ TYPE_1__* make () ;
+
