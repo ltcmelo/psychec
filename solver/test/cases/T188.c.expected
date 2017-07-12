@@ -1,0 +1,7 @@
+/* Forward declarations */
+
+/* Type definitions */
+typedef  int* z ;
+
+/* Variables and functions */
+

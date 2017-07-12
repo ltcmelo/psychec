@@ -741,7 +741,10 @@ DomainLattice::Class ConstraintGenerator::classOfExpr(ExpressionAST *ast) const
 
         // Scalar types default to integral. Defaulting is necessary to avoid a scalar
         // being interpreted as an integral one time and as a pointer another time.
-        if (clazz == DomainLattice::Scalar) {
+        if (clazz == DomainLattice::Scalar
+                && !(ast->asNumericLiteral()
+                     && !strcmp(numericLiteral(
+                            ast->asNumericLiteral()->literal_token)->chars(), "0"))) {
             clazz = DomainLattice::Integral;
             printDebug("Defaulting scalar AST %s to %s\n", s.c_str(), clazz.name_.c_str());
         }

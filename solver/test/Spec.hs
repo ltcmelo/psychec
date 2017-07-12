@@ -232,6 +232,7 @@ tests = testGroup "Unit tests"
                   , doTest "T185.c" -- Declaration after function call and argument uniform.
                   , doTest "T186.c" -- Separate logical from comparisson operator.
                   , doTest "T187.c" -- volatile qualifier.
+                  , doTest "T188.c" -- Dont promote scalar 0.
                   ]
 
 doTest s
