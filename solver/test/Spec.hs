@@ -220,6 +220,16 @@ tests = testGroup "Unit tests"
                   , doTest "T173.c" -- Detect void* prior to inequalities ordering.
                   , doTest "T174.c" -- Variadic functions.
                   , doTest "T175.c" -- Composite types and void* conversion.
+                  , doTest "T176.c" -- Conversion void* into T* and array of T.
+                  , doTest "T177.c"
+                  , doTest "T178.c" -- Lattice (?:) and variadic function match.
+                  , doTest "T179.c" -- Uniform function argument ranks.
+                  , doTest "T180.c" -- Uniform function argument rank and ternary operator.
+                  , doTest "T181.c" -- Uniform function argument rank and other operators.
+                  , doTest "T182.c" -- Variadic functions with annotations.
+                  , doTest "T183.c" -- Ensure declaration is used not to generate variadic.
+                  , doTest "T184.c" -- Declarations and no-variadics (with const).
+                  , doTest "T185.c" -- Declaration after function call and argument uniform.
                   ]
 
 doTest s
