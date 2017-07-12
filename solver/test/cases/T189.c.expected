@@ -1,0 +1,16 @@
+/* Forward declarations */
+typedef  struct TYPE_11__   TYPE_4__ ;
+typedef  struct TYPE_10__   TYPE_3__ ;
+typedef  struct TYPE_9__   TYPE_2__ ;
+typedef  struct TYPE_8__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_11__ {int member_0; int member_1; } ;
+struct TYPE_10__ {int member_0; char* member_1; int member_2; } ;
+struct TYPE_8__ {double member_0; double member_1; } ;
+struct TYPE_9__ {int member_0; char* member_1; TYPE_1__ member_2; } ;
+typedef  TYPE_2__ T3 ;
+typedef  TYPE_3__ T2 ;
+typedef  TYPE_4__ T1 ;
+
+/* Variables and functions */

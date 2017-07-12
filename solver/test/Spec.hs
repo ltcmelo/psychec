@@ -233,6 +233,7 @@ tests = testGroup "Unit tests"
                   , doTest "T186.c" -- Separate logical from comparisson operator.
                   , doTest "T187.c" -- volatile qualifier.
                   , doTest "T188.c" -- Dont promote scalar 0.
+                  , doTest "T189.c" -- Plain struct initialization.
                   ]
 
 doTest s

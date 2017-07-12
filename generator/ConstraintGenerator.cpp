@@ -467,6 +467,13 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
                 writer_->writeEquivRel(alpha, elem);
                 writer_->writeAnd(true);
             }
+        } else if (declIt->value->initializer
+                   && declIt->value->initializer->asBracedInitializer()
+                   && declIt->value->initializer->asBracedInitializer()->expression_list) {
+            // TODO: When this is an array hidden by a missing typedef.
+            pushType(alpha);
+            visitExpression(declIt->value->initializer);
+            writer_->writeAnd();
         }
 
         declIt = declIt->next;
