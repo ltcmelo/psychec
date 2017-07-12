@@ -145,6 +145,9 @@ void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
     Scope *previousScope = switchScope(global);
     for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
         visitDeclaration(it->value);
+    // TODO: Get rid of cache data in lattice and pass twice over program.
+    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
+        visitDeclaration(it->value);
     switchScope(previousScope);
     writer_->block(prevState);
 

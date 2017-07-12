@@ -234,6 +234,8 @@ tests = testGroup "Unit tests"
                   , doTest "T187.c" -- volatile qualifier.
                   , doTest "T188.c" -- Dont promote scalar 0.
                   , doTest "T189.c" -- Plain struct initialization.
+                  , doTest "T190.c" -- Frontpage example, simplified.
+                  , doTest "T191.c" -- Frontpage example, full.
                   ]
 
 doTest s

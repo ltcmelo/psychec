@@ -1,0 +1,10 @@
+/* Forward declarations */
+typedef  struct TYPE_4__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_4__ {double data; } ;
+typedef  TYPE_1__* List ;
+
+/* Variables and functions */
+ TYPE_1__* make () ;
+
