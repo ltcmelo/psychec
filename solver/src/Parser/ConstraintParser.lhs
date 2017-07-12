@@ -61,7 +61,7 @@ Constraint parser
 >                    , defParser
 >                    , existsParser
 >                    , typeDefParser
->                    , isConstParser
+>                    , isConstExprParser
 >                    , staticStorageParser
 >                    , eofParser
 >                    ]
@@ -85,8 +85,8 @@ Constraint parser
 >                    where
 >                      build _ n _ t = n :<-: t
 
-> isConstParser :: Parser Constraint
-> isConstParser = build <$> reserved "$read_only$" <*>
+> isConstExprParser :: Parser Constraint
+> isConstExprParser = build <$> reserved "$read_only$" <*>
 >                         (parens nameParser)
 >                    where
 >                      build _ n = ReadOnly n
@@ -133,7 +133,13 @@ Type parser
 > constQualParser p = f <$> p <*> (optionMaybe constParser)
 >                     where
 >                       f t Nothing = t
->                       f t _ = QualTy t
+>                       f t _ = QualTy t Const
+
+> volatileQualParser :: Parser Ty -> Parser Ty
+> volatileQualParser p = f <$> p <*> (optionMaybe volatileParser)
+>                     where
+>                       f t Nothing = t
+>                       f t _ = QualTy t Volatile
 
 > typeParser :: Parser Ty
 > typeParser = constQualParser typeParser'
@@ -145,13 +151,13 @@ Type parser
 
 > typeParser'' :: Parser Ty
 > typeParser'' = choice [ tyVarParser
->                      , constQualParser floatTyParser
->                      , constQualParser intTyParser
->                      , constQualParser tyConParser
+>                      , constQualParser (volatileQualParser floatTyParser)
+>                      , constQualParser (volatileQualParser intTyParser)
+>                      , constQualParser (volatileQualParser tyConParser)
 >                      , funTyParser
->                      , constQualParser structTyParser
->                      , constQualParser unionTyParser
->                      , constQualParser enumTyParser
+>                      , constQualParser (volatileQualParser structTyParser)
+>                      , constQualParser (volatileQualParser unionTyParser)
+>                      , constQualParser (volatileQualParser enumTyParser)
 >                     ]
 
 > trivialSpecParser :: Parser Ty
@@ -264,6 +270,9 @@ Lexer definition
 > constParser :: Parser ()
 > constParser = () <$ (Tk.lexeme constrLexer $ Tk.reserved constrLexer "const")
 
+> volatileParser :: Parser ()
+> volatileParser = () <$ (Tk.lexeme constrLexer $ Tk.reserved constrLexer "volatile")
+
 > colon :: Parser ()
 > colon = () <$ Tk.colon constrLexer
 
@@ -290,6 +299,7 @@ Constraint language definition
 >                        , "float"
 >                        , "double"
 >                        , "const"
+>                        , "volatile"
 >                        -- The surrounding `$'s are to prevend collisions
 >                        -- between identifiers in the C program and keywords
 >                        -- from our the contraint's language.

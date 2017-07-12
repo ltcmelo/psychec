@@ -45,7 +45,7 @@ instance Retypeable Ty where
   collect (VarTy _) = []
   collect (NamedTy _) = []
   collect (EnumTy t) = []
-  collect (QualTy t) = collect t
+  collect (QualTy t _) = collect t
   collect (PtrTy t) = collect t
   collect (FunTy t tx) = collect t ++ collect tx
   collect t@(RecTy fs _) = [t] ++ collect fs
@@ -54,7 +54,7 @@ instance Retypeable Ty where
   compact _ t@(VarTy _) = t
   compact _ t@(NamedTy _) = t
   compact _ t@(EnumTy _) = t
-  compact idx (QualTy t) = QualTy (compact idx t)
+  compact idx (QualTy t q) = QualTy (compact idx t) q
   compact idx (PtrTy t) = PtrTy (compact idx t)
   compact idx (FunTy t tx) = FunTy (compact idx t) (compact idx tx)
   compact idx t@(RecTy fs _) = maybe t (\k -> NamedTy k) (Map.lookup t (ty2n idx))
@@ -63,7 +63,7 @@ instance Retypeable Ty where
   orphanize idx t@(VarTy v) = maybe orphan NamedTy (Map.lookup t (ty2n idx))
   orphanize _ t@(NamedTy _) = t
   orphanize _ t@(EnumTy _) = t
-  orphanize idx (QualTy t) = QualTy (orphanize idx t)
+  orphanize idx (QualTy t q) = QualTy (orphanize idx t) q
   orphanize idx (PtrTy t) = PtrTy (orphanize idx t)
   orphanize idx (FunTy t tx) = FunTy (orphanize idx t) (orphanize idx tx)
   orphanize idx (RecTy fs n) = RecTy (orphanize idx fs) n
@@ -109,8 +109,8 @@ unalpha2 kn (RecTy fs n) =
   RecTy (check fs kn) kn
  where
   check fs k = map (\(Field fn ft) -> Field fn (unalphaHelper k n ft)) fs
-unalpha2 kn (QualTy t) =
-  QualTy t'
+unalpha2 kn (QualTy t q) =
+  QualTy t' q
  where
   t' = unalpha2 kn t
 unalpha2 _ t = t
@@ -121,7 +121,7 @@ unalphaHelper k n t@(VarTy v)
   | otherwise = t
 unalphaHelper _ _ t@(NamedTy _) = t
 unalphaHelper _ _ t@(EnumTy _) = t
-unalphaHelper k n (QualTy t) = QualTy (unalphaHelper k n t)
+unalphaHelper k n (QualTy t q) = QualTy (unalphaHelper k n t) q
 unalphaHelper k n (PtrTy t) = PtrTy (unalphaHelper k n t)
 unalphaHelper k n t@(FunTy _ _) = t
 unalphaHelper _ _ (RecTy _ _) = error "shouldn't have structs at this point"

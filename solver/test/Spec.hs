@@ -231,6 +231,7 @@ tests = testGroup "Unit tests"
                   , doTest "T184.c" -- Declarations and no-variadics (with const).
                   , doTest "T185.c" -- Declaration after function call and argument uniform.
                   , doTest "T186.c" -- Separate logical from comparisson operator.
+                  , doTest "T187.c" -- volatile qualifier.
                   ]
 
 doTest s

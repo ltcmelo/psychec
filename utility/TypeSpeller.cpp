@@ -50,6 +50,8 @@ void TypeSpeller<SyntaxT>::visitType(const FullySpecifiedType& fullType)
     accept(fullType.type());
     if (fullType.isConst())
         spelling_.append(" const ");
+    if (fullType.isVolatile())
+        spelling_.append(" volatile ");
 }
 
 template <class SyntaxT>

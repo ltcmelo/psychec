@@ -181,10 +181,10 @@ sysStatTypes :: [Ty]
 sysStatTypes
   = [ struct_stat ]
 sysStatValues
-  = [ (Name "stat", FunTy int [PtrTy (QualTy char), PtrTy struct_stat])
+  = [ (Name "stat", FunTy int [PtrTy (constTy char), PtrTy struct_stat])
     , (Name "fstat", FunTy int [int, PtrTy struct_stat])
-    , (Name "lstat", FunTy int [PtrTy (QualTy char), PtrTy struct_stat])
-    , (Name "fstatat", FunTy int [int, PtrTy (QualTy char), PtrTy struct_stat, int])
+    , (Name "lstat", FunTy int [PtrTy (constTy char), PtrTy struct_stat])
+    , (Name "fstatat", FunTy int [int, PtrTy (constTy char), PtrTy struct_stat, int])
     ]
 
 

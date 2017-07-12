@@ -31,7 +31,7 @@ convertible t t' =
       and [isArithTy t, isEnum t'],
       and [isEnum t, isArithTy t'],
       or [t == PtrTy void, t' == PtrTy void],
-      or [t == PtrTy (QualTy void), t' == PtrTy (QualTy void)]]
+      or [t == PtrTy (QualTy void Const), t' == PtrTy (QualTy void Const)]]
 
 isEnum :: Ty -> Bool
 isEnum (EnumTy _) = True

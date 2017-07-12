@@ -5,11 +5,9 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-touch solver/test/cases/T"$1".c
+cp test.c solver/test/cases/T"$1".c
 touch solver/test/cases/T"$1".c.expected
 git add solver/test/cases/T"$1".c
 git add solver/test/cases/T"$1".c.expected
 
 echo "Files created and added to git"
-
-

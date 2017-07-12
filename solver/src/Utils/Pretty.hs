@@ -47,7 +47,8 @@ instance Pretty Ty where
   pprint (RecTy fs n) = pprint n <+> braces (hcat $ (map pprint fs))
   pprint (SumTy fs n) = pprint n <+> braces (hcat $ (map pprint fs))
   pprint (PtrTy t) = pprint t <> char '*'
-  pprint (QualTy t) = pprint t <+> text "const"
+  pprint (QualTy t Const) = pprint t <+> text "const"
+  pprint (QualTy t Volatile) = pprint t <+> text "volatile"
   pprint (EnumTy n) =
     pprint n <+> text "{ ____Placeholder_" <> pprint (ensurePlain n) <+> text "}"
   pprint AnyTy = text "..."
@@ -78,7 +79,7 @@ nameOf (RecTy _ n) = n
 nameOf (SumTy _ n) = n
 nameOf (PtrTy t) = Name ((unName (nameOf t)) ++ "*")
 nameOf x@(FunTy t ts) = Name (show $ pprint x)
-nameOf (QualTy t) = nameOf t
+nameOf (QualTy t _) = nameOf t
 nameOf (EnumTy n) = n
 nameOf AnyTy = Name "..."
 

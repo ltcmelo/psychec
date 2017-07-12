@@ -65,8 +65,8 @@ instance Apply Ty where
     apply s (PtrTy t) = PtrTy (apply s t)
     apply s (FunTy t ts) = FunTy (apply s t) (apply s ts)
     apply s (RecTy fs n) = RecTy (apply s fs) n
-    -- Duplicate const qualifiers don't make sense, so drop substituted ones.
-    apply s (QualTy t) = QualTy (dropTopQual (apply s t))
+    -- Duplicate type qualifiers don't make sense, so drop substituted ones.
+    apply s (QualTy t q) = QualTy (dropTopQual q (apply s t)) q
     apply s t@(EnumTy n) = t
     apply s t@(AnyTy) = t
 
@@ -125,7 +125,7 @@ instance Unifiable Ty where
     fv (PtrTy t) = fv t
     fv (FunTy t ts) = fv t `union` fv ts
     fv (RecTy fs _) = fv fs
-    fv (QualTy t) = fv t
+    fv (QualTy t _) = fv t
     fv (EnumTy _) = []
 
     -- Plain unification
@@ -163,9 +163,11 @@ instance Unifiable Ty where
         | n == n' = punify (sort fs) (sort fs')
         | otherwise = differentTypeConstructorsError n n'
 
-    punify (QualTy t) (QualTy t') = punify t t'
-    punify (QualTy t) t' = punify t t'
-    punify t'(QualTy t) = punify t t'
+    punify (QualTy t q) (QualTy t' q')
+      | q == q' = punify t t'
+      | otherwise = incompatibleQualifiers
+    punify (QualTy t _) t' = punify t t'
+    punify t'(QualTy t _) = punify t t'
 
     punify t@(EnumTy _) t'
         | convertible t t' = return nullSubst
@@ -208,9 +210,11 @@ instance Unifiable Ty where
         | n == n' = dunify (sort fs) (sort fs') Relax
         | otherwise = differentTypeConstructorsError n n'
 
-    dunify (QualTy t) (QualTy t') m = dunify t t' m
-    dunify (QualTy t) t' _ = dunify t t' Relax
-    dunify t (QualTy t') m = dunify t t' m
+    dunify (QualTy t q) (QualTy t' q') m
+      | q == q' = dunify t t' m
+      | otherwise = incompatibleQualifiers
+    dunify (QualTy t _) t' _ = dunify t t' Relax
+    dunify t (QualTy t' _) m = dunify t t' m
 
     dunify t@(EnumTy _) t' _
         | convertible t t' = return nullSubst
@@ -243,15 +247,20 @@ varBind n t = return (n +-> t)
 
 
 dropQual :: Ty -> Ty
-dropQual (QualTy t) = dropQual t
+dropQual (QualTy t _) = dropQual t
 dropQual (PtrTy t) = PtrTy (dropQual t)
 dropQual t = t
 
-dropTopQual (QualTy t) = t
-dropTopQual t = t
+dropTopQual q t'@(QualTy t q')
+  | q == q' = t
+  | otherwise = t'
+dropTopQual _ t = t
+
+dropTopQualAny (QualTy t _) = t
+dropTopQualAny t = t
 
 hasVarDep (PtrTy t) = hasVarDep t
-hasVarDep (QualTy t) = hasVarDep t
+hasVarDep (QualTy t _) = hasVarDep t
 hasVarDep (VarTy _) = True
 hasVarDep _ = False
 
@@ -274,3 +283,6 @@ punifyDifferentFields :: Name -> Name -> SolverM a
 punifyDifferentFields n n' = throwError $ show $
                                 text "Cannot unify different fields:\n" <+>
                                 pprint n <+> text "\nwith\n" <+> pprint n'
+
+incompatibleQualifiers :: SolverM a
+incompatibleQualifiers = throwError $ show $ text "incompatible qualifiers\n"

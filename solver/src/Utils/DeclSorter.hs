@@ -42,7 +42,7 @@ populate tctx =
 buildDeps :: Ty -> Map.Map Name Int -> [Int]
 buildDeps (RecTy fs n) m =
     foldr (\(Field _ ft) acc -> (buildDeps ft m) ++ acc) [] fs
-buildDeps (QualTy t) m = buildDeps t m
+buildDeps (QualTy t _) m = buildDeps t m
 buildDeps t m =
     case Map.lookup (nameOf t) m of
         Nothing -> []

@@ -177,7 +177,7 @@ findCanonical :: TyCtx -> Ty -> Ty
 findCanonical tctx t@(NamedTy n) = maybe t fst (Map.lookup n (tyctx tctx))
 findCanonical _ t@(VarTy _) = t
 findCanonical tctx (FunTy t ts) = FunTy (findCanonical tctx t) (map (findCanonical tctx) ts)
-findCanonical tctx (QualTy t) = QualTy (findCanonical tctx t)
+findCanonical tctx (QualTy t q) = QualTy (findCanonical tctx t) q
 findCanonical tctx (PtrTy t) = PtrTy (findCanonical tctx t)
 findCanonical tctx (RecTy fs n) = RecTy (map (\f -> f{ty = findCanonical tctx (ty f)}) fs) n
 findCanonical tctx (SumTy fs n) = SumTy (map (\f -> f{ty = findCanonical tctx (ty f)}) fs) n
@@ -193,13 +193,13 @@ createEquiv t@(PtrTy l) t'@(VarTy v) tctx = do
   v' <- fresh
   (tcx, c) <- createEquiv l v' tctx
   return (tcx, (t' :=: (PtrTy v')) :&: c)
-createEquiv (QualTy t) (QualTy t') tctx = do
+createEquiv (QualTy t _) (QualTy t' _) tctx = do
   (tcx,c) <- createEquiv t t' tctx
   return (tcx, (t :=: t') :&: c)
-createEquiv t@(QualTy l) t'@(VarTy v) tctx = do
+createEquiv t@(QualTy l q) t'@(VarTy v) tctx = do
    v' <- fresh
    (tcx, c) <- createEquiv l v' tctx
-   return (tcx, ((QualTy v') :=: t') :&: c)
+   return (tcx, ((QualTy v' q) :=: t') :&: c)
 createEquiv t@(EnumTy n) t'@(VarTy v) tctx = do
   let tctx' = TyCtx $ maybe (Map.insert n (EnumTy n, False) (tyctx tctx))
                             (const (tyctx tctx))
@@ -220,8 +220,8 @@ flattenDecl :: TyCtx -> Ty -> Ty -> (Ty, Bool)
 flattenDecl _ (FunTy _ _) t = (t, True)
 flattenDecl tctx _ t@(NamedTy n) = maybe (t, True) id (Map.lookup n (tyctx tctx))
 flattenDecl _ _ t@(VarTy _) = (t, False)
-flattenDecl tctx t' (QualTy t) =
-  (QualTy t'', b)
+flattenDecl tctx t' (QualTy t q) =
+  (QualTy t'' q, b)
  where
   (t'', b) = flattenDecl tctx t' t
 flattenDecl tctx t' (PtrTy t) =
@@ -272,9 +272,9 @@ stage2 vtx (c :&: c') = do
   (vtx2, c2) <- stage2 vtx1 c'
   let
     -- Pick the symbol in which attributes are "enforced" by what's available in the program.
-    choose (ValSym t@(QualTy _) dc ce st) (ValSym _ dc' ce' st') =
+    choose (ValSym t@(QualTy _ _) dc ce st) (ValSym _ dc' ce' st') =
       ValSym t (dc && dc') (ce || ce') (st || st')
-    choose (ValSym _ dc ce st) (ValSym t@(QualTy _) dc' ce' st') =
+    choose (ValSym _ dc ce st) (ValSym t@(QualTy _ _) dc' ce' st') =
       ValSym t (dc && dc') (ce || ce') (st || st')
     -- A function can be defined, but not declared. We wanna pick the type of the one defined,
     -- available in the program. So we don't risk a mismatching signature due to modulo-
@@ -289,10 +289,11 @@ stage2 vtx c@(_ :=: _) = return (vtx, c)
 stage2 vtx c@(_ :>: _) = return (vtx, c)
 stage2 vtx (ReadOnly n) =
   case Map.lookup n (varctx vtx) of
-    Nothing -> error "const can only be applied on known values"
-    Just info -> return (VarCtx $ Map.insert n
-                                  (ValSym (QualTy (valty info)) (declared info) True (static info))
-                                  (varctx vtx), Truth)
+    Nothing -> error "constexpr can only be applied on known values"
+    Just info -> return
+      (VarCtx $ Map.insert n
+                (ValSym (QualTy (valty info) Const) (declared info) True (static info))
+                (varctx vtx), Truth)
 stage2 vtx c@(Static n) =
   case Map.lookup n (varctx vtx) of
     Nothing -> error "static can only be applied on known values"
@@ -322,7 +323,8 @@ instantiateTopPtr [(_ :>: _)] = return nullSubst
 instantiateTopPtr ((t1 :>: t1'):c@(t2 :>: t2'):xs) = do
   let
     check t (VarTy n) t' (VarTy n')
-      | n == n' && (dropTopQual t) /= (dropTopQual t') = return (n +-> (PtrTy void))
+      | n == n' && (dropTopQual Const t) /= (dropTopQual Const t') = return (n +-> (PtrTy void))
+      | n == n' && (dropTopQual Volatile t) /= (dropTopQual Volatile t') = return (n +-> (PtrTy void))
       | otherwise = return nullSubst
     check _ _ _ _  = return nullSubst
   s <- check t1 t1' t2 t2'
@@ -340,7 +342,7 @@ dsort (x:xs) =
   (eq1', eq2', eq3', eq4') = dsort xs
 
 dsort' :: Constraint -> ([Constraint], [Constraint], [Constraint], [Constraint])
-dsort' c@(_ :>: (PtrTy (QualTy t)))
+dsort' c@(_ :>: (PtrTy (QualTy t _)))
   | hasVarDep t = ([], [], [c], [])
   | t == Data.BuiltIn.void = ([], [], [], [c])
   | otherwise = ([c], [], [], [])
@@ -350,7 +352,7 @@ dsort' c@(_ :>: (PtrTy t))
 dsort' c@((PtrTy t) :>: _)
   | hasVarDep t = ([], [], [c], [])
   | t == Data.BuiltIn.void = ([], [], [], [c])
-  | otherwise = case t of { QualTy _ -> ([], [], [c], []); _ -> ([], [c], [], []) }
+  | otherwise = case t of { QualTy _ _ -> ([], [], [c], []); _ -> ([], [c], [], []) }
 dsort' c = ([], [], [c], [])
 
 
@@ -445,7 +447,7 @@ stage5 tcx vcx s = do
     -- in an index so we are able to identify their definitions so they can be matched.
     tcxFlt_ = Map.filterWithKey (\k _ -> (not . isElab) k) (tyctx tcx)
     elabIdx = Map.foldrWithKey (\k (t, _) acc ->
-      if isElab k then acc %% ((dropTopQual t) %-> k) else acc) nullIdx (tyctx tcx)
+      if isElab k then acc %% ((dropTopQualAny t) %-> k) else acc) nullIdx (tyctx tcx)
     tcxFlt_' = Map.map (\(t, b) -> (compact elabIdx t , b)) tcxFlt_
     vcxFlt_ = Map.map (\(ValSym t b ro st) -> ValSym (compact elabIdx t) b ro st) (varctx vcx)
 
@@ -492,7 +494,7 @@ stage5 tcx vcx s = do
     -- Create an index to be used for de-alphasizing fields from composite types.
     fullIdx = (ty2n idx) `Map.union` (ty2n elabIdx)
     gon2n (RecTy _ n) n' acc = Map.insert n n' acc
-    gon2n (QualTy t) n acc = gon2n t n acc
+    gon2n (QualTy t _) n acc = gon2n t n acc
     gon2n (PtrTy t) n acc = gon2n t n acc
     gon2n _ _ acc = acc
     n2n = Map.foldrWithKey gon2n Map.empty fullIdx
@@ -500,7 +502,7 @@ stage5 tcx vcx s = do
     update t@(VarTy v) = maybe t (NamedTy) (Map.lookup v n2n)
     update t@(NamedTy _) = t
     update t@(EnumTy _) = t
-    update (QualTy t) = QualTy (update t)
+    update (QualTy t q) = QualTy (update t) q
     update (PtrTy t) = PtrTy (update t)
     update (FunTy t tx) = FunTy (update t) (map (\t -> update t) tx)
     update (RecTy fs n) = RecTy (map (\(Field fn ft) -> Field fn (update ft)) fs) n
@@ -533,7 +535,7 @@ stage6 tcx vcx =
     pick k t@(VarTy _) acc
       | isElab k = acc %% (t %-> k)
       | otherwise = acc
-    pick k (QualTy t) acc = pick k t acc
+    pick k (QualTy t _) acc = pick k t acc
     pick k _ acc = acc
     elabOrph = Map.foldrWithKey (\k (t, _) acc -> pick k t acc) nullIdx (tyctx tcx)
 

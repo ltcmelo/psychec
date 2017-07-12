@@ -26,7 +26,6 @@ newtype Name = Name { unName :: String } deriving (Eq, Ord, Show)
 emptyName :: Name
 emptyName = Name ""
 
-
 -- | Type constructors
 data Ty = VarTy Name  -- Type variables
         | NamedTy Name  -- Named types (include primitives, for convenience)
@@ -34,7 +33,7 @@ data Ty = VarTy Name  -- Type variables
         | RecTy [Field] Name  -- Records
         | SumTy [Field] Name  -- Unions
         | PtrTy Ty  -- Pointers
-        | QualTy Ty  -- Qualified types (only const supported currently)
+        | QualTy Ty Qual -- Qualified types
         | EnumTy Name -- Enumerated types
         | AnyTy  -- Any type, any arity.
         deriving (Eq, Ord, Show)
@@ -42,3 +41,12 @@ data Ty = VarTy Name  -- Type variables
 
 -- | A record/union field.
 data Field = Field { name :: Name, ty   :: Ty } deriving (Eq, Ord, Show)
+
+
+-- | Type qualifiers
+data Qual = Const | Volatile deriving (Eq, Ord, Show)
+
+
+-- | Convenience
+constTy :: Ty -> Ty
+constTy t = QualTy t Const

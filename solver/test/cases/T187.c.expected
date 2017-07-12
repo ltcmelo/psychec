@@ -1,0 +1,9 @@
+/* Forward declarations */
+
+/* Type definitions */
+typedef  int T3 ;
+typedef  int T2 ;
+typedef  int volatile* T1 ;
+
+/* Variables and functions */
+
