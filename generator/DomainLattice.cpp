@@ -348,6 +348,7 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     BinaryExpressionAST* bin = ast->asBinaryExpression();
 
     switch (tokenKind(bin->binary_op_token)) {
+    // Scalar arithmetic
     case T_PLUS:
     case T_MINUS: {
         switchClass(Scalar);
@@ -373,6 +374,7 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
         return false;
     }
 
+    // Arithmetic
     case T_STAR:
     case T_SLASH:
     case T_PERCENT:
@@ -389,19 +391,35 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
         return false;
     }
 
+    // Comparisson
     case T_LESS:
     case T_LESS_EQUAL:
     case T_GREATER:
     case T_GREATER_EQUAL:
+    case T_EQUAL_EQUAL:
+    case T_EXCLAIM_EQUAL: {
+        switchClass(Scalar);
+        enter(bin->right_expression);
+        Class rhsClass = clazz_;
+        enter(bin->left_expression);
+        if (clazz_ > rhsClass)
+            enter(bin->right_expression);
+        switchClass(Integral);
+        return false;
+    }
+
+    // Logical
     case T_AMPER_AMPER:
     case T_PIPE_PIPE: {
         switchClass(Scalar);
         enter(bin->left_expression);
+        switchClass(Scalar);
         enter(bin->right_expression);
         switchClass(Arithmetic);
         return false;
     }
 
+    // Plain assignment
     case T_EQUAL: {
         switchClass(Undefined);
         enter(bin->right_expression);
@@ -412,6 +430,7 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
         return false;
     }
 
+    // Scalar assignment
     case T_PLUS_EQUAL:
     case T_MINUS_EQUAL: {
         switchClass(Scalar);
@@ -422,30 +441,19 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
         return false;
     }
 
+    // Compound assignment
     case T_STAR_EQUAL:
     case T_SLASH_EQUAL:
     case T_PERCENT_EQUAL:
-    case T_LESS_LESS_EQUAL:
-    case T_GREATER_GREATER_EQUAL:
-    case T_CARET_EQUAL:
     case T_AMPER_EQUAL:
-    case T_PIPE_EQUAL: {
+    case T_PIPE_EQUAL:
+    case T_CARET_EQUAL:
+    case T_LESS_LESS_EQUAL:
+    case T_GREATER_GREATER_EQUAL: {
         switchClass(Arithmetic);
         enter(bin->left_expression);
         switchClass(Arithmetic);
         enter(bin->right_expression);
-        return false;
-    }
-
-    case T_EQUAL_EQUAL:
-    case T_EXCLAIM_EQUAL: {
-        switchClass(Scalar);
-        enter(bin->right_expression);
-        Class rhsClass = clazz_;
-        enter(bin->left_expression);
-        if (clazz_ > rhsClass)
-            enter(bin->right_expression);
-        switchClass(Integral);
         return false;
     }
 
