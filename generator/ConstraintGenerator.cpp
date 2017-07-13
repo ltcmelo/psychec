@@ -481,6 +481,9 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             // TODO: When this is an array hidden by a missing typedef.
             pushType(alpha);
             visitExpression(declIt->value->initializer);
+            ENSURE_NONEMPTY_TYPE_STACK(return false);
+            popType();
+
             writer_->writeAnd();
         }
 
