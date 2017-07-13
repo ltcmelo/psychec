@@ -242,6 +242,7 @@ private:
     //!@}
 
     std::stack<std::string> structs_;
+    std::vector<std::string> field_;
 
     /*!
      * Functions with "printf style" we understand.

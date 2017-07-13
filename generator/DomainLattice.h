@@ -75,7 +75,7 @@ public:
      * Classify the AST.
      */
     void totalize(CPlusPlus::ExpressionAST*, const CPlusPlus::Scope*);
-    void totalize(SimpleDeclarationAST*, const CPlusPlus::Scope*);
+    void totalize(CPlusPlus::SimpleDeclarationAST*, const CPlusPlus::Scope*);
 
     /*!
      * \brief createBindings

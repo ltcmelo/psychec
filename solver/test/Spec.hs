@@ -236,6 +236,7 @@ tests = testGroup "Unit tests"
                   , doTest "T189.c" -- Plain struct initialization.
                   , doTest "T190.c" -- Frontpage example, simplified.
                   , doTest "T191.c" -- Frontpage example, full.
+                  , doTest "T192.c" -- Designated initializers (structs).
                   ]
 
 doTest s

@@ -131,30 +131,6 @@ void DomainLattice::totalize(SimpleDeclarationAST* ast, const Scope* scope)
 
         switchClass(clazz);
         enter(declIt->value->initializer);
-
-        ExpressionAST* equivalent = isKnownAST(declIt->value->initializer);
-        if (!equivalent)
-            continue;
-
-        // We might have used an equivalent AST to type function, so iterate through
-        // all of them and update the rank for coresponding arguments.
-        // TODO: This is too inefficient (use an index).
-        for (auto& p : funcs_) {
-            for (auto& argData : p.second) {
-                bool update = false;
-                for (const auto instance : argData.instances_) {
-                    if (equivalent == isKnownAST(instance)) {
-                        update = true;
-                        break;
-                    }
-                }
-                if (update) {
-                    argData.clazz_ = clazz_;
-                    for (const auto instance : argData.instances_)
-                        enter(instance);
-                }
-            }
-        }
     }
 }
 
@@ -622,7 +598,6 @@ bool DomainLattice::visit(CallAST *ast)
 
     auto idx = 0u;
     for (ExpressionListAST* it = ast->expression_list; it; it = it->next, ++idx) {
-        const auto seenIdx = data[idx].instances_.size();
         data[idx].instances_.push_back(it->value);
         switchClass(Undefined);
         enter(it->value);
@@ -630,11 +605,6 @@ bool DomainLattice::visit(CallAST *ast)
         // If a higher rank is reached, update the argument data.
         if (clazz_ > data[idx].clazz_) {
             data[idx].clazz_ = clazz_;
-
-            // Update already seen arguments with the new higher rank. (This could be
-            // done later, more efficiently, after the entire lattice is computed.)
-            for (auto i = 0u; i < seenIdx; ++i)
-                enter(data[idx].instances_[i]);
         } else if (data[idx].clazz_ > clazz_) {
             clazz_ = data[idx].clazz_;
             enter(it->value);

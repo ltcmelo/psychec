@@ -118,6 +118,9 @@ void ConstraintGenerator::prepareForRun()
     unnamedCount_ = 0;
     knownFuncNames_.clear();
     knownFuncRets_.clear();
+    valuedRets_ = std::stack<bool>();
+    types_ = std::stack<std::string>();
+    pendingEquivs_ = std::stack<EquivPair>();
 
     static Observer dummy;
     if (!observer_)
@@ -145,7 +148,9 @@ void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
     Scope *previousScope = switchScope(global);
     for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
         visitDeclaration(it->value);
-    // TODO: Get rid of cache data in lattice and pass twice over program.
+    // TODO: Get rid of cache data in lattice and pass twice over program. Refactor this
+    // together with the TODO further above.
+    switchScope(global);
     for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
         visitDeclaration(it->value);
     switchScope(previousScope);
@@ -1215,12 +1220,46 @@ bool ConstraintGenerator::visit(BracedInitializerAST *ast)
 
     auto cnt = 0;
     for (auto it = ast->expression_list; it; it = it->next, ++cnt) {
-        const std::string& member = supply_.createTypeVar1();
-        writer_->writeExists(member);
-        collectExpression(member, it->value);
+        std::string alphaField = supply_.createTypeVar1();
+        writer_->writeExists(alphaField);
+        collectExpression(alphaField, it->value);
         writer_->writeAnd();
-        // TODO: We need a member name placeholder!
-        writer_->writeMemberRel(alpha, "member_" + std::to_string(cnt), member);
+
+        if (it->value->asDesignatedInitializer()) {
+            auto init = it->value->asDesignatedInitializer();
+
+            // Traverse the designators list from right to left, creating, for each name,
+            // a corresponding type. The first type comes from the intializer expression.
+            std::vector<DesignatorAST*> designators;
+            for (DesignatorListAST* it2 = init->designator_list; it2; it2 = it2->next)
+                designators.push_back(it2->value);
+            std::reverse(designators.begin(), designators.end());
+
+            std::string alphaDesig;
+            for (auto i = 0u; i < designators.size(); ++i) {
+                if (i > 0)
+                    writer_->writeAnd();
+
+                auto design = designators[i];
+                if (design->asDotDesignator()) {
+                    alphaDesig = supply_.createTypeVar1();
+                    writer_->writeExists(alphaDesig);
+
+                    const Identifier* field =
+                        identifier(design->asDotDesignator()->identifier_token);
+                    writer_->writeMemberRel(alphaDesig, std::string(field->chars(),
+                                                                    field->size()), alphaField);
+                    alphaField = alphaDesig;
+                } else {
+                    // TODO: Arrays.
+                }
+            }
+            writer_->writeAnd();
+            writer_->writeEquivRel(alphaDesig, alpha);
+        } else {
+            writer_->writeMemberRel(alpha, "member_" + std::to_string(cnt), alphaField);
+        }
+
         if (it->next)
             writer_->writeAnd();
     }

@@ -98,6 +98,15 @@ struct PSYCHEC_API ASTIdentityMatcher final : public CPlusPlus::ASTMatcher
         return true;
     }
 
+    bool match(DotDesignatorAST* node, DotDesignatorAST* pattern) override
+    {
+        if (!node || !pattern)
+            return false;
+        if (unit_->spell(node->identifier_token) != unit_->spell(pattern->identifier_token))
+            return false;
+        return true;
+    }
+
     bool match(CallAST *node, CallAST *pattern) override
     {
         if (!node || !pattern)
