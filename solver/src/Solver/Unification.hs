@@ -52,6 +52,7 @@ instance Apply Constraint where
     apply s (n :<-: t) = n :<-: (apply s t)
     apply s (Has t f) = Has (apply s t) (apply s f)
     apply s (Def n t c) = Def n (apply s t) (apply s c)
+    apply s (Scope c) = Scope (apply s c)
     apply s (c :&: c') = (apply s c) :&: (apply s c')
     apply s (Exists n c) = Exists n (apply s c)
     apply s (TypeDef t t') = TypeDef (apply s t) (apply s t')
@@ -111,6 +112,7 @@ instance Unifiable Constraint where
     fv ( _ :<-: t) = fv t
     fv (Has t (Field _ t')) = fv t `union` fv t'
     fv (Def _ t c) = fv t `union` fv c
+    fv (Scope c) = fv c
     fv (c :&: c') = fv c `union` fv c'
     fv (Exists n c) = n : fv c
     fv (TypeDef t t') = fv t `union` fv t'

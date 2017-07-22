@@ -64,6 +64,7 @@ void ConstraintWriter::writeText(const std::string &text)
 {
     HONOR_BLOCKING_STATE;
 
+    beginSection();
     os_ << text;
 }
 
@@ -71,17 +72,22 @@ void ConstraintWriter::writeTypedef(const std::string &ty1, const std::string &t
 {
     HONOR_BLOCKING_STATE;
 
+    beginSection();
+    writeLineBreak();
     os_ << kTypeDef << ty1 << kAlias << ty2;
+    endSection();
+
     ++cnt_;
 }
 
-void ConstraintWriter::writeVarDecl(const std::string &name,
-                                          const std::string &type)
+void ConstraintWriter::writeVarDecl(const std::string &name, const std::string &ty)
 {
     HONOR_BLOCKING_STATE;
 
-    os_ << kDecl << name << kDeclDelim << type << kContainment << "\n";
-    indent();
+    beginSection();
+    writeLineBreak();
+    os_ << kDecl << name << kDeclDelim << ty << kContainment << " ";
+
     ++cnt_;
 }
 
@@ -91,12 +97,14 @@ void ConstraintWriter::writeFuncDecl(const std::string &name,
 {
     HONOR_BLOCKING_STATE;
 
+    beginSection();
+    writeLineBreak();
     os_ << kDecl << name << kDeclDelim << "(";
     for (const auto& param : params)
         os_ << param << ", ";
     os_ << ret;
-    os_ << ") " << kContainment << "\n";
-    indent();
+    os_ << ") " << kContainment << " ";
+
     ++cnt_;
 }
 
@@ -105,6 +113,7 @@ void ConstraintWriter::writeTypeof(const std::string &sym)
     HONOR_BLOCKING_STATE;
 
     os_ << kTypeOf << "(" << sym << ")";
+
     ++cnt_;
 }
 
@@ -112,8 +121,10 @@ void ConstraintWriter::writeExists(const std::string &ty)
 {
     HONOR_BLOCKING_STATE;
 
-    os_ << kExistence << ty << ".\n";
-    indent();
+    beginSection();
+    writeLineBreak();
+    os_ << kExistence << ty << ". ";
+
     ++cnt_;
 }
 
@@ -131,29 +142,33 @@ void ConstraintWriter::writeSubtypeMark()
     os_ << kSubtype;
 }
 
-void ConstraintWriter::writeSubtypeRel(const std::string& ty,
-                                       const std::string& subTy)
+void ConstraintWriter::writeSubtypeRel(const std::string& ty, const std::string& subTy)
 {
     HONOR_BLOCKING_STATE;
 
-    writeTypeName(ty);
+    beginSection();
+    writeTypeSection(ty);
     writeSubtypeMark();
-    writeTypeName(subTy);
+    writeTypeSection(subTy);
+    endSection();
     ++cnt_;
 }
 
-void ConstraintWriter::writeTypeName(const std::string& ty)
+void ConstraintWriter::writeTypeSection(const std::string& ty)
 {
     HONOR_BLOCKING_STATE;
 
     os_ << ty;
 }
 
-void ConstraintWriter::writeReadOnly(const std::string &val)
+void ConstraintWriter::writeConstantExpression(const std::string &val)
 {
     HONOR_BLOCKING_STATE;
 
+    beginSection();
     os_ << kReadOnly << "(" << val << ")";
+    endSection();
+
     ++cnt_;
 }
 
@@ -161,17 +176,20 @@ void ConstraintWriter::writeStatic(const std::string &val)
 {
     HONOR_BLOCKING_STATE;
 
+    beginSection();
     os_ << kStatic << "(" << val << ")";
+    endSection();
+
     ++cnt_;
 }
 
-void ConstraintWriter::writeTypeNames(const std::vector<std::string> &tys)
+void ConstraintWriter::writeTypesSection(const std::vector<std::string> &tys)
 {
     HONOR_BLOCKING_STATE;
 
     const auto size = tys.size();
     for (auto i = 0u; i < size; ++i) {
-        writeTypeName(tys[i]);
+        writeTypeSection(tys[i]);
         if (i != tys.size() - 1)
             writeAnd();
     }
@@ -179,47 +197,54 @@ void ConstraintWriter::writeTypeNames(const std::vector<std::string> &tys)
 }
 
 void ConstraintWriter::writeMemberRel(const std::string &baseTy,
-                                      const std::string &sym,
+                                      const std::string &memberName,
                                       const std::string &symTy)
 {
     HONOR_BLOCKING_STATE;
 
+    beginSection();
     os_ << kMember << "(";
-    writeTypeName(baseTy);
+    writeTypeSection(baseTy);
     writeAnd();
-    os_ << sym;
+    os_ << memberName;
     writeColon();
-    writeTypeName(symTy);
+    writeTypeSection(symTy);
     os_ << ")";
+    endSection();
+
     ++cnt_;
 }
 
-void ConstraintWriter::writePtrRel(const std::string &ty1,
-                                   const std::string &ty2)
+void ConstraintWriter::writePtrRel(const std::string &ty1, const std::string &ty2)
 {
     HONOR_BLOCKING_STATE;
 
-    writeTypeName(ty1);
+    beginSection();
+    writeTypeSection(ty1);
     writeEquivMark();
-    writeTypeName(ty2);
+    writeTypeSection(ty2);
     os_ << "*";
+    endSection();
     ++cnt_;
 }
 
-void ConstraintWriter::writeEquivRel(const std::string &ty1,
-                                     const std::string &ty2)
+void ConstraintWriter::writeEquivRel(const std::string &ty1, const std::string &ty2)
 {
     HONOR_BLOCKING_STATE;
 
-    writeTypeName(ty1);
+    beginSection();
+    writeTypeSection(ty1);
     writeEquivMark();
-    writeTypeName(ty2);
+    writeTypeSection(ty2);
+    endSection();
     ++cnt_;
 }
 
 void ConstraintWriter::writeTruth()
 {
+    beginSection();
     writeEquivRel("true", "true");
+    endSection();
 }
 
 void ConstraintWriter::enterGroup()
@@ -236,13 +261,31 @@ void ConstraintWriter::leaveGroup()
     os_ << ")";
 }
 
-void ConstraintWriter::writeAnd(bool breakIt)
+void ConstraintWriter::openScope()
+{
+    HONOR_BLOCKING_STATE;
+
+    beginSection();
+    writeLineBreak();
+    os_ << "[ ";
+    ++indent_;
+}
+
+void ConstraintWriter::closeScope()
+{
+    HONOR_BLOCKING_STATE;
+
+    --indent_;
+    writeLineBreak();
+    os_ << "]";
+    endSection();
+}
+
+void ConstraintWriter::writeAnd()
 {
     HONOR_BLOCKING_STATE;
 
     os_ << ", ";
-    if (breakIt)
-        writeLineBreak();
 }
 
 void ConstraintWriter::writeLineBreak()
@@ -257,11 +300,8 @@ void ConstraintWriter::indent()
 {
     HONOR_BLOCKING_STATE;
 
-    int indent = ++indent_;
-    while (indent > 0) {
-        os_ << " ";
-        --indent;
-    }
+    std::string space(indent_, ' ');
+    os_ << space;
 }
 
 void ConstraintWriter::dedent()
@@ -270,9 +310,16 @@ void ConstraintWriter::dedent()
     PSYCHE_ASSERT(indent_ >= 0, return, "indent must be >= 0");
 }
 
-void ConstraintWriter::clearIndent()
+void ConstraintWriter::beginSection()
 {
-    indent_ = 0;
+    if (wantComma)
+        writeAnd();
+    wantComma = false;
+}
+
+void ConstraintWriter::endSection()
+{
+    wantComma = true;
 }
 
 void ConstraintWriter::writeColon()

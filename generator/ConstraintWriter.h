@@ -107,7 +107,7 @@ public:
      *
      * \sa writeTypeNames
      */
-    virtual void writeTypeName(const std::string& ty);
+    virtual void writeTypeSection(const std::string& ty);
 
     /*!
      * \brief writeTypeNames
@@ -115,13 +115,13 @@ public:
      *
      * Write a sequence of type names.
      */
-    virtual void writeTypeNames(const std::vector<std::string>& tys);
+    virtual void writeTypesSection(const std::vector<std::string>& tys);
 
     /*!
      * \brief writeReadOnly
      * \param ty
      */
-    virtual void writeReadOnly(const std::string& val);
+    virtual void writeConstantExpression(const std::string& val);
 
     /*!
      * \brief writeStatic
@@ -185,21 +185,6 @@ public:
      */
     virtual void writeTruth();
 
-    /*!
-     * \brief writeAnd
-     */
-    virtual void writeAnd(bool writeLineBreak = false);
-
-    /*!
-     * \brief write a colon
-     */
-    virtual void writeColon();
-
-    /*!
-     * \brief breakLine
-     */
-    virtual void writeLineBreak();
-
     //!@{
     /*!
      * Sub-grouping
@@ -208,7 +193,8 @@ public:
     virtual void leaveGroup();
     //!@}
 
-    virtual void clearIndent();
+    virtual void openScope();
+    virtual void closeScope();
 
     /*!
      * \brief totalConstraints
@@ -216,7 +202,14 @@ public:
      */
     size_t totalConstraints() const { return cnt_; }
 
+    void endSection();
+    void beginSection();
+
 private:
+    void writeAnd();
+    void writeColon();
+    void writeLineBreak();
+
     void indent();
     void dedent();
 
@@ -224,6 +217,8 @@ private:
     int indent_ { 0 };
     bool blocked_ { false };
     size_t cnt_ { 0 };
+    bool wantComma { false };
+
 };
 
 } // namespace psyche

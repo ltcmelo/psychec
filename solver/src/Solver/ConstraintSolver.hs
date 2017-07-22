@@ -64,6 +64,14 @@ solve c l = do
   -- Populate value context, create missing variables, generalize types.
   (vcx0,c'') <- stage2 vcx c'
 
+  {--liftIO (print $ text "c" <+> pprint c)
+  liftIO (print $ text "c'" <+> pprint c')
+  liftIO (print $ text "c''" <+> pprint c'')
+  liftIO (print $ text "tcx" <+> pprint (TyCtx $ cleanTypes C99 (tyctx tcx)))
+  liftIO (print $ text "vcx" <+> pprint (VarCtx $ cleanValues C99 (varctx vcx)))
+  liftIO (print $ text "vcx0" <+> pprint (VarCtx $ cleanValues C99 (varctx vcx0)))
+  liftIO (mapM_ (print . pprint) (varctx vcx0))  --}
+
   -- Split constraints into equivalence, inequality, and field acess.
   let (eqs, iqs, fds) = stage3 c''
 
@@ -101,7 +109,11 @@ solve c l = do
   -- Assemble records.
   (tcx1, vcx1, s''') <- stage4 tcx0 vcx0 fds s''
 
+--  liftIO (print $ text "subs" <+> pprint s''')
+ -- liftIO (print $ text "vcx1" <+> pprint (VarCtx $ cleanValues C99 (varctx vcx1)))
+
   let cc' = apply s''' c'
+--  liftIO (print $ text "cc'" <+> pprint cc')
   vcx1' <- untypeVariadics cc' s''' vcx1
 
   -- Translate structural representation to a nominative one.
@@ -120,6 +132,9 @@ solve c l = do
   -- Decay function pointers.
   (tcx5, vcx5) <- decay tcx4 vcx4
 
+--  liftIO (print $ text "tcx5" <+> pprint (TyCtx $ cleanTypes C99 (tyctx tcx5)))
+--  liftIO (print $ text "vcx5" <+> pprint (VarCtx $ cleanValues C99 (varctx vcx5)))
+
   let
     -- Remove builtins and standard library components.
     tcx_ = undefTys (tyctx tcx5) Map.\\ (builtinTypes l) --Map.\\ (stdTypes l)
@@ -136,7 +151,7 @@ solve c l = do
   return (TyCtx tcx_', VarCtx vcx_)
 
 
-{-- instance Pretty ValSym where
+instance Pretty ValSym where
   pprint =
    foo . bar
     where
@@ -165,8 +180,11 @@ stage1 tctx (Exists n c) = do
   v <- fresh
   stage1 tctx (apply (n +-> v) c)
 stage1 tctx (Def n t c) = do
-  (tcx, c')  <- stage1 tctx c
+  (tcx, c') <- stage1 tctx c
   return (tcx, Def n (findCanonical tctx t) c')
+stage1 tctx (Scope c) = do
+  (tcx, c') <- stage1 tctx c
+  return (tcx, Scope c')
 stage1 tctx c@(ReadOnly _) = return (tctx, c)
 stage1 tctx c@(Static _) = return (tctx, c)
 stage1 tctx Truth = return (tctx, Truth)
@@ -256,7 +274,7 @@ stage2 vtx (n :<-: t) =
     Just info -> return (vtx, valty info :=: t)
     Nothing -> do
       v <- fresh
-      return ( VarCtx $ Map.insert n (ValSym v False False False) (varctx vtx), v :=: t )
+      return (VarCtx $ Map.insert n (ValSym v False False False) (varctx vtx), v :=: t)
 stage2 vtx (Def n t c) = do
   -- Functions might have their definition in the program but not their declaration. A function
   -- call prior to the definition will be inserted into the environment through an ascription
@@ -267,6 +285,20 @@ stage2 vtx (Def n t c) = do
              Just sym -> replaceOrInsert (readOnly sym) (static sym)
              Nothing -> replaceOrInsert False False
   stage2 vtx' c
+stage2 vtx (Scope c) = do
+  (vtx', c') <- stage2 vtx c
+
+  let
+    updateSym acc n ce = Map.adjust (\(ValSym t dc _ st) -> ValSym t dc ce st) n acc
+    foobar n sym@(ValSym _ d ce _) acc
+      | not d = if Map.member n acc then updateSym acc n ce else Map.insert n sym acc
+      | otherwise = acc
+    vtx'' = VarCtx $ Map.foldrWithKey foobar (varctx vtx) (varctx vtx')
+
+--  liftIO (print $ text "vtx" <+> pprint (VarCtx $ cleanValues C99 (varctx vtx)))
+--  liftIO (print $ text "vtx''" <+> pprint (VarCtx $ cleanValues C99 (varctx vtx'')))
+
+  return (vtx'', c')
 stage2 vtx (c :&: c') = do
   (vtx1, c1) <- stage2 vtx c
   (vtx2, c2) <- stage2 vtx1 c'
@@ -280,7 +312,7 @@ stage2 vtx (c :&: c') = do
     -- available in the program. So we don't risk a mismatching signature due to modulo-
     -- conversion inferred type.
     choose (ValSym t dc ce st) (ValSym t' dc' ce' st')
-      | dc = ValSym t (dc && dc) (ce || ce') (st || st')
+      | dc = ValSym t (dc && dc') (ce || ce') (st || st')
       | otherwise = ValSym t' (dc && dc') (ce || ce') (st || st')
   return ( VarCtx $ Map.unionWith choose (varctx vtx1) (varctx vtx2)
            , c1 :&: c2 )
@@ -314,7 +346,7 @@ stage3 c@(Has _ _) = ([], [], [c])
 stage3 c@(_ :=: _) = ([c], [], [])
 stage3 c@(_ :>: _) = ([], [c], [])
 stage3 Truth = ([], [], [])
-
+stage3 c = error ("noooo "  ++ show (pprint c))
 
 -- | Detect and instantiate void*.
 instantiateTopPtr :: [Constraint] -> SolverM Subst
@@ -410,7 +442,7 @@ untypeVariadics (n :<-: (FunTy _ pv)) s vcx =
   return vcx'
  where
   vcx' = case Map.lookup n (varctx vcx) of
-    Nothing -> error "value must exist"
+    Nothing -> vcx -- The name must be typed as a function pointer.  -- error ("value must exist " ++ (show n))
     Just (ValSym (FunTy r pt) d ce st) ->
       let
         params (t1:xs1) (t2:xs2)
@@ -433,6 +465,7 @@ untypeVariadics (c1 :&: c2) s vcx = do
   vcx2 <- untypeVariadics c2 s vcx1
   return vcx2
 untypeVariadics (Def _ _ c) s vcx = untypeVariadics c s vcx
+untypeVariadics (Scope c) s vcx = untypeVariadics c s vcx
 untypeVariadics c s vcx = return vcx
 
 

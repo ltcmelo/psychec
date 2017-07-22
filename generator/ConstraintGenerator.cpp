@@ -84,7 +84,6 @@ std::string ConstraintGenerator::stubPrefix_ = "stub";
 ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
                                          ConstraintWriter* writer)
     : ASTVisitor(unit)
-    , seenStmt_(false)
     , scope_(nullptr)
     , writer_(writer)
     , lattice_(unit)
@@ -120,7 +119,7 @@ void ConstraintGenerator::prepareForRun()
     knownFuncRets_.clear();
     valuedRets_ = std::stack<bool>();
     types_ = std::stack<std::string>();
-    pendingEquivs_ = std::stack<EquivPair>();
+//    pendingEquivs_ = std::stack<EquivPair>();
 
     static Observer dummy;
     if (!observer_)
@@ -164,15 +163,6 @@ void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
     OBSERVE(TranslationUnitAST);
     for (DeclarationListAST *it = ast->declaration_list; it; it = it->next) {
         visitDeclaration(it->value);
-        if(it->next && ((it->value->asFunctionDefinition() &&
-                        it->value->asFunctionDefinition()->function_body->asCompoundStatement()) ||
-                        (it->value->asSimpleDeclaration() &&
-                         it->value->asSimpleDeclaration()->symbols &&
-                         it->value->asSimpleDeclaration()->symbols->value->storage() == Symbol::Typedef)
-                       )) {
-            writer_->clearIndent();
-            writer_->writeAnd(true);
-        }
     }
     switchScope(previousScope);
 }
@@ -218,10 +208,12 @@ std::string ConstraintGenerator::createUnnamed(const std::string& prefix)
 
 void ConstraintGenerator::assignTop(const std::string& name)
 {
+    writer_->beginSection();
     writer_->writeTypeof(name);
     writer_->writeEquivMark();
     ENSURE_NONEMPTY_TYPE_STACK(return);
-    writer_->writeTypeName(types_.top());
+    writer_->writeTypeSection(types_.top());
+    writer_->endSection();
 }
 
 void ConstraintGenerator::collectExpression(const std::string &ty,
@@ -251,54 +243,26 @@ bool ConstraintGenerator::visit(FunctionDefinitionAST *ast)
 
     visitSymbol(func, ast->function_body);
 
-    // Time to write any pending equivalences.
-    auto writePending = [this]() {
-        const EquivPair& equiv = pendingEquivs_.top();
-        writer_->writeEquivRel(equiv.first, equiv.second);
-        pendingEquivs_.pop();
-    };
-    while (!pendingEquivs_.empty()) {
-        maybeFollowStmt();
-        writePending();
-    }
-
-    writer_->clearIndent();
-    writer_->writeLineBreak();
-    seenStmt_ = false;
-
     return false;
 }
 
 void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
 {
-    std::vector<std::string> params;
-    if (func->hasArguments()) {
-        for (auto i = 0u; i < func->argumentCount(); i++) {
-            Symbol *sym = func->argumentAt(i);
-            const std::string& ty = typeSpeller_.spell(sym->type(), scope_);
-            params.push_back(ty);
+    std::vector<std::string> paramTyVars;
+    for (auto i = 0u; i < func->argumentCount(); i++) {
+        std::string alpha = supply_.createTypeVar1();
+        writer_->writeExists(alpha);
+        paramTyVars.push_back(alpha);
 
-            std::string alpha = supply_.createTypeVar1();
-            writer_->writeExists(alpha);
-            writer_->writeTypedef(ty, alpha);
-            writer_->writeAnd(true);
+        Symbol *sym = func->argumentAt(i);
+        const std::string& ty = typeSpeller_.spell(sym->type(), scope_);
+        writer_->writeTypedef(ty, alpha);
 
-            const Name *argName = sym->name();
-            std::string var;
-            if(argName) {
-                const Identifier *id = argName->asNameId()->identifier();
-                var.assign(id->begin(), id->end());
-            } else {
-                var = createUnnamed(paramPrefix_);
-            }
-            writer_->writeVarDecl(var, alpha);
-
-            pendingEquivs_.push(EquivPair(alpha, ty));
-        }
+        writer_->writeEquivRel(alpha, ty);
     }
 
-    // Write the function prototype. If no return type is specified, we adopt old-style C
-    // rule and assume it's `int'.
+    // Write the function prototype. When no return type is specified, adopt old-style C
+    // rule and assume `int'.
     std::string funcRet;
     if (func->returnType())
         funcRet = typeSpeller_.spell(func->returnType(), scope_);
@@ -308,40 +272,52 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
     const std::string& alpha = ensureTypeIsKnown(funcRet);
     const Identifier *id = func->name()->asNameId()->identifier();
     const std::string funcName(id->begin(), id->end());
-    writer_->writeFuncDecl(funcName, params, funcRet);
+    writer_->writeFuncDecl(funcName, paramTyVars, funcRet);
 
-    if (func->storage() == Symbol::Static) {
+    if (func->storage() == Symbol::Static)
         writer_->writeStatic(funcName);
-        writer_->writeAnd(true);
+
+    // The function name and parameter's type names are visible in the outer scope, but
+    // parameters themselves are visible within the function body only.
+    writer_->openScope();
+
+    for (auto i = 0u; i < func->argumentCount(); i++) {
+        std::string param;
+        if(func->argumentAt(i)) {
+            const Name* paramName = func->argumentAt(i)->name();
+            const Identifier* id = paramName->asNameId()->identifier();
+            param.assign(id->begin(), id->end());
+        } else {
+            param = createUnnamed(paramPrefix_);
+        }
+        writer_->writeVarDecl(param, paramTyVars[i]);
     }
 
-    // Flag that we have no return value information about this function.
     valuedRets_.push(false);
-
-    // Enter the function's body, if a definition.
     if (body) {
         pushType(funcRet);
         Scope *previousScope = switchScope(func->asScope());
         visitStatement(body);
         switchScope(previousScope);
+        if (valuedRets_.top())
+            writer_->writeEquivRel(alpha, types_.top());
         popType();
     }
 
-    // If no valued return was detected and its return is of an unknown type, we add an
-    // equivalence between it and its alpha.
-    ENSURE_NONEMPTY_ALPHA_RET_STACK(return);
-    bool hasValue = valuedRets_.top();
-    valuedRets_.pop();
-    if (!hasValue && !alpha.empty())
-        pendingEquivs_.push(EquivPair(alpha, funcRet));
+    writer_->closeScope();
 
-    // Keep track of function return types, since we can use this information for function
-    // calls that are expression statements.
+    // If no valued return was detected, this alpha will be orphanized.
+    ENSURE_NONEMPTY_ALPHA_RET_STACK(return);
+    if (! valuedRets_.top())
+        writer_->writeEquivRel(alpha, funcRet);
+    valuedRets_.pop();
+
+    // Keep track of function returns.
     knownFuncNames_.insert(std::make_pair(funcName, funcRet));
     auto it = knownFuncRets_.find(funcName);
     if (it != knownFuncRets_.end()) {
         for (const auto& ignored : it->second)
-            pendingEquivs_.push(EquivPair(ignored, funcRet));
+            writer_->writeEquivRel(ignored, funcRet);
     }
 }
 
@@ -382,13 +358,13 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
         // exist multiple typedefs within one declaration.
         if (decl->storage() == Symbol::Typedef) {
             writer_->writeTypedef(declName, declTy);
-            writer_->writeLineBreak();
             PSYCHE_ASSERT(!symIt->next, return false,
                           "multiple symbols within typedef cannot exist");
             return false;
         }
 
         const std::string& alpha = ensureTypeIsKnown(declTy);
+        writer_->writeEquivRel(alpha, declTy);
 
         // If an initializer is provided, visit the expression. Unless, if
         // contains braces. If the declaration is of a record, we'll only
@@ -400,12 +376,10 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             writer_->writeExists(rhsAlpha);
             pushType(rhsAlpha);
             visitExpression(declIt->value->initializer);
-            writer_->writeAnd(true);
 
             applyTypeLattice(lattice_.recover(decl), classOfExpr(declIt->value->initializer),
                              alpha, rhsAlpha, T_EQUAL);
             popType();
-            writer_->writeAnd(true);
         }
 
         writer_->writeVarDecl(declName, alpha);
@@ -415,7 +389,6 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
         if (!structs_.empty()) {
             const std::string& structTy = structs_.top();
             writer_->writeMemberRel(structTy, declName, alpha);
-            writer_->writeAnd(true);
         }
 
         // When we have an array with an initializer, we use the individual
@@ -437,10 +410,8 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             auto decltr = declIt->value->postfix_declarator_list;
             do {
                 auto size = decltr->value->asArrayDeclarator()->expression;
-                if (size) {
+                if (size)
                     collectExpression(kDefaultIntTy, size);
-                    writer_->writeAnd();
-                }
                 decltr = decltr->next;
             } while (decltr && decltr->value->asArrayDeclarator());
 
@@ -458,22 +429,18 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
                     init = init->next;
                     if (!init)
                         break;
-                    writer_->writeAnd();
                 } while (true);
                 staticDecl_ = false; // Just make it false, cannot nest.
 
                 auto decltrs = declIt->value->postfix_declarator_list;
                 do {
-                    writer_->writeAnd();
                     const std::string& ptr = supply_.createTypeVar1();
                     writer_->writeExists(ptr);
                     writer_->writePtrRel(ptr, elem);
                     elem = ptr;
                     decltrs = decltrs->next;
                 } while (decltrs && decltrs->value->asArrayDeclarator());
-                writer_->writeAnd();
                 writer_->writeEquivRel(alpha, elem);
-                writer_->writeAnd(true);
             }
         } else if (declIt->value->initializer
                    && declIt->value->initializer->asBracedInitializer()
@@ -483,15 +450,13 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             visitExpression(declIt->value->initializer);
             ENSURE_NONEMPTY_TYPE_STACK(return false);
             popType();
-
-            writer_->writeAnd();
         }
 
         declIt = declIt->next;
 
         // Remember about the pending type equivalence for this declaration,
         // which we write down only after traversing the remaining statements.
-        pendingEquivs_.push(EquivPair(alpha, declTy));
+//        pendingEquivs_.push(EquivPair(alpha, declTy));
     }
 
     return false;
@@ -509,7 +474,6 @@ std::string ConstraintGenerator::ensureTypeIsKnown(std::string& tyName)
     std::string alpha = supply_.createTypeVar1();
     writer_->writeExists(alpha);
     writer_->writeTypedef(tyName, alpha);
-    writer_->writeAnd(true);
     return alpha;
 }
 
@@ -734,13 +698,11 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
             writer_->writeEquivRel(lhsAlpha, rhsAlpha);
 
         if (!actualArithTy.empty()) {
-            writer_->writeAnd();
             writer_->writeEquivRel(lhsAlpha, actualArithTy);
-            writer_->writeAnd();
             writer_->writeEquivRel(rhsAlpha, actualArithTy);
         }
+
         if (isPolyOprtrArithRet(opTk)) {
-            writer_->writeAnd();
             writer_->writeEquivRel(types_.top(),
                                    actualArithTy.empty() ? kDefaultArithTy : actualArithTy);
         }
@@ -788,18 +750,12 @@ bool ConstraintGenerator::visit(ArrayAccessAST *ast)
     writer_->writeExists(std::get<1>(a1a2a3));
     writer_->writeExists(std::get<2>(a1a2a3));
     collectExpression(std::get<0>(a1a2a3), ast->base_expression);
-
-    writer_->writeAnd();
     collectExpression(std::get<1>(a1a2a3), ast->expression);
 
-    writer_->writeAnd();
     writer_->writePtrRel(std::get<0>(a1a2a3), std::get<2>(a1a2a3));
-
-    writer_->writeAnd();
     ENSURE_NONEMPTY_TYPE_STACK(return false);
     writer_->writeEquivRel(types_.top(), std::get<2>(a1a2a3));
 
-    writer_->writeAnd();
     writer_->writeEquivRel(std::get<1>(a1a2a3), kDefaultIntTy);
 
     return false;
@@ -816,10 +772,8 @@ bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
     unsigned opTk = tokenKind(ast->binary_op_token);
     if (opTk == T_COMMA) {
         visitExpression(ast->left_expression);
-        if (ast->right_expression) {
-            writer_->writeAnd(true);
+        if (ast->right_expression)
             visitExpression(ast->right_expression);
-        }
         return false;
     }
 
@@ -832,7 +786,6 @@ bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
         writer_->writeExists(std::get<0>(a1a2));
         writer_->writeExists(std::get<1>(a1a2));
         collectExpression(std::get<0>(a1a2), left);
-        writer_->writeAnd();
         writer_->writePtrRel(std::get<0>(a1a2), std::get<1>(a1a2));
         return false;
     }
@@ -841,23 +794,22 @@ bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
     writer_->writeExists(std::get<0>(a1a2));
     writer_->writeExists(std::get<1>(a1a2));
     collectExpression(std::get<0>(a1a2), left);
-    writer_->writeAnd();
     collectExpression(std::get<1>(a1a2), right);
-    writer_->writeAnd();
 
     applyTypeLattice(classOfExpr(left), classOfExpr(right),
                      std::get<0>(a1a2), std::get<1>(a1a2),
                      opTk);
 
     if (!isPolymorphicOperator(opTk)) {
-        writer_->writeAnd();
+        writer_->beginSection();
         writer_->writeTypeof(nonPolyOprtrName(opTk));
         writer_->writeEquivMark();
         writer_->enterGroup();
         ENSURE_NONEMPTY_TYPE_STACK(return false);
-        writer_->writeTypeNames(
+        writer_->writeTypesSection(
         { std::get<0>(a1a2), std::get<1>(a1a2), types_.top() });
         writer_->leaveGroup();
+        writer_->endSection();
     }
 
     return false;
@@ -898,13 +850,12 @@ bool ConstraintGenerator::visit(CallAST *ast)
         const std::string& funcVar = supply_.createTypeVar1();
         writer_->writeExists(funcVar);
         collectExpression(funcVar, ast->base_expression);
-
         funcName = createUnnamed(stubPrefix_);
-        writer_->writeAnd();
+        writer_->beginSection();
         writer_->writeTypeof(funcName);
         writer_->writeEquivMark();
-        writer_->writeTypeName(funcVar);
-        writer_->writeAnd();
+        writer_->writeTypeSection(funcVar);
+        writer_->endSection();
     }
 
     // Deal with "regular" functions, for which we generate constraints through
@@ -915,26 +866,24 @@ bool ConstraintGenerator::visit(CallAST *ast)
         writer_->writeExists(typeVar);
         collectExpression(typeVar, it->value);
         typeVars.push_back(typeVar);
-        if (it->next)
-            writer_->writeAnd(true);
     }
     ENSURE_NONEMPTY_TYPE_STACK(return false);
     typeVars.push_back(types_.top());
 
-    if (ast->expression_list)
-        writer_->writeAnd();
+    writer_->beginSection();
     writer_->writeTypeof(funcName);
     writer_->writeEquivMark();
     writer_->enterGroup();
-    writer_->writeTypeNames(typeVars);
+    writer_->writeTypesSection(typeVars);
     writer_->leaveGroup();
+    writer_->endSection();
+
 
     if (varArgPos == -1)
         return false;
 
     // Deal with printf family of functions, for which we generate constraints
     // based on format specifiers.
-    writer_->writeAnd();
     int argCnt = 0;
     std::vector<PrintfScanner::FormatSpec> specs;
     for (ExpressionListAST* it = ast->expression_list; it; it = it->next, ++argCnt) {
@@ -942,8 +891,6 @@ bool ConstraintGenerator::visit(CallAST *ast)
             const std::string& typeVar = supply_.createTypeVar1();
             writer_->writeExists(typeVar);
             collectExpression(typeVar, it->value);
-            if (it->next)
-                writer_->writeAnd(true);
             continue;
         }
 
@@ -1014,8 +961,6 @@ bool ConstraintGenerator::visit(CallAST *ast)
                 PSYCHE_ASSERT(false, return false, "unknown type spec");
                 break;
             }
-            if (it->next)
-                writer_->writeAnd();
         }
     }
 
@@ -1051,7 +996,6 @@ bool ConstraintGenerator::visit(CastExpressionAST *ast)
     std::string ty = typeSpeller_.spell(ast->expression_type, scope_);
     castExpressionHelper(types_.top(), ty);
 
-    writer_->writeAnd();
     const std::string& alpha = supply_.createTypeVar1();
     writer_->writeExists(alpha);
     collectExpression(alpha, ast->expression);
@@ -1088,10 +1032,7 @@ bool ConstraintGenerator::visit(ConditionalExpressionAST *ast)
     CLASSIFY(ast);
 
     convertBoolExpression(ast->condition);
-
-    writer_->writeAnd();
     visitExpression(ast->left_expression);
-    writer_->writeAnd();
     visitExpression(ast->right_expression);
 
     return false;
@@ -1105,11 +1046,9 @@ bool ConstraintGenerator::visit(IdExpressionAST *ast)
 
     assignTop(extractId(ast->name->name));
 
-    if (staticDecl_) {
-        // Static initialization requires a compile-time constant.
-        writer_->writeAnd();
-        writer_->writeReadOnly(extractId(ast->name->name));
-    }
+    // Static initialization requires a compile-time constant.
+    if (staticDecl_)
+        writer_->writeConstantExpression(extractId(ast->name->name));
 
     return false;
 }
@@ -1122,24 +1061,26 @@ bool ConstraintGenerator::visit(NumericLiteralAST *ast)
 
     const NumericLiteral *numLit = numericLiteral(ast->literal_token);
     PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
+    writer_->beginSection();
     if (numLit->isDouble()
             || numLit->isFloat()
             || numLit->isLongDouble()) {
-        writer_->writeTypeName(kDefaultFloatPointTy);
+        writer_->writeTypeSection(kDefaultFloatPointTy);
     } else {
         if (!strcmp(numLit->chars(), "0")) {
             const std::string& alpha = supply_.createTypeVar1();
             writer_->writeExists(alpha);
-            writer_->writeTypeName(alpha);
+            writer_->writeTypeSection(alpha);
         } else if (tokenKind(ast->literal_token) == T_CHAR_LITERAL) {
-            writer_->writeTypeName(kCharTy);
+            writer_->writeTypeSection(kCharTy);
         } else {
-            writer_->writeTypeName(kDefaultIntTy);
+            writer_->writeTypeSection(kDefaultIntTy);
         }
     }
     writer_->writeEquivMark();
     ENSURE_NONEMPTY_TYPE_STACK(return false);
-    writer_->writeTypeName(types_.top());
+    writer_->writeTypeSection(types_.top());
+    writer_->endSection();
 
     return false;
 }
@@ -1190,19 +1131,15 @@ bool ConstraintGenerator::visit(MemberAccessAST *ast)
     collectExpression(std::get<0>(a1a2), ast->base_expression);
 
     // For a pointer access we need to insert an additional constraint.
-    if (accessTk == T_ARROW) {
-        writer_->writeAnd();
+    if (accessTk == T_ARROW)
         writer_->writePtrRel(std::get<0>(a1a2), std::get<1>(a1a2));
-    }
 
     std::string sym = extractId(ast->member_name->name);
-    writer_->writeAnd();
     if (accessTk == T_ARROW)
         writer_->writeMemberRel(std::get<1>(a1a2), sym, alpha3);
     else
         writer_->writeMemberRel(std::get<0>(a1a2), sym, std::get<1>(a1a2));
 
-    writer_->writeAnd();
     ENSURE_NONEMPTY_TYPE_STACK(return false);
     if (accessTk == T_ARROW)
         writer_->writeEquivRel(types_.top(), alpha3);
@@ -1226,7 +1163,6 @@ bool ConstraintGenerator::visit(BracedInitializerAST *ast)
         std::string alphaField = supply_.createTypeVar1();
         writer_->writeExists(alphaField);
         collectExpression(alphaField, it->value);
-        writer_->writeAnd();
 
         if (it->value->asDesignatedInitializer()) {
             auto init = it->value->asDesignatedInitializer();
@@ -1240,9 +1176,6 @@ bool ConstraintGenerator::visit(BracedInitializerAST *ast)
 
             std::string alphaDesig;
             for (auto i = 0u; i < designators.size(); ++i) {
-                if (i > 0)
-                    writer_->writeAnd();
-
                 auto design = designators[i];
                 if (design->asDotDesignator()) {
                     alphaDesig = supply_.createTypeVar1();
@@ -1257,17 +1190,12 @@ bool ConstraintGenerator::visit(BracedInitializerAST *ast)
                     // TODO: Arrays.
                 }
             }
-            writer_->writeAnd();
             writer_->writeEquivRel(alphaDesig, alpha);
         } else {
             writer_->writeMemberRel(alpha, "member_" + std::to_string(cnt), alphaField);
         }
-
-        if (it->next)
-            writer_->writeAnd();
     }
 
-    writer_->writeAnd();
     ENSURE_NONEMPTY_TYPE_STACK(return false);
     writer_->writeEquivRel(types_.top(), alpha);
 
@@ -1300,10 +1228,8 @@ bool ConstraintGenerator::visit(UnaryExpressionAST* ast)
         writer_->writeExists(std::get<1>(a1a2));
         collectExpression(std::get<1>(a1a2), ast->expression);
 
-        writer_->writeAnd();
         writer_->writePtrRel(std::get<0>(a1a2), std::get<1>(a1a2));
 
-        writer_->writeAnd();
         ENSURE_NONEMPTY_TYPE_STACK(return false);
         writer_->writeEquivRel(types_.top(), std::get<0>(a1a2));
         break;
@@ -1313,7 +1239,7 @@ bool ConstraintGenerator::visit(UnaryExpressionAST* ast)
         const std::string& alpha = supply_.createTypeVar1();
         writer_->writeExists(alpha);
         collectExpression(alpha, ast->expression);
-        writer_->writeAnd();
+
         ENSURE_NONEMPTY_TYPE_STACK(return false);
         writer_->writePtrRel(alpha, types_.top());
         break;
@@ -1323,7 +1249,7 @@ bool ConstraintGenerator::visit(UnaryExpressionAST* ast)
         const std::string& alpha = supply_.createTypeVar1();
         writer_->writeExists(alpha);
         collectExpression(alpha, ast->expression);
-        writer_->writeAnd();
+
         ENSURE_NONEMPTY_TYPE_STACK(return false);
         writer_->writeEquivRel(types_.top(), kDefaultIntTy);
         break;
@@ -1350,7 +1276,6 @@ bool ConstraintGenerator::visit(SizeofExpressionAST *ast)
         writer_->writeExists(alpha);
         const std::string& ty = typeSpeller_.spell(ast->expression_type, scope_);
         writer_->writeTypedef(ty, alpha);
-        writer_->writeAnd(true);
     }
 
     // TODO: Make sizeof and related type as size_t.
@@ -1414,12 +1339,10 @@ bool ConstraintGenerator::visit(ClassSpecifierAST* ast)
     }
 
     writer_->writeTypedef(tyName, classTy);
-    writer_->writeAnd(true);
 
     const std::string& alpha = supply_.createTypeVar1();
     writer_->writeExists(alpha);
     writer_->writeEquivRel(alpha, tyName);
-    writer_->writeAnd(true);
 
     structs_.push(alpha);
     Scope *previousScope = switchScope(ast->symbol);
@@ -1443,10 +1366,12 @@ bool ConstraintGenerator::visit(CompoundStatementAST *ast)
     DEBUG_VISIT(CompoundStatementAST);
     OBSERVE(CompoundStatementAST);
 
+    writer_->openScope();
     Scope *previousScope = switchScope(ast->symbol);
     for (StatementListAST *it = ast->statement_list; it; it = it->next)
         visitStatement(it->value);
     switchScope(previousScope);
+    writer_->closeScope();
 
     return false;
 }
@@ -1456,9 +1381,7 @@ bool ConstraintGenerator::visit(DeclarationStatementAST *ast)
     DEBUG_VISIT(DeclarationStatementAST);
     OBSERVE(DeclarationStatementAST);
 
-    maybeFollowStmt();
     visitDeclaration(ast->declaration);
-    seenStmt_ = false; // Actually a declaration (unset the stmt seen flag).
 
     return false;
 }
@@ -1472,7 +1395,6 @@ bool ConstraintGenerator::visit(ExpressionStatementAST *ast)
         return false;
 
     CLASSIFY(ast->expression);
-    maybeFollowStmt();
 
     // Deal with an assignment.
     if (ast->expression->asBinaryExpression()) {
@@ -1504,7 +1426,6 @@ bool ConstraintGenerator::visit(ExpressionStatementAST *ast)
         writer_->writeExists(std::get<0>(a1a2));
         writer_->writeExists(std::get<1>(a1a2));
         collectExpression(std::get<0>(a1a2), ast->expression->asUnaryExpression()->expression);
-        writer_->writeAnd();
         writer_->writePtrRel(std::get<0>(a1a2), std::get<1>(a1a2));
         return false;
     }
@@ -1522,12 +1443,10 @@ bool ConstraintGenerator::visit(ExpressionStatementAST *ast)
         const std::string& funcName =
                 trivialName(ast->expression->asCall()->base_expression->asIdExpression());
         const auto it = knownFuncNames_.find(funcName);
-        if (it != knownFuncNames_.end()) {
-            writer_->writeAnd();
+        if (it != knownFuncNames_.end())
             writer_->writeEquivRel(alpha, it->second);
-        } else {
+        else
             knownFuncRets_[funcName].push_back(alpha);
-        }
     }
 
     return false;
@@ -1539,7 +1458,6 @@ bool ConstraintGenerator::visit(IfStatementAST *ast)
     OBSERVE(IfStatementAST);
     CLASSIFY(ast->condition);
 
-    maybeFollowStmt();
     convertBoolExpression(ast->condition);
 
     if (ast->statement)
@@ -1557,7 +1475,6 @@ bool ConstraintGenerator::visit(ReturnStatementAST *ast)
     OBSERVE(ReturnStatementAST);
 
     if (ast->expression) {
-        maybeFollowStmt();
         visitExpression(ast->expression);
 
         ENSURE_NONEMPTY_ALPHA_RET_STACK(return false);
@@ -1572,7 +1489,6 @@ bool ConstraintGenerator::visit(SwitchStatementAST *ast)
     DEBUG_VISIT(SwitchStatementAST);
     OBSERVE(SwitchStatementAST);
 
-    maybeFollowStmt();
     convertBoolExpression(ast->condition);
 
     if (ast->statement)
@@ -1586,12 +1502,9 @@ bool ConstraintGenerator::visit(CaseStatementAST *ast)
     DEBUG_VISIT(CaseStatementAST);
     OBSERVE(CaseStatementAST);
 
-    maybeFollowStmt();
     collectExpression(kDefaultIntTy, ast->expression);
-    if (ast->expression->asIdExpression()) {
-        writer_->writeAnd();
-        writer_->writeReadOnly(extractId(ast->expression->asIdExpression()->name->name));
-    }
+    if (ast->expression->asIdExpression())
+        writer_->writeConstantExpression(extractId(ast->expression->asIdExpression()->name->name));
 
     if (ast->statement)
         visitStatement(ast->statement);
@@ -1604,7 +1517,6 @@ bool ConstraintGenerator::visit(DoStatementAST *ast)
     DEBUG_VISIT(DoStatementAST);
     OBSERVE(DoStatementAST);
 
-    maybeFollowStmt();
     convertBoolExpression(ast->expression);
 
     if (ast->statement)
@@ -1618,20 +1530,12 @@ bool ConstraintGenerator::visit(WhileStatementAST *ast)
     DEBUG_VISIT(WhileStatementAST);
     OBSERVE(WhileStatementAST);
 
-    maybeFollowStmt();
     convertBoolExpression(ast->condition);
 
     if (ast->statement)
         visitStatement(ast->statement);
 
     return false;
-}
-
-void ConstraintGenerator::maybeFollowStmt()
-{
-    if (seenStmt_)
-        writer_->writeAnd(true);
-    seenStmt_ = true;
 }
 
 bool ConstraintGenerator::visit(ForStatementAST *ast)
@@ -1647,13 +1551,10 @@ bool ConstraintGenerator::visit(ForStatementAST *ast)
         visitStatement(ast->initializer);
     }
 
-    if (ast->condition) {
-        maybeFollowStmt();
+    if (ast->condition)
         convertBoolExpression(ast->condition);
-    }
 
     if (ast->expression) {
-        maybeFollowStmt();
         const std::string& alpha = supply_.createTypeVar1();
         writer_->writeExists(alpha);
         collectExpression(alpha, ast->expression);
@@ -1662,16 +1563,8 @@ bool ConstraintGenerator::visit(ForStatementAST *ast)
     if (ast->statement)
         visitStatement(ast->statement);
 
-    if (ast->initializer->asDeclarationStatement()) {
-        maybeFollowStmt();
+    if (ast->initializer->asDeclarationStatement())
         visitDeclaration(ast->initializer->asDeclarationStatement()->declaration);
-        if (!preprocess_) {
-            PSYCHE_ASSERT(!pendingEquivs_.empty(), return false, "expected for's declaration");
-            const EquivPair& equiv = pendingEquivs_.top();
-            writer_->writeEquivRel(equiv.first, equiv.second);
-            pendingEquivs_.pop();
-        }
-    }
 
     return false;
 }

@@ -238,6 +238,12 @@ tests = testGroup "Unit tests"
                   , doTest "T191.c" -- Frontpage example, full.
                   , doTest "T192.c" -- Designated initializers (structs).
                   , doTest "T193.c" -- Bug in struct initialization.
+                  , doTest "T194.c" -- Scoping: global x local names.
+                  , doTest "T195.c" -- Scoping: function x variable names.
+                  , doTest "T196.c" -- Scoping: return values.
+                  , doTest "T197.c" -- Scoping: in domain lattice.
+                  , doTest "T198.c" -- Scoping: nested compound statements.
+                  , doTest "T199.c" -- Scoping: preserve constant-expression.
                   ]
 
 doTest s

@@ -33,6 +33,7 @@ Constraints' Parser
 > import Data.Type
 > import Data.Constraints
 
+> import Debug.Trace
 
 A type for parsers
 
@@ -54,11 +55,12 @@ Constraint parser
 >                      conjParser = (:&:) <$ comma
 
 > ctrParser :: Parser Constraint
-> ctrParser = choice [
+> ctrParser = skipMany space *> choice [
 >                      eqParser
 >                    , ascriptionParser
 >                    , hasParser
 >                    , defParser
+>                    , scopeParser
 >                    , existsParser
 >                    , typeDefParser
 >                    , isConstExprParser
@@ -113,6 +115,11 @@ Constraint parser
 >                       reserved "$in$"  <*> (Truth `option` constraintParser)
 >             where
 >               build _ n _ t _ ctr = Def n t ctr
+
+> scopeParser :: Parser Constraint
+> scopeParser = build <$> brackets (Truth `option` constraintParser)
+>              where
+>               build c = Scope c
 
 > existsParser :: Parser Constraint
 > existsParser = build <$> reserved "$exists$" <*> nameParser <*>
@@ -252,6 +259,9 @@ Lexer definition
 > reservedOp :: String -> Parser ()
 > reservedOp = Tk.reservedOp constrLexer
 
+> brackets :: Parser a -> Parser a
+> brackets = Tk.brackets constrLexer
+
 > braces :: Parser a -> Parser a
 > braces = Tk.braces constrLexer
 
@@ -312,5 +322,7 @@ Constraint language definition
 >                        , "$typeof$"
 >                        , "$read_only$"
 >                        , "$static$"
+>                        , "$begin$"
+>                        , "$end$"
 >                        ]
 >                      }

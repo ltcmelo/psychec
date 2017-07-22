@@ -113,18 +113,6 @@ private:
     // Symbol visits.
     void visitSymbol(CPlusPlus::Function* func, CPlusPlus::StatementAST* body);
 
-    //!@{
-    /*!
-     * The constraints rules requires that statements are `and`ed one to
-     * another. But through the visitor we can't see ahead: either 1) we look
-     * behind if there's been a valid statement or 2) we mark whenever a valid
-     * statement has been visited. The approach originally implemented was
-     * option 1, but it can get tricky. Current implementation is option 2.
-     */
-    void maybeFollowStmt();
-    bool seenStmt_;
-    //!@}
-
     //! Scope we're in and the global scope.
     CPlusPlus::Scope *scope_;
     CPlusPlus::Scope *global_;
@@ -189,15 +177,6 @@ private:
     static std::string paramPrefix_;
     static std::string stubPrefix_;
     //!@}
-
-    /*!
-     * There's a little "operational inconvenience" when generating constraints
-     * for a declaration: the program's remaining statements come in the middle,
-     * instead of in the end of the rule. Then we must accumulate all type
-     * equivalences from the declarations and write then down later.
-     */
-    using EquivPair = std::pair<std::string, std::string>;
-    std::stack<EquivPair> pendingEquivs_;
 
     /*!
      * Assign the name to type on top of the stack.
