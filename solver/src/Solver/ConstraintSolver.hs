@@ -326,7 +326,7 @@ stage3 c@(Has _ _) = ([], [], [c])
 stage3 c@(_ :=: _) = ([c], [], [])
 stage3 c@(_ :>: _) = ([], [c], [])
 stage3 Truth = ([], [], [])
-stage3 c = error ("noooo "  ++ show (pprint c))
+
 
 -- | Detect and instantiate void*.
 instantiateTopPtr :: [Constraint] -> SolverM Subst
