@@ -322,7 +322,5 @@ Constraint language definition
 >                        , "$typeof$"
 >                        , "$read_only$"
 >                        , "$static$"
->                        , "$begin$"
->                        , "$end$"
 >                        ]
 >                      }

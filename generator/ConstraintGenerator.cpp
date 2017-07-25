@@ -119,7 +119,6 @@ void ConstraintGenerator::prepareForRun()
     knownFuncRets_.clear();
     valuedRets_ = std::stack<bool>();
     types_ = std::stack<std::string>();
-//    pendingEquivs_ = std::stack<EquivPair>();
 
     static Observer dummy;
     if (!observer_)
@@ -453,10 +452,6 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
         }
 
         declIt = declIt->next;
-
-        // Remember about the pending type equivalence for this declaration,
-        // which we write down only after traversing the remaining statements.
-//        pendingEquivs_.push(EquivPair(alpha, declTy));
     }
 
     return false;
