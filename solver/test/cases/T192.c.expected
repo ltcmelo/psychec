@@ -1,19 +1,19 @@
 /* Forward declarations */
-typedef  struct TYPE_15__   TYPE_6__ ;
-typedef  struct TYPE_14__   TYPE_5__ ;
-typedef  struct TYPE_13__   TYPE_4__ ;
-typedef  struct TYPE_12__   TYPE_3__ ;
-typedef  struct TYPE_11__   TYPE_2__ ;
-typedef  struct TYPE_10__   TYPE_1__ ;
+typedef  struct TYPE_12__   TYPE_6__ ;
+typedef  struct TYPE_11__   TYPE_5__ ;
+typedef  struct TYPE_10__   TYPE_4__ ;
+typedef  struct TYPE_9__   TYPE_3__ ;
+typedef  struct TYPE_8__   TYPE_2__ ;
+typedef  struct TYPE_7__   TYPE_1__ ;
 
 /* Type definitions */
 struct point {int y; int x; } ;
-struct TYPE_15__ {char* a; char* b; } ;
-struct TYPE_10__ {char* bar; } ;
-struct TYPE_14__ {char* foo; TYPE_1__ nest; } ;
-struct TYPE_11__ {double e; } ;
-struct TYPE_12__ {char* b; TYPE_2__ c; } ;
-struct TYPE_13__ {double a; TYPE_3__ member_1; } ;
+struct TYPE_12__ {char* a; char* b; } ;
+struct TYPE_7__ {char* bar; } ;
+struct TYPE_11__ {char* foo; TYPE_1__ nest; } ;
+struct TYPE_8__ {double e; } ;
+struct TYPE_9__ {char* b; TYPE_2__ c; } ;
+struct TYPE_10__ {double a; TYPE_3__ member_1; } ;
 typedef  TYPE_4__ T2 ;
 typedef  TYPE_5__ T1 ;
 typedef  TYPE_6__ T0 ;

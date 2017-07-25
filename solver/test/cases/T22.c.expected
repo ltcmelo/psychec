@@ -1,10 +1,10 @@
 /* Forward declarations */
-typedef  struct TYPE_13__   TYPE_2__ ;
-typedef  struct TYPE_12__   TYPE_1__ ;
+typedef  struct TYPE_9__   TYPE_2__ ;
+typedef  struct TYPE_8__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_13__ {struct TYPE_13__* next; } ;
-struct TYPE_12__ {struct TYPE_12__* next2; } ;
+struct TYPE_9__ {struct TYPE_9__* next; } ;
+struct TYPE_8__ {struct TYPE_8__* next2; } ;
 typedef  TYPE_1__* List2 ;
 typedef  TYPE_2__* List ;
 

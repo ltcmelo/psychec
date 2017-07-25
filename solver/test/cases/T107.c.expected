@@ -1,7 +1,6 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  int size_t ;
 
 /* Variables and functions */
  int ENC_BLOCKSIZE ; 

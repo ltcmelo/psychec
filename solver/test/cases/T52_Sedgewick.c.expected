@@ -1,9 +1,9 @@
 /* Forward declarations */
-typedef  struct TYPE_7__   TYPE_1__ ;
+typedef  struct TYPE_6__   TYPE_1__ ;
 
 /* Type definitions */
 typedef  TYPE_1__* link ;
-struct TYPE_7__ {int N; struct TYPE_7__* r; struct TYPE_7__* l; } ;
+struct TYPE_6__ {int N; struct TYPE_6__* r; struct TYPE_6__* l; } ;
 
 /* Variables and functions */
  TYPE_1__* partR (TYPE_1__*,int /*<<< orphan*/ ) ; 

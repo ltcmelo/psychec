@@ -1,8 +1,8 @@
 /* Forward declarations */
-typedef  struct TYPE_4__   TYPE_1__ ;
+typedef  struct TYPE_3__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_4__ {double member_0; int member_1; double fpval; int ival; } ;
+struct TYPE_3__ {double member_0; int member_1; double fpval; int ival; } ;
 typedef  TYPE_1__ T1 ;
 
 /* Variables and functions */

@@ -6,6 +6,6 @@ typedef  TYPE_1__* link ;
 struct TYPE_6__ {struct TYPE_6__* l; } ;
 
 /* Variables and functions */
- TYPE_1__* x ;
- TYPE_1__* y ;
+ TYPE_1__* x ; 
+ TYPE_1__* y ; 
 

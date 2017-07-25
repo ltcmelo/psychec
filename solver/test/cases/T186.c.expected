@@ -3,5 +3,5 @@
 /* Type definitions */
 
 /* Variables and functions */
- char* groups ;
+ char* groups ; 
 

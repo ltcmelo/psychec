@@ -1,10 +1,10 @@
 /* Forward declarations */
-typedef  struct TYPE_10__   TYPE_2__ ;
-typedef  struct TYPE_9__   TYPE_1__ ;
+typedef  struct TYPE_8__   TYPE_2__ ;
+typedef  struct TYPE_7__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_10__ {int v; int w; } ;
-struct TYPE_9__ {int V; int E; int** adj; } ;
+struct TYPE_8__ {int v; int w; } ;
+struct TYPE_7__ {int V; int E; int** adj; } ;
 typedef  TYPE_1__* Graph ;
 typedef  TYPE_2__ Edge ;
 

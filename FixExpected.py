@@ -1,6 +1,6 @@
 # Copyright (c) Leandro T. C. Melo
 
-from os import listdir
+from os import listdir, path
 from os.path import isfile, join
 import subprocess
 import sys
@@ -24,6 +24,10 @@ def fix():
         subprocess.call(invok)
 
         generated = full_name[:-2] + "_gen.h"
+        if not path.isfile(generated):
+            print "*** Skipping... File not generated!"
+            continue
+
         with open(generated, "r") as f:
             content = f.read()
 

@@ -1,8 +1,8 @@
 /* Forward declarations */
-typedef  struct TYPE_6__   TYPE_1__ ;
+typedef  struct TYPE_5__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_6__ {float x; float y; } ;
+struct TYPE_5__ {float x; float y; } ;
 typedef  TYPE_1__ point ;
 
 /* Variables and functions */

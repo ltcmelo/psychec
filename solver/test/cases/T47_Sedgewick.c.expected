@@ -1,8 +1,8 @@
 /* Forward declarations */
-typedef  struct TYPE_10__   TYPE_1__ ;
+typedef  struct TYPE_8__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_10__ {float Re; float Im; } ;
+struct TYPE_8__ {float Re; float Im; } ;
 typedef  TYPE_1__ Complex ;
 
 /* Variables and functions */

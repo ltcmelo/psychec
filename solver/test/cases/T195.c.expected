@@ -1,0 +1,9 @@
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables and functions */
+ float Im (int /*<<< orphan*/ ) ; 
+ float Re (int /*<<< orphan*/ ) ; 
+ int /*<<< orphan*/  a ; 
+

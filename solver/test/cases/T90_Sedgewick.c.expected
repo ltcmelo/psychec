@@ -1,8 +1,8 @@
 /* Forward declarations */
-typedef  struct TYPE_8__   TYPE_1__ ;
+typedef  struct TYPE_7__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_8__ {int E; int V; int** adj; } ;
+struct TYPE_7__ {int E; int V; int** adj; } ;
 typedef  TYPE_1__* Graph ;
 
 /* Variables and functions */

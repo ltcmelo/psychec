@@ -1,18 +1,18 @@
 /* Forward declarations */
-typedef  struct TYPE_11__   TYPE_4__ ;
-typedef  struct TYPE_10__   TYPE_3__ ;
-typedef  struct TYPE_9__   TYPE_2__ ;
-typedef  struct TYPE_8__   TYPE_1__ ;
+typedef  struct TYPE_8__   TYPE_4__ ;
+typedef  struct TYPE_7__   TYPE_3__ ;
+typedef  struct TYPE_6__   TYPE_2__ ;
+typedef  struct TYPE_5__   TYPE_1__ ;
 
 /* Type definitions */
 typedef  TYPE_2__* Z ;
 typedef  TYPE_3__* W ;
 typedef  double* V ;
 typedef  TYPE_4__* U ;
-struct TYPE_11__ {int m; } ;
-struct TYPE_10__ {char* n; } ;
-struct TYPE_9__ {TYPE_1__* y; } ;
-struct TYPE_8__ {double p; } ;
+struct TYPE_8__ {int m; } ;
+struct TYPE_7__ {char* n; } ;
+struct TYPE_6__ {TYPE_1__* y; } ;
+struct TYPE_5__ {double p; } ;
 
 /* Variables and functions */
  void* g () ; 

@@ -9,7 +9,7 @@ typedef  int /*<<< orphan*/  Complex ;
  double Im (int /*<<< orphan*/ ) ; 
  double Re (int /*<<< orphan*/ ) ; 
  int atoi (char*) ; 
- int /*<<< orphan*/  cos (double) ; 
+ int /*<<< orphan*/  cos (float) ; 
  int /*<<< orphan*/  printf (char*,double,...) ; 
- int /*<<< orphan*/  sin (double) ; 
+ int /*<<< orphan*/  sin (float) ; 
 
