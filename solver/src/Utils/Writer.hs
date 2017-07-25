@@ -37,6 +37,7 @@ writeCFile :: (TyCtx, VarCtx) -> String
 writeCFile ctxs@(tcx, _) =
   -- writeIncs ++
   writeNULL ++
+  writeSize_t ++
   writeBoolDef ++
   writeFwdDecls tcx ++
   writeDecls ctxs
@@ -58,6 +59,11 @@ writeIncs =
 -- | Write NULL definition.
 writeNULL :: String
 writeNULL = "#define NULL ((void*)0)\n\n"
+
+
+-- | Write size_t definition.
+writeSize_t :: String
+writeSize_t = "typedef unsigned long size_t;  // Customize by platform.\n\n"
 
 
 -- TODO: By default, our generator parses a `bool' type and interpret it as an `int'.

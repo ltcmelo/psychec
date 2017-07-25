@@ -34,6 +34,8 @@ const char* const kFloatTy = "float";
 const char* const kDoubleTy = "double";
 const char* const kLongDouble = "long double";
 
+const char* const kSizeT = "size_t";
+
 const char* const kDefaultFloatPointTy = kDoubleTy;
 const char* const kDefaultIntTy = kIntTy;
 const char* const kDefaultArithTy = kDefaultIntTy;

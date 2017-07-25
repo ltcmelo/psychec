@@ -53,7 +53,8 @@ builtinTypes l =
            __int128, __uint128,
            float, -- floatComplex, floatImaginary,
            double, -- doubleComplex, doubleImaginary,
-           longDouble] -- longDoubleComplex, longDoubleImaginary]
+           longDouble, -- longDoubleComplex, longDoubleImaginary
+           size_t]
 
 
 -- | C's builtin values by language version.

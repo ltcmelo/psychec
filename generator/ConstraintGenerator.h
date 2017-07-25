@@ -224,7 +224,8 @@ private:
     std::vector<std::string> field_;
 
     /*!
-     * Functions with "printf style" we understand.
+     * Variadic functions in printf-style in which a format-specifier is used to type
+     * arguments.
      */
     std::unordered_map<std::string, size_t> variadic_;
 

@@ -24,9 +24,6 @@ import Data.Type
 
 
 -- | Types
-size_t :: Ty
-size_t = NamedTy (Name "size_t")
-
 ptrdiff_t :: Ty
 ptrdiff_t = NamedTy (Name "ptrdiff_t")
 
@@ -36,4 +33,4 @@ max_align_t = NamedTy (Name "max_align_t")
 
 -- | Collection of types
 stddefTypes :: [Ty]
-stddefTypes = [size_t, ptrdiff_t, max_align_t]
+stddefTypes = [ptrdiff_t, max_align_t]

@@ -20,6 +20,7 @@
 
 module Data.StdInt where
 
+import Data.BuiltIn
 import Data.Type
 import Data.StdDef
 

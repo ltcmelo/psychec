@@ -244,6 +244,7 @@ tests = testGroup "Unit tests"
                   , doTest "T197.c" -- Scoping: in domain lattice.
                   , doTest "T198.c" -- Scoping: nested compound statements.
                   , doTest "T199.c" -- Scoping: preserve constant-expression.
+                  , doTest "T200.c" -- Make size_t a "builtin".
                   ]
 
 doTest s

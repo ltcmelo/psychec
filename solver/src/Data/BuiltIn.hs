@@ -67,6 +67,9 @@ double = NamedTy (Name "double")
 longDouble :: Ty
 longDouble = NamedTy (Name "long double")
 
+size_t :: Ty
+size_t = NamedTy (Name "size_t")
+
 _Bool :: Ty
 _Bool = NamedTy (Name "_Bool")
 
