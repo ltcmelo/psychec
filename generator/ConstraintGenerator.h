@@ -45,11 +45,11 @@ class Observer;
 class PSYCHEC_API ConstraintGenerator final : public CPlusPlus::ASTVisitor
 {
 public:
-    ConstraintGenerator(CPlusPlus::TranslationUnit *unit,
-                        ConstraintWriter* writer);
+    ConstraintGenerator(CPlusPlus::TranslationUnit *unit, ConstraintWriter* writer);
 
-    void generate(CPlusPlus::TranslationUnitAST *ast,
-                  CPlusPlus::Scope *global);
+    void generate(CPlusPlus::TranslationUnitAST *ast, CPlusPlus::Scope *global);
+
+    void employDomainLattice(const DomainLattice* lattice);
 
     void installObserver(Observer* observer);
 
@@ -66,18 +66,15 @@ private:
      */
     CPlusPlus::Scope *switchScope(CPlusPlus::Scope *scope);
 
-    // Top-level visitation entry points.
-    void visitDeclaration(CPlusPlus::DeclarationAST *ast);
-    void visitExpression(CPlusPlus::ExpressionAST* ast);
     void visitName(CPlusPlus::NameAST* ast);
-    void visitSpecifier(CPlusPlus::SpecifierAST *ast);
-    void visitStatement(CPlusPlus::StatementAST *ast);
 
     // Declarations
+    void visitDeclaration(CPlusPlus::DeclarationAST *ast);
     bool visit(CPlusPlus::SimpleDeclarationAST *ast) override;
     bool visit(CPlusPlus::FunctionDefinitionAST *ast) override;
 
     // Expressions
+    void visitExpression(CPlusPlus::ExpressionAST* ast);
     bool visit(CPlusPlus::ArrayAccessAST* ast) override;
     bool visit(CPlusPlus::BinaryExpressionAST* ast) override;
     bool visit(CPlusPlus::CallAST *ast) override;
@@ -85,30 +82,32 @@ private:
     bool visit(CPlusPlus::ConditionalExpressionAST *ast) override;
     bool visit(CPlusPlus::IdExpressionAST* ast) override;
     bool visit(CPlusPlus::MemberAccessAST* ast) override;
+    bool visit(CPlusPlus::UnaryExpressionAST* ast) override;
     bool visit(CPlusPlus::NumericLiteralAST* ast) override;
     bool visit(CPlusPlus::BoolLiteralAST* ast) override;
     bool visit(CPlusPlus::StringLiteralAST* ast) override;
-    bool visit(CPlusPlus::UnaryExpressionAST* ast) override;
     bool visit(CPlusPlus::SizeofExpressionAST* ast) override;
     bool visit(CPlusPlus::PointerLiteralAST* ast) override;
     bool visit(CPlusPlus::BracedInitializerAST *ast) override;
     bool visit(CPlusPlus::PostIncrDecrAST* ast) override;
 
     // Specifiers
+    void visitSpecifier(CPlusPlus::SpecifierAST *ast);
     bool visit(CPlusPlus::EnumSpecifierAST *ast) override;
     bool visit(CPlusPlus::ClassSpecifierAST *ast) override;
 
     // Statements
+    void visitStatement(CPlusPlus::StatementAST *ast);
+    bool visit(CPlusPlus::SwitchStatementAST *ast) override;
     bool visit(CPlusPlus::CaseStatementAST* ast) override;
     bool visit(CPlusPlus::CompoundStatementAST *ast) override;
     bool visit(CPlusPlus::DeclarationStatementAST *ast) override;
     bool visit(CPlusPlus::DoStatementAST *ast) override;
-    bool visit(CPlusPlus::ForStatementAST *ast) override;
-    bool visit(CPlusPlus::ExpressionStatementAST *ast) override;
-    bool visit(CPlusPlus::IfStatementAST *ast) override;
-    bool visit(CPlusPlus::ReturnStatementAST *ast) override;
-    bool visit(CPlusPlus::SwitchStatementAST *ast) override;
     bool visit(CPlusPlus::WhileStatementAST *ast) override;
+    bool visit(CPlusPlus::ForStatementAST *ast) override;
+    bool visit(CPlusPlus::IfStatementAST *ast) override;
+    bool visit(CPlusPlus::ExpressionStatementAST *ast) override;
+    bool visit(CPlusPlus::ReturnStatementAST *ast) override;
 
     // Symbol visits.
     void visitSymbol(CPlusPlus::Function* func, CPlusPlus::StatementAST* body);
@@ -126,8 +125,8 @@ private:
     //! Type variables supply and properties.
     FreshVarSupply supply_;
 
-    //! Pointer x integers lattice.
-    DomainLattice lattice_;
+    //! Domain lattice for "pre inference".
+    const DomainLattice* lattice_;
 
     //! Inside static initialization.
     bool staticDecl_;
@@ -144,11 +143,6 @@ private:
                           int opTk);
     DomainLattice::Class classOfExpr(CPlusPlus::ExpressionAST* ast) const;
     //!@}
-
-    /*!
-     * Overall initialization.
-     */
-    void prepareForRun();
 
     //!@{
     /*!

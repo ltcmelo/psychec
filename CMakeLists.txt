@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(psychec)
 
+set(CMAKE_CXX_COMPILER g++)
 set(PSYCHEC_CXX_FLAGS)
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -std=c++1y -g")
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall -Wsign-compare")

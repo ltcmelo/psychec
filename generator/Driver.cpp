@@ -26,6 +26,7 @@
 #include "ConstraintWriter.h"
 #include "Debug.h"
 #include "DiagnosticCollector.h"
+#include "DomainLattice.h"
 #include "Dumper.h"
 #include "Literals.h"
 #include "Observer.h"
@@ -136,7 +137,7 @@ bool Driver::annotateSymbols()
     Bind bind(tu());
     bind(tuAst(), global_);
 
-    ASTNormalizer fixer(tu(), !flags_.flag_.nonHeuristic);
+    ASTNormalizer fixer(tu(), !flags_.flag_.noHeuristics);
     fixer.normalize(tuAst());
     if (isProgramAmbiguous(tu(), tuAst()))
         return false;
@@ -152,11 +153,16 @@ bool Driver::annotateSymbols()
 
 void Driver::generateConstraints()
 {
+    // Build domain lattice.
+    DomainLattice lattice(tu());
+    lattice.buildRanking(tuAst(), global_);
+
     std::ostringstream oss;
     auto writer = factory_.makeWriter(oss);
     auto observer = factory_.makeObserver();
 
     ConstraintGenerator generator(tu(), writer.get());
+    generator.employDomainLattice(&lattice);
     generator.installObserver(observer.get());
     if (flags_.flag_.handleGNUerrorFunc_)
         generator.addVariadic("error", 2);

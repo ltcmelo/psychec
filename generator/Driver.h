@@ -49,7 +49,7 @@ struct PSYCHEC_API ExecutionFlags
         uint32_t dumpAst : 1;  //!< Both original and fixed one.
         uint32_t testOnly : 1;  //!< Test-only run.
         uint32_t disambOnly : 1;  //!< Disambiguatio-only run.
-        uint32_t nonHeuristic : 1;  //!< Disable heuristics on unresolved ambiguities.
+        uint32_t noHeuristics : 1;  //!< Disable heuristics on unresolved ambiguities.
         uint32_t libDetect : 2;  //!< Lib-detection mode.
 
         //! Whether to handle GNU's error function as a printf variety.

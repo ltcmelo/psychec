@@ -53,7 +53,7 @@ void Tester::checkAst(const std::string &source, std::string expected, bool nonH
 {
     Factory factory;
     Driver driver(factory);
-    flags_.flag_.nonHeuristic = nonHeu;
+    flags_.flag_.noHeuristics = nonHeu;
     driver.process("testfile", source, flags_);
     PSYCHE_EXPECT_TRUE(driver.tuAst());
 
@@ -76,7 +76,7 @@ void Tester::compareText(std::string expected, std::string actual) const
 void Tester::reset()
 {
     flags_ = ExecutionFlags();
-    flags_.flag_.nonHeuristic = true;
+    flags_.flag_.noHeuristics = true;
 }
 
 void Tester::testAll()

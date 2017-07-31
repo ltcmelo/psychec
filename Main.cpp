@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
     if (cmdLine.count("stats"))
         flags.flag_.displayStats = 1;
     if (cmdLine.count("strict"))
-        flags.flag_.nonHeuristic = 1;
+        flags.flag_.noHeuristics = 1;
 
     if (cmdLine.count("help")
             || (!cmdLine.count("positional") && (!flags.flag_.testOnly))) {

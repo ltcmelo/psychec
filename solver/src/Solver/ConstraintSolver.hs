@@ -422,7 +422,7 @@ untypeVariadics (n :<-: (FunTy _ pv)) s vcx =
   return vcx'
  where
   vcx' = case Map.lookup n (varctx vcx) of
-    Nothing -> vcx -- The name must be typed as a function pointer.  -- error ("value must exist " ++ (show n))
+    Nothing -> vcx -- The name must be typed as a function pointer.
     Just (ValSym (FunTy r pt) d ce st) ->
       let
         params (t1:xs1) (t2:xs2)

@@ -1,4 +1,5 @@
-T* f(int a)
+T* f()
 {
-  return &a;
+    static int a;
+    return &a;
 }

@@ -1,20 +1,19 @@
 /******************************************************************************
- * Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- * USA
+ Copyright (c) 2016-17 Leandro T. C. Melo (ltcmelo@gmail.com)
+
+ This library is free software; you can redistribute it and/or modify it under
+ the terms of the GNU Lesser General Public License as published by the Free
+ Software Foundation; either version 2.1 of the License, or (at your option)
+ any later version.
+
+ This library is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+ for more details.
+
+ You should have received a copy of the GNU Lesser General Public License along
+ with this library; if not, write to the Free Software Foundation, Inc., 51
+ Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
 #include "DomainLattice.h"
@@ -104,6 +103,18 @@ DomainLattice::DomainLattice(TranslationUnit *unit)
     , matcher_(unit)
 {}
 
+void DomainLattice::buildRanking(TranslationUnitAST* ast, Scope* global)
+{
+    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
+        accept(it->value);
+    printDebug("Done, 1st pass\n\n");
+
+    // TODO: Don't pass over everythin, adjust function calss.
+    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
+        accept(it->value);
+    printDebug("Done, 2nd pass\n\n");
+}
+
 void DomainLattice::totalize(ExpressionAST* ast, const Scope *scope)
 {
     scope_ = scope;
@@ -126,9 +137,6 @@ void DomainLattice::totalize(SimpleDeclarationAST* ast, const Scope* scope)
 
         Symbol* decl = symIt->value;
         auto clazz = classOf(decl->type(), decl);
-        if (clazz == Undefined)
-            continue;
-
         switchClass(clazz);
         enter(declIt->value->initializer);
     }
@@ -142,6 +150,12 @@ DomainLattice::Class DomainLattice::recover(const Symbol* sym) const
     return Undefined;
 }
 
+DomainLattice::Class DomainLattice::recover(const Symbol *sym, const Scope* scope) const
+{
+    // TODO
+    return Undefined;
+}
+
 DomainLattice::Class DomainLattice::recover(ExpressionAST *ast) const
 {
     auto equivalent = isKnownAST(ast);
@@ -152,6 +166,12 @@ DomainLattice::Class DomainLattice::recover(ExpressionAST *ast) const
                   return Undefined,
                   "expected equivalent ast in index");
     return astDB_.find(equivalent)->second;
+}
+
+DomainLattice::Class DomainLattice::recover(ExpressionAST *ast, const Scope* scope) const
+{
+    // TODO
+    return Undefined;
 }
 
 DomainLattice::Class DomainLattice::classOf(const FullySpecifiedType &ty,
@@ -216,6 +236,9 @@ DomainLattice::Class DomainLattice::classOf(const FullySpecifiedType &ty,
 
 void DomainLattice::classify(ExpressionAST *ast)
 {
+    if (!ast)
+        return;
+
     const auto& astText = fetchText(ast);
 
     bool checkTy = true;
@@ -287,6 +310,130 @@ void DomainLattice::classify(ExpressionAST *ast)
                astText.c_str(), clazz_.name_.c_str());
 }
 
+bool DomainLattice::visit(SimpleDeclarationAST* ast)
+{
+    DeclaratorListAST *declIt = ast->declarator_list;
+    for (const List<Symbol*>* symIt = ast->symbols;
+            symIt;
+            symIt = symIt->next, declIt = declIt->next) {
+        PSYCHE_ASSERT(declIt->value, return false, "expected declarator");
+        if (!declIt->value->initializer
+                || declIt->value->initializer->asBracedInitializer())
+            continue;
+
+        Symbol* decl = symIt->value;
+        auto clazz = classOf(decl->type(), decl);
+        switchClass(clazz);
+        visitExpression(declIt->value->initializer);
+    }
+
+    return false;
+}
+
+bool DomainLattice::visit(FunctionDefinitionAST* ast)
+{
+    accept(ast->function_body);
+
+    return false;
+}
+
+bool DomainLattice::visit(SwitchStatementAST *ast)
+{
+    switchClass(Integral);
+    visitExpression(ast->condition);
+
+    return false;
+}
+
+bool DomainLattice::visit(CaseStatementAST *ast)
+{
+    switchClass(Integral);
+    visitExpression(ast->expression);
+
+    return false;
+}
+
+bool DomainLattice::visit(CompoundStatementAST *ast)
+{
+    switchClass(Undefined);
+
+    const Scope *prevScope = switchScope(ast->symbol);
+    for (StatementListAST *it = ast->statement_list; it; it = it->next)
+        accept(it->value);
+    switchScope(prevScope);
+
+    return false;
+}
+
+bool DomainLattice::visit(DeclarationStatementAST *ast)
+{
+    accept(ast->declaration);
+
+    return false;
+}
+
+bool DomainLattice::visit(DoStatementAST *ast)
+{
+    switchClass(Scalar);
+    visitExpression(ast->expression);
+    accept(ast->statement);
+
+    return false;
+}
+
+bool DomainLattice::visit(WhileStatementAST *ast)
+{
+    switchClass(Scalar);
+    visitExpression(ast->condition);
+    accept(ast->statement);
+
+    return false;
+}
+
+bool DomainLattice::visit(ForStatementAST *ast)
+{
+    switchClass(Undefined);
+    accept(ast->initializer);
+    switchClass(Scalar);
+    visitExpression(ast->condition);
+    switchClass(Undefined);
+    visitExpression(ast->expression);
+    accept(ast->statement);
+
+    return false;
+}
+
+bool DomainLattice::visit(IfStatementAST *ast)
+{
+    switchClass(Scalar);
+    visitExpression(ast->condition);
+    accept(ast->statement);
+    accept(ast->else_statement);
+
+    return false;
+}
+
+bool DomainLattice::visit(ExpressionStatementAST *ast)
+{
+    switchClass(Undefined);
+    visitExpression(ast->expression);
+
+    return false;
+}
+
+bool DomainLattice::visit(ReturnStatementAST *ast)
+{
+    switchClass(Undefined);
+    visitExpression(ast->expression);
+
+    return false;
+}
+
+void DomainLattice::visitExpression(ExpressionAST *ast)
+{
+    enter(ast);
+}
+
 ExpressionAST *DomainLattice::isKnownAST(ExpressionAST *ast) const
 {
     for (auto candidate : knownAsts_) {
@@ -294,6 +441,14 @@ ExpressionAST *DomainLattice::isKnownAST(ExpressionAST *ast) const
             return candidate;
     }
     return nullptr;
+}
+
+const Scope* DomainLattice::switchScope(const Scope* scope)
+{
+    if (!scope)
+        return scope_;
+    std::swap(scope_, scope);
+    return scope;
 }
 
 DomainLattice::Class DomainLattice::switchClass(DomainLattice::Class clazz)
@@ -321,16 +476,16 @@ bool DomainLattice::visit(ArrayAccessAST *ast)
 
 bool DomainLattice::visit(BinaryExpressionAST *ast)
 {
-    BinaryExpressionAST* bin = ast->asBinaryExpression();
+    BinaryExpressionAST* expr = ast->asBinaryExpression();
 
-    switch (tokenKind(bin->binary_op_token)) {
+    switch (tokenKind(expr->binary_op_token)) {
     // Scalar arithmetic
     case T_PLUS:
     case T_MINUS: {
         switchClass(Scalar);
-        enter(bin->left_expression);
+        enter(expr->left_expression);
         Class lhsClass = switchClass(Scalar);
-        enter(bin->right_expression);
+        enter(expr->right_expression);
         if ((lhsClass == Pointer
              && (clazz_ == Scalar
                  || clazz_ == Arithmetic
@@ -360,9 +515,9 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_LESS_LESS:
     case T_GREATER_GREATER: {
         switchClass(Arithmetic);
-        enter(bin->left_expression);
+        enter(expr->left_expression);
         switchClass(Arithmetic);
-        enter(bin->right_expression);
+        enter(expr->right_expression);
         switchClass(Arithmetic);
         return false;
     }
@@ -375,11 +530,11 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_EQUAL_EQUAL:
     case T_EXCLAIM_EQUAL: {
         switchClass(Scalar);
-        enter(bin->right_expression);
+        enter(expr->right_expression);
         Class rhsClass = clazz_;
-        enter(bin->left_expression);
+        enter(expr->left_expression);
         if (clazz_ > rhsClass)
-            enter(bin->right_expression);
+            enter(expr->right_expression);
         switchClass(Integral);
         return false;
     }
@@ -388,9 +543,9 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_AMPER_AMPER:
     case T_PIPE_PIPE: {
         switchClass(Scalar);
-        enter(bin->left_expression);
+        enter(expr->left_expression);
         switchClass(Scalar);
-        enter(bin->right_expression);
+        enter(expr->right_expression);
         switchClass(Arithmetic);
         return false;
     }
@@ -398,11 +553,11 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     // Plain assignment
     case T_EQUAL: {
         switchClass(Undefined);
-        enter(bin->right_expression);
+        enter(expr->right_expression);
         Class rhsClass = clazz_;
-        enter(bin->left_expression);
+        enter(expr->left_expression);
         if (clazz_ > rhsClass)
-            enter(bin->right_expression);
+            enter(expr->right_expression);
         return false;
     }
 
@@ -410,9 +565,9 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_PLUS_EQUAL:
     case T_MINUS_EQUAL: {
         switchClass(Scalar);
-        enter(bin->right_expression);
+        enter(expr->right_expression);
         switchClass(Scalar);
-        accept(bin->left_expression);
+        accept(expr->left_expression);
         switchClass(Scalar);
         return false;
     }
@@ -427,17 +582,17 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_LESS_LESS_EQUAL:
     case T_GREATER_GREATER_EQUAL: {
         switchClass(Arithmetic);
-        enter(bin->left_expression);
+        enter(expr->left_expression);
         switchClass(Arithmetic);
-        enter(bin->right_expression);
+        enter(expr->right_expression);
         return false;
     }
 
     default:
         Class prevClass = switchClass(Undefined);
-        enter(bin->left_expression);
+        enter(expr->left_expression);
         switchClass(Undefined);
-        enter(bin->right_expression);
+        enter(expr->right_expression);
         switchClass(prevClass);
         return false;
     }
@@ -469,13 +624,6 @@ bool DomainLattice::visit(MemberAccessAST *ast)
         switchClass(Undefined);
     enter(ast->base_expression);
     switchClass(prevClass);
-
-    return false;
-}
-
-bool DomainLattice::visit(NestedExpressionAST *ast)
-{
-    enter(ast->expression);
 
     return false;
 }
@@ -563,18 +711,39 @@ bool DomainLattice::visit(NumericLiteralAST *ast)
 bool DomainLattice::visit(BoolLiteralAST *ast)
 {
     switchClass(Integral); // Booleans are integrals.
+
     return false;
 }
 
 bool DomainLattice::visit(StringLiteralAST *ast)
 {
     switchClass(Pointer);
+
+    return false;
+}
+
+bool DomainLattice::visit(SizeofExpressionAST *ast)
+{
+    switchClass(Undefined);
+    visitExpression(ast->expression);
+
     return false;
 }
 
 bool DomainLattice::visit(PointerLiteralAST *ast)
 {
     switchClass(Pointer);
+
+    return false;
+}
+
+bool DomainLattice::visit(BracedInitializerAST *ast)
+{
+    for (auto it = ast->expression_list; it; it = it->next) {
+        switchClass(Undefined);
+        visitExpression(it->value);
+    }
+
     return false;
 }
 
@@ -615,10 +784,19 @@ bool DomainLattice::visit(CallAST *ast)
     return false;
 }
 
+bool DomainLattice::visit(CastExpressionAST *ast)
+{
+    switchClass(Undefined);
+    visitExpression(ast->expression);
+
+    return false;
+}
+
 bool DomainLattice::visit(PostIncrDecrAST* ast)
 {
     switchClass(Scalar);
-    enter(ast->base_expression);
+    visitExpression(ast->base_expression);
+
     return false;
 }
 

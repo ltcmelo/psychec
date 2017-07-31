@@ -52,13 +52,6 @@
 #define ENSURE_NONEMPTY_ALPHA_RET_STACK(CODE) \
     PSYCHE_ASSERT(!valuedRets_.empty(), CODE, "alpha return stack must be nonempty")
 
-#define CLASSIFY(ast) \
-    do { \
-        if (preprocess_) { \
-            lattice_.totalize(ast, scope_); \
-        } \
-    } while (false) \
-
 using namespace CPlusPlus;
 using namespace psyche;
 
@@ -86,7 +79,7 @@ ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
     : ASTVisitor(unit)
     , scope_(nullptr)
     , writer_(writer)
-    , lattice_(unit)
+    , lattice_(nullptr)
     , staticDecl_(false)
     , preprocess_(true)
     , unnamedCount_(0)
@@ -109,24 +102,6 @@ ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
     addVariadic("snwprintf_s", 2);
 }
 
-void ConstraintGenerator::prepareForRun()
-{
-    staticDecl_ = false;
-    preprocess_ = false;
-    supply_.resetCounter();
-    unnamedCount_ = 0;
-    knownFuncNames_.clear();
-    knownFuncRets_.clear();
-    valuedRets_ = std::stack<bool>();
-    types_ = std::stack<std::string>();
-
-    static Observer dummy;
-    if (!observer_)
-        observer_ = &dummy;
-
-    printDebug("Let's generate constraints!!!\n");
-}
-
 void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
 {
     if (!ast)
@@ -134,36 +109,16 @@ void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
 
     global_ = global;
 
-    // TODO: Split domain-lattice construction out of generator's implementation,
-    // so we don't worry about "state" of constraint-specific data.
-    auto writer = writer_;
-    std::ostringstream unused;
-    static ConstraintWriter dummy(unused);
-    writer_ = &dummy;
-
-    // Build the expression lattice.
-    bool prevState = writer_->block(true);
-    Scope *previousScope = switchScope(global);
-    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
-        visitDeclaration(it->value);
-    // TODO: Get rid of cache data in lattice and pass twice over program. Refactor this
-    // together with the TODO further above.
-    switchScope(global);
-    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
-        visitDeclaration(it->value);
-    switchScope(previousScope);
-    writer_->block(prevState);
-
-    prepareForRun();
-    writer_ = writer;
-
-    // Constraint processing.
-    previousScope = switchScope(global);
+    printDebug("Let's generate constraints!!!\n");
     OBSERVE(TranslationUnitAST);
-    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next) {
+    switchScope(global_);
+    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
         visitDeclaration(it->value);
-    }
-    switchScope(previousScope);
+}
+
+void ConstraintGenerator::employDomainLattice(const DomainLattice* lattice)
+{
+    lattice_ = lattice;
 }
 
 void ConstraintGenerator::installObserver(Observer *observer)
@@ -324,7 +279,6 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
 {
     DEBUG_VISIT(SimpleDeclarationAST);
     OBSERVE(SimpleDeclarationAST);
-    CLASSIFY(ast);
 
     for (SpecifierListAST *it = ast->decl_specifier_list; it; it = it->next)
         visitSpecifier(it->value);
@@ -376,7 +330,7 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             pushType(rhsAlpha);
             visitExpression(declIt->value->initializer);
 
-            applyTypeLattice(lattice_.recover(decl), classOfExpr(declIt->value->initializer),
+            applyTypeLattice(lattice_->recover(decl), classOfExpr(declIt->value->initializer),
                              alpha, rhsAlpha, T_EQUAL);
             popType();
         }
@@ -709,24 +663,31 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
 
 DomainLattice::Class ConstraintGenerator::classOfExpr(ExpressionAST *ast) const
 {
-    const auto& s = lattice_.fetchText(ast);
-    auto clazz = lattice_.recover(ast);
-    if (clazz != DomainLattice::Undefined) {
-        printDebug("Recovered AST %s as %s\n", s.c_str(), clazz.name_.c_str());
+    DomainLattice::Class clazz = DomainLattice::Undefined;
+    if (lattice_) {
+        clazz = lattice_->recover(ast);
+        if (clazz != DomainLattice::Undefined) {
+            const auto& s = lattice_->fetchText(ast);
+            printDebug("Recovered AST %s as %s\n", s.c_str(), clazz.name_.c_str());
 
-        // Scalar types default to integral. Defaulting is necessary to avoid a scalar
-        // being interpreted as an integral one time and as a pointer another time.
-        if (clazz == DomainLattice::Scalar
-                && !(ast->asNumericLiteral()
-                     && !strcmp(numericLiteral(
-                            ast->asNumericLiteral()->literal_token)->chars(), "0"))) {
-            clazz = DomainLattice::Integral;
-            printDebug("Defaulting scalar AST %s to %s\n", s.c_str(), clazz.name_.c_str());
+            // Scalar types default to integral. Defaulting is necessary to avoid a scalar
+            // being interpreted as an integral one time and as a pointer another time.
+            if (clazz == DomainLattice::Scalar
+                    && !(ast->asNumericLiteral()
+                         && !strcmp(numericLiteral(
+                                        ast->asNumericLiteral()->literal_token)->chars(), "0"))) {
+                clazz = DomainLattice::Integral;
+                printDebug("Defaulting scalar AST %s to %s\n", s.c_str(), clazz.name_.c_str());
+            }
         }
-    } else {
+    }
+
+    if (clazz == DomainLattice::Undefined) {
         TypeOfExpr typeofExpr(translationUnit());
         FullySpecifiedType ty = typeofExpr.resolve(ast, scope_);
         clazz = DomainLattice::classOf(ty);
+        // TODO: Fetch text utility.
+        const auto& s = lattice_->fetchText(ast);
         printDebug("Typed AST %s as %s\n", s.c_str(), clazz.name_.c_str());
     }
 
@@ -738,7 +699,6 @@ bool ConstraintGenerator::visit(ArrayAccessAST *ast)
 {
     DEBUG_VISIT(ArrayAccessAST);
     OBSERVE(ArrayAccessAST);
-    CLASSIFY(ast);
 
     std::tuple<std::string, std::string, std::string> a1a2a3 = supply_.createTypeVar3();
     writer_->writeExists(std::get<0>(a1a2a3));
@@ -760,7 +720,6 @@ bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
 {
     DEBUG_VISIT(BinaryExpressionAST);
     OBSERVE(BinaryExpressionAST);
-    CLASSIFY(ast);
 
     // A comma expression is irrelevant for us. We consider it merely as a
     // sequence of unrelated expressions.
@@ -830,7 +789,6 @@ bool ConstraintGenerator::visit(CallAST *ast)
 {
     DEBUG_VISIT(CallAST);
     OBSERVE(CallAST);
-    CLASSIFY(ast);
 
     std::string funcName;
     int varArgPos = -1;
@@ -986,7 +944,6 @@ bool ConstraintGenerator::visit(CastExpressionAST *ast)
 {
     DEBUG_VISIT(CastExpressionAST);
     OBSERVE(CastExpressionAST);
-    CLASSIFY(ast);
 
     std::string ty = typeSpeller_.spell(ast->expression_type, scope_);
     castExpressionHelper(types_.top(), ty);
@@ -1024,7 +981,6 @@ bool ConstraintGenerator::visit(ConditionalExpressionAST *ast)
 {
     DEBUG_VISIT(ConditionalExpressionAST);
     OBSERVE(ConditionalExpressionAST);
-    CLASSIFY(ast);
 
     convertBoolExpression(ast->condition);
     visitExpression(ast->left_expression);
@@ -1037,7 +993,6 @@ bool ConstraintGenerator::visit(IdExpressionAST *ast)
 {
     DEBUG_VISIT(IdExpressionAST);
     OBSERVE(IdExpressionAST);
-    CLASSIFY(ast);
 
     assignTop(extractId(ast->name->name));
 
@@ -1052,7 +1007,6 @@ bool ConstraintGenerator::visit(NumericLiteralAST *ast)
 {
     DEBUG_VISIT(NumericLiteralAST);
     OBSERVE(NumericLiteralAST);
-    CLASSIFY(ast);
 
     const NumericLiteral *numLit = numericLiteral(ast->literal_token);
     PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
@@ -1084,7 +1038,6 @@ bool ConstraintGenerator::visit(BoolLiteralAST *ast)
 {
     DEBUG_VISIT(BoolLiteralAST);
     OBSERVE(BoolLiteralAST);
-    CLASSIFY(ast);
 
     // Treated as integer. It's relatively common to have C code defining `true`
     // and `false` through macros. Their meaning is obvious in such cases.
@@ -1098,7 +1051,6 @@ bool ConstraintGenerator::visit(StringLiteralAST *ast)
 {
     DEBUG_VISIT(StringLiteralAST);
     OBSERVE(StringLiteralAST);
-    CLASSIFY(ast);
 
     ENSURE_NONEMPTY_TYPE_STACK(return false);
     writer_->writeEquivRel(kDefaultStrTy, types_.top());
@@ -1110,7 +1062,6 @@ bool ConstraintGenerator::visit(MemberAccessAST *ast)
 {
     DEBUG_VISIT(MemberAccessAST);
     OBSERVE(MemberAccessAST);
-    CLASSIFY(ast);
 
     std::tuple<std::string, std::string> a1a2 = supply_.createTypeVar2();
     writer_->writeExists(std::get<0>(a1a2));
@@ -1148,7 +1099,6 @@ bool ConstraintGenerator::visit(BracedInitializerAST *ast)
 {
     DEBUG_VISIT(BracedInitializerAST);
     OBSERVE(BracedInitializerAST);
-    CLASSIFY(ast);
 
     const std::string& alpha = supply_.createTypeVar1();
     writer_->writeExists(alpha);
@@ -1201,7 +1151,6 @@ bool ConstraintGenerator::visit(PostIncrDecrAST *ast)
 {
     DEBUG_VISIT(PostIncrDecrAST);
     OBSERVE(PostIncrDecrAST);
-    CLASSIFY(ast);
 
     const std::string& alpha = supply_.createTypeVar1();
     writer_->writeExists(alpha);
@@ -1214,7 +1163,6 @@ bool ConstraintGenerator::visit(UnaryExpressionAST* ast)
 {
     DEBUG_VISIT(UnaryExpressionAST);
     OBSERVE(UnaryExpressionAST);
-    CLASSIFY(ast);
 
     switch(tokenKind(ast->unary_op_token)) {
     case T_AMPER: {
@@ -1263,7 +1211,6 @@ bool ConstraintGenerator::visit(SizeofExpressionAST *ast)
 {
     DEBUG_VISIT(SizeofExpressionAST);
     OBSERVE(SizeofExpressionAST);
-    CLASSIFY(ast);
 
     // When sizeof's argument is a type, we need to make sure it exists.
     if (ast->expression->asTypeId()) {
@@ -1283,7 +1230,6 @@ bool ConstraintGenerator::visit(SizeofExpressionAST *ast)
 bool ConstraintGenerator::visit(CPlusPlus::PointerLiteralAST* ast)
 {
     DEBUG_VISIT(PointerLiteralAST);
-    CLASSIFY(ast);
 
     // We don't know the underlying element type, but we know it's a pointer.
     const std::string& alpha = supply_.createTypeVar1();
@@ -1389,8 +1335,6 @@ bool ConstraintGenerator::visit(ExpressionStatementAST *ast)
     if (!ast->expression)
         return false;
 
-    CLASSIFY(ast->expression);
-
     // Deal with an assignment.
     if (ast->expression->asBinaryExpression()) {
         switch (tokenKind(ast->expression->asBinaryExpression()->binary_op_token)) {
@@ -1451,7 +1395,6 @@ bool ConstraintGenerator::visit(IfStatementAST *ast)
 {
     DEBUG_VISIT(IfStatementAST);
     OBSERVE(IfStatementAST);
-    CLASSIFY(ast->condition);
 
     convertBoolExpression(ast->condition);
 

@@ -169,7 +169,7 @@ tests = testGroup "Unit tests"
                   , doTest "T122.c"
                   , doTest "T123.c"
                   , doTest "T124.c"
-                  , doTest "T125.c"
+                  , doTest "T125.c" -- Scalar type: unify integral and pointer.
                   , doTest "T126.c"
                   , doTest "T127.c"
                   , doTest "T128.c"
@@ -244,7 +244,9 @@ tests = testGroup "Unit tests"
                   , doTest "T197.c" -- Scoping: in domain lattice.
                   , doTest "T198.c" -- Scoping: nested compound statements.
                   , doTest "T199.c" -- Scoping: preserve constant-expression.
-                  , doTest "T200.c" -- Make size_t a "builtin".
+                  , doTest "T200.c" -- Make size_t a "builtin"
+                  , doTest "T201.c"
+                  , doTest "T202.c"
                   ]
 
 doTest s
