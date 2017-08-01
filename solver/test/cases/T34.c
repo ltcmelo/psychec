@@ -6,6 +6,6 @@ void f() {
     *(a.z) = a;
 
     struct data b, *c;
-    b.m = 0; // m classified as scalar (but defaults to int)
+    b.m = 0; // m classified as scalar
     b.m = c; // m grows higher in the lattice, classified as pointer
 }

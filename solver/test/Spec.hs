@@ -247,6 +247,12 @@ tests = testGroup "Unit tests"
                   , doTest "T200.c" -- Make size_t a "builtin"
                   , doTest "T201.c"
                   , doTest "T202.c"
+                  , doTest "T203.c" -- Like T186: subtype for args in undecl. function.
+                  , doTest "T204.c" -- Scalar in +: requires RHS's reclassificaiton.
+                  , doTest "T205.c" -- Scalar in + and =: requires RHS's reclassification.
+                  , doTest "T206.c" -- Scalar in +: no reclassification.
+                  , doTest "T207.c" -- Scalar in -: differences from +.
+                  , doTest "T208.c" -- Lattice classification.
                   ]
 
 doTest s

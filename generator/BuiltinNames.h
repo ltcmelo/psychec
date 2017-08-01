@@ -35,6 +35,8 @@ const char* const kDoubleTy = "double";
 const char* const kLongDouble = "long double";
 
 const char* const kSizeT = "size_t";
+const char* const ptrdiff_t__ = "ptrdiff_t";
+const char* const kScalar_t__ = "__scalar_t";
 
 const char* const kDefaultFloatPointTy = kDoubleTy;
 const char* const kDefaultIntTy = kIntTy;

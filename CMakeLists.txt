@@ -10,72 +10,74 @@ set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
 set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/Config.h
-    # Parser's files
-    ${PROJECT_SOURCE_DIR}/parser/AST.cpp
-    ${PROJECT_SOURCE_DIR}/parser/AST.h
-    ${PROJECT_SOURCE_DIR}/parser/ASTClone.cpp
-    ${PROJECT_SOURCE_DIR}/parser/ASTIdentityMatcher.h
-    ${PROJECT_SOURCE_DIR}/parser/ASTMatch0.cpp
-    ${PROJECT_SOURCE_DIR}/parser/ASTMatcher.cpp
-    ${PROJECT_SOURCE_DIR}/parser/ASTMatcher.h
-    ${PROJECT_SOURCE_DIR}/parser/ASTNormalizer.h
-    ${PROJECT_SOURCE_DIR}/parser/ASTNormalizer.cpp
-    ${PROJECT_SOURCE_DIR}/parser/ASTPatternBuilder.h
-    ${PROJECT_SOURCE_DIR}/parser/ASTVisit.cpp
-    ${PROJECT_SOURCE_DIR}/parser/ASTVisitor.cpp
-    ${PROJECT_SOURCE_DIR}/parser/ASTVisitor.h
-    ${PROJECT_SOURCE_DIR}/parser/ASTfwd.h
-    ${PROJECT_SOURCE_DIR}/parser/Bind.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Bind.h
-    ${PROJECT_SOURCE_DIR}/parser/CPlusPlus.h
-    ${PROJECT_SOURCE_DIR}/parser/CPlusPlusForwardDeclarations.h
-    ${PROJECT_SOURCE_DIR}/parser/Control.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Control.h
-    ${PROJECT_SOURCE_DIR}/parser/CoreTypes.cpp
-    ${PROJECT_SOURCE_DIR}/parser/CoreTypes.h
-    ${PROJECT_SOURCE_DIR}/parser/Dialect.h
-    ${PROJECT_SOURCE_DIR}/parser/DiagnosticClient.cpp
-    ${PROJECT_SOURCE_DIR}/parser/DiagnosticClient.h
-    ${PROJECT_SOURCE_DIR}/parser/FullySpecifiedType.cpp
-    ${PROJECT_SOURCE_DIR}/parser/FullySpecifiedType.h
-    ${PROJECT_SOURCE_DIR}/parser/Keywords.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Lexer.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Lexer.h
-    ${PROJECT_SOURCE_DIR}/parser/LiteralTable.h
-    ${PROJECT_SOURCE_DIR}/parser/Literals.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Literals.h
-    ${PROJECT_SOURCE_DIR}/parser/MemoryPool.cpp
-    ${PROJECT_SOURCE_DIR}/parser/MemoryPool.h
-    ${PROJECT_SOURCE_DIR}/parser/Name.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Name.h
-    ${PROJECT_SOURCE_DIR}/parser/NameVisitor.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Names.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Names.h
-    ${PROJECT_SOURCE_DIR}/parser/ObjectiveCAtKeywords.cpp
-    ${PROJECT_SOURCE_DIR}/parser/ObjectiveCTypeQualifiers.cpp
-    ${PROJECT_SOURCE_DIR}/parser/ObjectiveCTypeQualifiers.h
-    ${PROJECT_SOURCE_DIR}/parser/Parser.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Parser.h
-    ${PROJECT_SOURCE_DIR}/parser/QtContextKeywords.cpp
-    ${PROJECT_SOURCE_DIR}/parser/QtContextKeywords.h
-    ${PROJECT_SOURCE_DIR}/parser/Scope.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Scope.h
-    ${PROJECT_SOURCE_DIR}/parser/Symbol.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Symbol.h
-    ${PROJECT_SOURCE_DIR}/parser/SymbolVisitor.h
-    ${PROJECT_SOURCE_DIR}/parser/Symbols.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Symbols.h
-    ${PROJECT_SOURCE_DIR}/parser/SyntaxAmbiguity.h
-    ${PROJECT_SOURCE_DIR}/parser/Templates.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Templates.h
-    ${PROJECT_SOURCE_DIR}/parser/Token.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Token.h
-    ${PROJECT_SOURCE_DIR}/parser/TranslationUnit.cpp
-    ${PROJECT_SOURCE_DIR}/parser/TranslationUnit.h
-    ${PROJECT_SOURCE_DIR}/parser/Type.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Type.h
-    ${PROJECT_SOURCE_DIR}/parser/TypeVisitor.cpp
-    ${PROJECT_SOURCE_DIR}/parser/TypeVisitor.h
+    # Front-end files
+    ${PROJECT_SOURCE_DIR}/frontend/AST.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/AST.h
+    ${PROJECT_SOURCE_DIR}/frontend/ASTClone.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/ASTIdentityMatcher.h
+    ${PROJECT_SOURCE_DIR}/frontend/ASTMatch0.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/ASTMatcher.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/ASTMatcher.h
+    ${PROJECT_SOURCE_DIR}/frontend/ASTNormalizer.h
+    ${PROJECT_SOURCE_DIR}/frontend/ASTNormalizer.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/ASTPatternBuilder.h
+    ${PROJECT_SOURCE_DIR}/frontend/ASTVisit.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/ASTVisitor.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/ASTVisitor.h
+    ${PROJECT_SOURCE_DIR}/frontend/ASTfwd.h
+    ${PROJECT_SOURCE_DIR}/frontend/Bind.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Bind.h
+    ${PROJECT_SOURCE_DIR}/frontend/CPlusPlus.h
+    ${PROJECT_SOURCE_DIR}/frontend/CPlusPlusForwardDeclarations.h
+    ${PROJECT_SOURCE_DIR}/frontend/Control.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Control.h
+    ${PROJECT_SOURCE_DIR}/frontend/CoreTypes.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/CoreTypes.h
+    ${PROJECT_SOURCE_DIR}/frontend/Dialect.h
+    ${PROJECT_SOURCE_DIR}/frontend/DiagnosticClient.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/DiagnosticClient.h
+    ${PROJECT_SOURCE_DIR}/frontend/FullySpecifiedType.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/FullySpecifiedType.h
+    ${PROJECT_SOURCE_DIR}/frontend/Keywords.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Lexer.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Lexer.h
+    ${PROJECT_SOURCE_DIR}/frontend/LiteralTable.h
+    ${PROJECT_SOURCE_DIR}/frontend/Literals.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Literals.h
+    ${PROJECT_SOURCE_DIR}/frontend/MemoryPool.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/MemoryPool.h
+    ${PROJECT_SOURCE_DIR}/frontend/Name.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Name.h
+    ${PROJECT_SOURCE_DIR}/frontend/NameVisitor.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Names.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Names.h
+    ${PROJECT_SOURCE_DIR}/frontend/ObjectiveCAtKeywords.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/ObjectiveCTypeQualifiers.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/ObjectiveCTypeQualifiers.h
+    ${PROJECT_SOURCE_DIR}/frontend/Parser.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Parser.h
+    ${PROJECT_SOURCE_DIR}/frontend/QtContextKeywords.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/QtContextKeywords.h
+    ${PROJECT_SOURCE_DIR}/frontend/Scope.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Scope.h
+    ${PROJECT_SOURCE_DIR}/frontend/Symbol.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Symbol.h
+    ${PROJECT_SOURCE_DIR}/frontend/SymbolVisitor.h
+    ${PROJECT_SOURCE_DIR}/frontend/Symbols.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Symbols.h
+    ${PROJECT_SOURCE_DIR}/frontend/SyntaxAmbiguity.h
+    ${PROJECT_SOURCE_DIR}/frontend/Templates.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Templates.h
+    ${PROJECT_SOURCE_DIR}/frontend/Token.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Token.h
+    ${PROJECT_SOURCE_DIR}/frontend/TranslationUnit.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/TranslationUnit.h
+    ${PROJECT_SOURCE_DIR}/frontend/Type.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/Type.h
+    ${PROJECT_SOURCE_DIR}/frontend/TypeOfExpression.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/TypeOfExpression.h
+    ${PROJECT_SOURCE_DIR}/frontend/TypeVisitor.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/TypeVisitor.h
     # Generator's file
     ${PROJECT_SOURCE_DIR}/generator/Assert.h
     ${PROJECT_SOURCE_DIR}/generator/BuiltinNames.h
@@ -109,8 +111,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.cpp
     ${PROJECT_SOURCE_DIR}/generator/Tester.h
     ${PROJECT_SOURCE_DIR}/generator/Tester.cpp
-    ${PROJECT_SOURCE_DIR}/generator/TypeOfExpr.h
-    ${PROJECT_SOURCE_DIR}/generator/TypeOfExpr.cpp
     ${PROJECT_SOURCE_DIR}/generator/Utils.h
     ${PROJECT_SOURCE_DIR}/generator/Utils.cpp
     # Analysis files
@@ -148,7 +148,7 @@ include_directories(
     .
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_SOURCE_DIR}/generator
-    ${PROJECT_SOURCE_DIR}/parser
+    ${PROJECT_SOURCE_DIR}/frontend
     ${PROJECT_SOURCE_DIR}/analysis
     ${PROJECT_SOURCE_DIR}/tools
     ${PROJECT_SOURCE_DIR}/utility

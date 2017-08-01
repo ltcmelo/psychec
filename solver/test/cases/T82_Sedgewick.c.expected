@@ -4,12 +4,11 @@ typedef  struct TYPE_12__   TYPE_1__ ;
 
 /* Type definitions */
 struct TYPE_13__ {int v; int w; } ;
-struct TYPE_12__ {int V; int E; int** adj; } ;
+struct TYPE_12__ {int V; __scalar_t E; int** adj; } ;
 typedef  TYPE_1__* Graph ;
 typedef  TYPE_2__ Edge ;
 
 /* Variables and functions */
- TYPE_2__ EDGE (int,int) ; 
- int** MATRIXint (int,int,int /*<<< orphan*/ ) ; 
- TYPE_1__* malloc (int) ; 
-
+ TYPE_2__ EDGE (int,int) ;
+ int** MATRIXint (int,int,int /*<<< orphan*/ ) ;
+ TYPE_1__* malloc (int) ;

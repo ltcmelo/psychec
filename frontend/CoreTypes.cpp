@@ -1,5 +1,8 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
+// Modifications:
+// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -89,6 +92,34 @@ void IntegerType::accept0(TypeVisitor *visitor)
 
 int IntegerType::kind() const
 { return _kind; }
+
+unsigned int IntegerType::rank() const
+{
+    switch (_kind) {
+    case Bool:
+        return 1;
+
+    case Char:
+    case Char16:
+    case Char32:
+        return 2;
+
+    case Short:
+        return 3;
+
+    case Int:
+        return 4;
+
+    case Long:
+        return 5;
+
+    case LongLong:
+        return 6;
+
+    default:
+        return 0;
+    }
+}
 
 FloatType::FloatType(int kind)
     : _kind(kind)

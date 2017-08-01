@@ -1,0 +1,10 @@
+/* Forward declarations */
+
+/* Type definitions */
+
+/* Variables and functions */
+ int /*<<< orphan*/ * col_sep ;
+ int /*<<< orphan*/  g (int /*<<< orphan*/ *) ;
+ int /*<<< orphan*/ * line ;
+ int /*<<< orphan*/ * optarg ;
+

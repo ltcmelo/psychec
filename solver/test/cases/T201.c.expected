@@ -10,6 +10,6 @@ struct TYPE_2__ {char const* pw_name; } ;
  TYPE_1__* pwd ;
  int /*<<< orphan*/  uid ;
  char const* umaxtostr (int /*<<< orphan*/ ,int /*<<< orphan*/ ) ;
- int user ;
+ __scalar_t user ;
  int /*<<< orphan*/  xstrdup (char const*) ;
 

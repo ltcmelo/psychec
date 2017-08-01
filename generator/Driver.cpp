@@ -155,7 +155,7 @@ void Driver::generateConstraints()
 {
     // Build domain lattice.
     DomainLattice lattice(tu());
-    lattice.buildRanking(tuAst(), global_);
+    lattice.categorize(tuAst(), global_);
 
     std::ostringstream oss;
     auto writer = factory_.makeWriter(oss);

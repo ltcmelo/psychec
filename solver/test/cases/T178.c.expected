@@ -6,5 +6,5 @@
  int EXIT_FAILURE ; 
  int EXIT_SUCCESS ; 
  int /*<<< orphan*/  error (int,...) ; 
- int ok ; 
+ __scalar_t ok ;
 

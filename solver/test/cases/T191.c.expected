@@ -8,5 +8,5 @@ typedef  TYPE_1__* List ;
 
 /* Variables and functions */
  char* FAIL_MACRO (int) ; 
- int  analyse (TYPE_1__*) ;
+ __scalar_t analyse (TYPE_1__*) ;
  TYPE_1__* make () ; 

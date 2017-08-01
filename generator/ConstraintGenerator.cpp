@@ -37,7 +37,7 @@
 #include "Symbols.h"
 #include "SymbolPP.h"
 #include "TranslationUnit.h"
-#include "TypeOfExpr.h"
+#include "TypeOfExpression.h"
 #include "Utils.h"
 #include <iostream>
 #include <algorithm>
@@ -330,7 +330,7 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             pushType(rhsAlpha);
             visitExpression(declIt->value->initializer);
 
-            applyTypeLattice(lattice_->recover(decl), classOfExpr(declIt->value->initializer),
+            applyTypeLattice(lattice_->retrieveDomain(decl), classOfExpr(declIt->value->initializer),
                              alpha, rhsAlpha, T_EQUAL);
             popType();
         }
@@ -567,15 +567,18 @@ bool isPolyOprtrArithRet(int opTk)
 
 } // anonymous
 
-void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
-                                           const DomainLattice::Class& rhsClass,
+void ConstraintGenerator::applyTypeLattice(const DomainLattice::Domain& lhsClass,
+                                           const DomainLattice::Domain& rhsClass,
                                            const std::string& lhsAlpha,
                                            const std::string& rhsAlpha,
                                            int opTk)
 {
+    // TODO: Refactor consistently across operators.
+
     switch (opTk) {
     case T_MINUS:
         if (lhsClass == DomainLattice::Pointer && rhsClass == DomainLattice::Pointer) {
+            writer_->writeEquivRel(lhsAlpha, rhsAlpha);
             writer_->writeEquivRel(types_.top(), kDefaultArithTy);
             printDebug("Keep constraint (subtraction) %s x %s\n",
                        lhsClass.name_.c_str(), rhsClass.name_.c_str());
@@ -590,15 +593,30 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
                        lhsClass.name_.c_str(), rhsClass.name_.c_str());
             return;
         }
+
         if (rhsClass == DomainLattice::Pointer) {
             writer_->writeEquivRel(types_.top(), rhsAlpha);
             printDebug("Keep constraint %s x %s\n",
                        lhsClass.name_.c_str(), rhsClass.name_.c_str());
             return;
         }
-    }
 
-    // TODO: Refactor on per-operator basis.
+        if (lhsClass == DomainLattice::Scalar) {
+            writer_->writeEquivRel(types_.top(), lhsAlpha);
+            writer_->writeSubtypeRel(lhsAlpha, kScalar_t__);
+            if (rhsClass == DomainLattice::Scalar)
+                writer_->writeEquivRel(lhsAlpha, rhsAlpha);
+            return;
+        }
+
+        if (rhsClass == DomainLattice::Scalar) {
+            writer_->writeEquivRel(types_.top(), rhsAlpha);
+            writer_->writeSubtypeRel(rhsAlpha, kScalar_t__);
+            if (lhsClass == DomainLattice::Scalar)
+                writer_->writeEquivRel(lhsAlpha, lhsAlpha);
+            return;
+        }
+    }
 
     // Eliminate the risk of overnification for arbitrary binary expressions.
     if ((lhsClass == DomainLattice::Pointer
@@ -615,26 +633,41 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
         return;
     }
 
+    if (lhsClass == DomainLattice::Scalar
+            && rhsClass > DomainLattice::Scalar) {
+        writer_->writeSubtypeRel(lhsAlpha, kScalar_t__);
+        return;
+    }
+
+    if (rhsClass == DomainLattice::Scalar
+            && lhsClass > DomainLattice::Scalar) {
+        writer_->writeSubtypeRel(rhsAlpha, kScalar_t__);
+        return;
+    }
+
     printDebug("No constraint tweak, %s x %s\n",
                lhsClass.name_.c_str(), rhsClass.name_.c_str());
 
     // At this point, we know there's no conflict between pointers and
     // arithmetic types. We pick the one with the highest rank.
-    std::string actualArithTy = (lhsClass > rhsClass) ? lhsClass.arithName_
-                                                      : rhsClass.arithName_;
+    std::string actualTy = (lhsClass > rhsClass) ? lhsClass.ty_
+                                                 : rhsClass.ty_;
 
     if (lhsClass != DomainLattice::Scalar
             && rhsClass != DomainLattice::Scalar
-            && actualArithTy.empty()) {
+            && actualTy.empty()) {
         if (lhsClass == DomainLattice::Integral
                 || rhsClass == DomainLattice::Integral
                 || lhsClass == DomainLattice::Arithmetic
                 || rhsClass == DomainLattice::Arithmetic) {
-            actualArithTy = kDefaultIntTy;
+            actualTy = kDefaultIntTy;
         } else if (lhsClass == DomainLattice::FloatingPoint
                    || rhsClass == DomainLattice::FloatingPoint) {
-            actualArithTy = kDefaultFloatPointTy;
+            actualTy = kDefaultFloatPointTy;
         }
+    } else if (lhsClass == DomainLattice::Scalar
+               && rhsClass == DomainLattice::Scalar) {
+        actualTy = kScalar_t__;
     }
 
     // We must be careful with polymorphic operators such as `+' or `-' since
@@ -646,14 +679,14 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
         else
             writer_->writeEquivRel(lhsAlpha, rhsAlpha);
 
-        if (!actualArithTy.empty()) {
-            writer_->writeEquivRel(lhsAlpha, actualArithTy);
-            writer_->writeEquivRel(rhsAlpha, actualArithTy);
+        if (!actualTy.empty()) {
+            writer_->writeEquivRel(lhsAlpha, actualTy);
+            writer_->writeEquivRel(rhsAlpha, actualTy);
         }
 
         if (isPolyOprtrArithRet(opTk)) {
             writer_->writeEquivRel(types_.top(),
-                                   actualArithTy.empty() ? kDefaultArithTy : actualArithTy);
+                                   actualTy.empty() ? kDefaultArithTy : actualTy);
         }
         return;
     }
@@ -661,31 +694,21 @@ void ConstraintGenerator::applyTypeLattice(const DomainLattice::Class& lhsClass,
     writer_->writeTruth();
 }
 
-DomainLattice::Class ConstraintGenerator::classOfExpr(ExpressionAST *ast) const
+DomainLattice::Domain ConstraintGenerator::classOfExpr(ExpressionAST *ast) const
 {
-    DomainLattice::Class clazz = DomainLattice::Undefined;
+    DomainLattice::Domain clazz = DomainLattice::Undefined;
     if (lattice_) {
-        clazz = lattice_->recover(ast);
+        clazz = lattice_->retrieveDomain(ast);
         if (clazz != DomainLattice::Undefined) {
             const auto& s = lattice_->fetchText(ast);
             printDebug("Recovered AST %s as %s\n", s.c_str(), clazz.name_.c_str());
-
-            // Scalar types default to integral. Defaulting is necessary to avoid a scalar
-            // being interpreted as an integral one time and as a pointer another time.
-            if (clazz == DomainLattice::Scalar
-                    && !(ast->asNumericLiteral()
-                         && !strcmp(numericLiteral(
-                                        ast->asNumericLiteral()->literal_token)->chars(), "0"))) {
-                clazz = DomainLattice::Integral;
-                printDebug("Defaulting scalar AST %s to %s\n", s.c_str(), clazz.name_.c_str());
-            }
         }
     }
 
     if (clazz == DomainLattice::Undefined) {
-        TypeOfExpr typeofExpr(translationUnit());
+        TypeOfExpression typeofExpr(translationUnit());
         FullySpecifiedType ty = typeofExpr.resolve(ast, scope_);
-        clazz = DomainLattice::classOf(ty);
+        clazz = DomainLattice::domainForType(ty);
         // TODO: Fetch text utility.
         const auto& s = lattice_->fetchText(ast);
         printDebug("Typed AST %s as %s\n", s.c_str(), clazz.name_.c_str());
@@ -959,8 +982,8 @@ void ConstraintGenerator::convertBoolExpression(ExpressionAST *ast)
 {
     std::string ty;
     auto clazz = classOfExpr(ast);
-    if (!clazz.arithName_.empty()) {
-        ty = clazz.arithName_;
+    if (!clazz.ty_.empty()) {
+        ty = clazz.ty_;
     } else {
         if (clazz == DomainLattice::Arithmetic) {
             ty = kDefaultArithTy;
@@ -971,6 +994,8 @@ void ConstraintGenerator::convertBoolExpression(ExpressionAST *ast)
         } else {
             ty = supply_.createTypeVar1();
             writer_->writeExists(ty);
+            if (clazz == DomainLattice::Scalar)
+                writer_->writeSubtypeRel(ty, kScalar_t__);
         }
     }
 
@@ -1335,7 +1360,7 @@ bool ConstraintGenerator::visit(ExpressionStatementAST *ast)
     if (!ast->expression)
         return false;
 
-    // Deal with an assignment.
+    // Deal with assignment.
     if (ast->expression->asBinaryExpression()) {
         switch (tokenKind(ast->expression->asBinaryExpression()->binary_op_token)) {
         case T_EQUAL:

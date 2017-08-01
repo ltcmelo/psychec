@@ -2,14 +2,13 @@
 typedef  struct TYPE_7__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_7__ {int E; int V; int** adj; } ;
+struct TYPE_7__ {__scalar_t E; int V; __scalar_t** adj; } ;
 typedef  TYPE_1__* Graph ;
 
 /* Variables and functions */
- int /*<<< orphan*/  EDGE (int,int) ; 
- int /*<<< orphan*/  GRAPHinsertE (TYPE_1__*,int /*<<< orphan*/ ) ; 
- int GRAPHiso (TYPE_1__*,int) ; 
- int GRAPHpath (TYPE_1__*,int,int) ; 
- int /*<<< orphan*/  GRAPHremoveE (TYPE_1__*,int /*<<< orphan*/ ) ; 
- int /*<<< orphan*/  printf (char*,int,int) ; 
-
+ int /*<<< orphan*/  EDGE (int,int) ;
+ int /*<<< orphan*/  GRAPHinsertE (TYPE_1__*,int /*<<< orphan*/ ) ;
+ __scalar_t GRAPHiso (TYPE_1__*,int) ;
+ __scalar_t GRAPHpath (TYPE_1__*,int,int) ;
+ int /*<<< orphan*/  GRAPHremoveE (TYPE_1__*,int /*<<< orphan*/ ) ;
+ int /*<<< orphan*/  printf (char*,int,int) ;

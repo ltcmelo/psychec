@@ -1,7 +1,9 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  int T2 ;
-typedef  __scalar_t T1 ;
+typedef  long* T3 ;
+typedef  long* T2 ;
+typedef  long* T1 ;
 
 /* Variables and functions */
+

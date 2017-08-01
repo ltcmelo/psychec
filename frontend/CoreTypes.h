@@ -1,5 +1,8 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
+// Modifications:
+// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -80,6 +83,8 @@ public:
 
     int kind() const;
 
+    unsigned int rank() const;
+
     virtual IntegerType *asIntegerType()
     { return this; }
 
@@ -91,6 +96,7 @@ protected:
 
 private:
     int _kind;
+    int _rank;
 };
 
 class CPLUSPLUS_EXPORT FloatType: public Type

@@ -1,0 +1,16 @@
+/* Forward declarations */
+
+/* Type definitions */
+typedef  long* T2 ;
+typedef  long* T1 ;
+
+/* Variables and functions */
+ char* bpout0 ;
+ char* bpout1 ;
+ char* bpout2 ;
+ __scalar_t j ;
+ __scalar_t j1 ;
+ __scalar_t j2 ;
+ long u1 ;
+ long u2 ;
+

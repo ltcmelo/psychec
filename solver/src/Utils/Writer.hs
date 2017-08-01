@@ -38,6 +38,7 @@ writeCFile ctxs@(tcx, _) =
   -- writeIncs ++
   writeNULL ++
   writeSize_t ++
+  writeScalar_t ++
   writeBoolDef ++
   writeFwdDecls tcx ++
   writeDecls ctxs
@@ -58,22 +59,25 @@ writeIncs =
 
 -- | Write NULL definition.
 writeNULL :: String
-writeNULL = "#define NULL ((void*)0)\n\n"
+writeNULL = "#define NULL ((void*)0)\n"
 
 
 -- | Write size_t definition.
 writeSize_t :: String
-writeSize_t = "typedef unsigned long size_t;  // Customize by platform.\n\n"
+writeSize_t = "typedef unsigned long size_t;  // Customize by platform.\n"
+
+
+-- | Write __scalar_t definition.
+writeScalar_t :: String
+writeScalar_t = "typedef int __scalar_t;  // Either arithmetic or pointer type.\n"
 
 
 -- TODO: By default, our generator parses a `bool' type and interpret it as an `int'.
 -- We'll make this optional.
 writeBoolDef :: String
 writeBoolDef =
-  "/* By default, we accept bool (as int). */\n" ++
-  "typedef int bool;\n" ++
-  "const bool false = 0;\n" ++
-  "const bool true = 1;\n" ++
+  "/* By default, we understand bool (as a convenience). */\n" ++
+  "typedef int bool; const bool false = 0; const bool true = 1;\n" ++
   "\n"
 
 

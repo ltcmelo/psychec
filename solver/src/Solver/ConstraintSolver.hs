@@ -64,8 +64,17 @@ solve c l = do
   -- Populate value context, create missing variables, generalize types.
   (vcx0,c'') <- stage2 vcx c'
 
+  {--liftIO (print $ text "c'\n" <+> pprint c')
+  liftIO (print $ text "tcx0\n" <+> pprint (TyCtx $ cleanTypes C99 (tyctx tcx0)))
+  liftIO (print $ text "c''\n" <+> pprint c'')
+  liftIO (print $ text "vcx0\n" <+> pprint (VarCtx $ cleanValues C99 (varctx vcx0)))--}
+
   -- Split constraints into equivalence, inequality, and field acess.
   let (eqs, iqs, fds) = stage3 c''
+
+  {--liftIO (print $ text "eqs e iqs\n")
+  liftIO (mapM_ (print . pprint) eqs)
+  liftIO (mapM_ (print . pprint) iqs)--}
 
   -- Move function constraints to last positions, so we get more instantiated types to match
   -- variadic functions.
@@ -248,7 +257,6 @@ stage2 vtx (n :<-: t@(FunTy rt pts)) =
                         pcs' = foldr (\c acc -> c :&: acc) Truth pcs
                         rtc = rt :>: rt'
                     return (vtx, pcs' :&: rtc)
-                -- FIXME: Verify scoping.
                 t' -> return (vtx, t' :=: t)
         Nothing -> do
             v <- fresh
@@ -579,6 +587,7 @@ dunifyList :: [Constraint] -> SolverM Subst
 dunifyList [] = return nullSubst
 dunifyList ((t :>: t') : ts) = do
     s <- dunify t t' Relax
+    --liftIO (print $ pprint (t :>: t') <+> text "|" <+> pprint s)
     s' <- dunifyList (apply s ts)
     return (s' @@ s)
 

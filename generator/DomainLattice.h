@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2016-17 Leandro T. C. Melo (ltcmelo@gmail.com)
+ Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
 
  This library is free software; you can redistribute it and/or modify it under
  the terms of the GNU Lesser General Public License as published by the Free
@@ -39,82 +39,64 @@ class PSYCHEC_API DomainLattice final : public CPlusPlus::ASTVisitor
 public:
     DomainLattice(CPlusPlus::TranslationUnit* unit);
 
-    void buildRanking(CPlusPlus::TranslationUnitAST* ast, CPlusPlus::Scope* global);
-
+    void categorize(CPlusPlus::TranslationUnitAST* ast, CPlusPlus::Scope* global);
 
     /*!
-     * \brief The class structure
+     * \brief The domain
      */
-    struct Class
+    struct Domain
     {
-        explicit Class(const std::string& name = "undefined")
+        explicit Domain(const std::string& name = "undefined")
             : name_(name)
         {}
 
-        Class(const std::string& name, const std::string& tyName)
-            : name_(name), arithName_(tyName)
+        Domain(const std::string& name, const std::string& tyName)
+            : name_(name), ty_(tyName)
         {}
 
-        bool operator>(const Class& other) const;
-        bool operator==(const Class& other) const;
-        bool operator!=(const Class& other) const;
+        bool operator>(const Domain& other) const;
+        bool operator>=(const Domain& other) const;
+        bool operator==(const Domain& other) const;
+        bool operator!=(const Domain& other) const;
 
         std::string name_;
-        std::string arithName_;
+        std::string ty_;
     };
 
-    // The classes.
-    const static Class Undefined;
-    const static Class Scalar;
-    const static Class Pointer;
-    const static Class Integral;
-    const static Class FloatingPoint;
-    const static Class Arithmetic; // Integer or floating-point.
+    // The domains.
+    const static Domain Undefined;
+    const static Domain Scalar;
+    const static Domain Pointer;
+    const static Domain Integral;
+    const static Domain FloatingPoint;
+    const static Domain Arithmetic; // Integral or floating-point.
 
     /*!
-     * \brief totalize
-     *
-     * Classify the AST.
-     */
-    void totalize(CPlusPlus::ExpressionAST*, const CPlusPlus::Scope*);
-    void totalize(CPlusPlus::SimpleDeclarationAST*, const CPlusPlus::Scope*);
-
-    /*!
-     * \brief createBindings
-     */
-    void createBindings();
-
-    /*!
-     * \brief recover
+     * \brief retrieveDomain
      * \return
      *
-     * Return the class of the given identifier.
+     * Return the domain of the given AST/symbol.
      */
-    Class recover(const CPlusPlus::Symbol *sym) const;
-    Class recover(const CPlusPlus::Symbol *sym, const CPlusPlus::Scope*) const;
+    Domain retrieveDomain(const CPlusPlus::Symbol* sym) const;
+    Domain retrieveDomain(const CPlusPlus::Symbol* sym, const CPlusPlus::Scope*) const;
+    Domain retrieveDomain(CPlusPlus::ExpressionAST* ast) const;
+    Domain retrieveDomain(CPlusPlus::ExpressionAST* ast, const CPlusPlus::Scope*) const;
 
     /*!
-     * \brief recover
-     * \param ast
-     * \return
-     */
-    Class recover(CPlusPlus::ExpressionAST* ast) const;
-    Class recover(CPlusPlus::ExpressionAST* ast, const CPlusPlus::Scope*) const;
-
-    /*!
-     * \brief classOf
+     * \brief typeDomain
      * \param ty
      * \return
+     *
+     * Return the domain of a type.
      */
-    static Class classOf(const CPlusPlus::FullySpecifiedType& ty,
-                         const CPlusPlus::Symbol* sym = nullptr);
+    static Domain domainForType(const CPlusPlus::FullySpecifiedType& ty,
+                               const CPlusPlus::Symbol* sym = nullptr);
 
     // TEMP: Make this a utility.
     std::string fetchText(CPlusPlus::AST* ast) const;
 
 private:
-    void classify(CPlusPlus::ExpressionAST* ast);
-    void enter(CPlusPlus::ExpressionAST* ast);
+    const Scope *switchScope(const CPlusPlus::Scope* scope);
 
     // Declarations
     bool visit(CPlusPlus::SimpleDeclarationAST* ast) override;
@@ -150,35 +132,32 @@ private:
     bool visit(CPlusPlus::BracedInitializerAST *ast) override;
     bool visit(CPlusPlus::PostIncrDecrAST* ast) override;
 
-    Class switchClass(Class);
-    CPlusPlus::ExpressionAST* isKnownAST(CPlusPlus::ExpressionAST*) const;
+    Domain enforceBaseDomain(Domain);
+    void assignDomain(CPlusPlus::ExpressionAST* ast);
+    Domain lastDom_;
 
-    const Scope *switchScope(const CPlusPlus::Scope* scope);
-
-    using SymbolMap = std::unordered_map<const CPlusPlus::Symbol*, Class>;
-    using AstMap = std::unordered_map<CPlusPlus::ExpressionAST*, Class>;
-
-    std::unordered_map<const CPlusPlus::Scope*, SymbolMap> symbolDB_2;
-    std::unordered_map<const CPlusPlus::Scope*, AstMap> astDB_2;
-
-    Class clazz_;
+    using SymbolMap = std::unordered_map<const CPlusPlus::Symbol*, Domain>;
+    using AstMap = std::unordered_map<CPlusPlus::ExpressionAST*, Domain>;
     SymbolMap symbolDB_;
     AstMap astDB_;
+
     std::vector<CPlusPlus::ExpressionAST*> knownAsts_;
+    CPlusPlus::ExpressionAST* isKnownAST(CPlusPlus::ExpressionAST*) const;
+
     const CPlusPlus::Scope* scope_;
     mutable ASTIdentityMatcher matcher_;
 
     // Function argument domains, taken from the call with highest rank.
     struct ArgumentData
     {
-        Class clazz_;
+        Domain clazz_;
         std::vector<CPlusPlus::ExpressionAST*> instances_;
     };
 
     std::unordered_map<CPlusPlus::ExpressionAST*, std::vector<ArgumentData>> funcs_;
 };
 
-inline std::ostream& operator<<(std::ostream& os, const DomainLattice::Class& h)
+inline std::ostream& operator<<(std::ostream& os, const DomainLattice::Domain& h)
 {
     os << h.name_;
     return os;
