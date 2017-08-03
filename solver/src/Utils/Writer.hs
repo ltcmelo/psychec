@@ -39,8 +39,7 @@ writeCFile ctxs@(tcx, _) =
   writeNULL ++
   writeSize_t ++
   writeScalar_t ++
-  -- writeBoolDef ++
-  "\n" ++
+  writeBoolDef ++
   writeFwdDecls tcx ++
   writeDecls ctxs
 
@@ -73,12 +72,13 @@ writeScalar_t :: String
 writeScalar_t = "typedef int __scalar_t;  // Either arithmetic or pointer type.\n"
 
 
--- TODO: Make bool optional.
-{-- writeBoolDef :: String
+-- TODO: By default, our generator parses a `bool' type and interpret it as an `int'.
+-- We'll make this optional.
+writeBoolDef :: String
 writeBoolDef =
   "/* By default, we understand bool (as a convenience). */\n" ++
   "typedef int bool; const bool false = 0; const bool true = 1;\n" ++
-  "\n" --}
+  "\n"
 
 
 -- | Write forward declarations.
