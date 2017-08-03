@@ -96,7 +96,6 @@ protected:
 
 private:
     int _kind;
-    int _rank;
 };
 
 class CPLUSPLUS_EXPORT FloatType: public Type

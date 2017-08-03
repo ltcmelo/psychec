@@ -135,13 +135,12 @@ private:
     /*!
      * Pointer x scalar lattice related processing.
      */
-    bool preprocess_;
-    void applyTypeLattice(const DomainLattice::Domain &lhsClass,
-                          const DomainLattice::Domain &rhsClass,
-                          const std::string &lhsAlpha,
-                          const std::string &rhsAlpha,
-                          int opTk);
-    DomainLattice::Domain classOfExpr(CPlusPlus::ExpressionAST* ast) const;
+    void applyTypeLattice(const DomainLattice::Domain &lhsDom,
+                          const DomainLattice::Domain &rhsDom,
+                          const std::string &lhsTy,
+                          const std::string &rhsTy,
+                          int op);
+    DomainLattice::Domain domain(CPlusPlus::ExpressionAST* ast) const;
     //!@}
 
     //!@{
