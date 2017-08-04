@@ -131,6 +131,7 @@ private:
     bool visit(CPlusPlus::PointerLiteralAST* ast) override;
     bool visit(CPlusPlus::BracedInitializerAST *ast) override;
     bool visit(CPlusPlus::PostIncrDecrAST* ast) override;
+    bool visit(CPlusPlus::NestedExpressionAST* ast) override;
 
     Domain enforceBaseDomain(Domain);
     void assignDomain(CPlusPlus::ExpressionAST* ast);
@@ -150,7 +151,7 @@ private:
     // Function argument domains, taken from the call with highest rank.
     struct ArgumentData
     {
-        Domain clazz_;
+        Domain clazz_; // TODO: rename
         std::vector<CPlusPlus::ExpressionAST*> instances_;
     };
 

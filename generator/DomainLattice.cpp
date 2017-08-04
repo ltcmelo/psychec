@@ -110,14 +110,33 @@ DomainLattice::DomainLattice(TranslationUnit *unit)
 
 void DomainLattice::categorize(TranslationUnitAST* ast, Scope* global)
 {
-    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
-        accept(it->value);
-    printDebug("Done, 1st pass\n\n");
+    scope_ = global;
 
-    // TODO: Don't pass over everything, adjust function class.
     for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
         accept(it->value);
-    printDebug("Done, 2nd pass\n\n");
+
+    // Use collected function arguments to normalize domains in every call.
+    for (auto& p : funcs_) {
+        auto& argsData = p.second;
+        for (auto& argData : argsData) {
+            Domain dom = argData.clazz_;
+            bool needUpdate = false;
+            for (ExpressionAST* arg : argData.instances_) {
+                const Domain& argDom = retrieveDomain(arg);
+                if (argDom > dom) {
+                    dom = argDom;
+                    needUpdate = true;
+                }
+            }
+
+            if (needUpdate) {
+                for (ExpressionAST* arg : argData.instances_) {
+                    enforceBaseDomain(dom);
+                    visitExpression(arg);
+                }
+            }
+        }
+    }
 }
 
 DomainLattice::Domain DomainLattice::retrieveDomain(const Symbol* sym) const
@@ -590,12 +609,17 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
         return false;
     }
 
-    default:
-        Domain prevClass = enforceBaseDomain(Undefined);
+    case T_COMMA: {
+        Domain dom = enforceBaseDomain(Undefined);
         visitExpression(expr->left_expression);
         enforceBaseDomain(Undefined);
         visitExpression(expr->right_expression);
-        enforceBaseDomain(prevClass);
+        enforceBaseDomain(dom);
+        return false;
+    }
+
+    default:
+        PSYCHE_ASSERT(false, return false, "unrecognized operator");
         return false;
     }
 }
@@ -782,14 +806,14 @@ bool DomainLattice::visit(CallAST *ast)
     for (ExpressionListAST* it = ast->expression_list; it; it = it->next, ++idx) {
         data[idx].instances_.push_back(it->value);
 
-        auto paramClazz = DomainLattice::Undefined;
+        auto paramDom = DomainLattice::Undefined;
         if (func) {
             auto argSym = func->argumentAt(idx);
             if (argSym)
-                paramClazz = domainForType(argSym->type(), argSym);
+                paramDom = domainForType(argSym->type(), argSym);
         }
 
-        enforceBaseDomain(paramClazz);
+        enforceBaseDomain(paramDom);
         visitExpression(it->value);
 
         // If a higher rank is reached, update the argument data.
@@ -817,6 +841,13 @@ bool DomainLattice::visit(PostIncrDecrAST* ast)
 {
     enforceBaseDomain(Scalar);
     visitExpression(ast->base_expression);
+
+    return false;
+}
+
+bool DomainLattice::visit(NestedExpressionAST* ast)
+{
+    visitExpression(ast->expression);
 
     return false;
 }

@@ -2,7 +2,7 @@
 typedef  struct TYPE_6__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_6__ {int V; int E; } ;
+struct TYPE_6__ {double V; int E; } ;
 typedef  TYPE_1__* Graph ;
 
 /* Variables and functions */

@@ -1,7 +1,7 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  int INT ;
+typedef  size_t INT ;
 
 /* Variables and functions */
 

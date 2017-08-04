@@ -178,13 +178,6 @@ public:
      */
     virtual void writeSubtypeMark();
 
-    /*!
-     * \brief writeTruth
-     *
-     * Write a filling true=true constraint.
-     */
-    virtual void writeTruth();
-
     //!@{
     /*!
      * Sub-grouping

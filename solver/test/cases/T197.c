@@ -1,4 +1,3 @@
-// The issue (simplified) from T50: scoping in domain lattice.
 
 void NEW(link param)
 {

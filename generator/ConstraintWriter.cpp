@@ -240,13 +240,6 @@ void ConstraintWriter::writeEquivRel(const std::string &ty1, const std::string &
     ++cnt_;
 }
 
-void ConstraintWriter::writeTruth()
-{
-    beginSection();
-    writeEquivRel("true", "true");
-    endSection();
-}
-
 void ConstraintWriter::enterGroup()
 {
     HONOR_BLOCKING_STATE;

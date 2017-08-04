@@ -1,11 +1,10 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  int numType ;
+typedef  float numType ;
 
 /* Variables and functions */
- int atoi (char*) ; 
- int /*<<< orphan*/  printf (char*,double) ; 
- int rand () ; 
- double sqrt (float) ; 
-
+ int atoi (char*) ;
+ int /*<<< orphan*/  printf (char*,double) ;
+ float rand () ;
+ double sqrt (float) ;

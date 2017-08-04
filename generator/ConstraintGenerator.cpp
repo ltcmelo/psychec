@@ -1,20 +1,19 @@
 /******************************************************************************
- * Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- * USA
+ Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+
+ This library is free software; you can redistribute it and/or modify it under
+ the terms of the GNU Lesser General Public License as published by the Free
+ Software Foundation; either version 2.1 of the License, or (at your option)
+ any later version.
+
+ This library is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+ for more details.
+
+ You should have received a copy of the GNU Lesser General Public License along
+ with this library; if not, write to the Free Software Foundation, Inc., 51
+ Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
 /*
@@ -326,11 +325,13 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
                 && !declIt->value->initializer->asBracedInitializer()) {
             const std::string& rhsAlpha = supply_.createTypeVar1();
             writer_->writeExists(rhsAlpha);
-            pushType(rhsAlpha);
-            visitExpression(declIt->value->initializer);
+            collectExpression(rhsAlpha, declIt->value->initializer);
 
-            applyTypeLattice(lattice_->retrieveDomain(decl), domain(declIt->value->initializer),
-                             alpha, rhsAlpha, T_EQUAL);
+            const std::string& dummy = supply_.createTypeVar1();
+            writer_->writeExists(dummy);
+            pushType(dummy);
+            employLattice(lattice_->retrieveDomain(decl), domainOf(declIt->value->initializer),
+                          alpha, rhsAlpha, T_EQUAL);
             popType();
         }
 
@@ -432,268 +433,187 @@ void ConstraintGenerator::visitExpression(ExpressionAST *ast)
     accept(ast);
 }
 
-namespace {
-
-const std::string nonPolyOprtrName(int opTk)
+void ConstraintGenerator::employLattice(const DomainLattice::Domain& lhsDom,
+                                        const DomainLattice::Domain& rhsDom,
+                                        const std::string& lhsTy,
+                                        const std::string& rhsTy,
+                                        int op)
 {
-    switch (opTk) {
-    case T_STAR:
-        return "*";
+    printDebug("Binary expression  %s x %s\n", lhsDom.name_.c_str(), rhsDom.name_.c_str());
 
-    case T_SLASH:
-        return "/";
-
-    case T_PERCENT:
-        return "%";
-
-    case T_AMPER:
-        return "&";
-
-    case T_PIPE:
-        return "|";
-
-    case T_CARET:
-        return "^";
-
-    case T_LESS_LESS:
-        return "<<";
-
-    case T_GREATER_GREATER:
-        return ">>";
-
-    default:
-        PSYCHE_ASSERT(false, return "", "operator is polymorphic");
-        return "";
-    }
-}
-
-/*!
- * \brief isPolymorphicOperator
- * \param op
- *
- * Return whether the operator is polymorhpic. But we don't consider polymorphism
- * among numeric types themsleves (i.e. between integers and floating points).
- * We are interested on operators in which pointer types can be operands.
- */
-bool isPolymorphicOperator(int op)
-{
-    switch (op) {
-        // Assignment operators
-    case T_EQUAL:
-    case T_PLUS_EQUAL:
-    case T_MINUS_EQUAL:
-    case T_STAR_EQUAL:
-    case T_SLASH_EQUAL:
-    case T_PERCENT_EQUAL:
-    case T_LESS_LESS_EQUAL:
-    case T_GREATER_GREATER_EQUAL:
-    case T_CARET_EQUAL:
-    case T_AMPER_EQUAL:
-    case T_PIPE_EQUAL:
-        return true;
-
-        // Additive operators
-    case T_PLUS:
-    case T_MINUS:
-        return true;
-
-        // Multiplicative operators
-    case T_STAR:
-    case T_SLASH:
-    case T_PERCENT:
-        return true;
-
-        // Bitwise operators
-    case T_AMPER:
-    case T_PIPE:
-    case T_CARET:
-        return true;
-
-        // Shift operators
-    case T_LESS_LESS:
-    case T_GREATER_GREATER:
-        return false;
-
-        // Logical operators
-    case T_AMPER_AMPER:
-    case T_PIPE_PIPE:
-        return true;
-
-        // Equality operators
-    case T_EXCLAIM_EQUAL:
-    case T_EQUAL_EQUAL:
-        return true;
-
-        // Relational operators.
-    case T_LESS:
-    case T_GREATER:
-    case T_LESS_EQUAL:
-    case T_GREATER_EQUAL:
-        return true;
-
-    default:
-        PSYCHE_ASSERT(false, return false, "unhandled binary operator");
-        break;
-    }
-}
-
-/*!
- * \brief isPolyOprtrArithRet
- * \param opTk
- *
- * Return whether the return type of an expression involving the given operator
- * is of an arithmetic type.
- */
-bool isPolyOprtrArithRet(int opTk)
-{
-    switch (opTk) {
-    case T_PLUS:
-    case T_MINUS:
-    case T_AMPER_AMPER:
-    case T_PIPE_PIPE:
-    case T_EXCLAIM_EQUAL:
-    case T_EQUAL_EQUAL:
-    case T_LESS:
-    case T_GREATER:
-    case T_LESS_EQUAL:
-    case T_GREATER_EQUAL:
-        return true;
-
-    default:
-        return false;
-    }
-}
-
-} // anonymous
-
-void ConstraintGenerator::applyTypeLattice(const DomainLattice::Domain& lhsDom,
-                                           const DomainLattice::Domain& rhsDom,
-                                           const std::string& lhsTy,
-                                           const std::string& rhsTy,
-                                           int op)
-{
-    // TODO: Refactor consistently across operators.
+    auto isInconsistent = [&lhsDom, &rhsDom] () {
+        return ((lhsDom == DomainLattice::Pointer
+                    && (rhsDom == DomainLattice::Integral
+                        || rhsDom == DomainLattice::FloatingPoint
+                        || rhsDom == DomainLattice::Arithmetic))
+                || (rhsDom == DomainLattice::Pointer
+                    && (lhsDom == DomainLattice::Integral
+                        || lhsDom == DomainLattice::FloatingPoint
+                        || lhsDom == DomainLattice::Arithmetic)));
+    };
 
     switch (op) {
     case T_MINUS:
         if (lhsDom == DomainLattice::Pointer && rhsDom == DomainLattice::Pointer) {
             writer_->writeEquivRel(lhsTy, rhsTy);
             writer_->writeEquivRel(types_.top(), kDefaultArithTy);
-            printDebug("Keep constraint (subtraction) %s x %s\n",
-                       lhsDom.name_.c_str(), rhsDom.name_.c_str());
-            return;
+            break;
         }
         // Fallthrough
 
-    case T_PLUS:
+    case T_PLUS: {
+        auto handlePtr = [this] (const std::string& ptrTy,
+                                 const std::string& otherTy,
+                                 const DomainLattice::Domain& otherDom) {
+            writer_->writeEquivRel(types_.top(), ptrTy);
+            if (otherDom == DomainLattice::Scalar) {
+                writer_->writeEquivRel(otherTy, kIntTy);
+            } else if (otherDom == DomainLattice::Arithmetic
+                        || otherDom == DomainLattice::Integral
+                        || otherDom == DomainLattice::FloatingPoint) {
+                writer_->writeEquivRel(otherTy, otherDom.ty_.empty() ? kIntTy : otherDom.ty_);
+            } else {
+                // TODO: report error.
+            }
+        };
+
+        auto handleArith = [this] (const std::string& arithTy,
+                                   const std::string& otherTy,
+                                   const DomainLattice::Domain& otherDom) {
+            if (otherDom == DomainLattice::Arithmetic
+                    || otherDom == DomainLattice::Integral
+                    || otherDom == DomainLattice::FloatingPoint) {
+                writer_->writeEquivRel(arithTy, otherTy);
+                writer_->writeEquivRel(types_.top(), arithTy); // TODO: Use side with higher rank.
+            } else {
+                PSYCHE_ASSERT(otherDom == DomainLattice::Scalar, return, "expected scalar");
+                writer_->writeEquivRel(types_.top(), otherTy);
+                writer_->writeSubtypeRel(otherTy, kScalar_t__);
+            }
+        };
+
         if (lhsDom == DomainLattice::Pointer) {
-            writer_->writeEquivRel(types_.top(), lhsTy);
-            printDebug("Keep constraint %s x %s\n",
-                       lhsDom.name_.c_str(), rhsDom.name_.c_str());
-            return;
-        }
-
-        if (rhsDom == DomainLattice::Pointer) {
-            writer_->writeEquivRel(types_.top(), rhsTy);
-            printDebug("Keep constraint %s x %s\n",
-                       lhsDom.name_.c_str(), rhsDom.name_.c_str());
-            return;
-        }
-
-        if (lhsDom == DomainLattice::Scalar) {
-            writer_->writeEquivRel(types_.top(), lhsTy);
-            writer_->writeSubtypeRel(lhsTy, kScalar_t__);
-            if (rhsDom == DomainLattice::Scalar)
-                writer_->writeEquivRel(lhsTy, rhsTy);
-            return;
-        }
-
-        if (rhsDom == DomainLattice::Scalar) {
-            writer_->writeEquivRel(types_.top(), rhsTy);
-            writer_->writeSubtypeRel(rhsTy, kScalar_t__);
-            if (lhsDom == DomainLattice::Scalar)
-                writer_->writeEquivRel(lhsTy, lhsTy);
-            return;
-        }
-    }
-
-    // Eliminate the risk of overnification for arbitrary binary expressions.
-    if ((lhsDom == DomainLattice::Pointer
-         && (rhsDom == DomainLattice::Integral
-             || rhsDom == DomainLattice::FloatingPoint
-             || rhsDom == DomainLattice::Arithmetic))
-            || ((lhsDom == DomainLattice::Integral
-                 || lhsDom == DomainLattice::FloatingPoint
-                 || lhsDom == DomainLattice::Arithmetic)
-                && (rhsDom == DomainLattice::Pointer))) {
-        printDebug("Discard constraint, %s x %s\n",
-                   lhsDom.name_.c_str(), rhsDom.name_.c_str());
-        writer_->writeTruth();
-        return;
-    }
-
-    if (lhsDom == DomainLattice::Scalar
-            && rhsDom > DomainLattice::Scalar) {
-        writer_->writeSubtypeRel(lhsTy, kScalar_t__);
-        return;
-    }
-
-    if (rhsDom == DomainLattice::Scalar
-            && lhsDom > DomainLattice::Scalar) {
-        writer_->writeSubtypeRel(rhsTy, kScalar_t__);
-        return;
-    }
-
-    printDebug("No constraint tweak, %s x %s\n",
-               lhsDom.name_.c_str(), rhsDom.name_.c_str());
-
-    // At this point, we know there's no conflict between pointers and
-    // arithmetic types. We pick the one with the highest rank.
-    std::string actualTy = (lhsDom > rhsDom) ? lhsDom.ty_
-                                                 : rhsDom.ty_;
-
-    if (lhsDom != DomainLattice::Scalar
-            && rhsDom != DomainLattice::Scalar
-            && actualTy.empty()) {
-        if (lhsDom == DomainLattice::Integral
+            handlePtr(lhsTy, rhsTy, rhsDom);
+        } else if (rhsDom == DomainLattice::Pointer) {
+            handlePtr(rhsTy, lhsTy, lhsDom);
+        } else if (lhsDom == DomainLattice::Arithmetic
+                || lhsDom == DomainLattice::Integral
+                || lhsDom == DomainLattice::FloatingPoint) {
+            handleArith(lhsTy, rhsTy, rhsDom);
+        } else if (rhsDom == DomainLattice::Arithmetic
                 || rhsDom == DomainLattice::Integral
-                || lhsDom == DomainLattice::Arithmetic
-                || rhsDom == DomainLattice::Arithmetic) {
-            actualTy = kDefaultIntTy;
-        } else if (lhsDom == DomainLattice::FloatingPoint
-                   || rhsDom == DomainLattice::FloatingPoint) {
-            actualTy = kDefaultFloatPointTy;
-        }
-    } else if (lhsDom == DomainLattice::Scalar
-               && rhsDom == DomainLattice::Scalar) {
-        actualTy = kScalar_t__;
-    }
-
-    // We must be careful with polymorphic operators such as `+' or `-' since
-    // they work on both pointers and integers. A constraint for a concrete
-    // type may only be generated in the case both operands are compatible.
-    if (isPolymorphicOperator(op)) {
-        if (op == T_EQUAL)
-            writer_->writeSubtypeRel(lhsTy, rhsTy);
-        else
+                || rhsDom == DomainLattice::FloatingPoint) {
+            handleArith(rhsTy, lhsTy, lhsDom);
+        } else {
+            // Scalars
+            writer_->writeEquivRel(types_.top(), lhsTy);
             writer_->writeEquivRel(lhsTy, rhsTy);
-
-        if (!actualTy.empty()) {
-            writer_->writeEquivRel(lhsTy, actualTy);
-            writer_->writeEquivRel(rhsTy, actualTy);
+            writer_->writeSubtypeRel(lhsTy, kScalar_t__);
+            writer_->writeSubtypeRel(rhsTy, kScalar_t__);
         }
-
-        if (isPolyOprtrArithRet(op)) {
-            writer_->writeEquivRel(types_.top(),
-                                   actualTy.empty() ? kDefaultArithTy : actualTy);
-        }
-        return;
+        break;
     }
 
-    writer_->writeTruth();
+    // Arithmetic
+    case T_STAR:
+    case T_SLASH:
+    case T_PERCENT:
+    case T_AMPER:
+    case T_PIPE:
+    case T_CARET:
+    case T_LESS_LESS:
+    case T_GREATER_GREATER:
+        writer_->writeEquivRel(lhsTy, rhsTy);
+        writer_->writeEquivRel(types_.top(), lhsTy); // TODO: Use side with higher rank.
+        writer_->writeSubtypeRel(types_.top(), kIntTy);
+        break;
+
+    // Comparison
+    case T_LESS:
+    case T_LESS_EQUAL:
+    case T_GREATER:
+    case T_GREATER_EQUAL:
+    case T_EQUAL_EQUAL:
+    case T_EXCLAIM_EQUAL:
+        writer_->writeEquivRel(lhsTy, rhsTy);
+        writer_->writeEquivRel(types_.top(), kIntTy);
+        if (lhsDom == DomainLattice::Scalar && rhsDom == DomainLattice::Scalar) {
+            writer_->writeEquivRel(lhsTy, kScalar_t__);
+            writer_->writeEquivRel(rhsTy, kScalar_t__);
+        }
+        break;
+
+    // Logical
+    case T_AMPER_AMPER:
+    case T_PIPE_PIPE:
+        if (!isInconsistent()) {
+            writer_->writeEquivRel(types_.top(), kIntTy);
+            if (lhsDom == DomainLattice::Scalar)
+                writer_->writeSubtypeRel(lhsTy, kScalar_t__);
+            if (rhsDom == DomainLattice::Scalar)
+                writer_->writeSubtypeRel(rhsTy, kScalar_t__);
+        }
+        break;
+
+    case T_EQUAL:
+        if (!isInconsistent()) {
+            writer_->writeSubtypeRel(lhsTy, rhsTy);
+            writer_->writeEquivRel(types_.top(), lhsTy);
+            if (lhsDom == DomainLattice::Scalar && rhsDom == DomainLattice::Scalar) {
+                writer_->writeEquivRel(lhsTy, kScalar_t__);
+                writer_->writeEquivRel(rhsTy, kScalar_t__);
+            }
+        }
+        break;
+
+    case T_PLUS_EQUAL:
+    case T_MINUS_EQUAL:
+        if (!isInconsistent()) {
+            if (lhsDom == DomainLattice::Pointer) {
+                writer_->writeEquivRel(types_.top(), lhsTy);
+            } else if (rhsDom == DomainLattice::Pointer) {
+                writer_->writeEquivRel(types_.top(), rhsTy);
+            } else if (lhsDom == DomainLattice::Scalar) {
+                writer_->writeEquivRel(types_.top(), lhsTy);
+                writer_->writeSubtypeRel(lhsTy, kScalar_t__);
+                if (rhsDom == DomainLattice::Scalar)
+                    writer_->writeEquivRel(lhsTy, rhsTy);
+            } else if (rhsDom == DomainLattice::Scalar) {
+                writer_->writeEquivRel(types_.top(), rhsTy);
+                writer_->writeSubtypeRel(rhsTy, kScalar_t__);
+                if (lhsDom == DomainLattice::Scalar)
+                    writer_->writeEquivRel(lhsTy, rhsTy);
+            } else {
+                writer_->writeEquivRel(types_.top(), lhsTy); // TODO: Use the highest rank.
+                writer_->writeEquivRel(lhsTy, rhsTy);
+            }
+        }
+        break;
+
+    case T_STAR_EQUAL:
+    case T_SLASH_EQUAL:
+    case T_PERCENT_EQUAL:
+    case T_AMPER_EQUAL:
+    case T_PIPE_EQUAL:
+    case T_CARET_EQUAL:
+    case T_LESS_LESS_EQUAL:
+    case T_GREATER_GREATER_EQUAL:
+        writer_->writeEquivRel(lhsTy, rhsTy);
+        if (lhsDom > DomainLattice::Arithmetic)
+            writer_->writeEquivRel(types_.top(), lhsTy);
+        else if (rhsDom > DomainLattice::Arithmetic)
+            writer_->writeEquivRel(types_.top(), rhsTy);
+        else
+            writer_->writeEquivRel(types_.top(), kIntTy);
+        break;;
+
+    default:
+        PSYCHE_ASSERT(false, return, "unrecognized operator");
+        break;
+    }
 }
 
-DomainLattice::Domain ConstraintGenerator::domain(ExpressionAST *ast) const
+DomainLattice::Domain ConstraintGenerator::domainOf(ExpressionAST *ast) const
 {
     DomainLattice::Domain dom = DomainLattice::Undefined;
     if (lattice_) {
@@ -743,18 +663,19 @@ bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
     DEBUG_VISIT(BinaryExpressionAST);
     OBSERVE(BinaryExpressionAST);
 
-    // A comma expression is irrelevant for us. We consider it merely as a
-    // sequence of unrelated expressions.
-    unsigned opTk = tokenKind(ast->binary_op_token);
-    if (opTk == T_COMMA) {
+    // A comma expression is just a  sequence of unrelated expressions.
+    unsigned op = tokenKind(ast->binary_op_token);
+    if (op == T_COMMA) {
         visitExpression(ast->left_expression);
-        if (ast->right_expression)
-            visitExpression(ast->right_expression);
+
+        const std::string& alpha = supply_.createTypeVar1();
+        writer_->writeExists(alpha);
+        collectExpression(alpha, ast->right_expression);
         return false;
     }
 
-    // We don't know the underlying element type of the pointer, but we can
-    // at least constrain the left-hand-side as a pointer.
+    // Upon NULL, we don't know the underlying element type of the pointer, but we can
+    // constrain the left-hand-side as a pointer.
     ExpressionAST* left = stripParen(ast->left_expression);
     ExpressionAST* right = stripParen(ast->right_expression);
     if (right->asPointerLiteral()) {
@@ -772,21 +693,7 @@ bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
     collectExpression(std::get<0>(a1a2), left);
     collectExpression(std::get<1>(a1a2), right);
 
-    applyTypeLattice(domain(left), domain(right),
-                     std::get<0>(a1a2), std::get<1>(a1a2),
-                     opTk);
-
-    if (!isPolymorphicOperator(opTk)) {
-        writer_->beginSection();
-        writer_->writeTypeof(nonPolyOprtrName(opTk));
-        writer_->writeEquivMark();
-        writer_->enterGroup();
-        ENSURE_NONEMPTY_TYPE_STACK(return false);
-        writer_->writeTypesSection(
-        { std::get<0>(a1a2), std::get<1>(a1a2), types_.top() });
-        writer_->leaveGroup();
-        writer_->endSection();
-    }
+    employLattice(domainOf(left), domainOf(right), std::get<0>(a1a2), std::get<1>(a1a2), op);
 
     return false;
 }
@@ -929,7 +836,6 @@ bool ConstraintGenerator::visit(CallAST *ast)
 
             case PrintfScanner::Pointer:
                 // We don't know the underlying pointer type, nothing interesting to do.
-                writer_->writeTruth();
                 break;
 
             default:
@@ -980,20 +886,20 @@ bool ConstraintGenerator::visit(CastExpressionAST *ast)
 void ConstraintGenerator::convertBoolExpression(ExpressionAST *ast)
 {
     std::string ty;
-    auto clazz = domain(ast);
-    if (!clazz.ty_.empty()) {
-        ty = clazz.ty_;
+    auto dom = domainOf(ast);
+    if (!dom.ty_.empty()) {
+        ty = dom.ty_;
     } else {
-        if (clazz == DomainLattice::Arithmetic) {
+        if (dom == DomainLattice::Arithmetic) {
             ty = kDefaultArithTy;
-        } else if (clazz == DomainLattice::Integral) {
+        } else if (dom == DomainLattice::Integral) {
             ty = kDefaultIntTy;
-        } else if (clazz == DomainLattice::FloatingPoint) {
+        } else if (dom == DomainLattice::FloatingPoint) {
             ty = kDefaultFloatPointTy;
         } else {
             ty = supply_.createTypeVar1();
             writer_->writeExists(ty);
-            if (clazz == DomainLattice::Scalar)
+            if (dom == DomainLattice::Scalar)
                 writer_->writeSubtypeRel(ty, kScalar_t__);
         }
     }
@@ -1361,24 +1267,10 @@ bool ConstraintGenerator::visit(ExpressionStatementAST *ast)
 
     // Deal with assignment.
     if (ast->expression->asBinaryExpression()) {
-        switch (tokenKind(ast->expression->asBinaryExpression()->binary_op_token)) {
-        case T_EQUAL:
-        case T_PLUS_EQUAL:
-        case T_MINUS_EQUAL:
-        case T_STAR_EQUAL:
-        case T_SLASH_EQUAL:
-        case T_PERCENT_EQUAL:
-        case T_LESS_LESS_EQUAL:
-        case T_GREATER_GREATER_EQUAL:
-        case T_CARET_EQUAL:
-        case T_AMPER_EQUAL:
-        case T_PIPE_EQUAL:
-            visitExpression(ast->expression);
-            return false;
-
-        default:
-            break;
-        }
+        const std::string& alpha = supply_.createTypeVar1();
+        writer_->writeExists(alpha);
+        collectExpression(alpha, ast->expression);
+        return false;
     }
 
     // Deal with a pointer dereference.

@@ -15,7 +15,7 @@ link max(Item a[], int l, int r)
     x->l = max(a, l, m);
     x->r = max(a, m+1, r);
     u = x->l->item; v = x->r->item;
-    if (u > v) 
+    if (u > v)  // force scalar
       x->item = u; else x->item = v;
     return x;
   }

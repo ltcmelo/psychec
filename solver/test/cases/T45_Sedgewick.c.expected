@@ -8,5 +8,5 @@ struct TYPE_13__ {int item; struct TYPE_13__* next; } ;
 /* Variables and functions */
  TYPE_1__* deleteNext (TYPE_1__*) ; 
  void insertNext (TYPE_1__*,TYPE_1__*) ; 
- TYPE_1__* malloc (int /*<<< orphan*/ ) ; 
+ TYPE_1__* malloc (int ) ;
 

@@ -4,5 +4,5 @@
 typedef  int /*<<< orphan*/  Item ;
 
 /* Variables and functions */
- int /*<<< orphan*/ * malloc (int /*<<< orphan*/ ) ; 
+ int /*<<< orphan*/ * malloc (int ) ;
 

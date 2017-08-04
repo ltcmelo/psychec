@@ -6,5 +6,5 @@ typedef  TYPE_1__* link ;
 struct TYPE_13__ {int item; struct TYPE_13__* next; } ;
 
 /* Variables and functions */
- TYPE_1__* malloc (int /*<<< orphan*/ ) ; 
+ TYPE_1__* malloc (int ) ;
 

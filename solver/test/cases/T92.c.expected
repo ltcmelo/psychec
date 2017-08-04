@@ -1,14 +1,14 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  short TUS ;
-typedef  long TUL ;
-typedef  int TUI ;
-typedef  short TSIU ;
+typedef  unsigned short TUS ;
+typedef  unsigned long TUL ;
+typedef  unsigned int TUI ;
+typedef  unsigned short TSIU ;
 typedef  short TS ;
-typedef  double TLD ;
+typedef  long double TLD ;
 typedef  long TL ;
-typedef  int TIU ;
+typedef  unsigned int TIU ;
 typedef  int TI ;
 
 /* Variables and functions */
