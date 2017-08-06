@@ -106,23 +106,29 @@ DomainLattice::DomainLattice(TranslationUnit *unit)
     : ASTVisitor(unit)
     , lastDom_(Undefined)
     , matcher_(unit)
+    , scope_(nullptr)
+    , globalScope_(nullptr)
+    , cutoffScope_(nullptr)
 {}
 
 void DomainLattice::categorize(TranslationUnitAST* ast, Scope* global)
 {
-    scope_ = global;
+    enterScope(global);
+    globalScope_ = scope_;
 
-    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
+    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next) {
+        resetCutoffScope();
         accept(it->value);
+    }
 
     // Use collected function arguments to normalize domains in every call.
     for (auto& p : funcs_) {
         auto& argsData = p.second;
         for (auto& argData : argsData) {
-            Domain dom = argData.clazz_;
+            Domain dom = argData.dom_;
             bool needUpdate = false;
             for (ExpressionAST* arg : argData.instances_) {
-                const Domain& argDom = retrieveDomain(arg);
+                const Domain& argDom = retrieveDomain(arg, argData.callScope_); // TODO: Store scope.
                 if (argDom > dom) {
                     dom = argDom;
                     needUpdate = true;
@@ -131,7 +137,8 @@ void DomainLattice::categorize(TranslationUnitAST* ast, Scope* global)
 
             if (needUpdate) {
                 for (ExpressionAST* arg : argData.instances_) {
-                    enforceBaseDomain(dom);
+                    resetCutoffScope();
+                    enforceLeastDomain(dom);
                     visitExpression(arg);
                 }
             }
@@ -139,40 +146,64 @@ void DomainLattice::categorize(TranslationUnitAST* ast, Scope* global)
     }
 }
 
-DomainLattice::Domain DomainLattice::retrieveDomain(const Symbol* sym) const
+const DomainLattice::DB* DomainLattice::searchDB(const Scope* scope) const
 {
-    auto it = symbolDB_.find(const_cast<Symbol*>(sym));
-    if (it != symbolDB_.end())
-        return it->second;
+    PSYCHE_ASSERT(scope, return nullptr, "expected valid scope");
+
+    auto it = index_.find(scope);
+    while (it == index_.end()) {
+        if (!scope->enclosingScope())
+            return nullptr;
+        return searchDB(scope->enclosingScope());
+    }
+    return &it->second;
+}
+
+DomainLattice::DB *DomainLattice::findOrCreateDB(const Scope *scope)
+{
+    DB* db = nullptr;
+    auto it = index_.find(scope);
+    if (it == index_.end())
+        db = &index_[scope];
+    else
+        db = &it->second;
+    PSYCHE_ASSERT(db, return nullptr, "expected valid db");
+
+    return db;
+}
+
+template <class T, class MapT>
+DomainLattice::Domain DomainLattice::retrieveDomainCore(const T* v,
+                                                        const MapT DB::*m,
+                                                        const CPlusPlus::Scope* scope) const
+{
+    while (scope) {
+        if (const DB* db = searchDB(scope)) {
+            auto it = (db->*m).find(v);
+            if (it != (db->*m).end())
+                return it->second;
+        }
+        scope = scope->enclosingScope();
+    }
     return Undefined;
 }
 
-DomainLattice::Domain DomainLattice::retrieveDomain(const Symbol *sym, const Scope* scope) const
+DomainLattice::Domain DomainLattice::retrieveDomain(const Symbol* sym, const Scope* scope) const
 {
-    // TODO
-    return Undefined;
+    return retrieveDomainCore(sym, &DB::second, scope);
 }
 
-DomainLattice::Domain DomainLattice::retrieveDomain(ExpressionAST *ast) const
+DomainLattice::Domain DomainLattice::retrieveDomain(const ExpressionAST* ast, const Scope* scope) const
 {
-    auto equivalent = isKnownAST(ast);
-    if (!equivalent)
+    auto equiv = isKnownAST(ast);
+    if (!equiv)
         return Undefined;
 
-    PSYCHE_ASSERT(astDB_.find(equivalent) != astDB_.end(),
-                  return Undefined,
-                  "expected equivalent ast in index");
-    return astDB_.find(equivalent)->second;
-}
-
-DomainLattice::Domain DomainLattice::retrieveDomain(ExpressionAST *ast, const Scope* scope) const
-{
-    // TODO
-    return Undefined;
+    return retrieveDomainCore(equiv, &DB::first, scope);
 }
 
 DomainLattice::Domain DomainLattice::domainForType(const FullySpecifiedType& ty,
-                                                  const Symbol* sym)
+                                                   const Symbol* sym)
 {
     auto debug = [sym] (const char* m) {
         if (sym) {
@@ -247,90 +278,97 @@ void DomainLattice::assignDomain(ExpressionAST *ast)
     const auto& astText = fetchText(ast);
 
     bool checkTy = true;
+
     if (ast->asNumericLiteral()) {
-        const NumericLiteral *numLit =
-                numericLiteral(ast->asNumericLiteral()->literal_token);
+        // We don't want to type 0: it's both an integer and the null pointer constant.
+        const NumericLiteral *numLit = numericLiteral(ast->asNumericLiteral()->literal_token);
         PSYCHE_ASSERT(numLit, return, "numeric literal must exist");
         checkTy = !numLit->isInt() || strcmp(numLit->chars(), kZero);
     }
 
-    // Whenever we have typing information, we must use it.
     if (checkTy) {
-        TypeOfExpression typeofExpr(translationUnit());
-        FullySpecifiedType ty = typeofExpr.resolve(ast, const_cast<Scope*>(scope_));
-        if (ty.isValid()) {
-            // This AST can be of any form, but it it's an identifier-expression
-            // we recover the symbol so we can associated the class with it too.
-            const Symbol* valSym = nullptr;
-            if (ast->asIdExpression())
-                valSym = lookupValueSymbol(ast->asIdExpression()->name->name, scope_);
+        TypeOfExpression exprType(translationUnit());
+        FullySpecifiedType ty = exprType.resolve(ast, const_cast<Scope*>(scope_));
 
-            auto clazz = domainForType(ty, valSym);
-            if (clazz > lastDom_) {
-                enforceBaseDomain(clazz);
-                printDebug("Upgrade class to %s, based type of AST <%s>\n",
+        if (ty.isValid()) {
+            auto dom = domainForType(ty, nullptr);
+            if (dom > lastDom_) {
+                enforceLeastDomain(dom);
+                printDebug("Upgrade domain to %s, based on type information of AST <%s>\n",
                            lastDom_.name_.c_str(), astText.c_str());
             }
+        }
+    }
 
-            // The "extra" association of classes with symbols is needed only
-            // in the case of declarations with initializers.
-            if (valSym) {
+    if (ast->asIdExpression()) {
+        auto valSym = lookupValueSymbol(ast->asIdExpression()->name->name, scope_);
+
+        // The domain of a symbol applies from its declaration onwards or, in the case
+        // its declaration is absent, within the entire scope.
+        if (valSym && !control()->isSymbolAnulled(valSym)) {
+            auto symScope = valSym->enclosingScope();
+            if (!symScope->encloses(cutoffScope_))
+                cutoffScope_ = symScope;
+
+            DB* db = findOrCreateDB(symScope);
+            if (lastDom_ > db->second[valSym]) {
                 const auto& symName = SymbolPP().print(valSym);
-                auto it = symbolDB_.find(valSym);
-                if (it == symbolDB_.end()) {
-                    symbolDB_.insert(std::make_pair(valSym, clazz));
-                    printDebug("Symbol %s classified as %s in AST <%s>\n",
-                               symName.c_str(), lastDom_.name_.c_str(), astText.c_str());
-                } else {
-                    it->second = clazz;
-                    printDebug("Symbol %s classified as %s in AST <%s>\n",
-                               symName.c_str(), lastDom_.name_.c_str(), astText.c_str());
-                }
+                printDebug("Symbol %s (re)categorized as <%s>\n", symName.c_str(), lastDom_.name_.c_str());
+                db->second[valSym] = lastDom_;
             }
+        } else {
+            resetCutoffScope();
         }
     }
 
-    if (auto equivalent = isKnownAST(ast)) {
-        PSYCHE_ASSERT(astDB_.find(equivalent) != astDB_.end(),
-                      return,
-                      "expected equivalent ast in index");
-
-        if (astDB_[equivalent] > lastDom_) {
-            enforceBaseDomain(astDB_[equivalent]);
-            printDebug("Upgrade class to %s, from equivalent of AST <%s>\n",
-                       lastDom_.name_.c_str(), astText.c_str());
-            return;
-        }
-        if (lastDom_ > astDB_[equivalent]) {
-            astDB_[equivalent] = lastDom_;
-            printDebug("AST <%s> re-classified as %s\n",
+    // The domain of an expression applies up to the least scope where the declaration
+    // of a symbol involved in its subexpressions appears.
+    DB* db = findOrCreateDB(cutoffScope_);
+    if (auto equiv = isKnownAST(ast)) {
+        auto ait = db->first.find(equiv);
+        if (ait != db->first.end()) {
+            auto& astDom = ait->second;
+            if (astDom > lastDom_) {
+                // Upgrade least domain
+                enforceLeastDomain(astDom);
+            } else if (lastDom_ > astDom) {
+                // Update ast domain
+                printDebug("AST %s re-categorized as <%s>\n",
+                           astText.c_str(), lastDom_.name_.c_str());
+                astDom = lastDom_;
+            }
+        } else {
+            printDebug("AST %s categorized as <%s> in deeper scope\n",
                        astText.c_str(), lastDom_.name_.c_str());
-            return;
+            db->first[equiv] = lastDom_;
         }
+    } else {
+        printDebug("New AST %s categorized as <%s>\n", astText.c_str(), lastDom_.name_.c_str());
+        knownAsts_.push_back(ast);
+        db->first[ast] = lastDom_;
     }
-
-    knownAsts_.push_back(ast);
-    astDB_[ast] = lastDom_;
-    printDebug("AST <%s> classified as %s\n",
-               astText.c_str(), lastDom_.name_.c_str());
 }
 
-void DomainLattice::visitExpression(ExpressionAST *ast)
-{
-    accept(ast);
-    assignDomain(ast);
-}
+    //--- Statements
 
 bool DomainLattice::visit(FunctionDefinitionAST* ast)
 {
-    accept(ast->function_body);
+    const Scope *prevScope = enterScope(ast->symbol);
+    visitStatement(ast->function_body);
+    enterScope(prevScope);
 
     return false;
 }
 
+void DomainLattice::visitStatement(StatementAST *ast)
+{
+    resetCutoffScope();
+    accept(ast);
+}
+
 bool DomainLattice::visit(SwitchStatementAST *ast)
 {
-    enforceBaseDomain(Integral);
+    enforceLeastDomain(Integral);
     visitExpression(ast->condition);
 
     return false;
@@ -338,7 +376,7 @@ bool DomainLattice::visit(SwitchStatementAST *ast)
 
 bool DomainLattice::visit(CaseStatementAST *ast)
 {
-    enforceBaseDomain(Integral);
+    enforceLeastDomain(Integral);
     visitExpression(ast->expression);
 
     return false;
@@ -346,18 +384,19 @@ bool DomainLattice::visit(CaseStatementAST *ast)
 
 bool DomainLattice::visit(CompoundStatementAST *ast)
 {
-    enforceBaseDomain(Undefined);
+    enforceLeastDomain(Undefined);
 
-    const Scope *prevScope = switchScope(ast->symbol);
+    const Scope *prevScope = enterScope(ast->symbol);
     for (StatementListAST *it = ast->statement_list; it; it = it->next)
-        accept(it->value);
-    switchScope(prevScope);
+        visitStatement(it->value);
+    enterScope(prevScope);
 
     return false;
 }
 
 bool DomainLattice::visit(DeclarationStatementAST *ast)
 {
+    resetCutoffScope();
     accept(ast->declaration);
 
     return false;
@@ -365,48 +404,59 @@ bool DomainLattice::visit(DeclarationStatementAST *ast)
 
 bool DomainLattice::visit(DoStatementAST *ast)
 {
-    enforceBaseDomain(Scalar);
+    enforceLeastDomain(Scalar);
+
     visitExpression(ast->expression);
-    accept(ast->statement);
+    visitStatement(ast->statement);
 
     return false;
 }
 
 bool DomainLattice::visit(WhileStatementAST *ast)
 {
-    enforceBaseDomain(Scalar);
+    enforceLeastDomain(Scalar);
+
+    const Scope* prevScope = enterScope(ast->symbol);
     visitExpression(ast->condition);
-    accept(ast->statement);
+    visitStatement(ast->statement);
+    enterScope(prevScope);
 
     return false;
 }
 
 bool DomainLattice::visit(ForStatementAST *ast)
 {
-    enforceBaseDomain(Undefined);
+    enforceLeastDomain(Undefined);
+
+    const Scope* prevScope = enterScope(ast->symbol);
     accept(ast->initializer);
-    enforceBaseDomain(Scalar);
+    enforceLeastDomain(Scalar);
     visitExpression(ast->condition);
-    enforceBaseDomain(Undefined);
+    enforceLeastDomain(Undefined);
     visitExpression(ast->expression);
-    accept(ast->statement);
+    visitStatement(ast->statement);
+    enterScope(prevScope);
 
     return false;
 }
 
 bool DomainLattice::visit(IfStatementAST *ast)
 {
-    enforceBaseDomain(Scalar);
+    enforceLeastDomain(Scalar);
+
+    const Scope* prevScope = enterScope(ast->symbol);
     visitExpression(ast->condition);
-    accept(ast->statement);
-    accept(ast->else_statement);
+    visitStatement(ast->statement);
+    visitStatement(ast->else_statement);
+    enterScope(prevScope);
 
     return false;
 }
 
 bool DomainLattice::visit(ExpressionStatementAST *ast)
 {
-    enforceBaseDomain(Undefined);
+    enforceLeastDomain(Undefined);
+
     visitExpression(ast->expression);
 
     return false;
@@ -414,22 +464,31 @@ bool DomainLattice::visit(ExpressionStatementAST *ast)
 
 bool DomainLattice::visit(ReturnStatementAST *ast)
 {
-    enforceBaseDomain(Undefined);
+    enforceLeastDomain(Undefined);
+
     visitExpression(ast->expression);
 
     return false;
 }
 
-ExpressionAST *DomainLattice::isKnownAST(ExpressionAST *ast) const
+    //--- Expressions
+
+void DomainLattice::visitExpression(ExpressionAST *ast)
+{
+    accept(ast);
+    assignDomain(ast);
+}
+
+ExpressionAST *DomainLattice::isKnownAST(const ExpressionAST *ast) const
 {
     for (auto candidate : knownAsts_) {
-        if (ast->match(candidate, &matcher_))
+        if (const_cast<ExpressionAST*>(ast)->match(candidate, &matcher_))
             return candidate;
     }
     return nullptr;
 }
 
-const Scope* DomainLattice::switchScope(const Scope* scope)
+const Scope* DomainLattice::enterScope(const Scope* scope)
 {
     if (!scope)
         return scope_;
@@ -437,19 +496,24 @@ const Scope* DomainLattice::switchScope(const Scope* scope)
     return scope;
 }
 
-DomainLattice::Domain DomainLattice::enforceBaseDomain(DomainLattice::Domain clazz)
+void DomainLattice::resetCutoffScope()
 {
-    std::swap(lastDom_, clazz);
-    return clazz;
+    cutoffScope_ = globalScope_;
+}
+
+DomainLattice::Domain DomainLattice::enforceLeastDomain(DomainLattice::Domain dom)
+{
+    std::swap(lastDom_, dom);
+    return dom;
 }
 
 bool DomainLattice::visit(ArrayAccessAST *ast)
 {
-    Domain prevClass = enforceBaseDomain(Pointer);
+    Domain prevDom = enforceLeastDomain(Pointer);
     visitExpression(ast->base_expression);
-    enforceBaseDomain(Integral);
+    enforceLeastDomain(Integral);
     visitExpression(ast->expression);
-    enforceBaseDomain(prevClass);
+    enforceLeastDomain(prevDom);
 
     return false;
 }
@@ -461,37 +525,37 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     auto plusMinus = [this, expr] (Domain lhsDom, bool isMinus) {
         if (lastDom_ == Scalar) {
             if (lhsDom == Scalar || lhsDom == Pointer)
-                enforceBaseDomain(isMinus ? Scalar : lhsDom);
+                enforceLeastDomain(isMinus ? Scalar : lhsDom);
         } else if (lastDom_ == Pointer) {
             if (lhsDom == Scalar) {
-                enforceBaseDomain(isMinus ? Scalar : Pointer);
+                enforceLeastDomain(isMinus ? Scalar : Pointer);
             } else if (lhsDom == Arithmetic
                             || lhsDom == Integral
                             || lhsDom == FloatingPoint) {
-                enforceBaseDomain(Pointer);
+                enforceLeastDomain(Pointer);
             } else if (isMinus && lhsDom == Pointer) {
-                enforceBaseDomain(Integral);
+                enforceLeastDomain(Integral);
             } else {
-                enforceBaseDomain(Scalar);
+                enforceLeastDomain(Scalar);
             }
         } else if (lastDom_ == Arithmetic
                         || lastDom_ == Integral
                         || lastDom_ == FloatingPoint) {
             if (lhsDom == Scalar || lhsDom == Pointer)
-                enforceBaseDomain(lhsDom);
+                enforceLeastDomain(lhsDom);
         }
     };
 
     switch (tokenKind(expr->binary_op_token)) {
     case T_PLUS: {
         Domain entryDom = Scalar > lastDom_ ? Scalar : lastDom_;
-        enforceBaseDomain(entryDom);
+        enforceLeastDomain(entryDom);
         visitExpression(expr->left_expression);
         Domain lhsDom = lastDom_;
         if (lhsDom == Pointer && entryDom == Pointer)
-            enforceBaseDomain(Scalar);
+            enforceLeastDomain(Scalar);
         else
-            enforceBaseDomain(entryDom);
+            enforceLeastDomain(entryDom);
         visitExpression(expr->right_expression);
 
         plusMinus(lhsDom, false);
@@ -501,27 +565,27 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_MINUS: {
         if (Scalar > lastDom_ || lastDom_ == Pointer) {
             Domain entryDom = Scalar > lastDom_ ? Scalar : Pointer;
-            enforceBaseDomain(entryDom);
+            enforceLeastDomain(entryDom);
             visitExpression(expr->left_expression);
-            Domain lhsDom = enforceBaseDomain(entryDom);
+            Domain lhsDom = enforceLeastDomain(entryDom);
             visitExpression(expr->right_expression);
 
             plusMinus(lhsDom, true);
         } else {
             // Current domain is arithmetic or higher.
-            Domain prevDom = enforceBaseDomain(Scalar);
+            Domain prevDom = enforceLeastDomain(Scalar);
             visitExpression(expr->left_expression);
-            Domain lhsDom = enforceBaseDomain(Scalar);
+            Domain lhsDom = enforceLeastDomain(Scalar);
             visitExpression(expr->right_expression);
 
             if (lhsDom == Scalar && lastDom_ != Scalar) {
-                enforceBaseDomain(lastDom_);
+                enforceLeastDomain(lastDom_);
                 visitExpression(expr->left_expression);
             } else if (lastDom_ == Scalar && lhsDom != Scalar) {
-                enforceBaseDomain(lhsDom);
+                enforceLeastDomain(lhsDom);
                 visitExpression(expr->right_expression);
             }
-            enforceBaseDomain(prevDom);
+            enforceLeastDomain(prevDom);
         }
         return false;
     }
@@ -535,11 +599,11 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_CARET:
     case T_LESS_LESS:
     case T_GREATER_GREATER: {
-        enforceBaseDomain(Arithmetic);
+        enforceLeastDomain(Arithmetic);
         visitExpression(expr->left_expression);
-        enforceBaseDomain(Arithmetic);
+        enforceLeastDomain(Arithmetic);
         visitExpression(expr->right_expression);
-        enforceBaseDomain(Arithmetic);
+        enforceLeastDomain(Arithmetic);
         return false;
     }
 
@@ -550,30 +614,30 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_GREATER_EQUAL:
     case T_EQUAL_EQUAL:
     case T_EXCLAIM_EQUAL: {
-        enforceBaseDomain(Scalar);
+        enforceLeastDomain(Scalar);
         visitExpression(expr->right_expression);
         Domain rhsClass = lastDom_;
         visitExpression(expr->left_expression);
         if (lastDom_ > rhsClass) {
             visitExpression(expr->right_expression); }
-        enforceBaseDomain(Integral);
+        enforceLeastDomain(Integral);
         return false;
     }
 
     // Logical
     case T_AMPER_AMPER:
     case T_PIPE_PIPE: {
-        enforceBaseDomain(Scalar);
+        enforceLeastDomain(Scalar);
         visitExpression(expr->left_expression);
-        enforceBaseDomain(Scalar);
+        enforceLeastDomain(Scalar);
         visitExpression(expr->right_expression);
-        enforceBaseDomain(Arithmetic);
+        enforceLeastDomain(Arithmetic);
         return false;
     }
 
     // Plain assignment
     case T_EQUAL: {
-        enforceBaseDomain(Undefined);
+        enforceLeastDomain(Undefined);
         visitExpression(expr->right_expression);
         Domain rhsClass = lastDom_;
         visitExpression(expr->left_expression);
@@ -585,11 +649,11 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     // Scalar assignment
     case T_PLUS_EQUAL:
     case T_MINUS_EQUAL: {
-        enforceBaseDomain(Scalar);
+        enforceLeastDomain(Scalar);
         visitExpression(expr->right_expression);
-        enforceBaseDomain(Scalar);
+        enforceLeastDomain(Scalar);
         accept(expr->left_expression);
-        enforceBaseDomain(Scalar);
+        enforceLeastDomain(Scalar);
         return false;
     }
 
@@ -602,19 +666,19 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     case T_CARET_EQUAL:
     case T_LESS_LESS_EQUAL:
     case T_GREATER_GREATER_EQUAL: {
-        enforceBaseDomain(Arithmetic);
+        enforceLeastDomain(Arithmetic);
         visitExpression(expr->left_expression);
-        enforceBaseDomain(Arithmetic);
+        enforceLeastDomain(Arithmetic);
         visitExpression(expr->right_expression);
         return false;
     }
 
     case T_COMMA: {
-        Domain dom = enforceBaseDomain(Undefined);
+        Domain dom = enforceLeastDomain(Undefined);
         visitExpression(expr->left_expression);
-        enforceBaseDomain(Undefined);
+        enforceLeastDomain(Undefined);
         visitExpression(expr->right_expression);
-        enforceBaseDomain(dom);
+        enforceLeastDomain(dom);
         return false;
     }
 
@@ -626,12 +690,12 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
 
 bool DomainLattice::visit(ConditionalExpressionAST *ast)
 {
-    Domain prevClass = enforceBaseDomain(Scalar);
+    Domain prevDom = enforceLeastDomain(Scalar);
     visitExpression(ast->condition);
-    enforceBaseDomain(prevClass);
+    enforceLeastDomain(prevDom);
     visitExpression(ast->left_expression);
     visitExpression(ast->right_expression);
-    enforceBaseDomain(prevClass);
+    enforceLeastDomain(prevDom);
 
     return false;
 }
@@ -643,13 +707,13 @@ bool DomainLattice::visit(IdExpressionAST *ast)
 
 bool DomainLattice::visit(MemberAccessAST *ast)
 {
-    Domain prevClass = lastDom_;
+    Domain prevDom = lastDom_;
     if (tokenKind(ast->access_token) == T_ARROW)
-        enforceBaseDomain(Pointer);
+        enforceLeastDomain(Pointer);
     else
-        enforceBaseDomain(Undefined);
+        enforceLeastDomain(Undefined);
     visitExpression(ast->base_expression);
-    enforceBaseDomain(prevClass);
+    enforceLeastDomain(prevDom);
 
     return false;
 }
@@ -658,42 +722,42 @@ bool DomainLattice::visit(UnaryExpressionAST *ast)
 {
     switch (tokenKind(ast->unary_op_token)) {
     case T_STAR: {
-        Domain prevClass = enforceBaseDomain(Pointer);
+        Domain prevDom = enforceLeastDomain(Pointer);
         visitExpression(ast->expression);
-        enforceBaseDomain(prevClass);
+        enforceLeastDomain(prevDom);
         return false;
     }
 
     case T_EXCLAIM:
-        enforceBaseDomain(Scalar);
+        enforceLeastDomain(Scalar);
         visitExpression(ast->expression);
-        enforceBaseDomain(Integral);
+        enforceLeastDomain(Integral);
         return false;
 
     case T_PLUS:
     case T_MINUS:
-        enforceBaseDomain(Arithmetic);
+        enforceLeastDomain(Arithmetic);
         visitExpression(ast->expression);
         if (Arithmetic > lastDom_)
-            enforceBaseDomain(Arithmetic);
+            enforceLeastDomain(Arithmetic);
         return false;
 
     case T_PLUS_PLUS:
     case T_MINUS_MINUS:
         if (Scalar > lastDom_)
-            enforceBaseDomain(Scalar);
+            enforceLeastDomain(Scalar);
         visitExpression(ast->expression);
         return false;
 
     case T_AMPER:
         visitExpression(ast->expression);
-        enforceBaseDomain(Pointer);
+        enforceLeastDomain(Pointer);
         return false;
 
     case T_TILDE:
-        enforceBaseDomain(Arithmetic);
+        enforceLeastDomain(Arithmetic);
         visitExpression(ast->expression);
-        enforceBaseDomain(Arithmetic);
+        enforceLeastDomain(Arithmetic);
         return false;
 
     default:
@@ -707,26 +771,26 @@ bool DomainLattice::visit(NumericLiteralAST *ast)
 {
     const Token& tk = tokenAt(ast->literal_token);
     if (tk.is(T_CHAR_LITERAL)) {
-        enforceBaseDomain(Domain(kIntegral, kCharTy));
+        enforceLeastDomain(Domain(kIntegral, kCharTy));
     } else {
         const NumericLiteral *numLit = numericLiteral(ast->literal_token);
         PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
         if (numLit->isDouble()) {
-            enforceBaseDomain(Domain(kFloatingPoint, kDoubleTy));
+            enforceLeastDomain(Domain(kFloatingPoint, kDoubleTy));
         } else if (numLit->isFloat()) {
-            enforceBaseDomain(Domain(kFloatingPoint, kFloatTy));
+            enforceLeastDomain(Domain(kFloatingPoint, kFloatTy));
         } else if (numLit->isLongDouble()) {
-            enforceBaseDomain(Domain(kFloatingPoint, kLongDouble));
+            enforceLeastDomain(Domain(kFloatingPoint, kLongDouble));
         } else if (numLit->isLong()) {
-            enforceBaseDomain(Domain(kIntegral, kLongTy));
+            enforceLeastDomain(Domain(kIntegral, kLongTy));
         } else if (numLit->isLongLong()) {
-            enforceBaseDomain(Domain(kIntegral, kLongLongTy));
+            enforceLeastDomain(Domain(kIntegral, kLongLongTy));
         } else {
             if (!strcmp(numLit->chars(), kZero)) {
                 printDebug("Found null constant, 0, an integer or a pointer\n");
-                enforceBaseDomain(Scalar);
+                enforceLeastDomain(Scalar);
             } else {
-                enforceBaseDomain(Integral);
+                enforceLeastDomain(Integral);
             }
         }
     }
@@ -736,21 +800,21 @@ bool DomainLattice::visit(NumericLiteralAST *ast)
 
 bool DomainLattice::visit(BoolLiteralAST *ast)
 {
-    enforceBaseDomain(Integral); // Booleans are integrals.
+    enforceLeastDomain(Integral); // Booleans are integrals.
 
     return false;
 }
 
 bool DomainLattice::visit(StringLiteralAST *ast)
 {
-    enforceBaseDomain(Pointer);
+    enforceLeastDomain(Pointer);
 
     return false;
 }
 
 bool DomainLattice::visit(SizeofExpressionAST *ast)
 {
-    enforceBaseDomain(Undefined);
+    enforceLeastDomain(Undefined);
     visitExpression(ast->expression);
 
     return false;
@@ -758,7 +822,7 @@ bool DomainLattice::visit(SizeofExpressionAST *ast)
 
 bool DomainLattice::visit(PointerLiteralAST *ast)
 {
-    enforceBaseDomain(Pointer);
+    enforceLeastDomain(Pointer);
 
     return false;
 }
@@ -766,7 +830,7 @@ bool DomainLattice::visit(PointerLiteralAST *ast)
 bool DomainLattice::visit(BracedInitializerAST *ast)
 {
     for (auto it = ast->expression_list; it; it = it->next) {
-        enforceBaseDomain(Undefined);
+        enforceLeastDomain(Undefined);
         visitExpression(it->value);
     }
 
@@ -775,7 +839,7 @@ bool DomainLattice::visit(BracedInitializerAST *ast)
 
 bool DomainLattice::visit(CallAST *ast)
 {
-    Domain prevClass = lastDom_;
+    Domain prevDom = lastDom_;
     visitExpression(ast->base_expression);
 
     ExpressionAST* equivalent = isKnownAST(ast->base_expression);
@@ -805,6 +869,7 @@ bool DomainLattice::visit(CallAST *ast)
     auto idx = 0u;
     for (ExpressionListAST* it = ast->expression_list; it; it = it->next, ++idx) {
         data[idx].instances_.push_back(it->value);
+        data[idx].callScope_ = scope_; // TODO: Make this a call (not arg) data.
 
         auto paramDom = DomainLattice::Undefined;
         if (func) {
@@ -813,25 +878,25 @@ bool DomainLattice::visit(CallAST *ast)
                 paramDom = domainForType(argSym->type(), argSym);
         }
 
-        enforceBaseDomain(paramDom);
+        enforceLeastDomain(paramDom);
         visitExpression(it->value);
 
         // If a higher rank is reached, update the argument data.
-        if (lastDom_ > data[idx].clazz_) {
-            data[idx].clazz_ = lastDom_;
-        } else if (data[idx].clazz_ > lastDom_) {
-            lastDom_ = data[idx].clazz_;
+        if (lastDom_ > data[idx].dom_) {
+            data[idx].dom_ = lastDom_;
+        } else if (data[idx].dom_ > lastDom_) {
+            lastDom_ = data[idx].dom_;
             visitExpression(it->value);
         }
     }
-    enforceBaseDomain(prevClass);
+    enforceLeastDomain(prevDom);
 
     return false;
 }
 
 bool DomainLattice::visit(CastExpressionAST *ast)
 {
-    enforceBaseDomain(Undefined);
+    enforceLeastDomain(Undefined);
     visitExpression(ast->expression);
 
     return false;
@@ -839,7 +904,7 @@ bool DomainLattice::visit(CastExpressionAST *ast)
 
 bool DomainLattice::visit(PostIncrDecrAST* ast)
 {
-    enforceBaseDomain(Scalar);
+    enforceLeastDomain(Scalar);
     visitExpression(ast->base_expression);
 
     return false;
@@ -851,6 +916,8 @@ bool DomainLattice::visit(NestedExpressionAST* ast)
 
     return false;
 }
+
+    //--- Declarations
 
 bool DomainLattice::visit(SimpleDeclarationAST* ast)
 {
@@ -865,7 +932,7 @@ bool DomainLattice::visit(SimpleDeclarationAST* ast)
 
         Symbol* decl = symIt->value;
         auto clazz = domainForType(decl->type(), decl);
-        enforceBaseDomain(clazz);
+        enforceLeastDomain(clazz);
         visitExpression(declIt->value->initializer);
     }
 

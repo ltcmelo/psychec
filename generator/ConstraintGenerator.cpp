@@ -330,7 +330,7 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             const std::string& dummy = supply_.createTypeVar1();
             writer_->writeExists(dummy);
             pushType(dummy);
-            employLattice(lattice_->retrieveDomain(decl), domainOf(declIt->value->initializer),
+            employLattice(lattice_->retrieveDomain(decl, scope_), domainOf(declIt->value->initializer),
                           alpha, rhsAlpha, T_EQUAL);
             popType();
         }
@@ -617,10 +617,10 @@ DomainLattice::Domain ConstraintGenerator::domainOf(ExpressionAST *ast) const
 {
     DomainLattice::Domain dom = DomainLattice::Undefined;
     if (lattice_) {
-        dom = lattice_->retrieveDomain(ast);
+        dom = lattice_->retrieveDomain(ast, scope_);
         if (dom != DomainLattice::Undefined) {
             const auto& s = lattice_->fetchText(ast);
-            printDebug("Recovered AST %s as %s\n", s.c_str(), dom.name_.c_str());
+            printDebug("Retrieved AST %s as %s\n", s.c_str(), dom.name_.c_str());
         }
     }
 
@@ -635,7 +635,6 @@ DomainLattice::Domain ConstraintGenerator::domainOf(ExpressionAST *ast) const
 
     return dom;
 }
-
 
 bool ConstraintGenerator::visit(ArrayAccessAST *ast)
 {
@@ -663,26 +662,27 @@ bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
     DEBUG_VISIT(BinaryExpressionAST);
     OBSERVE(BinaryExpressionAST);
 
+    ExpressionAST* lexpr = stripParen(ast->left_expression);
+    ExpressionAST* rexpr = stripParen(ast->right_expression);
+
     // A comma expression is just a  sequence of unrelated expressions.
     unsigned op = tokenKind(ast->binary_op_token);
     if (op == T_COMMA) {
-        visitExpression(ast->left_expression);
+        visitExpression(lexpr);
 
         const std::string& alpha = supply_.createTypeVar1();
         writer_->writeExists(alpha);
-        collectExpression(alpha, ast->right_expression);
+        collectExpression(alpha, rexpr);
         return false;
     }
 
-    // Upon NULL, we don't know the underlying element type of the pointer, but we can
+    // With NULL, we don't know the underlying element type of the pointer, but we can
     // constrain the left-hand-side as a pointer.
-    ExpressionAST* left = stripParen(ast->left_expression);
-    ExpressionAST* right = stripParen(ast->right_expression);
-    if (right->asPointerLiteral()) {
+    if (rexpr->asPointerLiteral()) {
         std::tuple<std::string, std::string> a1a2 = supply_.createTypeVar2();
         writer_->writeExists(std::get<0>(a1a2));
         writer_->writeExists(std::get<1>(a1a2));
-        collectExpression(std::get<0>(a1a2), left);
+        collectExpression(std::get<0>(a1a2), lexpr);
         writer_->writePtrRel(std::get<0>(a1a2), std::get<1>(a1a2));
         return false;
     }
@@ -690,10 +690,10 @@ bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
     std::tuple<std::string, std::string> a1a2 = supply_.createTypeVar2();
     writer_->writeExists(std::get<0>(a1a2));
     writer_->writeExists(std::get<1>(a1a2));
-    collectExpression(std::get<0>(a1a2), left);
-    collectExpression(std::get<1>(a1a2), right);
+    collectExpression(std::get<0>(a1a2), lexpr);
+    collectExpression(std::get<1>(a1a2), rexpr);
 
-    employLattice(domainOf(left), domainOf(right), std::get<0>(a1a2), std::get<1>(a1a2), op);
+    employLattice(domainOf(lexpr), domainOf(rexpr), std::get<0>(a1a2), std::get<1>(a1a2), op);
 
     return false;
 }
@@ -885,6 +885,9 @@ bool ConstraintGenerator::visit(CastExpressionAST *ast)
 
 void ConstraintGenerator::convertBoolExpression(ExpressionAST *ast)
 {
+    if (!ast)
+        return;
+
     std::string ty;
     auto dom = domainOf(ast);
     if (!dom.ty_.empty()) {
@@ -1313,12 +1316,8 @@ bool ConstraintGenerator::visit(IfStatementAST *ast)
     OBSERVE(IfStatementAST);
 
     convertBoolExpression(ast->condition);
-
-    if (ast->statement)
-        visitStatement(ast->statement);
-
-    if (ast->else_statement)
-        visitStatement(ast->else_statement);
+    visitStatement(ast->statement);
+    visitStatement(ast->else_statement);
 
     return false;
 }
@@ -1344,9 +1343,7 @@ bool ConstraintGenerator::visit(SwitchStatementAST *ast)
     OBSERVE(SwitchStatementAST);
 
     convertBoolExpression(ast->condition);
-
-    if (ast->statement)
-        visitStatement(ast->statement);
+    visitStatement(ast->statement);
 
     return false;
 }
@@ -1360,8 +1357,7 @@ bool ConstraintGenerator::visit(CaseStatementAST *ast)
     if (ast->expression->asIdExpression())
         writer_->writeConstantExpression(extractId(ast->expression->asIdExpression()->name->name));
 
-    if (ast->statement)
-        visitStatement(ast->statement);
+    visitStatement(ast->statement);
 
     return false;
 }
@@ -1372,9 +1368,7 @@ bool ConstraintGenerator::visit(DoStatementAST *ast)
     OBSERVE(DoStatementAST);
 
     convertBoolExpression(ast->expression);
-
-    if (ast->statement)
-        visitStatement(ast->statement);
+    visitStatement(ast->statement);
 
     return false;
 }
@@ -1385,9 +1379,7 @@ bool ConstraintGenerator::visit(WhileStatementAST *ast)
     OBSERVE(WhileStatementAST);
 
     convertBoolExpression(ast->condition);
-
-    if (ast->statement)
-        visitStatement(ast->statement);
+    visitStatement(ast->statement);
 
     return false;
 }
@@ -1397,16 +1389,12 @@ bool ConstraintGenerator::visit(ForStatementAST *ast)
     DEBUG_VISIT(ForStatementAST);
     OBSERVE(ForStatementAST);
 
-    // Declaration within a for statement in only available C99 onwards.
-    if (ast->initializer
-            && ((ast->initializer->asExpressionStatement()
-                 && ast->initializer->asExpressionStatement()->expression)
-                || ast->initializer->asDeclarationStatement())) {
+    if (ast->initializer && ast->initializer->asDeclarationStatement())
+        visitDeclaration(ast->initializer->asDeclarationStatement()->declaration);
+    else
         visitStatement(ast->initializer);
-    }
 
-    if (ast->condition)
-        convertBoolExpression(ast->condition);
+     convertBoolExpression(ast->condition);
 
     if (ast->expression) {
         const std::string& alpha = supply_.createTypeVar1();
@@ -1414,11 +1402,7 @@ bool ConstraintGenerator::visit(ForStatementAST *ast)
         collectExpression(alpha, ast->expression);
     }
 
-    if (ast->statement)
-        visitStatement(ast->statement);
-
-    if (ast->initializer->asDeclarationStatement())
-        visitDeclaration(ast->initializer->asDeclarationStatement()->declaration);
+    visitStatement(ast->statement);
 
     return false;
 }

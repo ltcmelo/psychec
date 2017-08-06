@@ -57,7 +57,6 @@ Symbol *lookupTypeSymbol(const Name* name, const Scope *scope)
 {
     Symbol *tySym = lookupSymbol(name, scope);
     if (tySym && (tySym->isClass()
-                  || tySym->isFakeClass()
                   || tySym->isForwardClassDeclaration()
                   || tySym->isEnum()
                   || tySym->isTypedef())) {
@@ -72,8 +71,7 @@ Symbol *lookupValueSymbol(const Name *name, const Scope *scope)
     Symbol *valSym = lookupSymbol(name, scope);
     if (valSym
             && (valSym->isDeclaration()
-                || valSym->isFakeDeclaration()
-                || valSym->isArgument())
+                    || valSym->isArgument())
             && valSym->storage() != Symbol::Typedef) {
         return valSym;
     }

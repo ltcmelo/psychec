@@ -299,4 +299,17 @@ unsigned Scope::endOffset() const
 void Scope::setEndOffset(unsigned offset)
 { _endOffset = offset; }
 
+bool Scope::encloses(const Scope* scope) const
+{
+    if (!_members || !scope)
+        return false;
+
+    while (scope) {
+        if (this == scope)
+            return true;
+        scope = scope->enclosingScope();
+    }
+    return false;
+}
+
 } // namespace CPlusPlus

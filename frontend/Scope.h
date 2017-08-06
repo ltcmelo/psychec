@@ -57,6 +57,8 @@ public:
     Symbol *find(const Identifier *id) const;
     Symbol *find(OperatorNameId::Kind operatorId) const;
 
+    bool encloses(const Scope*) const;
+
     /// Set the start offset of the scope
     unsigned startOffset() const;
     void setStartOffset(unsigned offset);

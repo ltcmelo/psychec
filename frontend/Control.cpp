@@ -1,5 +1,7 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
+//
+// Modifications:
+// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +30,7 @@
 #include "Names.h"
 #include <map>
 #include <set>
+#include <unordered_set>
 #include <algorithm>
 
 using namespace CPlusPlus;
@@ -538,6 +541,7 @@ public:
 
     // symbols
     std::vector<Symbol *> symbols;
+    std::unordered_set<const Symbol*> annuledSymbols;
 
     const Identifier *deprecatedId;
     const Identifier *unavailableId;
@@ -805,6 +809,12 @@ ObjCMethod *Control::newObjCMethod(unsigned sourceLocation, const Name *name)
 
 ObjCPropertyDeclaration *Control::newObjCPropertyDeclaration(unsigned sourceLocation, const Name *name)
 { return d->newObjCPropertyDeclaration(sourceLocation, name); }
+
+void Control::annulSymbol(const Symbol* sym)
+{ d->annuledSymbols.insert(sym); }
+
+bool Control::isSymbolAnulled(const Symbol* sym)
+{ return d->annuledSymbols.count(sym); }
 
 const Identifier *Control::deprecatedId() const
 { return d->deprecatedId; }

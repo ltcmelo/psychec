@@ -19,6 +19,7 @@
 #include "ASTNormalizer.h"
 #include "AST.h"
 #include "Assert.h"
+#include "Control.h"
 #include "CoreTypes.h"
 #include "Debug.h"
 #include "Literals.h"
@@ -119,27 +120,37 @@ void ASTNormalizer::maybeFixAST(StatementAST *&ast)
     if (!ast || !ast->asAmbiguousStatement())
         return;
 
-    SyntaxAmbiguity::Resolution resolution = ast->asAmbiguousStatement()->info->resolution();
-    auto line = ast->asAmbiguousStatement()->info->line();
+    AmbiguousStatementAST* amb = ast->asAmbiguousStatement();
+    std::vector<Declaration*> suspicious;
+    SyntaxAmbiguity::Resolution resolution = amb->info->resolution();
+    auto line = amb->info->line();
+
     if (resolution == SyntaxAmbiguity::Resolution::DefinitelyExpression) {
-        ast = ast->asAmbiguousStatement()->expressionStmt;
+        suspicious = amb->suspiciousDecls;
+        ast = amb->expressionStmt;
         printDebug("Ambiguity at %d can be disambiguated as expression\n", line);
         ++stats_.resolvedAsExpr_;
     } else if (resolution == SyntaxAmbiguity::Resolution::DefinitelyDeclaration) {
-        ast = ast->asAmbiguousStatement()->declarationStmt;
+        ast = amb->declarationStmt;
         printDebug("Ambiguity at %d can be disambiguated as declaration\n", line);
         ++stats_.resolvedAsDecl_;
     } else if (employHeuristic_) {
         printDebug("Ambiguity at %d cannot be disambiguated, apply heuristics\n", line);
-        SyntaxAmbiguity::Variety variety = ast->asAmbiguousStatement()->info->variety();
+        SyntaxAmbiguity::Variety variety = amb->info->variety();
         if (variety == SyntaxAmbiguity::Variety::MulExpr_X_PointerDecl) {
-            ast = ast->asAmbiguousStatement()->declarationStmt;
+            ast = amb->declarationStmt;
             ++stats_.guessedAsPtrDecl_;
         } else if (variety == SyntaxAmbiguity::Variety::OneArgCall_X_VarDecl) {
-            ast = ast->asAmbiguousStatement()->expressionStmt;
+            suspicious = amb->suspiciousDecls;
+            ast = amb->expressionStmt;
             ++stats_.guessedAsCall_;
         }
     }
+
+    std::for_each(suspicious.begin(), suspicious.end(),
+                  [this] (Declaration* decl) {
+                      control()->annulSymbol(decl);
+    });
 }
 
 namespace psyche {

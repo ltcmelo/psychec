@@ -2031,6 +2031,11 @@ bool Bind::visit(SimpleDeclarationAST *ast)
         decl->setType(declTy);
         setDeclSpecifiers(decl, type);
 
+        if (ambiguity_
+                && ambiguity_->info->resolution() == SyntaxAmbiguity::Resolution::Unknown) {
+            ambiguity_->suspiciousDecls.push_back(decl);
+        }
+
         if (Function *fun = decl->type()->asFunctionType()) {
             fun->setEnclosingScope(_scope);
             fun->setSourceLocation(sourceLocation, translationUnit());

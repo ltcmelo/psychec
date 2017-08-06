@@ -1911,6 +1911,7 @@ public:
     DeclarationStatementAST *declarationStmt;
     ExpressionStatementAST *expressionStmt;
     std::unique_ptr<psyche::SyntaxAmbiguity> info;
+    std::vector<Declaration*> suspiciousDecls;
 
 public:
     AmbiguousStatementAST()

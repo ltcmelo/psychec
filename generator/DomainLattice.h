@@ -77,10 +77,8 @@ public:
      *
      * Return the domain of the given AST/symbol.
      */
-    Domain retrieveDomain(const CPlusPlus::Symbol* sym) const;
     Domain retrieveDomain(const CPlusPlus::Symbol* sym, const CPlusPlus::Scope*) const;
-    Domain retrieveDomain(CPlusPlus::ExpressionAST* ast) const;
-    Domain retrieveDomain(CPlusPlus::ExpressionAST* ast, const CPlusPlus::Scope*) const;
+    Domain retrieveDomain(const CPlusPlus::ExpressionAST* ast, const CPlusPlus::Scope*) const;
 
     /*!
      * \brief typeDomain
@@ -90,19 +88,18 @@ public:
      * Return the domain of a type.
      */
     static Domain domainForType(const CPlusPlus::FullySpecifiedType& ty,
-                               const CPlusPlus::Symbol* sym = nullptr);
+                                const CPlusPlus::Symbol* sym = nullptr);
 
     // TEMP: Make this a utility.
     std::string fetchText(CPlusPlus::AST* ast) const;
 
 private:
-    const Scope *switchScope(const CPlusPlus::Scope* scope);
-
     // Declarations
     bool visit(CPlusPlus::SimpleDeclarationAST* ast) override;
     bool visit(CPlusPlus::FunctionDefinitionAST* ast) override;
 
     // Statements
+    void visitStatement(CPlusPlus::StatementAST* ast);
     bool visit(CPlusPlus::SwitchStatementAST *ast) override;
     bool visit(CPlusPlus::CaseStatementAST* ast) override;
     bool visit(CPlusPlus::CompoundStatementAST *ast) override;
@@ -133,26 +130,38 @@ private:
     bool visit(CPlusPlus::PostIncrDecrAST* ast) override;
     bool visit(CPlusPlus::NestedExpressionAST* ast) override;
 
-    Domain enforceBaseDomain(Domain);
+    Domain enforceLeastDomain(Domain);
     void assignDomain(CPlusPlus::ExpressionAST* ast);
     Domain lastDom_;
 
-    using SymbolMap = std::unordered_map<const CPlusPlus::Symbol*, Domain>;
-    using AstMap = std::unordered_map<CPlusPlus::ExpressionAST*, Domain>;
-    SymbolMap symbolDB_;
-    AstMap astDB_;
-
     std::vector<CPlusPlus::ExpressionAST*> knownAsts_;
-    CPlusPlus::ExpressionAST* isKnownAST(CPlusPlus::ExpressionAST*) const;
-
-    const CPlusPlus::Scope* scope_;
+    CPlusPlus::ExpressionAST* isKnownAST(const CPlusPlus::ExpressionAST*) const;
     mutable ASTIdentityMatcher matcher_;
+
+    using SymbolMap = std::unordered_map<const CPlusPlus::Symbol*, Domain>;
+    using AstMap = std::unordered_map<const CPlusPlus::ExpressionAST*, Domain>;
+    using DB = std::pair<AstMap, SymbolMap>;
+    std::unordered_map<const CPlusPlus::Scope*, DB> index_;
+
+    template <class T, class MapT>
+    Domain retrieveDomainCore(const T* v, const MapT DB::*, const CPlusPlus::Scope*) const;
+
+    const Scope *enterScope(const CPlusPlus::Scope* scope);
+    const CPlusPlus::Scope* scope_;
+
+    void resetCutoffScope();
+    const CPlusPlus::Scope* globalScope_;
+    const CPlusPlus::Scope* cutoffScope_;
+
+    const DB* searchDB(const CPlusPlus::Scope* scope) const;
+    DB* findOrCreateDB(const CPlusPlus::Scope* scope);
 
     // Function argument domains, taken from the call with highest rank.
     struct ArgumentData
     {
-        Domain clazz_; // TODO: rename
+        Domain dom_;
         std::vector<CPlusPlus::ExpressionAST*> instances_;
+        const CPlusPlus::Scope* callScope_; // TODO: This information is for call, not for arg.
     };
 
     std::unordered_map<CPlusPlus::ExpressionAST*, std::vector<ArgumentData>> funcs_;

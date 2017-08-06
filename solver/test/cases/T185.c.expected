@@ -3,10 +3,10 @@
 /* Type definitions */
 
 /* Variables and functions */
- int /*<<< orphan*/  ignore_value (char*) ; 
- int /*<<< orphan*/  ignore_value2 (char*) ; 
- int /*<<< orphan*/  ignore_value3 (char*) ; 
- int /*<<< orphan*/  ignore_value4 (char*) ; 
+ int /*<<< orphan*/  foo (char*) ;
+ int /*<<< orphan*/  foo2 (char*) ;
+ int /*<<< orphan*/  foo3 (char*) ;
+ int /*<<< orphan*/  foo4 (char*) ;
  char* parse_additional_groups ; 
  char* parse_additional_groups2 ; 
  char* parse_additional_groups3 ; 

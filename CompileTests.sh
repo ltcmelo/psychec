@@ -14,7 +14,7 @@ for C_FILE in solver/test/cases/*.c ; do
     FIXED_FILE=$(echo "$C_FILE" | sed -e 's/\.c/_fixed.c/g')
     echo "$C_FILE"
 
-    ./Reconstruct.py "$C_FILE" > /dev/null
+    ./Reconstruct.py "$C_FILE" # > /dev/null
 
     "$CC" -Wall\
 	  -Wno-incompatible-library-redeclaration\
