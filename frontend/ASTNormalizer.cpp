@@ -27,6 +27,7 @@
 #include "Symbols.h"
 #include "SyntaxAmbiguity.h"
 #include "TranslationUnit.h"
+#include <algorithm>
 
 #define VISITOR_NAME "AstNormalizer"
 
