@@ -255,6 +255,7 @@ tests = testGroup "Unit tests"
                   , doTest "T208.c" -- Lattice classification.
                   , doTest "T209.c" -- Improve cast precision.
                   , doTest "T210.c" -- Cast with void: (void)x.
+                  , doTest "T211.c" -- Dont crash on unnamed param.
                   ]
 
 doTest s
