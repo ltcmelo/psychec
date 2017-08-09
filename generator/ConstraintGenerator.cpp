@@ -235,7 +235,8 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
 
     for (auto i = 0u; i < func->argumentCount(); i++) {
         std::string param;
-        if(func->argumentAt(i)) {
+        if(func->argumentAt(i)
+                && func->argumentAt(i)->name()) {
             const Name* paramName = func->argumentAt(i)->name();
             const Identifier* id = paramName->asNameId()->identifier();
             param.assign(id->begin(), id->end());
