@@ -253,6 +253,8 @@ tests = testGroup "Unit tests"
                   , doTest "T206.c" -- Scalar in +: no reclassification.
                   , doTest "T207.c" -- Scalar in -: differences from +.
                   , doTest "T208.c" -- Lattice classification.
+                  , doTest "T209.c" -- Improve cast precision.
+                  , doTest "T210.c" -- Cast with void: (void)x.
                   ]
 
 doTest s

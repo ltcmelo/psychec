@@ -19,6 +19,7 @@
 
 #include "Driver.h"
 #include "AST.h"
+#include "ASTDumper.h"
 #include "ASTNormalizer.h"
 #include "Bind.h"
 #include "Control.h"
@@ -27,7 +28,6 @@
 #include "Debug.h"
 #include "DiagnosticCollector.h"
 #include "DomainLattice.h"
-#include "Dumper.h"
 #include "Literals.h"
 #include "Observer.h"
 #include "Symbols.h"
@@ -125,7 +125,7 @@ size_t Driver::buildAst(const std::string& source)
         return InvalidAST;
 
     if (flags_.flag_.dumpAst)
-        Dumper(tu()).dump(tuAst(), ".ast.dot");
+        ASTDumper(tu()).dump(tuAst(), ".ast.dot");
 
     return OK;
 }
@@ -146,7 +146,7 @@ bool Driver::annotateSymbols()
         std::cout << "Ambiguities stats" << std::endl << fixer.stats() << std::endl;
 
     if (flags_.flag_.dumpAst)
-        Dumper(tu()).dump(tuAst(), ".ast.fixed.dot");
+        ASTDumper(tu()).dump(tuAst(), ".ast.fixed.dot");
 
     return true;
 }

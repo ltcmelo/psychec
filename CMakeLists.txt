@@ -9,11 +9,14 @@ set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
 set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/Config.h
-    # Front-end files
+    # Front-end's files
     ${PROJECT_SOURCE_DIR}/frontend/AST.cpp
     ${PROJECT_SOURCE_DIR}/frontend/AST.h
     ${PROJECT_SOURCE_DIR}/frontend/ASTClone.cpp
     ${PROJECT_SOURCE_DIR}/frontend/ASTIdentityMatcher.h
+    ${PROJECT_SOURCE_DIR}/frontend/ASTIdentityMatcher.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/ASTDumper.h
+    ${PROJECT_SOURCE_DIR}/frontend/ASTDumper.cpp
     ${PROJECT_SOURCE_DIR}/frontend/ASTMatch0.cpp
     ${PROJECT_SOURCE_DIR}/frontend/ASTMatcher.cpp
     ${PROJECT_SOURCE_DIR}/frontend/ASTMatcher.h
@@ -93,8 +96,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/DomainLattice.cpp
     ${PROJECT_SOURCE_DIR}/generator/Driver.h
     ${PROJECT_SOURCE_DIR}/generator/Driver.cpp
-    ${PROJECT_SOURCE_DIR}/generator/Dumper.h
-    ${PROJECT_SOURCE_DIR}/generator/Dumper.cpp
     ${PROJECT_SOURCE_DIR}/generator/Factory.h
     ${PROJECT_SOURCE_DIR}/generator/Factory.cpp
     ${PROJECT_SOURCE_DIR}/generator/FreshVarSupply.h

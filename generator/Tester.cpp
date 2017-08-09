@@ -24,8 +24,8 @@
 
 #include "Tester.h"
 #include "AST.h"
+#include "ASTDumper.h"
 #include "Control.h"
-#include "Dumper.h"
 #include "Factory.h"
 #include "Literals.h"
 #include "TranslationUnit.h"
@@ -58,7 +58,7 @@ void Tester::checkAst(const std::string &source, std::string expected, bool nonH
     PSYCHE_EXPECT_TRUE(driver.tuAst());
 
     std::ostringstream oss;
-    Dumper(driver.tu()).dump(driver.tuAst(), "test", oss);
+    ASTDumper(driver.tu()).dump(driver.tuAst(), "test", oss);
 
     compareText(expected, oss.str());
 }

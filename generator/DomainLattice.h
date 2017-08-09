@@ -130,6 +130,14 @@ private:
     bool visit(CPlusPlus::PostIncrDecrAST* ast) override;
     bool visit(CPlusPlus::NestedExpressionAST* ast) override;
 
+    unsigned int withinExpr_;
+    struct ExpressionRegion
+    {
+        ExpressionRegion(unsigned int& cnt) : cnt_(cnt) { ++cnt_; }
+        ~ExpressionRegion() { --cnt_; }
+        unsigned int& cnt_;
+    };
+
     Domain enforceLeastDomain(Domain);
     void assignDomain(CPlusPlus::ExpressionAST* ast);
     Domain lastDom_;

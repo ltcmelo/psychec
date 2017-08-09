@@ -42,6 +42,8 @@ using namespace psyche;
 
 #define VISITOR_NAME "TypeLattice"
 
+#define EXPR_REGION_CTRL ExpressionRegion r(withinExpr_)
+
 namespace {
 
 const char* const kUndefined = "undefined";
@@ -104,6 +106,7 @@ bool DomainLattice::Domain::operator!=(const DomainLattice::Domain& other) const
 
 DomainLattice::DomainLattice(TranslationUnit *unit)
     : ASTVisitor(unit)
+    , withinExpr_(0)
     , lastDom_(Undefined)
     , matcher_(unit)
     , scope_(nullptr)
@@ -509,6 +512,8 @@ DomainLattice::Domain DomainLattice::enforceLeastDomain(DomainLattice::Domain do
 
 bool DomainLattice::visit(ArrayAccessAST *ast)
 {
+    EXPR_REGION_CTRL;
+
     Domain prevDom = enforceLeastDomain(Pointer);
     visitExpression(ast->base_expression);
     enforceLeastDomain(Integral);
@@ -520,6 +525,8 @@ bool DomainLattice::visit(ArrayAccessAST *ast)
 
 bool DomainLattice::visit(BinaryExpressionAST *ast)
 {
+    EXPR_REGION_CTRL;
+
     BinaryExpressionAST* expr = ast->asBinaryExpression();
 
     auto plusMinus = [this, expr] (Domain lhsDom, bool isMinus) {
@@ -690,6 +697,8 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
 
 bool DomainLattice::visit(ConditionalExpressionAST *ast)
 {
+    EXPR_REGION_CTRL;
+
     Domain prevDom = enforceLeastDomain(Scalar);
     visitExpression(ast->condition);
     enforceLeastDomain(prevDom);
@@ -707,6 +716,8 @@ bool DomainLattice::visit(IdExpressionAST *ast)
 
 bool DomainLattice::visit(MemberAccessAST *ast)
 {
+    EXPR_REGION_CTRL;
+
     Domain prevDom = lastDom_;
     if (tokenKind(ast->access_token) == T_ARROW)
         enforceLeastDomain(Pointer);
@@ -720,6 +731,8 @@ bool DomainLattice::visit(MemberAccessAST *ast)
 
 bool DomainLattice::visit(UnaryExpressionAST *ast)
 {
+    EXPR_REGION_CTRL;
+
     switch (tokenKind(ast->unary_op_token)) {
     case T_STAR: {
         Domain prevDom = enforceLeastDomain(Pointer);
@@ -769,8 +782,11 @@ bool DomainLattice::visit(UnaryExpressionAST *ast)
 
 bool DomainLattice::visit(NumericLiteralAST *ast)
 {
+    EXPR_REGION_CTRL;
+
     const Token& tk = tokenAt(ast->literal_token);
     if (tk.is(T_CHAR_LITERAL)) {
+        // TODO: char/int
         enforceLeastDomain(Domain(kIntegral, kCharTy));
     } else {
         const NumericLiteral *numLit = numericLiteral(ast->literal_token);
@@ -800,6 +816,8 @@ bool DomainLattice::visit(NumericLiteralAST *ast)
 
 bool DomainLattice::visit(BoolLiteralAST *ast)
 {
+    EXPR_REGION_CTRL;
+
     enforceLeastDomain(Integral); // Booleans are integrals.
 
     return false;
@@ -807,6 +825,8 @@ bool DomainLattice::visit(BoolLiteralAST *ast)
 
 bool DomainLattice::visit(StringLiteralAST *ast)
 {
+    EXPR_REGION_CTRL;
+
     enforceLeastDomain(Pointer);
 
     return false;
@@ -814,6 +834,8 @@ bool DomainLattice::visit(StringLiteralAST *ast)
 
 bool DomainLattice::visit(SizeofExpressionAST *ast)
 {
+    EXPR_REGION_CTRL;
+
     enforceLeastDomain(Undefined);
     visitExpression(ast->expression);
 
@@ -829,6 +851,8 @@ bool DomainLattice::visit(PointerLiteralAST *ast)
 
 bool DomainLattice::visit(BracedInitializerAST *ast)
 {
+    EXPR_REGION_CTRL;
+
     for (auto it = ast->expression_list; it; it = it->next) {
         enforceLeastDomain(Undefined);
         visitExpression(it->value);
@@ -839,6 +863,8 @@ bool DomainLattice::visit(BracedInitializerAST *ast)
 
 bool DomainLattice::visit(CallAST *ast)
 {
+    EXPR_REGION_CTRL;
+
     Domain prevDom = lastDom_;
     visitExpression(ast->base_expression);
 
@@ -896,14 +922,27 @@ bool DomainLattice::visit(CallAST *ast)
 
 bool DomainLattice::visit(CastExpressionAST *ast)
 {
-    enforceLeastDomain(Undefined);
-    visitExpression(ast->expression);
+    if (withinExpr_) {
+        EXPR_REGION_CTRL;
+        enforceLeastDomain(Scalar);
+        visitExpression(ast->type_id);
+        enforceLeastDomain(Scalar);
+        visitExpression(ast->expression);
+    } else {
+        EXPR_REGION_CTRL;
+        enforceLeastDomain(Undefined);
+        visitExpression(ast->type_id);
+        enforceLeastDomain(Undefined);
+        visitExpression(ast->expression);
+    }
 
     return false;
 }
 
 bool DomainLattice::visit(PostIncrDecrAST* ast)
 {
+    EXPR_REGION_CTRL;
+
     enforceLeastDomain(Scalar);
     visitExpression(ast->base_expression);
 
@@ -912,6 +951,8 @@ bool DomainLattice::visit(PostIncrDecrAST* ast)
 
 bool DomainLattice::visit(NestedExpressionAST* ast)
 {
+    EXPR_REGION_CTRL;
+
     visitExpression(ast->expression);
 
     return false;

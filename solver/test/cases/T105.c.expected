@@ -2,10 +2,9 @@
 typedef  struct TYPE_3__   TYPE_1__ ;
 
 /* Type definitions */
-struct TYPE_3__ {unsigned int* vector; int size; } ;
+struct TYPE_3__ {unsigned int* vector; unsigned int size; } ;
 typedef  TYPE_1__ set ;
 
 /* Variables and functions */
- unsigned int INT_BITS ; 
- int /*<<< orphan*/  malloc (int ) ;
-
+ unsigned int INT_BITS ;
+ int /*<<< orphan*/ * malloc (int) ;

@@ -5,5 +5,4 @@ struct A {int dummy; } ;
 typedef  int /*<<< orphan*/  A_t ;
 
 /* Variables and functions */
- int /*<<< orphan*/  malloc (int) ; 
-
+ int /*<<< orphan*/ malloc (int) ;

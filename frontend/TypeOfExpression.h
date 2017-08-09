@@ -47,6 +47,7 @@ public:
 private:
     void process(const CPlusPlus::Identifier* id);
 
+    // Expressions
     bool visit(CPlusPlus::ArrayAccessAST* ast) override;
     bool visit(CPlusPlus::BinaryExpressionAST* ast) override;
     bool visit(CPlusPlus::CallAST *ast) override;
@@ -60,8 +61,18 @@ private:
     bool visit(CPlusPlus::UnaryExpressionAST* ast) override;
     bool visit(CPlusPlus::SizeofExpressionAST* ast) override;
     bool visit(CPlusPlus::PointerLiteralAST* ast) override;
+    bool visit(CPlusPlus::TypeIdAST* ast) override;
 
-    std::vector<CPlusPlus::FullySpecifiedType> fullType_; // TODO: Remove vector.
+    // Specifiers
+    bool visit(CPlusPlus::SimpleSpecifierAST* ast) override;
+    bool visit(CPlusPlus::NamedTypeSpecifierAST* ast) override;
+    bool visit(CPlusPlus::ElaboratedTypeSpecifierAST* ast) override;
+
+    // Declarators
+    bool visit(CPlusPlus::DeclaratorAST* ast) override;
+    bool visit(CPlusPlus::PointerAST* ast) override;
+
+    CPlusPlus::FullySpecifiedType fullType_;
     CPlusPlus::Scope* scope_;
     std::size_t singleLookup_;
 };

@@ -42,9 +42,7 @@ FullySpecifiedType TypeOfExpression::resolve(ExpressionAST *ast, Scope *scope)
 {
     scope_ = scope;
     accept(ast);
-    if (!fullType_.empty())
-        return fullType_.back();
-    return FullySpecifiedType();
+    return fullType_;
 }
 
 FullySpecifiedType TypeOfExpression::commonRealType(const FullySpecifiedType& lhsTy,
@@ -121,12 +119,12 @@ bool TypeOfExpression::visit(ArrayAccessAST *ast)
 {
     accept(ast->base_expression);
 
-    FullySpecifiedType elemTy;
-    if (fullType_.back()->isArrayType())
-        elemTy = fullType_.back()->asArrayType()->elementType();
-    else if (fullType_.back()->isPointerType())
-        elemTy = fullType_.back()->asPointerType()->elementType();
-    fullType_.push_back(std::move(elemTy));
+    if (fullType_->isArrayType())
+        fullType_ = fullType_->asArrayType()->elementType();
+    else if (fullType_->isPointerType())
+        fullType_ = fullType_->asPointerType()->elementType();
+    else
+        fullType_ = FullySpecifiedType();
 
     return false;
 }
@@ -137,9 +135,9 @@ bool TypeOfExpression::visit(BinaryExpressionAST *ast)
 
     auto plusMinus = [this, expr] (bool isMinus) {
         accept(expr->left_expression);
-        const FullySpecifiedType lhsTy = fullType_.back();
+        const FullySpecifiedType lhsTy = fullType_;
         accept(expr->right_expression);
-        const FullySpecifiedType rhsTy = fullType_.back();
+        const FullySpecifiedType rhsTy = fullType_;
 
         if (!lhsTy || !rhsTy)
             return FullySpecifiedType();
@@ -163,11 +161,11 @@ bool TypeOfExpression::visit(BinaryExpressionAST *ast)
 
     switch (tokenKind(expr->binary_op_token)) {
     case T_PLUS:
-        fullType_.push_back(plusMinus(false));
+        fullType_ = plusMinus(false);
         return false;
 
     case T_MINUS:
-        fullType_.push_back(plusMinus(true));
+        fullType_ = plusMinus(true);
         return false;
 
     case T_STAR:
@@ -179,17 +177,17 @@ bool TypeOfExpression::visit(BinaryExpressionAST *ast)
     case T_LESS_LESS:
     case T_GREATER_GREATER: {
         accept(expr->left_expression);
-        const FullySpecifiedType lhsTy = fullType_.back();
+        const FullySpecifiedType lhsTy = fullType_;
         accept(expr->right_expression);
-        const FullySpecifiedType rhsTy = fullType_.back();
+        const FullySpecifiedType rhsTy = fullType_;
 
         if (!lhsTy) {
-            fullType_.push_back(rhsTy);
+            fullType_ = rhsTy;
         } else {
             if (rhsTy && Type::isArithmetic(rhsTy.type()) && Type::isArithmetic(lhsTy.type()))
-                fullType_.push_back(commonRealType(lhsTy, rhsTy));
+                fullType_ = commonRealType(lhsTy, rhsTy);
             else
-                fullType_.push_back(lhsTy);
+                fullType_ = lhsTy;
         }
         return false;
     }
@@ -203,7 +201,7 @@ bool TypeOfExpression::visit(BinaryExpressionAST *ast)
     case T_EXCLAIM_EQUAL:
     case T_AMPER_AMPER:
     case T_PIPE_PIPE:
-        fullType_.push_back(control()->integerType(IntegerType::Int));
+        fullType_ = control()->integerType(IntegerType::Int);
         return false;
 
     // Assignment
@@ -239,7 +237,7 @@ bool TypeOfExpression::visit(CallAST *ast)
 
 bool TypeOfExpression::visit(CastExpressionAST *ast)
 {
-    fullType_.push_back(ast->expression_type);
+    fullType_ = ast->expression_type;
     return false;
 }
 
@@ -258,12 +256,12 @@ void TypeOfExpression::process(const Identifier *id)
         valSym = lookupValueSymbol(id, scope_);
 
     if (!valSym || !valSym->type()) {
-        fullType_.push_back(FullySpecifiedType());
+        fullType_ = FullySpecifiedType();
         return;
     }
 
     FullySpecifiedType ty = valSym->type();
-    fullType_.push_back(ty);
+    fullType_ = ty;
 
     while (ty.type()->isPointerType())
         ty = ty.type()->asPointerType()->elementType();
@@ -312,35 +310,35 @@ bool TypeOfExpression::visit(NumericLiteralAST *ast)
 {
     const Token& tk = tokenAt(ast->literal_token);
     if (tk.is(T_CHAR_LITERAL)) {
-        // TODO
-        fullType_.push_back(control()->integerType(IntegerType::Char));
+        // TODO: char/int
+        fullType_ = control()->integerType(IntegerType::Char);
     } else {
         const NumericLiteral *numLit = numericLiteral(ast->literal_token);
         PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
         if (numLit->isDouble()) {
-            fullType_.push_back(control()->floatType(FloatType::Double));
+            fullType_ = control()->floatType(FloatType::Double);
         } else if (numLit->isLongDouble()) {
-            fullType_.push_back(control()->floatType(FloatType::LongDouble));
+            fullType_ = control()->floatType(FloatType::LongDouble);
         } else if (numLit->isFloat()) {
-            fullType_.push_back(control()->floatType(FloatType::Float));
+            fullType_ = control()->floatType(FloatType::Float);
         } else {
-            fullType_.push_back(control()->integerType(IntegerType::Int));
+            fullType_ = control()->integerType(IntegerType::Int);
         }
     }
 
     return false;
 }
 
-bool TypeOfExpression::visit(BoolLiteralAST *ast)
+bool TypeOfExpression::visit(BoolLiteralAST*)
 {
-    fullType_.push_back(control()->integerType(IntegerType::Int));
+    fullType_ = control()->integerType(IntegerType::Int);
     return false;
 }
 
-bool TypeOfExpression::visit(StringLiteralAST *ast)
+bool TypeOfExpression::visit(StringLiteralAST*)
 {
     FullySpecifiedType baseType = control()->integerType(IntegerType::Char);
-    fullType_.push_back(control()->pointerType(baseType));
+    fullType_ = control()->pointerType(baseType);
     return false;
 }
 
@@ -350,16 +348,16 @@ bool TypeOfExpression::visit(UnaryExpressionAST *ast)
 
     switch (tokenKind(ast->unary_op_token)) {
     case T_AMPER:
-        fullType_.push_back(control()->pointerType(fullType_.back()));
+        fullType_ = control()->pointerType(fullType_);
         return false;
 
     case T_STAR: {
-        FullySpecifiedType elemTy;
-        if (fullType_.back()->isArrayType())
-            elemTy = fullType_.back()->asArrayType()->elementType();
-        else if (fullType_.back()->isPointerType())
-            elemTy = fullType_.back()->asPointerType()->elementType();
-        fullType_.push_back(std::move(elemTy));
+        if (fullType_->isArrayType())
+            fullType_ = fullType_->asArrayType()->elementType();
+        else if (fullType_->isPointerType())
+            fullType_ = fullType_->asPointerType()->elementType();
+        else
+            fullType_ = FullySpecifiedType();
         return false;
     }
 
@@ -368,14 +366,106 @@ bool TypeOfExpression::visit(UnaryExpressionAST *ast)
     }
 }
 
-bool TypeOfExpression::visit(SizeofExpressionAST *ast)
+bool TypeOfExpression::visit(SizeofExpressionAST*)
 {
-    fullType_.push_back(control()->integerType(IntegerType::Int));
+    fullType_ = control()->integerType(IntegerType::Int);
     return false;
 }
 
-bool TypeOfExpression::visit(PointerLiteralAST *ast)
+bool TypeOfExpression::visit(PointerLiteralAST*)
 {
-    fullType_.push_back(control()->pointerType(FullySpecifiedType()));
+    fullType_ = control()->pointerType(FullySpecifiedType());
+    return false;
+}
+
+bool psyche::TypeOfExpression::visit(CPlusPlus::TypeIdAST *ast)
+{
+    accept(ast->type_specifier_list);
+    accept(ast->declarator);
+    return false;
+}
+
+bool TypeOfExpression::visit(SimpleSpecifierAST *ast)
+{
+    switch (tokenKind(ast->specifier_token)) {
+    case T_CHAR:
+        // TODO: char/int
+        fullType_ = control()->integerType(IntegerType::Char);
+        return false;
+    case T_SHORT:
+        fullType_ = control()->integerType(IntegerType::Short);
+        return false;
+    case T_INT:
+        fullType_ = control()->integerType(IntegerType::Int);
+        return false;
+    case T_LONG:
+        if (fullType_.type()
+                && fullType_->asIntegerType()
+                && fullType_->asIntegerType()->kind() == IntegerType::Long) {
+            fullType_ = control()->integerType(IntegerType::LongLong);
+        } else {
+            fullType_ = control()->integerType(IntegerType::Long);
+        }
+        return false;
+    case T_FLOAT:
+        fullType_ = control()->floatType(FloatType::Float);
+        return false;
+    case T_DOUBLE:
+        if (fullType_.type()
+                && fullType_->asIntegerType()
+                && fullType_->asIntegerType()->kind() == IntegerType::Long) {
+            fullType_ = control()->floatType(FloatType::LongDouble);
+        } else {
+            fullType_ = control()->floatType(FloatType::Double);
+        }
+        return false;
+    case T_UNSIGNED:
+        fullType_.setUnsigned(true);
+        return false;
+    case T_SIGNED:
+        fullType_.setSigned(true);
+        return false;
+    case T_VOID:
+        return false;
+
+    default:
+        PSYCHE_ASSERT(false, return false, "unknown type specifier");
+        return false;
+    }
+}
+
+namespace {
+
+FullySpecifiedType lookupTypeName(NameAST *name, const Scope* scope)
+{
+    Symbol* tySym = lookupTypeSymbol(name->name, scope);
+    if (tySym)
+        return tySym->type();
+    return FullySpecifiedType();
+}
+
+} // anonymous
+
+bool TypeOfExpression::visit(NamedTypeSpecifierAST *ast)
+{
+    fullType_ = lookupTypeName(ast->name, scope_);
+    return false;
+}
+
+bool TypeOfExpression::visit(ElaboratedTypeSpecifierAST *ast)
+{
+    fullType_ = lookupTypeName(ast->name, scope_);
+    return false;
+}
+
+bool TypeOfExpression::visit(DeclaratorAST *ast)
+{
+    accept(ast->ptr_operator_list);
+    return false;
+}
+
+bool TypeOfExpression::visit(PointerAST*)
+{
+    fullType_ = control()->pointerType(fullType_);
     return false;
 }

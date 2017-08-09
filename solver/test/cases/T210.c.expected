@@ -1,8 +1,9 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  float T ;
+typedef  int /*<<< orphan*/  ANY ;
 
 /* Variables and functions */
- int e ;
+ int a ;
+ int b ;
 

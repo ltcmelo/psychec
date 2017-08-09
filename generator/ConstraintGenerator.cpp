@@ -880,6 +880,19 @@ bool ConstraintGenerator::visit(CastExpressionAST *ast)
     writer_->writeExists(alpha);
     collectExpression(alpha, ast->expression);
 
+    auto targetDom = domainOf(ast->type_id);
+    if (targetDom == DomainLattice::Arithmetic
+            || targetDom == DomainLattice::Integral
+            || targetDom == DomainLattice::FloatingPoint) {
+        writer_->writeSubtypeRel(alpha, kIntTy);
+    } else if (targetDom == DomainLattice::Scalar) {
+        writer_->writeSubtypeRel(alpha, kIntTy);
+    } else if (targetDom == DomainLattice::Pointer){
+        const std::string& alpha2 = supply_.createTypeVar1();
+        writer_->writeExists(alpha2);
+        writer_->writePtrRel(alpha, alpha2);
+    }
+
     return false;
 }
 
@@ -954,6 +967,7 @@ bool ConstraintGenerator::visit(NumericLiteralAST *ast)
             writer_->writeExists(alpha);
             writer_->writeTypeSection(alpha);
         } else if (tokenKind(ast->literal_token) == T_CHAR_LITERAL) {
+            // TODO: char/int
             writer_->writeTypeSection(kCharTy);
         } else {
             writer_->writeTypeSection(kDefaultIntTy);
