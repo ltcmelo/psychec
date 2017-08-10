@@ -36,8 +36,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/frontend/CoreTypes.cpp
     ${PROJECT_SOURCE_DIR}/frontend/CoreTypes.h
     ${PROJECT_SOURCE_DIR}/frontend/Dialect.h
-    ${PROJECT_SOURCE_DIR}/frontend/DiagnosticClient.cpp
-    ${PROJECT_SOURCE_DIR}/frontend/DiagnosticClient.h
+    ${PROJECT_SOURCE_DIR}/frontend/DiagnosticCollector.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/DiagnosticCollector.h
     ${PROJECT_SOURCE_DIR}/frontend/FullySpecifiedType.cpp
     ${PROJECT_SOURCE_DIR}/frontend/FullySpecifiedType.h
     ${PROJECT_SOURCE_DIR}/frontend/Keywords.cpp
@@ -90,8 +90,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/ConstraintSyntax.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.cpp
-    ${PROJECT_SOURCE_DIR}/generator/DiagnosticCollector.h
-    ${PROJECT_SOURCE_DIR}/generator/DiagnosticCollector.cpp
     ${PROJECT_SOURCE_DIR}/generator/DomainLattice.h
     ${PROJECT_SOURCE_DIR}/generator/DomainLattice.cpp
     ${PROJECT_SOURCE_DIR}/generator/Driver.h

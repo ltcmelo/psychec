@@ -39,7 +39,6 @@ std::string executeCore(const char* cmd)
             all += buf.data();
     }
 
-    std::cout << "RESULT:" << all << std::endl;
     return all;
 }
 

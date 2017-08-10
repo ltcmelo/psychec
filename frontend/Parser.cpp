@@ -1,5 +1,7 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
+//
+// Modifications:
+// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -6903,7 +6905,7 @@ void Parser::warning(unsigned index, const char *format, ...)
     va_list args, ap;
     va_start(args, format);
     va_copy(ap, args);
-    _translationUnit->message(DiagnosticClient::Warning, index, format, ap);
+    _translationUnit->message(DiagnosticCollector::Warning, index, format, ap);
     va_end(ap);
     va_end(args);
 }
@@ -6913,7 +6915,7 @@ void Parser::error(unsigned index, const char *format, ...)
     va_list args, ap;
     va_start(args, format);
     va_copy(ap, args);
-    _translationUnit->message(DiagnosticClient::Error, index, format, ap);
+    _translationUnit->message(DiagnosticCollector::Error, index, format, ap);
     va_end(ap);
     va_end(args);
 }
@@ -6923,7 +6925,7 @@ void Parser::fatal(unsigned index, const char *format, ...)
     va_list args, ap;
     va_start(args, format);
     va_copy(ap, args);
-    _translationUnit->message(DiagnosticClient::Fatal, index, format, ap);
+    _translationUnit->message(DiagnosticCollector::Fatal, index, format, ap);
     va_end(ap);
     va_end(args);
 }

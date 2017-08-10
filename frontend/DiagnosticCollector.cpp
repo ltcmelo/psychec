@@ -1,5 +1,8 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
+// Modifications:
+// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -18,36 +21,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_DIAGNOSTICCLIENT_H
-#define CPLUSPLUS_DIAGNOSTICCLIENT_H
+#include "DiagnosticCollector.h"
+#include "Literals.h"
+#include <cstdio>
+#include <iostream>
+#include <unordered_map>
 
-#include "CPlusPlusForwardDeclarations.h"
-#include <cstdarg>
+using namespace CPlusPlus;
 
-namespace CPlusPlus {
+DiagnosticCollector::DiagnosticCollector()
+{}
 
-class CPLUSPLUS_EXPORT DiagnosticClient
+DiagnosticCollector::~DiagnosticCollector()
+{}
+
+void DiagnosticCollector::collect(Severity severity,
+                                  const StringLiteral *fileName,
+                                  unsigned line, unsigned column,
+                                  const char *format, va_list ap)
 {
-    DiagnosticClient(const DiagnosticClient &other);
-    void operator =(const DiagnosticClient &other);
-
-public:
-    enum Level {
-        Warning,
-        Error,
-        Fatal
+    static std::unordered_map<int, const char*> map {
+        { Warning, "warning" },
+        { Error, "error" },
+        { Fatal, "fatal" }
     };
 
-    DiagnosticClient();
-    virtual ~DiagnosticClient();
+    if (severity != Warning)
+        blockingIssue_ = true;
 
-    virtual void report(int level,
-                        const StringLiteral *fileName,
-                        unsigned line, unsigned column,
-                        const char *format, va_list ap) = 0;
-};
-
-} // namespace CPlusPlus
-
-
-#endif // CPLUSPLUS_DIAGNOSTICCLIENT_H
+    fprintf(stderr, "%s:%u:%u: %s: ", fileName->chars(), line, column, map[severity]);
+    vfprintf(stderr, format, ap);
+    fprintf(stderr, "\n");
+}

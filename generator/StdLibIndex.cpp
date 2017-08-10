@@ -157,5 +157,6 @@ std::vector<std::string> StdLibIndex::inspect(const Control& control) const
 
     std::vector<std::string> v;
     std::move(deps.begin(), deps.end(), std::back_inserter(v));
+
     return v;
 }

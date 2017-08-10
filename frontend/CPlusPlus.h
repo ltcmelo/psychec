@@ -30,7 +30,7 @@
 #include "CPlusPlusForwardDeclarations.h"
 #include "Control.h"
 #include "CoreTypes.h"
-#include "DiagnosticClient.h"
+#include "DiagnosticCollector.h"
 #include "FullySpecifiedType.h"
 #include "Lexer.h"
 #include "LiteralTable.h"

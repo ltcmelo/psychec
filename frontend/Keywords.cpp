@@ -41,7 +41,7 @@ static inline int classify2(const char *s, Dialect)
 
 static inline int classify3(const char *s, Dialect lang)
 {
-  if (lang.isCpp() && s[0] == 'a') {
+  if (s[0] == 'a') {
     if (s[1] == 's') {
       if (s[2] == 'm') {
         return T_ASM;
@@ -215,7 +215,7 @@ static inline int classify4(const char *s, Dialect lang)
 static inline int classify5(const char *s, Dialect lang)
 {
   if (s[0] == '_') {
-    if (lang.isCpp() && s[1] == '_') {
+    if (s[1] == '_') {
       if (s[2] == 'a') {
         if (s[3] == 's') {
           if (s[4] == 'm') {
@@ -572,7 +572,7 @@ static inline int classify6(const char *s, Dialect lang)
 
 static inline int classify7(const char *s, Dialect lang)
 {
-  if (lang.isCpp() && s[0] == '_') {
+  if (s[0] == '_') {
     if (s[1] == '_') {
       if (s[2] == 'a') {
         if (s[3] == 's') {

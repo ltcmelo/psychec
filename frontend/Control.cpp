@@ -220,7 +220,7 @@ public:
     Data(Control *control)
         : control(control)
         , translationUnit(0)
-        , diagnosticClient(0)
+        , diagnosticCollector(0)
         , deprecatedId(0)
         , unavailableId(0)
         , objcGetterId(0)
@@ -511,7 +511,7 @@ public:
 
     Control *control;
     TranslationUnit *translationUnit;
-    DiagnosticClient *diagnosticClient;
+    DiagnosticCollector *diagnosticCollector;
 
     LiteralTable<Identifier> identifiers;
     LiteralTable<StringLiteral> stringLiterals;
@@ -601,11 +601,11 @@ TranslationUnit *Control::switchTranslationUnit(TranslationUnit *unit)
     return previousTranslationUnit;
 }
 
-DiagnosticClient *Control::diagnosticClient() const
-{ return d->diagnosticClient; }
+DiagnosticCollector *Control::diagnosticCollector() const
+{ return d->diagnosticCollector; }
 
-void Control::setDiagnosticClient(DiagnosticClient *diagnosticClient)
-{ d->diagnosticClient = diagnosticClient; }
+void Control::setDiagnosticCollector(DiagnosticCollector* collector)
+{ d->diagnosticCollector = collector; }
 
 const AnonymousNameId *Control::anonymousNameId(unsigned classTokenIndex)
 { return d->findOrInsertAnonymousNameId(classTokenIndex); }

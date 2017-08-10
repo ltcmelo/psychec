@@ -27,6 +27,7 @@
 #include "Dialect.h"
 #include "Factory.h"
 #include <cstddef>
+#include <functional>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -47,10 +48,10 @@ struct PSYCHEC_API ExecutionFlags
         uint32_t displayCstr : 1;  //!< Display generated constraints.
         uint32_t displayStats : 1;  //!< Ambiguity- and constraints-related stats.
         uint32_t dumpAst : 1;  //!< Both original and fixed one.
-        uint32_t testOnly : 1;  //!< Test-only run.
-        uint32_t disambOnly : 1;  //!< Disambiguatio-only run.
+        uint32_t testOnly : 1;  //!< Test run.
+        uint32_t disambOnly : 1;  //!< Only disambiguate AST.
         uint32_t noHeuristics : 1;  //!< Disable heuristics on unresolved ambiguities.
-        uint32_t libDetect : 2;  //!< Lib-detection mode.
+        uint32_t matchMode : 2;  //!< Standard library usage detection mode.
 
         //! Whether to handle GNU's error function as a printf variety.
         uint32_t handleGNUerrorFunc_ : 1;
@@ -63,9 +64,9 @@ struct PSYCHEC_API ExecutionFlags
 };
 
 /*!
- * \brief The LibDetectMode enum
+ * \brief The StdLibMatchMode enum
  */
-enum class LibDetectMode : char
+enum class StdLibMatchMode : char
 {
     Ignore,
     Approx,
@@ -98,11 +99,18 @@ private:
     static CPlusPlus::Dialect specifiedDialect(const ExecutionFlags& exec);
 
     void configure(const ExecutionFlags& flags);
-    size_t buildAst(const std::string& source);
-    bool annotateSymbols();
-    void generateConstraints();
-    void reparseWithGuessedLibs();
-    void reprocessWithLibs();
+
+    size_t parse(const std::string& source, bool allowReparse);
+    size_t annotateAstWithSymbols(bool allowReparse);
+    size_t generateConstraints();
+
+    static std::string augmentSource(const std::string& baseSource,
+                                     std::function<std::vector<std::string>()>);
+
+    std::vector<std::string> guessMissingHeaders();
+    std::vector<std::string> detectMissingHeaders();
+
+    static std::string preprocessHeaders(std::vector<std::string>&& headers);
 
     const Factory factory_;
     CPlusPlus::Control control_;

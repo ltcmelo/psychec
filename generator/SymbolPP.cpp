@@ -80,6 +80,9 @@ bool SymbolPP::visit(Block *symbol)
 
 void SymbolPP::appendName(const Name *name)
 {
+    if (!name)
+        return;
+
     PSYCHE_ASSERT(name && name->asNameId(), return, "expected trivial name");
     if (name_.tellp())
         name_ << '.';

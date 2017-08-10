@@ -1,5 +1,8 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
+// Modifications:
+// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -25,7 +28,7 @@
 #include "MemoryPool.h"
 #include "AST.h"
 #include "Literals.h"
-#include "DiagnosticClient.h"
+#include "DiagnosticCollector.h"
 #include <stack>
 #include <vector>
 #include <cstdarg>
@@ -51,16 +54,13 @@ TranslationUnit::TranslationUnit(Control *control, const StringLiteral *fileId)
       _ast(0),
       _flags(0)
 {
-    _tokens = new std::vector<Token>();
-    _comments = new std::vector<Token>();
     _previousTranslationUnit = control->switchTranslationUnit(this);
-    _pool = new MemoryPool();
 }
 
 TranslationUnit::~TranslationUnit()
 {
     (void) _control->switchTranslationUnit(_previousTranslationUnit);
-    release();
+    releaseAst();
 }
 
 Control *TranslationUnit::control() const
@@ -86,8 +86,15 @@ unsigned TranslationUnit::sourceLength() const
 
 void TranslationUnit::setSource(const char *source, unsigned size)
 {
+    releaseAst();
+
     _firstSourceChar = source;
     _lastSourceChar = source + size;
+    _tokens.clear();
+    _comments.clear();
+    _flags = 0;
+    _ast = nullptr;
+    _pool = new MemoryPool();
 }
 
 const char *TranslationUnit::spell(unsigned index) const
@@ -99,10 +106,10 @@ const char *TranslationUnit::spell(unsigned index) const
 }
 
 unsigned TranslationUnit::commentCount() const
-{ return unsigned(_comments->size()); }
+{ return unsigned(_comments.size()); }
 
 const Token &TranslationUnit::commentAt(unsigned index) const
-{ return _comments->at(index); }
+{ return _comments.at(index); }
 
 const Identifier *TranslationUnit::identifier(unsigned index) const
 { return tokenAt(index).identifier; }
@@ -143,7 +150,7 @@ void TranslationUnit::tokenize()
     lex.setScanCommentTokens(true);
 
     std::stack<unsigned> braces;
-    _tokens->push_back(nullToken); // the first token needs to be invalid!
+    _tokens.push_back(nullToken); // the first token needs to be invalid!
 
     pushLineOffset(0);
     pushPreprocessorLine(0, 1, fileId());
@@ -246,14 +253,14 @@ recognize:
             }
             goto recognize;
         } else if (tk.kind() == T_LBRACE) {
-            braces.push(unsigned(_tokens->size()));
+            braces.push(unsigned(_tokens.size()));
         } else if (tk.kind() == T_RBRACE && ! braces.empty()) {
             const unsigned open_brace_index = braces.top();
             braces.pop();
             if (open_brace_index < tokenCount())
-                (*_tokens)[open_brace_index].close_brace = unsigned(_tokens->size());
+                _tokens[open_brace_index].close_brace = unsigned(_tokens.size());
         } else if (tk.isComment()) {
-            _comments->push_back(tk);
+            _comments.push_back(tk);
             continue; // comments are not in the regular token stream
         }
 
@@ -274,12 +281,12 @@ recognize:
         tk.f.expanded = currentExpanded;
         tk.f.generated = currentGenerated;
 
-        _tokens->push_back(tk);
+        _tokens.push_back(tk);
     } while (tk.kind());
 
     for (; ! braces.empty(); braces.pop()) {
         unsigned open_brace_index = braces.top();
-        (*_tokens)[open_brace_index].close_brace = unsigned(_tokens->size());
+        _tokens[open_brace_index].close_brace = unsigned(_tokens.size());
     }
 }
 
@@ -435,7 +442,9 @@ void TranslationUnit::getPosition(unsigned utf16charOffset,
        *fileName = file;
 }
 
-void TranslationUnit::message(DiagnosticClient::Level level, unsigned index, const char *format, va_list args)
+void TranslationUnit::message(DiagnosticCollector::Severity severity,
+                              unsigned index,
+                              const char *format, va_list args)
 {
     if (f._blockErrors)
         return;
@@ -446,14 +455,14 @@ void TranslationUnit::message(DiagnosticClient::Level level, unsigned index, con
     const StringLiteral *fileName = 0;
     getTokenPosition(index, &line, &column, &fileName);
 
-    if (DiagnosticClient *client = control()->diagnosticClient()) {
-        client->report(level, fileName, line, column, format, args);
+    if (DiagnosticCollector *collector = control()->diagnosticCollector()) {
+        collector->collect(severity, fileName, line, column, format, args);
     } else {
         fprintf(stderr, "%s:%u: ", fileName->chars(), line);
         const char *l = "error";
-        if (level == DiagnosticClient::Warning)
+        if (severity == DiagnosticCollector::Warning)
             l = "warning";
-        else if (level == DiagnosticClient::Fatal)
+        else if (severity == DiagnosticCollector::Fatal)
             l = "fatal";
         fprintf(stderr, "%s: ", l);
 
@@ -463,7 +472,7 @@ void TranslationUnit::message(DiagnosticClient::Level level, unsigned index, con
         showErrorLine(index, column, stderr);
     }
 
-    if (level == DiagnosticClient::Fatal)
+    if (severity == DiagnosticCollector::Fatal)
         exit(EXIT_FAILURE);
 }
 
@@ -475,7 +484,7 @@ void TranslationUnit::warning(unsigned index, const char *format, ...)
     va_list args, ap;
     va_start(args, format);
     va_copy(ap, args);
-    message(DiagnosticClient::Warning, index, format, args);
+    message(DiagnosticCollector::Warning, index, format, args);
     va_end(ap);
     va_end(args);
 }
@@ -488,7 +497,7 @@ void TranslationUnit::error(unsigned index, const char *format, ...)
     va_list args, ap;
     va_start(args, format);
     va_copy(ap, args);
-    message(DiagnosticClient::Error, index, format, args);
+    message(DiagnosticCollector::Error, index, format, args);
     va_end(ap);
     va_end(args);
 }
@@ -501,7 +510,7 @@ void TranslationUnit::fatal(unsigned index, const char *format, ...)
     va_list args, ap;
     va_start(args, format);
     va_copy(ap, args);
-    message(DiagnosticClient::Fatal, index, format, args);
+    message(DiagnosticCollector::Fatal, index, format, args);
     va_end(ap);
     va_end(args);
 }
@@ -516,7 +525,7 @@ bool TranslationUnit::maybeSplitGreaterGreaterToken(unsigned tokenIndex)
 {
     if (tokenIndex >= tokenCount())
         return false;
-    Token &tok = (*_tokens)[tokenIndex];
+    Token &tok = _tokens[tokenIndex];
     if (tok.kind() != T_GREATER_GREATER)
         return false;
 
@@ -535,7 +544,7 @@ bool TranslationUnit::maybeSplitGreaterGreaterToken(unsigned tokenIndex)
 
     TokenLineColumn::const_iterator it = _expandedLineColumn.find(tok.bytesBegin());
 
-    _tokens->insert(_tokens->begin() + tokenIndex + 1, newGreater);
+    _tokens.insert(_tokens.begin() + tokenIndex + 1, newGreater);
 
     if (it != _expandedLineColumn.end()) {
         const std::pair<unsigned, unsigned> newPosition(it->second.first, it->second.second + 1);
@@ -543,14 +552,6 @@ bool TranslationUnit::maybeSplitGreaterGreaterToken(unsigned tokenIndex)
     }
 
     return true;
-}
-
-void TranslationUnit::releaseTokensAndComments()
-{
-    delete _tokens;
-    _tokens = 0;
-    delete _comments;
-    _comments = 0;
 }
 
 void TranslationUnit::showErrorLine(unsigned index, unsigned column, FILE *out)
@@ -572,15 +573,9 @@ void TranslationUnit::showErrorLine(unsigned index, unsigned column, FILE *out)
     fputc('\n', out);
 }
 
-void TranslationUnit::resetAST()
+void TranslationUnit::releaseAst()
 {
     delete _pool;
     _pool = 0;
     _ast = 0;
-}
-
-void TranslationUnit::release()
-{
-    resetAST();
-    releaseTokensAndComments();
 }

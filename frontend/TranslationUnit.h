@@ -1,5 +1,8 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
+// Modifications:
+// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -24,8 +27,9 @@
 #include "CPlusPlusForwardDeclarations.h"
 #include "ASTfwd.h"
 #include "Token.h"
-#include "DiagnosticClient.h"
+#include "DiagnosticCollector.h"
 #include <cstdio>
+#include <memory>
 #include <vector>
 
 #if !(__cplusplus > 199711L || __GXX_EXPERIMENTAL_CXX0X__ || _MSC_VER >= 1600 || defined( _LIBCPP_VERSION )) \
@@ -64,9 +68,10 @@ public:
 
     void setSource(const char *source, unsigned size);
 
-    unsigned tokenCount() const { return _tokens ? unsigned(_tokens->size()) : unsigned(0); }
-    const Token &tokenAt(unsigned index) const
-    { return _tokens && index < tokenCount() ? (*_tokens)[index] : nullToken; }
+    bool isTokenized() const;
+    void tokenize();
+    unsigned tokenCount() const { return _tokens.size(); }
+    const Token &tokenAt(unsigned index) const { return _tokens[index]; }
 
     Kind tokenKind(unsigned index) const { return tokenAt(index).kind(); }
     const char *spell(unsigned index) const;
@@ -82,6 +87,7 @@ public:
 
     MemoryPool *memoryPool() const;
     AST *ast() const;
+    void releaseAst();
 
     bool blockErrors() const { return f._blockErrors; }
     bool blockErrors(bool block)
@@ -94,17 +100,12 @@ public:
     void warning(unsigned index, const char *fmt, ...);
     void error(unsigned index, const char *fmt, ...);
     void fatal(unsigned index, const char *fmt, ...);
-
-    void message(DiagnosticClient::Level level, unsigned index,
+    void message(DiagnosticCollector::Severity severity,
+                 unsigned index,
                  const char *format, va_list ap);
-
-    bool isTokenized() const;
-    void tokenize();
 
     bool skipFunctionBody() const;
     void setSkipFunctionBody(bool skipFunctionBody);
-
-    bool isParsed() const;
 
     enum ParseMode {
         ParseTranlationUnit,
@@ -115,9 +116,7 @@ public:
     };
 
     bool parse(ParseMode mode = ParseTranlationUnit);
-
-    void resetAST();
-    void release();
+    bool isParsed() const;
 
     void getTokenStartPosition(unsigned index, unsigned *line,
                                unsigned *column = 0,
@@ -171,7 +170,6 @@ private:
         { return utf16charOffset < other.utf16charOffset; }
     };
 
-    void releaseTokensAndComments();
     unsigned findLineNumber(unsigned utf16charOffset) const;
     unsigned findColumnNumber(unsigned utf16CharOffset, unsigned lineNumber) const;
     PPLine findPreprocessorLine(unsigned utf16charOffset) const;
@@ -183,10 +181,11 @@ private:
     const StringLiteral *_fileId;
     const char *_firstSourceChar;
     const char *_lastSourceChar;
-    std::vector<Token> *_tokens;
-    std::vector<Token> *_comments;
+    std::vector<Token> _tokens;
+    std::vector<Token> _comments;
     std::vector<unsigned> _lineOffsets;
     std::vector<PPLine> _ppLines;
+
 #if defined(_MSC_VER) && _MSC_VER < 1600
     // MSVC2008 and earlier do not implement TR1.
     typedef std::map<unsigned, std::pair<unsigned, unsigned> > TokenLineColumn;
@@ -195,6 +194,7 @@ private:
 #else
     typedef std::unordered_map<unsigned, std::pair<unsigned, unsigned> > TokenLineColumn;
 #endif
+
     TokenLineColumn _expandedLineColumn;
     MemoryPool *_pool;
     AST *_ast;

@@ -41,6 +41,7 @@
 
 using namespace psyche;
 using namespace CPlusPlus;
+using namespace std::placeholders;
 
 namespace psyche {
     extern bool debugEnabled;
@@ -65,26 +66,12 @@ size_t Driver::process(const std::string& unitName,
 
     StringLiteral name(unitName.c_str(), unitName.length());
     unit_.reset(new TranslationUnit(&control_, &name));
+    unit_->setDialect(specifiedDialect(flags));
 
-    auto error = buildAst(source);
-    if (error)
-        return error;
+    static DiagnosticCollector collector;
+    control_.setDiagnosticCollector(&collector);
 
-    if (flags_.flag_.libDetect == static_cast<char>(LibDetectMode::Approx))
-        reparseWithGuessedLibs();
-
-    if (!annotateSymbols())
-        return ProgramAmbiguous;
-
-    if (flags_.flag_.libDetect == static_cast<char>(LibDetectMode::Strict))
-        reprocessWithLibs();
-
-    if (flags_.flag_.disambOnly)
-        return OK;
-
-    generateConstraints();
-
-    return OK;
+    return parse(source, true);
 }
 
 TranslationUnit *Driver::tu() const
@@ -97,6 +84,7 @@ Dialect Driver::specifiedDialect(const ExecutionFlags&)
     Dialect dialect;
     dialect.c99 = 1;
     dialect.nullptrOnNULL = 1;
+
     return dialect;
 }
 
@@ -107,19 +95,15 @@ void Driver::configure(const ExecutionFlags& flags)
     flags_ = flags;
 }
 
-size_t Driver::buildAst(const std::string& source)
+size_t Driver::parse(const std::string& source, bool allowReparse)
 {
-    unit_->setDialect(specifiedDialect(flags_));
-
-    static DiagnosticCollector collector;
-    collector.clear();
-    control_.setDiagnosticClient(&collector);
+    control_.diagnosticCollector()->reset();
 
     unit_->setSource(source.c_str(), source.length());
     if (!unit_->parse())
         return ParsingFailed;
 
-    if (!collector.isEmpty())
+    if (control_.diagnosticCollector()->seenBlockingIssue())
         return SyntaxErrors;
 
     if (!unit_->ast() || !tuAst())
@@ -128,10 +112,17 @@ size_t Driver::buildAst(const std::string& source)
     if (flags_.flag_.dumpAst)
         ASTDumper(tu()).dump(tuAst(), ".ast.dot");
 
-    return OK;
+    std::function<std::vector<std::string> (Driver&)> f = &Driver::detectMissingHeaders;
+
+    if (allowReparse
+            && flags_.flag_.matchMode == static_cast<char>(StdLibMatchMode::Approx)) {
+        return parse(augmentSource(source, std::bind(&Driver::guessMissingHeaders, this)), false);
+    }
+
+    return annotateAstWithSymbols(allowReparse);
 }
 
-bool Driver::annotateSymbols()
+size_t Driver::annotateAstWithSymbols(bool allowReparse)
 {
     // During symbol binding we try to disambiguate ambiguities. Afterwards, it's
     // necessary to normalize the AST according to the disambiguation resolutions.
@@ -141,7 +132,7 @@ bool Driver::annotateSymbols()
     ASTNormalizer fixer(tu(), !flags_.flag_.noHeuristics);
     fixer.normalize(tuAst());
     if (isProgramAmbiguous(tu(), tuAst()))
-        return false;
+        return ProgramAmbiguous;
 
     if (flags_.flag_.displayStats)
         std::cout << "Ambiguities stats" << std::endl << fixer.stats() << std::endl;
@@ -149,10 +140,18 @@ bool Driver::annotateSymbols()
     if (flags_.flag_.dumpAst)
         ASTDumper(tu()).dump(tuAst(), ".ast.fixed.dot");
 
-    return true;
+    if (allowReparse
+            && flags_.flag_.matchMode == static_cast<char>(StdLibMatchMode::Strict)) {
+        // TODO
+    }
+
+    if (flags_.flag_.disambOnly)
+        return OK;
+
+    return generateConstraints();
 }
 
-void Driver::generateConstraints()
+size_t Driver::generateConstraints()
 {
     // Build domain lattice.
     DomainLattice lattice(tu());
@@ -168,6 +167,7 @@ void Driver::generateConstraints()
     if (flags_.flag_.handleGNUerrorFunc_)
         generator.addVariadic("error", 2);
     generator.generate(tuAst(), global_);
+
     constraints_ = oss.str();
 
     if (flags_.flag_.displayStats)
@@ -175,30 +175,40 @@ void Driver::generateConstraints()
 
     if (flags_.flag_.displayCstr)
         std::cout << "Constraints:\n" << constraints_ << std::endl;
+
+    return OK;
 }
 
-void Driver::reparseWithGuessedLibs()
+std::string Driver::augmentSource(const std::string& baseSource,
+                                  std::function<std::vector<std::string>()> getHeaders)
 {
-    std::cout << "guess...\n";
-    StdLibIndex index(StdLibIndex::Version::C99);
-    std::vector<std::string> headers = index.inspect(control_);
-    if (headers.empty())
-        return;
+    std::string fullSource = preprocessHeaders(getHeaders());
+    fullSource.reserve(fullSource.length() + baseSource.length());
+    fullSource += baseSource;
 
-    std::string in = R"(echo ")";
+    return fullSource;
+}
+
+std::vector<std::string> Driver::guessMissingHeaders()
+{
+    StdLibIndex index(StdLibIndex::Version::C99);
+    return index.inspect(control_);
+}
+
+std::vector<std::string> Driver::detectMissingHeaders()
+{
+    return std::vector<std::string>();
+}
+
+std::string Driver::preprocessHeaders(std::vector<std::string> &&headers)
+{
+    // Preprocess dependent headers.
+    std::string in = "echo \"";
     for (const auto& h : headers)
         in += "#include <" + h + ">\n";
-    in += R"(" | gcc -E -x c -)";
+    in += "\" | gcc -E -P -x c -";
 
-
-    std::cout << in << std::endl;
-    Process process;
-    process.execute(in);
-}
-
-void Driver::reprocessWithLibs()
-{
-
+    return Process().execute(in);
 }
 
 TranslationUnitAST *Driver::tuAst() const

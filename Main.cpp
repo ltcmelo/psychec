@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
             ("t,test", "Test AST disambiguation")
             ("p,dump-ast", "Dump AST in .dot format")
             ("h,help", "Print help")
-            ("l,lib-detect", "Detect library names: ignore, approx, strict",
+            ("l,stdlib-match", "Detect stdlib names: ignore, approx, strict",
                 cxxopts::value<std::string>()->default_value("ignore"))
             ("positional", "Positional arguments",
                 cxxopts::value<std::vector<std::string>>());
@@ -107,15 +107,15 @@ int main(int argc, char* argv[])
         in = v[0];
     }
 
-    const auto& libDetect = cmdLine["lib-detect"].as<std::string>();
-    if (libDetect == "ignore")
-        flags.flag_.libDetect = static_cast<uint32_t>(LibDetectMode::Ignore);
-    else if (libDetect == "approx")
-        flags.flag_.libDetect = static_cast<uint32_t>(LibDetectMode::Approx);
-    else if (libDetect == "strict")
-        flags.flag_.libDetect = static_cast<uint32_t>(LibDetectMode::Strict);
+    const auto& matchLib = cmdLine["stdlib-match"].as<std::string>();
+    if (matchLib == "ignore")
+        flags.flag_.matchMode = static_cast<uint32_t>(StdLibMatchMode::Ignore);
+    else if (matchLib == "approx")
+        flags.flag_.matchMode = static_cast<uint32_t>(StdLibMatchMode::Approx);
+    else if (matchLib == "strict")
+        flags.flag_.matchMode = static_cast<uint32_t>(StdLibMatchMode::Strict);
     else {
-        std::cout << "Unrecognized `lib-detect' value" << std::endl;
+        std::cout << "Unrecognized `stdlib-match' value" << std::endl;
         return 1;
     }
 

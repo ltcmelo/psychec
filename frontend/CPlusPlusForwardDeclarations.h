@@ -60,7 +60,7 @@ namespace CPlusPlus {
 class TranslationUnit;
 class Control;
 class MemoryPool;
-class DiagnosticClient;
+class DiagnosticCollector;
 
 class Identifier;
 class Literal;

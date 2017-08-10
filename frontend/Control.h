@@ -52,8 +52,8 @@ public:
     TopLevelDeclarationProcessor *topLevelDeclarationProcessor() const;
     void setTopLevelDeclarationProcessor(TopLevelDeclarationProcessor *processor);
 
-    DiagnosticClient *diagnosticClient() const;
-    void setDiagnosticClient(DiagnosticClient *diagnosticClient);
+    DiagnosticCollector *diagnosticCollector() const;
+    void setDiagnosticCollector(DiagnosticCollector* collector);
 
     /// Returns the canonical anonymous name id
     const AnonymousNameId *anonymousNameId(unsigned classTokenIndex);

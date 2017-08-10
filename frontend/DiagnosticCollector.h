@@ -1,5 +1,8 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
+// Modifications:
+// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -18,14 +21,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "DiagnosticClient.h"
+#ifndef CPLUSPLUS_DIAGNOSTIC_COLLECTOR_H
+#define CPLUSPLUS_DIAGNOSTIC_COLLECTOR_H
 
-using namespace CPlusPlus;
+#include "CPlusPlusForwardDeclarations.h"
+#include <cstdarg>
 
-DiagnosticClient::DiagnosticClient()
-{ }
+namespace CPlusPlus {
 
-DiagnosticClient::~DiagnosticClient()
-{ }
+class CPLUSPLUS_EXPORT DiagnosticCollector
+{
+public:
+    enum Severity {
+        Warning,
+        Error,
+        Fatal
+    };
 
+    DiagnosticCollector();
+    virtual ~DiagnosticCollector();
 
+    virtual void collect(Severity severity,
+                         const StringLiteral *fileName,
+                         unsigned line, unsigned column,
+                         const char *format, va_list ap);
+
+    bool seenBlockingIssue() const { return blockingIssue_; }
+    void reset() { blockingIssue_ = false; }
+
+private:
+    bool blockingIssue_ { false };
+};
+
+} // namespace CPlusPlus
+
+#endif
