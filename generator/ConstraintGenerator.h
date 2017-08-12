@@ -52,7 +52,20 @@ public:
 
     void installObserver(Observer* observer);
 
-    void addVariadic(const std::string& funcName, size_t varArgPos);
+    /*!
+     * \brief addPrintfLike
+     * \param funcName
+     * \param varArgPos
+     *
+     * Add a printf-like function such that a format-specifier argument can be used to
+     * type the remaining ones.
+     *
+     * Variadic functions in general don't need to be added through this method, they
+     * are automatically detected by our unificaiton algorithm. This method should be
+     * used only as means of improving precision, since specifiers like `%d' or `%f'
+     * will enforce a particular type.
+     */
+    void addPrintfLike(const std::string& funcName, size_t varArgPos);
 
 private:
     /*!
@@ -217,7 +230,7 @@ private:
      * Variadic functions in printf-style in which a format-specifier is used to type
      * arguments.
      */
-    std::unordered_map<std::string, size_t> variadic_;
+    std::unordered_map<std::string, size_t> printfs_;
 
     //! Visitor observer.
     Observer* observer_;

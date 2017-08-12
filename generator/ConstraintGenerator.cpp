@@ -83,21 +83,21 @@ ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
     , unnamedCount_(0)
     , observer_(nullptr)
 {
-    addVariadic("printf", 0);
-    addVariadic("printf_s", 0);
-    addVariadic("wprintf", 0);
-    addVariadic("wprintf_s", 0);
-    addVariadic("fprintf", 1);
-    addVariadic("fprintf_s", 1);
-    addVariadic("fwprintf", 1);
-    addVariadic("fwprintf_s", 1);
-    addVariadic("sprintf", 1);
-    addVariadic("snprintf", 2);
-    addVariadic("snprintf_s", 2);
-    addVariadic("sprintf_s", 2);
-    addVariadic("swprintf", 2);
-    addVariadic("swprintf_s", 2);
-    addVariadic("snwprintf_s", 2);
+    addPrintfLike("printf", 0);
+    addPrintfLike("printf_s", 0);
+    addPrintfLike("wprintf", 0);
+    addPrintfLike("wprintf_s", 0);
+    addPrintfLike("fprintf", 1);
+    addPrintfLike("fprintf_s", 1);
+    addPrintfLike("fwprintf", 1);
+    addPrintfLike("fwprintf_s", 1);
+    addPrintfLike("sprintf", 1);
+    addPrintfLike("snprintf", 2);
+    addPrintfLike("snprintf_s", 2);
+    addPrintfLike("sprintf_s", 2);
+    addPrintfLike("swprintf", 2);
+    addPrintfLike("swprintf_s", 2);
+    addPrintfLike("snwprintf_s", 2);
 }
 
 void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
@@ -127,9 +127,9 @@ void ConstraintGenerator::installObserver(Observer *observer)
     observer_->setConstraintWriter(writer_);
 }
 
-void ConstraintGenerator::addVariadic(const std::string &funcName, size_t varArgPos)
+void ConstraintGenerator::addPrintfLike(const std::string &funcName, size_t varArgPos)
 {
-    variadic_.insert(std::make_pair(funcName, varArgPos));
+    printfs_.insert(std::make_pair(funcName, varArgPos));
 }
 
 Scope *ConstraintGenerator::switchScope(Scope *scope)
@@ -726,8 +726,8 @@ bool ConstraintGenerator::visit(CallAST *ast)
         funcName = trivialName(ast->base_expression->asIdExpression());
 
         // Detect whether the function is registered as a variadic one.
-        auto fit = variadic_.find(funcName);
-        if (fit != variadic_.end())
+        auto fit = printfs_.find(funcName);
+        if (fit != printfs_.end())
             varArgPos = fit->second;
     } else {
         const std::string& funcVar = supply_.createTypeVar1();

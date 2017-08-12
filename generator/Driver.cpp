@@ -165,7 +165,7 @@ size_t Driver::generateConstraints()
     generator.employDomainLattice(&lattice);
     generator.installObserver(observer.get());
     if (flags_.flag_.handleGNUerrorFunc_)
-        generator.addVariadic("error", 2);
+        generator.addPrintfLike("error", 2);
     generator.generate(tuAst(), global_);
 
     constraints_ = oss.str();
