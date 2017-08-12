@@ -266,7 +266,7 @@ doTest s
         case parser ctr of
           Left err -> error $ "Error parsing constraints:\n" ++ err
           Right c  -> do
-            r <- solver c C99
+            r <- solver c C99 False
             case r of
                 Left err' -> error $ "Error solving constraints:\n" ++ show err'
                 Right ctxs@(tcx, _) -> do

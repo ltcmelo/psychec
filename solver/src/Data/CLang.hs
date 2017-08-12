@@ -20,3 +20,11 @@ module Data.CLang where
 
 -- | C standard versions
 data CLang = C89 | C99 | C11
+
+
+-- | C lang for string
+stringCLang :: String -> CLang
+stringCLang "C89" = C89
+stringCLang "C99" = C99
+stringCLang "C11" = C11
+stringCLang _ = C99

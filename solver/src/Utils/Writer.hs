@@ -33,11 +33,11 @@ import qualified Data.List as List
 import Debug.Trace
 
 
-writeCFile :: (TyCtx, VarCtx) -> String
-writeCFile ctxs@(tcx, _) =
+writeCFile :: (TyCtx, VarCtx) -> Bool -> String
+writeCFile ctxs@(tcx, _) ml =
   -- writeIncs ++
-  writeNULL ++
-  writeSize_t ++
+  writeNULL ml ++
+  writeSize_t ml ++
   writeScalar_t ++
   writeBoolDef ++
   writeFwdDecls tcx ++
@@ -58,13 +58,15 @@ writeIncs =
 
 
 -- | Write NULL definition.
-writeNULL :: String
-writeNULL = "#define NULL ((void*)0)\n"
+writeNULL :: Bool -> String
+writeNULL False = "#define NULL ((void*)0)\n"
+writeNULL _ = ""
 
 
 -- | Write size_t definition.
-writeSize_t :: String
-writeSize_t = "typedef unsigned long size_t;  // Customize by platform.\n"
+writeSize_t :: Bool -> String
+writeSize_t False = "typedef unsigned long size_t;  // Customize by platform.\n"
+writeSize_t _ = ""
 
 
 -- | Write __scalar_t definition.

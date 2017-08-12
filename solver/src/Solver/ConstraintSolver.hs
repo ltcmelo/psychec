@@ -48,15 +48,15 @@ import Utils.Pretty
 import Debug.Trace
 
 
-solver :: Constraint -> CLang -> IO (Either String (TyCtx, VarCtx))
-solver c l = runSolverM (solve c l) (((length $ fv c) + 1), 1)
+solver :: Constraint -> CLang -> Bool -> IO (Either String (TyCtx, VarCtx))
+solver c cl ml = runSolverM (solve c cl ml) (((length $ fv c) + 1), 1)
 
-solve :: Constraint -> CLang -> SolverM (TyCtx, VarCtx)
-solve c l = do
+solve :: Constraint -> CLang -> Bool -> SolverM (TyCtx, VarCtx)
+solve c cl ml = do
   let
     -- Populate builtin and standard library types and values.
-    tcx = TyCtx $ (builtinTypes l) --`Map.union` (stdTypes l)
-    vcx = VarCtx $ (builtinValues l) --`Map.union` (stdValues l)
+    tcx = TyCtx $ (builtinTypes cl) `Map.union` (if ml then (stdTypes cl) else Map.empty)
+    vcx = VarCtx $ (builtinValues cl) `Map.union` (if ml then (stdValues cl) else Map.empty)
 
   -- Populate typing context and incorporate typedefs.
   (tcx0,c') <- stage1 tcx c
@@ -131,8 +131,12 @@ solve c l = do
 
   let
     -- Remove builtins and standard library components.
-    tcx_ = undefTys (tyctx tcx5) Map.\\ (builtinTypes l) --Map.\\ (stdTypes l)
-    vcx_ = undefVars (varctx vcx5) Map.\\ (builtinValues l) --Map.\\ (stdValues l)
+    tcx_ = undefTys (tyctx tcx5)
+             Map.\\ (builtinTypes cl)
+             Map.\\ (if ml then (stdTypes cl) else Map.empty)
+    vcx_ = undefVars (varctx vcx5)
+             Map.\\ (builtinValues cl)
+             Map.\\ (if ml then (stdValues cl) else Map.empty)
 
     -- Remove anonymous types, their definitions are always in the program. Otherwise, we would
     -- have given them names.

@@ -27,51 +27,70 @@ import Parser.ConstraintParser hiding (optional)
 import Utils.Pretty (pprint, (<+>), text)
 import Utils.Writer
 import Solver.SolverMonad (TyCtx (..), VarCtx(..))
+import Debug.Trace
 
-data Config = Config {
-                inputFile  :: FilePath
-              , outputFile :: Maybe FilePath
-              } deriving Show
 
-config = Config <$> strOption
-                      (  long "input-file"
-                      <> short 'i'
-                      <> metavar "INPUT"
-                      <> help "Constraint input file")
-                <*> optional
-                      (strOption
-                         (  long "output-file"
-                         <> short 'o'
-                         <> metavar "OUTPUT"
-                         <> help "Output file"))
+data Config = Config
+  { inputFile  :: FilePath
+  , outputFile :: Maybe FilePath
+  , dialect :: Maybe String
+  , matchStdLib :: Maybe String  -- Optional bool switch unsupported.
+  } deriving Show
+
+config = Config
+  <$> strOption
+      (long "input-file"
+      <> short 'i'
+      <> metavar "INPUT"
+      <> help "Constraint input file")
+  <*> optional
+      (strOption
+        (long "output-file"
+        <> short 'o'
+        <> metavar "OUTPUT"
+        <> help "Output file"))
+  <*> optional
+      (strOption
+        (long "c-dialect"
+        <> short 'c'
+        <> metavar "DIALECT"
+        <> help "C dialect"))
+  <*> optional
+      (strOption  -- switch
+        (long "matchStdLib"
+        <> short 'l'
+        <> help "Whether to match stdlib"))
+
 
 opts :: ParserInfo Config
 opts = info (config <**> helper)
             ( fullDesc
-            <> progDesc "Infer missing typedef's for a constraint in INPUT file"
-            <> header "Constraint solver for typedef inference" )
+            <> progDesc "Infer missing types for a constraint in INPUT file"
+            <> header "Constraint solver for type inference" )
 
+optOutputFile :: Config -> FilePath
+optOutputFile cfg = case (outputFile cfg) of { Nothing -> "a.h"; Just f -> f; }
 
-outfile :: Maybe FilePath -> FilePath
-outfile Nothing = "./result.txt"
-outfile (Just f) = f
+optDialect :: Config -> CLang
+optDialect cfg = case (dialect cfg) of { Nothing -> C99; Just s -> stringCLang s; }
 
-execSolver :: Maybe FilePath -> String -> IO ()
-execSolver fp s = case parser s of
-                    Left err -> putStrLn err
-                    Right c  ->
-                        do
-                          inf <- solver c C99
-                          case inf of
-                            Left err'  -> putStrLn err'
-                            Right inf' -> do
-                                            writeFile (outfile fp)
-                                                      (writeCFile inf')
+optMatchLib :: Config -> Bool
+optMatchLib cfg = case (matchStdLib cfg) of { Nothing -> False; Just _ -> True; }
+
+execSolver :: FilePath -> CLang -> Bool -> String -> IO ()
+execSolver fp cl ml s =
+  case parser s of
+    Left err -> putStrLn err
+    Right c -> do
+      inf <- solver c cl ml
+      case inf of
+        Left err' -> putStrLn err'
+        Right inf' -> do
+          writeFile fp (writeCFile inf' ml)
+
 
 main :: IO ()
 main = do
-        cfg <- execParser opts
-        cont <- readFile (inputFile cfg)
-        execSolver (outputFile cfg) cont
-
-
+  cfg <- execParser opts
+  cstr <- readFile (inputFile cfg)
+  execSolver (optOutputFile cfg) (optDialect cfg) (optMatchLib cfg) cstr
