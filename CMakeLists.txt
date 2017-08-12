@@ -78,6 +78,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/frontend/Type.h
     ${PROJECT_SOURCE_DIR}/frontend/TypeOfExpression.cpp
     ${PROJECT_SOURCE_DIR}/frontend/TypeOfExpression.h
+    ${PROJECT_SOURCE_DIR}/frontend/TypeSpeller.h
+    ${PROJECT_SOURCE_DIR}/frontend/TypeSpeller.cpp
     ${PROJECT_SOURCE_DIR}/frontend/TypeVisitor.cpp
     ${PROJECT_SOURCE_DIR}/frontend/TypeVisitor.h
     # Generator's file
@@ -88,6 +90,7 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/ConstraintWriter.h
     ${PROJECT_SOURCE_DIR}/generator/ConstraintWriter.cpp
     ${PROJECT_SOURCE_DIR}/generator/ConstraintSyntax.h
+    ${PROJECT_SOURCE_DIR}/generator/CSyntax.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.cpp
     ${PROJECT_SOURCE_DIR}/generator/DomainLattice.h
@@ -112,24 +115,22 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/Utils.h
     ${PROJECT_SOURCE_DIR}/generator/Utils.cpp
     # Analysis files
-    ${PROJECT_SOURCE_DIR}/analysis/Range.h
-    ${PROJECT_SOURCE_DIR}/analysis/Range.cpp
-    ${PROJECT_SOURCE_DIR}/analysis/RangeAnalysis.h
-    ${PROJECT_SOURCE_DIR}/analysis/RangeAnalysis.cpp
+    ${PROJECT_SOURCE_DIR}/static-analysis/Range.h
+    ${PROJECT_SOURCE_DIR}/static-analysis/Range.cpp
+    ${PROJECT_SOURCE_DIR}/static-analysis/RangeAnalysis.h
+    ${PROJECT_SOURCE_DIR}/static-analysis/RangeAnalysis.cpp
     # Tools' files
     ${PROJECT_SOURCE_DIR}/tools/BasicStubber.h
     ${PROJECT_SOURCE_DIR}/tools/BasicStubber.cpp
+    ${PROJECT_SOURCE_DIR}/tools/FunctionWriter.h
+    ${PROJECT_SOURCE_DIR}/tools/FunctionWriter.cpp
     # Utils' files
-    ${PROJECT_SOURCE_DIR}/utility/CSyntax.h
-    ${PROJECT_SOURCE_DIR}/utility/FunctionWriter.h
-    ${PROJECT_SOURCE_DIR}/utility/FunctionWriter.cpp
     ${PROJECT_SOURCE_DIR}/utility/IO.h
     ${PROJECT_SOURCE_DIR}/utility/IO.cpp
-    ${PROJECT_SOURCE_DIR}/utility/TypeSpeller.h
-    ${PROJECT_SOURCE_DIR}/utility/TypeSpeller.cpp
-    ${PROJECT_SOURCE_DIR}/utility/VersionedMap.h
     ${PROJECT_SOURCE_DIR}/utility/Process.h
     ${PROJECT_SOURCE_DIR}/utility/Process.cpp
+    # Data structures
+    ${PROJECT_SOURCE_DIR}/data-structures/VersionedMap.h
 )
 
 set(GENERATOR_SOURCES
@@ -147,9 +148,10 @@ include_directories(
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_SOURCE_DIR}/generator
     ${PROJECT_SOURCE_DIR}/frontend
-    ${PROJECT_SOURCE_DIR}/analysis
+    ${PROJECT_SOURCE_DIR}/static-analysis
     ${PROJECT_SOURCE_DIR}/tools
     ${PROJECT_SOURCE_DIR}/utility
+    ${PROJECT_SOURCE_DIR}/data-structures
     ${PROJECT_SOURCE_DIR}/command/cxxopts/include
 )
 
