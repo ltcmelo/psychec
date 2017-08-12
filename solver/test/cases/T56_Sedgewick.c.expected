@@ -6,6 +6,6 @@ typedef  TYPE_1__* link ;
 struct TYPE_4__ {int index; int d; int /*<<< orphan*/ * r; int /*<<< orphan*/ * m; int /*<<< orphan*/ * l; } ;
 
 /* Variables and functions */
- __scalar_t N ;
+ scalar_t__ N ;
  int /*<<< orphan*/ * head ;
  TYPE_1__* malloc (int) ;

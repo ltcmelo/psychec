@@ -78,8 +78,8 @@ __int128 = NamedTy (Name "__int128")
 __uint128 :: Ty
 __uint128 = NamedTy (Name "__uint128")
 
-__scalar_t :: Ty
-__scalar_t = NamedTy (Name "__scalar_t")
+scalar_t__ :: Ty
+scalar_t__ = NamedTy (Name "scalar_t__")
 
 
 -- | A type for orphans and scalars (we could eventually separate those).

@@ -4,5 +4,5 @@
 
 /* Variables and functions */
  int /*<<< orphan*/  uid ;
- __scalar_t uid_set (int /*<<< orphan*/ ) ;
+ scalar_t__ uid_set (int /*<<< orphan*/ ) ;
 

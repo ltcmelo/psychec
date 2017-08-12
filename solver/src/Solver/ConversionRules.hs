@@ -30,10 +30,10 @@ convertible t t' =
       and [isArithTy t, isArithTy t'],
       and [isArithTy t, isEnum t'],
       and [isEnum t, isArithTy t'],
-      and [isArithTy t, t' == __scalar_t],
-      and [t == __scalar_t, isArithTy t'],
-      and [isPtrTy t, t' == __scalar_t],
-      and [t == __scalar_t, isPtrTy t'],
+      and [isArithTy t, t' == scalar_t__],
+      and [t == scalar_t__, isArithTy t'],
+      and [isPtrTy t, t' == scalar_t__],
+      and [t == scalar_t__, isPtrTy t'],
       or [t == PtrTy void, t' == PtrTy void],
       or [t == PtrTy (QualTy void Const), t' == PtrTy (QualTy void Const)]]
 

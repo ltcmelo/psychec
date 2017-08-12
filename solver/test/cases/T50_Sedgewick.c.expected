@@ -3,8 +3,8 @@ typedef  struct TYPE_7__   TYPE_1__ ;
 
 /* Type definitions */
 typedef  TYPE_1__* link ;
-struct TYPE_7__ {__scalar_t item; struct TYPE_7__* r; struct TYPE_7__* l; } ;
-typedef  __scalar_t Item ;
+struct TYPE_7__ {scalar_t__ item; struct TYPE_7__* r; struct TYPE_7__* l; } ;
+typedef  scalar_t__ Item ;
 
 /* Variables and functions */
  TYPE_1__* malloc (int) ;

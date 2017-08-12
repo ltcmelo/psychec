@@ -34,15 +34,18 @@ const char* const kFloatTy = "float";
 const char* const kDoubleTy = "double";
 const char* const kLongDouble = "long double";
 
-const char* const kSizeT = "size_t";
-const char* const ptrdiff_t__ = "ptrdiff_t";
-const char* const kScalar_t__ = "__scalar_t";
-
 const char* const kDefaultFloatPointTy = kDoubleTy;
 const char* const kDefaultIntTy = kIntTy;
 const char* const kDefaultArithTy = kDefaultIntTy;
 const char* const kDefaultStrTy = "char*";
 const char* const kDefaultConstStrTy = "char const*";
+
+// Standard library
+const char* const kSizeTy = "size_t";
+const char* const kPtrDiffTy = "ptrdiff_t";
+
+// Reserved
+const char* const kScalarTy = "scalar_t__";
 
 } // namepspace psyche
 

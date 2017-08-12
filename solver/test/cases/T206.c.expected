@@ -3,6 +3,6 @@
 /* Type definitions */
 
 /* Variables and functions */
-__scalar_t j ;
-__scalar_t j1 ;
-__scalar_t j2 ;
+scalar_t__ j ;
+scalar_t__ j1 ;
+scalar_t__ j2 ;

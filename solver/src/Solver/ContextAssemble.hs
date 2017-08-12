@@ -55,7 +55,7 @@ builtinTypes l =
            double, -- doubleComplex, doubleImaginary,
            longDouble, -- longDoubleComplex, longDoubleImaginary
            size_t,
-           __scalar_t]
+           scalar_t__]
 
 
 -- | C's builtin values by language version.

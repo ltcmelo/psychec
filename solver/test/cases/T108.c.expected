@@ -2,7 +2,7 @@
 
 /* Type definitions */
 typedef  int T2 ;
-typedef  __scalar_t T1 ;
+typedef  scalar_t__ T1 ;
 
 /* Variables and functions */
 

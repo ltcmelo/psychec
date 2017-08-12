@@ -489,7 +489,7 @@ void ConstraintGenerator::employLattice(const DomainLattice::Domain& lhsDom,
             } else {
                 PSYCHE_ASSERT(otherDom == DomainLattice::Scalar, return, "expected scalar");
                 writer_->writeEquivRel(types_.top(), otherTy);
-                writer_->writeSubtypeRel(otherTy, kScalar_t__);
+                writer_->writeSubtypeRel(otherTy, kScalarTy);
             }
         };
 
@@ -509,8 +509,8 @@ void ConstraintGenerator::employLattice(const DomainLattice::Domain& lhsDom,
             // Scalars
             writer_->writeEquivRel(types_.top(), lhsTy);
             writer_->writeEquivRel(lhsTy, rhsTy);
-            writer_->writeSubtypeRel(lhsTy, kScalar_t__);
-            writer_->writeSubtypeRel(rhsTy, kScalar_t__);
+            writer_->writeSubtypeRel(lhsTy, kScalarTy);
+            writer_->writeSubtypeRel(rhsTy, kScalarTy);
         }
         break;
     }
@@ -539,8 +539,8 @@ void ConstraintGenerator::employLattice(const DomainLattice::Domain& lhsDom,
         writer_->writeEquivRel(lhsTy, rhsTy);
         writer_->writeEquivRel(types_.top(), kIntTy);
         if (lhsDom == DomainLattice::Scalar && rhsDom == DomainLattice::Scalar) {
-            writer_->writeEquivRel(lhsTy, kScalar_t__);
-            writer_->writeEquivRel(rhsTy, kScalar_t__);
+            writer_->writeEquivRel(lhsTy, kScalarTy);
+            writer_->writeEquivRel(rhsTy, kScalarTy);
         }
         break;
 
@@ -550,9 +550,9 @@ void ConstraintGenerator::employLattice(const DomainLattice::Domain& lhsDom,
         if (!isInconsistent()) {
             writer_->writeEquivRel(types_.top(), kIntTy);
             if (lhsDom == DomainLattice::Scalar)
-                writer_->writeSubtypeRel(lhsTy, kScalar_t__);
+                writer_->writeSubtypeRel(lhsTy, kScalarTy);
             if (rhsDom == DomainLattice::Scalar)
-                writer_->writeSubtypeRel(rhsTy, kScalar_t__);
+                writer_->writeSubtypeRel(rhsTy, kScalarTy);
         }
         break;
 
@@ -561,8 +561,8 @@ void ConstraintGenerator::employLattice(const DomainLattice::Domain& lhsDom,
             writer_->writeSubtypeRel(lhsTy, rhsTy);
             writer_->writeEquivRel(types_.top(), lhsTy);
             if (lhsDom == DomainLattice::Scalar && rhsDom == DomainLattice::Scalar) {
-                writer_->writeEquivRel(lhsTy, kScalar_t__);
-                writer_->writeEquivRel(rhsTy, kScalar_t__);
+                writer_->writeEquivRel(lhsTy, kScalarTy);
+                writer_->writeEquivRel(rhsTy, kScalarTy);
             }
         }
         break;
@@ -576,12 +576,12 @@ void ConstraintGenerator::employLattice(const DomainLattice::Domain& lhsDom,
                 writer_->writeEquivRel(types_.top(), rhsTy);
             } else if (lhsDom == DomainLattice::Scalar) {
                 writer_->writeEquivRel(types_.top(), lhsTy);
-                writer_->writeSubtypeRel(lhsTy, kScalar_t__);
+                writer_->writeSubtypeRel(lhsTy, kScalarTy);
                 if (rhsDom == DomainLattice::Scalar)
                     writer_->writeEquivRel(lhsTy, rhsTy);
             } else if (rhsDom == DomainLattice::Scalar) {
                 writer_->writeEquivRel(types_.top(), rhsTy);
-                writer_->writeSubtypeRel(rhsTy, kScalar_t__);
+                writer_->writeSubtypeRel(rhsTy, kScalarTy);
                 if (lhsDom == DomainLattice::Scalar)
                     writer_->writeEquivRel(lhsTy, rhsTy);
             } else {
@@ -653,7 +653,7 @@ bool ConstraintGenerator::visit(ArrayAccessAST *ast)
     ENSURE_NONEMPTY_TYPE_STACK(return false);
     writer_->writeEquivRel(types_.top(), std::get<2>(a1a2a3));
 
-    writer_->writeEquivRel(std::get<1>(a1a2a3), kSizeT);
+    writer_->writeEquivRel(std::get<1>(a1a2a3), kSizeTy);
 
     return false;
 }
@@ -917,7 +917,7 @@ void ConstraintGenerator::convertBoolExpression(ExpressionAST *ast)
             ty = supply_.createTypeVar1();
             writer_->writeExists(ty);
             if (dom == DomainLattice::Scalar)
-                writer_->writeSubtypeRel(ty, kScalar_t__);
+                writer_->writeSubtypeRel(ty, kScalarTy);
         }
     }
 

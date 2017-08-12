@@ -4,7 +4,7 @@ typedef  struct TYPE_7__   TYPE_1__ ;
 
 /* Type definitions */
 struct TYPE_8__ {int v; int w; } ;
-struct TYPE_7__ {int V; __scalar_t E; int** adj; } ;
+struct TYPE_7__ {int V; scalar_t__ E; int** adj; } ;
 typedef  TYPE_1__* Graph ;
 typedef  TYPE_2__ Edge ;
 

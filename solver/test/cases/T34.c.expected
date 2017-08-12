@@ -1,7 +1,7 @@
 /* Forward declarations */
 
 /* Type definitions */
-struct node {__scalar_t x; int w; struct node* z; struct node* y; } ;
+struct node {scalar_t__ x; int w; struct node* z; struct node* y; } ;
 struct data {struct data* m; } ;
 
 /* Variables and functions */

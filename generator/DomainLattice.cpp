@@ -264,10 +264,10 @@ DomainLattice::Domain DomainLattice::domainForType(const FullySpecifiedType& ty,
 
     if (ty->asNamedType() && ty->asNamedType()->name()->asNameId()) {
         const Identifier* ident = ty->asNamedType()->name()->asNameId();
-        return !strcmp(kSizeT, ident->chars()) ?
-                    Domain(kIntegral, kSizeT) :
-                    !strcmp(ptrdiff_t__, ident->chars()) ?
-                        Domain(kIntegral, ptrdiff_t__) : Undefined;
+        return !strcmp(kSizeTy, ident->chars()) ?
+                    Domain(kIntegral, kSizeTy) :
+                    !strcmp(kPtrDiffTy, ident->chars()) ?
+                        Domain(kIntegral, kPtrDiffTy) : Undefined;
     }
 
     return Undefined;

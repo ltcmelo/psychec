@@ -69,9 +69,9 @@ writeSize_t False = "typedef unsigned long size_t;  // Customize by platform.\n"
 writeSize_t _ = ""
 
 
--- | Write __scalar_t definition.
+-- | Write scalar_t__ definition.
 writeScalar_t :: String
-writeScalar_t = "typedef int __scalar_t;  // Either arithmetic or pointer type.\n"
+writeScalar_t = "typedef int scalar_t__;  // Either arithmetic or pointer type.\n"
 
 
 -- TODO: By default, our generator parses a `bool' type and interpret it as an `int'.

@@ -1,7 +1,7 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  __scalar_t T ;
+typedef  scalar_t__ T ;
 
 /* Variables and functions */
 
