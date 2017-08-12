@@ -419,13 +419,21 @@ bool TypeOfExpression::visit(SimpleSpecifierAST *ast)
             fullType_ = control()->floatType(FloatType::Double);
         }
         return false;
+    case T_VOID:
+        return false;
+
     case T_UNSIGNED:
         fullType_.setUnsigned(true);
         return false;
     case T_SIGNED:
         fullType_.setSigned(true);
         return false;
-    case T_VOID:
+
+    case T_CONST:
+        fullType_.setConst(true);
+        return false;
+    case T_VOLATILE:
+        fullType_.setVolatile(true);
         return false;
 
     default:
