@@ -87,7 +87,7 @@ bool ASTNormalizer::normalize(TranslationUnitAST *ast)
     if (employHeuristic_)
         return true;
 
-    return FindAmbiguousNode(translationUnit())(ast);
+    return !FindAmbiguousNode(translationUnit())(ast);
 }
 
 bool ASTNormalizer::visit(CompoundStatementAST *ast)

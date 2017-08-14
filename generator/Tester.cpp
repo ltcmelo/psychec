@@ -1945,7 +1945,6 @@ t13 [shape=rect label = ";"]; t12 -> t13 [arrowhead="vee" color="transparent"];
 t14 [shape=rect label = "}"]; t13 -> t14 [arrowhead="vee" color="transparent"];
 }
 }
-
     )raw";
 
     checkAst(source, expectedAst, false);
