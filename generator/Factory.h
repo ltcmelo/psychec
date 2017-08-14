@@ -36,7 +36,7 @@ class PSYCHEC_API Factory
 public:
     virtual ~Factory() {}
 
-    virtual std::unique_ptr<ConstraintWriter> makeWriter(std::ostream& os) const;
+    virtual std::unique_ptr<ConstraintWriter> makeConstraintWriter(std::ostream& os) const;
     virtual std::unique_ptr<Observer> makeObserver() const;
 };
 

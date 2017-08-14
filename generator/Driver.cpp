@@ -22,6 +22,7 @@
 #include "ASTDumper.h"
 #include "ASTNormalizer.h"
 #include "Bind.h"
+#include "CompilerFacade.h"
 #include "Control.h"
 #include "ConstraintGenerator.h"
 #include "ConstraintWriter.h"
@@ -30,7 +31,6 @@
 #include "DomainLattice.h"
 #include "Literals.h"
 #include "Observer.h"
-#include "Process.h"
 #include "Symbols.h"
 #include "StdLibIndex.h"
 #include "TranslationUnit.h"
@@ -156,7 +156,7 @@ size_t Driver::generateConstraints()
     lattice.categorize(tuAst(), global_);
 
     std::ostringstream oss;
-    auto writer = factory_.makeWriter(oss);
+    auto writer = factory_.makeConstraintWriter(oss);
     auto observer = factory_.makeObserver();
 
     ConstraintGenerator generator(tu(), writer.get());
@@ -178,7 +178,7 @@ size_t Driver::generateConstraints()
 }
 
 std::string Driver::augmentSource(const std::string& baseSource,
-                                  std::function<std::vector<std::string>()> getHeaders)
+                                  std::function<std::vector<std::string>()> getHeaders) const
 {
     std::string fullSource = preprocessHeaders(getHeaders());
     fullSource.reserve(fullSource.length() + baseSource.length());
@@ -198,15 +198,16 @@ std::vector<std::string> Driver::detectMissingHeaders()
     return std::vector<std::string>();
 }
 
-std::string Driver::preprocessHeaders(std::vector<std::string> &&headers)
+std::string Driver::preprocessHeaders(std::vector<std::string> &&headers) const
 {
-    // Preprocess dependent headers.
-    std::string in = "echo \"";
+    if (headers.empty())
+        return "";
+
+    std::string in;
     for (const auto& h : headers)
         in += "#include <" + h + ">\n";
-    in += "\" | gcc -E -P -x c -";
 
-    return Process().execute(in);
+    return CompilerFacade(flags_.nativeCC_).preprocessSource(in);
 }
 
 TranslationUnitAST *Driver::tuAst() const

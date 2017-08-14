@@ -120,6 +120,8 @@ set(PSYCHEC_SOURCES
     # Tools' files
     ${PROJECT_SOURCE_DIR}/tools/BasicStubber.h
     ${PROJECT_SOURCE_DIR}/tools/BasicStubber.cpp
+    ${PROJECT_SOURCE_DIR}/tools/CompilerFacade.h
+    ${PROJECT_SOURCE_DIR}/tools/CompilerFacade.cpp
     ${PROJECT_SOURCE_DIR}/tools/FunctionWriter.h
     ${PROJECT_SOURCE_DIR}/tools/FunctionWriter.cpp
     # Utils' files

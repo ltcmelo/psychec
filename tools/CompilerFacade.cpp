@@ -16,18 +16,20 @@
  Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#include "Factory.h"
-#include "ConstraintWriter.h"
-#include "Observer.h"
+#include "CompilerFacade.h"
+#include "Process.h"
 
 using namespace psyche;
 
-std::unique_ptr<ConstraintWriter> Factory::makeConstraintWriter(std::ostream& os) const
-{
-    return std::make_unique<ConstraintWriter>(os);
-}
+CompilerFacade::CompilerFacade(const std::string& nativeCC)
+    : nativeCC_(nativeCC)  // TODO: Native compiler support validation.
+{}
 
-std::unique_ptr<Observer> Factory::makeObserver() const
+std::string CompilerFacade::preprocessSource(const std::string& source)
 {
-    return std::make_unique<Observer>();
+    std::string in = "echo \"" + source + "\" | ";
+    in += nativeCC_;
+    in += " -E -P -x c -";
+
+    return Process().execute(in);
 }

@@ -16,18 +16,26 @@
  Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#include "Factory.h"
-#include "ConstraintWriter.h"
-#include "Observer.h"
+#ifndef PSYCHE_COMPILER_FACADE_H__
+#define PSYCHE_COMPILER_FACADE_H__
 
-using namespace psyche;
+#include "Config.h"
+#include <string>
 
-std::unique_ptr<ConstraintWriter> Factory::makeConstraintWriter(std::ostream& os) const
+namespace psyche {
+
+class PSYCHEC_API CompilerFacade
 {
-    return std::make_unique<ConstraintWriter>(os);
-}
+public:
+    CompilerFacade(const std::string& nativeCC);
 
-std::unique_ptr<Observer> Factory::makeObserver() const
-{
-    return std::make_unique<Observer>();
-}
+    std::string preprocessSource(const std::string& source);
+    std::string preprocessFile(const std::string& filePath);
+
+private:
+    std::string nativeCC_;
+};
+
+} // namespace psyche
+
+#endif

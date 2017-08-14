@@ -61,6 +61,8 @@ struct PSYCHEC_API ExecutionFlags
         Detail flag_;
         uint32_t all_;
     };
+
+    std::string nativeCC_;
 };
 
 /*!
@@ -104,15 +106,15 @@ private:
     size_t annotateAstWithSymbols(bool allowReparse);
     size_t generateConstraints();
 
-    static std::string augmentSource(const std::string& baseSource,
-                                     std::function<std::vector<std::string>()>);
-
     std::vector<std::string> guessMissingHeaders();
     std::vector<std::string> detectMissingHeaders();
 
-    static std::string preprocessHeaders(std::vector<std::string>&& headers);
+    std::string augmentSource(const std::string& baseSource,
+                              std::function<std::vector<std::string>()>) const;
 
-    const Factory factory_;
+    std::string preprocessHeaders(std::vector<std::string>&& headers) const;
+
+    const Factory& factory_;
     CPlusPlus::Control control_;
     ExecutionFlags flags_;
     CPlusPlus::Namespace* global_;

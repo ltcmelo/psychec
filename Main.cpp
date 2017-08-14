@@ -58,6 +58,8 @@ int main(int argc, char* argv[])
             ("t,test", "Test AST disambiguation")
             ("p,dump-ast", "Dump AST in .dot format")
             ("h,help", "Print help")
+            ("cc", "Native C compiler",
+                cxxopts::value<std::string>()->default_value("gcc"))
             ("l,stdlib-match", "Detect stdlib names: ignore, approx, strict",
                 cxxopts::value<std::string>()->default_value("ignore"))
             ("positional", "Positional arguments",
@@ -106,6 +108,8 @@ int main(int argc, char* argv[])
         auto& v = cmdLine["positional"].as<std::vector<std::string>>();
         in = v[0];
     }
+
+    flags.nativeCC_ = cmdLine["cc"].as<std::string>();
 
     const auto& matchLib = cmdLine["stdlib-match"].as<std::string>();
     if (matchLib == "ignore")
