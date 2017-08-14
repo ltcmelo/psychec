@@ -25,7 +25,6 @@
 #include "Scope.h"
 #include "Symbols.h"
 #include "TranslationUnit.h"
-#include "Utils.h"
 #include <cstdlib>
 #include <memory>
 

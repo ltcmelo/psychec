@@ -22,7 +22,6 @@
 #include "ConstraintSyntax.h"
 #include "Literals.h"
 #include "Symbols.h"
-#include "Utils.h"
 
 using namespace CPlusPlus;
 using namespace psyche;

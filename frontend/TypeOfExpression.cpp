@@ -28,7 +28,6 @@
 #include "Symbol.h"
 #include "Symbols.h"
 #include "TranslationUnit.h"
-#include "Utils.h"
 
 using namespace CPlusPlus;
 using namespace psyche;

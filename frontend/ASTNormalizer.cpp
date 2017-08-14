@@ -34,6 +34,35 @@
 using namespace CPlusPlus;
 using namespace psyche;
 
+namespace {
+
+struct FindAmbiguousNode : public ASTVisitor
+{
+    FindAmbiguousNode(CPlusPlus::TranslationUnit *unit)
+        : ASTVisitor(unit)
+        , hasAmbiguousNode_(false)
+    {}
+
+    bool operator()(const CPlusPlus::TranslationUnitAST *ast)
+    {
+        if (ast) {
+            for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
+                accept(it->value);
+        }
+        return hasAmbiguousNode_;
+    }
+
+    bool visit(AmbiguousStatementAST *) override
+    {
+        hasAmbiguousNode_ = true;
+        return false;
+    }
+
+    bool hasAmbiguousNode_;
+};
+
+} // Anonymous
+
 ASTNormalizer::ASTNormalizer(TranslationUnit *unit, bool employHeuristic)
     : ASTVisitor(unit)
     , employHeuristic_(employHeuristic)
@@ -47,13 +76,18 @@ void ASTNormalizer::Stats::reset()
     guessedAsPtrDecl_ = 0;
 }
 
-void ASTNormalizer::normalize(TranslationUnitAST *ast)
+bool ASTNormalizer::normalize(TranslationUnitAST *ast)
 {
     if (!ast)
-        return;
+        return true;
 
     for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
         accept(it->value);
+
+    if (employHeuristic_)
+        return true;
+
+    return FindAmbiguousNode(translationUnit())(ast);
 }
 
 bool ASTNormalizer::visit(CompoundStatementAST *ast)

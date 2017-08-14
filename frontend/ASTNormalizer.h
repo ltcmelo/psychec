@@ -30,7 +30,7 @@ class PSYCHEC_API ASTNormalizer final : public CPlusPlus::ASTVisitor
 public:
     ASTNormalizer(CPlusPlus::TranslationUnit *unit, bool employHeuristic);
 
-    void normalize(CPlusPlus::TranslationUnitAST *ast);
+    bool normalize(CPlusPlus::TranslationUnitAST *ast);
 
     struct Stats
     {

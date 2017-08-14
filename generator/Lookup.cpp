@@ -17,7 +17,6 @@
  * USA
  *****************************************************************************/
 
-#include "Utils.h"
 #include "AST.h"
 #include "ASTVisitor.h"
 #include "Assert.h"

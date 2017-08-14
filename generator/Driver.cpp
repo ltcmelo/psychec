@@ -34,7 +34,6 @@
 #include "Symbols.h"
 #include "StdLibIndex.h"
 #include "TranslationUnit.h"
-#include "Utils.h"
 #include <iostream>
 #include <sstream>
 #include <cstring>
@@ -130,8 +129,7 @@ size_t Driver::annotateAstWithSymbols(bool allowReparse)
     bind(tuAst(), global_);
 
     ASTNormalizer fixer(tu(), !flags_.flag_.noHeuristics);
-    fixer.normalize(tuAst());
-    if (isProgramAmbiguous(tu(), tuAst()))
+    if (!fixer.normalize(tuAst()))
         return ProgramAmbiguous;
 
     if (flags_.flag_.displayStats)

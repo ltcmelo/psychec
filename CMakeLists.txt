@@ -112,8 +112,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.cpp
     ${PROJECT_SOURCE_DIR}/generator/Tester.h
     ${PROJECT_SOURCE_DIR}/generator/Tester.cpp
-    ${PROJECT_SOURCE_DIR}/generator/Utils.h
-    ${PROJECT_SOURCE_DIR}/generator/Utils.cpp
     # Analysis files
     ${PROJECT_SOURCE_DIR}/static-analysis/Range.h
     ${PROJECT_SOURCE_DIR}/static-analysis/Range.cpp

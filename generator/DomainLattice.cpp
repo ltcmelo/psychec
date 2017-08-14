@@ -32,7 +32,6 @@
 #include "Token.h"
 #include "TypeOfExpression.h"
 #include "TranslationUnit.h"
-#include "Utils.h"
 #include <algorithm>
 #include <unordered_set>
 #include <utility>

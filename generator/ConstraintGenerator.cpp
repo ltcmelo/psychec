@@ -37,7 +37,6 @@
 #include "SymbolPP.h"
 #include "TranslationUnit.h"
 #include "TypeOfExpression.h"
-#include "Utils.h"
 #include <iostream>
 #include <algorithm>
 
@@ -663,8 +662,8 @@ bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
     DEBUG_VISIT(BinaryExpressionAST);
     OBSERVE(BinaryExpressionAST);
 
-    ExpressionAST* lexpr = stripParen(ast->left_expression);
-    ExpressionAST* rexpr = stripParen(ast->right_expression);
+    ExpressionAST* lexpr = ast->left_expression;
+    ExpressionAST* rexpr = ast->right_expression;
 
     // A comma expression is just a  sequence of unrelated expressions.
     unsigned op = tokenKind(ast->binary_op_token);
