@@ -59,7 +59,7 @@ Bind::Bind(TranslationUnit *unit)
       _methodKey(Function::NormalMethod),
       _skipFunctionBodies(false),
       _depth(0),
-      ambiguity_(nullptr)
+      parentAmbiguousStmt_(nullptr)
 {
 }
 
@@ -1164,32 +1164,33 @@ bool Bind::visit(TrailingReturnTypeAST *)
     return false;
 }
 
-bool Bind::visit(AmbiguousStatementAST *ast)
+bool Bind::visit(AmbiguousStatementAST *ambiStmt)
 {
-    // It's possible that the parser created an AST ambiguity node but
-    // was already capable of disambiguating it.
-    if (ast->info->resolution() == SyntaxAmbiguity::Resolution::DefinitelyDeclaration) {
-        this->statement(ast->declarationStmt);
-        return false;
-    }
-    if (ast->info->resolution() == SyntaxAmbiguity::Resolution::DefinitelyExpression) {
-        this->statement(ast->expressionStmt);
+    // It's possible that the parser created an AST ambiguity node but was later capable
+    // of disambiguating it on its own.
+    StatementAST* pickedStmt = nullptr;
+    if (ambiStmt->ambiguity->resolution() == SyntaxAmbiguity::Resolution::IsDecl)
+        pickedStmt = ambiStmt->declarationStmt;
+    else if (ambiStmt->ambiguity->resolution() == SyntaxAmbiguity::Resolution::IsExpr)
+        pickedStmt = ambiStmt->expressionStmt;
+
+    if (pickedStmt) {
+        this->statement(pickedStmt);
         return false;
     }
 
-    PSYCHE_ASSERT(ast->info->resolution() == SyntaxAmbiguity::Resolution::Unknown,
+    PSYCHE_ASSERT(ambiStmt->ambiguity->resolution() == SyntaxAmbiguity::Resolution::Unknown,
                   return false,
-                  "cannot be an ambiguity");
-    ambiguity_ = ast;
-    this->statement(ast->expressionStmt);
-    if (ast->info->resolution() == SyntaxAmbiguity::Resolution::Unknown) {
-        this->statement(ast->declarationStmt);
-        // If the ambiguity still remains unresolved, we store it in the
-        // scoped-map of pending ambiguities.
-        if (ast->info->resolution() == SyntaxAmbiguity::Resolution::Unknown)
-            _unresolvedAmbiguities.insert(std::make_pair(_scope, ast));
-    }
-    ambiguity_ = nullptr;
+                  "expected unresolved ambiguity");
+
+    parentAmbiguousStmt_ = ambiStmt;
+    this->statement(ambiStmt->expressionStmt);
+    this->statement(ambiStmt->declarationStmt);
+    parentAmbiguousStmt_ = nullptr;
+
+    // If the ambiguity still remains unresolved, store it for later.
+    if (ambiStmt->ambiguity->resolution() == SyntaxAmbiguity::Resolution::Unknown)
+        ambiguousStmts_.insert(std::make_pair(_scope, ambiStmt));
 
     return false;
 }
@@ -1586,28 +1587,13 @@ bool Bind::visit(IdExpressionAST *ast)
 {
     const Name *name = this->name(ast->name);
 
-    // If we're in an ambiguous expression, we can't use it as basis to disambiguate others.
-    if (ambiguity_)
+    // If we're within an ambiguous statement, we can't tell this identifier is really
+    // an expression, so it isn't possible to use for disambiguating ambiguities.
+    if (withinAmbiguousStmt())
         return false;
 
-    // Perhaps we have an unresolved ambiguity within this scope. In this case,
-    // we can try to resolve it because if there's a use as an expression of
-    // the right hand side of the ambiguity, it's certainly not a type.
-    if (!_unresolvedAmbiguities.empty() && name->asNameId()) {
-        const auto& ambigs = hasAmbiguity(_scope);
-        for (auto ambig : ambigs) {
-            PSYCHE_ASSERT(ambig, return false, "ambiguity must be non-null");
-            if (ambig->info->lhs()
-                    && !strcmp(name->identifier()->chars(),
-                               ambig->info->lhs()->identifier()->chars())) {
-                resolveAmbiguity("Resolve ambiguity as expression at %d "
-                                 "(found usage as expression for LHS)\n",
-                                 SyntaxAmbiguity::Resolution::DefinitelyExpression,
-                                 ambig);
-                break;
-            }
-        }
-    }
+    if (name->asNameId())
+        maybeResolveAmbiguity(name, &SyntaxAmbiguity::lhs, SyntaxAmbiguity::Resolution::IsExpr);
 
     return false;
 }
@@ -1642,36 +1628,38 @@ bool Bind::visit(QtMethodAST *ast)
 
 bool Bind::visit(BinaryExpressionAST *ast)
 {
-    ExpressionTy left_expression = this->expression(ast->left_expression);
-    ExpressionTy right_expression = this->expression(ast->right_expression);
+    this->expression(ast->left_expression);
+    this->expression(ast->right_expression);
 
-    if (!ambiguity_
-            || ambiguity_->info->resolution() != SyntaxAmbiguity::Resolution::Unknown) {
+    if (!withinAmbiguousStmt()
+            || parentAmbiguousStmt_->ambiguity->resolution() != SyntaxAmbiguity::Resolution::Unknown) {
         return false;
     }
 
-    // Let's try to resolve the names now.
-    auto maybeResolve = [this] (const Name* name) {
-        if (lookupValueSymbol(name, _scope)) {
-            ambiguity_->info->resolveAs(SyntaxAmbiguity::Resolution::DefinitelyExpression);
-            return true;
+    auto resolve = [this] (AST* astSide, void (SyntaxAmbiguity::*set) (const Name*)) {
+        if (astSide->asIdExpression()) {
+            const Name* name = astSide->asIdExpression()->name->name;
+            if (lookupValueSymbol(name, _scope)) {
+                parentAmbiguousStmt_->ambiguity->applyResolution(SyntaxAmbiguity::Resolution::IsExpr);
+                return true;
+            }
+            (parentAmbiguousStmt_->ambiguity.get()->*(set))(name);
         }
         return false;
     };
 
-    const Name* name = nullptr;
-    if (ast->left_expression->asIdExpression()) {
-        name = ast->left_expression->asIdExpression()->name->name;
-        if (maybeResolve(name))
-            return false;
-        ambiguity_->info->setLhs(name);
-    }
+    // Try to resolve ambiguity through symbol lookup.
+    if (resolve(ast->left_expression, &SyntaxAmbiguity::setLhs)
+            || resolve(ast->right_expression, &SyntaxAmbiguity::setRhs))
+        return false;
 
-    if (ast->right_expression->asIdExpression()) {
-        name = ast->right_expression->asIdExpression()->name->name;
-        if (maybeResolve(name))
-            return false;
-        ambiguity_->info->setRhs(name);
+    // Undeclared names won't produce a symbol, but maybe this name has been seen as a
+    // type specifier.
+    if (ast->left_expression->asIdExpression()) {
+        const Name* name = ast->left_expression->asIdExpression()->name->name;
+        auto it = typeNames_.find(_scope);
+        if (it != typeNames_.end() && (it->second.find(name) != it->second.end()))
+            parentAmbiguousStmt_->ambiguity->applyResolution(SyntaxAmbiguity::Resolution::IsDecl);
     }
 
     return false;
@@ -1868,23 +1856,11 @@ bool Bind::visit(UnaryExpressionAST *ast)
     // unsigned unary_op_token = ast->unary_op_token;
     ExpressionTy expression = this->expression(ast->expression);
 
-    if (!_unresolvedAmbiguities.empty()
-            && ast->expression->asIdExpression()
+    if (ast->expression->asIdExpression()
             && tokenKind(ast->unary_op_token) == T_STAR) {
-        const auto& ambigs = hasAmbiguity(_scope);
-        for (auto ambig : ambigs) {
-            PSYCHE_ASSERT(ambig, return false, "ambiguity must be non-null");
-            const Name* name = ast->expression->asIdExpression()->name->name;
-            if (ambig->info->rhs()
-                    && !strcmp(name->identifier()->chars(),
-                               ambig->info->rhs()->identifier()->chars())) {
-                resolveAmbiguity("Resolve ambiguity as declaration at %d "
-                                 "(found usage as pointer deref for RHS)\n",
-                                 SyntaxAmbiguity::Resolution::DefinitelyDeclaration,
-                                 ambig);
-                break;
-            }
-        }
+        maybeResolveAmbiguity(ast->expression->asIdExpression()->name->name,
+                              &SyntaxAmbiguity::rhs,
+                              SyntaxAmbiguity::Resolution::IsDecl);
     }
 
     return false;
@@ -1983,15 +1959,6 @@ bool Bind::visit(SimpleDeclarationAST *ast)
     if (type.isUnsigned() && type->isUndefinedType())
         type.setType(control()->integerType(IntegerType::Int));
 
-    if (ambiguity_
-            && ambiguity_->info->resolution() == SyntaxAmbiguity::Resolution::Unknown
-            && type->isNamedType()) {
-        if (lookupTypeSymbol(type->asNamedType()->name(), _scope))
-            ambiguity_->info->resolveAs(SyntaxAmbiguity::Resolution::DefinitelyDeclaration);
-        else
-            ambiguity_->info->setLhs(type->asNamedType()->name());
-    }
-
     List<Symbol *> **symbolTail = &ast->symbols;
 
     if (! ast->declarator_list) {
@@ -2031,9 +1998,28 @@ bool Bind::visit(SimpleDeclarationAST *ast)
         decl->setType(declTy);
         setDeclSpecifiers(decl, type);
 
-        if (ambiguity_
-                && ambiguity_->info->resolution() == SyntaxAmbiguity::Resolution::Unknown) {
-            ambiguity_->suspiciousDecls.push_back(decl);
+        // Keep track of named types not accompanined by a pointer declarator, so we can
+        // use them for AST disambiguation.
+        if (type->isNamedType() && !declTy->isPointerType())
+            typeNames_[_scope].insert(type->asNamedType()->name());
+
+        if (withinAmbiguousStmt()
+                && parentAmbiguousStmt_->ambiguity->resolution() == SyntaxAmbiguity::Resolution::Unknown
+                && type->isNamedType()) {
+            if (lookupTypeSymbol(type->asNamedType()->name(), _scope)) {
+                parentAmbiguousStmt_->ambiguity->applyResolution(SyntaxAmbiguity::Resolution::IsDecl);
+            } else {
+                parentAmbiguousStmt_->ambiguity->setLhs(type->asNamedType()->name());
+
+                // It might be the case this is not a declaration. But because the symbol
+                // is always created nevertheless, we keep track such "declarations" so
+                // it's possible to invalidate them later.
+                parentAmbiguousStmt_->suspiciousDecls.push_back(decl);
+            }
+        } else if (declTy->asNamedType()) {
+            maybeResolveAmbiguity(declTy->asNamedType()->name(),
+                                  &SyntaxAmbiguity::lhs,
+                                  SyntaxAmbiguity::Resolution::IsDecl);
         }
 
         if (Function *fun = decl->type()->asFunctionType()) {
@@ -2071,6 +2057,7 @@ bool Bind::visit(SimpleDeclarationAST *ast)
         *symbolTail = new (translationUnit()->memoryPool()) List<Symbol *>(decl);
         symbolTail = &(*symbolTail)->next;
     }
+
     return false;
 }
 
@@ -3269,8 +3256,8 @@ bool Bind::visit(CallAST *ast)
         this->expression(it->value);
     }
 
-    if (!ambiguity_
-            || ambiguity_->info->resolution() != SyntaxAmbiguity::Resolution::Unknown
+    if (!withinAmbiguousStmt()
+            || parentAmbiguousStmt_->ambiguity->resolution() != SyntaxAmbiguity::Resolution::Unknown
             || !ast->base_expression->asIdExpression()) {
         return false;
     }
@@ -3284,7 +3271,7 @@ bool Bind::visit(CallAST *ast)
         if (sym->asFunction()
                 || (sym->asDeclaration()
                     && sym->asDeclaration()->type()->asFunctionType())) {
-            ambiguity_->info->resolveAs(SyntaxAmbiguity::Resolution::DefinitelyExpression);
+            parentAmbiguousStmt_->ambiguity->applyResolution(SyntaxAmbiguity::Resolution::IsExpr);
             return false;
         }
     } else if (ast->expression_list
@@ -3292,7 +3279,7 @@ bool Bind::visit(CallAST *ast)
                && ast->expression_list->value->asIdExpression()) {
         name = ast->expression_list->value->asIdExpression()->name->name;
         if (lookupValueSymbol(name, _scope)) {
-            ambiguity_->info->resolveAs(SyntaxAmbiguity::Resolution::DefinitelyExpression);
+            parentAmbiguousStmt_->ambiguity->applyResolution(SyntaxAmbiguity::Resolution::IsExpr);
             return false;
         }
     }
@@ -3318,32 +3305,18 @@ bool Bind::visit(PostIncrDecrAST *ast)
 
 bool Bind::visit(MemberAccessAST *ast)
 {
-    ExpressionTy base_expression = this->expression(ast->base_expression);
-
-    if (!_unresolvedAmbiguities.empty()
-            && ast->base_expression->asIdExpression()) {
-        const auto& ambigs = hasAmbiguity(_scope);
-        for (auto ambig : ambigs) {
-            PSYCHE_ASSERT(ambig, return false, "ambiguity must be non-null");
-            const Name* baseName = ast->base_expression->asIdExpression()->name->name;
-            if (ambig->info->rhs()
-                    && !strcmp(baseName->identifier()->chars(),
-                               ambig->info->rhs()->identifier()->chars())) {
-                // Multiplication is not valid a pointer arithmetic.
-                resolveAmbiguity("Resolve ambiguity as declaration at %d "
-                                 "(found member access expr on RHS)\n",
-                                 SyntaxAmbiguity::Resolution::DefinitelyDeclaration,
-                                 ambig);
-                break;
-            }
-        }
-    }
+    /*ExpressionTy base_expression =*/ this->expression(ast->base_expression);
 
     /*const Name *member_name =*/ this->name(ast->member_name);
 
+    if (ast->base_expression->asIdExpression()) {
+        maybeResolveAmbiguity(ast->base_expression->asIdExpression()->name->name,
+                              &SyntaxAmbiguity::rhs,
+                              SyntaxAmbiguity::Resolution::IsDecl);
+    }
+
     return false;
 }
-
 
 // CoreDeclaratorAST
 bool Bind::visit(DeclaratorIdAST *ast)
@@ -3419,13 +3392,13 @@ void Bind::ensureValidClassName(const Name **name, unsigned sourceLocation)
     }
 }
 
-std::vector<AmbiguousStatementAST*> Bind::hasAmbiguity(const Scope *scope) const
+std::vector<AmbiguousStatementAST*> Bind::findAmbiguousStmts(const Scope *scope) const
 {
     std::vector<AmbiguousStatementAST*> ambigs;
     while (scope) {
-        auto it = _unresolvedAmbiguities.find(scope);
-        if (it != _unresolvedAmbiguities.end()
-                && it->second->info->resolution() == SyntaxAmbiguity::Resolution::Unknown) {
+        auto it = ambiguousStmts_.find(scope);
+        if (it != ambiguousStmts_.end()
+                && it->second->ambiguity->resolution() == SyntaxAmbiguity::Resolution::Unknown) {
             ambigs.push_back(it->second);
         }
         scope = scope->enclosingScope();
@@ -3433,14 +3406,20 @@ std::vector<AmbiguousStatementAST*> Bind::hasAmbiguity(const Scope *scope) const
     return ambigs;
 }
 
-void Bind::resolveAmbiguity(const char *msg,
-                            SyntaxAmbiguity::Resolution resolution,
-                            AmbiguousStatementAST* ambig)
+void Bind::maybeResolveAmbiguity(const Name* name,
+                                 const Name* (SyntaxAmbiguity::*getSide)() const,
+                                 SyntaxAmbiguity::Resolution resolution) const
 {
-    unsigned line;
-    translationUnit()->getTokenPosition(ambig->firstToken(), &line);
-    printDebug(msg, line);
-    ambig->info->resolveAs(resolution);
+    const auto& stmts = findAmbiguousStmts(_scope);
+    for (auto ambiStmt : stmts) {
+        PSYCHE_ASSERT(ambiStmt, return , "expected valid ambiguity");
+
+        if (((ambiStmt->ambiguity.get())->*(getSide))()
+                && !strcmp(name->identifier()->chars(),
+                           (ambiStmt->ambiguity.get()->*(getSide))()->identifier()->chars())) {
+            ambiStmt->ambiguity->applyResolution(resolution);
+        }
+    }
 }
 
 int Bind::visibilityForAccessSpecifier(int tokenKind)

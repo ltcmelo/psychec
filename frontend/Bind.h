@@ -28,6 +28,7 @@
 #include "FullySpecifiedType.h"
 #include "Names.h"
 #include <unordered_map>
+#include <unordered_set>
 
 // Pysche
 #include "SyntaxAmbiguity.h"
@@ -287,11 +288,6 @@ private:
 
     void ensureValidClassName(const Name **name, unsigned sourceLocation);
 
-    std::vector<AmbiguousStatementAST*> hasAmbiguity(const Scope* scope) const;
-    void resolveAmbiguity(const char* msg,
-                          psyche::SyntaxAmbiguity::Resolution,
-                          AmbiguousStatementAST *ambig);
-
     Scope *_scope;
     ExpressionTy _expression;
     const Name *_name;
@@ -302,8 +298,29 @@ private:
     int _methodKey;
     bool _skipFunctionBodies;
     int _depth;
-    std::unordered_multimap<const Scope*, AmbiguousStatementAST*> _unresolvedAmbiguities;
-    AmbiguousStatementAST* ambiguity_;
+
+    /*!
+     * Ambiguity handling
+     * @{
+     */
+    //! Ambiguities indexed by scope.
+    std::vector<AmbiguousStatementAST*> findAmbiguousStmts(const Scope* scope) const;
+    std::unordered_multimap<const Scope*, AmbiguousStatementAST*> ambiguousStmts_;
+
+    //! Whether the parent AST node is an ambiguity node.
+    AmbiguousStatementAST* parentAmbiguousStmt_;
+    bool withinAmbiguousStmt() const { return parentAmbiguousStmt_; }
+
+    //! Names unambiguously identified as type specifiers.
+    std::unordered_map<const Scope*, std::unordered_set<const Name*>> typeNames_;
+
+    //! Try to resolve any pending ambiguity for the given name.
+    void maybeResolveAmbiguity(const Name* name,
+                               const Name* (psyche::SyntaxAmbiguity::*get) () const,
+                               psyche::SyntaxAmbiguity::Resolution) const;
+    /*!
+     * @}
+     */
 };
 
 } // namespace CPlusPlus

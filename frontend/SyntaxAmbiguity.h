@@ -35,9 +35,9 @@ public:
     enum class Resolution : char
     {
         Unknown,
-        DefinitelyDeclaration,
-        DefinitelyExpression,
-        DefinitelyCoercion
+        IsDecl,
+        IsExpr,
+        IsCoercion
     };
 
     enum class Variety : char
@@ -49,18 +49,18 @@ public:
     };
 
     SyntaxAmbiguity(Variety variety,
-                  unsigned line,
-                  Resolution status = Resolution::Unknown)
+                    unsigned line,
+                    Resolution r = Resolution::Unknown)
         : variety_(variety)
         , line_(line)
-        , resolution_(status)
+        , resolution_(r)
         , lhs_(nullptr)
         , rhs_(nullptr)
     {}
 
     Variety variety() const { return variety_; }
 
-    void resolveAs(SyntaxAmbiguity::Resolution resolution);
+    void applyResolution(SyntaxAmbiguity::Resolution r) { resolution_ = r; }
     Resolution resolution() const { return resolution_; }
 
     void setLhs(const CPlusPlus::Name* name) { lhs_ = name; }
@@ -77,11 +77,6 @@ private:
     const CPlusPlus::Name* lhs_;
     const CPlusPlus::Name* rhs_;
 };
-
-inline void SyntaxAmbiguity::resolveAs(SyntaxAmbiguity::Resolution resolution)
-{
-    resolution_ = resolution;
-}
 
 } // namespace psyche
 

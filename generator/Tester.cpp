@@ -1950,3 +1950,183 @@ t14 [shape=rect label = "}"]; t13 -> t14 [arrowhead="vee" color="transparent"];
     checkAst(source, expectedAst, false);
 }
 
+
+void Tester::testCase23()
+{
+    std::string source = R"raw(
+void f() {
+    x z;
+    x * y;
+}
+    )raw";
+
+    std::string expectedAst = R"raw(
+digraph AST { ordering=out;
+n1 [label="TranslationUnitAST"];
+n2 [label="FunctionDefinitionAST"];
+n3 [label="SimpleSpecifierAST"];
+n4 [label="DeclaratorAST"];
+n5 [label="DeclaratorIdAST"];
+n6 [label="SimpleNameAST"];
+n7 [label="FunctionDeclaratorAST"];
+n8 [label="CompoundStatementAST"];
+n9 [label="DeclarationStatementAST"];
+n10 [label="SimpleDeclarationAST"];
+n11 [label="NamedTypeSpecifierAST"];
+n12 [label="SimpleNameAST"];
+n13 [label="DeclaratorAST"];
+n14 [label="DeclaratorIdAST"];
+n15 [label="SimpleNameAST"];
+n16 [label="DeclarationStatementAST"];
+n17 [label="SimpleDeclarationAST"];
+n18 [label="NamedTypeSpecifierAST"];
+n19 [label="SimpleNameAST"];
+n20 [label="DeclaratorAST"];
+n21 [label="PointerAST"];
+n22 [label="DeclaratorIdAST"];
+n23 [label="SimpleNameAST"];
+n1 -> n2
+n2 -> n3
+n3 -> t1
+n2 -> n4
+n4 -> n5
+n5 -> n6
+n6 -> t2
+n4 -> n7
+n7 -> t3
+n7 -> t4
+n2 -> n8
+n8 -> t5
+n8 -> n9
+n9 -> n10
+n10 -> n11
+n11 -> n12
+n12 -> t6
+n10 -> n13
+n13 -> n14
+n14 -> n15
+n15 -> t7
+n10 -> t8
+n8 -> n16
+n16 -> n17
+n17 -> n18
+n18 -> n19
+n19 -> t9
+n17 -> n20
+n20 -> n21
+n21 -> t10
+n20 -> n22
+n22 -> n23
+n23 -> t11
+n17 -> t12
+n8 -> t13
+{ rank=same;
+t1 [shape=rect label = "void"];
+t2 [shape=rect label = "f"]; t1 -> t2 [arrowhead="vee" color="transparent"];
+t3 [shape=rect label = "("]; t2 -> t3 [arrowhead="vee" color="transparent"];
+t4 [shape=rect label = ")"]; t3 -> t4 [arrowhead="vee" color="transparent"];
+t5 [shape=rect label = "{"]; t4 -> t5 [arrowhead="vee" color="transparent"];
+t6 [shape=rect label = "x"]; t5 -> t6 [arrowhead="vee" color="transparent"];
+t7 [shape=rect label = "z"]; t6 -> t7 [arrowhead="vee" color="transparent"];
+t8 [shape=rect label = ";"]; t7 -> t8 [arrowhead="vee" color="transparent"];
+t9 [shape=rect label = "x"]; t8 -> t9 [arrowhead="vee" color="transparent"];
+t10 [shape=rect label = "*"]; t9 -> t10 [arrowhead="vee" color="transparent"];
+t11 [shape=rect label = "y"]; t10 -> t11 [arrowhead="vee" color="transparent"];
+t12 [shape=rect label = ";"]; t11 -> t12 [arrowhead="vee" color="transparent"];
+t13 [shape=rect label = "}"]; t12 -> t13 [arrowhead="vee" color="transparent"];
+}
+}
+    )raw";
+
+    checkAst(source, expectedAst, false);
+}
+
+void Tester::testCase24()
+{
+    std::string source = R"raw(
+void g() {
+    x * y;
+    x z;
+}
+    )raw";
+
+    std::string expectedAst = R"raw(
+digraph AST { ordering=out;
+n1 [label="TranslationUnitAST"];
+n2 [label="FunctionDefinitionAST"];
+n3 [label="SimpleSpecifierAST"];
+n4 [label="DeclaratorAST"];
+n5 [label="DeclaratorIdAST"];
+n6 [label="SimpleNameAST"];
+n7 [label="FunctionDeclaratorAST"];
+n8 [label="CompoundStatementAST"];
+n9 [label="DeclarationStatementAST"];
+n10 [label="SimpleDeclarationAST"];
+n11 [label="NamedTypeSpecifierAST"];
+n12 [label="SimpleNameAST"];
+n13 [label="DeclaratorAST"];
+n14 [label="PointerAST"];
+n15 [label="DeclaratorIdAST"];
+n16 [label="SimpleNameAST"];
+n17 [label="DeclarationStatementAST"];
+n18 [label="SimpleDeclarationAST"];
+n19 [label="NamedTypeSpecifierAST"];
+n20 [label="SimpleNameAST"];
+n21 [label="DeclaratorAST"];
+n22 [label="DeclaratorIdAST"];
+n23 [label="SimpleNameAST"];
+n1 -> n2
+n2 -> n3
+n3 -> t1
+n2 -> n4
+n4 -> n5
+n5 -> n6
+n6 -> t2
+n4 -> n7
+n7 -> t3
+n7 -> t4
+n2 -> n8
+n8 -> t5
+n8 -> n9
+n9 -> n10
+n10 -> n11
+n11 -> n12
+n12 -> t6
+n10 -> n13
+n13 -> n14
+n14 -> t7
+n13 -> n15
+n15 -> n16
+n16 -> t8
+n10 -> t9
+n8 -> n17
+n17 -> n18
+n18 -> n19
+n19 -> n20
+n20 -> t10
+n18 -> n21
+n21 -> n22
+n22 -> n23
+n23 -> t11
+n18 -> t12
+n8 -> t13
+{ rank=same;
+t1 [shape=rect label = "void"];
+t2 [shape=rect label = "g"]; t1 -> t2 [arrowhead="vee" color="transparent"];
+t3 [shape=rect label = "("]; t2 -> t3 [arrowhead="vee" color="transparent"];
+t4 [shape=rect label = ")"]; t3 -> t4 [arrowhead="vee" color="transparent"];
+t5 [shape=rect label = "{"]; t4 -> t5 [arrowhead="vee" color="transparent"];
+t6 [shape=rect label = "x"]; t5 -> t6 [arrowhead="vee" color="transparent"];
+t7 [shape=rect label = "*"]; t6 -> t7 [arrowhead="vee" color="transparent"];
+t8 [shape=rect label = "y"]; t7 -> t8 [arrowhead="vee" color="transparent"];
+t9 [shape=rect label = ";"]; t8 -> t9 [arrowhead="vee" color="transparent"];
+t10 [shape=rect label = "x"]; t9 -> t10 [arrowhead="vee" color="transparent"];
+t11 [shape=rect label = "z"]; t10 -> t11 [arrowhead="vee" color="transparent"];
+t12 [shape=rect label = ";"]; t11 -> t12 [arrowhead="vee" color="transparent"];
+t13 [shape=rect label = "}"]; t12 -> t13 [arrowhead="vee" color="transparent"];
+}
+}
+    )raw";
+
+    checkAst(source, expectedAst, false);
+}

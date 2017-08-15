@@ -157,21 +157,21 @@ void ASTNormalizer::maybeFixAST(StatementAST *&ast)
 
     AmbiguousStatementAST* amb = ast->asAmbiguousStatement();
     std::vector<Declaration*> suspicious;
-    SyntaxAmbiguity::Resolution resolution = amb->info->resolution();
-    auto line = amb->info->line();
+    SyntaxAmbiguity::Resolution resolution = amb->ambiguity->resolution();
+    auto line = amb->ambiguity->line();
 
-    if (resolution == SyntaxAmbiguity::Resolution::DefinitelyExpression) {
+    if (resolution == SyntaxAmbiguity::Resolution::IsExpr) {
         suspicious = amb->suspiciousDecls;
         ast = amb->expressionStmt;
         printDebug("Ambiguity at %d can be disambiguated as expression\n", line);
         ++stats_.resolvedAsExpr_;
-    } else if (resolution == SyntaxAmbiguity::Resolution::DefinitelyDeclaration) {
+    } else if (resolution == SyntaxAmbiguity::Resolution::IsDecl) {
         ast = amb->declarationStmt;
         printDebug("Ambiguity at %d can be disambiguated as declaration\n", line);
         ++stats_.resolvedAsDecl_;
     } else if (employHeuristic_) {
         printDebug("Ambiguity at %d cannot be disambiguated, apply heuristics\n", line);
-        SyntaxAmbiguity::Variety variety = amb->info->variety();
+        SyntaxAmbiguity::Variety variety = amb->ambiguity->variety();
         if (variety == SyntaxAmbiguity::Variety::MulExpr_X_PointerDecl) {
             ast = amb->declarationStmt;
             ++stats_.guessedAsPtrDecl_;

@@ -1910,7 +1910,7 @@ class CPLUSPLUS_EXPORT AmbiguousStatementAST : public StatementAST
 public:
     DeclarationStatementAST *declarationStmt;
     ExpressionStatementAST *expressionStmt;
-    std::unique_ptr<psyche::SyntaxAmbiguity> info;
+    std::unique_ptr<psyche::SyntaxAmbiguity> ambiguity;
     std::vector<Declaration*> suspiciousDecls;
 
 public:
