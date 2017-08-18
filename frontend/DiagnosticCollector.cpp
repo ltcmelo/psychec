@@ -49,7 +49,7 @@ void DiagnosticCollector::collect(Severity severity,
     if (severity != Warning)
         blockingIssue_ = true;
 
-    fprintf(stderr, "%s:%u:%u: %s: ", fileName->chars(), line, column, map[severity]);
-    vfprintf(stderr, format, ap);
-    fprintf(stderr, "\n");
+    fprintf(stdout, "%s:%u:%u: %s: ", fileName->chars(), line, column, map[severity]);
+    vfprintf(stdout, format, ap);
+    fprintf(stdout, "\n");
 }

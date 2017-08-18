@@ -155,7 +155,7 @@ private:
     };
 
     std::string currentTest_;
-    ExecutionFlags flags_;
+    ExecutionOptions flags_;
 };
 
 struct PSYCHEC_API TestFailed {};

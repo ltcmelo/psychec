@@ -75,7 +75,7 @@ void Tester::compareText(std::string expected, std::string actual) const
 
 void Tester::reset()
 {
-    flags_ = ExecutionFlags();
+    flags_ = ExecutionOptions();
     flags_.flag_.noHeuristics = true;
 }
 
