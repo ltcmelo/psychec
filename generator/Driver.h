@@ -114,8 +114,8 @@ private:
 
     void configure(const ExecutionOptions& flags);
 
-    int parse(const std::string& source, bool allowReparse);
-    int annotateAstWithSymbols(bool allowReparse);
+    int parse(const std::string& source, bool firstPass);
+    int annotateAstWithSymbols(bool firstPass);
     int generateConstraints();
 
     std::vector<std::string> guessMissingHeaders();
@@ -125,6 +125,8 @@ private:
                               std::function<std::vector<std::string>()>) const;
 
     std::string preprocessHeaders(std::vector<std::string>&& headers) const;
+
+    void honorFlag(bool flag, std::function<void ()>) const;
 
     CPlusPlus::TranslationUnitAST* tuAst() const;
     CPlusPlus::TranslationUnit* tu() const;

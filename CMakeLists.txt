@@ -46,6 +46,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/frontend/LiteralTable.h
     ${PROJECT_SOURCE_DIR}/frontend/Literals.cpp
     ${PROJECT_SOURCE_DIR}/frontend/Literals.h
+    ${PROJECT_SOURCE_DIR}/frontend/Lookup.h
+    ${PROJECT_SOURCE_DIR}/frontend/Lookup.cpp
     ${PROJECT_SOURCE_DIR}/frontend/MemoryPool.cpp
     ${PROJECT_SOURCE_DIR}/frontend/MemoryPool.h
     ${PROJECT_SOURCE_DIR}/frontend/Name.cpp
@@ -64,6 +66,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/frontend/Scope.h
     ${PROJECT_SOURCE_DIR}/frontend/Symbol.cpp
     ${PROJECT_SOURCE_DIR}/frontend/Symbol.h
+    ${PROJECT_SOURCE_DIR}/frontend/SymbolPP.h
+    ${PROJECT_SOURCE_DIR}/frontend/SymbolPP.cpp
     ${PROJECT_SOURCE_DIR}/frontend/SymbolVisitor.h
     ${PROJECT_SOURCE_DIR}/frontend/Symbols.cpp
     ${PROJECT_SOURCE_DIR}/frontend/Symbols.h
@@ -101,13 +105,9 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/Factory.cpp
     ${PROJECT_SOURCE_DIR}/generator/FreshVarSupply.h
     ${PROJECT_SOURCE_DIR}/generator/FreshVarSupply.cpp
-    ${PROJECT_SOURCE_DIR}/generator/Lookup.h
-    ${PROJECT_SOURCE_DIR}/generator/Lookup.cpp
     ${PROJECT_SOURCE_DIR}/generator/Observer.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
-    ${PROJECT_SOURCE_DIR}/generator/SymbolPP.h
-    ${PROJECT_SOURCE_DIR}/generator/SymbolPP.cpp
     ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.h
     ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.cpp
     ${PROJECT_SOURCE_DIR}/generator/Tester.h
@@ -124,6 +124,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/tools/CompilerFacade.cpp
     ${PROJECT_SOURCE_DIR}/tools/FunctionWriter.h
     ${PROJECT_SOURCE_DIR}/tools/FunctionWriter.cpp
+    ${PROJECT_SOURCE_DIR}/tools/ProgramValidator.h
+    ${PROJECT_SOURCE_DIR}/tools/ProgramValidator.cpp
     # Utils' files
     ${PROJECT_SOURCE_DIR}/utility/IO.h
     ${PROJECT_SOURCE_DIR}/utility/IO.cpp

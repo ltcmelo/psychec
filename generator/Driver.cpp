@@ -30,6 +30,7 @@
 #include "IO.h"
 #include "Literals.h"
 #include "Observer.h"
+#include "ProgramValidator.h"
 #include "Symbols.h"
 #include "StdLibIndex.h"
 #include "Tester.h"
@@ -141,8 +142,9 @@ int Driver::process(int argc, char *argv[])
     exeOpts.flag_.displayConstraints = cmdOpts.count("constraints");
     exeOpts.flag_.displayStats = cmdOpts.count("stats");
     exeOpts.flag_.noHeuristics = cmdOpts.count("no-heuristic");
-    exeOpts.nativeCC_ = cmdOpts["CC"].as<std::string>();
+    exeOpts.flag_.noTypedef = cmdOpts.count("no-typedef");
     exeOpts.flag_.handleGNUerrorFunc_ = true; // TODO: POSIX stuff?
+    exeOpts.nativeCC_ = cmdOpts["CC"].as<std::string>();
 
     const std::string& source = readFile(in);
 
@@ -205,7 +207,7 @@ void Driver::configure(const ExecutionOptions& flags)
     opts_ = flags;
 }
 
-int Driver::parse(const std::string& source, bool allowReparse)
+int Driver::parse(const std::string& source, bool firstPass)
 {
     control_.diagnosticCollector()->reset();
 
@@ -213,26 +215,27 @@ int Driver::parse(const std::string& source, bool allowReparse)
     if (!unit_->parse())
         return ParsingError;
 
-    if (control_.diagnosticCollector()->seenBlockingIssue())
-        return InvalidSyntax;
-
     if (!unit_->ast() || !tuAst())
         return UnavailableAstError;
 
-    if (opts_.flag_.dumpAst)
-        ASTDumper(tu()).dump(tuAst(), ".ast.dot");
+    honorFlag(opts_.flag_.dumpAst,
+              [this] () { ASTDumper(tu()).dump(tuAst(), ".ast.dot"); });
 
-    std::function<std::vector<std::string> (Driver&)> f = &Driver::detectMissingHeaders;
+    ProgramValidator validator(tu(), firstPass && opts_.flag_.noTypedef);
+    validator.validate(tuAst());
 
-    if (allowReparse
+    if (control_.diagnosticCollector()->seenBlockingIssue())
+        return InvalidSyntax;
+
+    if (firstPass
             && opts_.flag_.stdlibMode == static_cast<char>(StdLibMode::Approx)) {
         return parse(augmentSource(source, std::bind(&Driver::guessMissingHeaders, this)), false);
     }
 
-    return annotateAstWithSymbols(allowReparse);
+    return annotateAstWithSymbols(firstPass);
 }
 
-int Driver::annotateAstWithSymbols(bool allowReparse)
+int Driver::annotateAstWithSymbols(bool firstPass)
 {
     // During symbol binding we try to disambiguate ambiguities. Afterwards, it's
     // necessary to normalize the AST according to the disambiguation resolutions.
@@ -243,13 +246,15 @@ int Driver::annotateAstWithSymbols(bool allowReparse)
     if (!fixer.normalize(tuAst()))
         return UnresolvedAmbiguity;
 
-    if (opts_.flag_.displayStats)
-        std::cout << "Ambiguities stats" << std::endl << fixer.stats() << std::endl;
+    honorFlag(opts_.flag_.displayStats,
+              [this, &fixer] () {
+                 std::cout << "Ambiguities stats" << std::endl << fixer.stats() << std::endl;
+              });
 
-    if (opts_.flag_.dumpAst)
-        ASTDumper(tu()).dump(tuAst(), ".ast.fixed.dot");
+    honorFlag(opts_.flag_.dumpAst,
+              [this] () { ASTDumper(tu()).dump(tuAst(), ".ast.fixed.dot"); });
 
-    if (allowReparse
+    if (firstPass
             && opts_.flag_.stdlibMode == static_cast<char>(StdLibMode::Strict)) {
         // TODO
     }
@@ -279,11 +284,8 @@ int Driver::generateConstraints()
 
     constraints_ = oss.str();
 
-    if (opts_.flag_.displayStats)
-        std::cout << "Stats: " << writer->totalConstraints() << std::endl;
-
-    if (opts_.flag_.displayConstraints)
-        std::cout << "Constraints:\n" << constraints_ << std::endl;
+    honorFlag(opts_.flag_.displayConstraints,
+              [this] () { std::cout << constraints_ << std::endl; });
 
     return OK;
 }
@@ -319,6 +321,12 @@ std::string Driver::preprocessHeaders(std::vector<std::string> &&headers) const
         in += "#include <" + h + ">\n";
 
     return CompilerFacade(opts_.nativeCC_).preprocessSource(in);
+}
+
+void Driver::honorFlag(bool flag, std::function<void ()> f) const
+{
+    if (flag)
+        f();
 }
 
 TranslationUnitAST *Driver::tuAst() const
