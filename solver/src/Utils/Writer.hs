@@ -79,7 +79,10 @@ writeScalar_t = "typedef int scalar_t__;  // Either arithmetic or pointer type.\
 writeBoolDef :: String
 writeBoolDef =
   "/* By default, we understand bool (as a convenience). */\n" ++
-  "typedef int bool; const bool false = 0; const bool true = 1;\n" ++
+  "typedef int bool;\n" ++
+  -- Write defines instead of declarations to avoid multiple definitions.
+  "#define false 0\n" ++
+  "#define true 1\n" ++
   "\n"
 
 
