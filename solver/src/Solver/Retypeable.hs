@@ -123,5 +123,5 @@ unalphaHelper _ _ t@(NamedTy _) = t
 unalphaHelper _ _ t@(EnumTy _) = t
 unalphaHelper k n (QualTy t q) = QualTy (unalphaHelper k n t) q
 unalphaHelper k n (PtrTy t) = PtrTy (unalphaHelper k n t)
-unalphaHelper k n t@(FunTy _ _) = t
+unalphaHelper _ _ t@(FunTy _ _) = t
 unalphaHelper _ _ (RecTy _ _) = error "shouldn't have structs at this point"

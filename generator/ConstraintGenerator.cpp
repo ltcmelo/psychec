@@ -560,8 +560,8 @@ void ConstraintGenerator::employLattice(const DomainLattice::Domain& lhsDom,
             writer_->writeSubtypeRel(lhsTy, rhsTy);
             writer_->writeEquivRel(types_.top(), lhsTy);
             if (lhsDom == DomainLattice::Scalar && rhsDom == DomainLattice::Scalar) {
-                writer_->writeEquivRel(lhsTy, kScalarTy);
-                writer_->writeEquivRel(rhsTy, kScalarTy);
+                writer_->writeSubtypeRel(lhsTy, kScalarTy);
+                writer_->writeSubtypeRel(rhsTy, kScalarTy);
             }
         }
         break;

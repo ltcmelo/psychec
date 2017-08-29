@@ -1,0 +1,12 @@
+/* Forward declarations */
+typedef  struct TYPE_4__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_4__ {int value; struct TYPE_4__* next; } ;
+typedef  TYPE_1__* NODE_PTR ;
+typedef  int /*<<< orphan*/  NODE ;
+
+/* Variables and functions */
+ int atoi (char*) ;
+ TYPE_1__* malloc (int) ;
+

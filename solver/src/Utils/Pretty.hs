@@ -30,6 +30,9 @@ import Text.PrettyPrint.HughesPJ
 class Pretty a where
   pprint :: a -> Doc
 
+instance Pretty a => Pretty [a] where
+  pprint v = foldr (\x acc -> pprint x <+> text "  " <+> acc ) (text "") v
+
 instance Pretty Name where
   pprint = text . unName
 

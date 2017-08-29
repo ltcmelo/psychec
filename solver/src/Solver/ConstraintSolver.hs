@@ -66,15 +66,10 @@ solve c cl ml = do
 
   {--liftIO (print $ text "c'\n" <+> pprint c')
   liftIO (print $ text "tcx0\n" <+> pprint (TyCtx $ cleanTypes C99 (tyctx tcx0)))
-  liftIO (print $ text "c''\n" <+> pprint c'')
   liftIO (print $ text "vcx0\n" <+> pprint (VarCtx $ cleanValues C99 (varctx vcx0)))--}
 
   -- Split constraints into equivalence, inequality, and field acess.
   let (eqs, iqs, fds) = stage3 c''
-
-  {--liftIO (print $ text "eqs e iqs\n")
-  liftIO (mapM_ (print . pprint) eqs)
-  liftIO (mapM_ (print . pprint) iqs)--}
 
   -- Move function constraints to last positions, so we get more instantiated types to match
   -- variadic functions.
@@ -102,7 +97,7 @@ solve c cl ml = do
   let
     vs' = vs @@ s
     iqs_'' = apply vs' iqs''
-    (iq1, iq2, iq3, iq4) = dsort iqs_''
+    (iq1, iq2, iq3, iq4, iq5) = dsort iqs_''
     iqs''' = iq1 ++ iq2 ++ iq3
   s' <- dunifyList iqs'''
   let s'' = s' @@ vs'
@@ -116,15 +111,16 @@ solve c cl ml = do
   -- Translate structural representation to a nominative one.
   (tcx2, vcx2) <- stage5 tcx1 vcx1' s'''
 
-  -- Unify against the top type, void*, and apply substitions.
-  let vqs = apply s''' iq4
+  -- Unify against void* and scalar types.
+  let vqs = apply s''' (iq4 ++ iq5)
   ss <- dunifyList vqs
   let
     ss' = ss @@ s'''
     tcx3 = TyCtx $ Map.map (\(t,b) -> (apply ss' t, b)) (tyctx tcx2)
     vcx3 = VarCtx $ Map.map (\varInfo -> apply ss' varInfo) (varctx vcx2)
-    -- Orphanize type variables that remain.
-    (tcx4, vcx4) = stage6 tcx3 vcx3
+
+  -- Orphanize type variables that remain.
+  let  (tcx4, vcx4) = stage6 tcx3 vcx3
 
   -- Decay function pointers.
   (tcx5, vcx5) <- decay tcx4 vcx4
@@ -357,27 +353,30 @@ instantiateTopPtr ((t1 :>: t1'):c@(t2 :>: t2'):xs) = do
 
 
 -- | Sort constraint relations as according to our modeled subtyping relation.
-dsort :: [Constraint] -> ([Constraint], [Constraint], [Constraint], [Constraint])
-dsort [] = ([], [], [], [])
+dsort :: [Constraint] -> ([Constraint], [Constraint], [Constraint], [Constraint], [Constraint])
+dsort [] = ([], [], [], [], [])
 dsort (x:xs) =
-  (eq1 ++ eq1', eq2 ++ eq2', eq3 ++ eq3', eq4 ++ eq4')
+  (eq1 ++ eq1', eq2 ++ eq2', eq3 ++ eq3', eq4 ++ eq4', eq5 ++ eq5')
  where
-  (eq1, eq2, eq3, eq4) = dsort' x
-  (eq1', eq2', eq3', eq4') = dsort xs
+  (eq1, eq2, eq3, eq4, eq5) = dsort' x
+  (eq1', eq2', eq3', eq4', eq5') = dsort xs
 
-dsort' :: Constraint -> ([Constraint], [Constraint], [Constraint], [Constraint])
+dsort' :: Constraint -> ([Constraint], [Constraint], [Constraint], [Constraint], [Constraint])
 dsort' c@(_ :>: (PtrTy (QualTy t _)))
-  | hasVarDep t = ([], [], [c], [])
-  | t == Data.BuiltIn.void = ([], [], [], [c])
-  | otherwise = ([c], [], [], [])
+  | hasVarDep t = ([], [], [c], [], [])
+  | t == Data.BuiltIn.void = ([], [], [], [c], [])
+  | otherwise = ([c], [], [], [], [])
 dsort' c@(_ :>: (PtrTy t))
-  | t == Data.BuiltIn.void = ([], [], [], [c])
-  | otherwise =  ([], [], [c], [])
+  | t == Data.BuiltIn.void = ([], [], [], [c], [])
+  | otherwise =  ([], [], [c], [], [])
 dsort' c@((PtrTy t) :>: _)
-  | hasVarDep t = ([], [], [c], [])
-  | t == Data.BuiltIn.void = ([], [], [], [c])
-  | otherwise = case t of { QualTy _ _ -> ([], [], [c], []); _ -> ([], [c], [], []) }
-dsort' c = ([], [], [c], [])
+  | hasVarDep t = ([], [], [c], [], [])
+  | t == Data.BuiltIn.void = ([], [], [], [c], [])
+  | t == Data.BuiltIn.scalar_t__ = ([], [], [], [], [c])
+  | otherwise = case t of { QualTy _ _ -> ([], [], [c], [], []); _ -> ([], [c], [], [], []) }
+dsort' c@(t :>: t')
+  | t' == Data.BuiltIn.scalar_t__ = ([], [], [], [], [c])
+  | otherwise = ([], [], [c], [], [])
 
 
 -- | Assemble records by unified their fields. After this stage, all typing information

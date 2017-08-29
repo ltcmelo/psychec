@@ -256,6 +256,7 @@ tests = testGroup "Unit tests"
                   , doTest "T209.c" -- Improve cast precision.
                   , doTest "T210.c" -- Cast with void: (void)x.
                   , doTest "T211.c" -- Dont crash on unnamed param.
+                  , doTest "T212.c" -- Postpone scalar_t__ unification.
                   ]
 
 doTest s
