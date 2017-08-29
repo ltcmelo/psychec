@@ -342,9 +342,15 @@ instantiateTopPtr [] = return nullSubst
 instantiateTopPtr [(_ :>: _)] = return nullSubst
 instantiateTopPtr ((t1 :>: t1'):c@(t2 :>: t2'):xs) = do
   let
-    check t (VarTy n) t' (VarTy n')
-      | n == n' && (dropTopQual Const t) /= (dropTopQual Const t') = return (n +-> (PtrTy void))
-      | n == n' && (dropTopQual Volatile t) /= (dropTopQual Volatile t') = return (n +-> (PtrTy void))
+    check t tn@(VarTy n) t' tn'@(VarTy n')
+      | t /= tn
+        && t' /= tn'
+        && n == n'
+        && (dropTopQual Const t) /= (dropTopQual Const t') = return (n +-> (PtrTy void))
+      | t /= tn
+        && t' /= tn'
+        && n == n'
+        && (dropTopQual Volatile t) /= (dropTopQual Volatile t') = return (n +-> (PtrTy void))
       | otherwise = return nullSubst
     check _ _ _ _  = return nullSubst
   s <- check t1 t1' t2 t2'

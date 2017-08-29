@@ -1,0 +1,8 @@
+/* Forward declarations */
+typedef  struct TYPE_4__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_4__ {int v; } ;
+typedef  TYPE_1__ Edge ;
+
+/* Variables and functions */

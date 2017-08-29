@@ -3,8 +3,8 @@ typedef  struct TYPE_8__   TYPE_1__ ;
 
 /* Type definitions */
 typedef  TYPE_1__* link ;
-struct TYPE_8__ {struct TYPE_8__* next; void* item; } ;
-typedef  void* Item ;
+struct TYPE_8__ {struct TYPE_8__* next; int /*<<< orphan*/ item; } ;
+typedef  int /*<<< orphan*/ Item ;
 
 /* Variables and functions */
  int /*<<< orphan*/  free (TYPE_1__*) ; 
