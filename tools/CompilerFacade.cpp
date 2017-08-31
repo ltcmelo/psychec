@@ -29,7 +29,7 @@ std::string CompilerFacade::preprocessSource(const std::string& source)
 {
     std::string in = "echo \"" + source + "\" | ";
     in += nativeCC_;
-    in += " -E -P -x c -";
+    in += " -E -x c -";
 
     return Process().execute(in);
 }

@@ -248,9 +248,9 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
     valuedRets_.push(false);
     if (body) {
         pushType(funcRet);
-        Scope *previousScope = switchScope(func->asScope());
+        Scope *prevScope = switchScope(func->asScope());
         visitStatement(body);
-        switchScope(previousScope);
+        switchScope(prevScope);
         if (valuedRets_.top())
             writer_->writeEquivRel(alpha, types_.top());
         popType();
@@ -896,7 +896,7 @@ bool ConstraintGenerator::visit(CastExpressionAST *ast)
     return false;
 }
 
-void ConstraintGenerator::convertBoolExpression(ExpressionAST *ast)
+void ConstraintGenerator::treatAsBool(ExpressionAST *ast)
 {
     if (!ast)
         return;
@@ -928,7 +928,7 @@ bool ConstraintGenerator::visit(ConditionalExpressionAST *ast)
     DEBUG_VISIT(ConditionalExpressionAST);
     OBSERVE(ConditionalExpressionAST);
 
-    convertBoolExpression(ast->condition);
+    treatAsBool(ast->condition);
     visitExpression(ast->left_expression);
     visitExpression(ast->right_expression);
 
@@ -1202,10 +1202,10 @@ bool ConstraintGenerator::visit(EnumSpecifierAST *ast)
     for (SpecifierListAST *it = ast->type_specifier_list; it; it = it->next)
         visitSpecifier(it->value);
 
-    Scope *previousScope = switchScope(ast->symbol);
+    Scope *prevScope = switchScope(ast->symbol);
     for (EnumeratorListAST *it = ast->enumerator_list; it; it = it->next)
         visitExpression(it->value->expression);
-    switchScope(previousScope);
+    switchScope(prevScope);
 
     return false;
 }
@@ -1233,10 +1233,10 @@ bool ConstraintGenerator::visit(ClassSpecifierAST* ast)
     writer_->writeEquivRel(alpha, tyName);
 
     structs_.push(alpha);
-    Scope *previousScope = switchScope(ast->symbol);
+    Scope *prevScope = switchScope(ast->symbol);
     for (DeclarationListAST *it = ast->member_specifier_list; it; it = it->next)
         visitDeclaration(it->value);
-    switchScope(previousScope);
+    switchScope(prevScope);
     structs_.pop();
 
     return false;
@@ -1255,10 +1255,10 @@ bool ConstraintGenerator::visit(CompoundStatementAST *ast)
     OBSERVE(CompoundStatementAST);
 
     writer_->openScope();
-    Scope *previousScope = switchScope(ast->symbol);
+    Scope *prevScope = switchScope(ast->symbol);
     for (StatementListAST *it = ast->statement_list; it; it = it->next)
         visitStatement(it->value);
-    switchScope(previousScope);
+    switchScope(prevScope);
     writer_->closeScope();
 
     return false;
@@ -1329,9 +1329,11 @@ bool ConstraintGenerator::visit(IfStatementAST *ast)
     DEBUG_VISIT(IfStatementAST);
     OBSERVE(IfStatementAST);
 
-    convertBoolExpression(ast->condition);
+    Scope* prevScope = switchScope(ast->symbol);
+    treatAsBool(ast->condition);
     visitStatement(ast->statement);
     visitStatement(ast->else_statement);
+    switchScope(prevScope);
 
     return false;
 }
@@ -1356,7 +1358,7 @@ bool ConstraintGenerator::visit(SwitchStatementAST *ast)
     DEBUG_VISIT(SwitchStatementAST);
     OBSERVE(SwitchStatementAST);
 
-    convertBoolExpression(ast->condition);
+    treatAsBool(ast->condition);
     visitStatement(ast->statement);
 
     return false;
@@ -1381,7 +1383,7 @@ bool ConstraintGenerator::visit(DoStatementAST *ast)
     DEBUG_VISIT(DoStatementAST);
     OBSERVE(DoStatementAST);
 
-    convertBoolExpression(ast->expression);
+    treatAsBool(ast->expression);
     visitStatement(ast->statement);
 
     return false;
@@ -1392,8 +1394,10 @@ bool ConstraintGenerator::visit(WhileStatementAST *ast)
     DEBUG_VISIT(WhileStatementAST);
     OBSERVE(WhileStatementAST);
 
-    convertBoolExpression(ast->condition);
+    Scope* prevScope = switchScope(ast->symbol);
+    treatAsBool(ast->condition);
     visitStatement(ast->statement);
+    switchScope(prevScope);
 
     return false;
 }
@@ -1403,12 +1407,13 @@ bool ConstraintGenerator::visit(ForStatementAST *ast)
     DEBUG_VISIT(ForStatementAST);
     OBSERVE(ForStatementAST);
 
+    Scope* prevScope = switchScope(ast->symbol);
     if (ast->initializer && ast->initializer->asDeclarationStatement())
         visitDeclaration(ast->initializer->asDeclarationStatement()->declaration);
     else
         visitStatement(ast->initializer);
 
-     convertBoolExpression(ast->condition);
+    treatAsBool(ast->condition);
 
     if (ast->expression) {
         const std::string& alpha = supply_.createTypeVar1();
@@ -1417,6 +1422,7 @@ bool ConstraintGenerator::visit(ForStatementAST *ast)
     }
 
     visitStatement(ast->statement);
+    switchScope(prevScope);
 
     return false;
 }

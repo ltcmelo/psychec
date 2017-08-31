@@ -259,6 +259,7 @@ tests = testGroup "Unit tests"
                   , doTest "T212.c" -- Postpone scalar_t__ unification.
                   , doTest "T213.c" -- Like 212, but with 0 instead of NULL.
                   , doTest "T214.c" -- Ensure different types on void* instantiation.
+                  , doTest "T215.c" -- Fix domain class for vars declared inside for-loop.
                   ]
 
 doTest s

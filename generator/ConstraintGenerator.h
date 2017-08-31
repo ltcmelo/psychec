@@ -192,7 +192,7 @@ private:
     /*!
      * Convert boolean expressions to int.
      */
-    void convertBoolExpression(CPlusPlus::ExpressionAST *ast);
+    void treatAsBool(CPlusPlus::ExpressionAST *ast);
 
     /*!
      * Encapsulates the steps to enter a new expression rule and generate its
