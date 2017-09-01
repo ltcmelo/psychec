@@ -18,18 +18,30 @@
 
 #include "CompilerFacade.h"
 #include "Process.h"
+#include <iostream>
 
 using namespace psyche;
 
-CompilerFacade::CompilerFacade(const std::string& nativeCC)
+CompilerFacade::CompilerFacade(const std::string& nativeCC,
+                               const std::vector<std::string>& macros)
     : nativeCC_(nativeCC)  // TODO: Native compiler support validation.
+    , macros_(macros)
 {}
 
 std::string CompilerFacade::preprocessSource(const std::string& source)
 {
     std::string in = "echo \"" + source + "\" | ";
     in += nativeCC_;
+    in += predefinedMacros();
     in += " -E -x c -";
 
     return Process().execute(in);
+}
+
+std::string CompilerFacade::predefinedMacros() const
+{
+    std::string s;
+    for (const auto& m : macros_)
+        s += " -D " + m;
+    return s;
 }

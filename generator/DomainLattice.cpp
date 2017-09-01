@@ -965,6 +965,9 @@ bool DomainLattice::visit(SimpleDeclarationAST* ast)
     for (const List<Symbol*>* symIt = ast->symbols;
             symIt;
             symIt = symIt->next, declIt = declIt->next) {
+        if (symIt->value->asForwardClassDeclaration())
+            break;
+
         PSYCHE_ASSERT(declIt->value, return false, "expected declarator");
         if (!declIt->value->initializer
                 || declIt->value->initializer->asBracedInitializer())

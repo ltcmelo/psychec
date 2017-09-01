@@ -4,7 +4,7 @@ project(psychec)
 
 set(PSYCHEC_CXX_FLAGS)
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -std=c++1y -g")
-set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall -Wsign-compare")
+set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall -Wsign-compare -Wno-inconsistent-missing-override")
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
 set(PSYCHEC_SOURCES

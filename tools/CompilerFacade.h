@@ -21,19 +21,24 @@
 
 #include "Config.h"
 #include <string>
+#include <vector>
 
 namespace psyche {
 
 class PSYCHEC_API CompilerFacade
 {
 public:
-    CompilerFacade(const std::string& nativeCC);
+    CompilerFacade(const std::string& nativeCC,
+                   const std::vector<std::string>& macros);
 
     std::string preprocessSource(const std::string& source);
     std::string preprocessFile(const std::string& filePath);
 
 private:
+    std::string predefinedMacros() const;
+
     std::string nativeCC_;
+    std::vector<std::string> macros_;
 };
 
 } // namespace psyche

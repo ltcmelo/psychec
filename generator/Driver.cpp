@@ -88,6 +88,8 @@ int Driver::process(int argc, char *argv[])
                 cxxopts::value<std::string>()->default_value("ignore"))
             ("CC", "Specify host C compiler",
                 cxxopts::value<std::string>()->default_value("gcc"))
+            ("cc-D", "Predefine a macro",
+                cxxopts::value<std::vector<std::string>>())
             ("positional", "Positional arguments",
                 cxxopts::value<std::vector<std::string>>());
 
@@ -145,6 +147,7 @@ int Driver::process(int argc, char *argv[])
     exeOpts.flag_.noTypedef = cmdOpts.count("no-typedef");
     exeOpts.flag_.handleGNUerrorFunc_ = true; // TODO: POSIX stuff?
     exeOpts.nativeCC_ = cmdOpts["CC"].as<std::string>();
+    exeOpts.macros_ = cmdOpts["cc-D"].as<std::vector<std::string>>();
 
     const std::string& source = readFile(in);
 
@@ -320,7 +323,8 @@ std::string Driver::preprocessHeaders(std::vector<std::string> &&headers) const
     for (const auto& h : headers)
         in += "#include <" + h + ">\n";
 
-    return CompilerFacade(opts_.nativeCC_).preprocessSource(in);
+    CompilerFacade cc(opts_.nativeCC_, opts_.macros_);
+    return cc.preprocessSource(in);
 }
 
 void Driver::honorFlag(bool flag, std::function<void ()> f) const

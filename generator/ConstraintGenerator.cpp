@@ -288,6 +288,8 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
     // declarator, and we can uniformily iterate over the two lists.
     DeclaratorListAST *declIt = ast->declarator_list;
     for (const List<Symbol*> *symIt = ast->symbols; symIt; symIt = symIt->next) {
+        if (symIt->value->asForwardClassDeclaration())
+            break;
         PSYCHE_ASSERT(declIt->value, return false, "expected declarator");
 
         // Current symbol.
@@ -1239,6 +1241,11 @@ bool ConstraintGenerator::visit(ClassSpecifierAST* ast)
     switchScope(prevScope);
     structs_.pop();
 
+    return false;
+}
+
+bool ConstraintGenerator::visit(GnuAttributeSpecifierAST *ast)
+{
     return false;
 }
 

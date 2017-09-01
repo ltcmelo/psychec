@@ -107,6 +107,7 @@ private:
     void visitSpecifier(CPlusPlus::SpecifierAST *ast);
     bool visit(CPlusPlus::EnumSpecifierAST *ast) override;
     bool visit(CPlusPlus::ClassSpecifierAST *ast) override;
+    bool visit(CPlusPlus::GnuAttributeSpecifierAST *ast) override;
 
     // Statements
     void visitStatement(CPlusPlus::StatementAST *ast);

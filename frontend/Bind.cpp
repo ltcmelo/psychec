@@ -3380,10 +3380,21 @@ void Bind::ensureValidClassName(const Name **name, unsigned sourceLocation)
     if (!*name)
         return;
 
+    const Name *uqName = nullptr;
     const QualifiedNameId *qName = (*name)->asQualifiedNameId();
-    const Name *uqName = qName ? qName->name() : *name;
+    if (qName)
+        uqName = qName->name();
+    else {
+        const ElaboratedNameId* eName = (*name)->asElaboratedNameId();
+        if (eName)
+            uqName = eName->name();
+        else
+            uqName = *name;
+    }
 
-    if (!uqName->isNameId() && !uqName->isTemplateNameId()) {
+    if (!uqName->isNameId()
+            && !uqName->isElaboratedNameId()
+            && !uqName->isTemplateNameId()) {
         translationUnit()->error(sourceLocation, "expected a class-name");
 
         *name = uqName->identifier();
