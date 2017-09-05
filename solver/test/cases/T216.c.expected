@@ -1,0 +1,10 @@
+/* Forward declarations */
+typedef  struct TYPE_4__   TYPE_1__ ;
+
+/* Type definitions */
+struct TUPLE {int dummy; } ;
+struct TYPE_4__ {struct TYPE_4__* next; } ;
+typedef  TYPE_1__* NODE_PTR ;
+
+/* Variables and functions */
+

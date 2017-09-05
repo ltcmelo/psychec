@@ -16,6 +16,7 @@ for C_FILE in solver/test/cases/*.c ; do
 
     ./Reconstruct.py "$C_FILE" # > /dev/null
 
+    # Avoid warnings not related to typing.
     "$CC" -Wall\
 	  -Wno-incompatible-library-redeclaration\
           -Wno-uninitialized\
@@ -26,6 +27,7 @@ for C_FILE in solver/test/cases/*.c ; do
 	  -Wno-implicit-int\
 	  -Wno-return-type\
 	  -Wno-builtin-requires-header\
+	  -Wno-infinite-recursion\
 	  -c "$FIXED_FILE" # &> /dev/null
     OK=$?
     if [ $OK -ne 0 ]; then

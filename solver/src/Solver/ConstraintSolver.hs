@@ -80,17 +80,17 @@ solve c cl ml = do
 
   -- Run plain unification on equalities and apply the substitutions on the inequalities,
   -- allowing us to sort them in a const-aware manner later.
-  s <- punifyList eqs'
-  let iqs' = apply s iqs
+  s0 <- punifyList eqs'
+
+  (s, ineqs) <- makeEquivFromSymIneq s0 iqs
 
   -- Identity inconsistent pointer conversions, where the only solution is to bind a type
   -- variable to void*.
   let
-    iqs'' = sortBySubTy iqs'
+    iqs'' = sortBySubTy ineqs
     sortBySubTy iq = List.sortBy subPred iq
     subPred (_ :>: t) (_ :>: t') = compare (nameOf t) (nameOf t')
-
-  vs <- instantiateTopPtr iqs''
+  vs <- detectVoidPtr iqs''
 
   -- We want a binding order such that it weakens type qualifiers when possible, but
   -- enforces it when necessary. Therefore, the sorting prior to unifying inequalities.
@@ -336,11 +336,28 @@ stage3 c@(_ :>: _) = ([], [c], [])
 stage3 Truth = ([], [], [])
 
 
+-- | Convert symmetric inequalities such as alphaX :>: alphaY and alphaY > alphaX into an
+--   equivalence alphaX = alphaY, reapplying substitutions in the end.
+makeEquivFromSymIneq :: Subst -> [Constraint] -> SolverM (Subst, [Constraint])
+makeEquivFromSymIneq s cstr = do
+  let
+    ineqs = apply s cstr
+    lookupTable = List.foldr (\(t :>: t') acc -> Set.insert (t' :>: t) acc) Set.empty ineqs
+    ineqs' = List.filter (\x -> if Set.member x lookupTable then False else True) ineqs
+    equivs = ineqs List.\\ ineqs'
+    equivs' = List.foldr (\(t :>: t') acc -> (t :=: t'):acc) [] equivs
+
+  s' <-punifyList equivs'
+  let ineqs'' = apply s ineqs'
+      s'' = s' @@ s
+  return (s'', ineqs'')
+
+
 -- | Detect and instantiate void*.
-instantiateTopPtr :: [Constraint] -> SolverM Subst
-instantiateTopPtr [] = return nullSubst
-instantiateTopPtr [(_ :>: _)] = return nullSubst
-instantiateTopPtr ((t1 :>: t1'):c@(t2 :>: t2'):xs) = do
+detectVoidPtr :: [Constraint] -> SolverM Subst
+detectVoidPtr [] = return nullSubst
+detectVoidPtr [(_ :>: _)] = return nullSubst
+detectVoidPtr ((t1 :>: t1'):c@(t2 :>: t2'):xs) = do
   let
     check t tn@(VarTy n) t' tn'@(VarTy n')
       | t /= tn
@@ -354,7 +371,7 @@ instantiateTopPtr ((t1 :>: t1'):c@(t2 :>: t2'):xs) = do
       | otherwise = return nullSubst
     check _ _ _ _  = return nullSubst
   s <- check t1 t1' t2 t2'
-  s' <- instantiateTopPtr ((apply s c):(apply s xs))
+  s' <- detectVoidPtr ((apply s c):(apply s xs))
   return (s' @@ s)
 
 
