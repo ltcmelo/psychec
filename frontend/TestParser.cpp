@@ -17,17 +17,50 @@
  *****************************************************************************/
 
 #include "TestParser.h"
+#include "AST.h"
+#include "Literals.h"
 #include <iostream>
+#include <string>
 
 using namespace psyche;
+using namespace CPlusPlus;
 
+TestParser::TestParser()
+    : name_(new StringLiteral("<test>", strlen("<test>")))
+    , unit_(new TranslationUnit(&control_, name_.get()))
+{
+    control_.setDiagnosticCollector(&collector_);
+
+    Dialect dialect;
+    dialect.c99 = 1;
+    dialect.nullptrOnNULL = 1;
+    unit_->setDialect(dialect);
+}
+
+TestParser::~TestParser()
+{}
 
 void TestParser::testAll()
 {
     run<TestParser>(tests_);
 }
 
+void TestParser::reset()
+{
+    control_.diagnosticCollector()->reset();
+}
+
+void TestParser::testSource(const std::string& source)
+{
+    unit_->setSource(source.c_str(), source.length());
+    auto ret = unit_->parse();
+    PSYCHE_EXPECT_TRUE(ret);
+    PSYCHE_EXPECT_TRUE(unit_->ast());
+    PSYCHE_EXPECT_TRUE(unit_->ast()->asTranslationUnit());
+    PSYCHE_EXPECT_INT_EQ(0, collector_.seenBlockingIssue());
+}
+
 void TestParser::testCase1()
 {
-
+    testSource("void dymmy(){}");
 }

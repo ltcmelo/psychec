@@ -67,6 +67,8 @@ namespace psyche {
 class BaseTester
 {
 public:
+    virtual ~BaseTester() {}
+
     static void runSuite();
 
 protected:
@@ -85,6 +87,8 @@ protected:
 
     std::string currentTest_;
 };
+
+struct PSYCHEC_API TestFailed {};
 
 } // namespace psyche
 

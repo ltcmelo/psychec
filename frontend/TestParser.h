@@ -21,6 +21,10 @@
 
 #include "Config.h"
 #include "BaseTester.h"
+#include "Control.h"
+#include "CPlusPlusForwardDeclarations.h"
+#include "DiagnosticCollector.h"
+#include "TranslationUnit.h"
 #include <functional>
 #include <string>
 #include <utility>
@@ -33,10 +37,17 @@ namespace psyche {
 class TestParser final : public BaseTester
 {
 public:
+    TestParser();
+    ~TestParser();
+
     void testAll() override;
 
 private:
     using TestData = std::pair<std::function<void(TestParser*)>, const char*>;
+
+    void reset() override;
+
+    void testSource(const std::string& source);
 
     void testCase1();
 
@@ -44,6 +55,11 @@ private:
     {
         PARSER_TEST(testCase1),
     };
+
+    CPlusPlus::DiagnosticCollector collector_;
+    CPlusPlus::Control control_;
+    std::unique_ptr<CPlusPlus::StringLiteral> name_;
+    std::unique_ptr<CPlusPlus::TranslationUnit> unit_;
 };
 
 } // namespace psyche

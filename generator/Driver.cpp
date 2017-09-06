@@ -110,6 +110,7 @@ int Driver::process(int argc, char *argv[])
             BaseTester::runSuite();
         } catch (...) {
             std::cout << "\nYou BROKE stuff! Take a look at it!" << std::endl;
+            return OK;
         }
         std::cout << "Tests passed successfully!\n"
                   << "For type-inference tests: $cd solver && stack test" << std::endl;

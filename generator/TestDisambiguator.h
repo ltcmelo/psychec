@@ -108,8 +108,6 @@ private:
     ExecutionOptions flags_;
 };
 
-struct PSYCHEC_API TestFailed {};
-
 } // namespace psyche
 
 #endif
