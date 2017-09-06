@@ -1,20 +1,19 @@
 /******************************************************************************
- * Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
- * USA
+ Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+
+ This library is free software; you can redistribute it and/or modify it under
+ the terms of the GNU Lesser General Public License as published by the Free
+ Software Foundation; either version 2.1 of the License, or (at your option)
+ any later version.
+
+ This library is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+ for more details.
+
+ You should have received a copy of the GNU Lesser General Public License along
+ with this library; if not, write to the Free Software Foundation, Inc., 51
+ Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
 /*
@@ -22,7 +21,7 @@
    - Marcus Rodrigues (demaroar@gmail.com)
 */
 
-#include "Tester.h"
+#include "TestDisambiguator.h"
 #include "AST.h"
 #include "ASTDumper.h"
 #include "Control.h"
@@ -49,7 +48,7 @@ using namespace CPlusPlus;
  *
  * Follow the already existing examples for additional info.
  */
-void Tester::checkAst(const std::string &source, std::string expected, bool nonHeu)
+void TestDisambiguator::checkAst(const std::string &source, std::string expected, bool nonHeu)
 {
     Factory factory;
     Driver driver(factory);
@@ -63,7 +62,7 @@ void Tester::checkAst(const std::string &source, std::string expected, bool nonH
     compareText(expected, oss.str());
 }
 
-void Tester::compareText(std::string expected, std::string actual) const
+void TestDisambiguator::compareText(std::string expected, std::string actual) const
 {
     // Remove all spaces to avoid silly errors in comparisson.
     auto check = [](const char c) { return std::isspace(c); };
@@ -73,24 +72,18 @@ void Tester::compareText(std::string expected, std::string actual) const
     PSYCHE_EXPECT_STR_EQ(expected, actual);
 }
 
-void Tester::reset()
+void TestDisambiguator::reset()
 {
     flags_ = ExecutionOptions();
     flags_.flag_.noHeuristics = true;
 }
 
-void Tester::testAll()
+void TestDisambiguator::testAll()
 {
-    std::cout << "Running tests..." << std::endl;
-    for (auto testData : tests_) {
-        reset();
-        currentTest_ = testData.second;
-        testData.first(this);
-        std::cout << "\t" << currentTest_ << " passed!" << std::endl;
-    }
+    run<TestDisambiguator>(tests_);
 }
 
-void Tester::testCase1()
+void TestDisambiguator::testCase1()
 {
     std::string source = R"raw(
 void f(int) {
@@ -186,7 +179,7 @@ n11 -> t15
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase2()
+void TestDisambiguator::testCase2()
 {
       std::string source = R"raw(
 void f(int) {
@@ -274,7 +267,7 @@ t14 [shape=rect label = "}"]; t13 -> t14 [arrowhead="vee" color="transparent"];
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase3()
+void TestDisambiguator::testCase3()
 {
     std::string source = R"raw(
 void f(int) {
@@ -349,7 +342,7 @@ n11 -> t11
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase4()
+void TestDisambiguator::testCase4()
 {
     std::string source = R"raw(
 void f(int) {
@@ -420,7 +413,7 @@ n11 -> t10
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase5()
+void TestDisambiguator::testCase5()
 {
     std::string source = R"raw(
 void f(int) {
@@ -493,7 +486,7 @@ n11 -> t10
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase6()
+void TestDisambiguator::testCase6()
 {
     std::string source = R"raw(
 void f(int) {
@@ -576,7 +569,7 @@ n11 -> t13
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase7()
+void TestDisambiguator::testCase7()
 {
     std::string source = R"raw(
 void f(int) {
@@ -676,7 +669,7 @@ n11 -> t16
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase8()
+void TestDisambiguator::testCase8()
 {
     std::string source = R"raw(
 void f() {
@@ -779,7 +772,7 @@ n8 -> t18
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase9()
+void TestDisambiguator::testCase9()
 {
     std::string source = R"raw(
 void f() {
@@ -858,7 +851,7 @@ n8 -> t13
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase10()
+void TestDisambiguator::testCase10()
 {
     std::string source = R"raw(
 void f() {
@@ -936,7 +929,7 @@ n8 -> t13
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase11()
+void TestDisambiguator::testCase11()
 {
     std::string source = R"raw(
 typedef int a;
@@ -1030,7 +1023,7 @@ t15 [shape=rect label = "}"]; t14 -> t15 [arrowhead="vee" color="transparent"];
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase12()
+void TestDisambiguator::testCase12()
 {
     // This one is a function declaration with implicit return type. But we
     // don't handle it yet - some work in the parser is required.
@@ -1048,7 +1041,7 @@ void f() {
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase13()
+void TestDisambiguator::testCase13()
 {
     std::string source = R"raw(
 void f();
@@ -1138,7 +1131,7 @@ n14 -> t16
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase14()
+void TestDisambiguator::testCase14()
 {
     std::string source = R"raw(
 void g() {
@@ -1224,7 +1217,7 @@ n8 -> t14
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase15()
+void TestDisambiguator::testCase15()
 {
   std::string source = R"raw(
 int Bubble(int i){}
@@ -1394,7 +1387,7 @@ n21 -> t33
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase16()
+void TestDisambiguator::testCase16()
 {
     std::string source = R"raw(
 void f() {
@@ -1407,7 +1400,7 @@ void f() {
     // TODO: Implement this disambiguation.
 }
 
-void Tester::testCase17()
+void TestDisambiguator::testCase17()
 {
     std::string source = R"raw(
 void f() {
@@ -1420,7 +1413,7 @@ void f() {
     // TODO: Implement this disambiguation.
 }
 
-void Tester::testCase18()
+void TestDisambiguator::testCase18()
 {
     std::string source = R"raw(
 void f() {
@@ -1511,7 +1504,7 @@ t15 [shape=rect label = "}"]; t14 -> t15 [arrowhead="vee" color="transparent"];
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase19()
+void TestDisambiguator::testCase19()
 {
     std::string source = R"raw(
 void f() {
@@ -1603,7 +1596,7 @@ t15 [shape=rect label = "}"]; t14 -> t15 [arrowhead="vee" color="transparent"];
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase20()
+void TestDisambiguator::testCase20()
 {
     std::string source = R"raw(
 void f() {
@@ -1724,7 +1717,7 @@ void f() {
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase21()
+void TestDisambiguator::testCase21()
 {
     // Without heuristics, it's ambiguous.
     std::string source = R"raw(
@@ -1855,7 +1848,7 @@ void f() {
     checkAst(source, expectedAst);
 }
 
-void Tester::testCase22()
+void TestDisambiguator::testCase22()
 {
     // With heuristics, those are pointers.
     std::string source = R"raw(
@@ -1951,7 +1944,7 @@ t14 [shape=rect label = "}"]; t13 -> t14 [arrowhead="vee" color="transparent"];
 }
 
 
-void Tester::testCase23()
+void TestDisambiguator::testCase23()
 {
     std::string source = R"raw(
 void f() {
@@ -2041,7 +2034,7 @@ t13 [shape=rect label = "}"]; t12 -> t13 [arrowhead="vee" color="transparent"];
     checkAst(source, expectedAst, false);
 }
 
-void Tester::testCase24()
+void TestDisambiguator::testCase24()
 {
     std::string source = R"raw(
 void g() {

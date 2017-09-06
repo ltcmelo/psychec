@@ -109,7 +109,7 @@ public:
     static constexpr int UnavailableAstError = -2;
 
 private:
-    friend class Tester;
+    friend class TestDisambiguator;
 
     static CPlusPlus::Dialect specifiedDialect(const ExecutionOptions& exec);
 

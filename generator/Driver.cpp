@@ -20,6 +20,7 @@
 #include "AST.h"
 #include "ASTDumper.h"
 #include "ASTNormalizer.h"
+#include "BaseTester.h"
 #include "Bind.h"
 #include "CompilerFacade.h"
 #include "ConstraintGenerator.h"
@@ -33,7 +34,6 @@
 #include "ProgramValidator.h"
 #include "Symbols.h"
 #include "StdLibIndex.h"
-#include "Tester.h"
 
 #include "cxxopts.hpp"
 
@@ -107,12 +107,11 @@ int Driver::process(int argc, char *argv[])
 
     if (cmdOpts.count("test-disambiguation")) {
         try {
-            Tester tester;
-            tester.testAll();
+            BaseTester::runSuite();
         } catch (...) {
             std::cout << "\nYou BROKE stuff! Take a look at it!" << std::endl;
         }
-        std::cout << "AST disambiguation tests passed successfully!\n"
+        std::cout << "Tests passed successfully!\n"
                   << "For type-inference tests: $cd solver && stack test" << std::endl;
         return OK;
     }

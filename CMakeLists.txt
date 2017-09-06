@@ -74,6 +74,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/frontend/SyntaxAmbiguity.h
     ${PROJECT_SOURCE_DIR}/frontend/Templates.cpp
     ${PROJECT_SOURCE_DIR}/frontend/Templates.h
+    ${PROJECT_SOURCE_DIR}/frontend/TestParser.cpp
+    ${PROJECT_SOURCE_DIR}/frontend/TestParser.h
     ${PROJECT_SOURCE_DIR}/frontend/Token.cpp
     ${PROJECT_SOURCE_DIR}/frontend/Token.h
     ${PROJECT_SOURCE_DIR}/frontend/TranslationUnit.cpp
@@ -110,14 +112,16 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
     ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.h
     ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.cpp
-    ${PROJECT_SOURCE_DIR}/generator/Tester.h
-    ${PROJECT_SOURCE_DIR}/generator/Tester.cpp
+    ${PROJECT_SOURCE_DIR}/generator/TestDisambiguator.h
+    ${PROJECT_SOURCE_DIR}/generator/TestDisambiguator.cpp
     # Analysis files
     ${PROJECT_SOURCE_DIR}/static-analysis/Range.h
     ${PROJECT_SOURCE_DIR}/static-analysis/Range.cpp
     ${PROJECT_SOURCE_DIR}/static-analysis/RangeAnalysis.h
     ${PROJECT_SOURCE_DIR}/static-analysis/RangeAnalysis.cpp
     # Tools' files
+    ${PROJECT_SOURCE_DIR}/tools/BaseTester.h
+    ${PROJECT_SOURCE_DIR}/tools/BaseTester.cpp
     ${PROJECT_SOURCE_DIR}/tools/BasicStubber.h
     ${PROJECT_SOURCE_DIR}/tools/BasicStubber.cpp
     ${PROJECT_SOURCE_DIR}/tools/CompilerFacade.h
