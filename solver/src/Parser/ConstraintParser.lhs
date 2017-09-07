@@ -149,7 +149,9 @@ Type parser
 >                       f t _ = QualTy t Volatile
 
 > typeParser :: Parser Ty
-> typeParser = constQualParser typeParser'
+> typeParser = f <$> constQualParser typeParser' <*> (many starParser)
+>            where
+>             f t ts = foldr (\_ acc -> PtrTy acc) t ts
 
 > typeParser' :: Parser Ty
 > typeParser' = f <$> typeParser'' <*> (many starParser)

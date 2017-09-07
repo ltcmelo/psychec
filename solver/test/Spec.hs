@@ -261,6 +261,7 @@ tests = testGroup "Unit tests"
                   , doTest "T214.c" -- Ensure different types on void* instantiation.
                   , doTest "T215.c" -- Fix domain class for vars declared inside for-loop.
                   , doTest "T216.c" -- Tranform x :>: y and y :>: x into x :=: y.
+                  , doTest "T217.c" -- Solver parser: T const * const *.
                   ]
 
 doTest s

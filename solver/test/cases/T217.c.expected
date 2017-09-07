@@ -1,0 +1,7 @@
+/* Forward declarations */
+
+/* Type definitions */
+typedef  char const* const* T ;
+
+/* Variables and functions */
+

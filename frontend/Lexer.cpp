@@ -23,6 +23,7 @@
 #include "TranslationUnit.h"
 #include "Literals.h"
 #include <cctype>
+#include <iostream>
 
 using namespace CPlusPlus;
 
