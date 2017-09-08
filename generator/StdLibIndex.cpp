@@ -135,6 +135,8 @@ const StdLibIndex::Index StdLibIndex::c89idx_
                 { "rename", SymbolKind::Value },
                 { "tmpfile", SymbolKind::Value },
                 { "tmpnam", SymbolKind::Value },
+                { "FILE", SymbolKind::Type },
+                { "fpos_t", SymbolKind::Type },
                 { "stdin", SymbolKind::Value },
                 { "stdout", SymbolKind::Value },
                 { "stderr", SymbolKind::Value },

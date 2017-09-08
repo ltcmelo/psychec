@@ -262,6 +262,7 @@ tests = testGroup "Unit tests"
                   , doTest "T215.c" -- Fix domain class for vars declared inside for-loop.
                   , doTest "T216.c" -- Tranform x :>: y and y :>: x into x :=: y.
                   , doTest "T217.c" -- Solver parser: T const * const *.
+                  , doTest "T218.c" -- Anonymous bitfields.
                   ]
 
 doTest s

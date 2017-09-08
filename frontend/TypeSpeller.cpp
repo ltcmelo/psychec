@@ -223,9 +223,11 @@ void TypeSpeller<SyntaxT>::visit(Class *ty)
     spelling_.append(declName);
     spelling_.append("{ ");
     for (unsigned i = 0; i < ty->memberCount(); ++i) {
-        Symbol* member = ty->memberAt(i);
-        visitType(member->type());
-        const Name *name = member->name();
+        const Name *name = ty->memberAt(i)->name();
+        if (!name)
+            continue;
+
+        visitType(ty->memberAt(i)->type());
         PSYCHE_ASSERT(name->isNameId(), return, "expected a simple name");
         const Identifier *id = name->asNameId()->identifier();
         spelling_.append(" ");

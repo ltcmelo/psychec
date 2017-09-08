@@ -50,10 +50,12 @@ private:
     void testSource(const std::string& source);
 
     void testCase1();
+    void testCase2();
 
     std::vector<TestData> tests_
     {
         PARSER_TEST(testCase1),
+        PARSER_TEST(testCase2),
     };
 
     CPlusPlus::DiagnosticCollector collector_;

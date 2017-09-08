@@ -69,7 +69,7 @@ std::string extractId(const Name* name)
 
 }
 
-std::string ConstraintGenerator::paramPrefix_ = "param";
+std::string ConstraintGenerator::declPrefix_ = "decl";
 std::string ConstraintGenerator::stubPrefix_ = "stub";
 
 ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
@@ -240,7 +240,7 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
             const Identifier* id = paramName->asNameId()->identifier();
             param.assign(id->begin(), id->end());
         } else {
-            param = createUnnamed(paramPrefix_);
+            param = createUnnamed(declPrefix_);
         }
         writer_->writeVarDecl(param, paramTyVars[i]);
     }
@@ -292,11 +292,7 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             break;
         PSYCHE_ASSERT(declIt->value, return false, "expected declarator");
 
-        // Current symbol.
         Symbol *decl = symIt->value;
-        const Name *name = decl->name();
-        std::string declName = extractId(name);
-        std::string declTy = typeSpeller_.spell(decl->type(), scope_);
 
         // Type a function declaration just as we do for a function definition.
         if (decl->asDeclaration()
@@ -305,6 +301,13 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             visitSymbol(decl->asDeclaration()->type()->asFunctionType()->asFunction(), nullptr);
             return false;
         }
+
+        std::string declName;
+        if (decl->name())
+            declName = extractId(decl->name());
+        else
+            declName = createUnnamed(declPrefix_);
+        std::string declTy = typeSpeller_.spell(decl->type(), scope_);
 
         // Altough a `typedef` is parsed as a simple declaration, its contraint
         // rule is different. We process it and break out, since there cannot
@@ -726,7 +729,7 @@ bool ConstraintGenerator::visit(CallAST *ast)
     if (ast->base_expression->asIdExpression()) {
         funcName = trivialName(ast->base_expression->asIdExpression());
 
-        // Detect whether the function is registered as a variadic one.
+        // Detect whether the function is registered as a printf-style one.
         auto fit = printfs_.find(funcName);
         if (fit != printfs_.end())
             varArgPos = fit->second;

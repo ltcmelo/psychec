@@ -178,7 +178,7 @@ private:
      */
     int unnamedCount_;
     std::string createUnnamed(const std::string &prefix);
-    static std::string paramPrefix_;
+    static std::string declPrefix_;
     static std::string stubPrefix_;
     //!@}
 

@@ -1,0 +1,8 @@
+/* Forward declarations */
+
+/* Type definitions */
+typedef  struct B T2 ;
+typedef  struct A T1 ;
+
+/* Variables and functions */
+

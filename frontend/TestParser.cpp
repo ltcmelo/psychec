@@ -18,6 +18,7 @@
 
 #include "TestParser.h"
 #include "AST.h"
+#include "IO.h"
 #include "Literals.h"
 #include <iostream>
 #include <string>
@@ -62,5 +63,12 @@ void TestParser::testSource(const std::string& source)
 
 void TestParser::testCase1()
 {
-    testSource("void dymmy(){}");
+    const std::string& source = readFile("test-data/stdio_clang-pp_osx.i");
+    testSource(source);
+}
+
+void TestParser::testCase2()
+{
+    const std::string& source = readFile("test-data/stdio_gcc-pp_osx.i");
+    testSource(source);
 }
