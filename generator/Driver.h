@@ -66,7 +66,8 @@ struct PSYCHEC_API ExecutionOptions
     };
 
     std::string nativeCC_;
-    std::vector<std::string> macros_;
+    std::vector<std::string> defs_;
+    std::vector<std::string> undefs_;
 };
 
 /*!

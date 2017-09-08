@@ -25,9 +25,12 @@ using namespace psyche;
 
 void BaseTester::runSuite()
 {
+    std::cout << "Parser tests..." << std::endl;
+    TestParser().testAll();
+
     std::cout << "AST disambiguation tests..." << std::endl;
     TestDisambiguator().testAll();
 
-    std::cout << "Parser tests..." << std::endl;
-    TestParser().testAll();
+    std::cout << "Type inference tests..." << std::endl
+              << "\t$cd solver && stack test" << std::endl;
 }

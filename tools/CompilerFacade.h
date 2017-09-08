@@ -29,16 +29,18 @@ class PSYCHEC_API CompilerFacade
 {
 public:
     CompilerFacade(const std::string& nativeCC,
-                   const std::vector<std::string>& macros);
+                   const std::vector<std::string>& defs,
+                   const std::vector<std::string>& undefs);
 
     std::string preprocessSource(const std::string& source);
     std::string preprocessFile(const std::string& filePath);
 
 private:
-    std::string predefinedMacros() const;
+    std::string macroSetup() const;
 
     std::string nativeCC_;
-    std::vector<std::string> macros_;
+    std::vector<std::string> defs_;
+    std::vector<std::string> undefs_;
 };
 
 } // namespace psyche

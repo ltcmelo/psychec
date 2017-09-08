@@ -23,25 +23,29 @@
 using namespace psyche;
 
 CompilerFacade::CompilerFacade(const std::string& nativeCC,
-                               const std::vector<std::string>& macros)
+                               const std::vector<std::string>& defs,
+                               const std::vector<std::string>& undefs)
     : nativeCC_(nativeCC)  // TODO: Native compiler support validation.
-    , macros_(macros)
+    , defs_(defs)
+    , undefs_(undefs)
 {}
 
 std::string CompilerFacade::preprocessSource(const std::string& source)
 {
     std::string in = "echo \"" + source + "\" | ";
     in += nativeCC_;
-    in += predefinedMacros();
+    in += macroSetup();
     in += " -E -x c -";
 
     return Process().execute(in);
 }
 
-std::string CompilerFacade::predefinedMacros() const
+std::string CompilerFacade::macroSetup() const
 {
     std::string s;
-    for (const auto& m : macros_)
-        s += " -D " + m;
+    for (const auto& d : defs_)
+        s += " -D " + d;
+    for (const auto& u : undefs_)
+        s += " -U " + u;
     return s;
 }

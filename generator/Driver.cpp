@@ -92,6 +92,8 @@ int Driver::process(int argc, char *argv[])
                 cxxopts::value<std::string>()->default_value("gcc"))
             ("cc-D", "Predefine a macro",
                 cxxopts::value<std::vector<std::string>>())
+            ("cc-U", "Undefine a macro",
+                cxxopts::value<std::vector<std::string>>())
             ("positional", "Positional arguments",
                 cxxopts::value<std::vector<std::string>>());
 
@@ -112,10 +114,7 @@ int Driver::process(int argc, char *argv[])
             BaseTester::runSuite();
         } catch (...) {
             std::cout << "\nYou BROKE stuff! Take a look at it!" << std::endl;
-            return OK;
         }
-        std::cout << "Tests passed successfully!\n"
-                  << "For type-inference tests: $cd solver && stack test" << std::endl;
         return OK;
     }
 
@@ -149,7 +148,8 @@ int Driver::process(int argc, char *argv[])
     exeOpts.flag_.noTypedef = cmdOpts.count("no-typedef");
     exeOpts.flag_.handleGNUerrorFunc_ = true; // TODO: POSIX stuff?
     exeOpts.nativeCC_ = cmdOpts["CC"].as<std::string>();
-    exeOpts.macros_ = cmdOpts["cc-D"].as<std::vector<std::string>>();
+    exeOpts.defs_ = cmdOpts["cc-D"].as<std::vector<std::string>>();
+    exeOpts.undefs_ = cmdOpts["cc-U"].as<std::vector<std::string>>();
 
     const std::string& source = readFile(in);
 
@@ -328,7 +328,7 @@ std::vector<std::string> Driver::detectMissingHeaders()
 
 std::string Driver::preprocessIncludes() const
 {
-    CompilerFacade cc(opts_.nativeCC_, opts_.macros_);
+    CompilerFacade cc(opts_.nativeCC_, opts_.defs_, opts_.undefs_);
     return cc.preprocessSource(includes_);
 }
 

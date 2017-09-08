@@ -61,6 +61,14 @@ void TestParser::testSource(const std::string& source)
     PSYCHE_EXPECT_INT_EQ(0, collector_.seenBlockingIssue());
 }
 
+/*
+ * Preprocessed output generated with the following options:
+ *  -D restrict=
+ *  -D _Nonnull=
+ *  -D _Nullable=
+ *  -U __BLOCKS__  (disable clang's block language)
+ */
+
 void TestParser::testCase1()
 {
     const std::string& source = readFile("test-data/stdio_clang-pp_osx.i");
@@ -71,4 +79,71 @@ void TestParser::testCase2()
 {
     const std::string& source = readFile("test-data/stdio_gcc-pp_osx.i");
     testSource(source);
+}
+
+void TestParser::testCase3()
+{
+    const std::string& source = readFile("test-data/stdlib_clang-pp_osx.i");
+    testSource(source);
+}
+
+void TestParser::testCase4()
+{
+    const std::string& source = readFile("test-data/stdlib_gcc-pp_osx.i");
+    testSource(source);
+}
+
+void TestParser::testCase5()
+{
+
+}
+
+void TestParser::testCase6()
+{
+
+}
+
+void TestParser::testCase7()
+{
+
+}
+
+void TestParser::testCase8()
+{
+
+}
+
+void TestParser::testCase9()
+{
+
+}
+
+void TestParser::testCase10()
+{
+
+}
+
+void TestParser::testCase11()
+{
+
+}
+
+void TestParser::testCase12()
+{
+
+}
+
+void TestParser::testCase13()
+{
+
+}
+
+void TestParser::testCase14()
+{
+
+}
+
+void TestParser::testCase15()
+{
+
 }
