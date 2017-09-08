@@ -31,6 +31,7 @@
 #include <memory>
 #include <string>
 #include <tuple>
+#include <vector>
 
 namespace { const char* const kPsychePrefix = "psychec: "; }
 
@@ -123,9 +124,9 @@ private:
     std::vector<std::string> detectMissingHeaders();
 
     std::string augmentSource(const std::string& baseSource,
-                              std::function<std::vector<std::string>()>) const;
+                              std::function<std::vector<std::string>()>);
 
-    std::string preprocessHeaders(std::vector<std::string>&& headers) const;
+    std::string preprocessIncludes() const;
 
     void honorFlag(bool flag, std::function<void ()>) const;
 
@@ -138,6 +139,7 @@ private:
     CPlusPlus::Namespace* global_;
     std::unique_ptr<CPlusPlus::TranslationUnit> unit_;
     std::string constraints_;
+    std::string includes_;
 };
 
 } // namespace psyche

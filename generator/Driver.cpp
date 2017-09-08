@@ -86,6 +86,8 @@ int Driver::process(int argc, char *argv[])
             ("no-typedef", "Forbid typedef and struct/union declarations")
             ("match-stdlib", "Match stdlib names: ignore, approx, strict",
                 cxxopts::value<std::string>()->default_value("ignore"))
+            ("stdlib-inc", "Required #includes from stdlib",
+                cxxopts::value<std::string>()->default_value("a.inc"))
             ("CC", "Specify host C compiler",
                 cxxopts::value<std::string>()->default_value("gcc"))
             ("cc-D", "Predefine a macro",
@@ -154,8 +156,11 @@ int Driver::process(int argc, char *argv[])
     const auto code = process(in, source, exeOpts);
     switch (code) {
     case OK:
-        if (!constraints_.empty())
+        if (!constraints_.empty()) {
             writeFile(constraints_, cmdOpts["output"].as<std::string>());
+            if (cmdOpts.count("stdlib-inc") && !includes_.empty())
+                writeFile(includes_, cmdOpts["stdlib-inc"].as<std::string>());
+        }
         break;
 
     case ParsingError:
@@ -294,9 +299,16 @@ int Driver::generateConstraints()
 }
 
 std::string Driver::augmentSource(const std::string& baseSource,
-                                  std::function<std::vector<std::string>()> getHeaders) const
+                                  std::function<std::vector<std::string>()> headerNames)
 {
-    std::string fullSource = preprocessHeaders(getHeaders());
+    auto headers = headerNames();
+    if (headers.empty())
+        return baseSource;
+
+    for (const auto& h : headers)
+        includes_ += "#include <" + h + ">\n";
+
+    std::string fullSource = preprocessIncludes();
     fullSource.reserve(fullSource.length() + baseSource.length());
     fullSource += baseSource;
 
@@ -314,17 +326,10 @@ std::vector<std::string> Driver::detectMissingHeaders()
     return std::vector<std::string>();
 }
 
-std::string Driver::preprocessHeaders(std::vector<std::string> &&headers) const
+std::string Driver::preprocessIncludes() const
 {
-    if (headers.empty())
-        return "";
-
-    std::string in;
-    for (const auto& h : headers)
-        in += "#include <" + h + ">\n";
-
     CompilerFacade cc(opts_.nativeCC_, opts_.macros_);
-    return cc.preprocessSource(in);
+    return cc.preprocessSource(includes_);
 }
 
 void Driver::honorFlag(bool flag, std::function<void ()> f) const
