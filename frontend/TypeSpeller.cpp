@@ -224,7 +224,7 @@ void TypeSpeller<SyntaxT>::visit(Class *ty)
     spelling_.append("{ ");
     for (unsigned i = 0; i < ty->memberCount(); ++i) {
         const Name *name = ty->memberAt(i)->name();
-        if (!name)
+        if (!name || name->asAnonymousNameId())
             continue;
 
         visitType(ty->memberAt(i)->type());
