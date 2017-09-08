@@ -187,15 +187,19 @@ template<class SyntaxT>
 void TypeSpeller<SyntaxT>::func(Function* ty, RetParam)
 {
     funcRet(ty);
-    spelling_.append(SyntaxT::retParamSep());
-    funcParam(ty);
+    if (ty->hasArguments()) {
+        spelling_.append(SyntaxT::retParamSep());
+        funcParam(ty);
+    }
 }
 
 template<class SyntaxT>
 void TypeSpeller<SyntaxT>::func(Function* ty, ParamRet)
 {
-    funcParam(ty);
-    spelling_.append(SyntaxT::retParamSep());
+    if (ty->hasArguments()) {
+        funcParam(ty);
+        spelling_.append(SyntaxT::retParamSep());
+    }
     funcRet(ty);
 }
 

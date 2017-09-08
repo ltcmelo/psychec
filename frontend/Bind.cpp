@@ -1854,9 +1854,10 @@ bool Bind::visit(TypeIdAST *ast)
 bool Bind::visit(UnaryExpressionAST *ast)
 {
     // unsigned unary_op_token = ast->unary_op_token;
-    ExpressionTy expression = this->expression(ast->expression);
+    this->expression(ast->expression);
 
-    if (ast->expression->asIdExpression()
+    if (ast->expression
+            && ast->expression->asIdExpression()
             && tokenKind(ast->unary_op_token) == T_STAR) {
         maybeResolveAmbiguity(ast->expression->asIdExpression()->name->name,
                               &SyntaxAmbiguity::rhs,
