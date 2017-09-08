@@ -57,7 +57,7 @@ config = Config
         <> help "C dialect"))
   <*> optional
       (strOption  -- switch
-        (long "matchStdLib"
+        (long "match-stdlib"
         <> short 'l'
         <> help "Whether to match stdlib"))
 
