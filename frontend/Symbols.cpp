@@ -122,41 +122,6 @@ const StringLiteral *Declaration::getInitializer() const
 void Declaration::visitSymbol0(SymbolVisitor *visitor)
 { visitor->visit(this); }
 
-
-FakeDeclaration::FakeDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
-    : Symbol(translationUnit, sourceLocation, name)
-    , _initializer(0)
-{ }
-
-FakeDeclaration::FakeDeclaration(Clone *clone, Subst *subst, FakeDeclaration *original)
-    : Symbol(clone, subst, original)
-    , _type(clone->type(original->_type, subst))
-    , _initializer(clone->stringLiteral(original->_initializer))
-{ }
-
-FakeDeclaration::~FakeDeclaration()
-{ }
-
-void FakeDeclaration::setType(const FullySpecifiedType &type)
-{ _type = type; }
-
-void FakeDeclaration::setInitializer(const StringLiteral *initializer)
-{
-    _initializer = initializer;
-}
-
-FullySpecifiedType FakeDeclaration::type() const
-{ return _type; }
-
-const StringLiteral *FakeDeclaration::getInitializer() const
-{
-    return _initializer;
-}
-
-void FakeDeclaration::visitSymbol0(SymbolVisitor *visitor)
-{ visitor->visit(this); }
-
-
 EnumeratorDeclaration::EnumeratorDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
     : Declaration(translationUnit, sourceLocation, name)
     , _constantValue(0)
@@ -666,48 +631,6 @@ void Class::visitSymbol0(SymbolVisitor *visitor)
         }
     }
 }
-
-
-FakeClass::FakeClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
-    : Scope(translationUnit, sourceLocation, name),
-      _key(StructKey)
-{}
-
-FakeClass::FakeClass(Clone *clone, Subst *subst, FakeClass *original)
-    : Scope(clone, subst, original)
-    , _key(original->_key)
-{}
-
-FakeClass::~FakeClass()
-{ }
-
-bool FakeClass::isStruct() const
-{ return _key == StructKey; }
-
-bool FakeClass::isUnion() const
-{ return _key == UnionKey; }
-
-FakeClass::Key FakeClass::classKey() const
-{ return _key; }
-
-void FakeClass::setClassKey(Key key)
-{ _key = key; }
-
-void FakeClass::accept0(TypeVisitor *visitor)
-{ visitor->visit(this); }
-
-FullySpecifiedType FakeClass::type() const
-{ return FullySpecifiedType(const_cast<FakeClass *>(this)); }
-
-void FakeClass::visitSymbol0(SymbolVisitor *visitor)
-{
-    if (visitor->visit(this)) {
-        for (unsigned i = 0; i < memberCount(); ++i) {
-            visitSymbol(memberAt(i), visitor);
-        }
-    }
-}
-
 
 QtPropertyDeclaration::QtPropertyDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
     : Symbol(translationUnit, sourceLocation, name)

@@ -52,7 +52,6 @@ public:
     virtual void visit(Namespace *) {}
     virtual void visit(Template *) {}
     virtual void visit(Class *) {}
-    virtual void visit(FakeClass *) {}
     virtual void visit(Enum *) {}
     virtual void visit(ForwardClassDeclaration *) {}
     virtual void visit(ObjCClass *) {}

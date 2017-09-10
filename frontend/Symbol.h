@@ -147,9 +147,6 @@ public:
     /// Returns true if this Symbol is a Class.
     bool isClass() const;
 
-    /// Returns true if this Symbol is a FakeClass.
-    bool isFakeClass() const;
-
     /// Returns true if this Symbol is a Block.
     bool isBlock() const;
 
@@ -161,9 +158,6 @@ public:
 
     /// Returns true if this Symbol is a Declaration.
     bool isDeclaration() const;
-
-    /// Returns true if this Symbol is a FakeDeclaration.
-    bool isFakeDeclaration() const;
 
     /// Returns true if this Symbol is an Argument.
     bool isArgument() const;
@@ -211,12 +205,10 @@ public:
     virtual const Template *asTemplate() const { return 0; }
     virtual const NamespaceAlias *asNamespaceAlias() const { return 0; }
     virtual const Class *asClass() const { return 0; }
-    virtual const FakeClass *asFakeClass() const { return 0; }
     virtual const Block *asBlock() const { return 0; }
     virtual const UsingNamespaceDirective *asUsingNamespaceDirective() const { return 0; }
     virtual const UsingDeclaration *asUsingDeclaration() const { return 0; }
     virtual const Declaration *asDeclaration() const { return 0; }
-    virtual const FakeDeclaration *asFakeDeclaration() const { return 0; }
     virtual const Argument *asArgument() const { return 0; }
     virtual const TypenameArgument *asTypenameArgument() const { return 0; }
     virtual const BaseClass *asBaseClass() const { return 0; }
@@ -239,12 +231,10 @@ public:
     virtual Template *asTemplate() { return 0; }
     virtual NamespaceAlias *asNamespaceAlias() { return 0; }
     virtual Class *asClass() { return 0; }
-    virtual FakeClass *asFakeClass() { return 0; }
     virtual Block *asBlock() { return 0; }
     virtual UsingNamespaceDirective *asUsingNamespaceDirective() { return 0; }
     virtual UsingDeclaration *asUsingDeclaration() { return 0; }
     virtual Declaration *asDeclaration() { return 0; }
-    virtual FakeDeclaration *asFakeDeclaration() { return 0; }
     virtual Argument *asArgument() { return 0; }
     virtual TypenameArgument *asTypenameArgument() { return 0; }
     virtual BaseClass *asBaseClass() { return 0; }

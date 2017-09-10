@@ -42,12 +42,6 @@ bool SymbolPP::visit(Declaration *symbol)
     return false;
 }
 
-bool SymbolPP::visit(FakeDeclaration *symbol)
-{
-    appendName(symbol->name());
-    return false;
-}
-
 bool SymbolPP::visit(Argument *symbol)
 {
     appendName(symbol->name());
@@ -61,12 +55,6 @@ bool SymbolPP::visit(Function *symbol)
 }
 
 bool SymbolPP::visit(Class *symbol)
-{
-    appendName(symbol->name());
-    return false;
-}
-
-bool SymbolPP::visit(FakeClass *symbol)
 {
     appendName(symbol->name());
     return false;

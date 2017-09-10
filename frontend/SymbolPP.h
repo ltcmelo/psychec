@@ -35,11 +35,9 @@ public:
 
 private:
      bool visit(CPlusPlus::Declaration *) override;
-     bool visit(CPlusPlus::FakeDeclaration *) override;
      bool visit(CPlusPlus::Argument *) override;
      bool visit(CPlusPlus::Function *) override;
      bool visit(CPlusPlus::Class *) override;
-     bool visit(CPlusPlus::FakeClass *) override;
      bool visit(CPlusPlus::Block *) override;
 
      void appendName(const CPlusPlus::Name* name);

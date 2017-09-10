@@ -44,7 +44,6 @@ public:
     virtual bool visit(UsingDeclaration *) { return true; }
     virtual bool visit(NamespaceAlias *) { return true; }
     virtual bool visit(Declaration *) { return true; }
-    virtual bool visit(FakeDeclaration*) { return true; }
     virtual bool visit(Argument *) { return true; }
     virtual bool visit(TypenameArgument *) { return true; }
     virtual bool visit(BaseClass *) { return true; }
@@ -53,7 +52,6 @@ public:
     virtual bool visit(Namespace *) { return true; }
     virtual bool visit(Template *) { return true; }
     virtual bool visit(Class *) { return true; }
-    virtual bool visit(FakeClass *) { return true; }
     virtual bool visit(Block *) { return true; }
     virtual bool visit(ForwardClassDeclaration *) { return true; }
 

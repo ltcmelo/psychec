@@ -111,9 +111,6 @@ public:
     /// Creates a new Declaration symbol.
     Declaration *newDeclaration(unsigned sourceLocation, const Name *name);
 
-    /// Creates a new FakeDeclaration symbol.
-    FakeDeclaration *newFakeDeclaration(unsigned sourceLocation, const Name *name);
-
     /// Creates a new EnumeratorDeclaration symbol.
     EnumeratorDeclaration *newEnumeratorDeclaration(unsigned sourceLocation, const Name *name);
 
@@ -140,9 +137,6 @@ public:
 
     /// Creates a new Class symbol.
     Class *newClass(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new FakeClass symbol.
-    FakeClass *newFakeClass(unsigned sourceLocation, const Name *name = 0);
 
     /// Creates a new Enum symbol.
     Enum *newEnum(unsigned sourceLocation, const Name *name = 0);

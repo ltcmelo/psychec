@@ -70,7 +70,6 @@ public:
     virtual const Namespace *asNamespaceType() const { return 0; }
     virtual const Template *asTemplateType() const { return 0; }
     virtual const Class *asClassType() const { return 0; }
-    virtual const FakeClass *asFakeClassType() const { return 0; }
     virtual const Enum *asEnumType() const { return 0; }
     virtual const ForwardClassDeclaration *asForwardClassDeclarationType() const { return 0; }
     virtual const ObjCClass *asObjCClassType() const { return 0; }
@@ -92,7 +91,6 @@ public:
     virtual Namespace *asNamespaceType() { return 0; }
     virtual Template *asTemplateType() { return 0; }
     virtual Class *asClassType() { return 0; }
-    virtual FakeClass *asFakeClassType() { return 0; }
     virtual Enum *asEnumType() { return 0; }
     virtual ForwardClassDeclaration *asForwardClassDeclarationType() { return 0; }
     virtual ObjCClass *asObjCClassType() { return 0; }

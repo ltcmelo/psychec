@@ -363,9 +363,6 @@ bool Symbol::isTemplate() const
 bool Symbol::isClass() const
 { return asClass() != 0; }
 
-bool Symbol::isFakeClass() const
-{ return asFakeClass() != 0; }
-
 bool Symbol::isForwardClassDeclaration() const
 { return asForwardClassDeclaration() != 0; }
 
@@ -386,9 +383,6 @@ bool Symbol::isUsingDeclaration() const
 
 bool Symbol::isDeclaration() const
 { return asDeclaration() != 0; }
-
-bool Symbol::isFakeDeclaration() const
-{ return asFakeDeclaration() != 0; }
 
 bool Symbol::isArgument() const
 { return asArgument() != 0; }

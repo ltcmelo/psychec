@@ -327,13 +327,6 @@ public:
         return declaration;
     }
 
-    FakeDeclaration *newFakeDeclaration(unsigned sourceLocation, const Name *name)
-    {
-        FakeDeclaration *declaration = new FakeDeclaration(translationUnit, sourceLocation, name);
-        symbols.push_back(declaration);
-        return declaration;
-    }
-
     EnumeratorDeclaration *newEnumeratorDeclaration(unsigned sourceLocation, const Name *name)
     {
         EnumeratorDeclaration *decl = new EnumeratorDeclaration(translationUnit, sourceLocation, name);
@@ -379,13 +372,6 @@ public:
     Class *newClass(unsigned sourceLocation, const Name *name)
     {
         Class *klass = new Class(translationUnit, sourceLocation, name);
-        symbols.push_back(klass);
-        return klass;
-    }
-
-    FakeClass *newFakeClass(unsigned sourceLocation, const Name *name)
-    {
-        FakeClass *klass = new FakeClass(translationUnit, sourceLocation, name);
         symbols.push_back(klass);
         return klass;
     }
@@ -750,9 +736,6 @@ BaseClass *Control::newBaseClass(unsigned sourceLocation, const Name *name)
 Class *Control::newClass(unsigned sourceLocation, const Name *name)
 { return d->newClass(sourceLocation, name); }
 
-FakeClass *Control::newFakeClass(unsigned sourceLocation, const Name *name)
-{ return d->newFakeClass(sourceLocation, name); }
-
 Enum *Control::newEnum(unsigned sourceLocation, const Name *name)
 { return d->newEnum(sourceLocation, name); }
 
@@ -761,9 +744,6 @@ Block *Control::newBlock(unsigned sourceLocation)
 
 Declaration *Control::newDeclaration(unsigned sourceLocation, const Name *name)
 { return d->newDeclaration(sourceLocation, name); }
-
-FakeDeclaration *Control::newFakeDeclaration(unsigned sourceLocation, const Name *name)
-{ return d->newFakeDeclaration(sourceLocation, name); }
 
 EnumeratorDeclaration *Control::newEnumeratorDeclaration(unsigned sourceLocation, const Name *name)
 { return d->newEnumeratorDeclaration(sourceLocation, name); }

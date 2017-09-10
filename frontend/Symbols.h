@@ -130,34 +130,6 @@ private:
     const StringLiteral *_initializer;
 };
 
-class CPLUSPLUS_EXPORT FakeDeclaration: public Symbol
-{
-public:
-    FakeDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    FakeDeclaration(Clone *clone, Subst *subst, FakeDeclaration *original);
-    virtual ~FakeDeclaration();
-
-    void setType(const FullySpecifiedType &type);
-    void setInitializer(StringLiteral const* initializer);
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-    const StringLiteral *getInitializer() const;
-
-    virtual const FakeDeclaration *asFakeDeclaration() const
-    { return this; }
-
-    virtual FakeDeclaration *asFakeDeclaration()
-    { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-
-private:
-    FullySpecifiedType _type;
-    const StringLiteral *_initializer;
-};
-
 class CPLUSPLUS_EXPORT EnumeratorDeclaration: public Declaration
 {
 public:
@@ -563,40 +535,6 @@ protected:
 private:
     Key _key;
     std::vector<BaseClass *> _baseClasses;
-};
-
-class CPLUSPLUS_EXPORT FakeClass: public Scope, public Type
-{
-public:
-    FakeClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    FakeClass(Clone *clone, Subst *subst, FakeClass *original);
-    virtual ~FakeClass();
-
-    enum Key {
-        StructKey,
-        UnionKey
-    };
-
-    bool isStruct() const;
-    bool isUnion() const;
-    Key classKey() const;
-    void setClassKey(Key key);
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-    virtual const FakeClass *asFakeClass() const { return this; }
-    virtual FakeClass *asFakeClass() { return this; }
-
-    // Type's interface
-    virtual const FakeClass *asFakeClassType() const { return this; }
-    virtual FakeClass *asFakeClassType() { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
-
-private:
-    Key _key;
 };
 
 class CPLUSPLUS_EXPORT QtPropertyDeclaration: public Symbol
