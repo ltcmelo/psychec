@@ -115,7 +115,7 @@ public:
     virtual bool visit(DoStatementAST *) { return true; }
     virtual bool visit(DotDesignatorAST *) { return true; }
     virtual bool visit(DynamicExceptionSpecificationAST *) { return true; }
-    virtual bool visit(ElaboratedNameAST *) { return true; }
+    virtual bool visit(TaggedNameAST *) { return true; }
     virtual bool visit(ElaboratedTypeSpecifierAST *) { return true; }
     virtual bool visit(EmptyDeclarationAST *) { return true; }
     virtual bool visit(EnumSpecifierAST *) { return true; }
@@ -268,7 +268,7 @@ public:
     virtual void endVisit(DoStatementAST *) {}
     virtual void endVisit(DotDesignatorAST *) {}
     virtual void endVisit(DynamicExceptionSpecificationAST *) {}
-    virtual void endVisit(ElaboratedNameAST *) {}
+    virtual void endVisit(TaggedNameAST *) {}
     virtual void endVisit(ElaboratedTypeSpecifierAST *) {}
     virtual void endVisit(EmptyDeclarationAST *) {}
     virtual void endVisit(EnumSpecifierAST *) {}

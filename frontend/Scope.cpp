@@ -24,6 +24,7 @@
 #include "Literals.h"
 #include "Templates.h"
 #include <cstring>
+#include <iostream>
 
 namespace CPlusPlus {
 
@@ -150,6 +151,9 @@ Symbol *SymbolTable::lookat(const Identifier *id) const
             continue;
         } else if (const Identifier *nameId = identity->asNameId()) {
             if (check(nameId->identifier()))
+                    break;
+        } else if (const TaggedNameId *elabName = identity->asTaggedNameId()) {
+            if (check(elabName->identifier()))
                     break;
         } else if (const TemplateNameId *t = identity->asTemplateNameId()) {
             if (check(t->identifier()))

@@ -140,12 +140,12 @@ template <class SyntaxT>
 void TypeSpeller<SyntaxT>::visit(NamedType *ty)
 {
     const Identifier *id = nullptr;
-    if (ty->name()->asElaboratedNameId()) {
-        id = ty->name()->asElaboratedNameId()->name()->identifier();
-        auto tag = ty->name()->asElaboratedNameId()->tag();
-        if (tag == ElaboratedNameId::Struct)
+    if (ty->name()->asTaggedNameId()) {
+        id = ty->name()->asTaggedNameId()->name()->identifier();
+        auto tag = ty->name()->asTaggedNameId()->tag();
+        if (tag == TaggedNameId::Struct)
             spelling_.append("struct ");
-        else if (tag == ElaboratedNameId::Enum)
+        else if (tag == TaggedNameId::Enum)
             spelling_.append("enum ");
         else
             spelling_.append("union ");
@@ -216,7 +216,7 @@ void TypeSpeller<SyntaxT>::visit(Class *ty)
 {
     const Name *name = ty->name();
     std::string declName;
-    if (name && (name->asNameId() || name->asElaboratedNameId())) {
+    if (name && (name->asNameId() || name->asTaggedNameId())) {
         const Identifier *id = name->identifier();
         declName.assign(id->begin(), id->end());
     } else {

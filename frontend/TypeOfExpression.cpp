@@ -269,7 +269,7 @@ void TypeOfExpression::process(const Identifier *id)
         id = ty.type()->asNamedType()->name()->identifier();
     } else if (ty.type()->isClassType()
                && (ty.type()->asClassType()->name()->asNameId()
-                   || ty.type()->asClassType()->name()->asElaboratedNameId())) {
+                   || ty.type()->asClassType()->name()->asTaggedNameId())) {
         id = ty.type()->asClassType()->name()->identifier();
     } else {
         return;

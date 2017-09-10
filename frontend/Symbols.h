@@ -525,7 +525,7 @@ public:
     virtual ~Class();
 
     enum Key {
-        ClassKey,
+        ClassKey = 0,
         StructKey,
         UnionKey
     };

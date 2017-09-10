@@ -2814,23 +2814,19 @@ bool Bind::visit(SimpleNameAST *ast)
     return false;
 }
 
-bool Bind::visit(ElaboratedNameAST *ast)
+bool Bind::visit(TaggedNameAST *ast)
 {
-    if (translationUnit()->dialect().isC()) {
-        unsigned classKey = tokenKind(ast->tag_token);
-        if (classKey == T_CLASS)
-            _name = control()->elaboratedNameId(ElaboratedNameId::Class, name(ast->core_name));
-        else if (classKey == T_STRUCT)
-            _name = control()->elaboratedNameId(ElaboratedNameId::Struct, name(ast->core_name));
-        else if (classKey == T_UNION)
-            _name = control()->elaboratedNameId(ElaboratedNameId::Union, name(ast->core_name));
-        else if (classKey == T_ENUM)
-            _name = control()->elaboratedNameId(ElaboratedNameId::Enum, name(ast->core_name));
-    } else {
-        _name = name(ast->core_name);
-    }
+    unsigned classKey = tokenKind(ast->tag_token);
+    TaggedNameId::Tag tag = TaggedNameId::Struct;
+    if (classKey == T_UNION)
+        tag = TaggedNameId::Union;
+    else if (classKey == T_ENUM)
+        tag = TaggedNameId::Enum;
 
+    const Name *core_name = this->name(ast->core_name);
+    _name = control()->taggedNameId(tag, core_name);
     ast->name = _name;
+
     return false;
 }
 
@@ -3386,7 +3382,7 @@ void Bind::ensureValidClassName(const Name **name, unsigned sourceLocation)
     if (qName)
         uqName = qName->name();
     else {
-        const ElaboratedNameId* eName = (*name)->asElaboratedNameId();
+        const TaggedNameId* eName = (*name)->asTaggedNameId();
         if (eName)
             uqName = eName->name();
         else
@@ -3394,7 +3390,7 @@ void Bind::ensureValidClassName(const Name **name, unsigned sourceLocation)
     }
 
     if (!uqName->isNameId()
-            && !uqName->isElaboratedNameId()
+            && !uqName->isTaggedNameId()
             && !uqName->isTemplateNameId()) {
         translationUnit()->error(sourceLocation, "expected a class-name");
 

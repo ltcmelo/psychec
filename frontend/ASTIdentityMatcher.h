@@ -77,7 +77,7 @@ struct PSYCHEC_API ASTIdentityMatcher final : public CPlusPlus::ASTMatcher
 
     // Names
     bool match(SimpleNameAST* node, SimpleNameAST* pattern) override;
-    bool match(ElaboratedNameAST* node, ElaboratedNameAST* pattern) override;
+    bool match(TaggedNameAST* node, TaggedNameAST* pattern) override;
 };
 
 } // namespace psyche

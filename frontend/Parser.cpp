@@ -2135,10 +2135,15 @@ bool Parser::parseClassSpecifier(SpecifierListAST *&node)
     }
 
     if (LA() == T_COLON || LA() == T_LBRACE) {
-        if (!name) {
-            AnonymousNameAST *ast = new (_pool) AnonymousNameAST;
-            ast->class_token = classkey_token;
-            name = ast;
+        if (name) {
+            TaggedNameAST *elabName = new (_pool) TaggedNameAST;
+            elabName->tag_token = classkey_token;
+            elabName->core_name = name;
+            name = elabName;
+        } else {
+            AnonymousNameAST *anonName = new (_pool) AnonymousNameAST;
+            anonName->class_token = classkey_token;
+            name = anonName;
         }
 
         BaseSpecifierListAST *base_clause_list = 0;
@@ -2587,7 +2592,7 @@ bool Parser::parseElaboratedTypeSpecifier(SpecifierListAST *&node)
             ElaboratedTypeSpecifierAST *ast = new (_pool) ElaboratedTypeSpecifierAST;
             ast->classkey_token = classkey_token;
             ast->attribute_list = attributes;
-            ElaboratedNameAST *elabName = new (_pool) ElaboratedNameAST;
+            TaggedNameAST *elabName = new (_pool) TaggedNameAST;
             elabName->tag_token = classkey_token;
             elabName->core_name = name;
             ast->name = elabName;

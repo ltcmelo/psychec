@@ -577,9 +577,9 @@ bool SimpleNameAST::match0(AST *pattern, ASTMatcher *matcher)
     return false;
 }
 
-bool ElaboratedNameAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TaggedNameAST::match0(AST *pattern, ASTMatcher *matcher)
 {
-    if (ElaboratedNameAST *_other = pattern->asElaboratedName())
+    if (TaggedNameAST *_other = pattern->asTaggedName())
         return matcher->match(this, _other);
 
     return false;

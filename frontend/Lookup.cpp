@@ -49,20 +49,42 @@ Symbol *lookupSymbol(const Identifier* ident, const Scope* scope)
 
 Symbol *lookupSymbol(const Name* name, const Scope* scope)
 {
-    return lookupSymbol(name->asNameId(), scope);
+    PSYCHE_ASSERT(name->isNameId() || name->isTaggedNameId(),
+                  return nullptr,
+                  "expected trival or tagged name");
+
+    return lookupSymbol(name->identifier(), scope);
 }
 
 Symbol *lookupTypeSymbol(const Name* name, const Scope *scope)
 {
-    Symbol *tySym = lookupSymbol(name, scope);
-    if (tySym && (tySym->isClass()
-                  || tySym->isForwardClassDeclaration()
-                  || tySym->isEnum()
-                  || tySym->isTypedef())) {
-        return tySym;
-    }
+    PSYCHE_ASSERT(name->isNameId() || name->isTaggedNameId(),
+                  return nullptr,
+                  "expected trival or tagged name");
 
-    return nullptr;
+    Symbol *tySym = lookupSymbol(name->identifier(), scope);
+    if (!tySym)
+        return nullptr;
+
+    if (name->asNameId())
+        return tySym->isTypedef() ? tySym : nullptr;
+
+    auto tag = name->asTaggedNameId()->tag();
+    switch (tag) {
+    case TaggedNameId::Struct:
+    case TaggedNameId::Union:
+        // TODO: Add tag to forward-decl and unify all "tag/key" enums.
+        return (tySym->isForwardClassDeclaration()
+                    || (tySym->isClass()
+                            && tySym->asClass()->classKey() == (int)tag)) ? tySym : nullptr;
+
+    case TaggedNameId::Enum:
+        return tySym->isEnum() ? tySym : nullptr;
+
+    default:
+        PSYCHE_ASSERT(false, return nullptr, "unexpected name");
+        return nullptr;
+    }
 }
 
 Symbol *lookupValueSymbol(const Name *name, const Scope *scope)

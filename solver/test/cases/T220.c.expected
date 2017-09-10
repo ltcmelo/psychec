@@ -1,0 +1,11 @@
+/* Forward declarations */
+typedef  struct TYPE_3__   TYPE_1__ ;
+
+/* Type definitions */
+struct TYPE_3__ {int member; } ;
+typedef  TYPE_1__ T ;
+typedef  TYPE_1__ B ;
+typedef  struct T A ;
+
+/* Variables and functions */
+

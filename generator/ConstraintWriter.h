@@ -198,7 +198,7 @@ public:
     void endSection();
     void beginSection();
 
-private:
+protected:
     void writeAnd();
     void writeColon();
     void writeLineBreak();

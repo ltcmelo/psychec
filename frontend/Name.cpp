@@ -58,8 +58,8 @@ bool Name::isQualifiedNameId() const
 bool Name::isSelectorNameId() const
 { return asSelectorNameId() != 0; }
 
-bool Name::isElaboratedNameId() const
-{ return asElaboratedNameId() != 0; }
+bool Name::isTaggedNameId() const
+{ return asTaggedNameId() != 0; }
 
 void Name::accept(NameVisitor *visitor) const
 {

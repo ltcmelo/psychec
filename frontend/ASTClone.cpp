@@ -825,9 +825,9 @@ QualifiedNameAST *QualifiedNameAST::clone(MemoryPool *pool) const
     return ast;
 }
 
-ElaboratedNameAST *ElaboratedNameAST::clone(MemoryPool *pool) const
+TaggedNameAST *TaggedNameAST::clone(MemoryPool *pool) const
 {
-    ElaboratedNameAST *ast = new (pool) ElaboratedNameAST;
+    TaggedNameAST *ast = new (pool) TaggedNameAST;
     ast->tag_token = tag_token;
     if (core_name)
         ast->core_name = core_name->clone(pool);

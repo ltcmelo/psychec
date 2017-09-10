@@ -249,7 +249,7 @@ protected:
     virtual bool visit(ConversionFunctionIdAST *ast);
     virtual bool visit(AnonymousNameAST *ast);
     virtual bool visit(SimpleNameAST *ast);
-    virtual bool visit(ElaboratedNameAST *ast);
+    virtual bool visit(TaggedNameAST *ast);
     virtual bool visit(DestructorNameAST *ast);
     virtual bool visit(TemplateIdAST *ast);
 

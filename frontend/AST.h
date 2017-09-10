@@ -176,7 +176,7 @@ public:
     virtual DoStatementAST *asDoStatement() { return 0; }
     virtual DotDesignatorAST *asDotDesignator() { return 0; }
     virtual DynamicExceptionSpecificationAST *asDynamicExceptionSpecification() { return 0; }
-    virtual ElaboratedNameAST *asElaboratedName() { return 0; }
+    virtual TaggedNameAST *asTaggedName() { return 0; }
     virtual ElaboratedTypeSpecifierAST *asElaboratedTypeSpecifier() { return 0; }
     virtual EmptyDeclarationAST *asEmptyDeclaration() { return 0; }
     virtual EnumSpecifierAST *asEnumSpecifier() { return 0; }
@@ -2307,32 +2307,24 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-/*!
- * \brief The ElaboratedNameAST class
- *
- * In C++, we inject only the name of an elaborated type specifier, but in C
- * it's necessary to distiguish `struct T' from `T'. In fact, for C++ as well
- * since other entities in the same scope (enums or functions) would cause a
- * name to be hidden.
- */
-class CPLUSPLUS_EXPORT ElaboratedNameAST: public NameAST
+class CPLUSPLUS_EXPORT TaggedNameAST: public NameAST
 {
 public:
     unsigned tag_token;
     NameAST *core_name;
 
 public:
-    ElaboratedNameAST()
+    TaggedNameAST()
         : tag_token(0)
         , core_name(0)
     {}
 
-    virtual ElaboratedNameAST *asElaboratedName() { return this; }
+    virtual TaggedNameAST *asTaggedName() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ElaboratedNameAST *clone(MemoryPool *pool) const;
+    virtual TaggedNameAST *clone(MemoryPool *pool) const;
 
 protected:
     virtual void accept0(ASTVisitor *visitor);

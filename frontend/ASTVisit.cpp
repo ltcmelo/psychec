@@ -619,7 +619,7 @@ void SimpleNameAST::accept0(ASTVisitor *visitor)
     visitor->endVisit(this);
 }
 
-void ElaboratedNameAST::accept0(ASTVisitor *visitor)
+void TaggedNameAST::accept0(ASTVisitor *visitor)
 {
     if (visitor->visit(this)) {
         accept(core_name, visitor);

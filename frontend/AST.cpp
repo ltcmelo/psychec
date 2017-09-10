@@ -3458,12 +3458,12 @@ unsigned QualifiedNameAST::lastToken() const
     return 1;
 }
 
-unsigned ElaboratedNameAST::firstToken() const
+unsigned TaggedNameAST::firstToken() const
 {
     return tag_token;
 }
 
-unsigned ElaboratedNameAST::lastToken() const
+unsigned TaggedNameAST::lastToken() const
 {
     if (core_name)
         return core_name->lastToken();

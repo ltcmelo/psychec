@@ -59,11 +59,11 @@ namespace {
 // the underlying name is indeed a simple one.
 std::string extractId(const Name* name)
 {
-    PSYCHE_ASSERT(name && name->isNameId(),
+    PSYCHE_ASSERT(name && (name->isNameId() || name->isTaggedNameId()),
                   return std::string(),
-                  "expected simple name");
+                  "expected either trival or elaborated name");
 
-    const Identifier *id = name->asNameId()->identifier();
+    const Identifier *id = name->identifier();
     return std::string(id->chars(), id->size());
 }
 

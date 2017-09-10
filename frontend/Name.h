@@ -43,7 +43,7 @@ public:
     bool isConversionNameId() const;
     bool isQualifiedNameId() const;
     bool isSelectorNameId() const;
-    bool isElaboratedNameId() const;
+    bool isTaggedNameId() const;
 
     virtual const Identifier *asNameId() const { return 0; }
     virtual const AnonymousNameId *asAnonymousNameId() const { return 0; }
@@ -53,7 +53,7 @@ public:
     virtual const ConversionNameId *asConversionNameId() const { return 0; }
     virtual const QualifiedNameId *asQualifiedNameId() const { return 0; }
     virtual const SelectorNameId *asSelectorNameId() const { return 0; }
-    virtual const ElaboratedNameId *asElaboratedNameId() const { return 0; }
+    virtual const TaggedNameId *asTaggedNameId() const { return 0; }
 
     void accept(NameVisitor *visitor) const;
     static void accept(const Name *name, NameVisitor *visitor);

@@ -49,7 +49,7 @@ public:
     virtual void visit(const ConversionNameId *) {}
     virtual void visit(const QualifiedNameId *) {}
     virtual void visit(const SelectorNameId *) {}
-    virtual void visit(const ElaboratedNameId *) {}
+    virtual void visit(const TaggedNameId *) {}
 };
 
 } // namespace CPlusPlus

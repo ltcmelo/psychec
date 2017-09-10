@@ -1036,7 +1036,7 @@ bool ASTMatcher::match(DynamicExceptionSpecificationAST *node, DynamicExceptionS
     return true;
 }
 
-bool ASTMatcher::match(ElaboratedNameAST *node, ElaboratedNameAST *pattern)
+bool ASTMatcher::match(TaggedNameAST *node, TaggedNameAST *pattern)
 {
     (void) node;
     (void) pattern;

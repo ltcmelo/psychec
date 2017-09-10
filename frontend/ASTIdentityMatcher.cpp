@@ -348,7 +348,7 @@ bool ASTIdentityMatcher::match(SimpleNameAST* node, SimpleNameAST* pattern)
                     pattern->name->identifier()->begin()));
 }
 
-bool ASTIdentityMatcher::match(ElaboratedNameAST* node, ElaboratedNameAST* pattern)
+bool ASTIdentityMatcher::match(TaggedNameAST* node, TaggedNameAST* pattern)
 {
     if (!node || !pattern)
         return false;

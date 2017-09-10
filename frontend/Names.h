@@ -193,18 +193,19 @@ private:
     Kind _kind;
 };
 
-class CPLUSPLUS_EXPORT ElaboratedNameId: public Name
+class CPLUSPLUS_EXPORT TaggedNameId: public Name
 {
 public:
+    // TODO: Keep ordered as in symbol `Class' until all "tags/keys" are unified.
     enum Tag {
-        Class,
-        Enum,
+        Class = 0,
         Struct,
-        Union
+        Union,
+        Enum
     };
 
-    ElaboratedNameId(Tag tag, const Name* name);
-    virtual ~ElaboratedNameId();
+    TaggedNameId(Tag tag, const Name* name);
+    virtual ~TaggedNameId();
 
     Tag tag() const;
 
@@ -212,7 +213,7 @@ public:
 
     virtual const Identifier *identifier() const;
 
-    virtual const ElaboratedNameId *asElaboratedNameId() const
+    virtual const TaggedNameId *asTaggedNameId() const
     { return this; }
 
 protected:

@@ -73,7 +73,7 @@ public:
     virtual bool match(DoStatementAST *node, DoStatementAST *pattern);
     virtual bool match(DotDesignatorAST *node, DotDesignatorAST *pattern);
     virtual bool match(DynamicExceptionSpecificationAST *node, DynamicExceptionSpecificationAST *pattern);
-    virtual bool match(ElaboratedNameAST *node, ElaboratedNameAST *pattern);
+    virtual bool match(TaggedNameAST *node, TaggedNameAST *pattern);
     virtual bool match(ElaboratedTypeSpecifierAST *node, ElaboratedTypeSpecifierAST *pattern);
     virtual bool match(EmptyDeclarationAST *node, EmptyDeclarationAST *pattern);
     virtual bool match(EnumSpecifierAST *node, EnumSpecifierAST *pattern);

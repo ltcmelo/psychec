@@ -264,6 +264,7 @@ tests = testGroup "Unit tests"
                   , doTest "T217.c" -- Solver parser: T const * const *.
                   , doTest "T218.c" -- Anonymous bitfields.
                   , doTest "T219.c" -- Param-less function pointers.
+                  , doTest "T220.c" -- Stricter elaborated type spec handling.
                   ]
 
 doTest s

@@ -128,24 +128,24 @@ OperatorNameId::Kind OperatorNameId::kind() const
 const Identifier *OperatorNameId::identifier() const
 { return 0; }
 
-ElaboratedNameId::ElaboratedNameId(Tag tag, const Name *name)
+TaggedNameId::TaggedNameId(Tag tag, const Name *name)
     : _tag(tag)
     , _name(name)
 { }
 
-ElaboratedNameId::~ElaboratedNameId()
+TaggedNameId::~TaggedNameId()
 { }
 
-void ElaboratedNameId::accept0(NameVisitor *visitor) const
+void TaggedNameId::accept0(NameVisitor *visitor) const
 { visitor->visit(this); }
 
-ElaboratedNameId::Tag ElaboratedNameId::tag() const
+TaggedNameId::Tag TaggedNameId::tag() const
 { return _tag; }
 
-const Name *ElaboratedNameId::name() const
+const Name *TaggedNameId::name() const
 { return _name; }
 
-const Identifier *ElaboratedNameId::identifier() const
+const Identifier *TaggedNameId::identifier() const
 { return _name->identifier(); }
 
 ConversionNameId::ConversionNameId(const FullySpecifiedType &type)

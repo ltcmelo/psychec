@@ -195,11 +195,14 @@ unsigned Symbol::fileNameLength() const
 
 const Name *Symbol::unqualifiedName() const
 {
-    if (! _name)
+    if (!_name)
         return 0;
 
-    else if (const QualifiedNameId *q = _name->asQualifiedNameId())
+    if (const QualifiedNameId *q = _name->asQualifiedNameId())
         return q->name();
+
+    if (const TaggedNameId *elab = _name->asTaggedNameId())
+        return elab->name();
 
     return _name;
 }
