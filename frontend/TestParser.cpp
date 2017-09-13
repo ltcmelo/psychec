@@ -22,6 +22,7 @@
 #include "Literals.h"
 #include <iostream>
 #include <string>
+#include <cstring>
 
 using namespace psyche;
 using namespace CPlusPlus;
