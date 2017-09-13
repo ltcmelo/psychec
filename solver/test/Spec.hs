@@ -265,6 +265,7 @@ tests = testGroup "Unit tests"
                   , doTest "T218.c" -- Anonymous bitfields.
                   , doTest "T219.c" -- Param-less function pointers.
                   , doTest "T220.c" -- Stricter elaborated type spec handling.
+                  , doTest "T221.c" -- Respect arithmetic suffixes.
                   ]
 
 doTest s

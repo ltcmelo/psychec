@@ -795,7 +795,7 @@ bool DomainLattice::visit(NumericLiteralAST *ast)
         } else if (numLit->isFloat()) {
             enforceLeastDomain(Domain(kFloatingPoint, kFloatTy));
         } else if (numLit->isLongDouble()) {
-            enforceLeastDomain(Domain(kFloatingPoint, kLongDouble));
+            enforceLeastDomain(Domain(kFloatingPoint, kLongDoubleTy));
         } else if (numLit->isLong()) {
             enforceLeastDomain(Domain(kIntegral, kLongTy));
         } else if (numLit->isLongLong()) {

@@ -864,7 +864,7 @@ void ConstraintGenerator::castExpressionHelper(const std::string& inputTy,
             && resultTy != kLongLongTy
             && resultTy != kFloatTy
             && resultTy != kDoubleTy
-            && resultTy != kLongDouble
+            && resultTy != kLongDoubleTy
             && resultTy != kVoidTy
             && resultTy != kDefaultStrTy) {
         ensureTypeIsKnown(resultTy);
@@ -961,23 +961,35 @@ bool ConstraintGenerator::visit(NumericLiteralAST *ast)
 
     const NumericLiteral *numLit = numericLiteral(ast->literal_token);
     PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
+
+    std::string ty;
+    if (numLit->isUnsigned())
+        ty.append(" unsigned ");
+
     writer_->beginSection();
-    if (numLit->isDouble()
-            || numLit->isFloat()
-            || numLit->isLongDouble()) {
-        writer_->writeTypeSection(kDefaultFloatPointTy);
+    if (numLit->isDouble()) {
+        ty.append(kDoubleTy);
+    } else if (numLit->isFloat()) {
+        ty.append(kFloatTy);
+    } else if (numLit->isLongDouble()) {
+        ty.append(kLongDoubleTy);
     } else {
         if (!strcmp(numLit->chars(), "0")) {
             const std::string& alpha = supply_.createTypeVar1();
             writer_->writeExists(alpha);
-            writer_->writeTypeSection(alpha);
+            ty.append(alpha);
         } else if (tokenKind(ast->literal_token) == T_CHAR_LITERAL) {
             // TODO: char/int
-            writer_->writeTypeSection(kCharTy);
+            ty.append(kCharTy);
+        } else if (numLit->isLong()) {
+            ty.append(kLongTy);
+        } else if (numLit->isLongLong()) {
+            ty.append(kLongLongTy);
         } else {
-            writer_->writeTypeSection(kDefaultIntTy);
+            ty.append(kDefaultIntTy);
         }
     }
+    writer_->writeTypeSection(ty);
     writer_->writeEquivMark();
     ENSURE_NONEMPTY_TYPE_STACK(return false);
     writer_->writeTypeSection(types_.top());

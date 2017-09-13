@@ -32,7 +32,7 @@ const char* const kLongLongTy = "long long";
 
 const char* const kFloatTy = "float";
 const char* const kDoubleTy = "double";
-const char* const kLongDouble = "long double";
+const char* const kLongDoubleTy = "long double";
 
 const char* const kDefaultFloatPointTy = kDoubleTy;
 const char* const kDefaultIntTy = kIntTy;

@@ -1,0 +1,18 @@
+/* Forward declarations */
+
+/* Type definitions */
+typedef  unsigned long UL2 ;
+typedef  unsigned long UL ;
+typedef  unsigned int UI2 ;
+typedef  unsigned int UI ;
+typedef  long long LLI2 ;
+typedef  long long LLI ;
+typedef  long LI2 ;
+typedef  long LI ;
+typedef  long double LD2 ;
+typedef  long double LD ;
+typedef  float F2 ;
+typedef  float F ;
+
+/* Variables and functions */
+
