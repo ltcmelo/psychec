@@ -422,7 +422,7 @@ static inline int classify6(const char *s, Dialect lang)
       }
     }
   }
-  else if (lang.c99 && s[0] == 'i') {
+  else if (s[0] == 'i') {
     if (s[1] == 'n') {
       if (s[2] == 'l') {
         if (s[3] == 'i') {
@@ -795,7 +795,7 @@ static inline int classify7(const char *s, Dialect lang)
 
 static inline int classify8(const char *s, Dialect lang)
 {
-  if (lang.c99 && s[0] == '_') {
+  if (s[0] == '_') {
     if (s[1] == '_') {
       if (s[2] == 'i') {
         if (s[3] == 'n') {
@@ -957,6 +957,18 @@ static inline int classify8(const char *s, Dialect lang)
             }
           }
         }
+      } else if (s[2] == 's') {
+          if (s[3] == 't') {
+            if (s[4] == 'r') {
+              if (s[5] == 'i') {
+                if (s[6] == 'c') {
+                  if (s[7] == 't') {
+                      return T_RESTRICT;
+                  }
+                }
+              }
+            }
+          }
       }
     }
   }
@@ -1188,7 +1200,7 @@ static inline int classify9(const char *s, Dialect lang)
 
 static inline int classify10(const char *s, Dialect lang)
 {
-  if (lang.c99 && s[0] == '_') {
+  if (s[0] == '_') {
     if (s[1] == '_') {
       if (s[2] == 'i') {
         if (s[3] == 'n') {

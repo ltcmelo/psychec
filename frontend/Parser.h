@@ -75,7 +75,7 @@ public:
     bool parseConditionalExpression(ExpressionAST *&node);
     bool parseConstantExpression(ExpressionAST *&node);
     bool parseCtorInitializer(CtorInitializerAST *&node);
-    bool parseCvQualifiers(SpecifierListAST *&node);
+    bool parseQualifiers(SpecifierListAST *&node);
     bool parseRefQualifier(unsigned &ref_qualifier);
     bool parseOverrideFinalQualifiers(SpecifierListAST *&node);
     bool parseDeclaratorOrAbstractDeclarator(DeclaratorAST *&node, SpecifierListAST *decl_specifier_list);
@@ -263,7 +263,7 @@ public:
     int find(int token, int stopAt);
 
     bool lookAtTypeParameter();
-    bool lookAtCVQualifier() const;
+    bool lookAtQualifier() const;
     bool lookAtFunctionSpecifier() const;
     bool lookAtStorageClassSpecifier() const;
     bool lookAtBuiltinTypeSpecifier() const;

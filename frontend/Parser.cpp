@@ -387,6 +387,7 @@ bool Parser::skipUntilStatement()
             case T_RBRACE:
             case T_CONST:
             case T_VOLATILE:
+            case T_RESTRICT:
             case T_IDENTIFIER:
             case T_CASE:
             case T_DEFAULT:
@@ -1299,7 +1300,7 @@ bool Parser::parseOperator(OperatorAST *&node) // ### FIXME
     return true;
 }
 
-bool Parser::parseCvQualifiers(SpecifierListAST *&node)
+bool Parser::parseQualifiers(SpecifierListAST *&node)
 {
     DEBUG_THIS_RULE();
 
@@ -1310,7 +1311,7 @@ bool Parser::parseCvQualifiers(SpecifierListAST *&node)
         ast = &(*ast)->next;
 
     while (int tk = LA()) {
-        if (tk == T_CONST || tk == T_VOLATILE) {
+        if (tk == T_CONST || tk == T_VOLATILE || tk == T_RESTRICT) {
             SimpleSpecifierAST *spec = new (_pool) SimpleSpecifierAST;
             spec->specifier_token = consumeToken();
             *ast = new (_pool) SpecifierListAST(spec);
@@ -1385,7 +1386,7 @@ bool Parser::parsePtrOperator(PtrOperatorListAST *&node)
     } else if (LA() == T_STAR) {
         PointerAST *ast = new (_pool) PointerAST;
         ast->star_token = consumeToken();
-        parseCvQualifiers(ast->cv_qualifier_list);
+        parseQualifiers(ast->cv_qualifier_list);
         node = new (_pool) PtrOperatorListAST(ast);
         return true;
     } else if (LA() == T_COLON_COLON || LA() == T_IDENTIFIER) {
@@ -1402,7 +1403,7 @@ bool Parser::parsePtrOperator(PtrOperatorListAST *&node)
             ast->global_scope_token = global_scope_token;
             ast->nested_name_specifier_list = nested_name_specifiers;
             ast->star_token = consumeToken();
-            parseCvQualifiers(ast->cv_qualifier_list);
+            parseQualifiers(ast->cv_qualifier_list);
             node = new (_pool) PtrOperatorListAST(ast);
             return true;
         }
@@ -1459,7 +1460,7 @@ bool Parser::parseDeclSpecifierSeq(SpecifierListAST *&decl_specifier_seq,
             spec->specifier_token = consumeToken();
             *decl_specifier_seq_ptr = new (_pool) SpecifierListAST(spec);
             decl_specifier_seq_ptr = &(*decl_specifier_seq_ptr)->next;
-        } else if (lookAtCVQualifier()) {
+        } else if (lookAtQualifier()) {
             // cv-qualifier
             SimpleSpecifierAST *spec = new (_pool) SimpleSpecifierAST;
             spec->specifier_token = consumeToken();
@@ -1648,7 +1649,7 @@ bool Parser::parseDeclarator(DeclaratorAST *&node, SpecifierListAST *decl_specif
 
             ast->rparen_token = consumeToken();
             // ### parse attributes
-            parseCvQualifiers(ast->cv_qualifier_list);
+            parseQualifiers(ast->cv_qualifier_list);
             parseRefQualifier(ast->ref_qualifier_token);
             parseExceptionSpecification(ast->exception_specification);
 
@@ -1747,7 +1748,7 @@ bool Parser::parseAbstractDeclarator(DeclaratorAST *&node, SpecifierListAST *dec
                 if (LA() == T_RPAREN)
                     ast->rparen_token = consumeToken();
             }
-            parseCvQualifiers(ast->cv_qualifier_list);
+            parseQualifiers(ast->cv_qualifier_list);
             parseRefQualifier(ast->ref_qualifier_token);
             parseExceptionSpecification(ast->exception_specification);
             *postfix_ptr = new (_pool) PostfixDeclaratorListAST(ast);
@@ -3396,7 +3397,7 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
 
     const unsigned start = cursor();
 
-    if (lookAtCVQualifier()
+    if (lookAtQualifier()
             || lookAtStorageClassSpecifier()
             || lookAtBuiltinTypeSpecifier()
             || LA() == T_TYPENAME
@@ -3960,11 +3961,12 @@ bool Parser::parseDeclarationStatement(StatementAST *&node)
     return true;
 }
 
-bool Parser::lookAtCVQualifier() const
+bool Parser::lookAtQualifier() const
 {
     switch (LA()) {
     case T_CONST:
     case T_VOLATILE:
+    case T_RESTRICT:
         return true;
     default:
         return false;
@@ -4198,7 +4200,7 @@ bool Parser::parseSimpleDeclaration(DeclarationAST *&node, ClassSpecifierAST *de
     SpecifierListAST *decl_specifier_seq = 0,
          **decl_specifier_seq_ptr = &decl_specifier_seq;
     for (;;) {
-        if (lookAtCVQualifier() || lookAtFunctionSpecifier()
+        if (lookAtQualifier() || lookAtFunctionSpecifier()
                 || lookAtStorageClassSpecifier()) {
             SimpleSpecifierAST *spec = new (_pool) SimpleSpecifierAST;
             spec->specifier_token = consumeToken();

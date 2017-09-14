@@ -157,6 +157,7 @@ enum Kind {
     T_PUBLIC,
     T_REGISTER,
     T_REINTERPRET_CAST,
+    T_RESTRICT,
     T_RETURN,
     T_SIZEOF,
     T_STATIC,

@@ -54,7 +54,7 @@ const char *token_names[] = {
     ("friend"), ("goto"), ("if"), ("inline"),
     ("mutable"), ("namespace"), ("new"), ("noexcept"),
     ("nullptr"), ("operator"), ("private"),
-    ("protected"), ("public"), ("register"), ("reinterpret_cast"),
+    ("protected"), ("public"), ("register"), ("reinterpret_cast"), ("restrict"),
     ("return"), ("sizeof"), ("static"), ("static_assert"),
     ("static_cast"), ("struct"), ("switch"), ("template"), ("this"), ("thread_local"),
     ("throw"), ("true"), ("try"), ("typedef"), ("typeid"), ("typename"),
