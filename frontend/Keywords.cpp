@@ -1236,6 +1236,23 @@ static inline int classify10(const char *s, Dialect lang)
           }
         }
       }
+      else if (s[2] == 'r') {
+        if (s[3] == 'e') {
+          if (s[4] == 's') {
+            if (s[5] == 't') {
+              if (s[6] == 'r') {
+                if (s[7] == 'i') {
+                  if (s[8] == 'c') {
+                    if (s[9] == 't') {
+                      return T___RESTRICT;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       else if (lang.isCpp() && s[2] == 't') {
         if (s[3] == 'y') {
           if (s[4] == 'p') {
@@ -1449,6 +1466,27 @@ static inline int classify12(const char *s, Dialect lang)
           }
         }
       }
+      else if (s[2] == 'r') {
+          if (s[3] == 'e') {
+            if (s[4] == 's') {
+              if (s[5] == 't') {
+                if (s[6] == 'r') {
+                  if (s[7] == 'i') {
+                    if (s[8] == 'c') {
+                      if (s[9] == 't') {
+                        if (s[10] == '_') {
+                          if (s[11] == '_') {
+                            return T___RESTRICT__;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
     }
   }
   else if (lang.qt && s[0] == 'Q') {

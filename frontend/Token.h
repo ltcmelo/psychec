@@ -289,6 +289,10 @@ enum Kind {
 
     T___ATTRIBUTE = T___ATTRIBUTE__,
     T___ALIGNOF__ = T_ALIGNOF,
+
+    T___RESTRICT = T_RESTRICT,
+    T___RESTRICT__ = T_RESTRICT,
+
     T_LAST_TOKEN
 };
 
