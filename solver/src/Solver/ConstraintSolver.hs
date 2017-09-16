@@ -1,4 +1,4 @@
--- Copyright (c) 2016 Rodrigo Ribeiro (rodrigo@decsi.ufop.br)
+-- Copyright (c) 2016 Rodrigo RiAbeiro (rodrigo@decsi.ufop.br)
 --                    Leandro T. C. Melo (ltcmelo@gmail.com)
 --                    Marcus Rodrigues (demaroar@gmail.com)
 --
@@ -49,8 +49,19 @@ import Debug.Trace
 
 
 solver :: Constraint -> CLang -> Bool -> IO (Either String (TyCtx, VarCtx))
-solver c cl ml = runSolverM (solve c cl ml) (((length $ fv c) + 1), 1)
+solver c cl ml = runSolverM (solve c cl ml) (((maxVarId 0 c) + 1), 1)
 
+
+-- | Discover the maximum type variable id.
+maxVarId :: Int -> Constraint -> Int
+maxVarId k (Def _ _ c) = maxVarId k c
+maxVarId k (Scope c) = maxVarId k c
+maxVarId k (c :&: c') = max (maxVarId k c) (maxVarId k c')
+maxVarId k (Exists (Name n) c) = maxVarId (max k (varId n)) c
+maxVarId k _ = k
+
+
+-- | Solve constraints.
 solve :: Constraint -> CLang -> Bool -> SolverM (TyCtx, VarCtx)
 solve c cl ml = do
   let

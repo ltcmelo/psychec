@@ -97,6 +97,10 @@ Fresh variable generation
 >           put ((n + 1), n')
 >           return (VarTy (Name ("#alpha" ++ show n)))
 
+> varId :: String -> Int
+> varId = (read . (drop 6))
+
+
 Auxiliar code
 -------------
 

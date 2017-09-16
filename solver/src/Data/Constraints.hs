@@ -29,7 +29,7 @@ data Constraint = Ty :=: Ty                 -- equivalence
                 | Name :<-: Ty              -- type ascription
                 | Has Ty Field              -- field constraint
                 | TypeDef Ty Ty             -- type definition
-                | Def Name Ty Constraint    -- symbol definition
+                | Def Name Ty Constraint    -- symbol definition (TODO: remove Constraint)
                 | Constraint :&: Constraint -- conjunction
                 | Exists Name Constraint    -- fresh variable introduction
                 | Scope Constraint          -- scoping
