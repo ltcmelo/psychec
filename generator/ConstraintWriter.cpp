@@ -47,7 +47,7 @@ const char* const kStatic = "$static$";
 
 
 ConstraintWriter::ConstraintWriter(std::ostream &os)
-    : os_(os)
+    : os_(&os)
 {}
 
 ConstraintWriter::~ConstraintWriter()
@@ -65,7 +65,7 @@ void ConstraintWriter::writeText(const std::string &text)
     HONOR_BLOCKING_STATE;
 
     beginSection();
-    os_ << text;
+    *os_ << text;
 }
 
 void ConstraintWriter::writeTypedef(const std::string &ty1, const std::string &ty2)
@@ -74,7 +74,7 @@ void ConstraintWriter::writeTypedef(const std::string &ty1, const std::string &t
 
     beginSection();
     writeLineBreak();
-    os_ << kTypeDef << ty1 << kAlias << ty2;
+    *os_ << kTypeDef << ty1 << kAlias << ty2;
     endSection();
 
     ++cnt_;
@@ -86,7 +86,7 @@ void ConstraintWriter::writeVarDecl(const std::string &name, const std::string &
 
     beginSection();
     writeLineBreak();
-    os_ << kDecl << name << kDeclDelim << ty << kContainment << " ";
+    *os_ << kDecl << name << kDeclDelim << ty << kContainment << " ";
 
     ++cnt_;
 }
@@ -99,11 +99,11 @@ void ConstraintWriter::writeFuncDecl(const std::string &name,
 
     beginSection();
     writeLineBreak();
-    os_ << kDecl << name << kDeclDelim << "(";
+    *os_ << kDecl << name << kDeclDelim << "(";
     for (const auto& param : params)
-        os_ << param << ", ";
-    os_ << ret;
-    os_ << ") " << kContainment << " ";
+        *os_ << param << ", ";
+    *os_ << ret;
+    *os_ << ") " << kContainment << " ";
 
     ++cnt_;
 }
@@ -112,7 +112,7 @@ void ConstraintWriter::writeTypeof(const std::string &sym)
 {
     HONOR_BLOCKING_STATE;
 
-    os_ << kTypeOf << "(" << sym << ")";
+    *os_ << kTypeOf << "(" << sym << ")";
 
     ++cnt_;
 }
@@ -123,7 +123,7 @@ void ConstraintWriter::writeExists(const std::string &ty)
 
     beginSection();
     writeLineBreak();
-    os_ << kExistence << ty << ". ";
+    *os_ << kExistence << ty << ". ";
 
     ++cnt_;
 }
@@ -132,14 +132,14 @@ void ConstraintWriter::writeEquivMark()
 {
     HONOR_BLOCKING_STATE;
 
-    os_ << kEquiv;
+    *os_ << kEquiv;
 }
 
 void ConstraintWriter::writeSubtypeMark()
 {
     HONOR_BLOCKING_STATE;
 
-    os_ << kSubtype;
+    *os_ << kSubtype;
 }
 
 void ConstraintWriter::writeSubtypeRel(const std::string& ty, const std::string& subTy)
@@ -158,7 +158,7 @@ void ConstraintWriter::writeTypeSection(const std::string& ty)
 {
     HONOR_BLOCKING_STATE;
 
-    os_ << ty;
+    *os_ << ty;
 }
 
 void ConstraintWriter::writeConstantExpression(const std::string &val)
@@ -166,7 +166,7 @@ void ConstraintWriter::writeConstantExpression(const std::string &val)
     HONOR_BLOCKING_STATE;
 
     beginSection();
-    os_ << kReadOnly << "(" << val << ")";
+    *os_ << kReadOnly << "(" << val << ")";
     endSection();
 
     ++cnt_;
@@ -177,7 +177,7 @@ void ConstraintWriter::writeStatic(const std::string &val)
     HONOR_BLOCKING_STATE;
 
     beginSection();
-    os_ << kStatic << "(" << val << ")";
+    *os_ << kStatic << "(" << val << ")";
     endSection();
 
     ++cnt_;
@@ -203,13 +203,13 @@ void ConstraintWriter::writeMemberRel(const std::string &baseTy,
     HONOR_BLOCKING_STATE;
 
     beginSection();
-    os_ << kMember << "(";
+    *os_ << kMember << "(";
     writeTypeSection(baseTy);
     writeAnd();
-    os_ << memberName;
+    *os_ << memberName;
     writeColon();
     writeTypeSection(symTy);
-    os_ << ")";
+    *os_ << ")";
     endSection();
 
     ++cnt_;
@@ -223,7 +223,7 @@ void ConstraintWriter::writePtrRel(const std::string &ty1, const std::string &ty
     writeTypeSection(ty1);
     writeEquivMark();
     writeTypeSection(ty2);
-    os_ << "*";
+    *os_ << "*";
     endSection();
     ++cnt_;
 }
@@ -244,14 +244,14 @@ void ConstraintWriter::enterGroup()
 {
     HONOR_BLOCKING_STATE;
 
-    os_ << "(";
+    *os_ << "(";
 }
 
 void ConstraintWriter::leaveGroup()
 {
     HONOR_BLOCKING_STATE;
 
-    os_ << ")";
+    *os_ << ")";
 }
 
 void ConstraintWriter::openScope()
@@ -260,7 +260,7 @@ void ConstraintWriter::openScope()
 
     beginSection();
     writeLineBreak();
-    os_ << "[ ";
+    *os_ << "[ ";
     ++indent_;
 }
 
@@ -270,7 +270,7 @@ void ConstraintWriter::closeScope()
 
     --indent_;
     writeLineBreak();
-    os_ << "]";
+    *os_ << "]";
     endSection();
 }
 
@@ -278,14 +278,14 @@ void ConstraintWriter::writeAnd()
 {
     HONOR_BLOCKING_STATE;
 
-    os_ << ", ";
+    *os_ << ", ";
 }
 
 void ConstraintWriter::writeLineBreak()
 {
     HONOR_BLOCKING_STATE;
 
-    os_ << std::endl;
+    *os_ << std::endl;
     indent();
 }
 
@@ -294,7 +294,7 @@ void ConstraintWriter::indent()
     HONOR_BLOCKING_STATE;
 
     std::string space(indent_, ' ');
-    os_ << space;
+    *os_ << space;
 }
 
 void ConstraintWriter::dedent()
@@ -317,5 +317,5 @@ void ConstraintWriter::endSection()
 
 void ConstraintWriter::writeColon()
 {
-    os_ << kDeclDelim;
+    *os_ << kDeclDelim;
 }

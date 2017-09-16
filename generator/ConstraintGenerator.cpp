@@ -123,7 +123,7 @@ void ConstraintGenerator::installObserver(Observer *observer)
     PSYCHE_ASSERT(observer, return, "expected valid observer");
 
     observer_ = observer;
-    observer_->setConstraintWriter(writer_);
+    observer_->configure(translationUnit(), writer_);
 }
 
 void ConstraintGenerator::addPrintfLike(const std::string &funcName, size_t varArgPos)

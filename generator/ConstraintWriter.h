@@ -206,7 +206,7 @@ protected:
     void indent();
     void dedent();
 
-    std::ostream& os_;
+    std::ostream* os_;
     int indent_ { 0 };
     bool blocked_ { false };
     size_t cnt_ { 0 };

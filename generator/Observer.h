@@ -30,8 +30,9 @@ class Observer {
 public:
     virtual ~Observer() {}
 
-    void setConstraintWriter(ConstraintWriter* writer) { writer_ = writer; }
+    virtual void configure(CPlusPlus::TranslationUnit* unit, ConstraintWriter* writer) {}
 
+    // Unit
     virtual void enter(CPlusPlus::TranslationUnitAST*, CPlusPlus::Scope*) {}
     virtual void leave(CPlusPlus::TranslationUnitAST*) {}
 
@@ -108,9 +109,6 @@ public:
     virtual void leave(CPlusPlus::ReturnStatementAST*) {}
     virtual void leave(CPlusPlus::SwitchStatementAST*) {}
     virtual void leave(CPlusPlus::WhileStatementAST*) {}
-
-protected:
-    ConstraintWriter* writer_ { nullptr };
 };
 
 template <class AstT>
