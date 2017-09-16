@@ -74,7 +74,7 @@ private:
 
     CPlusPlus::FullySpecifiedType fullType_;
     CPlusPlus::Scope* scope_;
-    std::size_t singleLookup_;
+    std::size_t searchMember_;
 };
 
 } // namespace psyche

@@ -34,7 +34,7 @@ using namespace psyche;
 
 TypeOfExpression::TypeOfExpression(TranslationUnit *unit)
     : ASTVisitor(unit)
-    , singleLookup_(0)
+    , searchMember_(0)
 {}
 
 FullySpecifiedType TypeOfExpression::resolve(ExpressionAST *ast, Scope *scope)
@@ -249,36 +249,40 @@ bool TypeOfExpression::visit(ConditionalExpressionAST *ast)
 void TypeOfExpression::process(const Identifier *id)
 {
     const Symbol* valSym;
-    if (singleLookup_)
+    if (searchMember_)
         valSym = scope_->find(id);
     else
         valSym = lookupValueSymbol(id, scope_);
 
-    if (!valSym || !valSym->type()) {
+    if (!valSym)
         fullType_ = FullySpecifiedType();
+    else
+        fullType_ = valSym->type();
+
+    if (searchMember_ || !fullType_)
         return;
+
+    FullySpecifiedType ty = fullType_;
+    while (true) {
+        if (ty.type()->isPointerType())
+            ty = ty.type()->asPointerType()->elementType();
+        else if (ty.type()->isArrayType())
+            ty = ty.type()->asArrayType()->elementType();
+        else break;
     }
 
-    FullySpecifiedType ty = valSym->type();
-    fullType_ = ty;
-
-    while (ty.type()->isPointerType())
-        ty = ty.type()->asPointerType()->elementType();
+    if (ty.type()->isClassType()) {
+        scope_ = ty.type()->asClassType();
+        return;
+    }
 
     if (ty.type()->isNamedType()) {
-        id = ty.type()->asNamedType()->name()->identifier();
-    } else if (ty.type()->isClassType()
-               && (ty.type()->asClassType()->name()->asNameId()
-                   || ty.type()->asClassType()->name()->asTaggedNameId())) {
-        id = ty.type()->asClassType()->name()->identifier();
-    } else {
-        return;
+        Symbol* tySym = lookupTypeSymbol(ty.type()->asNamedType()->name(), scope_);
+        if (tySym && tySym->type() && tySym->type()->asClassType())
+            scope_ = tySym->type()->asClassType();
     }
 
-    PSYCHE_ASSERT(id, return, "expected valid id");
-    Symbol* tySym = lookupTypeSymbol(id, scope_);
-    if (tySym && tySym->type()->asClassType())
-        scope_ = tySym->type()->asClassType();
+    // TODO: Stop the visit entirely.
 }
 
 bool TypeOfExpression::visit(IdExpressionAST *ast)
@@ -297,10 +301,10 @@ bool TypeOfExpression::visit(MemberAccessAST *ast)
                   "expected trivial member name");
 
     accept(ast->base_expression);
-    ++singleLookup_;
+    ++searchMember_;
     process(ast->member_name->name->identifier());
-    PSYCHE_ASSERT(singleLookup_ > 0, return false, "expected member check");
-    --singleLookup_;
+    PSYCHE_ASSERT(searchMember_ > 0, return false, "expected member check");
+    --searchMember_;
 
     return false;
 }
