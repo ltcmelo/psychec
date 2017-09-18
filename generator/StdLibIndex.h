@@ -42,6 +42,8 @@ public:
 
     std::vector<std::string> inspect(const CPlusPlus::Control&) const;
 
+    bool recognizes(const char* ident) const;
+
 private:
     enum class SymbolKind : char
     {

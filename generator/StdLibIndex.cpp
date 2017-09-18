@@ -232,3 +232,21 @@ std::vector<std::string> StdLibIndex::inspect(const Control& control) const
 
     return v;
 }
+
+bool StdLibIndex::recognizes(const char* ident) const
+{
+    auto f = [ident] (const Index& idx) {
+        for (const auto& v : idx) {
+            for (const auto& kw : v.second) {
+                if (!strncmp(kw.first, ident, strlen(kw.first)))
+                    return true;
+            }
+        }
+        return false;
+    };
+
+    return f(c89idx_) ? true :
+                        std_ == Version::C99 && f(c99idx_) ?
+                            true :
+                            std_ == Version::C11 ? f(c11idx_) : false;
+}
