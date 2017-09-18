@@ -197,13 +197,14 @@ stage1 tctx Truth = return (tctx, Truth)
 
 -- | Find the canonical instance of a type.
 findCanonical :: TyCtx -> Ty -> Ty
-findCanonical tctx t@(NamedTy n) = maybe t fst (Map.lookup n (tyctx tctx))
 findCanonical _ t@(VarTy _) = t
+findCanonical tctx t@(NamedTy n) = maybe t fst (Map.lookup n (tyctx tctx))
 findCanonical tctx (FunTy t ts) = FunTy (findCanonical tctx t) (map (findCanonical tctx) ts)
-findCanonical tctx (QualTy t q) = QualTy (findCanonical tctx t) q
-findCanonical tctx (PtrTy t) = PtrTy (findCanonical tctx t)
 findCanonical tctx (RecTy fs n) = RecTy (map (\f -> f{ty = findCanonical tctx (ty f)}) fs) n
 findCanonical tctx (SumTy fs n) = SumTy (map (\f -> f{ty = findCanonical tctx (ty f)}) fs) n
+findCanonical tctx (PtrTy t) = PtrTy (findCanonical tctx t)
+findCanonical tctx (QualTy t q) = QualTy (findCanonical tctx t) q
+findCanonical _ t@(AnyTy) = t
 findCanonical _ t@(EnumTy _) = Data.BuiltIn.int -- We treat enumerations as plain integer.
 
 
@@ -467,7 +468,7 @@ untypeVariadics (n :<-: (FunTy _ pv)) s vcx =
   return vcx'
  where
   vcx' = case Map.lookup n (varctx vcx) of
-    Nothing -> vcx -- The name must be typed as a function pointer.
+    Nothing -> vcx -- When the name is typed as a function pointer.
     Just (ValSym (FunTy r pt) d ce st) ->
       let
         params (t1:xs1) (t2:xs2)

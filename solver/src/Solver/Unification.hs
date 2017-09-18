@@ -131,9 +131,14 @@ instance Unifiable Ty where
     fv (EnumTy _) = []
 
     -- Plain unification
+    punify AnyTy t = return nullSubst
+
     punify t'@(VarTy v) t
         | convertible t t' = return nullSubst
         | otherwise = varBind v t
+
+    punify t AnyTy = return nullSubst
+
     punify t t'@(VarTy v)
         | convertible t t' = return nullSubst
         | otherwise = varBind v t
@@ -187,9 +192,14 @@ instance Unifiable Ty where
     -- Directional unification
     dunify t@(VarTy v) t'@(PtrTy _) _ = varBind v t'
 
+    dunify AnyTy t _ = return nullSubst
+
     dunify t'@(VarTy v) t m
         | m == Relax = varBind v (dropQual t)
         | otherwise = varBind v t
+
+    dunify t AnyTy _ = return nullSubst
+
     dunify t t'@(VarTy v) m = varBind v (dropQual t)
 
     dunify (NamedTy c) (NamedTy c') _

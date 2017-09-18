@@ -87,12 +87,6 @@ orphan :: Ty
 orphan = NamedTy (Name "int /*<<< orphan*/ ")
 
 
--- helper
-isPtrTy :: Ty -> Bool
-isPtrTy (PtrTy _) = True
-isPtrTy _ = False
-
-
 -- | Whether a given type can be classified as arithmetic type.
 isArithTy :: Ty -> Bool
 isArithTy (NamedTy (Name n)) =
@@ -173,6 +167,33 @@ isArithTy (NamedTy (Name n)) =
   -- Non-arithmetic types
   isArithName _ = False
 isArithTy _ = False
+
+
+-- | Convenience for common stuff.
+constTy :: Ty -> Ty
+constTy t = QualTy t Const
+
+charPtr :: Ty
+charPtr = PtrTy char
+charConstPtr :: Ty
+charConstPtr = PtrTy (constTy char)
+
+voidPtr :: Ty
+voidPtr = PtrTy void
+voidConstPtr :: Ty
+voidConstPtr = PtrTy (constTy void)
+
+
+-- | Compiler internals.
+va_list :: Ty
+va_list = NamedTy (Name "va_list")
+
+
+-- helper
+isPtrTy :: Ty -> Bool
+isPtrTy (PtrTy _) = True
+isPtrTy _ = False
+
 
 
 

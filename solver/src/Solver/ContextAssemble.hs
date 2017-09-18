@@ -72,6 +72,7 @@ builtinValues l =
 stdTypes :: CLang -> Map Name (Ty, Bool)
 stdTypes l =
   fillTypes stdintTypes `Map.union` fillTypes stddefTypes
+                        `Map.union` fillTypes stdioTypes
                         `Map.union` fillTypes sysTypesTypes
                         `Map.union` fillTypes sysStatTypes
 
@@ -80,10 +81,11 @@ stdTypes l =
 stdValues :: CLang -> Map Name ValSym
 stdValues l =
   fillValues stdintValues `Map.union` fillValues stdlibValues
-                           `Map.union` fillValues stringValues
-                           `Map.union` fillValues sysStatValues
-                           `Map.union` fillValues sysTypesValues
-                           `Map.union` fillValues mathValues
+                          `Map.union` fillValues stdioValues
+                          `Map.union` fillValues stringValues
+                          `Map.union` fillValues sysStatValues
+                          `Map.union` fillValues sysTypesValues
+                          `Map.union` fillValues mathValues
 
 
 -- | Clean the map from builtint/stdlib values.

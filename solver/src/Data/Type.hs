@@ -45,8 +45,3 @@ data Field = Field { name :: Name, ty   :: Ty } deriving (Eq, Ord, Show)
 
 -- | Type qualifiers
 data Qual = Const | Volatile deriving (Eq, Ord, Show)
-
-
--- | Convenience
-constTy :: Ty -> Ty
-constTy t = QualTy t Const
