@@ -97,6 +97,7 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/ConstraintWriter.cpp
     ${PROJECT_SOURCE_DIR}/generator/ConstraintSyntax.h
     ${PROJECT_SOURCE_DIR}/generator/CSyntax.h
+    ${PROJECT_SOURCE_DIR}/generator/DeclarationInterceptor.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.cpp
     ${PROJECT_SOURCE_DIR}/generator/DomainLattice.h

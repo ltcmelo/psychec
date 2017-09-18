@@ -25,6 +25,7 @@
 #include "CompilerFacade.h"
 #include "ConstraintGenerator.h"
 #include "ConstraintWriter.h"
+#include "DeclarationInterceptor.h"
 #include "Debug.h"
 #include "DiagnosticCollector.h"
 #include "DomainLattice.h"
@@ -282,10 +283,12 @@ int Driver::generateConstraints()
     std::ostringstream oss;
     auto writer = factory_.makeConstraintWriter(oss);
     auto observer = factory_.makeObserver();
+    auto interceptor = factory_.makeInterceptor();
 
     ConstraintGenerator generator(tu(), writer.get());
     generator.employDomainLattice(&lattice);
     generator.installObserver(observer.get());
+    generator.installInterceptor(interceptor.get());
     if (opts_.flag_.handleGNUerrorFunc_)
         generator.addPrintfLike("error", 2);
     generator.generate(tuAst(), global_);

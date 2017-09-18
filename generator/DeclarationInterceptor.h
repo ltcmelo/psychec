@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2016-17 Leandro T. C. Melo (ltcmelo@gmail.com)
+ Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
 
  This library is free software; you can redistribute it and/or modify it under
  the terms of the GNU Lesser General Public License as published by the Free
@@ -16,30 +16,21 @@
  Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#ifndef PSYCHE_FUNCTIONWRITER_H__
-#define PSYCHE_FUNCTIONWRITER_H__
+#ifndef PSYCHE_DECLARATION_INTERCEPTOR_H__
+#define PSYCHE_DECLARATION_INTERCEPTOR_H__
 
 #include "Config.h"
-#include <memory>
-#include <ostream>
+#include "ASTfwd.h"
 
 namespace psyche {
 
-class ConstraintWriter;
-class DeclarationInterceptor;
-class Observer;
-
-/*!
- * \brief The Factory class
- */
-class PSYCHEC_API Factory
+class PSYCHEC_API DeclarationInterceptor
 {
 public:
-    virtual ~Factory() {}
+    virtual ~DeclarationInterceptor() = default;
 
-    virtual std::unique_ptr<ConstraintWriter> makeConstraintWriter(std::ostream& os) const;
-    virtual std::unique_ptr<Observer> makeObserver() const;
-    virtual std::unique_ptr<DeclarationInterceptor> makeInterceptor() const;
+    virtual bool intercept(CPlusPlus::SimpleDeclarationAST*) { return false; }
+    virtual bool intercept(CPlusPlus::FunctionDefinitionAST*) { return false; }
 };
 
 } // namespace psyche

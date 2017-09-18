@@ -28,6 +28,7 @@
 #include "BuiltinNames.h"
 #include "Control.h"
 #include "CoreTypes.h"
+#include "DeclarationInterceptor.h"
 #include "Debug.h"
 #include "Literals.h"
 #include "Observer.h"
@@ -81,6 +82,7 @@ ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
     , staticDecl_(false)
     , unnamedCount_(0)
     , observer_(nullptr)
+    , interceptor_(nullptr)
 {
     addPrintfLike("printf", 0);
     addPrintfLike("printf_s", 0);
@@ -124,6 +126,13 @@ void ConstraintGenerator::installObserver(Observer *observer)
 
     observer_ = observer;
     observer_->configure(translationUnit(), writer_);
+}
+
+void ConstraintGenerator::installInterceptor(DeclarationInterceptor *interceptor)
+{
+    PSYCHE_ASSERT(interceptor, return, "expected valid interceptor");
+
+    interceptor_ = interceptor;
 }
 
 void ConstraintGenerator::addPrintfLike(const std::string &funcName, size_t varArgPos)
@@ -185,6 +194,9 @@ void ConstraintGenerator::visitDeclaration(DeclarationAST *ast)
 
 bool ConstraintGenerator::visit(FunctionDefinitionAST *ast)
 {
+    if (interceptor_->intercept(ast))
+        return false;
+
     DEBUG_VISIT(FunctionDefinitionAST);
     OBSERVE(FunctionDefinitionAST);
 
@@ -228,9 +240,10 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
     if (func->storage() == Symbol::Static)
         writer_->writeStatic(funcName);
 
-    // The function name and parameter's type names are visible in the outer scope, but
-    // parameters themselves are visible within the function body only.
+    // The function name and parameter's type names are visible in the outer scope, but parameter
+    // themselves are visible within the function body only.
     writer_->openScope();
+    observer_->withinFunction();
 
     for (auto i = 0u; i < func->argumentCount(); i++) {
         std::string param;
@@ -256,6 +269,7 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
         popType();
     }
 
+    observer_->outsideFunction();
     writer_->closeScope();
 
     // If no valued return was detected, this alpha will be orphanized.
@@ -275,6 +289,9 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
 
 bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
 {
+    if (interceptor_->intercept(ast))
+        return false;
+
     DEBUG_VISIT(SimpleDeclarationAST);
     OBSERVE(SimpleDeclarationAST);
 

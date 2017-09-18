@@ -109,6 +109,10 @@ public:
     virtual void leave(CPlusPlus::ReturnStatementAST*) {}
     virtual void leave(CPlusPlus::SwitchStatementAST*) {}
     virtual void leave(CPlusPlus::WhileStatementAST*) {}
+
+    // Miscellanea
+    virtual void withinFunction() {}
+    virtual void outsideFunction() {}
 };
 
 template <class AstT>

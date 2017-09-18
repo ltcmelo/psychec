@@ -16,8 +16,8 @@
  Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#ifndef PSYCHE_CONSTRAINTGENERATOR_H__
-#define PSYCHE_CONSTRAINTGENERATOR_H__
+#ifndef PSYCHE_CONSTRAINT_GENERATOR_H__
+#define PSYCHE_CONSTRAINT_GENERATOR_H__
 
 #include "Config.h"
 #include "ASTVisitor.h"
@@ -34,6 +34,7 @@
 namespace psyche {
 
 class ConstraintWriter;
+class DeclarationInterceptor;
 class Observer;
 
 /*!
@@ -52,18 +53,18 @@ public:
 
     void installObserver(Observer* observer);
 
+    void installInterceptor(DeclarationInterceptor* interceptor);
+
     /*!
      * \brief addPrintfLike
      * \param funcName
      * \param varArgPos
      *
-     * Add a printf-like function such that a format-specifier argument can be used to
-     * type the remaining ones.
+     * Add a printf-like function, one that accepts a format-specifier argument that can be used
+     * to type other arguments.
      *
-     * Variadic functions in general don't need to be added through this method, they
-     * are automatically detected by our unificaiton algorithm. This method should be
-     * used only as means of improving precision, since specifiers like `%d' or `%f'
-     * will enforce a particular type.
+     * Variadic functions in general don't need to be added through this method, they are detected
+     * automatically by our unificaiton algorithm.
      */
     void addPrintfLike(const std::string& funcName, size_t varArgPos);
 
@@ -233,8 +234,11 @@ private:
      */
     std::unordered_map<std::string, size_t> printfs_;
 
-    //! Visitor observer.
+    //! Generation's observer.
     Observer* observer_;
+
+    //! Generation's interceptor.
+    DeclarationInterceptor* interceptor_;
 };
 
 } // namespace psyche
