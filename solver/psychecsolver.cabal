@@ -18,13 +18,17 @@ library
                      , Data.BuiltIn
                      , Data.Constraints
                      , Data.CLang
-                     , Data.CLib
+                     , Data.IntTypes
+                     , Data.SetJmp
+                     , Data.Signal
                      , Data.StdDef
                      , Data.StdInt
                      , Data.StdLib
                      , Data.StdIO
                      , Data.String
                      , Data.Math
+                     , Data.WChar
+                     , Data.WCType
                      , Solver.ConstraintSolver
                      , Solver.SolverMonad
                      , Solver.Unification

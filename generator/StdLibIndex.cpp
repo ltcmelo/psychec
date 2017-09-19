@@ -56,14 +56,54 @@ const StdLibIndex::Index StdLibIndex::c89idx_
                 { "toupper", SymbolKind::Value }
             }
         },
+        { "setjmp.h",
+            {
+                { "setjmp", SymbolKind::Value },
+                { "longjmp", SymbolKind::Value },
+                { "jmp_buf", SymbolKind::Type }
+            }
+        },
+        { "signal.h",
+            {
+                { "signal", SymbolKind::Value },
+                { "raise", SymbolKind::Value },
+                { "sig_atomic_t", SymbolKind::Type },
+                { "SIG_DFL", SymbolKind::Value },
+                { "SIG_IGN", SymbolKind::Value },
+                { "SIG_ERR", SymbolKind::Value },
+                { "SIGTERM", SymbolKind::Value },
+                { "SIGSEGV", SymbolKind::Value },
+                { "SIGINT", SymbolKind::Value },
+                { "SIGILL", SymbolKind::Value },
+                { "SIGABRT", SymbolKind::Value },
+                { "SIGFPE", SymbolKind::Value },
+            }
+        },
         { "stdlib.h",
             {
+                { "abort", SymbolKind::Value },
+                { "exit", SymbolKind::Value },
+                { "atexit", SymbolKind::Value },
+                { "EXIT_SUCCESS", SymbolKind::Value },
+                { "EXIT_FAILURE", SymbolKind::Value },
+                { "system", SymbolKind::Value },
+                { "getenv", SymbolKind::Value },
+                { "malloc", SymbolKind::Value },
+                { "calloc", SymbolKind::Value },
+                { "realloc", SymbolKind::Value },
+                { "free", SymbolKind::Value },
                 { "atof", SymbolKind::Value },
                 { "atoi", SymbolKind::Value },
                 { "atol", SymbolKind::Value },
                 { "strtol", SymbolKind::Value },
                 { "strtoul", SymbolKind::Value },
-                { "strtod", SymbolKind::Value }
+                { "strtod", SymbolKind::Value },
+                { "strtold", SymbolKind::Value },
+                { "mblen", SymbolKind::Value },
+                { "mbtowc", SymbolKind::Value },
+                { "wctomb", SymbolKind::Value },
+                { "mbstowcs", SymbolKind::Value },
+                { "wcstombs", SymbolKind::Value },
             }
         },
         { "string.h",
@@ -155,6 +195,36 @@ const StdLibIndex::Index StdLibIndex::c89idx_
                 { "TMP_MAX", SymbolKind::Value },
                 { "L_tmpnam", SymbolKind::Value }
             }
+        },
+        { "wchar.h",
+            {
+                { "wchar_t", SymbolKind::Value },
+                { "mbstate_t", SymbolKind::Value },
+            }
+        },
+        { "wctype.h",
+            {
+                { "iswalnum", SymbolKind::Value },
+                { "iswalpha", SymbolKind::Value },
+                { "iswlower", SymbolKind::Value },
+                { "iswupper", SymbolKind::Value },
+                { "iswdigit", SymbolKind::Value },
+                { "iswxdigit", SymbolKind::Value },
+                { "iswcntrl", SymbolKind::Value },
+                { "iswgraph", SymbolKind::Value },
+                { "iswspace", SymbolKind::Value },
+                { "iswblank", SymbolKind::Value },
+                { "iswprint", SymbolKind::Value },
+                { "iswpunct", SymbolKind::Value },
+                { "iswctype", SymbolKind::Value },
+                { "wctype_t", SymbolKind::Type },
+                { "wctrans_t", SymbolKind::Type },
+                { "wint_t", SymbolKind::Type },
+                { "towlower", SymbolKind::Value },
+                { "towupper", SymbolKind::Value },
+                { "towctrans", SymbolKind::Value },
+                { "wctrans", SymbolKind::Value }
+            }
         }
     };
 
@@ -168,11 +238,20 @@ const StdLibIndex::Index StdLibIndex::c99idx_
         },
         { "stdlib.h",
             {
+                { "_Exit", SymbolKind::Value },
                 { "atoll", SymbolKind::Value },
                 { "strtoll", SymbolKind::Value },
                 { "strtoull", SymbolKind::Value },
                 { "strtof", SymbolKind::Value },
-                { "strtold", SymbolKind::Value }
+                { "strtold", SymbolKind::Value },
+                { "strtoimax", SymbolKind::Value },
+                { "strtoumax", SymbolKind::Value }
+            }
+        },
+        { "inttypes.h",
+            {
+                { "strtoimax", SymbolKind::Value },
+                { "strtoumax", SymbolKind::Value }
             }
         }
     };
@@ -197,6 +276,17 @@ const StdLibIndex::Index StdLibIndex::c11idx_
                 { "strcat_s", SymbolKind::Value },
                 { "strncat_s", SymbolKind::Value },
                 { "strnlen_s", SymbolKind::Value }
+            }
+        },
+        { "stdlib.h",
+            {
+                { "quick_exit", SymbolKind::Value },
+                { "at_quick_exit", SymbolKind::Value },
+                { "getenv_s", SymbolKind::Value },
+                { "aligned_alloc", SymbolKind::Value },
+                { "wctomb_s", SymbolKind::Value },
+                { "mbstowcs_s", SymbolKind::Value },
+                { "wcstombs_s", SymbolKind::Value },
             }
         }
     };

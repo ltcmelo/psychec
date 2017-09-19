@@ -24,16 +24,20 @@ module Solver.ContextAssemble where
 
 import Data.BuiltIn
 import Data.CLang
-import Data.CLib
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Type
+import Data.IntTypes
+import Data.SetJmp
+import Data.Signal
 import Data.StdDef
 import Data.StdInt
 import Data.StdLib
 import Data.StdIO
 import Data.String
 import Data.Math
+import Data.WChar
+import Data.WCType
 
 import Utils.Pretty (nameOf)
 
@@ -73,6 +77,11 @@ stdTypes :: CLang -> Map Name (Ty, Bool)
 stdTypes l =
   fillTypes stdintTypes `Map.union` fillTypes stddefTypes
                         `Map.union` fillTypes stdioTypes
+                        `Map.union` fillTypes stdlibTypes
+                        `Map.union` fillTypes setjmpTypes
+                        `Map.union` fillTypes signalTypes
+                        `Map.union` fillTypes wctypeTypes
+                        `Map.union` fillTypes wcharTypes
                         `Map.union` fillTypes sysTypesTypes
                         `Map.union` fillTypes sysStatTypes
 
@@ -80,9 +89,14 @@ stdTypes l =
 -- | C standard library's values by language version.
 stdValues :: CLang -> Map Name ValSym
 stdValues l =
-  fillValues stdintValues `Map.union` fillValues stdlibValues
-                          `Map.union` fillValues stdioValues
+  fillValues stdintValues `Map.union` fillValues stdioValues
+                          `Map.union` fillValues stdlibValues
                           `Map.union` fillValues stringValues
+                          `Map.union` fillValues setjmpValues
+                          `Map.union` fillValues inttypesValues
+                          `Map.union` fillValues signalValues
+                          `Map.union` fillValues wctypeValues
+                          `Map.union` fillValues wcharValues
                           `Map.union` fillValues sysStatValues
                           `Map.union` fillValues sysTypesValues
                           `Map.union` fillValues mathValues

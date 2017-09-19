@@ -22,23 +22,54 @@ module Data.StdLib where
 
 import Data.Type
 import Data.BuiltIn
+import Data.WChar
+
+
+-- | Types
+sig_atomic_t :: Ty
+sig_atomic_t = NamedTy (Name "sig_atomic_t")
+
+
+-- | Collection of types
+stdlibTypes :: [Ty]
+stdlibTypes = [sig_atomic_t]
+
 
 -- | Collection of values.
 stdlibValues :: [(Name, Ty)]
-stdlibValues
-  = [ (Name "malloc", FunTy (PtrTy void) [int])
-    , (Name "calloc", FunTy (PtrTy void) [int, int])
-    , (Name "realloc", FunTy (PtrTy void) [(PtrTy void), int])
-    , (Name "free", FunTy void [(PtrTy void)])
-    , (Name "abort", FunTy void [])
-    , (Name "exit", FunTy void [int])
-    , (Name "atexit", FunTy void [(FunTy void [])])
-    , (Name "atoi", FunTy int [PtrTy (constTy char)])
-    , (Name "atof", FunTy double [PtrTy (constTy char)])
-    , (Name "atol", FunTy long [PtrTy (constTy char)])
-    , (Name "atoll", FunTy longLong [PtrTy (constTy char)])
-    , (Name "rand", FunTy int [])
-    , (Name "RAND_MAX", int)
-    , (Name "EXIT_SUCCESS", int)
-    , (Name "EXIT_FAILURE", int)
-    ]
+stdlibValues =
+  [ (Name "abort", FunTy void [])
+  , (Name "exit", FunTy void [int])
+  , (Name "quick_exit", FunTy void [int])
+  , (Name "_Exit", FunTy void [int])
+  , (Name "atexit", FunTy void [PtrTy (FunTy void [])])
+  , (Name "at_quick_exit", FunTy void [PtrTy (FunTy void [])])
+  , (Name "EXIT_SUCCESS", int)
+  , (Name "EXIT_FAILURE", int)
+  , (Name "system", FunTy int [charConstPtr])
+  , (Name "getenv", FunTy charPtr [charConstPtr])
+  , (Name "signal", FunTy (PtrTy (FunTy void [int])) [int, (PtrTy (FunTy void [int]))])
+  , (Name "malloc", FunTy (PtrTy void) [size_t])
+  , (Name "calloc", FunTy (PtrTy void) [size_t, size_t])
+  , (Name "realloc", FunTy (PtrTy void) [(PtrTy void), size_t])
+  , (Name "free", FunTy void [(PtrTy void)])
+  , (Name "atof", FunTy double [PtrTy (constTy char)])
+  , (Name "atoi", FunTy int [PtrTy (constTy char)])
+  , (Name "atol", FunTy long [PtrTy (constTy char)])
+  , (Name "atoll", FunTy longLong [PtrTy (constTy char)])
+  , (Name "strtol", FunTy long [charConstPtr, PtrTy charPtr, int])
+  , (Name "strtoll", FunTy long [charConstPtr, PtrTy charPtr, int])
+  , (Name "strtoul", FunTy unsignedLong [charConstPtr, PtrTy charPtr, int])
+  , (Name "strtoull", FunTy unsignedLongLong [charConstPtr, PtrTy charPtr, int])
+  , (Name "strtof", FunTy float [charConstPtr, PtrTy charPtr])
+  , (Name "strtod", FunTy double [charConstPtr, PtrTy charPtr])
+  , (Name "strtold", FunTy longDouble [charConstPtr, PtrTy charPtr])
+  , (Name "mblen", FunTy int [charConstPtr, size_t])
+  , (Name "mbtowc", FunTy wchar_t [charConstPtr])
+  , (Name "wctomb_s", FunTy int [charPtr, wchar_t])
+  , (Name "mbstowcs", FunTy size_t [wchar_t, charConstPtr, size_t])
+  , (Name "wcstombs", FunTy size_t [charPtr, PtrTy (constTy wchar_t), size_t])
+  , (Name "rand", FunTy int [])
+  , (Name "srand", FunTy void [unsignedInt])
+  , (Name "RAND_MAX", int)
+  ]

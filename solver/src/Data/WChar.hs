@@ -15,5 +15,27 @@
 -- 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 
 
-module Data.CLib where
+-- | Module corresponding to header <wchar.h>
 
+
+module Data.WChar where
+
+import Data.Type
+import Data.BuiltIn
+
+
+-- | Types
+wchar_t :: Ty
+wchar_t = NamedTy (Name "wchar_t")
+mbstate_t :: Ty
+mbstate_t = NamedTy (Name "mbstate_t")
+
+
+-- | Collection of types
+wcharTypes :: [Ty]
+wcharTypes = [wchar_t]
+
+
+-- | Collection of values.
+wcharValues :: [(Name, Ty)]
+wcharValues = []

@@ -28,7 +28,6 @@ import Data.Maybe (isJust, fromJust)
 import Data.Constraints
 import Data.BuiltIn
 import Data.CLang
-import Data.CLib
 import Data.Type
 
 import Control.Monad hiding (void)
