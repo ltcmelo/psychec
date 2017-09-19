@@ -87,7 +87,6 @@ private:
     CPlusPlus::DiagnosticCollector collector_;
     CPlusPlus::Control control_;
     std::unique_ptr<CPlusPlus::StringLiteral> name_;
-    std::unique_ptr<CPlusPlus::TranslationUnit> unit_;
 };
 
 } // namespace psyche

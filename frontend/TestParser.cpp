@@ -29,14 +29,8 @@ using namespace CPlusPlus;
 
 TestParser::TestParser()
     : name_(new StringLiteral("<test>", strlen("<test>")))
-    , unit_(new TranslationUnit(&control_, name_.get()))
 {
     control_.setDiagnosticCollector(&collector_);
-
-    Dialect dialect;
-    dialect.c99 = 1;
-    dialect.nullptrOnNULL = 1;
-    unit_->setDialect(dialect);
 }
 
 TestParser::~TestParser()
@@ -54,20 +48,30 @@ void TestParser::reset()
 
 void TestParser::testSource(const std::string& source)
 {
-    unit_->setSource(source.c_str(), source.length());
-    auto ret = unit_->parse();
+    // TODO: Get through the driver, to ensure the default dialect is the same.
+    Dialect dialect;
+    dialect.c99 = 1;
+    dialect.gnuKeywordExt = 1;
+    dialect.nullptrOnNULL = 1;
+
+    auto unit = std::make_unique<TranslationUnit>(&control_, name_.get());
+    unit->setDialect(dialect);
+    unit->setSource(source.c_str(), source.length());
+    auto ret = unit->parse();
+
     PSYCHE_EXPECT_TRUE(ret);
-    PSYCHE_EXPECT_TRUE(unit_->ast());
-    PSYCHE_EXPECT_TRUE(unit_->ast()->asTranslationUnit());
+    PSYCHE_EXPECT_TRUE(unit->ast());
+    PSYCHE_EXPECT_TRUE(unit->ast()->asTranslationUnit());
     PSYCHE_EXPECT_INT_EQ(0, collector_.seenBlockingIssue());
 }
 
 /*
  * Preprocessed output generated with the following options:
- *  -D restrict=
+ *
  *  -D _Nonnull=
  *  -D _Nullable=
  *  -U __BLOCKS__  (disable clang's block language)
+ *
  */
 
 void TestParser::testCase1()
@@ -96,22 +100,26 @@ void TestParser::testCase4()
 
 void TestParser::testCase5()
 {
-
+    const std::string& source = readFile("test-data/stddef_clang-pp_osx.i");
+    testSource(source);
 }
 
 void TestParser::testCase6()
 {
-
+    const std::string& source = readFile("test-data/stddef_gcc-pp_osx.i");
+    testSource(source);
 }
 
 void TestParser::testCase7()
 {
-
+    const std::string& source = readFile("test-data/stdint_clang-pp_osx.i");
+    testSource(source);
 }
 
 void TestParser::testCase8()
 {
-
+    const std::string& source = readFile("test-data/stdint_gcc-pp_osx.i");
+    testSource(source);
 }
 
 void TestParser::testCase9()

@@ -270,28 +270,24 @@ enum Kind {
     T_NOT_EQ = T_EXCLAIM_EQUAL,
     T_XOR_EQ = T_CARET_EQUAL,
 
+    // Extensions
     T___ASM = T_ASM,
     T___ASM__ = T_ASM,
-
     T_TYPEOF = T___TYPEOF__,
     T___TYPEOF = T___TYPEOF__,
-
     T___DECLTYPE = T_DECLTYPE,
-
     T___INLINE = T_INLINE,
     T___INLINE__ = T_INLINE,
-
     T___CONST = T_CONST,
     T___CONST__ = T_CONST,
-
     T___VOLATILE = T_VOLATILE,
     T___VOLATILE__ = T_VOLATILE,
-
     T___ATTRIBUTE = T___ATTRIBUTE__,
     T___ALIGNOF__ = T_ALIGNOF,
-
     T___RESTRICT = T_RESTRICT,
     T___RESTRICT__ = T_RESTRICT,
+    T___SIGNED = T_SIGNED,
+    T___SIGNED__ = T_SIGNED,
 
     T_LAST_TOKEN
 };

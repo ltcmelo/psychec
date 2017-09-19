@@ -36,7 +36,7 @@ struct Dialect
         unsigned int flags;
         struct
         {
-            // C++ (default)
+            // C++
             unsigned int cpp11 : 1;
             unsigned int cpp14 : 1;
 
@@ -44,6 +44,9 @@ struct Dialect
             unsigned int c89 : 1;
             unsigned int c99 : 1;
             unsigned int c11 : 1;
+
+            // GNU
+            unsigned int gnuKeywordExt : 1;
 
             // Objective-C
             unsigned int objC : 1;
@@ -53,7 +56,7 @@ struct Dialect
             unsigned int qtMocRun : 1;
             unsigned int qtKeywords : 1; // If Qt is used but QT_NO_KEYWORDS defined.
 
-            // Miscellaneous
+            // Miscellanea
             unsigned int nullptrOnNULL : 1;
         };
     };
