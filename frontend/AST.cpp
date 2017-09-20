@@ -1141,6 +1141,9 @@ unsigned EnumeratorAST::firstToken() const
 {
     if (identifier_token)
         return identifier_token;
+    if (attribute_list)
+        if (unsigned candidate = attribute_list->firstToken())
+            return candidate;
     if (equal_token)
         return equal_token;
     if (expression)
@@ -1157,6 +1160,9 @@ unsigned EnumeratorAST::lastToken() const
             return candidate;
     if (equal_token)
         return equal_token + 1;
+    if (attribute_list)
+        if (unsigned candidate = attribute_list->firstToken())
+            return candidate;
     if (identifier_token)
         return identifier_token + 1;
     return 1;

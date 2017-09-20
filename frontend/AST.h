@@ -1740,12 +1740,14 @@ class CPLUSPLUS_EXPORT EnumeratorAST: public AST
 {
 public:
     unsigned identifier_token;
+    SpecifierListAST *attribute_list;
     unsigned equal_token;
     ExpressionAST *expression;
 
 public:
     EnumeratorAST()
         : identifier_token(0)
+        , attribute_list(0)
         , equal_token(0)
         , expression(0)
     {}

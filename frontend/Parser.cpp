@@ -2641,6 +2641,14 @@ bool Parser::parseEnumerator(EnumeratorListAST *&node)
         EnumeratorAST *ast = new (_pool) EnumeratorAST;
         ast->identifier_token = consumeToken();
 
+        if (LA() == T___ATTRIBUTE__) {
+            SpecifierListAST** attr = &ast->attribute_list;
+            while (parseGnuAttributeSpecifier(*attr))
+                attr = &(*attr)->next;
+            if (!_language.ext_EnumeratorAttributes)
+                    warning((*attr)->value->firstToken(), "enumerator-attributes are an extension");
+        }
+
         if (LA() == T_EQUAL) {
             ast->equal_token = consumeToken();
             parseConstantExpression(ast->expression);

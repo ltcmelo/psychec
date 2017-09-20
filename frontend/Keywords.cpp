@@ -834,7 +834,7 @@ static inline int classify8(const char *s, Dialect d)
           }
         }
       }
-      else if (d.gnuKeywordExt && s[2] == 's') {
+      else if (d.ext_KeywordsGNU && s[2] == 's') {
         if (s[3] == 'i') {
           if (s[4] == 'g') {
             if (s[5] == 'n') {
@@ -1283,7 +1283,7 @@ static inline int classify10(const char *s, Dialect d)
           }
         }
       }
-      else if (d.gnuKeywordExt && s[2] == 's') {
+      else if (d.ext_KeywordsGNU && s[2] == 's') {
         if (s[3] == 'i') {
           if (s[4] == 'g') {
             if (s[5] == 'n') {

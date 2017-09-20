@@ -45,9 +45,6 @@ struct Dialect
             unsigned int c99 : 1;
             unsigned int c11 : 1;
 
-            // GNU
-            unsigned int gnuKeywordExt : 1;
-
             // Objective-C
             unsigned int objC : 1;
 
@@ -55,6 +52,12 @@ struct Dialect
             unsigned int qt : 1;
             unsigned int qtMocRun : 1;
             unsigned int qtKeywords : 1; // If Qt is used but QT_NO_KEYWORDS defined.
+
+            // Extensions
+            // - https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html#Keywords
+            unsigned int ext_KeywordsGNU : 1;
+            // - http://clang.llvm.org/docs/LanguageExtensions.html#attributes-on-enumerators
+            unsigned int ext_EnumeratorAttributes : 1;
 
             // Miscellanea
             unsigned int nullptrOnNULL : 1;

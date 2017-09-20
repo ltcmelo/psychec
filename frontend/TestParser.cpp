@@ -51,7 +51,8 @@ void TestParser::testSource(const std::string& source)
     // TODO: Get through the driver, to ensure the default dialect is the same.
     Dialect dialect;
     dialect.c99 = 1;
-    dialect.gnuKeywordExt = 1;
+    dialect.ext_KeywordsGNU = 1;
+    dialect.ext_EnumeratorAttributes = 1;
     dialect.nullptrOnNULL = 1;
 
     auto unit = std::make_unique<TranslationUnit>(&control_, name_.get());
@@ -124,23 +125,39 @@ void TestParser::testCase8()
 
 void TestParser::testCase9()
 {
-//    const std::string& source = readFile("test-data/wchar_clang-pp_osx.i");
-//    testSource(source);
+    const std::string& source = readFile("test-data/wchar_gcc-pp_osx.i");
+    testSource(source);
 }
 
 void TestParser::testCase10()
 {
+    std::string s = R"(
+enum Enum
+{
+    A __attribute__((deprecated)),
+    B __attribute__((deprecated)) = 9,
+    C
+};
 
+int f()
+{
+    return A;
+}
+     )";
+
+    testSource(s);
 }
 
 void TestParser::testCase11()
 {
-
+    const std::string& source = readFile("test-data/wchar_gcc-pp_osx.i");
+    testSource(source);
 }
 
 void TestParser::testCase12()
 {
-
+    const std::string& source = readFile("test-data/wchar_clang-pp_osx.i");
+    testSource(source);
 }
 
 void TestParser::testCase13()
