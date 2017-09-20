@@ -204,7 +204,7 @@ Dialect Driver::specifiedDialect(const ExecutionOptions&)
 {
     Dialect dialect;
     dialect.c99 = 1;
-    dialect.gnuKeywordExt = 0;
+    dialect.gnuKeywordExt = 1;
     dialect.nullptrOnNULL = 1;
 
     return dialect;
