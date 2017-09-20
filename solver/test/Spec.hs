@@ -266,6 +266,8 @@ tests = testGroup "Unit tests"
   , doTest "T220.c" -- Stricter elaborated type spec handling.
   , doTest "T221.c" -- Respect arithmetic suffixes.
   , doTestWithLib "T222.c" -- Unify variadic predefined function.
+  , doTest "T223.c" -- Standalone enumerator use in expression.
+  , doTest "T224.c" -- Enforce const-expr on enumerator.
   ]
 
 

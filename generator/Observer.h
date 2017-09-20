@@ -32,13 +32,19 @@ public:
 
     virtual void configure(CPlusPlus::TranslationUnit* unit, ConstraintWriter* writer) {}
 
-    // Unit
+    // Miscellanea
     virtual void enter(CPlusPlus::TranslationUnitAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::EnumeratorAST*, CPlusPlus::Scope*) {}
+
     virtual void leave(CPlusPlus::TranslationUnitAST*) {}
+    virtual void leave(CPlusPlus::EnumeratorAST*) {}
 
     // Declarations
     virtual void enter(CPlusPlus::SimpleDeclarationAST*, CPlusPlus::Scope*) {}
     virtual void enter(CPlusPlus::FunctionDefinitionAST*, CPlusPlus::Scope*) {}
+
+    virtual void leave(CPlusPlus::SimpleDeclarationAST*) {}
+    virtual void leave(CPlusPlus::FunctionDefinitionAST*) {}
 
     // Expressions
     virtual void enter(CPlusPlus::ArrayAccessAST*, CPlusPlus::Scope*) {}
@@ -57,27 +63,6 @@ public:
     virtual void enter(CPlusPlus::BracedInitializerAST*, CPlusPlus::Scope*) {}
     virtual void enter(CPlusPlus::PostIncrDecrAST*, CPlusPlus::Scope*) {}
 
-    // Specifiers
-    virtual void enter(CPlusPlus::EnumSpecifierAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::ClassSpecifierAST*, CPlusPlus::Scope*) {}
-
-    // Statements
-    virtual void enter(CPlusPlus::CaseStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::CompoundStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::DeclarationStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::DoStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::ForStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::ExpressionStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::IfStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::ReturnStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::SwitchStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::WhileStatementAST*, CPlusPlus::Scope*) {}
-
-    // Declarations
-    virtual void leave(CPlusPlus::SimpleDeclarationAST*) {}
-    virtual void leave(CPlusPlus::FunctionDefinitionAST*) {}
-
-    // Expressions
     virtual void leave(CPlusPlus::ArrayAccessAST*) {}
     virtual void leave(CPlusPlus::BinaryExpressionAST*) {}
     virtual void leave(CPlusPlus::CallAST*) {}
@@ -95,10 +80,24 @@ public:
     virtual void leave(CPlusPlus::PostIncrDecrAST*) {}
 
     // Specifiers
+    virtual void enter(CPlusPlus::EnumSpecifierAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::ClassSpecifierAST*, CPlusPlus::Scope*) {}
+
     virtual void leave(CPlusPlus::EnumSpecifierAST*) {}
     virtual void leave(CPlusPlus::ClassSpecifierAST*) {}
 
     // Statements
+    virtual void enter(CPlusPlus::CaseStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::CompoundStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::DeclarationStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::DoStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::ForStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::ExpressionStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::IfStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::ReturnStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::SwitchStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(CPlusPlus::WhileStatementAST*, CPlusPlus::Scope*) {}
+
     virtual void leave(CPlusPlus::CaseStatementAST*) {}
     virtual void leave(CPlusPlus::CompoundStatementAST*) {}
     virtual void leave(CPlusPlus::DeclarationStatementAST*) {}

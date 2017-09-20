@@ -123,6 +123,9 @@ private:
     bool visit(CPlusPlus::ExpressionStatementAST *ast) override;
     bool visit(CPlusPlus::ReturnStatementAST *ast) override;
 
+    // Miscellanea
+    bool visit(CPlusPlus::EnumeratorAST *ast) override;
+
     // Symbol visits.
     void visitSymbol(CPlusPlus::Function* func, CPlusPlus::StatementAST* body);
 

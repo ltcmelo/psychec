@@ -1238,7 +1238,7 @@ bool ConstraintGenerator::visit(EnumSpecifierAST *ast)
 
     Scope *prevScope = switchScope(ast->symbol);
     for (EnumeratorListAST *it = ast->enumerator_list; it; it = it->next)
-        visitExpression(it->value->expression);
+        accept(it->value);
     switchScope(prevScope);
 
     return false;
@@ -1392,6 +1392,22 @@ bool ConstraintGenerator::visit(ReturnStatementAST *ast)
     return false;
 }
 
+bool ConstraintGenerator::visit(EnumeratorAST *ast)
+{
+    DEBUG_VISIT(EnumeratorAST);
+    OBSERVE(EnumeratorAST);
+
+    const Identifier* ident = identifier(ast->identifier_token);
+    writer_->writeVarDecl(ident->chars(), kIntTy);
+    collectExpression(kIntTy, ast->expression);
+
+    // TODO: Extend...
+    if (ast->expression->asIdExpression())
+        writer_->writeConstantExpression(extractId(ast->expression->asIdExpression()->name->name));
+
+    return false;
+}
+
 bool ConstraintGenerator::visit(SwitchStatementAST *ast)
 {
     DEBUG_VISIT(SwitchStatementAST);
@@ -1409,6 +1425,8 @@ bool ConstraintGenerator::visit(CaseStatementAST *ast)
     OBSERVE(CaseStatementAST);
 
     collectExpression(kDefaultIntTy, ast->expression);
+
+    // TODO: Extend...
     if (ast->expression->asIdExpression())
         writer_->writeConstantExpression(extractId(ast->expression->asIdExpression()->name->name));
 

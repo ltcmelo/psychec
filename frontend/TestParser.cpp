@@ -124,7 +124,8 @@ void TestParser::testCase8()
 
 void TestParser::testCase9()
 {
-
+//    const std::string& source = readFile("test-data/wchar_clang-pp_osx.i");
+//    testSource(source);
 }
 
 void TestParser::testCase10()
