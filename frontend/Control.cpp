@@ -233,6 +233,7 @@ public:
         , objcNonatomicId(0)
         , cpp11Override(0)
         , cpp11Final(0)
+        , attrAvailability(0)
         , processor(0)
     {}
 
@@ -531,6 +532,7 @@ public:
 
     const Identifier *deprecatedId;
     const Identifier *unavailableId;
+
     // ObjC context keywords:
     const Identifier *objcGetterId;
     const Identifier *objcSetterId;
@@ -540,14 +542,22 @@ public:
     const Identifier *objcRetainId;
     const Identifier *objcCopyId;
     const Identifier *objcNonatomicId;
+
+    // C++ contextual
     const Identifier *cpp11Override;
     const Identifier *cpp11Final;
+
+    // Distinguished attributes
+    const Identifier* attrAvailability;
+
     TopLevelDeclarationProcessor *processor;
 };
 
 Control::Control()
     : d(new Data(this))
-{}
+{
+    populateBuiltins();
+}
 
 Control::~Control()
 { delete d; }
@@ -575,6 +585,8 @@ void Control::populateBuiltins()
 
     d->cpp11Override = identifier("override");
     d->cpp11Final = identifier("final");
+
+    d->attrAvailability = identifier("availability");
 }
 
 TranslationUnit *Control::translationUnit() const
@@ -831,6 +843,9 @@ const Identifier *Control::cpp11Override() const
 
 const Identifier *Control::cpp11Final() const
 { return d->cpp11Final; }
+
+const Identifier *Control::attrAvailability() const
+{ return d->attrAvailability; }
 
 Symbol **Control::firstSymbol() const
 {

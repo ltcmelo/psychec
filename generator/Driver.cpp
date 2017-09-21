@@ -206,6 +206,7 @@ Dialect Driver::specifiedDialect(const ExecutionOptions&)
     dialect.c99 = 1;
     dialect.ext_KeywordsGNU = 1;
     dialect.ext_EnumeratorAttributes = 1;
+    dialect.ext_AvailabilityAttribute = 1;
     dialect.nullptrOnNULL = 1;
 
     return dialect;

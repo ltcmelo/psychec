@@ -3013,6 +3013,62 @@ bool Parser::parseExpressionList(ExpressionListAST *&node)
     return result;
 }
 
+/*
+ * GNU attributes are normally parsed as an expression list. However, the clang's availability
+ * attribute doesn't fit into this rule: Clauses such as `introduced', `obsolete', etc. come
+ * with a `version' specifier. This version information can be a tuple of three separated
+ * integers, which doesn't make for an expression (had it been two integers only, handling it
+ * as a double would work). Example:
+ *
+ *   __attribute__((availability(macosx,introduced=10.12.1))) void f();
+ *
+ * Reference: https://clang.llvm.org/docs/AttributeReference.html#availability
+ */
+bool Parser::parseAvailabilityAttribute(ExpressionListAST *&node)
+{
+    DEBUG_THIS_RULE();
+
+    unsigned start = cursor();
+    ExpressionListAST **expression_list_ptr = &node;
+    ExpressionAST* name = nullptr;
+    if (parsePrimaryExpression(name)) {
+        *expression_list_ptr = new (_pool) ExpressionListAST;
+        (*expression_list_ptr)->value = name;
+        expression_list_ptr = &(*expression_list_ptr)->next;
+
+        consumeToken(); // Platform-name separator.
+
+        ExpressionAST* clause = nullptr;
+        while (parsePrimaryExpression(clause)) {
+            if (LA() == T_EQUAL) {
+                BinaryExpressionAST *bin_expr = new (_pool) BinaryExpressionAST;
+                bin_expr->left_expression = clause;
+                bin_expr->binary_op_token = consumeToken();
+                if (!parseStringLiteral(bin_expr->right_expression)) {
+                    parseNumericLiteral(bin_expr->right_expression);
+                    // Discard the remaining of a possible 3-tuple version number.
+                    ExpressionAST* dummy;
+                    parseNumericLiteral(dummy);
+                }
+                clause = bin_expr;
+            }
+
+            *expression_list_ptr = new (_pool) ExpressionListAST;
+            (*expression_list_ptr)->value = clause;
+            expression_list_ptr = &(*expression_list_ptr)->next;
+
+            if (LA() == T_COMMA)
+                consumeToken();
+        }
+    } else {
+        error(start, "expected platform-name");
+        rewind(start + 1);
+        skipUntilDeclaration();
+    }
+
+    return true;
+}
+
 bool Parser::parseBaseSpecifier(BaseSpecifierListAST *&node)
 {
     DEBUG_THIS_RULE();
@@ -4133,11 +4189,18 @@ bool Parser::parseGnuAttributeList(GnuAttributeListAST *&node)
             (*iter)->value = attr;
             iter = &(*iter)->next;
         } else if (LA() == T_IDENTIFIER) {
+            const Identifier* ident = _translationUnit->tokenAt(cursor()).identifier;
             GnuAttributeAST *attr = new (_pool) GnuAttributeAST;
             attr->identifier_token = consumeToken();
             if (LA() == T_LPAREN) {
                 attr->lparen_token = consumeToken();
-                parseExpressionList(attr->expression_list);
+                if (ident->equalTo(_control->attrAvailability())) {
+                    parseAvailabilityAttribute(attr->expression_list);
+                    if (!_language.ext_AvailabilityAttribute)
+                        warning(attr->identifier_token, "availability-attribute is an extension");
+                } else {
+                    parseExpressionList(attr->expression_list);
+                }
                 match(T_RPAREN, &attr->rparen_token);
             }
 

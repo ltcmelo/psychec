@@ -54,10 +54,9 @@ struct Dialect
             unsigned int qtKeywords : 1; // If Qt is used but QT_NO_KEYWORDS defined.
 
             // Extensions
-            // - https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html#Keywords
-            unsigned int ext_KeywordsGNU : 1;
-            // - http://clang.llvm.org/docs/LanguageExtensions.html#attributes-on-enumerators
-            unsigned int ext_EnumeratorAttributes : 1;
+            unsigned int ext_KeywordsGNU : 1; // https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html#Keywords
+            unsigned int ext_EnumeratorAttributes : 1; // http://clang.llvm.org/docs/LanguageExtensions.html#attributes-on-enumerators
+            unsigned int ext_AvailabilityAttribute : 1; // https://clang.llvm.org/docs/AttributeReference.html#availability
 
             // Miscellanea
             unsigned int nullptrOnNULL : 1;

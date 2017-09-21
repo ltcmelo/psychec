@@ -186,6 +186,7 @@ public:
 
     const Identifier *deprecatedId() const;
     const Identifier *unavailableId() const;
+
     // Objective-C specific context keywords.
     const Identifier *objcGetterId() const;
     const Identifier *objcSetterId() const;
@@ -195,9 +196,13 @@ public:
     const Identifier *objcRetainId() const;
     const Identifier *objcCopyId() const;
     const Identifier *objcNonatomicId() const;
-    // C++11 context keywords
+
+    // C++11 contextual keywords
     const Identifier *cpp11Override() const;
     const Identifier *cpp11Final() const;
+
+    // Distinguished attributes.
+    const Identifier* attrAvailability() const;
 
     const OperatorNameId *findOperatorNameId(OperatorNameId::Kind operatorId) const;
 

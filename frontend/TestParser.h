@@ -64,6 +64,11 @@ private:
     void testCase13();
     void testCase14();
     void testCase15();
+    void testCase16();
+    void testCase17();
+    void testCase18();
+    void testCase19();
+    void testCase20();
 
     std::vector<TestData> tests_
     {
@@ -81,7 +86,12 @@ private:
         PARSER_TEST(testCase12),
         PARSER_TEST(testCase13),
         PARSER_TEST(testCase14),
-        PARSER_TEST(testCase15)
+        PARSER_TEST(testCase15),
+        PARSER_TEST(testCase16),
+        PARSER_TEST(testCase17),
+        PARSER_TEST(testCase18),
+        PARSER_TEST(testCase19),
+        PARSER_TEST(testCase20)
     };
 
     CPlusPlus::DiagnosticCollector collector_;

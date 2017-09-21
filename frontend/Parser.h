@@ -256,6 +256,9 @@ public:
     bool parseDesignatedInitializer(ExpressionAST *&node);
     bool parseDesignator(DesignatorAST *&node);
 
+    // Distinguished attributes.
+    bool parseAvailabilityAttribute(ExpressionListAST *&node);
+
     bool skipUntil(int token);
     void skipUntilDeclaration();
     bool skipUntilStatement();

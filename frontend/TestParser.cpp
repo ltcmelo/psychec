@@ -53,6 +53,7 @@ void TestParser::testSource(const std::string& source)
     dialect.c99 = 1;
     dialect.ext_KeywordsGNU = 1;
     dialect.ext_EnumeratorAttributes = 1;
+    dialect.ext_AvailabilityAttribute = 1;
     dialect.nullptrOnNULL = 1;
 
     auto unit = std::make_unique<TranslationUnit>(&control_, name_.get());
@@ -124,13 +125,7 @@ void TestParser::testCase8()
 }
 
 void TestParser::testCase9()
-{
-    const std::string& source = readFile("test-data/wchar_gcc-pp_osx.i");
-    testSource(source);
-}
-
-void TestParser::testCase10()
-{
+{   
     std::string s = R"(
 enum Enum
 {
@@ -148,29 +143,59 @@ int f()
     testSource(s);
 }
 
-void TestParser::testCase11()
+void TestParser::testCase10()
 {
     const std::string& source = readFile("test-data/wchar_gcc-pp_osx.i");
     testSource(source);
 }
 
-void TestParser::testCase12()
+void TestParser::testCase11()
 {
     const std::string& source = readFile("test-data/wchar_clang-pp_osx.i");
     testSource(source);
 }
 
+void TestParser::testCase12()
+{
+    const std::string& source = readFile("test-data/wctype_gcc-pp_osx.i");
+    testSource(source);
+}
+
 void TestParser::testCase13()
 {
-
+    const std::string& source = readFile("test-data/wctype_clang-pp_osx.i");
+    testSource(source);
 }
 
 void TestParser::testCase14()
 {
+    std::string s = R"(
+__attribute__((availability(macosx,introduced=10.12.1))) int a();
 
+__attribute__((availability(macos,introduced=10.4.1,deprecated=10.6.0,obsoleted=10.7.0))) int b();
+
+__attribute__((availability(ios,introduced=10.1))) int d();
+
+__attribute__((availability(macosx,introduced=10.12.1))) int c();
+     )";
+
+    testSource(s);
 }
 
 void TestParser::testCase15()
 {
 
+    const std::string& source = readFile("test-data/string_gcc-pp_osx.i");
+    testSource(source);
 }
+
+void TestParser::testCase16()
+{
+    const std::string& source = readFile("test-data/string_clang-pp_osx.i");
+    testSource(source);
+}
+
+void TestParser::testCase17() {}
+void TestParser::testCase18() {}
+void TestParser::testCase19() {}
+void TestParser::testCase20() {}
