@@ -18,13 +18,13 @@
 
 #include "AST.h"
 #include "ASTVisitor.h"
-#include "Assert.h"
 #include "CoreTypes.h"
 #include "Literals.h"
 #include "Name.h"
 #include "Symbol.h"
 #include "Symbols.h"
 #include "TypeVisitor.h"
+#include <cassert>
 #include <iostream>
 
 using namespace CPlusPlus;
@@ -48,18 +48,14 @@ Symbol *lookupSymbol(const Identifier* ident, const Scope* scope)
 
 Symbol *lookupSymbol(const Name* name, const Scope* scope)
 {
-    PSYCHE_ASSERT(name->isNameId() || name->isTaggedNameId(),
-                  return nullptr,
-                  "expected trival or tagged name");
+    assert((name->isNameId() || name->isTaggedNameId()) && "expected trival or tagged name");
 
     return lookupSymbol(name->identifier(), scope);
 }
 
 Symbol *lookupTypeSymbol(const Name* name, const Scope *scope)
 {
-    PSYCHE_ASSERT(name->isNameId() || name->isTaggedNameId(),
-                  return nullptr,
-                  "expected trival or tagged name");
+    assert((name->isNameId() || name->isTaggedNameId()) && "expected trival or tagged name");
 
     Symbol *tySym = lookupSymbol(name->identifier(), scope);
     if (!tySym)
@@ -81,7 +77,7 @@ Symbol *lookupTypeSymbol(const Name* name, const Scope *scope)
         return tySym->isEnum() ? tySym : nullptr;
 
     default:
-        PSYCHE_ASSERT(false, return nullptr, "unexpected name");
+        assert(false && "unexpected name");
         return nullptr;
     }
 }

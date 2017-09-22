@@ -29,16 +29,12 @@
 #include "Literals.h"
 #include "ObjectiveCTypeQualifiers.h"
 #include "QtContextKeywords.h"
-#include "Debug.h"
-
 #include <iostream>
 #include <unordered_map>
 #include <utility>
 #include <string>
 #include <cstdio> // for putchar
 
-// Pysche
-#include "Assert.h"
 
 #if defined(_MSC_VER) && (_MSC_VER < 1800)
 #    define va_copy(dst, src) ((dst) = (src))
@@ -3500,7 +3496,7 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
                 if (parseSimpleDeclaration(declaration)) {
                     unsigned line;
                     _translationUnit->getTokenPosition(start, &line);
-                    printDebug("Ambiguity call x decl found at %d\n", line);
+                    //printDebug("Ambiguity call x decl found at %d\n", line);
 
                     AmbiguousStatementAST *ambig = new (_pool) AmbiguousStatementAST;
                     ambig->declarationStmt = new (_pool) DeclarationStatementAST;
@@ -3600,7 +3596,7 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
                             if (parseExpressionStatement(as_expression)) {
                                 unsigned line;
                                 _translationUnit->getTokenPosition(start, &line);
-                                printDebug("Ambiguity pointer decl x multiplication at %d\n", line);
+                                //printDebug("Ambiguity pointer decl x multiplication at %d\n", line);
 
                                 AmbiguousStatementAST *ambig = new (_pool) AmbiguousStatementAST;
                                 ambig->declarationStmt = as_declaration;

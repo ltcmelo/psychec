@@ -29,6 +29,7 @@
 #include "Symbols.h"
 #include "CoreTypes.h"
 #include "Literals.h"
+#include "Lookup.h"
 #include "Scope.h"
 #include <algorithm>
 #include <vector>
@@ -37,11 +38,6 @@
 #include <sstream>
 #include <string.h>
 #include <stack>
-
-// Pysche
-#include "Assert.h"
-#include "Debug.h"
-#include "Lookup.h"
 
 using namespace CPlusPlus;
 using namespace psyche;
@@ -1178,10 +1174,6 @@ bool Bind::visit(AmbiguousStatementAST *ambiStmt)
         this->statement(pickedStmt);
         return false;
     }
-
-    PSYCHE_ASSERT(ambiStmt->ambiguity->resolution() == SyntaxAmbiguity::Resolution::Unknown,
-                  return false,
-                  "expected unresolved ambiguity");
 
     parentAmbiguousStmt_ = ambiStmt;
     this->statement(ambiStmt->expressionStmt);
@@ -3420,8 +3412,6 @@ void Bind::maybeResolveAmbiguity(const Name* name,
 {
     const auto& stmts = findAmbiguousStmts(_scope);
     for (auto ambiStmt : stmts) {
-        PSYCHE_ASSERT(ambiStmt, return , "expected valid ambiguity");
-
         if (((ambiStmt->ambiguity.get())->*(getSide))()
                 && !strcmp(name->identifier()->chars(),
                            (ambiStmt->ambiguity.get()->*(getSide))()->identifier()->chars())) {

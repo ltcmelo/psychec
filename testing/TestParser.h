@@ -19,7 +19,6 @@
 #ifndef PSYCHE_TEST_PARSER_H__
 #define PSYCHE_TEST_PARSER_H__
 
-#include "Config.h"
 #include "BaseTester.h"
 #include "Control.h"
 #include "CPlusPlusForwardDeclarations.h"

@@ -19,9 +19,8 @@
 #ifndef PSYCHE_TYPEOFEXPRESSION_H__
 #define PSYCHE_TYPEOFEXPRESSION_H__
 
-#include "Config.h"
-#include "ASTVisitor.h"
 #include "CPlusPlusForwardDeclarations.h"
+#include "ASTVisitor.h"
 #include "FullySpecifiedType.h"
 #include <vector>
 #include <cstddef>
@@ -31,7 +30,7 @@ namespace psyche {
 /*!
  * \brief The TypeOfExpression class
  */
-class PSYCHEC_API TypeOfExpression final : CPlusPlus::ASTVisitor
+class CPLUSPLUS_EXPORT TypeOfExpression final : CPlusPlus::ASTVisitor
 {
 public:
     TypeOfExpression(CPlusPlus::TranslationUnit* unit);

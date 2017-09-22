@@ -19,9 +19,9 @@
 
 #include "SymbolPP.h"
 #include "Symbols.h"
-#include "Assert.h"
 #include "Names.h"
 #include "Literals.h"
+#include <cassert>
 
 using namespace CPlusPlus;
 using namespace psyche;
@@ -71,7 +71,7 @@ void SymbolPP::appendName(const Name *name)
     if (!name)
         return;
 
-    PSYCHE_ASSERT(name && name->asNameId(), return, "expected trivial name");
+    assert((name && name->asNameId()) && "expected trivial name");
     if (name_.tellp())
         name_ << '.';
     name_ << std::string(name->asNameId()->identifier()->begin(),

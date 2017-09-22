@@ -1,14 +1,10 @@
 *~
-*.vo
-*.v.d
 *.glob
-*kate-swp
 *.aux
 *.bbl
 *.bc
 *.blg
-*.chi
-*.chs.h
+*.dylib
 *.dyn_o
 *.dyn_hi
 *.dot
@@ -24,6 +20,7 @@
 *.swp
 *.thm
 *.cstr
+.DS_Store
 
 # Qt Creator project files
 *.creator
@@ -32,7 +29,11 @@
 *.files
 *.includes
 
-.DS_Store
+# CMake stuff
+*CMakeCache.txt
+*CMakeFiles
+*cmake_install.cmake
+*Makefile
 
 # The test file! ;-)
 test.c

@@ -20,7 +20,6 @@
 #ifndef PSYCHE_SYMBOLPP__
 #define PSYCHE_SYMBOLPP__
 
-#include "Config.h"
 #include "CPlusPlusForwardDeclarations.h"
 #include "SymbolVisitor.h"
 #include <string>
@@ -28,7 +27,7 @@
 
 namespace psyche {
 
-class PSYCHEC_API SymbolPP final : public CPlusPlus::SymbolVisitor
+class CPLUSPLUS_EXPORT SymbolPP final : public CPlusPlus::SymbolVisitor
 {
 public:
     std::string print(const CPlusPlus::Symbol * symbol);

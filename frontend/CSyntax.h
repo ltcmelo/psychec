@@ -16,24 +16,31 @@
  Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#ifndef PSYCHE_CONSTRAINTSYNTAXFORMATTER_H__
-#define PSYCHE_CONSTRAINTSYNTAXFORMATTER_H__
+#ifndef PSYCHE_SYNTAXFORMATTER_H__
+#define PSYCHE_SYNTAXFORMATTER_H__
 
 #include "CPlusPlusForwardDeclarations.h"
-#include "CSyntax.h"
 #include <string>
 
 namespace psyche {
 
-class ConstraintSyntax
+// Dispatch tags for function syntax.
+struct RetParam {};
+struct ParamRet {};
+
+/*!
+ * \brief The CSyntax class
+ */
+class CPLUSPLUS_EXPORT CSyntax
 {
 public:
-    typedef ParamRet SigOrder;
-    static std::string funcLDelim() { return "("; }
-    static std::string funcRDelim() { return ")"; }
-    static std::string paramLDelim() { return ""; }
-    static std::string paramRDelim() { return ""; }
-    static std::string retParamSep() { return ","; }
+    typedef RetParam SigOrder;
+
+    static std::string funcLDelim() { return ""; }
+    static std::string funcRDelim() { return ""; }
+    static std::string paramLDelim() { return "("; }
+    static std::string paramRDelim() { return ")"; }
+    static std::string retParamSep() { return " "; }
 };
 
 } // namespace psyche

@@ -19,13 +19,13 @@
 #ifndef PSYCHE_ASTNORMALIZER_H__
 #define PSYCHE_ASTNORMALIZER_H__
 
-#include "Config.h"
+#include "CPlusPlusForwardDeclarations.h"
 #include "ASTVisitor.h"
 #include <iostream>
 
 namespace psyche {
 
-class PSYCHEC_API ASTNormalizer final : public CPlusPlus::ASTVisitor
+class CPLUSPLUS_EXPORT ASTNormalizer final : public CPlusPlus::ASTVisitor
 {
 public:
     ASTNormalizer(CPlusPlus::TranslationUnit *unit, bool employHeuristic);

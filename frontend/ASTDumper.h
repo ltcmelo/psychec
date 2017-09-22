@@ -48,7 +48,7 @@
 #ifndef PSYCHE_ASTDUMPER_H__
 #define PSYCHE_ASTDUMPER_H__
 
-#include "Config.h"
+#include "CPlusPlusForwardDeclarations.h"
 #include "AST.h"
 #include "ASTVisitor.h"
 #include <fstream>
@@ -67,7 +67,7 @@ namespace CPlusPlus {
  *
  * This is an adaptation of Qt Creator's ASTDump class.
  */
-class PSYCHEC_API ASTDumper: protected CPlusPlus::ASTVisitor
+class CPLUSPLUS_EXPORT ASTDumper: protected CPlusPlus::ASTVisitor
 {
 public:
     ASTDumper(CPlusPlus::TranslationUnit *unit)

@@ -18,16 +18,15 @@
 
 #include "TypeOfExpression.h"
 #include "AST.h"
-#include "Assert.h"
 #include "CoreTypes.h"
 #include "Control.h"
-#include "Debug.h"
 #include "Literals.h"
 #include "Lookup.h"
 #include "Scope.h"
 #include "Symbol.h"
 #include "Symbols.h"
 #include "TranslationUnit.h"
+#include <cassert>
 
 using namespace CPlusPlus;
 using namespace psyche;
@@ -47,10 +46,9 @@ FullySpecifiedType TypeOfExpression::resolve(ExpressionAST *ast, Scope *scope)
 FullySpecifiedType TypeOfExpression::commonRealType(const FullySpecifiedType& lhsTy,
                                               const FullySpecifiedType& rhsTy) const
 {
-    PSYCHE_ASSERT(lhsTy && Type::isArithmetic(lhsTy.type())
-                        && rhsTy && Type::isArithmetic(rhsTy.type()),
-                  return FullySpecifiedType(),
-                  "expected arithmetic type");
+    assert((lhsTy && Type::isArithmetic(lhsTy.type())
+                && rhsTy && Type::isArithmetic(rhsTy.type()))
+            && "expected arithmetic type");
 
     if (lhsTy == rhsTy)
         return lhsTy;
@@ -223,7 +221,7 @@ bool TypeOfExpression::visit(BinaryExpressionAST *ast)
         return false;
 
     default:
-        PSYCHE_ASSERT(false, return false, "unrecognized operator");
+        assert(false && "unrecognized operator");
         return false;
     }
 }
@@ -287,23 +285,20 @@ void TypeOfExpression::process(const Identifier *id)
 
 bool TypeOfExpression::visit(IdExpressionAST *ast)
 {
-    PSYCHE_ASSERT(ast->asIdExpression()->name->name->asNameId(),
-                  return false,
-                  "expected trivial identifier name");
+    assert((ast->asIdExpression()->name->name->asNameId()) && "expected trivial identifier name");
+
     process(ast->name->name->identifier());
     return false;
 }
 
 bool TypeOfExpression::visit(MemberAccessAST *ast)
 {
-    PSYCHE_ASSERT(ast->member_name->name->asNameId(),
-                  return false,
-                  "expected trivial member name");
+    assert(ast->member_name->name->asNameId() && "expected trivial member name");
 
     accept(ast->base_expression);
     ++searchMember_;
     process(ast->member_name->name->identifier());
-    PSYCHE_ASSERT(searchMember_ > 0, return false, "expected member check");
+    assert(searchMember_ > 0 && "expected member check");
     --searchMember_;
 
     return false;
@@ -317,7 +312,7 @@ bool TypeOfExpression::visit(NumericLiteralAST *ast)
         fullType_ = control()->integerType(IntegerType::Char);
     } else {
         const NumericLiteral *numLit = numericLiteral(ast->literal_token);
-        PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
+        assert(numLit && "numeric literal must exist");
         if (numLit->isDouble()) {
             fullType_ = control()->floatType(FloatType::Double);
         } else if (numLit->isLongDouble()) {
@@ -440,7 +435,7 @@ bool TypeOfExpression::visit(SimpleSpecifierAST *ast)
         return false;
 
     default:
-        PSYCHE_ASSERT(false, return false, "unknown type specifier");
+        assert(false && "unknown type specifier");
         return false;
     }
 }

@@ -17,11 +17,11 @@
  *****************************************************************************/
 
 #include "TypeSpeller.h"
-#include "Assert.h"
 #include "CoreTypes.h"
 #include "ConstraintSyntax.h"
 #include "Literals.h"
 #include "Symbols.h"
+#include <cassert>
 
 using namespace CPlusPlus;
 using namespace psyche;
@@ -175,7 +175,7 @@ void TypeSpeller<SyntaxT>::funcRet(Function* ty)
 {
     if (ty->returnType()->isNamedType()) {
         const Name *name = ty->returnType()->asNamedType()->name();
-        PSYCHE_ASSERT(name->isNameId(), return, "expected a simple name");
+        assert(name->isNameId() && "expected a simple name");
         const Identifier *id = name->asNameId()->identifier();
         spelling_.append(std::string(id->begin(), id->end()));
     } else {
@@ -232,7 +232,7 @@ void TypeSpeller<SyntaxT>::visit(Class *ty)
             continue;
 
         visitType(ty->memberAt(i)->type());
-        PSYCHE_ASSERT(name->isNameId(), return, "expected a simple name");
+        assert(name->isNameId() && "expected a simple name");
         const Identifier *id = name->asNameId()->identifier();
         spelling_.append(" ");
         spelling_.append(id->chars(), id->size());

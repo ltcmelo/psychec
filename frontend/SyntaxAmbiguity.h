@@ -20,7 +20,7 @@
 #ifndef PSYCHE_SYNTAXAMBIGUITY_H__
 #define PSYCHE_SYNTAXAMBIGUITY_H__
 
-#include "Config.h"
+#include "CPlusPlusForwardDeclarations.h"
 #include "Name.h"
 #include "Names.h"
 
@@ -29,7 +29,7 @@ namespace psyche {
 /*!
  * \brief The SyntaxAmbiguity class
  */
-class PSYCHEC_API SyntaxAmbiguity
+class CPLUSPLUS_EXPORT SyntaxAmbiguity
 {
 public:
     enum class Resolution : char
