@@ -19,7 +19,7 @@
 #ifndef PSYCHE_IDENTITY_MATCHER_H__
 #define PSYCHE_IDENTITY_MATCHER_H__
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "AST.h"
 #include "ASTMatcher.h"
 #include "Name.h"
@@ -27,11 +27,9 @@
 #include "TranslationUnit.h"
 #include <cstring>
 
-using namespace CPlusPlus;
-
 namespace psyche {
 
-class CPLUSPLUS_EXPORT ASTIdentityMatcher final : public CPlusPlus::ASTMatcher
+class CFE_API ASTIdentityMatcher final : public psyche::ASTMatcher
 {
 public:
     ASTIdentityMatcher(TranslationUnit* unit)

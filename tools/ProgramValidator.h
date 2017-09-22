@@ -23,27 +23,27 @@
 
 namespace psyche {
 
-class ProgramValidator final : public CPlusPlus::ASTVisitor
+class ProgramValidator final : public psyche::ASTVisitor
 {
 public:
-    ProgramValidator(CPlusPlus::TranslationUnit* unit,
+    ProgramValidator(psyche::TranslationUnit* unit,
                      bool forbidTypeDecl);
 
-    void validate(CPlusPlus::TranslationUnitAST* ast);
+    void validate(psyche::TranslationUnitAST* ast);
 
 private:
     bool checksRegistered() const;
 
     // Declarations
-    bool visit(CPlusPlus::FunctionDefinitionAST* ast) override;
-    bool visit(CPlusPlus::SimpleDeclarationAST* ast) override;
+    bool visit(psyche::FunctionDefinitionAST* ast) override;
+    bool visit(psyche::SimpleDeclarationAST* ast) override;
 
     // Statements
-    bool visit(CPlusPlus::CompoundStatementAST* ast) override;
+    bool visit(psyche::CompoundStatementAST* ast) override;
 
     // Specifiers
-    bool visit(CPlusPlus::ClassSpecifierAST* ast) override;
-    bool visit(CPlusPlus::SimpleSpecifierAST* ast) override;
+    bool visit(psyche::ClassSpecifierAST* ast) override;
+    bool visit(psyche::SimpleSpecifierAST* ast) override;
 
     bool forbidTypeDecl_;
 };

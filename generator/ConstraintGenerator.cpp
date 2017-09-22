@@ -51,7 +51,7 @@
 #define ENSURE_NONEMPTY_ALPHA_RET_STACK(CODE) \
     PSYCHE_ASSERT(!valuedRets_.empty(), CODE, "alpha return stack must be nonempty")
 
-using namespace CPlusPlus;
+using namespace psyche;
 using namespace psyche;
 
 namespace {
@@ -1208,7 +1208,7 @@ bool ConstraintGenerator::visit(SizeofExpressionAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(CPlusPlus::PointerLiteralAST* ast)
+bool ConstraintGenerator::visit(psyche::PointerLiteralAST* ast)
 {
     DEBUG_VISIT(PointerLiteralAST);
 

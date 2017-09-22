@@ -41,7 +41,7 @@
 #    define va_copy __va_copy
 #endif
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 const Token TranslationUnit::nullToken;
 

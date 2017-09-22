@@ -25,7 +25,7 @@
 #include <cstring>
 
 using namespace psyche;
-using namespace CPlusPlus;
+using namespace psyche;
 
 TestParser::TestParser()
     : name_(new StringLiteral("<test>", strlen("<test>")))

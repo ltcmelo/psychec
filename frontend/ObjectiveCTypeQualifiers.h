@@ -1,10 +1,10 @@
-#ifndef CPLUSPLUS_OBJC_TYPEQUALIFIERS_H
-#define CPLUSPLUS_OBJC_TYPEQUALIFIERS_H
+#ifndef CFE_OBJC_TYPEQUALIFIERS_H
+#define CFE_OBJC_TYPEQUALIFIERS_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 
 
-namespace CPlusPlus {
+namespace psyche {
 
 enum {
   Token_in,
@@ -24,9 +24,9 @@ enum {
   Token_identifier
 };
 
-CPLUSPLUS_EXPORT int classifyObjectiveCContextKeyword(const char *s, int n);
+CFE_API int classifyObjectiveCContextKeyword(const char *s, int n);
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_OBJC_TYPEQUALIFIERS_H
+#endif // CFE_OBJC_TYPEQUALIFIERS_H

@@ -23,7 +23,7 @@
 #include "AST.h"
 #include "ASTMatcher.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 bool ObjCSelectorArgumentAST::match0(AST *pattern, ASTMatcher *matcher)
 {

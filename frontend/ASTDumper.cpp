@@ -61,7 +61,7 @@
 #  include <cxxabi.h>
 #endif
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 void ASTDumper::dump(AST *ast, const std::string& fileSuffix)
 {
@@ -101,7 +101,7 @@ void ASTDumper::alignTerminals()
 
 std::string ASTDumper::name(AST *ast) {
 #ifdef __GNUC__
-    std::string name = abi::__cxa_demangle(typeid(*ast).name(), 0, 0, 0) + 11;
+    std::string name = abi::__cxa_demangle(typeid(*ast).name(), 0, 0, 0) + 8;
 #else
     std::string name = typeid(*ast).name();
 #endif

@@ -21,15 +21,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_NAMEVISITOR_H
-#define CPLUSPLUS_NAMEVISITOR_H
+#ifndef CFE_NAMEVISITOR_H
+#define CFE_NAMEVISITOR_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT NameVisitor
+class CFE_API NameVisitor
 {
     NameVisitor(const NameVisitor &other);
     void operator =(const NameVisitor &other);
@@ -54,7 +54,7 @@ public:
     virtual void visit(const TaggedNameId *) {}
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_NAMEVISITOR_H
+#endif // CFE_NAMEVISITOR_H

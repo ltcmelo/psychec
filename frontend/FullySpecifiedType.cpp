@@ -22,7 +22,7 @@
 #include "Type.h"
 #include "CoreTypes.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 FullySpecifiedType::FullySpecifiedType(Type *type) :
     _type(type), _flags(0)

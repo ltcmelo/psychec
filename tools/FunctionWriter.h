@@ -27,12 +27,12 @@ namespace psyche {
 class PSYCHEC_API FunctionWriter final : private TypeSpeller<CSyntax>
 {
 public:
-    std::string writeFunction(CPlusPlus::Function*, const std::string name);
+    std::string writeFunction(psyche::Function*, const std::string name);
 
 private:
     using TypeSpeller<CSyntax>::spell;
 
-    void funcParam(CPlusPlus::Function*) override;
+    void funcParam(psyche::Function*) override;
 };
 
 } // namespace psyche

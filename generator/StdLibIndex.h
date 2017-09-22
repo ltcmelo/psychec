@@ -20,7 +20,7 @@
 #define PSYCHE_STD_LIB_INDEX_H__
 
 #include "Config.h"
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -40,7 +40,7 @@ public:
 
     StdLibIndex(Version std);
 
-    std::vector<std::string> inspect(const CPlusPlus::Control&) const;
+    std::vector<std::string> inspect(const psyche::Control&) const;
 
     bool recognizes(const char* ident) const;
 

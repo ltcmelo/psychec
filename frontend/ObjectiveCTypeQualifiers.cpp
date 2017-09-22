@@ -1,7 +1,7 @@
 
 #include "ObjectiveCTypeQualifiers.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 static inline int classify2(const char *s) {
   if (s[0] == 'i') {
@@ -206,7 +206,7 @@ static inline int classify9(const char *s) {
     return Token_identifier;
 }
 
-int CPlusPlus::classifyObjectiveCContextKeyword(const char *s, int n) {
+int psyche::classifyObjectiveCContextKeyword(const char *s, int n) {
   switch (n) {
     case 2: return classify2(s);
     case 3: return classify3(s);

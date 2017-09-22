@@ -18,19 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_SYMBOLS_H
-#define CPLUSPLUS_SYMBOLS_H
+#ifndef CFE_SYMBOLS_H
+#define CFE_SYMBOLS_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "Symbol.h"
 #include "Type.h"
 #include "FullySpecifiedType.h"
 #include "Scope.h"
 #include <vector>
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT UsingNamespaceDirective: public Symbol
+class CFE_API UsingNamespaceDirective: public Symbol
 {
 public:
     UsingNamespaceDirective(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -50,7 +50,7 @@ protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
 };
 
-class CPLUSPLUS_EXPORT UsingDeclaration: public Symbol
+class CFE_API UsingDeclaration: public Symbol
 {
 public:
     UsingDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -70,7 +70,7 @@ protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
 };
 
-class CPLUSPLUS_EXPORT NamespaceAlias: public Symbol
+class CFE_API NamespaceAlias: public Symbol
 {
 public:
     NamespaceAlias(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -96,7 +96,7 @@ private:
     const Name *_namespaceName;
 };
 
-class CPLUSPLUS_EXPORT Declaration: public Symbol
+class CFE_API Declaration: public Symbol
 {
 public:
     Declaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -130,7 +130,7 @@ private:
     const StringLiteral *_initializer;
 };
 
-class CPLUSPLUS_EXPORT EnumeratorDeclaration: public Declaration
+class CFE_API EnumeratorDeclaration: public Declaration
 {
 public:
     EnumeratorDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -149,7 +149,7 @@ private:
     const StringLiteral *_constantValue;
 };
 
-class CPLUSPLUS_EXPORT Argument: public Symbol
+class CFE_API Argument: public Symbol
 {
 public:
     Argument(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -180,7 +180,7 @@ private:
     FullySpecifiedType _type;
 };
 
-class CPLUSPLUS_EXPORT TypenameArgument: public Symbol
+class CFE_API TypenameArgument: public Symbol
 {
 public:
     TypenameArgument(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -205,7 +205,7 @@ private:
     FullySpecifiedType _type;
 };
 
-class CPLUSPLUS_EXPORT Block: public Scope
+class CFE_API Block: public Scope
 {
 public:
     Block(TranslationUnit *translationUnit, unsigned sourceLocation);
@@ -225,7 +225,7 @@ protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
 };
 
-class CPLUSPLUS_EXPORT ForwardClassDeclaration: public Symbol, public Type
+class CFE_API ForwardClassDeclaration: public Symbol, public Type
 {
 public:
     ForwardClassDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -253,7 +253,7 @@ protected:
     virtual void accept0(TypeVisitor *visitor);
 };
 
-class CPLUSPLUS_EXPORT Enum: public Scope, public Type
+class CFE_API Enum: public Scope, public Type
 {
 public:
     Enum(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -287,7 +287,7 @@ private:
     bool _isScoped;
 };
 
-class CPLUSPLUS_EXPORT Function: public Scope, public Type
+class CFE_API Function: public Scope, public Type
 {
 public:
     enum MethodKey {
@@ -387,7 +387,7 @@ private:
     };
 };
 
-class CPLUSPLUS_EXPORT Template: public Scope, public Type
+class CFE_API Template: public Scope, public Type
 {
 public:
     Template(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -420,7 +420,7 @@ protected:
 };
 
 
-class CPLUSPLUS_EXPORT Namespace: public Scope, public Type
+class CFE_API Namespace: public Scope, public Type
 {
 public:
     Namespace(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -457,7 +457,7 @@ private:
     bool _isInline;
 };
 
-class CPLUSPLUS_EXPORT BaseClass: public Symbol
+class CFE_API BaseClass: public Symbol
 {
 public:
     BaseClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -489,7 +489,7 @@ private:
     FullySpecifiedType _type;
 };
 
-class CPLUSPLUS_EXPORT Class: public Scope, public Type
+class CFE_API Class: public Scope, public Type
 {
 public:
     Class(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -537,7 +537,7 @@ private:
     std::vector<BaseClass *> _baseClasses;
 };
 
-class CPLUSPLUS_EXPORT QtPropertyDeclaration: public Symbol
+class CFE_API QtPropertyDeclaration: public Symbol
 {
 public:
     enum Flag {
@@ -586,7 +586,7 @@ private:
     int _flags;
 };
 
-class CPLUSPLUS_EXPORT QtEnum: public Symbol
+class CFE_API QtEnum: public Symbol
 {
 public:
     QtEnum(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -606,7 +606,7 @@ protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
 };
 
-class CPLUSPLUS_EXPORT ObjCBaseClass: public Symbol
+class CFE_API ObjCBaseClass: public Symbol
 {
 public:
     ObjCBaseClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -626,7 +626,7 @@ protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
 };
 
-class CPLUSPLUS_EXPORT ObjCBaseProtocol: public Symbol
+class CFE_API ObjCBaseProtocol: public Symbol
 {
 public:
     ObjCBaseProtocol(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -646,7 +646,7 @@ protected:
     virtual void visitSymbol0(SymbolVisitor *visitor);
 };
 
-class CPLUSPLUS_EXPORT ObjCForwardProtocolDeclaration: public Symbol, public Type
+class CFE_API ObjCForwardProtocolDeclaration: public Symbol, public Type
 {
 public:
     ObjCForwardProtocolDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -674,7 +674,7 @@ protected:
     virtual void accept0(TypeVisitor *visitor);
 };
 
-class CPLUSPLUS_EXPORT ObjCProtocol: public Scope, public Type
+class CFE_API ObjCProtocol: public Scope, public Type
 {
 public:
     ObjCProtocol(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -709,7 +709,7 @@ private:
     std::vector<ObjCBaseProtocol *> _protocols;
 };
 
-class CPLUSPLUS_EXPORT ObjCForwardClassDeclaration: public Symbol, public Type
+class CFE_API ObjCForwardClassDeclaration: public Symbol, public Type
 {
 public:
     ObjCForwardClassDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -737,7 +737,7 @@ protected:
     virtual void accept0(TypeVisitor *visitor);
 };
 
-class CPLUSPLUS_EXPORT ObjCClass: public Scope, public Type
+class CFE_API ObjCClass: public Scope, public Type
 {
 public:
     ObjCClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -785,7 +785,7 @@ private:
     bool _isInterface;
 };
 
-class CPLUSPLUS_EXPORT ObjCMethod: public Scope, public Type
+class CFE_API ObjCMethod: public Scope, public Type
 {
 public:
     ObjCMethod(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -838,7 +838,7 @@ private:
     };
 };
 
-class CPLUSPLUS_EXPORT ObjCPropertyDeclaration: public Symbol
+class CFE_API ObjCPropertyDeclaration: public Symbol
 {
 public:
     enum PropertyAttributes {
@@ -897,7 +897,7 @@ private:
     int _propertyAttributes;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_SYMBOLS_H
+#endif // CFE_SYMBOLS_H

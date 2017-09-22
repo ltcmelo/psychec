@@ -21,7 +21,7 @@
 #include "Token.h"
 #include "Literals.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 const char *token_names[] = {
     (""), ("<error>"),

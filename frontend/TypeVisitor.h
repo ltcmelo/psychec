@@ -18,14 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_TYPEVISITOR_H
-#define CPLUSPLUS_TYPEVISITOR_H
+#ifndef CFE_TYPEVISITOR_H
+#define CFE_TYPEVISITOR_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT TypeVisitor
+class CFE_API TypeVisitor
 {
     TypeVisitor(const TypeVisitor &other);
     void operator =(const TypeVisitor &other);
@@ -61,7 +61,7 @@ public:
     virtual void visit(ObjCForwardProtocolDeclaration*) {}
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_TYPEVISITOR_H
+#endif // CFE_TYPEVISITOR_H

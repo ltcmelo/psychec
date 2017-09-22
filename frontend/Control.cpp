@@ -33,7 +33,7 @@
 #include <unordered_set>
 #include <algorithm>
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 namespace {
 

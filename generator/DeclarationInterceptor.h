@@ -20,7 +20,7 @@
 #define PSYCHE_DECLARATION_INTERCEPTOR_H__
 
 #include "Config.h"
-#include "ASTfwd.h"
+#include "ASTFwds.h"
 
 namespace psyche {
 
@@ -29,8 +29,8 @@ class PSYCHEC_API DeclarationInterceptor
 public:
     virtual ~DeclarationInterceptor() = default;
 
-    virtual bool intercept(CPlusPlus::SimpleDeclarationAST*) { return false; }
-    virtual bool intercept(CPlusPlus::FunctionDefinitionAST*) { return false; }
+    virtual bool intercept(psyche::SimpleDeclarationAST*) { return false; }
+    virtual bool intercept(psyche::FunctionDefinitionAST*) { return false; }
 };
 
 } // namespace psyche

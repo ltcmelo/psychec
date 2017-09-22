@@ -33,7 +33,7 @@
 #include "Scope.h"
 #include "Templates.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 class Symbol::HashCode: protected NameVisitor
 {

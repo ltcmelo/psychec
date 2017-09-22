@@ -23,7 +23,7 @@
 #include "Literals.h"
 #include <cassert>
 
-using namespace CPlusPlus;
+using namespace psyche;
 using namespace psyche;
 
 std::string SymbolPP::print(const Symbol *symbol)

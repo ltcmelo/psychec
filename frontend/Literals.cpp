@@ -25,7 +25,7 @@
 #include <algorithm>
 #include <iostream>
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 ////////////////////////////////////////////////////////////////////////////////
 Literal::Literal(const char *chars, unsigned size)

@@ -21,20 +21,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_PARSER_H
-#define CPLUSPLUS_PARSER_H
+#ifndef CFE_PARSER_H
+#define CFE_PARSER_H
 
-#include "CPlusPlusForwardDeclarations.h"
-#include "ASTfwd.h"
+#include "Api.h"
+#include "ASTFwds.h"
 #include "Token.h"
 #include "TranslationUnit.h"
 #include "MemoryPool.h"
 #include <map>
 #include <stack>
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT Parser
+class CFE_API Parser
 {
 public:
     Parser(TranslationUnit *translationUnit);
@@ -341,7 +341,7 @@ private:
     void operator =(const Parser& source);
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_PARSER_H
+#endif // CFE_PARSER_H

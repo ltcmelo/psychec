@@ -23,7 +23,6 @@
 #include "Symbols.h"
 #include <cassert>
 
-using namespace CPlusPlus;
 using namespace psyche;
 
 template <class SyntaxT>

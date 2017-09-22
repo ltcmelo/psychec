@@ -18,15 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_SYMBOL_H
-#define CPLUSPLUS_SYMBOL_H
+#ifndef CFE_SYMBOL_H
+#define CFE_SYMBOL_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT Symbol
+class CFE_API Symbol
 {
     Symbol(const Symbol &other);
     void operator =(const Symbol &other);
@@ -324,7 +324,7 @@ private:
     friend class SymbolTable;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_SYMBOL_H
+#endif // CFE_SYMBOL_H

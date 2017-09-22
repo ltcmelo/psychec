@@ -18,15 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_LEXER_H
-#define CPLUSPLUS_LEXER_H
+#ifndef CFE_LEXER_H
+#define CFE_LEXER_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "Token.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT Lexer
+class CFE_API Lexer
 {
     Lexer(const Lexer &other);
     void operator =(const Lexer &other);
@@ -70,7 +70,7 @@ public:
         ++utf16charCounter;
 
         // Process multi-byte UTF-8 code point (non-latin1)
-        if (CPLUSPLUS_UNLIKELY(isByteOfMultiByteCodePoint(yychar))) {
+        if (UNLIKELY(isByteOfMultiByteCodePoint(yychar))) {
             unsigned trailingBytesCurrentCodePoint = 1;
             for (unsigned char c = yychar << 2; isByteOfMultiByteCodePoint(c); c <<= 1)
                 ++trailingBytesCurrentCodePoint;
@@ -115,7 +115,7 @@ private:
     void yyinp()
     {
         yyinp_utf8(_currentChar, _yychar, _currentCharUtf16);
-        if (CPLUSPLUS_UNLIKELY(_yychar == '\n'))
+        if (UNLIKELY(_yychar == '\n'))
             pushLineStartOffset();
     }
 
@@ -156,6 +156,6 @@ private:
     Dialect _languageOptions;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_LEXER_H
+#endif // CFE_LEXER_H

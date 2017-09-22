@@ -20,26 +20,26 @@
 #ifndef PSYCHE_SYMBOLPP__
 #define PSYCHE_SYMBOLPP__
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "SymbolVisitor.h"
 #include <string>
 #include <sstream>
 
 namespace psyche {
 
-class CPLUSPLUS_EXPORT SymbolPP final : public CPlusPlus::SymbolVisitor
+class CFE_API SymbolPP final : public psyche::SymbolVisitor
 {
 public:
-    std::string print(const CPlusPlus::Symbol * symbol);
+    std::string print(const psyche::Symbol * symbol);
 
 private:
-     bool visit(CPlusPlus::Declaration *) override;
-     bool visit(CPlusPlus::Argument *) override;
-     bool visit(CPlusPlus::Function *) override;
-     bool visit(CPlusPlus::Class *) override;
-     bool visit(CPlusPlus::Block *) override;
+     bool visit(psyche::Declaration *) override;
+     bool visit(psyche::Argument *) override;
+     bool visit(psyche::Function *) override;
+     bool visit(psyche::Class *) override;
+     bool visit(psyche::Block *) override;
 
-     void appendName(const CPlusPlus::Name* name);
+     void appendName(const psyche::Name* name);
 
      std::ostringstream name_;
 };

@@ -18,7 +18,6 @@
 
 #include "ASTIdentityMatcher.h"
 
-using namespace CPlusPlus;
 using namespace psyche;
 
 bool ASTIdentityMatcher::match(ArrayAccessAST *node, ArrayAccessAST *pattern)

@@ -26,7 +26,7 @@
 #include "CoreTypes.h"
 #include "Symbols.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 Type::Type()
 { }

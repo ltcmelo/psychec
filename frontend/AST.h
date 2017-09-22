@@ -19,11 +19,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_AST_H
-#define CPLUSPLUS_AST_H
+#ifndef CFE_AST_H
+#define CFE_AST_H
 
-#include "CPlusPlusForwardDeclarations.h"
-#include "ASTfwd.h"
+#include "Api.h"
+#include "ASTFwds.h"
 #include "MemoryPool.h"
 #include "FullySpecifiedType.h"
 #include <iostream>
@@ -32,10 +32,10 @@
 // Pysche
 #include "SyntaxAmbiguity.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
 template <typename Tptr>
-class CPLUSPLUS_EXPORT List: public Managed
+class CFE_API List: public Managed
 {
     List(const List &other);
     void operator =(const List &other);
@@ -85,7 +85,7 @@ public:
     List *next;
 };
 
-class CPLUSPLUS_EXPORT AST: public Managed
+class CFE_API AST: public Managed
 {
     AST(const AST &other);
     void operator =(const AST &other);
@@ -301,7 +301,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *) = 0;
 };
 
-class CPLUSPLUS_EXPORT StatementAST: public AST
+class CFE_API StatementAST: public AST
 {
 public:
     StatementAST()
@@ -312,7 +312,7 @@ public:
     virtual StatementAST *clone(MemoryPool *pool) const = 0;
 };
 
-class CPLUSPLUS_EXPORT ExpressionAST: public AST
+class CFE_API ExpressionAST: public AST
 {
 public:
     ExpressionAST()
@@ -323,7 +323,7 @@ public:
     virtual ExpressionAST *clone(MemoryPool *pool) const = 0;
 };
 
-class CPLUSPLUS_EXPORT DeclarationAST: public AST
+class CFE_API DeclarationAST: public AST
 {
 public:
     DeclarationAST()
@@ -334,7 +334,7 @@ public:
     virtual DeclarationAST *clone(MemoryPool *pool) const = 0;
 };
 
-class CPLUSPLUS_EXPORT NameAST: public AST
+class CFE_API NameAST: public AST
 {
 public: // annotations
     const Name *name;
@@ -349,7 +349,7 @@ public:
     virtual NameAST *clone(MemoryPool *pool) const = 0;
 };
 
-class CPLUSPLUS_EXPORT SpecifierAST: public AST
+class CFE_API SpecifierAST: public AST
 {
 public:
     SpecifierAST()
@@ -360,7 +360,7 @@ public:
     virtual SpecifierAST *clone(MemoryPool *pool) const = 0;
 };
 
-class CPLUSPLUS_EXPORT PtrOperatorAST: public AST
+class CFE_API PtrOperatorAST: public AST
 {
 public:
     PtrOperatorAST()
@@ -371,7 +371,7 @@ public:
     virtual PtrOperatorAST *clone(MemoryPool *pool) const = 0;
 };
 
-class CPLUSPLUS_EXPORT PostfixAST: public ExpressionAST
+class CFE_API PostfixAST: public ExpressionAST
 {
 public:
     PostfixAST()
@@ -382,7 +382,7 @@ public:
     virtual PostfixAST *clone(MemoryPool *pool) const = 0;
 };
 
-class CPLUSPLUS_EXPORT CoreDeclaratorAST: public AST
+class CFE_API CoreDeclaratorAST: public AST
 {
 public:
     CoreDeclaratorAST()
@@ -393,7 +393,7 @@ public:
     virtual CoreDeclaratorAST *clone(MemoryPool *pool) const = 0;
 };
 
-class CPLUSPLUS_EXPORT PostfixDeclaratorAST: public AST
+class CFE_API PostfixDeclaratorAST: public AST
 {
 public:
     PostfixDeclaratorAST()
@@ -404,7 +404,7 @@ public:
     virtual PostfixDeclaratorAST *clone(MemoryPool *pool) const = 0;
 };
 
-class CPLUSPLUS_EXPORT ObjCSelectorArgumentAST: public AST
+class CFE_API ObjCSelectorArgumentAST: public AST
 {
 public:
     unsigned name_token;
@@ -428,7 +428,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCSelectorAST: public NameAST
+class CFE_API ObjCSelectorAST: public NameAST
 {
 public:
     ObjCSelectorArgumentListAST *selector_argument_list;
@@ -450,7 +450,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT SimpleSpecifierAST: public SpecifierAST
+class CFE_API SimpleSpecifierAST: public SpecifierAST
 {
 public:
     unsigned specifier_token;
@@ -472,7 +472,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT AttributeSpecifierAST: public SpecifierAST
+class CFE_API AttributeSpecifierAST: public SpecifierAST
 {
 public:
     AttributeSpecifierAST()
@@ -483,7 +483,7 @@ public:
     virtual AttributeSpecifierAST *clone(MemoryPool *pool) const = 0;
 };
 
-class CPLUSPLUS_EXPORT AlignmentSpecifierAST: public AttributeSpecifierAST
+class CFE_API AlignmentSpecifierAST: public AttributeSpecifierAST
 {
 public:
     unsigned align_token;
@@ -514,7 +514,7 @@ protected:
 };
 
 
-class CPLUSPLUS_EXPORT GnuAttributeSpecifierAST: public AttributeSpecifierAST
+class CFE_API GnuAttributeSpecifierAST: public AttributeSpecifierAST
 {
 public:
     unsigned attribute_token;
@@ -546,7 +546,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT GnuAttributeAST: public AST
+class CFE_API GnuAttributeAST: public AST
 {
 public:
     unsigned identifier_token;
@@ -576,7 +576,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TypeofSpecifierAST: public SpecifierAST
+class CFE_API TypeofSpecifierAST: public SpecifierAST
 {
 public:
     unsigned typeof_token;
@@ -604,7 +604,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT DecltypeSpecifierAST: public SpecifierAST
+class CFE_API DecltypeSpecifierAST: public SpecifierAST
 {
 public:
     unsigned decltype_token;
@@ -632,7 +632,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT DeclaratorAST: public AST
+class CFE_API DeclaratorAST: public AST
 {
 public:
     SpecifierListAST *attribute_list;
@@ -666,7 +666,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT SimpleDeclarationAST: public DeclarationAST
+class CFE_API SimpleDeclarationAST: public DeclarationAST
 {
 public:
     unsigned qt_invokable_token;
@@ -698,7 +698,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT EmptyDeclarationAST: public DeclarationAST
+class CFE_API EmptyDeclarationAST: public DeclarationAST
 {
 public:
     unsigned semicolon_token;
@@ -720,7 +720,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT AccessDeclarationAST: public DeclarationAST
+class CFE_API AccessDeclarationAST: public DeclarationAST
 {
 public:
     unsigned access_specifier_token;
@@ -746,7 +746,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT QtObjectTagAST: public DeclarationAST
+class CFE_API QtObjectTagAST: public DeclarationAST
 {
 public:
     unsigned q_object_token;
@@ -768,7 +768,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT QtPrivateSlotAST: public DeclarationAST
+class CFE_API QtPrivateSlotAST: public DeclarationAST
 {
 public:
     unsigned q_private_slot_token;
@@ -830,7 +830,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT QtPropertyDeclarationAST: public DeclarationAST
+class CFE_API QtPropertyDeclarationAST: public DeclarationAST
 {
 public:
     unsigned property_specifier_token;
@@ -866,7 +866,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT QtEnumDeclarationAST: public DeclarationAST
+class CFE_API QtEnumDeclarationAST: public DeclarationAST
 {
 public:
     unsigned enum_specifier_token;
@@ -894,7 +894,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT QtFlagsDeclarationAST: public DeclarationAST
+class CFE_API QtFlagsDeclarationAST: public DeclarationAST
 {
 public:
     unsigned flags_specifier_token;
@@ -922,7 +922,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT QtInterfaceNameAST: public AST
+class CFE_API QtInterfaceNameAST: public AST
 {
 public:
     NameAST *interface_name;
@@ -946,7 +946,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT QtInterfacesDeclarationAST: public DeclarationAST
+class CFE_API QtInterfacesDeclarationAST: public DeclarationAST
 {
 public:
     unsigned interfaces_token;
@@ -974,7 +974,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT AsmDefinitionAST: public DeclarationAST
+class CFE_API AsmDefinitionAST: public DeclarationAST
 {
 public:
     unsigned asm_token;
@@ -1006,7 +1006,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT BaseSpecifierAST: public AST
+class CFE_API BaseSpecifierAST: public AST
 {
 public:
     unsigned virtual_token;
@@ -1038,7 +1038,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT IdExpressionAST: public ExpressionAST
+class CFE_API IdExpressionAST: public ExpressionAST
 {
 public:
     NameAST *name;
@@ -1060,7 +1060,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT CompoundExpressionAST: public ExpressionAST
+class CFE_API CompoundExpressionAST: public ExpressionAST
 {
 public:
     unsigned lparen_token;
@@ -1086,7 +1086,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT CompoundLiteralAST: public ExpressionAST
+class CFE_API CompoundLiteralAST: public ExpressionAST
 {
 public:
     unsigned lparen_token;
@@ -1114,7 +1114,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT QtMethodAST: public ExpressionAST
+class CFE_API QtMethodAST: public ExpressionAST
 {
 public:
     unsigned method_token;
@@ -1142,7 +1142,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT QtMemberDeclarationAST: public StatementAST
+class CFE_API QtMemberDeclarationAST: public StatementAST
 {
 public:
     unsigned q_token;
@@ -1170,7 +1170,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT BinaryExpressionAST: public ExpressionAST
+class CFE_API BinaryExpressionAST: public ExpressionAST
 {
 public:
     ExpressionAST *left_expression;
@@ -1196,7 +1196,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT CastExpressionAST: public ExpressionAST
+class CFE_API CastExpressionAST: public ExpressionAST
 {
 public:
     unsigned lparen_token;
@@ -1227,7 +1227,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ClassSpecifierAST: public SpecifierAST
+class CFE_API ClassSpecifierAST: public SpecifierAST
 {
 public:
     unsigned classkey_token;
@@ -1271,7 +1271,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT CaseStatementAST: public StatementAST
+class CFE_API CaseStatementAST: public StatementAST
 {
 public:
     unsigned case_token;
@@ -1299,7 +1299,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT CompoundStatementAST: public StatementAST
+class CFE_API CompoundStatementAST: public StatementAST
 {
 public:
     unsigned lbrace_token;
@@ -1329,7 +1329,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ConditionAST: public ExpressionAST
+class CFE_API ConditionAST: public ExpressionAST
 {
 public:
     SpecifierListAST *type_specifier_list;
@@ -1353,7 +1353,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ConditionalExpressionAST: public ExpressionAST
+class CFE_API ConditionalExpressionAST: public ExpressionAST
 {
 public:
     ExpressionAST *condition;
@@ -1383,7 +1383,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT CppCastExpressionAST: public ExpressionAST
+class CFE_API CppCastExpressionAST: public ExpressionAST
 {
 public:
     unsigned cast_token;
@@ -1417,7 +1417,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT CtorInitializerAST: public AST
+class CFE_API CtorInitializerAST: public AST
 {
 public:
     unsigned colon_token;
@@ -1443,7 +1443,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT DeclarationStatementAST: public StatementAST
+class CFE_API DeclarationStatementAST: public StatementAST
 {
 public:
     DeclarationAST *declaration;
@@ -1465,7 +1465,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT DeclaratorIdAST: public CoreDeclaratorAST
+class CFE_API DeclaratorIdAST: public CoreDeclaratorAST
 {
 public:
     unsigned dot_dot_dot_token;
@@ -1489,7 +1489,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NestedDeclaratorAST: public CoreDeclaratorAST
+class CFE_API NestedDeclaratorAST: public CoreDeclaratorAST
 {
 public:
     unsigned lparen_token;
@@ -1515,7 +1515,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT FunctionDeclaratorAST: public PostfixDeclaratorAST
+class CFE_API FunctionDeclaratorAST: public PostfixDeclaratorAST
 {
 public:
     unsigned lparen_token;
@@ -1556,7 +1556,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ArrayDeclaratorAST: public PostfixDeclaratorAST
+class CFE_API ArrayDeclaratorAST: public PostfixDeclaratorAST
 {
 public:
     unsigned lbracket_token;
@@ -1582,7 +1582,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT DeleteExpressionAST: public ExpressionAST
+class CFE_API DeleteExpressionAST: public ExpressionAST
 {
 public:
     unsigned scope_token;
@@ -1612,7 +1612,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT DoStatementAST: public StatementAST
+class CFE_API DoStatementAST: public StatementAST
 {
 public:
     unsigned do_token;
@@ -1646,7 +1646,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NamedTypeSpecifierAST: public SpecifierAST
+class CFE_API NamedTypeSpecifierAST: public SpecifierAST
 {
 public:
     NameAST *name;
@@ -1668,7 +1668,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ElaboratedTypeSpecifierAST: public SpecifierAST
+class CFE_API ElaboratedTypeSpecifierAST: public SpecifierAST
 {
 public:
     unsigned classkey_token;
@@ -1694,7 +1694,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT EnumSpecifierAST: public SpecifierAST
+class CFE_API EnumSpecifierAST: public SpecifierAST
 {
 public:
     unsigned enum_token;
@@ -1736,7 +1736,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT EnumeratorAST: public AST
+class CFE_API EnumeratorAST: public AST
 {
 public:
     unsigned identifier_token;
@@ -1764,7 +1764,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ExceptionDeclarationAST: public DeclarationAST
+class CFE_API ExceptionDeclarationAST: public DeclarationAST
 {
 public:
     SpecifierListAST *type_specifier_list;
@@ -1790,7 +1790,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ExceptionSpecificationAST: public AST
+class CFE_API ExceptionSpecificationAST: public AST
 {
 public:
     ExceptionSpecificationAST()
@@ -1801,7 +1801,7 @@ public:
     virtual ExceptionSpecificationAST *clone(MemoryPool *pool) const = 0;
 };
 
-class CPLUSPLUS_EXPORT DynamicExceptionSpecificationAST: public ExceptionSpecificationAST
+class CFE_API DynamicExceptionSpecificationAST: public ExceptionSpecificationAST
 {
 public:
     unsigned throw_token;
@@ -1831,7 +1831,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NoExceptSpecificationAST: public ExceptionSpecificationAST
+class CFE_API NoExceptSpecificationAST: public ExceptionSpecificationAST
 {
 public:
     unsigned noexcept_token;
@@ -1859,7 +1859,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ExpressionOrDeclarationStatementAST: public StatementAST
+class CFE_API ExpressionOrDeclarationStatementAST: public StatementAST
 {
 public:
     ExpressionStatementAST *expression;
@@ -1883,7 +1883,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ExpressionStatementAST: public StatementAST
+class CFE_API ExpressionStatementAST: public StatementAST
 {
 public:
     ExpressionAST *expression;
@@ -1907,7 +1907,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT AmbiguousStatementAST : public StatementAST
+class CFE_API AmbiguousStatementAST : public StatementAST
 {
 public:
     DeclarationStatementAST *declarationStmt;
@@ -1933,7 +1933,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT FunctionDefinitionAST: public DeclarationAST
+class CFE_API FunctionDefinitionAST: public DeclarationAST
 {
 public:
     unsigned qt_invokable_token;
@@ -1967,7 +1967,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ForeachStatementAST: public StatementAST
+class CFE_API ForeachStatementAST: public StatementAST
 {
 public:
     unsigned foreach_token;
@@ -2011,7 +2011,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT RangeBasedForStatementAST : public StatementAST
+class CFE_API RangeBasedForStatementAST : public StatementAST
 {
 public:
     unsigned for_token;
@@ -2053,7 +2053,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ForStatementAST: public StatementAST
+class CFE_API ForStatementAST: public StatementAST
 {
 public:
     unsigned for_token;
@@ -2093,7 +2093,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT IfStatementAST: public StatementAST
+class CFE_API IfStatementAST: public StatementAST
 {
 public:
     unsigned if_token;
@@ -2131,7 +2131,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ArrayInitializerAST: public ExpressionAST
+class CFE_API ArrayInitializerAST: public ExpressionAST
 {
 public:
     unsigned lbrace_token;
@@ -2157,7 +2157,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT LabeledStatementAST: public StatementAST
+class CFE_API LabeledStatementAST: public StatementAST
 {
 public:
     unsigned label_token;
@@ -2183,7 +2183,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT LinkageBodyAST: public DeclarationAST
+class CFE_API LinkageBodyAST: public DeclarationAST
 {
 public:
     unsigned lbrace_token;
@@ -2208,7 +2208,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT LinkageSpecificationAST: public DeclarationAST
+class CFE_API LinkageSpecificationAST: public DeclarationAST
 {
 public:
     unsigned extern_token;
@@ -2234,7 +2234,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT MemInitializerAST: public AST
+class CFE_API MemInitializerAST: public AST
 {
 public:
     NameAST *name;
@@ -2259,7 +2259,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NestedNameSpecifierAST: public AST
+class CFE_API NestedNameSpecifierAST: public AST
 {
 public:
     NameAST *class_or_namespace_name;
@@ -2283,7 +2283,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT QualifiedNameAST: public NameAST
+class CFE_API QualifiedNameAST: public NameAST
 {
 public:
     unsigned global_scope_token;
@@ -2309,7 +2309,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TaggedNameAST: public NameAST
+class CFE_API TaggedNameAST: public NameAST
 {
 public:
     unsigned tag_token;
@@ -2333,7 +2333,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT OperatorFunctionIdAST: public NameAST
+class CFE_API OperatorFunctionIdAST: public NameAST
 {
 public:
     unsigned operator_token;
@@ -2357,7 +2357,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ConversionFunctionIdAST: public NameAST
+class CFE_API ConversionFunctionIdAST: public NameAST
 {
 public:
     unsigned operator_token;
@@ -2383,7 +2383,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT AnonymousNameAST: public NameAST
+class CFE_API AnonymousNameAST: public NameAST
 {
 public:
     unsigned class_token;
@@ -2403,7 +2403,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT SimpleNameAST: public NameAST
+class CFE_API SimpleNameAST: public NameAST
 {
 public:
     unsigned identifier_token;
@@ -2425,7 +2425,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT DestructorNameAST: public NameAST
+class CFE_API DestructorNameAST: public NameAST
 {
 public:
     unsigned tilde_token;
@@ -2449,7 +2449,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TemplateIdAST: public NameAST
+class CFE_API TemplateIdAST: public NameAST
 {
 public:
     unsigned template_token;
@@ -2479,7 +2479,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NamespaceAST: public DeclarationAST
+class CFE_API NamespaceAST: public DeclarationAST
 {
 public:
     unsigned inline_token;
@@ -2513,7 +2513,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NamespaceAliasDefinitionAST: public DeclarationAST
+class CFE_API NamespaceAliasDefinitionAST: public DeclarationAST
 {
 public:
     unsigned namespace_token;
@@ -2543,7 +2543,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT AliasDeclarationAST: public DeclarationAST
+class CFE_API AliasDeclarationAST: public DeclarationAST
 {
 public:
     unsigned using_token;
@@ -2577,7 +2577,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ExpressionListParenAST: public ExpressionAST
+class CFE_API ExpressionListParenAST: public ExpressionAST
 {
 public:
     unsigned lparen_token;
@@ -2603,7 +2603,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NewArrayDeclaratorAST: public AST
+class CFE_API NewArrayDeclaratorAST: public AST
 {
 public:
     unsigned lbracket_token;
@@ -2629,7 +2629,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NewExpressionAST: public ExpressionAST
+class CFE_API NewExpressionAST: public ExpressionAST
 {
 public:
     unsigned scope_token;
@@ -2668,7 +2668,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NewTypeIdAST: public AST
+class CFE_API NewTypeIdAST: public AST
 {
 public:
     SpecifierListAST *type_specifier_list;
@@ -2694,7 +2694,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT OperatorAST: public AST
+class CFE_API OperatorAST: public AST
 {
 public:
     unsigned op_token;
@@ -2720,7 +2720,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ParameterDeclarationAST: public DeclarationAST
+class CFE_API ParameterDeclarationAST: public DeclarationAST
 {
 public:
     SpecifierListAST *type_specifier_list;
@@ -2752,7 +2752,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ParameterDeclarationClauseAST: public AST
+class CFE_API ParameterDeclarationClauseAST: public AST
 {
 public:
     ParameterDeclarationListAST *parameter_declaration_list;
@@ -2776,7 +2776,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT CallAST: public PostfixAST
+class CFE_API CallAST: public PostfixAST
 {
 public:
     ExpressionAST *base_expression;
@@ -2804,7 +2804,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ArrayAccessAST: public PostfixAST
+class CFE_API ArrayAccessAST: public PostfixAST
 {
 public:
     ExpressionAST *base_expression;
@@ -2832,7 +2832,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT PostIncrDecrAST: public PostfixAST
+class CFE_API PostIncrDecrAST: public PostfixAST
 {
 public:
     ExpressionAST *base_expression;
@@ -2856,7 +2856,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT MemberAccessAST: public PostfixAST
+class CFE_API MemberAccessAST: public PostfixAST
 {
 public:
     ExpressionAST *base_expression;
@@ -2884,7 +2884,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TypeidExpressionAST: public ExpressionAST
+class CFE_API TypeidExpressionAST: public ExpressionAST
 {
 public:
     unsigned typeid_token;
@@ -2912,7 +2912,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TypenameCallExpressionAST: public ExpressionAST
+class CFE_API TypenameCallExpressionAST: public ExpressionAST
 {
 public:
     unsigned typename_token;
@@ -2938,7 +2938,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TypeConstructorCallAST: public ExpressionAST
+class CFE_API TypeConstructorCallAST: public ExpressionAST
 {
 public:
     SpecifierListAST *type_specifier_list;
@@ -2962,7 +2962,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT PointerToMemberAST: public PtrOperatorAST
+class CFE_API PointerToMemberAST: public PtrOperatorAST
 {
 public:
     unsigned global_scope_token;
@@ -2992,7 +2992,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT PointerAST: public PtrOperatorAST
+class CFE_API PointerAST: public PtrOperatorAST
 {
 public:
     unsigned star_token;
@@ -3016,7 +3016,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ReferenceAST: public PtrOperatorAST
+class CFE_API ReferenceAST: public PtrOperatorAST
 {
 public:
     unsigned reference_token;
@@ -3038,7 +3038,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT BreakStatementAST: public StatementAST
+class CFE_API BreakStatementAST: public StatementAST
 {
 public:
     unsigned break_token;
@@ -3062,7 +3062,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ContinueStatementAST: public StatementAST
+class CFE_API ContinueStatementAST: public StatementAST
 {
 public:
     unsigned continue_token;
@@ -3086,7 +3086,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT GotoStatementAST: public StatementAST
+class CFE_API GotoStatementAST: public StatementAST
 {
 public:
     unsigned goto_token;
@@ -3112,7 +3112,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ReturnStatementAST: public StatementAST
+class CFE_API ReturnStatementAST: public StatementAST
 {
 public:
     unsigned return_token;
@@ -3138,7 +3138,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT SizeofExpressionAST: public ExpressionAST
+class CFE_API SizeofExpressionAST: public ExpressionAST
 {
 public:
     unsigned sizeof_token;
@@ -3171,7 +3171,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT AlignofExpressionAST: public ExpressionAST
+class CFE_API AlignofExpressionAST: public ExpressionAST
 {
 public:
     unsigned alignof_token;
@@ -3199,7 +3199,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT PointerLiteralAST: public ExpressionAST
+class CFE_API PointerLiteralAST: public ExpressionAST
 {
 public:
     unsigned literal_token;
@@ -3221,7 +3221,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NumericLiteralAST: public ExpressionAST
+class CFE_API NumericLiteralAST: public ExpressionAST
 {
 public:
     unsigned literal_token;
@@ -3243,7 +3243,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT BoolLiteralAST: public ExpressionAST
+class CFE_API BoolLiteralAST: public ExpressionAST
 {
 public:
     unsigned literal_token;
@@ -3265,7 +3265,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ThisExpressionAST: public ExpressionAST
+class CFE_API ThisExpressionAST: public ExpressionAST
 {
 public:
     unsigned this_token;
@@ -3287,7 +3287,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NestedExpressionAST: public ExpressionAST
+class CFE_API NestedExpressionAST: public ExpressionAST
 {
 public:
     unsigned lparen_token;
@@ -3313,7 +3313,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT StaticAssertDeclarationAST: public DeclarationAST
+class CFE_API StaticAssertDeclarationAST: public DeclarationAST
 {
 public:
     unsigned static_assert_token;
@@ -3347,7 +3347,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT StringLiteralAST: public ExpressionAST
+class CFE_API StringLiteralAST: public ExpressionAST
 {
 public:
     unsigned literal_token;
@@ -3371,7 +3371,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT SwitchStatementAST: public StatementAST
+class CFE_API SwitchStatementAST: public StatementAST
 {
 public:
     unsigned switch_token;
@@ -3405,7 +3405,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TemplateDeclarationAST: public DeclarationAST
+class CFE_API TemplateDeclarationAST: public DeclarationAST
 {
 public:
     unsigned export_token;
@@ -3441,7 +3441,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ThrowExpressionAST: public ExpressionAST
+class CFE_API ThrowExpressionAST: public ExpressionAST
 {
 public:
     unsigned throw_token;
@@ -3465,7 +3465,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT NoExceptOperatorExpressionAST: public ExpressionAST
+class CFE_API NoExceptOperatorExpressionAST: public ExpressionAST
 {
 public:
     unsigned noexcept_token;
@@ -3489,7 +3489,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TranslationUnitAST: public AST
+class CFE_API TranslationUnitAST: public AST
 {
 public:
     DeclarationListAST *declaration_list;
@@ -3511,7 +3511,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TryBlockStatementAST: public StatementAST
+class CFE_API TryBlockStatementAST: public StatementAST
 {
 public:
     unsigned try_token;
@@ -3537,7 +3537,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT CatchClauseAST: public StatementAST
+class CFE_API CatchClauseAST: public StatementAST
 {
 public:
     unsigned catch_token;
@@ -3571,7 +3571,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TypeIdAST: public ExpressionAST
+class CFE_API TypeIdAST: public ExpressionAST
 {
 public:
     SpecifierListAST *type_specifier_list;
@@ -3595,7 +3595,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TypenameTypeParameterAST: public DeclarationAST
+class CFE_API TypenameTypeParameterAST: public DeclarationAST
 {
 public:
     unsigned classkey_token;
@@ -3629,7 +3629,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT TemplateTypeParameterAST: public DeclarationAST
+class CFE_API TemplateTypeParameterAST: public DeclarationAST
 {
 public:
     unsigned template_token;
@@ -3671,7 +3671,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT UnaryExpressionAST: public ExpressionAST
+class CFE_API UnaryExpressionAST: public ExpressionAST
 {
 public:
     unsigned unary_op_token;
@@ -3695,7 +3695,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT UsingAST: public DeclarationAST
+class CFE_API UsingAST: public DeclarationAST
 {
 public:
     unsigned using_token;
@@ -3727,7 +3727,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT UsingDirectiveAST: public DeclarationAST
+class CFE_API UsingDirectiveAST: public DeclarationAST
 {
 public:
     unsigned using_token;
@@ -3759,7 +3759,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT WhileStatementAST: public StatementAST
+class CFE_API WhileStatementAST: public StatementAST
 {
 public:
     unsigned while_token;
@@ -3793,7 +3793,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCClassForwardDeclarationAST: public DeclarationAST
+class CFE_API ObjCClassForwardDeclarationAST: public DeclarationAST
 {
 public:
     SpecifierListAST *attribute_list;
@@ -3825,7 +3825,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCClassDeclarationAST: public DeclarationAST
+class CFE_API ObjCClassDeclarationAST: public DeclarationAST
 {
 public:
     SpecifierListAST *attribute_list;
@@ -3875,7 +3875,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCProtocolForwardDeclarationAST: public DeclarationAST
+class CFE_API ObjCProtocolForwardDeclarationAST: public DeclarationAST
 {
 public:
     SpecifierListAST *attribute_list;
@@ -3907,7 +3907,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCProtocolDeclarationAST: public DeclarationAST
+class CFE_API ObjCProtocolDeclarationAST: public DeclarationAST
 {
 public:
     SpecifierListAST *attribute_list;
@@ -3943,7 +3943,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCProtocolRefsAST: public AST
+class CFE_API ObjCProtocolRefsAST: public AST
 {
 public:
     unsigned less_token;
@@ -3969,7 +3969,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCMessageArgumentAST: public AST
+class CFE_API ObjCMessageArgumentAST: public AST
 {
 public:
     ExpressionAST *parameter_value_expression;
@@ -3991,7 +3991,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCMessageExpressionAST: public ExpressionAST
+class CFE_API ObjCMessageExpressionAST: public ExpressionAST
 {
 public:
     unsigned lbracket_token;
@@ -4021,7 +4021,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCProtocolExpressionAST: public ExpressionAST
+class CFE_API ObjCProtocolExpressionAST: public ExpressionAST
 {
 public:
     unsigned protocol_token;
@@ -4049,7 +4049,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCTypeNameAST: public AST
+class CFE_API ObjCTypeNameAST: public AST
 {
 public:
     unsigned lparen_token;
@@ -4077,7 +4077,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCEncodeExpressionAST: public ExpressionAST
+class CFE_API ObjCEncodeExpressionAST: public ExpressionAST
 {
 public:
     unsigned encode_token;
@@ -4101,7 +4101,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCSelectorExpressionAST: public ExpressionAST
+class CFE_API ObjCSelectorExpressionAST: public ExpressionAST
 {
 public:
     unsigned selector_token;
@@ -4129,7 +4129,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCInstanceVariablesDeclarationAST: public AST
+class CFE_API ObjCInstanceVariablesDeclarationAST: public AST
 {
 public:
     unsigned lbrace_token;
@@ -4155,7 +4155,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCVisibilityDeclarationAST: public DeclarationAST
+class CFE_API ObjCVisibilityDeclarationAST: public DeclarationAST
 {
 public:
     unsigned visibility_token;
@@ -4177,7 +4177,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCPropertyAttributeAST: public AST
+class CFE_API ObjCPropertyAttributeAST: public AST
 {
 public:
     unsigned attribute_identifier_token;
@@ -4203,7 +4203,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCPropertyDeclarationAST: public DeclarationAST
+class CFE_API ObjCPropertyDeclarationAST: public DeclarationAST
 {
 public:
     SpecifierListAST *attribute_list;
@@ -4239,7 +4239,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCMessageArgumentDeclarationAST: public AST
+class CFE_API ObjCMessageArgumentDeclarationAST: public AST
 {
 public:
     ObjCTypeNameAST* type_name;
@@ -4269,7 +4269,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCMethodPrototypeAST: public AST
+class CFE_API ObjCMethodPrototypeAST: public AST
 {
 public:
     unsigned method_type_token;
@@ -4305,7 +4305,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCMethodDeclarationAST: public DeclarationAST
+class CFE_API ObjCMethodDeclarationAST: public DeclarationAST
 {
 public:
     ObjCMethodPrototypeAST *method_prototype;
@@ -4331,7 +4331,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCSynthesizedPropertyAST: public AST
+class CFE_API ObjCSynthesizedPropertyAST: public AST
 {
 public:
     unsigned property_identifier_token;
@@ -4357,7 +4357,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCSynthesizedPropertiesDeclarationAST: public DeclarationAST
+class CFE_API ObjCSynthesizedPropertiesDeclarationAST: public DeclarationAST
 {
 public:
     unsigned synthesized_token;
@@ -4383,7 +4383,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCDynamicPropertiesDeclarationAST: public DeclarationAST
+class CFE_API ObjCDynamicPropertiesDeclarationAST: public DeclarationAST
 {
 public:
     unsigned dynamic_token;
@@ -4409,7 +4409,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCFastEnumerationAST: public StatementAST
+class CFE_API ObjCFastEnumerationAST: public StatementAST
 {
 public:
     unsigned for_token;
@@ -4455,7 +4455,7 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-class CPLUSPLUS_EXPORT ObjCSynchronizedStatementAST: public StatementAST
+class CFE_API ObjCSynchronizedStatementAST: public StatementAST
 {
 public:
     unsigned synchronized_token;
@@ -4754,6 +4754,6 @@ protected:
     virtual bool match0(AST *, ASTMatcher *);
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_AST_H
+#endif // CFE_AST_H

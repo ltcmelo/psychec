@@ -18,17 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_MEMORYPOOL_H
-#define CPLUSPLUS_MEMORYPOOL_H
+#ifndef CFE_MEMORYPOOL_H
+#define CFE_MEMORYPOOL_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include <new>
 
-namespace CPlusPlus {
+namespace psyche {
 
 class MemoryPool;
 
-class CPLUSPLUS_EXPORT MemoryPool
+class CFE_API MemoryPool
 {
     MemoryPool(const MemoryPool &other);
     void operator =(const MemoryPool &other);
@@ -67,7 +67,7 @@ private:
     };
 };
 
-class CPLUSPLUS_EXPORT Managed
+class CFE_API Managed
 {
     Managed(const Managed &other);
     void operator = (const Managed &other);
@@ -81,6 +81,6 @@ public:
     void operator delete(void *, MemoryPool *);
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_MEMORYPOOL_H
+#endif // CFE_MEMORYPOOL_H

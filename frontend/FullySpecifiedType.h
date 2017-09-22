@@ -18,15 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_FULLYSPECIFIEDTYPE_H
-#define CPLUSPLUS_FULLYSPECIFIEDTYPE_H
+#ifndef CFE_FULLYSPECIFIEDTYPE_H
+#define CFE_FULLYSPECIFIEDTYPE_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT FullySpecifiedType
+class CFE_API FullySpecifiedType
 {
 public:
     FullySpecifiedType(Type *type = 0);
@@ -146,6 +146,6 @@ private:
     };
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_FULLYSPECIFIEDTYPE_H
+#endif // CFE_FULLYSPECIFIEDTYPE_H

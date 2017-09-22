@@ -20,9 +20,9 @@
 #define PSYCHE_DRIVER_H__
 
 #include "Config.h"
-#include "ASTfwd.h"
+#include "ASTFwds.h"
 #include "Control.h"
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "Dialect.h"
 #include "Factory.h"
 #include "TranslationUnit.h"
@@ -113,7 +113,7 @@ public:
 private:
     friend class TestDisambiguator;
 
-    static CPlusPlus::Dialect specifiedDialect(const ExecutionOptions& exec);
+    static psyche::Dialect specifiedDialect(const ExecutionOptions& exec);
 
     void configure(const ExecutionOptions& flags);
 
@@ -131,14 +131,14 @@ private:
 
     void honorFlag(bool flag, std::function<void ()>) const;
 
-    CPlusPlus::TranslationUnitAST* tuAst() const;
-    CPlusPlus::TranslationUnit* tu() const;
+    psyche::TranslationUnitAST* tuAst() const;
+    psyche::TranslationUnit* tu() const;
 
     const Factory& factory_;
-    CPlusPlus::Control control_;
+    psyche::Control control_;
     ExecutionOptions opts_;
-    CPlusPlus::Namespace* global_;
-    std::unique_ptr<CPlusPlus::TranslationUnit> unit_;
+    psyche::Namespace* global_;
+    std::unique_ptr<psyche::TranslationUnit> unit_;
     std::string constraints_;
     std::string includes_;
 };

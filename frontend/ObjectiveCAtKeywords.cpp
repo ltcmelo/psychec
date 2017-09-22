@@ -2,7 +2,7 @@
 #include "Lexer.h"
 #include "Token.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 static inline int classify3(const char *s) {
   if (s[0] == 'e') {

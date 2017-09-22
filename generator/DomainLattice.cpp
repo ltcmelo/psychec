@@ -36,7 +36,7 @@
 #include <unordered_set>
 #include <utility>
 
-using namespace CPlusPlus;
+using namespace psyche;
 using namespace psyche;
 
 #define VISITOR_NAME "TypeLattice"
@@ -177,7 +177,7 @@ DomainLattice::DB *DomainLattice::findOrCreateDB(const Scope *scope)
 template <class T, class MapT>
 DomainLattice::Domain DomainLattice::retrieveDomainCore(const T* v,
                                                         const MapT DB::*m,
-                                                        const CPlusPlus::Scope* scope) const
+                                                        const psyche::Scope* scope) const
 {
     while (scope) {
         if (const DB* db = searchDB(scope)) {

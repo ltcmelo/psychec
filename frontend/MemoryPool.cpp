@@ -21,7 +21,7 @@
 #include "MemoryPool.h"
 #include <cstring>
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 MemoryPool::MemoryPool()
     : _blocks(0),

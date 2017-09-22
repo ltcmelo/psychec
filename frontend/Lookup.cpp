@@ -27,7 +27,7 @@
 #include <cassert>
 #include <iostream>
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 namespace psyche {
 

@@ -29,7 +29,7 @@
 #include <cstring>
 #include <iostream>
 
-namespace CPlusPlus {
+namespace psyche {
 
 class SymbolTable
 {
@@ -319,4 +319,4 @@ bool Scope::encloses(const Scope* scope) const
     return false;
 }
 
-} // namespace CPlusPlus
+} // namespace psyche

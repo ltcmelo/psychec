@@ -21,7 +21,7 @@
 
 #include "BaseTester.h"
 #include "Control.h"
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "DiagnosticCollector.h"
 #include "TranslationUnit.h"
 #include <functional>
@@ -113,9 +113,9 @@ private:
         PARSER_TEST(testCase30)
     };
 
-    CPlusPlus::DiagnosticCollector collector_;
-    CPlusPlus::Control control_;
-    std::unique_ptr<CPlusPlus::StringLiteral> name_;
+    psyche::DiagnosticCollector collector_;
+    psyche::Control control_;
+    std::unique_ptr<psyche::StringLiteral> name_;
 };
 
 } // namespace psyche

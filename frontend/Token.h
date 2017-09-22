@@ -18,13 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_TOKEN_H
-#define CPLUSPLUS_TOKEN_H
+#ifndef CFE_TOKEN_H
+#define CFE_TOKEN_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "Dialect.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
 enum Kind {
     T_EOF_SYMBOL = 0,
@@ -292,7 +292,7 @@ enum Kind {
     T_LAST_TOKEN
 };
 
-class CPLUSPLUS_EXPORT Token
+class CFE_API Token
 {
 public:
     Token() : flags(0), byteOffset(0), utf16charOffset(0), ptr(0) {}
@@ -398,6 +398,6 @@ public:
     };
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_TOKEN_H
+#endif // CFE_TOKEN_H

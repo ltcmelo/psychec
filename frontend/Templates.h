@@ -18,10 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_TEMPLATES_H
-#define CPLUSPLUS_TEMPLATES_H
+#ifndef CFE_TEMPLATES_H
+#define CFE_TEMPLATES_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "TypeVisitor.h"
 #include "FullySpecifiedType.h"
 #include "Name.h"
@@ -31,11 +31,11 @@
 #include <map>
 #include <utility>
 
-namespace CPlusPlus {
+namespace psyche {
 
 class Clone;
 
-class CPLUSPLUS_EXPORT Subst
+class CFE_API Subst
 {
     Subst(const Subst &other);
     Subst &operator = (const Subst &other);
@@ -64,7 +64,7 @@ private:
     std::map<const Name *, FullySpecifiedType, Name::Compare> _map;
 };
 
-class CPLUSPLUS_EXPORT CloneType: protected TypeVisitor
+class CFE_API CloneType: protected TypeVisitor
 {
 public:
     CloneType(Clone *clone);
@@ -104,7 +104,7 @@ protected:
     FullySpecifiedType _type;
 };
 
-class CPLUSPLUS_EXPORT CloneName: protected NameVisitor
+class CFE_API CloneName: protected NameVisitor
 {
 public:
     CloneName(Clone *clone);
@@ -132,7 +132,7 @@ protected:
     const Name *_name;
 };
 
-class CPLUSPLUS_EXPORT CloneSymbol: protected SymbolVisitor
+class CFE_API CloneSymbol: protected SymbolVisitor
 {
 public:
     CloneSymbol(Clone *clone);
@@ -180,7 +180,7 @@ protected:
     Symbol *_symbol;
 };
 
-class CPLUSPLUS_EXPORT Clone
+class CFE_API Clone
 {
     Control *_control;
 
@@ -206,6 +206,6 @@ private:
     CloneSymbol _symbol;
 };
 
-} // end of namespace CPlusPlus
+} // end of namespace psyche
 
-#endif // CPLUSPLUS_TEMPLATES_H
+#endif // CFE_TEMPLATES_H

@@ -43,7 +43,7 @@
 #include <cstring>
 
 using namespace psyche;
-using namespace CPlusPlus;
+using namespace psyche;
 using namespace std::placeholders;
 
 namespace psyche {

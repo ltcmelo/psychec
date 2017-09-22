@@ -22,11 +22,11 @@
 #ifndef ASTMATCHER_H
 #define ASTMATCHER_H
 
-#include "ASTfwd.h"
+#include "ASTFwds.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT ASTMatcher
+class CFE_API ASTMatcher
 {
 public:
     ASTMatcher();
@@ -186,6 +186,6 @@ public:
     virtual bool match(WhileStatementAST *node, WhileStatementAST *pattern);
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_ASTMATCHER_H
+#endif // CFE_ASTMATCHER_H

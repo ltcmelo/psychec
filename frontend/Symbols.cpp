@@ -25,7 +25,7 @@
 #include "Scope.h"
 #include "Templates.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 UsingNamespaceDirective::UsingNamespaceDirective(TranslationUnit *translationUnit,
                                                  unsigned sourceLocation, const Name *name)

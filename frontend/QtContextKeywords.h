@@ -2,9 +2,9 @@
 #ifndef QTCONTEXTKEYWORDS_H
 #define QTCONTEXTKEYWORDS_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
 enum {
     Token_not_Qt_context_keyword = 0,
@@ -22,7 +22,7 @@ enum {
     Token_MEMBER
 };
 
-CPLUSPLUS_EXPORT int classifyQtContextKeyword(const char *s, int n);
-} // namespace CPlusPlus;
+CFE_API int classifyQtContextKeyword(const char *s, int n);
+} // namespace psyche;
 
 #endif // QTCONTEXTKEYWORDS_H

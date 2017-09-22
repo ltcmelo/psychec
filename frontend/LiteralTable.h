@@ -18,13 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_LITERALTABLE_H
-#define CPLUSPLUS_LITERALTABLE_H
+#ifndef CFE_LITERALTABLE_H
+#define CFE_LITERALTABLE_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include <cstring>
 
-namespace CPlusPlus {
+namespace psyche {
 
 template <typename Literal>
 class LiteralTable
@@ -163,7 +163,7 @@ protected:
     int _allocatedBuckets;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_LITERALTABLE_H
+#endif // CFE_LITERALTABLE_H

@@ -1,5 +1,8 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
+// Modifications:
+// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -18,44 +21,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_CPLUSPLUSFORWARDDECLARATIONS_H
-#define CPLUSPLUS_CPLUSPLUSFORWARDDECLARATIONS_H
+#ifndef CFE_API_H__
+#define CFE_API_H__
 
 #include <cstdlib>
 #include <cstddef>
 
-#ifdef CPLUSPLUS_WITHOUT_QT
-#  ifndef CPLUSPLUS_UNLIKELY
-#    ifdef __GNUC__
-#      define CPLUSPLUS_UNLIKELY(expr) __builtin_expect(!!(expr), false)
-#    else
-#      define CPLUSPLUS_UNLIKELY(expr) (expr)
-#    endif
-#  endif
-#  define CPLUSPLUS_EXPORT
+// From https://gcc.gnu.org/wiki/Visibility
+#if defined _WIN32 || defined __CYGWIN__
+  #ifdef EXPORT_API
+    #ifdef __GNUC__
+      #define CFE_API __attribute__ ((dllexport))
+    #else
+      #define CFE_API __declspec(dllexport)
+    #endif
+  #else
+    #ifdef __GNUC__
+      #define CFE_API __attribute__ ((dllimport))
+    #else
+      #define CFE_API __declspec(dllimport)
+    #endif
+  #endif
+  #define CFE_API_LOCAL
 #else
-#  include <qglobal.h>
-#  ifndef CPLUSPLUS_UNLIKELY
-#    ifdef Q_UNLIKELY
-#      define CPLUSPLUS_UNLIKELY(expr) Q_UNLIKELY(expr)
-#    else // pre 4.8.something
-#      ifdef __GCC__
-#        define CPLUSPLUS_UNLIKELY(expr) __builtin_expect(!!(expr), false)
-#      else
-#        define CPLUSPLUS_UNLIKELY(expr) (expr)
-#      endif
-#    endif
-#  endif
-#  if defined(CPLUSPLUS_BUILD_LIB)
-#    define CPLUSPLUS_EXPORT Q_DECL_EXPORT
-#  elif defined(CPLUSPLUS_BUILD_STATIC_LIB)
-#    define CPLUSPLUS_EXPORT
-#  else
-#    define CPLUSPLUS_EXPORT Q_DECL_IMPORT
-#  endif
+  #if __GNUC__ >= 4
+    #define CFE_API __attribute__ ((visibility ("default")))
+    #define CFE_API_LOCAL  __attribute__ ((visibility ("hidden")))
+  #else
+    #define CFE_API
+    #define CFE_API_LOCAL
+  #endif
 #endif
 
-namespace CPlusPlus {
+#ifndef UNLIKELY
+  #ifdef __GNUC__
+    #define UNLIKELY(expr) __builtin_expect(!!(expr), false)
+  #else
+    #define UNLIKELY(expr) (expr)
+  #endif
+#endif
+
+namespace psyche {
 
 class TranslationUnit;
 class Control;
@@ -137,6 +143,6 @@ class ObjCForwardProtocolDeclaration;
 class ObjCMethod;
 class ObjCPropertyDeclaration;
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_CPLUSPLUSFORWARDDECLARATIONS_H
+#endif

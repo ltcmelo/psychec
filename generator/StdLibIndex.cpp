@@ -24,7 +24,7 @@
 #include <unordered_set>
 
 using namespace psyche;
-using namespace CPlusPlus;
+using namespace psyche;
 
 // C89/90
 const StdLibIndex::Index StdLibIndex::c89idx_

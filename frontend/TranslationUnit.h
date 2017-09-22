@@ -21,11 +21,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_TRANSLATIONUNIT_H
-#define CPLUSPLUS_TRANSLATIONUNIT_H
+#ifndef CFE_TRANSLATIONUNIT_H
+#define CFE_TRANSLATIONUNIT_H
 
-#include "CPlusPlusForwardDeclarations.h"
-#include "ASTfwd.h"
+#include "Api.h"
+#include "ASTFwds.h"
 #include "Token.h"
 #include "DiagnosticCollector.h"
 #include <cstdio>
@@ -45,9 +45,9 @@
 #  include <unordered_map>
 #endif
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT TranslationUnit
+class CFE_API TranslationUnit
 {
     TranslationUnit(const TranslationUnit &other);
     void operator =(const TranslationUnit &other);
@@ -212,7 +212,7 @@ private:
     Dialect _dialect;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_TRANSLATIONUNIT_H
+#endif // CFE_TRANSLATIONUNIT_H

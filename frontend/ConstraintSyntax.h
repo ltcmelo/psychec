@@ -19,7 +19,7 @@
 #ifndef PSYCHE_CONSTRAINTSYNTAXFORMATTER_H__
 #define PSYCHE_CONSTRAINTSYNTAXFORMATTER_H__
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "CSyntax.h"
 #include <string>
 

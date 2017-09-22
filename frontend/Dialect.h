@@ -22,7 +22,7 @@
 #ifndef PSYCHE_DIALECT_H__
 #define PSYCHE_DIALECT_H__
 
-namespace CPlusPlus {
+namespace psyche {
 
 struct Dialect
 {
@@ -64,6 +64,6 @@ struct Dialect
     };
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 #endif

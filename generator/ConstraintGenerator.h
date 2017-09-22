@@ -42,12 +42,12 @@ class Observer;
  *
  * Responsible for generating the constraints.
  */
-class PSYCHEC_API ConstraintGenerator final : public CPlusPlus::ASTVisitor
+class PSYCHEC_API ConstraintGenerator final : public psyche::ASTVisitor
 {
 public:
-    ConstraintGenerator(CPlusPlus::TranslationUnit *unit, ConstraintWriter* writer);
+    ConstraintGenerator(psyche::TranslationUnit *unit, ConstraintWriter* writer);
 
-    void generate(CPlusPlus::TranslationUnitAST *ast, CPlusPlus::Scope *global);
+    void generate(psyche::TranslationUnitAST *ast, psyche::Scope *global);
 
     void employDomainLattice(const DomainLattice* lattice);
 
@@ -77,61 +77,61 @@ private:
      * Convenience to switch current scope. Works similar to a stack, the
      * caller is responsible to pop the previous scope and push it back later.
      */
-    CPlusPlus::Scope *switchScope(CPlusPlus::Scope *scope);
+    psyche::Scope *switchScope(psyche::Scope *scope);
 
-    void visitName(CPlusPlus::NameAST* ast);
+    void visitName(psyche::NameAST* ast);
 
     // Declarations
-    void visitDeclaration(CPlusPlus::DeclarationAST *ast);
-    bool visit(CPlusPlus::SimpleDeclarationAST *ast) override;
-    bool visit(CPlusPlus::FunctionDefinitionAST *ast) override;
+    void visitDeclaration(psyche::DeclarationAST *ast);
+    bool visit(psyche::SimpleDeclarationAST *ast) override;
+    bool visit(psyche::FunctionDefinitionAST *ast) override;
 
     // Expressions
-    void visitExpression(CPlusPlus::ExpressionAST* ast);
-    bool visit(CPlusPlus::ArrayAccessAST* ast) override;
-    bool visit(CPlusPlus::BinaryExpressionAST* ast) override;
-    bool visit(CPlusPlus::CallAST *ast) override;
-    bool visit(CPlusPlus::CastExpressionAST *ast) override;
-    bool visit(CPlusPlus::ConditionalExpressionAST *ast) override;
-    bool visit(CPlusPlus::IdExpressionAST* ast) override;
-    bool visit(CPlusPlus::MemberAccessAST* ast) override;
-    bool visit(CPlusPlus::UnaryExpressionAST* ast) override;
-    bool visit(CPlusPlus::NumericLiteralAST* ast) override;
-    bool visit(CPlusPlus::BoolLiteralAST* ast) override;
-    bool visit(CPlusPlus::StringLiteralAST* ast) override;
-    bool visit(CPlusPlus::SizeofExpressionAST* ast) override;
-    bool visit(CPlusPlus::PointerLiteralAST* ast) override;
-    bool visit(CPlusPlus::BracedInitializerAST *ast) override;
-    bool visit(CPlusPlus::PostIncrDecrAST* ast) override;
+    void visitExpression(psyche::ExpressionAST* ast);
+    bool visit(psyche::ArrayAccessAST* ast) override;
+    bool visit(psyche::BinaryExpressionAST* ast) override;
+    bool visit(psyche::CallAST *ast) override;
+    bool visit(psyche::CastExpressionAST *ast) override;
+    bool visit(psyche::ConditionalExpressionAST *ast) override;
+    bool visit(psyche::IdExpressionAST* ast) override;
+    bool visit(psyche::MemberAccessAST* ast) override;
+    bool visit(psyche::UnaryExpressionAST* ast) override;
+    bool visit(psyche::NumericLiteralAST* ast) override;
+    bool visit(psyche::BoolLiteralAST* ast) override;
+    bool visit(psyche::StringLiteralAST* ast) override;
+    bool visit(psyche::SizeofExpressionAST* ast) override;
+    bool visit(psyche::PointerLiteralAST* ast) override;
+    bool visit(psyche::BracedInitializerAST *ast) override;
+    bool visit(psyche::PostIncrDecrAST* ast) override;
 
     // Specifiers
-    void visitSpecifier(CPlusPlus::SpecifierAST *ast);
-    bool visit(CPlusPlus::EnumSpecifierAST *ast) override;
-    bool visit(CPlusPlus::ClassSpecifierAST *ast) override;
-    bool visit(CPlusPlus::GnuAttributeSpecifierAST *ast) override;
+    void visitSpecifier(psyche::SpecifierAST *ast);
+    bool visit(psyche::EnumSpecifierAST *ast) override;
+    bool visit(psyche::ClassSpecifierAST *ast) override;
+    bool visit(psyche::GnuAttributeSpecifierAST *ast) override;
 
     // Statements
-    void visitStatement(CPlusPlus::StatementAST *ast);
-    bool visit(CPlusPlus::SwitchStatementAST *ast) override;
-    bool visit(CPlusPlus::CaseStatementAST* ast) override;
-    bool visit(CPlusPlus::CompoundStatementAST *ast) override;
-    bool visit(CPlusPlus::DeclarationStatementAST *ast) override;
-    bool visit(CPlusPlus::DoStatementAST *ast) override;
-    bool visit(CPlusPlus::WhileStatementAST *ast) override;
-    bool visit(CPlusPlus::ForStatementAST *ast) override;
-    bool visit(CPlusPlus::IfStatementAST *ast) override;
-    bool visit(CPlusPlus::ExpressionStatementAST *ast) override;
-    bool visit(CPlusPlus::ReturnStatementAST *ast) override;
+    void visitStatement(psyche::StatementAST *ast);
+    bool visit(psyche::SwitchStatementAST *ast) override;
+    bool visit(psyche::CaseStatementAST* ast) override;
+    bool visit(psyche::CompoundStatementAST *ast) override;
+    bool visit(psyche::DeclarationStatementAST *ast) override;
+    bool visit(psyche::DoStatementAST *ast) override;
+    bool visit(psyche::WhileStatementAST *ast) override;
+    bool visit(psyche::ForStatementAST *ast) override;
+    bool visit(psyche::IfStatementAST *ast) override;
+    bool visit(psyche::ExpressionStatementAST *ast) override;
+    bool visit(psyche::ReturnStatementAST *ast) override;
 
     // Miscellanea
-    bool visit(CPlusPlus::EnumeratorAST *ast) override;
+    bool visit(psyche::EnumeratorAST *ast) override;
 
     // Symbol visits.
-    void visitSymbol(CPlusPlus::Function* func, CPlusPlus::StatementAST* body);
+    void visitSymbol(psyche::Function* func, psyche::StatementAST* body);
 
     //! Scope we're in and the global scope.
-    CPlusPlus::Scope *scope_;
-    CPlusPlus::Scope *global_;
+    psyche::Scope *scope_;
+    psyche::Scope *global_;
 
     //! Writer we use to generate the constraints.
     ConstraintWriter *writer_;
@@ -155,7 +155,7 @@ private:
     void employLattice(const DomainLattice::Domain &lhsDom, const DomainLattice::Domain &rhsDom,
                        const std::string &lhsTy, const std::string &rhsTy,
                        int op);
-    DomainLattice::Domain domainOf(CPlusPlus::ExpressionAST* ast) const;
+    DomainLattice::Domain domainOf(psyche::ExpressionAST* ast) const;
     //!@}
 
     //!@{
@@ -197,13 +197,13 @@ private:
     /*!
      * Convert boolean expressions to int.
      */
-    void treatAsBool(CPlusPlus::ExpressionAST *ast);
+    void treatAsBool(psyche::ExpressionAST *ast);
 
     /*!
      * Encapsulates the steps to enter a new expression rule and generate its
      * corresponding constraints.
      */
-    void collectExpression(const std::string& ty, CPlusPlus::ExpressionAST* expr);
+    void collectExpression(const std::string& ty, psyche::ExpressionAST* expr);
 
     /*!
      * \brief ensureTypeIsKnown

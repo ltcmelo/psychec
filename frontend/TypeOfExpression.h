@@ -19,7 +19,7 @@
 #ifndef PSYCHE_TYPEOFEXPRESSION_H__
 #define PSYCHE_TYPEOFEXPRESSION_H__
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "ASTVisitor.h"
 #include "FullySpecifiedType.h"
 #include <vector>
@@ -30,49 +30,49 @@ namespace psyche {
 /*!
  * \brief The TypeOfExpression class
  */
-class CPLUSPLUS_EXPORT TypeOfExpression final : CPlusPlus::ASTVisitor
+class CFE_API TypeOfExpression final : psyche::ASTVisitor
 {
 public:
-    TypeOfExpression(CPlusPlus::TranslationUnit* unit);
+    TypeOfExpression(psyche::TranslationUnit* unit);
 
-    CPlusPlus::FullySpecifiedType resolve(CPlusPlus::ExpressionAST* ast,
-                                          CPlusPlus::Scope* scope);
+    psyche::FullySpecifiedType resolve(psyche::ExpressionAST* ast,
+                                          psyche::Scope* scope);
 
-    CPlusPlus::FullySpecifiedType commonRealType(const CPlusPlus::FullySpecifiedType&,
-                                                 const CPlusPlus::FullySpecifiedType&) const;
+    psyche::FullySpecifiedType commonRealType(const psyche::FullySpecifiedType&,
+                                                 const psyche::FullySpecifiedType&) const;
 
-    CPlusPlus::FullySpecifiedType promotedType(const CPlusPlus::FullySpecifiedType&) const;
+    psyche::FullySpecifiedType promotedType(const psyche::FullySpecifiedType&) const;
 
 private:
-    void process(const CPlusPlus::Identifier* id);
+    void process(const psyche::Identifier* id);
 
     // Expressions
-    bool visit(CPlusPlus::ArrayAccessAST* ast) override;
-    bool visit(CPlusPlus::BinaryExpressionAST* ast) override;
-    bool visit(CPlusPlus::CallAST *ast) override;
-    bool visit(CPlusPlus::CastExpressionAST *ast) override;
-    bool visit(CPlusPlus::ConditionalExpressionAST *ast) override;
-    bool visit(CPlusPlus::IdExpressionAST* ast) override;
-    bool visit(CPlusPlus::MemberAccessAST* ast) override;
-    bool visit(CPlusPlus::NumericLiteralAST* ast) override;
-    bool visit(CPlusPlus::BoolLiteralAST* ast) override;
-    bool visit(CPlusPlus::StringLiteralAST* ast) override;
-    bool visit(CPlusPlus::UnaryExpressionAST* ast) override;
-    bool visit(CPlusPlus::SizeofExpressionAST* ast) override;
-    bool visit(CPlusPlus::PointerLiteralAST* ast) override;
-    bool visit(CPlusPlus::TypeIdAST* ast) override;
+    bool visit(psyche::ArrayAccessAST* ast) override;
+    bool visit(psyche::BinaryExpressionAST* ast) override;
+    bool visit(psyche::CallAST *ast) override;
+    bool visit(psyche::CastExpressionAST *ast) override;
+    bool visit(psyche::ConditionalExpressionAST *ast) override;
+    bool visit(psyche::IdExpressionAST* ast) override;
+    bool visit(psyche::MemberAccessAST* ast) override;
+    bool visit(psyche::NumericLiteralAST* ast) override;
+    bool visit(psyche::BoolLiteralAST* ast) override;
+    bool visit(psyche::StringLiteralAST* ast) override;
+    bool visit(psyche::UnaryExpressionAST* ast) override;
+    bool visit(psyche::SizeofExpressionAST* ast) override;
+    bool visit(psyche::PointerLiteralAST* ast) override;
+    bool visit(psyche::TypeIdAST* ast) override;
 
     // Specifiers
-    bool visit(CPlusPlus::SimpleSpecifierAST* ast) override;
-    bool visit(CPlusPlus::NamedTypeSpecifierAST* ast) override;
-    bool visit(CPlusPlus::ElaboratedTypeSpecifierAST* ast) override;
+    bool visit(psyche::SimpleSpecifierAST* ast) override;
+    bool visit(psyche::NamedTypeSpecifierAST* ast) override;
+    bool visit(psyche::ElaboratedTypeSpecifierAST* ast) override;
 
     // Declarators
-    bool visit(CPlusPlus::DeclaratorAST* ast) override;
-    bool visit(CPlusPlus::PointerAST* ast) override;
+    bool visit(psyche::DeclaratorAST* ast) override;
+    bool visit(psyche::PointerAST* ast) override;
 
-    CPlusPlus::FullySpecifiedType fullType_;
-    CPlusPlus::Scope* scope_;
+    psyche::FullySpecifiedType fullType_;
+    psyche::Scope* scope_;
     std::size_t searchMember_;
 };
 

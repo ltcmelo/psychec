@@ -20,7 +20,7 @@
 #ifndef PSYCHE_SYNTAXAMBIGUITY_H__
 #define PSYCHE_SYNTAXAMBIGUITY_H__
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "Name.h"
 #include "Names.h"
 
@@ -29,7 +29,7 @@ namespace psyche {
 /*!
  * \brief The SyntaxAmbiguity class
  */
-class CPLUSPLUS_EXPORT SyntaxAmbiguity
+class CFE_API SyntaxAmbiguity
 {
 public:
     enum class Resolution : char
@@ -63,10 +63,10 @@ public:
     void applyResolution(SyntaxAmbiguity::Resolution r) { resolution_ = r; }
     Resolution resolution() const { return resolution_; }
 
-    void setLhs(const CPlusPlus::Name* name) { lhs_ = name; }
-    const CPlusPlus::Name* lhs() const { return lhs_; }
-    void setRhs(const CPlusPlus::Name* name) { rhs_ = name; }
-    const CPlusPlus::Name* rhs() const { return rhs_; }
+    void setLhs(const psyche::Name* name) { lhs_ = name; }
+    const psyche::Name* lhs() const { return lhs_; }
+    void setRhs(const psyche::Name* name) { rhs_ = name; }
+    const psyche::Name* rhs() const { return rhs_; }
 
     const unsigned line() const { return line_; }
 
@@ -74,8 +74,8 @@ private:
     Variety variety_;
     const unsigned line_;
     Resolution resolution_;
-    const CPlusPlus::Name* lhs_;
-    const CPlusPlus::Name* rhs_;
+    const psyche::Name* lhs_;
+    const psyche::Name* rhs_;
 };
 
 } // namespace psyche

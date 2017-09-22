@@ -22,7 +22,7 @@
 #include "AST.h"
 #include "ASTVisitor.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 void ObjCSelectorArgumentAST::accept0(ASTVisitor *visitor)
 {

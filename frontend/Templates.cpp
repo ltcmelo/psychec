@@ -26,7 +26,7 @@
 #include "Literals.h"
 #include <algorithm>
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 CloneType::CloneType(Clone *clone)
     : _clone(clone)

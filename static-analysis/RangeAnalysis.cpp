@@ -28,7 +28,7 @@
 #include <cstdlib>
 #include <memory>
 
-using namespace CPlusPlus;
+using namespace psyche;
 using namespace psyche;
 
 RangeAnalysis::RangeAnalysis(TranslationUnit *unit)

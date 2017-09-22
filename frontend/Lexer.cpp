@@ -25,7 +25,7 @@
 #include <cctype>
 #include <iostream>
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 /*!
     \class Lexer

@@ -27,7 +27,7 @@
 #include <iostream>
 
 using namespace psyche;
-using namespace CPlusPlus;
+using namespace psyche;
 
 BasicStubber::BasicStubber(TranslationUnit* unit)
     : ASTVisitor(unit)

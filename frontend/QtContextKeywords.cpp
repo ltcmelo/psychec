@@ -1,7 +1,7 @@
 
 #include "QtContextKeywords.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 static inline int classify4(const char *s) {
   if (s[0] == 'R') {
@@ -189,7 +189,7 @@ static inline int classify10(const char *s) {
   return Token_not_Qt_context_keyword;
 }
 
-int CPlusPlus::classifyQtContextKeyword(const char *s, int n) {
+int psyche::classifyQtContextKeyword(const char *s, int n) {
   switch (n) {
     case 4: return classify4(s);
     case 5: return classify5(s);

@@ -42,11 +42,11 @@
 #    define va_copy __va_copy
 #endif
 
-#define CPLUSPLUS_NO_DEBUG_RULE
+#define CFE_NO_DEBUG_RULE
 #define MAX_EXPRESSION_DEPTH 1000
 #define MAX_STATEMENT_DEPTH 100
 
-using namespace CPlusPlus;
+using namespace psyche;
 using namespace psyche;
 
 namespace {
@@ -226,7 +226,7 @@ private:
     std::unordered_map<ASTKindAndTokenIndex, ParseFunctionResult, KeyHasher> _cache;
 };
 
-#ifndef CPLUSPLUS_NO_DEBUG_RULE
+#ifndef CFE_NO_DEBUG_RULE
 #  define DEBUG_THIS_RULE() DebugRule __debug_rule__(__func__, tok().spell(), cursor(), _translationUnit->blockErrors())
 inline void debugPrintCheckCache(bool goodCase)
 {
@@ -6962,7 +6962,7 @@ bool Parser::parseTrailingReturnType(TrailingReturnTypeAST *&node)
 
 void Parser::rewind(unsigned cursor)
 {
-#ifndef CPLUSPLUS_NO_DEBUG_RULE
+#ifndef CFE_NO_DEBUG_RULE
     if (cursor != _tokenIndex)
         fprintf(stderr, "! rewinding from token %d to token %d\n", _tokenIndex, cursor);
 #endif

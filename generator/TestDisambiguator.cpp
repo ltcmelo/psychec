@@ -35,7 +35,7 @@
 #include <string.h>
 
 using namespace psyche;
-using namespace CPlusPlus;
+using namespace psyche;
 
 /*
  * The expected AST is obtained as follows:

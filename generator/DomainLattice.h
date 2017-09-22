@@ -20,10 +20,10 @@
 #define PSYCHE_DOMAIN_LATTICE_H__
 
 #include "Config.h"
-#include "ASTfwd.h"
+#include "ASTFwds.h"
 #include "ASTVisitor.h"
 #include "ASTIdentityMatcher.h"
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -34,12 +34,12 @@ namespace psyche {
 /*!
  * \brief The DomainLattice class
  */
-class PSYCHEC_API DomainLattice final : public CPlusPlus::ASTVisitor
+class PSYCHEC_API DomainLattice final : public psyche::ASTVisitor
 {
 public:
-    DomainLattice(CPlusPlus::TranslationUnit* unit);
+    DomainLattice(psyche::TranslationUnit* unit);
 
-    void categorize(CPlusPlus::TranslationUnitAST* ast, CPlusPlus::Scope* global);
+    void categorize(psyche::TranslationUnitAST* ast, psyche::Scope* global);
 
     /*!
      * \brief The domain
@@ -77,8 +77,8 @@ public:
      *
      * Return the domain of the given AST/symbol.
      */
-    Domain retrieveDomain(const CPlusPlus::Symbol* sym, const CPlusPlus::Scope*) const;
-    Domain retrieveDomain(const CPlusPlus::ExpressionAST* ast, const CPlusPlus::Scope*) const;
+    Domain retrieveDomain(const psyche::Symbol* sym, const psyche::Scope*) const;
+    Domain retrieveDomain(const psyche::ExpressionAST* ast, const psyche::Scope*) const;
 
     /*!
      * \brief typeDomain
@@ -87,48 +87,48 @@ public:
      *
      * Return the domain of a type.
      */
-    static Domain domainForType(const CPlusPlus::FullySpecifiedType& ty,
-                                const CPlusPlus::Symbol* sym = nullptr);
+    static Domain domainForType(const psyche::FullySpecifiedType& ty,
+                                const psyche::Symbol* sym = nullptr);
 
     // TEMP: Make this a utility.
-    std::string fetchText(CPlusPlus::AST* ast) const;
+    std::string fetchText(psyche::AST* ast) const;
 
 private:
     // Declarations
-    bool visit(CPlusPlus::SimpleDeclarationAST* ast) override;
-    bool visit(CPlusPlus::FunctionDefinitionAST* ast) override;
+    bool visit(psyche::SimpleDeclarationAST* ast) override;
+    bool visit(psyche::FunctionDefinitionAST* ast) override;
 
     // Statements
-    void visitStatement(CPlusPlus::StatementAST* ast);
-    bool visit(CPlusPlus::SwitchStatementAST *ast) override;
-    bool visit(CPlusPlus::CaseStatementAST* ast) override;
-    bool visit(CPlusPlus::CompoundStatementAST *ast) override;
-    bool visit(CPlusPlus::DeclarationStatementAST *ast) override;
-    bool visit(CPlusPlus::DoStatementAST *ast) override;
-    bool visit(CPlusPlus::WhileStatementAST *ast) override;
-    bool visit(CPlusPlus::ForStatementAST *ast) override;
-    bool visit(CPlusPlus::IfStatementAST *ast) override;
-    bool visit(CPlusPlus::ExpressionStatementAST *ast) override;
-    bool visit(CPlusPlus::ReturnStatementAST *ast) override;
+    void visitStatement(psyche::StatementAST* ast);
+    bool visit(psyche::SwitchStatementAST *ast) override;
+    bool visit(psyche::CaseStatementAST* ast) override;
+    bool visit(psyche::CompoundStatementAST *ast) override;
+    bool visit(psyche::DeclarationStatementAST *ast) override;
+    bool visit(psyche::DoStatementAST *ast) override;
+    bool visit(psyche::WhileStatementAST *ast) override;
+    bool visit(psyche::ForStatementAST *ast) override;
+    bool visit(psyche::IfStatementAST *ast) override;
+    bool visit(psyche::ExpressionStatementAST *ast) override;
+    bool visit(psyche::ReturnStatementAST *ast) override;
 
     // Expressions
-    void visitExpression(CPlusPlus::ExpressionAST* ast);
-    bool visit(CPlusPlus::ArrayAccessAST* ast) override;
-    bool visit(CPlusPlus::BinaryExpressionAST* ast) override;
-    bool visit(CPlusPlus::CallAST* ast) override;
-    bool visit(CPlusPlus::CastExpressionAST *ast) override;
-    bool visit(CPlusPlus::ConditionalExpressionAST *ast) override;
-    bool visit(CPlusPlus::IdExpressionAST* ast) override;
-    bool visit(CPlusPlus::MemberAccessAST* ast) override;
-    bool visit(CPlusPlus::UnaryExpressionAST* ast) override;
-    bool visit(CPlusPlus::NumericLiteralAST* ast) override;
-    bool visit(CPlusPlus::BoolLiteralAST* ast) override;
-    bool visit(CPlusPlus::StringLiteralAST* ast) override;
-    bool visit(CPlusPlus::SizeofExpressionAST* ast) override;
-    bool visit(CPlusPlus::PointerLiteralAST* ast) override;
-    bool visit(CPlusPlus::BracedInitializerAST *ast) override;
-    bool visit(CPlusPlus::PostIncrDecrAST* ast) override;
-    bool visit(CPlusPlus::NestedExpressionAST* ast) override;
+    void visitExpression(psyche::ExpressionAST* ast);
+    bool visit(psyche::ArrayAccessAST* ast) override;
+    bool visit(psyche::BinaryExpressionAST* ast) override;
+    bool visit(psyche::CallAST* ast) override;
+    bool visit(psyche::CastExpressionAST *ast) override;
+    bool visit(psyche::ConditionalExpressionAST *ast) override;
+    bool visit(psyche::IdExpressionAST* ast) override;
+    bool visit(psyche::MemberAccessAST* ast) override;
+    bool visit(psyche::UnaryExpressionAST* ast) override;
+    bool visit(psyche::NumericLiteralAST* ast) override;
+    bool visit(psyche::BoolLiteralAST* ast) override;
+    bool visit(psyche::StringLiteralAST* ast) override;
+    bool visit(psyche::SizeofExpressionAST* ast) override;
+    bool visit(psyche::PointerLiteralAST* ast) override;
+    bool visit(psyche::BracedInitializerAST *ast) override;
+    bool visit(psyche::PostIncrDecrAST* ast) override;
+    bool visit(psyche::NestedExpressionAST* ast) override;
 
     unsigned int withinExpr_;
     struct ExpressionRegion
@@ -139,40 +139,40 @@ private:
     };
 
     Domain enforceLeastDomain(Domain);
-    void assignDomain(CPlusPlus::ExpressionAST* ast);
+    void assignDomain(psyche::ExpressionAST* ast);
     Domain lastDom_;
 
-    std::vector<CPlusPlus::ExpressionAST*> knownAsts_;
-    CPlusPlus::ExpressionAST* isKnownAST(const CPlusPlus::ExpressionAST*) const;
+    std::vector<psyche::ExpressionAST*> knownAsts_;
+    psyche::ExpressionAST* isKnownAST(const psyche::ExpressionAST*) const;
     mutable ASTIdentityMatcher matcher_;
 
-    using SymbolMap = std::unordered_map<const CPlusPlus::Symbol*, Domain>;
-    using AstMap = std::unordered_map<const CPlusPlus::ExpressionAST*, Domain>;
+    using SymbolMap = std::unordered_map<const psyche::Symbol*, Domain>;
+    using AstMap = std::unordered_map<const psyche::ExpressionAST*, Domain>;
     using DB = std::pair<AstMap, SymbolMap>;
-    std::unordered_map<const CPlusPlus::Scope*, DB> index_;
+    std::unordered_map<const psyche::Scope*, DB> index_;
 
     template <class T, class MapT>
-    Domain retrieveDomainCore(const T* v, const MapT DB::*, const CPlusPlus::Scope*) const;
+    Domain retrieveDomainCore(const T* v, const MapT DB::*, const psyche::Scope*) const;
 
-    const Scope *enterScope(const CPlusPlus::Scope* scope);
-    const CPlusPlus::Scope* scope_;
+    const Scope *enterScope(const psyche::Scope* scope);
+    const psyche::Scope* scope_;
 
     void resetCutoffScope();
-    const CPlusPlus::Scope* globalScope_;
-    const CPlusPlus::Scope* cutoffScope_;
+    const psyche::Scope* globalScope_;
+    const psyche::Scope* cutoffScope_;
 
-    const DB* searchDB(const CPlusPlus::Scope* scope) const;
-    DB* findOrCreateDB(const CPlusPlus::Scope* scope);
+    const DB* searchDB(const psyche::Scope* scope) const;
+    DB* findOrCreateDB(const psyche::Scope* scope);
 
     // Function argument domains, taken from the call with highest rank.
     struct ArgumentData
     {
         Domain dom_;
-        std::vector<CPlusPlus::ExpressionAST*> instances_;
-        const CPlusPlus::Scope* callScope_; // TODO: This information is for call, not for arg.
+        std::vector<psyche::ExpressionAST*> instances_;
+        const psyche::Scope* callScope_; // TODO: This information is for call, not for arg.
     };
 
-    std::unordered_map<CPlusPlus::ExpressionAST*, std::vector<ArgumentData>> funcs_;
+    std::unordered_map<psyche::ExpressionAST*, std::vector<ArgumentData>> funcs_;
 };
 
 inline std::ostream& operator<<(std::ostream& os, const DomainLattice::Domain& h)

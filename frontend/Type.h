@@ -21,14 +21,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_TYPE_H
-#define CPLUSPLUS_TYPE_H
+#ifndef CFE_TYPE_H
+#define CFE_TYPE_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT Type
+class CFE_API Type
 {
 public:
     Type();
@@ -106,6 +106,6 @@ protected:
     virtual void accept0(TypeVisitor *visitor) = 0;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_TYPE_H
+#endif // CFE_TYPE_H

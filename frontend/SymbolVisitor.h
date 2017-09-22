@@ -24,9 +24,9 @@
 #include "Symbol.h"
 
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT SymbolVisitor
+class CFE_API SymbolVisitor
 {
     SymbolVisitor(const SymbolVisitor &other);
     void operator =(const SymbolVisitor &other);
@@ -70,7 +70,7 @@ public:
     virtual bool visit(ObjCPropertyDeclaration *) { return true; }
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
 #endif // SYMBOLVISITOR_H

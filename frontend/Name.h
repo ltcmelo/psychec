@@ -21,15 +21,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_NAME_H
-#define CPLUSPLUS_NAME_H
+#ifndef CFE_NAME_H
+#define CFE_NAME_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include <functional>
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT Name
+class CFE_API Name
 {
 public:
     Name();
@@ -69,7 +69,7 @@ protected:
     virtual void accept0(NameVisitor *visitor) const = 0;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_NAME_H
+#endif // CFE_NAME_H

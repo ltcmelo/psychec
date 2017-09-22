@@ -21,7 +21,7 @@
 #include "NameVisitor.h"
 #include "Names.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 NameVisitor::NameVisitor()
 { }

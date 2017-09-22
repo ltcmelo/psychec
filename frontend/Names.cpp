@@ -27,7 +27,7 @@
 #include <algorithm>
 #include <cstring>
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 QualifiedNameId::~QualifiedNameId()
 { }

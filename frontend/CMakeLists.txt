@@ -10,9 +10,11 @@ set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 set(CMAKE_MACOSX_RPATH 1)
 
 set(CFE_SOURCES
+    ${PROJECT_SOURCE_DIR}/Api.h
     ${PROJECT_SOURCE_DIR}/AST.cpp
     ${PROJECT_SOURCE_DIR}/AST.h
     ${PROJECT_SOURCE_DIR}/ASTClone.cpp
+    ${PROJECT_SOURCE_DIR}/ASTFwds.h
     ${PROJECT_SOURCE_DIR}/ASTIdentityMatcher.h
     ${PROJECT_SOURCE_DIR}/ASTIdentityMatcher.cpp
     ${PROJECT_SOURCE_DIR}/ASTDumper.h
@@ -26,11 +28,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/ASTVisit.cpp
     ${PROJECT_SOURCE_DIR}/ASTVisitor.cpp
     ${PROJECT_SOURCE_DIR}/ASTVisitor.h
-    ${PROJECT_SOURCE_DIR}/ASTfwd.h
     ${PROJECT_SOURCE_DIR}/Bind.cpp
     ${PROJECT_SOURCE_DIR}/Bind.h
-    ${PROJECT_SOURCE_DIR}/CPlusPlus.h
-    ${PROJECT_SOURCE_DIR}/CPlusPlusForwardDeclarations.h
     ${PROJECT_SOURCE_DIR}/Control.cpp
     ${PROJECT_SOURCE_DIR}/Control.h
     ${PROJECT_SOURCE_DIR}/CoreTypes.cpp

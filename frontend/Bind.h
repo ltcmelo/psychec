@@ -21,8 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_BIND_H
-#define CPLUSPLUS_BIND_H
+#ifndef CFE_BIND_H
+#define CFE_BIND_H
 
 #include "ASTVisitor.h"
 #include "FullySpecifiedType.h"
@@ -33,9 +33,9 @@
 // Pysche
 #include "SyntaxAmbiguity.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT Bind: protected ASTVisitor
+class CFE_API Bind: protected ASTVisitor
 {
 public:
     Bind(TranslationUnit *unit);
@@ -323,6 +323,6 @@ private:
      */
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_BIND_H
+#endif // CFE_BIND_H

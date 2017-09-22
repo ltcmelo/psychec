@@ -19,18 +19,18 @@
 #ifndef PSYCHE_ASTNORMALIZER_H__
 #define PSYCHE_ASTNORMALIZER_H__
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "ASTVisitor.h"
 #include <iostream>
 
 namespace psyche {
 
-class CPLUSPLUS_EXPORT ASTNormalizer final : public CPlusPlus::ASTVisitor
+class CFE_API ASTNormalizer final : public psyche::ASTVisitor
 {
 public:
-    ASTNormalizer(CPlusPlus::TranslationUnit *unit, bool employHeuristic);
+    ASTNormalizer(psyche::TranslationUnit *unit, bool employHeuristic);
 
-    bool normalize(CPlusPlus::TranslationUnitAST *ast);
+    bool normalize(psyche::TranslationUnitAST *ast);
 
     struct Stats
     {
@@ -50,16 +50,16 @@ private:
     // methods only wouldn't work because all we get is a copy of the poitner.
     // Our approach is to overide the visit of all nodes which can hold an
     // ambiguous statement within it.
-    bool visit(CPlusPlus::CompoundStatementAST *ast);
-    bool visit(CPlusPlus::IfStatementAST *ast);
-    bool visit(CPlusPlus::ForStatementAST *ast);
-    bool visit(CPlusPlus::LabeledStatementAST *ast);
-    bool visit(CPlusPlus::WhileStatementAST *ast);
-    bool visit(CPlusPlus::SwitchStatementAST *ast);
-    bool visit(CPlusPlus::CaseStatementAST *ast);
-    bool visit(CPlusPlus::DoStatementAST *ast);
+    bool visit(psyche::CompoundStatementAST *ast);
+    bool visit(psyche::IfStatementAST *ast);
+    bool visit(psyche::ForStatementAST *ast);
+    bool visit(psyche::LabeledStatementAST *ast);
+    bool visit(psyche::WhileStatementAST *ast);
+    bool visit(psyche::SwitchStatementAST *ast);
+    bool visit(psyche::CaseStatementAST *ast);
+    bool visit(psyche::DoStatementAST *ast);
 
-    void maybeFixAST(CPlusPlus::StatementAST *&ast);
+    void maybeFixAST(psyche::StatementAST *&ast);
 
     bool employHeuristic_; // On ambiguities not resolved by further syntax.
     Stats stats_;

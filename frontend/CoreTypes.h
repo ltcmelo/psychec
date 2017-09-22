@@ -21,16 +21,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_CORETYPES_H
-#define CPLUSPLUS_CORETYPES_H
+#ifndef CFE_CORETYPES_H
+#define CFE_CORETYPES_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "Type.h"
 #include "FullySpecifiedType.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT UndefinedType : public Type
+class CFE_API UndefinedType : public Type
 {
 public:
     static UndefinedType *instance()
@@ -49,7 +49,7 @@ protected:
     virtual void accept0(TypeVisitor *visitor);
 };
 
-class CPLUSPLUS_EXPORT VoidType: public Type
+class CFE_API VoidType: public Type
 {
 public:
     virtual const VoidType *asVoidType() const
@@ -62,7 +62,7 @@ protected:
     virtual void accept0(TypeVisitor *visitor);
 };
 
-class CPLUSPLUS_EXPORT IntegerType: public Type
+class CFE_API IntegerType: public Type
 {
 public:
     enum Kind {
@@ -98,7 +98,7 @@ private:
     int _kind;
 };
 
-class CPLUSPLUS_EXPORT FloatType: public Type
+class CFE_API FloatType: public Type
 {
 public:
     enum Kind {
@@ -126,7 +126,7 @@ private:
     int _kind;
 };
 
-class CPLUSPLUS_EXPORT PointerType: public Type
+class CFE_API PointerType: public Type
 {
 public:
     PointerType(const FullySpecifiedType &elementType);
@@ -147,7 +147,7 @@ private:
     FullySpecifiedType _elementType;
 };
 
-class CPLUSPLUS_EXPORT PointerToMemberType: public Type
+class CFE_API PointerToMemberType: public Type
 {
 public:
     PointerToMemberType(const Name *memberName, const FullySpecifiedType &elementType);
@@ -170,7 +170,7 @@ private:
     FullySpecifiedType _elementType;
 };
 
-class CPLUSPLUS_EXPORT ReferenceType: public Type
+class CFE_API ReferenceType: public Type
 {
 public:
     ReferenceType(const FullySpecifiedType &elementType, bool rvalueRef);
@@ -193,7 +193,7 @@ private:
     bool _rvalueReference;
 };
 
-class CPLUSPLUS_EXPORT ArrayType: public Type
+class CFE_API ArrayType: public Type
 {
 public:
     ArrayType(const FullySpecifiedType &elementType, unsigned size);
@@ -216,7 +216,7 @@ private:
     unsigned _size;
 };
 
-class CPLUSPLUS_EXPORT NamedType: public Type
+class CFE_API NamedType: public Type
 {
 public:
     NamedType(const Name *name);
@@ -237,6 +237,6 @@ private:
     const Name *_name;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_CORETYPES_H
+#endif // CFE_CORETYPES_H

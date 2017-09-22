@@ -29,19 +29,18 @@
 
 #define VISITOR_NAME "AstNormalizer"
 
-using namespace CPlusPlus;
 using namespace psyche;
 
 namespace {
 
 struct FindAmbiguousNode : public ASTVisitor
 {
-    FindAmbiguousNode(CPlusPlus::TranslationUnit *unit)
+    FindAmbiguousNode(psyche::TranslationUnit *unit)
         : ASTVisitor(unit)
         , hasAmbiguousNode_(false)
     {}
 
-    bool operator()(const CPlusPlus::TranslationUnitAST *ast)
+    bool operator()(const psyche::TranslationUnitAST *ast)
     {
         if (ast) {
             for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)

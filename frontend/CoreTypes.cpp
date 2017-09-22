@@ -26,7 +26,7 @@
 #include "Names.h"
 #include <algorithm>
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 void UndefinedType::accept0(TypeVisitor *visitor)
 { visitor->visit(this); }

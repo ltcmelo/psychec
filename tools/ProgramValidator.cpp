@@ -23,7 +23,7 @@
 #include "TranslationUnit.h"
 #include <iostream>
 
-using namespace CPlusPlus;
+using namespace psyche;
 using namespace psyche;
 
 ProgramValidator::ProgramValidator(TranslationUnit *unit, bool forbidTypeDecl)

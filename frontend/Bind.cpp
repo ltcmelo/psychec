@@ -39,7 +39,7 @@
 #include <string.h>
 #include <stack>
 
-using namespace CPlusPlus;
+using namespace psyche;
 using namespace psyche;
 
 const int Bind::kMaxDepth(100);

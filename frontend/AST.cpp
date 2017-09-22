@@ -34,7 +34,7 @@
  */
 
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 AST::AST()
 { }

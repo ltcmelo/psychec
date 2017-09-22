@@ -23,16 +23,16 @@
 
 namespace psyche {
 
-class BasicStubber final : public CPlusPlus::ASTVisitor
+class BasicStubber final : public psyche::ASTVisitor
 {
 public:
-    BasicStubber(CPlusPlus::TranslationUnit* unit);
+    BasicStubber(psyche::TranslationUnit* unit);
 
-    void apply(CPlusPlus::TranslationUnitAST* ast);
+    void apply(psyche::TranslationUnitAST* ast);
 
 private:
-    bool visit(CPlusPlus::SimpleDeclarationAST* ast) override;
-    void create(CPlusPlus::Function* f);
+    bool visit(psyche::SimpleDeclarationAST* ast) override;
+    void create(psyche::Function* f);
 };
 
 } // namespace psyche

@@ -27,7 +27,7 @@
 #include <iostream>
 #include <unordered_map>
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 DiagnosticCollector::DiagnosticCollector()
 {}

@@ -18,16 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_LITERALS_H
-#define CPLUSPLUS_LITERALS_H
+#ifndef CFE_LITERALS_H
+#define CFE_LITERALS_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "Token.h"
 #include "Name.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT Literal
+class CFE_API Literal
 {
     Literal(const Literal &other);
     void operator =(const Literal &other);
@@ -63,7 +63,7 @@ public:
     unsigned _index;     // ### private
 };
 
-class CPLUSPLUS_EXPORT StringLiteral: public Literal
+class CFE_API StringLiteral: public Literal
 {
 public:
     StringLiteral(const char *chars, unsigned size)
@@ -71,7 +71,7 @@ public:
     { }
 };
 
-class CPLUSPLUS_EXPORT NumericLiteral: public Literal
+class CFE_API NumericLiteral: public Literal
 {
 public:
     NumericLiteral(const char *chars, unsigned size);
@@ -106,7 +106,7 @@ private:
     };
 };
 
-class CPLUSPLUS_EXPORT Identifier: public Literal, public Name
+class CFE_API Identifier: public Literal, public Name
 {
 public:
     Identifier(const char *chars, unsigned size)
@@ -122,7 +122,7 @@ protected:
     virtual void accept0(NameVisitor *visitor) const;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_LITERALS_H
+#endif // CFE_LITERALS_H

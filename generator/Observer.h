@@ -19,8 +19,8 @@
 #ifndef PSYCHE_OBSERVER_H__
 #define PSYCHE_OBSERVER_H__
 
-#include "ASTfwd.h"
-#include "CPlusPlusForwardDeclarations.h"
+#include "ASTFwds.h"
+#include "Api.h"
 
 namespace psyche {
 
@@ -30,84 +30,84 @@ class Observer {
 public:
     virtual ~Observer() {}
 
-    virtual void configure(CPlusPlus::TranslationUnit* unit, ConstraintWriter* writer) {}
+    virtual void configure(psyche::TranslationUnit* unit, ConstraintWriter* writer) {}
 
     // Miscellanea
-    virtual void enter(CPlusPlus::TranslationUnitAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::EnumeratorAST*, CPlusPlus::Scope*) {}
+    virtual void enter(psyche::TranslationUnitAST*, psyche::Scope*) {}
+    virtual void enter(psyche::EnumeratorAST*, psyche::Scope*) {}
 
-    virtual void leave(CPlusPlus::TranslationUnitAST*) {}
-    virtual void leave(CPlusPlus::EnumeratorAST*) {}
+    virtual void leave(psyche::TranslationUnitAST*) {}
+    virtual void leave(psyche::EnumeratorAST*) {}
 
     // Declarations
-    virtual void enter(CPlusPlus::SimpleDeclarationAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::FunctionDefinitionAST*, CPlusPlus::Scope*) {}
+    virtual void enter(psyche::SimpleDeclarationAST*, psyche::Scope*) {}
+    virtual void enter(psyche::FunctionDefinitionAST*, psyche::Scope*) {}
 
-    virtual void leave(CPlusPlus::SimpleDeclarationAST*) {}
-    virtual void leave(CPlusPlus::FunctionDefinitionAST*) {}
+    virtual void leave(psyche::SimpleDeclarationAST*) {}
+    virtual void leave(psyche::FunctionDefinitionAST*) {}
 
     // Expressions
-    virtual void enter(CPlusPlus::ArrayAccessAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::BinaryExpressionAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::CallAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::CastExpressionAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::ConditionalExpressionAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::IdExpressionAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::MemberAccessAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::NumericLiteralAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::BoolLiteralAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::StringLiteralAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::UnaryExpressionAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::SizeofExpressionAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::PointerLiteralAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::BracedInitializerAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::PostIncrDecrAST*, CPlusPlus::Scope*) {}
+    virtual void enter(psyche::ArrayAccessAST*, psyche::Scope*) {}
+    virtual void enter(psyche::BinaryExpressionAST*, psyche::Scope*) {}
+    virtual void enter(psyche::CallAST*, psyche::Scope*) {}
+    virtual void enter(psyche::CastExpressionAST*, psyche::Scope*) {}
+    virtual void enter(psyche::ConditionalExpressionAST*, psyche::Scope*) {}
+    virtual void enter(psyche::IdExpressionAST*, psyche::Scope*) {}
+    virtual void enter(psyche::MemberAccessAST*, psyche::Scope*) {}
+    virtual void enter(psyche::NumericLiteralAST*, psyche::Scope*) {}
+    virtual void enter(psyche::BoolLiteralAST*, psyche::Scope*) {}
+    virtual void enter(psyche::StringLiteralAST*, psyche::Scope*) {}
+    virtual void enter(psyche::UnaryExpressionAST*, psyche::Scope*) {}
+    virtual void enter(psyche::SizeofExpressionAST*, psyche::Scope*) {}
+    virtual void enter(psyche::PointerLiteralAST*, psyche::Scope*) {}
+    virtual void enter(psyche::BracedInitializerAST*, psyche::Scope*) {}
+    virtual void enter(psyche::PostIncrDecrAST*, psyche::Scope*) {}
 
-    virtual void leave(CPlusPlus::ArrayAccessAST*) {}
-    virtual void leave(CPlusPlus::BinaryExpressionAST*) {}
-    virtual void leave(CPlusPlus::CallAST*) {}
-    virtual void leave(CPlusPlus::CastExpressionAST*) {}
-    virtual void leave(CPlusPlus::ConditionalExpressionAST*) {}
-    virtual void leave(CPlusPlus::IdExpressionAST*) {}
-    virtual void leave(CPlusPlus::MemberAccessAST*) {}
-    virtual void leave(CPlusPlus::NumericLiteralAST*) {}
-    virtual void leave(CPlusPlus::BoolLiteralAST*) {}
-    virtual void leave(CPlusPlus::StringLiteralAST*) {}
-    virtual void leave(CPlusPlus::UnaryExpressionAST*) {}
-    virtual void leave(CPlusPlus::SizeofExpressionAST*) {}
-    virtual void leave(CPlusPlus::PointerLiteralAST*) {}
-    virtual void leave(CPlusPlus::BracedInitializerAST*) {}
-    virtual void leave(CPlusPlus::PostIncrDecrAST*) {}
+    virtual void leave(psyche::ArrayAccessAST*) {}
+    virtual void leave(psyche::BinaryExpressionAST*) {}
+    virtual void leave(psyche::CallAST*) {}
+    virtual void leave(psyche::CastExpressionAST*) {}
+    virtual void leave(psyche::ConditionalExpressionAST*) {}
+    virtual void leave(psyche::IdExpressionAST*) {}
+    virtual void leave(psyche::MemberAccessAST*) {}
+    virtual void leave(psyche::NumericLiteralAST*) {}
+    virtual void leave(psyche::BoolLiteralAST*) {}
+    virtual void leave(psyche::StringLiteralAST*) {}
+    virtual void leave(psyche::UnaryExpressionAST*) {}
+    virtual void leave(psyche::SizeofExpressionAST*) {}
+    virtual void leave(psyche::PointerLiteralAST*) {}
+    virtual void leave(psyche::BracedInitializerAST*) {}
+    virtual void leave(psyche::PostIncrDecrAST*) {}
 
     // Specifiers
-    virtual void enter(CPlusPlus::EnumSpecifierAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::ClassSpecifierAST*, CPlusPlus::Scope*) {}
+    virtual void enter(psyche::EnumSpecifierAST*, psyche::Scope*) {}
+    virtual void enter(psyche::ClassSpecifierAST*, psyche::Scope*) {}
 
-    virtual void leave(CPlusPlus::EnumSpecifierAST*) {}
-    virtual void leave(CPlusPlus::ClassSpecifierAST*) {}
+    virtual void leave(psyche::EnumSpecifierAST*) {}
+    virtual void leave(psyche::ClassSpecifierAST*) {}
 
     // Statements
-    virtual void enter(CPlusPlus::CaseStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::CompoundStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::DeclarationStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::DoStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::ForStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::ExpressionStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::IfStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::ReturnStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::SwitchStatementAST*, CPlusPlus::Scope*) {}
-    virtual void enter(CPlusPlus::WhileStatementAST*, CPlusPlus::Scope*) {}
+    virtual void enter(psyche::CaseStatementAST*, psyche::Scope*) {}
+    virtual void enter(psyche::CompoundStatementAST*, psyche::Scope*) {}
+    virtual void enter(psyche::DeclarationStatementAST*, psyche::Scope*) {}
+    virtual void enter(psyche::DoStatementAST*, psyche::Scope*) {}
+    virtual void enter(psyche::ForStatementAST*, psyche::Scope*) {}
+    virtual void enter(psyche::ExpressionStatementAST*, psyche::Scope*) {}
+    virtual void enter(psyche::IfStatementAST*, psyche::Scope*) {}
+    virtual void enter(psyche::ReturnStatementAST*, psyche::Scope*) {}
+    virtual void enter(psyche::SwitchStatementAST*, psyche::Scope*) {}
+    virtual void enter(psyche::WhileStatementAST*, psyche::Scope*) {}
 
-    virtual void leave(CPlusPlus::CaseStatementAST*) {}
-    virtual void leave(CPlusPlus::CompoundStatementAST*) {}
-    virtual void leave(CPlusPlus::DeclarationStatementAST*) {}
-    virtual void leave(CPlusPlus::DoStatementAST*) {}
-    virtual void leave(CPlusPlus::ForStatementAST*) {}
-    virtual void leave(CPlusPlus::ExpressionStatementAST*) {}
-    virtual void leave(CPlusPlus::IfStatementAST*) {}
-    virtual void leave(CPlusPlus::ReturnStatementAST*) {}
-    virtual void leave(CPlusPlus::SwitchStatementAST*) {}
-    virtual void leave(CPlusPlus::WhileStatementAST*) {}
+    virtual void leave(psyche::CaseStatementAST*) {}
+    virtual void leave(psyche::CompoundStatementAST*) {}
+    virtual void leave(psyche::DeclarationStatementAST*) {}
+    virtual void leave(psyche::DoStatementAST*) {}
+    virtual void leave(psyche::ForStatementAST*) {}
+    virtual void leave(psyche::ExpressionStatementAST*) {}
+    virtual void leave(psyche::IfStatementAST*) {}
+    virtual void leave(psyche::ReturnStatementAST*) {}
+    virtual void leave(psyche::SwitchStatementAST*) {}
+    virtual void leave(psyche::WhileStatementAST*) {}
 
     // Miscellanea
     virtual void withinFunction() {}
@@ -119,7 +119,7 @@ struct ObserverInvoker
 {
     ObserverInvoker(Observer* o,
                     AstT* ast,
-                    CPlusPlus::Scope* scope) : o_(o), ast_(ast)
+                    psyche::Scope* scope) : o_(o), ast_(ast)
     {
         o_->enter(ast_, scope);
     }

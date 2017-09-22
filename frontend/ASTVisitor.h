@@ -19,15 +19,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_ASTVISITOR_H
-#define CPLUSPLUS_ASTVISITOR_H
+#ifndef CFE_ASTVISITOR_H
+#define CFE_ASTVISITOR_H
 
-#include "CPlusPlusForwardDeclarations.h"
-#include "ASTfwd.h"
+#include "Api.h"
+#include "ASTFwds.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT ASTVisitor
+class CFE_API ASTVisitor
 {
     ASTVisitor(const ASTVisitor &other);
     void operator =(const ASTVisitor &other);
@@ -384,6 +384,6 @@ private:
    TranslationUnit *_translationUnit;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_ASTVISITOR_H
+#endif // CFE_ASTVISITOR_H

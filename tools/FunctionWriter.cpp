@@ -19,9 +19,9 @@
 #include "FunctionWriter.h"
 
 using namespace psyche;
-using namespace CPlusPlus;
+using namespace psyche;
 
-std::string FunctionWriter::writeFunction(CPlusPlus::Function* f, const std::string name)
+std::string FunctionWriter::writeFunction(psyche::Function* f, const std::string name)
 {
     this->spelling_.clear();
     this->funcRet(f);

@@ -95,7 +95,7 @@ private:
 class PSYCHEC_API SymbolValue final : public AbstractValue
 {
 public:
-    SymbolValue(const CPlusPlus::Symbol* symbol)
+    SymbolValue(const psyche::Symbol* symbol)
         : symbol_(symbol)
     {}
 
@@ -103,7 +103,7 @@ public:
     Bound evaluate() override;
 
 private:
-    const CPlusPlus::Symbol* symbol_;
+    const psyche::Symbol* symbol_;
 };
 
 class PSYCHEC_API CompositeValue final : public AbstractValue

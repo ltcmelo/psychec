@@ -28,7 +28,7 @@
 
 #include <cstring>
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 Name::Name()
 { }

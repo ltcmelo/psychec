@@ -29,7 +29,7 @@
 #include "AST.h"
 #include "MemoryPool.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 ObjCSelectorArgumentAST *ObjCSelectorArgumentAST::clone(MemoryPool *pool) const
 {

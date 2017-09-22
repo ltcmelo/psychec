@@ -18,16 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_AST_PATTERN_BUILDER_H
-#define CPLUSPLUS_AST_PATTERN_BUILDER_H
+#ifndef CFE_AST_PATTERN_BUILDER_H
+#define CFE_AST_PATTERN_BUILDER_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "AST.h"
 #include "MemoryPool.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT ASTPatternBuilder
+class CFE_API ASTPatternBuilder
 {
     MemoryPool pool;
 
@@ -1376,6 +1376,6 @@ public:
 
 };
 
-} // end of namespace CPlusPlus
+} // end of namespace psyche
 
-#endif // CPLUSPLUS_AST_PATTERN_BUILDER_H
+#endif // CFE_AST_PATTERN_BUILDER_H

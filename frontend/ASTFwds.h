@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_ASTFWD_H
-#define CPLUSPLUS_ASTFWD_H
+#ifndef CFE_ASTFWD_H
+#define CFE_ASTFWD_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
 template <typename Tptr> class List;
 
@@ -226,7 +226,7 @@ typedef List<ObjCSynthesizedPropertyAST *> ObjCSynthesizedPropertyListAST;
 
 typedef List<DesignatorAST *> DesignatorListAST;
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_ASTFWD_H
+#endif // CFE_ASTFWD_H

@@ -31,12 +31,12 @@
 
 namespace psyche {
 
-class PSYCHEC_API RangeAnalysis final : public CPlusPlus::ASTVisitor
+class PSYCHEC_API RangeAnalysis final : public psyche::ASTVisitor
 {
 public:
-    RangeAnalysis(CPlusPlus::TranslationUnit *unit);
+    RangeAnalysis(psyche::TranslationUnit *unit);
 
-    void run(CPlusPlus::TranslationUnitAST *ast, CPlusPlus::Namespace *global);
+    void run(psyche::TranslationUnitAST *ast, psyche::Namespace *global);
 
 private:
     /*!
@@ -46,14 +46,14 @@ private:
      *
      * Convenience to switch current scope.
      */
-    const CPlusPlus::Scope *switchScope(const CPlusPlus::Scope *scope);
+    const psyche::Scope *switchScope(const psyche::Scope *scope);
 
     /*!
      * \brief switchSymbol
      * \param symbol
      * \return
      */
-    const CPlusPlus::Symbol* switchSymbol(const CPlusPlus::Symbol* symbol);
+    const psyche::Symbol* switchSymbol(const psyche::Symbol* symbol);
 
     /*!
      * \brief resolve
@@ -61,33 +61,33 @@ private:
      *
      * Resolve a name to a symbol.
      */
-    void resolve(const CPlusPlus::Name* name);
+    void resolve(const psyche::Name* name);
 
     // Expressions
-    bool visit(CPlusPlus::BinaryExpressionAST* ast) override;
-    bool visit(CPlusPlus::IdExpressionAST* ast) override;
-    bool visit(CPlusPlus::MemberAccessAST* ast) override;
-    bool visit(CPlusPlus::NumericLiteralAST* ast) override;
+    bool visit(psyche::BinaryExpressionAST* ast) override;
+    bool visit(psyche::IdExpressionAST* ast) override;
+    bool visit(psyche::MemberAccessAST* ast) override;
+    bool visit(psyche::NumericLiteralAST* ast) override;
 
     // Statements
-    bool visit(CPlusPlus::DeclarationStatementAST *ast) override;
-    bool visit(CPlusPlus::ExpressionStatementAST *ast) override;
-    bool visit(CPlusPlus::IfStatementAST *ast) override;
-    bool visit(CPlusPlus::WhileStatementAST *ast) override;
+    bool visit(psyche::DeclarationStatementAST *ast) override;
+    bool visit(psyche::ExpressionStatementAST *ast) override;
+    bool visit(psyche::IfStatementAST *ast) override;
+    bool visit(psyche::WhileStatementAST *ast) override;
 
     void dumpRanges() const;
 
     //! Scope we're in.
-    const CPlusPlus::Scope *scope_;
+    const psyche::Scope *scope_;
 
     //! Symbol just looked-up.
-    const CPlusPlus::Symbol* symbol_;
+    const psyche::Symbol* symbol_;
 
     //! Range stack.
     std::stack<Range> stack_;
 
-    std::unordered_map<const CPlusPlus::StatementAST*, int32_t> revisionMap_;
-    VersionedMap<const CPlusPlus::Symbol*, Range> rangeMap_;
+    std::unordered_map<const psyche::StatementAST*, int32_t> revisionMap_;
+    VersionedMap<const psyche::Symbol*, Range> rangeMap_;
 };
 
 } // namespace psyche

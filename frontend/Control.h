@@ -21,23 +21,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_CONTROL_H
-#define CPLUSPLUS_CONTROL_H
+#ifndef CFE_CONTROL_H
+#define CFE_CONTROL_H
 
-#include "CPlusPlusForwardDeclarations.h"
-#include "ASTfwd.h"
+#include "Api.h"
+#include "ASTFwds.h"
 #include "Names.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT TopLevelDeclarationProcessor
+class CFE_API TopLevelDeclarationProcessor
 {
 public:
     virtual ~TopLevelDeclarationProcessor() {}
     virtual bool processDeclaration(DeclarationAST *ast) = 0;
 };
 
-class CPLUSPLUS_EXPORT Control
+class CFE_API Control
 {
 public:
     Control();
@@ -248,7 +248,7 @@ private:
     Data *d;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_CONTROL_H
+#endif // CFE_CONTROL_H

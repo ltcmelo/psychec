@@ -22,7 +22,7 @@
 #include "AST.h"
 #include "ASTMatcher.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 ASTMatcher::ASTMatcher()
 { }

@@ -18,16 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_SCOPE_H
-#define CPLUSPLUS_SCOPE_H
+#ifndef CFE_SCOPE_H
+#define CFE_SCOPE_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "Symbol.h"
 #include "Names.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT Scope: public Symbol
+class CFE_API Scope: public Symbol
 {
 public:
     Scope(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
@@ -79,7 +79,7 @@ private:
     unsigned _endOffset;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 
-#endif // CPLUSPLUS_SCOPE_H
+#endif // CFE_SCOPE_H

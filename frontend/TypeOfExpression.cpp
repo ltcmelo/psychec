@@ -28,7 +28,6 @@
 #include "TranslationUnit.h"
 #include <cassert>
 
-using namespace CPlusPlus;
 using namespace psyche;
 
 TypeOfExpression::TypeOfExpression(TranslationUnit *unit)
@@ -376,7 +375,7 @@ bool TypeOfExpression::visit(PointerLiteralAST*)
     return false;
 }
 
-bool psyche::TypeOfExpression::visit(CPlusPlus::TypeIdAST *ast)
+bool psyche::TypeOfExpression::visit(psyche::TypeIdAST *ast)
 {
     accept(ast->type_specifier_list);
     accept(ast->declarator);

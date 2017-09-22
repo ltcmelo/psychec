@@ -21,7 +21,7 @@
 #include "TypeVisitor.h"
 #include "Type.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 TypeVisitor::TypeVisitor()
 { }

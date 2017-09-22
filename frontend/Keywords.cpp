@@ -22,7 +22,7 @@
 #include "Lexer.h"
 #include "Token.h"
 
-namespace CPlusPlus {
+namespace psyche {
 
 static inline int classify2(const char *s, Dialect)
 {
@@ -1974,4 +1974,4 @@ int Lexer::classifyOperator(const char *s, int n) {
 }
 
 
-} // namespace CPlusPlus
+} // namespace psyche

@@ -24,7 +24,7 @@
 #include "TranslationUnit.h"
 #include "Control.h"
 
-using namespace CPlusPlus;
+using namespace psyche;
 
 ASTVisitor::ASTVisitor(TranslationUnit *translationUnit)
     : _translationUnit(translationUnit)

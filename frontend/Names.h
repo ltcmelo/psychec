@@ -21,17 +21,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_NAMES_H
-#define CPLUSPLUS_NAMES_H
+#ifndef CFE_NAMES_H
+#define CFE_NAMES_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "Name.h"
 #include "FullySpecifiedType.h"
 #include <vector>
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT QualifiedNameId: public Name
+class CFE_API QualifiedNameId: public Name
 {
 public:
     QualifiedNameId(const Name *base, const Name *name)
@@ -55,7 +55,7 @@ private:
     const Name *_name;
 };
 
-class CPLUSPLUS_EXPORT DestructorNameId: public Name
+class CFE_API DestructorNameId: public Name
 {
 public:
     DestructorNameId(const Name *name);
@@ -75,7 +75,7 @@ private:
     const Name *_name;
 };
 
-class CPLUSPLUS_EXPORT TemplateNameId: public Name
+class CFE_API TemplateNameId: public Name
 {
 public:
     template <typename Iterator>
@@ -120,7 +120,7 @@ private:
     bool _isSpecialization;
 };
 
-class CPLUSPLUS_EXPORT OperatorNameId: public Name
+class CFE_API OperatorNameId: public Name
 {
 public:
     /*
@@ -195,7 +195,7 @@ private:
     Kind _kind;
 };
 
-class CPLUSPLUS_EXPORT TaggedNameId: public Name
+class CFE_API TaggedNameId: public Name
 {
 public:
     // TODO: Keep ordered as in symbol `Class' until all "tags/keys" are unified.
@@ -226,7 +226,7 @@ private:
     const Name *_name;
 };
 
-class CPLUSPLUS_EXPORT ConversionNameId: public Name
+class CFE_API ConversionNameId: public Name
 {
 public:
     ConversionNameId(const FullySpecifiedType &type);
@@ -246,7 +246,7 @@ private:
     FullySpecifiedType _type;
 };
 
-class CPLUSPLUS_EXPORT SelectorNameId: public Name
+class CFE_API SelectorNameId: public Name
 {
 public:
     template <typename Iterator>
@@ -277,7 +277,7 @@ private:
     bool _hasArguments;
 };
 
-class CPLUSPLUS_EXPORT AnonymousNameId: public Name
+class CFE_API AnonymousNameId: public Name
 {
 public:
     AnonymousNameId(unsigned classTokenIndex);
@@ -297,6 +297,6 @@ private:
     unsigned _classTokenIndex;
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
-#endif // CPLUSPLUS_NAMES_H
+#endif // CFE_NAMES_H

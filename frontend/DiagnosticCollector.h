@@ -21,15 +21,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CPLUSPLUS_DIAGNOSTIC_COLLECTOR_H
-#define CPLUSPLUS_DIAGNOSTIC_COLLECTOR_H
+#ifndef CFE_DIAGNOSTIC_COLLECTOR_H
+#define CFE_DIAGNOSTIC_COLLECTOR_H
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include <cstdarg>
 
-namespace CPlusPlus {
+namespace psyche {
 
-class CPLUSPLUS_EXPORT DiagnosticCollector
+class CFE_API DiagnosticCollector
 {
 public:
     enum Severity {
@@ -53,6 +53,6 @@ private:
     bool blockingIssue_ { false };
 };
 
-} // namespace CPlusPlus
+} // namespace psyche
 
 #endif

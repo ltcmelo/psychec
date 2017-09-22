@@ -19,7 +19,7 @@
 #ifndef PSYCHE_TYPENAMESPELLER_H__
 #define PSYCHE_TYPENAMESPELLER_H__
 
-#include "CPlusPlusForwardDeclarations.h"
+#include "Api.h"
 #include "CSyntax.h"
 #include "CoreTypes.h"
 #include "Literals.h"
@@ -35,7 +35,7 @@ namespace psyche {
  * Spell the name of a type.
  */
 template <class SyntaxT>
-class CPLUSPLUS_EXPORT TypeSpeller : public CPlusPlus::TypeVisitor
+class CFE_API TypeSpeller : public psyche::TypeVisitor
 {
 public:
     TypeSpeller();
@@ -48,33 +48,33 @@ public:
      *
      * Spell the full type's name into an string.
      */
-    std::string spell(const CPlusPlus::FullySpecifiedType& fullType,
-                      const CPlusPlus::Scope* scope);
+    std::string spell(const psyche::FullySpecifiedType& fullType,
+                      const psyche::Scope* scope);
 
 protected:
-    void visitType(const CPlusPlus::FullySpecifiedType&);
+    void visitType(const psyche::FullySpecifiedType&);
 
-    void visit(CPlusPlus::UndefinedType*) override;
-    void visit(CPlusPlus::VoidType*) override;
-    void visit(CPlusPlus::IntegerType*) override;
-    void visit(CPlusPlus::FloatType*) override;
-    void visit(CPlusPlus::PointerToMemberType*) override;
-    void visit(CPlusPlus::PointerType*) override;
-    void visit(CPlusPlus::ReferenceType*) override;
-    void visit(CPlusPlus::ArrayType*) override;
-    void visit(CPlusPlus::NamedType*) override;
-    void visit(CPlusPlus::Function*) override;
-    void visit(CPlusPlus::Class*) override;
-    void visit(CPlusPlus::Enum*) override;
-    void visit(CPlusPlus::ForwardClassDeclaration*) override;
+    void visit(psyche::UndefinedType*) override;
+    void visit(psyche::VoidType*) override;
+    void visit(psyche::IntegerType*) override;
+    void visit(psyche::FloatType*) override;
+    void visit(psyche::PointerToMemberType*) override;
+    void visit(psyche::PointerType*) override;
+    void visit(psyche::ReferenceType*) override;
+    void visit(psyche::ArrayType*) override;
+    void visit(psyche::NamedType*) override;
+    void visit(psyche::Function*) override;
+    void visit(psyche::Class*) override;
+    void visit(psyche::Enum*) override;
+    void visit(psyche::ForwardClassDeclaration*) override;
 
-    void func(CPlusPlus::Function*, RetParam);
-    void func(CPlusPlus::Function*, ParamRet);
-    virtual void funcParam(CPlusPlus::Function*);
-    virtual void funcRet(CPlusPlus::Function*);
+    void func(psyche::Function*, RetParam);
+    void func(psyche::Function*, ParamRet);
+    virtual void funcParam(psyche::Function*);
+    virtual void funcRet(psyche::Function*);
 
     std::string spelling_;
-    const CPlusPlus::Scope* scope_;
+    const psyche::Scope* scope_;
 };
 
 } // namespace psyche
