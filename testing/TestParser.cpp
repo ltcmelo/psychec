@@ -78,49 +78,49 @@ void TestParser::testSource(const std::string& source)
 
 void TestParser::testCase1()
 {
-    const std::string& source = readFile("test-data/stdio_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/stdio_clang-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase2()
 {
-    const std::string& source = readFile("test-data/stdio_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/stdio_gcc-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase3()
 {
-    const std::string& source = readFile("test-data/stdlib_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/stdlib_clang-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase4()
 {
-    const std::string& source = readFile("test-data/stdlib_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/stdlib_gcc-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase5()
 {
-    const std::string& source = readFile("test-data/stddef_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/stddef_clang-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase6()
 {
-    const std::string& source = readFile("test-data/stddef_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/stddef_gcc-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase7()
 {
-    const std::string& source = readFile("test-data/stdint_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/stdint_clang-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase8()
 {
-    const std::string& source = readFile("test-data/stdint_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/stdint_gcc-pp_osx.i");
     testSource(source);
 }
 
@@ -145,25 +145,25 @@ int f()
 
 void TestParser::testCase10()
 {
-    const std::string& source = readFile("test-data/wchar_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/wchar_gcc-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase11()
 {
-    const std::string& source = readFile("test-data/wchar_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/wchar_clang-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase12()
 {
-    const std::string& source = readFile("test-data/wctype_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/wctype_gcc-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase13()
 {
-    const std::string& source = readFile("test-data/wctype_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/wctype_clang-pp_osx.i");
     testSource(source);
 }
 
@@ -184,73 +184,73 @@ __attribute__((availability(macosx,introduced=10.12.1))) int c();
 
 void TestParser::testCase15()
 {
-    const std::string& source = readFile("test-data/string_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/string_gcc-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase16()
 {
-    const std::string& source = readFile("test-data/string_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/string_clang-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase17()
 {
-    const std::string& source = readFile("test-data/math_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/math_gcc-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase18()
 {
-    const std::string& source = readFile("test-data/math_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/math_clang-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase19()
 {
-    const std::string& source = readFile("test-data/time_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/time_gcc-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase20()
 {
-    const std::string& source = readFile("test-data/time_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/time_clang-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase21()
 {
-    const std::string& source = readFile("test-data/inttypes_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/inttypes_gcc-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase22()
 {
-    const std::string& source = readFile("test-data/inttypes_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/inttypes_clang-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase23()
 {
-    const std::string& source = readFile("test-data/ctype_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/ctype_gcc-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase24()
 {
-    const std::string& source = readFile("test-data/ctype_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/ctype_clang-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase25()
 {
-    const std::string& source = readFile("test-data/assert_gcc-pp_osx.i");
+    const std::string& source = readFile("testing/data/assert_gcc-pp_osx.i");
     testSource(source);
 }
 
 void TestParser::testCase26()
 {
-    const std::string& source = readFile("test-data/assert_clang-pp_osx.i");
+    const std::string& source = readFile("testing/data/assert_clang-pp_osx.i");
     testSource(source);
 }
 

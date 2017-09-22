@@ -38,8 +38,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
     ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.h
     ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.cpp
-    ${PROJECT_SOURCE_DIR}/generator/TestDisambiguator.h
-    ${PROJECT_SOURCE_DIR}/generator/TestDisambiguator.cpp
     # Analysis files
     ${PROJECT_SOURCE_DIR}/static-analysis/Range.h
     ${PROJECT_SOURCE_DIR}/static-analysis/Range.cpp
@@ -57,6 +55,8 @@ set(PSYCHEC_SOURCES
     # Testing files
     ${PROJECT_SOURCE_DIR}/testing/BaseTester.h
     ${PROJECT_SOURCE_DIR}/testing/BaseTester.cpp
+    ${PROJECT_SOURCE_DIR}/testing/TestDisambiguator.h
+    ${PROJECT_SOURCE_DIR}/testing/TestDisambiguator.cpp
     ${PROJECT_SOURCE_DIR}/testing/TestParser.h
     ${PROJECT_SOURCE_DIR}/testing/TestParser.cpp
     # Utils' files
