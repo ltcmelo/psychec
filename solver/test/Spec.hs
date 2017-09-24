@@ -268,6 +268,7 @@ tests = testGroup "Unit tests"
   , doTestWithLib "T222.c" -- Unify variadic predefined function.
   , doTest "T223.c" -- Standalone enumerator use in expression.
   , doTest "T224.c" -- Enforce const-expr on enumerator.
+  , doTest "T225.c" -- Enumerator without expression.
   ]
 
 

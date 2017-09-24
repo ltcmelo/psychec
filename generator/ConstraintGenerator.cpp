@@ -1399,11 +1399,14 @@ bool ConstraintGenerator::visit(EnumeratorAST *ast)
 
     const Identifier* ident = identifier(ast->identifier_token);
     writer_->writeVarDecl(ident->chars(), kIntTy);
-    collectExpression(kIntTy, ast->expression);
 
-    // TODO: Extend...
-    if (ast->expression->asIdExpression())
-        writer_->writeConstantExpression(extractId(ast->expression->asIdExpression()->name->name));
+    if (ast->expression) {
+        collectExpression(kIntTy, ast->expression);
+
+        // TODO: Extend...
+        if (ast->expression->asIdExpression())
+            writer_->writeConstantExpression(extractId(ast->expression->asIdExpression()->name->name));
+    }
 
     return false;
 }
