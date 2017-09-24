@@ -19,11 +19,10 @@
 #ifndef PSYCHE_DOMAIN_LATTICE_H__
 #define PSYCHE_DOMAIN_LATTICE_H__
 
-#include "Config.h"
 #include "ASTFwds.h"
 #include "ASTVisitor.h"
 #include "ASTIdentityMatcher.h"
-#include "Api.h"
+#include "FrontendConfig.h"
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -34,7 +33,7 @@ namespace psyche {
 /*!
  * \brief The DomainLattice class
  */
-class PSYCHEC_API DomainLattice final : public psyche::ASTVisitor
+class DomainLattice final : public psyche::ASTVisitor
 {
 public:
     DomainLattice(psyche::TranslationUnit* unit);

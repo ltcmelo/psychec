@@ -21,7 +21,7 @@
 #ifndef CFE_ASTFWD_H
 #define CFE_ASTFWD_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 
 namespace psyche {
 

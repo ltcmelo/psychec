@@ -19,7 +19,7 @@
 #include "Factory.h"
 #include "ConstraintWriter.h"
 #include "DeclarationInterceptor.h"
-#include "Observer.h"
+#include "VisitorObserver.h"
 
 using namespace psyche;
 
@@ -28,9 +28,9 @@ std::unique_ptr<ConstraintWriter> Factory::makeConstraintWriter(std::ostream& os
     return std::make_unique<ConstraintWriter>(os);
 }
 
-std::unique_ptr<Observer> Factory::makeObserver() const
+std::unique_ptr<VisitorObserver> Factory::makeObserver() const
 {
-    return std::make_unique<Observer>();
+    return std::make_unique<VisitorObserver>();
 }
 
 std::unique_ptr<DeclarationInterceptor> Factory::makeInterceptor() const

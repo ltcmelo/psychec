@@ -21,7 +21,7 @@
 #ifndef CFE_LITERALS_H
 #define CFE_LITERALS_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "Token.h"
 #include "Name.h"
 

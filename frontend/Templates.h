@@ -21,7 +21,7 @@
 #ifndef CFE_TEMPLATES_H
 #define CFE_TEMPLATES_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "TypeVisitor.h"
 #include "FullySpecifiedType.h"
 #include "Name.h"

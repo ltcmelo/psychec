@@ -21,7 +21,7 @@
 
 #include "BaseTester.h"
 #include "Control.h"
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "DiagnosticCollector.h"
 #include "TranslationUnit.h"
 #include <functional>

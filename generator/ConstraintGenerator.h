@@ -19,7 +19,6 @@
 #ifndef PSYCHE_CONSTRAINT_GENERATOR_H__
 #define PSYCHE_CONSTRAINT_GENERATOR_H__
 
-#include "Config.h"
 #include "ASTVisitor.h"
 #include "FreshVarSupply.h"
 #include "FullySpecifiedType.h"
@@ -35,14 +34,14 @@ namespace psyche {
 
 class ConstraintWriter;
 class DeclarationInterceptor;
-class Observer;
+class VisitorObserver;
 
 /*!
  * \brief The ConstraintGenerator class
  *
  * Responsible for generating the constraints.
  */
-class PSYCHEC_API ConstraintGenerator final : public psyche::ASTVisitor
+class ConstraintGenerator final : public psyche::ASTVisitor
 {
 public:
     ConstraintGenerator(psyche::TranslationUnit *unit, ConstraintWriter* writer);
@@ -51,7 +50,7 @@ public:
 
     void employDomainLattice(const DomainLattice* lattice);
 
-    void installObserver(Observer* observer);
+    void installObserver(VisitorObserver* observer);
 
     void installInterceptor(DeclarationInterceptor* interceptor);
 
@@ -238,7 +237,7 @@ private:
     std::unordered_map<std::string, size_t> printfs_;
 
     //! Generation's observer.
-    Observer* observer_;
+    VisitorObserver* observer_;
 
     //! Generation's interceptor.
     DeclarationInterceptor* interceptor_;

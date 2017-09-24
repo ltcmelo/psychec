@@ -24,7 +24,7 @@
 #ifndef CFE_TRANSLATIONUNIT_H
 #define CFE_TRANSLATIONUNIT_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "ASTFwds.h"
 #include "Token.h"
 #include "DiagnosticCollector.h"

@@ -24,7 +24,7 @@
 #ifndef CFE_PARSER_H
 #define CFE_PARSER_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "ASTFwds.h"
 #include "Token.h"
 #include "TranslationUnit.h"

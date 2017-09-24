@@ -1,7 +1,7 @@
 #ifndef CFE_OBJC_TYPEQUALIFIERS_H
 #define CFE_OBJC_TYPEQUALIFIERS_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 
 
 namespace psyche {

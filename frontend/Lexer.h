@@ -21,7 +21,8 @@
 #ifndef CFE_LEXER_H
 #define CFE_LEXER_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
+#include "FrontendFwds.h"
 #include "Token.h"
 
 namespace psyche {

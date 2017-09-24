@@ -19,9 +19,8 @@
 #ifndef PSYCHE_TEST_AMBIGUITY_RESOLVER_H__
 #define PSYCHE_TEST_AMBIGUITY_RESOLVER_H__
 
-#include "Config.h"
 #include "BaseTester.h"
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "Driver.h"
 #include <algorithm>
 #include <functional>
@@ -33,7 +32,7 @@
 
 namespace psyche {
 
-class PSYCHEC_API TestDisambiguator final : public BaseTester
+class TestDisambiguator final : public BaseTester
 {
 public:
     void testAll() override;

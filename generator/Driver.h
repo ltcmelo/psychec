@@ -19,10 +19,9 @@
 #ifndef PSYCHE_DRIVER_H__
 #define PSYCHE_DRIVER_H__
 
-#include "Config.h"
 #include "ASTFwds.h"
 #include "Control.h"
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "Dialect.h"
 #include "Factory.h"
 #include "TranslationUnit.h"
@@ -42,7 +41,7 @@ class Factory;
 /*!
  * \brief The ExecutionOptions struct
  */
-struct PSYCHEC_API ExecutionOptions
+struct ExecutionOptions
 {
     ExecutionOptions() : all_(0) {}
 
@@ -53,7 +52,6 @@ struct PSYCHEC_API ExecutionOptions
         uint32_t dumpAst : 1;  //!< Dump AST, both original and fixed one.
         uint32_t disambOnly : 1;  //!< Only disambiguate AST.
         uint32_t noHeuristics : 1;  //!< Disable heuristics on unresolved ambiguities.
-        uint32_t stdlibMode : 2;  //!< Standard library usage detection mode.
         uint32_t noTypedef : 1;  //! < Forbid type declarations.
 
         //! Whether to handle GNU's error function as a printf variety.
@@ -71,19 +69,9 @@ struct PSYCHEC_API ExecutionOptions
 };
 
 /*!
- * \brief The StdLibMode enum
- */
-enum class StdLibMode : char
-{
-    Ignore,
-    Approx,
-    Strict
-};
-
-/*!
  * \brief The Driver class
  */
-class PSYCHEC_API Driver final
+class Driver final
 {
 public:
     Driver(const Factory& factory);
@@ -113,32 +101,25 @@ public:
 private:
     friend class TestDisambiguator;
 
-    static psyche::Dialect specifiedDialect(const ExecutionOptions& exec);
-
     void configure(const ExecutionOptions& flags);
 
-    int parse(const std::string& source, bool firstPass);
-    int annotateAstWithSymbols(bool firstPass);
+    static Dialect adjustedDialect(const ExecutionOptions& exec);
+
+    TranslationUnit* tu() const;
+    TranslationUnitAST* ast() const;
+
+    std::string augmentSource(const std::string&, const std::vector<std::string>&);
+
+    int preprocess(const std::string& source);
+    int parse(const std::string& source);
+    int annotateAst();
     int generateConstraints();
 
-    std::vector<std::string> guessMissingHeaders();
-    std::vector<std::string> detectMissingHeaders();
-
-    std::string augmentSource(const std::string& baseSource,
-                              std::function<std::vector<std::string>()>);
-
-    std::string preprocessIncludes() const;
-
-    void honorFlag(bool flag, std::function<void ()>) const;
-
-    psyche::TranslationUnitAST* tuAst() const;
-    psyche::TranslationUnit* tu() const;
-
-    const Factory& factory_;
-    psyche::Control control_;
+    const Factory& factory_; // TODO: Will go away.
+    Control control_;
     ExecutionOptions opts_;
-    psyche::Namespace* global_;
-    std::unique_ptr<psyche::TranslationUnit> unit_;
+    Namespace* global_;
+    std::unique_ptr<TranslationUnit> unit_;
     std::string constraints_;
     std::string includes_;
 };

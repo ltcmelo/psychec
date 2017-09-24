@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2016-17 Leandro T. C. Melo (ltcmelo@gmail.com)
+ Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
 
  This library is free software; you can redistribute it and/or modify it under
  the terms of the GNU Lesser General Public License as published by the Free
@@ -16,22 +16,47 @@
  Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#ifndef PSYCHE_FUNCTIONWRITER_H__
-#define PSYCHE_FUNCTIONWRITER_H__
+#ifndef PSYCHE_PLUGIN_H__
+#define PSYCHE_PLUGIN_H__
 
-#include "TypeSpeller.h"
+#include <string>
+#include <type_traits>
 
 namespace psyche {
 
-class FunctionWriter final : private TypeSpeller<CSyntax>
+class DeclarationInterceptor;
+class SourceInspector;
+class VisitorObserver;
+
+/*!
+ * \brief The Plugin class
+ *
+ * To be extended...
+ */
+class Plugin final
 {
 public:
-    std::string writeFunction(psyche::Function*, const std::string name);
+    static void load(const std::string& name);
+    static bool isLoaded();
+    static void unload();
+
+    static DeclarationInterceptor* createInterceptor();
+    static SourceInspector* createInspector();
+    static VisitorObserver* createObserver();
 
 private:
-    using TypeSpeller<CSyntax>::spell;
+    Plugin() = delete;
 
-    void funcParam(psyche::Function*) override;
+    template <class RetT>
+    static RetT* create(const char* name);
+
+    template <class ParamT>
+    static void destroy(ParamT*, const char* name);
+
+    static void* handle_;
+    static DeclarationInterceptor* interceptor_;
+    static SourceInspector* inspector_;
+    static VisitorObserver* observer_;
 };
 
 } // namespace psyche

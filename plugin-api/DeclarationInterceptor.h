@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2017 Leandro T. C. Melo (ltcmelo@gmail.com)
+ Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
 
  This library is free software; you can redistribute it and/or modify it under
  the terms of the GNU Lesser General Public License as published by the Free
@@ -16,33 +16,24 @@
  Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#ifndef PSYCHEC_CONFIG_H__
-#define PSYCHEC_CONFIG_H__
+#ifndef PSYCHE_DECLARATION_INTERCEPTOR_H__
+#define PSYCHE_DECLARATION_INTERCEPTOR_H__
 
-// From https://gcc.gnu.org/wiki/Visibility
-#if defined _WIN32 || defined __CYGWIN__
-  #ifdef EXPORT_API
-    #ifdef __GNUC__
-      #define PSYCHEC_API __attribute__ ((dllexport))
-    #else
-      #define PSYCHEC_API __declspec(dllexport)
-    #endif
-  #else
-    #ifdef __GNUC__
-      #define PSYCHEC_API __attribute__ ((dllimport))
-    #else
-      #define PSYCHEC_API __declspec(dllimport)
-    #endif
-  #endif
-  #define PSYCHEC_API_LOCAL
-#else
-  #if __GNUC__ >= 4
-    #define PSYCHEC_API __attribute__ ((visibility ("default")))
-    #define PSYCHEC_API_LOCAL  __attribute__ ((visibility ("hidden")))
-  #else
-    #define PSYCHEC_API
-    #define PSYCHEC_API_LOCAL
-  #endif
-#endif
+#include "PluginConfig.h"
+#include "FrontendFwds.h"
+#include "ASTFwds.h"
+
+namespace psyche {
+
+class PLUGIN_API DeclarationInterceptor
+{
+public:
+    virtual ~DeclarationInterceptor() = default;
+
+    virtual bool intercept(psyche::SimpleDeclarationAST*) { return false; }
+    virtual bool intercept(psyche::FunctionDefinitionAST*) { return false; }
+};
+
+} // namespace psyche
 
 #endif

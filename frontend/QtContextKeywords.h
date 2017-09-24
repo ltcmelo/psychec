@@ -2,7 +2,7 @@
 #ifndef QTCONTEXTKEYWORDS_H
 #define QTCONTEXTKEYWORDS_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 
 namespace psyche {
 

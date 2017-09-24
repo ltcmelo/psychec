@@ -24,9 +24,6 @@
 #ifndef CFE_API_H__
 #define CFE_API_H__
 
-#include <cstdlib>
-#include <cstddef>
-
 // From https://gcc.gnu.org/wiki/Visibility
 #if defined _WIN32 || defined __CYGWIN__
   #ifdef EXPORT_API
@@ -60,89 +57,5 @@
     #define UNLIKELY(expr) (expr)
   #endif
 #endif
-
-namespace psyche {
-
-class TranslationUnit;
-class Control;
-class MemoryPool;
-class DiagnosticCollector;
-
-class Identifier;
-class Literal;
-class StringLiteral;
-class NumericLiteral;
-
-class SymbolTable;
-
-// names
-class NameVisitor;
-class Name;
-class Identifier;
-class AnonymousNameId;
-class TemplateNameId;
-class DestructorNameId;
-class OperatorNameId;
-class ConversionNameId;
-class QualifiedNameId;
-class SelectorNameId;
-class TaggedNameId;
-
-// types
-class FullySpecifiedType;
-class TypeVisitor;
-class Type;
-class UndefinedType;
-class VoidType;
-class IntegerType;
-class FloatType;
-class PointerToMemberType;
-class PointerType;
-class ReferenceType;
-class ArrayType;
-class NamedType;
-
-// symbols
-class Clone;
-class Subst;
-
-class SymbolVisitor;
-class Symbol;
-class Scope;
-class UsingNamespaceDirective;
-class UsingDeclaration;
-class Declaration;
-class FakeDeclaration;
-class Argument;
-class TypenameArgument;
-class Function;
-class Namespace;
-class NamespaceAlias;
-class Template;
-class BaseClass;
-class Block;
-class Class;
-class FakeClass;
-class Enum;
-class EnumeratorDeclaration;
-class ForwardClassDeclaration;
-
-class Token;
-
-// Qt symbols
-class QtPropertyDeclaration;
-class QtEnum;
-
-// Objective-C symbols
-class ObjCBaseClass;
-class ObjCBaseProtocol;
-class ObjCClass;
-class ObjCForwardClassDeclaration;
-class ObjCProtocol;
-class ObjCForwardProtocolDeclaration;
-class ObjCMethod;
-class ObjCPropertyDeclaration;
-
-} // namespace psyche
 
 #endif

@@ -19,7 +19,7 @@
 #ifndef PSYCHE_LOOKUPANDRESOLVE__
 #define PSYCHE_LOOKUPANDRESOLVE__
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "ASTFwds.h"
 
 namespace psyche {

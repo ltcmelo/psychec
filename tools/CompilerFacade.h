@@ -19,13 +19,12 @@
 #ifndef PSYCHE_COMPILER_FACADE_H__
 #define PSYCHE_COMPILER_FACADE_H__
 
-#include "Config.h"
 #include <string>
 #include <vector>
 
 namespace psyche {
 
-class PSYCHEC_API CompilerFacade
+class CompilerFacade
 {
 public:
     CompilerFacade(const std::string& nativeCC,

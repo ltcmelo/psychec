@@ -21,7 +21,7 @@
 #ifndef CFE_MEMORYPOOL_H
 #define CFE_MEMORYPOOL_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include <new>
 
 namespace psyche {

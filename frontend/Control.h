@@ -24,7 +24,7 @@
 #ifndef CFE_CONTROL_H
 #define CFE_CONTROL_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "ASTFwds.h"
 #include "Names.h"
 

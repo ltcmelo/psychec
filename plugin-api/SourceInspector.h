@@ -16,21 +16,22 @@
  Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#ifndef PSYCHE_DECLARATION_INTERCEPTOR_H__
-#define PSYCHE_DECLARATION_INTERCEPTOR_H__
+#ifndef PSYCHE_SOURCE_INSPECTOR_H__
+#define PSYCHE_SOURCE_INSPECTOR_H__
 
-#include "Config.h"
-#include "ASTFwds.h"
+#include "PluginConfig.h"
+#include "FrontendFwds.h"
+#include <string>
+#include <vector>
 
 namespace psyche {
 
-class PSYCHEC_API DeclarationInterceptor
+class PLUGIN_API SourceInspector
 {
 public:
-    virtual ~DeclarationInterceptor() = default;
+    virtual ~SourceInspector() = default;
 
-    virtual bool intercept(psyche::SimpleDeclarationAST*) { return false; }
-    virtual bool intercept(psyche::FunctionDefinitionAST*) { return false; }
+    virtual std::vector<std::string> identifyIncludes(const std::string&) = 0;
 };
 
 } // namespace psyche

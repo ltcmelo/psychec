@@ -20,7 +20,7 @@
 #ifndef PSYCHE_SYMBOLPP__
 #define PSYCHE_SYMBOLPP__
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "SymbolVisitor.h"
 #include <string>
 #include <sstream>

@@ -16,49 +16,33 @@
  Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#ifndef PSYCHE_STD_LIB_INDEX_H__
-#define PSYCHE_STD_LIB_INDEX_H__
+#ifndef PLUGIN_CONFIG_H__
+#define PLUGIN_CONFIG_H__
 
-#include "Config.h"
-#include "Api.h"
-#include <string>
-#include <unordered_map>
-#include <utility>
-#include <vector>
-
-namespace psyche {
-
-class PSYCHEC_API StdLibIndex final
-{
-public:
-    enum class Version
-    {
-        C89,
-        C99,
-        C11
-    };
-
-    StdLibIndex(Version std);
-
-    std::vector<std::string> inspect(const psyche::Control&) const;
-
-    bool recognizes(const char* ident) const;
-
-private:
-    enum class SymbolKind : char
-    {
-        Type,
-        Value
-    };
-    using StdSymbol = std::pair<const char*, SymbolKind>;
-    using Index = std::unordered_map<const char*, std::vector<StdSymbol>>;
-
-    Version std_;
-    static const Index c89idx_;
-    static const Index c99idx_;
-    static const Index c11idx_;
-};
-
-} // namespace psyche
+// From https://gcc.gnu.org/wiki/Visibility
+#if defined _WIN32 || defined __CYGWIN__
+  #ifdef EXPORT_API
+    #ifdef __GNUC__
+      #define PLUGIN_API __attribute__ ((dllexport))
+    #else
+      #define PLUGIN_API __declspec(dllexport)
+    #endif
+  #else
+    #ifdef __GNUC__
+      #define PLUGIN_API __attribute__ ((dllimport))
+    #else
+      #define PLUGIN_API __declspec(dllimport)
+    #endif
+  #endif
+  #define PLUGIN_API_LOCAL
+#else
+  #if __GNUC__ >= 4
+    #define PLUGIN_API __attribute__ ((visibility ("default")))
+    #define PLUGIN_API_LOCAL  __attribute__ ((visibility ("hidden")))
+  #else
+    #define PLUGIN_API
+    #define PLUGIN_API_LOCAL
+  #endif
+#endif
 
 #endif

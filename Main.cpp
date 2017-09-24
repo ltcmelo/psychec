@@ -18,12 +18,14 @@
 
 #include "Driver.h"
 #include "Factory.h"
+#include "Plugin.h"
+#include <iostream>
 
 using namespace psyche;
 
 int main(int argc, char* argv[])
 {
-    Factory factory;
+    Factory factory; // TODO: Will go away.
     Driver driver(factory);
     return driver.process(argc, argv);
 }

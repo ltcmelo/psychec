@@ -19,7 +19,7 @@
 #ifndef PSYCHE_TYPEOFEXPRESSION_H__
 #define PSYCHE_TYPEOFEXPRESSION_H__
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "ASTVisitor.h"
 #include "FullySpecifiedType.h"
 #include <vector>

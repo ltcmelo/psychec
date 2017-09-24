@@ -24,7 +24,7 @@
 #ifndef CFE_CORETYPES_H
 #define CFE_CORETYPES_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "Type.h"
 #include "FullySpecifiedType.h"
 

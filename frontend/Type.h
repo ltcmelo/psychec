@@ -24,7 +24,8 @@
 #ifndef CFE_TYPE_H
 #define CFE_TYPE_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
+#include "FrontendFwds.h"
 
 namespace psyche {
 

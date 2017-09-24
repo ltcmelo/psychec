@@ -24,7 +24,7 @@
 #ifndef CFE_NAMES_H
 #define CFE_NAMES_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "Name.h"
 #include "FullySpecifiedType.h"
 #include <vector>

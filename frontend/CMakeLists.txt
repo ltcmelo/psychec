@@ -10,7 +10,6 @@ set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 set(CMAKE_MACOSX_RPATH 1)
 
 set(CFE_SOURCES
-    ${PROJECT_SOURCE_DIR}/Api.h
     ${PROJECT_SOURCE_DIR}/AST.cpp
     ${PROJECT_SOURCE_DIR}/AST.h
     ${PROJECT_SOURCE_DIR}/ASTClone.cpp
@@ -37,6 +36,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/Dialect.h
     ${PROJECT_SOURCE_DIR}/DiagnosticCollector.cpp
     ${PROJECT_SOURCE_DIR}/DiagnosticCollector.h
+    ${PROJECT_SOURCE_DIR}/FrontendConfig.h
+    ${PROJECT_SOURCE_DIR}/FrontendFwds.h
     ${PROJECT_SOURCE_DIR}/FullySpecifiedType.cpp
     ${PROJECT_SOURCE_DIR}/FullySpecifiedType.h
     ${PROJECT_SOURCE_DIR}/Keywords.cpp

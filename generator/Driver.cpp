@@ -29,12 +29,13 @@
 #include "Debug.h"
 #include "DiagnosticCollector.h"
 #include "DomainLattice.h"
+#include "FileInfo.h"
 #include "IO.h"
 #include "Literals.h"
-#include "Observer.h"
+#include "Plugin.h"
 #include "ProgramValidator.h"
+#include "SourceInspector.h"
 #include "Symbols.h"
-#include "StdLibIndex.h"
 
 #include "cxxopts.hpp"
 
@@ -59,10 +60,63 @@ constexpr int Driver::UnspecifiedInputFile;
 constexpr int Driver::UnknownCommandLineOption;
 constexpr int Driver::InvalidCommandLineValue;
 
+namespace {
+
+void honorFlag(bool flag, std::function<void ()> f)
+{
+    if (flag)
+        f();
+}
+
+} // anonymous
+
 Driver::Driver(const Factory& factory)
     : factory_(factory)
     , global_(nullptr)
 {}
+
+TranslationUnit *Driver::tu() const
+{
+    return unit_.get();
+}
+
+TranslationUnitAST *Driver::ast() const
+{
+    return tu()->ast()->asTranslationUnit();
+}
+
+Dialect Driver::adjustedDialect(const ExecutionOptions&)
+{
+    Dialect dialect;
+    dialect.c99 = 1;
+    dialect.ext_KeywordsGNU = 1;
+    dialect.ext_EnumeratorAttributes = 1;
+    dialect.ext_AvailabilityAttribute = 1;
+    dialect.nullptrOnNULL = 1;
+
+    return dialect;
+}
+
+void Driver::configure(const ExecutionOptions& flags)
+{
+    control_.reset();
+    global_ = control_.newNamespace(0, nullptr);
+    opts_ = flags;
+}
+
+std::string Driver::augmentSource(const std::string& source, const std::vector<std::string>& headers)
+{
+    if (headers.empty())
+        return source;
+
+    for (const auto& h : headers)
+        includes_ += "#include <" + h + ">\n";
+    includes_ += "\n";
+
+    std::string fullSource = includes_;
+    fullSource += source;
+    return fullSource;
+}
 
 int Driver::process(int argc, char *argv[])
 {
@@ -80,16 +134,14 @@ int Driver::process(int argc, char *argv[])
             ("d,debug", "Enable debugging messages",
                 cxxopts::value<bool>(debugEnabled))
             ("c,constraints", "Display generated constraints")
-            ("dump-ast", "Dump AST in .dot format")
+            ("a,ast", "Dump AST in .dot format")
             ("s,stats", "Display AST disambiguation and constraint-generation stats")
-            ("t,test-disambiguation", "Run AST disambiguation tests")
-            ("no-heuristic", "Disable heuristics on unresolved AST ambiguities")
+            ("t,test", "Run tests (except for inference)")
+            ("p,plugin", "Load named plugin",
+                cxxopts::value<std::string>())
+            ("no-heuristic", "Disable heuristics on unresolved syntax ambiguities")
             ("no-typedef", "Forbid typedef and struct/union declarations")
-            ("match-stdlib", "Match stdlib names: ignore, approx, strict",
-                cxxopts::value<std::string>()->default_value("ignore"))
-            ("stdlib-inc", "Required #includes from stdlib",
-                cxxopts::value<std::string>()->default_value("a.inc"))
-            ("CC", "Specify host C compiler",
+            ("cc", "Specify host C compiler",
                 cxxopts::value<std::string>()->default_value("gcc"))
             ("cc-D", "Predefine a macro",
                 cxxopts::value<std::vector<std::string>>())
@@ -110,7 +162,7 @@ int Driver::process(int argc, char *argv[])
         return OK;
     }
 
-    if (cmdOpts.count("test-disambiguation")) {
+    if (cmdOpts.count("test")) {
         try {
             BaseTester::runSuite();
         } catch (...) {
@@ -130,37 +182,35 @@ int Driver::process(int argc, char *argv[])
         in = v[0];
     }
 
-    const auto& matchLib = cmdOpts["match-stdlib"].as<std::string>();
-    if (matchLib == "ignore")
-        exeOpts.flag_.stdlibMode = static_cast<uint32_t>(StdLibMode::Ignore);
-    else if (matchLib == "approx")
-        exeOpts.flag_.stdlibMode = static_cast<uint32_t>(StdLibMode::Approx);
-    else if (matchLib == "strict")
-        exeOpts.flag_.stdlibMode = static_cast<uint32_t>(StdLibMode::Strict);
-    else {
-        std::cerr << kPsychePrefix << "invalid command line value" << std::endl;
-        return InvalidCommandLineValue;
-    }
-
-    exeOpts.flag_.dumpAst = cmdOpts.count("dump-ast");
+    exeOpts.flag_.dumpAst = cmdOpts.count("ast");
     exeOpts.flag_.displayConstraints = cmdOpts.count("constraints");
     exeOpts.flag_.displayStats = cmdOpts.count("stats");
     exeOpts.flag_.noHeuristics = cmdOpts.count("no-heuristic");
     exeOpts.flag_.noTypedef = cmdOpts.count("no-typedef");
     exeOpts.flag_.handleGNUerrorFunc_ = true; // TODO: POSIX stuff?
-    exeOpts.nativeCC_ = cmdOpts["CC"].as<std::string>();
+    exeOpts.nativeCC_ = cmdOpts["cc"].as<std::string>();
     exeOpts.defs_ = cmdOpts["cc-D"].as<std::vector<std::string>>();
     exeOpts.undefs_ = cmdOpts["cc-U"].as<std::vector<std::string>>();
 
-    const std::string& source = readFile(in);
+    if (cmdOpts.count("plugin"))
+        Plugin::load(cmdOpts["plugin"].as<std::string>());
 
-    const auto code = process(in, source, exeOpts);
+    const std::string& source = readFile(in);
+    int code = 0;
+    try {
+        code = process(in, source, exeOpts);
+    } catch (...) {
+        Plugin::unload();
+    }
+
     switch (code) {
     case OK:
         if (!constraints_.empty()) {
             writeFile(constraints_, cmdOpts["output"].as<std::string>());
-            if (cmdOpts.count("stdlib-inc") && !includes_.empty())
-                writeFile(includes_, cmdOpts["stdlib-inc"].as<std::string>());
+            if (!includes_.empty()) {
+                FileInfo info(cmdOpts["output"].as<std::string>());
+                writeFile(includes_, info.fileBaseName() + ".inc");
+            }
         }
         break;
 
@@ -187,39 +237,29 @@ int Driver::process(const std::string& unitName,
 
     StringLiteral name(unitName.c_str(), unitName.length());
     unit_.reset(new TranslationUnit(&control_, &name));
-    unit_->setDialect(specifiedDialect(flags));
+    unit_->setDialect(adjustedDialect(flags));
 
     static DiagnosticCollector collector;
     control_.setDiagnosticCollector(&collector);
 
-    return parse(source, true);
+    if (Plugin::isLoaded()) {
+        SourceInspector* inspector = Plugin::createInspector();
+        auto includes = inspector->identifyIncludes(source);
+        return preprocess(augmentSource(source, includes));
+    }
+
+    return parse(source);
 }
 
-TranslationUnit *Driver::tu() const
+int Driver::preprocess(const std::string& source)
 {
-    return unit_.get();
+    CompilerFacade cc(opts_.nativeCC_, opts_.defs_, opts_.undefs_);
+    std::string ppSource = cc.preprocessSource(source);
+
+    return parse(ppSource);
 }
 
-Dialect Driver::specifiedDialect(const ExecutionOptions&)
-{
-    Dialect dialect;
-    dialect.c99 = 1;
-    dialect.ext_KeywordsGNU = 1;
-    dialect.ext_EnumeratorAttributes = 1;
-    dialect.ext_AvailabilityAttribute = 1;
-    dialect.nullptrOnNULL = 1;
-
-    return dialect;
-}
-
-void Driver::configure(const ExecutionOptions& flags)
-{
-    control_.reset();
-    global_ = control_.newNamespace(0, nullptr);
-    opts_ = flags;
-}
-
-int Driver::parse(const std::string& source, bool firstPass)
+int Driver::parse(const std::string& source)
 {
     control_.diagnosticCollector()->reset();
 
@@ -227,35 +267,30 @@ int Driver::parse(const std::string& source, bool firstPass)
     if (!unit_->parse())
         return ParsingError;
 
-    if (!unit_->ast() || !tuAst())
+    if (!unit_->ast() || !ast())
         return UnavailableAstError;
 
     honorFlag(opts_.flag_.dumpAst,
-              [this] () { ASTDumper(tu()).dump(tuAst(), ".ast.dot"); });
+              [this] () { ASTDumper(tu()).dump(ast(), ".ast.dot"); });
 
-    ProgramValidator validator(tu(), firstPass && opts_.flag_.noTypedef);
-    validator.validate(tuAst());
+    ProgramValidator validator(tu(), opts_.flag_.noTypedef);
+    validator.validate(ast());
 
     if (control_.diagnosticCollector()->seenBlockingIssue())
         return InvalidSyntax;
 
-    if (firstPass
-            && opts_.flag_.stdlibMode == static_cast<char>(StdLibMode::Approx)) {
-        return parse(augmentSource(source, std::bind(&Driver::guessMissingHeaders, this)), false);
-    }
-
-    return annotateAstWithSymbols(firstPass);
+    return annotateAst();
 }
 
-int Driver::annotateAstWithSymbols(bool firstPass)
+int Driver::annotateAst()
 {
-    // During symbol binding we try to disambiguate ambiguities. Afterwards, it's
-    // necessary to normalize the AST according to the disambiguation resolutions.
+    // Create symbols.
     Bind bind(tu());
-    bind(tuAst(), global_);
+    bind(ast(), global_);
 
+    // Try to disambiguate syntax ambiguities and normalize the AST according to the resolutions.
     ASTNormalizer fixer(tu(), !opts_.flag_.noHeuristics);
-    if (!fixer.normalize(tuAst()))
+    if (!fixer.normalize(ast()))
         return UnresolvedAmbiguity;
 
     honorFlag(opts_.flag_.displayStats,
@@ -264,12 +299,7 @@ int Driver::annotateAstWithSymbols(bool firstPass)
               });
 
     honorFlag(opts_.flag_.dumpAst,
-              [this] () { ASTDumper(tu()).dump(tuAst(), ".ast.fixed.dot"); });
-
-    if (firstPass
-            && opts_.flag_.stdlibMode == static_cast<char>(StdLibMode::Strict)) {
-        // TODO
-    }
+              [this] () { ASTDumper(tu()).dump(ast(), ".ast.fixed.dot"); });
 
     if (opts_.flag_.disambOnly)
         return OK;
@@ -281,20 +311,22 @@ int Driver::generateConstraints()
 {
     // Build domain lattice.
     DomainLattice lattice(tu());
-    lattice.categorize(tuAst(), global_);
+    lattice.categorize(ast(), global_);
 
     std::ostringstream oss;
     auto writer = factory_.makeConstraintWriter(oss);
-    auto observer = factory_.makeObserver();
-    auto interceptor = factory_.makeInterceptor();
 
     ConstraintGenerator generator(tu(), writer.get());
     generator.employDomainLattice(&lattice);
-    generator.installObserver(observer.get());
-    generator.installInterceptor(interceptor.get());
+
+    if (Plugin::isLoaded()) {
+        generator.installInterceptor(Plugin::createInterceptor());
+        generator.installObserver(Plugin::createObserver());
+    }
+
     if (opts_.flag_.handleGNUerrorFunc_)
         generator.addPrintfLike("error", 2);
-    generator.generate(tuAst(), global_);
+    generator.generate(ast(), global_);
 
     constraints_ = oss.str();
 
@@ -302,49 +334,4 @@ int Driver::generateConstraints()
               [this] () { std::cout << constraints_ << std::endl; });
 
     return OK;
-}
-
-std::string Driver::augmentSource(const std::string& baseSource,
-                                  std::function<std::vector<std::string>()> headerNames)
-{
-    auto headers = headerNames();
-    if (headers.empty())
-        return baseSource;
-
-    for (const auto& h : headers)
-        includes_ += "#include <" + h + ">\n";
-
-    std::string fullSource = preprocessIncludes();
-    fullSource.reserve(fullSource.length() + baseSource.length());
-    fullSource += baseSource;
-
-    return fullSource;
-}
-
-std::vector<std::string> Driver::guessMissingHeaders()
-{
-    StdLibIndex index(StdLibIndex::Version::C99);
-    return index.inspect(control_);
-}
-
-std::vector<std::string> Driver::detectMissingHeaders()
-{
-    return std::vector<std::string>();
-}
-
-std::string Driver::preprocessIncludes() const
-{
-    CompilerFacade cc(opts_.nativeCC_, opts_.defs_, opts_.undefs_);
-    return cc.preprocessSource(includes_);
-}
-
-void Driver::honorFlag(bool flag, std::function<void ()> f) const
-{
-    if (flag)
-        f();
-}
-
-TranslationUnitAST *Driver::tuAst() const
-{
-    return tu()->ast()->asTranslationUnit();
 }

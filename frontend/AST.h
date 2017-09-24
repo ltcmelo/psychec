@@ -22,7 +22,7 @@
 #ifndef CFE_AST_H
 #define CFE_AST_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "ASTFwds.h"
 #include "MemoryPool.h"
 #include "FullySpecifiedType.h"

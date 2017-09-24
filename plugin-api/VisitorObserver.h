@@ -16,28 +16,18 @@
  Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#ifndef PSYCHE_OBSERVER_H__
-#define PSYCHE_OBSERVER_H__
+#ifndef PSYCHE_VISITOR_OBSERVER_H__
+#define PSYCHE_VISITOR_OBSERVER_H__
 
+#include "PluginConfig.h"
+#include "FrontendFwds.h"
 #include "ASTFwds.h"
-#include "Api.h"
 
 namespace psyche {
 
-class ConstraintWriter;
-
-class Observer {
+class PLUGIN_API VisitorObserver {
 public:
-    virtual ~Observer() {}
-
-    virtual void configure(psyche::TranslationUnit* unit, ConstraintWriter* writer) {}
-
-    // Miscellanea
-    virtual void enter(psyche::TranslationUnitAST*, psyche::Scope*) {}
-    virtual void enter(psyche::EnumeratorAST*, psyche::Scope*) {}
-
-    virtual void leave(psyche::TranslationUnitAST*) {}
-    virtual void leave(psyche::EnumeratorAST*) {}
+    virtual ~VisitorObserver() {}
 
     // Declarations
     virtual void enter(psyche::SimpleDeclarationAST*, psyche::Scope*) {}
@@ -110,6 +100,12 @@ public:
     virtual void leave(psyche::WhileStatementAST*) {}
 
     // Miscellanea
+    virtual void enter(psyche::TranslationUnitAST*, psyche::Scope*) {}
+    virtual void enter(psyche::EnumeratorAST*, psyche::Scope*) {}
+
+    virtual void leave(psyche::TranslationUnitAST*) {}
+    virtual void leave(psyche::EnumeratorAST*) {}
+
     virtual void withinFunction() {}
     virtual void outsideFunction() {}
 };
@@ -117,15 +113,21 @@ public:
 template <class AstT>
 struct ObserverInvoker
 {
-    ObserverInvoker(Observer* o,
+    ObserverInvoker(VisitorObserver* o,
                     AstT* ast,
                     psyche::Scope* scope) : o_(o), ast_(ast)
     {
-        o_->enter(ast_, scope);
+        if (o_)
+            o_->enter(ast_, scope);
     }
-    ~ObserverInvoker() { o_->leave(ast_); }
 
-    Observer* o_;
+    ~ObserverInvoker()
+    {
+        if (o_)
+            o_->leave(ast_);
+    }
+
+    VisitorObserver* o_;
     AstT* ast_;
 };
 

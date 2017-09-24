@@ -19,7 +19,6 @@
 #ifndef PSYCHE_BASE_TESTER_H
 #define PSYCHE_BASE_TESTER_H
 
-#include "Config.h"
 #include <iostream>
 #include <string>
 
@@ -88,7 +87,7 @@ protected:
     std::string currentTest_;
 };
 
-struct PSYCHEC_API TestFailed {};
+struct TestFailed {};
 
 } // namespace psyche
 

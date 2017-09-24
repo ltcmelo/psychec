@@ -22,8 +22,9 @@
 #ifndef CFE_ASTVISITOR_H
 #define CFE_ASTVISITOR_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "ASTFwds.h"
+#include "FrontendFwds.h"
 
 namespace psyche {
 

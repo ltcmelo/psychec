@@ -21,7 +21,7 @@
 #ifndef CFE_SYMBOLS_H
 #define CFE_SYMBOLS_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "Symbol.h"
 #include "Type.h"
 #include "FullySpecifiedType.h"

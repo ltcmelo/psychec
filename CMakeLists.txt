@@ -12,7 +12,6 @@ set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
 set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/Main.cpp
-    ${PROJECT_SOURCE_DIR}/Config.h
     # Generator's file
     ${PROJECT_SOURCE_DIR}/generator/Assert.h
     ${PROJECT_SOURCE_DIR}/generator/BuiltinNames.h
@@ -22,7 +21,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/ConstraintWriter.cpp
     # ${PROJECT_SOURCE_DIR}/generator/ConstraintSyntax.h
     # ${PROJECT_SOURCE_DIR}/generator/CSyntax.h
-    ${PROJECT_SOURCE_DIR}/generator/DeclarationInterceptor.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.h
     ${PROJECT_SOURCE_DIR}/generator/Debug.cpp
     ${PROJECT_SOURCE_DIR}/generator/DomainLattice.h
@@ -33,11 +31,10 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/Factory.cpp
     ${PROJECT_SOURCE_DIR}/generator/FreshVarSupply.h
     ${PROJECT_SOURCE_DIR}/generator/FreshVarSupply.cpp
-    ${PROJECT_SOURCE_DIR}/generator/Observer.h
+    ${PROJECT_SOURCE_DIR}/generator/Plugin.h
+    ${PROJECT_SOURCE_DIR}/generator/Plugin.cpp
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
-    ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.h
-    ${PROJECT_SOURCE_DIR}/generator/StdLibIndex.cpp
     # Analysis files
     ${PROJECT_SOURCE_DIR}/static-analysis/Range.h
     ${PROJECT_SOURCE_DIR}/static-analysis/Range.cpp
@@ -59,7 +56,14 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/testing/TestDisambiguator.cpp
     ${PROJECT_SOURCE_DIR}/testing/TestParser.h
     ${PROJECT_SOURCE_DIR}/testing/TestParser.cpp
-    # Utils' files
+    # Plugin API files
+    ${PROJECT_SOURCE_DIR}/plugin-api/PluginConfig.h
+    ${PROJECT_SOURCE_DIR}/plugin-api/DeclarationInterceptor.h
+    ${PROJECT_SOURCE_DIR}/plugin-api/SourceInspector.h
+    ${PROJECT_SOURCE_DIR}/plugin-api/VisitorObserver.h
+    # Utility files
+    ${PROJECT_SOURCE_DIR}/utility/FileInfo.h
+    ${PROJECT_SOURCE_DIR}/utility/FileInfo.cpp
     ${PROJECT_SOURCE_DIR}/utility/IO.h
     ${PROJECT_SOURCE_DIR}/utility/IO.cpp
     ${PROJECT_SOURCE_DIR}/utility/Process.h
@@ -85,6 +89,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/utility
     ${PROJECT_SOURCE_DIR}/data-structures
     ${PROJECT_SOURCE_DIR}/testing
+    ${PROJECT_SOURCE_DIR}/plugin-api
     ${PROJECT_SOURCE_DIR}/command/cxxopts/include
 )
 

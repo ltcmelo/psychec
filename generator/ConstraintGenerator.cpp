@@ -31,13 +31,13 @@
 #include "DeclarationInterceptor.h"
 #include "Debug.h"
 #include "Literals.h"
-#include "Observer.h"
 #include "PrintfScanner.h"
 #include "Scope.h"
 #include "Symbols.h"
 #include "SymbolPP.h"
 #include "TranslationUnit.h"
 #include "TypeOfExpression.h"
+#include "VisitorObserver.h"
 #include <iostream>
 #include <algorithm>
 
@@ -120,18 +120,14 @@ void ConstraintGenerator::employDomainLattice(const DomainLattice* lattice)
     lattice_ = lattice;
 }
 
-void ConstraintGenerator::installObserver(Observer *observer)
+void ConstraintGenerator::installObserver(VisitorObserver *observer)
 {
-    PSYCHE_ASSERT(observer, return, "expected valid observer");
-
     observer_ = observer;
-    observer_->configure(translationUnit(), writer_);
+    //observer_->configure(translationUnit(), writer_);
 }
 
 void ConstraintGenerator::installInterceptor(DeclarationInterceptor *interceptor)
 {
-    PSYCHE_ASSERT(interceptor, return, "expected valid interceptor");
-
     interceptor_ = interceptor;
 }
 
@@ -194,7 +190,7 @@ void ConstraintGenerator::visitDeclaration(DeclarationAST *ast)
 
 bool ConstraintGenerator::visit(FunctionDefinitionAST *ast)
 {
-    if (interceptor_->intercept(ast))
+    if (interceptor_ && interceptor_->intercept(ast))
         return false;
 
     DEBUG_VISIT(FunctionDefinitionAST);
@@ -243,7 +239,8 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
     // The function name and parameter's type names are visible in the outer scope, but parameter
     // themselves are visible within the function body only.
     writer_->openScope();
-    observer_->withinFunction();
+    if (observer_)
+        observer_->withinFunction();
 
     for (auto i = 0u; i < func->argumentCount(); i++) {
         std::string param;
@@ -269,7 +266,8 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
         popType();
     }
 
-    observer_->outsideFunction();
+    if (observer_)
+        observer_->outsideFunction();
     writer_->closeScope();
 
     // If no valued return was detected, this alpha will be orphanized.
@@ -289,7 +287,7 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
 
 bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
 {
-    if (interceptor_->intercept(ast))
+    if (interceptor_ && interceptor_->intercept(ast))
         return false;
 
     DEBUG_VISIT(SimpleDeclarationAST);

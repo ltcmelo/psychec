@@ -20,7 +20,6 @@
 #ifndef PSYCHE_CONSTRAINTWRITER_H__
 #define PSYCHE_CONSTRAINTWRITER_H__
 
-#include "Config.h"
 #include <ostream>
 #include <string>
 #include <tuple>
@@ -31,7 +30,7 @@ namespace psyche {
 /*!
  * \brief The ConstraintWriter class
  */
-class PSYCHEC_API ConstraintWriter
+class ConstraintWriter
 {
 public:
     /*!

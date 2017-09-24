@@ -24,8 +24,8 @@
 #ifndef CFE_NAMEVISITOR_H
 #define CFE_NAMEVISITOR_H
 
-#include "Api.h"
-
+#include "FrontendConfig.h"
+#include "FrontendFwds.h"
 
 namespace psyche {
 

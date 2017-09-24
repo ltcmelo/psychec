@@ -21,7 +21,7 @@
 #ifndef CFE_AST_PATTERN_BUILDER_H
 #define CFE_AST_PATTERN_BUILDER_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "AST.h"
 #include "MemoryPool.h"
 

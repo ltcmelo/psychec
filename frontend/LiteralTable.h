@@ -21,7 +21,9 @@
 #ifndef CFE_LITERALTABLE_H
 #define CFE_LITERALTABLE_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
+#include "FrontendFwds.h"
+#include <cstdlib>
 #include <cstring>
 
 namespace psyche {

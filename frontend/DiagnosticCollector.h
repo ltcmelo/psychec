@@ -24,7 +24,8 @@
 #ifndef CFE_DIAGNOSTIC_COLLECTOR_H
 #define CFE_DIAGNOSTIC_COLLECTOR_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
+#include "FrontendFwds.h"
 #include <cstdarg>
 
 namespace psyche {

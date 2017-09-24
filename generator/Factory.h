@@ -19,7 +19,6 @@
 #ifndef PSYCHE_FUNCTIONWRITER_H__
 #define PSYCHE_FUNCTIONWRITER_H__
 
-#include "Config.h"
 #include <memory>
 #include <ostream>
 
@@ -27,18 +26,18 @@ namespace psyche {
 
 class ConstraintWriter;
 class DeclarationInterceptor;
-class Observer;
+class VisitorObserver;
 
 /*!
  * \brief The Factory class
  */
-class PSYCHEC_API Factory
+class Factory
 {
 public:
     virtual ~Factory() {}
 
     virtual std::unique_ptr<ConstraintWriter> makeConstraintWriter(std::ostream& os) const;
-    virtual std::unique_ptr<Observer> makeObserver() const;
+    virtual std::unique_ptr<VisitorObserver> makeObserver() const;
     virtual std::unique_ptr<DeclarationInterceptor> makeInterceptor() const;
 };
 

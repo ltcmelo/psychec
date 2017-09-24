@@ -19,7 +19,7 @@
 #ifndef PSYCHE_ASTNORMALIZER_H__
 #define PSYCHE_ASTNORMALIZER_H__
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "ASTVisitor.h"
 #include <iostream>
 

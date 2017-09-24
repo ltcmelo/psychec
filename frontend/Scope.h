@@ -21,9 +21,10 @@
 #ifndef CFE_SCOPE_H
 #define CFE_SCOPE_H
 
-#include "Api.h"
-#include "Symbol.h"
+#include "FrontendConfig.h"
+#include "FrontendFwds.h"
 #include "Names.h"
+#include "Symbol.h"
 
 namespace psyche {
 

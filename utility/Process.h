@@ -19,12 +19,11 @@
 #ifndef PSYCHE_PROCESS_H__
 #define PSYCHE_PROCESS_H__
 
-#include "Config.h"
 #include <string>
 
 namespace psyche {
 
-class PSYCHEC_API Process final
+class Process final
 {
 public:
     std::string execute(const std::string& cmd);

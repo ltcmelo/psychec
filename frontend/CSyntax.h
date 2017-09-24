@@ -19,7 +19,7 @@
 #ifndef PSYCHE_SYNTAXFORMATTER_H__
 #define PSYCHE_SYNTAXFORMATTER_H__
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include <string>
 
 namespace psyche {

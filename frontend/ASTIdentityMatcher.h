@@ -19,10 +19,11 @@
 #ifndef PSYCHE_IDENTITY_MATCHER_H__
 #define PSYCHE_IDENTITY_MATCHER_H__
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "AST.h"
 #include "ASTMatcher.h"
 #include "Name.h"
+#include "FrontendFwds.h"
 #include "Literals.h"
 #include "TranslationUnit.h"
 #include <cstring>

@@ -21,7 +21,8 @@
 #ifndef CFE_TYPEVISITOR_H
 #define CFE_TYPEVISITOR_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
+#include "FrontendFwds.h"
 
 namespace psyche {
 

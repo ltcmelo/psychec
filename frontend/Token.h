@@ -21,7 +21,8 @@
 #ifndef CFE_TOKEN_H
 #define CFE_TOKEN_H
 
-#include "Api.h"
+#include "FrontendConfig.h"
+#include "FrontendFwds.h"
 #include "Dialect.h"
 
 namespace psyche {

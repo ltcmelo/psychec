@@ -21,8 +21,8 @@
 #ifndef CFE_FULLYSPECIFIEDTYPE_H
 #define CFE_FULLYSPECIFIEDTYPE_H
 
-#include "Api.h"
-
+#include "FrontendConfig.h"
+#include "FrontendFwds.h"
 
 namespace psyche {
 

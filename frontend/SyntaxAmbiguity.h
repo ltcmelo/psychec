@@ -20,7 +20,7 @@
 #ifndef PSYCHE_SYNTAXAMBIGUITY_H__
 #define PSYCHE_SYNTAXAMBIGUITY_H__
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "Name.h"
 #include "Names.h"
 

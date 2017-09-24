@@ -48,7 +48,7 @@
 #ifndef PSYCHE_ASTDUMPER_H__
 #define PSYCHE_ASTDUMPER_H__
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "AST.h"
 #include "ASTVisitor.h"
 #include <fstream>

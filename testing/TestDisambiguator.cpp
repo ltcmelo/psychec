@@ -54,10 +54,10 @@ void TestDisambiguator::checkAst(const std::string &source, std::string expected
     Driver driver(factory);
     flags_.flag_.noHeuristics = nonHeu;
     driver.process("testfile", source, flags_);
-    PSYCHE_EXPECT_TRUE(driver.tuAst());
+    PSYCHE_EXPECT_TRUE(driver.ast());
 
     std::ostringstream oss;
-    ASTDumper(driver.tu()).dump(driver.tuAst(), "test", oss);
+    ASTDumper(driver.tu()).dump(driver.ast(), "test", oss);
 
     compareText(expected, oss.str());
 }

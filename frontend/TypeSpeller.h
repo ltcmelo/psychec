@@ -19,7 +19,7 @@
 #ifndef PSYCHE_TYPENAMESPELLER_H__
 #define PSYCHE_TYPENAMESPELLER_H__
 
-#include "Api.h"
+#include "FrontendConfig.h"
 #include "CSyntax.h"
 #include "CoreTypes.h"
 #include "Literals.h"
