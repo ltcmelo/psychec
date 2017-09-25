@@ -20,14 +20,15 @@
 #define PSYCHE_PROCESS_H__
 
 #include <string>
+#include <utility>
 
 namespace psyche {
 
 class Process final
 {
 public:
-    std::string execute(const std::string& cmd);
-    std::string execute(std::string&& cmd);
+    std::pair<int, std::string> execute(const std::string& cmd);
+    std::pair<int, std::string> execute(std::string&& cmd);
 };
 
 } // namespace psyche

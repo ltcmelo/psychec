@@ -20,6 +20,7 @@
 #define PSYCHE_COMPILER_FACADE_H__
 
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace psyche {
@@ -27,17 +28,16 @@ namespace psyche {
 class CompilerFacade
 {
 public:
-    CompilerFacade(const std::string& nativeCC,
+    CompilerFacade(const std::string& hostCC,
                    const std::vector<std::string>& defs,
                    const std::vector<std::string>& undefs);
 
-    std::string preprocessSource(const std::string& source);
-    std::string preprocessFile(const std::string& filePath);
+    std::pair<int, std::string> preprocessSource(const std::string& source);
 
 private:
     std::string macroSetup() const;
 
-    std::string nativeCC_;
+    std::string hostCC_;
     std::vector<std::string> defs_;
     std::vector<std::string> undefs_;
 };

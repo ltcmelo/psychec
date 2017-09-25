@@ -20,36 +20,35 @@
 #include <array>
 #include <cstdio>  // Using POSIX's `popen'.
 #include <iostream>
-#include <memory>
 
 using namespace psyche;
 
 namespace {
 
-std::string executeCore(const char* cmd)
+std::pair<int, std::string> executeCore(const char* cmd)
 {
-    std::shared_ptr<FILE> out(popen(cmd, "r"), pclose);
-    if (!out)
-        return "";
+    FILE* pipe = popen(cmd, "r");
+    if (!pipe)
+        return std::make_pair(1, "");
 
     std::string all;
-    while (!feof(out.get())) {
+    while (!feof(pipe)) {
         std::array<char, 512> buf;
-        if (fgets(buf.data(), 512, out.get()))
+        if (fgets(buf.data(), 512, pipe))
             all += buf.data();
     }
 
-    return all;
+    return std::make_pair(pclose(pipe), all);
 }
 
 } // anonymous
 
-std::string Process::execute(std::string&& s)
+std::pair<int, std::string> Process::execute(std::string&& s)
 {
     return executeCore(s.c_str());
 }
 
-std::string Process::execute(const std::string &s)
+std::pair<int, std::string> Process::execute(const std::string &s)
 {
     return executeCore(s.c_str());
 }

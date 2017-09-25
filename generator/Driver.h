@@ -94,6 +94,7 @@ public:
     static constexpr int InvalidSyntax = 5;
     static constexpr int UnresolvedAmbiguity = 6;
     static constexpr int FailureLoadingPlugin = 7;
+    static constexpr int PreprocessingError = 8;
 
     //! Internal errors (negative values).
     static constexpr int ParsingError = -1;

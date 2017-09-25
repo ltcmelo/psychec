@@ -60,6 +60,7 @@ constexpr int Driver::UnspecifiedInputFile;
 constexpr int Driver::UnknownCommandLineOption;
 constexpr int Driver::InvalidCommandLineValue;
 constexpr int Driver::FailureLoadingPlugin;
+constexpr int Driver::PreprocessingError;
 
 namespace {
 
@@ -260,9 +261,11 @@ int Driver::process(const std::string& unitName,
 int Driver::preprocess(const std::string& source)
 {
     CompilerFacade cc(opts_.nativeCC_, opts_.defs_, opts_.undefs_);
-    std::string ppSource = cc.preprocessSource(source);
+    auto res = cc.preprocessSource(source);
+    if (!res.first)
+        return parse(res.second);
 
-    return parse(ppSource);
+    return PreprocessingError;
 }
 
 int Driver::parse(const std::string& source)
