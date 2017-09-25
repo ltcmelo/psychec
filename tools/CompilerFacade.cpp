@@ -32,10 +32,11 @@ CompilerFacade::CompilerFacade(const std::string& hostCC,
 
 std::pair<int, std::string> CompilerFacade::preprocessSource(const std::string& source)
 {
-    std::string in = "echo \"" + source + "\" | ";
+    std::string in = "cat << 'EOF' | ";
     in += hostCC_;
     in += macroSetup();
     in += " -E -x c -";
+    in += "\n" + source + "\nEOF";
 
     return Process().execute(in);
 }
