@@ -93,6 +93,7 @@ public:
     static constexpr int InvalidCommandLineValue = 4;
     static constexpr int InvalidSyntax = 5;
     static constexpr int UnresolvedAmbiguity = 6;
+    static constexpr int FailureLoadingPlugin = 7;
 
     //! Internal errors (negative values).
     static constexpr int ParsingError = -1;

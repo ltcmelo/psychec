@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 2.8)
 
 project(psychec)
 
+# Loading and rpath setup.
+set(CMAKE_MACOSX_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH "\$ORIGIN;@executable_path;@loader_path")
+
 # Build frontend's library.
 add_subdirectory(frontend)
 
@@ -97,3 +101,6 @@ set(GENERATOR psychecgen)
 add_executable(${GENERATOR} ${PSYCHEC_SOURCES})
 
 target_link_libraries(${GENERATOR} psychecfe)
+
+# Install setup
+install(TARGETS ${GENERATOR} DESTINATION ${PROJECT_SOURCE_DIR}/../../Deliverable)

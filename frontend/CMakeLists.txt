@@ -7,7 +7,7 @@ set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -std=c++1y -g")
 set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -Wall -Wsign-compare -Wno-inconsistent-missing-override")
 set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
-set(CMAKE_MACOSX_RPATH 1)
+set(CMAKE_MACOSX_RPATH TRUE)
 
 set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/AST.cpp
@@ -103,3 +103,5 @@ include_directories(
 set(LIBRARY psychecfe)
 add_library(${LIBRARY} SHARED ${CFE_SOURCES})
 
+# Install setup
+install(TARGETS ${LIBRARY} DESTINATION ${PROJECT_SOURCE_DIR}/../../../Deliverable)

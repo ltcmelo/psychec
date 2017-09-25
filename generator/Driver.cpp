@@ -59,6 +59,7 @@ constexpr int Driver::UnresolvedAmbiguity;
 constexpr int Driver::UnspecifiedInputFile;
 constexpr int Driver::UnknownCommandLineOption;
 constexpr int Driver::InvalidCommandLineValue;
+constexpr int Driver::FailureLoadingPlugin;
 
 namespace {
 
@@ -192,8 +193,13 @@ int Driver::process(int argc, char *argv[])
     exeOpts.defs_ = cmdOpts["cc-D"].as<std::vector<std::string>>();
     exeOpts.undefs_ = cmdOpts["cc-U"].as<std::vector<std::string>>();
 
-    if (cmdOpts.count("plugin"))
+    if (cmdOpts.count("plugin")) {
         Plugin::load(cmdOpts["plugin"].as<std::string>());
+        if (!Plugin::isLoaded()) {
+            std::cerr << kPsychePrefix << "cannot load plugin" << std::endl;
+            return FailureLoadingPlugin;
+        }
+    }
 
     const std::string& source = readFile(in);
     int code = 0;
