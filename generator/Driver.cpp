@@ -216,7 +216,7 @@ int Driver::process(int argc, char *argv[])
             writeFile(constraints_, cmdOpts["output"].as<std::string>());
             if (!includes_.empty()) {
                 FileInfo info(cmdOpts["output"].as<std::string>());
-                writeFile(includes_, info.fileBaseName() + ".inc");
+                writeFile(includes_, info.fullDir() + "/" + info.fileBaseName() + ".inc");
             }
         }
         break;
