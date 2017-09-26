@@ -22,6 +22,7 @@
 #define CFE_MEMORYPOOL_H
 
 #include "FrontendConfig.h"
+#include <cstddef>
 #include <new>
 
 namespace psyche {

@@ -100,7 +100,7 @@ include_directories(
 set(GENERATOR psychecgen)
 add_executable(${GENERATOR} ${PSYCHEC_SOURCES})
 
-target_link_libraries(${GENERATOR} psychecfe)
+target_link_libraries(${GENERATOR} psychecfe dl)
 
 # Install setup
 install(TARGETS ${GENERATOR} DESTINATION ${PROJECT_SOURCE_DIR}/../../Deliverable)

@@ -24,6 +24,7 @@
 #include "ASTMatcher.h"
 #include "MemoryPool.h"
 #include <algorithm>
+#include <cstddef>
 
 /*
    All firstToken/lastToken functions below which have a doxygen comment with
