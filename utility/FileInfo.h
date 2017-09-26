@@ -35,7 +35,7 @@ public:
 
     /*!
      * \brief FileInfo
-     * \param fullFileName - file name with complete path
+     * \param fullFileName
      *
      * Within the docs, suppose an instance of this class is created as:
      *

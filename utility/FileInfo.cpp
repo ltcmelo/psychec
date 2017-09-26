@@ -69,6 +69,8 @@ std::string FileInfo::dir() const
 std::string FileInfo::fullDir() const
 {
     size_t pos = impl_->fullFileName_.rfind('/');
+    if (pos == std::string::npos)
+        return "./";
     return impl_->fullFileName_.substr(0, pos + 1);
 }
 
