@@ -74,8 +74,9 @@ solve c cl ml = do
   -- Populate value context, create missing variables, generalize types.
   (vcx0,c'') <- stage2 vcx c'
 
-  {--liftIO (print $ text "c'\n" <+> pprint c')
+  {--liftIO (print $ text "c\n" <+> pprint c)
   liftIO (print $ text "tcx0\n" <+> pprint (TyCtx $ cleanTypes C99 (tyctx tcx0)))
+  liftIO (print $ text "c'\n" <+> pprint c')
   liftIO (print $ text "vcx0\n" <+> pprint (VarCtx $ cleanValues C99 (varctx vcx0)))--}
 
   -- Split constraints into equivalence, inequality, and field acess.
@@ -228,11 +229,18 @@ createEquiv t@(EnumTy n) t'@(VarTy v) tctx = do
                             (const (tyctx tctx))
                             (Map.lookup n (tyctx tctx))
   return (tctx', Truth)
-createEquiv t@(EnumTy n) t'@(EnumTy _) tctx = error "TODO: Implement me."
-createEquiv t t' tcx = do
-  let tctx' = TyCtx $ maybe (Map.insert (nameOf t) (flattenDecl tcx t t') (tyctx tcx))
-                            (const (tyctx tcx))
-                            (Map.lookup (nameOf t) (tyctx tcx))
+createEquiv t t'@(VarTy _) tcx = do
+  let
+    tctx' = TyCtx $ maybe (Map.insert (nameOf t) (flattenDecl tcx t t') (tyctx tcx))
+                          (const (tyctx tcx))
+                          (Map.lookup (nameOf t) (tyctx tcx))
+  return (tctx' , Truth)
+createEquiv t t' tcx = do -- Prefer a concrete type (when the definition only later appeared).
+  let
+    redefine _ = Map.insert (nameOf t) (t', True) (tyctx tcx)
+    tctx' = TyCtx $ maybe (Map.insert (nameOf t) (flattenDecl tcx t t') (tyctx tcx))
+                          (redefine)
+                          (Map.lookup (nameOf t) (tyctx tcx))
   return (tctx' , Truth)
 
 

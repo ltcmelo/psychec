@@ -269,6 +269,7 @@ tests = testGroup "Unit tests"
   , doTest "T223.c" -- Standalone enumerator use in expression.
   , doTest "T224.c" -- Enforce const-expr on enumerator.
   , doTest "T225.c" -- Enumerator without expression.
+  , doTest "T226.c" -- Struct forward decl before definition in same TU.
   ]
 
 
