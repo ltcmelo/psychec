@@ -35,7 +35,7 @@ std::pair<int, std::string> CompilerFacade::preprocessSource(const std::string& 
     std::string in = "cat << 'EOF' | ";
     in += hostCC_;
     in += macroSetup();
-    in += " -E -x c -";
+    in += " -std=c99 -E -x c -";
     in += "\n" + source + "\nEOF";
 
     return Process().execute(in);

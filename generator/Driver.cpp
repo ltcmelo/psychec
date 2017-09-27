@@ -90,7 +90,7 @@ TranslationUnitAST *Driver::ast() const
 Dialect Driver::adjustedDialect(const ExecutionOptions&)
 {
     Dialect dialect;
-    dialect.c99 = 1;
+    dialect.c99 = 1; // TODO: Requires further work for actual customization.
     dialect.ext_KeywordsGNU = 1;
     dialect.ext_EnumeratorAttributes = 1;
     dialect.ext_AvailabilityAttribute = 1;
@@ -145,6 +145,8 @@ int Driver::process(int argc, char *argv[])
             ("no-typedef", "Forbid typedef and struct/union declarations")
             ("cc", "Specify host C compiler",
                 cxxopts::value<std::string>()->default_value("gcc"))
+            ("cc-std", "Specify C dialect",
+                cxxopts::value<std::string>()->default_value("c99"))
             ("cc-D", "Predefine a macro",
                 cxxopts::value<std::vector<std::string>>())
             ("cc-U", "Undefine a macro",
@@ -191,6 +193,7 @@ int Driver::process(int argc, char *argv[])
     exeOpts.flag_.noTypedef = cmdOpts.count("no-typedef");
     exeOpts.flag_.handleGNUerrorFunc_ = true; // TODO: POSIX stuff?
     exeOpts.nativeCC_ = cmdOpts["cc"].as<std::string>();
+    exeOpts.dialect_ = cmdOpts["cc-std"].as<std::string>();
     exeOpts.defs_ = cmdOpts["cc-D"].as<std::vector<std::string>>();
     exeOpts.undefs_ = cmdOpts["cc-U"].as<std::vector<std::string>>();
 

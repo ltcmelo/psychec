@@ -64,6 +64,7 @@ struct ExecutionOptions
     };
 
     std::string nativeCC_;
+    std::string dialect_;
     std::vector<std::string> defs_;
     std::vector<std::string> undefs_;
 };
