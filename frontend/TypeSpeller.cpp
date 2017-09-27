@@ -231,8 +231,9 @@ void TypeSpeller<SyntaxT>::visit(Class *ty)
             continue;
 
         visitType(ty->memberAt(i)->type());
-        assert(name->isNameId() && "expected a simple name");
-        const Identifier *id = name->asNameId()->identifier();
+
+        assert((name->isNameId() || name->isTaggedNameId()) && "expected a simple name");
+        const Identifier *id = name->identifier();
         spelling_.append(" ");
         spelling_.append(id->chars(), id->size());
         spelling_.append("; ");

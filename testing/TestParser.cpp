@@ -70,9 +70,14 @@ void TestParser::testSource(const std::string& source)
 /*
  * Preprocessed output generated with the following options:
  *
+ *  -std=c99
  *  -D _Nonnull=
  *  -D _Nullable=
+ *  -D __extension__
  *  -U __BLOCKS__  (disable clang's block language)
+ *
+ * Convenience for copy & paste:
+ *  -std=c99 -D _Nonnull= -D _Nullable= -D __extension__ -U __BLOCKS__
  *
  */
 
@@ -256,16 +261,24 @@ void TestParser::testCase26()
 
 void TestParser::testCase27()
 {
+    const std::string& source = readFile("testing/data/stdlib_gcc-pp_ubuntu.i");
+    testSource(source);
 }
 
 void TestParser::testCase28()
 {
+    const std::string& source = readFile("testing/data/stdio_gcc-pp_ubuntu.i");
+    testSource(source);
 }
 
 void TestParser::testCase29()
 {
+    const std::string& source = readFile("testing/data/stddef_gcc-pp_ubuntu.i");
+    testSource(source);
 }
 
 void TestParser::testCase30()
 {
+    const std::string& source = readFile("testing/data/string_gcc-pp_ubuntu.i");
+    testSource(source);
 }
