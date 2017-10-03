@@ -1,6 +1,6 @@
 /* At least Interix lacks supplemental group support.  */
 static int
-setgroups (size_t size, gid_t const *list     
+setgroups (size_t size, gid_t const *list
            //_GL_UNUSED
            // ^^^ Removed by Secret tool, invalid syntax with unexpanded macro.
            )
@@ -232,8 +232,14 @@ main (int argc, char **argv)
         - Second, inside chroot to redo parsing in case IDs are different.
           Within chroot lookup is the main justification for having
           the --user option supported by the chroot command itself.  */
-//      if (userspec)
-//        ignore_value (parse_user_spec (userspec, &uid, &gid, NULL, NULL));
+
+      if (userspec)
+          ;
+      //  ignore_value (parse_user_spec (userspec, &uid, &gid, NULL, NULL));
+      //  ^^^ Removed by Secret tool. The name ignore_value refers to a macro the
+      //      casts the result of a call to void, eliminating warnings. Normally,
+      //      we keep it the sources, but in this case it'd have need to be annotated
+      //      by Secret, since it's applied on function with different retun types.
 
       /* If no gid is supplied or looked up, do so now.
         Also lookup the username for use with getgroups.  */
@@ -248,9 +254,9 @@ main (int argc, char **argv)
             }
         }
 
-//      if (groups && *groups)
-//        ignore_value (parse_additional_groups (groups, &out_gids, &n_gids,
-//                                               false));
+      if (groups && *groups)
+        ignore_value (parse_additional_groups (groups, &out_gids, &n_gids,
+                                               false));
 
       else if (! groups && gid_set (gid) && username)
         {

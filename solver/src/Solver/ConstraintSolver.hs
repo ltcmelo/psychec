@@ -290,18 +290,21 @@ stage2 vtx (n :<-: t) =
 stage2 vtx (Def n t c) = do
   -- Functions might have their definition in the program but not their declaration. A function
   -- call prior to the definition will be inserted into the environment through an ascription
-  -- constraint. Therefore, the care in order to preserve the attributes already defined.
+  -- constraint. Therefore, if when the definition is later on discovered, we need to preserve
+  -- the symbol properties and "update" its type, possibly producing another constraint.
   let
-    replaceOrInsert decl st  = VarCtx $ Map.insert n (ValSym t True decl st) (varctx vtx)
-    vtx' = case Map.lookup n (varctx vtx) of
-             Just sym -> replaceOrInsert (readOnly sym) (static sym)
-             Nothing -> replaceOrInsert False False
-  stage2 vtx' c
+    matchFunc t@(FunTy _ _) t' c = (t :=: t') :&: c
+    matchFunc _ _ c = c
+    replaceOrInsert t decl st  = VarCtx $ Map.insert n (ValSym t True decl st) (varctx vtx)
+    (vtx', c') = case Map.lookup n (varctx vtx) of
+             Just sym -> (replaceOrInsert t (readOnly sym) (static sym), matchFunc t (valty sym) c)
+             Nothing -> (replaceOrInsert t False False, c)
+  stage2 vtx' c'
 stage2 vtx (Scope c) = do
   (vtx', c') <- stage2 vtx c
   let
     updateSym acc n ce = Map.adjust (\(ValSym t dc _ st) -> ValSym t dc ce st) n acc
-    replaceOrNot n sym@(ValSym _ d ce _) acc
+    replaceOrNot n sym@(ValSym t d ce _) acc
       | not d = if Map.member n acc then updateSym acc n ce else Map.insert n sym acc
       | otherwise = acc
     vtx'' = VarCtx $ Map.foldrWithKey replaceOrNot (varctx vtx) (varctx vtx')

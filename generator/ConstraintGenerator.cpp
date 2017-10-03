@@ -211,11 +211,11 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
     for (auto i = 0u; i < func->argumentCount(); i++) {
         std::string alpha = supply_.createTypeVar1();
         writer_->writeExists(alpha);
-        paramTyVars.push_back(alpha);
 
         Symbol *sym = func->argumentAt(i);
         const std::string& ty = typeSpeller_.spell(sym->type(), scope_);
         writer_->writeTypedef(ty, alpha);
+        paramTyVars.push_back(ty);
 
         writer_->writeEquivRel(alpha, ty);
     }

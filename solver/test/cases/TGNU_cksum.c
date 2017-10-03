@@ -21,7 +21,7 @@ crc_remainder (int m)
   return rem & 0xFFFFFFFF;	/* Make it run on 64-bit machine.  */
 }
 
-/* Secret tool: Alternative main function which, in the original code, is disabled
+/* Removed by Secret tool: There are two main function this source, one disabled
  * by #ifdef macros. Generally, we simply remove the preprocessor directives
  * and keep the code in the most complete version, but in this case we would
  * have a collision of main functions.

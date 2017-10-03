@@ -1,4 +1,4 @@
-void f()
+void g()
 {
     UI ui = 1U;
     UI2 ui2 = 1u;
