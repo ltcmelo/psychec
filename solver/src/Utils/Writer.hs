@@ -33,28 +33,16 @@ import qualified Data.List as List
 import Debug.Trace
 
 
+-- TODO: Write only what appears in the source.
 writeCFile :: (TyCtx, VarCtx) -> Bool -> String
 writeCFile ctxs@(tcx, _) ml =
-  -- writeIncs ++
   writeNULL ml ++
   writeSize_t ml ++
+  writeIntPtr ml ++
   writeScalar_t ++
   writeBoolDef ++
   writeFwdDecls tcx ++
   writeDecls ctxs
-
-
--- TODO: Filter includes, write only those that are needed.
-writeIncs :: String
-writeIncs =
-  "/* WIP: In the future, only needed includes will be written. */\n" ++
-  "#include <stdint.h>\n" ++
-  "#include <stddef.h>\n" ++
-  "#include <stdlib.h>\n" ++
-  "#include <string.h>\n" ++
-  "#include <sys/types.h>\n" ++
-  "#include <sys/stat.h>\n" ++
-  "\n"
 
 
 -- | Write NULL definition.
@@ -69,9 +57,15 @@ writeSize_t False = "typedef unsigned long size_t;  // Customize by platform.\n"
 writeSize_t _ = ""
 
 
+-- | Write (u)intptr_t
+writeIntPtr :: Bool -> String
+writeIntPtr False = "typedef long intptr_t; typedef unsigned long uintptr_t;\n";
+writeIntPtr _ = ""
+
+
 -- | Write scalar_t__ definition.
 writeScalar_t :: String
-writeScalar_t = "typedef int scalar_t__;  // Either arithmetic or pointer type.\n"
+writeScalar_t = "typedef long scalar_t__;  // Either arithmetic or pointer type.\n"
 
 
 -- TODO: By default, our generator parses a `bool' type and interpret it as an `int'.

@@ -78,10 +78,6 @@ intmax_t :: Ty
 intmax_t = NamedTy (Name "intmax_t")
 uintmax_t :: Ty
 uintmax_t = NamedTy (Name "uintmax_t")
-intptr_t :: Ty
-intptr_t = NamedTy (Name "intptr_t")
-uintptr_t :: Ty
-uintptr_t = NamedTy (Name "uintptr_t")
 
 
 -- | Collection of types
@@ -94,7 +90,6 @@ stdintTypes =
         , uint_fast8_t, uint_fast16_t, uint_fast32_t, uint_fast64_t
         , uint_least8_t, uint_least16_t, uint_least32_t, uint_least64_t
         , intmax_t, uintmax_t
-        , intptr_t, uintptr_t
         ]
 
 

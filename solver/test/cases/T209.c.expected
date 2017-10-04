@@ -6,7 +6,7 @@ typedef  int TI ;
 typedef  double TD ;
 
 /* Variables and functions */
- int d ;
- int i ;
- int ui ;
+scalar_t__ d ;
+scalar_t__ i ;
+scalar_t__ ui ;
 

@@ -11,5 +11,4 @@ typedef  TYPE_2__ set ;
 /* Variables and functions */
  unsigned int INT_BITS ;
  unsigned int INT_BITS2 ;
- int /*<<< orphan*/ * malloc (int) ;
-
+ scalar_t__ malloc (int) ;

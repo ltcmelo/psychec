@@ -7,4 +7,4 @@ typedef  TYPE_1__ set ;
 
 /* Variables and functions */
  unsigned int INT_BITS ;
- int /*<<< orphan*/ * malloc (int) ;
+ scalar_t__ malloc (int) ;

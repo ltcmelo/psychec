@@ -262,11 +262,16 @@ DomainLattice::Domain DomainLattice::domainForType(const FullySpecifiedType& ty,
     }
 
     if (ty->asNamedType() && ty->asNamedType()->name()->asNameId()) {
+        // TODO: Compare char-by-char, matching at each substring.
         const Identifier* ident = ty->asNamedType()->name()->asNameId();
         return !strcmp(kSizeTy, ident->chars()) ?
                     Domain(kIntegral, kSizeTy) :
                     !strcmp(kPtrDiffTy, ident->chars()) ?
-                        Domain(kIntegral, kPtrDiffTy) : Undefined;
+                        Domain(kIntegral, kPtrDiffTy) :
+                        !strcmp(kIntPtrTy, ident->chars()) ?
+                            Domain(kIntegral, kIntPtrTy) :
+                            !strcmp(kUIntPtrTy, ident->chars()) ?
+                                Domain(kIntegral, kUIntPtrTy) : Undefined;
     }
 
     return Undefined;
@@ -921,19 +926,21 @@ bool DomainLattice::visit(CallAST *ast)
 
 bool DomainLattice::visit(CastExpressionAST *ast)
 {
+    Domain finalDom;
     if (withinExpr_) {
         EXPR_REGION_CTRL;
         enforceLeastDomain(Scalar);
         visitExpression(ast->type_id);
-        enforceLeastDomain(Scalar);
+        finalDom = enforceLeastDomain(Scalar);
         visitExpression(ast->expression);
     } else {
         EXPR_REGION_CTRL;
         enforceLeastDomain(Undefined);
         visitExpression(ast->type_id);
-        enforceLeastDomain(Undefined);
+        finalDom = enforceLeastDomain(Undefined);
         visitExpression(ast->expression);
     }
+    enforceLeastDomain(finalDom);
 
     return false;
 }

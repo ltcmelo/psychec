@@ -6,4 +6,4 @@ Result generate(double val)
   return analyse(list);
 }
 
-Result analyse(Chain chain) {}
+Result analyse(Chain chain) { /*...*/ }

@@ -40,9 +40,11 @@ const char* const kDefaultArithTy = kDefaultIntTy;
 const char* const kDefaultStrTy = "char*";
 const char* const kDefaultConstStrTy = "char const*";
 
-// Standard library
+// Standard library understood by default.
 const char* const kSizeTy = "size_t";
 const char* const kPtrDiffTy = "ptrdiff_t";
+const char* const kIntPtrTy = "intptr_t";
+const char* const kUIntPtrTy = "uintptr_t";
 
 // Reserved
 const char* const kScalarTy = "scalar_t__";

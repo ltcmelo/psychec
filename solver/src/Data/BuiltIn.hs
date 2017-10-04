@@ -78,6 +78,14 @@ __int128 = NamedTy (Name "__int128")
 __uint128 :: Ty
 __uint128 = NamedTy (Name "__uint128")
 
+intptr_t :: Ty
+intptr_t = NamedTy (Name "intptr_t")
+
+uintptr_t :: Ty
+uintptr_t = NamedTy (Name "uintptr_t")
+
+
+-- | Scalar, either an integer or pointer.
 scalar_t__ :: Ty
 scalar_t__ = NamedTy (Name "scalar_t__")
 

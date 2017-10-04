@@ -270,6 +270,7 @@ tests = testGroup "Unit tests"
   , doTest "T224.c" -- Enforce const-expr on enumerator.
   , doTest "T225.c" -- Enumerator without expression.
   , doTest "T226.c" -- Struct forward decl before definition in same TU.
+  , doTest "T227.c" -- Enforce scalar_t on non-void RHS of cast expressions.
   ]
 
 

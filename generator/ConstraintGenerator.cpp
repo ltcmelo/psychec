@@ -901,17 +901,9 @@ bool ConstraintGenerator::visit(CastExpressionAST *ast)
     collectExpression(alpha, ast->expression);
 
     auto targetDom = domainOf(ast->type_id);
-    if (targetDom == DomainLattice::Arithmetic
-            || targetDom == DomainLattice::Integral
-            || targetDom == DomainLattice::FloatingPoint) {
-        writer_->writeSubtypeRel(alpha, kIntTy);
-    } else if (targetDom == DomainLattice::Scalar) {
-        writer_->writeSubtypeRel(alpha, kIntTy);
-    } else if (targetDom == DomainLattice::Pointer){
-        const std::string& alpha2 = supply_.createTypeVar1();
-        writer_->writeExists(alpha2);
-        writer_->writePtrRel(alpha, alpha2);
-    }
+
+    if (targetDom != DomainLattice::Undefined)
+        writer_->writeSubtypeRel(alpha, kScalarTy);
 
     return false;
 }

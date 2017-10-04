@@ -58,7 +58,7 @@ builtinTypes l =
            float, -- floatComplex, floatImaginary,
            double, -- doubleComplex, doubleImaginary,
            longDouble, -- longDoubleComplex, longDoubleImaginary
-           size_t,
+           size_t, intptr_t, uintptr_t,
            scalar_t__]
 
 

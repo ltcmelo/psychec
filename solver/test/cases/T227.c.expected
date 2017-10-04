@@ -1,8 +1,7 @@
 /* Forward declarations */
 
 /* Type definitions */
-typedef  float T ;
+struct A {int dummy; } ;
 
 /* Variables and functions */
-scalar_t__ e ;
-
+ struct A* a ;
