@@ -144,7 +144,7 @@ instance Unifiable Ty where
         | otherwise = varBind v t
 
     punify (NamedTy c) (NamedTy c')
-        | monoConvertible (NamedTy c) (NamedTy c') = return nullSubst
+        | convertible (NamedTy c) (NamedTy c') = return nullSubst
         | otherwise = differentTypeConstructorsError c c'
 
     punify p@(PtrTy t@(VarTy n)) p'@(PtrTy t')
