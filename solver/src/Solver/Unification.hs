@@ -134,24 +134,24 @@ instance Unifiable Ty where
     punify AnyTy t = return nullSubst
 
     punify t'@(VarTy v) t
-        | convertible t t' = return nullSubst
+        | monoConvertible t t' = return nullSubst
         | otherwise = varBind v t
 
     punify t AnyTy = return nullSubst
 
     punify t t'@(VarTy v)
-        | convertible t t' = return nullSubst
+        | monoConvertible t t' = return nullSubst
         | otherwise = varBind v t
 
     punify (NamedTy c) (NamedTy c')
-        | convertible (NamedTy c) (NamedTy c') = return nullSubst
+        | monoConvertible (NamedTy c) (NamedTy c') = return nullSubst
         | otherwise = differentTypeConstructorsError c c'
 
     punify p@(PtrTy t@(VarTy n)) p'@(PtrTy t')
-        | p == t' || convertible p p' = return nullSubst
+        | p == t' || monoConvertible p p' = return nullSubst
         | otherwise = punify t t'
     punify p@(PtrTy t) p'@(PtrTy t')
-        | convertible p p' = return nullSubst
+        | monoConvertible p p' = return nullSubst
         | otherwise = punify t t'
 
     punify f@(FunTy t ts) (PtrTy p) = punify f p

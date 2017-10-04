@@ -26,16 +26,24 @@ import Data.BuiltIn
 
 convertible :: Ty -> Ty -> Bool
 convertible t t' =
-  or [t == t',
+  or [
+      monoConvertible t t',
+      or [t == PtrTy void, t' == PtrTy void],
+      or [t == PtrTy (QualTy void Const), t' == PtrTy (QualTy void Const)]
+     ]
+
+monoConvertible :: Ty -> Ty -> Bool
+monoConvertible t t' =
+  or [
+      t == t',
       and [isArithTy t, isArithTy t'],
       and [isArithTy t, isEnum t'],
       and [isEnum t, isArithTy t'],
       and [isArithTy t, t' == scalar_t__],
       and [t == scalar_t__, isArithTy t'],
       and [isPtrTy t, t' == scalar_t__],
-      and [t == scalar_t__, isPtrTy t'],
-      or [t == PtrTy void, t' == PtrTy void],
-      or [t == PtrTy (QualTy void Const), t' == PtrTy (QualTy void Const)]]
+      and [t == scalar_t__, isPtrTy t']
+     ]
 
 isEnum :: Ty -> Bool
 isEnum (EnumTy _) = True

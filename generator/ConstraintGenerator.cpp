@@ -868,7 +868,6 @@ bool ConstraintGenerator::visit(CallAST *ast)
     return false;
 }
 
-
 void ConstraintGenerator::castExpressionHelper(const std::string& inputTy,
                                                std::string& resultTy)
 {
