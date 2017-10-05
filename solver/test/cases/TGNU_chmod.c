@@ -313,7 +313,7 @@ Each MODE is of the form '[ugoa]*([-+=]([rwxXst]*|[ugo]))+|[-+=][0-7]+'.\n\
 int
 main (int argc, char **argv)
 {
-  char *mode_p = NULL; /* Pysche TODO: Bug with duplicate var name. */
+  char *mode = NULL;
   size_t mode_len = 0;
   size_t mode_alloc = 0;
   bool ok;
@@ -371,10 +371,10 @@ main (int argc, char **argv)
             if (mode_alloc <= new_mode_len)
               {
                 mode_alloc = new_mode_len + 1;
-                mode_p = X2REALLOC (mode_p, &mode_alloc);
+                mode = X2REALLOC (mode, &mode_alloc);
               }
-            mode_p[mode_len] = ',';
-            memcpy (mode_p + mode_comma_len, arg, arg_len + 1);
+            mode[mode_len] = ',';
+            memcpy (mode + mode_comma_len, arg, arg_len + 1);
             mode_len = new_mode_len;
 
             diagnose_surprises = true;
@@ -410,7 +410,7 @@ main (int argc, char **argv)
 
   if (reference_file)
     {
-      if (mode_p)
+      if (mode)
         {
           error (0, 0, _("cannot combine mode and --reference options"));
           usage (EXIT_FAILURE);
@@ -418,13 +418,13 @@ main (int argc, char **argv)
     }
   else
     {
-      if (!mode_p)
-        mode_p = argv[optind++];
+      if (!mode)
+        mode = argv[optind++];
     }
 
   if (optind >= argc)
     {
-      if (!mode_p || mode_p != argv[optind - 1])
+      if (!mode || mode != argv[optind - 1])
         error (0, 0, _("missing operand"));
       else
         error (0, 0, _("missing operand after %s"), quote (argv[argc - 1]));
@@ -435,15 +435,15 @@ main (int argc, char **argv)
     {
       change = mode_create_from_ref (reference_file);
       if (!change)
-        error (EXIT_FAILURE, errno, _("failed to get attributes of %s"),
-               quoteaf (reference_file));
+        die (EXIT_FAILURE, errno, _("failed to get attributes of %s"),
+             quoteaf (reference_file));
     }
   else
     {
-      change = mode_compile (mode_p);
+      change = mode_compile (mode);
       if (!change)
         {
-          error (0, 0, _("invalid mode: %s"), quote (mode_p));
+          error (0, 0, _("invalid mode: %s"), quote (mode));
           usage (EXIT_FAILURE);
         }
       umask_value = umask (0);
@@ -454,8 +454,8 @@ main (int argc, char **argv)
       static struct dev_ino dev_ino_buf;
       root_dev_ino = get_root_dev_ino (&dev_ino_buf);
       if (root_dev_ino == NULL)
-        error (EXIT_FAILURE, errno, _("failed to get attributes of %s"),
-               quoteaf ("/"));
+        die (EXIT_FAILURE, errno, _("failed to get attributes of %s"),
+             quoteaf ("/"));
     }
   else
     {

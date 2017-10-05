@@ -105,7 +105,7 @@ simple_cat (
         /* The following is ok, since we know that 0 < n_read.  */
         size_t n = n_read;
         if (full_write (STDOUT_FILENO, buf, n) != n)
-          error (EXIT_FAILURE, errno, _("write error"));
+          die (EXIT_FAILURE, errno, _("write error"));
       }
     }
 }
@@ -121,7 +121,7 @@ write_pending (char *outbuf, char **bpout)
   if (0 < n_write)
     {
       if (full_write (STDOUT_FILENO, outbuf, n_write) != n_write)
-        error (EXIT_FAILURE, errno, _("write error"));
+        die (EXIT_FAILURE, errno, _("write error"));
       *bpout = outbuf;
     }
 }
@@ -205,7 +205,7 @@ cat (
               do
                 {
                   if (full_write (STDOUT_FILENO, wp, outsize) != outsize)
-                    error (EXIT_FAILURE, errno, _("write error"));
+                    die (EXIT_FAILURE, errno, _("write error"));
                   wp += outsize;
                   remaining_bytes = bpout - wp;
                 }
@@ -559,7 +559,7 @@ main (int argc, char **argv)
   /* Get device, i-node number, and optimal blocksize of output.  */
 
   if (fstat (STDOUT_FILENO, &stat_buf) < 0)
-    error (EXIT_FAILURE, errno, _("standard output"));
+    die (EXIT_FAILURE, errno, _("standard output"));
 
   outsize = io_blksize (stat_buf);
   out_dev = stat_buf.st_dev;
@@ -569,8 +569,7 @@ main (int argc, char **argv)
   if (! (number || show_ends || squeeze_blank))
     {
       file_open_mode |= O_BINARY;
-      if (O_BINARY && ! isatty (STDOUT_FILENO))
-        xfreopen (NULL, "wb", stdout);
+      xset_binary_mode (STDOUT_FILENO, O_BINARY);
     }
 
   /* Check if any of the input files are the same as the output file.  */
@@ -589,8 +588,8 @@ main (int argc, char **argv)
         {
           have_read_stdin = true;
           input_desc = STDIN_FILENO;
-          if ((file_open_mode & O_BINARY) && ! isatty (STDIN_FILENO))
-            xfreopen (NULL, "rb", stdin);
+          if (file_open_mode & O_BINARY)
+            xset_binary_mode (STDIN_FILENO, O_BINARY);
         }
       else
         {
@@ -686,7 +685,7 @@ main (int argc, char **argv)
   while (++argind < argc);
 
   if (have_read_stdin && close (STDIN_FILENO) < 0)
-    error (EXIT_FAILURE, errno, _("closing standard input"));
+    die (EXIT_FAILURE, errno, _("closing standard input"));
 
   return ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }

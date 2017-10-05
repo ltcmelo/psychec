@@ -126,8 +126,7 @@ cksum (const char *file, bool print_name)
     {
       fp = stdin;
       have_read_stdin = true;
-      if (O_BINARY && ! isatty (STDIN_FILENO))
-        xfreopen (NULL, "rb", stdin);
+      xset_binary_mode (STDIN_FILENO, O_BINARY);
     }
   else
     {
@@ -146,7 +145,7 @@ cksum (const char *file, bool print_name)
       unsigned char *cp = buf;
 
       if (length + bytes_read < length)
-        error (EXIT_FAILURE, 0, _("%s: file too long"), quotef (file));
+        die (EXIT_FAILURE, 0, _("%s: file too long"), quotef (file));
       length += bytes_read;
       while (bytes_read--)
         crc = (crc << 8) ^ crctab[((crc >> 24) ^ *cp++) & 0xFF];
@@ -181,7 +180,7 @@ cksum (const char *file, bool print_name)
     printf ("%u %s\n", (unsigned int) crc, hp);
 
   if (ferror (stdout))
-    error (EXIT_FAILURE, errno, "-: %s", _("write error"));
+    die (EXIT_FAILURE, errno, "-: %s", _("write error"));
 
   return true;
 }
@@ -244,6 +243,6 @@ main (int argc, char **argv)
     }
 
   if (have_read_stdin && fclose (stdin) == EOF)
-    error (EXIT_FAILURE, errno, "-");
+    die (EXIT_FAILURE, errno, "-");
   return ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }

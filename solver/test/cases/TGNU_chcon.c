@@ -85,10 +85,10 @@ change_file_context (int fd, char const *file)
           return 1;
         }
 
-      if (compute_context_from_mask (file_context, &g_context)) /* Pysche TODO: Bug with duplicate var names. */
+      if (compute_context_from_mask (file_context, &context))
         return 1;
 
-      context_string = context_str (g_context); /* Pysche TODO: Bug with duplicate var names. */
+      context_string = context_str (context);
     }
   else
     {
@@ -111,7 +111,7 @@ change_file_context (int fd, char const *file)
 
   if (specified_context == NULL)
     {
-      context_free (g_context); /* Pysche TODO: Bug with duplicate var names. */
+      context_free (context);
       freecon (file_context);
     }
 
@@ -430,14 +430,14 @@ main (int argc, char **argv)
       if (bit_flags == FTS_PHYSICAL)
         {
           if (dereference == 1)
-            error (EXIT_FAILURE, 0,
-                   _("-R --dereference requires either -H or -L"));
+            die (EXIT_FAILURE, 0,
+                 _("-R --dereference requires either -H or -L"));
           affect_symlink_referent = false;
         }
       else
         {
           if (dereference == 0)
-            error (EXIT_FAILURE, 0, _("-R -h requires -P"));
+            die (EXIT_FAILURE, 0, _("-R -h requires -P"));
           affect_symlink_referent = true;
         }
     }
@@ -461,8 +461,8 @@ main (int argc, char **argv)
       char *ref_context = NULL;
 
       if (getfilecon (reference_file, &ref_context) < 0)
-        error (EXIT_FAILURE, errno, _("failed to get security context of %s"),
-               quoteaf (reference_file));
+        die (EXIT_FAILURE, errno, _("failed to get security context of %s"),
+             quoteaf (reference_file));
 
       specified_context = ref_context;
     }
@@ -475,8 +475,8 @@ main (int argc, char **argv)
     {
       specified_context = argv[optind++];
       if (security_check_context (se_const (specified_context)) < 0)
-        error (EXIT_FAILURE, errno, _("invalid context: %s"),
-               quote (specified_context));
+        die (EXIT_FAILURE, errno, _("invalid context: %s"),
+             quote (specified_context));
     }
 
   if (reference_file && component_specified)
@@ -490,8 +490,8 @@ main (int argc, char **argv)
       static struct dev_ino dev_ino_buf;
       root_dev_ino = get_root_dev_ino (&dev_ino_buf);
       if (root_dev_ino == NULL)
-        error (EXIT_FAILURE, errno, _("failed to get attributes of %s"),
-               quoteaf ("/"));
+        die (EXIT_FAILURE, errno, _("failed to get attributes of %s"),
+             quoteaf ("/"));
     }
   else
     {
