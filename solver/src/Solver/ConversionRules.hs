@@ -42,7 +42,10 @@ monoConvertible t t' =
       and [isArithTy t, t' == scalar_t__],
       and [t == scalar_t__, isArithTy t'],
       and [isPtrTy t, t' == scalar_t__],
-      and [t == scalar_t__, isPtrTy t']
+      and [t == scalar_t__, isPtrTy t'],
+      -- Due to function pointer decaying.
+      and [isFunTy t, t' == scalar_t__],
+      and [t == scalar_t__, isFunTy t']
      ]
 
 isEnum :: Ty -> Bool

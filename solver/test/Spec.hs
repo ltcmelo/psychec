@@ -272,6 +272,7 @@ tests = testGroup "Unit tests"
   , doTest "T226.c" -- Struct forward decl before definition in same TU.
   , doTest "T227.c" -- Enforce scalar_t on non-void RHS of cast expressions.
   , doTest "T228.c" -- Bind void* as-is in type equivalences.
+  , doTest "T229.c" -- Function pointer decaying and scalar_t__ type.
   ]
 
 
