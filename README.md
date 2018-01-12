@@ -25,7 +25,7 @@ The science behind our type inference is explained in the following paper:
 
 - *Inference of Static Semantics for Incomplete C Programs*
 
-[This paper](homepages.dcc.ufmg.br/~fernando/publications/papers/Leandro_POPL18.pdf) has been accepted for publication in [POPL 2018](https://popl18.sigplan.org).
+[This paper](http://homepages.dcc.ufmg.br/~fernando/publications/papers/Leandro_POPL18.pdf) has been accepted for publication in [POPL 2018](https://popl18.sigplan.org).
 
 
 ## About
