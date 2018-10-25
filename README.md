@@ -1,6 +1,6 @@
 # PsycheC
 
-PsycheC is a Hindley/Milner unification-based type inference engine for C. You can try it online [here](http://cuda.dcc.ufmg.br/psyche-c/).
+PsycheC is a ML-styled, unification-based, type inference engine for C. You can try it online [here](http://cuda.dcc.ufmg.br/psyche-c/).
 
 ## Prerequisites
 
