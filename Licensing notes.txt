@@ -1,0 +1,3 @@
+- The content in directory ./formalism is licensed under GPLv3.
+- Part of the content in directory ./frontend is licensed under MIT.
+- Most the remaining (or if unspecified) is licensed under LGPLv21.
