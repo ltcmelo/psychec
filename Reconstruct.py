@@ -19,7 +19,7 @@ class PartialProgramAnalyser:
     @staticmethod
     def write_log(msg):
         if log_enabled:
-            print "[Reconstructor] %s" % msg
+            print("[Reconstructor] %s" % msg)
 
     def gen_constraints(self):
         """ Invoke our constraint generator """
@@ -63,7 +63,7 @@ class PartialProgramAnalyser:
 
 if __name__ == "__main__":
     if (len(sys.argv)) != 2:
-        print "Usage: ./Reconstruct.py relative/path/file.c"
+        print("Usage: ./Reconstruct.py relative/path/file.c")
         sys.exit(1)
 
     analyser = PartialProgramAnalyser(sys.argv[1])
