@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,10 +19,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_TRANSLATIONUNIT_H
-#define CFE_TRANSLATIONUNIT_H
+#ifndef PSYCHE_TRANSLATION_UNIT_H__
+#define PSYCHE_TRANSLATION_UNIT_H__
 
 #include "FrontendConfig.h"
+
 #include "ASTFwds.h"
 #include "Token.h"
 #include "DiagnosticCollector.h"
@@ -53,12 +52,12 @@ class CFE_API TranslationUnit
     void operator =(const TranslationUnit &other);
 
 public:
-    TranslationUnit(Control *control, const StringLiteral *fileId);
+    TranslationUnit(Control *control, const StringLiteral* fileId);
     ~TranslationUnit();
 
     Control *control() const;
 
-    const StringLiteral *fileId() const;
+    const StringLiteral* fileId() const;
     const char *fileName() const;
     unsigned fileNameLength() const;
 
@@ -80,13 +79,13 @@ public:
     const Token &commentAt(unsigned index) const;
 
     unsigned matchingBrace(unsigned index) const;
-    const Identifier *identifier(unsigned index) const;
-    const Literal *literal(unsigned index) const;
-    const StringLiteral *stringLiteral(unsigned index) const;
-    const NumericLiteral *numericLiteral(unsigned index) const;
+    const Identifier* identifier(unsigned index) const;
+    const Literal* literal(unsigned index) const;
+    const StringLiteral* stringLiteral(unsigned index) const;
+    const NumericLiteral* numericLiteral(unsigned index) const;
 
     MemoryPool *memoryPool() const;
-    AST *ast() const;
+    AST* ast() const;
     void releaseAst();
 
     bool blockErrors() const { return f._blockErrors; }
@@ -120,26 +119,26 @@ public:
 
     void getTokenStartPosition(unsigned index, unsigned *line,
                                unsigned *column = 0,
-                               const StringLiteral **fileName = 0) const;
+                               const StringLiteral* *fileName = 0) const;
 
     void getTokenEndPosition(unsigned index, unsigned *line,
                              unsigned *column = 0,
-                             const StringLiteral **fileName = 0) const;
+                             const StringLiteral* *fileName = 0) const;
 
     void getPosition(unsigned utf16charOffset,
                      unsigned *line,
                      unsigned *column = 0,
-                     const StringLiteral **fileName = 0) const;
+                     const StringLiteral* *fileName = 0) const;
 
     void getTokenPosition(unsigned index,
                           unsigned *line,
                           unsigned *column = 0,
-                          const StringLiteral **fileName = 0) const;
+                          const StringLiteral* *fileName = 0) const;
 
     void pushLineOffset(unsigned offset);
     void pushPreprocessorLine(unsigned utf16charOffset,
                               unsigned line,
-                              const StringLiteral *fileName);
+                              const StringLiteral* fileName);
 
     unsigned findPreviousLineOffset(unsigned tokenIndex) const;
 
@@ -152,11 +151,11 @@ private:
     struct PPLine {
         unsigned utf16charOffset;
         unsigned line;
-        const StringLiteral *fileName;
+        const StringLiteral* fileName;
 
         PPLine(unsigned utf16charOffset = 0,
                unsigned line = 0,
-               const StringLiteral *fileName = 0)
+               const StringLiteral* fileName = 0)
             : utf16charOffset(utf16charOffset), line(line), fileName(fileName)
         { }
 
@@ -178,7 +177,7 @@ private:
     static const Token nullToken;
 
     Control *_control;
-    const StringLiteral *_fileId;
+    const StringLiteral* _fileId;
     const char *_firstSourceChar;
     const char *_lastSourceChar;
     std::vector<Token> _tokens;
@@ -197,7 +196,7 @@ private:
 
     TokenLineColumn _expandedLineColumn;
     MemoryPool *_pool;
-    AST *_ast;
+    AST* _ast;
     TranslationUnit *_previousTranslationUnit;
     struct Flags {
         unsigned _tokenized: 1;
@@ -215,4 +214,4 @@ private:
 } // namespace psyche
 
 
-#endif // CFE_TRANSLATIONUNIT_H
+#endif

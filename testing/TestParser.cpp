@@ -55,6 +55,7 @@ void TestParser::testSource(const std::string& source)
     dialect.ext_EnumeratorAttributes = 1;
     dialect.ext_AvailabilityAttribute = 1;
     dialect.nullptrOnNULL = 1;
+    dialect.generics = 1;
 
     auto unit = std::make_unique<TranslationUnit>(&control_, name_.get());
     unit->setDialect(dialect);

@@ -17,8 +17,8 @@
  * USA
  *****************************************************************************/
 
-#ifndef PSYCHE_VERSIONEDMAP_H__
-#define PSYCHE_VERSIONEDMAP_H__
+#ifndef PSYCHE_VERSIONED_MAP_H__
+#define PSYCHE_VERSIONED_MAP_H__
 
 #include <algorithm>
 #include <cstdint>

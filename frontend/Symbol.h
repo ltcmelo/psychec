@@ -18,10 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_SYMBOL_H
-#define CFE_SYMBOL_H
+#ifndef PSYCHE_SYMBOL_H__
+#define PSYCHE_SYMBOL_H__
 
 #include "FrontendConfig.h"
+
 #include "FrontendFwds.h"
 
 namespace psyche {
@@ -54,8 +55,8 @@ public:
 
 public:
     /// Constructs a Symbol with the given source location, name and translation unit.
-    Symbol(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    Symbol(Clone *clone, Subst *subst, Symbol *original);
+    Symbol(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
+    Symbol(Clone *clone, Subst *subst, Symbol* original);
 
     /// Destroy this Symbol.
     virtual ~Symbol();
@@ -70,7 +71,7 @@ public:
     unsigned column() const;
 
     /// Returns this Symbol's file name.
-    const StringLiteral *fileId() const;
+    const StringLiteral* fileId() const;
 
     /// Returns this Symbol's file name.
     const char *fileName() const;
@@ -79,13 +80,13 @@ public:
     unsigned fileNameLength() const;
 
     /// Returns this Symbol's name.
-    const Name *name() const;
+    const Name* name() const;
 
     /// Sets this Symbol's name.
-    void setName(const Name *name); // ### dangerous
+    void setName(const Name* name); // ### dangerous
 
     /// Returns this Symbol's (optional) identifier
-    const Identifier *identifier() const;
+    const Identifier* identifier() const;
 
     /// Returns this Symbol's storage class specifier.
     int storage() const;
@@ -100,7 +101,7 @@ public:
     void setVisibility(int visibility);
 
     /// Returns the next chained Symbol.
-    Symbol *next() const;
+    Symbol* next() const;
 
     /// Returns true if this Symbol has friend storage specifier.
     bool isFriend() const;
@@ -171,33 +172,6 @@ public:
     /// Returns true if this Symbol is a ForwardClassDeclaration.
     bool isForwardClassDeclaration() const;
 
-    /// Returns true if this Symbol is a QtPropertyDeclaration.
-    bool isQtPropertyDeclaration() const;
-
-    /// Returns true if this Symbol is a QtEnum.
-    bool isQtEnum() const;
-
-    bool isObjCBaseClass() const;
-    bool isObjCBaseProtocol() const;
-
-    /// Returns true if this Symbol is an Objective-C Class declaration.
-    bool isObjCClass() const;
-
-    /// Returns true if this Symbol is an Objective-C Class forward declaration.
-    bool isObjCForwardClassDeclaration() const;
-
-    /// Returns true if this Symbol is an Objective-C Protocol declaration.
-    bool isObjCProtocol() const;
-
-    /// Returns true if this Symbol is an Objective-C Protocol forward declaration.
-    bool isObjCForwardProtocolDeclaration() const;
-
-    /// Returns true if this Symbol is an Objective-C method declaration.
-    bool isObjCMethod() const;
-
-    /// Returns true if this Symbol is an Objective-C @property declaration.
-    bool isObjCPropertyDeclaration() const;
-
     virtual const Scope *asScope() const { return 0; }
     virtual const Enum *asEnum() const { return 0; }
     virtual const Function *asFunction() const { return 0; }
@@ -213,16 +187,6 @@ public:
     virtual const TypenameArgument *asTypenameArgument() const { return 0; }
     virtual const BaseClass *asBaseClass() const { return 0; }
     virtual const ForwardClassDeclaration *asForwardClassDeclaration() const { return 0; }
-    virtual const QtPropertyDeclaration *asQtPropertyDeclaration() const { return 0; }
-    virtual const QtEnum *asQtEnum() const { return 0; }
-    virtual const ObjCBaseClass *asObjCBaseClass() const { return 0; }
-    virtual const ObjCBaseProtocol *asObjCBaseProtocol() const { return 0; }
-    virtual const ObjCClass *asObjCClass() const { return 0; }
-    virtual const ObjCForwardClassDeclaration *asObjCForwardClassDeclaration() const { return 0; }
-    virtual const ObjCProtocol *asObjCProtocol() const { return 0; }
-    virtual const ObjCForwardProtocolDeclaration *asObjCForwardProtocolDeclaration() const { return 0; }
-    virtual const ObjCMethod *asObjCMethod() const { return 0; }
-    virtual const ObjCPropertyDeclaration *asObjCPropertyDeclaration() const { return 0; }
 
     virtual Scope *asScope() { return 0; }
     virtual Enum *asEnum() { return 0; }
@@ -239,16 +203,6 @@ public:
     virtual TypenameArgument *asTypenameArgument() { return 0; }
     virtual BaseClass *asBaseClass() { return 0; }
     virtual ForwardClassDeclaration *asForwardClassDeclaration() { return 0; }
-    virtual QtPropertyDeclaration *asQtPropertyDeclaration() { return 0; }
-    virtual QtEnum *asQtEnum() { return 0; }
-    virtual ObjCBaseClass *asObjCBaseClass() { return 0; }
-    virtual ObjCBaseProtocol *asObjCBaseProtocol() { return 0; }
-    virtual ObjCClass *asObjCClass() { return 0; }
-    virtual ObjCForwardClassDeclaration *asObjCForwardClassDeclaration() { return 0; }
-    virtual ObjCProtocol *asObjCProtocol() { return 0; }
-    virtual ObjCForwardProtocolDeclaration *asObjCForwardProtocolDeclaration() { return 0; }
-    virtual ObjCMethod *asObjCMethod() { return 0; }
-    virtual ObjCPropertyDeclaration *asObjCPropertyDeclaration() { return 0; }
 
     /// Returns this Symbol's type.
     virtual FullySpecifiedType type() const = 0;
@@ -259,7 +213,7 @@ public:
     /// Returns this Symbol's index.
     unsigned index() const;
 
-    const Name *unqualifiedName() const;
+    const Name* unqualifiedName() const;
 
     bool isGenerated() const;
 
@@ -294,19 +248,19 @@ public:
     void resetEnclosingScope(); // ### make me private
     void setSourceLocation(unsigned sourceLocation, TranslationUnit *translationUnit); // ### make me private
 
-    void visitSymbol(SymbolVisitor *visitor);
-    static void visitSymbol(Symbol *symbol, SymbolVisitor *visitor);
+    void visitSymbol(SymbolVisitor* visitor);
+    static void visitSymbol(Symbol* symbol, SymbolVisitor* visitor);
 
-    virtual void copy(Symbol *other);
+    virtual void copy(Symbol* other);
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor) = 0;
+    virtual void visitSymbol0(SymbolVisitor* visitor) = 0;
 
 private:
-    const Name *_name;
+    const Name* _name;
     Scope *_enclosingScope;
-    Symbol *_next;
-    const StringLiteral *_fileId;
+    Symbol* _next;
+    const StringLiteral* _fileId;
     unsigned _sourceLocation;
     unsigned _hashCode;
     int _storage;
@@ -327,4 +281,4 @@ private:
 } // namespace psyche
 
 
-#endif // CFE_SYMBOL_H
+#endif

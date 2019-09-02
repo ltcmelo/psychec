@@ -1,5 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ Literal::Literal(const char *chars, unsigned size)
 Literal::~Literal()
 { delete[] _chars; }
 
-bool Literal::equalTo(const Literal *other) const
+bool Literal::equalTo(const Literal* other) const
 {
     if (! other)
         return false;
@@ -132,5 +132,5 @@ NumericLiteral::NumericLiteral(const char *chars, unsigned size)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Identifier::accept0(NameVisitor *visitor) const
+void Identifier::accept0(NameVisitor* visitor) const
 { visitor->visit(this); }

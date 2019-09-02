@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,10 +19,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_TOKEN_H
-#define CFE_TOKEN_H
+#ifndef PSYCHE_TOKEN_H__
+#define PSYCHE_TOKEN_H__
 
 #include "FrontendConfig.h"
+
 #include "FrontendFwds.h"
 #include "Dialect.h"
 
@@ -185,36 +187,6 @@ enum Kind {
     T___THREAD,
     T___TYPEOF__,
 
-    // obj c++ @ keywords
-    T_FIRST_OBJC_AT_KEYWORD,
-
-    T_AT_CATCH = T_FIRST_OBJC_AT_KEYWORD,
-    T_AT_CLASS,
-    T_AT_COMPATIBILITY_ALIAS,
-    T_AT_DEFS,
-    T_AT_DYNAMIC,
-    T_AT_ENCODE,
-    T_AT_END,
-    T_AT_FINALLY,
-    T_AT_IMPLEMENTATION,
-    T_AT_INTERFACE,
-    T_AT_NOT_KEYWORD,
-    T_AT_OPTIONAL,
-    T_AT_PACKAGE,
-    T_AT_PRIVATE,
-    T_AT_PROPERTY,
-    T_AT_PROTECTED,
-    T_AT_PROTOCOL,
-    T_AT_PUBLIC,
-    T_AT_REQUIRED,
-    T_AT_SELECTOR,
-    T_AT_SYNCHRONIZED,
-    T_AT_SYNTHESIZE,
-    T_AT_THROW,
-    T_AT_TRY,
-
-    T_LAST_OBJC_AT_KEYWORD = T_AT_TRY,
-
     // Primitive types
     T_FIRST_PRIMITIVE,
     T_BOOL = T_FIRST_PRIMITIVE,
@@ -232,31 +204,10 @@ enum Kind {
     T_WCHAR_T,
     T_LAST_PRIMITIVE = T_WCHAR_T,
 
-    // Qt keywords
-    T_FIRST_QT_KEYWORD,
-    T_EMIT = T_FIRST_QT_KEYWORD,
-    T_SIGNAL,
-    T_SLOT,
-    T_Q_SIGNAL,
-    T_Q_SLOT,
-    T_Q_SIGNALS,
-    T_Q_SLOTS,
-    T_Q_FOREACH,
-    T_Q_D,
-    T_Q_Q,
-    T_Q_INVOKABLE,
-    T_Q_PROPERTY,
-    T_Q_PRIVATE_PROPERTY,
-    T_Q_INTERFACES,
-    T_Q_EMIT,
-    T_Q_ENUMS,
-    T_Q_FLAGS,
-    T_Q_PRIVATE_SLOT,
-    T_Q_DECLARE_INTERFACE,
-    T_Q_OBJECT,
-    T_Q_GADGET,
-    T_LAST_QT_KEYWORD = T_Q_GADGET,
-    T_LAST_KEYWORD = T_LAST_QT_KEYWORD,
+    // Generics
+    T__GENERIC,
+    T__FORALL,
+    T__EXISTS,
 
     // aliases
     T_OR = T_PIPE_PIPE,
@@ -337,15 +288,9 @@ public:
     inline bool isPrimitiveType() const
     { return f.kind >= T_FIRST_PRIMITIVE && f.kind <= T_LAST_PRIMITIVE; }
 
-    inline bool isQtKeyword() const
-    { return f.kind >= T_FIRST_QT_KEYWORD && f.kind <= T_LAST_QT_KEYWORD; }
-
     inline bool isComment() const
     { return f.kind == T_COMMENT || f.kind == T_DOXY_COMMENT ||
       f.kind == T_CPP_COMMENT || f.kind == T_CPP_DOXY_COMMENT; }
-
-    inline bool isObjCAtKeyword() const
-    { return f.kind >= T_FIRST_OBJC_AT_KEYWORD && f.kind <= T_LAST_OBJC_AT_KEYWORD; }
 
     static const char *name(int kind);
 
@@ -390,10 +335,10 @@ public:
 
     union {
         void *ptr;
-        const Literal *literal;
-        const NumericLiteral *number;
-        const StringLiteral *string;
-        const Identifier *identifier;
+        const Literal* literal;
+        const NumericLiteral* number;
+        const StringLiteral* string;
+        const Identifier* identifier;
         unsigned close_brace;
         unsigned lineno;
     };
@@ -401,4 +346,4 @@ public:
 
 } // namespace psyche
 
-#endif // CFE_TOKEN_H
+#endif

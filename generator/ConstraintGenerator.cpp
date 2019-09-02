@@ -34,9 +34,8 @@
 #include "PrintfScanner.h"
 #include "Scope.h"
 #include "Symbols.h"
-#include "SymbolPP.h"
 #include "TranslationUnit.h"
-#include "TypeOfExpression.h"
+#include "ExpressionTypeEvaluator.h"
 #include "VisitorObserver.h"
 #include <iostream>
 #include <algorithm>
@@ -52,7 +51,6 @@
     PSYCHE_ASSERT(!valuedRets_.empty(), CODE, "alpha return stack must be nonempty")
 
 using namespace psyche;
-using namespace psyche;
 
 namespace {
 
@@ -64,7 +62,7 @@ std::string extractId(const Name* name)
                   return std::string(),
                   "expected either trival or elaborated name");
 
-    const Identifier *id = name->identifier();
+    const Identifier* id = name->identifier();
     return std::string(id->chars(), id->size());
 }
 
@@ -101,7 +99,7 @@ ConstraintGenerator::ConstraintGenerator(TranslationUnit *unit,
     addPrintfLike("snwprintf_s", 2);
 }
 
-void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
+void ConstraintGenerator::generate(TranslationUnitAST* ast, Scope *global)
 {
     if (!ast)
         return;
@@ -111,7 +109,7 @@ void ConstraintGenerator::generate(TranslationUnitAST *ast, Scope *global)
     printDebug("Let's generate constraints!!!\n");
     OBSERVE(TranslationUnitAST);
     switchScope(global_);
-    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
+    for (DeclarationListAST* it = ast->declaration_list; it; it = it->next)
         visitDeclaration(it->value);
 }
 
@@ -173,7 +171,7 @@ void ConstraintGenerator::assignTop(const std::string& name)
 }
 
 void ConstraintGenerator::collectExpression(const std::string &ty,
-                                            ExpressionAST *expr)
+                                            ExpressionAST* expr)
 {
     pushType(ty);
     visitExpression(expr);
@@ -183,12 +181,12 @@ void ConstraintGenerator::collectExpression(const std::string &ty,
 
     //--- Declarations
 
-void ConstraintGenerator::visitDeclaration(DeclarationAST *ast)
+void ConstraintGenerator::visitDeclaration(DeclarationAST* ast)
 {
     accept(ast);
 }
 
-bool ConstraintGenerator::visit(FunctionDefinitionAST *ast)
+bool ConstraintGenerator::visit(FunctionDefinitionAST* ast)
 {
     if (interceptor_ && interceptor_->intercept(ast))
         return false;
@@ -212,8 +210,8 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
         std::string alpha = supply_.createTypeVar1();
         writer_->writeExists(alpha);
 
-        Symbol *sym = func->argumentAt(i);
-        const std::string& ty = typeSpeller_.spell(sym->type(), scope_);
+        Symbol* sym = func->argumentAt(i);
+        const std::string& ty = typePP_.print(sym->type(), scope_);
         writer_->writeTypedef(ty, alpha);
         paramTyVars.push_back(ty);
 
@@ -224,12 +222,12 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
     // rule and assume `int'.
     std::string funcRet;
     if (func->returnType())
-        funcRet = typeSpeller_.spell(func->returnType(), scope_);
+        funcRet = typePP_.print(func->returnType(), scope_);
     else
         funcRet = kDefaultIntTy;
 
     const std::string& alpha = ensureTypeIsKnown(funcRet);
-    const Identifier *id = func->name()->asNameId()->identifier();
+    const Identifier* id = func->name()->asNameId()->identifier();
     const std::string funcName(id->begin(), id->end());
     writer_->writeFuncDecl(funcName, paramTyVars, funcRet);
 
@@ -285,7 +283,7 @@ void ConstraintGenerator::visitSymbol(Function *func, StatementAST* body)
     }
 }
 
-bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
+bool ConstraintGenerator::visit(SimpleDeclarationAST* ast)
 {
     if (interceptor_ && interceptor_->intercept(ast))
         return false;
@@ -293,7 +291,7 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
     DEBUG_VISIT(SimpleDeclarationAST);
     OBSERVE(SimpleDeclarationAST);
 
-    for (SpecifierListAST *it = ast->decl_specifier_list; it; it = it->next)
+    for (SpecifierListAST* it = ast->decl_specifier_list; it; it = it->next)
         visitSpecifier(it->value);
 
     if (!ast->declarator_list)
@@ -301,13 +299,13 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
 
     // For each symbol annotated in the AST, there must exist a corresponding
     // declarator, and we can uniformily iterate over the two lists.
-    DeclaratorListAST *declIt = ast->declarator_list;
+    DeclaratorListAST* declIt = ast->declarator_list;
     for (const List<Symbol*> *symIt = ast->symbols; symIt; symIt = symIt->next) {
         if (symIt->value->asForwardClassDeclaration())
             break;
         PSYCHE_ASSERT(declIt->value, return false, "expected declarator");
 
-        Symbol *decl = symIt->value;
+        Symbol* decl = symIt->value;
 
         // Type a function declaration just as we do for a function definition.
         if (decl->asDeclaration()
@@ -322,7 +320,7 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
             declName = extractId(decl->name());
         else
             declName = createUnnamed(declPrefix_);
-        std::string declTy = typeSpeller_.spell(decl->type(), scope_);
+        std::string declTy = typePP_.print(decl->type(), scope_);
 
         // Altough a `typedef` is parsed as a simple declaration, its contraint
         // rule is different. We process it and break out, since there cannot
@@ -433,7 +431,7 @@ bool ConstraintGenerator::visit(SimpleDeclarationAST *ast)
 
     //--- Names
 
-void ConstraintGenerator::visitName(NameAST *ast)
+void ConstraintGenerator::visitName(NameAST* ast)
 {
     accept(ast);
 }
@@ -448,7 +446,7 @@ std::string ConstraintGenerator::ensureTypeIsKnown(std::string& tyName)
 
     //--- Expressions
 
-void ConstraintGenerator::visitExpression(ExpressionAST *ast)
+void ConstraintGenerator::visitExpression(ExpressionAST* ast)
 {
     accept(ast);
 }
@@ -633,7 +631,7 @@ void ConstraintGenerator::employLattice(const DomainLattice::Domain& lhsDom,
     }
 }
 
-DomainLattice::Domain ConstraintGenerator::domainOf(ExpressionAST *ast) const
+DomainLattice::Domain ConstraintGenerator::domainOf(ExpressionAST* ast) const
 {
     DomainLattice::Domain dom = DomainLattice::Undefined;
     if (lattice_) {
@@ -645,8 +643,8 @@ DomainLattice::Domain ConstraintGenerator::domainOf(ExpressionAST *ast) const
     }
 
     if (dom == DomainLattice::Undefined) {
-        TypeOfExpression typeofExpr(translationUnit());
-        FullySpecifiedType ty = typeofExpr.resolve(ast, scope_);
+        ExpressionTypeEvaluator typeofExpr(translationUnit());
+        FullySpecifiedType ty = typeofExpr.evaluate(ast, scope_);
         dom = DomainLattice::domainForType(ty);
         // TODO: Fetch text utility.
         const auto& s = lattice_->fetchText(ast);
@@ -656,7 +654,7 @@ DomainLattice::Domain ConstraintGenerator::domainOf(ExpressionAST *ast) const
     return dom;
 }
 
-bool ConstraintGenerator::visit(ArrayAccessAST *ast)
+bool ConstraintGenerator::visit(ArrayAccessAST* ast)
 {
     DEBUG_VISIT(ArrayAccessAST);
     OBSERVE(ArrayAccessAST);
@@ -677,7 +675,7 @@ bool ConstraintGenerator::visit(ArrayAccessAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(BinaryExpressionAST *ast)
+bool ConstraintGenerator::visit(BinaryExpressionAST* ast)
 {
     DEBUG_VISIT(BinaryExpressionAST);
     OBSERVE(BinaryExpressionAST);
@@ -728,13 +726,13 @@ const std::string trivialName(IdExpressionAST* idExpr)
                   return std::string(),
                   "expected a trivial name");
 
-    const Identifier *id = idExpr->name->name->asNameId()->identifier();
+    const Identifier* id = idExpr->name->name->asNameId()->identifier();
     return std::string(id->chars(), id->size());
 }
 
 } // anonymous
 
-bool ConstraintGenerator::visit(CallAST *ast)
+bool ConstraintGenerator::visit(CallAST* ast)
 {
     DEBUG_VISIT(CallAST);
     OBSERVE(CallAST);
@@ -887,12 +885,12 @@ void ConstraintGenerator::castExpressionHelper(const std::string& inputTy,
     writer_->writeEquivRel(inputTy, resultTy);
 }
 
-bool ConstraintGenerator::visit(CastExpressionAST *ast)
+bool ConstraintGenerator::visit(CastExpressionAST* ast)
 {
     DEBUG_VISIT(CastExpressionAST);
     OBSERVE(CastExpressionAST);
 
-    std::string ty = typeSpeller_.spell(ast->expression_type, scope_);
+    std::string ty = typePP_.print(ast->expression_type, scope_);
     castExpressionHelper(types_.top(), ty);
 
     const std::string& alpha = supply_.createTypeVar1();
@@ -907,7 +905,7 @@ bool ConstraintGenerator::visit(CastExpressionAST *ast)
     return false;
 }
 
-void ConstraintGenerator::treatAsBool(ExpressionAST *ast)
+void ConstraintGenerator::treatAsBool(ExpressionAST* ast)
 {
     if (!ast)
         return;
@@ -934,7 +932,7 @@ void ConstraintGenerator::treatAsBool(ExpressionAST *ast)
     collectExpression(ty, ast);
 }
 
-bool ConstraintGenerator::visit(ConditionalExpressionAST *ast)
+bool ConstraintGenerator::visit(ConditionalExpressionAST* ast)
 {
     DEBUG_VISIT(ConditionalExpressionAST);
     OBSERVE(ConditionalExpressionAST);
@@ -946,7 +944,7 @@ bool ConstraintGenerator::visit(ConditionalExpressionAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(IdExpressionAST *ast)
+bool ConstraintGenerator::visit(IdExpressionAST* ast)
 {
     DEBUG_VISIT(IdExpressionAST);
     OBSERVE(IdExpressionAST);
@@ -960,12 +958,12 @@ bool ConstraintGenerator::visit(IdExpressionAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(NumericLiteralAST *ast)
+bool ConstraintGenerator::visit(NumericLiteralAST* ast)
 {
     DEBUG_VISIT(NumericLiteralAST);
     OBSERVE(NumericLiteralAST);
 
-    const NumericLiteral *numLit = numericLiteral(ast->literal_token);
+    const NumericLiteral* numLit = numericLiteral(ast->literal_token);
     PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
 
     std::string ty;
@@ -1004,7 +1002,7 @@ bool ConstraintGenerator::visit(NumericLiteralAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(BoolLiteralAST *ast)
+bool ConstraintGenerator::visit(BoolLiteralAST* ast)
 {
     DEBUG_VISIT(BoolLiteralAST);
     OBSERVE(BoolLiteralAST);
@@ -1017,7 +1015,7 @@ bool ConstraintGenerator::visit(BoolLiteralAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(StringLiteralAST *ast)
+bool ConstraintGenerator::visit(StringLiteralAST* ast)
 {
     DEBUG_VISIT(StringLiteralAST);
     OBSERVE(StringLiteralAST);
@@ -1028,7 +1026,7 @@ bool ConstraintGenerator::visit(StringLiteralAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(MemberAccessAST *ast)
+bool ConstraintGenerator::visit(MemberAccessAST* ast)
 {
     DEBUG_VISIT(MemberAccessAST);
     OBSERVE(MemberAccessAST);
@@ -1065,7 +1063,7 @@ bool ConstraintGenerator::visit(MemberAccessAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(BracedInitializerAST *ast)
+bool ConstraintGenerator::visit(BracedInitializerAST* ast)
 {
     DEBUG_VISIT(BracedInitializerAST);
     OBSERVE(BracedInitializerAST);
@@ -1117,7 +1115,7 @@ bool ConstraintGenerator::visit(BracedInitializerAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(PostIncrDecrAST *ast)
+bool ConstraintGenerator::visit(PostIncrDecrAST* ast)
 {
     DEBUG_VISIT(PostIncrDecrAST);
     OBSERVE(PostIncrDecrAST);
@@ -1177,7 +1175,7 @@ bool ConstraintGenerator::visit(UnaryExpressionAST* ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(SizeofExpressionAST *ast)
+bool ConstraintGenerator::visit(SizeofExpressionAST* ast)
 {
     DEBUG_VISIT(SizeofExpressionAST);
     OBSERVE(SizeofExpressionAST);
@@ -1186,7 +1184,7 @@ bool ConstraintGenerator::visit(SizeofExpressionAST *ast)
     if (ast->expression->asTypeId()) {
         const std::string& alpha = supply_.createTypeVar1();
         writer_->writeExists(alpha);
-        const std::string& ty = typeSpeller_.spell(ast->expression_type, scope_);
+        const std::string& ty = typePP_.print(ast->expression_type, scope_);
         writer_->writeTypedef(ty, alpha);
     }
 
@@ -1212,21 +1210,21 @@ bool ConstraintGenerator::visit(psyche::PointerLiteralAST* ast)
 
     //--- Specifiers
 
-void ConstraintGenerator::visitSpecifier(SpecifierAST *ast)
+void ConstraintGenerator::visitSpecifier(SpecifierAST* ast)
 {
     accept(ast);
 }
 
-bool ConstraintGenerator::visit(EnumSpecifierAST *ast)
+bool ConstraintGenerator::visit(EnumSpecifierAST* ast)
 {
     DEBUG_VISIT(EnumSpecifierAST);
     OBSERVE(EnumSpecifierAST);
 
-    for (SpecifierListAST *it = ast->type_specifier_list; it; it = it->next)
+    for (SpecifierListAST* it = ast->type_specifier_list; it; it = it->next)
         visitSpecifier(it->value);
 
     Scope *prevScope = switchScope(ast->symbol);
-    for (EnumeratorListAST *it = ast->enumerator_list; it; it = it->next)
+    for (EnumeratorListAST* it = ast->enumerator_list; it; it = it->next)
         accept(it->value);
     switchScope(prevScope);
 
@@ -1238,7 +1236,7 @@ bool ConstraintGenerator::visit(ClassSpecifierAST* ast)
     DEBUG_VISIT(ClassSpecifierAST);
     OBSERVE(ClassSpecifierAST);
 
-    std::string classTy = typeSpeller_.spell(ast->symbol->type(), scope_);
+    std::string classTy = typePP_.print(ast->symbol->type(), scope_);
     std::string tyName;
     if (ast->name->name->asAnonymousNameId()) {
         tyName = classTy;
@@ -1257,7 +1255,7 @@ bool ConstraintGenerator::visit(ClassSpecifierAST* ast)
 
     structs_.push(alpha);
     Scope *prevScope = switchScope(ast->symbol);
-    for (DeclarationListAST *it = ast->member_specifier_list; it; it = it->next)
+    for (DeclarationListAST* it = ast->member_specifier_list; it; it = it->next)
         visitDeclaration(it->value);
     switchScope(prevScope);
     structs_.pop();
@@ -1265,26 +1263,26 @@ bool ConstraintGenerator::visit(ClassSpecifierAST* ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(GnuAttributeSpecifierAST *ast)
+bool ConstraintGenerator::visit(GnuAttributeSpecifierAST* ast)
 {
     return false;
 }
 
     //--- Statements
 
-void ConstraintGenerator::visitStatement(StatementAST *ast)
+void ConstraintGenerator::visitStatement(StatementAST* ast)
 {
     accept(ast);
 }
 
-bool ConstraintGenerator::visit(CompoundStatementAST *ast)
+bool ConstraintGenerator::visit(CompoundStatementAST* ast)
 {
     DEBUG_VISIT(CompoundStatementAST);
     OBSERVE(CompoundStatementAST);
 
     writer_->openScope();
     Scope *prevScope = switchScope(ast->symbol);
-    for (StatementListAST *it = ast->statement_list; it; it = it->next)
+    for (StatementListAST* it = ast->statement_list; it; it = it->next)
         visitStatement(it->value);
     switchScope(prevScope);
     writer_->closeScope();
@@ -1292,7 +1290,7 @@ bool ConstraintGenerator::visit(CompoundStatementAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(DeclarationStatementAST *ast)
+bool ConstraintGenerator::visit(DeclarationStatementAST* ast)
 {
     DEBUG_VISIT(DeclarationStatementAST);
     OBSERVE(DeclarationStatementAST);
@@ -1302,7 +1300,7 @@ bool ConstraintGenerator::visit(DeclarationStatementAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(ExpressionStatementAST *ast)
+bool ConstraintGenerator::visit(ExpressionStatementAST* ast)
 {
     DEBUG_VISIT(ExpressionStatementAST);
     OBSERVE(ExpressionStatementAST);
@@ -1352,7 +1350,7 @@ bool ConstraintGenerator::visit(ExpressionStatementAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(IfStatementAST *ast)
+bool ConstraintGenerator::visit(IfStatementAST* ast)
 {
     DEBUG_VISIT(IfStatementAST);
     OBSERVE(IfStatementAST);
@@ -1366,7 +1364,7 @@ bool ConstraintGenerator::visit(IfStatementAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(ReturnStatementAST *ast)
+bool ConstraintGenerator::visit(ReturnStatementAST* ast)
 {
     DEBUG_VISIT(ReturnStatementAST);
     OBSERVE(ReturnStatementAST);
@@ -1381,7 +1379,7 @@ bool ConstraintGenerator::visit(ReturnStatementAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(EnumeratorAST *ast)
+bool ConstraintGenerator::visit(EnumeratorAST* ast)
 {
     DEBUG_VISIT(EnumeratorAST);
     OBSERVE(EnumeratorAST);
@@ -1400,7 +1398,7 @@ bool ConstraintGenerator::visit(EnumeratorAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(SwitchStatementAST *ast)
+bool ConstraintGenerator::visit(SwitchStatementAST* ast)
 {
     DEBUG_VISIT(SwitchStatementAST);
     OBSERVE(SwitchStatementAST);
@@ -1411,7 +1409,7 @@ bool ConstraintGenerator::visit(SwitchStatementAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(CaseStatementAST *ast)
+bool ConstraintGenerator::visit(CaseStatementAST* ast)
 {
     DEBUG_VISIT(CaseStatementAST);
     OBSERVE(CaseStatementAST);
@@ -1427,7 +1425,7 @@ bool ConstraintGenerator::visit(CaseStatementAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(DoStatementAST *ast)
+bool ConstraintGenerator::visit(DoStatementAST* ast)
 {
     DEBUG_VISIT(DoStatementAST);
     OBSERVE(DoStatementAST);
@@ -1438,7 +1436,7 @@ bool ConstraintGenerator::visit(DoStatementAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(WhileStatementAST *ast)
+bool ConstraintGenerator::visit(WhileStatementAST* ast)
 {
     DEBUG_VISIT(WhileStatementAST);
     OBSERVE(WhileStatementAST);
@@ -1451,7 +1449,7 @@ bool ConstraintGenerator::visit(WhileStatementAST *ast)
     return false;
 }
 
-bool ConstraintGenerator::visit(ForStatementAST *ast)
+bool ConstraintGenerator::visit(ForStatementAST* ast)
 {
     DEBUG_VISIT(ForStatementAST);
     OBSERVE(ForStatementAST);

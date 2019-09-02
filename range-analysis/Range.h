@@ -23,8 +23,8 @@
 #include "Symbol.h"
 #include <cstdint>
 #include <iostream>
-#include <memory>
 #include <limits>
+#include <memory>
 #include <utility>
 
 namespace psyche {

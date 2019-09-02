@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,10 +19,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_NAME_H
-#define CFE_NAME_H
+#ifndef PSYCHE_NAME_H__
+#define PSYCHE_NAME_H__
 
 #include "FrontendConfig.h"
+
 #include "FrontendFwds.h"
 #include <functional>
 
@@ -36,7 +35,7 @@ public:
     Name();
     virtual ~Name();
 
-    virtual const Identifier *identifier() const = 0;
+    virtual const Identifier* identifier() const = 0;
 
     bool isNameId() const;
     bool isAnonymousNameId() const;
@@ -48,7 +47,7 @@ public:
     bool isSelectorNameId() const;
     bool isTaggedNameId() const;
 
-    virtual const Identifier *asNameId() const { return 0; }
+    virtual const Identifier* asNameId() const { return 0; }
     virtual const AnonymousNameId *asAnonymousNameId() const { return 0; }
     virtual const TemplateNameId *asTemplateNameId() const { return 0; }
     virtual const DestructorNameId *asDestructorNameId() const { return 0; }
@@ -58,19 +57,19 @@ public:
     virtual const SelectorNameId *asSelectorNameId() const { return 0; }
     virtual const TaggedNameId *asTaggedNameId() const { return 0; }
 
-    void accept(NameVisitor *visitor) const;
-    static void accept(const Name *name, NameVisitor *visitor);
+    void accept(NameVisitor* visitor) const;
+    static void accept(const Name* name, NameVisitor* visitor);
 
 public:
-    struct Compare: std::binary_function<const Name *, const Name *, bool> {
-        bool operator()(const Name *name, const Name *other) const;
+    struct Compare: std::binary_function<const Name* , const Name* , bool> {
+        bool operator()(const Name* name, const Name* other) const;
     };
 
 protected:
-    virtual void accept0(NameVisitor *visitor) const = 0;
+    virtual void accept0(NameVisitor* visitor) const = 0;
 };
 
 } // namespace psyche
 
 
-#endif // CFE_NAME_H
+#endif

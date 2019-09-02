@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,11 +19,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef SYMBOLVISITOR_H
-#define SYMBOLVISITOR_H
+#ifndef PSYCHE_SYMBOL_VISITOR_H__
+#define PSYCHE_SYMBOL_VISITOR_H__
 
 #include "Symbol.h"
-
 
 namespace psyche {
 
@@ -35,10 +35,10 @@ public:
     SymbolVisitor() { }
     virtual ~SymbolVisitor() { }
 
-    void accept(Symbol *symbol) { Symbol::visitSymbol(symbol, this); }
+    void accept(Symbol* symbol) { Symbol::visitSymbol(symbol, this); }
 
-    virtual bool preVisit(Symbol *) { return true; }
-    virtual void postVisit(Symbol *) {}
+    virtual bool preVisit(Symbol* ) { return true; }
+    virtual void postVisit(Symbol* ) {}
 
     virtual bool visit(UsingNamespaceDirective *) { return true; }
     virtual bool visit(UsingDeclaration *) { return true; }
@@ -54,23 +54,8 @@ public:
     virtual bool visit(Class *) { return true; }
     virtual bool visit(Block *) { return true; }
     virtual bool visit(ForwardClassDeclaration *) { return true; }
-
-    // Qt
-    virtual bool visit(QtPropertyDeclaration *) { return true; }
-    virtual bool visit(QtEnum *) { return true; }
-
-    // Objective-C
-    virtual bool visit(ObjCBaseClass *) { return true; }
-    virtual bool visit(ObjCBaseProtocol *) { return true; }
-    virtual bool visit(ObjCClass *) { return true; }
-    virtual bool visit(ObjCForwardClassDeclaration *) { return true; }
-    virtual bool visit(ObjCProtocol *) { return true; }
-    virtual bool visit(ObjCForwardProtocolDeclaration *) { return true; }
-    virtual bool visit(ObjCMethod *) { return true; }
-    virtual bool visit(ObjCPropertyDeclaration *) { return true; }
 };
 
 } // namespace psyche
 
-
-#endif // SYMBOLVISITOR_H
+#endif

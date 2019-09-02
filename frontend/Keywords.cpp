@@ -1,5 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,7 @@
 
 #include "Lexer.h"
 #include "Token.h"
+#include <iostream>
 
 namespace psyche {
 
@@ -73,16 +74,6 @@ static inline int classify3(const char *s, Dialect d)
     if (s[1] == 'r') {
       if (s[2] == 'y') {
         return T_TRY;
-      }
-    }
-  }
-  else if (d.qtMocRun && s[0] == 'Q') {
-    if (s[1] == '_') {
-      if (s[2] == 'D') {
-        return T_Q_D;
-      }
-      else if (s[2] == 'Q') {
-        return T_Q_Q;
       }
     }
   }
@@ -140,13 +131,6 @@ static inline int classify4(const char *s, Dialect d)
         }
       }
     }
-    else if (d.qtKeywords && s[1] == 'm') {
-      if (s[2] == 'i') {
-        if (s[3] == 't') {
-          return T_EMIT;
-        }
-      }
-    }
   }
   else if (s[0] == 'g') {
     if (s[1] == 'o') {
@@ -196,15 +180,6 @@ static inline int classify4(const char *s, Dialect d)
       if (s[2] == 'i') {
         if (s[3] == 'd') {
           return T_VOID;
-        }
-      }
-    }
-  }
-  else if (d.qt && s[0] == 'S') {
-    if (s[1] == 'L') {
-      if (s[2] == 'O') {
-        if (s[3] == 'T') {
-          return T_SLOT;
         }
       }
     }
@@ -300,17 +275,6 @@ static inline int classify5(const char *s, Dialect d)
         if (s[3] == 'r') {
           if (s[4] == 't') {
             return T_SHORT;
-          }
-        }
-      }
-    }
-    else if (d.qtKeywords) {
-      if (s[1] == 'l') {
-        if (s[2] == 'o') {
-          if (s[3] == 't') {
-            if (s[4] == 's') {
-              return T_Q_SLOTS;
-            }
           }
         }
       }
@@ -532,41 +496,6 @@ static inline int classify6(const char *s, Dialect d)
       }
     }
   }
-  else if (d.qtKeywords && s[0] == 'S') {
-    if (s[1] == 'I') {
-      if (s[2] == 'G') {
-        if (s[3] == 'N') {
-          if (s[4] == 'A') {
-            if (s[5] == 'L') {
-              return T_SIGNAL;
-            }
-          }
-        }
-      }
-    }
-  }
-  else if (d.qtKeywords && s[0] == 'Q') {
-    if (s[1] == '_') {
-      if (s[2] == 'S') {
-        if (s[3] == 'L') {
-          if (s[4] == 'O') {
-            if (s[5] == 'T') {
-              return T_Q_SLOT;
-            }
-          }
-        }
-      }
-      else if (s[2] == 'E') {
-        if (s[3] == 'M') {
-          if (s[4] == 'I') {
-            if (s[5] == 'T') {
-              return T_Q_EMIT;
-            }
-          }
-        }
-      }
-    }
-  }
   return T_IDENTIFIER;
 }
 
@@ -591,6 +520,32 @@ static inline int classify7(const char *s, Dialect d)
             if (s[5] == 's') {
               if (s[6] == 't') {
                 return T___CONST;
+              }
+            }
+          }
+        }
+      }
+    }
+    else if (d.generics && s[1] == 'F') {
+      if (s[2] == 'o') {
+        if (s[3] == 'r') {
+          if (s[4] == 'a') {
+            if (s[5] == 'l') {
+              if (s[6] == 'l') {
+                return T__FORALL;
+              }
+            }
+          }
+        }
+      }
+    }
+    else if (d.generics && s[1] == 'E') {
+      if (s[2] == 'x') {
+        if (s[3] == 'i') {
+          if (s[4] == 's') {
+            if (s[5] == 't') {
+              if (s[6] == 's') {
+                return T__EXISTS;
               }
             }
           }
@@ -678,36 +633,6 @@ static inline int classify7(const char *s, Dialect d)
       }
     }
   }
-  else if (d.qtKeywords && s[0] == 'f') {
-    if (s[1] == 'o') {
-      if (s[2] == 'r') {
-        if (s[3] == 'e') {
-          if (s[4] == 'a') {
-            if (s[5] == 'c') {
-              if (s[6] == 'h') {
-                return T_Q_FOREACH;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  else if (d.qtKeywords && s[0] == 's') {
-    if (s[1] == 'i') {
-      if (s[2] == 'g') {
-        if (s[3] == 'n') {
-          if (s[4] == 'a') {
-            if (s[5] == 'l') {
-              if (s[6] == 's') {
-                return T_Q_SIGNALS;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
   else if (s[0] == 't') {
     if (s[1] == 'y') {
       if (s[2] == 'p') {
@@ -746,43 +671,6 @@ static inline int classify7(const char *s, Dialect d)
             if (s[5] == '_') {
               if (s[6] == 't') {
                 return T_WCHAR_T;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  else if (d.qt && s[0] == 'Q') {
-    if (s[1] == '_') {
-      if (s[2] == 'S') {
-        if (s[3] == 'L') {
-          if (s[4] == 'O') {
-            if (s[5] == 'T') {
-              if (s[6] == 'S') {
-                return T_Q_SLOTS;
-              }
-            }
-          }
-        }
-      }
-      else if (s[2] == 'E') {
-        if (s[3] == 'N') {
-          if (s[4] == 'U') {
-            if (s[5] == 'M') {
-              if (s[6] == 'S') {
-                return T_Q_ENUMS;
-              }
-            }
-          }
-        }
-      }
-      else if (s[2] == 'F') {
-        if (s[3] == 'L') {
-          if (s[4] == 'A') {
-            if (s[5] == 'G') {
-              if (s[6] == 'S') {
-                return T_Q_FLAGS;
               }
             }
           }
@@ -843,6 +731,21 @@ static inline int classify8(const char *s, Dialect d)
                   return T___SIGNED;
                 }
               }
+            }
+          }
+        }
+      }
+    }
+    else if(d.generics && s[1] == 'G') {
+      if (s[2] == 'e') {
+        if (s[3] == 'n') {
+          if (s[4] == 'e') {
+            if (s[5] == 'r') {
+                if (s[6] == 'i') {
+                    if (s[7] == 'c') {
+                        return T__GENERIC;
+                    }
+                }
             }
           }
         }
@@ -1051,49 +954,6 @@ static inline int classify8(const char *s, Dialect d)
       }
     }
   }
-  else if (d.qt && s[0] == 'Q') {
-    if (s[1] == '_') {
-      if (s[2] == 'G') {
-        if (s[3] == 'A') {
-          if (s[4] == 'D') {
-            if (s[5] == 'G') {
-              if (s[6] == 'E') {
-                if (s[7] == 'T') {
-                  return T_Q_GADGET;
-                }
-              }
-            }
-          }
-        }
-      }
-      else if (s[2] == 'O') {
-        if (s[3] == 'B') {
-          if (s[4] == 'J') {
-            if (s[5] == 'E') {
-              if (s[6] == 'C') {
-                if (s[7] == 'T') {
-                  return T_Q_OBJECT;
-                }
-              }
-            }
-          }
-        }
-      }
-      else if (s[2] == 'S') {
-        if (s[3] == 'I') {
-          if (s[4] == 'G') {
-            if (s[5] == 'N') {
-              if (s[6] == 'A') {
-                if (s[7] == 'L') {
-                  return T_Q_SIGNAL;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
   return T_IDENTIFIER;
 }
 
@@ -1166,39 +1026,6 @@ static inline int classify9(const char *s, Dialect d)
                 if (s[7] == 'e') {
                   if (s[8] == 'd') {
                     return T_PROTECTED;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  else if (d.qt && s[0] == 'Q') {
-    if (s[1] == '_') {
-      if (s[2] == 'S') {
-        if (s[3] == 'I') {
-          if (s[4] == 'G') {
-            if (s[5] == 'N') {
-              if (s[6] == 'A') {
-                if (s[7] == 'L') {
-                  if (s[8] == 'S') {
-                    return T_Q_SIGNALS;
-                  }
-                }
-              }
-            }
-          }
-        }
-      } else if (s[2] == 'F') {
-        if (s[3] == 'O') {
-          if (s[4] == 'R') {
-            if (s[5] == 'E') {
-              if (s[6] == 'A') {
-                if (s[7] == 'C') {
-                  if (s[8] == 'H') {
-                    return T_Q_FOREACH;
                   }
                 }
               }
@@ -1340,44 +1167,6 @@ static inline int classify10(const char *s, Dialect d)
       }
     }
   }
-  else if (d.qt && s[0] == 'Q') {
-    if (s[1] == '_') {
-      if (s[2] == 'O') {
-        if (s[3] == 'V') {
-          if (s[4] == 'E') {
-            if (s[5] == 'R') {
-              if (s[6] == 'R') {
-                if (s[7] == 'I') {
-                  if (s[8] == 'D') {
-                    if (s[9] == 'E') {
-                      return T_Q_PROPERTY; // Q_OVERRIDE is just an alias for Q_PROPERTY
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-      else if (s[2] == 'P') {
-        if (s[3] == 'R') {
-          if (s[4] == 'O') {
-            if (s[5] == 'P') {
-              if (s[6] == 'E') {
-                if (s[7] == 'R') {
-                  if (s[8] == 'T') {
-                    if (s[9] == 'Y') {
-                      return T_Q_PROPERTY;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
   return T_IDENTIFIER;
 }
 
@@ -1445,29 +1234,6 @@ static inline int classify11(const char *s, Dialect d)
       }
     }
   }
-  else if (d.qt && s[0] == 'Q') {
-    if (s[1] == '_') {
-      if (s[2] == 'I') {
-        if (s[3] == 'N') {
-          if (s[4] == 'V') {
-            if (s[5] == 'O') {
-              if (s[6] == 'K') {
-                if (s[7] == 'A') {
-                  if (s[8] == 'B') {
-                    if (s[9] == 'L') {
-                      if (s[10] == 'E') {
-                        return T_Q_INVOKABLE;
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
   return T_IDENTIFIER;
 }
 
@@ -1517,31 +1283,6 @@ static inline int classify12(const char *s, Dialect d)
             }
           }
         }
-    }
-  }
-  else if (d.qt && s[0] == 'Q') {
-    if (s[1] == '_') {
-      if (s[2] == 'I') {
-        if (s[3] == 'N') {
-          if (s[4] == 'T') {
-            if (s[5] == 'E') {
-              if (s[6] == 'R') {
-                if (s[7] == 'F') {
-                  if (s[8] == 'A') {
-                    if (s[9] == 'C') {
-                      if (s[10] == 'E') {
-                        if (s[11] == 'S') {
-                          return T_Q_INTERFACES;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   }
   else if (d.isCpp() && s[0] == 'd') {
@@ -1695,121 +1436,16 @@ static inline int classify16(const char *s, Dialect d)
 
 static inline int classify14(const char *s, Dialect d)
 {
-  if (d.qt && s[0] == 'Q') {
-    if (s[1] == '_') {
-      if (s[2] == 'P') {
-        if (s[3] == 'R') {
-          if (s[4] == 'I') {
-            if (s[5] == 'V') {
-              if (s[6] == 'A') {
-                if (s[7] == 'T') {
-                  if (s[8] == 'E') {
-                    if (s[9] == '_') {
-                      if (s[10] == 'S') {
-                        if (s[11] == 'L') {
-                          if (s[12] == 'O') {
-                            if (s[13] == 'T') {
-                              return T_Q_PRIVATE_SLOT;
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
   return T_IDENTIFIER;
 }
 
 static inline int classify18(const char *s, Dialect d)
 {
-  if (d.qt && s[0] == 'Q') {
-    if (s[1] == '_') {
-      if (s[2] == 'P') {
-        if (s[3] == 'R') {
-          if (s[4] == 'I') {
-            if (s[5] == 'V') {
-              if (s[6] == 'A') {
-                if (s[7] == 'T') {
-                  if (s[8] == 'E') {
-                    if (s[9] == '_') {
-                      if (s[10] == 'P') {
-                        if (s[11] == 'R') {
-                          if (s[12] == 'O') {
-                            if (s[13] == 'P') {
-                              if (s[14] == 'E') {
-                                if (s[15] == 'R') {
-                                  if (s[16] == 'T') {
-                                    if (s[17] == 'Y') {
-                                      return T_Q_PRIVATE_PROPERTY;
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
   return T_IDENTIFIER;
 }
 
 static inline int classify19(const char *s, Dialect d)
 {
-  if (d.qt && s[0] == 'Q') {
-    if (s[1] == '_') {
-      if (s[2] == 'D') {
-        if (s[3] == 'E') {
-          if (s[4] == 'C') {
-            if (s[5] == 'L') {
-              if (s[6] == 'A') {
-                if (s[7] == 'R') {
-                  if (s[8] == 'E') {
-                    if (s[9] == '_') {
-                      if (s[10] == 'I') {
-                        if (s[11] == 'N') {
-                          if (s[12] == 'T') {
-                            if (s[13] == 'E') {
-                              if (s[14] == 'R') {
-                                if (s[15] == 'F') {
-                                  if (s[16] == 'A') {
-                                    if (s[17] == 'C') {
-                                      if (s[18] == 'E') {
-                                        return T_Q_DECLARE_INTERFACE;
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
   return T_IDENTIFIER;
 }
 

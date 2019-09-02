@@ -1,20 +1,22 @@
-/******************************************************************************
- Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
-
- This library is free software; you can redistribute it and/or modify it under
- the terms of the GNU Lesser General Public License as published by the Free
- Software Foundation; either version 2.1 of the License, or (at your option)
- any later version.
-
- This library is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- for more details.
-
- You should have received a copy of the GNU Lesser General Public License along
- with this library; if not, write to the Free Software Foundation, Inc., 51
- Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
- *****************************************************************************/
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 #include "AST.h"
 #include "ASTVisitor.h"
@@ -31,33 +33,30 @@ using namespace psyche;
 
 namespace psyche {
 
-Symbol *lookupSymbol(const Identifier* ident, const Scope* scope)
+Symbol* lookupSymbol(const Identifier* ident, const Scope* scope)
 {
     if (!ident)
         return nullptr;
 
-    Symbol *tySym = nullptr;
+    Symbol* sym = nullptr;
     while (scope) {
-        if ((tySym = scope->find(ident)))
-            break;
+        if ((sym = scope->find(ident)))
+            return sym;
         scope = scope->enclosingScope();
     }
-
-    return tySym;
+    return sym;
 }
 
-Symbol *lookupSymbol(const Name* name, const Scope* scope)
+Symbol* lookupSymbol(const Name* name, const Scope* scope)
+{
+    return name->identifier() ? lookupSymbol(name->identifier(), scope) : nullptr;
+}
+
+Symbol* lookupTypeSymbol(const Name* name, const Scope *scope)
 {
     assert((name->isNameId() || name->isTaggedNameId()) && "expected trival or tagged name");
 
-    return lookupSymbol(name->identifier(), scope);
-}
-
-Symbol *lookupTypeSymbol(const Name* name, const Scope *scope)
-{
-    assert((name->isNameId() || name->isTaggedNameId()) && "expected trival or tagged name");
-
-    Symbol *tySym = lookupSymbol(name->identifier(), scope);
+    Symbol* tySym = lookupSymbol(name->identifier(), scope);
     if (!tySym)
         return nullptr;
 
@@ -82,9 +81,9 @@ Symbol *lookupTypeSymbol(const Name* name, const Scope *scope)
     }
 }
 
-Symbol *lookupValueSymbol(const Name *name, const Scope *scope)
+Symbol* lookupValueSymbol(const Name* name, const Scope *scope)
 {
-    Symbol *valSym = lookupSymbol(name, scope);
+    Symbol* valSym = lookupSymbol(name, scope);
     if (valSym
             && (valSym->isDeclaration()
                     || valSym->isArgument())

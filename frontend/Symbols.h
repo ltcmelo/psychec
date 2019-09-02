@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,14 +19,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_SYMBOLS_H
-#define CFE_SYMBOLS_H
+#ifndef PSYCHE_SYMBOLS_H__
+#define PSYCHE_SYMBOLS_H__
 
 #include "FrontendConfig.h"
-#include "Symbol.h"
-#include "Type.h"
+
 #include "FullySpecifiedType.h"
 #include "Scope.h"
+#include "Symbol.h"
+#include "Type.h"
 #include <vector>
 
 namespace psyche {
@@ -33,7 +35,7 @@ namespace psyche {
 class CFE_API UsingNamespaceDirective: public Symbol
 {
 public:
-    UsingNamespaceDirective(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    UsingNamespaceDirective(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     UsingNamespaceDirective(Clone *clone, Subst *subst, UsingNamespaceDirective *original);
     virtual ~UsingNamespaceDirective();
 
@@ -47,13 +49,13 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
 };
 
 class CFE_API UsingDeclaration: public Symbol
 {
 public:
-    UsingDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    UsingDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     UsingDeclaration(Clone *clone, Subst *subst, UsingDeclaration *original);
     virtual ~UsingDeclaration();
 
@@ -67,18 +69,18 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
 };
 
 class CFE_API NamespaceAlias: public Symbol
 {
 public:
-    NamespaceAlias(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    NamespaceAlias(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     NamespaceAlias(Clone *clone, Subst *subst, NamespaceAlias *original);
     virtual ~NamespaceAlias();
 
-    const Name *namespaceName() const;
-    void setNamespaceName(const Name *namespaceName);
+    const Name* namespaceName() const;
+    void setNamespaceName(const Name* namespaceName);
 
     // Symbol's interface
     virtual FullySpecifiedType type() const;
@@ -90,16 +92,16 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
 
 private:
-    const Name *_namespaceName;
+    const Name* _namespaceName;
 };
 
 class CFE_API Declaration: public Symbol
 {
 public:
-    Declaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    Declaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     Declaration(Clone *clone, Subst *subst, Declaration *original);
     virtual ~Declaration();
 
@@ -108,7 +110,7 @@ public:
 
     // Symbol's interface
     virtual FullySpecifiedType type() const;
-    const StringLiteral *getInitializer() const;
+    const StringLiteral* getInitializer() const;
 
     virtual const Declaration *asDeclaration() const
     { return this; }
@@ -123,21 +125,21 @@ public:
     { return 0; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
 
 private:
     FullySpecifiedType _type;
-    const StringLiteral *_initializer;
+    const StringLiteral* _initializer;
 };
 
 class CFE_API EnumeratorDeclaration: public Declaration
 {
 public:
-    EnumeratorDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    EnumeratorDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     virtual ~EnumeratorDeclaration();
 
-    const StringLiteral *constantValue() const;
-    void setConstantValue(const StringLiteral *constantValue);
+    const StringLiteral* constantValue() const;
+    void setConstantValue(const StringLiteral* constantValue);
 
     virtual EnumeratorDeclaration *asEnumeratorDeclarator()
     { return this; }
@@ -146,13 +148,13 @@ public:
     { return this; }
 
 private:
-    const StringLiteral *_constantValue;
+    const StringLiteral* _constantValue;
 };
 
 class CFE_API Argument: public Symbol
 {
 public:
-    Argument(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    Argument(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     Argument(Clone *clone, Subst *subst, Argument *original);
     virtual ~Argument();
 
@@ -160,8 +162,8 @@ public:
 
     bool hasInitializer() const;
 
-    const StringLiteral *initializer() const;
-    void setInitializer(const StringLiteral *initializer);
+    const StringLiteral* initializer() const;
+    void setInitializer(const StringLiteral* initializer);
 
     // Symbol's interface
     virtual FullySpecifiedType type() const;
@@ -173,17 +175,17 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
 
 private:
-    const StringLiteral *_initializer;
+    const StringLiteral* _initializer;
     FullySpecifiedType _type;
 };
 
 class CFE_API TypenameArgument: public Symbol
 {
 public:
-    TypenameArgument(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    TypenameArgument(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     TypenameArgument(Clone *clone, Subst *subst, TypenameArgument *original);
     virtual ~TypenameArgument();
 
@@ -199,7 +201,7 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
 
 private:
     FullySpecifiedType _type;
@@ -222,13 +224,13 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
 };
 
 class CFE_API ForwardClassDeclaration: public Symbol, public Type
 {
 public:
-    ForwardClassDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    ForwardClassDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     ForwardClassDeclaration(Clone *clone, Subst *subst, ForwardClassDeclaration *original);
     virtual ~ForwardClassDeclaration();
 
@@ -249,14 +251,14 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
+    virtual void accept0(TypeVisitor* visitor);
 };
 
 class CFE_API Enum: public Scope, public Type
 {
 public:
-    Enum(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    Enum(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     Enum(Clone *clone, Subst *subst, Enum *original);
     virtual ~Enum();
 
@@ -280,8 +282,8 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
+    virtual void accept0(TypeVisitor* visitor);
 
 private:
     bool _isScoped;
@@ -298,7 +300,7 @@ public:
     };
 
 public:
-    Function(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    Function(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     Function(Clone *clone, Subst *subst, Function *original);
     virtual ~Function();
 
@@ -316,7 +318,7 @@ public:
     bool hasReturnType() const;
 
     unsigned argumentCount() const;
-    Symbol *argumentAt(unsigned index) const;
+    Symbol* argumentAt(unsigned index) const;
 
     /** Convenience function that returns whether the function receives any arguments. */
     bool hasArguments() const;
@@ -346,6 +348,9 @@ public:
     bool isAmbiguous() const; // internal
     void setAmbiguous(bool isAmbiguous); // internal
 
+    bool isGeneric() const;
+    void setIsGeneric(bool isGeneric);
+
     bool maybeValidPrototype(unsigned actualArgumentCount) const;
 
     // Symbol's interface
@@ -365,8 +370,8 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
+    virtual void accept0(TypeVisitor* visitor);
 
 private:
     FullySpecifiedType _returnType;
@@ -379,6 +384,7 @@ private:
         unsigned _isConst: 1;
         unsigned _isVolatile: 1;
         unsigned _isAmbiguous: 1;
+        unsigned _isGeneric: 1;
         unsigned _methodKey: 3;
     };
     union {
@@ -390,13 +396,13 @@ private:
 class CFE_API Template: public Scope, public Type
 {
 public:
-    Template(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    Template(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     Template(Clone *clone, Subst *subst, Template *original);
     virtual ~Template();
 
     unsigned templateParameterCount() const;
-    Symbol *templateParameterAt(unsigned index) const;
-    Symbol *declaration() const;
+    Symbol* templateParameterAt(unsigned index) const;
+    Symbol* declaration() const;
 
     // Symbol's interface
     virtual FullySpecifiedType type() const;
@@ -415,15 +421,15 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
+    virtual void accept0(TypeVisitor* visitor);
 };
 
 
 class CFE_API Namespace: public Scope, public Type
 {
 public:
-    Namespace(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    Namespace(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     Namespace(Clone *clone, Subst *subst, Namespace *original);
     virtual ~Namespace();
 
@@ -450,8 +456,8 @@ public:
     { _isInline = onoff; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
+    virtual void accept0(TypeVisitor* visitor);
 
 private:
     bool _isInline;
@@ -460,7 +466,7 @@ private:
 class CFE_API BaseClass: public Symbol
 {
 public:
-    BaseClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    BaseClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     BaseClass(Clone *clone, Subst *subst, BaseClass *original);
     virtual ~BaseClass();
 
@@ -481,7 +487,7 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
 
 private:
     bool _isVariadic;
@@ -492,7 +498,7 @@ private:
 class CFE_API Class: public Scope, public Type
 {
 public:
-    Class(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    Class(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     Class(Clone *clone, Subst *subst, Class *original);
     virtual ~Class();
 
@@ -529,375 +535,15 @@ public:
     { return this; }
 
 protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void visitSymbol0(SymbolVisitor* visitor);
+    virtual void accept0(TypeVisitor* visitor);
 
 private:
     Key _key;
     std::vector<BaseClass *> _baseClasses;
 };
 
-class CFE_API QtPropertyDeclaration: public Symbol
-{
-public:
-    enum Flag {
-        NoFlags = 0,
-        ReadFunction = 1 << 0,
-        WriteFunction = 1 << 1,
-        MemberVariable = 1 << 2,
-        ResetFunction = 1 << 3,
-        NotifyFunction = 1 << 4,
-        DesignableFlag = 1 << 5,
-        DesignableFunction = 1 << 6,
-        ScriptableFlag = 1 << 7,
-        ScriptableFunction = 1 << 8,
-        StoredFlag = 1 << 9,
-        StoredFunction = 1 << 10,
-        UserFlag = 1 << 11,
-        UserFunction = 1 << 12,
-        ConstantFlag = 1 << 13,
-        FinalFlag = 1 << 14
-    };
-
-public:
-    QtPropertyDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    QtPropertyDeclaration(Clone *clone, Subst *subst, QtPropertyDeclaration *original);
-    virtual ~QtPropertyDeclaration();
-
-    void setType(const FullySpecifiedType &type);
-
-    void setFlags(int flags);
-    int flags() const;
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-
-    virtual const QtPropertyDeclaration *asQtPropertyDeclaration() const
-    { return this; }
-
-    virtual QtPropertyDeclaration *asQtPropertyDeclaration()
-    { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-
-private:
-    FullySpecifiedType _type;
-    int _flags;
-};
-
-class CFE_API QtEnum: public Symbol
-{
-public:
-    QtEnum(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    QtEnum(Clone *clone, Subst *subst, QtEnum *original);
-    virtual ~QtEnum();
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-
-    virtual const QtEnum *asQtEnum() const
-    { return this; }
-
-    virtual QtEnum *asQtEnum()
-    { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-};
-
-class CFE_API ObjCBaseClass: public Symbol
-{
-public:
-    ObjCBaseClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    ObjCBaseClass(Clone *clone, Subst *subst, ObjCBaseClass *original);
-    virtual ~ObjCBaseClass();
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-
-    virtual const ObjCBaseClass *asObjCBaseClass() const
-    { return this; }
-
-    virtual ObjCBaseClass *asObjCBaseClass()
-    { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-};
-
-class CFE_API ObjCBaseProtocol: public Symbol
-{
-public:
-    ObjCBaseProtocol(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    ObjCBaseProtocol(Clone *clone, Subst *subst, ObjCBaseProtocol *original);
-    virtual ~ObjCBaseProtocol();
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-
-    virtual const ObjCBaseProtocol *asObjCBaseProtocol() const
-    { return this; }
-
-    virtual ObjCBaseProtocol *asObjCBaseProtocol()
-    { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-};
-
-class CFE_API ObjCForwardProtocolDeclaration: public Symbol, public Type
-{
-public:
-    ObjCForwardProtocolDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    ObjCForwardProtocolDeclaration(Clone *clone, Subst *subst, ObjCForwardProtocolDeclaration *original);
-    virtual ~ObjCForwardProtocolDeclaration();
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-
-    virtual const ObjCForwardProtocolDeclaration *asObjCForwardProtocolDeclaration() const
-    { return this; }
-
-    virtual ObjCForwardProtocolDeclaration *asObjCForwardProtocolDeclaration()
-    { return this; }
-
-    // Type's interface
-    virtual const ObjCForwardProtocolDeclaration *asObjCForwardProtocolDeclarationType() const
-    { return this; }
-
-    virtual ObjCForwardProtocolDeclaration *asObjCForwardProtocolDeclarationType()
-    { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
-};
-
-class CFE_API ObjCProtocol: public Scope, public Type
-{
-public:
-    ObjCProtocol(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    ObjCProtocol(Clone *clone, Subst *subst, ObjCProtocol *original);
-    virtual ~ObjCProtocol();
-
-    unsigned protocolCount() const;
-    ObjCBaseProtocol *protocolAt(unsigned index) const;
-    void addProtocol(ObjCBaseProtocol *protocol);
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-
-    virtual const ObjCProtocol *asObjCProtocol() const
-    { return this; }
-
-    virtual ObjCProtocol *asObjCProtocol()
-    { return this; }
-
-    // Type's interface
-    virtual const ObjCProtocol *asObjCProtocolType() const
-    { return this; }
-
-    virtual ObjCProtocol *asObjCProtocolType()
-    { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
-
-private:
-    std::vector<ObjCBaseProtocol *> _protocols;
-};
-
-class CFE_API ObjCForwardClassDeclaration: public Symbol, public Type
-{
-public:
-    ObjCForwardClassDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    ObjCForwardClassDeclaration(Clone *clone, Subst *subst, ObjCForwardClassDeclaration *original);
-    virtual ~ObjCForwardClassDeclaration();
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-
-    virtual const ObjCForwardClassDeclaration *asObjCForwardClassDeclaration() const
-    { return this; }
-
-    virtual ObjCForwardClassDeclaration *asObjCForwardClassDeclaration()
-    { return this; }
-
-    // Type's interface
-    virtual const ObjCForwardClassDeclaration *asObjCForwardClassDeclarationType() const
-    { return this; }
-
-    virtual ObjCForwardClassDeclaration *asObjCForwardClassDeclarationType()
-    { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
-};
-
-class CFE_API ObjCClass: public Scope, public Type
-{
-public:
-    ObjCClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    ObjCClass(Clone *clone, Subst *subst, ObjCClass *original);
-    virtual ~ObjCClass();
-
-    bool isInterface() const;
-    void setInterface(bool isInterface);
-
-    bool isCategory() const;
-    const Name *categoryName() const;
-    void setCategoryName(const Name *categoryName);
-
-    ObjCBaseClass *baseClass() const;
-    void setBaseClass(ObjCBaseClass *baseClass);
-
-    unsigned protocolCount() const;
-    ObjCBaseProtocol *protocolAt(unsigned index) const;
-    void addProtocol(ObjCBaseProtocol *protocol);
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-
-    virtual const ObjCClass *asObjCClass() const
-    { return this; }
-
-    virtual ObjCClass *asObjCClass()
-    { return this; }
-
-    // Type's interface
-    virtual const ObjCClass *asObjCClassType() const
-    { return this; }
-
-    virtual ObjCClass *asObjCClassType()
-    { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
-
-private:
-    const Name *_categoryName;
-    ObjCBaseClass * _baseClass;
-    std::vector<ObjCBaseProtocol *> _protocols;
-    bool _isInterface;
-};
-
-class CFE_API ObjCMethod: public Scope, public Type
-{
-public:
-    ObjCMethod(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
-    ObjCMethod(Clone *clone, Subst *subst, ObjCMethod *original);
-    virtual ~ObjCMethod();
-
-    FullySpecifiedType returnType() const;
-    void setReturnType(const FullySpecifiedType &returnType);
-
-    /** Convenience function that returns whether the function returns something (including void). */
-    bool hasReturnType() const;
-
-    unsigned argumentCount() const;
-    Symbol *argumentAt(unsigned index) const;
-
-    /** Convenience function that returns whether the function receives any arguments. */
-    bool hasArguments() const;
-
-    bool isVariadic() const;
-    void setVariadic(bool isVariadic);
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-
-    virtual const ObjCMethod *asObjCMethod() const
-    { return this; }
-
-    virtual ObjCMethod *asObjCMethod()
-    { return this; }
-
-    // Type's interface
-    virtual const ObjCMethod *asObjCMethodType() const
-    { return this; }
-
-    virtual ObjCMethod *asObjCMethodType()
-    { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-    virtual void accept0(TypeVisitor *visitor);
-
-private:
-    FullySpecifiedType _returnType;
-    struct Flags {
-        unsigned _isVariadic: 1;
-    };
-    union {
-        unsigned _flags;
-        Flags f;
-    };
-};
-
-class CFE_API ObjCPropertyDeclaration: public Symbol
-{
-public:
-    enum PropertyAttributes {
-        None = 0,
-        Assign = 1 << 0,
-        Retain = 1 << 1,
-        Copy = 1 << 2,
-        ReadOnly = 1 << 3,
-        ReadWrite = 1 << 4,
-        Getter = 1 << 5,
-        Setter = 1 << 6,
-        NonAtomic = 1 << 7,
-
-        WritabilityMask = ReadOnly | ReadWrite,
-        SetterSemanticsMask = Assign | Retain | Copy
-    };
-
-public:
-    ObjCPropertyDeclaration(TranslationUnit *translationUnit,
-                            unsigned sourceLocation,
-                            const Name *name);
-    ObjCPropertyDeclaration(Clone *clone, Subst *subst, ObjCPropertyDeclaration *original);
-    virtual ~ObjCPropertyDeclaration();
-
-    bool hasAttribute(int attribute) const;
-    void setAttributes(int attributes);
-
-    bool hasGetter() const;
-    bool hasSetter() const;
-
-    const Name *getterName() const;
-
-    void setGetterName(const Name *getterName);
-
-    const Name *setterName() const;
-    void setSetterName(const Name *setterName);
-
-    void setType(const FullySpecifiedType &type);
-
-    // Symbol's interface
-    virtual FullySpecifiedType type() const;
-
-    virtual const ObjCPropertyDeclaration *asObjCPropertyDeclaration() const
-    { return this; }
-
-    virtual ObjCPropertyDeclaration *asObjCPropertyDeclaration()
-    { return this; }
-
-protected:
-    virtual void visitSymbol0(SymbolVisitor *visitor);
-
-private:
-    const Name *_getterName;
-    const Name *_setterName;
-    FullySpecifiedType _type;
-    int _propertyAttributes;
-};
-
 } // namespace psyche
 
 
-#endif // CFE_SYMBOLS_H
+#endif

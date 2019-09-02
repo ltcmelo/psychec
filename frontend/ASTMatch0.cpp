@@ -1,5 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,1217 +25,953 @@
 
 using namespace psyche;
 
-bool ObjCSelectorArgumentAST::match0(AST *pattern, ASTMatcher *matcher)
+bool SimpleSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ObjCSelectorArgumentAST *_other = pattern->asObjCSelectorArgument())
+    if (SimpleSpecifierAST* _other = pattern->asSimpleSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ObjCSelectorAST::match0(AST *pattern, ASTMatcher *matcher)
+bool AlignmentSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ObjCSelectorAST *_other = pattern->asObjCSelector())
+    if (AlignmentSpecifierAST* _other = pattern->asAlignmentSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool SimpleSpecifierAST::match0(AST *pattern, ASTMatcher *matcher)
+bool GnuAttributeSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (SimpleSpecifierAST *_other = pattern->asSimpleSpecifier())
+    if (GnuAttributeSpecifierAST* _other = pattern->asGnuAttributeSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool AlignmentSpecifierAST::match0(AST *pattern, ASTMatcher *matcher)
+bool GnuAttributeAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (AlignmentSpecifierAST *_other = pattern->asAlignmentSpecifier())
+    if (GnuAttributeAST* _other = pattern->asGnuAttribute())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool GnuAttributeSpecifierAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TypeofSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (GnuAttributeSpecifierAST *_other = pattern->asGnuAttributeSpecifier())
+    if (TypeofSpecifierAST* _other = pattern->asTypeofSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool GnuAttributeAST::match0(AST *pattern, ASTMatcher *matcher)
+bool DecltypeSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (GnuAttributeAST *_other = pattern->asGnuAttribute())
+    if (DecltypeSpecifierAST* _other = pattern->asDecltypeSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TypeofSpecifierAST::match0(AST *pattern, ASTMatcher *matcher)
+bool DeclaratorAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TypeofSpecifierAST *_other = pattern->asTypeofSpecifier())
+    if (DeclaratorAST* _other = pattern->asDeclarator())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool DecltypeSpecifierAST::match0(AST *pattern, ASTMatcher *matcher)
+bool SimpleDeclarationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (DecltypeSpecifierAST *_other = pattern->asDecltypeSpecifier())
+    if (SimpleDeclarationAST* _other = pattern->asSimpleDeclaration())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool DeclaratorAST::match0(AST *pattern, ASTMatcher *matcher)
+bool EmptyDeclarationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (DeclaratorAST *_other = pattern->asDeclarator())
+    if (EmptyDeclarationAST* _other = pattern->asEmptyDeclaration())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool SimpleDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool AccessDeclarationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (SimpleDeclarationAST *_other = pattern->asSimpleDeclaration())
+    if (AccessDeclarationAST* _other = pattern->asAccessDeclaration())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool EmptyDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool AsmDefinitionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (EmptyDeclarationAST *_other = pattern->asEmptyDeclaration())
+    if (AsmDefinitionAST* _other = pattern->asAsmDefinition())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool AccessDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool BaseSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (AccessDeclarationAST *_other = pattern->asAccessDeclaration())
+    if (BaseSpecifierAST* _other = pattern->asBaseSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool QtObjectTagAST::match0(AST *pattern, ASTMatcher *matcher)
+bool IdExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (QtObjectTagAST *_other = pattern->asQtObjectTag())
+    if (IdExpressionAST* _other = pattern->asIdExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool QtPrivateSlotAST::match0(AST *pattern, ASTMatcher *matcher)
+bool CompoundExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (QtPrivateSlotAST *_other = pattern->asQtPrivateSlot())
+    if (CompoundExpressionAST* _other = pattern->asCompoundExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool QtPropertyDeclarationItemAST::match0(AST *pattern, ASTMatcher *matcher)
+bool CompoundLiteralAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (QtPropertyDeclarationItemAST *_other = pattern->asQtPropertyDeclarationItem())
+    if (CompoundLiteralAST* _other = pattern->asCompoundLiteral())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool QtPropertyDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool BinaryExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (QtPropertyDeclarationAST *_other = pattern->asQtPropertyDeclaration())
+    if (BinaryExpressionAST* _other = pattern->asBinaryExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool QtEnumDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool CastExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (QtEnumDeclarationAST *_other = pattern->asQtEnumDeclaration())
+    if (CastExpressionAST* _other = pattern->asCastExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool QtFlagsDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ClassSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (QtFlagsDeclarationAST *_other = pattern->asQtFlagsDeclaration())
+    if (ClassSpecifierAST* _other = pattern->asClassSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool QtInterfaceNameAST::match0(AST *pattern, ASTMatcher *matcher)
+bool CaseStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (QtInterfaceNameAST *_other = pattern->asQtInterfaceName())
+    if (CaseStatementAST* _other = pattern->asCaseStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool QtInterfacesDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool CompoundStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (QtInterfacesDeclarationAST *_other = pattern->asQtInterfacesDeclaration())
+    if (CompoundStatementAST* _other = pattern->asCompoundStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool AsmDefinitionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ConditionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (AsmDefinitionAST *_other = pattern->asAsmDefinition())
+    if (ConditionAST* _other = pattern->asCondition())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool BaseSpecifierAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ConditionalExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (BaseSpecifierAST *_other = pattern->asBaseSpecifier())
+    if (ConditionalExpressionAST* _other = pattern->asConditionalExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool IdExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool CppCastExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (IdExpressionAST *_other = pattern->asIdExpression())
+    if (CppCastExpressionAST* _other = pattern->asCppCastExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool CompoundExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool CtorInitializerAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (CompoundExpressionAST *_other = pattern->asCompoundExpression())
+    if (CtorInitializerAST* _other = pattern->asCtorInitializer())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool CompoundLiteralAST::match0(AST *pattern, ASTMatcher *matcher)
+bool DeclarationStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (CompoundLiteralAST *_other = pattern->asCompoundLiteral())
+    if (DeclarationStatementAST* _other = pattern->asDeclarationStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool QtMethodAST::match0(AST *pattern, ASTMatcher *matcher)
+bool DeclaratorIdAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (QtMethodAST *_other = pattern->asQtMethod())
+    if (DeclaratorIdAST* _other = pattern->asDeclaratorId())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool QtMemberDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NestedDeclaratorAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (QtMemberDeclarationAST *_other = pattern->asQtMemberDeclaration())
+    if (NestedDeclaratorAST* _other = pattern->asNestedDeclarator())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool BinaryExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool FunctionDeclaratorAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (BinaryExpressionAST *_other = pattern->asBinaryExpression())
+    if (FunctionDeclaratorAST* _other = pattern->asFunctionDeclarator())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool CastExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ArrayDeclaratorAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (CastExpressionAST *_other = pattern->asCastExpression())
+    if (ArrayDeclaratorAST* _other = pattern->asArrayDeclarator())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ClassSpecifierAST::match0(AST *pattern, ASTMatcher *matcher)
+bool DeleteExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ClassSpecifierAST *_other = pattern->asClassSpecifier())
+    if (DeleteExpressionAST* _other = pattern->asDeleteExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool CaseStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool DoStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (CaseStatementAST *_other = pattern->asCaseStatement())
+    if (DoStatementAST* _other = pattern->asDoStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool CompoundStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NamedTypeSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (CompoundStatementAST *_other = pattern->asCompoundStatement())
+    if (NamedTypeSpecifierAST* _other = pattern->asNamedTypeSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ConditionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ElaboratedTypeSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ConditionAST *_other = pattern->asCondition())
+    if (ElaboratedTypeSpecifierAST* _other = pattern->asElaboratedTypeSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ConditionalExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool EnumSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ConditionalExpressionAST *_other = pattern->asConditionalExpression())
+    if (EnumSpecifierAST* _other = pattern->asEnumSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool CppCastExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool EnumeratorAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (CppCastExpressionAST *_other = pattern->asCppCastExpression())
+    if (EnumeratorAST* _other = pattern->asEnumerator())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool CtorInitializerAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ExceptionDeclarationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (CtorInitializerAST *_other = pattern->asCtorInitializer())
+    if (ExceptionDeclarationAST* _other = pattern->asExceptionDeclaration())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool DeclarationStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool DynamicExceptionSpecificationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (DeclarationStatementAST *_other = pattern->asDeclarationStatement())
+    if (DynamicExceptionSpecificationAST* _other = pattern->asDynamicExceptionSpecification())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool DeclaratorIdAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NoExceptSpecificationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (DeclaratorIdAST *_other = pattern->asDeclaratorId())
+    if (NoExceptSpecificationAST* _other = pattern->asNoExceptSpecification())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NestedDeclaratorAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ExpressionOrDeclarationStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NestedDeclaratorAST *_other = pattern->asNestedDeclarator())
+    if (ExpressionOrDeclarationStatementAST* _other = pattern->asExpressionOrDeclarationStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool FunctionDeclaratorAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ExpressionStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (FunctionDeclaratorAST *_other = pattern->asFunctionDeclarator())
+    if (ExpressionStatementAST* _other = pattern->asExpressionStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ArrayDeclaratorAST::match0(AST *pattern, ASTMatcher *matcher)
+bool AmbiguousStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ArrayDeclaratorAST *_other = pattern->asArrayDeclarator())
+    if (AmbiguousStatementAST* _other = pattern->asAmbiguousStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool DeleteExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool FunctionDefinitionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (DeleteExpressionAST *_other = pattern->asDeleteExpression())
+    if (FunctionDefinitionAST* _other = pattern->asFunctionDefinition())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool DoStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ForeachStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (DoStatementAST *_other = pattern->asDoStatement())
+    if (ForeachStatementAST* _other = pattern->asForeachStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NamedTypeSpecifierAST::match0(AST *pattern, ASTMatcher *matcher)
+bool RangeBasedForStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NamedTypeSpecifierAST *_other = pattern->asNamedTypeSpecifier())
+    if (RangeBasedForStatementAST* _other = pattern->asRangeBasedForStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ElaboratedTypeSpecifierAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ForStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ElaboratedTypeSpecifierAST *_other = pattern->asElaboratedTypeSpecifier())
+    if (ForStatementAST* _other = pattern->asForStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool EnumSpecifierAST::match0(AST *pattern, ASTMatcher *matcher)
+bool IfStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (EnumSpecifierAST *_other = pattern->asEnumSpecifier())
+    if (IfStatementAST* _other = pattern->asIfStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool EnumeratorAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ArrayInitializerAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (EnumeratorAST *_other = pattern->asEnumerator())
+    if (ArrayInitializerAST* _other = pattern->asArrayInitializer())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ExceptionDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool LabeledStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ExceptionDeclarationAST *_other = pattern->asExceptionDeclaration())
+    if (LabeledStatementAST* _other = pattern->asLabeledStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool DynamicExceptionSpecificationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool LinkageBodyAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (DynamicExceptionSpecificationAST *_other = pattern->asDynamicExceptionSpecification())
+    if (LinkageBodyAST* _other = pattern->asLinkageBody())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NoExceptSpecificationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool LinkageSpecificationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NoExceptSpecificationAST *_other = pattern->asNoExceptSpecification())
+    if (LinkageSpecificationAST* _other = pattern->asLinkageSpecification())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ExpressionOrDeclarationStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool MemInitializerAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ExpressionOrDeclarationStatementAST *_other = pattern->asExpressionOrDeclarationStatement())
+    if (MemInitializerAST* _other = pattern->asMemInitializer())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ExpressionStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NestedNameSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ExpressionStatementAST *_other = pattern->asExpressionStatement())
+    if (NestedNameSpecifierAST* _other = pattern->asNestedNameSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool AmbiguousStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool QualifiedNameAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (AmbiguousStatementAST *_other = pattern->asAmbiguousStatement())
+    if (QualifiedNameAST* _other = pattern->asQualifiedName())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool FunctionDefinitionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool QuantifiedTypeSpecifierAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (FunctionDefinitionAST *_other = pattern->asFunctionDefinition())
+    if (QuantifiedTypeSpecifierAST* _other = pattern->asQuantifiedTypeSpecifier())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ForeachStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool OperatorFunctionIdAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ForeachStatementAST *_other = pattern->asForeachStatement())
+    if (OperatorFunctionIdAST* _other = pattern->asOperatorFunctionId())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool RangeBasedForStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ConversionFunctionIdAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (RangeBasedForStatementAST *_other = pattern->asRangeBasedForStatement())
+    if (ConversionFunctionIdAST* _other = pattern->asConversionFunctionId())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ForStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool AnonymousNameAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ForStatementAST *_other = pattern->asForStatement())
+    if (AnonymousNameAST* _other = pattern->asAnonymousName())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool IfStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool SimpleNameAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (IfStatementAST *_other = pattern->asIfStatement())
+    if (SimpleNameAST* _other = pattern->asSimpleName())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ArrayInitializerAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TaggedNameAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ArrayInitializerAST *_other = pattern->asArrayInitializer())
+    if (TaggedNameAST* _other = pattern->asTaggedName())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool LabeledStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool DestructorNameAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (LabeledStatementAST *_other = pattern->asLabeledStatement())
+    if (DestructorNameAST* _other = pattern->asDestructorName())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool LinkageBodyAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TemplateIdAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (LinkageBodyAST *_other = pattern->asLinkageBody())
+    if (TemplateIdAST* _other = pattern->asTemplateId())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool LinkageSpecificationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NamespaceAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (LinkageSpecificationAST *_other = pattern->asLinkageSpecification())
+    if (NamespaceAST* _other = pattern->asNamespace())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool MemInitializerAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NamespaceAliasDefinitionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (MemInitializerAST *_other = pattern->asMemInitializer())
+    if (NamespaceAliasDefinitionAST* _other = pattern->asNamespaceAliasDefinition())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NestedNameSpecifierAST::match0(AST *pattern, ASTMatcher *matcher)
+bool AliasDeclarationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NestedNameSpecifierAST *_other = pattern->asNestedNameSpecifier())
+    if (AliasDeclarationAST* _other = pattern->asAliasDeclaration())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool QualifiedNameAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ExpressionListParenAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (QualifiedNameAST *_other = pattern->asQualifiedName())
+    if (ExpressionListParenAST* _other = pattern->asExpressionListParen())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool OperatorFunctionIdAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NewArrayDeclaratorAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (OperatorFunctionIdAST *_other = pattern->asOperatorFunctionId())
+    if (NewArrayDeclaratorAST* _other = pattern->asNewArrayDeclarator())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ConversionFunctionIdAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NewExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ConversionFunctionIdAST *_other = pattern->asConversionFunctionId())
+    if (NewExpressionAST* _other = pattern->asNewExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool AnonymousNameAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NewTypeIdAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (AnonymousNameAST *_other = pattern->asAnonymousName())
+    if (NewTypeIdAST* _other = pattern->asNewTypeId())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool SimpleNameAST::match0(AST *pattern, ASTMatcher *matcher)
+bool OperatorAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (SimpleNameAST *_other = pattern->asSimpleName())
+    if (OperatorAST* _other = pattern->asOperator())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TaggedNameAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ParameterDeclarationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TaggedNameAST *_other = pattern->asTaggedName())
+    if (ParameterDeclarationAST* _other = pattern->asParameterDeclaration())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool DestructorNameAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ParameterDeclarationClauseAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (DestructorNameAST *_other = pattern->asDestructorName())
+    if (ParameterDeclarationClauseAST* _other = pattern->asParameterDeclarationClause())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TemplateIdAST::match0(AST *pattern, ASTMatcher *matcher)
+bool CallAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TemplateIdAST *_other = pattern->asTemplateId())
+    if (CallAST* _other = pattern->asCall())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NamespaceAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ArrayAccessAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NamespaceAST *_other = pattern->asNamespace())
+    if (ArrayAccessAST* _other = pattern->asArrayAccess())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NamespaceAliasDefinitionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool PostIncrDecrAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NamespaceAliasDefinitionAST *_other = pattern->asNamespaceAliasDefinition())
+    if (PostIncrDecrAST* _other = pattern->asPostIncrDecr())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool AliasDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool MemberAccessAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (AliasDeclarationAST *_other = pattern->asAliasDeclaration())
+    if (MemberAccessAST* _other = pattern->asMemberAccess())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ExpressionListParenAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TypeidExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ExpressionListParenAST *_other = pattern->asExpressionListParen())
+    if (TypeidExpressionAST* _other = pattern->asTypeidExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NewArrayDeclaratorAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TypenameCallExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NewArrayDeclaratorAST *_other = pattern->asNewArrayDeclarator())
+    if (TypenameCallExpressionAST* _other = pattern->asTypenameCallExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NewExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TypeConstructorCallAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NewExpressionAST *_other = pattern->asNewExpression())
+    if (TypeConstructorCallAST* _other = pattern->asTypeConstructorCall())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NewTypeIdAST::match0(AST *pattern, ASTMatcher *matcher)
+bool PointerToMemberAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NewTypeIdAST *_other = pattern->asNewTypeId())
+    if (PointerToMemberAST* _other = pattern->asPointerToMember())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool OperatorAST::match0(AST *pattern, ASTMatcher *matcher)
+bool PointerAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (OperatorAST *_other = pattern->asOperator())
+    if (PointerAST* _other = pattern->asPointer())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ParameterDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ReferenceAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ParameterDeclarationAST *_other = pattern->asParameterDeclaration())
+    if (ReferenceAST* _other = pattern->asReference())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ParameterDeclarationClauseAST::match0(AST *pattern, ASTMatcher *matcher)
+bool BreakStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ParameterDeclarationClauseAST *_other = pattern->asParameterDeclarationClause())
+    if (BreakStatementAST* _other = pattern->asBreakStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool CallAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ContinueStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (CallAST *_other = pattern->asCall())
+    if (ContinueStatementAST* _other = pattern->asContinueStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ArrayAccessAST::match0(AST *pattern, ASTMatcher *matcher)
+bool GotoStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ArrayAccessAST *_other = pattern->asArrayAccess())
+    if (GotoStatementAST* _other = pattern->asGotoStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool PostIncrDecrAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ReturnStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (PostIncrDecrAST *_other = pattern->asPostIncrDecr())
+    if (ReturnStatementAST* _other = pattern->asReturnStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool MemberAccessAST::match0(AST *pattern, ASTMatcher *matcher)
+bool SizeofExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (MemberAccessAST *_other = pattern->asMemberAccess())
+    if (SizeofExpressionAST* _other = pattern->asSizeofExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TypeidExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool AlignofExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TypeidExpressionAST *_other = pattern->asTypeidExpression())
+    if (AlignofExpressionAST* _other = pattern->asAlignofExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TypenameCallExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool PointerLiteralAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TypenameCallExpressionAST *_other = pattern->asTypenameCallExpression())
+    if (PointerLiteralAST* _other = pattern->asPointerLiteral())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TypeConstructorCallAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NumericLiteralAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TypeConstructorCallAST *_other = pattern->asTypeConstructorCall())
+    if (NumericLiteralAST* _other = pattern->asNumericLiteral())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool PointerToMemberAST::match0(AST *pattern, ASTMatcher *matcher)
+bool BoolLiteralAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (PointerToMemberAST *_other = pattern->asPointerToMember())
+    if (BoolLiteralAST* _other = pattern->asBoolLiteral())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool PointerAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ThisExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (PointerAST *_other = pattern->asPointer())
+    if (ThisExpressionAST* _other = pattern->asThisExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ReferenceAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NestedExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ReferenceAST *_other = pattern->asReference())
+    if (NestedExpressionAST* _other = pattern->asNestedExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool BreakStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool StaticAssertDeclarationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (BreakStatementAST *_other = pattern->asBreakStatement())
+    if (StaticAssertDeclarationAST* _other = pattern->asStaticAssertDeclaration())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ContinueStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool StringLiteralAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ContinueStatementAST *_other = pattern->asContinueStatement())
+    if (StringLiteralAST* _other = pattern->asStringLiteral())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool GotoStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool SwitchStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (GotoStatementAST *_other = pattern->asGotoStatement())
+    if (SwitchStatementAST* _other = pattern->asSwitchStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ReturnStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool GenericsDeclarationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ReturnStatementAST *_other = pattern->asReturnStatement())
+    if (GenericsDeclarationAST* _other = pattern->asGenericsDeclaration())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool SizeofExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TemplateDeclarationAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (SizeofExpressionAST *_other = pattern->asSizeofExpression())
+    if (TemplateDeclarationAST* _other = pattern->asTemplateDeclaration())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool AlignofExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool ThrowExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (AlignofExpressionAST *_other = pattern->asAlignofExpression())
+    if (ThrowExpressionAST* _other = pattern->asThrowExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool PointerLiteralAST::match0(AST *pattern, ASTMatcher *matcher)
+bool NoExceptOperatorExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (PointerLiteralAST *_other = pattern->asPointerLiteral())
+    if (NoExceptOperatorExpressionAST* _other = pattern->asNoExceptOperatorExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NumericLiteralAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TranslationUnitAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NumericLiteralAST *_other = pattern->asNumericLiteral())
+    if (TranslationUnitAST* _other = pattern->asTranslationUnit())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool BoolLiteralAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TryBlockStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (BoolLiteralAST *_other = pattern->asBoolLiteral())
+    if (TryBlockStatementAST* _other = pattern->asTryBlockStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ThisExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool CatchClauseAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ThisExpressionAST *_other = pattern->asThisExpression())
+    if (CatchClauseAST* _other = pattern->asCatchClause())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NestedExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TypeIdAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NestedExpressionAST *_other = pattern->asNestedExpression())
+    if (TypeIdAST* _other = pattern->asTypeId())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool StaticAssertDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TypenameTypeParameterAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (StaticAssertDeclarationAST *_other = pattern->asStaticAssertDeclaration())
+    if (TypenameTypeParameterAST* _other = pattern->asTypenameTypeParameter())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool StringLiteralAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TemplateTypeParameterAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (StringLiteralAST *_other = pattern->asStringLiteral())
+    if (TemplateTypeParameterAST* _other = pattern->asTemplateTypeParameter())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool SwitchStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool UnaryExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (SwitchStatementAST *_other = pattern->asSwitchStatement())
+    if (UnaryExpressionAST* _other = pattern->asUnaryExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TemplateDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
+bool UsingAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TemplateDeclarationAST *_other = pattern->asTemplateDeclaration())
+    if (UsingAST* _other = pattern->asUsing())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool ThrowExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool UsingDirectiveAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (ThrowExpressionAST *_other = pattern->asThrowExpression())
+    if (UsingDirectiveAST* _other = pattern->asUsingDirective())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool NoExceptOperatorExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool WhileStatementAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (NoExceptOperatorExpressionAST *_other = pattern->asNoExceptOperatorExpression())
+    if (WhileStatementAST* _other = pattern->asWhileStatement())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TranslationUnitAST::match0(AST *pattern, ASTMatcher *matcher)
+bool LambdaExpressionAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TranslationUnitAST *_other = pattern->asTranslationUnit())
+    if (LambdaExpressionAST* _other = pattern->asLambdaExpression())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TryBlockStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool LambdaIntroducerAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TryBlockStatementAST *_other = pattern->asTryBlockStatement())
+    if (LambdaIntroducerAST* _other = pattern->asLambdaIntroducer())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool CatchClauseAST::match0(AST *pattern, ASTMatcher *matcher)
+bool LambdaCaptureAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (CatchClauseAST *_other = pattern->asCatchClause())
+    if (LambdaCaptureAST* _other = pattern->asLambdaCapture())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TypeIdAST::match0(AST *pattern, ASTMatcher *matcher)
+bool CaptureAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TypeIdAST *_other = pattern->asTypeId())
+    if (CaptureAST* _other = pattern->asCapture())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TypenameTypeParameterAST::match0(AST *pattern, ASTMatcher *matcher)
+bool LambdaDeclaratorAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TypenameTypeParameterAST *_other = pattern->asTypenameTypeParameter())
+    if (LambdaDeclaratorAST* _other = pattern->asLambdaDeclarator())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool TemplateTypeParameterAST::match0(AST *pattern, ASTMatcher *matcher)
+bool TrailingReturnTypeAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (TemplateTypeParameterAST *_other = pattern->asTemplateTypeParameter())
+    if (TrailingReturnTypeAST* _other = pattern->asTrailingReturnType())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool UnaryExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
+bool BracedInitializerAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (UnaryExpressionAST *_other = pattern->asUnaryExpression())
+    if (BracedInitializerAST* _other = pattern->asBracedInitializer())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool UsingAST::match0(AST *pattern, ASTMatcher *matcher)
+bool DotDesignatorAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (UsingAST *_other = pattern->asUsing())
+    if (DotDesignatorAST* _other = pattern->asDotDesignator())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool UsingDirectiveAST::match0(AST *pattern, ASTMatcher *matcher)
+bool BracketDesignatorAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (UsingDirectiveAST *_other = pattern->asUsingDirective())
+    if (BracketDesignatorAST* _other = pattern->asBracketDesignator())
         return matcher->match(this, _other);
 
     return false;
 }
 
-bool WhileStatementAST::match0(AST *pattern, ASTMatcher *matcher)
+bool DesignatedInitializerAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (WhileStatementAST *_other = pattern->asWhileStatement())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCClassForwardDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCClassForwardDeclarationAST *_other = pattern->asObjCClassForwardDeclaration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCClassDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCClassDeclarationAST *_other = pattern->asObjCClassDeclaration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCProtocolForwardDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCProtocolForwardDeclarationAST *_other = pattern->asObjCProtocolForwardDeclaration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCProtocolDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCProtocolDeclarationAST *_other = pattern->asObjCProtocolDeclaration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCProtocolRefsAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCProtocolRefsAST *_other = pattern->asObjCProtocolRefs())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCMessageArgumentAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCMessageArgumentAST *_other = pattern->asObjCMessageArgument())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCMessageExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCMessageExpressionAST *_other = pattern->asObjCMessageExpression())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCProtocolExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCProtocolExpressionAST *_other = pattern->asObjCProtocolExpression())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCTypeNameAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCTypeNameAST *_other = pattern->asObjCTypeName())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCEncodeExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCEncodeExpressionAST *_other = pattern->asObjCEncodeExpression())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCSelectorExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCSelectorExpressionAST *_other = pattern->asObjCSelectorExpression())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCInstanceVariablesDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCInstanceVariablesDeclarationAST *_other = pattern->asObjCInstanceVariablesDeclaration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCVisibilityDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCVisibilityDeclarationAST *_other = pattern->asObjCVisibilityDeclaration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCPropertyAttributeAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCPropertyAttributeAST *_other = pattern->asObjCPropertyAttribute())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCPropertyDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCPropertyDeclarationAST *_other = pattern->asObjCPropertyDeclaration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCMessageArgumentDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCMessageArgumentDeclarationAST *_other = pattern->asObjCMessageArgumentDeclaration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCMethodPrototypeAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCMethodPrototypeAST *_other = pattern->asObjCMethodPrototype())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCMethodDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCMethodDeclarationAST *_other = pattern->asObjCMethodDeclaration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCSynthesizedPropertyAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCSynthesizedPropertyAST *_other = pattern->asObjCSynthesizedProperty())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCSynthesizedPropertiesDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCSynthesizedPropertiesDeclarationAST *_other = pattern->asObjCSynthesizedPropertiesDeclaration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCDynamicPropertiesDeclarationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCDynamicPropertiesDeclarationAST *_other = pattern->asObjCDynamicPropertiesDeclaration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCFastEnumerationAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCFastEnumerationAST *_other = pattern->asObjCFastEnumeration())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool ObjCSynchronizedStatementAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (ObjCSynchronizedStatementAST *_other = pattern->asObjCSynchronizedStatement())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool LambdaExpressionAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (LambdaExpressionAST *_other = pattern->asLambdaExpression())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool LambdaIntroducerAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (LambdaIntroducerAST *_other = pattern->asLambdaIntroducer())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool LambdaCaptureAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (LambdaCaptureAST *_other = pattern->asLambdaCapture())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool CaptureAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (CaptureAST *_other = pattern->asCapture())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool LambdaDeclaratorAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (LambdaDeclaratorAST *_other = pattern->asLambdaDeclarator())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool TrailingReturnTypeAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (TrailingReturnTypeAST *_other = pattern->asTrailingReturnType())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool BracedInitializerAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (BracedInitializerAST *_other = pattern->asBracedInitializer())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool DotDesignatorAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (DotDesignatorAST *_other = pattern->asDotDesignator())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool BracketDesignatorAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (BracketDesignatorAST *_other = pattern->asBracketDesignator())
-        return matcher->match(this, _other);
-
-    return false;
-}
-
-bool DesignatedInitializerAST::match0(AST *pattern, ASTMatcher *matcher)
-{
-    if (DesignatedInitializerAST *_other = pattern->asDesignatedInitializer())
+    if (DesignatedInitializerAST* _other = pattern->asDesignatedInitializer())
         return matcher->match(this, _other);
 
     return false;

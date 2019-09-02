@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2019 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,10 +19,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_FULLYSPECIFIEDTYPE_H
-#define CFE_FULLYSPECIFIEDTYPE_H
+#ifndef PSYCHE_FULLY_SPECIFIED_TYPE_H__
+#define PSYCHE_FULLY_SPECIFIED_TYPE_H__
 
 #include "FrontendConfig.h"
+
 #include "FrontendFwds.h"
 
 namespace psyche {
@@ -29,16 +31,18 @@ namespace psyche {
 class CFE_API FullySpecifiedType
 {
 public:
-    FullySpecifiedType(Type *type = 0);
+    FullySpecifiedType(Type* type = 0);
     ~FullySpecifiedType();
 
     bool isValid() const;
     explicit operator bool() const;
 
-    Type *type() const;
-    void setType(Type *type);
+    Type* type() const;
+    void setType(Type* type);
 
-    FullySpecifiedType qualifiedType() const;
+    FullySpecifiedType strippedType() const;
+
+    FullySpecifiedType coreType() const;
 
     bool isConst() const;
     void setConst(bool isConst);
@@ -94,31 +98,30 @@ public:
     bool isUnavailable() const;
     void setUnavailable(bool isUnavailable);
 
-    Type &operator*();
-    const Type &operator*() const;
+    Type& operator*();
+    const Type& operator*() const;
 
-    Type *operator->();
-    const Type *operator->() const;
+    Type* operator->();
+    const Type* operator->() const;
 
-    bool operator == (const FullySpecifiedType &other) const;
-    bool operator != (const FullySpecifiedType &other) const;
-    bool operator < (const FullySpecifiedType &other) const;
-
-    FullySpecifiedType simplified() const;
+    bool operator == (const FullySpecifiedType& other) const;
+    bool operator != (const FullySpecifiedType& other) const;
+    bool operator < (const FullySpecifiedType& other) const;
 
     unsigned flags() const;
     void setFlags(unsigned flags);
 
 private:
-    Type *_type;
+    Type* type_;
+
     struct Flags {
         // cv qualifiers
-        unsigned _isConst: 1;
-        unsigned _isVolatile: 1;
+        unsigned isConst_: 1;
+        unsigned isVolatile_: 1;
 
         // sign
-        unsigned _isSigned: 1;
-        unsigned _isUnsigned: 1;
+        unsigned isSigned_: 1;
+        unsigned isUnsigned_: 1;
 
         // storage class specifiers
         unsigned _isFriend: 1;
@@ -137,15 +140,15 @@ private:
         unsigned _isExplicit: 1;
 
         // speficiers from attributes
-        unsigned _isDeprecated: 1;
-        unsigned _isUnavailable: 1;
+        unsigned isDeprecated_: 1;
+        unsigned isUnavailable_: 1;
     };
     union {
-        unsigned _flags;
+        unsigned flags_;
         Flags f;
     };
 };
 
 } // namespace psyche
 
-#endif // CFE_FULLYSPECIFIEDTYPE_H
+#endif

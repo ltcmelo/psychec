@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -63,21 +61,21 @@ bool Name::isSelectorNameId() const
 bool Name::isTaggedNameId() const
 { return asTaggedNameId() != 0; }
 
-void Name::accept(NameVisitor *visitor) const
+void Name::accept(NameVisitor* visitor) const
 {
     if (visitor->preVisit(this))
         accept0(visitor);
     visitor->postVisit(this);
 }
 
-void Name::accept(const Name *name, NameVisitor *visitor)
+void Name::accept(const Name* name, NameVisitor* visitor)
 {
     if (! name)
         return;
     name->accept(visitor);
 }
 
-bool Name::Compare::operator()(const Name *name, const Name *other) const
+bool Name::Compare::operator()(const Name* name, const Name* other) const
 {
     if (name == 0)
         return other != 0;
@@ -86,8 +84,8 @@ bool Name::Compare::operator()(const Name *name, const Name *other) const
     if (name == other)
         return false;
 
-    const Identifier *id = name->identifier();
-    const Identifier *otherId = other->identifier();
+    const Identifier* id = name->identifier();
+    const Identifier* otherId = other->identifier();
 
     if (id == 0)
         return otherId != 0;

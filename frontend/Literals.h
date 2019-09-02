@@ -18,10 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_LITERALS_H
-#define CFE_LITERALS_H
+#ifndef PSYCHE_LITERALS_H__
+#define PSYCHE_LITERALS_H__
 
 #include "FrontendConfig.h"
+
 #include "Token.h"
 #include "Name.h"
 
@@ -50,9 +51,9 @@ public:
     unsigned hashCode() const { return _hashCode; }
     static unsigned hashCode(const char *chars, unsigned size);
 
-    bool equalTo(const Literal *other) const;
+    bool equalTo(const Literal* other) const;
 
-    Literal *_next; // ## private
+    Literal* _next; // ## private
 
 private:
     char *_chars;
@@ -113,16 +114,16 @@ public:
         : Literal(chars, size)
     { }
 
-    virtual const Identifier *identifier() const { return this; }
+    virtual const Identifier* identifier() const { return this; }
 
-    virtual const Identifier *asNameId() const
+    virtual const Identifier* asNameId() const
     { return this; }
 
 protected:
-    virtual void accept0(NameVisitor *visitor) const;
+    virtual void accept0(NameVisitor* visitor) const;
 };
 
 } // namespace psyche
 
 
-#endif // CFE_LITERALS_H
+#endif

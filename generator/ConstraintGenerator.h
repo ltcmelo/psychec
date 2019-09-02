@@ -24,7 +24,7 @@
 #include "FullySpecifiedType.h"
 #include "ConstraintSyntax.h"
 #include "DomainLattice.h"
-#include "TypeSpeller.h"
+#include "TypePP.h"
 #include <stack>
 #include <string>
 #include <unordered_map>
@@ -46,7 +46,7 @@ class ConstraintGenerator final : public psyche::ASTVisitor
 public:
     ConstraintGenerator(psyche::TranslationUnit *unit, ConstraintWriter* writer);
 
-    void generate(psyche::TranslationUnitAST *ast, psyche::Scope *global);
+    void generate(psyche::TranslationUnitAST* ast, psyche::Scope *global);
 
     void employDomainLattice(const DomainLattice* lattice);
 
@@ -81,17 +81,17 @@ private:
     void visitName(psyche::NameAST* ast);
 
     // Declarations
-    void visitDeclaration(psyche::DeclarationAST *ast);
-    bool visit(psyche::SimpleDeclarationAST *ast) override;
-    bool visit(psyche::FunctionDefinitionAST *ast) override;
+    void visitDeclaration(psyche::DeclarationAST* ast);
+    bool visit(psyche::SimpleDeclarationAST* ast) override;
+    bool visit(psyche::FunctionDefinitionAST* ast) override;
 
     // Expressions
     void visitExpression(psyche::ExpressionAST* ast);
     bool visit(psyche::ArrayAccessAST* ast) override;
     bool visit(psyche::BinaryExpressionAST* ast) override;
-    bool visit(psyche::CallAST *ast) override;
-    bool visit(psyche::CastExpressionAST *ast) override;
-    bool visit(psyche::ConditionalExpressionAST *ast) override;
+    bool visit(psyche::CallAST* ast) override;
+    bool visit(psyche::CastExpressionAST* ast) override;
+    bool visit(psyche::ConditionalExpressionAST* ast) override;
     bool visit(psyche::IdExpressionAST* ast) override;
     bool visit(psyche::MemberAccessAST* ast) override;
     bool visit(psyche::UnaryExpressionAST* ast) override;
@@ -100,30 +100,30 @@ private:
     bool visit(psyche::StringLiteralAST* ast) override;
     bool visit(psyche::SizeofExpressionAST* ast) override;
     bool visit(psyche::PointerLiteralAST* ast) override;
-    bool visit(psyche::BracedInitializerAST *ast) override;
+    bool visit(psyche::BracedInitializerAST* ast) override;
     bool visit(psyche::PostIncrDecrAST* ast) override;
 
     // Specifiers
-    void visitSpecifier(psyche::SpecifierAST *ast);
-    bool visit(psyche::EnumSpecifierAST *ast) override;
-    bool visit(psyche::ClassSpecifierAST *ast) override;
-    bool visit(psyche::GnuAttributeSpecifierAST *ast) override;
+    void visitSpecifier(psyche::SpecifierAST* ast);
+    bool visit(psyche::EnumSpecifierAST* ast) override;
+    bool visit(psyche::ClassSpecifierAST* ast) override;
+    bool visit(psyche::GnuAttributeSpecifierAST* ast) override;
 
     // Statements
-    void visitStatement(psyche::StatementAST *ast);
-    bool visit(psyche::SwitchStatementAST *ast) override;
+    void visitStatement(psyche::StatementAST* ast);
+    bool visit(psyche::SwitchStatementAST* ast) override;
     bool visit(psyche::CaseStatementAST* ast) override;
-    bool visit(psyche::CompoundStatementAST *ast) override;
-    bool visit(psyche::DeclarationStatementAST *ast) override;
-    bool visit(psyche::DoStatementAST *ast) override;
-    bool visit(psyche::WhileStatementAST *ast) override;
-    bool visit(psyche::ForStatementAST *ast) override;
-    bool visit(psyche::IfStatementAST *ast) override;
-    bool visit(psyche::ExpressionStatementAST *ast) override;
-    bool visit(psyche::ReturnStatementAST *ast) override;
+    bool visit(psyche::CompoundStatementAST* ast) override;
+    bool visit(psyche::DeclarationStatementAST* ast) override;
+    bool visit(psyche::DoStatementAST* ast) override;
+    bool visit(psyche::WhileStatementAST* ast) override;
+    bool visit(psyche::ForStatementAST* ast) override;
+    bool visit(psyche::IfStatementAST* ast) override;
+    bool visit(psyche::ExpressionStatementAST* ast) override;
+    bool visit(psyche::ReturnStatementAST* ast) override;
 
     // Miscellanea
-    bool visit(psyche::EnumeratorAST *ast) override;
+    bool visit(psyche::EnumeratorAST* ast) override;
 
     // Symbol visits.
     void visitSymbol(psyche::Function* func, psyche::StatementAST* body);
@@ -136,7 +136,7 @@ private:
     ConstraintWriter *writer_;
 
     //! Type name speller.
-    TypeSpeller<ConstraintSyntax> typeSpeller_;
+    TypePP<ConstraintSyntax> typePP_;
 
     //! Type variables supply and properties.
     FreshVarSupply supply_;
@@ -196,7 +196,7 @@ private:
     /*!
      * Convert boolean expressions to int.
      */
-    void treatAsBool(psyche::ExpressionAST *ast);
+    void treatAsBool(psyche::ExpressionAST* ast);
 
     /*!
      * Encapsulates the steps to enter a new expression rule and generate its

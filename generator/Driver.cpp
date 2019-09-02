@@ -17,11 +17,12 @@
  *****************************************************************************/
 
 #include "Driver.h"
+
 #include "AST.h"
-#include "ASTDumper.h"
+#include "ASTDotWriter.h"
 #include "ASTNormalizer.h"
 #include "BaseTester.h"
-#include "Bind.h"
+#include "Binder.h"
 #include "CompilerFacade.h"
 #include "ConstraintGenerator.h"
 #include "ConstraintWriter.h"
@@ -30,12 +31,14 @@
 #include "DiagnosticCollector.h"
 #include "DomainLattice.h"
 #include "FileInfo.h"
+#include "GenericsInstantiatior.h"
 #include "IO.h"
 #include "Literals.h"
 #include "Plugin.h"
 #include "ProgramValidator.h"
 #include "SourceInspector.h"
 #include "Symbols.h"
+#include "Unparser.h"
 
 #include "cxxopts.hpp"
 
@@ -75,6 +78,7 @@ void honorFlag(bool flag, std::function<void ()> f)
 Driver::Driver(const Factory& factory)
     : factory_(factory)
     , global_(nullptr)
+    , withGenerics_(false)
 {}
 
 TranslationUnit *Driver::tu() const
@@ -82,7 +86,7 @@ TranslationUnit *Driver::tu() const
     return unit_.get();
 }
 
-TranslationUnitAST *Driver::ast() const
+TranslationUnitAST* Driver::ast() const
 {
     return tu()->ast()->asTranslationUnit();
 }
@@ -95,6 +99,7 @@ Dialect Driver::adjustedDialect(const ExecutionOptions&)
     dialect.ext_EnumeratorAttributes = 1;
     dialect.ext_AvailabilityAttribute = 1;
     dialect.nullptrOnNULL = 1;
+    dialect.generics = 1;
 
     return dialect;
 }
@@ -276,6 +281,7 @@ int Driver::parse(const std::string& source)
     control_.diagnosticCollector()->reset();
 
     unit_->setSource(source.c_str(), source.length());
+
     if (!unit_->parse())
         return ParsingError;
 
@@ -283,7 +289,7 @@ int Driver::parse(const std::string& source)
         return UnavailableAstError;
 
     honorFlag(opts_.flag_.dumpAst,
-              [this] () { ASTDumper(tu()).dump(ast(), ".ast.dot"); });
+              [this] () { ASTDotWriter(tu()).write(ast(), ".ast.dot"); });
 
     ProgramValidator validator(tu(), opts_.flag_.noTypedef);
     validator.validate(ast());
@@ -297,7 +303,7 @@ int Driver::parse(const std::string& source)
 int Driver::annotateAst()
 {
     // Create symbols.
-    Bind bind(tu());
+    Binder bind(tu());
     bind(ast(), global_);
 
     // Try to disambiguate syntax ambiguities and normalize the AST according to the resolutions.
@@ -311,11 +317,25 @@ int Driver::annotateAst()
               });
 
     honorFlag(opts_.flag_.dumpAst,
-              [this] () { ASTDumper(tu()).dump(ast(), ".ast.fixed.dot"); });
+              [this] () { ASTDotWriter(tu()).write(ast(), ".ast.fixed.dot"); });
 
     if (opts_.flag_.disambOnly)
         return OK;
 
+    if (withGenerics_)
+        return instantiateGenerics();
+    return generateConstraints();
+}
+
+int Driver::instantiateGenerics()
+{
+    GenericsInstantiatior expander(tu());
+    std::ostringstream oss;
+    int r = expander.expand(ast(), global_, oss);
+    if (r) {
+        withGenerics_ = false;
+        return parse(oss.str());
+    }
     return generateConstraints();
 }
 

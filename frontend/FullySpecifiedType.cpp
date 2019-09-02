@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2019 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,33 +20,36 @@
 // THE SOFTWARE.
 
 #include "FullySpecifiedType.h"
-#include "Type.h"
+
 #include "CoreTypes.h"
+#include "Type.h"
 
 using namespace psyche;
 
-FullySpecifiedType::FullySpecifiedType(Type *type) :
-    _type(type), _flags(0)
+FullySpecifiedType::FullySpecifiedType(Type* type)
+    : type_(type)
+    , flags_(0)
 {
-    if (! type)
-        _type = UndefinedType::instance();
+    if (!type)
+        type_ = UndefinedType::instance();
 }
 
 FullySpecifiedType::~FullySpecifiedType()
 { }
 
 bool FullySpecifiedType::isValid() const
-{ return _type != UndefinedType::instance(); }
+{ return type_ != UndefinedType::instance(); }
 
-Type *FullySpecifiedType::type() const
-{ return _type; }
+Type* FullySpecifiedType::type() const
+{ return type_; }
 
-void FullySpecifiedType::setType(Type *type)
-{ _type = type; }
+void FullySpecifiedType::setType(Type* type)
+{ type_ = type; }
 
-FullySpecifiedType FullySpecifiedType::qualifiedType() const
+FullySpecifiedType FullySpecifiedType::strippedType() const
 {
     FullySpecifiedType ty = *this;
+
     ty.setFriend(false);
     ty.setRegister(false);
     ty.setStatic(false);
@@ -61,32 +65,47 @@ FullySpecifiedType FullySpecifiedType::qualifiedType() const
 
     ty.setDeprecated(false);
     ty.setUnavailable(false);
+
     return ty;
 }
 
+FullySpecifiedType FullySpecifiedType::coreType() const
+{
+    if (type()->asArrayType())
+        return type()->asArrayType()->elementType().coreType();
+
+    if (type()->asPointerType())
+        return type()->asPointerType()->elementType().coreType();
+
+    if (type()->asReferenceType())
+        return type()->asReferenceType()->elementType().coreType();
+
+    return *this;
+}
+
 bool FullySpecifiedType::isConst() const
-{ return f._isConst; }
+{ return f.isConst_; }
 
 void FullySpecifiedType::setConst(bool isConst)
-{ f._isConst = isConst; }
+{ f.isConst_ = isConst; }
 
 bool FullySpecifiedType::isVolatile() const
-{ return f._isVolatile; }
+{ return f.isVolatile_; }
 
 void FullySpecifiedType::setVolatile(bool isVolatile)
-{ f._isVolatile = isVolatile; }
+{ f.isVolatile_ = isVolatile; }
 
 bool FullySpecifiedType::isSigned() const
-{ return f._isSigned; }
+{ return f.isSigned_; }
 
 void FullySpecifiedType::setSigned(bool isSigned)
-{ f._isSigned = isSigned; }
+{ f.isSigned_ = isSigned; }
 
 bool FullySpecifiedType::isUnsigned() const
-{ return f._isUnsigned; }
+{ return f.isUnsigned_; }
 
 void FullySpecifiedType::setUnsigned(bool isUnsigned)
-{ f._isUnsigned = isUnsigned; }
+{ f.isUnsigned_ = isUnsigned; }
 
 bool FullySpecifiedType::isFriend() const
 { return f._isFriend; }
@@ -161,55 +180,47 @@ void FullySpecifiedType::setExplicit(bool isExplicit)
 { f._isExplicit = isExplicit; }
 
 bool FullySpecifiedType::isDeprecated() const
-{ return f._isDeprecated; }
+{ return f.isDeprecated_; }
 
 void FullySpecifiedType::setDeprecated(bool isDeprecated)
-{ f._isDeprecated = isDeprecated; }
+{ f.isDeprecated_ = isDeprecated; }
 
 bool FullySpecifiedType::isUnavailable() const
-{ return f._isUnavailable; }
+{ return f.isUnavailable_; }
 
 void FullySpecifiedType::setUnavailable(bool isUnavailable)
-{ f._isUnavailable = isUnavailable; }
+{ f.isUnavailable_ = isUnavailable; }
 
-Type &FullySpecifiedType::operator*()
-{ return *_type; }
+Type& FullySpecifiedType::operator*()
+{ return *type_; }
 
 FullySpecifiedType::operator bool() const
-{ return _type != UndefinedType::instance(); }
+{ return type_ != UndefinedType::instance(); }
 
-const Type &FullySpecifiedType::operator*() const
-{ return *_type; }
+const Type& FullySpecifiedType::operator*() const
+{ return *type_; }
 
-Type *FullySpecifiedType::operator->()
-{ return _type; }
+Type* FullySpecifiedType::operator->()
+{ return type_; }
 
-const Type *FullySpecifiedType::operator->() const
-{ return _type; }
+const Type* FullySpecifiedType::operator->() const
+{ return type_; }
 
-bool FullySpecifiedType::operator == (const FullySpecifiedType &other) const
-{ return _type == other._type && _flags == other._flags; }
+bool FullySpecifiedType::operator == (const FullySpecifiedType& other) const
+{ return type_ == other.type_ && flags_ == other.flags_; }
 
-bool FullySpecifiedType::operator != (const FullySpecifiedType &other) const
+bool FullySpecifiedType::operator != (const FullySpecifiedType& other) const
 { return ! operator ==(other); }
 
-bool FullySpecifiedType::operator < (const FullySpecifiedType &other) const
+bool FullySpecifiedType::operator < (const FullySpecifiedType& other) const
 {
-    if (_type == other._type)
-        return _flags < other._flags;
-    return _type < other._type;
-}
-
-FullySpecifiedType FullySpecifiedType::simplified() const
-{
-    if (const ReferenceType *refTy = type()->asReferenceType())
-        return refTy->elementType().simplified();
-
-    return *this;
+    if (type_ == other.type_)
+        return flags_ < other.flags_;
+    return type_ < other.type_;
 }
 
 unsigned FullySpecifiedType::flags() const
-{ return _flags; }
+{ return flags_; }
 
 void FullySpecifiedType::setFlags(unsigned flags)
-{ _flags = flags; }
+{ flags_ = flags; }

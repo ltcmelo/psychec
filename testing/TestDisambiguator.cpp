@@ -23,7 +23,7 @@
 
 #include "TestDisambiguator.h"
 #include "AST.h"
-#include "ASTDumper.h"
+#include "ASTDotWriter.h"
 #include "Control.h"
 #include "Factory.h"
 #include "Literals.h"
@@ -57,7 +57,7 @@ void TestDisambiguator::checkAst(const std::string &source, std::string expected
     PSYCHE_EXPECT_TRUE(driver.ast());
 
     std::ostringstream oss;
-    ASTDumper(driver.tu()).dump(driver.ast(), "test", oss);
+    ASTDotWriter(driver.tu()).write(driver.ast(), "test", oss);
 
     compareText(expected, oss.str());
 }

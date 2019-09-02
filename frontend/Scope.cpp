@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +35,7 @@ class SymbolTable
     void operator =(const SymbolTable &other);
 
 public:
-    typedef Symbol **iterator;
+    typedef Symbol* *iterator;
 
 public:
     /// Constructs an empty Scope.
@@ -53,7 +51,7 @@ public:
     void setOwner(Scope *owner); // ### remove me
 
     /// Adds a Symbol to this Scope.
-    void enterSymbol(Symbol *symbol);
+    void enterSymbol(Symbol* symbol);
 
     /// Returns true if this Scope is empty; otherwise returns false.
     bool isEmpty() const;
@@ -62,7 +60,7 @@ public:
     unsigned symbolCount() const;
 
     /// Returns the Symbol at the given position.
-    Symbol *symbolAt(unsigned index) const;
+    Symbol* symbolAt(unsigned index) const;
 
     /// Returns the first Symbol in the scope.
     iterator firstSymbol() const;
@@ -70,12 +68,12 @@ public:
     /// Returns the last Symbol in the scope.
     iterator lastSymbol() const;
 
-    Symbol *lookat(const Identifier *id) const;
-    Symbol *lookat(OperatorNameId::Kind operatorId) const;
+    Symbol* lookat(const Identifier* id) const;
+    Symbol* lookat(OperatorNameId::Kind operatorId) const;
 
 private:
     /// Returns the hash value for the given Symbol.
-    unsigned hashValue(Symbol *symbol) const;
+    unsigned hashValue(Symbol* symbol) const;
 
     /// Updates the hash table.
     void rehash();
@@ -84,8 +82,8 @@ private:
     enum { DefaultInitialSize = 4 };
 
     Scope *_owner;
-    Symbol **_symbols;
-    Symbol **_hash;
+    Symbol* *_symbols;
+    Symbol* *_hash;
     int _allocatedSymbols;
     int _symbolCount;
     int _hashSize;
@@ -108,15 +106,15 @@ SymbolTable::~SymbolTable()
         free(_hash);
 }
 
-void SymbolTable::enterSymbol(Symbol *symbol)
+void SymbolTable::enterSymbol(Symbol* symbol)
 {
     if (++_symbolCount == _allocatedSymbols) {
         _allocatedSymbols <<= 1;
         if (! _allocatedSymbols)
             _allocatedSymbols = DefaultInitialSize;
 
-        _symbols = reinterpret_cast<Symbol **>(realloc(_symbols, sizeof(Symbol *) * _allocatedSymbols));
-        memset(_symbols + _symbolCount, 0, sizeof(Symbol *) * (_allocatedSymbols - _symbolCount));
+        _symbols = reinterpret_cast<Symbol* *>(realloc(_symbols, sizeof(Symbol* ) * _allocatedSymbols));
+        memset(_symbols + _symbolCount, 0, sizeof(Symbol* ) * (_allocatedSymbols - _symbolCount));
     }
 
     symbol->_index = _symbolCount;
@@ -135,7 +133,7 @@ void SymbolTable::enterSymbol(Symbol *symbol)
 
 
 
-Symbol *SymbolTable::lookat(const Identifier *id) const
+Symbol* SymbolTable::lookat(const Identifier* id) const
 {
     auto check = [id] (auto otherId) {
         if (id == otherId)
@@ -147,12 +145,12 @@ Symbol *SymbolTable::lookat(const Identifier *id) const
         return 0;
 
     const unsigned h = id->hashCode() % _hashSize;
-    Symbol *symbol = _hash[h];
+    Symbol* symbol = _hash[h];
     for (; symbol; symbol = symbol->_next) {
-        const Name *identity = symbol->unqualifiedName();
+        const Name* identity = symbol->unqualifiedName();
         if (! identity) {
             continue;
-        } else if (const Identifier *nameId = identity->asNameId()) {
+        } else if (const Identifier* nameId = identity->asNameId()) {
             if (check(nameId->identifier()))
                     break;
         } else if (const TaggedNameId *elabName = identity->asTaggedNameId()) {
@@ -174,15 +172,15 @@ Symbol *SymbolTable::lookat(const Identifier *id) const
     return symbol;
 }
 
-Symbol *SymbolTable::lookat(OperatorNameId::Kind operatorId) const
+Symbol* SymbolTable::lookat(OperatorNameId::Kind operatorId) const
 {
     if (! _hash)
         return 0;
 
     const unsigned h = operatorId % _hashSize;
-    Symbol *symbol = _hash[h];
+    Symbol* symbol = _hash[h];
     for (; symbol; symbol = symbol->_next) {
-        if (const Name *identity = symbol->unqualifiedName()) {
+        if (const Name* identity = symbol->unqualifiedName()) {
             if (const OperatorNameId *op = identity->asOperatorNameId()) {
                 if (op->kind() == operatorId)
                     break;
@@ -199,18 +197,18 @@ void SymbolTable::rehash()
     if (! _hashSize)
         _hashSize = DefaultInitialSize;
 
-    _hash = reinterpret_cast<Symbol **>(realloc(_hash, sizeof(Symbol *) * _hashSize));
-    std::memset(_hash, 0, sizeof(Symbol *) * _hashSize);
+    _hash = reinterpret_cast<Symbol* *>(realloc(_hash, sizeof(Symbol* ) * _hashSize));
+    std::memset(_hash, 0, sizeof(Symbol* ) * _hashSize);
 
     for (int index = 0; index < _symbolCount + 1; ++index) {
-        Symbol *symbol = _symbols[index];
+        Symbol* symbol = _symbols[index];
         const unsigned h = hashValue(symbol);
         symbol->_next = _hash[h];
         _hash[h] = symbol;
     }
 }
 
-unsigned SymbolTable::hashValue(Symbol *symbol) const
+unsigned SymbolTable::hashValue(Symbol* symbol) const
 {
     if (! symbol)
         return 0;
@@ -224,7 +222,7 @@ bool SymbolTable::isEmpty() const
 unsigned SymbolTable::symbolCount() const
 { return _symbolCount + 1; }
 
-Symbol *SymbolTable::symbolAt(unsigned index) const
+Symbol* SymbolTable::symbolAt(unsigned index) const
 {
     if (! _symbols)
         return 0;
@@ -237,7 +235,7 @@ SymbolTable::iterator SymbolTable::firstSymbol() const
 SymbolTable::iterator SymbolTable::lastSymbol() const
 { return _symbols + _symbolCount + 1; }
 
-Scope::Scope(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+Scope::Scope(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : Symbol(translationUnit, sourceLocation, name),
       _members(0),
       _startOffset(0),
@@ -258,7 +256,7 @@ Scope::~Scope()
 { delete _members; }
 
 /// Adds a Symbol to this Scope.
-void Scope::addMember(Symbol *symbol)
+void Scope::addMember(Symbol* symbol)
 {
     if (! _members)
         _members = new SymbolTable(this);
@@ -275,7 +273,7 @@ unsigned Scope::memberCount() const
 { return _members ? _members->symbolCount() : 0; }
 
 /// Returns the Symbol at the given position.
-Symbol *Scope::memberAt(unsigned index) const
+Symbol* Scope::memberAt(unsigned index) const
 { return _members ? _members->symbolAt(index) : 0; }
 
 /// Returns the first Symbol in the scope.
@@ -286,10 +284,10 @@ Scope::iterator Scope::memberBegin() const
 Scope::iterator Scope::memberEnd() const
 { return _members ? _members->lastSymbol() : 0; }
 
-Symbol *Scope::find(const Identifier *id) const
+Symbol* Scope::find(const Identifier* id) const
 { return _members ? _members->lookat(id) : 0; }
 
-Symbol *Scope::find(OperatorNameId::Kind operatorId) const
+Symbol* Scope::find(OperatorNameId::Kind operatorId) const
 { return _members ? _members->lookat(operatorId) : 0; }
 
 /// Set the start offset of the scope

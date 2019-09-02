@@ -1,21 +1,5 @@
 // See notes regarding this file in Dumper.h
 
-virtual bool visit(ObjCSelectorArgumentAST *ast)
-{
-    if (ast->name_token)
-        terminal(ast->name_token, ast);
-    if (ast->colon_token)
-        terminal(ast->colon_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCSelectorAST *ast)
-{
-    for (ObjCSelectorArgumentListAST *iter = ast->selector_argument_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    return false;
-}
-
 virtual bool visit(SimpleSpecifierAST *ast)
 {
     if (ast->specifier_token)
@@ -112,12 +96,13 @@ virtual bool visit(DeclaratorAST *ast)
 
 virtual bool visit(SimpleDeclarationAST *ast)
 {
-    if (ast->qt_invokable_token)
-        terminal(ast->qt_invokable_token, ast);
     for (SpecifierListAST *iter = ast->decl_specifier_list; iter; iter = iter->next)
         nonterminal(iter->value);
-    for (DeclaratorListAST *iter = ast->declarator_list; iter; iter = iter->next)
+    for (DeclaratorListAST *iter = ast->declarator_list; iter; iter = iter->next) {
         nonterminal(iter->value);
+        if (iter->delim_token)
+            terminal(iter->delim_token, ast);
+    }
     if (ast->semicolon_token)
         terminal(ast->semicolon_token, ast);
     return false;
@@ -138,108 +123,6 @@ virtual bool visit(AccessDeclarationAST *ast)
         terminal(ast->slots_token, ast);
     if (ast->colon_token)
         terminal(ast->colon_token, ast);
-    return false;
-}
-
-virtual bool visit(QtObjectTagAST *ast)
-{
-    if (ast->q_object_token)
-        terminal(ast->q_object_token, ast);
-    return false;
-}
-
-virtual bool visit(QtPrivateSlotAST *ast)
-{
-    if (ast->q_private_slot_token)
-        terminal(ast->q_private_slot_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    if (ast->dptr_token)
-        terminal(ast->dptr_token, ast);
-    if (ast->dptr_lparen_token)
-        terminal(ast->dptr_lparen_token, ast);
-    if (ast->dptr_rparen_token)
-        terminal(ast->dptr_rparen_token, ast);
-    if (ast->comma_token)
-        terminal(ast->comma_token, ast);
-    for (SpecifierListAST *iter = ast->type_specifier_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    nonterminal(ast->declarator);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    return false;
-}
-
-virtual bool visit(QtPropertyDeclarationItemAST *ast)
-{
-    if (ast->item_name_token)
-        terminal(ast->item_name_token, ast);
-    nonterminal(ast->expression);
-    return false;
-}
-
-virtual bool visit(QtPropertyDeclarationAST *ast)
-{
-    if (ast->property_specifier_token)
-        terminal(ast->property_specifier_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    nonterminal(ast->expression);
-    if (ast->comma_token)
-        terminal(ast->comma_token, ast);
-    nonterminal(ast->type_id);
-    nonterminal(ast->property_name);
-    for (QtPropertyDeclarationItemListAST *iter = ast->property_declaration_item_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    return false;
-}
-
-virtual bool visit(QtEnumDeclarationAST *ast)
-{
-    if (ast->enum_specifier_token)
-        terminal(ast->enum_specifier_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    for (NameListAST *iter = ast->enumerator_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    return false;
-}
-
-virtual bool visit(QtFlagsDeclarationAST *ast)
-{
-    if (ast->flags_specifier_token)
-        terminal(ast->flags_specifier_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    for (NameListAST *iter = ast->flag_enums_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    return false;
-}
-
-virtual bool visit(QtInterfaceNameAST *ast)
-{
-    nonterminal(ast->interface_name);
-    for (NameListAST *iter = ast->constraint_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    return false;
-}
-
-virtual bool visit(QtInterfacesDeclarationAST *ast)
-{
-    if (ast->interfaces_token)
-        terminal(ast->interfaces_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    for (QtInterfaceNameListAST *iter = ast->interface_name_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
     return false;
 }
 
@@ -294,30 +177,6 @@ virtual bool visit(CompoundLiteralAST *ast)
     if (ast->rparen_token)
         terminal(ast->rparen_token, ast);
     nonterminal(ast->initializer);
-    return false;
-}
-
-virtual bool visit(QtMethodAST *ast)
-{
-    if (ast->method_token)
-        terminal(ast->method_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    nonterminal(ast->declarator);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    return false;
-}
-
-virtual bool visit(QtMemberDeclarationAST *ast)
-{
-    if (ast->q_token)
-        terminal(ast->q_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    nonterminal(ast->type_id);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
     return false;
 }
 
@@ -523,10 +382,20 @@ virtual bool visit(NamedTypeSpecifierAST *ast)
     return false;
 }
 
+virtual bool visit(QuantifiedTypeSpecifierAST* ast)
+{
+    if (ast->quantifier_token)
+        terminal(ast->quantifier_token, ast);
+    if (ast->lparen_token)
+        terminal(ast->lparen_token, ast);
+    nonterminal(ast->name);
+    if (ast->rparen_token)
+        terminal(ast->rparen_token, ast);
+    return false;
+}
+
 virtual bool visit(ElaboratedTypeSpecifierAST *ast)
 {
-    if (ast->classkey_token)
-        terminal(ast->classkey_token, ast);
     for (SpecifierListAST *iter = ast->attribute_list; iter; iter = iter->next)
         nonterminal(iter->value);
     nonterminal(ast->name);
@@ -619,8 +488,6 @@ virtual bool visit(ExpressionStatementAST *ast)
 
 virtual bool visit(FunctionDefinitionAST *ast)
 {
-    if (ast->qt_invokable_token)
-        terminal(ast->qt_invokable_token, ast);
     for (SpecifierListAST *iter = ast->decl_specifier_list; iter; iter = iter->next)
         nonterminal(iter->value);
     nonterminal(ast->declarator);
@@ -799,6 +666,14 @@ virtual bool visit(SimpleNameAST *ast)
     return false;
 }
 
+virtual bool visit(TaggedNameAST* ast)
+{
+    if (ast->tag_token)
+        terminal(ast->tag_token, ast);
+    nonterminal(ast->core_name);
+    return false;
+}
+
 virtual bool visit(DestructorNameAST *ast)
 {
     if (ast->tilde_token)
@@ -936,8 +811,11 @@ virtual bool visit(ParameterDeclarationAST *ast)
 
 virtual bool visit(ParameterDeclarationClauseAST *ast)
 {
-    for (ParameterDeclarationListAST *iter = ast->parameter_declaration_list; iter; iter = iter->next)
+    for (ParameterDeclarationListAST *iter = ast->parameter_declaration_list; iter; iter = iter->next) {
         nonterminal(iter->value);
+        if (iter->delim_token)
+            terminal(iter->delim_token, ast);
+    }
     if (ast->dot_dot_dot_token)
         terminal(ast->dot_dot_dot_token, ast);
     return false;
@@ -948,8 +826,11 @@ virtual bool visit(CallAST *ast)
     nonterminal(ast->base_expression);
     if (ast->lparen_token)
         terminal(ast->lparen_token, ast);
-    for (ExpressionListAST *iter = ast->expression_list; iter; iter = iter->next)
+    for (ExpressionListAST *iter = ast->expression_list; iter; iter = iter->next) {
         nonterminal(iter->value);
+        if (iter->delim_token)
+            terminal(iter->delim_token, ast);
+    }
     if (ast->rparen_token)
         terminal(ast->rparen_token, ast);
     return false;
@@ -1329,290 +1210,6 @@ virtual bool visit(WhileStatementAST *ast)
     if (ast->lparen_token)
         terminal(ast->lparen_token, ast);
     nonterminal(ast->condition);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    nonterminal(ast->statement);
-    return false;
-}
-
-virtual bool visit(ObjCClassForwardDeclarationAST *ast)
-{
-    for (SpecifierListAST *iter = ast->attribute_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->class_token)
-        terminal(ast->class_token, ast);
-    for (NameListAST *iter = ast->identifier_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->semicolon_token)
-        terminal(ast->semicolon_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCClassDeclarationAST *ast)
-{
-    for (SpecifierListAST *iter = ast->attribute_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->interface_token)
-        terminal(ast->interface_token, ast);
-    if (ast->implementation_token)
-        terminal(ast->implementation_token, ast);
-    nonterminal(ast->class_name);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    nonterminal(ast->category_name);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    if (ast->colon_token)
-        terminal(ast->colon_token, ast);
-    nonterminal(ast->superclass);
-    nonterminal(ast->protocol_refs);
-    nonterminal(ast->inst_vars_decl);
-    for (DeclarationListAST *iter = ast->member_declaration_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->end_token)
-        terminal(ast->end_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCProtocolForwardDeclarationAST *ast)
-{
-    for (SpecifierListAST *iter = ast->attribute_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->protocol_token)
-        terminal(ast->protocol_token, ast);
-    for (NameListAST *iter = ast->identifier_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->semicolon_token)
-        terminal(ast->semicolon_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCProtocolDeclarationAST *ast)
-{
-    for (SpecifierListAST *iter = ast->attribute_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->protocol_token)
-        terminal(ast->protocol_token, ast);
-    nonterminal(ast->name);
-    nonterminal(ast->protocol_refs);
-    for (DeclarationListAST *iter = ast->member_declaration_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->end_token)
-        terminal(ast->end_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCProtocolRefsAST *ast)
-{
-    if (ast->less_token)
-        terminal(ast->less_token, ast);
-    for (NameListAST *iter = ast->identifier_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->greater_token)
-        terminal(ast->greater_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCMessageArgumentAST *ast)
-{
-    nonterminal(ast->parameter_value_expression);
-    return false;
-}
-
-virtual bool visit(ObjCMessageExpressionAST *ast)
-{
-    if (ast->lbracket_token)
-        terminal(ast->lbracket_token, ast);
-    nonterminal(ast->receiver_expression);
-    nonterminal(ast->selector);
-    for (ObjCMessageArgumentListAST *iter = ast->argument_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->rbracket_token)
-        terminal(ast->rbracket_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCProtocolExpressionAST *ast)
-{
-    if (ast->protocol_token)
-        terminal(ast->protocol_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    if (ast->identifier_token)
-        terminal(ast->identifier_token, ast);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCTypeNameAST *ast)
-{
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    if (ast->type_qualifier_token)
-        terminal(ast->type_qualifier_token, ast);
-    nonterminal(ast->type_id);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCEncodeExpressionAST *ast)
-{
-    if (ast->encode_token)
-        terminal(ast->encode_token, ast);
-    nonterminal(ast->type_name);
-    return false;
-}
-
-virtual bool visit(ObjCSelectorExpressionAST *ast)
-{
-    if (ast->selector_token)
-        terminal(ast->selector_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    nonterminal(ast->selector);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCInstanceVariablesDeclarationAST *ast)
-{
-    if (ast->lbrace_token)
-        terminal(ast->lbrace_token, ast);
-    for (DeclarationListAST *iter = ast->instance_variable_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->rbrace_token)
-        terminal(ast->rbrace_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCVisibilityDeclarationAST *ast)
-{
-    if (ast->visibility_token)
-        terminal(ast->visibility_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCPropertyAttributeAST *ast)
-{
-    if (ast->attribute_identifier_token)
-        terminal(ast->attribute_identifier_token, ast);
-    if (ast->equals_token)
-        terminal(ast->equals_token, ast);
-    nonterminal(ast->method_selector);
-    return false;
-}
-
-virtual bool visit(ObjCPropertyDeclarationAST *ast)
-{
-    for (SpecifierListAST *iter = ast->attribute_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->property_token)
-        terminal(ast->property_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    for (ObjCPropertyAttributeListAST *iter = ast->property_attribute_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    nonterminal(ast->simple_declaration);
-    return false;
-}
-
-virtual bool visit(ObjCMessageArgumentDeclarationAST *ast)
-{
-    nonterminal(ast->type_name);
-    for (SpecifierListAST *iter = ast->attribute_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    nonterminal(ast->param_name);
-    return false;
-}
-
-virtual bool visit(ObjCMethodPrototypeAST *ast)
-{
-    if (ast->method_type_token)
-        terminal(ast->method_type_token, ast);
-    nonterminal(ast->type_name);
-    nonterminal(ast->selector);
-    for (ObjCMessageArgumentDeclarationListAST *iter = ast->argument_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->dot_dot_dot_token)
-        terminal(ast->dot_dot_dot_token, ast);
-    for (SpecifierListAST *iter = ast->attribute_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    return false;
-}
-
-virtual bool visit(ObjCMethodDeclarationAST *ast)
-{
-    nonterminal(ast->method_prototype);
-    nonterminal(ast->function_body);
-    if (ast->semicolon_token)
-        terminal(ast->semicolon_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCSynthesizedPropertyAST *ast)
-{
-    if (ast->property_identifier_token)
-        terminal(ast->property_identifier_token, ast);
-    if (ast->equals_token)
-        terminal(ast->equals_token, ast);
-    if (ast->alias_identifier_token)
-        terminal(ast->alias_identifier_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCSynthesizedPropertiesDeclarationAST *ast)
-{
-    if (ast->synthesized_token)
-        terminal(ast->synthesized_token, ast);
-    for (ObjCSynthesizedPropertyListAST *iter = ast->property_identifier_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->semicolon_token)
-        terminal(ast->semicolon_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCDynamicPropertiesDeclarationAST *ast)
-{
-    if (ast->dynamic_token)
-        terminal(ast->dynamic_token, ast);
-    for (NameListAST *iter = ast->property_identifier_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    if (ast->semicolon_token)
-        terminal(ast->semicolon_token, ast);
-    return false;
-}
-
-virtual bool visit(ObjCFastEnumerationAST *ast)
-{
-    if (ast->for_token)
-        terminal(ast->for_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    for (SpecifierListAST *iter = ast->type_specifier_list; iter; iter = iter->next)
-        nonterminal(iter->value);
-    nonterminal(ast->declarator);
-    nonterminal(ast->initializer);
-    if (ast->in_token)
-        terminal(ast->in_token, ast);
-    nonterminal(ast->fast_enumeratable_expression);
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-    nonterminal(ast->statement);
-    return false;
-}
-
-virtual bool visit(ObjCSynchronizedStatementAST *ast)
-{
-    if (ast->synchronized_token)
-        terminal(ast->synchronized_token, ast);
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    nonterminal(ast->synchronized_object);
     if (ast->rparen_token)
         terminal(ast->rparen_token, ast);
     nonterminal(ast->statement);

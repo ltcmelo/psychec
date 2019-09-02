@@ -38,17 +38,17 @@ void BasicStubber::apply(TranslationUnitAST* ast)
     if (!ast)
         return;
 
-    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
+    for (DeclarationListAST* it = ast->declaration_list; it; it = it->next)
         accept(it->value);
 }
 
-bool BasicStubber::visit(SimpleDeclarationAST *ast)
+bool BasicStubber::visit(SimpleDeclarationAST* ast)
 {
     if (!ast->declarator_list)
         return false;
 
     for (const List<Symbol*> *symIt = ast->symbols; symIt; symIt = symIt->next) {
-        Symbol *decl = symIt->value;
+        Symbol* decl = symIt->value;
         if (decl->asDeclaration()
                 && decl->asDeclaration()->type()
                 && decl->asDeclaration()->type()->asFunctionType()) {
@@ -75,13 +75,13 @@ void BasicStubber::create(Function* func)
         return;
     }
 
-    TypeSpeller<CSyntax> speller;
+    TypePP<CSyntax> typePP;
     bool isPtr = func->returnType()->isPointerType();
     if (isPtr) {
         text.append("    static ");
-        text.append(speller.spell(func->returnType()->asPointerType()->elementType(), nullptr));
+        text.append(typePP.print(func->returnType()->asPointerType()->elementType(), nullptr));
     } else {
-        text.append("    " + speller.spell(func->returnType(), nullptr));
+        text.append("    " + typePP.print(func->returnType(), nullptr));
     }
     const std::string& var = "fake" + std::to_string(cnt);
     text.append(" " + var + ";\n    return ");

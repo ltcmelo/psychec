@@ -33,19 +33,14 @@
 
 /////////////////////////////////////////////////////////////////////
 /////              Note about copyright/licesing                /////
-/////                                                           /////
-///// Psyche reuses parts of the C++ parser of the Qt Creator   /////
-///// IDE, as explained in 3rdParty.txt. Those sources that we  /////
-///// have taken are copyrighed by Roberto Raggi and licensed   /////
-///// under BSD (they live in Qt Creator's own 3rd party dir).  /////
-///// The only exception to this rule is this AST dumper, which /////
-///// is/was copyrighted by NOKIA/Digia/QtCompany and licensed  /////
-///// under LGPL (applicable for open-source projects). Still,  /////
-///// I have modified it to make it Qt-agnostic.                /////
-/////                                                           /////
+///// Except for this file, which is copyrighed by NOKIA/Digia/ /////
+///// Qt Company and licensed under LGPL, all of PsycheC front- /////
+///// end is licensed under BSD. This version has been modified /////
+///// by Leandro T. C. Melo.                                    /////
 /////////////////////////////////////////////////////////////////////
 
-#include "ASTDumper.h"
+#include "ASTDotWriter.h"
+
 #include "ASTMatcher.h"
 #include "ASTPatternBuilder.h"
 #include "ASTVisitor.h"
@@ -63,16 +58,16 @@
 
 using namespace psyche;
 
-void ASTDumper::dump(AST *ast, const std::string& fileSuffix)
+void ASTDotWriter::write(AST *ast, const std::string& fileSuffix)
 {
     std::string basename = translationUnit()->fileName();
     basename.append(fileSuffix);
     std::ofstream ofs(basename);
-    dump(ast, fileSuffix, ofs);
+    write(ast, fileSuffix, ofs);
     ofs.close();
 }
 
-void ASTDumper::dump(AST *ast, const std::string &fileSuffix, std::ostream &os)
+void ASTDotWriter::write(AST *ast, const std::string &fileSuffix, std::ostream &os)
 {
     os_ = &os;
     count_ = 1;
@@ -91,7 +86,7 @@ void ASTDumper::dump(AST *ast, const std::string &fileSuffix, std::ostream &os)
     *os_ << "}" << std::endl;
 }
 
-void ASTDumper::alignTerminals()
+void ASTDotWriter::alignTerminals()
 {
     *os_ <<"{ rank=same;" << std::endl;
     for (const auto& terminalShape : terminalShapes_)
@@ -99,7 +94,7 @@ void ASTDumper::alignTerminals()
     *os_ <<"}"<<std::endl;
 }
 
-std::string ASTDumper::name(AST *ast) {
+std::string ASTDotWriter::name(AST *ast) {
 #ifdef __GNUC__
     std::string name = abi::__cxa_demangle(typeid(*ast).name(), 0, 0, 0) + 8;
 #else
@@ -108,17 +103,17 @@ std::string ASTDumper::name(AST *ast) {
     return name;
 }
 
-std::string ASTDumper::terminalId(unsigned token)
+std::string ASTDotWriter::terminalId(unsigned token)
 {
     return 't' + std::to_string(token);
 }
 
-void ASTDumper::terminal(unsigned token, AST *node)
+void ASTDotWriter::terminal(unsigned token, AST *node)
 {
     connections_.push_back(std::make_pair(id_[node], terminalId(token)));
 }
 
-void ASTDumper::generateTokens() {
+void ASTDotWriter::generateTokens() {
     for (unsigned token = 1; token < translationUnit()->tokenCount(); ++token) {
         if (translationUnit()->tokenKind(token) == T_EOF_SYMBOL)
             break;
@@ -141,17 +136,12 @@ void ASTDumper::generateTokens() {
     }
 }
 
-void ASTDumper::nonterminal(AST *ast)
-{
-    accept(ast);
-}
-
-void ASTDumper::node(AST *ast)
+void ASTDotWriter::node(AST *ast)
 {
     *os_ << id_[ast] << " [label=\"" << name(ast) << "\"];" << std::endl;
 }
 
-bool ASTDumper::preVisit(AST *ast)
+bool ASTDotWriter::preVisit(AST *ast)
 {
     const std::string id = 'n' + std::to_string(count_++);
     id_[ast] = id;
@@ -166,7 +156,8 @@ bool ASTDumper::preVisit(AST *ast)
     return true;
 }
 
-void ASTDumper::postVisit(AST *)
+void ASTDotWriter::postVisit(AST *)
 {
     nodes_.pop();
 }
+

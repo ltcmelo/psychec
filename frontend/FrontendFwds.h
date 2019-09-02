@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,8 +19,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_FWDS_H__
-#define CFE_FWDS_H__
+#ifndef PSYCHE_FWDS_H__
+#define PSYCHE_FWDS_H__
 
 namespace psyche {
 
@@ -64,6 +62,7 @@ class PointerType;
 class ReferenceType;
 class ArrayType;
 class NamedType;
+class QuantifiedType;
 
 // symbols
 class Clone;
@@ -91,21 +90,6 @@ class EnumeratorDeclaration;
 class ForwardClassDeclaration;
 
 class Token;
-
-// Qt symbols
-class QtPropertyDeclaration;
-class QtEnum;
-
-// Objective-C symbols
-class ObjCBaseClass;
-class ObjCBaseProtocol;
-class ObjCClass;
-class ObjCForwardClassDeclaration;
-class ObjCProtocol;
-class ObjCForwardProtocolDeclaration;
-class ObjCMethod;
-class ObjCPropertyDeclaration;
-
 } // namespace psyche
 
 #endif

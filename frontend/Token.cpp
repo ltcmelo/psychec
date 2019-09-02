@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -64,24 +65,12 @@ const char *token_names[] = {
     // gnu
     ("__attribute__"), ("__thread"), ("__typeof__"),
 
-    // objc @keywords
-    ("@catch"), ("@class"), ("@compatibility_alias"), ("@defs"), ("@dynamic"),
-    ("@encode"), ("@end"), ("@finally"), ("@implementation"), ("@interface"),
-    ("@not_keyword"), ("@optional"), ("@package"), ("@private"), ("@property"),
-    ("@protected"), ("@protocol"), ("@public"), ("@required"), ("@selector"),
-    ("@synchronized"), ("@synthesize"), ("@throw"), ("@try"),
-
     // Primitive types
     ("bool"), ("char"), ("char16_t"), ("char32_t"), ("double"), ("float"), ("int"),
     ("long"), ("short"), ("signed"), ("unsigned"), ("void"), ("wchar_t"),
 
-    // Qt keywords
-    ("emit"), ("SIGNAL"), ("SLOT"), ("Q_SIGNAL"), ("Q_SLOT"), ("signals"), ("slots"),
-    ("Q_FOREACH"), ("Q_D"), ("Q_Q"),
-    ("Q_INVOKABLE"), ("Q_PROPERTY"), ("T_Q_PRIVATE_PROPERTY"),
-    ("Q_INTERFACES"), ("Q_EMIT"), ("Q_ENUMS"), ("Q_FLAGS"),
-    ("Q_PRIVATE_SLOT"), ("Q_DECLARE_INTERFACE"), ("Q_OBJECT"), ("Q_GADGET"),
-
+    // Generics
+    ("_Generic"), ("_Forall"), ("_Exists")
 };
 
 void Token::reset()

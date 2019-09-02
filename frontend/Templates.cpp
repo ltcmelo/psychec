@@ -86,7 +86,7 @@ void CloneType::visit(PointerType *type)
 
 void CloneType::visit(ReferenceType *type)
 {
-    _type.setType(_control->referenceType(_clone->type(type->elementType(), _subst), type->isRvalueReference()));
+    _type.setType(_control->referenceType(_clone->type(type->elementType(), _subst)));
 }
 
 void CloneType::visit(ArrayType *type)
@@ -96,7 +96,7 @@ void CloneType::visit(ArrayType *type)
 
 void CloneType::visit(NamedType *type)
 {
-    const Name *name = _clone->name(type->name(), _subst);
+    const Name* name = _clone->name(type->name(), _subst);
     FullySpecifiedType ty;
     if (_subst)
         ty = _clone->type(_subst->apply(name), 0);
@@ -141,36 +141,6 @@ void CloneType::visit(ForwardClassDeclaration *type)
     _type = fwd;
 }
 
-void CloneType::visit(ObjCClass *type)
-{
-    ObjCClass *klass = _clone->symbol(type, _subst)->asObjCClass();
-    _type = klass;
-}
-
-void CloneType::visit(ObjCProtocol *type)
-{
-    ObjCProtocol *proto = _clone->symbol(type, _subst)->asObjCProtocol();
-    _type = proto;
-}
-
-void CloneType::visit(ObjCMethod *type)
-{
-    ObjCMethod *meth = _clone->symbol(type, _subst)->asObjCMethod();
-    _type = meth;
-}
-
-void CloneType::visit(ObjCForwardClassDeclaration *type)
-{
-    ObjCForwardClassDeclaration *fwd = _clone->symbol(type, _subst)->asObjCForwardClassDeclaration();
-    _type = fwd;
-}
-
-void CloneType::visit(ObjCForwardProtocolDeclaration *type)
-{
-    ObjCForwardProtocolDeclaration *fwd = _clone->symbol(type, _subst)->asObjCForwardProtocolDeclaration();
-    _type = fwd;
-}
-
 CloneSymbol::CloneSymbol(Clone *clone)
     : _clone(clone)
     , _control(clone->control())
@@ -179,7 +149,7 @@ CloneSymbol::CloneSymbol(Clone *clone)
 {
 }
 
-Symbol *CloneSymbol::cloneSymbol(Symbol *symbol, Subst *subst)
+Symbol* CloneSymbol::cloneSymbol(Symbol* symbol, Subst *subst)
 {
     if (! symbol)
         return 0;
@@ -191,7 +161,7 @@ Symbol *CloneSymbol::cloneSymbol(Symbol *symbol, Subst *subst)
             return it->second;
     }
 
-    Symbol *r = 0;
+    Symbol* r = 0;
     std::swap(_subst, subst);
     std::swap(_symbol, r);
     accept(symbol);
@@ -314,86 +284,6 @@ bool CloneSymbol::visit(ForwardClassDeclaration *symbol)
     return false;
 }
 
-bool CloneSymbol::visit(QtPropertyDeclaration *symbol)
-{
-    QtPropertyDeclaration *decl = new QtPropertyDeclaration(_clone, _subst, symbol);
-    _symbol = decl;
-    _control->addSymbol(decl);
-    return false;
-}
-
-bool CloneSymbol::visit(QtEnum *symbol)
-{
-    QtEnum *e = new QtEnum(_clone, _subst, symbol);
-    _symbol = e;
-    _control->addSymbol(e);
-    return false;
-}
-
-bool CloneSymbol::visit(ObjCBaseClass *symbol)
-{
-    ObjCBaseClass *bc = new ObjCBaseClass(_clone, _subst, symbol);
-    _symbol = bc;
-    _control->addSymbol(bc);
-    return false;
-}
-
-bool CloneSymbol::visit(ObjCBaseProtocol *symbol)
-{
-    ObjCBaseProtocol *bc = new ObjCBaseProtocol(_clone, _subst, symbol);
-    _symbol = bc;
-    _control->addSymbol(bc);
-    return false;
-}
-
-bool CloneSymbol::visit(ObjCClass *symbol)
-{
-    ObjCClass *klass = new ObjCClass(_clone, _subst, symbol);
-    _symbol = klass;
-    _control->addSymbol(klass);
-    return false;
-}
-
-bool CloneSymbol::visit(ObjCForwardClassDeclaration *symbol)
-{
-    ObjCForwardClassDeclaration *fwd = new ObjCForwardClassDeclaration(_clone, _subst, symbol);
-    _symbol = fwd;
-    _control->addSymbol(fwd);
-    return false;
-}
-
-bool CloneSymbol::visit(ObjCProtocol *symbol)
-{
-    ObjCProtocol *proto = new ObjCProtocol(_clone, _subst, symbol);
-    _symbol = proto;
-    _control->addSymbol(proto);
-    return false;
-}
-
-bool CloneSymbol::visit(ObjCForwardProtocolDeclaration *symbol)
-{
-    ObjCForwardProtocolDeclaration *fwd = new ObjCForwardProtocolDeclaration(_clone, _subst, symbol);
-    _symbol = fwd;
-    _control->addSymbol(fwd);
-    return false;
-}
-
-bool CloneSymbol::visit(ObjCMethod *symbol)
-{
-    ObjCMethod *meth = new ObjCMethod(_clone, _subst, symbol);
-    _symbol = meth;
-    _control->addSymbol(meth);
-    return false;
-}
-
-bool CloneSymbol::visit(ObjCPropertyDeclaration *symbol)
-{
-    ObjCPropertyDeclaration *decl = new ObjCPropertyDeclaration(_clone, _subst, symbol);
-    _symbol = decl;
-    _control->addSymbol(decl);
-    return false;
-}
-
 CloneName::CloneName(Clone *clone)
     : _clone(clone)
     , _control(clone->control())
@@ -402,7 +292,7 @@ CloneName::CloneName(Clone *clone)
 {
 }
 
-const Name *CloneName::cloneName(const Name *name, Subst *subst)
+const Name* CloneName::cloneName(const Name* name, Subst *subst)
 {
     if (! name)
         return 0;
@@ -412,7 +302,7 @@ const Name *CloneName::cloneName(const Name *name, Subst *subst)
     if (it != _cache.end())
         return it->second;
 
-    const Name *r = 0;
+    const Name* r = 0;
     std::swap(_subst, subst);
     std::swap(_name, r);
     accept(name);
@@ -422,7 +312,7 @@ const Name *CloneName::cloneName(const Name *name, Subst *subst)
     return r;
 }
 
-void CloneName::visit(const Identifier *name)
+void CloneName::visit(const Identifier* name)
 {
     _name = _control->identifier(name->chars(), name->size());
 }
@@ -467,7 +357,7 @@ void CloneName::visit(const QualifiedNameId *name)
 
 void CloneName::visit(const SelectorNameId *name)
 {
-    std::vector<const Name *> names(name->nameCount());
+    std::vector<const Name* > names(name->nameCount());
     for (unsigned i = 0; i < names.size(); ++i)
         names[i] = _clone->name(name->nameAt(i), _subst);
     _name = _control->selectorNameId(&names[0], unsigned(names.size()), name->hasArguments());
@@ -482,17 +372,17 @@ Clone::Clone(Control *control)
 {
 }
 
-const StringLiteral *Clone::stringLiteral(const StringLiteral *literal)
+const StringLiteral* Clone::stringLiteral(const StringLiteral* literal)
 {
     return literal ? _control->stringLiteral(literal->chars(), literal->size()) : 0;
 }
 
-const NumericLiteral *Clone::numericLiteral(const NumericLiteral *literal)
+const NumericLiteral* Clone::numericLiteral(const NumericLiteral* literal)
 {
     return literal ? _control->numericLiteral(literal->chars(), literal->size()) : 0;
 }
 
-const Identifier *Clone::identifier(const Identifier *id)
+const Identifier* Clone::identifier(const Identifier* id)
 {
     return id ? _control->identifier(id->chars(), id->size()) : 0;
 }
@@ -502,32 +392,32 @@ FullySpecifiedType Clone::type(const FullySpecifiedType &type, Subst *subst)
     return _type(type, subst);
 }
 
-const Name *Clone::name(const Name *name, Subst *subst)
+const Name* Clone::name(const Name* name, Subst *subst)
 {
     return _name(name, subst);
 }
 
-Symbol *Clone::symbol(Symbol *symbol, Subst *subst)
+Symbol* Clone::symbol(Symbol* symbol, Subst *subst)
 {
     return _symbol(symbol, subst);
 }
 
-Symbol *Clone::instantiate(Template *templ, const FullySpecifiedType *const args, unsigned argc, Subst *s)
+Symbol* Clone::instantiate(Template *templ, const FullySpecifiedType *const args, unsigned argc, Subst *s)
 {
     Subst subst(_control, s);
     for (unsigned i = 0, e = std::min(templ->templateParameterCount(), argc); i < e; ++i) {
-        Symbol *formal = templ->templateParameterAt(i);
+        Symbol* formal = templ->templateParameterAt(i);
         FullySpecifiedType actual = args[i];
         subst.bind(name(formal->name(), 0), actual);
     }
     if (argc < templ->templateParameterCount()) {
         for (unsigned i = argc; i < templ->templateParameterCount(); ++i) {
-            Symbol *formal = templ->templateParameterAt(i);
+            Symbol* formal = templ->templateParameterAt(i);
             if (TypenameArgument *tn = formal->asTypenameArgument())
                 subst.bind(name(formal->name(), &subst), type(tn->type(), &subst));
         }
     }
-    if (Symbol *inst = symbol(templ->declaration(), &subst)) {
+    if (Symbol* inst = symbol(templ->declaration(), &subst)) {
         inst->setEnclosingScope(templ->enclosingScope());
         return inst;
     }
@@ -539,7 +429,7 @@ Symbol *Clone::instantiate(Template *templ, const FullySpecifiedType *const args
 //
 
 
-FullySpecifiedType Subst::apply(const Name *name) const
+FullySpecifiedType Subst::apply(const Name* name) const
 {
     if (name) {
         auto it = _map.find(name);
@@ -553,8 +443,8 @@ FullySpecifiedType Subst::apply(const Name *name) const
             const NamedType *unqualified = apply(q->name())->asNamedType();
             if (baseNamedType) {
                 if (! unqualified) {
-                    const Name *qualifiedBase = baseNamedType->name();
-                    const Name *qualifiedName = q->name();
+                    const Name* qualifiedBase = baseNamedType->name();
+                    const Name* qualifiedName = q->name();
                     return control()->namedType(control()->qualifiedNameId(qualifiedBase,
                                                                            qualifiedName));
                 }

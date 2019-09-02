@@ -18,10 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_MEMORYPOOL_H
-#define CFE_MEMORYPOOL_H
+#ifndef PSYCHE_MEMORY_POOL_H__
+#define PSYCHE_MEMORY_POOL_H__
 
 #include "FrontendConfig.h"
+
 #include <cstddef>
 #include <new>
 
@@ -84,4 +85,4 @@ public:
 
 } // namespace psyche
 
-#endif // CFE_MEMORYPOOL_H
+#endif

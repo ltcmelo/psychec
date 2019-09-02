@@ -1,0 +1,113 @@
+#!/usr/bin/env python
+
+# -----------------------------------------------------------------------------
+# Copyright (c) 2017 Leandro T. C. Melo (LTCMELO@GMAIL.COM)
+#
+# All rights reserved. Unauthorized copying of this file, through any
+# medium, is strictly prohibited.
+#
+# This software is provided on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+# CONDITIONS OF ANY KIND, explicit or implicit. In no event shall the
+# author be liable for any claim or damages.
+# -----------------------------------------------------------------------------
+
+
+import argparse
+import os
+import sys
+from Driver import *
+from Environment import *
+from Version import *
+
+
+def _parse_input():
+    """ Parse input, identify options, host compiler and its command """
+
+    parser = argparse.ArgumentParser(
+        add_help=False,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description='\tcnippet - the compiler for C snippets\n',
+        epilog='examples:\n'
+               '  $cnip gcc file.c\n'
+               '  $cnip gcc file.c -o exe\n'
+               '  $cnip clang -c file.c\n')
+
+    version_str = '%s' % Version()
+    copyright_str = 'Copyright 2017 Leandro T. C. Melo'
+
+    parser.add_argument('-v', '--version',
+                        action='version',
+                        version='%(prog)s ' + version_str + '\n' + copyright_str,
+                        help="Show program's version number and exit.")
+
+    parser.add_argument('-h', '--help',
+                        action='help',
+                        default=argparse.SUPPRESS,
+                        help='Show this help message and exit.')
+
+    parser.add_argument('--no-heuristic',
+                        action='store_true',
+                        help='Disable heuristics on unresolved syntax ambiguities.')
+
+    parser.add_argument('--no-typedef',
+                        action='store_true',
+                        help='Forbid typedef and struct/union declarations.')
+
+    parser.add_argument('--no-stdlib',
+                        action='store_true',
+                        help="Don't attempt to match stdlib names.")
+
+    parser.add_argument('-f', '--non-commercial-use',
+                        action='store_true',
+                        help="Specify non-commercial use of cnippet.")
+
+    parser.add_argument('-t', '--trace',
+                        action='append',
+                        help='Enable (component) tracing.')
+
+    parser.add_argument('--trace-level',
+                        choices=['info', 'detail'],
+                        default='info',
+                        help='Tracing level.')
+
+    parser.add_argument('CC',
+                        help='Host C compiler.')
+
+    parser.add_argument('command',
+                        nargs=argparse.REMAINDER,
+                        help='Command forwarded to the host C compiler.')
+
+    # Hidden arguments.
+    parser.add_argument('-d', '--dev',
+                        action='store_true',
+                        help=argparse.SUPPRESS)
+
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+
+    args = _parse_input()
+    cnip_opt = dict(no_stdlib=args.no_stdlib,
+                    no_typedef=args.no_typedef,
+                    no_heuristic=args.no_heuristic,
+                    traces=args.trace,
+                    trace_level=args.trace_level,
+                    host_cc=args.CC,
+                    host_cc_cmd=args.command,
+                    dev_mode=args.dev)
+
+    TraceManager().configure(cnip_opt['traces'], cnip_opt['trace_level'])
+
+    env = EnvironmentController(os.path.expanduser('~'))
+    env.check_all(args.non_commercial_use)
+
+    if args.dev:
+        run_dir = os.path.dirname(os.path.realpath(__file__))
+        os.environ['LD_LIBRARY_PATH'] = run_dir + '/../Plugin'
+        os.environ['PATH'] += os.pathsep + run_dir + '/../External/PsycheC'
+
+    # Let' go!
+    driver = Driver(cnip_opt)
+    code = driver.execute()
+    sys.exit(code)

@@ -2,12 +2,30 @@ cmake_minimum_required(VERSION 2.8)
 
 project(psychec)
 
-# Loading and rpath setup.
+# Directory setup.
+set(PSYCHE_DIR ${PROJECT_SOURCE_DIR})
+set(SOLVER_DIR ${PROJECT_SOURCE_DIR}/solver)
+
+# Loading and rpath.
 set(CMAKE_MACOSX_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH "\$ORIGIN;@executable_path;@loader_path")
 
-# Build frontend's library.
+# Build the frontend.
 add_subdirectory(frontend)
+
+# Build the stdlib plugin.
+add_subdirectory(stdlib-support)
+
+# Build the solver.
+execute_process(COMMAND
+                stack install --local-bin-path ${PSYCHE_DIR}
+                WORKING_DIRECTORY ${SOLVER_DIR}
+		RESULT_VARIABLE SOLVER_RV
+		OUTPUT_VARIABLE SOLVER_OV
+		ERROR_VARIABLE  SOLVER_EV
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+		ERROR_STRIP_TRAILING_WHITESPACE)
+message("-- Solver build: ${SOLVER_RV} ${SOLVER_OV} ${SOLVER_EV}")
 
 set(PSYCHEC_CXX_FLAGS)
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -std=c++1y -g")
@@ -16,7 +34,8 @@ set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
 set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/Main.cpp
-    # Generator's file
+
+    # Constraint generator
     ${PROJECT_SOURCE_DIR}/generator/Assert.h
     ${PROJECT_SOURCE_DIR}/generator/BuiltinNames.h
     ${PROJECT_SOURCE_DIR}/generator/ConstraintGenerator.h
@@ -39,12 +58,37 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/Plugin.cpp
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
-    # Analysis files
-    ${PROJECT_SOURCE_DIR}/static-analysis/Range.h
-    ${PROJECT_SOURCE_DIR}/static-analysis/Range.cpp
-    ${PROJECT_SOURCE_DIR}/static-analysis/RangeAnalysis.h
-    ${PROJECT_SOURCE_DIR}/static-analysis/RangeAnalysis.cpp
-    # Tools' files
+
+    # Data structures
+    ${PROJECT_SOURCE_DIR}/data-structures/Substitution.h
+    ${PROJECT_SOURCE_DIR}/data-structures/Substitution.cpp
+    ${PROJECT_SOURCE_DIR}/data-structures/VersionedMap.h
+
+    # Generics
+    ${PROJECT_SOURCE_DIR}/generics/GenericsInstantiatior.h
+    ${PROJECT_SOURCE_DIR}/generics/GenericsInstantiatior.cpp
+
+    # Plugin API files
+    ${PROJECT_SOURCE_DIR}/plugin-api/PluginConfig.h
+    ${PROJECT_SOURCE_DIR}/plugin-api/DeclarationInterceptor.h
+    ${PROJECT_SOURCE_DIR}/plugin-api/SourceInspector.h
+    ${PROJECT_SOURCE_DIR}/plugin-api/VisitorObserver.h
+
+    # Range analysis
+    ${PROJECT_SOURCE_DIR}/range-analysis/Range.h
+    ${PROJECT_SOURCE_DIR}/range-analysis/Range.cpp
+    ${PROJECT_SOURCE_DIR}/range-analysis/RangeAnalysis.h
+    ${PROJECT_SOURCE_DIR}/range-analysis/RangeAnalysis.cpp
+
+    # Tests
+    ${PROJECT_SOURCE_DIR}/testing/BaseTester.h
+    ${PROJECT_SOURCE_DIR}/testing/BaseTester.cpp
+    ${PROJECT_SOURCE_DIR}/testing/TestDisambiguator.h
+    ${PROJECT_SOURCE_DIR}/testing/TestDisambiguator.cpp
+    ${PROJECT_SOURCE_DIR}/testing/TestParser.h
+    ${PROJECT_SOURCE_DIR}/testing/TestParser.cpp
+
+    # Tools
     ${PROJECT_SOURCE_DIR}/tools/BasicStubber.h
     ${PROJECT_SOURCE_DIR}/tools/BasicStubber.cpp
     ${PROJECT_SOURCE_DIR}/tools/CompilerFacade.h
@@ -53,18 +97,7 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/tools/FunctionWriter.cpp
     ${PROJECT_SOURCE_DIR}/tools/ProgramValidator.h
     ${PROJECT_SOURCE_DIR}/tools/ProgramValidator.cpp
-    # Testing files
-    ${PROJECT_SOURCE_DIR}/testing/BaseTester.h
-    ${PROJECT_SOURCE_DIR}/testing/BaseTester.cpp
-    ${PROJECT_SOURCE_DIR}/testing/TestDisambiguator.h
-    ${PROJECT_SOURCE_DIR}/testing/TestDisambiguator.cpp
-    ${PROJECT_SOURCE_DIR}/testing/TestParser.h
-    ${PROJECT_SOURCE_DIR}/testing/TestParser.cpp
-    # Plugin API files
-    ${PROJECT_SOURCE_DIR}/plugin-api/PluginConfig.h
-    ${PROJECT_SOURCE_DIR}/plugin-api/DeclarationInterceptor.h
-    ${PROJECT_SOURCE_DIR}/plugin-api/SourceInspector.h
-    ${PROJECT_SOURCE_DIR}/plugin-api/VisitorObserver.h
+
     # Utility files
     ${PROJECT_SOURCE_DIR}/utility/FileInfo.h
     ${PROJECT_SOURCE_DIR}/utility/FileInfo.cpp
@@ -72,8 +105,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/utility/IO.cpp
     ${PROJECT_SOURCE_DIR}/utility/Process.h
     ${PROJECT_SOURCE_DIR}/utility/Process.cpp
-    # Data structures
-    ${PROJECT_SOURCE_DIR}/data-structures/VersionedMap.h
 )
 
 foreach(file ${PSYCHEC_SOURCES})
@@ -87,6 +118,7 @@ include_directories(
     .
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_SOURCE_DIR}/generator
+    ${PROJECT_SOURCE_DIR}/generics
     ${PROJECT_SOURCE_DIR}/frontend
     ${PROJECT_SOURCE_DIR}/static-analysis
     ${PROJECT_SOURCE_DIR}/tools
@@ -102,5 +134,15 @@ add_executable(${GENERATOR} ${PSYCHEC_SOURCES})
 
 target_link_libraries(${GENERATOR} psychecfe dl)
 
+
 # Install setup
-install(TARGETS ${GENERATOR} DESTINATION ${PROJECT_SOURCE_DIR}/../../Deliverable)
+install(TARGETS ${GENERATOR}
+    DESTINATION ${PROJECT_SOURCE_DIR}
+	PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+	            GROUP_EXECUTE GROUP_READ
+		        WORLD_EXECUTE WORLD_READ)
+install(FILES ${PSYCHE_DIR}/psychecsolver-exe
+	DESTINATION ${PROJECT_SOURCE_DIR}
+	PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+	            GROUP_EXECUTE GROUP_READ
+		        WORLD_EXECUTE WORLD_READ)

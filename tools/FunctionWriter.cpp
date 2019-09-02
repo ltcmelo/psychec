@@ -23,25 +23,25 @@ using namespace psyche;
 
 std::string FunctionWriter::writeFunction(psyche::Function* f, const std::string name)
 {
-    this->spelling_.clear();
+    this->text_.clear();
     this->funcRet(f);
-    this->spelling_.append(" " + name);
+    this->text_.append(" " + name);
     this->funcParam(f);
-    return this->spelling_;
+    return this->text_;
 }
 
 void FunctionWriter::funcParam(Function* f)
 {
     int cnt = 0;
-    spelling_.append(CSyntax::paramLDelim());
+    text_.append(CSyntax::paramLDelim());
     if (f->argumentCount()) {
         visitType(f->argumentAt(0)->type());
-        spelling_.append(" p" + std::to_string(cnt++));
+        text_.append(" p" + std::to_string(cnt++));
         for (auto i = 1u; i < f->argumentCount(); ++i) {
-            spelling_.append(", ");
+            text_.append(", ");
             visitType(f->argumentAt(i)->type());
-            spelling_.append(" p" + std::to_string(cnt++));
+            text_.append(" p" + std::to_string(cnt++));
         }
     }
-    spelling_.append(CSyntax::paramRDelim());
+    text_.append(CSyntax::paramRDelim());
 }

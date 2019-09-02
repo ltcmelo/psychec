@@ -31,12 +31,12 @@ ProgramValidator::ProgramValidator(TranslationUnit *unit, bool forbidTypeDecl)
     , forbidTypeDecl_(forbidTypeDecl)
 {}
 
-void ProgramValidator::validate(TranslationUnitAST *ast)
+void ProgramValidator::validate(TranslationUnitAST* ast)
 {
     if (!ast || !checksRegistered())
         return;
 
-    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
+    for (DeclarationListAST* it = ast->declaration_list; it; it = it->next)
         accept(it->value);
 }
 
@@ -45,14 +45,14 @@ bool ProgramValidator::checksRegistered() const
     return forbidTypeDecl_;
 }
 
-bool ProgramValidator::visit(FunctionDefinitionAST *ast)
+bool ProgramValidator::visit(FunctionDefinitionAST* ast)
 {
     accept(ast->function_body);
 
     return false;
 }
 
-bool ProgramValidator::visit(CompoundStatementAST *ast)
+bool ProgramValidator::visit(CompoundStatementAST* ast)
 {
     for (StatementListAST* it = ast->statement_list; it; it = it->next)
         accept(it->value);
@@ -60,15 +60,15 @@ bool ProgramValidator::visit(CompoundStatementAST *ast)
     return false;
 }
 
-bool ProgramValidator::visit(SimpleDeclarationAST *ast)
+bool ProgramValidator::visit(SimpleDeclarationAST* ast)
 {
-    for (SpecifierListAST *it = ast->decl_specifier_list; it; it = it->next)
+    for (SpecifierListAST* it = ast->decl_specifier_list; it; it = it->next)
         accept(it->value);
 
     return false;
 }
 
-bool ProgramValidator::visit(ClassSpecifierAST *ast)
+bool ProgramValidator::visit(ClassSpecifierAST* ast)
 {
     if (forbidTypeDecl_) {
         translationUnit()->error(ast->firstToken(),
@@ -78,7 +78,7 @@ bool ProgramValidator::visit(ClassSpecifierAST *ast)
     return false;
 }
 
-bool ProgramValidator::visit(SimpleSpecifierAST *ast)
+bool ProgramValidator::visit(SimpleSpecifierAST* ast)
 {
     if (forbidTypeDecl_
             && tokenKind(ast->specifier_token) == T_TYPEDEF) {

@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,12 +19,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_NAMES_H
-#define CFE_NAMES_H
+#ifndef PSYCHE_NAMES_H__
+#define PSYCHE_NAMES_H__
 
 #include "FrontendConfig.h"
-#include "Name.h"
+
 #include "FullySpecifiedType.h"
+#include "Name.h"
 #include <vector>
 
 namespace psyche {
@@ -34,52 +33,52 @@ namespace psyche {
 class CFE_API QualifiedNameId: public Name
 {
 public:
-    QualifiedNameId(const Name *base, const Name *name)
+    QualifiedNameId(const Name* base, const Name* name)
         : _base(base), _name(name) {}
 
     virtual ~QualifiedNameId();
 
-    virtual const Identifier *identifier() const;
+    virtual const Identifier* identifier() const;
 
-    const Name *base() const;
-    const Name *name() const;
+    const Name* base() const;
+    const Name* name() const;
 
     virtual const QualifiedNameId *asQualifiedNameId() const
     { return this; }
 
 protected:
-    virtual void accept0(NameVisitor *visitor) const;
+    virtual void accept0(NameVisitor* visitor) const;
 
 private:
-    const Name *_base;
-    const Name *_name;
+    const Name* _base;
+    const Name* _name;
 };
 
 class CFE_API DestructorNameId: public Name
 {
 public:
-    DestructorNameId(const Name *name);
+    DestructorNameId(const Name* name);
     virtual ~DestructorNameId();
 
-    virtual const Name *name() const;
+    virtual const Name* name() const;
 
-    virtual const Identifier *identifier() const;
+    virtual const Identifier* identifier() const;
 
     virtual const DestructorNameId *asDestructorNameId() const
     { return this; }
 
 protected:
-    virtual void accept0(NameVisitor *visitor) const;
+    virtual void accept0(NameVisitor* visitor) const;
 
 private:
-    const Name *_name;
+    const Name* _name;
 };
 
 class CFE_API TemplateNameId: public Name
 {
 public:
     template <typename Iterator>
-    TemplateNameId(const Identifier *identifier, bool isSpecialization, Iterator first,
+    TemplateNameId(const Identifier* identifier, bool isSpecialization, Iterator first,
                    Iterator last)
         : _identifier(identifier)
         , _templateArguments(first, last)
@@ -87,7 +86,7 @@ public:
 
     virtual ~TemplateNameId();
 
-    virtual const Identifier *identifier() const;
+    virtual const Identifier* identifier() const;
 
     // ### find a better name
     unsigned templateArgumentCount() const;
@@ -111,10 +110,10 @@ public:
     };
 
 protected:
-    virtual void accept0(NameVisitor *visitor) const;
+    virtual void accept0(NameVisitor* visitor) const;
 
 private:
-    const Identifier *_identifier;
+    const Identifier* _identifier;
     std::vector<FullySpecifiedType> _templateArguments;
     // now TemplateNameId can be a specialization or an instantiation
     bool _isSpecialization;
@@ -183,13 +182,13 @@ public:
 
     Kind kind() const;
 
-    virtual const Identifier *identifier() const;
+    virtual const Identifier* identifier() const;
 
     virtual const OperatorNameId *asOperatorNameId() const
     { return this; }
 
 protected:
-    virtual void accept0(NameVisitor *visitor) const;
+    virtual void accept0(NameVisitor* visitor) const;
 
 private:
     Kind _kind;
@@ -211,19 +210,19 @@ public:
 
     Tag tag() const;
 
-    virtual const Name *name() const;
+    virtual const Name* name() const;
 
-    virtual const Identifier *identifier() const;
+    virtual const Identifier* identifier() const;
 
     virtual const TaggedNameId *asTaggedNameId() const
     { return this; }
 
 protected:
-    virtual void accept0(NameVisitor *visitor) const;
+    virtual void accept0(NameVisitor* visitor) const;
 
 private:
     Tag _tag;
-    const Name *_name;
+    const Name* _name;
 };
 
 class CFE_API ConversionNameId: public Name
@@ -234,13 +233,13 @@ public:
 
     FullySpecifiedType type() const;
 
-    virtual const Identifier *identifier() const;
+    virtual const Identifier* identifier() const;
 
     virtual const ConversionNameId *asConversionNameId() const
     { return this; }
 
 protected:
-    virtual void accept0(NameVisitor *visitor) const;
+    virtual void accept0(NameVisitor* visitor) const;
 
 private:
     FullySpecifiedType _type;
@@ -255,25 +254,25 @@ public:
 
     virtual ~SelectorNameId();
 
-    virtual const Identifier *identifier() const;
+    virtual const Identifier* identifier() const;
 
     unsigned nameCount() const;
-    const Name *nameAt(unsigned index) const;
+    const Name* nameAt(unsigned index) const;
     bool hasArguments() const;
 
     virtual const SelectorNameId *asSelectorNameId() const
     { return this; }
 
-    typedef std::vector<const Name *>::const_iterator NameIterator;
+    typedef std::vector<const Name* >::const_iterator NameIterator;
 
     NameIterator firstName() const { return _names.begin(); }
     NameIterator lastName() const { return _names.end(); }
 
 protected:
-    virtual void accept0(NameVisitor *visitor) const;
+    virtual void accept0(NameVisitor* visitor) const;
 
 private:
-    std::vector<const Name *> _names;
+    std::vector<const Name* > _names;
     bool _hasArguments;
 };
 
@@ -285,13 +284,13 @@ public:
 
     unsigned classTokenIndex() const;
 
-    virtual const Identifier *identifier() const;
+    virtual const Identifier* identifier() const;
 
     virtual const AnonymousNameId *asAnonymousNameId() const
     { return this; }
 
 protected:
-    virtual void accept0(NameVisitor *visitor) const;
+    virtual void accept0(NameVisitor* visitor) const;
 
 private:
     unsigned _classTokenIndex;
@@ -299,4 +298,4 @@ private:
 
 } // namespace psyche
 
-#endif // CFE_NAMES_H
+#endif

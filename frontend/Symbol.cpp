@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +43,7 @@ public:
     virtual ~HashCode()
     { }
 
-    unsigned operator()(const Name *name)
+    unsigned operator()(const Name* name)
     {
         unsigned previousValue = switchValue(0);
         accept(name);
@@ -60,7 +58,7 @@ protected:
         return previousValue;
     }
 
-    virtual void visit(const Identifier *name)
+    virtual void visit(const Identifier* name)
     { _value = name->identifier()->hashCode(); }
 
     virtual void visit(const TemplateNameId *name)
@@ -85,7 +83,7 @@ private:
     unsigned _value;
 };
 
-Symbol::Symbol(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+Symbol::Symbol(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : _name(0),
       _enclosingScope(0),
       _next(0),
@@ -105,7 +103,7 @@ Symbol::Symbol(TranslationUnit *translationUnit, unsigned sourceLocation, const 
     setName(name);
 }
 
-Symbol::Symbol(Clone *clone, Subst *subst, Symbol *original)
+Symbol::Symbol(Clone *clone, Subst *subst, Symbol* original)
     : _name(clone->name(original->_name, subst)),
       _enclosingScope(0),
       _next(0),
@@ -126,14 +124,14 @@ Symbol::Symbol(Clone *clone, Subst *subst, Symbol *original)
 Symbol::~Symbol()
 { }
 
-void Symbol::visitSymbol(SymbolVisitor *visitor)
+void Symbol::visitSymbol(SymbolVisitor* visitor)
 {
     if (visitor->preVisit(this))
         visitSymbol0(visitor);
     visitor->postVisit(this);
 }
 
-void Symbol::visitSymbol(Symbol *symbol, SymbolVisitor *visitor)
+void Symbol::visitSymbol(Symbol* symbol, SymbolVisitor* visitor)
 {
     if (! symbol)
         return;
@@ -185,7 +183,7 @@ unsigned Symbol::column() const
     return _column;
 }
 
-const StringLiteral *Symbol::fileId() const
+const StringLiteral* Symbol::fileId() const
 {
     return _fileId;
 }
@@ -196,7 +194,7 @@ const char *Symbol::fileName() const
 unsigned Symbol::fileNameLength() const
 { return fileId()->size(); }
 
-const Name *Symbol::unqualifiedName() const
+const Name* Symbol::unqualifiedName() const
 {
     if (!_name)
         return 0;
@@ -210,10 +208,10 @@ const Name *Symbol::unqualifiedName() const
     return _name;
 }
 
-const Name *Symbol::name() const
+const Name* Symbol::name() const
 { return _name; }
 
-void Symbol::setName(const Name *name)
+void Symbol::setName(const Name* name)
 {
     _name = name;
 
@@ -225,7 +223,7 @@ void Symbol::setName(const Name *name)
     }
 }
 
-const Identifier *Symbol::identifier() const
+const Identifier* Symbol::identifier() const
 {
     if (_name)
         return _name->identifier();
@@ -303,7 +301,7 @@ Block *Symbol::enclosingBlock() const
 unsigned Symbol::index() const
 { return _index; }
 
-Symbol *Symbol::next() const
+Symbol* Symbol::next() const
 { return _next; }
 
 unsigned Symbol::hashCode() const
@@ -369,12 +367,6 @@ bool Symbol::isClass() const
 bool Symbol::isForwardClassDeclaration() const
 { return asForwardClassDeclaration() != 0; }
 
-bool Symbol::isQtPropertyDeclaration() const
-{ return asQtPropertyDeclaration() != 0; }
-
-bool Symbol::isQtEnum() const
-{ return asQtEnum() != 0; }
-
 bool Symbol::isBlock() const
 { return asBlock() != 0; }
 
@@ -396,31 +388,7 @@ bool Symbol::isTypenameArgument() const
 bool Symbol::isBaseClass() const
 { return asBaseClass() != 0; }
 
-bool Symbol::isObjCBaseClass() const
-{ return asObjCBaseClass() != 0; }
-
-bool Symbol::isObjCBaseProtocol() const
-{ return asObjCBaseProtocol() != 0; }
-
-bool Symbol::isObjCClass() const
-{ return asObjCClass() != 0; }
-
-bool Symbol::isObjCForwardClassDeclaration() const
-{ return asObjCForwardClassDeclaration() != 0; }
-
-bool Symbol::isObjCProtocol() const
-{ return asObjCProtocol() != 0; }
-
-bool Symbol::isObjCForwardProtocolDeclaration() const
-{ return asObjCForwardProtocolDeclaration() != 0; }
-
-bool Symbol::isObjCMethod() const
-{ return asObjCMethod() != 0; }
-
-bool Symbol::isObjCPropertyDeclaration() const
-{ return asObjCPropertyDeclaration() != 0; }
-
-void Symbol::copy(Symbol *other)
+void Symbol::copy(Symbol* other)
 {
     _sourceLocation = other->_sourceLocation;
     _name = other->_name;

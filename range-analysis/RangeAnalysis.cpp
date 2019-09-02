@@ -35,10 +35,10 @@ RangeAnalysis::RangeAnalysis(TranslationUnit *unit)
     : ASTVisitor(unit)
 {}
 
-void RangeAnalysis::run(TranslationUnitAST *ast, Namespace *global)
+void RangeAnalysis::run(TranslationUnitAST* ast, Namespace *global)
 {
     switchScope(global);
-    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
+    for (DeclarationListAST* it = ast->declaration_list; it; it = it->next)
         accept(it->value);
     dumpRanges();
 }
@@ -63,14 +63,14 @@ const Scope *RangeAnalysis::switchScope(const Scope *scope)
     return scope;
 }
 
-const Symbol *RangeAnalysis::switchSymbol(const Symbol *symbol)
+const Symbol* RangeAnalysis::switchSymbol(const Symbol* symbol)
 {
     PSYCHE_ASSERT(symbol, return nullptr, "symbol must be valid");
     std::swap(symbol_, symbol);
     return symbol;
 }
 
-void RangeAnalysis::resolve(const Name *name)
+void RangeAnalysis::resolve(const Name* name)
 {
     // We expect to see only simple names. Also, since range analysis assumes
     // well-formed code, symbol lookup must succeed.
@@ -79,9 +79,9 @@ void RangeAnalysis::resolve(const Name *name)
     PSYCHE_ASSERT(symbol_, return, "expected successful lookup");
 }
 
-bool RangeAnalysis::visit(NumericLiteralAST *ast)
+bool RangeAnalysis::visit(NumericLiteralAST* ast)
 {
-    const NumericLiteral *numLit = numericLiteral(ast->literal_token);
+    const NumericLiteral* numLit = numericLiteral(ast->literal_token);
     PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
 
     // We're interested only on natural numbers. In the case this literal
@@ -94,7 +94,7 @@ bool RangeAnalysis::visit(NumericLiteralAST *ast)
     return false;
 }
 
-bool RangeAnalysis::visit(IdExpressionAST *ast)
+bool RangeAnalysis::visit(IdExpressionAST* ast)
 {
     resolve(ast->name->name);
 
@@ -118,7 +118,7 @@ bool RangeAnalysis::visit(IdExpressionAST *ast)
     return false;
 }
 
-bool RangeAnalysis::visit(BinaryExpressionAST *ast)
+bool RangeAnalysis::visit(BinaryExpressionAST* ast)
 {
     accept(ast->left_expression);
 
@@ -156,7 +156,7 @@ bool RangeAnalysis::visit(BinaryExpressionAST *ast)
     return false;
 }
 
-bool RangeAnalysis::visit(MemberAccessAST *ast)
+bool RangeAnalysis::visit(MemberAccessAST* ast)
 {
     const Scope* prevScope = scope_;
     accept(ast->base_expression);
@@ -165,19 +165,19 @@ bool RangeAnalysis::visit(MemberAccessAST *ast)
     return false;
 }
 
-bool RangeAnalysis::visit(DeclarationStatementAST *ast)
+bool RangeAnalysis::visit(DeclarationStatementAST* ast)
 {
     return false;
 }
 
-bool RangeAnalysis::visit(ExpressionStatementAST *ast)
+bool RangeAnalysis::visit(ExpressionStatementAST* ast)
 {
     accept(ast->expression);
     revisionMap_.insert(std::make_pair(ast, rangeMap_.revision()));
     return false;
 }
 
-bool RangeAnalysis::visit(IfStatementAST *ast)
+bool RangeAnalysis::visit(IfStatementAST* ast)
 {
     const auto revision = rangeMap_.revision();
     accept(ast->statement);
@@ -188,7 +188,7 @@ bool RangeAnalysis::visit(IfStatementAST *ast)
     return false;
 }
 
-bool RangeAnalysis::visit(WhileStatementAST *ast)
+bool RangeAnalysis::visit(WhileStatementAST* ast)
 {
     return false;
 }

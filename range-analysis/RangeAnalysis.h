@@ -35,7 +35,7 @@ class RangeAnalysis final : public psyche::ASTVisitor
 public:
     RangeAnalysis(psyche::TranslationUnit *unit);
 
-    void run(psyche::TranslationUnitAST *ast, psyche::Namespace *global);
+    void run(psyche::TranslationUnitAST* ast, psyche::Namespace *global);
 
 private:
     /*!
@@ -69,10 +69,10 @@ private:
     bool visit(psyche::NumericLiteralAST* ast) override;
 
     // Statements
-    bool visit(psyche::DeclarationStatementAST *ast) override;
-    bool visit(psyche::ExpressionStatementAST *ast) override;
-    bool visit(psyche::IfStatementAST *ast) override;
-    bool visit(psyche::WhileStatementAST *ast) override;
+    bool visit(psyche::DeclarationStatementAST* ast) override;
+    bool visit(psyche::ExpressionStatementAST* ast) override;
+    bool visit(psyche::IfStatementAST* ast) override;
+    bool visit(psyche::WhileStatementAST* ast) override;
 
     void dumpRanges() const;
 

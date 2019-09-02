@@ -1,5 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ ASTVisitor::ASTVisitor(TranslationUnit *translationUnit)
 ASTVisitor::~ASTVisitor()
 { }
 
-void ASTVisitor::accept(AST *ast)
+void ASTVisitor::accept(AST* ast)
 { AST::accept(ast, this); }
 
 Control *ASTVisitor::control() const
@@ -62,28 +62,28 @@ int ASTVisitor::tokenKind(unsigned index) const
 const char *ASTVisitor::spell(unsigned index) const
 { return translationUnit()->spell(index); }
 
-const Identifier *ASTVisitor::identifier(unsigned index) const
+const Identifier* ASTVisitor::identifier(unsigned index) const
 { return translationUnit()->identifier(index); }
 
-const Literal *ASTVisitor::literal(unsigned index) const
+const Literal* ASTVisitor::literal(unsigned index) const
 { return translationUnit()->literal(index); }
 
-const NumericLiteral *ASTVisitor::numericLiteral(unsigned index) const
+const NumericLiteral* ASTVisitor::numericLiteral(unsigned index) const
 { return translationUnit()->numericLiteral(index); }
 
-const StringLiteral *ASTVisitor::stringLiteral(unsigned index) const
+const StringLiteral* ASTVisitor::stringLiteral(unsigned index) const
 { return translationUnit()->stringLiteral(index); }
 
 void ASTVisitor::getPosition(unsigned offset,
                              unsigned *line,
                              unsigned *column,
-                             const StringLiteral **fileName) const
+                             const StringLiteral* *fileName) const
 { translationUnit()->getPosition(offset, line, column, fileName); }
 
 void ASTVisitor::getTokenPosition(unsigned index,
                                   unsigned *line,
                                   unsigned *column,
-                                  const StringLiteral **fileName) const
+                                  const StringLiteral* *fileName) const
 { translationUnit()->getTokenPosition(index, line, column, fileName); }
 
 void ASTVisitor::getTokenStartPosition(unsigned index, unsigned *line, unsigned *column) const

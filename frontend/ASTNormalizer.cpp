@@ -1,22 +1,25 @@
-/******************************************************************************
- Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
-
- This library is free software; you can redistribute it and/or modify it under
- the terms of the GNU Lesser General Public License as published by the Free
- Software Foundation; either version 2.1 of the License, or (at your option)
- any later version.
-
- This library is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- for more details.
-
- You should have received a copy of the GNU Lesser General Public License along
- with this library; if not, write to the Free Software Foundation, Inc., 51
- Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
- *****************************************************************************/
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 #include "ASTNormalizer.h"
+
 #include "AST.h"
 #include "Control.h"
 #include "CoreTypes.h"
@@ -40,16 +43,16 @@ struct FindAmbiguousNode : public ASTVisitor
         , hasAmbiguousNode_(false)
     {}
 
-    bool operator()(const psyche::TranslationUnitAST *ast)
+    bool operator()(const psyche::TranslationUnitAST* ast)
     {
         if (ast) {
-            for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
+            for (DeclarationListAST* it = ast->declaration_list; it; it = it->next)
                 accept(it->value);
         }
         return hasAmbiguousNode_;
     }
 
-    bool visit(AmbiguousStatementAST *) override
+    bool visit(AmbiguousStatementAST* ) override
     {
         hasAmbiguousNode_ = true;
         return false;
@@ -73,12 +76,12 @@ void ASTNormalizer::Stats::reset()
     guessedAsPtrDecl_ = 0;
 }
 
-bool ASTNormalizer::normalize(TranslationUnitAST *ast)
+bool ASTNormalizer::normalize(TranslationUnitAST* ast)
 {
     if (!ast)
         return true;
 
-    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next)
+    for (DeclarationListAST* it = ast->declaration_list; it; it = it->next)
         accept(it->value);
 
     if (employHeuristic_)
@@ -87,16 +90,16 @@ bool ASTNormalizer::normalize(TranslationUnitAST *ast)
     return !FindAmbiguousNode(translationUnit())(ast);
 }
 
-bool ASTNormalizer::visit(CompoundStatementAST *ast)
+bool ASTNormalizer::visit(CompoundStatementAST* ast)
 {
-    for (StatementListAST *it = ast->statement_list; it; it = it->next) {
+    for (StatementListAST* it = ast->statement_list; it; it = it->next) {
         maybeFixAST(it->value);
         accept(it->value);
     }
     return false;
 }
 
-bool ASTNormalizer::visit(IfStatementAST *ast)
+bool ASTNormalizer::visit(IfStatementAST* ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
@@ -105,49 +108,49 @@ bool ASTNormalizer::visit(IfStatementAST *ast)
     return false;
 }
 
-bool ASTNormalizer::visit(ForStatementAST *ast)
+bool ASTNormalizer::visit(ForStatementAST* ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-bool ASTNormalizer::visit(LabeledStatementAST *ast)
+bool ASTNormalizer::visit(LabeledStatementAST* ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-bool ASTNormalizer::visit(WhileStatementAST *ast)
+bool ASTNormalizer::visit(WhileStatementAST* ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-bool ASTNormalizer::visit(SwitchStatementAST *ast)
+bool ASTNormalizer::visit(SwitchStatementAST* ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-bool ASTNormalizer::visit(CaseStatementAST *ast)
+bool ASTNormalizer::visit(CaseStatementAST* ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-bool ASTNormalizer::visit(DoStatementAST *ast)
+bool ASTNormalizer::visit(DoStatementAST* ast)
 {
     maybeFixAST(ast->statement);
     accept(ast->statement);
     return false;
 }
 
-void ASTNormalizer::maybeFixAST(StatementAST *&ast)
+void ASTNormalizer::maybeFixAST(StatementAST* &ast)
 {
     if (!ast || !ast->asAmbiguousStatement())
         return;

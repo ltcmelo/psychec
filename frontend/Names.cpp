@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -32,46 +30,46 @@ using namespace psyche;
 QualifiedNameId::~QualifiedNameId()
 { }
 
-void QualifiedNameId::accept0(NameVisitor *visitor) const
+void QualifiedNameId::accept0(NameVisitor* visitor) const
 { visitor->visit(this); }
 
-const Identifier *QualifiedNameId::identifier() const
+const Identifier* QualifiedNameId::identifier() const
 {
-    if (const Name *u = name())
+    if (const Name* u = name())
         return u->identifier();
 
     return 0;
 }
 
-const Name *QualifiedNameId::base() const
+const Name* QualifiedNameId::base() const
 { return _base; }
 
-const Name *QualifiedNameId::name() const
+const Name* QualifiedNameId::name() const
 { return _name; }
 
-DestructorNameId::DestructorNameId(const Name *name)
+DestructorNameId::DestructorNameId(const Name* name)
     : _name(name)
 { }
 
 DestructorNameId::~DestructorNameId()
 { }
 
-void DestructorNameId::accept0(NameVisitor *visitor) const
+void DestructorNameId::accept0(NameVisitor* visitor) const
 { visitor->visit(this); }
 
-const Name *DestructorNameId::name() const
+const Name* DestructorNameId::name() const
 { return _name; }
 
-const Identifier *DestructorNameId::identifier() const
+const Identifier* DestructorNameId::identifier() const
 { return _name->identifier(); }
 
 TemplateNameId::~TemplateNameId()
 { }
 
-void TemplateNameId::accept0(NameVisitor *visitor) const
+void TemplateNameId::accept0(NameVisitor* visitor) const
 { visitor->visit(this); }
 
-const Identifier *TemplateNameId::identifier() const
+const Identifier* TemplateNameId::identifier() const
 { return _identifier; }
 
 unsigned TemplateNameId::templateArgumentCount() const
@@ -90,8 +88,8 @@ bool TemplateNameId::Compare::operator()(const TemplateNameId *name,
     if (name == other)
         return false;
 
-    const Identifier *id = name->identifier();
-    const Identifier *otherId = other->identifier();
+    const Identifier* id = name->identifier();
+    const Identifier* otherId = other->identifier();
 
     if (id == 0)
         return otherId != 0;
@@ -121,16 +119,16 @@ OperatorNameId::OperatorNameId(Kind kind)
 OperatorNameId::~OperatorNameId()
 { }
 
-void OperatorNameId::accept0(NameVisitor *visitor) const
+void OperatorNameId::accept0(NameVisitor* visitor) const
 { visitor->visit(this); }
 
 OperatorNameId::Kind OperatorNameId::kind() const
 { return _kind; }
 
-const Identifier *OperatorNameId::identifier() const
+const Identifier* OperatorNameId::identifier() const
 { return 0; }
 
-TaggedNameId::TaggedNameId(Tag tag, const Name *name)
+TaggedNameId::TaggedNameId(Tag tag, const Name* name)
     : _tag(tag)
     , _name(name)
 { }
@@ -138,16 +136,16 @@ TaggedNameId::TaggedNameId(Tag tag, const Name *name)
 TaggedNameId::~TaggedNameId()
 { }
 
-void TaggedNameId::accept0(NameVisitor *visitor) const
+void TaggedNameId::accept0(NameVisitor* visitor) const
 { visitor->visit(this); }
 
 TaggedNameId::Tag TaggedNameId::tag() const
 { return _tag; }
 
-const Name *TaggedNameId::name() const
+const Name* TaggedNameId::name() const
 { return _name; }
 
-const Identifier *TaggedNameId::identifier() const
+const Identifier* TaggedNameId::identifier() const
 { return _name->identifier(); }
 
 ConversionNameId::ConversionNameId(const FullySpecifiedType &type)
@@ -157,22 +155,22 @@ ConversionNameId::ConversionNameId(const FullySpecifiedType &type)
 ConversionNameId::~ConversionNameId()
 { }
 
-void ConversionNameId::accept0(NameVisitor *visitor) const
+void ConversionNameId::accept0(NameVisitor* visitor) const
 { visitor->visit(this); }
 
 FullySpecifiedType ConversionNameId::type() const
 { return _type; }
 
-const Identifier *ConversionNameId::identifier() const
+const Identifier* ConversionNameId::identifier() const
 { return 0; }
 
 SelectorNameId::~SelectorNameId()
 { }
 
-void SelectorNameId::accept0(NameVisitor *visitor) const
+void SelectorNameId::accept0(NameVisitor* visitor) const
 { visitor->visit(this); }
 
-const Identifier *SelectorNameId::identifier() const
+const Identifier* SelectorNameId::identifier() const
 {
     if (_names.empty())
         return 0;
@@ -183,7 +181,7 @@ const Identifier *SelectorNameId::identifier() const
 unsigned SelectorNameId::nameCount() const
 { return unsigned(_names.size()); }
 
-const Name *SelectorNameId::nameAt(unsigned index) const
+const Name* SelectorNameId::nameAt(unsigned index) const
 { return _names[index]; }
 
 bool SelectorNameId::hasArguments() const
@@ -201,8 +199,8 @@ unsigned AnonymousNameId::classTokenIndex() const
     return _classTokenIndex;
 }
 
-void AnonymousNameId::accept0(NameVisitor *visitor) const
+void AnonymousNameId::accept0(NameVisitor* visitor) const
 { visitor->visit(this); }
 
-const Identifier *AnonymousNameId::identifier() const
+const Identifier* AnonymousNameId::identifier() const
 { return 0; }

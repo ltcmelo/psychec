@@ -18,6 +18,7 @@
  *****************************************************************************/
 
 #include "Range.h"
+
 #include "Assert.h"
 #include <algorithm>
 #include <functional>

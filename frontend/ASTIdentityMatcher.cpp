@@ -1,26 +1,28 @@
-/******************************************************************************
- Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
-
- This library is free software; you can redistribute it and/or modify it under
- the terms of the GNU Lesser General Public License as published by the Free
- Software Foundation; either version 2.1 of the License, or (at your option)
- any later version.
-
- This library is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- for more details.
-
- You should have received a copy of the GNU Lesser General Public License along
- with this library; if not, write to the Free Software Foundation, Inc., 51
- Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
- *****************************************************************************/
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 #include "ASTIdentityMatcher.h"
 
 using namespace psyche;
 
-bool ASTIdentityMatcher::match(ArrayAccessAST *node, ArrayAccessAST *pattern)
+bool ASTIdentityMatcher::match(ArrayAccessAST* node, ArrayAccessAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -29,7 +31,7 @@ bool ASTIdentityMatcher::match(ArrayAccessAST *node, ArrayAccessAST *pattern)
     return true;
 }
 
-bool ASTIdentityMatcher::match(ArrayInitializerAST *node, ArrayInitializerAST *pattern)
+bool ASTIdentityMatcher::match(ArrayInitializerAST* node, ArrayInitializerAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -38,7 +40,7 @@ bool ASTIdentityMatcher::match(ArrayInitializerAST *node, ArrayInitializerAST *p
     return true;
 }
 
-bool ASTIdentityMatcher::match(BinaryExpressionAST *node, BinaryExpressionAST *pattern)
+bool ASTIdentityMatcher::match(BinaryExpressionAST* node, BinaryExpressionAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -51,7 +53,7 @@ bool ASTIdentityMatcher::match(BinaryExpressionAST *node, BinaryExpressionAST *p
     return true;
 }
 
-bool ASTIdentityMatcher::match(BoolLiteralAST *node, BoolLiteralAST *pattern)
+bool ASTIdentityMatcher::match(BoolLiteralAST* node, BoolLiteralAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -60,7 +62,7 @@ bool ASTIdentityMatcher::match(BoolLiteralAST *node, BoolLiteralAST *pattern)
     return true;
 }
 
-bool ASTIdentityMatcher::match(BracedInitializerAST *node, BracedInitializerAST *pattern)
+bool ASTIdentityMatcher::match(BracedInitializerAST* node, BracedInitializerAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -69,7 +71,7 @@ bool ASTIdentityMatcher::match(BracedInitializerAST *node, BracedInitializerAST 
     return true;
 }
 
-bool ASTIdentityMatcher::match(BracketDesignatorAST *node, BracketDesignatorAST *pattern)
+bool ASTIdentityMatcher::match(BracketDesignatorAST* node, BracketDesignatorAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -87,7 +89,7 @@ bool ASTIdentityMatcher::match(DotDesignatorAST* node, DotDesignatorAST* pattern
     return true;
 }
 
-bool ASTIdentityMatcher::match(CallAST *node, CallAST *pattern)
+bool ASTIdentityMatcher::match(CallAST* node, CallAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -96,7 +98,7 @@ bool ASTIdentityMatcher::match(CallAST *node, CallAST *pattern)
     return true;
 }
 
-bool ASTIdentityMatcher::match(CastExpressionAST *node, CastExpressionAST *pattern)
+bool ASTIdentityMatcher::match(CastExpressionAST* node, CastExpressionAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -118,7 +120,7 @@ bool ASTIdentityMatcher::match(TypeIdAST* node, TypeIdAST* pattern)
     return true;
 }
 
-bool ASTIdentityMatcher::match(ConditionalExpressionAST *node, ConditionalExpressionAST *pattern)
+bool ASTIdentityMatcher::match(ConditionalExpressionAST* node, ConditionalExpressionAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -131,7 +133,7 @@ bool ASTIdentityMatcher::match(ConditionalExpressionAST *node, ConditionalExpres
     return true;
 }
 
-bool ASTIdentityMatcher::match(IdExpressionAST *node, IdExpressionAST *pattern)
+bool ASTIdentityMatcher::match(IdExpressionAST* node, IdExpressionAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -140,7 +142,7 @@ bool ASTIdentityMatcher::match(IdExpressionAST *node, IdExpressionAST *pattern)
     return true;
 }
 
-bool ASTIdentityMatcher::match(MemberAccessAST *node, MemberAccessAST *pattern)
+bool ASTIdentityMatcher::match(MemberAccessAST* node, MemberAccessAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -153,7 +155,7 @@ bool ASTIdentityMatcher::match(MemberAccessAST *node, MemberAccessAST *pattern)
     return true;
 }
 
-bool ASTIdentityMatcher::match(NestedExpressionAST *node, NestedExpressionAST *pattern)
+bool ASTIdentityMatcher::match(NestedExpressionAST* node, NestedExpressionAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -162,7 +164,7 @@ bool ASTIdentityMatcher::match(NestedExpressionAST *node, NestedExpressionAST *p
     return true;
 }
 
-bool ASTIdentityMatcher::match(NumericLiteralAST *node, NumericLiteralAST *pattern)
+bool ASTIdentityMatcher::match(NumericLiteralAST* node, NumericLiteralAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -186,7 +188,7 @@ bool ASTIdentityMatcher::match(StringLiteralAST* node, StringLiteralAST* pattern
     return true;
 }
 
-bool ASTIdentityMatcher::match(PointerLiteralAST *node, PointerLiteralAST *pattern)
+bool ASTIdentityMatcher::match(PointerLiteralAST* node, PointerLiteralAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -195,7 +197,7 @@ bool ASTIdentityMatcher::match(PointerLiteralAST *node, PointerLiteralAST *patte
     return true;
 }
 
-bool ASTIdentityMatcher::match(PostIncrDecrAST *node, PostIncrDecrAST *pattern)
+bool ASTIdentityMatcher::match(PostIncrDecrAST* node, PostIncrDecrAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -206,7 +208,7 @@ bool ASTIdentityMatcher::match(PostIncrDecrAST *node, PostIncrDecrAST *pattern)
     return true;
 }
 
-bool ASTIdentityMatcher::match(SizeofExpressionAST *node, SizeofExpressionAST *pattern)
+bool ASTIdentityMatcher::match(SizeofExpressionAST* node, SizeofExpressionAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -215,7 +217,7 @@ bool ASTIdentityMatcher::match(SizeofExpressionAST *node, SizeofExpressionAST *p
     return true;
 }
 
-bool ASTIdentityMatcher::match(UnaryExpressionAST *node, UnaryExpressionAST *pattern)
+bool ASTIdentityMatcher::match(UnaryExpressionAST* node, UnaryExpressionAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -226,7 +228,7 @@ bool ASTIdentityMatcher::match(UnaryExpressionAST *node, UnaryExpressionAST *pat
     return true;
 }
 
-bool ASTIdentityMatcher::match(ClassSpecifierAST *node, ClassSpecifierAST *pattern)
+bool ASTIdentityMatcher::match(ClassSpecifierAST* node, ClassSpecifierAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -239,7 +241,7 @@ bool ASTIdentityMatcher::match(ClassSpecifierAST *node, ClassSpecifierAST *patte
     return true;
 }
 
-bool ASTIdentityMatcher::match(ElaboratedTypeSpecifierAST *node, ElaboratedTypeSpecifierAST *pattern)
+bool ASTIdentityMatcher::match(ElaboratedTypeSpecifierAST* node, ElaboratedTypeSpecifierAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -250,7 +252,7 @@ bool ASTIdentityMatcher::match(ElaboratedTypeSpecifierAST *node, ElaboratedTypeS
     return true;
 }
 
-bool ASTIdentityMatcher::match(EnumSpecifierAST *node, EnumSpecifierAST *pattern)
+bool ASTIdentityMatcher::match(EnumSpecifierAST* node, EnumSpecifierAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -259,7 +261,7 @@ bool ASTIdentityMatcher::match(EnumSpecifierAST *node, EnumSpecifierAST *pattern
     return true;
 }
 
-bool ASTIdentityMatcher::match(GnuAttributeSpecifierAST *node, GnuAttributeSpecifierAST *pattern)
+bool ASTIdentityMatcher::match(GnuAttributeSpecifierAST* node, GnuAttributeSpecifierAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -270,7 +272,7 @@ bool ASTIdentityMatcher::match(GnuAttributeSpecifierAST *node, GnuAttributeSpeci
     return true;
 }
 
-bool ASTIdentityMatcher::match(NamedTypeSpecifierAST *node, NamedTypeSpecifierAST *pattern)
+bool ASTIdentityMatcher::match(NamedTypeSpecifierAST* node, NamedTypeSpecifierAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -279,7 +281,7 @@ bool ASTIdentityMatcher::match(NamedTypeSpecifierAST *node, NamedTypeSpecifierAS
     return true;
 }
 
-bool ASTIdentityMatcher::match(SimpleSpecifierAST *node, SimpleSpecifierAST *pattern)
+bool ASTIdentityMatcher::match(SimpleSpecifierAST* node, SimpleSpecifierAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -288,7 +290,7 @@ bool ASTIdentityMatcher::match(SimpleSpecifierAST *node, SimpleSpecifierAST *pat
     return true;
 }
 
-bool ASTIdentityMatcher::match(TypeofSpecifierAST *node, TypeofSpecifierAST *pattern)
+bool ASTIdentityMatcher::match(TypeofSpecifierAST* node, TypeofSpecifierAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -297,7 +299,7 @@ bool ASTIdentityMatcher::match(TypeofSpecifierAST *node, TypeofSpecifierAST *pat
     return true;
 }
 
-bool ASTIdentityMatcher::match(DeclaratorAST *node, DeclaratorAST *pattern)
+bool ASTIdentityMatcher::match(DeclaratorAST* node, DeclaratorAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -318,7 +320,7 @@ bool ASTIdentityMatcher::match(DeclaratorAST *node, DeclaratorAST *pattern)
     return true;
 }
 
-bool ASTIdentityMatcher::match(DeclaratorIdAST *node, DeclaratorIdAST *pattern)
+bool ASTIdentityMatcher::match(DeclaratorIdAST* node, DeclaratorIdAST* pattern)
 {
     if (!node || !pattern)
         return false;
@@ -328,7 +330,7 @@ bool ASTIdentityMatcher::match(DeclaratorIdAST *node, DeclaratorIdAST *pattern)
 
 }
 
-bool ASTIdentityMatcher::match(PointerAST *node, PointerAST *pattern)
+bool ASTIdentityMatcher::match(PointerAST* node, PointerAST* pattern)
 {
     if (!node || !pattern)
         return false;

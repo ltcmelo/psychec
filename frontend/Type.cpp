@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,15 +27,10 @@
 using namespace psyche;
 
 Type::Type()
-{ }
+{}
 
 Type::~Type()
-{ }
-
-bool Type::isArithmetic(const Type* ty)
-{
-    return ty->isIntegerType() || ty->isFloatType();
-}
+{}
 
 bool Type::isUndefinedType() const
 { return this == UndefinedType::instance(); }
@@ -84,32 +77,25 @@ bool Type::isEnumType() const
 bool Type::isForwardClassDeclarationType() const
 { return asForwardClassDeclarationType() != 0; }
 
-bool Type::isObjCClassType() const
-{ return asObjCClassType() != 0; }
-
-bool Type::isObjCProtocolType() const
-{ return asObjCProtocolType() != 0; }
-
-bool Type::isObjCMethodType() const
-{ return asObjCMethodType() != 0; }
-
-bool Type::isObjCForwardClassDeclarationType() const
-{ return asObjCForwardClassDeclarationType() != 0; }
-
-bool Type::isObjCForwardProtocolDeclarationType() const
-{ return asObjCForwardProtocolDeclarationType() != 0; }
-
-void Type::accept(TypeVisitor *visitor)
+void Type::accept(TypeVisitor* visitor)
 {
     if (visitor->preVisit(this))
         accept0(visitor);
     visitor->postVisit(this);
 }
 
-void Type::accept(Type *type, TypeVisitor *visitor)
+void Type::accept(Type *type, TypeVisitor* visitor)
 {
     if (! type)
         return;
-
     type->accept(visitor);
+}
+
+namespace psyche {
+
+bool isArithmetic(const Type* ty)
+{
+    return ty->isIntegerType() || ty->isFloatType();
+}
+
 }

@@ -19,17 +19,16 @@
 // THE SOFTWARE.
 
 #include "TypeVisitor.h"
+
 #include "Type.h"
 
 using namespace psyche;
 
 TypeVisitor::TypeVisitor()
-{ }
+{}
 
 TypeVisitor::~TypeVisitor()
-{ }
+{}
 
-void TypeVisitor::accept(Type *type)
+void TypeVisitor::accept(Type* type)
 { Type::accept(type, this); }
-
-

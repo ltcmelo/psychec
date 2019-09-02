@@ -18,10 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_SCOPE_H
-#define CFE_SCOPE_H
+#ifndef PSYCHE_SCOPE_H__
+#define PSYCHE_SCOPE_H__
 
 #include "FrontendConfig.h"
+
 #include "FrontendFwds.h"
 #include "Names.h"
 #include "Symbol.h"
@@ -31,12 +32,12 @@ namespace psyche {
 class CFE_API Scope: public Symbol
 {
 public:
-    Scope(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name);
+    Scope(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name);
     Scope(Clone *clone, Subst *subst, Scope *original);
     virtual ~Scope();
 
     /// Adds a Symbol to this Scope.
-    void addMember(Symbol *symbol);
+    void addMember(Symbol* symbol);
 
     /// Returns true if this Scope is empty; otherwise returns false.
     bool isEmpty() const;
@@ -45,9 +46,9 @@ public:
     unsigned memberCount() const;
 
     /// Returns the Symbol at the given position.
-    Symbol *memberAt(unsigned index) const;
+    Symbol* memberAt(unsigned index) const;
 
-    typedef Symbol **iterator;
+    typedef Symbol* *iterator;
 
     /// Returns member iterator to the beginning.
     iterator memberBegin() const;
@@ -55,8 +56,8 @@ public:
     /// Returns member iterator to the end.
     iterator memberEnd() const;
 
-    Symbol *find(const Identifier *id) const;
-    Symbol *find(OperatorNameId::Kind operatorId) const;
+    Symbol* find(const Identifier* id) const;
+    Symbol* find(OperatorNameId::Kind operatorId) const;
 
     bool encloses(const Scope*) const;
 
@@ -83,4 +84,4 @@ private:
 } // namespace psyche
 
 
-#endif // CFE_SCOPE_H
+#endif

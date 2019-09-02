@@ -1,35 +1,89 @@
 # PsycheC
 
-PsycheC is a ML-styled, unification-based, type inference engine for C. You can try it online [here](http://cuda.dcc.ufmg.br/psyche-c/).
+PsycheC is a compilation infrastructure for the C language that is enabled with an ML/Haskell-style (unification-based) type inference engine.
+[This online interface](http://cuda.dcc.ufmg.br/psyche-c/) illustrates the essential functionality of PsycheC.
 
-## Prerequisites
+## Requirements
 
 * Cmake
 * C++14 compiler
 * Haskell Stack
-* Python
+* Python 3
 
-## Installing and running
+## Building
 
     cmake CMakeLists.txt  
-    make  
-    cd solver  
-    stack setup  
-    stack build  
-    cd ..  
-    python Reconstruct.py path/to/file.c
+    make
 
-## How it works
+## Cnippet
 
-The science behind our type inference is explained in the following paper:
+The simplest way to use PsycheC is through the [Cnippet](http://www.cnippet.cc) compiler adaptor.
+Let us see an example.
 
-- *Inference of Static Semantics for Incomplete C Programs*
+Consider the file *node.c* below.
 
-[This paper](http://homepages.dcc.ufmg.br/~fernando/publications/papers/Leandro_POPL18.pdf) has been accepted for publication in [POPL 2018](https://popl18.sigplan.org).
+```c
+// node.c
+void f()
+{
+    T v = 0;
+    v->value = 42;
+    v->next = v;
+}
+```
 
+If you were to compile *node.c* with GCC/Clang, you would issue a command similar to this one:
 
-## About
+    gcc -c node.c
 
-This is a research project. While we strive to keep the code clean and to make the tool easily accessible, this is an academic effort. Neverless, feel free to provide feedback or to report bugs.
+As a result, an object file *node.o* would have been produced.
+However, this will not happen, since a declaration for `T` is not available.
+Instead, you will get an "undeclared identifier" error.
 
-For a wrapper around PsycheC that integrates with your host C compiler, check [Cnippet](http://www.cnippet.cc/).
+Now, if you invoke Cnippet, the compilation succeeds (flag `-f` is for non-commercial use).
+
+    ./cnip.sh -f gcc -c node.c
+
+That is because, under the hood, PsycheC will infer the following definition for `T`.
+
+```c
+typedef struct T
+{
+    int value;
+    struct T* next;
+} T;
+```
+
+## Testing
+
+Tests exist at varying layers. Currently, this is the best you can do.
+
+    ./psychecgen -t
+    ./CompileTests.sh
+    cd solver && stack test && cd -
+
+## Publications
+
+PsycheC is an ongoing research project.
+It has been introduced at:
+
+- [Inference of static semantics for incomplete C programs](https://dl.acm.org/citation.cfm?id=3158117);
+Proceedings of the ACM on Programming Languages, Volume 2 Issue POPL (Principles of Programming Languages),
+January 2018, Article No. 29.
+
+Below is a list of papers that cite PsycheC:
+
+- [Generation of in-bounds inputs for arrays in memory-unsafe languages](https://dl.acm.org/citation.cfm?id=3314890);
+Proceedings of the 2019 IEEE/ACM International Symposium on CGO (Code Generation and Optimization),
+February 2019, Pages 136-148.
+
+- [Automatic annotation of tasks in structured code](https://dl.acm.org/citation.cfm?id=3243200);
+Proceedings of the 27th International Conference on PACT (Parallel Architectures and Compilation Techniques),
+November 2018, Article No. 31.
+
+- [The computer for the 21st century: present security & privacy challenges](https://link.springer.com/article/10.1186/s13174-018-0095-2);
+Journal of Internet Services and Applications, December 2018, 9:24.
+
+This is an online article presenting PsycheC:
+
+- [Programming in C with Type Inference](https://www.codeproject.com/Articles/1238603/Programming-in-C-with-Type-Inference)

@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,6 +20,7 @@
 // THE SOFTWARE.
 
 #include "Symbols.h"
+
 #include "Names.h"
 #include "TypeVisitor.h"
 #include "SymbolVisitor.h"
@@ -28,7 +30,7 @@
 using namespace psyche;
 
 UsingNamespaceDirective::UsingNamespaceDirective(TranslationUnit *translationUnit,
-                                                 unsigned sourceLocation, const Name *name)
+                                                 unsigned sourceLocation, const Name* name)
     : Symbol(translationUnit, sourceLocation, name)
 { }
 
@@ -42,11 +44,11 @@ UsingNamespaceDirective::~UsingNamespaceDirective()
 FullySpecifiedType UsingNamespaceDirective::type() const
 { return FullySpecifiedType(); }
 
-void UsingNamespaceDirective::visitSymbol0(SymbolVisitor *visitor)
+void UsingNamespaceDirective::visitSymbol0(SymbolVisitor* visitor)
 { visitor->visit(this); }
 
 NamespaceAlias::NamespaceAlias(TranslationUnit *translationUnit,
-                               unsigned sourceLocation, const Name *name)
+                               unsigned sourceLocation, const Name* name)
     : Symbol(translationUnit, sourceLocation, name), _namespaceName(0)
 { }
 
@@ -58,21 +60,21 @@ NamespaceAlias::NamespaceAlias(Clone *clone, Subst *subst, NamespaceAlias *origi
 NamespaceAlias::~NamespaceAlias()
 { }
 
-const Name *NamespaceAlias::namespaceName() const
+const Name* NamespaceAlias::namespaceName() const
 { return _namespaceName; }
 
-void NamespaceAlias::setNamespaceName(const Name *namespaceName)
+void NamespaceAlias::setNamespaceName(const Name* namespaceName)
 { _namespaceName = namespaceName; }
 
 FullySpecifiedType NamespaceAlias::type() const
 { return FullySpecifiedType(); }
 
-void NamespaceAlias::visitSymbol0(SymbolVisitor *visitor)
+void NamespaceAlias::visitSymbol0(SymbolVisitor* visitor)
 { visitor->visit(this); }
 
 
 UsingDeclaration::UsingDeclaration(TranslationUnit *translationUnit,
-                                   unsigned sourceLocation, const Name *name)
+                                   unsigned sourceLocation, const Name* name)
     : Symbol(translationUnit, sourceLocation, name)
 { }
 
@@ -86,10 +88,10 @@ UsingDeclaration::~UsingDeclaration()
 FullySpecifiedType UsingDeclaration::type() const
 { return FullySpecifiedType(); }
 
-void UsingDeclaration::visitSymbol0(SymbolVisitor *visitor)
+void UsingDeclaration::visitSymbol0(SymbolVisitor* visitor)
 { visitor->visit(this); }
 
-Declaration::Declaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+Declaration::Declaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : Symbol(translationUnit, sourceLocation, name)
     , _initializer(0)
 { }
@@ -106,7 +108,7 @@ Declaration::~Declaration()
 void Declaration::setType(const FullySpecifiedType &type)
 { _type = type; }
 
-void Declaration::setInitializer(const StringLiteral *initializer)
+void Declaration::setInitializer(const StringLiteral* initializer)
 {
     _initializer = initializer;
 }
@@ -114,15 +116,15 @@ void Declaration::setInitializer(const StringLiteral *initializer)
 FullySpecifiedType Declaration::type() const
 { return _type; }
 
-const StringLiteral *Declaration::getInitializer() const
+const StringLiteral* Declaration::getInitializer() const
 {
     return _initializer;
 }
 
-void Declaration::visitSymbol0(SymbolVisitor *visitor)
+void Declaration::visitSymbol0(SymbolVisitor* visitor)
 { visitor->visit(this); }
 
-EnumeratorDeclaration::EnumeratorDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+EnumeratorDeclaration::EnumeratorDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : Declaration(translationUnit, sourceLocation, name)
     , _constantValue(0)
 {}
@@ -130,13 +132,13 @@ EnumeratorDeclaration::EnumeratorDeclaration(TranslationUnit *translationUnit, u
 EnumeratorDeclaration::~EnumeratorDeclaration()
 {}
 
-const StringLiteral *EnumeratorDeclaration::constantValue() const
+const StringLiteral* EnumeratorDeclaration::constantValue() const
 { return _constantValue; }
 
-void EnumeratorDeclaration::setConstantValue(const StringLiteral *constantValue)
+void EnumeratorDeclaration::setConstantValue(const StringLiteral* constantValue)
 { _constantValue = constantValue; }
 
-Argument::Argument(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+Argument::Argument(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : Symbol(translationUnit, sourceLocation, name),
       _initializer(0)
 { }
@@ -153,10 +155,10 @@ Argument::~Argument()
 bool Argument::hasInitializer() const
 { return _initializer != 0; }
 
-const StringLiteral *Argument::initializer() const
+const StringLiteral* Argument::initializer() const
 { return _initializer; }
 
-void Argument::setInitializer(const StringLiteral *initializer)
+void Argument::setInitializer(const StringLiteral* initializer)
 { _initializer = initializer; }
 
 void Argument::setType(const FullySpecifiedType &type)
@@ -165,10 +167,10 @@ void Argument::setType(const FullySpecifiedType &type)
 FullySpecifiedType Argument::type() const
 { return _type; }
 
-void Argument::visitSymbol0(SymbolVisitor *visitor)
+void Argument::visitSymbol0(SymbolVisitor* visitor)
 { visitor->visit(this); }
 
-TypenameArgument::TypenameArgument(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+TypenameArgument::TypenameArgument(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : Symbol(translationUnit, sourceLocation, name)
 { }
 
@@ -186,10 +188,10 @@ void TypenameArgument::setType(const FullySpecifiedType &type)
 FullySpecifiedType TypenameArgument::type() const
 { return _type; }
 
-void TypenameArgument::visitSymbol0(SymbolVisitor *visitor)
+void TypenameArgument::visitSymbol0(SymbolVisitor* visitor)
 { visitor->visit(this); }
 
-Function::Function(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+Function::Function(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : Scope(translationUnit, sourceLocation, name),
       _flags(0)
 { }
@@ -221,7 +223,7 @@ int Function::methodKey() const
 void Function::setMethodKey(int key)
 { f._methodKey = key; }
 
-void Function::accept0(TypeVisitor *visitor)
+void Function::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
 FullySpecifiedType Function::type() const
@@ -259,7 +261,7 @@ unsigned Function::argumentCount() const
     return argc;
 }
 
-Symbol *Function::argumentAt(unsigned index) const
+Symbol* Function::argumentAt(unsigned index) const
 {
     for (unsigned it = 0, eit = memberCount(); it < eit; ++it) {
         if (Argument *arg = memberAt(it)->asArgument()) {
@@ -341,7 +343,13 @@ bool Function::isAmbiguous() const
 void Function::setAmbiguous(bool isAmbiguous)
 { f._isAmbiguous = isAmbiguous; }
 
-void Function::visitSymbol0(SymbolVisitor *visitor)
+bool Function::isGeneric() const
+{ return f._isGeneric; }
+
+void Function::setIsGeneric(bool isGeneric)
+{ f._isGeneric = isGeneric; }
+
+void Function::visitSymbol0(SymbolVisitor* visitor)
 {
     if (visitor->visit(this)) {
         for (unsigned i = 0; i < memberCount(); ++i) {
@@ -392,7 +400,7 @@ Block::~Block()
 FullySpecifiedType Block::type() const
 { return FullySpecifiedType(); }
 
-void Block::visitSymbol0(SymbolVisitor *visitor)
+void Block::visitSymbol0(SymbolVisitor* visitor)
 {
     if (visitor->visit(this)) {
         for (unsigned i = 0; i < memberCount(); ++i) {
@@ -401,7 +409,7 @@ void Block::visitSymbol0(SymbolVisitor *visitor)
     }
 }
 
-Enum::Enum(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+Enum::Enum(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : Scope(translationUnit, sourceLocation, name)
     , _isScoped(false)
 { }
@@ -427,10 +435,10 @@ void Enum::setScoped(bool scoped)
     _isScoped = scoped;
 }
 
-void Enum::accept0(TypeVisitor *visitor)
+void Enum::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
-void Enum::visitSymbol0(SymbolVisitor *visitor)
+void Enum::visitSymbol0(SymbolVisitor* visitor)
 {
     if (visitor->visit(this)) {
         for (unsigned i = 0; i < memberCount(); ++i) {
@@ -439,7 +447,7 @@ void Enum::visitSymbol0(SymbolVisitor *visitor)
     }
 }
 
-Template::Template(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+Template::Template(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : Scope(translationUnit, sourceLocation, name)
 { }
 
@@ -458,15 +466,15 @@ unsigned Template::templateParameterCount() const
     return 0;
 }
 
-Symbol *Template::templateParameterAt(unsigned index) const
+Symbol* Template::templateParameterAt(unsigned index) const
 { return memberAt(index); }
 
-Symbol *Template::declaration() const
+Symbol* Template::declaration() const
 {
     if (isEmpty())
         return 0;
 
-    if (Symbol *s = memberAt(memberCount() - 1)) {
+    if (Symbol* s = memberAt(memberCount() - 1)) {
         if (s->isClass() || s->isForwardClassDeclaration() ||
             s->isTemplate() || s->isFunction() || s->isDeclaration())
             return s;
@@ -478,7 +486,7 @@ Symbol *Template::declaration() const
 FullySpecifiedType Template::type() const
 { return FullySpecifiedType(const_cast<Template *>(this)); }
 
-void Template::visitSymbol0(SymbolVisitor *visitor)
+void Template::visitSymbol0(SymbolVisitor* visitor)
 {
     if (visitor->visit(this)) {
         for (unsigned i = 0; i < memberCount(); ++i) {
@@ -487,10 +495,10 @@ void Template::visitSymbol0(SymbolVisitor *visitor)
     }
 }
 
-void Template::accept0(TypeVisitor *visitor)
+void Template::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
-Namespace::Namespace(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+Namespace::Namespace(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : Scope(translationUnit, sourceLocation, name)
     , _isInline(false)
 { }
@@ -503,10 +511,10 @@ Namespace::Namespace(Clone *clone, Subst *subst, Namespace *original)
 Namespace::~Namespace()
 { }
 
-void Namespace::accept0(TypeVisitor *visitor)
+void Namespace::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
-void Namespace::visitSymbol0(SymbolVisitor *visitor)
+void Namespace::visitSymbol0(SymbolVisitor* visitor)
 {
     if (visitor->visit(this)) {
         for (unsigned i = 0; i < memberCount(); ++i) {
@@ -518,7 +526,7 @@ void Namespace::visitSymbol0(SymbolVisitor *visitor)
 FullySpecifiedType Namespace::type() const
 { return FullySpecifiedType(const_cast<Namespace *>(this)); }
 
-BaseClass::BaseClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+BaseClass::BaseClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : Symbol(translationUnit, sourceLocation, name),
       _isVirtual(false)
 { }
@@ -550,11 +558,11 @@ bool BaseClass::isVariadic() const
 void BaseClass::setVariadic(bool isVariadic)
 { _isVariadic = isVariadic; }
 
-void BaseClass::visitSymbol0(SymbolVisitor *visitor)
+void BaseClass::visitSymbol0(SymbolVisitor* visitor)
 { visitor->visit(this); }
 
 ForwardClassDeclaration::ForwardClassDeclaration(TranslationUnit *translationUnit,
-                                                 unsigned sourceLocation, const Name *name)
+                                                 unsigned sourceLocation, const Name* name)
     : Symbol(translationUnit, sourceLocation, name)
 { }
 
@@ -568,13 +576,13 @@ ForwardClassDeclaration::~ForwardClassDeclaration()
 FullySpecifiedType ForwardClassDeclaration::type() const
 { return FullySpecifiedType(const_cast<ForwardClassDeclaration *>(this)); }
 
-void ForwardClassDeclaration::visitSymbol0(SymbolVisitor *visitor)
+void ForwardClassDeclaration::visitSymbol0(SymbolVisitor* visitor)
 { visitor->visit(this); }
 
-void ForwardClassDeclaration::accept0(TypeVisitor *visitor)
+void ForwardClassDeclaration::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
-Class::Class(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
+Class::Class(TranslationUnit *translationUnit, unsigned sourceLocation, const Name* name)
     : Scope(translationUnit, sourceLocation, name),
       _key(ClassKey)
 { }
@@ -605,7 +613,7 @@ Class::Key Class::classKey() const
 void Class::setClassKey(Key key)
 { _key = key; }
 
-void Class::accept0(TypeVisitor *visitor)
+void Class::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
 unsigned Class::baseClassCount() const
@@ -620,7 +628,7 @@ void Class::addBaseClass(BaseClass *baseClass)
 FullySpecifiedType Class::type() const
 { return FullySpecifiedType(const_cast<Class *>(this)); }
 
-void Class::visitSymbol0(SymbolVisitor *visitor)
+void Class::visitSymbol0(SymbolVisitor* visitor)
 {
     if (visitor->visit(this)) {
         for (unsigned i = 0; i < _baseClasses.size(); ++i) {
@@ -629,364 +637,5 @@ void Class::visitSymbol0(SymbolVisitor *visitor)
         for (unsigned i = 0; i < memberCount(); ++i) {
             visitSymbol(memberAt(i), visitor);
         }
-    }
-}
-
-QtPropertyDeclaration::QtPropertyDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
-    : Symbol(translationUnit, sourceLocation, name)
-    , _flags(NoFlags)
-{ }
-
-QtPropertyDeclaration::QtPropertyDeclaration(Clone *clone, Subst *subst, QtPropertyDeclaration *original)
-    : Symbol(clone, subst, original)
-    , _type(clone->type(original->_type, subst))
-    , _flags(original->_flags)
-{ }
-
-QtPropertyDeclaration::~QtPropertyDeclaration()
-{ }
-
-void QtPropertyDeclaration::setType(const FullySpecifiedType &type)
-{ _type = type; }
-
-void QtPropertyDeclaration::setFlags(int flags)
-{ _flags = flags; }
-
-int QtPropertyDeclaration::flags() const
-{ return _flags; }
-
-FullySpecifiedType QtPropertyDeclaration::type() const
-{ return _type; }
-
-void QtPropertyDeclaration::visitSymbol0(SymbolVisitor *visitor)
-{ visitor->visit(this); }
-
-
-QtEnum::QtEnum(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
-    : Symbol(translationUnit, sourceLocation, name)
-{ }
-
-QtEnum::QtEnum(Clone *clone, Subst *subst, QtEnum *original)
-    : Symbol(clone, subst, original)
-{ }
-
-QtEnum::~QtEnum()
-{ }
-
-FullySpecifiedType QtEnum::type() const
-{ return FullySpecifiedType(); }
-
-void QtEnum::visitSymbol0(SymbolVisitor *visitor)
-{ visitor->visit(this); }
-
-
-ObjCBaseClass::ObjCBaseClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
-    : Symbol(translationUnit, sourceLocation, name)
-{ }
-
-ObjCBaseClass::ObjCBaseClass(Clone *clone, Subst *subst, ObjCBaseClass *original)
-    : Symbol(clone, subst, original)
-{ }
-
-ObjCBaseClass::~ObjCBaseClass()
-{ }
-
-FullySpecifiedType ObjCBaseClass::type() const
-{ return FullySpecifiedType(); }
-
-void ObjCBaseClass::visitSymbol0(SymbolVisitor *visitor)
-{ visitor->visit(this); }
-
-ObjCBaseProtocol::ObjCBaseProtocol(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
-    : Symbol(translationUnit, sourceLocation, name)
-{ }
-
-ObjCBaseProtocol::ObjCBaseProtocol(Clone *clone, Subst *subst, ObjCBaseProtocol *original)
-    : Symbol(clone, subst, original)
-{ }
-
-ObjCBaseProtocol::~ObjCBaseProtocol()
-{ }
-
-FullySpecifiedType ObjCBaseProtocol::type() const
-{ return FullySpecifiedType(); }
-
-void ObjCBaseProtocol::visitSymbol0(SymbolVisitor *visitor)
-{ visitor->visit(this); }
-
-ObjCClass::ObjCClass(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name):
-    Scope(translationUnit, sourceLocation, name),
-    _categoryName(0),
-    _baseClass(0),
-    _isInterface(false)
-{ }
-
-ObjCClass::ObjCClass(Clone *clone, Subst *subst, ObjCClass *original)
-    : Scope(clone, subst, original)
-    , _categoryName(clone->name(original->_categoryName, subst))
-    , _baseClass(0)
-    , _isInterface(original->_isInterface)
-{
-    if (original->_baseClass)
-        _baseClass = clone->symbol(original->_baseClass, subst)->asObjCBaseClass();
-    for (size_t i = 0; i < original->_protocols.size(); ++i)
-        addProtocol(clone->symbol(original->_protocols.at(i), subst)->asObjCBaseProtocol());
-}
-
-ObjCClass::~ObjCClass()
-{}
-
-bool ObjCClass::isInterface() const
-{ return _isInterface; }
-
-void ObjCClass::setInterface(bool isInterface)
-{ _isInterface = isInterface; }
-
-bool ObjCClass::isCategory() const
-{ return _categoryName != 0; }
-
-const Name *ObjCClass::categoryName() const
-{ return _categoryName; }
-
-void ObjCClass::setCategoryName(const Name *categoryName)
-{ _categoryName = categoryName; }
-
-ObjCBaseClass *ObjCClass::baseClass() const
-{ return _baseClass; }
-
-void ObjCClass::setBaseClass(ObjCBaseClass *baseClass)
-{ _baseClass = baseClass; }
-
-unsigned ObjCClass::protocolCount() const
-{ return unsigned(_protocols.size()); }
-
-ObjCBaseProtocol *ObjCClass::protocolAt(unsigned index) const
-{ return _protocols.at(index); }
-
-void ObjCClass::addProtocol(ObjCBaseProtocol *protocol)
-{ _protocols.push_back(protocol); }
-
-FullySpecifiedType ObjCClass::type() const
-{ return FullySpecifiedType(const_cast<ObjCClass *>(this)); }
-
-void ObjCClass::visitSymbol0(SymbolVisitor *visitor)
-{
-    if (visitor->visit(this)) {
-        if (_baseClass)
-            visitSymbol(_baseClass, visitor);
-
-        for (unsigned i = 0; i < _protocols.size(); ++i)
-            visitSymbol(_protocols.at(i), visitor);
-
-        for (unsigned i = 0; i < memberCount(); ++i)
-            visitSymbol(memberAt(i), visitor);
-    }
-}
-
-void ObjCClass::accept0(TypeVisitor *visitor)
-{ visitor->visit(this); }
-
-ObjCProtocol::ObjCProtocol(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name):
-        Scope(translationUnit, sourceLocation, name)
-{
-}
-
-ObjCProtocol::ObjCProtocol(Clone *clone, Subst *subst, ObjCProtocol *original)
-    : Scope(clone, subst, original)
-{
-    for (size_t i = 0; i < original->_protocols.size(); ++i)
-        addProtocol(clone->symbol(original->_protocols.at(i), subst)->asObjCBaseProtocol());
-}
-
-ObjCProtocol::~ObjCProtocol()
-{}
-
-unsigned ObjCProtocol::protocolCount() const
-{ return unsigned(_protocols.size()); }
-
-ObjCBaseProtocol *ObjCProtocol::protocolAt(unsigned index) const
-{ return _protocols.at(index); }
-
-void ObjCProtocol::addProtocol(ObjCBaseProtocol *protocol)
-{ _protocols.push_back(protocol); }
-
-FullySpecifiedType ObjCProtocol::type() const
-{ return FullySpecifiedType(const_cast<ObjCProtocol *>(this)); }
-
-void ObjCProtocol::visitSymbol0(SymbolVisitor *visitor)
-{
-    if (visitor->visit(this)) {
-        for (unsigned i = 0; i < _protocols.size(); ++i)
-            visitSymbol(_protocols.at(i), visitor);
-    }
-}
-
-void ObjCProtocol::accept0(TypeVisitor *visitor)
-{ visitor->visit(this); }
-
-
-ObjCForwardClassDeclaration::ObjCForwardClassDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation,
-                                                         const Name *name):
-        Symbol(translationUnit, sourceLocation, name)
-{
-}
-
-ObjCForwardClassDeclaration::ObjCForwardClassDeclaration(Clone *clone, Subst *subst, ObjCForwardClassDeclaration *original)
-    : Symbol(clone, subst, original)
-{ }
-
-ObjCForwardClassDeclaration::~ObjCForwardClassDeclaration()
-{}
-
-FullySpecifiedType ObjCForwardClassDeclaration::type() const
-{ return FullySpecifiedType(); }
-
-void ObjCForwardClassDeclaration::visitSymbol0(SymbolVisitor *visitor)
-{ visitor->visit(this); }
-
-void ObjCForwardClassDeclaration::accept0(TypeVisitor *visitor)
-{ visitor->visit(this); }
-
-ObjCForwardProtocolDeclaration::ObjCForwardProtocolDeclaration(TranslationUnit *translationUnit, unsigned sourceLocation,
-                                                               const Name *name):
-        Symbol(translationUnit, sourceLocation, name)
-{
-}
-
-ObjCForwardProtocolDeclaration::ObjCForwardProtocolDeclaration(Clone *clone, Subst *subst, ObjCForwardProtocolDeclaration *original)
-    : Symbol(clone, subst, original)
-{ }
-
-ObjCForwardProtocolDeclaration::~ObjCForwardProtocolDeclaration()
-{}
-
-FullySpecifiedType ObjCForwardProtocolDeclaration::type() const
-{ return FullySpecifiedType(); }
-
-void ObjCForwardProtocolDeclaration::visitSymbol0(SymbolVisitor *visitor)
-{ visitor->visit(this); }
-
-void ObjCForwardProtocolDeclaration::accept0(TypeVisitor *visitor)
-{ visitor->visit(this); }
-
-ObjCMethod::ObjCMethod(TranslationUnit *translationUnit, unsigned sourceLocation, const Name *name)
-    : Scope(translationUnit, sourceLocation, name),
-     _flags(0)
-{ }
-
-ObjCMethod::ObjCMethod(Clone *clone, Subst *subst, ObjCMethod *original)
-    : Scope(clone, subst, original)
-    , _returnType(clone->type(original->_returnType, subst))
-    , _flags(original->_flags)
-{ }
-
-ObjCMethod::~ObjCMethod()
-{ }
-
-void ObjCMethod::accept0(TypeVisitor *visitor)
-{ visitor->visit(this); }
-
-FullySpecifiedType ObjCMethod::type() const
-{ return FullySpecifiedType(const_cast<ObjCMethod *>(this)); }
-
-FullySpecifiedType ObjCMethod::returnType() const
-{ return _returnType; }
-
-void ObjCMethod::setReturnType(const FullySpecifiedType &returnType)
-{ _returnType = returnType; }
-
-bool ObjCMethod::hasReturnType() const
-{
-    const FullySpecifiedType ty = returnType();
-    return ty.isValid() || ty.isSigned() || ty.isUnsigned();
-}
-
-unsigned ObjCMethod::argumentCount() const
-{
-    const unsigned c = memberCount();
-    if (c > 0 && memberAt(c - 1)->isBlock())
-        return c - 1;
-    return c;
-}
-
-Symbol *ObjCMethod::argumentAt(unsigned index) const
-{
-    return memberAt(index);
-}
-
-bool ObjCMethod::hasArguments() const
-{
-    return ! (argumentCount() == 0 ||
-              (argumentCount() == 1 && argumentAt(0)->type()->isVoidType()));
-}
-
-bool ObjCMethod::isVariadic() const
-{ return f._isVariadic; }
-
-void ObjCMethod::setVariadic(bool isVariadic)
-{ f._isVariadic = isVariadic; }
-
-void ObjCMethod::visitSymbol0(SymbolVisitor *visitor)
-{
-    if (visitor->visit(this)) {
-        for (unsigned i = 0; i < memberCount(); ++i) {
-            visitSymbol(memberAt(i), visitor);
-        }
-    }
-}
-
-ObjCPropertyDeclaration::ObjCPropertyDeclaration(TranslationUnit *translationUnit,
-                                                 unsigned sourceLocation,
-                                                 const Name *name):
-    Symbol(translationUnit, sourceLocation, name),
-    _getterName(0),
-    _setterName(0),
-    _propertyAttributes(None)
-{}
-
-ObjCPropertyDeclaration::ObjCPropertyDeclaration(Clone *clone, Subst *subst, ObjCPropertyDeclaration *original)
-    : Symbol(clone, subst, original)
-    , _getterName(clone->name(original->_getterName, subst))
-    , _setterName(clone->name(original->_setterName, subst))
-    , _type(clone->type(original->_type, subst))
-    , _propertyAttributes(original->_propertyAttributes)
-{ }
-
-ObjCPropertyDeclaration::~ObjCPropertyDeclaration()
-{}
-
-bool ObjCPropertyDeclaration::hasAttribute(int attribute) const
-{ return _propertyAttributes & attribute; }
-
-void ObjCPropertyDeclaration::setAttributes(int attributes)
-{ _propertyAttributes = attributes; }
-
-bool ObjCPropertyDeclaration::hasGetter() const
-{ return hasAttribute(Getter); }
-
-bool ObjCPropertyDeclaration::hasSetter() const
-{ return hasAttribute(Setter); }
-
-const Name *ObjCPropertyDeclaration::getterName() const
-{ return _getterName; }
-
-void ObjCPropertyDeclaration::setGetterName(const Name *getterName)
-{ _getterName = getterName; }
-
-const Name *ObjCPropertyDeclaration::setterName() const
-{ return _setterName; }
-
-void ObjCPropertyDeclaration::setSetterName(const Name *setterName)
-{ _setterName = setterName; }
-
-void ObjCPropertyDeclaration::setType(const FullySpecifiedType &type)
-{ _type = type; }
-
-FullySpecifiedType ObjCPropertyDeclaration::type() const
-{ return _type; }
-
-void ObjCPropertyDeclaration::visitSymbol0(SymbolVisitor *visitor)
-{
-    if (visitor->visit(this)) {
     }
 }

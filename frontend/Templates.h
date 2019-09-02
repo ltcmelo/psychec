@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_TEMPLATES_H
-#define CFE_TEMPLATES_H
+#ifndef PSYCHE_TEMPLATES_H
+#define PSYCHE_TEMPLATES_H
 
 #include "FrontendConfig.h"
 #include "TypeVisitor.h"
@@ -49,19 +49,19 @@ public:
     Control *control() const { return _control; }
     Subst *previous() const { return _previous; }
 
-    FullySpecifiedType apply(const Name *name) const;
+    FullySpecifiedType apply(const Name* name) const;
 
-    void bind(const Name *name, const FullySpecifiedType &ty)
+    void bind(const Name* name, const FullySpecifiedType &ty)
     { _map.insert(std::make_pair(name, ty)); }
 
-    FullySpecifiedType &operator[](const Name *name) { return _map[name]; }
+    FullySpecifiedType &operator[](const Name* name) { return _map[name]; }
 
-    bool contains(const Name *name) const { return _map.find(name) != _map.end(); }
+    bool contains(const Name* name) const { return _map.find(name) != _map.end(); }
 
 private:
     Control *_control;
     Subst *_previous;
-    std::map<const Name *, FullySpecifiedType, Name::Compare> _map;
+    std::map<const Name* , FullySpecifiedType, Name::Compare> _map;
 };
 
 class CFE_API CloneType: protected TypeVisitor
@@ -88,11 +88,6 @@ protected:
     virtual void visit(Class *type);
     virtual void visit(Enum *type);
     virtual void visit(ForwardClassDeclaration *type);
-    virtual void visit(ObjCClass *type);
-    virtual void visit(ObjCProtocol *type);
-    virtual void visit(ObjCMethod *type);
-    virtual void visit(ObjCForwardClassDeclaration *type);
-    virtual void visit(ObjCForwardProtocolDeclaration *type);
 
 protected:
     typedef std::pair <const FullySpecifiedType, Subst *> TypeSubstPair;
@@ -109,11 +104,11 @@ class CFE_API CloneName: protected NameVisitor
 public:
     CloneName(Clone *clone);
 
-    const Name *operator()(const Name *name, Subst *subst) { return cloneName(name, subst); }
-    const Name *cloneName(const Name *name, Subst *subst);
+    const Name* operator()(const Name* name, Subst *subst) { return cloneName(name, subst); }
+    const Name* cloneName(const Name* name, Subst *subst);
 
 protected:
-    virtual void visit(const Identifier *name);
+    virtual void visit(const Identifier* name);
     virtual void visit(const AnonymousNameId *name);
     virtual void visit(const TemplateNameId *name);
     virtual void visit(const DestructorNameId *name);
@@ -123,13 +118,13 @@ protected:
     virtual void visit(const SelectorNameId *name);
 
 protected:
-    typedef std::pair <const Name *, Subst *> NameSubstPair;
-    std::map<NameSubstPair, const Name *> _cache;
+    typedef std::pair <const Name* , Subst *> NameSubstPair;
+    std::map<NameSubstPair, const Name* > _cache;
 
     Clone *_clone;
     Control *_control;
     Subst *_subst;
-    const Name *_name;
+    const Name* _name;
 };
 
 class CFE_API CloneSymbol: protected SymbolVisitor
@@ -137,8 +132,8 @@ class CFE_API CloneSymbol: protected SymbolVisitor
 public:
     CloneSymbol(Clone *clone);
 
-    Symbol *operator()(Symbol *symbol, Subst *subst) { return cloneSymbol(symbol, subst); }
-    Symbol *cloneSymbol(Symbol *symbol, Subst *subst);
+    Symbol* operator()(Symbol* symbol, Subst *subst) { return cloneSymbol(symbol, subst); }
+    Symbol* cloneSymbol(Symbol* symbol, Subst *subst);
 
 protected:
     virtual bool visit(UsingNamespaceDirective *symbol);
@@ -156,28 +151,14 @@ protected:
     virtual bool visit(Block *symbol);
     virtual bool visit(ForwardClassDeclaration *symbol);
 
-    // Qt
-    virtual bool visit(QtPropertyDeclaration *symbol);
-    virtual bool visit(QtEnum *symbol);
-
-    // Objective-C
-    virtual bool visit(ObjCBaseClass *symbol);
-    virtual bool visit(ObjCBaseProtocol *symbol);
-    virtual bool visit(ObjCClass *symbol);
-    virtual bool visit(ObjCForwardClassDeclaration *symbol);
-    virtual bool visit(ObjCProtocol *symbol);
-    virtual bool visit(ObjCForwardProtocolDeclaration *symbol);
-    virtual bool visit(ObjCMethod *symbol);
-    virtual bool visit(ObjCPropertyDeclaration *symbol);
-
 protected:
-    typedef std::pair <Symbol *, Subst *> SymbolSubstPair;
-    std::map<SymbolSubstPair, Symbol *> _cache;
+    typedef std::pair <Symbol* , Subst *> SymbolSubstPair;
+    std::map<SymbolSubstPair, Symbol* > _cache;
 
     Clone *_clone;
     Control *_control;
     Subst *_subst;
-    Symbol *_symbol;
+    Symbol* _symbol;
 };
 
 class CFE_API Clone
@@ -188,15 +169,15 @@ public:
     Clone(Control *control);
 
     Control *control() const { return _control; }
-    const StringLiteral *stringLiteral(const StringLiteral *literal);
-    const NumericLiteral *numericLiteral(const NumericLiteral *literal);
-    const Identifier *identifier(const Identifier *id);
+    const StringLiteral* stringLiteral(const StringLiteral* literal);
+    const NumericLiteral* numericLiteral(const NumericLiteral* literal);
+    const Identifier* identifier(const Identifier* id);
 
     FullySpecifiedType type(const FullySpecifiedType &type, Subst *subst);
-    const Name *name(const Name *name, Subst *subst);
-    Symbol *symbol(Symbol *symbol, Subst *subst);
+    const Name* name(const Name* name, Subst *subst);
+    Symbol* symbol(Symbol* symbol, Subst *subst);
 
-    Symbol *instantiate(Template *templ,
+    Symbol* instantiate(Template *templ,
                         const FullySpecifiedType *const args, unsigned argc,
                         Subst *subst = 0);
 
@@ -208,4 +189,4 @@ private:
 
 } // end of namespace psyche
 
-#endif // CFE_TEMPLATES_H
+#endif

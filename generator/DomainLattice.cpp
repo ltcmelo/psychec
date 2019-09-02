@@ -28,9 +28,8 @@
 #include "Name.h"
 #include "Symbol.h"
 #include "Symbols.h"
-#include "SymbolPP.h"
 #include "Token.h"
-#include "TypeOfExpression.h"
+#include "ExpressionTypeEvaluator.h"
 #include "TranslationUnit.h"
 #include <algorithm>
 #include <unordered_set>
@@ -118,7 +117,7 @@ void DomainLattice::categorize(TranslationUnitAST* ast, Scope* global)
     enterScope(global);
     globalScope_ = scope_;
 
-    for (DeclarationListAST *it = ast->declaration_list; it; it = it->next) {
+    for (DeclarationListAST* it = ast->declaration_list; it; it = it->next) {
         resetCutoffScope();
         accept(it->value);
     }
@@ -208,10 +207,8 @@ DomainLattice::Domain DomainLattice::domainForType(const FullySpecifiedType& ty,
                                                    const Symbol* sym)
 {
     auto debug = [sym] (const char* m) {
-        if (sym) {
-            const auto& s = SymbolPP().print(sym);
-            printDebug(m, s.begin());
-        }
+        if (sym)
+            printDebug(m, sym->name()->identifier()->chars());
     };
 
     if (ty->asIntegerType()) {
@@ -277,7 +274,7 @@ DomainLattice::Domain DomainLattice::domainForType(const FullySpecifiedType& ty,
     return Undefined;
 }
 
-void DomainLattice::assignDomain(ExpressionAST *ast)
+void DomainLattice::assignDomain(ExpressionAST* ast)
 {
     if (!ast)
         return;
@@ -288,14 +285,14 @@ void DomainLattice::assignDomain(ExpressionAST *ast)
 
     if (ast->asNumericLiteral()) {
         // We don't want to type 0: it's both an integer and the null pointer constant.
-        const NumericLiteral *numLit = numericLiteral(ast->asNumericLiteral()->literal_token);
+        const NumericLiteral* numLit = numericLiteral(ast->asNumericLiteral()->literal_token);
         PSYCHE_ASSERT(numLit, return, "numeric literal must exist");
         checkTy = !numLit->isInt() || strcmp(numLit->chars(), kZero);
     }
 
     if (checkTy) {
-        TypeOfExpression exprType(translationUnit());
-        FullySpecifiedType ty = exprType.resolve(ast, const_cast<Scope*>(scope_));
+        ExpressionTypeEvaluator exprType(translationUnit());
+        FullySpecifiedType ty = exprType.evaluate(ast, const_cast<Scope*>(scope_));
 
         if (ty.isValid()) {
             auto dom = domainForType(ty, nullptr);
@@ -319,8 +316,8 @@ void DomainLattice::assignDomain(ExpressionAST *ast)
 
             DB* db = findOrCreateDB(symScope);
             if (lastDom_ > db->second[valSym]) {
-                const auto& symName = SymbolPP().print(valSym);
-                printDebug("Symbol %s (re)categorized as <%s>\n", symName.c_str(), lastDom_.name_.c_str());
+                printDebug("Symbol %s (re)categorized as <%s>\n", valSym->name()->identifier()->chars(),
+                           lastDom_.name_.c_str());
                 db->second[valSym] = lastDom_;
             }
         } else {
@@ -367,13 +364,13 @@ bool DomainLattice::visit(FunctionDefinitionAST* ast)
     return false;
 }
 
-void DomainLattice::visitStatement(StatementAST *ast)
+void DomainLattice::visitStatement(StatementAST* ast)
 {
     resetCutoffScope();
     accept(ast);
 }
 
-bool DomainLattice::visit(SwitchStatementAST *ast)
+bool DomainLattice::visit(SwitchStatementAST* ast)
 {
     enforceLeastDomain(Integral);
     visitExpression(ast->condition);
@@ -381,7 +378,7 @@ bool DomainLattice::visit(SwitchStatementAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(CaseStatementAST *ast)
+bool DomainLattice::visit(CaseStatementAST* ast)
 {
     enforceLeastDomain(Integral);
     visitExpression(ast->expression);
@@ -389,19 +386,19 @@ bool DomainLattice::visit(CaseStatementAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(CompoundStatementAST *ast)
+bool DomainLattice::visit(CompoundStatementAST* ast)
 {
     enforceLeastDomain(Undefined);
 
     const Scope *prevScope = enterScope(ast->symbol);
-    for (StatementListAST *it = ast->statement_list; it; it = it->next)
+    for (StatementListAST* it = ast->statement_list; it; it = it->next)
         visitStatement(it->value);
     enterScope(prevScope);
 
     return false;
 }
 
-bool DomainLattice::visit(DeclarationStatementAST *ast)
+bool DomainLattice::visit(DeclarationStatementAST* ast)
 {
     resetCutoffScope();
     accept(ast->declaration);
@@ -409,7 +406,7 @@ bool DomainLattice::visit(DeclarationStatementAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(DoStatementAST *ast)
+bool DomainLattice::visit(DoStatementAST* ast)
 {
     enforceLeastDomain(Scalar);
 
@@ -419,7 +416,7 @@ bool DomainLattice::visit(DoStatementAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(WhileStatementAST *ast)
+bool DomainLattice::visit(WhileStatementAST* ast)
 {
     enforceLeastDomain(Scalar);
 
@@ -431,7 +428,7 @@ bool DomainLattice::visit(WhileStatementAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(ForStatementAST *ast)
+bool DomainLattice::visit(ForStatementAST* ast)
 {
     enforceLeastDomain(Undefined);
 
@@ -447,7 +444,7 @@ bool DomainLattice::visit(ForStatementAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(IfStatementAST *ast)
+bool DomainLattice::visit(IfStatementAST* ast)
 {
     enforceLeastDomain(Scalar);
 
@@ -460,7 +457,7 @@ bool DomainLattice::visit(IfStatementAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(ExpressionStatementAST *ast)
+bool DomainLattice::visit(ExpressionStatementAST* ast)
 {
     enforceLeastDomain(Undefined);
 
@@ -469,7 +466,7 @@ bool DomainLattice::visit(ExpressionStatementAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(ReturnStatementAST *ast)
+bool DomainLattice::visit(ReturnStatementAST* ast)
 {
     enforceLeastDomain(Undefined);
 
@@ -480,13 +477,13 @@ bool DomainLattice::visit(ReturnStatementAST *ast)
 
     //--- Expressions
 
-void DomainLattice::visitExpression(ExpressionAST *ast)
+void DomainLattice::visitExpression(ExpressionAST* ast)
 {
     accept(ast);
     assignDomain(ast);
 }
 
-ExpressionAST *DomainLattice::isKnownAST(const ExpressionAST *ast) const
+ExpressionAST* DomainLattice::isKnownAST(const ExpressionAST* ast) const
 {
     for (auto candidate : knownAsts_) {
         if (const_cast<ExpressionAST*>(ast)->match(candidate, &matcher_))
@@ -514,7 +511,7 @@ DomainLattice::Domain DomainLattice::enforceLeastDomain(DomainLattice::Domain do
     return dom;
 }
 
-bool DomainLattice::visit(ArrayAccessAST *ast)
+bool DomainLattice::visit(ArrayAccessAST* ast)
 {
     EXPR_REGION_CTRL;
 
@@ -527,7 +524,7 @@ bool DomainLattice::visit(ArrayAccessAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(BinaryExpressionAST *ast)
+bool DomainLattice::visit(BinaryExpressionAST* ast)
 {
     EXPR_REGION_CTRL;
 
@@ -699,7 +696,7 @@ bool DomainLattice::visit(BinaryExpressionAST *ast)
     }
 }
 
-bool DomainLattice::visit(ConditionalExpressionAST *ast)
+bool DomainLattice::visit(ConditionalExpressionAST* ast)
 {
     EXPR_REGION_CTRL;
 
@@ -713,12 +710,12 @@ bool DomainLattice::visit(ConditionalExpressionAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(IdExpressionAST *ast)
+bool DomainLattice::visit(IdExpressionAST* ast)
 {
     return false;
 }
 
-bool DomainLattice::visit(MemberAccessAST *ast)
+bool DomainLattice::visit(MemberAccessAST* ast)
 {
     EXPR_REGION_CTRL;
 
@@ -733,7 +730,7 @@ bool DomainLattice::visit(MemberAccessAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(UnaryExpressionAST *ast)
+bool DomainLattice::visit(UnaryExpressionAST* ast)
 {
     EXPR_REGION_CTRL;
 
@@ -784,7 +781,7 @@ bool DomainLattice::visit(UnaryExpressionAST *ast)
     }
 }
 
-bool DomainLattice::visit(NumericLiteralAST *ast)
+bool DomainLattice::visit(NumericLiteralAST* ast)
 {
     EXPR_REGION_CTRL;
 
@@ -793,7 +790,7 @@ bool DomainLattice::visit(NumericLiteralAST *ast)
         // TODO: char/int
         enforceLeastDomain(Domain(kIntegral, kCharTy));
     } else {
-        const NumericLiteral *numLit = numericLiteral(ast->literal_token);
+        const NumericLiteral* numLit = numericLiteral(ast->literal_token);
         PSYCHE_ASSERT(numLit, return false, "numeric literal must exist");
         if (numLit->isDouble()) {
             enforceLeastDomain(Domain(kFloatingPoint, kDoubleTy));
@@ -818,7 +815,7 @@ bool DomainLattice::visit(NumericLiteralAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(BoolLiteralAST *ast)
+bool DomainLattice::visit(BoolLiteralAST* ast)
 {
     EXPR_REGION_CTRL;
 
@@ -827,7 +824,7 @@ bool DomainLattice::visit(BoolLiteralAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(StringLiteralAST *ast)
+bool DomainLattice::visit(StringLiteralAST* ast)
 {
     EXPR_REGION_CTRL;
 
@@ -836,7 +833,7 @@ bool DomainLattice::visit(StringLiteralAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(SizeofExpressionAST *ast)
+bool DomainLattice::visit(SizeofExpressionAST* ast)
 {
     EXPR_REGION_CTRL;
 
@@ -846,14 +843,14 @@ bool DomainLattice::visit(SizeofExpressionAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(PointerLiteralAST *ast)
+bool DomainLattice::visit(PointerLiteralAST* ast)
 {
     enforceLeastDomain(Pointer);
 
     return false;
 }
 
-bool DomainLattice::visit(BracedInitializerAST *ast)
+bool DomainLattice::visit(BracedInitializerAST* ast)
 {
     EXPR_REGION_CTRL;
 
@@ -865,7 +862,7 @@ bool DomainLattice::visit(BracedInitializerAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(CallAST *ast)
+bool DomainLattice::visit(CallAST* ast)
 {
     EXPR_REGION_CTRL;
 
@@ -924,7 +921,7 @@ bool DomainLattice::visit(CallAST *ast)
     return false;
 }
 
-bool DomainLattice::visit(CastExpressionAST *ast)
+bool DomainLattice::visit(CastExpressionAST* ast)
 {
     Domain finalDom;
     if (withinExpr_) {
@@ -968,7 +965,7 @@ bool DomainLattice::visit(NestedExpressionAST* ast)
 
 bool DomainLattice::visit(SimpleDeclarationAST* ast)
 {
-    DeclaratorListAST *declIt = ast->declarator_list;
+    DeclaratorListAST* declIt = ast->declarator_list;
     for (const List<Symbol*>* symIt = ast->symbols;
             symIt;
             symIt = symIt->next, declIt = declIt->next) {
@@ -989,7 +986,7 @@ bool DomainLattice::visit(SimpleDeclarationAST* ast)
     return false;
 }
 
-std::string DomainLattice::fetchText(AST *ast) const
+std::string DomainLattice::fetchText(AST* ast) const
 {
     const Token first = tokenAt(ast->firstToken());
     const Token last = tokenAt(ast->lastToken());

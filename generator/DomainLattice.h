@@ -99,24 +99,24 @@ private:
 
     // Statements
     void visitStatement(psyche::StatementAST* ast);
-    bool visit(psyche::SwitchStatementAST *ast) override;
+    bool visit(psyche::SwitchStatementAST* ast) override;
     bool visit(psyche::CaseStatementAST* ast) override;
-    bool visit(psyche::CompoundStatementAST *ast) override;
-    bool visit(psyche::DeclarationStatementAST *ast) override;
-    bool visit(psyche::DoStatementAST *ast) override;
-    bool visit(psyche::WhileStatementAST *ast) override;
-    bool visit(psyche::ForStatementAST *ast) override;
-    bool visit(psyche::IfStatementAST *ast) override;
-    bool visit(psyche::ExpressionStatementAST *ast) override;
-    bool visit(psyche::ReturnStatementAST *ast) override;
+    bool visit(psyche::CompoundStatementAST* ast) override;
+    bool visit(psyche::DeclarationStatementAST* ast) override;
+    bool visit(psyche::DoStatementAST* ast) override;
+    bool visit(psyche::WhileStatementAST* ast) override;
+    bool visit(psyche::ForStatementAST* ast) override;
+    bool visit(psyche::IfStatementAST* ast) override;
+    bool visit(psyche::ExpressionStatementAST* ast) override;
+    bool visit(psyche::ReturnStatementAST* ast) override;
 
     // Expressions
     void visitExpression(psyche::ExpressionAST* ast);
     bool visit(psyche::ArrayAccessAST* ast) override;
     bool visit(psyche::BinaryExpressionAST* ast) override;
     bool visit(psyche::CallAST* ast) override;
-    bool visit(psyche::CastExpressionAST *ast) override;
-    bool visit(psyche::ConditionalExpressionAST *ast) override;
+    bool visit(psyche::CastExpressionAST* ast) override;
+    bool visit(psyche::ConditionalExpressionAST* ast) override;
     bool visit(psyche::IdExpressionAST* ast) override;
     bool visit(psyche::MemberAccessAST* ast) override;
     bool visit(psyche::UnaryExpressionAST* ast) override;
@@ -125,7 +125,7 @@ private:
     bool visit(psyche::StringLiteralAST* ast) override;
     bool visit(psyche::SizeofExpressionAST* ast) override;
     bool visit(psyche::PointerLiteralAST* ast) override;
-    bool visit(psyche::BracedInitializerAST *ast) override;
+    bool visit(psyche::BracedInitializerAST* ast) override;
     bool visit(psyche::PostIncrDecrAST* ast) override;
     bool visit(psyche::NestedExpressionAST* ast) override;
 

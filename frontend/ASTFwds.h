@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,14 +19,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_ASTFWD_H
-#define CFE_ASTFWD_H
+#ifndef PSYCHE_ASTFWD_H
+#define PSYCHE_ASTFWD_H
 
 #include "FrontendConfig.h"
 
 namespace psyche {
 
-template <typename Tptr> class List;
+template <class PtrT, class DerivedListT> class BaseList;
+template <class PtrT> class List;
+template <class PtrT> class SepList;
 
 class AST;
 class ASTVisitor;
@@ -91,6 +94,7 @@ class ForStatementAST;
 class ForeachStatementAST;
 class FunctionDeclaratorAST;
 class FunctionDefinitionAST;
+class GenericsDeclarationAST;
 class GnuAttributeAST;
 class GnuAttributeSpecifierAST;
 class GotoStatementAST;
@@ -118,31 +122,6 @@ class NewTypeIdAST;
 class NoExceptOperatorExpressionAST;
 class NoExceptSpecificationAST;
 class NumericLiteralAST;
-class ObjCClassDeclarationAST;
-class ObjCClassForwardDeclarationAST;
-class ObjCDynamicPropertiesDeclarationAST;
-class ObjCEncodeExpressionAST;
-class ObjCFastEnumerationAST;
-class ObjCInstanceVariablesDeclarationAST;
-class ObjCMessageArgumentAST;
-class ObjCMessageArgumentDeclarationAST;
-class ObjCMessageExpressionAST;
-class ObjCMethodDeclarationAST;
-class ObjCMethodPrototypeAST;
-class ObjCPropertyAttributeAST;
-class ObjCPropertyDeclarationAST;
-class ObjCProtocolDeclarationAST;
-class ObjCProtocolExpressionAST;
-class ObjCProtocolForwardDeclarationAST;
-class ObjCProtocolRefsAST;
-class ObjCSelectorAST;
-class ObjCSelectorArgumentAST;
-class ObjCSelectorExpressionAST;
-class ObjCSynchronizedStatementAST;
-class ObjCSynthesizedPropertiesDeclarationAST;
-class ObjCSynthesizedPropertyAST;
-class ObjCTypeNameAST;
-class ObjCVisibilityDeclarationAST;
 class OperatorAST;
 class OperatorFunctionIdAST;
 class ParameterDeclarationAST;
@@ -154,17 +133,8 @@ class PostIncrDecrAST;
 class PostfixAST;
 class PostfixDeclaratorAST;
 class PtrOperatorAST;
-class QtEnumDeclarationAST;
-class QtFlagsDeclarationAST;
-class QtInterfaceNameAST;
-class QtInterfacesDeclarationAST;
-class QtMemberDeclarationAST;
-class QtMethodAST;
-class QtObjectTagAST;
-class QtPrivateSlotAST;
-class QtPropertyDeclarationAST;
-class QtPropertyDeclarationItemAST;
 class QualifiedNameAST;
+class QuantifiedTypeSpecifierAST;
 class RangeBasedForStatementAST;
 class ReferenceAST;
 class ReturnStatementAST;
@@ -196,37 +166,28 @@ class UsingAST;
 class UsingDirectiveAST;
 class WhileStatementAST;
 
-typedef List<ExpressionAST *> ExpressionListAST;
-typedef List<DeclarationAST *> DeclarationListAST;
-typedef List<StatementAST *> StatementListAST;
-typedef List<DeclaratorAST *> DeclaratorListAST;
-typedef List<BaseSpecifierAST *> BaseSpecifierListAST;
-typedef List<EnumeratorAST *> EnumeratorListAST;
-typedef List<MemInitializerAST *> MemInitializerListAST;
-typedef List<NewArrayDeclaratorAST *> NewArrayDeclaratorListAST;
-typedef List<PostfixAST *> PostfixListAST;
-typedef List<PostfixDeclaratorAST *> PostfixDeclaratorListAST;
-typedef List<GnuAttributeAST *> GnuAttributeListAST;
-typedef List<NestedNameSpecifierAST *> NestedNameSpecifierListAST;
-typedef List<CatchClauseAST *> CatchClauseListAST;
-typedef List<PtrOperatorAST *> PtrOperatorListAST;
-typedef List<SpecifierAST *> SpecifierListAST;
-typedef List<QtPropertyDeclarationItemAST *> QtPropertyDeclarationItemListAST;
-typedef List<NameAST *> NameListAST;
-typedef List<QtInterfaceNameAST *> QtInterfaceNameListAST;
+typedef SepList<ExpressionAST*> ExpressionListAST;
+typedef List<DeclarationAST*> DeclarationListAST;
+typedef List<StatementAST*> StatementListAST;
+typedef SepList<DeclaratorAST*> DeclaratorListAST;
+typedef SepList<BaseSpecifierAST*> BaseSpecifierListAST;
+typedef List<EnumeratorAST*> EnumeratorListAST;
+typedef List<MemInitializerAST*> MemInitializerListAST;
+typedef List<NewArrayDeclaratorAST*> NewArrayDeclaratorListAST;
+typedef List<PostfixAST*> PostfixListAST;
+typedef List<PostfixDeclaratorAST*> PostfixDeclaratorListAST;
+typedef List<GnuAttributeAST*> GnuAttributeListAST;
+typedef List<NestedNameSpecifierAST*> NestedNameSpecifierListAST;
+typedef List<CatchClauseAST*> CatchClauseListAST;
+typedef List<PtrOperatorAST*> PtrOperatorListAST;
+typedef List<SpecifierAST*> SpecifierListAST;
+typedef List<NameAST*> NameListAST;
+typedef SepList<ParameterDeclarationAST*> ParameterDeclarationListAST;
+typedef List<CaptureAST*> CaptureListAST;
 
-typedef List<ParameterDeclarationAST *> ParameterDeclarationListAST;
-typedef List<CaptureAST *> CaptureListAST;
-
-typedef List<ObjCMessageArgumentAST *> ObjCMessageArgumentListAST;
-typedef List<ObjCSelectorArgumentAST *> ObjCSelectorArgumentListAST;
-typedef List<ObjCPropertyAttributeAST *> ObjCPropertyAttributeListAST;
-typedef List<ObjCMessageArgumentDeclarationAST *> ObjCMessageArgumentDeclarationListAST;
-typedef List<ObjCSynthesizedPropertyAST *> ObjCSynthesizedPropertyListAST;
-
-typedef List<DesignatorAST *> DesignatorListAST;
+typedef List<DesignatorAST*> DesignatorListAST;
 
 } // namespace psyche
 
 
-#endif // CFE_ASTFWD_H
+#endif

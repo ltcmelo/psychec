@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +34,7 @@ DiagnosticCollector::~DiagnosticCollector()
 {}
 
 void DiagnosticCollector::collect(Severity severity,
-                                  const StringLiteral *fileName,
+                                  const StringLiteral* fileName,
                                   unsigned line, unsigned column,
                                   const char *format, va_list ap)
 {

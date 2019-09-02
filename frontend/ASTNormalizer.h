@@ -1,25 +1,29 @@
-/******************************************************************************
- Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
-
- This library is free software; you can redistribute it and/or modify it under
- the terms of the GNU Lesser General Public License as published by the Free
- Software Foundation; either version 2.1 of the License, or (at your option)
- any later version.
-
- This library is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- for more details.
-
- You should have received a copy of the GNU Lesser General Public License along
- with this library; if not, write to the Free Software Foundation, Inc., 51
- Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
- *****************************************************************************/
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 #ifndef PSYCHE_ASTNORMALIZER_H__
 #define PSYCHE_ASTNORMALIZER_H__
 
 #include "FrontendConfig.h"
+
+#include "AST.h"
 #include "ASTVisitor.h"
 #include <iostream>
 
@@ -30,7 +34,7 @@ class CFE_API ASTNormalizer final : public psyche::ASTVisitor
 public:
     ASTNormalizer(psyche::TranslationUnit *unit, bool employHeuristic);
 
-    bool normalize(psyche::TranslationUnitAST *ast);
+    bool normalize(psyche::TranslationUnitAST* ast);
 
     struct Stats
     {
@@ -50,16 +54,16 @@ private:
     // methods only wouldn't work because all we get is a copy of the poitner.
     // Our approach is to overide the visit of all nodes which can hold an
     // ambiguous statement within it.
-    bool visit(psyche::CompoundStatementAST *ast);
-    bool visit(psyche::IfStatementAST *ast);
-    bool visit(psyche::ForStatementAST *ast);
-    bool visit(psyche::LabeledStatementAST *ast);
-    bool visit(psyche::WhileStatementAST *ast);
-    bool visit(psyche::SwitchStatementAST *ast);
-    bool visit(psyche::CaseStatementAST *ast);
-    bool visit(psyche::DoStatementAST *ast);
+    bool visit(psyche::CompoundStatementAST* ast);
+    bool visit(psyche::IfStatementAST* ast);
+    bool visit(psyche::ForStatementAST* ast);
+    bool visit(psyche::LabeledStatementAST* ast);
+    bool visit(psyche::WhileStatementAST* ast);
+    bool visit(psyche::SwitchStatementAST* ast);
+    bool visit(psyche::CaseStatementAST* ast);
+    bool visit(psyche::DoStatementAST* ast);
 
-    void maybeFixAST(psyche::StatementAST *&ast);
+    void maybeFixAST(psyche::StatementAST* &ast);
 
     bool employHeuristic_; // On ambiguities not resolved by further syntax.
     Stats stats_;

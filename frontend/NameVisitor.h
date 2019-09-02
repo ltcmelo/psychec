@@ -21,8 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_NAMEVISITOR_H
-#define CFE_NAMEVISITOR_H
+#ifndef PSYCHE_NAMEVISITOR_H
+#define PSYCHE_NAMEVISITOR_H
 
 #include "FrontendConfig.h"
 #include "FrontendFwds.h"
@@ -38,13 +38,13 @@ public:
     NameVisitor();
     virtual ~NameVisitor();
 
-    void accept(const Name *name);
+    void accept(const Name* name);
 
-    virtual bool preVisit(const Name *) { return true; }
-    virtual void postVisit(const Name *) {}
+    virtual bool preVisit(const Name* ) { return true; }
+    virtual void postVisit(const Name* ) {}
 
     virtual void visit(const AnonymousNameId *) {}
-    virtual void visit(const Identifier *) {}
+    virtual void visit(const Identifier* ) {}
     virtual void visit(const TemplateNameId *) {}
     virtual void visit(const DestructorNameId *) {}
     virtual void visit(const OperatorNameId *) {}
@@ -57,4 +57,4 @@ public:
 } // namespace psyche
 
 
-#endif // CFE_NAMEVISITOR_H
+#endif

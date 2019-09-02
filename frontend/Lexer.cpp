@@ -592,26 +592,6 @@ void Lexer::scan_helper(Token *tok)
         break;
 
     default: {
-        if (_languageOptions.objC) {
-            if (ch == '@' && _yychar >= 'a' && _yychar <= 'z') {
-                const char *yytext = _currentChar;
-
-                do {
-                    yyinp();
-                    if (! (isalnum(_yychar) || _yychar == '_' || _yychar == '$'))
-                        break;
-                } while (_yychar);
-
-                const int yylen = _currentChar - yytext;
-                tok->f.kind = classifyObjCAtKeyword(yytext, yylen);
-                break;
-            } else if (ch == '@' && _yychar == '"') {
-                yyinp();
-                scanStringLiteral(tok, '"');
-                break;
-            }
-        }
-
         if (ch == 'L' || ch == 'u' || ch == 'U' || ch == 'R') {
             // Either a literal or still an identifier.
             if (_yychar == '"') {

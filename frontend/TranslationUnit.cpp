@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +43,7 @@ using namespace psyche;
 
 const Token TranslationUnit::nullToken;
 
-TranslationUnit::TranslationUnit(Control *control, const StringLiteral *fileId)
+TranslationUnit::TranslationUnit(Control *control, const StringLiteral* fileId)
     : _control(control),
       _fileId(fileId),
       _firstSourceChar(0),
@@ -66,7 +64,7 @@ TranslationUnit::~TranslationUnit()
 Control *TranslationUnit::control() const
 { return _control; }
 
-const StringLiteral *TranslationUnit::fileId() const
+const StringLiteral* TranslationUnit::fileId() const
 { return _fileId; }
 
 const char *TranslationUnit::fileName() const
@@ -111,16 +109,16 @@ unsigned TranslationUnit::commentCount() const
 const Token &TranslationUnit::commentAt(unsigned index) const
 { return _comments.at(index); }
 
-const Identifier *TranslationUnit::identifier(unsigned index) const
+const Identifier* TranslationUnit::identifier(unsigned index) const
 { return tokenAt(index).identifier; }
 
-const Literal *TranslationUnit::literal(unsigned index) const
+const Literal* TranslationUnit::literal(unsigned index) const
 { return tokenAt(index).literal; }
 
-const StringLiteral *TranslationUnit::stringLiteral(unsigned index) const
+const StringLiteral* TranslationUnit::stringLiteral(unsigned index) const
 { return tokenAt(index).string; }
 
-const NumericLiteral *TranslationUnit::numericLiteral(unsigned index) const
+const NumericLiteral* TranslationUnit::numericLiteral(unsigned index) const
 { return tokenAt(index).number; }
 
 unsigned TranslationUnit::matchingBrace(unsigned index) const
@@ -129,7 +127,7 @@ unsigned TranslationUnit::matchingBrace(unsigned index) const
 MemoryPool *TranslationUnit::memoryPool() const
 { return _pool; }
 
-AST *TranslationUnit::ast() const
+AST* TranslationUnit::ast() const
 { return _ast; }
 
 bool TranslationUnit::isTokenized() const
@@ -155,10 +153,10 @@ void TranslationUnit::tokenize()
     pushLineOffset(0);
     pushPreprocessorLine(0, 1, fileId());
 
-    const Identifier *lineId   = control()->identifier("line");
-    const Identifier *expansionId = control()->identifier("expansion");
-    const Identifier *beginId = control()->identifier("begin");
-    const Identifier *endId = control()->identifier("end");
+    const Identifier* lineId   = control()->identifier("line");
+    const Identifier* expansionId = control()->identifier("expansion");
+    const Identifier* beginId = control()->identifier("begin");
+    const Identifier* endId = control()->identifier("end");
 
     // We need to track information about the expanded tokens. A vector with an addition
     // explicit index control is used instead of queue mainly for performance reasons.
@@ -242,7 +240,7 @@ recognize:
                     unsigned line = (unsigned) strtoul(tk.spell(), 0, 0);
                     lex(&tk);
                     if (! tk.newline() && tk.is(T_STRING_LITERAL)) {
-                        const StringLiteral *fileName =
+                        const StringLiteral* fileName =
                                 control()->stringLiteral(tk.string->chars(), tk.string->size());
                         pushPreprocessorLine(utf16CharOffset, line, fileName);
                         lex(&tk);
@@ -311,31 +309,31 @@ bool TranslationUnit::parse(ParseMode mode)
 
     switch (mode) {
     case ParseTranlationUnit: {
-        TranslationUnitAST *node = 0;
+        TranslationUnitAST* node = 0;
         parsed = parser.parseTranslationUnit(node);
         _ast = node;
     } break;
 
     case ParseDeclaration: {
-        DeclarationAST *node = 0;
+        DeclarationAST* node = 0;
         parsed = parser.parseDeclaration(node);
         _ast = node;
     } break;
 
     case ParseExpression: {
-        ExpressionAST *node = 0;
+        ExpressionAST* node = 0;
         parsed = parser.parseExpression(node);
         _ast = node;
     } break;
 
     case ParseDeclarator: {
-        DeclaratorAST *node = 0;
+        DeclaratorAST* node = 0;
         parsed = parser.parseDeclarator(node, /*decl_specifier_list =*/ 0);
         _ast = node;
     } break;
 
     case ParseStatement: {
-        StatementAST *node = 0;
+        StatementAST* node = 0;
         parsed = parser.parseStatement(node);
         _ast = node;
     } break;
@@ -352,7 +350,7 @@ void TranslationUnit::pushLineOffset(unsigned offset)
 
 void TranslationUnit::pushPreprocessorLine(unsigned utf16charOffset,
                                            unsigned line,
-                                           const StringLiteral *fileName)
+                                           const StringLiteral* fileName)
 { _ppLines.push_back(PPLine(utf16charOffset, line, fileName)); }
 
 unsigned TranslationUnit::findLineNumber(unsigned utf16charOffset) const
@@ -388,27 +386,27 @@ unsigned TranslationUnit::findColumnNumber(unsigned utf16CharOffset, unsigned li
 void TranslationUnit::getTokenPosition(unsigned index,
                                        unsigned *line,
                                        unsigned *column,
-                                       const StringLiteral **fileName) const
+                                       const StringLiteral* *fileName) const
 { return getPosition(tokenAt(index).utf16charsBegin(), line, column, fileName); }
 
 void TranslationUnit::getTokenStartPosition(unsigned index, unsigned *line,
                                             unsigned *column,
-                                            const StringLiteral **fileName) const
+                                            const StringLiteral* *fileName) const
 { return getPosition(tokenAt(index).utf16charsBegin(), line, column, fileName); }
 
 void TranslationUnit::getTokenEndPosition(unsigned index, unsigned *line,
                                           unsigned *column,
-                                          const StringLiteral **fileName) const
+                                          const StringLiteral* *fileName) const
 { return getPosition(tokenAt(index).utf16charsEnd(), line, column, fileName); }
 
 void TranslationUnit::getPosition(unsigned utf16charOffset,
                                   unsigned *line,
                                   unsigned *column,
-                                  const StringLiteral **fileName) const
+                                  const StringLiteral* *fileName) const
 {
     unsigned lineNumber = 0;
     unsigned columnNumber = 0;
-    const StringLiteral *file = 0;
+    const StringLiteral* file = 0;
 
     // If this token is expanded we already have the information directly from the expansion
     // section header. Otherwise, we need to calculate it.
@@ -452,7 +450,7 @@ void TranslationUnit::message(DiagnosticCollector::Severity severity,
     index = std::min(index, tokenCount() - 1);
 
     unsigned line = 0, column = 0;
-    const StringLiteral *fileName = 0;
+    const StringLiteral* fileName = 0;
     getTokenPosition(index, &line, &column, &fileName);
 
     if (DiagnosticCollector *collector = control()->diagnosticCollector()) {

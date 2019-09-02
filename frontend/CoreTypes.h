@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,48 +19,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_CORETYPES_H
-#define CFE_CORETYPES_H
+#ifndef PSYCHE_CORE_TYPES_H__
+#define PSYCHE_CORE_TYPES_H__
 
 #include "FrontendConfig.h"
-#include "Type.h"
+
 #include "FullySpecifiedType.h"
+#include "Type.h"
 
 namespace psyche {
 
 class CFE_API UndefinedType : public Type
 {
 public:
-    static UndefinedType *instance()
+    static UndefinedType* instance()
     {
-        static UndefinedType t;
-        return &t;
+        static UndefinedType ty;
+        return &ty;
     }
 
-    virtual const UndefinedType *asUndefinedType() const
+    virtual const UndefinedType* asUndefinedType() const
     { return this; }
 
-    virtual UndefinedType *asUndefinedType()
+    virtual UndefinedType* asUndefinedType()
     { return this; }
 
 protected:
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void accept0(TypeVisitor* visitor);
 };
 
-class CFE_API VoidType: public Type
+class CFE_API VoidType : public Type
 {
 public:
-    virtual const VoidType *asVoidType() const
+    virtual const VoidType* asVoidType() const
     { return this; }
 
-    virtual VoidType *asVoidType()
+    virtual VoidType* asVoidType()
     { return this; }
 
 protected:
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void accept0(TypeVisitor* visitor);
 };
 
-class CFE_API IntegerType: public Type
+class CFE_API IntegerType : public Type
 {
 public:
     enum Kind {
@@ -78,27 +77,27 @@ public:
     };
 
 public:
-    IntegerType(int kind);
+    IntegerType(Kind kind);
     virtual ~IntegerType();
 
-    int kind() const;
+    Kind kind() const;
 
     unsigned int rank() const;
 
-    virtual IntegerType *asIntegerType()
+    virtual IntegerType* asIntegerType()
     { return this; }
 
-    virtual const IntegerType *asIntegerType() const
+    virtual const IntegerType* asIntegerType() const
     { return this; }
 
 protected:
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void accept0(TypeVisitor* visitor);
 
 private:
-    int _kind;
+    Kind kind_;
 };
 
-class CFE_API FloatType: public Type
+class CFE_API FloatType : public Type
 {
 public:
     enum Kind {
@@ -108,135 +107,163 @@ public:
     };
 
 public:
-    FloatType(int kind);
+    FloatType(Kind kind);
     virtual ~FloatType();
 
-    int kind() const;
+    Kind kind() const;
 
-    virtual const FloatType *asFloatType() const
+    virtual const FloatType* asFloatType() const
     { return this; }
 
-    virtual FloatType *asFloatType()
+    virtual FloatType* asFloatType()
     { return this; }
 
 protected:
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void accept0(TypeVisitor* visitor);
 
 private:
-    int _kind;
+    Kind kind_;
 };
 
-class CFE_API PointerType: public Type
+class CFE_API PointerType : public Type
 {
 public:
-    PointerType(const FullySpecifiedType &elementType);
+    PointerType(const FullySpecifiedType& elementType);
     virtual ~PointerType();
 
     FullySpecifiedType elementType() const;
 
-    virtual const PointerType *asPointerType() const
+    virtual const PointerType* asPointerType() const
     { return this; }
 
-    virtual PointerType *asPointerType()
+    virtual PointerType* asPointerType()
     { return this; }
 
 protected:
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void accept0(TypeVisitor* visitor);
 
 private:
-    FullySpecifiedType _elementType;
+    FullySpecifiedType elementType_;
 };
 
-class CFE_API PointerToMemberType: public Type
+class CFE_API PointerToMemberType : public Type
 {
 public:
-    PointerToMemberType(const Name *memberName, const FullySpecifiedType &elementType);
+    PointerToMemberType(const Name* memberName, const FullySpecifiedType& elementType);
     virtual ~PointerToMemberType();
 
-    const Name *memberName() const;
+    const Name* memberName() const;
     FullySpecifiedType elementType() const;
 
-    virtual const PointerToMemberType *asPointerToMemberType() const
+    virtual const PointerToMemberType* asPointerToMemberType() const
     { return this; }
 
-    virtual PointerToMemberType *asPointerToMemberType()
+    virtual PointerToMemberType* asPointerToMemberType()
     { return this; }
 
 protected:
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void accept0(TypeVisitor* visitor);
 
 private:
-    const Name *_memberName;
-    FullySpecifiedType _elementType;
+    const Name* memberName_;
+    FullySpecifiedType elementType_;
 };
 
-class CFE_API ReferenceType: public Type
+class CFE_API ReferenceType : public Type
 {
 public:
-    ReferenceType(const FullySpecifiedType &elementType, bool rvalueRef);
+    ReferenceType(const FullySpecifiedType& elementType);
     virtual ~ReferenceType();
 
     FullySpecifiedType elementType() const;
-    bool isRvalueReference() const;
 
-    virtual const ReferenceType *asReferenceType() const
+    virtual const ReferenceType* asReferenceType() const
     { return this; }
 
-    virtual ReferenceType *asReferenceType()
+    virtual ReferenceType* asReferenceType()
     { return this; }
 
 protected:
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void accept0(TypeVisitor* visitor);
 
 private:
-    FullySpecifiedType _elementType;
-    bool _rvalueReference;
+    FullySpecifiedType elementType_;
 };
 
-class CFE_API ArrayType: public Type
+class CFE_API ArrayType : public Type
 {
 public:
-    ArrayType(const FullySpecifiedType &elementType, unsigned size);
+    ArrayType(const FullySpecifiedType& elementType, unsigned size);
     virtual ~ArrayType();
 
     FullySpecifiedType elementType() const;
     unsigned size() const;
 
-    virtual const ArrayType *asArrayType() const
+    virtual const ArrayType* asArrayType() const
     { return this; }
 
-    virtual ArrayType *asArrayType()
+    virtual ArrayType* asArrayType()
     { return this; }
 
 protected:
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void accept0(TypeVisitor* visitor);
 
 private:
-    FullySpecifiedType _elementType;
-    unsigned _size;
+    FullySpecifiedType elementType_;
+    unsigned size_;
 };
 
-class CFE_API NamedType: public Type
+class CFE_API NamedType : public Type
 {
 public:
-    NamedType(const Name *name);
+    NamedType(const Name* name);
     virtual ~NamedType();
 
-    const Name *name() const;
+    const Name* name() const;
 
-    virtual const NamedType *asNamedType() const
+    virtual const NamedType* asNamedType() const
     { return this; }
 
-    virtual NamedType *asNamedType()
+    virtual NamedType* asNamedType()
     { return this; }
 
 protected:
-    virtual void accept0(TypeVisitor *visitor);
+    virtual void accept0(TypeVisitor* visitor);
 
 private:
-    const Name *_name;
+    const Name* name_;
+};
+
+class CFE_API QuantifiedType : public Type
+{
+public:
+    enum Kind {
+        Existential,
+        Universal
+    };
+
+    QuantifiedType(const Name* name, Kind kind, int label);
+    virtual ~QuantifiedType();
+
+    const Name* name() const;
+    Kind kind() const;
+    int label() const;
+
+    virtual const QuantifiedType* asQuantifiedType() const
+    { return this; }
+
+    virtual QuantifiedType* asQuantifiedType()
+    { return this; }
+
+protected:
+    virtual void accept0(TypeVisitor* visitor);
+
+private:
+    const Name* name_;
+    Kind kind_;
+    int label_;
 };
 
 } // namespace psyche
 
-#endif // CFE_CORETYPES_H
+#endif

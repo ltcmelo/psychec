@@ -18,10 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_LEXER_H
-#define CFE_LEXER_H
+#ifndef PSYCHE_LEXER_H__
+#define PSYCHE_LEXER_H__
 
 #include "FrontendConfig.h"
+
 #include "FrontendFwds.h"
 #include "Token.h"
 
@@ -91,7 +92,6 @@ private:
     void scan_helper(Token *tok);
     void setSource(const char *firstChar, const char *lastChar);
     static int classify(const char *string, int length, Dialect features);
-    static int classifyObjCAtKeyword(const char *s, int n);
     static int classifyOperator(const char *string, int length);
 
     void scanStringLiteral(Token *tok, unsigned char hint = 0);
@@ -159,4 +159,4 @@ private:
 
 } // namespace psyche
 
-#endif // CFE_LEXER_H
+#endif

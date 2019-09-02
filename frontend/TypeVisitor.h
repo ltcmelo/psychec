@@ -1,4 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2019 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,10 +19,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_TYPEVISITOR_H
-#define CFE_TYPEVISITOR_H
+#ifndef PSYCHE_TYPE_VISITOR_H__
+#define PSYCHE_TYPE_VISITOR_H__
 
 #include "FrontendConfig.h"
+
 #include "FrontendFwds.h"
 
 namespace psyche {
@@ -35,34 +37,29 @@ public:
     TypeVisitor();
     virtual ~TypeVisitor();
 
-    void accept(Type *type);
+    void accept(Type* type);
 
-    virtual bool preVisit(Type *) { return true; }
-    virtual void postVisit(Type *) {}
+    virtual bool preVisit(Type*) { return true; }
+    virtual void postVisit(Type*) {}
 
-    virtual void visit(UndefinedType *) {}
-    virtual void visit(VoidType *) {}
-    virtual void visit(IntegerType *) {}
-    virtual void visit(FloatType *) {}
-    virtual void visit(PointerToMemberType *) {}
-    virtual void visit(PointerType *) {}
-    virtual void visit(ReferenceType *) {}
-    virtual void visit(ArrayType *) {}
-    virtual void visit(NamedType *) {}
-    virtual void visit(Function *) {}
-    virtual void visit(Namespace *) {}
-    virtual void visit(Template *) {}
-    virtual void visit(Class *) {}
-    virtual void visit(Enum *) {}
-    virtual void visit(ForwardClassDeclaration *) {}
-    virtual void visit(ObjCClass *) {}
-    virtual void visit(ObjCProtocol *) {}
-    virtual void visit(ObjCMethod *) {}
-    virtual void visit(ObjCForwardClassDeclaration *) {}
-    virtual void visit(ObjCForwardProtocolDeclaration*) {}
+    virtual void visit(UndefinedType*) {}
+    virtual void visit(VoidType*) {}
+    virtual void visit(IntegerType*) {}
+    virtual void visit(FloatType*) {}
+    virtual void visit(PointerToMemberType*) {}
+    virtual void visit(PointerType*) {}
+    virtual void visit(ReferenceType*) {}
+    virtual void visit(ArrayType*) {}
+    virtual void visit(NamedType*) {}
+    virtual void visit(QuantifiedType*) {}
+    virtual void visit(Function*) {}
+    virtual void visit(Namespace*) {}
+    virtual void visit(Template*) {}
+    virtual void visit(Class*) {}
+    virtual void visit(Enum*) {}
+    virtual void visit(ForwardClassDeclaration*) {}
 };
 
 } // namespace psyche
 
-
-#endif // CFE_TYPEVISITOR_H
+#endif

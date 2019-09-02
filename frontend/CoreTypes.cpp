@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,80 +20,78 @@
 // THE SOFTWARE.
 
 #include "CoreTypes.h"
-#include "TypeVisitor.h"
+
 #include "Names.h"
+#include "TypeVisitor.h"
 #include <algorithm>
 
 using namespace psyche;
 
-void UndefinedType::accept0(TypeVisitor *visitor)
+void UndefinedType::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
-void VoidType::accept0(TypeVisitor *visitor)
+void VoidType::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
-PointerToMemberType::PointerToMemberType(const Name *memberName, const FullySpecifiedType &elementType)
-    : _memberName(memberName),
-      _elementType(elementType)
-{ }
+PointerToMemberType::PointerToMemberType(const Name* memberName, const FullySpecifiedType &elementType)
+    : memberName_(memberName)
+    , elementType_(elementType)
+{}
 
 PointerToMemberType::~PointerToMemberType()
-{ }
+{}
 
-const Name *PointerToMemberType::memberName() const
-{ return _memberName; }
+const Name* PointerToMemberType::memberName() const
+{ return memberName_; }
 
 FullySpecifiedType PointerToMemberType::elementType() const
-{ return _elementType; }
+{ return elementType_; }
 
-void PointerToMemberType::accept0(TypeVisitor *visitor)
+void PointerToMemberType::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
 PointerType::PointerType(const FullySpecifiedType &elementType)
-    : _elementType(elementType)
-{ }
+    : elementType_(elementType)
+{}
 
 PointerType::~PointerType()
-{ }
+{}
 
-void PointerType::accept0(TypeVisitor *visitor)
+void PointerType::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
 FullySpecifiedType PointerType::elementType() const
-{ return _elementType; }
+{ return elementType_; }
 
-ReferenceType::ReferenceType(const FullySpecifiedType &elementType, bool rvalueRef)
-    : _elementType(elementType), _rvalueReference(rvalueRef)
-{ }
+ReferenceType::ReferenceType(const FullySpecifiedType &elementType)
+    : elementType_(elementType)
+{}
 
 ReferenceType::~ReferenceType()
-{ }
+{}
 
-void ReferenceType::accept0(TypeVisitor *visitor)
+void ReferenceType::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
 FullySpecifiedType ReferenceType::elementType() const
-{ return _elementType; }
+{ return elementType_; }
 
-bool ReferenceType::isRvalueReference() const
-{ return _rvalueReference; }
-
-IntegerType::IntegerType(int kind)
-    : _kind(kind)
-{ }
+IntegerType::IntegerType(Kind kind)
+    : kind_(kind)
+{}
 
 IntegerType::~IntegerType()
-{ }
+{}
 
-void IntegerType::accept0(TypeVisitor *visitor)
+void IntegerType::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
-int IntegerType::kind() const
-{ return _kind; }
+IntegerType::Kind IntegerType::kind() const
+{ return kind_; }
 
 unsigned int IntegerType::rank() const
 {
-    switch (_kind) {
+    switch (kind_) {
     case Bool:
         return 1;
 
@@ -121,44 +117,66 @@ unsigned int IntegerType::rank() const
     }
 }
 
-FloatType::FloatType(int kind)
-    : _kind(kind)
-{ }
+FloatType::FloatType(Kind kind)
+    : kind_(kind)
+{}
 
 FloatType::~FloatType()
-{ }
+{}
 
-void FloatType::accept0(TypeVisitor *visitor)
+void FloatType::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
-int FloatType::kind() const
-{ return _kind; }
+FloatType::Kind FloatType::kind() const
+{ return kind_; }
 
 ArrayType::ArrayType(const FullySpecifiedType &elementType, unsigned size)
-    : _elementType(elementType), _size(size)
-{ }
+    : elementType_(elementType)
+    , size_(size)
+{}
 
 ArrayType::~ArrayType()
-{ }
+{}
 
-void ArrayType::accept0(TypeVisitor *visitor)
+void ArrayType::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }
 
 FullySpecifiedType ArrayType::elementType() const
-{ return _elementType; }
+{ return elementType_; }
 
 unsigned ArrayType::size() const
-{ return _size; }
+{ return size_; }
 
-NamedType::NamedType(const Name *name)
-    : _name(name)
-{ }
+NamedType::NamedType(const Name* name)
+    : name_(name)
+{}
 
 NamedType::~NamedType()
-{ }
+{}
 
-const Name *NamedType::name() const
-{ return _name; }
+const Name* NamedType::name() const
+{ return name_; }
 
-void NamedType::accept0(TypeVisitor *visitor)
+void NamedType::accept0(TypeVisitor* visitor)
+{ visitor->visit(this); }
+
+QuantifiedType::QuantifiedType(const Name* name, QuantifiedType::Kind kind, int label)
+    : name_(name)
+    , kind_(kind)
+    , label_(label)
+{}
+
+QuantifiedType::~QuantifiedType()
+{}
+
+const Name* QuantifiedType::name() const
+{ return name_; }
+
+QuantifiedType::Kind QuantifiedType::kind() const
+{ return kind_; }
+
+int QuantifiedType::label() const
+{ return label_; }
+
+void QuantifiedType::accept0(TypeVisitor* visitor)
 { visitor->visit(this); }

@@ -1,5 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,31 +26,22 @@
 #include <algorithm>
 #include <cstddef>
 
-/*
-   All firstToken/lastToken functions below which have a doxygen comment with
-   \generated in it, will be re-generated when the tool "cplusplus-update-frontend" is run.
-
-   For functions which are hand-coded, or which should not be changed, make sure that
-   the comment is gone.
- */
-
-
 using namespace psyche;
 
 AST::AST()
-{ }
+{}
 
 AST::~AST()
-{ }
+{}
 
-void AST::accept(ASTVisitor *visitor)
+void AST::accept(ASTVisitor* visitor)
 {
     if (visitor->preVisit(this))
         accept0(visitor);
     visitor->postVisit(this);
 }
 
-bool AST::match(AST *ast, AST *pattern, ASTMatcher *matcher)
+bool AST::match(AST* ast, AST* pattern, ASTMatcher* matcher)
 {
     if (ast == pattern)
         return true;
@@ -61,7 +52,7 @@ bool AST::match(AST *ast, AST *pattern, ASTMatcher *matcher)
     return ast->match(pattern, matcher);
 }
 
-bool AST::match(AST *pattern, ASTMatcher *matcher)
+bool AST::match(AST* pattern, ASTMatcher* matcher)
 {
     return match0(pattern, matcher);
 }
@@ -241,6 +232,25 @@ unsigned AsmDefinitionAST::lastToken() const
     return 1;
 }
 
+unsigned GenericsDeclarationAST::firstToken() const
+{
+    if (generics_token)
+        return generics_token;
+    if (declaration)
+        if (unsigned candidate = declaration->firstToken())
+            return candidate;
+    return 0;
+}
+
+unsigned GenericsDeclarationAST::lastToken() const
+{
+    if (declaration)
+        if (unsigned candidate = declaration->lastToken())
+            return candidate;
+    if (generics_token)
+        return generics_token + 1;
+    return 1;
+}
 
 unsigned GnuAttributeAST::firstToken() const
 {
@@ -1042,8 +1052,6 @@ unsigned DoStatementAST::lastToken() const
 
 unsigned ElaboratedTypeSpecifierAST::firstToken() const
 {
-    if (classkey_token)
-        return classkey_token;
     if (attribute_list)
         if (unsigned candidate = attribute_list->firstToken())
             return candidate;
@@ -1058,12 +1066,10 @@ unsigned ElaboratedTypeSpecifierAST::lastToken() const
 {
     if (name)
         if (unsigned candidate = name->lastToken())
-            return candidate;
+            return candidate + 1;
     if (attribute_list)
         if (unsigned candidate = attribute_list->lastToken())
-            return candidate;
-    if (classkey_token)
-        return classkey_token + 1;
+            return candidate + 1;
     return 1;
 }
 
@@ -1444,8 +1450,6 @@ unsigned FunctionDeclaratorAST::lastToken() const
 
 unsigned FunctionDefinitionAST::firstToken() const
 {
-    if (qt_invokable_token)
-        return qt_invokable_token;
     if (decl_specifier_list)
         if (unsigned candidate = decl_specifier_list->firstToken())
             return candidate;
@@ -1476,8 +1480,6 @@ unsigned FunctionDefinitionAST::lastToken() const
     if (decl_specifier_list)
         if (unsigned candidate = decl_specifier_list->lastToken())
             return candidate;
-    if (qt_invokable_token)
-        return qt_invokable_token + 1;
     return 1;
 }
 
@@ -2142,804 +2144,6 @@ unsigned NumericLiteralAST::lastToken() const
 }
 
 
-unsigned ObjCClassDeclarationAST::firstToken() const
-{
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->firstToken())
-            return candidate;
-    if (interface_token)
-        return interface_token;
-    if (implementation_token)
-        return implementation_token;
-    if (class_name)
-        if (unsigned candidate = class_name->firstToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token;
-    if (category_name)
-        if (unsigned candidate = category_name->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    if (colon_token)
-        return colon_token;
-    if (superclass)
-        if (unsigned candidate = superclass->firstToken())
-            return candidate;
-    if (protocol_refs)
-        if (unsigned candidate = protocol_refs->firstToken())
-            return candidate;
-    if (inst_vars_decl)
-        if (unsigned candidate = inst_vars_decl->firstToken())
-            return candidate;
-    if (member_declaration_list)
-        if (unsigned candidate = member_declaration_list->firstToken())
-            return candidate;
-    if (end_token)
-        return end_token;
-    return 0;
-}
-
-
-unsigned ObjCClassDeclarationAST::lastToken() const
-{
-    if (end_token)
-        return end_token + 1;
-    if (member_declaration_list)
-        if (unsigned candidate = member_declaration_list->lastToken())
-            return candidate;
-    if (inst_vars_decl)
-        if (unsigned candidate = inst_vars_decl->lastToken())
-            return candidate;
-    if (protocol_refs)
-        if (unsigned candidate = protocol_refs->lastToken())
-            return candidate;
-    if (superclass)
-        if (unsigned candidate = superclass->lastToken())
-            return candidate;
-    if (colon_token)
-        return colon_token + 1;
-    if (rparen_token)
-        return rparen_token + 1;
-    if (category_name)
-        if (unsigned candidate = category_name->lastToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (class_name)
-        if (unsigned candidate = class_name->lastToken())
-            return candidate;
-    if (implementation_token)
-        return implementation_token + 1;
-    if (interface_token)
-        return interface_token + 1;
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->lastToken())
-            return candidate;
-    return 1;
-}
-
-
-unsigned ObjCClassForwardDeclarationAST::firstToken() const
-{
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->firstToken())
-            return candidate;
-    if (class_token)
-        return class_token;
-    if (identifier_list)
-        if (unsigned candidate = identifier_list->firstToken())
-            return candidate;
-    if (semicolon_token)
-        return semicolon_token;
-    return 0;
-}
-
-
-unsigned ObjCClassForwardDeclarationAST::lastToken() const
-{
-    if (semicolon_token)
-        return semicolon_token + 1;
-    if (identifier_list)
-        if (unsigned candidate = identifier_list->lastToken())
-            return candidate;
-    if (class_token)
-        return class_token + 1;
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->lastToken())
-            return candidate;
-    return 1;
-}
-
-
-unsigned ObjCDynamicPropertiesDeclarationAST::firstToken() const
-{
-    if (dynamic_token)
-        return dynamic_token;
-    if (property_identifier_list)
-        if (unsigned candidate = property_identifier_list->firstToken())
-            return candidate;
-    if (semicolon_token)
-        return semicolon_token;
-    return 0;
-}
-
-
-unsigned ObjCDynamicPropertiesDeclarationAST::lastToken() const
-{
-    if (semicolon_token)
-        return semicolon_token + 1;
-    if (property_identifier_list)
-        if (unsigned candidate = property_identifier_list->lastToken())
-            return candidate;
-    if (dynamic_token)
-        return dynamic_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCEncodeExpressionAST::firstToken() const
-{
-    if (encode_token)
-        return encode_token;
-    if (type_name)
-        if (unsigned candidate = type_name->firstToken())
-            return candidate;
-    return 0;
-}
-
-
-unsigned ObjCEncodeExpressionAST::lastToken() const
-{
-    if (type_name)
-        if (unsigned candidate = type_name->lastToken())
-            return candidate;
-    if (encode_token)
-        return encode_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCFastEnumerationAST::firstToken() const
-{
-    if (for_token)
-        return for_token;
-    if (lparen_token)
-        return lparen_token;
-    if (type_specifier_list)
-        if (unsigned candidate = type_specifier_list->firstToken())
-            return candidate;
-    if (declarator)
-        if (unsigned candidate = declarator->firstToken())
-            return candidate;
-    if (initializer)
-        if (unsigned candidate = initializer->firstToken())
-            return candidate;
-    if (in_token)
-        return in_token;
-    if (fast_enumeratable_expression)
-        if (unsigned candidate = fast_enumeratable_expression->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    if (statement)
-        if (unsigned candidate = statement->firstToken())
-            return candidate;
-    return 0;
-}
-
-
-unsigned ObjCFastEnumerationAST::lastToken() const
-{
-    if (statement)
-        if (unsigned candidate = statement->lastToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token + 1;
-    if (fast_enumeratable_expression)
-        if (unsigned candidate = fast_enumeratable_expression->lastToken())
-            return candidate;
-    if (in_token)
-        return in_token + 1;
-    if (initializer)
-        if (unsigned candidate = initializer->lastToken())
-            return candidate;
-    if (declarator)
-        if (unsigned candidate = declarator->lastToken())
-            return candidate;
-    if (type_specifier_list)
-        if (unsigned candidate = type_specifier_list->lastToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (for_token)
-        return for_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCInstanceVariablesDeclarationAST::firstToken() const
-{
-    if (lbrace_token)
-        return lbrace_token;
-    if (instance_variable_list)
-        if (unsigned candidate = instance_variable_list->firstToken())
-            return candidate;
-    if (rbrace_token)
-        return rbrace_token;
-    return 0;
-}
-
-
-unsigned ObjCInstanceVariablesDeclarationAST::lastToken() const
-{
-    if (rbrace_token)
-        return rbrace_token + 1;
-    if (instance_variable_list)
-        if (unsigned candidate = instance_variable_list->lastToken())
-            return candidate;
-    if (lbrace_token)
-        return lbrace_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCMessageArgumentAST::firstToken() const
-{
-    if (parameter_value_expression)
-        if (unsigned candidate = parameter_value_expression->firstToken())
-            return candidate;
-    return 0;
-}
-
-
-unsigned ObjCMessageArgumentAST::lastToken() const
-{
-    if (parameter_value_expression)
-        if (unsigned candidate = parameter_value_expression->lastToken())
-            return candidate;
-    return 1;
-}
-
-
-unsigned ObjCMessageArgumentDeclarationAST::firstToken() const
-{
-    if (type_name)
-        if (unsigned candidate = type_name->firstToken())
-            return candidate;
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->firstToken())
-            return candidate;
-    if (param_name)
-        if (unsigned candidate = param_name->firstToken())
-            return candidate;
-    return 0;
-}
-
-
-unsigned ObjCMessageArgumentDeclarationAST::lastToken() const
-{
-    if (param_name)
-        if (unsigned candidate = param_name->lastToken())
-            return candidate;
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->lastToken())
-            return candidate;
-    if (type_name)
-        if (unsigned candidate = type_name->lastToken())
-            return candidate;
-    return 1;
-}
-
-
-unsigned ObjCMessageExpressionAST::firstToken() const
-{
-    if (lbracket_token)
-        return lbracket_token;
-    if (receiver_expression)
-        if (unsigned candidate = receiver_expression->firstToken())
-            return candidate;
-    if (selector)
-        if (unsigned candidate = selector->firstToken())
-            return candidate;
-    if (argument_list)
-        if (unsigned candidate = argument_list->firstToken())
-            return candidate;
-    if (rbracket_token)
-        return rbracket_token;
-    return 0;
-}
-
-
-unsigned ObjCMessageExpressionAST::lastToken() const
-{
-    if (rbracket_token)
-        return rbracket_token + 1;
-    if (argument_list)
-        if (unsigned candidate = argument_list->lastToken())
-            return candidate;
-    if (selector)
-        if (unsigned candidate = selector->lastToken())
-            return candidate;
-    if (receiver_expression)
-        if (unsigned candidate = receiver_expression->lastToken())
-            return candidate;
-    if (lbracket_token)
-        return lbracket_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCMethodDeclarationAST::firstToken() const
-{
-    if (method_prototype)
-        if (unsigned candidate = method_prototype->firstToken())
-            return candidate;
-    if (function_body)
-        if (unsigned candidate = function_body->firstToken())
-            return candidate;
-    if (semicolon_token)
-        return semicolon_token;
-    return 0;
-}
-
-
-unsigned ObjCMethodDeclarationAST::lastToken() const
-{
-    if (semicolon_token)
-        return semicolon_token + 1;
-    if (function_body)
-        if (unsigned candidate = function_body->lastToken())
-            return candidate;
-    if (method_prototype)
-        if (unsigned candidate = method_prototype->lastToken())
-            return candidate;
-    return 1;
-}
-
-
-unsigned ObjCMethodPrototypeAST::firstToken() const
-{
-    if (method_type_token)
-        return method_type_token;
-    if (type_name)
-        if (unsigned candidate = type_name->firstToken())
-            return candidate;
-    if (selector)
-        if (unsigned candidate = selector->firstToken())
-            return candidate;
-    if (argument_list)
-        if (unsigned candidate = argument_list->firstToken())
-            return candidate;
-    if (dot_dot_dot_token)
-        return dot_dot_dot_token;
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->firstToken())
-            return candidate;
-    return 0;
-}
-
-
-unsigned ObjCMethodPrototypeAST::lastToken() const
-{
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->lastToken())
-            return candidate;
-    if (dot_dot_dot_token)
-        return dot_dot_dot_token + 1;
-    if (argument_list)
-        if (unsigned candidate = argument_list->lastToken())
-            return candidate;
-    if (selector)
-        if (unsigned candidate = selector->lastToken())
-            return candidate;
-    if (type_name)
-        if (unsigned candidate = type_name->lastToken())
-            return candidate;
-    if (method_type_token)
-        return method_type_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCPropertyAttributeAST::firstToken() const
-{
-    if (attribute_identifier_token)
-        return attribute_identifier_token;
-    if (equals_token)
-        return equals_token;
-    if (method_selector)
-        if (unsigned candidate = method_selector->firstToken())
-            return candidate;
-    return 0;
-}
-
-
-unsigned ObjCPropertyAttributeAST::lastToken() const
-{
-    if (method_selector)
-        if (unsigned candidate = method_selector->lastToken())
-            return candidate;
-    if (equals_token)
-        return equals_token + 1;
-    if (attribute_identifier_token)
-        return attribute_identifier_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCPropertyDeclarationAST::firstToken() const
-{
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->firstToken())
-            return candidate;
-    if (property_token)
-        return property_token;
-    if (lparen_token)
-        return lparen_token;
-    if (property_attribute_list)
-        if (unsigned candidate = property_attribute_list->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    if (simple_declaration)
-        if (unsigned candidate = simple_declaration->firstToken())
-            return candidate;
-    return 0;
-}
-
-
-unsigned ObjCPropertyDeclarationAST::lastToken() const
-{
-    if (simple_declaration)
-        if (unsigned candidate = simple_declaration->lastToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token + 1;
-    if (property_attribute_list)
-        if (unsigned candidate = property_attribute_list->lastToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (property_token)
-        return property_token + 1;
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->lastToken())
-            return candidate;
-    return 1;
-}
-
-
-unsigned ObjCProtocolDeclarationAST::firstToken() const
-{
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->firstToken())
-            return candidate;
-    if (protocol_token)
-        return protocol_token;
-    if (name)
-        if (unsigned candidate = name->firstToken())
-            return candidate;
-    if (protocol_refs)
-        if (unsigned candidate = protocol_refs->firstToken())
-            return candidate;
-    if (member_declaration_list)
-        if (unsigned candidate = member_declaration_list->firstToken())
-            return candidate;
-    if (end_token)
-        return end_token;
-    return 0;
-}
-
-
-unsigned ObjCProtocolDeclarationAST::lastToken() const
-{
-    if (end_token)
-        return end_token + 1;
-    if (member_declaration_list)
-        if (unsigned candidate = member_declaration_list->lastToken())
-            return candidate;
-    if (protocol_refs)
-        if (unsigned candidate = protocol_refs->lastToken())
-            return candidate;
-    if (name)
-        if (unsigned candidate = name->lastToken())
-            return candidate;
-    if (protocol_token)
-        return protocol_token + 1;
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->lastToken())
-            return candidate;
-    return 1;
-}
-
-
-unsigned ObjCProtocolExpressionAST::firstToken() const
-{
-    if (protocol_token)
-        return protocol_token;
-    if (lparen_token)
-        return lparen_token;
-    if (identifier_token)
-        return identifier_token;
-    if (rparen_token)
-        return rparen_token;
-    return 0;
-}
-
-
-unsigned ObjCProtocolExpressionAST::lastToken() const
-{
-    if (rparen_token)
-        return rparen_token + 1;
-    if (identifier_token)
-        return identifier_token + 1;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (protocol_token)
-        return protocol_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCProtocolForwardDeclarationAST::firstToken() const
-{
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->firstToken())
-            return candidate;
-    if (protocol_token)
-        return protocol_token;
-    if (identifier_list)
-        if (unsigned candidate = identifier_list->firstToken())
-            return candidate;
-    if (semicolon_token)
-        return semicolon_token;
-    return 0;
-}
-
-
-unsigned ObjCProtocolForwardDeclarationAST::lastToken() const
-{
-    if (semicolon_token)
-        return semicolon_token + 1;
-    if (identifier_list)
-        if (unsigned candidate = identifier_list->lastToken())
-            return candidate;
-    if (protocol_token)
-        return protocol_token + 1;
-    if (attribute_list)
-        if (unsigned candidate = attribute_list->lastToken())
-            return candidate;
-    return 1;
-}
-
-
-unsigned ObjCProtocolRefsAST::firstToken() const
-{
-    if (less_token)
-        return less_token;
-    if (identifier_list)
-        if (unsigned candidate = identifier_list->firstToken())
-            return candidate;
-    if (greater_token)
-        return greater_token;
-    return 0;
-}
-
-
-unsigned ObjCProtocolRefsAST::lastToken() const
-{
-    if (greater_token)
-        return greater_token + 1;
-    if (identifier_list)
-        if (unsigned candidate = identifier_list->lastToken())
-            return candidate;
-    if (less_token)
-        return less_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCSelectorAST::firstToken() const
-{
-    if (selector_argument_list)
-        if (unsigned candidate = selector_argument_list->firstToken())
-            return candidate;
-    return 0;
-}
-
-
-unsigned ObjCSelectorAST::lastToken() const
-{
-    if (selector_argument_list)
-        if (unsigned candidate = selector_argument_list->lastToken())
-            return candidate;
-    return 1;
-}
-
-
-unsigned ObjCSelectorArgumentAST::firstToken() const
-{
-    if (name_token)
-        return name_token;
-    if (colon_token)
-        return colon_token;
-    return 0;
-}
-
-
-unsigned ObjCSelectorArgumentAST::lastToken() const
-{
-    if (colon_token)
-        return colon_token + 1;
-    if (name_token)
-        return name_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCSelectorExpressionAST::firstToken() const
-{
-    if (selector_token)
-        return selector_token;
-    if (lparen_token)
-        return lparen_token;
-    if (selector)
-        if (unsigned candidate = selector->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    return 0;
-}
-
-
-unsigned ObjCSelectorExpressionAST::lastToken() const
-{
-    if (rparen_token)
-        return rparen_token + 1;
-    if (selector)
-        if (unsigned candidate = selector->lastToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (selector_token)
-        return selector_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCSynchronizedStatementAST::firstToken() const
-{
-    if (synchronized_token)
-        return synchronized_token;
-    if (lparen_token)
-        return lparen_token;
-    if (synchronized_object)
-        if (unsigned candidate = synchronized_object->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    if (statement)
-        if (unsigned candidate = statement->firstToken())
-            return candidate;
-    return 0;
-}
-
-
-unsigned ObjCSynchronizedStatementAST::lastToken() const
-{
-    if (statement)
-        if (unsigned candidate = statement->lastToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token + 1;
-    if (synchronized_object)
-        if (unsigned candidate = synchronized_object->lastToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (synchronized_token)
-        return synchronized_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCSynthesizedPropertiesDeclarationAST::firstToken() const
-{
-    if (synthesized_token)
-        return synthesized_token;
-    if (property_identifier_list)
-        if (unsigned candidate = property_identifier_list->firstToken())
-            return candidate;
-    if (semicolon_token)
-        return semicolon_token;
-    return 0;
-}
-
-
-unsigned ObjCSynthesizedPropertiesDeclarationAST::lastToken() const
-{
-    if (semicolon_token)
-        return semicolon_token + 1;
-    if (property_identifier_list)
-        if (unsigned candidate = property_identifier_list->lastToken())
-            return candidate;
-    if (synthesized_token)
-        return synthesized_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCSynthesizedPropertyAST::firstToken() const
-{
-    if (property_identifier_token)
-        return property_identifier_token;
-    if (equals_token)
-        return equals_token;
-    if (alias_identifier_token)
-        return alias_identifier_token;
-    return 0;
-}
-
-
-unsigned ObjCSynthesizedPropertyAST::lastToken() const
-{
-    if (alias_identifier_token)
-        return alias_identifier_token + 1;
-    if (equals_token)
-        return equals_token + 1;
-    if (property_identifier_token)
-        return property_identifier_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCTypeNameAST::firstToken() const
-{
-    if (lparen_token)
-        return lparen_token;
-    if (type_qualifier_token)
-        return type_qualifier_token;
-    if (type_id)
-        if (unsigned candidate = type_id->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    return 0;
-}
-
-
-unsigned ObjCTypeNameAST::lastToken() const
-{
-    if (rparen_token)
-        return rparen_token + 1;
-    if (type_id)
-        if (unsigned candidate = type_id->lastToken())
-            return candidate;
-    if (type_qualifier_token)
-        return type_qualifier_token + 1;
-    if (lparen_token)
-        return lparen_token + 1;
-    return 1;
-}
-
-
-unsigned ObjCVisibilityDeclarationAST::firstToken() const
-{
-    if (visibility_token)
-        return visibility_token;
-    return 0;
-}
-
-
-unsigned ObjCVisibilityDeclarationAST::lastToken() const
-{
-    if (visibility_token)
-        return visibility_token + 1;
-    return 1;
-}
-
-
 unsigned OperatorAST::firstToken() const
 {
     if (op_token)
@@ -3122,322 +2326,6 @@ unsigned PostIncrDecrAST::lastToken() const
 }
 
 
-unsigned QtEnumDeclarationAST::firstToken() const
-{
-    if (enum_specifier_token)
-        return enum_specifier_token;
-    if (lparen_token)
-        return lparen_token;
-    if (enumerator_list)
-        if (unsigned candidate = enumerator_list->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    return 0;
-}
-
-
-unsigned QtEnumDeclarationAST::lastToken() const
-{
-    if (rparen_token)
-        return rparen_token + 1;
-    if (enumerator_list)
-        if (unsigned candidate = enumerator_list->lastToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (enum_specifier_token)
-        return enum_specifier_token + 1;
-    return 1;
-}
-
-
-unsigned QtFlagsDeclarationAST::firstToken() const
-{
-    if (flags_specifier_token)
-        return flags_specifier_token;
-    if (lparen_token)
-        return lparen_token;
-    if (flag_enums_list)
-        if (unsigned candidate = flag_enums_list->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    return 0;
-}
-
-
-unsigned QtFlagsDeclarationAST::lastToken() const
-{
-    if (rparen_token)
-        return rparen_token + 1;
-    if (flag_enums_list)
-        if (unsigned candidate = flag_enums_list->lastToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (flags_specifier_token)
-        return flags_specifier_token + 1;
-    return 1;
-}
-
-
-unsigned QtInterfaceNameAST::firstToken() const
-{
-    if (interface_name)
-        if (unsigned candidate = interface_name->firstToken())
-            return candidate;
-    if (constraint_list)
-        if (unsigned candidate = constraint_list->firstToken())
-            return candidate;
-    return 0;
-}
-
-
-unsigned QtInterfaceNameAST::lastToken() const
-{
-    if (constraint_list)
-        if (unsigned candidate = constraint_list->lastToken())
-            return candidate;
-    if (interface_name)
-        if (unsigned candidate = interface_name->lastToken())
-            return candidate;
-    return 1;
-}
-
-
-unsigned QtInterfacesDeclarationAST::firstToken() const
-{
-    if (interfaces_token)
-        return interfaces_token;
-    if (lparen_token)
-        return lparen_token;
-    if (interface_name_list)
-        if (unsigned candidate = interface_name_list->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    return 0;
-}
-
-
-unsigned QtInterfacesDeclarationAST::lastToken() const
-{
-    if (rparen_token)
-        return rparen_token + 1;
-    if (interface_name_list)
-        if (unsigned candidate = interface_name_list->lastToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (interfaces_token)
-        return interfaces_token + 1;
-    return 1;
-}
-
-
-unsigned QtMemberDeclarationAST::firstToken() const
-{
-    if (q_token)
-        return q_token;
-    if (lparen_token)
-        return lparen_token;
-    if (type_id)
-        if (unsigned candidate = type_id->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    return 0;
-}
-
-
-unsigned QtMemberDeclarationAST::lastToken() const
-{
-    if (rparen_token)
-        return rparen_token + 1;
-    if (type_id)
-        if (unsigned candidate = type_id->lastToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (q_token)
-        return q_token + 1;
-    return 1;
-}
-
-
-unsigned QtMethodAST::firstToken() const
-{
-    if (method_token)
-        return method_token;
-    if (lparen_token)
-        return lparen_token;
-    if (declarator)
-        if (unsigned candidate = declarator->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    return 0;
-}
-
-
-unsigned QtMethodAST::lastToken() const
-{
-    if (rparen_token)
-        return rparen_token + 1;
-    if (declarator)
-        if (unsigned candidate = declarator->lastToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (method_token)
-        return method_token + 1;
-    return 1;
-}
-
-
-unsigned QtObjectTagAST::firstToken() const
-{
-    if (q_object_token)
-        return q_object_token;
-    return 0;
-}
-
-
-unsigned QtObjectTagAST::lastToken() const
-{
-    if (q_object_token)
-        return q_object_token + 1;
-    return 1;
-}
-
-
-unsigned QtPrivateSlotAST::firstToken() const
-{
-    if (q_private_slot_token)
-        return q_private_slot_token;
-    if (lparen_token)
-        return lparen_token;
-    if (dptr_token)
-        return dptr_token;
-    if (dptr_lparen_token)
-        return dptr_lparen_token;
-    if (dptr_rparen_token)
-        return dptr_rparen_token;
-    if (comma_token)
-        return comma_token;
-    if (type_specifier_list)
-        if (unsigned candidate = type_specifier_list->firstToken())
-            return candidate;
-    if (declarator)
-        if (unsigned candidate = declarator->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    return 0;
-}
-
-
-unsigned QtPrivateSlotAST::lastToken() const
-{
-    if (rparen_token)
-        return rparen_token + 1;
-    if (declarator)
-        if (unsigned candidate = declarator->lastToken())
-            return candidate;
-    if (type_specifier_list)
-        if (unsigned candidate = type_specifier_list->lastToken())
-            return candidate;
-    if (comma_token)
-        return comma_token + 1;
-    if (dptr_rparen_token)
-        return dptr_rparen_token + 1;
-    if (dptr_lparen_token)
-        return dptr_lparen_token + 1;
-    if (dptr_token)
-        return dptr_token + 1;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (q_private_slot_token)
-        return q_private_slot_token + 1;
-    return 1;
-}
-
-
-unsigned QtPropertyDeclarationAST::firstToken() const
-{
-    if (property_specifier_token)
-        return property_specifier_token;
-    if (lparen_token)
-        return lparen_token;
-    if (expression)
-        if (unsigned candidate = expression->firstToken())
-            return candidate;
-    if (comma_token)
-        return comma_token;
-    if (type_id)
-        if (unsigned candidate = type_id->firstToken())
-            return candidate;
-    if (property_name)
-        if (unsigned candidate = property_name->firstToken())
-            return candidate;
-    if (property_declaration_item_list)
-        if (unsigned candidate = property_declaration_item_list->firstToken())
-            return candidate;
-    if (rparen_token)
-        return rparen_token;
-    return 0;
-}
-
-
-unsigned QtPropertyDeclarationAST::lastToken() const
-{
-    if (rparen_token)
-        return rparen_token + 1;
-    if (property_declaration_item_list)
-        if (unsigned candidate = property_declaration_item_list->lastToken())
-            return candidate;
-    if (property_name)
-        if (unsigned candidate = property_name->lastToken())
-            return candidate;
-    if (type_id)
-        if (unsigned candidate = type_id->lastToken())
-            return candidate;
-    if (comma_token)
-        return comma_token + 1;
-    if (expression)
-        if (unsigned candidate = expression->lastToken())
-            return candidate;
-    if (lparen_token)
-        return lparen_token + 1;
-    if (property_specifier_token)
-        return property_specifier_token + 1;
-    return 1;
-}
-
-
-unsigned QtPropertyDeclarationItemAST::firstToken() const
-{
-    if (item_name_token)
-        return item_name_token;
-    if (expression)
-        if (unsigned candidate = expression->firstToken())
-            return candidate;
-    return 0;
-}
-
-
-unsigned QtPropertyDeclarationItemAST::lastToken() const
-{
-    if (expression)
-        if (unsigned candidate = expression->lastToken())
-            return candidate;
-    if (item_name_token)
-        return item_name_token + 1;
-    return 1;
-}
-
-
 unsigned QualifiedNameAST::firstToken() const
 {
     if (global_scope_token)
@@ -3462,6 +2350,35 @@ unsigned QualifiedNameAST::lastToken() const
             return candidate;
     if (global_scope_token)
         return global_scope_token + 1;
+    return 1;
+}
+
+unsigned QuantifiedTypeSpecifierAST::firstToken() const
+{
+    if (quantifier_token)
+        return quantifier_token;
+    if (lparen_token)
+        return lparen_token;
+    if (name)
+        if (unsigned candidate = name->firstToken())
+            return candidate;
+    if (rparen_token)
+        return rparen_token;
+    return 0;
+}
+
+
+unsigned QuantifiedTypeSpecifierAST::lastToken() const
+{
+    if (rparen_token)
+        return rparen_token;
+    if (name)
+        if (unsigned candidate = name->firstToken())
+            return candidate;
+    if (lparen_token)
+        return lparen_token;
+    if (quantifier_token)
+        return quantifier_token + 1;
     return 1;
 }
 
@@ -3521,8 +2438,6 @@ unsigned ReturnStatementAST::lastToken() const
 
 unsigned SimpleDeclarationAST::firstToken() const
 {
-    if (qt_invokable_token)
-        return qt_invokable_token;
     if (decl_specifier_list)
         if (unsigned candidate = decl_specifier_list->firstToken())
             return candidate;
@@ -3545,8 +2460,6 @@ unsigned SimpleDeclarationAST::lastToken() const
     if (decl_specifier_list)
         if (unsigned candidate = decl_specifier_list->lastToken())
             return candidate;
-    if (qt_invokable_token)
-        return qt_invokable_token + 1;
     return 1;
 }
 

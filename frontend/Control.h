@@ -1,7 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-//
-// Modifications:
-// Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,11 +19,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_CONTROL_H
-#define CFE_CONTROL_H
+#ifndef PSYCHE_CONTROL_H__
+#define PSYCHE_CONTROL_H__
 
 #include "FrontendConfig.h"
+
 #include "ASTFwds.h"
+#include "CoreTypes.h"
 #include "Names.h"
 
 namespace psyche {
@@ -34,7 +34,7 @@ class CFE_API TopLevelDeclarationProcessor
 {
 public:
     virtual ~TopLevelDeclarationProcessor() {}
-    virtual bool processDeclaration(DeclarationAST *ast) = 0;
+    virtual bool processDeclaration(DeclarationAST* ast) = 0;
 };
 
 class CFE_API Control
@@ -55,164 +55,69 @@ public:
     DiagnosticCollector *diagnosticCollector() const;
     void setDiagnosticCollector(DiagnosticCollector* collector);
 
-    /// Returns the canonical anonymous name id
     const AnonymousNameId *anonymousNameId(unsigned classTokenIndex);
-
-    /// Returns the canonical template name id.
-    const TemplateNameId *templateNameId(const Identifier *id,
+    const TemplateNameId *templateNameId(const Identifier* id,
                                          bool isSpecialization,
-                                         const FullySpecifiedType *const args = 0,
+                                         const FullySpecifiedType* const args = 0,
                                          unsigned argc = 0);
-
-    /// Returns the canonical destructor name id.
-    const DestructorNameId *destructorNameId(const Name *name);
-
-    /// Returns the canonical elaborated name id.
-    const TaggedNameId *taggedNameId(TaggedNameId::Tag, const Name *name);
-
-    /// Returns the canonical operator name id.
+    const DestructorNameId *destructorNameId(const Name* name);
+    const TaggedNameId *taggedNameId(TaggedNameId::Tag, const Name* name);
     const OperatorNameId *operatorNameId(OperatorNameId::Kind operatorId);
-
-    /// Returns the canonical conversion name id.
-    const ConversionNameId *conversionNameId(const FullySpecifiedType &type);
-
-    /// Returns the canonical qualified name id.
-    const QualifiedNameId *qualifiedNameId(const Name *base, const Name *name);
-
-    const SelectorNameId *selectorNameId(const Name *const *names,
+    const ConversionNameId *conversionNameId(const FullySpecifiedType& type);
+    const QualifiedNameId *qualifiedNameId(const Name* base, const Name* name);
+    const SelectorNameId *selectorNameId(const Name* const *names,
                                          unsigned nameCount,
                                          bool hasArguments);
 
-    /// Returns a Type object of type VoidType.
-    VoidType *voidType();
+    VoidType* voidType();
+    IntegerType* integerType(IntegerType::Kind kind);
+    FloatType* floatType(FloatType::Kind floatId);
+    PointerToMemberType* pointerToMemberType(const Name* memberName, const FullySpecifiedType& elementType);
+    PointerType* pointerType(const FullySpecifiedType& elementType);
+    ReferenceType* referenceType(const FullySpecifiedType& elementType);
+    ArrayType* arrayType(const FullySpecifiedType& elementType, unsigned size = 0);
+    NamedType* namedType(const Name* name);
+    QuantifiedType* quantifiedType(const Name* name, QuantifiedType::Kind kind, int label);
 
-    /// Returns a Type object of type IntegerType.
-    IntegerType *integerType(int integerId);
-
-    /// Returns a Type object of type FloatType.
-    FloatType *floatType(int floatId);
-
-    /// Returns a Type object of type PointertoMemberType.
-    PointerToMemberType *pointerToMemberType(const Name *memberName,
-                                             const FullySpecifiedType &elementType);
-
-    /// Returns a Type object of type PointerType.
-    PointerType *pointerType(const FullySpecifiedType &elementType);
-
-    /// Returns a Type object of type ReferenceType.
-    ReferenceType *referenceType(const FullySpecifiedType &elementType, bool rvalueRef);
-
-    /// Retruns a Type object of type ArrayType.
-    ArrayType *arrayType(const FullySpecifiedType &elementType, unsigned size = 0);
-
-    /// Returns a Type object of type NamedType.
-    NamedType *namedType(const Name *name);
-
-    /// Creates a new Declaration symbol.
-    Declaration *newDeclaration(unsigned sourceLocation, const Name *name);
-
-    /// Creates a new EnumeratorDeclaration symbol.
-    EnumeratorDeclaration *newEnumeratorDeclaration(unsigned sourceLocation, const Name *name);
-
-    /// Creates a new Argument symbol.
-    Argument *newArgument(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Argument symbol.
-    TypenameArgument *newTypenameArgument(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Function symbol.
-    Function *newFunction(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Namespace symbol.
-    Namespace *newNamespace(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Template symbol.
-    Template *newTemplate(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Namespace symbol.
-    NamespaceAlias *newNamespaceAlias(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new BaseClass symbol.
-    BaseClass *newBaseClass(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Class symbol.
-    Class *newClass(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Enum symbol.
-    Enum *newEnum(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Block symbol.
+    Declaration *newDeclaration(unsigned sourceLocation, const Name* name);
+    EnumeratorDeclaration *newEnumeratorDeclaration(unsigned sourceLocation, const Name* name);
+    Argument *newArgument(unsigned sourceLocation, const Name* name = 0);
+    TypenameArgument *newTypenameArgument(unsigned sourceLocation, const Name* name = 0);
+    Function *newFunction(unsigned sourceLocation, const Name* name = 0);
+    Namespace *newNamespace(unsigned sourceLocation, const Name* name = 0);
+    Template *newTemplate(unsigned sourceLocation, const Name* name = 0);
+    NamespaceAlias *newNamespaceAlias(unsigned sourceLocation, const Name* name = 0);
+    BaseClass *newBaseClass(unsigned sourceLocation, const Name* name = 0);
+    Class *newClass(unsigned sourceLocation, const Name* name = 0);
+    Enum *newEnum(unsigned sourceLocation, const Name* name = 0);
     Block *newBlock(unsigned sourceLocation);
-
-    /// Creates a new UsingNamespaceDirective symbol.
-    UsingNamespaceDirective *newUsingNamespaceDirective(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new UsingDeclaration symbol.
-    UsingDeclaration *newUsingDeclaration(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new ForwardClassDeclaration symbol.
-    ForwardClassDeclaration *newForwardClassDeclaration(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new QtPropertyDeclaration symbol.
-    QtPropertyDeclaration *newQtPropertyDeclaration(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new QtEnum symbol.
-    QtEnum *newQtEnum(unsigned sourceLocation, const Name *name = 0);
-
-    ObjCBaseClass *newObjCBaseClass(unsigned sourceLocation, const Name *name);
-    ObjCBaseProtocol *newObjCBaseProtocol(unsigned sourceLocation, const Name *name);
-
-    /// Creates a new Objective-C class symbol.
-    ObjCClass *newObjCClass(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Objective-C class forward declaration symbol.
-    ObjCForwardClassDeclaration *newObjCForwardClassDeclaration(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Objective-C protocol symbol.
-    ObjCProtocol *newObjCProtocol(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Objective-C protocol forward declaration symbol.
-    ObjCForwardProtocolDeclaration *newObjCForwardProtocolDeclaration(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Objective-C method symbol.
-    ObjCMethod *newObjCMethod(unsigned sourceLocation, const Name *name = 0);
-
-    /// Creates a new Objective-C @property declaration symbol.
-    ObjCPropertyDeclaration *newObjCPropertyDeclaration(unsigned sourceLocation, const Name *name);
+    UsingNamespaceDirective *newUsingNamespaceDirective(unsigned sourceLocation, const Name* name = 0);
+    UsingDeclaration *newUsingDeclaration(unsigned sourceLocation, const Name* name = 0);
+    ForwardClassDeclaration *newForwardClassDeclaration(unsigned sourceLocation, const Name* name = 0);
 
     /// Symbol annulation
     void annulSymbol(const Symbol* sym);
     bool isSymbolAnulled(const Symbol* sym);
 
-    const Identifier *deprecatedId() const;
-    const Identifier *unavailableId() const;
-
-    // Objective-C specific context keywords.
-    const Identifier *objcGetterId() const;
-    const Identifier *objcSetterId() const;
-    const Identifier *objcReadwriteId() const;
-    const Identifier *objcReadonlyId() const;
-    const Identifier *objcAssignId() const;
-    const Identifier *objcRetainId() const;
-    const Identifier *objcCopyId() const;
-    const Identifier *objcNonatomicId() const;
+    const Identifier* deprecatedId() const;
+    const Identifier* unavailableId() const;
 
     // C++11 contextual keywords
-    const Identifier *cpp11Override() const;
-    const Identifier *cpp11Final() const;
+    const Identifier* cpp11Override() const;
+    const Identifier* cpp11Final() const;
 
     // Distinguished attributes.
     const Identifier* attrAvailability() const;
 
     const OperatorNameId *findOperatorNameId(OperatorNameId::Kind operatorId) const;
 
-    const Identifier *findIdentifier(const char *chars, unsigned size) const;
-    const Identifier *identifier(const char *chars, unsigned size);
-    const Identifier *identifier(const char *chars);
+    const Identifier* findIdentifier(const char *chars, unsigned size) const;
+    const Identifier* identifier(const char *chars, unsigned size);
+    const Identifier* identifier(const char *chars);
 
-    typedef const Identifier *const *IdentifierIterator;
-    typedef const StringLiteral *const *StringLiteralIterator;
-    typedef const NumericLiteral *const *NumericLiteralIterator;
+    typedef const Identifier* const *IdentifierIterator;
+    typedef const StringLiteral* const *StringLiteralIterator;
+    typedef const NumericLiteral* const *NumericLiteralIterator;
 
     IdentifierIterator firstIdentifier() const;
     IdentifierIterator lastIdentifier() const;
@@ -223,18 +128,18 @@ public:
     NumericLiteralIterator firstNumericLiteral() const;
     NumericLiteralIterator lastNumericLiteral() const;
 
-    const StringLiteral *stringLiteral(const char *chars, unsigned size);
-    const StringLiteral *stringLiteral(const char *chars);
+    const StringLiteral* stringLiteral(const char *chars, unsigned size);
+    const StringLiteral* stringLiteral(const char *chars);
 
-    const NumericLiteral *numericLiteral(const char *chars, unsigned size);
-    const NumericLiteral *numericLiteral(const char *chars);
+    const NumericLiteral* numericLiteral(const char *chars, unsigned size);
+    const NumericLiteral* numericLiteral(const char *chars);
 
-    Symbol **firstSymbol() const;
-    Symbol **lastSymbol() const;
+    Symbol** firstSymbol() const;
+    Symbol** lastSymbol() const;
     unsigned symbolCount() const;
 
-    bool hasSymbol(Symbol *symbol) const;
-    void addSymbol(Symbol *symbol);
+    bool hasSymbol(Symbol* symbol) const;
+    void addSymbol(Symbol* symbol);
 
     void squeeze();
 
@@ -251,4 +156,4 @@ private:
 } // namespace psyche
 
 
-#endif // CFE_CONTROL_H
+#endif

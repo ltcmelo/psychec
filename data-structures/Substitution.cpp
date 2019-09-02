@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
+ * Copyright (c) 2019 Leandro T. C. Melo (ltcmelo@gmail.com)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,33 +17,29 @@
  * USA
  *****************************************************************************/
 
-#ifndef PSYCHE_SYMBOLPP__
-#define PSYCHE_SYMBOLPP__
+#include "Substitution.h"
 
-#include "FrontendConfig.h"
-#include "SymbolVisitor.h"
 #include <string>
-#include <sstream>
+#include <iostream>
 
 namespace psyche {
 
-class CFE_API SymbolPP final : public psyche::SymbolVisitor
+template <class T>
+Substitution<T> Substitution<T>::Trivial;
+
+template <>
+std::string apply(const Substitution<std::string>& sub, const std::string& input)
 {
-public:
-    std::string print(const psyche::Symbol * symbol);
+    if (sub == Substitution<std::string>::Trivial)
+        return input;
 
-private:
-     bool visit(psyche::Declaration *) override;
-     bool visit(psyche::Argument *) override;
-     bool visit(psyche::Function *) override;
-     bool visit(psyche::Class *) override;
-     bool visit(psyche::Block *) override;
-
-     void appendName(const psyche::Name* name);
-
-     std::ostringstream name_;
-};
+    std::string substituted = input;
+    std::string::size_type pos = 0;
+    while ((pos = substituted.find(sub.from(), pos)) != std::string::npos) {
+        substituted.replace(pos, sub.from().size(), sub.to());
+        pos += sub.to().size();
+    }
+    return substituted;
+}
 
 } // namespace psyche
-
-#endif

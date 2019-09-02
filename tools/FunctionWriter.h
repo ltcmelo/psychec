@@ -19,17 +19,17 @@
 #ifndef PSYCHE_FUNCTIONWRITER_H__
 #define PSYCHE_FUNCTIONWRITER_H__
 
-#include "TypeSpeller.h"
+#include "TypePP.h"
 
 namespace psyche {
 
-class FunctionWriter final : private TypeSpeller<CSyntax>
+class FunctionWriter final : private TypePP<CSyntax>
 {
 public:
     std::string writeFunction(psyche::Function*, const std::string name);
 
 private:
-    using TypeSpeller<CSyntax>::spell;
+    using TypePP<CSyntax>::print;
 
     void funcParam(psyche::Function*) override;
 };

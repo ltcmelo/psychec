@@ -1,5 +1,5 @@
 // Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
-// Modifications: Copyright (c) 2016 Leandro T. C. Melo (ltcmelo@gmail.com)
+// Copyright (c) 2016 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,98 +19,110 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CFE_AST_H
-#define CFE_AST_H
+#ifndef PSYCHE_AST_H__
+#define PSYCHE_AST_H__
 
 #include "FrontendConfig.h"
+
 #include "ASTFwds.h"
-#include "MemoryPool.h"
 #include "FullySpecifiedType.h"
+#include "MemoryPool.h"
+#include "SyntaxAmbiguity.h"
 #include <iostream>
 #include <memory>
 
-// Pysche
-#include "SyntaxAmbiguity.h"
-
 namespace psyche {
 
-template <typename Tptr>
-class CFE_API List: public Managed
+template <class PtrT, class DerivedListT>
+class CFE_API BaseList: public Managed
 {
-    List(const List &other);
-    void operator =(const List &other);
+    BaseList(const BaseList& other) = delete;
+    void operator =(const BaseList& other) = delete;
 
 public:
-    List()
-        : value(Tptr()), next(0)
-    { }
+    BaseList()
+        : value(PtrT())
+        , next(nullptr)
+    {}
 
-    List(const Tptr &value)
-        : value(value), next(0)
-    { }
+    BaseList(const PtrT& value)
+        : value(value)
+        , next(nullptr)
+    {}
 
     unsigned firstToken() const
     {
         if (value)
             return value->firstToken();
-
-        // ### CPP_CHECK(0);
         return 0;
     }
 
     unsigned lastToken() const
     {
-        Tptr lv = lastValue();
-
+        PtrT lv = lastValue();
         if (lv)
             return lv->lastToken();
-
-        // ### CPP_CHECK(0);
         return 0;
     }
 
-    Tptr lastValue() const
+    PtrT lastValue() const
     {
-        Tptr lastValue = 0;
-
-        for (const List *it = this; it; it = it->next) {
+        PtrT lastValue = nullptr;
+        for (const DerivedListT* it = (DerivedListT*)this; it; it = it->next) {
             if (it->value)
                 lastValue = it->value;
         }
-
         return lastValue;
     }
 
-    Tptr value;
-    List *next;
+    PtrT value;
+    DerivedListT* next;
+};
+
+template <class PtrT>
+class CFE_API List: public BaseList<PtrT, List<PtrT>>
+{
+public:
+    using BaseList<PtrT, List<PtrT>>::BaseList;
+};
+
+template <class PtrT>
+class CFE_API SepList: public BaseList<PtrT, SepList<PtrT>>
+{
+public:
+    using BaseList<PtrT, SepList<PtrT>>::BaseList;
+
+    unsigned delim_token = 0;
 };
 
 class CFE_API AST: public Managed
 {
-    AST(const AST &other);
-    void operator =(const AST &other);
+    AST(const AST& other) = delete;
+    void operator =(const AST& other) = delete;
 
 public:
     AST();
     virtual ~AST();
 
-    void accept(ASTVisitor *visitor);
+    void accept(ASTVisitor* visitor);
 
-    static void accept(AST *ast, ASTVisitor *visitor)
+    static void accept(AST* ast, ASTVisitor* visitor)
     { if (ast) ast->accept(visitor); }
 
-    template <typename Tptr>
-    static void accept(List<Tptr> *it, ASTVisitor *visitor)
+    template <class PtrT, class DerivedListT>
+    static void accept(BaseList<PtrT, DerivedListT>* it, ASTVisitor* visitor)
     {
         for (; it; it = it->next)
             accept(it->value, visitor);
     }
 
-    static bool match(AST *ast, AST *pattern, ASTMatcher *matcher);
-    bool match(AST *pattern, ASTMatcher *matcher);
+    static bool match(AST* ast, AST* pattern, ASTMatcher* matcher);
+    bool match(AST* pattern, ASTMatcher* matcher);
 
-    template <typename Tptr>
-    static bool match(List<Tptr> *it, List<Tptr> *patternIt, ASTMatcher *matcher)
+    template <class PtrT, class DerivedListT>
+    static bool match(BaseList<PtrT, DerivedListT>* it,
+                      BaseList<PtrT, DerivedListT>* patternIt,
+                      ASTMatcher* matcher)
     {
         while (it && patternIt) {
             if (! match(it->value, patternIt->value, matcher))
@@ -129,176 +141,143 @@ public:
     virtual unsigned firstToken() const = 0;
     virtual unsigned lastToken() const = 0;
 
-    virtual AST *clone(MemoryPool *pool) const = 0;
+    virtual AST* clone(MemoryPool *pool) const = 0;
 
-    virtual AccessDeclarationAST *asAccessDeclaration() { return 0; }
-    virtual AliasDeclarationAST *asAliasDeclaration() { return 0; }
-    virtual AlignmentSpecifierAST *asAlignmentSpecifier() { return 0; }
-    virtual AlignofExpressionAST *asAlignofExpression() { return 0; }
-    virtual AmbiguousStatementAST *asAmbiguousStatement() { return 0; }
-    virtual AnonymousNameAST *asAnonymousName() { return 0; }
-    virtual ArrayAccessAST *asArrayAccess() { return 0; }
-    virtual ArrayDeclaratorAST *asArrayDeclarator() { return 0; }
-    virtual ArrayInitializerAST *asArrayInitializer() { return 0; }
-    virtual AsmDefinitionAST *asAsmDefinition() { return 0; }
-    virtual AttributeSpecifierAST *asAttributeSpecifier() { return 0; }
-    virtual BaseSpecifierAST *asBaseSpecifier() { return 0; }
-    virtual BinaryExpressionAST *asBinaryExpression() { return 0; }
-    virtual BoolLiteralAST *asBoolLiteral() { return 0; }
-    virtual BracedInitializerAST *asBracedInitializer() { return 0; }
-    virtual BracketDesignatorAST *asBracketDesignator() { return 0; }
-    virtual BreakStatementAST *asBreakStatement() { return 0; }
-    virtual CallAST *asCall() { return 0; }
-    virtual CaptureAST *asCapture() { return 0; }
-    virtual CaseStatementAST *asCaseStatement() { return 0; }
-    virtual CastExpressionAST *asCastExpression() { return 0; }
-    virtual CatchClauseAST *asCatchClause() { return 0; }
-    virtual ClassSpecifierAST *asClassSpecifier() { return 0; }
-    virtual CompoundExpressionAST *asCompoundExpression() { return 0; }
-    virtual CompoundLiteralAST *asCompoundLiteral() { return 0; }
-    virtual CompoundStatementAST *asCompoundStatement() { return 0; }
-    virtual ConditionAST *asCondition() { return 0; }
-    virtual ConditionalExpressionAST *asConditionalExpression() { return 0; }
-    virtual ContinueStatementAST *asContinueStatement() { return 0; }
-    virtual ConversionFunctionIdAST *asConversionFunctionId() { return 0; }
-    virtual CoreDeclaratorAST *asCoreDeclarator() { return 0; }
-    virtual CppCastExpressionAST *asCppCastExpression() { return 0; }
-    virtual CtorInitializerAST *asCtorInitializer() { return 0; }
-    virtual DeclarationAST *asDeclaration() { return 0; }
-    virtual DeclarationStatementAST *asDeclarationStatement() { return 0; }
-    virtual DeclaratorAST *asDeclarator() { return 0; }
-    virtual DeclaratorIdAST *asDeclaratorId() { return 0; }
-    virtual DecltypeSpecifierAST *asDecltypeSpecifier() { return 0; }
-    virtual DeleteExpressionAST *asDeleteExpression() { return 0; }
-    virtual DesignatedInitializerAST *asDesignatedInitializer() { return 0; }
-    virtual DesignatorAST *asDesignator() { return 0; }
-    virtual DestructorNameAST *asDestructorName() { return 0; }
-    virtual DoStatementAST *asDoStatement() { return 0; }
-    virtual DotDesignatorAST *asDotDesignator() { return 0; }
-    virtual DynamicExceptionSpecificationAST *asDynamicExceptionSpecification() { return 0; }
-    virtual TaggedNameAST *asTaggedName() { return 0; }
-    virtual ElaboratedTypeSpecifierAST *asElaboratedTypeSpecifier() { return 0; }
-    virtual EmptyDeclarationAST *asEmptyDeclaration() { return 0; }
-    virtual EnumSpecifierAST *asEnumSpecifier() { return 0; }
-    virtual EnumeratorAST *asEnumerator() { return 0; }
-    virtual ExceptionDeclarationAST *asExceptionDeclaration() { return 0; }
-    virtual ExceptionSpecificationAST *asExceptionSpecification() { return 0; }
-    virtual ExpressionAST *asExpression() { return 0; }
-    virtual ExpressionListParenAST *asExpressionListParen() { return 0; }
-    virtual ExpressionOrDeclarationStatementAST *asExpressionOrDeclarationStatement() { return 0; }
-    virtual ExpressionStatementAST *asExpressionStatement() { return 0; }
-    virtual ForStatementAST *asForStatement() { return 0; }
-    virtual ForeachStatementAST *asForeachStatement() { return 0; }
-    virtual FunctionDeclaratorAST *asFunctionDeclarator() { return 0; }
-    virtual FunctionDefinitionAST *asFunctionDefinition() { return 0; }
-    virtual GnuAttributeAST *asGnuAttribute() { return 0; }
-    virtual GnuAttributeSpecifierAST *asGnuAttributeSpecifier() { return 0; }
-    virtual GotoStatementAST *asGotoStatement() { return 0; }
-    virtual IdExpressionAST *asIdExpression() { return 0; }
-    virtual IfStatementAST *asIfStatement() { return 0; }
-    virtual LabeledStatementAST *asLabeledStatement() { return 0; }
-    virtual LambdaCaptureAST *asLambdaCapture() { return 0; }
-    virtual LambdaDeclaratorAST *asLambdaDeclarator() { return 0; }
-    virtual LambdaExpressionAST *asLambdaExpression() { return 0; }
-    virtual LambdaIntroducerAST *asLambdaIntroducer() { return 0; }
-    virtual LinkageBodyAST *asLinkageBody() { return 0; }
-    virtual LinkageSpecificationAST *asLinkageSpecification() { return 0; }
-    virtual MemInitializerAST *asMemInitializer() { return 0; }
-    virtual MemberAccessAST *asMemberAccess() { return 0; }
-    virtual NameAST *asName() { return 0; }
-    virtual NamedTypeSpecifierAST *asNamedTypeSpecifier() { return 0; }
-    virtual NamespaceAST *asNamespace() { return 0; }
-    virtual NamespaceAliasDefinitionAST *asNamespaceAliasDefinition() { return 0; }
-    virtual NestedDeclaratorAST *asNestedDeclarator() { return 0; }
-    virtual NestedExpressionAST *asNestedExpression() { return 0; }
-    virtual NestedNameSpecifierAST *asNestedNameSpecifier() { return 0; }
-    virtual NewArrayDeclaratorAST *asNewArrayDeclarator() { return 0; }
-    virtual NewExpressionAST *asNewExpression() { return 0; }
-    virtual NewTypeIdAST *asNewTypeId() { return 0; }
-    virtual NoExceptOperatorExpressionAST *asNoExceptOperatorExpression() { return 0; }
-    virtual NoExceptSpecificationAST *asNoExceptSpecification() { return 0; }
-    virtual NumericLiteralAST *asNumericLiteral() { return 0; }
-    virtual ObjCClassDeclarationAST *asObjCClassDeclaration() { return 0; }
-    virtual ObjCClassForwardDeclarationAST *asObjCClassForwardDeclaration() { return 0; }
-    virtual ObjCDynamicPropertiesDeclarationAST *asObjCDynamicPropertiesDeclaration() { return 0; }
-    virtual ObjCEncodeExpressionAST *asObjCEncodeExpression() { return 0; }
-    virtual ObjCFastEnumerationAST *asObjCFastEnumeration() { return 0; }
-    virtual ObjCInstanceVariablesDeclarationAST *asObjCInstanceVariablesDeclaration() { return 0; }
-    virtual ObjCMessageArgumentAST *asObjCMessageArgument() { return 0; }
-    virtual ObjCMessageArgumentDeclarationAST *asObjCMessageArgumentDeclaration() { return 0; }
-    virtual ObjCMessageExpressionAST *asObjCMessageExpression() { return 0; }
-    virtual ObjCMethodDeclarationAST *asObjCMethodDeclaration() { return 0; }
-    virtual ObjCMethodPrototypeAST *asObjCMethodPrototype() { return 0; }
-    virtual ObjCPropertyAttributeAST *asObjCPropertyAttribute() { return 0; }
-    virtual ObjCPropertyDeclarationAST *asObjCPropertyDeclaration() { return 0; }
-    virtual ObjCProtocolDeclarationAST *asObjCProtocolDeclaration() { return 0; }
-    virtual ObjCProtocolExpressionAST *asObjCProtocolExpression() { return 0; }
-    virtual ObjCProtocolForwardDeclarationAST *asObjCProtocolForwardDeclaration() { return 0; }
-    virtual ObjCProtocolRefsAST *asObjCProtocolRefs() { return 0; }
-    virtual ObjCSelectorAST *asObjCSelector() { return 0; }
-    virtual ObjCSelectorArgumentAST *asObjCSelectorArgument() { return 0; }
-    virtual ObjCSelectorExpressionAST *asObjCSelectorExpression() { return 0; }
-    virtual ObjCSynchronizedStatementAST *asObjCSynchronizedStatement() { return 0; }
-    virtual ObjCSynthesizedPropertiesDeclarationAST *asObjCSynthesizedPropertiesDeclaration() { return 0; }
-    virtual ObjCSynthesizedPropertyAST *asObjCSynthesizedProperty() { return 0; }
-    virtual ObjCTypeNameAST *asObjCTypeName() { return 0; }
-    virtual ObjCVisibilityDeclarationAST *asObjCVisibilityDeclaration() { return 0; }
-    virtual OperatorAST *asOperator() { return 0; }
-    virtual OperatorFunctionIdAST *asOperatorFunctionId() { return 0; }
-    virtual ParameterDeclarationAST *asParameterDeclaration() { return 0; }
-    virtual ParameterDeclarationClauseAST *asParameterDeclarationClause() { return 0; }
-    virtual PointerAST *asPointer() { return 0; }
-    virtual PointerLiteralAST *asPointerLiteral() { return 0; }
-    virtual PointerToMemberAST *asPointerToMember() { return 0; }
-    virtual PostIncrDecrAST *asPostIncrDecr() { return 0; }
-    virtual PostfixAST *asPostfix() { return 0; }
-    virtual PostfixDeclaratorAST *asPostfixDeclarator() { return 0; }
-    virtual PtrOperatorAST *asPtrOperator() { return 0; }
-    virtual QtEnumDeclarationAST *asQtEnumDeclaration() { return 0; }
-    virtual QtFlagsDeclarationAST *asQtFlagsDeclaration() { return 0; }
-    virtual QtInterfaceNameAST *asQtInterfaceName() { return 0; }
-    virtual QtInterfacesDeclarationAST *asQtInterfacesDeclaration() { return 0; }
-    virtual QtMemberDeclarationAST *asQtMemberDeclaration() { return 0; }
-    virtual QtMethodAST *asQtMethod() { return 0; }
-    virtual QtObjectTagAST *asQtObjectTag() { return 0; }
-    virtual QtPrivateSlotAST *asQtPrivateSlot() { return 0; }
-    virtual QtPropertyDeclarationAST *asQtPropertyDeclaration() { return 0; }
-    virtual QtPropertyDeclarationItemAST *asQtPropertyDeclarationItem() { return 0; }
-    virtual QualifiedNameAST *asQualifiedName() { return 0; }
-    virtual RangeBasedForStatementAST *asRangeBasedForStatement() { return 0; }
-    virtual ReferenceAST *asReference() { return 0; }
-    virtual ReturnStatementAST *asReturnStatement() { return 0; }
-    virtual SimpleDeclarationAST *asSimpleDeclaration() { return 0; }
-    virtual SimpleNameAST *asSimpleName() { return 0; }
-    virtual SimpleSpecifierAST *asSimpleSpecifier() { return 0; }
-    virtual SizeofExpressionAST *asSizeofExpression() { return 0; }
-    virtual SpecifierAST *asSpecifier() { return 0; }
-    virtual StatementAST *asStatement() { return 0; }
-    virtual StaticAssertDeclarationAST *asStaticAssertDeclaration() { return 0; }
-    virtual StringLiteralAST *asStringLiteral() { return 0; }
-    virtual SwitchStatementAST *asSwitchStatement() { return 0; }
-    virtual TemplateDeclarationAST *asTemplateDeclaration() { return 0; }
-    virtual TemplateIdAST *asTemplateId() { return 0; }
-    virtual TemplateTypeParameterAST *asTemplateTypeParameter() { return 0; }
-    virtual ThisExpressionAST *asThisExpression() { return 0; }
-    virtual ThrowExpressionAST *asThrowExpression() { return 0; }
-    virtual TrailingReturnTypeAST *asTrailingReturnType() { return 0; }
-    virtual TranslationUnitAST *asTranslationUnit() { return 0; }
-    virtual TryBlockStatementAST *asTryBlockStatement() { return 0; }
-    virtual TypeConstructorCallAST *asTypeConstructorCall() { return 0; }
-    virtual TypeIdAST *asTypeId() { return 0; }
-    virtual TypeidExpressionAST *asTypeidExpression() { return 0; }
-    virtual TypenameCallExpressionAST *asTypenameCallExpression() { return 0; }
-    virtual TypenameTypeParameterAST *asTypenameTypeParameter() { return 0; }
-    virtual TypeofSpecifierAST *asTypeofSpecifier() { return 0; }
-    virtual UnaryExpressionAST *asUnaryExpression() { return 0; }
-    virtual UsingAST *asUsing() { return 0; }
-    virtual UsingDirectiveAST *asUsingDirective() { return 0; }
-    virtual WhileStatementAST *asWhileStatement() { return 0; }
+    virtual AccessDeclarationAST* asAccessDeclaration() { return 0; }
+    virtual AliasDeclarationAST* asAliasDeclaration() { return 0; }
+    virtual AlignmentSpecifierAST* asAlignmentSpecifier() { return 0; }
+    virtual AlignofExpressionAST* asAlignofExpression() { return 0; }
+    virtual AmbiguousStatementAST* asAmbiguousStatement() { return 0; }
+    virtual AnonymousNameAST* asAnonymousName() { return 0; }
+    virtual ArrayAccessAST* asArrayAccess() { return 0; }
+    virtual ArrayDeclaratorAST* asArrayDeclarator() { return 0; }
+    virtual ArrayInitializerAST* asArrayInitializer() { return 0; }
+    virtual AsmDefinitionAST* asAsmDefinition() { return 0; }
+    virtual AttributeSpecifierAST* asAttributeSpecifier() { return 0; }
+    virtual BaseSpecifierAST* asBaseSpecifier() { return 0; }
+    virtual BinaryExpressionAST* asBinaryExpression() { return 0; }
+    virtual BoolLiteralAST* asBoolLiteral() { return 0; }
+    virtual BracedInitializerAST* asBracedInitializer() { return 0; }
+    virtual BracketDesignatorAST* asBracketDesignator() { return 0; }
+    virtual BreakStatementAST* asBreakStatement() { return 0; }
+    virtual CallAST* asCall() { return 0; }
+    virtual CaptureAST* asCapture() { return 0; }
+    virtual CaseStatementAST* asCaseStatement() { return 0; }
+    virtual CastExpressionAST* asCastExpression() { return 0; }
+    virtual CatchClauseAST* asCatchClause() { return 0; }
+    virtual ClassSpecifierAST* asClassSpecifier() { return 0; }
+    virtual CompoundExpressionAST* asCompoundExpression() { return 0; }
+    virtual CompoundLiteralAST* asCompoundLiteral() { return 0; }
+    virtual CompoundStatementAST* asCompoundStatement() { return 0; }
+    virtual ConditionAST* asCondition() { return 0; }
+    virtual ConditionalExpressionAST* asConditionalExpression() { return 0; }
+    virtual ContinueStatementAST* asContinueStatement() { return 0; }
+    virtual ConversionFunctionIdAST* asConversionFunctionId() { return 0; }
+    virtual CoreDeclaratorAST* asCoreDeclarator() { return 0; }
+    virtual CppCastExpressionAST* asCppCastExpression() { return 0; }
+    virtual CtorInitializerAST* asCtorInitializer() { return 0; }
+    virtual DeclarationAST* asDeclaration() { return 0; }
+    virtual DeclarationStatementAST* asDeclarationStatement() { return 0; }
+    virtual DeclaratorAST* asDeclarator() { return 0; }
+    virtual DeclaratorIdAST* asDeclaratorId() { return 0; }
+    virtual DecltypeSpecifierAST* asDecltypeSpecifier() { return 0; }
+    virtual DeleteExpressionAST* asDeleteExpression() { return 0; }
+    virtual DesignatedInitializerAST* asDesignatedInitializer() { return 0; }
+    virtual DesignatorAST* asDesignator() { return 0; }
+    virtual DestructorNameAST* asDestructorName() { return 0; }
+    virtual DoStatementAST* asDoStatement() { return 0; }
+    virtual DotDesignatorAST* asDotDesignator() { return 0; }
+    virtual DynamicExceptionSpecificationAST* asDynamicExceptionSpecification() { return 0; }
+    virtual TaggedNameAST* asTaggedName() { return 0; }
+    virtual ElaboratedTypeSpecifierAST* asElaboratedTypeSpecifier() { return 0; }
+    virtual EmptyDeclarationAST* asEmptyDeclaration() { return 0; }
+    virtual EnumSpecifierAST* asEnumSpecifier() { return 0; }
+    virtual EnumeratorAST* asEnumerator() { return 0; }
+    virtual ExceptionDeclarationAST* asExceptionDeclaration() { return 0; }
+    virtual ExceptionSpecificationAST* asExceptionSpecification() { return 0; }
+    virtual ExpressionAST* asExpression() { return 0; }
+    virtual ExpressionListParenAST* asExpressionListParen() { return 0; }
+    virtual ExpressionOrDeclarationStatementAST* asExpressionOrDeclarationStatement() { return 0; }
+    virtual ExpressionStatementAST* asExpressionStatement() { return 0; }
+    virtual ForStatementAST* asForStatement() { return 0; }
+    virtual ForeachStatementAST* asForeachStatement() { return 0; }
+    virtual FunctionDeclaratorAST* asFunctionDeclarator() { return 0; }
+    virtual FunctionDefinitionAST* asFunctionDefinition() { return 0; }
+    virtual GenericsDeclarationAST* asGenericsDeclaration() { return 0; }
+    virtual GnuAttributeAST* asGnuAttribute() { return 0; }
+    virtual GnuAttributeSpecifierAST* asGnuAttributeSpecifier() { return 0; }
+    virtual GotoStatementAST* asGotoStatement() { return 0; }
+    virtual IdExpressionAST* asIdExpression() { return 0; }
+    virtual IfStatementAST* asIfStatement() { return 0; }
+    virtual LabeledStatementAST* asLabeledStatement() { return 0; }
+    virtual LambdaCaptureAST* asLambdaCapture() { return 0; }
+    virtual LambdaDeclaratorAST* asLambdaDeclarator() { return 0; }
+    virtual LambdaExpressionAST* asLambdaExpression() { return 0; }
+    virtual LambdaIntroducerAST* asLambdaIntroducer() { return 0; }
+    virtual LinkageBodyAST* asLinkageBody() { return 0; }
+    virtual LinkageSpecificationAST* asLinkageSpecification() { return 0; }
+    virtual MemInitializerAST* asMemInitializer() { return 0; }
+    virtual MemberAccessAST* asMemberAccess() { return 0; }
+    virtual NameAST* asName() { return 0; }
+    virtual NamedTypeSpecifierAST* asNamedTypeSpecifier() { return 0; }
+    virtual NamespaceAST* asNamespace() { return 0; }
+    virtual NamespaceAliasDefinitionAST* asNamespaceAliasDefinition() { return 0; }
+    virtual NestedDeclaratorAST* asNestedDeclarator() { return 0; }
+    virtual NestedExpressionAST* asNestedExpression() { return 0; }
+    virtual NestedNameSpecifierAST* asNestedNameSpecifier() { return 0; }
+    virtual NewArrayDeclaratorAST* asNewArrayDeclarator() { return 0; }
+    virtual NewExpressionAST* asNewExpression() { return 0; }
+    virtual NewTypeIdAST* asNewTypeId() { return 0; }
+    virtual NoExceptOperatorExpressionAST* asNoExceptOperatorExpression() { return 0; }
+    virtual NoExceptSpecificationAST* asNoExceptSpecification() { return 0; }
+    virtual NumericLiteralAST* asNumericLiteral() { return 0; }
+    virtual OperatorAST* asOperator() { return 0; }
+    virtual OperatorFunctionIdAST* asOperatorFunctionId() { return 0; }
+    virtual ParameterDeclarationAST* asParameterDeclaration() { return 0; }
+    virtual ParameterDeclarationClauseAST* asParameterDeclarationClause() { return 0; }
+    virtual PointerAST* asPointer() { return 0; }
+    virtual PointerLiteralAST* asPointerLiteral() { return 0; }
+    virtual PointerToMemberAST* asPointerToMember() { return 0; }
+    virtual PostIncrDecrAST* asPostIncrDecr() { return 0; }
+    virtual PostfixAST* asPostfix() { return 0; }
+    virtual PostfixDeclaratorAST* asPostfixDeclarator() { return 0; }
+    virtual PtrOperatorAST* asPtrOperator() { return 0; }
+    virtual QualifiedNameAST* asQualifiedName() { return 0; }
+    virtual QuantifiedTypeSpecifierAST* asQuantifiedTypeSpecifier() { return 0; }
+    virtual RangeBasedForStatementAST* asRangeBasedForStatement() { return 0; }
+    virtual ReferenceAST* asReference() { return 0; }
+    virtual ReturnStatementAST* asReturnStatement() { return 0; }
+    virtual SimpleDeclarationAST* asSimpleDeclaration() { return 0; }
+    virtual SimpleNameAST* asSimpleName() { return 0; }
+    virtual SimpleSpecifierAST* asSimpleSpecifier() { return 0; }
+    virtual SizeofExpressionAST* asSizeofExpression() { return 0; }
+    virtual SpecifierAST* asSpecifier() { return 0; }
+    virtual StatementAST* asStatement() { return 0; }
+    virtual StaticAssertDeclarationAST* asStaticAssertDeclaration() { return 0; }
+    virtual StringLiteralAST* asStringLiteral() { return 0; }
+    virtual SwitchStatementAST* asSwitchStatement() { return 0; }
+    virtual TemplateDeclarationAST* asTemplateDeclaration() { return 0; }
+    virtual TemplateIdAST* asTemplateId() { return 0; }
+    virtual TemplateTypeParameterAST* asTemplateTypeParameter() { return 0; }
+    virtual ThisExpressionAST* asThisExpression() { return 0; }
+    virtual ThrowExpressionAST* asThrowExpression() { return 0; }
+    virtual TrailingReturnTypeAST* asTrailingReturnType() { return 0; }
+    virtual TranslationUnitAST* asTranslationUnit() { return 0; }
+    virtual TryBlockStatementAST* asTryBlockStatement() { return 0; }
+    virtual TypeConstructorCallAST* asTypeConstructorCall() { return 0; }
+    virtual TypeIdAST* asTypeId() { return 0; }
+    virtual TypeidExpressionAST* asTypeidExpression() { return 0; }
+    virtual TypenameCallExpressionAST* asTypenameCallExpression() { return 0; }
+    virtual TypenameTypeParameterAST* asTypenameTypeParameter() { return 0; }
+    virtual TypeofSpecifierAST* asTypeofSpecifier() { return 0; }
+    virtual UnaryExpressionAST* asUnaryExpression() { return 0; }
+    virtual UsingAST* asUsing() { return 0; }
+    virtual UsingDirectiveAST* asUsingDirective() { return 0; }
+    virtual WhileStatementAST* asWhileStatement() { return 0; }
 
 protected:
-    virtual void accept0(ASTVisitor *visitor) = 0;
-    virtual bool match0(AST *, ASTMatcher *) = 0;
+    virtual void accept0(ASTVisitor* visitor) = 0;
+    virtual bool match0(AST* , ASTMatcher *) = 0;
 };
 
 class CFE_API StatementAST: public AST
@@ -307,9 +286,9 @@ public:
     StatementAST()
     {}
 
-    virtual StatementAST *asStatement() { return this; }
+    virtual StatementAST* asStatement() { return this; }
 
-    virtual StatementAST *clone(MemoryPool *pool) const = 0;
+    virtual StatementAST* clone(MemoryPool *pool) const = 0;
 };
 
 class CFE_API ExpressionAST: public AST
@@ -318,9 +297,9 @@ public:
     ExpressionAST()
     {}
 
-    virtual ExpressionAST *asExpression() { return this; }
+    virtual ExpressionAST* asExpression() { return this; }
 
-    virtual ExpressionAST *clone(MemoryPool *pool) const = 0;
+    virtual ExpressionAST* clone(MemoryPool *pool) const = 0;
 };
 
 class CFE_API DeclarationAST: public AST
@@ -329,24 +308,24 @@ public:
     DeclarationAST()
     {}
 
-    virtual DeclarationAST *asDeclaration() { return this; }
+    virtual DeclarationAST* asDeclaration() { return this; }
 
-    virtual DeclarationAST *clone(MemoryPool *pool) const = 0;
+    virtual DeclarationAST* clone(MemoryPool *pool) const = 0;
 };
 
 class CFE_API NameAST: public AST
 {
 public: // annotations
-    const Name *name;
+    const Name* name;
 
 public:
     NameAST()
         : name(0)
     {}
 
-    virtual NameAST *asName() { return this; }
+    virtual NameAST* asName() { return this; }
 
-    virtual NameAST *clone(MemoryPool *pool) const = 0;
+    virtual NameAST* clone(MemoryPool *pool) const = 0;
 };
 
 class CFE_API SpecifierAST: public AST
@@ -355,9 +334,9 @@ public:
     SpecifierAST()
     {}
 
-    virtual SpecifierAST *asSpecifier() { return this; }
+    virtual SpecifierAST* asSpecifier() { return this; }
 
-    virtual SpecifierAST *clone(MemoryPool *pool) const = 0;
+    virtual SpecifierAST* clone(MemoryPool *pool) const = 0;
 };
 
 class CFE_API PtrOperatorAST: public AST
@@ -366,9 +345,9 @@ public:
     PtrOperatorAST()
     {}
 
-    virtual PtrOperatorAST *asPtrOperator() { return this; }
+    virtual PtrOperatorAST* asPtrOperator() { return this; }
 
-    virtual PtrOperatorAST *clone(MemoryPool *pool) const = 0;
+    virtual PtrOperatorAST* clone(MemoryPool *pool) const = 0;
 };
 
 class CFE_API PostfixAST: public ExpressionAST
@@ -377,9 +356,9 @@ public:
     PostfixAST()
     {}
 
-    virtual PostfixAST *asPostfix() { return this; }
+    virtual PostfixAST* asPostfix() { return this; }
 
-    virtual PostfixAST *clone(MemoryPool *pool) const = 0;
+    virtual PostfixAST* clone(MemoryPool *pool) const = 0;
 };
 
 class CFE_API CoreDeclaratorAST: public AST
@@ -388,9 +367,9 @@ public:
     CoreDeclaratorAST()
     {}
 
-    virtual CoreDeclaratorAST *asCoreDeclarator() { return this; }
+    virtual CoreDeclaratorAST* asCoreDeclarator() { return this; }
 
-    virtual CoreDeclaratorAST *clone(MemoryPool *pool) const = 0;
+    virtual CoreDeclaratorAST* clone(MemoryPool *pool) const = 0;
 };
 
 class CFE_API PostfixDeclaratorAST: public AST
@@ -399,55 +378,9 @@ public:
     PostfixDeclaratorAST()
     {}
 
-    virtual PostfixDeclaratorAST *asPostfixDeclarator() { return this; }
+    virtual PostfixDeclaratorAST* asPostfixDeclarator() { return this; }
 
-    virtual PostfixDeclaratorAST *clone(MemoryPool *pool) const = 0;
-};
-
-class CFE_API ObjCSelectorArgumentAST: public AST
-{
-public:
-    unsigned name_token;
-    unsigned colon_token;
-
-public:
-    ObjCSelectorArgumentAST()
-        : name_token(0)
-        , colon_token(0)
-    {}
-
-    virtual ObjCSelectorArgumentAST *asObjCSelectorArgument() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCSelectorArgumentAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCSelectorAST: public NameAST
-{
-public:
-    ObjCSelectorArgumentListAST *selector_argument_list;
-
-public:
-    ObjCSelectorAST()
-        : selector_argument_list(0)
-    {}
-
-    virtual ObjCSelectorAST *asObjCSelector() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCSelectorAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual PostfixDeclaratorAST* clone(MemoryPool *pool) const = 0;
 };
 
 class CFE_API SimpleSpecifierAST: public SpecifierAST
@@ -460,16 +393,16 @@ public:
         : specifier_token(0)
     {}
 
-    virtual SimpleSpecifierAST *asSimpleSpecifier() { return this; }
+    virtual SimpleSpecifierAST* asSimpleSpecifier() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual SimpleSpecifierAST *clone(MemoryPool *pool) const;
+    virtual SimpleSpecifierAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API AttributeSpecifierAST: public SpecifierAST
@@ -478,9 +411,9 @@ public:
     AttributeSpecifierAST()
     {}
 
-    virtual AttributeSpecifierAST *asAttributeSpecifier() { return this; }
+    virtual AttributeSpecifierAST* asAttributeSpecifier() { return this; }
 
-    virtual AttributeSpecifierAST *clone(MemoryPool *pool) const = 0;
+    virtual AttributeSpecifierAST* clone(MemoryPool *pool) const = 0;
 };
 
 class CFE_API AlignmentSpecifierAST: public AttributeSpecifierAST
@@ -488,7 +421,7 @@ class CFE_API AlignmentSpecifierAST: public AttributeSpecifierAST
 public:
     unsigned align_token;
     unsigned lparen_token;
-    ExpressionAST *typeIdExprOrAlignmentExpr;
+    ExpressionAST* typeIdExprOrAlignmentExpr;
     unsigned ellipses_token;
     unsigned rparen_token;
 
@@ -501,18 +434,40 @@ public:
         , rparen_token(0)
     {}
 
-    virtual AlignmentSpecifierAST *asAlignmentSpecifier() { return this; }
+    virtual AlignmentSpecifierAST* asAlignmentSpecifier() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual AlignmentSpecifierAST *clone(MemoryPool *pool) const;
+    virtual AlignmentSpecifierAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
+class CFE_API GenericsDeclarationAST : public DeclarationAST
+{
+public:
+    unsigned generics_token;
+    DeclarationAST* declaration;
+
+    GenericsDeclarationAST()
+        : generics_token(0)
+        , declaration(0)
+    {}
+
+    virtual GenericsDeclarationAST* asGenericsDeclaration() { return this; }
+
+    virtual unsigned firstToken() const;
+    virtual unsigned lastToken() const;
+
+    virtual GenericsDeclarationAST* clone(MemoryPool *pool) const;
+
+protected:
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
+};
 
 class CFE_API GnuAttributeSpecifierAST: public AttributeSpecifierAST
 {
@@ -520,7 +475,7 @@ public:
     unsigned attribute_token;
     unsigned first_lparen_token;
     unsigned second_lparen_token;
-    GnuAttributeListAST *attribute_list;
+    GnuAttributeListAST* attribute_list;
     unsigned first_rparen_token;
     unsigned second_rparen_token;
 
@@ -534,16 +489,16 @@ public:
         , second_rparen_token(0)
     {}
 
-    virtual GnuAttributeSpecifierAST *asGnuAttributeSpecifier() { return this; }
+    virtual GnuAttributeSpecifierAST* asGnuAttributeSpecifier() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual GnuAttributeSpecifierAST *clone(MemoryPool *pool) const;
+    virtual GnuAttributeSpecifierAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API GnuAttributeAST: public AST
@@ -552,7 +507,7 @@ public:
     unsigned identifier_token;
     unsigned lparen_token;
     unsigned tag_token;
-    ExpressionListAST *expression_list;
+    ExpressionListAST* expression_list;
     unsigned rparen_token;
 
 public:
@@ -564,16 +519,16 @@ public:
         , rparen_token(0)
     {}
 
-    virtual GnuAttributeAST *asGnuAttribute() { return this; }
+    virtual GnuAttributeAST* asGnuAttribute() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual GnuAttributeAST *clone(MemoryPool *pool) const;
+    virtual GnuAttributeAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TypeofSpecifierAST: public SpecifierAST
@@ -581,7 +536,7 @@ class CFE_API TypeofSpecifierAST: public SpecifierAST
 public:
     unsigned typeof_token;
     unsigned lparen_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rparen_token;
 
 public:
@@ -592,16 +547,16 @@ public:
         , rparen_token(0)
     {}
 
-    virtual TypeofSpecifierAST *asTypeofSpecifier() { return this; }
+    virtual TypeofSpecifierAST* asTypeofSpecifier() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TypeofSpecifierAST *clone(MemoryPool *pool) const;
+    virtual TypeofSpecifierAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API DecltypeSpecifierAST: public SpecifierAST
@@ -609,7 +564,7 @@ class CFE_API DecltypeSpecifierAST: public SpecifierAST
 public:
     unsigned decltype_token;
     unsigned lparen_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rparen_token;
 
 public:
@@ -620,28 +575,28 @@ public:
         , rparen_token(0)
     {}
 
-    virtual DecltypeSpecifierAST *asDecltypeSpecifier() { return this; }
+    virtual DecltypeSpecifierAST* asDecltypeSpecifier() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual DecltypeSpecifierAST *clone(MemoryPool *pool) const;
+    virtual DecltypeSpecifierAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API DeclaratorAST: public AST
 {
 public:
-    SpecifierListAST *attribute_list;
-    PtrOperatorListAST *ptr_operator_list;
-    CoreDeclaratorAST *core_declarator;
-    PostfixDeclaratorListAST *postfix_declarator_list;
-    SpecifierListAST *post_attribute_list;
+    SpecifierListAST* attribute_list;
+    PtrOperatorListAST* ptr_operator_list;
+    CoreDeclaratorAST* core_declarator;
+    PostfixDeclaratorListAST* postfix_declarator_list;
+    SpecifierListAST* post_attribute_list;
     unsigned equal_token;
-    ExpressionAST *initializer;
+    ExpressionAST* initializer;
 
 public:
     DeclaratorAST()
@@ -654,48 +609,46 @@ public:
         , initializer(0)
     {}
 
-    virtual DeclaratorAST *asDeclarator() { return this; }
+    virtual DeclaratorAST* asDeclarator() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual DeclaratorAST *clone(MemoryPool *pool) const;
+    virtual DeclaratorAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API SimpleDeclarationAST: public DeclarationAST
 {
 public:
-    unsigned qt_invokable_token;
-    SpecifierListAST *decl_specifier_list;
-    DeclaratorListAST *declarator_list;
+    SpecifierListAST* decl_specifier_list;
+    DeclaratorListAST* declarator_list;
     unsigned semicolon_token;
 
 public:
-    List<Symbol *> *symbols;
+    List<Symbol*>* symbols;
 
 public:
     SimpleDeclarationAST()
-        : qt_invokable_token(0)
-        , decl_specifier_list(0)
+        : decl_specifier_list(0)
         , declarator_list(0)
         , semicolon_token(0)
         , symbols(0)
     {}
 
-    virtual SimpleDeclarationAST *asSimpleDeclaration() { return this; }
+    virtual SimpleDeclarationAST* asSimpleDeclaration() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual SimpleDeclarationAST *clone(MemoryPool *pool) const;
+    virtual SimpleDeclarationAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API EmptyDeclarationAST: public DeclarationAST
@@ -708,16 +661,16 @@ public:
         : semicolon_token(0)
     {}
 
-    virtual EmptyDeclarationAST *asEmptyDeclaration() { return this; }
+    virtual EmptyDeclarationAST* asEmptyDeclaration() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual EmptyDeclarationAST *clone(MemoryPool *pool) const;
+    virtual EmptyDeclarationAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API AccessDeclarationAST: public DeclarationAST
@@ -734,244 +687,16 @@ public:
         , colon_token(0)
     {}
 
-    virtual AccessDeclarationAST *asAccessDeclaration() { return this; }
+    virtual AccessDeclarationAST* asAccessDeclaration() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual AccessDeclarationAST *clone(MemoryPool *pool) const;
+    virtual AccessDeclarationAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API QtObjectTagAST: public DeclarationAST
-{
-public:
-    unsigned q_object_token;
-
-public:
-    QtObjectTagAST()
-        : q_object_token(0)
-    {}
-
-    virtual QtObjectTagAST *asQtObjectTag() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual QtObjectTagAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API QtPrivateSlotAST: public DeclarationAST
-{
-public:
-    unsigned q_private_slot_token;
-    unsigned lparen_token;
-    unsigned dptr_token;
-    unsigned dptr_lparen_token;
-    unsigned dptr_rparen_token;
-    unsigned comma_token;
-    SpecifierListAST *type_specifier_list;
-    DeclaratorAST *declarator;
-    unsigned rparen_token;
-
-public:
-    QtPrivateSlotAST()
-        : q_private_slot_token(0)
-        , lparen_token(0)
-        , dptr_token(0)
-        , dptr_lparen_token(0)
-        , dptr_rparen_token(0)
-        , comma_token(0)
-        , type_specifier_list(0)
-        , declarator(0)
-        , rparen_token(0)
-    {}
-
-    virtual QtPrivateSlotAST *asQtPrivateSlot() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual QtPrivateSlotAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class QtPropertyDeclarationItemAST: public AST
-{
-public:
-    unsigned item_name_token;
-    ExpressionAST *expression;
-
-public:
-    QtPropertyDeclarationItemAST()
-        : item_name_token(0)
-        , expression(0)
-    {}
-
-    virtual QtPropertyDeclarationItemAST *asQtPropertyDeclarationItem() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual QtPropertyDeclarationItemAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API QtPropertyDeclarationAST: public DeclarationAST
-{
-public:
-    unsigned property_specifier_token;
-    unsigned lparen_token;
-    ExpressionAST *expression; // for Q_PRIVATE_PROPERTY(expression, ...)
-    unsigned comma_token;
-    ExpressionAST *type_id;
-    NameAST *property_name;
-    QtPropertyDeclarationItemListAST *property_declaration_item_list;
-    unsigned rparen_token;
-
-public:
-    QtPropertyDeclarationAST()
-        : property_specifier_token(0)
-        , lparen_token(0)
-        , expression(0)
-        , comma_token(0)
-        , type_id(0)
-        , property_name(0)
-        , property_declaration_item_list(0)
-        , rparen_token(0)
-    {}
-
-    virtual QtPropertyDeclarationAST *asQtPropertyDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual QtPropertyDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API QtEnumDeclarationAST: public DeclarationAST
-{
-public:
-    unsigned enum_specifier_token;
-    unsigned lparen_token;
-    NameListAST *enumerator_list;
-    unsigned rparen_token;
-
-public:
-    QtEnumDeclarationAST()
-        : enum_specifier_token(0)
-        , lparen_token(0)
-        , enumerator_list(0)
-        , rparen_token(0)
-    {}
-
-    virtual QtEnumDeclarationAST *asQtEnumDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual QtEnumDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API QtFlagsDeclarationAST: public DeclarationAST
-{
-public:
-    unsigned flags_specifier_token;
-    unsigned lparen_token;
-    NameListAST *flag_enums_list;
-    unsigned rparen_token;
-
-public:
-    QtFlagsDeclarationAST()
-        : flags_specifier_token(0)
-        , lparen_token(0)
-        , flag_enums_list(0)
-        , rparen_token(0)
-    {}
-
-    virtual QtFlagsDeclarationAST *asQtFlagsDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual QtFlagsDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API QtInterfaceNameAST: public AST
-{
-public:
-    NameAST *interface_name;
-    NameListAST *constraint_list;
-
-public:
-    QtInterfaceNameAST()
-        : interface_name(0)
-        , constraint_list(0)
-    {}
-
-    virtual QtInterfaceNameAST *asQtInterfaceName() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual QtInterfaceNameAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API QtInterfacesDeclarationAST: public DeclarationAST
-{
-public:
-    unsigned interfaces_token;
-    unsigned lparen_token;
-    QtInterfaceNameListAST *interface_name_list;
-    unsigned rparen_token;
-
-public:
-    QtInterfacesDeclarationAST()
-        : interfaces_token(0)
-        , lparen_token(0)
-        , interface_name_list(0)
-        , rparen_token(0)
-    {}
-
-    virtual QtInterfacesDeclarationAST *asQtInterfacesDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual QtInterfacesDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API AsmDefinitionAST: public DeclarationAST
@@ -994,16 +719,16 @@ public:
         , semicolon_token(0)
     {}
 
-    virtual AsmDefinitionAST *asAsmDefinition() { return this; }
+    virtual AsmDefinitionAST* asAsmDefinition() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual AsmDefinitionAST *clone(MemoryPool *pool) const;
+    virtual AsmDefinitionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API BaseSpecifierAST: public AST
@@ -1011,7 +736,7 @@ class CFE_API BaseSpecifierAST: public AST
 public:
     unsigned virtual_token;
     unsigned access_specifier_token;
-    NameAST *name;
+    NameAST* name;
     unsigned ellipsis_token;
 
 public: // annotations
@@ -1026,45 +751,45 @@ public:
         , symbol(0)
     {}
 
-    virtual BaseSpecifierAST *asBaseSpecifier() { return this; }
+    virtual BaseSpecifierAST* asBaseSpecifier() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual BaseSpecifierAST *clone(MemoryPool *pool) const;
+    virtual BaseSpecifierAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API IdExpressionAST: public ExpressionAST
 {
 public:
-    NameAST *name;
+    NameAST* name;
 
 public:
     IdExpressionAST()
         : name(0)
     {}
 
-    virtual IdExpressionAST *asIdExpression() { return this; }
+    virtual IdExpressionAST* asIdExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual IdExpressionAST *clone(MemoryPool *pool) const;
+    virtual IdExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API CompoundExpressionAST: public ExpressionAST
 {
 public:
     unsigned lparen_token;
-    CompoundStatementAST *statement;
+    CompoundStatementAST* statement;
     unsigned rparen_token;
 
 public:
@@ -1074,25 +799,25 @@ public:
         , rparen_token(0)
     {}
 
-    virtual CompoundExpressionAST *asCompoundExpression() { return this; }
+    virtual CompoundExpressionAST* asCompoundExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual CompoundExpressionAST *clone(MemoryPool *pool) const;
+    virtual CompoundExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API CompoundLiteralAST: public ExpressionAST
 {
 public:
     unsigned lparen_token;
-    ExpressionAST *type_id;
+    ExpressionAST* type_id;
     unsigned rparen_token;
-    ExpressionAST *initializer;
+    ExpressionAST* initializer;
 
 public:
     CompoundLiteralAST()
@@ -1102,80 +827,24 @@ public:
         , initializer(0)
     {}
 
-    virtual CompoundLiteralAST *asCompoundLiteral() { return this; }
+    virtual CompoundLiteralAST* asCompoundLiteral() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual CompoundLiteralAST *clone(MemoryPool *pool) const;
+    virtual CompoundLiteralAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API QtMethodAST: public ExpressionAST
-{
-public:
-    unsigned method_token;
-    unsigned lparen_token;
-    DeclaratorAST *declarator;
-    unsigned rparen_token;
-
-public:
-    QtMethodAST()
-        : method_token(0)
-        , lparen_token(0)
-        , declarator(0)
-        , rparen_token(0)
-    {}
-
-    virtual QtMethodAST *asQtMethod() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual QtMethodAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API QtMemberDeclarationAST: public StatementAST
-{
-public:
-    unsigned q_token;
-    unsigned lparen_token;
-    ExpressionAST *type_id;
-    unsigned rparen_token;
-
-public:
-    QtMemberDeclarationAST()
-        : q_token(0)
-        , lparen_token(0)
-        , type_id(0)
-        , rparen_token(0)
-    {}
-
-    virtual QtMemberDeclarationAST *asQtMemberDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual QtMemberDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API BinaryExpressionAST: public ExpressionAST
 {
 public:
-    ExpressionAST *left_expression;
+    ExpressionAST* left_expression;
     unsigned binary_op_token;
-    ExpressionAST *right_expression;
+    ExpressionAST* right_expression;
 
 public:
     BinaryExpressionAST()
@@ -1184,25 +853,25 @@ public:
         , right_expression(0)
     {}
 
-    virtual BinaryExpressionAST *asBinaryExpression() { return this; }
+    virtual BinaryExpressionAST* asBinaryExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual BinaryExpressionAST *clone(MemoryPool *pool) const;
+    virtual BinaryExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API CastExpressionAST: public ExpressionAST
 {
 public:
     unsigned lparen_token;
-    ExpressionAST *type_id;
+    ExpressionAST* type_id;
     unsigned rparen_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
 
 public: // annotations
     FullySpecifiedType expression_type;
@@ -1215,30 +884,30 @@ public:
         , expression(0)
     {}
 
-    virtual CastExpressionAST *asCastExpression() { return this; }
+    virtual CastExpressionAST* asCastExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual CastExpressionAST *clone(MemoryPool *pool) const;
+    virtual CastExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ClassSpecifierAST: public SpecifierAST
 {
 public:
     unsigned classkey_token;
-    SpecifierListAST *attribute_list;
-    NameAST *name;
+    SpecifierListAST* attribute_list;
+    NameAST* name;
     unsigned final_token;
     unsigned colon_token;
-    BaseSpecifierListAST *base_clause_list;
+    BaseSpecifierListAST* base_clause_list;
     unsigned dot_dot_dot_token;
     unsigned lbrace_token;
-    DeclarationListAST *member_specifier_list;
+    DeclarationListAST* member_specifier_list;
     unsigned rbrace_token;
 
 public: // annotations
@@ -1259,25 +928,25 @@ public:
         , symbol(0)
     {}
 
-    virtual ClassSpecifierAST *asClassSpecifier() { return this; }
+    virtual ClassSpecifierAST* asClassSpecifier() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ClassSpecifierAST *clone(MemoryPool *pool) const;
+    virtual ClassSpecifierAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API CaseStatementAST: public StatementAST
 {
 public:
     unsigned case_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned colon_token;
-    StatementAST *statement;
+    StatementAST* statement;
 
 public:
     CaseStatementAST()
@@ -1287,23 +956,23 @@ public:
         , statement(0)
     {}
 
-    virtual CaseStatementAST *asCaseStatement() { return this; }
+    virtual CaseStatementAST* asCaseStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual CaseStatementAST *clone(MemoryPool *pool) const;
+    virtual CaseStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API CompoundStatementAST: public StatementAST
 {
 public:
     unsigned lbrace_token;
-    StatementListAST *statement_list;
+    StatementListAST* statement_list;
     unsigned rbrace_token;
 
 public: // annotations
@@ -1317,23 +986,23 @@ public:
         , symbol(0)
     {}
 
-    virtual CompoundStatementAST *asCompoundStatement() { return this; }
+    virtual CompoundStatementAST* asCompoundStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual CompoundStatementAST *clone(MemoryPool *pool) const;
+    virtual CompoundStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ConditionAST: public ExpressionAST
 {
 public:
-    SpecifierListAST *type_specifier_list;
-    DeclaratorAST *declarator;
+    SpecifierListAST* type_specifier_list;
+    DeclaratorAST* declarator;
 
 public:
     ConditionAST()
@@ -1341,26 +1010,26 @@ public:
         , declarator(0)
     {}
 
-    virtual ConditionAST *asCondition() { return this; }
+    virtual ConditionAST* asCondition() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ConditionAST *clone(MemoryPool *pool) const;
+    virtual ConditionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ConditionalExpressionAST: public ExpressionAST
 {
 public:
-    ExpressionAST *condition;
+    ExpressionAST* condition;
     unsigned question_token;
-    ExpressionAST *left_expression;
+    ExpressionAST* left_expression;
     unsigned colon_token;
-    ExpressionAST *right_expression;
+    ExpressionAST* right_expression;
 
 public:
     ConditionalExpressionAST()
@@ -1371,16 +1040,16 @@ public:
         , right_expression(0)
     {}
 
-    virtual ConditionalExpressionAST *asConditionalExpression() { return this; }
+    virtual ConditionalExpressionAST* asConditionalExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ConditionalExpressionAST *clone(MemoryPool *pool) const;
+    virtual ConditionalExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API CppCastExpressionAST: public ExpressionAST
@@ -1388,10 +1057,10 @@ class CFE_API CppCastExpressionAST: public ExpressionAST
 public:
     unsigned cast_token;
     unsigned less_token;
-    ExpressionAST *type_id;
+    ExpressionAST* type_id;
     unsigned greater_token;
     unsigned lparen_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rparen_token;
 
 public:
@@ -1405,23 +1074,23 @@ public:
         , rparen_token(0)
     {}
 
-    virtual CppCastExpressionAST *asCppCastExpression() { return this; }
+    virtual CppCastExpressionAST* asCppCastExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual CppCastExpressionAST *clone(MemoryPool *pool) const;
+    virtual CppCastExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API CtorInitializerAST: public AST
 {
 public:
     unsigned colon_token;
-    MemInitializerListAST *member_initializer_list;
+    MemInitializerListAST* member_initializer_list;
     unsigned dot_dot_dot_token;
 
 public:
@@ -1431,45 +1100,45 @@ public:
         , dot_dot_dot_token(0)
     {}
 
-    virtual CtorInitializerAST *asCtorInitializer() { return this; }
+    virtual CtorInitializerAST* asCtorInitializer() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual CtorInitializerAST *clone(MemoryPool *pool) const;
+    virtual CtorInitializerAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API DeclarationStatementAST: public StatementAST
 {
 public:
-    DeclarationAST *declaration;
+    DeclarationAST* declaration;
 
 public:
     DeclarationStatementAST()
         : declaration(0)
     {}
 
-    virtual DeclarationStatementAST *asDeclarationStatement() { return this; }
+    virtual DeclarationStatementAST* asDeclarationStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual DeclarationStatementAST *clone(MemoryPool *pool) const;
+    virtual DeclarationStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API DeclaratorIdAST: public CoreDeclaratorAST
 {
 public:
     unsigned dot_dot_dot_token;
-    NameAST *name;
+    NameAST* name;
 
 public:
     DeclaratorIdAST()
@@ -1477,23 +1146,23 @@ public:
         , name(0)
     {}
 
-    virtual DeclaratorIdAST *asDeclaratorId() { return this; }
+    virtual DeclaratorIdAST* asDeclaratorId() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual DeclaratorIdAST *clone(MemoryPool *pool) const;
+    virtual DeclaratorIdAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NestedDeclaratorAST: public CoreDeclaratorAST
 {
 public:
     unsigned lparen_token;
-    DeclaratorAST *declarator;
+    DeclaratorAST* declarator;
     unsigned rparen_token;
 
 public:
@@ -1503,30 +1172,30 @@ public:
         , rparen_token(0)
     {}
 
-    virtual NestedDeclaratorAST *asNestedDeclarator() { return this; }
+    virtual NestedDeclaratorAST* asNestedDeclarator() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NestedDeclaratorAST *clone(MemoryPool *pool) const;
+    virtual NestedDeclaratorAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API FunctionDeclaratorAST: public PostfixDeclaratorAST
 {
 public:
     unsigned lparen_token;
-    ParameterDeclarationClauseAST *parameter_declaration_clause;
+    ParameterDeclarationClauseAST* parameter_declaration_clause;
     unsigned rparen_token;
-    SpecifierListAST *cv_qualifier_list;
+    SpecifierListAST* cv_qualifier_list;
     unsigned ref_qualifier_token;
-    ExceptionSpecificationAST *exception_specification;
-    TrailingReturnTypeAST *trailing_return_type;
+    ExceptionSpecificationAST* exception_specification;
+    TrailingReturnTypeAST* trailing_return_type;
     // Some FunctionDeclarators can also be interpreted as an initializer, like for 'A b(c);'
-    ExpressionAST *as_cpp_initializer;
+    ExpressionAST* as_cpp_initializer;
 
 public: // annotations
     Function *symbol;
@@ -1544,23 +1213,23 @@ public:
         , symbol(0)
     {}
 
-    virtual FunctionDeclaratorAST *asFunctionDeclarator() { return this; }
+    virtual FunctionDeclaratorAST* asFunctionDeclarator() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual FunctionDeclaratorAST *clone(MemoryPool *pool) const;
+    virtual FunctionDeclaratorAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ArrayDeclaratorAST: public PostfixDeclaratorAST
 {
 public:
     unsigned lbracket_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rbracket_token;
 
 public:
@@ -1570,16 +1239,16 @@ public:
         , rbracket_token(0)
     {}
 
-    virtual ArrayDeclaratorAST *asArrayDeclarator() { return this; }
+    virtual ArrayDeclaratorAST* asArrayDeclarator() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ArrayDeclaratorAST *clone(MemoryPool *pool) const;
+    virtual ArrayDeclaratorAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API DeleteExpressionAST: public ExpressionAST
@@ -1589,7 +1258,7 @@ public:
     unsigned delete_token;
     unsigned lbracket_token;
     unsigned rbracket_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
 
 public:
     DeleteExpressionAST()
@@ -1600,26 +1269,26 @@ public:
         , expression(0)
     {}
 
-    virtual DeleteExpressionAST *asDeleteExpression() { return this; }
+    virtual DeleteExpressionAST* asDeleteExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual DeleteExpressionAST *clone(MemoryPool *pool) const;
+    virtual DeleteExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API DoStatementAST: public StatementAST
 {
 public:
     unsigned do_token;
-    StatementAST *statement;
+    StatementAST* statement;
     unsigned while_token;
     unsigned lparen_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rparen_token;
     unsigned semicolon_token;
 
@@ -1634,64 +1303,62 @@ public:
         , semicolon_token(0)
     {}
 
-    virtual DoStatementAST *asDoStatement() { return this; }
+    virtual DoStatementAST* asDoStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual DoStatementAST *clone(MemoryPool *pool) const;
+    virtual DoStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NamedTypeSpecifierAST: public SpecifierAST
 {
 public:
-    NameAST *name;
+    NameAST* name;
 
 public:
     NamedTypeSpecifierAST()
         : name(0)
     {}
 
-    virtual NamedTypeSpecifierAST *asNamedTypeSpecifier() { return this; }
+    virtual NamedTypeSpecifierAST* asNamedTypeSpecifier() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NamedTypeSpecifierAST *clone(MemoryPool *pool) const;
+    virtual NamedTypeSpecifierAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ElaboratedTypeSpecifierAST: public SpecifierAST
 {
 public:
-    unsigned classkey_token;
-    SpecifierListAST *attribute_list;
-    NameAST *name;
+    SpecifierListAST* attribute_list;
+    TaggedNameAST* name;
 
 public:
     ElaboratedTypeSpecifierAST()
-        : classkey_token(0)
-        , attribute_list(0)
+        : attribute_list(0)
         , name(0)
     {}
 
-    virtual ElaboratedTypeSpecifierAST *asElaboratedTypeSpecifier() { return this; }
+    virtual ElaboratedTypeSpecifierAST* asElaboratedTypeSpecifier() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ElaboratedTypeSpecifierAST *clone(MemoryPool *pool) const;
+    virtual ElaboratedTypeSpecifierAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API EnumSpecifierAST: public SpecifierAST
@@ -1699,11 +1366,11 @@ class CFE_API EnumSpecifierAST: public SpecifierAST
 public:
     unsigned enum_token;
     unsigned key_token; // struct, class or 0
-    NameAST *name;
+    NameAST* name;
     unsigned colon_token; // can be 0 if there is no enum-base
-    SpecifierListAST *type_specifier_list; // ditto
+    SpecifierListAST* type_specifier_list; // ditto
     unsigned lbrace_token;
-    EnumeratorListAST *enumerator_list;
+    EnumeratorListAST* enumerator_list;
     unsigned stray_comma_token;
     unsigned rbrace_token;
 
@@ -1724,25 +1391,25 @@ public:
         , symbol(0)
     {}
 
-    virtual EnumSpecifierAST *asEnumSpecifier() { return this; }
+    virtual EnumSpecifierAST* asEnumSpecifier() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual EnumSpecifierAST *clone(MemoryPool *pool) const;
+    virtual EnumSpecifierAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API EnumeratorAST: public AST
 {
 public:
     unsigned identifier_token;
-    SpecifierListAST *attribute_list;
+    SpecifierListAST* attribute_list;
     unsigned equal_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
 
 public:
     EnumeratorAST()
@@ -1752,23 +1419,23 @@ public:
         , expression(0)
     {}
 
-    virtual EnumeratorAST *asEnumerator() { return this; }
+    virtual EnumeratorAST* asEnumerator() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual EnumeratorAST *clone(MemoryPool *pool) const;
+    virtual EnumeratorAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ExceptionDeclarationAST: public DeclarationAST
 {
 public:
-    SpecifierListAST *type_specifier_list;
-    DeclaratorAST *declarator;
+    SpecifierListAST* type_specifier_list;
+    DeclaratorAST* declarator;
     unsigned dot_dot_dot_token;
 
 public:
@@ -1778,16 +1445,16 @@ public:
         , dot_dot_dot_token(0)
     {}
 
-    virtual ExceptionDeclarationAST *asExceptionDeclaration() { return this; }
+    virtual ExceptionDeclarationAST* asExceptionDeclaration() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ExceptionDeclarationAST *clone(MemoryPool *pool) const;
+    virtual ExceptionDeclarationAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ExceptionSpecificationAST: public AST
@@ -1796,9 +1463,9 @@ public:
     ExceptionSpecificationAST()
     {}
 
-    virtual ExceptionSpecificationAST *asExceptionSpecification() { return this; }
+    virtual ExceptionSpecificationAST* asExceptionSpecification() { return this; }
 
-    virtual ExceptionSpecificationAST *clone(MemoryPool *pool) const = 0;
+    virtual ExceptionSpecificationAST* clone(MemoryPool *pool) const = 0;
 };
 
 class CFE_API DynamicExceptionSpecificationAST: public ExceptionSpecificationAST
@@ -1807,7 +1474,7 @@ public:
     unsigned throw_token;
     unsigned lparen_token;
     unsigned dot_dot_dot_token;
-    ExpressionListAST *type_id_list;
+    ExpressionListAST* type_id_list;
     unsigned rparen_token;
 
 public:
@@ -1819,16 +1486,16 @@ public:
         , rparen_token(0)
     {}
 
-    virtual DynamicExceptionSpecificationAST *asDynamicExceptionSpecification() { return this; }
+    virtual DynamicExceptionSpecificationAST* asDynamicExceptionSpecification() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual DynamicExceptionSpecificationAST *clone(MemoryPool *pool) const;
+    virtual DynamicExceptionSpecificationAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NoExceptSpecificationAST: public ExceptionSpecificationAST
@@ -1836,7 +1503,7 @@ class CFE_API NoExceptSpecificationAST: public ExceptionSpecificationAST
 public:
     unsigned noexcept_token;
     unsigned lparen_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rparen_token;
 
 public:
@@ -1847,23 +1514,23 @@ public:
         , rparen_token(0)
     {}
 
-    virtual NoExceptSpecificationAST *asNoExceptSpecification() { return this; }
+    virtual NoExceptSpecificationAST* asNoExceptSpecification() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NoExceptSpecificationAST *clone(MemoryPool *pool) const;
+    virtual NoExceptSpecificationAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ExpressionOrDeclarationStatementAST: public StatementAST
 {
 public:
-    ExpressionStatementAST *expression;
-    DeclarationStatementAST *declaration;
+    ExpressionStatementAST* expression;
+    DeclarationStatementAST* declaration;
 
 public:
     ExpressionOrDeclarationStatementAST()
@@ -1871,22 +1538,22 @@ public:
         , declaration(0)
     {}
 
-    virtual ExpressionOrDeclarationStatementAST *asExpressionOrDeclarationStatement() { return this; }
+    virtual ExpressionOrDeclarationStatementAST* asExpressionOrDeclarationStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ExpressionOrDeclarationStatementAST *clone(MemoryPool *pool) const;
+    virtual ExpressionOrDeclarationStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ExpressionStatementAST: public StatementAST
 {
 public:
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned semicolon_token;
 
 public:
@@ -1895,23 +1562,23 @@ public:
         , semicolon_token(0)
     {}
 
-    virtual ExpressionStatementAST *asExpressionStatement() { return this; }
+    virtual ExpressionStatementAST* asExpressionStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ExpressionStatementAST *clone(MemoryPool *pool) const;
+    virtual ExpressionStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API AmbiguousStatementAST : public StatementAST
 {
 public:
-    DeclarationStatementAST *declarationStmt;
-    ExpressionStatementAST *expressionStmt;
+    DeclarationStatementAST* declarationStmt;
+    ExpressionStatementAST* expressionStmt;
     std::unique_ptr<psyche::SyntaxAmbiguity> ambiguity;
     std::vector<Declaration*> suspiciousDecls;
 
@@ -1921,50 +1588,48 @@ public:
         , expressionStmt(0)
     {}
 
-    virtual AmbiguousStatementAST *asAmbiguousStatement() { return this; }
+    virtual AmbiguousStatementAST* asAmbiguousStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual AmbiguousStatementAST *clone(MemoryPool *pool) const;
+    virtual AmbiguousStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API FunctionDefinitionAST: public DeclarationAST
 {
 public:
-    unsigned qt_invokable_token;
-    SpecifierListAST *decl_specifier_list;
-    DeclaratorAST *declarator;
-    CtorInitializerAST *ctor_initializer;
-    StatementAST *function_body;
+    SpecifierListAST* decl_specifier_list;
+    DeclaratorAST* declarator;
+    CtorInitializerAST* ctor_initializer;
+    StatementAST* function_body;
 
 public: // annotations
     Function *symbol;
 
 public:
     FunctionDefinitionAST()
-        : qt_invokable_token(0)
-        , decl_specifier_list(0)
+        : decl_specifier_list(0)
         , declarator(0)
         , ctor_initializer(0)
         , function_body(0)
         , symbol(0)
     {}
 
-    virtual FunctionDefinitionAST *asFunctionDefinition() { return this; }
+    virtual FunctionDefinitionAST* asFunctionDefinition() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual FunctionDefinitionAST *clone(MemoryPool *pool) const;
+    virtual FunctionDefinitionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ForeachStatementAST: public StatementAST
@@ -1973,14 +1638,14 @@ public:
     unsigned foreach_token;
     unsigned lparen_token;
     // declaration
-    SpecifierListAST *type_specifier_list;
-    DeclaratorAST *declarator;
+    SpecifierListAST* type_specifier_list;
+    DeclaratorAST* declarator;
     // or an expression
-    ExpressionAST *initializer;
+    ExpressionAST* initializer;
     unsigned comma_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rparen_token;
-    StatementAST *statement;
+    StatementAST* statement;
 
 public: // annotations
     Block *symbol;
@@ -1999,16 +1664,16 @@ public:
         , symbol(0)
     {}
 
-    virtual ForeachStatementAST *asForeachStatement() { return this; }
+    virtual ForeachStatementAST* asForeachStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ForeachStatementAST *clone(MemoryPool *pool) const;
+    virtual ForeachStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API RangeBasedForStatementAST : public StatementAST
@@ -2017,13 +1682,13 @@ public:
     unsigned for_token;
     unsigned lparen_token;
     // declaration
-    SpecifierListAST *type_specifier_list;
-    DeclaratorAST *declarator;
+    SpecifierListAST* type_specifier_list;
+    DeclaratorAST* declarator;
     // or an expression
     unsigned colon_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rparen_token;
-    StatementAST *statement;
+    StatementAST* statement;
 
 public: // annotations
     Block *symbol;
@@ -2041,16 +1706,16 @@ public:
         , symbol(0)
     {}
 
-    virtual RangeBasedForStatementAST *asRangeBasedForStatement() { return this; }
+    virtual RangeBasedForStatementAST* asRangeBasedForStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual RangeBasedForStatementAST *clone(MemoryPool *pool) const;
+    virtual RangeBasedForStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ForStatementAST: public StatementAST
@@ -2058,12 +1723,12 @@ class CFE_API ForStatementAST: public StatementAST
 public:
     unsigned for_token;
     unsigned lparen_token;
-    StatementAST *initializer;
-    ExpressionAST *condition;
+    StatementAST* initializer;
+    ExpressionAST* condition;
     unsigned semicolon_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rparen_token;
-    StatementAST *statement;
+    StatementAST* statement;
 
 public: // annotations
     Block *symbol;
@@ -2081,16 +1746,16 @@ public:
         , symbol(0)
     {}
 
-    virtual ForStatementAST *asForStatement() { return this; }
+    virtual ForStatementAST* asForStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ForStatementAST *clone(MemoryPool *pool) const;
+    virtual ForStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API IfStatementAST: public StatementAST
@@ -2098,11 +1763,11 @@ class CFE_API IfStatementAST: public StatementAST
 public:
     unsigned if_token;
     unsigned lparen_token;
-    ExpressionAST *condition;
+    ExpressionAST* condition;
     unsigned rparen_token;
-    StatementAST *statement;
+    StatementAST* statement;
     unsigned else_token;
-    StatementAST *else_statement;
+    StatementAST* else_statement;
 
 public: // annotations
     Block *symbol;
@@ -2119,23 +1784,23 @@ public:
         , symbol(0)
     {}
 
-    virtual IfStatementAST *asIfStatement() { return this; }
+    virtual IfStatementAST* asIfStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual IfStatementAST *clone(MemoryPool *pool) const;
+    virtual IfStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ArrayInitializerAST: public ExpressionAST
 {
 public:
     unsigned lbrace_token;
-    ExpressionListAST *expression_list;
+    ExpressionListAST* expression_list;
     unsigned rbrace_token;
 
 public:
@@ -2145,16 +1810,16 @@ public:
         , rbrace_token(0)
     {}
 
-    virtual ArrayInitializerAST *asArrayInitializer() { return this; }
+    virtual ArrayInitializerAST* asArrayInitializer() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ArrayInitializerAST *clone(MemoryPool *pool) const;
+    virtual ArrayInitializerAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API LabeledStatementAST: public StatementAST
@@ -2162,7 +1827,7 @@ class CFE_API LabeledStatementAST: public StatementAST
 public:
     unsigned label_token;
     unsigned colon_token;
-    StatementAST *statement;
+    StatementAST* statement;
 
 public:
     LabeledStatementAST()
@@ -2171,23 +1836,23 @@ public:
         , statement(0)
     {}
 
-    virtual LabeledStatementAST *asLabeledStatement() { return this; }
+    virtual LabeledStatementAST* asLabeledStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual LabeledStatementAST *clone(MemoryPool *pool) const;
+    virtual LabeledStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API LinkageBodyAST: public DeclarationAST
 {
 public:
     unsigned lbrace_token;
-    DeclarationListAST *declaration_list;
+    DeclarationListAST* declaration_list;
     unsigned rbrace_token;
 
 public:
@@ -2197,15 +1862,15 @@ public:
         , rbrace_token(0)
     {}
 
-    virtual LinkageBodyAST *asLinkageBody() { return this; }
+    virtual LinkageBodyAST* asLinkageBody() { return this; }
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual LinkageBodyAST *clone(MemoryPool *pool) const;
+    virtual LinkageBodyAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API LinkageSpecificationAST: public DeclarationAST
@@ -2213,7 +1878,7 @@ class CFE_API LinkageSpecificationAST: public DeclarationAST
 public:
     unsigned extern_token;
     unsigned extern_type_token;
-    DeclarationAST *declaration;
+    DeclarationAST* declaration;
 
 public:
     LinkageSpecificationAST()
@@ -2222,24 +1887,24 @@ public:
         , declaration(0)
     {}
 
-    virtual LinkageSpecificationAST *asLinkageSpecification() { return this; }
+    virtual LinkageSpecificationAST* asLinkageSpecification() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual LinkageSpecificationAST *clone(MemoryPool *pool) const;
+    virtual LinkageSpecificationAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API MemInitializerAST: public AST
 {
 public:
-    NameAST *name;
+    NameAST* name;
     // either a BracedInitializerAST or a ExpressionListParenAST
-    ExpressionAST *expression;
+    ExpressionAST* expression;
 
 public:
     MemInitializerAST()
@@ -2247,22 +1912,22 @@ public:
         , expression(0)
     {}
 
-    virtual MemInitializerAST *asMemInitializer() { return this; }
+    virtual MemInitializerAST* asMemInitializer() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual MemInitializerAST *clone(MemoryPool *pool) const;
+    virtual MemInitializerAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NestedNameSpecifierAST: public AST
 {
 public:
-    NameAST *class_or_namespace_name;
+    NameAST* class_or_namespace_name;
     unsigned scope_token;
 
 public:
@@ -2271,24 +1936,24 @@ public:
         , scope_token(0)
     {}
 
-    virtual NestedNameSpecifierAST *asNestedNameSpecifier() { return this; }
+    virtual NestedNameSpecifierAST* asNestedNameSpecifier() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NestedNameSpecifierAST *clone(MemoryPool *pool) const;
+    virtual NestedNameSpecifierAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API QualifiedNameAST: public NameAST
 {
 public:
     unsigned global_scope_token;
-    NestedNameSpecifierListAST *nested_name_specifier_list;
-    NameAST *unqualified_name;
+    NestedNameSpecifierListAST* nested_name_specifier_list;
+    NameAST* unqualified_name;
 
 public:
     QualifiedNameAST()
@@ -2297,23 +1962,51 @@ public:
         , unqualified_name(0)
     {}
 
-    virtual QualifiedNameAST *asQualifiedName() { return this; }
+    virtual QualifiedNameAST* asQualifiedName() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual QualifiedNameAST *clone(MemoryPool *pool) const;
+    virtual QualifiedNameAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
+};
+
+class CFE_API QuantifiedTypeSpecifierAST: public SpecifierAST
+{
+public:
+    unsigned quantifier_token;
+    unsigned lparen_token;
+    NameAST* name;
+    unsigned rparen_token;
+
+public:
+    QuantifiedTypeSpecifierAST()
+        : quantifier_token(0)
+        , lparen_token(0)
+        , name(0)
+        , rparen_token(0)
+    {}
+
+    virtual QuantifiedTypeSpecifierAST* asQuantifiedTypeSpecifier() { return this; }
+
+    virtual unsigned firstToken() const;
+    virtual unsigned lastToken() const;
+
+    virtual QuantifiedTypeSpecifierAST* clone(MemoryPool *pool) const;
+
+protected:
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TaggedNameAST: public NameAST
 {
 public:
     unsigned tag_token;
-    NameAST *core_name;
+    NameAST* core_name;
 
 public:
     TaggedNameAST()
@@ -2321,23 +2014,23 @@ public:
         , core_name(0)
     {}
 
-    virtual TaggedNameAST *asTaggedName() { return this; }
+    virtual TaggedNameAST* asTaggedName() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TaggedNameAST *clone(MemoryPool *pool) const;
+    virtual TaggedNameAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API OperatorFunctionIdAST: public NameAST
 {
 public:
     unsigned operator_token;
-    OperatorAST *op;
+    OperatorAST* op;
 
 public:
     OperatorFunctionIdAST()
@@ -2345,24 +2038,24 @@ public:
         , op(0)
     {}
 
-    virtual OperatorFunctionIdAST *asOperatorFunctionId() { return this; }
+    virtual OperatorFunctionIdAST* asOperatorFunctionId() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual OperatorFunctionIdAST *clone(MemoryPool *pool) const;
+    virtual OperatorFunctionIdAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ConversionFunctionIdAST: public NameAST
 {
 public:
     unsigned operator_token;
-    SpecifierListAST *type_specifier_list;
-    PtrOperatorListAST *ptr_operator_list;
+    SpecifierListAST* type_specifier_list;
+    PtrOperatorListAST* ptr_operator_list;
 
 public:
     ConversionFunctionIdAST()
@@ -2371,16 +2064,16 @@ public:
         , ptr_operator_list(0)
     {}
 
-    virtual ConversionFunctionIdAST *asConversionFunctionId() { return this; }
+    virtual ConversionFunctionIdAST* asConversionFunctionId() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ConversionFunctionIdAST *clone(MemoryPool *pool) const;
+    virtual ConversionFunctionIdAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API AnonymousNameAST: public NameAST
@@ -2392,15 +2085,15 @@ public:
         : class_token(0)
     {}
 
-    virtual AnonymousNameAST *asAnonymousName() { return this; }
+    virtual AnonymousNameAST* asAnonymousName() { return this; }
     virtual unsigned firstToken() const { return 0; }
     virtual unsigned lastToken() const { return 0; }
 
-    virtual AnonymousNameAST *clone(MemoryPool *pool) const;
+    virtual AnonymousNameAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API SimpleNameAST: public NameAST
@@ -2413,23 +2106,23 @@ public:
         : identifier_token(0)
     {}
 
-    virtual SimpleNameAST *asSimpleName() { return this; }
+    virtual SimpleNameAST* asSimpleName() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual SimpleNameAST *clone(MemoryPool *pool) const;
+    virtual SimpleNameAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API DestructorNameAST: public NameAST
 {
 public:
     unsigned tilde_token;
-    NameAST *unqualified_name;
+    NameAST* unqualified_name;
 
 public:
     DestructorNameAST()
@@ -2437,16 +2130,16 @@ public:
         , unqualified_name(0)
     {}
 
-    virtual DestructorNameAST *asDestructorName() { return this; }
+    virtual DestructorNameAST* asDestructorName() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual DestructorNameAST *clone(MemoryPool *pool) const;
+    virtual DestructorNameAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TemplateIdAST: public NameAST
@@ -2455,7 +2148,7 @@ public:
     unsigned template_token;
     unsigned identifier_token;
     unsigned less_token;
-    ExpressionListAST *template_argument_list;
+    ExpressionListAST* template_argument_list;
     unsigned greater_token;
 
 public:
@@ -2467,16 +2160,16 @@ public:
         , greater_token(0)
     {}
 
-    virtual TemplateIdAST *asTemplateId() { return this; }
+    virtual TemplateIdAST* asTemplateId() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TemplateIdAST *clone(MemoryPool *pool) const;
+    virtual TemplateIdAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NamespaceAST: public DeclarationAST
@@ -2485,8 +2178,8 @@ public:
     unsigned inline_token;
     unsigned namespace_token;
     unsigned identifier_token;
-    SpecifierListAST *attribute_list;
-    DeclarationAST *linkage_body;
+    SpecifierListAST* attribute_list;
+    DeclarationAST* linkage_body;
 
 public: // annotations
     Namespace *symbol;
@@ -2501,16 +2194,16 @@ public:
         , symbol(0)
     {}
 
-    virtual NamespaceAST *asNamespace() { return this; }
+    virtual NamespaceAST* asNamespace() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NamespaceAST *clone(MemoryPool *pool) const;
+    virtual NamespaceAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NamespaceAliasDefinitionAST: public DeclarationAST
@@ -2519,7 +2212,7 @@ public:
     unsigned namespace_token;
     unsigned namespace_name_token;
     unsigned equal_token;
-    NameAST *name;
+    NameAST* name;
     unsigned semicolon_token;
 
 public:
@@ -2531,25 +2224,25 @@ public:
         , semicolon_token(0)
     {}
 
-    virtual NamespaceAliasDefinitionAST *asNamespaceAliasDefinition() { return this; }
+    virtual NamespaceAliasDefinitionAST* asNamespaceAliasDefinition() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NamespaceAliasDefinitionAST *clone(MemoryPool *pool) const;
+    virtual NamespaceAliasDefinitionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API AliasDeclarationAST: public DeclarationAST
 {
 public:
     unsigned using_token;
-    NameAST *name;
+    NameAST* name;
     unsigned equal_token;
-    TypeIdAST *typeId;
+    TypeIdAST* typeId;
     unsigned semicolon_token;
 
 public: // annotations
@@ -2565,23 +2258,23 @@ public:
         , symbol(0)
     {}
 
-    virtual AliasDeclarationAST *asAliasDeclaration() { return this; }
+    virtual AliasDeclarationAST* asAliasDeclaration() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual AliasDeclarationAST *clone(MemoryPool *pool) const;
+    virtual AliasDeclarationAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ExpressionListParenAST: public ExpressionAST
 {
 public:
     unsigned lparen_token;
-    ExpressionListAST *expression_list;
+    ExpressionListAST* expression_list;
     unsigned rparen_token;
 
 public:
@@ -2591,23 +2284,23 @@ public:
         , rparen_token(0)
     {}
 
-    virtual ExpressionListParenAST *asExpressionListParen() { return this; }
+    virtual ExpressionListParenAST* asExpressionListParen() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ExpressionListParenAST *clone(MemoryPool *pool) const;
+    virtual ExpressionListParenAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NewArrayDeclaratorAST: public AST
 {
 public:
     unsigned lbracket_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rbracket_token;
 
 public:
@@ -2617,16 +2310,16 @@ public:
         , rbracket_token(0)
     {}
 
-    virtual NewArrayDeclaratorAST *asNewArrayDeclarator() { return this; }
+    virtual NewArrayDeclaratorAST* asNewArrayDeclarator() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NewArrayDeclaratorAST *clone(MemoryPool *pool) const;
+    virtual NewArrayDeclaratorAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NewExpressionAST: public ExpressionAST
@@ -2634,15 +2327,15 @@ class CFE_API NewExpressionAST: public ExpressionAST
 public:
     unsigned scope_token;
     unsigned new_token;
-    ExpressionListParenAST *new_placement;
+    ExpressionListParenAST* new_placement;
 
     unsigned lparen_token;
-    ExpressionAST *type_id;
+    ExpressionAST* type_id;
     unsigned rparen_token;
 
-    NewTypeIdAST *new_type_id;
+    NewTypeIdAST* new_type_id;
 
-    ExpressionAST *new_initializer; // either ExpressionListParenAST or BracedInitializerAST
+    ExpressionAST* new_initializer; // either ExpressionListParenAST or BracedInitializerAST
 
 public:
     NewExpressionAST()
@@ -2656,24 +2349,24 @@ public:
         , new_initializer(0)
     {}
 
-    virtual NewExpressionAST *asNewExpression() { return this; }
+    virtual NewExpressionAST* asNewExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NewExpressionAST *clone(MemoryPool *pool) const;
+    virtual NewExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NewTypeIdAST: public AST
 {
 public:
-    SpecifierListAST *type_specifier_list;
-    PtrOperatorListAST *ptr_operator_list;
-    NewArrayDeclaratorListAST *new_array_declarator_list;
+    SpecifierListAST* type_specifier_list;
+    PtrOperatorListAST* ptr_operator_list;
+    NewArrayDeclaratorListAST* new_array_declarator_list;
 
 public:
     NewTypeIdAST()
@@ -2682,16 +2375,16 @@ public:
         , new_array_declarator_list(0)
     {}
 
-    virtual NewTypeIdAST *asNewTypeId() { return this; }
+    virtual NewTypeIdAST* asNewTypeId() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NewTypeIdAST *clone(MemoryPool *pool) const;
+    virtual NewTypeIdAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API OperatorAST: public AST
@@ -2708,25 +2401,25 @@ public:
         , close_token(0)
     {}
 
-    virtual OperatorAST *asOperator() { return this; }
+    virtual OperatorAST* asOperator() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual OperatorAST *clone(MemoryPool *pool) const;
+    virtual OperatorAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ParameterDeclarationAST: public DeclarationAST
 {
 public:
-    SpecifierListAST *type_specifier_list;
-    DeclaratorAST *declarator;
+    SpecifierListAST* type_specifier_list;
+    DeclaratorAST* declarator;
     unsigned equal_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
 
 public: // annotations
     Argument *symbol;
@@ -2740,22 +2433,22 @@ public:
         , symbol(0)
     {}
 
-    virtual ParameterDeclarationAST *asParameterDeclaration() { return this; }
+    virtual ParameterDeclarationAST* asParameterDeclaration() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ParameterDeclarationAST *clone(MemoryPool *pool) const;
+    virtual ParameterDeclarationAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ParameterDeclarationClauseAST: public AST
 {
 public:
-    ParameterDeclarationListAST *parameter_declaration_list;
+    ParameterDeclarationListAST* parameter_declaration_list;
     unsigned dot_dot_dot_token;
 
 public:
@@ -2764,24 +2457,24 @@ public:
         , dot_dot_dot_token(0)
     {}
 
-    virtual ParameterDeclarationClauseAST *asParameterDeclarationClause() { return this; }
+    virtual ParameterDeclarationClauseAST* asParameterDeclarationClause() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ParameterDeclarationClauseAST *clone(MemoryPool *pool) const;
+    virtual ParameterDeclarationClauseAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API CallAST: public PostfixAST
 {
 public:
-    ExpressionAST *base_expression;
+    ExpressionAST* base_expression;
     unsigned lparen_token;
-    ExpressionListAST *expression_list;
+    ExpressionListAST* expression_list;
     unsigned rparen_token;
 
 public:
@@ -2792,24 +2485,24 @@ public:
         , rparen_token(0)
     {}
 
-    virtual CallAST *asCall() { return this; }
+    virtual CallAST* asCall() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual CallAST *clone(MemoryPool *pool) const;
+    virtual CallAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ArrayAccessAST: public PostfixAST
 {
 public:
-    ExpressionAST *base_expression;
+    ExpressionAST* base_expression;
     unsigned lbracket_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rbracket_token;
 
 public:
@@ -2820,22 +2513,22 @@ public:
         , rbracket_token(0)
     {}
 
-    virtual ArrayAccessAST *asArrayAccess() { return this; }
+    virtual ArrayAccessAST* asArrayAccess() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ArrayAccessAST *clone(MemoryPool *pool) const;
+    virtual ArrayAccessAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API PostIncrDecrAST: public PostfixAST
 {
 public:
-    ExpressionAST *base_expression;
+    ExpressionAST* base_expression;
     unsigned incr_decr_token;
 
 public:
@@ -2844,25 +2537,25 @@ public:
         , incr_decr_token(0)
     {}
 
-    virtual PostIncrDecrAST *asPostIncrDecr() { return this; }
+    virtual PostIncrDecrAST* asPostIncrDecr() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual PostIncrDecrAST *clone(MemoryPool *pool) const;
+    virtual PostIncrDecrAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API MemberAccessAST: public PostfixAST
 {
 public:
-    ExpressionAST *base_expression;
+    ExpressionAST* base_expression;
     unsigned access_token;
     unsigned template_token;
-    NameAST *member_name;
+    NameAST* member_name;
 
 public:
     MemberAccessAST()
@@ -2872,16 +2565,16 @@ public:
         , member_name(0)
     {}
 
-    virtual MemberAccessAST *asMemberAccess() { return this; }
+    virtual MemberAccessAST* asMemberAccess() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual MemberAccessAST *clone(MemoryPool *pool) const;
+    virtual MemberAccessAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TypeidExpressionAST: public ExpressionAST
@@ -2889,7 +2582,7 @@ class CFE_API TypeidExpressionAST: public ExpressionAST
 public:
     unsigned typeid_token;
     unsigned lparen_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rparen_token;
 
 public:
@@ -2900,24 +2593,24 @@ public:
         , rparen_token(0)
     {}
 
-    virtual TypeidExpressionAST *asTypeidExpression() { return this; }
+    virtual TypeidExpressionAST* asTypeidExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TypeidExpressionAST *clone(MemoryPool *pool) const;
+    virtual TypeidExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TypenameCallExpressionAST: public ExpressionAST
 {
 public:
     unsigned typename_token;
-    NameAST *name;
-    ExpressionAST *expression; // either ExpressionListParenAST or BracedInitializerAST
+    NameAST* name;
+    ExpressionAST* expression; // either ExpressionListParenAST or BracedInitializerAST
 
 public:
     TypenameCallExpressionAST()
@@ -2926,23 +2619,23 @@ public:
         , expression(0)
     {}
 
-    virtual TypenameCallExpressionAST *asTypenameCallExpression() { return this; }
+    virtual TypenameCallExpressionAST* asTypenameCallExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TypenameCallExpressionAST *clone(MemoryPool *pool) const;
+    virtual TypenameCallExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TypeConstructorCallAST: public ExpressionAST
 {
 public:
-    SpecifierListAST *type_specifier_list;
-    ExpressionAST *expression; // either ExpressionListParenAST or BracedInitializerAST
+    SpecifierListAST* type_specifier_list;
+    ExpressionAST* expression; // either ExpressionListParenAST or BracedInitializerAST
 
 public:
     TypeConstructorCallAST()
@@ -2950,25 +2643,25 @@ public:
         , expression(0)
     {}
 
-    virtual TypeConstructorCallAST *asTypeConstructorCall() { return this; }
+    virtual TypeConstructorCallAST* asTypeConstructorCall() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TypeConstructorCallAST *clone(MemoryPool *pool) const;
+    virtual TypeConstructorCallAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API PointerToMemberAST: public PtrOperatorAST
 {
 public:
     unsigned global_scope_token;
-    NestedNameSpecifierListAST *nested_name_specifier_list;
+    NestedNameSpecifierListAST* nested_name_specifier_list;
     unsigned star_token;
-    SpecifierListAST *cv_qualifier_list;
+    SpecifierListAST* cv_qualifier_list;
     unsigned ref_qualifier_token;
 
 public:
@@ -2980,23 +2673,23 @@ public:
         , ref_qualifier_token(0)
     {}
 
-    virtual PointerToMemberAST *asPointerToMember() { return this; }
+    virtual PointerToMemberAST* asPointerToMember() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual PointerToMemberAST *clone(MemoryPool *pool) const;
+    virtual PointerToMemberAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API PointerAST: public PtrOperatorAST
 {
 public:
     unsigned star_token;
-    SpecifierListAST *cv_qualifier_list;
+    SpecifierListAST* cv_qualifier_list;
 
 public:
     PointerAST()
@@ -3004,16 +2697,16 @@ public:
         , cv_qualifier_list(0)
     {}
 
-    virtual PointerAST *asPointer() { return this; }
+    virtual PointerAST* asPointer() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual PointerAST *clone(MemoryPool *pool) const;
+    virtual PointerAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ReferenceAST: public PtrOperatorAST
@@ -3026,16 +2719,16 @@ public:
         : reference_token(0)
     {}
 
-    virtual ReferenceAST *asReference() { return this; }
+    virtual ReferenceAST* asReference() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ReferenceAST *clone(MemoryPool *pool) const;
+    virtual ReferenceAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API BreakStatementAST: public StatementAST
@@ -3050,16 +2743,16 @@ public:
         , semicolon_token(0)
     {}
 
-    virtual BreakStatementAST *asBreakStatement() { return this; }
+    virtual BreakStatementAST* asBreakStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual BreakStatementAST *clone(MemoryPool *pool) const;
+    virtual BreakStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ContinueStatementAST: public StatementAST
@@ -3074,16 +2767,16 @@ public:
         , semicolon_token(0)
     {}
 
-    virtual ContinueStatementAST *asContinueStatement() { return this; }
+    virtual ContinueStatementAST* asContinueStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ContinueStatementAST *clone(MemoryPool *pool) const;
+    virtual ContinueStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API GotoStatementAST: public StatementAST
@@ -3100,23 +2793,23 @@ public:
         , semicolon_token(0)
     {}
 
-    virtual GotoStatementAST *asGotoStatement() { return this; }
+    virtual GotoStatementAST* asGotoStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual GotoStatementAST *clone(MemoryPool *pool) const;
+    virtual GotoStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ReturnStatementAST: public StatementAST
 {
 public:
     unsigned return_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned semicolon_token;
 
 public:
@@ -3126,16 +2819,16 @@ public:
         , semicolon_token(0)
     {}
 
-    virtual ReturnStatementAST *asReturnStatement() { return this; }
+    virtual ReturnStatementAST* asReturnStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ReturnStatementAST *clone(MemoryPool *pool) const;
+    virtual ReturnStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API SizeofExpressionAST: public ExpressionAST
@@ -3144,7 +2837,7 @@ public:
     unsigned sizeof_token;
     unsigned dot_dot_dot_token;
     unsigned lparen_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rparen_token;
 
 public: // annotations
@@ -3159,16 +2852,16 @@ public:
         , rparen_token(0)
     {}
 
-    virtual SizeofExpressionAST *asSizeofExpression() { return this; }
+    virtual SizeofExpressionAST* asSizeofExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual SizeofExpressionAST *clone(MemoryPool *pool) const;
+    virtual SizeofExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API AlignofExpressionAST: public ExpressionAST
@@ -3176,7 +2869,7 @@ class CFE_API AlignofExpressionAST: public ExpressionAST
 public:
     unsigned alignof_token;
     unsigned lparen_token;
-    TypeIdAST *typeId;
+    TypeIdAST* typeId;
     unsigned rparen_token;
 
 public:
@@ -3187,16 +2880,16 @@ public:
         , rparen_token(0)
     {}
 
-    virtual AlignofExpressionAST *asAlignofExpression() { return this; }
+    virtual AlignofExpressionAST* asAlignofExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual AlignofExpressionAST *clone(MemoryPool *pool) const;
+    virtual AlignofExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API PointerLiteralAST: public ExpressionAST
@@ -3209,16 +2902,16 @@ public:
         : literal_token(0)
     {}
 
-    virtual PointerLiteralAST *asPointerLiteral() { return this; }
+    virtual PointerLiteralAST* asPointerLiteral() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual PointerLiteralAST *clone(MemoryPool *pool) const;
+    virtual PointerLiteralAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NumericLiteralAST: public ExpressionAST
@@ -3231,16 +2924,16 @@ public:
         : literal_token(0)
     {}
 
-    virtual NumericLiteralAST *asNumericLiteral() { return this; }
+    virtual NumericLiteralAST* asNumericLiteral() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NumericLiteralAST *clone(MemoryPool *pool) const;
+    virtual NumericLiteralAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API BoolLiteralAST: public ExpressionAST
@@ -3253,16 +2946,16 @@ public:
         : literal_token(0)
     {}
 
-    virtual BoolLiteralAST *asBoolLiteral() { return this; }
+    virtual BoolLiteralAST* asBoolLiteral() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual BoolLiteralAST *clone(MemoryPool *pool) const;
+    virtual BoolLiteralAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ThisExpressionAST: public ExpressionAST
@@ -3275,23 +2968,23 @@ public:
         : this_token(0)
     {}
 
-    virtual ThisExpressionAST *asThisExpression() { return this; }
+    virtual ThisExpressionAST* asThisExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ThisExpressionAST *clone(MemoryPool *pool) const;
+    virtual ThisExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NestedExpressionAST: public ExpressionAST
 {
 public:
     unsigned lparen_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rparen_token;
 
 public:
@@ -3301,16 +2994,16 @@ public:
         , rparen_token(0)
     {}
 
-    virtual NestedExpressionAST *asNestedExpression() { return this; }
+    virtual NestedExpressionAST* asNestedExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NestedExpressionAST *clone(MemoryPool *pool) const;
+    virtual NestedExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API StaticAssertDeclarationAST: public DeclarationAST
@@ -3318,9 +3011,9 @@ class CFE_API StaticAssertDeclarationAST: public DeclarationAST
 public:
     unsigned static_assert_token;
     unsigned lparen_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned comma_token;
-    ExpressionAST *string_literal;
+    ExpressionAST* string_literal;
     unsigned rparen_token;
     unsigned semicolon_token;
 
@@ -3335,23 +3028,23 @@ public:
         , semicolon_token(0)
     {}
 
-    virtual StaticAssertDeclarationAST *asStaticAssertDeclaration() { return this; }
+    virtual StaticAssertDeclarationAST* asStaticAssertDeclaration() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual StaticAssertDeclarationAST *clone(MemoryPool *pool) const;
+    virtual StaticAssertDeclarationAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API StringLiteralAST: public ExpressionAST
 {
 public:
     unsigned literal_token;
-    StringLiteralAST *next;
+    StringLiteralAST* next;
 
 public:
     StringLiteralAST()
@@ -3359,16 +3052,16 @@ public:
         , next(0)
     {}
 
-    virtual StringLiteralAST *asStringLiteral() { return this; }
+    virtual StringLiteralAST* asStringLiteral() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual StringLiteralAST *clone(MemoryPool *pool) const;
+    virtual StringLiteralAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API SwitchStatementAST: public StatementAST
@@ -3376,9 +3069,9 @@ class CFE_API SwitchStatementAST: public StatementAST
 public:
     unsigned switch_token;
     unsigned lparen_token;
-    ExpressionAST *condition;
+    ExpressionAST* condition;
     unsigned rparen_token;
-    StatementAST *statement;
+    StatementAST* statement;
 
 public: // annotations
     Block *symbol;
@@ -3393,16 +3086,16 @@ public:
         , symbol(0)
     {}
 
-    virtual SwitchStatementAST *asSwitchStatement() { return this; }
+    virtual SwitchStatementAST* asSwitchStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual SwitchStatementAST *clone(MemoryPool *pool) const;
+    virtual SwitchStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TemplateDeclarationAST: public DeclarationAST
@@ -3411,9 +3104,9 @@ public:
     unsigned export_token;
     unsigned template_token;
     unsigned less_token;
-    DeclarationListAST *template_parameter_list;
+    DeclarationListAST* template_parameter_list;
     unsigned greater_token;
-    DeclarationAST *declaration;
+    DeclarationAST* declaration;
 
 public: // annotations
     Template *symbol;
@@ -3429,23 +3122,23 @@ public:
         , symbol(0)
     {}
 
-    virtual TemplateDeclarationAST *asTemplateDeclaration() { return this; }
+    virtual TemplateDeclarationAST* asTemplateDeclaration() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TemplateDeclarationAST *clone(MemoryPool *pool) const;
+    virtual TemplateDeclarationAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API ThrowExpressionAST: public ExpressionAST
 {
 public:
     unsigned throw_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
 
 public:
     ThrowExpressionAST()
@@ -3453,23 +3146,23 @@ public:
         , expression(0)
     {}
 
-    virtual ThrowExpressionAST *asThrowExpression() { return this; }
+    virtual ThrowExpressionAST* asThrowExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual ThrowExpressionAST *clone(MemoryPool *pool) const;
+    virtual ThrowExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API NoExceptOperatorExpressionAST: public ExpressionAST
 {
 public:
     unsigned noexcept_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
 
 public:
     NoExceptOperatorExpressionAST()
@@ -3477,46 +3170,46 @@ public:
         , expression(0)
     {}
 
-    virtual NoExceptOperatorExpressionAST *asNoExceptOperatorExpression() { return this; }
+    virtual NoExceptOperatorExpressionAST* asNoExceptOperatorExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual NoExceptOperatorExpressionAST *clone(MemoryPool *pool) const;
+    virtual NoExceptOperatorExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TranslationUnitAST: public AST
 {
 public:
-    DeclarationListAST *declaration_list;
+    DeclarationListAST* declaration_list;
 
 public:
     TranslationUnitAST()
         : declaration_list(0)
     {}
 
-    virtual TranslationUnitAST *asTranslationUnit() { return this; }
+    virtual TranslationUnitAST* asTranslationUnit() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TranslationUnitAST *clone(MemoryPool *pool) const;
+    virtual TranslationUnitAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TryBlockStatementAST: public StatementAST
 {
 public:
     unsigned try_token;
-    StatementAST *statement;
-    CatchClauseListAST *catch_clause_list;
+    StatementAST* statement;
+    CatchClauseListAST* catch_clause_list;
 
 public:
     TryBlockStatementAST()
@@ -3525,16 +3218,16 @@ public:
         , catch_clause_list(0)
     {}
 
-    virtual TryBlockStatementAST *asTryBlockStatement() { return this; }
+    virtual TryBlockStatementAST* asTryBlockStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TryBlockStatementAST *clone(MemoryPool *pool) const;
+    virtual TryBlockStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API CatchClauseAST: public StatementAST
@@ -3542,9 +3235,9 @@ class CFE_API CatchClauseAST: public StatementAST
 public:
     unsigned catch_token;
     unsigned lparen_token;
-    ExceptionDeclarationAST *exception_declaration;
+    ExceptionDeclarationAST* exception_declaration;
     unsigned rparen_token;
-    StatementAST *statement;
+    StatementAST* statement;
 
 public: // annotations
     Block *symbol;
@@ -3559,23 +3252,23 @@ public:
         , symbol(0)
     {}
 
-    virtual CatchClauseAST *asCatchClause() { return this; }
+    virtual CatchClauseAST* asCatchClause() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual CatchClauseAST *clone(MemoryPool *pool) const;
+    virtual CatchClauseAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TypeIdAST: public ExpressionAST
 {
 public:
-    SpecifierListAST *type_specifier_list;
-    DeclaratorAST *declarator;
+    SpecifierListAST* type_specifier_list;
+    DeclaratorAST* declarator;
 
 public:
     TypeIdAST()
@@ -3583,16 +3276,16 @@ public:
         , declarator(0)
     {}
 
-    virtual TypeIdAST *asTypeId() { return this; }
+    virtual TypeIdAST* asTypeId() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TypeIdAST *clone(MemoryPool *pool) const;
+    virtual TypeIdAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TypenameTypeParameterAST: public DeclarationAST
@@ -3600,9 +3293,9 @@ class CFE_API TypenameTypeParameterAST: public DeclarationAST
 public:
     unsigned classkey_token;
     unsigned dot_dot_dot_token;
-    NameAST *name;
+    NameAST* name;
     unsigned equal_token;
-    ExpressionAST *type_id;
+    ExpressionAST* type_id;
 
 public: // annotations
     TypenameArgument *symbol;
@@ -3617,16 +3310,16 @@ public:
         , symbol(0)
     {}
 
-    virtual TypenameTypeParameterAST *asTypenameTypeParameter() { return this; }
+    virtual TypenameTypeParameterAST* asTypenameTypeParameter() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TypenameTypeParameterAST *clone(MemoryPool *pool) const;
+    virtual TypenameTypeParameterAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API TemplateTypeParameterAST: public DeclarationAST
@@ -3634,13 +3327,13 @@ class CFE_API TemplateTypeParameterAST: public DeclarationAST
 public:
     unsigned template_token;
     unsigned less_token;
-    DeclarationListAST *template_parameter_list;
+    DeclarationListAST* template_parameter_list;
     unsigned greater_token;
     unsigned class_token;
     unsigned dot_dot_dot_token;
-    NameAST *name;
+    NameAST* name;
     unsigned equal_token;
-    ExpressionAST *type_id;
+    ExpressionAST* type_id;
 
 public:
     TypenameArgument *symbol;
@@ -3659,23 +3352,23 @@ public:
         , symbol(0)
     {}
 
-    virtual TemplateTypeParameterAST *asTemplateTypeParameter() { return this; }
+    virtual TemplateTypeParameterAST* asTemplateTypeParameter() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TemplateTypeParameterAST *clone(MemoryPool *pool) const;
+    virtual TemplateTypeParameterAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API UnaryExpressionAST: public ExpressionAST
 {
 public:
     unsigned unary_op_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
 
 public:
     UnaryExpressionAST()
@@ -3683,16 +3376,16 @@ public:
         , expression(0)
     {}
 
-    virtual UnaryExpressionAST *asUnaryExpression() { return this; }
+    virtual UnaryExpressionAST* asUnaryExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual UnaryExpressionAST *clone(MemoryPool *pool) const;
+    virtual UnaryExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API UsingAST: public DeclarationAST
@@ -3700,7 +3393,7 @@ class CFE_API UsingAST: public DeclarationAST
 public:
     unsigned using_token;
     unsigned typename_token;
-    NameAST *name;
+    NameAST* name;
     unsigned semicolon_token;
 
 public: // annotations
@@ -3715,16 +3408,16 @@ public:
         , symbol(0)
     {}
 
-    virtual UsingAST *asUsing() { return this; }
+    virtual UsingAST* asUsing() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual UsingAST *clone(MemoryPool *pool) const;
+    virtual UsingAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API UsingDirectiveAST: public DeclarationAST
@@ -3732,7 +3425,7 @@ class CFE_API UsingDirectiveAST: public DeclarationAST
 public:
     unsigned using_token;
     unsigned namespace_token;
-    NameAST *name;
+    NameAST* name;
     unsigned semicolon_token;
 
 public:
@@ -3747,16 +3440,16 @@ public:
         , symbol(0)
     {}
 
-    virtual UsingDirectiveAST *asUsingDirective() { return this; }
+    virtual UsingDirectiveAST* asUsingDirective() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual UsingDirectiveAST *clone(MemoryPool *pool) const;
+    virtual UsingDirectiveAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CFE_API WhileStatementAST: public StatementAST
@@ -3764,9 +3457,9 @@ class CFE_API WhileStatementAST: public StatementAST
 public:
     unsigned while_token;
     unsigned lparen_token;
-    ExpressionAST *condition;
+    ExpressionAST* condition;
     unsigned rparen_token;
-    StatementAST *statement;
+    StatementAST* statement;
 
 public: // annotations
     Block *symbol;
@@ -3781,717 +3474,24 @@ public:
         , symbol(0)
     {}
 
-    virtual WhileStatementAST *asWhileStatement() { return this; }
+    virtual WhileStatementAST* asWhileStatement() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual WhileStatementAST *clone(MemoryPool *pool) const;
+    virtual WhileStatementAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
-
-class CFE_API ObjCClassForwardDeclarationAST: public DeclarationAST
-{
-public:
-    SpecifierListAST *attribute_list;
-    unsigned class_token;
-    NameListAST *identifier_list;
-    unsigned semicolon_token;
-
-public: // annotations
-    List<ObjCForwardClassDeclaration *> *symbols;
-
-public:
-    ObjCClassForwardDeclarationAST()
-        : attribute_list(0)
-        , class_token(0)
-        , identifier_list(0)
-        , semicolon_token(0)
-        , symbols(0)
-    {}
-
-    virtual ObjCClassForwardDeclarationAST *asObjCClassForwardDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCClassForwardDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCClassDeclarationAST: public DeclarationAST
-{
-public:
-    SpecifierListAST *attribute_list;
-    unsigned interface_token;
-    unsigned implementation_token;
-    NameAST *class_name;
-    unsigned lparen_token;
-    NameAST *category_name;
-    unsigned rparen_token;
-    unsigned colon_token;
-    NameAST *superclass;
-    ObjCProtocolRefsAST *protocol_refs;
-    ObjCInstanceVariablesDeclarationAST *inst_vars_decl;
-    DeclarationListAST *member_declaration_list;
-    unsigned end_token;
-
-public: // annotations
-    ObjCClass *symbol;
-
-public:
-    ObjCClassDeclarationAST()
-        : attribute_list(0)
-        , interface_token(0)
-        , implementation_token(0)
-        , class_name(0)
-        , lparen_token(0)
-        , category_name(0)
-        , rparen_token(0)
-        , colon_token(0)
-        , superclass(0)
-        , protocol_refs(0)
-        , inst_vars_decl(0)
-        , member_declaration_list(0)
-        , end_token(0)
-        , symbol(0)
-    {}
-
-    virtual ObjCClassDeclarationAST *asObjCClassDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCClassDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCProtocolForwardDeclarationAST: public DeclarationAST
-{
-public:
-    SpecifierListAST *attribute_list;
-    unsigned protocol_token;
-    NameListAST *identifier_list;
-    unsigned semicolon_token;
-
-public: // annotations
-    List<ObjCForwardProtocolDeclaration *> *symbols;
-
-public:
-    ObjCProtocolForwardDeclarationAST()
-        : attribute_list(0)
-        , protocol_token(0)
-        , identifier_list(0)
-        , semicolon_token(0)
-        , symbols(0)
-    {}
-
-    virtual ObjCProtocolForwardDeclarationAST *asObjCProtocolForwardDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCProtocolForwardDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCProtocolDeclarationAST: public DeclarationAST
-{
-public:
-    SpecifierListAST *attribute_list;
-    unsigned protocol_token;
-    NameAST *name;
-    ObjCProtocolRefsAST *protocol_refs;
-    DeclarationListAST *member_declaration_list;
-    unsigned end_token;
-
-public: // annotations
-    ObjCProtocol *symbol;
-
-public:
-    ObjCProtocolDeclarationAST()
-        : attribute_list(0)
-        , protocol_token(0)
-        , name(0)
-        , protocol_refs(0)
-        , member_declaration_list(0)
-        , end_token(0)
-        , symbol(0)
-    {}
-
-    virtual ObjCProtocolDeclarationAST *asObjCProtocolDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCProtocolDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCProtocolRefsAST: public AST
-{
-public:
-    unsigned less_token;
-    NameListAST *identifier_list;
-    unsigned greater_token;
-
-public:
-    ObjCProtocolRefsAST()
-        : less_token(0)
-        , identifier_list(0)
-        , greater_token(0)
-    {}
-
-    virtual ObjCProtocolRefsAST *asObjCProtocolRefs() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCProtocolRefsAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCMessageArgumentAST: public AST
-{
-public:
-    ExpressionAST *parameter_value_expression;
-
-public:
-    ObjCMessageArgumentAST()
-        : parameter_value_expression(0)
-    {}
-
-    virtual ObjCMessageArgumentAST *asObjCMessageArgument() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCMessageArgumentAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCMessageExpressionAST: public ExpressionAST
-{
-public:
-    unsigned lbracket_token;
-    ExpressionAST *receiver_expression;
-    ObjCSelectorAST *selector;
-    ObjCMessageArgumentListAST *argument_list;
-    unsigned rbracket_token;
-
-public:
-    ObjCMessageExpressionAST()
-        : lbracket_token(0)
-        , receiver_expression(0)
-        , selector(0)
-        , argument_list(0)
-        , rbracket_token(0)
-    {}
-
-    virtual ObjCMessageExpressionAST *asObjCMessageExpression() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCMessageExpressionAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCProtocolExpressionAST: public ExpressionAST
-{
-public:
-    unsigned protocol_token;
-    unsigned lparen_token;
-    unsigned identifier_token;
-    unsigned rparen_token;
-
-public:
-    ObjCProtocolExpressionAST()
-        : protocol_token(0)
-        , lparen_token(0)
-        , identifier_token(0)
-        , rparen_token(0)
-    {}
-
-    virtual ObjCProtocolExpressionAST *asObjCProtocolExpression() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCProtocolExpressionAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCTypeNameAST: public AST
-{
-public:
-    unsigned lparen_token;
-    unsigned type_qualifier_token;
-    ExpressionAST *type_id;
-    unsigned rparen_token;
-
-public:
-    ObjCTypeNameAST()
-        : lparen_token(0)
-        , type_qualifier_token(0)
-        , type_id(0)
-        , rparen_token(0)
-    {}
-
-    virtual ObjCTypeNameAST *asObjCTypeName() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCTypeNameAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCEncodeExpressionAST: public ExpressionAST
-{
-public:
-    unsigned encode_token;
-    ObjCTypeNameAST *type_name;
-
-public:
-    ObjCEncodeExpressionAST()
-        : encode_token(0)
-        , type_name(0)
-    {}
-
-    virtual ObjCEncodeExpressionAST *asObjCEncodeExpression() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCEncodeExpressionAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCSelectorExpressionAST: public ExpressionAST
-{
-public:
-    unsigned selector_token;
-    unsigned lparen_token;
-    ObjCSelectorAST *selector;
-    unsigned rparen_token;
-
-public:
-    ObjCSelectorExpressionAST()
-        : selector_token(0)
-        , lparen_token(0)
-        , selector(0)
-        , rparen_token(0)
-    {}
-
-    virtual ObjCSelectorExpressionAST *asObjCSelectorExpression() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCSelectorExpressionAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCInstanceVariablesDeclarationAST: public AST
-{
-public:
-    unsigned lbrace_token;
-    DeclarationListAST *instance_variable_list;
-    unsigned rbrace_token;
-
-public:
-    ObjCInstanceVariablesDeclarationAST()
-        : lbrace_token(0)
-        , instance_variable_list(0)
-        , rbrace_token(0)
-    {}
-
-    virtual ObjCInstanceVariablesDeclarationAST *asObjCInstanceVariablesDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCInstanceVariablesDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCVisibilityDeclarationAST: public DeclarationAST
-{
-public:
-    unsigned visibility_token;
-
-public:
-    ObjCVisibilityDeclarationAST()
-        : visibility_token(0)
-    {}
-
-    virtual ObjCVisibilityDeclarationAST *asObjCVisibilityDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCVisibilityDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCPropertyAttributeAST: public AST
-{
-public:
-    unsigned attribute_identifier_token;
-    unsigned equals_token;
-    ObjCSelectorAST *method_selector;
-
-public:
-    ObjCPropertyAttributeAST()
-        : attribute_identifier_token(0)
-        , equals_token(0)
-        , method_selector(0)
-    {}
-
-    virtual ObjCPropertyAttributeAST *asObjCPropertyAttribute() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCPropertyAttributeAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCPropertyDeclarationAST: public DeclarationAST
-{
-public:
-    SpecifierListAST *attribute_list;
-    unsigned property_token;
-    unsigned lparen_token;
-    ObjCPropertyAttributeListAST *property_attribute_list;
-    unsigned rparen_token;
-    DeclarationAST *simple_declaration;
-
-public: // annotations
-    List<ObjCPropertyDeclaration *> *symbols;
-
-public:
-    ObjCPropertyDeclarationAST()
-        : attribute_list(0)
-        , property_token(0)
-        , lparen_token(0)
-        , property_attribute_list(0)
-        , rparen_token(0)
-        , simple_declaration(0)
-        , symbols(0)
-    {}
-
-    virtual ObjCPropertyDeclarationAST *asObjCPropertyDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCPropertyDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCMessageArgumentDeclarationAST: public AST
-{
-public:
-    ObjCTypeNameAST* type_name;
-    SpecifierListAST *attribute_list;
-    NameAST *param_name;
-
-public: // annotations
-    Argument *argument;
-
-public:
-    ObjCMessageArgumentDeclarationAST()
-        : type_name(0)
-        , attribute_list(0)
-        , param_name(0)
-        , argument(0)
-    {}
-
-    virtual ObjCMessageArgumentDeclarationAST *asObjCMessageArgumentDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCMessageArgumentDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCMethodPrototypeAST: public AST
-{
-public:
-    unsigned method_type_token;
-    ObjCTypeNameAST *type_name;
-    ObjCSelectorAST *selector;
-    ObjCMessageArgumentDeclarationListAST *argument_list;
-    unsigned dot_dot_dot_token;
-    SpecifierListAST *attribute_list;
-
-public: // annotations
-    ObjCMethod *symbol;
-
-public:
-    ObjCMethodPrototypeAST()
-        : method_type_token(0)
-        , type_name(0)
-        , selector(0)
-        , argument_list(0)
-        , dot_dot_dot_token(0)
-        , attribute_list(0)
-        , symbol(0)
-    {}
-
-    virtual ObjCMethodPrototypeAST *asObjCMethodPrototype() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCMethodPrototypeAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCMethodDeclarationAST: public DeclarationAST
-{
-public:
-    ObjCMethodPrototypeAST *method_prototype;
-    StatementAST *function_body;
-    unsigned semicolon_token;
-
-public:
-    ObjCMethodDeclarationAST()
-        : method_prototype(0)
-        , function_body(0)
-        , semicolon_token(0)
-    {}
-
-    virtual ObjCMethodDeclarationAST *asObjCMethodDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCMethodDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCSynthesizedPropertyAST: public AST
-{
-public:
-    unsigned property_identifier_token;
-    unsigned equals_token;
-    unsigned alias_identifier_token;
-
-public:
-    ObjCSynthesizedPropertyAST()
-        : property_identifier_token(0)
-        , equals_token(0)
-        , alias_identifier_token(0)
-    {}
-
-    virtual ObjCSynthesizedPropertyAST *asObjCSynthesizedProperty() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCSynthesizedPropertyAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCSynthesizedPropertiesDeclarationAST: public DeclarationAST
-{
-public:
-    unsigned synthesized_token;
-    ObjCSynthesizedPropertyListAST *property_identifier_list;
-    unsigned semicolon_token;
-
-public:
-    ObjCSynthesizedPropertiesDeclarationAST()
-        : synthesized_token(0)
-        , property_identifier_list(0)
-        , semicolon_token(0)
-    {}
-
-    virtual ObjCSynthesizedPropertiesDeclarationAST *asObjCSynthesizedPropertiesDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCSynthesizedPropertiesDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCDynamicPropertiesDeclarationAST: public DeclarationAST
-{
-public:
-    unsigned dynamic_token;
-    NameListAST *property_identifier_list;
-    unsigned semicolon_token;
-
-public:
-    ObjCDynamicPropertiesDeclarationAST()
-        : dynamic_token(0)
-        , property_identifier_list(0)
-        , semicolon_token(0)
-    {}
-
-    virtual ObjCDynamicPropertiesDeclarationAST *asObjCDynamicPropertiesDeclaration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCDynamicPropertiesDeclarationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCFastEnumerationAST: public StatementAST
-{
-public:
-    unsigned for_token;
-    unsigned lparen_token;
-
-    // declaration
-    SpecifierListAST *type_specifier_list;
-    DeclaratorAST *declarator;
-    // or an expression
-    ExpressionAST *initializer;
-
-    unsigned in_token;
-    ExpressionAST *fast_enumeratable_expression;
-    unsigned rparen_token;
-    StatementAST *statement;
-
-public: // annotations
-    Block *symbol;
-
-public:
-    ObjCFastEnumerationAST()
-        : for_token(0)
-        , lparen_token(0)
-        , type_specifier_list(0)
-        , declarator(0)
-        , initializer(0)
-        , in_token(0)
-        , fast_enumeratable_expression(0)
-        , rparen_token(0)
-        , statement(0)
-        , symbol(0)
-    {}
-
-    virtual ObjCFastEnumerationAST *asObjCFastEnumeration() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCFastEnumerationAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
-class CFE_API ObjCSynchronizedStatementAST: public StatementAST
-{
-public:
-    unsigned synchronized_token;
-    unsigned lparen_token;
-    ExpressionAST *synchronized_object;
-    unsigned rparen_token;
-    StatementAST *statement;
-
-public:
-    ObjCSynchronizedStatementAST()
-        : synchronized_token(0)
-        , lparen_token(0)
-        , synchronized_object(0)
-        , rparen_token(0)
-        , statement(0)
-    {}
-
-    virtual ObjCSynchronizedStatementAST *asObjCSynchronizedStatement() { return this; }
-
-    virtual unsigned firstToken() const;
-    virtual unsigned lastToken() const;
-
-    virtual ObjCSynchronizedStatementAST *clone(MemoryPool *pool) const;
-
-protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
-};
-
 
 class LambdaExpressionAST: public ExpressionAST
 {
 public:
-    LambdaIntroducerAST *lambda_introducer;
-    LambdaDeclaratorAST *lambda_declarator;
-    StatementAST *statement;
+    LambdaIntroducerAST* lambda_introducer;
+    LambdaDeclaratorAST* lambda_declarator;
+    StatementAST* statement;
 
 public:
     LambdaExpressionAST()
@@ -4500,22 +3500,22 @@ public:
         , statement(0)
     {}
 
-    virtual LambdaExpressionAST *asLambdaExpression() { return this; }
+    virtual LambdaExpressionAST* asLambdaExpression() { return this; }
 
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
-    virtual LambdaExpressionAST *clone(MemoryPool *pool) const;
+    virtual LambdaExpressionAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class LambdaIntroducerAST: public AST
 {
 public:
     unsigned lbracket_token;
-    LambdaCaptureAST *lambda_capture;
+    LambdaCaptureAST* lambda_capture;
     unsigned rbracket_token;
 
 public:
@@ -4525,22 +3525,22 @@ public:
         , rbracket_token(0)
     {}
 
-    virtual LambdaIntroducerAST *asLambdaIntroducer() { return this; }
+    virtual LambdaIntroducerAST* asLambdaIntroducer() { return this; }
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual LambdaIntroducerAST *clone(MemoryPool *pool) const;
+    virtual LambdaIntroducerAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class LambdaCaptureAST: public AST
 {
 public:
     unsigned default_capture_token;
-    CaptureListAST *capture_list;
+    CaptureListAST* capture_list;
 
 public:
     LambdaCaptureAST()
@@ -4548,22 +3548,22 @@ public:
         , capture_list(0)
     {}
 
-    virtual LambdaCaptureAST *asLambdaCapture() { return this; }
+    virtual LambdaCaptureAST* asLambdaCapture() { return this; }
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual LambdaCaptureAST *clone(MemoryPool *pool) const;
+    virtual LambdaCaptureAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class CaptureAST: public AST
 {
 public:
     unsigned amper_token;
-    NameAST *identifier;
+    NameAST* identifier;
 
 public:
     CaptureAST()
@@ -4571,27 +3571,27 @@ public:
         , identifier(0)
     {}
 
-    virtual CaptureAST *asCapture() { return this; }
+    virtual CaptureAST* asCapture() { return this; }
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual CaptureAST *clone(MemoryPool *pool) const;
+    virtual CaptureAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class LambdaDeclaratorAST: public AST
 {
 public:
     unsigned lparen_token;
-    ParameterDeclarationClauseAST *parameter_declaration_clause;
+    ParameterDeclarationClauseAST* parameter_declaration_clause;
     unsigned rparen_token;
-    SpecifierListAST *attributes;
+    SpecifierListAST* attributes;
     unsigned mutable_token;
-    ExceptionSpecificationAST *exception_specification;
-    TrailingReturnTypeAST *trailing_return_type;
+    ExceptionSpecificationAST* exception_specification;
+    TrailingReturnTypeAST* trailing_return_type;
 
 public: // annotations
     Function *symbol;
@@ -4608,24 +3608,24 @@ public:
         , symbol(0)
     {}
 
-    virtual LambdaDeclaratorAST *asLambdaDeclarator() { return this; }
+    virtual LambdaDeclaratorAST* asLambdaDeclarator() { return this; }
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual LambdaDeclaratorAST *clone(MemoryPool *pool) const;
+    virtual LambdaDeclaratorAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class TrailingReturnTypeAST: public AST
 {
 public:
     unsigned arrow_token;
-    SpecifierListAST *attributes;
-    SpecifierListAST *type_specifier_list;
-    DeclaratorAST *declarator;
+    SpecifierListAST* attributes;
+    SpecifierListAST* type_specifier_list;
+    DeclaratorAST* declarator;
 
 public:
     TrailingReturnTypeAST()
@@ -4635,22 +3635,22 @@ public:
         , declarator(0)
     {}
 
-    virtual TrailingReturnTypeAST *asTrailingReturnType() { return this; }
+    virtual TrailingReturnTypeAST* asTrailingReturnType() { return this; }
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual TrailingReturnTypeAST *clone(MemoryPool *pool) const;
+    virtual TrailingReturnTypeAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class BracedInitializerAST: public ExpressionAST
 {
 public:
     unsigned lbrace_token;
-    ExpressionListAST *expression_list;
+    ExpressionListAST* expression_list;
     unsigned comma_token;
     unsigned rbrace_token;
 
@@ -4662,15 +3662,15 @@ public:
         , rbrace_token(0)
     {}
 
-    virtual BracedInitializerAST *asBracedInitializer() { return this; }
+    virtual BracedInitializerAST* asBracedInitializer() { return this; }
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual BracedInitializerAST *clone(MemoryPool *pool) const;
+    virtual BracedInitializerAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class DesignatorAST: public AST
@@ -4679,8 +3679,8 @@ public:
     DesignatorAST()
     {}
 
-    virtual DesignatorAST *asDesignator() { return this; }
-    virtual DesignatorAST *clone(MemoryPool *pool) const = 0;
+    virtual DesignatorAST* asDesignator() { return this; }
+    virtual DesignatorAST* clone(MemoryPool *pool) const = 0;
 };
 
 class DotDesignatorAST: public DesignatorAST
@@ -4694,22 +3694,22 @@ public:
         , identifier_token(0)
     {}
 
-    virtual DotDesignatorAST *asDotDesignator() { return this; }
+    virtual DotDesignatorAST* asDotDesignator() { return this; }
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual DotDesignatorAST *clone(MemoryPool *pool) const;
+    virtual DotDesignatorAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class BracketDesignatorAST: public DesignatorAST
 {
 public:
     unsigned lbracket_token;
-    ExpressionAST *expression;
+    ExpressionAST* expression;
     unsigned rbracket_token;
 public:
     BracketDesignatorAST()
@@ -4718,23 +3718,23 @@ public:
         , rbracket_token(0)
     {}
 
-    virtual BracketDesignatorAST *asBracketDesignator() { return this; }
+    virtual BracketDesignatorAST* asBracketDesignator() { return this; }
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual BracketDesignatorAST *clone(MemoryPool *pool) const;
+    virtual BracketDesignatorAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 class DesignatedInitializerAST: public ExpressionAST
 {
 public:
-    DesignatorListAST *designator_list;
+    DesignatorListAST* designator_list;
     unsigned equal_token;
-    ExpressionAST *initializer;
+    ExpressionAST* initializer;
 
 public:
     DesignatedInitializerAST()
@@ -4743,17 +3743,17 @@ public:
         , initializer(0)
     {}
 
-    virtual DesignatedInitializerAST *asDesignatedInitializer() { return this; }
+    virtual DesignatedInitializerAST* asDesignatedInitializer() { return this; }
     virtual unsigned firstToken() const;
     virtual unsigned lastToken() const;
 
-    virtual DesignatedInitializerAST *clone(MemoryPool *pool) const;
+    virtual DesignatedInitializerAST* clone(MemoryPool *pool) const;
 
 protected:
-    virtual void accept0(ASTVisitor *visitor);
-    virtual bool match0(AST *, ASTMatcher *);
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
 };
 
 } // namespace psyche
 
-#endif // CFE_AST_H
+#endif

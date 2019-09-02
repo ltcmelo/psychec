@@ -116,6 +116,7 @@ private:
     int preprocess(const std::string& source);
     int parse(const std::string& source);
     int annotateAst();
+    int instantiateGenerics();
     int generateConstraints();
 
     const Factory& factory_; // TODO: Will go away.
@@ -125,6 +126,7 @@ private:
     std::unique_ptr<TranslationUnit> unit_;
     std::string constraints_;
     std::string includes_;
+    bool withGenerics_;
 };
 
 } // namespace psyche
