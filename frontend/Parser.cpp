@@ -2093,8 +2093,7 @@ bool Parser::parseClassSpecifier(SpecifierListAST* &node)
 
     if (LA() == T_COLON || LA() == T_LBRACE) {
         if (!name) {
-            AnonymousNameAST* anonName = new (_pool) AnonymousNameAST;
-            anonName->class_token = classkey_token;
+            EmptyNameAST* anonName = new (_pool) EmptyNameAST;
             name = anonName;
         }
 

@@ -522,7 +522,7 @@ void ConversionFunctionIdAST::accept0(ASTVisitor* visitor)
     visitor->endVisit(this);
 }
 
-void AnonymousNameAST::accept0(ASTVisitor* visitor)
+void EmptyNameAST::accept0(ASTVisitor* visitor)
 {
     if (visitor->visit(this)) {
     }

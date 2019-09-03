@@ -317,9 +317,8 @@ void CloneName::visit(const Identifier* name)
     _name = _control->identifier(name->chars(), name->size());
 }
 
-void CloneName::visit(const AnonymousNameId *name)
+void CloneName::visit(const EmptyName *name)
 {
-    _name = _control->anonymousNameId(name->classTokenIndex());
 }
 
 void CloneName::visit(const TemplateNameId *name)

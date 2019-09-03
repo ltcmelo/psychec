@@ -473,9 +473,9 @@ bool ConversionFunctionIdAST::match0(AST* pattern, ASTMatcher* matcher)
     return false;
 }
 
-bool AnonymousNameAST::match0(AST* pattern, ASTMatcher* matcher)
+bool EmptyNameAST::match0(AST* pattern, ASTMatcher* matcher)
 {
-    if (AnonymousNameAST* _other = pattern->asAnonymousName())
+    if (EmptyNameAST* _other = pattern->asEmptyName())
         return matcher->match(this, _other);
 
     return false;

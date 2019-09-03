@@ -1238,7 +1238,7 @@ bool ConstraintGenerator::visit(ClassSpecifierAST* ast)
 
     std::string classTy = typePP_.print(ast->symbol->type(), scope_);
     std::string tyName;
-    if (ast->name->name->asAnonymousNameId()) {
+    if (ast->name->name->asEmptyName()) {
         tyName = classTy;
     } else {
         std::string head = "struct ";

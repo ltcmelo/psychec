@@ -40,7 +40,7 @@ class SymbolTable;
 class NameVisitor;
 class Name;
 class Identifier;
-class AnonymousNameId;
+class EmptyName;
 class TemplateNameId;
 class DestructorNameId;
 class OperatorNameId;

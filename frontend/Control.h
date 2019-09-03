@@ -55,7 +55,7 @@ public:
     DiagnosticCollector *diagnosticCollector() const;
     void setDiagnosticCollector(DiagnosticCollector* collector);
 
-    const AnonymousNameId *anonymousNameId(unsigned classTokenIndex);
+    const EmptyName *emptyName();
     const TemplateNameId *templateNameId(const Identifier* id,
                                          bool isSpecialization,
                                          const FullySpecifiedType* const args = 0,

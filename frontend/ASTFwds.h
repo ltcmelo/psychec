@@ -39,7 +39,7 @@ class AliasDeclarationAST;
 class AlignmentSpecifierAST;
 class AlignofExpressionAST;
 class AmbiguousStatementAST;
-class AnonymousNameAST;
+class EmptyNameAST;
 class ArrayAccessAST;
 class ArrayDeclaratorAST;
 class ArrayInitializerAST;

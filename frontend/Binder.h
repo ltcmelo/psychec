@@ -195,7 +195,7 @@ protected:
     virtual bool visit(QualifiedNameAST* ast);
     virtual bool visit(OperatorFunctionIdAST* ast);
     virtual bool visit(ConversionFunctionIdAST* ast);
-    virtual bool visit(AnonymousNameAST* ast);
+    virtual bool visit(EmptyNameAST* ast);
     virtual bool visit(SimpleNameAST* ast);
     virtual bool visit(TaggedNameAST* ast);
     virtual bool visit(DestructorNameAST* ast);

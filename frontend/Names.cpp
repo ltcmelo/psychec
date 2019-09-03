@@ -187,20 +187,14 @@ const Name* SelectorNameId::nameAt(unsigned index) const
 bool SelectorNameId::hasArguments() const
 { return _hasArguments; }
 
-AnonymousNameId::AnonymousNameId(unsigned classTokenIndex)
-    : _classTokenIndex(classTokenIndex)
+EmptyName::EmptyName()
 { }
 
-AnonymousNameId::~AnonymousNameId()
+EmptyName::~EmptyName()
 { }
 
-unsigned AnonymousNameId::classTokenIndex() const
-{
-    return _classTokenIndex;
-}
-
-void AnonymousNameId::accept0(NameVisitor* visitor) const
+void EmptyName::accept0(NameVisitor* visitor) const
 { visitor->visit(this); }
 
-const Identifier* AnonymousNameId::identifier() const
+const Identifier* EmptyName::identifier() const
 { return 0; }

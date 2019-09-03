@@ -1230,12 +1230,10 @@ bool ASTMatcher::match(ConversionFunctionIdAST* node, ConversionFunctionIdAST* p
     return true;
 }
 
-bool ASTMatcher::match(AnonymousNameAST* node, AnonymousNameAST* pattern)
+bool ASTMatcher::match(EmptyNameAST* node, EmptyNameAST* pattern)
 {
     (void) node;
     (void) pattern;
-
-    pattern->class_token = node->class_token;
 
     return true;
 }

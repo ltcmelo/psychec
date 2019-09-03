@@ -652,10 +652,8 @@ virtual bool visit(ConversionFunctionIdAST *ast)
     return false;
 }
 
-virtual bool visit(AnonymousNameAST *ast)
+virtual bool visit(EmptyNameAST *ast)
 {
-    if (ast->class_token)
-        terminal(ast->class_token, ast);
     return false;
 }
 

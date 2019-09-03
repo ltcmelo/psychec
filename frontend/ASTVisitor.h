@@ -81,7 +81,7 @@ public:
     virtual bool visit(AlignmentSpecifierAST* ) { return true; }
     virtual bool visit(AlignofExpressionAST* ) { return true; }
     virtual bool visit(AmbiguousStatementAST* ) { return true; }
-    virtual bool visit(AnonymousNameAST* ) { return true; }
+    virtual bool visit(EmptyNameAST* ) { return true; }
     virtual bool visit(ArrayAccessAST* ) { return true; }
     virtual bool visit(ArrayDeclaratorAST* ) { return true; }
     virtual bool visit(ArrayInitializerAST* ) { return true; }
@@ -201,7 +201,7 @@ public:
     virtual void endVisit(AlignmentSpecifierAST* ) {}
     virtual void endVisit(AlignofExpressionAST* ) {}
     virtual void endVisit(AmbiguousStatementAST* ) {}
-    virtual void endVisit(AnonymousNameAST* ) {}
+    virtual void endVisit(EmptyNameAST* ) {}
     virtual void endVisit(ArrayAccessAST* ) {}
     virtual void endVisit(ArrayDeclaratorAST* ) {}
     virtual void endVisit(ArrayInitializerAST* ) {}

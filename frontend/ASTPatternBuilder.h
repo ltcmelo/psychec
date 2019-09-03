@@ -456,9 +456,9 @@ public:
         return ast;
     }
 
-    AnonymousNameAST* AnonymousName()
+    EmptyNameAST* AnonymousName()
     {
-        AnonymousNameAST* ast = new (&pool) AnonymousNameAST;
+        EmptyNameAST* ast = new (&pool) EmptyNameAST;
         return ast;
     }
 

@@ -2056,9 +2056,9 @@ bool Binder::visit(ConversionFunctionIdAST* ast)
     return false;
 }
 
-bool Binder::visit(AnonymousNameAST* ast)
+bool Binder::visit(EmptyNameAST* ast)
 {
-    ast->name = name_ = control()->anonymousNameId(ast->class_token);
+    ast->name = name_ = control()->emptyName();
     return false;
 }
 
@@ -2359,7 +2359,7 @@ bool Binder::visit(ClassSpecifierAST* ast)
 
     const Name *className = this->name(ast->name);
 
-    if (ast->name && ! ast->name->asAnonymousName()) {
+    if (ast->name && ! ast->name->asEmptyName()) {
         sourceLocation = location(ast->name, sourceLocation);
         startScopeOffset = tokenAt(sourceLocation).utf16charsEnd(); // at the end of the class name
 

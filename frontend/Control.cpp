@@ -117,14 +117,6 @@ template <> struct Compare<ArrayType>
     }
 };
 
-template <> struct Compare<AnonymousNameId>
-{
-    bool operator()(const AnonymousNameId &name, const AnonymousNameId &otherName) const
-    {
-        return name.classTokenIndex() < otherName.classTokenIndex();
-    }
-};
-
 template <> struct Compare<DestructorNameId>
 {
     bool operator()(const DestructorNameId &name, const DestructorNameId &otherName) const
@@ -248,9 +240,10 @@ public:
         delete_array_entries(symbols);
     }
 
-    const AnonymousNameId *findOrInsertAnonymousNameId(unsigned classTokenIndex)
+    const EmptyName *findOrInsertEmptyName()
     {
-        return anonymousNameIds.intern(AnonymousNameId(classTokenIndex));
+        static EmptyName name;
+        return &name;
     }
 
     template <typename Iterator>
@@ -447,7 +440,6 @@ public:
     // ### replace std::map with lookup tables. ASAP!
 
     // names
-    Table<AnonymousNameId> anonymousNameIds;
     Table<DestructorNameId> destructorNameIds;
     Table<OperatorNameId> operatorNameIds;
     Table<ConversionNameId> conversionNameIds;
@@ -527,8 +519,8 @@ DiagnosticCollector *Control::diagnosticCollector() const
 void Control::setDiagnosticCollector(DiagnosticCollector* collector)
 { d->diagnosticCollector = collector; }
 
-const AnonymousNameId *Control::anonymousNameId(unsigned classTokenIndex)
-{ return d->findOrInsertAnonymousNameId(classTokenIndex); }
+const EmptyName *Control::emptyName()
+{ return d->findOrInsertEmptyName(); }
 
 const OperatorNameId *Control::findOperatorNameId(OperatorNameId::Kind operatorId) const
 {

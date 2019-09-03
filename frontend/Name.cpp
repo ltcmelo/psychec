@@ -37,8 +37,8 @@ Name::~Name()
 bool Name::isNameId() const
 { return asNameId() != 0; }
 
-bool Name::isAnonymousNameId() const
-{ return asAnonymousNameId() != 0; }
+bool Name::isEmptyName() const
+{ return asEmptyName() != 0; }
 
 bool Name::isTemplateNameId() const
 { return asTemplateNameId() != 0; }

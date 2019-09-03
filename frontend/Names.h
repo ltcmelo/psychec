@@ -276,24 +276,19 @@ private:
     bool _hasArguments;
 };
 
-class CFE_API AnonymousNameId: public Name
+class CFE_API EmptyName: public Name
 {
 public:
-    AnonymousNameId(unsigned classTokenIndex);
-    virtual ~AnonymousNameId();
-
-    unsigned classTokenIndex() const;
+    EmptyName();
+    virtual ~EmptyName();
 
     virtual const Identifier* identifier() const;
 
-    virtual const AnonymousNameId *asAnonymousNameId() const
+    virtual const EmptyName *asEmptyName() const
     { return this; }
 
 protected:
     virtual void accept0(NameVisitor* visitor) const;
-
-private:
-    unsigned _classTokenIndex;
 };
 
 } // namespace psyche

@@ -148,7 +148,7 @@ public:
     virtual AlignmentSpecifierAST* asAlignmentSpecifier() { return 0; }
     virtual AlignofExpressionAST* asAlignofExpression() { return 0; }
     virtual AmbiguousStatementAST* asAmbiguousStatement() { return 0; }
-    virtual AnonymousNameAST* asAnonymousName() { return 0; }
+    virtual EmptyNameAST* asEmptyName() { return 0; }
     virtual ArrayAccessAST* asArrayAccess() { return 0; }
     virtual ArrayDeclaratorAST* asArrayDeclarator() { return 0; }
     virtual ArrayInitializerAST* asArrayInitializer() { return 0; }
@@ -2076,20 +2076,17 @@ protected:
     virtual bool match0(AST* , ASTMatcher *);
 };
 
-class CFE_API AnonymousNameAST: public NameAST
+class CFE_API EmptyNameAST: public NameAST
 {
 public:
-    unsigned class_token;
-public:
-    AnonymousNameAST()
-        : class_token(0)
+    EmptyNameAST()
     {}
 
-    virtual AnonymousNameAST* asAnonymousName() { return this; }
+    virtual EmptyNameAST* asEmptyName() { return this; }
     virtual unsigned firstToken() const { return 0; }
     virtual unsigned lastToken() const { return 0; }
 
-    virtual AnonymousNameAST* clone(MemoryPool *pool) const;
+    virtual EmptyNameAST* clone(MemoryPool *pool) const;
 
 protected:
     virtual void accept0(ASTVisitor* visitor);

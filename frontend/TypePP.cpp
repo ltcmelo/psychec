@@ -244,7 +244,7 @@ void TypePP<SyntaxT>::visit(Class* ty)
     text_.append("{ ");
     for (unsigned i = 0; i < ty->memberCount(); ++i) {
         const Name* name = ty->memberAt(i)->name();
-        if (!name || name->asAnonymousNameId())
+        if (!name || name->asEmptyName())
             continue;
 
         visitType(ty->memberAt(i)->type());
