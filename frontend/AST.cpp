@@ -1394,6 +1394,22 @@ unsigned ForeachStatementAST::lastToken() const
 }
 
 
+unsigned BitfieldDeclaratorAST::firstToken() const
+{
+    if (colon_token)
+        return colon_token;
+    return 0;
+}
+
+
+unsigned BitfieldDeclaratorAST::lastToken() const
+{
+    if (colon_token)
+        return colon_token + 1;
+    return 1;
+}
+
+
 unsigned FunctionDeclaratorAST::firstToken() const
 {
     if (lparen_token)

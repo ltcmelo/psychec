@@ -156,6 +156,7 @@ public:
     virtual AttributeSpecifierAST* asAttributeSpecifier() { return 0; }
     virtual BaseSpecifierAST* asBaseSpecifier() { return 0; }
     virtual BinaryExpressionAST* asBinaryExpression() { return 0; }
+    virtual BitfieldDeclaratorAST* asBitfieldDeclarator() { return 0; }
     virtual BoolLiteralAST* asBoolLiteral() { return 0; }
     virtual BracedInitializerAST* asBracedInitializer() { return 0; }
     virtual BracketDesignatorAST* asBracketDesignator() { return 0; }
@@ -1178,6 +1179,28 @@ public:
     virtual unsigned lastToken() const;
 
     virtual NestedDeclaratorAST* clone(MemoryPool *pool) const;
+
+protected:
+    virtual void accept0(ASTVisitor* visitor);
+    virtual bool match0(AST* , ASTMatcher *);
+};
+
+class CFE_API BitfieldDeclaratorAST: public PostfixDeclaratorAST
+{
+public:
+    unsigned colon_token;
+
+public:
+    BitfieldDeclaratorAST()
+        : colon_token(0)
+    {}
+
+    virtual BitfieldDeclaratorAST* asBitfieldDeclarator() { return this; }
+
+    virtual unsigned firstToken() const;
+    virtual unsigned lastToken() const;
+
+    virtual BitfieldDeclaratorAST* clone(MemoryPool *pool) const;
 
 protected:
     virtual void accept0(ASTVisitor* visitor);

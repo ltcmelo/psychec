@@ -47,6 +47,7 @@ class AsmDefinitionAST;
 class AttributeSpecifierAST;
 class BaseSpecifierAST;
 class BinaryExpressionAST;
+class BitfieldDeclaratorAST;
 class BoolLiteralAST;
 class BracedInitializerAST;
 class BracketDesignatorAST;

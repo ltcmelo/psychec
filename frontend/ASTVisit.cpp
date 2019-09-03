@@ -261,6 +261,13 @@ void NestedDeclaratorAST::accept0(ASTVisitor* visitor)
     visitor->endVisit(this);
 }
 
+void BitfieldDeclaratorAST::accept0(ASTVisitor* visitor)
+{
+    if (visitor->visit(this)) {
+    }
+    visitor->endVisit(this);
+}
+
 void FunctionDeclaratorAST::accept0(ASTVisitor* visitor)
 {
     if (visitor->visit(this)) {

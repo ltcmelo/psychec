@@ -587,6 +587,16 @@ bool ASTMatcher::match(NestedDeclaratorAST* node, NestedDeclaratorAST* pattern)
     return true;
 }
 
+bool ASTMatcher::match(BitfieldDeclaratorAST* node, BitfieldDeclaratorAST* pattern)
+{
+    (void) node;
+    (void) pattern;
+
+    pattern->colon_token = node->colon_token;
+
+    return true;
+}
+
 bool ASTMatcher::match(FunctionDeclaratorAST* node, FunctionDeclaratorAST* pattern)
 {
     (void) node;

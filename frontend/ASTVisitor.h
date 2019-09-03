@@ -88,6 +88,7 @@ public:
     virtual bool visit(AsmDefinitionAST* ) { return true; }
     virtual bool visit(BaseSpecifierAST* ) { return true; }
     virtual bool visit(BinaryExpressionAST* ) { return true; }
+    virtual bool visit(BitfieldDeclaratorAST* ) { return true; }
     virtual bool visit(BoolLiteralAST* ) { return true; }
     virtual bool visit(BracedInitializerAST* ) { return true; }
     virtual bool visit(BracketDesignatorAST* ) { return true; }
@@ -208,6 +209,7 @@ public:
     virtual void endVisit(AsmDefinitionAST* ) {}
     virtual void endVisit(BaseSpecifierAST* ) {}
     virtual void endVisit(BinaryExpressionAST* ) {}
+    virtual void endVisit(BitfieldDeclaratorAST* ) {}
     virtual void endVisit(BoolLiteralAST* ) {}
     virtual void endVisit(BracedInitializerAST* ) {}
     virtual void endVisit(BracketDesignatorAST* ) {}

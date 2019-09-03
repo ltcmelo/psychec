@@ -344,6 +344,13 @@ NestedDeclaratorAST* NestedDeclaratorAST::clone(MemoryPool *pool) const
     return ast;
 }
 
+BitfieldDeclaratorAST* BitfieldDeclaratorAST::clone(MemoryPool *pool) const
+{
+    BitfieldDeclaratorAST* ast = new (pool) BitfieldDeclaratorAST;
+    ast->colon_token = colon_token;
+    return ast;
+}
+
 FunctionDeclaratorAST* FunctionDeclaratorAST::clone(MemoryPool *pool) const
 {
     FunctionDeclaratorAST* ast = new (pool) FunctionDeclaratorAST;

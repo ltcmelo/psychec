@@ -2373,15 +2373,19 @@ bool Parser::parseInitDeclarator(DeclaratorAST* &node, SpecifierListAST* decl_sp
             && node->postfix_declarator_list
             && node->postfix_declarator_list->lastValue()
             && node->postfix_declarator_list->lastValue()->asFunctionDeclarator();
-    if (declaringClass && LA() == T_COLON
+    if (declaringClass
+            && LA() == T_COLON
             && (! node || ! node->postfix_declarator_list)) {
         unsigned colon_token = consumeToken();
         ExpressionAST* expression = 0;
-        if (parseConstantExpression(expression) && (LA() == T_COMMA ||
-                                                    LA() == T_SEMICOLON)) {
-            // recognized a bitfielddeclarator.
+        if (parseConstantExpression(expression)
+                && (LA() == T_COMMA
+                    || LA() == T_SEMICOLON)) {
             if (! node)
                 node = new (_pool) DeclaratorAST;
+            BitfieldDeclaratorAST* ast = new (_pool) BitfieldDeclaratorAST;
+            ast->colon_token = colon_token;
+            node->postfix_declarator_list = new (_pool) PostfixDeclaratorListAST(ast);
             node->initializer = expression;
             return true;
         }

@@ -44,6 +44,7 @@ public:
     virtual bool match(AsmDefinitionAST* node, AsmDefinitionAST* pattern);
     virtual bool match(BaseSpecifierAST* node, BaseSpecifierAST* pattern);
     virtual bool match(BinaryExpressionAST* node, BinaryExpressionAST* pattern);
+    virtual bool match(BitfieldDeclaratorAST* node, BitfieldDeclaratorAST* pattern);
     virtual bool match(BoolLiteralAST* node, BoolLiteralAST* pattern);
     virtual bool match(BracedInitializerAST* node, BracedInitializerAST* pattern);
     virtual bool match(BracketDesignatorAST* node, BracketDesignatorAST* pattern);

@@ -318,6 +318,13 @@ virtual bool visit(NestedDeclaratorAST *ast)
     return false;
 }
 
+virtual bool visit(BitfieldDeclaratorAST *ast)
+{
+    if (ast->colon_token)
+        terminal(ast->colon_token, ast);
+    return false;
+}
+
 virtual bool visit(FunctionDeclaratorAST *ast)
 {
     if (ast->lparen_token)

@@ -241,6 +241,14 @@ bool NestedDeclaratorAST::match0(AST* pattern, ASTMatcher* matcher)
     return false;
 }
 
+bool BitfieldDeclaratorAST::match0(AST* pattern, ASTMatcher* matcher)
+{
+    if (BitfieldDeclaratorAST* _other = pattern->asBitfieldDeclarator())
+        return matcher->match(this, _other);
+
+    return false;
+}
+
 bool FunctionDeclaratorAST::match0(AST* pattern, ASTMatcher* matcher)
 {
     if (FunctionDeclaratorAST* _other = pattern->asFunctionDeclarator())
