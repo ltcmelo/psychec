@@ -1766,8 +1766,8 @@ bool Parser::parseEnumSpecifier(SpecifierListAST* &node)
         }
         if (LA() == T_LBRACE) {
             ast->lbrace_token = consumeToken();
-            unsigned comma_token = 0;
-            EnumeratorListAST* *enumerator_ptr = &ast->enumerator_list;
+            EnumeratorListAST** enumerator_ptr = &ast->enumerator_list;
+            unsigned dummy;
             while (int tk = LA()) {
                 if (tk == T_RBRACE)
                     break;
@@ -1777,14 +1777,17 @@ bool Parser::parseEnumSpecifier(SpecifierListAST* &node)
                     skipUntil(T_IDENTIFIER);
                 }
 
-                if (parseEnumerator(*enumerator_ptr))
+                auto comma_token = &dummy;
+                if (parseEnumerator(*enumerator_ptr)) {
+                    comma_token = &(*enumerator_ptr)->delim_token;
                     enumerator_ptr = &(*enumerator_ptr)->next;
+                }
 
                 if (LA() == T_COMMA && LA(2) == T_RBRACE)
                     ast->stray_comma_token = consumeToken();
 
                 if (LA() != T_RBRACE)
-                    match(T_COMMA, &comma_token);
+                    match(T_COMMA, comma_token);
             }
             match(T_RBRACE, &ast->rbrace_token);
         } else if (!_language.cpp11) {
@@ -1985,7 +1988,7 @@ bool Parser::parseParameterDeclarationList(ParameterDeclarationListAST* &node)
     if (parseParameterDeclaration(declaration)) {
         *parameter_declaration_ptr = new (_pool) ParameterDeclarationListAST;
         (*parameter_declaration_ptr)->value = declaration;
-        unsigned* comma_token = &(*parameter_declaration_ptr)->delim_token;
+        auto comma_token = &(*parameter_declaration_ptr)->delim_token;
         parameter_declaration_ptr = &(*parameter_declaration_ptr)->next;
         while (LA() == T_COMMA) {
             *comma_token = consumeToken();
@@ -1997,6 +2000,7 @@ bool Parser::parseParameterDeclarationList(ParameterDeclarationListAST* &node)
             if (parseParameterDeclaration(declaration)) {
                 *parameter_declaration_ptr = new (_pool) ParameterDeclarationListAST;
                 (*parameter_declaration_ptr)->value = declaration;
+                comma_token = &(*parameter_declaration_ptr)->delim_token;
                 parameter_declaration_ptr = &(*parameter_declaration_ptr)->next;
             }
         }
@@ -2686,6 +2690,7 @@ bool Parser::parseExpressionList(ExpressionListAST* &node)
             if (parseAssignmentExpression(expression)) {
                 *expression_list_ptr = new (_pool) ExpressionListAST;
                 (*expression_list_ptr)->value = expression;
+                comma_token = &(*expression_list_ptr)->delim_token;
                 expression_list_ptr = &(*expression_list_ptr)->next;
             }
         }

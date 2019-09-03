@@ -171,7 +171,7 @@ typedef List<DeclarationAST*> DeclarationListAST;
 typedef List<StatementAST*> StatementListAST;
 typedef SepList<DeclaratorAST*> DeclaratorListAST;
 typedef SepList<BaseSpecifierAST*> BaseSpecifierListAST;
-typedef List<EnumeratorAST*> EnumeratorListAST;
+typedef SepList<EnumeratorAST*> EnumeratorListAST;
 typedef List<MemInitializerAST*> MemInitializerListAST;
 typedef List<NewArrayDeclaratorAST*> NewArrayDeclaratorListAST;
 typedef List<PostfixAST*> PostfixListAST;

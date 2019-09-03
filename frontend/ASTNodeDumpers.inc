@@ -415,8 +415,11 @@ virtual bool visit(EnumSpecifierAST *ast)
         nonterminal(iter->value);
     if (ast->lbrace_token)
         terminal(ast->lbrace_token, ast);
-    for (EnumeratorListAST *iter = ast->enumerator_list; iter; iter = iter->next)
+    for (EnumeratorListAST *iter = ast->enumerator_list; iter; iter = iter->next) {
         nonterminal(iter->value);
+        if (iter->delim_token)
+            terminal(iter->delim_token, ast);
+    }
     if (ast->stray_comma_token)
         terminal(ast->stray_comma_token, ast);
     if (ast->rbrace_token)
