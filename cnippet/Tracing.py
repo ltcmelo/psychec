@@ -26,9 +26,7 @@ def _trace(caller_id, msg, level):
         print('[cnippet-%s] %s' % (caller_id, msg))
 
 
-class TraceManager:
-
-    __metaclass__ = Singleton
+class TraceManager(metaclass=Singleton):
 
     DISABLED = ''
     INFO = 'info'
