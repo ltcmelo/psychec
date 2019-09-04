@@ -118,6 +118,7 @@ void AccessDeclarationAST::accept0(ASTVisitor* visitor)
 void AsmDefinitionAST::accept0(ASTVisitor* visitor)
 {
     if (visitor->visit(this)) {
+        accept(string_literal, visitor);
     }
     visitor->endVisit(this);
 }

@@ -249,11 +249,16 @@ bool ASTMatcher::match(AsmDefinitionAST* node, AsmDefinitionAST* pattern)
 
     pattern->asm_token = node->asm_token;
 
-    pattern->volatile_token = node->volatile_token;
+    pattern->qualifier_token = node->qualifier_token;
 
     pattern->lparen_token = node->lparen_token;
 
     pattern->rparen_token = node->rparen_token;
+
+    if (! pattern->string_literal)
+        pattern->string_literal = node->string_literal;
+    else if (! AST::match(node->string_literal, pattern->string_literal, this))
+        return false;
 
     pattern->semicolon_token = node->semicolon_token;
 

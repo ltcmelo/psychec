@@ -130,10 +130,11 @@ virtual bool visit(AsmDefinitionAST *ast)
 {
     if (ast->asm_token)
         terminal(ast->asm_token, ast);
-    if (ast->volatile_token)
-        terminal(ast->volatile_token, ast);
+    if (ast->qualifier_token)
+        terminal(ast->qualifier_token, ast);
     if (ast->lparen_token)
         terminal(ast->lparen_token, ast);
+    nonterminal(ast->string_literal);
     if (ast->rparen_token)
         terminal(ast->rparen_token, ast);
     if (ast->semicolon_token)

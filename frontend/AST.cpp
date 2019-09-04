@@ -205,12 +205,15 @@ unsigned AsmDefinitionAST::firstToken() const
 {
     if (asm_token)
         return asm_token;
-    if (volatile_token)
-        return volatile_token;
+    if (qualifier_token)
+        return qualifier_token;
     if (lparen_token)
         return lparen_token;
     if (rparen_token)
         return rparen_token;
+    if (string_literal)
+        if (unsigned candidate = string_literal->firstToken())
+            return candidate;
     if (semicolon_token)
         return semicolon_token;
     return 0;
@@ -221,12 +224,15 @@ unsigned AsmDefinitionAST::lastToken() const
 {
     if (semicolon_token)
         return semicolon_token + 1;
+    if (string_literal)
+        if (unsigned candidate = string_literal->lastToken())
+            return candidate;
     if (rparen_token)
         return rparen_token + 1;
     if (lparen_token)
         return lparen_token + 1;
-    if (volatile_token)
-        return volatile_token + 1;
+    if (qualifier_token)
+        return qualifier_token + 1;
     if (asm_token)
         return asm_token + 1;
     return 1;

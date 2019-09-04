@@ -704,9 +704,9 @@ class CFE_API AsmDefinitionAST: public DeclarationAST
 {
 public:
     unsigned asm_token;
-    unsigned volatile_token;
+    unsigned qualifier_token;
     unsigned lparen_token;
-    // ### string literals
+    ExpressionAST* string_literal;
     // ### asm operand list
     unsigned rparen_token;
     unsigned semicolon_token;
@@ -714,8 +714,9 @@ public:
 public:
     AsmDefinitionAST()
         : asm_token(0)
-        , volatile_token(0)
+        , qualifier_token(0)
         , lparen_token(0)
+        , string_literal(0)
         , rparen_token(0)
         , semicolon_token(0)
     {}

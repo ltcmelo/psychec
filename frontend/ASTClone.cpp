@@ -149,9 +149,11 @@ AsmDefinitionAST* AsmDefinitionAST::clone(MemoryPool *pool) const
 {
     AsmDefinitionAST* ast = new (pool) AsmDefinitionAST;
     ast->asm_token = asm_token;
-    ast->volatile_token = volatile_token;
+    ast->qualifier_token = qualifier_token;
     ast->lparen_token = lparen_token;
     ast->rparen_token = rparen_token;
+    if (string_literal)
+        ast->string_literal = string_literal->clone(pool);
     ast->semicolon_token = semicolon_token;
     return ast;
 }

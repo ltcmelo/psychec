@@ -1015,14 +1015,11 @@ bool Parser::parseAsmDefinition(DeclarationAST* &node)
     ast->asm_token = consumeToken();
 
     if (LA() == T_VOLATILE)
-        ast->volatile_token = consumeToken();
+        ast->qualifier_token = consumeToken();
 
     match(T_LPAREN, &ast->lparen_token);
-    unsigned string_literal_token = 0;
-    match(T_STRING_LITERAL, &string_literal_token);
-    while (LA() == T_STRING_LITERAL) {
-        consumeToken();
-    }
+    parseStringLiteral(ast->string_literal);
+
     if (LA() == T_COLON) {
         consumeToken(); // skip T_COLON
         parseAsmOperandList();
@@ -2883,6 +2880,7 @@ bool Parser::parseUnqualifiedName(NameAST* &node, bool acceptTemplateId)
 bool Parser::parseStringLiteral(ExpressionAST* &node)
 {
     DEBUG_THIS_RULE();
+
     if (! (LA() == T_STRING_LITERAL
            || LA() == T_WIDE_STRING_LITERAL
            || LA() == T_UTF8_STRING_LITERAL

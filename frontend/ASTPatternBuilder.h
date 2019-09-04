@@ -110,9 +110,10 @@ public:
         return ast;
     }
 
-    AsmDefinitionAST* AsmDefinition()
+    AsmDefinitionAST* AsmDefinition(ExpressionAST* string_literal = 0)
     {
         AsmDefinitionAST* ast = new (&pool) AsmDefinitionAST;
+        ast->string_literal = string_literal;
         return ast;
     }
 
