@@ -1,6 +1,6 @@
 # PsycheC
 
-PsycheC is a compilation infrastructure for the C language that is enabled with an ML/Haskell-style (unification-based) type inference engine.
+PsycheC is a compiler frontend infrastructure for the C language that is enabled with an ML/Haskell-style (unification-based) type inference engine.
 [This online interface](http://cuda.dcc.ufmg.br/psyche-c/) illustrates the essential functionality of PsycheC.
 
 ## Requirements
