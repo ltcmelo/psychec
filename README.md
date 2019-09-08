@@ -82,7 +82,7 @@ It is not necessary to define neither `node_t` nor `value_t`.
 The definition of `prepend` applies "for all" kinds of nodes and values.
 This way, you can focus on the *algorithms* (the essence of generic programming).
 
-Let us create 2 lists, one of `int`s and another of `point_t`s, and insert an element as their head.
+Let us create 2 lists, one of `int` and another of `point_t`, and insert an new head to them.
 
 ```c
 int main()
