@@ -15,7 +15,7 @@ PsycheC is a compiler frontend infrastructure for the C language that is enabled
     cmake CMakeLists.txt  
     make
 
-### Running the Tests
+#### Running the Tests
 
 Tests exist at varying layers.
 
@@ -62,10 +62,60 @@ typedef struct TYPE_1__
 }* T;
 ```
 
+## Features
+
+Besides type inference, PsycheC supports the following features.
+
+### Generic Programming
+
+*This is a work-in-progress, feedback is welcome through [this form](https://forms.gle/oJj1YEhAk3jwvHRo8).*
+
+PsycheC provides an alternative to `void*` and `#macros` for writing generic code in C.
+This is how you would implement a generic linked-list's `prepend` function.
+
+```c
+_Generic void prepend(_Forall(node_t)** head,
+                      _Forall(value_t) value)
+{
+    node_t* n = malloc(sizeof(node_t));
+    n->value = value;
+    n->next = *head;
+    *head = n;
+}
+```
+
+It is not necessary to define neither `node_t` nor `value_t`, they will be inferred.
+This definition if `prepend` applies "for all" kinds of nodes and values.
+This way, you can focus on the *algorithms* - the essence of generic programming.
+
+Let us create 2 lists, one of `int`'s and another of `point_t`s, and insert an element as their head.
+
+```c
+int main()
+{
+    _Exists(node_t)* ilst = 0;
+    prepend(&ilst, 42);
+
+    _Exists(node_t)* plst = 0;
+    struct point_t p;
+    p.x = p.y = 42;
+    prepend(&plst, p);
+}
+
+```
+
+Now, PsycheC understands that there "exists" a (node) type whose value is an `int`,
+and a specialization of `prepend` for such arguments.
+Similarly, a different (node) type for `point_t` "exists" too, with a corresponding
+specialization of `prepend`.
+
+Check the examples directory for this snippet.
+
+
 ## Publications
 
 PsycheC is an ongoing research project.
-It has been introduced at:
+It has been presented at:
 
 - [Inference of static semantics for incomplete C programs](https://dl.acm.org/citation.cfm?id=3158117);
 Proceedings of the ACM on Programming Languages, Volume 2 Issue **POPL** (Principles of Programming Languages),
