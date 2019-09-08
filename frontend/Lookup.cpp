@@ -26,7 +26,6 @@
 #include "Symbol.h"
 #include "Symbols.h"
 #include "TypeVisitor.h"
-#include <cassert>
 #include <iostream>
 
 using namespace psyche;
@@ -54,8 +53,6 @@ Symbol* lookupSymbol(const Name* name, const Scope* scope)
 
 Symbol* lookupTypeSymbol(const Name* name, const Scope *scope)
 {
-    assert((name->isNameId() || name->isTaggedNameId()) && "expected trival or tagged name");
-
     Symbol* tySym = lookupSymbol(name->identifier(), scope);
     if (!tySym)
         return nullptr;
@@ -76,7 +73,6 @@ Symbol* lookupTypeSymbol(const Name* name, const Scope *scope)
         return tySym->isEnum() ? tySym : nullptr;
 
     default:
-        assert(false && "unexpected name");
         return nullptr;
     }
 }

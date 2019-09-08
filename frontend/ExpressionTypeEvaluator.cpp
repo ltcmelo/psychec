@@ -20,6 +20,7 @@
 
 #include "ExpressionTypeEvaluator.h"
 
+#include "Assert.h"
 #include "AST.h"
 #include "CoreTypes.h"
 #include "Control.h"
@@ -29,7 +30,6 @@
 #include "Symbol.h"
 #include "Symbols.h"
 #include "TranslationUnit.h"
-#include <cassert>
 
 using namespace psyche;
 
@@ -48,10 +48,6 @@ FullySpecifiedType ExpressionTypeEvaluator::evaluate(ExpressionAST* ast, Scope *
 FullySpecifiedType ExpressionTypeEvaluator::commonRealType(const FullySpecifiedType& lhsTy,
                                               const FullySpecifiedType& rhsTy) const
 {
-    assert((lhsTy && isArithmetic(lhsTy.type())
-                && rhsTy && isArithmetic(rhsTy.type()))
-            && "expected arithmetic type");
-
     if (lhsTy == rhsTy)
         return lhsTy;
 
@@ -223,7 +219,7 @@ bool ExpressionTypeEvaluator::visit(BinaryExpressionAST* ast)
         return false;
 
     default:
-        assert(false && "unrecognized operator");
+        PSYCHE_ASSERT(false, return false, "unrecognized operator");
         return false;
     }
 }
@@ -287,20 +283,15 @@ void ExpressionTypeEvaluator::process(const Identifier *id)
 
 bool ExpressionTypeEvaluator::visit(IdExpressionAST* ast)
 {
-    assert((ast->asIdExpression()->name->name->asNameId()) && "expected trivial identifier name");
-
     process(ast->name->name->identifier());
     return false;
 }
 
 bool ExpressionTypeEvaluator::visit(MemberAccessAST* ast)
 {
-    assert(ast->member_name->name->asNameId() && "expected trivial member name");
-
     accept(ast->base_expression);
     ++_memberAccess;
     process(ast->member_name->name->identifier());
-    assert(_memberAccess > 0 && "expected member check");
     --_memberAccess;
 
     return false;
@@ -314,7 +305,6 @@ bool ExpressionTypeEvaluator::visit(NumericLiteralAST* ast)
         type_ = control()->integerType(IntegerType::Char);
     } else {
         const NumericLiteral *numLit = numericLiteral(ast->literal_token);
-        assert(numLit && "numeric literal must exist");
         if (numLit->isDouble()) {
             type_ = control()->floatType(FloatType::Double);
         } else if (numLit->isLongDouble()) {
@@ -437,7 +427,7 @@ bool ExpressionTypeEvaluator::visit(SimpleSpecifierAST* ast)
         return false;
 
     default:
-        assert(false && "unknown type specifier");
+        PSYCHE_ASSERT(false, return false, "unknown type specifier");
         return false;
     }
 }

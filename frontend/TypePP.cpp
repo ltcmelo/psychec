@@ -24,7 +24,6 @@
 #include "CoreTypes.h"
 #include "Literals.h"
 #include "Symbols.h"
-#include <cassert>
 
 using namespace psyche;
 
@@ -191,7 +190,6 @@ void TypePP<SyntaxT>::funcRet(Function* ty)
 {
     if (ty->returnType()->isNamedType()) {
         const Name* name = ty->returnType()->asNamedType()->name();
-        assert(name->isNameId() && "expected a simple name");
         const Identifier* id = name->asNameId()->identifier();
         text_.append(std::string(id->begin(), id->end()));
     } else {
@@ -249,7 +247,6 @@ void TypePP<SyntaxT>::visit(Class* ty)
 
         visitType(ty->memberAt(i)->type());
 
-        assert((name->isNameId() || name->isTaggedNameId()) && "expected a simple name");
         const Identifier* id = name->identifier();
         text_.append(" ");
         text_.append(id->chars(), id->size());

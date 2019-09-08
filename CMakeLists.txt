@@ -36,8 +36,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/Main.cpp
 
     # Constraint generator
-    ${PROJECT_SOURCE_DIR}/generator/Assert.h
-    ${PROJECT_SOURCE_DIR}/generator/BuiltinNames.h
     ${PROJECT_SOURCE_DIR}/generator/ConstraintGenerator.h
     ${PROJECT_SOURCE_DIR}/generator/ConstraintGenerator.cpp
     ${PROJECT_SOURCE_DIR}/generator/ConstraintWriter.h
@@ -48,14 +46,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/Debug.cpp
     ${PROJECT_SOURCE_DIR}/generator/DomainLattice.h
     ${PROJECT_SOURCE_DIR}/generator/DomainLattice.cpp
-    ${PROJECT_SOURCE_DIR}/generator/Driver.h
-    ${PROJECT_SOURCE_DIR}/generator/Driver.cpp
-    ${PROJECT_SOURCE_DIR}/generator/Factory.h
-    ${PROJECT_SOURCE_DIR}/generator/Factory.cpp
     ${PROJECT_SOURCE_DIR}/generator/FreshVarSupply.h
     ${PROJECT_SOURCE_DIR}/generator/FreshVarSupply.cpp
-    ${PROJECT_SOURCE_DIR}/generator/Plugin.h
-    ${PROJECT_SOURCE_DIR}/generator/Plugin.cpp
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
 
@@ -65,8 +57,14 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/data-structures/VersionedMap.h
 
     # Driver
+    ${PROJECT_SOURCE_DIR}/driver/Driver.h
+    ${PROJECT_SOURCE_DIR}/driver/Driver.cpp
+    ${PROJECT_SOURCE_DIR}/driver/Factory.h
+    ${PROJECT_SOURCE_DIR}/driver/Factory.cpp
     ${PROJECT_SOURCE_DIR}/driver/GenericsInstantiatior.h
     ${PROJECT_SOURCE_DIR}/driver/GenericsInstantiatior.cpp
+    ${PROJECT_SOURCE_DIR}/driver/Plugin.h
+    ${PROJECT_SOURCE_DIR}/driver/Plugin.cpp
 
     # Plugin API files
     ${PROJECT_SOURCE_DIR}/plugin-api/PluginConfig.h
