@@ -82,6 +82,6 @@ February 2019, Pages 136-148.
 Proceedings of the 27th International Conference on **PACT** (Parallel Architectures and Compilation Techniques),
 November 2018, Article No. 31.
 
-This is an online article presenting PsycheC:
+This is an online article about PsycheC:
 
 - [Programming in C with Type Inference](https://www.codeproject.com/Articles/1238603/Programming-in-C-with-Type-Inference)
