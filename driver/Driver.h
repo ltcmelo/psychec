@@ -108,16 +108,18 @@ private:
 
     static Dialect adjustedDialect(const ExecutionOptions& exec);
 
-    TranslationUnit* tu() const;
+    TranslationUnit* unit() const;
     TranslationUnitAST* ast() const;
 
-    std::string augmentSource(const std::string&, const std::vector<std::string>&);
+    void collectIncludes(const std::string& source);
 
     int preprocess(const std::string& source);
     int parse(const std::string& source);
-    int annotateAst();
+    int annotateAST();
     int instantiateGenerics();
     int generateConstraints();
+
+    std::string augmentSource(const std::string&, const std::vector<std::string>&);
 
     const Factory& factory_; // TODO: Will go away.
     Control control_;

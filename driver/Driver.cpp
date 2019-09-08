@@ -80,14 +80,14 @@ Driver::Driver(const Factory& factory)
     , withGenerics_(true)
 {}
 
-TranslationUnit *Driver::tu() const
+TranslationUnit *Driver::unit() const
 {
     return unit_.get();
 }
 
 TranslationUnitAST* Driver::ast() const
 {
-    return tu()->ast()->asTranslationUnit();
+    return unit()->ast()->asTranslationUnit();
 }
 
 Dialect Driver::adjustedDialect(const ExecutionOptions&)
@@ -259,6 +259,8 @@ int Driver::process(const std::string& unitName,
     static DiagnosticCollector collector;
     control_.setDiagnosticCollector(&collector);
 
+    collectIncludes(source);
+
     if (Plugin::isLoaded()) {
         SourceInspector* inspector = Plugin::createInspector();
         auto includes = inspector->identifyIncludes(source);
@@ -268,12 +270,21 @@ int Driver::process(const std::string& unitName,
     return parse(source);
 }
 
+void Driver::collectIncludes(const std::string& source)
+{
+    std::istringstream iss(source);
+    for (std::string line; std::getline(iss, line);) {
+        if (line.find("#include ") == 0)
+            includes_ += line + "\n";
+    }
+}
+
 int Driver::preprocess(const std::string& source)
 {
     CompilerFacade cc(opts_.nativeCC_, opts_.defs_, opts_.undefs_);
     auto r = cc.preprocessSource(source);
     if (!r.first) {
-        writeFile(FileInfo(tu()->fileName()).fileBaseName() + ".i", r.second);
+        writeFile(FileInfo(unit()->fileName()).fileBaseName() + ".i", r.second);
         return parse(r.second);
     }
 
@@ -293,25 +304,25 @@ int Driver::parse(const std::string& source)
         return UnavailableAstError;
 
     honorFlag(opts_.flag_.dumpAst,
-              [this] () { ASTDotWriter(tu()).write(ast(), ".ast.dot"); });
+              [this] () { ASTDotWriter(unit()).write(ast(), ".ast.dot"); });
 
-    ProgramValidator validator(tu(), opts_.flag_.noTypedef);
+    ProgramValidator validator(unit(), opts_.flag_.noTypedef);
     validator.validate(ast());
 
     if (control_.diagnosticCollector()->seenBlockingIssue())
         return InvalidSyntax;
 
-    return annotateAst();
+    return annotateAST();
 }
 
-int Driver::annotateAst()
+int Driver::annotateAST()
 {
     // Create symbols.
-    Binder bind(tu());
+    Binder bind(unit());
     bind(ast(), global_);
 
     // Try to disambiguate syntax ambiguities and normalize the AST according to the resolutions.
-    ASTNormalizer fixer(tu(), !opts_.flag_.noHeuristics);
+    ASTNormalizer fixer(unit(), !opts_.flag_.noHeuristics);
     if (!fixer.normalize(ast()))
         return UnresolvedAmbiguity;
 
@@ -321,7 +332,7 @@ int Driver::annotateAst()
               });
 
     honorFlag(opts_.flag_.dumpAst,
-              [this] () { ASTDotWriter(tu()).write(ast(), ".ast.fixed.dot"); });
+              [this] () { ASTDotWriter(unit()).write(ast(), ".ast.fixed.dot"); });
 
     if (opts_.flag_.disambOnly)
         return OK;
@@ -333,15 +344,15 @@ int Driver::annotateAst()
 
 int Driver::instantiateGenerics()
 {
-    GenericsInstantiatior instantiator(tu());
+    GenericsInstantiatior instantiator(unit());
     bool r = instantiator.quantify(ast(), global_);
     if (!r)
         return generateConstraints();
 
-    auto origSource = readFile(tu()->fileName());
+    auto origSource = readFile(unit()->fileName());
     auto newSource = instantiator.instantiate(origSource);
 
-    writeFile(FileInfo(tu()->fileName()).fileBaseName() + ".poly", newSource);
+    writeFile(FileInfo(unit()->fileName()).fileBaseName() + ".poly", newSource);
 
     // Ignore generics in next pass.
     withGenerics_ = false;
@@ -355,13 +366,13 @@ int Driver::instantiateGenerics()
 int Driver::generateConstraints()
 {
     // Build domain lattice.
-    DomainLattice lattice(tu());
+    DomainLattice lattice(unit());
     lattice.categorize(ast(), global_);
 
     std::ostringstream oss;
     auto writer = factory_.makeConstraintWriter(oss);
 
-    ConstraintGenerator generator(tu(), writer.get());
+    ConstraintGenerator generator(unit(), writer.get());
     generator.employDomainLattice(&lattice);
 
     if (Plugin::isLoaded()) {

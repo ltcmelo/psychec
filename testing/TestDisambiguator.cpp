@@ -57,7 +57,7 @@ void TestDisambiguator::checkAst(const std::string &source, std::string expected
     PSYCHE_EXPECT_TRUE(driver.ast());
 
     std::ostringstream oss;
-    ASTDotWriter(driver.tu()).write(driver.ast(), "test", oss);
+    ASTDotWriter(driver.unit()).write(driver.ast(), "test", oss);
 
     compareText(expected, oss.str());
 }
