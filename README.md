@@ -60,11 +60,7 @@ typedef struct TYPE_1__
 }* T;
 ```
 
-## Features
-
-Besides type inference, PsycheC supports the following features.
-
-### Generic Programming
+## Generic Programming
 
 *This is a work-in-progress, feedback is welcome through [this form](https://forms.gle/oJj1YEhAk3jwvHRo8).*
 
@@ -82,11 +78,11 @@ _Generic void prepend(_Forall(node_t)** head,
 }
 ```
 
-It is not necessary to define neither `node_t` nor `value_t`, they will be inferred.
-This definition if `prepend` applies "for all" kinds of nodes and values.
-This way, you can focus on the *algorithms* - the essence of generic programming.
+It is not necessary to define neither `node_t` nor `value_t`.
+The definition of `prepend` applies "for all" kinds of nodes and values.
+This way, you can focus on the *algorithms* (the essence of generic programming).
 
-Let us create 2 lists, one of `int`'s and another of `point_t`s, and insert an element as their head.
+Let us create 2 lists, one of `int`s and another of `point_t`s, and insert an element as their head.
 
 ```c
 int main()
@@ -102,12 +98,11 @@ int main()
 
 ```
 
-Now, PsycheC understands that there "exists" a (node) type whose value is an `int`,
-and a specialization of `prepend` for such arguments.
-Similarly, a different (node) type for `point_t` "exists" too, with a corresponding
-specialization of `prepend`.
+Now, PsycheC infers that there "exists" a (node) type whose value is an `int`,
+together with an specialization of `prepend` for such arguments.
+A different (node) type for `point_t` "exists" too, with its corresponding specialization of `prepend`.
 
-Check the examples directory for this snippet.
+Check the examples directory for [this snippet](https://github.com/ltcmelo/psychec/blob/master/examples/generic_list.c).
 
 
 ## Publications
