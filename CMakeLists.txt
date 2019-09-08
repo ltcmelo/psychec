@@ -35,6 +35,11 @@ set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/Main.cpp
 
+    # Data structures
+    ${PROJECT_SOURCE_DIR}/adt/Substitution.h
+    ${PROJECT_SOURCE_DIR}/adt/Substitution.cpp
+    ${PROJECT_SOURCE_DIR}/adt/VersionedMap.h
+
     # Constraint generator
     ${PROJECT_SOURCE_DIR}/generator/ConstraintGenerator.h
     ${PROJECT_SOURCE_DIR}/generator/ConstraintGenerator.cpp
@@ -50,11 +55,6 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/FreshVarSupply.cpp
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.h
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
-
-    # Data structures
-    ${PROJECT_SOURCE_DIR}/data-structures/Substitution.h
-    ${PROJECT_SOURCE_DIR}/data-structures/Substitution.cpp
-    ${PROJECT_SOURCE_DIR}/data-structures/VersionedMap.h
 
     # Driver
     ${PROJECT_SOURCE_DIR}/driver/Driver.h
@@ -115,8 +115,8 @@ endforeach()
 include_directories(
     .
     ${PROJECT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/adt
     ${PROJECT_SOURCE_DIR}/command/cxxopts/include
-    ${PROJECT_SOURCE_DIR}/data-structures
     ${PROJECT_SOURCE_DIR}/driver
     ${PROJECT_SOURCE_DIR}/frontend
     ${PROJECT_SOURCE_DIR}/generator
