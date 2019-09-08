@@ -15,9 +15,7 @@ PsycheC is a compiler frontend infrastructure for the C language that is enabled
     cmake CMakeLists.txt  
     make
 
-#### Running the Tests
-
-Tests exist at varying layers.
+### Running the Tests
 
     ./psychecgen -t
     ./CompileTests.sh
