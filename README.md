@@ -47,12 +47,11 @@ Now, if you invoke Cnippet, the compilation succeeds (flag `-f` is for non-comme
 That is because, under the hood, PsycheC will infer the necessary missing definitions.
 
 ```c
-struct T
+typedef struct TYPE_1__
 {
     int value;
-    struct T* next;
-};
-typedef struct T* T;
+    struct TYPE_1__* next;
+}* T;
 ```
 
 ## Testing
