@@ -29,6 +29,7 @@
 #include "DiagnosticCollector.h"
 #include <cstdio>
 #include <memory>
+#include <string>
 #include <vector>
 
 #if !(__cplusplus > 199711L || __GXX_EXPERIMENTAL_CXX0X__ || _MSC_VER >= 1600 || defined( _LIBCPP_VERSION )) \
@@ -63,9 +64,10 @@ public:
 
     const char *firstSourceChar() const;
     const char *lastSourceChar() const;
-    unsigned sourceLength() const;
 
     void setSource(const char *source, unsigned size);
+    unsigned sourceLength() const;
+    std::string fetchSource(AST* ast) const;
 
     bool isTokenized() const;
     void tokenize();

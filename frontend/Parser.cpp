@@ -2239,6 +2239,7 @@ bool Parser::parseQuantifiedTypeSpecifier(SpecifierListAST* &node)
         return false;
 
     QuantifiedTypeSpecifierAST* ast = new (_pool) QuantifiedTypeSpecifierAST;
+    node = new (_pool) SpecifierListAST(ast);
 
     ast->quantifier_token = consumeToken();
     match(T_LPAREN, &ast->lparen_token);
@@ -2247,6 +2248,7 @@ bool Parser::parseQuantifiedTypeSpecifier(SpecifierListAST* &node)
     if (LA() == T_STRUCT)
         classkey_token = consumeToken();
 
+    unsigned startOfName = cursor();
     NameAST* name = 0;
     if (parseName(name)) {
         match(T_RPAREN, &ast->rparen_token);
@@ -2258,12 +2260,14 @@ bool Parser::parseQuantifiedTypeSpecifier(SpecifierListAST* &node)
         } else {
             ast->name = name;
         }
-        node = new (_pool) SpecifierListAST(ast);
         return true;
     }
 
-    error(cursor(), "expected type specifier");
-    return false;
+    error(startOfName, "invalid quantified name");
+    if (skipUntil(T_RPAREN))
+        consumeToken();
+
+    return true;
 }
 
 bool Parser::parseElaboratedTypeSpecifier(SpecifierListAST* &node)
@@ -2287,6 +2291,7 @@ bool Parser::parseElaboratedTypeSpecifier(SpecifierListAST* &node)
             return true;
         }
     }
+
     return false;
 }
 
@@ -2726,6 +2731,7 @@ bool Parser::parseAvailabilityAttribute(ExpressionListAST* &node)
     if (parsePrimaryExpression(name)) {
         *expression_list_ptr = new (_pool) ExpressionListAST;
         (*expression_list_ptr)->value = name;
+        auto comma_token = &(*expression_list_ptr)->delim_token;
         expression_list_ptr = &(*expression_list_ptr)->next;
 
         consumeToken(); // Platform-name separator.
@@ -2747,10 +2753,11 @@ bool Parser::parseAvailabilityAttribute(ExpressionListAST* &node)
 
             *expression_list_ptr = new (_pool) ExpressionListAST;
             (*expression_list_ptr)->value = clause;
+            comma_token = &(*expression_list_ptr)->delim_token;
             expression_list_ptr = &(*expression_list_ptr)->next;
 
             if (LA() == T_COMMA)
-                consumeToken();
+                *comma_token = consumeToken();
         }
     } else {
         error(start, "expected platform-name");
@@ -3931,6 +3938,8 @@ bool Parser::parseSimpleDeclaration(DeclarationAST* &node, ClassSpecifierAST* de
                         && (LA() == T__FORALL || LA() == T__EXISTS)) {
             unsigned startOfTypeSpecifier = cursor();
             if (! parseQuantifiedTypeSpecifier(*decl_specifier_seq_ptr)) {
+                has_complex_type_specifier = true;
+                consumeToken();
                 error(startOfTypeSpecifier, "expected a quantified type specifier");
                 break;
             }

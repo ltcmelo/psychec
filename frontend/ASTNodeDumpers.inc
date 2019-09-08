@@ -46,8 +46,11 @@ virtual bool visit(GnuAttributeAST *ast)
         terminal(ast->lparen_token, ast);
     if (ast->tag_token)
         terminal(ast->tag_token, ast);
-    for (ExpressionListAST *iter = ast->expression_list; iter; iter = iter->next)
+    for (ExpressionListAST *iter = ast->expression_list; iter; iter = iter->next) {
         nonterminal(iter->value);
+        if (iter->delim_token)
+            terminal(iter->delim_token, ast);
+    }
     if (ast->rparen_token)
         terminal(ast->rparen_token, ast);
     return false;

@@ -19,8 +19,9 @@
 
 #include "Substitution.h"
 
-#include <string>
 #include <iostream>
+#include <string>
+#include <vector>
 
 namespace psyche {
 
@@ -38,6 +39,23 @@ std::string apply(const Substitution<std::string>& sub, const std::string& input
     while ((pos = substituted.find(sub.from(), pos)) != std::string::npos) {
         substituted.replace(pos, sub.from().size(), sub.to());
         pos += sub.to().size();
+    }
+    return substituted;
+}
+
+template <>
+std::string applyOnce(const std::vector<Substitution<std::string>>& seq, const std::string& input)
+{
+    std::string substituted = input;
+    std::string::size_type pos = 0;
+    for (const auto& sub : seq) {
+        if (sub == Substitution<std::string>::Trivial)
+            continue;
+
+        if ((pos = substituted.find(sub.from(), pos)) != std::string::npos) {
+            substituted.replace(pos, sub.from().size(), sub.to());
+            pos += sub.to().size();
+        }
     }
     return substituted;
 }

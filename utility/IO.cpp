@@ -27,8 +27,8 @@ namespace psyche {
 std::string readFile(const std::string& fileName)
 {
     std::ifstream ifs(fileName);
-    if (!ifs.is_open()) {
-        std::cerr << "File not found: " << fileName << std::endl;
+    if (!ifs) {
+        std::cout << "File input error: " << fileName << std::endl;
         return std::string();
     }
 
@@ -38,9 +38,14 @@ std::string readFile(const std::string& fileName)
     return ss.str();
 }
 
-void writeFile(const std::string& content, const std::string& fileName)
+void writeFile(const std::string& fileName, const std::string& content)
 {
     std::ofstream ofs(fileName);
+    if (!ofs) {
+        std::cout << "File output error: " << fileName << std::endl;
+        return;
+    }
+
     ofs << content;
     ofs.close();
 }

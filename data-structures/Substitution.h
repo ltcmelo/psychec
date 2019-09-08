@@ -51,6 +51,15 @@ private:
 template <class SubT, class ContentT>
 ContentT apply(const Substitution<SubT>& sub, const ContentT& input);
 
+template <class SeqT, class ContentT>
+ContentT apply(const SeqT& seq, const ContentT& input);
+
+template <class SubT, class ContentT>
+ContentT applyOnce(const Substitution<SubT>& sub, const ContentT& input);
+
+template <class SeqT, class ContentT>
+ContentT applyOnce(const SeqT& seq, const ContentT& input);
+
 template <class T>
 bool operator==(const Substitution<T>& s1, const Substitution<T>& s2)
 {

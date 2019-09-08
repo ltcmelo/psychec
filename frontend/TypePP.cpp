@@ -167,7 +167,7 @@ void TypePP<SyntaxT>::visit(QuantifiedType* ty)
 {
     name(ty->name());
     if (ty->kind() == QuantifiedType::Existential) {
-        text_.append("_E");
+        text_.append("_Ex");
         text_.append(std::to_string(ty->label()));
     }
 }

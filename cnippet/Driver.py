@@ -59,9 +59,12 @@ class Driver:
         else:
             self.psyche.solve(unit)
 
-            # Append the original source to the file we inferred. And if missing stdlib headers
-            # were detected, append this later file to the one with the #includes.
-            concat_file(unit.c_file_path, unit.cnip_file_path)
+            # Append the original source or its polymorphic version to the file we inferred.
+            # If missing stdlib headers were detected, account for the "include list" file.
+            if os.path.isfile(unit.poly_file_path):
+                concat_file(unit.poly_file_path, unit.cnip_file_path)
+            else:
+                concat_file(unit.c_file_path, unit.cnip_file_path)
             if os.path.isfile(unit.inc_file_path):
                 concat_file(unit.cnip_file_path, unit.inc_file_path)
                 copy_file(unit.inc_file_path, unit.cnip_file_path)

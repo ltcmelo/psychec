@@ -38,10 +38,7 @@
 #include "ProgramValidator.h"
 #include "SourceInspector.h"
 #include "Symbols.h"
-#include "Unparser.h"
-
 #include "cxxopts.hpp"
-
 #include <iostream>
 #include <sstream>
 #include <cstring>
@@ -73,12 +70,14 @@ void honorFlag(bool flag, std::function<void ()> f)
         f();
 }
 
+
+
 } // anonymous
 
 Driver::Driver(const Factory& factory)
     : factory_(factory)
     , global_(nullptr)
-    , withGenerics_(false)
+    , withGenerics_(true)
 {}
 
 TranslationUnit *Driver::tu() const
@@ -120,9 +119,12 @@ std::string Driver::augmentSource(const std::string& source, const std::vector<s
         includes_ += "#include <" + h + ">\n";
     includes_ += "\n";
 
-    std::string fullSource = includes_;
-    fullSource += source;
-    return fullSource;
+    std::string augmented = "\n/* psychec: automatic inclusion */\n";
+    augmented += includes_;
+    augmented += "/* psychec end: automatic inclusion */\n\n";
+    augmented += source;
+
+    return augmented;
 }
 
 int Driver::process(int argc, char *argv[])
@@ -221,10 +223,10 @@ int Driver::process(int argc, char *argv[])
     switch (code) {
     case OK:
         if (!constraints_.empty()) {
-            writeFile(constraints_, cmdOpts["output"].as<std::string>());
+            writeFile(cmdOpts["output"].as<std::string>(), constraints_);
             if (!includes_.empty()) {
                 FileInfo info(cmdOpts["output"].as<std::string>());
-                writeFile(includes_, info.fullDir() + "/" + info.fileBaseName() + ".inc");
+                writeFile(info.fullDir() + "/" + info.fileBaseName() + ".inc", includes_);
             }
         }
         break;
@@ -269,9 +271,11 @@ int Driver::process(const std::string& unitName,
 int Driver::preprocess(const std::string& source)
 {
     CompilerFacade cc(opts_.nativeCC_, opts_.defs_, opts_.undefs_);
-    auto res = cc.preprocessSource(source);
-    if (!res.first)
-        return parse(res.second);
+    auto r = cc.preprocessSource(source);
+    if (!r.first) {
+        writeFile(FileInfo(tu()->fileName()).fileBaseName() + ".i", r.second);
+        return parse(r.second);
+    }
 
     return PreprocessingError;
 }
@@ -322,21 +326,30 @@ int Driver::annotateAst()
     if (opts_.flag_.disambOnly)
         return OK;
 
-    if (withGenerics_)
-        return instantiateGenerics();
-    return generateConstraints();
+    return withGenerics_
+                ? instantiateGenerics()
+                : generateConstraints();
 }
 
 int Driver::instantiateGenerics()
 {
-    GenericsInstantiatior expander(tu());
-    std::ostringstream oss;
-    int r = expander.expand(ast(), global_, oss);
-    if (r) {
-        withGenerics_ = false;
-        return parse(oss.str());
-    }
-    return generateConstraints();
+    GenericsInstantiatior instantiator(tu());
+    bool r = instantiator.quantify(ast(), global_);
+    if (!r)
+        return generateConstraints();
+
+    auto origSource = readFile(tu()->fileName());
+    auto newSource = instantiator.instantiate(origSource);
+
+    writeFile(FileInfo(tu()->fileName()).fileBaseName() + ".poly", newSource);
+
+    // Ignore generics in next pass.
+    withGenerics_ = false;
+    opts_.defs_.push_back("_Generic=");
+    opts_.defs_.push_back("'_Forall(v)=v'");
+    opts_.defs_.push_back("'_Exists(v)=v'");
+
+    return preprocess(newSource);
 }
 
 int Driver::generateConstraints()

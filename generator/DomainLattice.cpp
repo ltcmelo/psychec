@@ -207,7 +207,7 @@ DomainLattice::Domain DomainLattice::domainForType(const FullySpecifiedType& ty,
                                                    const Symbol* sym)
 {
     auto debug = [sym] (const char* m) {
-        if (sym)
+        if (sym && sym->name() && sym->name()->identifier())
             printDebug(m, sym->name()->identifier()->chars());
     };
 

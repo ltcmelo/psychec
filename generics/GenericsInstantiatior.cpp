@@ -38,65 +38,41 @@
 using namespace psyche;
 
 GenericsInstantiatior::GenericsInstantiatior(TranslationUnit* unit)
-    : ASTDumper(unit)
-    , isLineStart_(true)
+    : ASTVisitor(unit)
     , typeof_(unit)
     , resolver_(unit)
     , scope_(nullptr)
 {}
 
-int GenericsInstantiatior::expand(AST* ast, psyche::Scope* global, std::ostream& os)
+bool GenericsInstantiatior::quantify(AST* ast, Scope* scope)
 {
-    os_ = &os;
-    switchScope(global);
+    switchScope(scope);
     accept(ast);
 
-    if (funcTbl_.empty())
-        return 0;
+    return !funcTbl_.empty();
+}
 
-    *os_ << "\n/* psychec: generics expansion */\n";
+std::string GenericsInstantiatior::instantiate(const std::string& source) const
+{
+    std::string newSource = source;
+
     for (const auto& f : funcTbl_) {
-        std::ostringstream oss;
-
-        std::ostream* prevStream = os_;
-        os_ = &oss;
-        FunctionDefinitionAST* ast = f.second.ast_;
-        for (SpecifierListAST* it = ast->decl_specifier_list; it; it = it->next)
-            nonterminal(it->value);
-        nonterminal(ast->declarator);
-        nonterminal(ast->function_body);
-        os_ = prevStream;
+        GenericsDeclarationAST* ast = f.second.ast_;
+        const std::string& funcText = translationUnit()->fetchSource(ast);
 
         for (const auto& data : f.second.overloads_) {
-            std::string substituted = oss.str();
+            std::string newFuncText = funcText;
             for (const auto& sub : data.second.subs_)
-                substituted = apply(sub, substituted);
-            *os_ << substituted << "\n";
+                newFuncText = apply(sub, newFuncText);
+            newSource += newFuncText + "\n";
         }
     }
-    *os_ << "/* psychec: end */\n";
 
-    return 1;
+    newSource = applyOnce(subs_, newSource);
+
+    return newSource;
 }
 
-void GenericsInstantiatior::terminal(unsigned tok, AST* ast)
-{
-    auto tokk = translationUnit()->tokenKind(tok);
-    if (tokk == T_EOF_SYMBOL)
-        return;
-
-    if (!isLineStart_)
-        *os_ << " ";
-    *os_ <<  spell(tok);
-    if (tokk == T_RBRACE
-            || tokk == T_LBRACE
-            || tokk == T_SEMICOLON) {
-        *os_ << "\n";
-        isLineStart_ = true;
-    } else {
-        isLineStart_ = false;
-    }
-}
 
 int GenericsInstantiatior::recognize(Function* func, const std::vector<FullySpecifiedType>& argsTypes)
 {
@@ -114,16 +90,21 @@ int GenericsInstantiatior::recognize(Function* func, const std::vector<FullySpec
 
         std::string funcName(func->name()->identifier()->chars());
         it->second.overloads_[key].subs_.emplace_back(funcName, funcName + std::to_string(cnt));
+        it->second.overloads_[key].subs_.emplace_back("_Generic", "");
 
         int cntU = func->argumentCount();
         int cntE = argsTypes.size();
-        PSYCHE_ASSERT(cntU == cntE, return 0, "expected matching argument count");
+        PSYCHE_ASSERT(cntU == cntE, return -1, "expected matching argument count");
 
         for (auto i = 0L; i < func->argumentCount(); ++i) {
-            const FullySpecifiedType& tyU = func->argumentAt(i)->asArgument()->type().coreType();
-            const FullySpecifiedType& tyE = argsTypes[i].coreType();
-            it->second.overloads_[key].subs_.emplace_back(typePP_.print(tyU, scope_),
-                                                          typePP_.print(tyE, scope_));
+            if (!func->argumentAt(i)->asArgument()->type().coreType()->asQuantifiedType())
+                continue;
+
+            auto tyU = typePP_.print(func->argumentAt(i)->asArgument()->type().coreType(), scope_);
+            it->second.overloads_[key].subs_.emplace_back("_Forall(" + tyU + ")", tyU);
+
+            auto tyE = typePP_.print(argsTypes[i].coreType(), scope_);
+            it->second.overloads_[key].subs_.emplace_back(tyU, tyE);
         }
     }
 
@@ -138,6 +119,18 @@ Scope* GenericsInstantiatior::switchScope(Scope* scope)
     return scope;
 }
 
+bool GenericsInstantiatior::visit(GenericsDeclarationAST* ast)
+{
+    auto funcText = translationUnit()->fetchSource(ast);
+    subs_.emplace_back(funcText, "");
+
+    genericsCtx_.push(ast);
+    accept(ast->declaration);
+    genericsCtx_.pop();
+
+    return false;
+}
+
 bool GenericsInstantiatior::visit(FunctionDefinitionAST* ast)
 {
     Function* func = ast->symbol;
@@ -145,17 +138,17 @@ bool GenericsInstantiatior::visit(FunctionDefinitionAST* ast)
         return false;
 
     for (SpecifierListAST* it = ast->decl_specifier_list; it; it = it->next)
-        nonterminal(it->value);
-    nonterminal(ast->declarator);
+        accept(it->value);
+    accept(ast->declarator);
 
     Scope* prevScope = switchScope(func->asScope());
-    nonterminal(ast->function_body);
+    accept(ast->function_body);
     switchScope(prevScope);
 
     if (func->isGeneric() && ast->function_body) {
         if (funcTbl_.find(func) != funcTbl_.end())
             translationUnit()->error(ast->firstToken(), "redefinition of generic function");
-        FunctionInstantions f(ast);
+        FunctionInstantions f(genericsCtx_.top());
         funcTbl_[func] = f;
     }
 
@@ -171,43 +164,29 @@ bool GenericsInstantiatior::visit(SimpleDeclarationAST* ast)
     }
 
     for (SpecifierListAST *it = ast->decl_specifier_list; it; it = it->next) {
-        if (it->value->asQuantifiedTypeSpecifier())
-            *os_ << "  " << typePP_.print(coreTy, scope_);
-        else
-            nonterminal(it->value);
+        if (it->value->asQuantifiedTypeSpecifier()) {
+            QuantifiedTypeSpecifierAST* specifier = it->value->asQuantifiedTypeSpecifier();
+            subs_.emplace_back(translationUnit()->fetchSource(specifier),
+                               typePP_.print(coreTy, scope_));
+        }
     }
-
-    for (DeclaratorListAST *it = ast->declarator_list; it; it = it->next) {
-        nonterminal(it->value);
-        if (it->delim_token)
-            terminal(it->delim_token, ast);
-    }
-
-    if (ast->semicolon_token)
-        terminal(ast->semicolon_token, ast);
 
     return false;
 }
 
 bool GenericsInstantiatior::visit(QuantifiedTypeSpecifierAST* ast)
 {
-    nonterminal(ast->name);
+    accept(ast->name);
 
     return false;
 }
 
 bool GenericsInstantiatior::visit(CompoundStatementAST* ast)
 {
-    if (ast->lbrace_token)
-        terminal(ast->lbrace_token, ast);
-
     Scope* prevScope = switchScope(ast->symbol);
     for (StatementListAST *it = ast->statement_list; it; it = it->next)
-        nonterminal(it->value);
+        accept(it->value);
     switchScope(prevScope);
-
-    if (ast->rbrace_token)
-        terminal(ast->rbrace_token, ast);
 
     return false;
 }
@@ -215,10 +194,12 @@ bool GenericsInstantiatior::visit(CompoundStatementAST* ast)
 bool GenericsInstantiatior::visit(CallAST* ast)
 {
     Symbol* sym = resolver_.resolve(ast->base_expression, scope_);
-    if (!sym || !sym->asFunction() || !sym->asFunction()->isGeneric()) {
-        Base::visit(ast);
-        return false;
-    }
+    if (!sym || !sym->asFunction() || !sym->asFunction()->isGeneric())
+        return true;
+
+    Function* func = sym->asFunction();
+    if (funcTbl_.find(func) == funcTbl_.end())
+        return true;
 
     std::vector<FullySpecifiedType> paramsTypes;
     for (ExpressionListAST* it = ast->expression_list; it; it = it->next) {
@@ -226,21 +207,11 @@ bool GenericsInstantiatior::visit(CallAST* ast)
         paramsTypes.push_back(ty);
     }
 
-    Function* func = sym->asFunction();
-    int n = recognize(func, paramsTypes);
+    int cnt = recognize(sym->asFunction(), paramsTypes);
 
-    nonterminal(ast->base_expression);
-    *os_ << std::to_string(n);
+    std::string funcName(func->name()->identifier()->chars());
+    subs_.emplace_back(translationUnit()->fetchSource(ast->base_expression),
+                       funcName + std::to_string(cnt));
 
-    if (ast->lparen_token)
-        terminal(ast->lparen_token, ast);
-    for (ExpressionListAST* it = ast->expression_list; it; it = it->next) {
-        nonterminal(it->value);
-        if (it->delim_token)
-            terminal(it->delim_token, ast);
-    }
-    if (ast->rparen_token)
-        terminal(ast->rparen_token, ast);
-
-    return false;
+    return true;
 }

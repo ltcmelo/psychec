@@ -19,7 +19,7 @@
 #ifndef PSYCHE_GENERICS_INSTANTIATIOR_H__
 #define PSYCHE_GENERICS_INSTANTIATIOR_H__
 
-#include "ASTDumper.h"
+#include "ASTVisitor.h"
 #include "ExpressionResolver.h"
 #include "ExpressionTypeEvaluator.h"
 #include "Substitution.h"
@@ -32,18 +32,16 @@
 
 namespace psyche {
 
-class GenericsInstantiatior final : public ASTDumper
+class GenericsInstantiatior final : public ASTVisitor
 {
 public:
     GenericsInstantiatior(TranslationUnit* unit);
 
-    int expand(AST* ast, Scope* global, std::ostream& os);
+    bool quantify(AST* ast, Scope* scope);
+    std::string instantiate(const std::string& source) const;
 
 private:
-    using Base = ASTDumper;
-
-    std::ostream* os_;
-    bool isLineStart_;
+    using Base = ASTVisitor;
 
     ExpressionTypeEvaluator typeof_;
     ExpressionResolver resolver_;
@@ -54,13 +52,15 @@ private:
 
     int recognize(Function* func, const std::vector<FullySpecifiedType>& argsTypes);
 
+    std::vector<Substitution<std::string>> subs_;
+
     struct FunctionInstantions
     {
-        FunctionInstantions(FunctionDefinitionAST* ast = nullptr)
+        FunctionInstantions(GenericsDeclarationAST* ast = nullptr)
             : ast_(ast)
         {}
 
-        FunctionDefinitionAST* ast_;
+        GenericsDeclarationAST* ast_;
 
         struct InstanceData
         {
@@ -71,9 +71,10 @@ private:
     };
     std::unordered_map<Function*, FunctionInstantions> funcTbl_;
 
-    void terminal(unsigned tok, AST* ast) override;
+    std::stack<GenericsDeclarationAST*> genericsCtx_;
 
     // Declarations
+    bool visit(GenericsDeclarationAST* ast) override;
     bool visit(FunctionDefinitionAST* ast) override;
     bool visit(SimpleDeclarationAST* ast) override;
 
@@ -84,7 +85,7 @@ private:
     bool visit(CompoundStatementAST* ast) override;
 
     // Expressions
-    bool visit(CallAST *ast) override;
+    bool visit(CallAST* ast) override;
 };
 
 } // namespace psyche

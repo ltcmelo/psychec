@@ -2393,12 +2393,12 @@ unsigned QuantifiedTypeSpecifierAST::firstToken() const
 unsigned QuantifiedTypeSpecifierAST::lastToken() const
 {
     if (rparen_token)
-        return rparen_token;
+        return rparen_token + 1;
     if (name)
         if (unsigned candidate = name->firstToken())
             return candidate;
     if (lparen_token)
-        return lparen_token;
+        return lparen_token + 1;
     if (quantifier_token)
         return quantifier_token + 1;
     return 1;

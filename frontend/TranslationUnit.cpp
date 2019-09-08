@@ -95,6 +95,16 @@ void TranslationUnit::setSource(const char *source, unsigned size)
     _pool = new MemoryPool();
 }
 
+std::string TranslationUnit::fetchSource(AST* ast) const
+{
+    Token firstToken = tokenAt(ast->firstToken());
+    Token lastToken = tokenAt(ast->lastToken() - 1);
+    auto begin = firstSourceChar() + firstToken.bytesBegin();
+    auto end = firstSourceChar() + lastToken.bytesEnd();
+
+    return std::string(begin, end - begin);
+}
+
 const char *TranslationUnit::spell(unsigned index) const
 {
     if (! index)

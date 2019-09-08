@@ -14,7 +14,7 @@ from Singleton import *
 
 
 def trace_extern_cmd(caller_id, cmd):
-    _trace(caller_id, '$' + cmd, TraceManager.INFO)
+    _trace(caller_id, cmd, TraceManager.INFO)
 
 
 def trace_op(caller_id, op):
