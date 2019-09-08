@@ -15,6 +15,14 @@ PsycheC is a compiler frontend infrastructure for the C language that is enabled
     cmake CMakeLists.txt  
     make
 
+### Running the Tests
+
+Tests exist at varying layers.
+
+    ./psychecgen -t
+    ./CompileTests.sh
+    cd solver && stack test
+
 ## Cnippet
 
 The simplest way to use PsycheC is through the [Cnippet](http://www.cnippet.cc) compiler adaptor.
@@ -53,14 +61,6 @@ typedef struct TYPE_1__
     struct TYPE_1__* next;
 }* T;
 ```
-
-## Testing
-
-Tests exist at varying layers. Currently, this is the best you can do.
-
-    ./psychecgen -t
-    ./CompileTests.sh
-    cd solver && stack test && cd -
 
 ## Publications
 
