@@ -64,9 +64,9 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/data-structures/Substitution.cpp
     ${PROJECT_SOURCE_DIR}/data-structures/VersionedMap.h
 
-    # Generics
-    ${PROJECT_SOURCE_DIR}/generics/GenericsInstantiatior.h
-    ${PROJECT_SOURCE_DIR}/generics/GenericsInstantiatior.cpp
+    # Driver
+    ${PROJECT_SOURCE_DIR}/driver/GenericsInstantiatior.h
+    ${PROJECT_SOURCE_DIR}/driver/GenericsInstantiatior.cpp
 
     # Plugin API files
     ${PROJECT_SOURCE_DIR}/plugin-api/PluginConfig.h
@@ -117,23 +117,22 @@ endforeach()
 include_directories(
     .
     ${PROJECT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/generator
-    ${PROJECT_SOURCE_DIR}/generics
+    ${PROJECT_SOURCE_DIR}/command/cxxopts/include
+    ${PROJECT_SOURCE_DIR}/data-structures
+    ${PROJECT_SOURCE_DIR}/driver
     ${PROJECT_SOURCE_DIR}/frontend
-    ${PROJECT_SOURCE_DIR}/static-analysis
+    ${PROJECT_SOURCE_DIR}/generator
+    ${PROJECT_SOURCE_DIR}/plugin-api
+    ${PROJECT_SOURCE_DIR}/range-analysis
+    ${PROJECT_SOURCE_DIR}/testing
     ${PROJECT_SOURCE_DIR}/tools
     ${PROJECT_SOURCE_DIR}/utility
-    ${PROJECT_SOURCE_DIR}/data-structures
-    ${PROJECT_SOURCE_DIR}/testing
-    ${PROJECT_SOURCE_DIR}/plugin-api
-    ${PROJECT_SOURCE_DIR}/command/cxxopts/include
 )
 
 set(GENERATOR psychecgen)
 add_executable(${GENERATOR} ${PSYCHEC_SOURCES})
 
 target_link_libraries(${GENERATOR} psychecfe dl)
-
 
 # Install setup
 install(TARGETS ${GENERATOR}
