@@ -72,7 +72,7 @@ It has been introduced at:
 Proceedings of the ACM on Programming Languages, Volume 2 Issue **POPL** (Principles of Programming Languages),
 January 2018, Article No. 29.
 
-Below is a list of papers that cite PsycheC:
+Below is a list of papers whose developed tooling rely on PsycheC:
 
 - [Generation of in-bounds inputs for arrays in memory-unsafe languages](https://dl.acm.org/citation.cfm?id=3314890);
 Proceedings of the 2019 IEEE/ACM International Symposium on **CGO** (Code Generation and Optimization),
@@ -81,9 +81,6 @@ February 2019, Pages 136-148.
 - [Automatic annotation of tasks in structured code](https://dl.acm.org/citation.cfm?id=3243200);
 Proceedings of the 27th International Conference on **PACT** (Parallel Architectures and Compilation Techniques),
 November 2018, Article No. 31.
-
-- [The computer for the 21st century: present security & privacy challenges](https://link.springer.com/article/10.1186/s13174-018-0095-2);
-Journal of Internet Services and Applications, December 2018, 9:24.
 
 This is an online article presenting PsycheC:
 
