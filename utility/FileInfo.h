@@ -64,6 +64,15 @@ public:
     std::string fileBaseName() const;
 
     /*!
+     * \brief fullFileBaseName
+     * \return
+     *
+     * According to constructor's assumption, return is:
+     * "/home/user/project/code"
+     */
+    std::string fullFileBaseName() const;
+
+    /*!
      * \brief fullFileName
      * \return
      *

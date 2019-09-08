@@ -225,8 +225,8 @@ int Driver::process(int argc, char *argv[])
         if (!constraints_.empty()) {
             writeFile(cmdOpts["output"].as<std::string>(), constraints_);
             if (!includes_.empty()) {
-                FileInfo info(cmdOpts["output"].as<std::string>());
-                writeFile(info.fullDir() + "/" + info.fileBaseName() + ".inc", includes_);
+                FileInfo fi(cmdOpts["output"].as<std::string>());
+                writeFile(fi.fullFileBaseName() + ".inc", includes_);
             }
         }
         break;
@@ -284,7 +284,8 @@ int Driver::preprocess(const std::string& source)
     CompilerFacade cc(opts_.nativeCC_, opts_.defs_, opts_.undefs_);
     auto r = cc.preprocessSource(source);
     if (!r.first) {
-        writeFile(FileInfo(unit()->fileName()).fileBaseName() + ".i", r.second);
+
+        writeFile(FileInfo(unit()->fileName()).fullFileBaseName() + ".i", r.second);
         return parse(r.second);
     }
 
@@ -352,7 +353,7 @@ int Driver::instantiateGenerics()
     auto origSource = readFile(unit()->fileName());
     auto newSource = instantiator.instantiate(origSource);
 
-    writeFile(FileInfo(unit()->fileName()).fileBaseName() + ".poly", newSource);
+    writeFile(FileInfo(unit()->fileName()).fullFileBaseName() + ".poly", newSource);
 
     // Ignore generics in next pass.
     withGenerics_ = false;

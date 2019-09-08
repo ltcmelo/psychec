@@ -49,6 +49,11 @@ std::string FileInfo::fileBaseName() const
     return impl_->fullFileName_.substr(pos1 + 1, pos2 - (pos1 + 1));
 }
 
+std::string FileInfo::fullFileBaseName() const
+{
+    return fullDir() + "/" + fileBaseName();
+}
+
 std::string FileInfo::fullFileName() const
 {
     return impl_->fullFileName_;
