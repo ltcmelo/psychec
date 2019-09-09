@@ -5,9 +5,14 @@ PsycheC is a compiler frontend infrastructure for the C language that is enabled
 
 ## Requirements
 
+To *build* PsycheC:
+
 * Cmake
 * C++14 compiler
 * Haskell Stack
+
+To *use* PsycheC (once the binaries are available):
+
 * Python 3
 
 ## Building
