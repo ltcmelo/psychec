@@ -11,7 +11,7 @@ To *build* PsycheC:
 * C++14 compiler
 * Haskell Stack
 
-To *use* PsycheC (or download binaries form [here](http://www.cnippet.cc/)):
+To *use* PsycheC (or download [here](http://www.cnippet.cc/)):
 
 * Python 3
 
