@@ -129,6 +129,11 @@ February 2019, Pages 136-148.
 Proceedings of the 27th International Conference on **PACT** (Parallel Architectures and Compilation Techniques),
 November 2018, Article No. 31.
 
+- [Synthesis of Benchmarks for the C Programming Language by Mining Software Repositories](https://dl.acm.org/citation.cfm?id=3355378.3355380);
+Proceedings of the XXIII Brazilian Symposium on Programming Languages,
+September 2019.
+
+
 This is an online article about PsycheC:
 
 - [Programming in C with Type Inference](https://www.codeproject.com/Articles/1238603/Programming-in-C-with-Type-Inference)
