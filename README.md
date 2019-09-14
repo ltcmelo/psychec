@@ -125,21 +125,21 @@ Check the examples directory for [this snippet](https://github.com/ltcmelo/psych
 PsycheC is an ongoing research project.
 It has been presented at:
 
-- [Inference of static semantics for incomplete C programs](https://dl.acm.org/citation.cfm?id=3158117);
+- [Inference of static semantics for incomplete C programs](https://dl.acm.org/citation.cfm?id=3158117)<br/>
 Proceedings of the ACM on Programming Languages, Volume 2 Issue **POPL** (Principles of Programming Languages),
 January 2018, Article No. 29.
 
 Below is a list of papers whose developed tooling rely on PsycheC:
 
-- [Generation of in-bounds inputs for arrays in memory-unsafe languages](https://dl.acm.org/citation.cfm?id=3314890);
+- [Generation of in-bounds inputs for arrays in memory-unsafe languages](https://dl.acm.org/citation.cfm?id=3314890)<br/>
 Proceedings of the 2019 IEEE/ACM International Symposium on **CGO** (Code Generation and Optimization),
 February 2019, Pages 136-148.
 
-- [Automatic annotation of tasks in structured code](https://dl.acm.org/citation.cfm?id=3243200);
+- [Automatic annotation of tasks in structured code](https://dl.acm.org/citation.cfm?id=3243200)<br/>
 Proceedings of the 27th International Conference on **PACT** (Parallel Architectures and Compilation Techniques),
 November 2018, Article No. 31.
 
-- [Synthesis of Benchmarks for the C Programming Language by Mining Software Repositories](https://dl.acm.org/citation.cfm?id=3355378.3355380);
+- [Synthesis of Benchmarks for the C Programming Language by Mining Software Repositories](https://dl.acm.org/citation.cfm?id=3355378.3355380)<br/>
 Proceedings of the XXIII Brazilian Symposium on Programming Languages,
 September 2019.
 
