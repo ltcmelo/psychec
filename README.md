@@ -3,6 +3,15 @@
 PsycheC is a compiler frontend infrastructure for the C language that is enabled with an ML/Haskell-style (unification-based) type inference engine.
 [This online interface](http://cuda.dcc.ufmg.br/psyche-c/) illustrates the essential functionality of PsycheC.
 
+Applications:
+
+- Compiling a code snippet (e.g., retrieved from a bug tracker) without a build environment.
+- Statically analysing a partial program, by isolating uninteresting dependencies.
+- Enabling static analysis tools to work upon `#include` failures.
+- Generating test-input data for functions in an independent manner.
+- Quick prototyping of an algorithm without the definition of concrete types.
+- Be creative!
+
 ## Requirements
 
 To *build* PsycheC:
@@ -134,6 +143,6 @@ Proceedings of the XXIII Brazilian Symposium on Programming Languages,
 September 2019.
 
 
-This is an online article about PsycheC:
+An small article about PsycheC:
 
 - [Programming in C with Type Inference](https://www.codeproject.com/Articles/1238603/Programming-in-C-with-Type-Inference)
