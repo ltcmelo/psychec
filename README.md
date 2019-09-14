@@ -10,7 +10,8 @@ Applications:
 - Enabling static analysis tools upon `#include` failures - common in cross-platform/embedded development.
 - Generating test-input data for functions in an independent manner.
 - Quick prototyping of an algorithm without the definition of concrete types.
-- Be creative!
+
+Be creative!
 
 ## Requirements
 
