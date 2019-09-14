@@ -7,7 +7,7 @@ Applications:
 
 - Compiling a code snippet (e.g., retrieved from a bug tracker) without a build environment.
 - Statically analysing a partial program, by isolating uninteresting dependencies.
-- Enabling static analysis tools to work upon `#include` failures - common in cross-platform/embedded development.
+- Enabling static analysis tools upon `#include` failures - common in cross-platform/embedded development.
 - Generating test-input data for functions in an independent manner.
 - Quick prototyping of an algorithm without the definition of concrete types.
 - Be creative!
