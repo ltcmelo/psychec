@@ -89,6 +89,7 @@ newtype Ident = Ident { _x :: String } deriving (Eq, Ord, Show)
 
 data Type = IntTy
           | DoubleTy
+          | VoidTy
           | PtrTy Type
           | ConstTy Type
           | ArrowTy Type [Type]
@@ -172,6 +173,7 @@ instance Substitutable Type where
   apply Trivial t = t
   apply s t@(IntTy) = t
   apply s t@(DoubleTy) = t
+  apply s t@(VoidTy) = t
   apply s (PtrTy t) = PtrTy (apply s t)
   apply s (ConstTy t) = ConstTy (apply s t)
   apply s (ArrowTy rt pt) = ArrowTy (apply s rt) (apply s pt)
@@ -180,6 +182,7 @@ instance Substitutable Type where
   apply (st :-> t) t'@(TyVar st') = if st == st' then t else t'
   ftv IntTy = []
   ftv DoubleTy = []
+  ftv VoidTy = []
   ftv (PtrTy t) = ftv t
   ftv (ConstTy t) = ftv t
   ftv (ArrowTy rt pt) = ftv rt `union` ftv pt
@@ -225,6 +228,7 @@ newtype TypeId = TypeId { _id :: String } deriving (Eq, Ord, Show)
 hat :: Type -> TypeId
 hat IntTy = TypeId "int"
 hat DoubleTy = TypeId "double"
+hat VoidTy = TypeId "void"
 hat (PtrTy t) = TypeId $ (_id (hat t) ++ "*")
 hat (ConstTy t) = TypeId $ "const " ++ (_id (hat t))
 hat (ArrowTy rt pt) = TypeId $
@@ -311,8 +315,8 @@ satisfies (phi, psi, theta) (k1 :&: k2) =
   let check1 = satisfies (phi, psi, theta) k1
       check2 = satisfies (phi, psi, theta) k2
   in if trace_Sema
-     then trace ("[trace Sema] " ++ show (ppK k1)) check1
-          && trace ("[trace Sema] " ++ show (ppK k2)) check2
+     then trace ("#satisfies# " ++ show (ppK k1)) check1
+          && trace ("#satisfies#" ++ show (ppK k2)) check2
      else check1 && check2
 
 -- | KEx
@@ -401,6 +405,7 @@ isSubTy phi t@(PtrTy t1) t'@(PtrTy t2) =
   isSubTyPtr phi t1 t2
 isSubTy _ IntTy IntTy = True
 isSubTy _ DoubleTy DoubleTy = True
+isSubTy _ VoidTy VoidTy = True
 isSubTy _ IntTy DoubleTy = True
 isSubTy _ (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTy _ t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
@@ -427,10 +432,11 @@ isSubTyPtr phi (PtrTy t1) (PtrTy t2) =
   isSubTyPtr phi t2 t2
 isSubTyPtr _ IntTy IntTy = True
 isSubTyPtr _ DoubleTy DoubleTy = True
+isSubTyPtr _ VoidTy VoidTy = True
 isSubTyPtr _ (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTyPtr _ t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
 isSubTyPtr phi t1 t2 =
-  error $ "unknown (reference) subtyping relation " ++
+  error $ "unknown (pointer) subtyping relation " ++
   show (ppK t1) ++ "<:" ++ show (ppK t2)
 
 
@@ -447,6 +453,7 @@ isSubTy' (PtrTy t1) (PtrTy t2) =
   isSubTyPtr' t1 t2
 isSubTy' IntTy IntTy = True
 isSubTy' DoubleTy DoubleTy = True
+isSubTy' VoidTy VoidTy = True
 isSubTy' IntTy DoubleTy = True
 isSubTy' (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTy' t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
@@ -465,10 +472,11 @@ isSubTyPtr' (PtrTy t1) (PtrTy t2) =
   isSubTyPtr' t2 t2
 isSubTyPtr' IntTy IntTy = True
 isSubTyPtr' DoubleTy DoubleTy = True
+isSubTyPtr' VoidTy VoidTy = True
 isSubTyPtr' (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTyPtr' t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
 isSubTyPtr' t1 t2 =
-  error $ "unknown (reference/ground) subtyping relation " ++
+  error $ "unknown (pointer/ground) subtyping relation " ++
   show (ppK t1) ++ "<:" ++ show (ppK t2)
 
 -- | Whether we have an identity relation.
@@ -833,20 +841,20 @@ instance UnifiableC Type where
   uC (TyVar st) t2 =
     let s = st :-> t2
     in if (trace_UC)
-       then trace("[trace uC] " ++ show (ppK s)) [s]
+       then trace("#uC# " ++ show (ppK s)) [s]
        else [s]
   uC t1 t2@(TyVar _) = uC t2 t1
   uC IntTy IntTy = [Trivial]
   uC DoubleTy DoubleTy = [Trivial]
   uC t1@(NamedTy x1) t2@(NamedTy x2)
     | x1 == x2 = [Trivial]
-    | otherwise = error $ "can't unify named types " ++
+    | otherwise = error $ "can't (classic) unify named types " ++
                   (show $ ppK t1) ++ "::" ++ (show $ ppK t2)
   uC (ConstTy t1) (ConstTy t2) = uC t1 t2
   uC (PtrTy t1) (PtrTy t2) = uC t1 t2
   uC t1@(RecTy fs1 x1) t2@(RecTy fs2 x2) = undefined
   uC (ArrowTy rt1 [pt1]) (ArrowTy rt2 [pt2]) = undefined
-  uC t1 t2 = error $ "unknown unification from " ++
+  uC t1 t2 = error $ "unknown (classic) unification from " ++
              (show $ ppK t1) ++ " to " ++ (show $ ppK t2)
 
 
@@ -986,7 +994,7 @@ preprocess cfg@(Config { k = k'@(t1 :<=: t2), kI } ) =
 preprocess cfg@(Config { k = T }) =
   if (not trace_PP)
   then cfg
-  else trace ("[trace PP]\n" ++ showConfig cfg ++ "\n") cfg
+  else trace (showConfig cfg ++ "\n") cfg
 
 trace_PP = False
 
@@ -995,7 +1003,7 @@ trace_PP = False
 -- Solver: 1st unification round --
 -----------------------------------
 
-trace_U = False
+trace_U = True
 
 unifyEq :: Config -> Config
 
@@ -1017,7 +1025,7 @@ unifyEq cfg@(Config { kE = k@(t1 :=: t2):kE_ }) =
       rw = unifyEq (checkEntail (cfg, cfg') k)
   in if (not trace_U)
      then rw
-     else trace("[uni-eq]: " ++ show (ppK s)) rw
+     else trace("uC: " ++ show (ppK s) ++ "\n... " ++ show (ppK kE') ++ "\n") rw
 
 -- | UE-end
 unifyEq cfg@(Config { kE = [] }) = cfg
@@ -1027,13 +1035,21 @@ unifyEq cfg@(Config { kE = [] }) = cfg
 -- Solver: 2nd unification round --
 -----------------------------------
 
-unifyIq :: Config -> Config
+--treatAnyPtr :: Config -> Config
+
+
+
+
+splitOrder :: Config -> Config
 
 -- | SO
 splitOrder cfg =
   let (kI', kW') = splitWob ((kI cfg) ++ [B]) []
       kI'' = orderSub (kI' ++ [B]) []
   in cfg { kI = kI'', kW = kW'}
+
+unifyIq :: Config -> Config
+
 
 -- | UI-base
 unifyIq cfg@(Config {
@@ -1056,14 +1072,15 @@ unifyIq cfg@(Config {
       rw = unifyIq (checkEntail (cfg, cfg') k)
   in if (not trace_U)
      then rw
-     else trace("[uni-iq]: " ++ show (ppK s)) rw
+     else trace("uS: " ++ show (ppK s) ++ "\n... " ++ show (ppK kI') ++ "\n") rw
 
 -- | UI-end
 unifyIq cfg = cfg
 
 
--- | UW-base
 unifyWb ::  Config -> Config
+
+-- | UW-base
 unifyWb cfg@(Config { kI = k@(t1 :<=: t2):kI_ }) =
   let s = uS t1 t2 Relax
       phi' = foreachValue s (phi cfg)
@@ -1079,7 +1096,7 @@ unifyWb cfg@(Config { kI = k@(t1 :<=: t2):kI_ }) =
       rw = unifyWb (checkEntail (cfg, cfg') k)
   in if (not trace_U)
      then rw
-     else trace("[uni-w]: " ++ show (ppK s)) rw
+     else trace("uS (wobbly): " ++ show (ppK s) ++ "\n... " ++ show (ppK kI_') ++ "\n") rw
 
 -- | UW-end
 unifyWb cfg = cfg
@@ -1657,7 +1674,7 @@ langDef = emptyDef {
   Token.identStart = letter,
   Token.identLetter = alphaNum <|> char '_',
   Token.reservedNames =
-      [ "int", "double", "const", "return", "struct", "typedef" ],
+      [ "int", "double", "void", "const", "return", "struct", "typedef" ],
   Token.reservedOpNames =
       [ "*", "/", "+", "||", "=", "&", "->" ]
   }
@@ -1710,6 +1727,9 @@ intTyParser = IntTy <$ reserved "int"
 
 fpTyParser :: Parser Type
 fpTyParser = DoubleTy <$ reserved "double"
+
+voidTyParser :: Parser Type
+voidTyParser = VoidTy <$ reserved "void"
 
 namedTyParser :: Parser Type
 namedTyParser = f <$> (optionMaybe (reserved "struct")) <*> identParser
