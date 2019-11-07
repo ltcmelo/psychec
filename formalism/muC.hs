@@ -72,7 +72,7 @@ compile src =
       debug "semantics" (if ok then "OK" else error "does NOT hold\n")
 
       let ts = verifyTyping cfg' Map.empty p
-      debug "typing" ("OK")
+      debug "typing" ("OK " ++ show ts)
 
       let preamble = rewriteInC (theta Map.\\ theta_i)
           src' = preamble ++ src
@@ -89,6 +89,7 @@ newtype Ident = Ident { _x :: String } deriving (Eq, Ord, Show)
 
 data Type = IntTy
           | DoubleTy
+          | VoidTy
           | PtrTy Type
           | ConstTy Type
           | ArrowTy Type [Type]
@@ -172,6 +173,7 @@ instance Substitutable Type where
   apply Trivial t = t
   apply s t@(IntTy) = t
   apply s t@(DoubleTy) = t
+  apply s t@(VoidTy) = t
   apply s (PtrTy t) = PtrTy (apply s t)
   apply s (ConstTy t) = ConstTy (apply s t)
   apply s (ArrowTy rt pt) = ArrowTy (apply s rt) (apply s pt)
@@ -180,6 +182,7 @@ instance Substitutable Type where
   apply (st :-> t) t'@(TyVar st') = if st == st' then t else t'
   ftv IntTy = []
   ftv DoubleTy = []
+  ftv VoidTy = []
   ftv (PtrTy t) = ftv t
   ftv (ConstTy t) = ftv t
   ftv (ArrowTy rt pt) = ftv rt `union` ftv pt
@@ -225,6 +228,7 @@ newtype TypeId = TypeId { _id :: String } deriving (Eq, Ord, Show)
 hat :: Type -> TypeId
 hat IntTy = TypeId "int"
 hat DoubleTy = TypeId "double"
+hat VoidTy = TypeId "void"
 hat (PtrTy t) = TypeId $ (_id (hat t) ++ "*")
 hat (ConstTy t) = TypeId $ "const " ++ (_id (hat t))
 hat (ArrowTy rt pt) = TypeId $
@@ -311,8 +315,8 @@ satisfies (phi, psi, theta) (k1 :&: k2) =
   let check1 = satisfies (phi, psi, theta) k1
       check2 = satisfies (phi, psi, theta) k2
   in if trace_Sema
-     then trace ("[trace Sema] " ++ show (ppK k1)) check1
-          && trace ("[trace Sema] " ++ show (ppK k2)) check2
+     then trace ("satisfies " ++ show (ppK k1)) check1
+          && trace ("satisfies " ++ show (ppK k2)) check2
      else check1 && check2
 
 -- | KEx
@@ -401,6 +405,7 @@ isSubTy phi t@(PtrTy t1) t'@(PtrTy t2) =
   isSubTyPtr phi t1 t2
 isSubTy _ IntTy IntTy = True
 isSubTy _ DoubleTy DoubleTy = True
+isSubTy _ VoidTy VoidTy = True
 isSubTy _ IntTy DoubleTy = True
 isSubTy _ (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTy _ t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
@@ -423,14 +428,13 @@ isSubTyPtr phi (ConstTy t1) (ConstTy t2) =
   isSubTyPtr phi t1 t2
 isSubTyPtr phi t1 (ConstTy t2) =
   isSubTyPtr phi t1 t2
-isSubTyPtr phi (PtrTy t1) (PtrTy t2) =
-  isSubTyPtr phi t2 t2
+isSubTyPtr _ _ VoidTy = True
 isSubTyPtr _ IntTy IntTy = True
 isSubTyPtr _ DoubleTy DoubleTy = True
 isSubTyPtr _ (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTyPtr _ t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
 isSubTyPtr phi t1 t2 =
-  error $ "unknown (reference) subtyping relation " ++
+  error $ "unknown (pointer) subtyping relation " ++
   show (ppK t1) ++ "<:" ++ show (ppK t2)
 
 
@@ -447,6 +451,7 @@ isSubTy' (PtrTy t1) (PtrTy t2) =
   isSubTyPtr' t1 t2
 isSubTy' IntTy IntTy = True
 isSubTy' DoubleTy DoubleTy = True
+isSubTy' VoidTy VoidTy = True
 isSubTy' IntTy DoubleTy = True
 isSubTy' (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTy' t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
@@ -463,12 +468,13 @@ isSubTyPtr' t1 (ConstTy t2) =
   isSubTyPtr' t1 t2
 isSubTyPtr' (PtrTy t1) (PtrTy t2) =
   isSubTyPtr' t2 t2
+isSubTyPtr' _ VoidTy = True
 isSubTyPtr' IntTy IntTy = True
 isSubTyPtr' DoubleTy DoubleTy = True
 isSubTyPtr' (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTyPtr' t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
 isSubTyPtr' t1 t2 =
-  error $ "unknown (reference/ground) subtyping relation " ++
+  error $ "unknown (pointer/ground) subtyping relation " ++
   show (ppK t1) ++ "<:" ++ show (ppK t2)
 
 -- | Whether we have an identity relation.
@@ -833,20 +839,20 @@ instance UnifiableC Type where
   uC (TyVar st) t2 =
     let s = st :-> t2
     in if (trace_UC)
-       then trace("[trace uC] " ++ show (ppK s)) [s]
+       then trace("uC " ++ show (ppK s)) [s]
        else [s]
   uC t1 t2@(TyVar _) = uC t2 t1
   uC IntTy IntTy = [Trivial]
   uC DoubleTy DoubleTy = [Trivial]
   uC t1@(NamedTy x1) t2@(NamedTy x2)
     | x1 == x2 = [Trivial]
-    | otherwise = error $ "can't unify named types " ++
+    | otherwise = error $ "can't (classic) unify named types " ++
                   (show $ ppK t1) ++ "::" ++ (show $ ppK t2)
   uC (ConstTy t1) (ConstTy t2) = uC t1 t2
   uC (PtrTy t1) (PtrTy t2) = uC t1 t2
   uC t1@(RecTy fs1 x1) t2@(RecTy fs2 x2) = undefined
   uC (ArrowTy rt1 [pt1]) (ArrowTy rt2 [pt2]) = undefined
-  uC t1 t2 = error $ "unknown unification from " ++
+  uC t1 t2 = error $ "unknown (classic) unification from " ++
              (show $ ppK t1) ++ " to " ++ (show $ ppK t2)
 
 
@@ -858,17 +864,20 @@ instance UnifiableC Type where
   uS IntTy IntTy _ = [Trivial]
   uS IntTy DoubleTy Relax = [Trivial]
   uS DoubleTy DoubleTy _ = [Trivial]
+  uS VoidTy VoidTy _ = [Trivial]
   uS t1@(NamedTy x1) t2@(NamedTy x2) _
     | x1 == x2 = [Trivial]
-    | otherwise = error $ "can't unify named types " ++
+    | otherwise = error $ "can't (directional) unify named types " ++
                   (show $ ppK t1) ++ "::" ++ (show $ ppK t2)
   uS (ConstTy t1) (ConstTy t2) sm = uS t1 t2 sm
   uS (ConstTy t1) t2 Relax = uS t1 t2 Relax
   uS t1 (ConstTy t2) _ = uS t1 t2 Relax
+  uS (PtrTy t1@(TyVar _)) (PtrTy t2@VoidTy) _ = uS t1 t2 Enforce
+  uS (PtrTy _) (PtrTy VoidTy) _ = [Trivial]
   uS (PtrTy t1) (PtrTy t2) _ = uS t1 t2 Enforce
   uS t1@(RecTy fs1 x1) t2@(RecTy fs2 x2) _ = undefined
   uS (ArrowTy rt1 [pt1]) (ArrowTy rt2 [pt2]) _ = undefined
-  uS t1 t2 _ = error $ "unknown unification from " ++
+  uS t1 t2 _ = error $ "unknown (directional) unification from " ++
                (show $ ppK t1) ++ " to " ++ (show $ ppK t2)
 
 instance UnifiableC Decl where
@@ -986,7 +995,7 @@ preprocess cfg@(Config { k = k'@(t1 :<=: t2), kI } ) =
 preprocess cfg@(Config { k = T }) =
   if (not trace_PP)
   then cfg
-  else trace ("[trace PP]\n" ++ showConfig cfg ++ "\n") cfg
+  else trace (showConfig cfg ++ "\n") cfg
 
 trace_PP = False
 
@@ -1017,7 +1026,7 @@ unifyEq cfg@(Config { kE = k@(t1 :=: t2):kE_ }) =
       rw = unifyEq (checkEntail (cfg, cfg') k)
   in if (not trace_U)
      then rw
-     else trace("[uni-eq]: " ++ show (ppK s)) rw
+     else trace("uC: " ++ show (ppK s) ++ "\n... " ++ show (ppK kE') ++ "\n") rw
 
 -- | UE-end
 unifyEq cfg@(Config { kE = [] }) = cfg
@@ -1027,13 +1036,17 @@ unifyEq cfg@(Config { kE = [] }) = cfg
 -- Solver: 2nd unification round --
 -----------------------------------
 
-unifyIq :: Config -> Config
+splitOrderLift :: Config -> Config
 
--- | SO
-splitOrder cfg =
+-- | SOL
+splitOrderLift cfg =
   let (kI', kW') = splitWob ((kI cfg) ++ [B]) []
       kI'' = orderSub (kI' ++ [B]) []
-  in cfg { kI = kI'', kW = kW'}
+      kI''' = liftSub(kI'' ++ [B]) []
+  in cfg { kI = kI''', kW = kW'}
+
+
+unifyIq :: Config -> Config
 
 -- | UI-base
 unifyIq cfg@(Config {
@@ -1047,23 +1060,29 @@ unifyIq cfg@(Config {
       kW' = applyMany s (kW cfg)
       (kI'', kW'') = splitWob (kI' ++ kW' ++ [B]) []
       kI''' = orderSub (kI'' ++ [B]) []
+      kI'''' = liftSub (kI''' ++ [B]) []
       cfg' = cfg { phi = phi',
                    psi = psi',
                    theta = theta',
-                   kI = kI''',
+                   kI = kI'''',
                    kF = kF',
                    kW = kW'' }
       rw = unifyIq (checkEntail (cfg, cfg') k)
   in if (not trace_U)
      then rw
-     else trace("[uni-iq]: " ++ show (ppK s)) rw
+     else trace("uS: " ++ show (ppK s) ++
+                "\n'    " ++ show (ppK kI') ++
+                "\n''   " ++ show (ppK kI'') ++
+                "\n'''  " ++ show (ppK kI''') ++
+                "\n'''' " ++ show (ppK kI'''') ++ "\n") rw
 
 -- | UI-end
 unifyIq cfg = cfg
 
 
--- | UW-base
 unifyWb ::  Config -> Config
+
+-- | UW-base
 unifyWb cfg@(Config { kI = k@(t1 :<=: t2):kI_ }) =
   let s = uS t1 t2 Relax
       phi' = foreachValue s (phi cfg)
@@ -1079,15 +1098,24 @@ unifyWb cfg@(Config { kI = k@(t1 :<=: t2):kI_ }) =
       rw = unifyWb (checkEntail (cfg, cfg') k)
   in if (not trace_U)
      then rw
-     else trace("[uni-w]: " ++ show (ppK s)) rw
+     else trace("uS (wobbly): " ++ show (ppK s) ++ "\n... " ++ show (ppK kI_') ++ "\n") rw
 
 -- | UW-end
 unifyWb cfg = cfg
 
 
-----------------------------
--- Splitting and ordering --
-----------------------------
+----------------------------------
+-- Splitting, ordering, lifting --
+----------------------------------
+
+-- | Split wobbly relations.
+splitWob :: [K] -> [K] -> ([K], [K])
+splitWob (w@((TyVar _) :<=: (TyVar _)):k) kW =
+  splitWob k (w:kW)
+splitWob (nw@(t1 :<=: t2):k) kW =
+  splitWob (k ++ [nw]) kW
+splitWob (B:k) kW =
+  (k, kW)
 
 -- | Order inequality constraints.
 orderSub :: [K] -> [K] -> [K]
@@ -1104,14 +1132,29 @@ orderSub ((t1 :<=: t2):kW) kS =
 orderSub (B:kW) kS =
   kS ++ kW
 
--- | Split wobbly relations.
-splitWob :: [K] -> [K] -> ([K], [K])
-splitWob (w@((TyVar _) :<=: (TyVar _)):k) kW =
-  splitWob k (w:kW)
-splitWob (nw@(t1 :<=: t2):k) kW =
-  splitWob (k ++ [nw]) kW
-splitWob (B:k) kW =
-  (k, kW)
+-- | Detect presence of top type.
+liftSub :: [K] -> [K] -> [K]
+liftSub (k1@(t1 :<=: t1'@(PtrTy (TyVar (Stamp n1)))):
+         k2@(t2 :<=: t2'@(PtrTy (TyVar (Stamp n2)))):k) kn
+  | n1 == n2
+    && ((unqualPtrTy t1) /= (unqualPtrTy t2))
+    && (isGround t1)
+    && (isGround t2) =
+      -- Check t1 only, since `const' pointers (when existing) appear first.
+      let t = case t1 of
+             PtrTy (ConstTy _) -> (PtrTy (ConstTy VoidTy))
+             _ ->  PtrTy VoidTy
+      in liftSub k (kn ++ ((t :<=: t1'):k1:[k2]))
+  | otherwise = liftSub (k2:k) (kn ++ [k1])
+liftSub (k1@( _ :<=: _):k) kn =
+  liftSub k (kn ++ [k1])
+liftSub (B:k) kn =
+  kn ++ k
+
+-- | Unqualify pointer type.
+unqualPtrTy :: Type -> Type
+unqualPtrTy (PtrTy (ConstTy t)) = PtrTy t
+unqualPtrTy t = t
 
 
 ------------------------------
@@ -1245,8 +1288,8 @@ solveConstraints k cfg = do
   let cfgUE = unifyEq cfgPP
   debug "unify-equivalences" (showConfig cfgUE)
 
-  let cfgSO = splitOrder cfgUE
-  debug "split-order-inequalities" (showConfig cfgSO)
+  let cfgSO = splitOrderLift cfgUE
+  debug "split-order-lift" (showConfig cfgSO)
 
   let cfgUI = unifyIq cfgSO
   debug "unify-inequalities" (showConfig cfgUI)
@@ -1292,7 +1335,7 @@ typeFunDef c gam (FunDef rt f dl s) =
 typeParam :: Config -> Gamma -> [Decl] -> [Stmt] -> Type -> Type
 typeParam c gam [] s rt = typeStmt c gam s rt
 typeParam c gam ((Decl t x):dl) s rt =
-  let t' = findInTheta (hat (findInPsi x (psi c))) (theta c)
+  let t' = findInPsi x (psi c)
       gam' = addToGamma x t' gam
   in typeParam c gam' dl s rt
 
@@ -1301,7 +1344,7 @@ typeStmt :: Config -> Gamma -> [Stmt] -> Type -> Type
 
 -- | TCDcl
 typeStmt c gam ((DeclStmt (Decl t x)):sl) rt =
-  let t' = findInTheta (hat (findInPsi x (psi c))) (theta c)
+  let t' = findInPsi x (psi c)
       gam' = addToGamma x t' gam
   in typeStmt c gam' sl rt
 
@@ -1363,7 +1406,7 @@ typeExpr c gam (Deref e) =
 typeExpr c gam (AddrOf e) =
   PtrTy (typeExpr c gam e)
 
--- | TCAsgZro
+-- | TCAsgZr
 typeExpr c gam (BinExpr Assign e1 (NumLit (IntLit 0))) =
   let lht = dropTopQual $ typeExpr c gam e1
   in if isScalar lht
@@ -1444,12 +1487,17 @@ isArith IntTy = True
 isArith DoubleTy = True
 isArith _ = error $ "expected arithmetic type"
 
--- | Return whether type is an scalar type.
+-- | Return whether the type is scalar.
 isScalar :: Type -> Bool
 isScalar (PtrTy _) = True
 isScalar IntTy = True
 isScalar DoubleTy = True
 isScalar _ = error $ "expected scalar type"
+
+-- | Return whether the type is a pointer.
+isPtr :: Type -> Bool
+isPtr (PtrTy _) = True
+isPtr _ = error $ "expected pointer type"
 
 -- | Return the highest ranked of 2 arithmetic types.
 highRank :: Type -> Type -> Type
@@ -1479,6 +1527,7 @@ instance PrettyK TypeId where
 instance PrettyK Type where
   ppK IntTy = PP.text "int"
   ppK DoubleTy = PP.text "double"
+  ppK VoidTy = PP.text "void"
   ppK (PtrTy t) = ppK t PP.<> PP.text "*"
   ppK (ConstTy t) = PP.text "const " PP.<> ppK t
   ppK (ArrowTy rt ps) =
@@ -1486,7 +1535,7 @@ instance PrettyK Type where
     PP.<> PP.text "⟶  " PP.<> ppK rt
   ppK (RecTy flds x) = PP.char '@' PP.<> ppK x PP.<> PP.char '@'
   ppK (NamedTy x) = ppK x
-  ppK (TyVar (Stamp i)) = PP.text "α" PP.<> PP.text (show i)
+  ppK (TyVar (Stamp n)) = PP.text "α" PP.<> PP.text (show n)
 
 instance PrettyK Subst where
   ppK Trivial = PP.text "[]"
@@ -1616,6 +1665,7 @@ instance PrettyC Decl where
 instance PrettyC Type where
   ppC IntTy = PP.text "int"
   ppC DoubleTy = PP.text "double"
+  ppC VoidTy = PP.text "void"
   ppC (PtrTy t) = ppC t PP.<> PP.char '*'
   ppC (ConstTy t) = PP.text "const" PP.<+> ppC t
   ppC (ArrowTy rt pt) =
@@ -1657,7 +1707,7 @@ langDef = emptyDef {
   Token.identStart = letter,
   Token.identLetter = alphaNum <|> char '_',
   Token.reservedNames =
-      [ "int", "double", "const", "return", "struct", "typedef" ],
+      [ "int", "double", "void", "const", "return", "struct", "typedef" ],
   Token.reservedOpNames =
       [ "*", "/", "+", "||", "=", "&", "->" ]
   }
@@ -1710,6 +1760,9 @@ intTyParser = IntTy <$ reserved "int"
 
 fpTyParser :: Parser Type
 fpTyParser = DoubleTy <$ reserved "double"
+
+voidTyParser :: Parser Type
+voidTyParser = VoidTy <$ reserved "void"
 
 namedTyParser :: Parser Type
 namedTyParser = f <$> (optionMaybe (reserved "struct")) <*> identParser

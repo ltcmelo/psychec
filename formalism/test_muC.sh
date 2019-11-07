@@ -44,17 +44,17 @@ for C_FILE in *.c ; do
         -Wconversion\
         -Wfloat-conversion\
         -Wno-unused-but-set-variable\
-	    -Wno-incompatible-library-redeclaration\
+        -Wno-incompatible-library-redeclaration\
         -Wno-uninitialized\
-	    -Wno-unused-variable\
-	    -Wno-unused-function\
-	    -Wno-switch\
-	    -Wno-unused-value\
-	    -Wno-implicit-int\
-	    -Wno-return-type\
-	    -Wno-builtin-requires-header\
-	    -Wno-infinite-recursion\
-	    -c "$FIXED_FILE"  #  &> /dev/null
+        -Wno-unused-variable\
+        -Wno-unused-function\
+        -Wno-switch\
+        -Wno-unused-value\
+        -Wno-implicit-int\
+        -Wno-return-type\
+        -Wno-builtin-requires-header\
+        -Wno-infinite-recursion\
+        -c "$FIXED_FILE"  #  &> /dev/null
     OK=$?
     if [ $OK -ne 0 ]; then
         printf "  <<error in $FIXED_FILE>>\n"
