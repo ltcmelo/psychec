@@ -841,7 +841,7 @@ instance UnifiableC Type where
   uC (TyVar st) t2 =
     let s = st :-> t2
     in if (trace_UC)
-       then trace("#uC# " ++ show (ppK s)) [s]
+       then trace("uC " ++ show (ppK s)) [s]
        else [s]
   uC t1 t2@(TyVar _) = uC t2 t1
   uC IntTy IntTy = [Trivial]
@@ -866,17 +866,20 @@ instance UnifiableC Type where
   uS IntTy IntTy _ = [Trivial]
   uS IntTy DoubleTy Relax = [Trivial]
   uS DoubleTy DoubleTy _ = [Trivial]
+  uS VoidTy VoidTy _ = [Trivial]
   uS t1@(NamedTy x1) t2@(NamedTy x2) _
     | x1 == x2 = [Trivial]
-    | otherwise = error $ "can't unify named types " ++
+    | otherwise = error $ "can't (directional) unify named types " ++
                   (show $ ppK t1) ++ "::" ++ (show $ ppK t2)
   uS (ConstTy t1) (ConstTy t2) sm = uS t1 t2 sm
   uS (ConstTy t1) t2 Relax = uS t1 t2 Relax
   uS t1 (ConstTy t2) _ = uS t1 t2 Relax
+  uS (PtrTy t1@(TyVar _)) (PtrTy t2@VoidTy) _ = uS t1 t2 Enforce
+  uS (PtrTy _) (PtrTy VoidTy) _ = [Trivial]
   uS (PtrTy t1) (PtrTy t2) _ = uS t1 t2 Enforce
   uS t1@(RecTy fs1 x1) t2@(RecTy fs2 x2) _ = undefined
   uS (ArrowTy rt1 [pt1]) (ArrowTy rt2 [pt2]) _ = undefined
-  uS t1 t2 _ = error $ "unknown unification from " ++
+  uS t1 t2 _ = error $ "unknown (directional) unification from " ++
                (show $ ppK t1) ++ " to " ++ (show $ ppK t2)
 
 instance UnifiableC Decl where
@@ -1063,16 +1066,20 @@ unifyIq cfg@(Config {
       kW' = applyMany s (kW cfg)
       (kI'', kW'') = splitWob (kI' ++ kW' ++ [B]) []
       kI''' = orderSub (kI'' ++ [B]) []
+      kI'''' = treatTop (kI''' ++ [B]) []
       cfg' = cfg { phi = phi',
                    psi = psi',
                    theta = theta',
-                   kI = kI''',
+                   kI = kI'''',
                    kF = kF',
                    kW = kW'' }
       rw = unifyIq (checkEntail (cfg, cfg') k)
   in if (not trace_U)
      then rw
-     else trace("uS: " ++ show (ppK s) ++ "\n... " ++ show (ppK kI') ++ "\n") rw
+     else trace("uS: " ++ show (ppK s) ++
+                "\n... " ++ show (ppK kI') ++
+                "\n... " ++ show (ppK kI''') ++
+                "\n... " ++ show (ppK kI'''') ++ "\n") rw
 
 -- | UI-end
 unifyIq cfg = cfg
@@ -1102,9 +1109,18 @@ unifyWb cfg@(Config { kI = k@(t1 :<=: t2):kI_ }) =
 unifyWb cfg = cfg
 
 
-----------------------------
--- Splitting and ordering --
-----------------------------
+----------------------------------
+-- Splitting, ordering, topping --
+----------------------------------
+
+-- | Split wobbly relations.
+splitWob :: [K] -> [K] -> ([K], [K])
+splitWob (w@((TyVar _) :<=: (TyVar _)):k) kW =
+  splitWob k (w:kW)
+splitWob (nw@(t1 :<=: t2):k) kW =
+  splitWob (k ++ [nw]) kW
+splitWob (B:k) kW =
+  (k, kW)
 
 -- | Order inequality constraints.
 orderSub :: [K] -> [K] -> [K]
@@ -1121,14 +1137,18 @@ orderSub ((t1 :<=: t2):kW) kS =
 orderSub (B:kW) kS =
   kS ++ kW
 
--- | Split wobbly relations.
-splitWob :: [K] -> [K] -> ([K], [K])
-splitWob (w@((TyVar _) :<=: (TyVar _)):k) kW =
-  splitWob k (w:kW)
-splitWob (nw@(t1 :<=: t2):k) kW =
-  splitWob (k ++ [nw]) kW
-splitWob (B:k) kW =
-  (k, kW)
+-- | Detect presence of top type.
+treatTop :: [K] -> [K] -> [K]
+treatTop (k1@(t1 :<=: t1'@(PtrTy (TyVar (Stamp n1)))):
+          k2@(t2 :<=: t2'@(PtrTy (TyVar (Stamp n2)))):k) kn
+  | n1 == n2
+    && (isGround t1)
+    && (isGround t2) = treatTop k (kn ++ (((PtrTy VoidTy) :<=: t1'):k1:[k2]))
+  | otherwise = treatTop (k2:k) (kn ++ [k1])
+treatTop (k1@( _ :<=: _):k) kn =
+  treatTop k (kn ++ [k1])
+treatTop (B:k) kn =
+  kn ++ k
 
 
 ------------------------------
@@ -1496,6 +1516,7 @@ instance PrettyK TypeId where
 instance PrettyK Type where
   ppK IntTy = PP.text "int"
   ppK DoubleTy = PP.text "double"
+  ppK VoidTy = PP.text "void"
   ppK (PtrTy t) = ppK t PP.<> PP.text "*"
   ppK (ConstTy t) = PP.text "const " PP.<> ppK t
   ppK (ArrowTy rt ps) =
@@ -1503,7 +1524,7 @@ instance PrettyK Type where
     PP.<> PP.text "⟶  " PP.<> ppK rt
   ppK (RecTy flds x) = PP.char '@' PP.<> ppK x PP.<> PP.char '@'
   ppK (NamedTy x) = ppK x
-  ppK (TyVar (Stamp i)) = PP.text "α" PP.<> PP.text (show i)
+  ppK (TyVar (Stamp n)) = PP.text "α" PP.<> PP.text (show n)
 
 instance PrettyK Subst where
   ppK Trivial = PP.text "[]"
@@ -1633,6 +1654,7 @@ instance PrettyC Decl where
 instance PrettyC Type where
   ppC IntTy = PP.text "int"
   ppC DoubleTy = PP.text "double"
+  ppC VoidTy = PP.text "void"
   ppC (PtrTy t) = ppC t PP.<> PP.char '*'
   ppC (ConstTy t) = PP.text "const" PP.<+> ppC t
   ppC (ArrowTy rt pt) =
