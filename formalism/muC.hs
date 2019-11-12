@@ -1036,11 +1036,6 @@ unifyEq cfg@(Config { kE = [] }) = cfg
 -- Solver: 2nd unification round --
 -----------------------------------
 
---treatAnyPtr :: Config -> Config
-
-
-
-
 splitOrder :: Config -> Config
 
 -- | SO
