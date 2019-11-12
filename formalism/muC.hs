@@ -315,8 +315,8 @@ satisfies (phi, psi, theta) (k1 :&: k2) =
   let check1 = satisfies (phi, psi, theta) k1
       check2 = satisfies (phi, psi, theta) k2
   in if trace_Sema
-     then trace ("#satisfies# " ++ show (ppK k1)) check1
-          && trace ("#satisfies#" ++ show (ppK k2)) check2
+     then trace ("satisfies " ++ show (ppK k1)) check1
+          && trace ("satisfies " ++ show (ppK k2)) check2
      else check1 && check2
 
 -- | KEx
@@ -428,11 +428,9 @@ isSubTyPtr phi (ConstTy t1) (ConstTy t2) =
   isSubTyPtr phi t1 t2
 isSubTyPtr phi t1 (ConstTy t2) =
   isSubTyPtr phi t1 t2
-isSubTyPtr phi (PtrTy t1) (PtrTy t2) =
-  isSubTyPtr phi t2 t2
+isSubTyPtr _ _ VoidTy = True
 isSubTyPtr _ IntTy IntTy = True
 isSubTyPtr _ DoubleTy DoubleTy = True
-isSubTyPtr _ VoidTy VoidTy = True
 isSubTyPtr _ (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTyPtr _ t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
 isSubTyPtr phi t1 t2 =
@@ -1066,7 +1064,7 @@ unifyIq cfg@(Config {
       kW' = applyMany s (kW cfg)
       (kI'', kW'') = splitWob (kI' ++ kW' ++ [B]) []
       kI''' = orderSub (kI'' ++ [B]) []
-      kI'''' = treatTop (kI''' ++ [B]) []
+      kI'''' = liftSub (kI''' ++ [B]) []
       cfg' = cfg { phi = phi',
                    psi = psi',
                    theta = theta',
@@ -1138,17 +1136,28 @@ orderSub (B:kW) kS =
   kS ++ kW
 
 -- | Detect presence of top type.
-treatTop :: [K] -> [K] -> [K]
-treatTop (k1@(t1 :<=: t1'@(PtrTy (TyVar (Stamp n1)))):
-          k2@(t2 :<=: t2'@(PtrTy (TyVar (Stamp n2)))):k) kn
+liftSub :: [K] -> [K] -> [K]
+liftSub (k1@(t1 :<=: t1'@(PtrTy (TyVar (Stamp n1)))):
+         k2@(t2 :<=: t2'@(PtrTy (TyVar (Stamp n2)))):k) kn
   | n1 == n2
+    && ((unqualPtrTy t1) /= (unqualPtrTy t2))
     && (isGround t1)
-    && (isGround t2) = treatTop k (kn ++ (((PtrTy VoidTy) :<=: t1'):k1:[k2]))
-  | otherwise = treatTop (k2:k) (kn ++ [k1])
-treatTop (k1@( _ :<=: _):k) kn =
-  treatTop k (kn ++ [k1])
-treatTop (B:k) kn =
+    && (isGround t2) =
+      -- Check t1 only, since `const' pointers (when existing) appear first.
+      let t = case t1 of
+             PtrTy (ConstTy _) -> (PtrTy (ConstTy VoidTy))
+             _ ->  PtrTy VoidTy
+      in liftSub k (kn ++ ((t :<=: t1'):k1:[k2]))
+  | otherwise = liftSub (k2:k) (kn ++ [k1])
+liftSub (k1@( _ :<=: _):k) kn =
+  liftSub k (kn ++ [k1])
+liftSub (B:k) kn =
   kn ++ k
+
+-- | Unqualify pointer type.
+unqualPtrTy :: Type -> Type
+unqualPtrTy (PtrTy (ConstTy t)) = PtrTy t
+unqualPtrTy t = t
 
 
 ------------------------------
