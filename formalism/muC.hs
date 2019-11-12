@@ -1103,7 +1103,7 @@ unifyWb cfg = cfg
 
 
 ----------------------------------
--- Splitting, ordering, topping --
+-- Splitting, ordering, lifting --
 ----------------------------------
 
 -- | Split wobbly relations.
