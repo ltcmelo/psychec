@@ -1485,12 +1485,17 @@ isArith IntTy = True
 isArith DoubleTy = True
 isArith _ = error $ "expected arithmetic type"
 
--- | Return whether type is an scalar type.
+-- | Return whether the type is scalar.
 isScalar :: Type -> Bool
 isScalar (PtrTy _) = True
 isScalar IntTy = True
 isScalar DoubleTy = True
 isScalar _ = error $ "expected scalar type"
+
+-- | Return whether the type is a pointer.
+isPtr :: Type -> Bool
+isPtr (PtrTy _) = True
+isPtr _ = error $ "expected pointer type"
 
 -- | Return the highest ranked of 2 arithmetic types.
 highRank :: Type -> Type -> Type
