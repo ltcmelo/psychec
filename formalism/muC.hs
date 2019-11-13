@@ -1404,7 +1404,7 @@ typeExpr c gam (Deref e) =
 typeExpr c gam (AddrOf e) =
   PtrTy (typeExpr c gam e)
 
--- | TCAsgZro
+-- | TCAsgZr
 typeExpr c gam (BinExpr Assign e1 (NumLit (IntLit 0))) =
   let lht = dropTopQual $ typeExpr c gam e1
   in if isScalar lht
