@@ -72,7 +72,7 @@ compile src =
       debug "semantics" (if ok then "OK" else error "does NOT hold\n")
 
       let ts = verifyTyping cfg' Map.empty p
-      debug "typing" ("OK")
+      debug "typing" ("OK " ++ show ts)
 
       let preamble = rewriteInC (theta Map.\\ theta_i)
           src' = preamble ++ src
@@ -1333,7 +1333,7 @@ typeFunDef c gam (FunDef rt f dl s) =
 typeParam :: Config -> Gamma -> [Decl] -> [Stmt] -> Type -> Type
 typeParam c gam [] s rt = typeStmt c gam s rt
 typeParam c gam ((Decl t x):dl) s rt =
-  let t' = findInTheta (hat (findInPsi x (psi c))) (theta c)
+  let t' = findInPsi x (psi c)
       gam' = addToGamma x t' gam
   in typeParam c gam' dl s rt
 
@@ -1342,7 +1342,7 @@ typeStmt :: Config -> Gamma -> [Stmt] -> Type -> Type
 
 -- | TCDcl
 typeStmt c gam ((DeclStmt (Decl t x)):sl) rt =
-  let t' = findInTheta (hat (findInPsi x (psi c))) (theta c)
+  let t' = findInPsi x (psi c)
       gam' = addToGamma x t' gam
   in typeStmt c gam' sl rt
 
