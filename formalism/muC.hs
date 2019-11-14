@@ -1004,7 +1004,7 @@ trace_PP = False
 -- Solver: 1st unification round --
 -----------------------------------
 
-trace_U = True
+trace_U = False
 
 unifyEq :: Config -> Config
 
