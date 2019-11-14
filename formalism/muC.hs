@@ -468,9 +468,9 @@ isSubTyPtr' t1 (ConstTy t2) =
   isSubTyPtr' t1 t2
 isSubTyPtr' (PtrTy t1) (PtrTy t2) =
   isSubTyPtr' t2 t2
+isSubTyPtr' _ VoidTy = True
 isSubTyPtr' IntTy IntTy = True
 isSubTyPtr' DoubleTy DoubleTy = True
-isSubTyPtr' VoidTy VoidTy = True
 isSubTyPtr' (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTyPtr' t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
 isSubTyPtr' t1 t2 =
