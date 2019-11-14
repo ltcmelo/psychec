@@ -1036,16 +1036,17 @@ unifyEq cfg@(Config { kE = [] }) = cfg
 -- Solver: 2nd unification round --
 -----------------------------------
 
-splitOrder :: Config -> Config
+splitOrderLift :: Config -> Config
 
--- | SO
-splitOrder cfg =
+-- | SOL
+splitOrderLift cfg =
   let (kI', kW') = splitWob ((kI cfg) ++ [B]) []
       kI'' = orderSub (kI' ++ [B]) []
-  in cfg { kI = kI'', kW = kW'}
+      kI''' = liftSub(kI'' ++ [B]) []
+  in cfg { kI = kI''', kW = kW'}
+
 
 unifyIq :: Config -> Config
-
 
 -- | UI-base
 unifyIq cfg@(Config {
@@ -1070,9 +1071,10 @@ unifyIq cfg@(Config {
   in if (not trace_U)
      then rw
      else trace("uS: " ++ show (ppK s) ++
-                "\n... " ++ show (ppK kI') ++
-                "\n... " ++ show (ppK kI''') ++
-                "\n... " ++ show (ppK kI'''') ++ "\n") rw
+                "\n'    " ++ show (ppK kI') ++
+                "\n''   " ++ show (ppK kI'') ++
+                "\n'''  " ++ show (ppK kI''') ++
+                "\n'''' " ++ show (ppK kI'''') ++ "\n") rw
 
 -- | UI-end
 unifyIq cfg = cfg
@@ -1286,8 +1288,8 @@ solveConstraints k cfg = do
   let cfgUE = unifyEq cfgPP
   debug "unify-equivalences" (showConfig cfgUE)
 
-  let cfgSO = splitOrder cfgUE
-  debug "split-order-inequalities" (showConfig cfgSO)
+  let cfgSO = splitOrderLift cfgUE
+  debug "split-order-lift" (showConfig cfgSO)
 
   let cfgUI = unifyIq cfgSO
   debug "unify-inequalities" (showConfig cfgUI)
