@@ -1356,7 +1356,7 @@ typeStmt c gam ((ExprStmt e):sl) rt =
      else error $ "expected ground type " ++ show (ppC t)
           ++ " for expression " ++ show e
 
--- | TCRetZro
+-- | TCRetZr
 typeStmt c gam ((RetStmt (NumLit (IntLit 0))):[]) rt =
   let rt' = (findInTheta (hat rt) (theta c))
   in if isScalar rt'
