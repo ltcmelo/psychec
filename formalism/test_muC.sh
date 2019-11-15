@@ -14,14 +14,14 @@ if [ $OK -ne 0 ]; then
     exit 1
 fi
 
-FAIL_EXPECT=('new_test24.c'
-             'new_test25.c'
-             'new_test34.c'
-             'new_test36.c'
-             'new_test72.c'
-             'new_test87.c'
-             'new_test92.c'
-             'new_test96.c'
+FAIL_EXPECT=('new_test024.c'
+             'new_test025.c'
+             'new_test034.c'
+             'new_test036.c'
+             'new_test072.c'
+             'new_test087.c'
+             'new_test092.c'
+             'new_test096.c'
              'new_test104.c'
              'new_test105.c'
              'new_test106.c')
