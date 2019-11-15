@@ -21,7 +21,10 @@ FAIL_EXPECT=('new_test24.c'
              'new_test72.c'
              'new_test87.c'
              'new_test92.c'
-             'new_test96.c')
+             'new_test96.c'
+             'new_test104.c'
+             'new_test105.c'
+             'new_test106.c')
 
 for C_FILE in *.c ; do
     echo "  "

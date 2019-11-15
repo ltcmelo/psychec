@@ -404,9 +404,9 @@ isSubTy phi (ConstTy t1) t2 =
 isSubTy phi t@(PtrTy t1) t'@(PtrTy t2) =
   isSubTyPtr phi t1 t2
 isSubTy _ IntTy IntTy = True
+isSubTy _ IntTy DoubleTy = True
 isSubTy _ DoubleTy DoubleTy = True
 isSubTy _ VoidTy VoidTy = True
-isSubTy _ IntTy DoubleTy = True
 isSubTy _ (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTy _ t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
 isSubTy phi t1 t2 =
@@ -661,24 +661,24 @@ select :: Shape -> Type -> Shape -> Type -> Type -> BinOptr -> K
 select sp1 a1 sp2 a2 t op  =
   case op of
     Add -> if (sp1 == Pointer)
-           then (a1 :=: t) :&: (a2 :=: IntTy)
+           then (a1 :=: t) :&: ((ConstTy IntTy) :<=: a2)
            else if (sp2 == Pointer)
-                then (a2 :=: t) :&: (a1 :=: IntTy)
+                then (a2 :=: t) :&: ((ConstTy IntTy) :<=: a1)
                 else (t :<=: DoubleTy)
     Assign -> (t :=: a1)
     Or -> (t :=: IntTy)
     Divide -> if (sp1 == Integral && sp2 == Integral)
               then (t :=: IntTy)
-                   :&: (a1 :=: IntTy)
-                   :&: (a2 :=: IntTy)
+                   :&: ((ConstTy IntTy) :<=: a1)
+                   :&: ((ConstTy IntTy) :<=: a2)
               else if (sp1 == Integral)
                    then (t :<=: DoubleTy)
-                        :&: (a1 :=: IntTy)
-                        :&: (a2 :<=: DoubleTy)
+                        :&: ((ConstTy IntTy) :<=: a1)
+                        :&: ((ConstTy DoubleTy) :<=: a2)
                    else if (sp2 == Integral)
                         then (t :<=: DoubleTy)
-                             :&: (a1 :<=: DoubleTy)
-                             :&: (a2 :=: IntTy)
+                             :&: ((ConstTy DoubleTy) :<=: a1)
+                             :&: ((ConstTy IntTy) :<=: a2)
                         else (t :<=: DoubleTy)
                              :&: (a1 :<=: DoubleTy)
                              :&: (a2 :<=: DoubleTy)
@@ -849,6 +849,7 @@ instance UnifiableC Type where
     | otherwise = error $ "can't (classic) unify named types " ++
                   (show $ ppK t1) ++ "::" ++ (show $ ppK t2)
   uC (ConstTy t1) (ConstTy t2) = uC t1 t2
+  uC (ConstTy t1) t2 = uC t1 t2
   uC (PtrTy t1) (PtrTy t2) = uC t1 t2
   uC t1@(RecTy fs1 x1) t2@(RecTy fs2 x2) = undefined
   uC (ArrowTy rt1 [pt1]) (ArrowTy rt2 [pt2]) = undefined
@@ -908,7 +909,6 @@ instance UnifiableC a => UnifiableC [a] where
     in s ++ s'
 
 trace_UC = False
-trace_US = False
 
 
 ----------------------------------
@@ -1026,7 +1026,9 @@ unifyEq cfg@(Config { kE = k@(t1 :=: t2):kE_ }) =
       rw = unifyEq (checkEntail (cfg, cfg') k)
   in if (not trace_U)
      then rw
-     else trace("uC: " ++ show (ppK s) ++ "\n... " ++ show (ppK kE') ++ "\n") rw
+     else trace("uC: " ++ show (ppK s) ++
+                "\n≡'  " ++ show (ppK kE') ++
+                "\n≤'  " ++ show (ppK kI') ++ "\n") rw
 
 -- | UE-end
 unifyEq cfg@(Config { kE = [] }) = cfg
@@ -1070,11 +1072,11 @@ unifyIq cfg@(Config {
       rw = unifyIq (checkEntail (cfg, cfg') k)
   in if (not trace_U)
      then rw
-     else trace("uS: " ++ show (ppK s) ++
-                "\n'    " ++ show (ppK kI') ++
-                "\n''   " ++ show (ppK kI'') ++
-                "\n'''  " ++ show (ppK kI''') ++
-                "\n'''' " ++ show (ppK kI'''') ++ "\n") rw
+     else trace("uS:   " ++ show (ppK s) ++
+                "\n≤'    " ++ show (ppK kI') ++
+                "\n≤''   " ++ show (ppK kI'') ++
+                "\n≤'''  " ++ show (ppK kI''') ++
+                "\n≤'''' " ++ show (ppK kI'''') ++ "\n") rw
 
 -- | UI-end
 unifyIq cfg = cfg
@@ -1408,10 +1410,10 @@ typeExpr c gam (AddrOf e) =
 
 -- | TCAsgZr
 typeExpr c gam (BinExpr Assign e1 (NumLit (IntLit 0))) =
-  let lht = dropTopQual $ typeExpr c gam e1
+  let lht = typeExpr c gam e1
   in if isScalar lht
      then lht
-     else error $ "0 assignment doesn't type check"
+     else error $ "assignment to 0 doesn't type check"
 
 -- | TCAsg
 typeExpr c gam (BinExpr Assign e1 e2) =
@@ -1423,14 +1425,16 @@ typeExpr c gam (BinExpr Assign e1 e2) =
 
 -- | TCAdd
 typeExpr c gam (BinExpr Add e1 e2) =
-  let lht = dropTopQual $ typeExpr c gam e1
-      rht = dropTopQual $ typeExpr c gam e2
-  in case lht of
-    PtrTy _ -> if rht == IntTy
+  let lht = typeExpr c gam e1
+      lht' = case lht of {(ConstTy t) -> t; _ -> lht}
+      rht = typeExpr c gam e2
+      rht' = case rht of {(ConstTy t) -> t; _ -> rht}
+  in case lht' of
+    PtrTy _ -> if rht' == IntTy
                then lht
                else error $ "expected int as RHS of +"
-    _ -> case rht of
-      PtrTy _ -> if lht == IntTy
+    _ -> case rht' of
+      PtrTy _ -> if lht' == IntTy
                  then rht
                  else error $ "expected int as LHS of +"
       _ -> if isArith lht && isArith rht
@@ -1439,25 +1443,20 @@ typeExpr c gam (BinExpr Add e1 e2) =
 
 -- | TCOr
 typeExpr c gam (BinExpr Or e1 e2) =
-  let lht = dropTopQual $ typeExpr c gam e1
-      rht = dropTopQual $ typeExpr c gam e2
+  let lht = typeExpr c gam e1
+      rht = typeExpr c gam e2
   in if isScalar lht && isScalar rht
      then IntTy
      else error $ "incompatible types in || (OR)"
 
 -- | TCDiv
 typeExpr c gam (BinExpr Divide e1 e2) =
-  let lht = dropTopQual $ typeExpr c gam e1
-      rht = dropTopQual $ typeExpr c gam e2
+  let lht = typeExpr c gam e1
+      rht = typeExpr c gam e2
   in if isArith lht && isArith rht
      then highRank lht rht
      else error $ "incompatible types in / (div)"
 
-
--- | Drop top-level qualifier.
-dropTopQual :: Type -> Type
-dropTopQual (ConstTy t) = dropTopQual t
-dropTopQual t = t
 
 -- | Find, in Gamma, the type mapped to an identifier.
 findInGamma :: Ident -> Gamma -> Type
@@ -1483,12 +1482,14 @@ addToGamma x t gam =
 
 -- | Return whether the type is an arithmetic type.
 isArith :: Type -> Bool
+isArith (ConstTy t) = isArith t
 isArith IntTy = True
 isArith DoubleTy = True
 isArith _ = error $ "expected arithmetic type"
 
 -- | Return whether the type is scalar.
 isScalar :: Type -> Bool
+isScalar (ConstTy t) = isScalar t
 isScalar (PtrTy _) = True
 isScalar IntTy = True
 isScalar DoubleTy = True
@@ -1496,15 +1497,17 @@ isScalar _ = error $ "expected scalar type"
 
 -- | Return whether the type is a pointer.
 isPtr :: Type -> Bool
+isPtr (ConstTy t) = isPtr t
 isPtr (PtrTy _) = True
 isPtr _ = error $ "expected pointer type"
 
 -- | Return the highest ranked of 2 arithmetic types.
 highRank :: Type -> Type -> Type
 highRank t1 t2 =
-  if t1 == IntTy
-  then t2
-  else t1
+  case t1 of
+    (ConstTy t1') -> highRank t1' t2
+    IntTy -> t2
+    _ -> t1
 
 
 -------------------------------------
