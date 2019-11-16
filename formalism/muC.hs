@@ -872,7 +872,7 @@ instance UnifiableC Type where
                   (show $ ppK t1) ++ "::" ++ (show $ ppK t2)
   uS (ConstTy t1) (ConstTy t2) sm = uS t1 t2 sm
   uS (ConstTy t1) t2 Relax = uS t1 t2 Relax
-  uS t1 (ConstTy t2) _ = uS t1 t2 Relax
+  uS t1 (ConstTy t2) _ = uS t1 t2 Enforce
   uS (PtrTy t1@(TyVar _)) (PtrTy t2@VoidTy) _ = uS t1 t2 Enforce
   uS (PtrTy _) (PtrTy VoidTy) _ = [Trivial]
   uS (PtrTy t1) (PtrTy t2) _ = uS t1 t2 Enforce
