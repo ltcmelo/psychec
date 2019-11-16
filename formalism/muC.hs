@@ -1360,7 +1360,7 @@ typeStmt c gam ((ExprStmt e):sl) rt =
 -- | TCRetZr
 typeStmt c gam ((RetStmt (NumLit (IntLit 0))):[]) rt =
   let rt' = (findInTheta (hat rt) (theta c))
-  in if isS rt'
+  in if isScaTy rt'
      then rt'
      else error $ "0 doesn't type with " ++ show (ppC rt') ++ " as return"
 
@@ -1410,7 +1410,7 @@ typeExpr c gam (AddrOf e) =
 -- | TCAsgZr
 typeExpr c gam (BinExpr Assign e1 (NumLit (IntLit 0))) =
   let lht = typeExpr c gam e1
-  in if isS lht
+  in if isScaTy lht
      then lht
      else error $ "assignment to 0 doesn't type check"
 
@@ -1436,7 +1436,7 @@ typeExpr c gam (BinExpr Add e1 e2) =
       PtrTy _ -> if lht' == IntTy
                  then rht
                  else error $ "expected int as LHS of +"
-      _ -> if isArith lht && isArith rht
+      _ -> if isAriTy lht && isAriTy rht
            then highRank lht rht
            else error $ "incompatible types in + (Add)"
 
@@ -1444,7 +1444,7 @@ typeExpr c gam (BinExpr Add e1 e2) =
 typeExpr c gam (BinExpr Or e1 e2) =
   let lht = typeExpr c gam e1
       rht = typeExpr c gam e2
-  in if isS lht && isS rht
+  in if isScaTy lht && isScaTy rht
      then IntTy
      else error $ "incompatible types in || (OR)"
 
@@ -1452,7 +1452,7 @@ typeExpr c gam (BinExpr Or e1 e2) =
 typeExpr c gam (BinExpr Divide e1 e2) =
   let lht = typeExpr c gam e1
       rht = typeExpr c gam e2
-  in if isArith lht && isArith rht
+  in if isAriTy lht && isAriTy rht
      then highRank lht rht
      else error $ "incompatible types in / (div)"
 
@@ -1480,25 +1480,25 @@ addToGamma x t gam =
 --------------------
 
 -- | Return whether the type is an arithmetic type.
-isArith :: Type -> Bool
-isArith (ConstTy t) = isArith t
-isArith IntTy = True
-isArith DoubleTy = True
-isArith _ = error $ "expected arithmetic type"
+isAriTy :: Type -> Bool
+isAriTy (ConstTy t) = isAriTy t
+isAriTy IntTy = True
+isAriTy DoubleTy = True
+isAriTy _ = error $ "expected arithmetic type"
 
 -- | Return whether the type is scalar.
-isS :: Type -> Bool
-isS (ConstTy t) = isS t
-isS (PtrTy _) = True
-isS IntTy = True
-isS DoubleTy = True
-isS _ = error $ "expected scalar type"
+isScaTy :: Type -> Bool
+isScaTy (ConstTy t) = isScaTy t
+isScaTy (PtrTy _) = True
+isScaTy IntTy = True
+isScaTy DoubleTy = True
+isScaTy _ = error $ "expected scalar type"
 
 -- | Return whether the type is a pointer.
-isPtr :: Type -> Bool
-isPtr (ConstTy t) = isPtr t
-isPtr (PtrTy _) = True
-isPtr _ = error $ "expected pointer type"
+isPtrTy :: Type -> Bool
+isPtrTy (ConstTy t) = isPtrTy t
+isPtrTy (PtrTy _) = True
+isPtrTy _ = error $ "expected pointer type"
 
 -- | Return the highest ranked of 2 arithmetic types.
 highRank :: Type -> Type -> Type
