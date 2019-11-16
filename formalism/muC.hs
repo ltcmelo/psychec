@@ -849,7 +849,6 @@ instance UnifiableC Type where
     | otherwise = error $ "can't (classic) unify named types " ++
                   (show $ ppK t1) ++ "::" ++ (show $ ppK t2)
   uC (ConstTy t1) (ConstTy t2) = uC t1 t2
-  uC (ConstTy t1) t2 = uC t1 t2
   uC (PtrTy t1) (PtrTy t2) = uC t1 t2
   uC t1@(RecTy fs1 x1) t2@(RecTy fs2 x2) = undefined
   uC (ArrowTy rt1 [pt1]) (ArrowTy rt2 [pt2]) = undefined
