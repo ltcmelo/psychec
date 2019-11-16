@@ -644,15 +644,15 @@ buildSyn t a =
 keepOrDrop :: Shape -> Type -> Shape -> Type -> BinOptr -> K
 keepOrDrop sp1 a1 sp2 a2 op =
   if (sp1 /= sp2
-      && (sp1 == Pointer || sp2 == Pointer)
-      && sp1 /= Undefined
-      && sp2 /= Undefined)
+      && (sp1 == P || sp2 == P)
+      && sp1 /= U
+      && sp2 /= U)
   then T
   else if (op == Assign)
        then (a2 :<=: a1)
-       else if (sp1 == Integral && sp2 == Floating)
+       else if (sp1 == I && sp2 == FP)
             then (a1 :<=: a2)
-            else if (sp1 == Floating && sp2 == Integral)
+            else if (sp1 == FP && sp2 == I)
                  then (a2 :<=: a1)
                  else (a1 :=: a2)
 
@@ -660,22 +660,22 @@ keepOrDrop sp1 a1 sp2 a2 op =
 select :: Shape -> Type -> Shape -> Type -> Type -> BinOptr -> K
 select sp1 a1 sp2 a2 t op  =
   case op of
-    Add -> if (sp1 == Pointer)
+    Add -> if (sp1 == P)
            then (a1 :=: t) :&: ((ConstTy IntTy) :<=: a2)
-           else if (sp2 == Pointer)
+           else if (sp2 == P)
                 then (a2 :=: t) :&: ((ConstTy IntTy) :<=: a1)
                 else (t :<=: DoubleTy)
     Assign -> (t :=: a1)
     Or -> (t :=: IntTy)
-    Divide -> if (sp1 == Integral && sp2 == Integral)
+    Divide -> if (sp1 == I && sp2 == I)
               then (t :=: IntTy)
                    :&: ((ConstTy IntTy) :<=: a1)
                    :&: ((ConstTy IntTy) :<=: a2)
-              else if (sp1 == Integral)
+              else if (sp1 == I)
                    then (t :<=: DoubleTy)
                         :&: ((ConstTy IntTy) :<=: a1)
                         :&: ((ConstTy DoubleTy) :<=: a2)
-                   else if (sp2 == Integral)
+                   else if (sp2 == I)
                         then (t :<=: DoubleTy)
                              :&: ((ConstTy DoubleTy) :<=: a1)
                              :&: ((ConstTy IntTy) :<=: a2)
@@ -688,12 +688,12 @@ select sp1 a1 sp2 a2 t op  =
 -- The lattice of shapes (i.e., "pre-types") --
 -----------------------------------------------
 
-data Shape = Undefined
-           | Scalar
-           | Pointer
-           | Numeric
-           | Integral
-           | Floating
+data Shape = U
+           | S
+           | P
+           | N
+           | I
+           | FP
            deriving (Eq, Ord, Show)
 
 newtype M = M { _shapes :: Map Expr Shape } deriving (Eq, Ord, Show)
@@ -703,57 +703,57 @@ classifyE e@(NumLit v) _ m =
   insertOrUpdate e sp m
   where
     sp = case v of
-      (IntLit 0) -> Scalar
-      (IntLit _) -> Integral
-      _ -> Floating
+      (IntLit 0) -> S
+      (IntLit _) -> I
+      _ -> FP
 classifyE e@(Var _) sp m =
   insertOrUpdate e sp m
 classifyE e@(FldAcc e' x) sp m =
   insertOrUpdate e sp m'
   where
-    (_, m') = classifyE e' Pointer m
+    (_, m') = classifyE e' P m
 classifyE e@(Deref e') sp m =
   insertOrUpdate e sp m'
   where
-    (_, m') = classifyE e' Pointer m
+    (_, m') = classifyE e' P m
 classifyE e@(AddrOf e') sp m =
-  insertOrUpdate e Pointer m'
+  insertOrUpdate e P m'
   where
     (_, m') = classifyE e' sp m
 classifyE e@(BinExpr Add e1 e2) sp m =
   insertOrUpdate e sp'''' m''
   where
-    sp' = if (sp == Integral
-              || sp == Floating
-              || sp == Numeric)
+    sp' = if (sp == I
+              || sp == FP
+              || sp == N)
           then sp
-          else Scalar
+          else S
     (sp1, m') = classifyE e1 sp' m
-    sp'' = if (sp1 == Pointer)
-           then Integral
-           else if (sp == Integral
-                   || sp == Floating
-                   || sp == Numeric)
+    sp'' = if (sp1 == P)
+           then I
+           else if (sp == I
+                   || sp == FP
+                   || sp == N)
                 then sp
-                else Scalar
+                else S
     (sp2, m'') = classifyE e2 sp'' m'
-    sp''' = if (sp2 == Pointer)
-            then Integral
+    sp''' = if (sp2 == P)
+            then I
             else sp''
     (sp3, m''') = classifyE e1 sp''' m''
-    sp'''' = if (sp3 == Pointer || sp2 == Pointer)
-             then Pointer
-             else Numeric
+    sp'''' = if (sp3 == P || sp2 == P)
+             then P
+             else N
 classifyE e@(BinExpr Divide e1 e2) sp m =
-  insertOrUpdate e Numeric m''
+  insertOrUpdate e N m''
   where
-    (_, m') = classifyE e1 Numeric m
-    (_, m'') = classifyE e2 Numeric m'
+    (_, m') = classifyE e1 N m
+    (_, m'') = classifyE e2 N m'
 classifyE e@(BinExpr Or e1 e2) sp m =
-  insertOrUpdate e Integral m''
+  insertOrUpdate e I m''
   where
-    (_, m') = classifyE e1 Scalar m
-    (_, m'') = classifyE e2 Scalar m'
+    (_, m') = classifyE e1 S m
+    (_, m'') = classifyE e2 S m'
 classifyE e@(BinExpr Assign e1 e2) sp m =
   insertOrUpdate e sp1 m''
   where
@@ -772,34 +772,34 @@ insertOrUpdate e sp m =
     sp' = case Map.lookup e (_shapes m) of
       Just sp'' ->
         case sp'' of
-          Pointer -> sp''
-          Integral -> sp''
-          Floating -> sp''
-          Numeric ->
-            if (sp == Integral || sp == Floating)
+          P -> sp''
+          I -> sp''
+          FP -> sp''
+          N ->
+            if (sp == I || sp == FP)
             then sp
             else sp''
-          Scalar ->
-            if (sp == Integral
-                || sp == Floating
-                || sp == Pointer)
+          S ->
+            if (sp == I
+                || sp == FP
+                || sp == P)
             then sp
             else sp''
-          Undefined -> sp
+          U -> sp
       Nothing -> sp
 
 shape :: Expr -> M -> Shape
 shape e m =
   case Map.lookup e (_shapes m) of
     Just sp -> sp
-    Nothing -> Undefined
+    Nothing -> U
 
 ty2shape :: Type -> Shape
-ty2shape IntTy = Integral
-ty2shape DoubleTy = Floating
+ty2shape IntTy = I
+ty2shape DoubleTy = FP
 ty2shape (ConstTy t) = ty2shape t
-ty2shape (PtrTy _) = Pointer
-ty2shape _ = Undefined
+ty2shape (PtrTy _) = P
+ty2shape _ = U
 
 -- | Build lattice of shapes until stabilization.
 buildLattice :: Prog -> M -> M
@@ -1360,7 +1360,7 @@ typeStmt c gam ((ExprStmt e):sl) rt =
 -- | TCRetZr
 typeStmt c gam ((RetStmt (NumLit (IntLit 0))):[]) rt =
   let rt' = (findInTheta (hat rt) (theta c))
-  in if isScalar rt'
+  in if isS rt'
      then rt'
      else error $ "0 doesn't type with " ++ show (ppC rt') ++ " as return"
 
@@ -1410,7 +1410,7 @@ typeExpr c gam (AddrOf e) =
 -- | TCAsgZr
 typeExpr c gam (BinExpr Assign e1 (NumLit (IntLit 0))) =
   let lht = typeExpr c gam e1
-  in if isScalar lht
+  in if isS lht
      then lht
      else error $ "assignment to 0 doesn't type check"
 
@@ -1444,7 +1444,7 @@ typeExpr c gam (BinExpr Add e1 e2) =
 typeExpr c gam (BinExpr Or e1 e2) =
   let lht = typeExpr c gam e1
       rht = typeExpr c gam e2
-  in if isScalar lht && isScalar rht
+  in if isS lht && isS rht
      then IntTy
      else error $ "incompatible types in || (OR)"
 
@@ -1487,12 +1487,12 @@ isArith DoubleTy = True
 isArith _ = error $ "expected arithmetic type"
 
 -- | Return whether the type is scalar.
-isScalar :: Type -> Bool
-isScalar (ConstTy t) = isScalar t
-isScalar (PtrTy _) = True
-isScalar IntTy = True
-isScalar DoubleTy = True
-isScalar _ = error $ "expected scalar type"
+isS :: Type -> Bool
+isS (ConstTy t) = isS t
+isS (PtrTy _) = True
+isS IntTy = True
+isS DoubleTy = True
+isS _ = error $ "expected scalar type"
 
 -- | Return whether the type is a pointer.
 isPtr :: Type -> Bool
@@ -1582,12 +1582,12 @@ class PrettyM a where
   ppM :: a -> PP.Doc
 
 instance PrettyM Shape where
-  ppM Undefined = PP.text "<undefined>"
-  ppM Scalar = PP.text "<scalar>"
-  ppM Pointer = PP.text "<pointer>"
-  ppM Integral = PP.text "<integral>"
-  ppM Floating = PP.text "<floating>"
-  ppM Numeric = PP.text "<numeric>"
+  ppM U = PP.text "<undefined>"
+  ppM S = PP.text "<scalar>"
+  ppM P = PP.text "<pointer>"
+  ppM I = PP.text "<integral>"
+  ppM FP = PP.text "<floating-point>"
+  ppM N = PP.text "<numeric>"
 
 instance PrettyM M where
   ppM m =
