@@ -556,7 +556,7 @@ genStmt ((RetStmt e):[]) rt m = do
   k <- genExpr e a m
   return $
     Exists [a] $
-    keepOrDrop (shape (Var (Ident "$ret")) m) rt (shape e m) a Assign :&:
+    keepOrDrop (shapeOf (Var (Ident "$ret")) m) rt (shapeOf e m) a Assign :&:
     k
 
 -- | Constraint generation for expressions.
@@ -599,8 +599,8 @@ genExpr e@(BinExpr op e1 e2) t m = do
     Exists [a1, a2] $
     k1 :&:
     k2 :&:
-    keepOrDrop (shape e1 m) a1 (shape e2 m) a2 op :&:
-    select (shape e1 m) a1 (shape e2 m) a2 t op
+    keepOrDrop (shapeOf e1 m) a1 (shapeOf e2 m) a2 op :&:
+    select (shapeOf e1 m) a1 (shapeOf e2 m) a2 t op
 
 -- | The type of a literal.
 rho :: Lit -> Type
@@ -643,39 +643,44 @@ buildSyn t a =
 -- | Keep or drop a constraint.
 keepOrDrop :: Shape -> Type -> Shape -> Type -> BinOptr -> K
 keepOrDrop sp1 a1 sp2 a2 op =
-  if (sp1 /= sp2
-      && (sp1 == P || sp2 == P)
-      && sp1 /= U
-      && sp2 /= U)
+  if (fst sp1 /= fst sp2
+      && (fst sp1 == P || fst sp2 == P)
+      && fst sp1 /= U
+      && fst sp2 /= U)
   then T
   else if (op == Assign)
        then (a2 :<=: a1)
-       else if (sp1 == I && sp2 == FP)
+       else if (fst sp1 == I && fst sp2 == FP)
             then (a1 :<=: a2)
-            else if (sp1 == FP && sp2 == I)
+            else if (fst sp1 == FP && fst sp2 == I)
                  then (a2 :<=: a1)
-                 else (a1 :=: a2)
+                 else if (snd sp1 == snd sp2)
+                      then (a1 :=: a2)
+                      -- The shape carries an annotation, use it accordinly.
+                      else if (snd sp1 == (ConstTy (snd sp2)))
+                           then (a1 :<=: a2)
+                           else (a2 :<=: a1)
 
 -- | Select operands and result types.
 select :: Shape -> Type -> Shape -> Type -> Type -> BinOptr -> K
 select sp1 a1 sp2 a2 t op  =
   case op of
-    Add -> if (sp1 == P)
+    Add -> if (fst sp1 == P)
            then (a1 :=: t) :&: ((ConstTy IntTy) :<=: a2)
-           else if (sp2 == P)
+           else if (fst sp2 == P)
                 then (a2 :=: t) :&: ((ConstTy IntTy) :<=: a1)
                 else (t :<=: DoubleTy)
     Assign -> (t :=: a1)
     Or -> (t :=: IntTy)
-    Divide -> if (sp1 == I && sp2 == I)
+    Divide -> if (fst sp1 == I && fst sp2 == I)
               then (t :=: IntTy)
                    :&: ((ConstTy IntTy) :<=: a1)
                    :&: ((ConstTy IntTy) :<=: a2)
-              else if (sp1 == I)
+              else if (fst sp1 == I)
                    then (t :<=: DoubleTy)
                         :&: ((ConstTy IntTy) :<=: a1)
                         :&: ((ConstTy DoubleTy) :<=: a2)
-                   else if (sp2 == I)
+                   else if (fst sp2 == I)
                         then (t :<=: DoubleTy)
                              :&: ((ConstTy DoubleTy) :<=: a1)
                              :&: ((ConstTy IntTy) :<=: a2)
@@ -684,76 +689,81 @@ select sp1 a1 sp2 a2 t op  =
                              :&: (a2 :<=: DoubleTy)
 
 
------------------------------------------------
--- The lattice of shapes (i.e., "pre-types") --
------------------------------------------------
+---------------------------
+-- The lattice of shapes --
+---------------------------
 
-data Shape = U
-           | S
-           | P
-           | N
-           | I
-           | FP
-           deriving (Eq, Ord, Show)
+data ShapeName = U
+               | S
+               | P
+               | N
+               | I
+               | FP
+               deriving (Eq, Ord, Show)
+
+type Shape = (ShapeName, Type)
 
 newtype M = M { _shapes :: Map Expr Shape } deriving (Eq, Ord, Show)
+
+shape :: ShapeName -> Shape
+shape n = (n, NamedTy $ Ident "<empty type>")
 
 classifyE :: Expr -> Shape -> M -> (Shape, M)
 classifyE e@(NumLit v) _ m =
   insertOrUpdate e sp m
   where
     sp = case v of
-      (IntLit 0) -> S
-      (IntLit _) -> I
-      _ -> FP
+      (IntLit 0) -> shape S
+      (IntLit _) -> shape I
+      _ -> shape FP
 classifyE e@(Var _) sp m =
   insertOrUpdate e sp m
 classifyE e@(FldAcc e' x) sp m =
   insertOrUpdate e sp m'
   where
-    (_, m') = classifyE e' P m
+    (_, m') = classifyE e' (shape P) m
 classifyE e@(Deref e') sp m =
   insertOrUpdate e sp m'
   where
-    (_, m') = classifyE e' P m
+    (_, m') = classifyE e' (shape P) m
 classifyE e@(AddrOf e') sp m =
-  insertOrUpdate e P m'
+  insertOrUpdate e (shape P) m'
   where
     (_, m') = classifyE e' sp m
 classifyE e@(BinExpr Add e1 e2) sp m =
   insertOrUpdate e sp'''' m''
   where
-    sp' = if (sp == I
-              || sp == FP
-              || sp == N)
+    sp' = if (sp == shape I
+              || sp == shape FP
+              || sp == shape N)
           then sp
-          else S
+          else shape S
     (sp1, m') = classifyE e1 sp' m
-    sp'' = if (sp1 == P)
-           then I
-           else if (sp == I
-                   || sp == FP
-                   || sp == N)
+    sp'' = if (fst sp1 == P)
+           then shape I
+           else if (sp == shape I
+                   || sp == shape FP
+                   || sp == shape N)
                 then sp
-                else S
+                else shape S
     (sp2, m'') = classifyE e2 sp'' m'
-    sp''' = if (sp2 == P)
-            then I
+    sp''' = if (fst sp2 == P)
+            then shape I
             else sp''
     (sp3, m''') = classifyE e1 sp''' m''
-    sp'''' = if (sp3 == P || sp2 == P)
-             then P
-             else N
+    sp'''' = if (fst sp3 == P || fst sp2 == P)
+             then shape P
+             else shape N
 classifyE e@(BinExpr Divide e1 e2) sp m =
-  insertOrUpdate e N m''
+  insertOrUpdate e (shape N) m''
   where
-    (_, m') = classifyE e1 N m
-    (_, m'') = classifyE e2 N m'
+    (_, m') = classifyE e1 (shape N) m
+    (_, m'') = classifyE e2 (shape N) m'
 classifyE e@(BinExpr Or e1 e2) sp m =
-  insertOrUpdate e I m''
+  insertOrUpdate e (shape I) m''
   where
-    (_, m') = classifyE e1 S m
-    (_, m'') = classifyE e2 S m'
+    (_, m') = classifyE e1 (shape S) m
+    (_, m'') = classifyE e2 (shape S) m'
 classifyE e@(BinExpr Assign e1 e2) sp m =
   insertOrUpdate e sp1 m''
   where
@@ -771,35 +781,33 @@ insertOrUpdate e sp m =
   where
     sp' = case Map.lookup e (_shapes m) of
       Just sp'' ->
-        case sp'' of
-          P -> sp''
-          I -> sp''
+        case fst sp'' of
+          P  -> sp''
+          I  -> sp''
           FP -> sp''
-          N ->
-            if (sp == I || sp == FP)
-            then sp
-            else sp''
-          S ->
-            if (sp == I
-                || sp == FP
-                || sp == P)
-            then sp
-            else sp''
-          U -> sp
+          N  -> if (fst sp == I || fst sp == FP)
+                then sp
+                else sp''
+          S  -> if (fst sp == I
+                    || fst sp == FP
+                    || fst sp == P)
+                then sp
+                else sp''
+          U  -> sp
       Nothing -> sp
 
-shape :: Expr -> M -> Shape
-shape e m =
+shapeOf :: Expr -> M -> Shape
+shapeOf e m =
   case Map.lookup e (_shapes m) of
     Just sp -> sp
-    Nothing -> U
+    Nothing -> shape U
 
 ty2shape :: Type -> Shape
-ty2shape IntTy = I
-ty2shape DoubleTy = FP
-ty2shape (ConstTy t) = ty2shape t
-ty2shape (PtrTy _) = P
-ty2shape _ = U
+ty2shape t@IntTy = (I, t)
+ty2shape t@DoubleTy = (FP, t)
+ty2shape t@(ConstTy t') = (fst (ty2shape t'), t)
+ty2shape t@(PtrTy _) = (P, t)
+ty2shape _ = shape U
 
 -- | Build lattice of shapes until stabilization.
 buildLattice :: Prog -> M -> M
@@ -809,9 +817,9 @@ buildLattice p@(Prog _ fs) m =
       let (sp, m) = classifyD d acc
       in go xs m
     go ((ExprStmt e):xs) acc =
-      let (sp, m) = classifyE e (shape e acc) acc
+      let (sp, m) = classifyE e (shapeOf e acc) acc
       in go xs m
-    go ((RetStmt e):[]) acc = snd $ classifyE e (shape e acc) acc
+    go ((RetStmt e):[]) acc = snd $ classifyE e (shapeOf e acc) acc
 
     handleParam ds = map (\d -> DeclStmt d) ds
     handleRet rt m = M $ Map.insert (Var (Ident "$ret")) (ty2shape rt) (_shapes m)
@@ -1581,7 +1589,7 @@ instance PrettyK Stamp where
 class PrettyM a where
   ppM :: a -> PP.Doc
 
-instance PrettyM Shape where
+instance PrettyM ShapeName where
   ppM U = PP.text "<undefined>"
   ppM S = PP.text "<scalar>"
   ppM P = PP.text "<pointer>"
@@ -1601,7 +1609,7 @@ instance PrettyM M where
       pp (BinExpr Divide e1 e2) = pp e1 PP.<> PP.char '/' PP.<> pp e2
       pp (BinExpr Or e1 e2) = pp e1 PP.<> PP.text "||" PP.<> pp e2
       pp (BinExpr Assign e1 e2) = pp e1 PP.<> PP.char '=' PP.<> pp e2
-    in Map.foldrWithKey (\k v acc -> pp k PP.<+> ppM v PP.$$ acc)
+    in Map.foldrWithKey (\k v acc -> pp k PP.<+> ppM (fst v) PP.$$ acc)
                         PP.empty
                         (_shapes m)
 
