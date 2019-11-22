@@ -852,6 +852,7 @@ instance UnifiableC Type where
   uC t1 t2@(TyVar _) = uC t2 t1
   uC IntTy IntTy = [Trivial]
   uC DoubleTy DoubleTy = [Trivial]
+  uC VoidTy VoidTy = [Trivial]
   uC t1@(NamedTy x1) t2@(NamedTy x2)
     | x1 == x2 = [Trivial]
     | otherwise = error $ "can't (classic) unify named types " ++
@@ -880,7 +881,7 @@ instance UnifiableC Type where
   uS (ConstTy t1) (ConstTy t2) sm = uS t1 t2 sm
   uS (ConstTy t1) t2 Relax = uS t1 t2 Relax
   uS t1 (ConstTy t2) Enforce = uS t1 t2 Enforce
-  uS (PtrTy t1@(TyVar _)) (PtrTy t2@VoidTy) _ = uS t1 t2 Enforce
+  uS (PtrTy (TyVar st)) (PtrTy t2@VoidTy) _ = [st :-> t2]
   uS (PtrTy _) (PtrTy VoidTy) _ = [Trivial]
   uS (PtrTy t1) (PtrTy t2) _ = uS t1 t2 Enforce
   uS t1@(RecTy fs1 x1) t2@(RecTy fs2 x2) _ = undefined
