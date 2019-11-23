@@ -1144,10 +1144,10 @@ orderSub (B:kW) kS =
 
 -- | Detect presence of top type.
 liftSub :: [K] -> [K] -> [K]
-liftSub (k1@(t1 :<=: t2@(PtrTy (TyVar (Stamp n)))):
-         k2@(t1' :<=: t2'@(PtrTy (TyVar (Stamp n')))):k) kn
+liftSub (k1@(t1@(PtrTy pt1) :<=: t2@(PtrTy (TyVar (Stamp n)))):
+         k2@(t1'@(PtrTy pt1') :<=: t2'@(PtrTy (TyVar (Stamp n')))):k) kn
   | n == n'
-    && ((coreTy t1) /= (coreTy t1'))
+    && ((unqualTy pt1) /= (unqualTy pt1'))
     && (isGround t1)
     && (isGround t1') =
       -- Check t1 only, since `const' pointers (when existing) appear first.
@@ -1161,11 +1161,10 @@ liftSub (k1@( _ :<=: _):k) kn =
 liftSub (B:k) kn =
   kn ++ k
 
--- | Core type.
-coreTy :: Type -> Type
-coreTy (PtrTy t) = coreTy t
-coreTy (ConstTy t) = coreTy t
-coreTy t = t
+-- | Ensure unqualified type.
+unqualTy :: Type -> Type
+unqualTy (ConstTy t) = t
+unqualTy t = t
 
 
 ------------------------------
