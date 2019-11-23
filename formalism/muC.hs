@@ -1144,17 +1144,17 @@ orderSub (B:kW) kS =
 
 -- | Detect presence of top type.
 liftSub :: [K] -> [K] -> [K]
-liftSub (k1@(t1 :<=: t1'@(PtrTy (TyVar (Stamp n1)))):
-         k2@(t2 :<=: t2'@(PtrTy (TyVar (Stamp n2)))):k) kn
-  | n1 == n2
-    && ((coreTy t1) /= (coreTy t2))
+liftSub (k1@(t1 :<=: t2@(PtrTy (TyVar (Stamp n)))):
+         k2@(t1' :<=: t2'@(PtrTy (TyVar (Stamp n')))):k) kn
+  | n == n'
+    && ((coreTy t1) /= (coreTy t1'))
     && (isGround t1)
-    && (isGround t2) =
+    && (isGround t1') =
       -- Check t1 only, since `const' pointers (when existing) appear first.
       let t = case t1 of
              PtrTy (ConstTy _) -> (PtrTy (ConstTy VoidTy))
              _ ->  PtrTy VoidTy
-      in liftSub k (kn ++ ((t :<=: t1'):k1:[k2]))
+      in liftSub k (kn ++ ((t :<=: t2):k1:[k2]))
   | otherwise = liftSub (k2:k) (kn ++ [k1])
 liftSub (k1@( _ :<=: _):k) kn =
   liftSub k (kn ++ [k1])
