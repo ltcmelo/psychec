@@ -1147,7 +1147,7 @@ liftSub :: [K] -> [K] -> [K]
 liftSub (k1@(t1 :<=: t1'@(PtrTy (TyVar (Stamp n1)))):
          k2@(t2 :<=: t2'@(PtrTy (TyVar (Stamp n2)))):k) kn
   | n1 == n2
-    && ((unqualPtrTy t1) /= (unqualPtrTy t2))
+    && ((coreTy t1) /= (coreTy t2))
     && (isGround t1)
     && (isGround t2) =
       -- Check t1 only, since `const' pointers (when existing) appear first.
@@ -1161,10 +1161,11 @@ liftSub (k1@( _ :<=: _):k) kn =
 liftSub (B:k) kn =
   kn ++ k
 
--- | Unqualify pointer type.
-unqualPtrTy :: Type -> Type
-unqualPtrTy (PtrTy (ConstTy t)) = PtrTy t
-unqualPtrTy t = t
+-- | Core type.
+coreTy :: Type -> Type
+coreTy (PtrTy t) = coreTy t
+coreTy (ConstTy t) = coreTy t
+coreTy t = t
 
 
 ------------------------------
