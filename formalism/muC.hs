@@ -1298,10 +1298,10 @@ solveConstraints k cfg = do
   let cfgUE = unifyEq cfgPP
   debug "unify-equivalences" (showConfig cfgUE)
 
-  let cfgSO = splitOrderLift cfgUE
-  debug "split-order-lift" (showConfig cfgSO)
+  let cfgSOL = splitOrderLift cfgUE
+  debug "split-order-lift" (showConfig cfgSOL)
 
-  let cfgUI = unifyIq cfgSO
+  let cfgUI = unifyIq cfgSOL
   debug "unify-inequalities" (showConfig cfgUI)
 
   let cfgUP = unifyWb cfgUI { kI = (kW cfgUI), kW = [] }
