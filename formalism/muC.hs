@@ -57,18 +57,16 @@ compile src =
       let
         phi_i = Map.empty
         psi_i = Map.empty
-        theta_i = (Map.fromList [ (hat IntTy, IntTy),
-                                  (hat DoubleTy, DoubleTy) ])
-        cfg = Config
-            phi_i
-            psi_i
-            theta_i
-            k
-            [] [] [] []
+        theta_i = (Map.fromList
+                    [ (hat IntTy, IntTy),
+                      (hat DoubleTy, DoubleTy),
+                      (hat VoidTy, VoidTy) ])
+        cfg = Config phi_i psi_i theta_i k [] [] [] []
+
       cfg'@(Config { phi, psi , theta }) <- solveConstraints k cfg
       debug "final config" (showConfig cfg')
 
-      let ok = validateSemantics (phi, psi, theta) k
+      let ok = satisfyK (phi, psi, theta) k
       debug "semantics" (if ok then "OK" else error "does NOT hold\n")
 
       let ts = verifyTyping cfg' Map.empty p
@@ -302,61 +300,72 @@ addToTheta tid t theta =
 -- The semantics of constraints --
 ----------------------------------
 
-validateSemantics :: (Phi, Psi, Theta) -> K -> Bool
-validateSemantics (phi, psi, theta) k = satisfies (phi, psi, theta) k
+trace_Sema = False
 
-satisfies :: (Phi, Psi, Theta) -> K -> Bool
+satisfyK :: (Phi, Psi, Theta) -> K -> Bool
 
 -- | KT
-satisfies (_, _, _) T = True
+satisfyK (_, _, _) T = True
 
 -- | KAnd
-satisfies (phi, psi, theta) (k1 :&: k2) =
-  let check1 = satisfies (phi, psi, theta) k1
-      check2 = satisfies (phi, psi, theta) k2
+satisfyK d@(phi, psi, theta) k@(k1 :&: k2) =
+  let check1 = satisfyK (phi, psi, theta) k1
+      check2 = satisfyK (phi, psi, theta) k2
   in if trace_Sema
-     then trace ("satisfies " ++ show (ppK k1)) check1
-          && trace ("satisfies " ++ show (ppK k2)) check2
+     then trace ("\nsatisfy " ++ show (ppK k) ++ "\n" ++ show (formatPhiPsiTheta d) ++
+                 "k1 " ++ show (ppK k1) ++ "\nk2 " ++ show (ppK k2)) (check1 && check2)
      else check1 && check2
 
 -- | KEx
-satisfies (phi, psi, theta) kk@(Exists tl k) =
-  let f st = isGround (findInPhi st phi)
-  in foldr (\(TyVar st) acc -> f st && acc) True tl
-     && satisfies (phi, psi, theta) k
+satisfyK (phi, psi, theta) kk@(Exists tl k) =
+  let  go st t = isSubTy phi (findInPhi st phi) t
+  in foldr (\(TyVar st) acc -> (Map.foldr (\t acc_ -> go st t || acc_) False phi) && acc) True tl
+     && satisfyK (phi, psi, theta) k
 
 -- | KDef
-satisfies (phi, psi, theta) (Def x (TyVar st) k) =
+satisfyK (phi, psi, theta) (Def x (TyVar st) k) =
   findInPsi x psi == findInPhi st phi
-  && satisfies (phi, psi, theta) k
+  && satisfyK (phi, psi, theta) k
 
 -- | KFun
-satisfies (phi, psi, theta) (Fun f (ArrowTy rt@(TyVar st) p) k) =
+satisfyK (phi, psi, theta) (Fun f (ArrowTy rt@(TyVar st) p) k) =
   findInPsi f psi == ArrowTy (findInPhi st phi) p
-  && satisfies (phi, psi, theta) k
+  && satisfyK (phi, psi, theta) k
 
 -- | KInst
-satisfies (phi, psi, theta) k@(TypeOf x t@(TyVar _)) =
-  satisfies (phi, psi, theta) ((findInPsi x psi) :=: t)
+satisfyK (phi, psi, theta) k@(TypeOf x t@(TyVar _)) =
+  satisfyK (phi, psi, theta) ((findInPsi x psi) :=: t)
 
 -- | KSyn
-satisfies (phi, psi, theta) (Syn t a@(TyVar _)) =
+satisfyK (phi, psi, theta) (Syn t a@(TyVar _)) =
   let t' = findInTheta (hat t) theta
-  in satisfies (phi, psi, theta) (t' :=: a)
+  in satisfyK (phi, psi, theta) (t' :=: a)
 
 -- | KHas
-satisfies (phi, psi, theta) (Has (TyVar st) (Decl t x)) =
-  let tt = findInPhi st phi
-      t' = field x (findInTheta (hat tt) theta)
-  in satisfies (phi, psi, theta) (t' :=: t)
+satisfyK (phi, psi, theta) (Has (TyVar st) (Decl t x)) =
+  let t' = case findInPhi st phi of
+             (TyVar _) -> t
+             gt -> field x (findInTheta (hat gt) theta)
+  in satisfyK (phi, psi, theta) (t' :=: t)
 
 -- | KEq
-satisfies (phi, _, _) k@(t1 :=: t2) = isSubTy phi t1 t2
+satisfyK (phi, _, _) k@(t1 :=: t2) = isSubTy phi t1 t2
 
 -- | KIq
-satisfies (phi, _, _) k@(t1 :<=: t2) = isSubTy phi t1 t2
+satisfyK (phi, _, _) k@(t1 :<=: t2) = isSubTy phi t1 t2
 
-trace_Sema = False
+
+satisfyC_ :: (Config, Config) -> K -> Config
+satisfyC_ (cfg, cfg') k =
+  if satisfyK ((phi cfg), (psi cfg), (theta cfg)) k
+  then cfg'
+  else error $ "entailment failed"
+
+satisfyC :: Config -> Config
+satisfyC cfg =
+  if satisfyK ((phi cfg), (psi cfg), (theta cfg)) (groupK cfg)
+  then cfg
+  else error $ "entailment failed"
 
 -- | Return the type of the field in a record.
 field :: Ident -> Type -> Type
@@ -374,17 +383,12 @@ isGround t =
   then True
   else False
 
--- | Supporting function to check entailment across rewrites.
-checkEntail :: (Config, Config) -> K -> Config
-checkEntail (cfg, cfg') k =
-  if validateSemantics ((phi cfg), (psi cfg), (theta cfg)) k
-  then cfg'
-  else error $ "entailment failed"
-
 
 ------------------------
 -- The type predicate --
 ------------------------
+
+trace_Pred = False
 
 isSubTy :: Phi -> Type -> Type -> Bool
 isSubTy phi t1@(TyVar st1) t2 =
@@ -410,8 +414,9 @@ isSubTy _ VoidTy VoidTy = True
 isSubTy _ (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTy _ t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
 isSubTy phi t1 t2 =
-  error $ "unknown (value) subtyping relation " ++
-  show (ppK t1) ++ "<:" ++ show (ppK t2)
+  if trace_Pred
+  then trace ("unknown (value) subtyping " ++ show (ppK t1) ++ "<:" ++ show (ppK t2)) False
+  else False
 
 isSubTyPtr :: Phi -> Type -> Type -> Bool
 isSubTyPtr phi t1@(TyVar st1) t2 =
@@ -434,8 +439,9 @@ isSubTyPtr _ DoubleTy DoubleTy = True
 isSubTyPtr _ (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTyPtr _ t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
 isSubTyPtr phi t1 t2 =
-  error $ "unknown (pointer) subtyping relation " ++
-  show (ppK t1) ++ "<:" ++ show (ppK t2)
+  if trace_Pred
+  then trace ("unknown (pointer) subtyping " ++ show (ppK t1) ++ "<:" ++ show (ppK t2)) False
+  else False
 
 
 -- | Subtyping predicate for ground types.
@@ -456,8 +462,9 @@ isSubTy' IntTy DoubleTy = True
 isSubTy' (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTy' t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
 isSubTy' t1 t2 =
-  error $ "unknown (value/ground) subtyping relation " ++
-  show (ppK t1) ++ "<:" ++ show (ppK t2)
+  if trace_Pred
+  then trace ("unknown (value/ground) subtyping " ++ show (ppK t1) ++ "<:" ++ show (ppK t2)) False
+  else False
 
 isSubTyPtr' :: Type -> Type -> Bool
 isSubTyPtr' (TyVar _) _ = error $ "expected ground type "
@@ -474,8 +481,9 @@ isSubTyPtr' DoubleTy DoubleTy = True
 isSubTyPtr' (NamedTy x1) (NamedTy x2) = x1 == x2
 isSubTyPtr' t1@(RecTy _ _) t2@(RecTy _ _) = t1 == t2
 isSubTyPtr' t1 t2 =
-  error $ "unknown (pointer/ground) subtyping relation " ++
-  show (ppK t1) ++ "<:" ++ show (ppK t2)
+  if trace_Pred
+  then trace ("unknown (pointer/ground) subtyping " ++ show (ppK t1) ++ "<:" ++ show (ppK t2)) False
+  else False
 
 -- | Whether we have an identity relation.
 isIdentity phi t@(TyVar st) = t == findInPhi st phi
@@ -946,6 +954,11 @@ data Config = Config
   }
   deriving (Eq, Ord, Show)
 
+groupK :: Config -> K
+groupK cfg@(Config { k, kE, kI, kW, kF }) =
+  let go el acc = acc :&: el
+  in foldr go k (kE ++ kI ++ kW ++ kF)
+
 
 ---------------------------
 -- Solver: preprocessing --
@@ -956,7 +969,8 @@ preprocess :: Config -> Config
 -- | PP-and
 preprocess cfg@(Config { k = k1 :&: k2 }) =
   let cfg' = preprocess (cfg { k = k1 })
-  in  preprocess $ (cfg' { k = k2 })
+      cfg'' = satisfyC cfg'
+  in  preprocess $ (cfg'' { k = k2 })
 
 -- | PP-ex
 preprocess cfg@(Config { k = Exists ts k' }) =
@@ -969,8 +983,8 @@ preprocess cfg@(Config { k = Syn t a, theta } ) =
   let theta' = if Map.member (hat t) theta
                then theta
                else addToTheta (hat t) a theta
-  in preprocess $ cfg { theta = theta',
-                        k = ((findInTheta (hat t) theta') :=: a) }
+      cfg' = cfg { theta = theta', k = ((findInTheta (hat t) theta') :=: a) }
+  in preprocess $ cfg'
 
 -- | PP-def
 preprocess cfg@(Config { k = Def x (TyVar st) k' }) =
@@ -1031,7 +1045,7 @@ unifyEq cfg@(Config { kE = k@(t1 :=: t2):kE_ }) =
                    kE = kE',
                    kF = kF',
                    kI = kI' }
-      rw = unifyEq (checkEntail (cfg, cfg') k)
+      rw = unifyEq (satisfyC_ (cfg, cfg') k)
   in if (not trace_U)
      then rw
      else trace("uC: " ++ show (ppK s) ++
@@ -1077,7 +1091,7 @@ unifyIq cfg@(Config {
                    kI = kI'''',
                    kF = kF',
                    kW = kW'' }
-      rw = unifyIq (checkEntail (cfg, cfg') k)
+      rw = unifyIq (satisfyC_ (cfg, cfg') k)
   in if (not trace_U)
      then rw
      else trace("uS:   " ++ show (ppK s) ++
@@ -1105,7 +1119,7 @@ unifyWb cfg@(Config { kI = k@(t1 :<=: t2):kI_ }) =
                    theta = theta',
                    kI = kI_',
                    kF = kF' }
-      rw = unifyWb (checkEntail (cfg, cfg') k)
+      rw = unifyWb (satisfyC_ (cfg, cfg') k)
   in if (not trace_U)
      then rw
      else trace("uS (wobbly): " ++ show (ppK s) ++ "\n... " ++ show (ppK kI_') ++ "\n") rw
@@ -1692,18 +1706,21 @@ instance PrettyC Type where
   ppC (TyVar (Stamp n)) = PP.text "α" PP.<> PP.text (show n)
 
 
-showMap m = show $
+formatMap m = show $
   Map.foldrWithKey
   (\k v acc -> PP.lbrace PP.<> PP.space PP.<> ppK k PP.<>
                PP.comma PP.<> PP.space PP.<> ppC v PP.<>
                PP.rbrace PP.<> PP.comma PP.<> PP.space PP.<> acc)
   PP.empty  m
 
+formatPhiPsiTheta (phi, psi, theta) =
+  PP.text (" Φ = { " ++ formatMap phi) PP.<+> PP.text "}\n" PP.<>
+  PP.text (" ψ = { " ++ formatMap psi) PP.<+> PP.text "}\n" PP.<>
+  PP.text (" Θ = { " ++ formatMap theta) PP.<+> PP.text "}\n"
+
 showConfig cfg@(Config { phi, psi, theta, k, kE, kF, kI, kW }) =
   show $
-  PP.text (" Φ = { " ++ showMap phi) PP.<+> PP.text "}\n" PP.<>
-  PP.text (" ψ = { " ++ showMap psi) PP.<+> PP.text "}\n" PP.<>
-  PP.text (" Θ = { " ++ showMap theta) PP.<+> PP.text "}\n" PP.<>
+  formatPhiPsiTheta (phi, psi, theta) PP.<>
   PP.text " [Ke] = " PP.<> ppK kE PP.<+> PP.text "\n" PP.<>
   PP.text " [Kf] = " PP.<> ppK kF PP.<+> PP.text "\n" PP.<>
   PP.text " [Ki] = " PP.<> ppK kI PP.<+> PP.text "\n" PP.<>

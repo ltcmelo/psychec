@@ -7,7 +7,7 @@ for FIXED_FILE in new_*; do
 done
 
 echo "building..."
-ghc -o runner muC.hs
+ghc -prof -fprof-auto -fprof-cafs -o runner muC.hs
 OK=$?
 if [ $OK -ne 0 ]; then
     echo "error in Haskell"
