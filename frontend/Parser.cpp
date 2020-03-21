@@ -665,7 +665,7 @@ bool Parser::parseDeclaration(DeclarationAST* &node)
     case T_ASM:
         return parseAsmDefinition(node);
 
-    case T__GENERIC:
+    case T__TEMPLATE:
         return parseGenericsDeclaration(node);
 
     case T_TEMPLATE:
@@ -1107,7 +1107,7 @@ bool Parser::parseGenericsDeclaration(DeclarationAST* &node)
 {
     DEBUG_THIS_RULE();
 
-    if (! (LA(1) == T__GENERIC))
+    if (! (LA(1) == T__TEMPLATE))
         return false;
 
     GenericsDeclarationAST* ast = new (_pool) GenericsDeclarationAST;

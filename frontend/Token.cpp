@@ -70,7 +70,7 @@ const char *token_names[] = {
     ("long"), ("short"), ("signed"), ("unsigned"), ("void"), ("wchar_t"),
 
     // Generics
-    ("_Generic"), ("_Forall"), ("_Exists")
+    ("_Template"), ("_Forall"), ("_Exists")
 };
 
 void Token::reset()
