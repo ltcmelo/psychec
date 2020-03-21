@@ -22,6 +22,9 @@
 *.cstr
 .DS_Store
 
+psychecgen
+psychecsolver-exe
+
 # Qt Creator project files
 *.creator
 *.creator.user
