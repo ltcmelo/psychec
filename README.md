@@ -21,7 +21,7 @@ To *build* PsycheC:
 * C++14 compiler
 * Haskell Stack
 
-To *use* PsycheC (or download [here](http://www.cnippet.cc/)):
+To *use* PsycheC (download [here](http://www.cnippet.cc/)):
 
 * Python 3
 
@@ -30,13 +30,14 @@ To *use* PsycheC (or download [here](http://www.cnippet.cc/)):
     cmake CMakeLists.txt  
     make
 
-### Running the Tests
+## Running the Tests
 
     ./psychecgen -t
     ./CompileTests.sh
-    cd solver && stack test
+    cd solver && stack test && cd -
+    cd formalism && ./test_muC.sh
 
-## Cnippet
+## Using
 
 The simplest way to use PsycheC is through the [Cnippet](http://www.cnippet.cc) compiler adaptor.
 Let us see an example.
@@ -75,7 +76,7 @@ typedef struct TYPE_1__
 }* T;
 ```
 
-## Generic Programming
+### Generic Programming
 
 *This is a work-in-progress, feedback is welcome through [this form](https://forms.gle/oJj1YEhAk3jwvHRo8).*
 
