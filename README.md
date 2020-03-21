@@ -33,7 +33,7 @@ To *use* PsycheC (download [here](http://www.cnippet.cc/)):
 ## Running the Tests
 
     ./psychecgen -t
-    ./CompileTests.sh
+    ./test_infer_and_compile.sh
     cd solver && stack test && cd -
     cd formalism && ./test_muC.sh
 
