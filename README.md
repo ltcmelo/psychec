@@ -5,11 +5,11 @@ PsycheC is a compiler frontend infrastructure for the C language that is enabled
 
 Applications:
 
-- Compiling a code snippet (e.g., retrieved from a bug tracker) without a build environment.
-- Statically analysing a partial program, by isolating uninteresting dependencies.
-- Enabling static analysis tools upon `#include` failures - common in cross-platform/embedded development.
-- Generating test-input data for functions in an independent manner.
-- Quick prototyping of an algorithm without the definition of concrete types.
+- Enabling static analysis on partial programs.
+- Supporting semantic tools despite of `#include` failures.
+- Compiling a code snippet (e.g., retrieved from a bug tracker).
+- Generating test-input data for a function, individually.
+- Prototyping of an algorithm without a type specification.
 
 Be creative!
 
