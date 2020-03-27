@@ -11,17 +11,23 @@
 
 
 import os.path
-from Algorithms import *
-from CommandLine import *
-from CompilerFacade import *
-from Diagnostics import *
-from PsycheFacade import *
-from Tracing import *
-from Unit import *
+import sys
+from Algorithms import remove_if_exists, flatten, concat_file, copy_file
+from CompilerFacade import CompilerFacade
+from Diagnostics import (DiagnosticReporter,
+                         FILE_DOES_NOT_EXIST,
+                         HOST_C_COMPILER_FORWARDING_FAILED,
+                         HOST_C_COMPILER_NOT_FOUND)
+from Process import execute
+from PsycheFacade import PsycheFacade
+from Tracing import trace_op
+from Unit import make_unit
 
 
 class Driver:
-    """ The compiler's driver """
+    """
+    The compiler's driver.
+    """
 
     _id = 'driver'
 
@@ -30,20 +36,21 @@ class Driver:
         self.cc = CompilerFacade(cnip_opt)
         self.psyche = PsycheFacade(cnip_opt)
 
-
     @staticmethod
     def _delete_old_files(unit):
-        """ Delete old files from any previous run. """
+        """
+        Delete old files from a previous run (if any).
+        """
 
         remove_if_exists(unit.cstr_file_path)
         remove_if_exists(unit.inc_file_path)
         remove_if_exists(unit.cnip_file_path)
 
-
     def _compile_unit(self, unit, cc_opts):
-        """ Perform the entire type-inference workflow for each target unit. """
+        """
+        Perform the entire type-inference workflow for each unit.
+        """
 
-        # Possible old files might exist, delete them.
         Driver._delete_old_files(unit)
 
         # Invoke the psyche generator with the stdlib plugin, which will: (i) identify whether an
@@ -70,11 +77,12 @@ class Driver:
                 concat_file(unit.cnip_file_path, unit.inc_file_path)
                 copy_file(unit.inc_file_path, unit.cnip_file_path)
 
-
     def execute(self):
-        """ Entry point for the driver. """
+        """
+        Entry point for the driver.
+        """
 
-        trace_op(Driver._id, list2str(self.cnip_opt['host_cc_cmd']))
+        trace_op(Driver._id, flatten(self.cnip_opt['host_cc_cmd']))
 
         if not self.cc.verify_support():
             sys.exit(DiagnosticReporter.fatal(HOST_C_COMPILER_NOT_FOUND))
@@ -119,7 +127,7 @@ class Driver:
         # In the final command, enforce C compilation mode, since we're compiling a file
         # with the `.cnip' extension (no worry about duplicating this option).
         cmd = [self.cnip_opt['host_cc'], '-x', 'c'] + new_cmd
-        ok = call_process(Driver._id, cmd)
+        ok = execute(Driver._id, cmd)
         if ok != 0:
             sys.exit(DiagnosticReporter.fatal(HOST_C_COMPILER_FORWARDING_FAILED))
         return 0

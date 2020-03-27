@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 
 
-from Diagnostics import *
+from Diagnostics import DiagnosticReporter, C_VERSION_NOT_SUPPORTED
 
 
 class Command(object):

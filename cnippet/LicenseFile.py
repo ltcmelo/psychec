@@ -16,18 +16,27 @@ import hashlib
 import os
 import re
 import sys
-from Diagnostics import *
-from Version import *
+from Diagnostics import (DiagnosticReporter,
+                         LICENSE_FILE_NOT_FOUND,
+                         CORRUPTED_LICENSE_FILE,
+                         INCOMPATIBLE_LICENSE_PRODUCT_VERSION,
+                         LICENSE_EXPIRED)
+from Version import Version
 
 
 class LicenseFile:
-    """ The license file. """
+    """
+    The license file.
+    """
 
     def __init__(self, path):
-        """ Validate and initialize data. """
+        """
+        Validate and initialize data.
+        """
 
         if not os.path.isfile(path):
             sys.exit(DiagnosticReporter.fatal(LICENSE_FILE_NOT_FOUND))
+
         if os.stat(path).st_size == 0:
             sys.exit(DiagnosticReporter.fatal(CORRUPTED_LICENSE_FILE))
 
@@ -48,10 +57,10 @@ class LicenseFile:
         if not version_pat.match(self.version):
             sys.exit(DiagnosticReporter.fatal(CORRUPTED_LICENSE_FILE))
 
-
     def verify(self):
-        """ Check whether the license file is integral; cnippet's version applies;
-            and license has not expired.
+        """
+        Verify integrity of the license file is integral, cnippet's version, and
+        expiration date.
         """
 
         secret = '$*we#j238@#WA!%'
@@ -78,10 +87,11 @@ class LicenseFile:
         if datetime.datetime.today() > exp_date:
             sys.exit(DiagnosticReporter.fatal(LICENSE_EXPIRED))
 
-
     @staticmethod
     def _check_line(line):
-        """ Check line format. """
+        """
+        Check the line format.
+        """
         parts = line.split(':')
         if len(parts) != 2:
             sys.exit(DiagnosticReporter.fatal(CORRUPTED_LICENSE_FILE))

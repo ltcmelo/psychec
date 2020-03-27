@@ -10,9 +10,11 @@
 # -----------------------------------------------------------------------------
 
 
+import subprocess
 import sys
-from CommandLine import *
-from Process import *
+from CommandLine import GccCommand
+from Diagnostics import DiagnosticReporter, PREPROCESSING_FILE_FAILED
+from Process import execute
 
 
 class CompilerFacade:
@@ -28,44 +30,50 @@ class CompilerFacade:
         self.host_cc_cmd = cnip_opt["host_cc_cmd"]
         self.host_cc_family = None
 
-
     @staticmethod
     def predefined_macros(prefix):
-        """ Define common builtin/platform/common macros. """
+        """
+        Defined common builtin/platform macros.
+        """
 
         macros = [
-                   # Calling conventions
-                   prefix, '__cdecl=',
-                   prefix, '__stdcall=',
-                   prefix, '__thiscall=',
+            # Calling conventions
+            prefix, '__cdecl=',
+            prefix, '__stdcall=',
+            prefix, '__thiscall=',
 
-                   # Nullability attributes
-                   prefix, '_Nullable=',
-                   prefix, '_Nonnull=',
+            # Nullability attributes
+            prefix, '_Nullable=',
+            prefix, '_Nonnull=',
 
-                   # GNU alternate keywords
-                   prefix, '__extension__=',
+            # GNU alternate keywords
+            prefix, '__extension__=',
 
-                   # Microsoft
-                   prefix, "'__declspec(a)='"
-                 ]
+            # Microsoft
+            prefix, "'__declspec(a)='"
+        ]
+
         return macros
 
     @staticmethod
     def undefined_macros(prefix):
-        """ Undefine common builtin/platform/common macros. """
+        """
+        Undefine common builtin/platform macros.
+        """
 
         macros = [
-                   # Clang' block language.
-                   prefix, '__BLOCKS__',
-                 ]
+            # Clang' block language.
+            prefix, '__BLOCKS__',
+        ]
+
         return macros
 
-
     def verify_support(self):
-        """ Verify whether the host C compiler is a supported one. """
+        """
+        Verify whether the host C compiler is supported.
+        """
 
-        # Identify the compiler by looking at predefined macros: $ echo | gcc -dM -E -
+        # Look at predefined macros: $ echo | gcc -dM -E -
         echo = subprocess.Popen('echo', stdout=subprocess.PIPE)
         cmd = [self.host_cc, '-dM', '-E', '-']
         try:
@@ -73,7 +81,7 @@ class CompilerFacade:
         except:
             return False
 
-        # Macro __GNU__ is predefined in both GCC and Clang, __clang__ only by Clang.
+        #  __GNU__ is predefined in GCC/Clang; __clang__, only in Clang.
         if b'__clang__' in macros:
             self.host_cc_family = CompilerFacade.Clang
         elif b'__GNUC__' in macros:
@@ -81,41 +89,45 @@ class CompilerFacade:
 
         return self.host_cc_family
 
-
     def parse_command(self):
-        """ Parse the compiler command to extract compilation options. """
+        """
+        Parse the compiler command to extract compilation options.
+        """
 
         assert self.host_cc_family
 
         return GccCommand(self.host_cc_cmd)
-        #return {
+        # return {
         #           CompilerFacade.GCC: GccCommand(self.host_cc_cmd),
         #           CompilerFacade.Clang: GccCommand(self.host_cc_cmd)
         #       }[self.host_cc_family]
 
-
     def check_syntax(self, c_file_name):
-        """ Check the "syntax" of the program. We're abusing terminology, since this syntax-check
-            actually performs symbol-lookup. So if a declaration is missing, an error is thrown. """
+        """
+        Check the "syntax" of the file -- this is an abuse of terminology, since
+        `fsyntax-only' performs symbol lookup, i.e., if a declaration is missing,
+        an error is thrown.
+        """
 
         cmd = [self.host_cc,
                '-fsyntax-only',
                c_file_name]
 
         extra = {
-                    CompilerFacade.GCC: '-Werror=builtin-declaration-mismatch',
-                    CompilerFacade.Clang: '-Werror=incompatible-library-redeclaration'
-                }
+            CompilerFacade.GCC: '-Werror=builtin-declaration-mismatch',
+            CompilerFacade.Clang: '-Werror=incompatible-library-redeclaration'
+        }
 
         cmd.append(extra[self.host_cc_family])
         cmd.append('-Werror=incompatible-pointer-types')
         cmd.append('-Werror=implicit-function-declaration')
 
-        return call_process(CompilerFacade._id, cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
+        return execute(CompilerFacade._id, cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     def preprocess(self, c_file_name, pp_file_name):
-        """ Pre-process the given file. """
+        """
+        Preprocess the file.
+        """
 
         cmd = [self.host_cc,
                '-E',
@@ -128,6 +140,8 @@ class CompilerFacade:
         cmd += CompilerFacade.predefined_macros('-D')
         cmd += CompilerFacade.undefined_macros('-U')
 
-        ok = call_process(CompilerFacade._id, cmd)
+        ok = execute(CompilerFacade._id, cmd)
         if ok != 0:
-            sys.exit(DiagnosticReporter.fatal(PREPROCESSING_FILE_FAILED, c_file_name))
+            sys.exit(
+                DiagnosticReporter.fatal(PREPROCESSING_FILE_FAILED,
+                                         c_file_name))

@@ -11,9 +11,12 @@
 
 
 import sys
-from CompilerFacade import *
-from Diagnostics import *
-from Process import *
+from Algorithms import maybe_append
+from CompilerFacade import CompilerFacade
+from Diagnostics import (DiagnosticReporter,
+                         CONSTRAINT_GENERATION_FOR_FILE_FAILED,
+                         CONSTRAINT_SOLVING_FOR_FILE_FAILED)
+from Process import execute
 
 
 class PsycheFacade:
@@ -28,7 +31,6 @@ class PsycheFacade:
         self.no_heuristic = cnip_opt['no_heuristic']
         self.no_stdlib = cnip_opt['no_stdlib']
         self.host_cc = cnip_opt['host_cc']
-
 
     def generate(self, unit, cc_opts):
         """ Invoke the constraint generator. """
@@ -49,10 +51,11 @@ class PsycheFacade:
             cmd.append('-p')
             cmd.append('libpsychecstd')
 
-        ok = call_process(PsycheFacade._id, cmd)
-        if ok != 0:
-            sys.exit(DiagnosticReporter.fatal(CONSTRAINT_GENERATION_FOR_FILE_FAILED, unit.c_file_path))
-
+        ok = execute(PsycheFacade._id, cmd)
+        if not ok:
+            sys.exit(
+                DiagnosticReporter.fatal(CONSTRAINT_GENERATION_FOR_FILE_FAILED,
+                                         unit.c_file_path))
 
     def solve(self, unit):
         """ Invoke the constraint solver. """
@@ -66,6 +69,8 @@ class PsycheFacade:
         if not self.no_stdlib:
             cmd.append('--match-stdlib=approx')
 
-        ok = call_process(PsycheFacade._id, cmd)
-        if ok != 0:
-            sys.exit(DiagnosticReporter.fatal(CONSTRAINT_SOLVING_FOR_FILE_FAILED, unit.c_file_path))
+        ok = execute(PsycheFacade._id, cmd)
+        if not ok:
+            sys.exit(
+                DiagnosticReporter.fatal(CONSTRAINT_SOLVING_FOR_FILE_FAILED,
+                                         unit.c_file_path))

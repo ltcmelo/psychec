@@ -12,7 +12,7 @@
 
 import subprocess
 import sys
-from Diagnostics import *
+from Diagnostics import DiagnosticReporter, ERROR_FETCHING_GIT_SHA
 
 
 class Version:
@@ -26,9 +26,8 @@ class Version:
 
     description = 'pre-alpha evaluation'
 
-    def __init__(self):
-        pass
-
+    def __str__(self):
+        return self.__repr__()
 
     def __repr__(self):
         return '%s.%s.%s %s' % (Version.major,
@@ -36,17 +35,17 @@ class Version:
                                 Version.patch,
                                 Version.description)
 
-
     @staticmethod
     def number():
         return '%s.%s.%s' % (Version.major,
                              Version.minor,
                              Version.patch)
 
-
     @staticmethod
     def git_sha():
-        """ Get the git top sha. """
+        """
+        Get git HEAD's sha.
+        """
 
         cmd = ['git', 'rev-parse', 'HEAD']
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE)

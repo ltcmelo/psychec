@@ -15,13 +15,16 @@
 import argparse
 import os
 import sys
-from Driver import *
-from Environment import *
-from Version import *
+from Driver import Driver
+from Environment import EnvironmentController
+from Version import Version
+from Tracing import TraceManager
 
 
 def _parse_input():
-    """ Parse input, identify options, host compiler and its command """
+    """
+    Parse input, identify options, the host compiler and command.
+    """
 
     parser = argparse.ArgumentParser(
         add_help=False,
