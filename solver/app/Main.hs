@@ -28,7 +28,10 @@ import Utils.Pretty (pprint, (<+>), text)
 import Utils.Writer
 import Solver.SolverMonad (TyCtx (..), VarCtx(..))
 import Debug.Trace
-
+import System.Exit
+import Control.Monad.Except
+import System.IO
+import System.IO.Error
 
 data Config = Config
   { inputFile  :: FilePath
@@ -84,7 +87,7 @@ execSolver fp cl ml s =
     Right c -> do
       inf <- solver c cl ml
       case inf of
-        Left err' -> putStrLn err'
+        Left err' -> ioError (userError err')
         Right inf' -> do
           writeFile fp (writeCFile inf' ml)
 

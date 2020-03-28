@@ -52,7 +52,7 @@ class PsycheFacade:
             cmd.append('libpsychecstd')
 
         ok = execute(PsycheFacade._id, cmd)
-        if not ok:
+        if ok != 0:
             sys.exit(
                 DiagnosticReporter.fatal(CONSTRAINT_GENERATION_FOR_FILE_FAILED,
                                          unit.c_file_path))
@@ -70,7 +70,7 @@ class PsycheFacade:
             cmd.append('--match-stdlib=approx')
 
         ok = execute(PsycheFacade._id, cmd)
-        if not ok:
+        if ok != 0:
             sys.exit(
                 DiagnosticReporter.fatal(CONSTRAINT_SOLVING_FOR_FILE_FAILED,
                                          unit.c_file_path))
