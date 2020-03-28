@@ -23,7 +23,7 @@ def trace_op(parent, op):
 
 def _trace(parent, msg, level):
     if (TraceManager().is_trace_active(parent)
-            and TraceManager().is_level_on(level):
+            and TraceManager().is_level_on(level)):
         print('[cnippet-%s] %s' % (parent, msg))
 
 
