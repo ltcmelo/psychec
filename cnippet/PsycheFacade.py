@@ -17,10 +17,13 @@ from Diagnostics import (DiagnosticReporter,
                          CONSTRAINT_GENERATION_FOR_FILE_FAILED,
                          CONSTRAINT_SOLVING_FOR_FILE_FAILED)
 from Process import execute
+from Unit import Unit
 
 
 class PsycheFacade:
-    """ Facade to the Psyche inference engine """
+    """
+    A facade to the Psyche inference engine.
+    """
 
     _id = 'psychec'
 
@@ -32,8 +35,13 @@ class PsycheFacade:
         self.no_stdlib = cnip_opt['no_stdlib']
         self.host_cc = cnip_opt['host_cc']
 
-    def generate(self, unit, cc_opts):
-        """ Invoke the constraint generator. """
+    def generate_constraints(self,
+                             unit: Unit,
+                             cc_opts):
+        """
+        Generate constraints for a unit.
+        """
+
         cmd = [self.generator,
                unit.c_file_path,
                '-o',
@@ -57,8 +65,11 @@ class PsycheFacade:
                 DiagnosticReporter.fatal(CONSTRAINT_GENERATION_FOR_FILE_FAILED,
                                          unit.c_file_path))
 
-    def solve(self, unit):
-        """ Invoke the constraint solver. """
+    def solve_constraints(self, unit: Unit):
+        """
+        Solve the constraint.
+        """
+
         cmd = [self.solver,
                '--',
                '-i',

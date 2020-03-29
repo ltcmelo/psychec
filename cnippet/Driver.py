@@ -12,7 +12,7 @@
 
 import os.path
 import sys
-from Algorithms import remove_if_exists, flatten, concat_file, copy_file
+from Algorithms import delete_files, flatten, concat_file, copy_file
 from CompilerFacade import CompilerFacade
 from Diagnostics import (DiagnosticReporter,
                          FILE_DOES_NOT_EXIST,
@@ -26,7 +26,7 @@ from Unit import make_unit
 
 class Driver:
     """
-    The compiler's driver.
+    The driver.
     """
 
     _id = 'driver'
@@ -39,47 +39,42 @@ class Driver:
     @staticmethod
     def _delete_old_files(unit):
         """
-        Delete old files from a previous run (if any).
+        Delete old files, from any previous run.
         """
 
-        remove_if_exists(unit.cstr_file_path)
-        remove_if_exists(unit.inc_file_path)
-        remove_if_exists(unit.cnip_file_path)
+        delete_files(unit.i_file_path,
+                     unit.cstr_file_path,
+                     unit.inc_file_path,
+                     unit.poly_file_path,
+                     unit.cnip_file_path)
 
     def _compile_unit(self, unit, cc_opts):
         """
-        Perform the entire type-inference workflow for each unit.
+        Perform the entire type-inference workflow for a unit.
         """
 
         Driver._delete_old_files(unit)
 
-        # Invoke the psyche generator with the stdlib plugin, which will: (i) identify whether an
-        # stdlib header is necessary; (ii) preprocess the "new" source, containing such includes;
-        # and (iii) generate the constraints.
-        self.psyche.generate(unit, cc_opts)
+        self.psyche.generate_constraints(unit, cc_opts)
 
-        # Constraints are produced only if the original source is incomplete (i.e. when type
-        # inference is required).
         if not os.path.isfile(unit.cstr_file_path):
-            # When there's nothing to solve, we make the original source the final one.
             copy_file(unit.c_file_path, unit.cnip_file_path)
+            return
+
+        self.psyche.solve_constraints(unit)
+
+        if os.path.isfile(unit.poly_file_path):
+            concat_file(unit.poly_file_path, unit.cnip_file_path)
         else:
-            self.psyche.solve(unit)
+            concat_file(unit.c_file_path, unit.cnip_file_path)
 
-            # Append the original source or its polymorphic version to the file we inferred.
-            if os.path.isfile(unit.poly_file_path):
-                concat_file(unit.poly_file_path, unit.cnip_file_path)
-            else:
-                concat_file(unit.c_file_path, unit.cnip_file_path)
-
-            # Preserve original `#includes' and add missing stdlib ones.
-            if os.path.isfile(unit.inc_file_path):
-                concat_file(unit.cnip_file_path, unit.inc_file_path)
-                copy_file(unit.inc_file_path, unit.cnip_file_path)
+        if os.path.isfile(unit.inc_file_path):
+            concat_file(unit.cnip_file_path, unit.inc_file_path)
+            copy_file(unit.inc_file_path, unit.cnip_file_path)
 
     def execute(self):
         """
-        Entry point for the driver.
+        Entry point.
         """
 
         trace_op(Driver._id, flatten(self.cnip_opt['host_cc_cmd']))

@@ -22,11 +22,12 @@ def maybe_append(value, condition, sequence):
     return sequence.append(value) if condition else sequence
 
 
-def remove_if_exists(file_path):
-    try:
-        os.remove(file_path)
-    except OSError:
-        pass
+def delete_files(*files_path):
+    for p in files_path:
+        try:
+            os.remove(p)
+        except OSError:
+            pass
 
 
 def concat_file(src_path, dst_path):
