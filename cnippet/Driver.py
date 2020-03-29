@@ -48,14 +48,14 @@ class Driver:
                      unit.poly_file_path,
                      unit.cnip_file_path)
 
-    def _compile_unit(self, unit, cc_opts):
+    def _compile_unit(self, unit, cc_cmd):
         """
         Perform the entire type-inference workflow for a unit.
         """
 
         Driver._delete_old_files(unit)
 
-        self.psyche.generate_constraints(unit, cc_opts)
+        self.psyche.generate_constraints(unit, cc_cmd)
 
         if not os.path.isfile(unit.cstr_file_path):
             copy_file(unit.c_file_path, unit.cnip_file_path)
