@@ -91,35 +91,35 @@ class Driver:
             if gen_dir:
                 gen_dir += '/'
             else:
-                gen_dir = ''  # Output specified as working directory.
+                gen_dir = ''
 
-        # The "new" command to be passed to the host C compiler has the same structure as
-        # the one originally provided by the user. But input source file will be replaced
-        # by those manipulated by us.
+        # The adjusted command that is forwarded to the host C compiler is the
+        # one provided by the user, with input file replaced.
         new_cmd = self.cnip_opt['host_cc_cmd']
 
         for c_file_path in cc_cmd.sources:
             if not os.path.isfile(c_file_path):
                 sys.exit(DiagnosticReporter.fatal(FILE_DOES_NOT_EXIST, c_file_path))
 
-            # If the original source already passes the "syntax" check, we don't touch it. But if
-            # an error is diagnosed, it could be due to an absent declaration.
             if self.cc.check_syntax(c_file_path) == 0:
+                # If there are missing declarations in the source, this check
+                # would've failed. Since it didn't, there's nothing to infer.
                 continue
 
             unit = make_unit(c_file_path, gen_dir)
             self._compile_unit(unit, cc_cmd)
 
-            # Replace, in the command line, the source originally provided by the user
-            # for the one we have produced (already preprocessed).
-            trace_op(Driver._id, 'replace %s for %s in command' % (unit.c_file_path,
-                                                                   unit.cnip_file_path))
-            new_cmd = [w.replace(unit.c_file_path, unit.cnip_file_path) for w in new_cmd]
+            trace_op(Driver._id,
+                     f'replace {unit.c_file_path} for {unit.cnip_file_path} in command')
+            new_cmd = [w.replace(unit.c_file_path, unit.cnip_file_path)
+                       for w in new_cmd]
 
-        # In the final command, enforce C compilation mode, since we're compiling a file
-        # with the `.cnip' extension (no worry about duplicating this option).
-        cmd = [self.cnip_opt['host_cc'], '-x', 'c'] + new_cmd
+        cmd = [self.cnip_opt['host_cc'],
+               '-x',
+               'c'] + new_cmd
+
         ok = execute(Driver._id, cmd)
         if ok != 0:
             sys.exit(DiagnosticReporter.fatal(HOST_C_COMPILER_FORWARDING_FAILED))
+
         return 0
