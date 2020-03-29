@@ -21,10 +21,10 @@ def trace_op(parent, op):
     _trace(parent, op, TraceManager.DETAIL)
 
 
-def _trace(parent, msg, level):
-    if (TraceManager().is_trace_active(parent)
+def _trace(component, msg, level):
+    if (TraceManager().is_trace_active(component)
             and TraceManager().is_level_on(level)):
-        print('[cnippet-%s] %s' % (parent, msg))
+        print(f'<cnippet |{component}|>\n{msg}\n')
 
 
 class TraceManager(metaclass=Singleton):
