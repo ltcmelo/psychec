@@ -12,13 +12,15 @@
 
 import subprocess
 import sys
-from CommandLine import GccCommand
+from CommandLine import Command, GccCommand
 from Diagnostics import DiagnosticReporter, PREPROCESSING_FILE_FAILED
 from Process import execute
 
 
 class CCompilerFacade:
-    """ Facade to the host C compiler """
+    """
+    Facade to the host C compiler.
+    """
 
     _id = 'cc'
 
@@ -68,9 +70,9 @@ class CCompilerFacade:
 
         return macros
 
-    def verify_support(self):
+    def is_supported(self) -> bool:
         """
-        Verify whether the host C compiler is supported.
+        Tell whether the host C compiler is supported.
         """
 
         # Look at predefined macros: $ echo | gcc -dM -E -
@@ -87,9 +89,9 @@ class CCompilerFacade:
         elif b'__GNUC__' in macros:
             self.host_cc_family = CCompilerFacade.GCC
 
-        return self.host_cc_family
+        return True
 
-    def parse_command(self):
+    def parse_command(self) -> Command:
         """
         Parse the compiler command to extract compilation options.
         """

@@ -34,7 +34,7 @@ class Driver:
     def __init__(self, cnip_opt):
         self.cnip_opt = cnip_opt
         self.cc: CCompilerFacade = CCompilerFacade(cnip_opt)
-        self.psyche = PsycheFacade(cnip_opt)
+        self.psyche: PsycheFacade = PsycheFacade(cnip_opt)
 
     @staticmethod
     def _delete_old_files(unit):
@@ -79,15 +79,15 @@ class Driver:
 
         trace_op(Driver._id, flatten(self.cnip_opt['host_cc_cmd']))
 
-        if not self.cc.verify_support():
+        if not self.cc.is_supported():
             sys.exit(DiagnosticReporter.fatal(HOST_C_COMPILER_NOT_FOUND))
 
-        cc_opts = self.cc.parse_command()
+        cc_cmd = self.cc.parse_command()
 
-        if not cc_opts.out_file_name:
+        if not cc_cmd.out_file_name:
             gen_dir = ''
         else:
-            (gen_dir, _) = os.path.split(cc_opts.out_file_name)
+            (gen_dir, _) = os.path.split(cc_cmd.out_file_name)
             if gen_dir:
                 gen_dir += '/'
             else:
@@ -98,7 +98,7 @@ class Driver:
         # by those manipulated by us.
         new_cmd = self.cnip_opt['host_cc_cmd']
 
-        for c_file_path in cc_opts.sources:
+        for c_file_path in cc_cmd.sources:
             if not os.path.isfile(c_file_path):
                 sys.exit(DiagnosticReporter.fatal(FILE_DOES_NOT_EXIST, c_file_path))
 
@@ -108,7 +108,7 @@ class Driver:
                 continue
 
             unit = make_unit(c_file_path, gen_dir)
-            self._compile_unit(unit, cc_opts)
+            self._compile_unit(unit, cc_cmd)
 
             # Replace, in the command line, the source originally provided by the user
             # for the one we have produced (already preprocessed).

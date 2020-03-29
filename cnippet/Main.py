@@ -64,7 +64,7 @@ def _parse_input():
                         action='store_true',
                         help="Specify non-commercial use of cnippet.")
 
-    parser.add_argument('-t',
+    parser.add_argument('-t', '--trace',
                         action='append',
                         help="The componet to be traced -- 'all' for every one.")
 
@@ -76,9 +76,10 @@ def _parse_input():
     parser.add_argument('CC',
                         help="The host C compiler (e.g., 'gcc' or 'clang').")
 
-    parser.add_argument('...',
+    parser.add_argument('command',
+                        metavar='...',
                         nargs=argparse.REMAINDER,
-                        help='The options to be forwarded to the C compiler.')
+                        help='The command to be forwarded to the C compiler.')
 
     # Hidden arguments.
     parser.add_argument('-d', '--dev',
@@ -103,7 +104,7 @@ if __name__ == "__main__":
     TraceManager().configure(cnip_opt['traces'], cnip_opt['trace_level'])
 
     env = EnvironmentController(os.path.expanduser('~'))
-    env.check_all(args.non_commercial_use)
+    env.check_all(args.non_commercial)
 
     if args.dev:
         run_dir = os.path.dirname(os.path.realpath(__file__))
