@@ -12,7 +12,7 @@
 
 import sys
 from Algorithms import maybe_append
-from CompilerFacade import CompilerFacade
+from CCompilerFacade import CCompilerFacade
 from Diagnostics import (DiagnosticReporter,
                          CONSTRAINT_GENERATION_FOR_FILE_FAILED,
                          CONSTRAINT_SOLVING_FOR_FILE_FAILED)
@@ -48,8 +48,8 @@ class PsycheFacade:
                unit.cstr_file_path]
 
         cmd += ['--cc', self.host_cc]
-        cmd += CompilerFacade.predefined_macros('--cc-D')
-        cmd += CompilerFacade.undefined_macros('--cc-U')
+        cmd += CCompilerFacade.predefined_macros('--cc-D')
+        cmd += CCompilerFacade.undefined_macros('--cc-U')
         cmd += ['--cc-std', cc_opts.c_version]
 
         maybe_append('--no-typedef', self.no_typedef, cmd)

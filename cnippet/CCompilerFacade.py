@@ -17,7 +17,7 @@ from Diagnostics import DiagnosticReporter, PREPROCESSING_FILE_FAILED
 from Process import execute
 
 
-class CompilerFacade:
+class CCompilerFacade:
     """ Facade to the host C compiler """
 
     _id = 'cc'
@@ -83,9 +83,9 @@ class CompilerFacade:
 
         #  __GNU__ is predefined in GCC/Clang; __clang__, only in Clang.
         if b'__clang__' in macros:
-            self.host_cc_family = CompilerFacade.Clang
+            self.host_cc_family = CCompilerFacade.Clang
         elif b'__GNUC__' in macros:
-            self.host_cc_family = CompilerFacade.GCC
+            self.host_cc_family = CCompilerFacade.GCC
 
         return self.host_cc_family
 
@@ -98,8 +98,8 @@ class CompilerFacade:
 
         return GccCommand(self.host_cc_cmd)
         # return {
-        #           CompilerFacade.GCC: GccCommand(self.host_cc_cmd),
-        #           CompilerFacade.Clang: GccCommand(self.host_cc_cmd)
+        #           CCompilerFacade.GCC: GccCommand(self.host_cc_cmd),
+        #           CCompilerFacade.Clang: GccCommand(self.host_cc_cmd)
         #       }[self.host_cc_family]
 
     def check_syntax(self, c_file_name):
@@ -114,15 +114,15 @@ class CompilerFacade:
                c_file_name]
 
         extra = {
-            CompilerFacade.GCC: '-Werror=builtin-declaration-mismatch',
-            CompilerFacade.Clang: '-Werror=incompatible-library-redeclaration'
+            CCompilerFacade.GCC: '-Werror=builtin-declaration-mismatch',
+            CCompilerFacade.Clang: '-Werror=incompatible-library-redeclaration'
         }
 
         cmd.append(extra[self.host_cc_family])
         cmd.append('-Werror=incompatible-pointer-types')
         cmd.append('-Werror=implicit-function-declaration')
 
-        return execute(CompilerFacade._id, cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return execute(CCompilerFacade._id, cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     def preprocess(self, c_file_name, pp_file_name):
         """
@@ -137,10 +137,10 @@ class CompilerFacade:
                '-o',
                pp_file_name]
 
-        cmd += CompilerFacade.predefined_macros('-D')
-        cmd += CompilerFacade.undefined_macros('-U')
+        cmd += CCompilerFacade.predefined_macros('-D')
+        cmd += CCompilerFacade.undefined_macros('-U')
 
-        ok = execute(CompilerFacade._id, cmd)
+        ok = execute(CCompilerFacade._id, cmd)
         if ok != 0:
             sys.exit(
                 DiagnosticReporter.fatal(PREPROCESSING_FILE_FAILED,

@@ -13,7 +13,7 @@
 import os.path
 import sys
 from Algorithms import delete_files, flatten, concat_file, copy_file
-from CompilerFacade import CompilerFacade
+from CCompilerFacade import CCompilerFacade
 from Diagnostics import (DiagnosticReporter,
                          FILE_DOES_NOT_EXIST,
                          HOST_C_COMPILER_FORWARDING_FAILED,
@@ -33,7 +33,7 @@ class Driver:
 
     def __init__(self, cnip_opt):
         self.cnip_opt = cnip_opt
-        self.cc = CompilerFacade(cnip_opt)
+        self.cc: CCompilerFacade = CCompilerFacade(cnip_opt)
         self.psyche = PsycheFacade(cnip_opt)
 
     @staticmethod
@@ -84,9 +84,6 @@ class Driver:
 
         cc_opts = self.cc.parse_command()
 
-        # The directory for the generated files is the same as the output directory
-        # specified in the host C compiler's command. Unless, none is provided. In such
-        # case, the working directory is used (just like GCC does).
         if not cc_opts.out_file_name:
             gen_dir = ''
         else:
