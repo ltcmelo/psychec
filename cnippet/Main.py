@@ -50,35 +50,35 @@ def _parse_input():
 
     parser.add_argument('--no-heuristic',
                         action='store_true',
-                        help='Disable heuristics on unresolved syntax ambiguities.')
+                        help='Disable heuristics upon unresolved ambiguous syntax.')
 
     parser.add_argument('--no-typedef',
                         action='store_true',
-                        help='Forbid typedef and struct/union declarations.')
+                        help="Forbid 'typedef','struct', and 'union' declarations.")
 
     parser.add_argument('--no-stdlib',
                         action='store_true',
                         help="Don't attempt to match stdlib names.")
 
-    parser.add_argument('-f', '--non-commercial-use',
+    parser.add_argument('-f', '--non-commercial',
                         action='store_true',
                         help="Specify non-commercial use of cnippet.")
 
-    parser.add_argument('-t', '--trace',
+    parser.add_argument('-t',
                         action='append',
-                        help='Enable (component) tracing.')
+                        help="The componet to be traced -- 'all' for every one.")
 
     parser.add_argument('--trace-level',
                         choices=['info', 'detail'],
                         default='info',
-                        help='Tracing level.')
+                        help='Enable tracing.')
 
     parser.add_argument('CC',
-                        help='Host C compiler.')
+                        help="The host C compiler (e.g., 'gcc' or 'clang').")
 
-    parser.add_argument('command',
+    parser.add_argument('...',
                         nargs=argparse.REMAINDER,
-                        help='Command forwarded to the host C compiler.')
+                        help='The options to be forwarded to the C compiler.')
 
     # Hidden arguments.
     parser.add_argument('-d', '--dev',
