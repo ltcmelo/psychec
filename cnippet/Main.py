@@ -32,8 +32,8 @@ def _parse_input():
         description='\tcnippet - the compiler for C snippets\n',
         epilog='examples:\n'
                '  $cnip gcc file.c\n'
-               '  $cnip gcc file.c -o exe\n'
-               '  $cnip clang -c file.c\n')
+               '  $cnip -f gcc file.c -o exe\n'
+               '  $cnip -f --no-stdlib gcc -c file.c\n')
 
     version_str = '%s' % Version()
     copyright_str = 'Copyright 2017 Leandro T. C. Melo'
