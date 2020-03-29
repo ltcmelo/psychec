@@ -44,13 +44,11 @@ class PsycheFacade:
 
         cmd = [self.generator,
                unit.c_file_path,
-               '-o',
-               unit.cstr_file_path]
-
-        cmd += ['--cc', self.host_cc]
+               '-o', unit.cstr_file_path,
+               '--cc', self.host_cc,
+               '--cc-std', cc_opts.c_version]
         cmd += CCompilerFacade.predefined_macros('--cc-D')
         cmd += CCompilerFacade.undefined_macros('--cc-U')
-        cmd += ['--cc-std', cc_opts.c_version]
 
         maybe_append('--no-typedef', self.no_typedef, cmd)
         maybe_append('--no-heuristic', self.no_heuristic, cmd)
