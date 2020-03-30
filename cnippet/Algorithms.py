@@ -13,18 +13,21 @@
 import os
 import shutil
 import sys
-from Diagnostics import *
+from Diagnostics import (DiagnosticReporter,
+                         EXCEPTION_COPYING_FILE_OBJECT,
+                         EXCEPTION_COPYING_FILE_PATH)
 
 
 def maybe_append(value, condition, sequence):
     return sequence.append(value) if condition else sequence
 
 
-def remove_if_exists(file_path):
-    try:
-        os.remove(file_path)
-    except OSError:
-        pass
+def delete_files(*files_path):
+    for p in files_path:
+        try:
+            os.remove(p)
+        except OSError:
+            pass
 
 
 def concat_file(src_path, dst_path):
@@ -33,7 +36,8 @@ def concat_file(src_path, dst_path):
             try:
                 shutil.copyfileobj(src, dst)
             except:
-                sys.exit(DiagnosticReporter.fatal(EXCEPTION_COPYING_FILE_OBJECT, src_path, dst_path))
+                sys.exit(DiagnosticReporter.fatal(EXCEPTION_COPYING_FILE_OBJECT,
+                                                  src_path, dst_path))
 
 
 def copy_file(src_path, dst_path):
@@ -43,5 +47,5 @@ def copy_file(src_path, dst_path):
         sys.exit(DiagnosticReporter.fatal(EXCEPTION_COPYING_FILE_PATH, src_path, dst_path))
 
 
-def list2str(l):
+def flatten(l):
     return ' '.join(l)

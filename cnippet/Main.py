@@ -15,13 +15,16 @@
 import argparse
 import os
 import sys
-from Driver import *
-from Environment import *
-from Version import *
+from Driver import Driver
+from Environment import EnvironmentController
+from Version import Version
+from Tracing import TraceManager
 
 
 def _parse_input():
-    """ Parse input, identify options, host compiler and its command """
+    """
+    Parse input, identify options, the host compiler and command.
+    """
 
     parser = argparse.ArgumentParser(
         add_help=False,
@@ -29,8 +32,8 @@ def _parse_input():
         description='\tcnippet - the compiler for C snippets\n',
         epilog='examples:\n'
                '  $cnip gcc file.c\n'
-               '  $cnip gcc file.c -o exe\n'
-               '  $cnip clang -c file.c\n')
+               '  $cnip -f gcc file.c -o exe\n'
+               '  $cnip -f --no-stdlib gcc -c file.c\n')
 
     version_str = '%s' % Version()
     copyright_str = 'Copyright 2017 Leandro T. C. Melo'
@@ -47,35 +50,36 @@ def _parse_input():
 
     parser.add_argument('--no-heuristic',
                         action='store_true',
-                        help='Disable heuristics on unresolved syntax ambiguities.')
+                        help='Disable heuristics upon unresolved ambiguous syntax.')
 
     parser.add_argument('--no-typedef',
                         action='store_true',
-                        help='Forbid typedef and struct/union declarations.')
+                        help="Forbid 'typedef','struct', and 'union' declarations.")
 
     parser.add_argument('--no-stdlib',
                         action='store_true',
                         help="Don't attempt to match stdlib names.")
 
-    parser.add_argument('-f', '--non-commercial-use',
+    parser.add_argument('-f', '--non-commercial',
                         action='store_true',
                         help="Specify non-commercial use of cnippet.")
 
     parser.add_argument('-t', '--trace',
                         action='append',
-                        help='Enable (component) tracing.')
+                        help="The componet to be traced -- 'all' for every one.")
 
     parser.add_argument('--trace-level',
                         choices=['info', 'detail'],
                         default='info',
-                        help='Tracing level.')
+                        help='Enable tracing.')
 
     parser.add_argument('CC',
-                        help='Host C compiler.')
+                        help="The host C compiler (e.g., 'gcc' or 'clang').")
 
     parser.add_argument('command',
+                        metavar='...',
                         nargs=argparse.REMAINDER,
-                        help='Command forwarded to the host C compiler.')
+                        help='The command to be forwarded to the C compiler.')
 
     # Hidden arguments.
     parser.add_argument('-d', '--dev',
@@ -100,7 +104,7 @@ if __name__ == "__main__":
     TraceManager().configure(cnip_opt['traces'], cnip_opt['trace_level'])
 
     env = EnvironmentController(os.path.expanduser('~'))
-    env.check_all(args.non_commercial_use)
+    env.check_all(args.non_commercial)
 
     if args.dev:
         run_dir = os.path.dirname(os.path.realpath(__file__))

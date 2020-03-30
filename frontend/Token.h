@@ -205,7 +205,7 @@ enum Kind {
     T_LAST_PRIMITIVE = T_WCHAR_T,
 
     // Generics
-    T__GENERIC,
+    T__TEMPLATE,
     T__FORALL,
     T__EXISTS,
 

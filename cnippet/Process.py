@@ -10,19 +10,22 @@
 # -----------------------------------------------------------------------------
 
 
-import sys
 import subprocess
-from Algorithms import *
-from Diagnostics import *
-from Tracing import *
+import sys
+from Algorithms import flatten
+from Diagnostics import DiagnosticReporter, EXCEPTION_EXECUTING_PROCESS
+from Tracing import trace_extern_cmd
 
 
-def call_process(caller_id, cmd, *args, **kwargs):
-    """ Invoke external process with the given command. """
+def execute(parent, cmd, *args, **kwargs):
+    """
+    Execute an external process with the given command.
+    """
 
-    trace_extern_cmd(caller_id, list2str(cmd))
+    trace_extern_cmd(parent, flatten(cmd))
     try:
-        code = subprocess.call(cmd, *args, **kwargs)
+        return subprocess.call(cmd, *args, **kwargs)
     except:
-        sys.exit(DiagnosticReporter.fatal(EXCEPTION_INVOKING_PROCESS, cmd[0]))
-    return code
+        sys.exit(
+            DiagnosticReporter.fatal(EXCEPTION_EXECUTING_PROCESS,
+                                     cmd[0]))

@@ -736,21 +736,6 @@ static inline int classify8(const char *s, Dialect d)
         }
       }
     }
-    else if(d.generics && s[1] == 'G') {
-      if (s[2] == 'e') {
-        if (s[3] == 'n') {
-          if (s[4] == 'e') {
-            if (s[5] == 'r') {
-                if (s[6] == 'i') {
-                    if (s[7] == 'c') {
-                        return T__GENERIC;
-                    }
-                }
-            }
-          }
-        }
-      }
-    }
   }
   else if (s[0] == 'c') {
     if (s[1] == 'o') {
@@ -969,6 +954,23 @@ static inline int classify9(const char *s, Dialect d)
                 if (s[7] == '_') {
                   if (s[8] == '_') {
                     return T___CONST__;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    else if(d.generics && s[1] == 'T') {
+      if (s[2] == 'e') {
+        if (s[3] == 'm') {
+          if (s[4] == 'p') {
+            if (s[5] == 'l') {
+              if (s[6] == 'a') {
+                if (s[7] == 't') {
+                  if (s[8] == 'e') {
+                    return T__TEMPLATE;
                   }
                 }
               }

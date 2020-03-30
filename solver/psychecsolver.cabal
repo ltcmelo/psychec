@@ -54,10 +54,11 @@ executable psychecsolver-exe
   main-is:             Main.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
-                       , optparse-applicative
-                       , filepath
-                       , psychecsolver
-                       , containers
+                     , optparse-applicative
+                     , filepath
+                     , psychecsolver
+                     , containers
+                     , mtl
   default-language:    Haskell2010
 
 test-suite psychecsolver-test

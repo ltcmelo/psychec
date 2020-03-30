@@ -10,20 +10,21 @@
 # -----------------------------------------------------------------------------
 
 
-from Singleton import *
+from Singleton import Singleton
 
 
-def trace_extern_cmd(caller_id, cmd):
-    _trace(caller_id, cmd, TraceManager.INFO)
+def trace_extern_cmd(parent, cmd):
+    _trace(parent, cmd, TraceManager.INFO)
 
 
-def trace_op(caller_id, op):
-    _trace(caller_id, op, TraceManager.DETAIL)
+def trace_op(parent, op):
+    _trace(parent, op, TraceManager.DETAIL)
 
 
-def _trace(caller_id, msg, level):
-    if TraceManager().is_trace_active(caller_id) and TraceManager().is_level_on(level):
-        print('[cnippet-%s] %s' % (caller_id, msg))
+def _trace(component, msg, level):
+    if (TraceManager().is_trace_active(component)
+            and TraceManager().is_level_on(level)):
+        print(f'<cnippet |{component}|>\n{msg}\n')
 
 
 class TraceManager(metaclass=Singleton):
@@ -40,8 +41,8 @@ class TraceManager(metaclass=Singleton):
         self.active = set(traces) if traces else set()
         self.level = level
 
-    def is_trace_active(self, caller_id):
-        return caller_id in self.active or 'all' in self.active
+    def is_trace_active(self, parent):
+        return parent in self.active or 'all' in self.active
 
     def is_level_on(self, level):
         if self.level == TraceManager.DISABLED:

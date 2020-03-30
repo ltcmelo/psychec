@@ -14,21 +14,27 @@ import os
 from collections import namedtuple
 
 
+Unit = namedtuple(
+    'Unit',
+    [
+        'c_file_path',     # The original C file.
+        'i_file_path',     # A preprocessed version of the original C file.
+        'cstr_file_path',  # The constraints file.
+        'inc_file_path',   # A file with a list of stdlib `#include's.
+        'poly_file_path',  # A "polymorphic" version of the original C file.
+        'cnip_file_path'   # The file containing inference results.
+    ])
+
+
 def make_unit(c_file_path, out_dir):
-    """ Make compilation unit data """
+    """
+    Make a compilation unit.
+    """
 
     (_, file_name) = os.path.split(c_file_path)
     (base_name, _) = os.path.splitext(file_name)
     gen_path = out_dir + base_name
 
-    Unit = namedtuple('Unit', [
-                               'c_file_path',    # Original C file.
-                               'i_file_path',    # Preprocessed (original) C file.
-                               'cstr_file_path', # Constraints file.
-                               'inc_file_path',  # Include-list file.
-                               'poly_file_path', # File in polymorhpic version.
-                               'cnip_file_path'  # Inferred file.
-                              ])
     return Unit(c_file_path,
                 gen_path + '.i',
                 gen_path + '.cstr',

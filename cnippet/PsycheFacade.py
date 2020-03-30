@@ -11,13 +11,19 @@
 
 
 import sys
-from CompilerFacade import *
-from Diagnostics import *
-from Process import *
+from Algorithms import maybe_append
+from CCompilerFacade import CCompilerFacade
+from Diagnostics import (DiagnosticReporter,
+                         CONSTRAINT_GENERATION_FOR_FILE_FAILED,
+                         CONSTRAINT_SOLVING_FOR_FILE_FAILED)
+from Process import execute
+from Unit import Unit
 
 
 class PsycheFacade:
-    """ Facade to the Psyche inference engine """
+    """
+    A facade to the Psyche inference engine.
+    """
 
     _id = 'psychec'
 
@@ -29,18 +35,20 @@ class PsycheFacade:
         self.no_stdlib = cnip_opt['no_stdlib']
         self.host_cc = cnip_opt['host_cc']
 
+    def generate_constraints(self,
+                             unit: Unit,
+                             cc_opts):
+        """
+        Generate constraints for a unit.
+        """
 
-    def generate(self, unit, cc_opts):
-        """ Invoke the constraint generator. """
         cmd = [self.generator,
                unit.c_file_path,
-               '-o',
-               unit.cstr_file_path]
-
-        cmd += ['--cc', self.host_cc]
-        cmd += CompilerFacade.predefined_macros('--cc-D')
-        cmd += CompilerFacade.undefined_macros('--cc-U')
-        cmd += ['--cc-std', cc_opts.c_version]
+               '-o', unit.cstr_file_path,
+               '--cc', self.host_cc,
+               '--cc-std', cc_opts.c_version]
+        cmd += CCompilerFacade.predefined_macros('--cc-D')
+        cmd += CCompilerFacade.undefined_macros('--cc-U')
 
         maybe_append('--no-typedef', self.no_typedef, cmd)
         maybe_append('--no-heuristic', self.no_heuristic, cmd)
@@ -49,13 +57,17 @@ class PsycheFacade:
             cmd.append('-p')
             cmd.append('libpsychecstd')
 
-        ok = call_process(PsycheFacade._id, cmd)
+        ok = execute(PsycheFacade._id, cmd)
         if ok != 0:
-            sys.exit(DiagnosticReporter.fatal(CONSTRAINT_GENERATION_FOR_FILE_FAILED, unit.c_file_path))
+            sys.exit(
+                DiagnosticReporter.fatal(CONSTRAINT_GENERATION_FOR_FILE_FAILED,
+                                         unit.c_file_path))
 
+    def solve_constraints(self, unit: Unit):
+        """
+        Solve the constraint.
+        """
 
-    def solve(self, unit):
-        """ Invoke the constraint solver. """
         cmd = [self.solver,
                '--',
                '-i',
@@ -66,6 +78,8 @@ class PsycheFacade:
         if not self.no_stdlib:
             cmd.append('--match-stdlib=approx')
 
-        ok = call_process(PsycheFacade._id, cmd)
+        ok = execute(PsycheFacade._id, cmd)
         if ok != 0:
-            sys.exit(DiagnosticReporter.fatal(CONSTRAINT_SOLVING_FOR_FILE_FAILED, unit.c_file_path))
+            sys.exit(
+                DiagnosticReporter.fatal(CONSTRAINT_SOLVING_FOR_FILE_FAILED,
+                                         unit.c_file_path))

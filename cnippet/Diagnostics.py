@@ -12,19 +12,24 @@
 
 class Diagnostic:
 
-    def __init__(self, code, desc):
+    def __init__(self,
+                 code: str,
+                 desc: str):
         self.code = code
         self.desc = desc
 
+    def __str__(self):
+        return 'diagnostic: %s %s' % (self.code, self.desc)
+
     def __repr__(self):
-        return 'Diagnostic(%s, %s)' % (self.code, self.desc)
+        return self.code + self.desc
 
 
 # Predefined diagnostics
 HOST_C_COMPILER_NOT_FOUND = Diagnostic(1, 'host C compiler not found')
 FILE_DOES_NOT_EXIST = Diagnostic(2, "file %s doesn't exist")
 PREPROCESSING_FILE_FAILED = Diagnostic(3, 'pre-processing file %s failed')
-EXCEPTION_INVOKING_PROCESS = Diagnostic(4, 'exception invoking process %s')
+EXCEPTION_EXECUTING_PROCESS = Diagnostic(4, 'exception invoking process %s')
 CONSTRAINT_GENERATION_FOR_FILE_FAILED = Diagnostic(5, 'constraint generation for file %s failed')
 CONSTRAINT_SOLVING_FOR_FILE_FAILED = Diagnostic(6, 'constraint solving for file %s failed')
 LICENSE_FILE_NOT_FOUND = Diagnostic(7, 'license file not found')
@@ -40,7 +45,9 @@ C_VERSION_NOT_SUPPORTED = Diagnostic(16, 'unsupported C version, falling back to
 
 
 class DiagnosticReporter:
-    """ The diagnostic's reporter. """
+    """
+    The diagnostic's reporter.
+    """
 
     _FATAL = 'fatal'
     _ERROR = 'error'
@@ -53,12 +60,18 @@ class DiagnosticReporter:
 
     @staticmethod
     def fatal(diagnostic, *args):
-        return DiagnosticReporter._display(DiagnosticReporter._FATAL, diagnostic, *args)
+        return DiagnosticReporter._display(DiagnosticReporter._FATAL,
+                                           diagnostic,
+                                           *args)
 
     @staticmethod
     def error(diagnostic, *args):
-        return DiagnosticReporter._display(DiagnosticReporter._ERROR, diagnostic, *args)
+        return DiagnosticReporter._display(DiagnosticReporter._ERROR,
+                                           diagnostic,
+                                           *args)
 
     @staticmethod
     def warning(diagnostic, *args):
-        return DiagnosticReporter._display(DiagnosticReporter._WARNING, diagnostic, *args)
+        return DiagnosticReporter._display(DiagnosticReporter._WARNING,
+                                           diagnostic,
+                                           *args)
