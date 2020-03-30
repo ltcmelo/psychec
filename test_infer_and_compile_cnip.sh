@@ -9,7 +9,8 @@ for GEN_FILE in solver/test/cases/*_gen.h; do
 done
 
 CC=clang
-CC_FLAGS="-Wall\
+CC_FLAGS="-Werror\
+          -Wall\
           -Wno-incompatible-library-redeclaration\
           -Wno-uninitialized\
           -Wno-unused-variable\
@@ -23,13 +24,20 @@ CC_FLAGS="-Wall\
           -c"
 
 for C_FILE in solver/test/cases/*.c ; do
-    echo "$C_FILE"
+    printf "\n\n$C_FILE"
+
+    ./cnip.sh -f --no-stdlib "$CC" "$CC_FLAGS" "$C_FILE" # > /dev/null
+
+    OK=$?
+    if [ $OK -ne 0 ]; then
+        printf "*** ^^^\n*** Error in $C_FILE !!!\n\n"
+    fi
 
     ./cnip.sh -f "$CC" "$CC_FLAGS" "$C_FILE" # > /dev/null
 
     OK=$?
     if [ $OK -ne 0 ]; then
-        printf "*****\nError compiling $C_FILE\n*****\n"
+        printf "*** ^^^\n*** Error in $C_FILE (with STDlib) !!!\n\n"
     fi
 done
 
