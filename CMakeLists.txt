@@ -28,7 +28,7 @@ execute_process(COMMAND
 message("-- Solver build: ${SOLVER_RV} ${SOLVER_OV} ${SOLVER_EV}")
 
 set(PSYCHEC_CXX_FLAGS)
-set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -std=c++1y -g")
+set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -std=c++14 -g")
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall -Wsign-compare -Wno-inconsistent-missing-override")
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
