@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(cfe)
 
 set(CFE_CXX_FLAGS)
-set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -std=c++1y -g")
+set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -std=c++14 -g")
 set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -Wall -Wsign-compare -Wno-inconsistent-missing-override")
 set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
