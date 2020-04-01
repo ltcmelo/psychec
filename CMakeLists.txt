@@ -27,11 +27,19 @@ execute_process(COMMAND
 		ERROR_STRIP_TRAILING_WHITESPACE)
 message("-- Solver build: ${SOLVER_RV} ${SOLVER_OV} ${SOLVER_EV}")
 
+# C++ compiler flags.
 set(PSYCHEC_CXX_FLAGS)
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -std=c++14 -g")
-set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall -Wsign-compare -Wno-inconsistent-missing-override")
+set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall \
+                                            -Wsign-compare \
+                                            -Wno-inconsistent-missing-override")
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+   set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -stdlib=libc++")
+endif()
+
+# Project sources.
 set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/Main.cpp
 
