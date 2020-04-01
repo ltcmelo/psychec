@@ -37,6 +37,7 @@ set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
    set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -stdlib=libc++")
+   message("set stdlib for clang")
 endif()
 
 # Project sources.

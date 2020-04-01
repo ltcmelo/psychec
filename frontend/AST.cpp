@@ -19,11 +19,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include <algorithm>
 #include "AST.h"
 #include "ASTVisitor.h"
 #include "ASTMatcher.h"
 #include "MemoryPool.h"
-#include <algorithm>
 #include <cstddef>
 
 using namespace psyche;
