@@ -1,4 +1,4 @@
-name: Haskell CI
+name: solver-build
 
 on:
   push:
@@ -13,9 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-haskell@v1
-      with:
-        ghc-version: '8.8.2'
     - name: cd solver
       run: cd solver
     - name: setup
