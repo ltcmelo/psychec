@@ -18,7 +18,7 @@ jobs:
         ghc-version: '8.8.2'
     - name: cd solver
       run: cd solver
+    - name: setup
+      run: stack setup
     - name: build
-      run: |
-        stack setup
-        stack build
+      run: stack build
