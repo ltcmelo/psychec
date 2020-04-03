@@ -18,4 +18,6 @@ jobs:
         cd solver
         stack setup
     - name: build
-      run: stack build
+      run: |
+        cd solver
+        stack build
