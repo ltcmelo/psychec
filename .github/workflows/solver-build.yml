@@ -16,6 +16,6 @@ jobs:
     - name: cd solver
       run: cd solver
     - name: setup
-      run: stack setup
+      run: stack init
     - name: build
       run: stack build
