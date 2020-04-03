@@ -13,9 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: cd solver
-      run: cd solver
     - name: setup
-      run: stack setup
+      run: |
+        cd solver
+        stack setup
     - name: build
       run: stack build
