@@ -1,3 +1,7 @@
+![](https://github.com/ltcmelo/psychec/workflows/generator-build/badge.svg)
+
+![](https://github.com/ltcmelo/psychec/workflows/solver-build/badge.svg)
+
 # PsycheC
 
 PsycheC is a compiler frontend infrastructure for the C language that is enabled with an ML/Haskell-style (unification-based) type inference engine.
