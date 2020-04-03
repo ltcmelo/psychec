@@ -16,6 +16,9 @@ jobs:
     - name: cd solver
       run: cd solver
     - name: setup
-      run: stack init
+      run: |
+        stack --version
+        stack init
+        cat stack.yaml
     - name: build
       run: stack build
