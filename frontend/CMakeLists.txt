@@ -2,9 +2,16 @@ cmake_minimum_required(VERSION 2.8)
 
 project(cfe)
 
+# C++ standard.
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Compiler flags.
 set(CFE_CXX_FLAGS)
-set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -std=c++14 -g")
-set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -Wall -Wsign-compare -Wno-inconsistent-missing-override")
+set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -g")
+set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -Wall \
+                                    -Wsign-compare \
+                                    -Wno-inconsistent-missing-override")
 set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
 set(CMAKE_MACOSX_RPATH TRUE)

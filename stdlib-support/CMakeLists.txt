@@ -2,9 +2,16 @@ cmake_minimum_required(VERSION 2.8)
 
 project(psychecstd)
 
+# C++ standard.
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Compiler flags.
 set(STD_CXX_FLAGS)
-set(STD_CXX_FLAGS "${STD_CXX_FLAGS} -std=c++1y -g")
-set(STD_CXX_FLAGS "${STD_CXX_FLAGS} -Wall -Wsign-compare -Wno-inconsistent-missing-override")
+set(STD_CXX_FLAGS "${STD_CXX_FLAGS} -g")
+set(STD_CXX_FLAGS "${STD_CXX_FLAGS} -Wall \
+                                    -Wsign-compare \
+                                    -Wno-inconsistent-missing-override")
 
 set(CMAKE_MACOSX_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH "\$ORIGIN;@executable_path;@loader_path")
