@@ -161,7 +161,7 @@ tests = testGroup "Unit tests"
   , doTest "T115.c"
   , doTest "T116.c"
   , doTest "T117.c"
-  , doTest "T118.c"
+  -- , doTest "T118.c" -- require inspection of `switch' values
   , doTest "T119.c"
   , doTest "T120.c"
   , doTest "T121.c"
