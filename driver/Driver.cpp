@@ -52,6 +52,7 @@ namespace psyche {
 }
 
 constexpr int Driver::Exit_OK;
+constexpr int Driver::Exit_Error;
 constexpr int Driver::Exit_ParsingError_Internal;
 constexpr int Driver::Exit_SyntaxError;
 constexpr int Driver::Exit_ASTError_Internal;
