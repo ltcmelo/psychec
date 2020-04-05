@@ -1,4 +1,4 @@
-name: solver-build
+name: inference-tests
 
 on:
   push:
@@ -13,7 +13,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: setup
+    - name: configure
+      run: cmake CMakeLists.txt
+    - name: make
+      run: make
+    - name: test inference
       run: |
         cd solver
         stack test
