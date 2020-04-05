@@ -1,5 +1,5 @@
 /******************************************************************************
- Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+ Copyright (c) 2016-20 Leandro T. C. Melo (ltcmelo@gmail.com)
 
  This library is free software; you can redistribute it and/or modify it under
  the terms of the GNU Lesser General Public License as published by the Free
@@ -16,8 +16,8 @@
  Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
  *****************************************************************************/
 
-#ifndef PSYCHE_BASE_TESTER_H
-#define PSYCHE_BASE_TESTER_H
+#ifndef PSYCHE_BASE_TESTER_H__
+#define PSYCHE_BASE_TESTER_H__
 
 #include <iostream>
 #include <string>

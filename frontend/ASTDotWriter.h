@@ -4,7 +4,7 @@
 ** Contact: https://www.qt.io/licensing/
 **
 ** Modifications (apply on the LGPL usage):
-** Copyright (c) 2016,17 Leandro T. C. Melo (ltcmelo@gmail.com)
+** Copyright (c) 2016-20 Leandro T. C. Melo (ltcmelo@gmail.com)
 **
 ** This file is part of Qt Creator.
 **
