@@ -1,6 +1,6 @@
 ![](https://github.com/ltcmelo/psychec/workflows/generator-build/badge.svg)
-
 ![](https://github.com/ltcmelo/psychec/workflows/solver-build/badge.svg)
+![](https://github.com/ltcmelo/psychec/workflows/inference-tests/badge.svg)
 
 # PsycheC
 
