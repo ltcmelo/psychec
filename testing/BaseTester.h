@@ -26,7 +26,7 @@
     do { \
         std::cout << "\n\t"<< currentTest_ << " -> FAILED\n" \
                   << "\tReason: " << MSG << "\n" \
-                  << "in " << __FILE__ << ":" << __LINE__ << std::endl; \
+                  << "\tin " << __FILE__ << ":" << __LINE__ << std::endl; \
         throw TestFailed(); \
     } while (0)
 
@@ -36,7 +36,7 @@
             std::cout << "\n\t" << currentTest_ << " -> FAILED\n" \
                       << "\t\tExpected: " << EXPECTED << "\n" \
                       << "\t\tActual  : " << ACTUAL << "\n" \
-                      << "in " << __FILE__ << ":" << __LINE__ << std::endl; \
+                      << "\tin " << __FILE__ << ":" << __LINE__ << std::endl; \
             throw TestFailed(); \
         } \
     } while (0)
@@ -46,7 +46,7 @@
         if (bool(EXPR) != BOOLEAN) { \
             std::cout << "\n\t" << currentTest_ << " -> FAILED\n" \
                       << "\t\tExpression is NOT " << #BOOLEAN << "\n" \
-                      << "in " << __FILE__ << ":" << __LINE__ << std::endl; \
+                      << "\tin " << __FILE__ << ":" << __LINE__ << std::endl; \
             throw TestFailed(); \
         } \
     } while (0)
