@@ -103,7 +103,6 @@ private:
         PSYCHE_TEST(testCase24),
     };
 
-    std::string currentTest_;
     ExecutionOptions flags_;
 };
 

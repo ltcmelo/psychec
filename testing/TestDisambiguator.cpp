@@ -38,16 +38,14 @@ using namespace psyche;
 using namespace psyche;
 
 /*
- * The expected AST is obtained as follows:
- *  - The generator always generates a .dot file for the original program's AST
- *    and another .dot file for the "fixed" AST.
- *  - Create a PDF out of the fixed AST .dot file and manually inspect it to
- *    see whether the AST is correct and according to what we want.
- *  - If so, create a new test case and copy the contents of the fixed .dot
- *    file into it as a raw string.
+ * The expected AST, for a program `test.c', is obtained as follows:
  *
- * Follow the already existing examples for additional info.
+ *   1) Invoke ./psychecgen --ast test.c
+ *   2) Create a PDF out of .dot file produced for the disambiguated AST.
+ *   3) Verify that the ambiguity has indeed been correctly eliminated.
+ *   4) Use the content of the .dot file in question as the expectation.
  */
+
 void TestDisambiguator::checkAst(const std::string &source, std::string expected, bool nonHeu)
 {
     Factory factory;

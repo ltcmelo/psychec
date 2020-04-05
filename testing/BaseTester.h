@@ -24,19 +24,19 @@
 
 #define PSYCHE_TEST_FAIL(MSG) \
     do { \
-        std::cout << "[psyche] Test " << currentTest_ << " -> FAILED\n" \
-                  << "         Reason: " << MSG << "\n" \
-                  << "         " << __FILE__ << ":" << __LINE__ << std::endl; \
+        std::cout << "\n\t"<< currentTest_ << " -> FAILED\n" \
+                  << "\tReason: " << MSG << "\n" \
+                  << "in " << __FILE__ << ":" << __LINE__ << std::endl; \
         throw TestFailed(); \
     } while (0)
 
 #define PSYCHE_EXPECT_EQ(EXPECTED, ACTUAL, EQ) \
     do { \
         if (!(EQ(EXPECTED, ACTUAL))) { \
-            std::cout << "[psyche] Test " << currentTest_ << " -> FAILED\n" \
-                      << "         Expected: " << EXPECTED << "\n" \
-                      << "         Actual  : " << ACTUAL << "\n" \
-                      << "         " << __FILE__ << ":" << __LINE__ << std::endl; \
+            std::cout << "\n\t" << currentTest_ << " -> FAILED\n" \
+                      << "\t\tExpected: " << EXPECTED << "\n" \
+                      << "\t\tActual  : " << ACTUAL << "\n" \
+                      << "in " << __FILE__ << ":" << __LINE__ << std::endl; \
             throw TestFailed(); \
         } \
     } while (0)
@@ -44,9 +44,9 @@
 #define PSYCHE_EXPECT(EXPR, BOOLEAN) \
     do { \
         if (bool(EXPR) != BOOLEAN) { \
-            std::cout << "[psyche] Test " << currentTest_ << " -> FAILED\n" \
-                      << "        Expression is NOT " << #BOOLEAN << "\n" \
-                      << "        " << __FILE__ << ":" << __LINE__ << std::endl; \
+            std::cout << "\n\t" << currentTest_ << " -> FAILED\n" \
+                      << "\t\tExpression is NOT " << #BOOLEAN << "\n" \
+                      << "in " << __FILE__ << ":" << __LINE__ << std::endl; \
             throw TestFailed(); \
         } \
     } while (0)
@@ -76,8 +76,9 @@ protected:
         for (auto testData : tests) {
             reset();
             currentTest_ = testData.second;
+            std::cout << "\t" << currentTest_ << "...";
             testData.first(static_cast<TesterT*>(this));
-            std::cout << "\t" << currentTest_ << " passed!" << std::endl;
+            std::cout << " passed!" << std::endl;
         }
     }
 

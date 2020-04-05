@@ -28,6 +28,6 @@ void BaseTester::runSuite()
     std::cout << "Parser tests..." << std::endl;
     TestParser().testAll();
 
-    std::cout << "AST disambiguation tests..." << std::endl;
+    std::cout << "\nAST disambiguation tests..." << std::endl;
     TestDisambiguator().testAll();
 }
