@@ -85,41 +85,38 @@ public:
 
     const std::string& constraints() const { return constraints_; }
 
-    //! Successfull run.
-    static constexpr int OK = 0;
+    //! Exit code of successfull run.
+    static constexpr int Exit_OK = 0;
 
-    //! Diagnostics in general (positive values).
-    static constexpr int UnspecifiedInputFile = 2;
-    static constexpr int UnknownCommandLineOption = 3;
-    static constexpr int InvalidCommandLineValue = 4;
-    static constexpr int InvalidSyntax = 5;
-    static constexpr int UnresolvedAmbiguity = 6;
-    static constexpr int FailureLoadingPlugin = 7;
-    static constexpr int PreprocessingError = 8;
+    //! Exit code of a generic error.
+    static constexpr int Exit_Error = 1;
 
-    //! Internal errors (negative values).
-    static constexpr int ParsingError = -1;
-    static constexpr int UnavailableAstError = -2;
+    //! Exit code with specific error diagnostics.
+    static constexpr int Exit_UnspecifiedInputFileError = 2;
+    static constexpr int Exit_UnknownCommandLineOptionError = 3;
+    static constexpr int Exit_SyntaxError = 5;
+    static constexpr int Exit_UnresolvedSyntaxAmbiguityError = 6;
+    static constexpr int Exit_PluginLoadingError = 7;
+    static constexpr int Exit_PreprocessingError = 8;
+
+    //! Exit code of internal errors (negative values).
+    static constexpr int Exit_ParsingError_Internal = -1;
+    static constexpr int Exit_ASTError_Internal = -2;
 
 private:
-    friend class TestDisambiguator;
-
-    void configure(const ExecutionOptions& flags);
-
-    static Dialect adjustedDialect(const ExecutionOptions& exec);
-
     TranslationUnit* unit() const;
     TranslationUnitAST* ast() const;
 
-    void collectIncludes(const std::string& source);
+    static Dialect adjustedDialect(const ExecutionOptions& exec);
 
+    void configure(const ExecutionOptions& flags);
+    void collectIncludes(const std::string& source);
+    std::string augmentSource(const std::string&, const std::vector<std::string>&);
     int preprocess(const std::string& source);
     int parse(const std::string& source);
     int annotateAST();
     int instantiateGenerics();
     int generateConstraints();
-
-    std::string augmentSource(const std::string&, const std::vector<std::string>&);
 
     const Factory& factory_; // TODO: Will go away.
     Control control_;
@@ -129,6 +126,8 @@ private:
     std::string constraints_;
     std::string includes_;
     bool withGenerics_;
+
+    friend class TestDisambiguator;
 };
 
 } // namespace psyche

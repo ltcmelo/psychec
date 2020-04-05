@@ -30,7 +30,4 @@ void BaseTester::runSuite()
 
     std::cout << "AST disambiguation tests..." << std::endl;
     TestDisambiguator().testAll();
-
-    std::cout << "Type inference tests..." << std::endl
-              << "\t$cd solver && stack test" << std::endl;
 }

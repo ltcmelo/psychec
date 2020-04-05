@@ -51,16 +51,15 @@ namespace psyche {
     extern bool debugEnabled;
 }
 
-constexpr int Driver::OK;
-constexpr int Driver::ParsingError;
-constexpr int Driver::InvalidSyntax;
-constexpr int Driver::UnavailableAstError;
-constexpr int Driver::UnresolvedAmbiguity;
-constexpr int Driver::UnspecifiedInputFile;
-constexpr int Driver::UnknownCommandLineOption;
-constexpr int Driver::InvalidCommandLineValue;
-constexpr int Driver::FailureLoadingPlugin;
-constexpr int Driver::PreprocessingError;
+constexpr int Driver::Exit_OK;
+constexpr int Driver::Exit_ParsingError_Internal;
+constexpr int Driver::Exit_SyntaxError;
+constexpr int Driver::Exit_ASTError_Internal;
+constexpr int Driver::Exit_UnresolvedSyntaxAmbiguityError;
+constexpr int Driver::Exit_UnspecifiedInputFileError;
+constexpr int Driver::Exit_UnknownCommandLineOptionError;
+constexpr int Driver::Exit_PluginLoadingError;
+constexpr int Driver::Exit_PreprocessingError;
 
 namespace {
 
@@ -165,12 +164,12 @@ int Driver::process(int argc, char *argv[])
         cmdOpts.parse(argc, argv);
     } catch (const cxxopts::OptionException& e) {
         std::cerr << kPsychePrefix << e.what() << std::endl;
-        return UnknownCommandLineOption;
+        return Exit_UnknownCommandLineOptionError;
     }
 
     if (cmdOpts.count("help")) {
         std::cout << cmdOpts.help({"", "Group"}) << std::endl;
-        return OK;
+        return Exit_OK;
     }
 
     if (cmdOpts.count("test")) {
@@ -178,13 +177,14 @@ int Driver::process(int argc, char *argv[])
             BaseTester::runSuite();
         } catch (...) {
             std::cout << "\nYou BROKE stuff! Take a look at it!" << std::endl;
+            return Exit_Error;
         }
-        return OK;
+        return Exit_OK;
     }
 
     if (!cmdOpts.count("positional")) {
         std::cerr << kPsychePrefix << "unspecified input file" << std::endl;
-        return UnspecifiedInputFile;
+        return Exit_UnspecifiedInputFileError;
     }
 
     // The input file name is the single positional argument.
@@ -208,7 +208,7 @@ int Driver::process(int argc, char *argv[])
         Plugin::load(cmdOpts["plugin"].as<std::string>());
         if (!Plugin::isLoaded()) {
             std::cerr << kPsychePrefix << "cannot load plugin" << std::endl;
-            return FailureLoadingPlugin;
+            return Exit_PluginLoadingError;
         }
     }
 
@@ -221,7 +221,7 @@ int Driver::process(int argc, char *argv[])
     }
 
     switch (code) {
-    case OK:
+    case Exit_OK:
         if (!constraints_.empty()) {
             writeFile(cmdOpts["output"].as<std::string>(), constraints_);
             if (!includes_.empty()) {
@@ -231,11 +231,11 @@ int Driver::process(int argc, char *argv[])
         }
         break;
 
-    case ParsingError:
+    case Exit_ParsingError_Internal:
         std::cerr << kPsychePrefix << "parsing (internal) error" << std::endl;
         break;
 
-    case UnavailableAstError:
+    case Exit_ASTError_Internal:
         std::cerr << kPsychePrefix << "unavailable AST (internal) error" << in << std::endl;
         break;
 
@@ -289,7 +289,7 @@ int Driver::preprocess(const std::string& source)
         return parse(r.second);
     }
 
-    return PreprocessingError;
+    return Exit_PreprocessingError;
 }
 
 int Driver::parse(const std::string& source)
@@ -299,10 +299,10 @@ int Driver::parse(const std::string& source)
     unit_->setSource(source.c_str(), source.length());
 
     if (!unit_->parse())
-        return ParsingError;
+        return Exit_ParsingError_Internal;
 
     if (!unit_->ast() || !ast())
-        return UnavailableAstError;
+        return Exit_ASTError_Internal;
 
     honorFlag(opts_.flag_.dumpAst,
               [this] () { ASTDotWriter(unit()).write(ast(), ".ast.dot"); });
@@ -311,7 +311,7 @@ int Driver::parse(const std::string& source)
     validator.validate(ast());
 
     if (control_.diagnosticCollector()->seenBlockingIssue())
-        return InvalidSyntax;
+        return Exit_SyntaxError;
 
     return annotateAST();
 }
@@ -325,7 +325,7 @@ int Driver::annotateAST()
     // Try to disambiguate syntax ambiguities and normalize the AST according to the resolutions.
     ASTNormalizer fixer(unit(), !opts_.flag_.noHeuristics);
     if (!fixer.normalize(ast()))
-        return UnresolvedAmbiguity;
+        return Exit_UnresolvedSyntaxAmbiguityError;
 
     honorFlag(opts_.flag_.displayStats,
               [this, &fixer] () {
@@ -336,7 +336,7 @@ int Driver::annotateAST()
               [this] () { ASTDotWriter(unit()).write(ast(), ".ast.fixed.dot"); });
 
     if (opts_.flag_.disambOnly)
-        return OK;
+        return Exit_OK;
 
     return withGenerics_
                 ? instantiateGenerics()
@@ -390,5 +390,5 @@ int Driver::generateConstraints()
     honorFlag(opts_.flag_.displayConstraints,
               [this] () { std::cout << constraints_ << std::endl; });
 
-    return OK;
+    return Exit_OK;
 }
