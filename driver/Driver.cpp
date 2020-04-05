@@ -176,7 +176,7 @@ int Driver::process(int argc, char *argv[])
         try {
             BaseTester::runSuite();
         } catch (...) {
-            std::cout << "\nYou BROKE stuff! Take a look at it!" << std::endl;
+            std::cout << "\nTests failed." << std::endl;
             return Exit_Error;
         }
         return Exit_OK;
@@ -357,7 +357,7 @@ int Driver::instantiateGenerics()
 
     // Ignore generics in next pass.
     withGenerics_ = false;
-    opts_.defs_.push_back("_Generic=");
+    opts_.defs_.push_back("_Template=");
     opts_.defs_.push_back("'_Forall(v)=v'");
     opts_.defs_.push_back("'_Exists(v)=v'");
 
