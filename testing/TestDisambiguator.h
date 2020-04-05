@@ -65,7 +65,7 @@ private:
 
     using TestData = std::pair<std::function<void(TestDisambiguator*)>, const char*>;
 
-    void checkAst(const std::string& source, std::string expected, bool nonHeu = true);
+    void checkAst(const std::string& source, std::string expected, bool noHeuristic = true);
     void checkConstraints(const std::string& source, std::string expected);
 
     void compareText(std::string expected, std::string actual) const;
@@ -102,8 +102,6 @@ private:
         PSYCHE_TEST(testCase23),
         PSYCHE_TEST(testCase24),
     };
-
-    ExecutionOptions flags_;
 };
 
 } // namespace psyche
