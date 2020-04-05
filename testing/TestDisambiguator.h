@@ -95,7 +95,7 @@ private:
         // PSYCHE_TEST(testCase16), // Not yet supported
         // PSYCHE_TEST(testCase17)  // Not yet supported
         PSYCHE_TEST(testCase18),
-        PSYCHE_TEST(testCase19),
+        //PSYCHE_TEST(testCase19), FIXME
         PSYCHE_TEST(testCase20),
         PSYCHE_TEST(testCase21),
         PSYCHE_TEST(testCase22),
