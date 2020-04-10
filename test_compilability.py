@@ -21,9 +21,9 @@ baseline = Expectation(
 
 class Runner:
     def __init__(self,
-                 cc: str,
-                 c_files_dir: str,
-                 expect: Expectation):
+                 cc,
+                 c_files_dir,
+                 expect):
         self.cc = cc
         self.c_files_dir = c_files_dir
 
@@ -61,7 +61,7 @@ class Runner:
                 except:
                     pass
 
-    def _execute_cnip(self, c_file_path: str):
+    def _execute_cnip(self, c_file_path):
 
         print(c_file_path)
         cmd = ['cnip.sh',
@@ -78,8 +78,8 @@ class Runner:
             sys.exit(1)
 
     @staticmethod
-    def _print_info(action: str,
-                    c_file_path: str):
+    def _print_info(action,
+                    c_file_path):
         prefix = '^' * len(action)
         print(f'\n  {prefix}\n  {action} ({c_file_path})\n')
 
