@@ -64,7 +64,7 @@ class Runner:
     def _execute_cnip(self, c_file_path: str):
 
         print(c_file_path)
-        cmd = ['cnip.sh',
+        cmd = ['./cnip.sh',
                '-f',
                '--no-stdlib',
                self.cc,
