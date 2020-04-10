@@ -1,0 +1,25 @@
+name: compilability-tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: cmake CMakeLists.txt
+    - name: make
+      run: make
+    - name: build solver
+      run: |
+        cd solver
+        stack build
+    - name: test
+      run: ./test_compilability.py
