@@ -13,6 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.8'
     - name: configure
       run: cmake CMakeLists.txt
     - name: make
@@ -22,4 +25,4 @@ jobs:
         cd solver
         stack build
     - name: test
-      run: ./test_compilability.py
+      run: python test_compilability.py
