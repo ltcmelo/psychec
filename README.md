@@ -90,7 +90,7 @@ PsycheC provides an alternative to `void*` and `#macros` for writing generic cod
 This is how you would implement a generic linked-list's `prepend` function.
 
 ```c
-_Generic void prepend(_Forall(node_t)** head,
+_Template void prepend(_Forall(node_t)** head,
                       _Forall(value_t) value)
 {
     node_t* n = malloc(sizeof(node_t));
