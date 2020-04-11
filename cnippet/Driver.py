@@ -31,10 +31,10 @@ class Driver:
 
     _id = 'driver'
 
-    def __init__(self, cnip_opt):
-        self.cnip_opt = cnip_opt
-        self.cc: CCompilerFacade = CCompilerFacade(cnip_opt)
-        self.psyche: PsycheFacade = PsycheFacade(cnip_opt)
+    def __init__(self, cnip_opts):
+        self.cnip_opts = cnip_opts
+        self.cc: CCompilerFacade = CCompilerFacade(cnip_opts)
+        self.psyche: PsycheFacade = PsycheFacade(cnip_opts)
 
     @staticmethod
     def _delete_old_files(unit):
@@ -77,7 +77,7 @@ class Driver:
         Entry point.
         """
 
-        trace_op(Driver._id, flatten(self.cnip_opt['host_cc_cmd']))
+        trace_op(Driver._id, flatten(self.cnip_opts['host_cc_cmd']))
 
         if not self.cc.is_supported():
             sys.exit(DiagnosticReporter.fatal(HOST_C_COMPILER_NOT_FOUND))
@@ -95,7 +95,7 @@ class Driver:
 
         # The adjusted command that is forwarded to the host C compiler is the
         # one provided by the user, with input file replaced.
-        new_cmd = self.cnip_opt['host_cc_cmd']
+        new_cmd = self.cnip_opts['host_cc_cmd']
 
         for c_file_path in cc_cmd.sources:
             if not os.path.isfile(c_file_path):
@@ -114,7 +114,7 @@ class Driver:
             new_cmd = [w.replace(unit.c_file_path, unit.cnip_file_path)
                        for w in new_cmd]
 
-        cmd = [self.cnip_opt['host_cc'],
+        cmd = [self.cnip_opts['host_cc'],
                '-x',
                'c'] + new_cmd
 

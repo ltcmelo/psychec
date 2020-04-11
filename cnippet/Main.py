@@ -60,9 +60,13 @@ def _parse_input():
                         action='store_true',
                         help="Don't attempt to match stdlib names.")
 
+    parser.add_argument('-s', '--omissive-only',
+                        action='store_true',
+                        help='Only consider "omissive" functions (with /*...*/)')
+
     parser.add_argument('-f', '--non-commercial',
                         action='store_true',
-                        help="Specify non-commercial use of cnippet.")
+                        help="Specify non-commercial use.")
 
     parser.add_argument('-t', '--trace',
                         action='append',
@@ -95,6 +99,7 @@ if __name__ == "__main__":
     cnip_opt = dict(no_stdlib=args.no_stdlib,
                     no_typedef=args.no_typedef,
                     no_heuristic=args.no_heuristic,
+                    omissive_only=args.omissive_only,
                     traces=args.trace,
                     trace_level=args.trace_level,
                     host_cc=args.CC,
