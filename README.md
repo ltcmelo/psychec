@@ -2,6 +2,7 @@
 ![](https://github.com/ltcmelo/psychec/workflows/solver-build/badge.svg)
 ![](https://github.com/ltcmelo/psychec/workflows/parser-tests/badge.svg)
 ![](https://github.com/ltcmelo/psychec/workflows/inference-tests/badge.svg)
+![](https://github.com/ltcmelo/psychec/workflows/compilability-tests/badge.svg)
 
 # PsycheC
 
