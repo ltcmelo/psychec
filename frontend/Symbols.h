@@ -452,8 +452,8 @@ public:
     bool isInline() const
     { return _isInline; }
 
-    void setInline(bool onoff)
-    { _isInline = onoff; }
+    void setInline(bool yes)
+    { _isInline = yes; }
 
 protected:
     virtual void visitSymbol0(SymbolVisitor* visitor);

@@ -23,7 +23,6 @@
 #define PSYCHE_LEXER_H__
 
 #include "FrontendConfig.h"
-
 #include "FrontendFwds.h"
 #include "Token.h"
 
@@ -39,34 +38,98 @@ public:
     Lexer(const char *firstChar, const char *lastChar);
     ~Lexer();
 
-    Control *control() const { return _control; }
+    Control *control() const { return control_; }
 
-    void scan(Token *tok);
+    void lex(Token *tok);
 
     inline void operator()(Token *tok)
-    { scan(tok); }
+    { lex(tok); }
 
-    bool scanCommentTokens() const;
-    void setScanCommentTokens(bool onoff);
+    Dialect dialect() const { return dialect_; }
+    void setDialect(Dialect dialect) { dialect_ = dialect; }
 
-    bool scanKeywords() const;
-    void setScanKeywords(bool onoff);
+    bool classifyKeywordIdentifiers() const;
+    void setClassifyKeywordIdentifiers(bool yes);
 
-    bool scanAngleStringLiteralTokens() const;
-    void setScanAngleStringLiteralTokens(bool onoff);
+    bool keepComments() const;
+    void setKeepComments(bool yes);
+
+    bool recognizeAngleBracketStrings() const;
+    void setRecognizeAngleBracketStrings(bool yes);
+
+    void setPreprocessorMode(bool yes)
+    { f.ppMode_ = yes; }
 
     void setStartWithNewline(bool enabled);
+
+private:
+    static int classify(const char *string, int length, Dialect features);
+    static int classifyOperator(const char *string, int length);
+
+    void setSource(const char *firstChar, const char *lastChar);
 
     int state() const;
     void setState(int state);
 
-    Dialect dialect() const { return _languageOptions; }
-    void setDialect(Dialect dialect) { _languageOptions = dialect; }
+    void pushLineStartOffset();
 
-    void setPreprocessorMode(bool onoff)
-    { f._ppMode = onoff; }
+    void lex_helper(Token *tok);
+    void lexStringLiteral(Token *tok, unsigned char hint = 0);
+    void lexRawStringLiteral(Token *tok, unsigned char hint = 0);
+    bool lexUntilRawStringLiteralEndSimple();
+    void lexCharLiteral(Token *tok, unsigned char hint = 0);
+    void lexUntilQuote(Token *tok, const unsigned char quote);
+    bool lexDigitSequence();
+    bool lexExponentPart();
+    bool lexOptionalFloatingSuffix();
+    bool lexOptionalIntegerSuffix(bool allowU = true);
+    void lexOptionalUserDefinedLiteral(Token *tok);
+    void lexNumericLiteral(Token *tok);
+    void lexPreprocessorNumber(Token *tok, bool dotAlreadySkipped);
+    void lexIdentifier(Token *tok, unsigned extraProcessedChars = 0);
+    void lexBackslash(Kind type);
+    void lexCppComment(Kind type);
 
-public:
+    TranslationUnit *unit_;
+    Control *control_;
+
+    struct Flags {
+        unsigned keepComments_                 : 1;
+        unsigned classifyKeywordsIdentifiers_  : 1;
+        unsigned recognizeAngleBracketStrings_ : 1;
+        unsigned ppMode_                       : 1;
+    };
+    union {
+        unsigned flags_;
+        Flags f;
+    };
+
+    struct State {
+        unsigned char tokKind_ : 7;
+        unsigned char newLineExpected_ : 1;
+    };
+    union {
+        unsigned char state_;
+        State s;
+    };
+
+    const char *firstChar_;
+    const char *curChar_;
+    const char *lastChar_;
+    const char *tokStart_;
+
+    unsigned char yy_;
+
+    void yyinp()
+    {
+        yyinp_utf8(curChar_, yy_, _currentCharUtf16);
+        if (UNLIKELY(yy_ == '\n'))
+            pushLineStartOffset();
+    }
+
+    unsigned curLine_;
+    Dialect dialect_;
+
     static void yyinp_utf8(const char *&currentSourceChar, unsigned char &yychar,
                            unsigned &utf16charCounter)
     {
@@ -88,74 +151,11 @@ public:
         }
     }
 
-private:
-    void pushLineStartOffset();
-    void scan_helper(Token *tok);
-    void setSource(const char *firstChar, const char *lastChar);
-    static int classify(const char *string, int length, Dialect features);
-    static int classifyOperator(const char *string, int length);
-
-    void scanStringLiteral(Token *tok, unsigned char hint = 0);
-    void scanRawStringLiteral(Token *tok, unsigned char hint = 0);
-    bool scanUntilRawStringLiteralEndSimple();
-    void scanCharLiteral(Token *tok, unsigned char hint = 0);
-    void scanUntilQuote(Token *tok, const unsigned char quote);
-    bool scanDigitSequence();
-    bool scanExponentPart();
-    bool scanOptionalFloatingSuffix();
-    bool scanOptionalIntegerSuffix(bool allowU = true);
-    void scanOptionalUserDefinedLiteral(Token *tok);
-    void scanNumericLiteral(Token *tok);
-    void scanPreprocessorNumber(Token *tok, bool dotAlreadySkipped);
-    void scanIdentifier(Token *tok, unsigned extraProcessedChars = 0);
-    void scanBackslash(Kind type);
-    void scanCppComment(Kind type);
-
     static bool isByteOfMultiByteCodePoint(unsigned char byte)
     { return byte & 0x80; } // Check if most significant bit is set
 
-    void yyinp()
-    {
-        yyinp_utf8(_currentChar, _yychar, _currentCharUtf16);
-        if (UNLIKELY(_yychar == '\n'))
-            pushLineStartOffset();
-    }
-
-private:
-    struct Flags {
-        unsigned _scanCommentTokens: 1;
-        unsigned _scanKeywords: 1;
-        unsigned _scanAngleStringLiteralTokens: 1;
-        unsigned _ppMode: 1;
-    };
-
-    struct State {
-        unsigned char _tokenKind : 7;
-        unsigned char _newlineExpected : 1;
-    };
-
-    TranslationUnit *_translationUnit;
-    Control *_control;
-    const char *_firstChar;
-    const char *_currentChar;
-    const char *_lastChar;
-    const char *_tokenStart;
-    unsigned char _yychar;
-
     unsigned _currentCharUtf16;
     unsigned _tokenStartUtf16;
-
-    union {
-        unsigned char _state;
-        State s;
-    };
-    union {
-        unsigned _flags;
-        Flags f;
-    };
-
-    unsigned _currentLine;
-    Dialect _languageOptions;
 };
 
 } // namespace psyche

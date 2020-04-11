@@ -31,6 +31,8 @@
 #include "DeclarationInterceptor.h"
 #include "Debug.h"
 #include "Literals.h"
+#include "Name.h"
+#include "Names.h"
 #include "PrintfScanner.h"
 #include "Scope.h"
 #include "Symbols.h"

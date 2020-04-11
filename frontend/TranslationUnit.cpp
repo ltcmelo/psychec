@@ -27,11 +27,13 @@
 #include "AST.h"
 #include "Literals.h"
 #include "DiagnosticCollector.h"
-#include <stack>
-#include <vector>
-#include <cstdarg>
+
 #include <algorithm>
+#include <cstdarg>
+#include <iostream>
+#include <stack>
 #include <utility>
+#include <vector>
 
 #if defined(_MSC_VER) && (_MSC_VER < 1800)
 #    define va_copy(dst, src) ((dst) = (src))
@@ -155,7 +157,7 @@ void TranslationUnit::tokenize()
 
     Lexer lex(this);
     lex.setDialect(_dialect);
-    lex.setScanCommentTokens(true);
+    lex.setKeepComments(true);
 
     std::stack<unsigned> braces;
     _tokens.push_back(nullToken); // the first token needs to be invalid!

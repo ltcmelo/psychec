@@ -3434,12 +3434,14 @@ bool Parser::parseForStatement(StatementAST* &node)
 bool Parser::parseForInitStatement(StatementAST* &node)
 {
     DEBUG_THIS_RULE();
+
     return parseExpressionOrDeclarationStatement(node);
 }
 
 bool Parser::parseCompoundStatement(StatementAST* &node)
 {
     DEBUG_THIS_RULE();
+
     if (LA() == T_LBRACE) {
         if (_statementDepth > MAX_STATEMENT_DEPTH)
             return false;
@@ -3447,9 +3449,6 @@ bool Parser::parseCompoundStatement(StatementAST* &node)
 
         CompoundStatementAST* ast = new (_pool) CompoundStatementAST;
         ast->lbrace_token = consumeToken();
-
-        // ### TODO: the GNU "local label" extension: "__label__ X, Y, Z;"
-        // These are only allowed at the start of a compound stmt regardless of the language.
 
         StatementListAST* *statement_ptr = &ast->statement_list;
         while (int tk = LA()) {
