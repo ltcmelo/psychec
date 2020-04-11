@@ -36,7 +36,7 @@ public:
     void unparse(AST* ast, std::ostream& os);
 
 protected:
-    void terminal(unsigned tok, AST* ast) override;
+    void terminal(unsigned tk, AST* ast) override;
 
     std::ostream* os_;
 };

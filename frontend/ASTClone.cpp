@@ -360,6 +360,7 @@ FunctionDeclaratorAST* FunctionDeclaratorAST::clone(MemoryPool *pool) const
     if (parameter_declaration_clause)
         ast->parameter_declaration_clause = parameter_declaration_clause->clone(pool);
     ast->rparen_token = rparen_token;
+    ast->psychec_omission_token = psychec_omission_token;
     for (SpecifierListAST* iter = cv_qualifier_list, **ast_iter = &ast->cv_qualifier_list;
          iter; iter = iter->next, ast_iter = &(*ast_iter)->next)
         *ast_iter = new (pool) SpecifierListAST((iter->value) ? iter->value->clone(pool) : 0);

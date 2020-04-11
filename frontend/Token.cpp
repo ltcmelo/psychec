@@ -69,8 +69,8 @@ const char *token_names[] = {
     ("bool"), ("char"), ("char16_t"), ("char32_t"), ("double"), ("float"), ("int"),
     ("long"), ("short"), ("signed"), ("unsigned"), ("void"), ("wchar_t"),
 
-    // Generics
-    ("_Template"), ("_Forall"), ("_Exists")
+    // psychec
+    ("_Template"), ("_Forall"), ("_Exists"), ("<psychec marker>")
 };
 
 void Token::reset()

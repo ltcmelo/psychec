@@ -271,7 +271,9 @@ recognize:
                 _tokens[open_brace_index].close_brace = unsigned(_tokens.size());
         } else if (tk.isComment()) {
             _comments.push_back(tk);
-            continue; // comments are not in the regular token stream
+            if (tk.kind() != T_PSYCHEC_OMISSION_MARKER)
+                // regular comments are not in the main token stream
+                continue;
         }
 
         bool currentExpanded = false;
@@ -535,24 +537,24 @@ bool TranslationUnit::maybeSplitGreaterGreaterToken(unsigned tokenIndex)
 {
     if (tokenIndex >= tokenCount())
         return false;
-    Token &tok = _tokens[tokenIndex];
-    if (tok.kind() != T_GREATER_GREATER)
+    Token &tk = _tokens[tokenIndex];
+    if (tk.kind() != T_GREATER_GREATER)
         return false;
 
-    tok.f.kind = T_GREATER;
-    tok.f.bytes = 1;
-    tok.f.utf16chars = 1;
+    tk.f.kind = T_GREATER;
+    tk.f.bytes = 1;
+    tk.f.utf16chars = 1;
 
     Token newGreater;
     newGreater.f.kind = T_GREATER;
-    newGreater.f.expanded = tok.expanded();
-    newGreater.f.generated = tok.generated();
+    newGreater.f.expanded = tk.expanded();
+    newGreater.f.generated = tk.generated();
     newGreater.f.bytes = 1;
     newGreater.f.utf16chars = 1;
-    newGreater.byteOffset = tok.byteOffset + 1;
-    newGreater.utf16charOffset = tok.utf16charOffset + 1;
+    newGreater.byteOffset = tk.byteOffset + 1;
+    newGreater.utf16charOffset = tk.utf16charOffset + 1;
 
-    TokenLineColumn::const_iterator it = _expandedLineColumn.find(tok.bytesBegin());
+    TokenLineColumn::const_iterator it = _expandedLineColumn.find(tk.bytesBegin());
 
     _tokens.insert(_tokens.begin() + tokenIndex + 1, newGreater);
 

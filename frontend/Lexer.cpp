@@ -117,12 +117,12 @@ void Lexer::pushLineStartOffset()
         unit_->pushLineOffset(_currentCharUtf16);
 }
 
-void Lexer::lex(Token *tok)
+void Lexer::lex(Token *tk)
 {
-    tok->reset();
-    lex_helper(tok);
-    tok->f.bytes = curChar_ - tokStart_;
-    tok->f.utf16chars = _currentCharUtf16 - _tokenStartUtf16;
+    tk->reset();
+    lex_helper(tk);
+    tk->f.bytes = curChar_ - tokStart_;
+    tk->f.utf16chars = _currentCharUtf16 - _tokenStartUtf16;
 }
 
 static bool isRawStringLiteral(unsigned char kind)
@@ -136,48 +136,48 @@ static bool isMultiLineToken(unsigned char kind)
     return kind == T_EOF_SYMBOL
         || kind == T_COMMENT
         || kind == T_DOXY_COMMENT
+        || kind == T_PSYCHEC_OMISSION_MARKER
         || isRawStringLiteral(kind);
 }
 
-void Lexer::lex_helper(Token *tok)
+void Lexer::lex_helper(Token *tk)
 {
   again:
     while (yy_ && std::isspace(yy_)) {
         if (yy_ == '\n') {
-            tok->f.joined = s.newLineExpected_;
-            tok->f.newline = !s.newLineExpected_;
+            tk->f.joined = s.newLineExpected_;
+            tk->f.newline = !s.newLineExpected_;
 
             if (s.newLineExpected_)
                 s.newLineExpected_ = false;
             else if (!isMultiLineToken(s.tokKind_))
                 state_ = 0;
         } else {
-            tok->f.whitespace = true;
+            tk->f.whitespace = true;
         }
         yyinp();
     }
 
     if (! unit_)
-        tok->lineno = curLine_;
+        tk->lineno = curLine_;
 
     tokStart_ = curChar_;
-    tok->byteOffset = curChar_ - firstChar_;
+    tk->byteOffset = curChar_ - firstChar_;
 
     _tokenStartUtf16 = _currentCharUtf16;
-    tok->utf16charOffset = _currentCharUtf16;
+    tk->utf16charOffset = _currentCharUtf16;
 
     if (yy_) {
         s.newLineExpected_ = false;
     } else if (s.tokKind_) {
-        tok->f.kind = T_EOF_SYMBOL;
+        tk->f.kind = T_EOF_SYMBOL;
         return;
     }
 
-    if (s.tokKind_ == T_EOF_SYMBOL) {
-        // skip
-    } else if (s.tokKind_ == T_COMMENT || s.tokKind_ == T_DOXY_COMMENT) {
-        const int originalKind = s.tokKind_;
-
+    if (s.tokKind_ == T_COMMENT
+            || s.tokKind_ == T_DOXY_COMMENT
+            || s.tokKind_ == T_PSYCHEC_OMISSION_MARKER) {
+        const int tkKind = s.tokKind_;
         while (yy_) {
             if (yy_ != '*')
                 yyinp();
@@ -194,31 +194,38 @@ void Lexer::lex_helper(Token *tok)
         if (! f.keepComments_)
             goto again;
 
-        tok->f.kind = originalKind;
-        return;
-    } else if (s.tokKind_ == T_CPP_COMMENT || s.tokKind_ == T_CPP_DOXY_COMMENT) {
-        const Kind originalKind = (Kind)s.tokKind_;
-        tok->f.joined = true;
-        if (f.keepComments_)
-            tok->f.kind = originalKind;
-        state_ = 0;
-        lexCppComment(originalKind);
-        return;
-    } else if (isRawStringLiteral(s.tokKind_)) {
-        tok->f.kind = s.tokKind_;
-        if (lexUntilRawStringLiteralEndSimple())
-            state_ = 0;
-        return;
-    } else { // non-raw strings
-        tok->f.joined = true;
-        tok->f.kind = s.tokKind_;
-        state_ = 0;
-        lexUntilQuote(tok, '"');
+        tk->f.kind = tkKind;
         return;
     }
 
-    if (! yy_) {
-        tok->f.kind = T_EOF_SYMBOL;
+    if (s.tokKind_ == T_CPP_COMMENT
+            || s.tokKind_ == T_CPP_DOXY_COMMENT) {
+        const Kind tkKind = (Kind)s.tokKind_;
+        tk->f.joined = true;
+        if (f.keepComments_)
+            tk->f.kind = tkKind;
+        state_ = 0;
+        lexCppComment(tkKind);
+        return;
+    }
+
+    if (isRawStringLiteral(s.tokKind_)) {
+        tk->f.kind = s.tokKind_;
+        if (lexUntilRawStringLiteralEndSimple())
+            state_ = 0;
+        return;
+    }
+
+    if (s.tokKind_ != T_EOF_SYMBOL) {
+        tk->f.joined = true;
+        tk->f.kind = s.tokKind_;
+        state_ = 0;
+        lexUntilQuote(tk, '"');
+        return;
+    }
+
+    if (!yy_) {
+        tk->f.kind = T_EOF_SYMBOL;
         return;
     }
 
@@ -231,78 +238,78 @@ void Lexer::lex_helper(Token *tok)
         goto again;
 
     case '"':
-        lexStringLiteral(tok);
+        lexStringLiteral(tk);
         break;
 
     case '\'':
-        lexCharLiteral(tok);
+        lexCharLiteral(tk);
         break;
 
     case '{':
-        tok->f.kind = T_LBRACE;
+        tk->f.kind = T_LBRACE;
         break;
 
     case '}':
-        tok->f.kind = T_RBRACE;
+        tk->f.kind = T_RBRACE;
         break;
 
     case '[':
-        tok->f.kind = T_LBRACKET;
+        tk->f.kind = T_LBRACKET;
         break;
 
     case ']':
-        tok->f.kind = T_RBRACKET;
+        tk->f.kind = T_RBRACKET;
         break;
 
     case '#':
         if (yy_ == '#') {
-            tok->f.kind = T_POUND_POUND;
+            tk->f.kind = T_POUND_POUND;
             yyinp();
         } else {
-            tok->f.kind = T_POUND;
+            tk->f.kind = T_POUND;
         }
         break;
 
     case '(':
-        tok->f.kind = T_LPAREN;
+        tk->f.kind = T_LPAREN;
         break;
 
     case ')':
-        tok->f.kind = T_RPAREN;
+        tk->f.kind = T_RPAREN;
         break;
 
     case ';':
-        tok->f.kind = T_SEMICOLON;
+        tk->f.kind = T_SEMICOLON;
         break;
 
     case ':':
         if (yy_ == ':') {
             yyinp();
-            tok->f.kind = T_COLON_COLON;
+            tk->f.kind = T_COLON_COLON;
         } else if (yy_ == '>') {
             yyinp();
-            tok->f.kind = T_RBRACKET;
+            tk->f.kind = T_RBRACKET;
         } else {
-            tok->f.kind = T_COLON;
+            tk->f.kind = T_COLON;
         }
         break;
 
     case '.':
         if (yy_ == '*') {
             yyinp();
-            tok->f.kind = T_DOT_STAR;
+            tk->f.kind = T_DOT_STAR;
         } else if (yy_ == '.') {
             yyinp();
             // ### CPP_CHECK(_yychar);
             if (yy_ == '.') {
                 yyinp();
-                tok->f.kind = T_DOT_DOT_DOT;
+                tk->f.kind = T_DOT_DOT_DOT;
             } else {
-                tok->f.kind = T_ERROR;
+                tk->f.kind = T_ERROR;
             }
         } else if (std::isdigit(yy_)) {
             if (f.ppMode_) {
-                lexPreprocessorNumber(tok, true);
+                lexPreprocessorNumber(tk, true);
                 break;
             }
 
@@ -311,20 +318,20 @@ void Lexer::lex_helper(Token *tok)
             lexDigitSequence(); // this is optional: we already skipped over the first digit
             lexExponentPart();
             if (!lexOptionalFloatingSuffix())
-                lexOptionalUserDefinedLiteral(tok);
+                lexOptionalUserDefinedLiteral(tk);
             if (std::isalnum(yy_) || yy_ == '_') {
                 do {
                     yyinp();
                 } while (std::isalnum(yy_) || yy_ == '_');
-                tok->f.kind = T_ERROR;
+                tk->f.kind = T_ERROR;
             } else {
                 int yylen = curChar_ - yytext;
-                tok->f.kind = T_NUMERIC_LITERAL;
+                tk->f.kind = T_NUMERIC_LITERAL;
                 if (control())
-                    tok->number = control()->numericLiteral(yytext, yylen);
+                    tk->number = control()->numericLiteral(yytext, yylen);
             }
         } else {
-            tok->f.kind = T_DOT;
+            tk->f.kind = T_DOT;
         }
         break;
 
@@ -333,99 +340,98 @@ void Lexer::lex_helper(Token *tok)
             yyinp();
             if (yy_ == '(') {
                 yyinp();
-                tok->f.kind = T_LBRACKET;
+                tk->f.kind = T_LBRACKET;
             } else if (yy_ == ')') {
                 yyinp();
-                tok->f.kind = T_RBRACKET;
+                tk->f.kind = T_RBRACKET;
             } else if (yy_ == '<') {
                 yyinp();
-                tok->f.kind = T_LBRACE;
+                tk->f.kind = T_LBRACE;
             } else if (yy_ == '>') {
                 yyinp();
-                tok->f.kind = T_RBRACE;
+                tk->f.kind = T_RBRACE;
             }
         } else {
-            tok->f.kind = T_QUESTION;
+            tk->f.kind = T_QUESTION;
         }
         break;
 
     case '+':
         if (yy_ == '+') {
             yyinp();
-            tok->f.kind = T_PLUS_PLUS;
+            tk->f.kind = T_PLUS_PLUS;
         } else if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_PLUS_EQUAL;
+            tk->f.kind = T_PLUS_EQUAL;
         } else {
-            tok->f.kind = T_PLUS;
+            tk->f.kind = T_PLUS;
         }
         break;
 
     case '-':
         if (yy_ == '-') {
             yyinp();
-            tok->f.kind = T_MINUS_MINUS;
+            tk->f.kind = T_MINUS_MINUS;
         } else if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_MINUS_EQUAL;
+            tk->f.kind = T_MINUS_EQUAL;
         } else if (yy_ == '>') {
             yyinp();
             if (yy_ == '*') {
                 yyinp();
-                tok->f.kind = T_ARROW_STAR;
+                tk->f.kind = T_ARROW_STAR;
             } else {
-                tok->f.kind = T_ARROW;
+                tk->f.kind = T_ARROW;
             }
         } else {
-            tok->f.kind = T_MINUS;
+            tk->f.kind = T_MINUS;
         }
         break;
 
     case '*':
         if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_STAR_EQUAL;
+            tk->f.kind = T_STAR_EQUAL;
         } else {
-            tok->f.kind = T_STAR;
+            tk->f.kind = T_STAR;
         }
         break;
 
     case '/':
         if (yy_ == '/') {
             yyinp();
-
-            Kind commentType = T_CPP_COMMENT;
+            Kind tokKind = T_CPP_COMMENT;
 
             if (yy_ == '/' || yy_ == '!') {
                 yyinp();
-                commentType = T_CPP_DOXY_COMMENT;
+                tokKind = T_CPP_DOXY_COMMENT;
             }
 
-            lexCppComment(commentType);
+            lexCppComment(tokKind);
 
             if (! f.keepComments_)
                 goto again;
 
-            tok->f.kind = commentType;
-
+            tk->f.kind = tokKind;
         } else if (yy_ == '*') {
             yyinp();
-
-            Kind commentKind = T_COMMENT;
+            Kind tokKind = T_COMMENT;
 
             if (yy_ == '*' || yy_ == '!') {
                 const char ch = yy_;
-
                 yyinp();
-
                 if (ch == '*' && yy_ == '/')
                     goto done;
 
                 if (yy_ == '<')
                     yyinp();
-
                 if (! yy_ || std::isspace(yy_))
-                    commentKind = T_DOXY_COMMENT;
+                    tokKind = T_DOXY_COMMENT;
+            } else if (yy_ == '.') {
+                do {
+                    yyinp();
+                } while (yy_ == '.');
+                tokKind = T_PSYCHEC_OMISSION_MARKER;
             }
 
             while (yy_) {
@@ -442,93 +448,92 @@ void Lexer::lex_helper(Token *tok)
             if (yy_)
                 yyinp();
             else
-                s.tokKind_ = commentKind;
+                s.tokKind_ = tokKind;
 
             if (! f.keepComments_)
                 goto again;
 
-            tok->f.kind = commentKind;
-
+            tk->f.kind = tokKind;
         } else if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_SLASH_EQUAL;
+            tk->f.kind = T_SLASH_EQUAL;
         } else {
-            tok->f.kind = T_SLASH;
+            tk->f.kind = T_SLASH;
         }
         break;
 
     case '%':
         if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_PERCENT_EQUAL;
+            tk->f.kind = T_PERCENT_EQUAL;
         } else if (yy_ == '>') {
             yyinp();
-            tok->f.kind = T_RBRACE;
+            tk->f.kind = T_RBRACE;
         } else if (yy_ == ':') {
             yyinp();
-            tok->f.kind = T_POUND;
+            tk->f.kind = T_POUND;
         } else {
-            tok->f.kind = T_PERCENT;
+            tk->f.kind = T_PERCENT;
         }
         break;
 
     case '^':
         if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_CARET_EQUAL;
+            tk->f.kind = T_CARET_EQUAL;
         } else {
-            tok->f.kind = T_CARET;
+            tk->f.kind = T_CARET;
         }
         break;
 
     case '&':
         if (yy_ == '&') {
             yyinp();
-            tok->f.kind = T_AMPER_AMPER;
+            tk->f.kind = T_AMPER_AMPER;
         } else if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_AMPER_EQUAL;
+            tk->f.kind = T_AMPER_EQUAL;
         } else {
-            tok->f.kind = T_AMPER;
+            tk->f.kind = T_AMPER;
         }
         break;
 
     case '|':
         if (yy_ == '|') {
             yyinp();
-            tok->f.kind = T_PIPE_PIPE;
+            tk->f.kind = T_PIPE_PIPE;
         } else if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_PIPE_EQUAL;
+            tk->f.kind = T_PIPE_EQUAL;
         } else {
-            tok->f.kind = T_PIPE;
+            tk->f.kind = T_PIPE;
         }
         break;
 
     case '~':
         if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_TILDE_EQUAL;
+            tk->f.kind = T_TILDE_EQUAL;
         } else {
-            tok->f.kind = T_TILDE;
+            tk->f.kind = T_TILDE;
         }
         break;
 
     case '!':
         if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_EXCLAIM_EQUAL;
+            tk->f.kind = T_EXCLAIM_EQUAL;
         } else {
-            tok->f.kind = T_EXCLAIM;
+            tk->f.kind = T_EXCLAIM;
         }
         break;
 
     case '=':
         if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_EQUAL_EQUAL;
+            tk->f.kind = T_EQUAL_EQUAL;
         } else {
-            tok->f.kind = T_EQUAL;
+            tk->f.kind = T_EQUAL;
         }
         break;
 
@@ -542,26 +547,26 @@ void Lexer::lex_helper(Token *tok)
             if (yy_ == '>')
                 yyinp();
             if (control())
-                tok->string = control()->stringLiteral(yytext, yylen);
-            tok->f.kind = T_ANGLE_STRING_LITERAL;
+                tk->string = control()->stringLiteral(yytext, yylen);
+            tk->f.kind = T_ANGLE_STRING_LITERAL;
         } else if (yy_ == '<') {
             yyinp();
             if (yy_ == '=') {
                 yyinp();
-                tok->f.kind = T_LESS_LESS_EQUAL;
+                tk->f.kind = T_LESS_LESS_EQUAL;
             } else
-                tok->f.kind = T_LESS_LESS;
+                tk->f.kind = T_LESS_LESS;
         } else if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_LESS_EQUAL;
+            tk->f.kind = T_LESS_EQUAL;
         } else if (yy_ == ':') {
             yyinp();
-            tok->f.kind = T_LBRACKET;
+            tk->f.kind = T_LBRACKET;
         } else if (yy_ == '%') {
             yyinp();
-            tok->f.kind = T_LBRACE;
+            tk->f.kind = T_LBRACE;
         } else {
-            tok->f.kind = T_LESS;
+            tk->f.kind = T_LESS;
         }
         break;
 
@@ -570,20 +575,20 @@ void Lexer::lex_helper(Token *tok)
             yyinp();
             if (yy_ == '=') {
                 yyinp();
-                tok->f.kind = T_GREATER_GREATER_EQUAL;
+                tk->f.kind = T_GREATER_GREATER_EQUAL;
             } else
-                tok->f.kind = T_LESS_LESS;
-            tok->f.kind = T_GREATER_GREATER;
+                tk->f.kind = T_LESS_LESS;
+            tk->f.kind = T_GREATER_GREATER;
         } else if (yy_ == '=') {
             yyinp();
-            tok->f.kind = T_GREATER_EQUAL;
+            tk->f.kind = T_GREATER_EQUAL;
         } else {
-            tok->f.kind = T_GREATER;
+            tk->f.kind = T_GREATER;
         }
         break;
 
     case ',':
-        tok->f.kind = T_COMMA;
+        tk->f.kind = T_COMMA;
         break;
 
     default: {
@@ -592,51 +597,51 @@ void Lexer::lex_helper(Token *tok)
             if (yy_ == '"') {
                 yyinp();
                 if (ch == 'R')
-                    lexRawStringLiteral(tok);
+                    lexRawStringLiteral(tk);
                 else
-                    lexStringLiteral(tok, ch);
+                    lexStringLiteral(tk, ch);
             } else if (yy_ == '\'') {
                 yyinp();
-                lexCharLiteral(tok, ch);
+                lexCharLiteral(tk, ch);
             } else if (ch != 'R' && yy_ == 'R') {
                 yyinp();
                 if (yy_ == '"') {
                     yyinp();
-                    lexRawStringLiteral(tok, ch);
+                    lexRawStringLiteral(tk, ch);
                 } else {
-                    lexIdentifier(tok, 1);
+                    lexIdentifier(tk, 1);
                 }
             } else if (ch == 'u' && yy_ == '8') {
                 yyinp();
                 if (yy_ == '"') {
                     yyinp();
-                    lexStringLiteral(tok, '8');
+                    lexStringLiteral(tk, '8');
                 } else if (yy_ == '\'') {
                     yyinp();
-                    lexCharLiteral(tok, '8');
+                    lexCharLiteral(tk, '8');
                 } else if (yy_ == 'R') {
                     yyinp();
                     if (yy_ == '"') {
                         yyinp();
-                        lexRawStringLiteral(tok, '8');
+                        lexRawStringLiteral(tk, '8');
                     } else {
-                        lexIdentifier(tok, 2);
+                        lexIdentifier(tk, 2);
                     }
                 } else {
-                    lexIdentifier(tok, 1);
+                    lexIdentifier(tk, 1);
                 }
             } else {
-                lexIdentifier(tok);
+                lexIdentifier(tk);
             }
         } else if (std::isalpha(ch) || ch == '_' || ch == '$' || isByteOfMultiByteCodePoint(ch)) {
-            lexIdentifier(tok, curChar_ - tokStart_ - 1);
+            lexIdentifier(tk, curChar_ - tokStart_ - 1);
         } else if (std::isdigit(ch)) {
             if (f.ppMode_)
-                lexPreprocessorNumber(tok, false);
+                lexPreprocessorNumber(tk, false);
             else
-                lexNumericLiteral(tok);
+                lexNumericLiteral(tk);
         } else {
-            tok->f.kind = T_ERROR;
+            tk->f.kind = T_ERROR;
         }
         break;
     } // default
@@ -644,26 +649,26 @@ void Lexer::lex_helper(Token *tok)
     } // switch
 }
 
-void Lexer::lexStringLiteral(Token *tok, unsigned char hint)
+void Lexer::lexStringLiteral(Token *tk, unsigned char hint)
 {
     if (hint == 'L')
-        tok->f.kind = T_WIDE_STRING_LITERAL;
+        tk->f.kind = T_WIDE_STRING_LITERAL;
     else if (hint == 'U')
-        tok->f.kind = T_UTF32_STRING_LITERAL;
+        tk->f.kind = T_UTF32_STRING_LITERAL;
     else if (hint == 'u')
-        tok->f.kind = T_UTF16_STRING_LITERAL;
+        tk->f.kind = T_UTF16_STRING_LITERAL;
     else if (hint == '8')
-        tok->f.kind = T_UTF8_STRING_LITERAL;
+        tk->f.kind = T_UTF8_STRING_LITERAL;
     else if (hint == '@')
-        tok->f.kind = T_AT_STRING_LITERAL;
+        tk->f.kind = T_AT_STRING_LITERAL;
     else
-        tok->f.kind = T_STRING_LITERAL;
+        tk->f.kind = T_STRING_LITERAL;
 
-    lexUntilQuote(tok, '"');
-    lexOptionalUserDefinedLiteral(tok);
+    lexUntilQuote(tk, '"');
+    lexOptionalUserDefinedLiteral(tk);
 }
 
-void Lexer::lexRawStringLiteral(Token *tok, unsigned char hint)
+void Lexer::lexRawStringLiteral(Token *tk, unsigned char hint)
 {
     const char *yytext = curChar_;
 
@@ -710,21 +715,21 @@ void Lexer::lexRawStringLiteral(Token *tok, unsigned char hint)
         yyinp();
 
     if (control())
-        tok->string = control()->stringLiteral(yytext, yylen);
+        tk->string = control()->stringLiteral(yytext, yylen);
 
     if (hint == 'L')
-        tok->f.kind = T_RAW_WIDE_STRING_LITERAL;
+        tk->f.kind = T_RAW_WIDE_STRING_LITERAL;
     else if (hint == 'U')
-        tok->f.kind = T_RAW_UTF32_STRING_LITERAL;
+        tk->f.kind = T_RAW_UTF32_STRING_LITERAL;
     else if (hint == 'u')
-        tok->f.kind = T_RAW_UTF16_STRING_LITERAL;
+        tk->f.kind = T_RAW_UTF16_STRING_LITERAL;
     else if (hint == '8')
-        tok->f.kind = T_RAW_UTF8_STRING_LITERAL;
+        tk->f.kind = T_RAW_UTF8_STRING_LITERAL;
     else
-        tok->f.kind = T_RAW_STRING_LITERAL;
+        tk->f.kind = T_RAW_STRING_LITERAL;
 
     if (!yy_)
-        s.tokKind_ = tok->f.kind;
+        s.tokKind_ = tk->f.kind;
 }
 
 // In the highlighting case we don't have any further information
@@ -750,29 +755,29 @@ bool Lexer::lexUntilRawStringLiteralEndSimple()
     return false;
 }
 
-void Lexer::lexCharLiteral(Token *tok, unsigned char hint)
+void Lexer::lexCharLiteral(Token *tk, unsigned char hint)
 {
     if (hint == 'L')
-        tok->f.kind = T_WIDE_CHAR_LITERAL;
+        tk->f.kind = T_WIDE_CHAR_LITERAL;
     else if (hint == 'U')
-        tok->f.kind = T_UTF32_CHAR_LITERAL;
+        tk->f.kind = T_UTF32_CHAR_LITERAL;
     else if (hint == 'u')
-        tok->f.kind = T_UTF16_CHAR_LITERAL;
+        tk->f.kind = T_UTF16_CHAR_LITERAL;
     else
-        tok->f.kind = T_CHAR_LITERAL;
+        tk->f.kind = T_CHAR_LITERAL;
 
-    lexUntilQuote(tok, '\'');
-    lexOptionalUserDefinedLiteral(tok);
+    lexUntilQuote(tk, '\'');
+    lexOptionalUserDefinedLiteral(tk);
 }
 
-void Lexer::lexUntilQuote(Token *tok, const unsigned char quote)
+void Lexer::lexUntilQuote(Token *tk, const unsigned char quote)
 {
     const char *yytext = curChar_;
     while (yy_
            && yy_ != quote
            && yy_ != '\n') {
         if (yy_ == '\\')
-            lexBackslash((Kind)tok->f.kind);
+            lexBackslash((Kind)tk->f.kind);
         else
             yyinp();
     }
@@ -783,9 +788,9 @@ void Lexer::lexUntilQuote(Token *tok, const unsigned char quote)
 
     if (control()) {
         if (quote == '\'')
-            tok->number = control()->numericLiteral(yytext, yylen);
+            tk->number = control()->numericLiteral(yytext, yylen);
         else
-            tok->string = control()->stringLiteral(yytext, yylen);
+            tk->string = control()->stringLiteral(yytext, yylen);
     }
 }
 
@@ -843,16 +848,16 @@ bool Lexer::lexOptionalIntegerSuffix(bool allowU)
     }
 }
 
-void Lexer::lexOptionalUserDefinedLiteral(Token *tok)
+void Lexer::lexOptionalUserDefinedLiteral(Token *tk)
 {
     if (dialect_.cpp11 && yy_ == '_') {
-        tok->f.userDefinedLiteral = true;
+        tk->f.userDefinedLiteral = true;
         while (std::isalnum(yy_) || yy_ == '_' || isByteOfMultiByteCodePoint(yy_))
             yyinp();
     }
 }
 
-void Lexer::lexNumericLiteral(Token *tok)
+void Lexer::lexNumericLiteral(Token *tk)
 {
     const char *yytext = curChar_ - 1;
     if (*yytext == '0' && yy_) {
@@ -864,21 +869,21 @@ void Lexer::lexNumericLiteral(Token *tok)
                 yyinp();
             }
             if (!lexOptionalIntegerSuffix())
-                lexOptionalUserDefinedLiteral(tok);
+                lexOptionalUserDefinedLiteral(tk);
             goto theEnd;
         } else if (yy_ == 'b' || yy_ == 'B') { // see n3472
             yyinp();
             while (yy_ == '0' || yy_ == '1')
                 yyinp();
             if (!lexOptionalIntegerSuffix())
-                lexOptionalUserDefinedLiteral(tok);
+                lexOptionalUserDefinedLiteral(tk);
             goto theEnd;
         } else if (yy_ >= '0' && yy_ <= '7') {
             do {
                 yyinp();
             } while (yy_ >= '0' && yy_ <= '7');
             if (!lexOptionalIntegerSuffix())
-                lexOptionalUserDefinedLiteral(tok);
+                lexOptionalUserDefinedLiteral(tk);
             goto theEnd;
         }
     }
@@ -889,17 +894,17 @@ void Lexer::lexNumericLiteral(Token *tok)
             lexDigitSequence(); // this is optional: "1." is a valid floating point number
             lexExponentPart();
             if (!lexOptionalFloatingSuffix())
-                lexOptionalUserDefinedLiteral(tok);
+                lexOptionalUserDefinedLiteral(tk);
             break;
         } else if (yy_ == 'e' || yy_ == 'E') {
             if (lexExponentPart() && !lexOptionalFloatingSuffix())
-                lexOptionalUserDefinedLiteral(tok);
+                lexOptionalUserDefinedLiteral(tk);
             break;
         } else if (std::isdigit(yy_)) {
             yyinp();
         } else {
             if (!lexOptionalIntegerSuffix())
-                lexOptionalUserDefinedLiteral(tok);
+                lexOptionalUserDefinedLiteral(tk);
             break;
         }
     }
@@ -909,21 +914,21 @@ theEnd:
         do {
             yyinp();
         } while (std::isalnum(yy_) || yy_ == '_');
-        tok->f.kind = T_ERROR;
+        tk->f.kind = T_ERROR;
     } else {
         int yylen = curChar_ - yytext;
-        tok->f.kind = T_NUMERIC_LITERAL;
+        tk->f.kind = T_NUMERIC_LITERAL;
         if (control())
-            tok->number = control()->numericLiteral(yytext, yylen);
+            tk->number = control()->numericLiteral(yytext, yylen);
     }
 }
 
-void Lexer::lexPreprocessorNumber(Token *tok, bool dotAlreadySkipped)
+void Lexer::lexPreprocessorNumber(Token *tk, bool dotAlreadySkipped)
 {
     const char *yytext = curChar_ - (dotAlreadySkipped ? 2 : 1);
     if (dotAlreadySkipped &&
             (!yy_ || (yy_ && !std::isdigit(yy_)))) {
-        tok->f.kind = T_DOT;
+        tk->f.kind = T_DOT;
         return;
     }
 
@@ -935,18 +940,18 @@ void Lexer::lexPreprocessorNumber(Token *tok, bool dotAlreadySkipped)
         } else if (std::isalnum(yy_) || yy_ == '_' || yy_ == '.') {
             yyinp();
         } else {
-            lexOptionalUserDefinedLiteral(tok);
+            lexOptionalUserDefinedLiteral(tk);
             break;
         }
     }
 
     int yylen = curChar_ - yytext;
-    tok->f.kind = T_NUMERIC_LITERAL;
+    tk->f.kind = T_NUMERIC_LITERAL;
     if (control())
-        tok->number = control()->numericLiteral(yytext, yylen);
+        tk->number = control()->numericLiteral(yytext, yylen);
 }
 
-void Lexer::lexIdentifier(Token *tok, unsigned extraProcessedChars)
+void Lexer::lexIdentifier(Token *tk, unsigned extraProcessedChars)
 {
     const char *yytext = curChar_ - 1 - extraProcessedChars;
     while (std::isalnum(yy_) || yy_ == '_' || yy_ == '$'
@@ -955,15 +960,15 @@ void Lexer::lexIdentifier(Token *tok, unsigned extraProcessedChars)
     }
     int yylen = curChar_ - yytext;
     if (f.classifyKeywordsIdentifiers_)
-        tok->f.kind = classify(yytext, yylen, dialect_);
+        tk->f.kind = classify(yytext, yylen, dialect_);
     else
-        tok->f.kind = T_IDENTIFIER;
+        tk->f.kind = T_IDENTIFIER;
 
-    if (tok->f.kind == T_IDENTIFIER) {
-        tok->f.kind = classifyOperator(yytext, yylen);
+    if (tk->f.kind == T_IDENTIFIER) {
+        tk->f.kind = classifyOperator(yytext, yylen);
 
         if (control())
-            tok->identifier = control()->identifier(yytext, yylen);
+            tk->identifier = control()->identifier(yytext, yylen);
     }
 }
 

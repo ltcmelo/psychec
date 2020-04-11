@@ -204,10 +204,11 @@ enum Kind {
     T_WCHAR_T,
     T_LAST_PRIMITIVE = T_WCHAR_T,
 
-    // Generics
-    T__TEMPLATE,
-    T__FORALL,
-    T__EXISTS,
+    // psychec
+    T_PSYCHEC_TEMPLATE,
+    T_PSYCHEC_FORALL,
+    T_PSYCHEC_EXISTS,
+    T_PSYCHEC_OMISSION_MARKER,
 
     // aliases
     T_OR = T_PIPE_PIPE,
@@ -289,8 +290,13 @@ public:
     { return f.kind >= T_FIRST_PRIMITIVE && f.kind <= T_LAST_PRIMITIVE; }
 
     inline bool isComment() const
-    { return f.kind == T_COMMENT || f.kind == T_DOXY_COMMENT ||
-      f.kind == T_CPP_COMMENT || f.kind == T_CPP_DOXY_COMMENT; }
+    {
+        return f.kind == T_COMMENT
+                || f.kind == T_DOXY_COMMENT
+                || f.kind == T_CPP_COMMENT
+                || f.kind == T_CPP_DOXY_COMMENT
+                || f.kind == T_PSYCHEC_OMISSION_MARKER;
+    }
 
     static const char *name(int kind);
 

@@ -616,6 +616,8 @@ bool ASTMatcher::match(FunctionDeclaratorAST* node, FunctionDeclaratorAST* patte
 
     pattern->rparen_token = node->rparen_token;
 
+    pattern->psychec_omission_token = node->psychec_omission_token;
+
     if (! pattern->cv_qualifier_list)
         pattern->cv_qualifier_list = node->cv_qualifier_list;
     else if (! AST::match(node->cv_qualifier_list, pattern->cv_qualifier_list, this))

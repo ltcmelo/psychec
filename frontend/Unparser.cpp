@@ -32,13 +32,13 @@ void Unparser::unparse(AST* ast, std::ostream& os)
     accept(ast);
 }
 
-void Unparser::terminal(unsigned tok, AST* ast)
+void Unparser::terminal(unsigned tk, AST* ast)
 {
-    auto tokk = translationUnit()->tokenKind(tok);
+    auto tokk = translationUnit()->tokenKind(tk);
     if (tokk == T_EOF_SYMBOL)
         return;
 
-    *os_ << spell(tok);
+    *os_ << spell(tk);
     if (tokk == T_RBRACE
             || tokk == T_LBRACE
             || tokk == T_SEMICOLON)

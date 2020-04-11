@@ -40,10 +40,10 @@ public:
 
     Control *control() const { return control_; }
 
-    void lex(Token *tok);
+    void lex(Token *tk);
 
-    inline void operator()(Token *tok)
-    { lex(tok); }
+    inline void operator()(Token *tk)
+    { lex(tk); }
 
     Dialect dialect() const { return dialect_; }
     void setDialect(Dialect dialect) { dialect_ = dialect; }
@@ -73,20 +73,20 @@ private:
 
     void pushLineStartOffset();
 
-    void lex_helper(Token *tok);
-    void lexStringLiteral(Token *tok, unsigned char hint = 0);
-    void lexRawStringLiteral(Token *tok, unsigned char hint = 0);
+    void lex_helper(Token *tk);
+    void lexStringLiteral(Token *tk, unsigned char hint = 0);
+    void lexRawStringLiteral(Token *tk, unsigned char hint = 0);
     bool lexUntilRawStringLiteralEndSimple();
-    void lexCharLiteral(Token *tok, unsigned char hint = 0);
-    void lexUntilQuote(Token *tok, const unsigned char quote);
+    void lexCharLiteral(Token *tk, unsigned char hint = 0);
+    void lexUntilQuote(Token *tk, const unsigned char quote);
     bool lexDigitSequence();
     bool lexExponentPart();
     bool lexOptionalFloatingSuffix();
     bool lexOptionalIntegerSuffix(bool allowU = true);
-    void lexOptionalUserDefinedLiteral(Token *tok);
-    void lexNumericLiteral(Token *tok);
-    void lexPreprocessorNumber(Token *tok, bool dotAlreadySkipped);
-    void lexIdentifier(Token *tok, unsigned extraProcessedChars = 0);
+    void lexOptionalUserDefinedLiteral(Token *tk);
+    void lexNumericLiteral(Token *tk);
+    void lexPreprocessorNumber(Token *tk, bool dotAlreadySkipped);
+    void lexIdentifier(Token *tk, unsigned extraProcessedChars = 0);
     void lexBackslash(Kind type);
     void lexCppComment(Kind type);
 

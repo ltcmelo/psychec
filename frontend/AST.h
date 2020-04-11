@@ -1214,6 +1214,7 @@ public:
     unsigned lparen_token;
     ParameterDeclarationClauseAST* parameter_declaration_clause;
     unsigned rparen_token;
+    unsigned psychec_omission_token;
     SpecifierListAST* cv_qualifier_list;
     unsigned ref_qualifier_token;
     ExceptionSpecificationAST* exception_specification;
@@ -1229,6 +1230,7 @@ public:
         : lparen_token(0)
         , parameter_declaration_clause(0)
         , rparen_token(0)
+        , psychec_omission_token(0)
         , cv_qualifier_list(0)
         , ref_qualifier_token(0)
         , exception_specification(0)

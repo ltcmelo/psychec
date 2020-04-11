@@ -240,7 +240,7 @@ public:
     void error(unsigned index, const char *format, ...);
     void fatal(unsigned index, const char *format, ...);
 
-    inline const Token &tok(int i = 1) const
+    inline const Token &token(int i = 1) const
     { return _translationUnit->tokenAt(_tokenIndex + i - 1); }
 
     inline int LA(int n = 1) const

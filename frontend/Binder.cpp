@@ -2425,11 +2425,11 @@ bool Binder::visit(QuantifiedTypeSpecifierAST* ast)
 {
     QuantifiedType::Kind kind;
     switch (tokenKind(ast->quantifier_token)) {
-    case T__EXISTS:
+    case T_PSYCHEC_EXISTS:
         kind = QuantifiedType::Existential;
         break;
 
-    case T__FORALL:
+    case T_PSYCHEC_FORALL:
         kind = QuantifiedType::Universal;
         break;
     }

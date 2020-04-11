@@ -532,7 +532,7 @@ static inline int classify7(const char *s, Dialect d)
           if (s[4] == 'a') {
             if (s[5] == 'l') {
               if (s[6] == 'l') {
-                return T__FORALL;
+                return T_PSYCHEC_FORALL;
               }
             }
           }
@@ -545,7 +545,7 @@ static inline int classify7(const char *s, Dialect d)
           if (s[4] == 's') {
             if (s[5] == 't') {
               if (s[6] == 's') {
-                return T__EXISTS;
+                return T_PSYCHEC_EXISTS;
               }
             }
           }
@@ -970,7 +970,7 @@ static inline int classify9(const char *s, Dialect d)
               if (s[6] == 'a') {
                 if (s[7] == 't') {
                   if (s[8] == 'e') {
-                    return T__TEMPLATE;
+                    return T_PSYCHEC_TEMPLATE;
                   }
                 }
               }

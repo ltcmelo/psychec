@@ -223,7 +223,7 @@ private:
 };
 
 #ifndef PSYCHE_NO_DEBUG_RULE
-#  define DEBUG_THIS_RULE() DebugRule __debug_rule__(__func__, tok().spell(), cursor(), _translationUnit->blockErrors())
+#  define DEBUG_THIS_RULE() DebugRule __debug_rule__(__func__, token().spell(), cursor(), _translationUnit->blockErrors())
 inline void debugPrintCheckCache(bool goodCase)
 {
     for (int i = 0; i <= DebugRule::depth - 1; ++i)
@@ -442,14 +442,14 @@ int Parser::find(int token, int stopAt)
     return 0;
 }
 
-void Parser::match(int kind, unsigned *token)
+void Parser::match(int kind, unsigned *tk)
 {
     if (LA() == kind)
-        *token = consumeToken();
+        *tk = consumeToken();
     else {
-        *token = 0;
+        *tk = 0;
         error(_tokenIndex, "expected token `%s' got `%s'",
-              Token::name(kind), tok().spell());
+              Token::name(kind), token().spell());
     }
 }
 
@@ -665,7 +665,7 @@ bool Parser::parseDeclaration(DeclarationAST* &node)
     case T_ASM:
         return parseAsmDefinition(node);
 
-    case T__TEMPLATE:
+    case T_PSYCHEC_TEMPLATE:
         return parseGenericsDeclaration(node);
 
     case T_TEMPLATE:
@@ -818,7 +818,7 @@ bool Parser::parseNamespace(DeclarationAST* &node)
             case T_PROTECTED:
                 continue;
             }
-            if (tok().isLiteral())
+            if (token().isLiteral())
                 continue;
             break;
         }
@@ -864,7 +864,7 @@ bool Parser::parseUsingDirective(DeclarationAST* &node)
         ast->namespace_token = consumeToken();
         if (! parseName(ast->name))
             warning(cursor(), "expected `namespace name' before `%s'",
-                    tok().spell());
+                    token().spell());
         match(T_SEMICOLON, &ast->semicolon_token);
         node = ast;
         return true;
@@ -1107,7 +1107,7 @@ bool Parser::parseGenericsDeclaration(DeclarationAST* &node)
 {
     DEBUG_THIS_RULE();
 
-    if (! (LA(1) == T__TEMPLATE))
+    if (! (LA(1) == T_PSYCHEC_TEMPLATE))
         return false;
 
     GenericsDeclarationAST* ast = new (_pool) GenericsDeclarationAST;
@@ -1231,10 +1231,13 @@ bool Parser::parseOperator(OperatorAST* &node) // ### FIXME
         } else if (LA() == T_LBRACKET && LA(2) == T_RBRACKET) {
             ast->op_token = ast->open_token = consumeToken();
             ast->close_token = consumeToken();
-        } else if (_language.cpp11 &&
-                   LA() == T_STRING_LITERAL && LA(2) == T_IDENTIFIER &&
-                   !tok().f.userDefinedLiteral && tok().string->size() == 0 &&
-                   tok(2).identifier->size() > 1 && tok(2).identifier->chars()[0] == '_') {
+        } else if (_language.cpp11
+                   && LA() == T_STRING_LITERAL
+                   && LA(2) == T_IDENTIFIER
+                   && !token().f.userDefinedLiteral
+                   && token().string->size() == 0
+                   && token(2).identifier->size() > 1
+                   && token(2).identifier->chars()[0] == '_') {
             // C++11 user-defined literal operator, e.g.:
             // int operator"" _abc123(const char *str, size_t size) { ... }
             ast->op_token = consumeToken();
@@ -1436,7 +1439,7 @@ bool Parser::parseDeclSpecifierSeq(SpecifierListAST* &decl_specifier_seq,
                     && (! parseElaboratedTypeSpecifier(*decl_specifier_seq_ptr))) {
                 error(startOfTypeSpecifier, "expected an elaborated type specifier");
                 break;
-            } else if ((LA() == T__FORALL || LA() == T__EXISTS)
+            } else if ((LA() == T_PSYCHEC_FORALL || LA() == T_PSYCHEC_EXISTS)
                        && (! parseQuantifiedTypeSpecifier(*decl_specifier_seq_ptr))) {
                 error(startOfTypeSpecifier, "expected a quantified type specifier");
                 break;
@@ -1565,10 +1568,12 @@ bool Parser::parseDeclarator(DeclaratorAST* &node, SpecifierListAST* decl_specif
 
                             consumeToken();
                             ParameterDeclarationClauseAST* parameter_declaration_clause = 0;
-                            if (parseParameterDeclarationClause(parameter_declaration_clause) && LA() == T_RPAREN) {
-                                unsigned rparen_token = consumeToken();
-
+                            if (parseParameterDeclarationClause(parameter_declaration_clause)
+                                    && LA() == T_RPAREN) {
                                 FunctionDeclaratorAST* ast = new (_pool) FunctionDeclaratorAST;
+                                unsigned rparen_token = consumeToken();
+                                if (LA() == T_PSYCHEC_OMISSION_MARKER)
+                                    ast->psychec_omission_token = consumeToken();
                                 ast->lparen_token = lparen_token;
                                 ast->parameter_declaration_clause = parameter_declaration_clause;
                                 ast->as_cpp_initializer = initializer;
@@ -1578,7 +1583,6 @@ bool Parser::parseDeclarator(DeclaratorAST* &node, SpecifierListAST* decl_specif
                                 blockErrors(blocked);
                                 return true;
                             }
-
 
                             blockErrors(blocked);
                             rewind(lparen_token);
@@ -1600,6 +1604,9 @@ bool Parser::parseDeclarator(DeclaratorAST* &node, SpecifierListAST* decl_specif
             }
 
             ast->rparen_token = consumeToken();
+            if (LA() == T_PSYCHEC_OMISSION_MARKER)
+                ast->psychec_omission_token = consumeToken();
+
             // ### parse attributes
             parseQualifiers(ast->cv_qualifier_list);
             parseRefQualifier(ast->ref_qualifier_token);
@@ -1686,19 +1693,23 @@ bool Parser::parseAbstractCoreDeclarator(DeclaratorAST* &node, SpecifierListAST*
 bool Parser::parseAbstractDeclarator(DeclaratorAST* &node, SpecifierListAST* decl_specifier_list)
 {
     DEBUG_THIS_RULE();
+
     if (! parseAbstractCoreDeclarator(node, decl_specifier_list))
         return false;
 
-    PostfixDeclaratorListAST* postfix_declarators = 0,
-        **postfix_ptr = &postfix_declarators;
+    PostfixDeclaratorListAST* postfix_declarators = 0;
+    PostfixDeclaratorListAST** postfix_ptr = &postfix_declarators;
 
     for (;;) {
         if (LA() == T_LPAREN) {
             FunctionDeclaratorAST* ast = new (_pool) FunctionDeclaratorAST;
             ast->lparen_token = consumeToken();
             if (LA() == T_RPAREN || parseParameterDeclarationClause(ast->parameter_declaration_clause)) {
-                if (LA() == T_RPAREN)
+                if (LA() == T_RPAREN) {
                     ast->rparen_token = consumeToken();
+                    if (LA() == T_PSYCHEC_OMISSION_MARKER)
+                        ast->psychec_omission_token = consumeToken();
+                }
             }
             parseQualifiers(ast->cv_qualifier_list);
             parseRefQualifier(ast->ref_qualifier_token);
@@ -1751,8 +1762,8 @@ bool Parser::parseEnumSpecifier(SpecifierListAST* &node)
             ast->key_token = consumeToken();
 
 
-        if (tok().isKeyword()) {
-            error(cursor(), "expected identifier before '%s'", tok().spell());
+        if (token().isKeyword()) {
+            error(cursor(), "expected identifier before '%s'", token().spell());
             return false;
         }
         parseName(ast->name);
@@ -1770,7 +1781,7 @@ bool Parser::parseEnumSpecifier(SpecifierListAST* &node)
                     break;
 
                 if (LA() != T_IDENTIFIER) {
-                    error(cursor(), "expected identifier before '%s'", tok().spell());
+                    error(cursor(), "expected identifier before '%s'", token().spell());
                     skipUntil(T_IDENTIFIER);
                 }
 
@@ -2066,10 +2077,10 @@ bool Parser::parseClassSpecifier(SpecifierListAST* &node)
     parseOptionalAttributeSpecifierSequence(attributes);
 
     if (LA(1) == T_IDENTIFIER && LA(2) == T_IDENTIFIER) {
-        const Identifier* id = tok(2).identifier;
+        const Identifier* id = token(2).identifier;
         if (!id->equalTo(_control->cpp11Final())) {
             warning(cursor(), "skip identifier `%s'",
-                                      tok().spell());
+                                      token().spell());
             consumeToken();
         }
     }
@@ -2087,7 +2098,7 @@ bool Parser::parseClassSpecifier(SpecifierListAST* &node)
     unsigned final_token = 0;
 
     if (LA() == T_IDENTIFIER) {
-        const Identifier* id = tok().identifier;
+        const Identifier* id = token().identifier;
         if (id->equalTo(_control->cpp11Final()))
             final_token = consumeToken();
     }
@@ -2109,7 +2120,7 @@ bool Parser::parseClassSpecifier(SpecifierListAST* &node)
                 dot_dot_dot_token = consumeToken();
 
             if (LA() != T_LBRACE) {
-                error(cursor(), "expected `{' before `%s'", tok().spell());
+                error(cursor(), "expected `{' before `%s'", token().spell());
 
                 const unsigned saved = cursor();
 
@@ -2235,7 +2246,7 @@ bool Parser::parseQuantifiedTypeSpecifier(SpecifierListAST* &node)
 {
     DEBUG_THIS_RULE();
 
-    if (! (LA() == T__EXISTS || LA() == T__FORALL))
+    if (! (LA() == T_PSYCHEC_EXISTS || LA() == T_PSYCHEC_FORALL))
         return false;
 
     QuantifiedTypeSpecifierAST* ast = new (_pool) QuantifiedTypeSpecifierAST;
@@ -2328,6 +2339,7 @@ bool Parser::parseExceptionSpecification(ExceptionSpecificationAST* &node)
 bool Parser::parseEnumerator(EnumeratorListAST* &node)
 {
     DEBUG_THIS_RULE();
+
     if (LA() == T_IDENTIFIER) {
         EnumeratorAST* ast = new (_pool) EnumeratorAST;
         ast->identifier_token = consumeToken();
@@ -2352,7 +2364,8 @@ bool Parser::parseEnumerator(EnumeratorListAST* &node)
     return false;
 }
 
-bool Parser::parseInitDeclarator(DeclaratorAST* &node, SpecifierListAST* decl_specifier_list,
+bool Parser::parseInitDeclarator(DeclaratorAST* &node,
+                                 SpecifierListAST* decl_specifier_list,
                                  ClassSpecifierAST* declaringClass) // ### rewrite me
 {
     DEBUG_THIS_RULE();
@@ -3012,8 +3025,8 @@ bool Parser::parseStatement(StatementAST* &node, bool blockLabeledStatement)
     case T_ASM:
     case T_NAMESPACE:
     case T_USING:
-    case T__FORALL:
-    case T__EXISTS:
+    case T_PSYCHEC_FORALL:
+    case T_PSYCHEC_EXISTS:
     case T_TEMPLATE:
     case T_CLASS:
     case T_STRUCT:
@@ -3477,6 +3490,7 @@ bool Parser::parseCompoundStatement(StatementAST* &node)
 bool Parser::parseIfStatement(StatementAST* &node)
 {
     DEBUG_THIS_RULE();
+
     if (LA() == T_IF) {
         IfStatementAST* ast = new (_pool) IfStatementAST;
         ast->if_token = consumeToken();
@@ -3868,8 +3882,9 @@ bool Parser::parseSimpleDeclaration(DeclarationAST* &node, ClassSpecifierAST* de
             parseBuiltinTypeSpecifier(*decl_specifier_seq_ptr);
             decl_specifier_seq_ptr = &(*decl_specifier_seq_ptr)->next;
             has_type_specifier = true;
-        } else if (! has_type_specifier && (LA() == T_COLON_COLON ||
-                                            LA() == T_IDENTIFIER)) {
+        } else if (! has_type_specifier
+                    && (LA() == T_COLON_COLON
+                        || LA() == T_IDENTIFIER)) {
             startOfNamedTypeSpecifier = cursor();
             if (parseName(named_type_specifier)) {
 
@@ -3934,7 +3949,7 @@ bool Parser::parseSimpleDeclaration(DeclarationAST* &node, ClassSpecifierAST* de
             decl_specifier_seq_ptr = &(*decl_specifier_seq_ptr)->next;
             has_type_specifier = true;
         } else if (! has_type_specifier
-                        && (LA() == T__FORALL || LA() == T__EXISTS)) {
+                        && (LA() == T_PSYCHEC_FORALL || LA() == T_PSYCHEC_EXISTS)) {
             unsigned startOfTypeSpecifier = cursor();
             if (! parseQuantifiedTypeSpecifier(*decl_specifier_seq_ptr)) {
                 has_complex_type_specifier = true;
@@ -3949,9 +3964,8 @@ bool Parser::parseSimpleDeclaration(DeclarationAST* &node, ClassSpecifierAST* de
         }
     }
 
-    DeclaratorListAST* declarator_list = 0,
-        **declarator_ptr = &declarator_list;
-
+    DeclaratorListAST* declarator_list = 0;
+    DeclaratorListAST** declarator_ptr = &declarator_list;
     DeclaratorAST* declarator = 0;
 
     if (LA() != T_SEMICOLON) {
@@ -4007,7 +4021,13 @@ bool Parser::parseSimpleDeclaration(DeclarationAST* &node, ClassSpecifierAST* de
         match(T_SEMICOLON, &ast->semicolon_token);
         node = ast;
         return true;
-    } else if (! _inFunctionBody && declarator && (LA() == T_COLON || LA() == T_LBRACE || LA() == T_TRY)) {
+    }
+
+    if (!_inFunctionBody
+            && declarator
+            && (LA() == T_COLON
+                || LA() == T_LBRACE
+                || LA() == T_TRY)) {
         if (LA() == T_TRY) {
             FunctionDefinitionAST* ast = new (_pool) FunctionDefinitionAST;
             ast->decl_specifier_list = decl_specifier_seq;
@@ -4015,41 +4035,40 @@ bool Parser::parseSimpleDeclaration(DeclarationAST* &node, ClassSpecifierAST* de
             parseTryBlockStatement(ast->function_body, &ast->ctor_initializer);
             node = ast;
             return true; // recognized a function definition.
-        } else {
-            CtorInitializerAST* ctor_initializer = 0;
-            bool hasCtorInitializer = false;
+        }
 
-            if (LA() == T_COLON) {
-                hasCtorInitializer = true;
-                parseCtorInitializer(ctor_initializer);
+        CtorInitializerAST* ctor_initializer = 0;
+        bool hasCtorInitializer = false;
+        if (LA() == T_COLON) {
+            hasCtorInitializer = true;
+            parseCtorInitializer(ctor_initializer);
+
+            if (LA() != T_LBRACE) {
+                const unsigned pos = cursor();
+
+                for (int n = 0; n < 3 && LA(); consumeToken(), ++n)
+                    if (LA() == T_LBRACE)
+                        break;
 
                 if (LA() != T_LBRACE) {
-                    const unsigned pos = cursor();
-
-                    for (int n = 0; n < 3 && LA(); consumeToken(), ++n)
-                        if (LA() == T_LBRACE)
-                            break;
-
-                    if (LA() != T_LBRACE) {
-                        error(pos, "unexpected token `%s'", _translationUnit->spell(pos));
-                        rewind(pos);
-                    }
+                    error(pos, "unexpected token `%s'", _translationUnit->spell(pos));
+                    rewind(pos);
                 }
             }
+        }
 
-            if (LA() == T_LBRACE || hasCtorInitializer) {
-                FunctionDefinitionAST* ast = new (_pool) FunctionDefinitionAST;
-                ast->decl_specifier_list = decl_specifier_seq;
-                ast->declarator = firstDeclarator;
-                ast->ctor_initializer = ctor_initializer;
-                parseFunctionBody(ast->function_body);
-                node = ast;
-                return true; // recognized a function definition.
-            }
+        if (LA() == T_LBRACE || hasCtorInitializer) {
+            FunctionDefinitionAST* ast = new (_pool) FunctionDefinitionAST;
+            ast->decl_specifier_list = decl_specifier_seq;
+            ast->declarator = firstDeclarator;
+            ast->ctor_initializer = ctor_initializer;
+            parseFunctionBody(ast->function_body);
+            node = ast;
+            return true; // recognized a function definition.
         }
     }
 
-    error(cursor(), "unexpected token `%s'", tok().spell());
+    error(cursor(), "unexpected token `%s'", token().spell());
     return false;
 }
 
@@ -4391,7 +4410,7 @@ bool Parser::parseNameId(NameAST* &name)
         return parseName(name, false);
 
     default:
-        if (tok().isLiteral() || tok().isOperator()) {
+        if (token().isLiteral() || token().isOperator()) {
             rewind(start);
             return parseName(name, false);
         }
@@ -4592,7 +4611,7 @@ bool Parser::parsePostfixExpression(ExpressionAST* &node)
                 if (LA() == T_TEMPLATE)
                     ast->template_token = consumeToken();
                 if (! parseNameId(ast->member_name))
-                    error(cursor(), "expected unqualified-id before token `%s'", tok().spell());
+                    error(cursor(), "expected unqualified-id before token `%s'", token().spell());
                 ast->base_expression = node;
                 node = ast;
             } else break;
@@ -5030,20 +5049,20 @@ void Parser::parseExpressionWithOperatorPrecedence(ExpressionAST* &lhs, int minP
     DEBUG_THIS_RULE();
 
     unsigned iterations = 0;
-    while (precedence(tok().kind(), _templateArguments) >= minPrecedence) {
+    while (precedence(token().kind(), _templateArguments) >= minPrecedence) {
         if (++iterations > MAX_EXPRESSION_DEPTH) {
             warning(cursor(), "Reached parse limit for expression");
             return;
         }
 
-        const int operPrecedence = precedence(tok().kind(), _templateArguments);
+        const int operPrecedence = precedence(token().kind(), _templateArguments);
         const int oper = consumeToken();
 
         ConditionalExpressionAST* condExpr = 0;
         if (operPrecedence == Prec::Conditional) {
             condExpr = new (_pool) ConditionalExpressionAST;
             condExpr->question_token = oper;
-            if (tok().kind() == T_COLON) {
+            if (token().kind() == T_COLON) {
                 // GNU extension:
                 //   logical-or-expression '?' ':' conditional-expression
                 condExpr->left_expression = 0;
@@ -5071,10 +5090,10 @@ void Parser::parseExpressionWithOperatorPrecedence(ExpressionAST* &lhs, int minP
                 return;
         }
 
-        for (int tokenKindAhead = tok().kind(), precedenceAhead = precedence(tokenKindAhead, _templateArguments);
+        for (int tokenKindAhead = token().kind(), precedenceAhead = precedence(tokenKindAhead, _templateArguments);
                 (precedenceAhead > operPrecedence && isBinaryOperator(tokenKindAhead))
                         || (precedenceAhead == operPrecedence && isRightAssociative(tokenKindAhead));
-                tokenKindAhead = tok().kind(), precedenceAhead = precedence(tokenKindAhead, _templateArguments)) {
+                tokenKindAhead = token().kind(), precedenceAhead = precedence(tokenKindAhead, _templateArguments)) {
             parseExpressionWithOperatorPrecedence(rhs, precedenceAhead);
         }
 

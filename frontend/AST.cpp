@@ -1425,6 +1425,8 @@ unsigned FunctionDeclaratorAST::firstToken() const
             return candidate;
     if (rparen_token)
         return rparen_token;
+    if (psychec_omission_token)
+        return psychec_omission_token;
     if (cv_qualifier_list)
         if (unsigned candidate = cv_qualifier_list->firstToken())
             return candidate;
@@ -1459,6 +1461,8 @@ unsigned FunctionDeclaratorAST::lastToken() const
     if (cv_qualifier_list)
         if (unsigned candidate = cv_qualifier_list->lastToken())
             return candidate;
+    if (psychec_omission_token)
+        return psychec_omission_token;
     if (rparen_token)
         return rparen_token + 1;
     if (parameter_declaration_clause)

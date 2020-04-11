@@ -36,7 +36,7 @@ public:
     {}
 
 protected:
-    virtual void terminal(unsigned tok, AST* ast) = 0;
+    virtual void terminal(unsigned tk, AST* ast) = 0;
     virtual void nonterminal(AST* ast) { accept(ast); }
 
     #include "ASTNodeDumpers.inc"
