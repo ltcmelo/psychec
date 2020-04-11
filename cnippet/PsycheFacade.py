@@ -28,8 +28,8 @@ class PsycheFacade:
     _id = 'psychec'
 
     def __init__(self, cnip_opt):
-        self.generator = 'psychecgen'
-        self.solver = 'psychecsolver-exe'
+        self.generator = './psychecgen'
+        self.solver = './psychecsolver-exe'
         self.no_typedef = cnip_opt['no_typedef']
         self.no_heuristic = cnip_opt['no_heuristic']
         self.no_stdlib = cnip_opt['no_stdlib']
