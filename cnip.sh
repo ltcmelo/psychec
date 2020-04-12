@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
-python cnippet/Main.py $@
+THIS_SCRIPT_DIR=$(dirname "$0")
+python "$THIS_SCRIPT_DIR"/cnippet/Main.py $@
