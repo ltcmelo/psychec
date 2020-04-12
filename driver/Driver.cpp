@@ -285,7 +285,6 @@ int Driver::preprocess(const std::string& source)
     CompilerFacade cc(opts_.nativeCC_, opts_.defs_, opts_.undefs_);
     auto r = cc.preprocessSource(source);
     if (!r.first) {
-
         writeFile(FileInfo(unit()->fileName()).fullFileBaseName() + ".i", r.second);
         return parse(r.second);
     }
@@ -346,6 +345,7 @@ int Driver::annotateAST()
 
 int Driver::instantiateGenerics()
 {
+    std::cout << "\n\ninstantiate generics \n\n";
     GenericsInstantiatior instantiator(unit());
     bool r = instantiator.quantify(ast(), global_);
     if (!r)

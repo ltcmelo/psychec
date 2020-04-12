@@ -59,7 +59,6 @@ std::string GenericsInstantiatior::instantiate(const std::string& source) const
     for (const auto& f : funcTbl_) {
         GenericsDeclarationAST* ast = f.second.ast_;
         const std::string& funcText = translationUnit()->fetchSource(ast);
-
         for (const auto& data : f.second.overloads_) {
             std::string newFuncText = funcText;
             for (const auto& sub : data.second.subs_)
@@ -72,7 +71,6 @@ std::string GenericsInstantiatior::instantiate(const std::string& source) const
 
     return newSource;
 }
-
 
 int GenericsInstantiatior::recognize(Function* func, const std::vector<FullySpecifiedType>& argsTypes)
 {
@@ -90,7 +88,7 @@ int GenericsInstantiatior::recognize(Function* func, const std::vector<FullySpec
 
         std::string funcName(func->name()->identifier()->chars());
         it->second.overloads_[key].subs_.emplace_back(funcName, funcName + std::to_string(cnt));
-        it->second.overloads_[key].subs_.emplace_back("_Generic", "");
+        it->second.overloads_[key].subs_.emplace_back("_Template", "");
 
         int cntU = func->argumentCount();
         int cntE = argsTypes.size();
