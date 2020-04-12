@@ -37,8 +37,9 @@ public:
 
     virtual const Identifier* identifier() const = 0;
 
-    bool isNameId() const;
     bool isEmptyName() const;
+
+    bool isNameId() const;
     bool isTemplateNameId() const;
     bool isDestructorNameId() const;
     bool isOperatorNameId() const;
@@ -47,8 +48,9 @@ public:
     bool isSelectorNameId() const;
     bool isTaggedNameId() const;
 
-    virtual const Identifier* asNameId() const { return 0; }
     virtual const EmptyName *asEmptyName() const { return 0; }
+
+    virtual const Identifier* asNameId() const { return 0; }
     virtual const TemplateNameId *asTemplateNameId() const { return 0; }
     virtual const DestructorNameId *asDestructorNameId() const { return 0; }
     virtual const OperatorNameId *asOperatorNameId() const { return 0; }
@@ -61,7 +63,7 @@ public:
     static void accept(const Name* name, NameVisitor* visitor);
 
 public:
-    struct Compare: std::binary_function<const Name* , const Name* , bool> {
+    struct Compare: std::binary_function<const Name*, const Name*, bool> {
         bool operator()(const Name* name, const Name* other) const;
     };
 

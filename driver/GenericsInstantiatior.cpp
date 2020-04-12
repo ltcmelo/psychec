@@ -49,17 +49,40 @@ bool GenericsInstantiatior::quantify(AST* ast, Scope* scope)
     switchScope(scope);
     accept(ast);
 
-    return !funcTbl_.empty();
+    if (genericFuncsTbl_.empty())
+        return false;
+
+    auto unusedTyNameCnt = 0;
+    const auto funcTbl = genericFuncsTbl_;
+    for (const auto& variation : funcTbl) {
+        if (!variation.second.overloads_.empty())
+            continue;
+
+        Function* func = variation.first;
+
+        std::vector<FullySpecifiedType> argsTypes;
+        for (unsigned i = 0; i < func->argumentCount(); ++i) {
+            auto tyName = "__unused_" + std::to_string(unusedTyNameCnt++);
+            NamedType* namedTy = control()->namedType(
+                control()->identifier(tyName.c_str(), tyName.size()));
+            argsTypes.emplace_back(namedTy);
+        }
+
+        recognize(func, argsTypes);
+    }
+
+    return true;
 }
 
 std::string GenericsInstantiatior::instantiate(const std::string& source) const
 {
     std::string newSource = source;
 
-    for (const auto& f : funcTbl_) {
-        GenericsDeclarationAST* ast = f.second.ast_;
+    for (const auto& variation : genericFuncsTbl_) {
+        GenericsDeclarationAST* ast = variation.second.ast_;
+
         const std::string& funcText = translationUnit()->fetchSource(ast);
-        for (const auto& data : f.second.overloads_) {
+        for (const auto& data : variation.second.overloads_) {
             std::string newFuncText = funcText;
             for (const auto& sub : data.second.subs_)
                 newFuncText = apply(sub, newFuncText);
@@ -72,14 +95,15 @@ std::string GenericsInstantiatior::instantiate(const std::string& source) const
     return newSource;
 }
 
-int GenericsInstantiatior::recognize(Function* func, const std::vector<FullySpecifiedType>& argsTypes)
+int GenericsInstantiatior::recognize(Function* func,
+                                     const std::vector<FullySpecifiedType>& argsTypes)
 {
     std::string key;
     std::for_each(argsTypes.begin(), argsTypes.end(),
                   [&] (const auto& s) { key += typePP_.print(s, scope_) + ','; });
 
-    auto it = funcTbl_.find(func);
-    PSYCHE_ASSERT(it != funcTbl_.end(), return -1, "expected known function");
+    auto it = genericFuncsTbl_.find(func);
+    PSYCHE_ASSERT(it != genericFuncsTbl_.end(), return -1, "expected known function");
 
     auto it2 = it->second.overloads_.find(key);
     if (it2 == it->second.overloads_.end()) {
@@ -144,10 +168,10 @@ bool GenericsInstantiatior::visit(FunctionDefinitionAST* ast)
     switchScope(prevScope);
 
     if (func->isGeneric() && ast->function_body) {
-        if (funcTbl_.find(func) != funcTbl_.end())
+        if (genericFuncsTbl_.find(func) != genericFuncsTbl_.end())
             translationUnit()->error(ast->firstToken(), "redefinition of generic function");
         FunctionInstantions f(genericsCtx_.top());
-        funcTbl_[func] = f;
+        genericFuncsTbl_[func] = f;
     }
 
     return false;
@@ -196,16 +220,16 @@ bool GenericsInstantiatior::visit(CallAST* ast)
         return true;
 
     Function* func = sym->asFunction();
-    if (funcTbl_.find(func) == funcTbl_.end())
+    if (genericFuncsTbl_.find(func) == genericFuncsTbl_.end())
         return true;
 
-    std::vector<FullySpecifiedType> paramsTypes;
+    std::vector<FullySpecifiedType> argsTypes;
     for (ExpressionListAST* it = ast->expression_list; it; it = it->next) {
         FullySpecifiedType ty = typeof_.evaluate(it->value, scope_);
-        paramsTypes.push_back(ty);
+        argsTypes.push_back(ty);
     }
 
-    int cnt = recognize(sym->asFunction(), paramsTypes);
+    int cnt = recognize(sym->asFunction(), argsTypes);
 
     std::string funcName(func->name()->identifier()->chars());
     subs_.emplace_back(translationUnit()->fetchSource(ast->base_expression),

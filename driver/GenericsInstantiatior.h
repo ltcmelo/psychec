@@ -24,6 +24,7 @@
 #include "ExpressionTypeEvaluator.h"
 #include "Substitution.h"
 #include "TypePP.h"
+
 #include <stack>
 #include <string>
 #include <unordered_map>
@@ -60,17 +61,17 @@ private:
             : ast_(ast)
         {}
 
-        GenericsDeclarationAST* ast_;
-
-        struct InstanceData
+        struct Variation
         {
             int label_;
             std::vector<Substitution<std::string>> subs_;
         };
-        std::unordered_map<std::string, InstanceData> overloads_;
-    };
-    std::unordered_map<Function*, FunctionInstantions> funcTbl_;
 
+        GenericsDeclarationAST* ast_;
+        std::unordered_map<std::string, Variation> overloads_;
+    };
+
+    std::unordered_map<Function*, FunctionInstantions> genericFuncsTbl_;
     std::stack<GenericsDeclarationAST*> genericsCtx_;
 
     // Declarations

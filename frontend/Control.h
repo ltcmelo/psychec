@@ -56,6 +56,11 @@ public:
     void setDiagnosticCollector(DiagnosticCollector* collector);
 
     const EmptyName *emptyName();
+
+    const Identifier* findIdentifier(const char *chars, unsigned size) const;
+    const Identifier* identifier(const char *chars, unsigned size);
+    const Identifier* identifier(const char *chars);
+
     const TemplateNameId *templateNameId(const Identifier* id,
                                          bool isSpecialization,
                                          const FullySpecifiedType* const args = 0,
@@ -110,10 +115,6 @@ public:
     const Identifier* attrAvailability() const;
 
     const OperatorNameId *findOperatorNameId(OperatorNameId::Kind operatorId) const;
-
-    const Identifier* findIdentifier(const char *chars, unsigned size) const;
-    const Identifier* identifier(const char *chars, unsigned size);
-    const Identifier* identifier(const char *chars);
 
     typedef const Identifier* const *IdentifierIterator;
     typedef const StringLiteral* const *StringLiteralIterator;
