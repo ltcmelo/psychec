@@ -345,7 +345,6 @@ int Driver::annotateAST()
 
 int Driver::instantiateGenerics()
 {
-    std::cout << "\n\ninstantiate generics \n\n";
     GenericsInstantiatior instantiator(unit());
     bool r = instantiator.quantify(ast(), global_);
     if (!r)
