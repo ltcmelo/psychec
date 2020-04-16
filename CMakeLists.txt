@@ -65,6 +65,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/generator/PrintfScanner.cpp
 
     # Driver
+    ${PROJECT_SOURCE_DIR}/driver/Configuration.h
+    ${PROJECT_SOURCE_DIR}/driver/Configuration.cpp
     ${PROJECT_SOURCE_DIR}/driver/Driver.h
     ${PROJECT_SOURCE_DIR}/driver/Driver.cpp
     ${PROJECT_SOURCE_DIR}/driver/Factory.h

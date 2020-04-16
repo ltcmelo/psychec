@@ -19,11 +19,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_DIAGNOSTIC_COLLECTOR_H
-#define PSYCHE_DIAGNOSTIC_COLLECTOR_H
+#ifndef PSYCHE_DIAGNOSTIC_COLLECTOR_H__
+#define PSYCHE_DIAGNOSTIC_COLLECTOR_H__
 
 #include "FrontendConfig.h"
-
 #include "FrontendFwds.h"
 #include <cstdarg>
 
@@ -43,8 +42,10 @@ public:
 
     virtual void collect(Severity severity,
                          const StringLiteral* fileName,
-                         unsigned line, unsigned column,
-                         const char *format, va_list ap);
+                         unsigned line,
+                         unsigned column,
+                         const char *format,
+                         va_list ap);
 
     bool seenBlockingIssue() const { return blockingIssue_; }
     void reset() { blockingIssue_ = false; }

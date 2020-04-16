@@ -10,6 +10,8 @@
 # -----------------------------------------------------------------------------
 
 
+import os
+import pathlib
 import sys
 from Algorithms import maybe_append
 from CCompilerFacade import CCompilerFacade
@@ -28,16 +30,16 @@ class PsycheFacade:
     _id = 'psychec'
 
     def __init__(self, cnip_opt):
-        self.generator = './psychecgen'
-        self.solver = './psychecsolver-exe'
+        self.generator = 'psychecgen'
+        self.solver = 'psychecsolver-exe'
         self.no_typedef = cnip_opt['no_typedef']
         self.no_heuristic = cnip_opt['no_heuristic']
         self.no_stdlib = cnip_opt['no_stdlib']
-        self.host_cc = cnip_opt['host_cc']
+        self.cc = cnip_opt['cc']
 
     def generate_constraints(self,
                              unit: Unit,
-                             cc_opts):
+                             cc_cmd):
         """
         Generate constraints for a unit.
         """
@@ -45,8 +47,9 @@ class PsycheFacade:
         cmd = [self.generator,
                unit.c_file_path,
                '-o', unit.cstr_file_path,
-               '--cc', self.host_cc,
-               '--cc-std', cc_opts.c_version]
+               '--cc', self.cc,
+               '--cc-std', cc_cmd.c_version]
+
         cmd += CCompilerFacade.predefined_macros('--cc-D')
         cmd += CCompilerFacade.undefined_macros('--cc-U')
 
@@ -55,13 +58,15 @@ class PsycheFacade:
 
         if not self.no_stdlib:
             cmd.append('-p')
-            cmd.append('libpsychecstd')
+            dir_path = pathlib.Path(__file__).parent.parent.absolute()
+            cmd.append(os.path.join(dir_path, 'libpsychecstd'))
 
-        ok = execute(PsycheFacade._id, cmd)
-        if ok != 0:
+        code = execute(PsycheFacade._id, cmd)
+        if code != 0:
             sys.exit(
                 DiagnosticReporter.fatal(CONSTRAINT_GENERATION_FOR_FILE_FAILED,
-                                         unit.c_file_path))
+                                         unit.c_file_path,
+                                         error=code))
 
     def solve_constraints(self, unit: Unit):
         """

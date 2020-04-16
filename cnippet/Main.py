@@ -84,7 +84,7 @@ def _parse_input():
     parser.add_argument('CC',
                         help="The host C compiler (e.g., 'gcc' or 'clang').")
 
-    parser.add_argument('command',
+    parser.add_argument('cc_cmd_line',
                         metavar='...',
                         nargs=argparse.REMAINDER,
                         help='The command to be forwarded to the C compiler.')
@@ -100,17 +100,19 @@ def _parse_input():
 if __name__ == "__main__":
 
     args = _parse_input()
-    cnip_opt = dict(no_stdlib=args.no_stdlib,
+
+    # TODO: Eliminate "extra" dictionary.
+    cnip_opts = dict(no_stdlib=args.no_stdlib,
                     no_typedef=args.no_typedef,
                     no_heuristic=args.no_heuristic,
                     only_omissive=args.only_omissive,
                     traces=args.trace,
                     trace_level=args.trace_level,
-                    host_cc=args.CC,
-                    host_cc_cmd=args.command,
+                    cc=args.CC,
+                    cc_cmd_line=args.cc_cmd_line,
                     dev_mode=args.dev)
 
-    TraceManager().configure(cnip_opt['traces'], cnip_opt['trace_level'])
+    TraceManager().configure(cnip_opts['traces'], cnip_opts['trace_level'])
 
     env = EnvironmentController(os.path.expanduser('~'))
     env.check_all(args.non_commercial)
@@ -121,6 +123,6 @@ if __name__ == "__main__":
         os.environ['PATH'] += os.pathsep + run_dir + '/../External/PsycheC'
 
     # Let' go!
-    driver = Driver(cnip_opt)
+    driver = Driver(cnip_opts)
     code = driver.execute()
     sys.exit(code)

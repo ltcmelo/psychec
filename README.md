@@ -19,6 +19,7 @@ Applications:
 
 Be creative!
 
+
 ## Requirements
 
 To *build* PsycheC:
@@ -31,21 +32,22 @@ To *use* PsycheC (download [here](http://www.cnippet.cc/)):
 
 * Python 3
 
+
 ## Building
 
     cmake CMakeLists.txt  
     make
 
-## Running the Tests
 
-    ./psychecgen -t
-    ./test_infer_and_compile.sh
-    cd solver && stack test && cd -
-    cd formalism && ./test_muC.sh
+## Setting Up
+
+    export PATH=$PATH:/path/to/psychec
+
 
 ## Using
 
 The simplest way to use PsycheC is through the [Cnippet](http://www.cnippet.cc) compiler adaptor.
+
 Let us see an example.
 
 Consider the file *node.c* below.
@@ -126,6 +128,13 @@ A different (node) type for `point_t` "exists" too, with its corresponding speci
 
 Check the examples directory for [this snippet](https://github.com/ltcmelo/psychec/blob/master/examples/generic_list.c).
 
+
+## Running the Tests
+
+    ./psychecgen -t
+    ./test_infer_and_compile.sh
+    cd solver && stack test && cd -
+    cd formalism && ./test_muC.sh
 
 ## Publications
 

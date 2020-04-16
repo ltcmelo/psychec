@@ -12,7 +12,7 @@
 
 import subprocess
 import sys
-from CommandLine import Command, GccCommand
+from CommandSummary import CommandSummary
 from Diagnostics import DiagnosticReporter, PREPROCESSING_FILE_FAILED
 from Process import execute
 
@@ -27,10 +27,11 @@ class CCompilerFacade:
     GCC = 'GCC'
     Clang = 'Clang'
 
-    def __init__(self, cnip_opt):
-        self.host_cc = cnip_opt['host_cc']
-        self.host_cc_cmd = cnip_opt["host_cc_cmd"]
-        self.host_cc_family = None
+    def __init__(self, cnip_opts):
+        self.cc = cnip_opts['cc']
+        self.cc_cmd_line = cnip_opts["cc_cmd_line"]
+        self.cc_family = None
+        self.cc_cmd_summary = None
 
     @staticmethod
     def predefined_macros(prefix):
@@ -77,7 +78,7 @@ class CCompilerFacade:
 
         # Look at predefined macros: $ echo | gcc -dM -E -
         echo = subprocess.Popen('echo', stdout=subprocess.PIPE)
-        cmd = [self.host_cc, '-dM', '-E', '-']
+        cmd = [self.cc, '-dM', '-E', '-']
         try:
             macros = subprocess.check_output(cmd, stdin=echo.stdout)
         except:
@@ -85,24 +86,21 @@ class CCompilerFacade:
 
         #  __GNU__ is predefined in GCC/Clang; __clang__, only in Clang.
         if b'__clang__' in macros:
-            self.host_cc_family = CCompilerFacade.Clang
+            self.cc_family = CCompilerFacade.Clang
         elif b'__GNUC__' in macros:
-            self.host_cc_family = CCompilerFacade.GCC
+            self.cc_family = CCompilerFacade.GCC
 
         return True
 
-    def parse_command(self) -> Command:
+    def parse_command(self) -> CommandSummary:
         """
         Parse the compiler command to extract compilation options.
         """
 
-        assert self.host_cc_family
+        assert self.cc_family
 
-        return GccCommand(self.host_cc_cmd)
-        # return {
-        #           CCompilerFacade.GCC: GccCommand(self.host_cc_cmd),
-        #           CCompilerFacade.Clang: GccCommand(self.host_cc_cmd)
-        #       }[self.host_cc_family]
+        self.cc_cmd_summary = CommandSummary(self.cc_cmd_line)
+        return self.cc_cmd_summary.collect()
 
     def check_syntax(self, c_file_name):
         """
@@ -111,7 +109,7 @@ class CCompilerFacade:
         an error is thrown.
         """
 
-        cmd = [self.host_cc,
+        cmd = [self.cc,
                '-fsyntax-only',
                c_file_name]
 
@@ -120,18 +118,20 @@ class CCompilerFacade:
             CCompilerFacade.Clang: '-Werror=incompatible-library-redeclaration'
         }
 
-        cmd.append(extra[self.host_cc_family])
+        cmd.append(extra[self.cc_family])
         cmd.append('-Werror=incompatible-pointer-types')
         cmd.append('-Werror=implicit-function-declaration')
 
-        return execute(CCompilerFacade._id, cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return execute(CCompilerFacade._id, cmd,
+                       stdout=subprocess.PIPE,
+                       stderr=subprocess.PIPE)
 
     def preprocess(self, c_file_name, pp_file_name):
         """
         Preprocess the file.
         """
 
-        cmd = [self.host_cc,
+        cmd = [self.cc,
                '-E',
                '-x',
                'c',

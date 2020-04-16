@@ -20,11 +20,13 @@
 #define PSYCHE_DRIVER_H__
 
 #include "ASTFwds.h"
+#include "Configuration.h"
 #include "Control.h"
 #include "FrontendConfig.h"
 #include "Dialect.h"
 #include "Factory.h"
 #include "TranslationUnit.h"
+
 #include <cstddef>
 #include <functional>
 #include <memory>
@@ -39,37 +41,6 @@ namespace psyche {
 class Factory;
 
 /*!
- * \brief The ExecutionOptions struct
- */
-struct ExecutionOptions
-{
-    ExecutionOptions() : all_(0) {}
-
-    struct Detail
-    {
-        uint32_t displayConstraints : 1;  //!< Display generated constraints.
-        uint32_t displayStats : 1;  //!< Ambiguity- and constraints-related stats.
-        uint32_t dumpAst : 1;  //!< Dump AST, both original and fixed one.
-        uint32_t disambOnly : 1;  //!< Only disambiguate AST.
-        uint32_t noHeuristics : 1;  //!< Disable heuristics on unresolved ambiguities.
-        uint32_t noTypedef : 1;  //! < Forbid type declarations.
-
-        //! Whether to handle GNU's error function as a printf variety.
-        uint32_t handleGNUerrorFunc_ : 1;
-    };
-    union
-    {
-        Detail flag_;
-        uint32_t all_;
-    };
-
-    std::string nativeCC_;
-    std::string dialect_;
-    std::vector<std::string> defs_;
-    std::vector<std::string> undefs_;
-};
-
-/*!
  * \brief The Driver class
  */
 class Driver final
@@ -81,7 +52,7 @@ public:
 
     int process(const std::string& unitName,
                 const std::string& source,
-                const ExecutionOptions& flags);
+                const Configuration& config);
 
     const std::string& constraints() const { return constraints_; }
 
@@ -107,9 +78,9 @@ private:
     TranslationUnit* unit() const;
     TranslationUnitAST* ast() const;
 
-    static Dialect adjustedDialect(const ExecutionOptions& exec);
+    static Dialect adjustedDialect(const Configuration& exec);
 
-    void configure(const ExecutionOptions& flags);
+    void configure(const Configuration& config);
     void collectIncludes(const std::string& source);
     std::string augmentSource(const std::string&, const std::vector<std::string>&);
     int preprocess(const std::string& source);
@@ -118,14 +89,15 @@ private:
     int instantiateGenerics();
     int generateConstraints();
 
-    const Factory& factory_; // TODO: Will go away.
+    const Factory& factory_; // TODO: Get rid of it.
+
+    Configuration config_;
     Control control_;
-    ExecutionOptions opts_;
-    Namespace* global_;
+    Namespace* globalNs_;
     std::unique_ptr<TranslationUnit> unit_;
     std::string constraints_;
     std::string includes_;
-    bool withGenerics_;
+    bool withGenerics_; // TODO: Integrate with config.
 
     friend class TestDisambiguator;
 };

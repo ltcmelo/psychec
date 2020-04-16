@@ -77,7 +77,7 @@ class Driver:
         Entry point.
         """
 
-        trace_op(Driver._id, flatten(self.cnip_opts['host_cc_cmd']))
+        trace_op(Driver._id, flatten(self.cnip_opts['cc_cmd_line']))
 
         if not self.cc.is_supported():
             sys.exit(DiagnosticReporter.fatal(HOST_C_COMPILER_NOT_FOUND))
@@ -94,19 +94,19 @@ class Driver:
                 gen_dir = ''
 
         # The adjusted command that is forwarded to the host C compiler is the
-        # one provided by the user, with input file replaced.
-        new_cmd = self.cnip_opts['host_cc_cmd']
+        # one provided by the user, with the input file replaced.
+        new_cmd = self.cnip_opts['cc_cmd_line']
 
-        for c_file_path in cc_cmd.sources:
-            if not os.path.isfile(c_file_path):
-                sys.exit(DiagnosticReporter.fatal(FILE_DOES_NOT_EXIST, c_file_path))
+        for c_file in cc_cmd.c_files:
+            if not os.path.isfile(c_file):
+                sys.exit(DiagnosticReporter.fatal(FILE_DOES_NOT_EXIST, c_file))
 
-            if self.cc.check_syntax(c_file_path) == 0:
+            if self.cc.check_syntax(c_file) == 0:
                 # If there are missing declarations in the source, this check
                 # would've failed. Since it didn't, there's nothing to infer.
                 continue
 
-            unit = make_unit(c_file_path, gen_dir)
+            unit = make_unit(c_file, gen_dir)
             self._compile_unit(unit, cc_cmd)
 
             trace_op(Driver._id,
@@ -114,7 +114,7 @@ class Driver:
             new_cmd = [w.replace(unit.c_file_path, unit.cnip_file_path)
                        for w in new_cmd]
 
-        cmd = [self.cnip_opts['host_cc'],
+        cmd = [self.cnip_opts['cc'],
                '-x',
                'c'] + new_cmd
 

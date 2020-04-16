@@ -39,6 +39,7 @@
 #include "SourceInspector.h"
 #include "Symbols.h"
 #include "cxxopts.hpp"
+
 #include <iostream>
 #include <sstream>
 #include <cstring>
@@ -70,13 +71,11 @@ void honorFlag(bool flag, std::function<void ()> f)
         f();
 }
 
-
-
 } // anonymous
 
 Driver::Driver(const Factory& factory)
     : factory_(factory)
-    , global_(nullptr)
+    , globalNs_(nullptr)
     , withGenerics_(true)
 {}
 
@@ -90,7 +89,7 @@ TranslationUnitAST* Driver::ast() const
     return unit()->ast()->asTranslationUnit();
 }
 
-Dialect Driver::adjustedDialect(const ExecutionOptions&)
+Dialect Driver::adjustedDialect(const Configuration&)
 {
     Dialect dialect;
     dialect.c99 = 1; // TODO: Requires further work for actual customization.
@@ -103,11 +102,11 @@ Dialect Driver::adjustedDialect(const ExecutionOptions&)
     return dialect;
 }
 
-void Driver::configure(const ExecutionOptions& flags)
+void Driver::configure(const Configuration& config)
 {
     control_.reset();
-    global_ = control_.newNamespace(0, nullptr);
-    opts_ = flags;
+    globalNs_ = control_.newNamespace(0, nullptr);
+    config_ = config;
 }
 
 std::string Driver::augmentSource(const std::string& source, const std::vector<std::string>& headers)
@@ -129,14 +128,14 @@ std::string Driver::augmentSource(const std::string& source, const std::vector<s
 
 int Driver::process(int argc, char *argv[])
 {
-    ExecutionOptions exeOpts;
+    Configuration config;
     std::string in;
-    cxxopts::Options cmdOpts(argv[0], "PsycheC constraint generator");
+    cxxopts::Options options(argv[0], "PsycheC constraint generator");
 
     try {
-        cmdOpts.positional_help("file");
+        options.positional_help("file");
 
-        cmdOpts.add_options()
+        options.add_options()
             ("h,help", "Print help")
             ("o,output", "Specify output file",
                 cxxopts::value<std::string>()->default_value("a.cstr"))
@@ -158,22 +157,25 @@ int Driver::process(int argc, char *argv[])
                 cxxopts::value<std::vector<std::string>>())
             ("cc-U", "Undefine a macro",
                 cxxopts::value<std::vector<std::string>>())
+            ("cc-I", "Specify #include path",
+                cxxopts::value<std::vector<std::string>>())
             ("positional", "Positional arguments",
                 cxxopts::value<std::vector<std::string>>());
 
-        cmdOpts.parse_positional(std::vector<std::string>{"file", "positional"});
-        cmdOpts.parse(argc, argv);
-    } catch (const cxxopts::OptionException& e) {
+        options.parse_positional(std::vector<std::string>{"file", "positional"});
+        options.parse(argc, argv);
+    }
+    catch (const cxxopts::OptionException& e) {
         std::cerr << kPsychePrefix << e.what() << std::endl;
         return Exit_UnknownCommandLineOptionError;
     }
 
-    if (cmdOpts.count("help")) {
-        std::cout << cmdOpts.help({"", "Group"}) << std::endl;
+    if (options.count("help")) {
+        std::cout << options.help({"", "Group"}) << std::endl;
         return Exit_OK;
     }
 
-    if (cmdOpts.count("test")) {
+    if (options.count("test")) {
         try {
             BaseTester::runSuite();
         } catch (...) {
@@ -183,32 +185,34 @@ int Driver::process(int argc, char *argv[])
         return Exit_OK;
     }
 
-    if (!cmdOpts.count("positional")) {
+    if (!options.count("positional")) {
         std::cerr << kPsychePrefix << "unspecified input file" << std::endl;
         return Exit_UnspecifiedInputFileError;
     }
 
     // The input file name is the single positional argument.
-    if (cmdOpts.count("positional")) {
-        auto& v = cmdOpts["positional"].as<std::vector<std::string>>();
+    if (options.count("positional")) {
+        auto& v = options["positional"].as<std::vector<std::string>>();
         in = v[0];
     }
 
-    exeOpts.flag_.dumpAst = cmdOpts.count("ast");
-    exeOpts.flag_.displayConstraints = cmdOpts.count("constraints");
-    exeOpts.flag_.displayStats = cmdOpts.count("stats");
-    exeOpts.flag_.noHeuristics = cmdOpts.count("no-heuristic");
-    exeOpts.flag_.noTypedef = cmdOpts.count("no-typedef");
-    exeOpts.flag_.handleGNUerrorFunc_ = true; // TODO: POSIX stuff?
-    exeOpts.nativeCC_ = cmdOpts["cc"].as<std::string>();
-    exeOpts.dialect_ = cmdOpts["cc-std"].as<std::string>();
-    exeOpts.defs_ = cmdOpts["cc-D"].as<std::vector<std::string>>();
-    exeOpts.undefs_ = cmdOpts["cc-U"].as<std::vector<std::string>>();
+    config.value_.dumpAst = options.count("ast");
+    config.value_.displayConstraints = options.count("constraints");
+    config.value_.displayStats = options.count("stats");
+    config.value_.noHeuristics = options.count("no-heuristic");
+    config.value_.noTypedef = options.count("no-typedef");
+    config.value_.handleGNUerrorFunc_ = true; // TODO: POSIX stuff?
+    config.nativeCC_ = options["cc"].as<std::string>();
+    config.dialectName_ = options["cc-std"].as<std::string>();
+    config.macroDefs_ = options["cc-D"].as<std::vector<std::string>>();
+    config.macroUndefs_ = options["cc-U"].as<std::vector<std::string>>();
+    config.includePaths_ = options["cc-I"].as<std::vector<std::string>>();
 
-    if (cmdOpts.count("plugin")) {
-        Plugin::load(cmdOpts["plugin"].as<std::string>());
+    if (options.count("plugin")) {
+        auto pluginName = options["plugin"].as<std::string>();
+        Plugin::load(pluginName);
         if (!Plugin::isLoaded()) {
-            std::cerr << kPsychePrefix << "cannot load plugin" << std::endl;
+            std::cerr << kPsychePrefix << "cannot load plugin " << pluginName << std::endl;
             return Exit_PluginLoadingError;
         }
     }
@@ -216,7 +220,7 @@ int Driver::process(int argc, char *argv[])
     const std::string& source = readFile(in);
     int code = 0;
     try {
-        code = process(in, source, exeOpts);
+        code = process(in, source, config);
     } catch (...) {
         Plugin::unload();
     }
@@ -224,9 +228,9 @@ int Driver::process(int argc, char *argv[])
     switch (code) {
     case Exit_OK:
         if (!constraints_.empty()) {
-            writeFile(cmdOpts["output"].as<std::string>(), constraints_);
+            writeFile(options["output"].as<std::string>(), constraints_);
             if (!includes_.empty()) {
-                FileInfo fi(cmdOpts["output"].as<std::string>());
+                FileInfo fi(options["output"].as<std::string>());
                 writeFile(fi.fullFileBaseName() + ".inc", includes_);
             }
         }
@@ -249,13 +253,13 @@ int Driver::process(int argc, char *argv[])
 
 int Driver::process(const std::string& unitName,
                     const std::string& source,
-                    const ExecutionOptions& flags)
+                    const Configuration& config)
 {
-    configure(flags);
+    configure(config);
 
     StringLiteral name(unitName.c_str(), unitName.length());
     unit_.reset(new TranslationUnit(&control_, &name));
-    unit_->setDialect(adjustedDialect(flags));
+    unit_->setDialect(adjustedDialect(config));
 
     static DiagnosticCollector collector;
     control_.setDiagnosticCollector(&collector);
@@ -282,7 +286,7 @@ void Driver::collectIncludes(const std::string& source)
 
 int Driver::preprocess(const std::string& source)
 {
-    CompilerFacade cc(opts_.nativeCC_, opts_.defs_, opts_.undefs_);
+    CompilerFacade cc(config_.nativeCC_, config_.macroDefs_, config_.macroUndefs_);
     auto r = cc.preprocessSource(source);
     if (!r.first) {
         writeFile(FileInfo(unit()->fileName()).fullFileBaseName() + ".i", r.second);
@@ -304,10 +308,10 @@ int Driver::parse(const std::string& source)
     if (!unit_->ast() || !ast())
         return Exit_ASTError_Internal;
 
-    honorFlag(opts_.flag_.dumpAst,
+    honorFlag(config_.value_.dumpAst,
               [this] () { ASTDotWriter(unit()).write(ast(), ".ast.dot"); });
 
-    ProgramValidator validator(unit(), opts_.flag_.noTypedef);
+    ProgramValidator validator(unit(), config_.value_.noTypedef);
     validator.validate(ast());
 
     if (control_.diagnosticCollector()->seenBlockingIssue())
@@ -320,22 +324,22 @@ int Driver::annotateAST()
 {
     // Create symbols.
     Binder bind(unit());
-    bind(ast(), global_);
+    bind(ast(), globalNs_);
 
     // Try to disambiguate syntax ambiguities and normalize the AST according to the resolutions.
-    ASTNormalizer fixer(unit(), !opts_.flag_.noHeuristics);
+    ASTNormalizer fixer(unit(), !config_.value_.noHeuristics);
     if (!fixer.normalize(ast()))
         return Exit_UnresolvedSyntaxAmbiguityError;
 
-    honorFlag(opts_.flag_.displayStats,
+    honorFlag(config_.value_.displayStats,
               [this, &fixer] () {
                  std::cout << "Ambiguities stats" << std::endl << fixer.stats() << std::endl;
               });
 
-    honorFlag(opts_.flag_.dumpAst,
+    honorFlag(config_.value_.dumpAst,
               [this] () { ASTDotWriter(unit()).write(ast(), ".ast.fixed.dot"); });
 
-    if (opts_.flag_.disambOnly)
+    if (config_.value_.disambOnly)
         return Exit_OK;
 
     return withGenerics_
@@ -346,7 +350,7 @@ int Driver::annotateAST()
 int Driver::instantiateGenerics()
 {
     GenericsInstantiatior instantiator(unit());
-    bool r = instantiator.quantify(ast(), global_);
+    bool r = instantiator.quantify(ast(), globalNs_);
     if (!r)
         return generateConstraints();
 
@@ -357,9 +361,9 @@ int Driver::instantiateGenerics()
 
     // Ignore generics in next pass.
     withGenerics_ = false;
-    opts_.defs_.push_back("_Template=");
-    opts_.defs_.push_back("'_Forall(v)=v'");
-    opts_.defs_.push_back("'_Exists(v)=v'");
+    config_.macroDefs_.push_back("_Template=");
+    config_.macroDefs_.push_back("'_Forall(v)=v'");
+    config_.macroDefs_.push_back("'_Exists(v)=v'");
 
     return preprocess(newSource);
 }
@@ -368,7 +372,7 @@ int Driver::generateConstraints()
 {
     // Build domain lattice.
     DomainLattice lattice(unit());
-    lattice.categorize(ast(), global_);
+    lattice.categorize(ast(), globalNs_);
 
     std::ostringstream oss;
     auto writer = factory_.makeConstraintWriter(oss);
@@ -381,13 +385,13 @@ int Driver::generateConstraints()
         generator.installObserver(Plugin::createObserver());
     }
 
-    if (opts_.flag_.handleGNUerrorFunc_)
+    if (config_.value_.handleGNUerrorFunc_)
         generator.addPrintfLike("error", 2);
-    generator.generate(ast(), global_);
+    generator.generate(ast(), globalNs_);
 
     constraints_ = oss.str();
 
-    honorFlag(opts_.flag_.displayConstraints,
+    honorFlag(config_.value_.displayConstraints,
               [this] () { std::cout << constraints_ << std::endl; });
 
     return Exit_OK;

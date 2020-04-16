@@ -13,49 +13,61 @@
 from Diagnostics import DiagnosticReporter, C_VERSION_NOT_SUPPORTED
 
 
-class Command(object):
+class CommandSummary(object):
+    """
+    The command to the C compiler.
+    """
+
     def __init__(self, cmd):
         self.cmd = cmd
-        self.sources = []
+
         self.c_version = 'c99'
+        self.c_files = []
+        self.D_lst = []
+        self.U_lst = []
+        self.I_lst = []
         self.pedantic = False
         self.out_file_name = None
 
-
-class GccCommand(Command):
-    def __init__(self, line):
-        super(GccCommand, self).__init__(line)
-        self.collect()
-
     def collect(self):
         expect_out_file = False
-        for w in self.cmd:
-            # TODO: Deal with -E... Do nothing?
+        for v in self.cmd:
+            # TODO: Deal vith -E... Do nothing?
 
-            # Collect file(s) being compiled.
-            if w.endswith(".c"):
-                self.sources.append(w)
-                continue
-
-            # Identify C version, if specified.
-            if w.startswith("-std="):
-                self.c_version = w[5:]
-            if w == "-ansi":
+            if v.startswith("-std="):
+                self.c_version = v[5:]
+            if v == "-ansi":
                 self.c_version = "c90"
 
-            # Pedantic compilation.
-            if w == "-pedantic-errors":
+            if v.endswith('.c'):
+                self.c_files.append(v)
+                continue
+
+            if v.startswith('-D'):
+                self.D_lst.append(v[2:])
+                continue
+
+            if v.startswith('-U'):
+                self.U_lst.append(v[2:])
+                continue
+
+            if v.startswith('-I'):
+                self.I_lst.append(v[2:])
+                continue
+
+            if v == "-pedantic-errors":
                 self.pedantic = True
 
             # Keep track of output file, if specified.
             if expect_out_file:
-                self.out_file_name = w
+                self.out_file_name = v
                 expect_out_file = False
-
-            if w == "-o":
+            if v == "-o":
                 expect_out_file = True
 
         # Temporary
         if self.c_version != 'c99':
             DiagnosticReporter.warning(C_VERSION_NOT_SUPPORTED)
             self.c_version = 'c99'
+
+        return self

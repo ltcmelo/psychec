@@ -48,8 +48,8 @@ using namespace psyche;
 
 void TestDisambiguator::checkAst(const std::string &source, std::string expected, bool noHeuristic)
 {
-    ExecutionOptions config;
-    config.flag_.noHeuristics = noHeuristic;
+    Configuration config;
+    config.value_.noHeuristics = noHeuristic;
 
     Driver driver((Factory()));
     driver.process("testfile", source, config);
