@@ -18,7 +18,7 @@ import sys
 from Driver import Driver
 from Environment import EnvironmentController
 from Version import Version
-from Tracing import TraceManager
+from Logger import Logger
 
 
 def _parse_input():
@@ -64,22 +64,22 @@ def _parse_input():
                         action='store_true',
                         help='Only consider "omissive" functions for inference.')
 
-    parser.add_argument('-g', '--generics',
+    parser.add_argument('-p', '--generics',
                         action='store_true',
-                        help='Enable generic functions.')
+                        help='Enable parmetric polimorphism.')
 
     parser.add_argument('-f', '--non-commercial',
                         action='store_true',
                         help="Specify non-commercial use.")
 
-    parser.add_argument('-t', '--trace',
+    parser.add_argument('-g', '--debug',
                         action='append',
-                        help="The componet to be traced -- 'all' for every one.")
+                        choices=['all'],
+                        help='Debug specified component(s).')
 
-    parser.add_argument('--trace-level',
-                        choices=['info', 'detail'],
-                        default='info',
-                        help='Enable tracing.')
+    parser.add_argument('-x', '--trace-external',
+                        action='store_true',
+                        help='Trace invocation of external processes.')
 
     parser.add_argument('CC',
                         help="The host C compiler (e.g., 'gcc' or 'clang').")
@@ -106,13 +106,11 @@ if __name__ == "__main__":
                     no_typedef=args.no_typedef,
                     no_heuristic=args.no_heuristic,
                     only_omissive=args.only_omissive,
-                    traces=args.trace,
-                    trace_level=args.trace_level,
                     cc=args.CC,
                     cc_cmd_line=args.cc_cmd_line,
                     dev_mode=args.dev)
 
-    TraceManager().configure(cnip_opts['traces'], cnip_opts['trace_level'])
+    Logger().configure(args.trace_external, args.debug)
 
     env = EnvironmentController(os.path.expanduser('~'))
     env.check_all(args.non_commercial)

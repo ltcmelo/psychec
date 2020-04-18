@@ -14,7 +14,7 @@ import os
 import sys
 from Diagnostics import DiagnosticReporter, ERROR_CREATING_CONFIG_DIRECTORY
 from LicenseFile import LicenseFile
-from Tracing import trace_op
+from Logger import debug
 
 
 class EnvironmentController:
@@ -34,7 +34,7 @@ class EnvironmentController:
         """
 
         if not os.path.isdir(self.config_dir_path):
-            trace_op(EnvironmentController._id,
+            debug(EnvironmentController._id,
                      'create config directory in %s' % self.home_dir_path)
             try:
                 os.makedirs(self.config_dir_path)

@@ -20,7 +20,7 @@ from Diagnostics import (DiagnosticReporter,
                          HOST_C_COMPILER_NOT_FOUND)
 from Process import execute
 from PsycheFacade import PsycheFacade
-from Tracing import trace_op
+from Logger import debug
 from Unit import make_unit
 
 
@@ -77,7 +77,7 @@ class Driver:
         Entry point.
         """
 
-        trace_op(Driver._id, flatten(self.cnip_opts['cc_cmd_line']))
+        debug(Driver._id, flatten(self.cnip_opts['cc_cmd_line']))
 
         if not self.cc.is_supported():
             sys.exit(DiagnosticReporter.fatal(HOST_C_COMPILER_NOT_FOUND))
@@ -109,7 +109,7 @@ class Driver:
             unit = make_unit(c_file, gen_dir)
             self._compile_unit(unit, cc_cmd)
 
-            trace_op(Driver._id,
+            debug(Driver._id,
                      f'replace {unit.c_file_path} for {unit.cnip_file_path} in command')
             new_cmd = [w.replace(unit.c_file_path, unit.cnip_file_path)
                        for w in new_cmd]

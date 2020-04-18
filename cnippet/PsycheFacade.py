@@ -28,30 +28,34 @@ class PsycheFacade:
     """
 
     _id = 'psychec'
+    _GENERATOR = 'psychecgen'
+    _SOLVER = 'psychecsolver-exe'
 
-    def __init__(self, cnip_opt):
-        self.generator = 'psychecgen'
-        self.solver = 'psychecsolver-exe'
-        self.no_typedef = cnip_opt['no_typedef']
-        self.no_heuristic = cnip_opt['no_heuristic']
-        self.no_stdlib = cnip_opt['no_stdlib']
-        self.cc = cnip_opt['cc']
+    def __init__(self, cnip_opts):
+        self.cc = cnip_opts['cc']
+        self.no_typedef = cnip_opts['no_typedef']
+        self.no_heuristic = cnip_opts['no_heuristic']
+        self.no_stdlib = cnip_opts['no_stdlib']
 
     def generate_constraints(self,
                              unit: Unit,
-                             cc_cmd):
+                             cc_cmd_summary):
         """
         Generate constraints for a unit.
         """
 
-        cmd = [self.generator,
+        cmd = [PsycheFacade._GENERATOR,
                unit.c_file_path,
                '-o', unit.cstr_file_path,
                '--cc', self.cc,
-               '--cc-std', cc_cmd.c_version]
+               '--cc-std', cc_cmd_summary.c_version]
 
-        cmd += CCompilerFacade.predefined_macros('--cc-D')
+        cmd += CCompilerFacade.defined_macros('--cc-D')
         cmd += CCompilerFacade.undefined_macros('--cc-U')
+
+        cmd += cc_cmd_summary.defined_macros('-cc-D ')
+        cmd += cc_cmd_summary.undefined_macros('--cc-U ')
+        cmd += cc_cmd_summary.include_paths('--cc-I ')
 
         maybe_append('--no-typedef', self.no_typedef, cmd)
         maybe_append('--no-heuristic', self.no_heuristic, cmd)
@@ -73,7 +77,7 @@ class PsycheFacade:
         Solve the constraint.
         """
 
-        cmd = [self.solver,
+        cmd = [PsycheFacade._SOLVER,
                '--',
                '-i',
                unit.cstr_file_path,

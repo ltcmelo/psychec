@@ -34,7 +34,7 @@ class CCompilerFacade:
         self.cc_cmd_summary = None
 
     @staticmethod
-    def predefined_macros(prefix):
+    def defined_macros(prefix):
         """
         Defined common builtin/platform macros.
         """
@@ -102,6 +102,12 @@ class CCompilerFacade:
         self.cc_cmd_summary = CommandSummary(self.cc_cmd_line)
         return self.cc_cmd_summary.collect()
 
+    def original_options(self):
+        cmd = self.cc_cmd_summary.defined_macros('-D')
+        cmd += self.cc_cmd_summary.undefined_macros('-U')
+        cmd += self.cc_cmd_summary.include_paths('-I')
+        return cmd
+
     def check_syntax(self, c_file_name):
         """
         Check the "syntax" of the file -- this is an abuse of terminology, since
@@ -109,20 +115,24 @@ class CCompilerFacade:
         an error is thrown.
         """
 
-        cmd = [self.cc,
-               '-fsyntax-only',
-               c_file_name]
+        cmd = [self.cc, '-fsyntax-only', c_file_name]
 
-        extra = {
+        common_opts = [
+            '-Werror=incompatible-pointer-types',
+            '-Werror=implicit-function-declaration'
+        ]
+        cmd += common_opts
+
+        by_cc_opts = {
             CCompilerFacade.GCC: '-Werror=builtin-declaration-mismatch',
             CCompilerFacade.Clang: '-Werror=incompatible-library-redeclaration'
         }
+        cmd.append(by_cc_opts[self.cc_family])
 
-        cmd.append(extra[self.cc_family])
-        cmd.append('-Werror=incompatible-pointer-types')
-        cmd.append('-Werror=implicit-function-declaration')
+        cmd += self.original_options()
 
-        return execute(CCompilerFacade._id, cmd,
+        return execute(CCompilerFacade._id,
+                       cmd,
                        stdout=subprocess.PIPE,
                        stderr=subprocess.PIPE)
 
@@ -139,8 +149,10 @@ class CCompilerFacade:
                '-o',
                pp_file_name]
 
-        cmd += CCompilerFacade.predefined_macros('-D')
+        cmd += CCompilerFacade.defined_macros('-D')
         cmd += CCompilerFacade.undefined_macros('-U')
+
+        cmd += self.original_options()
 
         ok = execute(CCompilerFacade._id, cmd)
         if ok != 0:

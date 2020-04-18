@@ -29,6 +29,20 @@ class CommandSummary(object):
         self.pedantic = False
         self.out_file_name = None
 
+    @staticmethod
+    def _prefixed_lst(prefix: str, lst):
+        lst = [prefix + el for el in lst]
+        return lst
+
+    def defined_macros(self, prefix: str):
+        return CommandSummary._prefixed_lst(prefix, self.D_lst)
+
+    def undefined_macros(self, prefix: str):
+        return CommandSummary._prefixed_lst(prefix, self.U_lst)
+
+    def include_paths(self, prefix: str):
+        return CommandSummary._prefixed_lst(prefix, self.I_lst)
+
     def collect(self):
         expect_out_file = False
         for v in self.cmd:
@@ -44,15 +58,15 @@ class CommandSummary(object):
                 continue
 
             if v.startswith('-D'):
-                self.D_lst.append(v[2:])
+                self.D_lst.append(v[2:].strip())
                 continue
 
             if v.startswith('-U'):
-                self.U_lst.append(v[2:])
+                self.U_lst.append(v[2:].strip())
                 continue
 
             if v.startswith('-I'):
-                self.I_lst.append(v[2:])
+                self.I_lst.append(v[2:].strip())
                 continue
 
             if v == "-pedantic-errors":
