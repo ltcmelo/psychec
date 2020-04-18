@@ -25,4 +25,6 @@ jobs:
         cd solver
         stack build
     - name: test
-      run: python test_compilability.py
+      run: |
+        export PATH=$PATH:$PWD
+        python test_compilability.py
