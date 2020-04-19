@@ -22,14 +22,14 @@ from Process import execute
 from Unit import Unit
 
 
-class PsycheFacade:
+class PsycheCFacade:
     """
     A facade to the Psyche inference engine.
     """
 
     @staticmethod
     def ID():
-        return PsycheFacade.__name__
+        return PsycheCFacade.__name__
 
     _GENERATOR = 'psychecgen'
     _SOLVER = 'psychecsolver-exe'
@@ -47,7 +47,7 @@ class PsycheFacade:
         Generate constraints for a unit.
         """
 
-        cmd = [PsycheFacade._GENERATOR,
+        cmd = [PsycheCFacade._GENERATOR,
                unit.c_file,
                '-o', unit.cstr_file,
                '--cc', self.cc,
@@ -68,7 +68,7 @@ class PsycheFacade:
             dir_path = pathlib.Path(__file__).parent.parent.absolute()
             cmd.append(os.path.join(dir_path, 'libpsychecstd'))
 
-        code = execute(PsycheFacade.ID(), cmd)
+        code = execute(PsycheCFacade.ID(), cmd)
         if code != 0:
             sys.exit(
                 DiagnosticReporter.fatal(CONSTRAINT_GENERATION_FOR_FILE_FAILED,
@@ -80,7 +80,7 @@ class PsycheFacade:
         Solve the constraint.
         """
 
-        cmd = [PsycheFacade._SOLVER,
+        cmd = [PsycheCFacade._SOLVER,
                '--',
                '-i',
                unit.cstr_file,
@@ -90,7 +90,7 @@ class PsycheFacade:
         if not self.no_stdlib:
             cmd.append('--match-stdlib=approx')
 
-        ok = execute(PsycheFacade.ID(), cmd)
+        ok = execute(PsycheCFacade.ID(), cmd)
         if ok != 0:
             sys.exit(
                 DiagnosticReporter.fatal(CONSTRAINT_SOLVING_FOR_FILE_FAILED,

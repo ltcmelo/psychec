@@ -19,7 +19,7 @@ from Diagnostics import (DiagnosticReporter,
                          HOST_C_COMPILER_FORWARDING_FAILED,
                          HOST_C_COMPILER_NOT_FOUND)
 from Process import execute
-from PsycheFacade import PsycheFacade
+from PsycheCFacade import PsycheCFacade
 from Logger import debug
 from Unit import make_unit
 
@@ -36,7 +36,7 @@ class Driver:
     def __init__(self, cnip_opts):
         self.cnip_opts = cnip_opts
         self.cc: CCompilerFacade = CCompilerFacade(cnip_opts)
-        self.psyche: PsycheFacade = PsycheFacade(cnip_opts)
+        self.psyche: PsycheCFacade = PsycheCFacade(cnip_opts)
 
     @staticmethod
     def _delete_old_files(unit):
