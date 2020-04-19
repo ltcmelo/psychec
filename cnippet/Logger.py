@@ -41,7 +41,8 @@ class Logger(metaclass=Singleton):
             return self
 
         def __exit__(self, exc_type, exc_val, exc_tb):
-            print(f'... {self.r}\n')
+            if self.ctx:
+                print(f'... {self.r}\n')
 
         def report(self, r):
             self.r = r
@@ -49,11 +50,7 @@ class Logger(metaclass=Singleton):
     def xtrace(self, parent, cmd):
         if self.xtrace_enabled:
             print(f'<cnippet> $\n{cmd}')
-        return Logger.Handle(cmd)
-
-    def xtrace_exit(self, code):
-        if self.xtrace_enabled:
-            print(f'... exit: {code}')
+        return Logger.Handle(self.xtrace_enabled)
 
     def debug(self, parent, msg):
         if parent in self.debug_enabled or 'all' in self.debug_enabled:
