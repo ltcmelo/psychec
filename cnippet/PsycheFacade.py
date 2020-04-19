@@ -27,7 +27,10 @@ class PsycheFacade:
     A facade to the Psyche inference engine.
     """
 
-    _id = 'psychec'
+    @staticmethod
+    def ID():
+        return PsycheFacade.__name__
+
     _GENERATOR = 'psychecgen'
     _SOLVER = 'psychecsolver-exe'
 
@@ -65,7 +68,7 @@ class PsycheFacade:
             dir_path = pathlib.Path(__file__).parent.parent.absolute()
             cmd.append(os.path.join(dir_path, 'libpsychecstd'))
 
-        code = execute(PsycheFacade._id, cmd)
+        code = execute(PsycheFacade.ID(), cmd)
         if code != 0:
             sys.exit(
                 DiagnosticReporter.fatal(CONSTRAINT_GENERATION_FOR_FILE_FAILED,
@@ -87,7 +90,7 @@ class PsycheFacade:
         if not self.no_stdlib:
             cmd.append('--match-stdlib=approx')
 
-        ok = execute(PsycheFacade._id, cmd)
+        ok = execute(PsycheFacade.ID(), cmd)
         if ok != 0:
             sys.exit(
                 DiagnosticReporter.fatal(CONSTRAINT_SOLVING_FOR_FILE_FAILED,

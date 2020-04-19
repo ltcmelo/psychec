@@ -47,11 +47,15 @@ class Logger(metaclass=Singleton):
         def report(self, r):
             self.r = r
 
+    @staticmethod
+    def prefix(parent: str):
+        return f'<cnippet :: {parent.upper()}>'
+
     def xtrace(self, parent, cmd):
         if self.xtrace_enabled:
-            print(f'<cnippet::{parent}> $\n{cmd}')
+            print(f'{Logger.prefix(parent)} $\n{cmd}')
         return Logger.Handle(self.xtrace_enabled)
 
     def debug(self, parent, msg):
         if parent in self.debug_enabled or 'all' in self.debug_enabled:
-            print(f'<cnippet::{parent}> {msg}\n')
+            print(f'{Logger.prefix(parent)} {msg}\n')

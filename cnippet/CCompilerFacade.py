@@ -22,7 +22,9 @@ class CCompilerFacade:
     Facade to the host C compiler.
     """
 
-    _id = 'cc'
+    @staticmethod
+    def ID():
+        return CCompilerFacade.__name__
 
     GCC = 'GCC'
     Clang = 'Clang'
@@ -131,7 +133,7 @@ class CCompilerFacade:
 
         cmd += self.original_options()
 
-        return execute(CCompilerFacade._id,
+        return execute(CCompilerFacade.ID(),
                        cmd,
                        stdout=subprocess.PIPE,
                        stderr=subprocess.PIPE)
@@ -154,8 +156,8 @@ class CCompilerFacade:
 
         cmd += self.original_options()
 
-        ok = execute(CCompilerFacade._id, cmd)
-        if ok != 0:
+        code = execute(CCompilerFacade.ID(), cmd)
+        if code != 0:
             sys.exit(
                 DiagnosticReporter.fatal(PREPROCESSING_FILE_FAILED,
                                          c_file_name))
