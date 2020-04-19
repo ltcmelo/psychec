@@ -63,6 +63,14 @@ constexpr int Driver::Exit_UnknownCommandLineOptionError;
 constexpr int Driver::Exit_PluginLoadingError;
 constexpr int Driver::Exit_PreprocessingError;
 
+
+int main(int argc, char* argv[])
+{
+    Factory factory; // TODO: Will go away.
+    Driver driver(factory);
+    return driver.process(argc, argv);
+}
+
 namespace {
 
 void honorFlag(bool flag, std::function<void ()> f)

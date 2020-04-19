@@ -41,8 +41,6 @@ set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
 
 # Project sources.
 set(PSYCHEC_SOURCES
-    ${PROJECT_SOURCE_DIR}/Main.cpp
-
     # Data structures
     ${PROJECT_SOURCE_DIR}/adt/Substitution.h
     ${PROJECT_SOURCE_DIR}/adt/Substitution.cpp
