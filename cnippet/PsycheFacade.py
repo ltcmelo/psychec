@@ -45,8 +45,8 @@ class PsycheFacade:
         """
 
         cmd = [PsycheFacade._GENERATOR,
-               unit.c_file_path,
-               '-o', unit.cstr_file_path,
+               unit.c_file,
+               '-o', unit.cstr_file,
                '--cc', self.cc,
                '--cc-std', cc_cmd_summary.c_version]
 
@@ -69,7 +69,7 @@ class PsycheFacade:
         if code != 0:
             sys.exit(
                 DiagnosticReporter.fatal(CONSTRAINT_GENERATION_FOR_FILE_FAILED,
-                                         unit.c_file_path,
+                                         unit.c_file,
                                          error=code))
 
     def solve_constraints(self, unit: Unit):
@@ -80,9 +80,9 @@ class PsycheFacade:
         cmd = [PsycheFacade._SOLVER,
                '--',
                '-i',
-               unit.cstr_file_path,
+               unit.cstr_file,
                '-o',
-               unit.cnip_file_path]
+               unit.cnip_file]
 
         if not self.no_stdlib:
             cmd.append('--match-stdlib=approx')
@@ -91,4 +91,4 @@ class PsycheFacade:
         if ok != 0:
             sys.exit(
                 DiagnosticReporter.fatal(CONSTRAINT_SOLVING_FOR_FILE_FAILED,
-                                         unit.c_file_path))
+                                         unit.c_file))

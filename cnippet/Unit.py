@@ -16,12 +16,12 @@ from collections import namedtuple
 
 Unit = namedtuple(
     'Unit', [
-        'c_file_path',     # The original C file.
-        'i_file_path',     # A preprocessed version of the original C file.
-        'cstr_file_path',  # The constraints file.
-        'inc_file_path',   # A file with a list of stdlib `#include's.
-        'poly_file_path',  # A "polymorphic" version of the original C file.
-        'cnip_file_path'   # The file containing inference results.
+        'c_file',     # The original C file.
+        'i_file',     # A preprocessed version of the original C file.
+        'cstr_file',  # The constraints file.
+        'inc_file',   # A file with a list of stdlib `#include's.
+        'poly_file',  # A "polymorphic" version of the original C file.
+        'cnip_file'   # The file containing inference results.
     ])
 
 

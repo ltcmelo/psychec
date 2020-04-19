@@ -61,16 +61,16 @@ class Runner:
                 except:
                     pass
 
-    def _execute_cnip(self, c_file_path: str):
+    def _execute_cnip(self, c_file: str):
 
-        print(c_file_path)
+        print(c_file)
         cmd = ['./cnip.sh',
                '-f',
                '--no-stdlib',
                self.cc,
                self.cc_flags,
-               c_file_path,
-               '-o', c_file_path + '.o']
+               c_file,
+               '-o', c_file + '.o']
         try:
             return subprocess.call(cmd)
         except Exception as e:
@@ -79,9 +79,9 @@ class Runner:
 
     @staticmethod
     def _print_info(action: str,
-                    c_file_path: str):
+                    c_file: str):
         prefix = '^' * len(action)
-        print(f'\n  {prefix}\n  {action} ({c_file_path})\n')
+        print(f'\n  {prefix}\n  {action} ({c_file})\n')
 
     def _print_summary(self):
         s = f'\n  IGNORED: {len(self.expect.IGNORE)}' \

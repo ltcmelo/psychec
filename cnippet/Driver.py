@@ -42,11 +42,11 @@ class Driver:
         Delete old files, from any previous run.
         """
 
-        delete_files(unit.i_file_path,
-                     unit.cstr_file_path,
-                     unit.inc_file_path,
-                     unit.poly_file_path,
-                     unit.cnip_file_path)
+        delete_files(unit.i_file,
+                     unit.cstr_file,
+                     unit.inc_file,
+                     unit.poly_file,
+                     unit.cnip_file)
 
     def _compile_unit(self, unit, cc_cmd):
         """
@@ -57,20 +57,20 @@ class Driver:
 
         self.psyche.generate_constraints(unit, cc_cmd)
 
-        if not os.path.isfile(unit.cstr_file_path):
-            copy_file(unit.c_file_path, unit.cnip_file_path)
+        if not os.path.isfile(unit.cstr_file):
+            copy_file(unit.c_file, unit.cnip_file)
             return
 
         self.psyche.solve_constraints(unit)
 
-        if os.path.isfile(unit.poly_file_path):
-            concat_file(unit.poly_file_path, unit.cnip_file_path)
+        if os.path.isfile(unit.poly_file):
+            concat_file(unit.poly_file, unit.cnip_file)
         else:
-            concat_file(unit.c_file_path, unit.cnip_file_path)
+            concat_file(unit.c_file, unit.cnip_file)
 
-        if os.path.isfile(unit.inc_file_path):
-            concat_file(unit.cnip_file_path, unit.inc_file_path)
-            copy_file(unit.inc_file_path, unit.cnip_file_path)
+        if os.path.isfile(unit.inc_file):
+            concat_file(unit.cnip_file, unit.inc_file)
+            copy_file(unit.inc_file, unit.cnip_file)
 
     def execute(self):
         """
@@ -93,8 +93,8 @@ class Driver:
             else:
                 gen_dir = ''
 
-        # The adjusted command that is forwarded to the host C compiler is the
-        # one provided by the user, with the input file replaced.
+        # The new command that is forwarded to the host C compiler is the
+        # original one provided by the user, with the input file replaced.
         new_cmd = self.cnip_opts['cc_cmd_line']
 
         for c_file in cc_cmd.c_files:
@@ -110,8 +110,8 @@ class Driver:
             self._compile_unit(unit, cc_cmd)
 
             debug(Driver._id,
-                     f'replace {unit.c_file_path} for {unit.cnip_file_path} in command')
-            new_cmd = [w.replace(unit.c_file_path, unit.cnip_file_path)
+                     f'replace {unit.c_file} for {unit.cnip_file} in command')
+            new_cmd = [w.replace(unit.c_file, unit.cnip_file)
                        for w in new_cmd]
 
         cmd = [self.cnip_opts['cc']] + new_cmd
