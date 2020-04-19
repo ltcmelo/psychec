@@ -114,7 +114,7 @@ class Driver:
             new_cmd = [w.replace(unit.c_file_path, unit.cnip_file_path)
                        for w in new_cmd]
 
-        cmd = [self.cnip_opts['cc'], '-x', 'c'] + new_cmd
+        cmd = [self.cnip_opts['cc']] + new_cmd
 
         code = execute(Driver._id, cmd)
         if code != 0:
