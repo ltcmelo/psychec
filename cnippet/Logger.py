@@ -49,7 +49,7 @@ class Logger(metaclass=Singleton):
 
     def xtrace(self, parent, cmd):
         if self.xtrace_enabled:
-            print(f'<cnippet> $\n{cmd}')
+            print(f'<cnippet::{parent}> $\n{cmd}')
         return Logger.Handle(self.xtrace_enabled)
 
     def debug(self, parent, msg):

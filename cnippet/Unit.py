@@ -15,8 +15,7 @@ from collections import namedtuple
 
 
 Unit = namedtuple(
-    'Unit',
-    [
+    'Unit', [
         'c_file_path',     # The original C file.
         'i_file_path',     # A preprocessed version of the original C file.
         'cstr_file_path',  # The constraints file.
@@ -26,18 +25,18 @@ Unit = namedtuple(
     ])
 
 
-def make_unit(c_file_path, out_dir):
+def make_unit(c_file, out_dir):
     """
     Make a compilation unit.
     """
 
-    (_, file_name) = os.path.split(c_file_path)
-    (base_name, _) = os.path.splitext(file_name)
-    gen_path = out_dir + base_name
+    (_, c_file_name) = os.path.split(c_file)
+    (c_file_base_name, _) = os.path.splitext(c_file_name)
+    out_file_base_name = out_dir + c_file_base_name
 
-    return Unit(c_file_path,
-                gen_path + '.i',
-                gen_path + '.cstr',
-                gen_path + '.inc',
-                gen_path + '.poly',
-                gen_path + '.cnip')
+    return Unit(c_file,
+                out_file_base_name + '.i',
+                out_file_base_name + '.cstr',
+                out_file_base_name + '.inc',
+                out_file_base_name + '.poly',
+                out_file_base_name + '.cnip.c')
