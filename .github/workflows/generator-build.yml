@@ -12,10 +12,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-16.04]
+        os: [ubuntu-18.04, ubuntu-16.04, macos-10.15]
 
     steps:
     - uses: actions/checkout@v2
+    - name: update clang
+      if: matrix.os == 'macos-10.15'
+      run: |
+        brew update
+        brew upgrade llvm
+        export CXX="/usr/local/opt/llvm/bin/clang++"
     - name: configure
       run: cmake CMakeLists.txt
     - name: make
