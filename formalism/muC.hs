@@ -228,7 +228,7 @@ hat IntTy = TypeId "int"
 hat DoubleTy = TypeId "double"
 hat VoidTy = TypeId "void"
 hat (PtrTy t) = TypeId $ (_id (hat t) ++ "*")
-hat (ConstTy t) = TypeId $ "const " ++ (_id (hat t))
+hat (ConstTy t) = TypeId $ "const[" ++ (_id (hat t)) ++ "]"
 hat (ArrowTy rt pt) = TypeId $
   (_id (hat rt))  ++ "(*)(" ++
   (foldr (\t acc -> (_id (hat t)) ++ acc) ")" pt)
@@ -1760,14 +1760,20 @@ progParser :: Parser Prog
 progParser = Prog <$> many tydefParser <*> many funParser
 
 tydefParser :: Parser TypeDef
-tydefParser = TypeDef <$> (reserved "typedef" *>) tyParser <*> tyParser <* semi
+tydefParser = TypeDef <$> (reserved "typedef" *>) qualPtrTyParser <*> tyParser <* semi
 
 funParser :: Parser FunDef
 funParser = FunDef
-            <$> tyParser
+            <$> qualPtrTyParser
             <*> identParser
             <*> parens (declParser `sepBy` comma)
             <*> stmtListParser
+
+qualPtrTyParser :: Parser Type
+qualPtrTyParser = f <$> tyParser <*> (optionMaybe (reserved "const"))
+  where
+    f t Nothing = t
+    f t _ = ConstTy t
 
 tyParser :: Parser Type
 tyParser = f <$> nonPtrTyParser <*> (many starParser)
@@ -1798,8 +1804,6 @@ namedTyParser = f <$> (optionMaybe (reserved "struct")) <*> identParser
     f Nothing n = NamedTy n
     f _ n = NamedTy (Ident ("struct " ++ (_x n)))
 
--- For simplicity, we require in muC that the `const' keyword comes before a type,
--- specifier. In standard C, that's not necessary.
 qualTyParser :: Parser Type -> Parser Type
 qualTyParser p = f <$> (optionMaybe (reserved "const")) <*> p
   where
@@ -1812,7 +1816,7 @@ recTyParser = RecTy
               <*> identParser
 
 declParser :: Parser Decl
-declParser = Decl <$> tyParser <*> identParser
+declParser = Decl <$> qualPtrTyParser <*> identParser
 
 exprParser :: Parser Expr
 exprParser = buildExpressionParser table baseExprParser
