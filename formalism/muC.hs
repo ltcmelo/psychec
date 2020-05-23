@@ -349,7 +349,7 @@ satisfyK (phi, psi, theta) (Has (TyVar st) (Decl t x)) =
   in satisfyK (phi, psi, theta) (t' :=: t)
 
 -- | KEq
-satisfyK (phi, _, _) k@(t1 :=: t2) = isSubTy phi t1 t2
+satisfyK (phi, _, _) k@(t1 :=: t2) = isSubTy phi t1 t2 && isSubTy phi t2 t1
 
 -- | KIq
 satisfyK (phi, _, _) k@(t1 :<=: t2) = isSubTy phi t1 t2
