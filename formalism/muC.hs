@@ -98,6 +98,8 @@ data Type = IntTy
 
 data BinOptr = Add
              | Divide
+             | Multiply
+             | And
              | Or
              | Assign
              deriving (Eq, Ord, Show)
@@ -673,28 +675,41 @@ keepOrDrop sp1 a1 sp2 a2 op =
 select :: Shape -> Type -> Shape -> Type -> Type -> BinOptr -> K
 select sp1 a1 sp2 a2 t op  =
   case op of
-    Add -> if (fst sp1 == P)
-           then (a1 :=: t) :&: ((ConstTy IntTy) :<=: a2)
-           else if (fst sp2 == P)
-                then (a2 :=: t) :&: ((ConstTy IntTy) :<=: a1)
-                else (t :<=: DoubleTy)
+    Add -> select_Add sp1 a1 sp2 a2 t
     Assign -> (t :=: a1)
-    Or -> (t :=: IntTy)
-    Divide -> if (fst sp1 == I && fst sp2 == I)
-              then (t :=: IntTy)
-                   :&: ((ConstTy IntTy) :<=: a1)
-                   :&: ((ConstTy IntTy) :<=: a2)
-              else if (fst sp1 == I)
-                   then (t :<=: DoubleTy)
-                        :&: ((ConstTy IntTy) :<=: a1)
-                        :&: (a2 :<=: DoubleTy)
-                   else if (fst sp2 == I)
-                        then (t :<=: DoubleTy)
-                             :&: (a1 :<=: DoubleTy)
-                             :&: ((ConstTy IntTy) :<=: a2)
-                        else (t :<=: DoubleTy)
-                             :&: (a1 :<=: DoubleTy)
-                             :&: (a2 :<=: DoubleTy)
+    And -> select_AndOr sp1 a1 sp2 a2 t
+    Or -> select_AndOr sp1 a1 sp2 a2 t
+    Divide -> select_DivideMultiply sp1 a1 sp2 a2 t
+    Multiply -> select_DivideMultiply sp1 a1 sp2 a2 t
+
+select_Add :: Shape -> Type -> Shape -> Type -> Type -> K
+select_Add sp1 a1 sp2 a2 t =
+  if (fst sp1 == P)
+  then (a1 :=: t) :&: ((ConstTy IntTy) :<=: a2)
+  else if (fst sp2 == P)
+       then (a2 :=: t) :&: ((ConstTy IntTy) :<=: a1)
+       else (t :<=: DoubleTy)
+
+select_AndOr :: Shape -> Type -> Shape -> Type -> Type -> K
+select_AndOr sp1 a1 sp2 a2 t = t :=: IntTy
+
+select_DivideMultiply :: Shape -> Type -> Shape -> Type -> Type -> K
+select_DivideMultiply sp1 a1 sp2 a2 t =
+  if (fst sp1 == I && fst sp2 == I)
+  then (t :=: IntTy)
+       :&: ((ConstTy IntTy) :<=: a1)
+       :&: ((ConstTy IntTy) :<=: a2)
+  else if (fst sp1 == I)
+       then (t :<=: DoubleTy)
+            :&: ((ConstTy IntTy) :<=: a1)
+            :&: (a2 :<=: DoubleTy)
+       else if (fst sp2 == I)
+            then (t :<=: DoubleTy)
+                 :&: (a1 :<=: DoubleTy)
+                 :&: ((ConstTy IntTy) :<=: a2)
+            else (t :<=: DoubleTy)
+                 :&: (a1 :<=: DoubleTy)
+                 :&: (a2 :<=: DoubleTy)
 
 ---------------------------
 -- The lattice of shapes --
@@ -766,6 +781,16 @@ classifyE e@(BinExpr Divide e1 e2) sp m =
   where
     (_, m') = classifyE e1 (shape N) m
     (_, m'') = classifyE e2 (shape N) m'
+classifyE e@(BinExpr Multiply e1 e2) sp m =
+  insertOrUpdate e (shape N) m''
+  where
+    (_, m') = classifyE e1 (shape N) m
+    (_, m'') = classifyE e2 (shape N) m'
+classifyE e@(BinExpr And e1 e2) sp m =
+  insertOrUpdate e (shape I) m''
+  where
+    (_, m') = classifyE e1 (shape S) m
+    (_, m'') = classifyE e2 (shape S) m'
 classifyE e@(BinExpr Or e1 e2) sp m =
   insertOrUpdate e (shape I) m''
   where
@@ -1462,13 +1487,21 @@ typeExpr c gam (BinExpr Add e1 e2) =
            then highRank lht rht
            else error $ "incompatible types in + (Add)"
 
+-- | TCAnd
+typeExpr c gam (BinExpr And e1 e2) =
+  let lht = typeExpr c gam e1
+      rht = typeExpr c gam e2
+  in if isScaTy lht && isScaTy rht
+     then IntTy
+     else error $ "incompatible types in && (logical AND)"
+
 -- | TCOr
 typeExpr c gam (BinExpr Or e1 e2) =
   let lht = typeExpr c gam e1
       rht = typeExpr c gam e2
   in if isScaTy lht && isScaTy rht
      then IntTy
-     else error $ "incompatible types in || (OR)"
+     else error $ "incompatible types in || (logical OR)"
 
 -- | TCDiv
 typeExpr c gam (BinExpr Divide e1 e2) =
@@ -1476,7 +1509,15 @@ typeExpr c gam (BinExpr Divide e1 e2) =
       rht = typeExpr c gam e2
   in if isAriTy lht && isAriTy rht
      then highRank lht rht
-     else error $ "incompatible types in / (div)"
+     else error $ "incompatible types in / (division)"
+
+-- | TCMul
+typeExpr c gam (BinExpr Multiply e1 e2) =
+  let lht = typeExpr c gam e1
+      rht = typeExpr c gam e2
+  in if isAriTy lht && isAriTy rht
+     then highRank lht rht
+     else error $ "incompatible types in * (multiplication)"
 
 
 -- | Find, in Gamma, the type mapped to an identifier.
@@ -1621,6 +1662,8 @@ instance PrettyM M where
       pp (AddrOf e) = PP.char '&' PP.<> pp e
       pp (BinExpr Add e1 e2) = pp e1 PP.<> PP.char '+' PP.<> pp e2
       pp (BinExpr Divide e1 e2) = pp e1 PP.<> PP.char '/' PP.<> pp e2
+      pp (BinExpr Multiply e1 e2) = pp e1 PP.<> PP.char '*' PP.<> pp e2
+      pp (BinExpr And e1 e2) = pp e1 PP.<> PP.text "&&" PP.<> pp e2
       pp (BinExpr Or e1 e2) = pp e1 PP.<> PP.text "||" PP.<> pp e2
       pp (BinExpr Assign e1 e2) = pp e1 PP.<> PP.char '=' PP.<> pp e2
     in Map.foldrWithKey (\k v acc -> pp k PP.<+> ppM (fst v) PP.$$ acc)
@@ -1848,7 +1891,9 @@ exprParser = buildExpressionParser table baseExprParser
       [ [ Prefix (reservedOp "*" >> return Deref) ],
         [ Prefix (reservedOp "&" >> return AddrOf) ],
         [ Infix (reservedOp "/" >> return (BinExpr Divide)) AssocLeft ],
+        [ Infix (reservedOp "*" >> return (BinExpr Divide)) AssocLeft ],
         [ Infix (reservedOp "+" >> return (BinExpr Add)) AssocLeft ],
+        [ Infix (reservedOp "&&" >> return (BinExpr And)) AssocLeft ],
         [ Infix (reservedOp "||" >> return (BinExpr Or)) AssocLeft ],
         [ Infix (reservedOp "=" >> return (BinExpr Assign)) AssocLeft ] ]
 
