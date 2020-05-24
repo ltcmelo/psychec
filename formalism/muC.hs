@@ -687,15 +687,14 @@ select sp1 a1 sp2 a2 t op  =
               else if (fst sp1 == I)
                    then (t :<=: DoubleTy)
                         :&: ((ConstTy IntTy) :<=: a1)
-                        :&: ((ConstTy DoubleTy) :<=: a2)
+                        :&: (a2 :<=: DoubleTy)
                    else if (fst sp2 == I)
                         then (t :<=: DoubleTy)
-                             :&: ((ConstTy DoubleTy) :<=: a1)
+                             :&: (a1 :<=: DoubleTy)
                              :&: ((ConstTy IntTy) :<=: a2)
                         else (t :<=: DoubleTy)
                              :&: (a1 :<=: DoubleTy)
                              :&: (a2 :<=: DoubleTy)
-
 
 ---------------------------
 -- The lattice of shapes --
@@ -832,8 +831,8 @@ buildLattice p@(Prog _ fs) m =
     handleParam ds = map (\d -> DeclStmt d) ds
     handleRet rt m = M $ Map.insert (Var (Ident "$ret")) (ty2shape rt) (_shapes m)
 
-    m' = foldr (\(FunDef rt _ ds ss) acc -> go ((handleParam ds) ++ ss)
-               (handleRet rt acc)) m fs
+    m' = foldr (\(FunDef rt _ ds ss) acc -> go
+                 ((handleParam ds) ++ ss) (handleRet rt acc)) m fs
   in if (m' == m)
      then m'
      else buildLattice p m'
@@ -1605,12 +1604,12 @@ class PrettyM a where
   ppM :: a -> PP.Doc
 
 instance PrettyM ShapeName where
-  ppM U = PP.text "<undefined>"
-  ppM S = PP.text "<scalar>"
-  ppM P = PP.text "<pointer>"
-  ppM I = PP.text "<integral>"
-  ppM FP = PP.text "<floating-point>"
-  ppM N = PP.text "<numeric>"
+  ppM U = PP.text "<Undefined>"
+  ppM S = PP.text "<Scalar>"
+  ppM P = PP.text "<Pointer>"
+  ppM I = PP.text "<Integral>"
+  ppM FP = PP.text "<FloatingPoint>"
+  ppM N = PP.text "<Numeric>"
 
 instance PrettyM M where
   ppM m =
@@ -1638,30 +1637,54 @@ class PrettyAST a where
 
 instance PrettyAST a => PrettyAST [a] where
   fmt n (s:sl) =
-    fmt n s PP.<> (foldr (\s d -> fmt (n + 1) s PP.<> d) PP.empty sl)
+    fmt n s PP.<> (foldr (\s d -> fmt n s PP.<> d) PP.empty sl)
+
+instance PrettyAST Lit where
+  fmt _ (IntLit l) =
+    PP.char '`' PP.<>
+    PP.text (show l) PP.<>
+    PP.char '\''
+  fmt _ (DoubleLit l) =
+    PP.char '`' PP.<>
+    PP.text (show l) PP.<>
+    PP.char '\''
 
 instance PrettyAST Expr where
-  fmt n e@(NumLit _) = indent n PP.<> PP.text "NumLit"
-  fmt n e@(Var _) = indent n PP.<> PP.text "VarDecl"
+  fmt n e@(NumLit l) = indent n PP.<> PP.text "NumLit" PP.<+> fmt 0 l
+  fmt n e@(Var x) =
+    indent n PP.<>
+    PP.text "Var" PP.<+>
+    PP.char '`' PP.<>
+    PP.text (_x x) PP.<>
+    PP.char '\''
   fmt n e@(FldAcc x t) = indent n PP.<> PP.text "FieldAccess"
   fmt n e@(Deref e1) = indent n PP.<> PP.text "Deref" PP.<> fmt (n + 1) e1
   fmt n e@(AddrOf e1) = indent n PP.<> PP.text "AddrOf" PP.<> fmt (n + 1) e1
-  fmt n e@(BinExpr _ e1 e2) = indent n PP.<> PP.text "BinExpr" PP.<>
-                              fmt (n + 1) e1 PP.<> fmt (n + 1) e2
+  fmt n e@(BinExpr op e1 e2) =
+    indent n PP.<>
+    PP.text "BinExpr" PP.<+>
+    PP.char '`' PP.<> PP.text (show op) PP.<> PP.char '\'' PP.<+>
+    fmt (n + 1) e1 PP.<>
+    fmt (n + 1) e2
 
 instance PrettyAST Stmt where
+  fmt n (DeclStmt d) = indent n PP.<> PP.text "DeclStmt" PP.<> fmt (n + 1) d
   fmt n (ExprStmt e) = indent n PP.<> PP.text "ExprStmt" PP.<> fmt (n + 1) e
-  fmt n (DeclStmt _) = indent n PP.<> PP.text "DeclStmt"
   fmt n (RetStmt e) = indent n PP.<> PP.text "RetStmt" PP.<> fmt (n + 1) e
 
 instance PrettyAST Decl where
-  fmt n (Decl _ _) = indent n PP.<> PP.text "Decl"
+  fmt n (Decl _ x) =
+    indent n PP.<>
+    PP.text "Decl" PP.<+>
+    PP.char '`' PP.<>
+    PP.text (_x x) PP.<>
+    PP.char '\''
 
 instance PrettyAST FunDef where
-  fmt n f@(FunDef _ _ ps s) =
+  fmt n f@(FunDef _ _ ps sl) =
     PP.text "Function" PP.<>
     (foldr (\p d -> fmt (n + 1) p PP.<> d) PP.empty ps) PP.<>
-    fmt (n + 1) s
+    fmt (n + 1) sl
 
 instance PrettyAST Prog where
   fmt n p@(Prog _ fs) =
@@ -1822,12 +1845,12 @@ exprParser :: Parser Expr
 exprParser = buildExpressionParser table baseExprParser
   where
     table =
-      [ [ Prefix (reservedOp "*" >> return Deref) ]
-      , [ Prefix (reservedOp "&" >> return AddrOf) ]
-      , [ Infix (reservedOp "/" >> return (BinExpr Divide)) AssocLeft ]
-      , [ Infix (reservedOp "+" >> return (BinExpr Add)) AssocLeft ]
-      , [ Infix (reservedOp "||" >> return (BinExpr Or)) AssocLeft ]
-      , [ Infix (reservedOp "=" >> return (BinExpr Assign)) AssocLeft ] ]
+      [ [ Prefix (reservedOp "*" >> return Deref) ],
+        [ Prefix (reservedOp "&" >> return AddrOf) ],
+        [ Infix (reservedOp "/" >> return (BinExpr Divide)) AssocLeft ],
+        [ Infix (reservedOp "+" >> return (BinExpr Add)) AssocLeft ],
+        [ Infix (reservedOp "||" >> return (BinExpr Or)) AssocLeft ],
+        [ Infix (reservedOp "=" >> return (BinExpr Assign)) AssocLeft ] ]
 
 baseExprParser :: Parser Expr
 baseExprParser = f <$> fldAccParser <*> (many (reservedOp "->" *> identParser))
