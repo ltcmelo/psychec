@@ -44,12 +44,14 @@ parse s =
       then p' ++ [S_e e]
       else if t `elem` tyset
            then p' ++ [S_vd vd]
-           else p' ++ (decideAdhoc e vd)
+           else p' ++ (heuristic e vd)
     go p' s = p' ++ [s]
   in P p
 
-decideAdhoc :: E -> Vd -> [S]
-decideAdhoc _ _ = []
+heuristic :: E -> Vd -> [S]
+heuristic _ _ = []
+
+
 
 main :: IO ()
 main = do
