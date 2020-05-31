@@ -715,87 +715,100 @@ select_DivideMultiply sp1 a1 sp2 a2 t =
 -- The lattice of shapes --
 ---------------------------
 
-data ShapeName = U
-               | S
-               | P
-               | N
-               | I
-               | FP
-               deriving (Eq, Ord, Show)
+data ShapeKey = U
+              | S
+              | P
+              | N
+              | I
+              | FP
+              deriving (Eq, Ord, Show)
 
-type Shape = (ShapeName, Type)
+type Shape = (ShapeKey, Type)
+
+data SyntaxRole = ValRole Expr
+                | FunRole Ident Type
+                deriving (Eq, Ord, Show)
 
 newtype M = M { _shapes :: Map Expr Shape } deriving (Eq, Ord, Show)
 
-shape :: ShapeName -> Shape
-shape n = (n, NamedTy $ Ident "<empty type>")
+-- | Create a shapeFromUse based on use.
+shapeFromUse :: ShapeKey -> Shape
+shapeFromUse sk = (sk, NamedTy $ Ident "<empty type>")
+
+-- | Create a shapeFromUse out of a type.
+shapeFromTy :: Type -> Shape
+shapeFromTy t@IntTy = (I, t)
+shapeFromTy t@DoubleTy = (FP, t)
+shapeFromTy t@(ConstTy t') = (fst (shapeFromTy t'), t)
+shapeFromTy t@(PtrTy _) = (P, t)
+shapeFromTy _ = shapeFromUse U
 
 classifyE :: Expr -> Shape -> M -> (Shape, M)
 classifyE e@(NumLit v) _ m =
   insertOrUpdate e sp m
   where
     sp = case v of
-      (IntLit 0) -> shape S
-      (IntLit _) -> shape I
-      _ -> shape FP
+      (IntLit 0) -> shapeFromUse S
+      (IntLit _) -> shapeFromUse I
+      _ -> shapeFromUse FP
 classifyE e@(Var _) sp m =
   insertOrUpdate e sp m
 classifyE e@(FldAcc e' x) sp m =
   insertOrUpdate e sp m'
   where
-    (_, m') = classifyE e' (shape P) m
+    (_, m') = classifyE e' (shapeFromUse P) m
 classifyE e@(Deref e') sp m =
   insertOrUpdate e sp m'
   where
-    (_, m') = classifyE e' (shape P) m
+    (_, m') = classifyE e' (shapeFromUse P) m
 classifyE e@(AddrOf e') sp m =
-  insertOrUpdate e (shape P) m'
+  insertOrUpdate e (shapeFromUse P) m'
   where
     (_, m') = classifyE e' sp m
 classifyE e@(BinExpr Add e1 e2) sp m =
   insertOrUpdate e sp'''' m''
   where
-    sp' = if (sp == shape I
-              || sp == shape FP
-              || sp == shape N)
+    sp' = if (sp == shapeFromUse I
+              || sp == shapeFromUse FP
+              || sp == shapeFromUse N)
           then sp
-          else shape S
+          else shapeFromUse S
     (sp1, m') = classifyE e1 sp' m
     sp'' = if (fst sp1 == P)
-           then shape I
-           else if (sp == shape I
-                   || sp == shape FP
-                   || sp == shape N)
+           then shapeFromUse I
+           else if (sp == shapeFromUse I
+                   || sp == shapeFromUse FP
+                   || sp == shapeFromUse N)
                 then sp
-                else shape S
+                else shapeFromUse S
     (sp2, m'') = classifyE e2 sp'' m'
     sp''' = if (fst sp2 == P)
-            then shape I
+            then shapeFromUse I
             else sp''
     (sp3, m''') = classifyE e1 sp''' m''
     sp'''' = if (fst sp3 == P || fst sp2 == P)
-             then shape P
-             else shape N
+             then shapeFromUse P
+             else shapeFromUse N
 classifyE e@(BinExpr Divide e1 e2) sp m =
-  insertOrUpdate e (shape N) m''
+  insertOrUpdate e (shapeFromUse N) m''
   where
-    (_, m') = classifyE e1 (shape N) m
-    (_, m'') = classifyE e2 (shape N) m'
+    (_, m') = classifyE e1 (shapeFromUse N) m
+    (_, m'') = classifyE e2 (shapeFromUse N) m'
 classifyE e@(BinExpr Multiply e1 e2) sp m =
-  insertOrUpdate e (shape N) m''
+  insertOrUpdate e (shapeFromUse N) m''
   where
-    (_, m') = classifyE e1 (shape N) m
-    (_, m'') = classifyE e2 (shape N) m'
+    (_, m') = classifyE e1 (shapeFromUse N) m
+    (_, m'') = classifyE e2 (shapeFromUse N) m'
 classifyE e@(BinExpr And e1 e2) sp m =
-  insertOrUpdate e (shape I) m''
+  insertOrUpdate e (shapeFromUse I) m''
   where
-    (_, m') = classifyE e1 (shape S) m
-    (_, m'') = classifyE e2 (shape S) m'
+    (_, m') = classifyE e1 (shapeFromUse S) m
+    (_, m'') = classifyE e2 (shapeFromUse S) m'
 classifyE e@(BinExpr Or e1 e2) sp m =
-  insertOrUpdate e (shape I) m''
+  insertOrUpdate e (shapeFromUse I) m''
   where
-    (_, m') = classifyE e1 (shape S) m
-    (_, m'') = classifyE e2 (shape S) m'
+    (_, m') = classifyE e1 (shapeFromUse S) m
+    (_, m'') = classifyE e2 (shapeFromUse S) m'
 classifyE e@(BinExpr Assign e1 e2) sp m =
   insertOrUpdate e sp1 m''
   where
@@ -804,7 +817,7 @@ classifyE e@(BinExpr Assign e1 e2) sp m =
 
 classifyD :: Decl -> M -> (Shape, M)
 classifyD (Decl { _ft = t, _fx = x }) m =
-   insertOrUpdate (Var x) (ty2shape t) m
+   insertOrUpdate (Var x) (shapeFromTy t) m
 
 
 insertOrUpdate :: Expr -> Shape -> M -> (Shape, M)
@@ -832,14 +845,8 @@ shapeOf :: Expr -> M -> Shape
 shapeOf e m =
   case Map.lookup e (_shapes m) of
     Just sp -> sp
-    Nothing -> shape U
+    Nothing -> shapeFromUse U
 
-ty2shape :: Type -> Shape
-ty2shape t@IntTy = (I, t)
-ty2shape t@DoubleTy = (FP, t)
-ty2shape t@(ConstTy t') = (fst (ty2shape t'), t)
-ty2shape t@(PtrTy _) = (P, t)
-ty2shape _ = shape U
 
 -- | Build lattice of shapes until stabilization.
 buildLattice :: Prog -> M -> M
@@ -854,7 +861,7 @@ buildLattice p@(Prog _ fs) m =
     go ((RetStmt e):[]) acc = snd $ classifyE e (shapeOf e acc) acc
 
     handleParam ds = map (\d -> DeclStmt d) ds
-    handleRet rt m = M $ Map.insert (Var (Ident "$ret")) (ty2shape rt) (_shapes m)
+    handleRet rt m = M $ Map.insert (Var (Ident "$ret")) (shapeFromTy rt) (_shapes m)
 
     m' = foldr (\(FunDef rt _ ds ss) acc -> go
                  ((handleParam ds) ++ ss) (handleRet rt acc)) m fs
@@ -1644,7 +1651,7 @@ instance PrettyK Stamp where
 class PrettyM a where
   ppM :: a -> PP.Doc
 
-instance PrettyM ShapeName where
+instance PrettyM ShapeKey where
   ppM U = PP.text "<Undefined>"
   ppM S = PP.text "<Scalar>"
   ppM P = PP.text "<Pointer>"
