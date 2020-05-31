@@ -566,7 +566,7 @@ genStmt ((RetStmt e):[]) rt m = do
   k <- genExpr e a m
   return $
     Exists [a] $
-    keepOrDrop (shapeOf (Var (Ident "$ret")) m) rt (shapeOf e m) a Assign :&:
+    keepOrDrop (shapeOf FunRole m) rt (shapeOf (ValRole e) m) a Assign :&:
     k
 
 -- | Constraint generation for expressions.
@@ -609,8 +609,8 @@ genExpr e@(BinExpr op e1 e2) t m = do
     Exists [a1, a2] $
     k1 :&:
     k2 :&:
-    keepOrDrop (shapeOf e1 m) a1 (shapeOf e2 m) a2 op :&:
-    select (shapeOf e1 m) a1 (shapeOf e2 m) a2 t op
+    keepOrDrop (shapeOf (ValRole e1) m) a1 (shapeOf (ValRole e2) m) a2 op :&:
+    select (shapeOf (ValRole e1) m) a1 (shapeOf (ValRole e2) m) a2 t op
 
 -- | The type of a literal.
 rho :: Lit -> Type
@@ -725,11 +725,6 @@ data ShapeKey = U
 
 type Shape = (ShapeKey, Type)
 
-data SyntaxRole = ValRole Expr
-                | FunRole Ident Type
-                deriving (Eq, Ord, Show)
-
-newtype M = M { _shapes :: Map Expr Shape } deriving (Eq, Ord, Show)
 
 -- | Create a shapeFromUse based on use.
 shapeFromUse :: ShapeKey -> Shape
@@ -743,30 +738,66 @@ shapeFromTy t@(ConstTy t') = (fst (shapeFromTy t'), t)
 shapeFromTy t@(PtrTy _) = (P, t)
 shapeFromTy _ = shapeFromUse U
 
+
+data SyntaxRole = ValRole Expr
+                | FunRole
+                deriving (Eq, Ord, Show)
+
+-- | The table M.
+newtype M = M { _shapes :: Map SyntaxRole Shape } deriving (Eq, Ord, Show)
+
+insertOrUpdate :: SyntaxRole -> Shape -> M -> (Shape, M)
+insertOrUpdate ro sp m =
+  (sp', M $ Map.insert ro sp' (_shapes m))
+  where
+    sp' = case Map.lookup ro (_shapes m) of
+      Just sp'' ->
+        case fst sp'' of
+          P  -> sp''
+          I  -> sp''
+          FP -> sp''
+          N  -> if (fst sp == I || fst sp == FP)
+                then sp
+                else sp''
+          S  -> if (fst sp == I
+                    || fst sp == FP
+                    || fst sp == P)
+                then sp
+                else sp''
+          U  -> sp
+      Nothing -> sp
+
+shapeOf :: SyntaxRole -> M -> Shape
+shapeOf ro m =
+  case Map.lookup ro (_shapes m) of
+    Just sp -> sp
+    Nothing -> shapeFromUse U
+
+
 classifyE :: Expr -> Shape -> M -> (Shape, M)
 classifyE e@(NumLit v) _ m =
-  insertOrUpdate e sp m
+  insertOrUpdate (ValRole e) sp m
   where
     sp = case v of
       (IntLit 0) -> shapeFromUse S
       (IntLit _) -> shapeFromUse I
       _ -> shapeFromUse FP
 classifyE e@(Var _) sp m =
-  insertOrUpdate e sp m
+  insertOrUpdate (ValRole e) sp m
 classifyE e@(FldAcc e' x) sp m =
-  insertOrUpdate e sp m'
+  insertOrUpdate (ValRole e) sp m'
   where
     (_, m') = classifyE e' (shapeFromUse P) m
 classifyE e@(Deref e') sp m =
-  insertOrUpdate e sp m'
+  insertOrUpdate (ValRole e) sp m'
   where
     (_, m') = classifyE e' (shapeFromUse P) m
 classifyE e@(AddrOf e') sp m =
-  insertOrUpdate e (shapeFromUse P) m'
+  insertOrUpdate (ValRole e) (shapeFromUse P) m'
   where
     (_, m') = classifyE e' sp m
 classifyE e@(BinExpr Add e1 e2) sp m =
-  insertOrUpdate e sp'''' m''
+  insertOrUpdate (ValRole e) sp'''' m''
   where
     sp' = if (sp == shapeFromUse I
               || sp == shapeFromUse FP
@@ -790,62 +821,34 @@ classifyE e@(BinExpr Add e1 e2) sp m =
              then shapeFromUse P
              else shapeFromUse N
 classifyE e@(BinExpr Divide e1 e2) sp m =
-  insertOrUpdate e (shapeFromUse N) m''
+  insertOrUpdate (ValRole e) (shapeFromUse N) m''
   where
     (_, m') = classifyE e1 (shapeFromUse N) m
     (_, m'') = classifyE e2 (shapeFromUse N) m'
 classifyE e@(BinExpr Multiply e1 e2) sp m =
-  insertOrUpdate e (shapeFromUse N) m''
+  insertOrUpdate (ValRole e) (shapeFromUse N) m''
   where
     (_, m') = classifyE e1 (shapeFromUse N) m
     (_, m'') = classifyE e2 (shapeFromUse N) m'
 classifyE e@(BinExpr And e1 e2) sp m =
-  insertOrUpdate e (shapeFromUse I) m''
+  insertOrUpdate (ValRole e) (shapeFromUse I) m''
   where
     (_, m') = classifyE e1 (shapeFromUse S) m
     (_, m'') = classifyE e2 (shapeFromUse S) m'
 classifyE e@(BinExpr Or e1 e2) sp m =
-  insertOrUpdate e (shapeFromUse I) m''
+  insertOrUpdate (ValRole e) (shapeFromUse I) m''
   where
     (_, m') = classifyE e1 (shapeFromUse S) m
     (_, m'') = classifyE e2 (shapeFromUse S) m'
 classifyE e@(BinExpr Assign e1 e2) sp m =
-  insertOrUpdate e sp1 m''
+  insertOrUpdate (ValRole e) sp1 m''
   where
     (sp2, m') = classifyE e2 sp m
     (sp1, m'') = classifyE e1 sp2 m'
 
 classifyD :: Decl -> M -> (Shape, M)
 classifyD (Decl { _ft = t, _fx = x }) m =
-   insertOrUpdate (Var x) (shapeFromTy t) m
-
-
-insertOrUpdate :: Expr -> Shape -> M -> (Shape, M)
-insertOrUpdate e sp m =
-  (sp', M $ Map.insert e sp' (_shapes m))
-  where
-    sp' = case Map.lookup e (_shapes m) of
-      Just sp'' ->
-        case fst sp'' of
-          P  -> sp''
-          I  -> sp''
-          FP -> sp''
-          N  -> if (fst sp == I || fst sp == FP)
-                then sp
-                else sp''
-          S  -> if (fst sp == I
-                    || fst sp == FP
-                    || fst sp == P)
-                then sp
-                else sp''
-          U  -> sp
-      Nothing -> sp
-
-shapeOf :: Expr -> M -> Shape
-shapeOf e m =
-  case Map.lookup e (_shapes m) of
-    Just sp -> sp
-    Nothing -> shapeFromUse U
+   insertOrUpdate (ValRole (Var x)) (shapeFromTy t) m
 
 
 -- | Build lattice of shapes until stabilization.
@@ -856,12 +859,12 @@ buildLattice p@(Prog _ fs) m =
       let (sp, m) = classifyD d acc
       in go xs m
     go ((ExprStmt e):xs) acc =
-      let (sp, m) = classifyE e (shapeOf e acc) acc
+      let (sp, m) = classifyE e (shapeOf (ValRole e) acc) acc
       in go xs m
-    go ((RetStmt e):[]) acc = snd $ classifyE e (shapeOf e acc) acc
+    go ((RetStmt e):[]) acc = snd $ classifyE e (shapeOf (ValRole e) acc) acc
 
     handleParam ds = map (\d -> DeclStmt d) ds
-    handleRet rt m = M $ Map.insert (Var (Ident "$ret")) (shapeFromTy rt) (_shapes m)
+    handleRet rt m = M $ Map.insert FunRole (shapeFromTy rt) (_shapes m)
 
     m' = foldr (\(FunDef rt _ ds ss) acc -> go
                  ((handleParam ds) ++ ss) (handleRet rt acc)) m fs
@@ -1659,21 +1662,25 @@ instance PrettyM ShapeKey where
   ppM FP = PP.text "<FloatingPoint>"
   ppM N = PP.text "<Numeric>"
 
+instance PrettyM SyntaxRole where
+  ppM (ValRole e) = ppM e
+  ppM FunRole = PP.text "... ⟶  "
+
+instance PrettyM Expr where
+  ppM (NumLit v) = PP.text $ show v
+  ppM (Var x) = PP.text (_x x)
+  ppM (FldAcc e x) = ppM e PP.<> PP.text "->" PP.<> PP.text (_x x)
+  ppM (Deref e) = PP.char '*' PP.<> ppM e
+  ppM (AddrOf e) = PP.char '&' PP.<> ppM e
+  ppM (BinExpr Add e1 e2) = ppM e1 PP.<> PP.char '+' PP.<> ppM e2
+  ppM (BinExpr Divide e1 e2) = ppM e1 PP.<> PP.char '/' PP.<> ppM e2
+  ppM (BinExpr Multiply e1 e2) = ppM e1 PP.<> PP.char '*' PP.<> ppM e2
+  ppM (BinExpr And e1 e2) = ppM e1 PP.<> PP.text "&&" PP.<> ppM e2
+  ppM (BinExpr Or e1 e2) = ppM e1 PP.<> PP.text "||" PP.<> ppM e2
+  ppM (BinExpr Assign e1 e2) = ppM e1 PP.<> PP.char '=' PP.<> ppM e2
+
 instance PrettyM M where
-  ppM m =
-    let
-      pp (NumLit v) = PP.text $ show v
-      pp (Var x) = PP.text (_x x)
-      pp (FldAcc e x) = pp e PP.<> PP.text "->" PP.<> PP.text (_x x)
-      pp (Deref e) = PP.char '*' PP.<> pp e
-      pp (AddrOf e) = PP.char '&' PP.<> pp e
-      pp (BinExpr Add e1 e2) = pp e1 PP.<> PP.char '+' PP.<> pp e2
-      pp (BinExpr Divide e1 e2) = pp e1 PP.<> PP.char '/' PP.<> pp e2
-      pp (BinExpr Multiply e1 e2) = pp e1 PP.<> PP.char '*' PP.<> pp e2
-      pp (BinExpr And e1 e2) = pp e1 PP.<> PP.text "&&" PP.<> pp e2
-      pp (BinExpr Or e1 e2) = pp e1 PP.<> PP.text "||" PP.<> pp e2
-      pp (BinExpr Assign e1 e2) = pp e1 PP.<> PP.char '=' PP.<> pp e2
-    in Map.foldrWithKey (\k v acc -> pp k PP.<+> ppM (fst v) PP.$$ acc)
+  ppM m = Map.foldrWithKey (\k v acc -> ppM k PP.<+> ppM (fst v) PP.$$ acc)
                         PP.empty
                         (_shapes m)
 
