@@ -1606,8 +1606,10 @@ instance PrettyK Type where
   ppK (PtrTy t) = ppK t PP.<> PP.text "*"
   ppK (ConstTy t) = PP.text "const " PP.<> ppK t
   ppK (ArrowTy rt ps) =
-    (PP.hcat $ PP.punctuate (PP.text "⟶  ") (map ppK ps))
-    PP.<> PP.text "⟶  " PP.<> ppK rt
+    PP.text " (" PP.<>
+    (PP.hcat $ PP.punctuate (PP.text ", ") (map ppK ps)) PP.<>
+    PP.text " )" PP.<>
+    PP.text "⟶  " PP.<> ppK rt
   ppK (RecTy flds x) = PP.char '@' PP.<> ppK x PP.<> PP.char '@'
   ppK (NamedTy x) = ppK x
   ppK (TyVar (Stamp n)) = PP.text "α" PP.<> PP.text (show n)
