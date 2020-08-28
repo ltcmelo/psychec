@@ -232,8 +232,8 @@ hat VoidTy = TypeId "void"
 hat (PtrTy t) = TypeId $ (_id (hat t) ++ "*")
 hat (ConstTy t) = TypeId $ "const[" ++ (_id (hat t)) ++ "]"
 hat (ArrowTy rt pt) = TypeId $
-  (_id (hat rt))  ++ "(*)(" ++
-  (foldr (\t acc -> (_id (hat t)) ++ acc) ")" pt)
+  "[" ++ (_id (hat rt))  ++ "(*)(" ++
+  (foldr (\t acc -> (_id (hat t)) ++ acc) ")" pt) ++ "]"
 hat (RecTy _ x) = TypeId (_x x)
 hat (NamedTy x) = TypeId (_x x)
 hat (TyVar (Stamp n)) = TypeId $ "α" ++ (show n)
