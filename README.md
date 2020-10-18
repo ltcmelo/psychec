@@ -141,7 +141,7 @@ Check the examples directory for [this snippet](https://github.com/ltcmelo/psych
     cd solver && stack test && cd -
     cd formalism && ./test_muC.sh
 
-## Related publications
+## Related Publications
 
 PsycheC is an ongoing research project.
 
