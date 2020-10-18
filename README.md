@@ -4,6 +4,11 @@
 ![](https://github.com/ltcmelo/psychec/workflows/inference-tests/badge.svg)
 ![](https://github.com/ltcmelo/psychec/workflows/compilability-tests/badge.svg)
 
+# -----------------------------------------------
+## The Psyche project is going through a major overhaul.
+## Further news to be shared soon.
+# -----------------------------------------------
+
 # PsycheC
 
 PsycheC is a compiler frontend infrastructure for the C language that is enabled with an ML/Haskell-style (unification-based) type inference engine.
@@ -136,16 +141,16 @@ Check the examples directory for [this snippet](https://github.com/ltcmelo/psych
     cd solver && stack test && cd -
     cd formalism && ./test_muC.sh
 
-## Publications
+## Related publications
 
 PsycheC is an ongoing research project.
-It has been presented at:
+
+- [Type Inference for C: Applications to the Static Analysis of Incomplete Programs]()<br/>
+ACM Transactions on Programming Languages and Systems, **TOPLAS** (to appear)
 
 - [Inference of static semantics for incomplete C programs](https://dl.acm.org/citation.cfm?id=3158117)<br/>
 Proceedings of the ACM on Programming Languages, Volume 2 Issue **POPL** (Principles of Programming Languages),
 January 2018, Article No. 29.
-
-Below is a list of papers whose developed tooling rely on PsycheC:
 
 - [Generation of in-bounds inputs for arrays in memory-unsafe languages](https://dl.acm.org/citation.cfm?id=3314890)<br/>
 Proceedings of the 2019 IEEE/ACM International Symposium on **CGO** (Code Generation and Optimization),
