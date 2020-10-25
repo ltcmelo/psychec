@@ -4,10 +4,8 @@
 ![](https://github.com/ltcmelo/psychec/workflows/inference-tests/badge.svg)
 ![](https://github.com/ltcmelo/psychec/workflows/compilability-tests/badge.svg)
 
-# -----------------------------------------------
-## The Psyche project is going through a major overhaul.
-## Further news to be shared soon.
-# -----------------------------------------------
+# NOTE
+## The Psyche project is going through a major overhaul in a private branch which will (hopefully) be merged soon.
 
 # PsycheC
 
