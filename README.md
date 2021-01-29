@@ -153,7 +153,7 @@ Proceedings of the ACM on Programming Languages, Volume 2, Issue **POPL**, Janua
 Proceedings of the IEEE/ACM International Symposium on Code Generation and Optimization — **CGO**, 2021.
 
 - [Generation of in-bounds inputs for arrays in memory-unsafe languages](https://dl.acm.org/citation.cfm?id=3314890)<br/>
-Proceedings of the IEEE/ACM International Symposium on Code Generation and Optimization — **CGO**, February 2019, Pages 136-148.
+Proceedings of the IEEE/ACM International Symposium on Code Generation and Optimization — **CGO**, February 2019, p. 136-148.
 
 - [Automatic annotation of tasks in structured code](https://dl.acm.org/citation.cfm?id=3243200)<br/>
 Proceedings of the International Conference on Parallel Architectures and Compilation Techniques — **PACT**, November 2018, Article No. 31.
