@@ -288,7 +288,8 @@ bool Parser::ignoreMemberDeclaration()
 
 bool Parser::ignoreStatement()
 {
-    switch (peek().kind()) {
+    while (true) {
+        switch (peek().kind()) {
         // Just return.
         case EndOfFile:
         case Keyword_typedef:
@@ -307,13 +308,14 @@ bool Parser::ignoreStatement()
             return false;
 
         // Skip and return.
-        case SemicolonToken:
         case CloseBraceToken:
+        case SemicolonToken:
             consume();
             return false;
 
-        // Skip.
+            // Skip.
         default:
             consume();
+        }
     }
 }

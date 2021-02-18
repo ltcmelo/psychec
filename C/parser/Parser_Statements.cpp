@@ -273,7 +273,7 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
 
             default: {
                 if (!parseStatement(insideStmt, stmtCtx)) {
-                    ignoreStatement();
+                    skipTo(CloseBraceToken);
                     continue;
                 }
                 break;

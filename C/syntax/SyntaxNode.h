@@ -25,7 +25,6 @@
 #include "API.h"
 #include "APIFwds.h"
 #include "Managed.h"
-#include "SyntaxAmbiguity.h"
 #include "SyntaxKind.h"
 #include "SyntaxNodeList.h"
 #include "SyntaxToken.h"

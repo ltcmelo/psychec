@@ -67,7 +67,6 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/TypeChecker.cpp
 
     # Syntax
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxAmbiguity.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDumper.h
