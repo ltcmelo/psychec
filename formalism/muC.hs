@@ -98,6 +98,8 @@ data Type = IntTy
 
 data BinOptr = Add
              | Divide
+             | Multiply
+             | And
              | Or
              | Assign
              deriving (Eq, Ord, Show)
@@ -230,10 +232,10 @@ hat IntTy = TypeId "int"
 hat DoubleTy = TypeId "double"
 hat VoidTy = TypeId "void"
 hat (PtrTy t) = TypeId $ (_id (hat t) ++ "*")
-hat (ConstTy t) = TypeId $ "const " ++ (_id (hat t))
+hat (ConstTy t) = TypeId $ "const[" ++ (_id (hat t)) ++ "]"
 hat (ArrowTy rt pt) = TypeId $
-  (_id (hat rt))  ++ "(*)(" ++
-  (foldr (\t acc -> (_id (hat t)) ++ acc) ")" pt)
+  "[" ++ (_id (hat rt))  ++ "(*)(" ++
+  (foldr (\t acc -> (_id (hat t)) ++ acc) ")" pt) ++ "]"
 hat (RecTy _ x) = TypeId (_x x)
 hat (NamedTy x) = TypeId (_x x)
 hat (TyVar (Stamp n)) = TypeId $ "α" ++ (show n)
@@ -351,7 +353,7 @@ satisfyK (phi, psi, theta) (Has (TyVar st) (Decl t x)) =
   in satisfyK (phi, psi, theta) (t' :=: t)
 
 -- | KEq
-satisfyK (phi, _, _) k@(t1 :=: t2) = isSubTy phi t1 t2
+satisfyK (phi, _, _) k@(t1 :=: t2) = isSubTy phi t1 t2 && isSubTy phi t2 t1
 
 -- | KIq
 satisfyK (phi, _, _) k@(t1 :<=: t2) = isSubTy phi t1 t2
@@ -566,7 +568,7 @@ genStmt ((RetStmt e):[]) rt m = do
   k <- genExpr e a m
   return $
     Exists [a] $
-    keepOrDrop (shapeOf (Var (Ident "$ret")) m) rt (shapeOf e m) a Assign :&:
+    keepOrDrop (shapeOf FunRole m) rt (shapeOf (ValRole e) m) a Assign :&:
     k
 
 -- | Constraint generation for expressions.
@@ -609,8 +611,8 @@ genExpr e@(BinExpr op e1 e2) t m = do
     Exists [a1, a2] $
     k1 :&:
     k2 :&:
-    keepOrDrop (shapeOf e1 m) a1 (shapeOf e2 m) a2 op :&:
-    select (shapeOf e1 m) a1 (shapeOf e2 m) a2 t op
+    keepOrDrop (shapeOf (ValRole e1) m) a1 (shapeOf (ValRole e2) m) a2 op :&:
+    select (shapeOf (ValRole e1) m) a1 (shapeOf (ValRole e2) m) a2 t op
 
 -- | The type of a literal.
 rho :: Lit -> Type
@@ -675,121 +677,82 @@ keepOrDrop sp1 a1 sp2 a2 op =
 select :: Shape -> Type -> Shape -> Type -> Type -> BinOptr -> K
 select sp1 a1 sp2 a2 t op  =
   case op of
-    Add -> if (fst sp1 == P)
-           then (a1 :=: t) :&: ((ConstTy IntTy) :<=: a2)
-           else if (fst sp2 == P)
-                then (a2 :=: t) :&: ((ConstTy IntTy) :<=: a1)
-                else (t :<=: DoubleTy)
+    Add -> select_Add sp1 a1 sp2 a2 t
     Assign -> (t :=: a1)
-    Or -> (t :=: IntTy)
-    Divide -> if (fst sp1 == I && fst sp2 == I)
-              then (t :=: IntTy)
-                   :&: ((ConstTy IntTy) :<=: a1)
-                   :&: ((ConstTy IntTy) :<=: a2)
-              else if (fst sp1 == I)
-                   then (t :<=: DoubleTy)
-                        :&: ((ConstTy IntTy) :<=: a1)
-                        :&: ((ConstTy DoubleTy) :<=: a2)
-                   else if (fst sp2 == I)
-                        then (t :<=: DoubleTy)
-                             :&: ((ConstTy DoubleTy) :<=: a1)
-                             :&: ((ConstTy IntTy) :<=: a2)
-                        else (t :<=: DoubleTy)
-                             :&: (a1 :<=: DoubleTy)
-                             :&: (a2 :<=: DoubleTy)
+    And -> select_AndOr sp1 a1 sp2 a2 t
+    Or -> select_AndOr sp1 a1 sp2 a2 t
+    Divide -> select_DivideMultiply sp1 a1 sp2 a2 t
+    Multiply -> select_DivideMultiply sp1 a1 sp2 a2 t
 
+select_Add :: Shape -> Type -> Shape -> Type -> Type -> K
+select_Add sp1 a1 sp2 a2 t =
+  if (fst sp1 == P)
+  then (a1 :=: t) :&: ((ConstTy IntTy) :<=: a2)
+  else if (fst sp2 == P)
+       then (a2 :=: t) :&: ((ConstTy IntTy) :<=: a1)
+       else (t :<=: DoubleTy)
+
+select_AndOr :: Shape -> Type -> Shape -> Type -> Type -> K
+select_AndOr sp1 a1 sp2 a2 t = t :=: IntTy
+
+select_DivideMultiply :: Shape -> Type -> Shape -> Type -> Type -> K
+select_DivideMultiply sp1 a1 sp2 a2 t =
+  if (fst sp1 == I && fst sp2 == I)
+  then (t :=: IntTy)
+       :&: ((ConstTy IntTy) :<=: a1)
+       :&: ((ConstTy IntTy) :<=: a2)
+  else if (fst sp1 == I)
+       then (t :<=: DoubleTy)
+            :&: ((ConstTy IntTy) :<=: a1)
+            :&: (a2 :<=: DoubleTy)
+       else if (fst sp2 == I)
+            then (t :<=: DoubleTy)
+                 :&: (a1 :<=: DoubleTy)
+                 :&: ((ConstTy IntTy) :<=: a2)
+            else (t :<=: DoubleTy)
+                 :&: (a1 :<=: DoubleTy)
+                 :&: (a2 :<=: DoubleTy)
 
 ---------------------------
 -- The lattice of shapes --
 ---------------------------
 
-data ShapeName = U
-               | S
-               | P
-               | N
-               | I
-               | FP
-               deriving (Eq, Ord, Show)
+data ShapeKey = U
+              | S
+              | P
+              | N
+              | I
+              | FP
+              deriving (Eq, Ord, Show)
 
-type Shape = (ShapeName, Type)
-
-newtype M = M { _shapes :: Map Expr Shape } deriving (Eq, Ord, Show)
-
-shape :: ShapeName -> Shape
-shape n = (n, NamedTy $ Ident "<empty type>")
-
-classifyE :: Expr -> Shape -> M -> (Shape, M)
-classifyE e@(NumLit v) _ m =
-  insertOrUpdate e sp m
-  where
-    sp = case v of
-      (IntLit 0) -> shape S
-      (IntLit _) -> shape I
-      _ -> shape FP
-classifyE e@(Var _) sp m =
-  insertOrUpdate e sp m
-classifyE e@(FldAcc e' x) sp m =
-  insertOrUpdate e sp m'
-  where
-    (_, m') = classifyE e' (shape P) m
-classifyE e@(Deref e') sp m =
-  insertOrUpdate e sp m'
-  where
-    (_, m') = classifyE e' (shape P) m
-classifyE e@(AddrOf e') sp m =
-  insertOrUpdate e (shape P) m'
-  where
-    (_, m') = classifyE e' sp m
-classifyE e@(BinExpr Add e1 e2) sp m =
-  insertOrUpdate e sp'''' m''
-  where
-    sp' = if (sp == shape I
-              || sp == shape FP
-              || sp == shape N)
-          then sp
-          else shape S
-    (sp1, m') = classifyE e1 sp' m
-    sp'' = if (fst sp1 == P)
-           then shape I
-           else if (sp == shape I
-                   || sp == shape FP
-                   || sp == shape N)
-                then sp
-                else shape S
-    (sp2, m'') = classifyE e2 sp'' m'
-    sp''' = if (fst sp2 == P)
-            then shape I
-            else sp''
-    (sp3, m''') = classifyE e1 sp''' m''
-    sp'''' = if (fst sp3 == P || fst sp2 == P)
-             then shape P
-             else shape N
-classifyE e@(BinExpr Divide e1 e2) sp m =
-  insertOrUpdate e (shape N) m''
-  where
-    (_, m') = classifyE e1 (shape N) m
-    (_, m'') = classifyE e2 (shape N) m'
-classifyE e@(BinExpr Or e1 e2) sp m =
-  insertOrUpdate e (shape I) m''
-  where
-    (_, m') = classifyE e1 (shape S) m
-    (_, m'') = classifyE e2 (shape S) m'
-classifyE e@(BinExpr Assign e1 e2) sp m =
-  insertOrUpdate e sp1 m''
-  where
-    (sp2, m') = classifyE e2 sp m
-    (sp1, m'') = classifyE e1 sp2 m'
-
-classifyD :: Decl -> M -> (Shape, M)
-classifyD (Decl { _ft = t, _fx = x }) m =
-   insertOrUpdate (Var x) (ty2shape t) m
+type Shape = (ShapeKey, Type)
 
 
-insertOrUpdate :: Expr -> Shape -> M -> (Shape, M)
-insertOrUpdate e sp m =
-  (sp', M $ Map.insert e sp' (_shapes m))
+-- | Create a shapeFromUse based on use.
+shapeFromUse :: ShapeKey -> Shape
+shapeFromUse sk = (sk, NamedTy $ Ident "<empty type>")
+
+-- | Create a shapeFromUse out of a type.
+shapeFromTy :: Type -> Shape
+shapeFromTy t@IntTy = (I, t)
+shapeFromTy t@DoubleTy = (FP, t)
+shapeFromTy t@(ConstTy t') = (fst (shapeFromTy t'), t)
+shapeFromTy t@(PtrTy _) = (P, t)
+shapeFromTy _ = shapeFromUse U
+
+
+data SyntaxRole = ValRole Expr
+                | FunRole
+                deriving (Eq, Ord, Show)
+
+-- | The table M.
+newtype M = M { _shapes :: Map SyntaxRole Shape } deriving (Eq, Ord, Show)
+
+insertOrUpdate :: SyntaxRole -> Shape -> M -> (Shape, M)
+insertOrUpdate ro sp m =
+  (sp', M $ Map.insert ro sp' (_shapes m))
   where
-    sp' = case Map.lookup e (_shapes m) of
+    sp' = case Map.lookup ro (_shapes m) of
       Just sp'' ->
         case fst sp'' of
           P  -> sp''
@@ -806,18 +769,89 @@ insertOrUpdate e sp m =
           U  -> sp
       Nothing -> sp
 
-shapeOf :: Expr -> M -> Shape
-shapeOf e m =
-  case Map.lookup e (_shapes m) of
+shapeOf :: SyntaxRole -> M -> Shape
+shapeOf ro m =
+  case Map.lookup ro (_shapes m) of
     Just sp -> sp
-    Nothing -> shape U
+    Nothing -> shapeFromUse U
 
-ty2shape :: Type -> Shape
-ty2shape t@IntTy = (I, t)
-ty2shape t@DoubleTy = (FP, t)
-ty2shape t@(ConstTy t') = (fst (ty2shape t'), t)
-ty2shape t@(PtrTy _) = (P, t)
-ty2shape _ = shape U
+
+classifyE :: Expr -> Shape -> M -> (Shape, M)
+classifyE e@(NumLit v) _ m =
+  insertOrUpdate (ValRole e) sp m
+  where
+    sp = case v of
+      (IntLit 0) -> shapeFromUse S
+      (IntLit _) -> shapeFromUse I
+      _ -> shapeFromUse FP
+classifyE e@(Var _) sp m =
+  insertOrUpdate (ValRole e) sp m
+classifyE e@(FldAcc e' x) sp m =
+  insertOrUpdate (ValRole e) sp m'
+  where
+    (_, m') = classifyE e' (shapeFromUse P) m
+classifyE e@(Deref e') sp m =
+  insertOrUpdate (ValRole e) sp m'
+  where
+    (_, m') = classifyE e' (shapeFromUse P) m
+classifyE e@(AddrOf e') sp m =
+  insertOrUpdate (ValRole e) (shapeFromUse P) m'
+  where
+    (_, m') = classifyE e' sp m
+classifyE e@(BinExpr Add e1 e2) sp m =
+  insertOrUpdate (ValRole e) sp'''' m''
+  where
+    sp' = if (sp == shapeFromUse I
+              || sp == shapeFromUse FP
+              || sp == shapeFromUse N)
+          then sp
+          else shapeFromUse S
+    (sp1, m') = classifyE e1 sp' m
+    sp'' = if (fst sp1 == P)
+           then shapeFromUse I
+           else if (sp == shapeFromUse I
+                   || sp == shapeFromUse FP
+                   || sp == shapeFromUse N)
+                then sp
+                else shapeFromUse S
+    (sp2, m'') = classifyE e2 sp'' m'
+    sp''' = if (fst sp2 == P)
+            then shapeFromUse I
+            else sp''
+    (sp3, m''') = classifyE e1 sp''' m''
+    sp'''' = if (fst sp3 == P || fst sp2 == P)
+             then shapeFromUse P
+             else shapeFromUse N
+classifyE e@(BinExpr Divide e1 e2) sp m =
+  insertOrUpdate (ValRole e) (shapeFromUse N) m''
+  where
+    (_, m') = classifyE e1 (shapeFromUse N) m
+    (_, m'') = classifyE e2 (shapeFromUse N) m'
+classifyE e@(BinExpr Multiply e1 e2) sp m =
+  insertOrUpdate (ValRole e) (shapeFromUse N) m''
+  where
+    (_, m') = classifyE e1 (shapeFromUse N) m
+    (_, m'') = classifyE e2 (shapeFromUse N) m'
+classifyE e@(BinExpr And e1 e2) sp m =
+  insertOrUpdate (ValRole e) (shapeFromUse I) m''
+  where
+    (_, m') = classifyE e1 (shapeFromUse S) m
+    (_, m'') = classifyE e2 (shapeFromUse S) m'
+classifyE e@(BinExpr Or e1 e2) sp m =
+  insertOrUpdate (ValRole e) (shapeFromUse I) m''
+  where
+    (_, m') = classifyE e1 (shapeFromUse S) m
+    (_, m'') = classifyE e2 (shapeFromUse S) m'
+classifyE e@(BinExpr Assign e1 e2) sp m =
+  insertOrUpdate (ValRole e) sp1 m''
+  where
+    (sp2, m') = classifyE e2 sp m
+    (sp1, m'') = classifyE e1 sp2 m'
+
+classifyD :: Decl -> M -> (Shape, M)
+classifyD (Decl { _ft = t, _fx = x }) m =
+   insertOrUpdate (ValRole (Var x)) (shapeFromTy t) m
+
 
 -- | Build lattice of shapes until stabilization.
 buildLattice :: Prog -> M -> M
@@ -827,15 +861,15 @@ buildLattice p@(Prog _ fs) m =
       let (sp, m) = classifyD d acc
       in go xs m
     go ((ExprStmt e):xs) acc =
-      let (sp, m) = classifyE e (shapeOf e acc) acc
+      let (sp, m) = classifyE e (shapeOf (ValRole e) acc) acc
       in go xs m
-    go ((RetStmt e):[]) acc = snd $ classifyE e (shapeOf e acc) acc
+    go ((RetStmt e):[]) acc = snd $ classifyE e (shapeOf (ValRole e) acc) acc
 
     handleParam ds = map (\d -> DeclStmt d) ds
-    handleRet rt m = M $ Map.insert (Var (Ident "$ret")) (ty2shape rt) (_shapes m)
+    handleRet rt m = M $ Map.insert FunRole (shapeFromTy rt) (_shapes m)
 
-    m' = foldr (\(FunDef rt _ ds ss) acc -> go ((handleParam ds) ++ ss)
-               (handleRet rt acc)) m fs
+    m' = foldr (\(FunDef rt _ ds ss) acc -> go
+                 ((handleParam ds) ++ ss) (handleRet rt acc)) m fs
   in if (m' == m)
      then m'
      else buildLattice p m'
@@ -1465,13 +1499,21 @@ typeExpr c gam (BinExpr Add e1 e2) =
            then highRank lht rht
            else error $ "incompatible types in + (Add)"
 
+-- | TCAnd
+typeExpr c gam (BinExpr And e1 e2) =
+  let lht = typeExpr c gam e1
+      rht = typeExpr c gam e2
+  in if isScaTy lht && isScaTy rht
+     then IntTy
+     else error $ "incompatible types in && (logical AND)"
+
 -- | TCOr
 typeExpr c gam (BinExpr Or e1 e2) =
   let lht = typeExpr c gam e1
       rht = typeExpr c gam e2
   in if isScaTy lht && isScaTy rht
      then IntTy
-     else error $ "incompatible types in || (OR)"
+     else error $ "incompatible types in || (logical OR)"
 
 -- | TCDiv
 typeExpr c gam (BinExpr Divide e1 e2) =
@@ -1479,7 +1521,15 @@ typeExpr c gam (BinExpr Divide e1 e2) =
       rht = typeExpr c gam e2
   in if isAriTy lht && isAriTy rht
      then highRank lht rht
-     else error $ "incompatible types in / (div)"
+     else error $ "incompatible types in / (division)"
+
+-- | TCMul
+typeExpr c gam (BinExpr Multiply e1 e2) =
+  let lht = typeExpr c gam e1
+      rht = typeExpr c gam e2
+  in if isAriTy lht && isAriTy rht
+     then highRank lht rht
+     else error $ "incompatible types in * (multiplication)"
 
 
 -- | Find, in Gamma, the type mapped to an identifier.
@@ -1558,8 +1608,10 @@ instance PrettyK Type where
   ppK (PtrTy t) = ppK t PP.<> PP.text "*"
   ppK (ConstTy t) = PP.text "const " PP.<> ppK t
   ppK (ArrowTy rt ps) =
-    (PP.hcat $ PP.punctuate (PP.text "⟶  ") (map ppK ps))
-    PP.<> PP.text "⟶  " PP.<> ppK rt
+    PP.text " (" PP.<>
+    (PP.hcat $ PP.punctuate (PP.text ", ") (map ppK ps)) PP.<>
+    PP.text " )" PP.<>
+    PP.text "⟶  " PP.<> ppK rt
   ppK (RecTy flds x) = PP.char '@' PP.<> ppK x PP.<> PP.char '@'
   ppK (NamedTy x) = ppK x
   ppK (TyVar (Stamp n)) = PP.text "α" PP.<> PP.text (show n)
@@ -1606,27 +1658,33 @@ instance PrettyK Stamp where
 class PrettyM a where
   ppM :: a -> PP.Doc
 
-instance PrettyM ShapeName where
-  ppM U = PP.text "<undefined>"
-  ppM S = PP.text "<scalar>"
-  ppM P = PP.text "<pointer>"
-  ppM I = PP.text "<integral>"
-  ppM FP = PP.text "<floating-point>"
-  ppM N = PP.text "<numeric>"
+instance PrettyM ShapeKey where
+  ppM U = PP.text "<Undefined>"
+  ppM S = PP.text "<Scalar>"
+  ppM P = PP.text "<Pointer>"
+  ppM I = PP.text "<Integral>"
+  ppM FP = PP.text "<FloatingPoint>"
+  ppM N = PP.text "<Numeric>"
+
+instance PrettyM SyntaxRole where
+  ppM (ValRole e) = ppM e
+  ppM FunRole = PP.text "... ⟶  "
+
+instance PrettyM Expr where
+  ppM (NumLit v) = PP.text $ show v
+  ppM (Var x) = PP.text (_x x)
+  ppM (FldAcc e x) = ppM e PP.<> PP.text "->" PP.<> PP.text (_x x)
+  ppM (Deref e) = PP.char '*' PP.<> ppM e
+  ppM (AddrOf e) = PP.char '&' PP.<> ppM e
+  ppM (BinExpr Add e1 e2) = ppM e1 PP.<> PP.char '+' PP.<> ppM e2
+  ppM (BinExpr Divide e1 e2) = ppM e1 PP.<> PP.char '/' PP.<> ppM e2
+  ppM (BinExpr Multiply e1 e2) = ppM e1 PP.<> PP.char '*' PP.<> ppM e2
+  ppM (BinExpr And e1 e2) = ppM e1 PP.<> PP.text "&&" PP.<> ppM e2
+  ppM (BinExpr Or e1 e2) = ppM e1 PP.<> PP.text "||" PP.<> ppM e2
+  ppM (BinExpr Assign e1 e2) = ppM e1 PP.<> PP.char '=' PP.<> ppM e2
 
 instance PrettyM M where
-  ppM m =
-    let
-      pp (NumLit v) = PP.text $ show v
-      pp (Var x) = PP.text (_x x)
-      pp (FldAcc e x) = pp e PP.<> PP.text "->" PP.<> PP.text (_x x)
-      pp (Deref e) = PP.char '*' PP.<> pp e
-      pp (AddrOf e) = PP.char '&' PP.<> pp e
-      pp (BinExpr Add e1 e2) = pp e1 PP.<> PP.char '+' PP.<> pp e2
-      pp (BinExpr Divide e1 e2) = pp e1 PP.<> PP.char '/' PP.<> pp e2
-      pp (BinExpr Or e1 e2) = pp e1 PP.<> PP.text "||" PP.<> pp e2
-      pp (BinExpr Assign e1 e2) = pp e1 PP.<> PP.char '=' PP.<> pp e2
-    in Map.foldrWithKey (\k v acc -> pp k PP.<+> ppM (fst v) PP.$$ acc)
+  ppM m = Map.foldrWithKey (\k v acc -> ppM k PP.<+> ppM (fst v) PP.$$ acc)
                         PP.empty
                         (_shapes m)
 
@@ -1640,30 +1698,54 @@ class PrettyAST a where
 
 instance PrettyAST a => PrettyAST [a] where
   fmt n (s:sl) =
-    fmt n s PP.<> (foldr (\s d -> fmt (n + 1) s PP.<> d) PP.empty sl)
+    fmt n s PP.<> (foldr (\s d -> fmt n s PP.<> d) PP.empty sl)
+
+instance PrettyAST Lit where
+  fmt _ (IntLit l) =
+    PP.char '`' PP.<>
+    PP.text (show l) PP.<>
+    PP.char '\''
+  fmt _ (DoubleLit l) =
+    PP.char '`' PP.<>
+    PP.text (show l) PP.<>
+    PP.char '\''
 
 instance PrettyAST Expr where
-  fmt n e@(NumLit _) = indent n PP.<> PP.text "NumLit"
-  fmt n e@(Var _) = indent n PP.<> PP.text "VarDecl"
+  fmt n e@(NumLit l) = indent n PP.<> PP.text "NumLit" PP.<+> fmt 0 l
+  fmt n e@(Var x) =
+    indent n PP.<>
+    PP.text "Var" PP.<+>
+    PP.char '`' PP.<>
+    PP.text (_x x) PP.<>
+    PP.char '\''
   fmt n e@(FldAcc x t) = indent n PP.<> PP.text "FieldAccess"
   fmt n e@(Deref e1) = indent n PP.<> PP.text "Deref" PP.<> fmt (n + 1) e1
   fmt n e@(AddrOf e1) = indent n PP.<> PP.text "AddrOf" PP.<> fmt (n + 1) e1
-  fmt n e@(BinExpr _ e1 e2) = indent n PP.<> PP.text "BinExpr" PP.<>
-                              fmt (n + 1) e1 PP.<> fmt (n + 1) e2
+  fmt n e@(BinExpr op e1 e2) =
+    indent n PP.<>
+    PP.text "BinExpr" PP.<+>
+    PP.char '`' PP.<> PP.text (show op) PP.<> PP.char '\'' PP.<+>
+    fmt (n + 1) e1 PP.<>
+    fmt (n + 1) e2
 
 instance PrettyAST Stmt where
+  fmt n (DeclStmt d) = indent n PP.<> PP.text "DeclStmt" PP.<> fmt (n + 1) d
   fmt n (ExprStmt e) = indent n PP.<> PP.text "ExprStmt" PP.<> fmt (n + 1) e
-  fmt n (DeclStmt _) = indent n PP.<> PP.text "DeclStmt"
   fmt n (RetStmt e) = indent n PP.<> PP.text "RetStmt" PP.<> fmt (n + 1) e
 
 instance PrettyAST Decl where
-  fmt n (Decl _ _) = indent n PP.<> PP.text "Decl"
+  fmt n (Decl _ x) =
+    indent n PP.<>
+    PP.text "Decl" PP.<+>
+    PP.char '`' PP.<>
+    PP.text (_x x) PP.<>
+    PP.char '\''
 
 instance PrettyAST FunDef where
-  fmt n f@(FunDef _ _ ps s) =
+  fmt n f@(FunDef _ _ ps sl) =
     PP.text "Function" PP.<>
     (foldr (\p d -> fmt (n + 1) p PP.<> d) PP.empty ps) PP.<>
-    fmt (n + 1) s
+    fmt (n + 1) sl
 
 instance PrettyAST Prog where
   fmt n p@(Prog _ fs) =
@@ -1762,14 +1844,20 @@ progParser :: Parser Prog
 progParser = Prog <$> many tydefParser <*> many funParser
 
 tydefParser :: Parser TypeDef
-tydefParser = TypeDef <$> (reserved "typedef" *>) tyParser <*> tyParser <* semi
+tydefParser = TypeDef <$> (reserved "typedef" *>) qualPtrTyParser <*> tyParser <* semi
 
 funParser :: Parser FunDef
 funParser = FunDef
-            <$> tyParser
+            <$> qualPtrTyParser
             <*> identParser
             <*> parens (declParser `sepBy` comma)
             <*> stmtListParser
+
+qualPtrTyParser :: Parser Type
+qualPtrTyParser = f <$> tyParser <*> (optionMaybe (reserved "const"))
+  where
+    f t Nothing = t
+    f t _ = ConstTy t
 
 tyParser :: Parser Type
 tyParser = f <$> nonPtrTyParser <*> (many starParser)
@@ -1800,8 +1888,6 @@ namedTyParser = f <$> (optionMaybe (reserved "struct")) <*> identParser
     f Nothing n = NamedTy n
     f _ n = NamedTy (Ident ("struct " ++ (_x n)))
 
--- For simplicity, we require in muC that the `const' keyword comes before a type,
--- specifier. In standard C, that's not necessary.
 qualTyParser :: Parser Type -> Parser Type
 qualTyParser p = f <$> (optionMaybe (reserved "const")) <*> p
   where
@@ -1814,18 +1900,20 @@ recTyParser = RecTy
               <*> identParser
 
 declParser :: Parser Decl
-declParser = Decl <$> tyParser <*> identParser
+declParser = Decl <$> qualPtrTyParser <*> identParser
 
 exprParser :: Parser Expr
 exprParser = buildExpressionParser table baseExprParser
   where
     table =
-      [ [ Prefix (reservedOp "*" >> return Deref) ]
-      , [ Prefix (reservedOp "&" >> return AddrOf) ]
-      , [ Infix (reservedOp "/" >> return (BinExpr Divide)) AssocLeft ]
-      , [ Infix (reservedOp "+" >> return (BinExpr Add)) AssocLeft ]
-      , [ Infix (reservedOp "||" >> return (BinExpr Or)) AssocLeft ]
-      , [ Infix (reservedOp "=" >> return (BinExpr Assign)) AssocLeft ] ]
+      [ [ Prefix (reservedOp "*" >> return Deref) ],
+        [ Prefix (reservedOp "&" >> return AddrOf) ],
+        [ Infix (reservedOp "/" >> return (BinExpr Divide)) AssocLeft ],
+        [ Infix (reservedOp "*" >> return (BinExpr Divide)) AssocLeft ],
+        [ Infix (reservedOp "+" >> return (BinExpr Add)) AssocLeft ],
+        [ Infix (reservedOp "&&" >> return (BinExpr And)) AssocLeft ],
+        [ Infix (reservedOp "||" >> return (BinExpr Or)) AssocLeft ],
+        [ Infix (reservedOp "=" >> return (BinExpr Assign)) AssocLeft ] ]
 
 baseExprParser :: Parser Expr
 baseExprParser = f <$> fldAccParser <*> (many (reservedOp "->" *> identParser))
