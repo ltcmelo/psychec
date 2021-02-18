@@ -1,9 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-typedef  double real ;
-typedef  int inteiro ;
-
-/* Variables and functions */
- int /*<<< orphan*/  printf (char*,...) ; 
-

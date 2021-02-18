@@ -1,0 +1,64 @@
+// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+#ifndef CNIPPET_DRIVER_H__
+#define CNIPPET_DRIVER_H__
+
+#include "cxxopts.hpp"
+
+#include "Configuration.h"
+
+#include <memory>
+#include <string>
+#include <utility>
+
+const char* const kCnip = "cnip: ";
+
+namespace cnip {
+
+/*!
+ * \brief The Driver class.
+ */
+class Driver final
+{
+public:
+    Driver();
+
+    int execute(int argc, char* argv[]);
+
+private:
+    std::unique_ptr<Configuration> config_;
+
+    void applyOptions(cxxopts::Options opts);
+
+    friend class Executer_C;
+
+    static constexpr int SUCCESS = 0;
+    static constexpr int ERROR = 1;
+    static constexpr int ERROR_UnrecognizedCommandLine = 2;
+    static constexpr int ERROR_InputFileUnspecified = 3;
+    static constexpr int ERROR_InputFileReadingFailure = 4;
+    static constexpr int ERROR_CannotLoadPluging = 5;
+    static constexpr int ERROR_UnsupportedLanguage = 6;
+};
+
+} // cnip
+
+#endif

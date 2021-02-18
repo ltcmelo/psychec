@@ -1,8 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-typedef  int (* T2 ) (void (*) ()) ;
-typedef  int (* T ) (void (*) ()) ;
-
-/* Variables and functions */
-

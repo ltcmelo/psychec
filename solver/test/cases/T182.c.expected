@@ -1,9 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-
-/* Variables and functions */
- int num ; 
- int /*<<< orphan*/  printf (char*,...) ; 
- char* str ; 
-

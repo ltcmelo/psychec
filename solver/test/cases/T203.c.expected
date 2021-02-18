@@ -1,8 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-
-/* Variables and functions */
- char* groups ;
- void parse (char*) ;
-

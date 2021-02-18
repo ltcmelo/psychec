@@ -1,9 +1,0 @@
-/* Forward declarations */
-typedef  struct TYPE_2__   TYPE_1__ ;
-
-/* Type definitions */
-struct TYPE_2__ {char c; int i; } ;
-typedef  TYPE_1__* T ;
-
-/* Variables and functions */
-

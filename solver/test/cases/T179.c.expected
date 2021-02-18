@@ -1,8 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-
-/* Variables and functions */
- char* name ; 
- int /*<<< orphan*/  quoteaf (char*) ; 
-

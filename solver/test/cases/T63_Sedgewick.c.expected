@@ -1,9 +1,0 @@
-/* Forward declarations */
-typedef  struct TYPE_4__   TYPE_1__ ;
-
-/* Type definitions */
-struct TYPE_4__ {float x; float y; } ;
-typedef  TYPE_1__ point ;
-
-/* Variables and functions */
- float sqrt (float) ;

@@ -1,8 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-typedef  float T ;
-
-/* Variables and functions */
-scalar_t__ e ;
-

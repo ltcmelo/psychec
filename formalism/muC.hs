@@ -155,12 +155,14 @@ data Subst = Stamp :-> Type
            deriving (Eq, Ord, Show)
 
 class Substitutable a where
-  -- | Apply a substitution.
+  -- | Apply a single substitution.
   apply :: Subst -> a -> a
-  -- | Convenience for multiple applications.
+
+  -- | Apply multiple substitutions at once.
   applyMany :: [Subst] -> a -> a
   applyMany sl a = foldr (\s acc -> apply s acc) a sl
-  -- | Get the free type variables.
+
+  -- | Obtain the free type variables.
   ftv :: a -> [Stamp]
 
 instance Substitutable a => Substitutable [a] where

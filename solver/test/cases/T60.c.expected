@@ -1,9 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-typedef  double T ;
-
-/* Variables and functions */
- int g (double) ; 
- double h (int,char*) ; 
-

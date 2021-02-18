@@ -1,7 +1,0 @@
-- Our C parser derives from the C++ parser of the Qt Creator IDE, which is copyrighted by
-  Roberto Raggi - we use the parser, exclusively, not Qt Creator's compiler frontend as
-  a whole. Those files are located in directory `frontend', together with our own extensions
-  and components.
-
-- The command-line processing utility, located in directory `command', is copyrighted by
-  Jarryd Beck and originally from https://github.com/jarro2783/cxxopts.

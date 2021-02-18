@@ -1,9 +1,0 @@
-/* Forward declarations */
-typedef  struct TYPE_4__   TYPE_1__ ;
-
-/* Type definitions */
-typedef  TYPE_1__* link ;
-struct TYPE_4__ {struct TYPE_4__* r; struct TYPE_4__* l; } ;
-
-/* Variables and functions */
-
