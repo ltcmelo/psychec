@@ -24,7 +24,6 @@
 
 #include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNodes.h"
-#include "common/diagnostics/DiagnosticCollector.h"
 
 #include <algorithm>
 #include <cstring>
@@ -44,13 +43,10 @@ void TestTypeChecker::testAll()
 
 void TestTypeChecker::setUp()
 {
-//    control_.reset();
-//    control_.setDiagnosticCollector(&diagnosticCollector_);
 }
 
 void TestTypeChecker::tearDown()
 {
-    diagnosticCollector_.reset();
 }
 
 void TestTypeChecker::case0001()

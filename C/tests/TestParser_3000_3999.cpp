@@ -23,7 +23,6 @@
 #include "TestBinder.h"
 #include "Unparser.h"
 
-#include "common/diagnostics/DiagnosticCollector.h"
 #include "parser/Parser.h"
 
 using namespace psy;

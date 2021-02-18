@@ -49,9 +49,6 @@ set(COMMON_SOURCES
     ${PROJECT_SOURCE_DIR}/diagnostics/DiagnosticDescriptor.h
     ${PROJECT_SOURCE_DIR}/diagnostics/DiagnosticSeverity.cpp
     ${PROJECT_SOURCE_DIR}/diagnostics/DiagnosticSeverity.h
-    ${PROJECT_SOURCE_DIR}/diagnostics/DiagnosticCollector.h
-    ${PROJECT_SOURCE_DIR}/diagnostics/DiagnosticCollector.cpp
-
 )
 
 foreach(file ${COMMON_SOURCES})

@@ -20,10 +20,9 @@
 
 #include "TestFrontend.h"
 
-#include "syntax/SyntaxLexemes.h"
 #include "Unparser.h"
 
-#include "common/diagnostics/DiagnosticCollector.h"
+#include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
@@ -239,9 +238,6 @@ void TestFrontend::parseAndBind(std::string text, int errorCnt, int warnCnt)
         std::cout << " [expect (binding) warning] ";
 
     //tree_->bind();
-
-    PSYCHE_EXPECT_INT_EQ(warnCnt, diagnosticCollector_.warningsCount());
-    PSYCHE_EXPECT_INT_EQ(errorCnt, diagnosticCollector_.errorsCount());
 }
 
 void TestFrontend::parseAndBindAndCheck(std::string text, int errorCnt, int warnCnt)
@@ -254,7 +250,4 @@ void TestFrontend::parseAndBindAndCheck(std::string text, int errorCnt, int warn
         std::cout << " [expect (typing) warning] ";
 
     //tree_->typeCheck();
-
-    PSYCHE_EXPECT_INT_EQ(warnCnt, diagnosticCollector_.warningsCount());
-    PSYCHE_EXPECT_INT_EQ(errorCnt, diagnosticCollector_.errorsCount());
 }

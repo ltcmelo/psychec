@@ -89,8 +89,6 @@ protected:
 
     std::unique_ptr<SyntaxTree> tree_;
     std::unique_ptr<Compilation> compilation_;
-
-    DiagnosticCollector diagnosticCollector_;
 };
 
 } // C

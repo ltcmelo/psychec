@@ -25,7 +25,6 @@
 #include "Unparser.h"
 
 #include "syntax/SyntaxNodes.h"
-#include "common/diagnostics/DiagnosticCollector.h"
 
 #include <algorithm>
 #include <cstring>

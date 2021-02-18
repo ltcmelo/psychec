@@ -28,7 +28,6 @@ namespace C {
 class MemoryPool;
 class SyntaxTree;
 class Compilation;
-class DiagnosticCollector;
 
 //=================================================================== Tokens
 

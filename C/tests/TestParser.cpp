@@ -35,5 +35,4 @@ void TestParser::setUp()
 
 void TestParser::tearDown()
 {
-    diagnosticCollector_.reset();
 }

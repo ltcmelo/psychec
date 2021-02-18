@@ -31,7 +31,7 @@
 #include "parser/PreprocessorOptions.h"
 #include "syntax/SyntaxToken.h"
 
-#include "../common/diagnostics/DiagnosticCollector.h"
+#include "../common/diagnostics/Diagnostic.h"
 #include "../common/infra/Pimpl.h"
 #include "../common/text/SourceText.h"
 
