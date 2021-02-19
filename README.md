@@ -43,14 +43,11 @@ If you compile this snippet with GCC or Clang, you'd see a diagnostic _"the decl
 
 ## Building and Testing
 
-Requirements:
-
-* Cmake
-* C++17 compiler
-* Haskell Stack
+Requirements: cmake, a C++17 compiler, and the Haskell Stack.
 
     cmake CMakeLists.txt  
     make -j 4
+    
     ./test-suite
 
 ## Related Publications
