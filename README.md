@@ -39,7 +39,7 @@ void f()
 }
 ```
 
-If you compile this snippet with GCC or Clang, you'd see a diagnostic _"the declaration for_`T`_is not available"_. But with the *cnippet* driver adaptor (through command line `./cnip.sh -f gcc -c node.c`), a definition for `T` is inferred and the compilation succeeds.
+If you compile the above snippet with GCC or Clang, you'd see the diagnostic _"declaration for_`T`_is not available"_. But with the *cnippet* driver adaptor, the compilation would succeed: a definition for `T` is inferred.
 
 ## Building and Testing
 
