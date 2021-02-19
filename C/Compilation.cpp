@@ -29,8 +29,9 @@ using namespace C;
 
 struct Compilation::CompilationImpl
 {
-    CompilationImpl(Compilation* compilation)
+    CompilationImpl(Compilation* compilation, const std::string& id)
         : Q_(compilation)
+        , id_(id)
         , curUnit_(nullptr)
     {}
 
@@ -38,16 +39,21 @@ struct Compilation::CompilationImpl
     {}
 
     Compilation* Q_;
+    std::string id_;
     SyntaxTree* curUnit_;
 };
 
-Compilation::Compilation()
-    : P(new CompilationImpl(this))
-{
-}
+Compilation::Compilation(const std::string& id)
+    : P(new CompilationImpl(this, id))
+{}
 
 Compilation::~Compilation()
 {}
+
+std::unique_ptr<Compilation> Compilation::create(const std::string& id)
+{
+
+}
 
 std::unique_ptr<SemanticModel> Compilation::semanticModel(SyntaxTree* tree) const
 {

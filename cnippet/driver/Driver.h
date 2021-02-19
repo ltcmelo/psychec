@@ -27,6 +27,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 #include <utility>
 
 const char* const kCnip = "cnip: ";
@@ -40,13 +41,14 @@ class Driver final
 {
 public:
     Driver();
+    ~Driver();
 
     int execute(int argc, char* argv[]);
 
 private:
     std::unique_ptr<Configuration> config_;
 
-    void applyOptions(cxxopts::Options opts);
+    void applyOptions(const cxxopts::ParseResult& opts);
 
     friend class Executer_C;
 

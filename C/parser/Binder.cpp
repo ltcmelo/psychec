@@ -20,3 +20,27 @@
 // THE SOFTWARE.
 
 #include "Binder.h"
+
+#include "SyntaxTree.h"
+
+#include <iostream>
+
+using namespace psy;
+using namespace C;
+
+Binder::Binder(SyntaxTree* tree)
+    : SyntaxVisitor(tree)
+{}
+
+Binder::~Binder()
+{}
+
+void Binder::bind()
+{
+    visit(tree_->root());
+}
+
+SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
+{
+    return Action::Continue;
+}

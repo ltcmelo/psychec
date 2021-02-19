@@ -44,9 +44,12 @@ constexpr int Driver::ERROR_UnsupportedLanguage;
 Driver::Driver()
 {}
 
+Driver::~Driver()
+{}
+
 int Driver::execute(int argc, char* argv[])
 {
-
+    std::string lang;
     cxxopts::Options opts(argv[0], "Cnippet");
     try {
         opts.positional_help("file");
@@ -109,39 +112,40 @@ int Driver::execute(int argc, char* argv[])
              cxxopts::value<std::vector<std::string>>());
 
         opts.parse_positional(std::vector<std::string>{"file", "positional"});
-        opts.parse(argc, argv);
+        auto cmd = opts.parse(argc, argv);
+
+        if (cmd.count("help")) {
+            std::cout << opts.help({"", "Group"}) << std::endl;
+            return SUCCESS;
+        }
+
+        if (cmd.count("plugin")) {
+            auto pluginName = cmd["plugin"].as<std::string>();
+            Plugin::load(pluginName);
+            if (!Plugin::isLoaded()) {
+                std::cerr << kCnip << "cannot load plugin " << pluginName << std::endl;
+                return ERROR_CannotLoadPluging;
+            }
+        }
+
+        if (!cmd.count("positional")) {
+            std::cerr << kCnip << "input file unspecified" << std::endl;
+            return ERROR_InputFileUnspecified;
+        }
+
+        lang = cmd["lang"].as<std::string>();
+
+        applyOptions(cmd);
     }
     catch (const cxxopts::OptionException& ex) {
         std::cerr << kCnip << ex.what() << std::endl;
         return ERROR_UnrecognizedCommandLine;
     }
 
-    if (opts.count("help")) {
-        std::cout << opts.help({"", "Group"}) << std::endl;
-        return SUCCESS;
-    }
-
-    if (opts.count("plugin")) {
-        auto pluginName = opts["plugin"].as<std::string>();
-        Plugin::load(pluginName);
-        if (!Plugin::isLoaded()) {
-            std::cerr << kCnip << "cannot load plugin " << pluginName << std::endl;
-            return ERROR_CannotLoadPluging;
-        }
-    }
-
-    if (!opts.count("positional")) {
-        std::cerr << kCnip << "input file unspecified" << std::endl;
-        return ERROR_InputFileUnspecified;
-    }
-
-    applyOptions(opts);
-
     auto [exit, source] = readFile(config_->input_.fullFileName());
     if (exit != 0)
         return ERROR_InputFileReadingFailure;
 
-    auto lang = opts["lang"].as<std::string>();
     if (lang == "C")
         return Executer_C(this).execute(source);
 
@@ -149,14 +153,14 @@ int Driver::execute(int argc, char* argv[])
     return ERROR_UnsupportedLanguage;
 }
 
-void Driver::applyOptions(cxxopts::Options opts)
+void Driver::applyOptions(const cxxopts::ParseResult& cmd)
 {
-    std::string inputPath = opts["positional"].as<std::vector<std::string>>()[0];
+    std::string inputPath = cmd["positional"].as<std::vector<std::string>>()[0];
     config_.reset(new Configuration(inputPath));
 
-    config_->C_hostCC_ = opts["cc"].as<std::string>();
+    config_->C_hostCC_ = cmd["cc"].as<std::string>();
 
-    auto std = opts["cc-std"].as<std::string>();
+    auto std = cmd["cc-std"].as<std::string>();
     std::for_each(std.begin(), std.end(),
                   [] (char& c) { c = ::tolower(c); });
     LanguageDialect::Std stdP = LanguageDialect::Std::C11;
@@ -168,11 +172,10 @@ void Driver::applyOptions(cxxopts::Options opts)
         stdP = LanguageDialect::Std::C17_18;
     config_->C_std = stdP;
 
-    config_->C_macroDefs_ = opts["cc-D"].as<std::vector<std::string>>();
-    config_->C_macroUndefs_ = opts["cc-U"].as<std::vector<std::string>>();
-    config_->C_searchPaths_ = opts["cc-I"].as<std::vector<std::string>>();
-    config_->C_dumpAST = opts.count("C-dump-AST");
-    config_->C_infer = opts.count("C-infer");
-    config_->C_inferOnly = opts.count("C-infer-only");
+    config_->C_macroDefs_ = cmd["cc-D"].as<std::vector<std::string>>();
+    config_->C_macroUndefs_ = cmd["cc-U"].as<std::vector<std::string>>();
+    config_->C_searchPaths_ = cmd["cc-I"].as<std::vector<std::string>>();
+    config_->C_dumpAST = cmd.count("C-dump-AST");
+    config_->C_infer = cmd.count("C-infer");
+    config_->C_inferOnly = cmd.count("C-infer-only");
 }
-

@@ -213,6 +213,11 @@ void SyntaxTree::buildTree(SyntaxCategory syntaxCat)
     }
 }
 
+void SyntaxTree::createSymbols()
+{
+
+}
+
 const ParseOptions& SyntaxTree::options() const
 {
     return P->options_;
