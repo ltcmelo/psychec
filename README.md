@@ -9,10 +9,10 @@
 Psyche is a compiler frontend for the C programming language. Psyche-C is specifically designed for the implementation of static analysis tools. Below are the distinct features that make Psyche-C a rather unique C frontend:
 
 - Clean separation between the syntactic and semantic phases.
-- Both algorithmic and heuristic syntax disambiguation strategeies.
-- Indepedence of `#include` headers and type inference for the missing `struct`, `union`, `enum', and `typedef`.
+- Both algorithmic- and heuristic-based syntax disambiguation strategies.
+- Agnostic of `#include`, with type inference for missing `struct`, `union`, `enum`, and `typedef`.
 - API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn).
-- Resemblance between the AST resulting from its parser and that of the [LLVM's Clang frontend](https://clang.llvm.org/).
+- Resemblance between the ist AST that of the [LLVM's Clang frontend](https://clang.llvm.org/).
 
 Check out [this online interface](http://cuda.dcc.ufmg.br/psyche-c/).
 
@@ -23,7 +23,7 @@ Applications:
 - Generating test-input data for individual functions.
 - Quick prototyping of an algorithm, without the need of explicit types.
 
-**Note**: The master branch is going through a major overhaul; at this point, it's expected that syntax analysis (parsing and AST construction) is functional, though. The original version of Psyche-C is available in [this branch](https://github.com/ltcmelo/psychec/tree/original).
+**NOTE**: The master branch is going through a major overhaul; at this point, it's expected that syntax analysis (parsing and AST construction) is functional, though. The original version of Psyche-C is available in [this branch](https://github.com/ltcmelo/psychec/tree/original).
 
 ## The Cnippet Driver Adaptor
 
