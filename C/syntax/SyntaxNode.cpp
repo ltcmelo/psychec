@@ -58,26 +58,26 @@ SyntaxToken SyntaxNode::lastToken() const
     return findValidToken(reversed);
 }
 
-SyntaxToken SyntaxNode::findValidToken(const std::vector<SyntaxHolder>& syntaxes) const
+SyntaxToken SyntaxNode::findValidToken(const std::vector<SyntaxHolder>& syntaxHolders) const
 {
-    for (const auto& s : syntaxes) {
-        switch (s.variant()) {
+    for (const auto& synH : syntaxHolders) {
+        switch (synH.variant()) {
             case SyntaxHolder::Variant::Token:
-                if (s.tokenIndex() != LexedTokens::invalidIndex())
-                    return tokenAtIndex(s.tokenIndex());
+                if (synH.tokenIndex() != LexedTokens::invalidIndex())
+                    return tokenAtIndex(synH.tokenIndex());
                 break;
 
             case SyntaxHolder::Variant::Node:
-                if (s.node()) {
-                    auto tk = s.node()->firstToken();
+                if (synH.node()) {
+                    auto tk = synH.node()->firstToken();
                     if (tk != SyntaxToken::invalid())
                         return tk;
                 }
                 break;
 
             case SyntaxHolder::Variant::NodeList:
-                if (s.nodeList()) {
-                    auto tk = s.nodeList()->firstToken();
+                if (synH.nodeList()) {
+                    auto tk = synH.nodeList()->firstToken();
                     if (tk != SyntaxToken::invalid())
                         return tk;
                 }
@@ -94,24 +94,24 @@ SyntaxToken SyntaxNode::tokenAtIndex(LexedTokens::IndexType tkIdx) const
     return tree_->tokenAt(tkIdx);
 }
 
-void SyntaxNode::visitChildren(SyntaxVisitor *visitor) const
+void SyntaxNode::visitChildren(SyntaxVisitor* visitor) const
 {
-    for (auto syntax : childNodesAndTokens()) {
-        switch (syntax.variant()) {
+    for (auto synH : childNodesAndTokens()) {
+        switch (synH.variant()) {
             case SyntaxHolder::Variant::Node: {
-                if (!syntax.node())
+                if (!synH.node())
                     continue;
 
-                auto node = const_cast<SyntaxNode*>(syntax.node());
+                auto node = const_cast<SyntaxNode*>(synH.node());
                 node->acceptVisitor(visitor);
                 break;
             }
 
             case SyntaxHolder::Variant::NodeList: {
-                if (!syntax.nodeList())
+                if (!synH.nodeList())
                     continue;
 
-                auto nodeL = const_cast<SyntaxNodeList*>(syntax.nodeList());
+                auto nodeL = const_cast<SyntaxNodeList*>(synH.nodeList());
                 nodeL->acceptVisitor_t(visitor);
                 break;
             }

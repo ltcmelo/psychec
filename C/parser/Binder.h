@@ -36,6 +36,21 @@ class SemanticModel;
  */
 class PSY_C_API Binder final : protected SyntaxVisitor
 {
+public:
+    Binder(const Binder&) = delete;
+    void operator=(const Binder&) = delete;
+    ~Binder();
+
+    void bind();
+
+private:
+    Binder(SyntaxTree* tree);
+
+    //--------------//
+    // Declarations //
+    //--------------//
+    virtual Action visitTranslationUnit(const TranslationUnitSyntax* node) override;
+
 };
 
 } // C

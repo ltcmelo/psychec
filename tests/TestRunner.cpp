@@ -36,4 +36,5 @@ void TestRunner::runSuite()
     // C
     std::cout << "  C" << std::endl;
     TestParser().testAll();
+    //TestBinder().testAll();
 }

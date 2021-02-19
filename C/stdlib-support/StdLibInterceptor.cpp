@@ -42,4 +42,5 @@ bool StdLibInterceptor::intercept(FunctionDefinitionSyntax*)
 
 bool StdLibInterceptor::isStdName(const DeclarationName* name) const
 {
+    return false;
 }

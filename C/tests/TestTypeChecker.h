@@ -23,7 +23,7 @@
 
 #include "TestFrontend.h"
 
-#define TEST_TYPING(Function) TestFunction { &TestTypeChecker::Function, #Function }
+#define TEST_TYPE_CHECKER(Function) TestFunction { &TestTypeChecker::Function, #Function }
 
 namespace psy {
 namespace C {
@@ -51,15 +51,15 @@ private:
 
     std::vector<TestFunction> tests_
     {
-        TEST_TYPING(case0001),
-        TEST_TYPING(case0002),
-        TEST_TYPING(case0003),
-        TEST_TYPING(case0004),
-        TEST_TYPING(case0005),
-        TEST_TYPING(case0006),
-        TEST_TYPING(case0007),
-        TEST_TYPING(case0008),
-        TEST_TYPING(case0009)
+        TEST_TYPE_CHECKER(case0001),
+        TEST_TYPE_CHECKER(case0002),
+        TEST_TYPE_CHECKER(case0003),
+        TEST_TYPE_CHECKER(case0004),
+        TEST_TYPE_CHECKER(case0005),
+        TEST_TYPE_CHECKER(case0006),
+        TEST_TYPE_CHECKER(case0007),
+        TEST_TYPE_CHECKER(case0008),
+        TEST_TYPE_CHECKER(case0009)
     };
 };
 

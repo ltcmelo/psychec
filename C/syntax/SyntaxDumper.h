@@ -93,7 +93,6 @@ protected:
     }
 
     /* Specifiers */
-
     virtual Action visitTrivialSpecifier_Common(const TrivialSpecifierSyntax* node)
     {
         if (node->specTkIdx_)

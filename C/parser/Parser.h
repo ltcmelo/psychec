@@ -52,7 +52,7 @@ public:
     TranslationUnitSyntax* parse();
 
 private:
-    Parser(SyntaxTree* unit);
+    Parser(SyntaxTree* tree);
 
     friend class SyntaxTree;
     friend class DebugRule;

@@ -51,7 +51,8 @@ namespace C {
  * \brief The SyntaxTree class.
  *
  * \note
- * API inspired by \c Microsoft.CodeAnalysis.SyntaxTree from Roslyn, the .NET Compiler Platform.
+ * This API inspirted by that of \c Microsoft.CodeAnalysis.SyntaxTree
+ * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_C_API SyntaxTree
 {
@@ -144,6 +145,8 @@ private:
     LexedTokens::IndexType freeTokenSlot() const;
 
     void buildTree(SyntaxCategory syntaxCat);
+    void createSymbols();
+    void typeCheck() {}
     const ParseOptions& options() const;
 
     const Identifier* identifier(const char* s, unsigned int size);
@@ -162,9 +165,6 @@ private:
     LineDirective searchForLineDirective(unsigned int offset) const;
 
     void newDiagnostic(DiagnosticDescriptor descriptor, LexedTokens::IndexType tkIdx);
-
-    void bind() {}
-    void typeCheck() {}
 
     LanguageDialect dialect() const { return dialect_; }
     void setDialect(LanguageDialect dialect) { dialect_ = dialect; }

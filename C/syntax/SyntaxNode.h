@@ -319,12 +319,11 @@ protected:
     SyntaxNode(SyntaxTree* tree, SyntaxKind kind = Error);
 
     SyntaxToken tokenAtIndex(LexedTokens::IndexType tkIdx) const;
-    SyntaxToken findValidToken(const std::vector<SyntaxHolder>& syntaxes) const;
-
-    virtual std::vector<SyntaxHolder> childNodesAndTokens() const /*= 0;*/ { return {}; }
-    virtual SyntaxVisitor::Action dispatchVisit(SyntaxVisitor* visitor) const = 0;
-
+    SyntaxToken findValidToken(const std::vector<SyntaxHolder>& syntaxHolders) const;
     void visitChildren(SyntaxVisitor* visitor) const;
+
+    virtual std::vector<SyntaxHolder> childNodesAndTokens() const { return {}; }
+    virtual SyntaxVisitor::Action dispatchVisit(SyntaxVisitor* visitor) const = 0;
 
     SyntaxTree* tree_;
     SyntaxKind kind_;

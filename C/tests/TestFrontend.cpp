@@ -108,9 +108,9 @@ void TestFrontend::parse(std::string source,
     if (X.numW_ > 0 || X.numE_ > 0) {
         std::cout << std::endl;
         if (X.numW_ > 0)
-            std::cout << "\t\t[expect (syntax) WARNING]\n";
+            std::cout << "\t\t[expect (parser) WARNING]\n";
         if (X.numE_ > 0)
-            std::cout << "\t\t[expect (syntax) ERROR]\n";
+            std::cout << "\t\t[expect (parser) ERROR]\n";
     }
 #endif
 
@@ -233,11 +233,9 @@ void TestFrontend::parseAndBind(std::string text, int errorCnt, int warnCnt)
     parse(text);
 
     if (errorCnt > 0)
-        std::cout << " [expect (binding) error] ";
+        std::cout << " [expect (binder) error] ";
     if (warnCnt > 0)
-        std::cout << " [expect (binding) warning] ";
-
-    //tree_->bind();
+        std::cout << " [expect (binder) warning] ";
 }
 
 void TestFrontend::parseAndBindAndCheck(std::string text, int errorCnt, int warnCnt)
@@ -245,9 +243,7 @@ void TestFrontend::parseAndBindAndCheck(std::string text, int errorCnt, int warn
     parseAndBind(text);
 
     if (errorCnt > 0)
-        std::cout << " [expect (typing) error] ";
+        std::cout << " [expect (binder) error] ";
     if (warnCnt > 0)
-        std::cout << " [expect (typing) warning] ";
-
-    //tree_->typeCheck();
+        std::cout << " [expect (binder) warning] ";
 }

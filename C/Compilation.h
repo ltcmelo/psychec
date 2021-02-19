@@ -28,6 +28,7 @@
 #include "../common/infra/Pimpl.h"
 
 #include <memory>
+#include <string>
 
 namespace psy {
 namespace C {
@@ -38,19 +39,30 @@ class SemanticModel;
  * \brief The Compilation class.
  *
  * \note
- * API inspirted by \c Microsoft.CodeAnalysis.Compilation from Roslyn, the .NET Compiler Platform.
+ * This API inspirted by that of \c Microsoft.CodeAnalysis.Compilation
+ * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_C_API Compilation
 {
 public:
-    Compilation();
-    ~Compilation();
     Compilation(const Compilation&) = delete;
     Compilation& operator=(const Compilation&) = delete;
+    ~Compilation();
 
+    /**
+     * Create a new compilation.
+     */
+    std::unique_ptr<Compilation> create(const std::string& id);
+
+    /**
+     * The semantic model associated to the given \p tree, which
+     * must be part of \c this compilation.
+     */
     std::unique_ptr<SemanticModel> semanticModel(SyntaxTree* tree) const;
 
 private:
+    Compilation(const std::string& id);
+
     DECL_PIMPL(Compilation);
 };
 
