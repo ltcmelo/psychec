@@ -14,7 +14,7 @@ Psyche is a compiler frontend for the C programming language. Psyche-C is specif
 - API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn).
 - Parser's AST resembling that of the [LLVM's Clang frontend](https://clang.llvm.org/).
 
-Check out [this online interface](http://cuda.dcc.ufmg.br/psyche-c/).
+Check out [this online interface](http://cuda.dcc.ufmg.br/psyche-c/) for a glimpse of Psyche-C.
 
 Applications:
 
