@@ -6,26 +6,26 @@
 
 # Psyche-C
 
-Psyche is a compiler frontend for the C programming language. Psyche-C is specifically designed for the implementation of static analysis tools. Below are the distinct features that make Psyche-C a rather unique C frontend:
+Psyche is a compiler frontend for the C programming language. Psyche-C is specifically designed for the implementation of static analysis tools. These are the distinct features that make Psyche-C rather unique:
 
-- Clean separation between the syntactic and semantic phases.
+- Clean separation between the syntactic and semantic compiler phases.
 - Both algorithmic- and heuristic-based syntax disambiguation strategies.
 - Independent of `#include`, with type inference for missing `struct`, `union`, `enum`, and `typedef`.
 - API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn).
-- Parser's AST resembling that of the [LLVM's Clang frontend](https://clang.llvm.org/).
+- A parser's AST resembling that of the [LLVM's Clang frontend](https://clang.llvm.org/).
 
 Check out [this online interface](http://cuda.dcc.ufmg.br/psyche-c/) for a glimpse of Psyche-C.
 
 Applications:
 
-- Enabling, on incomplete source-code, static analysis techniques that depend on fully-typed programs.
-- Compiling a code snippet (e.g., retrieved from a bug tracker) for object-code inspection.
+- Enabling, on incomplete source-code, static analysis techniques that require on fully-typed programs.
+- Compiling code snippets (e.g., retrieved from a bug tracker) for object-code inspection/debugging.
 - Generating test-input data for standalone functions, in isolation.
 - Quick prototyping of an algorithm, without the need of explicit types.
 
-**NOTE**: The master branch is going through a major overhaul; at this point, it's expected that syntax analysis (parsing and AST construction) already is functional, though. The original version of Psyche-C is available in [this branch](https://github.com/ltcmelo/psychec/tree/original).
+**NOTE**: The master branch is going through a major overhaul; it's expected that syntax analysis (parsing and AST construction) already is functional, though. The original version of Psyche-C is available in [this branch](https://github.com/ltcmelo/psychec/tree/original).
 
-## The Cnippet Driver Adaptor
+## The *cnippet* Driver Adaptor
 
 While Psyche-C is primarily used as a library for the implementation of static analysis tools, it still is a compiler frontend, and may also be used as such — this is done through the *cnippet* driver adaptor.
 
@@ -39,15 +39,18 @@ void f()
 }
 ```
 
-If you compile this snippet with GCC or Clang, you'd see a diagnostic _"the declaration for"_ `T` _"is not available"_. But with the *cnippet* driver adaptor (command line `./cnip.sh -f gcc -c node.c`), a definition for `T` is inferred and the compilation succeeds.
+If you compile this snippet with GCC or Clang, you'd see a diagnostic _"the declaration for_`T`_is not available"_. But with the *cnippet* driver adaptor (through command line `./cnip.sh -f gcc -c node.c`), a definition for `T` is inferred and the compilation succeeds.
 
 ## Building and Testing
 
-Requirements: cmake, a C++17 compiler, and the Haskell Stack.
+Except for type inference, which is written in Haskell, Psyche-C is written in C++17; *cnippet* is written in Python 3.
 
-    cmake CMakeLists.txt  
-    make -j 4
-    
+To build:
+
+    cmake CMakeLists.txt && make -j 4
+
+To run the tests:
+
     ./test-suite
 
 ## Related Publications
