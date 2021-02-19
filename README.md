@@ -4,56 +4,30 @@
 ![](https://github.com/ltcmelo/psychec/workflows/inference-tests/badge.svg)
 ![](https://github.com/ltcmelo/psychec/workflows/compilability-tests/badge.svg)
 
-# NOTE
-## The Psyche project is going through a major overhaul in a private branch which will (hopefully) be merged soon.
+# Psyche-C
 
-# PsycheC
+Psyche is a compiler frontend for the C programming language. Psyche-C is specifically designed for the implementation of static analysis tools. Below are the distinct features that make Psyche-C a rather unique C frontend:
 
-PsycheC is a compiler frontend infrastructure for the C language that is enabled with an ML/Haskell-style (unification-based) type inference engine.
-[This online interface](http://cuda.dcc.ufmg.br/psyche-c/) illustrates the essential functionality of PsycheC.
+- Clean separation between the syntactic and semantic phases.
+- Both algorithmic and heuristic syntax disambiguation strategeies.
+- Indepedence of `#include` headers and type inference for the missing `struct`, `union`, `enum', and `typedef`.
+- API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn).
+- Resemblance between the AST resulting from its parser and that of the [LLVM's Clang frontend](https://clang.llvm.org/).
+
+Check out [this online interface](http://cuda.dcc.ufmg.br/psyche-c/).
 
 Applications:
 
-- Enabling static analysis on partial programs.
-- Supporting semantic tools despite of `#include` failures.
-- Compiling a code snippet (e.g., retrieved from a bug tracker).
-- Generating test-input data for a function, individually.
-- Prototyping of an algorithm without a type specification.
+- Enabling, on incomplete source-code, static analysis techniques that depend on fully-typed programs.
+- Compiling a code snippet (e.g., retrieved from a bug tracker) for object-code inspection.
+- Generating test-input data for individual functions.
+- Quick prototyping of an algorithm, without the need of explicit types.
 
-Be creative!
+**Note**: The master branch is going through a major overhaul; at this point, it's expected that syntax analysis (parsing and AST construction) is functional, though. The original version of Psyche-C is available in [this branch](https://github.com/ltcmelo/psychec/tree/original).
 
+## The Cnippet Driver Adaptor
 
-## Requirements
-
-To *build* PsycheC:
-
-* Cmake
-* C++14 compiler
-* Haskell Stack
-
-To *use* PsycheC (download [here](http://www.cnippet.cc/)):
-
-* Python 3
-
-
-## Building
-
-    cmake CMakeLists.txt  
-    make
-
-
-## Setting Up
-
-    export PATH=$PATH:/path/to/psychec
-
-
-## Using
-
-The simplest way to use PsycheC is through the [Cnippet](http://www.cnippet.cc) compiler adaptor.
-
-Let us see an example.
-
-Consider the file *node.c* below.
+While Psyche-C is primarily used as a library for the implementation of static analysis tools, it still is a compiler frontend, and may also be used as such — this is done through the *cnippet* driver adaptor.
 
 ```c
 // node.c
@@ -65,79 +39,19 @@ void f()
 }
 ```
 
-If you were to compile *node.c* with GCC/Clang, you would issue a command similar to this one:
+If you compile this snippet with GCC or Clang, you'd see a diagnostic _"the declaration for"_ `T` _"is not available"_. But with the *cnippet* driver adaptor (command line `./cnip.sh -f gcc -c node.c`), a definition for `T` is inferred and the compilation succeeds.
 
-    gcc -c node.c
+## Building and Testing
 
-As a result, an object file *node.o* would have been produced.
-However, this will not happen, since a declaration for `T` is not available.
-Instead, you will get an "undeclared identifier" error.
+Requirements:
 
-Now, if you invoke Cnippet, the compilation succeeds (flag `-f` is for non-commercial use).
+* Cmake
+* C++17 compiler
+* Haskell Stack
 
-    ./cnip.sh -f gcc -c node.c
-
-That is because, under the hood, PsycheC will infer the necessary missing definitions.
-
-```c
-typedef struct TYPE_1__
-{
-    int value;
-    struct TYPE_1__* next;
-}* T;
-```
-
-### Generic Programming
-
-*This is a work-in-progress, feedback is welcome through [this form](https://forms.gle/oJj1YEhAk3jwvHRo8).*
-
-PsycheC provides an alternative to `void*` and `#macros` for writing generic code in C.
-This is how you would implement a generic linked-list's `prepend` function.
-
-```c
-_Template void prepend(_Forall(node_t)** head,
-                      _Forall(value_t) value)
-{
-    node_t* n = malloc(sizeof(node_t));
-    n->value = value;
-    n->next = *head;
-    *head = n;
-}
-```
-
-It is not necessary to define neither `node_t` nor `value_t`.
-The definition of `prepend` applies "for all" kinds of nodes and values.
-This way, you can focus on the *algorithms* (the essence of generic programming).
-
-Let us create 2 lists, one of `int` and another of `point_t`, and insert an new head to them.
-
-```c
-int main()
-{
-    _Exists(node_t)* ilst = 0;
-    prepend(&ilst, 42);
-
-    _Exists(node_t)* plst = 0;
-    struct point_t p;
-    p.x = p.y = 42;
-    prepend(&plst, p);
-}
-
-```
-
-Now, PsycheC infers that there "exists" a (node) type whose value is an `int`,
-together with an specialization of `prepend` for such arguments.
-A different (node) type for `point_t` "exists" too, with its corresponding specialization of `prepend`.
-
-Check the examples directory for [this snippet](https://github.com/ltcmelo/psychec/blob/master/examples/generic_list.c).
-
-
-## Running the Tests
-
-    ./psychecgen -t
-    ./test_infer_and_compile.sh
-    cd solver && stack test && cd -
-    cd formalism && ./test_muC.sh
+    cmake CMakeLists.txt  
+    make -j 4
+    ./test-suite
 
 ## Related Publications
 
@@ -160,8 +74,6 @@ Proceedings of the International Conference on Parallel Architectures and Compil
 
 - [Synthesis of Benchmarks for the C Programming Language by Mining Software Repositories](https://dl.acm.org/citation.cfm?id=3355378.3355380)<br/>
 Proceedings of the _Simpósio Brasileiro de Linguagens de Programacao_ — **SBLP**, September 2019.
-
-
 
 An small article about PsycheC:
 
