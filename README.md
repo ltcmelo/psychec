@@ -20,7 +20,7 @@ Applications:
 
 - Enabling, on incomplete source-code, static analysis techniques that depend on fully-typed programs.
 - Compiling a code snippet (e.g., retrieved from a bug tracker) for object-code inspection.
-- Generating test-input data for individual functions.
+- Generating test-input data for standalone functions, in isolation.
 - Quick prototyping of an algorithm, without the need of explicit types.
 
 **NOTE**: The master branch is going through a major overhaul; at this point, it's expected that syntax analysis (parsing and AST construction) already is functional, though. The original version of Psyche-C is available in [this branch](https://github.com/ltcmelo/psychec/tree/original).
