@@ -1,9 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-typedef  long* T3 ;
-typedef  long* T2 ;
-typedef  long* T1 ;
-
-/* Variables and functions */
-

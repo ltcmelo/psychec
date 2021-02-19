@@ -1,8 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-struct option {char* member_0; char member_3; int /*<<< orphan*/ * member_2; int /*<<< orphan*/  member_1; } ;
-
-/* Variables and functions */
-#define  no_argument 128 
-

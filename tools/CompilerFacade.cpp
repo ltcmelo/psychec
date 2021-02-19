@@ -1,41 +1,49 @@
-/******************************************************************************
- Copyright (c) 2016-17 Leandro T. C. Melo (ltcmelo@gmail.com)
-
- This library is free software; you can redistribute it and/or modify it under
- the terms of the GNU Lesser General Public License as published by the Free
- Software Foundation; either version 2.1 of the License, or (at your option)
- any later version.
-
- This library is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- for more details.
-
- You should have received a copy of the GNU Lesser General Public License along
- with this library; if not, write to the Free Software Foundation, Inc., 51
- Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
- *****************************************************************************/
+// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 #include "CompilerFacade.h"
+
 #include "Process.h"
+
 #include <iostream>
 
-using namespace psyche;
+using namespace psy;
 
 CompilerFacade::CompilerFacade(const std::string& hostCC,
-                               const std::vector<std::string>& defs,
-                               const std::vector<std::string>& undefs)
-    : hostCC_(hostCC)  // TODO: Native compiler support validation.
-    , defs_(defs)
-    , undefs_(undefs)
+                               const std::string& std,
+                               const std::vector<std::string>& macroDefs,
+                               const std::vector<std::string>& macroUndefs)
+    : hostCC_(hostCC)
+    , std_(std)
+    , macroDefs_(macroDefs)
+    , macroUndefs_(macroUndefs)
 {}
 
-std::pair<int, std::string> CompilerFacade::preprocessSource(const std::string& source)
+std::pair<int, std::string> CompilerFacade::preprocess(const std::string& source)
 {
     std::string in = "cat << 'EOF' | ";
     in += hostCC_;
     in += macroSetup();
-    in += " -std=c99 -E -x c -CC -";
+    in += " ";
+    in += "-std=" + std_ + " ";
+    in += "-E -x c -CC -";
     in += "\n" + source + "\nEOF";
 
     return Process().execute(in);
@@ -44,9 +52,9 @@ std::pair<int, std::string> CompilerFacade::preprocessSource(const std::string& 
 std::string CompilerFacade::macroSetup() const
 {
     std::string s;
-    for (const auto& d : defs_)
+    for (const auto& d : macroDefs_)
         s += " -D " + d;
-    for (const auto& u : undefs_)
+    for (const auto& u : macroUndefs_)
         s += " -U " + u;
     return s;
 }

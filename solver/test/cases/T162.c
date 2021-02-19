@@ -1,2 +1,0 @@
-void k();
-void j();

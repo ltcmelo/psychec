@@ -1,9 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-
-/* Variables and functions */
- int /*<<< orphan*/  EXIT_FAILURE ; 
- int /*<<< orphan*/  parse_long_options (int,int /*<<< orphan*/  (*) (int /*<<< orphan*/ ),double) ; 
- int /*<<< orphan*/  usage (int /*<<< orphan*/ ) ; 
-

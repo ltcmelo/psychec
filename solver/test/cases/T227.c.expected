@@ -1,7 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-struct A {int dummy; } ;
-
-/* Variables and functions */
- struct A* a ;

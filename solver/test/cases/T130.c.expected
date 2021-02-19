@@ -1,8 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-struct T {int dummy; } ;
-typedef  struct T Chain ;
-
-/* Variables and functions */
-

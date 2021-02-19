@@ -1,9 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-typedef  int /*<<< orphan*/  ANY ;
-
-/* Variables and functions */
- int a ;
- int b ;
-

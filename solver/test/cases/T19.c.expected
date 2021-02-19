@@ -1,8 +1,0 @@
-/* Forward declarations */
-
-/* Type definitions */
-typedef  int* X ;
-
-/* Variables and functions */
- int /*<<< orphan*/  free (int*) ; 
-
