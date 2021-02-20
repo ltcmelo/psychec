@@ -1,6 +1,6 @@
 ---
 name: 'Bug — Parser: valid C snippet not accepted'
-about: Snippet compiled without errors/warnings with GCC and Clang isn't accepted
+about: Error and/or warning in snippet cleanly compiled by both GCC and Clang
 title: ''
 labels: bug, parser
 assignees: ''
