@@ -9,8 +9,8 @@ assignees: ''
 
 BEWARE: Parsing of the snippet for which the AST is malformed must not diagnose any errors or warnings!
 
-**Psyche tag, branch, commit:**
-Either a sha or a screenshot of `git show --summary`.
+**Version**
+Tag, branch, commit, or screenshot of `git show --summary`:
 
-**The snippet:**
+**The snippet**
 As minimal as possible…

@@ -9,11 +9,11 @@ assignees: ''
 
 BEWARE: The snippet which fails with Psyche must be compiled without errors with GCC and Clang with options -c and -Wpedantic!
 
-**ISO C Standard:**
+**ISO C Standard**
 `-std=`
 
-**Psyche tag, branch, commit:**
-Either a sha or a screenshot of `git show --summary`.
+**Version**
+Tag, branch, commit, or screenshot of `git show --summary`:
 
-**The snippet:**
+**The snippet**
 As minimal as possible…
