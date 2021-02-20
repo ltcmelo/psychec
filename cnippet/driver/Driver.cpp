@@ -52,7 +52,8 @@ int Driver::execute(int argc, char* argv[])
     std::string lang;
     cxxopts::Options opts(argv[0], "Cnippet");
     try {
-        opts.positional_help("file");
+        opts.positional_help("file.c")
+            .show_positional_help();
         opts.add_options()
 
         /* General */
@@ -62,7 +63,7 @@ int Driver::execute(int argc, char* argv[])
              "Enable debugging output.",
              cxxopts::value<bool>(DEBUG::globalDebugEnabled))
             ("p,plugin",
-             "Load the plugin of given name.",
+             "Load the plugin with the given name.",
              cxxopts::value<std::string>())
             ("l,lang",
              "Specify the operating language.",
@@ -82,36 +83,31 @@ int Driver::execute(int argc, char* argv[])
              "Undefine a macro.",
              cxxopts::value<std::vector<std::string>>())
             ("cc-I",
-             "Add a directory to the list of `#include' search paths.",
+             "Add a directory as an `#include' search path.",
              cxxopts::value<std::vector<std::string>>())
 
         /* Type inference */
             ("C-infer",
-             "Infer the definition of missing type declarations.")
+             "Infer the definition of missing types.")
             ("C-infer-only",
-             "Don't allow types to be defined, rely only on type inference.")
+             "Don't allow types to be defined.")
 
          /* AST */
             ("C-dump-AST",
              "Dump the C AST to the console.")
-            ("C-AST-no-heuristics",
-             "Disable heuristics on unresolved AST ambiguities.")
-            ("C-AST-stats",
-             "Display AST disambiguation statistics.")
 
         /* Output */
             ("o,output",
              "Specify output file",
              cxxopts::value<std::string>()->default_value("a.cstr"))
-            ("c,constraints",
-             "Display generated constraints.")
 
         /* Input */
             ("positional",
              "Positional arguments",
              cxxopts::value<std::vector<std::string>>());
 
-        opts.parse_positional(std::vector<std::string>{"file", "positional"});
+        opts.parse_positional(std::vector<std::string>{"positional"});
+
         auto cmd = opts.parse(argc, argv);
 
         if (cmd.count("help")) {
@@ -134,11 +130,10 @@ int Driver::execute(int argc, char* argv[])
         }
 
         lang = cmd["lang"].as<std::string>();
-
         applyOptions(cmd);
     }
-    catch (const cxxopts::OptionException& ex) {
-        std::cerr << kCnip << ex.what() << std::endl;
+    catch (...) {
+        std::cerr << kCnip << "command-line error" << std::endl;
         return ERROR_UnrecognizedCommandLine;
     }
 
@@ -160,21 +155,28 @@ void Driver::applyOptions(const cxxopts::ParseResult& cmd)
 
     config_->C_hostCC_ = cmd["cc"].as<std::string>();
 
+    LanguageDialect::Std stdP;
     auto std = cmd["cc-std"].as<std::string>();
     std::for_each(std.begin(), std.end(),
                   [] (char& c) { c = ::tolower(c); });
-    LanguageDialect::Std stdP = LanguageDialect::Std::C11;
+
     if (std == "c89" || std == "c90")
         stdP = LanguageDialect::Std::C89_90;
     else if (std == "c99")
         stdP = LanguageDialect::Std::C99;
     else if (std == "c17" || std == "c18")
         stdP = LanguageDialect::Std::C17_18;
+    else
+        stdP = LanguageDialect::Std::C11;
     config_->C_std = stdP;
 
-    config_->C_macroDefs_ = cmd["cc-D"].as<std::vector<std::string>>();
-    config_->C_macroUndefs_ = cmd["cc-U"].as<std::vector<std::string>>();
-    config_->C_searchPaths_ = cmd["cc-I"].as<std::vector<std::string>>();
+    if (cmd.count("cc-D"))
+        config_->C_macroDefs_ = cmd["cc-D"].as<std::vector<std::string>>();
+    if (cmd.count("cc-U"))
+        config_->C_macroUndefs_ = cmd["cc-U"].as<std::vector<std::string>>();
+    if (cmd.count("cc-I"))
+        config_->C_searchPaths_ = cmd["cc-I"].as<std::vector<std::string>>();
+
     config_->C_dumpAST = cmd.count("C-dump-AST");
     config_->C_infer = cmd.count("C-infer");
     config_->C_inferOnly = cmd.count("C-infer-only");
