@@ -132,9 +132,9 @@ void Parser::DiagnosticsReporter::ExpectedOneOfTokens(const std::vector<SyntaxKi
 void Parser::DiagnosticsReporter::ExpectedTokenOfCategory(const std::string& name,
                                                           const std::string& cat)
 {
-    std::string s = "expected <"
+    std::string s = "expected "
                 + name
-                + ">, got `"
+                + " got `"
                 + parser_->peek().valueText() + "'";
 
     diagnose(DiagnosticDescriptor(cat,
