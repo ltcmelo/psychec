@@ -81,7 +81,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/utility
 )
 
-set(GENERATOR cnip-core)
+set(GENERATOR cnip)
 add_executable(${GENERATOR} ${CNIPPET_SOURCES})
 target_link_libraries(${GENERATOR} psychecfe psychecommon dl)
 
