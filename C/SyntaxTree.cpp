@@ -36,6 +36,7 @@
 #include <algorithm>
 #include <cstdarg>
 #include <cstring>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <stack>
