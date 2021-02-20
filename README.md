@@ -59,8 +59,6 @@ To run the tests:
 
 ## Related Publications
 
-PsycheC is an ongoing research project.
-
 - [Type Inference for C: Applications to the Static Analysis of Incomplete Programs](https://dl.acm.org/doi/10.1145/3421472)<br/>
 ACM Transactions on Programming Languages and Systems — **TOPLAS**, Volume 42, Issue 3, Artible No. 15, Dec. 2020.
 
