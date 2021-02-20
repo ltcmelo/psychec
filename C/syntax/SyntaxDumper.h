@@ -340,10 +340,54 @@ protected:
         if (node->openParenTkIdx_)
             terminal(node->openParenTkIdx_, node);
         nonterminal(node->strLit_);
+        if (node->colon1TkIdx_)
+            terminal(node->colon1TkIdx_, node);
+        for (auto it = node->outputOperands(); it; it = it->next) {
+            nonterminal(it->value);
+            if (it->delimTkIdx_)
+                terminal(it->delimTkIdx_, node);
+        }
+        if (node->colon2TkIdx_)
+            terminal(node->colon2TkIdx_, node);
+        for (auto it = node->inputOperands(); it; it = it->next) {
+            nonterminal(it->value);
+            if (it->delimTkIdx_)
+                terminal(it->delimTkIdx_, node);
+        }
+        if (node->colon3TkIdx_)
+            terminal(node->colon3TkIdx_, node);
+        for (auto it = node->clobbers(); it; it = it->next) {
+            nonterminal(it->value);
+            if (it->delimTkIdx_)
+                terminal(it->delimTkIdx_, node);
+        }
+        if (node->colon4TkIdx_)
+            terminal(node->colon4TkIdx_, node);
+        for (auto it = node->gotoLabels(); it; it = it->next) {
+            nonterminal(it->value);
+            if (it->delimTkIdx_)
+                terminal(it->delimTkIdx_, node);
+        }
         if (node->closeParenTkIdx_)
             terminal(node->closeParenTkIdx_, node);
         if (node->semicolonTkIdx_)
             terminal(node->semicolonTkIdx_, node);
+        return Action::Skip;
+    }
+
+    virtual Action visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax* node) override
+    {
+        if (node->openBracketTkIdx_)
+            terminal(node->openBracketTkIdx_, node);
+        nonterminal(node->identExpr_);
+        if (node->closeBracketTkIdx_)
+            terminal(node->closeBracketTkIdx_, node);
+        nonterminal(node->strLit_);
+        if (node->openParenTkIdx_)
+            terminal(node->openParenTkIdx_, node);
+        nonterminal(node->expr_);
+        if (node->closeParenTkIdx_)
+            terminal(node->closeParenTkIdx_, node);
         return Action::Skip;
     }
 

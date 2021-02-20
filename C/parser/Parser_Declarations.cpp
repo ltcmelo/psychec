@@ -1074,8 +1074,9 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
  *
  *  a \a storage-class-specifier,
  *  a \a (builtin) type-specifer,
- *  a \a type-qualifier, or
- *  a \a function-specifier.
+ *  a \a type-qualifier,
+ *  a \a function-specifier, or
+ *  a \a GNU ext asm-qualifier.
  *
  * \remark 6.7.1, 6.7.2, 6.7.3, and 6.7.4
  */
@@ -1086,10 +1087,14 @@ void Parser::parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec, SyntaxKind sp
     PSYCHE_ASSERT(SyntaxFacts::isStorageClassToken(peek().kind())
                         || SyntaxFacts::isBuiltinTypeSpecifierToken(peek().kind())
                         || SyntaxFacts::isTypeQualifierToken(peek().kind())
-                        || SyntaxFacts::isFunctionSpecifierToken(peek().kind()),
+                        || SyntaxFacts::isFunctionSpecifierToken(peek().kind())
+                        || SyntaxFacts::isExtGNU_AsmQualifierToken(peek().kind()),
                   return,
-                  "assert failure: <storage-class-specifier>, (builtin) <type-specifier>,"
-                  "<function-specifier>, or <type-qualifier>");
+                  "assert failure: <storage-class-specifier>, "
+                                  "(builtin) <type-specifier>, "
+                                  "<function-specifier>, "
+                                  "<type-qualifier>, or"
+                                  "<GNU-ext-asm-qualifier>");
 
     auto trivSpec = makeNode<SpecT>(specK);
     spec = trivSpec;

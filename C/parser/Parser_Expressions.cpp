@@ -60,6 +60,24 @@ bool Parser::parseExpression(ExpressionSyntax*& expr)
 }
 
 /**
+ * Parse an \a identifier.
+ *
+ * \remark 6.4.2 and 6.5.1
+ */
+bool Parser::parseIdentifierExpression(ExpressionSyntax*& expr)
+{
+    DEBUG_THIS_RULE();
+
+    if (peek().kind() != SyntaxKind::IdentifierToken) {
+        diagnosticsReporter_.ExpectedIdentifier();
+        return false;
+    }
+
+    parseIdentifierExpression_AtFirst(expr);
+    return true;
+}
+
+/**
  * Parse an \a identifier as an \a expression, with LA(1) at FIRST.
  *
  * \remark 6.4.2 and 6.5.1

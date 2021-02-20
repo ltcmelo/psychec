@@ -1529,19 +1529,92 @@ void TestParser::case2603()
 
 void TestParser::case2604()
 {
-//    parseStatement(R"(
-//                   asm ( "movq %0, %0" : "+rm" ( foo ) ) ;
-//                   )");
+    // From https://www.felixcloutier.com/documents/gcc-asm.html.
+
+    parseStatement(R"(
+                   asm ( "movq %0, %0" : "+rm" ( foo ) ) ;
+                   )");
 }
 
-void TestParser::case2605() {}
-void TestParser::case2606() {}
-void TestParser::case2607() {}
-void TestParser::case2608() {}
-void TestParser::case2609() {}
-void TestParser::case2610() {}
-void TestParser::case2611() {}
-void TestParser::case2612() {}
+void TestParser::case2605()
+{
+    // From https://www.felixcloutier.com/documents/gcc-asm.html.
+
+    parseStatement(R"(
+                   asm ( "addl %0, %1" : "+r" ( foo ) : "g" ( bar ) ) ;
+                   )");
+}
+
+void TestParser::case2606()
+{
+    // From https://www.felixcloutier.com/documents/gcc-asm.html.
+
+    parseStatement(R"(
+                   asm ( "lfence " :  :  : "memory" ) ;
+                   )");
+}
+
+void TestParser::case2607()
+{
+    parseStatement(R"(
+                   asm ( "movl $123 , %0 \n  "
+                         "addl %1 , %0"
+                         : "=&r" ( foo )
+                         : "r" ( bar ) ) ;
+                   )");
+}
+
+void TestParser::case2608()
+{
+    parseStatement(R"(
+                   asm goto ( "jmp %l0\n"
+                              :
+                              :
+                              :
+                              : x , y );
+                   )");
+}
+
+void TestParser::case2609()
+{
+    parseStatement(R"(
+                   asm goto ( "jmp %l0\n"
+                              :
+                              :
+                              :
+                              : x );
+                   )");
+}
+
+void TestParser::case2610()
+{
+    // From https://www.felixcloutier.com/documents/gcc-asm.html.
+
+    parseStatement(R"(
+                   asm volatile ( "syscall" : "=a" (ret_val) : : "rcx" , "r11" ) ;
+                   )");
+}
+
+void TestParser::case2611()
+{
+    // From https://www.felixcloutier.com/documents/gcc-asm.html.
+
+    parseStatement(R"(
+                   asm ( "imulq %[rhs]"
+                         : "=a" (*lo) , "=d" (*hi)
+                         : [ lhs ] "0" ( left ) , [ rhs ] "rm" ( right )) ;
+                   )");
+}
+
+void TestParser::case2612()
+{
+    parseStatement(R"(
+                   asm ( "mov %[e], %[d]"
+                      : [ d ] "=rm" ( d )
+                      : [ e ] "rm" ( * e ) );
+                   )");
+}
+
 void TestParser::case2613() {}
 void TestParser::case2614() {}
 void TestParser::case2615() {}

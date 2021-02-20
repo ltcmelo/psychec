@@ -705,31 +705,35 @@ bool Parser::parseExtGNU_AsmStatement(StatementSyntax*& stmt)
 
     if (peek().kind() == ColonToken) {
         asmStmt->colon1TkIdx_ = consume();
-        if (peek().kind() == StringLiteralToken
+        if ((peek().kind() == StringLiteralToken
+                    || peek().kind() == OpenBracketToken)
                 && !parseCommaSeparatedItems<ExtGNU_AsmOperandSyntax>(
                         asmStmt->outOprds_,
-                        &Parser::parseExtGNU_AsmOutputOperand_AtFirst))
+                        &Parser::parseExtGNU_AsmOutputOperand_AtFirst)) {
             return ignoreStatement();
+        }
     }
 
     if (peek().kind() == ColonToken) {
         asmStmt->colon2TkIdx_ = consume();
-        if (peek().kind() == StringLiteralToken
+        if ((peek().kind() == StringLiteralToken
+                    || peek().kind() == OpenBracketToken)
                 && !parseCommaSeparatedItems<ExtGNU_AsmOperandSyntax>(
                         asmStmt->inOprds_,
-                        &Parser::parseExtGNU_AsmInputOperand_AtFirst))
+                        &Parser::parseExtGNU_AsmInputOperand_AtFirst)) {
             return ignoreStatement();
+        }
     }
 
     if (peek().kind() == ColonToken) {
         asmStmt->colon3TkIdx_ = consume();
-        if (parseExtGNU_AsmClobbers(asmStmt->clobs_))
+        if (!parseExtGNU_AsmClobbers(asmStmt->clobs_))
             return ignoreStatement();
     }
 
     if (peek().kind() == ColonToken) {
         asmStmt->colon4TkIdx_ = consume();
-        if (parseExtGNU_AsmGotos(asmStmt->labels_))
+        if (!parseExtGNU_AsmGotoLabels(asmStmt->labels_))
             return ignoreStatement();
     }
 
@@ -790,17 +794,25 @@ bool Parser::parseExtGNU_AsmOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOprd,
                                             SyntaxKind oprdK)
 {
     DEBUG_THIS_RULE();
-
-    PSYCHE_ASSERT(peek().kind() == StringLiteralToken,
+    PSYCHE_ASSERT(peek().kind() == StringLiteralToken
+                        || peek().kind() == OpenBracketToken,
                   return false,
-                  "assert failure: `<string-literal>'");
+                  "assert failure: `[' or `<string-literal>'");
 
     auto oprd = makeNode<ExtGNU_AsmOperandSyntax>(oprdK);
     asmOprd = oprd;
 
-    // TODO: continue
+    if (peek().kind() == OpenBracketToken) {
+        oprd->openBracketTkIdx_ = consume();
+        if (!(parseIdentifierExpression(oprd->identExpr_)
+                && match(CloseBracketToken, &oprd->closeBracketTkIdx_)))
+            return false;
+    }
 
-    return false;
+    return parseStringLiteral(oprd->strLit_)
+        && match(OpenParenToken, &oprd->openParenTkIdx_)
+        && parseExpression(oprd->expr_)
+        && match(CloseParenToken, &oprd->closeParenTkIdx_);
 }
 
 bool Parser::parseExtGNU_AsmClobbers(ExpressionListSyntax*& clobList)
@@ -822,9 +834,26 @@ bool Parser::parseExtGNU_AsmClobber_AtFirst(ExpressionSyntax*& clob, ExpressionL
     return parseStringLiteral(clob);
 }
 
-bool Parser::parseExtGNU_AsmGotos(IdentifierExpressionListSyntax*& labelList)
+bool Parser::parseExtGNU_AsmGotoLabels(ExpressionListSyntax*& labelList)
 {
-    return false; // TODO
+    DEBUG_THIS_RULE();
+
+    if (peek().kind() != IdentifierToken)
+        return true;
+
+    return parseCommaSeparatedItems<ExpressionSyntax>(
+                labelList,
+                &Parser::parseExtGNU_AsmGotoLabel_AtFirst);
+
+}
+
+bool Parser::parseExtGNU_AsmGotoLabel_AtFirst(ExpressionSyntax*& label,
+                                              ExpressionListSyntax*&)
+{
+    DEBUG_THIS_RULE();
+
+    parseIdentifierExpression_AtFirst(label);
+    return true;
 }
 
 bool Parser::checkStatementParse(bool stmtParsed)

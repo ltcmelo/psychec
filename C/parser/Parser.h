@@ -302,6 +302,7 @@ private:
     //-------------//
     bool parseExpression(ExpressionSyntax*& expr);
     bool parsePrimaryExpression(ExpressionSyntax*& expr);
+    bool parseIdentifierExpression(ExpressionSyntax*& expr);
     void parseIdentifierExpression_AtFirst(ExpressionSyntax*& expr);
     template <class ExprT> bool parseConstant(ExpressionSyntax*& expr, SyntaxKind exprK);
     template <class ExprT> void parseConstant_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK);
@@ -397,13 +398,17 @@ private:
     bool parseExtGNU_AsmInputOperand_AtFirst(
             ExtGNU_AsmOperandSyntax*& asmOprd,
             ExtGNU_AsmOperandListSyntax*&);
-    bool parseExtGNU_AsmOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOprd,
-                                        SyntaxKind oprdK);
+    bool parseExtGNU_AsmOperand_AtFirst(
+            ExtGNU_AsmOperandSyntax*& asmOprd,
+            SyntaxKind oprdK);
     bool parseExtGNU_AsmClobbers(ExpressionListSyntax*& clobList);
     bool parseExtGNU_AsmClobber_AtFirst(
             ExpressionSyntax*& clob,
             ExpressionListSyntax*& clobList);
-    bool parseExtGNU_AsmGotos(IdentifierExpressionListSyntax*& labelList);
+    bool parseExtGNU_AsmGotoLabels(ExpressionListSyntax*& labelList);
+    bool parseExtGNU_AsmGotoLabel_AtFirst(
+            ExpressionSyntax*& label,
+            ExpressionListSyntax*&);
     void maybeAmbiguateStatement(StatementSyntax*& stmt);
     bool checkStatementParse(bool stmtParsed);
 };

@@ -480,12 +480,18 @@ class PSY_C_API ExtGNU_AsmOperandSyntax final : public SyntaxNode
     AST_G_NODE_NK(ExtGNU_AsmOperand)
 
 public:
+    SyntaxToken openBracketToken() const { return tokenAtIndex(openBracketTkIdx_); }
+    const ExpressionSyntax* identifier() const { return identExpr_; }
+    SyntaxToken closeBracketToken() const { return tokenAtIndex(closeBracketTkIdx_); }
     const ExpressionSyntax* stringLiteral() const { return strLit_; }
     SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
     const ExpressionSyntax* expression() const { return expr_; }
-    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
+    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(openBracketTkIdx_); }
 
 private:
+    LexedTokens::IndexType openBracketTkIdx_ = LexedTokens::invalidIndex();
+    ExpressionSyntax* identExpr_ = nullptr;
+    LexedTokens::IndexType closeBracketTkIdx_ = LexedTokens::invalidIndex();
     ExpressionSyntax* strLit_ = nullptr;
     LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
     ExpressionSyntax* expr_ = nullptr;
@@ -511,6 +517,14 @@ public:
     const SpecifierListSyntax* asmQualifiers() const { return asmQuals_; }
     SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
     const ExpressionSyntax* stringLiteral() const { return strLit_; }
+    SyntaxToken colon1Token() const { return tokenAtIndex(colon1TkIdx_); }
+    const ExtGNU_AsmOperandListSyntax* outputOperands() const { return outOprds_; }
+    SyntaxToken colon2Token() const { return tokenAtIndex(colon2TkIdx_); }
+    const ExtGNU_AsmOperandListSyntax* inputOperands() const { return inOprds_; }
+    SyntaxToken colon3Token() const { return tokenAtIndex(colon3TkIdx_); }
+    const ExpressionListSyntax* clobbers() const { return clobs_; }
+    SyntaxToken colon4Token() const { return tokenAtIndex(colon4TkIdx_); }
+    const ExpressionListSyntax* gotoLabels() const { return labels_; }
     SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
     SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
 
@@ -526,7 +540,7 @@ private:
     LexedTokens::IndexType colon3TkIdx_ = LexedTokens::invalidIndex();
     ExpressionListSyntax* clobs_ = nullptr;
     LexedTokens::IndexType colon4TkIdx_ = LexedTokens::invalidIndex();
-    IdentifierExpressionListSyntax* labels_ = nullptr;
+    ExpressionListSyntax* labels_ = nullptr;
     LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
     LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
 
@@ -539,8 +553,6 @@ class PSY_C_API ExtGNU_AsmQualifierSyntax final : public TrivialSpecifierSyntax
 public:
     SyntaxToken asmQualifier() const { return tokenAtIndex(specTkIdx_); }
 };
-
-
 
 } // C
 } // psy

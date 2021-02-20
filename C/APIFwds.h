@@ -182,7 +182,6 @@ typedef SyntaxNodePlainList<DesignatorSyntax*> DesignatorListSyntax;
 typedef SyntaxNodeSeparatedList<InitializerSyntax*> InitializerListSyntax;
 
 typedef SyntaxNodeSeparatedList<ExpressionSyntax*> ExpressionListSyntax;
-typedef SyntaxNodePlainList<IdentifierExpressionSyntax*> IdentifierExpressionListSyntax;
 typedef SyntaxNodeSeparatedList<GenericAssociationSyntax*> GenericAssociationListSyntax;
 
 typedef SyntaxNodePlainList<StatementSyntax*> StatementListSyntax;

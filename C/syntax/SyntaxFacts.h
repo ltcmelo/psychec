@@ -377,6 +377,21 @@ public:
                 return false;
         }
     }
+
+    //------------//
+    // Statements //
+    //------------//
+    static bool isExtGNU_AsmQualifierToken(SyntaxKind tkK)
+    {
+        switch (tkK) {
+            case Keyword_volatile:
+            case Keyword_inline:
+            case Keyword_goto:
+                return true;
+            default:
+                return false;
+        }
+    }
 };
 
 } // C
