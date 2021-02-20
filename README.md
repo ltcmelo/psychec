@@ -14,8 +14,6 @@ Psyche is a compiler frontend for the C programming language. Psyche-C is specif
 - API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn).
 - A parser's AST resembling that of the [LLVM's Clang frontend](https://clang.llvm.org/).
 
-Check out [this online interface](http://cuda.dcc.ufmg.br/psyche-c/) for a glimpse of Psyche-C.
-
 Applications:
 
 - Enabling, on incomplete source-code, static analysis techniques that require on fully-typed programs.
@@ -40,6 +38,12 @@ void f()
 ```
 
 If you compile the above snippet with GCC or Clang, you'd see the diagnostic _"declaration for_`T`_is not available"_. But with *cnippet* the compilation would succeed: a definition for `T` is inferred.
+
+## Documentation and Resources
+
+- The Doxygen-generated [API](https://ltcmelo.github.io/psychec/api-docs/html/index.html).
+- An [online interface](http://cuda.dcc.ufmg.br/psyche-c/) that offers a glimpse of Psyche-C's functionality.
+- A little article about [Programming in C with Type Inference](https://www.codeproject.com/Articles/1238603/Programming-in-C-with-Type-Inference) (versão em [Português](https://www.embarcados.com.br/inferencia-de-tipos-em-c-usando-psychec/)).
 
 ## Building and Testing
 
@@ -74,7 +78,3 @@ Proceedings of the International Conference on Parallel Architectures and Compil
 
 - [Synthesis of Benchmarks for the C Programming Language by Mining Software Repositories](https://dl.acm.org/citation.cfm?id=3355378.3355380)<br/>
 Proceedings of the _Simpósio Brasileiro de Linguagens de Programacao_ — **SBLP**, Sep. 2019.
-
-An small article about PsycheC:
-
-- [Programming in C with Type Inference](https://www.codeproject.com/Articles/1238603/Programming-in-C-with-Type-Inference)
