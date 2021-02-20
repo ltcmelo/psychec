@@ -1,4 +1,4 @@
-name: generator-build
+name: build
 
 on:
   push:

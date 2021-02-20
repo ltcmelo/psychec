@@ -1,4 +1,4 @@
-name: parser-tests
+name: test-suite
 
 on:
   push:
