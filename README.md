@@ -27,7 +27,7 @@ Applications:
 
 ## The *cnippet* Driver Adaptor
 
-While Psyche-C is primarily used as a library for the implementation of static analysis tools, it still is a compiler frontend, and may also be used as such — this is done through the *cnippet* driver adaptor.
+While Psyche-C is primarily used as a library for the implementation of static analysis tools, it still is a compiler frontend, and may also be used as an ordinary C parser through the *cnippet* driver adaptor.
 
 ```c
 // node.c
