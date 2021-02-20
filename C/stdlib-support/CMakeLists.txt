@@ -10,8 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(STD_CXX_FLAGS)
 set(STD_CXX_FLAGS "${STD_CXX_FLAGS} -g")
 set(STD_CXX_FLAGS "${STD_CXX_FLAGS} -Wall \
-                                    -Wsign-compare \
-                                    -Wno-inconsistent-missing-override")
+                                    -Wsign-compare")
 
 set(CMAKE_MACOSX_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH "\$ORIGIN;@executable_path;@loader_path")

@@ -52,7 +52,7 @@ Compilation::~Compilation()
 
 std::unique_ptr<Compilation> Compilation::create(const std::string& id)
 {
-
+    return nullptr;
 }
 
 std::unique_ptr<SemanticModel> Compilation::semanticModel(SyntaxTree* tree) const

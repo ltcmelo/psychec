@@ -145,7 +145,7 @@
  */
 #define CHILD_NODES_AND_TOKENS(CHILDREN_SYNTAX) \
     public: \
-        virtual std::vector<SyntaxHolder> childNodesAndTokens() const \
+        virtual std::vector<SyntaxHolder> childNodesAndTokens() const override \
             { auto self = { CHILDREN_SYNTAX }; \
               return merge(BaseSyntax::childNodesAndTokens(), self); }
 

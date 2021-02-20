@@ -110,7 +110,7 @@ protected:
         return visitTrivialSpecifier_Common(node);
     }
 
-    virtual Action visitTaggedTypeSpecifier(const TaggedTypeSpecifierSyntax* node)
+    virtual Action visitTaggedTypeSpecifier(const TaggedTypeSpecifierSyntax* node) override
     {
         if (node->taggedKwTkIdx_)
             terminal(node->taggedKwTkIdx_, node);
@@ -212,7 +212,7 @@ protected:
         return Action::Skip;
     }
 
-    virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax* node)
+    virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax* node) override
     {
         for (auto iter = node->attrs_; iter; iter = iter->next)
             nonterminal(iter->value);
@@ -347,7 +347,7 @@ protected:
         return Action::Skip;
     }
 
-    virtual Action visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax* node)
+    virtual Action visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax* node) override
     {
         if (node->specTkIdx_)
             terminal(node->specTkIdx_, node);
@@ -579,7 +579,7 @@ protected:
         return Action::Skip;
     }
 
-    virtual Action visitExtPSY_QuantifiedTypeSpecifier(const ExtPSY_QuantifiedTypeSpecifierSyntax* node)
+    virtual Action visitExtPSY_QuantifiedTypeSpecifier(const ExtPSY_QuantifiedTypeSpecifierSyntax* node) override
     {
         if (node->quantifierTkIdx_)
             terminal(node->quantifierTkIdx_, node);

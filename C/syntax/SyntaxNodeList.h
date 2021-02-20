@@ -48,7 +48,7 @@ public:
      */
     virtual SyntaxToken lastToken() const = 0;
 
-    virtual void acceptVisitor_t(SyntaxVisitor* visitor) = 0;
+    virtual void acceptVisitor(SyntaxVisitor* visitor) = 0;
 };
 
 
@@ -91,7 +91,7 @@ public:
         return SyntaxToken::invalid();
     }
 
-    virtual void acceptVisitor_t(SyntaxVisitor* visitor)
+    virtual void acceptVisitor(SyntaxVisitor* visitor) override
     {
         for (auto it = this; it; it = it->next) {
             SyntaxNodeT node = static_cast<SyntaxNodeT>(it->value);

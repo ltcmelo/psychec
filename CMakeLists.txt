@@ -23,9 +23,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PSYCHEC_CXX_FLAGS)
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -g")
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall \
-                                            -Wsign-compare \
-                                            -Wno-inconsistent-missing-override")
-set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
+                                            -Wsign-compare")
 
 # Project sources.
 set(PSYCHEC_SOURCES

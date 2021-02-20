@@ -13,9 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CFE_CXX_FLAGS)
 set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -g")
 set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -Wall \
-                                    -Wsign-compare \
-                                    -Wno-inconsistent-missing-override")
-set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -DCPLUSPLUS_WITHOUT_QT")
+                                    -Wsign-compare")
 
 set(CMAKE_MACOSX_RPATH TRUE)
 

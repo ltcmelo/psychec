@@ -112,7 +112,7 @@ void SyntaxNode::visitChildren(SyntaxVisitor* visitor) const
                     continue;
 
                 auto nodeL = const_cast<SyntaxNodeList*>(synH.nodeList());
-                nodeL->acceptVisitor_t(visitor);
+                nodeL->acceptVisitor(visitor);
                 break;
             }
 

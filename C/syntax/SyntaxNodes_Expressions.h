@@ -574,9 +574,9 @@ class PSY_C_API BinaryExpressionSyntax
     AST_NODE_NK(BinaryExpression, Expression)
 
 public:
-    const ExpressionSyntax* left() const { return leftExpr_; }
-    SyntaxToken operatorToken() const { return tokenAtIndex(oprtrTkIdx_); }
-    const ExpressionSyntax* right() const { return rightExpr_; }
+    const ExpressionSyntax* left() const override { return leftExpr_; }
+    SyntaxToken operatorToken() const override { return tokenAtIndex(oprtrTkIdx_); }
+    const ExpressionSyntax* right() const override { return rightExpr_; }
 
 private:
     AST_CHILD_LST3(leftExpr_, oprtrTkIdx_, rightExpr_)
@@ -666,9 +666,9 @@ class PSY_C_API SequencingExpressionSyntax
     AST_NODE_1K(SequencingExpression, Expression)
 
 public:
-    const ExpressionSyntax* left() const { return leftExpr_; }
-    SyntaxToken operatorToken() const { return tokenAtIndex(oprtrTkIdx_); }
-    const ExpressionSyntax* right() const { return rightExpr_; }
+    const ExpressionSyntax* left() const override { return leftExpr_; }
+    SyntaxToken operatorToken() const override { return tokenAtIndex(oprtrTkIdx_); }
+    const ExpressionSyntax* right() const override { return rightExpr_; }
 
 private:
     AST_CHILD_LST3(leftExpr_, oprtrTkIdx_, rightExpr_)

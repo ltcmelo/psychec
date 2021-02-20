@@ -21,6 +21,8 @@
 
 #include "LanguageDialect.h"
 
+#include "common/infra/PsycheAssert.h"
+
 #include <type_traits>
 
 namespace psy {
@@ -72,6 +74,9 @@ std::string to_string(LanguageDialect::Std std)
 
         case LanguageDialect::Std::C17_18:
             return "c17";
+
+        default:
+            PSYCHE_ASSERT(false, return "", "");
     }
 }
 
