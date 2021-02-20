@@ -1,37 +1,10 @@
-## Welcome to GitHub Pages
+## The Psyche-C Project
 
-You can use the [editor on GitHub](https://github.com/ltcmelo/psychec/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Psyche-C is a rather unique compiler frontend for the C programming language. The primary goal Psyche-C is to support the implementation of static analysis tools, but it may also be used as an ordinary parser through the *cnippet* driver adaptor. A brief summary of the capabilities of Psyche-C is available in the [project's frontpage README](https://github.com/ltcmelo/psychec/blob/master/README.md).
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+All of the resources and documentation about Psyche-C may be found in its [open-source repository](https://github.com/ltcmelo/psychec), except for those related to its distinguished [type inference](https://en.wikipedia.org/wiki/Type_inference) engine, which are described here.
 
-### Markdown
+### Type Inference for C
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Comming soon...
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ltcmelo/psychec/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
