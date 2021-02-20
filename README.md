@@ -21,7 +21,9 @@ Applications:
 - Generating test-input data for standalone functions, in isolation.
 - Quick prototyping of an algorithm, without the need of explicit types.
 
-**NOTE**: The master branch is going through a major overhaul; it's expected that syntax analysis (parsing and AST construction) already is functional, though. The original version of Psyche-C is available in [this branch](https://github.com/ltcmelo/psychec/tree/original).
+**NOTE**:
+
+The master branch is going through a major overhaul; it's expected that syntax analysis (parsing and AST construction) already is functional, though. The original version of Psyche-C is available in [this branch](https://github.com/ltcmelo/psychec/tree/original).
 
 ## The *cnippet* Driver Adaptor
 
