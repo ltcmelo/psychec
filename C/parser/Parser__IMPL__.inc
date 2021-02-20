@@ -31,11 +31,12 @@
 #include "syntax/SyntaxToken.h"
 #include "syntax/SyntaxUtilities.h"
 
+#include <functional>
 #include <iostream>
-#include <unordered_map>
-#include <utility>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
+#include <utility>
 
 using namespace  psy;
 using namespace C;
