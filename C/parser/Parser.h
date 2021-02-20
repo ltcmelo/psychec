@@ -31,6 +31,7 @@
 #include "syntax/SyntaxToken.h"
 
 #include <cstdint>
+#include <functional>
 #include <stack>
 #include <vector>
 

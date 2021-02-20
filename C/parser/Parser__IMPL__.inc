@@ -31,7 +31,6 @@
 #include "syntax/SyntaxToken.h"
 #include "syntax/SyntaxUtilities.h"
 
-#include <functional>
 #include <iostream>
 #include <stdexcept>
 #include <string>
