@@ -1608,11 +1608,12 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
             decltor = identDecltor;
             identDecltor->identTkIdx_ = consume();
             identDecltor->attrs1_ = attrList;
-            if (!parseDirectDeclaratorSuffix(decltor,
-                                             declCtx,
-                                             decltorVariety,
-                                             attrList,
-                                             identDecltor))
+            if (!parseDirectDeclaratorSuffix(
+                        decltor,
+                        declCtx,
+                        decltorVariety,
+                        attrList,
+                        identDecltor))
                 return false;
 
             SpecifierListSyntax** specList_cur = &identDecltor->attrs2_;
@@ -1645,11 +1646,12 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
         case OpenParenToken: {
             if (decltorVariety == DeclaratorVariety::Abstract) {
                 if (peek(2).kind() == CloseParenToken) {
-                    if (!parseDirectDeclaratorSuffix(decltor,
-                                                     declCtx,
-                                                     decltorVariety,
-                                                     attrList,
-                                                     nullptr))
+                    if (!parseDirectDeclaratorSuffix(
+                                decltor,
+                                declCtx,
+                                decltorVariety,
+                                attrList,
+                                nullptr))
                         return false;
                     break;
                 }
@@ -1663,11 +1665,12 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                         auto absDecltor = makeNode<AbstractDeclaratorSyntax>();
                         decltor = absDecltor;
                         absDecltor->attrs_ = attrList;
-                        if (!parseDirectDeclaratorSuffix(decltor,
-                                                         declCtx,
-                                                         decltorVariety,
-                                                         attrList,
-                                                         absDecltor))
+                        if (!parseDirectDeclaratorSuffix(
+                                    decltor,
+                                    declCtx,
+                                    decltorVariety,
+                                    attrList,
+                                    absDecltor))
                             return false;
                         break;
                     }
@@ -1678,11 +1681,12 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                     parenDecltor->openParenTkIdx_ = openParenTkIdx;
                     parenDecltor->innerDecltor_ = innerDecltor;
                     parenDecltor->closeParenTkIdx_ = consume();
-                    if (!parseDirectDeclaratorSuffix(decltor,
-                                                     declCtx,
-                                                     decltorVariety,
-                                                     attrList,
-                                                     parenDecltor))
+                    if (!parseDirectDeclaratorSuffix(
+                                decltor,
+                                declCtx,
+                                decltorVariety,
+                                attrList,
+                                parenDecltor))
                         return false;
                     break;
                 }
@@ -1706,11 +1710,12 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
 
         case OpenBracketToken:
             if (decltorVariety == DeclaratorVariety::Abstract) {
-                if (!parseDirectDeclaratorSuffix(decltor,
-                                                 declCtx,
-                                                 decltorVariety,
-                                                 attrList,
-                                                 nullptr))
+                if (!parseDirectDeclaratorSuffix(
+                            decltor,
+                            declCtx,
+                            decltorVariety,
+                            attrList,
+                            nullptr))
                     return false;
                 break;
             }
@@ -1858,7 +1863,6 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
                 }
 
                 case Keyword_static:
-                    std::cout << "got static " << backtracker_ << std::endl;
                     checkDialect();
                     if (!validateContext(&Parser::DiagnosticsReporter::
                                          UnexpectedStaticOrTypeQualifiersInArrayDeclarator)) {
@@ -1907,8 +1911,30 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
     arrOrFuncDecltor->attrs1_ = attrList;
     arrOrFuncDecltor->innerDecltor_ = innerDecltor;
 
-    if (peek().kind() == Keyword_ExtGNU___attribute__)
-        parseExtGNU_AttributeSpecifierList_AtFirst(arrOrFuncDecltor->attrs2_);
+    SpecifierListSyntax** specList_cur = &arrOrFuncDecltor->attrs2_;
+
+    switch (peek().kind()) {
+        case Keyword_ExtGNU___asm__: {
+            SpecifierSyntax* spec = nullptr;
+            if (!parseExtGNU_AsmLabel_AtFirst(spec))
+                return false;
+
+            *specList_cur = makeNode<SpecifierListSyntax>(spec);
+            specList_cur = &(*specList_cur)->next;
+
+            if (peek().kind() != Keyword_ExtGNU___attribute__)
+                break;
+            [[fallthrough]];
+        }
+
+        case Keyword_ExtGNU___attribute__:
+            if (!parseExtGNU_AttributeSpecifierList_AtFirst(*specList_cur))
+                return false;
+            break;
+
+        default:
+            break;
+    }
 
     switch (peek().kind()) {
         case OpenParenToken:
