@@ -87,6 +87,7 @@ class TypedefNameSyntax;
 class ExtGNU_TypeofSyntax;
 class ExtGNU_AttributeSpecifierSyntax;
 class ExtGNU_AttributeSyntax;
+class ExtGNU_AsmLabelSyntax;
 class ExtPSY_QuantifiedTypeSpecifierSyntax;
 class AmbiguousTypedefNameOrIdentifierExpressionSyntax;
 

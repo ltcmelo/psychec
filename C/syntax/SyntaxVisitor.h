@@ -98,6 +98,7 @@ public:
     virtual Action visitExtGNU_Typeof(const ExtGNU_TypeofSyntax*) { return Action::Continue; }
     virtual Action visitExtGNU_AttributeSpecifier(const ExtGNU_AttributeSpecifierSyntax*) { return Action::Continue; }
     virtual Action visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*) { return Action::Continue; }
+    virtual Action visitExtGNU_AsmLabel(const ExtGNU_AsmLabelSyntax*) { return Action::Continue; }
     virtual Action visitExtPSY_QuantifiedTypeSpecifier(const ExtPSY_QuantifiedTypeSpecifierSyntax*) { return Action::Continue; }
 
     /* Declarators */

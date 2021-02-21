@@ -184,6 +184,18 @@ protected:
         return Action::Skip;
     }
 
+    virtual Action visitExtGNU_AsmLabel(const ExtGNU_AsmLabelSyntax* node) override
+    {
+        if (node->asmKwTkIdx_)
+            terminal(node->asmKwTkIdx_, node);
+        if (node->openParenTkIdx_)
+            terminal(node->openParenTkIdx_, node);
+        nonterminal(node->strLit_);
+        if (node->closeParenTkIdx_)
+            terminal(node->closeParenTkIdx_, node);
+        return Action::Skip;
+    }
+
     virtual Action visitExtGNU_Typeof(const ExtGNU_TypeofSyntax* node) override
     {
         if (node->typeofKwTkIdx_)

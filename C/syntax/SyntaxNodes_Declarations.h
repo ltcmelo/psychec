@@ -740,6 +740,36 @@ private:
 };
 
 /**
+ * \brief The ExtGNU_AttributeSpecifierSyntax class.
+ *
+ * \attention This is a GNU extension:
+ *  https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
+ *
+ * \note Similar to:
+ * - \c clang::AsmLabelAttrExpr of LLMV/Clang.
+ */
+class PSY_C_API ExtGNU_AsmLabelSyntax final : public SpecifierSyntax
+{
+    AST_NODE_1K(ExtGNU_AsmLabel, Specifier)
+
+public:
+    SyntaxToken asmKeyword() const { return tokenAtIndex(asmKwTkIdx_); }
+    SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
+    const ExpressionSyntax* stringLiteral() const { return strLit_; }
+    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
+
+private:
+    LexedTokens::IndexType asmKwTkIdx_ = LexedTokens::invalidIndex();
+    LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
+    ExpressionSyntax* strLit_ = nullptr;
+    LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
+    AST_CHILD_LST4(asmKwTkIdx_,
+                   openParenTkIdx_,
+                   strLit_,
+                   closeParenTkIdx_);
+};
+
+/**
  * \brief The ExtPSY_QuantifiedTypeSpecifierSyntax class.
  *
  * \attention This is a Psyche-C extension.

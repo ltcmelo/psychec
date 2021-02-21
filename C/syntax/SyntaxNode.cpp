@@ -215,6 +215,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "ExtGNU_AttributeSpecifier";
         case ExtGNU_Attribute:
             return "ExtGNU_Attribute";
+        case ExtGNU_AsmLabel:
+            return "ExtGNU_AsmLabel";
         case ExtGNU_Typeof:
             return "ExtGNU_Typeof";
 

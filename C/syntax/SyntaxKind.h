@@ -322,6 +322,7 @@ enum SyntaxKind : std::uint16_t
     AlignmentSpecifier,
     ExtGNU_AttributeSpecifier,
     ExtGNU_Attribute,
+    ExtGNU_AsmLabel,
 
     /* Declarators */
     PointerDeclarator,

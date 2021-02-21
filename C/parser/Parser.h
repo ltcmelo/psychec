@@ -258,6 +258,7 @@ private:
     bool parseExtGNU_Attribute(ExtGNU_AttributeSyntax*& attr);
     bool parseExtGNU_AttributeArguments(ExpressionListSyntax*& exprList);
     bool parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList);
+    bool parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr);
     bool parseExtPSY_QuantifiedTypeSpecifier_AtFirst(SpecifierSyntax*& spec);
 
     IdentifierRole determineRoleOfIdentifier(bool seenType) const;

@@ -44,7 +44,7 @@ public:
             + 0600-0649 -> storage class specifiers
             + 0650-0699 -> `_Static_assert'
             + 0700-0779 -> GNU: `__attribute__'
-            + 0780-0799 -> GNU: `__asm__' (file scope)
+            + 0780-0799 -> GNU: `__asm__' (file scope and labels)
             + 0800-0849 -> brace-enclosed initializaters
             + 0850-0899 -> designated initializers
             + 0900-0949 -> GNU: `__typeof__' (w/ ambiguity)

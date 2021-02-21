@@ -1510,6 +1510,25 @@ bool Parser::parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList)
     return true;
 }
 
+bool Parser::parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr)
+{
+    DEBUG_THIS_RULE();
+    PSYCHE_ASSERT(peek().kind() == Keyword_ExtGNU___asm__,
+                  return false,
+                  "assert failure: `asm'");
+
+    auto asmAttr = makeNode<ExtGNU_AsmLabelSyntax>();
+    attr = asmAttr;
+    asmAttr->asmKwTkIdx_ = consume();
+
+    if (match(OpenParenToken, &asmAttr->openParenTkIdx_)
+            && parseStringLiteral(asmAttr->strLit_)
+            && match(CloseParenToken, &asmAttr->closeParenTkIdx_))
+        return true;
+
+    return false;
+}
+
 bool Parser::parseExtPSY_QuantifiedTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
     DEBUG_THIS_RULE();
@@ -1596,8 +1615,30 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                                              identDecltor))
                 return false;
 
-            if (peek().kind() == Keyword_ExtGNU___attribute__)
-                parseExtGNU_AttributeSpecifierList_AtFirst(identDecltor->attrs2_);
+            SpecifierListSyntax** specList_cur = &identDecltor->attrs2_;
+
+            switch (peek().kind()) {
+                case Keyword_ExtGNU___asm__: {
+                    SpecifierSyntax* spec = nullptr;
+                    if (!parseExtGNU_AsmLabel_AtFirst(spec))
+                        return false;
+
+                    *specList_cur = makeNode<SpecifierListSyntax>(spec);
+                    specList_cur = &(*specList_cur)->next;
+
+                    if (peek().kind() != Keyword_ExtGNU___attribute__)
+                        break;
+                    [[fallthrough]];
+                }
+
+                case Keyword_ExtGNU___attribute__:
+                    if (!parseExtGNU_AttributeSpecifierList_AtFirst(*specList_cur))
+                        return false;
+                    break;
+
+                default:
+                    break;
+            }
             break;
         }
 
@@ -1909,6 +1950,11 @@ bool Parser::parseTypeQualifiersAndAttributes(SpecifierListSyntax*& specList)
         switch (peek().kind()) {
             case Keyword_ExtGNU___attribute__:
                 return parseExtGNU_AttributeSpecifierList_AtFirst(specList);
+
+            case Keyword_ExtGNU___asm__:
+                if (parseExtGNU_AsmLabel_AtFirst(spec))
+                    return false;
+                break;
 
             case Keyword_const:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(

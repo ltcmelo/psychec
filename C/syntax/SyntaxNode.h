@@ -173,6 +173,8 @@ public:
     virtual const ExtGNU_AttributeSpecifierSyntax* asExtGNU_AttributeSpecifier() const { return nullptr; }
     virtual ExtGNU_AttributeSyntax* asExtGNU_Attribute() { return nullptr; }
     virtual const ExtGNU_AttributeSyntax* asExtGNU_Attribute() const { return nullptr; }
+    virtual ExtGNU_AsmLabelSyntax* asExtGNU_AsmLabel() { return nullptr; }
+    virtual const ExtGNU_AsmLabelSyntax* asExtGNU_AsmLabel() const { return nullptr; }
     virtual ExtGNU_TypeofSyntax* asExtGNU_Typeof() { return nullptr; }
     virtual const ExtGNU_TypeofSyntax* asExtGNU_Typeof() const { return nullptr; }
     virtual ExtPSY_QuantifiedTypeSpecifierSyntax* asExtPSY_QuantifiedTypeSpecifier() { return nullptr; }

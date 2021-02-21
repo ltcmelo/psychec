@@ -4419,12 +4419,12 @@ void TestParser::case0780()
 
 void TestParser::case0781()
 {
-
+    parse("int x asm ( \"y\") = 1 ;");
 }
 
 void TestParser::case0782()
 {
-
+    parse("int x asm ( \"y\") __attribute__(()) = 1 ;");
 }
 
 void TestParser::case0783()
