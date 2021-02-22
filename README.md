@@ -1,6 +1,8 @@
 ![](https://github.com/ltcmelo/psychec/workflows/build/badge.svg)
 ![](https://github.com/ltcmelo/psychec/workflows/test-suite/badge.svg)
 
+![](https://docs.google.com/drawings/d/e/2PACX-1vT-pCvcuO4U63ERkXWfBzOfVKwMQ_kh-ntzANYyNrnkt8FUV2wRHd5fN6snq33u5hWmnNQR3E3glsnH/pub?w=375&h=150)
+
 # Psyche-C
 
 Psyche is a compiler frontend for the C programming language. Psyche-C is specifically designed for the implementation of static analysis tools. These are the distinct features that make Psyche-C rather unique:
