@@ -13,9 +13,9 @@ Psyche is a compiler frontend for the C programming language. Psyche-C is specif
 
 Applications:
 
-- Enabling, on incomplete source-code, static analysis techniques that require on fully-typed programs.
-- Compiling code snippets (e.g., retrieved from a bug tracker) for object-code inspection/debugging.
-- Generating test-input data for standalone functions, in isolation.
+- Enabling, on incomplete source-code, static analysis techniques that require fully-typed programs.
+- Compiling partial code (e.g., a snippet retrieved from a bug tracker) for object-code inspection.
+- Generating test-input data for a function in isolation (without its dependencies).
 - Quick prototyping of an algorithm, without the need of explicit types.
 
 **NOTE**: The master branch is going through a major overhaul; it's expected that syntax analysis (parsing and AST construction) already is functional, though. The original version of Psyche-C is available in [this branch](https://github.com/ltcmelo/psychec/tree/original).
@@ -40,7 +40,7 @@ If you compile the above snippet with GCC or Clang, you'd see the diagnostic _"d
 
 - The Doxygen-generated [API](https://ltcmelo.github.io/psychec/api-docs/html/index.html).
 - An [online interface](http://cuda.dcc.ufmg.br/psyche-c/) that offers a glimpse of Psyche-C's functionality.
-- A little article about [Programming in C with Type Inference](https://www.codeproject.com/Articles/1238603/Programming-in-C-with-Type-Inference) (versão em [Português](https://www.embarcados.com.br/inferencia-de-tipos-em-c-usando-psychec/)).
+- An article about [Programming in C with Type Inference](https://www.codeproject.com/Articles/1238603/Programming-in-C-with-Type-Inference) (versão em [Português](https://www.embarcados.com.br/inferencia-de-tipos-em-c-usando-psychec/)).
 
 ## Building and Testing
 
