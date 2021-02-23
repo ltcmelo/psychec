@@ -30,6 +30,10 @@ using namespace C;
 
 /**
  * Parse an \a expression.
+ * <a href="https://docs.google.com/spreadsheets/d/1oGjtFaqLzSoBEp2aGNgHrbEHxSi4Ijv57mXMPymZEcQ/edit?usp=sharing">
+ * This table
+ * </a>
+ * describes the choices taken by the parser as according to the grammar rules.
  *
  \verbatim
  expression:
