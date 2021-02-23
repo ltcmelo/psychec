@@ -299,6 +299,10 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
                 if (decltorList_cur == &decltorList) {
                     const DeclaratorSyntax* identDecltor = nullptr;
                     const DeclaratorSyntax* decltorP = decltor;
+                    while (decltorP
+                               && decltorP->kind() == PointerDeclarator)
+                        decltorP = decltorP->asPointerDeclarator()->innerDecltor_;
+
                     do {
                         decltorP = SyntaxUtilities::strippedDeclarator(decltorP);
                         if (decltorP->kind() != FunctionDeclarator)

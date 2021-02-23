@@ -1657,17 +1657,35 @@ void TestParser::case0240()
 
 void TestParser::case0241()
 {
-
+    parse("int * x ( ) { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              PointerDeclarator,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              CompoundStatement }));
 }
 
 void TestParser::case0242()
 {
-
+    parse("x * y ( ) { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              TypedefName,
+                              PointerDeclarator,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              CompoundStatement }));
 }
 
 void TestParser::case0243()
 {
-
+    parse("int [ ] x ( ) { }",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
 }
 
 void TestParser::case0244()
