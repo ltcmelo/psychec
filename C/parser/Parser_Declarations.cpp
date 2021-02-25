@@ -273,6 +273,20 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
                     break;
                 }
 
+                case FunctionDeclarator: {
+                    auto funcDecltor = stripDecltor->asArrayOrFunctionDeclarator();
+                    if (funcDecltor->innerDecltor_) {
+                        auto stripInnerDecltor = const_cast<DeclaratorSyntax*>(
+                                    SyntaxUtilities::strippedDeclarator(funcDecltor->innerDecltor_));
+                        if (stripInnerDecltor->kind() == PointerDeclarator) {
+                            funcDecltor->equalsTkIdx_ = consume();
+                            init = &funcDecltor->init_;
+                            break;
+                        }
+                    }
+                    [[fallthrough]];
+                }
+
                 default:
                     diagnosticsReporter_.UnexpectedInitializerFOLLOWingDeclarator();
                     return ignoreDeclarator();

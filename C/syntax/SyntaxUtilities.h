@@ -33,6 +33,8 @@ namespace C {
 class PSY_C_API SyntaxUtilities
 {
 public:
+    static const DeclaratorSyntax* innermostDeclarator(const DeclaratorSyntax* decltor);
+
     /**
      * Return the DeclaratorSyntax enclosed in \p parenDecltor.
      */

@@ -786,7 +786,7 @@ void TestParser::case0109()
 
 void TestParser::case0110()
 {
-    parse("void ( ( (* x) ( ) ));",
+    parse("void ( ( ( * x ) ( ) ) );",
           Expectation().AST({ TranslationUnit,
                               VariableAndOrFunctionDeclaration,
                               BuiltinTypeSpecifier,
@@ -801,7 +801,7 @@ void TestParser::case0110()
 
 void TestParser::case0111()
 {
-    parse("void ( ( ( (* x) ) ( ) ));",
+    parse("void ( ( ( ( * x ) ) ( ) ) );",
           Expectation().AST({ TranslationUnit,
                               VariableAndOrFunctionDeclaration,
                               BuiltinTypeSpecifier,
@@ -817,27 +817,27 @@ void TestParser::case0111()
 
 void TestParser::case0112()
 {
-    parse("int (* x) [4] [y + 1];") ;
+    parse("int ( * x ) [ 4 ] [ y + 1 ] ;") ;
 }
 
 void TestParser::case0113()
 {
-    parse("void (*** x) (int) ;") ;
+    parse("void ( * * * x ) ( int ) ;") ;
 }
 
 void TestParser::case0114()
 {
-    parse("x (*** y) (z) ;") ;
+    parse("x ( * * * y ) ( z ) ;") ;
 }
 
 void TestParser::case0115()
 {
-    parse("x (*(*( * y ) ) ) (z) ;") ;
+    parse("x ( * ( * ( * y ) ) ) ( z ) ;") ;
 }
 
 void TestParser::case0116()
 {
-    parse("int (* x) [9];",
+    parse("int ( * x ) [ 9 ] ;",
           Expectation().AST({ TranslationUnit,
                               VariableAndOrFunctionDeclaration,
                               BuiltinTypeSpecifier,
@@ -851,7 +851,7 @@ void TestParser::case0116()
 
 void TestParser::case0117()
 {
-    parse("x ( * y ) [9];",
+    parse("x ( * y ) [ 9 ];",
           Expectation().AST({ TranslationUnit,
                               VariableAndOrFunctionDeclaration,
                               TypedefName,
@@ -865,7 +865,7 @@ void TestParser::case0117()
 
 void TestParser::case0118()
 {
-    parse("int (* x) [9] [3];",
+    parse("int ( * x ) [ 9 ] [ 3 ] ;",
           Expectation().AST({ TranslationUnit,
                               VariableAndOrFunctionDeclaration,
                               BuiltinTypeSpecifier,
@@ -882,27 +882,59 @@ void TestParser::case0118()
 
 void TestParser::case0119()
 {
-
+    parse("void ( * x ) ( ) = 0 ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              ParenthesizedDeclarator,
+                              PointerDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ExpressionInitializer,
+                              IntegerConstantExpression }));
 }
 
 void TestParser::case0120()
 {
-
+    parse("void ( * * x ) ( ) = 0 ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              ParenthesizedDeclarator,
+                              PointerDeclarator,
+                              PointerDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ExpressionInitializer,
+                              IntegerConstantExpression }));
 }
 
 void TestParser::case0121()
 {
-
+    parse("void ( * ( x ) ) ( ) = 0 ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              ParenthesizedDeclarator,
+                              PointerDeclarator,
+                              ParenthesizedDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ExpressionInitializer,
+                              IntegerConstantExpression }));
 }
 
 void TestParser::case0122()
 {
-
+    parse("void ( * * ( x ) ) ( ) = 0 ;");
 }
 
 void TestParser::case0123()
 {
-
+    parse("void ( * ( * ( x ) ) ) ( ) = 0 ;");
 }
 
 void TestParser::case0124()

@@ -26,6 +26,39 @@
 using namespace psy;
 using namespace C;
 
+const DeclaratorSyntax* SyntaxUtilities::innermostDeclarator(const DeclaratorSyntax* decltor)
+{
+    while (decltor) {
+        const DeclaratorSyntax* innerDecltor = nullptr;
+        switch (decltor->kind()) {
+            case ParenthesizedDeclarator:
+                innerDecltor = decltor->asParenthesizedDeclarator()->innerDeclarator();
+                break;
+
+            case PointerDeclarator:
+                innerDecltor = decltor->asPointerDeclarator()->innerDeclarator();
+                break;
+
+            case ArrayDeclarator:
+            case FunctionDeclarator:
+                innerDecltor = decltor->asArrayOrFunctionDeclarator()->innerDeclarator();
+                break;
+
+            case BitfieldDeclarator:
+                innerDecltor = decltor->asBitfieldDeclarator()->innerDeclarator();
+                break;
+
+            default:
+                return decltor;
+        }
+        if (!innerDecltor)
+            break;
+
+        decltor = innerDecltor;
+    }
+    return decltor;
+}
+
 const DeclaratorSyntax*
 SyntaxUtilities::declaratorEnclosedIn(const ParenthesizedDeclaratorSyntax* parenDecltor)
 {
