@@ -470,31 +470,6 @@ enum SyntaxKind : std::uint16_t
     UnknownSyntax
 };
 
-enum class SyntaxKindCategory : char
-{
-    ValuedToken,
-    KeywordOrPunctuatorToken,
-    Node,
-    ERROR
-};
-
-inline SyntaxKindCategory kindCategory(SyntaxKind kind)
-{
-    if (kind >= STARTof_ValuedToken
-                && kind <= ENDof_ValuedToken)
-        return SyntaxKindCategory::ValuedToken;
-
-    if (kind >= STARTof_KeywordOrPunctuatorToken
-                && kind <= ENDof_KeywordOrPunctuatorToken)
-        return SyntaxKindCategory::KeywordOrPunctuatorToken;
-
-    if (kind >= STARTof_Node
-                && kind <= ENDof_Node)
-        return SyntaxKindCategory::Node;
-
-    return SyntaxKindCategory::ERROR;
-}
-
 } // C
 } // psy
 

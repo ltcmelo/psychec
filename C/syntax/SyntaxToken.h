@@ -241,9 +241,14 @@ private:
 };
 
 /**
- * The SyntaxKind \p kind of a SyntaxToken as a \c std::string.
+ * The SyntaxKind \p kind as a \c std::string.
  */
 std::string PSY_C_API to_string(SyntaxKind kind); // Definition in SyntaxNode.cpp
+
+/**
+ * The SyntaxToken::Category \p category as a \c std::string.
+ */
+std::string PSY_C_API to_string(SyntaxToken::Category category);
 
 bool operator==(const SyntaxToken& a, const SyntaxToken& b);
 bool operator!=(const SyntaxToken& a, const SyntaxToken& b);

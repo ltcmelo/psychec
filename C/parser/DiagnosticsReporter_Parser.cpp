@@ -60,23 +60,27 @@ std::string Parser::DiagnosticsReporter::joinTokenNames(const std::vector<Syntax
 {
     std::string s;
     if (!validTkKinds.empty()) {
-        auto syntaxK = validTkKinds.front();
-        auto tkKindCat = kindCategory(syntaxK);
-        if (tkKindCat == SyntaxKindCategory::KeywordOrPunctuatorToken)
+        auto tkK = validTkKinds.front();
+        auto tkCat = SyntaxToken::category(tkK);
+        if (tkCat == SyntaxToken::Category::Keywords
+                || tkCat == SyntaxToken::Category::Punctuators)
             s += "`";
-        s += to_string(syntaxK);
-        if (tkKindCat == SyntaxKindCategory::KeywordOrPunctuatorToken)
+        s += to_string(tkK);
+        if (tkCat == SyntaxToken::Category::Keywords
+                || tkCat == SyntaxToken::Category::Punctuators)
             s += "'";
     }
 
     for (std::vector<int>::size_type i = 1; i < validTkKinds.size(); ++i) {
-        auto syntaxK = validTkKinds[i];
-        auto tkKindCat = kindCategory(syntaxK);
+        auto tkK = validTkKinds[i];
+        auto tkCat = SyntaxToken::category(tkK);
         s += " or ";
-        if (tkKindCat == SyntaxKindCategory::KeywordOrPunctuatorToken)
+        if (tkCat == SyntaxToken::Category::Keywords
+                || tkCat == SyntaxToken::Category::Punctuators)
             s += "`";
-        s += to_string(syntaxK);
-        if (tkKindCat == SyntaxKindCategory::KeywordOrPunctuatorToken)
+        s += to_string(tkK);
+        if (tkCat == SyntaxToken::Category::Keywords
+                || tkCat == SyntaxToken::Category::Punctuators)
             s += "'";
     }
     s += " ";
@@ -101,10 +105,10 @@ void Parser::DiagnosticsReporter::ExpectedFeature(const std::string& name)
                                   DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpectedToken(SyntaxKind syntaxK)
+void Parser::DiagnosticsReporter::ExpectedToken(SyntaxKind tkK)
 {
     auto s = "expected `"
-            + to_string(syntaxK)
+            + to_string(tkK)
             + "', got `"
             + parser_->peek().valueText_c_str()
             + "'";

@@ -337,11 +337,6 @@ protected:
  */
 std::string PSY_C_API to_string(SyntaxKind kind);
 
-/**
- * The SyntaxKindCategory of a given \p kindCategory as a \c std::string.
- */
-std::string PSY_C_API to_string(SyntaxKindCategory kindCategory);
-
 } // C
 } // psy
 
