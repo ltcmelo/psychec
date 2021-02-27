@@ -23,36 +23,40 @@
 using namespace psy;
 using namespace C;
 
-/* Generic */
+/* General */
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFeature = "Parser-000";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedToken = "Parser-001";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenWithin = "Parser-002";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryConstant = "Parser-004";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryStringLiteral = "Parser-005";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryIdentifier = "Parser-318-6.8.6.1";
 
-/* Expressions, declarations, and statements */
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression = "Parser-006-6.5";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofEnumerationConstant= "Parser-007-6.7.2.2";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFieldName = "Parser-200-6.5.2";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedBraceEnclosedInitializerList = "Parser-201-6.7.9";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFieldDesignator = "Parser-202-6.7.9";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedEqualsFOLLOWingArrayDesignator = "Parser-203-6.7.9";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator = "Parser-204-6.7.6";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofInitializedDeclarator = "Parser-205";
-const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedInitializerFOLLOWingDeclarator = "Parser-206-6.7.9";
-const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedStaticOrTypeQualifierInArrayDeclarator = "Parser-207-6.7.6";
-const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedPointerInArrayDeclarator = "Parser-308-6.7.6";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator = "Parser--309-6.7.6";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructOrUnionOrEnum = "Parser-310-6.7.2.1";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofEnum = "Parser-311-6.7.2.1";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofSpecifierQualifier = "Parser-312-6.7.2.1";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedNamedParameterBeforeEllipsis = "Parser-313-6.7.6.3";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier = "Parser-314-6.7";
-const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedCaseLabelOutsideSwitch = "Parser-315-6.8.1-2";
-const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedDefaultLabelOutsideSwitch = "Parser-315-6.8.1-2";
-const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedContinueOutsideLoop = "Parser-316-6.8.6.2-1";
-const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedBreakOutsideSwitchOrLoop = "Parser-317-6.8.6.3-1";
+/* Terminal */
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedToken = "Parser-101";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenWithin = "Parser-102";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryConstant = "Parser-104";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryStringLiteral = "Parser-105";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryIdentifier = "Parser-106";
+
+/* Non-terminal */
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression = "Parser-200-6.5";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofEnumerationConstant= "Parser-201-6.7.2.2";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator = "Parser--202-6.7.6";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofSpecifierQualifier = "Parser-203-6.7.2.1";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDesignatedInitializer = "Parser-204-6.7.9";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator = "Parser-205-6.7.6";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofInitializedDeclarator = "Parser-206";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructOrUnionOrEnum = "Parser-207-6.7.2.1";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofEnum = "Parser-208-6.7.2.1";
+
+/* Detailed */
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFieldName = "Parser-300-6.5.2";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedBraceEnclosedInitializerList = "Parser-301-6.7.9";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFieldDesignator = "Parser-302-6.7.9";
+const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedInitializerOfDeclarator = "Parser-303-6.7.9";
+const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedStaticOrTypeQualifierInArrayDeclarator = "Parser-304-6.7.6";
+const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedPointerInArrayDeclarator = "Parser-305-6.7.6";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedNamedParameterBeforeEllipsis = "Parser-306-6.7.6.3";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier = "Parser-307-6.7";
+const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedCaseLabelOutsideSwitch = "Parser-308-6.8.1-2";
+const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedDefaultLabelOutsideSwitch = "Parser-309-6.8.1-2";
+const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedContinueOutsideLoop = "Parser-310-6.8.6.2-1";
+const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedBreakOutsideSwitchOrLoop = "Parser-311-6.8.6.3-1";
 
 
 std::string Parser::DiagnosticsReporter::joinTokenNames(const std::vector<SyntaxKind>& validTkKinds)
@@ -227,18 +231,18 @@ void Parser::DiagnosticsReporter::ExpectedFieldDesignator()
                                   DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::UnexpectedInitializerFOLLOWingDeclarator()
+void Parser::DiagnosticsReporter::UnexpectedInitializerOfDeclarator()
 {
-    diagnose(DiagnosticDescriptor(ID_of_UnexpectedInitializerFOLLOWingDeclarator,
+    diagnose(DiagnosticDescriptor(ID_of_UnexpectedInitializerOfDeclarator,
                                   "[[unexpected initializer for declarator]]",
                                   "declarator may not be initialized",
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpectedEqualsFOLLOWingArrayDesignator()
+void Parser::DiagnosticsReporter::ExpectedFOLLOWofDesignatedInitializer()
 {
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedEqualsFOLLOWingArrayDesignator,
+    diagnose(DiagnosticDescriptor(ID_of_ExpectedFOLLOWofDesignatedInitializer,
                                   "[[obsolete array designator syntax]]",
                                   "obsolete array designator without `='",
                                   DiagnosticSeverity::Warning,
