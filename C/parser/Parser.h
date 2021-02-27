@@ -169,11 +169,16 @@ private:
     };
     friend struct DepthControl;
 
-    enum class DeclarationContext : uint8_t
+    /**
+     * \brief The scope of a declaration.
+     *
+     * \remark 6.2.1-4
+     */
+    enum class DeclarationScope : uint8_t
     {
-        TopLevel,
-        Member,
-        Parameter
+        File,
+        Block,
+        FunctionPrototype
     };
 
     enum class DeclaratorVariety : uint8_t
@@ -213,7 +218,7 @@ private:
             DeclarationSyntax*& decl,
             bool (Parser::*parseSpecifiers)(DeclarationSyntax*&, SpecifierListSyntax*&, bool),
             bool (Parser::*parse_AtFollowOfSpecifiers)(DeclarationSyntax*&, const SpecifierListSyntax*),
-            DeclarationContext declCtx);
+            DeclarationScope declScope);
     bool parseDeclarationOrFunctionDefinition(DeclarationSyntax*& decl);
     bool parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
             DeclarationSyntax*& decl,
@@ -265,16 +270,16 @@ private:
 
     /* Declarators */
     bool parseAbstractDeclarator(DeclaratorSyntax*& decltor);
-    bool parseDeclarator(DeclaratorSyntax*& decltor, DeclarationContext declCtx);
+    bool parseDeclarator(DeclaratorSyntax*& decltor, DeclarationScope declScope);
     bool parseDeclarator(DeclaratorSyntax*& decltor,
-                         DeclarationContext declCtx,
+                         DeclarationScope declScope,
                          DeclaratorVariety decltorVariety);
     bool parseDirectDeclarator(DeclaratorSyntax*& decltor,
-                               DeclarationContext declCtx,
+                               DeclarationScope declScope,
                                DeclaratorVariety decltorVariety,
                                SpecifierListSyntax* attrList);
     bool parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
-                                     DeclarationContext declCtx,
+                                     DeclarationScope declScope,
                                      DeclaratorVariety decltorVariety,
                                      SpecifierListSyntax* attrList,
                                      DeclaratorSyntax* innerDecltor);

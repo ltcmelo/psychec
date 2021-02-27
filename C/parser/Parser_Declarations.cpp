@@ -170,13 +170,13 @@ bool Parser::parseDeclaration(
         DeclarationSyntax*& decl,
         bool (Parser::*parseSpecifiers)(DeclarationSyntax*&, SpecifierListSyntax*&, bool),
         bool (Parser::*parse_AtFollowOfSpecifiers)(DeclarationSyntax*&, const SpecifierListSyntax*),
-        DeclarationContext declCtx)
+        DeclarationScope declScope)
 {
     SpecifierListSyntax* specList = nullptr;
     if (!((this)->*(parseSpecifiers))(
                 decl,
                 specList,
-                declCtx != DeclarationContext::Member))
+                declScope != DeclarationScope::Block))
         return false;
 
     if (peek().kind() == SemicolonToken) {
@@ -201,9 +201,9 @@ bool Parser::parseDeclaration(
     }
 
     if (!specList) {
-        if (declCtx == DeclarationContext::TopLevel)
+        if (declScope == DeclarationScope::File)
             diagnosticsReporter_.ExpectedTypeSpecifier();
-        else if (declCtx == DeclarationContext::Member)
+        else if (declScope == DeclarationScope::Block)
             diagnosticsReporter_.ExpectedFIRSTofSpecifierQualifier();
     }
 
@@ -230,7 +230,7 @@ bool Parser::parseDeclarationOrFunctionDefinition(DeclarationSyntax*& decl)
                 decl,
                 &Parser::parseDeclarationSpecifiers,
                 &Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers,
-                DeclarationContext::TopLevel);
+                DeclarationScope::File);
 }
 
 bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
@@ -242,7 +242,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
 
     while (true) {
         DeclaratorSyntax* decltor = nullptr;
-        if (!parseDeclarator(decltor, DeclarationContext::TopLevel))
+        if (!parseDeclarator(decltor, DeclarationScope::File))
             return false;
 
         *decltorList_cur = makeNode<DeclaratorListSyntax>(decltor);
@@ -470,7 +470,7 @@ bool Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList(
 
     while (true) {
         DeclaratorSyntax* decltor = nullptr;
-        if (!parseDeclarator(decltor, DeclarationContext::Member))
+        if (!parseDeclarator(decltor, DeclarationScope::Block))
             return false;
 
         *decltorList_cur = makeNode<DeclaratorListSyntax>(decltor);
@@ -517,7 +517,7 @@ bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
                 decl,
                 &Parser::parseSpecifierQualifierList,
                 &Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList,
-                DeclarationContext::Member);
+                DeclarationScope::Block);
 }
 
 /**
@@ -692,7 +692,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
         diagnosticsReporter_.ExpectedTypeSpecifier();
 
     Backtracker BT(this);
-    if (!parseDeclarator(paramDecl->decltor_, DeclarationContext::Parameter)) {
+    if (!parseDeclarator(paramDecl->decltor_, DeclarationScope::FunctionPrototype)) {
         BT.backtrack();
         return parseAbstractDeclarator(paramDecl->decltor_);
     }
@@ -1531,20 +1531,20 @@ bool Parser::parseAbstractDeclarator(DeclaratorSyntax*& decltor)
     DEBUG_THIS_RULE();
 
     return parseDeclarator(decltor,
-                           DeclarationContext::Parameter,
+                           DeclarationScope::FunctionPrototype,
                            DeclaratorVariety::Abstract);
 }
 
 bool Parser::parseDeclarator(DeclaratorSyntax*& decltor,
-                             DeclarationContext declCtx)
+                             DeclarationScope declScope)
 {
     DEBUG_THIS_RULE();
 
-    return parseDeclarator(decltor, declCtx, DeclaratorVariety::Named);
+    return parseDeclarator(decltor, declScope, DeclaratorVariety::Named);
 }
 
 bool Parser::parseDeclarator(DeclaratorSyntax*& decltor,
-                             DeclarationContext declCtx,
+                             DeclarationScope declScope,
                              DeclaratorVariety decltorVariety)
 
 {
@@ -1561,14 +1561,14 @@ bool Parser::parseDeclarator(DeclaratorSyntax*& decltor,
         ptrDecltor->asteriskTkIdx_ = consume();
         if (!parseTypeQualifiersAndAttributes(ptrDecltor->qualsAndAttrs_))
             return false;
-        return parseDeclarator(ptrDecltor->innerDecltor_, declCtx, decltorVariety);
+        return parseDeclarator(ptrDecltor->innerDecltor_, declScope, decltorVariety);
     }
 
-    return parseDirectDeclarator(decltor, declCtx, decltorVariety, attrList);
+    return parseDirectDeclarator(decltor, declScope, decltorVariety, attrList);
 }
 
 bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
-                                   DeclarationContext declCtx,
+                                   DeclarationScope declScope,
                                    DeclaratorVariety decltorVariety,
                                    SpecifierListSyntax* attrList)
 {
@@ -1585,7 +1585,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
             identDecltor->attrs1_ = attrList;
             if (!parseDirectDeclaratorSuffix(
                         decltor,
-                        declCtx,
+                        declScope,
                         decltorVariety,
                         attrList,
                         identDecltor))
@@ -1623,7 +1623,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                 if (peek(2).kind() == CloseParenToken) {
                     if (!parseDirectDeclaratorSuffix(
                                 decltor,
-                                declCtx,
+                                declScope,
                                 decltorVariety,
                                 attrList,
                                 nullptr))
@@ -1642,7 +1642,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                         absDecltor->attrs_ = attrList;
                         if (!parseDirectDeclaratorSuffix(
                                     decltor,
-                                    declCtx,
+                                    declScope,
                                     decltorVariety,
                                     attrList,
                                     absDecltor))
@@ -1658,7 +1658,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                     parenDecltor->closeParenTkIdx_ = consume();
                     if (!parseDirectDeclaratorSuffix(
                                 decltor,
-                                declCtx,
+                                declScope,
                                 decltorVariety,
                                 attrList,
                                 parenDecltor))
@@ -1669,10 +1669,10 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
 
             auto parenDecltor = makeNode<ParenthesizedDeclaratorSyntax>();
             parenDecltor->openParenTkIdx_ = consume();
-            if (!parseDeclarator(parenDecltor->innerDecltor_, declCtx, decltorVariety)
+            if (!parseDeclarator(parenDecltor->innerDecltor_, declScope, decltorVariety)
                     || !match(CloseParenToken, &parenDecltor->closeParenTkIdx_)
                     || !parseDirectDeclaratorSuffix(decltor,
-                                                    declCtx,
+                                                    declScope,
                                                     decltorVariety,
                                                     attrList,
                                                     parenDecltor))
@@ -1687,7 +1687,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
             if (decltorVariety == DeclaratorVariety::Abstract) {
                 if (!parseDirectDeclaratorSuffix(
                             decltor,
-                            declCtx,
+                            declScope,
                             decltorVariety,
                             attrList,
                             nullptr))
@@ -1699,7 +1699,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
 
         case ColonToken:
             if (decltorVariety == DeclaratorVariety::Named
-                    && declCtx == DeclarationContext::Member) {
+                    && declScope == DeclarationScope::Block) {
                 auto bitFldDecltor = makeNode<BitfieldDeclaratorSyntax>();
                 decltor = bitFldDecltor;
                 bitFldDecltor->colonTkIdx_ = consume();
@@ -1723,7 +1723,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
 
     if (peek().kind() == ColonToken
             && decltorVariety == DeclaratorVariety::Named
-            && declCtx == DeclarationContext::Member) {
+            && declScope == DeclarationScope::Block) {
         auto bitFldDecltor = makeNode<BitfieldDeclaratorSyntax>();
         bitFldDecltor->innerDecltor_ = decltor;
         decltor = bitFldDecltor;
@@ -1752,14 +1752,14 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
  * \remark 6.7.6
  */
 bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
-                                         DeclarationContext declCtx,
+                                         DeclarationScope declScope,
                                          DeclaratorVariety decltorVariety,
                                          SpecifierListSyntax* attrList,
                                          DeclaratorSyntax* innerDecltor)
 {
     auto validateContext =
-            [this, declCtx] (void (Parser::DiagnosticsReporter::*report)()) {
-                if (declCtx != DeclarationContext::Parameter) {
+            [this, declScope] (void (Parser::DiagnosticsReporter::*report)()) {
+                if (declScope != DeclarationScope::FunctionPrototype) {
                     ((diagnosticsReporter_).*(report))();
                     skipTo(CloseBracketToken);
                     return false;
@@ -1916,7 +1916,7 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
         case OpenBracketToken: {
             innerDecltor = decltor;
             return parseDirectDeclaratorSuffix(decltor,
-                                               declCtx,
+                                               declScope,
                                                decltorVariety,
                                                nullptr,
                                                innerDecltor);
