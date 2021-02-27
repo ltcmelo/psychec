@@ -469,22 +469,5 @@ std::string PSY_C_API to_string(SyntaxKind kind)
     }
 }
 
-std::string PSY_C_API to_string(SyntaxKindCategory kindCategory)
-{
-    switch (kindCategory) {
-        case SyntaxKindCategory::ValuedToken:
-            return "$VTk$";
-
-        case SyntaxKindCategory::KeywordOrPunctuatorToken:
-            return "$KPTk$";
-
-        case SyntaxKindCategory::Node:
-            return "$Node$";
-
-        case SyntaxKindCategory::ERROR:
-            return "$syntax-kind-category-ERROR$";
-    }
-}
-
 } // C
 } // psy

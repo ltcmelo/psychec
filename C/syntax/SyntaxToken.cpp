@@ -407,5 +407,28 @@ bool operator!=(const SyntaxToken& a, const SyntaxToken& b)
     return !(a == b);
 }
 
+std::string to_string(SyntaxToken::Category category)
+{
+    switch (category) {
+        case SyntaxToken::Category::Keywords:
+            return "[keywords]";
+
+        case SyntaxToken::Category::Identifiers:
+            return "[identifiers]";
+
+        case SyntaxToken::Category::Constants:
+            return "[constants]";
+
+        case SyntaxToken::Category::StringLiterals:
+            return "[string literals]";
+
+        case SyntaxToken::Category::Punctuators:
+            return "[punctuators]";
+
+        default:
+            return "[unrecognized]";
+    }
+}
+
 } // C
 } // psy
