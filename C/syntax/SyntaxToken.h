@@ -82,7 +82,8 @@ public:
         Identifiers,
         Constants,
         StringLiterals,
-        Punctuators
+        Punctuators,
+        Unrecognized
     };
 
     /**

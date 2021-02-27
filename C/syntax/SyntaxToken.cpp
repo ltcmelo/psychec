@@ -345,7 +345,10 @@ SyntaxToken::Category SyntaxToken::category(SyntaxKind k)
             return Category::Punctuators;
 
         default:
-            return Category::Keywords;
+            if (k > STARTof_KeywordOrPunctuatorToken
+                    && k <= ENDof_KeywordOrPunctuatorToken)
+                return Category::Keywords;
+            return Category::Unrecognized;
     }
 }
 
