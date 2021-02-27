@@ -73,7 +73,7 @@ bool Parser::parseIdentifierExpression(ExpressionSyntax*& expr)
     DEBUG_THIS_RULE();
 
     if (peek().kind() != SyntaxKind::IdentifierToken) {
-        diagnosticsReporter_.ExpectedIdentifier();
+        diagnosticsReporter_.ExpectedTokenOfCategoryIdentifier();
         return false;
     }
 

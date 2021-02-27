@@ -53,14 +53,14 @@ void TestParser::case2003()
 {
     parseStatement("goto ;",
                    Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
-                                               Parser::DiagnosticsReporter::ID_of_ExpectedIdentifier));
+                                               Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryIdentifier));
 }
 
 void TestParser::case2004()
 {
     parseStatement("goto 1 ;",
                    Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
-                                               Parser::DiagnosticsReporter::ID_of_ExpectedIdentifier));
+                                               Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryIdentifier));
 }
 
 void TestParser::case2005()
