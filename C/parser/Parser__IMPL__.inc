@@ -127,3 +127,48 @@ bool Parser::parseCommaSeparatedItems(NodeListT*& nodeList,
     }
     return true;
 }
+
+template <class NodeT>
+bool Parser::parseParenthesizedTypeNameOrExpression(NodeT*& node)
+{
+    if (!match(OpenParenToken, &node->openParenTkIdx_))
+        return false;
+
+    switch (peek().kind()) {
+        case EllipsisToken:
+            consume();
+            break;
+
+        case IdentifierToken: {
+            if (peek(2).kind() == CloseParenToken) {
+                auto ambiIdent = makeNode<AmbiguousTypedefNameOrIdentifierExpressionSyntax>();
+                node->arg_ = ambiIdent;
+                Backtracker BT(this);
+                parseTypedefName_AtFirst(ambiIdent->typedefName_);
+                BT.backtrack();
+                parseIdentifierExpression_AtFirst(ambiIdent->identExpr_);
+                node->closeParenTkIdx_ = consume();
+                return true;
+            }
+            [[fallthrough]];
+        }
+
+        default: {
+            Backtracker BT(this);
+            ExpressionSyntax* expr = nullptr;
+            if (parseExpression(expr)) {
+                node->arg_ = expr;
+            }
+            else {
+                BT.backtrack();
+                TypeNameSyntax* typeName = nullptr;
+                if (!parseTypeName(typeName))
+                    return false;
+                node->arg_ = typeName;
+            }
+            break;
+        }
+    }
+
+    return matchOrSkipTo(CloseParenToken, &node->closeParenTkIdx_);
+}

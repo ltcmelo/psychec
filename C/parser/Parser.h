@@ -198,6 +198,7 @@ private:
     template <class NodeT, class NodeListT> bool parseCommaSeparatedItems(
             NodeListT*& nodeList,
             bool (Parser::*parseItem)(NodeT*& node, NodeListT*& nodeList));
+    template <class NodeT> bool parseParenthesizedTypeNameOrExpression(NodeT*& node);
 
     //--------------//
     // Declarations //
@@ -251,7 +252,6 @@ private:
             SyntaxKind declK,
             SyntaxKind specK,
             bool (Parser::*parseMember)(DeclarationSyntax*&));
-    template <class SpecT> bool parseParenthesizedTypeNameOrExpression_AtFollowOfSpecifier(SpecT*& spec);
     bool parseExtGNU_AttributeSpecifierList_AtFirst(SpecifierListSyntax*& specList);
     bool parseExtGNU_AttributeSpecifier_AtFirst(SpecifierSyntax*& spec);
     bool parseExtGNU_AttributeList(ExtGNU_AttributeListSyntax*& attrList);

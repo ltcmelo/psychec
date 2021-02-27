@@ -1143,7 +1143,7 @@ bool Parser::parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec)
     auto alignSpec = makeNode<AlignmentSpecifierSyntax>();
     spec = alignSpec;
     alignSpec->alignasKwTkIdx_ = consume();
-    return parseParenthesizedTypeNameOrExpression_AtFollowOfSpecifier(alignSpec);
+    return parseParenthesizedTypeNameOrExpression(alignSpec);
 }
 
 /**
@@ -1159,50 +1159,7 @@ bool Parser::parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec)
     auto typeofSpec = makeNode<ExtGNU_TypeofSyntax>();
     spec = typeofSpec;
     typeofSpec->typeofKwTkIdx_ = consume();
-    return parseParenthesizedTypeNameOrExpression_AtFollowOfSpecifier(typeofSpec);
-}
-
-template <class SpecT>
-bool Parser::parseParenthesizedTypeNameOrExpression_AtFollowOfSpecifier(SpecT*& spec)
-{
-    if (!match(OpenParenToken, &spec->openParenTkIdx_))
-        return false;
-
-    switch (peek().kind()) {
-        case EllipsisToken:
-            consume();
-            break;
-
-        case IdentifierToken: {
-            if (peek(2).kind() == CloseParenToken) {
-                auto ambiIdent = makeNode<AmbiguousTypedefNameOrIdentifierExpressionSyntax>();
-                spec->arg_ = ambiIdent;
-                Backtracker BT(this);
-                parseTypedefName_AtFirst(ambiIdent->typedefName_);
-                BT.backtrack();
-                parseIdentifierExpression_AtFirst(ambiIdent->identExpr_);
-                spec->closeParenTkIdx_ = consume();
-                return true;
-            }
-            [[fallthrough]];
-        }
-
-        default: {
-            Backtracker BT(this);
-            TypeNameSyntax* typeName = nullptr;
-            if (parseTypeName(typeName))
-                spec->arg_ = typeName;
-            else {
-                BT.backtrack();
-                ExpressionSyntax* expr = nullptr;
-                if (!parseExpression(expr))
-                    return false;
-                spec->arg_ = expr;
-            }
-        }
-    }
-
-    return matchOrSkipTo(CloseParenToken, &spec->closeParenTkIdx_);
+    return parseParenthesizedTypeNameOrExpression(typeofSpec);
 }
 
 /**

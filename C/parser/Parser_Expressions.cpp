@@ -888,24 +888,15 @@ bool Parser::parseTypeTraitExpression_AtFirst(ExpressionSyntax*& expr, SyntaxKin
     expr = traitExpr;
     traitExpr->oprtrTkIdx_ = consume();
 
-    if (peek().kind() == OpenParenToken) {
-        traitExpr->openParenTkIdx_ = consume();
-        TypeNameSyntax* typeName = nullptr;
-        if (!parseTypeName(typeName))
+    if (peek().kind() != OpenParenToken) {
+        ExpressionSyntax* unaryExpr = nullptr;
+        if (!parseExpressionWithPrecedenceUnary(unaryExpr))
             return false;
-        traitExpr->arg_ = typeName;
-        return matchOrSkipTo(CloseParenToken, &traitExpr->closeParenTkIdx_);
+        traitExpr->arg_ = unaryExpr;
+        return true;
     }
 
-    if (exprK == AlignofExpression
-            && !tree_->options().extensions().isEnabled_ExtGNU_Alignment())
-        diagnosticsReporter_.ExpectedFeature("GNU alignment");
-
-    ExpressionSyntax* unaryExpr = nullptr;
-    if (!parseExpressionWithPrecedenceUnary(unaryExpr))
-        return false;
-    traitExpr->arg_ = unaryExpr;
-    return true;
+    return parseParenthesizedTypeNameOrExpression(traitExpr);
 }
 
 /* Cast */

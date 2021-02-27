@@ -661,7 +661,7 @@ private:
  * \attention Thisis a GNU extension:
  * https://gcc.gnu.org/onlinedocs/gcc/Typeof.html#Typeof
  */
-class PSY_C_API ExtGNU_TypeofSyntax : public SpecifierSyntax
+class PSY_C_API ExtGNU_TypeofSyntax final : public SpecifierSyntax
 {
     AST_NODE_1K(ExtGNU_Typeof, Specifier);
 

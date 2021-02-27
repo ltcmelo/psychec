@@ -1099,9 +1099,8 @@ void TestParser::case1401()
 {
     parseExpression("sizeof ( x )",
                     Expectation().AST( { SizeofExpression,
-                                         TypeName,
-                                         TypedefName,
-                                         AbstractDeclarator }));
+                                         AmbiguousTypedefNameOrIdentifierExpression })
+                                 .replicateAmbiguity("sizeof ( x x )"));
 }
 
 void TestParser::case1402()
@@ -1126,11 +1125,9 @@ void TestParser::case1403()
 
 void TestParser::case1404()
 {
-    parseExpression("sizeof ( x )",
-                    Expectation().AST( { SizeofExpression,
-                                         TypeName,
-                                         TypedefName,
-                                         AbstractDeclarator }));
+    parseExpression("sizeof int",
+                    Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                                Parser::DiagnosticsReporter::ID_of_ExpectedExpression));
 }
 
 void TestParser::case1405()
@@ -1172,12 +1169,33 @@ void TestParser::case1408()
 
 void TestParser::case1409()
 {
+    parseExpression("sizeof x . y",
+                    Expectation().AST( { SizeofExpression,
+                                         DirectMemberAccessExpression,
+                                         IdentifierExpression,
+                                         IdentifierExpression }));
 }
 
-void TestParser::case1410() {}
-void TestParser::case1411() {}
-void TestParser::case1412() {}
-void TestParser::case1413() {}
+void TestParser::case1410()
+{
+    parseExpression("sizeof ( x . y )");
+}
+
+void TestParser::case1411()
+{
+    parseExpression("sizeof x [ 0 ]");
+}
+
+void TestParser::case1412()
+{
+    parseExpression("sizeof ( x [ 0 ] )");
+}
+
+void TestParser::case1413()
+{
+    parseExpression("sizeof ( x + 1 )");
+}
+
 void TestParser::case1414() {}
 void TestParser::case1415() {}
 void TestParser::case1416() {}
@@ -1219,10 +1237,8 @@ void TestParser::case1450()
 {
     parseExpression("_Alignof ( x )",
                     Expectation().AST( { AlignofExpression,
-                                         TypeName,
-                                         TypedefName,
-                                         AbstractDeclarator
-                                       }));
+                                         AmbiguousTypedefNameOrIdentifierExpression })
+                                 .replicateAmbiguity("_Alignof ( x x )"));
 }
 
 void TestParser::case1451()
@@ -1231,8 +1247,7 @@ void TestParser::case1451()
                     Expectation().AST( { AlignofExpression,
                                          TypeName,
                                          BuiltinTypeSpecifier,
-                                         AbstractDeclarator
-                                       }));
+                                         AbstractDeclarator }));
 }
 
 void TestParser::case1452()

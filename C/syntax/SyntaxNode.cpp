@@ -318,9 +318,9 @@ std::string PSY_C_API to_string(SyntaxKind kind)
 
         /* Access */
         case DirectMemberAccessExpression:
-            return "SimpleMemberAccessExpression";
+            return "DirectMemberAccessExpression";
         case IndirectMemberAccessExpression:
-            return "PointerMemberAccessExpression";
+            return "IndirectMemberAccessExpression";
         case ElementAccessExpression:
             return "ElementAccessExpression";
 
