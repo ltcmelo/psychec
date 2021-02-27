@@ -72,6 +72,25 @@ public:
     bool isRawKind(unsigned int rawKind) const { return rawSyntaxK_ == rawKind; }
 
     /**
+     * \brief The existing SyntaxToken categories.
+     *
+     * \remark 6.4-3
+     */
+    enum class Category
+    {
+        Keywords,
+        Identifiers,
+        Constants,
+        StringLiterals,
+        Punctuators
+    };
+
+    /**
+     * \brief The Category of \c this SyntaxToken.
+     */
+    Category category() const;
+
+    /**
      * The value of \c this SyntaxToken represented by a lexeme, from which
      * the actual value (e.g., an integer such as \c 42) may be obtained.
      *

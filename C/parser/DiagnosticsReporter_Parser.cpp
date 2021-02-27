@@ -153,7 +153,7 @@ void Parser::DiagnosticsReporter::ExpectedConstant()
 
 void Parser::DiagnosticsReporter::ExpectedStringLiteral()
 {
-    ExpectedTokenOfCategory("string-literal", ID_of_ExpectedStringLiteral);
+    ExpectedTokenOfCategory("string literal", ID_of_ExpectedStringLiteral);
 }
 
 void Parser::DiagnosticsReporter::ExpectedExpression()
