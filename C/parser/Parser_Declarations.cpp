@@ -288,7 +288,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
                 }
 
                 default:
-                    diagnosticsReporter_.UnexpectedInitializerFOLLOWingDeclarator();
+                    diagnosticsReporter_.UnexpectedInitializerOfDeclarator();
                     return ignoreDeclarator();
             }
             if (!parseInitializer(*init))
@@ -2180,7 +2180,7 @@ bool Parser::parseDesignatedInitializer_AtFirst(InitializerSyntax*& init,
             return parseInitializer(desigInit->init_);
 
         default:
-            diagnosticsReporter_.ExpectedEqualsFOLLOWingArrayDesignator();
+            diagnosticsReporter_.ExpectedFOLLOWofDesignatedInitializer();
             return parseInitializer(desigInit->init_);
     }
 }

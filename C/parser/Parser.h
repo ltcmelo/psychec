@@ -91,8 +91,12 @@ private:
         static std::string joinTokenNames(const std::vector<SyntaxKind>& validTkKinds);
         void diagnose(DiagnosticDescriptor&& desc);
 
+        /* General */
         void ExpectedFeature(const std::string& name);
 
+        static const std::string ID_of_ExpectedFeature;
+
+        /* Terminal */
         void ExpectedToken(SyntaxKind syntaxK);
         void ExpectedTokenWithin(const std::vector<SyntaxKind>& validTokens);
         void ExpectedTokenOfCategory(SyntaxToken::Category category, const std::string& id);
@@ -100,22 +104,40 @@ private:
         void ExpectedTokenOfCategoryConstant();
         void ExpectedTokenOfCategoryStringLiteral();
 
+        static const std::string ID_of_ExpectedToken;
+        static const std::string ID_of_ExpectedTokenWithin;
+        static const std::string ID_of_ExpectedTokenOfCategoryConstant;
+        static const std::string ID_of_ExpectedTokenOfCategoryStringLiteral;
+
+        /* Non-terminal */
         void ExpectedFIRSTof(const std::string& rule, const std::string& id);
         void ExpectedFIRSTofExpression();
         void ExpectedFIRSTofEnumerationConstant();
+        void ExpectedFIRSTofDirectDeclarator();
+        void ExpectedFIRSTofSpecifierQualifier();
+        void ExpectedFOLLOWofDesignatedInitializer();
+        void ExpectedFOLLOWofDeclarator();
+        void ExpectedFOLLOWofInitializedDeclarator();
+        void ExpectedFOLLOWofStructOrUnionOrEnum();
+        void ExpectedFOLLOWofEnum();
+
+        static const std::string ID_of_ExpectedFIRSTofExpression;
+        static const std::string ID_of_ExpectedFIRSTofEnumerationConstant;
+        static const std::string ID_of_ExpectedFIRSTofDirectDeclarator;
+        static const std::string ID_of_ExpectedFIRSTofSpecifierQualifier;
+        static const std::string ID_of_ExpectedFOLLOWofDesignatedInitializer;
+        static const std::string ID_of_ExpectedFOLLOWofDeclarator;
+        static const std::string ID_of_ExpectedFOLLOWofInitializedDeclarator;
+        static const std::string ID_of_ExpectedFOLLOWofStructOrUnionOrEnum;
+        static const std::string ID_of_ExpectedFOLLOWofEnum;
+
+        /* Detailed */
         void ExpectedFieldName();
         void ExpectedBraceEnclosedInitializerList();
         void ExpectedFieldDesignator();
-        void ExpectedEqualsFOLLOWingArrayDesignator();
-        void ExpectedFOLLOWofDeclarator();
-        void ExpectedFOLLOWofInitializedDeclarator();
-        void UnexpectedInitializerFOLLOWingDeclarator();
+        void UnexpectedInitializerOfDeclarator();
         void UnexpectedStaticOrTypeQualifiersInArrayDeclarator();
         void UnexpectedPointerInArrayDeclarator();
-        void ExpectedFIRSTofDirectDeclarator();
-        void ExpectedFOLLOWofStructOrUnionOrEnum();
-        void ExpectedFOLLOWofEnum();
-        void ExpectedFIRSTofSpecifierQualifier();
         void ExpectedNamedParameterBeforeEllipsis();
         void ExpectedTypeSpecifier();
         void UnexpectedCaseLabelOutsideSwitch();
@@ -123,27 +145,12 @@ private:
         void UnexpectedContinueOutsideLoop();
         void UnexpectedBreakOutsideSwitchOrLoop();
 
-        static const std::string ID_of_ExpectedFeature;
-        static const std::string ID_of_ExpectedToken;
-        static const std::string ID_of_ExpectedTokenWithin;
-        static const std::string ID_of_ExpectedTokenOfCategoryConstant;
-        static const std::string ID_of_ExpectedTokenOfCategoryStringLiteral;
-
-        static const std::string ID_of_ExpectedFIRSTofExpression;
-        static const std::string ID_of_ExpectedFIRSTofEnumerationConstant;
         static const std::string ID_of_ExpectedFieldName;
-        static const std::string ID_of_UnexpectedInitializerFOLLOWingDeclarator;
-        static const std::string ID_of_UnexpectedStaticOrTypeQualifierInArrayDeclarator;
-        static const std::string ID_of_ExpectedEqualsFOLLOWingArrayDesignator;
-        static const std::string ID_of_UnexpectedPointerInArrayDeclarator;
         static const std::string ID_of_ExpectedBraceEnclosedInitializerList;
         static const std::string ID_of_ExpectedFieldDesignator;
-        static const std::string ID_of_ExpectedFOLLOWofDeclarator;
-        static const std::string ID_of_ExpectedFOLLOWofInitializedDeclarator;
-        static const std::string ID_of_ExpectedFIRSTofDirectDeclarator;
-        static const std::string ID_of_ExpectedFOLLOWofStructOrUnionOrEnum;
-        static const std::string ID_of_ExpectedFOLLOWofEnum;
-        static const std::string ID_of_ExpectedFIRSTofSpecifierQualifier;
+        static const std::string ID_of_UnexpectedInitializerOfDeclarator;
+        static const std::string ID_of_UnexpectedStaticOrTypeQualifierInArrayDeclarator;
+        static const std::string ID_of_UnexpectedPointerInArrayDeclarator;
         static const std::string ID_of_ExpectedNamedParameterBeforeEllipsis;
         static const std::string ID_of_ExpectedTypeSpecifier;
         static const std::string ID_of_UnexpectedCaseLabelOutsideSwitch;

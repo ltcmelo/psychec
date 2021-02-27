@@ -1351,7 +1351,7 @@ void TestParser::case0203()
 {
     parse("void x ( ) = 1 { }",
           Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_UnexpectedInitializerFOLLOWingDeclarator));
+                                      Parser::DiagnosticsReporter::ID_of_UnexpectedInitializerOfDeclarator));
 }
 
 void TestParser::case0204()
@@ -4921,7 +4921,7 @@ void TestParser::case0859()
 {
     parse("x y [ ] = { [ 1 ] } ;",
           Expectation().addDiagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedEqualsFOLLOWingArrayDesignator)
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDesignatedInitializer)
                        .addDiagnostic(Expectation::ErrorOrWarn::Error,
                                       Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
@@ -4930,7 +4930,7 @@ void TestParser::case0860()
 {
     parse("x y [ ] = { [ 1 ] 2 } ;",
           Expectation().addDiagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedEqualsFOLLOWingArrayDesignator));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDesignatedInitializer));
 }
 
 void TestParser::case0861()
