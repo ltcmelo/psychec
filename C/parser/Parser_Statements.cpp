@@ -605,7 +605,7 @@ bool Parser::parseGotoStatement_AtFirst(StatementSyntax*& stmt)
     gotoStmt->gotoKwTkIdx_ = consume();
 
     if (peek().kind() != IdentifierToken) {
-        diagnosticsReporter_.ExpectedIdentifier();
+        diagnosticsReporter_.ExpectedTokenOfCategoryIdentifier();
         return ignoreStatement();
     }
 

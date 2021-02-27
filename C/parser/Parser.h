@@ -96,6 +96,7 @@ private:
         void ExpectedToken(SyntaxKind syntaxK);
         void ExpectedTokenWithin(const std::vector<SyntaxKind>& validTokens);
         void ExpectedTokenOfCategory(SyntaxToken::Category category, const std::string& id);
+        void ExpectedTokenOfCategoryIdentifier();
         void ExpectedTokenOfCategoryConstant();
         void ExpectedTokenOfCategoryStringLiteral();
 
@@ -121,7 +122,6 @@ private:
         void UnexpectedDefaultLabelOutsideSwitch();
         void UnexpectedContinueOutsideLoop();
         void UnexpectedBreakOutsideSwitchOrLoop();
-        void ExpectedIdentifier();
 
         static const std::string ID_of_ExpectedFeature;
         static const std::string ID_of_ExpectedToken;
@@ -150,7 +150,7 @@ private:
         static const std::string ID_of_UnexpectedDefaultLabelOutsideSwitch;
         static const std::string ID_of_UnexpectedContinueOutsideLoop;
         static const std::string ID_of_UnexpectedBreakOutsideSwitchOrLoop;
-        static const std::string ID_of_ExpectedIdentifier;
+        static const std::string ID_of_ExpectedTokenOfCategoryIdentifier;
     };
     friend struct DiagnosticsReporter;
 

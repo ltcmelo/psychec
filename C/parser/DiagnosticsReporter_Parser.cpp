@@ -29,6 +29,7 @@ const std::string Parser::DiagnosticsReporter::ID_of_ExpectedToken = "Parser-001
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenWithin = "Parser-002";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryConstant = "Parser-004";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryStringLiteral = "Parser-005";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryIdentifier = "Parser-318-6.8.6.1";
 
 /* Expressions, declarations, and statements */
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression = "Parser-006-6.5";
@@ -52,7 +53,6 @@ const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedCaseLabelOutsideS
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedDefaultLabelOutsideSwitch = "Parser-315-6.8.1-2";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedContinueOutsideLoop = "Parser-316-6.8.6.2-1";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedBreakOutsideSwitchOrLoop = "Parser-317-6.8.6.3-1";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedIdentifier = "Parser-318-6.8.6.1";
 
 
 std::string Parser::DiagnosticsReporter::joinTokenNames(const std::vector<SyntaxKind>& validTkKinds)
@@ -147,6 +147,11 @@ void Parser::DiagnosticsReporter::ExpectedTokenOfCategory(SyntaxToken::Category 
                                   s,
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Syntax));
+}
+
+void Parser::DiagnosticsReporter::ExpectedTokenOfCategoryIdentifier()
+{
+    ExpectedTokenOfCategory(SyntaxToken::Category::Constants, ID_of_ExpectedTokenOfCategoryIdentifier);
 }
 
 void Parser::DiagnosticsReporter::ExpectedTokenOfCategoryConstant()
@@ -396,20 +401,6 @@ void Parser::DiagnosticsReporter::UnexpectedBreakOutsideSwitchOrLoop()
     diagnose(DiagnosticDescriptor(ID_of_UnexpectedBreakOutsideSwitchOrLoop,
                                   "[[break outside iteration- or switch-statement]]",
                                   "`break' not within a loop or switch",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
-}
-
-
-void Parser::DiagnosticsReporter::ExpectedIdentifier()
-{
-    auto s = "expected identifier, got `"
-           + parser_->peek().valueText()
-           + "'";
-
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedIdentifier,
-                                  "[[expected identifier]]",
-                                  s,
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Syntax));
 }
