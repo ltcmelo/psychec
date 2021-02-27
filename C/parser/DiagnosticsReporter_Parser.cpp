@@ -26,18 +26,17 @@ using namespace C;
 /* Generic */
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFeature = "Parser-000";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedToken = "Parser-001";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedOneOfTokens = "Parser-002";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategory = "Parser-003";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedConstant = "Parser-004";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedStringLiteral = "Parser-005";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedExpression = "Parser-006";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedEnumerationConstant= "Parser-007";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenWithin = "Parser-002";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryConstant = "Parser-004";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryStringLiteral = "Parser-005";
 
 /* Expressions, declarations, and statements */
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression = "Parser-006-6.5";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofEnumerationConstant= "Parser-007-6.7.2.2";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFieldName = "Parser-200-6.5.2";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedBraceEnclosedInitializerList = "Parser-201-6.7.9";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFieldDesignator = "Parser-202-6.7.9";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpetedEqualsFOLLOWingArrayDesignator = "Parser-203-6.7.9";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedEqualsFOLLOWingArrayDesignator = "Parser-203-6.7.9";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator = "Parser-204-6.7.6";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofInitializedDeclarator = "Parser-205";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedInitializerFOLLOWingDeclarator = "Parser-206-6.7.9";
@@ -114,13 +113,13 @@ void Parser::DiagnosticsReporter::ExpectedToken(SyntaxKind tkK)
             + "'";
 
     diagnose(DiagnosticDescriptor(ID_of_ExpectedToken,
-                                  "[[expected an specific token]]",
+                                  "[[expected token]]",
                                   s,
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpectedOneOfTokens(const std::vector<SyntaxKind>& validTkKinds)
+void Parser::DiagnosticsReporter::ExpectedTokenWithin(const std::vector<SyntaxKind>& validTkKinds)
 {
     std::string s = "expected "
             + joinTokenNames(validTkKinds)
@@ -128,49 +127,65 @@ void Parser::DiagnosticsReporter::ExpectedOneOfTokens(const std::vector<SyntaxKi
             + parser_->peek().valueText()
             + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedOneOfTokens,
-                                  "[[expected one token from a selection of tokens]]",
+    diagnose(DiagnosticDescriptor(ID_of_ExpectedTokenWithin,
+                                  "[[expected one of tokens]]",
                                   s,
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpectedTokenOfCategory(const std::string& name,
-                                                          const std::string& cat)
+void Parser::DiagnosticsReporter::ExpectedTokenOfCategory(SyntaxToken::Category category,
+                                                          const std::string& id)
 {
     std::string s = "expected "
-                + name
+                + to_string(category)
                 + " got `"
                 + parser_->peek().valueText() + "'";
 
-    diagnose(DiagnosticDescriptor(cat,
-                                  "[[expected any token of a given category]]",
+    diagnose(DiagnosticDescriptor(id,
+                                  "[[expected token of category]]",
                                   s,
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpectedConstant()
+void Parser::DiagnosticsReporter::ExpectedTokenOfCategoryConstant()
 {
-    ExpectedTokenOfCategory("constant", ID_of_ExpectedConstant);
+    ExpectedTokenOfCategory(SyntaxToken::Category::Constants, ID_of_ExpectedTokenOfCategoryConstant);
 }
 
-void Parser::DiagnosticsReporter::ExpectedStringLiteral()
+void Parser::DiagnosticsReporter::ExpectedTokenOfCategoryStringLiteral()
 {
-    ExpectedTokenOfCategory("string literal", ID_of_ExpectedStringLiteral);
-}
-
-void Parser::DiagnosticsReporter::ExpectedExpression()
-{
-    ExpectedTokenOfCategory("expression", ID_of_ExpectedExpression);
-}
-
-void Parser::DiagnosticsReporter::ExpectedEnumerationConstant()
-{
-    ExpectedTokenOfCategory("enumeration-constant", ID_of_ExpectedEnumerationConstant);
+    ExpectedTokenOfCategory(SyntaxToken::Category::StringLiterals, ID_of_ExpectedTokenOfCategoryStringLiteral);
 }
 
 /* Expressions, declarations, and statements */
+
+void Parser::DiagnosticsReporter::ExpectedFIRSTof(const std::string& rule,
+                                                  const std::string& id)
+{
+    std::string s = "expected "
+                + rule
+                + " got `"
+                + parser_->peek().valueText() + "'";
+
+    diagnose(DiagnosticDescriptor(id,
+                                  "[[expected FIRST of]]",
+                                  s,
+                                  DiagnosticSeverity::Error,
+                                  DiagnosticCategory::Syntax));
+
+}
+
+void Parser::DiagnosticsReporter::ExpectedFIRSTofExpression()
+{
+    return ExpectedFIRSTof("expression", ID_of_ExpectedFIRSTofExpression);
+}
+
+void Parser::DiagnosticsReporter::ExpectedFIRSTofEnumerationConstant()
+{
+    return ExpectedFIRSTof("enumeration-constant", ID_of_ExpectedFIRSTofEnumerationConstant);
+}
 
 void Parser::DiagnosticsReporter::ExpectedFieldName()
 {
@@ -216,9 +231,9 @@ void Parser::DiagnosticsReporter::UnexpectedInitializerFOLLOWingDeclarator()
                                   DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpetedEqualsFOLLOWingArrayDesignator()
+void Parser::DiagnosticsReporter::ExpectedEqualsFOLLOWingArrayDesignator()
 {
-    diagnose(DiagnosticDescriptor(ID_of_ExpetedEqualsFOLLOWingArrayDesignator,
+    diagnose(DiagnosticDescriptor(ID_of_ExpectedEqualsFOLLOWingArrayDesignator,
                                   "[[obsolete array designator syntax]]",
                                   "obsolete array designator without `='",
                                   DiagnosticSeverity::Warning,

@@ -109,7 +109,7 @@ bool Parser::parseConstant(ExpressionSyntax*& expr, SyntaxKind exprK)
     DEBUG_THIS_RULE();
 
     if (!SyntaxFacts::isConstantToken(peek().kind())) {
-        diagnosticsReporter_.ExpectedConstant();
+        diagnosticsReporter_.ExpectedTokenOfCategoryConstant();
         return false;
     }
 
@@ -149,7 +149,7 @@ bool Parser::parseStringLiteral(ExpressionSyntax*& expr)
     DEBUG_THIS_RULE();
 
     if (!SyntaxFacts::isStringLiteralToken(peek().kind())) {
-        diagnosticsReporter_.ExpectedStringLiteral();
+        diagnosticsReporter_.ExpectedTokenOfCategoryStringLiteral();
         return false;
     }
 
@@ -309,7 +309,7 @@ bool Parser::parsePrimaryExpression(ExpressionSyntax*& expr)
             return parseGenericSelectionExpression_AtFirst(expr);
 
         default:
-            diagnosticsReporter_.ExpectedExpression();
+            diagnosticsReporter_.ExpectedFIRSTofExpression();
             return false;
     }
 
@@ -1005,7 +1005,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
             return parseExpressionWithPrecedenceUnary(expr);
 
         default:
-            diagnosticsReporter_.ExpectedExpression();
+            diagnosticsReporter_.ExpectedFIRSTofExpression();
             return false;
     }
 }

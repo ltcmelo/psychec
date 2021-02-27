@@ -2200,7 +2200,7 @@ void TestParser::case0321()
 {
     parse("void x ( int [ static struct ] ) ;",
           Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedExpression));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void TestParser::case0322()
@@ -3035,14 +3035,14 @@ void TestParser::case0513()
 {
     parse("enum x { (",
           Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedEnumerationConstant));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofEnumerationConstant));
 }
 
 void TestParser::case0514()
 {
     parse("enum x { y, , z, } ;",
           Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedEnumerationConstant));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofEnumerationConstant));
 }
 
 void TestParser::case0515()
@@ -4677,7 +4677,7 @@ void TestParser::case0816()
 {
     parse("x y = { 1, , 2 } ;",
           Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedExpression));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void TestParser::case0817()
@@ -4921,16 +4921,16 @@ void TestParser::case0859()
 {
     parse("x y [ ] = { [ 1 ] } ;",
           Expectation().addDiagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpetedEqualsFOLLOWingArrayDesignator)
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedEqualsFOLLOWingArrayDesignator)
                        .addDiagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedExpression));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void TestParser::case0860()
 {
     parse("x y [ ] = { [ 1 ] 2 } ;",
           Expectation().addDiagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpetedEqualsFOLLOWingArrayDesignator));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedEqualsFOLLOWingArrayDesignator));
 }
 
 void TestParser::case0861()
