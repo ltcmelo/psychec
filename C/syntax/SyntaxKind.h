@@ -463,10 +463,11 @@ enum SyntaxKind : std::uint16_t
     AmbiguousCallOrVariableDeclaration,
     AmbiguousMultiplicationOrPointerDeclaration,
 
+    ENDof_Node = AmbiguousMultiplicationOrPointerDeclaration,
+
 //=================================================================== Misc
 
-    Unknown,
-    ENDof_Node = Unknown
+    UnknownSyntax
 };
 
 enum class SyntaxKindCategory : char

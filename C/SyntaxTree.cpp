@@ -204,7 +204,7 @@ void SyntaxTree::buildTree(SyntaxCategory syntaxCat)
 
         case SyntaxCategory::Statements: {
             StatementSyntax* stmt = nullptr;
-            parser.parseStatement(stmt);
+            parser.parseStatement(stmt, Parser::StatementContext::None);
             P->rootNode_ = stmt;
             break;
          }
