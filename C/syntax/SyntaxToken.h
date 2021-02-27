@@ -86,9 +86,14 @@ public:
     };
 
     /**
-     * \brief The Category of \c this SyntaxToken.
+     * The Category of \c this SyntaxToken.
      */
     Category category() const;
+
+    /**
+     * The Category of the SyntaxToken of kind \p k.
+     */
+    static Category category(SyntaxKind k);
 
     /**
      * The value of \c this SyntaxToken represented by a lexeme, from which
