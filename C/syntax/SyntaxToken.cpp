@@ -254,7 +254,12 @@ Location SyntaxToken::location() const
 
 SyntaxToken::Category SyntaxToken::category() const
 {
-    switch (rawSyntaxK_) {
+    return category(SyntaxKind(rawSyntaxK_));
+}
+
+SyntaxToken::Category SyntaxToken::category(SyntaxKind k)
+{
+    switch (k) {
         case IdentifierToken:
             return Category::Identifiers;
 
