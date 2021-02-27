@@ -252,6 +252,98 @@ Location SyntaxToken::location() const
     return Location::create(fileLineSpan);
 }
 
+SyntaxToken::Category SyntaxToken::category() const
+{
+    switch (rawSyntaxK_) {
+        case IdentifierToken:
+            return Category::Identifiers;
+
+        case IntegerConstantToken:
+        case FloatingConstantToken:
+        case CharacterConstantToken:
+        case CharacterConstant_L_Token:
+        case CharacterConstant_u_Token:
+        case CharacterConstant_U_Token:
+            return Category::Constants;
+
+        case StringLiteralToken:
+        case StringLiteral_L_Token:
+        case StringLiteral_u8_Token:
+        case StringLiteral_u_Token:
+        case StringLiteral_U_Token:
+        case StringLiteral_R_Token:
+        case StringLiteral_LR_Token:
+        case StringLiteral_u8R_Token:
+        case StringLiteral_uR_Token:
+        case StringLiteral_UR_Token:
+            return Category::StringLiterals;
+
+        case EllipsisToken:
+        case OpenBraceToken:
+        case CloseBraceToken:
+        case OpenBracketToken:
+        case  CloseBracketToken:
+
+        case OpenParenToken:
+        case CloseParenToken:
+
+        case HashToken:
+        case HashHashToken:
+
+        case SemicolonToken:
+
+        case ArrowToken:
+        case DotToken:
+
+        case PlusPlusToken:
+        case MinusMinusToken:
+
+        case AsteriskToken:
+        case AmpersandToken:
+
+        case PlusToken:
+        case MinusToken:
+        case TildeToken:
+        case SlashToken:
+        case PercentToken:
+        case LessThanLessThanToken:
+        case GreaterThanGreaterThanToken:
+        case BarToken:
+        case CaretToken:
+
+        case ExclamationToken:
+        case AmpersandAmpersandToken:
+        case BarBarToken:
+
+        case LessThanToken:
+        case LessThanEqualsToken:
+        case GreaterThanToken:
+        case GreaterThanEqualsToken:
+        case EqualsEqualsToken:
+        case ExclamationEqualsToken:
+
+        case ColonToken:
+        case QuestionToken:
+
+        case EqualsToken:
+        case AsteriskEqualsToken:
+        case SlashEqualsToken:
+        case PercentEqualsToken:
+        case PlusEqualsToken:
+        case MinusEqualsToken:
+        case LessThanLessThanEqualsToken:
+        case GreaterThanGreaterThanEqualsToken:
+        case AmpersandEqualsToken:
+        case CaretEqualsToken:
+        case BarEqualsToken:
+        case CommaToken:
+            return Category::Punctuators;
+
+        default:
+            return Category::Keywords;
+    }
+}
+
 SyntaxLexeme* SyntaxToken::valueLexeme() const
 {
     return lexeme_;
