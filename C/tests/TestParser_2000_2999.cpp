@@ -1043,12 +1043,6 @@ void TestParser::case2357()
 
 void TestParser::case2358()
 {
-    parseStatement(R"(
-                   switch ( x ) {
-                       case 1 :
-                       case 2 : break;
-                   }
-                   )");
 }
 
 void TestParser::case2359() {}
@@ -1380,12 +1374,16 @@ void TestParser::case2499() {}
 
 void TestParser::case2500()
 {
-    parseStatement("break ;");
+    parseStatement("break ;",
+                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                               Parser::DiagnosticsReporter::ID_of_UnexpectedBreakOutsideSwitchOrLoop));
 }
 
 void TestParser::case2501()
 {
-    parseStatement("continue ;");
+    parseStatement("continue ;",
+                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                               Parser::DiagnosticsReporter::ID_of_UnexpectedContinueOutsideLoop));
 }
 
 void TestParser::case2502()
@@ -1408,17 +1406,113 @@ void TestParser::case2505()
     parseStatement("return x ( ) ;");
 }
 
-void TestParser::case2506() {}
-void TestParser::case2507() {}
-void TestParser::case2508() {}
-void TestParser::case2509() {}
-void TestParser::case2510() {}
-void TestParser::case2511() {}
-void TestParser::case2512() {}
-void TestParser::case2513() {}
-void TestParser::case2514() {}
-void TestParser::case2515() {}
-void TestParser::case2516() {}
+void TestParser::case2506()
+{
+    parseStatement(R"(
+                   for ( ; ; )
+                       break ;
+                   )");
+}
+
+void TestParser::case2507()
+{
+    parseStatement(R"(
+                   for ( ; ; )
+                   {
+                       break ;
+                   }
+                   )");
+}
+
+void TestParser::case2508()
+{
+    parseStatement(R"(
+                   for ( ; ; )
+                       continue ;
+                   )");
+}
+
+void TestParser::case2509()
+{
+    parseStatement(R"(
+                   while ( 1 )
+                       break ;
+                   )");
+}
+
+void TestParser::case2510()
+{
+    parseStatement(R"(
+                   while ( 1 )
+                   {
+                       break ;
+                   }
+                   )");
+}
+
+void TestParser::case2511()
+{
+    parseStatement(R"(
+                   for ( ; ; )
+                   {
+                       continue ;
+                   }
+                   )");
+}
+
+void TestParser::case2512()
+{
+    parseStatement(R"(
+                   switch ( x )
+                   {
+                       case 1 :
+                       case 2 : break ;
+                   }
+                   )");
+}
+
+void TestParser::case2513()
+{
+    parseStatement(R"(
+                   switch ( x )
+                   {
+                       case 1 : break ;
+                       case 2 : break ;
+                   }
+                   )");
+}
+
+void TestParser::case2514()
+{
+    parseStatement(R"(
+                   switch ( x )
+                   {
+                       case 1 :
+                       case 2 : break ;
+                       default : break ;
+                   }
+                   )");
+}
+
+void TestParser::case2515()
+{
+    parse("break",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator)
+                       .addDiagnostic(Expectation::ErrorOrWarn::Warn,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+}
+
+void TestParser::case2516()
+{
+    parse("continue ;",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator)
+                       .addDiagnostic(Expectation::ErrorOrWarn::Warn,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+
+}
+
 void TestParser::case2517() {}
 void TestParser::case2518() {}
 void TestParser::case2519() {}

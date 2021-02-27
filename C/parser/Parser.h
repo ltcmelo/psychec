@@ -117,6 +117,8 @@ private:
         void ExpectedTypeSpecifier();
         void UnexpectedCaseLabelOutsideSwitch();
         void UnexpectedDefaultLabelOutsideSwitch();
+        void UnexpectedContinueOutsideLoop();
+        void UnexpectedBreakOutsideSwitchOrLoop();
         void ExpectedIdentifier();
 
         static const std::string ID_of_ExpectedToken;
@@ -145,6 +147,8 @@ private:
         static const std::string ID_of_ExpectedTypeSpecifier;
         static const std::string ID_of_UnexpectedCaseLabelOutsideSwitch;
         static const std::string ID_of_UnexpectedDefaultLabelOutsideSwitch;
+        static const std::string ID_of_UnexpectedContinueOutsideLoop;
+        static const std::string ID_of_UnexpectedBreakOutsideSwitchOrLoop;
         static const std::string ID_of_ExpectedIdentifier;
     };
     friend struct DiagnosticsReporter;
@@ -388,9 +392,9 @@ private:
     bool parseLabeledStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
     bool parseIfStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
     bool parseSwitchStatement_AtFirst(StatementSyntax*& stmt);
-    bool parseWhileStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
-    bool parseDoStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
-    bool parseForStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
+    bool parseWhileStatement_AtFirst(StatementSyntax*& stmt);
+    bool parseDoStatement_AtFirst(StatementSyntax*& stmt);
+    bool parseForStatement_AtFirst(StatementSyntax*& stmt);
     bool parseGotoStatement_AtFirst(StatementSyntax*& stmt);
     bool parseContinueStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
     bool parseBreakStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);

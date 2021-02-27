@@ -117,21 +117,26 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
             return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_while:
-            return parseWhileStatement_AtFirst(stmt, stmtCtx);
+            return parseWhileStatement_AtFirst(stmt);
 
         case Keyword_do:
-            return parseDoStatement_AtFirst(stmt, stmtCtx);
+            return parseDoStatement_AtFirst(stmt);
 
         case Keyword_for:
-            return parseForStatement_AtFirst(stmt, stmtCtx);
+            return parseForStatement_AtFirst(stmt);
 
         case Keyword_goto:
             return parseGotoStatement_AtFirst(stmt);
 
         case Keyword_continue:
+            if (stmtCtx != StatementContext::WithinLoop)
+                diagnosticsReporter_.UnexpectedContinueOutsideLoop();
             return parseContinueStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_break:
+            if (stmtCtx != StatementContext::WithinLoop
+                    && stmtCtx != StatementContext::WithinSwitch)
+                diagnosticsReporter_.UnexpectedBreakOutsideSwitchOrLoop();
             return parseBreakStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_return:
@@ -430,8 +435,7 @@ bool Parser::parseLabeledStatement_AtFirst(StatementSyntax*& stmt,
  *
  * \remark 6.8.5.1
  */
-bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt,
-                                         StatementContext stmtCtx)
+bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_while,
@@ -446,7 +450,7 @@ bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt,
                 match(OpenParenToken, &whileStmt->openParenTkIdx_)
                 && parseExpression(whileStmt->cond_)
                 && match(CloseParenToken, &whileStmt->closeParenTkIdx_)
-                && parseStatement(whileStmt->stmt_, stmtCtx));
+                && parseStatement(whileStmt->stmt_, StatementContext::WithinLoop));
 }
 
 /**
@@ -455,8 +459,7 @@ bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt,
  *
  * \remark 6.8.5.2
  */
-bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt,
-                                      StatementContext stmtCtx)
+bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_do,
@@ -468,7 +471,7 @@ bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt,
     doStmt->doKwTkIdx_ = consume();
 
     return checkStatementParse(
-                parseStatement(doStmt->stmt_, stmtCtx)
+                parseStatement(doStmt->stmt_, StatementContext::WithinLoop)
                 && match(Keyword_while, &doStmt->whileKwTkIdx_)
                 && match(OpenParenToken, &doStmt->openParenTkIdx_)
                 && parseExpression(doStmt->cond_)
@@ -482,8 +485,7 @@ bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt,
  *
  * \remark 6.8.5.3
  */
-bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
-                                       StatementContext stmtCtx)
+bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_for,
@@ -582,7 +584,7 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
     }
 
     return checkStatementParse(
-                parseStatement(forStmt->stmt_, stmtCtx));
+                parseStatement(forStmt->stmt_, StatementContext::WithinLoop));
 }
 
 /**

@@ -51,7 +51,9 @@ const std::string Parser::DiagnosticsReporter::ID_of_ExpectedNamedParameterBefor
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier = "Parser-314-6.7";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedCaseLabelOutsideSwitch = "Parser-315-6.8.1-2";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedDefaultLabelOutsideSwitch = "Parser-315-6.8.1-2";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedIdentifier = "Parser-316-6.8.6.1";
+const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedContinueOutsideLoop = "Parser-316-6.8.6.2-1";
+const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedBreakOutsideSwitchOrLoop = "Parser-317-6.8.6.3-1";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedIdentifier = "Parser-318-6.8.6.1";
 
 
 std::string Parser::DiagnosticsReporter::joinTokenNames(const std::vector<SyntaxKind>& validTkKinds)
@@ -314,7 +316,7 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructOrUnionOrEnum()
 
     std::string s = "expected "
                 + joinTokenNames(validTkKinds)
-                + "following struct-or-union or <enum>, got `"
+                + "following struct-or-union or enum, got `"
                 + parser_->peek().valueText_c_str()
                 + "'";
 
@@ -347,7 +349,7 @@ void Parser::DiagnosticsReporter::UnexpectedCaseLabelOutsideSwitch()
 {
     diagnose(DiagnosticDescriptor(ID_of_UnexpectedCaseLabelOutsideSwitch,
                                   "[[case label outside switch-statement]]",
-                                  "`case' label not within a switch statement",
+                                  "`case' label not within a switch",
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Syntax));
 }
@@ -356,10 +358,29 @@ void Parser::DiagnosticsReporter::UnexpectedDefaultLabelOutsideSwitch()
 {
     diagnose(DiagnosticDescriptor(ID_of_UnexpectedDefaultLabelOutsideSwitch,
                                   "[[default label outside switch-statement]]",
-                                  "`default' label not within a switch statement",
+                                  "`default' label not within a switch",
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Syntax));
 }
+
+void Parser::DiagnosticsReporter::UnexpectedContinueOutsideLoop()
+{
+    diagnose(DiagnosticDescriptor(ID_of_UnexpectedContinueOutsideLoop,
+                                  "[[continue outside iteration-statement]]",
+                                  "`continue' not within a loop",
+                                  DiagnosticSeverity::Error,
+                                  DiagnosticCategory::Syntax));
+}
+
+void Parser::DiagnosticsReporter::UnexpectedBreakOutsideSwitchOrLoop()
+{
+    diagnose(DiagnosticDescriptor(ID_of_UnexpectedBreakOutsideSwitchOrLoop,
+                                  "[[break outside iteration- or switch-statement]]",
+                                  "`break' not within a loop or switch",
+                                  DiagnosticSeverity::Error,
+                                  DiagnosticCategory::Syntax));
+}
+
 
 void Parser::DiagnosticsReporter::ExpectedIdentifier()
 {
