@@ -546,7 +546,7 @@ bool Parser::parseEnumerator(DeclarationSyntax*& decl)
         }
 
         default:
-            diagnosticsReporter_.ExpectedEnumerationConstant();
+            diagnosticsReporter_.ExpectedFIRSTofEnumerationConstant();
             return false;
     }
 
@@ -1351,7 +1351,7 @@ bool Parser::parseExtGNU_AttributeList(ExtGNU_AttributeListSyntax*& attrList)
                 return true;
 
             default:
-                diagnosticsReporter_.ExpectedOneOfTokens(
+                diagnosticsReporter_.ExpectedTokenWithin(
                     { CommaToken,
                       CloseParenToken });
                 return false;
@@ -1381,7 +1381,7 @@ bool Parser::parseExtGNU_Attribute(ExtGNU_AttributeSyntax*& attr)
             return true;
 
         default:
-            diagnosticsReporter_.ExpectedOneOfTokens(
+            diagnosticsReporter_.ExpectedTokenWithin(
                 { IdentifierToken,
                   Keyword_const,
                   CommaToken,
@@ -2132,7 +2132,7 @@ bool Parser::parseInitializerListItem(InitializerSyntax*& init, InitializerListS
                 initList->delimTkIdx_ = consume();
                 return true;
             }
-            diagnosticsReporter_.ExpectedExpression();
+            diagnosticsReporter_.ExpectedFIRSTofExpression();
             return false;
 
         case DotToken:
@@ -2180,7 +2180,7 @@ bool Parser::parseDesignatedInitializer_AtFirst(InitializerSyntax*& init,
             return parseInitializer(desigInit->init_);
 
         default:
-            diagnosticsReporter_.ExpetedEqualsFOLLOWingArrayDesignator();
+            diagnosticsReporter_.ExpectedEqualsFOLLOWingArrayDesignator();
             return parseInitializer(desigInit->init_);
     }
 }

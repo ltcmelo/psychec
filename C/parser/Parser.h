@@ -92,18 +92,20 @@ private:
         void diagnose(DiagnosticDescriptor&& desc);
 
         void ExpectedFeature(const std::string& name);
-        void ExpectedToken(SyntaxKind syntaxK);
-        void ExpectedOneOfTokens(const std::vector<SyntaxKind>& validTokens);
-        void ExpectedTokenOfCategory(const std::string& name, const std::string& cat);
-        void ExpectedConstant();
-        void ExpectedStringLiteral();
-        void ExpectedExpression();
-        void ExpectedEnumerationConstant();
 
+        void ExpectedToken(SyntaxKind syntaxK);
+        void ExpectedTokenWithin(const std::vector<SyntaxKind>& validTokens);
+        void ExpectedTokenOfCategory(SyntaxToken::Category category, const std::string& id);
+        void ExpectedTokenOfCategoryConstant();
+        void ExpectedTokenOfCategoryStringLiteral();
+
+        void ExpectedFIRSTof(const std::string& rule, const std::string& id);
+        void ExpectedFIRSTofExpression();
+        void ExpectedFIRSTofEnumerationConstant();
         void ExpectedFieldName();
         void ExpectedBraceEnclosedInitializerList();
         void ExpectedFieldDesignator();
-        void ExpetedEqualsFOLLOWingArrayDesignator();
+        void ExpectedEqualsFOLLOWingArrayDesignator();
         void ExpectedFOLLOWofDeclarator();
         void ExpectedFOLLOWofInitializedDeclarator();
         void UnexpectedInitializerFOLLOWingDeclarator();
@@ -121,19 +123,18 @@ private:
         void UnexpectedBreakOutsideSwitchOrLoop();
         void ExpectedIdentifier();
 
-        static const std::string ID_of_ExpectedToken;
-        static const std::string ID_of_ExpectedOneOfTokens;
-        static const std::string ID_of_ExpectedTokenOfCategory;
-        static const std::string ID_of_ExpectedExpression;
-        static const std::string ID_of_ExpectedConstant;
-        static const std::string ID_of_ExpectedStringLiteral;
-        static const std::string ID_of_ExpectedEnumerationConstant;
         static const std::string ID_of_ExpectedFeature;
+        static const std::string ID_of_ExpectedToken;
+        static const std::string ID_of_ExpectedTokenWithin;
+        static const std::string ID_of_ExpectedTokenOfCategoryConstant;
+        static const std::string ID_of_ExpectedTokenOfCategoryStringLiteral;
 
+        static const std::string ID_of_ExpectedFIRSTofExpression;
+        static const std::string ID_of_ExpectedFIRSTofEnumerationConstant;
         static const std::string ID_of_ExpectedFieldName;
         static const std::string ID_of_UnexpectedInitializerFOLLOWingDeclarator;
         static const std::string ID_of_UnexpectedStaticOrTypeQualifierInArrayDeclarator;
-        static const std::string ID_of_ExpetedEqualsFOLLOWingArrayDesignator;
+        static const std::string ID_of_ExpectedEqualsFOLLOWingArrayDesignator;
         static const std::string ID_of_UnexpectedPointerInArrayDeclarator;
         static const std::string ID_of_ExpectedBraceEnclosedInitializerList;
         static const std::string ID_of_ExpectedFieldDesignator;
