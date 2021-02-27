@@ -997,7 +997,7 @@ void TestParser::case2352()
 {
     parseStatement(R"(
                    switch ( x ) {
-                       case 1: y ;
+                       case 1 : y ;
                        case 2 : z ( ) ;
                    }
                    )");
@@ -1012,7 +1012,7 @@ void TestParser::case2354()
 {
     parseStatement(R"(
                    switch ( x ) {
-                       case 1: y ;
+                       case 1 : y ;
                        default : z ( ) ;
                    }
                    )");
@@ -1041,7 +1041,16 @@ void TestParser::case2357()
                                                Parser::DiagnosticsReporter::ID_of_UnexpectedDefaultLabelOutsideSwitch));
 }
 
-void TestParser::case2358() {}
+void TestParser::case2358()
+{
+    parseStatement(R"(
+                   switch ( x ) {
+                       case 1 :
+                       case 2 : break;
+                   }
+                   )");
+}
+
 void TestParser::case2359() {}
 void TestParser::case2360() {}
 void TestParser::case2361() {}

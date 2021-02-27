@@ -196,7 +196,8 @@ private:
     enum class StatementContext : uint8_t
     {
         None,
-        WithinSwitch
+        WithinSwitch,
+        WithinLoop,
     };
 
     template <class NodeT, class... Args> NodeT* makeNode(Args&&... args) const;
@@ -376,24 +377,23 @@ private:
     //------------//
     // Statements //
     //------------//
-    bool parseStatement(StatementSyntax*& stmt,
-                        StatementContext stmtCtx = StatementContext::None);
+    bool parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx);
     bool parseCompoundStatement_AtFirst(
             StatementSyntax*& stmt,
-            StatementContext stmtCtx = StatementContext::None);
+            StatementContext stmtCtx);
     bool parseDeclarationStatement(
             StatementSyntax*& stmt,
             bool (Parser::*parseDecl)(DeclarationSyntax*&));
     bool parseExpressionStatement(StatementSyntax*& stmt);
-    bool parseLabeledStatement_AtFirst(StatementSyntax*& stmt);
-    bool parseIfStatement_AtFirst(StatementSyntax*& stmt);
+    bool parseLabeledStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
+    bool parseIfStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
     bool parseSwitchStatement_AtFirst(StatementSyntax*& stmt);
-    bool parseWhileStatement_AtFirst(StatementSyntax*& stmt);
-    bool parseDoStatement_AtFirst(StatementSyntax*& stmt);
-    bool parseForStatement_AtFirst(StatementSyntax*& stmt);
+    bool parseWhileStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
+    bool parseDoStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
+    bool parseForStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
     bool parseGotoStatement_AtFirst(StatementSyntax*& stmt);
-    bool parseContinueStatement_AtFirst(StatementSyntax*& stmt);
-    bool parseBreakStatement_AtFirst(StatementSyntax*& stmt);
+    bool parseContinueStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
+    bool parseBreakStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
     bool parseReturnStatement_AtFirst(StatementSyntax*& stmt);
     bool parseExtGNU_AsmStatement(StatementSyntax*& stmt);
     void parseExtGNU_AsmQualifiers(SpecifierListSyntax*& specList);

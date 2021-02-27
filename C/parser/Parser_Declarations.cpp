@@ -333,7 +333,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
                         decl = funcDef;
                         funcDef->specs_ = const_cast<SpecifierListSyntax*>(specList);
                         funcDef->decltor_ = decltor;
-                        parseCompoundStatement_AtFirst(funcDef->body_);
+                        parseCompoundStatement_AtFirst(funcDef->body_, StatementContext::None);
                         return true;
                     }
                 }

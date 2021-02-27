@@ -84,7 +84,7 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
 
         case IdentifierToken: {
             if (peek(2).kind() == ColonToken)
-                return parseLabeledStatement_AtFirst(stmt);
+                return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
             Backtracker BT(this);
             if (!parseExpressionStatement(stmt)) {
@@ -101,7 +101,7 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
             return parseCompoundStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_if:
-            return parseIfStatement_AtFirst(stmt);
+            return parseIfStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_switch:
             return parseSwitchStatement_AtFirst(stmt);
@@ -109,30 +109,30 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case Keyword_case:
             if (stmtCtx != StatementContext::WithinSwitch)
                 diagnosticsReporter_.UnexpectedCaseLabelOutsideSwitch();
-            return parseLabeledStatement_AtFirst(stmt);
+            return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_default:
             if (stmtCtx != StatementContext::WithinSwitch)
                 diagnosticsReporter_.UnexpectedDefaultLabelOutsideSwitch();
-            return parseLabeledStatement_AtFirst(stmt);
+            return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_while:
-            return parseWhileStatement_AtFirst(stmt);
+            return parseWhileStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_do:
-            return parseDoStatement_AtFirst(stmt);
+            return parseDoStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_for:
-            return parseForStatement_AtFirst(stmt);
+            return parseForStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_goto:
             return parseGotoStatement_AtFirst(stmt);
 
         case Keyword_continue:
-            return parseContinueStatement_AtFirst(stmt);
+            return parseContinueStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_break:
-            return parseBreakStatement_AtFirst(stmt);
+            return parseBreakStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_return:
             return parseReturnStatement_AtFirst(stmt);
@@ -227,7 +227,7 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
 
     VariableAndOrFunctionDeclarationSyntax* varDecl = nullptr;
     varDecl = makeNode<VariableAndOrFunctionDeclarationSyntax>();
-    varDecl->specs_ =makeNode<SpecifierListSyntax>(typedefName);
+    varDecl->specs_ = makeNode<SpecifierListSyntax>(typedefName);
     varDecl->semicolonTkIdx_ = exprStmt->semicolonTkIdx_;
     varDecl->decltors_ = makeNode<DeclaratorListSyntax>(decltor);
 
@@ -261,7 +261,7 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
     StatementListSyntax** stmtList_cur = &block->stmts_;
 
     while (true) {
-        StatementSyntax* insideStmt = nullptr;
+        StatementSyntax* innerStmt = nullptr;
         switch (peek().kind()) {
             case EndOfFile:
                 diagnosticsReporter_.ExpectedToken(CloseBraceToken);
@@ -272,7 +272,7 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
                 return true;
 
             default: {
-                if (!parseStatement(insideStmt, stmtCtx)) {
+                if (!parseStatement(innerStmt, stmtCtx)) {
                     skipTo(CloseBraceToken);
                     continue;
                 }
@@ -280,7 +280,7 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
             }
         }
 
-        *stmtList_cur = makeNode<StatementListSyntax>(insideStmt);
+        *stmtList_cur = makeNode<StatementListSyntax>(innerStmt);
         stmtList_cur = &(*stmtList_cur)->next;
     }
 
@@ -320,7 +320,7 @@ bool Parser::parseExpressionStatement(StatementSyntax*& stmt)
  *
  * \remark 6.8.4.1
  */
-bool Parser::parseIfStatement_AtFirst(StatementSyntax*& stmt)
+bool Parser::parseIfStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_if,
@@ -334,14 +334,14 @@ bool Parser::parseIfStatement_AtFirst(StatementSyntax*& stmt)
     if (!(match(OpenParenToken, &ifStmt->openParenTkIdx_)
             && parseExpression(ifStmt->cond_)
             && match(CloseParenToken, &ifStmt->closeParenTkIdx_)
-            && parseStatement(ifStmt->stmt_))) {
+            && parseStatement(ifStmt->stmt_, stmtCtx))) {
         return ignoreStatement();
     }
 
     if (peek().kind() == Keyword_else) {
         ifStmt->elseKwTkIdx_ = consume();
         return checkStatementParse(
-                    parseStatement(ifStmt->elseStmt_));
+                    parseStatement(ifStmt->elseStmt_, stmtCtx));
     }
     return true;
 }
@@ -375,7 +375,8 @@ bool Parser::parseSwitchStatement_AtFirst(StatementSyntax*& stmt)
  *
  * \remark 6.8.1
  */
-bool Parser::parseLabeledStatement_AtFirst(StatementSyntax*& stmt)
+bool Parser::parseLabeledStatement_AtFirst(StatementSyntax*& stmt,
+                                           StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == IdentifierToken
@@ -420,7 +421,7 @@ bool Parser::parseLabeledStatement_AtFirst(StatementSyntax*& stmt)
     }
 
     return checkStatementParse(
-                parseStatement(labelStmt->stmt_));
+                parseStatement(labelStmt->stmt_, stmtCtx));
 }
 
 /**
@@ -429,7 +430,8 @@ bool Parser::parseLabeledStatement_AtFirst(StatementSyntax*& stmt)
  *
  * \remark 6.8.5.1
  */
-bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt)
+bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt,
+                                         StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_while,
@@ -444,7 +446,7 @@ bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt)
                 match(OpenParenToken, &whileStmt->openParenTkIdx_)
                 && parseExpression(whileStmt->cond_)
                 && match(CloseParenToken, &whileStmt->closeParenTkIdx_)
-                && parseStatement(whileStmt->stmt_));
+                && parseStatement(whileStmt->stmt_, stmtCtx));
 }
 
 /**
@@ -453,7 +455,8 @@ bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt)
  *
  * \remark 6.8.5.2
  */
-bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt)
+bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt,
+                                      StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_do,
@@ -465,7 +468,7 @@ bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt)
     doStmt->doKwTkIdx_ = consume();
 
     return checkStatementParse(
-                parseStatement(doStmt->stmt_)
+                parseStatement(doStmt->stmt_, stmtCtx)
                 && match(Keyword_while, &doStmt->whileKwTkIdx_)
                 && match(OpenParenToken, &doStmt->openParenTkIdx_)
                 && parseExpression(doStmt->cond_)
@@ -479,7 +482,8 @@ bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt)
  *
  * \remark 6.8.5.3
  */
-bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt)
+bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
+                                       StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_for,
@@ -578,7 +582,7 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt)
     }
 
     return checkStatementParse(
-                parseStatement(forStmt->stmt_));
+                parseStatement(forStmt->stmt_, stmtCtx));
 }
 
 /**
@@ -615,7 +619,8 @@ bool Parser::parseGotoStatement_AtFirst(StatementSyntax*& stmt)
  *
  * \remark 6.8.6.2
  */
-bool Parser::parseContinueStatement_AtFirst(StatementSyntax*& stmt)
+bool Parser::parseContinueStatement_AtFirst(StatementSyntax*& stmt,
+                                            StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_continue,
@@ -636,7 +641,8 @@ bool Parser::parseContinueStatement_AtFirst(StatementSyntax*& stmt)
  *
  * \remark 6.8.6.3
  */
-bool Parser::parseBreakStatement_AtFirst(StatementSyntax*& stmt)
+bool Parser::parseBreakStatement_AtFirst(StatementSyntax*& stmt,
+                                         StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_break,

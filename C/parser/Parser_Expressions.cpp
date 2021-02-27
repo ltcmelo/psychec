@@ -223,7 +223,7 @@ bool Parser::parseExtGNU_StatementExpression_AtFirst(ExpressionSyntax *&expr)
     gnuExpr->openParenTkIdx_ = consume();
 
     StatementSyntax* statement = nullptr;
-    parseCompoundStatement_AtFirst(statement);
+    parseCompoundStatement_AtFirst(statement, StatementContext::None);
     if (statement->asCompoundStatement())
         gnuExpr->stmt_ = statement->asCompoundStatement();
     return matchOrSkipTo(CloseParenToken, &gnuExpr->closeParenTkIdx_);
@@ -499,7 +499,7 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
         return false;
 
     while (true) {
-        SyntaxKind exprK = Unknown;
+        SyntaxKind exprK = UnknownSyntax;
         switch (peek().kind()) {
             /* 6.5.2.1 */
             case OpenBracketToken: {
@@ -541,7 +541,7 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
                 [[fallthrough]];
 
             case ArrowToken: {
-                if (exprK == Unknown)
+                if (exprK == UnknownSyntax)
                     exprK = IndirectMemberAccessExpression;
                 if (!parsePostfixExpression_AtPostfix<MemberAccessExpressionSyntax>(
                             expr,
@@ -569,7 +569,7 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
                 [[fallthrough]];
 
             case MinusMinusToken: {
-                if (exprK == Unknown)
+                if (exprK == UnknownSyntax)
                     exprK = PostDecrementExpression;
                 if (!parsePostfixExpression_AtPostfix<PostfixUnaryExpressionSyntax>(
                             expr,
