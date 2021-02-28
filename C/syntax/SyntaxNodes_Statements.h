@@ -303,8 +303,9 @@ class PSY_C_API DoStatementSyntax final : public StatementSyntax
 public:
     SyntaxToken doKeyword() const { return tokenAtIndex(doKwTkIdx_); }
     const StatementSyntax* statement() const { return stmt_; }
+    SyntaxToken whileKeyword() const { return tokenAtIndex(whileKwTkIdx_); }
     SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
-    const ExpressionSyntax* expression() const { return cond_; }
+    const ExpressionSyntax* condition() const { return cond_; }
     SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
     SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
 
@@ -385,7 +386,7 @@ class PSY_C_API GotoStatementSyntax final : public StatementSyntax
 
 public:
     SyntaxToken gotoKeyword() const { return tokenAtIndex(gotoKwTkIdx_); }
-    SyntaxToken identToken() const { return tokenAtIndex(identTkIdx_); }
+    SyntaxToken identifierToken() const { return tokenAtIndex(identTkIdx_); }
     SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
 
 private:
@@ -459,7 +460,7 @@ class PSY_C_API ReturnStatementSyntax final : public StatementSyntax
     AST_NODE_1K(ReturnStatement, Statement)
 
 public:
-    SyntaxToken returnKeyworkd() const { return tokenAtIndex(returnKwTkIdx_); }
+    SyntaxToken returnKeyword() const { return tokenAtIndex(returnKwTkIdx_); }
     const ExpressionSyntax* expression() const { return expr_; }
     SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
 

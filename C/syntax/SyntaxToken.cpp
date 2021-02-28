@@ -389,9 +389,14 @@ const char* SyntaxToken::valueText_c_str() const
     }
 }
 
+bool SyntaxToken::isValid() const
+{
+    return tree_ != nullptr;
+}
+
 SyntaxToken SyntaxToken::invalid()
 {
-    return 0;
+    return SyntaxToken(nullptr);
 }
 
 namespace psy {

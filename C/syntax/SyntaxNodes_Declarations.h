@@ -460,6 +460,9 @@ class PSY_C_API TrivialSpecifierSyntax : public SpecifierSyntax
 {
     AST_NODE(TrivialSpecifier, Specifier)
 
+public:
+    SyntaxToken specifierToken() const { return tokenAtIndex(specTkIdx_); }
+
 protected:
     LexedTokens::IndexType specTkIdx_ = LexedTokens::invalidIndex();
     AST_CHILD_LST1(specTkIdx_);

@@ -57,7 +57,8 @@ public:
  *
  * The base class of every syntax list.
  */
-template <class SyntaxNodeT, class DerivedListT>
+template <class SyntaxNodeT,
+          class DerivedListT>
 class PSY_C_API CoreSyntaxNodeList
         : public List<SyntaxNodeT, DerivedListT>
         , public SyntaxNodeList
@@ -124,9 +125,11 @@ public:
 template <class SyntaxNodeT>
 class PSY_C_API SyntaxNodeSeparatedList final
         : public CoreSyntaxNodeList<SyntaxNodeT,
-                                         SyntaxNodeSeparatedList<SyntaxNodeT>>
+                                    SyntaxNodeSeparatedList<SyntaxNodeT>>
 {
 public:
+    SyntaxToken delimiterToken() const;
+
     using CoreSyntaxNodeList<SyntaxNodeT, SyntaxNodeSeparatedList<SyntaxNodeT>>::CoreSyntaxNodeList;
     using NodeType = SyntaxNodeT;
 

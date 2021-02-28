@@ -135,6 +135,7 @@ class PSY_C_API StringLiteralExpressionSyntax final : public ExpressionSyntax
 
 public:
     SyntaxToken literalToken() const { return tokenAtIndex(litTkIdx_); }
+    StringLiteralExpressionSyntax* adjacent() const { return adjacent_; }
 
 private:
     LexedTokens::IndexType litTkIdx_ = LexedTokens::invalidIndex();
@@ -190,7 +191,7 @@ class PSY_C_API GenericSelectionExpressionSyntax final : public ExpressionSyntax
     AST_NODE_1K(GenericSelectionExpression, Expression)
 
 public:
-    SyntaxToken genericKeywordToken() const { return tokenAtIndex(genericKwTkIdx_); }
+    SyntaxToken genericKeyword() const { return tokenAtIndex(genericKwTkIdx_); }
     SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
     const ExpressionSyntax* expression() const { return expr_; }
     SyntaxToken commaToken() const { return tokenAtIndex(commaTkIdx_); }
@@ -688,6 +689,7 @@ class PSY_C_API AmbiguousCastOrBinaryExpressionSyntax final : public ExpressionS
 {
     AST_NODE_NK(AmbiguousCastOrBinaryExpression, Expression)
 
+public:
     const CastExpressionSyntax* castExpression() const { return castExpr_; }
     const BinaryExpressionSyntax* binaryExpression() const { return binExpr_; }
 
