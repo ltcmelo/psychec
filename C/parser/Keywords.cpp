@@ -772,6 +772,27 @@ static inline SyntaxKind classify9(const char* s, const ParseOptions& opts)
                     }
                 }
             }
+            else if (s[2] == 'a'
+                     && opts.extensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                if (s[3] == 'l') {
+                    if (s[4] == 'i') {
+                        if (s[5] == 'g') {
+                            if (s[6] == 'n') {
+                                if (s[7] == 'o') {
+                                    if (s[8] == 'f') {
+                                        return KeywordAlias___alignof;
+                                    }
+                                }
+                                else if (s[7] == 'a') {
+                                    if (s[8] == 's') {
+                                        return KeywordAlias___alignas;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         else if(s[1] == 'T'
                     && opts.extensions().isEnabled_ExtPSY_Generics()) {

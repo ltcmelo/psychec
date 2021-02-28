@@ -258,6 +258,8 @@ enum SyntaxKind : std::uint16_t
     KeywordAlias_asm = Keyword_ExtGNU___asm__,
     KeywordAlias_typeof = Keyword_ExtGNU___typeof__,
 
+    KeywordAlias___alignas = Keyword__Alignas,
+    KeywordAlias___alignof = Keyword__Alignof,
     KeywordAlias___asm = Keyword_ExtGNU___asm__,
     KeywordAlias___attribute = Keyword_ExtGNU___attribute__,
     KeywordAlias___const = Keyword_const,
