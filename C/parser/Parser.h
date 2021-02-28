@@ -208,9 +208,12 @@ private:
     enum class StatementContext : uint8_t
     {
         None,
-        WithinSwitch,
-        WithinLoop,
+        Switch,
+        Loop,
+        SwitchAndLoop
     };
+
+    friend StatementContext operator+(StatementContext a, StatementContext b);
 
     template <class NodeT, class... Args> NodeT* makeNode(Args&&... args) const;
     template <class NodeT, class NodeListT> bool parseCommaSeparatedItems(
@@ -399,10 +402,10 @@ private:
     bool parseExpressionStatement(StatementSyntax*& stmt);
     bool parseLabeledStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
     bool parseIfStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
-    bool parseSwitchStatement_AtFirst(StatementSyntax*& stmt);
-    bool parseWhileStatement_AtFirst(StatementSyntax*& stmt);
-    bool parseDoStatement_AtFirst(StatementSyntax*& stmt);
-    bool parseForStatement_AtFirst(StatementSyntax*& stmt);
+    bool parseSwitchStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
+    bool parseWhileStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
+    bool parseDoStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
+    bool parseForStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
     bool parseGotoStatement_AtFirst(StatementSyntax*& stmt);
     bool parseContinueStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);
     bool parseBreakStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx);

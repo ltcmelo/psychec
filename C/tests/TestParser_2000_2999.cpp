@@ -1513,10 +1513,52 @@ void TestParser::case2516()
 
 }
 
-void TestParser::case2517() {}
-void TestParser::case2518() {}
-void TestParser::case2519() {}
-void TestParser::case2520() {}
+void TestParser::case2517()
+{
+    parseStatement(R"(
+                   for ( ; ; ) {
+                       switch ( 1 ) {
+                           default :
+                               continue ;
+                       }
+                   }
+                   )");
+}
+
+void TestParser::case2518()
+{
+    parseStatement(R"(
+                   for ( ; ; ) {
+                       switch ( 1 ) {
+                           default :
+                               if ( x ) continue ;
+                       }
+                   }
+                   )");
+}
+
+void TestParser::case2519()
+{
+    parseStatement(R"(
+                   switch ( x ) {
+                       break;
+                   }
+                   )");
+}
+
+void TestParser::case2520()
+{
+    parseStatement(R"(
+                   switch ( 0 ) {
+                       case 1 : ;
+                       default:
+                           for ( ; ; ) {
+                               case 2 : ;
+                           }
+                   }
+                   )");
+}
+
 void TestParser::case2521() {}
 void TestParser::case2522() {}
 void TestParser::case2523() {}

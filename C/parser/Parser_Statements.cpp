@@ -104,38 +104,40 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
             return parseIfStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_switch:
-            return parseSwitchStatement_AtFirst(stmt);
+            return parseSwitchStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_case:
-            if (stmtCtx != StatementContext::WithinSwitch)
+            if (stmtCtx != StatementContext::Switch
+                    && stmtCtx != StatementContext::SwitchAndLoop)
                 diagnosticsReporter_.UnexpectedCaseLabelOutsideSwitch();
             return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_default:
-            if (stmtCtx != StatementContext::WithinSwitch)
+            if (stmtCtx != StatementContext::Switch
+                    && stmtCtx != StatementContext::SwitchAndLoop)
                 diagnosticsReporter_.UnexpectedDefaultLabelOutsideSwitch();
             return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_while:
-            return parseWhileStatement_AtFirst(stmt);
+            return parseWhileStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_do:
-            return parseDoStatement_AtFirst(stmt);
+            return parseDoStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_for:
-            return parseForStatement_AtFirst(stmt);
+            return parseForStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_goto:
             return parseGotoStatement_AtFirst(stmt);
 
         case Keyword_continue:
-            if (stmtCtx != StatementContext::WithinLoop)
+            if (stmtCtx != StatementContext::Loop
+                    && stmtCtx != StatementContext::SwitchAndLoop)
                 diagnosticsReporter_.UnexpectedContinueOutsideLoop();
             return parseContinueStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_break:
-            if (stmtCtx != StatementContext::WithinLoop
-                    && stmtCtx != StatementContext::WithinSwitch)
+            if (stmtCtx == StatementContext::None)
                 diagnosticsReporter_.UnexpectedBreakOutsideSwitchOrLoop();
             return parseBreakStatement_AtFirst(stmt, stmtCtx);
 
@@ -357,7 +359,8 @@ bool Parser::parseIfStatement_AtFirst(StatementSyntax*& stmt, StatementContext s
  *
  * \remark 6.8.4.2
  */
-bool Parser::parseSwitchStatement_AtFirst(StatementSyntax*& stmt)
+bool Parser::parseSwitchStatement_AtFirst(StatementSyntax*& stmt,
+                                          StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_switch,
@@ -372,7 +375,8 @@ bool Parser::parseSwitchStatement_AtFirst(StatementSyntax*& stmt)
                 match(OpenParenToken, &switchStmt->openParenTkIdx_)
                 && parseExpression(switchStmt->cond_)
                 && match(CloseParenToken, &switchStmt->closeParenTkIdx_)
-                && parseStatement(switchStmt->stmt_, StatementContext::WithinSwitch));
+                && parseStatement(switchStmt->stmt_,
+                                  stmtCtx + StatementContext::Switch));
 }
 
 /**
@@ -435,7 +439,8 @@ bool Parser::parseLabeledStatement_AtFirst(StatementSyntax*& stmt,
  *
  * \remark 6.8.5.1
  */
-bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt)
+bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt,
+                                         StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_while,
@@ -450,7 +455,8 @@ bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt)
                 match(OpenParenToken, &whileStmt->openParenTkIdx_)
                 && parseExpression(whileStmt->cond_)
                 && match(CloseParenToken, &whileStmt->closeParenTkIdx_)
-                && parseStatement(whileStmt->stmt_, StatementContext::WithinLoop));
+                && parseStatement(whileStmt->stmt_,
+                                  stmtCtx + StatementContext::Loop));
 }
 
 /**
@@ -459,7 +465,8 @@ bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt)
  *
  * \remark 6.8.5.2
  */
-bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt)
+bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt,
+                                      StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_do,
@@ -471,7 +478,8 @@ bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt)
     doStmt->doKwTkIdx_ = consume();
 
     return checkStatementParse(
-                parseStatement(doStmt->stmt_, StatementContext::WithinLoop)
+                parseStatement(doStmt->stmt_,
+                               stmtCtx + StatementContext::Loop)
                 && match(Keyword_while, &doStmt->whileKwTkIdx_)
                 && match(OpenParenToken, &doStmt->openParenTkIdx_)
                 && parseExpression(doStmt->cond_)
@@ -485,7 +493,8 @@ bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt)
  *
  * \remark 6.8.5.3
  */
-bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt)
+bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
+                                       StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_for,
@@ -584,7 +593,8 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt)
     }
 
     return checkStatementParse(
-                parseStatement(forStmt->stmt_, StatementContext::WithinLoop));
+                parseStatement(forStmt->stmt_,
+                               stmtCtx + StatementContext::Loop));
 }
 
 /**
@@ -870,3 +880,34 @@ bool Parser::checkStatementParse(bool stmtParsed)
         return ignoreStatement();
     return true;
 }
+
+namespace psy {
+namespace C {
+
+Parser::StatementContext operator+(Parser::StatementContext a,
+                                   Parser::StatementContext b)
+{
+    switch (a) {
+        case Parser::StatementContext::None:
+            return b;
+
+        case Parser::StatementContext::Switch:
+            if (b == Parser::StatementContext::Loop)
+                return Parser::StatementContext::SwitchAndLoop;
+            return a;
+
+        case Parser::StatementContext::Loop:
+            if (b == Parser::StatementContext::Switch)
+                return Parser::StatementContext::SwitchAndLoop;
+            return a;
+
+        case Parser::StatementContext::SwitchAndLoop:
+            return a;
+
+        default:
+            PSYCHE_ASSERT(false, return Parser::StatementContext::None, "");
+    }
+}
+
+} // C
+} // psy
