@@ -3,6 +3,27 @@
 
 @import "{{ site.theme }}";
 
+body {
+  padding:10px 50px 0 0;
+  font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	color: #314c66;
+	background-color: #FBFAF7;
+	margin: 0;
+	line-height: 1.8em;
+	-webkit-font-smoothing: antialiased;
+
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color:#314c66;
+  margin:36px 0 10px;
+}
+
+dl, dt, dd, dl p {
+	color: #314c66;
+}
+
 header {
 	background-color: #84aec4;
 	color: #FDFDFB;
@@ -25,4 +46,12 @@ a {
   color:#2b6933;
   font-weight:200;
   text-decoration:none;
+}
+
+@media print {
+  body {
+    padding:0.4in;
+    font-size:12pt;
+    color:#314c66;
+  }
 }
