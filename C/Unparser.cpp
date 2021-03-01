@@ -36,8 +36,6 @@ void Unparser::unparse(const SyntaxNode* node, std::ostream& os)
     visit(node);
 }
 
-    // WIP
-
 void Unparser::terminal(const SyntaxToken& tk, const SyntaxNode*)
 {
     if (tk.kind() == EndOfFile)
