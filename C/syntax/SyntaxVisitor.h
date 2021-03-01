@@ -91,7 +91,6 @@ public:
     virtual Action visitTaggedTypeSpecifier(const TaggedTypeSpecifierSyntax*) { return Action::Continue; }
     virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) { return Action::Continue; }
     virtual Action visitTypedefName(const TypedefNameSyntax*) { return Action::Continue; }
-    virtual Action visitTypeName(const TypeNameSyntax*) { return Action::Continue; }
     virtual Action visitTypeQualifier(const TypeQualifierSyntax*) { return Action::Continue; }
     virtual Action visitFunctionSpecifier(const FunctionSpecifierSyntax*) { return Action::Continue; }
     virtual Action visitAlignmentSpecifier(const AlignmentSpecifierSyntax*) { return Action::Continue; }
@@ -111,6 +110,9 @@ public:
     virtual Action visitSubscriptSuffix(const SubscriptSuffixSyntax*) { return Action::Continue; }
     virtual Action visitParameterSuffix(const ParameterSuffixSyntax*) { return Action::Continue; }
     virtual Action visitBitfieldDeclarator(const BitfieldDeclaratorSyntax*) { return Action::Continue; }
+
+    /* Type Name */
+    virtual Action visitTypeName(const TypeNameSyntax*) { return Action::Continue; }
 
     /* Initializers */
     virtual Action visitExpressionInitializer(const ExpressionInitializerSyntax*) { return Action::Continue; }

@@ -81,6 +81,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNode.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNode.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodeList.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodeList.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Declarations.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Expressions.h

@@ -1,4 +1,5 @@
 // Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,35 +19,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Unparser.h"
+#include "SyntaxNodeList.h"
 
+#include "SyntaxNode.h"
+#include "SyntaxNodes.h"
 #include "SyntaxTree.h"
-
-#include "syntax/SyntaxLexemes.h"
-#include "syntax/SyntaxNodes.h"
-
-#include <iostream>
 
 using namespace psy;
 using namespace C;
 
-void Unparser::unparse(const SyntaxNode* node, std::ostream& os)
+SyntaxToken SyntaxNodeList::token(LexedTokens::IndexType tkIdx, SyntaxTree* tree)
 {
-    os_ = &os;
-    visit(node);
+    return tree->tokenAt(tkIdx);
 }
 
-void Unparser::terminal(const SyntaxToken& tk, const SyntaxNode*)
+template <class SyntaxNodeT>
+SyntaxToken
+SyntaxNodeSeparatedList<SyntaxNodeT>::delimiterToken() const
 {
-    if (tk.kind() == EndOfFile)
-        return;
-
-    *os_ << tk.valueText_c_str();
-
-    if (tk.kind() == CloseBraceToken
-            || tk.kind() == OpenBraceToken
-            || tk.kind() == SemicolonToken)
-        *os_ << "\n";
-    else
-        *os_ << " ";
+    return SyntaxNodeList::token(delimTkIdx_, Base::tree_);
 }
+
+namespace psy {
+namespace C {
+
+template class SyntaxNodeSeparatedList<EnumMemberDeclarationSyntax*>;
+template class SyntaxNodeSeparatedList<ParameterDeclarationSyntax*>;
+template class SyntaxNodeSeparatedList<ExtGNU_AttributeSyntax*>;
+template class SyntaxNodeSeparatedList<DeclaratorSyntax*>;
+template class SyntaxNodeSeparatedList<InitializerSyntax*>;
+template class SyntaxNodeSeparatedList<ExpressionSyntax*>;
+template class SyntaxNodeSeparatedList<GenericAssociationSyntax*>;
+template class SyntaxNodeSeparatedList<ExtGNU_AsmOperandSyntax*>;
+
+} // C
+} // psy

@@ -55,13 +55,12 @@ namespace C {
 class PSY_C_API SyntaxDumper : protected SyntaxVisitor
 {
 public:
-    SyntaxDumper(SyntaxTree* unit)
-        : SyntaxVisitor(unit)
+    SyntaxDumper(SyntaxTree* tree)
+        : SyntaxVisitor(tree)
     {}
 
 protected:
-    virtual void terminal(unsigned tk, const SyntaxNode* node) {} // TODO: remove
-    virtual void terminal(const SyntaxToken& tk, const SyntaxNode* node) {}
+    virtual void terminal(const SyntaxToken&, const SyntaxNode*) {}
     virtual void nonterminal(const SyntaxNode* node) { visit(node); }
 
     //--------------//
@@ -74,11 +73,18 @@ protected:
         return Action::Skip;
     }
 
+    virtual Action visitEmptyDeclaration(const EmptyDeclarationSyntax* node) override
+    {
+        for (auto it = node->specifiers(); it; it = it->next)
+            nonterminal(it->value);
+        terminal(node->semicolonToken(), node);
+        return Action::Skip;
+    }
+
     Action visitTypeDeclaration_Common(const TypeDeclarationSyntax* node)
     {
-        if (node->typeSpec_)
-            nonterminal(node->typeSpec_);
-        terminal(node->semicolonTkIdx_, node);
+        nonterminal(node->typeSpecifier());
+        terminal(node->semicolonToken(), node);
         return Action::Skip;
     }
 
@@ -92,11 +98,83 @@ protected:
         return visitTypeDeclaration_Common(node);
     }
 
+    virtual Action visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax* node) override
+    {
+        terminal(node->identifierToken(), node);
+        for (auto iter = node->attributes(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        terminal(node->equalsToken(), node);
+        nonterminal(node->expression());
+        terminal(node->commaToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) override
+    {
+        for (auto iter = node->specifiers(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        for (auto iter = node->declarators(); iter; iter = iter->next) {
+            nonterminal(iter->value);
+            terminal(iter->delimiterToken(), node);
+        }
+        terminal(node->semicolonToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitFieldDeclaration(const FieldDeclarationSyntax* node) override
+    {
+        for (auto iter = node->specifiers(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        for (auto iter = node->declarators(); iter; iter = iter->next) {
+            nonterminal(iter->value);
+            terminal(iter->delimiterToken(), node);
+        }
+        terminal(node->semicolonToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax* node) override
+    {
+        for (auto iter = node->specifiers(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        nonterminal(node->declarator());
+        return Action::Skip;
+    }
+
+    virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax* node) override
+    {
+        terminal(node->staticAssertKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->expression());
+        terminal(node->commaToken(), node);
+        nonterminal(node->stringLiteral());
+        terminal(node->closeParenthesisToken(), node);
+        terminal(node->semicolonToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax* node) override
+    {
+        for (auto iter = node->specifiers(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        nonterminal(node->declarator());
+        nonterminal(node->body());
+        return Action::Skip;
+    }
+
+    virtual Action visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax* node) override
+    {
+        terminal(node->asmKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->stringLiteral());
+        terminal(node->closeParenthesisToken(), node);
+        return Action::Skip;
+    }
+
     /* Specifiers */
     virtual Action visitTrivialSpecifier_Common(const TrivialSpecifierSyntax* node)
     {
-        if (node->specTkIdx_)
-            terminal(node->specTkIdx_, node);
+        terminal(node->specifierToken(), node);
         return Action::Skip;
     }
 
@@ -112,20 +190,22 @@ protected:
 
     virtual Action visitTaggedTypeSpecifier(const TaggedTypeSpecifierSyntax* node) override
     {
-        if (node->taggedKwTkIdx_)
-            terminal(node->taggedKwTkIdx_, node);
-        for (SpecifierListSyntax *iter = node->attrs1_; iter; iter = iter->next)
+        terminal(node->taggedKeyword(), node);
+        for (auto iter = node->attributes(); iter; iter = iter->next)
             nonterminal(iter->value);
-        if (node->identTkIdx_)
-            terminal(node->identTkIdx_, node);
-        if (node->openBraceTkIdx_)
-            terminal(node->openBraceTkIdx_, node);
-        for (DeclarationListSyntax *iter = node->decls_; iter; iter = iter->next)
+        terminal(node->identifierToken(), node);
+        terminal(node->openBraceToken(), node);
+        for (auto iter = node->declarations(); iter; iter = iter->next)
             nonterminal(iter->value);
-        if (node->closeBraceTkIdx_)
-            terminal(node->closeBraceTkIdx_, node);
-        for (SpecifierListSyntax *iter = node->attrs2_; iter; iter = iter->next)
+        terminal(node->closeBraceToken(), node);
+        for (auto iter = node->attributes_PostCloseBrace(); iter; iter = iter->next)
             nonterminal(iter->value);
+        return Action::Skip;
+    }
+
+    virtual Action visitTypedefName(const TypedefNameSyntax* node) override
+    {
+        terminal(node->identifierToken(), node);
         return Action::Skip;
     }
 
@@ -141,272 +221,184 @@ protected:
 
     virtual Action visitAlignmentSpecifier(const AlignmentSpecifierSyntax* node) override
     {
-        if (node->alignasKwTkIdx_)
-            terminal(node->alignasKwTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->arg_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitExtGNU_AttributeSpecifier(const ExtGNU_AttributeSpecifierSyntax* node) override
-    {
-        if (node->attrKwTkIdx_)
-            terminal(node->attrKwTkIdx_, node);
-        if (node->openOuterParenTkIdx_)
-            terminal(node->openOuterParenTkIdx_, node);
-        if (node->openInnerParenTkIdx_)
-            terminal(node->openInnerParenTkIdx_, node);
-        for (ExtGNU_AttributeListSyntax *iter = node->attrs_; iter; iter = iter->next)
-            nonterminal(iter->value);
-        if (node->closeInnerParenTkIdx_)
-            terminal(node->closeInnerParenTkIdx_, node);
-        if (node->closeOuterParenTkIdx_)
-            terminal(node->closeOuterParenTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitExtGNU_Attribute(const ExtGNU_AttributeSyntax* node) override
-    {
-        if (node->kwOrIdentTkIdx_)
-            terminal(node->kwOrIdentTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        for (ExpressionListSyntax *iter = node->exprs_; iter; iter = iter->next) {
-            nonterminal(iter->value);
-            if (iter->delimTkIdx_)
-                terminal(iter->delimTkIdx_, node);
-        }
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitExtGNU_AsmLabel(const ExtGNU_AsmLabelSyntax* node) override
-    {
-        if (node->asmKwTkIdx_)
-            terminal(node->asmKwTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->strLit_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
+        terminal(node->alignasKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->argument());
+        terminal(node->closeParenthesisToken(), node);
         return Action::Skip;
     }
 
     virtual Action visitExtGNU_Typeof(const ExtGNU_TypeofSyntax* node) override
     {
-        if (node->typeofKwTkIdx_)
-            terminal(node->typeofKwTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->arg_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
+        terminal(node->typeofKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->argument());
+        terminal(node->closeParenthesisToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitExtGNU_AttributeSpecifier(const ExtGNU_AttributeSpecifierSyntax* node) override
+    {
+        terminal(node->attributeKeyword(), node);
+        terminal(node->openOuterParenthesisToken(), node);
+        terminal(node->openInnerParenthesisToken(), node);
+        for (auto iter = node->attributes(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        terminal(node->closeInnerParenthesisToken(), node);
+        terminal(node->closeOuterParenthesisToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitExtGNU_Attribute(const ExtGNU_AttributeSyntax* node) override
+    {
+        terminal(node->keywordOrIdentifierToken(), node);
+        terminal(node->openParenthesisToken(), node);
+        for (auto iter = node->expressions(); iter; iter = iter->next) {
+            nonterminal(iter->value);
+            terminal(iter->delimiterToken(), node);
+        }
+        terminal(node->closeParenthesisToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitExtGNU_AsmLabel(const ExtGNU_AsmLabelSyntax* node) override
+    {
+        terminal(node->asmKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->stringLiteral());
+        terminal(node->closeParenthesisToken(), node);
         return Action::Skip;
     }
 
     /* Declarators */
-
     virtual Action visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node) override
     {
-        for (auto iter = node->attrs1_; iter; iter = iter->next)
+        for (auto iter = node->attributes(); iter; iter = iter->next)
             nonterminal(iter->value);
-        nonterminal(node->innerDecltor_);
-        nonterminal(node->suffix_);
-        for (auto iter = node->attrs2_; iter; iter = iter->next)
+        nonterminal(node->innerDeclarator());
+        nonterminal(node->suffix());
+        for (auto iter = node->attributes_PostDeclarator(); iter; iter = iter->next)
             nonterminal(iter->value);
-        if (node->equalsTkIdx_)
-            terminal(node->equalsTkIdx_, node);
-        nonterminal(node->init_);
+        terminal(node->equalsToken(), node);
+        nonterminal(node->initializer());
         return Action::Skip;
     }
 
     virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax* node) override
     {
-        for (auto iter = node->attrs_; iter; iter = iter->next)
+        for (auto iter = node->attributes(); iter; iter = iter->next)
             nonterminal(iter->value);
-        if (node->asteriskTkIdx_)
-            terminal(node->asteriskTkIdx_, node);
-        for (auto iter = node->qualsAndAttrs_; iter; iter = iter->next)
+        terminal(node->asteriskToken(), node);
+        for (auto iter = node->qualifiersAndAttributes(); iter; iter = iter->next)
             nonterminal(iter->value);
-        nonterminal(node->innerDecltor_);
-        if (node->equalsTkIdx_)
-            terminal(node->equalsTkIdx_, node);
-        nonterminal(node->init_);
+        nonterminal(node->innerDeclarator());
+        terminal(node->equalsToken(), node);
+        nonterminal(node->initializer());
         return Action::Skip;
     }
 
     virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax* node) override
     {
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->innerDecltor_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->innerDeclarator());
+        terminal(node->closeParenthesisToken(), node);
         return Action::Skip;
     }
 
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node) override
     {
-        if (node->identTkIdx_)
-            terminal(node->identTkIdx_, node);
-        for (SpecifierListSyntax *iter = node->attrs2_; iter; iter = iter->next)
+        terminal(node->identifierToken(), node);
+        for (auto iter = node->attributes_PostIdentifier(); iter; iter = iter->next)
             nonterminal(iter->value);
-        if (node->equalsTkIdx_)
-            terminal(node->equalsTkIdx_, node);
-        nonterminal(node->init_);
+        terminal(node->equalsToken(), node);
+        nonterminal(node->initializer());
         return Action::Skip;
     }
 
-    virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax* node) override
+    virtual Action visitSubscriptSuffix(const SubscriptSuffixSyntax* node) override
     {
+        terminal(node->openBracketToken(), node);
+        for (auto iter = node->qualifiersAndAttributes(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        terminal(node->staticKeyword(), node);
+        for (auto iter = node->qualifiersAndAttributes_PostStatic(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        nonterminal(node->expression());
+        terminal(node->asteriskToken(), node);
+        terminal(node->closeBracketToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitParameterSuffix(const ParameterSuffixSyntax* node) override
+    {
+        terminal(node->openParenthesisToken(), node);
+        for (auto iter = node->parameters(); iter; iter = iter->next) {
+            nonterminal(iter->value);
+            terminal(iter->delimiterToken(), node);
+        }
+        terminal(node->ellipsisToken(), node);
+        terminal(node->closeParenthesisToken(), node);
         return Action::Skip;
     }
 
     virtual Action visitBitfieldDeclarator(const BitfieldDeclaratorSyntax* node) override
     {
-        nonterminal(node->innerDecltor_);
-        if (node->colonTkIdx_)
-            terminal(node->colonTkIdx_, node);
-        nonterminal(node->expr_);
-        for (auto iter = node->attrs_; iter; iter = iter->next)
+        nonterminal(node->innerDeclarator());
+        terminal(node->colonToken(), node);
+        nonterminal(node->expression());
+        for (auto iter = node->attributes(); iter; iter = iter->next)
             nonterminal(iter->value);
         return Action::Skip;
     }
 
-    virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) override
-    {
-        for (auto iter = node->specs_; iter; iter = iter->next)
-            nonterminal(iter->value);
-        for (DeclaratorListSyntax *iter = node->decltors_; iter; iter = iter->next) {
-            nonterminal(iter->value);
-            if (iter->delimTkIdx_)
-                terminal(iter->delimTkIdx_, node);
-        }
-        if (node->semicolonTkIdx_)
-            terminal(node->semicolonTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitFieldDeclaration(const FieldDeclarationSyntax* node) override
-    {
-        for (auto iter = node->specs_; iter; iter = iter->next)
-            nonterminal(iter->value);
-        for (DeclaratorListSyntax *iter = node->decltors_; iter; iter = iter->next) {
-            nonterminal(iter->value);
-            if (iter->delimTkIdx_)
-                terminal(iter->delimTkIdx_, node);
-        }
-        if (node->semicolonTkIdx_)
-            terminal(node->semicolonTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax* node) override
-    {
-        if (node->staticAssertKwTkIdx_)
-            terminal(node->staticAssertKwTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->expr_);
-        if (node->commaTkIdx_)
-            terminal(node->commaTkIdx_, node);
-        nonterminal(node->strLit_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        if (node->semicolonTkIdx_)
-            terminal(node->semicolonTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitEmptyDeclaration(const EmptyDeclarationSyntax* node) override
+    /* Type Name */
+    virtual Action visitTypeName(const TypeNameSyntax* node) override
     {
         for (auto it = node->specifiers(); it; it = it->next)
             nonterminal(it->value);
-        if (!node->semicolonToken().isMissing())
-            terminal(node->semicolonToken(), node);
+        nonterminal(node->declarator());
         return Action::Skip;
     }
 
-    virtual Action visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax* node) override
+    /* Initializers */
+    virtual Action visitExpressionInitializer(const ExpressionInitializerSyntax* node) override
     {
-        if (node->asmTkIdx_)
-            terminal(node->asmTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->strLit_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
+        nonterminal(node->expression());
         return Action::Skip;
     }
 
-    virtual Action visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax* node) override
+    virtual Action visitBraceEnclosedInitializer(const BraceEnclosedInitializerSyntax* node) override
     {
-        if (node->asmKwTkIdx_)
-            terminal(node->asmKwTkIdx_, node);
-        for (auto it = node->asmQualifiers(); it; it = it->next)
-            nonterminal(it->value);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->strLit_);
-        if (node->colon1TkIdx_)
-            terminal(node->colon1TkIdx_, node);
-        for (auto it = node->outputOperands(); it; it = it->next) {
-            nonterminal(it->value);
-            if (it->delimTkIdx_)
-                terminal(it->delimTkIdx_, node);
+        terminal(node->openBraceToken(), node);
+        for (auto iter = node->initializerList(); iter; iter = iter->next) {
+            nonterminal(iter->value);
+            terminal(iter->delimiterToken(), node);
         }
-        if (node->colon2TkIdx_)
-            terminal(node->colon2TkIdx_, node);
-        for (auto it = node->inputOperands(); it; it = it->next) {
-            nonterminal(it->value);
-            if (it->delimTkIdx_)
-                terminal(it->delimTkIdx_, node);
-        }
-        if (node->colon3TkIdx_)
-            terminal(node->colon3TkIdx_, node);
-        for (auto it = node->clobbers(); it; it = it->next) {
-            nonterminal(it->value);
-            if (it->delimTkIdx_)
-                terminal(it->delimTkIdx_, node);
-        }
-        if (node->colon4TkIdx_)
-            terminal(node->colon4TkIdx_, node);
-        for (auto it = node->gotoLabels(); it; it = it->next) {
-            nonterminal(it->value);
-            if (it->delimTkIdx_)
-                terminal(it->delimTkIdx_, node);
-        }
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        if (node->semicolonTkIdx_)
-            terminal(node->semicolonTkIdx_, node);
+        terminal(node->closeBraceToken(), node);
         return Action::Skip;
     }
 
-    virtual Action visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax* node) override
+    virtual Action visitDesignatedInitializer(const DesignatedInitializerSyntax* node) override
     {
-        if (node->openBracketTkIdx_)
-            terminal(node->openBracketTkIdx_, node);
-        nonterminal(node->identExpr_);
-        if (node->closeBracketTkIdx_)
-            terminal(node->closeBracketTkIdx_, node);
-        nonterminal(node->strLit_);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->expr_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
+        for (auto iter = node->designators(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        terminal(node->equalsToken(), node);
+        nonterminal(node->initializer());
         return Action::Skip;
     }
 
-    virtual Action visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax* node) override
+    virtual Action visitFieldDesignator(const FieldDesignatorSyntax* node) override
     {
-        if (node->specTkIdx_)
-            terminal(node->specTkIdx_, node);
+        terminal(node->dotToken(), node);
+        terminal(node->identifierToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitArrayDesignator(const ArrayDesignatorSyntax* node) override
+    {
+        terminal(node->openBracketToken(), node);
+        nonterminal(node->expression());
+        terminal(node->closeBracketToken(), node);
         return Action::Skip;
     }
 
@@ -415,504 +407,352 @@ protected:
     //-------------//
     virtual Action visitIdentifierExpression(const IdentifierExpressionSyntax* node) override
     {
-        if (node->identTkIdx_)
-            terminal(node->identTkIdx_, node);
+        terminal(node->identifierToken(), node);
         return Action::Skip;
     }
 
     virtual Action visitConstantExpression(const ConstantExpressionSyntax* node) override
     {
-        if (node->constantTkIdx_)
-            terminal(node->constantTkIdx_, node);
+        terminal(node->constantToken(), node);
         return Action::Skip;
     }
 
     virtual Action visitStringLiteralExpression(const StringLiteralExpressionSyntax* node) override
     {
-        if (node->litTkIdx_)
-            terminal(node->litTkIdx_, node);
-        nonterminal(node->adjacent_);
+        terminal(node->literalToken(), node);
+        nonterminal(node->adjacent());
         return Action::Skip;
     }
 
     virtual Action visitParenthesizedExpression(const ParenthesizedExpressionSyntax* node) override
     {
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->expr_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->expression());
+        terminal(node->closeParenthesisToken(), node);
         return Action::Skip;
     }
 
     virtual Action visitGenericSelectionExpression(const GenericSelectionExpressionSyntax*  node) override
     {
-        if (node->genericKwTkIdx_)
-            terminal(node->genericKwTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->expr_);
-        if (node->commaTkIdx_)
-            terminal(node->commaTkIdx_, node);
-        for (auto it = node->assocs_; it; it = it->next) {
+        terminal(node->genericKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->expression());
+        terminal(node->commaToken(), node);
+        for (auto it = node->associations(); it; it = it->next) {
             nonterminal(it->value);
-            if (it->delimTkIdx_)
-                terminal(it->delimTkIdx_, node);
+            terminal(it->delimiterToken(), node);
         }
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
+        terminal(node->closeParenthesisToken(), node);
         return Action::Skip;
     }
 
     virtual Action visitGenericAssociation(const GenericAssociationSyntax* node) override
     {
-        nonterminal(node->typeName_or_default_);
-        if (node->colonTkIdx_)
-            terminal(node->colonTkIdx_, node);
-        nonterminal(node->expr_);
+        nonterminal(node->typeName_or_default());
+        terminal(node->colonToken(), node);
+        nonterminal(node->expression());
         return Action::Skip;
     }
 
     virtual Action visitExtGNU_EnclosedCompoundStatementExpression(const ExtGNU_EnclosedCompoundStatementExpressionSyntax* node) override
     {
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->stmt_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->statement());
+        terminal(node->closeParenthesisToken(), node);
         return Action::Skip;
     }
 
-    virtual Action visitAmbiguousCastOrBinaryExpression(const AmbiguousCastOrBinaryExpressionSyntax* node) override
-    {
-        nonterminal(node->castExpr_);
-        nonterminal(node->binExpr_);
-        return Action::Skip;
-    }
-
-    virtual Action visitTypeName(const TypeNameSyntax* node) override
-    {
-        for (auto it = node->specs_; it; it = it->next)
-            nonterminal(it->value);
-        nonterminal(node->decltor_);
-        return Action::Skip;
-    }
-
-    virtual Action visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax* node) override
-    {
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->typeName_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        nonterminal(node->init_);
-        return Action::Skip;
-    }
-
-    virtual Action visitBinaryExpression(const BinaryExpressionSyntax* node) override
-    {
-        nonterminal(node->leftExpr_);
-        if (node->oprtrTkIdx_)
-            terminal(node->oprtrTkIdx_, node);
-        nonterminal(node->rightExpr_);
-        return Action::Skip;
-    }
-
-    virtual Action visitSequencingExpression(const SequencingExpressionSyntax* node) override
-    {
-        nonterminal(node->leftExpr_);
-        if (node->oprtrTkIdx_)
-            terminal(node->oprtrTkIdx_, node);
-        nonterminal(node->rightExpr_);
-        return Action::Skip;
-    }
-
-    virtual Action visitAssignmentExpression(const AssignmentExpressionSyntax* node) override
-    {
-        nonterminal(node->leftExpr_);
-        if (node->oprtrTkIdx_)
-            terminal(node->oprtrTkIdx_, node);
-        nonterminal(node->rightExpr_);
-        return Action::Skip;
-    }
-
-    virtual Action visitCastExpression(const CastExpressionSyntax* node) override
-    {
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->typeName_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        nonterminal(node->expr_);
-        return Action::Skip;
-    }
-
-    virtual Action visitCompoundStatement(const CompoundStatementSyntax* node) override
-    {
-        if (node->openBraceTkIdx_)
-            terminal(node->openBraceTkIdx_, node);
-        for (StatementListSyntax *iter = node->stmts_; iter; iter = iter->next)
-            nonterminal(iter->value);
-        if (node->closeBraceTkIdx_)
-            terminal(node->closeBraceTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitConditionalExpression(const ConditionalExpressionSyntax* node) override
-    {
-        nonterminal(node->condExpr_);
-        if (node->questionTkIdx_)
-            terminal(node->questionTkIdx_, node);
-        nonterminal(node->whenTrueExpr_);
-        if (node->colonTkIdx_)
-            terminal(node->colonTkIdx_, node);
-        nonterminal(node->whenFalseExpr_);
-        return Action::Skip;
-    }
-
-    virtual Action visitDeclarationStatement(const DeclarationStatementSyntax* node) override
-    {
-        nonterminal(node->decl_);
-        return Action::Skip;
-    }
-
-    virtual Action visitParameterSuffix(const ParameterSuffixSyntax* node) override
-    {
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        for (ParameterDeclarationListSyntax *iter = node->decls_; iter; iter = iter->next) {
-            nonterminal(iter->value);
-            if (iter->delimTkIdx_)
-                terminal(iter->delimTkIdx_, node);
-        }
-        if (node->ellipsisTkIdx_)
-            terminal(node->ellipsisTkIdx_, node);
-
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitSubscriptSuffix(const SubscriptSuffixSyntax* node) override
-    {
-        if (node->openBracketTkIdx_)
-            terminal(node->openBracketTkIdx_, node);
-        for (auto iter = node->qualsAndAttrs1_; iter; iter = iter->next)
-            nonterminal(iter->value);
-        if (node->staticKwTkIdx_)
-            terminal(node->staticKwTkIdx_, node);
-        for (auto iter = node->qualsAndAttrs2_; iter; iter = iter->next)
-            nonterminal(iter->value);
-        nonterminal(node->expr_);
-        if (node->asteriskTkIdx_)
-            terminal(node->asteriskTkIdx_, node);
-        if (node->closeBracketTkIdx_)
-            terminal(node->closeBracketTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitDoStatement(const DoStatementSyntax* node) override
-    {
-        if (node->doKwTkIdx_)
-            terminal(node->doKwTkIdx_, node);
-        nonterminal(node->stmt_);
-        if (node->whileKwTkIdx_)
-            terminal(node->whileKwTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->cond_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        if (node->semicolonTkIdx_)
-            terminal(node->semicolonTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitTypedefName(const TypedefNameSyntax* node) override
-    {
-        if (node->identTkIdx_)
-            terminal(node->identTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitExtPSY_QuantifiedTypeSpecifier(const ExtPSY_QuantifiedTypeSpecifierSyntax* node) override
-    {
-        if (node->quantifierTkIdx_)
-            terminal(node->quantifierTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        if (node->identTkIdx_)
-            terminal(node->identTkIdx_, node);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax* node) override
-    {
-        if (node->identTkIdx_)
-            terminal(node->identTkIdx_, node);
-        for (SpecifierListSyntax *iter = node->attrs_; iter; iter = iter->next)
-            nonterminal(iter->value);
-        if (node->equalsTkIdx_)
-            terminal(node->equalsTkIdx_, node);
-        nonterminal(node->expr_);
-        if (node->commaTkIdx_)
-            terminal(node->commaTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitExpressionStatement(const ExpressionStatementSyntax* node) override
-    {
-        nonterminal(node->expr_);
-        if (node->semicolonTkIdx_)
-            terminal(node->semicolonTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax* node) override
-    {
-        for (auto iter = node->specs_; iter; iter = iter->next)
-            nonterminal(iter->value);
-        nonterminal(node->decltor_);
-        nonterminal(node->body_);
-        return Action::Skip;
-    }
-
-    virtual Action visitForStatement(const ForStatementSyntax* node) override
-    {
-        if (node->forKwTkIdx_)
-            terminal(node->forKwTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->initStmt_);
-        nonterminal(node->cond_);
-        if (node->semicolonTkIdx_)
-            terminal(node->semicolonTkIdx_, node);
-        nonterminal(node->expr_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        nonterminal(node->stmt_);
-        return Action::Skip;
-    }
-
-    virtual Action visitIfStatement(const IfStatementSyntax* node) override
-    {
-        if (node->ifKwTkIdx_)
-            terminal(node->ifKwTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->cond_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        nonterminal(node->stmt_);
-        if (node->elseKwTkIdx_)
-            terminal(node->elseKwTkIdx_, node);
-        nonterminal(node->elseStmt_);
-        return Action::Skip;
-    }
-
-
-    virtual Action visitLabeledStatement(const LabeledStatementSyntax* node) override
-    {
-        if (node->labelTkIdx_)
-            terminal(node->labelTkIdx_, node);
-        nonterminal(node->expr_);
-        if (node->colonTkIdx_)
-            terminal(node->colonTkIdx_, node);
-        nonterminal(node->stmt_);
-        return Action::Skip;
-    }
-
-    virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax* node) override
-    {
-        for (SpecifierListSyntax *iter = node->specs_; iter; iter = iter->next)
-            nonterminal(iter->value);
-        nonterminal(node->decltor_);
-        return Action::Skip;
-    }
-
-    virtual Action visitCallExpression(const CallExpressionSyntax* node) override
-    {
-        nonterminal(node->expr_);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        for (ExpressionListSyntax *iter = node->args_; iter; iter = iter->next) {
-            nonterminal(iter->value);
-            if (iter->delimTkIdx_)
-                terminal(iter->delimTkIdx_, node);
-        }
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitArraySubscriptExpression(const ArraySubscriptExpressionSyntax* node) override
-    {
-        nonterminal(node->expr_);
-        if (node->openBracketTkIdx_)
-            terminal(node->openBracketTkIdx_, node);
-        nonterminal(node->arg_);
-        if (node->closeBracketTkIdx_)
-            terminal(node->closeBracketTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitMemberAccessExpression(const MemberAccessExpressionSyntax* node) override
-    {
-        nonterminal(node->expr_);
-        if (node->oprtrTkIdx_)
-            terminal(node->oprtrTkIdx_, node);
-        nonterminal(node->identExpr_);
-        return Action::Skip;
-    }
-
-    virtual Action visitBreakStatement(const BreakStatementSyntax* node) override
-    {
-        if (node->breakKwTkIdx_)
-            terminal(node->breakKwTkIdx_, node);
-        if (node->semicolonTkIdx_)
-            terminal(node->semicolonTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitContinueStatement(const ContinueStatementSyntax* node) override
-    {
-        if (node->continueKwTkIdx_)
-            terminal(node->continueKwTkIdx_, node);
-        if (node->semicolonTkIdx_)
-            terminal(node->semicolonTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitGotoStatement(const GotoStatementSyntax* node) override
-    {
-        if (node->gotoKwTkIdx_)
-            terminal(node->gotoKwTkIdx_, node);
-        if (node->identTkIdx_)
-            terminal(node->identTkIdx_, node);
-        if (node->semicolonTkIdx_)
-            terminal(node->semicolonTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitReturnStatement(const ReturnStatementSyntax* node) override
-    {
-        if (node->returnKwTkIdx_)
-            terminal(node->returnKwTkIdx_, node);
-        nonterminal(node->expr_);
-        if (node->semicolonTkIdx_)
-            terminal(node->semicolonTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitTypeTraitExpression(const TypeTraitExpressionSyntax* node) override
-    {
-        if (node->oprtrTkIdx_)
-            terminal(node->oprtrTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->arg_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        return Action::Skip;
-    }
-
-    virtual Action visitSwitchStatement(const SwitchStatementSyntax* node) override
-    {
-        if (node->switchKwTkIdx_)
-            terminal(node->switchKwTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->cond_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        nonterminal(node->stmt_);
-        return Action::Skip;
-    }
-
+    /* Operations */
     virtual Action visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax* node) override
     {
-        if (node->oprtrTkIdx_)
-            terminal(node->oprtrTkIdx_, node);
-        nonterminal(node->expr_);
+        terminal(node->operatorToken(), node);
+        nonterminal(node->expression());
         return Action::Skip;
     }
 
     virtual Action visitPostfixUnaryExpression(const PostfixUnaryExpressionSyntax* node) override
     {
-        nonterminal(node->expr_);
-        if (node->oprtrTkIdx_)
-            terminal(node->oprtrTkIdx_, node);
+        nonterminal(node->expression());
+        terminal(node->operatorToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitMemberAccessExpression(const MemberAccessExpressionSyntax* node) override
+    {
+        nonterminal(node->expression());
+        terminal(node->operatorToken(), node);
+        nonterminal(node->identifier());
+        return Action::Skip;
+    }
+
+    virtual Action visitArraySubscriptExpression(const ArraySubscriptExpressionSyntax* node) override
+    {
+        nonterminal(node->expression());
+        terminal(node->openBracketToken(), node);
+        nonterminal(node->argument());
+        terminal(node->closeBracketToken(), node);
+        return Action::Skip;
+    }
+
+
+    virtual Action visitTypeTraitExpression(const TypeTraitExpressionSyntax* node) override
+    {
+        terminal(node->operatorToken(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->argument());
+        terminal(node->closeParenthesisToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitCastExpression(const CastExpressionSyntax* node) override
+    {
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->typeName());
+        terminal(node->closeParenthesisToken(), node);
+        nonterminal(node->expression());
+        return Action::Skip;
+    }
+
+    virtual Action visitCallExpression(const CallExpressionSyntax* node) override
+    {
+        nonterminal(node->expression());
+        terminal(node->openParenthesisToken(), node);
+        for (auto iter = node->arguments(); iter; iter = iter->next) {
+            nonterminal(iter->value);
+            terminal(iter->delimiterToken(), node);
+        }
+        terminal(node->closeParenthesisToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax* node) override
+    {
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->typeName());
+        terminal(node->closeParenthesisToken(), node);
+        nonterminal(node->initializer());
+        return Action::Skip;
+    }
+
+    virtual Action visitBinaryExpression(const BinaryExpressionSyntax* node) override
+    {
+        nonterminal(node->left());
+        terminal(node->operatorToken(), node);
+        nonterminal(node->right());
+        return Action::Skip;
+    }
+
+    virtual Action visitConditionalExpression(const ConditionalExpressionSyntax* node) override
+    {
+        nonterminal(node->condition());
+        terminal(node->questionToken(), node);
+        nonterminal(node->whenTrue());
+        terminal(node->colonToken(), node);
+        nonterminal(node->whenFalse());
+        return Action::Skip;
+    }
+
+    virtual Action visitAssignmentExpression(const AssignmentExpressionSyntax* node) override
+    {
+        nonterminal(node->left());
+        terminal(node->operatorToken(), node);
+        nonterminal(node->right());
+        return Action::Skip;
+    }
+
+    virtual Action visitSequencingExpression(const SequencingExpressionSyntax* node) override
+    {
+        nonterminal(node->left());
+        terminal(node->operatorToken(), node);
+        nonterminal(node->right());
+        return Action::Skip;
+    }
+
+    //------------//
+    // Statements //
+    //------------//
+    virtual Action visitCompoundStatement(const CompoundStatementSyntax* node) override
+    {
+        terminal(node->openBraceToken(), node);
+        for (auto iter = node->statements(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        terminal(node->closeBraceToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitDeclarationStatement(const DeclarationStatementSyntax* node) override
+    {
+        nonterminal(node->declaration());
+        return Action::Skip;
+    }
+
+    virtual Action visitExpressionStatement(const ExpressionStatementSyntax* node) override
+    {
+        nonterminal(node->expression());
+        terminal(node->semicolonToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitLabeledStatement(const LabeledStatementSyntax* node) override
+    {
+        terminal(node->labelToken(), node);
+        nonterminal(node->expression());
+        terminal(node->colonToken(), node);
+        nonterminal(node->statement());
+        return Action::Skip;
+    }
+
+    virtual Action visitIfStatement(const IfStatementSyntax* node) override
+    {
+        terminal(node->ifKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->condition());
+        terminal(node->closeParenthesisToken(), node);
+        nonterminal(node->statement());
+        terminal(node->elseKeyword(), node);
+        nonterminal(node->elseStatement());
+        return Action::Skip;
+    }
+
+    virtual Action visitSwitchStatement(const SwitchStatementSyntax* node) override
+    {
+        terminal(node->switchKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->condition());
+        terminal(node->closeParenthesisToken(), node);
+        nonterminal(node->statement());
         return Action::Skip;
     }
 
     virtual Action visitWhileStatement(const WhileStatementSyntax* node) override
     {
-        if (node->whileKwTkIdx_)
-            terminal(node->whileKwTkIdx_, node);
-        if (node->openParenTkIdx_)
-            terminal(node->openParenTkIdx_, node);
-        nonterminal(node->cond_);
-        if (node->closeParenTkIdx_)
-            terminal(node->closeParenTkIdx_, node);
-        nonterminal(node->stmt_);
+        terminal(node->whileKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->condition());
+        terminal(node->closeParenthesisToken(), node);
+        nonterminal(node->statement());
         return Action::Skip;
     }
 
-    virtual Action visitExpressionInitializer(const ExpressionInitializerSyntax* node) override
+    virtual Action visitDoStatement(const DoStatementSyntax* node) override
     {
-        nonterminal(node->expr_);
+        terminal(node->doKeyword(), node);
+        nonterminal(node->statement());
+        terminal(node->whileKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->condition());
+        terminal(node->closeParenthesisToken(), node);
+        terminal(node->semicolonToken(), node);
         return Action::Skip;
     }
 
-    virtual Action visitBraceEnclosedInitializer(const BraceEnclosedInitializerSyntax* node) override
+    virtual Action visitForStatement(const ForStatementSyntax* node) override
     {
-        if (node->openBraceTkIdx_)
-            terminal(node->openBraceTkIdx_, node);
-        for (InitializerListSyntax *iter = node->initList_; iter; iter = iter->next) {
-            nonterminal(iter->value);
-            if (iter->delimTkIdx_)
-                terminal(iter->delimTkIdx_, node);
+        terminal(node->forKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->initializer());
+        nonterminal(node->condition());
+        terminal(node->semicolonToken(), node);
+        nonterminal(node->expression());
+        terminal(node->closeParenthesisToken(), node);
+        nonterminal(node->statement());
+        return Action::Skip;
+    }
+
+    virtual Action visitGotoStatement(const GotoStatementSyntax* node) override
+    {
+        terminal(node->gotoKeyword(), node);
+        terminal(node->identifierToken(), node);
+        terminal(node->semicolonToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitContinueStatement(const ContinueStatementSyntax* node) override
+    {
+        terminal(node->continueKeyword(), node);
+        terminal(node->semicolonToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitBreakStatement(const BreakStatementSyntax* node) override
+    {
+        terminal(node->breakKeyword(), node);
+        terminal(node->semicolonToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitReturnStatement(const ReturnStatementSyntax* node) override
+    {
+        terminal(node->returnKeyword(), node);
+        nonterminal(node->expression());
+        terminal(node->semicolonToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax* node) override
+    {
+        terminal(node->asmKeyword(), node);
+        for (auto it = node->asmQualifiers(); it; it = it->next)
+            nonterminal(it->value);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->stringLiteral());
+        terminal(node->colon1Token(), node);
+        for (auto it = node->outputOperands(); it; it = it->next) {
+            nonterminal(it->value);
+            terminal(it->delimiterToken(), node);
         }
-        if (node->closeBraceTkIdx_)
-            terminal(node->closeBraceTkIdx_, node);
+        terminal(node->colon2Token(), node);
+        for (auto it = node->inputOperands(); it; it = it->next) {
+            nonterminal(it->value);
+            terminal(it->delimiterToken(), node);
+        }
+        terminal(node->colon3Token(), node);
+        for (auto it = node->clobbers(); it; it = it->next) {
+            nonterminal(it->value);
+            terminal(it->delimiterToken(), node);
+        }
+        terminal(node->colon4Token(), node);
+        for (auto it = node->gotoLabels(); it; it = it->next) {
+            nonterminal(it->value);
+            terminal(it->delimiterToken(), node);
+        }
+        terminal(node->closeParenthesisToken(), node);
+        terminal(node->semicolonToken(), node);
         return Action::Skip;
     }
 
-    virtual Action visitFieldDesignator(const FieldDesignatorSyntax* node) override
+    virtual Action visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax* node) override
     {
-        if (node->dotTkIdx_)
-            terminal(node->dotTkIdx_, node);
-        if (node->identTkIdx_)
-            terminal(node->identTkIdx_, node);
+        terminal(node->asmQualifier(), node);
         return Action::Skip;
     }
 
-    virtual Action visitArrayDesignator(const ArrayDesignatorSyntax* node) override
+    virtual Action visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax* node) override
     {
-        if (node->openBracketTkIdx_)
-            terminal(node->openBracketTkIdx_, node);
-        nonterminal(node->expr_);
-        if (node->closeBracketTkIdx_)
-            terminal(node->closeBracketTkIdx_, node);
+        terminal(node->openBracketToken(), node);
+        nonterminal(node->identifier());
+        terminal(node->closeBracketToken(), node);
+        nonterminal(node->stringLiteral());
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->expression());
+        terminal(node->closeParenthesisToken(), node);
         return Action::Skip;
     }
 
-    virtual Action visitDesignatedInitializer(const DesignatedInitializerSyntax* node) override
+    //-------------//
+    // Ambiguities //
+    //-------------//
+    virtual Action visitAmbiguousCastOrBinaryExpression(const AmbiguousCastOrBinaryExpressionSyntax* node) override
     {
-        for (DesignatorListSyntax *iter = node->desigs_; iter; iter = iter->next)
-            nonterminal(iter->value);
-        if (node->equalsTkIdx_)
-            terminal(node->equalsTkIdx_, node);
-        nonterminal(node->init_);
+        nonterminal(node->castExpression());
+        nonterminal(node->binaryExpression());
         return Action::Skip;
     }
 
     virtual Action visitAmbiguousExpressionOrDeclarationStatement(const AmbiguousExpressionOrDeclarationStatementSyntax* node) override
     {
-        nonterminal(node->declStmt_);
-        nonterminal(node->exprStmt_);
+        nonterminal(node->declarationStatement());
+        nonterminal(node->expressionStatement());
         return Action::Skip;
     }
 };

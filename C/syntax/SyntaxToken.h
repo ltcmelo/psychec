@@ -172,6 +172,13 @@ public:
     bool isMissing() const { return BF_.missing_; }
 
     /**
+     * Whether \c this SyntaxToken is valid.
+     *
+     * \see SyntaxToken::invalid
+     */
+    bool isValid() const;
+
+    /**
      * The Location of \c this SyntaxToken.
      */
     Location location() const;

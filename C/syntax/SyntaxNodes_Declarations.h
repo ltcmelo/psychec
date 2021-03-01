@@ -460,6 +460,9 @@ class PSY_C_API TrivialSpecifierSyntax : public SpecifierSyntax
 {
     AST_NODE(TrivialSpecifier, Specifier)
 
+public:
+    SyntaxToken specifierToken() const { return tokenAtIndex(specTkIdx_); }
+
 protected:
     LexedTokens::IndexType specTkIdx_ = LexedTokens::invalidIndex();
     AST_CHILD_LST1(specTkIdx_);
@@ -507,7 +510,7 @@ public:
     SyntaxToken openBraceToken() const { return tokenAtIndex(openBraceTkIdx_); }
     const DeclarationListSyntax* declarations() const { return decls_; }
     SyntaxToken closeBraceToken() const { return tokenAtIndex(closeBraceTkIdx_); }
-    const SpecifierListSyntax* attributes_PostCloseBrace() const { return attrs1_; }
+    const SpecifierListSyntax* attributes_PostCloseBrace() const { return attrs2_; }
 
 private:
     LexedTokens::IndexType taggedKwTkIdx_ = LexedTokens::invalidIndex();
