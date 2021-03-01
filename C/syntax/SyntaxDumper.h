@@ -60,7 +60,7 @@ public:
     {}
 
 protected:
-    virtual void terminal(const SyntaxToken& tk, const SyntaxNode* node) {}
+    virtual void terminal(const SyntaxToken&, const SyntaxNode*) {}
     virtual void nonterminal(const SyntaxNode* node) { visit(node); }
 
     //--------------//

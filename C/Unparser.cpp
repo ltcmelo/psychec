@@ -38,7 +38,7 @@ void Unparser::unparse(const SyntaxNode* node, std::ostream& os)
 
     // WIP
 
-void Unparser::terminal(const SyntaxToken& tk, const SyntaxNode* ast)
+void Unparser::terminal(const SyntaxToken& tk, const SyntaxNode*)
 {
     if (tk.kind() == EndOfFile)
         return;
@@ -52,21 +52,3 @@ void Unparser::terminal(const SyntaxToken& tk, const SyntaxNode* ast)
     else
         *os_ << " ";
 }
-
-/*
-void Unparser::terminal(unsigned tkIdx, const SyntaxNode* node)
-{
-    auto tk = tree_->tokenAt(tkIdx).kind();
-    if (tk == EndOfFile)
-        return;
-
-    *os_ << tree_->tokenAt(tkIdx).valueText_c_str();
-
-    if (tk == CloseBraceToken
-            || tk == OpenBraceToken
-            || tk == SemicolonToken)
-        *os_ << "\n";
-    else
-        *os_ << " ";
-}
-*/
