@@ -129,6 +129,7 @@ private:
     using ExpansionsTable = std::unordered_map<unsigned int, LineColum>;
 
     friend class SyntaxNode;
+    friend class SyntaxNodeList;
     friend class Lexer;
     friend class Parser;
     friend class Binder;

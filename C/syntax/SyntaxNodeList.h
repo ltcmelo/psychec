@@ -27,6 +27,8 @@
 #include "List.h"
 #include "SyntaxToken.h"
 
+#include "parser/LexedTokens.h"
+
 #include <iostream>
 
 namespace psy {
@@ -47,6 +49,8 @@ public:
      * The last token of \c this SyntaxNode.
      */
     virtual SyntaxToken lastToken() const = 0;
+
+    static SyntaxToken token(LexedTokens::IndexType tkIdx, SyntaxTree* tree);
 
     virtual void acceptVisitor(SyntaxVisitor* visitor) = 0;
 };
@@ -130,8 +134,10 @@ class PSY_C_API SyntaxNodeSeparatedList final
 public:
     SyntaxToken delimiterToken() const;
 
-    using CoreSyntaxNodeList<SyntaxNodeT, SyntaxNodeSeparatedList<SyntaxNodeT>>::CoreSyntaxNodeList;
+    using Base = CoreSyntaxNodeList<SyntaxNodeT, SyntaxNodeSeparatedList<SyntaxNodeT>>;
     using NodeType = SyntaxNodeT;
+    using CoreSyntaxNodeList<SyntaxNodeT,
+                             SyntaxNodeSeparatedList<SyntaxNodeT>>::CoreSyntaxNodeList;
 
     unsigned delimTkIdx_ = 0;
 };

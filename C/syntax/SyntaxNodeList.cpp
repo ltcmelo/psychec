@@ -21,14 +21,36 @@
 
 #include "SyntaxNodeList.h"
 
+#include "SyntaxNode.h"
+#include "SyntaxNodes.h"
 #include "SyntaxTree.h"
 
 using namespace psy;
 using namespace C;
 
+SyntaxToken SyntaxNodeList::token(LexedTokens::IndexType tkIdx, SyntaxTree* tree)
+{
+    return tree->tokenAt(tkIdx);
+}
+
 template <class SyntaxNodeT>
 SyntaxToken
 SyntaxNodeSeparatedList<SyntaxNodeT>::delimiterToken() const
 {
-    return this->tree_->tokenAt(delimTkIdx_);
+    return SyntaxNodeList::token(delimTkIdx_, Base::tree_);
 }
+
+namespace psy {
+namespace C {
+
+template class SyntaxNodeSeparatedList<EnumMemberDeclarationSyntax*>;
+template class SyntaxNodeSeparatedList<ParameterDeclarationSyntax*>;
+template class SyntaxNodeSeparatedList<ExtGNU_AttributeSyntax*>;
+template class SyntaxNodeSeparatedList<DeclaratorSyntax*>;
+template class SyntaxNodeSeparatedList<InitializerSyntax*>;
+template class SyntaxNodeSeparatedList<ExpressionSyntax*>;
+template class SyntaxNodeSeparatedList<GenericAssociationSyntax*>;
+template class SyntaxNodeSeparatedList<ExtGNU_AsmOperandSyntax*>;
+
+} // C
+} // psy
