@@ -487,7 +487,7 @@ public:
     const ExpressionSyntax* stringLiteral() const { return strLit_; }
     SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
     const ExpressionSyntax* expression() const { return expr_; }
-    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(openBracketTkIdx_); }
+    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
 
 private:
     LexedTokens::IndexType openBracketTkIdx_ = LexedTokens::invalidIndex();
