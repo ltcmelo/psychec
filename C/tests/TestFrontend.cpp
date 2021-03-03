@@ -183,7 +183,9 @@ void TestFrontend::parse(std::string source,
 
     std::ostringstream ossTree;
     SyntaxNamePrinter printer(tree_.get());
-    printer.print(tree_->root(), ossTree);
+    printer.print(tree_->root(),
+                  SyntaxNamePrinter::Style::Plain,
+                  ossTree);
 
 #ifdef DUMP_AST
     std::cout << "\n\n"

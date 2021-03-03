@@ -25,7 +25,7 @@ using namespace psy;
 using namespace C;
 
 SyntaxLexeme::SyntaxLexeme(const char* chars, unsigned int size, Kind kind)
-    : TextSpan(chars, size)
+    : TextElement(chars, size)
     , BF_all_(0)
 {
     BF_.kind_ = static_cast<std::uint16_t>(kind);

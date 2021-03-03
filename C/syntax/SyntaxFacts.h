@@ -31,8 +31,8 @@ namespace C {
  * \brief The SyntaxFacts class.
  *
  * \note
- * This API is inspired by that of Roslyn, the .NET Compiler Platform; specifically:
- * \c Microsoft.CodeAnalysis.CSharp.SyntaxFacts.
+ * This API inspirted by that of \c Microsoft.CodeAnalysis.CSharp.SyntaxFacts
+ * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_C_API SyntaxFacts
 {

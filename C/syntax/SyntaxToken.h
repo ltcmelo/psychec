@@ -28,6 +28,7 @@
 #include "SyntaxKind.h"
 
 #include "../common/location/Location.h"
+#include "../common/text/TextSpan.h"
 
 #include <cstddef>
 #include <cstdint>
@@ -39,8 +40,8 @@ namespace C {
  * \brief The SyntaxToken class.
  *
  * \note
- * This API is inspired by that of Roslyn, the .NET Compiler Platform; specifically:
- * \c Microsoft.CodeAnalysis.SyntaxToken.
+ * This API inspirted by that of \c Microsoft.CodeAnalysis.SyntaxToken
+ * from Roslyn, the .NET Compiler Platform.
  *
  * \note
  * Influence by the API of Clang/LLVM is present as well; specifically:
@@ -184,6 +185,11 @@ public:
     Location location() const;
 
     /**
+     * The text span of \c this SyntaxToken.
+     */
+    TextSpan span() const;
+
+    /**
      * An invalid SyntaxToken.
      */
     static SyntaxToken invalid();
@@ -198,11 +204,11 @@ private:
     friend class Parser;
     friend class Binder;
 
-    unsigned byteStart() const { return byteOffset_; }
-    unsigned byteEnd() const { return byteOffset_ + byteSize_; }
+    unsigned int byteStart() const { return byteOffset_; }
+    unsigned int byteEnd() const { return byteOffset_ + byteSize_; }
 
-    unsigned charStart() const { return charOffset_; }
-    unsigned charEnd() const { return charOffset_ + charSize_; }
+    unsigned int charStart() const { return charOffset_; }
+    unsigned int charEnd() const { return charOffset_ + charSize_; }
 
     SyntaxTree* tree_;
 

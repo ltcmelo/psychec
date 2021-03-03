@@ -18,10 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/*
- * This API is inspired by the API of Roslyn (the .NET Compiler Platform).
- */
-
 #ifndef PSYCHE_LOCATION_H__
 #define PSYCHE_LOCATION_H__
 
@@ -34,6 +30,13 @@
 
 namespace psy {
 
+/**
+ * \brief The Location class.
+ *
+ * \note
+ * This API inspirted by that of \c Microsoft.CodeAnalysis.Location
+ * from Roslyn, the .NET Compiler Platform.
+ */
 class PSY_API Location
 {
 public:

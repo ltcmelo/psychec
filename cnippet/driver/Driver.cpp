@@ -73,6 +73,9 @@ int Driver::execute(int argc, char* argv[])
             ("cc",
              "Specify the host C compiler.",
              cxxopts::value<std::string>()->default_value("gcc"))
+            ("cc-pp",
+             "Run the host C compiler's preprocessor.",
+             cxxopts::value<bool>()->default_value("false"))
             ("cc-std",
              "Specify the C dialect.",
              cxxopts::value<std::string>()->default_value("c11"))
@@ -102,11 +105,11 @@ int Driver::execute(int argc, char* argv[])
              cxxopts::value<std::string>()->default_value("a.cstr"))
 
         /* Input */
-            ("positional",
-             "Positional arguments",
+            ("file",
+             "Input file",
              cxxopts::value<std::vector<std::string>>());
 
-        opts.parse_positional(std::vector<std::string>{"positional"});
+        opts.parse_positional(std::vector<std::string>{"file"});
 
         auto cmd = opts.parse(argc, argv);
 
@@ -124,7 +127,7 @@ int Driver::execute(int argc, char* argv[])
             }
         }
 
-        if (!cmd.count("positional")) {
+        if (!cmd.count("file")) {
             std::cerr << kCnip << "input file unspecified" << std::endl;
             return ERROR_InputFileUnspecified;
         }
@@ -150,7 +153,7 @@ int Driver::execute(int argc, char* argv[])
 
 void Driver::applyOptions(const cxxopts::ParseResult& cmd)
 {
-    std::string inputPath = cmd["positional"].as<std::vector<std::string>>()[0];
+    std::string inputPath = cmd["file"].as<std::vector<std::string>>()[0];
     config_.reset(new Configuration(inputPath));
 
     config_->C_hostCC_ = cmd["cc"].as<std::string>();
@@ -170,6 +173,7 @@ void Driver::applyOptions(const cxxopts::ParseResult& cmd)
         stdP = LanguageDialect::Std::C11;
     config_->C_std = stdP;
 
+    config_->C_pp_ = cmd["cc-pp"].as<bool>();
     if (cmd.count("cc-D"))
         config_->C_macroDefs_ = cmd["cc-D"].as<std::vector<std::string>>();
     if (cmd.count("cc-U"))

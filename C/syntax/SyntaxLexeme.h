@@ -25,7 +25,7 @@
 #include "API.h"
 #include "APIFwds.h"
 
-#include "../common/text/TextSpan.h"
+#include "../common/text/TextElement.h"
 
 #include <string>
 
@@ -35,7 +35,7 @@ namespace C {
 /**
  * \brief The SyntaxLexeme class.
  */
-class PSY_C_API SyntaxLexeme : public TextSpan
+class PSY_C_API SyntaxLexeme : public TextElement
 {
 public:
     SyntaxLexeme(const SyntaxLexeme&) = delete;

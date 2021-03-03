@@ -18,10 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/*
- * This API is inspired by the API of Roslyn (the .NET Compiler Platform).
- */
-
 #ifndef PSYCHE_LINE_POSITION_SPAN_H__
 #define PSYCHE_LINE_POSITION_SPAN_H__
 
@@ -32,6 +28,15 @@
 
 namespace psy {
 
+/**
+ * \brief The LinePositionSpan
+ *
+ * An abstraction representation of a line within a file.
+ *
+ * \note
+ * This API inspirted by that of \c Microsoft.CodeAnalysis.Text.LinePositionSpan
+ * from Roslyn, the .NET Compiler Platform.
+ */
 class PSY_API LinePositionSpan
 {
 public:
@@ -41,12 +46,12 @@ public:
     {}
 
     /**
-     * The start position of the span.
+     * The start position of \c this span.
      */
     LinePosition start() const { return start_; }
 
     /**
-     * The end position of the span.
+     * The end position of \c this span.
      */
     LinePosition end() const { return end_; }
 

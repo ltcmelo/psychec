@@ -30,6 +30,16 @@
 
 namespace psy {
 
+/**
+ * \brief The FileLinePositionSpan class.
+ *
+ * An abstraction representation of a position, in terms of line,
+ * within a file.
+ *
+ * \note
+ * This API inspirted by that of \c Microsoft.CodeAnalysis.FileLinePositionSpan
+ * from Roslyn, the .NET Compiler Platform.
+ */
 class PSY_API FileLinePositionSpan
 {
 public:

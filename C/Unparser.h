@@ -38,7 +38,7 @@ public:
     void unparse(const SyntaxNode* node, std::ostream& os);
 
 protected:
-    void terminal(const SyntaxToken& tk, const SyntaxNode* ast) override;
+    void terminal(const SyntaxToken& tk, const SyntaxNode* node) override;
 
     std::ostream* os_;
 };
