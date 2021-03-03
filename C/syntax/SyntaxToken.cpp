@@ -246,7 +246,7 @@ bool SyntaxToken::isComment() const
 Location SyntaxToken::location() const
 {
     LinePosition lineStart(lineno_, column_);
-    LinePosition lineEnd(lineno_, column_ + byteSize_); // TODO: Account for joined tokens.
+    LinePosition lineEnd(lineno_, column_ + byteSize_ - 1); // TODO: Account for joined tokens.
     FileLinePositionSpan fileLineSpan(tree_->filePath(), lineStart, lineEnd);
 
     return Location::create(fileLineSpan);
@@ -287,8 +287,7 @@ SyntaxToken::Category SyntaxToken::category(SyntaxKind k)
         case OpenBraceToken:
         case CloseBraceToken:
         case OpenBracketToken:
-        case  CloseBracketToken:
-
+        case CloseBracketToken:
         case OpenParenToken:
         case CloseParenToken:
 

@@ -63,18 +63,21 @@ int Executer_C::execute(const std::string& source)
 
 int Executer_C::executeCore(std::string source)
 {
-    if ((driver_->config_->C_infer
-            || driver_->config_->C_inferOnly)) {
+    if (driver_->config_->C_infer
+            || driver_->config_->C_inferOnly) {
         inferMode_ = true;
     }
 
-    auto [includes, extSource] = extendSource(source);
+    auto [includes, source_P] = extendSource(source);
 
-    auto [exit, ppSource] = invokePreprocessor(extSource);
-    if (exit != 0)
-        return exit;
+    if (driver_->config_->C_pp_) {
+        auto [exit, source_PP] = invokePreprocessor(source_P);
+        if (exit != 0)
+            return exit;
+        source_P = source_PP;
+    }
 
-    return invokeParser(ppSource);
+    return invokeParser(source_P);
 }
 
 std::pair<std::string, std::string> Executer_C::extendSource(
@@ -162,7 +165,9 @@ int Executer_C::invokeParser(const std::string& source)
     if (driver_->config_->C_dumpAST) {
         std::ostringstream ossTree;
         SyntaxNamePrinter printer(tree.get());
-        printer.print(TU, ossTree);
+        printer.print(TU,
+                      SyntaxNamePrinter::Mode::Elaborate,
+                      ossTree);
         std::cout << ossTree.str() << std::endl;
     }
 

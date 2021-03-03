@@ -38,7 +38,7 @@ namespace psy {
 class PSY_API TextSpan
 {
 public:
-    TextSpan(const char* c_str, unsigned size);
+    TextSpan(const char* c_str, unsigned int size);
     TextSpan(const TextSpan& other) = delete;
     virtual ~TextSpan();
     void operator=(const TextSpan& other) = delete;
@@ -53,27 +53,27 @@ public:
     /**
      * The number of characters in the text.
      */
-    unsigned size() const { return size_; }
-    unsigned length() const { return size_; }
+    unsigned int size() const { return size_; }
+    unsigned int length() const { return size_; }
     //!@}
 
     /**
      * The character at the given index \c idx.
      */
-    char at(unsigned idx) const { return chars_[idx]; }
+    char at(unsigned int idx) const { return chars_[idx]; }
 
     /**
      * A null-terminated C-style string of the text.
      */
     const char* c_str() const { return chars_; }
 
-    unsigned hashCode() const { return hashCode_; }
-    static unsigned hashCode(const char* c_str, unsigned size);
+    unsigned int hashCode() const { return hashCode_; }
+    static unsigned int hashCode(const char* c_str, unsigned int size);
 
 private:
-    unsigned size_;
+    unsigned int size_;
     char* chars_;
-    unsigned hashCode_;
+    unsigned int hashCode_;
 
     template <class> friend class TextSpanContainer;
     TextSpan* next_;

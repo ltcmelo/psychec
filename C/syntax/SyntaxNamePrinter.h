@@ -26,6 +26,8 @@
 #include "SyntaxDumper.h"
 
 #include <ostream>
+#include <tuple>
+#include <vector>
 
 namespace psy {
 namespace C {
@@ -35,13 +37,19 @@ class PSY_C_API SyntaxNamePrinter final : public SyntaxDumper
 public:
     using SyntaxDumper::SyntaxDumper;
 
-    void print(const SyntaxNode* node);
-    void print(const SyntaxNode* node, std::ostream& os);
+    enum class Mode : char
+    {
+        Basic,
+        Elaborate
+    };
+
+    void print(const SyntaxNode* node, Mode mode);
+    void print(const SyntaxNode* node, Mode mode, std::ostream& os);
 
 private:
     virtual void nonterminal(const SyntaxNode* node) override;
 
-    std::ostream* os_;
+    std::vector<std::tuple<const SyntaxNode*, int>> dump_;
 };
 
 } // C

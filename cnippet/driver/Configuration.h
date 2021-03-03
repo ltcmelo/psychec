@@ -45,6 +45,7 @@ public:
 
     /* C */
     std::string C_hostCC_;
+    bool C_pp_;
     LanguageDialect::Std C_std;
     std::vector<std::string> C_macroDefs_;
     std::vector<std::string> C_macroUndefs_;

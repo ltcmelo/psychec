@@ -25,9 +25,10 @@
 
 using namespace psy;
 
-TextSpan::TextSpan(const char* chars, unsigned size)
+TextSpan::TextSpan(const char* chars, unsigned int size)
     : size_(size)
     , chars_(new char[size + 1])
+//    , chars_(chars)
     , next_(nullptr)
 {
     std::strncpy(chars_, chars, size);
@@ -40,7 +41,7 @@ TextSpan::~TextSpan()
     delete[] chars_;
 }
 
-unsigned TextSpan::hashCode(const char* chars, unsigned size)
+unsigned int TextSpan::hashCode(const char* chars, unsigned int size)
 {
     // Hash taken from QtCore's qHash for strings, which in turn has the note:
 
@@ -51,7 +52,7 @@ unsigned TextSpan::hashCode(const char* chars, unsigned size)
     "a", "aa", "aaa", "aaaa", ...
     */
 
-    unsigned h = 0;
+    unsigned int h = 0;
     while (size--) {
         h = (h << 4) + *chars++;
         h ^= (h & 0xf0000000) >> 23;

@@ -55,7 +55,7 @@ Lexer::Lexer(SyntaxTree* tree)
     , yy_(yytext_)
     , yychar_('\n')
     , yylineno_(1)
-    , yycolumn_(1)
+    , yycolumn_(0)
     , offset_(~0)  // Start immediately "before" 0.
     , withinLogicalLine_(false)
     , rawSyntaxK_splitTk(0)
@@ -263,7 +263,7 @@ LexEntry:
     yy_ = yytext_;
 
     tk->lineno_ = yylineno_;
-    tk->column_ = yycolumn_;
+    tk->column_ = yycolumn_ - 1;
     tk->byteOffset_ = yytext_ - c_strBeg_;
     tk->charOffset_ = offset_;
 
