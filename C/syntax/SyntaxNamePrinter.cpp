@@ -48,7 +48,7 @@ std::string formatSnippet(std::string& snippet)
     static const auto MAX_LEN = 30;
     if (snippet.length() > MAX_LEN) {
         snippet = snippet.substr(0, MAX_LEN);
-        snippet += " ...";
+        snippet += "...";
     }
 
     return snippet;
@@ -56,12 +56,12 @@ std::string formatSnippet(std::string& snippet)
 
 } // anonymous
 
-void SyntaxNamePrinter::print(const SyntaxNode* node, Mode mode)
+void SyntaxNamePrinter::print(const SyntaxNode* node, Style mode)
 {
     print(node, mode, std::cout);
 }
 
-void SyntaxNamePrinter::print(const SyntaxNode* node, Mode mode, std::ostream& os)
+void SyntaxNamePrinter::print(const SyntaxNode* node, Style mode, std::ostream& os)
 {
     CUR_LEVEL = 0;
 
@@ -74,7 +74,7 @@ void SyntaxNamePrinter::print(const SyntaxNode* node, Mode mode, std::ostream& o
         auto node = std::get<0>(dump_[i]);
         auto nodeLevel = std::get<1>(dump_[i]);
 
-        if (mode == Mode::Basic) {
+        if (mode == Style::Plain) {
             os << std::string(nodeLevel * 4, ' ');
             os << to_string(node->kind()) << std::endl;
             continue;
@@ -115,8 +115,8 @@ void SyntaxNamePrinter::print(const SyntaxNode* node, Mode mode, std::ostream& o
            << ".." << lastTk.location().lineSpan().span().end()
            << "> ";
 
-        auto firstTkStart = source.c_str() + firstTk.charStart();
-        auto lastTkEnd = source.c_str() + lastTk.charEnd();
+        auto firstTkStart = source.c_str() + firstTk.span().start();
+        auto lastTkEnd = source.c_str() + lastTk.span().end();
         std::string snippet(firstTkStart, lastTkEnd - firstTkStart);
         os << " `" << formatSnippet(snippet) << "`";
 

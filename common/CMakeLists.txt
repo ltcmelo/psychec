@@ -23,11 +23,13 @@ set(COMMON_SOURCES
     ${PROJECT_SOURCE_DIR}/infra/PsycheAssert.h
 
     # Text
-    ${PROJECT_SOURCE_DIR}/text/SourceText.cpp
     ${PROJECT_SOURCE_DIR}/text/SourceText.h
+    ${PROJECT_SOURCE_DIR}/text/SourceText.cpp
+    ${PROJECT_SOURCE_DIR}/text/TextElement.h
+    ${PROJECT_SOURCE_DIR}/text/TextElement.cpp
+    ${PROJECT_SOURCE_DIR}/text/TextElementTable.h
     ${PROJECT_SOURCE_DIR}/text/TextSpan.h
     ${PROJECT_SOURCE_DIR}/text/TextSpan.cpp
-    ${PROJECT_SOURCE_DIR}/text/TextSpanContainer.h
 
     # Location
     ${PROJECT_SOURCE_DIR}/location/FileLinePositionSpan.cpp

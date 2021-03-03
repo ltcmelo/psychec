@@ -38,7 +38,8 @@ class Binder;
  * \brief The SemanticModel class.
  *
  * \note
- * API inspired by \c Microsoft.CodeAnalysis.SemanticModel from Roslyn, the .NET Compiler Platform.
+ * This API inspirted by that of \c Microsoft.CodeAnalysis.SemanticModel
+ * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_C_API SemanticModel
 {

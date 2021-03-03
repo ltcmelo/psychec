@@ -24,62 +24,49 @@
 
 #include "../API.h"
 
+#include <ostream>
+
 namespace psy {
 
 /**
  * \brief The TextSpan class.
  *
- * A read-only sequence of characters, such as that from a lexed string.
+ * An abstraction representation of an immutable span of text.
+ *
+ * \attention
+ * The memory under which a piece of text is stored is unknown to this class;
+ * it is reponsibility of the user to employ this abstraction in consistent manner.
  *
  * \note
- * This API is influenced by that of \c Microsoft.CodeAnalysis.Text.TextSpan, from Roslyn
- * (the .NET Compiler Platform).
+ * This API inspirted by that of \c Microsoft.CodeAnalysis.Text.TextSpan
+ * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_API TextSpan
 {
 public:
-    TextSpan(const char* c_str, unsigned int size);
-    TextSpan(const TextSpan& other) = delete;
-    virtual ~TextSpan();
-    void operator=(const TextSpan& other) = delete;
-
-    typedef const char* iterator;
-    typedef iterator const_iterator;
-
-    iterator begin() const { return chars_; }
-    iterator end() const { return chars_ + size_; }
-
-    //!@{
-    /**
-     * The number of characters in the text.
-     */
-    unsigned int size() const { return size_; }
-    unsigned int length() const { return size_; }
-    //!@}
+    TextSpan(unsigned int start, unsigned int  end)
+        : start_(start)
+        , end_(end)
+    {}
 
     /**
-     * The character at the given index \c idx.
+     * The start of \c this span.
      */
-    char at(unsigned int idx) const { return chars_[idx]; }
+    unsigned int start() const { return start_; }
 
     /**
-     * A null-terminated C-style string of the text.
+     * The end of \c this span.
      */
-    const char* c_str() const { return chars_; }
-
-    unsigned int hashCode() const { return hashCode_; }
-    static unsigned int hashCode(const char* c_str, unsigned int size);
+    unsigned int end() const { return end_; }
 
 private:
-    unsigned int size_;
-    char* chars_;
-    unsigned int hashCode_;
-
-    template <class> friend class TextSpanContainer;
-    TextSpan* next_;
+    unsigned int start_;
+    unsigned int end_;
 };
 
 bool operator==(const TextSpan& a, const TextSpan& b);
+
+std::ostream& operator<<(std::ostream& os, const TextSpan& span);
 
 } // psy
 

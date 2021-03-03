@@ -40,8 +40,8 @@ namespace C {
  * \brief The SyntaxToken class.
  *
  * \note
- * This API is inspired by that of Roslyn, the .NET Compiler Platform; specifically:
- * \c Microsoft.CodeAnalysis.SyntaxToken.
+ * This API inspirted by that of \c Microsoft.CodeAnalysis.SyntaxToken
+ * from Roslyn, the .NET Compiler Platform.
  *
  * \note
  * Influence by the API of Clang/LLVM is present as well; specifically:
@@ -185,12 +185,16 @@ public:
     Location location() const;
 
     /**
+     * The text span of \c this SyntaxToken.
+     */
+    TextSpan span() const;
+
+    /**
      * An invalid SyntaxToken.
      */
     static SyntaxToken invalid();
 
-public:
-//private:
+private:
     SyntaxToken(SyntaxTree* tree);
     void setup();
 

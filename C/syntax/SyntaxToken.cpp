@@ -393,6 +393,11 @@ bool SyntaxToken::isValid() const
     return tree_ != nullptr;
 }
 
+TextSpan SyntaxToken::span() const
+{
+    return TextSpan(charStart(), charEnd());
+}
+
 SyntaxToken SyntaxToken::invalid()
 {
     return SyntaxToken(nullptr);

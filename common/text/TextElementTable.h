@@ -19,97 +19,96 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_TEXT_SPAN_CONTAINER_H__
-#define PSYCHE_TEXT_SPAN_CONTAINER_H__
+#ifndef PSYCHE_TEXT_ELEMENT_TABLE_H__
+#define PSYCHE_TEXT_ELEMENT_TABLE_H__
 
 #include <cstdlib>
 #include <cstring>
 
 namespace psy {
 
-template <class TextSpanT>
-class TextSpanContainer
+template <class ElemT>
+class TextElementTable
 {
 public:
-    TextSpanContainer()
-       : spans_(nullptr)
+    TextElementTable(const TextElementTable&) = delete;
+    void operator=(const TextElementTable&) = delete;
+
+    TextElementTable()
+       : elements_(nullptr)
        , count_(-1)
        , allocated_(0)
        , buckets_(nullptr)
        , bucketCount_(0)
     {}
 
-    ~TextSpanContainer()
+    ~TextElementTable()
     {
         reset();
     }
 
-    TextSpanContainer(const TextSpanContainer& other) = delete;
-    void operator=(const TextSpanContainer &other) = delete;
-
-    typedef TextSpanT* const* iterator;
-
-    iterator begin() const { return spans_; }
-    iterator end() const { return spans_ + count_ + 1; }
+    typedef ElemT* const* iterator;
+    iterator begin() const { return elements_; }
+    iterator end() const { return elements_ + count_ + 1; }
 
     bool empty() const { return count_ == -1; }
-    unsigned size() const { return count_ + 1; }
-    const TextSpanT* at(unsigned spanIdx) const { return spans_[spanIdx]; }
+    unsigned int size() const { return count_ + 1; }
+    const ElemT* at(unsigned int idx) const { return elements_[idx]; }
 
-    const TextSpanT* find(const char* chars, unsigned size) const
+    const ElemT* find(const char* chars, unsigned int size) const
     {
         if (buckets_) {
-            unsigned h = TextSpanT::hashCode(chars, size);
-            TextSpanT* span = buckets_[h % bucketCount_];
-            for (; span; span = static_cast<TextSpanT*>(span->next_)) {
-                if (span->size() == size && !std::strncmp(span->c_str(), chars, size))
-                    return span;
+            unsigned int h = ElemT::hashCode(chars, size);
+            ElemT* elem = buckets_[h % bucketCount_];
+            for (; elem; elem = static_cast<ElemT*>(elem->next_)) {
+                if (elem->size() == size && !std::strncmp(elem->c_str(), chars, size))
+                    return elem;
             }
         }
         return nullptr;
     }
 
-    const TextSpanT* findOrInsert(const char *chars, unsigned size)
+    const ElemT* findOrInsert(const char *chars, unsigned int size)
     {
-        TextSpanT* span = const_cast<TextSpanT*>(find(chars, size));
-        if (span)
-            return span;
+        ElemT* elem = const_cast<ElemT*>(find(chars, size));
+        if (elem)
+            return elem;
 
         if (++count_ == allocated_) {
             if (!allocated_)
                 allocated_ = 4;
             else
                 allocated_ <<= 1;
-            spans_ = (TextSpanT**) std::realloc(spans_, sizeof(TextSpanT*)* allocated_);
+            elements_ = (ElemT**) std::realloc(elements_, sizeof(ElemT*)* allocated_);
         }
 
-        span = new TextSpanT(chars, size);
-        spans_[count_] = span;
+        elem = new ElemT(chars, size);
+        elements_[count_] = elem;
 
         if (!buckets_ || count_ * 5 >= bucketCount_ * 3)
             rehash();
         else {
-            unsigned h = span->hashCode() % bucketCount_;
-            span ->next_ = buckets_[h];
-            buckets_[h] = span;
+            unsigned h = elem->hashCode() % bucketCount_;
+            elem ->next_ = buckets_[h];
+            buckets_[h] = elem;
         }
 
-        return span;
+        return elem;
     }
 
     void reset()
     {
-        if (spans_) {
-            TextSpanT** last = spans_ + count_ + 1;
-            for (TextSpanT** it = spans_; it != last; ++it)
+        if (elements_) {
+            ElemT** last = elements_ + count_ + 1;
+            for (ElemT** it = elements_; it != last; ++it)
                 delete *it;
-            std::free(spans_);
+            std::free(elements_);
         }
 
         if (buckets_)
             std::free(buckets_);
 
-        spans_ = 0;
+        elements_ = 0;
         buckets_ = 0;
         allocated_ = 0;
         count_ = -1;
@@ -127,21 +126,21 @@ private:
        else
            bucketCount_ <<= 1;
 
-       buckets_ = (TextSpanT**)std::calloc(bucketCount_, sizeof(TextSpanT*));
+       buckets_ = (ElemT**)std::calloc(bucketCount_, sizeof(ElemT*));
 
-       TextSpanT** last = spans_ + (count_ + 1);
-       for (TextSpanT** it = spans_; it != last; ++it) {
-           TextSpanT* cur = *it;
-           unsigned h = cur->hashCode() % bucketCount_;
+       ElemT** last = elements_ + (count_ + 1);
+       for (ElemT** it = elements_; it != last; ++it) {
+           ElemT* cur = *it;
+           unsigned int h = cur->hashCode() % bucketCount_;
            cur->next_ = buckets_[h];
            buckets_[h] = cur;
        }
     }
 
-    TextSpanT** spans_;
+    ElemT** elements_;
     int count_;
     int allocated_;
-    TextSpanT** buckets_;
+    ElemT** buckets_;
     int bucketCount_;
 };
 

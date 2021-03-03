@@ -145,7 +145,7 @@ class PSY_C_API TagDeclarationSyntax : public TypeDeclarationSyntax
  * \note Similar to:
  * - \c clang::RecordDecl of LLVM/Clang.
  * - \c Microsoft.CodeAnalysis.CSharp.StructDeclarationSyntax and
- *   \c Microsoft.CodeAnalysis.CSharp.ClassDeclarationSyntax of Roslyn.
+ * - \c Microsoft.CodeAnalysis.CSharp.ClassDeclarationSyntax of Roslyn.
  */
 class PSY_C_API StructOrUnionDeclarationSyntax final : public TagDeclarationSyntax
 {

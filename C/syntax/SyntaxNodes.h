@@ -171,7 +171,7 @@ namespace C {
  * \note Similar to:
  * - \c clang::Decl of LLVM/Clang.
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.MemberDeclarationSyntax and
- *   \c Microsoft.CodeAnalysis.CSharp.Syntax.VariableDeclarationSyntax of Roslyn.
+ * - \c Microsoft.CodeAnalysis.CSharp.Syntax.VariableDeclarationSyntax of Roslyn.
  */
 class PSY_C_API DeclarationSyntax : public SyntaxNode
 {

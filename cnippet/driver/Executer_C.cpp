@@ -166,7 +166,7 @@ int Executer_C::invokeParser(const std::string& source)
         std::ostringstream ossTree;
         SyntaxNamePrinter printer(tree.get());
         printer.print(TU,
-                      SyntaxNamePrinter::Mode::Elaborate,
+                      SyntaxNamePrinter::Style::Decorated,
                       ossTree);
         std::cout << ossTree.str() << std::endl;
     }

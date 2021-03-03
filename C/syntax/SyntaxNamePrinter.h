@@ -37,14 +37,14 @@ class PSY_C_API SyntaxNamePrinter final : public SyntaxDumper
 public:
     using SyntaxDumper::SyntaxDumper;
 
-    enum class Mode : char
+    enum class Style : char
     {
-        Basic,
-        Elaborate
+        Plain,
+        Decorated
     };
 
-    void print(const SyntaxNode* node, Mode mode);
-    void print(const SyntaxNode* node, Mode mode, std::ostream& os);
+    void print(const SyntaxNode* node, Style mode);
+    void print(const SyntaxNode* node, Style mode, std::ostream& os);
 
 private:
     virtual void nonterminal(const SyntaxNode* node) override;

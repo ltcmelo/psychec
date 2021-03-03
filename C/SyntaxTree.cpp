@@ -31,7 +31,7 @@
 #include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNodes.h"
 
-#include "../common/text/TextSpanContainer.h"
+#include "../common/text/TextElementTable.h"
 
 #include <algorithm>
 #include <cstdarg>
@@ -69,11 +69,11 @@ struct SyntaxTree::SyntaxTreeImpl
     ParseOptions options_;
     std::string path_;
 
-    TextSpanContainer<Identifier> identifiers_;
-    TextSpanContainer<IntegerConstant> integers_;
-    TextSpanContainer<FloatingConstant> floatings_;
-    TextSpanContainer<CharacterConstant> characters_;
-    TextSpanContainer<StringLiteral> strings_;
+    TextElementTable<Identifier> identifiers_;
+    TextElementTable<IntegerConstant> integers_;
+    TextElementTable<FloatingConstant> floatings_;
+    TextElementTable<CharacterConstant> characters_;
+    TextElementTable<StringLiteral> strings_;
 
     SyntaxNode* rootNode_;
 
