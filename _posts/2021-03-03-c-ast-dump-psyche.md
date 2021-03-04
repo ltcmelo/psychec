@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Dumping a C program's AST with Psyche-C"
+title:  "astdump"
 ---
 
 # Dumping a C program's AST with Psyche-C
