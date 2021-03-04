@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  "astdump"
+title:  "Dumping a C program's AST with Psyche-C"
 ---
 
 # Dumping a C program's AST with Psyche-C
