@@ -48,8 +48,7 @@ In Psyche-C, I opted for a more rigorous representation in the AST:
 
 The design "spirit" of Psyche-C's AST is more aligned with that of [Roslyn](https://github.com/dotnet/roslyn), the .NET compiler platform. To wrap this up, I'll leave a C# version of our program, together with its AST (thanks to [SharpLab](https://sharplab.io/).
 
-<img width="1023" alt="Screen Shot 2021-03-03 at 22 00 05" src="https://user-images.githubusercontent.com/2905588/109894206-d1e93a80-7c6b-11eb-8025-6699a19cdfab.png">
-
+<img width="830" alt="Screen Shot 2021-03-03 at 22 01 44" src="https://user-images.githubusercontent.com/2905588/109894341-0bba4100-7c6c-11eb-983a-d716cb6c5960.png">
 
 
 
