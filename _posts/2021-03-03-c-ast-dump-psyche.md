@@ -46,7 +46,7 @@ In Clang's AST, it's represented through a `VarDecl` and a `FunctionDecl`; both 
 
 In Psyche-C, I opted for a more rigorous representation in the AST: 
 
-- A `VariableAndOrFunctionDeclaration` is created (just like Clang, this node [inherits from](https://ltcmelo.github.io/psychec/api-docs/html/classpsy_1_1_c_1_1_variable_and_or_function_declaration_syntax.html) a `DeclaratorDeclaration`), and has two child nodes: an `IdentifierDeclarator`, designating object of type `int`, and a `FunctionDeclarator`, designating a function whose return type is `int`.
+- A `VariableAndOrFunctionDeclaration` is created (just like Clang, this node [inherits from](https://ltcmelo.github.io/psychec/api-docs/html/classpsy_1_1_c_1_1_variable_and_or_function_declaration_syntax.html) a `DeclaratorDeclaration`) with two child nodes: an `IdentifierDeclarator`, designating object of type `int`, and a `FunctionDeclarator`, designating a function whose return type is `int`.
 
 In general, the design "spirit" of Psyche-C's AST is more aligned with that of [Roslyn](https://github.com/dotnet/roslyn), the .NET compiler platform. Although, because Psyche-C is a frontend for C, its AST will, of course, resembles that of Clang.
 
