@@ -167,6 +167,8 @@ public:
     virtual const FunctionSpecifierSyntax* asFunctionSpecifier() const { return nullptr; }
     virtual AlignmentSpecifierSyntax* asAlignmentSpecifier() { return nullptr; }
     virtual const AlignmentSpecifierSyntax* asAlignmentSpecifier() const { return nullptr; }
+    virtual ExtGNU_ExtensionFlagSyntax* asExtGNU_ExtensionFlag() { return nullptr; }
+    virtual const ExtGNU_ExtensionFlagSyntax* asExtGNU_ExtensionFlag() const { return nullptr; }
     virtual TypedefNameSyntax* asTypedefName() { return nullptr; }
     virtual const TypedefNameSyntax* asTypedefName() const { return nullptr; }
     virtual ExtGNU_AttributeSpecifierSyntax* asExtGNU_AttributeSpecifier() { return nullptr; }

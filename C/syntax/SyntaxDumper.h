@@ -228,6 +228,12 @@ protected:
         return Action::Skip;
     }
 
+    virtual Action visitExtGNU_ExtensionFlag(const ExtGNU_ExtensionFlagSyntax* node) override
+    {
+        terminal(node->extensionKeyword(), node);
+        return Action::Skip;
+    }
+
     virtual Action visitExtGNU_Typeof(const ExtGNU_TypeofSyntax* node) override
     {
         terminal(node->typeofKeyword(), node);

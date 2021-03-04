@@ -901,16 +901,21 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                     return false;
                 break;
 
-            // GNU attribute specifier
+            // GNU-attribute-specifier
             case Keyword_ExtGNU___attribute__:
                 if (!parseExtGNU_AttributeSpecifier_AtFirst(spec))
                     return false;
                 break;
 
-            // GNU typeof specifier
+            // GNU-typeof-specifier
             case Keyword_ExtGNU___typeof__:
                 if (!parseExtGNU_Typeof_AtFirst(spec))
                     return false;
+                break;
+
+            // GNU-extension-flag
+            case Keyword_ExtGNU___extension__:
+                parseExtGNU_Extension_AtFirst(spec);
                 break;
 
             // Psyche
@@ -1144,6 +1149,22 @@ bool Parser::parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec)
     spec = alignSpec;
     alignSpec->alignasKwTkIdx_ = consume();
     return parseParenthesizedTypeNameOrExpression(alignSpec);
+}
+
+/**
+ * Parse a GNU extension \c __extension__.
+ *
+ */
+void Parser::parseExtGNU_Extension_AtFirst(SpecifierSyntax*& spec)
+{
+    DEBUG_THIS_RULE();
+    PSYCHE_ASSERT(peek().kind() == Keyword_ExtGNU___extension__,
+                  return,
+                  "assert failure: `__extension__'");
+
+    auto extFlag = makeNode<ExtGNU_ExtensionFlagSyntax>();
+    spec = extFlag;
+    extFlag->extTkIdx_ = consume();
 }
 
 /**

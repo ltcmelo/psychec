@@ -209,6 +209,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "NoReturnSpecifier";
         case AlignmentSpecifier:
             return "AlignmentSpecifier";
+        case ExtGNU_ExtensionFlag:
+            return "ExtGNU_ExtensionFlag";
         case TypedefName:
             return "TypedefName";
         case ExtGNU_AttributeSpecifier:

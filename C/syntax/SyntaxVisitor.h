@@ -94,6 +94,7 @@ public:
     virtual Action visitTypeQualifier(const TypeQualifierSyntax*) { return Action::Continue; }
     virtual Action visitFunctionSpecifier(const FunctionSpecifierSyntax*) { return Action::Continue; }
     virtual Action visitAlignmentSpecifier(const AlignmentSpecifierSyntax*) { return Action::Continue; }
+    virtual Action visitExtGNU_ExtensionFlag(const ExtGNU_ExtensionFlagSyntax*) { return Action::Continue; }
     virtual Action visitExtGNU_Typeof(const ExtGNU_TypeofSyntax*) { return Action::Continue; }
     virtual Action visitExtGNU_AttributeSpecifier(const ExtGNU_AttributeSpecifierSyntax*) { return Action::Continue; }
     virtual Action visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*) { return Action::Continue; }
