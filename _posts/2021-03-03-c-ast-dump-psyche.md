@@ -52,9 +52,11 @@ In general, the design "spirit" of Psyche-C's AST is more aligned with that of [
 
 To wrap up, I'll leave a C# version of `test.c` (well, `test.cs`), together with its AST.
 
-<img width="830" alt="Screen Shot 2021-03-03 at 22 01 44" src="https://user-images.githubusercontent.com/2905588/109894341-0bba4100-7c6c-11eb-983a-d716cb6c5960.png">
+<img width="837" alt="Screen Shot 2021-03-03 at 23 15 17" src="https://user-images.githubusercontent.com/2905588/109900632-753f4d00-7c76-11eb-9d61-6b3e278ec132.png">
 
-(Screenshot from [SharpLab](https://sharplab.io/))
+Screenshot from [SharpLab](https://sharplab.io/).
+
+
 
 
 
