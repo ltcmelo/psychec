@@ -43,6 +43,15 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
             case EndOfFile:
                 return;
 
+            case Keyword_ExtGNU___extension__: {
+                auto extKwTkIdx = consume();
+                if (!parseExternalDeclaration(decl))
+                    break;;
+                PSYCHE_ASSERT(decl, break, "invalid declaration");
+                decl->extKwTkIdx_ = extKwTkIdx;
+                break;
+            }
+
             default:
                 if (parseExternalDeclaration(decl))
                     break;
@@ -80,15 +89,6 @@ bool Parser::parseExternalDeclaration(DeclarationSyntax*& decl)
 
         case Keyword_ExtGNU___asm__:
             return parseExtGNU_AsmStatementDeclaration_AtFirst(decl);
-
-        case Keyword_ExtGNU___extension__: {
-            auto tkIdx = consume();
-            if (!parseDeclarationOrFunctionDefinition(decl))
-                return false;
-            PSYCHE_ASSERT(decl, return false, "invalid declaration");
-            decl->extKwTkIdx_ = tkIdx;
-            break;
-        }
 
         case Keyword_ExtPSY__Template:
             parseExtPSY_TemplateDeclaration_AtFirst(decl);
