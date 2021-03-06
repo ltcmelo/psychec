@@ -23,6 +23,7 @@
 #define PSYCHE_C_SYNTAX_NODES_H__
 
 #include "SyntaxNode.h"
+#include "SyntaxNodes_MIXIN.h"
 #include "SyntaxToken.h"
 #include "SyntaxTree.h"
 
@@ -104,6 +105,8 @@
     CHILD_NODES_AND_TOKENS(CHILD_NAME_7(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7))
 #define AST_CHILD_LST8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8) \
     CHILD_NODES_AND_TOKENS(CHILD_NAME_8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8))
+#define AST_CHILD_LST9(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8, NAME9) \
+    CHILD_NODES_AND_TOKENS(CHILD_NAME_9(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8, NAME9))
 
 #define CHILD_NAME_1(NAME1) \
     SyntaxHolder(NAME1)
@@ -128,6 +131,9 @@
 #define CHILD_NAME_8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8) \
     CHILD_NAME_7(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7), \
     SyntaxHolder(NAME8)
+#define CHILD_NAME_9(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8, NAME9) \
+    CHILD_NAME_8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8), \
+    SyntaxHolder(NAME9)
 
 /*
  * The default implementation of the visitor dispatching function for
@@ -161,6 +167,7 @@ inline std::vector<SyntaxHolder> merge(std::vector<SyntaxHolder>&& a,
 namespace psy {
 namespace C {
 
+
 /**
  * \brief The DeclarationSyntax class.
  *
@@ -174,14 +181,14 @@ namespace C {
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.VariableDeclarationSyntax of Roslyn.
  */
 class PSY_C_API DeclarationSyntax : public SyntaxNode
+                                  , public MIXIN_GNUExtensionFlag
 {
     AST_G_NODE(Declaration)
 
 public:
-    SyntaxToken extensionKeyword() const { return tokenAtIndex(extKwTkIdx_); }
+    SyntaxToken extensionKeyword() const override { return tokenAtIndex(extKwTkIdx_); }
 
-protected:
-    LexedTokens::IndexType extKwTkIdx_ = LexedTokens::invalidIndex(); // GNU's `__extension__'
+private:
     AST_CHILD_LST1(extKwTkIdx_);
 };
 
@@ -261,8 +268,15 @@ class PSY_C_API InitializerSyntax : public SyntaxNode
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.ExpressionSyntax of Roslyn.
  */
 class PSY_C_API ExpressionSyntax : public SyntaxNode
+                                 , public MIXIN_GNUExtensionFlag
 {
     AST_G_NODE(Expression)
+
+    public:
+        SyntaxToken extensionKeyword() const override { return tokenAtIndex(extKwTkIdx_); }
+
+    private:
+        AST_CHILD_LST1(extKwTkIdx_);
 };
 
 /**

@@ -154,6 +154,35 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case Keyword_ExtGNU___asm__:
             return parseExtGNU_AsmStatement(stmt);
 
+        case Keyword_ExtGNU___extension__: {
+            auto extKwTkIdx = consume();
+            if (!parseStatement(stmt, stmtCtx))
+                return false;
+
+            std::cout << "aqui\n\n";
+            PSYCHE_ASSERT(stmt, return false, "invalid declaration");
+            switch (stmt->kind()) {
+                case ExpressionStatement:
+                    PSYCHE_ASSERT(stmt->asExpressionStatement(),
+                                  return false,
+                                  "invalid expression-statement");
+                    stmt->asExpressionStatement()->expr_->extKwTkIdx_ = extKwTkIdx;
+                    break;
+
+                case DeclarationStatement:
+                    PSYCHE_ASSERT(stmt->asDeclarationStatement(),
+                                  return false,
+                                  "invalid expression-statement");
+                    stmt->asDeclarationStatement()->decl_->extKwTkIdx_ = extKwTkIdx;
+                    break;
+
+                default:
+                    diagnosticsReporter_.UnexpectedGNUExtensionFlag();
+                    return false;
+            }
+            return true;
+        }
+
         default:
             return parseExpressionStatement(stmt);
     }
@@ -509,6 +538,9 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
         skipTo(CloseParenToken);
         return false;
     }
+
+    if (peek().kind() == Keyword_ExtGNU___extension__)
+        forStmt->extKwTkIdx_ = consume();
 
     switch (peek().kind()) {
         // storage-class-specifier

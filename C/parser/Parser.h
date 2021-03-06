@@ -106,6 +106,7 @@ private:
 
         static const std::string ID_of_ExpectedToken;
         static const std::string ID_of_ExpectedTokenWithin;
+        static const std::string ID_of_ExpectedTokenOfCategoryIdentifier;
         static const std::string ID_of_ExpectedTokenOfCategoryConstant;
         static const std::string ID_of_ExpectedTokenOfCategoryStringLiteral;
 
@@ -144,6 +145,7 @@ private:
         void UnexpectedDefaultLabelOutsideSwitch();
         void UnexpectedContinueOutsideLoop();
         void UnexpectedBreakOutsideSwitchOrLoop();
+        void UnexpectedGNUExtensionFlag();
 
         static const std::string ID_of_ExpectedFieldName;
         static const std::string ID_of_ExpectedBraceEnclosedInitializerList;
@@ -157,7 +159,7 @@ private:
         static const std::string ID_of_UnexpectedDefaultLabelOutsideSwitch;
         static const std::string ID_of_UnexpectedContinueOutsideLoop;
         static const std::string ID_of_UnexpectedBreakOutsideSwitchOrLoop;
-        static const std::string ID_of_ExpectedTokenOfCategoryIdentifier;
+        static const std::string ID_of_UnexpectedGNUExtensionFlag;
     };
     friend struct DiagnosticsReporter;
 
