@@ -3865,7 +3865,7 @@ void TestParser::case0676()
 
 void TestParser::case0677()
 {
-
+    parseStatement("__extension__ for ( ; ; ) { } ");
 }
 
 void TestParser::case0678()
