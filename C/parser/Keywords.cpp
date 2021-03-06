@@ -1047,7 +1047,6 @@ static inline SyntaxKind classify13(const char* s, const ParseOptions& opts)
                                             if (s[10] == 'n') {
                                                 if (s[11] == '_') {
                                                     if (s[12] == '_') {
-                                                            std::cout << "HERE\n";
                                                         return Keyword_ExtGNU___extension__;
                                                     }
                                                 }

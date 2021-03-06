@@ -3835,17 +3835,17 @@ void TestParser::case0670()
 
 void TestParser::case0671()
 {
-
+    parse("__extension__ struct x { } ;");
 }
 
 void TestParser::case0672()
 {
-
+    parse("struct x { __extension__ int y ; } ;");
 }
 
 void TestParser::case0673()
 {
-
+    parse("int x = __extension__ 0 ;");
 }
 
 void TestParser::case0674()

@@ -81,6 +81,16 @@ bool Parser::parseExternalDeclaration(DeclarationSyntax*& decl)
         case Keyword_ExtGNU___asm__:
             return parseExtGNU_AsmStatementDeclaration_AtFirst(decl);
 
+        // GNU-extension-flag
+        case Keyword_ExtGNU___extension__: {
+            auto tkIdx = consume();
+            if (!parseDeclarationOrFunctionDefinition(decl))
+                return false;
+            PSYCHE_ASSERT(decl, return false, "invalid declaration");
+            decl->extKwTkIdx_ = tkIdx;
+            break;
+        }
+
         case Keyword_ExtPSY__Template:
             parseExtPSY_TemplateDeclaration_AtFirst(decl);
             break;
@@ -913,11 +923,6 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                     return false;
                 break;
 
-            // GNU-extension-flag
-            case Keyword_ExtGNU___extension__:
-                parseExtGNU_Extension_AtFirst(spec);
-                break;
-
             // Psyche
             case Keyword_ExtPSY__Forall:
             case Keyword_ExtPSY__Exists:
@@ -1067,13 +1072,13 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                     return false;
                 break;
 
-            // GNU attribute specifier
+            // GNU-attribute-specifier
             case Keyword_ExtGNU___attribute__:
                 if (!parseExtGNU_AttributeSpecifier_AtFirst(spec))
                     return false;
                 break;
 
-            // GNU typeof specifier
+            // GNU-typeof-specifier
             case Keyword_ExtGNU___typeof__:
                 if (!parseExtGNU_Typeof_AtFirst(spec))
                     return false;
@@ -1152,22 +1157,6 @@ bool Parser::parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec)
 }
 
 /**
- * Parse a GNU extension \c __extension__.
- *
- */
-void Parser::parseExtGNU_Extension_AtFirst(SpecifierSyntax*& spec)
-{
-    DEBUG_THIS_RULE();
-    PSYCHE_ASSERT(peek().kind() == Keyword_ExtGNU___extension__,
-                  return,
-                  "assert failure: `__extension__'");
-
-    auto extFlag = makeNode<ExtGNU_ExtensionFlagSyntax>();
-    spec = extFlag;
-    extFlag->extTkIdx_ = consume();
-}
-
-/**
  * Parse a GNU extension \c typeof \a specifier.
  */
 bool Parser::parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec)
@@ -1227,10 +1216,10 @@ void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
  */
 template <class TypeDeclT>
 bool Parser::parseTaggedTypeSpecifier(DeclarationSyntax*& decl,
-                                         SpecifierSyntax*& spec,
-                                         SyntaxKind declK,
-                                         SyntaxKind specK,
-                                         bool (Parser::*parseMember)(DeclarationSyntax*&))
+                                      SpecifierSyntax*& spec,
+                                      SyntaxKind declK,
+                                      SyntaxKind specK,
+                                      bool (Parser::*parseMember)(DeclarationSyntax*&))
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_struct
@@ -1271,21 +1260,21 @@ bool Parser::parseTaggedTypeSpecifier(DeclarationSyntax*& decl,
     DeclarationListSyntax** declList_cur = &tySpec->decls_;
 
     while (true) {
-        DeclarationSyntax* decl = nullptr;
+        DeclarationSyntax* memberDecl = nullptr;
         switch (peek().kind()) {
             case CloseBraceToken:
                 tySpec->closeBraceTkIdx_ = consume();
                 goto MembersParsed;
 
             default:
-                if (!((this)->*(parseMember))(decl)) {
+                if (!((this)->*(parseMember))(memberDecl)) {
                     ignoreMemberDeclaration();
                     if (peek().kind() == EndOfFile)
                         return false;
                 }
                 break;
         }
-        *declList_cur = makeNode<DeclarationListSyntax>(decl);
+        *declList_cur = makeNode<DeclarationListSyntax>(memberDecl);
         declList_cur = &(*declList_cur)->next;
     }
 

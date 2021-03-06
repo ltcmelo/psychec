@@ -83,7 +83,6 @@ class TypeDeclarationAsSpecifierSyntax;
 class TypeQualifierSyntax;
 class FunctionSpecifierSyntax;
 class AlignmentSpecifierSyntax;
-class ExtGNU_ExtensionFlagSyntax;
 class TypedefNameSyntax;
 class ExtGNU_TypeofSyntax;
 class ExtGNU_AttributeSpecifierSyntax;

@@ -589,24 +589,6 @@ public:
 };
 
 /**
- * \brief The ExtGNU_ExtensionFlag class.
- *
- * \attention This is a GNU extension:
- * https://gcc.gnu.org/onlinedocs/gcc/Alternate-Keywords.html#Alternate-Keywords
- */
-class PSY_C_API ExtGNU_ExtensionFlagSyntax final : public SpecifierSyntax
-{
-    AST_NODE_1K(ExtGNU_ExtensionFlag, Specifier)
-
-public:
-    SyntaxToken extensionKeyword() const { return tokenAtIndex(extTkIdx_); }
-
-protected:
-    LexedTokens::IndexType extTkIdx_ = LexedTokens::invalidIndex();
-    AST_CHILD_LST1(extTkIdx_);
-};
-
-/**
  * \brief The AmbiguousTypedefNameOrIdentifierExpressionSyntax class.
  *
  * Represents the ambiguous syntaxes \a typedef-name and (identifier)
