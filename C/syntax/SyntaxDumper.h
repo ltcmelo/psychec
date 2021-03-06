@@ -166,6 +166,7 @@ protected:
 
     virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax* node) override
     {
+        traverseDeclaration(node);
         for (auto iter = node->specifiers(); iter; iter = iter->next)
             nonterminal(iter->value);
         nonterminal(node->declarator());

@@ -3850,12 +3850,12 @@ void TestParser::case0673()
 
 void TestParser::case0674()
 {
-
+    parse("__extension__ void  x ( ) { }");
 }
 
 void TestParser::case0675()
 {
-
+    parse("__extension__ asm ( \"nop\" ) ;");
 }
 
 void TestParser::case0676()

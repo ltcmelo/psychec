@@ -81,7 +81,6 @@ bool Parser::parseExternalDeclaration(DeclarationSyntax*& decl)
         case Keyword_ExtGNU___asm__:
             return parseExtGNU_AsmStatementDeclaration_AtFirst(decl);
 
-        // GNU-extension-flag
         case Keyword_ExtGNU___extension__: {
             auto tkIdx = consume();
             if (!parseDeclarationOrFunctionDefinition(decl))
@@ -523,11 +522,20 @@ bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
 {
     DEBUG_THIS_RULE();
 
-    return parseDeclaration(
+    auto extKwTkIdx = LexedTokens::invalidIndex();
+    if (peek().kind() == Keyword_ExtGNU___extension__)
+        extKwTkIdx = consume();
+
+    if (!parseDeclaration(
                 decl,
                 &Parser::parseSpecifierQualifierList,
                 &Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList,
-                DeclarationScope::Block);
+                DeclarationScope::Block))
+        return false;
+
+    PSYCHE_ASSERT(decl, return false, "invalid declaration");
+    decl->extKwTkIdx_ = extKwTkIdx;
+    return true;
 }
 
 /**
