@@ -3845,8 +3845,7 @@ void TestParser::case0672()
 
 void TestParser::case0673()
 {
-    // TODO
-//    parse("int x = __extension__ 0 ;");
+    parse("int x = __extension__ 0 ;");
 }
 
 void TestParser::case0674()
@@ -3861,8 +3860,7 @@ void TestParser::case0675()
 
 void TestParser::case0676()
 {
-    // TODO
-//    parseStatement("{ __extension__ int x ; }");
+    parseStatement("{ __extension__ int x ; }");
 }
 
 void TestParser::case0677()

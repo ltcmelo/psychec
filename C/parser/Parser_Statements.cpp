@@ -154,6 +154,34 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case Keyword_ExtGNU___asm__:
             return parseExtGNU_AsmStatement(stmt);
 
+        case Keyword_ExtGNU___extension__: {
+            auto extKwTkIdx = consume();
+            if (!parseStatement(stmt, stmtCtx))
+                return false;
+
+            PSYCHE_ASSERT(stmt, return false, "invalid declaration");
+            switch (stmt->kind()) {
+                case ExpressionStatement:
+                    PSYCHE_ASSERT(stmt->asExpressionStatement(),
+                                  return false,
+                                  "invalid expression-statement");
+                    stmt->asExpressionStatement()->expr_->extKwTkIdx_ = extKwTkIdx;
+                    break;
+
+                case DeclarationStatement:
+                    PSYCHE_ASSERT(stmt->asDeclarationStatement(),
+                                  return false,
+                                  "invalid expression-statement");
+                    stmt->asDeclarationStatement()->decl_->extKwTkIdx_ = extKwTkIdx;
+                    break;
+
+                default:
+                    // TODO: warn
+                    break;
+            }
+            return true;
+        }
+
         default:
             return parseExpressionStatement(stmt);
     }

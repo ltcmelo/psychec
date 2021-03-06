@@ -24,6 +24,7 @@
 
 #include "SyntaxNode.h"
 #include "SyntaxNodes_Statements.h"
+#include "SyntaxNodes_MIXIN.h"
 #include "SyntaxToken.h"
 #include "SyntaxTree.h"
 
@@ -537,20 +538,6 @@ private:
     ExpressionSyntax* expr_ = nullptr;
 };
 
-class LeftOperandInfixOperatorRightOperand_MIXIN
-{
-    friend class Parser;
-
-protected:
-    virtual const ExpressionSyntax* left() const = 0;
-    virtual SyntaxToken operatorToken() const = 0;
-    virtual const ExpressionSyntax* right() const = 0;
-
-    ExpressionSyntax* leftExpr_ = nullptr;
-    LexedTokens::IndexType oprtrTkIdx_ = LexedTokens::invalidIndex();
-    ExpressionSyntax* rightExpr_ = nullptr;
-};
-
 /**
  * \brief The BinaryExpressionSyntax class.
  *
@@ -570,7 +557,7 @@ protected:
  */
 class PSY_C_API BinaryExpressionSyntax
         : public ExpressionSyntax
-        , public LeftOperandInfixOperatorRightOperand_MIXIN
+        , public MIXIN_LeftExpressionInfixOperatorRightExpression
 {
     AST_NODE_NK(BinaryExpression, Expression)
 
@@ -633,7 +620,7 @@ private:
  */
 class PSY_C_API AssignmentExpressionSyntax final
         : public ExpressionSyntax
-        , public LeftOperandInfixOperatorRightOperand_MIXIN
+        , public MIXIN_LeftExpressionInfixOperatorRightExpression
 {
     AST_NODE_NK(AssignmentExpression, Expression)
 
@@ -662,7 +649,7 @@ private:
  */
 class PSY_C_API SequencingExpressionSyntax
         : public ExpressionSyntax
-        , public LeftOperandInfixOperatorRightOperand_MIXIN
+        , public MIXIN_LeftExpressionInfixOperatorRightExpression
 {
     AST_NODE_1K(SequencingExpression, Expression)
 

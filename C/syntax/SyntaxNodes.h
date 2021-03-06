@@ -23,6 +23,7 @@
 #define PSYCHE_C_SYNTAX_NODES_H__
 
 #include "SyntaxNode.h"
+#include "SyntaxNodes_MIXIN.h"
 #include "SyntaxToken.h"
 #include "SyntaxTree.h"
 
@@ -161,6 +162,7 @@ inline std::vector<SyntaxHolder> merge(std::vector<SyntaxHolder>&& a,
 namespace psy {
 namespace C {
 
+
 /**
  * \brief The DeclarationSyntax class.
  *
@@ -174,14 +176,14 @@ namespace C {
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.VariableDeclarationSyntax of Roslyn.
  */
 class PSY_C_API DeclarationSyntax : public SyntaxNode
+                                  , public MIXIN_GNUExtensionFlag
 {
     AST_G_NODE(Declaration)
 
 public:
-    SyntaxToken extensionKeyword() const { return tokenAtIndex(extKwTkIdx_); }
+    SyntaxToken extensionKeyword() const override { return tokenAtIndex(extKwTkIdx_); }
 
-protected:
-    LexedTokens::IndexType extKwTkIdx_ = LexedTokens::invalidIndex(); // GNU's `__extension__'
+private:
     AST_CHILD_LST1(extKwTkIdx_);
 };
 
@@ -261,8 +263,15 @@ class PSY_C_API InitializerSyntax : public SyntaxNode
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.ExpressionSyntax of Roslyn.
  */
 class PSY_C_API ExpressionSyntax : public SyntaxNode
+                                 , public MIXIN_GNUExtensionFlag
 {
     AST_G_NODE(Expression)
+
+    public:
+        SyntaxToken extensionKeyword() const override { return tokenAtIndex(extKwTkIdx_); }
+
+    private:
+        AST_CHILD_LST1(extKwTkIdx_);
 };
 
 /**

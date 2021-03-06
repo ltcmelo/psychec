@@ -86,6 +86,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Declarations.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Expressions.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Statements.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_MIXIN.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxToken.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxToken.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxUtilities.cpp
