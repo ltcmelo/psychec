@@ -159,6 +159,7 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
             if (!parseStatement(stmt, stmtCtx))
                 return false;
 
+            std::cout << "aqui\n\n";
             PSYCHE_ASSERT(stmt, return false, "invalid declaration");
             switch (stmt->kind()) {
                 case ExpressionStatement:
@@ -176,8 +177,8 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
                     break;
 
                 default:
-                    // TODO: warn
-                    break;
+                    diagnosticsReporter_.UnexpectedGNUExtensionFlag();
+                    return false;
             }
             return true;
         }
@@ -537,6 +538,9 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
         skipTo(CloseParenToken);
         return false;
     }
+
+    if (peek().kind() == Keyword_ExtGNU___extension__)
+        forStmt->extKwTkIdx_ = consume();
 
     switch (peek().kind()) {
         // storage-class-specifier

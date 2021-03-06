@@ -679,6 +679,7 @@ protected:
     {
         terminal(node->forKeyword(), node);
         terminal(node->openParenthesisToken(), node);
+        terminal(node->extensionKeyword(), node);
         nonterminal(node->initializer());
         nonterminal(node->condition());
         terminal(node->semicolonToken(), node);

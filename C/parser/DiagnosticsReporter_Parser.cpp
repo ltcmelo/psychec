@@ -57,6 +57,7 @@ const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedCaseLabelOutsideS
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedDefaultLabelOutsideSwitch = "Parser-309-6.8.1-2";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedContinueOutsideLoop = "Parser-310-6.8.6.2-1";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedBreakOutsideSwitchOrLoop = "Parser-311-6.8.6.3-1";
+const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedGNUExtensionFlag = "Parser-312-GNU";
 
 
 std::string Parser::DiagnosticsReporter::joinTokenNames(const std::vector<SyntaxKind>& validTkKinds)
@@ -405,6 +406,15 @@ void Parser::DiagnosticsReporter::UnexpectedBreakOutsideSwitchOrLoop()
     diagnose(DiagnosticDescriptor(ID_of_UnexpectedBreakOutsideSwitchOrLoop,
                                   "[[break outside iteration- or switch-statement]]",
                                   "`break' not within a loop or switch",
+                                  DiagnosticSeverity::Error,
+                                  DiagnosticCategory::Syntax));
+}
+
+void Parser::DiagnosticsReporter::UnexpectedGNUExtensionFlag()
+{
+    diagnose(DiagnosticDescriptor(ID_of_UnexpectedGNUExtensionFlag,
+                                  "[[unexpected `__extension__']]",
+                                  "unrecognized `__extension__'",
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Syntax));
 }

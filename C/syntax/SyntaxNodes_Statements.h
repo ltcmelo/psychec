@@ -343,6 +343,7 @@ class PSY_C_API ForStatementSyntax final : public StatementSyntax
 public:
     SyntaxToken forKeyword() const { return tokenAtIndex(forKwTkIdx_); }
     SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
+    SyntaxToken extensionKeyword() const { return tokenAtIndex(extKwTkIdx_); }
     const StatementSyntax* initializer() const { return initStmt_; }
     const ExpressionSyntax* condition() const { return cond_; }
     SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
@@ -353,14 +354,16 @@ public:
 private:
     LexedTokens::IndexType forKwTkIdx_ = LexedTokens::invalidIndex();
     LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
+    LexedTokens::IndexType extKwTkIdx_ = LexedTokens::invalidIndex();
     StatementSyntax* initStmt_ = nullptr;
     ExpressionSyntax* cond_ = nullptr;
     LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
     ExpressionSyntax* expr_ = nullptr;
     LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
     StatementSyntax* stmt_ = nullptr;
-    AST_CHILD_LST8(forKwTkIdx_,
+    AST_CHILD_LST9(forKwTkIdx_,
                    openParenTkIdx_,
+                   extKwTkIdx_,
                    initStmt_,
                    cond_,
                    semicolonTkIdx_,
