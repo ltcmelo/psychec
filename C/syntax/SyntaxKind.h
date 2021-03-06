@@ -323,7 +323,6 @@ enum SyntaxKind : std::uint16_t
     InlineSpecifier,
     NoReturnSpecifier,
     AlignmentSpecifier,
-    ExtGNU_ExtensionFlag,
     ExtGNU_AttributeSpecifier,
     ExtGNU_Attribute,
     ExtGNU_AsmLabel,

@@ -3860,7 +3860,7 @@ void TestParser::case0675()
 
 void TestParser::case0676()
 {
-
+    parseStatement("{ __extension__ int x ; }");
 }
 
 void TestParser::case0677()
