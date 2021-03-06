@@ -176,6 +176,7 @@ protected:
 
     virtual Action visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax* node) override
     {
+        traverseDeclaration(node);
         terminal(node->asmKeyword(), node);
         terminal(node->openParenthesisToken(), node);
         nonterminal(node->stringLiteral());
