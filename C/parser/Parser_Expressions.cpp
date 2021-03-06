@@ -1004,6 +1004,16 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
         case Keyword__Generic:
             return parseExpressionWithPrecedenceUnary(expr);
 
+        case Keyword_ExtGNU___extension__: {
+            auto extKwTkIdx = consume();
+            if (!parseExpressionWithPrecedenceCast(expr))
+                return false;
+            PSYCHE_ASSERT(expr, return false, "invalid expression");
+            expr->extKwTkIdx_ = extKwTkIdx;
+            return true;
+        }
+
+
         default:
             diagnosticsReporter_.ExpectedFIRSTofExpression();
             return false;

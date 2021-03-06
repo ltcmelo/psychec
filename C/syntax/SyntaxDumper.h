@@ -418,20 +418,28 @@ protected:
     //-------------//
     // Expressions //
     //-------------//
+    void traverseExpression(const ExpressionSyntax* node)
+    {
+        terminal(node->extensionKeyword(), node);
+    }
+
     virtual Action visitIdentifierExpression(const IdentifierExpressionSyntax* node) override
     {
+        traverseExpression(node);
         terminal(node->identifierToken(), node);
         return Action::Skip;
     }
 
     virtual Action visitConstantExpression(const ConstantExpressionSyntax* node) override
     {
+        traverseExpression(node);
         terminal(node->constantToken(), node);
         return Action::Skip;
     }
 
     virtual Action visitStringLiteralExpression(const StringLiteralExpressionSyntax* node) override
     {
+        traverseExpression(node);
         terminal(node->literalToken(), node);
         nonterminal(node->adjacent());
         return Action::Skip;
@@ -439,6 +447,7 @@ protected:
 
     virtual Action visitParenthesizedExpression(const ParenthesizedExpressionSyntax* node) override
     {
+        traverseExpression(node);
         terminal(node->openParenthesisToken(), node);
         nonterminal(node->expression());
         terminal(node->closeParenthesisToken(), node);
@@ -447,6 +456,7 @@ protected:
 
     virtual Action visitGenericSelectionExpression(const GenericSelectionExpressionSyntax*  node) override
     {
+        traverseExpression(node);
         terminal(node->genericKeyword(), node);
         terminal(node->openParenthesisToken(), node);
         nonterminal(node->expression());
@@ -478,6 +488,7 @@ protected:
     /* Operations */
     virtual Action visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax* node) override
     {
+        traverseExpression(node);
         terminal(node->operatorToken(), node);
         nonterminal(node->expression());
         return Action::Skip;
@@ -485,6 +496,7 @@ protected:
 
     virtual Action visitPostfixUnaryExpression(const PostfixUnaryExpressionSyntax* node) override
     {
+        traverseExpression(node);
         nonterminal(node->expression());
         terminal(node->operatorToken(), node);
         return Action::Skip;
@@ -492,6 +504,7 @@ protected:
 
     virtual Action visitMemberAccessExpression(const MemberAccessExpressionSyntax* node) override
     {
+        traverseExpression(node);
         nonterminal(node->expression());
         terminal(node->operatorToken(), node);
         nonterminal(node->identifier());
@@ -500,6 +513,7 @@ protected:
 
     virtual Action visitArraySubscriptExpression(const ArraySubscriptExpressionSyntax* node) override
     {
+        traverseExpression(node);
         nonterminal(node->expression());
         terminal(node->openBracketToken(), node);
         nonterminal(node->argument());
@@ -510,6 +524,7 @@ protected:
 
     virtual Action visitTypeTraitExpression(const TypeTraitExpressionSyntax* node) override
     {
+        traverseExpression(node);
         terminal(node->operatorToken(), node);
         terminal(node->openParenthesisToken(), node);
         nonterminal(node->argument());
@@ -519,6 +534,7 @@ protected:
 
     virtual Action visitCastExpression(const CastExpressionSyntax* node) override
     {
+        traverseExpression(node);
         terminal(node->openParenthesisToken(), node);
         nonterminal(node->typeName());
         terminal(node->closeParenthesisToken(), node);
