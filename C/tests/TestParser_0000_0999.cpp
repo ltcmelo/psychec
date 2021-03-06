@@ -3830,37 +3830,39 @@ void TestParser::case0669()
 
 void TestParser::case0670()
 {
-
+    parse("__extension__ int x ;");
 }
 
 void TestParser::case0671()
 {
-
+    parse("__extension__ struct x { } ;");
 }
 
 void TestParser::case0672()
 {
-
+    parse("struct x { __extension__ int y ; } ;");
 }
 
 void TestParser::case0673()
 {
-
+    // TODO
+//    parse("int x = __extension__ 0 ;");
 }
 
 void TestParser::case0674()
 {
-
+    parse("__extension__ void  x ( ) { }");
 }
 
 void TestParser::case0675()
 {
-
+    parse("__extension__ asm ( \"nop\" ) ;");
 }
 
 void TestParser::case0676()
 {
-
+    // TODO
+//    parseStatement("{ __extension__ int x ; }");
 }
 
 void TestParser::case0677()

@@ -188,6 +188,7 @@ const char* tokenNames[] =
     "__attribute__",
     "__thread",
     "__typeof__",
+    "__extension__",
     "asm",
 
     "_Template",

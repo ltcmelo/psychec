@@ -42,5 +42,5 @@ void Binder::bind()
 
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    return Action::Continue;
+    return Action::Visit;
 }

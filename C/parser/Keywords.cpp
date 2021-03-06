@@ -1009,10 +1009,10 @@ static inline SyntaxKind classify12(const char* s, const ParseOptions& opts)
 
 static inline SyntaxKind classify13(const char* s, const ParseOptions& opts)
 {
-    if (s[0] == '_'
-            && opts.extensions().isEnabled_ExtGNU_AttributeSpecifiers()) {
+    if (s[0] == '_') {
         if (s[1] == '_') {
-            if (s[2] == 'a') {
+            if (s[2] == 'a'
+                    && opts.extensions().isEnabled_ExtGNU_AttributeSpecifiers()) {
                 if (s[3] == 't') {
                     if (s[4] == 't') {
                         if (s[5] == 'r') {
@@ -1024,6 +1024,30 @@ static inline SyntaxKind classify13(const char* s, const ParseOptions& opts)
                                                 if (s[11] == '_') {
                                                     if (s[12] == '_') {
                                                         return Keyword_ExtGNU___attribute__;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (s[2] == 'e'
+                     && opts.extensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                if (s[3] == 'x') {
+                    if (s[4] == 't') {
+                        if (s[5] == 'e') {
+                            if (s[6] == 'n') {
+                                if (s[7] == 's') {
+                                    if (s[8] == 'i') {
+                                        if (s[9] == 'o') {
+                                            if (s[10] == 'n') {
+                                                if (s[11] == '_') {
+                                                    if (s[12] == '_') {
+                                                        return Keyword_ExtGNU___extension__;
                                                     }
                                                 }
                                             }

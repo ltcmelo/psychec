@@ -46,7 +46,7 @@ public:
      */
     enum class Action : std::uint8_t
     {
-        Continue,
+        Visit,
         Skip,
         Quit
     };
@@ -72,106 +72,105 @@ public:
     //--------------//
     // Declarations //
     //--------------//
-    virtual Action visitTranslationUnit(const TranslationUnitSyntax*) { return Action::Continue; }
-    virtual Action visitEmptyDeclaration(const EmptyDeclarationSyntax*) { return Action::Continue; }
-    virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) { return Action::Continue; }
-    virtual Action visitEnumDeclaration(const EnumDeclarationSyntax*) { return Action::Continue; }
-    virtual Action visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax*) { return Action::Continue; }
-    virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) { return Action::Continue; }
-    virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) { return Action::Continue; }
-    virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) { return Action::Continue; }
-    virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) { return Action::Continue; }
-    virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) { return Action::Continue; }
-    virtual Action visitExtPSY_TemplateDeclaration(const ExtPSY_TemplateDeclarationSyntax*) { return Action::Continue; }
-    virtual Action visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax*) { return Action::Continue; }
+    virtual Action visitTranslationUnit(const TranslationUnitSyntax*) { return Action::Visit; }
+    virtual Action visitEmptyDeclaration(const EmptyDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitEnumDeclaration(const EnumDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) { return Action::Visit; }
+    virtual Action visitExtPSY_TemplateDeclaration(const ExtPSY_TemplateDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax*) { return Action::Visit; }
 
     /* Specifiers */
-    virtual Action visitStorageClass(const StorageClassSyntax*) { return Action::Continue; }
-    virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) { return Action::Continue; }
-    virtual Action visitTaggedTypeSpecifier(const TaggedTypeSpecifierSyntax*) { return Action::Continue; }
-    virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) { return Action::Continue; }
-    virtual Action visitTypedefName(const TypedefNameSyntax*) { return Action::Continue; }
-    virtual Action visitTypeQualifier(const TypeQualifierSyntax*) { return Action::Continue; }
-    virtual Action visitFunctionSpecifier(const FunctionSpecifierSyntax*) { return Action::Continue; }
-    virtual Action visitAlignmentSpecifier(const AlignmentSpecifierSyntax*) { return Action::Continue; }
-    virtual Action visitExtGNU_Typeof(const ExtGNU_TypeofSyntax*) { return Action::Continue; }
-    virtual Action visitExtGNU_AttributeSpecifier(const ExtGNU_AttributeSpecifierSyntax*) { return Action::Continue; }
-    virtual Action visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*) { return Action::Continue; }
-    virtual Action visitExtGNU_AsmLabel(const ExtGNU_AsmLabelSyntax*) { return Action::Continue; }
-    virtual Action visitExtPSY_QuantifiedTypeSpecifier(const ExtPSY_QuantifiedTypeSpecifierSyntax*) { return Action::Continue; }
+    virtual Action visitStorageClass(const StorageClassSyntax*) { return Action::Visit; }
+    virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) { return Action::Visit; }
+    virtual Action visitTaggedTypeSpecifier(const TaggedTypeSpecifierSyntax*) { return Action::Visit; }
+    virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) { return Action::Visit; }
+    virtual Action visitTypedefName(const TypedefNameSyntax*) { return Action::Visit; }
+    virtual Action visitTypeQualifier(const TypeQualifierSyntax*) { return Action::Visit; }
+    virtual Action visitFunctionSpecifier(const FunctionSpecifierSyntax*) { return Action::Visit; }
+    virtual Action visitAlignmentSpecifier(const AlignmentSpecifierSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_Typeof(const ExtGNU_TypeofSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_AttributeSpecifier(const ExtGNU_AttributeSpecifierSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_AsmLabel(const ExtGNU_AsmLabelSyntax*) { return Action::Visit; }
+    virtual Action visitExtPSY_QuantifiedTypeSpecifier(const ExtPSY_QuantifiedTypeSpecifierSyntax*) { return Action::Visit; }
 
     /* Declarators */
-    virtual Action visitDeclarator(const DeclaratorSyntax*) { return Action::Continue; }
-    virtual Action visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax*) { return Action::Continue; }
-    virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax*) { return Action::Continue; }
-    virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) { return Action::Continue; }
-    virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) { return Action::Continue; }
-    virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) { return Action::Continue; }
-    virtual Action visitSubscriptSuffix(const SubscriptSuffixSyntax*) { return Action::Continue; }
-    virtual Action visitParameterSuffix(const ParameterSuffixSyntax*) { return Action::Continue; }
-    virtual Action visitBitfieldDeclarator(const BitfieldDeclaratorSyntax*) { return Action::Continue; }
+    virtual Action visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax*) { return Action::Visit; }
+    virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax*) { return Action::Visit; }
+    virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) { return Action::Visit; }
+    virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) { return Action::Visit; }
+    virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) { return Action::Visit; }
+    virtual Action visitSubscriptSuffix(const SubscriptSuffixSyntax*) { return Action::Visit; }
+    virtual Action visitParameterSuffix(const ParameterSuffixSyntax*) { return Action::Visit; }
+    virtual Action visitBitfieldDeclarator(const BitfieldDeclaratorSyntax*) { return Action::Visit; }
 
     /* Type Name */
-    virtual Action visitTypeName(const TypeNameSyntax*) { return Action::Continue; }
+    virtual Action visitTypeName(const TypeNameSyntax*) { return Action::Visit; }
 
     /* Initializers */
-    virtual Action visitExpressionInitializer(const ExpressionInitializerSyntax*) { return Action::Continue; }
-    virtual Action visitBraceEnclosedInitializer(const BraceEnclosedInitializerSyntax*) { return Action::Continue; }
-    virtual Action visitDesignatedInitializer(const DesignatedInitializerSyntax*) { return Action::Continue; }
-    virtual Action visitFieldDesignator(const FieldDesignatorSyntax*) { return Action::Continue; }
-    virtual Action visitArrayDesignator(const ArrayDesignatorSyntax*) { return Action::Continue; }
+    virtual Action visitExpressionInitializer(const ExpressionInitializerSyntax*) { return Action::Visit; }
+    virtual Action visitBraceEnclosedInitializer(const BraceEnclosedInitializerSyntax*) { return Action::Visit; }
+    virtual Action visitDesignatedInitializer(const DesignatedInitializerSyntax*) { return Action::Visit; }
+    virtual Action visitFieldDesignator(const FieldDesignatorSyntax*) { return Action::Visit; }
+    virtual Action visitArrayDesignator(const ArrayDesignatorSyntax*) { return Action::Visit; }
 
     //-------------//
     // Expressions //
     //-------------//
-    virtual Action visitIdentifierExpression(const IdentifierExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitConstantExpression(const ConstantExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitStringLiteralExpression(const StringLiteralExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitParenthesizedExpression(const ParenthesizedExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitGenericSelectionExpression(const GenericSelectionExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitGenericAssociation(const GenericAssociationSyntax*) { return Action::Continue; }
-    virtual Action visitExtGNU_EnclosedCompoundStatementExpression(const ExtGNU_EnclosedCompoundStatementExpressionSyntax*) { return Action::Continue; }
+    virtual Action visitIdentifierExpression(const IdentifierExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitConstantExpression(const ConstantExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitStringLiteralExpression(const StringLiteralExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitParenthesizedExpression(const ParenthesizedExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitGenericSelectionExpression(const GenericSelectionExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitGenericAssociation(const GenericAssociationSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_EnclosedCompoundStatementExpression(const ExtGNU_EnclosedCompoundStatementExpressionSyntax*) { return Action::Visit; }
 
     /* Operations */
-    virtual Action visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitPostfixUnaryExpression(const PostfixUnaryExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitMemberAccessExpression(const MemberAccessExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitArraySubscriptExpression(const ArraySubscriptExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitTypeTraitExpression(const TypeTraitExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitCastExpression(const CastExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitCallExpression(const CallExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitBinaryExpression(const BinaryExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitConditionalExpression(const ConditionalExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitAssignmentExpression(const AssignmentExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitSequencingExpression(const SequencingExpressionSyntax*) { return Action::Continue; }
+    virtual Action visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitPostfixUnaryExpression(const PostfixUnaryExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitMemberAccessExpression(const MemberAccessExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitArraySubscriptExpression(const ArraySubscriptExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitTypeTraitExpression(const TypeTraitExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitCastExpression(const CastExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitCallExpression(const CallExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitBinaryExpression(const BinaryExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitConditionalExpression(const ConditionalExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitAssignmentExpression(const AssignmentExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitSequencingExpression(const SequencingExpressionSyntax*) { return Action::Visit; }
 
     //------------//
     // Statements //
     //------------//
-    virtual Action visitCompoundStatement(const CompoundStatementSyntax*) { return Action::Continue; }
-    virtual Action visitDeclarationStatement(const DeclarationStatementSyntax*) { return Action::Continue; }
-    virtual Action visitExpressionStatement(const ExpressionStatementSyntax*) { return Action::Continue; }
-    virtual Action visitLabeledStatement(const LabeledStatementSyntax*) { return Action::Continue; }
-    virtual Action visitIfStatement(const IfStatementSyntax*) { return Action::Continue; }
-    virtual Action visitSwitchStatement(const SwitchStatementSyntax*) { return Action::Continue; }
-    virtual Action visitWhileStatement(const WhileStatementSyntax*) { return Action::Continue; }
-    virtual Action visitDoStatement(const DoStatementSyntax*) { return Action::Continue; }
-    virtual Action visitForStatement(const ForStatementSyntax*) { return Action::Continue; }
-    virtual Action visitGotoStatement(const GotoStatementSyntax*) { return Action::Continue; }
-    virtual Action visitContinueStatement(const ContinueStatementSyntax*) { return Action::Continue; }
-    virtual Action visitBreakStatement(const BreakStatementSyntax*) { return Action::Continue; }
-    virtual Action visitReturnStatement(const ReturnStatementSyntax*) { return Action::Continue; }
-    virtual Action visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax*) { return Action::Continue; }
-    virtual Action visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax*) { return Action::Continue; }
-    virtual Action visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax*) { return Action::Continue; }
+    virtual Action visitCompoundStatement(const CompoundStatementSyntax*) { return Action::Visit; }
+    virtual Action visitDeclarationStatement(const DeclarationStatementSyntax*) { return Action::Visit; }
+    virtual Action visitExpressionStatement(const ExpressionStatementSyntax*) { return Action::Visit; }
+    virtual Action visitLabeledStatement(const LabeledStatementSyntax*) { return Action::Visit; }
+    virtual Action visitIfStatement(const IfStatementSyntax*) { return Action::Visit; }
+    virtual Action visitSwitchStatement(const SwitchStatementSyntax*) { return Action::Visit; }
+    virtual Action visitWhileStatement(const WhileStatementSyntax*) { return Action::Visit; }
+    virtual Action visitDoStatement(const DoStatementSyntax*) { return Action::Visit; }
+    virtual Action visitForStatement(const ForStatementSyntax*) { return Action::Visit; }
+    virtual Action visitGotoStatement(const GotoStatementSyntax*) { return Action::Visit; }
+    virtual Action visitContinueStatement(const ContinueStatementSyntax*) { return Action::Visit; }
+    virtual Action visitBreakStatement(const BreakStatementSyntax*) { return Action::Visit; }
+    virtual Action visitReturnStatement(const ReturnStatementSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax*) { return Action::Visit; }
 
     //-------------//
     // Ambiguities //
     //-------------//
-    virtual Action visitAmbiguousTypedefNameOrIdentifierExpression(const AmbiguousTypedefNameOrIdentifierExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitAmbiguousCastOrBinaryExpression(const AmbiguousCastOrBinaryExpressionSyntax*) { return Action::Continue; }
-    virtual Action visitAmbiguousExpressionOrDeclarationStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) { return Action::Continue; }
+    virtual Action visitAmbiguousTypedefNameOrIdentifierExpression(const AmbiguousTypedefNameOrIdentifierExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitAmbiguousCastOrBinaryExpression(const AmbiguousCastOrBinaryExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitAmbiguousExpressionOrDeclarationStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) { return Action::Visit; }
 
 protected:
     SyntaxTree* tree_;

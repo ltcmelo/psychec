@@ -126,12 +126,11 @@ void SyntaxNode::acceptVisitor(SyntaxVisitor* visitor) const
 {
     if (visitor->preVisit(this)) {
         auto action = dispatchVisit(visitor);
-        if (action == SyntaxVisitor::Action::Continue)
+        if (action == SyntaxVisitor::Action::Visit)
             visitChildren(visitor);
     }
     visitor->postVisit(this);
 }
-
 
 namespace psy {
 namespace C {

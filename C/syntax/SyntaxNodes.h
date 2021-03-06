@@ -45,11 +45,11 @@
  */
 #define AST_G_NODE__COMMON__(NODE) \
     AST__COMMON__(NODE,) \
-    using BaseSyntax = SyntaxNode; \
+    using BaseSyntax = SyntaxNode;
 
 #define AST_NODE__COMMON__(NODE, BASE_NODE) \
     AST__COMMON__(NODE, BASE_NODE) \
-    using BaseSyntax = BASE_NODE##Syntax; \
+    using BaseSyntax = BASE_NODE##Syntax;
 
 /*
  * The class of an AST node further varies in respect to whether:
@@ -176,6 +176,13 @@ namespace C {
 class PSY_C_API DeclarationSyntax : public SyntaxNode
 {
     AST_G_NODE(Declaration)
+
+public:
+    SyntaxToken extensionKeyword() const { return tokenAtIndex(extKwTkIdx_); }
+
+protected:
+    LexedTokens::IndexType extKwTkIdx_ = LexedTokens::invalidIndex(); // GNU's `__extension__'
+    AST_CHILD_LST1(extKwTkIdx_);
 };
 
 /**

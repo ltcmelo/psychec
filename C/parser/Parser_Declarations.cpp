@@ -43,6 +43,15 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
             case EndOfFile:
                 return;
 
+            case Keyword_ExtGNU___extension__: {
+                auto extKwTkIdx = consume();
+                if (!parseExternalDeclaration(decl))
+                    break;;
+                PSYCHE_ASSERT(decl, break, "invalid declaration");
+                decl->extKwTkIdx_ = extKwTkIdx;
+                break;
+            }
+
             default:
                 if (parseExternalDeclaration(decl))
                     break;
@@ -513,11 +522,20 @@ bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
 {
     DEBUG_THIS_RULE();
 
-    return parseDeclaration(
+    auto extKwTkIdx = LexedTokens::invalidIndex();
+    if (peek().kind() == Keyword_ExtGNU___extension__)
+        extKwTkIdx = consume();
+
+    if (!parseDeclaration(
                 decl,
                 &Parser::parseSpecifierQualifierList,
                 &Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList,
-                DeclarationScope::Block);
+                DeclarationScope::Block))
+        return false;
+
+    PSYCHE_ASSERT(decl, return false, "invalid declaration");
+    decl->extKwTkIdx_ = extKwTkIdx;
+    return true;
 }
 
 /**
@@ -901,13 +919,13 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                     return false;
                 break;
 
-            // GNU attribute specifier
+            // GNU-attribute-specifier
             case Keyword_ExtGNU___attribute__:
                 if (!parseExtGNU_AttributeSpecifier_AtFirst(spec))
                     return false;
                 break;
 
-            // GNU typeof specifier
+            // GNU-typeof-specifier
             case Keyword_ExtGNU___typeof__:
                 if (!parseExtGNU_Typeof_AtFirst(spec))
                     return false;
@@ -1062,13 +1080,13 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                     return false;
                 break;
 
-            // GNU attribute specifier
+            // GNU-attribute-specifier
             case Keyword_ExtGNU___attribute__:
                 if (!parseExtGNU_AttributeSpecifier_AtFirst(spec))
                     return false;
                 break;
 
-            // GNU typeof specifier
+            // GNU-typeof-specifier
             case Keyword_ExtGNU___typeof__:
                 if (!parseExtGNU_Typeof_AtFirst(spec))
                     return false;
@@ -1206,10 +1224,10 @@ void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
  */
 template <class TypeDeclT>
 bool Parser::parseTaggedTypeSpecifier(DeclarationSyntax*& decl,
-                                         SpecifierSyntax*& spec,
-                                         SyntaxKind declK,
-                                         SyntaxKind specK,
-                                         bool (Parser::*parseMember)(DeclarationSyntax*&))
+                                      SpecifierSyntax*& spec,
+                                      SyntaxKind declK,
+                                      SyntaxKind specK,
+                                      bool (Parser::*parseMember)(DeclarationSyntax*&))
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_struct
@@ -1250,21 +1268,21 @@ bool Parser::parseTaggedTypeSpecifier(DeclarationSyntax*& decl,
     DeclarationListSyntax** declList_cur = &tySpec->decls_;
 
     while (true) {
-        DeclarationSyntax* decl = nullptr;
+        DeclarationSyntax* memberDecl = nullptr;
         switch (peek().kind()) {
             case CloseBraceToken:
                 tySpec->closeBraceTkIdx_ = consume();
                 goto MembersParsed;
 
             default:
-                if (!((this)->*(parseMember))(decl)) {
+                if (!((this)->*(parseMember))(memberDecl)) {
                     ignoreMemberDeclaration();
                     if (peek().kind() == EndOfFile)
                         return false;
                 }
                 break;
         }
-        *declList_cur = makeNode<DeclarationListSyntax>(decl);
+        *declList_cur = makeNode<DeclarationListSyntax>(memberDecl);
         declList_cur = &(*declList_cur)->next;
     }
 

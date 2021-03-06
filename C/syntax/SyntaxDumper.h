@@ -73,33 +73,42 @@ protected:
         return Action::Skip;
     }
 
+    void traverseDeclaration(const DeclarationSyntax* node)
+    {
+        terminal(node->extensionKeyword(), node);
+    }
+
     virtual Action visitEmptyDeclaration(const EmptyDeclarationSyntax* node) override
     {
+        traverseDeclaration(node);
         for (auto it = node->specifiers(); it; it = it->next)
             nonterminal(it->value);
         terminal(node->semicolonToken(), node);
         return Action::Skip;
     }
 
-    Action visitTypeDeclaration_Common(const TypeDeclarationSyntax* node)
+    void traverseTypeDeclaration(const TypeDeclarationSyntax* node)
     {
+        traverseDeclaration(node);
         nonterminal(node->typeSpecifier());
         terminal(node->semicolonToken(), node);
-        return Action::Skip;
     }
 
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node) override
     {
-        return visitTypeDeclaration_Common(node);
+        traverseTypeDeclaration(node);
+        return Action::Skip;
     }
 
     virtual Action visitEnumDeclaration(const EnumDeclarationSyntax* node) override
     {
-        return visitTypeDeclaration_Common(node);
+        traverseTypeDeclaration(node);
+        return Action::Skip;
     }
 
     virtual Action visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax* node) override
     {
+        traverseDeclaration(node);
         terminal(node->identifierToken(), node);
         for (auto iter = node->attributes(); iter; iter = iter->next)
             nonterminal(iter->value);
@@ -111,6 +120,7 @@ protected:
 
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) override
     {
+        traverseDeclaration(node);
         for (auto iter = node->specifiers(); iter; iter = iter->next)
             nonterminal(iter->value);
         for (auto iter = node->declarators(); iter; iter = iter->next) {
@@ -123,6 +133,7 @@ protected:
 
     virtual Action visitFieldDeclaration(const FieldDeclarationSyntax* node) override
     {
+        traverseDeclaration(node);
         for (auto iter = node->specifiers(); iter; iter = iter->next)
             nonterminal(iter->value);
         for (auto iter = node->declarators(); iter; iter = iter->next) {
@@ -155,6 +166,7 @@ protected:
 
     virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax* node) override
     {
+        traverseDeclaration(node);
         for (auto iter = node->specifiers(); iter; iter = iter->next)
             nonterminal(iter->value);
         nonterminal(node->declarator());
@@ -164,6 +176,7 @@ protected:
 
     virtual Action visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax* node) override
     {
+        traverseDeclaration(node);
         terminal(node->asmKeyword(), node);
         terminal(node->openParenthesisToken(), node);
         nonterminal(node->stringLiteral());

@@ -229,6 +229,7 @@ enum SyntaxKind : std::uint16_t
     Keyword_ExtGNU___attribute__,
     Keyword_ExtGNU___thread,
     Keyword_ExtGNU___typeof__,
+    Keyword_ExtGNU___extension__,
     Keyword_ExtGNU___asm__, // Portability: J.5.10.
 
     // --------------------------//
