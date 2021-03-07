@@ -48,6 +48,7 @@ public:
             case Keyword_extern:
             case Keyword_static:
             case Keyword__Thread_local:
+            case Keyword_ExtGNU___thread:
             case Keyword_auto:
             case Keyword_register:
                 return true;

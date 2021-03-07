@@ -3620,27 +3620,30 @@ void TestParser::case0627()
 
 void TestParser::case0628()
 {
-
+    parse("_Thread_local int x ;");
 }
 
 void TestParser::case0629()
 {
-
+    parse("_Thread_local x y ;");
 }
 
 void TestParser::case0630()
 {
-
+    parse("__thread int x ;");
 }
 
 void TestParser::case0631()
 {
-
+    parse("void x ( ) { static __thread x y ; }");
 }
 
 void TestParser::case0632()
 {
+    // Not a syntactic error, but a semantic one; covered in:
+    CROSS_REFERENCE_TEST(TestBinder::case0015);
 
+    parse("void x ( ) { __thread x y ; }");
 }
 
 void TestParser::case0633()

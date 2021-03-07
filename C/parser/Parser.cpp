@@ -228,6 +228,7 @@ bool Parser::ignoreDeclarationOrDefinition()
             case Keyword_extern:
             case Keyword_static:
             case Keyword__Thread_local:
+            case Keyword_ExtGNU___thread:
             case Keyword_auto:
             case Keyword_register:
             case Keyword_inline:
@@ -262,6 +263,7 @@ bool Parser::ignoreMemberDeclaration()
             case Keyword_extern:
             case Keyword_static:
             case Keyword__Thread_local:
+            case Keyword_ExtGNU___thread:
             case Keyword_auto:
             case Keyword_register:
             case Keyword_inline:
@@ -290,32 +292,33 @@ bool Parser::ignoreStatement()
 {
     while (true) {
         switch (peek().kind()) {
-        // Just return.
-        case EndOfFile:
-        case Keyword_typedef:
-        case Keyword_extern:
-        case Keyword_static:
-        case Keyword__Thread_local:
-        case Keyword_auto:
-        case Keyword_register:
-        case Keyword_inline:
-        case Keyword__Noreturn:
-        case Keyword_struct:
-        case Keyword_union:
-        case Keyword_enum:
-        case Keyword__Static_assert:
-        case Keyword_ExtGNU___asm__:
-            return false;
+            // Just return.
+            case EndOfFile:
+            case Keyword_typedef:
+            case Keyword_extern:
+            case Keyword_static:
+            case Keyword__Thread_local:
+            case Keyword_ExtGNU___thread:
+            case Keyword_auto:
+            case Keyword_register:
+            case Keyword_inline:
+            case Keyword__Noreturn:
+            case Keyword_struct:
+            case Keyword_union:
+            case Keyword_enum:
+            case Keyword__Static_assert:
+            case Keyword_ExtGNU___asm__:
+                return false;
 
-        // Skip and return.
-        case CloseBraceToken:
-        case SemicolonToken:
-            consume();
-            return false;
+            // Skip and return.
+            case CloseBraceToken:
+            case SemicolonToken:
+                consume();
+                return false;
 
-            // Skip.
-        default:
-            consume();
+                // Skip.
+            default:
+                consume();
         }
     }
 }

@@ -254,7 +254,8 @@ enum SyntaxKind : std::uint16_t
     OperatorName_NOTEQToken = ExclamationEqualsToken,
     OperatorName_XOREQToken = CaretEqualsToken,
 
-    /* Aliases */
+    /* Aliases
+       TODO: Preserve original tokens */
     KeywordAlias_Bool = Keyword__Bool,
     KeywordAlias_asm = Keyword_ExtGNU___asm__,
     KeywordAlias_typeof = Keyword_ExtGNU___typeof__,

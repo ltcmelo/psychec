@@ -51,6 +51,7 @@ DEFINE_ENABLE_ISENABLED(Expand_complex_AsKeyword)
 DEFINE_ENABLE_ISENABLED(Expand_operatorNames)
 DEFINE_ENABLE_ISENABLED(Expand_alignas_AsKeyword)
 DEFINE_ENABLE_ISENABLED(Expand_alignof_AsKeyword)
+DEFINE_ENABLE_ISENABLED(Expand_thread_local_AsKeyword)
 
 DEFINE_ENABLE_ISENABLED(CPP_nullptr)
 

@@ -153,6 +153,9 @@ void TestBinder::case0014()
 
 void TestBinder::case0015()
 {
+    CROSS_REFERENCE_TEST(TestParser::case0632);
+
+    parseAndBind("void x ( ) { __thread x y ; }");
 }
 
 void TestBinder::case0016() {}

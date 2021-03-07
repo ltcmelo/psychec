@@ -50,6 +50,7 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case Keyword_auto:
         case Keyword_register:
         case Keyword__Thread_local:
+        case Keyword_ExtGNU___thread:
 
         // type-qualifier
         case Keyword_const:
@@ -551,6 +552,7 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
         case Keyword_auto:
         case Keyword_register:
         case Keyword__Thread_local:
+        case Keyword_ExtGNU___thread:
 
         // type-qualifier
         case Keyword_const:

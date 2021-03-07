@@ -427,6 +427,7 @@ Parser::IdentifierRole Parser::determineRoleOfIdentifier(bool seenType) const
             case Keyword_auto:
             case Keyword_register:
             case Keyword__Thread_local:
+            case Keyword_ExtGNU___thread:
 
             // type-qualifier
             case Keyword_const:
@@ -791,6 +792,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                 break;
 
             case Keyword__Thread_local:
+            case Keyword_ExtGNU___thread:
                 parseTrivialSpecifier_AtFirst<StorageClassSyntax>(
                             spec,
                             ThreadLocalStorageClass);

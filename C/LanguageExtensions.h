@@ -137,7 +137,6 @@ public:
     bool isEnabled_Expand_static_assert_AsKeyword() const;
     //!@}
 
-
     //!@{
     /**
      * Whether to automatically expand macro \c complex to \c _Complex.
@@ -184,6 +183,18 @@ public:
      */
     LanguageExtensions& enable_Expand_alignof_AsKeyword(bool expand);
     bool isEnabled_Expand_alignof_AsKeyword() const;
+    //!@}
+
+    //!@{
+    /**
+     * Whether to automatically expand macro \c thread_local to \c _Thread_local.
+     *
+     * From header <threads.h>.
+     *
+     * \remark 7.26
+     */
+    LanguageExtensions& enable_Expand_thread_local_AsKeyword(bool expand);
+    bool isEnabled_Expand_thread_local_AsKeyword() const;
     //!@}
 
     //!@{
@@ -242,6 +253,7 @@ private:
         std::uint64_t Expand_operatorNames_ : 1;
         std::uint64_t Expand_alignas_AsKeyword_ : 1;
         std::uint64_t Expand_alignof_AsKeyword_ : 1;
+        std::uint64_t Expand_thread_local_AsKeyword_ : 1;
 
         /* C++ */
         std::uint64_t CPP_nullptr_ : 1;
