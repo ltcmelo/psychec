@@ -5210,7 +5210,7 @@ void TestParser::case0913()
 
 void TestParser::case0914()
 {
-
+    parse("void x ( ) { sizeof ( __typeof__ ( int ) ) ; }");
 }
 
 void TestParser::case0915()
