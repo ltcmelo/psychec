@@ -78,6 +78,7 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case Keyword_struct:
         case Keyword_union:
         case Keyword_enum:
+        case Keyword_ExtGNU___typeof__:
             return parseDeclarationStatement(
                         stmt,
                         &Parser::parseDeclarationOrFunctionDefinition);

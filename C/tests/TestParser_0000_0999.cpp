@@ -5200,12 +5200,12 @@ void TestParser::case0911()
 
 void TestParser::case0912()
 {
-
+    parse("void x ( ) { __typeof__ ( x * ) y ; }");
 }
 
 void TestParser::case0913()
 {
-
+    parse("void x ( ) { __typeof__ ( int ) x ; }");
 }
 
 void TestParser::case0914()
