@@ -495,9 +495,12 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
         }
     }
 
-    if (!parsePrimaryExpression(expr))
-        return false;
+    return parsePrimaryExpression(expr)
+        && parsePostfixExpression_AtFollow(expr);
+}
 
+bool Parser::parsePostfixExpression_AtFollow(ExpressionSyntax*& expr)
+{
     while (true) {
         SyntaxKind exprK = UnknownSyntax;
         switch (peek().kind()) {
@@ -718,7 +721,8 @@ bool Parser::parseCompoundLiteral_AtOpenBrace(
     compLit->openParenTkIdx_ = openParenTkIdx;
     compLit->typeName_ = typeName;
     compLit->closeParenTkIdx_ = closeParenTkIdx;
-    return parseInitializer(compLit->init_);
+    return parseInitializer(compLit->init_)
+        && parsePostfixExpression_AtFollow(expr);
 }
 
 /* Unary */

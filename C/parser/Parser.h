@@ -341,6 +341,7 @@ private:
 
     /* Postfix */
     bool parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr);
+    bool parsePostfixExpression_AtFollow(ExpressionSyntax*& expr);
     template <class ExprT> bool parsePostfixExpression_AtPostfix(
             ExpressionSyntax*& expr,
             SyntaxKind exprK,

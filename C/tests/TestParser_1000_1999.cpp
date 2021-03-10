@@ -841,7 +841,7 @@ void TestParser::case1255()
 
 void TestParser::case1256()
 {
-    parseExpression("(long) {",
+    parseExpression("( long ) {",
                     Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
@@ -1445,8 +1445,37 @@ void TestParser::case1512()
 
 }
 
-void TestParser::case1513() {}
-void TestParser::case1514() {}
+void TestParser::case1513()
+{
+    parseExpression("( struct x ) { . y = 1 } . z",
+                    Expectation().AST( { DirectMemberAccessExpression,
+                                         CompoundLiteralExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         BraceEnclosedInitializer,
+                                         DesignatedInitializer,
+                                         FieldDesignator,
+                                         ExpressionInitializer,
+                                         IntegerConstantExpression,
+                                         IdentifierExpression }));
+
+}
+
+void TestParser::case1514()
+{
+    parseExpression("( struct x ) { 1 } . z",
+                    Expectation().AST( { DirectMemberAccessExpression,
+                                         CompoundLiteralExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         BraceEnclosedInitializer,
+                                         ExpressionInitializer,
+                                         IntegerConstantExpression,
+                                         IdentifierExpression }));
+}
+
 void TestParser::case1515() {}
 void TestParser::case1516() {}
 void TestParser::case1517() {}
