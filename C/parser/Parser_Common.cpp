@@ -95,16 +95,17 @@ bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& tyRef)
 void Parser::maybeAmbiguateTypeReference(TypeReferenceSyntax*& tyRef)
 {
     PSYCHE_ASSERT(tyRef->kind() == ExpressionAsTypeReference
-                    && tyRef->asExpressionAsTypeReference()->expr_->kind() == ParenthesizedExpression,
+                    && (tyRef->asExpressionAsTypeReference()->expr_->kind()
+                            == ParenthesizedExpression),
                   return, "");
 
     auto exprAsTyRef = tyRef->asExpressionAsTypeReference();
     auto parenExpr = exprAsTyRef->expr_->asParenthesizedExpression();
-    if (!parenExpr->asIdentifierExpression())
+    if (!parenExpr->expr_->asIdentifierExpression())
         return;
 
     auto tyDefName = makeNode<TypedefNameSyntax>();
-    tyDefName->identTkIdx_ = exprAsTyRef->expr_->asIdentifierExpression()->identTkIdx_;
+    tyDefName->identTkIdx_ = parenExpr->expr_->asIdentifierExpression()->identTkIdx_;
     auto tyName = makeNode<TypeNameSyntax>();
     tyName->specs_ =  makeNode<SpecifierListSyntax>(tyDefName);
     auto tyNameAsTyRef = makeNode<TypeNameAsTypeReferenceSyntax>();
@@ -115,47 +116,3 @@ void Parser::maybeAmbiguateTypeReference(TypeReferenceSyntax*& tyRef)
     ambiTyRef->exprAsTyRef_ = exprAsTyRef;
     ambiTyRef->tyNameAsTyRef_ = tyNameAsTyRef;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
