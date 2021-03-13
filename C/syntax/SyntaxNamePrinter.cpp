@@ -110,18 +110,22 @@ void SyntaxNamePrinter::print(const SyntaxNode* node, Style mode, std::ostream& 
             continue;
         }
 
+        os << " <";
         auto firstTk = node->firstToken();
         auto lastTk = node->lastToken();
-        if (!firstTk.isValid() || !lastTk.isValid())
-            continue;
-        os << " <" << firstTk.location().lineSpan().span().start()
-           << ".." << lastTk.location().lineSpan().span().end()
-           << "> ";
+        if (firstTk.isValid())
+            os << firstTk.location().lineSpan().span().start();
+        os << "..";
+        if (lastTk.isValid())
+            os << lastTk.location().lineSpan().span().end();
+        os << "> ";
 
-        auto firstTkStart = source.c_str() + firstTk.span().start();
-        auto lastTkEnd = source.c_str() + lastTk.span().end();
-        std::string snippet(firstTkStart, lastTkEnd - firstTkStart);
-        os << " `" << formatSnippet(snippet) << "`";
+        if (firstTk.isValid() && lastTk.isValid()) {
+            auto firstTkStart = source.c_str() + firstTk.span().start();
+            auto lastTkEnd = source.c_str() + lastTk.span().end();
+            std::string snippet(firstTkStart, lastTkEnd - firstTkStart);
+            os << " `" << formatSnippet(snippet) << "`";
+        }
 
         os << std::endl;
     }

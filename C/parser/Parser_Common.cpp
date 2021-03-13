@@ -52,7 +52,7 @@ bool Parser::parseTypeName(TypeNameSyntax*& typeName)
     return parseAbstractDeclarator(typeName->decltor_);
 }
 
-bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& typeRef)
+bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& tyRef)
 {
     switch (peek().kind()) {
         case OpenParenToken: {
@@ -60,10 +60,10 @@ bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& typeRe
             ExpressionSyntax* expr = nullptr;
             if (parseExpression(expr)) {
                 auto exprAsTyRef = makeNode<ExpressionAsTypeReferenceSyntax>();
-                typeRef = exprAsTyRef;
+                tyRef = exprAsTyRef;
                 exprAsTyRef->expr_ = expr;
                 if (expr->kind() == ParenthesizedExpression)
-                    maybeAmbiguateTypeReference(typeRef);
+                    maybeAmbiguateTypeReference(tyRef);
                 return true;
             }
 
@@ -74,7 +74,7 @@ bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& typeRe
                 return false;
 
             auto nameAsTyRef = makeNode<TypeNameAsTypeReferenceSyntax>();
-            typeRef = nameAsTyRef;
+            tyRef = nameAsTyRef;
             nameAsTyRef->openParenTkIdx_ = openParenTkIdx;
             nameAsTyRef->typeName_ = typeName;
             return matchOrSkipTo(CloseParenToken, &nameAsTyRef->closeParenTkIdx_);
@@ -85,78 +85,35 @@ bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& typeRe
             if (!parseExpressionWithPrecedenceUnary(unaryExpr))
                 return false;
             auto exprAsTyRef = makeNode<ExpressionAsTypeReferenceSyntax>();
-            typeRef = exprAsTyRef;
+            tyRef = exprAsTyRef;
             exprAsTyRef->expr_ = unaryExpr;
             return true;
         }
     }
-
-
-//    if (!match(OpenParenToken, &typeRef->openParenTkIdx_))
-//        return false;
-
-//    switch (peek().kind()) {
-//        case EllipsisToken:
-//            consume();
-//            break;
-
-//        case IdentifierToken: {
-//            if (peek(2).kind() == CloseParenToken) {
-//                auto ambiIdent = makeNode<AmbiguousTypedefNameOrIdentifierExpressionSyntax>();
-//                typeRef->arg_ = ambiIdent;
-//                Backtracker BT(this);
-//                parseTypedefName_AtFirst(ambiIdent->typedefName_);
-//                BT.backtrack();
-//                parseIdentifierExpression_AtFirst(ambiIdent->identExpr_);
-//                typeRef->closeParenTkIdx_ = consume();
-//                return true;
-//            }
-//            [[fallthrough]];
-//        }
-
-//        default: {
-//            Backtracker BT(this);
-//            ExpressionSyntax* expr = nullptr;
-//            if (parseExpression(expr)) {
-//                typeRef->arg_ = expr;
-//            }
-//            else {
-//                BT.backtrack();
-//                TypeNameSyntax* typeName = nullptr;
-//                if (!parseTypeName(typeName))
-//                    return false;
-//                typeRef->arg_ = typeName;
-//            }
-//            break;
-//        }
-//    }
-
-//    return matchOrSkipTo(CloseParenToken, &typeRef->closeParenTkIdx_);
 }
 
-void Parser::maybeAmbiguateTypeReference(TypeReferenceSyntax*& typeRef)
+void Parser::maybeAmbiguateTypeReference(TypeReferenceSyntax*& tyRef)
 {
-    /*
-    PSYCHE_ASSERT(typeRef->kind() == ExpressionAsTypeReference
-                        && typeRef->arg_->kind() == ParenthesizedExpression,
+    PSYCHE_ASSERT(tyRef->kind() == ExpressionAsTypeReference
+                    && tyRef->asExpressionAsTypeReference()->expr_->kind() == ParenthesizedExpression,
                   return, "");
 
-    auto exprAsRef = typeRef->arg_->asParenthesizedExpression();
-    if (!exprAsRef->expr_->asIdentifierExpression())
+    auto exprAsTyRef = tyRef->asExpressionAsTypeReference();
+    auto parenExpr = exprAsTyRef->expr_->asParenthesizedExpression();
+    if (!parenExpr->asIdentifierExpression())
         return;
 
     auto tyDefName = makeNode<TypedefNameSyntax>();
-    tyDefName->identTkIdx_ = exprAsRef->expr_->asIdentifierExpression()->identTkIdx_;
-    auto arg = makeNode<TypeNameSyntax>();
-    arg->specs_ =  makeNode<SpecifierListSyntax>(tyDefName);
-    auto tyNameAsRef = makeNode<TypeReferenceSyntax>(TypeNameAsTypeReference);
-    tyNameAsRef->arg_ = arg;
+    tyDefName->identTkIdx_ = exprAsTyRef->expr_->asIdentifierExpression()->identTkIdx_;
+    auto tyName = makeNode<TypeNameSyntax>();
+    tyName->specs_ =  makeNode<SpecifierListSyntax>(tyDefName);
+    auto tyNameAsTyRef = makeNode<TypeNameAsTypeReferenceSyntax>();
+    tyNameAsTyRef->typeName_ = tyName;
 
     auto ambiTyRef = makeNode<AmbiguousTypedefNameOrIdentifierExpressionSyntax>();
-    typeRef = ambiTyRef;
-    ambiTyRef->identExpr_ = exprAsRef;
-    ambiTyRef->typedefName_ = tyNameAsRef;
-    */
+    tyRef = ambiTyRef;
+    ambiTyRef->exprAsTyRef_ = exprAsTyRef;
+    ambiTyRef->tyNameAsTyRef_ = tyNameAsTyRef;
 }
 
 

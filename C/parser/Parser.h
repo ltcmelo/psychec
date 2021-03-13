@@ -436,8 +436,8 @@ private:
             NodeListT*& nodeList,
             bool (Parser::*parseItem)(NodeT*& node, NodeListT*& nodeList));
     bool parseTypeName(TypeNameSyntax*& typeName);
-    bool parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& typeRef);
-    void maybeAmbiguateTypeReference(TypeReferenceSyntax*& typeRef);
+    bool parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& tyRef);
+    void maybeAmbiguateTypeReference(TypeReferenceSyntax*& tyRef);
 };
 
 } // C

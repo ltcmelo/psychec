@@ -898,11 +898,11 @@ bool Parser::parseTypeTraitExpression_AtFirst(ExpressionSyntax*& expr, SyntaxKin
 //            return false;
 //        auto exprTyRef = makeNode<TypeReferenceSyntax>(ExpressionAsTypeReference);
 //        exprTyRef->arg_ = unaryExpr;
-//        traitExpr->typeRef_ = exprTyRef;
+//        traitExpr->tyRef_ = exprTyRef;
 //        return true;
 //    }
 
-    return parseParenthesizedTypeNameOrExpression(traitExpr->typeRef_);
+    return parseParenthesizedTypeNameOrExpression(traitExpr->tyRef_);
 }
 
 /* Cast */

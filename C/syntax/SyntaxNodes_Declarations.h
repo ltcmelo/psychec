@@ -589,34 +589,6 @@ public:
 };
 
 /**
- * \brief The AmbiguousTypedefNameOrIdentifierExpressionSyntax class.
- *
- * Represents the ambiguous syntaxes \a typedef-name and (identifier)
- * \a expression, when appearing as the argument of one of the
- * following specifiers:
- *   - an \c _Alignas,
- *   - the GNU extension \c typeof.
- *
- * \code
- * _Alignas(x)
- * __typeof__(x)
- * \endcode
- */
-class PSY_C_API AmbiguousTypedefNameOrIdentifierExpressionSyntax final : SyntaxNode
-{
-    AST_G_NODE_1K(AmbiguousTypedefNameOrIdentifierExpression)
-
-public:
-    const SpecifierSyntax* typedefName() const { return typedefName_; }
-    const ExpressionSyntax* identifier() const { return identExpr_; }
-
-private:
-    SpecifierSyntax* typedefName_ = nullptr;
-    ExpressionSyntax* identExpr_ = nullptr;
-    AST_CHILD_LST2(typedefName_, identExpr_);
-};
-
-/**
  * \brief The AlignmentSpecifierSyntax class.
  *
  * The specifier's argument is:
@@ -635,12 +607,12 @@ class PSY_C_API AlignmentSpecifierSyntax final : public SpecifierSyntax
 
 public:
     SyntaxToken alignasKeyword() const { return tokenAtIndex(alignasKwTkIdx_); }
-    const TypeReferenceSyntax* typeReference() const { return typeRef_; }
+    const TypeReferenceSyntax* tyReference() const { return tyRef_; }
 
 private:
     LexedTokens::IndexType alignasKwTkIdx_ = LexedTokens::invalidIndex();
-    TypeReferenceSyntax* typeRef_ = nullptr;
-    AST_CHILD_LST2(alignasKwTkIdx_, typeRef_);
+    TypeReferenceSyntax* tyRef_ = nullptr;
+    AST_CHILD_LST2(alignasKwTkIdx_, tyRef_);
 };
 
 /**
@@ -663,12 +635,12 @@ class PSY_C_API ExtGNU_TypeofSyntax final : public SpecifierSyntax
 
 public:
     SyntaxToken typeofKeyword() const { return tokenAtIndex(typeofKwTkIdx_); }
-    const TypeReferenceSyntax* typeReference() const { return typeRef_; }
+    const TypeReferenceSyntax* tyReference() const { return tyRef_; }
 
 private:
     LexedTokens::IndexType typeofKwTkIdx_ = LexedTokens::invalidIndex();
-    TypeReferenceSyntax* typeRef_ = nullptr;
-    AST_CHILD_LST2(typeofKwTkIdx_, typeRef_);
+    TypeReferenceSyntax* tyRef_ = nullptr;
+    AST_CHILD_LST2(typeofKwTkIdx_, tyRef_);
 };
 
 /**

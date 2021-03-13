@@ -1163,7 +1163,7 @@ bool Parser::parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec)
     auto alignSpec = makeNode<AlignmentSpecifierSyntax>();
     spec = alignSpec;
     alignSpec->alignasKwTkIdx_ = consume();
-    return parseParenthesizedTypeNameOrExpression(alignSpec->typeRef_);
+    return parseParenthesizedTypeNameOrExpression(alignSpec->tyRef_);
 }
 
 /**
@@ -1179,7 +1179,7 @@ bool Parser::parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec)
     auto typeofSpec = makeNode<ExtGNU_TypeofSyntax>();
     spec = typeofSpec;
     typeofSpec->typeofKwTkIdx_ = consume();
-    return parseParenthesizedTypeNameOrExpression(typeofSpec->typeRef_);
+    return parseParenthesizedTypeNameOrExpression(typeofSpec->tyRef_);
 }
 
 /**

@@ -91,6 +91,34 @@ private:
                    closeParenTkIdx_)
 };
 
+/**
+ * \brief The AmbiguousTypedefNameOrIdentifierExpressionSyntax class.
+ *
+ * Represents the ambiguous syntaxes \a typedef-name and (identifier)
+ * \a expression, when appearing as the argument of one of the
+ * following specifiers:
+ *   - an \c _Alignas,
+ *   - the GNU extension \c typeof.
+ *
+ * \code
+ * _Alignas(x)
+ * __typeof__(x)
+ * \endcode
+ */
+class PSY_C_API AmbiguousTypedefNameOrIdentifierExpressionSyntax final : public TypeReferenceSyntax
+{
+    AST_NODE_1K(AmbiguousTypedefNameOrIdentifierExpression, TypeReference)
+
+public:
+    const ExpressionAsTypeReferenceSyntax* expressionAsTypeReference() const { return exprAsTyRef_; }
+    const TypeNameAsTypeReferenceSyntax* typeNameAsTypeReference() const { return tyNameAsTyRef_; }
+
+private:
+    ExpressionAsTypeReferenceSyntax* exprAsTyRef_ = nullptr;
+    TypeNameAsTypeReferenceSyntax* tyNameAsTyRef_ = nullptr;
+    AST_CHILD_LST2(exprAsTyRef_, tyNameAsTyRef_);
+};
+
 } // C
 } // psy
 

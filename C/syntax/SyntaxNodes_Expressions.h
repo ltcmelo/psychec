@@ -492,12 +492,12 @@ class PSY_C_API TypeTraitExpressionSyntax final : public ExpressionSyntax
 
 public:
     SyntaxToken operatorToken() const { return tokenAtIndex(oprtrTkIdx_); }
-    const TypeReferenceSyntax* typeReference() const { return typeRef_; }
+    const TypeReferenceSyntax* tyReference() const { return tyRef_; }
 
 private:
     LexedTokens::IndexType oprtrTkIdx_ = LexedTokens::invalidIndex();
-    TypeReferenceSyntax* typeRef_ = nullptr;
-    AST_CHILD_LST2(oprtrTkIdx_, typeRef_);
+    TypeReferenceSyntax* tyRef_ = nullptr;
+    AST_CHILD_LST2(oprtrTkIdx_, tyRef_);
 };
 
 /**

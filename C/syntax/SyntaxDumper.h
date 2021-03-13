@@ -235,14 +235,14 @@ protected:
     virtual Action visitAlignmentSpecifier(const AlignmentSpecifierSyntax* node) override
     {
         terminal(node->alignasKeyword(), node);
-        nonterminal(node->typeReference());
+        nonterminal(node->tyReference());
         return Action::Skip;
     }
 
     virtual Action visitExtGNU_Typeof(const ExtGNU_TypeofSyntax* node) override
     {
         terminal(node->typeofKeyword(), node);
-        nonterminal(node->typeReference());
+        nonterminal(node->tyReference());
         return Action::Skip;
     }
 
@@ -513,7 +513,7 @@ protected:
     {
         traverseExpression(node);
         terminal(node->operatorToken(), node);
-        nonterminal(node->typeReference());
+        nonterminal(node->tyReference());
         return Action::Skip;
     }
 
