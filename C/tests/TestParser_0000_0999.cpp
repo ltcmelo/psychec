@@ -5157,12 +5157,31 @@ void TestParser::case0903()
 
 void TestParser::case0904()
 {
+    /*
+     Despite the parsing similarities between `typeof' and `sizeof',
+     mind the difference between this test case and the following:
+
+     `sizeof ( x ) y ;'
+
+     This `sizeof' expression is invalid, since it'd imply parsing
+     the expression operand as a cast-expression, but that isn't
+     allowed in such context: only a unary-expression is.
+     */
+
+    CROSS_REFERENCE_TEST(TestParser::case2115);
+
     parse("__typeof__ ( x ) y ;",
-          Expectation().replicateAmbiguity("__typeof__ ( x x ) y ;")
+          Expectation().replicateAmbiguity("__typeof__ ( x ) ( x ) y ;")
                        .AST( { TranslationUnit,
                                VariableAndOrFunctionDeclaration,
                                ExtGNU_Typeof,
                                AmbiguousTypeNameOrExpressionAsTypeReference,
+                               ExpressionAsTypeReference,
+                               ParenthesizedExpression,
+                               IdentifierExpression,
+                               TypeNameAsTypeReference,
+                               TypeName,
+                               TypedefName,
                                IdentifierDeclarator } ));
 }
 
@@ -5409,11 +5428,17 @@ void TestParser::case0952()
 void TestParser::case0953()
 {
     parse("_Alignas ( x ) int y ;",
-          Expectation().replicateAmbiguity("_Alignas ( x x ) int y ;")
+          Expectation().replicateAmbiguity("_Alignas ( x ) ( x ) int y ;")
                        .AST( { TranslationUnit,
                                VariableAndOrFunctionDeclaration,
                                AlignmentSpecifier,
                                AmbiguousTypeNameOrExpressionAsTypeReference,
+                               ExpressionAsTypeReference,
+                               ParenthesizedExpression,
+                               IdentifierExpression,
+                               TypeNameAsTypeReference,
+                               TypeName,
+                               TypedefName,
                                BuiltinTypeSpecifier,
                                IdentifierDeclarator } ));
 }
