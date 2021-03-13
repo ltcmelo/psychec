@@ -110,7 +110,7 @@ void Parser::maybeAmbiguateTypeReference(TypeReferenceSyntax*& tyRef)
     auto tyNameAsTyRef = makeNode<TypeNameAsTypeReferenceSyntax>();
     tyNameAsTyRef->typeName_ = tyName;
 
-    auto ambiTyRef = makeNode<AmbiguousTypedefNameOrIdentifierExpressionSyntax>();
+    auto ambiTyRef = makeNode<AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax>();
     tyRef = ambiTyRef;
     ambiTyRef->exprAsTyRef_ = exprAsTyRef;
     ambiTyRef->tyNameAsTyRef_ = tyNameAsTyRef;

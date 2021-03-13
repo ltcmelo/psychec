@@ -467,7 +467,7 @@ enum SyntaxKind : std::uint16_t
     // Ambiguities //
     //-------------//
     AmbiguousCastOrBinaryExpression,
-    AmbiguousTypedefNameOrIdentifierExpression,
+    AmbiguousTypeNameOrExpressionAsTypeReference,
     AmbiguousCallOrVariableDeclaration,
     AmbiguousMultiplicationOrPointerDeclaration,
 

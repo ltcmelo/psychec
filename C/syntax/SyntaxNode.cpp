@@ -456,8 +456,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
         //-------------//
         // Ambiguities //
         //-------------//
-        case AmbiguousTypedefNameOrIdentifierExpression:
-            return "AmbiguousTypedefNameOrIdentifierExpression";
+        case AmbiguousTypeNameOrExpressionAsTypeReference:
+            return "AmbiguousTypeNameOrExpressionAsTypeReference";
         case AmbiguousCastOrBinaryExpression:
             return "AmbiguousCastOrBinaryExpression";
         case AmbiguousCallOrVariableDeclaration:

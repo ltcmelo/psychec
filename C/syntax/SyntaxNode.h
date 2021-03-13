@@ -319,8 +319,8 @@ public:
     //-------------//
     // Ambiguities //
     //-------------//
-    virtual AmbiguousTypedefNameOrIdentifierExpressionSyntax* asAmbiguousTypedefNameOrIdentifierExpression() { return nullptr; }
-    virtual const AmbiguousTypedefNameOrIdentifierExpressionSyntax* asAmbiguousTypedefNameOrIdentifierExpression() const { return nullptr; }
+    virtual AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* asAmbiguousTypeNameOrExpressionAsTypeReference() { return nullptr; }
+    virtual const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* asAmbiguousTypeNameOrExpressionAsTypeReference() const { return nullptr; }
     virtual AmbiguousCastOrBinaryExpressionSyntax* asAmbiguousCastOrBinaryExpression() { return nullptr; }
     virtual const AmbiguousCastOrBinaryExpressionSyntax* asAmbiguousCastOrBinaryExpression() const { return nullptr; }
     virtual AmbiguousExpressionOrDeclarationStatementSyntax* asAmbiguousExpressionOrDeclarationStatement() { return nullptr; }

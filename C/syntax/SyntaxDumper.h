@@ -782,6 +782,13 @@ protected:
     //-------------//
     // Ambiguities //
     //-------------//
+    virtual Action visitAmbiguousTypeNameOrExpressionAsTypeReference(const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node) override
+    {
+        nonterminal(node->expressionAsTypeReference());
+        nonterminal(node->typeNameAsTypeReference());
+        return Action::Skip;
+    }
+
     virtual Action visitAmbiguousCastOrBinaryExpression(const AmbiguousCastOrBinaryExpressionSyntax* node) override
     {
         nonterminal(node->castExpression());

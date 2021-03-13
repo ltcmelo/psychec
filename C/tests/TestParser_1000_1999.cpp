@@ -1099,7 +1099,7 @@ void TestParser::case1401()
 {
     parseExpression("sizeof ( x )",
                     Expectation().AST( { SizeofExpression,
-                                         AmbiguousTypedefNameOrIdentifierExpression })
+                                         AmbiguousTypeNameOrExpressionAsTypeReference })
                                  .replicateAmbiguity("sizeof ( x x )"));
 }
 
@@ -1237,7 +1237,7 @@ void TestParser::case1450()
 {
     parseExpression("_Alignof ( x )",
                     Expectation().AST( { AlignofExpression,
-                                         AmbiguousTypedefNameOrIdentifierExpression })
+                                         AmbiguousTypeNameOrExpressionAsTypeReference })
                                  .replicateAmbiguity("_Alignof ( x x )"));
 }
 

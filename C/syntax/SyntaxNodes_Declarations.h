@@ -594,7 +594,7 @@ public:
  * The specifier's argument is:
  *   - a TypeNameSyntax,
  *   - an ExpressionSyntax, or
- *   - an AmbiguousTypedefNameOrIdentifierExpressionSyntax.
+ *   - an AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax.
  *
  * The latter case happens if the argument is an \a identifier, making
  * it impossible to determine whether it names a type or variable.
@@ -621,7 +621,7 @@ private:
  * The specifier's argument is:
  *   - a TypeNameSyntax,
  *   - an ExpressionSyntax, or
- *   - an AmbiguousTypedefNameOrIdentifierExpressionSyntax.
+ *   - an AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax.
  *
  * The latter case happens if the argument is a sole \a identifier, making
  * it impossible to determine whether it names a type or variable.

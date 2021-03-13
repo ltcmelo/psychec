@@ -5162,7 +5162,7 @@ void TestParser::case0904()
                        .AST( { TranslationUnit,
                                VariableAndOrFunctionDeclaration,
                                ExtGNU_Typeof,
-                               AmbiguousTypedefNameOrIdentifierExpression,
+                               AmbiguousTypeNameOrExpressionAsTypeReference,
                                IdentifierDeclarator } ));
 }
 
@@ -5413,7 +5413,7 @@ void TestParser::case0953()
                        .AST( { TranslationUnit,
                                VariableAndOrFunctionDeclaration,
                                AlignmentSpecifier,
-                               AmbiguousTypedefNameOrIdentifierExpression,
+                               AmbiguousTypeNameOrExpressionAsTypeReference,
                                BuiltinTypeSpecifier,
                                IdentifierDeclarator } ));
 }

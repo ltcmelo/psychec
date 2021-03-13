@@ -92,22 +92,23 @@ private:
 };
 
 /**
- * \brief The AmbiguousTypedefNameOrIdentifierExpressionSyntax class.
+ * \brief The AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax class.
  *
- * Represents the ambiguous syntaxes \a typedef-name and (identifier)
- * \a expression, when appearing as the argument of one of the
- * following specifiers:
- *   - an \c _Alignas,
- *   - the GNU extension \c typeof.
+ * Represents the ambiguous syntaxes for refering to a type in an
+ * \a expression like a \c sizeof or in a \a _Alignas \a specifier.
+ * Such ambiguous reference to a type may be:
+ * - a parenthesized \a type-name;
+ * - a parenthesized \a expression.
+ * (Both with a single \a identifier enclosed in parenthesis.)
  *
  * \code
- * _Alignas(x)
- * __typeof__(x)
+ * _Alignas (x)
+ * sizeof (x)
  * \endcode
  */
-class PSY_C_API AmbiguousTypedefNameOrIdentifierExpressionSyntax final : public TypeReferenceSyntax
+class PSY_C_API AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax final : public TypeReferenceSyntax
 {
-    AST_NODE_1K(AmbiguousTypedefNameOrIdentifierExpression, TypeReference)
+    AST_NODE_1K(AmbiguousTypeNameOrExpressionAsTypeReference, TypeReference)
 
 public:
     const ExpressionAsTypeReferenceSyntax* expressionAsTypeReference() const { return exprAsTyRef_; }

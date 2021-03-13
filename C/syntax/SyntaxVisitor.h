@@ -172,7 +172,7 @@ public:
     //-------------//
     // Ambiguities //
     //-------------//
-    virtual Action visitAmbiguousTypedefNameOrIdentifierExpression(const AmbiguousTypedefNameOrIdentifierExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitAmbiguousTypeNameOrExpressionAsTypeReference(const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) { return Action::Visit; }
     virtual Action visitAmbiguousCastOrBinaryExpression(const AmbiguousCastOrBinaryExpressionSyntax*) { return Action::Visit; }
     virtual Action visitAmbiguousExpressionOrDeclarationStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) { return Action::Visit; }
 
