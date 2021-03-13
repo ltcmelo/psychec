@@ -82,8 +82,7 @@ static inline SyntaxKind classify4(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 'b'
-             && (opts.extensions().isEnabled_NativeBooleans()
-                 || opts.dialect().std() >= LanguageDialect::Std::C99)) {
+             && opts.extensions().isEnabled_Expand_bool_AsKeyword()) {
         if (s[1] == 'o') {
             if (s[2] == 'o') {
                 if (s[3] == 'l') {
@@ -153,8 +152,7 @@ static inline SyntaxKind classify4(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 't'
-             && (opts.extensions().isEnabled_NativeBooleans()
-                 || opts.dialect().std() >= LanguageDialect::Std::C99)) {
+             && opts.extensions().isEnabled_NativeBooleans()) {
         if (s[1] == 'r') {
             if (s[2] == 'u') {
                 if (s[3] == 'e') {
@@ -188,8 +186,7 @@ static inline SyntaxKind classify5(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'B'
-                 && (opts.extensions().isEnabled_NativeBooleans()
-                     || opts.dialect().std() >= LanguageDialect::Std::C99)) {
+                 && opts.extensions().isEnabled_Expand_bool_AsKeyword()) {
             if (s[2] == 'o') {
                 if (s[3] == 'o') {
                     if (s[4] == 'l') {
@@ -221,10 +218,9 @@ static inline SyntaxKind classify5(const char* s, const ParseOptions& opts)
             }
         }
     }
-    else if (s[0] == 'f'
-             && (opts.extensions().isEnabled_NativeBooleans()
-                 || opts.dialect().std() >= LanguageDialect::Std::C99)) {
-        if (s[1] == 'a') {
+    else if (s[0] == 'f') {
+        if (s[1] == 'a'
+                && opts.extensions().isEnabled_NativeBooleans()) {
             if (s[2] == 'l') {
                 if (s[3] == 's') {
                     if (s[4] == 'e') {

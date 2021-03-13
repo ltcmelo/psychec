@@ -187,6 +187,18 @@ public:
 
     //!@{
     /**
+     * Whether to automatically expand macro \c bool to \c _Bool.
+     *
+     * From header <stdbool.h>.
+     *
+     * \remark 7.18
+     */
+    LanguageExtensions& enable_Expand_bool_AsKeyword(bool expand);
+    bool isEnabled_Expand_bool_AsKeyword() const;
+    //!@}
+
+    //!@{
+    /**
      * Whether to automatically expand macro \c thread_local to \c _Thread_local.
      *
      * From header <threads.h>.
@@ -253,6 +265,7 @@ private:
         std::uint64_t Expand_operatorNames_ : 1;
         std::uint64_t Expand_alignas_AsKeyword_ : 1;
         std::uint64_t Expand_alignof_AsKeyword_ : 1;
+        std::uint64_t Expand_bool_AsKeyword_ : 1;
         std::uint64_t Expand_thread_local_AsKeyword_ : 1;
 
         /* C++ */
