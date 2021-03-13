@@ -89,7 +89,6 @@ class ExtGNU_AttributeSpecifierSyntax;
 class ExtGNU_AttributeSyntax;
 class ExtGNU_AsmLabelSyntax;
 class ExtPSY_QuantifiedTypeSpecifierSyntax;
-class AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax;
 
 /* Declarators */
 class DeclaratorSyntax;
