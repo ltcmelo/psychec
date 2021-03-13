@@ -1163,7 +1163,7 @@ bool Parser::parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec)
     auto alignSpec = makeNode<AlignmentSpecifierSyntax>();
     spec = alignSpec;
     alignSpec->alignasKwTkIdx_ = consume();
-    return parseParenthesizedTypeNameOrExpression(alignSpec);
+    return parseParenthesizedTypeNameOrExpression(alignSpec->typeRef_);
 }
 
 /**
@@ -1179,7 +1179,7 @@ bool Parser::parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec)
     auto typeofSpec = makeNode<ExtGNU_TypeofSyntax>();
     spec = typeofSpec;
     typeofSpec->typeofKwTkIdx_ = consume();
-    return parseParenthesizedTypeNameOrExpression(typeofSpec);
+    return parseParenthesizedTypeNameOrExpression(typeofSpec->typeRef_);
 }
 
 /**
@@ -2008,32 +2008,6 @@ bool Parser::parseTypeQualifiersAndAttributes(SpecifierListSyntax*& specList)
         *specList_cur = makeNode<SpecifierListSyntax>(spec);
         specList_cur = &(*specList_cur)->next;
     }
-}
-
-/* Type Name */
-
-/**
- * Parse a \a type-name.
- *
- \verbatim
- type-name:
-     specifier-qualifier-list abstract-decltor_opt
- \endverbatim
- *
- * \remark 6.7.7.
- */
-bool Parser::parseTypeName(TypeNameSyntax*& typeName)
-{
-    DEBUG_THIS_RULE();
-
-    DeclarationSyntax* decl = nullptr;
-    SpecifierListSyntax* specList = nullptr;
-    if (!parseSpecifierQualifierList(decl, specList, false))
-        return false;
-
-    typeName = makeNode<TypeNameSyntax>();
-    typeName->specs_ = specList;
-    return parseAbstractDeclarator(typeName->decltor_);
 }
 
 /* Initializers */

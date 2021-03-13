@@ -635,19 +635,12 @@ class PSY_C_API AlignmentSpecifierSyntax final : public SpecifierSyntax
 
 public:
     SyntaxToken alignasKeyword() const { return tokenAtIndex(alignasKwTkIdx_); }
-    SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
-    const SyntaxNode* argument() const { return arg_; }
-    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
+    const TypeReferenceSyntax* typeReference() const { return typeRef_; }
 
 private:
     LexedTokens::IndexType alignasKwTkIdx_ = LexedTokens::invalidIndex();
-    LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
-    SyntaxNode* arg_ = nullptr;
-    LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
-    AST_CHILD_LST4(alignasKwTkIdx_,
-                   openParenTkIdx_,
-                   arg_,
-                   closeParenTkIdx_);
+    TypeReferenceSyntax* typeRef_ = nullptr;
+    AST_CHILD_LST2(alignasKwTkIdx_, typeRef_);
 };
 
 /**
@@ -670,19 +663,12 @@ class PSY_C_API ExtGNU_TypeofSyntax final : public SpecifierSyntax
 
 public:
     SyntaxToken typeofKeyword() const { return tokenAtIndex(typeofKwTkIdx_); }
-    SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
-    const SyntaxNode* argument() const { return arg_; }
-    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
+    const TypeReferenceSyntax* typeReference() const { return typeRef_; }
 
 private:
     LexedTokens::IndexType typeofKwTkIdx_ = LexedTokens::invalidIndex();
-    LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
-    SyntaxNode* arg_ = nullptr;
-    LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
-    AST_CHILD_LST4(typeofKwTkIdx_,
-                   openParenTkIdx_,
-                   arg_,
-                   closeParenTkIdx_);
+    TypeReferenceSyntax* typeRef_ = nullptr;
+    AST_CHILD_LST2(typeofKwTkIdx_, typeRef_);
 };
 
 /**
@@ -795,25 +781,6 @@ private:
 };
 
 /**
- * \brief The TypeNameSyntax class.
- *
- * \remark 6.7.7
- */
-class PSY_C_API TypeNameSyntax final : public SyntaxNode
-{
-    AST_G_NODE_1K(TypeName)
-
-public:
-    const SpecifierListSyntax* specifiers() const { return specs_; }
-    const DeclaratorSyntax* declarator() const { return decltor_; }
-
-private:
-    SpecifierListSyntax* specs_ = nullptr;
-    DeclaratorSyntax* decltor_ = nullptr;
-    AST_CHILD_LST2(specs_, decltor_);
-};
-
-/**
  * \brief The TypedefNameSyntax class.
  *
  * \remark 6.7.8
@@ -903,6 +870,7 @@ public:
 
 private:
     SpecifierListSyntax* attrs_ = nullptr;
+    AST_CHILD_LST1(attrs_);
 };
 
 /**

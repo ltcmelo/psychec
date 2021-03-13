@@ -110,9 +110,6 @@ public:
     virtual Action visitParameterSuffix(const ParameterSuffixSyntax*) { return Action::Visit; }
     virtual Action visitBitfieldDeclarator(const BitfieldDeclaratorSyntax*) { return Action::Visit; }
 
-    /* Type Name */
-    virtual Action visitTypeName(const TypeNameSyntax*) { return Action::Visit; }
-
     /* Initializers */
     virtual Action visitExpressionInitializer(const ExpressionInitializerSyntax*) { return Action::Visit; }
     virtual Action visitBraceEnclosedInitializer(const BraceEnclosedInitializerSyntax*) { return Action::Visit; }
@@ -164,6 +161,13 @@ public:
     virtual Action visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax*) { return Action::Visit; }
     virtual Action visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax*) { return Action::Visit; }
     virtual Action visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax*) { return Action::Visit; }
+
+    //--------//
+    // Common //
+    //--------//
+    virtual Action visitTypeName(const TypeNameSyntax*) { return Action::Visit; }
+    virtual Action visitExpressionAsTypeReference(const ExpressionAsTypeReferenceSyntax*) { return Action::Visit; }
+    virtual Action visitTypeNameAsTypeReference(const TypeNameAsTypeReferenceSyntax*) { return Action::Visit; }
 
     //-------------//
     // Ambiguities //

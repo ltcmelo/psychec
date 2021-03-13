@@ -492,19 +492,12 @@ class PSY_C_API TypeTraitExpressionSyntax final : public ExpressionSyntax
 
 public:
     SyntaxToken operatorToken() const { return tokenAtIndex(oprtrTkIdx_); }
-    SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
-    const SyntaxNode* argument() const { return arg_; }
-    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
+    const TypeReferenceSyntax* typeReference() const { return typeRef_; }
 
 private:
     LexedTokens::IndexType oprtrTkIdx_ = LexedTokens::invalidIndex();
-    LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
-    SyntaxNode* arg_ = nullptr;
-    LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
-    AST_CHILD_LST4(oprtrTkIdx_,
-                   openParenTkIdx_,
-                   arg_,
-                   closeParenTkIdx_)
+    TypeReferenceSyntax* typeRef_ = nullptr;
+    AST_CHILD_LST2(oprtrTkIdx_, typeRef_);
 };
 
 /**

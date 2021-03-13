@@ -112,6 +112,8 @@ void SyntaxNamePrinter::print(const SyntaxNode* node, Style mode, std::ostream& 
 
         auto firstTk = node->firstToken();
         auto lastTk = node->lastToken();
+        if (!firstTk.isValid() || !lastTk.isValid())
+            continue;
         os << " <" << firstTk.location().lineSpan().span().start()
            << ".." << lastTk.location().lineSpan().span().end()
            << "> ";

@@ -103,9 +103,6 @@ class DeclaratorSuffixSyntax;
 class SubscriptSuffixSyntax;
 class ParameterSuffixSyntax;
 
-/* Type Name */
-class TypeNameSyntax;
-
 /* Initializers */
 class InitializerSyntax;
 class ExpressionInitializerSyntax;
@@ -162,6 +159,14 @@ class ReturnStatementSyntax;
 class ExtGNU_AsmStatementSyntax;
 class ExtGNU_AsmQualifierSyntax;
 class ExtGNU_AsmOperandSyntax;
+
+//--------//
+// Common //
+//--------//
+class TypeNameSyntax;
+class TypeReferenceSyntax;
+class ExpressionAsTypeReferenceSyntax;
+class TypeNameAsTypeReferenceSyntax;
 
 //-------------//
 // Ambiguities //

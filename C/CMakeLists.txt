@@ -54,6 +54,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Parser.h
     ${PROJECT_SOURCE_DIR}/parser/Parser__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/parser/Parser.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Parser_Common.cpp
     ${PROJECT_SOURCE_DIR}/parser/Parser_Declarations.cpp
     ${PROJECT_SOURCE_DIR}/parser/Parser_Expressions.cpp
     ${PROJECT_SOURCE_DIR}/parser/Parser_Statements.cpp
@@ -83,6 +84,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodeList.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodeList.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Common.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Declarations.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Expressions.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Statements.h

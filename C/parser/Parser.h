@@ -218,10 +218,6 @@ private:
     friend StatementContext operator+(StatementContext a, StatementContext b);
 
     template <class NodeT, class... Args> NodeT* makeNode(Args&&... args) const;
-    template <class NodeT, class NodeListT> bool parseCommaSeparatedItems(
-            NodeListT*& nodeList,
-            bool (Parser::*parseItem)(NodeT*& node, NodeListT*& nodeList));
-    template <class NodeT> bool parseParenthesizedTypeNameOrExpression(NodeT*& node);
 
     //--------------//
     // Declarations //
@@ -302,9 +298,6 @@ private:
                                      SpecifierListSyntax* attrList,
                                      DeclaratorSyntax* innerDecltor);
     bool parseTypeQualifiersAndAttributes(SpecifierListSyntax*& specList);
-
-    /* Type Name */
-    bool parseTypeName(TypeNameSyntax*& typeName);
 
     /* Initializers */
     bool parseInitializer(InitializerSyntax*& init);
@@ -435,6 +428,16 @@ private:
             ExpressionListSyntax*&);
     void maybeAmbiguateStatement(StatementSyntax*& stmt);
     bool checkStatementParse(bool stmtParsed);
+
+    //--------//
+    // Common //
+    //--------//
+    template <class NodeT, class NodeListT> bool parseCommaSeparatedItems(
+            NodeListT*& nodeList,
+            bool (Parser::*parseItem)(NodeT*& node, NodeListT*& nodeList));
+    bool parseTypeName(TypeNameSyntax*& typeName);
+    bool parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& typeRef);
+    void maybeAmbiguateTypeReference(TypeReferenceSyntax*& typeRef);
 };
 
 } // C
