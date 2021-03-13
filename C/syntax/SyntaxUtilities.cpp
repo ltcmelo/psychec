@@ -29,48 +29,35 @@ using namespace C;
 const DeclaratorSyntax* SyntaxUtilities::innermostDeclarator(const DeclaratorSyntax* decltor)
 {
     while (decltor) {
-        const DeclaratorSyntax* innerDecltor = nullptr;
-        switch (decltor->kind()) {
-            case ParenthesizedDeclarator:
-                innerDecltor = decltor->asParenthesizedDeclarator()->innerDeclarator();
-                break;
-
-            case PointerDeclarator:
-                innerDecltor = decltor->asPointerDeclarator()->innerDeclarator();
-                break;
-
-            case ArrayDeclarator:
-            case FunctionDeclarator:
-                innerDecltor = decltor->asArrayOrFunctionDeclarator()->innerDeclarator();
-                break;
-
-            case BitfieldDeclarator:
-                innerDecltor = decltor->asBitfieldDeclarator()->innerDeclarator();
-                break;
-
-            default:
-                return decltor;
-        }
-        if (!innerDecltor)
+        const DeclaratorSyntax* innerDecltor = innerDeclarator(decltor);
+        if (innerDecltor == decltor)
             break;
-
         decltor = innerDecltor;
     }
     return decltor;
 }
 
-const DeclaratorSyntax*
-SyntaxUtilities::declaratorEnclosedIn(const ParenthesizedDeclaratorSyntax* parenDecltor)
+const DeclaratorSyntax* SyntaxUtilities::innerDeclarator(const DeclaratorSyntax* decltor)
 {
-    const DeclaratorSyntax* decltor = parenDecltor;
-    while (decltor && decltor->asParenthesizedDeclarator())
-        decltor = decltor->asParenthesizedDeclarator()->innerDeclarator();
-    return decltor;
+    switch (decltor->kind()) {
+        case PointerDeclarator:
+            return decltor->asPointerDeclarator()->innerDeclarator();
+
+        case ArrayDeclarator:
+        case FunctionDeclarator:
+            return decltor->asArrayOrFunctionDeclarator()->innerDeclarator();
+
+        case BitfieldDeclarator:
+            return decltor->asBitfieldDeclarator()->innerDeclarator();
+
+        default:
+            return decltor;
+    }
 }
 
 const DeclaratorSyntax* SyntaxUtilities::strippedDeclarator(const DeclaratorSyntax* decltor)
 {
-    if (decltor->asParenthesizedDeclarator())
-        return declaratorEnclosedIn(decltor->asParenthesizedDeclarator());
+    while (decltor && decltor->asParenthesizedDeclarator())
+        decltor = decltor->asParenthesizedDeclarator()->innerDeclarator();
     return decltor;
 }

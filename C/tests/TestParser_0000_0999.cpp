@@ -1722,7 +1722,28 @@ void TestParser::case0243()
 
 void TestParser::case0244()
 {
+    // A function taking a parameter of type double and returning
+    // a pointer to a function taking int as a parameter and
+    // returning void.
 
+    parse("void ( * x ( double ) ) ( int ) { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              ParenthesizedDeclarator,
+                              PointerDeclarator,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              AbstractDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              AbstractDeclarator,
+                              CompoundStatement }));
 }
 
 void TestParser::case0245()

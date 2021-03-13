@@ -33,17 +33,29 @@ namespace C {
 class PSY_C_API SyntaxUtilities
 {
 public:
+    /**
+     * Return the innermost DeclaratorSyntax of the given \p decltor.
+     *
+     * \note
+     * The DeclaratorSyntax enclosed in a ParenthesizedDeclaratorSyntax
+     * is not considered an inner one; for the purpose of extracting such
+     * enclosed DeclaratorSyntax, use SyntaxUtilities::strippedDeclarator.
+     */
     static const DeclaratorSyntax* innermostDeclarator(const DeclaratorSyntax* decltor);
 
     /**
-     * Return the DeclaratorSyntax enclosed in \p parenDecltor.
+     * Return the inner DeclaratorSyntax of the given \p decltor.
+     *
+     * \note
+     * The DeclaratorSyntax enclosed in a ParenthesizedDeclaratorSyntax
+     * is not considered an inner one; for the purpose of extracting such
+     * enclosed DeclaratorSyntax, use SyntaxUtilities::strippedDeclarator.
      */
-    static const DeclaratorSyntax*
-    declaratorEnclosedIn(const ParenthesizedDeclaratorSyntax* parenDecltor);
+    static const DeclaratorSyntax* innerDeclarator(const DeclaratorSyntax* decltor);
 
     /**
-     * Return a "stripped" (without parenthesis, if any) DeclaratorSyntax
-     * version of \p decltor.
+     * Return the DeclaratorSyntax enclosed within \p decltor, if it is
+     * a ParenthesizedDeclaratorSyntax.
      */
     static const DeclaratorSyntax* strippedDeclarator(const DeclaratorSyntax* decltor);
 };

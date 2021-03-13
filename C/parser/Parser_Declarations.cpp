@@ -320,24 +320,21 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
 
             case OpenBraceToken:
                 if (decltorList_cur == &decltorList) {
-                    const DeclaratorSyntax* identDecltor = nullptr;
-                    const DeclaratorSyntax* decltorP = decltor;
-                    while (decltorP
-                               && decltorP->kind() == PointerDeclarator)
-                        decltorP = decltorP->asPointerDeclarator()->innerDecltor_;
-
-                    do {
-                        decltorP = SyntaxUtilities::strippedDeclarator(decltorP);
-                        if (decltorP->kind() != FunctionDeclarator)
+                    const DeclaratorSyntax* outerDecltor =
+                            SyntaxUtilities::strippedDeclarator(decltor);
+                    const DeclaratorSyntax* prevDecltor = nullptr;
+                    while (outerDecltor) {
+                        const DeclaratorSyntax* innerDecltor =
+                                SyntaxUtilities::innerDeclarator(outerDecltor);
+                        if (innerDecltor == outerDecltor)
                             break;
-
-                        decltorP = decltorP->asArrayOrFunctionDeclarator()->innerDecltor_;
-                        identDecltor = SyntaxUtilities::strippedDeclarator(decltorP);
+                        prevDecltor = outerDecltor;
+                        outerDecltor = SyntaxUtilities::strippedDeclarator(innerDecltor);
                     }
-                    while (true);
 
-                    if (identDecltor
-                            && identDecltor->kind() == IdentifierDeclarator) {
+                    if (prevDecltor
+                            && prevDecltor->kind() == FunctionDeclarator
+                            && outerDecltor->kind() == IdentifierDeclarator) {
                         auto funcDef = makeNode<FunctionDefinitionSyntax>();
                         decl = funcDef;
                         funcDef->specs_ = const_cast<SpecifierListSyntax*>(specList);
