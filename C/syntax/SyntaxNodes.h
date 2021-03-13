@@ -272,11 +272,11 @@ class PSY_C_API ExpressionSyntax : public SyntaxNode
 {
     AST_G_NODE(Expression)
 
-    public:
-        SyntaxToken extensionKeyword() const override { return tokenAtIndex(extKwTkIdx_); }
+public:
+    SyntaxToken extensionKeyword() const override { return tokenAtIndex(extKwTkIdx_); }
 
-    private:
-        AST_CHILD_LST1(extKwTkIdx_);
+private:
+    AST_CHILD_LST1(extKwTkIdx_);
 };
 
 /**
@@ -287,9 +287,18 @@ class PSY_C_API StatementSyntax : public SyntaxNode
     AST_G_NODE(Statement)
 };
 
+/**
+ * \brief The TypeReferenceSyntax class.
+ */
+class PSY_C_API TypeReferenceSyntax : public SyntaxNode
+{
+    AST_G_NODE(TypeReference)
+};
+
 } // C
 } // psy
 
+#include "SyntaxNodes_Common.h"
 #include "SyntaxNodes_Declarations.h"
 #include "SyntaxNodes_Expressions.h"
 #include "SyntaxNodes_Statements.h"

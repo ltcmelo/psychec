@@ -235,18 +235,14 @@ protected:
     virtual Action visitAlignmentSpecifier(const AlignmentSpecifierSyntax* node) override
     {
         terminal(node->alignasKeyword(), node);
-        terminal(node->openParenthesisToken(), node);
-        nonterminal(node->argument());
-        terminal(node->closeParenthesisToken(), node);
+        nonterminal(node->tyReference());
         return Action::Skip;
     }
 
     virtual Action visitExtGNU_Typeof(const ExtGNU_TypeofSyntax* node) override
     {
         terminal(node->typeofKeyword(), node);
-        terminal(node->openParenthesisToken(), node);
-        nonterminal(node->argument());
-        terminal(node->closeParenthesisToken(), node);
+        nonterminal(node->tyReference());
         return Action::Skip;
     }
 
@@ -361,15 +357,6 @@ protected:
         nonterminal(node->expression());
         for (auto iter = node->attributes(); iter; iter = iter->next)
             nonterminal(iter->value);
-        return Action::Skip;
-    }
-
-    /* Type Name */
-    virtual Action visitTypeName(const TypeNameSyntax* node) override
-    {
-        for (auto it = node->specifiers(); it; it = it->next)
-            nonterminal(it->value);
-        nonterminal(node->declarator());
         return Action::Skip;
     }
 
@@ -526,9 +513,7 @@ protected:
     {
         traverseExpression(node);
         terminal(node->operatorToken(), node);
-        terminal(node->openParenthesisToken(), node);
-        nonterminal(node->argument());
-        terminal(node->closeParenthesisToken(), node);
+        nonterminal(node->tyReference());
         return Action::Skip;
     }
 
@@ -769,9 +754,41 @@ protected:
         return Action::Skip;
     }
 
+    //--------//
+    // Common //
+    //--------//
+    virtual Action visitTypeName(const TypeNameSyntax* node) override
+    {
+        for (auto it = node->specifiers(); it; it = it->next)
+            nonterminal(it->value);
+        nonterminal(node->declarator());
+        return Action::Skip;
+    }
+
+    virtual Action visitExpressionAsTypeReference(const ExpressionAsTypeReferenceSyntax* node) override
+    {
+        nonterminal(node->expression());
+        return Action::Skip;
+    }
+
+    virtual Action visitTypeNameAsTypeReference(const TypeNameAsTypeReferenceSyntax* node) override
+    {
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->typeName());
+        terminal(node->closeParenthesisToken(), node);
+        return Action::Skip;
+    }
+
     //-------------//
     // Ambiguities //
     //-------------//
+    virtual Action visitAmbiguousTypeNameOrExpressionAsTypeReference(const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node) override
+    {
+        nonterminal(node->expressionAsTypeReference());
+        nonterminal(node->typeNameAsTypeReference());
+        return Action::Skip;
+    }
+
     virtual Action visitAmbiguousCastOrBinaryExpression(const AmbiguousCastOrBinaryExpressionSyntax* node) override
     {
         nonterminal(node->castExpression());

@@ -89,7 +89,6 @@ class ExtGNU_AttributeSpecifierSyntax;
 class ExtGNU_AttributeSyntax;
 class ExtGNU_AsmLabelSyntax;
 class ExtPSY_QuantifiedTypeSpecifierSyntax;
-class AmbiguousTypedefNameOrIdentifierExpressionSyntax;
 
 /* Declarators */
 class DeclaratorSyntax;
@@ -102,9 +101,6 @@ class BitfieldDeclaratorSyntax;
 class DeclaratorSuffixSyntax;
 class SubscriptSuffixSyntax;
 class ParameterSuffixSyntax;
-
-/* Type Name */
-class TypeNameSyntax;
 
 /* Initializers */
 class InitializerSyntax;
@@ -163,10 +159,18 @@ class ExtGNU_AsmStatementSyntax;
 class ExtGNU_AsmQualifierSyntax;
 class ExtGNU_AsmOperandSyntax;
 
+//--------//
+// Common //
+//--------//
+class TypeNameSyntax;
+class TypeReferenceSyntax;
+class ExpressionAsTypeReferenceSyntax;
+class TypeNameAsTypeReferenceSyntax;
+
 //-------------//
 // Ambiguities //
 //-------------//
-class AmbiguousTypedefNameOrIdentifierExpressionSyntax;
+class AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax;
 class AmbiguousCastOrBinaryExpressionSyntax;
 class AmbiguousExpressionOrDeclarationStatementSyntax;
 

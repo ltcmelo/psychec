@@ -241,10 +241,6 @@ std::string PSY_C_API to_string(SyntaxKind kind)
         case BitfieldDeclaratorSuffix:
             return "BitfieldDeclaratorSuffix";
 
-        /* Type Name */
-        case TypeName:
-            return "TypeName";
-
         /* Initializers */
         case ExpressionInitializer:
             return "ExpressionInitializer";
@@ -447,11 +443,21 @@ std::string PSY_C_API to_string(SyntaxKind kind)
         case ExtGNU_AsmOutputOperand:
             return "ExtGNU_AsmOutputOperand";
 
+        //--------//
+        // Common //
+        //--------//
+        case TypeName:
+            return "TypeName";
+        case ExpressionAsTypeReference:
+            return "ExpressionAsTypeReference";
+        case TypeNameAsTypeReference:
+            return "TypeNameAsTypeReference";
+
         //-------------//
         // Ambiguities //
         //-------------//
-        case AmbiguousTypedefNameOrIdentifierExpression:
-            return "AmbiguousTypedefNameOrIdentifierExpression";
+        case AmbiguousTypeNameOrExpressionAsTypeReference:
+            return "AmbiguousTypeNameOrExpressionAsTypeReference";
         case AmbiguousCastOrBinaryExpression:
             return "AmbiguousCastOrBinaryExpression";
         case AmbiguousCallOrVariableDeclaration:

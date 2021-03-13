@@ -202,10 +202,6 @@ public:
     virtual BitfieldDeclaratorSyntax* asBitfieldDeclarator() { return  nullptr; }
     virtual const BitfieldDeclaratorSyntax* asBitfieldDeclarator() const { return  nullptr; }
 
-    /* Type Name */
-    virtual TypeNameSyntax* asTypeName() { return nullptr; }
-    virtual const TypeNameSyntax* asTypeName() const { return nullptr; }
-
     /* Initializers */
     virtual InitializerSyntax* asInitializer() { return nullptr; }
     virtual const InitializerSyntax* asInitializer() const { return nullptr; }
@@ -308,11 +304,23 @@ public:
     virtual ExtGNU_AsmOperandSyntax* asExtGNU_AsmOperand() { return nullptr; }
     virtual const ExtGNU_AsmOperandSyntax* asExtGNU_AsmOperand() const { return nullptr; }
 
+    //--------//
+    // Common //
+    //--------//
+    virtual TypeNameSyntax* asTypeName() { return nullptr; }
+    virtual const TypeNameSyntax* asTypeName() const { return nullptr; }
+    virtual TypeReferenceSyntax* asTypeReference() { return nullptr; }
+    virtual const TypeReferenceSyntax* asTypeReference() const { return nullptr; }
+    virtual ExpressionAsTypeReferenceSyntax* asExpressionAsTypeReference() { return nullptr; }
+    virtual const ExpressionAsTypeReferenceSyntax* asExpressionAsTypeReference() const { return nullptr; }
+    virtual TypeNameAsTypeReferenceSyntax* asTypeNameAsTypeReference() { return nullptr; }
+    virtual const TypeNameAsTypeReferenceSyntax* asTypeNameAsTypeReference() const { return nullptr; }
+
     //-------------//
     // Ambiguities //
     //-------------//
-    virtual AmbiguousTypedefNameOrIdentifierExpressionSyntax* asAmbiguousTypedefNameOrIdentifierExpression() { return nullptr; }
-    virtual const AmbiguousTypedefNameOrIdentifierExpressionSyntax* asAmbiguousTypedefNameOrIdentifierExpression() const { return nullptr; }
+    virtual AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* asAmbiguousTypeNameOrExpressionAsTypeReference() { return nullptr; }
+    virtual const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* asAmbiguousTypeNameOrExpressionAsTypeReference() const { return nullptr; }
     virtual AmbiguousCastOrBinaryExpressionSyntax* asAmbiguousCastOrBinaryExpression() { return nullptr; }
     virtual const AmbiguousCastOrBinaryExpressionSyntax* asAmbiguousCastOrBinaryExpression() const { return nullptr; }
     virtual AmbiguousExpressionOrDeclarationStatementSyntax* asAmbiguousExpressionOrDeclarationStatement() { return nullptr; }

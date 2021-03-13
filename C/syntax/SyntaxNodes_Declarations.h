@@ -589,40 +589,12 @@ public:
 };
 
 /**
- * \brief The AmbiguousTypedefNameOrIdentifierExpressionSyntax class.
- *
- * Represents the ambiguous syntaxes \a typedef-name and (identifier)
- * \a expression, when appearing as the argument of one of the
- * following specifiers:
- *   - an \c _Alignas,
- *   - the GNU extension \c typeof.
- *
- * \code
- * _Alignas(x)
- * __typeof__(x)
- * \endcode
- */
-class PSY_C_API AmbiguousTypedefNameOrIdentifierExpressionSyntax final : SyntaxNode
-{
-    AST_G_NODE_1K(AmbiguousTypedefNameOrIdentifierExpression)
-
-public:
-    const SpecifierSyntax* typedefName() const { return typedefName_; }
-    const ExpressionSyntax* identifier() const { return identExpr_; }
-
-private:
-    SpecifierSyntax* typedefName_ = nullptr;
-    ExpressionSyntax* identExpr_ = nullptr;
-    AST_CHILD_LST2(typedefName_, identExpr_);
-};
-
-/**
  * \brief The AlignmentSpecifierSyntax class.
  *
  * The specifier's argument is:
  *   - a TypeNameSyntax,
  *   - an ExpressionSyntax, or
- *   - an AmbiguousTypedefNameOrIdentifierExpressionSyntax.
+ *   - an AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax.
  *
  * The latter case happens if the argument is an \a identifier, making
  * it impossible to determine whether it names a type or variable.
@@ -635,19 +607,12 @@ class PSY_C_API AlignmentSpecifierSyntax final : public SpecifierSyntax
 
 public:
     SyntaxToken alignasKeyword() const { return tokenAtIndex(alignasKwTkIdx_); }
-    SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
-    const SyntaxNode* argument() const { return arg_; }
-    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
+    const TypeReferenceSyntax* tyReference() const { return tyRef_; }
 
 private:
     LexedTokens::IndexType alignasKwTkIdx_ = LexedTokens::invalidIndex();
-    LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
-    SyntaxNode* arg_ = nullptr;
-    LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
-    AST_CHILD_LST4(alignasKwTkIdx_,
-                   openParenTkIdx_,
-                   arg_,
-                   closeParenTkIdx_);
+    TypeReferenceSyntax* tyRef_ = nullptr;
+    AST_CHILD_LST2(alignasKwTkIdx_, tyRef_);
 };
 
 /**
@@ -656,7 +621,7 @@ private:
  * The specifier's argument is:
  *   - a TypeNameSyntax,
  *   - an ExpressionSyntax, or
- *   - an AmbiguousTypedefNameOrIdentifierExpressionSyntax.
+ *   - an AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax.
  *
  * The latter case happens if the argument is a sole \a identifier, making
  * it impossible to determine whether it names a type or variable.
@@ -670,19 +635,12 @@ class PSY_C_API ExtGNU_TypeofSyntax final : public SpecifierSyntax
 
 public:
     SyntaxToken typeofKeyword() const { return tokenAtIndex(typeofKwTkIdx_); }
-    SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
-    const SyntaxNode* argument() const { return arg_; }
-    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
+    const TypeReferenceSyntax* tyReference() const { return tyRef_; }
 
 private:
     LexedTokens::IndexType typeofKwTkIdx_ = LexedTokens::invalidIndex();
-    LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
-    SyntaxNode* arg_ = nullptr;
-    LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
-    AST_CHILD_LST4(typeofKwTkIdx_,
-                   openParenTkIdx_,
-                   arg_,
-                   closeParenTkIdx_);
+    TypeReferenceSyntax* tyRef_ = nullptr;
+    AST_CHILD_LST2(typeofKwTkIdx_, tyRef_);
 };
 
 /**
@@ -795,25 +753,6 @@ private:
 };
 
 /**
- * \brief The TypeNameSyntax class.
- *
- * \remark 6.7.7
- */
-class PSY_C_API TypeNameSyntax final : public SyntaxNode
-{
-    AST_G_NODE_1K(TypeName)
-
-public:
-    const SpecifierListSyntax* specifiers() const { return specs_; }
-    const DeclaratorSyntax* declarator() const { return decltor_; }
-
-private:
-    SpecifierListSyntax* specs_ = nullptr;
-    DeclaratorSyntax* decltor_ = nullptr;
-    AST_CHILD_LST2(specs_, decltor_);
-};
-
-/**
  * \brief The TypedefNameSyntax class.
  *
  * \remark 6.7.8
@@ -903,6 +842,7 @@ public:
 
 private:
     SpecifierListSyntax* attrs_ = nullptr;
+    AST_CHILD_LST1(attrs_);
 };
 
 /**

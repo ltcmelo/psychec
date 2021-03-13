@@ -340,9 +340,6 @@ enum SyntaxKind : std::uint16_t
     ParameterSuffix,
     BitfieldDeclaratorSuffix,
 
-    /* Type Name */
-    TypeName,
-
     /* Initializers */
     ExpressionInitializer,
     BraceEnclosedInitializer,
@@ -459,11 +456,18 @@ enum SyntaxKind : std::uint16_t
     ExtGNU_AsmInputOperand,
     ExtGNU_AsmOutputOperand,
 
+    //--------//
+    // Common //
+    //--------//
+    TypeName,
+    ExpressionAsTypeReference,
+    TypeNameAsTypeReference,
+
     //-------------//
     // Ambiguities //
     //-------------//
     AmbiguousCastOrBinaryExpression,
-    AmbiguousTypedefNameOrIdentifierExpression,
+    AmbiguousTypeNameOrExpressionAsTypeReference,
     AmbiguousCallOrVariableDeclaration,
     AmbiguousMultiplicationOrPointerDeclaration,
 

@@ -518,7 +518,25 @@ void TestParser::case2114()
     parseStatement("{ 'x' ; }");
 }
 
-void TestParser::case2115() {}
+void TestParser::case2115()
+{
+    /*
+     Despite the parsing similarities between `typeof' and `sizeof',
+     mind the difference between this test case and the following:
+
+     `typeof ( x ) y ;'
+
+     This would be a valid declaration-statement, and the `y' doesn't
+     belong to the parsing of `typeof': it's the declarator.
+     */
+
+    CROSS_REFERENCE_TEST(TestParser::case0904);
+
+    parseStatement("sizeof ( x ) y ;",
+                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                               Parser::DiagnosticsReporter::ID_of_ExpectedToken));
+}
+
 void TestParser::case2116() {}
 void TestParser::case2117() {}
 void TestParser::case2118() {}

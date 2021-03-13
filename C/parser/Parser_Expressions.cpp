@@ -892,15 +892,7 @@ bool Parser::parseTypeTraitExpression_AtFirst(ExpressionSyntax*& expr, SyntaxKin
     expr = traitExpr;
     traitExpr->oprtrTkIdx_ = consume();
 
-    if (peek().kind() != OpenParenToken) {
-        ExpressionSyntax* unaryExpr = nullptr;
-        if (!parseExpressionWithPrecedenceUnary(unaryExpr))
-            return false;
-        traitExpr->arg_ = unaryExpr;
-        return true;
-    }
-
-    return parseParenthesizedTypeNameOrExpression(traitExpr);
+    return parseParenthesizedTypeNameOrExpression(traitExpr->tyRef_);
 }
 
 /* Cast */
