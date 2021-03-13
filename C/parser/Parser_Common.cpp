@@ -58,7 +58,7 @@ bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& tyRef)
         case OpenParenToken: {
             Backtracker BT(this);
             ExpressionSyntax* expr = nullptr;
-            if (parseExpression(expr)) {
+            if (parseExpressionWithPrecedenceUnary(expr)) {
                 auto exprAsTyRef = makeNode<ExpressionAsTypeReferenceSyntax>();
                 tyRef = exprAsTyRef;
                 exprAsTyRef->expr_ = expr;
