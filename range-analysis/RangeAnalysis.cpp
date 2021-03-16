@@ -19,7 +19,7 @@
 
 #include "RangeAnalysis.h"
 #include "AST.h"
-#include "Assert.h"
+#include "PsycheAssert.h"
 #include "Literals.h"
 #include "Lookup.h"
 #include "Scope.h"

@@ -20,7 +20,7 @@
 
 #include "ExpressionTypeEvaluator.h"
 
-#include "Assert.h"
+#include "PsycheAssert.h"
 #include "AST.h"
 #include "CoreTypes.h"
 #include "Control.h"

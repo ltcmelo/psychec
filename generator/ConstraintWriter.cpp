@@ -18,7 +18,7 @@
  *****************************************************************************/
 
 #include "ConstraintWriter.h"
-#include "Assert.h"
+#include "PsycheAssert.h"
 
 using namespace psyche;
 

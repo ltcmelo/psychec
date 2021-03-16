@@ -18,7 +18,7 @@
 
 #include "BasicStubber.h"
 #include "AST.h"
-#include "Assert.h"
+#include "PsycheAssert.h"
 #include "CoreTypes.h"
 #include "CSyntax.h"
 #include "FunctionWriter.h"

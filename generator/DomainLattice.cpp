@@ -18,7 +18,7 @@
 
 #include "DomainLattice.h"
 #include "AST.h"
-#include "Assert.h"
+#include "PsycheAssert.h"
 #include "BuiltinNames.h"
 #include "Control.h"
 #include "CoreTypes.h"

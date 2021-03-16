@@ -18,7 +18,7 @@
  *****************************************************************************/
 
 #include "PrintfScanner.h"
-#include "Assert.h"
+#include "PsycheAssert.h"
 
 using namespace psyche;
 

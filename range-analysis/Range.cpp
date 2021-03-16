@@ -19,7 +19,7 @@
 
 #include "Range.h"
 
-#include "Assert.h"
+#include "PsycheAssert.h"
 #include <algorithm>
 #include <functional>
 
