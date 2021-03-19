@@ -89,6 +89,7 @@ public:
     virtual Action visitStorageClass(const StorageClassSyntax*) { return Action::Visit; }
     virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) { return Action::Visit; }
     virtual Action visitTaggedTypeSpecifier(const TaggedTypeSpecifierSyntax*) { return Action::Visit; }
+    virtual Action visitAtomicTypeSpecifier(const AtomicTypeSpecifierSyntax*) { return Action::Visit; }
     virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) { return Action::Visit; }
     virtual Action visitTypedefName(const TypedefNameSyntax*) { return Action::Visit; }
     virtual Action visitTypeQualifier(const TypeQualifierSyntax*) { return Action::Visit; }

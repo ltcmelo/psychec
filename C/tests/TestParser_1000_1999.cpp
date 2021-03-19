@@ -1242,8 +1242,16 @@ void TestParser::case1415()
                                          IntegerConstantExpression }));
 }
 
-void TestParser::case1416() {}
-void TestParser::case1417() {}
+void TestParser::case1416()
+{
+    parseExpression("sizeof ( _Atomic ( int ) )");
+}
+
+void TestParser::case1417()
+{
+    parseExpression("sizeof ( _Atomic ( x ) )");
+}
+
 void TestParser::case1418() {}
 void TestParser::case1419() {}
 void TestParser::case1420() {}

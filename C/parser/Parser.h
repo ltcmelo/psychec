@@ -265,7 +265,8 @@ private:
     bool parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec);
     bool parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec);
     void parseTypedefName_AtFirst(SpecifierSyntax*& spec);
-    template <class TypeDeclT> bool parseTaggedTypeSpecifier(
+    bool parseAtomiceTypeSpecifier_AtFirst(SpecifierSyntax*& spec);
+    template <class TypeDeclT> bool parseTaggedTypeSpecifier_AtFirst(
             DeclarationSyntax*& decl,
             SpecifierSyntax*& spec,
             SyntaxKind declK,

@@ -160,6 +160,8 @@ public:
     virtual TaggedTypeSpecifierSyntax* asTaggedTypeSpecifier() { return nullptr; }
     virtual const TaggedTypeSpecifierSyntax* asTaggedTypeSpecifier() const { return nullptr; }
     virtual TypeDeclarationAsSpecifierSyntax* asTypeDeclarationAsSpecifier() { return nullptr; }
+    virtual AtomicTypeSpecifierSyntax* asAtomicTypeSpecifier() { return nullptr; }
+    virtual const AtomicTypeSpecifierSyntax* asAtomicTypeSpecifier() const { return nullptr; }
     virtual const TypeDeclarationAsSpecifierSyntax* asTypeDeclarationAsSpecifier() const { return nullptr; }
     virtual TypeQualifierSyntax* asTypeQualifier() { return nullptr; }
     virtual const TypeQualifierSyntax* asTypeQualifier() const { return nullptr; }

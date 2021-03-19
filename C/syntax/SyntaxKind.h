@@ -317,6 +317,7 @@ enum SyntaxKind : std::uint16_t
     StructTypeSpecifier,
     UnionTypeSpecifier,
     EnumTypeSpecifier,
+    AtomicTypeSpecifier,
     TypedefName,
     TypeDeclarationAsSpecifier,
     ExtGNU_Typeof,

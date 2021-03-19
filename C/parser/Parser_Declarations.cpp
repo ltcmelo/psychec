@@ -757,7 +757,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
     while (true) {
         SpecifierSyntax* spec = nullptr;
         switch (peek().kind()) {
-            // storage-class-specifier
+            // declaration-specifiers -> storage-class-specifier
             case Keyword_typedef:
                 parseTrivialSpecifier_AtFirst<StorageClassSyntax>(
                             spec,
@@ -795,7 +795,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                             ThreadLocalStorageClass);
                 break;
 
-            // type-qualifier
+            // declaration-specifiers -> type-qualifier
             case Keyword_const:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
@@ -814,13 +814,20 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                             RestrictQualifier);
                 break;
 
+            // declaration-specifiers -> type-qualifier -> `_Atomic'
+            // declaration-specifiers -> type-specifier -> `_Atomic' `('
             case Keyword__Atomic:
-                parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
-                            spec,
-                            AtomicQualifier);
+                if (peek(2).kind() == OpenParenToken) {
+                    if (!parseAtomiceTypeSpecifier_AtFirst(spec))
+                        return false;
+                }
+                else
+                    parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
+                                spec,
+                                AtomicQualifier);
                 break;
 
-            // function-specifier
+            // declaration-specifiers -> function-specifier
             case Keyword_inline:
                 parseTrivialSpecifier_AtFirst<FunctionSpecifierSyntax>(
                             spec,
@@ -833,7 +840,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                             NoReturnSpecifier);
                 break;
 
-            // type-specifier -> builtins
+            // declaration-specifiers -> type-specifier -> "builtins"
             case Keyword_void:
             case Keyword_char:
             case Keyword_short:
@@ -853,10 +860,10 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                             BuiltinTypeSpecifier);
                 break;
 
-            // type-specifier -> struct-or-union-specifier -> `struct' ...
+            // declaration-specifiers -> type-specifier ->* `struct'
             case Keyword_struct:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier<StructOrUnionDeclarationSyntax>(
+                if (!parseTaggedTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
                             StructDeclaration,
@@ -868,10 +875,10 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                     return true;
                 break;
 
-            // type-specifier -> struct-or-union-specifier -> `union' ...
+            // declaration-specifiers -> type-specifier ->* `union'
             case Keyword_union:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier<StructOrUnionDeclarationSyntax>(
+                if (!parseTaggedTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
                             UnionDeclaration,
@@ -883,10 +890,10 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                     return true;
                 break;
 
-            // type-specifier -> enum-specifier
+            // declaration-specifiers -> type-specifier -> enum-specifier
             case Keyword_enum:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier<EnumDeclarationSyntax>(
+                if (!parseTaggedTypeSpecifier_AtFirst<EnumDeclarationSyntax>(
                             decl,
                             spec,
                             EnumDeclaration,
@@ -898,7 +905,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                     return true;
                 break;
 
-            // type-specifier -> typedef-name
+            // declaration-specifiers -> type-specifier -> typedef-name
             case IdentifierToken: {
                 if (seenType)
                     return true;
@@ -912,25 +919,25 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                 break;
             }
 
-            // alignment-specifier
+            // declaration-specifiers -> alignment-specifier
             case Keyword__Alignas:
                 if (!parseAlignmentSpecifier_AtFirst(spec))
                     return false;
                 break;
 
-            // GNU-attribute-specifier
+            // declaration-specifiers -> GNU-attribute-specifier
             case Keyword_ExtGNU___attribute__:
                 if (!parseExtGNU_AttributeSpecifier_AtFirst(spec))
                     return false;
                 break;
 
-            // GNU-typeof-specifier
+            // declaration-specifiers -> GNU-typeof-specifier
             case Keyword_ExtGNU___typeof__:
                 if (!parseExtGNU_Typeof_AtFirst(spec))
                     return false;
                 break;
 
-            // Psyche
+            // declaration-specifiers -> PsycheC
             case Keyword_ExtPSY__Forall:
             case Keyword_ExtPSY__Exists:
                 if (!parseExtPSY_QuantifiedTypeSpecifier_AtFirst(spec))
@@ -969,7 +976,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
     while (true) {
         SpecifierSyntax* spec = nullptr;
         switch (peek().kind()) {
-            // type-qualifier
+            // declaration-specifiers -> type-qualifier
             case Keyword_const:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
@@ -988,13 +995,20 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                             RestrictQualifier);
                 break;
 
+            // declaration-specifiers -> type-qualifier -> `_Atomic'
+            // declaration-specifiers -> type-specifier -> `_Atomic' `('
             case Keyword__Atomic:
-                parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
-                            spec,
-                            AtomicQualifier);
+                if (peek(2).kind() == OpenParenToken) {
+                    if (!parseAtomiceTypeSpecifier_AtFirst(spec))
+                        return false;
+                }
+                else
+                    parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
+                                spec,
+                                AtomicQualifier);
                 break;
 
-            // type-specifier -> builtins
+            // declaration-specifiers -> type-specifier -> "builtins"
             case Keyword_void:
             case Keyword_char:
             case Keyword_short:
@@ -1014,10 +1028,10 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                             BuiltinTypeSpecifier);
                 break;
 
-            // type-specifier -> struct-or-union-specifier -> `struct' ...
+            // declaration-specifiers -> type-specifier ->* `struct'
             case Keyword_struct:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier<StructOrUnionDeclarationSyntax>(
+                if (!parseTaggedTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
                             StructDeclaration,
@@ -1029,10 +1043,10 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                     return true;
                 break;
 
-            // type-specifier -> struct-or-union-specifier -> `union' ...
+            // declaration-specifiers -> type-specifier ->* `union'
             case Keyword_union:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier<StructOrUnionDeclarationSyntax>(
+                if (!parseTaggedTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
                             UnionDeclaration,
@@ -1044,10 +1058,10 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                     return true;
                 break;
 
-            // type-specifier -> enum-specifier
+            // declaration-specifiers -> type-specifier -> enum-specifier
             case Keyword_enum:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier<EnumDeclarationSyntax>(
+                if (!parseTaggedTypeSpecifier_AtFirst<EnumDeclarationSyntax>(
                             decl,
                             spec,
                             EnumDeclaration,
@@ -1059,7 +1073,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                     return true;
                 break;
 
-            // type-specifier -> typedef-name
+            // declaration-specifiers -> type-specifier -> typedef-name
             case IdentifierToken: {
                 if (seenType)
                     return true;
@@ -1073,19 +1087,19 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                 break;
             }
 
-            // alignment-specifier
+            // declaration-specifiers -> alignment-specifier
             case Keyword__Alignas:
                 if (!parseAlignmentSpecifier_AtFirst(spec))
                     return false;
                 break;
 
-            // GNU-attribute-specifier
+            // declaration-specifiers -> GNU-attribute-specifier
             case Keyword_ExtGNU___attribute__:
                 if (!parseExtGNU_AttributeSpecifier_AtFirst(spec))
                     return false;
                 break;
 
-            // GNU-typeof-specifier
+            // declaration-specifiers -> GNU-typeof-specifier
             case Keyword_ExtGNU___typeof__:
                 if (!parseExtGNU_Typeof_AtFirst(spec))
                     return false;
@@ -1187,7 +1201,6 @@ bool Parser::parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec)
 void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
 {
     DEBUG_THIS_RULE();
-
     PSYCHE_ASSERT(peek().kind() == IdentifierToken,
                   return,
                   "assert failure: <identifier>");
@@ -1195,6 +1208,27 @@ void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
     auto tyDefName = makeNode<TypedefNameSyntax>();
     spec = tyDefName;
     tyDefName->identTkIdx_ = consume();
+}
+
+/**
+ * Parse an \a atomic-type-specifier.
+ *
+ * \remark 6.7.2.4
+ */
+bool Parser::parseAtomiceTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
+{
+    DEBUG_THIS_RULE();
+    PSYCHE_ASSERT(peek().kind() == Keyword__Atomic,
+                  return false,
+                  "assert failure: `_Atomic'");
+
+    auto atomTySpec = makeNode<AtomicTypeSpecifierSyntax>();
+    spec = atomTySpec;
+    atomTySpec->atomicKwTkIdx_ = consume();
+
+    return match(OpenParenToken, &atomTySpec->openParenTkIdx_)
+        && parseTypeName(atomTySpec->typeName_)
+        && matchOrSkipTo(CloseParenToken, &atomTySpec->closeParenTkIdx_);
 }
 
 /**
@@ -1222,11 +1256,12 @@ void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
  * \remark 6.7.2.1
  */
 template <class TypeDeclT>
-bool Parser::parseTaggedTypeSpecifier(DeclarationSyntax*& decl,
-                                      SpecifierSyntax*& spec,
-                                      SyntaxKind declK,
-                                      SyntaxKind specK,
-                                      bool (Parser::*parseMember)(DeclarationSyntax*&))
+bool Parser::parseTaggedTypeSpecifier_AtFirst(
+        DeclarationSyntax*& decl,
+        SpecifierSyntax*& spec,
+        SyntaxKind declK,
+        SyntaxKind specK,
+        bool (Parser::*parseMember)(DeclarationSyntax*&))
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_struct

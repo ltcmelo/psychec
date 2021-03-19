@@ -80,6 +80,7 @@ class StorageClassSyntax;
 class BuiltinTypeSpecifierSyntax;
 class TaggedTypeSpecifierSyntax;
 class TypeDeclarationAsSpecifierSyntax;
+class AtomicTypeSpecifierSyntax;
 class TypeQualifierSyntax;
 class FunctionSpecifierSyntax;
 class AlignmentSpecifierSyntax;

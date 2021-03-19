@@ -533,6 +533,32 @@ private:
 };
 
 /**
+ * \brief The AtomicTypeSpecifierSyntax class.
+ *
+ * \remark 6.7.2.4
+ */
+class PSY_C_API AtomicTypeSpecifierSyntax final : public SpecifierSyntax
+{
+    AST_NODE_1K(AtomicTypeSpecifier, Specifier)
+
+public:
+    SyntaxToken atomicKeyword() const { return tokenAtIndex(atomicKwTkIdx_); }
+    SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
+    const TypeNameSyntax* typeName() const { return typeName_; }
+    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
+
+private:
+    LexedTokens::IndexType atomicKwTkIdx_ = LexedTokens::invalidIndex();
+    LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
+    TypeNameSyntax* typeName_ = nullptr;
+    LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
+    AST_CHILD_LST4(atomicKwTkIdx_,
+                   openParenTkIdx_,
+                   typeName_,
+                   closeParenTkIdx_);
+};
+
+/**
  * \brief The TypeDeclarationAsSpecifierSyntax class.
  *
  * A \a type-specifier that consists of a \a declaration. Consider the

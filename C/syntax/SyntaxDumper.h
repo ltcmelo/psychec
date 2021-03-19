@@ -216,6 +216,15 @@ protected:
         return Action::Skip;
     }
 
+    virtual Action visitAtomicTypeSpecifier(const AtomicTypeSpecifierSyntax* node) override
+    {
+        terminal(node->atomicKeyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->typeName());
+        terminal(node->closeParenthesisToken(), node);
+        return Action::Skip;
+    }
+
     virtual Action visitTypedefName(const TypedefNameSyntax* node) override
     {
         terminal(node->identifierToken(), node);
