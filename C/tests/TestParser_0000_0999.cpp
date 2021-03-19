@@ -430,11 +430,22 @@ void TestParser::case0041()
 
 void TestParser::case0042()
 {
-
+    parse("_Atomic int x ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              AtomicQualifier,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void TestParser::case0043()
 {
+    parse("_Atomic x y ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              AtomicQualifier,
+                              TypedefName,
+                              IdentifierDeclarator }));
 }
 
 void TestParser::case0044()

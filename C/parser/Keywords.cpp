@@ -426,6 +426,20 @@ static inline SyntaxKind classify7(const char* s, const ParseOptions& opts)
                 }
             }
         }
+        else if (s[1] == 'A'
+                 && opts.dialect().std() >= LanguageDialect::Std::C11) {
+            if (s[2] == 't') {
+                if (s[3] == 'o') {
+                    if (s[4] == 'm') {
+                        if (s[5] == 'i') {
+                            if (s[6] == 'c') {
+                                return Keyword__Atomic;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         else if (s[1] == 'F'
                  && opts.extensions().isEnabled_ExtPSY_Generics()) {
             if (s[2] == 'o') {
