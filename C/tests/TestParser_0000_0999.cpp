@@ -2653,7 +2653,7 @@ void TestParser::case0427()
 
 void TestParser::case0428()
 {
-
+    parse("struct { _Static_assert ( 1 , \"\" ) ; }; ");
 }
 
 void TestParser::case0429()

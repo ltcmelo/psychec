@@ -520,20 +520,30 @@ bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
 {
     DEBUG_THIS_RULE();
 
-    auto extKwTkIdx = LexedTokens::invalidIndex();
-    if (peek().kind() == Keyword_ExtGNU___extension__)
-        extKwTkIdx = consume();
+    switch (peek().kind()) {
+        case Keyword__Static_assert:
+            return parseStaticAssertDeclaration_AtFirst(decl);
 
-    if (!parseDeclaration(
-                decl,
-                &Parser::parseSpecifierQualifierList,
-                &Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList,
-                DeclarationScope::Block))
-        return false;
+        case Keyword_ExtGNU___extension__: {
+            auto extKwTkIdx = consume();
+            if (!parseDeclaration(
+                        decl,
+                        &Parser::parseSpecifierQualifierList,
+                        &Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList,
+                        DeclarationScope::Block))
+                return false;
+            PSYCHE_ASSERT(decl, return false, "invalid declaration");
+            decl->extKwTkIdx_ = extKwTkIdx;
+            return true;
+        }
 
-    PSYCHE_ASSERT(decl, return false, "invalid declaration");
-    decl->extKwTkIdx_ = extKwTkIdx;
-    return true;
+        default:
+            return parseDeclaration(
+                        decl,
+                        &Parser::parseSpecifierQualifierList,
+                        &Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList,
+                        DeclarationScope::Block);
+    }
 }
 
 /**
