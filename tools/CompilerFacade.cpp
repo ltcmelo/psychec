@@ -50,18 +50,18 @@ std::pair<int, std::string> CompilerFacade::preprocess(const std::string& source
     // Read the environment
     const char *env_tmp_dir = std::getenv("TMPDIR");
 
-    // Calculat temporary directory
+    // Calculate temporary directory
     const std::string tmp_dir(env_tmp_dir != nullptr ? env_tmp_dir : default_dir);
 
     // Calculate the full path
     const std::string pathed_template(tmp_dir + "/" + base_template);
 
-    // now get a char* to be able to call mkstemp
+    // now get a **non-const** char* to be able to call mkstemp
     char *tmp_template = new char[pathed_template.size() + 1];
     std::copy(pathed_template.begin(), pathed_template.end(), tmp_template);
     tmp_template[pathed_template.size()] = '\0';
 
-    // Convert our template into a full-file
+    // Convert our template into a completed filename
     int err = mkstemp(tmp_template);
 
     // mkstemp returns -1 on error ...
@@ -73,10 +73,10 @@ std::pair<int, std::string> CompilerFacade::preprocess(const std::string& source
     // Let's get a std::string for convenience
     std::string tmp_name(tmp_template);
 
-    // Delete our template
+    // Delete our modifiable template
     delete[] tmp_template;
 
-    // Write our source to our temporary file
+    // Write the input source to our temporary file
     std::ofstream tmp_stream(tmp_name);
     tmp_stream << source;
     tmp_stream.close();
@@ -95,6 +95,7 @@ std::pair<int, std::string> CompilerFacade::preprocess(const std::string& source
     // remove the temporary file
     std::remove(tmp_name.c_str());
 
+    // return the output from the preprocessor
     return ret;
 }
 
