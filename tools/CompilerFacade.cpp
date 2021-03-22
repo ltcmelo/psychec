@@ -79,6 +79,7 @@ std::pair<int, std::string> CompilerFacade::preprocess(const std::string& source
     // Write our source to our temporary file
     std::ofstream tmp_stream(tmp_name);
     tmp_stream << source;
+    tmp_stream.close();
 
     // build-up the preprocessor invocation
     std::string in = hostCC_;
