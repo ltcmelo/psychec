@@ -77,6 +77,3 @@ Proceedings of the IEEE/ACM International Symposium on Code Generation and Optim
 
 - [Automatic annotation of tasks in structured code](https://dl.acm.org/citation.cfm?id=3243200)<br/>
 Proceedings of the International Conference on Parallel Architectures and Compilation Techniques — **PACT**, Nov. 2018, Article No. 31.
-
-- [Synthesis of Benchmarks for the C Programming Language by Mining Software Repositories](https://dl.acm.org/citation.cfm?id=3355378.3355380)<br/>
-Proceedings of the _Simpósio Brasileiro de Linguagens de Programacao_ — **SBLP**, Sep. 2019.
