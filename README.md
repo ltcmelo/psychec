@@ -64,7 +64,7 @@ To run the tests:
 ## Related Publications
 
 - [Type Inference for C: Applications to the Static Analysis of Incomplete Programs](https://dl.acm.org/doi/10.1145/3421472)<br/>
-ACM Transactions on Programming Languages and Systems — **TOPLAS**, Volume 42, Issue 3, Artible No. 15, Dec. 2020.
+ACM Transactions on Programming Languages and Systems — **TOPLAS**, Volume 42, Issue 3, Article No. 15, Dec. 2020.
 
 - [Inference of static semantics for incomplete C programs](https://dl.acm.org/doi/10.1145/3158117)<br/>
 Proceedings of the ACM on Programming Languages, Volume 2, Issue **POPL**, Jan. 2018, Article No. 29.
