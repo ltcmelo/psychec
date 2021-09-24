@@ -12,6 +12,8 @@ set(STD_CXX_FLAGS "${STD_CXX_FLAGS} -g")
 set(STD_CXX_FLAGS "${STD_CXX_FLAGS} -Wall \
                                     -Wsign-compare")
 
+set(STD_CXX_FLAGS "${STD_CXX_FLAGS} -DEXPORT_C_API -DEXPORT_PLUGIN_API")
+
 set(CMAKE_MACOSX_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH "\$ORIGIN;@executable_path;@loader_path")
 

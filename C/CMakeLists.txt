@@ -15,7 +15,19 @@ set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -g")
 set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -Wall \
                                     -Wsign-compare")
 
+# Must happen before adding EXPORT_C_API to CFE_CXX_FLAGS
+set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -DEXPORT_C_API")
+set(PLUGIN_CXX_FLAGS "${CFE_CXX_FLAGS} -DEXPORT_PLUGIN_API")
+
 set(CMAKE_MACOSX_RPATH TRUE)
+
+set(PLUGIN_SOURCES
+    # Plugin API files
+    ${PROJECT_SOURCE_DIR}/plugin-api/PluginConfig.h
+    ${PROJECT_SOURCE_DIR}/plugin-api/DeclarationInterceptor.h
+    ${PROJECT_SOURCE_DIR}/plugin-api/SourceInspector.h
+    ${PROJECT_SOURCE_DIR}/plugin-api/VisitorObserver.h
+)
 
 set(CFE_SOURCES
     # Main
@@ -103,12 +115,6 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/names/DeclarationName.h
     ${PROJECT_SOURCE_DIR}/names/DeclarationNames.cpp
     ${PROJECT_SOURCE_DIR}/names/DeclarationNames.h
- 
-    # Plugin API files
-    ${PROJECT_SOURCE_DIR}/plugin-api/PluginConfig.h
-    ${PROJECT_SOURCE_DIR}/plugin-api/DeclarationInterceptor.h
-    ${PROJECT_SOURCE_DIR}/plugin-api/SourceInspector.h
-    ${PROJECT_SOURCE_DIR}/plugin-api/VisitorObserver.h
 
     # Tests
     ${PROJECT_SOURCE_DIR}/tests/TestBinder.h
@@ -125,6 +131,13 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/tests/TestTypeChecker.cpp
 )
 
+foreach(file ${PLUGIN_SOURCES})
+    set_source_files_properties(
+        ${file} PROPERTIES
+        COMPILE_FLAGS "${PLUGIN_CXX_FLAGS}"
+    )
+endforeach()
+
 foreach(file ${CFE_SOURCES})
     set_source_files_properties(
         ${file} PROPERTIES
@@ -138,7 +151,7 @@ include_directories(
 )
 
 set(LIBRARY psychecfe)
-add_library(${LIBRARY} SHARED ${CFE_SOURCES})
+add_library(${LIBRARY} SHARED ${CFE_SOURCES} ${PLUGIN_SOURCES})
 
 target_link_libraries(${LIBRARY} psychecommon)
 
