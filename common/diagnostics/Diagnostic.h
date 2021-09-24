@@ -80,7 +80,7 @@ private:
     friend class C::TestFrontend;
 };
 
-std::ostream& operator<<(std::ostream& os, const Diagnostic& diagnostic);
+PSY_API std::ostream& operator<<(std::ostream& os, const Diagnostic& diagnostic);
 
 } // psy
 

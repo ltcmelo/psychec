@@ -58,7 +58,7 @@ bool operator==(const LinePosition& a, const LinePosition& b);
 
 bool operator<(const LinePosition& a, const LinePosition& b);
 
-std::ostream& operator<<(std::ostream& os, const LinePosition& pos);
+PSY_API std::ostream& operator<<(std::ostream& os, const LinePosition& pos);
 
 } // psy
 

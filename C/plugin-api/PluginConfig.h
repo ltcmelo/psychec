@@ -23,7 +23,7 @@
 
 // From https://gcc.gnu.org/wiki/Visibility
 #if defined _WIN32 || defined __CYGWIN__
-  #ifdef EXPORT_API
+  #ifdef EXPORT_PLUGIN_API
     #ifdef __GNUC__
       #define PLUGIN_API __attribute__ ((dllexport))
     #else

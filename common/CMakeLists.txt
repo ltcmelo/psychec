@@ -11,6 +11,8 @@ set(COMMON_CXX_FLAGS)
 set(COMMON_CXX_FLAGS "${CFE_CXX_FLAGS} -g")
 set(COMMON_CXX_FLAGS "${CFE_CXX_FLAGS} -Wall \
                                        -Wsign-compare")
+set(COMMON_CXX_FLAGS "${CFE_CXX_FLAGS} -DEXPORT_PSY_API")
+
 
 set(CMAKE_MACOSX_RPATH TRUE)
 
