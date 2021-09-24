@@ -15,7 +15,6 @@ set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -g")
 set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -Wall \
                                     -Wsign-compare")
 
-# Must happen before adding EXPORT_C_API to CFE_CXX_FLAGS
 set(CFE_CXX_FLAGS "${CFE_CXX_FLAGS} -DEXPORT_C_API")
 set(PLUGIN_CXX_FLAGS "${CFE_CXX_FLAGS} -DEXPORT_PLUGIN_API")
 
