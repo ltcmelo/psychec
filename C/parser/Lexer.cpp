@@ -943,14 +943,20 @@ LexExit:
  *
  * \remark 6.4.4.1
  */
-void Lexer::lexIntegerSuffix(bool withUnicode)
+void Lexer::lexIntegerSuffix(int suffixCnt)
 {
+    if (!suffixCnt)
+        return;
+
     switch(yychar_) {
         case 'u':
         case 'U':
-            if (withUnicode) {
-                yyinput();
-                lexIntegerSuffix(false);
+            yyinput();
+            switch (yychar_) {
+                case 'l':
+                case 'L':
+                    lexIntegerSuffix(--suffixCnt);
+                    break;
             }
             break;
 
@@ -958,12 +964,24 @@ void Lexer::lexIntegerSuffix(bool withUnicode)
             yyinput();
             if (yychar_ == 'l')
                 yyinput();
+            switch (yychar_) {
+                case 'u':
+                case 'U':
+                    lexIntegerSuffix(--suffixCnt);
+                    break;
+            }
             break;
 
         case 'L':
             yyinput();
             if (yychar_ == 'L')
                 yyinput();
+            switch (yychar_) {
+                case 'u':
+                case 'U':
+                    lexIntegerSuffix(--suffixCnt);
+                    break;
+            }
             break;
     }
 }

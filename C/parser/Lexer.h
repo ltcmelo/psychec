@@ -65,7 +65,7 @@ private:
 
     /* 6.4.4 Constants */
     void lexIntegerOrFloatingConstant(SyntaxToken* tk);
-    void lexIntegerSuffix(bool withUnicode = true);
+    void lexIntegerSuffix(int suffixCnt = 2);
     void lexDigitSequence();
     void lexHexadecimalDigitSequence();
     void lexExponentPart();

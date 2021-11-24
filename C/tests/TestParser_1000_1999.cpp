@@ -407,39 +407,63 @@ void TestParser::case1060()
 
 void TestParser::case1061()
 {
+    parseExpression("1Lu",
+                    Expectation().AST( { IntegerConstantExpression }));
 
 }
 
 void TestParser::case1062()
 {
-
+    parseExpression("0x1lU",
+                    Expectation().AST( { IntegerConstantExpression }));
 }
 
 void TestParser::case1063()
 {
+    parseExpression("0x1lUll",
+                    Expectation().addDiagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void TestParser::case1064()
 {
+    parseExpression("1lul",
+                    Expectation().addDiagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void TestParser::case1065()
 {
-
+    parseExpression("1ulu",
+                    Expectation().addDiagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void TestParser::case1066()
 {
-
+    parseExpression("1ullu",
+                    Expectation().addDiagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void TestParser::case1067()
 {
-
+    parseExpression("1uu",
+                    Expectation().addDiagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void TestParser::case1068()
 {
+    parseExpression("1lll",
+                    Expectation().addDiagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void TestParser::case1069()
