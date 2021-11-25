@@ -190,7 +190,7 @@ static inline SyntaxKind classify5(const char* s, const ParseOptions& opts)
             if (s[2] == 'o') {
                 if (s[3] == 'o') {
                     if (s[4] == 'l') {
-                        return KeywordAlias_Bool;
+                        return Keyword__Bool;
                     }
                 }
             }
@@ -627,6 +627,22 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
                             else if (s[6] == 'o') {
                                 if (s[7] == 'f') {
                                     return Keyword__Alignof;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if (s[1] == 'C'
+                    && opts.dialect().std() >= LanguageDialect::Std::C99) {
+            if (s[2] == 'o') {
+                if (s[3] == 'm') {
+                    if (s[4] == 'p') {
+                        if (s[5] == 'l') {
+                            if (s[6] == 'e') {
+                                if (s[7] == 'x') {
+                                    return Keyword__Complex;
                                 }
                             }
                         }

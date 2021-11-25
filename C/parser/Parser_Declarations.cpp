@@ -409,6 +409,7 @@ Parser::IdentifierRole Parser::determineRoleOfIdentifier(bool seenType) const
             case Keyword_Ext_char32_t:
             case Keyword_Ext_wchar_t:
             case Keyword__Bool:
+            case Keyword__Complex:
             case Keyword_struct:
             case Keyword_union:
             case Keyword_enum:
@@ -864,6 +865,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
             case Keyword_Ext_char32_t:
             case Keyword_Ext_wchar_t:
             case Keyword__Bool:
+            case Keyword__Complex:
                 seenType = true;
                 parseTrivialSpecifier_AtFirst<BuiltinTypeSpecifierSyntax>(
                             spec,
@@ -1032,6 +1034,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             case Keyword_Ext_char32_t:
             case Keyword_Ext_wchar_t:
             case Keyword__Bool:
+            case Keyword__Complex:
                 seenType = true;
                 parseTrivialSpecifier_AtFirst<BuiltinTypeSpecifierSyntax>(
                             spec,

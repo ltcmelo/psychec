@@ -191,6 +191,7 @@ enum SyntaxKind : std::uint16_t
     // --- C99 --- //
     // ----------- //
     Keyword__Bool,
+    Keyword__Complex,
 
     // ----------- //
     // --- C11 --- //

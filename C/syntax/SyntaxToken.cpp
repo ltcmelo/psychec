@@ -161,6 +161,7 @@ const char* tokenNames[] =
     "wchar_t",
 
     "_Bool",
+    "_Complex",
 
     "_Alignas",
     "_Alignof",

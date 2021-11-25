@@ -474,40 +474,91 @@ void TestParser::case0045()
 
 void TestParser::case0046()
 {
-
+    parse("_Complex double x ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void TestParser::case0047()
 {
-
+    parse("_Complex float x ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void TestParser::case0048()
 {
-
+    parse("double _Complex x ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void TestParser::case0049()
 {
-
+    parse("float _Complex x ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void TestParser::case0050()
 {
+    // Not a syntactic error, but a semantic one; covered in:
+    CROSS_REFERENCE_TEST(TestBinder::case0016);
 
+    parse("double _Complex int x ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              BuiltinTypeSpecifier,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void TestParser::case0051()
 {
+    parse("_Complex x ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void TestParser::case0052()
 {
+    // Not a syntactic error, but a semantic one; covered in:
+    CROSS_REFERENCE_TEST(TestBinder::case0016);
+
+    parse("int int x ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void TestParser::case0053()
 {
+    // Not a syntactic error, but a semantic one; covered in:
+    CROSS_REFERENCE_TEST(TestBinder::case0018);
 
+    parse("_Complex _Complex x ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void TestParser::case0054()

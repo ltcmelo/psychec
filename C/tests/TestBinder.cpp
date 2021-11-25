@@ -158,9 +158,27 @@ void TestBinder::case0015()
     parseAndBind("void x ( ) { __thread x y ; }");
 }
 
-void TestBinder::case0016() {}
-void TestBinder::case0017() {}
-void TestBinder::case0018() {}
+void TestBinder::case0016()
+{
+    CROSS_REFERENCE_TEST(TestParser::case0050);
+
+    parseAndBind("double _Complex int x ;");
+}
+
+void TestBinder::case0017()
+{
+    CROSS_REFERENCE_TEST(TestParser::case0052);
+
+    parseAndBind("int int x ;");
+}
+
+void TestBinder::case0018()
+{
+    CROSS_REFERENCE_TEST(TestParser::case0053);
+
+    parseAndBind("_Complex _Complex x ;");
+}
+
 void TestBinder::case0019() {}
 
 void TestBinder::case0020() {}

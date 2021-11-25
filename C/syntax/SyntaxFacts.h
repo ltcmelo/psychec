@@ -73,6 +73,7 @@ public:
             case Keyword_signed:
             case Keyword_unsigned:
             case Keyword__Bool:
+            case Keyword__Complex:
                 return true;
             default:
                 return false;
