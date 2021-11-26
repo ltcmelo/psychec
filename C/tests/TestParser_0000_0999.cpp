@@ -2709,52 +2709,68 @@ void TestParser::case0428()
 
 void TestParser::case0429()
 {
-
+    parse("struct x volatile y ;");
 }
 
 void TestParser::case0430()
 {
-
+    parse("struct x { int y ; } volatile z ;");
 }
 
 void TestParser::case0431()
 {
-
+    parse("struct { int x ; } volatile y ;");
 }
 
 void TestParser::case0432()
 {
-
+    parse("const struct { int x ; } volatile y ;");
 }
 
 void TestParser::case0433()
 {
-
+    parse("struct { int x ; } struct y z ;",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
 }
 
 void TestParser::case0434()
 {
-
+    parse("struct x { int y ; } int z ;",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
 }
 
 void TestParser::case0435()
 {
+    // Covered as a semantic error.
+    CROSS_REFERENCE_TEST(TestBinder::case0019);
 
+    parse("int struct x { int y ; } z ;");
 }
 
 void TestParser::case0436()
 {
+    // Covered as a semantic error.
+    CROSS_REFERENCE_TEST(TestBinder::case0020);
 
+    parse("struct x struct { int y ; } z ;");
 }
 
 void TestParser::case0437()
 {
+    // Covered as a semantic error.
+    CROSS_REFERENCE_TEST(TestBinder::case0021);
 
+    parse("int struct x y ;");
 }
 
 void TestParser::case0438()
 {
+    // Covered as a semantic error.
+    CROSS_REFERENCE_TEST(TestBinder::case0022);
 
+    parse("struct x int y ;");
 }
 
 void TestParser::case0439()

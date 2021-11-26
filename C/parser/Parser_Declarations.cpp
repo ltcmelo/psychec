@@ -203,10 +203,17 @@ bool Parser::parseDeclaration(
         tyDeclSpec->typeDecl_ = static_cast<TypeDeclarationSyntax*>(decl);
         decl = nullptr;
 
-        SpecifierListSyntax** specList_cur = specList
-                ? specList->skipToLast()
-                : &specList;
-        *specList_cur = makeNode<SpecifierListSyntax>(tyDeclSpec);
+        if (!specList)
+            specList = makeNode<SpecifierListSyntax>(tyDeclSpec);
+        else {
+            for (auto iter = specList; iter; iter = iter->next) {
+                if (iter->value->asTaggedTypeSpecifier()
+                        && iter->value == tyDeclSpec->typeDecl_->typeSpec_) {
+                    iter->value = tyDeclSpec;
+                    break;
+                }
+            }
+        }
     }
 
     if (!specList) {
@@ -882,9 +889,6 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                             StructTypeSpecifier,
                             &Parser::parseStructDeclaration))
                     return false;
-
-                if (decl)
-                    return true;
                 break;
 
             // declaration-specifiers -> type-specifier ->* `union'
@@ -897,9 +901,6 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                             UnionTypeSpecifier,
                             &Parser::parseStructDeclaration))
                     return  false;
-
-                if (decl)
-                    return true;
                 break;
 
             // declaration-specifiers -> type-specifier -> enum-specifier
@@ -912,9 +913,6 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                             EnumTypeSpecifier,
                             &Parser::parseEnumerator))
                     return false;
-
-                if (decl)
-                    return true;
                 break;
 
             // declaration-specifiers -> type-specifier -> typedef-name
@@ -962,6 +960,9 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
 
         *specList_cur = makeNode<SpecifierListSyntax>(spec);
         specList_cur = &(*specList_cur)->next;
+
+        if (decl)
+            return parseTypeQualifiersAndAttributes(*specList_cur);
     }
 }
 
@@ -1051,9 +1052,6 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                             StructTypeSpecifier,
                             &Parser::parseStructDeclaration))
                     return false;
-
-                if (decl)
-                    return true;
                 break;
 
             // declaration-specifiers -> type-specifier ->* `union'
@@ -1066,9 +1064,6 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                             UnionTypeSpecifier,
                             &Parser::parseStructDeclaration))
                     return false;
-
-                if (decl)
-                    return true;
                 break;
 
             // declaration-specifiers -> type-specifier -> enum-specifier
@@ -1081,9 +1076,6 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                             EnumTypeSpecifier,
                             &Parser::parseEnumerator))
                     return false;
-
-                if (decl)
-                    return true;
                 break;
 
             // declaration-specifiers -> type-specifier -> typedef-name
@@ -1128,6 +1120,9 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
 
         *specList_cur = makeNode<SpecifierListSyntax>(spec);
         specList_cur = &(*specList_cur)->next;
+
+        if (decl)
+            return parseTypeQualifiersAndAttributes(*specList_cur);
     }
 }
 

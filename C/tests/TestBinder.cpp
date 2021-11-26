@@ -179,11 +179,34 @@ void TestBinder::case0018()
     parseAndBind("_Complex _Complex x ;");
 }
 
-void TestBinder::case0019() {}
+void TestBinder::case0019()
+{
+    CROSS_REFERENCE_TEST(TestParser::case0435);
 
-void TestBinder::case0020() {}
-void TestBinder::case0021() {}
-void TestBinder::case0022() {}
+    parseAndBind("int struct x { int y ; } z ;");
+}
+
+void TestBinder::case0020()
+{
+    CROSS_REFERENCE_TEST(TestParser::case0436);
+
+    parseAndBind("struct x struct { int y ; } z ;");
+}
+
+void TestBinder::case0021()
+{
+    CROSS_REFERENCE_TEST(TestParser::case0437);
+
+    parse("int struct x y ;");
+}
+
+void TestBinder::case0022()
+{
+    CROSS_REFERENCE_TEST(TestParser::case0438);
+
+    parse("struct x int y ;");
+}
+
 void TestBinder::case0023() {}
 void TestBinder::case0024() {}
 void TestBinder::case0025() {}
