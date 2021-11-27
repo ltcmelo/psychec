@@ -224,8 +224,8 @@ private:
     //--------------//
     void parseTranslationUnit(TranslationUnitSyntax*& unit);
     bool parseExternalDeclaration(DeclarationSyntax*& decl);
-    void parseEmptyDeclaration_AtFirst(DeclarationSyntax*& decl,
-                                       const SpecifierListSyntax* specList = nullptr);
+    void parseIncompleteDeclaration_AtFirst(DeclarationSyntax*& decl,
+                                            const SpecifierListSyntax* specList = nullptr);
     bool parseStaticAssertDeclaration_AtFirst(DeclarationSyntax*& decl);
     bool parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& decl);
     bool parseDeclaration(

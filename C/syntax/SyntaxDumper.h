@@ -78,7 +78,7 @@ protected:
         terminal(node->extensionKeyword(), node);
     }
 
-    virtual Action visitEmptyDeclaration(const EmptyDeclarationSyntax* node) override
+    virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node) override
     {
         traverseDeclaration(node);
         for (auto it = node->specifiers(); it; it = it->next)

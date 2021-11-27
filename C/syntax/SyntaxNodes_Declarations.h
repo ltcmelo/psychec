@@ -62,11 +62,11 @@ private:
 };
 
 /**
- * \brief The EmptyDeclarationSyntax class.
+ * \brief The IncompleteDeclarationSyntax class.
  */
-class PSY_C_API EmptyDeclarationSyntax final : public DeclarationSyntax
+class PSY_C_API IncompleteDeclarationSyntax final : public DeclarationSyntax
 {
-    AST_NODE_1K(EmptyDeclaration, Declaration)
+    AST_NODE_1K(IncompleteDeclaration, Declaration)
 
 public:
     const SpecifierListSyntax* specifiers() const { return specs_; }

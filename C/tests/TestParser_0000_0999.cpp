@@ -298,7 +298,7 @@ void TestParser::case0028()
 
     parse("const int ;",
           Expectation().AST({ TranslationUnit,
-                              EmptyDeclaration,
+                              IncompleteDeclaration,
                               ConstQualifier,
                               BuiltinTypeSpecifier }));
 }
@@ -4398,7 +4398,7 @@ void TestParser::case0737()
 
     parse("int __attribute__ ( ( ) ) double ;",
           Expectation().AST( { TranslationUnit,
-                               EmptyDeclaration,
+                               IncompleteDeclaration,
                                BuiltinTypeSpecifier,
                                ExtGNU_AttributeSpecifier,
                                ExtGNU_Attribute,
@@ -4412,7 +4412,7 @@ void TestParser::case0738()
 
     parse("x __attribute__ ( ( ) ) int ;",
           Expectation().AST( { TranslationUnit,
-                               EmptyDeclaration,
+                               IncompleteDeclaration,
                                TypedefName,
                                ExtGNU_AttributeSpecifier,
                                ExtGNU_Attribute,
@@ -4429,7 +4429,7 @@ void TestParser::case0739()
 
     parse("x __attribute__ ( ( ) ) ;",
           Expectation().AST( { TranslationUnit,
-                               EmptyDeclaration,
+                               IncompleteDeclaration,
                                TypedefName,
                                ExtGNU_AttributeSpecifier,
                                ExtGNU_Attribute }));

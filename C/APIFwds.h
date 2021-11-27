@@ -55,7 +55,7 @@ template <class SyntaxNodeT> class SyntaxNodeSeparatedList;
 //--------------//
 class TranslationUnitSyntax;
 class DeclarationSyntax;
-class EmptyDeclarationSyntax;
+class IncompleteDeclarationSyntax;
 class NamedDeclarationSyntax;
 class TypeDeclarationSyntax;
 class TagDeclarationSyntax;

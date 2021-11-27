@@ -81,7 +81,7 @@ bool Parser::parseExternalDeclaration(DeclarationSyntax*& decl)
 
     switch (peek().kind()) {
         case SemicolonToken:
-            parseEmptyDeclaration_AtFirst(decl);
+            parseIncompleteDeclaration_AtFirst(decl);
             break;
 
         case Keyword__Static_assert:
@@ -101,18 +101,18 @@ bool Parser::parseExternalDeclaration(DeclarationSyntax*& decl)
     return true;
 }
 
-void Parser::parseEmptyDeclaration_AtFirst(DeclarationSyntax*& decl,
-                                           const SpecifierListSyntax* specList)
+void Parser::parseIncompleteDeclaration_AtFirst(DeclarationSyntax*& decl,
+                                                const SpecifierListSyntax* specList)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == SemicolonToken,
                   return,
                   "assert failure: `;'");
 
-    auto emptyDecl = makeNode<EmptyDeclarationSyntax>();
-    decl = emptyDecl;
-    emptyDecl->specs_ = specList;
-    emptyDecl->semicolonTkIdx_ = consume();
+    auto incompDecl = makeNode<IncompleteDeclarationSyntax>();
+    decl = incompDecl;
+    incompDecl->specs_ = specList;
+    incompDecl->semicolonTkIdx_ = consume();
 }
 
 /**
@@ -194,7 +194,7 @@ bool Parser::parseDeclaration(
             tyDecl->semicolonTkIdx_ = consume();
         }
         else
-            parseEmptyDeclaration_AtFirst(decl, specList);
+            parseIncompleteDeclaration_AtFirst(decl, specList);
         return true;
     }
 

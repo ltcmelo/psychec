@@ -146,8 +146,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
         //--------------//
         case TranslationUnit:
             return "TranslationUnit";
-        case EmptyDeclaration:
-            return "EmptyDeclaration";
+        case IncompleteDeclaration:
+            return "IncompleteDeclaration";
         case StructDeclaration:
             return "StructDeclaration";
         case UnionDeclaration:

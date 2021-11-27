@@ -115,8 +115,8 @@ public:
     virtual const TranslationUnitSyntax* asTranslationUnit() const { return nullptr; }
     virtual DeclarationSyntax* asDeclaration() { return nullptr; }
     virtual const DeclarationSyntax* asDeclaration() const { return nullptr; }
-    virtual EmptyDeclarationSyntax* asEmptyDeclaration() { return nullptr; }
-    virtual const EmptyDeclarationSyntax* asEmptyDeclaration() const { return nullptr; }
+    virtual IncompleteDeclarationSyntax* asIncompleteDeclaration() { return nullptr; }
+    virtual const IncompleteDeclarationSyntax* asIncompleteDeclaration() const { return nullptr; }
     virtual NamedDeclarationSyntax* asNamedDeclaration() { return nullptr; }
     virtual const NamedDeclarationSyntax* asNamedDeclaration() const { return nullptr; }
     virtual TypeDeclarationSyntax* asTypeDeclaration() { return nullptr; }

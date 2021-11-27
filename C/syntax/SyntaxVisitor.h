@@ -73,7 +73,7 @@ public:
     // Declarations //
     //--------------//
     virtual Action visitTranslationUnit(const TranslationUnitSyntax*) { return Action::Visit; }
-    virtual Action visitEmptyDeclaration(const EmptyDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitEnumDeclaration(const EnumDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax*) { return Action::Visit; }

@@ -290,7 +290,7 @@ enum SyntaxKind : std::uint16_t
     // Declarations //
     //--------------//
     TranslationUnit = STARTof_Node,
-    EmptyDeclaration,
+    IncompleteDeclaration,
     StructDeclaration,
     UnionDeclaration,
     EnumDeclaration,
