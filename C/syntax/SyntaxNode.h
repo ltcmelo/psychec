@@ -47,7 +47,7 @@ namespace C {
  * The base class of every AST node.
  *
  * \note
- * This API inspirted by that of \c Microsoft.CodeAnalysis.SyntaxNode
+ * This API inspired by that of \c Microsoft.CodeAnalysis.SyntaxNode
  * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_C_API SyntaxNode : public Managed

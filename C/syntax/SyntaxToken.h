@@ -40,7 +40,7 @@ namespace C {
  * \brief The SyntaxToken class.
  *
  * \note
- * This API inspirted by that of \c Microsoft.CodeAnalysis.SyntaxToken
+ * This API inspired by that of \c Microsoft.CodeAnalysis.SyntaxToken
  * from Roslyn, the .NET Compiler Platform.
  *
  * \note

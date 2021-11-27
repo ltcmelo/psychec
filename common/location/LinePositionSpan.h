@@ -34,7 +34,7 @@ namespace psy {
  * An abstraction representation of a line within a file.
  *
  * \note
- * This API inspirted by that of \c Microsoft.CodeAnalysis.Text.LinePositionSpan
+ * This API inspired by that of \c Microsoft.CodeAnalysis.Text.LinePositionSpan
  * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_API LinePositionSpan

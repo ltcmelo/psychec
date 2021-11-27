@@ -38,7 +38,7 @@ namespace psy {
  * it is reponsibility of the user to employ this abstraction in consistent manner.
  *
  * \note
- * This API inspirted by that of \c Microsoft.CodeAnalysis.Text.TextSpan
+ * This API inspired by that of \c Microsoft.CodeAnalysis.Text.TextSpan
  * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_API TextSpan

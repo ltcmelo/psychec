@@ -37,7 +37,7 @@ namespace psy {
  * within a file.
  *
  * \note
- * This API inspirted by that of \c Microsoft.CodeAnalysis.FileLinePositionSpan
+ * This API inspired by that of \c Microsoft.CodeAnalysis.FileLinePositionSpan
  * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_API FileLinePositionSpan

@@ -51,7 +51,7 @@ namespace C {
  * \brief The SyntaxTree class.
  *
  * \note
- * This API inspirted by that of \c Microsoft.CodeAnalysis.SyntaxTree
+ * This API inspired by that of \c Microsoft.CodeAnalysis.SyntaxTree
  * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_C_API SyntaxTree
