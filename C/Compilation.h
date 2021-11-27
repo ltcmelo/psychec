@@ -39,7 +39,7 @@ class SemanticModel;
  * \brief The Compilation class.
  *
  * \note
- * This API inspired by that of \c Microsoft.CodeAnalysis.Compilation
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.Compilation
  * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_C_API Compilation
