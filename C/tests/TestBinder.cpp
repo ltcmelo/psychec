@@ -207,8 +207,20 @@ void TestBinder::case0022()
     parse("struct x int y ;");
 }
 
-void TestBinder::case0023() {}
-void TestBinder::case0024() {}
+void TestBinder::case0023()
+{
+    CROSS_REFERENCE_TEST(TestParser::case0737);
+
+    parseAndBind("int __attribute__ ( ( ) ) double ;");
+}
+
+void TestBinder::case0024()
+{
+    CROSS_REFERENCE_TEST(TestParser::case0738);
+
+    parseAndBind("x __attribute__ ( ( ) ) int ;");
+}
+
 void TestBinder::case0025() {}
 void TestBinder::case0026() {}
 void TestBinder::case0027() {}

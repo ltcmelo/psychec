@@ -227,13 +227,13 @@ void TestParser::case0022()
     /*
      * Notes:
      *     - `long int y ;'
-     *        Would be valid.
+     *        Good.
      *
      *     - `typedef int x ; long x y;'
-     *        Would be invalid.
+     *        Good.
      *
      *     - `x ; int y ;'
-     *        Would be valid, with `x' missing a type-specifier.
+     *       `x' is missing a type-specifier.
      */
 
     parse("x int y ;",
@@ -248,10 +248,10 @@ void TestParser::case0023()
     /*
      * Notes:
      *     - `long int y ;'
-     *        Would be valid.
+     *        Good.
      *
      *     - `typedef int x ; long x y ;'
-     *        Would not invalid.
+     *        Not Good.
      */
 
     parse("long x y ;",
@@ -296,7 +296,11 @@ void TestParser::case0028()
     // Not a syntactic error, but diagnoses a semantic warning.
     CROSS_REFERENCE_TEST(TestBinder::case0001) ;
 
-    parse("const int ;") ;
+    parse("const int ;",
+          Expectation().AST({ TranslationUnit,
+                              EmptyDeclaration,
+                              ConstQualifier,
+                              BuiltinTypeSpecifier }));
 }
 
 void TestParser::case0029()
@@ -563,6 +567,11 @@ void TestParser::case0053()
 
 void TestParser::case0054()
 {
+    parse("x int ;",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator)
+                       .addDiagnostic(Expectation::ErrorOrWarn::Warn,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
 }
 
 void TestParser::case0055()
@@ -894,22 +903,22 @@ void TestParser::case0111()
 
 void TestParser::case0112()
 {
-    parse("int ( * x ) [ 4 ] [ y + 1 ] ;") ;
+    parse("int ( * x ) [ 4 ] [ y + 1 ] ;");
 }
 
 void TestParser::case0113()
 {
-    parse("void ( * * * x ) ( int ) ;") ;
+    parse("void ( * * * x ) ( int ) ;");
 }
 
 void TestParser::case0114()
 {
-    parse("x ( * * * y ) ( z ) ;") ;
+    parse("x ( * * * y ) ( z ) ;");
 }
 
 void TestParser::case0115()
 {
-    parse("x ( * ( * ( * y ) ) ) ( z ) ;") ;
+    parse("x ( * ( * ( * y ) ) ) ( z ) ;");
 }
 
 void TestParser::case0116()
@@ -4359,32 +4368,76 @@ void TestParser::case0734()
 
 void TestParser::case0735()
 {
-
+    parse("int __attribute__ ( ( ) ) x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               ExtGNU_AttributeSpecifier,
+                               ExtGNU_Attribute,
+                               IdentifierDeclarator }));
 }
 
 void TestParser::case0736()
 {
-
+    parse("x __attribute__ ( ( ) ) y ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               TypedefName,
+                               ExtGNU_AttributeSpecifier,
+                               ExtGNU_Attribute,
+                               IdentifierDeclarator }));
 }
 
 void TestParser::case0737()
 {
+    // Not a syntactic error, but a semantic one; covered in:
+    CROSS_REFERENCE_TEST(TestBinder::case0023);
 
+    // Similar but without the `__attribute__'.
+    CROSS_REFERENCE_TEST(TestParser::case0021);
+
+    parse("int __attribute__ ( ( ) ) double ;",
+          Expectation().AST( { TranslationUnit,
+                               EmptyDeclaration,
+                               BuiltinTypeSpecifier,
+                               ExtGNU_AttributeSpecifier,
+                               ExtGNU_Attribute,
+                               BuiltinTypeSpecifier }));
 }
 
 void TestParser::case0738()
 {
+    // Not a syntactic error, but a semantic one; covered in:
+    CROSS_REFERENCE_TEST(TestBinder::case0024);
 
+    parse("x __attribute__ ( ( ) ) int ;",
+          Expectation().AST( { TranslationUnit,
+                               EmptyDeclaration,
+                               TypedefName,
+                               ExtGNU_AttributeSpecifier,
+                               ExtGNU_Attribute,
+                               BuiltinTypeSpecifier }));
 }
 
 void TestParser::case0739()
 {
+    /*
+     * Notes:
+     *     - Here, and without a `typedef' for `x', GCC 11.2 diagnoses a warning
+     *       (no type or storage class) while Clang 13.0 diagnoses an error.
+     */
 
+    parse("x __attribute__ ( ( ) ) ;",
+          Expectation().AST( { TranslationUnit,
+                               EmptyDeclaration,
+                               TypedefName,
+                               ExtGNU_AttributeSpecifier,
+                               ExtGNU_Attribute }));
 }
 
 void TestParser::case0740()
 {
-
+    parse("x __attribute__ ( ( noinline ) ) f ( ) { return 0 ; }");
 }
 
 void TestParser::case0741()

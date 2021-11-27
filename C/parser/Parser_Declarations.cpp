@@ -364,7 +364,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
     }
 }
 
-Parser::IdentifierRole Parser::determineRoleOfIdentifier(bool seenType) const
+Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
 {
     /*
      Upon an identifier, when parsing a declaration, we can't
@@ -423,7 +423,8 @@ Parser::IdentifierRole Parser::determineRoleOfIdentifier(bool seenType) const
                 if (seenType)
                     return IdentifierRole::AsDeclarator;
                 seenType = true;
-                [[fallthrough]];
+                ++LA;
+                continue;
 
             // storage-class-specifier
             case Keyword_typedef:
@@ -433,22 +434,34 @@ Parser::IdentifierRole Parser::determineRoleOfIdentifier(bool seenType) const
             case Keyword_register:
             case Keyword__Thread_local:
             case Keyword_ExtGNU___thread:
+                ++LA;
+                continue;
 
             // type-qualifier
             case Keyword_const:
             case Keyword_volatile:
             case Keyword_restrict:
             case Keyword__Atomic:
+                ++LA;
+                continue;
 
             // function-specifier
             case Keyword_inline:
             case Keyword__Noreturn:
+                ++LA;
+                continue;
 
             // alignment-specifier
             case Keyword__Alignas:
+                ++LA;
+                continue;
 
             // attribute-specifier
             case Keyword_ExtGNU___attribute__:
+                if (!parenCnt)
+                    return IdentifierRole::AsTypedefName;
+                ++LA;
+                continue;
 
             // pointer-declarator
             case AsteriskToken:
@@ -921,7 +934,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                     return true;
 
                 if (takeIdentifierAsDecltor
-                        && (determineRoleOfIdentifier(seenType) == IdentifierRole::AsDeclarator))
+                        && (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator))
                     return true;
 
                 seenType = true;
@@ -1084,7 +1097,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                     return true;
 
                 if (takeIdentifierAsDecltor
-                        && (determineRoleOfIdentifier(seenType) == IdentifierRole::AsDeclarator))
+                        && (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator))
                     return true;
 
                 seenType = true;
