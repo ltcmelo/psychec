@@ -86,7 +86,7 @@ Inheritance diagram for psy::C::IntegerConstant:</div>
   <map id="psy::C::IntegerConstant_map" name="psy::C::IntegerConstant_map">
 <area href="classpsy_1_1_c_1_1_constant.html" title="The Constant class." alt="psy::C::Constant" shape="rect" coords="0,112,141,136"/>
 <area href="classpsy_1_1_c_1_1_syntax_lexeme.html" title="The SyntaxLexeme class." alt="psy::C::SyntaxLexeme" shape="rect" coords="0,56,141,80"/>
-<area href="classpsy_1_1_text_span.html" title="The TextSpan class." alt="psy::TextSpan" shape="rect" coords="0,0,141,24"/>
+<area href="classpsy_1_1_text_element.html" title="The TextElement class." alt="psy::TextElement" shape="rect" coords="0,0,141,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -115,18 +115,18 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a5c902a23f6287d5f40643bc003721d56"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56" title="The SyntaxLexeme::Kind enumeraiton.">SyntaxLexeme::Kind</a> enumeraiton. <br /></td></tr>
 <tr class="separator:a5c902a23f6287d5f40643bc003721d56 inherit pub_types_classpsy_1_1_c_1_1_syntax_lexeme"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_classpsy_1_1_text_span"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classpsy_1_1_text_span')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classpsy_1_1_text_span.html">psy::TextSpan</a></td></tr>
-<tr class="memitem:a696e69222a5a17564a472ca2e6c28dba inherit pub_types_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top"><a id="a696e69222a5a17564a472ca2e6c28dba"></a>
+<tr class="inherit_header pub_types_classpsy_1_1_text_element"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classpsy_1_1_text_element')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classpsy_1_1_text_element.html">psy::TextElement</a></td></tr>
+<tr class="memitem:a51d2610083392a9ae937443542092f65 inherit pub_types_classpsy_1_1_text_element"><td class="memItemLeft" align="right" valign="top"><a id="a51d2610083392a9ae937443542092f65"></a>
 typedef const char *&#160;</td><td class="memItemRight" valign="bottom"><b>iterator</b></td></tr>
-<tr class="separator:a696e69222a5a17564a472ca2e6c28dba inherit pub_types_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e7083d670f11008b83fbd8aef7a6369 inherit pub_types_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top"><a id="a4e7083d670f11008b83fbd8aef7a6369"></a>
+<tr class="separator:a51d2610083392a9ae937443542092f65 inherit pub_types_classpsy_1_1_text_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0762a47a22371fa2c0fc3f20f2c11f64 inherit pub_types_classpsy_1_1_text_element"><td class="memItemLeft" align="right" valign="top"><a id="a0762a47a22371fa2c0fc3f20f2c11f64"></a>
 typedef iterator&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b></td></tr>
-<tr class="separator:a4e7083d670f11008b83fbd8aef7a6369 inherit pub_types_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a0762a47a22371fa2c0fc3f20f2c11f64 inherit pub_types_classpsy_1_1_text_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa2dc48a58ec8cff75c6a0322fcce26c9"><td class="memItemLeft" align="right" valign="top"><a id="aa2dc48a58ec8cff75c6a0322fcce26c9"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>IntegerConstant</b> (const char *chars, unsigned int <a class="el" href="classpsy_1_1_text_span.html#aba2f33262902bdaf06d637fd2a73e0b1">size</a>)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>IntegerConstant</b> (const char *chars, unsigned int <a class="el" href="classpsy_1_1_text_element.html#afc2fb4fdcabd12d9f325acb31ed67dbe">size</a>)</td></tr>
 <tr class="separator:aa2dc48a58ec8cff75c6a0322fcce26c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9f0027e1ef107155fa3563fd831b86d"><td class="memItemLeft" align="right" valign="top"><a id="aa9f0027e1ef107155fa3563fd831b86d"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_integer_constant.html">IntegerConstant</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>asIntegerConstant</b> () override</td></tr>
@@ -209,48 +209,41 @@ template&lt;&gt; </td></tr>
 template&lt;&gt; </td></tr>
 <tr class="memitem:a475a0b2b8d5ccab81619ef7e9d7621a8 inherit pub_methods_classpsy_1_1_c_1_1_syntax_lexeme"><td class="memTemplItemLeft" align="right" valign="top">char32_t&#160;</td><td class="memTemplItemRight" valign="bottom"><b>value</b> () const</td></tr>
 <tr class="separator:a475a0b2b8d5ccab81619ef7e9d7621a8 inherit pub_methods_classpsy_1_1_c_1_1_syntax_lexeme"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classpsy_1_1_text_span"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classpsy_1_1_text_span')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classpsy_1_1_text_span.html">psy::TextSpan</a></td></tr>
-<tr class="memitem:ae66445b0f0caa219ca1a315b1726e9f6 inherit pub_methods_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top"><a id="ae66445b0f0caa219ca1a315b1726e9f6"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TextSpan</b> (const char *<a class="el" href="classpsy_1_1_text_span.html#a3a9daecce210311d03da46ab5e1efdb4">c_str</a>, unsigned <a class="el" href="classpsy_1_1_text_span.html#aba2f33262902bdaf06d637fd2a73e0b1">size</a>)</td></tr>
-<tr class="separator:ae66445b0f0caa219ca1a315b1726e9f6 inherit pub_methods_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f90a21eba7b0162f7ef5977af580b36 inherit pub_methods_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top"><a id="a2f90a21eba7b0162f7ef5977af580b36"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TextSpan</b> (const <a class="el" href="classpsy_1_1_text_span.html">TextSpan</a> &amp;other)=delete</td></tr>
-<tr class="separator:a2f90a21eba7b0162f7ef5977af580b36 inherit pub_methods_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66f00f88bf37531344a34a3ccd8fb06c inherit pub_methods_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top"><a id="a66f00f88bf37531344a34a3ccd8fb06c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_text_span.html">TextSpan</a> &amp;other)=delete</td></tr>
-<tr class="separator:a66f00f88bf37531344a34a3ccd8fb06c inherit pub_methods_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a060891e7a0ae14c031a92425ff32ebfd inherit pub_methods_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top"><a id="a060891e7a0ae14c031a92425ff32ebfd"></a>
+<tr class="inherit_header pub_methods_classpsy_1_1_text_element"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classpsy_1_1_text_element')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classpsy_1_1_text_element.html">psy::TextElement</a></td></tr>
+<tr class="memitem:a2c77f62bd5270e1fe059afa3401693fb inherit pub_methods_classpsy_1_1_text_element"><td class="memItemLeft" align="right" valign="top"><a id="a2c77f62bd5270e1fe059afa3401693fb"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TextElement</b> (const char *<a class="el" href="classpsy_1_1_text_element.html#a4ee90b34115fb99b2762124534a904df">c_str</a>, unsigned int <a class="el" href="classpsy_1_1_text_element.html#afc2fb4fdcabd12d9f325acb31ed67dbe">size</a>)</td></tr>
+<tr class="separator:a2c77f62bd5270e1fe059afa3401693fb inherit pub_methods_classpsy_1_1_text_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95c43b77be53139e1b96cf65161997d6 inherit pub_methods_classpsy_1_1_text_element"><td class="memItemLeft" align="right" valign="top"><a id="a95c43b77be53139e1b96cf65161997d6"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TextElement</b> (const <a class="el" href="classpsy_1_1_text_element.html">TextElement</a> &amp;other)=delete</td></tr>
+<tr class="separator:a95c43b77be53139e1b96cf65161997d6 inherit pub_methods_classpsy_1_1_text_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12556838b0f26c37e3f973ad8951c08b inherit pub_methods_classpsy_1_1_text_element"><td class="memItemLeft" align="right" valign="top"><a id="a12556838b0f26c37e3f973ad8951c08b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_text_element.html">TextElement</a> &amp;other)=delete</td></tr>
+<tr class="separator:a12556838b0f26c37e3f973ad8951c08b inherit pub_methods_classpsy_1_1_text_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9df0f838283f82946b96e7bb1416c5eb inherit pub_methods_classpsy_1_1_text_element"><td class="memItemLeft" align="right" valign="top"><a id="a9df0f838283f82946b96e7bb1416c5eb"></a>
 iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const</td></tr>
-<tr class="separator:a060891e7a0ae14c031a92425ff32ebfd inherit pub_methods_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a907a92edb682e8444076491fecf61285 inherit pub_methods_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top"><a id="a907a92edb682e8444076491fecf61285"></a>
+<tr class="separator:a9df0f838283f82946b96e7bb1416c5eb inherit pub_methods_classpsy_1_1_text_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10b9a4e1a7cc50e1a68f49309573a058 inherit pub_methods_classpsy_1_1_text_element"><td class="memItemLeft" align="right" valign="top"><a id="a10b9a4e1a7cc50e1a68f49309573a058"></a>
 iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const</td></tr>
-<tr class="separator:a907a92edb682e8444076491fecf61285 inherit pub_methods_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b2288b5cc500b9253215d315c36e6e0 inherit pub_methods_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_text_span.html#a7b2288b5cc500b9253215d315c36e6e0">at</a> (unsigned idx) const</td></tr>
-<tr class="separator:a7b2288b5cc500b9253215d315c36e6e0 inherit pub_methods_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a9daecce210311d03da46ab5e1efdb4 inherit pub_methods_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_text_span.html#a3a9daecce210311d03da46ab5e1efdb4">c_str</a> () const</td></tr>
-<tr class="separator:a3a9daecce210311d03da46ab5e1efdb4 inherit pub_methods_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d72b71867481fdb79e0f7d1cfb4af15 inherit pub_methods_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top"><a id="a9d72b71867481fdb79e0f7d1cfb4af15"></a>
-unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>hashCode</b> () const</td></tr>
-<tr class="separator:a9d72b71867481fdb79e0f7d1cfb4af15 inherit pub_methods_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba2f33262902bdaf06d637fd2a73e0b1 inherit pub_methods_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_text_span.html#aba2f33262902bdaf06d637fd2a73e0b1">size</a> () const</td></tr>
-<tr class="separator:aba2f33262902bdaf06d637fd2a73e0b1 inherit pub_methods_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7215d0aa75d316b9845ef916099f935e inherit pub_methods_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top"><a id="a7215d0aa75d316b9845ef916099f935e"></a>
-unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>length</b> () const</td></tr>
-<tr class="separator:a7215d0aa75d316b9845ef916099f935e inherit pub_methods_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a10b9a4e1a7cc50e1a68f49309573a058 inherit pub_methods_classpsy_1_1_text_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9653f9214a3f46e0bebe944266776261 inherit pub_methods_classpsy_1_1_text_element"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_text_element.html#a9653f9214a3f46e0bebe944266776261">at</a> (unsigned int idx) const</td></tr>
+<tr class="separator:a9653f9214a3f46e0bebe944266776261 inherit pub_methods_classpsy_1_1_text_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ee90b34115fb99b2762124534a904df inherit pub_methods_classpsy_1_1_text_element"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_text_element.html#a4ee90b34115fb99b2762124534a904df">c_str</a> () const</td></tr>
+<tr class="separator:a4ee90b34115fb99b2762124534a904df inherit pub_methods_classpsy_1_1_text_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc2fb4fdcabd12d9f325acb31ed67dbe inherit pub_methods_classpsy_1_1_text_element"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_text_element.html#afc2fb4fdcabd12d9f325acb31ed67dbe">size</a> () const</td></tr>
+<tr class="separator:afc2fb4fdcabd12d9f325acb31ed67dbe inherit pub_methods_classpsy_1_1_text_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a925d9a45b70caeceb13656c71227060b inherit pub_methods_classpsy_1_1_text_element"><td class="memItemLeft" align="right" valign="top"><a id="a925d9a45b70caeceb13656c71227060b"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>length</b> () const</td></tr>
+<tr class="separator:a925d9a45b70caeceb13656c71227060b inherit pub_methods_classpsy_1_1_text_element"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_static_methods_classpsy_1_1_text_span"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classpsy_1_1_text_span')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classpsy_1_1_text_span.html">psy::TextSpan</a></td></tr>
-<tr class="memitem:ac76cd6fdb72ada1563ab9ab71d6e4930 inherit pub_static_methods_classpsy_1_1_text_span"><td class="memItemLeft" align="right" valign="top"><a id="ac76cd6fdb72ada1563ab9ab71d6e4930"></a>
-static unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>hashCode</b> (const char *<a class="el" href="classpsy_1_1_text_span.html#a3a9daecce210311d03da46ab5e1efdb4">c_str</a>, unsigned <a class="el" href="classpsy_1_1_text_span.html#aba2f33262902bdaf06d637fd2a73e0b1">size</a>)</td></tr>
-<tr class="separator:ac76cd6fdb72ada1563ab9ab71d6e4930 inherit pub_static_methods_classpsy_1_1_text_span"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classpsy_1_1_c_1_1_constant"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classpsy_1_1_c_1_1_constant')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classpsy_1_1_c_1_1_constant.html">psy::C::Constant</a></td></tr>
 <tr class="memitem:a145037d4ebf3a9fa6a4d30ef0783b0e9 inherit pro_methods_classpsy_1_1_c_1_1_constant"><td class="memItemLeft" align="right" valign="top"><a id="a145037d4ebf3a9fa6a4d30ef0783b0e9"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Constant</b> (const char *chars, unsigned int <a class="el" href="classpsy_1_1_text_span.html#aba2f33262902bdaf06d637fd2a73e0b1">size</a>, <a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56">Kind</a> <a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a8403358842bbfd182fb7e5671cb1a64e">kind</a>)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Constant</b> (const char *chars, unsigned int <a class="el" href="classpsy_1_1_text_element.html#afc2fb4fdcabd12d9f325acb31ed67dbe">size</a>, <a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56">Kind</a> <a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a8403358842bbfd182fb7e5671cb1a64e">kind</a>)</td></tr>
 <tr class="separator:a145037d4ebf3a9fa6a4d30ef0783b0e9 inherit pro_methods_classpsy_1_1_c_1_1_constant"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classpsy_1_1_c_1_1_syntax_lexeme"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classpsy_1_1_c_1_1_syntax_lexeme')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html">psy::C::SyntaxLexeme</a></td></tr>
 <tr class="memitem:ad22bdce2fdbc02efdfef78f4d5a56286 inherit pro_methods_classpsy_1_1_c_1_1_syntax_lexeme"><td class="memItemLeft" align="right" valign="top"><a id="ad22bdce2fdbc02efdfef78f4d5a56286"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxLexeme</b> (const char *chars, unsigned int <a class="el" href="classpsy_1_1_text_span.html#aba2f33262902bdaf06d637fd2a73e0b1">size</a>, <a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56">Kind</a> <a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a8403358842bbfd182fb7e5671cb1a64e">kind</a>)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxLexeme</b> (const char *chars, unsigned int <a class="el" href="classpsy_1_1_text_element.html#afc2fb4fdcabd12d9f325acb31ed67dbe">size</a>, <a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56">Kind</a> <a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a8403358842bbfd182fb7e5671cb1a64e">kind</a>)</td></tr>
 <tr class="separator:ad22bdce2fdbc02efdfef78f4d5a56286 inherit pro_methods_classpsy_1_1_c_1_1_syntax_lexeme"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a879be8f741cef804231fd4bb96d828e8 inherit pro_methods_classpsy_1_1_c_1_1_syntax_lexeme"><td class="memItemLeft" align="right" valign="top"><a id="a879be8f741cef804231fd4bb96d828e8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>checkHexPrefix</b> ()</td></tr>

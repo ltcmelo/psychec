@@ -105,11 +105,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const 
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
-<tr class="memitem:ac5ca783a5128af18c4b3ef2f9fda4755"><td class="memItemLeft" align="right" valign="top"><a id="ac5ca783a5128af18c4b3ef2f9fda4755"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>DeclarationContext</b> : uint8_t { <b>TopLevel</b>, 
-<b>Member</b>, 
-<b>Parameter</b>
+<tr class="memitem:a846861f4315842abc4c85dd23f57b3dd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a846861f4315842abc4c85dd23f57b3dd">DeclarationScope</a> : uint8_t { <b>File</b>, 
+<b>Block</b>, 
+<b>FunctionPrototype</b>
  }</td></tr>
-<tr class="separator:ac5ca783a5128af18c4b3ef2f9fda4755"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:a846861f4315842abc4c85dd23f57b3dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The scope of a declaration.  <a href="classpsy_1_1_c_1_1_parser.html#a846861f4315842abc4c85dd23f57b3dd">More...</a><br /></td></tr>
+<tr class="separator:a846861f4315842abc4c85dd23f57b3dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d26c370e34dcb351131e9b97c8b9d0e"><td class="memItemLeft" align="right" valign="top"><a id="a3d26c370e34dcb351131e9b97c8b9d0e"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>DeclaratorVariety</b> : uint8_t { <b>Named</b>, 
 <b>Abstract</b>
  }</td></tr>
@@ -119,7 +120,9 @@ Private Types</h2></td></tr>
  }</td></tr>
 <tr class="separator:acb7c97d6a0889e82feb0e2cdc066eb35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19f50464cb0306deacebba1eb9f6e21b"><td class="memItemLeft" align="right" valign="top"><a id="a19f50464cb0306deacebba1eb9f6e21b"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>StatementContext</b> : uint8_t { <b>None</b>, 
-<b>WithinSwitch</b>
+<b>Switch</b>, 
+<b>Loop</b>, 
+<b>SwitchAndLoop</b>
  }</td></tr>
 <tr class="separator:a19f50464cb0306deacebba1eb9f6e21b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -146,24 +149,20 @@ LexedTokens::IndexType&#160;</td><td class="memItemRight" valign="bottom"><b>con
 template&lt;class NodeT , class... Args&gt; </td></tr>
 <tr class="memitem:ae457c5fe9f3a180473397bcc5278c1d2"><td class="memTemplItemLeft" align="right" valign="top">NodeT *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>makeNode</b> (Args &amp;&amp;... args) const</td></tr>
 <tr class="separator:ae457c5fe9f3a180473397bcc5278c1d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac937ae64f044c3c45a23d1fc406cb0b5"><td class="memTemplParams" colspan="2"><a id="ac937ae64f044c3c45a23d1fc406cb0b5"></a>
-template&lt;class NodeT , class NodeListT &gt; </td></tr>
-<tr class="memitem:ac937ae64f044c3c45a23d1fc406cb0b5"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parseCommaSeparatedItems</b> (NodeListT *&amp;nodeList, bool(Parser::*parseItem)(NodeT *&amp;node, NodeListT *&amp;nodeList))</td></tr>
-<tr class="separator:ac937ae64f044c3c45a23d1fc406cb0b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99667beb8a441fa17ce48730575f21fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a99667beb8a441fa17ce48730575f21fb">parseTranslationUnit</a> (<a class="el" href="classpsy_1_1_c_1_1_translation_unit_syntax.html">TranslationUnitSyntax</a> *&amp;unit)</td></tr>
 <tr class="separator:a99667beb8a441fa17ce48730575f21fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9af6f1747c824e8989f37b557f4ac3e1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a9af6f1747c824e8989f37b557f4ac3e1">parseExternalDeclaration</a> (<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;decl)</td></tr>
 <tr class="separator:a9af6f1747c824e8989f37b557f4ac3e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab550d4e412c963cd06f06f4d3c3d6dd6"><td class="memItemLeft" align="right" valign="top"><a id="ab550d4e412c963cd06f06f4d3c3d6dd6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>parseEmptyDeclaration_AtFirst</b> (<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;decl, const <a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *specList=nullptr)</td></tr>
-<tr class="separator:ab550d4e412c963cd06f06f4d3c3d6dd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a559b69a07659cc31ecda49e5606eb33a"><td class="memItemLeft" align="right" valign="top"><a id="a559b69a07659cc31ecda49e5606eb33a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>parseIncompleteDeclaration_AtFirst</b> (<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;decl, const <a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *specList=nullptr)</td></tr>
+<tr class="separator:a559b69a07659cc31ecda49e5606eb33a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85f82802e6eb142b61961b60faab4efc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a85f82802e6eb142b61961b60faab4efc">parseStaticAssertDeclaration_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;decl)</td></tr>
 <tr class="separator:a85f82802e6eb142b61961b60faab4efc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f27ff930220f92c7985f6a5d5c78eee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a2f27ff930220f92c7985f6a5d5c78eee">parseExtGNU_AsmStatementDeclaration_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;decl)</td></tr>
 <tr class="separator:a2f27ff930220f92c7985f6a5d5c78eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa977fe72dcda468d61611afeb004a452"><td class="memItemLeft" align="right" valign="top"><a id="aa977fe72dcda468d61611afeb004a452"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseDeclaration</b> (<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;decl, bool(Parser::*parseSpecifiers)(<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;, <a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *&amp;, bool), bool(Parser::*parse_AtFollowOfSpecifiers)(<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;, const <a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *), DeclarationContext declCtx)</td></tr>
-<tr class="separator:aa977fe72dcda468d61611afeb004a452"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a103f4e8dcdf51eb73b7af9f5d6e3d093"><td class="memItemLeft" align="right" valign="top"><a id="a103f4e8dcdf51eb73b7af9f5d6e3d093"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseDeclaration</b> (<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;decl, bool(Parser::*parseSpecifiers)(<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;, <a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *&amp;, bool), bool(Parser::*parse_AtFollowOfSpecifiers)(<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;, const <a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *), <a class="el" href="classpsy_1_1_c_1_1_parser.html#a846861f4315842abc4c85dd23f57b3dd">DeclarationScope</a> declScope)</td></tr>
+<tr class="separator:a103f4e8dcdf51eb73b7af9f5d6e3d093"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a728bbac45f245744d356e4001581f2bb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a728bbac45f245744d356e4001581f2bb">parseDeclarationOrFunctionDefinition</a> (<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;decl)</td></tr>
 <tr class="separator:a728bbac45f245744d356e4001581f2bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd7feeacbe39577d47371629cdf019b4"><td class="memItemLeft" align="right" valign="top"><a id="acd7feeacbe39577d47371629cdf019b4"></a>
@@ -210,13 +209,11 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>ignoreStatement</b> (
 <tr class="separator:a65b1cbb11491962e403152c633f466fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0cd47a5dd734b69ffcca5dc5942991c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#ae0cd47a5dd734b69ffcca5dc5942991c">parseTypedefName_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_specifier_syntax.html">SpecifierSyntax</a> *&amp;spec)</td></tr>
 <tr class="separator:ae0cd47a5dd734b69ffcca5dc5942991c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d4a7c24d4bea2a35580504345935ec6"><td class="memTemplParams" colspan="2">template&lt;class TypeDeclT &gt; </td></tr>
-<tr class="memitem:a2d4a7c24d4bea2a35580504345935ec6"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a2d4a7c24d4bea2a35580504345935ec6">parseTaggedTypeSpecifier</a> (<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;decl, <a class="el" href="classpsy_1_1_c_1_1_specifier_syntax.html">SpecifierSyntax</a> *&amp;spec, SyntaxKind declK, SyntaxKind specK, bool(Parser::*parseMember)(<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;))</td></tr>
-<tr class="separator:a2d4a7c24d4bea2a35580504345935ec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa4345f47c0af995cffa7ecb732ba268"><td class="memTemplParams" colspan="2"><a id="aaa4345f47c0af995cffa7ecb732ba268"></a>
-template&lt;class SpecT &gt; </td></tr>
-<tr class="memitem:aaa4345f47c0af995cffa7ecb732ba268"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parseParenthesizedTypeNameOrExpression_AtFollowOfSpecifier</b> (SpecT *&amp;spec)</td></tr>
-<tr class="separator:aaa4345f47c0af995cffa7ecb732ba268"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6d8468cdb2252fc7e0d3a1d473b7fce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#af6d8468cdb2252fc7e0d3a1d473b7fce">parseAtomiceTypeSpecifier_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_specifier_syntax.html">SpecifierSyntax</a> *&amp;spec)</td></tr>
+<tr class="separator:af6d8468cdb2252fc7e0d3a1d473b7fce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada40a254310d1bef0f5a256c8f2dda57"><td class="memTemplParams" colspan="2">template&lt;class TypeDeclT &gt; </td></tr>
+<tr class="memitem:ada40a254310d1bef0f5a256c8f2dda57"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#ada40a254310d1bef0f5a256c8f2dda57">parseTaggedTypeSpecifier_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;decl, <a class="el" href="classpsy_1_1_c_1_1_specifier_syntax.html">SpecifierSyntax</a> *&amp;spec, SyntaxKind declK, SyntaxKind specK, bool(Parser::*parseMember)(<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;))</td></tr>
+<tr class="separator:ada40a254310d1bef0f5a256c8f2dda57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ba42192dd32efea91d59587234bd29d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a2ba42192dd32efea91d59587234bd29d">parseExtGNU_AttributeSpecifierList_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *&amp;specList)</td></tr>
 <tr class="separator:a2ba42192dd32efea91d59587234bd29d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa14b91b581cf17a7b22926abf0fd8b6f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#aa14b91b581cf17a7b22926abf0fd8b6f">parseExtGNU_AttributeSpecifier_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_specifier_syntax.html">SpecifierSyntax</a> *&amp;spec)</td></tr>
@@ -229,30 +226,31 @@ template&lt;class SpecT &gt; </td></tr>
 <tr class="separator:a5c0b528dca3199f47521f56a19b70e46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66366cb197d2905a9aa91040cd4faf75"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a66366cb197d2905a9aa91040cd4faf75">parseExtGNU_AttributeArgumentsLLVM</a> (<a class="el" href="classpsy_1_1_c_1_1_syntax_node_separated_list.html">ExpressionListSyntax</a> *&amp;exprList)</td></tr>
 <tr class="separator:a66366cb197d2905a9aa91040cd4faf75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa23e1aa38c168e1d1aa5746f45479fa6"><td class="memItemLeft" align="right" valign="top"><a id="aa23e1aa38c168e1d1aa5746f45479fa6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseExtGNU_AsmLabel_AtFirst</b> (<a class="el" href="classpsy_1_1_c_1_1_specifier_syntax.html">SpecifierSyntax</a> *&amp;attr)</td></tr>
+<tr class="separator:aa23e1aa38c168e1d1aa5746f45479fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29fd7d758424760caae318d9131a1789"><td class="memItemLeft" align="right" valign="top"><a id="a29fd7d758424760caae318d9131a1789"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseExtPSY_QuantifiedTypeSpecifier_AtFirst</b> (<a class="el" href="classpsy_1_1_c_1_1_specifier_syntax.html">SpecifierSyntax</a> *&amp;spec)</td></tr>
 <tr class="separator:a29fd7d758424760caae318d9131a1789"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a551c548c4e1c778c47a5bf50352de268"><td class="memItemLeft" align="right" valign="top"><a id="a551c548c4e1c778c47a5bf50352de268"></a>
-IdentifierRole&#160;</td><td class="memItemRight" valign="bottom"><b>determineRoleOfIdentifier</b> (bool seenType) const</td></tr>
-<tr class="separator:a551c548c4e1c778c47a5bf50352de268"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac892767b7c19fd657cc97897b94fa328"><td class="memItemLeft" align="right" valign="top"><a id="ac892767b7c19fd657cc97897b94fa328"></a>
+IdentifierRole&#160;</td><td class="memItemRight" valign="bottom"><b>determineIdentifierRole</b> (bool seenType) const</td></tr>
+<tr class="separator:ac892767b7c19fd657cc97897b94fa328"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada6bb72a88ca389113240fa221e9d6c9"><td class="memItemLeft" align="right" valign="top"><a id="ada6bb72a88ca389113240fa221e9d6c9"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseAbstractDeclarator</b> (<a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&amp;decltor)</td></tr>
 <tr class="separator:ada6bb72a88ca389113240fa221e9d6c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00658640b7ee1b73868b1b0ddb5398d0"><td class="memItemLeft" align="right" valign="top"><a id="a00658640b7ee1b73868b1b0ddb5398d0"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseDeclarator</b> (<a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&amp;decltor, DeclarationContext declCtx)</td></tr>
-<tr class="separator:a00658640b7ee1b73868b1b0ddb5398d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa17f4c03236888f7313ec7f3cdaa5eec"><td class="memItemLeft" align="right" valign="top"><a id="aa17f4c03236888f7313ec7f3cdaa5eec"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseDeclarator</b> (<a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&amp;decltor, DeclarationContext declCtx, DeclaratorVariety decltorVariety)</td></tr>
-<tr class="separator:aa17f4c03236888f7313ec7f3cdaa5eec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5684b423f01de456e13c68aca5ceecfd"><td class="memItemLeft" align="right" valign="top"><a id="a5684b423f01de456e13c68aca5ceecfd"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseDirectDeclarator</b> (<a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&amp;decltor, DeclarationContext declCtx, DeclaratorVariety decltorVariety, <a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *attrList)</td></tr>
-<tr class="separator:a5684b423f01de456e13c68aca5ceecfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb2236154fbc34c182ad7b24ce91d3eb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#aeb2236154fbc34c182ad7b24ce91d3eb">parseDirectDeclaratorSuffix</a> (<a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&amp;decltor, DeclarationContext declCtx, DeclaratorVariety decltorVariety, <a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *attrList, <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *innerDecltor)</td></tr>
-<tr class="separator:aeb2236154fbc34c182ad7b24ce91d3eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7311299cfe8d80acaf489565beba4602"><td class="memItemLeft" align="right" valign="top"><a id="a7311299cfe8d80acaf489565beba4602"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseDeclarator</b> (<a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&amp;decltor, <a class="el" href="classpsy_1_1_c_1_1_parser.html#a846861f4315842abc4c85dd23f57b3dd">DeclarationScope</a> declScope)</td></tr>
+<tr class="separator:a7311299cfe8d80acaf489565beba4602"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63fa771ff2adb70155e731bc0801dcb4"><td class="memItemLeft" align="right" valign="top"><a id="a63fa771ff2adb70155e731bc0801dcb4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseDeclarator</b> (<a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&amp;decltor, <a class="el" href="classpsy_1_1_c_1_1_parser.html#a846861f4315842abc4c85dd23f57b3dd">DeclarationScope</a> declScope, DeclaratorVariety decltorVariety)</td></tr>
+<tr class="separator:a63fa771ff2adb70155e731bc0801dcb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace756209cf9e8973e7a633516dacdac3"><td class="memItemLeft" align="right" valign="top"><a id="ace756209cf9e8973e7a633516dacdac3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseDirectDeclarator</b> (<a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&amp;decltor, <a class="el" href="classpsy_1_1_c_1_1_parser.html#a846861f4315842abc4c85dd23f57b3dd">DeclarationScope</a> declScope, DeclaratorVariety decltorVariety, <a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *attrList)</td></tr>
+<tr class="separator:ace756209cf9e8973e7a633516dacdac3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a087a0d827dc0477b83cf393fd2434414"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a087a0d827dc0477b83cf393fd2434414">parseDirectDeclaratorSuffix</a> (<a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&amp;decltor, <a class="el" href="classpsy_1_1_c_1_1_parser.html#a846861f4315842abc4c85dd23f57b3dd">DeclarationScope</a> declScope, DeclaratorVariety decltorVariety, <a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *attrList, <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *innerDecltor)</td></tr>
+<tr class="separator:a087a0d827dc0477b83cf393fd2434414"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98e739f6e335bc4e7c2034ab5918dc62"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a98e739f6e335bc4e7c2034ab5918dc62">parseTypeQualifiersAndAttributes</a> (<a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">SpecifierListSyntax</a> *&amp;specList)</td></tr>
 <tr class="separator:a98e739f6e335bc4e7c2034ab5918dc62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8177335140e90abb517a0fe696bbaf1e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a8177335140e90abb517a0fe696bbaf1e">parseTypeName</a> (<a class="el" href="classpsy_1_1_c_1_1_type_name_syntax.html">TypeNameSyntax</a> *&amp;typeName)</td></tr>
-<tr class="separator:a8177335140e90abb517a0fe696bbaf1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4712d7d67611f10c720d5b8a548991a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#ae4712d7d67611f10c720d5b8a548991a">parseInitializer</a> (<a class="el" href="classpsy_1_1_c_1_1_initializer_syntax.html">InitializerSyntax</a> *&amp;init)</td></tr>
 <tr class="separator:ae4712d7d67611f10c720d5b8a548991a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa89c6c8ba6411780467a5c02229fd8a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#aa89c6c8ba6411780467a5c02229fd8a9">parseExpressionInitializer</a> (<a class="el" href="classpsy_1_1_c_1_1_initializer_syntax.html">InitializerSyntax</a> *&amp;init)</td></tr>
@@ -281,6 +279,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseArrayDesignator_
 <tr class="separator:a42fa51ec44f6740ef75ba8aa414141c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7904d1d81313eb9fc22d202758826433"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a7904d1d81313eb9fc22d202758826433">parsePrimaryExpression</a> (<a class="el" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> *&amp;expr)</td></tr>
 <tr class="separator:a7904d1d81313eb9fc22d202758826433"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af78ac1d973a1e8877fd9fb8f60382eaa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#af78ac1d973a1e8877fd9fb8f60382eaa">parseIdentifierExpression</a> (<a class="el" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> *&amp;expr)</td></tr>
+<tr class="separator:af78ac1d973a1e8877fd9fb8f60382eaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61b0c0645cfec0168d8b031ceaf1afe8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a61b0c0645cfec0168d8b031ceaf1afe8">parseIdentifierExpression_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> *&amp;expr)</td></tr>
 <tr class="separator:a61b0c0645cfec0168d8b031ceaf1afe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc40061af8b5536b72ce248528836eb3"><td class="memTemplParams" colspan="2">template&lt;class ExprT &gt; </td></tr>
@@ -305,6 +305,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseArrayDesignator_
 <tr class="separator:a0df4db8c4d6bec1e0243b33fde6b6d0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacc508cede9cc1d63a0ee0e84ea3c0e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#aacc508cede9cc1d63a0ee0e84ea3c0e0">parseExpressionWithPrecedencePostfix</a> (<a class="el" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> *&amp;expr)</td></tr>
 <tr class="separator:aacc508cede9cc1d63a0ee0e84ea3c0e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf23fe89d9bfd2cfeb2d6dadaf52fdd4"><td class="memItemLeft" align="right" valign="top"><a id="aaf23fe89d9bfd2cfeb2d6dadaf52fdd4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>parsePostfixExpression_AtFollow</b> (<a class="el" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> *&amp;expr)</td></tr>
+<tr class="separator:aaf23fe89d9bfd2cfeb2d6dadaf52fdd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1410d1f8b8dcb944a3c192db0884c4e7"><td class="memTemplParams" colspan="2">template&lt;class ExprT &gt; </td></tr>
 <tr class="memitem:a1410d1f8b8dcb944a3c192db0884c4e7"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a1410d1f8b8dcb944a3c192db0884c4e7">parsePostfixExpression_AtPostfix</a> (<a class="el" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> *&amp;expr, SyntaxKind exprK, std::function&lt; bool(ExprT *&amp;)&gt; parsePostfix)</td></tr>
 <tr class="separator:a1410d1f8b8dcb944a3c192db0884c4e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -367,33 +370,33 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseNAryExpression_A
 template&lt;class NodeT &gt; </td></tr>
 <tr class="memitem:a3882121b7f487b37a52597b122cc5721"><td class="memTemplItemLeft" align="right" valign="top">NodeT *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>fill_LeftOperandInfixOperatorRightOperand_MIXIN</b> (NodeT *expr, <a class="el" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> *left, LexedTokens::IndexType opTkIdx, <a class="el" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> *right)</td></tr>
 <tr class="separator:a3882121b7f487b37a52597b122cc5721"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2698350faa9579a6bffc2fdaf8d1d11d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a2698350faa9579a6bffc2fdaf8d1d11d">parseStatement</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx=StatementContext::None)</td></tr>
-<tr class="separator:a2698350faa9579a6bffc2fdaf8d1d11d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e6c9c4dcf8fdd1f805e54f2e66fdc76"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a8e6c9c4dcf8fdd1f805e54f2e66fdc76">parseCompoundStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx=StatementContext::None)</td></tr>
-<tr class="separator:a8e6c9c4dcf8fdd1f805e54f2e66fdc76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1522f05e48327c5cc6e297e0fe7318a7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a1522f05e48327c5cc6e297e0fe7318a7">parseStatement</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx)</td></tr>
+<tr class="separator:a1522f05e48327c5cc6e297e0fe7318a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3aec309fbe754fc1d72fc4140d5d3a00"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a3aec309fbe754fc1d72fc4140d5d3a00">parseCompoundStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx)</td></tr>
+<tr class="separator:a3aec309fbe754fc1d72fc4140d5d3a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ca738a7216dd278103751784a315f93"><td class="memItemLeft" align="right" valign="top"><a id="a6ca738a7216dd278103751784a315f93"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseDeclarationStatement</b> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, bool(Parser::*parseDecl)(<a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;))</td></tr>
 <tr class="separator:a6ca738a7216dd278103751784a315f93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29c8ec09ba416869936ecaa1ea73bfaa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a29c8ec09ba416869936ecaa1ea73bfaa">parseExpressionStatement</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
 <tr class="separator:a29c8ec09ba416869936ecaa1ea73bfaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a743612b586ff7a9c3c5ad21144390d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a9a743612b586ff7a9c3c5ad21144390d">parseLabeledStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
-<tr class="separator:a9a743612b586ff7a9c3c5ad21144390d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5016b75899e550a9d93c9c9fe353b81"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#ae5016b75899e550a9d93c9c9fe353b81">parseIfStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
-<tr class="separator:ae5016b75899e550a9d93c9c9fe353b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14b8349ab049349fcfc5628355847672"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a14b8349ab049349fcfc5628355847672">parseSwitchStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
-<tr class="separator:a14b8349ab049349fcfc5628355847672"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38237f796cd587677f229f03a081a93d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a38237f796cd587677f229f03a081a93d">parseWhileStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
-<tr class="separator:a38237f796cd587677f229f03a081a93d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add16317147bf895d96a9197f7872c6a7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#add16317147bf895d96a9197f7872c6a7">parseDoStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
-<tr class="separator:add16317147bf895d96a9197f7872c6a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4a21050e5791557458fbeffe7fd85dd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#aa4a21050e5791557458fbeffe7fd85dd">parseForStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
-<tr class="separator:aa4a21050e5791557458fbeffe7fd85dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2daa8904b5786d6d72452e33c631f495"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a2daa8904b5786d6d72452e33c631f495">parseLabeledStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx)</td></tr>
+<tr class="separator:a2daa8904b5786d6d72452e33c631f495"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a986ed810d3f63d77690892816f109efc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a986ed810d3f63d77690892816f109efc">parseIfStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx)</td></tr>
+<tr class="separator:a986ed810d3f63d77690892816f109efc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0069b5e560093b7ac850f75a2ea2ef2d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a0069b5e560093b7ac850f75a2ea2ef2d">parseSwitchStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx)</td></tr>
+<tr class="separator:a0069b5e560093b7ac850f75a2ea2ef2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15bb57dcb339b6a72d4d456666f77b71"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a15bb57dcb339b6a72d4d456666f77b71">parseWhileStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx)</td></tr>
+<tr class="separator:a15bb57dcb339b6a72d4d456666f77b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affe3a21e96d9bd6b4359b17e2a72fedb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#affe3a21e96d9bd6b4359b17e2a72fedb">parseDoStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx)</td></tr>
+<tr class="separator:affe3a21e96d9bd6b4359b17e2a72fedb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaabca754b1198b388214ac0d27ca27c2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#aaabca754b1198b388214ac0d27ca27c2">parseForStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx)</td></tr>
+<tr class="separator:aaabca754b1198b388214ac0d27ca27c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff926c1309ef3671e80efa2335d71381"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#aff926c1309ef3671e80efa2335d71381">parseGotoStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
 <tr class="separator:aff926c1309ef3671e80efa2335d71381"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60e264c83e10a9e27eb61dd4b99dede2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a60e264c83e10a9e27eb61dd4b99dede2">parseContinueStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
-<tr class="separator:a60e264c83e10a9e27eb61dd4b99dede2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac2d6689e2ece3c670940fe8b07831ea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#aac2d6689e2ece3c670940fe8b07831ea">parseBreakStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
-<tr class="separator:aac2d6689e2ece3c670940fe8b07831ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1dc53dc416ff348229c3abc0d3b2d589"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a1dc53dc416ff348229c3abc0d3b2d589">parseContinueStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx)</td></tr>
+<tr class="separator:a1dc53dc416ff348229c3abc0d3b2d589"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7544f9898e79f4d8172a68754477d654"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a7544f9898e79f4d8172a68754477d654">parseBreakStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt, StatementContext stmtCtx)</td></tr>
+<tr class="separator:a7544f9898e79f4d8172a68754477d654"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfd5a30595011ebd334e17c71063d1f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#acfd5a30595011ebd334e17c71063d1f3">parseReturnStatement_AtFirst</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
 <tr class="separator:acfd5a30595011ebd334e17c71063d1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b004a81758a91d0eef8408a7597b39e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a4b004a81758a91d0eef8408a7597b39e">parseExtGNU_AsmStatement</a> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
@@ -419,15 +422,30 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseExtGNU_AsmClobbe
 <tr class="memitem:a99ea6656debc45fb0c88f4c5e2d964c6"><td class="memItemLeft" align="right" valign="top"><a id="a99ea6656debc45fb0c88f4c5e2d964c6"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseExtGNU_AsmClobber_AtFirst</b> (<a class="el" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> *&amp;clob, <a class="el" href="classpsy_1_1_c_1_1_syntax_node_separated_list.html">ExpressionListSyntax</a> *&amp;clobList)</td></tr>
 <tr class="separator:a99ea6656debc45fb0c88f4c5e2d964c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bfbd5e8d3456e04811857400de9c55f"><td class="memItemLeft" align="right" valign="top"><a id="a9bfbd5e8d3456e04811857400de9c55f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseExtGNU_AsmGotos</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_node_plain_list.html">IdentifierExpressionListSyntax</a> *&amp;labelList)</td></tr>
-<tr class="separator:a9bfbd5e8d3456e04811857400de9c55f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a586750512d910b6f30c2478f52d84415"><td class="memItemLeft" align="right" valign="top"><a id="a586750512d910b6f30c2478f52d84415"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseExtGNU_AsmGotoLabels</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_node_separated_list.html">ExpressionListSyntax</a> *&amp;labelList)</td></tr>
+<tr class="separator:a586750512d910b6f30c2478f52d84415"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae667b8e3770dc1fa7fb534960517c47c"><td class="memItemLeft" align="right" valign="top"><a id="ae667b8e3770dc1fa7fb534960517c47c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseExtGNU_AsmGotoLabel_AtFirst</b> (<a class="el" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> *&amp;label, <a class="el" href="classpsy_1_1_c_1_1_syntax_node_separated_list.html">ExpressionListSyntax</a> *&amp;)</td></tr>
+<tr class="separator:ae667b8e3770dc1fa7fb534960517c47c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa32e7ad32d74aed1f6a23a808921facf"><td class="memItemLeft" align="right" valign="top"><a id="aa32e7ad32d74aed1f6a23a808921facf"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>maybeAmbiguateStatement</b> (<a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;stmt)</td></tr>
 <tr class="separator:aa32e7ad32d74aed1f6a23a808921facf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68578c0f6d7095c887c13e3f6b6fbfe8"><td class="memItemLeft" align="right" valign="top"><a id="a68578c0f6d7095c887c13e3f6b6fbfe8"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkStatementParse</b> (bool stmtParsed)</td></tr>
 <tr class="separator:a68578c0f6d7095c887c13e3f6b6fbfe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac937ae64f044c3c45a23d1fc406cb0b5"><td class="memTemplParams" colspan="2"><a id="ac937ae64f044c3c45a23d1fc406cb0b5"></a>
+template&lt;class NodeT , class NodeListT &gt; </td></tr>
+<tr class="memitem:ac937ae64f044c3c45a23d1fc406cb0b5"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parseCommaSeparatedItems</b> (NodeListT *&amp;nodeList, bool(Parser::*parseItem)(NodeT *&amp;node, NodeListT *&amp;nodeList))</td></tr>
+<tr class="separator:ac937ae64f044c3c45a23d1fc406cb0b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8177335140e90abb517a0fe696bbaf1e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a8177335140e90abb517a0fe696bbaf1e">parseTypeName</a> (<a class="el" href="classpsy_1_1_c_1_1_type_name_syntax.html">TypeNameSyntax</a> *&amp;typeName)</td></tr>
+<tr class="separator:a8177335140e90abb517a0fe696bbaf1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86ab3499f885612b54a3e7713378bcb9"><td class="memItemLeft" align="right" valign="top"><a id="a86ab3499f885612b54a3e7713378bcb9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseParenthesizedTypeNameOrExpression</b> (<a class="el" href="classpsy_1_1_c_1_1_type_reference_syntax.html">TypeReferenceSyntax</a> *&amp;tyRef)</td></tr>
+<tr class="separator:a86ab3499f885612b54a3e7713378bcb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabcdd708dc71b2cd6943bd88f661c96e"><td class="memItemLeft" align="right" valign="top"><a id="aabcdd708dc71b2cd6943bd88f661c96e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>maybeAmbiguateTypeReference</b> (<a class="el" href="classpsy_1_1_c_1_1_type_reference_syntax.html">TypeReferenceSyntax</a> *&amp;tyRef)</td></tr>
+<tr class="separator:aabcdd708dc71b2cd6943bd88f661c96e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -473,10 +491,39 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>DiagnosticsReporter
 <tr class="memitem:a95ecf80e09fe19570a6911d000152d3a"><td class="memItemLeft" align="right" valign="top"><a id="a95ecf80e09fe19570a6911d000152d3a"></a>
 struct&#160;</td><td class="memItemRight" valign="bottom"><b>DepthControl</b></td></tr>
 <tr class="separator:a95ecf80e09fe19570a6911d000152d3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf67282bb197c3e4b3b97de805f9db5b"><td class="memItemLeft" align="right" valign="top"><a id="aaf67282bb197c3e4b3b97de805f9db5b"></a>
+StatementContext&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (StatementContext a, StatementContext b)</td></tr>
+<tr class="separator:aaf67282bb197c3e4b3b97de805f9db5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The C <a class="el" href="classpsy_1_1_c_1_1_parser.html" title="The C Parser class.">Parser</a> class. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a846861f4315842abc4c85dd23f57b3dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a846861f4315842abc4c85dd23f57b3dd">&#9670;&nbsp;</a></span>DeclarationScope</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classpsy_1_1_c_1_1_parser.html#a846861f4315842abc4c85dd23f57b3dd">psy::C::Parser::DeclarationScope</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The scope of a declaration. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>6.2.1-4 </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="a7a8d6442a5817e14f895722f4504ac76"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7a8d6442a5817e14f895722f4504ac76">&#9670;&nbsp;</a></span>inBactrackingMode()</h2>
 
@@ -627,6 +674,34 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>DepthControl</b></t
 
 </div>
 </div>
+<a id="af6d8468cdb2252fc7e0d3a1d473b7fce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6d8468cdb2252fc7e0d3a1d473b7fce">&#9670;&nbsp;</a></span>parseAtomiceTypeSpecifier_AtFirst()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Parser::parseAtomiceTypeSpecifier_AtFirst </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_specifier_syntax.html">SpecifierSyntax</a> *&amp;&#160;</td>
+          <td class="paramname"><em>spec</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Parse an <em>atomic-type-specifier</em>.</p>
+<dl class="section remark"><dt>Remarks</dt><dd>6.7.2.4 </dd></dl>
+
+</div>
+</div>
 <a id="a87853005cb3ee51cdf5a611b87e8c1c1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a87853005cb3ee51cdf5a611b87e8c1c1">&#9670;&nbsp;</a></span>parseBraceEnclosedInitializer_AtFirst()</h2>
 
@@ -658,8 +733,8 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>DepthControl</b></t
 </pre> 
 </div>
 </div>
-<a id="aac2d6689e2ece3c670940fe8b07831ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac2d6689e2ece3c670940fe8b07831ea">&#9670;&nbsp;</a></span>parseBreakStatement_AtFirst()</h2>
+<a id="a7544f9898e79f4d8172a68754477d654"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7544f9898e79f4d8172a68754477d654">&#9670;&nbsp;</a></span>parseBreakStatement_AtFirst()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -671,8 +746,18 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>DepthControl</b></t
           <td class="memname">bool Parser::parseBreakStatement_AtFirst </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;&#160;</td>
-          <td class="paramname"><em>stmt</em></td><td>)</td>
+          <td class="paramname"><em>stmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">StatementContext&#160;</td>
+          <td class="paramname"><em>stmtCtx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -800,8 +885,8 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>DepthControl</b></t
 </pre> 
 </div>
 </div>
-<a id="a8e6c9c4dcf8fdd1f805e54f2e66fdc76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e6c9c4dcf8fdd1f805e54f2e66fdc76">&#9670;&nbsp;</a></span>parseCompoundStatement_AtFirst()</h2>
+<a id="a3aec309fbe754fc1d72fc4140d5d3a00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3aec309fbe754fc1d72fc4140d5d3a00">&#9670;&nbsp;</a></span>parseCompoundStatement_AtFirst()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -819,7 +904,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>DepthControl</b></t
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">StatementContext&#160;</td>
-          <td class="paramname"><em>stmtCtx</em> = <code>StatementContext::None</code>&#160;</td>
+          <td class="paramname"><em>stmtCtx</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -918,8 +1003,8 @@ template&lt;class ExprT &gt; </div>
 
 </div>
 </div>
-<a id="a60e264c83e10a9e27eb61dd4b99dede2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60e264c83e10a9e27eb61dd4b99dede2">&#9670;&nbsp;</a></span>parseContinueStatement_AtFirst()</h2>
+<a id="a1dc53dc416ff348229c3abc0d3b2d589"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1dc53dc416ff348229c3abc0d3b2d589">&#9670;&nbsp;</a></span>parseContinueStatement_AtFirst()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -931,8 +1016,18 @@ template&lt;class ExprT &gt; </div>
           <td class="memname">bool Parser::parseContinueStatement_AtFirst </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;&#160;</td>
-          <td class="paramname"><em>stmt</em></td><td>)</td>
+          <td class="paramname"><em>stmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">StatementContext&#160;</td>
+          <td class="paramname"><em>stmtCtx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -1030,8 +1125,8 @@ function-definition:
 
 </div>
 </div>
-<a id="aeb2236154fbc34c182ad7b24ce91d3eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb2236154fbc34c182ad7b24ce91d3eb">&#9670;&nbsp;</a></span>parseDirectDeclaratorSuffix()</h2>
+<a id="a087a0d827dc0477b83cf393fd2434414"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a087a0d827dc0477b83cf393fd2434414">&#9670;&nbsp;</a></span>parseDirectDeclaratorSuffix()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1048,8 +1143,8 @@ function-definition:
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">DeclarationContext&#160;</td>
-          <td class="paramname"><em>declCtx</em>, </td>
+          <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_parser.html#a846861f4315842abc4c85dd23f57b3dd">DeclarationScope</a>&#160;</td>
+          <td class="paramname"><em>declScope</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1091,8 +1186,8 @@ function-definition:
 
 </div>
 </div>
-<a id="add16317147bf895d96a9197f7872c6a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add16317147bf895d96a9197f7872c6a7">&#9670;&nbsp;</a></span>parseDoStatement_AtFirst()</h2>
+<a id="affe3a21e96d9bd6b4359b17e2a72fedb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affe3a21e96d9bd6b4359b17e2a72fedb">&#9670;&nbsp;</a></span>parseDoStatement_AtFirst()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1104,8 +1199,18 @@ function-definition:
           <td class="memname">bool Parser::parseDoStatement_AtFirst </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;&#160;</td>
-          <td class="paramname"><em>stmt</em></td><td>)</td>
+          <td class="paramname"><em>stmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">StatementContext&#160;</td>
+          <td class="paramname"><em>stmtCtx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -1173,7 +1278,7 @@ function-definition:
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Parse an <em>expression</em>.</p>
+<p>Parse an <em>expression</em>. <a href="https://docs.google.com/spreadsheets/d/1oGjtFaqLzSoBEp2aGNgHrbEHxSi4Ijv57mXMPymZEcQ/edit?usp=sharing">This table </a> describes the choices taken by the parser as according to the grammar rules.</p>
 <pre class="fragment">expression:
     assignment-expression
     expression , assignment-expression
@@ -2093,8 +2198,8 @@ unary-operator: &amp; * + - ~ !
 
 </div>
 </div>
-<a id="aa4a21050e5791557458fbeffe7fd85dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa4a21050e5791557458fbeffe7fd85dd">&#9670;&nbsp;</a></span>parseForStatement_AtFirst()</h2>
+<a id="aaabca754b1198b388214ac0d27ca27c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaabca754b1198b388214ac0d27ca27c2">&#9670;&nbsp;</a></span>parseForStatement_AtFirst()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2106,8 +2211,18 @@ unary-operator: &amp; * + - ~ !
           <td class="memname">bool Parser::parseForStatement_AtFirst </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;&#160;</td>
-          <td class="paramname"><em>stmt</em></td><td>)</td>
+          <td class="paramname"><em>stmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">StatementContext&#160;</td>
+          <td class="paramname"><em>stmtCtx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -2251,6 +2366,34 @@ unary-operator: &amp; * + - ~ !
 
 </div>
 </div>
+<a id="af78ac1d973a1e8877fd9fb8f60382eaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af78ac1d973a1e8877fd9fb8f60382eaa">&#9670;&nbsp;</a></span>parseIdentifierExpression()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Parser::parseIdentifierExpression </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> *&amp;&#160;</td>
+          <td class="paramname"><em>expr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Parse an <em>identifier</em>.</p>
+<dl class="section remark"><dt>Remarks</dt><dd>6.4.2 and 6.5.1 </dd></dl>
+
+</div>
+</div>
 <a id="a61b0c0645cfec0168d8b031ceaf1afe8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a61b0c0645cfec0168d8b031ceaf1afe8">&#9670;&nbsp;</a></span>parseIdentifierExpression_AtFirst()</h2>
 
@@ -2279,8 +2422,8 @@ unary-operator: &amp; * + - ~ !
 
 </div>
 </div>
-<a id="ae5016b75899e550a9d93c9c9fe353b81"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5016b75899e550a9d93c9c9fe353b81">&#9670;&nbsp;</a></span>parseIfStatement_AtFirst()</h2>
+<a id="a986ed810d3f63d77690892816f109efc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a986ed810d3f63d77690892816f109efc">&#9670;&nbsp;</a></span>parseIfStatement_AtFirst()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2292,8 +2435,18 @@ unary-operator: &amp; * + - ~ !
           <td class="memname">bool Parser::parseIfStatement_AtFirst </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;&#160;</td>
-          <td class="paramname"><em>stmt</em></td><td>)</td>
+          <td class="paramname"><em>stmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">StatementContext&#160;</td>
+          <td class="paramname"><em>stmtCtx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -2343,8 +2496,8 @@ unary-operator: &amp; * + - ~ !
 
 </div>
 </div>
-<a id="a9a743612b586ff7a9c3c5ad21144390d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a743612b586ff7a9c3c5ad21144390d">&#9670;&nbsp;</a></span>parseLabeledStatement_AtFirst()</h2>
+<a id="a2daa8904b5786d6d72452e33c631f495"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2daa8904b5786d6d72452e33c631f495">&#9670;&nbsp;</a></span>parseLabeledStatement_AtFirst()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2356,8 +2509,18 @@ unary-operator: &amp; * + - ~ !
           <td class="memname">bool Parser::parseLabeledStatement_AtFirst </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;&#160;</td>
-          <td class="paramname"><em>stmt</em></td><td>)</td>
+          <td class="paramname"><em>stmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">StatementContext&#160;</td>
+          <td class="paramname"><em>stmtCtx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -2707,8 +2870,8 @@ unary-operator: &amp; * + - ~ !
 
 </div>
 </div>
-<a id="a2698350faa9579a6bffc2fdaf8d1d11d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2698350faa9579a6bffc2fdaf8d1d11d">&#9670;&nbsp;</a></span>parseStatement()</h2>
+<a id="a1522f05e48327c5cc6e297e0fe7318a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1522f05e48327c5cc6e297e0fe7318a7">&#9670;&nbsp;</a></span>parseStatement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2726,7 +2889,7 @@ unary-operator: &amp; * + - ~ !
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">StatementContext&#160;</td>
-          <td class="paramname"><em>stmtCtx</em> = <code>StatementContext::None</code>&#160;</td>
+          <td class="paramname"><em>stmtCtx</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2861,8 +3024,8 @@ unary-operator: &amp; * + - ~ !
 
 </div>
 </div>
-<a id="a14b8349ab049349fcfc5628355847672"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a14b8349ab049349fcfc5628355847672">&#9670;&nbsp;</a></span>parseSwitchStatement_AtFirst()</h2>
+<a id="a0069b5e560093b7ac850f75a2ea2ef2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0069b5e560093b7ac850f75a2ea2ef2d">&#9670;&nbsp;</a></span>parseSwitchStatement_AtFirst()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2874,8 +3037,18 @@ unary-operator: &amp; * + - ~ !
           <td class="memname">bool Parser::parseSwitchStatement_AtFirst </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;&#160;</td>
-          <td class="paramname"><em>stmt</em></td><td>)</td>
+          <td class="paramname"><em>stmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">StatementContext&#160;</td>
+          <td class="paramname"><em>stmtCtx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -2889,8 +3062,8 @@ unary-operator: &amp; * + - ~ !
 
 </div>
 </div>
-<a id="a2d4a7c24d4bea2a35580504345935ec6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d4a7c24d4bea2a35580504345935ec6">&#9670;&nbsp;</a></span>parseTaggedTypeSpecifier()</h2>
+<a id="ada40a254310d1bef0f5a256c8f2dda57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada40a254310d1bef0f5a256c8f2dda57">&#9670;&nbsp;</a></span>parseTaggedTypeSpecifier_AtFirst()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2901,7 +3074,7 @@ template&lt;class TypeDeclT &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Parser::parseTaggedTypeSpecifier </td>
+          <td class="memname">bool Parser::parseTaggedTypeSpecifier_AtFirst </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> *&amp;&#160;</td>
           <td class="paramname"><em>decl</em>, </td>
@@ -3024,7 +3197,7 @@ template&lt;class SpecT &gt; </div>
 </table>
 </div><div class="memdoc">
 <p>Parse a "trivial" specifier, which is one of:</p>
-<p>a <em>storage-class-specifier</em>, a <em></em>(builtin) type-specifer, a <em>type-qualifier</em>, or a <em>function-specifier</em>.</p>
+<p>a <em>storage-class-specifier</em>, a <em></em>(builtin) type-specifer, a <em>type-qualifier</em>, a <em>function-specifier</em>, or a <em>GNU</em> ext asm-qualifier.</p>
 <dl class="section remark"><dt>Remarks</dt><dd>6.7.1, 6.7.2, 6.7.3, and 6.7.4 </dd></dl>
 
 </div>
@@ -3161,8 +3334,8 @@ template&lt;class SpecT &gt; </div>
 
 </div>
 </div>
-<a id="a38237f796cd587677f229f03a081a93d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a38237f796cd587677f229f03a081a93d">&#9670;&nbsp;</a></span>parseWhileStatement_AtFirst()</h2>
+<a id="a15bb57dcb339b6a72d4d456666f77b71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15bb57dcb339b6a72d4d456666f77b71">&#9670;&nbsp;</a></span>parseWhileStatement_AtFirst()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3174,8 +3347,18 @@ template&lt;class SpecT &gt; </div>
           <td class="memname">bool Parser::parseWhileStatement_AtFirst </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> *&amp;&#160;</td>
-          <td class="paramname"><em>stmt</em></td><td>)</td>
+          <td class="paramname"><em>stmt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">StatementContext&#160;</td>
+          <td class="paramname"><em>stmtCtx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -3219,6 +3402,7 @@ template&lt;class SpecT &gt; </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>C/parser/<a class="el" href="_parser_8h_source.html">Parser.h</a></li>
 <li>C/parser/Parser.cpp</li>
+<li>C/parser/Parser_Common.cpp</li>
 <li>C/parser/Parser_Declarations.cpp</li>
 <li>C/parser/Parser_Expressions.cpp</li>
 <li>C/parser/Parser_Statements.cpp</li>

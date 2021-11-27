@@ -101,49 +101,49 @@ $(function() {
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span>psy {</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classpsy_1_1_file_line_position_span.html">   33</a></span>&#160;<span class="keyword">class </span>PSY_API <a class="code" href="classpsy_1_1_file_line_position_span.html">FileLinePositionSpan</a></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="classpsy_1_1_file_line_position_span.html">FileLinePositionSpan</a>(std::string path, <a class="code" href="classpsy_1_1_line_position_span.html">LinePositionSpan</a> span)</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        : path_(std::move(path))</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        , span_(std::move(span))</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    {}</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="classpsy_1_1_file_line_position_span.html">FileLinePositionSpan</a>(std::string path,</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                         <span class="keyword">const</span> <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a>&amp; start,</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                         <span class="keyword">const</span> <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a>&amp; end)</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        : path_(std::move(path))</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        , span_(start, end)</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {}</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classpsy_1_1_file_line_position_span.html#aed7dca94dbde8ed806db63367386fc20">   51</a></span>&#160;    std::string <a class="code" href="classpsy_1_1_file_line_position_span.html#aed7dca94dbde8ed806db63367386fc20">path</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> path_; }</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classpsy_1_1_file_line_position_span.html#a2b0fb0f94c125a0398de734e793c131e">   56</a></span>&#160;    <a class="code" href="classpsy_1_1_line_position_span.html">LinePositionSpan</a> <a class="code" href="classpsy_1_1_file_line_position_span.html#a2b0fb0f94c125a0398de734e793c131e">span</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> span_; }</div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classpsy_1_1_file_line_position_span.html">   43</a></span>&#160;<span class="keyword">class </span>PSY_API <a class="code" href="classpsy_1_1_file_line_position_span.html">FileLinePositionSpan</a></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="classpsy_1_1_file_line_position_span.html">FileLinePositionSpan</a>(std::string path, <a class="code" href="classpsy_1_1_line_position_span.html">LinePositionSpan</a> span)</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        : path_(std::move(path))</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        , span_(std::move(span))</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    {}</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="classpsy_1_1_file_line_position_span.html">FileLinePositionSpan</a>(std::string path,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                         <span class="keyword">const</span> <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a>&amp; start,</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                         <span class="keyword">const</span> <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a>&amp; end)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        : path_(std::move(path))</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        , span_(start, end)</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    {}</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classpsy_1_1_file_line_position_span.html#ad1224f8af96fb6811341e0a69c365690">   61</a></span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> <a class="code" href="classpsy_1_1_file_line_position_span.html#ad1224f8af96fb6811341e0a69c365690">endLinePosition</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> span_.end(); }</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classpsy_1_1_file_line_position_span.html#aed7dca94dbde8ed806db63367386fc20">   61</a></span>&#160;    std::string <a class="code" href="classpsy_1_1_file_line_position_span.html#aed7dca94dbde8ed806db63367386fc20">path</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> path_; }</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classpsy_1_1_file_line_position_span.html#ad79152a1ca8b488ff2bcf571f78d8dcf">   66</a></span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> <a class="code" href="classpsy_1_1_file_line_position_span.html#ad79152a1ca8b488ff2bcf571f78d8dcf">starLinePosition</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> span_.start(); }</div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classpsy_1_1_file_line_position_span.html#a2b0fb0f94c125a0398de734e793c131e">   66</a></span>&#160;    <a class="code" href="classpsy_1_1_line_position_span.html">LinePositionSpan</a> <a class="code" href="classpsy_1_1_file_line_position_span.html#a2b0fb0f94c125a0398de734e793c131e">span</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> span_; }</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    std::string path_;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <a class="code" href="classpsy_1_1_line_position_span.html">LinePositionSpan</a> span_;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;};</div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classpsy_1_1_file_line_position_span.html#ad1224f8af96fb6811341e0a69c365690">   71</a></span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> <a class="code" href="classpsy_1_1_file_line_position_span.html#ad1224f8af96fb6811341e0a69c365690">endLinePosition</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> span_.end(); }</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> FileLinePositionSpan&amp; a, <span class="keyword">const</span> FileLinePositionSpan&amp; b);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="keyword">const</span> FileLinePositionSpan&amp; span);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classpsy_1_1_file_line_position_span.html#ad79152a1ca8b488ff2bcf571f78d8dcf">   76</a></span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> <a class="code" href="classpsy_1_1_file_line_position_span.html#ad79152a1ca8b488ff2bcf571f78d8dcf">starLinePosition</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> span_.start(); }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    std::string path_;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="classpsy_1_1_line_position_span.html">LinePositionSpan</a> span_;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;};</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> FileLinePositionSpan&amp; a, <span class="keyword">const</span> FileLinePositionSpan&amp; b);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="keyword">const</span> FileLinePositionSpan&amp; span);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasspsy_1_1_file_line_position_span_html_ad79152a1ca8b488ff2bcf571f78d8dcf"><div class="ttname"><a href="classpsy_1_1_file_line_position_span.html#ad79152a1ca8b488ff2bcf571f78d8dcf">psy::FileLinePositionSpan::starLinePosition</a></div><div class="ttdeci">LinePosition starLinePosition() const</div><div class="ttdef"><b>Definition:</b> FileLinePositionSpan.h:66</div></div>
-<div class="ttc" id="aclasspsy_1_1_file_line_position_span_html_aed7dca94dbde8ed806db63367386fc20"><div class="ttname"><a href="classpsy_1_1_file_line_position_span.html#aed7dca94dbde8ed806db63367386fc20">psy::FileLinePositionSpan::path</a></div><div class="ttdeci">std::string path() const</div><div class="ttdef"><b>Definition:</b> FileLinePositionSpan.h:51</div></div>
-<div class="ttc" id="aclasspsy_1_1_file_line_position_span_html"><div class="ttname"><a href="classpsy_1_1_file_line_position_span.html">psy::FileLinePositionSpan</a></div><div class="ttdef"><b>Definition:</b> FileLinePositionSpan.h:34</div></div>
-<div class="ttc" id="aclasspsy_1_1_line_position_span_html"><div class="ttname"><a href="classpsy_1_1_line_position_span.html">psy::LinePositionSpan</a></div><div class="ttdef"><b>Definition:</b> LinePositionSpan.h:36</div></div>
-<div class="ttc" id="aclasspsy_1_1_file_line_position_span_html_a2b0fb0f94c125a0398de734e793c131e"><div class="ttname"><a href="classpsy_1_1_file_line_position_span.html#a2b0fb0f94c125a0398de734e793c131e">psy::FileLinePositionSpan::span</a></div><div class="ttdeci">LinePositionSpan span() const</div><div class="ttdef"><b>Definition:</b> FileLinePositionSpan.h:56</div></div>
+<div class="ttc" id="aclasspsy_1_1_file_line_position_span_html_ad79152a1ca8b488ff2bcf571f78d8dcf"><div class="ttname"><a href="classpsy_1_1_file_line_position_span.html#ad79152a1ca8b488ff2bcf571f78d8dcf">psy::FileLinePositionSpan::starLinePosition</a></div><div class="ttdeci">LinePosition starLinePosition() const</div><div class="ttdef"><b>Definition:</b> FileLinePositionSpan.h:76</div></div>
+<div class="ttc" id="aclasspsy_1_1_file_line_position_span_html_aed7dca94dbde8ed806db63367386fc20"><div class="ttname"><a href="classpsy_1_1_file_line_position_span.html#aed7dca94dbde8ed806db63367386fc20">psy::FileLinePositionSpan::path</a></div><div class="ttdeci">std::string path() const</div><div class="ttdef"><b>Definition:</b> FileLinePositionSpan.h:61</div></div>
+<div class="ttc" id="aclasspsy_1_1_file_line_position_span_html"><div class="ttname"><a href="classpsy_1_1_file_line_position_span.html">psy::FileLinePositionSpan</a></div><div class="ttdoc">The FileLinePositionSpan class.</div><div class="ttdef"><b>Definition:</b> FileLinePositionSpan.h:44</div></div>
+<div class="ttc" id="aclasspsy_1_1_line_position_span_html"><div class="ttname"><a href="classpsy_1_1_line_position_span.html">psy::LinePositionSpan</a></div><div class="ttdoc">The LinePositionSpan.</div><div class="ttdef"><b>Definition:</b> LinePositionSpan.h:41</div></div>
+<div class="ttc" id="aclasspsy_1_1_file_line_position_span_html_a2b0fb0f94c125a0398de734e793c131e"><div class="ttname"><a href="classpsy_1_1_file_line_position_span.html#a2b0fb0f94c125a0398de734e793c131e">psy::FileLinePositionSpan::span</a></div><div class="ttdeci">LinePositionSpan span() const</div><div class="ttdef"><b>Definition:</b> FileLinePositionSpan.h:66</div></div>
 <div class="ttc" id="aclasspsy_1_1_line_position_html"><div class="ttname"><a href="classpsy_1_1_line_position.html">psy::LinePosition</a></div><div class="ttdef"><b>Definition:</b> LinePosition.h:35</div></div>
-<div class="ttc" id="aclasspsy_1_1_file_line_position_span_html_ad1224f8af96fb6811341e0a69c365690"><div class="ttname"><a href="classpsy_1_1_file_line_position_span.html#ad1224f8af96fb6811341e0a69c365690">psy::FileLinePositionSpan::endLinePosition</a></div><div class="ttdeci">LinePosition endLinePosition() const</div><div class="ttdef"><b>Definition:</b> FileLinePositionSpan.h:61</div></div>
+<div class="ttc" id="aclasspsy_1_1_file_line_position_span_html_ad1224f8af96fb6811341e0a69c365690"><div class="ttname"><a href="classpsy_1_1_file_line_position_span.html#ad1224f8af96fb6811341e0a69c365690">psy::FileLinePositionSpan::endLinePosition</a></div><div class="ttdeci">LinePosition endLinePosition() const</div><div class="ttdef"><b>Definition:</b> FileLinePositionSpan.h:71</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

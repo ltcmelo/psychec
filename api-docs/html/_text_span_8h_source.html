@@ -95,52 +95,38 @@ $(function() {
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;../API.h&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>psy {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;ostream&gt;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classpsy_1_1_text_span.html">   38</a></span>&#160;<span class="keyword">class </span>PSY_API <a class="code" href="classpsy_1_1_text_span.html">TextSpan</a></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;{</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="classpsy_1_1_text_span.html">TextSpan</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* c_str, <span class="keywordtype">unsigned</span> size);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="classpsy_1_1_text_span.html">TextSpan</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_text_span.html">TextSpan</a>&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classpsy_1_1_text_span.html">TextSpan</a>();</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordtype">void</span> operator=(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_text_span.html">TextSpan</a>&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* iterator;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">typedef</span> iterator const_iterator;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    iterator begin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> chars_; }</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    iterator end()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> chars_ + size_; }</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span>psy {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classpsy_1_1_text_span.html">   44</a></span>&#160;<span class="keyword">class </span>PSY_API <a class="code" href="classpsy_1_1_text_span.html">TextSpan</a></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="classpsy_1_1_text_span.html">TextSpan</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> start, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>  end)</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        : start_(start)</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        , end_(end)</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    {}</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classpsy_1_1_text_span.html#aba2f33262902bdaf06d637fd2a73e0b1">   56</a></span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classpsy_1_1_text_span.html#aba2f33262902bdaf06d637fd2a73e0b1">size</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> size_; }</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordtype">unsigned</span> length()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> size_; }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classpsy_1_1_text_span.html#a7b2288b5cc500b9253215d315c36e6e0">   63</a></span>&#160;    <span class="keywordtype">char</span> <a class="code" href="classpsy_1_1_text_span.html#a7b2288b5cc500b9253215d315c36e6e0">at</a>(<span class="keywordtype">unsigned</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> chars_[idx]; }</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classpsy_1_1_text_span.html#a3a9daecce210311d03da46ab5e1efdb4">   68</a></span>&#160;    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classpsy_1_1_text_span.html#a3a9daecce210311d03da46ab5e1efdb4">c_str</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> chars_; }</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">unsigned</span> hashCode()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> hashCode_; }</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">unsigned</span> hashCode(<span class="keyword">const</span> <span class="keywordtype">char</span>* c_str, <span class="keywordtype">unsigned</span> size);</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classpsy_1_1_text_span.html#ab752009061b48f70d4822fbd2d3d2d17">   55</a></span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classpsy_1_1_text_span.html#ab752009061b48f70d4822fbd2d3d2d17">start</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> start_; }</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classpsy_1_1_text_span.html#a4a4c383f5d2903cf0edcc637f7ac6fc3">   60</a></span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classpsy_1_1_text_span.html#a4a4c383f5d2903cf0edcc637f7ac6fc3">end</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> end_; }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> start_;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> end_;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;};</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> TextSpan&amp; a, <span class="keyword">const</span> TextSpan&amp; b);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="keyword">const</span> TextSpan&amp; span);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;} <span class="comment">// psy</span></div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">unsigned</span> size_;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">char</span>* chars_;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">unsigned</span> hashCode_;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span>&gt; <span class="keyword">friend</span> <span class="keyword">class </span>TextSpanContainer;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    TextSpan* next_;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;};</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> TextSpan&amp; a, <span class="keyword">const</span> TextSpan&amp; b);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasspsy_1_1_text_span_html_a3a9daecce210311d03da46ab5e1efdb4"><div class="ttname"><a href="classpsy_1_1_text_span.html#a3a9daecce210311d03da46ab5e1efdb4">psy::TextSpan::c_str</a></div><div class="ttdeci">const char * c_str() const</div><div class="ttdef"><b>Definition:</b> TextSpan.h:68</div></div>
-<div class="ttc" id="aclasspsy_1_1_text_span_html_a7b2288b5cc500b9253215d315c36e6e0"><div class="ttname"><a href="classpsy_1_1_text_span.html#a7b2288b5cc500b9253215d315c36e6e0">psy::TextSpan::at</a></div><div class="ttdeci">char at(unsigned idx) const</div><div class="ttdef"><b>Definition:</b> TextSpan.h:63</div></div>
-<div class="ttc" id="aclasspsy_1_1_text_span_html"><div class="ttname"><a href="classpsy_1_1_text_span.html">psy::TextSpan</a></div><div class="ttdoc">The TextSpan class.</div><div class="ttdef"><b>Definition:</b> TextSpan.h:39</div></div>
-<div class="ttc" id="aclasspsy_1_1_text_span_html_aba2f33262902bdaf06d637fd2a73e0b1"><div class="ttname"><a href="classpsy_1_1_text_span.html#aba2f33262902bdaf06d637fd2a73e0b1">psy::TextSpan::size</a></div><div class="ttdeci">unsigned size() const</div><div class="ttdef"><b>Definition:</b> TextSpan.h:56</div></div>
+<div class="ttc" id="aclasspsy_1_1_text_span_html_ab752009061b48f70d4822fbd2d3d2d17"><div class="ttname"><a href="classpsy_1_1_text_span.html#ab752009061b48f70d4822fbd2d3d2d17">psy::TextSpan::start</a></div><div class="ttdeci">unsigned int start() const</div><div class="ttdef"><b>Definition:</b> TextSpan.h:55</div></div>
+<div class="ttc" id="aclasspsy_1_1_text_span_html"><div class="ttname"><a href="classpsy_1_1_text_span.html">psy::TextSpan</a></div><div class="ttdoc">The TextSpan class.</div><div class="ttdef"><b>Definition:</b> TextSpan.h:45</div></div>
+<div class="ttc" id="aclasspsy_1_1_text_span_html_a4a4c383f5d2903cf0edcc637f7ac6fc3"><div class="ttname"><a href="classpsy_1_1_text_span.html#a4a4c383f5d2903cf0edcc637f7ac6fc3">psy::TextSpan::end</a></div><div class="ttdeci">unsigned int end() const</div><div class="ttdef"><b>Definition:</b> TextSpan.h:60</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

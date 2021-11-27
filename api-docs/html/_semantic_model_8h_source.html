@@ -105,43 +105,43 @@ $(function() {
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">class </span>Binder;</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_semantic_model.html">   43</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    ~<a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>();</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>* compilation() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* syntaxTree() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    DECL_PIMPL(<a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>)</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>(<a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>* compilation, <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> bind();</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="comment">/* Names */</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class </span>NameT, <span class="keyword">class</span>... ArgsT&gt; NameT* make(ArgsT&amp;&amp;... args);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_identifier_name.html">IdentifierName</a>* makeName(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a>* identifier);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_tag_name.html">TagName</a>* makeName(TagName::TagKind typeSpecifierKind, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a>* identifier);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_anonymous_name.html">AnonymousName</a>* makeName();</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>* compilation();</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* syntaxTree();</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;};</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_semantic_model.html">   44</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    ~<a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>();</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>* compilation() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* syntaxTree() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    DECL_PIMPL(<a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>)</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>(<a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>* compilation, <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">void</span> bind();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="comment">/* Names */</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class </span>NameT, <span class="keyword">class</span>... ArgsT&gt; NameT* make(ArgsT&amp;&amp;... args);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_identifier_name.html">IdentifierName</a>* makeName(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a>* identifier);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_tag_name.html">TagName</a>* makeName(TagName::TagKind typeSpecifierKind, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a>* identifier);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_anonymous_name.html">AnonymousName</a>* makeName();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>* compilation();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* syntaxTree();</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;};</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasspsy_1_1_c_1_1_semantic_model_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_semantic_model.html">psy::C::SemanticModel</a></div><div class="ttdoc">The SemanticModel class.</div><div class="ttdef"><b>Definition:</b> SemanticModel.h:44</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_semantic_model_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_semantic_model.html">psy::C::SemanticModel</a></div><div class="ttdoc">The SemanticModel class.</div><div class="ttdef"><b>Definition:</b> SemanticModel.h:45</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_identifier_name_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_identifier_name.html">psy::C::IdentifierName</a></div><div class="ttdoc">The IdentifierName class.</div><div class="ttdef"><b>Definition:</b> DeclarationNames.h:37</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_anonymous_name_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_anonymous_name.html">psy::C::AnonymousName</a></div><div class="ttdoc">The AnonymousName class.</div><div class="ttdef"><b>Definition:</b> DeclarationNames.h:96</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_tag_name_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_tag_name.html">psy::C::TagName</a></div><div class="ttdoc">The TagName class.</div><div class="ttdef"><b>Definition:</b> DeclarationNames.h:59</div></div>

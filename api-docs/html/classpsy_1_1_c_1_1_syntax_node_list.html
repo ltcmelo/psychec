@@ -67,6 +67,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classpsy_1_1_c_1_1_syntax_node_list-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">psy::C::SyntaxNodeList Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
@@ -79,9 +80,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adba13b9883dd04a52bce8ec72037d3dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af82d1112eee9c607a04ffc6ff5044b84"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_node_list.html#af82d1112eee9c607a04ffc6ff5044b84">lastToken</a> () const =0</td></tr>
 <tr class="separator:af82d1112eee9c607a04ffc6ff5044b84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac768389b1ee06c1132c6a9db02e0b726"><td class="memItemLeft" align="right" valign="top"><a id="ac768389b1ee06c1132c6a9db02e0b726"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>acceptVisitor_t</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html">SyntaxVisitor</a> *visitor)=0</td></tr>
-<tr class="separator:ac768389b1ee06c1132c6a9db02e0b726"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7bd3cdf20d1dad98d99e7ae666067b0"><td class="memItemLeft" align="right" valign="top"><a id="aa7bd3cdf20d1dad98d99e7ae666067b0"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>acceptVisitor</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html">SyntaxVisitor</a> *visitor)=0</td></tr>
+<tr class="separator:aa7bd3cdf20d1dad98d99e7ae666067b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ab15ac0db6c6cb70af9947be873bb8825"><td class="memItemLeft" align="right" valign="top"><a id="ab15ac0db6c6cb70af9947be873bb8825"></a>
+static <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a>&#160;</td><td class="memItemRight" valign="bottom"><b>token</b> (LexedTokens::IndexType tkIdx, <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree)</td></tr>
+<tr class="separator:ab15ac0db6c6cb70af9947be873bb8825"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="adba13b9883dd04a52bce8ec72037d3dd"></a>
@@ -136,8 +143,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>acceptVisitor
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>C/syntax/<a class="el" href="_syntax_node_list_8h_source.html">SyntaxNodeList.h</a></li>
+<li>C/syntax/SyntaxNodeList.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

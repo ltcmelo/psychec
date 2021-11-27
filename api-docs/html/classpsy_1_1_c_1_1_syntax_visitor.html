@@ -97,7 +97,7 @@ Inheritance diagram for psy::C::SyntaxVisitor:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a557d7f8aa9b5ad0155e4e2b8d3fd3d16"><td class="memItemLeft" align="right" valign="top"><a id="a557d7f8aa9b5ad0155e4e2b8d3fd3d16"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a> : std::uint8_t { <b>Continue</b>, 
+<tr class="memitem:a557d7f8aa9b5ad0155e4e2b8d3fd3d16"><td class="memItemLeft" align="right" valign="top"><a id="a557d7f8aa9b5ad0155e4e2b8d3fd3d16"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a> : std::uint8_t { <b>Visit</b>, 
 <b>Skip</b>, 
 <b>Quit</b>
  }</td></tr>
@@ -129,9 +129,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>postVisit</b>
 <tr class="memitem:a5997a0a34a9cde3813380913077f6220"><td class="memItemLeft" align="right" valign="top"><a id="a5997a0a34a9cde3813380913077f6220"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTranslationUnit</b> (const <a class="el" href="classpsy_1_1_c_1_1_translation_unit_syntax.html">TranslationUnitSyntax</a> *)</td></tr>
 <tr class="separator:a5997a0a34a9cde3813380913077f6220"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a109cb937588d3c8d66ccff9cb6d28cc5"><td class="memItemLeft" align="right" valign="top"><a id="a109cb937588d3c8d66ccff9cb6d28cc5"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitEmptyDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_empty_declaration_syntax.html">EmptyDeclarationSyntax</a> *)</td></tr>
-<tr class="separator:a109cb937588d3c8d66ccff9cb6d28cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a265e67bf8a76cf6d4c1daa67349611a5"><td class="memItemLeft" align="right" valign="top"><a id="a265e67bf8a76cf6d4c1daa67349611a5"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitIncompleteDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_incomplete_declaration_syntax.html">IncompleteDeclarationSyntax</a> *)</td></tr>
+<tr class="separator:a265e67bf8a76cf6d4c1daa67349611a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10bb8b80d35da09b0f392af7d2d225f5"><td class="memItemLeft" align="right" valign="top"><a id="a10bb8b80d35da09b0f392af7d2d225f5"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitStructOrUnionDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_struct_or_union_declaration_syntax.html">StructOrUnionDeclarationSyntax</a> *)</td></tr>
 <tr class="separator:a10bb8b80d35da09b0f392af7d2d225f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,15 +171,15 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5
 <tr class="memitem:a12387f636016ea0d228d19d3dc6d434e"><td class="memItemLeft" align="right" valign="top"><a id="a12387f636016ea0d228d19d3dc6d434e"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTaggedTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_tagged_type_specifier_syntax.html">TaggedTypeSpecifierSyntax</a> *)</td></tr>
 <tr class="separator:a12387f636016ea0d228d19d3dc6d434e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5374d56309c7eac3c7e89d78fc54df4d"><td class="memItemLeft" align="right" valign="top"><a id="a5374d56309c7eac3c7e89d78fc54df4d"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitAtomicTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_atomic_type_specifier_syntax.html">AtomicTypeSpecifierSyntax</a> *)</td></tr>
+<tr class="separator:a5374d56309c7eac3c7e89d78fc54df4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a45a84988fec36e447af683ed929414"><td class="memItemLeft" align="right" valign="top"><a id="a7a45a84988fec36e447af683ed929414"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypeDeclarationAsSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_type_declaration_as_specifier_syntax.html">TypeDeclarationAsSpecifierSyntax</a> *)</td></tr>
 <tr class="separator:a7a45a84988fec36e447af683ed929414"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac768cad86a75003c4c5b4eec03fa707c"><td class="memItemLeft" align="right" valign="top"><a id="ac768cad86a75003c4c5b4eec03fa707c"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypedefName</b> (const <a class="el" href="classpsy_1_1_c_1_1_typedef_name_syntax.html">TypedefNameSyntax</a> *)</td></tr>
 <tr class="separator:ac768cad86a75003c4c5b4eec03fa707c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5859f233ae539822af306c812958aa4"><td class="memItemLeft" align="right" valign="top"><a id="ae5859f233ae539822af306c812958aa4"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypeName</b> (const <a class="el" href="classpsy_1_1_c_1_1_type_name_syntax.html">TypeNameSyntax</a> *)</td></tr>
-<tr class="separator:ae5859f233ae539822af306c812958aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a341cb0bb99cb276b716f7db2e0a62738"><td class="memItemLeft" align="right" valign="top"><a id="a341cb0bb99cb276b716f7db2e0a62738"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypeQualifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_type_qualifier_syntax.html">TypeQualifierSyntax</a> *)</td></tr>
 <tr class="separator:a341cb0bb99cb276b716f7db2e0a62738"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,12 +198,12 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5
 <tr class="memitem:a2bfb41d3170d4e87403d7f5b7d4f6c69"><td class="memItemLeft" align="right" valign="top"><a id="a2bfb41d3170d4e87403d7f5b7d4f6c69"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitExtGNU_Attribute</b> (const <a class="el" href="classpsy_1_1_c_1_1_ext_g_n_u___attribute_syntax.html">ExtGNU_AttributeSyntax</a> *)</td></tr>
 <tr class="separator:a2bfb41d3170d4e87403d7f5b7d4f6c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cd5d6855b402a405194983088cb9f59"><td class="memItemLeft" align="right" valign="top"><a id="a1cd5d6855b402a405194983088cb9f59"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitExtGNU_AsmLabel</b> (const <a class="el" href="classpsy_1_1_c_1_1_ext_g_n_u___asm_label_syntax.html">ExtGNU_AsmLabelSyntax</a> *)</td></tr>
+<tr class="separator:a1cd5d6855b402a405194983088cb9f59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab052a9d1259368a84d1a47d5223c975d"><td class="memItemLeft" align="right" valign="top"><a id="ab052a9d1259368a84d1a47d5223c975d"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitExtPSY_QuantifiedTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_ext_p_s_y___quantified_type_specifier_syntax.html">ExtPSY_QuantifiedTypeSpecifierSyntax</a> *)</td></tr>
 <tr class="separator:ab052a9d1259368a84d1a47d5223c975d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca8b84af904bb305f36362ba03b065eb"><td class="memItemLeft" align="right" valign="top"><a id="aca8b84af904bb305f36362ba03b065eb"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitDeclarator</b> (const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *)</td></tr>
-<tr class="separator:aca8b84af904bb305f36362ba03b065eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91ac89eec48b1da4cbd0da4f7302baa5"><td class="memItemLeft" align="right" valign="top"><a id="a91ac89eec48b1da4cbd0da4f7302baa5"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitArrayOrFunctionDeclarator</b> (const <a class="el" href="classpsy_1_1_c_1_1_array_or_function_declarator_syntax.html">ArrayOrFunctionDeclaratorSyntax</a> *)</td></tr>
 <tr class="separator:a91ac89eec48b1da4cbd0da4f7302baa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -348,9 +348,18 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5
 <tr class="memitem:a9c3b4b42cbf79b1be573b647806e2336"><td class="memItemLeft" align="right" valign="top"><a id="a9c3b4b42cbf79b1be573b647806e2336"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitExtGNU_AsmOperand</b> (const <a class="el" href="classpsy_1_1_c_1_1_ext_g_n_u___asm_operand_syntax.html">ExtGNU_AsmOperandSyntax</a> *)</td></tr>
 <tr class="separator:a9c3b4b42cbf79b1be573b647806e2336"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa44cd690fe1c32faf767ded92dcd956f"><td class="memItemLeft" align="right" valign="top"><a id="aa44cd690fe1c32faf767ded92dcd956f"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitAmbiguousTypedefNameOrIdentifierExpression</b> (const <a class="el" href="classpsy_1_1_c_1_1_ambiguous_typedef_name_or_identifier_expression_syntax.html">AmbiguousTypedefNameOrIdentifierExpressionSyntax</a> *)</td></tr>
-<tr class="separator:aa44cd690fe1c32faf767ded92dcd956f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5859f233ae539822af306c812958aa4"><td class="memItemLeft" align="right" valign="top"><a id="ae5859f233ae539822af306c812958aa4"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypeName</b> (const <a class="el" href="classpsy_1_1_c_1_1_type_name_syntax.html">TypeNameSyntax</a> *)</td></tr>
+<tr class="separator:ae5859f233ae539822af306c812958aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3d3d12415658e736cae1c64be4d06cd"><td class="memItemLeft" align="right" valign="top"><a id="ab3d3d12415658e736cae1c64be4d06cd"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitExpressionAsTypeReference</b> (const <a class="el" href="classpsy_1_1_c_1_1_expression_as_type_reference_syntax.html">ExpressionAsTypeReferenceSyntax</a> *)</td></tr>
+<tr class="separator:ab3d3d12415658e736cae1c64be4d06cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab29ac0572cdba5f8b02c532d68cc0a27"><td class="memItemLeft" align="right" valign="top"><a id="ab29ac0572cdba5f8b02c532d68cc0a27"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypeNameAsTypeReference</b> (const <a class="el" href="classpsy_1_1_c_1_1_type_name_as_type_reference_syntax.html">TypeNameAsTypeReferenceSyntax</a> *)</td></tr>
+<tr class="separator:ab29ac0572cdba5f8b02c532d68cc0a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cb9b00f4f6bb55d6817b791bfb3edaf"><td class="memItemLeft" align="right" valign="top"><a id="a8cb9b00f4f6bb55d6817b791bfb3edaf"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitAmbiguousTypeNameOrExpressionAsTypeReference</b> (const <a class="el" href="classpsy_1_1_c_1_1_ambiguous_type_name_or_expression_as_type_reference_syntax.html">AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax</a> *)</td></tr>
+<tr class="separator:a8cb9b00f4f6bb55d6817b791bfb3edaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae943c1147b5e60c698d80bc0604a77d8"><td class="memItemLeft" align="right" valign="top"><a id="ae943c1147b5e60c698d80bc0604a77d8"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitAmbiguousCastOrBinaryExpression</b> (const <a class="el" href="classpsy_1_1_c_1_1_ambiguous_cast_or_binary_expression_syntax.html">AmbiguousCastOrBinaryExpressionSyntax</a> *)</td></tr>
 <tr class="separator:ae943c1147b5e60c698d80bc0604a77d8"><td class="memSeparator" colspan="2">&#160;</td></tr>

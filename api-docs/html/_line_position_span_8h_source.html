@@ -89,48 +89,44 @@ $(function() {
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// THE SOFTWARE.</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"> * This API is inspired by the API of Roslyn (the .NET Compiler Platform).</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#ifndef PSYCHE_LINE_POSITION_SPAN_H__</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#define PSYCHE_LINE_POSITION_SPAN_H__</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;../API.h&quot;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;LinePosition.h&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#ifndef PSYCHE_LINE_POSITION_SPAN_H__</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define PSYCHE_LINE_POSITION_SPAN_H__</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;../API.h&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;LinePosition.h&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;ostream&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span>psy {</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;ostream&gt;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span>psy {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classpsy_1_1_line_position_span.html">   35</a></span>&#160;<span class="keyword">class </span>PSY_API <a class="code" href="classpsy_1_1_line_position_span.html">LinePositionSpan</a></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;{</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="classpsy_1_1_line_position_span.html">LinePositionSpan</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a>&amp; end)</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        : start_(start)</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        , end_(end)</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {}</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classpsy_1_1_line_position_span.html#af3b9b7110b4bb20d6ad5711a8971cd44">   46</a></span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> <a class="code" href="classpsy_1_1_line_position_span.html#af3b9b7110b4bb20d6ad5711a8971cd44">start</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> start_; }</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classpsy_1_1_line_position_span.html">   40</a></span>&#160;<span class="keyword">class </span>PSY_API <a class="code" href="classpsy_1_1_line_position_span.html">LinePositionSpan</a></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="classpsy_1_1_line_position_span.html">LinePositionSpan</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a>&amp; end)</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        : start_(start)</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        , end_(end)</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {}</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classpsy_1_1_line_position_span.html#a80e8e22a40e83510b7ab7daeec5daa8a">   51</a></span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> <a class="code" href="classpsy_1_1_line_position_span.html#a80e8e22a40e83510b7ab7daeec5daa8a">end</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> end_; }</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classpsy_1_1_line_position_span.html#af3b9b7110b4bb20d6ad5711a8971cd44">   51</a></span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> <a class="code" href="classpsy_1_1_line_position_span.html#af3b9b7110b4bb20d6ad5711a8971cd44">start</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> start_; }</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> start_;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> end_;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;};</div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classpsy_1_1_line_position_span.html#a80e8e22a40e83510b7ab7daeec5daa8a">   56</a></span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> <a class="code" href="classpsy_1_1_line_position_span.html#a80e8e22a40e83510b7ab7daeec5daa8a">end</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> end_; }</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> LinePositionSpan&amp; a, <span class="keyword">const</span> LinePositionSpan&amp; b);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="keyword">const</span> LinePositionSpan&amp; span);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> start_;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <a class="code" href="classpsy_1_1_line_position.html">LinePosition</a> end_;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;};</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> LinePositionSpan&amp; a, <span class="keyword">const</span> LinePositionSpan&amp; b);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="keyword">const</span> LinePositionSpan&amp; span);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasspsy_1_1_line_position_span_html_a80e8e22a40e83510b7ab7daeec5daa8a"><div class="ttname"><a href="classpsy_1_1_line_position_span.html#a80e8e22a40e83510b7ab7daeec5daa8a">psy::LinePositionSpan::end</a></div><div class="ttdeci">LinePosition end() const</div><div class="ttdef"><b>Definition:</b> LinePositionSpan.h:51</div></div>
-<div class="ttc" id="aclasspsy_1_1_line_position_span_html"><div class="ttname"><a href="classpsy_1_1_line_position_span.html">psy::LinePositionSpan</a></div><div class="ttdef"><b>Definition:</b> LinePositionSpan.h:36</div></div>
-<div class="ttc" id="aclasspsy_1_1_line_position_span_html_af3b9b7110b4bb20d6ad5711a8971cd44"><div class="ttname"><a href="classpsy_1_1_line_position_span.html#af3b9b7110b4bb20d6ad5711a8971cd44">psy::LinePositionSpan::start</a></div><div class="ttdeci">LinePosition start() const</div><div class="ttdef"><b>Definition:</b> LinePositionSpan.h:46</div></div>
+<div class="ttc" id="aclasspsy_1_1_line_position_span_html_a80e8e22a40e83510b7ab7daeec5daa8a"><div class="ttname"><a href="classpsy_1_1_line_position_span.html#a80e8e22a40e83510b7ab7daeec5daa8a">psy::LinePositionSpan::end</a></div><div class="ttdeci">LinePosition end() const</div><div class="ttdef"><b>Definition:</b> LinePositionSpan.h:56</div></div>
+<div class="ttc" id="aclasspsy_1_1_line_position_span_html"><div class="ttname"><a href="classpsy_1_1_line_position_span.html">psy::LinePositionSpan</a></div><div class="ttdoc">The LinePositionSpan.</div><div class="ttdef"><b>Definition:</b> LinePositionSpan.h:41</div></div>
+<div class="ttc" id="aclasspsy_1_1_line_position_span_html_af3b9b7110b4bb20d6ad5711a8971cd44"><div class="ttname"><a href="classpsy_1_1_line_position_span.html#af3b9b7110b4bb20d6ad5711a8971cd44">psy::LinePositionSpan::start</a></div><div class="ttdeci">LinePosition start() const</div><div class="ttdef"><b>Definition:</b> LinePositionSpan.h:51</div></div>
 <div class="ttc" id="aclasspsy_1_1_line_position_html"><div class="ttname"><a href="classpsy_1_1_line_position.html">psy::LinePosition</a></div><div class="ttdef"><b>Definition:</b> LinePosition.h:35</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -80,16 +80,18 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:abe1df362044145a3b40b374fcb0f94ef"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_utilities.html#abe1df362044145a3b40b374fcb0f94ef">declaratorEnclosedIn</a> (const <a class="el" href="classpsy_1_1_c_1_1_parenthesized_declarator_syntax.html">ParenthesizedDeclaratorSyntax</a> *parenDecltor)</td></tr>
-<tr class="separator:abe1df362044145a3b40b374fcb0f94ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06bc44dd9b6e33bfaf45f83783972fc4"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_utilities.html#a06bc44dd9b6e33bfaf45f83783972fc4">innermostDeclarator</a> (const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *decltor)</td></tr>
+<tr class="separator:a06bc44dd9b6e33bfaf45f83783972fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfacedd581c13cba416bdc8eacf5b9e3"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_utilities.html#adfacedd581c13cba416bdc8eacf5b9e3">innerDeclarator</a> (const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *decltor)</td></tr>
+<tr class="separator:adfacedd581c13cba416bdc8eacf5b9e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af060ac40ccaf240ec417746d32b02683"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_utilities.html#af060ac40ccaf240ec417746d32b02683">strippedDeclarator</a> (const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *decltor)</td></tr>
 <tr class="separator:af060ac40ccaf240ec417746d32b02683"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_syntax_utilities.html" title="The SyntaxUtilities class.">SyntaxUtilities</a> class. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="abe1df362044145a3b40b374fcb0f94ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe1df362044145a3b40b374fcb0f94ef">&#9670;&nbsp;</a></span>declaratorEnclosedIn()</h2>
+<a id="adfacedd581c13cba416bdc8eacf5b9e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfacedd581c13cba416bdc8eacf5b9e3">&#9670;&nbsp;</a></span>innerDeclarator()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -98,10 +100,10 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> * SyntaxUtilities::declaratorEnclosedIn </td>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> * SyntaxUtilities::innerDeclarator </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_parenthesized_declarator_syntax.html">ParenthesizedDeclaratorSyntax</a> *&#160;</td>
-          <td class="paramname"><em>parenDecltor</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&#160;</td>
+          <td class="paramname"><em>decltor</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -111,7 +113,36 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Return the <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> enclosed in <code>parenDecltor</code>. </p>
+<p>Return the inner <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> of the given <code>decltor</code>.</p>
+<dl class="section note"><dt>Note</dt><dd>The <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> enclosed in a <a class="el" href="classpsy_1_1_c_1_1_parenthesized_declarator_syntax.html">ParenthesizedDeclaratorSyntax</a> is not considered an inner one; for the purpose of extracting such enclosed <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a>, use <a class="el" href="classpsy_1_1_c_1_1_syntax_utilities.html#af060ac40ccaf240ec417746d32b02683">SyntaxUtilities::strippedDeclarator</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a06bc44dd9b6e33bfaf45f83783972fc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06bc44dd9b6e33bfaf45f83783972fc4">&#9670;&nbsp;</a></span>innermostDeclarator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> * SyntaxUtilities::innermostDeclarator </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *&#160;</td>
+          <td class="paramname"><em>decltor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return the innermost <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> of the given <code>decltor</code>.</p>
+<dl class="section note"><dt>Note</dt><dd>The <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> enclosed in a <a class="el" href="classpsy_1_1_c_1_1_parenthesized_declarator_syntax.html">ParenthesizedDeclaratorSyntax</a> is not considered an inner one; for the purpose of extracting such enclosed <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a>, use <a class="el" href="classpsy_1_1_c_1_1_syntax_utilities.html#af060ac40ccaf240ec417746d32b02683">SyntaxUtilities::strippedDeclarator</a>. </dd></dl>
 
 </div>
 </div>
@@ -138,7 +169,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Return a "stripped" (without parenthesis, if any) <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> version of <code>decltor</code>. </p>
+<p>Return the <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> enclosed within <code>decltor</code>, if it is a <a class="el" href="classpsy_1_1_c_1_1_parenthesized_declarator_syntax.html">ParenthesizedDeclaratorSyntax</a>. </p>
 
 </div>
 </div>

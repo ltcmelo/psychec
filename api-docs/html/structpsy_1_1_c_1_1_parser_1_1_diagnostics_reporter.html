@@ -90,24 +90,51 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFeature</b> (
 <tr class="memitem:a2e0852a45c020543b917edb5397c79dd"><td class="memItemLeft" align="right" valign="top"><a id="a2e0852a45c020543b917edb5397c79dd"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedToken</b> (SyntaxKind syntaxK)</td></tr>
 <tr class="separator:a2e0852a45c020543b917edb5397c79dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44f80b61b66d1ed348ae634b2dbeb506"><td class="memItemLeft" align="right" valign="top"><a id="a44f80b61b66d1ed348ae634b2dbeb506"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedOneOfTokens</b> (const std::vector&lt; SyntaxKind &gt; &amp;validTokens)</td></tr>
-<tr class="separator:a44f80b61b66d1ed348ae634b2dbeb506"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d2f9133e13808e8621ae0b81c2810a9"><td class="memItemLeft" align="right" valign="top"><a id="a9d2f9133e13808e8621ae0b81c2810a9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedTokenOfCategory</b> (const std::string &amp;<a class="el" href="classname.html">name</a>, const std::string &amp;cat)</td></tr>
-<tr class="separator:a9d2f9133e13808e8621ae0b81c2810a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae72246bdbfd62c9d09e93e38ceb363fd"><td class="memItemLeft" align="right" valign="top"><a id="ae72246bdbfd62c9d09e93e38ceb363fd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedConstant</b> ()</td></tr>
-<tr class="separator:ae72246bdbfd62c9d09e93e38ceb363fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc77f6b5762fba81558c726899bdfff1"><td class="memItemLeft" align="right" valign="top"><a id="adc77f6b5762fba81558c726899bdfff1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedStringLiteral</b> ()</td></tr>
-<tr class="separator:adc77f6b5762fba81558c726899bdfff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82f9f024ab6cee2989b8e213efed4b40"><td class="memItemLeft" align="right" valign="top"><a id="a82f9f024ab6cee2989b8e213efed4b40"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedExpression</b> ()</td></tr>
-<tr class="separator:a82f9f024ab6cee2989b8e213efed4b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac98412f629e1f555d57ced0332a8167e"><td class="memItemLeft" align="right" valign="top"><a id="ac98412f629e1f555d57ced0332a8167e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedEnumerationConstant</b> ()</td></tr>
-<tr class="separator:ac98412f629e1f555d57ced0332a8167e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8ff6ddf655373cdbc51cff4be965728"><td class="memItemLeft" align="right" valign="top"><a id="ae8ff6ddf655373cdbc51cff4be965728"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedTokenWithin</b> (const std::vector&lt; SyntaxKind &gt; &amp;validTokens)</td></tr>
+<tr class="separator:ae8ff6ddf655373cdbc51cff4be965728"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcba4fafd25fbeb936f533b2c2a2d05c"><td class="memItemLeft" align="right" valign="top"><a id="adcba4fafd25fbeb936f533b2c2a2d05c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedTokenOfCategory</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a1c34af83d1ca3481777b12a8c046d02b">SyntaxToken::Category</a> category, const std::string &amp;id)</td></tr>
+<tr class="separator:adcba4fafd25fbeb936f533b2c2a2d05c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bdc379b79131b32057186632937de76"><td class="memItemLeft" align="right" valign="top"><a id="a2bdc379b79131b32057186632937de76"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedTokenOfCategoryIdentifier</b> ()</td></tr>
+<tr class="separator:a2bdc379b79131b32057186632937de76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a061512cb6eef349988a47413ccf900e5"><td class="memItemLeft" align="right" valign="top"><a id="a061512cb6eef349988a47413ccf900e5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedTokenOfCategoryConstant</b> ()</td></tr>
+<tr class="separator:a061512cb6eef349988a47413ccf900e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3db1924fa015762884a882ffdf4408c0"><td class="memItemLeft" align="right" valign="top"><a id="a3db1924fa015762884a882ffdf4408c0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedTokenOfCategoryStringLiteral</b> ()</td></tr>
+<tr class="separator:a3db1924fa015762884a882ffdf4408c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78c7feeb6742f0b55d022075e79ba226"><td class="memItemLeft" align="right" valign="top"><a id="a78c7feeb6742f0b55d022075e79ba226"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFIRSTof</b> (const std::string &amp;rule, const std::string &amp;id)</td></tr>
+<tr class="separator:a78c7feeb6742f0b55d022075e79ba226"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed1d5a7352b845c2ad89eec78b15ec04"><td class="memItemLeft" align="right" valign="top"><a id="aed1d5a7352b845c2ad89eec78b15ec04"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFIRSTofExpression</b> ()</td></tr>
+<tr class="separator:aed1d5a7352b845c2ad89eec78b15ec04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1451499cb7d181259ae205e60543da0"><td class="memItemLeft" align="right" valign="top"><a id="ac1451499cb7d181259ae205e60543da0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFIRSTofEnumerationConstant</b> ()</td></tr>
+<tr class="separator:ac1451499cb7d181259ae205e60543da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b0eb38552210c92da1f02cce2a762e4"><td class="memItemLeft" align="right" valign="top"><a id="a5b0eb38552210c92da1f02cce2a762e4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFIRSTofDirectDeclarator</b> ()</td></tr>
+<tr class="separator:a5b0eb38552210c92da1f02cce2a762e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff6caf1829365b0a26986202a883a86e"><td class="memItemLeft" align="right" valign="top"><a id="aff6caf1829365b0a26986202a883a86e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFIRSTofSpecifierQualifier</b> ()</td></tr>
+<tr class="separator:aff6caf1829365b0a26986202a883a86e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a017e6e56605bd90fcf69c86c45e15964"><td class="memItemLeft" align="right" valign="top"><a id="a017e6e56605bd90fcf69c86c45e15964"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofDesignatedInitializer</b> ()</td></tr>
+<tr class="separator:a017e6e56605bd90fcf69c86c45e15964"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae29ba99bcbe6424fa2eb790c4dfff5d5"><td class="memItemLeft" align="right" valign="top"><a id="ae29ba99bcbe6424fa2eb790c4dfff5d5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofDeclarator</b> ()</td></tr>
+<tr class="separator:ae29ba99bcbe6424fa2eb790c4dfff5d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0dc89456c84a1fe2d610c7eeb3a0995"><td class="memItemLeft" align="right" valign="top"><a id="ad0dc89456c84a1fe2d610c7eeb3a0995"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofInitializedDeclarator</b> ()</td></tr>
+<tr class="separator:ad0dc89456c84a1fe2d610c7eeb3a0995"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35f95bebf00e98ee257fc406ef15ef9c"><td class="memItemLeft" align="right" valign="top"><a id="a35f95bebf00e98ee257fc406ef15ef9c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofStructOrUnionOrEnum</b> ()</td></tr>
+<tr class="separator:a35f95bebf00e98ee257fc406ef15ef9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f8e2fd65050745194268d3aa8fa36bd"><td class="memItemLeft" align="right" valign="top"><a id="a0f8e2fd65050745194268d3aa8fa36bd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofEnum</b> ()</td></tr>
+<tr class="separator:a0f8e2fd65050745194268d3aa8fa36bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a633f5a48342fe8ca9a77340f4d47b5c9"><td class="memItemLeft" align="right" valign="top"><a id="a633f5a48342fe8ca9a77340f4d47b5c9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFieldName</b> ()</td></tr>
 <tr class="separator:a633f5a48342fe8ca9a77340f4d47b5c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,36 +144,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedBraceEnclosed
 <tr class="memitem:ab2d7df46195bd17f10d9ac4048075bc5"><td class="memItemLeft" align="right" valign="top"><a id="ab2d7df46195bd17f10d9ac4048075bc5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFieldDesignator</b> ()</td></tr>
 <tr class="separator:ab2d7df46195bd17f10d9ac4048075bc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b00d41891f1fbca098a571a8a472a69"><td class="memItemLeft" align="right" valign="top"><a id="a9b00d41891f1fbca098a571a8a472a69"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpetedEqualsFOLLOWingArrayDesignator</b> ()</td></tr>
-<tr class="separator:a9b00d41891f1fbca098a571a8a472a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae29ba99bcbe6424fa2eb790c4dfff5d5"><td class="memItemLeft" align="right" valign="top"><a id="ae29ba99bcbe6424fa2eb790c4dfff5d5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofDeclarator</b> ()</td></tr>
-<tr class="separator:ae29ba99bcbe6424fa2eb790c4dfff5d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0dc89456c84a1fe2d610c7eeb3a0995"><td class="memItemLeft" align="right" valign="top"><a id="ad0dc89456c84a1fe2d610c7eeb3a0995"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofInitializedDeclarator</b> ()</td></tr>
-<tr class="separator:ad0dc89456c84a1fe2d610c7eeb3a0995"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7ce522f867f965b6ac11270f4428121"><td class="memItemLeft" align="right" valign="top"><a id="ab7ce522f867f965b6ac11270f4428121"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>UnexpectedInitializerFOLLOWingDeclarator</b> ()</td></tr>
-<tr class="separator:ab7ce522f867f965b6ac11270f4428121"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2e05f50064234f9e6e09d2ea45d0bb9"><td class="memItemLeft" align="right" valign="top"><a id="ae2e05f50064234f9e6e09d2ea45d0bb9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>UnexpectedInitializerOfDeclarator</b> ()</td></tr>
+<tr class="separator:ae2e05f50064234f9e6e09d2ea45d0bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6553e1283739e7a78d6b0a8570d4bd97"><td class="memItemLeft" align="right" valign="top"><a id="a6553e1283739e7a78d6b0a8570d4bd97"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>UnexpectedStaticOrTypeQualifiersInArrayDeclarator</b> ()</td></tr>
 <tr class="separator:a6553e1283739e7a78d6b0a8570d4bd97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e9aec51e514d55e4619c07e3b4ce07d"><td class="memItemLeft" align="right" valign="top"><a id="a4e9aec51e514d55e4619c07e3b4ce07d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>UnexpectedPointerInArrayDeclarator</b> ()</td></tr>
 <tr class="separator:a4e9aec51e514d55e4619c07e3b4ce07d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b0eb38552210c92da1f02cce2a762e4"><td class="memItemLeft" align="right" valign="top"><a id="a5b0eb38552210c92da1f02cce2a762e4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFIRSTofDirectDeclarator</b> ()</td></tr>
-<tr class="separator:a5b0eb38552210c92da1f02cce2a762e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35f95bebf00e98ee257fc406ef15ef9c"><td class="memItemLeft" align="right" valign="top"><a id="a35f95bebf00e98ee257fc406ef15ef9c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofStructOrUnionOrEnum</b> ()</td></tr>
-<tr class="separator:a35f95bebf00e98ee257fc406ef15ef9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f8e2fd65050745194268d3aa8fa36bd"><td class="memItemLeft" align="right" valign="top"><a id="a0f8e2fd65050745194268d3aa8fa36bd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofEnum</b> ()</td></tr>
-<tr class="separator:a0f8e2fd65050745194268d3aa8fa36bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff6caf1829365b0a26986202a883a86e"><td class="memItemLeft" align="right" valign="top"><a id="aff6caf1829365b0a26986202a883a86e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFIRSTofSpecifierQualifier</b> ()</td></tr>
-<tr class="separator:aff6caf1829365b0a26986202a883a86e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a879095324353290c7a9392ca63b9f341"><td class="memItemLeft" align="right" valign="top"><a id="a879095324353290c7a9392ca63b9f341"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedNamedParameterBeforeEllipsis</b> ()</td></tr>
 <tr class="separator:a879095324353290c7a9392ca63b9f341"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,9 +165,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>UnexpectedCaseLabelOu
 <tr class="memitem:a9ee170dd3d40d2a98b89f7d52b2c4cbc"><td class="memItemLeft" align="right" valign="top"><a id="a9ee170dd3d40d2a98b89f7d52b2c4cbc"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>UnexpectedDefaultLabelOutsideSwitch</b> ()</td></tr>
 <tr class="separator:a9ee170dd3d40d2a98b89f7d52b2c4cbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe47d10dbec3f60d8ef83387452bff8b"><td class="memItemLeft" align="right" valign="top"><a id="abe47d10dbec3f60d8ef83387452bff8b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedIdentifier</b> ()</td></tr>
-<tr class="separator:abe47d10dbec3f60d8ef83387452bff8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f6ed3e17a049bc9ee33e63726806aeb"><td class="memItemLeft" align="right" valign="top"><a id="a2f6ed3e17a049bc9ee33e63726806aeb"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>UnexpectedContinueOutsideLoop</b> ()</td></tr>
+<tr class="separator:a2f6ed3e17a049bc9ee33e63726806aeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9ac7d2586737469643bcde9d799b130"><td class="memItemLeft" align="right" valign="top"><a id="ae9ac7d2586737469643bcde9d799b130"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>UnexpectedBreakOutsideSwitchOrLoop</b> ()</td></tr>
+<tr class="separator:ae9ac7d2586737469643bcde9d799b130"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72d5350535f105095eb6a3c3ba027f64"><td class="memItemLeft" align="right" valign="top"><a id="a72d5350535f105095eb6a3c3ba027f64"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>UnexpectedGNUExtensionFlag</b> ()</td></tr>
+<tr class="separator:a72d5350535f105095eb6a3c3ba027f64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -177,84 +189,90 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a459db4bee61bc0117d43956b08b637a7"><td class="memItemLeft" align="right" valign="top"><a id="a459db4bee61bc0117d43956b08b637a7"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedToken</b> = &quot;Parser-001&quot;</td></tr>
-<tr class="separator:a459db4bee61bc0117d43956b08b637a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97d17c69b02a8ce2eef625332433e5d4"><td class="memItemLeft" align="right" valign="top"><a id="a97d17c69b02a8ce2eef625332433e5d4"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedOneOfTokens</b> = &quot;Parser-002&quot;</td></tr>
-<tr class="separator:a97d17c69b02a8ce2eef625332433e5d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab547ef7aa0382296b6962307a9e85e0d"><td class="memItemLeft" align="right" valign="top"><a id="ab547ef7aa0382296b6962307a9e85e0d"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedTokenOfCategory</b> = &quot;Parser-003&quot;</td></tr>
-<tr class="separator:ab547ef7aa0382296b6962307a9e85e0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb5f79d7074988dcb63e4b1b46886abc"><td class="memItemLeft" align="right" valign="top"><a id="adb5f79d7074988dcb63e4b1b46886abc"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedExpression</b> = &quot;Parser-006&quot;</td></tr>
-<tr class="separator:adb5f79d7074988dcb63e4b1b46886abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26970b8f78d86adc47377d0a3c1fc6ca"><td class="memItemLeft" align="right" valign="top"><a id="a26970b8f78d86adc47377d0a3c1fc6ca"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedConstant</b> = &quot;Parser-004&quot;</td></tr>
-<tr class="separator:a26970b8f78d86adc47377d0a3c1fc6ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8aa31f31b57dbef5f61cd743daa82271"><td class="memItemLeft" align="right" valign="top"><a id="a8aa31f31b57dbef5f61cd743daa82271"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedStringLiteral</b> = &quot;Parser-005&quot;</td></tr>
-<tr class="separator:a8aa31f31b57dbef5f61cd743daa82271"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0a9621c495d291d7ac2806e317c5fcc"><td class="memItemLeft" align="right" valign="top"><a id="ac0a9621c495d291d7ac2806e317c5fcc"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedEnumerationConstant</b> = &quot;Parser-007&quot;</td></tr>
-<tr class="separator:ac0a9621c495d291d7ac2806e317c5fcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdb85f694b19efc6be2fb47e63ba6c95"><td class="memItemLeft" align="right" valign="top"><a id="acdb85f694b19efc6be2fb47e63ba6c95"></a>
 static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFeature</b> = &quot;Parser-000&quot;</td></tr>
 <tr class="separator:acdb85f694b19efc6be2fb47e63ba6c95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2e8d54f29e6dcf0f8ba381edda015c4"><td class="memItemLeft" align="right" valign="top"><a id="ad2e8d54f29e6dcf0f8ba381edda015c4"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFieldName</b> = &quot;Parser-200-6.5.2&quot;</td></tr>
-<tr class="separator:ad2e8d54f29e6dcf0f8ba381edda015c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafd476a7974aaa826b0ad240866f3718"><td class="memItemLeft" align="right" valign="top"><a id="aafd476a7974aaa826b0ad240866f3718"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedInitializerFOLLOWingDeclarator</b> = &quot;Parser-206-6.7.9&quot;</td></tr>
-<tr class="separator:aafd476a7974aaa826b0ad240866f3718"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63be9c2df93001bd3b68ac58b7f6fe25"><td class="memItemLeft" align="right" valign="top"><a id="a63be9c2df93001bd3b68ac58b7f6fe25"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedStaticOrTypeQualifierInArrayDeclarator</b> = &quot;Parser-207-6.7.6&quot;</td></tr>
-<tr class="separator:a63be9c2df93001bd3b68ac58b7f6fe25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b7d08b5aee5135928639af7e07e8666"><td class="memItemLeft" align="right" valign="top"><a id="a4b7d08b5aee5135928639af7e07e8666"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpetedEqualsFOLLOWingArrayDesignator</b> = &quot;Parser-203-6.7.9&quot;</td></tr>
-<tr class="separator:a4b7d08b5aee5135928639af7e07e8666"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a912c066df5dfa90908a3c71283cc198c"><td class="memItemLeft" align="right" valign="top"><a id="a912c066df5dfa90908a3c71283cc198c"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedPointerInArrayDeclarator</b> = &quot;Parser-308-6.7.6&quot;</td></tr>
-<tr class="separator:a912c066df5dfa90908a3c71283cc198c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc1c05c42e586fc0f23e813d353b962f"><td class="memItemLeft" align="right" valign="top"><a id="afc1c05c42e586fc0f23e813d353b962f"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedBraceEnclosedInitializerList</b> = &quot;Parser-201-6.7.9&quot;</td></tr>
-<tr class="separator:afc1c05c42e586fc0f23e813d353b962f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a6c1f84f70b6251e8cf7e9135ba6e6e"><td class="memItemLeft" align="right" valign="top"><a id="a7a6c1f84f70b6251e8cf7e9135ba6e6e"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFieldDesignator</b> = &quot;Parser-202-6.7.9&quot;</td></tr>
-<tr class="separator:a7a6c1f84f70b6251e8cf7e9135ba6e6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a459db4bee61bc0117d43956b08b637a7"><td class="memItemLeft" align="right" valign="top"><a id="a459db4bee61bc0117d43956b08b637a7"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedToken</b> = &quot;Parser-101&quot;</td></tr>
+<tr class="separator:a459db4bee61bc0117d43956b08b637a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac08a7fd0f8a121030570c61b226b2cde"><td class="memItemLeft" align="right" valign="top"><a id="ac08a7fd0f8a121030570c61b226b2cde"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedTokenWithin</b> = &quot;Parser-102&quot;</td></tr>
+<tr class="separator:ac08a7fd0f8a121030570c61b226b2cde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7894b5ef5859f87c18c1a4fcaaa8429d"><td class="memItemLeft" align="right" valign="top"><a id="a7894b5ef5859f87c18c1a4fcaaa8429d"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedTokenOfCategoryIdentifier</b> = &quot;Parser-106&quot;</td></tr>
+<tr class="separator:a7894b5ef5859f87c18c1a4fcaaa8429d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37bcc054cd7d04db61ae1d31aa701ec6"><td class="memItemLeft" align="right" valign="top"><a id="a37bcc054cd7d04db61ae1d31aa701ec6"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedTokenOfCategoryConstant</b> = &quot;Parser-104&quot;</td></tr>
+<tr class="separator:a37bcc054cd7d04db61ae1d31aa701ec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa99f3fe7f2e462a79a70008cd97896ba"><td class="memItemLeft" align="right" valign="top"><a id="aa99f3fe7f2e462a79a70008cd97896ba"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedTokenOfCategoryStringLiteral</b> = &quot;Parser-105&quot;</td></tr>
+<tr class="separator:aa99f3fe7f2e462a79a70008cd97896ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e9c31cbe2255befa034652600bf0578"><td class="memItemLeft" align="right" valign="top"><a id="a2e9c31cbe2255befa034652600bf0578"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFIRSTofExpression</b> = &quot;Parser-200-6.5&quot;</td></tr>
+<tr class="separator:a2e9c31cbe2255befa034652600bf0578"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a487e93a760319304e5c2a3b181ee65a8"><td class="memItemLeft" align="right" valign="top"><a id="a487e93a760319304e5c2a3b181ee65a8"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFIRSTofEnumerationConstant</b> = &quot;Parser-201-6.7.2.2&quot;</td></tr>
+<tr class="separator:a487e93a760319304e5c2a3b181ee65a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53b04328b35d223ced5bf62d025a41d9"><td class="memItemLeft" align="right" valign="top"><a id="a53b04328b35d223ced5bf62d025a41d9"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFIRSTofDirectDeclarator</b> = &quot;Parser--202-6.7.6&quot;</td></tr>
+<tr class="separator:a53b04328b35d223ced5bf62d025a41d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac98628a5b64f00204c07a9b48b0e23f3"><td class="memItemLeft" align="right" valign="top"><a id="ac98628a5b64f00204c07a9b48b0e23f3"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFIRSTofSpecifierQualifier</b> = &quot;Parser-203-6.7.2.1&quot;</td></tr>
+<tr class="separator:ac98628a5b64f00204c07a9b48b0e23f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adef2cece1fdda1719ce5bec28a8c86e4"><td class="memItemLeft" align="right" valign="top"><a id="adef2cece1fdda1719ce5bec28a8c86e4"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofDesignatedInitializer</b> = &quot;Parser-204-6.7.9&quot;</td></tr>
+<tr class="separator:adef2cece1fdda1719ce5bec28a8c86e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafb0d2c1f6891a17b6868bc4cf14d2c0"><td class="memItemLeft" align="right" valign="top"><a id="aafb0d2c1f6891a17b6868bc4cf14d2c0"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofDeclarator</b> = &quot;Parser-204-6.7.6&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofDeclarator</b> = &quot;Parser-205-6.7.6&quot;</td></tr>
 <tr class="separator:aafb0d2c1f6891a17b6868bc4cf14d2c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a366b7863adf08a93495c46a3e69afe2b"><td class="memItemLeft" align="right" valign="top"><a id="a366b7863adf08a93495c46a3e69afe2b"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofInitializedDeclarator</b> = &quot;Parser-205&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofInitializedDeclarator</b> = &quot;Parser-206&quot;</td></tr>
 <tr class="separator:a366b7863adf08a93495c46a3e69afe2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53b04328b35d223ced5bf62d025a41d9"><td class="memItemLeft" align="right" valign="top"><a id="a53b04328b35d223ced5bf62d025a41d9"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFIRSTofDirectDeclarator</b> = &quot;Parser--309-6.7.6&quot;</td></tr>
-<tr class="separator:a53b04328b35d223ced5bf62d025a41d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a235db36396cbf901cb0631a3a854c679"><td class="memItemLeft" align="right" valign="top"><a id="a235db36396cbf901cb0631a3a854c679"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofStructOrUnionOrEnum</b> = &quot;Parser-310-6.7.2.1&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofStructOrUnionOrEnum</b> = &quot;Parser-207-6.7.2.1&quot;</td></tr>
 <tr class="separator:a235db36396cbf901cb0631a3a854c679"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8d39051d63ea1da78e90652ab65dd4c"><td class="memItemLeft" align="right" valign="top"><a id="aa8d39051d63ea1da78e90652ab65dd4c"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofEnum</b> = &quot;Parser-311-6.7.2.1&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofEnum</b> = &quot;Parser-208-6.7.2.1&quot;</td></tr>
 <tr class="separator:aa8d39051d63ea1da78e90652ab65dd4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac98628a5b64f00204c07a9b48b0e23f3"><td class="memItemLeft" align="right" valign="top"><a id="ac98628a5b64f00204c07a9b48b0e23f3"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFIRSTofSpecifierQualifier</b> = &quot;Parser-312-6.7.2.1&quot;</td></tr>
-<tr class="separator:ac98628a5b64f00204c07a9b48b0e23f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2e8d54f29e6dcf0f8ba381edda015c4"><td class="memItemLeft" align="right" valign="top"><a id="ad2e8d54f29e6dcf0f8ba381edda015c4"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFieldName</b> = &quot;Parser-300-6.5.2&quot;</td></tr>
+<tr class="separator:ad2e8d54f29e6dcf0f8ba381edda015c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc1c05c42e586fc0f23e813d353b962f"><td class="memItemLeft" align="right" valign="top"><a id="afc1c05c42e586fc0f23e813d353b962f"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedBraceEnclosedInitializerList</b> = &quot;Parser-301-6.7.9&quot;</td></tr>
+<tr class="separator:afc1c05c42e586fc0f23e813d353b962f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a6c1f84f70b6251e8cf7e9135ba6e6e"><td class="memItemLeft" align="right" valign="top"><a id="a7a6c1f84f70b6251e8cf7e9135ba6e6e"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFieldDesignator</b> = &quot;Parser-302-6.7.9&quot;</td></tr>
+<tr class="separator:a7a6c1f84f70b6251e8cf7e9135ba6e6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59432e4a21df17ad9364897e38bd8a70"><td class="memItemLeft" align="right" valign="top"><a id="a59432e4a21df17ad9364897e38bd8a70"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedInitializerOfDeclarator</b> = &quot;Parser-303-6.7.9&quot;</td></tr>
+<tr class="separator:a59432e4a21df17ad9364897e38bd8a70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63be9c2df93001bd3b68ac58b7f6fe25"><td class="memItemLeft" align="right" valign="top"><a id="a63be9c2df93001bd3b68ac58b7f6fe25"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedStaticOrTypeQualifierInArrayDeclarator</b> = &quot;Parser-304-6.7.6&quot;</td></tr>
+<tr class="separator:a63be9c2df93001bd3b68ac58b7f6fe25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a912c066df5dfa90908a3c71283cc198c"><td class="memItemLeft" align="right" valign="top"><a id="a912c066df5dfa90908a3c71283cc198c"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedPointerInArrayDeclarator</b> = &quot;Parser-305-6.7.6&quot;</td></tr>
+<tr class="separator:a912c066df5dfa90908a3c71283cc198c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad479f5b0f88c93769021f15a5fc224b7"><td class="memItemLeft" align="right" valign="top"><a id="ad479f5b0f88c93769021f15a5fc224b7"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedNamedParameterBeforeEllipsis</b> = &quot;Parser-313-6.7.6.3&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedNamedParameterBeforeEllipsis</b> = &quot;Parser-306-6.7.6.3&quot;</td></tr>
 <tr class="separator:ad479f5b0f88c93769021f15a5fc224b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcebf4197bb1e68481c8e0157b37547c"><td class="memItemLeft" align="right" valign="top"><a id="abcebf4197bb1e68481c8e0157b37547c"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedTypeSpecifier</b> = &quot;Parser-314-6.7&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedTypeSpecifier</b> = &quot;Parser-307-6.7&quot;</td></tr>
 <tr class="separator:abcebf4197bb1e68481c8e0157b37547c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8b99ad3e57a5932ecf6883bd42e93f6"><td class="memItemLeft" align="right" valign="top"><a id="ad8b99ad3e57a5932ecf6883bd42e93f6"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedCaseLabelOutsideSwitch</b> = &quot;Parser-315-6.8.1-2&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedCaseLabelOutsideSwitch</b> = &quot;Parser-308-6.8.1-2&quot;</td></tr>
 <tr class="separator:ad8b99ad3e57a5932ecf6883bd42e93f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add3118592769d6f9a802238680c82678"><td class="memItemLeft" align="right" valign="top"><a id="add3118592769d6f9a802238680c82678"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedDefaultLabelOutsideSwitch</b> = &quot;Parser-315-6.8.1-2&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedDefaultLabelOutsideSwitch</b> = &quot;Parser-309-6.8.1-2&quot;</td></tr>
 <tr class="separator:add3118592769d6f9a802238680c82678"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad6c61ad4121437bac76c47c2ddab621"><td class="memItemLeft" align="right" valign="top"><a id="aad6c61ad4121437bac76c47c2ddab621"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedIdentifier</b> = &quot;Parser-316-6.8.6.1&quot;</td></tr>
-<tr class="separator:aad6c61ad4121437bac76c47c2ddab621"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e60b193d3d97ebd1d8b0ce0ff8258fb"><td class="memItemLeft" align="right" valign="top"><a id="a5e60b193d3d97ebd1d8b0ce0ff8258fb"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedContinueOutsideLoop</b> = &quot;Parser-310-6.8.6.2-1&quot;</td></tr>
+<tr class="separator:a5e60b193d3d97ebd1d8b0ce0ff8258fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13e3c4ec2e56e8b39a1281bbf1072e01"><td class="memItemLeft" align="right" valign="top"><a id="a13e3c4ec2e56e8b39a1281bbf1072e01"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedBreakOutsideSwitchOrLoop</b> = &quot;Parser-311-6.8.6.3-1&quot;</td></tr>
+<tr class="separator:a13e3c4ec2e56e8b39a1281bbf1072e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af18ed266dcb38048ce872df8bd321a0b"><td class="memItemLeft" align="right" valign="top"><a id="af18ed266dcb38048ce872df8bd321a0b"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_UnexpectedGNUExtensionFlag</b> = &quot;Parser-312-GNU&quot;</td></tr>
+<tr class="separator:af18ed266dcb38048ce872df8bd321a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following files:<ul>
 <li>C/parser/<a class="el" href="_parser_8h_source.html">Parser.h</a></li>
