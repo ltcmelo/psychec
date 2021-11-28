@@ -214,7 +214,6 @@ class StructOrUnionSymbol;
 class EnumSymbol;
 class EnumeratorDeclaration;
 class ForwardDeclarationSymbol;
-template <class PtrT> class SymbolList;
 
 /* Types */
 class TypeSymbol;
@@ -228,7 +227,8 @@ class NamedType;
 class QuantifiedType;
 class TypeVisitor;
 
-
+/* Lists */
+template <class PtrT> class SymbolList;
 
 } // C
 } // psy
