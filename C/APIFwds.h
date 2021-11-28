@@ -175,8 +175,7 @@ class AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax;
 class AmbiguousCastOrBinaryExpressionSyntax;
 class AmbiguousExpressionOrDeclarationStatementSyntax;
 
-//=================================================================== Lists
-
+/* Lists */
 typedef SyntaxNodePlainList<DeclarationSyntax*> DeclarationListSyntax;
 typedef SyntaxNodeSeparatedList<EnumMemberDeclarationSyntax*> EnumMemberListSyntax;
 typedef SyntaxNodeSeparatedList<ParameterDeclarationSyntax*> ParameterDeclarationListSyntax;
@@ -186,10 +185,8 @@ typedef SyntaxNodeSeparatedList<DeclaratorSyntax*> DeclaratorListSyntax;
 typedef SyntaxNodePlainList<DeclaratorSuffixSyntax*> DeclaratorSuffixListSyntax;
 typedef SyntaxNodePlainList<DesignatorSyntax*> DesignatorListSyntax;
 typedef SyntaxNodeSeparatedList<InitializerSyntax*> InitializerListSyntax;
-
 typedef SyntaxNodeSeparatedList<ExpressionSyntax*> ExpressionListSyntax;
 typedef SyntaxNodeSeparatedList<GenericAssociationSyntax*> GenericAssociationListSyntax;
-
 typedef SyntaxNodePlainList<StatementSyntax*> StatementListSyntax;
 typedef SyntaxNodeSeparatedList<ExtGNU_AsmOperandSyntax*> ExtGNU_AsmOperandListSyntax;
 
@@ -202,23 +199,11 @@ class Identifier;
 class AnonymousName;
 class TagName;
 
-//=================================================================== Types
-
-class Type;
-class UndefinedType;
-class VoidType;
-class IntegerType;
-class FloatType;
-class PointerType;
-class ArrayType;
-class NamedType;
-class QuantifiedType;
-class TypeVisitor;
-
 //=================================================================== Symbols
 
 class SymbolTable;
 class SymbolVisitor;
+
 class Symbol;
 class ScopeSymbol;
 class VariableSymbol;
@@ -229,6 +214,20 @@ class StructOrUnionSymbol;
 class EnumSymbol;
 class EnumeratorDeclaration;
 class ForwardDeclarationSymbol;
+
+/* Types */
+class TypeSymbol;
+class UndefinedType;
+class VoidType;
+class IntegerType;
+class FloatType;
+class PointerType;
+class ArrayType;
+class NamedType;
+class QuantifiedType;
+class TypeVisitor;
+
+/* Lists */
 template <class PtrT> class SymbolList;
 
 } // C
