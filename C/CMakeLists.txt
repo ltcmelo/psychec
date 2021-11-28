@@ -100,6 +100,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Expressions.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Statements.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_MIXIN.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxReference.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxToken.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxToken.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxUtilities.cpp
@@ -114,6 +115,20 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/names/DeclarationName.h
     ${PROJECT_SOURCE_DIR}/names/DeclarationNames.cpp
     ${PROJECT_SOURCE_DIR}/names/DeclarationNames.h
+
+    # Symbols
+    ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbols.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
+    ${PROJECT_SOURCE_DIR}/symbols/SpecialType.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbols.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbols.h
 
     # Tests
     ${PROJECT_SOURCE_DIR}/tests/TestBinder.h
