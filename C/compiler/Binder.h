@@ -50,7 +50,7 @@ private:
     // Declarations //
     //--------------//
     virtual Action visitTranslationUnit(const TranslationUnitSyntax* node) override;
-
+    virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node) override;
 };
 
 } // C

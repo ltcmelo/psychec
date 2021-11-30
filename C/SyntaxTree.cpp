@@ -21,13 +21,13 @@
 
 #include "SyntaxTree.h"
 
-#include "Compilation.h"
 #include "MemoryPool.h"
 
-#include "parser/Binder.h"
+#include "compiler/Compilation.h"
+#include "compiler/Binder.h"
+#include "compiler/TypeChecker.h"
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
-#include "parser/TypeChecker.h"
 #include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNodes.h"
 

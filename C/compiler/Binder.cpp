@@ -1,4 +1,5 @@
 // Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,45 +19,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_EXECUTER_C_H__
-#define CNIPPET_EXECUTER_C_H__
-
-#include "Driver.h"
+#include "Binder.h"
 
 #include "SyntaxTree.h"
+#include "syntax/SyntaxNodes.h"
 
-#include <utility>
-#include <string>
+#include <iostream>
 
-namespace cnip {
+using namespace psy;
+using namespace C;
 
-class Executer_C
+Binder::Binder(SyntaxTree* tree)
+    : SyntaxVisitor(tree)
+{}
+
+Binder::~Binder()
+{}
+
+void Binder::bind()
 {
-public:
-    Executer_C(Driver* driver)
-        : driver_(driver)
-        , inferMode_(false)
-    {}
+    visit(tree_->root());
+}
 
-    int execute(const std::string& source);
+SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
+{
+    for (auto iter = node->declarations(); iter; iter = iter->next)
+        visit(iter->value);
+    return Action::Skip;
+}
 
-private:
-    int executeCore(std::string source);
-
-    std::pair<std::string, std::string> extendSource(const std::string& source);
-    std::pair<int, std::string> invokePreprocessor(std::string source);
-    std::pair<int, std::unique_ptr<SyntaxTree>> invokeParser(const std::string& source);
-    int invokeCompiler(std::unique_ptr<SyntaxTree> tree);
-
-    Driver* driver_;
-    bool inferMode_;
-
-    static constexpr int ERROR_PreprocessorInvocationFailure = 100;
-    static constexpr int ERROR_PreprocessedFileWritingFailure = 101;
-    static constexpr int ERROR_UnsuccessfulParsing = 102;
-    static constexpr int ERROR_InvalidSyntaxTree = 103;
-};
-
-} // cnip
-
-#endif
+SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node)
+{
+    std::cout << "\nincomplete declaration\n";
+    return Action::Visit;
+}

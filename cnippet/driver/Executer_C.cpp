@@ -25,6 +25,7 @@
 #include "IO.h"
 #include "Plugin.h"
 
+#include "compiler/Compilation.h"
 #include "plugin-api/SourceInspector.h"
 #include "syntax/SyntaxNamePrinter.h"
 
@@ -77,7 +78,11 @@ int Executer_C::executeCore(std::string source)
         source_P = source_PP;
     }
 
-    return invokeParser(source_P);
+    auto [exit, tree] = invokeParser(source_P);
+    if (exit != 0)
+        return exit;
+
+    return invokeCompiler(std::move(tree));
 }
 
 std::pair<std::string, std::string> Executer_C::extendSource(
@@ -138,7 +143,7 @@ std::pair<int, std::string> Executer_C::invokePreprocessor(std::string source)
     return std::make_pair(0, ppSource);
 }
 
-int Executer_C::invokeParser(const std::string& source)
+std::pair<int, std::unique_ptr<SyntaxTree>> Executer_C::invokeParser(const std::string& source)
 {
     auto tree = SyntaxTree::parseText(source,
                                       ParseOptions(),
@@ -146,13 +151,13 @@ int Executer_C::invokeParser(const std::string& source)
 
     if (!tree) {
         std::cerr << "unsuccessful parsing" << std::endl;
-        return ERROR_UnsuccessfulParsing;
+        return std::make_pair(ERROR_UnsuccessfulParsing, nullptr);
     }
 
     TranslationUnitSyntax* TU = tree->translationUnitRoot();
     if (!TU) {
         std::cerr << "invalid syntax tree" << std::endl;
-        return ERROR_InvalidSyntaxTree;
+        return std::make_pair(ERROR_InvalidSyntaxTree, nullptr);
     }
 
     if (!tree->diagnostics().empty()) {
@@ -171,6 +176,12 @@ int Executer_C::invokeParser(const std::string& source)
         std::cout << ossTree.str() << std::endl;
     }
 
-    return 0;
+    return std::make_pair(0, std::move(tree));
 }
 
+int Executer_C::invokeCompiler(std::unique_ptr<SyntaxTree> tree)
+{
+    auto compilation = Compilation::create(tree->filePath(), std::move(tree));
+
+    return 0;
+}

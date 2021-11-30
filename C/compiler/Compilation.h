@@ -19,63 +19,57 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SEMANTIC_MODEL_H__
-#define PSYCHE_C_SEMANTIC_MODEL_H__
+#ifndef PSYCHE_C_COMPILATION_H__
+#define PSYCHE_C_COMPILATION_H__
 
 #include "API.h"
 #include "APIFwds.h"
-
-#include "names/DeclarationNames.h"
+#include "SyntaxTree.h"
 
 #include "../common/infra/Pimpl.h"
+
+#include <memory>
+#include <string>
 
 namespace psy {
 namespace C {
 
-class Binder;
+class SemanticModel;
 
 /**
- * \brief The SemanticModel class.
+ * \brief The Compilation class.
  *
  * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.SemanticModel
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.Compilation
  * from Roslyn, the .NET Compiler Platform.
  */
-class PSY_C_API SemanticModel
+class PSY_C_API Compilation
 {
 public:
-    ~SemanticModel();
-    SemanticModel(const SemanticModel&) = delete;
-    SemanticModel& operator=(const SemanticModel&) = delete;
+    Compilation(const Compilation&) = delete;
+    Compilation& operator=(const Compilation&) = delete;
+    ~Compilation();
 
     /**
-     * The Compilation \c this SemanticModel was obtained from.
+     * Create an empty compilation identified by \p id with SyntaxTree \p tree.
      */
-    const Compilation* compilation() const;
+    static std::unique_ptr<Compilation> create(const std::string& id,
+                                               std::unique_ptr<SyntaxTree> tree);
 
     /**
-     * The SyntaxTree \c this SemanticModel was obtained from.
+     * The SemanticModel associated to \c this Compilation.
+     */
+    std::unique_ptr<SemanticModel> semanticModel() const;
+
+    /**
+     * The SyntaxTree associated to \c this Compilation.
      */
     const SyntaxTree* syntaxTree() const;
 
 private:
-    DECL_PIMPL(SemanticModel)
+    DECL_PIMPL(Compilation);
 
-    friend class Compilation;
-    friend class Binder;
-
-    SemanticModel(Compilation* compilation, SyntaxTree* tree);
-
-    void bind();
-
-    /* Names */
-    template <class NameT, class... ArgsT> NameT* make(ArgsT&&... args);
-    IdentifierName* makeName(const Identifier* identifier);
-    TagName* makeName(TagName::TagKind typeSpecifierKind, const Identifier* identifier);
-    AnonymousName* makeName();
-
-    Compilation* compilation();
-    SyntaxTree* syntaxTree();
+    Compilation();
 };
 
 } // C

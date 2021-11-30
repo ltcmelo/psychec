@@ -19,45 +19,59 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Compilation.h"
+#ifndef PSYCHE_C_SEMANTIC_MODEL_H__
+#define PSYCHE_C_SEMANTIC_MODEL_H__
 
-#include "SemanticModel.h"
-#include "SyntaxTree.h"
+#include "API.h"
+#include "APIFwds.h"
 
-using namespace psy;
-using namespace C;
+#include "names/DeclarationNames.h"
 
-struct Compilation::CompilationImpl
+#include "../common/infra/Pimpl.h"
+
+namespace psy {
+namespace C {
+
+class Binder;
+
+/**
+ * \brief The SemanticModel class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.SemanticModel
+ * from Roslyn, the .NET Compiler Platform.
+ */
+class PSY_C_API SemanticModel
 {
-    CompilationImpl(Compilation* compilation, const std::string& id)
-        : Q_(compilation)
-        , id_(id)
-        , curUnit_(nullptr)
-    {}
+public:
+    ~SemanticModel();
+    SemanticModel(const SemanticModel&) = delete;
+    SemanticModel& operator=(const SemanticModel&) = delete;
 
-    ~CompilationImpl()
-    {}
+    /**
+     * The Compilation \c this SemanticModel was obtained from.
+     */
+    const Compilation* compilation() const;
 
-    Compilation* Q_;
-    std::string id_;
-    SyntaxTree* curUnit_;
+private:
+    DECL_PIMPL(SemanticModel)
+
+    friend class Compilation;
+    friend class Binder;
+
+    SemanticModel(Compilation* compilation);
+
+    /* Names */
+    template <class NameT, class... ArgsT> NameT* make(ArgsT&&... args);
+    IdentifierName* makeName(const Identifier* identifier);
+    TagName* makeName(TagName::TagKind typeSpecifierKind, const Identifier* identifier);
+    AnonymousName* makeName();
+
+    Compilation* compilation();
+    SyntaxTree* syntaxTree();
 };
 
-Compilation::Compilation(const std::string& id)
-    : P(new CompilationImpl(this, id))
-{}
+} // C
+} // psy
 
-Compilation::~Compilation()
-{}
-
-std::unique_ptr<Compilation> Compilation::create(const std::string& id)
-{
-    return nullptr;
-}
-
-std::unique_ptr<SemanticModel> Compilation::semanticModel(SyntaxTree* tree) const
-{
-    std::unique_ptr<SemanticModel> model(new SemanticModel(const_cast<Compilation*>(this), tree));
-    model->bind();
-    return model;
-}
+#endif

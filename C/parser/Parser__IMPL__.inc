@@ -21,10 +21,10 @@
 
 #include "Parser.h"
 
-#include "Compilation.h"
 #include "Lexer.h"
 
 #include "common/infra/PsycheAssert.h"
+#include "compiler/Compilation.h"
 #include "syntax/SyntaxFacts.h"
 #include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNodes.h"

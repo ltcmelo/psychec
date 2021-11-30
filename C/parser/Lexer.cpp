@@ -21,7 +21,6 @@
 
 #include "Lexer.h"
 
-#include "Compilation.h"
 #include "SyntaxTree.h"
 
 #include "syntax/SyntaxLexemes.h"

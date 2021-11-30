@@ -19,54 +19,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_COMPILATION_H__
-#define PSYCHE_C_COMPILATION_H__
+#include "Compilation.h"
 
-#include "API.h"
-#include "APIFwds.h"
+#include "SemanticModel.h"
+#include "SyntaxTree.h"
 
-#include "../common/infra/Pimpl.h"
+using namespace psy;
+using namespace C;
 
-#include <memory>
-#include <string>
-
-namespace psy {
-namespace C {
-
-class SemanticModel;
-
-/**
- * \brief The Compilation class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.Compilation
- * from Roslyn, the .NET Compiler Platform.
- */
-class PSY_C_API Compilation
+struct Compilation::CompilationImpl
 {
-public:
-    Compilation(const Compilation&) = delete;
-    Compilation& operator=(const Compilation&) = delete;
-    ~Compilation();
+    CompilationImpl(Compilation* q)
+        : Q_(q)
+    {}
 
-    /**
-     * Create a new compilation.
-     */
-    std::unique_ptr<Compilation> create(const std::string& id);
-
-    /**
-     * The semantic model associated to the given \p tree, which
-     * must be part of \c this compilation.
-     */
-    std::unique_ptr<SemanticModel> semanticModel(SyntaxTree* tree) const;
-
-private:
-    Compilation(const std::string& id);
-
-    DECL_PIMPL(Compilation);
+    Compilation* Q_;
+    std::string id_;
+    std::unique_ptr<SyntaxTree> tree_;
 };
 
-} // C
-} // psy
+Compilation::Compilation()
+    : P(new CompilationImpl(this))
+{}
 
-#endif
+Compilation::~Compilation()
+{}
+
+std::unique_ptr<Compilation> Compilation::create(const std::string& id,
+                                                 std::unique_ptr<SyntaxTree> tree)
+{
+    std::unique_ptr<Compilation> compilation(new Compilation);
+    compilation->impl_->id_ = id;
+    compilation->impl_->tree_ = std::move(tree);
+    return compilation;
+}
+
+std::unique_ptr<SemanticModel> Compilation::semanticModel() const
+{
+    std::unique_ptr<SemanticModel> model(new SemanticModel(const_cast<Compilation*>(this)));
+    return model;
+}

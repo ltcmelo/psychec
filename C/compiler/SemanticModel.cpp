@@ -19,28 +19,64 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include "SemanticModel.h"
+
 #include "Binder.h"
+#include "Compilation.h"
 
-#include "SyntaxTree.h"
-
-#include <iostream>
+#include <unordered_set>
+#include <vector>
 
 using namespace psy;
 using namespace C;
 
-Binder::Binder(SyntaxTree* tree)
-    : SyntaxVisitor(tree)
-{}
-
-Binder::~Binder()
-{}
-
-void Binder::bind()
+struct SemanticModel::SemanticModelImpl
 {
-    visit(tree_->root());
+    SemanticModelImpl(Compilation* compilation)
+        : compilation_(compilation)
+    {}
+
+    Compilation* compilation_;
+    std::vector<std::unique_ptr<DeclarationName>> names_;
+};
+
+SemanticModel::SemanticModel(Compilation* compilation)
+    : P(new SemanticModelImpl(compilation))
+{}
+
+SemanticModel::~SemanticModel()
+{}
+
+const Compilation* SemanticModel::compilation() const
+{
+    return P->compilation_;
 }
 
-SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
+Compilation* SemanticModel::compilation()
 {
-    return Action::Visit;
+    return P->compilation_;
+}
+
+template <class NameT,
+          class... ArgsT>
+NameT* SemanticModel::make(ArgsT&&... args)
+{
+    P->names_.emplace_back(new NameT(std::forward<ArgsT>(args)...));
+    return static_cast<NameT*>(P->names_.back().get());
+}
+
+IdentifierName* SemanticModel::makeName(const Identifier* identifier)
+{
+    return make<IdentifierName>(identifier);
+}
+
+TagName* SemanticModel::makeName(TagName::TagKind typeSpecifierKind,
+                                 const Identifier* identifier)
+{
+    return make<TagName>(typeSpecifierKind, identifier);
+}
+
+AnonymousName* SemanticModel::makeName()
+{
+    return make<AnonymousName>();
 }

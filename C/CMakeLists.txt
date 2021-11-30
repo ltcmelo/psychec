@@ -32,8 +32,6 @@ set(CFE_SOURCES
     # Main
     ${PROJECT_SOURCE_DIR}/API.h
     ${PROJECT_SOURCE_DIR}/APIFwds.h
-    ${PROJECT_SOURCE_DIR}/Compilation.h
-    ${PROJECT_SOURCE_DIR}/Compilation.cpp
     ${PROJECT_SOURCE_DIR}/LanguageDialect.h
     ${PROJECT_SOURCE_DIR}/LanguageDialect.cpp
     ${PROJECT_SOURCE_DIR}/LanguageExtensions.h
@@ -43,38 +41,16 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/Managed.cpp
     ${PROJECT_SOURCE_DIR}/MemoryPool.h
     ${PROJECT_SOURCE_DIR}/MemoryPool.cpp
-    ${PROJECT_SOURCE_DIR}/SemanticModel.h
-    ${PROJECT_SOURCE_DIR}/SemanticModel.cpp
     ${PROJECT_SOURCE_DIR}/SyntaxTree.h
     ${PROJECT_SOURCE_DIR}/SyntaxTree.cpp
     ${PROJECT_SOURCE_DIR}/Unparser.h
     ${PROJECT_SOURCE_DIR}/Unparser.cpp
 
-    # Parser
-    ${PROJECT_SOURCE_DIR}/parser/Binder.h
-    ${PROJECT_SOURCE_DIR}/parser/Binder.cpp
-    ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Lexer.cpp
-    ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Parser.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Keywords.cpp
-    ${PROJECT_SOURCE_DIR}/parser/LexedTokens.h
-    ${PROJECT_SOURCE_DIR}/parser/LexedTokens.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Lexer.h
-    ${PROJECT_SOURCE_DIR}/parser/Lexer.cpp
-    ${PROJECT_SOURCE_DIR}/parser/LineDirective.h
-    ${PROJECT_SOURCE_DIR}/parser/LineDirective.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Parser.h
-    ${PROJECT_SOURCE_DIR}/parser/Parser__IMPL__.inc
-    ${PROJECT_SOURCE_DIR}/parser/Parser.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Parser_Common.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Parser_Declarations.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Parser_Expressions.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Parser_Statements.cpp
-    ${PROJECT_SOURCE_DIR}/parser/ParseOptions.h
-    ${PROJECT_SOURCE_DIR}/parser/ParseOptions.cpp
-    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.h
-    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.cpp
-    ${PROJECT_SOURCE_DIR}/parser/TypeChecker.h
-    ${PROJECT_SOURCE_DIR}/parser/TypeChecker.cpp
+    # Names
+    ${PROJECT_SOURCE_DIR}/names/DeclarationName.cpp
+    ${PROJECT_SOURCE_DIR}/names/DeclarationName.h
+    ${PROJECT_SOURCE_DIR}/names/DeclarationNames.cpp
+    ${PROJECT_SOURCE_DIR}/names/DeclarationNames.h
 
     # Syntax
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.h
@@ -110,11 +86,27 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxWriterDOTFormat.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxWriterDOTFormat.cpp
 
-    # Names
-    ${PROJECT_SOURCE_DIR}/names/DeclarationName.cpp
-    ${PROJECT_SOURCE_DIR}/names/DeclarationName.h
-    ${PROJECT_SOURCE_DIR}/names/DeclarationNames.cpp
-    ${PROJECT_SOURCE_DIR}/names/DeclarationNames.h
+    # Parser
+    ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Lexer.cpp
+    ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Parser.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Keywords.cpp
+    ${PROJECT_SOURCE_DIR}/parser/LexedTokens.h
+    ${PROJECT_SOURCE_DIR}/parser/LexedTokens.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Lexer.h
+    ${PROJECT_SOURCE_DIR}/parser/Lexer.cpp
+    ${PROJECT_SOURCE_DIR}/parser/LineDirective.h
+    ${PROJECT_SOURCE_DIR}/parser/LineDirective.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Parser.h
+    ${PROJECT_SOURCE_DIR}/parser/Parser__IMPL__.inc
+    ${PROJECT_SOURCE_DIR}/parser/Parser.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Parser_Common.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Parser_Declarations.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Parser_Expressions.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Parser_Statements.cpp
+    ${PROJECT_SOURCE_DIR}/parser/ParseOptions.h
+    ${PROJECT_SOURCE_DIR}/parser/ParseOptions.cpp
+    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.h
+    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.cpp
 
     # Symbols
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
@@ -129,6 +121,16 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbols.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbols.h
+
+    # Compiler
+    ${PROJECT_SOURCE_DIR}/compiler/Binder.h
+    ${PROJECT_SOURCE_DIR}/compiler/Binder.cpp
+    ${PROJECT_SOURCE_DIR}/compiler/Compilation.h
+    ${PROJECT_SOURCE_DIR}/compiler/Compilation.cpp
+    ${PROJECT_SOURCE_DIR}/compiler/SemanticModel.h
+    ${PROJECT_SOURCE_DIR}/compiler/SemanticModel.cpp
+    ${PROJECT_SOURCE_DIR}/compiler/TypeChecker.h
+    ${PROJECT_SOURCE_DIR}/compiler/TypeChecker.cpp
 
     # Tests
     ${PROJECT_SOURCE_DIR}/tests/TestBinder.h
