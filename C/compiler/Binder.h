@@ -24,7 +24,11 @@
 
 #include "API.h"
 
+#include "common/diagnostics/DiagnosticDescriptor.h"
+#include "parser/LexedTokens.h"
 #include "syntax/SyntaxVisitor.h"
+
+#include <string>
 
 namespace psy {
 namespace C {
@@ -44,7 +48,25 @@ public:
     void bind();
 
 private:
-    Binder(SyntaxTree* tree);
+    friend class SemanticModel;
+
+    Binder(const SyntaxTree* tree);
+
+    struct DiagnosticsReporter
+    {
+        DiagnosticsReporter(Binder* binder)
+            : binder_(binder)
+        {}
+        Binder* binder_;
+
+        void diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk);
+
+        static const std::string ID_of_UselessDeclaration;
+
+        void UselessDeclaration(SyntaxToken tk);
+    };
+
+    DiagnosticsReporter diagnosticsReporter_;
 
     //--------------//
     // Declarations //

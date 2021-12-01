@@ -59,7 +59,7 @@ public:
     /**
      * The SemanticModel associated to \c this Compilation.
      */
-    std::unique_ptr<SemanticModel> semanticModel() const;
+    const SemanticModel* semanticModel() const;
 
     /**
      * The SyntaxTree associated to \c this Compilation.

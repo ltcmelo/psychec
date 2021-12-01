@@ -36,7 +36,7 @@ namespace C {
 class PSY_C_API SyntaxVisitor
 {
 public:
-    SyntaxVisitor(SyntaxTree* tree);
+    SyntaxVisitor(const SyntaxTree* tree);
     SyntaxVisitor(const SyntaxVisitor&) = delete;
     void operator=(const SyntaxVisitor&) = delete;
     virtual ~SyntaxVisitor();
@@ -178,7 +178,7 @@ public:
     virtual Action visitAmbiguousExpressionOrDeclarationStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) { return Action::Visit; }
 
 protected:
-    SyntaxTree* tree_;
+    const SyntaxTree* tree_;
 };
 
 } // C

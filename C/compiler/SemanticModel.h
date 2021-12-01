@@ -48,27 +48,18 @@ public:
     SemanticModel(const SemanticModel&) = delete;
     SemanticModel& operator=(const SemanticModel&) = delete;
 
-    /**
-     * The Compilation \c this SemanticModel was obtained from.
-     */
-    const Compilation* compilation() const;
-
 private:
     DECL_PIMPL(SemanticModel)
 
     friend class Compilation;
-    friend class Binder;
 
-    SemanticModel(Compilation* compilation);
+    SemanticModel(const SyntaxTree* tree);
 
     /* Names */
     template <class NameT, class... ArgsT> NameT* make(ArgsT&&... args);
     IdentifierName* makeName(const Identifier* identifier);
     TagName* makeName(TagName::TagKind typeSpecifierKind, const Identifier* identifier);
     AnonymousName* makeName();
-
-    Compilation* compilation();
-    SyntaxTree* syntaxTree();
 };
 
 } // C

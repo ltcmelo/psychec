@@ -51,11 +51,11 @@ using namespace C;
 struct SyntaxTree::SyntaxTreeImpl
 {
     SyntaxTreeImpl(SourceText text,
-                   ParseOptions options,
+                   ParseOptions parseOptions,
                    const std::string& path)
         : pool_(new MemoryPool())
         , text_(std::move(text))
-        , options_(std::move(options))
+        , parseOptions_(std::move(parseOptions))
         , path_(path)
         , rootNode_(nullptr)
     {
@@ -66,7 +66,7 @@ struct SyntaxTree::SyntaxTreeImpl
     std::unique_ptr<MemoryPool> pool_;
 
     SourceText text_;
-    ParseOptions options_;
+    ParseOptions parseOptions_;
     std::string path_;
 
     TextElementTable<Identifier> identifiers_;
@@ -146,7 +146,7 @@ std::vector<Diagnostic> SyntaxTree::diagnostics() const
 void SyntaxTree::addToken(SyntaxToken tk) { P->tokens_.add(tk); }
 SyntaxToken& SyntaxTree::tokenAt(LexedTokens::IndexType tkIdx) { return P->tokens_.tokenAt(tkIdx); }
 const SyntaxToken& SyntaxTree::tokenAt(LexedTokens::IndexType tkIdx) const { return P->tokens_.tokenAt(tkIdx); }
-SyntaxTree::TokenSequenceType::size_type SyntaxTree::tokenCount() { return P->tokens_.count(); }
+SyntaxTree::TokenSequenceType::size_type SyntaxTree::tokenCount() const { return P->tokens_.count(); }
 LexedTokens::IndexType SyntaxTree::freeTokenSlot() const { return P->tokens_.freeSlot(); }
 
 void SyntaxTree::buildTree(SyntaxCategory syntaxCat)
@@ -214,14 +214,9 @@ void SyntaxTree::buildTree(SyntaxCategory syntaxCat)
     }
 }
 
-void SyntaxTree::createSymbols()
+const ParseOptions& SyntaxTree::parseOptions() const
 {
-
-}
-
-const ParseOptions& SyntaxTree::options() const
-{
-    return P->options_;
+    return P->parseOptions_;
 }
 
 const Identifier* SyntaxTree::identifier(const char* s, unsigned size)
@@ -322,9 +317,15 @@ LineDirective SyntaxTree::searchForLineDirective(unsigned int offset) const
     return *it;
 }
 
-void SyntaxTree::newDiagnostic(DiagnosticDescriptor descriptor, LexedTokens::IndexType tkIdx)
+void SyntaxTree::newDiagnostic(DiagnosticDescriptor descriptor,
+                               LexedTokens::IndexType tkIdx) const
 {
-    SyntaxToken tk = tokenAt(tkIdx);
+    newDiagnostic(descriptor, tokenAt(tkIdx));
+}
+
+void SyntaxTree::newDiagnostic(DiagnosticDescriptor descriptor,
+                               SyntaxToken tk) const
+{
     LinePosition start = computePosition(tk.charStart());
     LinePosition end = computePosition(tk.charEnd());
     FileLinePositionSpan line(P->path_, start, end);

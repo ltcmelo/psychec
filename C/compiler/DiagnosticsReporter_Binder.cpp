@@ -1,5 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
-// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,22 +18,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "SyntaxVisitor.h"
+#include "Binder.h"
 
-#include "SyntaxNodes.h"
 #include "SyntaxTree.h"
 
 using namespace psy;
 using namespace C;
 
-SyntaxVisitor::SyntaxVisitor(const SyntaxTree* tree)
-    : tree_(tree)
-{}
+const std::string Binder::DiagnosticsReporter::ID_of_UselessDeclaration = "Binder-000";
 
-SyntaxVisitor::~SyntaxVisitor()
-{}
-
-void SyntaxVisitor::visit(const SyntaxNode* node)
+void Binder::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc,
+                                           SyntaxToken tk)
 {
-    SyntaxNode::acceptVisitor(node, this);
+    binder_->tree_->newDiagnostic(desc, tk);
+};
+
+void Binder::DiagnosticsReporter::UselessDeclaration(SyntaxToken tk)
+{
+    diagnose(DiagnosticDescriptor(ID_of_UselessDeclaration,
+                                  "[[useless declaration]]",
+                                  "declaration does not declary anything",
+                                  DiagnosticSeverity::Error,
+                                  DiagnosticCategory::Binding), tk);
 }

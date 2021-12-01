@@ -32,30 +32,21 @@ using namespace C;
 
 struct SemanticModel::SemanticModelImpl
 {
-    SemanticModelImpl(Compilation* compilation)
-        : compilation_(compilation)
+    SemanticModelImpl()
     {}
 
-    Compilation* compilation_;
     std::vector<std::unique_ptr<DeclarationName>> names_;
 };
 
-SemanticModel::SemanticModel(Compilation* compilation)
-    : P(new SemanticModelImpl(compilation))
-{}
+SemanticModel::SemanticModel(const SyntaxTree* tree)
+    : P(new SemanticModelImpl())
+{
+    Binder binder(tree);
+    binder.bind();
+}
 
 SemanticModel::~SemanticModel()
 {}
-
-const Compilation* SemanticModel::compilation() const
-{
-    return P->compilation_;
-}
-
-Compilation* SemanticModel::compilation()
-{
-    return P->compilation_;
-}
 
 template <class NameT,
           class... ArgsT>

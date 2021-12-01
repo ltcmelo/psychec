@@ -36,6 +36,7 @@ struct Compilation::CompilationImpl
     Compilation* Q_;
     std::string id_;
     std::unique_ptr<SyntaxTree> tree_;
+    std::unique_ptr<SemanticModel> semaModel_;
 };
 
 Compilation::Compilation()
@@ -49,13 +50,19 @@ std::unique_ptr<Compilation> Compilation::create(const std::string& id,
                                                  std::unique_ptr<SyntaxTree> tree)
 {
     std::unique_ptr<Compilation> compilation(new Compilation);
-    compilation->impl_->id_ = id;
-    compilation->impl_->tree_ = std::move(tree);
+    compilation->P->id_ = id;
+    compilation->P->tree_ = std::move(tree);
     return compilation;
 }
 
-std::unique_ptr<SemanticModel> Compilation::semanticModel() const
+const SyntaxTree* Compilation::syntaxTree() const
 {
-    std::unique_ptr<SemanticModel> model(new SemanticModel(const_cast<Compilation*>(this)));
-    return model;
+    return P->tree_.get();
+}
+
+const SemanticModel* Compilation::semanticModel() const
+{
+    std::unique_ptr<SemanticModel> semaModel(new SemanticModel(P->tree_.get()));
+    P->semaModel_ = std::move(semaModel);
+    return P->semaModel_.get();
 }

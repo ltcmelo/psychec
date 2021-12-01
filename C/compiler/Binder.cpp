@@ -29,8 +29,9 @@
 using namespace psy;
 using namespace C;
 
-Binder::Binder(SyntaxTree* tree)
+Binder::Binder(const SyntaxTree* tree)
     : SyntaxVisitor(tree)
+    , diagnosticsReporter_(this)
 {}
 
 Binder::~Binder()
@@ -50,6 +51,9 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 
 SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node)
 {
-    std::cout << "\nincomplete declaration\n";
+    diagnosticsReporter_.UselessDeclaration(node->lastToken());
+
+    for (auto iter = node->specifiers(); iter; iter = iter->next)
+        ;
     return Action::Visit;
 }

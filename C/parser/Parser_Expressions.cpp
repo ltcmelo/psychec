@@ -215,7 +215,7 @@ bool Parser::parseExtGNU_StatementExpression_AtFirst(ExpressionSyntax *&expr)
                   return false,
                   "assert failure: `(' then `{'");
 
-    if (!tree_->options().extensions().isEnabled_ExtGNU_StatementExpressions())
+    if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_StatementExpressions())
         diagnosticsReporter_.ExpectedFeature("GNU statement expressions");
 
     auto gnuExpr = makeNode<ExtGNU_EnclosedCompoundStatementExpressionSyntax>();
@@ -714,7 +714,7 @@ bool Parser::parseCompoundLiteral_AtOpenBrace(
                   "assert failure: `{'");
 
     if (tree_->dialect().std() < LanguageDialect::Std::C99
-            && !tree_->options().extensions().isEnabled_ExtGNU_CompoundLiterals())
+            && !tree_->parseOptions().extensions().isEnabled_ExtGNU_CompoundLiterals())
         diagnosticsReporter_.ExpectedFeature("GNU/C99 compound literals");
 
     auto compLit = makeNode<CompoundLiteralExpressionSyntax>();
@@ -1500,7 +1500,7 @@ bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
             condExpr->questionTkIdx_ = oprtrTkIdx;
 
             if (peek().kind() == ColonToken) {
-                if (!tree_->options().extensions().isEnabled_ExtGNU_StatementExpressions())
+                if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_StatementExpressions())
                     diagnosticsReporter_.ExpectedFeature("GNU conditionals");
 
                 condExpr->whenTrueExpr_ = nullptr;

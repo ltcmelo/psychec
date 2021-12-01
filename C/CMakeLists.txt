@@ -125,6 +125,8 @@ set(CFE_SOURCES
     # Compiler
     ${PROJECT_SOURCE_DIR}/compiler/Binder.h
     ${PROJECT_SOURCE_DIR}/compiler/Binder.cpp
+    ${PROJECT_SOURCE_DIR}/compiler/DiagnosticsReporter_Binder.cpp
+    ${PROJECT_SOURCE_DIR}/compiler/DiagnosticsReporter_TypeChecker.cpp
     ${PROJECT_SOURCE_DIR}/compiler/Compilation.h
     ${PROJECT_SOURCE_DIR}/compiler/Compilation.cpp
     ${PROJECT_SOURCE_DIR}/compiler/SemanticModel.h
