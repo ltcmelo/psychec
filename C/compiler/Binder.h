@@ -1,5 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
-// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +22,13 @@
 #define PSYCHE_BINDER_H__
 
 #include "API.h"
+#include "APIFwds.h"
 
 #include "common/diagnostics/DiagnosticDescriptor.h"
 #include "parser/LexedTokens.h"
 #include "syntax/SyntaxVisitor.h"
 
+#include <stack>
 #include <string>
 
 namespace psy {
@@ -68,11 +69,17 @@ private:
 
     DiagnosticsReporter diagnosticsReporter_;
 
+    std::stack<Symbol*> syms_;
+
     //--------------//
     // Declarations //
     //--------------//
     virtual Action visitTranslationUnit(const TranslationUnitSyntax* node) override;
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node) override;
+    virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) override;
+
+    /* Declarators */
+    virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
 };
 
 } // C

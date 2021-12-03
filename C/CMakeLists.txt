@@ -113,14 +113,18 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbols.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Field.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Field.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.h
     ${PROJECT_SOURCE_DIR}/symbols/SpecialType.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeKind.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbols.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbols.h
 
     # Compiler
     ${PROJECT_SOURCE_DIR}/compiler/Binder.h

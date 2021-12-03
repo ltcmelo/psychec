@@ -31,9 +31,11 @@ struct Compilation::CompilationImpl
 {
     CompilationImpl(Compilation* q)
         : Q_(q)
+        , isDirty_(true)
     {}
 
     Compilation* Q_;
+    bool isDirty_;
     std::string id_;
     std::unique_ptr<SyntaxTree> tree_;
     std::unique_ptr<SemanticModel> semaModel_;
@@ -62,7 +64,10 @@ const SyntaxTree* Compilation::syntaxTree() const
 
 const SemanticModel* Compilation::semanticModel() const
 {
-    std::unique_ptr<SemanticModel> semaModel(new SemanticModel(P->tree_.get()));
-    P->semaModel_ = std::move(semaModel);
+    if (P->isDirty_) {
+        P->semaModel_.reset(new SemanticModel(P->tree_.get()));
+        P->isDirty_ = false;
+    }
+
     return P->semaModel_.get();
 }

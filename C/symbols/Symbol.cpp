@@ -22,3 +22,31 @@
 
 using namespace psy;
 using namespace C;
+
+struct Symbol::SymbolImpl
+{
+    SymbolKind kind_;
+    Accessibility access_;
+};
+
+Symbol::Symbol()
+    : P(new SymbolImpl)
+{}
+
+Symbol::~Symbol()
+{}
+
+Accessibility Symbol::declaredAccessibility() const
+{
+    return P->access_;
+}
+
+std::vector<SyntaxReference> Symbol::declaringSyntaxReferences() const
+{
+    return {};
+}
+
+SymbolKind Symbol::kind() const
+{
+    return P->kind_;
+}

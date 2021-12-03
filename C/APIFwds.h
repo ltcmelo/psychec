@@ -201,14 +201,14 @@ class TagName;
 
 //=================================================================== Symbols
 
-class SymbolTable;
-class SymbolVisitor;
-
 class Symbol;
-class ScopeSymbol;
+
+class FunctionSymbol;
+class FieldSymbol;
 class VariableSymbol;
 class ParameterSymbol;
-class FunctionSymbol;
+
+class ScopeSymbol;
 class BlockSymbol;
 class StructOrUnionSymbol;
 class EnumSymbol;
@@ -226,6 +226,9 @@ class ArrayType;
 class NamedType;
 class QuantifiedType;
 class TypeVisitor;
+
+class SymbolTable;
+class SymbolVisitor;
 
 /* Lists */
 template <class PtrT> class SymbolList;

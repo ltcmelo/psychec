@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeSymbols.h"
+#include "Symbol_Variable.h"
 
 using namespace psy;
 using namespace C;

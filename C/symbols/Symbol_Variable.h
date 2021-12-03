@@ -18,7 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbols.h"
+#ifndef PSYCHE_C_SYMBOL_VARIABLE_H__
+#define PSYCHE_C_SYMBOL_VARIABLE_H__
 
-using namespace psy;
-using namespace C;
+namespace psy {
+namespace C {
+
+} // C
+} // psy
+
+#endif

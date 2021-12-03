@@ -1,5 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
-// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -42,10 +41,14 @@ void Binder::bind()
     visit(tree_->root());
 }
 
+//--------------//
+// Declarations //
+//--------------//
+
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    for (auto iter = node->declarations(); iter; iter = iter->next)
-        visit(iter->value);
+    for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
+        visit(declIt->value);
     return Action::Skip;
 }
 
@@ -53,7 +56,34 @@ SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclara
 {
     diagnosticsReporter_.UselessDeclaration(node->lastToken());
 
-    for (auto iter = node->specifiers(); iter; iter = iter->next)
+    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         ;
-    return Action::Visit;
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node)
+{
+    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
+        ;
+
+    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
+        switch (decltorIt->value->kind()) {
+            case FunctionDeclarator:
+                std::cout << "its a function declarator "<< std::endl;
+                    break;
+
+        default:
+            std::cout << "its an object declarator \n";
+                break;
+        }
+    }
+
+    return Action::Skip;
+}
+
+/* Declarators */
+
+SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
+{
+    return Action::Skip;
 }

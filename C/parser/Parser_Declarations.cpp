@@ -1954,11 +1954,11 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
             return true;
     }
 
-    auto arrOrFuncDecltor = static_cast<ArrayOrFunctionDeclaratorSyntax*>(decltor);
-    arrOrFuncDecltor->attrs1_ = attrList;
-    arrOrFuncDecltor->innerDecltor_ = innerDecltor;
+    auto arrayOrFuncDecltor = static_cast<ArrayOrFunctionDeclaratorSyntax*>(decltor);
+    arrayOrFuncDecltor->attrs1_ = attrList;
+    arrayOrFuncDecltor->innerDecltor_ = innerDecltor;
 
-    SpecifierListSyntax** specList_cur = &arrOrFuncDecltor->attrs2_;
+    SpecifierListSyntax** specList_cur = &arrayOrFuncDecltor->attrs2_;
 
     switch (peek().kind()) {
         case Keyword_ExtGNU___asm__: {

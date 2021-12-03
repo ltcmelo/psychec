@@ -41,6 +41,8 @@ struct SemanticModel::SemanticModelImpl
 SemanticModel::SemanticModel(const SyntaxTree* tree)
     : P(new SemanticModelImpl())
 {
+    // TODO: clean up symbols previously annotated (if any)
+
     Binder binder(tree);
     binder.bind();
 }

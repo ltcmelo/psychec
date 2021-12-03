@@ -793,7 +793,7 @@ void TestParser::case0100()
 
 void TestParser::case0101()
 {
-    parse("void ( * x) ( ) ;",
+    parse("void ( * x ) ( ) ;",
           Expectation().AST({ TranslationUnit,
                               VariableAndOrFunctionDeclaration,
                               BuiltinTypeSpecifier,

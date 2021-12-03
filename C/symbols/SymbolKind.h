@@ -38,7 +38,7 @@ namespace C {
  */
 enum class SymbolKind : std::uint8_t
 {
-
+    Variable
 };
 
 } // C

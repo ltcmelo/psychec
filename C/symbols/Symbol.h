@@ -24,6 +24,13 @@
 #include "API.h"
 #include "APIFwds.h"
 #include "Accessibility.h"
+#include "SymbolKind.h"
+
+#include "syntax/SyntaxReference.h"
+
+#include "../common/infra/Pimpl.h"
+
+#include <vector>
 
 namespace psy {
 namespace C {
@@ -37,7 +44,31 @@ namespace C {
  */
 class PSY_C_API Symbol
 {
+protected:
+    Symbol();
 
+public:
+    Symbol(const Symbol&) = delete;
+    Symbol& operator=(const Symbol&) = delete;
+    virtual ~Symbol();
+
+    /**
+     * The Accessibility declared for \c this Symbol.
+     */
+    Accessibility declaredAccessibility() const;
+
+    /**
+     * References to the SyntaxNodes that declare \c this Symbol.
+     */
+    std::vector<SyntaxReference> declaringSyntaxReferences() const;
+
+    /**
+     * The SymbolKind of \c this Symbol.
+     */
+    SymbolKind kind() const;
+
+private:
+    DECL_PIMPL(Symbol);
 };
 
 } // C
