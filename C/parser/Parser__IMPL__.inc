@@ -23,13 +23,14 @@
 
 #include "Lexer.h"
 
-#include "common/infra/PsycheAssert.h"
-#include "compiler/Compilation.h"
+#include "compilation/Compilation.h"
 #include "syntax/SyntaxFacts.h"
 #include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxToken.h"
 #include "syntax/SyntaxUtilities.h"
+
+#include "../common/infra/PsycheAssert.h"
 
 #include <cstring>
 #include <iostream>

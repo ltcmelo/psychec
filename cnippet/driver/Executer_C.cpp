@@ -25,7 +25,7 @@
 #include "IO.h"
 #include "Plugin.h"
 
-#include "compiler/Compilation.h"
+#include "compilation/Compilation.h"
 #include "plugin-api/SourceInspector.h"
 #include "syntax/SyntaxNamePrinter.h"
 

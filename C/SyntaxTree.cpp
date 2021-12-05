@@ -23,9 +23,9 @@
 
 #include "MemoryPool.h"
 
-#include "compiler/Compilation.h"
-#include "compiler/Binder.h"
-#include "compiler/TypeChecker.h"
+#include "binder/Binder.h"
+#include "binder/TypeChecker.h"
+#include "compilation/Compilation.h"
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
 #include "syntax/SyntaxLexemes.h"

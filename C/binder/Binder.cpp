@@ -69,11 +69,9 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         switch (decltorIt->value->kind()) {
             case FunctionDeclarator:
-                std::cout << "its a function declarator "<< std::endl;
                     break;
 
-        default:
-            std::cout << "its an object declarator \n";
+            default:
                 break;
         }
     }

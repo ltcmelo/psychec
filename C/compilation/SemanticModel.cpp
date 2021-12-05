@@ -1,5 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
-// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,8 +20,10 @@
 
 #include "SemanticModel.h"
 
-#include "Binder.h"
 #include "Compilation.h"
+
+#include "binder/Binder.h"
+#include "symbols/Symbols.h"
 
 #include <unordered_set>
 #include <vector>
@@ -42,7 +43,6 @@ SemanticModel::SemanticModel(const SyntaxTree* tree)
     : P(new SemanticModelImpl())
 {
     // TODO: clean up symbols previously annotated (if any)
-
     Binder binder(tree);
     binder.bind();
 }
@@ -57,6 +57,15 @@ NameT* SemanticModel::make(ArgsT&&... args)
     P->names_.emplace_back(new NameT(std::forward<ArgsT>(args)...));
     return static_cast<NameT*>(P->names_.back().get());
 }
+
+/* Symbols */
+VariableSymbol* SemanticModel::declareVariable()
+{
+
+}
+
+
+/* Names */
 
 IdentifierName* SemanticModel::makeName(const Identifier* identifier)
 {

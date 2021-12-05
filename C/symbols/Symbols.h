@@ -18,13 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_PARAMETER_H__
-#define PSYCHE_C_SYMBOL_PARAMETER_H__
+#ifndef PSYCHE_C_SYMBOLS_H__
+#define PSYCHE_C_SYMBOLS_H__
 
-namespace psy {
-namespace C {
-
-} // C
-} // psy
+#include "Symbol_Field.h"
+#include "Symbol_Function.h"
+#include "Symbol_Parameter.h"
+#include "Symbol_Variable.h"
 
 #endif

@@ -121,22 +121,25 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
     ${PROJECT_SOURCE_DIR}/symbols/SpecialType.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeKind.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.h
 
-    # Compiler
-    ${PROJECT_SOURCE_DIR}/compiler/Binder.h
-    ${PROJECT_SOURCE_DIR}/compiler/Binder.cpp
-    ${PROJECT_SOURCE_DIR}/compiler/DiagnosticsReporter_Binder.cpp
-    ${PROJECT_SOURCE_DIR}/compiler/DiagnosticsReporter_TypeChecker.cpp
-    ${PROJECT_SOURCE_DIR}/compiler/Compilation.h
-    ${PROJECT_SOURCE_DIR}/compiler/Compilation.cpp
-    ${PROJECT_SOURCE_DIR}/compiler/SemanticModel.h
-    ${PROJECT_SOURCE_DIR}/compiler/SemanticModel.cpp
-    ${PROJECT_SOURCE_DIR}/compiler/TypeChecker.h
-    ${PROJECT_SOURCE_DIR}/compiler/TypeChecker.cpp
+    # Binder
+    ${PROJECT_SOURCE_DIR}/binder/Binder.h
+    ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
+    ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
+    ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_TypeChecker.cpp
+    ${PROJECT_SOURCE_DIR}/binder/TypeChecker.h
+    ${PROJECT_SOURCE_DIR}/binder/TypeChecker.cpp
+
+    # Compilation
+    ${PROJECT_SOURCE_DIR}/compilation/Compilation.h
+    ${PROJECT_SOURCE_DIR}/compilation/Compilation.cpp
+    ${PROJECT_SOURCE_DIR}/compilation/SemanticModel.h
+    ${PROJECT_SOURCE_DIR}/compilation/SemanticModel.cpp
 
     # Tests
     ${PROJECT_SOURCE_DIR}/tests/TestBinder.h

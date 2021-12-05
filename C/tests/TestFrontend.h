@@ -24,7 +24,7 @@
 #include "API.h"
 #include "SyntaxTree.h"
 
-#include "compiler/Compilation.h"
+#include "compilation/Compilation.h"
 #include "tests/TestRunner.h"
 
 #include <functional>
