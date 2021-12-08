@@ -24,8 +24,6 @@
 #include "API.h"
 #include "APIFwds.h"
 
-#include "names/DeclarationNames.h"
-
 #include "../common/infra/Pimpl.h"
 
 namespace psy {
@@ -56,12 +54,6 @@ private:
 
     /* Symbols */
     VariableSymbol* declareVariable();
-
-    /* Names */
-    template <class NameT, class... ArgsT> NameT* make(ArgsT&&... args);
-    IdentifierName* makeName(const Identifier* identifier);
-    TagName* makeName(TagName::TagKind typeSpecifierKind, const Identifier* identifier);
-    AnonymousName* makeName();
 };
 
 } // C

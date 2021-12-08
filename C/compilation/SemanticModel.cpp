@@ -36,7 +36,6 @@ struct SemanticModel::SemanticModelImpl
     SemanticModelImpl()
     {}
 
-    std::vector<std::unique_ptr<DeclarationName>> names_;
 };
 
 SemanticModel::SemanticModel(const SyntaxTree* tree)
@@ -50,35 +49,8 @@ SemanticModel::SemanticModel(const SyntaxTree* tree)
 SemanticModel::~SemanticModel()
 {}
 
-template <class NameT,
-          class... ArgsT>
-NameT* SemanticModel::make(ArgsT&&... args)
-{
-    P->names_.emplace_back(new NameT(std::forward<ArgsT>(args)...));
-    return static_cast<NameT*>(P->names_.back().get());
-}
-
 /* Symbols */
 VariableSymbol* SemanticModel::declareVariable()
 {
 
-}
-
-
-/* Names */
-
-IdentifierName* SemanticModel::makeName(const Identifier* identifier)
-{
-    return make<IdentifierName>(identifier);
-}
-
-TagName* SemanticModel::makeName(TagName::TagKind typeSpecifierKind,
-                                 const Identifier* identifier)
-{
-    return make<TagName>(typeSpecifierKind, identifier);
-}
-
-AnonymousName* SemanticModel::makeName()
-{
-    return make<AnonymousName>();
 }

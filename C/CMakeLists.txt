@@ -46,12 +46,6 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/Unparser.h
     ${PROJECT_SOURCE_DIR}/Unparser.cpp
 
-    # Names
-    ${PROJECT_SOURCE_DIR}/names/DeclarationName.cpp
-    ${PROJECT_SOURCE_DIR}/names/DeclarationName.h
-    ${PROJECT_SOURCE_DIR}/names/DeclarationNames.cpp
-    ${PROJECT_SOURCE_DIR}/names/DeclarationNames.h
-
     # Syntax
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.cpp
@@ -132,6 +126,15 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_TypeChecker.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Scope.h
+    ${PROJECT_SOURCE_DIR}/binder/Scope.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Scope_Block.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Scope_Block.h
+    ${PROJECT_SOURCE_DIR}/binder/Scope_File.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Scope_File.h
+    ${PROJECT_SOURCE_DIR}/binder/Scope_Function.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Scope_Function.h
+    ${PROJECT_SOURCE_DIR}/binder/Scopes.h
     ${PROJECT_SOURCE_DIR}/binder/TypeChecker.h
     ${PROJECT_SOURCE_DIR}/binder/TypeChecker.cpp
 

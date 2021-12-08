@@ -50,3 +50,8 @@ SymbolKind Symbol::kind() const
 {
     return P->kind_;
 }
+
+std::string Symbol::name() const
+{
+
+}

@@ -190,15 +190,6 @@ typedef SyntaxNodeSeparatedList<GenericAssociationSyntax*> GenericAssociationLis
 typedef SyntaxNodePlainList<StatementSyntax*> StatementListSyntax;
 typedef SyntaxNodeSeparatedList<ExtGNU_AsmOperandSyntax*> ExtGNU_AsmOperandListSyntax;
 
-//=================================================================== Names
-
-class DeclarationNameVisitor;
-class DeclarationName;
-class IdentifierName;
-class Identifier;
-class AnonymousName;
-class TagName;
-
 //=================================================================== Symbols
 
 class Symbol;

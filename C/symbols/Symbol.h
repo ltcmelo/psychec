@@ -30,6 +30,7 @@
 
 #include "../common/infra/Pimpl.h"
 
+#include <string>
 #include <vector>
 
 namespace psy {
@@ -66,6 +67,11 @@ public:
      * The SymbolKind of \c this Symbol.
      */
     SymbolKind kind() const;
+
+    /**
+     * The name of \c this Symbol.
+     */
+    std::string name() const;
 
 private:
     DECL_PIMPL(Symbol);
