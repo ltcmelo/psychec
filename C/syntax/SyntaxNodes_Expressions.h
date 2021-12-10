@@ -62,9 +62,9 @@ class PSY_C_API NameSyntax : public ExpressionSyntax
  * - \c clang::syntax::IdExpression of Clang's Libtooling.
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.IdentifierNameSyntax of Roslyn.
  */
-class PSY_C_API IdentifierExpressionSyntax final : public ExpressionSyntax
+class PSY_C_API IdentifierExpressionSyntax final : public NameSyntax
 {
-    AST_NODE_1K(IdentifierExpression, Expression)
+    AST_NODE_1K(IdentifierExpression, Name)
 
 public:
     SyntaxToken identifierToken() const { return tokenAtIndex(identTkIdx_); }
