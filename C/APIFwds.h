@@ -116,13 +116,16 @@ class FieldDesignatorSyntax;
 // Expressions //
 //-------------//
 class ExpressionSyntax;
-class IdentifierExpressionSyntax;
 class ConstantExpressionSyntax;
 class StringLiteralExpressionSyntax;
 class ParenthesizedExpressionSyntax;
 class GenericSelectionExpressionSyntax;
 class GenericAssociationSyntax;
 class ExtGNU_EnclosedCompoundStatementExpressionSyntax;
+
+/* Names */
+class NameSyntax;
+class IdentifierExpressionSyntax;
 
 /* Operations */
 class UnaryExpressionSyntax;

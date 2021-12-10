@@ -352,7 +352,6 @@ enum SyntaxKind : std::uint16_t
     //-------------//
     // Expressions //
     //-------------//
-    IdentifierExpression,
     IntegerConstantExpression,
     FloatingConstantExpression,
     CharacterConstantExpression,
@@ -364,6 +363,9 @@ enum SyntaxKind : std::uint16_t
     TypedGenericAssociation,
     DefaultGenericAssociation,
     ExtGNU_EnclosedCompoundStatementExpression,
+
+    /* Names */
+    IdentifierExpression,
 
     /* Unary */
     PostIncrementExpression,

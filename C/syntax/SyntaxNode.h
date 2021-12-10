@@ -225,8 +225,6 @@ public:
     //-------------//
     virtual ExpressionSyntax* asExpression() { return nullptr; }
     virtual const ExpressionSyntax* asExpression() const { return nullptr; }
-    virtual IdentifierExpressionSyntax* asIdentifierExpression() { return nullptr; }
-    virtual const IdentifierExpressionSyntax* asIdentifierExpression() const { return nullptr; }
     virtual ConstantExpressionSyntax* asConstantExpression() { return nullptr; }
     virtual const ConstantExpressionSyntax* asConstantExpression() const { return nullptr; }
     virtual StringLiteralExpressionSyntax* asStringLiteralExpression() { return nullptr; }
@@ -239,6 +237,12 @@ public:
     virtual const GenericAssociationSyntax* asGenericAssociation() const { return nullptr; }
     virtual ExtGNU_EnclosedCompoundStatementExpressionSyntax* asExtGNU_EnclosedCompoundStatementExpression() { return nullptr; }
     virtual const ExtGNU_EnclosedCompoundStatementExpressionSyntax* asExtGNU_EnclosedCompoundStatementExpression() const { return nullptr; }
+
+    /* Names */
+    virtual NameSyntax* asName() { return nullptr; }
+    virtual const NameSyntax* asName() const { return nullptr; }
+    virtual IdentifierExpressionSyntax* asIdentifierExpression() { return nullptr; }
+    virtual const IdentifierExpressionSyntax* asIdentifierExpression() const { return nullptr; }
 
     /* Operations */
     virtual UnaryExpressionSyntax* asUnaryExpression() { return nullptr; }

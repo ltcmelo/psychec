@@ -36,6 +36,19 @@ namespace C {
 //-------------//
 
 /**
+ * \brief The NameSyntax class.
+ *
+ * The base class of every \a expression that is a name.
+ *
+ * \note Similar to:
+ * - \c Microsoft.CodeAnalysis.CSharp.Syntax.NameSyntax of Roslyn.
+ */
+class PSY_C_API NameSyntax : public ExpressionSyntax
+{
+    AST_NODE(Name, Expression)
+};
+
+/**
  * \brief The IdentifierExpressionSyntax class.
  *
  * \code
