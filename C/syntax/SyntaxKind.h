@@ -365,7 +365,7 @@ enum SyntaxKind : std::uint16_t
     ExtGNU_EnclosedCompoundStatementExpression,
 
     /* Names */
-    IdentifierExpression,
+    IdentifierName,
 
     /* Unary */
     PostIncrementExpression,

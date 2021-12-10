@@ -282,8 +282,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "ExtGNU_EnclosedCompoundStatementExpression";
 
         /* Names */
-        case IdentifierExpression:
-            return "IdentifierExpression";
+        case IdentifierName:
+            return "IdentifierName";
 
         /* Unary */
         case PreIncrementExpression:

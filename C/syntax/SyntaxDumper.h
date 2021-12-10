@@ -419,7 +419,7 @@ protected:
         terminal(node->extensionKeyword(), node);
     }
 
-    virtual Action visitIdentifierExpression(const IdentifierExpressionSyntax* node) override
+    virtual Action visitIdentifierName(const IdentifierNameSyntax* node) override
     {
         traverseExpression(node);
         terminal(node->identifierToken(), node);

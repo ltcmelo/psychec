@@ -36,45 +36,6 @@ namespace C {
 //-------------//
 
 /**
- * \brief The NameSyntax class.
- *
- * The base class of every \a expression that is a name.
- *
- * \note Similar to:
- * - \c Microsoft.CodeAnalysis.CSharp.Syntax.NameSyntax of Roslyn.
- */
-class PSY_C_API NameSyntax : public ExpressionSyntax
-{
-    AST_NODE(Name, Expression)
-};
-
-/**
- * \brief The IdentifierExpressionSyntax class.
- *
- * \code
- * x
- * \endcode
- *
- * \remark 6.4.2 and 6.5.1
- *
- * \note Similar to:
- * - \c clang::UnaryOperator of LLVM/Clang.
- * - \c clang::syntax::IdExpression of Clang's Libtooling.
- * - \c Microsoft.CodeAnalysis.CSharp.Syntax.IdentifierNameSyntax of Roslyn.
- */
-class PSY_C_API IdentifierExpressionSyntax final : public NameSyntax
-{
-    AST_NODE_1K(IdentifierExpression, Name)
-
-public:
-    SyntaxToken identifierToken() const { return tokenAtIndex(identTkIdx_); }
-
-private:
-    LexedTokens::IndexType identTkIdx_ = LexedTokens::invalidIndex();
-    AST_CHILD_LST1(identTkIdx_)
-};
-
-/**
  * \brief The ConstantExpressionSyntax class.
  *
  * An \a expression that is a \a constant of numeric value.
@@ -156,6 +117,45 @@ private:
     AST_CHILD_LST1(litTkIdx_)
 
     StringLiteralExpressionSyntax* adjacent_ = nullptr;
+};
+
+/**
+ * \brief The NameSyntax class.
+ *
+ * The base class of every \a expression that is a name.
+ *
+ * \note Similar to:
+ * - \c Microsoft.CodeAnalysis.CSharp.Syntax.NameSyntax of Roslyn.
+ */
+class PSY_C_API NameSyntax : public ExpressionSyntax
+{
+    AST_NODE(Name, Expression)
+};
+
+/**
+ * \brief The IdentifierNameSyntax class.
+ *
+ * \code
+ * x
+ * \endcode
+ *
+ * \remark 6.4.2 and 6.5.1
+ *
+ * \note Similar to:
+ * - \c clang::UnaryOperator of LLVM/Clang.
+ * - \c clang::syntax::IdExpression of Clang's Libtooling.
+ * - \c Microsoft.CodeAnalysis.CSharp.Syntax.IdentifierNameSyntax of Roslyn.
+ */
+class PSY_C_API IdentifierNameSyntax final : public NameSyntax
+{
+    AST_NODE_1K(IdentifierName, Name)
+
+public:
+    SyntaxToken identifierToken() const { return tokenAtIndex(identTkIdx_); }
+
+private:
+    LexedTokens::IndexType identTkIdx_ = LexedTokens::invalidIndex();
+    AST_CHILD_LST1(identTkIdx_)
 };
 
 /**
@@ -443,12 +443,12 @@ class PSY_C_API MemberAccessExpressionSyntax final : public ExpressionSyntax
 public:
     const ExpressionSyntax* expression() const { return expr_; }
     SyntaxToken operatorToken() const { return tokenAtIndex(oprtrTkIdx_); }
-    const IdentifierExpressionSyntax* identifier() const { return identExpr_; }
+    const IdentifierNameSyntax* identifier() const { return identExpr_; }
 
 private:
     ExpressionSyntax* expr_ = nullptr;
     LexedTokens::IndexType oprtrTkIdx_ = LexedTokens::invalidIndex();
-    IdentifierExpressionSyntax* identExpr_ = nullptr;
+    IdentifierNameSyntax* identExpr_ = nullptr;
     AST_CHILD_LST3(expr_, oprtrTkIdx_, identExpr_)
 };
 

@@ -430,7 +430,7 @@ void TestParser::case2100()
                    Expectation().AST( { CompoundStatement,
                                         ExpressionStatement,
                                         PostIncrementExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case2101()
@@ -439,7 +439,7 @@ void TestParser::case2101()
                    Expectation().AST( { CompoundStatement,
                                         ExpressionStatement,
                                         PreIncrementExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case2102()
@@ -448,7 +448,7 @@ void TestParser::case2102()
                    Expectation().AST( { CompoundStatement,
                                         ExpressionStatement,
                                         CallExpression,
-                                        IdentifierExpression,
+                                        IdentifierName,
                                         IntegerConstantExpression }));
 }
 
@@ -474,7 +474,7 @@ void TestParser::case2106()
                                         ExpressionStatement,
                                         ParenthesizedExpression,
                                         CallExpression,
-                                        IdentifierExpression,
+                                        IdentifierName,
                                         IntegerConstantExpression }));
 }
 
@@ -746,8 +746,8 @@ void TestParser::case2211()
                                         IdentifierDeclarator,
                                         ExpressionStatement,
                                         MultiplyExpression,
-                                        IdentifierExpression,
-                                        IdentifierExpression })
+                                        IdentifierName,
+                                        IdentifierName })
                    .replicateAmbiguity("{ x * y ; x * y ; }"));
 }
 
@@ -763,8 +763,8 @@ void TestParser::case2212()
                                         IdentifierDeclarator,
                                         ExpressionStatement,
                                         CallExpression,
-                                        IdentifierExpression,
-                                        IdentifierExpression })
+                                        IdentifierName,
+                                        IdentifierName })
                    .replicateAmbiguity("{ x ( y ) ; x ( y ) ; }"));
 }
 
@@ -1264,9 +1264,9 @@ void TestParser::case2454()
     parseStatement("for ( x ; y ; z ) { }",
                    Expectation().AST( { ForStatement,
                                         ExpressionStatement,
-                                        IdentifierExpression,
-                                        IdentifierExpression,
-                                        IdentifierExpression,
+                                        IdentifierName,
+                                        IdentifierName,
+                                        IdentifierName,
                                         CompoundStatement }));
 }
 
@@ -1278,8 +1278,8 @@ void TestParser::case2455()
                                         VariableAndOrFunctionDeclaration,
                                         BuiltinTypeSpecifier,
                                         IdentifierDeclarator,
-                                        IdentifierExpression,
-                                        IdentifierExpression,
+                                        IdentifierName,
+                                        IdentifierName,
                                         CompoundStatement }));
 }
 
@@ -1326,10 +1326,10 @@ void TestParser::case2459()
                                         ExpressionStatement,
                                         IntegerConstantExpression,
                                         NotEqualsExpression,
-                                        IdentifierExpression,
+                                        IdentifierName,
                                         IntegerConstantExpression,
                                         PreIncrementExpression,
-                                        IdentifierExpression,
+                                        IdentifierName,
                                         CompoundStatement }));
 }
 void TestParser::case2460()
@@ -1343,10 +1343,10 @@ void TestParser::case2460()
                                         ExpressionInitializer,
                                         IntegerConstantExpression,
                                         NotEqualsExpression,
-                                        IdentifierExpression,
+                                        IdentifierName,
                                         IntegerConstantExpression,
                                         PreIncrementExpression,
-                                        IdentifierExpression,
+                                        IdentifierName,
                                         CompoundStatement }));
 }
 

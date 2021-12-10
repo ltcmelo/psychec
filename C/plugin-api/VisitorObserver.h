@@ -44,7 +44,7 @@ public:
     virtual void enter(CallExpressionSyntax*, ScopeSymbol*) {}
     virtual void enter(CastExpressionSyntax*, ScopeSymbol*) {}
     virtual void enter(ConditionalExpressionSyntax*, ScopeSymbol*) {}
-    virtual void enter(IdentifierExpressionSyntax*, ScopeSymbol*) {}
+    virtual void enter(IdentifierNameSyntax*, ScopeSymbol*) {}
     virtual void enter(MemberAccessExpressionSyntax*, ScopeSymbol*) {}
     virtual void enter(ConstantExpressionSyntax*, ScopeSymbol*) {}
     virtual void enter(StringLiteralExpressionSyntax*, ScopeSymbol*) {}
@@ -58,7 +58,7 @@ public:
     virtual void leave(CallExpressionSyntax*) {}
     virtual void leave(CastExpressionSyntax*) {}
     virtual void leave(ConditionalExpressionSyntax*) {}
-    virtual void leave(IdentifierExpressionSyntax*) {}
+    virtual void leave(IdentifierNameSyntax*) {}
     virtual void leave(MemberAccessExpressionSyntax*) {}
     virtual void leave(ConstantExpressionSyntax*) {}
     virtual void leave(StringLiteralExpressionSyntax*) {}

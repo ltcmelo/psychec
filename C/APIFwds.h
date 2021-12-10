@@ -125,7 +125,7 @@ class ExtGNU_EnclosedCompoundStatementExpressionSyntax;
 
 /* Names */
 class NameSyntax;
-class IdentifierExpressionSyntax;
+class IdentifierNameSyntax;
 
 /* Operations */
 class UnaryExpressionSyntax;

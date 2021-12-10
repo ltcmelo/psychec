@@ -68,7 +68,7 @@ bool Parser::parseExpression(ExpressionSyntax*& expr)
  *
  * \remark 6.4.2 and 6.5.1
  */
-bool Parser::parseIdentifierExpression(ExpressionSyntax*& expr)
+bool Parser::parseIdentifierName(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
 
@@ -77,7 +77,7 @@ bool Parser::parseIdentifierExpression(ExpressionSyntax*& expr)
         return false;
     }
 
-    parseIdentifierExpression_AtFirst(expr);
+    parseIdentifierName_AtFirst(expr);
     return true;
 }
 
@@ -86,14 +86,14 @@ bool Parser::parseIdentifierExpression(ExpressionSyntax*& expr)
  *
  * \remark 6.4.2 and 6.5.1
  */
-void Parser::parseIdentifierExpression_AtFirst(ExpressionSyntax*& expr)
+void Parser::parseIdentifierName_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == IdentifierToken,
                   return,
                   "assert failure: <identifier>");
 
-    auto identExpr = makeNode<IdentifierExpressionSyntax>();
+    auto identExpr = makeNode<IdentifierNameSyntax>();
     expr = identExpr;
     identExpr->identTkIdx_ = consume();
 }
@@ -249,7 +249,7 @@ bool Parser::parsePrimaryExpression(ExpressionSyntax*& expr)
 
     switch (peek().kind()) {
         case IdentifierToken:
-            parseIdentifierExpression_AtFirst(expr);
+            parseIdentifierName_AtFirst(expr);
             break;
 
         case IntegerConstantToken:
@@ -383,7 +383,7 @@ bool Parser::parseGenericAssociation(GenericAssociationSyntax*& assoc,
     switch (peek().kind()) {
         case Keyword_default: {
             assoc = makeNode<GenericAssociationSyntax>(DefaultGenericAssociation);
-            auto defExpr = makeNode<IdentifierExpressionSyntax>();
+            auto defExpr = makeNode<IdentifierNameSyntax>();
             defExpr->identTkIdx_ = consume();
             assoc->typeName_or_default_ = defExpr;
             break;
@@ -554,8 +554,8 @@ bool Parser::parsePostfixExpression_AtFollow(ExpressionSyntax*& expr)
                                 membAccess->oprtrTkIdx_ = consume();
                                 if (peek().kind() == IdentifierToken) {
                                     ExpressionSyntax* identExpr = nullptr;
-                                    parseIdentifierExpression_AtFirst(identExpr);
-                                    membAccess->identExpr_ = identExpr->asIdentifierExpression();
+                                    parseIdentifierName_AtFirst(identExpr);
+                                    membAccess->identExpr_ = identExpr->asIdentifierName();
                                     return true;
                                 }
 
@@ -1092,7 +1092,7 @@ void Parser::maybeAmbiguateCastExpression(ExpressionSyntax*& expr)
             PSYCHE_ASSERT(false, return, "");
     }
 
-    auto nameExpr = makeNode<IdentifierExpressionSyntax>();
+    auto nameExpr = makeNode<IdentifierNameSyntax>();
     nameExpr->identTkIdx_ =
             typeName->specs_->value->asTypedefName()->identTkIdx_;
     auto parenExpr = makeNode<ParenthesizedExpressionSyntax>();

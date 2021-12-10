@@ -217,18 +217,18 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
     switch (expr->kind()) {
         case MultiplyExpression: {
             auto binExpr = expr->asBinaryExpression();
-            if (!(binExpr->leftExpr_->kind() == IdentifierExpression
-                    && binExpr->rightExpr_->kind() == IdentifierExpression))
+            if (!(binExpr->leftExpr_->kind() == IdentifierName
+                    && binExpr->rightExpr_->kind() == IdentifierName))
                 return;
 
             stmtK = AmbiguousMultiplicationOrPointerDeclaration;
             typedefName = makeNode<TypedefNameSyntax>();
             typedefName->identTkIdx_ =
-                    binExpr->leftExpr_->asIdentifierExpression()->identTkIdx_;
+                    binExpr->leftExpr_->asIdentifierName()->identTkIdx_;
 
             auto identDecltor = makeNode<IdentifierDeclaratorSyntax>();
             identDecltor->identTkIdx_ =
-                    binExpr->rightExpr_->asIdentifierExpression()->identTkIdx_;
+                    binExpr->rightExpr_->asIdentifierName()->identTkIdx_;
             auto ptrDecltor = makeNode<PointerDeclaratorSyntax>();
             decltor = ptrDecltor;
             ptrDecltor->asteriskTkIdx_ = binExpr->oprtrTkIdx_;
@@ -238,20 +238,20 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
 
         case CallExpression: {
             auto callExpr = expr->asCallExpression();
-            if (!(callExpr->expr_->kind() == IdentifierExpression
+            if (!(callExpr->expr_->kind() == IdentifierName
                     && callExpr->args_
-                    && callExpr->args_->value->kind() == IdentifierExpression
+                    && callExpr->args_->value->kind() == IdentifierName
                     && !callExpr->args_->next))
                 return;
 
             stmtK = AmbiguousCallOrVariableDeclaration;
             typedefName = makeNode<TypedefNameSyntax>();
             typedefName->identTkIdx_ =
-                    callExpr->expr_->asIdentifierExpression()->identTkIdx_;
+                    callExpr->expr_->asIdentifierName()->identTkIdx_;
 
             auto identDecltor = makeNode<IdentifierDeclaratorSyntax>();
             identDecltor->identTkIdx_ =
-                    callExpr->args_->value->asIdentifierExpression()->identTkIdx_;
+                    callExpr->args_->value->asIdentifierName()->identTkIdx_;
             auto parenDecltor = makeNode<ParenthesizedDeclaratorSyntax>();
             decltor = parenDecltor;
             parenDecltor->openParenTkIdx_ = callExpr->openParenTkIdx_;
@@ -859,7 +859,7 @@ bool Parser::parseExtGNU_AsmOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOprd,
 
     if (peek().kind() == OpenBracketToken) {
         oprd->openBracketTkIdx_ = consume();
-        if (!(parseIdentifierExpression(oprd->identExpr_)
+        if (!(parseIdentifierName(oprd->identExpr_)
                 && match(CloseBracketToken, &oprd->closeBracketTkIdx_)))
             return false;
     }
@@ -907,7 +907,7 @@ bool Parser::parseExtGNU_AsmGotoLabel_AtFirst(ExpressionSyntax*& label,
 {
     DEBUG_THIS_RULE();
 
-    parseIdentifierExpression_AtFirst(label);
+    parseIdentifierName_AtFirst(label);
     return true;
 }
 
