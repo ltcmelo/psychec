@@ -35,13 +35,12 @@ struct Compilation::CompilationImpl
 {
     CompilationImpl(Compilation* q)
         : Q_(q)
-        , isDirty_(true)
     {}
 
     Compilation* Q_;
-    bool isDirty_;
     std::string id_;
     std::unique_ptr<Assembly> assembly_;
+    std::unordered_map<const SyntaxTree*, bool> isDirty_;
     std::unordered_map<const SyntaxTree*, std::unique_ptr<SemanticModel>> semaModels_;
 };
 
@@ -61,8 +60,10 @@ std::unique_ptr<Compilation> Compilation::create(const std::string& id)
 
 void Compilation::addSyntaxTrees(std::vector<const SyntaxTree*> trees)
 {
-    for (auto tree : trees)
+    for (auto tree : trees) {
         P->semaModels_[tree] = nullptr;
+        P->isDirty_[tree] = true;
+    }
 }
 
 std::vector<const SyntaxTree*> Compilation::syntaxTree() const
@@ -77,9 +78,9 @@ std::vector<const SyntaxTree*> Compilation::syntaxTree() const
 
 const SemanticModel* Compilation::semanticModel(const SyntaxTree* tree) const
 {
-    if (P->isDirty_) {
+    if (P->isDirty_[tree]) {
         P->semaModels_[tree].reset(new SemanticModel(tree));
-        P->isDirty_ = false;
+        P->isDirty_[tree] = false;
     }
 
     return P->semaModels_[tree].get();
