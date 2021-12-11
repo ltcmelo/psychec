@@ -197,17 +197,11 @@ typedef SyntaxNodeSeparatedList<ExtGNU_AsmOperandSyntax*> ExtGNU_AsmOperandListS
 
 class Symbol;
 
+/* Values */
 class FunctionSymbol;
 class FieldSymbol;
 class VariableSymbol;
 class ParameterSymbol;
-
-class ScopeSymbol;
-class BlockSymbol;
-class StructOrUnionSymbol;
-class EnumSymbol;
-class EnumeratorDeclaration;
-class ForwardDeclarationSymbol;
 
 /* Types */
 class TypeSymbol;
@@ -226,6 +220,18 @@ class SymbolVisitor;
 
 /* Lists */
 template <class PtrT> class SymbolList;
+
+/* Symbol names */
+class PlainSymbolName;
+class TagSymbolName;
+class AnonymousSymbolName;
+
+//=================================================================== Scopes
+
+class Scope;
+class FileScope;
+class FunctionScope;
+class BlockScope;
 
 } // C
 } // psy

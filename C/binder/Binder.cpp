@@ -30,7 +30,7 @@ using namespace C;
 
 Binder::Binder(const SyntaxTree* tree)
     : SyntaxVisitor(tree)
-    , diagnosticsReporter_(this)
+    , diagReporter_(this)
 {}
 
 Binder::~Binder()
@@ -54,7 +54,7 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 
 SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node)
 {
-    diagnosticsReporter_.UselessDeclaration(node->lastToken());
+    diagReporter_.UselessDeclaration(node->lastToken());
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         ;

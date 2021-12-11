@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Scope_Function.h"
+#include "SymbolName_Anonymous.h"
 
 using namespace psy;
 using namespace C;

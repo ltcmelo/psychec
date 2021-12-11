@@ -73,7 +73,7 @@ bool Parser::parseIdentifierName(ExpressionSyntax*& expr)
     DEBUG_THIS_RULE();
 
     if (peek().kind() != SyntaxKind::IdentifierToken) {
-        diagnosticsReporter_.ExpectedTokenOfCategoryIdentifier();
+        diagReporter_.ExpectedTokenOfCategoryIdentifier();
         return false;
     }
 
@@ -109,7 +109,7 @@ bool Parser::parseConstant(ExpressionSyntax*& expr, SyntaxKind exprK)
     DEBUG_THIS_RULE();
 
     if (!SyntaxFacts::isConstantToken(peek().kind())) {
-        diagnosticsReporter_.ExpectedTokenOfCategoryConstant();
+        diagReporter_.ExpectedTokenOfCategoryConstant();
         return false;
     }
 
@@ -149,7 +149,7 @@ bool Parser::parseStringLiteral(ExpressionSyntax*& expr)
     DEBUG_THIS_RULE();
 
     if (!SyntaxFacts::isStringLiteralToken(peek().kind())) {
-        diagnosticsReporter_.ExpectedTokenOfCategoryStringLiteral();
+        diagReporter_.ExpectedTokenOfCategoryStringLiteral();
         return false;
     }
 
@@ -216,7 +216,7 @@ bool Parser::parseExtGNU_StatementExpression_AtFirst(ExpressionSyntax *&expr)
                   "assert failure: `(' then `{'");
 
     if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_StatementExpressions())
-        diagnosticsReporter_.ExpectedFeature("GNU statement expressions");
+        diagReporter_.ExpectedFeature("GNU statement expressions");
 
     auto gnuExpr = makeNode<ExtGNU_EnclosedCompoundStatementExpressionSyntax>();
     expr = gnuExpr;
@@ -309,7 +309,7 @@ bool Parser::parsePrimaryExpression(ExpressionSyntax*& expr)
             return parseGenericSelectionExpression_AtFirst(expr);
 
         default:
-            diagnosticsReporter_.ExpectedFIRSTofExpression();
+            diagReporter_.ExpectedFIRSTofExpression();
             return false;
     }
 
@@ -559,7 +559,7 @@ bool Parser::parsePostfixExpression_AtFollow(ExpressionSyntax*& expr)
                                     return true;
                                 }
 
-                                diagnosticsReporter_.ExpectedFieldName();
+                                diagReporter_.ExpectedFieldName();
                                 return false;
                             })) {
                     return false;
@@ -682,7 +682,7 @@ bool Parser::parseCompoundLiteral_AtOpenParen(ExpressionSyntax*& expr)
         return false;
 
     if (peek().kind() != OpenBraceToken) {
-        diagnosticsReporter_.ExpectedToken(OpenBraceToken);
+        diagReporter_.ExpectedToken(OpenBraceToken);
         return false;
     }
 
@@ -715,7 +715,7 @@ bool Parser::parseCompoundLiteral_AtOpenBrace(
 
     if (tree_->dialect().std() < LanguageDialect::Std::C99
             && !tree_->parseOptions().extensions().isEnabled_ExtGNU_CompoundLiterals())
-        diagnosticsReporter_.ExpectedFeature("GNU/C99 compound literals");
+        diagReporter_.ExpectedFeature("GNU/C99 compound literals");
 
     auto compLit = makeNode<CompoundLiteralExpressionSyntax>();
     expr = compLit;
@@ -1013,7 +1013,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
 
 
         default:
-            diagnosticsReporter_.ExpectedFIRSTofExpression();
+            diagReporter_.ExpectedFIRSTofExpression();
             return false;
     }
 }
@@ -1501,7 +1501,7 @@ bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
 
             if (peek().kind() == ColonToken) {
                 if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_StatementExpressions())
-                    diagnosticsReporter_.ExpectedFeature("GNU conditionals");
+                    diagReporter_.ExpectedFeature("GNU conditionals");
 
                 condExpr->whenTrueExpr_ = nullptr;
             }

@@ -22,3 +22,7 @@
 
 using namespace psy;
 using namespace C;
+
+FunctionSymbol::FunctionSymbol(const SyntaxTree* tree)
+    : Symbol(tree, SymbolKind::Function)
+{}

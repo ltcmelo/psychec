@@ -18,7 +18,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Scope_Function.h"
+#ifndef PSYCHE_C_SYMBOL_NAME_PLAIN_H__
+#define PSYCHE_C_SYMBOL_NAME_PLAIN_H__
 
-using namespace psy;
-using namespace C;
+#include "SymbolName.h"
+
+namespace psy {
+namespace C {
+
+/**
+ * \brief The PlainSymbolName class.
+ */
+class PSY_C_API PlainSymbolName : public SymbolName
+{
+private:
+    PlainSymbolName();
+};
+
+} // C
+} // psy
+
+#endif

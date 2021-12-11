@@ -18,7 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Scope_Function.h"
+#include "SymbolName.h"
+
+#include "common/infra/PsycheAssert.h"
 
 using namespace psy;
 using namespace C;
+
+SymbolName::SymbolName()
+{}
+
+SymbolName::~SymbolName()
+{}
+
+SymbolName::Kind SymbolName::kind() const
+{
+    if (asPlainSymbolName())
+        return Kind::Plain;
+    if (asTagSymbolName())
+        return Kind::Tag;
+    if (asAnonymousSymbolName())
+        return Kind::Anynoymous;
+
+    PSYCHE_ASSERT(false, return Kind::Plain, "");
+}

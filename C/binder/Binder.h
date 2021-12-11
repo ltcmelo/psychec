@@ -67,7 +67,7 @@ private:
         void UselessDeclaration(SyntaxToken tk);
     };
 
-    DiagnosticsReporter diagnosticsReporter_;
+    DiagnosticsReporter diagReporter_;
 
     std::stack<Symbol*> syms_;
 

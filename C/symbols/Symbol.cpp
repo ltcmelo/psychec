@@ -25,13 +25,22 @@ using namespace C;
 
 struct Symbol::SymbolImpl
 {
+    SymbolImpl(const SyntaxTree* tree, SymbolKind kind)
+        : tree_(tree)
+        , kind_(kind)
+    {}
+
+    const SyntaxTree* tree_;
     SymbolKind kind_;
+    SymbolName name_;
     Accessibility access_;
 };
 
-Symbol::Symbol()
-    : P(new SymbolImpl)
-{}
+Symbol::Symbol(const SyntaxTree* tree,
+               SymbolKind kind)
+    : P(new SymbolImpl(tree, kind))
+{
+}
 
 Symbol::~Symbol()
 {}
@@ -51,7 +60,12 @@ SymbolKind Symbol::kind() const
     return P->kind_;
 }
 
-std::string Symbol::name() const
+SymbolName Symbol::name() const
+{
+    return P->name_;
+}
+
+Location Symbol::location() const
 {
 
 }

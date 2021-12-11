@@ -18,7 +18,55 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Scope_Function.h"
+#ifndef PSYCHE_C_SYMBOL_NAME_H__
+#define PSYCHE_C_SYMBOL_NAME_H__
 
-using namespace psy;
-using namespace C;
+#include "API.h"
+#include "APIFwds.h"
+
+#include <cstdint>
+
+namespace psy {
+namespace C {
+
+/**
+ * \brief The SymbolName class.
+ */
+class PSY_C_API SymbolName
+{
+protected:
+    SymbolName();
+
+public:
+    virtual ~SymbolName();
+
+    /**
+     * \brief The SymbolName::Kind enum.
+     */
+    enum class Kind : std::uint8_t
+    {
+        Plain,
+        Tag,
+        Anynoymous
+    };
+
+    /**
+     * The Kind of \c this SymbolName.
+     */
+    Kind kind() const;
+
+    virtual PlainSymbolName* asPlainSymbolName() { return nullptr; }
+    virtual const PlainSymbolName* asPlainSymbolName() const { return nullptr; }
+    virtual TagSymbolName* asTagSymbolName() { return nullptr; }
+    virtual const TagSymbolName* asTagSymbolName() const { return nullptr; }
+    virtual AnonymousSymbolName* asAnonymousSymbolName() { return nullptr; }
+    virtual const AnonymousSymbolName* asAnonymousSymbolName() const { return nullptr; }
+
+private:
+    friend class Symbol;
+};
+
+} // C
+} // psy
+
+#endif

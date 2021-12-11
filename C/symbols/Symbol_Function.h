@@ -21,8 +21,16 @@
 #ifndef PSYCHE_C_SYMBOL_FUNCTION_H__
 #define PSYCHE_C_SYMBOL_FUNCTION_H__
 
+#include "Symbol.h"
+
 namespace psy {
 namespace C {
+
+class PSY_C_API FunctionSymbol : public Symbol
+{
+private:
+    FunctionSymbol(const SyntaxTree* tree);
+};
 
 } // C
 } // psy

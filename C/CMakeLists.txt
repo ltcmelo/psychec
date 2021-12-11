@@ -25,7 +25,6 @@ set(PLUGIN_SOURCES
     ${PROJECT_SOURCE_DIR}/plugin-api/PluginConfig.h
     ${PROJECT_SOURCE_DIR}/plugin-api/DeclarationInterceptor.h
     ${PROJECT_SOURCE_DIR}/plugin-api/SourceInspector.h
-    ${PROJECT_SOURCE_DIR}/plugin-api/VisitorObserver.h
 )
 
 set(CFE_SOURCES
@@ -116,6 +115,15 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Plain.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Plain.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Anonymous.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Anonymous.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolNames.h
     ${PROJECT_SOURCE_DIR}/symbols/SpecialType.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeKind.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.cpp

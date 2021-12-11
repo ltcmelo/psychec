@@ -112,13 +112,13 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case Keyword_case:
             if (stmtCtx != StatementContext::Switch
                     && stmtCtx != StatementContext::SwitchAndLoop)
-                diagnosticsReporter_.UnexpectedCaseLabelOutsideSwitch();
+                diagReporter_.UnexpectedCaseLabelOutsideSwitch();
             return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_default:
             if (stmtCtx != StatementContext::Switch
                     && stmtCtx != StatementContext::SwitchAndLoop)
-                diagnosticsReporter_.UnexpectedDefaultLabelOutsideSwitch();
+                diagReporter_.UnexpectedDefaultLabelOutsideSwitch();
             return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_while:
@@ -136,12 +136,12 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case Keyword_continue:
             if (stmtCtx != StatementContext::Loop
                     && stmtCtx != StatementContext::SwitchAndLoop)
-                diagnosticsReporter_.UnexpectedContinueOutsideLoop();
+                diagReporter_.UnexpectedContinueOutsideLoop();
             return parseContinueStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_break:
             if (stmtCtx == StatementContext::None)
-                diagnosticsReporter_.UnexpectedBreakOutsideSwitchOrLoop();
+                diagReporter_.UnexpectedBreakOutsideSwitchOrLoop();
             return parseBreakStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_return:
@@ -180,7 +180,7 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
                     break;
 
                 default:
-                    diagnosticsReporter_.UnexpectedGNUExtensionFlag();
+                    diagReporter_.UnexpectedGNUExtensionFlag();
                     return false;
             }
             return true;
@@ -303,7 +303,7 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
         StatementSyntax* innerStmt = nullptr;
         switch (peek().kind()) {
             case EndOfFile:
-                diagnosticsReporter_.ExpectedToken(CloseBraceToken);
+                diagReporter_.ExpectedToken(CloseBraceToken);
                 return false;
 
             case CloseBraceToken:
@@ -652,7 +652,7 @@ bool Parser::parseGotoStatement_AtFirst(StatementSyntax*& stmt)
     gotoStmt->gotoKwTkIdx_ = consume();
 
     if (peek().kind() != IdentifierToken) {
-        diagnosticsReporter_.ExpectedTokenOfCategoryIdentifier();
+        diagReporter_.ExpectedTokenOfCategoryIdentifier();
         return ignoreStatement();
     }
 
@@ -745,7 +745,7 @@ bool Parser::parseExtGNU_AsmStatement(StatementSyntax*& stmt)
                   "assert failure: `asm'");
 
     if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Asm())
-        diagnosticsReporter_.ExpectedFeature("GNU asm");
+        diagReporter_.ExpectedFeature("GNU asm");
 
     auto asmStmt = makeNode<ExtGNU_AsmStatementSyntax>();
     stmt = asmStmt;

@@ -18,7 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Scope_Function.h"
+#ifndef PSYCHE_C_SYMBOL_NAMES_H__
+#define PSYCHE_C_SYMBOL_NAMES_H__
 
-using namespace psy;
-using namespace C;
+#include "SymbolName_Plain.h"
+#include "SymbolName_Tag.h"
+#include "SymbolName_Anonymous.h"
+
+#endif
