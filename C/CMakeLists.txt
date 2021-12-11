@@ -147,6 +147,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/TypeChecker.cpp
 
     # Compilation
+    ${PROJECT_SOURCE_DIR}/compilation/Assembly.cpp
+    ${PROJECT_SOURCE_DIR}/compilation/Assembly.h
     ${PROJECT_SOURCE_DIR}/compilation/Compilation.h
     ${PROJECT_SOURCE_DIR}/compilation/Compilation.cpp
     ${PROJECT_SOURCE_DIR}/compilation/SemanticModel.h

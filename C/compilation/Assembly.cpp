@@ -18,29 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SCOPE_H__
-#define PSYCHE_C_SCOPE_H__
+#include "Assembly.h"
 
-#include "API.h"
-#include "APIFwds.h"
-
-#include <unordered_map>
-
-namespace psy {
-namespace C {
-
-/**
- * \brief The Scope class.
- *
- * \remark 6.2.1
- */
-class PSY_C_API Scope
-{
-protected:
-    Scope();
-};
-
-} // C
-} // psy
-
-#endif
+using namespace psy;
+using namespace C;

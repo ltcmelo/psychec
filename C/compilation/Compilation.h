@@ -28,8 +28,8 @@
 
 #include "../common/infra/Pimpl.h"
 
-#include <memory>
 #include <string>
+#include <vector>
 
 namespace psy {
 namespace C {
@@ -53,18 +53,22 @@ public:
     /**
      * Create an empty compilation identified by \p id with SyntaxTree \p tree.
      */
-    static std::unique_ptr<Compilation> create(const std::string& id,
-                                               std::unique_ptr<SyntaxTree> tree);
+    static std::unique_ptr<Compilation> create(const std::string& id);
 
     /**
-     * The SemanticModel associated to \c this Compilation.
+     * Add SyntaxTrees to \c this Compilation.
      */
-    const SemanticModel* semanticModel() const;
+    void addSyntaxTrees(std::vector<const SyntaxTree*> trees);
 
     /**
      * The SyntaxTree associated to \c this Compilation.
      */
-    const SyntaxTree* syntaxTree() const;
+    std::vector<const SyntaxTree*> syntaxTree() const;
+
+    /**
+     * The SemanticModel associated to the SyntaxTree \p tree of \c this Compilation.
+     */
+    const SemanticModel* semanticModel(const SyntaxTree* tree) const;
 
 private:
     DECL_PIMPL(Compilation);

@@ -21,8 +21,12 @@
 
 #include "Compilation.h"
 
+#include "Assembly.h"
 #include "SemanticModel.h"
 #include "SyntaxTree.h"
+
+#include <algorithm>
+#include <unordered_map>
 
 using namespace psy;
 using namespace C;
@@ -37,8 +41,8 @@ struct Compilation::CompilationImpl
     Compilation* Q_;
     bool isDirty_;
     std::string id_;
-    std::unique_ptr<SyntaxTree> tree_;
-    std::unique_ptr<SemanticModel> semaModel_;
+    std::unique_ptr<Assembly> assembly_;
+    std::unordered_map<const SyntaxTree*, std::unique_ptr<SemanticModel>> semaModels_;
 };
 
 Compilation::Compilation()
@@ -48,26 +52,35 @@ Compilation::Compilation()
 Compilation::~Compilation()
 {}
 
-std::unique_ptr<Compilation> Compilation::create(const std::string& id,
-                                                 std::unique_ptr<SyntaxTree> tree)
+std::unique_ptr<Compilation> Compilation::create(const std::string& id)
 {
     std::unique_ptr<Compilation> compilation(new Compilation);
     compilation->P->id_ = id;
-    compilation->P->tree_ = std::move(tree);
     return compilation;
 }
 
-const SyntaxTree* Compilation::syntaxTree() const
+void Compilation::addSyntaxTrees(std::vector<const SyntaxTree*> trees)
 {
-    return P->tree_.get();
+    for (auto tree : trees)
+        P->semaModels_[tree] = nullptr;
 }
 
-const SemanticModel* Compilation::semanticModel() const
+std::vector<const SyntaxTree*> Compilation::syntaxTree() const
+{
+    std::vector<const SyntaxTree*> trees(P->semaModels_.size());
+    std::transform(P->semaModels_.begin(),
+                   P->semaModels_.end(),
+                   std::back_inserter(trees),
+                   [] (const auto& kv) { return kv.first; });
+    return  trees;
+}
+
+const SemanticModel* Compilation::semanticModel(const SyntaxTree* tree) const
 {
     if (P->isDirty_) {
-        P->semaModel_.reset(new SemanticModel(P->tree_.get()));
+        P->semaModels_[tree].reset(new SemanticModel(tree));
         P->isDirty_ = false;
     }
 
-    return P->semaModel_.get();
+    return P->semaModels_[tree].get();
 }

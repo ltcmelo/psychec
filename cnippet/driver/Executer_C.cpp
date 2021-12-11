@@ -181,12 +181,13 @@ std::pair<int, std::unique_ptr<SyntaxTree>> Executer_C::invokeParser(const std::
 
 int Executer_C::invokeCompiler(std::unique_ptr<SyntaxTree> tree)
 {
-    auto compilation = Compilation::create(tree->filePath(), std::move(tree));
-    /*auto semaModel = */compilation->semanticModel();
+    auto compilation = Compilation::create(tree->filePath());
+    compilation->addSyntaxTrees({ tree.get() });
+    /*auto semaModel = */compilation->semanticModel(tree.get());
 
     // show only not yet shown
-    if (!compilation->syntaxTree()->diagnostics().empty()) {
-        auto c = compilation->syntaxTree()->diagnostics();
+    if (!tree->diagnostics().empty()) {
+        auto c = tree->diagnostics();
         std::copy(c.begin(), c.end(),
                   std::ostream_iterator<Diagnostic>(std::cerr));
         std::cerr << std::endl;

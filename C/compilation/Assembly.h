@@ -18,26 +18,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SCOPE_H__
-#define PSYCHE_C_SCOPE_H__
+#ifndef PSYCHE_C_ASSEMBLY_H__
+#define PSYCHE_C_ASSEMBLY_H__
 
 #include "API.h"
 #include "APIFwds.h"
 
-#include <unordered_map>
+#include "symbols/Symbol.h"
+
+#include <vector>
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The Scope class.
+ * \brief The Assembly class.
  *
- * \remark 6.2.1
+ * An assembly is the symbolic output of a Compilation.
+ *
+ * \note Similar to:
+ * - \c Microsoft.CodeAnalysis.IAssemblySymbol of Roslyn.
  */
-class PSY_C_API Scope
+class PSY_C_API Assembly
 {
-protected:
-    Scope();
+private:
+    std::vector<std::unique_ptr<Symbol>> syms_;
 };
 
 } // C
