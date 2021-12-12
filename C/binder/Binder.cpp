@@ -21,6 +21,9 @@
 #include "Binder.h"
 
 #include "SyntaxTree.h"
+
+#include "compilation/SemanticModel.h"
+#include "symbols/Symbols.h"
 #include "syntax/SyntaxNodes.h"
 
 #include <iostream>
@@ -28,8 +31,9 @@
 using namespace psy;
 using namespace C;
 
-Binder::Binder(const SyntaxTree* tree)
+Binder::Binder(SemanticModel* semaModel, const SyntaxTree* tree)
     : SyntaxVisitor(tree)
+    , semaModel_(semaModel)
     , diagReporter_(this)
 {}
 
@@ -68,8 +72,10 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
 
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         switch (decltorIt->value->kind()) {
+            Symbol* sym;
             case FunctionDeclarator:
-                    break;
+                sym = semaModel_->newSymbol<FunctionSymbol>(tree_);
+                break;
 
             default:
                 break;

@@ -51,7 +51,10 @@ public:
 private:
     friend class SemanticModel;
 
-    Binder(const SyntaxTree* tree);
+    Binder(SemanticModel* semaModel, const SyntaxTree* tree);
+
+    SemanticModel* semaModel_;
+    std::stack<Symbol*> syms_;
 
     struct DiagnosticsReporter
     {
@@ -68,8 +71,6 @@ private:
     };
 
     DiagnosticsReporter diagReporter_;
-
-    std::stack<Symbol*> syms_;
 
     //--------------//
     // Declarations //

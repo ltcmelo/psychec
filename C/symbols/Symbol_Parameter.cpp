@@ -22,3 +22,7 @@
 
 using namespace psy;
 using namespace C;
+
+ParameterSymbol::ParameterSymbol(const SyntaxTree* tree)
+    : Symbol(tree, SymbolKind::Parameter)
+{}

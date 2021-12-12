@@ -20,6 +20,7 @@
 
 #include "SemanticModel.h"
 
+#include "Assembly.h"
 #include "Compilation.h"
 
 #include "binder/Binder.h"
@@ -33,24 +34,30 @@ using namespace C;
 
 struct SemanticModel::SemanticModelImpl
 {
-    SemanticModelImpl()
+    SemanticModelImpl(Compilation* compilation)
+        : compilation_(compilation)
     {}
 
+    Compilation* compilation_;
 };
 
-SemanticModel::SemanticModel(const SyntaxTree* tree)
-    : P(new SemanticModelImpl())
+SemanticModel::SemanticModel(Compilation* compilation, const SyntaxTree* tree)
+    : P(new SemanticModelImpl(compilation))
 {
-    // TODO: clean up symbols previously annotated (if any)
-    Binder binder(tree);
+    Binder binder(this, tree);
     binder.bind();
 }
 
 SemanticModel::~SemanticModel()
 {}
 
-/* Symbols */
-VariableSymbol* SemanticModel::declareVariable()
-{
+template FieldSymbol* SemanticModel::newSymbol<FieldSymbol>(const SyntaxTree*);
+template FunctionSymbol* SemanticModel::newSymbol<FunctionSymbol>(const SyntaxTree*);
+template ParameterSymbol* SemanticModel::newSymbol<ParameterSymbol>(const SyntaxTree*);
+template VariableSymbol* SemanticModel::newSymbol<VariableSymbol>(const SyntaxTree*);
 
+template <class SymbolT>
+SymbolT* SemanticModel::newSymbol(const SyntaxTree* tree)
+{
+    P->compilation_->assembly()->syms_.emplace_back(new SymbolT(tree));
 }

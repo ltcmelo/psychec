@@ -34,7 +34,7 @@ namespace C {
 /**
  * \brief The Assembly class.
  *
- * An assembly is the symbolic output of a Compilation.
+ * An assembly is the result produced by a Compilation.
  *
  * \note Similar to:
  * - \c Microsoft.CodeAnalysis.IAssemblySymbol of Roslyn.
@@ -42,6 +42,8 @@ namespace C {
 class PSY_C_API Assembly
 {
 private:
+    friend class SemanticModel;
+
     std::vector<std::unique_ptr<Symbol>> syms_;
 };
 

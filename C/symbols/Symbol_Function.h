@@ -29,6 +29,8 @@ namespace C {
 class PSY_C_API FunctionSymbol : public Symbol
 {
 private:
+    friend class SemanticModel;
+
     FunctionSymbol(const SyntaxTree* tree);
 };
 

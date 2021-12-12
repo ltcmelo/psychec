@@ -22,3 +22,7 @@
 
 using namespace psy;
 using namespace C;
+
+VariableSymbol::VariableSymbol(const SyntaxTree* tree)
+    : Symbol(tree, SymbolKind::Variable)
+{}

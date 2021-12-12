@@ -56,6 +56,11 @@ public:
     static std::unique_ptr<Compilation> create(const std::string& id);
 
     /**
+     * The Assembly produced by \c this Compilation.
+     */
+    const Assembly* assembly() const;
+
+    /**
      * Add SyntaxTrees to \c this Compilation.
      */
     void addSyntaxTrees(std::vector<const SyntaxTree*> trees);
@@ -73,7 +78,11 @@ public:
 private:
     DECL_PIMPL(Compilation);
 
+    friend class SemanticModel;
+
     Compilation();
+
+    Assembly* assembly();
 };
 
 } // C

@@ -48,12 +48,12 @@ public:
 private:
     DECL_PIMPL(SemanticModel)
 
+    friend class Binder;
     friend class Compilation;
 
-    SemanticModel(const SyntaxTree* tree);
+    SemanticModel(Compilation* compilation, const SyntaxTree* tree);
 
-    /* Symbols */
-    VariableSymbol* declareVariable();
+    template <class SymbolT> SymbolT* newSymbol(const SyntaxTree* tree);
 };
 
 } // C

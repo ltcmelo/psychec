@@ -22,3 +22,7 @@
 
 using namespace psy;
 using namespace C;
+
+FieldSymbol::FieldSymbol(const SyntaxTree* tree)
+    : Symbol(tree, SymbolKind::Field)
+{}

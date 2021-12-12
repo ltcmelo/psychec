@@ -21,8 +21,18 @@
 #ifndef PSYCHE_C_SYMBOL_PARAMETER_H__
 #define PSYCHE_C_SYMBOL_PARAMETER_H__
 
+#include "Symbol.h"
+
 namespace psy {
 namespace C {
+
+class PSY_C_API ParameterSymbol : public Symbol
+{
+private:
+    friend class SemanticModel;
+
+    ParameterSymbol(const SyntaxTree* tree);
+};
 
 } // C
 } // psy

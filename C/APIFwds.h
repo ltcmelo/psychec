@@ -193,17 +193,14 @@ typedef SyntaxNodeSeparatedList<GenericAssociationSyntax*> GenericAssociationLis
 typedef SyntaxNodePlainList<StatementSyntax*> StatementListSyntax;
 typedef SyntaxNodeSeparatedList<ExtGNU_AsmOperandSyntax*> ExtGNU_AsmOperandListSyntax;
 
-//=================================================================== Symbols
+//=================================================================== Semantic
 
+/* Symbols */
 class Symbol;
-
-/* Values */
 class FunctionSymbol;
 class FieldSymbol;
 class VariableSymbol;
 class ParameterSymbol;
-
-/* Types */
 class TypeSymbol;
 class UndefinedType;
 class VoidType;
@@ -215,10 +212,7 @@ class NamedType;
 class QuantifiedType;
 class TypeVisitor;
 
-class SymbolTable;
 class SymbolVisitor;
-
-/* Lists */
 template <class PtrT> class SymbolList;
 
 /* Symbol names */
@@ -226,12 +220,16 @@ class PlainSymbolName;
 class TagSymbolName;
 class AnonymousSymbolName;
 
-//=================================================================== Scopes
-
+/* Scopes */
 class Scope;
 class FileScope;
 class FunctionScope;
 class BlockScope;
+
+/* Compilation */
+class Compilation;
+class Assembly;
+class SemanticModel;
 
 } // C
 } // psy

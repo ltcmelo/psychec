@@ -58,6 +58,16 @@ std::unique_ptr<Compilation> Compilation::create(const std::string& id)
     return compilation;
 }
 
+const Assembly* Compilation::assembly() const
+{
+    return P->assembly_.get();
+}
+
+Assembly* Compilation::assembly()
+{
+    return P->assembly_.get();
+}
+
 void Compilation::addSyntaxTrees(std::vector<const SyntaxTree*> trees)
 {
     for (auto tree : trees) {
@@ -79,7 +89,9 @@ std::vector<const SyntaxTree*> Compilation::syntaxTree() const
 const SemanticModel* Compilation::semanticModel(const SyntaxTree* tree) const
 {
     if (P->isDirty_[tree]) {
-        P->semaModels_[tree].reset(new SemanticModel(tree));
+        // TODO: Remove from the assembly the symbols associated
+        // with the given syntax tree.
+        P->semaModels_[tree].reset(new SemanticModel(const_cast<Compilation*>(this), tree));
         P->isDirty_[tree] = false;
     }
 

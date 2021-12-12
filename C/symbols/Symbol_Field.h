@@ -21,8 +21,19 @@
 #ifndef PSYCHE_C_SYMBOL_FIELD_H__
 #define PSYCHE_C_SYMBOL_FIELD_H__
 
+#include "Symbol.h"
+
 namespace psy {
 namespace C {
+
+class PSY_C_API FieldSymbol : public Symbol
+{
+private:
+    friend class SemanticModel;
+
+    FieldSymbol(const SyntaxTree* tree);
+};
+
 
 } // C
 } // psy

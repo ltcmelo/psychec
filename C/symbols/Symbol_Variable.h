@@ -21,8 +21,18 @@
 #ifndef PSYCHE_C_SYMBOL_VARIABLE_H__
 #define PSYCHE_C_SYMBOL_VARIABLE_H__
 
+#include "Symbol.h"
+
 namespace psy {
 namespace C {
+
+class PSY_C_API VariableSymbol : public Symbol
+{
+private:
+    friend class SemanticModel;
+
+    VariableSymbol(const SyntaxTree* tree);
+};
 
 } // C
 } // psy
