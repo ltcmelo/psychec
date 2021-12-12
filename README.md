@@ -8,21 +8,21 @@
 Psyche is a compiler frontend for the C programming language. Psyche-C is specifically designed for the implementation of static analysis tools. These are the distinct features that make Psyche-C rather unique:
 
 - Clean separation between the syntactic and semantic compiler phases.
-- Both algorithmic- and heuristic-based syntax disambiguation strategies.
-- Independent of `#include`, with type inference for missing `struct`, `union`, `enum`, and `typedef`.
+- Algorithmic- and heuristic-based syntax disambiguation.
+- Type inference for missing `struct`, `union`, `enum`, and `typedef` (i.e., tolerant against missing `#include`s)
 - API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn).
 - A parser's AST resembling that of the [LLVM's Clang frontend](https://clang.llvm.org/).
 
-Applications:
+**NOTE**: The master branch is going through a major overhaul. Syntax analysis (parsing and AST construction) is fully functional, semantic analysis is WIP. The original version of Psyche-C is in [this branch](https://github.com/ltcmelo/psychec/tree/original).
+
+## Applications
 
 - Enabling, on incomplete source-code, static analysis techniques that require fully-typed programs.
 - Compiling partial code (e.g., a snippet retrieved from a bug tracker) for object-code inspection.
 - Generating test-input data for a function in isolation (without its dependencies).
 - Quick prototyping of an algorithm, without the need of explicit types.
 
-**NOTE**: The master branch is going through a major overhaul; it's expected that syntax analysis (parsing and AST construction) already is functional, though. The original version of Psyche-C is available in [this branch](https://github.com/ltcmelo/psychec/tree/original).
-
-## The *cnippet* Driver Adaptor
+### The *cnippet* Driver Adaptor
 
 While Psyche-C is primarily used as a library for the implementation of static analysis tools, it still is a compiler frontend, and may also be used as an ordinary C parser through the *cnippet* driver adaptor.
 
