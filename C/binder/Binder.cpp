@@ -22,6 +22,7 @@
 
 #include "SyntaxTree.h"
 
+#include "common/infra/PsycheAssert.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbols.h"
 #include "syntax/SyntaxNodes.h"
@@ -71,15 +72,24 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
         ;
 
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
+        Symbol* sym;
         switch (decltorIt->value->kind()) {
-            Symbol* sym;
             case FunctionDeclarator:
                 sym = semaModel_->newSymbol<FunctionSymbol>(tree_);
                 break;
 
+            case ArrayDeclarator:
+            case IdentifierDeclarator:
+                break;
+
+            case BitfieldDeclarator:
+                break;
+
             default:
+                PSYCHE_FAIL(return Action::Quit, "unknown declarator");
                 break;
         }
+        syms_.push(sym);
     }
 
     return Action::Skip;
