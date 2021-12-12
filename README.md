@@ -9,7 +9,7 @@ Psyche is a compiler frontend for the C programming language. Psyche-C is specif
 
 - Clean separation between the syntactic and semantic compiler phases.
 - Algorithmic- and heuristic-based syntax disambiguation.
-- Type inference for missing `struct`, `union`, `enum`, and `typedef` (i.e., tolerant against missing `#include`s)
+- Type inference for missing `struct`, `union`, `enum`, and `typedef` (i.e., tolerant against `#include` failures)
 - API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn).
 - A parser's AST resembling that of the [LLVM's Clang frontend](https://clang.llvm.org/).
 
