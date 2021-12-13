@@ -46,6 +46,20 @@ void Binder::bind()
     visit(tree_->root());
 }
 
+template <class SymbolT>
+SymbolT* Binder::newSymbol()
+{
+    std::unique_ptr<SymbolT> sym(new SymbolT(tree_,
+                                             scopes_.top(),
+                                             syms_.top()));
+    return static_cast<SymbolT*>(semaModel_->storeSymbol(std::move(sym)));
+}
+
+template FieldSymbol* Binder::newSymbol<FieldSymbol>();
+template FunctionSymbol* Binder::newSymbol<FunctionSymbol>();
+template ParameterSymbol* Binder::newSymbol<ParameterSymbol>();
+template VariableSymbol* Binder::newSymbol<VariableSymbol>();
+
 //--------------//
 // Declarations //
 //--------------//
@@ -75,7 +89,7 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
         Symbol* sym;
         switch (decltorIt->value->kind()) {
             case FunctionDeclarator:
-                sym = semaModel_->newSymbol<FunctionSymbol>(tree_);
+                sym = newSymbol<FunctionSymbol>();
                 break;
 
             case ArrayDeclarator:
@@ -90,6 +104,8 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
                 break;
         }
         syms_.push(sym);
+
+        visit(decltorIt->value);
     }
 
     return Action::Skip;

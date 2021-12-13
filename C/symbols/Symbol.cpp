@@ -20,25 +20,41 @@
 
 #include "Symbol.h"
 
+#include "SyntaxTree.h"
+
+#include "binder/Scope.h"
+
 using namespace psy;
 using namespace C;
 
 struct Symbol::SymbolImpl
 {
-    SymbolImpl(const SyntaxTree* tree, SymbolKind kind)
+    SymbolImpl(const SyntaxTree* tree,
+               const Scope* scope,
+               const Symbol* containingSym,
+               SymbolKind kind)
         : tree_(tree)
+        , scope_(scope)
+        , containingSym_(containingSym)
         , kind_(kind)
     {}
 
     const SyntaxTree* tree_;
+    const Scope* scope_;
+    const Symbol* containingSym_;
     SymbolKind kind_;
     SymbolName name_;
     Accessibility access_;
 };
 
 Symbol::Symbol(const SyntaxTree* tree,
+               const Scope* scope,
+               const Symbol* containingSym,
                SymbolKind kind)
-    : P(new SymbolImpl(tree, kind))
+    : P(new SymbolImpl(tree,
+                       scope,
+                       containingSym,
+                       kind))
 {
 }
 

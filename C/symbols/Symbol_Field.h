@@ -29,9 +29,11 @@ namespace C {
 class PSY_C_API FieldSymbol : public Symbol
 {
 private:
-    friend class SemanticModel;
+    friend class Binder;
 
-    FieldSymbol(const SyntaxTree* tree);
+    FieldSymbol(const SyntaxTree* tree,
+                const Scope* scope,
+                const Symbol* containingSym);
 };
 
 

@@ -47,12 +47,30 @@ namespace C {
 class PSY_C_API Symbol
 {
 protected:
-    Symbol(const SyntaxTree* tree, SymbolKind kind);
+    Symbol(const SyntaxTree* tree,
+           const Scope* scope,
+           const Symbol* containingSym,
+           SymbolKind kind);
 
 public:
     Symbol(const Symbol&) = delete;
     Symbol& operator=(const Symbol&) = delete;
     virtual ~Symbol();
+
+    /**
+     * The Assembly conatining \c this Symbol.
+     */
+    const Assembly* containingAssembly() const;
+
+    /**
+     * The Scope where \c this Symbol is \a defined.
+     */
+    const Scope* scope() const;
+
+    /**
+     * The Symbol immediately containing \c this Symbol.
+     */
+    const Symbol* containingSymbol() const;
 
     /**
      * The Accessibility declared for \c this Symbol.

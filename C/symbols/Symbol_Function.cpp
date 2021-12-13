@@ -23,6 +23,11 @@
 using namespace psy;
 using namespace C;
 
-FunctionSymbol::FunctionSymbol(const SyntaxTree* tree)
-    : Symbol(tree, SymbolKind::Function)
+FunctionSymbol::FunctionSymbol(const SyntaxTree* tree,
+                               const Scope* scope,
+                               const Symbol* containingSym)
+    : Symbol(tree,
+            scope,
+            containingSym,
+            SymbolKind::Function)
 {}

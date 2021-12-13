@@ -54,7 +54,10 @@ private:
     Binder(SemanticModel* semaModel, const SyntaxTree* tree);
 
     SemanticModel* semaModel_;
+    std::stack<Scope*> scopes_;
     std::stack<Symbol*> syms_;
+
+    template <class SymbolT> SymbolT* newSymbol();
 
     struct DiagnosticsReporter
     {

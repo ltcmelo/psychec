@@ -23,6 +23,11 @@
 using namespace psy;
 using namespace C;
 
-VariableSymbol::VariableSymbol(const SyntaxTree* tree)
-    : Symbol(tree, SymbolKind::Variable)
+VariableSymbol::VariableSymbol(const SyntaxTree* tree,
+                               const Scope* scope,
+                               const Symbol* containingSym)
+    : Symbol(tree,
+             scope,
+             containingSym,
+             SymbolKind::Variable)
 {}

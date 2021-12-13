@@ -23,6 +23,11 @@
 using namespace psy;
 using namespace C;
 
-FieldSymbol::FieldSymbol(const SyntaxTree* tree)
-    : Symbol(tree, SymbolKind::Field)
+FieldSymbol::FieldSymbol(const SyntaxTree* tree,
+                         const Scope* scope,
+                         const Symbol* containingSym)
+    : Symbol(tree,
+             scope,
+             containingSym,
+             SymbolKind::Field)
 {}

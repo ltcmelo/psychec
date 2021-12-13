@@ -29,9 +29,11 @@ namespace C {
 class PSY_C_API ParameterSymbol : public Symbol
 {
 private:
-    friend class SemanticModel;
+    friend class Binder;
 
-    ParameterSymbol(const SyntaxTree* tree);
+    ParameterSymbol(const SyntaxTree* tree,
+                    const Scope* scope,
+                    const Symbol* containingSym);
 };
 
 } // C

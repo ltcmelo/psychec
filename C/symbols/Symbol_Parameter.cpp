@@ -23,6 +23,11 @@
 using namespace psy;
 using namespace C;
 
-ParameterSymbol::ParameterSymbol(const SyntaxTree* tree)
-    : Symbol(tree, SymbolKind::Parameter)
+ParameterSymbol::ParameterSymbol(const SyntaxTree* tree,
+                                 const Scope* scope,
+                                 const Symbol* containingSym)
+    : Symbol(tree,
+             scope,
+             containingSym,
+             SymbolKind::Parameter)
 {}

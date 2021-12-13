@@ -51,13 +51,9 @@ SemanticModel::SemanticModel(Compilation* compilation, const SyntaxTree* tree)
 SemanticModel::~SemanticModel()
 {}
 
-template FieldSymbol* SemanticModel::newSymbol<FieldSymbol>(const SyntaxTree*);
-template FunctionSymbol* SemanticModel::newSymbol<FunctionSymbol>(const SyntaxTree*);
-template ParameterSymbol* SemanticModel::newSymbol<ParameterSymbol>(const SyntaxTree*);
-template VariableSymbol* SemanticModel::newSymbol<VariableSymbol>(const SyntaxTree*);
-
-template <class SymbolT>
-SymbolT* SemanticModel::newSymbol(const SyntaxTree* tree)
+Symbol* SemanticModel::newSymbol(std::unique_ptr<Symbol> sym)
 {
-    P->compilation_->assembly()->syms_.emplace_back(new SymbolT(tree));
+    auto& syms = P->compilation_->assembly()->syms_;
+    syms.push_back(std::move(sym));
+    return syms.back().get();
 }

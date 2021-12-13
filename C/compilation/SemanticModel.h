@@ -53,7 +53,7 @@ private:
 
     SemanticModel(Compilation* compilation, const SyntaxTree* tree);
 
-    template <class SymbolT> SymbolT* newSymbol(const SyntaxTree* tree);
+    Symbol* storeSymbol(std::unique_ptr<Symbol> sym);
 };
 
 } // C
