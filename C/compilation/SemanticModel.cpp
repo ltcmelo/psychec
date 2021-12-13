@@ -51,7 +51,7 @@ SemanticModel::SemanticModel(Compilation* compilation, const SyntaxTree* tree)
 SemanticModel::~SemanticModel()
 {}
 
-Symbol* SemanticModel::newSymbol(std::unique_ptr<Symbol> sym)
+Symbol* SemanticModel::storeSymbol(std::unique_ptr<Symbol> sym)
 {
     auto& syms = P->compilation_->assembly()->syms_;
     syms.push_back(std::move(sym));

@@ -68,6 +68,7 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 {
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
+
     return Action::Skip;
 }
 
@@ -77,6 +78,7 @@ SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclara
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         ;
+
     return Action::Skip;
 }
 
@@ -97,6 +99,7 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
                 break;
 
             case BitfieldDeclarator:
+                sym = newSymbol<FieldSymbol>();
                 break;
 
             default:

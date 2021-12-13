@@ -58,11 +58,6 @@ public:
     virtual ~Symbol();
 
     /**
-     * The Assembly conatining \c this Symbol.
-     */
-    const Assembly* containingAssembly() const;
-
-    /**
      * The Scope where \c this Symbol is \a defined.
      */
     const Scope* scope() const;
