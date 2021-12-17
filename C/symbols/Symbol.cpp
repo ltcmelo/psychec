@@ -28,6 +28,8 @@
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxReference.h"
 
+#include "../common/infra/PsycheAssert.h"
+
 using namespace psy;
 using namespace C;
 
@@ -74,6 +76,8 @@ const Assembly* Symbol::assembly() const
       if (it != syms.end())
           return compilation->assembly();
     }
+
+    PSYCHE_FAIL(return nullptr, "expected assembly");
     return nullptr;
 }
 
