@@ -30,6 +30,8 @@
 
 #include "../common/infra/PsycheAssert.h"
 
+#include <algorithm>
+
 using namespace psy;
 using namespace C;
 
