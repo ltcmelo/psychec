@@ -31,6 +31,7 @@
 #include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNodes.h"
 
+#include "../common/infra/PsycheAssert.h"
 #include "../common/text/TextElementTable.h"
 
 #include <algorithm>
@@ -83,6 +84,8 @@ struct SyntaxTree::SyntaxTreeImpl
     SyntaxTree::ExpansionsTable expansions_;
 
     std::vector<Diagnostic> diagnostics_;
+
+    std::unordered_set<const Compilation*> linkedCompilations_;
 };
 
 SyntaxTree::SyntaxTree(SourceText text,
@@ -350,4 +353,19 @@ void SyntaxTree::newDiagnostic(DiagnosticDescriptor descriptor,
     }
 
     P->diagnostics_.emplace_back(descriptor, Location::create(line), snippet);
+}
+
+void SyntaxTree::linkCompilation(const Compilation* compilation) const
+{
+    P->linkedCompilations_.insert(compilation);
+}
+
+void SyntaxTree::unlinkCompilation(const Compilation* compilation) const
+{
+    P->linkedCompilations_.erase(compilation);
+}
+
+std::unordered_set<const Compilation*> SyntaxTree::linkedCompilations() const
+{
+    return P->linkedCompilations_;
 }

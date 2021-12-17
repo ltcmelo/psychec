@@ -20,5 +20,17 @@
 
 #include "Assembly.h"
 
+#include <algorithm>
+
 using namespace psy;
 using namespace C;
+
+std::vector<const Symbol*> Assembly::symbols() const
+{
+    std::vector<const Symbol*> syms;
+    std::transform(syms_.begin(),
+                   syms_.end(),
+                   std::back_inserter(syms),
+                   [] (auto& sym) { return sym.get();});
+    return syms;
+}

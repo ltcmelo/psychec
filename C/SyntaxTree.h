@@ -41,6 +41,7 @@
 #include <ostream>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -133,6 +134,8 @@ private:
     friend class Lexer;
     friend class Parser;
     friend class Binder;
+    friend class Symbol;
+    friend class Compilation;
 
     // TODO: To be removed.
     friend class Unparser;
@@ -173,6 +176,10 @@ private:
     // TODO: Move to implementaiton.
     LanguageDialect dialect_;
     std::vector<SyntaxToken> comments_;
+
+    void linkCompilation(const Compilation*) const;
+    void unlinkCompilation(const Compilation*) const;
+    std::unordered_set<const Compilation*> linkedCompilations() const;
 };
 
 } // C

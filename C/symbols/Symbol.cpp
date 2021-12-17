@@ -23,6 +23,8 @@
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
+#include "compilation/Assembly.h"
+#include "compilation/Compilation.h"
 
 using namespace psy;
 using namespace C;
@@ -60,6 +62,17 @@ Symbol::Symbol(const SyntaxTree* tree,
 
 Symbol::~Symbol()
 {}
+
+const Assembly* Symbol::assembly() const
+{
+    for (auto compilation : P->tree_->linkedCompilations()) {
+      const auto&& syms = compilation->assembly()->symbols();
+      auto it = std::find(syms.begin(), syms.end(), this);
+      if (it != syms.end())
+          return compilation->assembly();
+    }
+    return nullptr;
+}
 
 Accessibility Symbol::declaredAccessibility() const
 {

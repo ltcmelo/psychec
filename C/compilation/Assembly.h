@@ -26,6 +26,7 @@
 
 #include "symbols/Symbol.h"
 
+#include <unordered_set>
 #include <vector>
 
 namespace psy {
@@ -35,16 +36,19 @@ namespace C {
  * \brief The Assembly class.
  *
  * An assembly is the result produced by a Compilation.
- *
- * \note Similar to:
- * - \c Microsoft.CodeAnalysis.IAssemblySymbol of Roslyn.
  */
 class PSY_C_API Assembly
 {
+public:
+    /**
+     * The Symbols in \c this Assembly.
+     */
+    std::vector<const Symbol*> symbols() const;
+
 private:
     friend class SemanticModel;
 
-    std::vector<std::unique_ptr<Symbol>> syms_;
+    std::unordered_set<std::unique_ptr<Symbol>> syms_;
 };
 
 } // C

@@ -49,7 +49,16 @@ Compilation::Compilation()
 {}
 
 Compilation::~Compilation()
-{}
+{
+    for (const auto& kv : P->semaModels_) {
+        auto tree = kv.first;
+
+        auto it = P->semaModels_.find(tree);
+        if (it == P->semaModels_.end())
+            continue;
+        tree->unlinkCompilation(this);
+    }
+}
 
 std::unique_ptr<Compilation> Compilation::create(const std::string& id)
 {
@@ -71,8 +80,13 @@ Assembly* Compilation::assembly()
 void Compilation::addSyntaxTrees(std::vector<const SyntaxTree*> trees)
 {
     for (auto tree : trees) {
-        P->semaModels_[tree] = nullptr;
+        auto it = P->semaModels_.find(tree);
+        if (it != P->semaModels_.end())
+            continue;
+
+        P->semaModels_.insert(it, std::make_pair(tree, nullptr));
         P->isDirty_[tree] = true;
+        tree->linkCompilation(this);
     }
 }
 

@@ -54,6 +54,6 @@ SemanticModel::~SemanticModel()
 Symbol* SemanticModel::storeSymbol(std::unique_ptr<Symbol> sym)
 {
     auto& syms = P->compilation_->assembly()->syms_;
-    syms.push_back(std::move(sym));
-    return syms.back().get();
+    auto [it, _] = syms.insert(std::move(sym));
+    return it->get();
 }
