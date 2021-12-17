@@ -28,6 +28,7 @@
 #include "parser/LexedTokens.h"
 #include "syntax/SyntaxVisitor.h"
 
+#include <memory>
 #include <stack>
 #include <string>
 

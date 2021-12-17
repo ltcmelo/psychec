@@ -31,7 +31,6 @@
 #include "../common/infra/PsycheAssert.h"
 
 #include <iostream>
-#include <memory>
 
 using namespace psy;
 using namespace C;
