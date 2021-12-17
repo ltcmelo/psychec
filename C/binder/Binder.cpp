@@ -26,6 +26,7 @@
 #include "binder/Scopes.h"
 #include "symbols/Symbols.h"
 #include "syntax/SyntaxNodes.h"
+#include "syntax/SyntaxUtilities.h"
 
 #include "../common/infra/PsycheAssert.h"
 
@@ -122,7 +123,8 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
 
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         Symbol* sym;
-        switch (decltorIt->value->kind()) {
+        auto decltor = SyntaxUtilities::strippedDeclarator(decltorIt->value);
+        switch (decltor->kind()) {
             case FunctionDeclarator:
                 sym = newSymbol<FunctionSymbol>();
                 break;
@@ -136,6 +138,7 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
                 break;
 
             default:
+                std::cout << "declarator " << to_string(decltorIt->value->kind()) << std::endl;
                 PSYCHE_FAIL(return Action::Quit, "unknown declarator");
                 break;
         }

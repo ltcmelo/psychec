@@ -35,6 +35,7 @@ struct Compilation::CompilationImpl
 {
     CompilationImpl(Compilation* q)
         : Q_(q)
+        , assembly_(new Assembly)
     {}
 
     Compilation* Q_;
