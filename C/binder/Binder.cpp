@@ -138,7 +138,6 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
                 break;
 
             default:
-                std::cout << "declarator " << to_string(decltorIt->value->kind()) << std::endl;
                 PSYCHE_FAIL(return Action::Quit, "unknown declarator");
                 break;
         }
