@@ -18,31 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYNTAX_REFERENCE_H__
-#define PSYCHE_C_SYNTAX_REFERENCE_H__
+#include "SyntaxReference.h"
 
-#include "API.h"
-#include "APIFwds.h"
+using namespace psy;
+using namespace C;
 
-namespace psy {
-namespace C {
-
-/**
- * \brief The SyntaxReference class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.SyntaxReference
- * from Roslyn, the .NET Compiler Platform.
- */
-class PSY_C_API SyntaxReference
+const SyntaxTree* SyntaxReference::syntaxTree() const
 {
-public:
-    const SyntaxTree* syntaxTree() const;
+    return nullptr;
+}
 
-    const SyntaxNode* syntax() const;
-};
-
-} // C
-} // psy
-
-#endif
+const SyntaxNode* SyntaxReference::syntax() const
+{
+    return nullptr;
+}

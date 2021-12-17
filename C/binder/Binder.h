@@ -61,7 +61,7 @@ private:
     template <class SymbolT> SymbolT* newSymbol();
 
     template <class ScopeT> void openScope();
-    template <class ScopeT> void closeScope();
+    void closeScope();
 
     struct DiagnosticsReporter
     {

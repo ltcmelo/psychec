@@ -83,7 +83,6 @@ void Binder::openScope()
     scopes_.push(scope);
 }
 
-template <class ScopeT>
 void Binder::closeScope()
 {
     scopes_.pop();
@@ -95,11 +94,13 @@ void Binder::closeScope()
 
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    auto sym = newSymbol<LinkUnitSymbol>();
+    newSymbol<LinkUnitSymbol>();
     openScope<FileScope>();
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
+
+    closeScope();
 
     return Action::Skip;
 }

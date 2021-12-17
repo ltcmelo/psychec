@@ -25,6 +25,8 @@
 #include "binder/Scopes.h"
 #include "compilation/Assembly.h"
 #include "compilation/Compilation.h"
+#include "syntax/SyntaxNodes.h"
+#include "syntax/SyntaxReference.h"
 
 using namespace psy;
 using namespace C;
@@ -97,7 +99,18 @@ SymbolName Symbol::name() const
 
 Location Symbol::location() const
 {
+    const auto& synRefs = declaringSyntaxReferences();
 
+    std::vector<Location> locs;
+    std::transform(synRefs.begin(),
+                   synRefs.end(),
+                   std::back_inserter(locs),
+                   [] (auto& synRef) {
+                        return synRef.syntax()->firstToken().location();
+                    });
+
+    // TODO
+    return locs.front();
 }
 
 template <class ScopeT>
