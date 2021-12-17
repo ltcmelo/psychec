@@ -48,7 +48,7 @@ class PSY_C_API Symbol
 {
 protected:
     Symbol(const SyntaxTree* tree,
-           const Scope* scope,
+           const Scope* outerScope,
            const Symbol* containingSym,
            SymbolKind kind);
 
@@ -63,9 +63,18 @@ public:
     const Assembly* assembly() const;
 
     /**
-     * The Scope where \c this Symbol is \a defined.
+     * The outer Scope of \c this Symbol.
+     *
+     * \remark 6.2.1-4
      */
-    const Scope* scope() const;
+    const Scope* outerScope() const;
+
+    /**
+     * The inner Scope of \c this Symbol.
+     *
+     * \remark 6.2.1-4
+     */
+    const Scope* innerScope() const;
 
     /**
      * The Symbol immediately containing \c this Symbol.
@@ -99,6 +108,10 @@ public:
 
 private:
     DECL_PIMPL(Symbol);
+
+    friend class Binder;
+
+    template <class ScopeT> ScopeT* newScope();
 };
 
 } // C

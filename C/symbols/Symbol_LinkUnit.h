@@ -18,19 +18,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SCOPE_FUNCTION_H__
-#define PSYCHE_C_SCOPE_FUNCTION_H__
+#ifndef PSYCHE_C_SYMBOL_LINK_UNIT_H__
+#define PSYCHE_C_SYMBOL_LINK_UNIT_H__
 
-#include "Scope.h"
+#include "Symbol.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_API FunctionScope final : public Scope
+/**
+ * \brief The LinkUnitSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IModuleSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
+class PSY_C_API LinkUnitSymbol : public Symbol
 {
 private:
-    using Scope::Scope;
+    friend class Binder;
+
+    LinkUnitSymbol(const SyntaxTree* tree,
+                   const Scope* outerScope,
+                   const Symbol* containingSym);
 };
+
 
 } // C
 } // psy

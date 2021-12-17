@@ -22,10 +22,12 @@
 
 #include "SyntaxTree.h"
 
-#include "common/infra/PsycheAssert.h"
 #include "compilation/SemanticModel.h"
+#include "binder/Scopes.h"
 #include "symbols/Symbols.h"
 #include "syntax/SyntaxNodes.h"
+
+#include "../common/infra/PsycheAssert.h"
 
 #include <iostream>
 
@@ -47,12 +49,19 @@ void Binder::bind()
 }
 
 template <class SymbolT>
+SymbolT* Binder::newSymbol_COMMON(std::unique_ptr<SymbolT> sym)
+{
+    syms_.push(sym.get());
+    return static_cast<SymbolT*>(semaModel_->storeSymbol(std::move(sym)));
+}
+
+template <class SymbolT>
 SymbolT* Binder::newSymbol()
 {
     std::unique_ptr<SymbolT> sym(new SymbolT(tree_,
                                              scopes_.top(),
                                              syms_.top()));
-    return static_cast<SymbolT*>(semaModel_->storeSymbol(std::move(sym)));
+    return newSymbol_COMMON(std::move(sym));
 }
 
 template FieldSymbol* Binder::newSymbol<FieldSymbol>();
@@ -60,12 +69,35 @@ template FunctionSymbol* Binder::newSymbol<FunctionSymbol>();
 template ParameterSymbol* Binder::newSymbol<ParameterSymbol>();
 template VariableSymbol* Binder::newSymbol<VariableSymbol>();
 
+template <>
+LinkUnitSymbol* Binder::newSymbol<LinkUnitSymbol>()
+{
+    std::unique_ptr<LinkUnitSymbol> sym(new LinkUnitSymbol(tree_, nullptr, nullptr));
+    return newSymbol_COMMON(std::move(sym));
+}
+
+template <class ScopeT>
+void Binder::openScope()
+{
+    auto scope = syms_.top()->newScope<ScopeT>();
+    scopes_.push(scope);
+}
+
+template <class ScopeT>
+void Binder::closeScope()
+{
+    scopes_.pop();
+}
+
 //--------------//
 // Declarations //
 //--------------//
 
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
+    auto sym = newSymbol<LinkUnitSymbol>();
+    openScope<FileScope>();
+
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
 
@@ -106,8 +138,6 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
                 PSYCHE_FAIL(return Action::Quit, "unknown declarator");
                 break;
         }
-        syms_.push(sym);
-
         visit(decltorIt->value);
     }
 

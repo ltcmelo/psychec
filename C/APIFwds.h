@@ -199,6 +199,7 @@ typedef SyntaxNodeSeparatedList<ExtGNU_AsmOperandSyntax*> ExtGNU_AsmOperandListS
 class Symbol;
 class FunctionSymbol;
 class FieldSymbol;
+class LinkUnitSymbol;
 class VariableSymbol;
 class ParameterSymbol;
 class TypeSymbol;

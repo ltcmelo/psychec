@@ -32,7 +32,7 @@ private:
     friend class Binder;
 
     ParameterSymbol(const SyntaxTree* tree,
-                    const Scope* scope,
+                    const Scope* outerScope,
                     const Symbol* containingSym);
 };
 

@@ -22,7 +22,7 @@
 
 #include "SyntaxTree.h"
 
-#include "binder/Scope.h"
+#include "binder/Scopes.h"
 #include "compilation/Assembly.h"
 #include "compilation/Compilation.h"
 
@@ -32,17 +32,18 @@ using namespace C;
 struct Symbol::SymbolImpl
 {
     SymbolImpl(const SyntaxTree* tree,
-               const Scope* scope,
+               const Scope* outerScope,
                const Symbol* containingSym,
                SymbolKind kind)
         : tree_(tree)
-        , scope_(scope)
+        , outerScope_(outerScope)
         , containingSym_(containingSym)
         , kind_(kind)
     {}
 
     const SyntaxTree* tree_;
-    const Scope* scope_;
+    const Scope* outerScope_;
+    std::unique_ptr<Scope> innerScope_;
     const Symbol* containingSym_;
     SymbolKind kind_;
     SymbolName name_;
@@ -98,3 +99,15 @@ Location Symbol::location() const
 {
 
 }
+
+template <class ScopeT>
+ScopeT* Symbol::newScope()
+{
+    std::unique_ptr<ScopeT> scope(new ScopeT());
+    P->innerScope_ = std::move(scope);
+    return static_cast<ScopeT*>(P->innerScope_.get());
+}
+
+template BlockScope* Symbol::newScope<BlockScope>();
+template FileScope* Symbol::newScope<FileScope>();
+template FunctionScope* Symbol::newScope<FunctionScope>();

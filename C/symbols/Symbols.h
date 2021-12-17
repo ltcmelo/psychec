@@ -23,6 +23,7 @@
 
 #include "Symbol_Field.h"
 #include "Symbol_Function.h"
+#include "Symbol_LinkUnit.h"
 #include "Symbol_Parameter.h"
 #include "Symbol_Variable.h"
 

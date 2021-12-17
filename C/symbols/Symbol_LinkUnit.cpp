@@ -18,21 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SCOPE_FUNCTION_H__
-#define PSYCHE_C_SCOPE_FUNCTION_H__
+#include "Symbol_LinkUnit.h"
 
-#include "Scope.h"
+using namespace psy;
+using namespace C;
 
-namespace psy {
-namespace C {
-
-class PSY_C_API FunctionScope final : public Scope
-{
-private:
-    using Scope::Scope;
-};
-
-} // C
-} // psy
-
-#endif
+LinkUnitSymbol::LinkUnitSymbol(const SyntaxTree* tree,
+                               const Scope* scope,
+                               const Symbol* containingSym)
+    : Symbol(tree,
+             scope,
+             containingSym,
+             SymbolKind::Field)
+{}

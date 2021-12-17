@@ -57,7 +57,11 @@ private:
     std::stack<Scope*> scopes_;
     std::stack<Symbol*> syms_;
 
+    template <class SymbolT> SymbolT* newSymbol_COMMON(std::unique_ptr<SymbolT>);
     template <class SymbolT> SymbolT* newSymbol();
+
+    template <class ScopeT> void openScope();
+    template <class ScopeT> void closeScope();
 
     struct DiagnosticsReporter
     {

@@ -22,3 +22,6 @@
 
 using namespace psy;
 using namespace C;
+
+Scope::Scope()
+{}

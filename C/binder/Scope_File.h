@@ -28,7 +28,8 @@ namespace C {
 
 class PSY_C_API FileScope final : public Scope
 {
-
+private:
+    using Scope::Scope;
 };
 
 } // C

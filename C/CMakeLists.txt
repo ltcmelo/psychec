@@ -110,6 +110,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Field.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_LinkUnit.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_LinkUnit.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.cpp
