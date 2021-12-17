@@ -18,7 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbols.h"
+#include "Symbol_Variable.h"
 
 using namespace psy;
 using namespace C;
+
+VariableSymbol::VariableSymbol(const SyntaxTree* tree,
+                               const Scope* scope,
+                               const Symbol* containingSym)
+    : Symbol(tree,
+             scope,
+             containingSym,
+             SymbolKind::Variable)
+{}

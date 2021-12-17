@@ -1,5 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
-// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,41 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "DeclarationNames.h"
-
-#include "syntax/SyntaxLexemes.h"
-
-#include <cstring>
+#include "Scope_File.h"
 
 using namespace psy;
 using namespace C;
-
-IdentifierName::IdentifierName(const Identifier* identifier)
-    : DeclarationName(Kind::Simple)
-    , identifier_(identifier)
-{}
-
-const Identifier* IdentifierName::identifier() const
-{
-    return identifier_;
-}
-
-TagName::TagName(TagKind tagKind, const Identifier* identifier)
-    : DeclarationName(Kind::Tag)
-    , tagKind_(tagKind)
-    , identifier_(identifier)
-{}
-
-TagName::TagKind TagName::taggedTypeKind() const
-{
-    return tagKind_;
-}
-
-const Identifier* TagName::identifier() const
-{
-    return identifier_;
-}
-
-AnonymousName::AnonymousName()
-    : DeclarationName(Kind::Anonymous)
-{}

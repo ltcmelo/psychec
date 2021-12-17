@@ -1,5 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
-// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,28 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Binder.h"
-
-#include "SyntaxTree.h"
-
-#include <iostream>
+#include "Symbol_Field.h"
 
 using namespace psy;
 using namespace C;
 
-Binder::Binder(SyntaxTree* tree)
-    : SyntaxVisitor(tree)
+FieldSymbol::FieldSymbol(const SyntaxTree* tree,
+                         const Scope* scope,
+                         const Symbol* containingSym)
+    : Symbol(tree,
+             scope,
+             containingSym,
+             SymbolKind::Field)
 {}
-
-Binder::~Binder()
-{}
-
-void Binder::bind()
-{
-    visit(tree_->root());
-}
-
-SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
-{
-    return Action::Visit;
-}

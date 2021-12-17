@@ -20,7 +20,6 @@
 
 #include "StdLibInterceptor.h"
 
-#include "names/DeclarationNames.h"
 #include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNodes.h"
 
@@ -36,11 +35,6 @@ bool StdLibInterceptor::intercept(DeclaratorDeclarationSyntax*)
 }
 
 bool StdLibInterceptor::intercept(FunctionDefinitionSyntax*)
-{
-    return false;
-}
-
-bool StdLibInterceptor::isStdName(const DeclarationName* name) const
 {
     return false;
 }

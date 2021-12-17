@@ -20,7 +20,6 @@
 
 #include "StdLibInterceptor.h"
 #include "StdLibInspector.h"
-#include "plugin-api/VisitorObserver.h"
 
 using namespace psy;
 using namespace C;
@@ -32,8 +31,5 @@ PLUGIN_API void deleteInterceptor(StdLibInterceptor* p) { delete p; }
 
 PLUGIN_API StdLibInspector* newInspector() { return new StdLibInspector; }
 PLUGIN_API void deleteInspector(StdLibInspector* p) { delete p; }
-
-PLUGIN_API VisitorObserver* newObserver() { return nullptr; }
-PLUGIN_API void deleteObserver(VisitorObserver* p) {}
 
 }

@@ -36,7 +36,10 @@ namespace C {
  */
 class PSY_C_API SyntaxReference
 {
+public:
+    const SyntaxTree* syntaxTree() const;
 
+    const SyntaxNode* syntax() const;
 };
 
 } // C

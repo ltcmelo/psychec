@@ -221,85 +221,85 @@ void TestParser::case1029()
 void TestParser::case1030()
 {
     parseExpression("x",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1031()
 {
     parseExpression("_x",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1032()
 {
     parseExpression("x_y",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1033()
 {
     parseExpression("x1",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1034()
 {
     parseExpression("x1_",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1035()
 {
     parseExpression("x1y2",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1036()
 {
     parseExpression("_x1y2_",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1037()
 {
     parseExpression("X",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1038()
 {
     parseExpression("_X",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1039()
 {
     parseExpression("X1",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1040()
 {
     parseExpression("_X1",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1041()
 {
     parseExpression("xYz1",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1042()
 {
     parseExpression("xYz1_",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1043()
 {
     parseExpression("xY_z1",
-                    Expectation().AST( { IdentifierExpression }));
+                    Expectation().AST( { IdentifierName }));
 }
 
 void TestParser::case1044()
@@ -524,7 +524,7 @@ void TestParser::case1101()
 {
     parseExpression("( x )",
                     Expectation().AST( { ParenthesizedExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1102()
@@ -532,7 +532,7 @@ void TestParser::case1102()
     parseExpression("( ( x ) )",
                     Expectation().AST( { ParenthesizedExpression,
                                          ParenthesizedExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1103()
@@ -813,7 +813,7 @@ void TestParser::case1250()
                                          BraceEnclosedInitializer,
                                          ExpressionInitializer,
                                          PostIncrementExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1251()
@@ -924,28 +924,28 @@ void TestParser::case1300()
 {
     parseExpression("++x",
                     Expectation().AST({ PreIncrementExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1301()
 {
     parseExpression("--x",
                     Expectation().AST({ PreDecrementExpression,
-                                        IdentifierExpression }));;
+                                        IdentifierName }));;
 }
 
 void TestParser::case1302()
 {
     parseExpression("x++",
                     Expectation().AST({ PostIncrementExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1303()
 {
     parseExpression("x--",
                     Expectation().AST({ PostDecrementExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1304()
@@ -953,7 +953,7 @@ void TestParser::case1304()
     parseExpression("++( x )",
                     Expectation().AST({ PreIncrementExpression,
                                         ParenthesizedExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1305()
@@ -962,7 +962,7 @@ void TestParser::case1305()
                     Expectation().AST({ PreIncrementExpression,
                                         ParenthesizedExpression,
                                         ParenthesizedExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1306()
@@ -970,7 +970,7 @@ void TestParser::case1306()
     parseExpression("( x )++",
                     Expectation().AST({ PostIncrementExpression,
                                         ParenthesizedExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1307()
@@ -979,7 +979,7 @@ void TestParser::case1307()
                     Expectation().AST({ PostIncrementExpression,
                                         ParenthesizedExpression,
                                         ParenthesizedExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1308()
@@ -1117,7 +1117,7 @@ void TestParser::case1400()
     parseExpression("sizeof x",
                     Expectation().AST( { SizeofExpression,
                                          ExpressionAsTypeReference,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1401()
@@ -1127,7 +1127,7 @@ void TestParser::case1401()
                                          AmbiguousTypeNameOrExpressionAsTypeReference,
                                          ExpressionAsTypeReference,
                                          ParenthesizedExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          TypeNameAsTypeReference,
                                          TypeName,
                                          TypedefName })
@@ -1169,7 +1169,7 @@ void TestParser::case1405()
                     Expectation().AST( { SizeofExpression,
                                          ExpressionAsTypeReference,
                                          PointerIndirectionExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1406()
@@ -1178,7 +1178,7 @@ void TestParser::case1406()
                     Expectation().AST( { SizeofExpression,
                                          ExpressionAsTypeReference,
                                          ElementAccessExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          IntegerConstantExpression }));
 }
 
@@ -1210,8 +1210,8 @@ void TestParser::case1409()
                     Expectation().AST( { SizeofExpression,
                                          ExpressionAsTypeReference,
                                          DirectMemberAccessExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1410()
@@ -1316,7 +1316,7 @@ void TestParser::case1450()
                                          AmbiguousTypeNameOrExpressionAsTypeReference,
                                          ExpressionAsTypeReference,
                                          ParenthesizedExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          TypeNameAsTypeReference,
                                          TypeName,
                                          TypedefName })
@@ -1351,7 +1351,7 @@ void TestParser::case1453()
     parseExpression("_Alignof x",
                     Expectation().AST( { AlignofExpression,
                                          ExpressionAsTypeReference,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1454()
@@ -1417,8 +1417,8 @@ void TestParser::case1500()
 {
     parseExpression("x . y",
                     Expectation().AST( { DirectMemberAccessExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1501()
@@ -1440,16 +1440,16 @@ void TestParser::case1503()
     parseExpression("x ( ) . y",
                     Expectation().AST( { DirectMemberAccessExpression,
                                          CallExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1504()
 {
     parseExpression("x -> y",
                     Expectation().AST( { IndirectMemberAccessExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1505()
@@ -1471,9 +1471,9 @@ void TestParser::case1507()
     parseExpression("x . y . z",
                     Expectation().AST( { DirectMemberAccessExpression,
                                          DirectMemberAccessExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1508()
@@ -1481,9 +1481,9 @@ void TestParser::case1508()
     parseExpression("x . y -> z",
                     Expectation().AST( { IndirectMemberAccessExpression,
                                          DirectMemberAccessExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1509()
@@ -1491,9 +1491,9 @@ void TestParser::case1509()
     parseExpression("x -> y -> z",
                     Expectation().AST( { IndirectMemberAccessExpression,
                                          IndirectMemberAccessExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1510()
@@ -1502,9 +1502,9 @@ void TestParser::case1510()
                     Expectation().AST( { IndirectMemberAccessExpression,
                                          ParenthesizedExpression,
                                          DirectMemberAccessExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1511()
@@ -1513,10 +1513,10 @@ void TestParser::case1511()
                     Expectation().AST( { DirectMemberAccessExpression,
                                          DirectMemberAccessExpression,
                                          DirectMemberAccessExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1512()
@@ -1524,9 +1524,9 @@ void TestParser::case1512()
     parseExpression("x [ 0 ] . y",
                     Expectation().AST( { DirectMemberAccessExpression,
                                          ElementAccessExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          IntegerConstantExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 
 }
 
@@ -1543,7 +1543,7 @@ void TestParser::case1513()
                                          FieldDesignator,
                                          ExpressionInitializer,
                                          IntegerConstantExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 
 }
 
@@ -1558,7 +1558,7 @@ void TestParser::case1514()
                                          BraceEnclosedInitializer,
                                          ExpressionInitializer,
                                          IntegerConstantExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1515() {}
@@ -1651,7 +1651,7 @@ void TestParser::case1600()
 {
     parseExpression("x ( )",
                     Expectation().AST( { CallExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1601()
@@ -1659,14 +1659,14 @@ void TestParser::case1601()
     parseExpression("( x ) ( )",
                     Expectation().AST( { CallExpression,
                                          ParenthesizedExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1602()
 {
     parseExpression("x ( 1 )",
                     Expectation().AST( { CallExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          IntegerConstantExpression }));
 }
 
@@ -1674,16 +1674,16 @@ void TestParser::case1603()
 {
     parseExpression("x ( y )",
                     Expectation().AST( { CallExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1604()
 {
     parseExpression("x ( y , 1 )",
                     Expectation().AST( { CallExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
+                                         IdentifierName,
                                          IntegerConstantExpression }));
 }
 
@@ -1693,7 +1693,7 @@ void TestParser::case1605()
                     Expectation().AST( { CallExpression,
                                          ParenthesizedExpression,
                                          AddressOfExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1606()
@@ -1702,7 +1702,7 @@ void TestParser::case1606()
                     Expectation().AST( { CallExpression,
                                          ParenthesizedExpression,
                                          PointerIndirectionExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1607()
@@ -1712,16 +1712,16 @@ void TestParser::case1607()
                                          ParenthesizedExpression,
                                          PointerIndirectionExpression,
                                          PointerIndirectionExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1608()
 {
     parseExpression("x ( y ( ), \"z\" )",
                     Expectation().AST( { CallExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          CallExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          StringLiteralExpression }));
 }
 
@@ -1750,7 +1750,7 @@ void TestParser::case1612()
 {
     parseExpression("x ( ( 1 ) )",
                     Expectation().AST( { CallExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          ParenthesizedExpression,
                                          IntegerConstantExpression }));
 }
@@ -1759,10 +1759,10 @@ void TestParser::case1613()
 {
     parseExpression("x ( ( ( y ) ) )",
                     Expectation().AST( { CallExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          ParenthesizedExpression,
                                          ParenthesizedExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1614()
@@ -1770,7 +1770,7 @@ void TestParser::case1614()
     parseExpression("( x ( ) )",
                     Expectation().AST( { ParenthesizedExpression,
                                          CallExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1615()
@@ -1779,7 +1779,7 @@ void TestParser::case1615()
                     Expectation().AST( { ParenthesizedExpression,
                                          ParenthesizedExpression,
                                          CallExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1616()
@@ -1787,7 +1787,7 @@ void TestParser::case1616()
     parseExpression("( x ( 1 ) )",
                     Expectation().AST( { ParenthesizedExpression,
                                          CallExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          IntegerConstantExpression }));
 }
 
@@ -1796,9 +1796,9 @@ void TestParser::case1617()
     parseExpression("( x ( 1 , y ) )",
                     Expectation().AST( { ParenthesizedExpression,
                                          CallExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          IntegerConstantExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1618() {}
@@ -1838,7 +1838,7 @@ void TestParser::case1650()
 {
     parseExpression("* x",
                     Expectation().AST( { PointerIndirectionExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1651()
@@ -1846,14 +1846,14 @@ void TestParser::case1651()
     parseExpression("* ( x )",
                     Expectation().AST( { PointerIndirectionExpression,
                                          ParenthesizedExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1652()
 {
     parseExpression("& x",
                     Expectation().AST( { AddressOfExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1653()
@@ -1931,7 +1931,7 @@ void TestParser::case1700()
                                         TypeName,
                                         BuiltinTypeSpecifier,
                                         AbstractDeclarator,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1701()
@@ -1942,7 +1942,7 @@ void TestParser::case1701()
                                         BuiltinTypeSpecifier,
                                         PointerDeclarator,
                                         AbstractDeclarator,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1702()
@@ -1954,7 +1954,7 @@ void TestParser::case1702()
                                         ConstQualifier,
                                         PointerDeclarator,
                                         AbstractDeclarator,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1703()
@@ -1964,7 +1964,7 @@ void TestParser::case1703()
                                         TypeName,
                                         StructTypeSpecifier,
                                         AbstractDeclarator,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1704()
@@ -1976,7 +1976,7 @@ void TestParser::case1704()
                                         BuiltinTypeSpecifier,
                                         AbstractDeclarator,
                                         UnaryPlusExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1705()
@@ -1988,7 +1988,7 @@ void TestParser::case1705()
                                         BuiltinTypeSpecifier,
                                         AbstractDeclarator,
                                         UnaryMinusExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1706()
@@ -1999,7 +1999,7 @@ void TestParser::case1706()
                                         BuiltinTypeSpecifier,
                                         AbstractDeclarator,
                                         PreIncrementExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1707()
@@ -2010,7 +2010,7 @@ void TestParser::case1707()
                                         BuiltinTypeSpecifier,
                                         AbstractDeclarator,
                                         PostIncrementExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName }));
 }
 
 void TestParser::case1708()
@@ -2051,8 +2051,8 @@ void TestParser::case1714()
                                         TypedefName,
                                         AbstractDeclarator,
                                         CallExpression,
-                                        IdentifierExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName,
+                                        IdentifierName }));
 }
 
 void TestParser::case1715()
@@ -2064,8 +2064,8 @@ void TestParser::case1715()
                                         AbstractDeclarator,
                                         ParenthesizedExpression,
                                         CallExpression,
-                                        IdentifierExpression,
-                                        IdentifierExpression }));
+                                        IdentifierName,
+                                        IdentifierName }));
 }
 
 void TestParser::case1716()
@@ -2092,7 +2092,7 @@ void TestParser::case1717()
                                          IntegerConstantExpression,
                                          SubstractExpression,
                                          ParenthesizedExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          IntegerConstantExpression }));
 }
 
@@ -2106,11 +2106,11 @@ void TestParser::case1718()
                                          TypedefName,
                                          AbstractDeclarator,
                                          UnaryPlusExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          AddExpression,
                                          ParenthesizedExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1719()
@@ -2170,9 +2170,9 @@ void TestParser::case1750()
 {
     parseExpression("x ? y : z",
                     Expectation().AST( { ConditionalExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression } ));
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName } ));
 
 }
 
@@ -2180,11 +2180,11 @@ void TestParser::case1751()
 {
     parseExpression("x ? y + z : w",
                     Expectation().AST( { ConditionalExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          AddExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression } ));
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName } ));
 }
 
 void TestParser::case1752()
@@ -2193,8 +2193,8 @@ void TestParser::case1752()
 
     parseExpression("x ?: z",
                     Expectation().AST( { ConditionalExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression } ));
+                                         IdentifierName,
+                                         IdentifierName } ));
 }
 
 void TestParser::case1753()
@@ -2252,16 +2252,16 @@ void TestParser::case1800()
 {
     parseExpression("x / y",
                     Expectation().AST( { DivideExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression } ));
+                                         IdentifierName,
+                                         IdentifierName } ));
 }
 
 void TestParser::case1801()
 {
     parseExpression("x << y",
                     Expectation().AST( { LeftShiftExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression } ));
+                                         IdentifierName,
+                                         IdentifierName } ));
 
 }
 
@@ -2269,8 +2269,8 @@ void TestParser::case1802()
 {
     parseExpression("x + y",
                     Expectation().AST( { AddExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression } ));
+                                         IdentifierName,
+                                         IdentifierName } ));
 
 }
 
@@ -2278,8 +2278,8 @@ void TestParser::case1803()
 {
     parseExpression("x || y",
                     Expectation().AST( { LogicalORExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression } ));
+                                         IdentifierName,
+                                         IdentifierName } ));
 }
 
 void TestParser::case1804()
@@ -2288,8 +2288,8 @@ void TestParser::case1804()
 
     parseExpression("x * y",
                     Expectation().AST( { MultiplyExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression } ));
+                                         IdentifierName,
+                                         IdentifierName } ));
 
 }
 
@@ -2299,30 +2299,30 @@ void TestParser::case1805()
                     Expectation().AST( { AddExpression,
                                          ParenthesizedExpression,
                                          MultiplyExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1806()
 {
     parseExpression("x * ( y + z)",
                     Expectation().AST( { MultiplyExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          ParenthesizedExpression,
                                          AddExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1807()
 {
     parseExpression("x + y * z",
                     Expectation().AST( { AddExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          MultiplyExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1808()
@@ -2330,17 +2330,17 @@ void TestParser::case1808()
     parseExpression("x * y + z",
                     Expectation().AST( { AddExpression,
                                          MultiplyExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1809()
 {
     parseExpression("x , y",
                     Expectation().AST( { SequencingExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName,
+                                         IdentifierName }));
 }
 
 void TestParser::case1810()
@@ -2348,9 +2348,9 @@ void TestParser::case1810()
     parseExpression("x , 1, y",
                     Expectation().AST( { SequencingExpression,
                                          SequencingExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          IntegerConstantExpression,
-                                         IdentifierExpression }));
+                                         IdentifierName }));
 }
 
 void TestParser::case1811()
@@ -2399,25 +2399,25 @@ void TestParser::case1850()
 {
     parseExpression("x = y",
                     Expectation().AST( { BasicAssignmentExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression } ));
+                                         IdentifierName,
+                                         IdentifierName } ));
 }
 
 void TestParser::case1851()
 {
     parseExpression("x %= y",
                     Expectation().AST( { ModuloAssignmentExpression,
-                                         IdentifierExpression,
-                                         IdentifierExpression } ));
+                                         IdentifierName,
+                                         IdentifierName } ));
 }
 
 void TestParser::case1852()
 {
     parseExpression("x = y = 1",
                     Expectation().AST( { BasicAssignmentExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          BasicAssignmentExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          IntegerConstantExpression } ));
 
 }
@@ -2426,10 +2426,10 @@ void TestParser::case1853()
 {
     parseExpression("x = ( y = 1)",
                     Expectation().AST( { BasicAssignmentExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          ParenthesizedExpression,
                                          BasicAssignmentExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          IntegerConstantExpression } ));
 }
 
@@ -2437,7 +2437,7 @@ void TestParser::case1854()
 {
     parseExpression("x = 0",
                     Expectation().AST( { BasicAssignmentExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          IntegerConstantExpression } ));
 }
 
@@ -2445,7 +2445,7 @@ void TestParser::case1855()
 {
     parseExpression("x = ( void * ) 0",
                     Expectation().AST( { BasicAssignmentExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          CastExpression,
                                          TypeName,
                                          BuiltinTypeSpecifier,
@@ -2458,7 +2458,7 @@ void TestParser::case1856()
 {
     parseExpression("x = ( ( void * ) 0 )",
                     Expectation().AST( { BasicAssignmentExpression,
-                                         IdentifierExpression,
+                                         IdentifierName,
                                          ParenthesizedExpression,
                                          CastExpression,
                                          TypeName,

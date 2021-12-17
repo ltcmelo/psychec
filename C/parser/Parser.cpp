@@ -107,7 +107,7 @@ Parser::Parser(SyntaxTree* tree)
     : pool_(tree->unitPool())
     , tree_(tree)
     , backtracker_(nullptr)
-    , diagnosticsReporter_(this)
+    , diagReporter_(this)
     , curTkIdx_(1)
     , depthOfExprs_(0)
     , depthOfStmts_(0)
@@ -140,7 +140,7 @@ bool Parser::match(SyntaxKind expectedTkK, LexedTokens::IndexType* tkIdx)
         return true;
     }
 
-    diagnosticsReporter_.ExpectedToken(SyntaxKind(expectedTkK));
+    diagReporter_.ExpectedToken(SyntaxKind(expectedTkK));
 
     if (curTkK != EndOfFile)
         consume();

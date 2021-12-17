@@ -21,14 +21,10 @@
 #ifndef PSYCHE_C_SYMBOLS_H__
 #define PSYCHE_C_SYMBOLS_H__
 
-#include "API.h"
-#include "APIFwds.h"
-#include "Symbol.h"
-
-namespace psy {
-namespace C {
-
-} // C
-} // psy
+#include "Symbol_Field.h"
+#include "Symbol_Function.h"
+#include "Symbol_LinkUnit.h"
+#include "Symbol_Parameter.h"
+#include "Symbol_Variable.h"
 
 #endif

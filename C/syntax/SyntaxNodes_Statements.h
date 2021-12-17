@@ -91,8 +91,6 @@ private:
     AST_CHILD_LST3(openBraceTkIdx_,
                    stmts_,
                    closeBraceTkIdx_)
-
-    BlockSymbol* sym_;
 };
 
 /**
@@ -211,8 +209,6 @@ public:
                    stmt_,
                    elseKwTkIdx_,
                    elseStmt_)
-
-    BlockSymbol* sym_ = nullptr;;
 };
 
 /**
@@ -247,8 +243,6 @@ public:
                    cond_,
                    closeParenTkIdx_,
                    stmt_)
-
-    BlockSymbol* sym_;
 };
 
 /**
@@ -283,8 +277,6 @@ private:
                    cond_,
                    closeParenTkIdx_,
                    stmt_)
-
-    BlockSymbol* sym_;
 };
 
 /**
@@ -370,8 +362,6 @@ private:
                    expr_,
                    closeParenTkIdx_,
                    stmt_)
-
-    BlockSymbol* sym_;
 };
 
 /**

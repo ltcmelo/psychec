@@ -38,7 +38,11 @@ namespace C {
  */
 enum class SymbolKind : std::uint8_t
 {
-
+    Field,
+    Function,
+    LinkUnit,
+    Parameter,
+    Variable,
 };
 
 } // C

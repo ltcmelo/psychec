@@ -1,5 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
-// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,12 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_BINDER_H__
-#define PSYCHE_BINDER_H__
+#ifndef PSYCHE_C_BINDER_H__
+#define PSYCHE_C_BINDER_H__
 
 #include "API.h"
+#include "APIFwds.h"
 
+#include "common/diagnostics/DiagnosticDescriptor.h"
+#include "parser/LexedTokens.h"
 #include "syntax/SyntaxVisitor.h"
+
+#include <memory>
+#include <stack>
+#include <string>
 
 namespace psy {
 namespace C {
@@ -44,13 +50,45 @@ public:
     void bind();
 
 private:
-    Binder(SyntaxTree* tree);
+    friend class SemanticModel;
+
+    Binder(SemanticModel* semaModel, const SyntaxTree* tree);
+
+    SemanticModel* semaModel_;
+    std::stack<Scope*> scopes_;
+    std::stack<Symbol*> syms_;
+
+    template <class SymbolT> SymbolT* newSymbol_COMMON(std::unique_ptr<SymbolT>);
+    template <class SymbolT> SymbolT* newSymbol();
+
+    template <class ScopeT> void openScope();
+    void closeScope();
+
+    struct DiagnosticsReporter
+    {
+        DiagnosticsReporter(Binder* binder)
+            : binder_(binder)
+        {}
+        Binder* binder_;
+
+        void diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk);
+
+        static const std::string ID_of_UselessDeclaration;
+
+        void UselessDeclaration(SyntaxToken tk);
+    };
+
+    DiagnosticsReporter diagReporter_;
 
     //--------------//
     // Declarations //
     //--------------//
     virtual Action visitTranslationUnit(const TranslationUnitSyntax* node) override;
+    virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node) override;
+    virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) override;
 
+    /* Declarators */
+    virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
 };
 
 } // C

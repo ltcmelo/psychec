@@ -20,7 +20,7 @@
 
 #include "StdLibIndex.h"
 
-#include "Compilation.h"
+#include "compilation/Compilation.h"
 
 #include <algorithm>
 #include <cstring>

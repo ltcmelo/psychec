@@ -27,11 +27,20 @@
     do { \
         if (COND) {} \
         else { \
-            std::cout << "[ASSERT FAILURE] at " \
+            std::cout << "[ASSERT] at " \
                       << __FILE__ << ":" << __LINE__ << " " \
                       << MSG << std::endl; \
             CODE; \
         } \
+    } while (0)
+
+
+#define PSYCHE_FAIL(CODE, MSG) \
+    do { \
+        std::cout << "[FAIL] at " \
+                  << __FILE__ << ":" << __LINE__ << " " \
+                  << MSG << std::endl; \
+        CODE; \
     } while (0)
 
 #endif

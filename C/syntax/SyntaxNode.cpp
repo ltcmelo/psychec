@@ -258,8 +258,6 @@ std::string PSY_C_API to_string(SyntaxKind kind)
         //-------------//
         // Expressions //
         //-------------//
-        case IdentifierExpression:
-            return "IdentifierExpression";
         case IntegerConstantExpression:
             return "IntegerConstantExpression";
         case FloatingConstantExpression:
@@ -282,6 +280,10 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "GenericDefaultAssociation";
         case ExtGNU_EnclosedCompoundStatementExpression:
             return "ExtGNU_EnclosedCompoundStatementExpression";
+
+        /* Names */
+        case IdentifierName:
+            return "IdentifierName";
 
         /* Unary */
         case PreIncrementExpression:

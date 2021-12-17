@@ -116,13 +116,16 @@ class FieldDesignatorSyntax;
 // Expressions //
 //-------------//
 class ExpressionSyntax;
-class IdentifierExpressionSyntax;
 class ConstantExpressionSyntax;
 class StringLiteralExpressionSyntax;
 class ParenthesizedExpressionSyntax;
 class GenericSelectionExpressionSyntax;
 class GenericAssociationSyntax;
 class ExtGNU_EnclosedCompoundStatementExpressionSyntax;
+
+/* Names */
+class NameSyntax;
+class IdentifierNameSyntax;
 
 /* Operations */
 class UnaryExpressionSyntax;
@@ -190,32 +193,15 @@ typedef SyntaxNodeSeparatedList<GenericAssociationSyntax*> GenericAssociationLis
 typedef SyntaxNodePlainList<StatementSyntax*> StatementListSyntax;
 typedef SyntaxNodeSeparatedList<ExtGNU_AsmOperandSyntax*> ExtGNU_AsmOperandListSyntax;
 
-//=================================================================== Names
+//=================================================================== Semantic
 
-class DeclarationNameVisitor;
-class DeclarationName;
-class IdentifierName;
-class Identifier;
-class AnonymousName;
-class TagName;
-
-//=================================================================== Symbols
-
-class SymbolTable;
-class SymbolVisitor;
-
+/* Symbols */
 class Symbol;
-class ScopeSymbol;
+class FunctionSymbol;
+class FieldSymbol;
+class LinkUnitSymbol;
 class VariableSymbol;
 class ParameterSymbol;
-class FunctionSymbol;
-class BlockSymbol;
-class StructOrUnionSymbol;
-class EnumSymbol;
-class EnumeratorDeclaration;
-class ForwardDeclarationSymbol;
-
-/* Types */
 class TypeSymbol;
 class UndefinedType;
 class VoidType;
@@ -227,8 +213,24 @@ class NamedType;
 class QuantifiedType;
 class TypeVisitor;
 
-/* Lists */
+class SymbolVisitor;
 template <class PtrT> class SymbolList;
+
+/* Symbol names */
+class PlainSymbolName;
+class TagSymbolName;
+class AnonymousSymbolName;
+
+/* Scopes */
+class Scope;
+class FileScope;
+class FunctionScope;
+class BlockScope;
+
+/* Compilation */
+class Compilation;
+class Assembly;
+class SemanticModel;
 
 } // C
 } // psy

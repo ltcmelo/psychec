@@ -793,7 +793,7 @@ void TestParser::case0100()
 
 void TestParser::case0101()
 {
-    parse("void ( * x) ( ) ;",
+    parse("void ( * x ) ( ) ;",
           Expectation().AST({ TranslationUnit,
                               VariableAndOrFunctionDeclaration,
                               BuiltinTypeSpecifier,
@@ -2116,7 +2116,7 @@ void TestParser::case0300()
                               ArrayDeclarator,
                               IdentifierDeclarator,
                               SubscriptSuffix,
-                              IdentifierExpression }));
+                              IdentifierName }));
 }
 
 void TestParser::case0301()
@@ -2128,7 +2128,7 @@ void TestParser::case0301()
                               ArrayDeclarator,
                               IdentifierDeclarator,
                               SubscriptSuffix,
-                              IdentifierExpression }));
+                              IdentifierName }));
 }
 
 void TestParser::case0302()
@@ -2171,11 +2171,11 @@ void TestParser::case0305()
                               ArrayDeclarator,
                               IdentifierDeclarator,
                               SubscriptSuffix,
-                              IdentifierExpression,
+                              IdentifierName,
                               SubscriptSuffix,
                               IntegerConstantExpression,
                               SubscriptSuffix,
-                              IdentifierExpression }));
+                              IdentifierName }));
 }
 
 void TestParser::case0306()
@@ -2189,9 +2189,9 @@ void TestParser::case0306()
                               ArrayDeclarator,
                               IdentifierDeclarator,
                               SubscriptSuffix,
-                              IdentifierExpression,
+                              IdentifierName,
                               SubscriptSuffix,
-                              IdentifierExpression,
+                              IdentifierName,
                               SubscriptSuffix,
                               IntegerConstantExpression }));
 }
@@ -5345,7 +5345,7 @@ void TestParser::case0904()
                                AmbiguousTypeNameOrExpressionAsTypeReference,
                                ExpressionAsTypeReference,
                                ParenthesizedExpression,
-                               IdentifierExpression,
+                               IdentifierName,
                                TypeNameAsTypeReference,
                                TypeName,
                                TypedefName,
@@ -5602,7 +5602,7 @@ void TestParser::case0953()
                                AmbiguousTypeNameOrExpressionAsTypeReference,
                                ExpressionAsTypeReference,
                                ParenthesizedExpression,
-                               IdentifierExpression,
+                               IdentifierName,
                                TypeNameAsTypeReference,
                                TypeName,
                                TypedefName,

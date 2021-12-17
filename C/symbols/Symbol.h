@@ -24,6 +24,15 @@
 #include "API.h"
 #include "APIFwds.h"
 #include "Accessibility.h"
+#include "SymbolKind.h"
+#include "SymbolName.h"
+
+#include "syntax/SyntaxReference.h"
+
+#include "../common/location/Location.h"
+#include "../common/infra/Pimpl.h"
+
+#include <vector>
 
 namespace psy {
 namespace C {
@@ -37,7 +46,72 @@ namespace C {
  */
 class PSY_C_API Symbol
 {
+protected:
+    Symbol(const SyntaxTree* tree,
+           const Scope* outerScope,
+           const Symbol* containingSym,
+           SymbolKind kind);
 
+public:
+    Symbol(const Symbol&) = delete;
+    Symbol& operator=(const Symbol&) = delete;
+    virtual ~Symbol();
+
+    /**
+     * The Assembly where \c this Symbol is \a defined.
+     */
+    const Assembly* assembly() const;
+
+    /**
+     * The outer Scope of \c this Symbol.
+     *
+     * \remark 6.2.1-4
+     */
+    const Scope* outerScope() const;
+
+    /**
+     * The inner Scope of \c this Symbol.
+     *
+     * \remark 6.2.1-4
+     */
+    const Scope* innerScope() const;
+
+    /**
+     * The Symbol immediately containing \c this Symbol.
+     */
+    const Symbol* containingSymbol() const;
+
+    /**
+     * The Accessibility declared for \c this Symbol.
+     */
+    Accessibility declaredAccessibility() const;
+
+    /**
+     * References to the SyntaxNodes that \a declare \c this Symbol.
+     */
+    std::vector<SyntaxReference> declaringSyntaxReferences() const;
+
+    /**
+     * The SymbolKind of \c this Symbol.
+     */
+    SymbolKind kind() const;
+
+    /**
+     * The SymbolName of \c this Symbol.
+     */
+    SymbolName name() const;
+
+    /**
+     * The Location where \c this Symbol is \a defined.
+     */
+    Location location() const;
+
+private:
+    DECL_PIMPL(Symbol);
+
+    friend class Binder;
+
+    template <class ScopeT> ScopeT* newScope();
 };
 
 } // C

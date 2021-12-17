@@ -1,5 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
-// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,58 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_DECLARATION_NAME_H__
-#define PSYCHE_C_DECLARATION_NAME_H__
+#ifndef PSYCHE_C_SCOPE_FUNCTION_H__
+#define PSYCHE_C_SCOPE_FUNCTION_H__
 
-#include "API.h"
-#include "APIFwds.h"
-
-#include <functional>
-#include <string>
+#include "Scope.h"
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The DeclarationName class.
- *
- * The base class of every (declared) name.
- *
- * \note Similar to:
- * - \c clang::DeclarationName of LLVM/Clang.
- */
-class PSY_C_API DeclarationName
+class PSY_C_API FunctionScope final : public Scope
 {
-public:
-    virtual ~DeclarationName();
-
-    enum class Kind : unsigned char
-    {
-        Simple,
-        Tag,
-        Anonymous,
-        Error
-    };
-
-    /**
-     * The Kind of \c this DeclarationName.
-     */
-    Kind kind() const;
-
-    virtual const IdentifierName* asIdentifierName() const { return nullptr; }
-    virtual const TagName* asTagName() const { return nullptr; }
-    virtual const AnonymousName* asAnonymousName() const { return nullptr; }
-
-protected:
-    DeclarationName(Kind kind);
-
-    Kind kind_;
+private:
+    using Scope::Scope;
 };
-
-/**
- * The \p kind of a DeclarationName as a \c std::string.
- */
-std::string PSY_C_API to_string(DeclarationName::Kind kind);
 
 } // C
 } // psy

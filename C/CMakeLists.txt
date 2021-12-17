@@ -25,15 +25,12 @@ set(PLUGIN_SOURCES
     ${PROJECT_SOURCE_DIR}/plugin-api/PluginConfig.h
     ${PROJECT_SOURCE_DIR}/plugin-api/DeclarationInterceptor.h
     ${PROJECT_SOURCE_DIR}/plugin-api/SourceInspector.h
-    ${PROJECT_SOURCE_DIR}/plugin-api/VisitorObserver.h
 )
 
 set(CFE_SOURCES
     # Main
     ${PROJECT_SOURCE_DIR}/API.h
     ${PROJECT_SOURCE_DIR}/APIFwds.h
-    ${PROJECT_SOURCE_DIR}/Compilation.h
-    ${PROJECT_SOURCE_DIR}/Compilation.cpp
     ${PROJECT_SOURCE_DIR}/LanguageDialect.h
     ${PROJECT_SOURCE_DIR}/LanguageDialect.cpp
     ${PROJECT_SOURCE_DIR}/LanguageExtensions.h
@@ -43,38 +40,10 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/Managed.cpp
     ${PROJECT_SOURCE_DIR}/MemoryPool.h
     ${PROJECT_SOURCE_DIR}/MemoryPool.cpp
-    ${PROJECT_SOURCE_DIR}/SemanticModel.h
-    ${PROJECT_SOURCE_DIR}/SemanticModel.cpp
     ${PROJECT_SOURCE_DIR}/SyntaxTree.h
     ${PROJECT_SOURCE_DIR}/SyntaxTree.cpp
     ${PROJECT_SOURCE_DIR}/Unparser.h
     ${PROJECT_SOURCE_DIR}/Unparser.cpp
-
-    # Parser
-    ${PROJECT_SOURCE_DIR}/parser/Binder.h
-    ${PROJECT_SOURCE_DIR}/parser/Binder.cpp
-    ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Lexer.cpp
-    ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Parser.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Keywords.cpp
-    ${PROJECT_SOURCE_DIR}/parser/LexedTokens.h
-    ${PROJECT_SOURCE_DIR}/parser/LexedTokens.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Lexer.h
-    ${PROJECT_SOURCE_DIR}/parser/Lexer.cpp
-    ${PROJECT_SOURCE_DIR}/parser/LineDirective.h
-    ${PROJECT_SOURCE_DIR}/parser/LineDirective.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Parser.h
-    ${PROJECT_SOURCE_DIR}/parser/Parser__IMPL__.inc
-    ${PROJECT_SOURCE_DIR}/parser/Parser.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Parser_Common.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Parser_Declarations.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Parser_Expressions.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Parser_Statements.cpp
-    ${PROJECT_SOURCE_DIR}/parser/ParseOptions.h
-    ${PROJECT_SOURCE_DIR}/parser/ParseOptions.cpp
-    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.h
-    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.cpp
-    ${PROJECT_SOURCE_DIR}/parser/TypeChecker.h
-    ${PROJECT_SOURCE_DIR}/parser/TypeChecker.cpp
 
     # Syntax
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.h
@@ -100,6 +69,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Expressions.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_Statements.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_MIXIN.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxReference.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxReference.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxToken.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxToken.h
@@ -110,25 +80,82 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxWriterDOTFormat.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxWriterDOTFormat.cpp
 
-    # Names
-    ${PROJECT_SOURCE_DIR}/names/DeclarationName.cpp
-    ${PROJECT_SOURCE_DIR}/names/DeclarationName.h
-    ${PROJECT_SOURCE_DIR}/names/DeclarationNames.cpp
-    ${PROJECT_SOURCE_DIR}/names/DeclarationNames.h
+    # Parser
+    ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Lexer.cpp
+    ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Parser.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Keywords.cpp
+    ${PROJECT_SOURCE_DIR}/parser/LexedTokens.h
+    ${PROJECT_SOURCE_DIR}/parser/LexedTokens.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Lexer.h
+    ${PROJECT_SOURCE_DIR}/parser/Lexer.cpp
+    ${PROJECT_SOURCE_DIR}/parser/LineDirective.h
+    ${PROJECT_SOURCE_DIR}/parser/LineDirective.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Parser.h
+    ${PROJECT_SOURCE_DIR}/parser/Parser__IMPL__.inc
+    ${PROJECT_SOURCE_DIR}/parser/Parser.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Parser_Common.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Parser_Declarations.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Parser_Expressions.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Parser_Statements.cpp
+    ${PROJECT_SOURCE_DIR}/parser/ParseOptions.h
+    ${PROJECT_SOURCE_DIR}/parser/ParseOptions.cpp
+    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.h
+    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.cpp
 
     # Symbols
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbols.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Field.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Field.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_LinkUnit.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_LinkUnit.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Plain.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Plain.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Anonymous.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Anonymous.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolNames.h
     ${PROJECT_SOURCE_DIR}/symbols/SpecialType.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeKind.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbols.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbols.h
+
+    # Binder
+    ${PROJECT_SOURCE_DIR}/binder/Binder.h
+    ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
+    ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
+    ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_TypeChecker.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Scope.h
+    ${PROJECT_SOURCE_DIR}/binder/Scope.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Scope_Block.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Scope_Block.h
+    ${PROJECT_SOURCE_DIR}/binder/Scope_File.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Scope_File.h
+    ${PROJECT_SOURCE_DIR}/binder/Scope_Function.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Scope_Function.h
+    ${PROJECT_SOURCE_DIR}/binder/Scopes.h
+    ${PROJECT_SOURCE_DIR}/binder/TypeChecker.h
+    ${PROJECT_SOURCE_DIR}/binder/TypeChecker.cpp
+
+    # Compilation
+    ${PROJECT_SOURCE_DIR}/compilation/Assembly.cpp
+    ${PROJECT_SOURCE_DIR}/compilation/Assembly.h
+    ${PROJECT_SOURCE_DIR}/compilation/Compilation.h
+    ${PROJECT_SOURCE_DIR}/compilation/Compilation.cpp
+    ${PROJECT_SOURCE_DIR}/compilation/SemanticModel.h
+    ${PROJECT_SOURCE_DIR}/compilation/SemanticModel.cpp
 
     # Tests
     ${PROJECT_SOURCE_DIR}/tests/TestBinder.h

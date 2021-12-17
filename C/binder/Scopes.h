@@ -1,5 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
-// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,45 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Compilation.h"
+#ifndef PSYCHE_C_SCOPES_H__
+#define PSYCHE_C_SCOPES_H__
 
-#include "SemanticModel.h"
-#include "SyntaxTree.h"
+#include "Scope_Block.h"
+#include "Scope_File.h"
+#include "Scope_Function.h"
 
-using namespace psy;
-using namespace C;
-
-struct Compilation::CompilationImpl
-{
-    CompilationImpl(Compilation* compilation, const std::string& id)
-        : Q_(compilation)
-        , id_(id)
-        , curUnit_(nullptr)
-    {}
-
-    ~CompilationImpl()
-    {}
-
-    Compilation* Q_;
-    std::string id_;
-    SyntaxTree* curUnit_;
-};
-
-Compilation::Compilation(const std::string& id)
-    : P(new CompilationImpl(this, id))
-{}
-
-Compilation::~Compilation()
-{}
-
-std::unique_ptr<Compilation> Compilation::create(const std::string& id)
-{
-    return nullptr;
-}
-
-std::unique_ptr<SemanticModel> Compilation::semanticModel(SyntaxTree* tree) const
-{
-    std::unique_ptr<SemanticModel> model(new SemanticModel(const_cast<Compilation*>(this), tree));
-    model->bind();
-    return model;
-}
+#endif

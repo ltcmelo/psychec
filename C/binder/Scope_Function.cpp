@@ -1,5 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
-// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,45 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "DeclarationName.h"
-
-#include "DeclarationNames.h"
-
-#include "syntax/SyntaxLexemes.h"
-
-#include <cstring>
+#include "Scope_Function.h"
 
 using namespace psy;
 using namespace C;
-
-DeclarationName::DeclarationName(Kind kind)
-    : kind_(kind)
-{}
-
-DeclarationName::~DeclarationName()
-{}
-
-DeclarationName::Kind DeclarationName::kind() const
-{
-    return kind_;
-}
-
-namespace psy {
-namespace C {
-
-std::string PSY_C_API to_string(DeclarationName::Kind kind)
-{
-    switch (kind) {
-        case DeclarationName::Kind::Simple:
-            return "IdentifierName";
-        case DeclarationName::Kind::Tag:
-            return "TagName";
-        case DeclarationName::Kind::Anonymous:
-            return "AnonymousName";
-        default:
-            return "<error-name>";
-    }
-}
-
-} // C
-} // psy

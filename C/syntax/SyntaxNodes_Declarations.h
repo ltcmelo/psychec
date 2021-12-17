@@ -89,9 +89,6 @@ private:
 class PSY_C_API NamedDeclarationSyntax : public DeclarationSyntax
 {
     AST_NODE(NamedDeclaration, Declaration)
-
-private:
-    const DeclarationName* name_ = nullptr;
 };
 
 /**
@@ -528,7 +525,6 @@ private:
                    attrs2_);
 
     mutable Symbol* sym_ = nullptr;
-    const DeclarationName* name_ = nullptr;
 };
 
 /**
@@ -773,8 +769,6 @@ private:
                    openParenTkIdx_,
                    identTkIdx_,
                    closeParenTkIdx_);
-
-    mutable const DeclarationName* name_;
 };
 
 /**
@@ -792,8 +786,6 @@ public:
 private:
     LexedTokens::IndexType identTkIdx_ = LexedTokens::invalidIndex();
     AST_CHILD_LST1(identTkIdx_);
-
-    mutable const DeclarationName* name_;
 };
 
 /* Declarators */
@@ -825,8 +817,6 @@ private:
                    attrs2_,
                    equalsTkIdx_,
                    init_)
-
-    const DeclarationName* name_ = nullptr;
 };
 
 /**

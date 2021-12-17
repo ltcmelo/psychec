@@ -68,16 +68,16 @@ bool Parser::parseExpression(ExpressionSyntax*& expr)
  *
  * \remark 6.4.2 and 6.5.1
  */
-bool Parser::parseIdentifierExpression(ExpressionSyntax*& expr)
+bool Parser::parseIdentifierName(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
 
     if (peek().kind() != SyntaxKind::IdentifierToken) {
-        diagnosticsReporter_.ExpectedTokenOfCategoryIdentifier();
+        diagReporter_.ExpectedTokenOfCategoryIdentifier();
         return false;
     }
 
-    parseIdentifierExpression_AtFirst(expr);
+    parseIdentifierName_AtFirst(expr);
     return true;
 }
 
@@ -86,14 +86,14 @@ bool Parser::parseIdentifierExpression(ExpressionSyntax*& expr)
  *
  * \remark 6.4.2 and 6.5.1
  */
-void Parser::parseIdentifierExpression_AtFirst(ExpressionSyntax*& expr)
+void Parser::parseIdentifierName_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == IdentifierToken,
                   return,
                   "assert failure: <identifier>");
 
-    auto identExpr = makeNode<IdentifierExpressionSyntax>();
+    auto identExpr = makeNode<IdentifierNameSyntax>();
     expr = identExpr;
     identExpr->identTkIdx_ = consume();
 }
@@ -109,7 +109,7 @@ bool Parser::parseConstant(ExpressionSyntax*& expr, SyntaxKind exprK)
     DEBUG_THIS_RULE();
 
     if (!SyntaxFacts::isConstantToken(peek().kind())) {
-        diagnosticsReporter_.ExpectedTokenOfCategoryConstant();
+        diagReporter_.ExpectedTokenOfCategoryConstant();
         return false;
     }
 
@@ -149,7 +149,7 @@ bool Parser::parseStringLiteral(ExpressionSyntax*& expr)
     DEBUG_THIS_RULE();
 
     if (!SyntaxFacts::isStringLiteralToken(peek().kind())) {
-        diagnosticsReporter_.ExpectedTokenOfCategoryStringLiteral();
+        diagReporter_.ExpectedTokenOfCategoryStringLiteral();
         return false;
     }
 
@@ -215,8 +215,8 @@ bool Parser::parseExtGNU_StatementExpression_AtFirst(ExpressionSyntax *&expr)
                   return false,
                   "assert failure: `(' then `{'");
 
-    if (!tree_->options().extensions().isEnabled_ExtGNU_StatementExpressions())
-        diagnosticsReporter_.ExpectedFeature("GNU statement expressions");
+    if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_StatementExpressions())
+        diagReporter_.ExpectedFeature("GNU statement expressions");
 
     auto gnuExpr = makeNode<ExtGNU_EnclosedCompoundStatementExpressionSyntax>();
     expr = gnuExpr;
@@ -249,7 +249,7 @@ bool Parser::parsePrimaryExpression(ExpressionSyntax*& expr)
 
     switch (peek().kind()) {
         case IdentifierToken:
-            parseIdentifierExpression_AtFirst(expr);
+            parseIdentifierName_AtFirst(expr);
             break;
 
         case IntegerConstantToken:
@@ -309,7 +309,7 @@ bool Parser::parsePrimaryExpression(ExpressionSyntax*& expr)
             return parseGenericSelectionExpression_AtFirst(expr);
 
         default:
-            diagnosticsReporter_.ExpectedFIRSTofExpression();
+            diagReporter_.ExpectedFIRSTofExpression();
             return false;
     }
 
@@ -383,7 +383,7 @@ bool Parser::parseGenericAssociation(GenericAssociationSyntax*& assoc,
     switch (peek().kind()) {
         case Keyword_default: {
             assoc = makeNode<GenericAssociationSyntax>(DefaultGenericAssociation);
-            auto defExpr = makeNode<IdentifierExpressionSyntax>();
+            auto defExpr = makeNode<IdentifierNameSyntax>();
             defExpr->identTkIdx_ = consume();
             assoc->typeName_or_default_ = defExpr;
             break;
@@ -554,12 +554,12 @@ bool Parser::parsePostfixExpression_AtFollow(ExpressionSyntax*& expr)
                                 membAccess->oprtrTkIdx_ = consume();
                                 if (peek().kind() == IdentifierToken) {
                                     ExpressionSyntax* identExpr = nullptr;
-                                    parseIdentifierExpression_AtFirst(identExpr);
-                                    membAccess->identExpr_ = identExpr->asIdentifierExpression();
+                                    parseIdentifierName_AtFirst(identExpr);
+                                    membAccess->identExpr_ = identExpr->asIdentifierName();
                                     return true;
                                 }
 
-                                diagnosticsReporter_.ExpectedFieldName();
+                                diagReporter_.ExpectedFieldName();
                                 return false;
                             })) {
                     return false;
@@ -682,7 +682,7 @@ bool Parser::parseCompoundLiteral_AtOpenParen(ExpressionSyntax*& expr)
         return false;
 
     if (peek().kind() != OpenBraceToken) {
-        diagnosticsReporter_.ExpectedToken(OpenBraceToken);
+        diagReporter_.ExpectedToken(OpenBraceToken);
         return false;
     }
 
@@ -714,8 +714,8 @@ bool Parser::parseCompoundLiteral_AtOpenBrace(
                   "assert failure: `{'");
 
     if (tree_->dialect().std() < LanguageDialect::Std::C99
-            && !tree_->options().extensions().isEnabled_ExtGNU_CompoundLiterals())
-        diagnosticsReporter_.ExpectedFeature("GNU/C99 compound literals");
+            && !tree_->parseOptions().extensions().isEnabled_ExtGNU_CompoundLiterals())
+        diagReporter_.ExpectedFeature("GNU/C99 compound literals");
 
     auto compLit = makeNode<CompoundLiteralExpressionSyntax>();
     expr = compLit;
@@ -1013,7 +1013,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
 
 
         default:
-            diagnosticsReporter_.ExpectedFIRSTofExpression();
+            diagReporter_.ExpectedFIRSTofExpression();
             return false;
     }
 }
@@ -1092,7 +1092,7 @@ void Parser::maybeAmbiguateCastExpression(ExpressionSyntax*& expr)
             PSYCHE_ASSERT(false, return, "");
     }
 
-    auto nameExpr = makeNode<IdentifierExpressionSyntax>();
+    auto nameExpr = makeNode<IdentifierNameSyntax>();
     nameExpr->identTkIdx_ =
             typeName->specs_->value->asTypedefName()->identTkIdx_;
     auto parenExpr = makeNode<ParenthesizedExpressionSyntax>();
@@ -1500,8 +1500,8 @@ bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
             condExpr->questionTkIdx_ = oprtrTkIdx;
 
             if (peek().kind() == ColonToken) {
-                if (!tree_->options().extensions().isEnabled_ExtGNU_StatementExpressions())
-                    diagnosticsReporter_.ExpectedFeature("GNU conditionals");
+                if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_StatementExpressions())
+                    diagReporter_.ExpectedFeature("GNU conditionals");
 
                 condExpr->whenTrueExpr_ = nullptr;
             }

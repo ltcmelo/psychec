@@ -27,7 +27,7 @@
 using namespace psy;
 using namespace C;
 
-SyntaxVisitor::SyntaxVisitor(SyntaxTree* tree)
+SyntaxVisitor::SyntaxVisitor(const SyntaxTree* tree)
     : tree_(tree)
 {}
 

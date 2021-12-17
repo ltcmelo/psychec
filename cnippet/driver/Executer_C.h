@@ -23,6 +23,8 @@
 
 #include "Driver.h"
 
+#include "SyntaxTree.h"
+
 #include <utility>
 #include <string>
 
@@ -43,7 +45,8 @@ private:
 
     std::pair<std::string, std::string> extendSource(const std::string& source);
     std::pair<int, std::string> invokePreprocessor(std::string source);
-    int invokeParser(const std::string& source);
+    std::pair<int, std::unique_ptr<SyntaxTree>> invokeParser(const std::string& source);
+    int invokeCompiler(std::unique_ptr<SyntaxTree> tree);
 
     Driver* driver_;
     bool inferMode_;

@@ -43,8 +43,8 @@ public:
         Decorated
     };
 
-    void print(const SyntaxNode* node, Style mode);
-    void print(const SyntaxNode* node, Style mode, std::ostream& os);
+    void print(const SyntaxNode* node, Style style);
+    void print(const SyntaxNode* node, Style style, std::ostream& os);
 
 private:
     virtual void nonterminal(const SyntaxNode* node) override;

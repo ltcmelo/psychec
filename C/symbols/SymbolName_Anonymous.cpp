@@ -18,17 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_SYMBOLS_H__
-#define PSYCHE_C_TYPE_SYMBOLS_H__
+#include "SymbolName_Anonymous.h"
 
-#include "API.h"
-#include "APIFwds.h"
-#include "TypeSymbol.h"
-
-namespace psy {
-namespace C {
-
-} // C
-} // psy
-
-#endif
+using namespace psy;
+using namespace C;

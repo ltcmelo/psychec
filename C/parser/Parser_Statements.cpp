@@ -112,13 +112,13 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case Keyword_case:
             if (stmtCtx != StatementContext::Switch
                     && stmtCtx != StatementContext::SwitchAndLoop)
-                diagnosticsReporter_.UnexpectedCaseLabelOutsideSwitch();
+                diagReporter_.UnexpectedCaseLabelOutsideSwitch();
             return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_default:
             if (stmtCtx != StatementContext::Switch
                     && stmtCtx != StatementContext::SwitchAndLoop)
-                diagnosticsReporter_.UnexpectedDefaultLabelOutsideSwitch();
+                diagReporter_.UnexpectedDefaultLabelOutsideSwitch();
             return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_while:
@@ -136,12 +136,12 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case Keyword_continue:
             if (stmtCtx != StatementContext::Loop
                     && stmtCtx != StatementContext::SwitchAndLoop)
-                diagnosticsReporter_.UnexpectedContinueOutsideLoop();
+                diagReporter_.UnexpectedContinueOutsideLoop();
             return parseContinueStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_break:
             if (stmtCtx == StatementContext::None)
-                diagnosticsReporter_.UnexpectedBreakOutsideSwitchOrLoop();
+                diagReporter_.UnexpectedBreakOutsideSwitchOrLoop();
             return parseBreakStatement_AtFirst(stmt, stmtCtx);
 
         case Keyword_return:
@@ -180,7 +180,7 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
                     break;
 
                 default:
-                    diagnosticsReporter_.UnexpectedGNUExtensionFlag();
+                    diagReporter_.UnexpectedGNUExtensionFlag();
                     return false;
             }
             return true;
@@ -217,18 +217,18 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
     switch (expr->kind()) {
         case MultiplyExpression: {
             auto binExpr = expr->asBinaryExpression();
-            if (!(binExpr->leftExpr_->kind() == IdentifierExpression
-                    && binExpr->rightExpr_->kind() == IdentifierExpression))
+            if (!(binExpr->leftExpr_->kind() == IdentifierName
+                    && binExpr->rightExpr_->kind() == IdentifierName))
                 return;
 
             stmtK = AmbiguousMultiplicationOrPointerDeclaration;
             typedefName = makeNode<TypedefNameSyntax>();
             typedefName->identTkIdx_ =
-                    binExpr->leftExpr_->asIdentifierExpression()->identTkIdx_;
+                    binExpr->leftExpr_->asIdentifierName()->identTkIdx_;
 
             auto identDecltor = makeNode<IdentifierDeclaratorSyntax>();
             identDecltor->identTkIdx_ =
-                    binExpr->rightExpr_->asIdentifierExpression()->identTkIdx_;
+                    binExpr->rightExpr_->asIdentifierName()->identTkIdx_;
             auto ptrDecltor = makeNode<PointerDeclaratorSyntax>();
             decltor = ptrDecltor;
             ptrDecltor->asteriskTkIdx_ = binExpr->oprtrTkIdx_;
@@ -238,20 +238,20 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
 
         case CallExpression: {
             auto callExpr = expr->asCallExpression();
-            if (!(callExpr->expr_->kind() == IdentifierExpression
+            if (!(callExpr->expr_->kind() == IdentifierName
                     && callExpr->args_
-                    && callExpr->args_->value->kind() == IdentifierExpression
+                    && callExpr->args_->value->kind() == IdentifierName
                     && !callExpr->args_->next))
                 return;
 
             stmtK = AmbiguousCallOrVariableDeclaration;
             typedefName = makeNode<TypedefNameSyntax>();
             typedefName->identTkIdx_ =
-                    callExpr->expr_->asIdentifierExpression()->identTkIdx_;
+                    callExpr->expr_->asIdentifierName()->identTkIdx_;
 
             auto identDecltor = makeNode<IdentifierDeclaratorSyntax>();
             identDecltor->identTkIdx_ =
-                    callExpr->args_->value->asIdentifierExpression()->identTkIdx_;
+                    callExpr->args_->value->asIdentifierName()->identTkIdx_;
             auto parenDecltor = makeNode<ParenthesizedDeclaratorSyntax>();
             decltor = parenDecltor;
             parenDecltor->openParenTkIdx_ = callExpr->openParenTkIdx_;
@@ -303,7 +303,7 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
         StatementSyntax* innerStmt = nullptr;
         switch (peek().kind()) {
             case EndOfFile:
-                diagnosticsReporter_.ExpectedToken(CloseBraceToken);
+                diagReporter_.ExpectedToken(CloseBraceToken);
                 return false;
 
             case CloseBraceToken:
@@ -652,7 +652,7 @@ bool Parser::parseGotoStatement_AtFirst(StatementSyntax*& stmt)
     gotoStmt->gotoKwTkIdx_ = consume();
 
     if (peek().kind() != IdentifierToken) {
-        diagnosticsReporter_.ExpectedTokenOfCategoryIdentifier();
+        diagReporter_.ExpectedTokenOfCategoryIdentifier();
         return ignoreStatement();
     }
 
@@ -744,8 +744,8 @@ bool Parser::parseExtGNU_AsmStatement(StatementSyntax*& stmt)
                   return false,
                   "assert failure: `asm'");
 
-    if (!tree_->options().extensions().isEnabled_ExtGNU_Asm())
-        diagnosticsReporter_.ExpectedFeature("GNU asm");
+    if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Asm())
+        diagReporter_.ExpectedFeature("GNU asm");
 
     auto asmStmt = makeNode<ExtGNU_AsmStatementSyntax>();
     stmt = asmStmt;
@@ -859,7 +859,7 @@ bool Parser::parseExtGNU_AsmOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOprd,
 
     if (peek().kind() == OpenBracketToken) {
         oprd->openBracketTkIdx_ = consume();
-        if (!(parseIdentifierExpression(oprd->identExpr_)
+        if (!(parseIdentifierName(oprd->identExpr_)
                 && match(CloseBracketToken, &oprd->closeBracketTkIdx_)))
             return false;
     }
@@ -907,7 +907,7 @@ bool Parser::parseExtGNU_AsmGotoLabel_AtFirst(ExpressionSyntax*& label,
 {
     DEBUG_THIS_RULE();
 
-    parseIdentifierExpression_AtFirst(label);
+    parseIdentifierName_AtFirst(label);
     return true;
 }
 

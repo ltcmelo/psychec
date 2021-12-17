@@ -36,7 +36,7 @@ namespace C {
 class PSY_C_API SyntaxVisitor
 {
 public:
-    SyntaxVisitor(SyntaxTree* tree);
+    SyntaxVisitor(const SyntaxTree* tree);
     SyntaxVisitor(const SyntaxVisitor&) = delete;
     void operator=(const SyntaxVisitor&) = delete;
     virtual ~SyntaxVisitor();
@@ -121,7 +121,7 @@ public:
     //-------------//
     // Expressions //
     //-------------//
-    virtual Action visitIdentifierExpression(const IdentifierExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitIdentifierName(const IdentifierNameSyntax*) { return Action::Visit; }
     virtual Action visitConstantExpression(const ConstantExpressionSyntax*) { return Action::Visit; }
     virtual Action visitStringLiteralExpression(const StringLiteralExpressionSyntax*) { return Action::Visit; }
     virtual Action visitParenthesizedExpression(const ParenthesizedExpressionSyntax*) { return Action::Visit; }
@@ -178,7 +178,7 @@ public:
     virtual Action visitAmbiguousExpressionOrDeclarationStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) { return Action::Visit; }
 
 protected:
-    SyntaxTree* tree_;
+    const SyntaxTree* tree_;
 };
 
 } // C

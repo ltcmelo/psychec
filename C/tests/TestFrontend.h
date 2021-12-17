@@ -22,9 +22,9 @@
 #define PSYCHE_C_TEST_FRONTEND_H__
 
 #include "API.h"
-#include "Compilation.h"
 #include "SyntaxTree.h"
 
+#include "compilation/Compilation.h"
 #include "tests/TestRunner.h"
 
 #include <functional>

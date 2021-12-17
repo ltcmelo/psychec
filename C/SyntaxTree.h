@@ -41,6 +41,7 @@
 #include <ostream>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -81,7 +82,7 @@ public:
      * in order to build \c this SyntaxTree.
      */
     static std::unique_ptr<SyntaxTree> parseText(SourceText text,
-                                                 ParseOptions options = ParseOptions(),
+                                                 ParseOptions parseOptions = ParseOptions(),
                                                  const std::string& path = "",
                                                  SyntaxCategory syntaxCategory = SyntaxCategory::Unspecified);
 
@@ -117,7 +118,7 @@ public:
 
 private:
     SyntaxTree(SourceText text,
-               ParseOptions options,
+               ParseOptions parseOptions,
                const std::string& path);
 
     DECL_PIMPL(SyntaxTree)
@@ -133,6 +134,8 @@ private:
     friend class Lexer;
     friend class Parser;
     friend class Binder;
+    friend class Symbol;
+    friend class Compilation;
 
     // TODO: To be removed.
     friend class Unparser;
@@ -142,13 +145,12 @@ private:
     void addToken(SyntaxToken tk);
     SyntaxToken& tokenAt(LexedTokens::IndexType tkIdx);
     const SyntaxToken& tokenAt(LexedTokens::IndexType tkIdx) const;
-    TokenSequenceType::size_type tokenCount();
+    TokenSequenceType::size_type tokenCount() const;
     LexedTokens::IndexType freeTokenSlot() const;
 
+    const ParseOptions& parseOptions() const;
+
     void buildTree(SyntaxCategory syntaxCat);
-    void createSymbols();
-    void typeCheck() {}
-    const ParseOptions& options() const;
 
     const Identifier* identifier(const char* s, unsigned int size);
     const IntegerConstant* integerConstant(const char* s, unsigned int size);
@@ -165,14 +167,19 @@ private:
     unsigned int searchForColumn(unsigned int offset, unsigned int lineno) const;
     LineDirective searchForLineDirective(unsigned int offset) const;
 
-    void newDiagnostic(DiagnosticDescriptor descriptor, LexedTokens::IndexType tkIdx);
+    void newDiagnostic(DiagnosticDescriptor descriptor, LexedTokens::IndexType tkIdx) const;
+    void newDiagnostic(DiagnosticDescriptor descriptor, SyntaxToken tk) const;
 
     LanguageDialect dialect() const { return dialect_; }
     void setDialect(LanguageDialect dialect) { dialect_ = dialect; }
 
     // TODO: Move to implementaiton.
     LanguageDialect dialect_;
-    std::vector<SyntaxToken> _comments;
+    std::vector<SyntaxToken> comments_;
+
+    void linkCompilation(const Compilation*) const;
+    void unlinkCompilation(const Compilation*) const;
+    std::unordered_set<const Compilation*> linkedCompilations() const;
 };
 
 } // C

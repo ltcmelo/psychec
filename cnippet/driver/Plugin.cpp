@@ -22,7 +22,6 @@
 
 #include "plugin-api/DeclarationInterceptor.h"
 #include "plugin-api/SourceInspector.h"
-#include "plugin-api/VisitorObserver.h"
 
 #include <dlfcn.h>
 #include <cassert>

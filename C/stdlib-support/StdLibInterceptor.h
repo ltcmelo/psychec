@@ -23,7 +23,6 @@
 
 #include "StdLibIndex.h"
 #include "plugin-api/DeclarationInterceptor.h"
-#include "names/DeclarationNames.h"
 
 namespace psy {
 namespace C {
@@ -35,7 +34,6 @@ public:
     bool intercept(FunctionDefinitionSyntax*) override;
 
 private:
-    bool isStdName(const DeclarationName* name) const;
 
     StdLibIndex index_ { StdLibIndex::Version::C99 }; // TODO: Config appropriately.
 };

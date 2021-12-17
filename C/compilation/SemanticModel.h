@@ -1,5 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
-// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +24,6 @@
 #include "API.h"
 #include "APIFwds.h"
 
-#include "names/DeclarationNames.h"
-
 #include "../common/infra/Pimpl.h"
 
 namespace psy {
@@ -48,34 +45,15 @@ public:
     SemanticModel(const SemanticModel&) = delete;
     SemanticModel& operator=(const SemanticModel&) = delete;
 
-    /**
-     * The Compilation \c this SemanticModel was obtained from.
-     */
-    const Compilation* compilation() const;
-
-    /**
-     * The SyntaxTree \c this SemanticModel was obtained from.
-     */
-    const SyntaxTree* syntaxTree() const;
-
 private:
     DECL_PIMPL(SemanticModel)
 
-    friend class Compilation;
     friend class Binder;
+    friend class Compilation;
 
-    SemanticModel(Compilation* compilation, SyntaxTree* tree);
+    SemanticModel(Compilation* compilation, const SyntaxTree* tree);
 
-    void bind();
-
-    /* Names */
-    template <class NameT, class... ArgsT> NameT* make(ArgsT&&... args);
-    IdentifierName* makeName(const Identifier* identifier);
-    TagName* makeName(TagName::TagKind typeSpecifierKind, const Identifier* identifier);
-    AnonymousName* makeName();
-
-    Compilation* compilation();
-    SyntaxTree* syntaxTree();
+    Symbol* storeSymbol(std::unique_ptr<Symbol> sym);
 };
 
 } // C

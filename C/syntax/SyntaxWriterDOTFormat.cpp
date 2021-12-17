@@ -42,12 +42,9 @@
 
 #include "SyntaxWriterDOTFormat.h"
 
-#include "Compilation.h"
 #include "SyntaxLexemes.h"
 #include "SyntaxVisitor.h"
 #include "SyntaxTree.h"
-
-#include "names/DeclarationNames.h"
 
 #ifdef __GNUC__
 #  include <cxxabi.h>
