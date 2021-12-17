@@ -107,7 +107,7 @@ Location Symbol::location() const
                    std::back_inserter(locs),
                    [] (auto& synRef) {
                         return synRef.syntax()->firstToken().location();
-                    });
+                   });
 
     // TODO
     return locs.front();
