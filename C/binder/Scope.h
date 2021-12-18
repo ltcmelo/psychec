@@ -24,7 +24,9 @@
 #include "API.h"
 #include "APIFwds.h"
 
+#include <memory>
 #include <unordered_map>
+#include <vector>
 
 namespace psy {
 namespace C {
@@ -38,6 +40,19 @@ class PSY_C_API Scope
 {
 protected:
     Scope();
+
+public:
+    /**
+     * The BlockScopes of \c this Scope.
+     */
+    std::vector<const BlockScope*> blocks() const;
+
+private:
+    friend class Binder;
+
+    BlockScope* newBlock();
+
+    std::vector<std::unique_ptr<BlockScope>> blocks_;
 };
 
 } // C

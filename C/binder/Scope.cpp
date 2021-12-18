@@ -20,8 +20,21 @@
 
 #include "Scope.h"
 
+#include "Scope_Block.h"
+
 using namespace psy;
 using namespace C;
 
 Scope::Scope()
 {}
+
+std::vector<const BlockScope*> Scope::blocks() const
+{
+    return {};
+}
+
+BlockScope* Scope::newBlock()
+{
+    blocks_.emplace_back(new BlockScope);
+    return blocks_.back().get();
+}

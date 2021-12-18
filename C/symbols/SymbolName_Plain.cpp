@@ -23,5 +23,27 @@
 using namespace psy;
 using namespace C;
 
-PlainSymbolName::PlainSymbolName()
+PlainSymbolName::PlainSymbolName(std::string s)
+    : s_(s)
 {}
+
+namespace psy {
+namespace C {
+
+std::string to_string(PlainSymbolName name)
+{
+    return name.s_;
+}
+
+bool operator==(PlainSymbolName a, PlainSymbolName b)
+{
+    return a.s_ == b.s_;
+}
+
+bool operator!=(PlainSymbolName a, PlainSymbolName b)
+{
+    return !(a == b);
+}
+
+} // C
+} // psy

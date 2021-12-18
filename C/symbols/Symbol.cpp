@@ -25,6 +25,7 @@
 #include "binder/Scopes.h"
 #include "compilation/Assembly.h"
 #include "compilation/Compilation.h"
+#include "symbols/SymbolNames.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxReference.h"
 
@@ -130,3 +131,8 @@ ScopeT* Symbol::newScope()
 template BlockScope* Symbol::newScope<BlockScope>();
 template FileScope* Symbol::newScope<FileScope>();
 template FunctionScope* Symbol::newScope<FunctionScope>();
+
+void Symbol::givePlainName(std::string s)
+{
+    P->name_ = PlainSymbolName(s);
+}

@@ -112,6 +112,8 @@ private:
     friend class Binder;
 
     template <class ScopeT> ScopeT* newScope();
+
+    void givePlainName(std::string s);
 };
 
 } // C
