@@ -18,26 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_SYMBOL_H__
-#define PSYCHE_C_TYPE_SYMBOL_H__
+#ifndef PSYCHE_C_SYMBOL_NAMED_TYPE_H__
+#define PSYCHE_C_SYMBOL_NAMED_TYPE_H__
 
-#include "API.h"
-#include "APIFwds.h"
-#include "Symbol.h"
+#include "Symbol_Type.h"
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The TypeSymbol class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.ITypeSymbol
- * from Roslyn, the .NET Compiler Platform.
- */
-class PSY_C_API TypeSymbol : public Symbol
+class PSY_C_API NamedTypeSymbol : public TypeSymbol
 {
+private:
+    friend class Binder;
 
+    NamedTypeSymbol(const SyntaxTree* tree,
+                    const Scope* outerScope,
+                    const Symbol* containingSym,
+                    TypeKind tyKind);
 };
 
 } // C

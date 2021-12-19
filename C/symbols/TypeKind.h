@@ -38,7 +38,11 @@ namespace C {
  */
 enum class TypeKind : std::uint8_t
 {
-
+    Array,
+    Enum,
+    Pointer,
+    Struct,
+    Union,
 };
 
 } // C

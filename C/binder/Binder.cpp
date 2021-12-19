@@ -78,9 +78,15 @@ LinkUnitSymbol* Binder::newSymbol<LinkUnitSymbol>()
 }
 
 template <class ScopeT>
-void Binder::openScope()
+void Binder::openScopeInSymbol()
 {
     auto scope = syms_.top()->newScope<ScopeT>();
+    scopes_.push(scope);
+}
+
+void Binder::openScopeInScope()
+{
+    auto scope = scopes_.top()->newBlock();
     scopes_.push(scope);
 }
 
@@ -92,11 +98,10 @@ void Binder::closeScope()
 //--------------//
 // Declarations //
 //--------------//
-
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     newSymbol<LinkUnitSymbol>();
-    openScope<FileScope>();
+    openScopeInSymbol<FileScope>();
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
@@ -147,9 +152,40 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
     return Action::Skip;
 }
 
-/* Declarators */
+SyntaxVisitor::Action Binder::common_visitTypeDeclaration(const TypeDeclarationSyntax* node)
+{
+    return Action::Skip;
+}
 
+SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
+{
+    return common_visitTypeDeclaration(node);
+}
+
+SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
+{
+    return common_visitTypeDeclaration(node);
+}
+
+/* Declarators */
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
+    syms_.top()->givePlainName(node->identifierToken().valueText_c_str());
+
+    return Action::Skip;
+}
+
+//------------//
+// Statements //
+//------------//
+SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
+{
+    openScopeInScope();
+
+    for (auto stmtIt = node->statements(); stmtIt; stmtIt = stmtIt->next)
+        visit(stmtIt->value);
+
+    closeScope();
+
     return Action::Skip;
 }

@@ -108,6 +108,7 @@ public:
     /**
      * The value of \c this SyntaxToken represented as text, by an \c std::string.
      *
+     * \sa valueText_c_str
      */
     std::string valueText() const;
 

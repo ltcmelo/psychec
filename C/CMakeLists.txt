@@ -106,6 +106,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/symbols/SymbolKind.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Field.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Field.h
@@ -115,6 +116,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_LinkUnit.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
@@ -129,8 +132,12 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/SymbolNames.h
     ${PROJECT_SOURCE_DIR}/symbols/SpecialType.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Named.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Named.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.h
 
     # Binder
     ${PROJECT_SOURCE_DIR}/binder/Binder.h

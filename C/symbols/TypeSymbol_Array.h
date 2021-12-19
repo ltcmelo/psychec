@@ -18,32 +18,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "SymbolName_Plain.h"
+#ifndef PSYCHE_C_SYMBOL_ARRAY_TYPE_H__
+#define PSYCHE_C_SYMBOL_ARRAY_TYPE_H__
 
-using namespace psy;
-using namespace C;
-
-PlainSymbolName::PlainSymbolName(std::string s)
-    : s_(s)
-{}
+#include "Symbol_Type.h"
 
 namespace psy {
 namespace C {
 
-std::string to_string(PlainSymbolName name)
+class PSY_C_API ArrayTypeSymbol : public TypeSymbol
 {
-    return name.s_;
-}
+private:
+    friend class Binder;
 
-bool operator==(PlainSymbolName a, PlainSymbolName b)
-{
-    return a.s_ == b.s_;
-}
-
-bool operator!=(PlainSymbolName a, PlainSymbolName b)
-{
-    return !(a == b);
-}
+    ArrayTypeSymbol(const SyntaxTree* tree,
+                    const Scope* outerScope,
+                    const Symbol* containingSym);
+};
 
 } // C
 } // psy
+
+#endif

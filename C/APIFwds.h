@@ -197,21 +197,18 @@ typedef SyntaxNodeSeparatedList<ExtGNU_AsmOperandSyntax*> ExtGNU_AsmOperandListS
 
 /* Symbols */
 class Symbol;
-class FunctionSymbol;
-class FieldSymbol;
 class LinkUnitSymbol;
+class FunctionSymbol;
+
+/* Symbols (values) */
+class FieldSymbol;
 class VariableSymbol;
 class ParameterSymbol;
+
+/* Symbols (types) */
 class TypeSymbol;
-class UndefinedType;
-class VoidType;
-class IntegerType;
-class FloatType;
-class PointerType;
-class ArrayType;
-class NamedType;
-class QuantifiedType;
-class TypeVisitor;
+class NamedTypeSymbol;
+class PointerTypeSymbol;
 
 class SymbolVisitor;
 template <class PtrT> class SymbolList;

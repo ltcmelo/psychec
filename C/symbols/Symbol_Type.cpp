@@ -18,32 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "SymbolName_Plain.h"
+#include "Symbol_Type.h"
+#include "Symbol__IMPL__.inc"
 
 using namespace psy;
 using namespace C;
 
-PlainSymbolName::PlainSymbolName(std::string s)
-    : s_(s)
+struct TypeSymbol::TypeSymbolImpl : SymbolImpl
+{
+
+};
+
+TypeSymbol::TypeSymbol(const SyntaxTree* tree,
+                       const Scope* outerScope,
+                       const Symbol* containingSym,
+                       SymbolKind symKind,
+                       TypeKind tyKind)
+    : Symbol(tree,
+             outerScope,
+             containingSym,
+             symKind)
 {}
 
-namespace psy {
-namespace C {
-
-std::string to_string(PlainSymbolName name)
-{
-    return name.s_;
-}
-
-bool operator==(PlainSymbolName a, PlainSymbolName b)
-{
-    return a.s_ == b.s_;
-}
-
-bool operator!=(PlainSymbolName a, PlainSymbolName b)
-{
-    return !(a == b);
-}
-
-} // C
-} // psy
+TypeSymbol::~TypeSymbol()
+{}

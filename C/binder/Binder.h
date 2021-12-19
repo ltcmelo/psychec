@@ -61,7 +61,8 @@ private:
     template <class SymbolT> SymbolT* newSymbol_COMMON(std::unique_ptr<SymbolT>);
     template <class SymbolT> SymbolT* newSymbol();
 
-    template <class ScopeT> void openScope();
+    template <class ScopeT> void openScopeInSymbol();
+    void openScopeInScope();
     void closeScope();
 
     struct DiagnosticsReporter
@@ -85,10 +86,18 @@ private:
     //--------------//
     virtual Action visitTranslationUnit(const TranslationUnitSyntax* node) override;
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node) override;
+    SyntaxVisitor::Action common_visitTypeDeclaration(const TypeDeclarationSyntax* node);
+    virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node) override;
+    virtual Action visitEnumDeclaration(const EnumDeclarationSyntax* node) override;
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) override;
 
     /* Declarators */
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
+
+    //------------//
+    // Statements //
+    //------------//
+    virtual Action visitCompoundStatement(const CompoundStatementSyntax* node) override;
 };
 
 } // C

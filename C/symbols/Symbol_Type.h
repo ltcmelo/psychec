@@ -18,32 +18,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "SymbolName_Plain.h"
+#ifndef PSYCHE_C_TYPE_SYMBOL_H__
+#define PSYCHE_C_TYPE_SYMBOL_H__
 
-using namespace psy;
-using namespace C;
+#include "API.h"
+#include "APIFwds.h"
+#include "TypeKind.h"
+#include "Symbol.h"
 
-PlainSymbolName::PlainSymbolName(std::string s)
-    : s_(s)
-{}
+#include <memory>
 
 namespace psy {
 namespace C {
 
-std::string to_string(PlainSymbolName name)
+/**
+ * \brief The TypeSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.ITypeSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
+class PSY_C_API TypeSymbol : public Symbol
 {
-    return name.s_;
-}
+public:
+    virtual ~TypeSymbol();
 
-bool operator==(PlainSymbolName a, PlainSymbolName b)
-{
-    return a.s_ == b.s_;
-}
+protected:
+    DECL_PIMPL(TypeSymbol);
 
-bool operator!=(PlainSymbolName a, PlainSymbolName b)
-{
-    return !(a == b);
-}
+    TypeSymbol(const SyntaxTree* tree,
+               const Scope* outerScope,
+               const Symbol* containingSym,
+               SymbolKind symKind,
+               TypeKind tyKind);
+};
 
 } // C
 } // psy
+
+#endif

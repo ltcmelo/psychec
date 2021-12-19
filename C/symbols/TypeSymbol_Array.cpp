@@ -18,32 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "SymbolName_Plain.h"
+#include "TypeSymbol_Array.h"
 
 using namespace psy;
 using namespace C;
 
-PlainSymbolName::PlainSymbolName(std::string s)
-    : s_(s)
+ArrayTypeSymbol::ArrayTypeSymbol(const SyntaxTree* tree,
+                                 const Scope* scope,
+                                 const Symbol* containingSym)
+    : TypeSymbol(tree,
+                 scope,
+                 containingSym,
+                 SymbolKind::ArrayType,
+                 TypeKind::Array)
 {}
-
-namespace psy {
-namespace C {
-
-std::string to_string(PlainSymbolName name)
-{
-    return name.s_;
-}
-
-bool operator==(PlainSymbolName a, PlainSymbolName b)
-{
-    return a.s_ == b.s_;
-}
-
-bool operator!=(PlainSymbolName a, PlainSymbolName b)
-{
-    return !(a == b);
-}
-
-} // C
-} // psy
