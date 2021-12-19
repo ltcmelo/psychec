@@ -491,34 +491,34 @@ public:
 };
 
 /**
- * \brief The TaggedTypeSpecifierSyntax class.
+ * \brief The TagTypeSpecifierSyntax class.
  *
  * \remark 6.7.2.1, 6.7.2.2, and 6.7.2.3
  */
-class PSY_C_API TaggedTypeSpecifierSyntax final : public SpecifierSyntax
+class PSY_C_API TagTypeSpecifierSyntax final : public SpecifierSyntax
 {
-    AST_NODE_NK(TaggedTypeSpecifier, Specifier)
+    AST_NODE_NK(TagTypeSpecifier, Specifier)
 
 public:
-    SyntaxToken taggedKeyword() const { return tokenAtIndex(taggedKwTkIdx_); }
+    SyntaxToken keyword() const { return tokenAtIndex(kwTkIdx_); }
     const SpecifierListSyntax* attributes() const { return attrs1_; }
-    SyntaxToken identifierToken() const { return tokenAtIndex(identTkIdx_); }
+    SyntaxToken tagToken() const { return tokenAtIndex(tagTkIdx_); }
     SyntaxToken openBraceToken() const { return tokenAtIndex(openBraceTkIdx_); }
     const DeclarationListSyntax* declarations() const { return decls_; }
     SyntaxToken closeBraceToken() const { return tokenAtIndex(closeBraceTkIdx_); }
     const SpecifierListSyntax* attributes_PostCloseBrace() const { return attrs2_; }
 
 private:
-    LexedTokens::IndexType taggedKwTkIdx_ = LexedTokens::invalidIndex();
+    LexedTokens::IndexType kwTkIdx_ = LexedTokens::invalidIndex();
     SpecifierListSyntax* attrs1_ = nullptr;
-    LexedTokens::IndexType identTkIdx_ = LexedTokens::invalidIndex();
+    LexedTokens::IndexType tagTkIdx_ = LexedTokens::invalidIndex();
     LexedTokens::IndexType openBraceTkIdx_ = LexedTokens::invalidIndex();
     DeclarationListSyntax* decls_ = nullptr;
     LexedTokens::IndexType closeBraceTkIdx_ = LexedTokens::invalidIndex();;
     SpecifierListSyntax* attrs2_ = nullptr;
-    AST_CHILD_LST7(taggedKwTkIdx_,
+    AST_CHILD_LST7(kwTkIdx_,
                    attrs1_,
-                   identTkIdx_,
+                   tagTkIdx_,
                    openBraceTkIdx_,
                    decls_,
                    closeBraceTkIdx_,

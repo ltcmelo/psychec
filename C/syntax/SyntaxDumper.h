@@ -201,12 +201,12 @@ protected:
         return visitTrivialSpecifier_Common(node);
     }
 
-    virtual Action visitTaggedTypeSpecifier(const TaggedTypeSpecifierSyntax* node) override
+    virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node) override
     {
-        terminal(node->taggedKeyword(), node);
+        terminal(node->keyword(), node);
         for (auto iter = node->attributes(); iter; iter = iter->next)
             nonterminal(iter->value);
-        terminal(node->identifierToken(), node);
+        terminal(node->tagToken(), node);
         terminal(node->openBraceToken(), node);
         for (auto iter = node->declarations(); iter; iter = iter->next)
             nonterminal(iter->value);

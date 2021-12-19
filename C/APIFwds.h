@@ -78,7 +78,7 @@ class SpecifierSyntax;
 class TrivialSpecifierSyntax;
 class StorageClassSyntax;
 class BuiltinTypeSpecifierSyntax;
-class TaggedTypeSpecifierSyntax;
+class TagTypeSpecifierSyntax;
 class TypeDeclarationAsSpecifierSyntax;
 class AtomicTypeSpecifierSyntax;
 class TypeQualifierSyntax;

@@ -157,8 +157,8 @@ public:
     virtual const StorageClassSyntax* asStorageClass() const { return nullptr; }
     virtual BuiltinTypeSpecifierSyntax* asBuiltinTypeSpecifier() { return nullptr; }
     virtual const BuiltinTypeSpecifierSyntax* asBuiltinTypeSpecifier() const { return nullptr; }
-    virtual TaggedTypeSpecifierSyntax* asTaggedTypeSpecifier() { return nullptr; }
-    virtual const TaggedTypeSpecifierSyntax* asTaggedTypeSpecifier() const { return nullptr; }
+    virtual TagTypeSpecifierSyntax* asTagTypeSpecifier() { return nullptr; }
+    virtual const TagTypeSpecifierSyntax* asTagTypeSpecifier() const { return nullptr; }
     virtual TypeDeclarationAsSpecifierSyntax* asTypeDeclarationAsSpecifier() { return nullptr; }
     virtual AtomicTypeSpecifierSyntax* asAtomicTypeSpecifier() { return nullptr; }
     virtual const AtomicTypeSpecifierSyntax* asAtomicTypeSpecifier() const { return nullptr; }

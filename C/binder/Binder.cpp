@@ -188,10 +188,10 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitTaggedTypeSpecifier(const TaggedTypeSpecifierSyntax* node)
+SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
     TypeKind tyKind;
-    switch (node->taggedKeyword().kind()) {
+    switch (node->keyword().kind()) {
         case Keyword_struct:
             tyKind = TypeKind::Struct;
             break;
@@ -211,7 +211,7 @@ SyntaxVisitor::Action Binder::visitTaggedTypeSpecifier(const TaggedTypeSpecifier
 
     std::unique_ptr<SymbolName> symName(
                 new TagSymbolName(to_string(tyKind),
-                                  node->identifierToken().valueText_c_str()));
+                                  node->tagToken().valueText_c_str()));
     newSymbol_NamedType(std::move(symName), tyKind);
 
     std::cout << to_string(*syms_.top()) << std::endl;

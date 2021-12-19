@@ -96,7 +96,7 @@ private:
 
     /* Specifiers */
     virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node) override;
-    virtual Action visitTaggedTypeSpecifier(const TaggedTypeSpecifierSyntax* node) override;
+    virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node) override;
     virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node) override;
     virtual Action visitTypedefName(const TypedefNameSyntax* node) override;
 

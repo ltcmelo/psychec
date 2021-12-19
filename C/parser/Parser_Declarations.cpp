@@ -206,7 +206,7 @@ bool Parser::parseDeclaration(
             specList = makeNode<SpecifierListSyntax>(tyDeclSpec);
         else {
             for (auto iter = specList; iter; iter = iter->next) {
-                if (iter->value->asTaggedTypeSpecifier()
+                if (iter->value->asTagTypeSpecifier()
                         && iter->value == tyDeclSpec->typeDecl_->typeSpec_) {
                     iter->value = tyDeclSpec;
                     break;
@@ -894,7 +894,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
             // declaration-specifiers -> type-specifier ->* `struct'
             case Keyword_struct:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
+                if (!parseTagTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
                             StructDeclaration,
@@ -906,7 +906,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
             // declaration-specifiers -> type-specifier ->* `union'
             case Keyword_union:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
+                if (!parseTagTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
                             UnionDeclaration,
@@ -918,7 +918,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
             // declaration-specifiers -> type-specifier -> enum-specifier
             case Keyword_enum:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier_AtFirst<EnumDeclarationSyntax>(
+                if (!parseTagTypeSpecifier_AtFirst<EnumDeclarationSyntax>(
                             decl,
                             spec,
                             EnumDeclaration,
@@ -1057,7 +1057,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             // declaration-specifiers -> type-specifier ->* `struct'
             case Keyword_struct:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
+                if (!parseTagTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
                             StructDeclaration,
@@ -1069,7 +1069,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             // declaration-specifiers -> type-specifier ->* `union'
             case Keyword_union:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
+                if (!parseTagTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
                             UnionDeclaration,
@@ -1081,7 +1081,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             // declaration-specifiers -> type-specifier -> enum-specifier
             case Keyword_enum:
                 seenType = true;
-                if (!parseTaggedTypeSpecifier_AtFirst<EnumDeclarationSyntax>(
+                if (!parseTagTypeSpecifier_AtFirst<EnumDeclarationSyntax>(
                             decl,
                             spec,
                             EnumDeclaration,
@@ -1276,7 +1276,7 @@ bool Parser::parseAtomiceTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
  * \remark 6.7.2.1
  */
 template <class TypeDeclT>
-bool Parser::parseTaggedTypeSpecifier_AtFirst(
+bool Parser::parseTagTypeSpecifier_AtFirst(
         DeclarationSyntax*& decl,
         SpecifierSyntax*& spec,
         SyntaxKind declK,
@@ -1290,9 +1290,9 @@ bool Parser::parseTaggedTypeSpecifier_AtFirst(
                   return false,
                   "assert failure: `struct', `union', or `enum'");
 
-    auto tySpec = makeNode<TaggedTypeSpecifierSyntax>(specK);
+    auto tySpec = makeNode<TagTypeSpecifierSyntax>(specK);
     spec = tySpec;
-    tySpec->taggedKwTkIdx_ = consume();
+    tySpec->kwTkIdx_ = consume();
 
     if (peek().kind() == Keyword_ExtGNU___attribute__)
         parseExtGNU_AttributeSpecifierList_AtFirst(tySpec->attrs1_);
@@ -1303,7 +1303,7 @@ bool Parser::parseTaggedTypeSpecifier_AtFirst(
             break;
 
         case IdentifierToken:
-            tySpec->identTkIdx_ = consume();
+            tySpec->tagTkIdx_ = consume();
             if (peek().kind() != OpenBraceToken)
                 return true;
             tySpec->openBraceTkIdx_ = consume();
