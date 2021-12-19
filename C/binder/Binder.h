@@ -62,7 +62,7 @@ private:
 
     template <class SymbolT> SymbolT* newSymbol_COMMON(std::unique_ptr<SymbolT>);
     template <class SymbolT> SymbolT* newSymbol();
-    NamedTypeSymbol* newSymbol_NamedType(SymbolName name, TypeKind);
+    NamedTypeSymbol* newSymbol_NamedType(std::unique_ptr<SymbolName>, TypeKind);
 
     template <class ScopeT> void openScopeInSymbol();
     void openScopeInScope();

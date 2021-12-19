@@ -71,13 +71,14 @@ template FunctionSymbol* Binder::newSymbol<FunctionSymbol>();
 template ParameterSymbol* Binder::newSymbol<ParameterSymbol>();
 template VariableSymbol* Binder::newSymbol<VariableSymbol>();
 
-NamedTypeSymbol* Binder::newSymbol_NamedType(SymbolName name, TypeKind tyKind)
+NamedTypeSymbol* Binder::newSymbol_NamedType(std::unique_ptr<SymbolName> symName,
+                                             TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> sym(
                 new NamedTypeSymbol(tree_,
                                     scopes_.top(),
                                     syms_.top(),
-                                    std::move(name),
+                                    std::move(symName),
                                     tyKind));
     return newSymbol_COMMON(std::move(sym));
 }
@@ -208,7 +209,11 @@ SyntaxVisitor::Action Binder::visitTaggedTypeSpecifier(const TaggedTypeSpecifier
             return Action::Quit;
     }
 
-    //newSymbol_NamedType(tyKind);
+    std::unique_ptr<SymbolName> symName(
+                new TagSymbolName(to_string(tyKind),
+                                  node->identifierToken().valueText_c_str()));
+    newSymbol_NamedType(std::move(symName), tyKind);
+
     std::cout << to_string(*syms_.top()) << std::endl;
 
     return Action::Skip;

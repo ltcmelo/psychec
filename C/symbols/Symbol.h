@@ -115,6 +115,7 @@ private:
 
     template <class ScopeT> ScopeT* newScope();
 
+protected:
     void giveName(std::unique_ptr<SymbolName> name);
 };
 

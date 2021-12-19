@@ -26,6 +26,29 @@
 namespace psy {
 namespace C {
 
+/**
+ * \brief The TagSymbolName class.
+ */
+class PSY_C_API TagSymbolName : public SymbolName
+{
+public:
+    virtual TagSymbolName* asTagSymbolName() { return this; }
+    virtual const TagSymbolName* asTagSymbolName() const { return this; }
+
+private:
+    friend class Binder;
+
+    TagSymbolName(std::string kw, std::string tag);
+
+    std::string kw_;
+    std::string tag_;
+
+    friend std::string to_string(const TagSymbolName& name);
+    friend bool operator==(const TagSymbolName& a, const TagSymbolName& b);
+};
+
+bool operator!=(const TagSymbolName& a, const TagSymbolName& b);
+
 } // C
 } // psy
 

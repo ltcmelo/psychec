@@ -54,6 +54,9 @@ std::string to_string(const SymbolName& name)
         case SymbolName::Kind::Plain:
             return to_string(static_cast<const PlainSymbolName&>(name));
 
+        case SymbolName::Kind::Tag:
+            return to_string(static_cast<const TagSymbolName&>(name));
+
         default:
             PSYCHE_FAIL(return "", "unknown symbol name");
             return "";
