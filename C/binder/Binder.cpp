@@ -152,6 +152,21 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
     return Action::Skip;
 }
 
+SyntaxVisitor::Action Binder::common_visitTypeDeclaration(const TypeDeclarationSyntax* node)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
+{
+    return common_visitTypeDeclaration(node);
+}
+
+SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
+{
+    return common_visitTypeDeclaration(node);
+}
+
 /* Declarators */
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {

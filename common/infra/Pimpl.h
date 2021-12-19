@@ -36,16 +36,6 @@
 #define DECL_PIMPL_BASE(CLASS) \
     CLASS(CLASS##Impl*);
 
-#define DECL_PIMPL_CSyntax(CLASS) \
-    struct CLASS##Impl; \
-    CLASS##Impl* implCast() const; \
-
-#define DEF_PIMPL_CSyntax(CLASS) \
-    CLASS::CLASS##Impl* CLASS::implCast() const \
-    { \
-        return static_cast<CLASS##Impl*>(impl_.get()); \
-    }
-
 #define DECL_SHARED_DATA(CLASS) \
     struct CLASS##Impl; \
     std::shared_ptr<CLASS##Impl> impl_;

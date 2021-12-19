@@ -86,6 +86,9 @@ private:
     //--------------//
     virtual Action visitTranslationUnit(const TranslationUnitSyntax* node) override;
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node) override;
+    SyntaxVisitor::Action common_visitTypeDeclaration(const TypeDeclarationSyntax* node);
+    virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node) override;
+    virtual Action visitEnumDeclaration(const EnumDeclarationSyntax* node) override;
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) override;
 
     /* Declarators */

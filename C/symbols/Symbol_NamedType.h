@@ -18,7 +18,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeSymbol.h"
+#ifndef PSYCHE_C_SYMBOL_NAMED_TYPE_H__
+#define PSYCHE_C_SYMBOL_NAMED_TYPE_H__
 
-using namespace psy;
-using namespace C;
+#include "Symbol_Type.h"
+
+namespace psy {
+namespace C {
+
+class PSY_C_API NamedTypeSymbol : public TypeSymbol
+{
+private:
+    friend class Binder;
+
+    NamedTypeSymbol(const SyntaxTree* tree,
+                    const Scope* outerScope,
+                    const Symbol* containingSym,
+                    TypeKind tyKind);
+};
+
+} // C
+} // psy
+
+#endif

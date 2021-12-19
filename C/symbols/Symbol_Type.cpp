@@ -18,34 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_KIND_H__
-#define PSYCHE_C_TYPE_KIND_H__
+#include "Symbol_Type.h"
+#include "Symbol__IMPL__.inc"
 
-#include "API.h"
-#include "APIFwds.h"
+using namespace psy;
+using namespace C;
 
-#include <cstdint>
-
-namespace psy {
-namespace C {
-
-/**
- * \brief The TypeKind enum.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.TypeKind
- * from Roslyn, the .NET Compiler Platform.
- */
-enum class TypeKind : std::uint8_t
+struct TypeSymbol::TypeSymbolImpl : SymbolImpl
 {
-    Array,
-    Enum,
-    Pointer,
-    Struct,
-    Union,
+
 };
 
-} // C
-} // psy
+TypeSymbol::TypeSymbol(const SyntaxTree* tree,
+                       const Scope* outerScope,
+                       const Symbol* containingSym,
+                       SymbolKind symKind,
+                       TypeKind tyKind)
+    : Symbol(tree,
+             outerScope,
+             containingSym,
+             symKind)
+{}
 
-#endif
+TypeSymbol::~TypeSymbol()
+{}

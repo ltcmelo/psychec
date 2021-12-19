@@ -32,6 +32,7 @@
 #include "../common/location/Location.h"
 #include "../common/infra/Pimpl.h"
 
+#include <memory>
 #include <vector>
 
 namespace psy {
@@ -109,6 +110,7 @@ public:
 private:
     DECL_PIMPL(Symbol);
 
+    friend class TypeSymbol;
     friend class Binder;
 
     template <class ScopeT> ScopeT* newScope();
