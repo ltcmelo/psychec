@@ -28,6 +28,7 @@
 #include "../common/infra/PsycheAssert.h"
 
 #include <algorithm>
+#include <sstream>
 
 Symbol::Symbol(const SyntaxTree* tree,
                const Scope* scope,
@@ -108,3 +109,19 @@ void Symbol::givePlainName(std::string s)
 {
     P->name_ = PlainSymbolName(s);
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const Symbol& sym)
+{
+    std::ostringstream oss;
+    oss << "Symbol ";
+    oss << to_string(sym.name()) << ' ';
+    oss << to_string(sym.kind()) << ' ';
+
+    return oss.str();
+}
+
+} // C
+} // psy

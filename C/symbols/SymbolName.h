@@ -25,6 +25,7 @@
 #include "APIFwds.h"
 
 #include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
@@ -65,6 +66,10 @@ public:
 private:
     friend class Symbol;
 };
+
+std::string to_string(const SymbolName& name);
+bool operator==(const SymbolName& a, const SymbolName& b);
+bool operator!=(const SymbolName& a, const SymbolName& b);
 
 } // C
 } // psy

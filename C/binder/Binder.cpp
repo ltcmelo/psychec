@@ -70,6 +70,16 @@ template FunctionSymbol* Binder::newSymbol<FunctionSymbol>();
 template ParameterSymbol* Binder::newSymbol<ParameterSymbol>();
 template VariableSymbol* Binder::newSymbol<VariableSymbol>();
 
+NamedTypeSymbol* Binder::newSymbol_NamedType(TypeKind tyKind)
+{
+    std::unique_ptr<NamedTypeSymbol> sym(
+                new NamedTypeSymbol(tree_,
+                                    scopes_.top(),
+                                    syms_.top(),
+                                    tyKind));
+    return newSymbol_COMMON(std::move(sym));
+}
+
 template <>
 LinkUnitSymbol* Binder::newSymbol<LinkUnitSymbol>()
 {
@@ -152,19 +162,64 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::common_visitTypeDeclaration(const TypeDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitTypeDeclaration_COMMON(const TypeDeclarationSyntax* node)
 {
+    visit(node->typeSpecifier());
+
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
 {
-    return common_visitTypeDeclaration(node);
+    return visitTypeDeclaration_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
-    return common_visitTypeDeclaration(node);
+    return visitTypeDeclaration_COMMON(node);
+}
+
+/* Specifiers */
+SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitTaggedTypeSpecifier(const TaggedTypeSpecifierSyntax* node)
+{
+    TypeKind tyKind;
+    switch (node->taggedKeyword().kind()) {
+        case Keyword_struct:
+            tyKind = TypeKind::Struct;
+            break;
+
+        case Keyword_union:
+            tyKind = TypeKind::Union;
+            break;
+
+        case Keyword_enum:
+            tyKind = TypeKind::Enum;
+            break;
+
+        default:
+            PSYCHE_FAIL(return Action::Quit, "unknown keyword");
+            return Action::Quit;
+    }
+
+    newSymbol_NamedType(tyKind);
+    std::cout << to_string(*syms_.top()) << std::endl;
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
+{
+    return Action::Skip;
 }
 
 /* Declarators */

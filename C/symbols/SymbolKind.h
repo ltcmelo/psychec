@@ -25,6 +25,7 @@
 #include "APIFwds.h"
 
 #include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
@@ -51,6 +52,36 @@ enum class SymbolKind : std::uint8_t
     NamedType,
     PointerType,
 };
+
+inline std::string PSY_C_API to_string(SymbolKind symKind)
+{
+    switch (symKind) {
+        case SymbolKind::LinkUnit:
+            return "LinkUnit";
+
+        case SymbolKind::Function:
+            return "Function";
+
+        /* Values */
+        case SymbolKind::Field:
+            return "Field";
+        case SymbolKind::Parameter:
+            return "Parameter";
+        case SymbolKind::Variable:
+            return "Variable";
+
+        /* Types */
+        case SymbolKind::ArrayType:
+            return "ArrayType";
+        case SymbolKind::NamedType:
+            return "NamedType";
+        case SymbolKind::PointerType:
+            return "PointerType";
+
+        default:
+            return "not implemented";
+    }
+}
 
 } // C
 } // psy

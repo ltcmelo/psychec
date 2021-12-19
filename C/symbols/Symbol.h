@@ -118,6 +118,8 @@ private:
     void givePlainName(std::string s);
 };
 
+std::string PSY_C_API to_string(const Symbol& sym);
+
 } // C
 } // psy
 

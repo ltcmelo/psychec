@@ -32,8 +32,8 @@ private:
     friend class Binder;
 
     PointerTypeSymbol(const SyntaxTree* tree,
-                     const Scope* outerScope,
-                     const Symbol* containingSym);
+                      const Scope* outerScope,
+                      const Symbol* containingSym);
 };
 
 } // C

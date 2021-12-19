@@ -25,6 +25,7 @@
 #include "APIFwds.h"
 
 #include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
@@ -44,6 +45,24 @@ enum class TypeKind : std::uint8_t
     Struct,
     Union,
 };
+
+inline std::string PSY_C_API to_string(TypeKind tyKind)
+{
+    switch (tyKind) {
+        case TypeKind::Array:
+            return "Array";
+        case TypeKind::Enum:
+            return "Enum";
+        case TypeKind::Pointer:
+            return "Pointer";
+        case TypeKind::Struct:
+            return "Struct";
+        case TypeKind::Union:
+            return "Union";
+        default:
+            return "not implemented";
+    }
+}
 
 } // C
 } // psy

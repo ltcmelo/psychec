@@ -40,11 +40,11 @@ private:
 
     std::string s_;
 
-    friend std::string to_string(PlainSymbolName name);
-    friend bool operator==(PlainSymbolName a, PlainSymbolName b);
+    friend std::string to_string(const PlainSymbolName& name);
+    friend bool operator==(const PlainSymbolName& a, const PlainSymbolName& b);
 };
 
-bool operator!=(PlainSymbolName a, PlainSymbolName b);
+bool operator!=(const PlainSymbolName& a, const PlainSymbolName& b);
 
 } // C
 } // psy
