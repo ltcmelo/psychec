@@ -26,5 +26,8 @@
 #include "Symbol_LinkUnit.h"
 #include "Symbol_Parameter.h"
 #include "Symbol_Variable.h"
+#include "TypeSymbol_Array.h"
+#include "TypeSymbol_Named.h"
+#include "TypeSymbol_Pointer.h"
 
 #endif

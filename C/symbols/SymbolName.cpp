@@ -20,6 +20,8 @@
 
 #include "SymbolName.h"
 
+#include "SymbolNames.h"
+
 #include "common/infra/PsycheAssert.h"
 
 using namespace psy;
@@ -42,3 +44,35 @@ SymbolName::Kind SymbolName::kind() const
 
     PSYCHE_ASSERT(false, return Kind::Plain, "");
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const SymbolName& name)
+{
+    switch (name.kind()) {
+        case SymbolName::Kind::Plain:
+            return to_string(static_cast<const PlainSymbolName&>(name));
+
+        case SymbolName::Kind::Tag:
+            return to_string(static_cast<const TagSymbolName&>(name));
+
+        default:
+            PSYCHE_FAIL(return "", "unknown symbol name");
+            return "";
+    }
+}
+
+bool operator==(const SymbolName& a, const SymbolName& b)
+{
+    // TODO
+    return false;
+}
+
+bool operator!=(const SymbolName& a, const SymbolName& b)
+{
+    return !(a == b);
+}
+
+} // C
+} // psy

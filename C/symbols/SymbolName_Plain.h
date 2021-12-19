@@ -33,18 +33,22 @@ namespace C {
  */
 class PSY_C_API PlainSymbolName : public SymbolName
 {
+public:
+    virtual PlainSymbolName* asPlainSymbolName() { return this; }
+    virtual const PlainSymbolName* asPlainSymbolName() const { return this; }
+
 private:
-    friend class Symbol;
+    friend class Binder;
 
     PlainSymbolName(std::string s);
 
     std::string s_;
 
-    friend std::string to_string(PlainSymbolName name);
-    friend bool operator==(PlainSymbolName a, PlainSymbolName b);
+    friend std::string to_string(const PlainSymbolName& name);
+    friend bool operator==(const PlainSymbolName& a, const PlainSymbolName& b);
 };
 
-bool operator!=(PlainSymbolName a, PlainSymbolName b);
+bool operator!=(const PlainSymbolName& a, const PlainSymbolName& b);
 
 } // C
 } // psy

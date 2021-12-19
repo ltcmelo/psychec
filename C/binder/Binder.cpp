@@ -25,6 +25,7 @@
 #include "compilation/SemanticModel.h"
 #include "binder/Scopes.h"
 #include "symbols/Symbols.h"
+#include "symbols/SymbolNames.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
 
@@ -69,6 +70,18 @@ template FieldSymbol* Binder::newSymbol<FieldSymbol>();
 template FunctionSymbol* Binder::newSymbol<FunctionSymbol>();
 template ParameterSymbol* Binder::newSymbol<ParameterSymbol>();
 template VariableSymbol* Binder::newSymbol<VariableSymbol>();
+
+NamedTypeSymbol* Binder::newSymbol_NamedType(std::unique_ptr<SymbolName> symName,
+                                             TypeKind tyKind)
+{
+    std::unique_ptr<NamedTypeSymbol> sym(
+                new NamedTypeSymbol(tree_,
+                                    scopes_.top(),
+                                    syms_.top(),
+                                    std::move(symName),
+                                    tyKind));
+    return newSymbol_COMMON(std::move(sym));
+}
 
 template <>
 LinkUnitSymbol* Binder::newSymbol<LinkUnitSymbol>()
@@ -152,25 +165,76 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::common_visitTypeDeclaration(const TypeDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitTypeDeclaration_COMMON(const TypeDeclarationSyntax* node)
 {
+    visit(node->typeSpecifier());
+
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
 {
-    return common_visitTypeDeclaration(node);
+    return visitTypeDeclaration_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
-    return common_visitTypeDeclaration(node);
+    return visitTypeDeclaration_COMMON(node);
+}
+
+/* Specifiers */
+SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
+{
+    TypeKind tyKind;
+    switch (node->keyword().kind()) {
+        case Keyword_struct:
+            tyKind = TypeKind::Struct;
+            break;
+
+        case Keyword_union:
+            tyKind = TypeKind::Union;
+            break;
+
+        case Keyword_enum:
+            tyKind = TypeKind::Enum;
+            break;
+
+        default:
+            PSYCHE_FAIL(return Action::Quit, "unknown keyword");
+            return Action::Quit;
+    }
+
+    std::unique_ptr<SymbolName> symName(
+                new TagSymbolName(to_string(tyKind),
+                                  node->tagToken().valueText_c_str()));
+    newSymbol_NamedType(std::move(symName), tyKind);
+
+    std::cout << to_string(*syms_.top()) << std::endl;
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
+{
+    return Action::Skip;
 }
 
 /* Declarators */
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    syms_.top()->givePlainName(node->identifierToken().valueText_c_str());
+    std::unique_ptr<SymbolName> symName(
+                new PlainSymbolName(node->identifierToken().valueText_c_str()));
+    syms_.top()->giveName(std::move(symName));
 
     return Action::Skip;
 }

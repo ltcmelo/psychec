@@ -80,7 +80,7 @@ public:
         }
     }
 
-    static bool isTaggedTypeSpecifierToken(SyntaxKind tkK)
+    static bool isTagTypeSpecifierToken(SyntaxKind tkK)
     {
         switch (tkK) {
             case Keyword_struct:

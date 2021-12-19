@@ -28,15 +28,16 @@
 #include "../common/infra/PsycheAssert.h"
 
 #include <algorithm>
+#include <sstream>
 
 Symbol::Symbol(const SyntaxTree* tree,
                const Scope* scope,
                const Symbol* containingSym,
-               SymbolKind kind)
+               SymbolKind symKind)
     : P(new SymbolImpl(tree,
                        scope,
                        containingSym,
-                       kind))
+                       symKind))
 {
 }
 
@@ -68,12 +69,12 @@ std::vector<SyntaxReference> Symbol::declaringSyntaxReferences() const
 
 SymbolKind Symbol::kind() const
 {
-    return P->kind_;
+    return P->symKind_;
 }
 
-SymbolName Symbol::name() const
+const SymbolName* Symbol::name() const
 {
-    return P->name_;
+    return P->symName_.get();
 }
 
 Location Symbol::location() const
@@ -104,7 +105,22 @@ template BlockScope* Symbol::newScope<BlockScope>();
 template FileScope* Symbol::newScope<FileScope>();
 template FunctionScope* Symbol::newScope<FunctionScope>();
 
-void Symbol::givePlainName(std::string s)
+void Symbol::giveName(std::unique_ptr<SymbolName> name)
 {
-    P->name_ = PlainSymbolName(s);
+    P->symName_ = std::move(name);
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const Symbol& sym)
+{
+    std::ostringstream oss;
+    oss << to_string(*sym.name()) << ' ';
+    oss << to_string(sym.kind()) << ' ';
+
+    return oss.str();
+}
+
+} // C
+} // psy

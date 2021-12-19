@@ -51,7 +51,7 @@ protected:
     Symbol(const SyntaxTree* tree,
            const Scope* outerScope,
            const Symbol* containingSym,
-           SymbolKind kind);
+           SymbolKind symKind);
 
 public:
     Symbol(const Symbol&) = delete;
@@ -100,7 +100,7 @@ public:
     /**
      * The SymbolName of \c this Symbol.
      */
-    SymbolName name() const;
+    const SymbolName* name() const;
 
     /**
      * The Location where \c this Symbol is \a defined.
@@ -115,8 +115,11 @@ private:
 
     template <class ScopeT> ScopeT* newScope();
 
-    void givePlainName(std::string s);
+protected:
+    void giveName(std::unique_ptr<SymbolName> name);
 };
+
+std::string PSY_C_API to_string(const Symbol& sym);
 
 } // C
 } // psy

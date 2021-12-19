@@ -23,6 +23,8 @@
 
 #include "Symbol_Type.h"
 
+#include <memory>
+
 namespace psy {
 namespace C {
 
@@ -34,6 +36,7 @@ private:
     NamedTypeSymbol(const SyntaxTree* tree,
                     const Scope* outerScope,
                     const Symbol* containingSym,
+                    std::unique_ptr<SymbolName> symName,
                     TypeKind tyKind);
 };
 

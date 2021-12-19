@@ -26,6 +26,8 @@
 
 #include "common/diagnostics/DiagnosticDescriptor.h"
 #include "parser/LexedTokens.h"
+#include "symbols/SymbolName.h"
+#include "symbols/TypeKind.h"
 #include "syntax/SyntaxVisitor.h"
 
 #include <memory>
@@ -60,6 +62,7 @@ private:
 
     template <class SymbolT> SymbolT* newSymbol_COMMON(std::unique_ptr<SymbolT>);
     template <class SymbolT> SymbolT* newSymbol();
+    NamedTypeSymbol* newSymbol_NamedType(std::unique_ptr<SymbolName>, TypeKind);
 
     template <class ScopeT> void openScopeInSymbol();
     void openScopeInScope();
@@ -86,10 +89,16 @@ private:
     //--------------//
     virtual Action visitTranslationUnit(const TranslationUnitSyntax* node) override;
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node) override;
-    SyntaxVisitor::Action common_visitTypeDeclaration(const TypeDeclarationSyntax* node);
+    SyntaxVisitor::Action visitTypeDeclaration_COMMON(const TypeDeclarationSyntax* node);
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node) override;
     virtual Action visitEnumDeclaration(const EnumDeclarationSyntax* node) override;
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) override;
+
+    /* Specifiers */
+    virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node) override;
+    virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node) override;
+    virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node) override;
+    virtual Action visitTypedefName(const TypedefNameSyntax* node) override;
 
     /* Declarators */
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
