@@ -114,12 +114,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_LinkUnit.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_LinkUnit.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_NamedType.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_NamedType.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_PointerType.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_PointerType.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.cpp
@@ -136,6 +132,12 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/SymbolNames.h
     ${PROJECT_SOURCE_DIR}/symbols/SpecialType.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Named.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Named.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.h
 
     # Binder
     ${PROJECT_SOURCE_DIR}/binder/Binder.h
