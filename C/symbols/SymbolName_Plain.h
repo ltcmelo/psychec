@@ -34,7 +34,7 @@ namespace C {
 class PSY_C_API PlainSymbolName : public SymbolName
 {
 private:
-    friend class Symbol;
+    friend class Binder;
 
     PlainSymbolName(std::string s);
 

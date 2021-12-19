@@ -26,6 +26,7 @@
 
 #include "common/diagnostics/DiagnosticDescriptor.h"
 #include "parser/LexedTokens.h"
+#include "symbols/SymbolName.h"
 #include "symbols/TypeKind.h"
 #include "syntax/SyntaxVisitor.h"
 
@@ -61,7 +62,7 @@ private:
 
     template <class SymbolT> SymbolT* newSymbol_COMMON(std::unique_ptr<SymbolT>);
     template <class SymbolT> SymbolT* newSymbol();
-    NamedTypeSymbol* newSymbol_NamedType(TypeKind);
+    NamedTypeSymbol* newSymbol_NamedType(SymbolName name, TypeKind);
 
     template <class ScopeT> void openScopeInSymbol();
     void openScopeInScope();

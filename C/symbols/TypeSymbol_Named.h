@@ -34,6 +34,7 @@ private:
     NamedTypeSymbol(const SyntaxTree* tree,
                     const Scope* outerScope,
                     const Symbol* containingSym,
+                    SymbolName symName,
                     TypeKind tyKind);
 };
 

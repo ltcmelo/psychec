@@ -26,7 +26,16 @@ using namespace C;
 
 struct TypeSymbol::TypeSymbolImpl : SymbolImpl
 {
+    TypeSymbolImpl(const SyntaxTree* tree,
+                   const Scope* outerScope,
+                   const Symbol* containingSym,
+                   SymbolKind symKind,
+                   TypeKind tyKind)
+        : SymbolImpl(tree, outerScope, containingSym, symKind)
+        , tyKind_(tyKind)
+    {}
 
+    TypeKind tyKind_;
 };
 
 TypeSymbol::TypeSymbol(const SyntaxTree* tree,

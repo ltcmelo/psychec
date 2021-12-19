@@ -25,6 +25,7 @@
 #include "compilation/SemanticModel.h"
 #include "binder/Scopes.h"
 #include "symbols/Symbols.h"
+#include "symbols/SymbolNames.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
 
@@ -70,12 +71,13 @@ template FunctionSymbol* Binder::newSymbol<FunctionSymbol>();
 template ParameterSymbol* Binder::newSymbol<ParameterSymbol>();
 template VariableSymbol* Binder::newSymbol<VariableSymbol>();
 
-NamedTypeSymbol* Binder::newSymbol_NamedType(TypeKind tyKind)
+NamedTypeSymbol* Binder::newSymbol_NamedType(SymbolName name, TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> sym(
                 new NamedTypeSymbol(tree_,
                                     scopes_.top(),
                                     syms_.top(),
+                                    std::move(name),
                                     tyKind));
     return newSymbol_COMMON(std::move(sym));
 }
@@ -206,7 +208,7 @@ SyntaxVisitor::Action Binder::visitTaggedTypeSpecifier(const TaggedTypeSpecifier
             return Action::Quit;
     }
 
-    newSymbol_NamedType(tyKind);
+    //newSymbol_NamedType(tyKind);
     std::cout << to_string(*syms_.top()) << std::endl;
 
     return Action::Skip;
@@ -225,7 +227,9 @@ SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 /* Declarators */
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    syms_.top()->givePlainName(node->identifierToken().valueText_c_str());
+    std::unique_ptr<SymbolName> symName(
+                new PlainSymbolName(node->identifierToken().valueText_c_str()));
+    syms_.top()->giveName(std::move(symName));
 
     return Action::Skip;
 }
