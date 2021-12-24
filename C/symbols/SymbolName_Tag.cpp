@@ -20,25 +20,38 @@
 
 #include "SymbolName_Tag.h"
 
+#include "../common/infra/PsycheAssert.h"
+
 using namespace psy;
 using namespace C;
 
-TagSymbolName::TagSymbolName(std::string kw, std::string tag)
-    : kw_(std::move(kw))
+TagSymbolName::TagSymbolName(TypeKind tyKind, std::string tag)
+    : tyKind_(tyKind)
     , tag_(std::move(tag))
-{}
+{
+    PSYCHE_ASSERT(tyKind == TypeKind::Struct
+                    || tyKind == TypeKind::Union
+                    || tyKind == TypeKind::Enum,
+                  return,
+                  "unexpected type kind");
+}
+
+TypeKind TagSymbolName::kind() const
+{
+    return tyKind_;
+}
 
 namespace psy {
 namespace C {
 
 std::string to_string(const TagSymbolName& name)
 {
-    return name.kw_ + " " + name.tag_;
+    return to_string(name.tyKind_) + " " + name.tag_;
 }
 
 bool operator==(const TagSymbolName& a, const TagSymbolName& b)
 {
-    return a.kw_ == b.kw_ && a.tag_ == b.tag_;
+    return a.tyKind_ == b.tyKind_ && a.tag_ == b.tag_;
 }
 
 bool operator!=(const TagSymbolName& a, const TagSymbolName& b)

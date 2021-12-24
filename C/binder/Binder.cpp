@@ -210,7 +210,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
     }
 
     std::unique_ptr<SymbolName> symName(
-                new TagSymbolName(to_string(tyKind),
+                new TagSymbolName(tyKind,
                                   node->tagToken().valueText_c_str()));
     newSymbol_NamedType(std::move(symName), tyKind);
 

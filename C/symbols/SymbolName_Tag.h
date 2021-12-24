@@ -22,6 +22,7 @@
 #define PSYCHE_C_SYMBOL_NAME_TAG_H__
 
 #include "SymbolName.h"
+#include "TypeKind.h"
 
 namespace psy {
 namespace C {
@@ -32,15 +33,17 @@ namespace C {
 class PSY_C_API TagSymbolName : public SymbolName
 {
 public:
+    TypeKind kind() const;
+
     virtual TagSymbolName* asTagSymbolName() { return this; }
     virtual const TagSymbolName* asTagSymbolName() const { return this; }
 
 private:
     friend class Binder;
 
-    TagSymbolName(std::string kw, std::string tag);
+    TagSymbolName(TypeKind tyKind, std::string tag);
 
-    std::string kw_;
+    TypeKind tyKind_;
     std::string tag_;
 
     friend std::string to_string(const TagSymbolName& name);
