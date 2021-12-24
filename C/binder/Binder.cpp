@@ -226,6 +226,10 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
+    std::unique_ptr<SymbolName> symName(
+                new PlainSymbolName(node->identifierToken().valueText_c_str()));
+    newSymbol_NamedType(std::move(symName), TypeKind::Typedef);
+
     return Action::Skip;
 }
 

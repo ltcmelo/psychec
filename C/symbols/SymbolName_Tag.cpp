@@ -36,7 +36,7 @@ TagSymbolName::TagSymbolName(TypeKind tyKind, std::string tag)
                   "unexpected type kind");
 }
 
-TypeKind TagSymbolName::kind() const
+TypeKind TagSymbolName::typeKind() const
 {
     return tyKind_;
 }

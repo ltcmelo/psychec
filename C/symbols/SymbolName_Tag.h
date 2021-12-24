@@ -33,7 +33,7 @@ namespace C {
 class PSY_C_API TagSymbolName : public SymbolName
 {
 public:
-    TypeKind kind() const;
+    TypeKind typeKind() const;
 
     virtual TagSymbolName* asTagSymbolName() { return this; }
     virtual const TagSymbolName* asTagSymbolName() const { return this; }
