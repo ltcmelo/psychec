@@ -59,10 +59,11 @@ private:
     SemanticModel* semaModel_;
     std::stack<Scope*> scopes_;
     std::stack<Symbol*> syms_;
+    std::stack<Symbol*> symsTypes_; // The type of a symbol (not a type symbol).
 
-    template <class SymbolT> SymbolT* newSymbol_COMMON(std::unique_ptr<SymbolT>);
-    template <class SymbolT> SymbolT* newSymbol();
-    NamedTypeSymbol* newSymbol_NamedType(std::unique_ptr<SymbolName>, TypeKind);
+    template <class SymT> SymT* newSym_COMMON(std::unique_ptr<SymT>);
+    template <class SymT> SymT* newSym();
+    NamedTypeSymbol* newTySym(std::unique_ptr<SymbolName>, TypeKind);
 
     template <class ScopeT> void openScopeInSymbol();
     void openScopeInScope();

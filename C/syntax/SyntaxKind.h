@@ -185,7 +185,7 @@ enum SyntaxKind : std::uint16_t
     // ----------- //
     // --- C95 --- //
     // ----------- //
-    Keyword_Ext_wchar_t, /* Enabled/disabled this in parse/language options. */
+    Keyword_Ext_wchar_t, /* Enabled/disabled by parse/language options. */
 
     // ----------- //
     // --- C99 --- //
@@ -205,19 +205,19 @@ enum SyntaxKind : std::uint16_t
     Keyword__Thread_local,
 
     /* The types char16_t and char32_t are from <uchar.h>.
-       Enabled/disabled this in parse/language options. */
+       Enabled/disabled by parse/language options. */
     Keyword_Ext_char16_t,
     Keyword_Ext_char32_t,
 
-    /* Enabled/disabled this in parse/language options. */
+    /* Enabled/disabled by parse/language options. */
     Keyword_Ext_false,
     Keyword_Ext_true,
 
-    /* Enabled/disabled this in parse/language options. */
+    /* Enabled/disabled by parse/language options. */
     Keyword_Ext_NULL,
     Keyword_Ext_nullptr,
 
-    /* Enabled/disabled this in parse/language options. */
+    /* Enabled/disabled by parse/language options. */
     StringLiteral_R_Token,
     StringLiteral_LR_Token,
     StringLiteral_u8R_Token,

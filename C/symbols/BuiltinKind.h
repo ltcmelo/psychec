@@ -30,15 +30,57 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The SpecialType enum.
+ * \brief The BuiltinKind enum.
+ *
+ * The unsigned integer types are suffixed with \c _U;
+ * the signed integer types are suffixed with \c _S.
+ * The signed integer types are equivalent to their "plain" versions, except for \c char:
+ * \c char is a separate type from <tt>signed char</tt> and <tt>unsigned char</tt>;
+ * its enumerator is \c Char only (without any suffix).
+ *
+ * \remark 6.2.5-3
+ * \remark 6.2.5-17
+ * \remark 6.2.5-15 (with footnote 45)
+ * \remark 6.7.2-2
  *
  * \note
  * This API is inspired by that of \c Microsoft.CodeAnalysis.SpecialType
  * from Roslyn, the .NET Compiler Platform.
  */
-enum class SpecialType : std::uint8_t
+enum class BuiltinKind : std::uint8_t
 {
+    None = 0,
 
+    Void,
+
+    Char,
+
+    Char_S, // signed char
+    Char_U, // unsigned char
+
+    Short_S, // short, signed short, short int, or signed short int
+    Short_U, // unsigned short, or unsigned short int
+
+    Int_S, // int, signed, or signed int
+    Int_U, // unsigned, or unsigned int
+
+    Long_S, // long, signed long, long int, or signed long int
+    Long_U, // unsigned long, or unsigned long int
+
+    LongLong_S, // long long, signed long long, long long int, or signed long long int
+    LongLong_U, // unsigned long long, or unsigned long long int
+
+    Float,
+
+    Double,
+
+    LongDouble,
+
+    Bool,
+
+    FloatComplex,
+    DoubleComplex,
+    LongDoubleComplex
 };
 
 } // C

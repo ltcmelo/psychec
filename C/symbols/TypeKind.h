@@ -39,6 +39,8 @@ namespace C {
  */
 enum class TypeKind : std::uint8_t
 {
+    None = 0,
+    Builtin,
     Array,
     Enum,
     Pointer,
@@ -50,6 +52,8 @@ enum class TypeKind : std::uint8_t
 inline std::string PSY_C_API to_string(TypeKind tyKind)
 {
     switch (tyKind) {
+        case TypeKind::Builtin:
+            return "Builtin";
         case TypeKind::Array:
             return "Array";
         case TypeKind::Enum:

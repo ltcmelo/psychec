@@ -50,29 +50,29 @@ void Binder::bind()
     visit(tree_->root());
 }
 
-template <class SymbolT>
-SymbolT* Binder::newSymbol_COMMON(std::unique_ptr<SymbolT> sym)
+template <class SymT>
+SymT* Binder::newSym_COMMON(std::unique_ptr<SymT> sym)
 {
     syms_.push(sym.get());
-    return static_cast<SymbolT*>(semaModel_->storeSymbol(std::move(sym)));
+    return static_cast<SymT*>(semaModel_->storeSymbol(std::move(sym)));
 }
 
-template <class SymbolT>
-SymbolT* Binder::newSymbol()
+template <class SymT>
+SymT* Binder::newSym()
 {
-    std::unique_ptr<SymbolT> sym(new SymbolT(tree_,
+    std::unique_ptr<SymT> sym(new SymT(tree_,
                                              scopes_.top(),
                                              syms_.top()));
-    return newSymbol_COMMON(std::move(sym));
+    return newSym_COMMON(std::move(sym));
 }
 
-template FieldSymbol* Binder::newSymbol<FieldSymbol>();
-template FunctionSymbol* Binder::newSymbol<FunctionSymbol>();
-template ParameterSymbol* Binder::newSymbol<ParameterSymbol>();
-template VariableSymbol* Binder::newSymbol<VariableSymbol>();
+template FieldSymbol* Binder::newSym<FieldSymbol>();
+template FunctionSymbol* Binder::newSym<FunctionSymbol>();
+template ParameterSymbol* Binder::newSym<ParameterSymbol>();
+template VariableSymbol* Binder::newSym<VariableSymbol>();
 
-NamedTypeSymbol* Binder::newSymbol_NamedType(std::unique_ptr<SymbolName> symName,
-                                             TypeKind tyKind)
+NamedTypeSymbol* Binder::newTySym(std::unique_ptr<SymbolName> symName,
+                                   TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> sym(
                 new NamedTypeSymbol(tree_,
@@ -80,14 +80,14 @@ NamedTypeSymbol* Binder::newSymbol_NamedType(std::unique_ptr<SymbolName> symName
                                     syms_.top(),
                                     std::move(symName),
                                     tyKind));
-    return newSymbol_COMMON(std::move(sym));
+    return newSym_COMMON(std::move(sym));
 }
 
 template <>
-LinkUnitSymbol* Binder::newSymbol<LinkUnitSymbol>()
+LinkUnitSymbol* Binder::newSym<LinkUnitSymbol>()
 {
     std::unique_ptr<LinkUnitSymbol> sym(new LinkUnitSymbol(tree_, nullptr, nullptr));
-    return newSymbol_COMMON(std::move(sym));
+    return newSym_COMMON(std::move(sym));
 }
 
 template <class ScopeT>
@@ -113,7 +113,7 @@ void Binder::closeScope()
 //--------------//
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    newSymbol<LinkUnitSymbol>();
+    newSym<LinkUnitSymbol>();
     openScopeInSymbol<FileScope>();
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
@@ -137,14 +137,14 @@ SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclara
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node)
 {
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
-        ;
+        visit(specIt->value);
 
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         Symbol* sym;
         auto decltor = SyntaxUtilities::strippedDeclarator(decltorIt->value);
         switch (decltor->kind()) {
             case FunctionDeclarator:
-                sym = newSymbol<FunctionSymbol>();
+                sym = newSym<FunctionSymbol>();
                 break;
 
             case ArrayDeclarator:
@@ -152,7 +152,7 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
                 break;
 
             case BitfieldDeclarator:
-                sym = newSymbol<FieldSymbol>();
+                sym = newSym<FieldSymbol>();
                 break;
 
             default:
@@ -185,6 +185,7 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* 
 /* Specifiers */
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
+    std::cout << "visit builtin type specifier: " << node->specifierToken().valueText() << std::endl;
     return Action::Skip;
 }
 
@@ -212,7 +213,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
     std::unique_ptr<SymbolName> symName(
                 new TagSymbolName(tyKind,
                                   node->tagToken().valueText_c_str()));
-    newSymbol_NamedType(std::move(symName), tyKind);
+    newTySym(std::move(symName), tyKind);
 
     std::cout << to_string(*syms_.top()) << std::endl;
 
@@ -228,7 +229,7 @@ SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
     std::unique_ptr<SymbolName> symName(
                 new PlainSymbolName(node->identifierToken().valueText_c_str()));
-    newSymbol_NamedType(std::move(symName), TypeKind::Typedef);
+    newTySym(std::move(symName), TypeKind::Typedef);
 
     return Action::Skip;
 }
