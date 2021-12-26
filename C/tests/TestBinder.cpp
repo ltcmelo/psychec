@@ -35,6 +35,8 @@
 using namespace psy;
 using namespace C;
 
+const std::string TestBinder::Name = "BINDER";
+
 void TestBinder::testAll()
 {
     std::cout << "    binding" << std::endl;

@@ -23,9 +23,10 @@
 using namespace psy;
 using namespace C;
 
+const std::string TestParser::Name = "PARSER";
+
 void TestParser::testAll()
 {
-    std::cout << "    syntax" << std::endl;
     run<TestParser>(tests_);
     std::cout << std::endl;
 }

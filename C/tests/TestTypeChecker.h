@@ -31,6 +31,8 @@ namespace C {
 class TestTypeChecker final : public TestFrontend
 {
 public:
+    static const std::string Name;
+
     void testAll() override;
 
     void case0001();

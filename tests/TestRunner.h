@@ -84,7 +84,7 @@ protected:
             setUp();
 
             curTestName_ = testData.second;
-            std::cout << "\t" << curTestName_ << "... ";
+            std::cout << "\t" << TesterT::Name << "-" << curTestName_ << "... ";
 
             try {
                 auto curTestFunc = testData.first;

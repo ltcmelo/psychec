@@ -31,6 +31,8 @@ namespace C {
 class TestBinder final : public TestFrontend
 {
 public:
+    static const std::string Name;
+
     void testAll() override;
 
     void case0001();

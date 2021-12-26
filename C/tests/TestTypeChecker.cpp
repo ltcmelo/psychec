@@ -34,6 +34,8 @@
 using namespace psy;
 using namespace C;
 
+const std::string TestTypeChecker::Name = "";
+
 void TestTypeChecker::testAll()
 {
     std::cout << "    typing" << std::endl;
