@@ -105,12 +105,6 @@ private:
     virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) override;
     virtual Action visitTypedefName(const TypedefNameSyntax*) override;
 
-    /* Specifiers */
-    virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node) override;
-    virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node) override;
-    virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node) override;
-    virtual Action visitTypedefName(const TypedefNameSyntax* node) override;
-
     /* Declarators */
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
