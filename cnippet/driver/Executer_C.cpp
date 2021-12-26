@@ -82,7 +82,7 @@ int Executer_C::executeCore(std::string source)
     if (exit != 0)
         return exit;
 
-    return invokeCompiler(std::move(tree));
+    return invokeBinder(std::move(tree));
 }
 
 std::pair<std::string, std::string> Executer_C::extendSource(
@@ -179,7 +179,7 @@ std::pair<int, std::unique_ptr<SyntaxTree>> Executer_C::invokeParser(const std::
     return std::make_pair(0, std::move(tree));
 }
 
-int Executer_C::invokeCompiler(std::unique_ptr<SyntaxTree> tree)
+int Executer_C::invokeBinder(std::unique_ptr<SyntaxTree> tree)
 {
     auto compilation = Compilation::create(tree->filePath());
     compilation->addSyntaxTrees({ tree.get() });

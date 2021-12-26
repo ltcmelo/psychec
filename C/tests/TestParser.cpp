@@ -27,8 +27,7 @@ const std::string TestParser::Name = "PARSER";
 
 void TestParser::testAll()
 {
-    run<TestParser>(tests_);
-    std::cout << std::endl;
+    return run<TestParser>(tests_);
 }
 
 void TestParser::setUp()

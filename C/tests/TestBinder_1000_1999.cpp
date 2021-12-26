@@ -37,7 +37,7 @@ using namespace C;
 
 void TestBinder::case1001()
 {
-    parseAndBind("int i ;");
+    bind("int i ;");
 }
 
 void TestBinder::case1002() {}

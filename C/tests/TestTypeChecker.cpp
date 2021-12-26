@@ -52,37 +52,37 @@ void TestTypeChecker::tearDown()
 
 void TestTypeChecker::case0001()
 {
-    parseAndBindAndCheck("void f() ();");
+    typeCheck("void f() ();");
 }
 
 void TestTypeChecker::case0002()
 {
-    parseAndBindAndCheck("void f() () {}");
+    typeCheck("void f() () {}");
 }
 
 void TestTypeChecker::case0003()
 {
-    parseAndBindAndCheck("int k() [];");
+    typeCheck("int k() [];");
 }
 
 void TestTypeChecker::case0004()
 {
-    parseAndBindAndCheck("int k() [] {}");
+    typeCheck("int k() [] {}");
 }
 
 void TestTypeChecker::case0005()
 {
-    parseAndBindAndCheck("int (k)() [] {}");
+    typeCheck("int (k)() [] {}");
 }
 
 void TestTypeChecker::case0006()
 {
-    parseAndBindAndCheck("int (k()) [] {}");
+    typeCheck("int (k()) [] {}");
 }
 
 void TestTypeChecker::case0007()
 {
-    parseAndBindAndCheck("void k() {}");
+    typeCheck("void k() {}");
 }
 void TestTypeChecker::case0008() {}
 void TestTypeChecker::case0009() {}

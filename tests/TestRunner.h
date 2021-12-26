@@ -70,16 +70,27 @@ struct TestFailed {};
 class TestRunner
 {
 public:
+    TestRunner()
+        : cntOK_(0)
+        , cntER_(0)
+    {}
+
     virtual ~TestRunner() {}
+
+    void summary()
+    {
+        std::cout << this->name() << " Succeeded: " << cntOK_ << std::endl
+                  << this->name() << " Failed   : " << cntER_ << std::endl;
+    }
 
     static void runSuite();
 
 protected:
-    template <class TesterT, class TestContT> void run(const TestContT& tests)
-    {
-        cntOK_ = 0;
-        cntER_ = 0;
+    virtual std::string name() const = 0;
 
+    template <class TesterT, class TestContT>
+    void run(const TestContT& tests)
+    {
         for (auto testData : tests) {
             setUp();
 
@@ -98,8 +109,6 @@ protected:
 
             tearDown();
         }
-        std::cout << "Succeeded: " << cntOK_ << std::endl
-                  << "Failed   : " << cntER_ << std::endl;
     }
 
     virtual void testAll() = 0;
@@ -107,9 +116,9 @@ protected:
     virtual void setUp() {}
     virtual void tearDown() {}
 
-    std::string curTestName_;
     int cntOK_;
     int cntER_;
+    std::string curTestName_;
 };
 
 } // psy

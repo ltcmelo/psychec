@@ -230,11 +230,11 @@ void TestFrontend::parse(std::string source,
     PSYCHE_EXPECT_STR_EQ(names, namesP);
 }
 
-void TestFrontend::parseAndBind(std::string text)
+void TestFrontend::bind(std::string text)
 {
     parse(text);
 }
 
-void TestFrontend::parseAndBindAndCheck(std::string text)
+void TestFrontend::typeCheck(std::string text)
 {
 }

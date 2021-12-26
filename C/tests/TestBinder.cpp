@@ -27,8 +27,19 @@ const std::string TestBinder::Name = "BINDER";
 
 void TestBinder::testAll()
 {
-    run<TestBinder>(tests_);
-    std::cout << std::endl;
+    // TEMPORARY
+    std::vector<TestFunction> active;
+    for (auto testData : tests_) {
+        auto n = std::string(testData.second);
+        auto p = n.find("case0");
+        if (p != std::string::npos) {
+            std::cout << "\t\tskip (TEMP) " << n << std::endl;
+            continue;
+        }
+        active.push_back(testData);
+    }
+
+    return run<TestBinder>(active);
 }
 
 void TestBinder::setUp()

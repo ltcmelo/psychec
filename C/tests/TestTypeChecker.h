@@ -33,6 +33,8 @@ class TestTypeChecker final : public TestFrontend
 public:
     static const std::string Name;
 
+    virtual std::string name() const override { return Name; }
+
     void testAll() override;
 
     void case0001();

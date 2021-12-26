@@ -39,43 +39,43 @@ void TestBinder::case0001()
 {
     CROSS_REFERENCE_TEST(TestParser::case0028);
 
-    parseAndBind("const int ;");
+    bind("const int ;");
 }
 
 void TestBinder::case0002()
 {
-    parseAndBind("int x ;");
+    bind("int x ;");
 }
 
 void TestBinder::case0003()
 {
-    parseAndBind("void x ( ) ;");
+    bind("void x ( ) ;");
 }
 
 void TestBinder::case0004()
 {
-    parseAndBind("int x ( ) ;");
+    bind("int x ( ) ;");
 }
 
 void TestBinder::case0005()
 {
     CROSS_REFERENCE_TEST(TestParser::case0021);
 
-    parseAndBind("int double x ;");
+    bind("int double x ;");
 }
 
 void TestBinder::case0006()
 {
     CROSS_REFERENCE_TEST(TestParser::case0416);
 
-    parseAndBind("struct x { y ; } ;");
+    bind("struct x { y ; } ;");
 }
 
 void TestBinder::case0007()
 {
     CROSS_REFERENCE_TEST(TestParser::case0422);
 
-    parseAndBind("struct x { int ; } ;");
+    bind("struct x { int ; } ;");
 }
 
 void TestBinder::case0008()
@@ -84,7 +84,7 @@ void TestBinder::case0008()
 
     // Function returning a function.
 
-    parseAndBind("void x ( ) ( ) { }");
+    bind("void x ( ) ( ) { }");
 }
 
 void TestBinder::case0009()
@@ -93,7 +93,7 @@ void TestBinder::case0009()
 
     // Function returning a function.
 
-    parseAndBind("void x ( ) ( ) ;");
+    bind("void x ( ) ( ) ;");
 }
 
 void TestBinder::case0010()
@@ -102,14 +102,14 @@ void TestBinder::case0010()
 
     // Function returning an array.
 
-    parseAndBind("int x ( ) [ ] ;");
+    bind("int x ( ) [ ] ;");
 }
 
 void TestBinder::case0011()
 {
     CROSS_REFERENCE_TEST(TestParser::case0207);
 
-    parseAndBind("int ( x ) ( ) [ ] ;");
+    bind("int ( x ) ( ) [ ] ;");
 }
 
 void TestBinder::case0012()
@@ -118,14 +118,14 @@ void TestBinder::case0012()
 
     // 6.9.1-5
 
-    parseAndBind("void x ( int ) { }");
+    bind("void x ( int ) { }");
 }
 
 void TestBinder::case0013()
 {
     CROSS_REFERENCE_TEST(TestParser::case0040);
 
-    parseAndBind("int ;");
+    bind("int ;");
 }
 
 void TestBinder::case0014()
@@ -135,49 +135,49 @@ void TestBinder::case0014()
     // Anonymous `struct' declaration without any variable declared
     // with such type.
 
-    parseAndBind("struct { int x ; } ;");
+    bind("struct { int x ; } ;");
 }
 
 void TestBinder::case0015()
 {
     CROSS_REFERENCE_TEST(TestParser::case0632);
 
-    parseAndBind("void x ( ) { __thread x y ; }");
+    bind("void x ( ) { __thread x y ; }");
 }
 
 void TestBinder::case0016()
 {
     CROSS_REFERENCE_TEST(TestParser::case0050);
 
-    parseAndBind("double _Complex int x ;");
+    bind("double _Complex int x ;");
 }
 
 void TestBinder::case0017()
 {
     CROSS_REFERENCE_TEST(TestParser::case0052);
 
-    parseAndBind("int int x ;");
+    bind("int int x ;");
 }
 
 void TestBinder::case0018()
 {
     CROSS_REFERENCE_TEST(TestParser::case0053);
 
-    parseAndBind("_Complex _Complex x ;");
+    bind("_Complex _Complex x ;");
 }
 
 void TestBinder::case0019()
 {
     CROSS_REFERENCE_TEST(TestParser::case0435);
 
-    parseAndBind("int struct x { int y ; } z ;");
+    bind("int struct x { int y ; } z ;");
 }
 
 void TestBinder::case0020()
 {
     CROSS_REFERENCE_TEST(TestParser::case0436);
 
-    parseAndBind("struct x struct { int y ; } z ;");
+    bind("struct x struct { int y ; } z ;");
 }
 
 void TestBinder::case0021()
@@ -198,14 +198,14 @@ void TestBinder::case0023()
 {
     CROSS_REFERENCE_TEST(TestParser::case0737);
 
-    parseAndBind("int __attribute__ ( ( ) ) double ;");
+    bind("int __attribute__ ( ( ) ) double ;");
 }
 
 void TestBinder::case0024()
 {
     CROSS_REFERENCE_TEST(TestParser::case0738);
 
-    parseAndBind("x __attribute__ ( ( ) ) int ;");
+    bind("x __attribute__ ( ( ) ) int ;");
 }
 
 void TestBinder::case0025() {}
@@ -293,12 +293,12 @@ void TestBinder::case0099() {}
 
 void TestBinder::case0101()
 {
-    parseAndBind("*1;");
+    bind("*1;");
 }
 
 void TestBinder::case0102()
 {
-    parseAndBind("&1;");
+    bind("&1;");
 }
 
 void TestBinder::case0103()
