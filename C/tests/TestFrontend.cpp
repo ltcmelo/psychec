@@ -33,8 +33,8 @@
 #include <string>
 #include <sstream>
 
-#define DEBUG_DIAGNOSTICS
-#define DUMP_AST
+//#define DEBUG_DIAGNOSTICS
+//#define DUMP_AST
 
 using namespace psy;
 using namespace C;
@@ -230,22 +230,16 @@ void TestFrontend::parse(std::string source,
     PSYCHE_EXPECT_STR_EQ(names, namesP);
 }
 
-void TestFrontend::parseAndBind(std::string text, int errorCnt, int warnCnt)
+void TestFrontend::bind(std::string text)
 {
     parse(text);
 
-    if (errorCnt > 0)
-        std::cout << " [expect (binder) error] ";
-    if (warnCnt > 0)
-        std::cout << " [expect (binder) warning] ";
+    auto compilation = Compilation::create(tree_->filePath());
+    compilation->addSyntaxTrees({ tree_.get() });
+    /*auto semaModel = */compilation->semanticModel(tree_.get());
+    std::cout << "asdfasdfasdfasdf\n\n";
 }
 
-void TestFrontend::parseAndBindAndCheck(std::string text, int errorCnt, int warnCnt)
+void TestFrontend::typeCheck(std::string text)
 {
-    parseAndBind(text);
-
-    if (errorCnt > 0)
-        std::cout << " [expect (binder) error] ";
-    if (warnCnt > 0)
-        std::cout << " [expect (binder) warning] ";
 }

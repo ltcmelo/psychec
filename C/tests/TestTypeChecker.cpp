@@ -34,9 +34,10 @@
 using namespace psy;
 using namespace C;
 
+const std::string TestTypeChecker::Name = "";
+
 void TestTypeChecker::testAll()
 {
-    std::cout << "    typing" << std::endl;
     run<TestTypeChecker>(tests_);
     std::cout << std::endl;
 }
@@ -51,37 +52,37 @@ void TestTypeChecker::tearDown()
 
 void TestTypeChecker::case0001()
 {
-    parseAndBindAndCheck("void f() ();", 1);
+    typeCheck("void f() ();");
 }
 
 void TestTypeChecker::case0002()
 {
-    parseAndBindAndCheck("void f() () {}", 1);
+    typeCheck("void f() () {}");
 }
 
 void TestTypeChecker::case0003()
 {
-    parseAndBindAndCheck("int k() [];", 1);
+    typeCheck("int k() [];");
 }
 
 void TestTypeChecker::case0004()
 {
-    parseAndBindAndCheck("int k() [] {}", 1);
+    typeCheck("int k() [] {}");
 }
 
 void TestTypeChecker::case0005()
 {
-    parseAndBindAndCheck("int (k)() [] {}", 1);
+    typeCheck("int (k)() [] {}");
 }
 
 void TestTypeChecker::case0006()
 {
-    parseAndBindAndCheck("int (k()) [] {}", 1);
+    typeCheck("int (k()) [] {}");
 }
 
 void TestTypeChecker::case0007()
 {
-    parseAndBindAndCheck("void k() {}");
+    typeCheck("void k() {}");
 }
 void TestTypeChecker::case0008() {}
 void TestTypeChecker::case0009() {}

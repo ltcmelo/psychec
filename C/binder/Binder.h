@@ -59,10 +59,11 @@ private:
     SemanticModel* semaModel_;
     std::stack<Scope*> scopes_;
     std::stack<Symbol*> syms_;
+    std::stack<Symbol*> symsTypes_; // The type of a symbol (not a type symbol).
 
-    template <class SymbolT> SymbolT* newSymbol_COMMON(std::unique_ptr<SymbolT>);
-    template <class SymbolT> SymbolT* newSymbol();
-    NamedTypeSymbol* newSymbol_NamedType(std::unique_ptr<SymbolName>, TypeKind);
+    template <class SymT> SymT* newSym_COMMON(std::unique_ptr<SymT>);
+    template <class SymT> SymT* newDeclSym();
+    NamedTypeSymbol* newTyDeclSym(std::unique_ptr<SymbolName>, TypeKind);
 
     template <class ScopeT> void openScopeInSymbol();
     void openScopeInScope();
@@ -87,26 +88,32 @@ private:
     //--------------//
     // Declarations //
     //--------------//
-    virtual Action visitTranslationUnit(const TranslationUnitSyntax* node) override;
-    virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node) override;
-    SyntaxVisitor::Action visitTypeDeclaration_COMMON(const TypeDeclarationSyntax* node);
-    virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node) override;
-    virtual Action visitEnumDeclaration(const EnumDeclarationSyntax* node) override;
-    virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) override;
+    virtual Action visitTranslationUnit(const TranslationUnitSyntax*) override;
+    virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax*) override;
+    SyntaxVisitor::Action visitTypeDeclaration_COMMON(const TypeDeclarationSyntax*);
+    virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) override;
+    virtual Action visitEnumDeclaration(const EnumDeclarationSyntax*) override;
+    virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
+    virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) override;
+    virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
+    virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;
+    virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) override;
 
     /* Specifiers */
-    virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node) override;
-    virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node) override;
-    virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node) override;
-    virtual Action visitTypedefName(const TypedefNameSyntax* node) override;
+    virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) override;
+    virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax*) override;
+    virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) override;
+    virtual Action visitTypedefName(const TypedefNameSyntax*) override;
 
     /* Declarators */
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
+    virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
 
     //------------//
     // Statements //
     //------------//
-    virtual Action visitCompoundStatement(const CompoundStatementSyntax* node) override;
+    virtual Action visitCompoundStatement(const CompoundStatementSyntax*) override;
+    virtual Action visitDeclarationStatement(const DeclarationStatementSyntax*) override;
 };
 
 } // C

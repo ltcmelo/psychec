@@ -31,6 +31,10 @@ namespace C {
 class TestParser final : public TestFrontend
 {
 public:
+    static const std::string Name;
+
+    virtual std::string name() const override { return Name; }
+
     void testAll() override;
 
     /*

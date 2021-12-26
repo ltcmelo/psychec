@@ -34,8 +34,8 @@ namespace C {
 class PSY_C_API PlainSymbolName : public SymbolName
 {
 public:
-    virtual PlainSymbolName* asPlainSymbolName() { return this; }
-    virtual const PlainSymbolName* asPlainSymbolName() const { return this; }
+    virtual PlainSymbolName* asPlainSymbolName() override { return this; }
+    virtual const PlainSymbolName* asPlainSymbolName() const override { return this; }
 
 private:
     friend class Binder;

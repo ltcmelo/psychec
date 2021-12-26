@@ -35,6 +35,15 @@ void TestRunner::runSuite()
 
     // C
     std::cout << "  C" << std::endl;
-    TestParser().testAll();
-    //TestBinder().testAll();
+    TestParser P;
+    P.testAll();
+
+    TestBinder B;
+    B.testAll();
+
+    P.summary();
+    B.summary();
+    std::cout << "Succeeded: " << P.cntOK_ + B.cntOK_ << std::endl
+              << "Failed   : " << P.cntER_ + B.cntER_ << std::endl;
+
 }

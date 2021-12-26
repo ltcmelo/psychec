@@ -39,8 +39,8 @@ SymbolName::Kind SymbolName::kind() const
         return Kind::Plain;
     if (asTagSymbolName())
         return Kind::Tag;
-    if (asAnonymousSymbolName())
-        return Kind::Anynoymous;
+    if (asEmptySymbolName())
+        return Kind::Empty;
 
     PSYCHE_ASSERT(false, return Kind::Plain, "");
 }

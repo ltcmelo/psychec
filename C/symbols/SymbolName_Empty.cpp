@@ -18,30 +18,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SPECIAL_TYPE_H__
-#define PSYCHE_C_SPECIAL_TYPE_H__
-
-#include "API.h"
-#include "APIFwds.h"
-
-#include <cstdint>
+#include "SymbolName_Empty.h"
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The SpecialType enum.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.SpecialType
- * from Roslyn, the .NET Compiler Platform.
- */
-enum class SpecialType : std::uint8_t
+std::string to_string(const EmptySymbolName&)
 {
+    return "<EmptySymbolName>";
+}
 
-};
+bool operator==(const EmptySymbolName&, const EmptySymbolName&)
+{
+    return false;
+}
+
+bool operator!=(const EmptySymbolName& a, const EmptySymbolName& b)
+{
+    return !(a == b);
+}
 
 } // C
 } // psy
-
-#endif

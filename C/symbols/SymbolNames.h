@@ -21,8 +21,8 @@
 #ifndef PSYCHE_C_SYMBOL_NAMES_H__
 #define PSYCHE_C_SYMBOL_NAMES_H__
 
+#include "SymbolName_Empty.h"
 #include "SymbolName_Plain.h"
 #include "SymbolName_Tag.h"
-#include "SymbolName_Anonymous.h"
 
 #endif

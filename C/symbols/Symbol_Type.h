@@ -43,6 +43,8 @@ class PSY_C_API TypeSymbol : public Symbol
 public:
     virtual ~TypeSymbol();
 
+    TypeKind typeKind() const;
+
 protected:
     DECL_PIMPL(TypeSymbol);
 

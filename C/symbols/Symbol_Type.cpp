@@ -51,3 +51,8 @@ TypeSymbol::TypeSymbol(const SyntaxTree* tree,
 
 TypeSymbol::~TypeSymbol()
 {}
+
+TypeKind TypeSymbol::typeKind() const
+{
+    return P->tyKind_;
+}

@@ -85,11 +85,11 @@ set(GENERATOR cnip)
 add_executable(${GENERATOR} ${CNIPPET_SOURCES})
 target_link_libraries(${GENERATOR} psychecfe psychecommon dl)
 
-if (NOT WIN32 AND NOT MINGW)
+#if (NOT WIN32 AND NOT MINGW)
     set(PSYCHE_TESTS test-suite)
     add_executable(${PSYCHE_TESTS} ${PSYCHE_TESTS_SOURCES})
     target_link_libraries(${PSYCHE_TESTS} psychecfe psychecommon dl)
-endif()
+#endif()
 
 # Install setup
 install(TARGETS ${GENERATOR}

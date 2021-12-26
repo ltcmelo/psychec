@@ -104,6 +104,7 @@ set(CFE_SOURCES
 
     # Symbols
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
+    ${PROJECT_SOURCE_DIR}/symbols/BuiltinKind.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol__IMPL__.inc
@@ -123,14 +124,13 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName.cpp
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Empty.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Empty.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Plain.cpp
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Plain.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.cpp
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.h
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Anonymous.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Anonymous.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolNames.h
-    ${PROJECT_SOURCE_DIR}/symbols/SpecialType.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeKind.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.h
@@ -167,6 +167,8 @@ set(CFE_SOURCES
     # Tests
     ${PROJECT_SOURCE_DIR}/tests/TestBinder.h
     ${PROJECT_SOURCE_DIR}/tests/TestBinder.cpp
+    ${PROJECT_SOURCE_DIR}/tests/TestBinder_0000_0999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/TestBinder_1000_1999.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestFrontend.h
     ${PROJECT_SOURCE_DIR}/tests/TestFrontend.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestParser.h
