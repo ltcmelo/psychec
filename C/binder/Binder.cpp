@@ -134,6 +134,23 @@ SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclara
     return Action::Skip;
 }
 
+SyntaxVisitor::Action Binder::visitTypeDeclaration_COMMON(const TypeDeclarationSyntax* node)
+{
+    visit(node->typeSpecifier());
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
+{
+    return visitTypeDeclaration_COMMON(node);
+}
+
+SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
+{
+    return visitTypeDeclaration_COMMON(node);
+}
+
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node)
 {
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
@@ -150,34 +167,20 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
             case IdentifierDeclarator:
                 switch (syms_.top()->kind()) {
                     case SymbolKind::LinkUnit:
+                    case SymbolKind::Function:
                         newDeclSym<VariableSymbol>();
                         break;
 
-                    case SymbolKind::Function:
-
-                        newDeclSym<ParameterSymbol>();
-                        break;
-
-                    case SymbolKind::NamedType:
-                        newDeclSym<FieldSymbol>();
-                        break;
-
                     default:
-                        PSYCHE_FAIL(return Action::Quit, "unexpected symbol kind");
+                        PSYCHE_FAIL(return Action::Quit, "unexpected symbol");
                         return Action::Quit;
                 }
                 break;
 
-            case BitfieldDeclarator:
-                newDeclSym<FieldSymbol>();
-                break;
-
             default:
-                PSYCHE_FAIL(return Action::Quit, "unknown declarator");
+                PSYCHE_FAIL(return Action::Quit, "unexpected declarator");
                 break;
         }
-
-        std::cout << "symbol: " << to_string(*syms_.top()) << std::endl;
 
         visit(decltorIt->value);
     }
@@ -185,21 +188,61 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitTypeDeclaration_COMMON(const TypeDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax* node)
 {
-    visit(node->typeSpecifier());
+    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
+        visit(specIt->value);
+
+    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
+        auto decltor = SyntaxUtilities::strippedDeclarator(decltorIt->value);
+        switch (decltor->kind()) {
+            case ArrayDeclarator:
+            case IdentifierDeclarator:
+                switch (syms_.top()->kind()) {
+                    case SymbolKind::NamedType:
+                        newDeclSym<FieldSymbol>();
+                        break;
+
+                    default:
+                        PSYCHE_FAIL(return Action::Quit, "unexpected symbol");
+                        return Action::Quit;
+                }
+                break;
+
+            default:
+                PSYCHE_FAIL(return Action::Quit, "unexpected declarator");
+                break;
+        }
+    }
 
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitParameterDeclaration(const ParameterDeclarationSyntax* node)
 {
-    return visitTypeDeclaration_COMMON(node);
+    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
+        visit(specIt->value);
+
+    visit(node->declarator());
+
+    return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*)
 {
-    return visitTypeDeclaration_COMMON(node);
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitFunctionDefinition(const FunctionDefinitionSyntax* node)
+{
+    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
+        visit(specIt->value);
+
+    visit(node->declarator());
+
+    visit(node->body());
+
+    return Action::Skip;
 }
 
 /* Specifiers */
@@ -234,7 +277,14 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                                   node->tagToken().valueText_c_str()));
     newTyDeclSym(std::move(symName), tyKind);
 
-    std::cout << to_string(*syms_.top()) << std::endl;
+    for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
+        visit(attrIt->value);
+
+    for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
+        visit(declIt->value);
+
+    for (auto attrIt = node->attributes_PostCloseBrace(); attrIt; attrIt = attrIt->next)
+        visit(attrIt->value);
 
     return Action::Skip;
 }
@@ -263,6 +313,14 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
     return Action::Skip;
 }
 
+SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax*)
+{
+    std::unique_ptr<SymbolName> symName(new EmptySymbolName);
+    syms_.top()->giveName(std::move(symName));
+
+    return Action::Skip;
+}
+
 //------------//
 // Statements //
 //------------//
@@ -274,6 +332,13 @@ SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSynt
         visit(stmtIt->value);
 
     closeScope();
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitDeclarationStatement(const DeclarationStatementSyntax* node)
+{
+    visit(node->declaration());
 
     return Action::Skip;
 }

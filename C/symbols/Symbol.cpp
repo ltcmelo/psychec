@@ -38,8 +38,7 @@ Symbol::Symbol(const SyntaxTree* tree,
                        scope,
                        containingSym,
                        symKind))
-{
-}
+{}
 
 Symbol::~Symbol()
 {}
@@ -47,10 +46,10 @@ Symbol::~Symbol()
 const Assembly* Symbol::assembly() const
 {
     for (auto compilation : P->tree_->linkedCompilations()) {
-      const auto&& syms = compilation->assembly()->symbols();
-      auto it = std::find(syms.begin(), syms.end(), this);
-      if (it != syms.end())
-          return compilation->assembly();
+        const auto&& syms = compilation->assembly()->symbols();
+        auto it = std::find(syms.begin(), syms.end(), this);
+        if (it != syms.end())
+            return compilation->assembly();
     }
 
     PSYCHE_FAIL(return nullptr, "expected assembly");
@@ -116,7 +115,7 @@ namespace C {
 std::string to_string(const Symbol& sym)
 {
     std::ostringstream oss;
-   // oss << to_string(*sym.name()) << ' ';
+    oss << to_string(*sym.name()) << ' ';
     oss << to_string(sym.kind()) << ' ';
 
     return oss.str();
