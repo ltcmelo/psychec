@@ -29,5 +29,5 @@ LinkUnitSymbol::LinkUnitSymbol(const SyntaxTree* tree,
     : Symbol(tree,
              scope,
              containingSym,
-             SymbolKind::Field)
+             SymbolKind::LinkUnit)
 {}

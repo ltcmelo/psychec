@@ -46,9 +46,9 @@ public:
      */
     enum class Kind : std::uint8_t
     {
+        Empty,
         Plain,
-        Tag,
-        Anynoymous
+        Tag
     };
 
     /**
@@ -60,8 +60,8 @@ public:
     virtual const PlainSymbolName* asPlainSymbolName() const { return nullptr; }
     virtual TagSymbolName* asTagSymbolName() { return nullptr; }
     virtual const TagSymbolName* asTagSymbolName() const { return nullptr; }
-    virtual AnonymousSymbolName* asAnonymousSymbolName() { return nullptr; }
-    virtual const AnonymousSymbolName* asAnonymousSymbolName() const { return nullptr; }
+    virtual EmptySymbolName* asEmptySymbolName() { return nullptr; }
+    virtual const EmptySymbolName* asEmptySymbolName() const { return nullptr; }
 
 private:
     friend class Symbol;

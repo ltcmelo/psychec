@@ -35,8 +35,8 @@ class PSY_C_API TagSymbolName : public SymbolName
 public:
     TypeKind typeKind() const;
 
-    virtual TagSymbolName* asTagSymbolName() { return this; }
-    virtual const TagSymbolName* asTagSymbolName() const { return this; }
+    virtual TagSymbolName* asTagSymbolName() override { return this; }
+    virtual const TagSymbolName* asTagSymbolName() const override { return this; }
 
 private:
     friend class Binder;

@@ -18,15 +18,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_NAME_ANONYMOUS_H__
-#define PSYCHE_C_SYMBOL_NAME_ANONYMOUS_H__
-
-#include "SymbolName.h"
+#include "SymbolName_Empty.h"
 
 namespace psy {
 namespace C {
 
+std::string to_string(const EmptySymbolName&)
+{
+    return "<EmptySymbolName>";
+}
+
+bool operator==(const EmptySymbolName&, const EmptySymbolName&)
+{
+    return false;
+}
+
+bool operator!=(const EmptySymbolName& a, const EmptySymbolName& b)
+{
+    return !(a == b);
+}
+
 } // C
 } // psy
-
-#endif

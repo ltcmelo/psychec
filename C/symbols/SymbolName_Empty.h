@@ -18,7 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "SymbolName_Anonymous.h"
+#ifndef PSYCHE_C_SYMBOL_NAME_EMPTY_H__
+#define PSYCHE_C_SYMBOL_NAME_EMPTY_H__
 
-using namespace psy;
-using namespace C;
+#include "SymbolName.h"
+
+namespace psy {
+namespace C {
+
+/**
+ * \brief The EmptySymbolName class.
+ */
+class PSY_C_API EmptySymbolName : public SymbolName
+{
+public:
+    virtual EmptySymbolName* asEmptySymbolName() override { return this; }
+    virtual const EmptySymbolName* asEmptySymbolName() const override { return this; }
+};
+
+std::string to_string(const EmptySymbolName& name);
+bool operator==(const EmptySymbolName& a, const EmptySymbolName& b);
+bool operator!=(const EmptySymbolName& a, const EmptySymbolName& b);
+
+} // C
+} // psy
+
+#endif

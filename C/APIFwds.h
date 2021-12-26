@@ -217,7 +217,7 @@ template <class PtrT> class SymbolList;
 /* Symbol names */
 class PlainSymbolName;
 class TagSymbolName;
-class AnonymousSymbolName;
+class EmptySymbolName;
 
 /* Scopes */
 class Scope;
