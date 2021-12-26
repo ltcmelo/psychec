@@ -233,6 +233,11 @@ void TestFrontend::parse(std::string source,
 void TestFrontend::bind(std::string text)
 {
     parse(text);
+
+    auto compilation = Compilation::create(tree_->filePath());
+    compilation->addSyntaxTrees({ tree_.get() });
+    /*auto semaModel = */compilation->semanticModel(tree_.get());
+    std::cout << "asdfasdfasdfasdf\n\n";
 }
 
 void TestFrontend::typeCheck(std::string text)
