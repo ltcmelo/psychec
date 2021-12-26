@@ -25,6 +25,7 @@
 using namespace psy;
 using namespace C;
 
+<<<<<<< HEAD
 TagSymbolName::TagSymbolName(TypeKind tyKind, std::string tag)
     : tyKind_(tyKind)
     , tag_(std::move(tag))
@@ -40,18 +41,32 @@ TypeKind TagSymbolName::typeKind() const
 {
     return tyKind_;
 }
+=======
+TagSymbolName::TagSymbolName(std::string kw, std::string tag)
+    : kw_(std::move(kw))
+    , tag_(std::move(tag))
+{}
+>>>>>>> master
 
 namespace psy {
 namespace C {
 
 std::string to_string(const TagSymbolName& name)
 {
+<<<<<<< HEAD
     return to_string(name.tyKind_) + " " + name.tag_;
+=======
+    return name.kw_ + " " + name.tag_;
+>>>>>>> master
 }
 
 bool operator==(const TagSymbolName& a, const TagSymbolName& b)
 {
+<<<<<<< HEAD
     return a.tyKind_ == b.tyKind_ && a.tag_ == b.tag_;
+=======
+    return a.kw_ == b.kw_ && a.tag_ == b.tag_;
+>>>>>>> master
 }
 
 bool operator!=(const TagSymbolName& a, const TagSymbolName& b)

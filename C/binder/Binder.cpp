@@ -83,6 +83,18 @@ NamedTypeSymbol* Binder::newTyDeclSym(std::unique_ptr<SymbolName> symName,
     return newSym_COMMON(std::move(sym));
 }
 
+NamedTypeSymbol* Binder::newSymbol_NamedType(std::unique_ptr<SymbolName> symName,
+                                             TypeKind tyKind)
+{
+    std::unique_ptr<NamedTypeSymbol> sym(
+                new NamedTypeSymbol(tree_,
+                                    scopes_.top(),
+                                    syms_.top(),
+                                    std::move(symName),
+                                    tyKind));
+    return newSymbol_COMMON(std::move(sym));
+}
+
 template <>
 LinkUnitSymbol* Binder::newDeclSym<LinkUnitSymbol>()
 {
