@@ -167,6 +167,8 @@ set(CFE_SOURCES
     # Tests
     ${PROJECT_SOURCE_DIR}/tests/TestBinder.h
     ${PROJECT_SOURCE_DIR}/tests/TestBinder.cpp
+    ${PROJECT_SOURCE_DIR}/tests/TestBinder_0000_0999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/TestBinder_1000_1999.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestFrontend.h
     ${PROJECT_SOURCE_DIR}/tests/TestFrontend.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestParser.h

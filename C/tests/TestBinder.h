@@ -35,6 +35,15 @@ public:
 
     void testAll() override;
 
+    /*
+        Errors:
+            + 0000-0199 -> declarations
+
+        Symbols:
+            + 1000-1099 ->
+
+     */
+
     void case0001();
     void case0002();
     void case0003();
