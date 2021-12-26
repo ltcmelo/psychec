@@ -84,8 +84,8 @@ protected:
     void parseStatement(std::string source,
                         Expectation X = Expectation());
 
-    void parseAndBind(std::string source, int errorCnt = 0, int warnCnt = 0);
-    void parseAndBindAndCheck(std::string source, int errorCnt = 0, int warnCnt = 0);
+    void parseAndBind(std::string source);
+    void parseAndBindAndCheck(std::string source);
 
     std::unique_ptr<SyntaxTree> tree_;
     std::unique_ptr<Compilation> compilation_;

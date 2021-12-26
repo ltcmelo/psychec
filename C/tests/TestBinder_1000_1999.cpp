@@ -35,7 +35,11 @@
 using namespace psy;
 using namespace C;
 
-void TestBinder::case1001() {}
+void TestBinder::case1001()
+{
+    parseAndBind("int i ;");
+}
+
 void TestBinder::case1002() {}
 void TestBinder::case1003() {}
 void TestBinder::case1004() {}

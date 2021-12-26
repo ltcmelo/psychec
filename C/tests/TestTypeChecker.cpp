@@ -38,7 +38,6 @@ const std::string TestTypeChecker::Name = "";
 
 void TestTypeChecker::testAll()
 {
-    std::cout << "    typing" << std::endl;
     run<TestTypeChecker>(tests_);
     std::cout << std::endl;
 }
@@ -53,32 +52,32 @@ void TestTypeChecker::tearDown()
 
 void TestTypeChecker::case0001()
 {
-    parseAndBindAndCheck("void f() ();", 1);
+    parseAndBindAndCheck("void f() ();");
 }
 
 void TestTypeChecker::case0002()
 {
-    parseAndBindAndCheck("void f() () {}", 1);
+    parseAndBindAndCheck("void f() () {}");
 }
 
 void TestTypeChecker::case0003()
 {
-    parseAndBindAndCheck("int k() [];", 1);
+    parseAndBindAndCheck("int k() [];");
 }
 
 void TestTypeChecker::case0004()
 {
-    parseAndBindAndCheck("int k() [] {}", 1);
+    parseAndBindAndCheck("int k() [] {}");
 }
 
 void TestTypeChecker::case0005()
 {
-    parseAndBindAndCheck("int (k)() [] {}", 1);
+    parseAndBindAndCheck("int (k)() [] {}");
 }
 
 void TestTypeChecker::case0006()
 {
-    parseAndBindAndCheck("int (k()) [] {}", 1);
+    parseAndBindAndCheck("int (k()) [] {}");
 }
 
 void TestTypeChecker::case0007()

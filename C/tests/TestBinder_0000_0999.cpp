@@ -39,7 +39,7 @@ void TestBinder::case0001()
 {
     CROSS_REFERENCE_TEST(TestParser::case0028);
 
-    parseAndBind("const int ;", 0, 1);
+    parseAndBind("const int ;");
 }
 
 void TestBinder::case0002()
@@ -61,7 +61,7 @@ void TestBinder::case0005()
 {
     CROSS_REFERENCE_TEST(TestParser::case0021);
 
-    parseAndBind("int double x ;", 1);
+    parseAndBind("int double x ;");
 }
 
 void TestBinder::case0006()
@@ -84,7 +84,7 @@ void TestBinder::case0008()
 
     // Function returning a function.
 
-    parseAndBind("void x ( ) ( ) { }", 1);
+    parseAndBind("void x ( ) ( ) { }");
 }
 
 void TestBinder::case0009()
@@ -93,7 +93,7 @@ void TestBinder::case0009()
 
     // Function returning a function.
 
-    parseAndBind("void x ( ) ( ) ;", 1);
+    parseAndBind("void x ( ) ( ) ;");
 }
 
 void TestBinder::case0010()
@@ -118,14 +118,14 @@ void TestBinder::case0012()
 
     // 6.9.1-5
 
-    parseAndBind("void x ( int ) { }", 1);
+    parseAndBind("void x ( int ) { }");
 }
 
 void TestBinder::case0013()
 {
     CROSS_REFERENCE_TEST(TestParser::case0040);
 
-    parseAndBind("int ;", 1);
+    parseAndBind("int ;");
 }
 
 void TestBinder::case0014()
@@ -293,12 +293,12 @@ void TestBinder::case0099() {}
 
 void TestBinder::case0101()
 {
-    parseAndBind("*1;", 1);
+    parseAndBind("*1;");
 }
 
 void TestBinder::case0102()
 {
-    parseAndBind("&1;", 1);
+    parseAndBind("&1;");
 }
 
 void TestBinder::case0103()

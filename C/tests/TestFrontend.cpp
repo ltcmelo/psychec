@@ -230,22 +230,11 @@ void TestFrontend::parse(std::string source,
     PSYCHE_EXPECT_STR_EQ(names, namesP);
 }
 
-void TestFrontend::parseAndBind(std::string text, int errorCnt, int warnCnt)
+void TestFrontend::parseAndBind(std::string text)
 {
     parse(text);
-
-    if (errorCnt > 0)
-        std::cout << " [expect (binder) error] ";
-    if (warnCnt > 0)
-        std::cout << " [expect (binder) warning] ";
 }
 
-void TestFrontend::parseAndBindAndCheck(std::string text, int errorCnt, int warnCnt)
+void TestFrontend::parseAndBindAndCheck(std::string text)
 {
-    parseAndBind(text);
-
-    if (errorCnt > 0)
-        std::cout << " [expect (binder) error] ";
-    if (warnCnt > 0)
-        std::cout << " [expect (binder) warning] ";
 }
