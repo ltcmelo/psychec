@@ -82,7 +82,7 @@ private:
 
     Compilation();
 
-    Assembly* assembly();
+    Assembly* assembly__();
 };
 
 } // C

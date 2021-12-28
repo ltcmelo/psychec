@@ -37,10 +37,15 @@ using namespace C;
 
 void TestBinder::case1001()
 {
-    bind("int i ;");
+    bind("int x ;",
+         Expectation().SymbolNameKind({ std::make_tuple("x", SymbolKind::Variable) }));
 }
 
-void TestBinder::case1002() {}
+void TestBinder::case1002()
+{
+
+}
+
 void TestBinder::case1003() {}
 void TestBinder::case1004() {}
 void TestBinder::case1005() {}
