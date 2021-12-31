@@ -169,7 +169,7 @@ private:
     bool matchOrSkipTo(SyntaxKind expectedTkK, LexedTokens::IndexType* tkIdx);
     void skipTo(SyntaxKind tkK);
 
-    DiagnosticsReporter diagReporter_;
+    DiagnosticsReporter diagReporter__;
     unsigned int curTkIdx_;
 
     int depthOfExprs_;

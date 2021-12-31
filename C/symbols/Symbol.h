@@ -113,10 +113,10 @@ private:
     friend class TypeSymbol;
     friend class Binder;
 
-    template <class ScopeT> ScopeT* newScope();
+    template <class ScopeT> ScopeT* makeScope__();
 
 protected:
-    void giveName(std::unique_ptr<SymbolName> name);
+    void giveName_(std::unique_ptr<SymbolName> name);
 };
 
 std::string PSY_C_API to_string(const Symbol& sym);

@@ -43,7 +43,6 @@ void TestBinder::case1001()
 
 void TestBinder::case1002()
 {
-
 }
 
 void TestBinder::case1003() {}

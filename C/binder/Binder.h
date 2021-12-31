@@ -56,18 +56,18 @@ private:
 
     Binder(SemanticModel* semaModel, const SyntaxTree* tree);
 
-    SemanticModel* semaModel_;
-    std::stack<Scope*> scopes_;
-    std::stack<Symbol*> syms_;
-    std::stack<Symbol*> symsTypes_; // The type of a symbol (not a type symbol).
+    SemanticModel* semaModel__;
+    std::stack<Scope*> scopes__;
+    std::stack<Symbol*> syms__;
+    std::stack<Symbol*> symsTypes__; // The type of a symbol (not a type symbol).
 
-    template <class SymT> SymT* newSym_COMMON(std::unique_ptr<SymT>);
-    template <class SymT> SymT* newDeclSym();
-    NamedTypeSymbol* newTyDeclSym(std::unique_ptr<SymbolName>, TypeKind);
+    template <class SymT> SymT* makeSym_COMMON__(std::unique_ptr<SymT>);
+    template <class SymT> SymT* makeDeclSym__();
+    NamedTypeSymbol* makeTyDeclSym__(std::unique_ptr<SymbolName>, TypeKind);
 
-    template <class ScopeT> void openScopeInSymbol();
-    void openScopeInScope();
-    void closeScope();
+    template <class ScopeT> void openScopeInSymbol__();
+    void openScopeInScope__();
+    void closeScope__();
 
     struct DiagnosticsReporter
     {
@@ -83,7 +83,7 @@ private:
         void UselessDeclaration(SyntaxToken tk);
     };
 
-    DiagnosticsReporter diagReporter_;
+    DiagnosticsReporter diagReporter__;
 
     //--------------//
     // Declarations //

@@ -93,18 +93,18 @@ Location Symbol::location() const
 }
 
 template <class ScopeT>
-ScopeT* Symbol::newScope()
+ScopeT* Symbol::makeScope__()
 {
     std::unique_ptr<ScopeT> scope(new ScopeT());
     P->innerScope_ = std::move(scope);
     return static_cast<ScopeT*>(P->innerScope_.get());
 }
 
-template BlockScope* Symbol::newScope<BlockScope>();
-template FileScope* Symbol::newScope<FileScope>();
-template FunctionScope* Symbol::newScope<FunctionScope>();
+template BlockScope* Symbol::makeScope__<BlockScope>();
+template FileScope* Symbol::makeScope__<FileScope>();
+template FunctionScope* Symbol::makeScope__<FunctionScope>();
 
-void Symbol::giveName(std::unique_ptr<SymbolName> name)
+void Symbol::giveName_(std::unique_ptr<SymbolName> name)
 {
     P->symName_ = std::move(name);
 }

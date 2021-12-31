@@ -50,9 +50,9 @@ private:
     friend class SemanticModel;
     friend class TestFrontend;
 
-    std::unordered_set<std::unique_ptr<Symbol>> syms_;
+    std::unordered_set<std::unique_ptr<Symbol>> syms__;
 
-    Symbol* find_if_WRAP__(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const;
+    Symbol* findSymByPred__(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const;
 };
 
 } // C

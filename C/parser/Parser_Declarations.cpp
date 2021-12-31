@@ -159,7 +159,7 @@ bool Parser::parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& dec
                   "assert failure: `asm'");
 
     if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Asm())
-        diagReporter_.ExpectedFeature("GNU assembly in C");
+        diagReporter__.ExpectedFeature("GNU assembly in C");
 
     auto asmDecl = makeNode<ExtGNU_AsmStatementDeclarationSyntax>();
     decl = asmDecl;
@@ -217,9 +217,9 @@ bool Parser::parseDeclaration(
 
     if (!specList) {
         if (declScope == DeclarationScope::File)
-            diagReporter_.ExpectedTypeSpecifier();
+            diagReporter__.ExpectedTypeSpecifier();
         else if (declScope == DeclarationScope::Block)
-            diagReporter_.ExpectedFIRSTofSpecifierQualifier();
+            diagReporter__.ExpectedFIRSTofSpecifierQualifier();
     }
 
     return ((this)->*(parse_AtFollowOfSpecifiers))(decl, specList);
@@ -303,7 +303,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
                 }
 
                 default:
-                    diagReporter_.UnexpectedInitializerOfDeclarator();
+                    diagReporter__.UnexpectedInitializerOfDeclarator();
                     return ignoreDeclarator();
             }
             if (!parseInitializer(*init))
@@ -353,9 +353,9 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
 
             default:
                 if (init)
-                    diagReporter_.ExpectedFOLLOWofInitializedDeclarator();
+                    diagReporter__.ExpectedFOLLOWofInitializedDeclarator();
                 else
-                    diagReporter_.ExpectedFOLLOWofDeclarator();
+                    diagReporter__.ExpectedFOLLOWofDeclarator();
                 return false;
         }
 
@@ -517,7 +517,7 @@ bool Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList(
             }
 
             default:
-                diagReporter_.ExpectedFOLLOWofDeclarator();
+                diagReporter__.ExpectedFOLLOWofDeclarator();
                 return false;
         }
 
@@ -592,7 +592,7 @@ bool Parser::parseEnumerator(DeclarationSyntax*& decl)
         }
 
         default:
-            diagReporter_.ExpectedFIRSTofEnumerationConstant();
+            diagReporter__.ExpectedFIRSTofEnumerationConstant();
             return false;
     }
 
@@ -641,7 +641,7 @@ bool Parser::parseParameterDeclarationListAndOrEllipsis(ParameterSuffixSyntax*& 
 
         case EllipsisToken:
             if (!paramDecltorSfx->decls_)
-                diagReporter_.ExpectedNamedParameterBeforeEllipsis();
+                diagReporter__.ExpectedNamedParameterBeforeEllipsis();
             paramDecltorSfx->ellipsisTkIdx_ = consume();
             break;
 
@@ -735,7 +735,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
     paramDecl->specs_ = specList;
 
     if (!paramDecl->specs_)
-        diagReporter_.ExpectedTypeSpecifier();
+        diagReporter__.ExpectedTypeSpecifier();
 
     Backtracker BT(this);
     if (!parseDeclarator(paramDecl->decltor_, DeclarationScope::FunctionPrototype)) {
@@ -1124,7 +1124,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
 
             default:
                 if (specList_cur == &specList) {
-                    diagReporter_.ExpectedFIRSTofSpecifierQualifier();
+                    diagReporter__.ExpectedFIRSTofSpecifierQualifier();
                     return false;
                 }
                 return true;
@@ -1310,7 +1310,7 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
             break;
 
         default:
-            diagReporter_.ExpectedFOLLOWofStructOrUnionOrEnum();
+            diagReporter__.ExpectedFOLLOWofStructOrUnionOrEnum();
             return false;
     }
 
@@ -1423,7 +1423,7 @@ bool Parser::parseExtGNU_AttributeList(ExtGNU_AttributeListSyntax*& attrList)
                 return true;
 
             default:
-                diagReporter_.ExpectedTokenWithin(
+                diagReporter__.ExpectedTokenWithin(
                     { CommaToken,
                       CloseParenToken });
                 return false;
@@ -1453,7 +1453,7 @@ bool Parser::parseExtGNU_Attribute(ExtGNU_AttributeSyntax*& attr)
             return true;
 
         default:
-            diagReporter_.ExpectedTokenWithin(
+            diagReporter__.ExpectedTokenWithin(
                 { IdentifierToken,
                   Keyword_const,
                   CommaToken,
@@ -1505,7 +1505,7 @@ bool Parser::parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList)
     DEBUG_THIS_RULE();
 
     if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_AttributeSpecifiersLLVM())
-        diagReporter_.ExpectedFeature("GNU attributes of LLVM");
+        diagReporter__.ExpectedFeature("GNU attributes of LLVM");
 
     ExpressionListSyntax** exprList_cur = &exprList;
 
@@ -1766,7 +1766,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                     return false;
                 break;
             }
-            diagReporter_.ExpectedFIRSTofDirectDeclarator();
+            diagReporter__.ExpectedFIRSTofDirectDeclarator();
             return false;
 
         case ColonToken:
@@ -1788,7 +1788,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                 annonDecltor->attrs_ = attrList;
                 break;
             }
-            diagReporter_.ExpectedFIRSTofDirectDeclarator();
+            diagReporter__.ExpectedFIRSTofDirectDeclarator();
             return false;
         }
     }
@@ -1832,7 +1832,7 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
     auto validateContext =
             [this, declScope] (void (Parser::DiagnosticsReporter::*report)()) {
                 if (declScope != DeclarationScope::FunctionPrototype) {
-                    ((diagReporter_).*(report))();
+                    ((diagReporter__).*(report))();
                     skipTo(CloseBracketToken);
                     return false;
                 }
@@ -1842,7 +1842,7 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
     auto checkDialect =
             [this] () {
                 if (tree_->dialect().std() < LanguageDialect::Std::C99) {
-                    diagReporter_.ExpectedFeature(
+                    diagReporter__.ExpectedFeature(
                             "C99 array declarators with `*', `static', and type-qualifiers "
                             "within function parameters");
                 }
@@ -2142,7 +2142,7 @@ bool Parser::parseBraceEnclosedInitializer_AtFirst(InitializerSyntax*& init)
     braceInit->openBraceTkIdx_ = consume();
 
     if (peek().kind() == CloseBraceToken) {
-        diagReporter_.ExpectedBraceEnclosedInitializerList();
+        diagReporter__.ExpectedBraceEnclosedInitializerList();
         braceInit->closeBraceTkIdx_ = consume();
         return true;
     }
@@ -2178,7 +2178,7 @@ bool Parser::parseInitializerListItem(InitializerSyntax*& init, InitializerListS
                 initList->delimTkIdx_ = consume();
                 return true;
             }
-            diagReporter_.ExpectedFIRSTofExpression();
+            diagReporter__.ExpectedFIRSTofExpression();
             return false;
 
         case DotToken:
@@ -2210,7 +2210,7 @@ bool Parser::parseDesignatedInitializer_AtFirst(InitializerSyntax*& init,
 
     if (tree_->dialect().std() < LanguageDialect::Std::C99
             && !tree_->parseOptions().extensions().isEnabled_ExtGNU_DesignatedInitializers())
-        diagReporter_.ExpectedFeature("GNU/C99 designated initializers");
+        diagReporter__.ExpectedFeature("GNU/C99 designated initializers");
 
     DesignatorListSyntax* desigList = nullptr;
     if (!parseDesignatorList_AtFirst(desigList, parseDesig))
@@ -2226,7 +2226,7 @@ bool Parser::parseDesignatedInitializer_AtFirst(InitializerSyntax*& init,
             return parseInitializer(desigInit->init_);
 
         default:
-            diagReporter_.ExpectedFOLLOWofDesignatedInitializer();
+            diagReporter__.ExpectedFOLLOWofDesignatedInitializer();
             return parseInitializer(desigInit->init_);
     }
 }
@@ -2280,7 +2280,7 @@ bool Parser::parseFieldDesignator_AtFirst(DesignatorSyntax*& desig)
         return true;
     }
 
-    diagReporter_.ExpectedFieldDesignator();
+    diagReporter__.ExpectedFieldDesignator();
     return false;
 }
 
