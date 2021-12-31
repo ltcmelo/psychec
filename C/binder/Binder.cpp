@@ -257,6 +257,8 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition(const FunctionDefinitionSy
 /* Specifiers */
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
+    auto valSym = syms_.top();
+
     return Action::Skip;
 }
 

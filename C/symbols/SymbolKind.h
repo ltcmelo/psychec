@@ -43,11 +43,6 @@ enum class SymbolKind : std::uint8_t
     Function,
     Value,
     Type,
-
-    /* Values */
-    Field = 10,
-    Parameter,
-    Variable
 };
 
 inline std::string PSY_C_API to_string(SymbolKind symKind)
@@ -57,14 +52,10 @@ inline std::string PSY_C_API to_string(SymbolKind symKind)
             return "LinkUnit";
         case SymbolKind::Function:
             return "Function";
+        case SymbolKind::Value:
+            return "Value";
         case SymbolKind::Type:
             return "Type";
-        case SymbolKind::Field:
-            return "Field";
-        case SymbolKind::Parameter:
-            return "Parameter";
-        case SymbolKind::Variable:
-            return "Variable";
 
         default:
             return "not implemented";
