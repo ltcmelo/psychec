@@ -22,6 +22,11 @@
 
 #include "Unparser.h"
 
+#include "compilation/Assembly.h"
+#include "compilation/Compilation.h"
+#include "compilation/SemanticModel.h"
+#include "symbols/Symbol.h"
+#include "symbols/Symbols.h"
 #include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
@@ -64,7 +69,14 @@ TestFrontend::Expectation& TestFrontend::Expectation::replicateAmbiguity(const s
 
 TestFrontend::Expectation& TestFrontend::Expectation::AST(std::vector<SyntaxKind>&& v)
 {
-    syntax_ = std::move(v);
+    syntaxKinds_ = std::move(v);
+    return *this;
+}
+
+TestFrontend::Expectation&
+TestFrontend::Expectation::symNameKind(std::vector<std::tuple<std::string, SymbolKind>>&& v)
+{
+    symbolNamesKinds_ = std::move(v);
     return *this;
 }
 
@@ -218,11 +230,11 @@ void TestFrontend::parse(std::string source,
     else
         PSYCHE_EXPECT_STR_EQ(text, textP);
 
-    if (X.syntax_.empty())
+    if (X.syntaxKinds_.empty())
         return;
 
     std::string names;
-    for (auto k : X.syntax_)
+    for (auto k : X.syntaxKinds_)
         names += to_string(k);
 
     std::string namesP = ossTree.str();
@@ -230,14 +242,38 @@ void TestFrontend::parse(std::string source,
     PSYCHE_EXPECT_STR_EQ(names, namesP);
 }
 
-void TestFrontend::bind(std::string text)
+void TestFrontend::bind(std::string text,
+                        Expectation X)
 {
     parse(text);
 
     auto compilation = Compilation::create(tree_->filePath());
     compilation->addSyntaxTrees({ tree_.get() });
-    /*auto semaModel = */compilation->semanticModel(tree_.get());
-    std::cout << "asdfasdfasdfasdf\n\n";
+    compilation->semanticModel(tree_.get());
+
+    auto sym = compilation->assembly()->findSymByPred(
+                [] (const auto& sym) {
+                    return sym->kind() == SymbolKind::LinkUnit;
+                });
+    if (sym == nullptr)
+        PSYCHE_TEST_FAIL("link unit not found");
+
+    for (auto tup : X.symbolNamesKinds_) {
+        auto symName = std::get<0>(tup);
+        auto symK = std::get<1>(tup);
+        auto sym = compilation->assembly()->findSymByPred(
+                    [symName, symK] (const auto& sym) {
+                        auto n = sym->name();
+                        return n != nullptr
+                                && symName == to_string(*n)
+                                && symK == sym->kind();
+                    });
+
+        if (sym == nullptr) {
+            auto s = to_string(symK) + " " + symName + " not found";
+            PSYCHE_TEST_FAIL(s);
+        }
+    }
 }
 
 void TestFrontend::typeCheck(std::string text)

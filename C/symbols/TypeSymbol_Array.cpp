@@ -29,6 +29,5 @@ ArrayTypeSymbol::ArrayTypeSymbol(const SyntaxTree* tree,
     : TypeSymbol(tree,
                  scope,
                  containingSym,
-                 SymbolKind::ArrayType,
                  TypeKind::Array)
 {}

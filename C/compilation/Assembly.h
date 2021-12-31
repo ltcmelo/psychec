@@ -26,6 +26,7 @@
 
 #include "symbols/Symbol.h"
 
+#include <functional>
 #include <unordered_set>
 #include <vector>
 
@@ -47,8 +48,11 @@ public:
 
 private:
     friend class SemanticModel;
+    friend class TestFrontend;
 
     std::unordered_set<std::unique_ptr<Symbol>> syms_;
+
+    Symbol* findSymByPred(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const;
 };
 
 } // C

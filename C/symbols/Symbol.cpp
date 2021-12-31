@@ -31,13 +31,17 @@
 #include <sstream>
 
 Symbol::Symbol(const SyntaxTree* tree,
-               const Scope* scope,
+               const Scope* outerScope,
                const Symbol* containingSym,
                SymbolKind symKind)
     : P(new SymbolImpl(tree,
-                       scope,
+                       outerScope,
                        containingSym,
                        symKind))
+{}
+
+Symbol::Symbol(SymbolImpl* p)
+    : P(p)
 {}
 
 Symbol::~Symbol()
@@ -93,16 +97,16 @@ Location Symbol::location() const
 }
 
 template <class ScopeT>
-ScopeT* Symbol::newScope()
+ScopeT* Symbol::makeScope()
 {
     std::unique_ptr<ScopeT> scope(new ScopeT());
     P->innerScope_ = std::move(scope);
     return static_cast<ScopeT*>(P->innerScope_.get());
 }
 
-template BlockScope* Symbol::newScope<BlockScope>();
-template FileScope* Symbol::newScope<FileScope>();
-template FunctionScope* Symbol::newScope<FunctionScope>();
+template BlockScope* Symbol::makeScope<BlockScope>();
+template FileScope* Symbol::makeScope<FileScope>();
+template FunctionScope* Symbol::makeScope<FunctionScope>();
 
 void Symbol::giveName(std::unique_ptr<SymbolName> name)
 {
@@ -115,7 +119,7 @@ namespace C {
 std::string to_string(const Symbol& sym)
 {
     std::ostringstream oss;
-    oss << to_string(*sym.name()) << ' ';
+//    oss << to_string(*sym.name()) << ' ';
     oss << to_string(sym.kind()) << ' ';
 
     return oss.str();

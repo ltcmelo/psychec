@@ -25,10 +25,12 @@
 #include "SyntaxTree.h"
 
 #include "compilation/Compilation.h"
+#include "symbols/SymbolKind.h"
 #include "tests/TestRunner.h"
 
 #include <functional>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -58,34 +60,36 @@ public:
         void setWarnCnt(int numW);
 
         Expectation& AST(std::vector<SyntaxKind>&& v);
+        Expectation& symNameKind(std::vector<std::tuple<std::string, SymbolKind>>&& v);
         Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
         Expectation& replicateAmbiguity(const std::string& s = "");
 
         int numE_;
         int numW_;
+        bool hasAmbiguity_;
         std::vector<std::string> descriptorsE_;
         std::vector<std::string> descriptorsW_;
-        std::vector<SyntaxKind> syntax_;
+        std::vector<SyntaxKind> syntaxKinds_;
+        std::vector<std::tuple<std::string, SymbolKind>> symbolNamesKinds_;
         std::string ambiguousText_;
-        bool hasAmbiguity_;
     };
 
 protected:
     TestFrontend();
     ~TestFrontend();
 
-    void parse(std::string source,
+    void parse(std::string text,
                Expectation X = Expectation(),
                SyntaxTree::SyntaxCategory cat = SyntaxTree::SyntaxCategory::Unspecified);
-    void parseDeclaration(std::string source,
+    void parseDeclaration(std::string text,
                           Expectation X = Expectation());
-    void parseExpression(std::string source,
+    void parseExpression(std::string text,
                          Expectation X = Expectation());
-    void parseStatement(std::string source,
+    void parseStatement(std::string text,
                         Expectation X = Expectation());
-
-    void bind(std::string source);
-    void typeCheck(std::string source);
+    void bind(std::string text,
+              Expectation X = Expectation());
+    void typeCheck(std::string text);
 
     std::unique_ptr<SyntaxTree> tree_;
     std::unique_ptr<Compilation> compilation_;

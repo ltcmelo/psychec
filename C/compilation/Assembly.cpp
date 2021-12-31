@@ -34,3 +34,10 @@ std::vector<const Symbol*> Assembly::symbols() const
                    [] (auto& sym) { return sym.get();});
     return syms;
 }
+
+Symbol* Assembly::findSymByPred(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const
+{
+    auto it = std::find_if(syms_.begin(), syms_.end(), pred);
+    return it == syms_.end() ? nullptr
+                             : it->get();
+}

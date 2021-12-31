@@ -33,7 +33,7 @@ std::vector<const BlockScope*> Scope::blocks() const
     return {};
 }
 
-BlockScope* Scope::newBlock()
+BlockScope* Scope::makeNestedScope()
 {
     blocks_.emplace_back(new BlockScope);
     return blocks_.back().get();

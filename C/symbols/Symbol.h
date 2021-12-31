@@ -47,12 +47,6 @@ namespace C {
  */
 class PSY_C_API Symbol
 {
-protected:
-    Symbol(const SyntaxTree* tree,
-           const Scope* outerScope,
-           const Symbol* containingSym,
-           SymbolKind symKind);
-
 public:
     Symbol(const Symbol&) = delete;
     Symbol& operator=(const Symbol&) = delete;
@@ -113,9 +107,16 @@ private:
     friend class TypeSymbol;
     friend class Binder;
 
-    template <class ScopeT> ScopeT* newScope();
+    Symbol(SymbolImpl* p);
+
+    template <class ScopeT> ScopeT* makeScope();
 
 protected:
+    Symbol(const SyntaxTree* tree,
+           const Scope* outerScope,
+           const Symbol* containingSym,
+           SymbolKind symKind);
+
     void giveName(std::unique_ptr<SymbolName> name);
 };
 

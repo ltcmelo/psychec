@@ -46,7 +46,7 @@ enum class TypeKind : std::uint8_t
     Pointer,
     Struct,
     Union,
-    Typedef,
+    Synonym,
 };
 
 inline std::string PSY_C_API to_string(TypeKind tyKind)
@@ -64,8 +64,8 @@ inline std::string PSY_C_API to_string(TypeKind tyKind)
             return "Struct";
         case TypeKind::Union:
             return "Union";
-        case TypeKind::Typedef:
-            return "Typedef";
+        case TypeKind::Synonym:
+            return "Synonym";
         default:
             return "not implemented";
     }

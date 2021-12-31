@@ -37,19 +37,108 @@ using namespace C;
 
 void TestBinder::case1001()
 {
-    bind("int i ;");
+    bind("int x ;",
+         Expectation().symNameKind(
+             {
+                 std::make_tuple("x", SymbolKind::Variable)
+             }));
 }
 
-void TestBinder::case1002() {}
-void TestBinder::case1003() {}
-void TestBinder::case1004() {}
-void TestBinder::case1005() {}
-void TestBinder::case1006() {}
-void TestBinder::case1007() {}
-void TestBinder::case1008() {}
-void TestBinder::case1009() {}
-void TestBinder::case1010() {}
-void TestBinder::case1011() {}
+void TestBinder::case1002()
+{
+    bind("int x ; int y ;",
+         Expectation().symNameKind(
+             {
+                 std::make_tuple("x", SymbolKind::Variable),
+                 std::make_tuple("y", SymbolKind::Variable)
+             }));
+}
+
+void TestBinder::case1003()
+{
+    bind("int x , y ;",
+         Expectation().symNameKind(
+            {
+                std::make_tuple("x", SymbolKind::Variable),
+                std::make_tuple("y", SymbolKind::Variable)
+            }));
+}
+
+void TestBinder::case1004()
+{
+    bind("x y ;",
+         Expectation().symNameKind(
+             {
+                 std::make_tuple("y", SymbolKind::Variable)
+             }));
+}
+
+void TestBinder::case1005()
+{
+    bind("x y , z ;",
+         Expectation().symNameKind(
+            {
+                std::make_tuple("y", SymbolKind::Variable),
+                std::make_tuple("z", SymbolKind::Variable)
+            }));
+}
+
+void TestBinder::case1006()
+{
+//    bind("int * x ;",
+//         Expectation().SymbolNameKind(
+//             {
+//                 std::make_tuple("x", SymbolKind::Variable)
+//             }));
+}
+
+void TestBinder::case1007()
+{
+//    bind("const int x ;",
+//         Expectation().SymbolNameKind(
+//             {
+//                 std::make_tuple("x", SymbolKind::Variable)
+//             }));
+}
+
+void TestBinder::case1008()
+{
+//    bind("const int * x ;",
+//         Expectation().SymbolNameKind(
+//             {
+//                 std::make_tuple("x", SymbolKind::Variable)
+//             }));
+}
+
+void TestBinder::case1009()
+{
+//    bind("const int * const x ;",
+//         Expectation().SymbolNameKind(
+//             {
+//                 std::make_tuple("x", SymbolKind::Variable)
+//             }));
+}
+
+void TestBinder::case1010()
+{
+//    bind("int * x ; int * y ;",
+//         Expectation().SymbolNameKind(
+//             {
+//                 std::make_tuple("x", SymbolKind::Variable),
+//                 std::make_tuple("y", SymbolKind::Variable)
+//             }));
+}
+
+void TestBinder::case1011()
+{
+//    bind("int x , * y ;",
+//         Expectation().SymbolNameKind(
+//             {
+//                 std::make_tuple("x", SymbolKind::Variable),
+//                 std::make_tuple("y", SymbolKind::Variable)
+//             }));
+}
+
 void TestBinder::case1012() {}
 void TestBinder::case1013() {}
 void TestBinder::case1014() {}
