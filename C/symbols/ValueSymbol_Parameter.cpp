@@ -18,16 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol_Variable.h"
+#include "ValueSymbol_Parameter.h"
 
 using namespace psy;
 using namespace C;
 
-VariableSymbol::VariableSymbol(const SyntaxTree* tree,
-                               const Scope* scope,
-                               const Symbol* containingSym)
+ParameterSymbol::ParameterSymbol(const SyntaxTree* tree,
+                                 const Scope* scope,
+                                 const Symbol* containingSym)
     : ValueSymbol(tree,
                   scope,
                   containingSym,
-                  ValueKind::Variable)
+                  ValueKind::Parameter)
 {}
