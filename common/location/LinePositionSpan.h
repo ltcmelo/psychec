@@ -41,23 +41,23 @@ class PSY_API LinePositionSpan
 {
 public:
     LinePositionSpan(const LinePosition& start, const LinePosition& end)
-        : start_(start)
-        , end_(end)
+        : start__(start)
+        , end__(end)
     {}
 
     /**
      * The start position of \c this span.
      */
-    LinePosition start() const { return start_; }
+    LinePosition start() const { return start__; }
 
     /**
      * The end position of \c this span.
      */
-    LinePosition end() const { return end_; }
+    LinePosition end() const { return end__; }
 
 private:
-    LinePosition start_;
-    LinePosition end_;
+    LinePosition start__;
+    LinePosition end__;
 };
 
 bool operator==(const LinePositionSpan& a, const LinePositionSpan& b);

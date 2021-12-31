@@ -28,53 +28,53 @@ using namespace psy;
 using namespace C;
 
 MemoryPool::MemoryPool()
-    : blocks_(0)
-    , allocatedBlocks_(0)
-    , blockCount_(-1)
-    , ptr_(0)\
-    , end_(0)
+    : blocks__(0)
+    , allocatedBlocks__(0)
+    , blockCount__(-1)
+    , ptr__(0)\
+    , end__(0)
 {}
 
 MemoryPool::~MemoryPool()
 {
-    if (blocks_) {
-        for (int i = 0; i < allocatedBlocks_; ++i) {
-            if (char* b = blocks_[i])
+    if (blocks__) {
+        for (int i = 0; i < allocatedBlocks__; ++i) {
+            if (char* b = blocks__[i])
                 std::free(b);
         }
-        std::free(blocks_);
+        std::free(blocks__);
     }
 }
 
 void MemoryPool::reset()
 {
-    blockCount_ = -1;
-    ptr_ = end_ = 0;
+    blockCount__ = -1;
+    ptr__ = end__ = 0;
 }
 
 void* MemoryPool::allocate_helper(size_t size)
 {
-    if (++blockCount_ == allocatedBlocks_) {
-        if (!allocatedBlocks_)
-            allocatedBlocks_ = DEFAULT_BLOCK_COUNT;
+    if (++blockCount__ == allocatedBlocks__) {
+        if (!allocatedBlocks__)
+            allocatedBlocks__ = DEFAULT_BLOCK_COUNT;
         else
-            allocatedBlocks_ *= 2;
+            allocatedBlocks__ *= 2;
 
-        blocks_ = (char**)realloc(blocks_, sizeof(char*) * allocatedBlocks_);
+        blocks__ = (char**)realloc(blocks__, sizeof(char*) * allocatedBlocks__);
 
-        for (int index = blockCount_; index < allocatedBlocks_; ++index)
-            blocks_[index] = 0;
+        for (int index = blockCount__; index < allocatedBlocks__; ++index)
+            blocks__[index] = 0;
     }
 
-    char*& block = blocks_[blockCount_];
+    char*& block = blocks__[blockCount__];
     if (!block)
         block = (char *) std::malloc(BLOCK_SIZE);
 
-    ptr_ = block;
-    end_ = ptr_ + BLOCK_SIZE;
+    ptr__ = block;
+    end__ = ptr__ + BLOCK_SIZE;
 
-    void* addr = ptr_;
-    ptr_ += size;
+    void* addr = ptr__;
+    ptr__ += size;
 
     return addr;
 }

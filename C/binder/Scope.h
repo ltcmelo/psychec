@@ -50,9 +50,9 @@ public:
 private:
     friend class Binder;
 
-    BlockScope* newBlock();
+    BlockScope* makeBlock__();
 
-    std::vector<std::unique_ptr<BlockScope>> blocks_;
+    std::vector<std::unique_ptr<BlockScope>> blocks__;
 };
 
 } // C

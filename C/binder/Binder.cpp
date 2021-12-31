@@ -99,7 +99,7 @@ void Binder::openScopeInSymbol__()
 
 void Binder::openScopeInScope__()
 {
-    auto scope = scopes__.top()->newBlock();
+    auto scope = scopes__.top()->makeBlock__();
     scopes__.push(scope);
 }
 
