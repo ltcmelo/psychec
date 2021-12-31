@@ -271,7 +271,7 @@ private:
     LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
     AST_CHILD_LST3(specs_, decltors_, semicolonTkIdx_)
 
-    mutable SymbolList<Symbol*>* syms__ = nullptr;
+    mutable SymbolList<Symbol*>* syms_ = nullptr;
 };
 
 /**
@@ -302,7 +302,7 @@ private:
                    decltors_,
                    semicolonTkIdx_)
 
-    mutable SymbolList<Symbol*>* syms__ = nullptr;
+    mutable SymbolList<Symbol*>* syms_ = nullptr;
 };
 
 /**

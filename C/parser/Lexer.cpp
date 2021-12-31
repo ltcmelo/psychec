@@ -58,7 +58,7 @@ Lexer::Lexer(SyntaxTree* tree)
     , offset_(~0)  // Start immediately "before" 0.
     , withinLogicalLine_(false)
     , rawSyntaxK_splitTk(0)
-    , diagReporter__(this)
+    , diagReporter_(this)
 {}
 
 Lexer::~Lexer()
@@ -859,7 +859,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
                 yyinput();
 
                 if (tree_->parseOptions().dialect().std() < LanguageDialect::Std::C99) {
-                    diagReporter__.IncompatibleLanguageDialect(
+                    diagReporter_.IncompatibleLanguageDialect(
                                 "hexadecimal floating-point constant",
                                 LanguageDialect::Std::C99);
                 }

@@ -120,7 +120,7 @@ private:
     };
     friend struct DiagnosticsReporter;
 
-    DiagnosticsReporter diagReporter__;
+    DiagnosticsReporter diagReporter_;
 };
 
 } // C

@@ -50,7 +50,7 @@ public:
 private:
     friend class Binder;
 
-    BlockScope* makeNestedScope__();
+    BlockScope* makeNestedScope();
 
     std::vector<std::unique_ptr<BlockScope>> blocks__;
 };

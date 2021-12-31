@@ -45,23 +45,23 @@ class PSY_API TextSpan
 {
 public:
     TextSpan(unsigned int start, unsigned int  end)
-        : start__(start)
-        , end__(end)
+        : start_(start)
+        , end_(end)
     {}
 
     /**
      * The start of \c this span.
      */
-    unsigned int start() const { return start__; }
+    unsigned int start() const { return start_; }
 
     /**
      * The end of \c this span.
      */
-    unsigned int end() const { return end__; }
+    unsigned int end() const { return end_; }
 
 private:
-    unsigned int start__;
-    unsigned int end__;
+    unsigned int start_;
+    unsigned int end_;
 };
 
 bool operator==(const TextSpan& a, const TextSpan& b);

@@ -109,7 +109,7 @@ private:
 
     Symbol(SymbolImpl* p);
 
-    template <class ScopeT> ScopeT* makeScope__();
+    template <class ScopeT> ScopeT* makeScope();
 
 protected:
     Symbol(const SyntaxTree* tree,

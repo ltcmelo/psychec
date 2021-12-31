@@ -38,8 +38,8 @@ using namespace C;
 
 Binder::Binder(SemanticModel* semaModel, const SyntaxTree* tree)
     : SyntaxVisitor(tree)
-    , semaModel__(semaModel)
-    , diagReporter__(this)
+    , semaModel_(semaModel)
+    , diagReporter_(this)
 {}
 
 Binder::~Binder()
@@ -52,66 +52,66 @@ void Binder::bind()
 }
 
 template <class SymT>
-SymT* Binder::makeAndPushDeclSym__()
+SymT* Binder::makeAndPushDeclSym()
 {
     std::unique_ptr<SymT> sym(new SymT(tree_,
-                                       scopes__.top(),
-                                       syms__.top()));
-    return pushSym__(std::move(sym));
+                                       scopes_.top(),
+                                       syms_.top()));
+    return pushSym(std::move(sym));
 }
 
-template FieldSymbol* Binder::makeAndPushDeclSym__<FieldSymbol>();
-template FunctionSymbol* Binder::makeAndPushDeclSym__<FunctionSymbol>();
-template ParameterSymbol* Binder::makeAndPushDeclSym__<ParameterSymbol>();
-template VariableSymbol* Binder::makeAndPushDeclSym__<VariableSymbol>();
+template FieldSymbol* Binder::makeAndPushDeclSym<FieldSymbol>();
+template FunctionSymbol* Binder::makeAndPushDeclSym<FunctionSymbol>();
+template ParameterSymbol* Binder::makeAndPushDeclSym<ParameterSymbol>();
+template VariableSymbol* Binder::makeAndPushDeclSym<VariableSymbol>();
 
-NamedTypeSymbol* Binder::makeAndPushDeclSym__(std::unique_ptr<SymbolName> symName,
+NamedTypeSymbol* Binder::makeAndPushDeclSym(std::unique_ptr<SymbolName> symName,
                                               TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> sym(
                 new NamedTypeSymbol(tree_,
-                                    scopes__.top(),
-                                    syms__.top(),
+                                    scopes_.top(),
+                                    syms_.top(),
                                     std::move(symName),
                                     tyKind));
-    return pushSym__(std::move(sym));
+    return pushSym(std::move(sym));
 }
 
 template <>
-LinkUnitSymbol* Binder::makeAndPushDeclSym__<LinkUnitSymbol>()
+LinkUnitSymbol* Binder::makeAndPushDeclSym<LinkUnitSymbol>()
 {
     std::unique_ptr<LinkUnitSymbol> sym(new LinkUnitSymbol(tree_, nullptr, nullptr));
-    return pushSym__(std::move(sym));
+    return pushSym(std::move(sym));
 }
 
 template <class SymT>
-SymT* Binder::pushSym__(std::unique_ptr<SymT> sym)
+SymT* Binder::pushSym(std::unique_ptr<SymT> sym)
 {
-    syms__.push(sym.get());
-    return static_cast<SymT*>(semaModel__->storeSymbol(std::move(sym)));
+    syms_.push(sym.get());
+    return static_cast<SymT*>(semaModel_->storeSymbol(std::move(sym)));
 }
 
-void Binder::popSym__()
+void Binder::popSym()
 {
-    syms__.pop();
+    syms_.pop();
 }
 
 template <class ScopeT>
-void Binder::openScope__()
+void Binder::openScope()
 {
-    auto scope = syms__.top()->makeScope__<ScopeT>();
-    scopes__.push(scope);
+    auto scope = syms_.top()->makeScope<ScopeT>();
+    scopes_.push(scope);
 }
 
-void Binder::openNestedScope__()
+void Binder::openNestedScope()
 {
-    auto scope = scopes__.top()->makeNestedScope__();
-    scopes__.push(scope);
+    auto scope = scopes_.top()->makeNestedScope();
+    scopes_.push(scope);
 }
 
-void Binder::closeScope__()
+void Binder::closeScope()
 {
-    scopes__.pop();
+    scopes_.pop();
 }
 
 //--------------//
@@ -119,20 +119,20 @@ void Binder::closeScope__()
 //--------------//
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    makeAndPushDeclSym__<LinkUnitSymbol>();
-    openScope__<FileScope>();
+    makeAndPushDeclSym<LinkUnitSymbol>();
+    openScope<FileScope>();
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
 
-    closeScope__();
+    closeScope();
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node)
 {
-    diagReporter__.UselessDeclaration(node->lastToken());
+    diagReporter_.UselessDeclaration(node->lastToken());
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         ;
@@ -164,15 +164,15 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
 
         switch (decltor->kind()) {
             case FunctionDeclarator:
-                makeAndPushDeclSym__<FunctionSymbol>();
+                makeAndPushDeclSym<FunctionSymbol>();
                 break;
 
             case ArrayDeclarator:
             case IdentifierDeclarator:
-                switch (syms__.top()->kind()) {
+                switch (syms_.top()->kind()) {
                     case SymbolKind::LinkUnit:
                     case SymbolKind::Function:
-                        makeAndPushDeclSym__<VariableSymbol>();
+                        makeAndPushDeclSym<VariableSymbol>();
                         break;
 
                     default:
@@ -191,7 +191,7 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
 
         visit(decltorIt->value);
 
-        popSym__();
+        popSym();
     }
 
     return Action::Skip;
@@ -207,9 +207,9 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax
         switch (decltor->kind()) {
             case ArrayDeclarator:
             case IdentifierDeclarator:
-                switch (syms__.top()->kind()) {
+                switch (syms_.top()->kind()) {
                     case SymbolKind::Type:
-                        makeAndPushDeclSym__<FieldSymbol>();
+                        makeAndPushDeclSym<FieldSymbol>();
                         break;
 
                     default:
@@ -284,7 +284,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
     std::unique_ptr<SymbolName> symName(
                 new TagSymbolName(tyKind,
                                   node->tagToken().valueText_c_str()));
-    makeAndPushDeclSym__(std::move(symName), tyKind);
+    makeAndPushDeclSym(std::move(symName), tyKind);
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
@@ -313,7 +313,7 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 {
     std::unique_ptr<SymbolName> symName(
                 new PlainSymbolName(node->identifierToken().valueText_c_str()));
-    syms__.top()->giveName_(std::move(symName));
+    syms_.top()->giveName_(std::move(symName));
 
     return Action::Skip;
 }
@@ -321,7 +321,7 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax*)
 {
     std::unique_ptr<SymbolName> symName(new EmptySymbolName);
-    syms__.top()->giveName_(std::move(symName));
+    syms_.top()->giveName_(std::move(symName));
 
     return Action::Skip;
 }
@@ -331,12 +331,12 @@ SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSy
 //------------//
 SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
-    openNestedScope__();
+    openNestedScope();
 
     for (auto stmtIt = node->statements(); stmtIt; stmtIt = stmtIt->next)
         visit(stmtIt->value);
 
-    closeScope__();
+    closeScope();
 
     return Action::Skip;
 }

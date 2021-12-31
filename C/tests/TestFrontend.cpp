@@ -251,7 +251,7 @@ void TestFrontend::bind(std::string text,
     compilation->addSyntaxTrees({ tree_.get() });
     compilation->semanticModel(tree_.get());
 
-    auto sym = compilation->assembly()->findSymByPred__(
+    auto sym = compilation->assembly()->findSymByPred(
                 [] (const auto& sym) {
                     return sym->kind() == SymbolKind::LinkUnit;
                 });
@@ -261,7 +261,7 @@ void TestFrontend::bind(std::string text,
     for (auto tup : X.symbolNamesKinds_) {
         auto symName = std::get<0>(tup);
         auto symK = std::get<1>(tup);
-        auto sym = compilation->assembly()->findSymByPred__(
+        auto sym = compilation->assembly()->findSymByPred(
                     [symName, symK] (const auto& sym) {
                         auto n = sym->name();
                         return n != nullptr

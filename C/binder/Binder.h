@@ -56,18 +56,18 @@ private:
 
     Binder(SemanticModel* semaModel, const SyntaxTree* tree);
 
-    SemanticModel* semaModel__;
-    std::stack<Scope*> scopes__;
-    std::stack<Symbol*> syms__;
+    SemanticModel* semaModel_;
+    std::stack<Scope*> scopes_;
+    std::stack<Symbol*> syms_;
 
-    template <class SymT> SymT* makeAndPushDeclSym__();
-    NamedTypeSymbol* makeAndPushDeclSym__(std::unique_ptr<SymbolName>, TypeKind);
-    template <class SymT> SymT* pushSym__(std::unique_ptr<SymT>);
-    void popSym__();
+    template <class SymT> SymT* makeAndPushDeclSym();
+    NamedTypeSymbol* makeAndPushDeclSym(std::unique_ptr<SymbolName>, TypeKind);
+    template <class SymT> SymT* pushSym(std::unique_ptr<SymT>);
+    void popSym();
 
-    template <class ScopeT> void openScope__();
-    void openNestedScope__();
-    void closeScope__();
+    template <class ScopeT> void openScope();
+    void openNestedScope();
+    void closeScope();
 
     struct DiagnosticsReporter
     {
@@ -83,7 +83,7 @@ private:
         void UselessDeclaration(SyntaxToken tk);
     };
 
-    DiagnosticsReporter diagReporter__;
+    DiagnosticsReporter diagReporter_;
 
     //--------------//
     // Declarations //

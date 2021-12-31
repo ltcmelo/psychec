@@ -42,9 +42,9 @@ public:
     void* allocate(size_t size)
     {
         size = (size + 7) & ~7;
-        if (ptr__ && (ptr__ + size < end__)) {
-            void *addr = ptr__;
-            ptr__ += size;
+        if (ptr_ && (ptr_ + size < end_)) {
+            void *addr = ptr_;
+            ptr_ += size;
             return addr;
         }
         return allocate_helper(size);
@@ -53,11 +53,11 @@ public:
 private:
     void* allocate_helper(size_t size);
 
-    char** blocks__;
-    int allocatedBlocks__;
-    int blockCount__;
-    char* ptr__;
-    char* end__;
+    char** blocks_;
+    int allocatedBlocks_;
+    int blockCount_;
+    char* ptr_;
+    char* end_;
 
     enum
     {
