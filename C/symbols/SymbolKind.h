@@ -41,6 +41,7 @@ enum class SymbolKind : std::uint8_t
 {
     LinkUnit = 0,
     Function,
+    Value,
     Type,
 
     /* Values */

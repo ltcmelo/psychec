@@ -18,61 +18,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_KIND_H__
-#define PSYCHE_C_TYPE_KIND_H__
+#include "Symbol_Value.h"
+#include "Symbol__IMPL__.inc"
 
-#include "API.h"
-#include "APIFwds.h"
+using namespace psy;
+using namespace C;
 
-#include <cstdint>
-#include <string>
-
-namespace psy {
-namespace C {
-
-/**
- * \brief The TypeKind enum.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.TypeKind
- * from Roslyn, the .NET Compiler Platform.
- */
-enum class TypeKind : std::uint8_t
+struct ValueSymbol::ValueSymbolImpl : SymbolImpl
 {
-    None = 0,
-    Builtin,
-    Array,
-    Enum,
-    Pointer,
-    Struct,
-    Union,
-    Synonym,
+    ValueSymbolImpl(const SyntaxTree* tree,
+                    const Scope* outerScope,
+                    const Symbol* containingSym,
+                    ValueKind valKind)
+        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Value)
+        , valKind_(valKind)
+    {}
+
+    ValueKind valKind_;
 };
 
-inline std::string PSY_C_API to_string(TypeKind tyKind)
+ValueSymbol::ValueSymbol(const SyntaxTree* tree,
+                         const Scope* outerScope,
+                         const Symbol* containingSym,
+                         ValueKind valKind)
+    : Symbol(new ValueSymbolImpl(tree,
+                                 outerScope,
+                                 containingSym,
+                                 valKind))
+{}
+
+ValueSymbol::~ValueSymbol()
+{}
+
+ValueKind ValueSymbol::valueKind() const
 {
-    switch (tyKind) {
-        case TypeKind::Builtin:
-            return "Builtin";
-        case TypeKind::Array:
-            return "Array";
-        case TypeKind::Enum:
-            return "Enum";
-        case TypeKind::Pointer:
-            return "Pointer";
-        case TypeKind::Struct:
-            return "Struct";
-        case TypeKind::Union:
-            return "Union";
-        case TypeKind::Synonym:
-            return "Synonym";
-
-        default:
-            return "<unknown type kind>";
-    }
+    return P_CAST->valKind_;
 }
-
-} // C
-} // psy
-
-#endif

@@ -18,59 +18,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_KIND_H__
-#define PSYCHE_C_TYPE_KIND_H__
+#ifndef PSYCHE_C_VALUE_SYMBOL_H__
+#define PSYCHE_C_VALUE_SYMBOL_H__
 
 #include "API.h"
 #include "APIFwds.h"
+#include "ValueKind.h"
+#include "Symbol.h"
 
-#include <cstdint>
-#include <string>
+#include <memory>
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The TypeKind enum.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.TypeKind
- * from Roslyn, the .NET Compiler Platform.
+ * \brief The ValueSymbol class.
  */
-enum class TypeKind : std::uint8_t
+class PSY_C_API ValueSymbol : public Symbol
 {
-    None = 0,
-    Builtin,
-    Array,
-    Enum,
-    Pointer,
-    Struct,
-    Union,
-    Synonym,
+public:
+    virtual ~ValueSymbol();
+
+    ValueKind valueKind() const;
+
+protected:
+    DECL_PIMPL_SUB(ValueSymbol);
+
+    ValueSymbol(const SyntaxTree* tree,
+                const Scope* outerScope,
+                const Symbol* containingSym,
+                ValueKind valKind);
 };
-
-inline std::string PSY_C_API to_string(TypeKind tyKind)
-{
-    switch (tyKind) {
-        case TypeKind::Builtin:
-            return "Builtin";
-        case TypeKind::Array:
-            return "Array";
-        case TypeKind::Enum:
-            return "Enum";
-        case TypeKind::Pointer:
-            return "Pointer";
-        case TypeKind::Struct:
-            return "Struct";
-        case TypeKind::Union:
-            return "Union";
-        case TypeKind::Synonym:
-            return "Synonym";
-
-        default:
-            return "<unknown type kind>";
-    }
-}
 
 } // C
 } // psy

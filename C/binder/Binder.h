@@ -65,6 +65,8 @@ private:
     template <class SymT> SymT* pushSym(std::unique_ptr<SymT>);
     void popSym();
 
+    template <class TySymT> void f();
+
     template <class ScopeT> void openScope();
     void openNestedScope();
     void closeScope();

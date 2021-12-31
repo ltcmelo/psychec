@@ -119,6 +119,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Parameter.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Variable.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
@@ -138,6 +140,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Named.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.h
+    ${PROJECT_SOURCE_DIR}/symbols/ValueKind.h
 
     # Binder
     ${PROJECT_SOURCE_DIR}/binder/Binder.h

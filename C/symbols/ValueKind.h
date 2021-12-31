@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_KIND_H__
-#define PSYCHE_C_TYPE_KIND_H__
+#ifndef PSYCHE_C_VALUE_KIND_H__
+#define PSYCHE_C_VALUE_KIND_H__
 
 #include "API.h"
 #include "APIFwds.h"
@@ -31,44 +31,28 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The TypeKind enum.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.TypeKind
- * from Roslyn, the .NET Compiler Platform.
+ * \brief The ValueKind enum.
  */
-enum class TypeKind : std::uint8_t
+enum class ValueKind : std::uint8_t
 {
     None = 0,
-    Builtin,
-    Array,
-    Enum,
-    Pointer,
-    Struct,
-    Union,
-    Synonym,
+    Field,
+    Parameter,
+    Variable
 };
 
-inline std::string PSY_C_API to_string(TypeKind tyKind)
+inline std::string PSY_C_API to_string(ValueKind tyKind)
 {
     switch (tyKind) {
-        case TypeKind::Builtin:
-            return "Builtin";
-        case TypeKind::Array:
-            return "Array";
-        case TypeKind::Enum:
-            return "Enum";
-        case TypeKind::Pointer:
-            return "Pointer";
-        case TypeKind::Struct:
-            return "Struct";
-        case TypeKind::Union:
-            return "Union";
-        case TypeKind::Synonym:
-            return "Synonym";
+        case ValueKind::Field:
+            return "Field";
+        case ValueKind::Parameter:
+            return "Parameter";
+        case ValueKind::Variable:
+            return "Variable";
 
         default:
-            return "<unknown type kind>";
+            return "<unknown value kind>";
     }
 }
 

@@ -104,6 +104,7 @@ public:
 private:
     DECL_PIMPL(Symbol);
 
+    friend class ValueSymbol;
     friend class TypeSymbol;
     friend class Binder;
 
