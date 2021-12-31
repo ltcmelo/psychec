@@ -61,9 +61,11 @@ private:
     std::stack<Symbol*> syms__;
     std::stack<Symbol*> symsTypes__; // The type of a symbol (not a type symbol).
 
-    template <class SymT> SymT* makeSym_COMMON__(std::unique_ptr<SymT>);
-    template <class SymT> SymT* makeDeclSym__();
-    NamedTypeSymbol* makeTyDeclSym__(std::unique_ptr<SymbolName>, TypeKind);
+    template <class SymT> SymT* pushSym__(std::unique_ptr<SymT>);
+    void popSym__();
+
+    template <class SymT> SymT* makeAndPushDeclSym__();
+    NamedTypeSymbol* makeAndPushTyDeclSym__(std::unique_ptr<SymbolName>, TypeKind);
 
     template <class ScopeT> void openScopeInSymbol__();
     void openScopeInScope__();

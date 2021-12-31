@@ -43,9 +43,24 @@ void TestBinder::case1001()
 
 void TestBinder::case1002()
 {
+    bind("int x ; int y ;",
+         Expectation().SymbolNameKind(
+            {
+                std::make_tuple("x", SymbolKind::Variable),
+                std::make_tuple("y", SymbolKind::Variable)
+            }));
 }
 
-void TestBinder::case1003() {}
+void TestBinder::case1003()
+{
+    bind("int x , y ;",
+         Expectation().SymbolNameKind(
+            {
+                std::make_tuple("x", SymbolKind::Variable),
+                std::make_tuple("y", SymbolKind::Variable)
+            }));
+}
+
 void TestBinder::case1004() {}
 void TestBinder::case1005() {}
 void TestBinder::case1006() {}
