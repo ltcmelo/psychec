@@ -52,7 +52,7 @@ private:
 
     BlockScope* makeNestedScope();
 
-    std::vector<std::unique_ptr<BlockScope>> blocks__;
+    std::vector<std::unique_ptr<BlockScope>> blocks_;
 };
 
 } // C

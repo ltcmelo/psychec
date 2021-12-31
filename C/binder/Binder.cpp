@@ -313,7 +313,7 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 {
     std::unique_ptr<SymbolName> symName(
                 new PlainSymbolName(node->identifierToken().valueText_c_str()));
-    syms_.top()->giveName_(std::move(symName));
+    syms_.top()->giveName(std::move(symName));
 
     return Action::Skip;
 }
@@ -321,7 +321,7 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax*)
 {
     std::unique_ptr<SymbolName> symName(new EmptySymbolName);
-    syms_.top()->giveName_(std::move(symName));
+    syms_.top()->giveName(std::move(symName));
 
     return Action::Skip;
 }

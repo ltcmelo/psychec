@@ -60,7 +60,7 @@ public:
         void setWarnCnt(int numW);
 
         Expectation& AST(std::vector<SyntaxKind>&& v);
-        Expectation& SymbolNameKind(std::vector<std::tuple<std::string, SymbolKind>>&& v);
+        Expectation& symNameKind(std::vector<std::tuple<std::string, SymbolKind>>&& v);
         Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
         Expectation& replicateAmbiguity(const std::string& s = "");
 

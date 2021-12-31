@@ -43,5 +43,5 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                  containingSym,
                  tyKind)
 {
-    giveName_(std::move(symName));
+    giveName(std::move(symName));
 }

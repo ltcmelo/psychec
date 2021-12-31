@@ -108,7 +108,7 @@ template BlockScope* Symbol::makeScope<BlockScope>();
 template FileScope* Symbol::makeScope<FileScope>();
 template FunctionScope* Symbol::makeScope<FunctionScope>();
 
-void Symbol::giveName_(std::unique_ptr<SymbolName> name)
+void Symbol::giveName(std::unique_ptr<SymbolName> name)
 {
     P->symName_ = std::move(name);
 }

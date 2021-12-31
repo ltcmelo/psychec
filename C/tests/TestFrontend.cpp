@@ -74,7 +74,7 @@ TestFrontend::Expectation& TestFrontend::Expectation::AST(std::vector<SyntaxKind
 }
 
 TestFrontend::Expectation&
-TestFrontend::Expectation::SymbolNameKind(std::vector<std::tuple<std::string, SymbolKind>>&& v)
+TestFrontend::Expectation::symNameKind(std::vector<std::tuple<std::string, SymbolKind>>&& v)
 {
     symbolNamesKinds_ = std::move(v);
     return *this;

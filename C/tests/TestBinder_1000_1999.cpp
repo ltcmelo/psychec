@@ -38,7 +38,7 @@ using namespace C;
 void TestBinder::case1001()
 {
     bind("int x ;",
-         Expectation().SymbolNameKind(
+         Expectation().symNameKind(
              {
                  std::make_tuple("x", SymbolKind::Variable)
              }));
@@ -47,7 +47,7 @@ void TestBinder::case1001()
 void TestBinder::case1002()
 {
     bind("int x ; int y ;",
-         Expectation().SymbolNameKind(
+         Expectation().symNameKind(
              {
                  std::make_tuple("x", SymbolKind::Variable),
                  std::make_tuple("y", SymbolKind::Variable)
@@ -57,7 +57,7 @@ void TestBinder::case1002()
 void TestBinder::case1003()
 {
     bind("int x , y ;",
-         Expectation().SymbolNameKind(
+         Expectation().symNameKind(
             {
                 std::make_tuple("x", SymbolKind::Variable),
                 std::make_tuple("y", SymbolKind::Variable)
@@ -67,7 +67,7 @@ void TestBinder::case1003()
 void TestBinder::case1004()
 {
     bind("x y ;",
-         Expectation().SymbolNameKind(
+         Expectation().symNameKind(
              {
                  std::make_tuple("y", SymbolKind::Variable)
              }));
@@ -76,7 +76,7 @@ void TestBinder::case1004()
 void TestBinder::case1005()
 {
     bind("x y , z ;",
-         Expectation().SymbolNameKind(
+         Expectation().symNameKind(
             {
                 std::make_tuple("y", SymbolKind::Variable),
                 std::make_tuple("z", SymbolKind::Variable)

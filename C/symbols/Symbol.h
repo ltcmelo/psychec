@@ -117,7 +117,7 @@ protected:
            const Symbol* containingSym,
            SymbolKind symKind);
 
-    void giveName_(std::unique_ptr<SymbolName> name);
+    void giveName(std::unique_ptr<SymbolName> name);
 };
 
 std::string PSY_C_API to_string(const Symbol& sym);
