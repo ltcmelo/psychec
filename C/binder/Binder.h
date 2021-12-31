@@ -67,8 +67,8 @@ private:
     template <class SymT> SymT* makeAndPushDeclSym__();
     NamedTypeSymbol* makeAndPushTyDeclSym__(std::unique_ptr<SymbolName>, TypeKind);
 
-    template <class ScopeT> void openScopeInSymbol__();
-    void openScopeInScope__();
+    template <class ScopeT> void openScope__();
+    void openNestedScope__();
     void closeScope__();
 
     struct DiagnosticsReporter

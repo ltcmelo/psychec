@@ -97,15 +97,15 @@ LinkUnitSymbol* Binder::makeAndPushDeclSym__<LinkUnitSymbol>()
 }
 
 template <class ScopeT>
-void Binder::openScopeInSymbol__()
+void Binder::openScope__()
 {
     auto scope = syms__.top()->makeScope__<ScopeT>();
     scopes__.push(scope);
 }
 
-void Binder::openScopeInScope__()
+void Binder::openNestedScope__()
 {
-    auto scope = scopes__.top()->makeBlock__();
+    auto scope = scopes__.top()->makeNestedScope__();
     scopes__.push(scope);
 }
 
@@ -120,7 +120,7 @@ void Binder::closeScope__()
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     makeAndPushDeclSym__<LinkUnitSymbol>();
-    openScopeInSymbol__<FileScope>();
+    openScope__<FileScope>();
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
@@ -335,7 +335,7 @@ SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSy
 //------------//
 SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
-    openScopeInScope__();
+    openNestedScope__();
 
     for (auto stmtIt = node->statements(); stmtIt; stmtIt = stmtIt->next)
         visit(stmtIt->value);
