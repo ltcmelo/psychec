@@ -26,8 +26,8 @@ using namespace C;
 ParameterSymbol::ParameterSymbol(const SyntaxTree* tree,
                                  const Scope* scope,
                                  const Symbol* containingSym)
-    : Symbol(tree,
-             scope,
-             containingSym,
-             SymbolKind::Parameter)
+    : ValueSymbol(tree,
+                  scope,
+                  containingSym,
+                  ValueKind::Parameter)
 {}

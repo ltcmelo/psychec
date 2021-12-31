@@ -26,6 +26,8 @@
 
 #include "compilation/Compilation.h"
 #include "symbols/SymbolKind.h"
+#include "symbols/ValueKind.h"
+#include "symbols/TypeKind.h"
 #include "tests/TestRunner.h"
 
 #include <functional>
@@ -60,7 +62,7 @@ public:
         void setWarnCnt(int numW);
 
         Expectation& AST(std::vector<SyntaxKind>&& v);
-        Expectation& symNameKind(std::vector<std::tuple<std::string, SymbolKind>>&& v);
+        Expectation& values(std::vector<std::tuple<std::string, ValueKind>>&& v);
         Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
         Expectation& replicateAmbiguity(const std::string& s = "");
 
@@ -70,7 +72,7 @@ public:
         std::vector<std::string> descriptorsE_;
         std::vector<std::string> descriptorsW_;
         std::vector<SyntaxKind> syntaxKinds_;
-        std::vector<std::tuple<std::string, SymbolKind>> symbolNamesKinds_;
+        std::vector<std::tuple<std::string, ValueKind>> values_;
         std::string ambiguousText_;
     };
 

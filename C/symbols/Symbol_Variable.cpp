@@ -26,8 +26,8 @@ using namespace C;
 VariableSymbol::VariableSymbol(const SyntaxTree* tree,
                                const Scope* scope,
                                const Symbol* containingSym)
-    : Symbol(tree,
-             scope,
-             containingSym,
-             SymbolKind::Variable)
+    : ValueSymbol(tree,
+                  scope,
+                  containingSym,
+                  ValueKind::Variable)
 {}

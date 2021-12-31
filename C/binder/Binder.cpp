@@ -66,7 +66,7 @@ template ParameterSymbol* Binder::makeAndPushDeclSym<ParameterSymbol>();
 template VariableSymbol* Binder::makeAndPushDeclSym<VariableSymbol>();
 
 NamedTypeSymbol* Binder::makeAndPushDeclSym(std::unique_ptr<SymbolName> symName,
-                                              TypeKind tyKind)
+                                            TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> sym(
                 new NamedTypeSymbol(tree_,

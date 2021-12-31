@@ -26,8 +26,8 @@ using namespace C;
 FieldSymbol::FieldSymbol(const SyntaxTree* tree,
                          const Scope* scope,
                          const Symbol* containingSym)
-    : Symbol(tree,
-             scope,
-             containingSym,
-             SymbolKind::Field)
+    : ValueSymbol(tree,
+                  scope,
+                  containingSym,
+                  ValueKind::Field)
 {}

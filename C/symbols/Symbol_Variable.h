@@ -21,12 +21,12 @@
 #ifndef PSYCHE_C_SYMBOL_VARIABLE_H__
 #define PSYCHE_C_SYMBOL_VARIABLE_H__
 
-#include "Symbol.h"
+#include "Symbol_Value.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_API VariableSymbol : public Symbol
+class PSY_C_API VariableSymbol : public ValueSymbol
 {
 private:
     friend class Binder;

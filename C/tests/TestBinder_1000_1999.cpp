@@ -20,10 +20,12 @@
 
 #include "TestBinder.h"
 
-#include "syntax/SyntaxLexemes.h"
 #include "TestParser.h"
 #include "Unparser.h"
 
+#include "symbols/Symbol.h"
+#include "symbols/Symbols.h"
+#include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNodes.h"
 
 #include <algorithm>
@@ -38,48 +40,48 @@ using namespace C;
 void TestBinder::case1001()
 {
     bind("int x ;",
-         Expectation().symNameKind(
+         Expectation().values(
              {
-                 std::make_tuple("x", SymbolKind::Variable)
+                 std::make_tuple("x", ValueKind::Variable)
              }));
 }
 
 void TestBinder::case1002()
 {
     bind("int x ; int y ;",
-         Expectation().symNameKind(
+         Expectation().values(
              {
-                 std::make_tuple("x", SymbolKind::Variable),
-                 std::make_tuple("y", SymbolKind::Variable)
+                 std::make_tuple("x", ValueKind::Variable),
+                 std::make_tuple("y", ValueKind::Variable)
              }));
 }
 
 void TestBinder::case1003()
 {
     bind("int x , y ;",
-         Expectation().symNameKind(
+         Expectation().values(
             {
-                std::make_tuple("x", SymbolKind::Variable),
-                std::make_tuple("y", SymbolKind::Variable)
+                std::make_tuple("x", ValueKind::Variable),
+                std::make_tuple("y", ValueKind::Variable)
             }));
 }
 
 void TestBinder::case1004()
 {
     bind("x y ;",
-         Expectation().symNameKind(
+         Expectation().values(
              {
-                 std::make_tuple("y", SymbolKind::Variable)
+                 std::make_tuple("y", ValueKind::Variable)
              }));
 }
 
 void TestBinder::case1005()
 {
     bind("x y , z ;",
-         Expectation().symNameKind(
+         Expectation().values(
             {
-                std::make_tuple("y", SymbolKind::Variable),
-                std::make_tuple("z", SymbolKind::Variable)
+                std::make_tuple("y", ValueKind::Variable),
+                std::make_tuple("z", ValueKind::Variable)
             }));
 }
 
@@ -88,7 +90,7 @@ void TestBinder::case1006()
 //    bind("int * x ;",
 //         Expectation().SymbolNameKind(
 //             {
-//                 std::make_tuple("x", SymbolKind::Variable)
+//                 std::make_tuple("x", ValueKind::Variable)
 //             }));
 }
 
@@ -97,7 +99,7 @@ void TestBinder::case1007()
 //    bind("const int x ;",
 //         Expectation().SymbolNameKind(
 //             {
-//                 std::make_tuple("x", SymbolKind::Variable)
+//                 std::make_tuple("x", ValueKind::Variable)
 //             }));
 }
 
@@ -106,7 +108,7 @@ void TestBinder::case1008()
 //    bind("const int * x ;",
 //         Expectation().SymbolNameKind(
 //             {
-//                 std::make_tuple("x", SymbolKind::Variable)
+//                 std::make_tuple("x", ValueKind::Variable)
 //             }));
 }
 
@@ -115,7 +117,7 @@ void TestBinder::case1009()
 //    bind("const int * const x ;",
 //         Expectation().SymbolNameKind(
 //             {
-//                 std::make_tuple("x", SymbolKind::Variable)
+//                 std::make_tuple("x", ValueKind::Variable)
 //             }));
 }
 
@@ -124,8 +126,8 @@ void TestBinder::case1010()
 //    bind("int * x ; int * y ;",
 //         Expectation().SymbolNameKind(
 //             {
-//                 std::make_tuple("x", SymbolKind::Variable),
-//                 std::make_tuple("y", SymbolKind::Variable)
+//                 std::make_tuple("x", ValueKind::Variable),
+//                 std::make_tuple("y", ValueKind::Variable)
 //             }));
 }
 
@@ -134,8 +136,8 @@ void TestBinder::case1011()
 //    bind("int x , * y ;",
 //         Expectation().SymbolNameKind(
 //             {
-//                 std::make_tuple("x", SymbolKind::Variable),
-//                 std::make_tuple("y", SymbolKind::Variable)
+//                 std::make_tuple("x", ValueKind::Variable),
+//                 std::make_tuple("y", ValueKind::Variable)
 //             }));
 }
 

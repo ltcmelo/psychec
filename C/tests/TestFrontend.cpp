@@ -74,9 +74,9 @@ TestFrontend::Expectation& TestFrontend::Expectation::AST(std::vector<SyntaxKind
 }
 
 TestFrontend::Expectation&
-TestFrontend::Expectation::symNameKind(std::vector<std::tuple<std::string, SymbolKind>>&& v)
+TestFrontend::Expectation::values(std::vector<std::tuple<std::string, ValueKind>>&& v)
 {
-    symbolNamesKinds_ = std::move(v);
+    values_ = std::move(v);
     return *this;
 }
 
@@ -258,19 +258,19 @@ void TestFrontend::bind(std::string text,
     if (sym == nullptr)
         PSYCHE_TEST_FAIL("link unit not found");
 
-    for (auto tup : X.symbolNamesKinds_) {
+    for (auto tup : X.values_) {
         auto symName = std::get<0>(tup);
-        auto symK = std::get<1>(tup);
+        auto valK = std::get<1>(tup);
         auto sym = compilation->assembly()->findSymByPred(
-                    [symName, symK] (const auto& sym) {
-                        auto n = sym->name();
-                        return n != nullptr
-                                && symName == to_string(*n)
-                                && symK == sym->kind();
+                    [symName, valK] (const auto& sym) {
+                        return sym->name() != nullptr
+                                && symName == to_string(*sym->name())
+                                && sym->kind() == SymbolKind::Value
+                                && (static_cast<ValueSymbol*>(sym.get()))->valueKind() == valK;
                     });
 
         if (sym == nullptr) {
-            auto s = to_string(symK) + " " + symName + " not found";
+            auto s = to_string(valK) + " " + symName + " not found";
             PSYCHE_TEST_FAIL(s);
         }
     }
