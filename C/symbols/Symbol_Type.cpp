@@ -29,9 +29,8 @@ struct TypeSymbol::TypeSymbolImpl : SymbolImpl
     TypeSymbolImpl(const SyntaxTree* tree,
                    const Scope* outerScope,
                    const Symbol* containingSym,
-                   SymbolKind symKind,
                    TypeKind tyKind)
-        : SymbolImpl(tree, outerScope, containingSym, symKind)
+        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Type)
         , tyKind_(tyKind)
     {}
 
@@ -41,12 +40,11 @@ struct TypeSymbol::TypeSymbolImpl : SymbolImpl
 TypeSymbol::TypeSymbol(const SyntaxTree* tree,
                        const Scope* outerScope,
                        const Symbol* containingSym,
-                       SymbolKind symKind,
                        TypeKind tyKind)
-    : Symbol(tree,
-             outerScope,
-             containingSym,
-             symKind)
+    : Symbol(new TypeSymbolImpl(tree,
+                                outerScope,
+                                containingSym,
+                                tyKind))
 {}
 
 TypeSymbol::~TypeSymbol()
@@ -54,5 +52,5 @@ TypeSymbol::~TypeSymbol()
 
 TypeKind TypeSymbol::typeKind() const
 {
-    return P->tyKind_;
+    return P_CAST->tyKind_;
 }

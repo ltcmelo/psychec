@@ -29,6 +29,5 @@ PointerTypeSymbol::PointerTypeSymbol(const SyntaxTree* tree,
     : TypeSymbol(tree,
                  scope,
                  containingSym,
-                 SymbolKind::PointerType,
                  TypeKind::Pointer)
 {}

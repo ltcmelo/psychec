@@ -31,7 +31,6 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
     : TypeSymbol(tree,
                  scope,
                  containingSym,
-                 SymbolKind::NamedType,
                  tyKind)
 {
     giveName_(std::move(symName));

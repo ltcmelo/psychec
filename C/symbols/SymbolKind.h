@@ -40,18 +40,13 @@ namespace C {
 enum class SymbolKind : std::uint8_t
 {
     LinkUnit = 0,
-
     Function,
+    Type,
 
     /* Values */
     Field = 10,
     Parameter,
-    Variable,
-
-    /* Types */
-    ArrayType = 100,
-    NamedType,
-    PointerType,
+    Variable
 };
 
 inline std::string PSY_C_API to_string(SymbolKind symKind)
@@ -59,25 +54,16 @@ inline std::string PSY_C_API to_string(SymbolKind symKind)
     switch (symKind) {
         case SymbolKind::LinkUnit:
             return "LinkUnit";
-
         case SymbolKind::Function:
             return "Function";
-
-        /* Values */
+        case SymbolKind::Type:
+            return "Type";
         case SymbolKind::Field:
             return "Field";
         case SymbolKind::Parameter:
             return "Parameter";
         case SymbolKind::Variable:
             return "Variable";
-
-        /* Types */
-        case SymbolKind::ArrayType:
-            return "ArrayType";
-        case SymbolKind::NamedType:
-            return "NamedType";
-        case SymbolKind::PointerType:
-            return "PointerType";
 
         default:
             return "not implemented";

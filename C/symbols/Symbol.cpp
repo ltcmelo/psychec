@@ -31,13 +31,17 @@
 #include <sstream>
 
 Symbol::Symbol(const SyntaxTree* tree,
-               const Scope* scope,
+               const Scope* outerScope,
                const Symbol* containingSym,
                SymbolKind symKind)
     : P(new SymbolImpl(tree,
-                       scope,
+                       outerScope,
                        containingSym,
                        symKind))
+{}
+
+Symbol::Symbol(SymbolImpl* p)
+    : P(p)
 {}
 
 Symbol::~Symbol()

@@ -33,14 +33,15 @@
     struct CLASS##Impl; \
     std::unique_ptr<CLASS##Impl> impl_;
 
-#define DECL_PIMPL_BASE(CLASS) \
-    CLASS(CLASS##Impl*);
+#define DECL_PIMPL_SUB(CLASS) \
+    struct CLASS##Impl; \
+    CLASS##Impl* CAST() const { return ((CLASS##Impl*)impl_.get()); }
 
 #define DECL_SHARED_DATA(CLASS) \
     struct CLASS##Impl; \
     std::shared_ptr<CLASS##Impl> impl_;
 
 #define P impl_
-#define P_CSyntax implCast()
+#define P_CAST CAST()
 
 #endif

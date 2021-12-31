@@ -65,7 +65,8 @@ private:
     void popSym__();
 
     template <class SymT> SymT* makeAndPushDeclSym__();
-    NamedTypeSymbol* makeAndPushTyDeclSym__(std::unique_ptr<SymbolName>, TypeKind);
+    NamedTypeSymbol* makeAndPushDeclSym__(std::unique_ptr<SymbolName>, TypeKind);
+    void makeAndPushTySym__(TypeKind);
 
     template <class ScopeT> void openScope__();
     void openNestedScope__();

@@ -46,12 +46,11 @@ public:
     TypeKind typeKind() const;
 
 protected:
-    DECL_PIMPL(TypeSymbol);
+    DECL_PIMPL_SUB(TypeSymbol);
 
     TypeSymbol(const SyntaxTree* tree,
                const Scope* outerScope,
                const Symbol* containingSym,
-               SymbolKind symKind,
                TypeKind tyKind);
 };
 
