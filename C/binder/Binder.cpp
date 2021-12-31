@@ -52,18 +52,6 @@ void Binder::bind()
 }
 
 template <class SymT>
-SymT* Binder::pushSym__(std::unique_ptr<SymT> sym)
-{
-    syms__.push(sym.get());
-    return static_cast<SymT*>(semaModel__->storeSymbol(std::move(sym)));
-}
-
-void Binder::popSym__()
-{
-    syms__.pop();
-}
-
-template <class SymT>
 SymT* Binder::makeAndPushDeclSym__()
 {
     std::unique_ptr<SymT> sym(new SymT(tree_,
@@ -96,15 +84,17 @@ LinkUnitSymbol* Binder::makeAndPushDeclSym__<LinkUnitSymbol>()
     return pushSym__(std::move(sym));
 }
 
-//template <class TySymT>
-//void Binder::makeAndPushTySym__(TypeKind tyKind)
-//{
-//    std::unique_ptr<TySymT> tySym(new TySymT(tree_,
-//                                             scopes__.top(),
-//                                             syms__.top(),
-//                                             symKind,
-//                                             tyKind));
-//}
+template <class SymT>
+SymT* Binder::pushSym__(std::unique_ptr<SymT> sym)
+{
+    syms__.push(sym.get());
+    return static_cast<SymT*>(semaModel__->storeSymbol(std::move(sym)));
+}
+
+void Binder::popSym__()
+{
+    syms__.pop();
+}
 
 template <class ScopeT>
 void Binder::openScope__()
@@ -267,7 +257,6 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition(const FunctionDefinitionSy
 /* Specifiers */
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
-//    makeAndPushTySym__()
     return Action::Skip;
 }
 
@@ -316,10 +305,6 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
-//    std::unique_ptr<SymbolName> symName(
-//                new PlainSymbolName(node->identifierToken().valueText_c_str()));
-//    makeAndPushTyDeclSym__(std::move(symName), TypeKind::Typedef);
-
     return Action::Skip;
 }
 

@@ -26,6 +26,16 @@ using namespace C;
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                                  const Scope* scope,
                                  const Symbol* containingSym,
+                                 TypeKind tyKind)
+    : TypeSymbol(tree,
+                 scope,
+                 containingSym,
+                 tyKind)
+{}
+
+NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
+                                 const Scope* scope,
+                                 const Symbol* containingSym,
                                  std::unique_ptr<SymbolName> symName,
                                  TypeKind tyKind)
     : TypeSymbol(tree,
