@@ -257,7 +257,33 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition(const FunctionDefinitionSy
 /* Specifiers */
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
-    auto valSym = syms_.top();
+    auto sym = syms_.top();
+    switch (sym->kind()) {
+        case SymbolKind::Function:
+            break;
+
+        case SymbolKind::Value: {
+            auto valSym = sym->asValue();
+
+            if (valSym->type() != nullptr)
+                ; // TODO
+
+            std::unique_ptr<SymbolName> symName(
+                        new PlainSymbolName(node->specifierToken().valueText_c_str()));
+            std::unique_ptr<NamedTypeSymbol> tySym(
+                        new NamedTypeSymbol(tree_,
+                                            scopes_.top(),
+                                            syms_.top(),
+                                            std::move(symName),
+                                            TypeKind::Builtin));
+            valSym->giveType(std::move(tySym));
+            break;
+        }
+
+        default:
+            PSYCHE_FAIL(return Action::Quit, "unexpected symbol");
+            return Action::Quit;
+    }
 
     return Action::Skip;
 }

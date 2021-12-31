@@ -47,7 +47,7 @@ public:
     virtual const TypeSymbol* asType() const override { return this; }
 
     /**
-     * The TypeKind of \c this Symbol.
+     * The (type) kind of \c this type.
      */
     TypeKind typeKind() const;
 

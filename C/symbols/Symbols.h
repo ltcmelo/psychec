@@ -21,9 +21,9 @@
 #ifndef PSYCHE_C_SYMBOLS_H__
 #define PSYCHE_C_SYMBOLS_H__
 
-#include "ValueSymbol_Field.h"
 #include "Symbol_Function.h"
 #include "Symbol_LinkUnit.h"
+#include "ValueSymbol_Field.h"
 #include "ValueSymbol_Parameter.h"
 #include "ValueSymbol_Variable.h"
 #include "TypeSymbol_Array.h"

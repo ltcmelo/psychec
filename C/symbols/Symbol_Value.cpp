@@ -21,6 +21,8 @@
 #include "Symbol_Value.h"
 #include "Symbol__IMPL__.inc"
 
+#include "Symbol_Type.h"
+
 using namespace psy;
 using namespace C;
 
@@ -35,6 +37,7 @@ struct ValueSymbol::ValueSymbolImpl : SymbolImpl
     {}
 
     ValueKind valKind_;
+    std::unique_ptr<TypeSymbol> tySym_;
 };
 
 ValueSymbol::ValueSymbol(const SyntaxTree* tree,
@@ -53,4 +56,14 @@ ValueSymbol::~ValueSymbol()
 ValueKind ValueSymbol::valueKind() const
 {
     return P_CAST->valKind_;
+}
+
+const TypeSymbol* ValueSymbol::type() const
+{
+    return P_CAST->tySym_.get();
+}
+
+void ValueSymbol::giveType(std::unique_ptr<TypeSymbol> tySym)
+{
+    P_CAST->tySym_ = std::move(tySym);
 }

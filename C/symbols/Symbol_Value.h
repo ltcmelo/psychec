@@ -43,7 +43,7 @@ public:
     virtual const ValueSymbol* asValue() const override { return this; }
 
     /**
-     * The ValueKind of \c this Symbol.
+     * The (value) kind of \c this value.
      */
     ValueKind valueKind() const;
 
@@ -54,13 +54,23 @@ public:
     virtual ParameterSymbol* asParameter() { return nullptr; }
     virtual const ParameterSymbol* asParameter() const { return nullptr; }
 
+    /**
+     * The type of \c this value.
+     */
+    const TypeSymbol* type() const;
+
 protected:
     DECL_PIMPL_SUB(ValueSymbol);
+
+    friend class Binder;
 
     ValueSymbol(const SyntaxTree* tree,
                 const Scope* outerScope,
                 const Symbol* containingSym,
                 ValueKind valKind);
+
+private:
+    void giveType(std::unique_ptr<TypeSymbol> tySym);
 };
 
 } // C
