@@ -28,6 +28,10 @@ namespace C {
 
 class PSY_C_API ParameterSymbol : public ValueSymbol
 {
+public:
+    virtual ParameterSymbol* asParameter() override { return this; }
+    virtual const ParameterSymbol* asParameter() const override { return this; }
+
 private:
     friend class Binder;
 

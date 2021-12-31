@@ -30,6 +30,10 @@ namespace C {
 
 class PSY_C_API NamedTypeSymbol : public TypeSymbol
 {
+public:
+    virtual NamedTypeSymbol* asNamedType() override { return nullptr; }
+    virtual const NamedTypeSymbol* asNamedType() const override { return nullptr; }
+
 private:
     friend class Binder;
 

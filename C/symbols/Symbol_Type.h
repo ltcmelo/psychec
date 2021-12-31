@@ -43,7 +43,20 @@ class PSY_C_API TypeSymbol : public Symbol
 public:
     virtual ~TypeSymbol();
 
+    virtual TypeSymbol* asType() override { return this; }
+    virtual const TypeSymbol* asType() const override { return this; }
+
+    /**
+     * The TypeKind of \c this Symbol.
+     */
     TypeKind typeKind() const;
+
+    virtual ArrayTypeSymbol* asArrayType() { return nullptr; }
+    virtual const ArrayTypeSymbol* asArrayType() const { return nullptr; }
+    virtual NamedTypeSymbol* asNamedType() { return nullptr; }
+    virtual const NamedTypeSymbol* asNamedType() const { return nullptr; }
+    virtual PointerTypeSymbol* asPointerType() { return nullptr; }
+    virtual const PointerTypeSymbol* asPointerType() const { return nullptr; }
 
 protected:
     DECL_PIMPL_SUB(TypeSymbol);

@@ -28,6 +28,10 @@ namespace C {
 
 class PSY_C_API VariableSymbol : public ValueSymbol
 {
+public:
+    virtual VariableSymbol* asVariable() override { return this; }
+    virtual const VariableSymbol* asVariable() const override { return this; }
+
 private:
     friend class Binder;
 

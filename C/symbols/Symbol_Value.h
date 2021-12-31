@@ -39,7 +39,20 @@ class PSY_C_API ValueSymbol : public Symbol
 public:
     virtual ~ValueSymbol();
 
+    virtual ValueSymbol* asValue() override { return this; }
+    virtual const ValueSymbol* asValue() const override { return this; }
+
+    /**
+     * The ValueKind of \c this Symbol.
+     */
     ValueKind valueKind() const;
+
+    virtual FieldSymbol* asField() { return nullptr; }
+    virtual const FieldSymbol* asField() const { return nullptr; }
+    virtual VariableSymbol* asVariable() { return nullptr; }
+    virtual const VariableSymbol* asVariable() const { return nullptr; }
+    virtual ParameterSymbol* asParameter() { return nullptr; }
+    virtual const ParameterSymbol* asParameter() const { return nullptr; }
 
 protected:
     DECL_PIMPL_SUB(ValueSymbol);

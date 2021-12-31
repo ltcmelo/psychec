@@ -28,6 +28,10 @@ namespace C {
 
 class PSY_C_API PointerTypeSymbol : public TypeSymbol
 {
+public:
+    virtual PointerTypeSymbol* asPointerType() override { return nullptr; }
+    virtual const PointerTypeSymbol* asPointerType() const override { return nullptr; }
+
 private:
     friend class Binder;
 

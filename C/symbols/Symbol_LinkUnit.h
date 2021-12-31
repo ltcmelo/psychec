@@ -35,6 +35,10 @@ namespace C {
  */
 class PSY_C_API LinkUnitSymbol : public Symbol
 {
+public:
+    virtual LinkUnitSymbol* asLinkUnit() override { return this; }
+    virtual const LinkUnitSymbol* asLinkUnit() const override { return this; }
+
 private:
     friend class Binder;
 

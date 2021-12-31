@@ -53,6 +53,20 @@ public:
     virtual ~Symbol();
 
     /**
+     * The SymbolKind of \c this Symbol.
+     */
+    SymbolKind kind() const;
+
+    virtual LinkUnitSymbol* asLinkUnit() { return nullptr; }
+    virtual const LinkUnitSymbol* asLinkUnit() const { return nullptr; }
+    virtual FunctionSymbol* asFunction() { return nullptr; }
+    virtual const FunctionSymbol* asFunction() const { return nullptr; }
+    virtual ValueSymbol* asValue() { return nullptr; }
+    virtual const ValueSymbol* asValue() const { return nullptr; }
+    virtual TypeSymbol* asType() { return nullptr; }
+    virtual const TypeSymbol* asType() const { return nullptr; }
+
+    /**
      * The Assembly where \c this Symbol is \a defined.
      */
     const Assembly* assembly() const;
@@ -85,11 +99,6 @@ public:
      * References to the SyntaxNodes that \a declare \c this Symbol.
      */
     std::vector<SyntaxReference> declaringSyntaxReferences() const;
-
-    /**
-     * The SymbolKind of \c this Symbol.
-     */
-    SymbolKind kind() const;
 
     /**
      * The SymbolName of \c this Symbol.

@@ -28,6 +28,10 @@ namespace C {
 
 class PSY_C_API FieldSymbol : public ValueSymbol
 {
+public:
+    virtual FieldSymbol* asField() override { return this; }
+    virtual const FieldSymbol* asField() const override { return this; }
+
 private:
     friend class Binder;
 
