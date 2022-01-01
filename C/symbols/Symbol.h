@@ -23,6 +23,7 @@
 
 #include "API.h"
 #include "APIFwds.h"
+
 #include "Accessibility.h"
 #include "SymbolKind.h"
 #include "SymbolName.h"
@@ -115,6 +116,7 @@ private:
 
     friend class ValueSymbol;
     friend class TypeSymbol;
+    friend class NamedTypeSymbol;
     friend class Binder;
 
     Symbol(SymbolImpl* p);

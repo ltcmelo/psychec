@@ -18,47 +18,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_NAMED_TYPE_H__
-#define PSYCHE_C_SYMBOL_NAMED_TYPE_H__
-
 #include "Symbol_Type.h"
-#include "BuiltinKind.h"
+#include "Symbol__IMPL__.inc"
 
-#include <memory>
+using namespace psy;
+using namespace C;
 
-namespace psy {
-namespace C {
-
-class PSY_C_API NamedTypeSymbol : public TypeSymbol
+struct TypeSymbol::TypeSymbolImpl : SymbolImpl
 {
-public:
-    virtual NamedTypeSymbol* asNamedType() override { return nullptr; }
-    virtual const NamedTypeSymbol* asNamedType() const override { return nullptr; }
+    TypeSymbolImpl(const SyntaxTree* tree,
+                   const Scope* outerScope,
+                   const Symbol* containingSym,
+                   TypeKind tyKind)
+        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Type)
+        , tyKind_(tyKind)
+    {}
 
-    /**
-     * The builtin kind of \c this type.
-     */
-    BuiltinKind builtinKind() const;
-
-private:
-    DECL_PIMPL_SUB(NamedTypeSymbol)
-
-    friend class Binder;
-
-    NamedTypeSymbol(const SyntaxTree* tree,
-                    const Scope* outerScope,
-                    const Symbol* containingSym,
-                    TypeKind tyKind);
-
-    // TODO: remove
-    NamedTypeSymbol(const SyntaxTree* tree,
-                    const Scope* outerScope,
-                    const Symbol* containingSym,
-                    std::unique_ptr<SymbolName> symName,
-                    TypeKind tyKind);
+    TypeKind tyKind_;
 };
-
-} // C
-} // psy
-
-#endif

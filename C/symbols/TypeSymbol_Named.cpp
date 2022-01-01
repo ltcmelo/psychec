@@ -19,16 +19,33 @@
 // THE SOFTWARE.
 
 #include "TypeSymbol_Named.h"
+#include "TypeSymbol__IMPL__.inc"
 
 using namespace psy;
 using namespace C;
 
+struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
+{
+    NamedTypeSymbolImpl(const SyntaxTree* tree,
+                        const Scope* outerScope,
+                        const Symbol* containingSym,
+                        TypeKind tyKind)
+        : TypeSymbolImpl(tree,
+                         outerScope,
+                         containingSym,
+                         tyKind)
+        , builtinKind_(BuiltinKind::None)
+    {}
+
+    BuiltinKind builtinKind_;
+};
+
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
-                                 const Scope* scope,
+                                 const Scope* outerScope,
                                  const Symbol* containingSym,
                                  TypeKind tyKind)
     : TypeSymbol(tree,
-                 scope,
+                 outerScope,
                  containingSym,
                  tyKind)
 {}
@@ -44,4 +61,9 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                  tyKind)
 {
     giveName(std::move(symName));
+}
+
+BuiltinKind NamedTypeSymbol::builtinKind() const
+{
+    return BuiltinKind::None;
 }

@@ -18,24 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol_Type.h"
-#include "Symbol__IMPL__.inc"
+#include "TypeSymbol__IMPL__.inc"
 
 using namespace psy;
 using namespace C;
-
-struct TypeSymbol::TypeSymbolImpl : SymbolImpl
-{
-    TypeSymbolImpl(const SyntaxTree* tree,
-                   const Scope* outerScope,
-                   const Symbol* containingSym,
-                   TypeKind tyKind)
-        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Type)
-        , tyKind_(tyKind)
-    {}
-
-    TypeKind tyKind_;
-};
 
 TypeSymbol::TypeSymbol(const SyntaxTree* tree,
                        const Scope* outerScope,
