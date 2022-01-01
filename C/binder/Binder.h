@@ -24,11 +24,12 @@
 #include "API.h"
 #include "APIFwds.h"
 
-#include "common/diagnostics/DiagnosticDescriptor.h"
 #include "parser/LexedTokens.h"
 #include "symbols/SymbolName.h"
 #include "symbols/TypeKind.h"
 #include "syntax/SyntaxVisitor.h"
+
+#include "../common/diagnostics/DiagnosticDescriptor.h"
 
 #include <memory>
 #include <stack>
@@ -53,6 +54,7 @@ public:
 
 private:
     friend class SemanticModel;
+    friend class Semantics_TypeSpecifiers;
 
     Binder(SemanticModel* semaModel, const SyntaxTree* tree);
 

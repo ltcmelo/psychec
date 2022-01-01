@@ -20,11 +20,22 @@
 
 #include "Semantics_TypeSpecifiers.h"
 
+#include "SyntaxTree.h"
+
+#include "../common/infra/PsycheAssert.h"
+
+#include <iostream>
+
 using namespace psy;
 using namespace C;
 
-BuiltinTypeKind Semantics_TypeSpecifiers::combine(BuiltinTypeKind builtTyKind, SyntaxKind tkK)
+const std::string  Semantics_TypeSpecifiers::ID_test = "Binder-000";
+
+BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
+                                                  BuiltinTypeKind builtTyKind,
+                                                  Binder::DiagnosticsReporter* diagReporter)
 {
+    const auto tkK = builtTySpecTk.kind();
     switch (builtTyKind) {
         case BuiltinTypeKind::None:
             switch (tkK) {
@@ -46,13 +57,23 @@ BuiltinTypeKind Semantics_TypeSpecifiers::combine(BuiltinTypeKind builtTyKind, S
                     return BuiltinTypeKind::Bool;
                 case Keyword__Complex:
                     return BuiltinTypeKind::DoubleComplex;
+                case Keyword_signed:
+                    return BuiltinTypeKind::Int_S;
+                case Keyword_unsigned:
+                    return BuiltinTypeKind::Int_U;
                 default:
-                    // report
+                    PSYCHE_FAIL(return builtTyKind, "expected builtin type specifier");
                     return builtTyKind;
             }
 
         case BuiltinTypeKind::Void:
-            // report
+            diagReporter->diagnose(DiagnosticDescriptor(
+                                       ID_test,
+                                       "[[]]",
+                                       "",
+                                       DiagnosticSeverity::Error,
+                                       DiagnosticCategory::Binding),
+                                   builtTySpecTk);
             return builtTyKind;
 
         case BuiltinTypeKind::Char:
@@ -92,7 +113,13 @@ BuiltinTypeKind Semantics_TypeSpecifiers::combine(BuiltinTypeKind builtTyKind, S
                 case Keyword_unsigned:
                     return BuiltinTypeKind::Int_U;
                 default:
-                    // report
+                diagReporter->diagnose(DiagnosticDescriptor(
+                                           ID_test,
+                                           "[[]]",
+                                           "",
+                                           DiagnosticSeverity::Error,
+                                           DiagnosticCategory::Binding),
+                                       builtTySpecTk);
                     return builtTyKind;
             }
         case BuiltinTypeKind::Int_S:

@@ -70,7 +70,7 @@ protected:
                 ValueKind valKind);
 
 private:
-    void giveType(std::unique_ptr<TypeSymbol> tySym);
+    TypeSymbol* giveType(std::unique_ptr<TypeSymbol> tySym);
 
     TypeSymbol* type();
 };

@@ -37,7 +37,7 @@ void Binder::DiagnosticsReporter::UselessDeclaration(SyntaxToken tk)
 {
     diagnose(DiagnosticDescriptor(ID_of_UselessDeclaration,
                                   "[[useless declaration]]",
-                                  "declaration does not declary anything",
+                                  "declaration does not declare anything",
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Binding), tk);
 }

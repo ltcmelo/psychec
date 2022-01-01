@@ -23,15 +23,25 @@
 
 #include "APIFwds.h"
 
+#include "binder/Binder.h"
 #include "symbols/BuiltinTypeKind.h"
 #include "syntax/SyntaxKind.h"
+
+#include <vector>
 
 namespace psy {
 namespace C {
 
-struct Semantics_TypeSpecifiers
+class Binder;
+
+class Semantics_TypeSpecifiers
 {
-    static BuiltinTypeKind combine(BuiltinTypeKind builtTyKind, SyntaxKind syntaxK);
+public:
+    static const std::string ID_test;
+
+    static BuiltinTypeKind combine(SyntaxToken tySpecTk,
+                                   BuiltinTypeKind builtTyKind,
+                                   Binder::DiagnosticsReporter* diagReporter);
 };
 
 } // C

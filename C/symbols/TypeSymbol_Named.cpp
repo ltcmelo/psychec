@@ -21,6 +21,8 @@
 #include "TypeSymbol_Named.h"
 #include "TypeSymbol__IMPL__.inc"
 
+#include <iostream>
+
 using namespace psy;
 using namespace C;
 
@@ -44,10 +46,10 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                                  const Scope* outerScope,
                                  const Symbol* containingSym,
                                  TypeKind tyKind)
-    : TypeSymbol(tree,
-                 outerScope,
-                 containingSym,
-                 tyKind)
+    : TypeSymbol(new NamedTypeSymbolImpl(tree,
+                                         outerScope,
+                                         containingSym,
+                                         tyKind))
 {}
 
 BuiltinTypeKind NamedTypeSymbol::builtinTypeKind() const

@@ -25,6 +25,7 @@
 #include "APIFwds.h"
 
 #include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
@@ -47,7 +48,7 @@ namespace C {
  * This API is inspired by that of \c Microsoft.CodeAnalysis.SpecialType
  * from Roslyn, the .NET Compiler Platform.
  */
-enum class BuiltinTypeKind : std::uint8_t
+enum class PSY_C_API BuiltinTypeKind : std::uint8_t
 {
     None = 0,
 
@@ -81,6 +82,62 @@ enum class BuiltinTypeKind : std::uint8_t
     DoubleComplex,
     LongDoubleComplex
 };
+
+PSY_C_API inline std::string PSY_C_API to_string(BuiltinTypeKind builtTyKind)
+{
+    switch (builtTyKind) {
+        case BuiltinTypeKind::None:
+            return "None";
+        case BuiltinTypeKind::Void:
+                return "Void";
+        case BuiltinTypeKind::Char:
+                return "Char";
+        case BuiltinTypeKind::Char_S:
+                return "Char_S";
+        case BuiltinTypeKind::Char_U:
+                return "Char_U";
+        case BuiltinTypeKind::Short:
+                return "Short";
+        case BuiltinTypeKind::Short_S:
+                return "Short_S";
+        case BuiltinTypeKind::Short_U:
+                return "Short_U";
+        case BuiltinTypeKind::Int:
+                return "Int";
+        case BuiltinTypeKind::Int_S:
+                return "Int_S";
+        case BuiltinTypeKind::Int_U:
+                return "Int_U";
+        case BuiltinTypeKind::Long:
+                return "Long";
+        case BuiltinTypeKind::Long_S:
+                return "Long_S";
+        case BuiltinTypeKind::Long_U:
+                return "Long_U";
+        case BuiltinTypeKind::LongLong:
+                return "LongLong";
+        case BuiltinTypeKind::LongLong_S:
+                return "LongLong_S";
+        case BuiltinTypeKind::LongLong_U:
+                return "LongLong_U";
+        case BuiltinTypeKind::Float:
+                return "Float";
+        case BuiltinTypeKind::Double:
+                return "Double";
+        case BuiltinTypeKind::LongDouble:
+                return "LongDouble";
+        case BuiltinTypeKind::Bool:
+                return "Bool";
+        case BuiltinTypeKind::FloatComplex:
+                return "FloatComplex";
+        case BuiltinTypeKind::DoubleComplex:
+                return "DoubleComplex";
+        case BuiltinTypeKind::LongDoubleComplex:
+                return "LongDoubleComplex";
+        default:
+            return "<unknown builtin type kind>";
+    }
+}
 
 } // C
 } // psy

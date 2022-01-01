@@ -33,6 +33,10 @@ TypeSymbol::TypeSymbol(const SyntaxTree* tree,
                                 tyKind))
 {}
 
+TypeSymbol::TypeSymbol(TypeSymbolImpl* p)
+    : Symbol(p)
+{}
+
 TypeSymbol::~TypeSymbol()
 {}
 

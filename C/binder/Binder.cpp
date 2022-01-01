@@ -22,8 +22,9 @@
 
 #include "SyntaxTree.h"
 
-#include "compilation/SemanticModel.h"
 #include "binder/Scopes.h"
+#include "binder/Semantics_TypeSpecifiers.h"
+#include "compilation/SemanticModel.h"
 #include "symbols/Symbols.h"
 #include "symbols/SymbolNames.h"
 #include "syntax/SyntaxFacts.h"
@@ -264,15 +265,26 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
         case SymbolKind::Value: {
             auto valSym = sym->asValue();
 
-            if (valSym->type() != nullptr)
-                ; // TODO
+            PSYCHE_ASSERT(valSym->type() == nullptr
+                             || valSym->type()->asNamedType() != nullptr,
+                          return Action::Skip, "");
 
-            std::unique_ptr<NamedTypeSymbol> tySym(
-                    new NamedTypeSymbol(tree_,
-                                        scopes_.top(),
-                                        syms_.top(),
-                                        TypeKind::Builtin));
-            valSym->giveType(std::move(tySym));
+            NamedTypeSymbol* namedTySym;
+            if (valSym->type() != nullptr)
+                namedTySym = valSym->type()->asNamedType();
+            else {
+                std::unique_ptr<NamedTypeSymbol> tySym(
+                        new NamedTypeSymbol(tree_,
+                                            scopes_.top(),
+                                            syms_.top(),
+                                            TypeKind::Builtin));
+                namedTySym = valSym->giveType(std::move(tySym))->asNamedType();
+            }
+
+            auto x = namedTySym->builtinTypeKind();
+            auto x_P = Semantics_TypeSpecifiers::combine(node->specifierToken(), x, &diagReporter_);
+            namedTySym->patchBuiltinTypeKind(x_P);
+
 
             if (SyntaxFacts::isBuiltinTypeSpecifierToken(node->specifierToken().kind())) {
                 std::unique_ptr<SymbolName> symName(

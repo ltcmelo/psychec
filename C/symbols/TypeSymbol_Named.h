@@ -32,8 +32,8 @@ namespace C {
 class PSY_C_API NamedTypeSymbol : public TypeSymbol
 {
 public:
-    virtual NamedTypeSymbol* asNamedType() override { return nullptr; }
-    virtual const NamedTypeSymbol* asNamedType() const override { return nullptr; }
+    virtual NamedTypeSymbol* asNamedType() override { return this; }
+    virtual const NamedTypeSymbol* asNamedType() const override { return this; }
 
     /**
      * The BuiltinTypeKind of \c this type.
