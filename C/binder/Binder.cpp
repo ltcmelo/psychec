@@ -26,6 +26,7 @@
 #include "binder/Scopes.h"
 #include "symbols/Symbols.h"
 #include "symbols/SymbolNames.h"
+#include "syntax/SyntaxFacts.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
 
@@ -266,14 +267,18 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
             if (valSym->type() != nullptr)
                 ; // TODO
 
-//            std::unique_ptr<SymbolName> symName(
-//                        new PlainSymbolName(node->specifierToken().valueText_c_str()));
             std::unique_ptr<NamedTypeSymbol> tySym(
-                        new NamedTypeSymbol(tree_,
-                                            scopes_.top(),
-                                            syms_.top(),
-                                            TypeKind::Builtin));
+                    new NamedTypeSymbol(tree_,
+                                        scopes_.top(),
+                                        syms_.top(),
+                                        TypeKind::Builtin));
             valSym->giveType(std::move(tySym));
+
+            if (SyntaxFacts::isBuiltinTypeSpecifierToken(node->specifierToken().kind())) {
+                std::unique_ptr<SymbolName> symName(
+                        new PlainSymbolName(node->specifierToken().valueText_c_str()));
+                valSym->type()->giveName(std::move(symName));
+            }
 
             break;
         }

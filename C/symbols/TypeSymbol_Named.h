@@ -49,6 +49,8 @@ private:
                     const Scope* outerScope,
                     const Symbol* containingSym,
                     TypeKind tyKind);
+
+    void patchBuiltinTypeKind(BuiltinTypeKind);
 };
 
 } // C

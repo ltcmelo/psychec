@@ -79,10 +79,11 @@ private:
     DECL_PIMPL(Compilation);
 
     friend class SemanticModel;
+    friend class TestFrontend;
 
     Compilation();
 
-    Assembly* assembly_();
+    Assembly* assembly();
 };
 
 } // C

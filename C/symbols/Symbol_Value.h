@@ -71,6 +71,8 @@ protected:
 
 private:
     void giveType(std::unique_ptr<TypeSymbol> tySym);
+
+    TypeSymbol* type();
 };
 
 } // C

@@ -460,13 +460,13 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
             case Keyword_long:
             case Keyword_float:
             case Keyword_double:
+            case Keyword__Bool:
+            case Keyword__Complex:
             case Keyword_signed:
             case Keyword_unsigned:
             case Keyword_Ext_char16_t:
             case Keyword_Ext_char32_t:
             case Keyword_Ext_wchar_t:
-            case Keyword__Bool:
-            case Keyword__Complex:
             case Keyword_struct:
             case Keyword_union:
             case Keyword_enum:
@@ -938,13 +938,13 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
                 case Keyword_long:
                 case Keyword_float:
                 case Keyword_double:
+                case Keyword__Bool:
+                case Keyword__Complex:
                 case Keyword_signed:
                 case Keyword_unsigned:
                 case Keyword_Ext_char16_t:
                 case Keyword_Ext_char32_t:
                 case Keyword_Ext_wchar_t:
-                case Keyword__Bool:
-                case Keyword__Complex:
                 case Keyword_struct:
                 case Keyword_union:
                 case Keyword_enum:

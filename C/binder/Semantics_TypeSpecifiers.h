@@ -18,15 +18,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYNTAX_KIND_UTILITIES_H__
-#define PSYCHE_C_SYNTAX_KIND_UTILITIES_H__
+#ifndef PSYCHE_C_SEMANTICS_TYPE_SPECIFIERS_H__
+#define PSYCHE_C_SEMANTICS_TYPE_SPECIFIERS_H__
 
-#include "SyntaxKind.h"
+#include "APIFwds.h"
+
+#include "symbols/BuiltinTypeKind.h"
+#include "syntax/SyntaxKind.h"
 
 namespace psy {
 namespace C {
 
-
+struct Semantics_TypeSpecifiers
+{
+    static BuiltinTypeKind combine(BuiltinTypeKind builtTyKind, SyntaxKind syntaxK);
+};
 
 } // C
 } // psy

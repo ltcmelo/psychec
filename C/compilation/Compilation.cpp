@@ -73,7 +73,7 @@ const Assembly* Compilation::assembly() const
     return P->assembly_.get();
 }
 
-Assembly* Compilation::assembly_()
+Assembly* Compilation::assembly()
 {
     return P->assembly_.get();
 }
