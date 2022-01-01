@@ -274,6 +274,7 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
                                             syms_.top(),
                                             TypeKind::Builtin));
             valSym->giveType(std::move(tySym));
+
             break;
         }
 

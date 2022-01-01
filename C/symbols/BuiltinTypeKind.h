@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SPECIAL_TYPE_H__
-#define PSYCHE_C_SPECIAL_TYPE_H__
+#ifndef PSYCHE_C_BUILTIN_TYPE_KIND_H__
+#define PSYCHE_C_BUILTIN_TYPE_KIND_H__
 
 #include "API.h"
 #include "APIFwds.h"
@@ -30,7 +30,7 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The BuiltinKind enum.
+ * \brief The BuiltinTypeKind enum.
  *
  * The unsigned integer types are suffixed with \c _U;
  * the signed integer types are suffixed with \c _S.
@@ -47,7 +47,7 @@ namespace C {
  * This API is inspired by that of \c Microsoft.CodeAnalysis.SpecialType
  * from Roslyn, the .NET Compiler Platform.
  */
-enum class BuiltinKind : std::uint8_t
+enum class BuiltinTypeKind : std::uint8_t
 {
     None = 0,
 

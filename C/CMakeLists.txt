@@ -53,6 +53,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxHolder.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxHolder.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxKind.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxKindUtilities.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxKindUtilities.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexemes.h
@@ -104,7 +106,7 @@ set(CFE_SOURCES
 
     # Symbols
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
-    ${PROJECT_SOURCE_DIR}/symbols/BuiltinKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeKind.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol__IMPL__.inc
@@ -144,8 +146,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Variable.h
 
     # Binder
-    ${PROJECT_SOURCE_DIR}/binder/Binder.h
     ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Binder.h
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_TypeChecker.cpp
     ${PROJECT_SOURCE_DIR}/binder/Scope.h

@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,38 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_NAMED_TYPE_H__
-#define PSYCHE_C_SYMBOL_NAMED_TYPE_H__
+#ifndef PSYCHE_C_SYNTAX_KIND_UTILITIES_H__
+#define PSYCHE_C_SYNTAX_KIND_UTILITIES_H__
 
-#include "Symbol_Type.h"
-#include "BuiltinTypeKind.h"
-
-#include <memory>
+#include "SyntaxKind.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_API NamedTypeSymbol : public TypeSymbol
-{
-public:
-    virtual NamedTypeSymbol* asNamedType() override { return nullptr; }
-    virtual const NamedTypeSymbol* asNamedType() const override { return nullptr; }
 
-    /**
-     * The BuiltinTypeKind of \c this type.
-     */
-    BuiltinTypeKind builtinTypeKind() const;
-
-private:
-    DECL_PIMPL_SUB(NamedTypeSymbol)
-
-    friend class Binder;
-
-    NamedTypeSymbol(const SyntaxTree* tree,
-                    const Scope* outerScope,
-                    const Symbol* containingSym,
-                    TypeKind tyKind);
-};
 
 } // C
 } // psy

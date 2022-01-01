@@ -34,10 +34,10 @@ struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
                          outerScope,
                          containingSym,
                          tyKind)
-        , builtinKind_(BuiltinKind::None)
+        , builtinKind_(BuiltinTypeKind::None)
     {}
 
-    BuiltinKind builtinKind_;
+    BuiltinTypeKind builtinKind_;
 };
 
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
@@ -50,7 +50,7 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                  tyKind)
 {}
 
-BuiltinKind NamedTypeSymbol::builtinKind() const
+BuiltinTypeKind NamedTypeSymbol::builtinTypeKind() const
 {
-    return BuiltinKind::None;
+    return BuiltinTypeKind::None;
 }
