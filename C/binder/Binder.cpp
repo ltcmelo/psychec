@@ -281,17 +281,16 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
                 namedTySym = valSym->giveType(std::move(tySym))->asNamedType();
             }
 
-            auto x = namedTySym->builtinTypeKind();
-            auto x_P = Semantics_TypeSpecifiers::combine(node->specifierToken(), x, &diagReporter_);
-            namedTySym->patchBuiltinTypeKind(x_P);
-
+            auto builtTyKindx = namedTySym->builtinTypeKind();
+            builtTyKindx = Semantics_TypeSpecifiers::combine(
+                        node->specifierToken(), builtTyKindx, &diagReporter_);
+            namedTySym->patchBuiltinTypeKind(builtTyKindx);
 
             if (SyntaxFacts::isBuiltinTypeSpecifierToken(node->specifierToken().kind())) {
                 std::unique_ptr<SymbolName> symName(
                         new PlainSymbolName(node->specifierToken().valueText_c_str()));
                 valSym->type()->giveName(std::move(symName));
             }
-
             break;
         }
 
