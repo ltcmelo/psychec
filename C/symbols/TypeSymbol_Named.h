@@ -49,13 +49,6 @@ private:
                     const Scope* outerScope,
                     const Symbol* containingSym,
                     TypeKind tyKind);
-
-    // TODO: remove
-    NamedTypeSymbol(const SyntaxTree* tree,
-                    const Scope* outerScope,
-                    const Symbol* containingSym,
-                    std::unique_ptr<SymbolName> symName,
-                    TypeKind tyKind);
 };
 
 } // C

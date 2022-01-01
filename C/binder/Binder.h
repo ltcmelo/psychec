@@ -61,7 +61,7 @@ private:
     std::stack<Symbol*> syms_;
 
     template <class SymT> SymT* makeAndPushDeclSym();
-    NamedTypeSymbol* makeAndPushDeclSym(std::unique_ptr<SymbolName>, TypeKind);
+    NamedTypeSymbol* makeAndPushDeclSym(TypeKind);
     template <class SymT> SymT* pushSym(std::unique_ptr<SymT>);
     void popSym();
 

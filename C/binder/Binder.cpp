@@ -65,14 +65,12 @@ template FunctionSymbol* Binder::makeAndPushDeclSym<FunctionSymbol>();
 template ParameterSymbol* Binder::makeAndPushDeclSym<ParameterSymbol>();
 template VariableSymbol* Binder::makeAndPushDeclSym<VariableSymbol>();
 
-NamedTypeSymbol* Binder::makeAndPushDeclSym(std::unique_ptr<SymbolName> symName,
-                                            TypeKind tyKind)
+NamedTypeSymbol* Binder::makeAndPushDeclSym(TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> sym(
                 new NamedTypeSymbol(tree_,
                                     scopes_.top(),
                                     syms_.top(),
-                                    std::move(symName),
                                     tyKind));
     return pushSym(std::move(sym));
 }
@@ -268,13 +266,12 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
             if (valSym->type() != nullptr)
                 ; // TODO
 
-            std::unique_ptr<SymbolName> symName(
-                        new PlainSymbolName(node->specifierToken().valueText_c_str()));
+//            std::unique_ptr<SymbolName> symName(
+//                        new PlainSymbolName(node->specifierToken().valueText_c_str()));
             std::unique_ptr<NamedTypeSymbol> tySym(
                         new NamedTypeSymbol(tree_,
                                             scopes_.top(),
                                             syms_.top(),
-                                            std::move(symName),
                                             TypeKind::Builtin));
             valSym->giveType(std::move(tySym));
             break;
@@ -309,10 +306,11 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
             return Action::Quit;
     }
 
+    makeAndPushDeclSym(tyKind);
     std::unique_ptr<SymbolName> symName(
                 new TagSymbolName(tyKind,
                                   node->tagToken().valueText_c_str()));
-    makeAndPushDeclSym(std::move(symName), tyKind);
+    syms_.top()->giveName(std::move(symName));
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);

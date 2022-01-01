@@ -50,19 +50,6 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                  tyKind)
 {}
 
-NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
-                                 const Scope* scope,
-                                 const Symbol* containingSym,
-                                 std::unique_ptr<SymbolName> symName,
-                                 TypeKind tyKind)
-    : TypeSymbol(tree,
-                 scope,
-                 containingSym,
-                 tyKind)
-{
-    giveName(std::move(symName));
-}
-
 BuiltinKind NamedTypeSymbol::builtinKind() const
 {
     return BuiltinKind::None;
