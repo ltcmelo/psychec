@@ -23,21 +23,21 @@
 using namespace psy;
 using namespace C;
 
-BuiltinTypeKind Semantics_TypeSpecifiers::combine(BuiltinTypeKind builtTyKind, SyntaxKind syntaxK)
+BuiltinTypeKind Semantics_TypeSpecifiers::combine(BuiltinTypeKind builtTyKind, SyntaxKind tkK)
 {
     switch (builtTyKind) {
         case BuiltinTypeKind::None:
-            switch (syntaxK) {
+            switch (tkK) {
                 case Keyword_void:
                     return BuiltinTypeKind::Void;
                 case Keyword_char:
                     return BuiltinTypeKind::Char;
                 case Keyword_short:
-                    return BuiltinTypeKind::Short_S;
+                    return BuiltinTypeKind::Short;
                 case Keyword_int:
-                    return BuiltinTypeKind::Int_S;
+                    return BuiltinTypeKind::Int;
                 case Keyword_long:
-                    return BuiltinTypeKind::Long_S;
+                    return BuiltinTypeKind::Long;
                 case Keyword_float:
                     return BuiltinTypeKind::Float;
                 case Keyword_double:
@@ -46,11 +46,32 @@ BuiltinTypeKind Semantics_TypeSpecifiers::combine(BuiltinTypeKind builtTyKind, S
                     return BuiltinTypeKind::Bool;
                 case Keyword__Complex:
                     return BuiltinTypeKind::DoubleComplex;
-
                 default:
                     // report
-                    return BuiltinTypeKind::None;
+                    return builtTyKind;
             }
+
+        case BuiltinTypeKind::Void:
+            // report
+            return builtTyKind;
+
+        case BuiltinTypeKind::Char:
+            switch (tkK) {
+                case Keyword_signed:
+                    return BuiltinTypeKind::Char_S;
+                case Keyword_unsigned:
+                    return BuiltinTypeKind::Char_U;
+                default:
+                    // report
+                    return builtTyKind;
+            }
+
+        case BuiltinTypeKind::Char_S:
+        case BuiltinTypeKind::Char_U:
+            // report
+            return builtTyKind;
+
+
 
         default:
             return BuiltinTypeKind::None;

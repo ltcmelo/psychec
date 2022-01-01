@@ -104,6 +104,8 @@ set(CFE_SOURCES
 
     # Symbols
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
+    ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeFacts.h
+    ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeFacts.cpp
     ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeKind.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.h
