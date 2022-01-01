@@ -65,13 +65,40 @@ BuiltinTypeKind Semantics_TypeSpecifiers::combine(BuiltinTypeKind builtTyKind, S
                     // report
                     return builtTyKind;
             }
-
         case BuiltinTypeKind::Char_S:
         case BuiltinTypeKind::Char_U:
             // report
             return builtTyKind;
 
+        case BuiltinTypeKind::Short:
+            switch (tkK) {
+                case Keyword_signed:
+                    return BuiltinTypeKind::Short_S;
+                case Keyword_unsigned:
+                    return BuiltinTypeKind::Short_U;
+                default:
+                    // report
+                    return builtTyKind;
+            }
+        case BuiltinTypeKind::Short_S:
+        case BuiltinTypeKind::Short_U:
+            // report
+            return builtTyKind;
 
+        case BuiltinTypeKind::Int:
+            switch (tkK) {
+                case Keyword_signed:
+                    return BuiltinTypeKind::Int_S;
+                case Keyword_unsigned:
+                    return BuiltinTypeKind::Int_U;
+                default:
+                    // report
+                    return builtTyKind;
+            }
+        case BuiltinTypeKind::Int_S:
+        case BuiltinTypeKind::Int_U:
+            // report
+            return builtTyKind;
 
         default:
             return BuiltinTypeKind::None;
