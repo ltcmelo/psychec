@@ -53,36 +53,21 @@ enum class BuiltinTypeKind : std::uint8_t
 
     Void,
 
-    // char
-    Char,
-    // signed char
-    Char_S,
-    // unsigned char
-    Char_U,
+    Char, // char
+    Char_S, // signed char
+    Char_U, // unsigned char
 
-    // short, signed short, short int, or signed short int
-    Short,
-    Short_S,
-    // unsigned short, or unsigned short int
-    Short_U,
+    Short, Short_S, // short, signed short, short int, or signed short int
+    Short_U, // unsigned short, or unsigned short int
 
-    // int, signed, or signed int
-    Int,
-    Int_S,
-    // unsigned, or unsigned int
-    Int_U,
+    Int, Int_S, // int, signed, or signed int
+    Int_U, // unsigned, or unsigned int
 
-    // long, signed long, long int, or signed long int
-    Long,
-    Long_S,
-    // unsigned long, or unsigned long int
-    Long_U,
+    Long, Long_S, // long, signed long, long int, or signed long int
+    Long_U, // unsigned long, or unsigned long int
 
-    // long long, signed long long, long long int, or signed long long int
-    LongLong,
-    LongLong_S,
-    // unsigned long long, or unsigned long long int
-    LongLong_U,
+    LongLong, LongLong_S, // long long, signed long long, long long int, or signed long long int
+    LongLong_U, // unsigned long long, or unsigned long long int
 
     Float,
 
