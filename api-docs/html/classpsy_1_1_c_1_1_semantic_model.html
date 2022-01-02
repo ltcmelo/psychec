@@ -94,91 +94,31 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad03c4def2d375b5e624f25ffb07f58df"><td class="memItemLeft" align="right" valign="top"><a id="ad03c4def2d375b5e624f25ffb07f58df"></a>
 <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> &amp;)=delete</td></tr>
 <tr class="separator:ad03c4def2d375b5e624f25ffb07f58df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4e44d73bcf110b31bb109a9398d2ef0"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#ac4e44d73bcf110b31bb109a9398d2ef0">compilation</a> () const</td></tr>
-<tr class="separator:ac4e44d73bcf110b31bb109a9398d2ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e1422906c4b043e07eadf8f5cd25bde"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#a0e1422906c4b043e07eadf8f5cd25bde">syntaxTree</a> () const</td></tr>
-<tr class="separator:a0e1422906c4b043e07eadf8f5cd25bde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:aa8126bddd26f717bb855d3955f688136"><td class="memItemLeft" align="right" valign="top"><a id="aa8126bddd26f717bb855d3955f688136"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SemanticModel</b> (<a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> *<a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#ac4e44d73bcf110b31bb109a9398d2ef0">compilation</a>, <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree)</td></tr>
-<tr class="separator:aa8126bddd26f717bb855d3955f688136"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade507fae4028de732a2103f51bb0b003"><td class="memItemLeft" align="right" valign="top"><a id="ade507fae4028de732a2103f51bb0b003"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>bind</b> ()</td></tr>
-<tr class="separator:ade507fae4028de732a2103f51bb0b003"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3817029d16badb02d210a2e8221d5381"><td class="memTemplParams" colspan="2"><a id="a3817029d16badb02d210a2e8221d5381"></a>
-template&lt;class NameT , class... ArgsT&gt; </td></tr>
-<tr class="memitem:a3817029d16badb02d210a2e8221d5381"><td class="memTemplItemLeft" align="right" valign="top">NameT *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>make</b> (ArgsT &amp;&amp;... args)</td></tr>
-<tr class="separator:a3817029d16badb02d210a2e8221d5381"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f6766724dbd24381b7795616660cfb7"><td class="memItemLeft" align="right" valign="top"><a id="a1f6766724dbd24381b7795616660cfb7"></a>
-<a class="el" href="classpsy_1_1_c_1_1_identifier_name.html">IdentifierName</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>makeName</b> (const <a class="el" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a> *identifier)</td></tr>
-<tr class="separator:a1f6766724dbd24381b7795616660cfb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad14bd3f40867ad9337f5c4f1b754295e"><td class="memItemLeft" align="right" valign="top"><a id="ad14bd3f40867ad9337f5c4f1b754295e"></a>
-<a class="el" href="classpsy_1_1_c_1_1_tag_name.html">TagName</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>makeName</b> (TagName::TagKind typeSpecifierKind, const <a class="el" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a> *identifier)</td></tr>
-<tr class="separator:ad14bd3f40867ad9337f5c4f1b754295e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17db3d3263df73748c003b90d8b683b3"><td class="memItemLeft" align="right" valign="top"><a id="a17db3d3263df73748c003b90d8b683b3"></a>
-<a class="el" href="classpsy_1_1_c_1_1_anonymous_name.html">AnonymousName</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>makeName</b> ()</td></tr>
-<tr class="separator:a17db3d3263df73748c003b90d8b683b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c68536e08ee315a1b65285235377c10"><td class="memItemLeft" align="right" valign="top"><a id="a5c68536e08ee315a1b65285235377c10"></a>
-<a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>compilation</b> ()</td></tr>
-<tr class="separator:a5c68536e08ee315a1b65285235377c10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44b62d0064a835e835f8576b16a3bbba"><td class="memItemLeft" align="right" valign="top"><a id="a44b62d0064a835e835f8576b16a3bbba"></a>
-<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>syntaxTree</b> ()</td></tr>
-<tr class="separator:a44b62d0064a835e835f8576b16a3bbba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26ed3fa08325fbc3bb508851fea2a0a6"><td class="memItemLeft" align="right" valign="top"><a id="a26ed3fa08325fbc3bb508851fea2a0a6"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SemanticModel</b> (<a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> *compilation, const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree)</td></tr>
+<tr class="separator:a26ed3fa08325fbc3bb508851fea2a0a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dadf7a464345c647552761a59a35c29"><td class="memItemLeft" align="right" valign="top"><a id="a5dadf7a464345c647552761a59a35c29"></a>
+<a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>storeSymbol</b> (std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &gt; sym)</td></tr>
+<tr class="separator:a5dadf7a464345c647552761a59a35c29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:a3da9c668a9722780fb894a20a8dbf95f"><td class="memItemLeft" align="right" valign="top"><a id="a3da9c668a9722780fb894a20a8dbf95f"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Compilation</b></td></tr>
-<tr class="separator:a3da9c668a9722780fb894a20a8dbf95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1477f45573f7be56ec13bb35c0041b9"><td class="memItemLeft" align="right" valign="top"><a id="ac1477f45573f7be56ec13bb35c0041b9"></a>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Binder</b></td></tr>
 <tr class="separator:ac1477f45573f7be56ec13bb35c0041b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3da9c668a9722780fb894a20a8dbf95f"><td class="memItemLeft" align="right" valign="top"><a id="a3da9c668a9722780fb894a20a8dbf95f"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Compilation</b></td></tr>
+<tr class="separator:a3da9c668a9722780fb894a20a8dbf95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html" title="The SemanticModel class.">SemanticModel</a> class. </p>
-<dl class="section note"><dt>Note</dt><dd>This API inspirted by that of <code>Microsoft.CodeAnalysis.SemanticModel</code> from Roslyn, the .NET Compiler Platform. </dd></dl>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac4e44d73bcf110b31bb109a9398d2ef0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4e44d73bcf110b31bb109a9398d2ef0">&#9670;&nbsp;</a></span>compilation()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> * SemanticModel::compilation </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>The <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a> <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html" title="The SemanticModel class.">SemanticModel</a> was obtained from. </p>
-
-</div>
-</div>
-<a id="a0e1422906c4b043e07eadf8f5cd25bde"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e1422906c4b043e07eadf8f5cd25bde">&#9670;&nbsp;</a></span>syntaxTree()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * SemanticModel::syntaxTree </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>The <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html" title="The SyntaxTree class.">SyntaxTree</a> <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html" title="The SemanticModel class.">SemanticModel</a> was obtained from. </p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
-<li>C/<a class="el" href="_semantic_model_8h_source.html">SemanticModel.h</a></li>
-<li>C/SemanticModel.cpp</li>
+<dl class="section note"><dt>Note</dt><dd>This API is inspired by that of <code>Microsoft.CodeAnalysis.SemanticModel</code> from Roslyn, the .NET Compiler Platform. </dd></dl>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
+<li>C/compilation/<a class="el" href="_semantic_model_8h_source.html">SemanticModel.h</a></li>
+<li>C/compilation/SemanticModel.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

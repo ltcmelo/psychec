@@ -68,7 +68,9 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classpsy_1_1_c_1_1_compilation-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">psy::C::Compilation Class Reference</div>  </div>
@@ -93,29 +95,87 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afe0788f9eb42fdcf2e9c99cac2383f75"><td class="memItemLeft" align="right" valign="top"><a id="afe0788f9eb42fdcf2e9c99cac2383f75"></a>
 <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> &amp;)=delete</td></tr>
 <tr class="separator:afe0788f9eb42fdcf2e9c99cac2383f75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6050028af0c15e55fdfcc95cd95dd6f4"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#a6050028af0c15e55fdfcc95cd95dd6f4">create</a> (const std::string &amp;id)</td></tr>
+<tr class="memitem:a8917f9ad2efd1966f62d3257a4abea27"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_assembly.html">Assembly</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#a8917f9ad2efd1966f62d3257a4abea27">assembly</a> () const</td></tr>
+<tr class="separator:a8917f9ad2efd1966f62d3257a4abea27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2715cf58e61a7128cc13f4316daf7c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#ab2715cf58e61a7128cc13f4316daf7c6">addSyntaxTrees</a> (std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * &gt; trees)</td></tr>
+<tr class="separator:ab2715cf58e61a7128cc13f4316daf7c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af131b8d675c126e6ffd448e43ad8cb31"><td class="memItemLeft" align="right" valign="top">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#af131b8d675c126e6ffd448e43ad8cb31">syntaxTree</a> () const</td></tr>
+<tr class="separator:af131b8d675c126e6ffd448e43ad8cb31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62d2e2c699ccef99d3afd6b7c870bc48"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#a62d2e2c699ccef99d3afd6b7c870bc48">semanticModel</a> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree) const</td></tr>
+<tr class="separator:a62d2e2c699ccef99d3afd6b7c870bc48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a6050028af0c15e55fdfcc95cd95dd6f4"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#a6050028af0c15e55fdfcc95cd95dd6f4">create</a> (const std::string &amp;id)</td></tr>
 <tr class="separator:a6050028af0c15e55fdfcc95cd95dd6f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af11e240ee8475c264ae7f300f2ce5848"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#af11e240ee8475c264ae7f300f2ce5848">semanticModel</a> (<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree) const</td></tr>
-<tr class="separator:af11e240ee8475c264ae7f300f2ce5848"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:ab4323707d6130e372c6e7d0e64e4c5cd"><td class="memItemLeft" align="right" valign="top"><a id="ab4323707d6130e372c6e7d0e64e4c5cd"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Compilation</b> (const std::string &amp;id)</td></tr>
-<tr class="separator:ab4323707d6130e372c6e7d0e64e4c5cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa67b882bc5e64f9c0cab21fe76bb20ec"><td class="memItemLeft" align="right" valign="top"><a id="aa67b882bc5e64f9c0cab21fe76bb20ec"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>DECL_PIMPL</b> (<a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>)</td></tr>
 <tr class="separator:aa67b882bc5e64f9c0cab21fe76bb20ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1a28cd1facd5d22cb999bc826dc0e1b"><td class="memItemLeft" align="right" valign="top"><a id="ad1a28cd1facd5d22cb999bc826dc0e1b"></a>
+<a class="el" href="classpsy_1_1_c_1_1_assembly.html">Assembly</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>assembly</b> ()</td></tr>
+<tr class="separator:ad1a28cd1facd5d22cb999bc826dc0e1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a84df906e0ed1f9bd0c19324177982b1d"><td class="memItemLeft" align="right" valign="top"><a id="a84df906e0ed1f9bd0c19324177982b1d"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>SemanticModel</b></td></tr>
+<tr class="separator:a84df906e0ed1f9bd0c19324177982b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8db1914e49ea7a1cd5f44eeb9d2be05"><td class="memItemLeft" align="right" valign="top"><a id="ae8db1914e49ea7a1cd5f44eeb9d2be05"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>TestFrontend</b></td></tr>
+<tr class="separator:ae8db1914e49ea7a1cd5f44eeb9d2be05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a> class. </p>
-<dl class="section note"><dt>Note</dt><dd>This API inspirted by that of <code>Microsoft.CodeAnalysis.Compilation</code> from Roslyn, the .NET Compiler Platform. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This API is inspired by that of <code>Microsoft.CodeAnalysis.Compilation</code> from Roslyn, the .NET Compiler Platform. </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab2715cf58e61a7128cc13f4316daf7c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2715cf58e61a7128cc13f4316daf7c6">&#9670;&nbsp;</a></span>addSyntaxTrees()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Compilation::addSyntaxTrees </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * &gt;&#160;</td>
+          <td class="paramname"><em>trees</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Add SyntaxTrees to <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a>. </p>
+
+</div>
+</div>
+<a id="a8917f9ad2efd1966f62d3257a4abea27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8917f9ad2efd1966f62d3257a4abea27">&#9670;&nbsp;</a></span>assembly()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_assembly.html">Assembly</a> * Compilation::assembly </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <a class="el" href="classpsy_1_1_c_1_1_assembly.html" title="The Assembly class.">Assembly</a> produced by <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a>. </p>
+
+</div>
+</div>
 <a id="a6050028af0c15e55fdfcc95cd95dd6f4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6050028af0c15e55fdfcc95cd95dd6f4">&#9670;&nbsp;</a></span>create()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> &gt; Compilation::create </td>
@@ -125,33 +185,56 @@ Private Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Create a new compilation. </p>
+<p>Create an empty compilation identified by <code>id</code> with <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html" title="The SyntaxTree class.">SyntaxTree</a> <code>tree</code>. </p>
 
 </div>
 </div>
-<a id="af11e240ee8475c264ae7f300f2ce5848"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af11e240ee8475c264ae7f300f2ce5848">&#9670;&nbsp;</a></span>semanticModel()</h2>
+<a id="a62d2e2c699ccef99d3afd6b7c870bc48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62d2e2c699ccef99d3afd6b7c870bc48">&#9670;&nbsp;</a></span>semanticModel()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> &gt; Compilation::semanticModel </td>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> * Compilation::semanticModel </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&#160;</td>
           <td class="paramname"><em>tree</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The semantic model associated to the given <code>tree</code>, which must be part of <code>this</code> compilation. </p>
+<p>The <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html" title="The SemanticModel class.">SemanticModel</a> associated to the <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html" title="The SyntaxTree class.">SyntaxTree</a> <code>tree</code> of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a>. </p>
+
+</div>
+</div>
+<a id="af131b8d675c126e6ffd448e43ad8cb31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af131b8d675c126e6ffd448e43ad8cb31">&#9670;&nbsp;</a></span>syntaxTree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * &gt; Compilation::syntaxTree </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html" title="The SyntaxTree class.">SyntaxTree</a> associated to <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a>. </p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>C/<a class="el" href="_compilation_8h_source.html">Compilation.h</a></li>
-<li>C/Compilation.cpp</li>
+<li>C/compilation/<a class="el" href="_compilation_8h_source.html">Compilation.h</a></li>
+<li>C/compilation/Compilation.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

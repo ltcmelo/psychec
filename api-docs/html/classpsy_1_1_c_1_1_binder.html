@@ -66,8 +66,11 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classpsy_1_1_c_1_1_binder-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">psy::C::Binder Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
@@ -88,6 +91,11 @@ Inheritance diagram for psy::C::Binder:</div>
   </map>
 </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpsy_1_1_c_1_1_binder_1_1_diagnostics_reporter.html">DiagnosticsReporter</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a4f73966d1206769f62241620d84d3eb7"><td class="memItemLeft" align="right" valign="top"><a id="a4f73966d1206769f62241620d84d3eb7"></a>
@@ -102,12 +110,119 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>bind</b> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a789f1380d8c405d8eb2bb398783d4620"><td class="memItemLeft" align="right" valign="top"><a id="a789f1380d8c405d8eb2bb398783d4620"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Binder</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree)</td></tr>
-<tr class="separator:a789f1380d8c405d8eb2bb398783d4620"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe041e1985ffa3af8d20be42cdc95cda"><td class="memItemLeft" align="right" valign="top"><a id="abe041e1985ffa3af8d20be42cdc95cda"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTranslationUnit</b> (const <a class="el" href="classpsy_1_1_c_1_1_translation_unit_syntax.html">TranslationUnitSyntax</a> *node) override</td></tr>
-<tr class="separator:abe041e1985ffa3af8d20be42cdc95cda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae04fff58541bafa80dac8603f27ee625"><td class="memItemLeft" align="right" valign="top"><a id="ae04fff58541bafa80dac8603f27ee625"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Binder</b> (<a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> *semaModel, const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree)</td></tr>
+<tr class="separator:ae04fff58541bafa80dac8603f27ee625"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a5d6b3882f9bd134a409d673358b511"><td class="memTemplParams" colspan="2"><a id="a7a5d6b3882f9bd134a409d673358b511"></a>
+template&lt;class SymT &gt; </td></tr>
+<tr class="memitem:a7a5d6b3882f9bd134a409d673358b511"><td class="memTemplItemLeft" align="right" valign="top">SymT *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>makeAndPushDeclSym</b> ()</td></tr>
+<tr class="separator:a7a5d6b3882f9bd134a409d673358b511"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a035d64de6f807471080dcc0f8fc4e3b7"><td class="memItemLeft" align="right" valign="top"><a id="a035d64de6f807471080dcc0f8fc4e3b7"></a>
+<a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>makeAndPushDeclSym</b> (TypeKind)</td></tr>
+<tr class="separator:a035d64de6f807471080dcc0f8fc4e3b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cd831e846254b40ec8b9b325d0258e8"><td class="memTemplParams" colspan="2"><a id="a4cd831e846254b40ec8b9b325d0258e8"></a>
+template&lt;class SymT &gt; </td></tr>
+<tr class="memitem:a4cd831e846254b40ec8b9b325d0258e8"><td class="memTemplItemLeft" align="right" valign="top">SymT *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>pushSym</b> (std::unique_ptr&lt; SymT &gt;)</td></tr>
+<tr class="separator:a4cd831e846254b40ec8b9b325d0258e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af72c0cfba259d5cf03e5bc8285de7ea6"><td class="memItemLeft" align="right" valign="top"><a id="af72c0cfba259d5cf03e5bc8285de7ea6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>popSym</b> ()</td></tr>
+<tr class="separator:af72c0cfba259d5cf03e5bc8285de7ea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba14cc95bd3805ecd25a34524081c47b"><td class="memTemplParams" colspan="2"><a id="aba14cc95bd3805ecd25a34524081c47b"></a>
+template&lt;class TySymT &gt; </td></tr>
+<tr class="memitem:aba14cc95bd3805ecd25a34524081c47b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>f</b> ()</td></tr>
+<tr class="separator:aba14cc95bd3805ecd25a34524081c47b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba0a22d617c7a05388d1c84295e0fd29"><td class="memTemplParams" colspan="2"><a id="aba0a22d617c7a05388d1c84295e0fd29"></a>
+template&lt;class ScopeT &gt; </td></tr>
+<tr class="memitem:aba0a22d617c7a05388d1c84295e0fd29"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>openScope</b> ()</td></tr>
+<tr class="separator:aba0a22d617c7a05388d1c84295e0fd29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af52c1058e1c46c2db7f9d06dc30c2f5a"><td class="memItemLeft" align="right" valign="top"><a id="af52c1058e1c46c2db7f9d06dc30c2f5a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>openNestedScope</b> ()</td></tr>
+<tr class="separator:af52c1058e1c46c2db7f9d06dc30c2f5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1249d587f002c21da5fb99fd185beff"><td class="memItemLeft" align="right" valign="top"><a id="af1249d587f002c21da5fb99fd185beff"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>closeScope</b> ()</td></tr>
+<tr class="separator:af1249d587f002c21da5fb99fd185beff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a293a2a1a76442d5969565b1b42c16dc5"><td class="memItemLeft" align="right" valign="top"><a id="a293a2a1a76442d5969565b1b42c16dc5"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTranslationUnit</b> (const <a class="el" href="classpsy_1_1_c_1_1_translation_unit_syntax.html">TranslationUnitSyntax</a> *) override</td></tr>
+<tr class="separator:a293a2a1a76442d5969565b1b42c16dc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa9fb93853ca05d923ff2fcc7f91f623"><td class="memItemLeft" align="right" valign="top"><a id="aaa9fb93853ca05d923ff2fcc7f91f623"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitIncompleteDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_incomplete_declaration_syntax.html">IncompleteDeclarationSyntax</a> *) override</td></tr>
+<tr class="separator:aaa9fb93853ca05d923ff2fcc7f91f623"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49308158b85ddca4f1abf7389efa8889"><td class="memItemLeft" align="right" valign="top"><a id="a49308158b85ddca4f1abf7389efa8889"></a>
+<a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">SyntaxVisitor::Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypeDeclaration_COMMON</b> (const <a class="el" href="classpsy_1_1_c_1_1_type_declaration_syntax.html">TypeDeclarationSyntax</a> *)</td></tr>
+<tr class="separator:a49308158b85ddca4f1abf7389efa8889"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6646ccf5ad43a4510315dd9549d1ccd3"><td class="memItemLeft" align="right" valign="top"><a id="a6646ccf5ad43a4510315dd9549d1ccd3"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitStructOrUnionDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_struct_or_union_declaration_syntax.html">StructOrUnionDeclarationSyntax</a> *) override</td></tr>
+<tr class="separator:a6646ccf5ad43a4510315dd9549d1ccd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4fdd41102ad7aad62ab4974fe1761fd"><td class="memItemLeft" align="right" valign="top"><a id="af4fdd41102ad7aad62ab4974fe1761fd"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitEnumDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_enum_declaration_syntax.html">EnumDeclarationSyntax</a> *) override</td></tr>
+<tr class="separator:af4fdd41102ad7aad62ab4974fe1761fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1d37e7a1040814c72a264e5a9b2b815"><td class="memItemLeft" align="right" valign="top"><a id="aa1d37e7a1040814c72a264e5a9b2b815"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitVariableAndOrFunctionDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_variable_and_or_function_declaration_syntax.html">VariableAndOrFunctionDeclarationSyntax</a> *) override</td></tr>
+<tr class="separator:aa1d37e7a1040814c72a264e5a9b2b815"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab73e29f32187234ce3c3cbf3fbd5258a"><td class="memItemLeft" align="right" valign="top"><a id="ab73e29f32187234ce3c3cbf3fbd5258a"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitFieldDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_field_declaration_syntax.html">FieldDeclarationSyntax</a> *) override</td></tr>
+<tr class="separator:ab73e29f32187234ce3c3cbf3fbd5258a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc709d2f076eb8186ccf7833c2b9f0e2"><td class="memItemLeft" align="right" valign="top"><a id="abc709d2f076eb8186ccf7833c2b9f0e2"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitParameterDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_parameter_declaration_syntax.html">ParameterDeclarationSyntax</a> *) override</td></tr>
+<tr class="separator:abc709d2f076eb8186ccf7833c2b9f0e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa846a28a5ef81d9e2669c93f2563e319"><td class="memItemLeft" align="right" valign="top"><a id="aa846a28a5ef81d9e2669c93f2563e319"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitStaticAssertDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_static_assert_declaration_syntax.html">StaticAssertDeclarationSyntax</a> *) override</td></tr>
+<tr class="separator:aa846a28a5ef81d9e2669c93f2563e319"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa2c5a85b9c5e446cf2dda2095ba3cb1"><td class="memItemLeft" align="right" valign="top"><a id="afa2c5a85b9c5e446cf2dda2095ba3cb1"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitFunctionDefinition</b> (const <a class="el" href="classpsy_1_1_c_1_1_function_definition_syntax.html">FunctionDefinitionSyntax</a> *) override</td></tr>
+<tr class="separator:afa2c5a85b9c5e446cf2dda2095ba3cb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4cb5dcade2bb8198acbbb36f6607ec"><td class="memItemLeft" align="right" valign="top"><a id="abd4cb5dcade2bb8198acbbb36f6607ec"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitBuiltinTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_builtin_type_specifier_syntax.html">BuiltinTypeSpecifierSyntax</a> *) override</td></tr>
+<tr class="separator:abd4cb5dcade2bb8198acbbb36f6607ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba63728bbf824e852a9064a7cf050908"><td class="memItemLeft" align="right" valign="top"><a id="aba63728bbf824e852a9064a7cf050908"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTagTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_tag_type_specifier_syntax.html">TagTypeSpecifierSyntax</a> *) override</td></tr>
+<tr class="separator:aba63728bbf824e852a9064a7cf050908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c47841dde86ba1185dddc22ab53cc6a"><td class="memItemLeft" align="right" valign="top"><a id="a6c47841dde86ba1185dddc22ab53cc6a"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypeDeclarationAsSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_type_declaration_as_specifier_syntax.html">TypeDeclarationAsSpecifierSyntax</a> *) override</td></tr>
+<tr class="separator:a6c47841dde86ba1185dddc22ab53cc6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab55f215bab7c2645b5101527e77e4740"><td class="memItemLeft" align="right" valign="top"><a id="ab55f215bab7c2645b5101527e77e4740"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypedefName</b> (const <a class="el" href="classpsy_1_1_c_1_1_typedef_name_syntax.html">TypedefNameSyntax</a> *) override</td></tr>
+<tr class="separator:ab55f215bab7c2645b5101527e77e4740"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a696673e8d997df7d1021afacefb93332"><td class="memItemLeft" align="right" valign="top"><a id="a696673e8d997df7d1021afacefb93332"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitIdentifierDeclarator</b> (const <a class="el" href="classpsy_1_1_c_1_1_identifier_declarator_syntax.html">IdentifierDeclaratorSyntax</a> *) override</td></tr>
+<tr class="separator:a696673e8d997df7d1021afacefb93332"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a610b8f4dc5101fd6d7b91d35ebd1739b"><td class="memItemLeft" align="right" valign="top"><a id="a610b8f4dc5101fd6d7b91d35ebd1739b"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitAbstractDeclarator</b> (const <a class="el" href="classpsy_1_1_c_1_1_abstract_declarator_syntax.html">AbstractDeclaratorSyntax</a> *) override</td></tr>
+<tr class="separator:a610b8f4dc5101fd6d7b91d35ebd1739b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47c96acc301469985d9a067600f28aea"><td class="memItemLeft" align="right" valign="top"><a id="a47c96acc301469985d9a067600f28aea"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitCompoundStatement</b> (const <a class="el" href="classpsy_1_1_c_1_1_compound_statement_syntax.html">CompoundStatementSyntax</a> *) override</td></tr>
+<tr class="separator:a47c96acc301469985d9a067600f28aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46e773fab2ecf51d91c186433408b9f7"><td class="memItemLeft" align="right" valign="top"><a id="a46e773fab2ecf51d91c186433408b9f7"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitDeclarationStatement</b> (const <a class="el" href="classpsy_1_1_c_1_1_declaration_statement_syntax.html">DeclarationStatementSyntax</a> *) override</td></tr>
+<tr class="separator:a46e773fab2ecf51d91c186433408b9f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5903b04179a1dd285ea8f786bc685df"><td class="memItemLeft" align="right" valign="top"><a id="ae5903b04179a1dd285ea8f786bc685df"></a>
+template&lt;&gt; </td></tr>
+<tr class="memitem:ae5903b04179a1dd285ea8f786bc685df"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_c_1_1_link_unit_symbol.html">LinkUnitSymbol</a> *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>makeAndPushDeclSym</b> ()</td></tr>
+<tr class="separator:ae5903b04179a1dd285ea8f786bc685df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a3dd275c466876a983d3ae7d85837b570"><td class="memItemLeft" align="right" valign="top"><a id="a3dd275c466876a983d3ae7d85837b570"></a>
+<a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>semaModel_</b></td></tr>
+<tr class="separator:a3dd275c466876a983d3ae7d85837b570"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf1d89c5701b09bda55a599d87f565f5"><td class="memItemLeft" align="right" valign="top"><a id="adf1d89c5701b09bda55a599d87f565f5"></a>
+std::stack&lt; <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>scopes_</b></td></tr>
+<tr class="separator:adf1d89c5701b09bda55a599d87f565f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02709703870917672bcf26eed6312cfc"><td class="memItemLeft" align="right" valign="top"><a id="a02709703870917672bcf26eed6312cfc"></a>
+std::stack&lt; <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>syms_</b></td></tr>
+<tr class="separator:a02709703870917672bcf26eed6312cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab77346517368c25ea02de82b1375f372"><td class="memItemLeft" align="right" valign="top"><a id="ab77346517368c25ea02de82b1375f372"></a>
+<a class="el" href="structpsy_1_1_c_1_1_binder_1_1_diagnostics_reporter.html">DiagnosticsReporter</a>&#160;</td><td class="memItemRight" valign="bottom"><b>diagReporter_</b></td></tr>
+<tr class="separator:ab77346517368c25ea02de82b1375f372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a84df906e0ed1f9bd0c19324177982b1d"><td class="memItemLeft" align="right" valign="top"><a id="a84df906e0ed1f9bd0c19324177982b1d"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>SemanticModel</b></td></tr>
+<tr class="separator:a84df906e0ed1f9bd0c19324177982b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32096f769e750573dbc1dc5563061cb7"><td class="memItemLeft" align="right" valign="top"><a id="a32096f769e750573dbc1dc5563061cb7"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Semantics_TypeSpecifiers</b></td></tr>
+<tr class="separator:a32096f769e750573dbc1dc5563061cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -119,9 +234,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memdesc:a557d7f8aa9b5ad0155e4e2b8d3fd3d16"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Action enumeration. <br /></td></tr>
 <tr class="separator:a557d7f8aa9b5ad0155e4e2b8d3fd3d16 inherit pro_types_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classpsy_1_1_c_1_1_syntax_visitor')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html">psy::C::SyntaxVisitor</a></td></tr>
-<tr class="memitem:af38f2c9c65c99390fe7b07eb8c218b92 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="af38f2c9c65c99390fe7b07eb8c218b92"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxVisitor</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree)</td></tr>
-<tr class="separator:af38f2c9c65c99390fe7b07eb8c218b92 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52c5c7e18b7a6ed5d8e3050a9dd0eb6a inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a52c5c7e18b7a6ed5d8e3050a9dd0eb6a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxVisitor</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree)</td></tr>
+<tr class="separator:a52c5c7e18b7a6ed5d8e3050a9dd0eb6a inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0f76543043032b02df9293d1eaa9c28 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="ac0f76543043032b02df9293d1eaa9c28"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxVisitor</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html">SyntaxVisitor</a> &amp;)=delete</td></tr>
 <tr class="separator:ac0f76543043032b02df9293d1eaa9c28 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,33 +254,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>postVisit</b>
 <tr class="memitem:a866f6bb268d92db9f869797c6fa59cab inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memTemplParams" colspan="2">template&lt;class PtrT , class DerivedListT &gt; </td></tr>
 <tr class="memitem:a866f6bb268d92db9f869797c6fa59cab inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a866f6bb268d92db9f869797c6fa59cab">visit</a> (<a class="el" href="classpsy_1_1_c_1_1_core_syntax_node_list.html">CoreSyntaxNodeList</a>&lt; PtrT, DerivedListT &gt; *it)</td></tr>
 <tr class="separator:a866f6bb268d92db9f869797c6fa59cab inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a265e67bf8a76cf6d4c1daa67349611a5 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a265e67bf8a76cf6d4c1daa67349611a5"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitIncompleteDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_incomplete_declaration_syntax.html">IncompleteDeclarationSyntax</a> *)</td></tr>
-<tr class="separator:a265e67bf8a76cf6d4c1daa67349611a5 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10bb8b80d35da09b0f392af7d2d225f5 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a10bb8b80d35da09b0f392af7d2d225f5"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitStructOrUnionDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_struct_or_union_declaration_syntax.html">StructOrUnionDeclarationSyntax</a> *)</td></tr>
-<tr class="separator:a10bb8b80d35da09b0f392af7d2d225f5 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86036c3e4343d11867f82d06aa23849a inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a86036c3e4343d11867f82d06aa23849a"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitEnumDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_enum_declaration_syntax.html">EnumDeclarationSyntax</a> *)</td></tr>
-<tr class="separator:a86036c3e4343d11867f82d06aa23849a inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53ee35afe7a9fa51efcce7bf6b95748d inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a53ee35afe7a9fa51efcce7bf6b95748d"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitEnumMemberDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_enum_member_declaration_syntax.html">EnumMemberDeclarationSyntax</a> *)</td></tr>
 <tr class="separator:a53ee35afe7a9fa51efcce7bf6b95748d inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa29652c2caf3874a61c9a5ab7e8e2f7 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="afa29652c2caf3874a61c9a5ab7e8e2f7"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitVariableAndOrFunctionDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_variable_and_or_function_declaration_syntax.html">VariableAndOrFunctionDeclarationSyntax</a> *)</td></tr>
-<tr class="separator:afa29652c2caf3874a61c9a5ab7e8e2f7 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4751758fe56c692011c64de07a91daf inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="ac4751758fe56c692011c64de07a91daf"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitFieldDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_field_declaration_syntax.html">FieldDeclarationSyntax</a> *)</td></tr>
-<tr class="separator:ac4751758fe56c692011c64de07a91daf inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1e51416cba4d895e9f9151b9cc3cf22 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="aa1e51416cba4d895e9f9151b9cc3cf22"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitParameterDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_parameter_declaration_syntax.html">ParameterDeclarationSyntax</a> *)</td></tr>
-<tr class="separator:aa1e51416cba4d895e9f9151b9cc3cf22 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83d70d3f89879d628615880ad97443bf inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a83d70d3f89879d628615880ad97443bf"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitStaticAssertDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_static_assert_declaration_syntax.html">StaticAssertDeclarationSyntax</a> *)</td></tr>
-<tr class="separator:a83d70d3f89879d628615880ad97443bf inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54c58937e7d3c4a1298744f5a3762b5f inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a54c58937e7d3c4a1298744f5a3762b5f"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitFunctionDefinition</b> (const <a class="el" href="classpsy_1_1_c_1_1_function_definition_syntax.html">FunctionDefinitionSyntax</a> *)</td></tr>
-<tr class="separator:a54c58937e7d3c4a1298744f5a3762b5f inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae76ae63b7006df40ecbf7aa5347c0ee9 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="ae76ae63b7006df40ecbf7aa5347c0ee9"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitExtPSY_TemplateDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_ext_p_s_y___template_declaration_syntax.html">ExtPSY_TemplateDeclarationSyntax</a> *)</td></tr>
 <tr class="separator:ae76ae63b7006df40ecbf7aa5347c0ee9 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -175,21 +266,9 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5
 <tr class="memitem:ab6177d3f20c887319b658f4aa595999e inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="ab6177d3f20c887319b658f4aa595999e"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitStorageClass</b> (const <a class="el" href="classpsy_1_1_c_1_1_storage_class_syntax.html">StorageClassSyntax</a> *)</td></tr>
 <tr class="separator:ab6177d3f20c887319b658f4aa595999e inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6229ddb56c73c51c065a93a2844fffb5 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a6229ddb56c73c51c065a93a2844fffb5"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitBuiltinTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_builtin_type_specifier_syntax.html">BuiltinTypeSpecifierSyntax</a> *)</td></tr>
-<tr class="separator:a6229ddb56c73c51c065a93a2844fffb5 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12387f636016ea0d228d19d3dc6d434e inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a12387f636016ea0d228d19d3dc6d434e"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTaggedTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_tagged_type_specifier_syntax.html">TaggedTypeSpecifierSyntax</a> *)</td></tr>
-<tr class="separator:a12387f636016ea0d228d19d3dc6d434e inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5374d56309c7eac3c7e89d78fc54df4d inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a5374d56309c7eac3c7e89d78fc54df4d"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitAtomicTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_atomic_type_specifier_syntax.html">AtomicTypeSpecifierSyntax</a> *)</td></tr>
 <tr class="separator:a5374d56309c7eac3c7e89d78fc54df4d inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a45a84988fec36e447af683ed929414 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a7a45a84988fec36e447af683ed929414"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypeDeclarationAsSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_type_declaration_as_specifier_syntax.html">TypeDeclarationAsSpecifierSyntax</a> *)</td></tr>
-<tr class="separator:a7a45a84988fec36e447af683ed929414 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac768cad86a75003c4c5b4eec03fa707c inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="ac768cad86a75003c4c5b4eec03fa707c"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypedefName</b> (const <a class="el" href="classpsy_1_1_c_1_1_typedef_name_syntax.html">TypedefNameSyntax</a> *)</td></tr>
-<tr class="separator:ac768cad86a75003c4c5b4eec03fa707c inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a341cb0bb99cb276b716f7db2e0a62738 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a341cb0bb99cb276b716f7db2e0a62738"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypeQualifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_type_qualifier_syntax.html">TypeQualifierSyntax</a> *)</td></tr>
 <tr class="separator:a341cb0bb99cb276b716f7db2e0a62738 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,12 +302,6 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5
 <tr class="memitem:a66e548517e0e92189d4c2de5e826947a inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a66e548517e0e92189d4c2de5e826947a"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitParenthesizedDeclarator</b> (const <a class="el" href="classpsy_1_1_c_1_1_parenthesized_declarator_syntax.html">ParenthesizedDeclaratorSyntax</a> *)</td></tr>
 <tr class="separator:a66e548517e0e92189d4c2de5e826947a inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a747d874b9c43449df2cbbe93d55250fc inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a747d874b9c43449df2cbbe93d55250fc"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitIdentifierDeclarator</b> (const <a class="el" href="classpsy_1_1_c_1_1_identifier_declarator_syntax.html">IdentifierDeclaratorSyntax</a> *)</td></tr>
-<tr class="separator:a747d874b9c43449df2cbbe93d55250fc inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2d285ab4d70937d2876794793169984 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="ab2d285ab4d70937d2876794793169984"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitAbstractDeclarator</b> (const <a class="el" href="classpsy_1_1_c_1_1_abstract_declarator_syntax.html">AbstractDeclaratorSyntax</a> *)</td></tr>
-<tr class="separator:ab2d285ab4d70937d2876794793169984 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b3263d5c48f14c1f480ec25daf751bb inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a3b3263d5c48f14c1f480ec25daf751bb"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitSubscriptSuffix</b> (const <a class="el" href="classpsy_1_1_c_1_1_subscript_suffix_syntax.html">SubscriptSuffixSyntax</a> *)</td></tr>
 <tr class="separator:a3b3263d5c48f14c1f480ec25daf751bb inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -253,9 +326,9 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5
 <tr class="memitem:a7056cd945ccc4361ed81c6951903142f inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a7056cd945ccc4361ed81c6951903142f"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitArrayDesignator</b> (const <a class="el" href="classpsy_1_1_c_1_1_array_designator_syntax.html">ArrayDesignatorSyntax</a> *)</td></tr>
 <tr class="separator:a7056cd945ccc4361ed81c6951903142f inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e0503a8095819482a0ac5c9a713d639 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a9e0503a8095819482a0ac5c9a713d639"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitIdentifierExpression</b> (const <a class="el" href="classpsy_1_1_c_1_1_identifier_expression_syntax.html">IdentifierExpressionSyntax</a> *)</td></tr>
-<tr class="separator:a9e0503a8095819482a0ac5c9a713d639 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb90e4481d3d962e91542270c0d16ea7 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="abb90e4481d3d962e91542270c0d16ea7"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitIdentifierName</b> (const <a class="el" href="classpsy_1_1_c_1_1_identifier_name_syntax.html">IdentifierNameSyntax</a> *)</td></tr>
+<tr class="separator:abb90e4481d3d962e91542270c0d16ea7 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b39cd08ca64b9a38f9ec8f5b635f9af inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a0b39cd08ca64b9a38f9ec8f5b635f9af"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitConstantExpression</b> (const <a class="el" href="classpsy_1_1_c_1_1_constant_expression_syntax.html">ConstantExpressionSyntax</a> *)</td></tr>
 <tr class="separator:a0b39cd08ca64b9a38f9ec8f5b635f9af inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -310,12 +383,6 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5
 <tr class="memitem:ab97251465f07b0d68a25a1078e9f6655 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="ab97251465f07b0d68a25a1078e9f6655"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitSequencingExpression</b> (const <a class="el" href="classpsy_1_1_c_1_1_sequencing_expression_syntax.html">SequencingExpressionSyntax</a> *)</td></tr>
 <tr class="separator:ab97251465f07b0d68a25a1078e9f6655 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ed4a6a00588fb384ea3d8e0ccb97f9a inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a3ed4a6a00588fb384ea3d8e0ccb97f9a"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitCompoundStatement</b> (const <a class="el" href="classpsy_1_1_c_1_1_compound_statement_syntax.html">CompoundStatementSyntax</a> *)</td></tr>
-<tr class="separator:a3ed4a6a00588fb384ea3d8e0ccb97f9a inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35340917b0595d806ee566a87d2cae42 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a35340917b0595d806ee566a87d2cae42"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitDeclarationStatement</b> (const <a class="el" href="classpsy_1_1_c_1_1_declaration_statement_syntax.html">DeclarationStatementSyntax</a> *)</td></tr>
-<tr class="separator:a35340917b0595d806ee566a87d2cae42 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54ab615a41bcf44d4eb6dcc88ad4be28 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a54ab615a41bcf44d4eb6dcc88ad4be28"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitExpressionStatement</b> (const <a class="el" href="classpsy_1_1_c_1_1_expression_statement_syntax.html">ExpressionStatementSyntax</a> *)</td></tr>
 <tr class="separator:a54ab615a41bcf44d4eb6dcc88ad4be28 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -377,15 +444,15 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitAmbiguousExpressionOrDeclarationStatement</b> (const <a class="el" href="classpsy_1_1_c_1_1_ambiguous_expression_or_declaration_statement_syntax.html">AmbiguousExpressionOrDeclarationStatementSyntax</a> *)</td></tr>
 <tr class="separator:abd9db4efa7f9d8ccf3112602c69b5858 inherit pro_methods_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classpsy_1_1_c_1_1_syntax_visitor"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classpsy_1_1_c_1_1_syntax_visitor')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html">psy::C::SyntaxVisitor</a></td></tr>
-<tr class="memitem:aa18099a6b298907bbb265d23e38164df inherit pro_attribs_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="aa18099a6b298907bbb265d23e38164df"></a>
-<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>tree_</b></td></tr>
-<tr class="separator:aa18099a6b298907bbb265d23e38164df inherit pro_attribs_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1171da719d4603cb176269b44ceddb13 inherit pro_attribs_classpsy_1_1_c_1_1_syntax_visitor"><td class="memItemLeft" align="right" valign="top"><a id="a1171da719d4603cb176269b44ceddb13"></a>
+const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>tree_</b></td></tr>
+<tr class="separator:a1171da719d4603cb176269b44ceddb13 inherit pro_attribs_classpsy_1_1_c_1_1_syntax_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_binder.html" title="The Binder class.">Binder</a> class. </p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
-<li>C/parser/<a class="el" href="_binder_8h_source.html">Binder.h</a></li>
-<li>C/parser/Binder.cpp</li>
+<li>C/binder/<a class="el" href="_binder_8h_source.html">Binder.h</a></li>
+<li>C/binder/Binder.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

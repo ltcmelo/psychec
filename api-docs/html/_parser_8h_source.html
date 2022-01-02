@@ -237,7 +237,7 @@ $(function() {
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keywordtype">bool</span> matchOrSkipTo(SyntaxKind expectedTkK, LexedTokens::IndexType* tkIdx);</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keywordtype">void</span> skipTo(SyntaxKind tkK);</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <a class="code" href="structpsy_1_1_c_1_1_parser_1_1_diagnostics_reporter.html">DiagnosticsReporter</a> diagnosticsReporter_;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <a class="code" href="structpsy_1_1_c_1_1_parser_1_1_diagnostics_reporter.html">DiagnosticsReporter</a> diagReporter_;</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> curTkIdx_;</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    <span class="keywordtype">int</span> depthOfExprs_;</div>
@@ -329,7 +329,7 @@ $(function() {
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keywordtype">bool</span> parseExtGNU_Typeof_AtFirst(SpecifierSyntax*&amp; spec);</div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="keywordtype">void</span> parseTypedefName_AtFirst(SpecifierSyntax*&amp; spec);</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="keywordtype">bool</span> parseAtomiceTypeSpecifier_AtFirst(SpecifierSyntax*&amp; spec);</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> TypeDeclT&gt; <span class="keywordtype">bool</span> parseTaggedTypeSpecifier_AtFirst(</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> TypeDeclT&gt; <span class="keywordtype">bool</span> parseTagTypeSpecifier_AtFirst(</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            DeclarationSyntax*&amp; decl,</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            SpecifierSyntax*&amp; spec,</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            SyntaxKind declK,</div>
@@ -383,8 +383,8 @@ $(function() {
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="comment">//-------------//</span></div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <span class="keywordtype">bool</span> parseExpression(ExpressionSyntax*&amp; expr);</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="keywordtype">bool</span> parsePrimaryExpression(ExpressionSyntax*&amp; expr);</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <span class="keywordtype">bool</span> parseIdentifierExpression(ExpressionSyntax*&amp; expr);</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <span class="keywordtype">void</span> parseIdentifierExpression_AtFirst(ExpressionSyntax*&amp; expr);</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <span class="keywordtype">bool</span> parseIdentifierName(ExpressionSyntax*&amp; expr);</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <span class="keywordtype">void</span> parseIdentifierName_AtFirst(ExpressionSyntax*&amp; expr);</div>
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> ExprT&gt; <span class="keywordtype">bool</span> parseConstant(ExpressionSyntax*&amp; expr, SyntaxKind exprK);</div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> ExprT&gt; <span class="keywordtype">void</span> parseConstant_AtFirst(ExpressionSyntax*&amp; expr, SyntaxKind exprK);</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    <span class="keywordtype">bool</span> parseStringLiteral(ExpressionSyntax*&amp; expr);</div>
@@ -516,10 +516,10 @@ $(function() {
 <div class="ttc" id="astructpsy_1_1_c_1_1_parser_1_1_diagnostics_reporter_html"><div class="ttname"><a href="structpsy_1_1_c_1_1_parser_1_1_diagnostics_reporter.html">psy::C::Parser::DiagnosticsReporter</a></div><div class="ttdef"><b>Definition:</b> Parser.h:87</div></div>
 <div class="ttc" id="astructpsy_1_1_c_1_1_parser_1_1_backtracker_html"><div class="ttname"><a href="structpsy_1_1_c_1_1_parser_1_1_backtracker.html">psy::C::Parser::Backtracker</a></div><div class="ttdef"><b>Definition:</b> Parser.h:71</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_test_parser_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_test_parser.html">psy::C::TestParser</a></div><div class="ttdef"><b>Definition:</b> TestParser.h:32</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_translation_unit_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_translation_unit_syntax.html">psy::C::TranslationUnitSyntax</a></div><div class="ttdoc">The TranslationUnitSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes_Declarations.h:53</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_translation_unit_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_translation_unit_syntax.html">psy::C::TranslationUnitSyntax</a></div><div class="ttdoc">The TranslationUnitSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes_Declarations.h:52</div></div>
 <div class="ttc" id="aclasspsy_1_1_diagnostic_descriptor_html"><div class="ttname"><a href="classpsy_1_1_diagnostic_descriptor.html">psy::DiagnosticDescriptor</a></div><div class="ttdef"><b>Definition:</b> DiagnosticDescriptor.h:41</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_token_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_token.html">psy::C::SyntaxToken</a></div><div class="ttdoc">The SyntaxToken class.</div><div class="ttdef"><b>Definition:</b> SyntaxToken.h:51</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:58</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:59</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_token_html_a1c34af83d1ca3481777b12a8c046d02b"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_token.html#a1c34af83d1ca3481777b12a8c046d02b">psy::C::SyntaxToken::Category</a></div><div class="ttdeci">Category</div><div class="ttdoc">The existing SyntaxToken categories.</div><div class="ttdef"><b>Definition:</b> SyntaxToken.h:81</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_parser_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_parser.html">psy::C::Parser</a></div><div class="ttdoc">The C Parser class.</div><div class="ttdef"><b>Definition:</b> Parser.h:47</div></div>
 <!-- start footer part -->
