@@ -41,49 +41,39 @@ using namespace C;
 void TestBinder::case1001()
 {
     bind("int x ;",
-         Expectation().values(
-             {
-                 std::make_tuple("x", ValueKind::Variable)
-             }));
+         Expectation()
+            .value("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1002()
 {
     bind("int x ; int y ;",
-         Expectation().values(
-             {
-                 std::make_tuple("x", ValueKind::Variable),
-                 std::make_tuple("y", ValueKind::Variable)
-             }));
+         Expectation()
+            .value("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int)
+            .value("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1003()
 {
     bind("int x , y ;",
-         Expectation().values(
-            {
-                std::make_tuple("x", ValueKind::Variable),
-                std::make_tuple("y", ValueKind::Variable)
-            }));
+         Expectation()
+            .value("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int)
+            .value("y", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1004()
 {
     bind("x y ;",
-         Expectation().values(
-             {
-                 std::make_tuple("y", ValueKind::Variable)
-             }));
+         Expectation()
+            .value("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
 }
 
 void TestBinder::case1005()
 {
     bind("x y , z ;",
-         Expectation().values(
-            {
-                std::make_tuple("y", ValueKind::Variable),
-                std::make_tuple("z", ValueKind::Variable)
-            }));
+         Expectation()
+            .value("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None)
+            .value("z", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
 }
 
 void TestBinder::case1006()

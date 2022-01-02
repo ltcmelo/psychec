@@ -349,6 +349,40 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
+    auto sym = syms_.top();
+    switch (sym->kind()) {
+        case SymbolKind::Function:
+            break;
+
+        case SymbolKind::Value: {
+            PSYCHE_ASSERT(sym->asValue()->type() == nullptr
+                              || sym->asValue()->type()->asNamedType() != nullptr,
+                          return Action::Skip, "");
+
+            NamedTypeSymbol* namedTySym;
+            auto valSym = sym->asValue();
+            if (valSym->type() != nullptr)
+                namedTySym = valSym->type()->asNamedType();
+            else {
+                std::unique_ptr<NamedTypeSymbol> tySym(
+                        new NamedTypeSymbol(tree_,
+                                            scopes_.top(),
+                                            syms_.top(),
+                                            TypeKind::Synonym));
+                namedTySym = valSym->giveType(std::move(tySym))->asNamedType();
+            }
+
+            std::unique_ptr<SymbolName> symName(
+                    new PlainSymbolName(node->identifierToken().valueText_c_str()));
+            valSym->type()->giveName(std::move(symName));
+            break;
+        }
+
+        default:
+            PSYCHE_FAIL(return Action::Quit, "unexpected symbol");
+            return Action::Quit;
+    }
+
     return Action::Skip;
 }
 

@@ -25,6 +25,7 @@
 #include "SyntaxTree.h"
 
 #include "compilation/Compilation.h"
+#include "symbols/BuiltinTypeKind.h"
 #include "symbols/SymbolKind.h"
 #include "symbols/ValueKind.h"
 #include "symbols/TypeKind.h"
@@ -62,9 +63,19 @@ public:
         void setWarnCnt(int numW);
 
         Expectation& AST(std::vector<SyntaxKind>&& v);
-        Expectation& values(std::vector<std::tuple<std::string, ValueKind>>&& v);
-        Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
         Expectation& replicateAmbiguity(const std::string& s = "");
+        Expectation& value(const std::string& valSymName,
+                           ValueKind valKind,
+                           const std::string& tySymName,
+                           TypeKind tyKind,
+                           BuiltinTypeKind builtTyKind);
+        Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
+
+        using ValueData = std::tuple<std::string,
+                                     ValueKind,
+                                     std::string,
+                                     TypeKind,
+                                     BuiltinTypeKind>;
 
         int numE_;
         int numW_;
@@ -72,7 +83,7 @@ public:
         std::vector<std::string> descriptorsE_;
         std::vector<std::string> descriptorsW_;
         std::vector<SyntaxKind> syntaxKinds_;
-        std::vector<std::tuple<std::string, ValueKind>> values_;
+        std::vector<ValueData> values_;
         std::string ambiguousText_;
     };
 
