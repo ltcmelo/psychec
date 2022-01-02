@@ -23,6 +23,7 @@
 #include "TestParser.h"
 #include "Unparser.h"
 
+#include "binder/Semantics_TypeSpecifiers.h"
 #include "symbols/Symbol.h"
 #include "symbols/Symbols.h"
 #include "syntax/SyntaxLexemes.h"
@@ -87,6 +88,10 @@ void TestBinder::case1005()
 
 void TestBinder::case1006()
 {
+    bind("int float x ;",
+         Expectation().addDiagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
 
 void TestBinder::case1007()
