@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,22 +18,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_VARIABLE_H__
-#define PSYCHE_C_SYMBOL_VARIABLE_H__
+#ifndef PSYCHE_C_SEMANTICS_TYPE_SPECIFIERS_H__
+#define PSYCHE_C_SEMANTICS_TYPE_SPECIFIERS_H__
 
-#include "Symbol.h"
+#include "APIFwds.h"
+
+#include "binder/Binder.h"
+#include "symbols/BuiltinTypeKind.h"
+#include "syntax/SyntaxKind.h"
+
+#include <vector>
 
 namespace psy {
 namespace C {
 
-class PSY_C_API VariableSymbol : public Symbol
-{
-private:
-    friend class Binder;
+class Binder;
 
-    VariableSymbol(const SyntaxTree* tree,
-                   const Scope* outerScope,
-                   const Symbol* containingSym);
+class Semantics_TypeSpecifiers
+{
+public:
+    static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
+
+    static BuiltinTypeKind combine(SyntaxToken tySpecTk,
+                                   BuiltinTypeKind builtTyKind,
+                                   Binder::DiagnosticsReporter* diagReporter);
+
+private:
+    static void TwoOrMoreDataTypesInDeclarationSpecifiers(SyntaxToken builtTySpecTk,
+                                                          Binder::DiagnosticsReporter* diagReporter);
 };
 
 } // C

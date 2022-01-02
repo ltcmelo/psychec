@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,26 +18,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Binder.h"
-
-#include "SyntaxTree.h"
+#include "BuiltinTypeFacts.h"
 
 using namespace psy;
 using namespace C;
 
-const std::string Binder::DiagnosticsReporter::ID_of_UselessDeclaration = "Binder-000";
-
-void Binder::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc,
-                                           SyntaxToken tk)
+bool BuiltinTypeFacts::areEquivalent(BuiltinTypeKind builtTyKind_a, BuiltinTypeKind builtTyKind_b)
 {
-    binder_->tree_->newDiagnostic(desc, tk);
-};
+    if (builtTyKind_a == builtTyKind_b)
+        return true;
 
-void Binder::DiagnosticsReporter::UselessDeclaration(SyntaxToken tk)
-{
-    diagnose(DiagnosticDescriptor(ID_of_UselessDeclaration,
-                                  "[[useless declaration]]",
-                                  "declaration does not declare anything",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Binding), tk);
+    switch (builtTyKind_a) {
+        case BuiltinTypeKind::Short:
+            return builtTyKind_b == BuiltinTypeKind::Short_S;
+        case BuiltinTypeKind::Short_S:
+            return builtTyKind_b == BuiltinTypeKind::Short;
+        case BuiltinTypeKind::Int:
+            return builtTyKind_b == BuiltinTypeKind::Int_S;
+        case BuiltinTypeKind::Int_S:
+            return builtTyKind_b == BuiltinTypeKind::Int;
+        case BuiltinTypeKind::Long:
+            return builtTyKind_b == BuiltinTypeKind::Long_S;
+        case BuiltinTypeKind::Long_S:
+            return builtTyKind_b == BuiltinTypeKind::Long;
+        case BuiltinTypeKind::LongLong:
+            return builtTyKind_b == BuiltinTypeKind::LongLong_S;
+        case BuiltinTypeKind::LongLong_S:
+            return builtTyKind_b == BuiltinTypeKind::LongLong;
+        default:
+            return false;
+    }
 }

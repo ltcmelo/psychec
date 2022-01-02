@@ -28,6 +28,10 @@ namespace C {
 
 class PSY_C_API FunctionSymbol : public Symbol
 {
+public:
+    virtual FunctionSymbol* asFunction() override { return this; }
+    virtual const FunctionSymbol* asFunction() const override { return this; }
+
 private:
     friend class Binder;
 

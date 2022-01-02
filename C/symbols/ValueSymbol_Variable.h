@@ -18,16 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol_Parameter.h"
+#ifndef PSYCHE_C_SYMBOL_VARIABLE_H__
+#define PSYCHE_C_SYMBOL_VARIABLE_H__
 
-using namespace psy;
-using namespace C;
+#include "Symbol_Value.h"
 
-ParameterSymbol::ParameterSymbol(const SyntaxTree* tree,
-                                 const Scope* scope,
-                                 const Symbol* containingSym)
-    : Symbol(tree,
-             scope,
-             containingSym,
-             SymbolKind::Parameter)
-{}
+namespace psy {
+namespace C {
+
+class PSY_C_API VariableSymbol : public ValueSymbol
+{
+public:
+    virtual VariableSymbol* asVariable() override { return this; }
+    virtual const VariableSymbol* asVariable() const override { return this; }
+
+private:
+    friend class Binder;
+
+    VariableSymbol(const SyntaxTree* tree,
+                   const Scope* outerScope,
+                   const Symbol* containingSym);
+};
+
+} // C
+} // psy
+
+#endif

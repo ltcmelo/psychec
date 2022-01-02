@@ -62,18 +62,18 @@ public:
         switch (tkK) {
             case Keyword_void:
             case Keyword_char:
-            case Keyword_Ext_char16_t:
-            case Keyword_Ext_char32_t:
-            case Keyword_Ext_wchar_t:
             case Keyword_short:
             case Keyword_int:
             case Keyword_long:
             case Keyword_float:
             case Keyword_double:
-            case Keyword_signed:
-            case Keyword_unsigned:
             case Keyword__Bool:
             case Keyword__Complex:
+            case Keyword_signed:
+            case Keyword_unsigned:
+            case Keyword_Ext_char16_t:
+            case Keyword_Ext_char32_t:
+            case Keyword_Ext_wchar_t:
                 return true;
             default:
                 return false;

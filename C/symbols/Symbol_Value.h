@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_SYMBOL_H__
-#define PSYCHE_C_TYPE_SYMBOL_H__
+#ifndef PSYCHE_C_VALUE_SYMBOL_H__
+#define PSYCHE_C_VALUE_SYMBOL_H__
 
 #include "API.h"
 #include "APIFwds.h"
-#include "TypeKind.h"
+#include "ValueKind.h"
 #include "Symbol.h"
 
 #include <memory>
@@ -32,44 +32,47 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The TypeSymbol class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.ITypeSymbol
- * from Roslyn, the .NET Compiler Platform.
+ * \brief The ValueSymbol class.
  */
-class PSY_C_API TypeSymbol : public Symbol
+class PSY_C_API ValueSymbol : public Symbol
 {
 public:
-    virtual ~TypeSymbol();
+    virtual ~ValueSymbol();
 
-    virtual TypeSymbol* asType() override { return this; }
-    virtual const TypeSymbol* asType() const override { return this; }
+    virtual ValueSymbol* asValue() override { return this; }
+    virtual const ValueSymbol* asValue() const override { return this; }
 
     /**
-     * The TypeKind of \c this type.
+     * The (value) kind of \c this value.
      */
-    TypeKind typeKind() const;
+    ValueKind valueKind() const;
 
-    virtual ArrayTypeSymbol* asArrayType() { return nullptr; }
-    virtual const ArrayTypeSymbol* asArrayType() const { return nullptr; }
-    virtual NamedTypeSymbol* asNamedType() { return nullptr; }
-    virtual const NamedTypeSymbol* asNamedType() const { return nullptr; }
-    virtual PointerTypeSymbol* asPointerType() { return nullptr; }
-    virtual const PointerTypeSymbol* asPointerType() const { return nullptr; }
+    virtual FieldSymbol* asField() { return nullptr; }
+    virtual const FieldSymbol* asField() const { return nullptr; }
+    virtual VariableSymbol* asVariable() { return nullptr; }
+    virtual const VariableSymbol* asVariable() const { return nullptr; }
+    virtual ParameterSymbol* asParameter() { return nullptr; }
+    virtual const ParameterSymbol* asParameter() const { return nullptr; }
+
+    /**
+     * The type of \c this value.
+     */
+    const TypeSymbol* type() const;
 
 protected:
-    TypeSymbol(const SyntaxTree* tree,
-               const Scope* outerScope,
-               const Symbol* containingSym,
-               TypeKind tyKind);
+    DECL_PIMPL_SUB(ValueSymbol);
+
+    friend class Binder;
+
+    ValueSymbol(const SyntaxTree* tree,
+                const Scope* outerScope,
+                const Symbol* containingSym,
+                ValueKind valKind);
 
 private:
-    DECL_PIMPL_SUB(TypeSymbol);
+    TypeSymbol* giveType(std::unique_ptr<TypeSymbol> tySym);
 
-    friend class NamedTypeSymbol;
-
-    TypeSymbol(TypeSymbolImpl* p);
+    TypeSymbol* type();
 };
 
 } // C

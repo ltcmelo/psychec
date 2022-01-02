@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,35 +18,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_LINK_UNIT_H__
-#define PSYCHE_C_SYMBOL_LINK_UNIT_H__
+#ifndef PSYCHE_C_BUILTIN_TYPE_FACTS_H__
+#define PSYCHE_C_BUILTIN_TYPE_FACTS_H__
 
-#include "Symbol.h"
+#include "API.h"
+
+#include "BuiltinTypeKind.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The LinkUnitSymbol class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IModuleSymbol
- * from Roslyn, the .NET Compiler Platform.
+ * \brief The BuiltinTypeFacts class.
  */
-class PSY_C_API LinkUnitSymbol : public Symbol
+class PSY_C_API BuiltinTypeFacts
 {
 public:
-    virtual LinkUnitSymbol* asLinkUnit() override { return this; }
-    virtual const LinkUnitSymbol* asLinkUnit() const override { return this; }
-
-private:
-    friend class Binder;
-
-    LinkUnitSymbol(const SyntaxTree* tree,
-                   const Scope* outerScope,
-                   const Symbol* containingSym);
+    static bool areEquivalent(BuiltinTypeKind builtTyKind_a, BuiltinTypeKind builtTyKind_b);
 };
-
 
 } // C
 } // psy

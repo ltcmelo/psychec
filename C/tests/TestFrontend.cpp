@@ -74,9 +74,17 @@ TestFrontend::Expectation& TestFrontend::Expectation::AST(std::vector<SyntaxKind
 }
 
 TestFrontend::Expectation&
-TestFrontend::Expectation::symNameKind(std::vector<std::tuple<std::string, SymbolKind>>&& v)
+TestFrontend::Expectation::value(const std::string& valSymName,
+                                 ValueKind valKind,
+                                 const std::string& tySymName,
+                                 TypeKind tyKind,
+                                 BuiltinTypeKind builtTyKind)
 {
-    symbolNamesKinds_ = std::move(v);
+    values_.push_back(std::make_tuple(valSymName,
+                                      valKind,
+                                      tySymName,
+                                      tyKind,
+                                      builtTyKind));
     return *this;
 }
 
@@ -258,19 +266,47 @@ void TestFrontend::bind(std::string text,
     if (sym == nullptr)
         PSYCHE_TEST_FAIL("link unit not found");
 
-    for (auto tup : X.symbolNamesKinds_) {
-        auto symName = std::get<0>(tup);
-        auto symK = std::get<1>(tup);
+    for (auto valData : X.values_) {
+        auto valSymName = std::get<0>(valData);
+        auto valKind = std::get<1>(valData);
+        auto tySymName = std::get<2>(valData);
+        auto tyKind = std::get<3>(valData);
+        auto builtTyKind = std::get<4>(valData);
+
         auto sym = compilation->assembly()->findSymByPred(
-                    [symName, symK] (const auto& sym) {
-                        auto n = sym->name();
-                        return n != nullptr
-                                && symName == to_string(*n)
-                                && symK == sym->kind();
-                    });
+                [&] (const auto& v) {
+                    const Symbol* sym = v.get();
+                    if (sym->kind() != SymbolKind::Value)
+                        return false;
+
+                    const ValueSymbol* actualSym = sym->asValue();
+                    if (!(actualSym->name() != nullptr
+                           && to_string(*actualSym->name()) == valSymName
+                           && actualSym->kind() == SymbolKind::Value
+                           && actualSym->valueKind() == valKind
+                           && actualSym->type() != nullptr
+                           && actualSym->type()->name() != nullptr
+                           && to_string(*actualSym->type()->name()) == tySymName
+                           && actualSym->type()->typeKind() == tyKind))
+                        return false;
+
+                    if (tyKind == TypeKind::Builtin) {
+                        const NamedTypeSymbol* namedTySym = actualSym->type()->asNamedType();
+                        if (!(namedTySym->builtinTypeKind() == builtTyKind))
+                            return false;
+                    }
+                    else {
+                        if (builtTyKind != BuiltinTypeKind::None)
+                            return false;
+                    }
+
+                    return true;
+                });
 
         if (sym == nullptr) {
-            auto s = to_string(symK) + " " + symName + " not found";
+            auto s = "not found: "
+                    + valSymName + " " + to_string(valKind) + " "
+                    + tySymName + " " + to_string(tyKind) + " " + to_string(builtTyKind);
             PSYCHE_TEST_FAIL(s);
         }
     }

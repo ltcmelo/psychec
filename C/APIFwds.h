@@ -201,6 +201,7 @@ class LinkUnitSymbol;
 class FunctionSymbol;
 
 /* Symbols (values) */
+class ValueSymbol;
 class FieldSymbol;
 class VariableSymbol;
 class ParameterSymbol;

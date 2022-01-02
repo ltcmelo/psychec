@@ -19,29 +19,45 @@
 // THE SOFTWARE.
 
 #include "TypeSymbol_Named.h"
+#include "TypeSymbol__IMPL__.inc"
+
+#include <iostream>
 
 using namespace psy;
 using namespace C;
 
-NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
-                                 const Scope* scope,
-                                 const Symbol* containingSym,
-                                 TypeKind tyKind)
-    : TypeSymbol(tree,
-                 scope,
-                 containingSym,
-                 tyKind)
-{}
+struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
+{
+    NamedTypeSymbolImpl(const SyntaxTree* tree,
+                        const Scope* outerScope,
+                        const Symbol* containingSym,
+                        TypeKind tyKind)
+        : TypeSymbolImpl(tree,
+                         outerScope,
+                         containingSym,
+                         tyKind)
+        , builtTyKind_(BuiltinTypeKind::None)
+    {}
+
+    BuiltinTypeKind builtTyKind_;
+};
 
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
-                                 const Scope* scope,
+                                 const Scope* outerScope,
                                  const Symbol* containingSym,
-                                 std::unique_ptr<SymbolName> symName,
                                  TypeKind tyKind)
-    : TypeSymbol(tree,
-                 scope,
-                 containingSym,
-                 tyKind)
+    : TypeSymbol(new NamedTypeSymbolImpl(tree,
+                                         outerScope,
+                                         containingSym,
+                                         tyKind))
+{}
+
+BuiltinTypeKind NamedTypeSymbol::builtinTypeKind() const
 {
-    giveName(std::move(symName));
+    return P_CAST->builtTyKind_;
+}
+
+void NamedTypeSymbol::patchBuiltinTypeKind(BuiltinTypeKind builtTyKind)
+{
+    P_CAST->builtTyKind_ = builtTyKind;
 }

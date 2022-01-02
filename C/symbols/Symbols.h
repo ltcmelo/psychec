@@ -21,11 +21,11 @@
 #ifndef PSYCHE_C_SYMBOLS_H__
 #define PSYCHE_C_SYMBOLS_H__
 
-#include "Symbol_Field.h"
 #include "Symbol_Function.h"
 #include "Symbol_LinkUnit.h"
-#include "Symbol_Parameter.h"
-#include "Symbol_Variable.h"
+#include "ValueSymbol_Field.h"
+#include "ValueSymbol_Parameter.h"
+#include "ValueSymbol_Variable.h"
 #include "TypeSymbol_Array.h"
 #include "TypeSymbol_Named.h"
 #include "TypeSymbol_Pointer.h"

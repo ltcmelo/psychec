@@ -28,6 +28,10 @@ namespace C {
 
 class PSY_C_API ArrayTypeSymbol : public TypeSymbol
 {
+public:
+    virtual ArrayTypeSymbol* asArrayType() override { return this; }
+    virtual const ArrayTypeSymbol* asArrayType() const override { return this; }
+
 private:
     friend class Binder;
 

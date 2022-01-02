@@ -23,6 +23,7 @@
 
 #include "API.h"
 #include "APIFwds.h"
+
 #include "Accessibility.h"
 #include "SymbolKind.h"
 #include "SymbolName.h"
@@ -51,6 +52,20 @@ public:
     Symbol(const Symbol&) = delete;
     Symbol& operator=(const Symbol&) = delete;
     virtual ~Symbol();
+
+    /**
+     * The SymbolKind of \c this Symbol.
+     */
+    SymbolKind kind() const;
+
+    virtual LinkUnitSymbol* asLinkUnit() { return nullptr; }
+    virtual const LinkUnitSymbol* asLinkUnit() const { return nullptr; }
+    virtual FunctionSymbol* asFunction() { return nullptr; }
+    virtual const FunctionSymbol* asFunction() const { return nullptr; }
+    virtual ValueSymbol* asValue() { return nullptr; }
+    virtual const ValueSymbol* asValue() const { return nullptr; }
+    virtual TypeSymbol* asType() { return nullptr; }
+    virtual const TypeSymbol* asType() const { return nullptr; }
 
     /**
      * The Assembly where \c this Symbol is \a defined.
@@ -87,11 +102,6 @@ public:
     std::vector<SyntaxReference> declaringSyntaxReferences() const;
 
     /**
-     * The SymbolKind of \c this Symbol.
-     */
-    SymbolKind kind() const;
-
-    /**
      * The SymbolName of \c this Symbol.
      */
     const SymbolName* name() const;
@@ -104,7 +114,9 @@ public:
 private:
     DECL_PIMPL(Symbol);
 
+    friend class ValueSymbol;
     friend class TypeSymbol;
+    friend class NamedTypeSymbol;
     friend class Binder;
 
     Symbol(SymbolImpl* p);

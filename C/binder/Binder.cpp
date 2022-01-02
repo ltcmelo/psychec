@@ -22,10 +22,12 @@
 
 #include "SyntaxTree.h"
 
-#include "compilation/SemanticModel.h"
 #include "binder/Scopes.h"
+#include "binder/Semantics_TypeSpecifiers.h"
+#include "compilation/SemanticModel.h"
 #include "symbols/Symbols.h"
 #include "symbols/SymbolNames.h"
+#include "syntax/SyntaxFacts.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
 
@@ -65,14 +67,12 @@ template FunctionSymbol* Binder::makeAndPushDeclSym<FunctionSymbol>();
 template ParameterSymbol* Binder::makeAndPushDeclSym<ParameterSymbol>();
 template VariableSymbol* Binder::makeAndPushDeclSym<VariableSymbol>();
 
-NamedTypeSymbol* Binder::makeAndPushDeclSym(std::unique_ptr<SymbolName> symName,
-                                              TypeKind tyKind)
+NamedTypeSymbol* Binder::makeAndPushDeclSym(TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> sym(
                 new NamedTypeSymbol(tree_,
                                     scopes_.top(),
                                     syms_.top(),
-                                    std::move(symName),
                                     tyKind));
     return pushSym(std::move(sym));
 }
@@ -257,6 +257,49 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition(const FunctionDefinitionSy
 /* Specifiers */
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
+    auto sym = syms_.top();
+    switch (sym->kind()) {
+        case SymbolKind::Function:
+            break;
+
+        case SymbolKind::Value: {
+            PSYCHE_ASSERT(sym->asValue()->type() == nullptr
+                              || sym->asValue()->type()->asNamedType() != nullptr,
+                          return Action::Skip, "");
+
+            NamedTypeSymbol* namedTySym;
+            auto valSym = sym->asValue();
+            if (valSym->type() != nullptr)
+                namedTySym = valSym->type()->asNamedType();
+            else {
+                std::unique_ptr<NamedTypeSymbol> tySym(
+                        new NamedTypeSymbol(tree_,
+                                            scopes_.top(),
+                                            syms_.top(),
+                                            TypeKind::Builtin));
+                namedTySym = valSym->giveType(std::move(tySym))->asNamedType();
+            }
+
+            auto builtTyKind = namedTySym->builtinTypeKind();
+            builtTyKind = Semantics_TypeSpecifiers::combine(
+                    node->specifierToken(),
+                    builtTyKind,
+                    &diagReporter_);
+            namedTySym->patchBuiltinTypeKind(builtTyKind);
+
+            if (SyntaxFacts::isBuiltinTypeSpecifierToken(node->specifierToken().kind())) {
+                std::unique_ptr<SymbolName> symName(
+                        new PlainSymbolName(node->specifierToken().valueText_c_str()));
+                valSym->type()->giveName(std::move(symName));
+            }
+            break;
+        }
+
+        default:
+            PSYCHE_FAIL(return Action::Quit, "unexpected symbol");
+            return Action::Quit;
+    }
+
     return Action::Skip;
 }
 
@@ -281,10 +324,11 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
             return Action::Quit;
     }
 
+    makeAndPushDeclSym(tyKind);
     std::unique_ptr<SymbolName> symName(
                 new TagSymbolName(tyKind,
                                   node->tagToken().valueText_c_str()));
-    makeAndPushDeclSym(std::move(symName), tyKind);
+    syms_.top()->giveName(std::move(symName));
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
@@ -305,6 +349,40 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
+    auto sym = syms_.top();
+    switch (sym->kind()) {
+        case SymbolKind::Function:
+            break;
+
+        case SymbolKind::Value: {
+            PSYCHE_ASSERT(sym->asValue()->type() == nullptr
+                              || sym->asValue()->type()->asNamedType() != nullptr,
+                          return Action::Skip, "");
+
+            NamedTypeSymbol* namedTySym;
+            auto valSym = sym->asValue();
+            if (valSym->type() != nullptr)
+                namedTySym = valSym->type()->asNamedType();
+            else {
+                std::unique_ptr<NamedTypeSymbol> tySym(
+                        new NamedTypeSymbol(tree_,
+                                            scopes_.top(),
+                                            syms_.top(),
+                                            TypeKind::Synonym));
+                namedTySym = valSym->giveType(std::move(tySym))->asNamedType();
+            }
+
+            std::unique_ptr<SymbolName> symName(
+                    new PlainSymbolName(node->identifierToken().valueText_c_str()));
+            valSym->type()->giveName(std::move(symName));
+            break;
+        }
+
+        default:
+            PSYCHE_FAIL(return Action::Quit, "unexpected symbol");
+            return Action::Quit;
+    }
+
     return Action::Skip;
 }
 

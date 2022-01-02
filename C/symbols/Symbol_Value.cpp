@@ -18,42 +18,58 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_NAMED_TYPE_H__
-#define PSYCHE_C_SYMBOL_NAMED_TYPE_H__
+#include "Symbol_Value.h"
+#include "Symbol__IMPL__.inc"
 
 #include "Symbol_Type.h"
-#include "BuiltinTypeKind.h"
 
-#include <memory>
+using namespace psy;
+using namespace C;
 
-namespace psy {
-namespace C {
-
-class PSY_C_API NamedTypeSymbol : public TypeSymbol
+struct ValueSymbol::ValueSymbolImpl : SymbolImpl
 {
-public:
-    virtual NamedTypeSymbol* asNamedType() override { return this; }
-    virtual const NamedTypeSymbol* asNamedType() const override { return this; }
-
-    /**
-     * The BuiltinTypeKind of \c this type.
-     */
-    BuiltinTypeKind builtinTypeKind() const;
-
-private:
-    DECL_PIMPL_SUB(NamedTypeSymbol)
-
-    friend class Binder;
-
-    NamedTypeSymbol(const SyntaxTree* tree,
+    ValueSymbolImpl(const SyntaxTree* tree,
                     const Scope* outerScope,
                     const Symbol* containingSym,
-                    TypeKind tyKind);
+                    ValueKind valKind)
+        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Value)
+        , valKind_(valKind)
+    {}
 
-    void patchBuiltinTypeKind(BuiltinTypeKind);
+    ValueKind valKind_;
+    std::unique_ptr<TypeSymbol> tySym_;
 };
 
-} // C
-} // psy
+ValueSymbol::ValueSymbol(const SyntaxTree* tree,
+                         const Scope* outerScope,
+                         const Symbol* containingSym,
+                         ValueKind valKind)
+    : Symbol(new ValueSymbolImpl(tree,
+                                 outerScope,
+                                 containingSym,
+                                 valKind))
+{}
 
-#endif
+ValueSymbol::~ValueSymbol()
+{}
+
+ValueKind ValueSymbol::valueKind() const
+{
+    return P_CAST->valKind_;
+}
+
+const TypeSymbol* ValueSymbol::type() const
+{
+    return P_CAST->tySym_.get();
+}
+
+TypeSymbol* ValueSymbol::type()
+{
+    return P_CAST->tySym_.get();
+}
+
+TypeSymbol* ValueSymbol::giveType(std::unique_ptr<TypeSymbol> tySym)
+{
+    P_CAST->tySym_ = std::move(tySym);
+    return P_CAST->tySym_.get();
+}

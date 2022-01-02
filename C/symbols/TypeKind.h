@@ -66,8 +66,9 @@ inline std::string PSY_C_API to_string(TypeKind tyKind)
             return "Union";
         case TypeKind::Synonym:
             return "Synonym";
+
         default:
-            return "not implemented";
+            return "<unknown type kind>";
     }
 }
 

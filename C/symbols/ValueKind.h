@@ -18,16 +18,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol_Field.h"
+#ifndef PSYCHE_C_VALUE_KIND_H__
+#define PSYCHE_C_VALUE_KIND_H__
 
-using namespace psy;
-using namespace C;
+#include "API.h"
+#include "APIFwds.h"
 
-FieldSymbol::FieldSymbol(const SyntaxTree* tree,
-                         const Scope* scope,
-                         const Symbol* containingSym)
-    : Symbol(tree,
-             scope,
-             containingSym,
-             SymbolKind::Field)
-{}
+#include <cstdint>
+#include <string>
+
+namespace psy {
+namespace C {
+
+/**
+ * \brief The ValueKind enum.
+ */
+enum class ValueKind : std::uint8_t
+{
+    None = 0,
+    Field,
+    Parameter,
+    Variable
+};
+
+inline std::string PSY_C_API to_string(ValueKind tyKind)
+{
+    switch (tyKind) {
+        case ValueKind::Field:
+            return "Field";
+        case ValueKind::Parameter:
+            return "Parameter";
+        case ValueKind::Variable:
+            return "Variable";
+
+        default:
+            return "<unknown value kind>";
+    }
+}
+
+} // C
+} // psy
+
+#endif

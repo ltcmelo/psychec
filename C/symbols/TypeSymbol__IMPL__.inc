@@ -18,37 +18,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_LINK_UNIT_H__
-#define PSYCHE_C_SYMBOL_LINK_UNIT_H__
+#include "Symbol_Type.h"
+#include "Symbol__IMPL__.inc"
 
-#include "Symbol.h"
+using namespace psy;
+using namespace C;
 
-namespace psy {
-namespace C {
-
-/**
- * \brief The LinkUnitSymbol class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IModuleSymbol
- * from Roslyn, the .NET Compiler Platform.
- */
-class PSY_C_API LinkUnitSymbol : public Symbol
+struct TypeSymbol::TypeSymbolImpl : SymbolImpl
 {
-public:
-    virtual LinkUnitSymbol* asLinkUnit() override { return this; }
-    virtual const LinkUnitSymbol* asLinkUnit() const override { return this; }
-
-private:
-    friend class Binder;
-
-    LinkUnitSymbol(const SyntaxTree* tree,
+    TypeSymbolImpl(const SyntaxTree* tree,
                    const Scope* outerScope,
-                   const Symbol* containingSym);
+                   const Symbol* containingSym,
+                   TypeKind tyKind)
+        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Type)
+        , tyKind_(tyKind)
+    {}
+
+    TypeKind tyKind_;
 };
-
-
-} // C
-} // psy
-
-#endif

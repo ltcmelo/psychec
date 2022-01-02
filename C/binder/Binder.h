@@ -24,11 +24,12 @@
 #include "API.h"
 #include "APIFwds.h"
 
-#include "common/diagnostics/DiagnosticDescriptor.h"
 #include "parser/LexedTokens.h"
 #include "symbols/SymbolName.h"
 #include "symbols/TypeKind.h"
 #include "syntax/SyntaxVisitor.h"
+
+#include "../common/diagnostics/DiagnosticDescriptor.h"
 
 #include <memory>
 #include <stack>
@@ -53,6 +54,7 @@ public:
 
 private:
     friend class SemanticModel;
+    friend class Semantics_TypeSpecifiers;
 
     Binder(SemanticModel* semaModel, const SyntaxTree* tree);
 
@@ -61,9 +63,11 @@ private:
     std::stack<Symbol*> syms_;
 
     template <class SymT> SymT* makeAndPushDeclSym();
-    NamedTypeSymbol* makeAndPushDeclSym(std::unique_ptr<SymbolName>, TypeKind);
+    NamedTypeSymbol* makeAndPushDeclSym(TypeKind);
     template <class SymT> SymT* pushSym(std::unique_ptr<SymT>);
     void popSym();
+
+    template <class TySymT> void f();
 
     template <class ScopeT> void openScope();
     void openNestedScope();
