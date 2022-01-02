@@ -263,13 +263,12 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
             break;
 
         case SymbolKind::Value: {
-            auto valSym = sym->asValue();
-
-            PSYCHE_ASSERT(valSym->type() == nullptr
-                             || valSym->type()->asNamedType() != nullptr,
+            PSYCHE_ASSERT(sym->asValue()->type() == nullptr
+                              || sym->asValue()->type()->asNamedType() != nullptr,
                           return Action::Skip, "");
 
             NamedTypeSymbol* namedTySym;
+            auto valSym = sym->asValue();
             if (valSym->type() != nullptr)
                 namedTySym = valSym->type()->asNamedType();
             else {
@@ -281,10 +280,12 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
                 namedTySym = valSym->giveType(std::move(tySym))->asNamedType();
             }
 
-            auto builtTyKindx = namedTySym->builtinTypeKind();
-            builtTyKindx = Semantics_TypeSpecifiers::combine(
-                        node->specifierToken(), builtTyKindx, &diagReporter_);
-            namedTySym->patchBuiltinTypeKind(builtTyKindx);
+            auto builtTyKind = namedTySym->builtinTypeKind();
+            builtTyKind = Semantics_TypeSpecifiers::combine(
+                    node->specifierToken(),
+                    builtTyKind,
+                    &diagReporter_);
+            namedTySym->patchBuiltinTypeKind(builtTyKind);
 
             if (SyntaxFacts::isBuiltinTypeSpecifierToken(node->specifierToken().kind())) {
                 std::unique_ptr<SymbolName> symName(

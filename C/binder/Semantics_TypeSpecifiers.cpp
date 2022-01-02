@@ -29,7 +29,22 @@
 using namespace psy;
 using namespace C;
 
-const std::string  Semantics_TypeSpecifiers::ID_test = "Binder-000";
+const std::string Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers =
+        "Binder-100-6.7.2-2";
+
+
+void Semantics_TypeSpecifiers::TwoOrMoreDataTypesInDeclarationSpecifiers(
+        SyntaxToken builtTySpecTk,
+        Binder::DiagnosticsReporter* diagReporter)
+{
+    diagReporter->diagnose(DiagnosticDescriptor(
+                               ID_TwoOrMoreDataTypesInDeclarationSpecifiers,
+                               "[[two or more data types in declaration specifiers]]",
+                               "two or more data types in declaration specifiers",
+                               DiagnosticSeverity::Error,
+                               DiagnosticCategory::Binding),
+                           builtTySpecTk);
+}
 
 BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
                                                   BuiltinTypeKind builtTyKind,
@@ -67,13 +82,7 @@ BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
             }
 
         case BuiltinTypeKind::Void:
-            diagReporter->diagnose(DiagnosticDescriptor(
-                                       ID_test,
-                                       "[[]]",
-                                       "",
-                                       DiagnosticSeverity::Error,
-                                       DiagnosticCategory::Binding),
-                                   builtTySpecTk);
+            // report
             return builtTyKind;
 
         case BuiltinTypeKind::Char:
@@ -113,13 +122,7 @@ BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
                 case Keyword_unsigned:
                     return BuiltinTypeKind::Int_U;
                 default:
-                diagReporter->diagnose(DiagnosticDescriptor(
-                                           ID_test,
-                                           "[[]]",
-                                           "",
-                                           DiagnosticSeverity::Error,
-                                           DiagnosticCategory::Binding),
-                                       builtTySpecTk);
+                    TwoOrMoreDataTypesInDeclarationSpecifiers(builtTySpecTk, diagReporter);
                     return builtTyKind;
             }
         case BuiltinTypeKind::Int_S:

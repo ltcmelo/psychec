@@ -37,11 +37,15 @@ class Binder;
 class Semantics_TypeSpecifiers
 {
 public:
-    static const std::string ID_test;
+    static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
 
     static BuiltinTypeKind combine(SyntaxToken tySpecTk,
                                    BuiltinTypeKind builtTyKind,
                                    Binder::DiagnosticsReporter* diagReporter);
+
+private:
+    static void TwoOrMoreDataTypesInDeclarationSpecifiers(SyntaxToken builtTySpecTk,
+                                                          Binder::DiagnosticsReporter* diagReporter);
 };
 
 } // C
