@@ -348,6 +348,7 @@ public:
     void case1098();
     void case1099();
 
+    void case1100();
     void case1101();
     void case1102();
     void case1103();
@@ -758,6 +759,7 @@ private:
         TEST_BINDER(case1098),
         TEST_BINDER(case1099),
 
+        TEST_BINDER(case1100),
         TEST_BINDER(case1101),
         TEST_BINDER(case1102),
         TEST_BINDER(case1103),
