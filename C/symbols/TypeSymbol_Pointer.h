@@ -26,7 +26,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API PointerTypeSymbol : public TypeSymbol
+class PSY_C_API PointerTypeSymbol final : public TypeSymbol
 {
 public:
     virtual PointerTypeSymbol* asPointerType() override { return this; }

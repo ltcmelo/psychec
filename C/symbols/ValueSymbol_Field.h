@@ -26,7 +26,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API FieldSymbol : public ValueSymbol
+class PSY_C_API FieldSymbol final : public ValueSymbol
 {
 public:
     virtual FieldSymbol* asField() override { return this; }

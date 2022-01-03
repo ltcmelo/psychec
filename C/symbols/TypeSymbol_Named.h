@@ -29,7 +29,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API NamedTypeSymbol : public TypeSymbol
+class PSY_C_API NamedTypeSymbol final : public TypeSymbol
 {
 public:
     virtual NamedTypeSymbol* asNamedType() override { return this; }

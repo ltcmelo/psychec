@@ -33,7 +33,7 @@ namespace C {
  * This API is inspired by that of \c Microsoft.CodeAnalysis.IModuleSymbol
  * from Roslyn, the .NET Compiler Platform.
  */
-class PSY_C_API LinkUnitSymbol : public Symbol
+class PSY_C_API LinkUnitSymbol final : public Symbol
 {
 public:
     virtual LinkUnitSymbol* asLinkUnit() override { return this; }

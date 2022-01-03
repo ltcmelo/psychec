@@ -26,7 +26,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API VariableSymbol : public ValueSymbol
+class PSY_C_API VariableSymbol final : public ValueSymbol
 {
 public:
     virtual VariableSymbol* asVariable() override { return this; }

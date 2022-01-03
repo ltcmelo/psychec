@@ -26,7 +26,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API FunctionSymbol : public Symbol
+class PSY_C_API FunctionSymbol final : public Symbol
 {
 public:
     virtual FunctionSymbol* asFunction() override { return this; }
