@@ -78,18 +78,24 @@ void TestBinder::case1005()
 
 void TestBinder::case1006()
 {
-    bind("int float x ;",
-         Expectation().addDiagnostic(
-             Expectation::ErrorOrWarn::Error,
-             Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
+    bind("x y = 1 ;",
+         Expectation()
+            .value("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
 }
 
 void TestBinder::case1007()
 {
+    bind("int x = 1 ;",
+         Expectation()
+            .value("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1008()
 {
+    bind("int float x ;",
+         Expectation().addDiagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
 
 void TestBinder::case1009()
@@ -142,6 +148,7 @@ void TestBinder::case1046() {}
 void TestBinder::case1047() {}
 void TestBinder::case1048() {}
 void TestBinder::case1049() {}
+
 void TestBinder::case1050() {}
 void TestBinder::case1051() {}
 void TestBinder::case1052() {}
@@ -195,11 +202,9 @@ void TestBinder::case1099() {}
 
 void TestBinder::case1100()
 {
-    //    bind("int * x ;",
-    //         Expectation().SymbolNameKind(
-    //             {
-    //                 std::make_tuple("x", ValueKind::Variable)
-    //             }));
+    bind("int * x ;",
+         Expectation()
+            .value("x", ValueKind::Variable, "", TypeKind::Pointer, BuiltinTypeKind::None));
 }
 void TestBinder::case1101()
 {

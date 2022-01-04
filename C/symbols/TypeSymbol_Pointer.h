@@ -32,12 +32,22 @@ public:
     virtual PointerTypeSymbol* asPointerType() override { return this; }
     virtual const PointerTypeSymbol* asPointerType() const override { return this; }
 
+    /**
+     * The \a referenced TypeSymbol of \c this PointerTypeSymbol.
+     *
+     * \remark 6.2.5-20
+     */
+    const TypeSymbol* referencedType() const;
+
 private:
+    DECL_PIMPL_SUB(PointerTypeSymbol)
+
     friend class Binder;
 
     PointerTypeSymbol(const SyntaxTree* tree,
                       const Scope* outerScope,
-                      const Symbol* containingSym);
+                      const Symbol* containingSym,
+                      const TypeSymbol* refedTySym);
 };
 
 } // C

@@ -19,15 +19,37 @@
 // THE SOFTWARE.
 
 #include "TypeSymbol_Pointer.h"
+#include "TypeSymbol__IMPL__.inc"
 
 using namespace psy;
 using namespace C;
 
+struct PointerTypeSymbol::PointerTypeSymbolImpl : TypeSymbolImpl
+{
+    PointerTypeSymbolImpl(const SyntaxTree* tree,
+                          const Scope* outerScope,
+                          const Symbol* containingSym,
+                          const TypeSymbol* refedTySym)
+        : TypeSymbolImpl(tree,
+                         outerScope,
+                         containingSym,
+                         TypeKind::Pointer)
+    {}
+
+    std::unique_ptr<const TypeSymbol> refedTySym_;
+};
+
 PointerTypeSymbol::PointerTypeSymbol(const SyntaxTree* tree,
                                      const Scope* scope,
-                                     const Symbol* containingSym)
-    : TypeSymbol(tree,
-                 scope,
-                 containingSym,
-                 TypeKind::Pointer)
+                                     const Symbol* containingSym,
+                                     const TypeSymbol* refedTySym)
+    : TypeSymbol(new PointerTypeSymbolImpl(tree,
+                                           scope,
+                                           containingSym,
+                                           refedTySym))
 {}
+
+const TypeSymbol *PointerTypeSymbol::referencedType() const
+{
+    return P_CAST->refedTySym_.get();
+}

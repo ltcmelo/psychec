@@ -38,10 +38,10 @@ public:
     void testAll() override;
 
     /*
-        Errors:
+        ...:
             + 0000-0199 -> declarations
 
-        Symbols:
+        ...:
             + 1000-1099 ->
             + 1100-1199 ->
             + 1200-1299 ->

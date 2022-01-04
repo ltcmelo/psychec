@@ -259,7 +259,7 @@ void TestFrontend::bind(std::string text,
     compilation->addSyntaxTrees({ tree_.get() });
     compilation->semanticModel(tree_.get());
 
-    auto sym = compilation->assembly()->findSymByPred(
+    auto sym = compilation->assembly()->findDeclSym(
                 [] (const auto& sym) {
                     return sym->kind() == SymbolKind::LinkUnit;
                 });
@@ -273,7 +273,7 @@ void TestFrontend::bind(std::string text,
         auto tyKind = std::get<3>(valData);
         auto builtTyKind = std::get<4>(valData);
 
-        auto sym = compilation->assembly()->findSymByPred(
+        auto sym = compilation->assembly()->findDeclSym(
                 [&] (const auto& v) {
                     const Symbol* sym = v.get();
                     if (sym->kind() != SymbolKind::Value)
@@ -304,9 +304,10 @@ void TestFrontend::bind(std::string text,
                 });
 
         if (sym == nullptr) {
-            auto s = "not found: "
-                    + valSymName + " " + to_string(valKind) + " "
-                    + tySymName + " " + to_string(tyKind) + " " + to_string(builtTyKind);
+            auto s = "cannot find "
+                    +  to_string(valKind) + " " + valSymName + " "
+                    + to_string(tyKind) + " " + to_string(builtTyKind) + " "
+                    + (tySymName == "" ? "<unnamed>" : tySymName);
             PSYCHE_TEST_FAIL(s);
         }
     }
