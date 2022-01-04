@@ -64,27 +64,47 @@ public:
 
         Expectation& AST(std::vector<SyntaxKind>&& v);
         Expectation& replicateAmbiguity(const std::string& s = "");
-        Expectation& value(const std::string& valSymName,
-                           ValueKind valKind,
-                           const std::string& tySymName,
-                           TypeKind tyKind,
-                           BuiltinTypeKind builtTyKind);
+
+        Expectation& obj(const std::string& valSymName,
+                         ValueKind valKind,
+                         const std::string& tySymName,
+                         TypeKind tyKind,
+                         BuiltinTypeKind builtTyKind);
+
+        Expectation& objPtr_1(const std::string& valSymName,
+                              ValueKind valKind,
+                              TypeKind tyKind,
+                              TypeKind refedTyKind);
+        Expectation& objPtr_2(const std::string& valSymName,
+                              ValueKind valKind,
+                              TypeKind tyKind,
+                              TypeKind refedTyKind,
+                              TypeKind refedTyKind2);
+
         Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
 
-        using ValueData = std::tuple<std::string,
-                                     ValueKind,
-                                     std::string,
-                                     TypeKind,
-                                     BuiltinTypeKind>;
+        using ObjData = std::tuple<std::string,
+                                   ValueKind,
+                                   std::string,
+                                   TypeKind,
+                                   BuiltinTypeKind>;
+
+        using ObjPtr_1_Data = std::tuple<std::string,
+                                         ValueKind,
+                                         TypeKind,
+                                         TypeKind>;
 
         int numE_;
         int numW_;
-        bool hasAmbiguity_;
         std::vector<std::string> descriptorsE_;
         std::vector<std::string> descriptorsW_;
-        std::vector<SyntaxKind> syntaxKinds_;
-        std::vector<ValueData> values_;
+
+        bool hasAmbiguity_;
         std::string ambiguousText_;
+        std::vector<SyntaxKind> syntaxKinds_;
+
+        std::vector<ObjData> objs_;
+        std::vector<ObjPtr_1_Data> objsPtr_1_;
     };
 
 protected:

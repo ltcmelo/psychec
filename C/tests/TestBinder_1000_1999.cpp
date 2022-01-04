@@ -42,52 +42,52 @@ void TestBinder::case1001()
 {
     bind("int x ;",
          Expectation()
-            .value("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+            .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1002()
 {
     bind("int x ; int y ;",
          Expectation()
-            .value("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int)
-            .value("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+            .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int)
+            .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1003()
 {
     bind("int x , y ;",
          Expectation()
-            .value("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int)
-            .value("y", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+            .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int)
+            .obj("y", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1004()
 {
     bind("x y ;",
          Expectation()
-            .value("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
+            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
 }
 
 void TestBinder::case1005()
 {
     bind("x y , z ;",
          Expectation()
-            .value("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None)
-            .value("z", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
+            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None)
+            .obj("z", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
 }
 
 void TestBinder::case1006()
 {
     bind("x y = 1 ;",
          Expectation()
-            .value("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
+            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
 }
 
 void TestBinder::case1007()
 {
     bind("int x = 1 ;",
          Expectation()
-            .value("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+            .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1008()
@@ -204,8 +204,9 @@ void TestBinder::case1100()
 {
     bind("int * x ;",
          Expectation()
-            .value("x", ValueKind::Variable, "", TypeKind::Pointer, BuiltinTypeKind::None));
+            .objPtr_1("x", ValueKind::Variable, TypeKind::Pointer, TypeKind::Builtin));
 }
+
 void TestBinder::case1101()
 {
     //    bind("const int x ;",
