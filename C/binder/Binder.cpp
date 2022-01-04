@@ -193,12 +193,16 @@ SyntaxVisitor::Action Binder::varOrFuncSymForDecltor(const DeclaratorSyntax* dec
 
 SyntaxVisitor::Action Binder::derivePtrOrArrayTypeForDecltor(const DeclaratorSyntax* decltor)
 {
+    auto r = Action::Skip;
+
     switch (decltor->kind()) {
         case ArrayDeclarator:
             break;
 
         case PointerDeclarator: {
-            auto x = derivePtrOrArrayTypeForDecltor(decltor->asPointerDeclarator()->innerDeclarator());
+            r = derivePtrOrArrayTypeForDecltor(decltor->asPointerDeclarator()->innerDeclarator());
+            if (r == Action::Quit)
+                break;
 
             auto sym = declSyms_.top();
             switch (sym->kind()) {
@@ -232,12 +236,12 @@ SyntaxVisitor::Action Binder::derivePtrOrArrayTypeForDecltor(const DeclaratorSyn
             break;
     }
 
-    return Action::Skip;
+    return r;
 }
 
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    Action r;
+    auto r = Action::Skip;
 
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         auto decltor = decltorIt->value;
