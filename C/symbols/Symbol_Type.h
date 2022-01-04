@@ -59,17 +59,13 @@ public:
     virtual const PointerTypeSymbol* asPointerType() const { return nullptr; }
 
 protected:
+    DECL_PIMPL_SUB(TypeSymbol);
+
+    TypeSymbol(TypeSymbolImpl* p);
     TypeSymbol(const SyntaxTree* tree,
                const Scope* outerScope,
                const Symbol* containingSym,
                TypeKind tyKind);
-
-private:
-    DECL_PIMPL_SUB(TypeSymbol);
-
-    friend class NamedTypeSymbol;
-
-    TypeSymbol(TypeSymbolImpl* p);
 };
 
 } // C

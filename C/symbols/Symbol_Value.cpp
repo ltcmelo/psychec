@@ -68,6 +68,11 @@ TypeSymbol* ValueSymbol::type()
     return P_CAST->tySym_.get();
 }
 
+TypeSymbol *ValueSymbol::releaseType()
+{
+    return P_CAST->tySym_.release();
+}
+
 TypeSymbol* ValueSymbol::giveType(std::unique_ptr<TypeSymbol> tySym)
 {
     P_CAST->tySym_ = std::move(tySym);

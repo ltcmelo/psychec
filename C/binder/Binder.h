@@ -60,11 +60,11 @@ private:
 
     SemanticModel* semaModel_;
     std::stack<Scope*> scopes_;
-    std::stack<Symbol*> syms_;
+    std::stack<Symbol*> declSyms_;
 
     template <class SymT> SymT* makeAndPushDeclSym();
     NamedTypeSymbol* makeAndPushDeclSym(TypeKind);
-    template <class SymT> SymT* pushSym(std::unique_ptr<SymT>);
+    template <class SymT> SymT* pushDeclSym(std::unique_ptr<SymT>);
     void popSym();
 
     template <class TySymT> void f();
@@ -88,6 +88,9 @@ private:
     };
 
     DiagnosticsReporter diagReporter_;
+
+    Action varOrFuncSymForDecltor(const DeclaratorSyntax* decltor);
+    Action derivePtrOrArrayTypeForDecltor(const DeclaratorSyntax* decltor);
 
     //--------------//
     // Declarations //

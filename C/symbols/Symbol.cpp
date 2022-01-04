@@ -119,8 +119,11 @@ namespace C {
 std::string to_string(const Symbol& sym)
 {
     std::ostringstream oss;
-//    oss << to_string(*sym.name()) << ' ';
     oss << to_string(sym.kind()) << ' ';
+
+    // TODO
+    if (sym.name())
+        oss << to_string(*sym.name()) << ' ';
 
     return oss.str();
 }

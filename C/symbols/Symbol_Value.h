@@ -70,9 +70,10 @@ protected:
                 ValueKind valKind);
 
 private:
+    TypeSymbol* type();
+    TypeSymbol* releaseType();
     TypeSymbol* giveType(std::unique_ptr<TypeSymbol> tySym);
 
-    TypeSymbol* type();
 };
 
 } // C

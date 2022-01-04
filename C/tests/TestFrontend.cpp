@@ -74,17 +74,30 @@ TestFrontend::Expectation& TestFrontend::Expectation::AST(std::vector<SyntaxKind
 }
 
 TestFrontend::Expectation&
-TestFrontend::Expectation::value(const std::string& valSymName,
-                                 ValueKind valKind,
-                                 const std::string& tySymName,
-                                 TypeKind tyKind,
-                                 BuiltinTypeKind builtTyKind)
+TestFrontend::Expectation::obj(const std::string& valSymName,
+                               ValueKind valKind,
+                               const std::string& tySymName,
+                               TypeKind tyKind,
+                               BuiltinTypeKind builtTyKind)
 {
-    values_.push_back(std::make_tuple(valSymName,
-                                      valKind,
-                                      tySymName,
-                                      tyKind,
-                                      builtTyKind));
+    objs_.push_back(std::make_tuple(valSymName,
+                                    valKind,
+                                    tySymName,
+                                    tyKind,
+                                    builtTyKind));
+    return *this;
+}
+
+TestFrontend::Expectation&
+TestFrontend::Expectation::objPtr_1(const std::string& valSymName,
+                                    ValueKind valKind,
+                                    TypeKind tyKind,
+                                    TypeKind refedTyKind)
+{
+    objsPtr_1_.push_back(std::make_tuple(valSymName,
+                                         valKind,
+                                         tyKind,
+                                         refedTyKind));
     return *this;
 }
 
@@ -259,21 +272,21 @@ void TestFrontend::bind(std::string text,
     compilation->addSyntaxTrees({ tree_.get() });
     compilation->semanticModel(tree_.get());
 
-    auto sym = compilation->assembly()->findSymByPred(
+    auto sym = compilation->assembly()->findDeclSym(
                 [] (const auto& sym) {
                     return sym->kind() == SymbolKind::LinkUnit;
                 });
     if (sym == nullptr)
         PSYCHE_TEST_FAIL("link unit not found");
 
-    for (auto valData : X.values_) {
-        auto valSymName = std::get<0>(valData);
-        auto valKind = std::get<1>(valData);
-        auto tySymName = std::get<2>(valData);
-        auto tyKind = std::get<3>(valData);
-        auto builtTyKind = std::get<4>(valData);
+    for (auto objData : X.objs_) {
+        auto valSymName = std::get<0>(objData);
+        auto valKind = std::get<1>(objData);
+        auto tySymName = std::get<2>(objData);
+        auto tyKind = std::get<3>(objData);
+        auto builtTyKind = std::get<4>(objData);
 
-        auto sym = compilation->assembly()->findSymByPred(
+        auto sym = compilation->assembly()->findDeclSym(
                 [&] (const auto& v) {
                     const Symbol* sym = v.get();
                     if (sym->kind() != SymbolKind::Value)
@@ -282,7 +295,6 @@ void TestFrontend::bind(std::string text,
                     const ValueSymbol* actualSym = sym->asValue();
                     if (!(actualSym->name() != nullptr
                            && to_string(*actualSym->name()) == valSymName
-                           && actualSym->kind() == SymbolKind::Value
                            && actualSym->valueKind() == valKind
                            && actualSym->type() != nullptr
                            && actualSym->type()->name() != nullptr
@@ -304,9 +316,41 @@ void TestFrontend::bind(std::string text,
                 });
 
         if (sym == nullptr) {
-            auto s = "not found: "
-                    + valSymName + " " + to_string(valKind) + " "
-                    + tySymName + " " + to_string(tyKind) + " " + to_string(builtTyKind);
+            auto s = "cannot find "
+                    + to_string(valKind) + " " + valSymName + " "
+                    + to_string(tyKind) + " " + to_string(builtTyKind) + " "
+                    + (tySymName == "" ? "<unnamed>" : tySymName);
+            PSYCHE_TEST_FAIL(s);
+        }
+    }
+
+    for (auto objPtr_1_Data : X.objsPtr_1_) {
+        auto valSymName = std::get<0>(objPtr_1_Data);
+        auto valKind = std::get<1>(objPtr_1_Data);
+        auto tyKind = std::get<2>(objPtr_1_Data);
+        auto refedTyKind = std::get<3>(objPtr_1_Data);
+
+        auto sym = compilation->assembly()->findDeclSym(
+                [&] (const auto& v) {
+                    const Symbol* sym = v.get();
+                    if (sym->kind() != SymbolKind::Value)
+                        return false;
+
+                    const ValueSymbol* actualSym = sym->asValue();
+                    if (!(actualSym->name() != nullptr
+                           && to_string(*actualSym->name()) == valSymName
+                           && actualSym->valueKind() == valKind
+                           && actualSym->type() != nullptr
+                           && actualSym->type()->typeKind() == tyKind))
+                        return false;
+
+                    return true;
+                });
+
+        if (sym == nullptr) {
+            auto s = "cannot find "
+                    + to_string(valKind) + " " + valSymName + " "
+                    + to_string(tyKind) + " " + to_string(refedTyKind);
             PSYCHE_TEST_FAIL(s);
         }
     }

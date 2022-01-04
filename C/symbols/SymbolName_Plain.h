@@ -31,7 +31,7 @@ namespace C {
 /**
  * \brief The PlainSymbolName class.
  */
-class PSY_C_API PlainSymbolName : public SymbolName
+class PSY_C_API PlainSymbolName final : public SymbolName
 {
 public:
     virtual PlainSymbolName* asPlainSymbolName() override { return this; }

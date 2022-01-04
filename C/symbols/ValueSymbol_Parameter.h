@@ -26,7 +26,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API ParameterSymbol : public ValueSymbol
+class PSY_C_API ParameterSymbol final : public ValueSymbol
 {
 public:
     virtual ParameterSymbol* asParameter() override { return this; }

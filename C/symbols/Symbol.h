@@ -111,25 +111,21 @@ public:
      */
     Location location() const;
 
-private:
+protected:
     DECL_PIMPL(Symbol);
 
-    friend class ValueSymbol;
-    friend class TypeSymbol;
-    friend class NamedTypeSymbol;
     friend class Binder;
 
     Symbol(SymbolImpl* p);
-
-    template <class ScopeT> ScopeT* makeScope();
-
-protected:
     Symbol(const SyntaxTree* tree,
            const Scope* outerScope,
            const Symbol* containingSym,
            SymbolKind symKind);
 
     void giveName(std::unique_ptr<SymbolName> name);
+
+private:
+    template <class ScopeT> ScopeT* makeScope();
 };
 
 std::string PSY_C_API to_string(const Symbol& sym);

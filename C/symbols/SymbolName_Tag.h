@@ -30,7 +30,7 @@ namespace C {
 /**
  * \brief The TagSymbolName class.
  */
-class PSY_C_API TagSymbolName : public SymbolName
+class PSY_C_API TagSymbolName final : public SymbolName
 {
 public:
     TypeKind typeKind() const;

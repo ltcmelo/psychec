@@ -29,7 +29,7 @@ namespace C {
 /**
  * \brief The EmptySymbolName class.
  */
-class PSY_C_API EmptySymbolName : public SymbolName
+class PSY_C_API EmptySymbolName final : public SymbolName
 {
 public:
     virtual EmptySymbolName* asEmptySymbolName() override { return this; }

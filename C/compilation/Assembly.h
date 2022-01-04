@@ -42,7 +42,7 @@ class PSY_C_API Assembly
 {
 public:
     /**
-     * The Symbols in \c this Assembly.
+     * The Symbols declared in \c this Assembly.
      */
     std::vector<const Symbol*> symbols() const;
 
@@ -50,9 +50,9 @@ private:
     friend class SemanticModel;
     friend class TestFrontend;
 
-    std::unordered_set<std::unique_ptr<Symbol>> syms_;
+    std::unordered_set<std::unique_ptr<Symbol>> declSyms_;
 
-    Symbol* findSymByPred(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const;
+    Symbol* findDeclSym(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const;
 };
 
 } // C

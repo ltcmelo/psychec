@@ -26,7 +26,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API ArrayTypeSymbol : public TypeSymbol
+class PSY_C_API ArrayTypeSymbol final : public TypeSymbol
 {
 public:
     virtual ArrayTypeSymbol* asArrayType() override { return this; }
