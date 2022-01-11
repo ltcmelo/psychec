@@ -22,7 +22,10 @@
 
 #include "Process.h"
 
+#include <cstdlib>
+#include <fstream>
 #include <iostream>
+#include <string>
 
 using namespace psy;
 
@@ -38,15 +41,62 @@ CompilerFacade::CompilerFacade(const std::string& hostCC,
 
 std::pair<int, std::string> CompilerFacade::preprocess(const std::string& source)
 {
-    std::string in = "cat << 'EOF' | ";
-    in += hostCC_;
+    // Template base filename to pass to 'mkstemp'
+    const std::string base_template("psyche_XXXXXX");
+
+    // Default temporary location
+    const std::string default_dir("/tmp");
+
+    // Read the environment
+    const char *env_tmp_dir = std::getenv("TMPDIR");
+
+    // Calculate temporary directory
+    const std::string tmp_dir(env_tmp_dir != nullptr ? env_tmp_dir : default_dir);
+
+    // Calculate the full path
+    const std::string pathed_template(tmp_dir + "/" + base_template);
+
+    // now get a **non-const** char* to be able to call mkstemp
+    char *tmp_template = new char[pathed_template.size() + 1];
+    std::copy(pathed_template.begin(), pathed_template.end(), tmp_template);
+    tmp_template[pathed_template.size()] = '\0';
+
+    // Convert our template into a completed filename
+    int err = mkstemp(tmp_template);
+
+    // mkstemp returns -1 on error ...
+    if (err == -1) {
+        // ... so do we
+        return std::make_pair(err, "");
+    }
+
+    // Let's get a std::string for convenience
+    std::string tmp_name(tmp_template);
+
+    // Delete our modifiable template
+    delete[] tmp_template;
+
+    // Write the input source to our temporary file
+    std::ofstream tmp_stream(tmp_name);
+    tmp_stream << source;
+    tmp_stream.close();
+
+    // build-up the preprocessor invocation
+    std::string in = hostCC_;
     in += macroSetup();
     in += " ";
     in += "-std=" + std_ + " ";
-    in += "-E -x c -CC -";
-    in += "\n" + source + "\nEOF";
+    in += "-E -x c -CC ";
+    in += tmp_name;
 
-    return Process().execute(in);
+    // call the preprocessor
+    auto ret = Process().execute(in);
+
+    // remove the temporary file
+    std::remove(tmp_name.c_str());
+
+    // return the output from the preprocessor
+    return ret;
 }
 
 std::string CompilerFacade::macroSetup() const
