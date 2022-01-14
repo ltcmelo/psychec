@@ -54,45 +54,58 @@ void Binder::bind()
 }
 
 template <class SymT>
-SymT* Binder::makeAndPushSymDEF()
+void Binder::makeAndPushSymDEF()
 {
     std::unique_ptr<SymT> sym(new SymT(tree_,
                                        scopes_.top(),
                                        symDEFs_.top()));
-    return pushSymDEF(std::move(sym));
+    pushSymDEF(std::move(sym));
 }
 
-template FieldSymbol* Binder::makeAndPushSymDEF<FieldSymbol>();
-template FunctionSymbol* Binder::makeAndPushSymDEF<FunctionSymbol>();
-template ParameterSymbol* Binder::makeAndPushSymDEF<ParameterSymbol>();
-template VariableSymbol* Binder::makeAndPushSymDEF<VariableSymbol>();
+template void Binder::makeAndPushSymDEF<FieldSymbol>();
+template void Binder::makeAndPushSymDEF<FunctionSymbol>();
+template void Binder::makeAndPushSymDEF<ParameterSymbol>();
+template void Binder::makeAndPushSymDEF<VariableSymbol>();
+
 template <>
-LinkUnitSymbol* Binder::makeAndPushSymDEF<LinkUnitSymbol>()
+void Binder::makeAndPushSymDEF<LinkUnitSymbol>()
 {
     std::unique_ptr<LinkUnitSymbol> sym(new LinkUnitSymbol(tree_, nullptr, nullptr));
-    return pushSymDEF(std::move(sym));
+    pushSymDEF(std::move(sym));
 }
 
-NamedTypeSymbol* Binder::makeAndPushSymDEF(TypeKind tyKind)
+void Binder::makeAndPushTySymDEF(TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> sym(
                 new NamedTypeSymbol(tree_,
                                     scopes_.top(),
                                     symDEFs_.top(),
                                     tyKind));
-    return pushSymDEF(std::move(sym));
+    pushSymDEF(std::move(sym));
 }
 
 template <class SymT>
-SymT* Binder::pushSymDEF(std::unique_ptr<SymT> sym)
+void Binder::pushSymDEF(std::unique_ptr<SymT> sym)
 {
     symDEFs_.push(sym.get());
-    return static_cast<SymT*>(semaModel_->storeSymDEF(std::move(sym)));
+    semaModel_->storeSymDEF(std::move(sym));
 }
 
 void Binder::popSymDEF()
 {
     symDEFs_.pop();
+}
+
+template <class TySymT>
+void Binder::pushTySymUSE(std::unique_ptr<TySymT> tySym)
+{
+    tySymUSEs_.push(tySym.get());
+    semaModel_->storeSymUSE(std::move(tySym));
+}
+
+void Binder::popTySymUSE()
+{
+    tySymUSEs_.pop();
 }
 
 template <class ScopeT>
@@ -158,8 +171,6 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* 
 
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    declData_ = std::make_unique<DeclData>();
-
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         visit(specIt->value);
 
@@ -191,18 +202,18 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
 
             case SymbolKind::Value: {
                 auto valSym = sym->asValue();
+                valSym->setType(tySymUSEs_.top());
+
                 switch (decltor->kind())
                 {
                     case ArrayDeclarator:
                         break;
 
                     case PointerDeclarator:
-                        valSym->setType(declData_->ptrTySyms.top());
-                        std::stack<TypeSymbol*>().swap(declData_->ptrTySyms);
+                        popTySymUSE();
                         break;
 
                     case IdentifierDeclarator:
-                         valSym->setType(declData_->tySym);
                          break;
 
                     default:
@@ -218,6 +229,8 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const Variab
 
         popSymDEF();
     }
+
+    popTySymUSE();
 
     return Action::Skip;
 }
@@ -279,27 +292,19 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition(const FunctionDefinitionSy
     return Action::Skip;
 }
 
-void Binder::f(std::unique_ptr<TypeSymbol> tySym)
-{
-    declData_->tySym = tySym.get();
-    semaModel_->storeSymUSE(std::move(tySym));
-}
-
 /* Specifiers */
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
-    PSYCHE_ASSERT_0(declData_, return Action::Quit);
-
-    if (!declData_->tySym) {
-        std::unique_ptr<TypeSymbol> namedTySym(
+    if (tySymUSEs_.empty()) {
+        std::unique_ptr<NamedTypeSymbol> namedTySym(
                 new NamedTypeSymbol(tree_,
                                     scopes_.top(),
                                     symDEFs_.top(),
                                     TypeKind::Builtin));
-        f(std::move(namedTySym));
+        pushTySymUSE(std::move(namedTySym));
     }
 
-    NamedTypeSymbol* namedTySym = declData_->tySym->asNamedType();
+    NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
     if (!namedTySym) {
         //error
         return Action::Skip;
@@ -339,7 +344,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
             return Action::Quit;
     }
 
-    makeAndPushSymDEF(tyKind);
+    makeAndPushTySymDEF(tyKind);
     std::unique_ptr<SymbolName> name(
                 new TagSymbolName(tyKind,
                                   node->tagToken().valueText_c_str()));
@@ -364,18 +369,16 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
-    PSYCHE_ASSERT_0(declData_, return Action::Quit);
-
-    if (!declData_->tySym) {
-        std::unique_ptr<TypeSymbol> namedTySym(
+    if (tySymUSEs_.empty()) {
+        std::unique_ptr<NamedTypeSymbol> namedTySym(
                 new NamedTypeSymbol(tree_,
                                     scopes_.top(),
                                     symDEFs_.top(),
                                     TypeKind::Synonym));
-        f(std::move(namedTySym));
+        pushTySymUSE(std::move(namedTySym));
     }
 
-    NamedTypeSymbol* namedTySym = declData_->tySym->asNamedType();
+    NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
     if (!namedTySym) {
         //error
         return Action::Skip;
@@ -415,21 +418,12 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
 
 SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSyntax* node)
 {
-    TypeSymbol* refedTySym;
-    if (declData_->ptrTySyms.empty())
-        refedTySym = declData_->tySym;
-    else
-        refedTySym = declData_->ptrTySyms.top();
-
-    auto ptrTySym =  new PointerTypeSymbol(tree_,
-                                           scopes_.top(),
-                                                      symDEFs_.top(),
-                                                      refedTySym);
-
-    semaModel_->storeSymUSE(std::unique_ptr<TypeSymbol>(ptrTySym));
-
-    declData_->ptrTySyms.push(ptrTySym);
-
+    std::unique_ptr<TypeSymbol> ptrTySym(
+            new PointerTypeSymbol(tree_,
+                                  scopes_.top(),
+                                  symDEFs_.top(),
+                                  tySymUSEs_.top()));
+    pushTySymUSE(std::move(ptrTySym));
 
     visit(node->innerDeclarator());
 
@@ -438,7 +432,6 @@ SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSynt
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    std::cout << "setting name " << node->identifierToken().valueText() << std::endl;
     std::unique_ptr<SymbolName> name(
                 new PlainSymbolName(node->identifierToken().valueText_c_str()));
     symDEFs_.top()->setName(std::move(name));
