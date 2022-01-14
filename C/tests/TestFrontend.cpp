@@ -272,7 +272,7 @@ void TestFrontend::bind(std::string text,
     compilation->addSyntaxTrees({ tree_.get() });
     compilation->semanticModel(tree_.get());
 
-    auto sym = compilation->assembly()->findDeclSym(
+    auto sym = compilation->assembly()->findSymDEF(
                 [] (const auto& sym) {
                     return sym->kind() == SymbolKind::LinkUnit;
                 });
@@ -286,7 +286,7 @@ void TestFrontend::bind(std::string text,
         auto tyKind = std::get<3>(objData);
         auto builtTyKind = std::get<4>(objData);
 
-        auto sym = compilation->assembly()->findDeclSym(
+        auto sym = compilation->assembly()->findSymDEF(
                 [&] (const auto& v) {
                     const Symbol* sym = v.get();
                     if (sym->kind() != SymbolKind::Value)
@@ -330,7 +330,7 @@ void TestFrontend::bind(std::string text,
         auto tyKind = std::get<2>(objPtr_1_Data);
         auto refedTyKind = std::get<3>(objPtr_1_Data);
 
-        auto sym = compilation->assembly()->findDeclSym(
+        auto sym = compilation->assembly()->findSymDEF(
                 [&] (const auto& v) {
                     const Symbol* sym = v.get();
                     if (sym->kind() != SymbolKind::Value)

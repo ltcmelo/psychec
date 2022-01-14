@@ -26,6 +26,7 @@
 
 #include "parser/LexedTokens.h"
 #include "symbols/SymbolName.h"
+#include "symbols/Symbols.h"
 #include "symbols/TypeKind.h"
 #include "syntax/SyntaxVisitor.h"
 
@@ -59,25 +60,37 @@ private:
     Binder(SemanticModel* semaModel, const SyntaxTree* tree);
 
     SemanticModel* semaModel_;
-    std::stack<Scope*> scopes_;
-    std::stack<Symbol*> declSyms_;
-
-    template <class SymT> SymT* makeAndPushDeclSym();
-    NamedTypeSymbol* makeAndPushDeclSym(TypeKind);
-    template <class SymT> SymT* pushDeclSym(std::unique_ptr<SymT>);
-    void popSym();
-
-    template <class TySymT> void f();
 
     template <class ScopeT> void openScope();
     void openNestedScope();
     void closeScope();
+    std::stack<Scope*> scopes_;
+
+    template <class SymT> SymT* makeAndPushSymDEF();
+    NamedTypeSymbol* makeAndPushSymDEF(TypeKind);
+    template <class SymT> SymT* pushSymDEF(std::unique_ptr<SymT>);
+    void popSymDEF();
+    std::stack<Symbol*> symDEFs_;
+
+
+    void f(std::unique_ptr<TypeSymbol>);
+    struct DeclData
+    {
+        DeclData()
+            : tySym(nullptr)
+        {}
+
+        TypeSymbol* tySym;
+        std::stack<TypeSymbol*> ptrTySyms;
+    };
+    std::unique_ptr<DeclData> declData_;
 
     struct DiagnosticsReporter
     {
         DiagnosticsReporter(Binder* binder)
             : binder_(binder)
         {}
+
         Binder* binder_;
 
         void diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk);
@@ -89,15 +102,12 @@ private:
 
     DiagnosticsReporter diagReporter_;
 
-    Action varOrFuncSymForDecltor(const DeclaratorSyntax* decltor);
-    Action derivePtrOrArrayTypeForDecltor(const DeclaratorSyntax* decltor);
-
     //--------------//
     // Declarations //
     //--------------//
     virtual Action visitTranslationUnit(const TranslationUnitSyntax*) override;
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax*) override;
-    SyntaxVisitor::Action visitTypeDeclaration_COMMON(const TypeDeclarationSyntax*);
+    Action visitTypeDeclaration_COMMON(const TypeDeclarationSyntax*);
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) override;
     virtual Action visitEnumDeclaration(const EnumDeclarationSyntax*) override;
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
@@ -111,8 +121,12 @@ private:
     virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax*) override;
     virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) override;
     virtual Action visitTypedefName(const TypedefNameSyntax*) override;
+    virtual Action visitTypeQualifier(const TypeQualifierSyntax*) override;
 
     /* Declarators */
+    virtual Action visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax*) override;
+    virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax*) override;
+    //virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) override;
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
 

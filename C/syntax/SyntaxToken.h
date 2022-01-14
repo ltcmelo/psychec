@@ -224,7 +224,7 @@ private:
     std::uint32_t charOffset_;  // UTF-16
     std::size_t matchingBracket_;
 
-    struct BitsFields
+    struct BitFields
     {
         std::uint16_t atStartOfLine_ : 1;
         std::uint16_t hasLeadingWS_  : 1;
@@ -236,7 +236,7 @@ private:
     union
     {
         std::uint16_t BF_all_;
-        BitsFields BF_;
+        BitFields BF_;
     };
 
     unsigned int lineno_;

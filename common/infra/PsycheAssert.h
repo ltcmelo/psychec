@@ -34,6 +34,7 @@
         } \
     } while (0)
 
+#define PSYCHE_ASSERT_0(COND, CODE) PSYCHE_ASSERT(COND, CODE, "<empty message>")
 
 #define PSYCHE_FAIL(CODE, MSG) \
     do { \
@@ -42,5 +43,7 @@
                   << MSG << std::endl; \
         CODE; \
     } while (0)
+
+#define PSYCHE_FAIL_0(CODE) PSYCHE_FAIL(CODE, "<empty message>")
 
 #endif
