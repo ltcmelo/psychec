@@ -34,9 +34,10 @@ struct PointerTypeSymbol::PointerTypeSymbolImpl : TypeSymbolImpl
                          outerScope,
                          containingSym,
                          TypeKind::Pointer)
+        , refedTySym_(refedTySym)
     {}
 
-    std::unique_ptr<const TypeSymbol> refedTySym_;
+    const TypeSymbol* refedTySym_;
 };
 
 PointerTypeSymbol::PointerTypeSymbol(const SyntaxTree* tree,
@@ -51,5 +52,5 @@ PointerTypeSymbol::PointerTypeSymbol(const SyntaxTree* tree,
 
 const TypeSymbol *PointerTypeSymbol::referencedType() const
 {
-    return P_CAST->refedTySym_.get();
+    return P_CAST->refedTySym_;
 }

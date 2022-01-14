@@ -33,11 +33,11 @@
 Symbol::Symbol(const SyntaxTree* tree,
                const Scope* outerScope,
                const Symbol* containingSym,
-               SymbolKind symKind)
+               SymbolKind kind)
     : P(new SymbolImpl(tree,
                        outerScope,
                        containingSym,
-                       symKind))
+                       kind))
 {}
 
 Symbol::Symbol(SymbolImpl* p)
@@ -72,12 +72,12 @@ std::vector<SyntaxReference> Symbol::declaringSyntaxReferences() const
 
 SymbolKind Symbol::kind() const
 {
-    return P->symKind_;
+    return P->kind_;
 }
 
 const SymbolName* Symbol::name() const
 {
-    return P->symName_.get();
+    return P->name_.get();
 }
 
 Location Symbol::location() const
@@ -108,9 +108,9 @@ template BlockScope* Symbol::makeScope<BlockScope>();
 template FileScope* Symbol::makeScope<FileScope>();
 template FunctionScope* Symbol::makeScope<FunctionScope>();
 
-void Symbol::giveName(std::unique_ptr<SymbolName> name)
+void Symbol::setName(std::unique_ptr<SymbolName> name)
 {
-    P->symName_ = std::move(name);
+    P->name_ = std::move(name);
 }
 
 namespace psy {

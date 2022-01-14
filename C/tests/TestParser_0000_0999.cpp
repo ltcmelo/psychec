@@ -576,7 +576,11 @@ void TestParser::case0054()
 
 void TestParser::case0055()
 {
-
+    parse("const x ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              ConstQualifier,
+                              IdentifierDeclarator }));
 }
 
 void TestParser::case0056()

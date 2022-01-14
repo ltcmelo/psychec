@@ -37,6 +37,10 @@ namespace C {
  * \note
  * This API is inspired by that of \c Microsoft.CodeAnalysis.ITypeSymbol
  * from Roslyn, the .NET Compiler Platform.
+ *
+ * \note
+ * Influence by the API of Clang/LLVM is present as well; specifically:
+ * \c clang::Type and \c clang::QualType.
  */
 class PSY_C_API TypeSymbol : public Symbol
 {
@@ -57,6 +61,21 @@ public:
     virtual const NamedTypeSymbol* asNamedType() const { return nullptr; }
     virtual PointerTypeSymbol* asPointerType() { return nullptr; }
     virtual const PointerTypeSymbol* asPointerType() const { return nullptr; }
+
+    /**
+     * Whether the type is \c const qualified.
+     */
+    bool isConstQualified() const;
+
+    /**
+     * Whether the type is \c volatile qualified.
+     */
+    bool isVolatileQualified() const;
+
+    /**
+     * Whether the type is \c restrict qualified.
+     */
+    bool isRestrictQualified() const;
 
 protected:
     DECL_PIMPL_SUB(TypeSymbol);

@@ -53,7 +53,8 @@ private:
 
     SemanticModel(Compilation* compilation, const SyntaxTree* tree);
 
-    Symbol* storeSymbol(std::unique_ptr<Symbol> sym);
+    Symbol* storeSymDEF(std::unique_ptr<Symbol> sym);
+    Symbol* storeSymUSE(std::unique_ptr<Symbol> sym);
 };
 
 } // C

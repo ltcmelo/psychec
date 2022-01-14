@@ -51,9 +51,16 @@ SemanticModel::SemanticModel(Compilation* compilation, const SyntaxTree* tree)
 SemanticModel::~SemanticModel()
 {}
 
-Symbol* SemanticModel::storeSymbol(std::unique_ptr<Symbol> sym)
+Symbol* SemanticModel::storeSymDEF(std::unique_ptr<Symbol> sym)
 {
-    auto& syms = P->compilation_->assembly()->declSyms_;
+    auto& syms = P->compilation_->assembly()->symDEFs_;
     auto [it, _] = syms.insert(std::move(sym));
     return it->get();
+}
+
+Symbol* SemanticModel::storeSymUSE(std::unique_ptr<Symbol> sym)
+{
+    auto& syms = P->compilation_->assembly()->symUSEs_;
+    syms.emplace_back(sym.release());
+    return syms.back().get();
 }

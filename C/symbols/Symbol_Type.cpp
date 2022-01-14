@@ -44,3 +44,18 @@ TypeKind TypeSymbol::typeKind() const
 {
     return P_CAST->tyKind_;
 }
+
+bool TypeSymbol::isConstQualified() const
+{
+    return P_CAST->BF_.const_;
+}
+
+bool TypeSymbol::isVolatileQualified() const
+{
+    return P_CAST->BF_.volatile_;
+}
+
+bool TypeSymbol::isRestrictQualified() const
+{
+    return P_CAST->BF_.restrict_;
+}

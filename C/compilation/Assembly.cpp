@@ -28,16 +28,16 @@ using namespace C;
 std::vector<const Symbol*> Assembly::symbols() const
 {
     std::vector<const Symbol*> syms;
-    std::transform(declSyms_.begin(),
-                   declSyms_.end(),
+    std::transform(symDEFs_.begin(),
+                   symDEFs_.end(),
                    std::back_inserter(syms),
                    [] (auto& sym) { return sym.get();});
     return syms;
 }
 
-Symbol* Assembly::findDeclSym(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const
+Symbol* Assembly::findSymDEF(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const
 {
-    auto it = std::find_if(declSyms_.begin(), declSyms_.end(), pred);
-    return it == declSyms_.end() ? nullptr
-                             : it->get();
+    auto it = std::find_if(symDEFs_.begin(), symDEFs_.end(), pred);
+    return it == symDEFs_.end() ? nullptr
+                                : it->get();
 }

@@ -120,9 +120,9 @@ protected:
     Symbol(const SyntaxTree* tree,
            const Scope* outerScope,
            const Symbol* containingSym,
-           SymbolKind symKind);
+           SymbolKind kind);
 
-    void giveName(std::unique_ptr<SymbolName> name);
+    void setName(std::unique_ptr<SymbolName> name);
 
 private:
     template <class ScopeT> ScopeT* makeScope();
