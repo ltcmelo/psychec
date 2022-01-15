@@ -59,7 +59,15 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers
     }
 
     if (tySymUSEs_.empty()) {
+        Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
+                    node->lastToken(), &diagReporter_);
 
+        std::unique_ptr<NamedTypeSymbol> namedTySym(
+                new NamedTypeSymbol(tree_,
+                                    scopes_.top(),
+                                    symDEFs_.top(),
+                                    TypeKind::Builtin));
+        pushTySymUSE(std::move(namedTySym));
     }
 
     for (auto spec : tyQualSpecs)

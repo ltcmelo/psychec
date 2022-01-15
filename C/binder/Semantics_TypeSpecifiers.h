@@ -37,7 +37,13 @@ class Binder;
 class Semantics_TypeSpecifiers
 {
 public:
+    static const std::string ID_TypeSpecifierMissingDefaultsToInt;
     static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
+
+    static void TypeSpecifierMissingDefaultsToInt(SyntaxToken declTk,
+                                                  Binder::DiagnosticsReporter* diagReporter);
+    static void TwoOrMoreDataTypesInDeclarationSpecifiers(SyntaxToken builtTySpecTk,
+                                                          Binder::DiagnosticsReporter* diagReporter);
 
     static void specify(SyntaxToken builtTySpecTk,
                         NamedTypeSymbol* namedTySym,
@@ -48,8 +54,6 @@ private:
                                    BuiltinTypeKind builtTyK,
                                    Binder::DiagnosticsReporter* diagReporter);
 
-    static void TwoOrMoreDataTypesInDeclarationSpecifiers(SyntaxToken builtTySpecTk,
-                                                          Binder::DiagnosticsReporter* diagReporter);
 };
 
 } // C

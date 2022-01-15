@@ -163,7 +163,14 @@ void TestBinder::case1051()
             .qualObj("y", ValueKind::Variable, "x", Expectation::Qual::Const, TypeKind::Synonym));
 }
 
-void TestBinder::case1052() {}
+void TestBinder::case1052()
+{
+    bind("const x ;",
+         Expectation().addDiagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Semantics_TypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt));
+}
+
 void TestBinder::case1053() {}
 void TestBinder::case1054() {}
 void TestBinder::case1055() {}

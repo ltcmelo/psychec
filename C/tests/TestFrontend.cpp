@@ -38,7 +38,7 @@
 #include <string>
 #include <sstream>
 
-//#define DEBUG_DIAGNOSTICS
+#define DEBUG_DIAGNOSTICS
 //#define DUMP_AST
 
 using namespace psy;
@@ -287,6 +287,86 @@ void TestFrontend::bind(std::string text,
     auto compilation = Compilation::create(tree_->filePath());
     compilation->addSyntaxTrees({ tree_.get() });
     compilation->semanticModel(tree_.get());
+
+
+
+
+
+
+
+    int E_cnt = 0;
+    int W_cnt = 0;
+    std::unordered_set<std::string> E_IDs;
+    std::unordered_set<std::string> W_IDs;
+    for (const auto& diagnostic : tree_->diagnostics()) {
+        if (diagnostic.severity() == DiagnosticSeverity::Error) {
+            ++E_cnt;
+            E_IDs.insert(diagnostic.descriptor().id());
+        }
+        else if (diagnostic.severity() == DiagnosticSeverity::Warning) {
+            ++W_cnt;
+            W_IDs.insert(diagnostic.descriptor().id());
+        }
+    }
+
+#ifdef DEBUG_DIAGNOSTICS
+    if (!tree_->diagnostics().empty()) {
+        for (auto& diagnostic : tree_->diagnostics()) {
+            diagnostic.outputIndent_ = 2;
+            std::cout << std::endl << diagnostic << std::endl;
+        }
+        std::cout << "\t";
+    }
+#endif
+
+    if (X.numW_ != W_cnt || X.numE_ != E_cnt) {
+#ifdef DEBUG_DIAGNOSTICS
+        std::cout << "\n\t" << std::string(25, '%') << "\n\t";
+#endif
+        std::cout << "mismatch in ";
+        if (X.numW_ != W_cnt)
+            std::cout << "WARNING";
+        else
+            std::cout << "ERROR";
+        std::cout << " count";
+
+#ifdef DEBUG_DIAGNOSTICS
+        std::cout << "\n\t" << std::string(25, '%');
+#endif
+    }
+
+    PSYCHE_EXPECT_INT_EQ(X.numW_, W_cnt);
+    PSYCHE_EXPECT_INT_EQ(X.numE_, E_cnt);
+
+    for (const auto& id : X.descriptorsW_) {
+        if (!W_IDs.count(id)) {
+            std::string msg = "WARNING " + id + " not found, got:";
+            for (const auto& idP : W_IDs)
+                msg += "\n\t\t- " + idP;
+            PSYCHE_TEST_FAIL(msg);
+        }
+    }
+
+    for (const auto& id : X.descriptorsE_) {
+        if (!E_IDs.count(id)) {
+            std::string msg = "ERROR " + id + " not found, got:";
+            for (const auto& idP : E_IDs)
+                msg += "\n\t\t- " + idP;
+            PSYCHE_TEST_FAIL(msg);
+        }
+    }
+
+    if (X.numE_)
+        return;
+
+
+
+
+
+
+
+
+
 
     auto sym = compilation->assembly()->findSymDEF(
                 [] (const auto& sym) {

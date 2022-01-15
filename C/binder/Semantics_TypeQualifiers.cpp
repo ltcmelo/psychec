@@ -52,7 +52,6 @@ void Semantics_TypeQualifiers::qualify(SyntaxToken tyQualTk,
     const auto tkK = tyQualTk.kind();
     switch (tkK) {
         case Keyword_const:
-            std::cout << "qualifying with const\n";
             tySym->qualifyWithConst();
             break;
 
