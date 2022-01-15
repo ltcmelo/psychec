@@ -49,8 +49,7 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next) {
         auto spec = specIt->value;
 
-        if (spec->asTypeQualifier())
-        {
+        if (spec->asTypeQualifier()) {
             tyQualSpecs.push_back(spec);
             continue;
         }

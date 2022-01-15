@@ -291,7 +291,6 @@ void TestFrontend::bind(std::string text,
                         Expectation X)
 {
     parse(text);
-
     auto compilation = Compilation::create(tree_->filePath());
     compilation->addSyntaxTrees({ tree_.get() });
     compilation->semanticModel(tree_.get());
