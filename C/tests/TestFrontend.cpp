@@ -89,15 +89,31 @@ TestFrontend::Expectation::obj(const std::string& valSymName,
 }
 
 TestFrontend::Expectation&
+TestFrontend::Expectation::qualObj(const std::string& valSymName,
+                     ValueKind valKind,
+                     const std::string& tySymName,
+                     Qual qual,
+                     TypeKind tyKind,
+                     BuiltinTypeKind builtTyKind)
+{
+    qualObjs_.push_back(std::make_tuple(valSymName,
+                                        valKind,
+                                        tySymName,
+                                        qual,
+                                        tyKind,
+                                        builtTyKind));
+    return *this;
+}
+
+TestFrontend::Expectation&
 TestFrontend::Expectation::objPtr_1(const std::string& valSymName,
                                     ValueKind valKind,
-                                    TypeKind tyKind,
                                     TypeKind refedTyKind)
 {
     objsPtr_1_.push_back(std::make_tuple(valSymName,
                                          valKind,
-                                         tyKind,
-                                         refedTyKind));
+                                         refedTyKind,
+                                         TypeKind::None));
     return *this;
 }
 
@@ -324,11 +340,13 @@ void TestFrontend::bind(std::string text,
         }
     }
 
-    for (auto objPtr_1_Data : X.objsPtr_1_) {
-        auto valSymName = std::get<0>(objPtr_1_Data);
-        auto valKind = std::get<1>(objPtr_1_Data);
-        auto tyKind = std::get<2>(objPtr_1_Data);
-        auto refedTyKind = std::get<3>(objPtr_1_Data);
+    for (auto qualObjData : X.qualObjs_) {
+        auto valSymName = std::get<0>(qualObjData);
+        auto valKind = std::get<1>(qualObjData);
+        auto tySymName = std::get<2>(qualObjData);
+        auto qual = std::get<3>(qualObjData);
+        auto tyKind = std::get<4>(qualObjData);
+        auto builtTyKind = std::get<5>(qualObjData);
 
         auto sym = compilation->assembly()->findSymDEF(
                 [&] (const auto& v) {
@@ -341,7 +359,74 @@ void TestFrontend::bind(std::string text,
                            && to_string(*actualSym->name()) == valSymName
                            && actualSym->valueKind() == valKind
                            && actualSym->type() != nullptr
+                           && actualSym->type()->name() != nullptr
+                           && to_string(*actualSym->type()->name()) == tySymName
                            && actualSym->type()->typeKind() == tyKind))
+                        return false;
+
+                    switch (qual) {
+                        case Expectation::Qual::Const:
+                            if (!actualSym->type()->isConstQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::Volatile:
+                            if (!actualSym->type()->isVolatileQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::ConstAndVolatile:
+                            if (!(actualSym->type()->isConstQualified())
+                                    || !(actualSym->type()->isVolatileQualified()))
+                            break;
+
+                        case Expectation::Qual::Restrict:
+                            if (!actualSym->type()->isRestrictQualified())
+                                return false;
+                            break;
+                    }
+
+                    if (tyKind == TypeKind::Builtin) {
+                        const NamedTypeSymbol* namedTySym = actualSym->type()->asNamedType();
+                        if (!(namedTySym->builtinTypeKind() == builtTyKind))
+                            return false;
+                    }
+                    else {
+                        if (builtTyKind != BuiltinTypeKind::None)
+                            return false;
+                    }
+
+                    return true;
+                });
+
+        if (sym == nullptr) {
+            auto s = "cannot find "
+                    + to_string(valKind) + " " + valSymName + " "
+                    + std::to_string((int)qual) + " "
+                    + to_string(tyKind) + " " + to_string(builtTyKind) + " "
+                    + (tySymName == "" ? "<unnamed>" : tySymName);
+            PSYCHE_TEST_FAIL(s);
+        }
+    }
+
+    for (auto objPtr_1_Data : X.objsPtr_1_) {
+        auto valSymName = std::get<0>(objPtr_1_Data);
+        auto valKind = std::get<1>(objPtr_1_Data);
+        auto refedTyKind1 = std::get<2>(objPtr_1_Data);
+        auto refedTyKind2 = std::get<3>(objPtr_1_Data);
+
+        auto sym = compilation->assembly()->findSymDEF(
+                [&] (const auto& v) {
+                    const Symbol* sym = v.get();
+                    if (sym->kind() != SymbolKind::Value)
+                        return false;
+
+                    const ValueSymbol* actualSym = sym->asValue();
+                    if (!(actualSym->name() != nullptr
+                           && to_string(*actualSym->name()) == valSymName
+                           && actualSym->valueKind() == valKind
+                           && actualSym->type() != nullptr
+                           && actualSym->type()->typeKind() == TypeKind::Pointer))
                         return false;
 
                     return true;
@@ -350,7 +435,7 @@ void TestFrontend::bind(std::string text,
         if (sym == nullptr) {
             auto s = "cannot find "
                     + to_string(valKind) + " " + valSymName + " "
-                    + to_string(tyKind) + " " + to_string(refedTyKind);
+                    + to_string(refedTyKind1) + " " + to_string(refedTyKind2);
             PSYCHE_TEST_FAIL(s);
         }
     }

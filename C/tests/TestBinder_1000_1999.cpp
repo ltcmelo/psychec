@@ -153,7 +153,7 @@ void TestBinder::case1050()
 {
     bind("const int x ;",
          Expectation()
-            .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+            .qualObj("x", ValueKind::Variable, "int", Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1051() {}
@@ -210,7 +210,7 @@ void TestBinder::case1100()
 {
     bind("int * x ;",
          Expectation()
-            .objPtr_1("x", ValueKind::Variable, TypeKind::Pointer, TypeKind::Builtin));
+            .objPtr_1("x", ValueKind::Variable, TypeKind::Builtin));
 }
 
 void TestBinder::case1101()

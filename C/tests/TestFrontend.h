@@ -47,12 +47,6 @@ class TestFrontend : public TestRunner
 public:
     struct Expectation
     {
-        enum class ErrorOrWarn
-        {
-            Error,
-            Warn
-        };
-
         Expectation(int numE = 0, int numW = 0)
             : numE_(numE)
             , numW_(numW)
@@ -62,8 +56,35 @@ public:
         void setErrorCnt(int numE);
         void setWarnCnt(int numW);
 
+        enum class ErrorOrWarn
+        {
+            Error,
+            Warn
+        };
+
+        Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
+
+        int numE_;
+        int numW_;
+        std::vector<std::string> descriptorsE_;
+        std::vector<std::string> descriptorsW_;
+
         Expectation& AST(std::vector<SyntaxKind>&& v);
         Expectation& replicateAmbiguity(const std::string& s = "");
+
+        bool hasAmbiguity_;
+        std::string ambiguousText_;
+        std::vector<SyntaxKind> syntaxKinds_;
+
+
+        // objects
+
+        using ObjData = std::tuple<std::string,
+                                   ValueKind,
+                                   std::string,
+                                   TypeKind,
+                                   BuiltinTypeKind>;
+        std::vector<ObjData> objs_;
 
         Expectation& obj(const std::string& valSymName,
                          ValueKind valKind,
@@ -71,40 +92,49 @@ public:
                          TypeKind tyKind,
                          BuiltinTypeKind builtTyKind);
 
-        Expectation& objPtr_1(const std::string& valSymName,
-                              ValueKind valKind,
-                              TypeKind tyKind,
-                              TypeKind refedTyKind);
-        Expectation& objPtr_2(const std::string& valSymName,
-                              ValueKind valKind,
-                              TypeKind tyKind,
-                              TypeKind refedTyKind,
-                              TypeKind refedTyKind2);
 
-        Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
+        // qualified type objects
 
-        using ObjData = std::tuple<std::string,
-                                   ValueKind,
-                                   std::string,
-                                   TypeKind,
-                                   BuiltinTypeKind>;
+        enum class Qual
+        {
+            Const,
+            Volatile,
+            Restrict,
+            ConstAndVolatile,
+        };
+
+        using QualObjData = std::tuple<std::string,
+                                       ValueKind,
+                                       std::string,
+                                       Qual,
+                                       TypeKind,
+                                       BuiltinTypeKind>;
+        std::vector<QualObjData> qualObjs_;
+
+        Expectation& qualObj(const std::string& valSymName,
+                             ValueKind valKind,
+                             const std::string& tySymName,
+                             Qual qual,
+                             TypeKind tyKind,
+                             BuiltinTypeKind builtTyKind);
+
+
+        // pointer objects
 
         using ObjPtr_1_Data = std::tuple<std::string,
                                          ValueKind,
                                          TypeKind,
                                          TypeKind>;
-
-        int numE_;
-        int numW_;
-        std::vector<std::string> descriptorsE_;
-        std::vector<std::string> descriptorsW_;
-
-        bool hasAmbiguity_;
-        std::string ambiguousText_;
-        std::vector<SyntaxKind> syntaxKinds_;
-
-        std::vector<ObjData> objs_;
         std::vector<ObjPtr_1_Data> objsPtr_1_;
+
+        Expectation& objPtr_1(const std::string& valSymName,
+                              ValueKind valKind,
+                              TypeKind refedTyKind);
+        Expectation& objPtr_2(const std::string& valSymName,
+                              ValueKind valKind,
+                              TypeKind refedTyKind,
+                              TypeKind refedTyKind2);
+
     };
 
 protected:
