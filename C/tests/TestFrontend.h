@@ -90,7 +90,7 @@ public:
                          ValueKind valKind,
                          const std::string& tySymName,
                          TypeKind tyKind,
-                         BuiltinTypeKind builtTyKind);
+                         BuiltinTypeKind builtTyKind = BuiltinTypeKind::None);
 
 
         // qualified type objects
@@ -116,7 +116,7 @@ public:
                              const std::string& tySymName,
                              Qual qual,
                              TypeKind tyKind,
-                             BuiltinTypeKind builtTyKind);
+                             BuiltinTypeKind builtTyKind = BuiltinTypeKind::None);
 
 
         // pointer objects

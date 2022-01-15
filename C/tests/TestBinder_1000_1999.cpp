@@ -65,22 +65,22 @@ void TestBinder::case1004()
 {
     bind("x y ;",
          Expectation()
-            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
+            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym));
 }
 
 void TestBinder::case1005()
 {
     bind("x y , z ;",
          Expectation()
-            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None)
-            .obj("z", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
+            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym)
+            .obj("z", ValueKind::Variable, "x", TypeKind::Synonym));
 }
 
 void TestBinder::case1006()
 {
     bind("x y = 1 ;",
          Expectation()
-            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym, BuiltinTypeKind::None));
+            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym));
 }
 
 void TestBinder::case1007()
