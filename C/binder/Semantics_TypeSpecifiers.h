@@ -39,7 +39,7 @@ class Semantics_TypeSpecifiers
 public:
     static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
 
-    static BuiltinTypeKind combine(SyntaxToken tySpecTk,
+    static BuiltinTypeKind combine(SyntaxToken builtTySpecTk,
                                    BuiltinTypeKind builtTyKind,
                                    Binder::DiagnosticsReporter* diagReporter);
 

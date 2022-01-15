@@ -38,6 +38,7 @@ struct Symbol::SymbolImpl
         , outerScope_(outerScope)
         , containingSym_(containingSym)
         , kind_(kind)
+        , BF_all_(0)
     {}
 
     const SyntaxTree* tree_;
@@ -47,4 +48,20 @@ struct Symbol::SymbolImpl
     SymbolKind kind_;
     std::unique_ptr<SymbolName> name_;
     Accessibility access_;
+
+    struct BitFields
+    {
+        // Symbol
+        std::uint16_t static_ : 1;
+
+        // TypeSymbol.
+        std::uint16_t const_ : 1;
+        std::uint16_t volatile_ : 1;
+        std::uint16_t restrict_ : 1;
+    };
+    union
+    {
+        std::uint16_t BF_all_ : 1;
+        BitFields BF_;
+    };
 };

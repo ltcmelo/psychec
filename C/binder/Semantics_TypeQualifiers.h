@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,59 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeSymbol__IMPL__.inc"
+#ifndef PSYCHE_C_SEMANTICS_TYPE_QUALIFIERS_H__
+#define PSYCHE_C_SEMANTICS_TYPE_QUALIFIERS_H__
 
-using namespace psy;
-using namespace C;
+#include "APIFwds.h"
 
-TypeSymbol::TypeSymbol(const SyntaxTree* tree,
-                       const Scope* outerScope,
-                       const Symbol* containingSym,
-                       TypeKind tyKind)
-    : Symbol(new TypeSymbolImpl(tree,
-                                outerScope,
-                                containingSym,
-                                tyKind))
-{}
+#include "binder/Binder.h"
+#include "symbols/Symbol_Type.h"
+#include "syntax/SyntaxKind.h"
 
-TypeSymbol::TypeSymbol(TypeSymbolImpl* p)
-    : Symbol(p)
-{}
+#include <vector>
 
-TypeSymbol::~TypeSymbol()
-{}
+namespace psy {
+namespace C {
 
-TypeKind TypeSymbol::typeKind() const
+class Binder;
+
+class Semantics_TypeQualifiers
 {
-    return P_CAST->tyKind_;
-}
+public:
+    static const std::string ID_Temp;
 
-bool TypeSymbol::isConstQualified() const
-{
-    return P->BF_.const_;
-}
+    static void qualify(SyntaxToken tyQualTk,
+                        TypeSymbol* tySym,
+                        Binder::DiagnosticsReporter* diagReporter);
 
-bool TypeSymbol::isVolatileQualified() const
-{
-    return P->BF_.volatile_;
-}
+private:
+    static void temp(Binder::DiagnosticsReporter* diagReporter);
+};
 
-bool TypeSymbol::isRestrictQualified() const
-{
-    return P->BF_.restrict_;
-}
+} // C
+} // psy
 
-void TypeSymbol::qualifyWithConst()
-{
-    P->BF_.const_ = 1;
-}
-
-void TypeSymbol::qualifyWithVolatile()
-{
-    P->BF_.volatile_ = 1;
-}
-
-void TypeSymbol::qualifyWithRestrict()
-{
-    P->BF_.restrict_ = 1;
-}
+#endif

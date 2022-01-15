@@ -149,7 +149,13 @@ void TestBinder::case1047() {}
 void TestBinder::case1048() {}
 void TestBinder::case1049() {}
 
-void TestBinder::case1050() {}
+void TestBinder::case1050()
+{
+    bind("const int x ;",
+         Expectation()
+            .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
 void TestBinder::case1051() {}
 void TestBinder::case1052() {}
 void TestBinder::case1053() {}
@@ -209,11 +215,6 @@ void TestBinder::case1100()
 
 void TestBinder::case1101()
 {
-    //    bind("const int x ;",
-    //         Expectation().SymbolNameKind(
-    //             {
-    //                 std::make_tuple("x", ValueKind::Variable)
-    //             }));
 }
 void TestBinder::case1102()
 {

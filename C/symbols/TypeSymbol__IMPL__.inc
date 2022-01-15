@@ -34,20 +34,7 @@ struct TypeSymbol::TypeSymbolImpl : SymbolImpl
                    TypeKind tyKind)
         : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Type)
         , tyKind_(tyKind)
-        , BF_all_(0)
     {}
 
     TypeKind tyKind_;
-
-    struct BitFields
-    {
-        std::uint16_t const_ : 1;
-        std::uint16_t volatile_ : 1;
-        std::uint16_t restrict_ : 1;
-    };
-    union
-    {
-        std::uint16_t BF_all_ : 1;
-        BitFields BF_;
-    };
 };
