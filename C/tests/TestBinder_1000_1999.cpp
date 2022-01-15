@@ -156,7 +156,13 @@ void TestBinder::case1050()
             .qualObj("x", ValueKind::Variable, "int", Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1051() {}
+void TestBinder::case1051()
+{
+    bind("const x y ;",
+         Expectation()
+            .qualObj("y", ValueKind::Variable, "x", Expectation::Qual::Const, TypeKind::Synonym));
+}
+
 void TestBinder::case1052() {}
 void TestBinder::case1053() {}
 void TestBinder::case1054() {}

@@ -57,7 +57,11 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers
 
         visit(spec);
     }
-    // check for type no type!
+
+    if (tySymUSEs_.empty()) {
+
+    }
+
     for (auto spec : tyQualSpecs)
         visit(spec);
 
@@ -82,11 +86,9 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
         return Action::Skip;
     }
 
-    auto builtTyKind = namedTySym->builtinTypeKind();
-    builtTyKind = Semantics_TypeSpecifiers::combine(node->specifierToken(),
-                                                    builtTyKind,
-                                                    &diagReporter_);
-    namedTySym->patchBuiltinTypeKind(builtTyKind);
+    Semantics_TypeSpecifiers::specify(node->specifierToken(),
+                                      namedTySym,
+                                      &diagReporter_);
 
     std::unique_ptr<SymbolName> name(
                 new PlainSymbolName(node->specifierToken().valueText_c_str()));

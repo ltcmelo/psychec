@@ -46,6 +46,19 @@ void Semantics_TypeSpecifiers::TwoOrMoreDataTypesInDeclarationSpecifiers(
                            builtTySpecTk);
 }
 
+void Semantics_TypeSpecifiers::specify(SyntaxToken builtTySpecTk,
+                                       NamedTypeSymbol* namedTySym,
+                                       Binder::DiagnosticsReporter* diagReporter)
+{
+    auto builtTyKind = combine(builtTySpecTk,
+                               namedTySym->builtinTypeKind(),
+                               diagReporter);
+    if (builtTyKind == namedTySym->builtinTypeKind())
+        return;
+
+    namedTySym->patchBuiltinTypeKind(builtTyKind);
+}
+
 BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
                                                   BuiltinTypeKind builtTyKind,
                                                   Binder::DiagnosticsReporter* diagReporter)
