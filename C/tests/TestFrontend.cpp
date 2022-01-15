@@ -132,39 +132,8 @@ TestFrontend::Expectation& TestFrontend::Expectation::addDiagnostic(ErrorOrWarn 
     return *this;
 }
 
-void TestFrontend::parseDeclaration(std::string source, Expectation X)
+bool TestFrontend::checkErrorAndWarn(Expectation X)
 {
-    parse(source, X, SyntaxTree::SyntaxCategory::Declarations);
-}
-
-void TestFrontend::parseExpression(std::string source, Expectation X)
-{
-    parse(source, X, SyntaxTree::SyntaxCategory::Expressions);
-}
-
-void TestFrontend::parseStatement(std::string source, Expectation X)
-{
-    parse(source, X, SyntaxTree::SyntaxCategory::Statements);
-}
-
-void TestFrontend::parse(std::string source,
-                         Expectation X,
-                         SyntaxTree::SyntaxCategory cat)
-{
-    auto text = source;
-
-#ifdef DEBUG_DIAGNOSTICS
-    if (X.numW_ > 0 || X.numE_ > 0) {
-        std::cout << std::endl;
-        if (X.numW_ > 0)
-            std::cout << "\t\t[expect (parser) WARNING]\n";
-        if (X.numE_ > 0)
-            std::cout << "\t\t[expect (parser) ERROR]\n";
-    }
-#endif
-
-    tree_ = SyntaxTree::parseText(text, ParseOptions(), "", cat);
-
     int E_cnt = 0;
     int W_cnt = 0;
     std::unordered_set<std::string> E_IDs;
@@ -228,6 +197,45 @@ void TestFrontend::parse(std::string source,
     }
 
     if (X.numE_)
+        return false;
+
+    return true;
+}
+
+void TestFrontend::parseDeclaration(std::string source, Expectation X)
+{
+    parse(source, X, SyntaxTree::SyntaxCategory::Declarations);
+}
+
+void TestFrontend::parseExpression(std::string source, Expectation X)
+{
+    parse(source, X, SyntaxTree::SyntaxCategory::Expressions);
+}
+
+void TestFrontend::parseStatement(std::string source, Expectation X)
+{
+    parse(source, X, SyntaxTree::SyntaxCategory::Statements);
+}
+
+void TestFrontend::parse(std::string source,
+                         Expectation X,
+                         SyntaxTree::SyntaxCategory cat)
+{
+    auto text = source;
+
+#ifdef DEBUG_DIAGNOSTICS
+    if (X.numW_ > 0 || X.numE_ > 0) {
+        std::cout << std::endl;
+        if (X.numW_ > 0)
+            std::cout << "\t\t[expect (parser) WARNING]\n";
+        if (X.numE_ > 0)
+            std::cout << "\t\t[expect (parser) ERROR]\n";
+    }
+#endif
+
+    tree_ = SyntaxTree::parseText(text, ParseOptions(), "", cat);
+
+    if (!checkErrorAndWarn(X))
         return;
 
     std::ostringstream ossTree;
@@ -288,85 +296,8 @@ void TestFrontend::bind(std::string text,
     compilation->addSyntaxTrees({ tree_.get() });
     compilation->semanticModel(tree_.get());
 
-
-
-
-
-
-
-    int E_cnt = 0;
-    int W_cnt = 0;
-    std::unordered_set<std::string> E_IDs;
-    std::unordered_set<std::string> W_IDs;
-    for (const auto& diagnostic : tree_->diagnostics()) {
-        if (diagnostic.severity() == DiagnosticSeverity::Error) {
-            ++E_cnt;
-            E_IDs.insert(diagnostic.descriptor().id());
-        }
-        else if (diagnostic.severity() == DiagnosticSeverity::Warning) {
-            ++W_cnt;
-            W_IDs.insert(diagnostic.descriptor().id());
-        }
-    }
-
-#ifdef DEBUG_DIAGNOSTICS
-    if (!tree_->diagnostics().empty()) {
-        for (auto& diagnostic : tree_->diagnostics()) {
-            diagnostic.outputIndent_ = 2;
-            std::cout << std::endl << diagnostic << std::endl;
-        }
-        std::cout << "\t";
-    }
-#endif
-
-    if (X.numW_ != W_cnt || X.numE_ != E_cnt) {
-#ifdef DEBUG_DIAGNOSTICS
-        std::cout << "\n\t" << std::string(25, '%') << "\n\t";
-#endif
-        std::cout << "mismatch in ";
-        if (X.numW_ != W_cnt)
-            std::cout << "WARNING";
-        else
-            std::cout << "ERROR";
-        std::cout << " count";
-
-#ifdef DEBUG_DIAGNOSTICS
-        std::cout << "\n\t" << std::string(25, '%');
-#endif
-    }
-
-    PSYCHE_EXPECT_INT_EQ(X.numW_, W_cnt);
-    PSYCHE_EXPECT_INT_EQ(X.numE_, E_cnt);
-
-    for (const auto& id : X.descriptorsW_) {
-        if (!W_IDs.count(id)) {
-            std::string msg = "WARNING " + id + " not found, got:";
-            for (const auto& idP : W_IDs)
-                msg += "\n\t\t- " + idP;
-            PSYCHE_TEST_FAIL(msg);
-        }
-    }
-
-    for (const auto& id : X.descriptorsE_) {
-        if (!E_IDs.count(id)) {
-            std::string msg = "ERROR " + id + " not found, got:";
-            for (const auto& idP : E_IDs)
-                msg += "\n\t\t- " + idP;
-            PSYCHE_TEST_FAIL(msg);
-        }
-    }
-
-    if (X.numE_)
+    if (!checkErrorAndWarn(X))
         return;
-
-
-
-
-
-
-
-
-
 
     auto sym = compilation->assembly()->findSymDEF(
                 [] (const auto& sym) {

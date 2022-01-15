@@ -141,6 +141,8 @@ protected:
     TestFrontend();
     ~TestFrontend();
 
+    bool checkErrorAndWarn(Expectation X);
+
     void parse(std::string text,
                Expectation X = Expectation(),
                SyntaxTree::SyntaxCategory cat = SyntaxTree::SyntaxCategory::Unspecified);
