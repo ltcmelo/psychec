@@ -108,12 +108,28 @@ TestFrontend::Expectation::qualObj(const std::string& valSymName,
 TestFrontend::Expectation&
 TestFrontend::Expectation::objPtr_1(const std::string& valSymName,
                                     ValueKind valKind,
-                                    TypeKind refedTyKind)
+                                    TypeKind refedTyKind,
+                                    BuiltinTypeKind refedTyBuiltTyKind)
 {
     objsPtr_1_.push_back(std::make_tuple(valSymName,
                                          valKind,
                                          refedTyKind,
-                                         TypeKind::None));
+                                         refedTyBuiltTyKind));
+    return *this;
+}
+
+TestFrontend::Expectation&
+TestFrontend::Expectation::qualObjPtr_1(const std::string& valSymName,
+                                        ValueKind valKind,
+                                        Qual qual,
+                                        TypeKind refedTyKind,
+                                        BuiltinTypeKind refedTyBuiltTyKind)
+{
+    qualObjsPtr_1_.push_back(std::make_tuple(valSymName,
+                                             valKind,
+                                             qual,
+                                             refedTyKind,
+                                             refedTyBuiltTyKind));
     return *this;
 }
 
@@ -422,8 +438,8 @@ void TestFrontend::bind(std::string text,
     for (auto objPtr_1_Data : X.objsPtr_1_) {
         auto valSymName = std::get<0>(objPtr_1_Data);
         auto valKind = std::get<1>(objPtr_1_Data);
-        auto refedTyKind1 = std::get<2>(objPtr_1_Data);
-        auto refedTyKind2 = std::get<3>(objPtr_1_Data);
+        auto refedTyKind = std::get<2>(objPtr_1_Data);
+        auto refedTyBuiltTyKind = std::get<3>(objPtr_1_Data);
 
         auto sym = compilation->assembly()->findSymDEF(
                 [&] (const auto& v) {
@@ -439,13 +455,97 @@ void TestFrontend::bind(std::string text,
                            && actualSym->type()->typeKind() == TypeKind::Pointer))
                         return false;
 
+                    const PointerTypeSymbol* ptrTySym = actualSym->type()->asPointerType();
+                    const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
+
+                    if (namedTySym->typeKind() != refedTyKind)
+                        return false;
+
+                    if (refedTyKind == TypeKind::Builtin) {
+                        if (!(namedTySym->builtinTypeKind() == refedTyBuiltTyKind))
+                            return false;
+                    }
+                    else {
+                        if (refedTyBuiltTyKind != BuiltinTypeKind::None)
+                            return false;
+                    }
+
                     return true;
                 });
 
         if (sym == nullptr) {
             auto s = "cannot find "
                     + to_string(valKind) + " " + valSymName + " "
-                    + to_string(refedTyKind1) + " " + to_string(refedTyKind2);
+                    + to_string(refedTyKind) + " " + to_string(refedTyBuiltTyKind);
+            PSYCHE_TEST_FAIL(s);
+        }
+    }
+
+    for (auto qualObjPtr_1_Data : X.qualObjsPtr_1_) {
+        auto valSymName = std::get<0>(qualObjPtr_1_Data);
+        auto valKind = std::get<1>(qualObjPtr_1_Data);
+        auto qual = std::get<2>(qualObjPtr_1_Data);
+        auto refedTyKind = std::get<3>(qualObjPtr_1_Data);
+        auto refedTyBuiltTyKind = std::get<4>(qualObjPtr_1_Data);
+
+        auto sym = compilation->assembly()->findSymDEF(
+                [&] (const auto& v) {
+                    const Symbol* sym = v.get();
+                    if (sym->kind() != SymbolKind::Value)
+                        return false;
+
+                    const ValueSymbol* actualSym = sym->asValue();
+                    if (!(actualSym->name() != nullptr
+                           && to_string(*actualSym->name()) == valSymName
+                           && actualSym->valueKind() == valKind
+                           && actualSym->type() != nullptr
+                           && actualSym->type()->typeKind() == TypeKind::Pointer))
+                        return false;
+
+                    const PointerTypeSymbol* ptrTySym = actualSym->type()->asPointerType();
+                    const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
+
+                    switch (qual) {
+                        case Expectation::Qual::Const:
+                            if (!namedTySym->isConstQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::Volatile:
+                            if (!namedTySym->isVolatileQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::ConstAndVolatile:
+                            if (!(namedTySym->isConstQualified())
+                                    || !(namedTySym->isVolatileQualified()))
+                            break;
+
+                        case Expectation::Qual::Restrict:
+                            if (!namedTySym->isRestrictQualified())
+                                return false;
+                            break;
+                    }
+
+                    if (namedTySym->typeKind() != refedTyKind)
+                        return false;
+
+                    if (refedTyKind == TypeKind::Builtin) {
+                        if (!(namedTySym->builtinTypeKind() == refedTyBuiltTyKind))
+                            return false;
+                    }
+                    else {
+                        if (refedTyBuiltTyKind != BuiltinTypeKind::None)
+                            return false;
+                    }
+
+                    return true;
+                });
+
+        if (sym == nullptr) {
+            auto s = "cannot find "
+                    + to_string(valKind) + " " + valSymName + " "
+                    + to_string(refedTyKind) + " " + to_string(refedTyBuiltTyKind);
             PSYCHE_TEST_FAIL(s);
         }
     }

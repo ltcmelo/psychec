@@ -124,16 +124,28 @@ public:
         using ObjPtr_1_Data = std::tuple<std::string,
                                          ValueKind,
                                          TypeKind,
-                                         TypeKind>;
+                                         BuiltinTypeKind>;
         std::vector<ObjPtr_1_Data> objsPtr_1_;
 
         Expectation& objPtr_1(const std::string& valSymName,
                               ValueKind valKind,
-                              TypeKind refedTyKind);
-        Expectation& objPtr_2(const std::string& valSymName,
-                              ValueKind valKind,
                               TypeKind refedTyKind,
-                              TypeKind refedTyKind2);
+                              BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
+
+        // qualified type pointer objects
+
+        using QualObjPtr_1_Data = std::tuple<std::string,
+                                             ValueKind,
+                                             Qual,
+                                             TypeKind,
+                                             BuiltinTypeKind>;
+        std::vector<QualObjPtr_1_Data> qualObjsPtr_1_;
+
+        Expectation& qualObjPtr_1(const std::string& valSymName,
+                                  ValueKind valKind,
+                                  Qual qual,
+                                  TypeKind refedTyKind,
+                                  BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
 
     };
 

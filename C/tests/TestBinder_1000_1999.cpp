@@ -235,19 +235,18 @@ void TestBinder::case1100()
 {
     bind("int * x ;",
          Expectation()
-            .objPtr_1("x", ValueKind::Variable, TypeKind::Builtin));
+            .objPtr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1101()
 {
+    bind("x * y ;",
+         Expectation()
+            .objPtr_1("y", ValueKind::Variable, TypeKind::Synonym));
 }
+
 void TestBinder::case1102()
 {
-    //    bind("const int * x ;",
-    //         Expectation().SymbolNameKind(
-    //             {
-    //                 std::make_tuple("x", ValueKind::Variable)
-    //             }));
 }
 void TestBinder::case1103()
 {
@@ -319,8 +318,21 @@ void TestBinder::case1146() {}
 void TestBinder::case1147() {}
 void TestBinder::case1148() {}
 void TestBinder::case1149() {}
-void TestBinder::case1150() {}
-void TestBinder::case1151() {}
+
+void TestBinder::case1150()
+{
+    bind("const int * x ;",
+         Expectation()
+            .qualObjPtr_1("x", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case1151()
+{
+    bind("const x * y ;",
+         Expectation()
+            .qualObjPtr_1("y", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Synonym));
+}
+
 void TestBinder::case1152() {}
 void TestBinder::case1153() {}
 void TestBinder::case1154() {}
