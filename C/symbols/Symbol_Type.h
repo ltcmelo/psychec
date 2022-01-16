@@ -85,6 +85,13 @@ protected:
                const Scope* outerScope,
                const Symbol* containingSym,
                TypeKind tyKind);
+
+private:
+    friend class Semantics_TypeQualifiers;
+
+    void qualifyWithConst();
+    void qualifyWithVolatile();
+    void qualifyWithRestrict();
 };
 
 } // C

@@ -449,6 +449,107 @@ public:
     void case1198();
     void case1199();
 
+    void case1200();
+    void case1201();
+    void case1202();
+    void case1203();
+    void case1204();
+    void case1205();
+    void case1206();
+    void case1207();
+    void case1208();
+    void case1209();
+    void case1210();
+    void case1211();
+    void case1212();
+    void case1213();
+    void case1214();
+    void case1215();
+    void case1216();
+    void case1217();
+    void case1218();
+    void case1219();
+    void case1220();
+    void case1221();
+    void case1222();
+    void case1223();
+    void case1224();
+    void case1225();
+    void case1226();
+    void case1227();
+    void case1228();
+    void case1229();
+    void case1230();
+    void case1231();
+    void case1232();
+    void case1233();
+    void case1234();
+    void case1235();
+    void case1236();
+    void case1237();
+    void case1238();
+    void case1239();
+    void case1240();
+    void case1241();
+    void case1242();
+    void case1243();
+    void case1244();
+    void case1245();
+    void case1246();
+    void case1247();
+    void case1248();
+    void case1249();
+    void case1250();
+    void case1251();
+    void case1252();
+    void case1253();
+    void case1254();
+    void case1255();
+    void case1256();
+    void case1257();
+    void case1258();
+    void case1259();
+    void case1260();
+    void case1261();
+    void case1262();
+    void case1263();
+    void case1264();
+    void case1265();
+    void case1266();
+    void case1267();
+    void case1268();
+    void case1269();
+    void case1270();
+    void case1271();
+    void case1272();
+    void case1273();
+    void case1274();
+    void case1275();
+    void case1276();
+    void case1277();
+    void case1278();
+    void case1279();
+    void case1280();
+    void case1281();
+    void case1282();
+    void case1283();
+    void case1284();
+    void case1285();
+    void case1286();
+    void case1287();
+    void case1288();
+    void case1289();
+    void case1290();
+    void case1291();
+    void case1292();
+    void case1293();
+    void case1294();
+    void case1295();
+    void case1296();
+    void case1297();
+    void case1298();
+    void case1299();
+
 private:
     using TestFunction = std::pair<std::function<void(TestBinder*)>, const char*>;
 
@@ -858,7 +959,108 @@ private:
         TEST_BINDER(case1196),
         TEST_BINDER(case1197),
         TEST_BINDER(case1198),
-        TEST_BINDER(case1199)
+        TEST_BINDER(case1199),
+
+        TEST_BINDER(case1200),
+        TEST_BINDER(case1201),
+        TEST_BINDER(case1202),
+        TEST_BINDER(case1203),
+        TEST_BINDER(case1204),
+        TEST_BINDER(case1205),
+        TEST_BINDER(case1206),
+        TEST_BINDER(case1207),
+        TEST_BINDER(case1208),
+        TEST_BINDER(case1209),
+        TEST_BINDER(case1210),
+        TEST_BINDER(case1211),
+        TEST_BINDER(case1212),
+        TEST_BINDER(case1213),
+        TEST_BINDER(case1214),
+        TEST_BINDER(case1215),
+        TEST_BINDER(case1216),
+        TEST_BINDER(case1217),
+        TEST_BINDER(case1218),
+        TEST_BINDER(case1219),
+        TEST_BINDER(case1220),
+        TEST_BINDER(case1221),
+        TEST_BINDER(case1222),
+        TEST_BINDER(case1223),
+        TEST_BINDER(case1224),
+        TEST_BINDER(case1225),
+        TEST_BINDER(case1226),
+        TEST_BINDER(case1227),
+        TEST_BINDER(case1228),
+        TEST_BINDER(case1229),
+        TEST_BINDER(case1230),
+        TEST_BINDER(case1231),
+        TEST_BINDER(case1232),
+        TEST_BINDER(case1233),
+        TEST_BINDER(case1234),
+        TEST_BINDER(case1235),
+        TEST_BINDER(case1236),
+        TEST_BINDER(case1237),
+        TEST_BINDER(case1238),
+        TEST_BINDER(case1239),
+        TEST_BINDER(case1240),
+        TEST_BINDER(case1241),
+        TEST_BINDER(case1242),
+        TEST_BINDER(case1243),
+        TEST_BINDER(case1244),
+        TEST_BINDER(case1245),
+        TEST_BINDER(case1246),
+        TEST_BINDER(case1247),
+        TEST_BINDER(case1248),
+        TEST_BINDER(case1249),
+        TEST_BINDER(case1250),
+        TEST_BINDER(case1251),
+        TEST_BINDER(case1252),
+        TEST_BINDER(case1253),
+        TEST_BINDER(case1254),
+        TEST_BINDER(case1255),
+        TEST_BINDER(case1256),
+        TEST_BINDER(case1257),
+        TEST_BINDER(case1258),
+        TEST_BINDER(case1259),
+        TEST_BINDER(case1260),
+        TEST_BINDER(case1261),
+        TEST_BINDER(case1262),
+        TEST_BINDER(case1263),
+        TEST_BINDER(case1264),
+        TEST_BINDER(case1265),
+        TEST_BINDER(case1266),
+        TEST_BINDER(case1267),
+        TEST_BINDER(case1268),
+        TEST_BINDER(case1269),
+        TEST_BINDER(case1270),
+        TEST_BINDER(case1271),
+        TEST_BINDER(case1272),
+        TEST_BINDER(case1273),
+        TEST_BINDER(case1274),
+        TEST_BINDER(case1275),
+        TEST_BINDER(case1276),
+        TEST_BINDER(case1277),
+        TEST_BINDER(case1278),
+        TEST_BINDER(case1279),
+        TEST_BINDER(case1280),
+        TEST_BINDER(case1281),
+        TEST_BINDER(case1282),
+        TEST_BINDER(case1283),
+        TEST_BINDER(case1284),
+        TEST_BINDER(case1285),
+        TEST_BINDER(case1286),
+        TEST_BINDER(case1287),
+        TEST_BINDER(case1288),
+        TEST_BINDER(case1289),
+        TEST_BINDER(case1290),
+        TEST_BINDER(case1291),
+        TEST_BINDER(case1292),
+        TEST_BINDER(case1293),
+        TEST_BINDER(case1294),
+        TEST_BINDER(case1295),
+        TEST_BINDER(case1296),
+        TEST_BINDER(case1297),
+        TEST_BINDER(case1298),
+        TEST_BINDER(case1299)
 
     };
 };

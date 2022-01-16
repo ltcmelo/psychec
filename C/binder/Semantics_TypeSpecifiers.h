@@ -24,7 +24,7 @@
 #include "APIFwds.h"
 
 #include "binder/Binder.h"
-#include "symbols/BuiltinTypeKind.h"
+#include "symbols/Symbol_Type.h"
 #include "syntax/SyntaxKind.h"
 
 #include <vector>
@@ -37,15 +37,23 @@ class Binder;
 class Semantics_TypeSpecifiers
 {
 public:
+    static const std::string ID_TypeSpecifierMissingDefaultsToInt;
     static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
 
-    static BuiltinTypeKind combine(SyntaxToken tySpecTk,
-                                   BuiltinTypeKind builtTyKind,
-                                   Binder::DiagnosticsReporter* diagReporter);
-
-private:
+    static void TypeSpecifierMissingDefaultsToInt(SyntaxToken declTk,
+                                                  Binder::DiagnosticsReporter* diagReporter);
     static void TwoOrMoreDataTypesInDeclarationSpecifiers(SyntaxToken builtTySpecTk,
                                                           Binder::DiagnosticsReporter* diagReporter);
+
+    static void specify(SyntaxToken builtTySpecTk,
+                        NamedTypeSymbol* namedTySym,
+                        Binder::DiagnosticsReporter* diagReporter);
+
+private:
+    static BuiltinTypeKind combine(SyntaxToken builtTySpecTk,
+                                   BuiltinTypeKind builtTyK,
+                                   Binder::DiagnosticsReporter* diagReporter);
+
 };
 
 } // C

@@ -585,7 +585,9 @@ void TestParser::case0055()
 
 void TestParser::case0056()
 {
-
+    parse("const * ;",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
 }
 
 void TestParser::case0057()

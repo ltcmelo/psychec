@@ -56,6 +56,7 @@ public:
 private:
     friend class SemanticModel;
     friend class Semantics_TypeSpecifiers;
+    friend class Semantics_TypeQualifiers;
 
     Binder(SemanticModel* semaModel, const SyntaxTree* tree);
 
@@ -67,14 +68,17 @@ private:
     std::stack<Scope*> scopes_;
 
     template <class SymT> void makeAndPushSymDEF();
+    void makeAndPushTySymDEF(TypeKind);
+
     template <class SymT> void pushSymDEF(std::unique_ptr<SymT>);
     void popSymDEF();
-    std::stack<Symbol*> symDEFs_;
+    using SymDEFs_T = std::stack<Symbol*>;
+    SymDEFs_T symDEFs_;
 
-    void makeAndPushTySymDEF(TypeKind);
     template <class TySymT> void pushTySymUSE(std::unique_ptr<TySymT>);
     void popTySymUSE();
-    std::stack<TypeSymbol*> tySymUSEs_;
+    using TySymUSEs_T = std::stack<TypeSymbol*>;
+    TySymUSEs_T tySymUSEs_;
 
     struct DiagnosticsReporter
     {
@@ -102,6 +106,8 @@ private:
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) override;
     virtual Action visitEnumDeclaration(const EnumDeclarationSyntax*) override;
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
+    Action visitVariableAndOrFunctionDeclaration_AtSpecifiers(const VariableAndOrFunctionDeclarationSyntax*);
+    Action visitVariableAndOrFunctionDeclaration_AtDeclarators(const VariableAndOrFunctionDeclarationSyntax*);
     virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) override;
     virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
     virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;

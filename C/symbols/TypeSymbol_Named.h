@@ -44,6 +44,7 @@ private:
     DECL_PIMPL_SUB(NamedTypeSymbol)
 
     friend class Binder;
+    friend class Semantics_TypeSpecifiers;
 
     NamedTypeSymbol(const SyntaxTree* tree,
                     const Scope* outerScope,

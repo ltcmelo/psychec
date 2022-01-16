@@ -29,9 +29,23 @@
 using namespace psy;
 using namespace C;
 
+const std::string Semantics_TypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt =
+        "Binder-100-6.7.2-2-A";
 const std::string Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers =
-        "Binder-100-6.7.2-2";
+        "Binder-100-6.7.2-2-B";
 
+void Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
+        SyntaxToken declTk,
+        Binder::DiagnosticsReporter *diagReporter)
+{
+    diagReporter->diagnose(DiagnosticDescriptor(
+                               ID_TypeSpecifierMissingDefaultsToInt,
+                               "[[type specifier missing]]",
+                               "type specifier missing, defaults to `int'",
+                               DiagnosticSeverity::Error,
+                               DiagnosticCategory::Binding),
+                           declTk);
+}
 
 void Semantics_TypeSpecifiers::TwoOrMoreDataTypesInDeclarationSpecifiers(
         SyntaxToken builtTySpecTk,
@@ -44,6 +58,19 @@ void Semantics_TypeSpecifiers::TwoOrMoreDataTypesInDeclarationSpecifiers(
                                DiagnosticSeverity::Error,
                                DiagnosticCategory::Binding),
                            builtTySpecTk);
+}
+
+void Semantics_TypeSpecifiers::specify(SyntaxToken builtTySpecTk,
+                                       NamedTypeSymbol* namedTySym,
+                                       Binder::DiagnosticsReporter* diagReporter)
+{
+    auto builtTyKind = combine(builtTySpecTk,
+                               namedTySym->builtinTypeKind(),
+                               diagReporter);
+    if (builtTyKind == namedTySym->builtinTypeKind())
+        return;
+
+    namedTySym->patchBuiltinTypeKind(builtTyKind);
 }
 
 BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
