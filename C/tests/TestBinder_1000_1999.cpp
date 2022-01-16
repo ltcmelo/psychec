@@ -171,8 +171,20 @@ void TestBinder::case1052()
              Semantics_TypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt));
 }
 
-void TestBinder::case1053() {}
-void TestBinder::case1054() {}
+void TestBinder::case1053()
+{
+    bind("int const x ;",
+         Expectation()
+            .qualObj("x", ValueKind::Variable, "int", Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case1054()
+{
+    bind("x const y ;",
+         Expectation()
+            .qualObj("y", ValueKind::Variable, "x", Expectation::Qual::Const, TypeKind::Synonym));
+}
+
 void TestBinder::case1055() {}
 void TestBinder::case1056() {}
 void TestBinder::case1057() {}
