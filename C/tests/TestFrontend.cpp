@@ -133,6 +133,23 @@ TestFrontend::Expectation::qualObjPtr_1(const std::string& valSymName,
     return *this;
 }
 
+TestFrontend::Expectation&
+TestFrontend::Expectation::qualObjQualPtr_1(const std::string& valSymName,
+                                            ValueKind valKind,
+                                            Qual qual,
+                                            Qual qualPtr,
+                                            TypeKind refedTyKind,
+                                            BuiltinTypeKind refedTyBuiltTyKind)
+{
+    qualObjsQualPtr_1_.push_back(std::make_tuple(valSymName,
+                                                 valKind,
+                                                 qual,
+                                                 qualPtr,
+                                                 refedTyKind,
+                                                 refedTyBuiltTyKind));
+    return *this;
+}
+
 TestFrontend::Expectation& TestFrontend::Expectation::addDiagnostic(ErrorOrWarn v, std::string descriptorId)
 {
     if (v == ErrorOrWarn::Error) {
@@ -504,6 +521,98 @@ void TestFrontend::bind(std::string text,
 
                     const PointerTypeSymbol* ptrTySym = actualSym->type()->asPointerType();
                     const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
+
+                    switch (qual) {
+                        case Expectation::Qual::Const:
+                            if (!namedTySym->isConstQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::Volatile:
+                            if (!namedTySym->isVolatileQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::ConstAndVolatile:
+                            if (!(namedTySym->isConstQualified())
+                                    || !(namedTySym->isVolatileQualified()))
+                            break;
+
+                        case Expectation::Qual::Restrict:
+                            if (!namedTySym->isRestrictQualified())
+                                return false;
+                            break;
+                    }
+
+                    if (namedTySym->typeKind() != refedTyKind)
+                        return false;
+
+                    if (refedTyKind == TypeKind::Builtin) {
+                        if (!(namedTySym->builtinTypeKind() == refedTyBuiltTyKind))
+                            return false;
+                    }
+                    else {
+                        if (refedTyBuiltTyKind != BuiltinTypeKind::None)
+                            return false;
+                    }
+
+                    return true;
+                });
+
+        if (sym == nullptr) {
+            auto s = "cannot find "
+                    + to_string(valKind) + " " + valSymName + " "
+                    + to_string(refedTyKind) + " " + to_string(refedTyBuiltTyKind);
+            PSYCHE_TEST_FAIL(s);
+        }
+    }
+
+    for (auto qualObjQualPtr_1_Data : X.qualObjsQualPtr_1_) {
+        auto valSymName = std::get<0>(qualObjQualPtr_1_Data);
+        auto valKind = std::get<1>(qualObjQualPtr_1_Data);
+        auto qual = std::get<2>(qualObjQualPtr_1_Data);
+        auto qualPtr = std::get<3>(qualObjQualPtr_1_Data);
+        auto refedTyKind = std::get<4>(qualObjQualPtr_1_Data);
+        auto refedTyBuiltTyKind = std::get<5>(qualObjQualPtr_1_Data);
+
+        auto sym = compilation->assembly()->findSymDEF(
+                [&] (const auto& v) {
+                    const Symbol* sym = v.get();
+                    if (sym->kind() != SymbolKind::Value)
+                        return false;
+
+                    const ValueSymbol* actualSym = sym->asValue();
+                    if (!(actualSym->name() != nullptr
+                           && to_string(*actualSym->name()) == valSymName
+                           && actualSym->valueKind() == valKind
+                           && actualSym->type() != nullptr
+                           && actualSym->type()->typeKind() == TypeKind::Pointer))
+                        return false;
+
+                    const PointerTypeSymbol* ptrTySym = actualSym->type()->asPointerType();
+                    const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
+
+                    switch (qualPtr) {
+                        case Expectation::Qual::Const:
+                            if (!ptrTySym->isConstQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::Volatile:
+                            if (!ptrTySym->isVolatileQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::ConstAndVolatile:
+                            if (!(ptrTySym->isConstQualified())
+                                    || !(ptrTySym->isVolatileQualified()))
+                            break;
+
+                        case Expectation::Qual::Restrict:
+                            if (!ptrTySym->isRestrictQualified())
+                                return false;
+                            break;
+                    }
 
                     switch (qual) {
                         case Expectation::Qual::Const:

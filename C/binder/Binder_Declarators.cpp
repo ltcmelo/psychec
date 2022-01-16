@@ -115,6 +115,9 @@ SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSynt
                                   tySymUSEs_.top()));
     pushTySymUSE(std::move(ptrTySym));
 
+    for (auto specIt = node->qualifiersAndAttributes(); specIt; specIt = specIt->next)
+        visit(specIt->value);
+
     visit(node->innerDeclarator());
 
     return Action::Skip;

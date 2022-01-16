@@ -147,6 +147,22 @@ public:
                                   TypeKind refedTyKind,
                                   BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
 
+        // qualified type qualified pointer objects
+
+        using QualObjQualPtr_1_Data = std::tuple<std::string,
+                                             ValueKind,
+                                             Qual,
+                                             Qual,
+                                             TypeKind,
+                                             BuiltinTypeKind>;
+        std::vector<QualObjQualPtr_1_Data> qualObjsQualPtr_1_;
+
+        Expectation& qualObjQualPtr_1(const std::string& valSymName,
+                                      ValueKind valKind,
+                                      Qual qual,
+                                      Qual qualPtr,
+                                      TypeKind refedTyKind,
+                                      BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
     };
 
 protected:
