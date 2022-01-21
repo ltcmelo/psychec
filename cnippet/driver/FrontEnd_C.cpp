@@ -98,7 +98,7 @@ int CFrontEnd::run(const std::string& srcText, const FileInfo& fi)
     }
 }
 
-int CFrontEnd::run_CORE(std::string srcText, const FileInfo& fi)
+int CFrontEnd::run_CORE(const std::string& srcText, const FileInfo& fi)
 {
 //    if (config_->C_infer
 //            || config_->C_inferOnly) {

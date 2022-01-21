@@ -40,7 +40,7 @@ public:
     int run(const std::string& srcText, const FileInfo& fi) override;
 
 private:
-    int run_CORE(std::string srcText, const FileInfo& fi);
+    int run_CORE(const std::string& srcText, const FileInfo& fi);
 
     std::pair<std::string, std::string> extendSource(const std::string& srcText);
     std::pair<int, std::string> invokePreprocessor(const std::string& srcText, const FileInfo& fi);
