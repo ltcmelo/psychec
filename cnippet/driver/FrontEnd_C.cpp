@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Executer_C.h"
+#include "Frontend_C.h"
 
 #include "CompilerFacade.h"
 #include "FileInfo.h"
@@ -43,18 +43,51 @@ namespace
 const char * const kInclude = "#include";
 } // anonymous
 
-constexpr int Executer_C::ERROR_PreprocessorInvocationFailure;
-constexpr int Executer_C::ERROR_PreprocessedFileWritingFailure;
-constexpr int Executer_C::ERROR_UnsuccessfulParsing;
-constexpr int Executer_C::ERROR_InvalidSyntaxTree;
+constexpr int FrontEnd_C::ERROR_PreprocessorInvocationFailure;
+constexpr int FrontEnd_C::ERROR_PreprocessedFileWritingFailure;
+constexpr int FrontEnd_C::ERROR_UnsuccessfulParsing;
+constexpr int FrontEnd_C::ERROR_InvalidSyntaxTree;
 
-int Executer_C::execute(const std::string& source)
+FrontEnd_C::FrontEnd_C(const cxxopts::ParseResult& parsedCmdLine)
+    : FrontEnd(parsedCmdLine)
+    , config_(new Configuration(parsedCmdLine["file"].as<std::vector<std::string>>()[0]))
+{
+    config_->C_dumpAST = parsedCmdLine.count("dump-AST");
+
+    config_->C_hostCC_ = parsedCmdLine["cc"].as<std::string>();
+
+    auto cc_std = parsedCmdLine["cc-std"].as<std::string>();
+    std::for_each(cc_std.begin(),
+                  cc_std.end(),
+                  [] (char& c) { c = ::tolower(c); });
+    if (cc_std == "c89" || cc_std == "c90")
+        config_->STD_ = LanguageDialect::Std::C89_90;
+    else if (cc_std == "c99")
+        config_->STD_ = LanguageDialect::Std::C99;
+    else if (cc_std == "c17" || cc_std == "c18")
+        config_->STD_ = LanguageDialect::Std::C17_18;
+    else
+        config_->STD_ = LanguageDialect::Std::C11;
+
+    config_->C_pp_ = parsedCmdLine["cc-pp"].as<bool>();
+    if (parsedCmdLine.count("cc-D"))
+        config_->C_macroDefs_ = parsedCmdLine["cc-D"].as<std::vector<std::string>>();
+    if (parsedCmdLine.count("cc-U"))
+        config_->C_macroUndefs_ = parsedCmdLine["cc-U"].as<std::vector<std::string>>();
+    if (parsedCmdLine.count("cc-I"))
+        config_->C_searchPaths_ = parsedCmdLine["cc-I"].as<std::vector<std::string>>();
+
+    config_->C_infer = parsedCmdLine.count("C-infer");
+    config_->C_inferOnly = parsedCmdLine.count("C-infer-only");
+}
+
+int FrontEnd_C::run(const std::string& source)
 {
     if (source.empty())
          return 0;
 
     try {
-        return executeCore(source);
+        return run_CORE(source);
     }
     catch (...) {
         Plugin::unload();
@@ -62,16 +95,16 @@ int Executer_C::execute(const std::string& source)
     }
 }
 
-int Executer_C::executeCore(std::string source)
+int FrontEnd_C::run_CORE(std::string source)
 {
-    if (driver_->config_->C_infer
-            || driver_->config_->C_inferOnly) {
-        inferMode_ = true;
-    }
+//    if (config_->C_infer
+//            || config_->C_inferOnly) {
+//        inferMode_ = true;
+//    }
 
     auto [includes, source_P] = extendSource(source);
 
-    if (driver_->config_->C_pp_) {
+    if (config_->C_pp_) {
         auto [exit, source_PP] = invokePreprocessor(source_P);
         if (exit != 0)
             return exit;
@@ -85,7 +118,7 @@ int Executer_C::executeCore(std::string source)
     return invokeBinder(std::move(tree));
 }
 
-std::pair<std::string, std::string> Executer_C::extendSource(
+std::pair<std::string, std::string> FrontEnd_C::extendSource(
         const std::string &source)
 {
     std::string includes;
@@ -98,8 +131,8 @@ std::pair<std::string, std::string> Executer_C::extendSource(
     }
 
     if (!Plugin::isLoaded()) {
-        if (inferMode_)
-            std::cout << kCnip << "stdlib names will be treated as ordinary identifiers" << std::endl;
+//        if (inferMode_)
+//            std::cout << kCnip << "stdlib names will be treated as ordinary identifiers" << std::endl;
         return std::make_pair(includes, source);
     }
 
@@ -121,12 +154,12 @@ std::pair<std::string, std::string> Executer_C::extendSource(
     return std::make_pair(includes, extSource);
 }
 
-std::pair<int, std::string> Executer_C::invokePreprocessor(std::string source)
+std::pair<int, std::string> FrontEnd_C::invokePreprocessor(std::string source)
 {
-    CompilerFacade cc(driver_->config_->C_hostCC_,
-                      to_string(driver_->config_->C_std),
-                      driver_->config_->C_macroDefs_,
-                      driver_->config_->C_macroUndefs_);
+    CompilerFacade cc(config_->C_hostCC_,
+                      to_string(config_->STD_),
+                      config_->C_macroDefs_,
+                      config_->C_macroUndefs_);
 
     auto [exit, ppSource] = cc.preprocess(source);
     if (exit != 0) {
@@ -134,7 +167,7 @@ std::pair<int, std::string> Executer_C::invokePreprocessor(std::string source)
         return std::make_pair(ERROR_PreprocessorInvocationFailure, "");
     }
 
-    exit = writeFile(driver_->config_->input_.fullFileBaseName() + ".i", ppSource);
+    exit = writeFile(config_->FI_.fullFileBaseName() + ".i", ppSource);
     if (exit != 0) {
         std::cerr << kCnip << "preprocessed file write failure" << std::endl;
         return std::make_pair(ERROR_PreprocessedFileWritingFailure, "");
@@ -143,11 +176,11 @@ std::pair<int, std::string> Executer_C::invokePreprocessor(std::string source)
     return std::make_pair(0, ppSource);
 }
 
-std::pair<int, std::unique_ptr<SyntaxTree>> Executer_C::invokeParser(const std::string& source)
+std::pair<int, std::unique_ptr<SyntaxTree>> FrontEnd_C::invokeParser(const std::string& source)
 {
     auto tree = SyntaxTree::parseText(source,
                                       ParseOptions(),
-                                      driver_->config_->input_.fileName());
+                                      config_->FI_.fileName());
 
     if (!tree) {
         std::cerr << "unsuccessful parsing" << std::endl;
@@ -167,7 +200,7 @@ std::pair<int, std::unique_ptr<SyntaxTree>> Executer_C::invokeParser(const std::
         std::cerr << std::endl;
     }
 
-    if (driver_->config_->C_dumpAST) {
+    if (config_->C_dumpAST) {
         std::ostringstream ossTree;
         SyntaxNamePrinter printer(tree.get());
         printer.print(TU,
@@ -179,7 +212,7 @@ std::pair<int, std::unique_ptr<SyntaxTree>> Executer_C::invokeParser(const std::
     return std::make_pair(0, std::move(tree));
 }
 
-int Executer_C::invokeBinder(std::unique_ptr<SyntaxTree> tree)
+int FrontEnd_C::invokeBinder(std::unique_ptr<SyntaxTree> tree)
 {
     auto compilation = Compilation::create(tree->filePath());
     compilation->addSyntaxTrees({ tree.get() });

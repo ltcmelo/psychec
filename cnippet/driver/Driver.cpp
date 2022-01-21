@@ -20,7 +20,7 @@
 
 #include "Driver.h"
 
-#include "Executer_C.h"
+#include "Frontend_C.h"
 #include "FileInfo.h"
 #include "IO.h"
 #include "Plugin.h"
@@ -36,10 +36,10 @@ using namespace cnip;
 namespace DEBUG { extern bool globalDebugEnabled; }
 
 constexpr int Driver::SUCCESS;
-constexpr int Driver::ERROR_InputFileUnspecified;
-constexpr int Driver::ERROR_UnrecognizedCommandLine;
+constexpr int Driver::ERROR_NoInputFile;
+constexpr int Driver::ERROR_UnrecognizedCmdLineOption;
 constexpr int Driver::ERROR_CannotLoadPluging;
-constexpr int Driver::ERROR_UnsupportedLanguage;
+constexpr int Driver::ERROR_LanguageNotRecognized;
 
 Driver::Driver()
 {}
@@ -49,77 +49,55 @@ Driver::~Driver()
 
 int Driver::execute(int argc, char* argv[])
 {
-    std::string lang;
-    cxxopts::Options opts(argv[0], "Cnippet");
-    try {
-        opts.positional_help("file.c")
-            .show_positional_help();
-        opts.add_options()
+    cxxopts::Options cmdLineOpts(argv[0], "cnippet");
+    cmdLineOpts
+        .positional_help("file")
+        .show_positional_help()
+        .add_options()
 
-        /* General */
-            ("h,help",
-             "Print usage instructions.")
-            ("d,debug",
-             "Enable debugging output.",
-             cxxopts::value<bool>(DEBUG::globalDebugEnabled))
-            ("p,plugin",
-             "Load the plugin with the given name.",
-             cxxopts::value<std::string>())
-            ("l,lang",
-             "Specify the operating language.",
-             cxxopts::value<std::string>()->default_value("C"))
+            ("l,lang", "Specify the programming language.",
+                cxxopts::value<std::string>()->default_value("C"))
+            ("file", "Specify the input file path.",
+                cxxopts::value<std::vector<std::string>>())
+            ("z,dump-AST", "Dump the program's AST to the console.")
+            ("d,debug", "Enable debugging.",
+                cxxopts::value<bool>(DEBUG::globalDebugEnabled))
+            ("p,plugin", "Load plugin with the given name.",
+                cxxopts::value<std::string>())
+            ("h,help", "Print usage instructions.")
 
         /* Host C compiler */
-            ("cc",
-             "Specify the host C compiler.",
-             cxxopts::value<std::string>()->default_value("gcc"))
-            ("cc-pp",
-             "Run the host C compiler's preprocessor.",
-             cxxopts::value<bool>()->default_value("false"))
-            ("cc-std",
-             "Specify the C dialect.",
-             cxxopts::value<std::string>()->default_value("c11"))
-            ("cc-D",
-             "Predefine a macro.",
-             cxxopts::value<std::vector<std::string>>())
-            ("cc-U",
-             "Undefine a macro.",
-             cxxopts::value<std::vector<std::string>>())
-            ("cc-I",
-             "Add a directory as an `#include' search path.",
-             cxxopts::value<std::vector<std::string>>())
+            ("cc", "Specify the host C compiler.",
+                cxxopts::value<std::string>()->default_value("gcc"))
+            ("cc-pp", "Run the host C compiler's preprocessor.",
+                cxxopts::value<bool>()->default_value("false"))
+            ("cc-std", "Specify the C dialect.",
+                cxxopts::value<std::string>()->default_value("c11"))
+            ("cc-D", "Predefine a macro.",
+                cxxopts::value<std::vector<std::string>>())
+            ("cc-U", "Undefine a macro.",
+                cxxopts::value<std::vector<std::string>>())
+            ("cc-I", "Add a directory to `#include' search path.",
+                cxxopts::value<std::vector<std::string>>())
 
         /* Type inference */
-            ("C-infer",
-             "Infer the definition of missing types.")
-            ("C-infer-only",
-             "Don't allow types to be defined.")
+            ("C-infer", "Infer the definition of missing types.")
+            ("C-infer-only", "Don't allow types to be defined.")
+            ("o,output", "Specify output file",
+                cxxopts::value<std::string>()->default_value("a.cstr"))
+    ;
 
-         /* AST */
-            ("C-dump-AST",
-             "Dump the C AST to the console.")
+    try {
+        cmdLineOpts.parse_positional(std::vector<std::string>{"file"});
+        auto parsedCmdLine = cmdLineOpts.parse(argc, argv);
 
-        /* Output */
-            ("o,output",
-             "Specify output file",
-             cxxopts::value<std::string>()->default_value("a.cstr"))
-
-        /* Input */
-            ("file",
-             "Input file",
-             cxxopts::value<std::vector<std::string>>());
-
-        opts.parse_positional(std::vector<std::string>{"file"});
-
-        auto cmd = opts.parse(argc, argv);
-
-        if (cmd.count("help")) {
-            std::cout << opts.help({"", "Group"}) << std::endl;
+        if (parsedCmdLine.count("help")) {
+            std::cout << cmdLineOpts.help({"", "Group"}) << std::endl;
             return SUCCESS;
         }
 
-        if (cmd.count("plugin")) {
-            auto pluginName = cmd["plugin"].as<std::string>();
+        if (parsedCmdLine.count("plugin")) {
+            auto pluginName = parsedCmdLine["plugin"].as<std::string>();
             Plugin::load(pluginName);
             if (!Plugin::isLoaded()) {
                 std::cerr << kCnip << "cannot load plugin " << pluginName << std::endl;
@@ -127,61 +105,27 @@ int Driver::execute(int argc, char* argv[])
             }
         }
 
-        if (!cmd.count("file")) {
-            std::cerr << kCnip << "input file unspecified" << std::endl;
-            return ERROR_InputFileUnspecified;
+        if (!parsedCmdLine.count("file")) {
+            std::cerr << kCnip << "no input file" << std::endl;
+            return ERROR_NoInputFile;
         }
 
-        lang = cmd["lang"].as<std::string>();
-        applyOptions(cmd);
+        auto filePath = parsedCmdLine["file"].as<std::vector<std::string>>()[0];
+        auto [exit, srcText] = readFile(filePath);
+        if (exit != 0)
+            return ERROR_FileNotFound;
+
+        auto lang = parsedCmdLine["lang"].as<std::string>();
+        if (lang == "C") {
+            FrontEnd_C CFE(parsedCmdLine);
+            return CFE.run(srcText);
+        }
+
+        std::cerr << kCnip << "language " << lang << " not recognized" << std::endl;
+        return ERROR_LanguageNotRecognized;
     }
     catch (...) {
-        std::cerr << kCnip << "command-line error" << std::endl;
-        return ERROR_UnrecognizedCommandLine;
+        std::cerr << kCnip << "unrecognized command-line option" << std::endl;
+        return ERROR_UnrecognizedCmdLineOption;
     }
-
-    auto [exit, source] = readFile(config_->input_.fullFileName());
-    if (exit != 0)
-        return ERROR_InputFileReadingFailure;
-
-    if (lang == "C")
-        return Executer_C(this).execute(source);
-
-    std::cerr << kCnip << "unsupported language" << std::endl;
-    return ERROR_UnsupportedLanguage;
-}
-
-void Driver::applyOptions(const cxxopts::ParseResult& cmd)
-{
-    std::string inputPath = cmd["file"].as<std::vector<std::string>>()[0];
-    config_.reset(new Configuration(inputPath));
-
-    config_->C_hostCC_ = cmd["cc"].as<std::string>();
-
-    LanguageDialect::Std stdP;
-    auto std = cmd["cc-std"].as<std::string>();
-    std::for_each(std.begin(), std.end(),
-                  [] (char& c) { c = ::tolower(c); });
-
-    if (std == "c89" || std == "c90")
-        stdP = LanguageDialect::Std::C89_90;
-    else if (std == "c99")
-        stdP = LanguageDialect::Std::C99;
-    else if (std == "c17" || std == "c18")
-        stdP = LanguageDialect::Std::C17_18;
-    else
-        stdP = LanguageDialect::Std::C11;
-    config_->C_std = stdP;
-
-    config_->C_pp_ = cmd["cc-pp"].as<bool>();
-    if (cmd.count("cc-D"))
-        config_->C_macroDefs_ = cmd["cc-D"].as<std::vector<std::string>>();
-    if (cmd.count("cc-U"))
-        config_->C_macroUndefs_ = cmd["cc-U"].as<std::vector<std::string>>();
-    if (cmd.count("cc-I"))
-        config_->C_searchPaths_ = cmd["cc-I"].as<std::vector<std::string>>();
-
-    config_->C_dumpAST = cmd.count("C-dump-AST");
-    config_->C_infer = cmd.count("C-infer");
-    config_->C_inferOnly = cmd.count("C-infer-only");
 }

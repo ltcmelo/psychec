@@ -21,15 +21,6 @@
 #ifndef CNIPPET_DRIVER_H__
 #define CNIPPET_DRIVER_H__
 
-#include "cxxopts.hpp"
-
-#include "Configuration.h"
-
-#include <memory>
-#include <string>
-#include <vector>
-#include <utility>
-
 const char* const kCnip = "cnip: ";
 
 namespace cnip {
@@ -46,19 +37,17 @@ public:
     int execute(int argc, char* argv[]);
 
 private:
-    std::unique_ptr<Configuration> config_;
-
-    void applyOptions(const cxxopts::ParseResult& opts);
-
-    friend class Executer_C;
+    friend class FrontEnd;
+    friend class FrontEnd_C;
 
     static constexpr int SUCCESS = 0;
+
     static constexpr int ERROR = 1;
-    static constexpr int ERROR_UnrecognizedCommandLine = 2;
-    static constexpr int ERROR_InputFileUnspecified = 3;
-    static constexpr int ERROR_InputFileReadingFailure = 4;
+    static constexpr int ERROR_UnrecognizedCmdLineOption = 2;
+    static constexpr int ERROR_NoInputFile = 3;
+    static constexpr int ERROR_FileNotFound = 4;
     static constexpr int ERROR_CannotLoadPluging = 5;
-    static constexpr int ERROR_UnsupportedLanguage = 6;
+    static constexpr int ERROR_LanguageNotRecognized = 6;
 };
 
 } // cnip

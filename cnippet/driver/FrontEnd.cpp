@@ -18,42 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_CONFIGURATION_H__
-#define CNIPPET_CONFIGURATION_H__
+#include "Frontend.h"
 
-#include "FileInfo.h"
+#include "Configuration.h"
 
-#include "C/LanguageDialect.h"
+using namespace cnip;
 
-#include <string>
-#include <vector>
-
-using namespace psy;
-using namespace C;
-
-namespace cnip {
-
-/*!
- * \brief The Configuration class.
- */
-class Configuration
-{
-public:
-    Configuration(const std::string& filePath);
-
-    FileInfo FI_;
-
-    std::string C_hostCC_;
-    bool C_pp_;
-    LanguageDialect::Std STD_;
-    std::vector<std::string> C_macroDefs_;
-    std::vector<std::string> C_macroUndefs_;
-    std::vector<std::string> C_searchPaths_;
-    bool C_dumpAST;
-    bool C_infer;
-    bool C_inferOnly;
-};
-
-} // cnip
-
-#endif
+FrontEnd::FrontEnd(const cxxopts::ParseResult& parsedCmdLine)
+    : parsedCmdLine_(parsedCmdLine)
+{}

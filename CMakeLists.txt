@@ -48,11 +48,14 @@ set(PSYCHEC_SOURCES
 set(CNIPPET_SOURCES
     ${PSYCHEC_SOURCES}
     ${PROJECT_SOURCE_DIR}/Cnippet.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/Configuration.h
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Configuration.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Driver.h
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Driver.cpp
-    ${PROJECT_SOURCE_DIR}/cnippet/driver/Executer_C.h
-    ${PROJECT_SOURCE_DIR}/cnippet/driver/Executer_C.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/FrontEnd.h
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/FrontEnd.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/FrontEnd_C.h
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/FrontEnd_C.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Plugin.h
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Plugin.cpp
 )

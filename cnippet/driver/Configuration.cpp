@@ -22,6 +22,6 @@
 
 using namespace cnip;
 
-Configuration::Configuration(const std::string& inputPath)
-    : input_(FileInfo(inputPath))
+Configuration::Configuration(const std::string& filePath)
+    : FI_(FileInfo(filePath))
 {}

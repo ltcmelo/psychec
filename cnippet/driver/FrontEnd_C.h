@@ -18,11 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_EXECUTER_C_H__
-#define CNIPPET_EXECUTER_C_H__
+#ifndef CNIPPET_FRONTEND_C_H__
+#define CNIPPET_FRONTEND_C_H__
 
 #include "Driver.h"
 
+#include "Frontend.h"
 #include "SyntaxTree.h"
 
 #include <utility>
@@ -30,31 +31,27 @@
 
 namespace cnip {
 
-class Executer_C
+class FrontEnd_C : FrontEnd
 {
 public:
-    Executer_C(Driver* driver)
-        : driver_(driver)
-        , inferMode_(false)
-    {}
+    FrontEnd_C(const cxxopts::ParseResult& parsedCmdLine);
 
-    int execute(const std::string& source);
+    int run(const std::string& srcText) override;
 
 private:
-    int executeCore(std::string source);
+    int run_CORE(std::string srcText);
 
     std::pair<std::string, std::string> extendSource(const std::string& source);
     std::pair<int, std::string> invokePreprocessor(std::string source);
     std::pair<int, std::unique_ptr<SyntaxTree>> invokeParser(const std::string& source);
     int invokeBinder(std::unique_ptr<SyntaxTree> tree);
 
-    Driver* driver_;
-    bool inferMode_;
-
     static constexpr int ERROR_PreprocessorInvocationFailure = 100;
     static constexpr int ERROR_PreprocessedFileWritingFailure = 101;
     static constexpr int ERROR_UnsuccessfulParsing = 102;
     static constexpr int ERROR_InvalidSyntaxTree = 103;
+
+    std::unique_ptr<Configuration> config_;
 };
 
 } // cnip
