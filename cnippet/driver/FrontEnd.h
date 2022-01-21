@@ -23,6 +23,8 @@
 
 #include "Configuration.h"
 
+#include "FileInfo.h"
+
 #include "cxxopts.hpp"
 
 #include <string>
@@ -30,12 +32,12 @@
 namespace cnip {
 
 /*!
- * \brief The Frontend class.
+ * \brief The FrontEnd class.
  */
 class FrontEnd
 {
 public:
-    virtual int run(const std::string& srcText) = 0;
+    virtual int run(const std::string& srcText, const FileInfo& fi) = 0;
 
 protected:
     FrontEnd(const cxxopts::ParseResult& parsedCmdLine);

@@ -20,7 +20,7 @@
 
 #include "Driver.h"
 
-#include "Frontend_C.h"
+#include "FrontEnd_C.h"
 #include "FileInfo.h"
 #include "IO.h"
 #include "Plugin.h"
@@ -55,10 +55,10 @@ int Driver::execute(int argc, char* argv[])
         .show_positional_help()
         .add_options()
 
-            ("l,lang", "Specify the programming language.",
-                cxxopts::value<std::string>()->default_value("C"))
             ("file", "Specify the input file path.",
                 cxxopts::value<std::vector<std::string>>())
+            ("l,lang", "Specify the programming language.",
+                cxxopts::value<std::string>()->default_value("C"))
             ("z,dump-AST", "Dump the program's AST to the console.")
             ("d,debug", "Enable debugging.",
                 cxxopts::value<bool>(DEBUG::globalDebugEnabled))
@@ -87,6 +87,8 @@ int Driver::execute(int argc, char* argv[])
                 cxxopts::value<std::string>()->default_value("a.cstr"))
     ;
 
+    std::unique_ptr<FrontEnd> FE;
+    std::vector<std::string> filesPaths;
     try {
         cmdLineOpts.parse_positional(std::vector<std::string>{"file"});
         auto parsedCmdLine = cmdLineOpts.parse(argc, argv);
@@ -105,27 +107,36 @@ int Driver::execute(int argc, char* argv[])
             }
         }
 
-        if (!parsedCmdLine.count("file")) {
-            std::cerr << kCnip << "no input file" << std::endl;
+        if (parsedCmdLine.count("file"))
+            filesPaths = parsedCmdLine["file"].as<std::vector<std::string>>();
+        else {
+            std::cerr << kCnip << "no input file(s)" << std::endl;
             return ERROR_NoInputFile;
         }
 
-        auto filePath = parsedCmdLine["file"].as<std::vector<std::string>>()[0];
-        auto [exit, srcText] = readFile(filePath);
-        if (exit != 0)
-            return ERROR_FileNotFound;
-
         auto lang = parsedCmdLine["lang"].as<std::string>();
-        if (lang == "C") {
-            FrontEnd_C CFE(parsedCmdLine);
-            return CFE.run(srcText);
+        if (lang != "C") {
+            std::cerr << kCnip << "language " << lang << " not recognized" << std::endl;
+            return ERROR_LanguageNotRecognized;
         }
 
-        std::cerr << kCnip << "language " << lang << " not recognized" << std::endl;
-        return ERROR_LanguageNotRecognized;
+        FE.reset(new CFrontEnd(parsedCmdLine));
     }
     catch (...) {
         std::cerr << kCnip << "unrecognized command-line option" << std::endl;
         return ERROR_UnrecognizedCmdLineOption;
     }
+
+    for (auto filePath : filesPaths) {
+        auto [exit, srcText] = readFile(filePath);
+        if (exit != 0)
+            return ERROR_FileNotFound;
+
+        FileInfo fi(filePath);
+        exit = FE->run(srcText, fi);
+        if (exit != 0)
+            return exit;
+    }
+
+    return SUCCESS;
 }

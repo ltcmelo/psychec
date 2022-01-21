@@ -39,9 +39,7 @@ namespace cnip {
 class Configuration
 {
 public:
-    Configuration(const std::string& filePath);
-
-    FileInfo FI_;
+    Configuration();
 
     std::string C_hostCC_;
     bool C_pp_;

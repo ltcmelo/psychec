@@ -23,7 +23,7 @@
 
 #include "Driver.h"
 
-#include "Frontend.h"
+#include "FrontEnd.h"
 #include "SyntaxTree.h"
 
 #include <utility>
@@ -31,19 +31,20 @@
 
 namespace cnip {
 
-class FrontEnd_C : FrontEnd
+class CFrontEnd : public FrontEnd
 {
 public:
-    FrontEnd_C(const cxxopts::ParseResult& parsedCmdLine);
+    CFrontEnd(const cxxopts::ParseResult& parsedCmdLine);
 
-    int run(const std::string& srcText) override;
+    int run(const std::string& srcText, const FileInfo& fi) override;
 
 private:
-    int run_CORE(std::string srcText);
+    int run_CORE(const std::string& srcText, const FileInfo& fi);
 
-    std::pair<std::string, std::string> extendSource(const std::string& source);
-    std::pair<int, std::string> invokePreprocessor(std::string source);
-    std::pair<int, std::unique_ptr<SyntaxTree>> invokeParser(const std::string& source);
+    std::pair<std::string, std::string> extendSource(const std::string& srcText);
+    std::pair<int, std::string> invokePreprocessor(const std::string& srcText, const FileInfo& fi);
+    std::pair<int, std::unique_ptr<SyntaxTree>> invokeParser(
+            const std::string& srcText, const FileInfo& fi);
     int invokeBinder(std::unique_ptr<SyntaxTree> tree);
 
     static constexpr int ERROR_PreprocessorInvocationFailure = 100;
