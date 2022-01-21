@@ -24,6 +24,9 @@
 
 using namespace cnip;
 
+FrontEnd::~FrontEnd()
+{}
+
 FrontEnd::FrontEnd(const cxxopts::ParseResult& parsedCmdLine)
     : parsedCmdLine_(parsedCmdLine)
 {}

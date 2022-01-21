@@ -37,6 +37,8 @@ namespace cnip {
 class FrontEnd
 {
 public:
+    virtual ~FrontEnd();
+
     virtual int run(const std::string& srcText, const FileInfo& fi) = 0;
 
 protected:
