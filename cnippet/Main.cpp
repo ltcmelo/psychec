@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     }
     catch (...)
     {
-        std::cerr << "Unhandled exception during compilation!" << std::endl;
+        std::cerr << "unhandled exception" << std::endl;
         return 1;
     }
 }

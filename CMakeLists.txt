@@ -47,7 +47,7 @@ set(PSYCHEC_SOURCES
 
 set(CNIPPET_SOURCES
     ${PSYCHEC_SOURCES}
-    ${PROJECT_SOURCE_DIR}/Cnippet.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/Main.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/CompilerConfiguration.h
     ${PROJECT_SOURCE_DIR}/cnippet/CompilerConfiguration.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/CompilerConfiguration_C.h
