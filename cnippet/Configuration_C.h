@@ -44,15 +44,15 @@ public:
     static void extend(cxxopts::Options& cmdLineOpts);
 
     // TODO: API
-    std::string hostCompiler;
-    LanguageDialect::Std langStd_;
+    LanguageDialect::Std langStd;
 
-    std::vector<std::string> ppD;
-    std::vector<std::string> ppU;
-    std::vector<std::string> searchPaths;
+    std::string hostCompiler;
+    std::vector<std::string> definedMacros;
+    std::vector<std::string> undefinedMacros;
+    std::vector<std::string> includeSearchPaths;
 
     // TODO: Bit fields.
-    bool pp;
+    bool runPP;
 
     bool C_infer;
     bool C_inferOnly;

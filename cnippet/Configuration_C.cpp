@@ -20,23 +20,48 @@
 
 #include "Configuration_C.h"
 
+namespace {
+const char* const kCStd = "c-std";
+const char* const kHostCCompiler = "host-cc";
+const char* const kRunCPP = "run-c-pp";
+const char* const kDefineCPPMacro = "c-pp-D";
+const char* const KUndefineCPPMacro = "c-pp-U";
+const char* const kAddDirToCPPSearchPath = "c-pp-I";
+}
+
 using namespace cnip;
 
 void ConfigurationForC::extend(cxxopts::Options& cmdLineOpts)
 {
     cmdLineOpts.add_options()
-        /* Host C compiler */
-            ("cc", "Specify the host C compiler.",
-                cxxopts::value<std::string>()->default_value("gcc"))
-            ("cc-pp", "Run the host C compiler's preprocessor.",
+            // https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html#C-Dialect-Options
+            (kCStd,
+                "Specify the C standard.",
+                cxxopts::value<std::string>()->default_value("c11"),
+                "<c89|c90|c99|c11|c17>")
+
+            (kHostCCompiler,
+                "Specify a host C compiler.",
+                cxxopts::value<std::string>()->default_value("gcc"),
+                "<gcc|clang>")
+
+            (kRunCPP,
+                "Run the C preprocessor.",
                 cxxopts::value<bool>()->default_value("false"))
-            ("cc-std", "Specify the C dialect.",
-                cxxopts::value<std::string>()->default_value("c11"))
-            ("cc-D", "Predefine a macro.",
-                cxxopts::value<std::vector<std::string>>())
-            ("cc-U", "Undefine a macro.",
-                cxxopts::value<std::vector<std::string>>())
-            ("cc-I", "Add a directory to `#include' search path.",
+
+            // https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html
+            (kDefineCPPMacro,
+                "Predefine a C preprocessor macro.",
+                cxxopts::value<std::vector<std::string>>(),
+                "<name|name=definition>")
+            (KUndefineCPPMacro,
+                "Undefine a C preprocessor macro.",
+                cxxopts::value<std::vector<std::string>>(),
+                "<name>")
+
+            // https://gcc.gnu.org/onlinedocs/gcc/Directory-Options.html
+            (kAddDirToCPPSearchPath,
+                "Add a directory to the `#include' search path of the C preprocessor.",
                 cxxopts::value<std::vector<std::string>>())
 
         /* Type inference */
@@ -50,28 +75,29 @@ void ConfigurationForC::extend(cxxopts::Options& cmdLineOpts)
 ConfigurationForC::ConfigurationForC(const cxxopts::ParseResult& parsedCmdLine)
     : Configuration(parsedCmdLine)
 {
-    hostCompiler = parsedCmdLine["cc"].as<std::string>();
-
-    auto cc_std = parsedCmdLine["cc-std"].as<std::string>();
+    auto cc_std = parsedCmdLine[kCStd].as<std::string>();
     std::for_each(cc_std.begin(),
                   cc_std.end(),
                   [] (char& c) { c = ::tolower(c); });
     if (cc_std == "c89" || cc_std == "c90")
-        langStd_ = LanguageDialect::Std::C89_90;
+        langStd = LanguageDialect::Std::C89_90;
     else if (cc_std == "c99")
-        langStd_ = LanguageDialect::Std::C99;
+        langStd = LanguageDialect::Std::C99;
     else if (cc_std == "c17" || cc_std == "c18")
-        langStd_ = LanguageDialect::Std::C17_18;
+        langStd = LanguageDialect::Std::C17_18;
     else
-        langStd_ = LanguageDialect::Std::C11;
+        langStd = LanguageDialect::Std::C11;
 
-    pp = parsedCmdLine["cc-pp"].as<bool>();
-    if (parsedCmdLine.count("cc-D"))
-        ppD = parsedCmdLine["cc-D"].as<std::vector<std::string>>();
-    if (parsedCmdLine.count("cc-U"))
-        ppU = parsedCmdLine["cc-U"].as<std::vector<std::string>>();
-    if (parsedCmdLine.count("cc-I"))
-        searchPaths = parsedCmdLine["cc-I"].as<std::vector<std::string>>();
+    hostCompiler = parsedCmdLine[kHostCCompiler].as<std::string>();
+
+    runPP = parsedCmdLine[kRunCPP].as<bool>();
+    if (parsedCmdLine.count(kDefineCPPMacro))
+        definedMacros = parsedCmdLine[kDefineCPPMacro].as<std::vector<std::string>>();
+    if (parsedCmdLine.count(KUndefineCPPMacro))
+        undefinedMacros = parsedCmdLine[KUndefineCPPMacro].as<std::vector<std::string>>();
+
+    if (parsedCmdLine.count(kAddDirToCPPSearchPath))
+        includeSearchPaths = parsedCmdLine[kAddDirToCPPSearchPath].as<std::vector<std::string>>();
 
     C_infer = parsedCmdLine.count("C-infer");
     C_inferOnly = parsedCmdLine.count("C-infer-only");

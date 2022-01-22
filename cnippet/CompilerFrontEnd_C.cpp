@@ -79,7 +79,7 @@ int CCompilerFrontEnd::run_CORE(const std::string& srcText, const FileInfo& fi)
 
     auto [includes, srcText_P] = extendSource(srcText);
 
-    if (config_->pp) {
+    if (config_->runPP) {
         auto [exit, srcText_PP] = invokePreprocessor(srcText_P, fi);
         if (exit != 0)
             return exit;
@@ -132,9 +132,9 @@ std::pair<std::string, std::string> CCompilerFrontEnd::extendSource(
 std::pair<int, std::string> CCompilerFrontEnd::invokePreprocessor(const std::string& srcText, const FileInfo& fi)
 {
     CompilerFacade cc(config_->hostCompiler,
-                      to_string(config_->langStd_),
-                      config_->ppD,
-                      config_->ppU);
+                      to_string(config_->langStd),
+                      config_->definedMacros,
+                      config_->undefinedMacros);
 
     auto [exit, ppSource] = cc.preprocess(srcText);
     if (exit != 0) {
