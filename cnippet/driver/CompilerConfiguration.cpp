@@ -18,38 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_DRIVER_H__
-#define CNIPPET_DRIVER_H__
+#include "CompilerConfiguration.h"
 
-const char* const kCnip = "cnip: ";
+using namespace cnip;
 
-namespace cnip {
+CompilerConfiguration::~CompilerConfiguration()
+{}
 
-/*!
- * \brief The Driver class.
- */
-class Driver final
-{
-public:
-    Driver();
-    ~Driver();
-
-    int execute(int argc, char* argv[]);
-
-private:
-    friend class FrontEnd;
-    friend class CCompilerFrontEnd;
-
-    static constexpr int SUCCESS = 0;
-
-    static constexpr int ERROR = 1;
-    static constexpr int ERROR_UnrecognizedCmdLineOption = 2;
-    static constexpr int ERROR_NoInputFile = 3;
-    static constexpr int ERROR_FileNotFound = 4;
-    static constexpr int ERROR_CannotLoadPluging = 5;
-    static constexpr int ERROR_LanguageNotRecognized = 6;
-};
-
-} // cnip
-
-#endif
+CompilerConfiguration::CompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine)
+    : cmdLineOpt_dump_AST(parsedCmdLine.count("dump-AST"))
+{}

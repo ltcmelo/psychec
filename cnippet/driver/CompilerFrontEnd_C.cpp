@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Executer_C.h"
+#include "CompilerFrontEnd_C.h"
 
 #include "CompilerFacade.h"
 #include "FileInfo.h"
@@ -43,18 +43,26 @@ namespace
 const char * const kInclude = "#include";
 } // anonymous
 
-constexpr int Executer_C::ERROR_PreprocessorInvocationFailure;
-constexpr int Executer_C::ERROR_PreprocessedFileWritingFailure;
-constexpr int Executer_C::ERROR_UnsuccessfulParsing;
-constexpr int Executer_C::ERROR_InvalidSyntaxTree;
+constexpr int CCompilerFrontEnd::ERROR_PreprocessorInvocationFailure;
+constexpr int CCompilerFrontEnd::ERROR_PreprocessedFileWritingFailure;
+constexpr int CCompilerFrontEnd::ERROR_UnsuccessfulParsing;
+constexpr int CCompilerFrontEnd::ERROR_InvalidSyntaxTree;
 
-int Executer_C::execute(const std::string& source)
+CCompilerFrontEnd::CCompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine)
+    : CompilerFrontEnd(parsedCmdLine)
+    , config_(new CCompilerConfiguration(parsedCmdLine))
+{}
+
+CCompilerFrontEnd::~CCompilerFrontEnd()
+{}
+
+int CCompilerFrontEnd::run(const std::string& srcText, const FileInfo& fi)
 {
-    if (source.empty())
+    if (srcText.empty())
          return 0;
 
     try {
-        return executeCore(source);
+        return run_CORE(srcText, fi);
     }
     catch (...) {
         Plugin::unload();
@@ -62,34 +70,34 @@ int Executer_C::execute(const std::string& source)
     }
 }
 
-int Executer_C::executeCore(std::string source)
+int CCompilerFrontEnd::run_CORE(const std::string& srcText, const FileInfo& fi)
 {
-    if (driver_->config_->C_infer
-            || driver_->config_->C_inferOnly) {
-        inferMode_ = true;
-    }
+//    if (config_->C_infer
+//            || config_->C_inferOnly) {
+//        inferMode_ = true;
+//    }
 
-    auto [includes, source_P] = extendSource(source);
+    auto [includes, srcText_P] = extendSource(srcText);
 
-    if (driver_->config_->C_pp_) {
-        auto [exit, source_PP] = invokePreprocessor(source_P);
+    if (config_->cmdLineOpt_cc_pp) {
+        auto [exit, srcText_PP] = invokePreprocessor(srcText_P, fi);
         if (exit != 0)
             return exit;
-        source_P = source_PP;
+        srcText_P = srcText_PP;
     }
 
-    auto [exit, tree] = invokeParser(source_P);
+    auto [exit, tree] = invokeParser(srcText_P, fi);
     if (exit != 0)
         return exit;
 
     return invokeBinder(std::move(tree));
 }
 
-std::pair<std::string, std::string> Executer_C::extendSource(
-        const std::string &source)
+std::pair<std::string, std::string> CCompilerFrontEnd::extendSource(
+        const std::string &srcText)
 {
     std::string includes;
-    std::istringstream iss(source);
+    std::istringstream iss(srcText);
     std::string line;
     while (std::getline(iss, line)) {
         line.erase(0, line.find_first_not_of(' '));
@@ -98,15 +106,15 @@ std::pair<std::string, std::string> Executer_C::extendSource(
     }
 
     if (!Plugin::isLoaded()) {
-        if (inferMode_)
-            std::cout << kCnip << "stdlib names will be treated as ordinary identifiers" << std::endl;
-        return std::make_pair(includes, source);
+//        if (inferMode_)
+//            std::cout << kCnip << "stdlib names will be treated as ordinary identifiers" << std::endl;
+        return std::make_pair(includes, srcText);
     }
 
     SourceInspector* inspector = Plugin::createInspector();
-    auto headerNames = inspector->detectRequiredHeaders(source);
+    auto headerNames = inspector->detectRequiredHeaders(srcText);
     if (headerNames.empty())
-        return std::make_pair(includes, source);
+        return std::make_pair(includes, srcText);
 
     std::string extSource;
     extSource += "\n/* CNIPPET: Start of #include section */\n";
@@ -116,25 +124,25 @@ std::pair<std::string, std::string> Executer_C::extendSource(
         includes += line;
     }
     extSource += "\n/* End of #include section */\n\n";
-    extSource += source;
+    extSource += srcText;
 
     return std::make_pair(includes, extSource);
 }
 
-std::pair<int, std::string> Executer_C::invokePreprocessor(std::string source)
+std::pair<int, std::string> CCompilerFrontEnd::invokePreprocessor(const std::string& srcText, const FileInfo& fi)
 {
-    CompilerFacade cc(driver_->config_->C_hostCC_,
-                      to_string(driver_->config_->C_std),
-                      driver_->config_->C_macroDefs_,
-                      driver_->config_->C_macroUndefs_);
+    CompilerFacade cc(config_->cmdLineOpt_cc,
+                      to_string(config_->cmdLineOpt_cc_std),
+                      config_->cmdLineOpt_cc_D,
+                      config_->cmdLineOpt_cc_U);
 
-    auto [exit, ppSource] = cc.preprocess(source);
+    auto [exit, ppSource] = cc.preprocess(srcText);
     if (exit != 0) {
         std::cerr << kCnip << "preprocessor invocation failed" << std::endl;
         return std::make_pair(ERROR_PreprocessorInvocationFailure, "");
     }
 
-    exit = writeFile(driver_->config_->input_.fullFileBaseName() + ".i", ppSource);
+    exit = writeFile(fi.fullFileBaseName() + ".i", ppSource);
     if (exit != 0) {
         std::cerr << kCnip << "preprocessed file write failure" << std::endl;
         return std::make_pair(ERROR_PreprocessedFileWritingFailure, "");
@@ -143,11 +151,13 @@ std::pair<int, std::string> Executer_C::invokePreprocessor(std::string source)
     return std::make_pair(0, ppSource);
 }
 
-std::pair<int, std::unique_ptr<SyntaxTree>> Executer_C::invokeParser(const std::string& source)
+std::pair<int, std::unique_ptr<SyntaxTree>> CCompilerFrontEnd::invokeParser(
+            const std::string& srcText,
+            const FileInfo& fi)
 {
-    auto tree = SyntaxTree::parseText(source,
+    auto tree = SyntaxTree::parseText(srcText,
                                       ParseOptions(),
-                                      driver_->config_->input_.fileName());
+                                      fi.fileName());
 
     if (!tree) {
         std::cerr << "unsuccessful parsing" << std::endl;
@@ -167,7 +177,7 @@ std::pair<int, std::unique_ptr<SyntaxTree>> Executer_C::invokeParser(const std::
         std::cerr << std::endl;
     }
 
-    if (driver_->config_->C_dumpAST) {
+    if (config_->cmdLineOpt_dump_AST) {
         std::ostringstream ossTree;
         SyntaxNamePrinter printer(tree.get());
         printer.print(TU,
@@ -179,7 +189,7 @@ std::pair<int, std::unique_ptr<SyntaxTree>> Executer_C::invokeParser(const std::
     return std::make_pair(0, std::move(tree));
 }
 
-int Executer_C::invokeBinder(std::unique_ptr<SyntaxTree> tree)
+int CCompilerFrontEnd::invokeBinder(std::unique_ptr<SyntaxTree> tree)
 {
     auto compilation = Compilation::create(tree->filePath());
     compilation->addSyntaxTrees({ tree.get() });

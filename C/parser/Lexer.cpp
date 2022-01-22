@@ -117,14 +117,14 @@ void Lexer::lex()
         yylex(&tk);
 
 LexEntry:
-        if (tk.isKind(HashToken) && tk.isAtStartOfLine()) {
+        if (tk.isAtStartOfLine() && tk.isKind(HashToken)) {
             auto offset = tk.charOffset_;
             yylex(&tk);
 
             if (!tk.isAtStartOfLine()
                     && tk.isKind(IdentifierToken)
                     && !strcmp(tk.identifier_->c_str(), kExpansion)) {
-                // A (Qt Creator-specific) macro mark.
+                // A Qt Creator-specific macro mark.
                 yylex(&tk);
 
                 if (!tk.isAtStartOfLine() && tk.isKind(IdentifierToken)) {
@@ -178,6 +178,7 @@ LexEntry:
                 }
             }
             else {
+                // A regular preprocessor directive.
                 if (!tk.isAtStartOfLine()
                         && tk.isKind(IdentifierToken)
                         && !strcmp(tk.identifier_->c_str(), kLine)) {
@@ -196,8 +197,11 @@ LexEntry:
                         yylex(&tk);
                     }
                 }
-                while (!tk.isKind(EndOfFile) && !tk.isAtStartOfLine())
+
+                while (!tk.isAtStartOfLine() && !tk.isKind(EndOfFile)) {
+                    // Skip the remaining of the line, ignoring a possible include.
                     yylex(&tk);
+                }
             }
             goto LexEntry;
         }

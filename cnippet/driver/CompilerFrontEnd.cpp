@@ -18,10 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Configuration.h"
+#include "CompilerFrontEnd.h"
+
+#include "CompilerConfiguration.h"
 
 using namespace cnip;
 
-Configuration::Configuration(const std::string& inputPath)
-    : input_(FileInfo(inputPath))
+CompilerFrontEnd::~CompilerFrontEnd()
+{}
+
+CompilerFrontEnd::CompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine)
+    : parsedCmdLine_(parsedCmdLine)
 {}

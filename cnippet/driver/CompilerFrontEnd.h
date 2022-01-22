@@ -18,36 +18,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_DRIVER_H__
-#define CNIPPET_DRIVER_H__
+#ifndef CNIPPET_COMPILER_FRONTEND_H__
+#define CNIPPET_COMPILER_FRONTEND_H__
 
-const char* const kCnip = "cnip: ";
+#include "CompilerConfiguration.h"
+
+#include "FileInfo.h"
+
+#include "cxxopts.hpp"
+
+#include <string>
 
 namespace cnip {
 
 /*!
- * \brief The Driver class.
+ * \brief The CompilerFrontEnd class.
  */
-class Driver final
+class CompilerFrontEnd
 {
 public:
-    Driver();
-    ~Driver();
+    virtual ~CompilerFrontEnd();
 
-    int execute(int argc, char* argv[]);
+    virtual int run(const std::string& srcText, const psy::FileInfo& fi) = 0;
 
-private:
-    friend class FrontEnd;
-    friend class CCompilerFrontEnd;
+protected:
+    CompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine);
 
-    static constexpr int SUCCESS = 0;
-
-    static constexpr int ERROR = 1;
-    static constexpr int ERROR_UnrecognizedCmdLineOption = 2;
-    static constexpr int ERROR_NoInputFile = 3;
-    static constexpr int ERROR_FileNotFound = 4;
-    static constexpr int ERROR_CannotLoadPluging = 5;
-    static constexpr int ERROR_LanguageNotRecognized = 6;
+    cxxopts::ParseResult parsedCmdLine_;
 };
 
 } // cnip

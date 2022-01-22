@@ -18,10 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_CONFIGURATION_H__
-#define CNIPPET_CONFIGURATION_H__
+#ifndef CNIPPET_C_COMPILER_CONFIGURATION_H__
+#define CNIPPET_C_COMPILER_CONFIGURATION_H__
 
-#include "FileInfo.h"
+#include "CompilerConfiguration.h"
 
 #include "C/LanguageDialect.h"
 
@@ -34,23 +34,25 @@ using namespace C;
 namespace cnip {
 
 /*!
- * \brief The Configuration class.
+ * \brief The CCompilerConfiguration class.
  */
-class Configuration
+class CCompilerConfiguration : public CompilerConfiguration
 {
 public:
-    Configuration(const std::string& inputPath);
+    CCompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine);
 
-    FileInfo input_;
+    static void extend(cxxopts::Options& cmdLineOpts);
 
-    /* C */
-    std::string C_hostCC_;
-    bool C_pp_;
-    LanguageDialect::Std C_std;
-    std::vector<std::string> C_macroDefs_;
-    std::vector<std::string> C_macroUndefs_;
-    std::vector<std::string> C_searchPaths_;
-    bool C_dumpAST;
+    // TODO: API
+    std::string cmdLineOpt_cc;
+    LanguageDialect::Std cmdLineOpt_cc_std;
+    std::vector<std::string> cmdLineOpt_cc_D;
+    std::vector<std::string> cmdLineOpt_cc_U;
+    std::vector<std::string> cmdLineOpt_cc_I;
+
+    // TODO: Bit fields.
+    bool cmdLineOpt_cc_pp;
+
     bool C_infer;
     bool C_inferOnly;
 };
