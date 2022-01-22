@@ -18,26 +18,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_CONFIGURATION_H__
-#define CNIPPET_CONFIGURATION_H__
+#ifndef CNIPPET_CONFIGURATION_FOR_C_H__
+#define CNIPPET_CONFIGURATION_FOR_C_H__
 
-#include "cxxopts.hpp"
+#include "Configuration.h"
+
+#include "C/LanguageDialect.h"
+
+#include <string>
+#include <vector>
+
+using namespace psy;
+using namespace C;
 
 namespace cnip {
 
 /*!
- * \brief The CompilerConfiguration class.
+ * \brief The ConfigurationForC class.
  */
-class CompilerConfiguration
+class ConfigurationForC : public Configuration
 {
 public:
-    virtual ~CompilerConfiguration();
+    ConfigurationForC(const cxxopts::ParseResult& parsedCmdLine);
+
+    static void extend(cxxopts::Options& cmdLineOpts);
 
     // TODO: API
-    bool dumpAst;
+    std::string hostCompiler;
+    LanguageDialect::Std langStd_;
 
-protected:
-    CompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine);
+    std::vector<std::string> ppD;
+    std::vector<std::string> ppU;
+    std::vector<std::string> searchPaths;
+
+    // TODO: Bit fields.
+    bool pp;
+
+    bool C_infer;
+    bool C_inferOnly;
 };
 
 } // cnip

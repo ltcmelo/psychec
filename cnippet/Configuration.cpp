@@ -18,13 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "CompilerConfiguration.h"
+#include "Configuration.h"
 
 using namespace cnip;
 
-CompilerConfiguration::~CompilerConfiguration()
+Configuration::~Configuration()
 {}
 
-CompilerConfiguration::CompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine)
+Configuration::Configuration(const cxxopts::ParseResult& parsedCmdLine)
     : dumpAst(parsedCmdLine.count("dump-AST"))
 {}

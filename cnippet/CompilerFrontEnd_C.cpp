@@ -50,7 +50,7 @@ constexpr int CCompilerFrontEnd::ERROR_InvalidSyntaxTree;
 
 CCompilerFrontEnd::CCompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine)
     : CompilerFrontEnd()
-    , config_(new CCompilerConfiguration(parsedCmdLine))
+    , config_(new ConfigurationForC(parsedCmdLine))
 {}
 
 CCompilerFrontEnd::~CCompilerFrontEnd()

@@ -21,7 +21,7 @@
 #ifndef CNIPPET_COMPILER_FRONTEND_H__
 #define CNIPPET_COMPILER_FRONTEND_H__
 
-#include "CompilerConfiguration.h"
+#include "Configuration.h"
 
 #include "FileInfo.h"
 

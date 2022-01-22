@@ -20,10 +20,10 @@
 
 #include "Driver.h"
 
-#include "CompilerConfiguration.h"
-#include "CompilerConfiguration_C.h"
 #include "CompilerFrontEnd.h"
 #include "CompilerFrontEnd_C.h"
+#include "Configuration.h"
+#include "Configuration_C.h"
 #include "FileInfo.h"
 #include "IO.h"
 #include "Plugin.h"
@@ -70,7 +70,7 @@ int Driver::execute(int argc, char* argv[])
             ("h,help", "Print usage instructions.")
     ;
 
-    CCompilerConfiguration::extend(cmdLineOpts);
+    ConfigurationForC::extend(cmdLineOpts);
 
     std::unique_ptr<CompilerFrontEnd> FE;
     std::vector<std::string> filesPaths;

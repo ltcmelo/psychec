@@ -18,11 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "CompilerConfiguration_C.h"
+#include "Configuration_C.h"
 
 using namespace cnip;
 
-void CCompilerConfiguration::extend(cxxopts::Options& cmdLineOpts)
+void ConfigurationForC::extend(cxxopts::Options& cmdLineOpts)
 {
     cmdLineOpts.add_options()
         /* Host C compiler */
@@ -47,8 +47,8 @@ void CCompilerConfiguration::extend(cxxopts::Options& cmdLineOpts)
         ;
 }
 
-CCompilerConfiguration::CCompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine)
-    : CompilerConfiguration(parsedCmdLine)
+ConfigurationForC::ConfigurationForC(const cxxopts::ParseResult& parsedCmdLine)
+    : Configuration(parsedCmdLine)
 {
     hostCompiler = parsedCmdLine["cc"].as<std::string>();
 

@@ -20,7 +20,7 @@
 
 #include "CompilerFrontEnd.h"
 
-#include "CompilerConfiguration.h"
+#include "Configuration.h"
 
 using namespace cnip;
 
