@@ -44,14 +44,15 @@ public:
     static void extend(cxxopts::Options& cmdLineOpts);
 
     // TODO: API
-    std::string C_hostCC_;
-    LanguageDialect::Std STD_;
-    std::vector<std::string> C_macroDefs_;
-    std::vector<std::string> C_macroUndefs_;
-    std::vector<std::string> C_searchPaths_;
+    std::string cmdLineOpt_cc;
+    LanguageDialect::Std cmdLineOpt_cc_std;
+    std::vector<std::string> cmdLineOpt_cc_D;
+    std::vector<std::string> cmdLineOpt_cc_U;
+    std::vector<std::string> cmdLineOpt_cc_I;
 
     // TODO: Bit fields.
-    bool C_pp_;
+    bool cmdLineOpt_cc_pp;
+
     bool C_infer;
     bool C_inferOnly;
 };

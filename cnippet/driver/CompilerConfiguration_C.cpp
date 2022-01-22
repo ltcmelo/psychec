@@ -50,28 +50,28 @@ void CCompilerConfiguration::extend(cxxopts::Options& cmdLineOpts)
 CCompilerConfiguration::CCompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine)
     : CompilerConfiguration(parsedCmdLine)
 {
-    C_hostCC_ = parsedCmdLine["cc"].as<std::string>();
+    cmdLineOpt_cc = parsedCmdLine["cc"].as<std::string>();
 
     auto cc_std = parsedCmdLine["cc-std"].as<std::string>();
     std::for_each(cc_std.begin(),
                   cc_std.end(),
                   [] (char& c) { c = ::tolower(c); });
     if (cc_std == "c89" || cc_std == "c90")
-        STD_ = LanguageDialect::Std::C89_90;
+        cmdLineOpt_cc_std = LanguageDialect::Std::C89_90;
     else if (cc_std == "c99")
-        STD_ = LanguageDialect::Std::C99;
+        cmdLineOpt_cc_std = LanguageDialect::Std::C99;
     else if (cc_std == "c17" || cc_std == "c18")
-        STD_ = LanguageDialect::Std::C17_18;
+        cmdLineOpt_cc_std = LanguageDialect::Std::C17_18;
     else
-        STD_ = LanguageDialect::Std::C11;
+        cmdLineOpt_cc_std = LanguageDialect::Std::C11;
 
-    C_pp_ = parsedCmdLine["cc-pp"].as<bool>();
+    cmdLineOpt_cc_pp = parsedCmdLine["cc-pp"].as<bool>();
     if (parsedCmdLine.count("cc-D"))
-        C_macroDefs_ = parsedCmdLine["cc-D"].as<std::vector<std::string>>();
+        cmdLineOpt_cc_D = parsedCmdLine["cc-D"].as<std::vector<std::string>>();
     if (parsedCmdLine.count("cc-U"))
-        C_macroUndefs_ = parsedCmdLine["cc-U"].as<std::vector<std::string>>();
+        cmdLineOpt_cc_U = parsedCmdLine["cc-U"].as<std::vector<std::string>>();
     if (parsedCmdLine.count("cc-I"))
-        C_searchPaths_ = parsedCmdLine["cc-I"].as<std::vector<std::string>>();
+        cmdLineOpt_cc_I = parsedCmdLine["cc-I"].as<std::vector<std::string>>();
 
     C_infer = parsedCmdLine.count("C-infer");
     C_inferOnly = parsedCmdLine.count("C-infer-only");
