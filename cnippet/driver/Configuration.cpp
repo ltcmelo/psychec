@@ -22,6 +22,9 @@
 
 using namespace cnip;
 
+Configuration::~Configuration()
+{}
+
 Configuration::Configuration(const cxxopts::ParseResult& parsedCmdLine)
-    : C_dumpAST(parsedCmdLine.count("dump-AST"))
+    : cmdLineOpt_dump_AST(parsedCmdLine.count("dump-AST"))
 {}

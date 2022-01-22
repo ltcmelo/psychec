@@ -31,9 +31,13 @@ namespace cnip {
 class Configuration
 {
 public:
-    Configuration(const cxxopts::ParseResult& parsedCmdLine);
+    virtual ~Configuration();
 
-    bool C_dumpAST;
+    // TODO: API
+    bool cmdLineOpt_dump_AST;
+
+protected:
+    Configuration(const cxxopts::ParseResult& parsedCmdLine);
 };
 
 } // cnip

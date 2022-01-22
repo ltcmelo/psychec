@@ -41,12 +41,17 @@ class CConfiguration : public Configuration
 public:
     CConfiguration(const cxxopts::ParseResult& parsedCmdLine);
 
+    static void extend(cxxopts::Options& cmdLineOpts);
+
+    // TODO: API
     std::string C_hostCC_;
-    bool C_pp_;
     LanguageDialect::Std STD_;
     std::vector<std::string> C_macroDefs_;
     std::vector<std::string> C_macroUndefs_;
     std::vector<std::string> C_searchPaths_;
+
+    // TODO: Bit fields.
+    bool C_pp_;
     bool C_infer;
     bool C_inferOnly;
 };

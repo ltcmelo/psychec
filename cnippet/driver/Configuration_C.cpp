@@ -22,6 +22,31 @@
 
 using namespace cnip;
 
+void CConfiguration::extend(cxxopts::Options& cmdLineOpts)
+{
+    cmdLineOpts.add_options()
+        /* Host C compiler */
+            ("cc", "Specify the host C compiler.",
+                cxxopts::value<std::string>()->default_value("gcc"))
+            ("cc-pp", "Run the host C compiler's preprocessor.",
+                cxxopts::value<bool>()->default_value("false"))
+            ("cc-std", "Specify the C dialect.",
+                cxxopts::value<std::string>()->default_value("c11"))
+            ("cc-D", "Predefine a macro.",
+                cxxopts::value<std::vector<std::string>>())
+            ("cc-U", "Undefine a macro.",
+                cxxopts::value<std::vector<std::string>>())
+            ("cc-I", "Add a directory to `#include' search path.",
+                cxxopts::value<std::vector<std::string>>())
+
+        /* Type inference */
+            ("C-infer", "Infer the definition of missing types.")
+            ("C-infer-only", "Don't allow types to be defined.")
+            ("o,output", "Specify output file",
+                cxxopts::value<std::string>()->default_value("a.cstr"))
+        ;
+}
+
 CConfiguration::CConfiguration(const cxxopts::ParseResult& parsedCmdLine)
     : Configuration(parsedCmdLine)
 {

@@ -20,6 +20,7 @@
 
 #include "Driver.h"
 
+#include "Configuration_C.h"
 #include "FrontEnd_C.h"
 #include "FileInfo.h"
 #include "IO.h"
@@ -55,7 +56,6 @@ int Driver::execute(int argc, char* argv[])
         .positional_help("file")
         .show_positional_help()
         .add_options()
-
             ("file", "Specify the input file path.",
                 cxxopts::value<std::vector<std::string>>())
             ("l,lang", "Specify the programming language.",
@@ -66,27 +66,9 @@ int Driver::execute(int argc, char* argv[])
             ("p,plugin", "Load plugin with the given name.",
                 cxxopts::value<std::string>())
             ("h,help", "Print usage instructions.")
-
-        /* Host C compiler */
-            ("cc", "Specify the host C compiler.",
-                cxxopts::value<std::string>()->default_value("gcc"))
-            ("cc-pp", "Run the host C compiler's preprocessor.",
-                cxxopts::value<bool>()->default_value("false"))
-            ("cc-std", "Specify the C dialect.",
-                cxxopts::value<std::string>()->default_value("c11"))
-            ("cc-D", "Predefine a macro.",
-                cxxopts::value<std::vector<std::string>>())
-            ("cc-U", "Undefine a macro.",
-                cxxopts::value<std::vector<std::string>>())
-            ("cc-I", "Add a directory to `#include' search path.",
-                cxxopts::value<std::vector<std::string>>())
-
-        /* Type inference */
-            ("C-infer", "Infer the definition of missing types.")
-            ("C-infer-only", "Don't allow types to be defined.")
-            ("o,output", "Specify output file",
-                cxxopts::value<std::string>()->default_value("a.cstr"))
     ;
+
+    CConfiguration::extend(cmdLineOpts);
 
     std::unique_ptr<FrontEnd> FE;
     std::vector<std::string> filesPaths;

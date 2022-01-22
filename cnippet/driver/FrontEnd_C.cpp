@@ -177,7 +177,7 @@ std::pair<int, std::unique_ptr<SyntaxTree>> CFrontEnd::invokeParser(
         std::cerr << std::endl;
     }
 
-    if (config_->C_dumpAST) {
+    if (config_->cmdLineOpt_dump_AST) {
         std::ostringstream ossTree;
         SyntaxNamePrinter printer(tree.get());
         printer.print(TU,
