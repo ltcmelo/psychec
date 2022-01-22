@@ -18,22 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Driver.h"
+#ifndef CNIPPET_CONFIGURATION_H__
+#define CNIPPET_CONFIGURATION_H__
 
-#include <iostream>
+#include "cxxopts.hpp"
 
-using namespace cnip;
+namespace cnip {
 
-int main(int argc, char* argv[])
+/*!
+ * \brief The Configuration class.
+ */
+class Configuration
 {
-    try
-    {
-        Driver driver;
-        return driver.execute(argc, argv);
-    }
-    catch (...)
-    {
-        std::cerr << "Unhandled exception during compilation!" << std::endl;
-        return 1;
-    }
-}
+public:
+    virtual ~Configuration();
+
+    // TODO: API
+    bool dumpAst;
+
+protected:
+    Configuration(const cxxopts::ParseResult& parsedCmdLine);
+};
+
+} // cnip
+
+#endif

@@ -18,14 +18,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "CompilerFrontEnd.h"
+#include "Driver.h"
 
-#include "CompilerConfiguration.h"
+#include <iostream>
 
 using namespace cnip;
 
-CompilerFrontEnd::~CompilerFrontEnd()
-{}
-
-CompilerFrontEnd::CompilerFrontEnd()
-{}
+int main(int argc, char* argv[])
+{
+    try
+    {
+        Driver driver;
+        return driver.execute(argc, argv);
+    }
+    catch (...)
+    {
+        std::cerr << "unhandled exception" << std::endl;
+        return 1;
+    }
+}

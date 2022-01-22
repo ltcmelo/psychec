@@ -24,7 +24,7 @@
 #include "Driver.h"
 
 #include "CompilerFrontEnd.h"
-#include "CompilerConfiguration_C.h"
+#include "Configuration_C.h"
 
 #include "C/SyntaxTree.h"
 
@@ -59,7 +59,7 @@ private:
     static constexpr int ERROR_UnsuccessfulParsing = 102;
     static constexpr int ERROR_InvalidSyntaxTree = 103;
 
-    std::unique_ptr<CCompilerConfiguration> config_;
+    std::unique_ptr<ConfigurationForC> config_;
 };
 
 } // cnip

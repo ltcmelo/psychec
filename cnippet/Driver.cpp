@@ -20,10 +20,10 @@
 
 #include "Driver.h"
 
-#include "CompilerConfiguration.h"
-#include "CompilerConfiguration_C.h"
 #include "CompilerFrontEnd.h"
 #include "CompilerFrontEnd_C.h"
+#include "Configuration.h"
+#include "Configuration_C.h"
 #include "FileInfo.h"
 #include "IO.h"
 #include "Plugin.h"
@@ -56,21 +56,27 @@ int Driver::execute(int argc, char* argv[])
     cxxopts::Options cmdLineOpts(argv[0], "cnippet");
     cmdLineOpts
         .positional_help("file")
-        .show_positional_help()
         .add_options()
-            ("file", "Specify the input file path.",
+            ("file",
+                "The input file(s) path(s).",
                 cxxopts::value<std::vector<std::string>>())
-            ("l,lang", "Specify the programming language.",
-                cxxopts::value<std::string>()->default_value("C"))
-            ("z,dump-AST", "Dump the program's AST to the console.")
-            ("d,debug", "Enable debugging.",
+            ("l,lang",
+                "Specify the programming language.",
+                cxxopts::value<std::string>()->default_value("C"),
+                "<C>")
+            ("z,dump-AST",
+                "Dump the program's AST to the console.")
+            ("d,debug",
+                "Enable debugging.",
                 cxxopts::value<bool>(DEBUG::globalDebugEnabled))
-            ("p,plugin", "Load plugin with the given name.",
+            ("p,plugin",
+                "Load plugin with the given name.",
                 cxxopts::value<std::string>())
-            ("h,help", "Print usage instructions.")
+            ("h,help",
+                "Print instructions.")
     ;
 
-    CCompilerConfiguration::extend(cmdLineOpts);
+    ConfigurationForC::extend(cmdLineOpts);
 
     std::unique_ptr<CompilerFrontEnd> FE;
     std::vector<std::string> filesPaths;

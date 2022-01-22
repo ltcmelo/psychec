@@ -18,13 +18,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "CompilerConfiguration.h"
+#ifndef CNIPPET_COMPILER_FRONTEND_H__
+#define CNIPPET_COMPILER_FRONTEND_H__
 
-using namespace cnip;
+#include "Configuration.h"
 
-CompilerConfiguration::~CompilerConfiguration()
-{}
+#include "FileInfo.h"
 
-CompilerConfiguration::CompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine)
-    : dumpAst(parsedCmdLine.count("dump-AST"))
-{}
+#include "cxxopts.hpp"
+
+#include <string>
+
+namespace cnip {
+
+/*!
+ * \brief The CompilerFrontEnd class.
+ */
+class CompilerFrontEnd
+{
+public:
+    virtual ~CompilerFrontEnd();
+
+    virtual int run(const std::string& srcText, const psy::FileInfo& fi) = 0;
+
+protected:
+    CompilerFrontEnd();
+};
+
+} // cnip
+
+#endif
