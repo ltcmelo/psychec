@@ -26,18 +26,18 @@
 namespace cnip {
 
 /*!
- * \brief The Configuration class.
+ * \brief The CompilerConfiguration class.
  */
-class Configuration
+class CompilerConfiguration
 {
 public:
-    virtual ~Configuration();
+    virtual ~CompilerConfiguration();
 
     // TODO: API
     bool cmdLineOpt_dump_AST;
 
 protected:
-    Configuration(const cxxopts::ParseResult& parsedCmdLine);
+    CompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine);
 };
 
 } // cnip

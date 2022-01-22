@@ -43,20 +43,20 @@ namespace
 const char * const kInclude = "#include";
 } // anonymous
 
-constexpr int CFrontEnd::ERROR_PreprocessorInvocationFailure;
-constexpr int CFrontEnd::ERROR_PreprocessedFileWritingFailure;
-constexpr int CFrontEnd::ERROR_UnsuccessfulParsing;
-constexpr int CFrontEnd::ERROR_InvalidSyntaxTree;
+constexpr int CCompilerFrontEnd::ERROR_PreprocessorInvocationFailure;
+constexpr int CCompilerFrontEnd::ERROR_PreprocessedFileWritingFailure;
+constexpr int CCompilerFrontEnd::ERROR_UnsuccessfulParsing;
+constexpr int CCompilerFrontEnd::ERROR_InvalidSyntaxTree;
 
-CFrontEnd::CFrontEnd(const cxxopts::ParseResult& parsedCmdLine)
-    : FrontEnd(parsedCmdLine)
-    , config_(new CConfiguration(parsedCmdLine))
+CCompilerFrontEnd::CCompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine)
+    : CompilerFrontEnd(parsedCmdLine)
+    , config_(new CCompilerConfiguration(parsedCmdLine))
 {}
 
-CFrontEnd::~CFrontEnd()
+CCompilerFrontEnd::~CCompilerFrontEnd()
 {}
 
-int CFrontEnd::run(const std::string& srcText, const FileInfo& fi)
+int CCompilerFrontEnd::run(const std::string& srcText, const FileInfo& fi)
 {
     if (srcText.empty())
          return 0;
@@ -70,7 +70,7 @@ int CFrontEnd::run(const std::string& srcText, const FileInfo& fi)
     }
 }
 
-int CFrontEnd::run_CORE(const std::string& srcText, const FileInfo& fi)
+int CCompilerFrontEnd::run_CORE(const std::string& srcText, const FileInfo& fi)
 {
 //    if (config_->C_infer
 //            || config_->C_inferOnly) {
@@ -93,7 +93,7 @@ int CFrontEnd::run_CORE(const std::string& srcText, const FileInfo& fi)
     return invokeBinder(std::move(tree));
 }
 
-std::pair<std::string, std::string> CFrontEnd::extendSource(
+std::pair<std::string, std::string> CCompilerFrontEnd::extendSource(
         const std::string &srcText)
 {
     std::string includes;
@@ -129,7 +129,7 @@ std::pair<std::string, std::string> CFrontEnd::extendSource(
     return std::make_pair(includes, extSource);
 }
 
-std::pair<int, std::string> CFrontEnd::invokePreprocessor(const std::string& srcText, const FileInfo& fi)
+std::pair<int, std::string> CCompilerFrontEnd::invokePreprocessor(const std::string& srcText, const FileInfo& fi)
 {
     CompilerFacade cc(config_->C_hostCC_,
                       to_string(config_->STD_),
@@ -151,7 +151,7 @@ std::pair<int, std::string> CFrontEnd::invokePreprocessor(const std::string& src
     return std::make_pair(0, ppSource);
 }
 
-std::pair<int, std::unique_ptr<SyntaxTree>> CFrontEnd::invokeParser(
+std::pair<int, std::unique_ptr<SyntaxTree>> CCompilerFrontEnd::invokeParser(
             const std::string& srcText,
             const FileInfo& fi)
 {
@@ -189,7 +189,7 @@ std::pair<int, std::unique_ptr<SyntaxTree>> CFrontEnd::invokeParser(
     return std::make_pair(0, std::move(tree));
 }
 
-int CFrontEnd::invokeBinder(std::unique_ptr<SyntaxTree> tree)
+int CCompilerFrontEnd::invokeBinder(std::unique_ptr<SyntaxTree> tree)
 {
     auto compilation = Compilation::create(tree->filePath());
     compilation->addSyntaxTrees({ tree.get() });

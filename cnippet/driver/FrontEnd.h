@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_FRONTEND_H__
-#define CNIPPET_FRONTEND_H__
+#ifndef CNIPPET_COMPILER_FRONTEND_H__
+#define CNIPPET_COMPILER_FRONTEND_H__
 
 #include "Configuration.h"
 
@@ -32,17 +32,17 @@
 namespace cnip {
 
 /*!
- * \brief The FrontEnd class.
+ * \brief The CompilerFrontEnd class.
  */
-class FrontEnd
+class CompilerFrontEnd
 {
 public:
-    virtual ~FrontEnd();
+    virtual ~CompilerFrontEnd();
 
     virtual int run(const std::string& srcText, const psy::FileInfo& fi) = 0;
 
 protected:
-    FrontEnd(const cxxopts::ParseResult& parsedCmdLine);
+    CompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine);
 
     cxxopts::ParseResult parsedCmdLine_;
 };

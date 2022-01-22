@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_C_CONFIGURATION_H__
-#define CNIPPET_C_CONFIGURATION_H__
+#ifndef CNIPPET_C_COMPILER_CONFIGURATION_H__
+#define CNIPPET_C_COMPILER_CONFIGURATION_H__
 
 #include "Configuration.h"
 
@@ -34,12 +34,12 @@ using namespace C;
 namespace cnip {
 
 /*!
- * \brief The CConfiguration class.
+ * \brief The CCompilerConfiguration class.
  */
-class CConfiguration : public Configuration
+class CCompilerConfiguration : public CompilerConfiguration
 {
 public:
-    CConfiguration(const cxxopts::ParseResult& parsedCmdLine);
+    CCompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine);
 
     static void extend(cxxopts::Options& cmdLineOpts);
 

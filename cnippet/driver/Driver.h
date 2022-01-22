@@ -38,7 +38,7 @@ public:
 
 private:
     friend class FrontEnd;
-    friend class CFrontEnd;
+    friend class CCompilerFrontEnd;
 
     static constexpr int SUCCESS = 0;
 

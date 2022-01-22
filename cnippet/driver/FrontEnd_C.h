@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_FRONTEND_C_H__
-#define CNIPPET_FRONTEND_C_H__
+#ifndef CNIPPET_C_COMPILER_FRONTEND_C_H__
+#define CNIPPET_C_COMPILER_FRONTEND_C_H__
 
 #include "Driver.h"
 
@@ -33,11 +33,14 @@
 
 namespace cnip {
 
-class CFrontEnd : public FrontEnd
+/*!
+ * \brief The CCompilerFrontEnd class.
+ */
+class CCompilerFrontEnd : public CompilerFrontEnd
 {
 public:
-    CFrontEnd(const cxxopts::ParseResult& parsedCmdLine);
-    virtual ~CFrontEnd();
+    CCompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine);
+    virtual ~CCompilerFrontEnd();
 
     int run(const std::string& srcText, const psy::FileInfo& fi) override;
 
@@ -56,7 +59,7 @@ private:
     static constexpr int ERROR_UnsuccessfulParsing = 102;
     static constexpr int ERROR_InvalidSyntaxTree = 103;
 
-    std::unique_ptr<CConfiguration> config_;
+    std::unique_ptr<CCompilerConfiguration> config_;
 };
 
 } // cnip

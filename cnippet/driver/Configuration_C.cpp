@@ -22,7 +22,7 @@
 
 using namespace cnip;
 
-void CConfiguration::extend(cxxopts::Options& cmdLineOpts)
+void CCompilerConfiguration::extend(cxxopts::Options& cmdLineOpts)
 {
     cmdLineOpts.add_options()
         /* Host C compiler */
@@ -47,8 +47,8 @@ void CConfiguration::extend(cxxopts::Options& cmdLineOpts)
         ;
 }
 
-CConfiguration::CConfiguration(const cxxopts::ParseResult& parsedCmdLine)
-    : Configuration(parsedCmdLine)
+CCompilerConfiguration::CCompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine)
+    : CompilerConfiguration(parsedCmdLine)
 {
     C_hostCC_ = parsedCmdLine["cc"].as<std::string>();
 
