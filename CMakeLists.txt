@@ -50,6 +50,8 @@ set(CNIPPET_SOURCES
     ${PROJECT_SOURCE_DIR}/Cnippet.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Configuration.h
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Configuration.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/Configuration_C.h
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/Configuration_C.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Driver.h
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Driver.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/driver/FrontEnd.h

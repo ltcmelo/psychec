@@ -31,6 +31,7 @@
 #include <sstream>
 #include <cstring>
 
+using namespace psy;
 using namespace cnip;
 
 namespace DEBUG { extern bool globalDebugEnabled; }

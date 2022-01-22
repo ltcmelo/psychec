@@ -39,7 +39,7 @@ class FrontEnd
 public:
     virtual ~FrontEnd();
 
-    virtual int run(const std::string& srcText, const FileInfo& fi) = 0;
+    virtual int run(const std::string& srcText, const psy::FileInfo& fi) = 0;
 
 protected:
     FrontEnd(const cxxopts::ParseResult& parsedCmdLine);

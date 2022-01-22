@@ -24,7 +24,9 @@
 #include "Driver.h"
 
 #include "FrontEnd.h"
-#include "SyntaxTree.h"
+#include "Configuration_C.h"
+
+#include "C/SyntaxTree.h"
 
 #include <utility>
 #include <string>
@@ -37,23 +39,24 @@ public:
     CFrontEnd(const cxxopts::ParseResult& parsedCmdLine);
     virtual ~CFrontEnd();
 
-    int run(const std::string& srcText, const FileInfo& fi) override;
+    int run(const std::string& srcText, const psy::FileInfo& fi) override;
 
 private:
-    int run_CORE(const std::string& srcText, const FileInfo& fi);
+    int run_CORE(const std::string& srcText, const psy::FileInfo& fi);
 
     std::pair<std::string, std::string> extendSource(const std::string& srcText);
-    std::pair<int, std::string> invokePreprocessor(const std::string& srcText, const FileInfo& fi);
-    std::pair<int, std::unique_ptr<SyntaxTree>> invokeParser(
-            const std::string& srcText, const FileInfo& fi);
-    int invokeBinder(std::unique_ptr<SyntaxTree> tree);
+    std::pair<int, std::string> invokePreprocessor(const std::string& srcText, const psy::FileInfo& fi);
+    std::pair<int, std::unique_ptr<psy::C::SyntaxTree>>
+        invokeParser(const std::string& srcText,
+                     const psy::FileInfo& fi);
+    int invokeBinder(std::unique_ptr<psy::C::SyntaxTree> tree);
 
     static constexpr int ERROR_PreprocessorInvocationFailure = 100;
     static constexpr int ERROR_PreprocessedFileWritingFailure = 101;
     static constexpr int ERROR_UnsuccessfulParsing = 102;
     static constexpr int ERROR_InvalidSyntaxTree = 103;
 
-    std::unique_ptr<Configuration> config_;
+    std::unique_ptr<CConfiguration> config_;
 };
 
 } // cnip

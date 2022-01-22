@@ -18,22 +18,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_CONFIGURATION_H__
-#define CNIPPET_CONFIGURATION_H__
+#ifndef CNIPPET_C_CONFIGURATION_H__
+#define CNIPPET_C_CONFIGURATION_H__
 
-#include "cxxopts.hpp"
+#include "Configuration.h"
+
+#include "C/LanguageDialect.h"
+
+#include <string>
+#include <vector>
+
+using namespace psy;
+using namespace C;
 
 namespace cnip {
 
 /*!
- * \brief The Configuration class.
+ * \brief The CConfiguration class.
  */
-class Configuration
+class CConfiguration : public Configuration
 {
 public:
-    Configuration(const cxxopts::ParseResult& parsedCmdLine);
+    CConfiguration(const cxxopts::ParseResult& parsedCmdLine);
 
-    bool C_dumpAST;
+    std::string C_hostCC_;
+    bool C_pp_;
+    LanguageDialect::Std STD_;
+    std::vector<std::string> C_macroDefs_;
+    std::vector<std::string> C_macroUndefs_;
+    std::vector<std::string> C_searchPaths_;
+    bool C_infer;
+    bool C_inferOnly;
 };
 
 } // cnip

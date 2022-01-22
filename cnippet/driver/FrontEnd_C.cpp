@@ -50,36 +50,8 @@ constexpr int CFrontEnd::ERROR_InvalidSyntaxTree;
 
 CFrontEnd::CFrontEnd(const cxxopts::ParseResult& parsedCmdLine)
     : FrontEnd(parsedCmdLine)
-    , config_(new Configuration())
-{
-    config_->C_dumpAST = parsedCmdLine.count("dump-AST");
-
-    config_->C_hostCC_ = parsedCmdLine["cc"].as<std::string>();
-
-    auto cc_std = parsedCmdLine["cc-std"].as<std::string>();
-    std::for_each(cc_std.begin(),
-                  cc_std.end(),
-                  [] (char& c) { c = ::tolower(c); });
-    if (cc_std == "c89" || cc_std == "c90")
-        config_->STD_ = LanguageDialect::Std::C89_90;
-    else if (cc_std == "c99")
-        config_->STD_ = LanguageDialect::Std::C99;
-    else if (cc_std == "c17" || cc_std == "c18")
-        config_->STD_ = LanguageDialect::Std::C17_18;
-    else
-        config_->STD_ = LanguageDialect::Std::C11;
-
-    config_->C_pp_ = parsedCmdLine["cc-pp"].as<bool>();
-    if (parsedCmdLine.count("cc-D"))
-        config_->C_macroDefs_ = parsedCmdLine["cc-D"].as<std::vector<std::string>>();
-    if (parsedCmdLine.count("cc-U"))
-        config_->C_macroUndefs_ = parsedCmdLine["cc-U"].as<std::vector<std::string>>();
-    if (parsedCmdLine.count("cc-I"))
-        config_->C_searchPaths_ = parsedCmdLine["cc-I"].as<std::vector<std::string>>();
-
-    config_->C_infer = parsedCmdLine.count("C-infer");
-    config_->C_inferOnly = parsedCmdLine.count("C-infer-only");
-}
+    , config_(new CConfiguration(parsedCmdLine))
+{}
 
 CFrontEnd::~CFrontEnd()
 {}
