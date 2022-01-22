@@ -27,6 +27,5 @@ using namespace cnip;
 CompilerFrontEnd::~CompilerFrontEnd()
 {}
 
-CompilerFrontEnd::CompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine)
-    : parsedCmdLine_(parsedCmdLine)
+CompilerFrontEnd::CompilerFrontEnd()
 {}

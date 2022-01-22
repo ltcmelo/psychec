@@ -42,9 +42,7 @@ public:
     virtual int run(const std::string& srcText, const psy::FileInfo& fi) = 0;
 
 protected:
-    CompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine);
-
-    cxxopts::ParseResult parsedCmdLine_;
+    CompilerFrontEnd();
 };
 
 } // cnip
