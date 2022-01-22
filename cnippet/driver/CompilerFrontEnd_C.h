@@ -23,8 +23,8 @@
 
 #include "Driver.h"
 
-#include "FrontEnd.h"
-#include "Configuration_C.h"
+#include "CompilerFrontEnd.h"
+#include "CompilerConfiguration_C.h"
 
 #include "C/SyntaxTree.h"
 

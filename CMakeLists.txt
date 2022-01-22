@@ -48,16 +48,16 @@ set(PSYCHEC_SOURCES
 set(CNIPPET_SOURCES
     ${PSYCHEC_SOURCES}
     ${PROJECT_SOURCE_DIR}/Cnippet.cpp
-    ${PROJECT_SOURCE_DIR}/cnippet/driver/Configuration.h
-    ${PROJECT_SOURCE_DIR}/cnippet/driver/Configuration.cpp
-    ${PROJECT_SOURCE_DIR}/cnippet/driver/Configuration_C.h
-    ${PROJECT_SOURCE_DIR}/cnippet/driver/Configuration_C.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/CompilerConfiguration.h
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/CompilerConfiguration.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/CompilerConfiguration_C.h
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/CompilerConfiguration_C.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/CompilerFrontEnd.h
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/CompilerFrontEnd.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/CompilerFrontEnd_C.h
+    ${PROJECT_SOURCE_DIR}/cnippet/driver/CompilerFrontEnd_C.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Driver.h
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Driver.cpp
-    ${PROJECT_SOURCE_DIR}/cnippet/driver/FrontEnd.h
-    ${PROJECT_SOURCE_DIR}/cnippet/driver/FrontEnd.cpp
-    ${PROJECT_SOURCE_DIR}/cnippet/driver/FrontEnd_C.h
-    ${PROJECT_SOURCE_DIR}/cnippet/driver/FrontEnd_C.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Plugin.h
     ${PROJECT_SOURCE_DIR}/cnippet/driver/Plugin.cpp
 )

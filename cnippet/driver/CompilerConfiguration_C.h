@@ -18,13 +18,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Configuration.h"
+#ifndef CNIPPET_C_COMPILER_CONFIGURATION_H__
+#define CNIPPET_C_COMPILER_CONFIGURATION_H__
 
-using namespace cnip;
+#include "CompilerConfiguration.h"
 
-CompilerConfiguration::~CompilerConfiguration()
-{}
+#include "C/LanguageDialect.h"
 
-CompilerConfiguration::CompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine)
-    : cmdLineOpt_dump_AST(parsedCmdLine.count("dump-AST"))
-{}
+#include <string>
+#include <vector>
+
+using namespace psy;
+using namespace C;
+
+namespace cnip {
+
+/*!
+ * \brief The CCompilerConfiguration class.
+ */
+class CCompilerConfiguration : public CompilerConfiguration
+{
+public:
+    CCompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine);
+
+    static void extend(cxxopts::Options& cmdLineOpts);
+
+    // TODO: API
+    std::string C_hostCC_;
+    LanguageDialect::Std STD_;
+    std::vector<std::string> C_macroDefs_;
+    std::vector<std::string> C_macroUndefs_;
+    std::vector<std::string> C_searchPaths_;
+
+    // TODO: Bit fields.
+    bool C_pp_;
+    bool C_infer;
+    bool C_inferOnly;
+};
+
+} // cnip
+
+#endif

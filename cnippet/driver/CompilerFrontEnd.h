@@ -18,42 +18,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_C_COMPILER_CONFIGURATION_H__
-#define CNIPPET_C_COMPILER_CONFIGURATION_H__
+#ifndef CNIPPET_COMPILER_FRONTEND_H__
+#define CNIPPET_COMPILER_FRONTEND_H__
 
-#include "Configuration.h"
+#include "CompilerConfiguration.h"
 
-#include "C/LanguageDialect.h"
+#include "FileInfo.h"
+
+#include "cxxopts.hpp"
 
 #include <string>
-#include <vector>
-
-using namespace psy;
-using namespace C;
 
 namespace cnip {
 
 /*!
- * \brief The CCompilerConfiguration class.
+ * \brief The CompilerFrontEnd class.
  */
-class CCompilerConfiguration : public CompilerConfiguration
+class CompilerFrontEnd
 {
 public:
-    CCompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine);
+    virtual ~CompilerFrontEnd();
 
-    static void extend(cxxopts::Options& cmdLineOpts);
+    virtual int run(const std::string& srcText, const psy::FileInfo& fi) = 0;
 
-    // TODO: API
-    std::string C_hostCC_;
-    LanguageDialect::Std STD_;
-    std::vector<std::string> C_macroDefs_;
-    std::vector<std::string> C_macroUndefs_;
-    std::vector<std::string> C_searchPaths_;
+protected:
+    CompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine);
 
-    // TODO: Bit fields.
-    bool C_pp_;
-    bool C_infer;
-    bool C_inferOnly;
+    cxxopts::ParseResult parsedCmdLine_;
 };
 
 } // cnip

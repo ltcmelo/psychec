@@ -18,9 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "FrontEnd.h"
+#include "CompilerFrontEnd.h"
 
-#include "Configuration.h"
+#include "CompilerConfiguration.h"
 
 using namespace cnip;
 

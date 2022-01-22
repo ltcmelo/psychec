@@ -20,8 +20,10 @@
 
 #include "Driver.h"
 
-#include "Configuration_C.h"
-#include "FrontEnd_C.h"
+#include "CompilerConfiguration.h"
+#include "CompilerConfiguration_C.h"
+#include "CompilerFrontEnd.h"
+#include "CompilerFrontEnd_C.h"
 #include "FileInfo.h"
 #include "IO.h"
 #include "Plugin.h"
