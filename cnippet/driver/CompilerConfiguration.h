@@ -34,7 +34,7 @@ public:
     virtual ~CompilerConfiguration();
 
     // TODO: API
-    bool cmdLineOpt_dump_AST;
+    bool dumpAst;
 
 protected:
     CompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine);

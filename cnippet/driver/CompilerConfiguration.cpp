@@ -26,5 +26,5 @@ CompilerConfiguration::~CompilerConfiguration()
 {}
 
 CompilerConfiguration::CompilerConfiguration(const cxxopts::ParseResult& parsedCmdLine)
-    : cmdLineOpt_dump_AST(parsedCmdLine.count("dump-AST"))
+    : dumpAst(parsedCmdLine.count("dump-AST"))
 {}

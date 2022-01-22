@@ -49,7 +49,7 @@ constexpr int CCompilerFrontEnd::ERROR_UnsuccessfulParsing;
 constexpr int CCompilerFrontEnd::ERROR_InvalidSyntaxTree;
 
 CCompilerFrontEnd::CCompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine)
-    : CompilerFrontEnd(parsedCmdLine)
+    : CompilerFrontEnd()
     , config_(new CCompilerConfiguration(parsedCmdLine))
 {}
 
@@ -79,7 +79,7 @@ int CCompilerFrontEnd::run_CORE(const std::string& srcText, const FileInfo& fi)
 
     auto [includes, srcText_P] = extendSource(srcText);
 
-    if (config_->cmdLineOpt_cc_pp) {
+    if (config_->pp) {
         auto [exit, srcText_PP] = invokePreprocessor(srcText_P, fi);
         if (exit != 0)
             return exit;
@@ -131,10 +131,10 @@ std::pair<std::string, std::string> CCompilerFrontEnd::extendSource(
 
 std::pair<int, std::string> CCompilerFrontEnd::invokePreprocessor(const std::string& srcText, const FileInfo& fi)
 {
-    CompilerFacade cc(config_->cmdLineOpt_cc,
-                      to_string(config_->cmdLineOpt_cc_std),
-                      config_->cmdLineOpt_cc_D,
-                      config_->cmdLineOpt_cc_U);
+    CompilerFacade cc(config_->hostCompiler,
+                      to_string(config_->langStd_),
+                      config_->ppD,
+                      config_->ppU);
 
     auto [exit, ppSource] = cc.preprocess(srcText);
     if (exit != 0) {
@@ -177,7 +177,7 @@ std::pair<int, std::unique_ptr<SyntaxTree>> CCompilerFrontEnd::invokeParser(
         std::cerr << std::endl;
     }
 
-    if (config_->cmdLineOpt_dump_AST) {
+    if (config_->dumpAst) {
         std::ostringstream ossTree;
         SyntaxNamePrinter printer(tree.get());
         printer.print(TU,
