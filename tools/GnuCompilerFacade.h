@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_COMPILER_FACADE_H__
-#define PSYCHE_COMPILER_FACADE_H__
+#ifndef PSYCHE_GNU_COMPILER_FACADE_H__
+#define PSYCHE_GNU_COMPILER_FACADE_H__
 
 #include <string>
 #include <utility>
@@ -27,23 +27,24 @@
 
 namespace psy {
 
-class CompilerFacade
+class GnuCompilerFacade
 {
 public:
-    CompilerFacade(const std::string& hostCC,
+    GnuCompilerFacade(const std::string& compilerName,
                    const std::string& std,
-                   const std::vector<std::string>& macroDefs,
-                   const std::vector<std::string>& macroUndefs);
+                   const std::vector<std::string>& D,
+                   const std::vector<std::string>& U);
 
-    std::pair<int, std::string> preprocess(const std::string& source);
+    std::pair<int, std::string> preprocess(const std::string& srcText);
+    std::pair<int, std::string> preprocess_IgnoreIncludes(const std::string& srcText);
 
 private:
-    std::string macroSetup() const;
+    std::string assembleMacroCmd() const;
 
-    std::string hostCC_;
+    std::string compilerName_;
     std::string std_;
-    std::vector<std::string> macroDefs_;
-    std::vector<std::string> macroUndefs_;
+    std::vector<std::string> D_;
+    std::vector<std::string> U_;
 };
 
 } // psy

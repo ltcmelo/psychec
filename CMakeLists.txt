@@ -33,8 +33,8 @@ set(PSYCHEC_SOURCES
     ${PROJECT_SOURCE_DIR}/adt/VersionedMap.h
 
     # Tools
-    ${PROJECT_SOURCE_DIR}/tools/CompilerFacade.h
-    ${PROJECT_SOURCE_DIR}/tools/CompilerFacade.cpp
+    ${PROJECT_SOURCE_DIR}/tools/GnuCompilerFacade.h
+    ${PROJECT_SOURCE_DIR}/tools/GnuCompilerFacade.cpp
 
     # Utilities
     ${PROJECT_SOURCE_DIR}/utility/FileInfo.h

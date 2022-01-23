@@ -23,10 +23,10 @@
 namespace {
 const char* const kCStd = "c-std";
 const char* const kHostCCompiler = "host-cc";
-const char* const kRunCPP = "run-c-pp";
-const char* const kDefineCPPMacro = "c-pp-D";
-const char* const KUndefineCPPMacro = "c-pp-U";
-const char* const kAddDirToCPPSearchPath = "c-pp-I";
+const char* const kExpandCPPIncludeDirectives = "cpp-includes";
+const char* const kDefineCPPMacro = "cpp-D";
+const char* const KUndefineCPPMacro = "cpp-U";
+const char* const kAddDirToCPPSearchPath = "cpp-I";
 }
 
 using namespace cnip;
@@ -45,9 +45,16 @@ void ConfigurationForC::extend(cxxopts::Options& cmdLineOpts)
                 cxxopts::value<std::string>()->default_value("gcc"),
                 "<gcc|clang>")
 
-            (kRunCPP,
-                "Run the C preprocessor.",
+            // https://gcc.gnu.org/onlinedocs/cpp/Include-Syntax.html
+            (kExpandCPPIncludeDirectives,
+                "Expand `#include' directives of the C preprocessor.",
                 cxxopts::value<bool>()->default_value("false"))
+
+            // https://gcc.gnu.org/onlinedocs/gcc/Directory-Options.html
+            (kAddDirToCPPSearchPath,
+                "Add a directory to the `#include' search path of the C preprocessor.",
+                cxxopts::value<std::vector<std::string>>(),
+                "path")
 
             // https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html
             (kDefineCPPMacro,
@@ -59,14 +66,8 @@ void ConfigurationForC::extend(cxxopts::Options& cmdLineOpts)
                 cxxopts::value<std::vector<std::string>>(),
                 "<name>")
 
-            // https://gcc.gnu.org/onlinedocs/gcc/Directory-Options.html
-            (kAddDirToCPPSearchPath,
-                "Add a directory to the `#include' search path of the C preprocessor.",
-                cxxopts::value<std::vector<std::string>>())
-
         /* Type inference */
             ("C-infer", "Infer the definition of missing types.")
-            ("C-infer-only", "Don't allow types to be defined.")
             ("o,output", "Specify output file",
                 cxxopts::value<std::string>()->default_value("a.cstr"))
         ;
@@ -90,7 +91,7 @@ ConfigurationForC::ConfigurationForC(const cxxopts::ParseResult& parsedCmdLine)
 
     hostCompiler = parsedCmdLine[kHostCCompiler].as<std::string>();
 
-    runPP = parsedCmdLine[kRunCPP].as<bool>();
+    expandIncludes = parsedCmdLine[kExpandCPPIncludeDirectives].as<bool>();
     if (parsedCmdLine.count(kDefineCPPMacro))
         macrosToDefine = parsedCmdLine[kDefineCPPMacro].as<std::vector<std::string>>();
     if (parsedCmdLine.count(KUndefineCPPMacro))

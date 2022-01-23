@@ -52,7 +52,7 @@ public:
     std::vector<std::string> headerSearchPaths;
 
     // TODO: Bit fields.
-    bool runPP;
+    bool expandIncludes;
     bool inferMissingTypes;
 };
 

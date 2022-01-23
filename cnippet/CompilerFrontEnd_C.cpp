@@ -20,8 +20,8 @@
 
 #include "CompilerFrontEnd_C.h"
 
-#include "CompilerFacade.h"
 #include "FileInfo.h"
+#include "GnuCompilerFacade.h"
 #include "IO.h"
 #include "Plugin.h"
 
@@ -62,7 +62,7 @@ int CCompilerFrontEnd::run(const std::string& srcText, const FileInfo& fi)
          return 0;
 
     return config_->inferMissingTypes ? extendWithStdLibHeaders(srcText, fi)
-                                          : incorporatePredefMacrosOrPreprocess(srcText, fi);
+                                          : preprocess(srcText, fi);
 }
 
 int CCompilerFrontEnd::extendWithStdLibHeaders(const std::string& srcText,
@@ -71,9 +71,9 @@ int CCompilerFrontEnd::extendWithStdLibHeaders(const std::string& srcText,
     if (!Plugin::isLoaded())
         return 1;
 
-    std::string existingHeaders;
     std::istringstream iss(srcText);
     std::string line;
+    std::string existingHeaders;
     while (std::getline(iss, line)) {
         line.erase(0, line.find_first_not_of(' '));
         if (line.find(kInclude) == 0)
@@ -83,7 +83,7 @@ int CCompilerFrontEnd::extendWithStdLibHeaders(const std::string& srcText,
     SourceInspector* inspector = Plugin::createInspector();
     auto stdLibHeaders = inspector->detectRequiredHeaders(srcText);
     if (stdLibHeaders.empty())
-        return incorporatePredefMacrosOrPreprocess(srcText, fi);
+        return preprocess(srcText, fi);
 
     std::string srcText_P;
     srcText_P += "\n/* CNIPPET: Start of #include section */\n";
@@ -95,21 +95,20 @@ int CCompilerFrontEnd::extendWithStdLibHeaders(const std::string& srcText,
     srcText_P += "\n/* End of #include section */\n\n";
     srcText_P += srcText;
 
-    return incorporatePredefMacrosOrPreprocess(srcText_P, fi);
+    return preprocess(srcText_P, fi);
 }
 
-int CCompilerFrontEnd::incorporatePredefMacrosOrPreprocess(
-        const std::string& srcText,
-        const psy::FileInfo& fi)
+int CCompilerFrontEnd::preprocess(const std::string& srcText,
+                                  const psy::FileInfo& fi)
 {
-    CompilerFacade cc(config_->hostCompiler,
+    GnuCompilerFacade cc(config_->hostCompiler,
                       to_string(config_->langStd),
                       config_->macrosToDefine,
                       config_->macrosToUndef);
 
     std::string srcText_P;
-    if (config_->runPP) {
-        int exit;
+    int exit;
+    if (config_->expandIncludes) {
         std::tie(exit, srcText_P) = cc.preprocess(srcText);
         if (exit != 0) {
             std::cerr << kCnip << "preprocessor invocation failed" << std::endl;
@@ -123,8 +122,7 @@ int CCompilerFrontEnd::incorporatePredefMacrosOrPreprocess(
         }
     }
     else {
-        // TODO: Collect builtin definitions.
-        srcText_P = srcText;
+        std::tie(exit, srcText_P) = cc.preprocess_IgnoreIncludes(srcText);
     }
 
     return constructSyntaxTree(srcText_P, fi);

@@ -61,7 +61,7 @@ int Driver::execute(int argc, char* argv[])
                 "The input file(s) path(s).",
                 cxxopts::value<std::vector<std::string>>())
             ("l,lang",
-                "Specify the programming language.",
+                "Specify the language.",
                 cxxopts::value<std::string>()->default_value("C"),
                 "<C>")
             ("z,dump-AST",

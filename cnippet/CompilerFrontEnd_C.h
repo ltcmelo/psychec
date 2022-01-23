@@ -47,7 +47,7 @@ public:
 private:
 
     int extendWithStdLibHeaders(const std::string& srcText, const psy::FileInfo& fi);
-    int incorporatePredefMacrosOrPreprocess(const std::string& srcText, const psy::FileInfo& fi);
+    int preprocess(const std::string& srcText, const psy::FileInfo& fi);
     int constructSyntaxTree(const std::string& srcText, const psy::FileInfo& fi);
     int computeSemanticModel(std::unique_ptr<psy::C::SyntaxTree> tree);
 
