@@ -45,8 +45,6 @@ public:
     int run(const std::string& srcText, const psy::FileInfo& fi) override;
 
 private:
-    int run_CORE(const std::string& srcText, const psy::FileInfo& fi);
-
     std::pair<std::string, std::string> extendSource(const std::string& srcText);
     std::pair<int, std::string> invokePreprocessor(const std::string& srcText, const psy::FileInfo& fi);
     std::pair<int, std::unique_ptr<psy::C::SyntaxTree>>

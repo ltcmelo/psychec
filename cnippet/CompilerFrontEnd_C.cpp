@@ -41,7 +41,7 @@ bool globalDebugEnabled = false;
 namespace
 {
 const char * const kInclude = "#include";
-} // anonymous
+}
 
 constexpr int CCompilerFrontEnd::ERROR_PreprocessorInvocationFailure;
 constexpr int CCompilerFrontEnd::ERROR_PreprocessedFileWritingFailure;
@@ -61,17 +61,6 @@ int CCompilerFrontEnd::run(const std::string& srcText, const FileInfo& fi)
     if (srcText.empty())
          return 0;
 
-    try {
-        return run_CORE(srcText, fi);
-    }
-    catch (...) {
-        Plugin::unload();
-        return Driver::ERROR;
-    }
-}
-
-int CCompilerFrontEnd::run_CORE(const std::string& srcText, const FileInfo& fi)
-{
 //    if (config_->C_infer
 //            || config_->C_inferOnly) {
 //        inferMode_ = true;

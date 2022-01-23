@@ -124,7 +124,15 @@ int Driver::execute(int argc, char* argv[])
             return ERROR_FileNotFound;
 
         FileInfo fi(filePath);
-        exit = FE->run(srcText, fi);
+
+        try {
+            exit = FE->run(srcText, fi);
+        }
+        catch (...) {
+            Plugin::unload();
+            return Driver::ERROR;
+        }
+
         if (exit != 0)
             return exit;
     }
