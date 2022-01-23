@@ -92,13 +92,12 @@ ConfigurationForC::ConfigurationForC(const cxxopts::ParseResult& parsedCmdLine)
 
     runPP = parsedCmdLine[kRunCPP].as<bool>();
     if (parsedCmdLine.count(kDefineCPPMacro))
-        definedMacros = parsedCmdLine[kDefineCPPMacro].as<std::vector<std::string>>();
+        macrosToDefine = parsedCmdLine[kDefineCPPMacro].as<std::vector<std::string>>();
     if (parsedCmdLine.count(KUndefineCPPMacro))
-        undefinedMacros = parsedCmdLine[KUndefineCPPMacro].as<std::vector<std::string>>();
+        macrosToUndef = parsedCmdLine[KUndefineCPPMacro].as<std::vector<std::string>>();
 
     if (parsedCmdLine.count(kAddDirToCPPSearchPath))
-        includeSearchPaths = parsedCmdLine[kAddDirToCPPSearchPath].as<std::vector<std::string>>();
+        headerSearchPaths = parsedCmdLine[kAddDirToCPPSearchPath].as<std::vector<std::string>>();
 
-    C_infer = parsedCmdLine.count("C-infer");
-    C_inferOnly = parsedCmdLine.count("C-infer-only");
+    inferMissingTypes = parsedCmdLine.count("infer");
 }
