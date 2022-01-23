@@ -45,14 +45,11 @@ public:
     int run(const std::string& srcText, const psy::FileInfo& fi) override;
 
 private:
-    int run_CORE(const std::string& srcText, const psy::FileInfo& fi);
 
-    std::pair<std::string, std::string> extendSource(const std::string& srcText);
-    std::pair<int, std::string> invokePreprocessor(const std::string& srcText, const psy::FileInfo& fi);
-    std::pair<int, std::unique_ptr<psy::C::SyntaxTree>>
-        invokeParser(const std::string& srcText,
-                     const psy::FileInfo& fi);
-    int invokeBinder(std::unique_ptr<psy::C::SyntaxTree> tree);
+    int extendWithStdLibHeaders(const std::string& srcText, const psy::FileInfo& fi);
+    int preprocess(const std::string& srcText, const psy::FileInfo& fi);
+    int constructSyntaxTree(const std::string& srcText, const psy::FileInfo& fi);
+    int computeSemanticModel(std::unique_ptr<psy::C::SyntaxTree> tree);
 
     static constexpr int ERROR_PreprocessorInvocationFailure = 100;
     static constexpr int ERROR_PreprocessedFileWritingFailure = 101;

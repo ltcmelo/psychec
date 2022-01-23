@@ -18,43 +18,68 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "CompilerFacade.h"
+#include "GnuCompilerFacade.h"
 
 #include "Process.h"
 
 #include <iostream>
+#include <sstream>
+
+namespace
+{
+const char * const kInclude = "#include";
+}
 
 using namespace psy;
 
-CompilerFacade::CompilerFacade(const std::string& hostCC,
+GnuCompilerFacade::GnuCompilerFacade(const std::string& compilerName,
                                const std::string& std,
-                               const std::vector<std::string>& macroDefs,
-                               const std::vector<std::string>& macroUndefs)
-    : hostCC_(hostCC)
+                               const std::vector<std::string>& D,
+                               const std::vector<std::string>& U)
+    : compilerName_(compilerName)
     , std_(std)
-    , macroDefs_(macroDefs)
-    , macroUndefs_(macroUndefs)
+    , D_(D)
+    , U_(U)
 {}
 
-std::pair<int, std::string> CompilerFacade::preprocess(const std::string& source)
+std::pair<int, std::string> GnuCompilerFacade::preprocess(const std::string& srcText)
 {
     std::string in = "cat << 'EOF' | ";
-    in += hostCC_;
-    in += macroSetup();
+    in += compilerName_;
+    in += assembleMacroCmd();
     in += " ";
     in += "-std=" + std_ + " ";
     in += "-E -x c -CC -";
-    in += "\n" + source + "\nEOF";
+    in += "\n" + srcText + "\nEOF";
 
     return Process().execute(in);
 }
 
-std::string CompilerFacade::macroSetup() const
+std::pair<int, std::string> GnuCompilerFacade::preprocess_IgnoreIncludes(const std::string& srcText)
+{
+    std::string srcText_P;
+    srcText_P.reserve(srcText.length());
+
+    std::istringstream iss(srcText);
+    std::string line;
+    while (std::getline(iss, line)) {
+        line.erase(0, line.find_first_not_of(' '));
+
+        if (line.find(kInclude) == 0)
+            continue;
+
+        srcText_P += (line + "\n");
+    }
+
+    return preprocess(srcText_P);
+}
+
+std::string GnuCompilerFacade::assembleMacroCmd() const
 {
     std::string s;
-    for (const auto& d : macroDefs_)
+    for (const auto& d : D_)
         s += " -D " + d;
-    for (const auto& u : macroUndefs_)
+    for (const auto& u : U_)
         s += " -U " + u;
     return s;
 }

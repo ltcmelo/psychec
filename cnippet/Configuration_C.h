@@ -47,15 +47,13 @@ public:
     LanguageDialect::Std langStd;
 
     std::string hostCompiler;
-    std::vector<std::string> definedMacros;
-    std::vector<std::string> undefinedMacros;
-    std::vector<std::string> includeSearchPaths;
+    std::vector<std::string> macrosToDefine;
+    std::vector<std::string> macrosToUndef;
+    std::vector<std::string> headerSearchPaths;
 
     // TODO: Bit fields.
-    bool runPP;
-
-    bool C_infer;
-    bool C_inferOnly;
+    bool expandIncludes;
+    bool inferMissingTypes;
 };
 
 } // cnip

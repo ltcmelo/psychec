@@ -61,7 +61,7 @@ int Driver::execute(int argc, char* argv[])
                 "The input file(s) path(s).",
                 cxxopts::value<std::vector<std::string>>())
             ("l,lang",
-                "Specify the programming language.",
+                "Specify the language.",
                 cxxopts::value<std::string>()->default_value("C"),
                 "<C>")
             ("z,dump-AST",
@@ -124,7 +124,15 @@ int Driver::execute(int argc, char* argv[])
             return ERROR_FileNotFound;
 
         FileInfo fi(filePath);
-        exit = FE->run(srcText, fi);
+
+        try {
+            exit = FE->run(srcText, fi);
+        }
+        catch (...) {
+            Plugin::unload();
+            return Driver::ERROR;
+        }
+
         if (exit != 0)
             return exit;
     }
