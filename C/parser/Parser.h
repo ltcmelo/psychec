@@ -81,7 +81,7 @@ private:
     };
     friend struct Backtracker;
     const Backtracker* backtracker_;
-    bool inBactrackingMode() const;
+    bool mightBacktrack() const;
 
     struct DiagnosticsReporter
     {

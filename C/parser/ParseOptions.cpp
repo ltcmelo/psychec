@@ -45,24 +45,6 @@ ParseOptions::ParseOptions(LanguageDialect dialect, LanguageExtensions extension
     BF_.keywordIdentifiersClassified_ = true;
 }
 
-ParseOptions::ParseOptions(LanguageDialect dialect,
-                           LanguageExtensions extensions,
-                           PreprocessorOptions ppOptions)
-    : ppOptions_(std::move(ppOptions))
-    , dialect_(std::move(dialect))
-    , extensions_(std::move(extensions))
-    , bits_(0)
-{
-    BF_.keywordIdentifiersClassified_ = true;
-}
-
-ParseOptions::ParseOptions(PreprocessorOptions ppOptions)
-    : ppOptions_(std::move(ppOptions))
-    , bits_(0)
-{
-    BF_.keywordIdentifiersClassified_ = true;
-}
-
 const LanguageDialect& ParseOptions::dialect() const
 {
     return dialect_;
@@ -71,11 +53,6 @@ const LanguageDialect& ParseOptions::dialect() const
 const LanguageExtensions& ParseOptions::extensions() const
 {
     return extensions_;
-}
-
-const PreprocessorOptions& ParseOptions::ppOptions() const
-{
-    return ppOptions_;
 }
 
 ParseOptions& ParseOptions::setCommentMode(CommentMode mode)

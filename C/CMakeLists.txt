@@ -99,8 +99,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Parser_Statements.cpp
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.h
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.cpp
-    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.h
-    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.cpp
+    ${PROJECT_SOURCE_DIR}/parser/TextPreprocessingSituation.h
 
     # Symbols
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h

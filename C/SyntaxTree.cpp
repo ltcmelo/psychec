@@ -104,6 +104,7 @@ MemoryPool* SyntaxTree::unitPool() const
 }
 
 std::unique_ptr<SyntaxTree> SyntaxTree::parseText(SourceText text,
+                                                  TextPreprocessingSituation textPPSituation,
                                                   ParseOptions options,
                                                   const std::string& path,
                                                   SyntaxCategory syntaxCategory)

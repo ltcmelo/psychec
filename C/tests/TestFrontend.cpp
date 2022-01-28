@@ -266,7 +266,7 @@ void TestFrontend::parse(std::string source,
     }
 #endif
 
-    tree_ = SyntaxTree::parseText(text, ParseOptions(), "", cat);
+    tree_ = SyntaxTree::parseText(text, TextPreprocessingSituation::Unknown, ParseOptions(), "", cat);
 
     if (!checkErrorAndWarn(X))
         return;

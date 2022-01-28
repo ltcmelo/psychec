@@ -1,4 +1,4 @@
-// Copyright (c) 2020/21 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,55 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_PREPROCESSOR_OPTIONS_H__
-#define PSYCHE_C_PREPROCESSOR_OPTIONS_H__
+#ifndef PSYCHE_C_TEXT_PREPROCESSING_SITUATION_H__
+#define PSYCHE_C_TEXT_PREPROCESSING_SITUATION_H__
 
-#include "API.h"
-
-#include <vector>
-#include <string>
+#include <cstdint>
 
 namespace psy {
 namespace C {
 
-/**
- * The PreprocessorOptions class.
- *
- * \see https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html
- */
-class PSY_C_API PreprocessorOptions
+enum class TextPreprocessingSituation : std::uint8_t
 {
-public:
-    PreprocessorOptions();
-
-    /**
-     * Add a predefined macro, equivalent to \a -D \c name.
-     */
-    PreprocessorOptions& D(const std::string& name);
-
-    /**
-     * Add a predefined macro, equivalent to \a -D \c name=def.
-     */
-    PreprocessorOptions& D(const std::string& name, const std::string& def);
-
-    /**
-     * The predefined macros list.
-     */
-    const std::vector<std::string>& Ds() const;
-
-    /**
-     * Cancel any previous definition of \c name, equivalent to \a -U \c name.
-     */
-    PreprocessorOptions& U(const std::string& name);
-
-    /**
-     * The undefined macros list.
-     */
-    const std::vector<std::string>& Us() const;
-
-private:
-    std::vector<std::string> D_;
-    std::vector<std::string> U_;
+    Unknown,
+    Preprocessed,
+    Unpreprocessed
 };
 
 } // C
