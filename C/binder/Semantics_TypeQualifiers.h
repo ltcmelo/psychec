@@ -37,14 +37,9 @@ class Binder;
 class Semantics_TypeQualifiers
 {
 public:
-    static const std::string ID_Temp;
-
     static void qualify(SyntaxToken tyQualTk,
                         TypeSymbol* tySym,
                         Binder::DiagnosticsReporter* diagReporter);
-
-private:
-    static void temp(Binder::DiagnosticsReporter* diagReporter);
 };
 
 } // C

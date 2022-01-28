@@ -42,9 +42,6 @@ using namespace C;
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    // assert
-    tySymUSEs_ = {};
-
     std::vector<SpecifierSyntax*> tyQualSpecs;
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next) {
         auto spec = specIt->value;

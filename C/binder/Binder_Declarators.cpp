@@ -97,7 +97,7 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarator
         popSymDEF();
     }
 
-    return Action::Skip;
+    return visitVariableAndOrFunctionDeclaration_Done(node);
 }
 
 /* Declarators */
