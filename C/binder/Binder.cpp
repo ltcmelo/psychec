@@ -180,9 +180,18 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* 
     return visitTypeDeclaration_COMMON(node);
 }
 
-SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(
+        const VariableAndOrFunctionDeclarationSyntax* node)
 {
     return visitVariableAndOrFunctionDeclaration_AtSpecifiers(node);
+}
+
+SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_Done(
+        const VariableAndOrFunctionDeclarationSyntax*)
+{
+    popTySymUSE();
+
+    return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax* node)

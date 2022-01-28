@@ -108,6 +108,7 @@ private:
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
     Action visitVariableAndOrFunctionDeclaration_AtSpecifiers(const VariableAndOrFunctionDeclarationSyntax*);
     Action visitVariableAndOrFunctionDeclaration_AtDeclarators(const VariableAndOrFunctionDeclarationSyntax*);
+    Action visitVariableAndOrFunctionDeclaration_Done(const VariableAndOrFunctionDeclarationSyntax*);
     virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) override;
     virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
     virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;
