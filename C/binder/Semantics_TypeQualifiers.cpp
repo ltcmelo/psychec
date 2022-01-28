@@ -29,22 +29,6 @@
 using namespace psy;
 using namespace C;
 
-const std::string Semantics_TypeQualifiers::ID_Temp =
-        "Binder-100-6.7.2-2";
-
-
-void Semantics_TypeQualifiers::temp(
-        Binder::DiagnosticsReporter* diagReporter)
-{
-//    diagReporter->diagnose(DiagnosticDescriptor(
-//                               ID_Temp,
-//                               "[[two or more data types in declaration specifiers]]",
-//                               "two or more data types in declaration specifiers",
-//                               DiagnosticSeverity::Error,
-//                               DiagnosticCategory::Binding),
-//                           builtTySpecTk);
-}
-
 void Semantics_TypeQualifiers::qualify(SyntaxToken tyQualTk,
                                        TypeSymbol* tySym,
                                        Binder::DiagnosticsReporter* diagReporter)
