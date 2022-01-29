@@ -137,7 +137,7 @@ class TypeTraitExpressionSyntax;
 class CallExpressionSyntax;
 class CompoundLiteralExpressionSyntax;
 class CastExpressionSyntax;
-class ExtGNU_VAArgumentExpressionSyntax;
+class VAArgumentExpressionSyntax;
 class BinaryExpressionSyntax;
 class ConditionalExpressionSyntax;
 class AssignmentExpressionSyntax;

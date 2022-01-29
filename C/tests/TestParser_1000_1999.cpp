@@ -2590,7 +2590,7 @@ void TestParser::case1949() {}
 void TestParser::case1950()
 {
     parseExpression("__builtin_va_arg ( x , int )",
-                    Expectation().AST( { ExtGNU_VAArgumentExpression,
+                    Expectation().AST( { VAArgumentExpression,
                                          IdentifierName,
                                          TypeName,
                                          BuiltinTypeSpecifier,
@@ -2600,7 +2600,7 @@ void TestParser::case1950()
 void TestParser::case1951()
 {
     parseExpression("__builtin_va_arg ( x , y )",
-                    Expectation().AST( { ExtGNU_VAArgumentExpression,
+                    Expectation().AST( { VAArgumentExpression,
                                          IdentifierName,
                                          TypeName,
                                          TypedefName,

@@ -548,7 +548,7 @@ protected:
         return Action::Skip;
     }
 
-    virtual Action visitExtGNU_VAArgumentExpression(const ExtGNU_VAArgumentExpressionSyntax* node) override
+    virtual Action visitVAArgumentExpression(const VAArgumentExpressionSyntax* node) override
     {
         terminal(node->keyword(), node);
         terminal(node->openParenthesisToken(), node);

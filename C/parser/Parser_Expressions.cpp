@@ -746,7 +746,7 @@ bool Parser::parserVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
     if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_InternalBuiltins())
         diagReporter_.ExpectedFeature("GNU internal builtins");
 
-    auto vaArgExpr = makeNode<ExtGNU_VAArgumentExpressionSyntax>();
+    auto vaArgExpr = makeNode<VAArgumentExpressionSyntax>();
     expr = vaArgExpr;
     vaArgExpr->kwTkIdx_ = consume();
     return match(OpenParenToken, &vaArgExpr->openParenTkIdx_)

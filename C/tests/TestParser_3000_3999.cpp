@@ -31,7 +31,7 @@ using namespace C;
 void TestParser::case3000()
 {
     parseExpression("va_arg ( x , int )",
-                    Expectation().AST( { ExtGNU_VAArgumentExpression,
+                    Expectation().AST( { VAArgumentExpression,
                                          IdentifierName,
                                          TypeName,
                                          BuiltinTypeSpecifier,
@@ -42,7 +42,7 @@ void TestParser::case3000()
 void TestParser::case3001()
 {
     parseExpression("va_arg ( x , y )",
-                    Expectation().AST( { ExtGNU_VAArgumentExpression,
+                    Expectation().AST( { VAArgumentExpression,
                                          IdentifierName,
                                          TypeName,
                                          TypedefName,

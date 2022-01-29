@@ -692,16 +692,16 @@ private:
 };
 
 /**
- * \brief The ExtGNU_VAArgumentExpressionSyntax class.
+ * \brief The VAArgumentExpressionSyntax class.
  *
  * \remark 7.16
  *
  * \note Similar to:
  * - \c clang:VAArgExpr of LLVM/Clang.
  */
-class PSY_C_API ExtGNU_VAArgumentExpressionSyntax final : public ExpressionSyntax
+class PSY_C_API VAArgumentExpressionSyntax final : public ExpressionSyntax
 {
-    AST_NODE_1K(ExtGNU_VAArgumentExpression, Expression)
+    AST_NODE_1K(VAArgumentExpression, Expression)
 
 public:
     SyntaxToken keyword() const { return tokenAtIndex(kwTkIdx_); }
