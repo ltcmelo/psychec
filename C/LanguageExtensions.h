@@ -30,7 +30,7 @@ namespace C {
 /**
  * \brief The LanguageExtensions class.
  */
-class LanguageExtensions
+class LanguageExtensions final
 {
 public:
     LanguageExtensions();
@@ -137,6 +137,11 @@ public:
     bool isEnabled_ExtGNU_AttributeSpecifiersLLVM() const;
     //!@}
 
+
+
+
+
+
     //!@{
     /**
      * Whether to automatically expand macro \c static_assert to \c _Static_assert.
@@ -220,6 +225,10 @@ public:
     LanguageExtensions& enable_Expand_thread_local_AsKeyword(bool expand);
     bool isEnabled_Expand_thread_local_AsKeyword() const;
     //!@}
+
+
+
+
 
     //!@{
     /**

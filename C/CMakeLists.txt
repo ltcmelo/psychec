@@ -90,6 +90,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Lexer.cpp
     ${PROJECT_SOURCE_DIR}/parser/LineDirective.h
     ${PROJECT_SOURCE_DIR}/parser/LineDirective.cpp
+    ${PROJECT_SOURCE_DIR}/parser/MacroTranslations.h
+    ${PROJECT_SOURCE_DIR}/parser/MacroTranslations.cpp
     ${PROJECT_SOURCE_DIR}/parser/Parser.h
     ${PROJECT_SOURCE_DIR}/parser/Parser__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/parser/Parser.cpp
