@@ -23,7 +23,7 @@
 #define PSYCHE_C_LEXER_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include "syntax/SyntaxToken.h"
 

@@ -23,7 +23,7 @@
 #define PSYCHE_C_COMPILATION_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 #include "SyntaxTree.h"
 
 #include "../common/infra/Pimpl.h"

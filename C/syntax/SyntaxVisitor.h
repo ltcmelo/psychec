@@ -23,7 +23,7 @@
 #define PSYCHE_C_SYNTAX_VISITOR_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include <cstdint>
 

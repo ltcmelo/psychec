@@ -23,7 +23,7 @@
 #define PSYCHE_C_PARSER_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include "LexedTokens.h"
 #include "SyntaxTree.h"

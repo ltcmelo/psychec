@@ -23,7 +23,7 @@
 #define PSYCHE_C_SYNTAX_LEXEME_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include "../common/text/TextElement.h"
 

@@ -23,7 +23,7 @@
 #define PSYCHE_C_SYNTAX_TOKEN_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include "SyntaxKind.h"
 

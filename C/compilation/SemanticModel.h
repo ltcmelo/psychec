@@ -22,7 +22,7 @@
 #define PSYCHE_C_SEMANTIC_MODEL_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include "../common/infra/Pimpl.h"
 

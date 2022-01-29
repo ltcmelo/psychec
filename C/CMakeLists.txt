@@ -30,7 +30,7 @@ set(PLUGIN_SOURCES
 set(CFE_SOURCES
     # Main
     ${PROJECT_SOURCE_DIR}/API.h
-    ${PROJECT_SOURCE_DIR}/APIFwds.h
+    ${PROJECT_SOURCE_DIR}/Fwds.h
     ${PROJECT_SOURCE_DIR}/SyntaxTree.h
     ${PROJECT_SOURCE_DIR}/SyntaxTree.cpp
 

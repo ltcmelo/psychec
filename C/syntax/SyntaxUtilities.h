@@ -22,7 +22,7 @@
 #define PSYCHE_C_SYNTAX_UTILITIES_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 namespace psy {
 namespace C {

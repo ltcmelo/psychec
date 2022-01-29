@@ -23,7 +23,7 @@
 #define PSYCHE_C_SYNTAX_NODE_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include "SyntaxKind.h"
 #include "SyntaxNodeList.h"

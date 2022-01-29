@@ -22,7 +22,7 @@
 #define PSYCHE_C_SYNTAX_HOLDER_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include "parser/LexedTokens.h"
 
