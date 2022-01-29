@@ -704,12 +704,20 @@ class PSY_C_API ExtGNU_VAArgumentExpressionSyntax final : public ExpressionSynta
     AST_NODE_1K(ExtGNU_VAArgumentExpression, Expression)
 
 public:
-    const AssignmentExpressionSyntax* expression() const { return expr_; }
+    SyntaxToken keyword() const { return tokenAtIndex(openParenTkIdx_); }
+    SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
+    const ExpressionSyntax* expression() const { return expr_; }
+    SyntaxToken commaToken() const { return tokenAtIndex(closeParenTkIdx_); }
     const TypeNameSyntax* typeName() const { return typeName_; }
+    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
 
 private:
-    AssignmentExpressionSyntax* expr_ = nullptr;
+    LexedTokens::IndexType kwTkIdx_ = LexedTokens::invalidIndex();
+    LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
+    ExpressionSyntax* expr_ = nullptr;
+    LexedTokens::IndexType commaTkIdx_ = LexedTokens::invalidIndex();
     TypeNameSyntax* typeName_ = nullptr;
+    LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
 
     AST_CHILD_LST2(expr_, typeName_)
 };

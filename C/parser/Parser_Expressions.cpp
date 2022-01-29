@@ -565,7 +565,7 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
             break;
 
         case Keyword_ExtGNU___builtin_va_arg:
-            break;
+            return parserVAArgumentExpression_AtFirst(expr);
 
         default:
             diagReporter_.ExpectedFIRSTofExpression();
@@ -730,6 +730,31 @@ bool Parser::parseCallArgument(ExpressionSyntax*&expr, ExpressionListSyntax*&)
 }
 
 /**
+ * Parser the variable argument "macro" \c va_arg.
+ *
+ * \remark 7.16.1.1
+ */
+bool Parser::parserVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
+{
+    DEBUG_THIS_RULE();
+    PSYCHE_ASSERT(peek().kind() == Keyword_ExtGNU___builtin_va_arg,
+                  return false,
+                  "assert failure: `__builtin_va_arg'");
+
+    if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_InternalBuiltins())
+        diagReporter_.ExpectedFeature("GNU internal builtins");
+
+    auto vaArgExpr = makeNode<ExtGNU_VAArgumentExpressionSyntax>();
+    expr = vaArgExpr;
+    vaArgExpr->kwTkIdx_ = consume();
+    return match(OpenParenToken, &vaArgExpr->openParenTkIdx_)
+            && parseExpressionWithPrecedenceAssignment(vaArgExpr->expr_)
+            && match(CommaToken, &vaArgExpr->commaTkIdx_)
+            && parseTypeName(vaArgExpr->typeName_)
+            && match(CloseParenToken, &vaArgExpr->closeParenTkIdx_);
+}
+
+/**
  * Parse a \a postfix-expression that is a compound literal,
  * with LA(1) at \c (.
  *
@@ -776,7 +801,6 @@ bool Parser::parseCompoundLiteral_AtOpenParen(ExpressionSyntax*& expr)
     { initializer-list, }
  \endverbatim
  */
-
 bool Parser::parseCompoundLiteral_AtOpenBrace(
         ExpressionSyntax*& expr,
         LexedTokens::IndexType openParenTkIdx,
@@ -1043,6 +1067,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
             }
         }
 
+        // cast-expression -> unary-expression
         case PlusPlusToken:
         case MinusMinusToken:
         case AmpersandToken:
@@ -1053,6 +1078,8 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
         case ExclamationToken:
         case Keyword_sizeof:
         case Keyword__Alignof:
+
+        // cast-expression ->* postfix-expression
         case IdentifierToken:
         case IntegerConstantToken:
         case FloatingConstantToken:
@@ -1075,6 +1102,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
         case StringLiteral_uR_Token:
         case StringLiteral_UR_Token:
         case Keyword__Generic:
+        case Keyword_ExtGNU___builtin_va_arg:
             return parseExpressionWithPrecedenceUnary(expr);
 
         case Keyword_ExtGNU___extension__: {
