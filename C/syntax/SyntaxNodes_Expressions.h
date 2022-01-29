@@ -702,6 +702,16 @@ private:
 class PSY_C_API ExtGNU_VAArgumentExpressionSyntax final : public ExpressionSyntax
 {
     AST_NODE_1K(ExtGNU_VAArgumentExpression, Expression)
+
+public:
+    const AssignmentExpressionSyntax* expression() const { return expr_; }
+    const TypeNameSyntax* typeName() const { return typeName_; }
+
+private:
+    AssignmentExpressionSyntax* expr_ = nullptr;
+    TypeNameSyntax* typeName_ = nullptr;
+
+    AST_CHILD_LST2(expr_, typeName_)
 };
 
 } // C
