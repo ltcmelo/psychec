@@ -22,7 +22,7 @@
 #define PSYCHE_C_TYPE_SYMBOL_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 #include "TypeKind.h"
 #include "Symbol.h"
 

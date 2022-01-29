@@ -22,7 +22,7 @@
 #define PSYCHE_C_SOURCE_INSPECTOR_H__
 
 #include "PluginConfig.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include <string>
 #include <vector>

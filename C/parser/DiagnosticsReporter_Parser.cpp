@@ -94,7 +94,7 @@ std::string Parser::DiagnosticsReporter::joinTokenNames(const std::vector<Syntax
 
 void Parser::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc)
 {
-    if (!parser_->inBactrackingMode())
+    if (!parser_->mightBacktrack())
         parser_->tree_->newDiagnostic(desc, parser_->curTkIdx_);
 };
 

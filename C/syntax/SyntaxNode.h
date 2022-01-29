@@ -23,14 +23,15 @@
 #define PSYCHE_C_SYNTAX_NODE_H__
 
 #include "API.h"
-#include "APIFwds.h"
-#include "Managed.h"
+#include "Fwds.h"
+
 #include "SyntaxKind.h"
 #include "SyntaxNodeList.h"
 #include "SyntaxToken.h"
 #include "SyntaxVisitor.h"
 #include "SyntaxHolder.h"
 
+#include "infra/Managed.h"
 #include "parser/LexedTokens.h"
 
 #include <iostream>
@@ -263,6 +264,8 @@ public:
     virtual const CompoundLiteralExpressionSyntax* asCompoundLiteralExpression() const { return nullptr; }
     virtual CastExpressionSyntax* asCastExpression() { return nullptr; }
     virtual const CastExpressionSyntax* asCastExpression() const { return nullptr; }
+    virtual VAArgumentExpressionSyntax* asVAArgumentExpression() { return nullptr; }
+    virtual const VAArgumentExpressionSyntax* asVAArgumentExpression() const { return nullptr; }
     virtual BinaryExpressionSyntax* asBinaryExpression() { return nullptr; }
     virtual const BinaryExpressionSyntax* asBinaryExpression() const { return nullptr; }
     virtual ConditionalExpressionSyntax* asConditionalExpression() { return nullptr; }

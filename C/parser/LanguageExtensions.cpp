@@ -21,6 +21,8 @@
 
 #include "LanguageExtensions.h"
 
+#include <utility>
+
 #define DEFINE_ENABLE_ISENABLED(FLAG) \
     LanguageExtensions& LanguageExtensions::enable_##FLAG(bool enable) \
         { BF_.FLAG##_ = enable; return *this; } \
@@ -31,25 +33,26 @@ using namespace psy;
 using namespace C;
 
 LanguageExtensions::LanguageExtensions()
-    : BF_all_(~0)
+    : LanguageExtensions(MacroTranslations())
+{}
+
+LanguageExtensions::LanguageExtensions(MacroTranslations translations)
+    : translations_(std::move(translations))
+    , BF_all_(~0)
 {
     /* Psyche */
     BF_.ExtPSY_Generics_ = false;
-
-    /* Macros */
-    BF_.Expand_static_assert_AsKeyword_ = false;
-    BF_.Expand_complex_AsKeyword_ = false;
-    BF_.Expand_operatorNames_ = false;
-    BF_.Expand_alignas_AsKeyword_ = false;
-    BF_.Expand_alignof_AsKeyword_ = false;
-    BF_.Expand_bool_AsKeyword_ = false;
-    BF_.Expand_thread_local_AsKeyword_ = false;
 
     /* C++ */
     BF_.CPP_nullptr_ = false;
 
     /* Custom */
     BF_.NativeBooleans_ = false;
+}
+
+const MacroTranslations& LanguageExtensions::translations() const
+{
+    return translations_;
 }
 
 DEFINE_ENABLE_ISENABLED(ExtGNU_AlternateKeywords)
@@ -61,16 +64,9 @@ DEFINE_ENABLE_ISENABLED(ExtGNU_CompoundLiterals)
 DEFINE_ENABLE_ISENABLED(ExtGNU_Conditionals)
 DEFINE_ENABLE_ISENABLED(ExtGNU_DesignatedInitializers)
 DEFINE_ENABLE_ISENABLED(ExtGNU_StatementExpressions)
+DEFINE_ENABLE_ISENABLED(ExtGNU_InternalBuiltins)
 
 DEFINE_ENABLE_ISENABLED(ExtPSY_Generics)
-
-DEFINE_ENABLE_ISENABLED(Expand_static_assert_AsKeyword)
-DEFINE_ENABLE_ISENABLED(Expand_complex_AsKeyword)
-DEFINE_ENABLE_ISENABLED(Expand_operatorNames)
-DEFINE_ENABLE_ISENABLED(Expand_alignas_AsKeyword)
-DEFINE_ENABLE_ISENABLED(Expand_alignof_AsKeyword)
-DEFINE_ENABLE_ISENABLED(Expand_bool_AsKeyword)
-DEFINE_ENABLE_ISENABLED(Expand_thread_local_AsKeyword)
 
 DEFINE_ENABLE_ISENABLED(CPP_nullptr)
 

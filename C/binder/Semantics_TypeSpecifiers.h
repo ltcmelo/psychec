@@ -21,7 +21,7 @@
 #ifndef PSYCHE_C_SEMANTICS_TYPE_SPECIFIERS_H__
 #define PSYCHE_C_SEMANTICS_TYPE_SPECIFIERS_H__
 
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include "binder/Binder.h"
 #include "symbols/Symbol_Type.h"

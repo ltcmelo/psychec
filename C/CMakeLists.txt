@@ -30,20 +30,16 @@ set(PLUGIN_SOURCES
 set(CFE_SOURCES
     # Main
     ${PROJECT_SOURCE_DIR}/API.h
-    ${PROJECT_SOURCE_DIR}/APIFwds.h
-    ${PROJECT_SOURCE_DIR}/LanguageDialect.h
-    ${PROJECT_SOURCE_DIR}/LanguageDialect.cpp
-    ${PROJECT_SOURCE_DIR}/LanguageExtensions.h
-    ${PROJECT_SOURCE_DIR}/LanguageExtensions.cpp
-    ${PROJECT_SOURCE_DIR}/List.h
-    ${PROJECT_SOURCE_DIR}/Managed.h
-    ${PROJECT_SOURCE_DIR}/Managed.cpp
-    ${PROJECT_SOURCE_DIR}/MemoryPool.h
-    ${PROJECT_SOURCE_DIR}/MemoryPool.cpp
+    ${PROJECT_SOURCE_DIR}/Fwds.h
     ${PROJECT_SOURCE_DIR}/SyntaxTree.h
     ${PROJECT_SOURCE_DIR}/SyntaxTree.cpp
-    ${PROJECT_SOURCE_DIR}/Unparser.h
-    ${PROJECT_SOURCE_DIR}/Unparser.cpp
+
+    # Infra
+    ${PROJECT_SOURCE_DIR}/infra/List.h
+    ${PROJECT_SOURCE_DIR}/infra/Managed.h
+    ${PROJECT_SOURCE_DIR}/infra/Managed.cpp
+    ${PROJECT_SOURCE_DIR}/infra/MemoryPool.h
+    ${PROJECT_SOURCE_DIR}/infra/MemoryPool.cpp
 
     # Syntax
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.h
@@ -84,12 +80,18 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Lexer.cpp
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Parser.cpp
     ${PROJECT_SOURCE_DIR}/parser/Keywords.cpp
+    ${PROJECT_SOURCE_DIR}/parser/LanguageDialect.h
+    ${PROJECT_SOURCE_DIR}/parser/LanguageDialect.cpp
+    ${PROJECT_SOURCE_DIR}/parser/LanguageExtensions.h
+    ${PROJECT_SOURCE_DIR}/parser/LanguageExtensions.cpp
     ${PROJECT_SOURCE_DIR}/parser/LexedTokens.h
     ${PROJECT_SOURCE_DIR}/parser/LexedTokens.cpp
     ${PROJECT_SOURCE_DIR}/parser/Lexer.h
     ${PROJECT_SOURCE_DIR}/parser/Lexer.cpp
     ${PROJECT_SOURCE_DIR}/parser/LineDirective.h
     ${PROJECT_SOURCE_DIR}/parser/LineDirective.cpp
+    ${PROJECT_SOURCE_DIR}/parser/MacroTranslations.h
+    ${PROJECT_SOURCE_DIR}/parser/MacroTranslations.cpp
     ${PROJECT_SOURCE_DIR}/parser/Parser.h
     ${PROJECT_SOURCE_DIR}/parser/Parser__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/parser/Parser.cpp
@@ -99,8 +101,9 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Parser_Statements.cpp
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.h
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.cpp
-    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.h
-    ${PROJECT_SOURCE_DIR}/parser/PreprocessorOptions.cpp
+    ${PROJECT_SOURCE_DIR}/parser/TextPreprocessingSituation.h
+    ${PROJECT_SOURCE_DIR}/parser/Unparser.h
+    ${PROJECT_SOURCE_DIR}/parser/Unparser.cpp
 
     # Symbols
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h

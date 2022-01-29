@@ -23,7 +23,7 @@
 #define PSYCHE_C_SYNTAX_VISITOR_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include <cstdint>
 
@@ -137,6 +137,7 @@ public:
     virtual Action visitTypeTraitExpression(const TypeTraitExpressionSyntax*) { return Action::Visit; }
     virtual Action visitCastExpression(const CastExpressionSyntax*) { return Action::Visit; }
     virtual Action visitCallExpression(const CallExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitVAArgumentExpression(const VAArgumentExpressionSyntax*) { return Action::Visit; }
     virtual Action visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax*) { return Action::Visit; }
     virtual Action visitBinaryExpression(const BinaryExpressionSyntax*) { return Action::Visit; }
     virtual Action visitConditionalExpression(const ConditionalExpressionSyntax*) { return Action::Visit; }

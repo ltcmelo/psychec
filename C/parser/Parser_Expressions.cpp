@@ -438,76 +438,152 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
 
-    if (peek().kind() == OpenParenToken) {
-        switch (peek(2).kind()) {
-            // postfix-expression -> `(' type-name ->* type-qualifier ->
-            case Keyword_const:
-            case Keyword_volatile:
-            case Keyword_restrict:
-            case Keyword__Atomic:
+    switch (peek().kind()) {
+        case OpenParenToken:
+            switch (peek(2).kind()) {
+                // postfix-expression -> `(' type-name ...
+                //                           type-name ->* type-qualifier
+                case Keyword_const:
+                case Keyword_volatile:
+                case Keyword_restrict:
+                case Keyword__Atomic:
 
-            // postfix-expression -> `(' type-name ->* alignment-specifier ->
-            case Keyword__Alignas:
+                // postfix-expression -> `(' type-name ...
+                //                           type-name ->* alignment-specifier
+                case Keyword__Alignas:
 
-            // postfix-expression -> `(' type-name ->* GNU-typeof-specifier ->
-            case Keyword_ExtGNU___typeof__:
+                // postfix-expression -> `(' type-name ...
+                //                           type-name ->* GNU-typeof-specifier ->
+                case Keyword_ExtGNU___typeof__:
 
-            // postfix-expression -> `(' type-name ->* type-specifier ->
-            case Keyword_void:
-            case Keyword_char:
-            case Keyword_short:
-            case Keyword_int:
-            case Keyword_long:
-            case Keyword_float:
-            case Keyword_double:
-            case Keyword__Bool:
-            case Keyword__Complex:
-            case Keyword_signed:
-            case Keyword_unsigned:
-            case Keyword_Ext_char16_t:
-            case Keyword_Ext_char32_t:
-            case Keyword_Ext_wchar_t:
-            case Keyword_struct:
-            case Keyword_union:
-            case Keyword_enum:
-                return parseCompoundLiteral_AtOpenParen(expr);
+                // postfix-expression -> `(' type-name ...
+                //                           type-name ->* type-specifier
+                case Keyword_void:
+                case Keyword_char:
+                case Keyword_short:
+                case Keyword_int:
+                case Keyword_long:
+                case Keyword_float:
+                case Keyword_double:
+                case Keyword__Bool:
+                case Keyword__Complex:
+                case Keyword_signed:
+                case Keyword_unsigned:
+                case Keyword_Ext_char16_t:
+                case Keyword_Ext_char32_t:
+                case Keyword_Ext_wchar_t:
+                case Keyword_struct:
+                case Keyword_union:
+                case Keyword_enum:
+                    return parseCompoundLiteral_AtOpenParen(expr);
 
-            // postfix-expression -> `(' type-name ->* type-specifier -> typedef-name ->
-            // postfix-expression -> unary-expression ->* `(' expression ->
-            case IdentifierToken: {
-                Backtracker BT(this);
-                auto openParenTkIdx = consume();
-                TypeNameSyntax* typeName = nullptr;
-                if (parseTypeName(typeName)
-                            && peek().kind() == CloseParenToken
-                            && peek(2).kind() == OpenBraceToken) {
-                    auto closeParenTkIdx = consume();
-                    return parseCompoundLiteral_AtOpenBrace(expr,
-                                                            openParenTkIdx,
-                                                            typeName,
-                                                            closeParenTkIdx);
+                // postfix-expression -> `(' type-name ...
+                //                           type-name -> type-specifier -> typedef-name -> identifier
+                // postfix-expression -> primary-expression -> `(' expression ...
+                case IdentifierToken: {
+                    Backtracker BT(this);
+                    auto openParenTkIdx = consume();
+                    TypeNameSyntax* typeName = nullptr;
+                    if (parseTypeName(typeName)
+                                && peek().kind() == CloseParenToken
+                                && peek(2).kind() == OpenBraceToken) {
+                        auto closeParenTkIdx = consume();
+                        return parseCompoundLiteral_AtOpenBrace(expr,
+                                                                openParenTkIdx,
+                                                                typeName,
+                                                                closeParenTkIdx);
+                    }
+                    BT.backtrack();
+
+                    return parseParenthesizedExpression_AtFirst(expr)
+                        && parsePostfixExpression_AtFollowOfPrimary(expr);
                 }
-                BT.backtrack();
-                break;
+
+                case OpenBraceToken:
+                    return parseExtGNU_StatementExpression_AtFirst(expr);
+
+                default:
+                    return parseParenthesizedExpression_AtFirst(expr)
+                        && parsePostfixExpression_AtFollowOfPrimary(expr);;
             }
 
-            default:
-                break;
-        }
+        case IdentifierToken:
+            parseIdentifierName_AtFirst(expr);
+            break;
+
+        case IntegerConstantToken:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    IntegerConstantExpression);
+            break;
+
+        case FloatingConstantToken:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    FloatingConstantExpression);
+            break;
+
+        case CharacterConstantToken:
+        case CharacterConstant_L_Token:
+        case CharacterConstant_u_Token:
+        case CharacterConstant_U_Token:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    CharacterConstantExpression);
+            break;
+
+        case Keyword_Ext_true:
+        case Keyword_Ext_false:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    BooleanConstantExpression);
+            break;
+
+        case Keyword_Ext_NULL:
+        case Keyword_Ext_nullptr:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    NULL_ConstantExpression);
+            break;
+
+        case StringLiteralToken:
+        case StringLiteral_L_Token:
+        case StringLiteral_u8_Token:
+        case StringLiteral_u_Token:
+        case StringLiteral_U_Token:
+        case StringLiteral_R_Token:
+        case StringLiteral_LR_Token:
+        case StringLiteral_u8R_Token:
+        case StringLiteral_uR_Token:
+        case StringLiteral_UR_Token:
+            parseStringLiteral_AtFirst(expr);
+            break;
+
+        case Keyword__Generic:
+            if (!parseGenericSelectionExpression_AtFirst(expr))
+                return false;
+            break;
+
+        case Keyword_ExtGNU___builtin_va_arg:
+        case Keyword_MacroStd_va_arg:
+            return parserVAArgumentExpression_AtFirst(expr);
+
+        default:
+            diagReporter_.ExpectedFIRSTofExpression();
+            return false;
     }
 
-    return parsePrimaryExpression(expr)
-        && parsePostfixExpression_AtFollow(expr);
+    return parsePostfixExpression_AtFollowOfPrimary(expr);
 }
 
-bool Parser::parsePostfixExpression_AtFollow(ExpressionSyntax*& expr)
+bool Parser::parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr)
 {
     while (true) {
         SyntaxKind exprK = UnknownSyntax;
         switch (peek().kind()) {
             /* 6.5.2.1 */
             case OpenBracketToken: {
-                if (!parsePostfixExpression_AtPostfix<ArraySubscriptExpressionSyntax>(
+                if (!parsePostfixExpression_AtFollowOfPrimary<ArraySubscriptExpressionSyntax>(
                             expr,
                             ElementAccessExpression,
                             [this] (ArraySubscriptExpressionSyntax*& arrExpr) {
@@ -522,7 +598,7 @@ bool Parser::parsePostfixExpression_AtFollow(ExpressionSyntax*& expr)
 
             /* 6.5.2.2 */
             case OpenParenToken: {
-                if (!parsePostfixExpression_AtPostfix<CallExpressionSyntax>(
+                if (!parsePostfixExpression_AtFollowOfPrimary<CallExpressionSyntax>(
                             expr,
                             CallExpression,
                             [this] (CallExpressionSyntax*& callExpr) {
@@ -547,7 +623,7 @@ bool Parser::parsePostfixExpression_AtFollow(ExpressionSyntax*& expr)
             case ArrowToken: {
                 if (exprK == UnknownSyntax)
                     exprK = IndirectMemberAccessExpression;
-                if (!parsePostfixExpression_AtPostfix<MemberAccessExpressionSyntax>(
+                if (!parsePostfixExpression_AtFollowOfPrimary<MemberAccessExpressionSyntax>(
                             expr,
                             exprK,
                             [this] (MemberAccessExpressionSyntax*& membAccess) {
@@ -575,7 +651,7 @@ bool Parser::parsePostfixExpression_AtFollow(ExpressionSyntax*& expr)
             case MinusMinusToken: {
                 if (exprK == UnknownSyntax)
                     exprK = PostDecrementExpression;
-                if (!parsePostfixExpression_AtPostfix<PostfixUnaryExpressionSyntax>(
+                if (!parsePostfixExpression_AtFollowOfPrimary<PostfixUnaryExpressionSyntax>(
                             expr,
                             exprK,
                             [this] (PostfixUnaryExpressionSyntax*& incDecExpr) {
@@ -609,7 +685,7 @@ bool Parser::parsePostfixExpression_AtFollow(ExpressionSyntax*& expr)
  \endverbatim
  */
 template <class ExprT>
-bool Parser::parsePostfixExpression_AtPostfix(ExpressionSyntax*& expr,
+bool Parser::parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr,
                                               SyntaxKind exprK,
                                               std::function<bool(ExprT*&)> parsePostfix)
 {
@@ -652,6 +728,32 @@ bool Parser::parseCallArguments(ExpressionListSyntax*& exprList)
 bool Parser::parseCallArgument(ExpressionSyntax*&expr, ExpressionListSyntax*&)
 {
     return parseExpressionWithPrecedenceAssignment(expr);
+}
+
+/**
+ * Parser the variable argument "macro" \c va_arg.
+ *
+ * \remark 7.16.1.1
+ */
+bool Parser::parserVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
+{
+    DEBUG_THIS_RULE();
+    PSYCHE_ASSERT(peek().kind() == Keyword_ExtGNU___builtin_va_arg
+                    || peek().kind() == Keyword_MacroStd_va_arg,
+                  return false,
+                  "assert failure: `__builtin_va_arg'");
+
+    if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_InternalBuiltins())
+        diagReporter_.ExpectedFeature("GNU internal builtins");
+
+    auto vaArgExpr = makeNode<VAArgumentExpressionSyntax>();
+    expr = vaArgExpr;
+    vaArgExpr->kwTkIdx_ = consume();
+    return match(OpenParenToken, &vaArgExpr->openParenTkIdx_)
+            && parseExpressionWithPrecedenceAssignment(vaArgExpr->expr_)
+            && match(CommaToken, &vaArgExpr->commaTkIdx_)
+            && parseTypeName(vaArgExpr->typeName_)
+            && match(CloseParenToken, &vaArgExpr->closeParenTkIdx_);
 }
 
 /**
@@ -701,7 +803,6 @@ bool Parser::parseCompoundLiteral_AtOpenParen(ExpressionSyntax*& expr)
     { initializer-list, }
  \endverbatim
  */
-
 bool Parser::parseCompoundLiteral_AtOpenBrace(
         ExpressionSyntax*& expr,
         LexedTokens::IndexType openParenTkIdx,
@@ -723,7 +824,7 @@ bool Parser::parseCompoundLiteral_AtOpenBrace(
     compLit->typeName_ = typeName;
     compLit->closeParenTkIdx_ = closeParenTkIdx;
     return parseInitializer(compLit->init_)
-        && parsePostfixExpression_AtFollow(expr);
+        && parsePostfixExpression_AtFollowOfPrimary(expr);
 }
 
 /* Unary */
@@ -968,6 +1069,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
             }
         }
 
+        // cast-expression -> unary-expression
         case PlusPlusToken:
         case MinusMinusToken:
         case AmpersandToken:
@@ -978,6 +1080,8 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
         case ExclamationToken:
         case Keyword_sizeof:
         case Keyword__Alignof:
+
+        // cast-expression ->* postfix-expression
         case IdentifierToken:
         case IntegerConstantToken:
         case FloatingConstantToken:
@@ -1000,6 +1104,8 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
         case StringLiteral_uR_Token:
         case StringLiteral_UR_Token:
         case Keyword__Generic:
+        case Keyword_ExtGNU___builtin_va_arg:
+        case Keyword_MacroStd_va_arg:
             return parseExpressionWithPrecedenceUnary(expr);
 
         case Keyword_ExtGNU___extension__: {
@@ -1010,7 +1116,6 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
             expr->extKwTkIdx_ = extKwTkIdx;
             return true;
         }
-
 
         default:
             diagReporter_.ExpectedFIRSTofExpression();

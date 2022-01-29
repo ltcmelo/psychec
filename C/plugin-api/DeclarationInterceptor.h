@@ -22,7 +22,7 @@
 #define PSYCHE_C_DECLARATION_INTERCEPTOR_H__
 
 #include "PluginConfig.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 namespace psy {
 namespace C {

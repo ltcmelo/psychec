@@ -21,7 +21,7 @@
 #ifndef PSYCHE_STDLIB_INDEX_H__
 #define PSYCHE_STDLIB_INDEX_H__
 
-#include "APIFwds.h"
+#include "Fwds.h"
 #include <string>
 #include <unordered_map>
 #include <utility>

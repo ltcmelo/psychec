@@ -23,9 +23,11 @@
 #define PSYCHE_C_SYNTAX_TOKEN_H__
 
 #include "API.h"
-#include "APIFwds.h"
-#include "LanguageDialect.h"
+#include "Fwds.h"
+
 #include "SyntaxKind.h"
+
+#include "parser/LanguageDialect.h"
 
 #include "../common/location/Location.h"
 #include "../common/text/TextSpan.h"

@@ -82,7 +82,7 @@ static inline SyntaxKind classify4(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 'b'
-             && opts.extensions().isEnabled_Expand_bool_AsKeyword()) {
+             && opts.extensions().translations().isEnabled_Translate_bool_AsKeyword()) {
         if (s[1] == 'o') {
             if (s[2] == 'o') {
                 if (s[3] == 'l') {
@@ -186,7 +186,7 @@ static inline SyntaxKind classify5(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'B'
-                 && opts.extensions().isEnabled_Expand_bool_AsKeyword()) {
+                 && opts.extensions().translations().isEnabled_Translate_bool_AsKeyword()) {
             if (s[2] == 'o') {
                 if (s[3] == 'o') {
                     if (s[4] == 'l') {
@@ -396,6 +396,20 @@ static inline SyntaxKind classify6(const char* s, const ParseOptions& opts)
             }
         }
     }
+    else if (s[0] == 'v'
+                && opts.extensions().translations().isEnabled_Translate_va_arg_AsKeyword()) {
+        if (s[1] == 'a') {
+            if (s[2] == '_') {
+                if (s[3] == 'a') {
+                    if (s[4] == 'r') {
+                        if (s[5] == 'g') {
+                            return Keyword_MacroStd_va_arg;
+                        }
+                    }
+                }
+            }
+        }
+    }
     return IdentifierToken;
 }
 
@@ -477,13 +491,13 @@ static inline SyntaxKind classify7(const char* s, const ParseOptions& opts)
                     if (s[4] == 'n') {
                         if (s[5] == 'a') {
                             if (s[6] == 's'
-                                    && opts.extensions().isEnabled_Expand_alignas_AsKeyword()) {
+                                    && opts.extensions().translations().isEnabled_Translate_alignas_AsKeyword()) {
                                 return Keyword__Alignas;
                             }
                         }
                         else if (s[5] == 'o') {
                             if (s[6] == 'f'
-                                    && opts.extensions().isEnabled_Expand_alignof_AsKeyword()) {
+                                    && opts.extensions().translations().isEnabled_Translate_alignof_AsKeyword()) {
                                 return Keyword__Alignof;
                             }
                         }
@@ -1043,7 +1057,7 @@ static inline SyntaxKind classify12(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 't'
-                 && opts.extensions().isEnabled_Expand_thread_local_AsKeyword()) {
+                 && opts.extensions().translations().isEnabled_Translate_thread_local_AsKeyword()) {
             if (s[2] == 'h') {
                 if (s[3] == 'r') {
                     if (s[4] == 'e') {
@@ -1198,6 +1212,71 @@ static inline SyntaxKind classify15(const char* s, const ParseOptions& opts)
 
 static inline SyntaxKind classify16(const char* s, const ParseOptions& opts)
 {
+    if (s[0] == '_'
+            && opts.extensions().isEnabled_ExtGNU_InternalBuiltins()) {
+        if (s[1] == '_') {
+            if (s[2] == 'b') {
+                if (s[3] == 'u') {
+                    if (s[4] == 'i') {
+                        if (s[5] == 'l') {
+                            if (s[6] == 't') {
+                                if (s[7] == 'i') {
+                                    if (s[8] == 'n') {
+                                        if (s[9] == '_') {
+                                            if (s[10] == 'v') {
+                                                if (s[11] == 'a') {
+                                                    if (s[12] == '_') {
+                                                        if (s[13] == 'a') {
+                                                            if (s[14] == 'r') {
+                                                                if (s[15] == 'g') {
+                                                                    return Keyword_ExtGNU___builtin_va_arg;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if (s[1] == '_') {
+            if (s[2] == 'b') {
+                if (s[3] == 'u') {
+                    if (s[4] == 'i') {
+                        if (s[5] == 'l') {
+                            if (s[6] == 't') {
+                                if (s[7] == 'i') {
+                                    if (s[8] == 'n') {
+                                        if (s[9] == '_') {
+                                            if (s[10] == 't') {
+                                                if (s[11] == 'g') {
+                                                    if (s[12] == 'm') {
+                                                        if (s[13] == 'a') {
+                                                            if (s[14] == 't') {
+                                                                if (s[15] == 'h') {
+                                                                    return Keyword_ExtGNU___builtin_tgmath;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     return IdentifierToken;
 }
 
@@ -1208,6 +1287,44 @@ static inline SyntaxKind classify17(const char* s, const ParseOptions& opts)
 
 static inline SyntaxKind classify18(const char* s, const ParseOptions& opts)
 {
+    if (s[0] == '_'
+            && opts.extensions().isEnabled_ExtGNU_InternalBuiltins()) {
+        if (s[1] == '_') {
+            if (s[2] == 'b') {
+                if (s[3] == 'u') {
+                    if (s[4] == 'i') {
+                        if (s[5] == 'l') {
+                            if (s[6] == 't') {
+                                if (s[7] == 'i') {
+                                    if (s[8] == 'n') {
+                                        if (s[9] == '_') {
+                                            if (s[10] == 'o') {
+                                                if (s[11] == 'f') {
+                                                    if (s[12] == 'f') {
+                                                        if (s[13] == 's') {
+                                                            if (s[14] == 'e') {
+                                                                if (s[15] == 't') {
+                                                                    if (s[16] == 'o') {
+                                                                        if (s[17] == 'f') {
+                                                                            return Keyword_ExtGNU___builtin_offsetof;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     return IdentifierToken;
 }
 
@@ -1374,7 +1491,7 @@ static inline SyntaxKind classifyOperator6(const char* s)
 
 SyntaxKind Lexer::classifyOperator(const char* s, int n, const ParseOptions& opts)
 {
-    if (!opts.extensions().isEnabled_Expand_operatorNames())
+    if (!opts.extensions().translations().isEnabled_Translate_operatorNames())
         return IdentifierToken;
 
     switch (n) {

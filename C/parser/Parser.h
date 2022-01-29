@@ -23,11 +23,12 @@
 #define PSYCHE_C_PARSER_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
+
 #include "LexedTokens.h"
-#include "MemoryPool.h"
 #include "SyntaxTree.h"
 
+#include "infra/MemoryPool.h"
 #include "syntax/SyntaxToken.h"
 
 #include <cstdint>
@@ -81,7 +82,7 @@ private:
     };
     friend struct Backtracker;
     const Backtracker* backtracker_;
-    bool inBactrackingMode() const;
+    bool mightBacktrack() const;
 
     struct DiagnosticsReporter
     {
@@ -335,8 +336,8 @@ private:
 
     /* Postfix */
     bool parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr);
-    bool parsePostfixExpression_AtFollow(ExpressionSyntax*& expr);
-    template <class ExprT> bool parsePostfixExpression_AtPostfix(
+    bool parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr);
+    template <class ExprT> bool parsePostfixExpression_AtFollowOfPrimary(
             ExpressionSyntax*& expr,
             SyntaxKind exprK,
             std::function<bool(ExprT*&)> parsePostfix);
@@ -348,6 +349,7 @@ private:
             LexedTokens::IndexType openParenTkIdx,
             TypeNameSyntax* typeName,
             LexedTokens::IndexType closeParenTkIdx);
+    bool parserVAArgumentExpression_AtFirst(ExpressionSyntax*& expr);
 
     /* Unary */
     bool parseExpressionWithPrecedenceUnary(ExpressionSyntax*& expr);

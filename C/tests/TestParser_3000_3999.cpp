@@ -21,21 +21,32 @@
 #include "TestParser.h"
 
 #include "TestBinder.h"
-#include "Unparser.h"
 
 #include "parser/Parser.h"
+#include "parser/Unparser.h"
 
 using namespace psy;
 using namespace C;
 
 void TestParser::case3000()
 {
+    parseExpression("va_arg ( x , int )",
+                    Expectation().AST( { VAArgumentExpression,
+                                         IdentifierName,
+                                         TypeName,
+                                         BuiltinTypeSpecifier,
+                                         AbstractDeclarator }));
 
 }
 
 void TestParser::case3001()
 {
-
+    parseExpression("va_arg ( x , y )",
+                    Expectation().AST( { VAArgumentExpression,
+                                         IdentifierName,
+                                         TypeName,
+                                         TypedefName,
+                                         AbstractDeclarator }));
 }
 
 void TestParser::case3002()

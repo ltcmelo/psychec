@@ -26,7 +26,6 @@
 
 #include "LanguageDialect.h"
 #include "LanguageExtensions.h"
-#include "PreprocessorOptions.h"
 
 #include <cstdint>
 
@@ -42,26 +41,16 @@ class PSY_C_API ParseOptions
 {
 public:
     ParseOptions();
-    ParseOptions(LanguageDialect dialect);
     ParseOptions(LanguageDialect dialect,
                  LanguageExtensions extensions);
-    ParseOptions(LanguageDialect dialect,
-                 LanguageExtensions extensions,
-                 PreprocessorOptions ppOptions);
-    ParseOptions(PreprocessorOptions ppOptions);
 
     /**
-     * The options given to the preprocessor prior to parse.
-     */
-    const PreprocessorOptions& ppOptions() const;
-
-    /**
-     * The dialect of the language.
+     * The LanguageDialect used for parsing with \c this options.
      */
     const LanguageDialect& dialect() const;
 
     /**
-     * The extensions allowed in the language.
+     * The LanguageExtensions used for parsing with \c this options.
      */
     const LanguageExtensions& extensions() const;
 
@@ -86,14 +75,13 @@ public:
 
     //!@{
     /**
-     * The comment comment.
+     * The comment mode.
      */
     ParseOptions& setCommentMode(CommentMode mode);
     CommentMode commentMode() const { return static_cast<CommentMode>(BF_.commentMode_); }
     //!@}
 
 private:
-    PreprocessorOptions ppOptions_;
     LanguageDialect dialect_;
     LanguageExtensions extensions_;
 

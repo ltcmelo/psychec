@@ -162,7 +162,6 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
             if (!parseStatement(stmt, stmtCtx))
                 return false;
 
-            std::cout << "aqui\n\n";
             PSYCHE_ASSERT(stmt, return false, "invalid declaration");
             switch (stmt->kind()) {
                 case ExpressionStatement:

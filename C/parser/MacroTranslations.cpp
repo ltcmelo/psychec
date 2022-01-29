@@ -1,4 +1,4 @@
-// Copyright (c) 2020/21 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,38 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "PreprocessorOptions.h"
+#include "MacroTranslations.h"
+
+#define DEFINE_ENABLE_ISENABLED(FLAG) \
+    MacroTranslations& MacroTranslations::enable_##FLAG(bool enable) \
+        { BF_.FLAG##_ = enable; return *this; } \
+    bool MacroTranslations::isEnabled_##FLAG() const \
+        { return BF_.FLAG##_; }
 
 using namespace psy;
 using namespace C;
 
-PreprocessorOptions::PreprocessorOptions()
+MacroTranslations::MacroTranslations()
+    : BF_all_(~0)
 {}
 
-PreprocessorOptions& PreprocessorOptions::D(const std::string &name)
-{
-    D_.push_back(name);
-    return *this;
-}
+DEFINE_ENABLE_ISENABLED(Translate_static_assert_AsKeyword)
+DEFINE_ENABLE_ISENABLED(Translate_complex_AsKeyword)
+DEFINE_ENABLE_ISENABLED(Translate_operatorNames)
+DEFINE_ENABLE_ISENABLED(Translate_alignas_AsKeyword)
+DEFINE_ENABLE_ISENABLED(Translate_alignof_AsKeyword)
+DEFINE_ENABLE_ISENABLED(Translate_va_arg_AsKeyword)
+DEFINE_ENABLE_ISENABLED(Translate_bool_AsKeyword)
+DEFINE_ENABLE_ISENABLED(Translate_thread_local_AsKeyword)
 
-PreprocessorOptions& PreprocessorOptions::D(const std::string& name, const std::string& def)
-{
-    D_.push_back(name + "=" + def);
-    return *this;
-}
-
-const std::vector<std::string>& PreprocessorOptions::Ds() const
-{
-    return D_;
-}
-
-PreprocessorOptions& PreprocessorOptions::U(const std::string &name)
-{
-    U_.push_back(name);
-    return *this;
-}
-
-const std::vector<std::string>& PreprocessorOptions::Us() const
-{
-    return U_;
-}
+#undef DEFINE_ENABLE_ISENABLED

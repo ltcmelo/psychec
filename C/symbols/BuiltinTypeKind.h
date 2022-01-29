@@ -22,7 +22,7 @@
 #define PSYCHE_C_BUILTIN_TYPE_KIND_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include <cstdint>
 #include <string>

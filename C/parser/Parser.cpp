@@ -177,7 +177,7 @@ void Parser::skipTo(SyntaxKind tkK)
 /**
  * Whether the parser is in backtracking mode.
  */
-bool Parser::inBactrackingMode() const
+bool Parser::mightBacktrack() const
 {
     return static_cast<bool>(backtracker_);
 }

@@ -22,7 +22,7 @@
 #define PSYCHE_C_SYMBOL_NAME_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include <cstdint>
 #include <string>

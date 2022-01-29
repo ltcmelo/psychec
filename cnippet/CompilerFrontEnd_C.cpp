@@ -132,6 +132,7 @@ int CCompilerFrontEnd::constructSyntaxTree(const std::string& srcText,
                                            const psy::FileInfo& fi)
 {
     auto tree = SyntaxTree::parseText(srcText,
+                                      TextPreprocessingSituation::Preprocessed,
                                       ParseOptions(),
                                       fi.fileName());
 

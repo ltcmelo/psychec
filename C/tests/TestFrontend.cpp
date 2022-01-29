@@ -20,12 +20,12 @@
 
 #include "TestFrontend.h"
 
-#include "Unparser.h"
 
 #include "compilation/Assembly.h"
 #include "compilation/Compilation.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol.h"
+#include "parser/Unparser.h"
 #include "symbols/Symbols.h"
 #include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNamePrinter.h"
@@ -38,7 +38,7 @@
 #include <string>
 #include <sstream>
 
-#define DEBUG_DIAGNOSTICS
+//#define DEBUG_DIAGNOSTICS
 //#define DUMP_AST
 
 using namespace psy;
@@ -266,7 +266,7 @@ void TestFrontend::parse(std::string source,
     }
 #endif
 
-    tree_ = SyntaxTree::parseText(text, ParseOptions(), "", cat);
+    tree_ = SyntaxTree::parseText(text, TextPreprocessingSituation::Unknown, ParseOptions(), "", cat);
 
     if (!checkErrorAndWarn(X))
         return;

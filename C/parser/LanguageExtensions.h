@@ -22,6 +22,8 @@
 #ifndef PSYCHE_C_LANGUAGE_EXTENSIONS_H__
 #define PSYCHE_C_LANGUAGE_EXTENSIONS_H__
 
+#include "MacroTranslations.h"
+
 #include <cstdint>
 
 namespace psy {
@@ -30,16 +32,22 @@ namespace C {
 /**
  * \brief The LanguageExtensions class.
  */
-class LanguageExtensions
+class LanguageExtensions final
 {
 public:
     LanguageExtensions();
+    LanguageExtensions(MacroTranslations translations);
+
+    /**
+     * The MacroTranslations of \c this LanguageExtensions.
+     */
+    const MacroTranslations& translations() const;
 
     //!@{
     /**
      * Whether to enable GNU keywords:
      *
-     * https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html#Keywords
+     * https://gcc.gnu.org/onlinedocs/gcc/Alternate-Keywords.html
      */
     LanguageExtensions& enable_ExtGNU_AlternateKeywords(bool enable);
     bool isEnabled_ExtGNU_AlternateKeywords() const;
@@ -49,7 +57,7 @@ public:
     /**
      * Whether to enable GNU attributes:
      *
-     * https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html#Attribute-Syntax
+     * https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
      */
     LanguageExtensions& enable_ExtGNU_AttributeSpecifiers(bool enable);
     bool isEnabled_ExtGNU_AttributeSpecifiers() const;
@@ -57,19 +65,9 @@ public:
 
     //!@{
     /**
-     * Whether to enable LLVM/Clang extensions of GNU attribute:
-     *
-     * https://clang.llvm.org/docs/AttributeReference.html#availability
-     */
-    LanguageExtensions& enable_ExtGNU_AttributeSpecifiersLLVM(bool enable);
-    bool isEnabled_ExtGNU_AttributeSpecifiersLLVM() const;
-    //!@}
-
-    //!@{
-    /**
      * Whether to enable GNU's alignment:
      *
-     * https://gcc.gnu.org/onlinedocs/gcc/Alignment.html#Alignment
+     * https://gcc.gnu.org/onlinedocs/gcc/Alignment.html
      */
     LanguageExtensions& enable_ExtGNU_Alignment(bool enable);
     bool isEnabled_ExtGNU_Alignment() const;
@@ -79,7 +77,7 @@ public:
     /**
      * Whether to enable GNU compound literals.
      *
-     * https://gcc.gnu.org/onlinedocs/gcc-10.1.0/gcc/Compound-Literals.html#Compound-Literals
+     * https://gcc.gnu.org/onlinedocs/gcc/Compound-Literals.html
      */
     LanguageExtensions& enable_ExtGNU_CompoundLiterals(bool enable);
     bool isEnabled_ExtGNU_CompoundLiterals() const;
@@ -89,7 +87,7 @@ public:
     /**
      * Whether to enable GNU conditionals.
      *
-     * https://gcc.gnu.org/onlinedocs/gcc/Conditionals.html#Conditionals
+     * https://gcc.gnu.org/onlinedocs/gcc/Conditionals.html
      */
     LanguageExtensions& enable_ExtGNU_Conditionals(bool enable);
     bool isEnabled_ExtGNU_Conditionals() const;
@@ -109,7 +107,7 @@ public:
     /**
      * Whether to enable GNU statement expressions.
      *
-     * https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html#Statement-Exprs
+     * https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
      */
     LanguageExtensions& enable_ExtGNU_StatementExpressions(bool enable);
     bool isEnabled_ExtGNU_StatementExpressions() const;
@@ -119,7 +117,7 @@ public:
     /**
      * Whether to enable GNU assembly in C.
      *
-     * https://gcc.gnu.org/onlinedocs/gcc/Using-Assembly-Language-with-C.html#Using-Assembly-Language-with-C
+     * https://gcc.gnu.org/onlinedocs/gcc/Using-Assembly-Language-with-C.html
      */
     LanguageExtensions& enable_ExtGNU_Asm(bool enable);
     bool isEnabled_ExtGNU_Asm() const;
@@ -127,86 +125,24 @@ public:
 
     //!@{
     /**
-     * Whether to automatically expand macro \c static_assert to \c _Static_assert.
+     * Whether to enable GNU internal builtins (with the \c __builtin prefix).
      *
-     * From header <assert.h>.
-     *
-     * \remark 7.2
+     * https://gcc.gnu.org/onlinedocs/gcc/Variadic-Macros.html
+     * https://gcc.gnu.org/onlinedocs/gcc/Offsetof.html
+     * https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
      */
-    LanguageExtensions& enable_Expand_static_assert_AsKeyword(bool expand);
-    bool isEnabled_Expand_static_assert_AsKeyword() const;
+    LanguageExtensions& enable_ExtGNU_InternalBuiltins(bool enable);
+    bool isEnabled_ExtGNU_InternalBuiltins() const;
     //!@}
 
     //!@{
     /**
-     * Whether to automatically expand macro \c complex to \c _Complex.
+     * Whether to enable LLVM/Clang extensions of GNU attribute:
      *
-     * From header <complex.h>.
-     *
-     * \remark 7.3
+     * https://clang.llvm.org/docs/AttributeReference.html#availability
      */
-    LanguageExtensions& enable_Expand_complex_AsKeyword(bool expand);
-    bool isEnabled_Expand_complex_AsKeyword() const;
-    //!@}
-
-    //!@{
-    /**
-     * Whether to automatically expand operators names.
-     *
-     * From header <iso646.h>.
-     *
-     * \remark 7.9
-     */
-    LanguageExtensions& enable_Expand_operatorNames(bool expand);
-    bool isEnabled_Expand_operatorNames() const;
-    //!@}
-
-    //!@{
-    /**
-     * Whether to automatically expand macro \c alignas to \c _Alignas.
-     *
-     * From header <stdalign.h>.
-     *
-     * \remark 7.15
-     */
-    LanguageExtensions& enable_Expand_alignas_AsKeyword(bool expand);
-    bool isEnabled_Expand_alignas_AsKeyword() const;
-    //!@}
-
-    //!@{
-    /**
-     * Whether to automatically expand macro \c alignof to \c _Alignof.
-     *
-     * From header <stdalign.h>.
-     *
-     * \remark 7.15
-     */
-    LanguageExtensions& enable_Expand_alignof_AsKeyword(bool expand);
-    bool isEnabled_Expand_alignof_AsKeyword() const;
-    //!@}
-
-    //!@{
-    /**
-     * Whether to automatically expand macro \c bool to \c _Bool.
-     *
-     * From header <stdbool.h>.
-     *
-     * \remark 7.18
-     */
-    LanguageExtensions& enable_Expand_bool_AsKeyword(bool expand);
-    bool isEnabled_Expand_bool_AsKeyword() const;
-    //!@}
-
-    //!@{
-    /**
-     * Whether to automatically expand macro \c thread_local to \c _Thread_local.
-     *
-     * From header <threads.h>.
-     *
-     * \remark 7.26
-     */
-    LanguageExtensions& enable_Expand_thread_local_AsKeyword(bool expand);
-    bool isEnabled_Expand_thread_local_AsKeyword() const;
+    LanguageExtensions& enable_ExtGNU_AttributeSpecifiersLLVM(bool enable);
+    bool isEnabled_ExtGNU_AttributeSpecifiersLLVM() const;
     //!@}
 
     //!@{
@@ -243,6 +179,8 @@ public:
     //!@}
 
 private:
+    MacroTranslations translations_;
+
     struct BitFields
     {
         /* GNU */
@@ -255,18 +193,10 @@ private:
         std::uint64_t ExtGNU_Conditionals_ : 1;
         std::uint64_t ExtGNU_DesignatedInitializers_ : 1;
         std::uint64_t ExtGNU_StatementExpressions_ : 1;
+        std::uint64_t ExtGNU_InternalBuiltins_ : 1;
 
         /* Psyche */
         std::uint64_t ExtPSY_Generics_ : 1;
-
-        /* Macros */
-        std::uint64_t Expand_static_assert_AsKeyword_: 1;
-        std::uint64_t Expand_complex_AsKeyword_: 1;
-        std::uint64_t Expand_operatorNames_ : 1;
-        std::uint64_t Expand_alignas_AsKeyword_ : 1;
-        std::uint64_t Expand_alignof_AsKeyword_ : 1;
-        std::uint64_t Expand_bool_AsKeyword_ : 1;
-        std::uint64_t Expand_thread_local_AsKeyword_ : 1;
 
         /* C++ */
         std::uint64_t CPP_nullptr_ : 1;

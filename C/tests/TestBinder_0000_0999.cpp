@@ -20,9 +20,10 @@
 
 #include "TestBinder.h"
 
-#include "syntax/SyntaxLexemes.h"
 #include "TestParser.h"
-#include "Unparser.h"
+
+#include "syntax/SyntaxLexemes.h"
+#include "parser/Unparser.h"
 
 #include "syntax/SyntaxNodes.h"
 

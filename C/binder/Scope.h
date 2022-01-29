@@ -22,7 +22,7 @@
 #define PSYCHE_C_SCOPE_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include <memory>
 #include <unordered_map>

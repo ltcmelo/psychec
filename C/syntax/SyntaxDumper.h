@@ -548,6 +548,17 @@ protected:
         return Action::Skip;
     }
 
+    virtual Action visitVAArgumentExpression(const VAArgumentExpressionSyntax* node) override
+    {
+        terminal(node->keyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->expression());
+        terminal(node->commaToken(), node);
+        nonterminal(node->typeName());
+        terminal(node->closeParenthesisToken(), node);
+        return Action::Skip;
+    }
+
     virtual Action visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax* node) override
     {
         terminal(node->openParenthesisToken(), node);

@@ -23,7 +23,7 @@
 
 #include "Configuration.h"
 
-#include "C/LanguageDialect.h"
+#include "C/parser/LanguageDialect.h"
 
 #include <string>
 #include <vector>

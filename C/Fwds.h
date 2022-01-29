@@ -137,6 +137,7 @@ class TypeTraitExpressionSyntax;
 class CallExpressionSyntax;
 class CompoundLiteralExpressionSyntax;
 class CastExpressionSyntax;
+class VAArgumentExpressionSyntax;
 class BinaryExpressionSyntax;
 class ConditionalExpressionSyntax;
 class AssignmentExpressionSyntax;

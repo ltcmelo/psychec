@@ -24,9 +24,9 @@
 
 #include "API.h"
 
-#include "List.h"
 #include "SyntaxToken.h"
 
+#include "infra/List.h"
 #include "parser/LexedTokens.h"
 
 #include <iostream>

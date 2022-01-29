@@ -22,7 +22,7 @@
 #define PSYCHE_C_ASSEMBLY_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include "symbols/Symbol.h"
 

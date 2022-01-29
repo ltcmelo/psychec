@@ -232,6 +232,14 @@ enum SyntaxKind : std::uint16_t
     Keyword_ExtGNU___typeof__,
     Keyword_ExtGNU___extension__,
     Keyword_ExtGNU___asm__, // Portability: J.5.10.
+    Keyword_ExtGNU___builtin_va_arg,
+    Keyword_ExtGNU___builtin_offsetof,
+    Keyword_ExtGNU___builtin_tgmath,
+
+    // --------------------------//
+    // --- Translated macros --- //
+    // --------------------------//
+    Keyword_MacroStd_va_arg,
 
     // --------------------------//
     // --- Extension: Psyche --- //
@@ -242,7 +250,7 @@ enum SyntaxKind : std::uint16_t
     Keyword_ExtPSY_omission,
 
     /* Operator names from <iso646.h> (7.9).
-       Enable/disable this in parse/languag eoptions. */
+       Enable/disable this in parse/language options. */
     OperatorName_ORToken = BarBarToken,
     OperatorName_ANDToken = AmpersandAmpersandToken,
     OperatorName_NOTToken = ExclamationToken,
@@ -256,7 +264,9 @@ enum SyntaxKind : std::uint16_t
     OperatorName_XOREQToken = CaretEqualsToken,
 
     /* Aliases
-       TODO: Preserve original tokens */
+       TODO: Do NOT add more...
+             We want to preserve original tokens to allow exact AST rewrite.
+    */
     KeywordAlias_Bool = Keyword__Bool,
     KeywordAlias_asm = Keyword_ExtGNU___asm__,
     KeywordAlias_typeof = Keyword_ExtGNU___typeof__,
@@ -394,6 +404,7 @@ enum SyntaxKind : std::uint16_t
     CallExpression,
     CompoundLiteralExpression,
     CastExpression,
+    VAArgumentExpression,
 
     /* Binary */
     MultiplyExpression,

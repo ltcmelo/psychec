@@ -57,23 +57,24 @@ public:
 
         Expressions:
             + 1000-1099 -> identifiers, constants, and string-literals
-            + 1100-1199 -> parenthesized expressions
-            + 1200-1249 -> generic selections
-            + 1250-1299 -> compound literals
+            + 1100-1199 -> parenthesized expression
+            + 1200-1249 -> generic selection
+            + 1250-1299 -> compound literal
             + 1300-1349 -> (pre/post) increment and decrement
             + 1350-1399 -> unary arithmetic
-            + 1400-1449 -> `sizeof' expressions
-            + 1450-1499 -> `_Alignof' expressions
+            + 1400-1449 -> `sizeof'
+            + 1450-1499 -> `_Alignof'
             + 1500-1549 -> member access
-            + 1550-1599 -> (array) element access
-            + 1600-1649 -> function calls
+            + 1550-1599 -> array element access
+            + 1600-1649 -> calls
             + 1650-1699 -> address-of and indirection
             + 1700-1749 -> casts (w/ ambiguity)
-            + 1750-1799 -> conditional expressions
+            + 1750-1799 -> conditional
             + 1800-1849 -> binary and sequencing
-            + 1850-1899 -> assignments
+            + 1850-1899 -> assignment
             + 1900-1949 -> GNU: statement-expressions
-            + 1950-1999 ->
+            + 1950-1959 -> GNU: `__builtin_va_arg'
+            + 1960-1999 ->
 
         Statements:
             + 2000-2019 -> `goto' and identifier labels
@@ -88,6 +89,14 @@ public:
             + 2550-2599 ->
             + 2600-2699 -> GNU: `__asm__'
 
+        Macro translation:
+            + 3000-3009 -> `va_arg'
+            + 3010-3099 ->
+            + 3100-3199 ->
+            + 3200-3299 ->
+            + 3300-3399 ->
+            + 3400-3499 ->
+            + 3500-3599 ->
      */
 
     void case0001();
@@ -4128,7 +4137,6 @@ public:
     void case3997();
     void case3998();
     void case3999();
-
 
 private:
     using TestFunction = std::pair<std::function<void(TestParser*)>, const char*>;

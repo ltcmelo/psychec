@@ -22,7 +22,7 @@
 #define PSYCHE_C_BINDER_H__
 
 #include "API.h"
-#include "APIFwds.h"
+#include "Fwds.h"
 
 #include "parser/LexedTokens.h"
 #include "symbols/SymbolName.h"
