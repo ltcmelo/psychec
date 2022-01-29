@@ -507,11 +507,69 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
                         && parsePostfixExpression_AtFollowOfPrimary(expr);;
             }
 
+        case IdentifierToken:
+            parseIdentifierName_AtFirst(expr);
+            break;
+
+        case IntegerConstantToken:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    IntegerConstantExpression);
+            break;
+
+        case FloatingConstantToken:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    FloatingConstantExpression);
+            break;
+
+        case CharacterConstantToken:
+        case CharacterConstant_L_Token:
+        case CharacterConstant_u_Token:
+        case CharacterConstant_U_Token:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    CharacterConstantExpression);
+            break;
+
+        case Keyword_Ext_true:
+        case Keyword_Ext_false:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    BooleanConstantExpression);
+            break;
+
+        case Keyword_Ext_NULL:
+        case Keyword_Ext_nullptr:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    NULL_ConstantExpression);
+            break;
+
+        case StringLiteralToken:
+        case StringLiteral_L_Token:
+        case StringLiteral_u8_Token:
+        case StringLiteral_u_Token:
+        case StringLiteral_U_Token:
+        case StringLiteral_R_Token:
+        case StringLiteral_LR_Token:
+        case StringLiteral_u8R_Token:
+        case StringLiteral_uR_Token:
+        case StringLiteral_UR_Token:
+            parseStringLiteral_AtFirst(expr);
+            break;
+
+        case Keyword__Generic:
+            if (!parseGenericSelectionExpression_AtFirst(expr))
+                return false;
+            break;
+
         default:
-            return parsePrimaryExpression(expr)
-                && parsePostfixExpression_AtFollowOfPrimary(expr);;
+            diagReporter_.ExpectedFIRSTofExpression();
+            return false;
     }
 
+    return parsePostfixExpression_AtFollowOfPrimary(expr);
 }
 
 bool Parser::parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr)
