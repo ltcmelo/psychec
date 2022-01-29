@@ -31,13 +31,15 @@ set(CFE_SOURCES
     # Main
     ${PROJECT_SOURCE_DIR}/API.h
     ${PROJECT_SOURCE_DIR}/APIFwds.h
-    ${PROJECT_SOURCE_DIR}/List.h
-    ${PROJECT_SOURCE_DIR}/Managed.h
-    ${PROJECT_SOURCE_DIR}/Managed.cpp
-    ${PROJECT_SOURCE_DIR}/MemoryPool.h
-    ${PROJECT_SOURCE_DIR}/MemoryPool.cpp
     ${PROJECT_SOURCE_DIR}/SyntaxTree.h
     ${PROJECT_SOURCE_DIR}/SyntaxTree.cpp
+
+    # Infra
+    ${PROJECT_SOURCE_DIR}/infra/List.h
+    ${PROJECT_SOURCE_DIR}/infra/Managed.h
+    ${PROJECT_SOURCE_DIR}/infra/Managed.cpp
+    ${PROJECT_SOURCE_DIR}/infra/MemoryPool.h
+    ${PROJECT_SOURCE_DIR}/infra/MemoryPool.cpp
 
     # Syntax
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.h

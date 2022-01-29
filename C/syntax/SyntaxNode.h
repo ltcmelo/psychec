@@ -24,13 +24,14 @@
 
 #include "API.h"
 #include "APIFwds.h"
-#include "Managed.h"
+
 #include "SyntaxKind.h"
 #include "SyntaxNodeList.h"
 #include "SyntaxToken.h"
 #include "SyntaxVisitor.h"
 #include "SyntaxHolder.h"
 
+#include "infra/Managed.h"
 #include "parser/LexedTokens.h"
 
 #include <iostream>

@@ -24,10 +24,11 @@
 
 #include "API.h"
 #include "APIFwds.h"
+
 #include "LexedTokens.h"
-#include "MemoryPool.h"
 #include "SyntaxTree.h"
 
+#include "infra/MemoryPool.h"
 #include "syntax/SyntaxToken.h"
 
 #include <cstdint>
