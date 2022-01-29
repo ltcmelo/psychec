@@ -137,99 +137,6 @@ public:
     bool isEnabled_ExtGNU_AttributeSpecifiersLLVM() const;
     //!@}
 
-
-
-
-
-
-    //!@{
-    /**
-     * Whether to automatically expand macro \c static_assert to \c _Static_assert.
-     *
-     * From header <assert.h>.
-     *
-     * \remark 7.2
-     */
-    LanguageExtensions& enable_Expand_static_assert_AsKeyword(bool expand);
-    bool isEnabled_Expand_static_assert_AsKeyword() const;
-    //!@}
-
-    //!@{
-    /**
-     * Whether to automatically expand macro \c complex to \c _Complex.
-     *
-     * From header <complex.h>.
-     *
-     * \remark 7.3
-     */
-    LanguageExtensions& enable_Expand_complex_AsKeyword(bool expand);
-    bool isEnabled_Expand_complex_AsKeyword() const;
-    //!@}
-
-    //!@{
-    /**
-     * Whether to automatically expand operators names.
-     *
-     * From header <iso646.h>.
-     *
-     * \remark 7.9
-     */
-    LanguageExtensions& enable_Expand_operatorNames(bool expand);
-    bool isEnabled_Expand_operatorNames() const;
-    //!@}
-
-    //!@{
-    /**
-     * Whether to automatically expand macro \c alignas to \c _Alignas.
-     *
-     * From header <stdalign.h>.
-     *
-     * \remark 7.15
-     */
-    LanguageExtensions& enable_Expand_alignas_AsKeyword(bool expand);
-    bool isEnabled_Expand_alignas_AsKeyword() const;
-    //!@}
-
-    //!@{
-    /**
-     * Whether to automatically expand macro \c alignof to \c _Alignof.
-     *
-     * From header <stdalign.h>.
-     *
-     * \remark 7.15
-     */
-    LanguageExtensions& enable_Expand_alignof_AsKeyword(bool expand);
-    bool isEnabled_Expand_alignof_AsKeyword() const;
-    //!@}
-
-    //!@{
-    /**
-     * Whether to automatically expand macro \c bool to \c _Bool.
-     *
-     * From header <stdbool.h>.
-     *
-     * \remark 7.18
-     */
-    LanguageExtensions& enable_Expand_bool_AsKeyword(bool expand);
-    bool isEnabled_Expand_bool_AsKeyword() const;
-    //!@}
-
-    //!@{
-    /**
-     * Whether to automatically expand macro \c thread_local to \c _Thread_local.
-     *
-     * From header <threads.h>.
-     *
-     * \remark 7.26
-     */
-    LanguageExtensions& enable_Expand_thread_local_AsKeyword(bool expand);
-    bool isEnabled_Expand_thread_local_AsKeyword() const;
-    //!@}
-
-
-
-
-
     //!@{
     /**
      * Whether to recognize the \c nullptr pointer literal from C++.
@@ -280,15 +187,6 @@ private:
 
         /* Psyche */
         std::uint64_t ExtPSY_Generics_ : 1;
-
-        /* Macros */
-        std::uint64_t Expand_static_assert_AsKeyword_: 1;
-        std::uint64_t Expand_complex_AsKeyword_: 1;
-        std::uint64_t Expand_operatorNames_ : 1;
-        std::uint64_t Expand_alignas_AsKeyword_ : 1;
-        std::uint64_t Expand_alignof_AsKeyword_ : 1;
-        std::uint64_t Expand_bool_AsKeyword_ : 1;
-        std::uint64_t Expand_thread_local_AsKeyword_ : 1;
 
         /* C++ */
         std::uint64_t CPP_nullptr_ : 1;
