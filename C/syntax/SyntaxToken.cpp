@@ -195,6 +195,8 @@ const char* tokenNames[] =
     "__builtin_offsetof",
     "__builtin_tgmath",
 
+    "va_arg",
+
     "_Template",
     "_Forall",
     "_Exists",

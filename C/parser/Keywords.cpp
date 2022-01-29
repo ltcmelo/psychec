@@ -396,6 +396,20 @@ static inline SyntaxKind classify6(const char* s, const ParseOptions& opts)
             }
         }
     }
+    else if (s[0] == 'v'
+                && opts.extensions().translations().isEnabled_Translate_va_arg_AsKeyword()) {
+        if (s[1] == 'a') {
+            if (s[2] == '_') {
+                if (s[3] == 'a') {
+                    if (s[4] == 'r') {
+                        if (s[5] == 'g') {
+                            return Keyword_MacroStd_va_arg;
+                        }
+                    }
+                }
+            }
+        }
+    }
     return IdentifierToken;
 }
 

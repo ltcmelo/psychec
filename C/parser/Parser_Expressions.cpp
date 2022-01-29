@@ -565,6 +565,7 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
             break;
 
         case Keyword_ExtGNU___builtin_va_arg:
+        case Keyword_MacroStd_va_arg:
             return parserVAArgumentExpression_AtFirst(expr);
 
         default:
@@ -737,7 +738,8 @@ bool Parser::parseCallArgument(ExpressionSyntax*&expr, ExpressionListSyntax*&)
 bool Parser::parserVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
-    PSYCHE_ASSERT(peek().kind() == Keyword_ExtGNU___builtin_va_arg,
+    PSYCHE_ASSERT(peek().kind() == Keyword_ExtGNU___builtin_va_arg
+                    || peek().kind() == Keyword_MacroStd_va_arg,
                   return false,
                   "assert failure: `__builtin_va_arg'");
 
@@ -1103,6 +1105,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
         case StringLiteral_UR_Token:
         case Keyword__Generic:
         case Keyword_ExtGNU___builtin_va_arg:
+        case Keyword_MacroStd_va_arg:
             return parseExpressionWithPrecedenceUnary(expr);
 
         case Keyword_ExtGNU___extension__: {

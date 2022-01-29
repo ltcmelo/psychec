@@ -237,6 +237,11 @@ enum SyntaxKind : std::uint16_t
     Keyword_ExtGNU___builtin_tgmath,
 
     // --------------------------//
+    // --- Translated macros --- //
+    // --------------------------//
+    Keyword_MacroStd_va_arg,
+
+    // --------------------------//
     // --- Extension: Psyche --- //
     // --------------------------//
     Keyword_ExtPSY__Template,
@@ -259,7 +264,9 @@ enum SyntaxKind : std::uint16_t
     OperatorName_XOREQToken = CaretEqualsToken,
 
     /* Aliases
-       TODO: Preserve original tokens to allow exact AST rewrite. */
+       TODO: Do NOT add more...
+             We want to preserve original tokens to allow exact AST rewrite.
+    */
     KeywordAlias_Bool = Keyword__Bool,
     KeywordAlias_asm = Keyword_ExtGNU___asm__,
     KeywordAlias_typeof = Keyword_ExtGNU___typeof__,

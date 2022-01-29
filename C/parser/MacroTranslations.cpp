@@ -30,7 +30,7 @@ using namespace psy;
 using namespace C;
 
 MacroTranslations::MacroTranslations()
-    : BF_all_(0)
+    : BF_all_(~0)
 {}
 
 DEFINE_ENABLE_ISENABLED(Translate_static_assert_AsKeyword)
@@ -38,6 +38,7 @@ DEFINE_ENABLE_ISENABLED(Translate_complex_AsKeyword)
 DEFINE_ENABLE_ISENABLED(Translate_operatorNames)
 DEFINE_ENABLE_ISENABLED(Translate_alignas_AsKeyword)
 DEFINE_ENABLE_ISENABLED(Translate_alignof_AsKeyword)
+DEFINE_ENABLE_ISENABLED(Translate_va_arg_AsKeyword)
 DEFINE_ENABLE_ISENABLED(Translate_bool_AsKeyword)
 DEFINE_ENABLE_ISENABLED(Translate_thread_local_AsKeyword)
 
