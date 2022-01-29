@@ -26,6 +26,7 @@
 
 #include "LanguageDialect.h"
 #include "LanguageExtensions.h"
+#include "MacroTranslations.h"
 
 #include <cstdint>
 
@@ -41,19 +42,24 @@ class PSY_C_API ParseOptions
 {
 public:
     ParseOptions();
-    ParseOptions(LanguageDialect dialect);
     ParseOptions(LanguageDialect dialect,
-                 LanguageExtensions extensions);
+                 LanguageExtensions extensions,
+                 MacroTranslations translations);
 
     /**
-     * The dialect of the language.
+     * The LanguageDialect used for parsing with \c this options.
      */
     const LanguageDialect& dialect() const;
 
     /**
-     * The extensions allowed in the language.
+     * The LanguageExtensions used for parsing with \c this options.
      */
     const LanguageExtensions& extensions() const;
+
+    /**
+     * The MacroTranslations used for parsing with \c this options.
+     */
+    const MacroTranslations& translations() const;
 
     //!@{
     /**
@@ -85,6 +91,7 @@ public:
 private:
     LanguageDialect dialect_;
     LanguageExtensions extensions_;
+    MacroTranslations translations_;
 
     struct BitFields
     {
