@@ -495,7 +495,7 @@ private:
  * \remark 6.5.3.4
  *
  * \note Similar to:
- * - \c clang::UnaryExprOrTypeTraitExpr of LLMV/Clang.
+ * - \c clang::UnaryExprOrTypeTraitExpr of LLVM/Clang.
  * - \c clang::syntax::PrefixUnaryOperatorExpression of Clang's Libtooling.
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.SizeOfExpressionSyntax of Roslyn.
  */
@@ -524,7 +524,7 @@ private:
  * \remark 6.5.4
  *
  * \note Similar to:
- * - \c clang::CStyleCastExpr of LLMV/Clang.
+ * - \c clang::CStyleCastExpr of LLVM/Clang.
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.CastExpressionSyntax of Roslyn.
  */
 class PSY_C_API CastExpressionSyntax final : public ExpressionSyntax
@@ -557,7 +557,7 @@ private:
  * 6.5.11, 6.5.12, 6.5.13, and 6.5.14.
  *
  * \note Similar to:
- * - \c clang::BinaryOperator of LLMV/Clang.
+ * - \c clang::BinaryOperator of LLVM/Clang.
  * - \c clang::syntax::BinaryOperatorExpression of Clang's Libtooling.
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.BinaryExpressionSyntax of Roslyn.
  */
@@ -586,7 +586,7 @@ private:
  * \remark 6.5.15
  *
  * \note Similar to:
- * - \c clang::ConditionalOperator of LLMV/Clang.
+ * - \c clang::ConditionalOperator of LLVM/Clang.
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.ConditionalExpressionSyntax of Roslyn.
  */
 class PSY_C_API ConditionalExpressionSyntax : public ExpressionSyntax
@@ -620,7 +620,7 @@ private:
  * \remark 6.5.16
  *
  * \note Similar to:
- * - \c clang::BinaryOperator of LLMV/Clang.
+ * - \c clang::BinaryOperator of LLVM/Clang.
  * - \c clang::syntax::BinaryOperatorExpression of Clang's Libtooling.
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.AssignmentExpressionSyntax of Roslyn.
  */
@@ -650,7 +650,7 @@ private:
  * \remark 6.5.17
  *
  * \note Similar to:
- * - \c clang::BinaryOperator of LLMV/Clang.
+ * - \c clang::BinaryOperator of LLVM/Clang.
  * - \c clang::syntax::BinaryOperatorExpression of Clang's Libtooling.
  */
 class PSY_C_API SequencingExpressionSyntax
@@ -689,6 +689,19 @@ public:
 private:
     CastExpressionSyntax* castExpr_ = nullptr;
     BinaryExpressionSyntax* binExpr_ = nullptr;
+};
+
+/**
+ * \brief The ExtGNU_VAArgumentExpressionSyntax class.
+ *
+ * \remark 7.16
+ *
+ * \note Similar to:
+ * - \c clang:VAArgExpr of LLVM/Clang.
+ */
+class PSY_C_API ExtGNU_VAArgumentExpressionSyntax final : public ExpressionSyntax
+{
+    AST_NODE_1K(ExtGNU_VAArgumentExpression, Expression)
 };
 
 } // C

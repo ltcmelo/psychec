@@ -330,6 +330,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "CompoundLiteralExpression";
         case CastExpression:
             return "CastExpression";
+        case ExtGNU_VAArgumentExpression:
+            return "ExtGNU_VAArgumentExpression";
 
         /* Binary */
         case MultiplyExpression:

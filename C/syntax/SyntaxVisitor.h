@@ -137,6 +137,7 @@ public:
     virtual Action visitTypeTraitExpression(const TypeTraitExpressionSyntax*) { return Action::Visit; }
     virtual Action visitCastExpression(const CastExpressionSyntax*) { return Action::Visit; }
     virtual Action visitCallExpression(const CallExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_VAArgumentExpression(const ExtGNU_VAArgumentExpressionSyntax*) { return Action::Visit; }
     virtual Action visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax*) { return Action::Visit; }
     virtual Action visitBinaryExpression(const BinaryExpressionSyntax*) { return Action::Visit; }
     virtual Action visitConditionalExpression(const ConditionalExpressionSyntax*) { return Action::Visit; }

@@ -564,6 +564,9 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
                 return false;
             break;
 
+        case Keyword_ExtGNU___builtin_va_arg:
+            break;
+
         default:
             diagReporter_.ExpectedFIRSTofExpression();
             return false;
