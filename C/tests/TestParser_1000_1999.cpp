@@ -2514,30 +2514,30 @@ void TestParser::case1899() {}
 
 void TestParser::case1900()
 {
-    // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html#Statement-Exprs
+    // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
 
     parseExpression("({ int x; })");
 }
 
 void TestParser::case1901()
 {
-    // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html#Statement-Exprs
+    // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
 
     parseExpression("({ int x; x; })");
 }
 
 void TestParser::case1902()
 {
-    // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html#Statement-Exprs
+    // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
 
-    //parseExpression("({ x y; })");
+    parseExpression("({ x y; })");
 }
 
 void TestParser::case1903()
 {
-    // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html#Statement-Exprs
+    // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
 
-    // parseExpression("({ x y; y; })");
+    parseExpression("({ x y; y; })");
 }
 
 void TestParser::case1904() {}
@@ -2586,8 +2586,27 @@ void TestParser::case1946() {}
 void TestParser::case1947() {}
 void TestParser::case1948() {}
 void TestParser::case1949() {}
-void TestParser::case1950() {}
-void TestParser::case1951() {}
+
+void TestParser::case1950()
+{
+    parseExpression("__builtin_va_arg ( x , int )",
+                    Expectation().AST( { ExtGNU_VAArgumentExpression,
+                                         IdentifierName,
+                                         TypeName,
+                                         BuiltinTypeSpecifier,
+                                         AbstractDeclarator }));
+}
+
+void TestParser::case1951()
+{
+    parseExpression("__builtin_va_arg ( x , y )",
+                    Expectation().AST( { ExtGNU_VAArgumentExpression,
+                                         IdentifierName,
+                                         TypeName,
+                                         TypedefName,
+                                         AbstractDeclarator }));
+}
+
 void TestParser::case1952() {}
 void TestParser::case1953() {}
 void TestParser::case1954() {}
