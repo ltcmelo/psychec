@@ -20,12 +20,12 @@
 
 #include "TestFrontend.h"
 
-#include "Unparser.h"
 
 #include "compilation/Assembly.h"
 #include "compilation/Compilation.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol.h"
+#include "parser/Unparser.h"
 #include "symbols/Symbols.h"
 #include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNamePrinter.h"

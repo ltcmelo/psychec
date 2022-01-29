@@ -38,8 +38,6 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/MemoryPool.cpp
     ${PROJECT_SOURCE_DIR}/SyntaxTree.h
     ${PROJECT_SOURCE_DIR}/SyntaxTree.cpp
-    ${PROJECT_SOURCE_DIR}/Unparser.h
-    ${PROJECT_SOURCE_DIR}/Unparser.cpp
 
     # Syntax
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.h
@@ -102,6 +100,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.h
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.cpp
     ${PROJECT_SOURCE_DIR}/parser/TextPreprocessingSituation.h
+    ${PROJECT_SOURCE_DIR}/parser/Unparser.h
+    ${PROJECT_SOURCE_DIR}/parser/Unparser.cpp
 
     # Symbols
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
