@@ -24,8 +24,10 @@
 
 #include "API.h"
 #include "APIFwds.h"
-#include "LanguageDialect.h"
+
 #include "SyntaxKind.h"
+
+#include "parser/LanguageDialect.h"
 
 #include "../common/location/Location.h"
 #include "../common/text/TextSpan.h"

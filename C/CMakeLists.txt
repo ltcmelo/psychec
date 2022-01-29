@@ -31,10 +31,6 @@ set(CFE_SOURCES
     # Main
     ${PROJECT_SOURCE_DIR}/API.h
     ${PROJECT_SOURCE_DIR}/APIFwds.h
-    ${PROJECT_SOURCE_DIR}/LanguageDialect.h
-    ${PROJECT_SOURCE_DIR}/LanguageDialect.cpp
-    ${PROJECT_SOURCE_DIR}/LanguageExtensions.h
-    ${PROJECT_SOURCE_DIR}/LanguageExtensions.cpp
     ${PROJECT_SOURCE_DIR}/List.h
     ${PROJECT_SOURCE_DIR}/Managed.h
     ${PROJECT_SOURCE_DIR}/Managed.cpp
@@ -84,6 +80,10 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Lexer.cpp
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Parser.cpp
     ${PROJECT_SOURCE_DIR}/parser/Keywords.cpp
+    ${PROJECT_SOURCE_DIR}/parser/LanguageDialect.h
+    ${PROJECT_SOURCE_DIR}/parser/LanguageDialect.cpp
+    ${PROJECT_SOURCE_DIR}/parser/LanguageExtensions.h
+    ${PROJECT_SOURCE_DIR}/parser/LanguageExtensions.cpp
     ${PROJECT_SOURCE_DIR}/parser/LexedTokens.h
     ${PROJECT_SOURCE_DIR}/parser/LexedTokens.cpp
     ${PROJECT_SOURCE_DIR}/parser/Lexer.h
