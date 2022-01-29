@@ -30,12 +30,23 @@ using namespace C;
 
 void TestParser::case3000()
 {
+    parseExpression("va_arg ( x , int )",
+                    Expectation().AST( { ExtGNU_VAArgumentExpression,
+                                         IdentifierName,
+                                         TypeName,
+                                         BuiltinTypeSpecifier,
+                                         AbstractDeclarator }));
 
 }
 
 void TestParser::case3001()
 {
-
+    parseExpression("va_arg ( x , y )",
+                    Expectation().AST( { ExtGNU_VAArgumentExpression,
+                                         IdentifierName,
+                                         TypeName,
+                                         TypedefName,
+                                         AbstractDeclarator }));
 }
 
 void TestParser::case3002()

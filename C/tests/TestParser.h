@@ -89,6 +89,14 @@ public:
             + 2550-2599 ->
             + 2600-2699 -> GNU: `__asm__'
 
+        Macro translation:
+            + 3000-3009 -> `va_arg'
+            + 3010-3099 ->
+            + 3100-3199 ->
+            + 3200-3299 ->
+            + 3300-3399 ->
+            + 3400-3499 ->
+            + 3500-3599 ->
      */
 
     void case0001();
@@ -4129,7 +4137,6 @@ public:
     void case3997();
     void case3998();
     void case3999();
-
 
 private:
     using TestFunction = std::pair<std::function<void(TestParser*)>, const char*>;
