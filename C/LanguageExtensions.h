@@ -39,7 +39,7 @@ public:
     /**
      * Whether to enable GNU keywords:
      *
-     * https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html#Keywords
+     * https://gcc.gnu.org/onlinedocs/gcc/Alternate-Keywords.html
      */
     LanguageExtensions& enable_ExtGNU_AlternateKeywords(bool enable);
     bool isEnabled_ExtGNU_AlternateKeywords() const;
@@ -49,7 +49,7 @@ public:
     /**
      * Whether to enable GNU attributes:
      *
-     * https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html#Attribute-Syntax
+     * https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
      */
     LanguageExtensions& enable_ExtGNU_AttributeSpecifiers(bool enable);
     bool isEnabled_ExtGNU_AttributeSpecifiers() const;
@@ -57,19 +57,9 @@ public:
 
     //!@{
     /**
-     * Whether to enable LLVM/Clang extensions of GNU attribute:
-     *
-     * https://clang.llvm.org/docs/AttributeReference.html#availability
-     */
-    LanguageExtensions& enable_ExtGNU_AttributeSpecifiersLLVM(bool enable);
-    bool isEnabled_ExtGNU_AttributeSpecifiersLLVM() const;
-    //!@}
-
-    //!@{
-    /**
      * Whether to enable GNU's alignment:
      *
-     * https://gcc.gnu.org/onlinedocs/gcc/Alignment.html#Alignment
+     * https://gcc.gnu.org/onlinedocs/gcc/Alignment.html
      */
     LanguageExtensions& enable_ExtGNU_Alignment(bool enable);
     bool isEnabled_ExtGNU_Alignment() const;
@@ -79,7 +69,7 @@ public:
     /**
      * Whether to enable GNU compound literals.
      *
-     * https://gcc.gnu.org/onlinedocs/gcc-10.1.0/gcc/Compound-Literals.html#Compound-Literals
+     * https://gcc.gnu.org/onlinedocs/gcc/Compound-Literals.html
      */
     LanguageExtensions& enable_ExtGNU_CompoundLiterals(bool enable);
     bool isEnabled_ExtGNU_CompoundLiterals() const;
@@ -89,7 +79,7 @@ public:
     /**
      * Whether to enable GNU conditionals.
      *
-     * https://gcc.gnu.org/onlinedocs/gcc/Conditionals.html#Conditionals
+     * https://gcc.gnu.org/onlinedocs/gcc/Conditionals.html
      */
     LanguageExtensions& enable_ExtGNU_Conditionals(bool enable);
     bool isEnabled_ExtGNU_Conditionals() const;
@@ -109,7 +99,7 @@ public:
     /**
      * Whether to enable GNU statement expressions.
      *
-     * https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html#Statement-Exprs
+     * https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
      */
     LanguageExtensions& enable_ExtGNU_StatementExpressions(bool enable);
     bool isEnabled_ExtGNU_StatementExpressions() const;
@@ -119,10 +109,32 @@ public:
     /**
      * Whether to enable GNU assembly in C.
      *
-     * https://gcc.gnu.org/onlinedocs/gcc/Using-Assembly-Language-with-C.html#Using-Assembly-Language-with-C
+     * https://gcc.gnu.org/onlinedocs/gcc/Using-Assembly-Language-with-C.html
      */
     LanguageExtensions& enable_ExtGNU_Asm(bool enable);
     bool isEnabled_ExtGNU_Asm() const;
+    //!@}
+
+    //!@{
+    /**
+     * Whether to enable GNU internal builtins (with the \c __builtin prefix).
+     *
+     * https://gcc.gnu.org/onlinedocs/gcc/Variadic-Macros.html
+     * https://gcc.gnu.org/onlinedocs/gcc/Offsetof.html
+     * https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
+     */
+    LanguageExtensions& enable_ExtGNU_InternalBuiltins(bool enable);
+    bool isEnabled_ExtGNU_InternalBuiltins() const;
+    //!@}
+
+    //!@{
+    /**
+     * Whether to enable LLVM/Clang extensions of GNU attribute:
+     *
+     * https://clang.llvm.org/docs/AttributeReference.html#availability
+     */
+    LanguageExtensions& enable_ExtGNU_AttributeSpecifiersLLVM(bool enable);
+    bool isEnabled_ExtGNU_AttributeSpecifiersLLVM() const;
     //!@}
 
     //!@{
@@ -255,6 +267,7 @@ private:
         std::uint64_t ExtGNU_Conditionals_ : 1;
         std::uint64_t ExtGNU_DesignatedInitializers_ : 1;
         std::uint64_t ExtGNU_StatementExpressions_ : 1;
+        std::uint64_t ExtGNU_InternalBuiltins_ : 1;
 
         /* Psyche */
         std::uint64_t ExtPSY_Generics_ : 1;

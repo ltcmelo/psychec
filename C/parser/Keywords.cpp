@@ -1198,6 +1198,71 @@ static inline SyntaxKind classify15(const char* s, const ParseOptions& opts)
 
 static inline SyntaxKind classify16(const char* s, const ParseOptions& opts)
 {
+    if (s[0] == '_'
+            && opts.extensions().isEnabled_ExtGNU_InternalBuiltins()) {
+        if (s[1] == '_') {
+            if (s[2] == 'b') {
+                if (s[3] == 'u') {
+                    if (s[4] == 'i') {
+                        if (s[5] == 'l') {
+                            if (s[6] == 't') {
+                                if (s[7] == 'i') {
+                                    if (s[8] == 'n') {
+                                        if (s[9] == '_') {
+                                            if (s[10] == 'v') {
+                                                if (s[11] == 'a') {
+                                                    if (s[12] == '_') {
+                                                        if (s[13] == 'a') {
+                                                            if (s[14] == 'r') {
+                                                                if (s[15] == 'g') {
+                                                                    return Keyword_ExtGNU___builtin_va_arg;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if (s[1] == '_') {
+            if (s[2] == 'b') {
+                if (s[3] == 'u') {
+                    if (s[4] == 'i') {
+                        if (s[5] == 'l') {
+                            if (s[6] == 't') {
+                                if (s[7] == 'i') {
+                                    if (s[8] == 'n') {
+                                        if (s[9] == '_') {
+                                            if (s[10] == 't') {
+                                                if (s[11] == 'g') {
+                                                    if (s[12] == 'm') {
+                                                        if (s[13] == 'a') {
+                                                            if (s[14] == 't') {
+                                                                if (s[15] == 'h') {
+                                                                    return Keyword_ExtGNU___builtin_tgmath;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     return IdentifierToken;
 }
 
@@ -1208,6 +1273,44 @@ static inline SyntaxKind classify17(const char* s, const ParseOptions& opts)
 
 static inline SyntaxKind classify18(const char* s, const ParseOptions& opts)
 {
+    if (s[0] == '_'
+            && opts.extensions().isEnabled_ExtGNU_InternalBuiltins()) {
+        if (s[1] == '_') {
+            if (s[2] == 'b') {
+                if (s[3] == 'u') {
+                    if (s[4] == 'i') {
+                        if (s[5] == 'l') {
+                            if (s[6] == 't') {
+                                if (s[7] == 'i') {
+                                    if (s[8] == 'n') {
+                                        if (s[9] == '_') {
+                                            if (s[10] == 'o') {
+                                                if (s[11] == 'f') {
+                                                    if (s[12] == 'f') {
+                                                        if (s[13] == 's') {
+                                                            if (s[14] == 'e') {
+                                                                if (s[15] == 't') {
+                                                                    if (s[16] == 'o') {
+                                                                        if (s[17] == 'f') {
+                                                                            return Keyword_ExtGNU___builtin_offsetof;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     return IdentifierToken;
 }
 

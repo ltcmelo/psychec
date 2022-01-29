@@ -1011,7 +1011,6 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
             return true;
         }
 
-
         default:
             diagReporter_.ExpectedFIRSTofExpression();
             return false;
