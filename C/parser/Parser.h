@@ -336,8 +336,8 @@ private:
 
     /* Postfix */
     bool parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr);
-    bool parsePostfixExpression_AtFollow(ExpressionSyntax*& expr);
-    template <class ExprT> bool parsePostfixExpression_AtPostfix(
+    bool parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr);
+    template <class ExprT> bool parsePostfixExpression_AtFollowOfPrimary(
             ExpressionSyntax*& expr,
             SyntaxKind exprK,
             std::function<bool(ExprT*&)> parsePostfix);
