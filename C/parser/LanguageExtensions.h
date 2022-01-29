@@ -22,6 +22,8 @@
 #ifndef PSYCHE_C_LANGUAGE_EXTENSIONS_H__
 #define PSYCHE_C_LANGUAGE_EXTENSIONS_H__
 
+#include "MacroTranslations.h"
+
 #include <cstdint>
 
 namespace psy {
@@ -34,6 +36,12 @@ class LanguageExtensions final
 {
 public:
     LanguageExtensions();
+    LanguageExtensions(MacroTranslations translations);
+
+    /**
+     * The MacroTranslations of \c this LanguageExtensions.
+     */
+    const MacroTranslations& translations() const;
 
     //!@{
     /**
@@ -171,6 +179,8 @@ public:
     //!@}
 
 private:
+    MacroTranslations translations_;
+
     struct BitFields
     {
         /* GNU */

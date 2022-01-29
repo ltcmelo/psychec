@@ -82,7 +82,7 @@ static inline SyntaxKind classify4(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 'b'
-             && opts.translations().isEnabled_Translate_bool_AsKeyword()) {
+             && opts.extensions().translations().isEnabled_Translate_bool_AsKeyword()) {
         if (s[1] == 'o') {
             if (s[2] == 'o') {
                 if (s[3] == 'l') {
@@ -186,7 +186,7 @@ static inline SyntaxKind classify5(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'B'
-                 && opts.translations().isEnabled_Translate_bool_AsKeyword()) {
+                 && opts.extensions().translations().isEnabled_Translate_bool_AsKeyword()) {
             if (s[2] == 'o') {
                 if (s[3] == 'o') {
                     if (s[4] == 'l') {
@@ -477,13 +477,13 @@ static inline SyntaxKind classify7(const char* s, const ParseOptions& opts)
                     if (s[4] == 'n') {
                         if (s[5] == 'a') {
                             if (s[6] == 's'
-                                    && opts.translations().isEnabled_Translate_alignas_AsKeyword()) {
+                                    && opts.extensions().translations().isEnabled_Translate_alignas_AsKeyword()) {
                                 return Keyword__Alignas;
                             }
                         }
                         else if (s[5] == 'o') {
                             if (s[6] == 'f'
-                                    && opts.translations().isEnabled_Translate_alignof_AsKeyword()) {
+                                    && opts.extensions().translations().isEnabled_Translate_alignof_AsKeyword()) {
                                 return Keyword__Alignof;
                             }
                         }
@@ -1043,7 +1043,7 @@ static inline SyntaxKind classify12(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 't'
-                 && opts.translations().isEnabled_Translate_thread_local_AsKeyword()) {
+                 && opts.extensions().translations().isEnabled_Translate_thread_local_AsKeyword()) {
             if (s[2] == 'h') {
                 if (s[3] == 'r') {
                     if (s[4] == 'e') {
@@ -1477,7 +1477,7 @@ static inline SyntaxKind classifyOperator6(const char* s)
 
 SyntaxKind Lexer::classifyOperator(const char* s, int n, const ParseOptions& opts)
 {
-    if (!opts.translations().isEnabled_Translate_operatorNames())
+    if (!opts.extensions().translations().isEnabled_Translate_operatorNames())
         return IdentifierToken;
 
     switch (n) {

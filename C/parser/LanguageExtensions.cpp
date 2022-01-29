@@ -21,6 +21,8 @@
 
 #include "LanguageExtensions.h"
 
+#include <utility>
+
 #define DEFINE_ENABLE_ISENABLED(FLAG) \
     LanguageExtensions& LanguageExtensions::enable_##FLAG(bool enable) \
         { BF_.FLAG##_ = enable; return *this; } \
@@ -31,7 +33,12 @@ using namespace psy;
 using namespace C;
 
 LanguageExtensions::LanguageExtensions()
-    : BF_all_(~0)
+    : LanguageExtensions(MacroTranslations())
+{}
+
+LanguageExtensions::LanguageExtensions(MacroTranslations translations)
+    : translations_(std::move(translations))
+    , BF_all_(~0)
 {
     /* Psyche */
     BF_.ExtPSY_Generics_ = false;
@@ -41,6 +48,11 @@ LanguageExtensions::LanguageExtensions()
 
     /* Custom */
     BF_.NativeBooleans_ = false;
+}
+
+const MacroTranslations& LanguageExtensions::translations() const
+{
+    return translations_;
 }
 
 DEFINE_ENABLE_ISENABLED(ExtGNU_AlternateKeywords)

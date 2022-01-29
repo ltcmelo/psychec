@@ -31,11 +31,9 @@ ParseOptions::ParseOptions()
 }
 
 ParseOptions::ParseOptions(LanguageDialect dialect,
-                           LanguageExtensions extensions,
-                           MacroTranslations translations)
+                           LanguageExtensions extensions)
     : dialect_(std::move(dialect))
     , extensions_(std::move(extensions))
-    , translations_(std::move(translations))
     , bits_(0)
 {
     BF_.keywordIdentifiersClassified_ = true;
@@ -49,11 +47,6 @@ const LanguageDialect& ParseOptions::dialect() const
 const LanguageExtensions& ParseOptions::extensions() const
 {
     return extensions_;
-}
-
-const MacroTranslations &ParseOptions::translations() const
-{
-    return translations_;
 }
 
 ParseOptions& ParseOptions::setCommentMode(CommentMode mode)
