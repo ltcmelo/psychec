@@ -22,6 +22,7 @@
 #define PSYCHE_C_TEST_BINDING_H__
 
 #include "TestFrontend.h"
+#include "C/Fwds.h"
 
 #define TEST_BINDER(Function) TestFunction { &TestBinder::Function, #Function }
 
@@ -37,15 +38,22 @@ public:
 
     void testAll() override;
 
+    virtual void bind(std::string text,
+                      Expectation X = Expectation()) override;
+
+    static void TEMP(Symbol* sym);
+
+
     /*
         ...:
-            + 0000-0199 -> declarations
+            + 0000-0099 ->
+            + 0100-0199 ->
+            + 0200-0299 ->
 
         ...:
             + 1000-1099 ->
             + 1100-1199 ->
             + 1200-1299 ->
-
      */
 
     void case0001();

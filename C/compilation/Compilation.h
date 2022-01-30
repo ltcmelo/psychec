@@ -79,7 +79,7 @@ private:
     DECL_PIMPL(Compilation);
 
     friend class SemanticModel;
-    friend class TestFrontend;
+    friend class TestBinder;
 
     Compilation();
 
