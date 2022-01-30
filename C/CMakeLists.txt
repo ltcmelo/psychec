@@ -101,7 +101,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Parser_Statements.cpp
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.h
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.cpp
-    ${PROJECT_SOURCE_DIR}/parser/TextPreprocessingSituation.h
+    ${PROJECT_SOURCE_DIR}/parser/TextPreprocessingState.h
     ${PROJECT_SOURCE_DIR}/parser/Unparser.h
     ${PROJECT_SOURCE_DIR}/parser/Unparser.cpp
 

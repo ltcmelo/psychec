@@ -28,7 +28,7 @@
 #include "parser/LexedTokens.h"
 #include "parser/LineDirective.h"
 #include "parser/ParseOptions.h"
-#include "parser/TextPreprocessingSituation.h"
+#include "parser/TextPreprocessingState.h"
 #include "syntax/SyntaxToken.h"
 
 #include "../common/diagnostics/Diagnostic.h"
@@ -82,7 +82,7 @@ public:
      * in order to build \c this SyntaxTree.
      */
     static std::unique_ptr<SyntaxTree> parseText(SourceText text,
-                                                 TextPreprocessingSituation textPPSituation,
+                                                 TextPreprocessingState textPPState,
                                                  ParseOptions parseOptions = ParseOptions(),
                                                  const std::string& path = "",
                                                  SyntaxCategory syntaxCategory = SyntaxCategory::Unspecified);

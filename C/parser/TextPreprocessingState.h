@@ -18,15 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TEXT_PREPROCESSING_SITUATION_H__
-#define PSYCHE_C_TEXT_PREPROCESSING_SITUATION_H__
+#ifndef PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
+#define PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
 
 #include <cstdint>
 
 namespace psy {
 namespace C {
 
-enum class TextPreprocessingSituation : std::uint8_t
+enum class TextPreprocessingState : std::uint8_t
 {
     Unknown,
     Preprocessed,
@@ -37,3 +37,4 @@ enum class TextPreprocessingSituation : std::uint8_t
 } // psy
 
 #endif
+
