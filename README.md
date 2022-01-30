@@ -41,8 +41,9 @@ If you compile the above snippet with GCC or Clang, you'd see the diagnostic _"d
 ## Documentation and Resources
 
 - The Doxygen-generated [API](https://ltcmelo.github.io/psychec/api-docs/html/index.html).
+- A [wiki](https://github.com/ltcmelo/psychec/wiki).
 - An [online interface](http://cuda.dcc.ufmg.br/psyche-c/) that offers a glimpse of Psyche-C's type inference functionality.
-- HOW-TO blogs:
+- Blogs:
   - [Dumping a C program’s AST with Psyche-C](https://ltcmelo.github.io/psychec/2021/03/03/c-ast-dump-psyche.html) /
     [Visualizando a AST de um programa C com o Psyche-C](https://www.embarcados.com.br/visualizando-a-ast-psyche-c/)
 - Articles:
