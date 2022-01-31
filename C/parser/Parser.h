@@ -320,7 +320,6 @@ private:
     // Expressions //
     //-------------//
     bool parseExpression(ExpressionSyntax*& expr);
-    bool parsePrimaryExpression(ExpressionSyntax*& expr);
     bool parseIdentifierName(ExpressionSyntax*& expr);
     void parseIdentifierName_AtFirst(ExpressionSyntax*& expr);
     template <class ExprT> bool parseConstant(ExpressionSyntax*& expr, SyntaxKind exprK);

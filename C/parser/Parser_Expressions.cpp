@@ -230,93 +230,6 @@ bool Parser::parseExtGNU_StatementExpression_AtFirst(ExpressionSyntax *&expr)
 }
 
 /**
- * Parse a \a primary-expression.
- *
- \verbatim
- primary-expression:
-     identifier
-     constant
-     string-literal
-     ( expression )
-     generic-selection
- \endverbatim
- *
- * \remark 6.5.1
- */
-bool Parser::parsePrimaryExpression(ExpressionSyntax*& expr)
-{
-    DEBUG_THIS_RULE();
-
-    switch (peek().kind()) {
-        case IdentifierToken:
-            parseIdentifierName_AtFirst(expr);
-            break;
-
-        case IntegerConstantToken:
-            parseConstant_AtFirst<ConstantExpressionSyntax>(
-                    expr,
-                    IntegerConstantExpression);
-            break;
-
-        case FloatingConstantToken:
-            parseConstant_AtFirst<ConstantExpressionSyntax>(
-                    expr,
-                    FloatingConstantExpression);
-            break;
-
-        case CharacterConstantToken:
-        case CharacterConstant_L_Token:
-        case CharacterConstant_u_Token:
-        case CharacterConstant_U_Token:
-            parseConstant_AtFirst<ConstantExpressionSyntax>(
-                    expr,
-                    CharacterConstantExpression);
-            break;
-
-        case Keyword_Ext_true:
-        case Keyword_Ext_false:
-            parseConstant_AtFirst<ConstantExpressionSyntax>(
-                    expr,
-                    BooleanConstantExpression);
-            break;
-
-        case Keyword_Ext_NULL:
-        case Keyword_Ext_nullptr:
-            parseConstant_AtFirst<ConstantExpressionSyntax>(
-                    expr,
-                    NULL_ConstantExpression);
-            break;
-
-        case StringLiteralToken:
-        case StringLiteral_L_Token:
-        case StringLiteral_u8_Token:
-        case StringLiteral_u_Token:
-        case StringLiteral_U_Token:
-        case StringLiteral_R_Token:
-        case StringLiteral_LR_Token:
-        case StringLiteral_u8R_Token:
-        case StringLiteral_uR_Token:
-        case StringLiteral_UR_Token:
-            parseStringLiteral_AtFirst(expr);
-            break;
-
-        case OpenParenToken:
-            if (peek(2).kind() == OpenBraceToken)
-                return parseExtGNU_StatementExpression_AtFirst(expr);
-            return parseParenthesizedExpression_AtFirst(expr);
-
-        case Keyword__Generic:
-            return parseGenericSelectionExpression_AtFirst(expr);
-
-        default:
-            diagReporter_.ExpectedFIRSTofExpression();
-            return false;
-    }
-
-    return true;
-}
-
-/**
  * Parse a \a generic-selection, with LA(1) at FIRST.
  *
  \verbatim
@@ -421,15 +334,22 @@ bool Parser::parseGenericAssociation(GenericAssociationSyntax*& assoc,
      postfix-expression --
      ( type-name ) { initializer-list }
      ( type-name) { initializer-list, }
+
+ primary-expression:
+     identifier
+     constant
+     string-literal
+     ( expression )
+     generic-selection
+     __builtin_va_arg ( assignment-expression , type-name )
  \endverbatim
  *
  * Adjusted grammar:
  *
  \verbatim
  postfix-expression:
-     primary-expression
-     postfix-expression postfix-expression-at-postfix
      compound-literal-at-open-paren
+     primary-expression postfix-expression-at-follow-of-primary
  \endverbatim
  *
  * \remark 6.5.2
@@ -575,6 +495,24 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
 
     return parsePostfixExpression_AtFollowOfPrimary(expr);
 }
+
+/**
+ *
+ * Adjusted grammar:
+ *
+ \verbatim
+ postfix-expression-at-follow-of-primary:
+     [ expression ] postfix-expression-at-follow-of-primary
+     ( argument-expression-list_opt ) postfix-expression-at-follow-of-primary
+      . identifier postfix-expression-at-follow-of-primary
+     -> identifier postfix-expression-at-follow-of-primary
+     ++ postfix-expression-at-follow-of-primary
+     -- postfix-expression-at-follow-of-primary
+     ε
+ \endverbatim
+ *
+ * \remark 6.5.2
+ */
 
 bool Parser::parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr)
 {

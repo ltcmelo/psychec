@@ -1510,7 +1510,7 @@ bool Parser::parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList)
     ExpressionListSyntax** exprList_cur = &exprList;
 
     ExpressionSyntax* platName = nullptr;
-    if (!parsePrimaryExpression(platName))
+    if (!parseIdentifierName(platName))
         return false;
 
     *exprList_cur = makeNode<ExpressionListSyntax>(platName);
@@ -1520,7 +1520,7 @@ bool Parser::parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList)
         exprList_cur = &(*exprList_cur)->next;
 
         ExpressionSyntax* expr = nullptr;
-        if (!parsePrimaryExpression(expr))
+        if (!parseIdentifierName(expr))
             return false;
 
         switch (peek().kind()) {
