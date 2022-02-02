@@ -74,7 +74,10 @@ public:
             + 1850-1899 -> assignment
             + 1900-1949 -> GNU: statement-expressions
             + 1950-1959 -> GNU: `__builtin_va_arg'
-            + 1960-1999 ->
+            + 1960-1969 -> GNU: `__builtin_offsetof'
+            + 1970-1979 -> GNU: `__builtin_choose_expr'
+            + 1980-1999 ->
+            + 1990-1999 ->
 
         Statements:
             + 2000-2019 -> `goto' and identifier labels
@@ -91,7 +94,10 @@ public:
 
         Macro translation:
             + 3000-3009 -> `va_arg'
-            + 3010-3099 ->
+            + 3010-3019 -> `offsetof'
+            + 3020-3029 ->
+            + 3030-3039 ->
+            + 3040-3099 ->
             + 3100-3199 ->
             + 3200-3299 ->
             + 3300-3399 ->

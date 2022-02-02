@@ -486,7 +486,7 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
 
         case Keyword_ExtGNU___builtin_va_arg:
         case Keyword_MacroStd_va_arg:
-            return parserVAArgumentExpression_AtFirst(expr);
+            return parseVAArgumentExpression_AtFirst(expr);
 
         default:
             diagReporter_.ExpectedFIRSTofExpression();
@@ -673,7 +673,7 @@ bool Parser::parseCallArgument(ExpressionSyntax*&expr, ExpressionListSyntax*&)
  *
  * \remark 7.16.1.1
  */
-bool Parser::parserVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
+bool Parser::parseVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_ExtGNU___builtin_va_arg
