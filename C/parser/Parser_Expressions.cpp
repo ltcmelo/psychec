@@ -400,7 +400,7 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
                 case OpenBraceToken:
                     return parseExtGNU_StatementExpression_AtFirst(expr);
 
-                // type-name -> type-specifier -> typedef-name -> identifier
+                // type-name ->* typedef-name -> identifier
                 // expression ->* identifier
                 case IdentifierToken: {
                     Backtracker BT(this);
@@ -988,7 +988,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
                 case Keyword_enum:
                     return parseCompoundLiteralOrCastExpression_AtFirst(expr);
 
-                // type-name -> type-specifier -> typedef-name -> identifier
+                // type-name ->* typedef-name -> identifier
                 // expression ->* identifier
                 case IdentifierToken: {
                     Backtracker BT(this);
