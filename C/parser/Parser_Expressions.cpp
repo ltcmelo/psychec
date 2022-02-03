@@ -360,24 +360,23 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
 
     switch (peek().kind()) {
         case OpenParenToken:
+            // postfix-expression -> primary-expression -> `(' expression `)'
+            //                     | `(' type-name `)' `{' initializer-list `}'
+            //                     | `(' `{' ... `}' `)'
             switch (peek(2).kind()) {
-                // postfix-expression -> `(' type-name ...
-                //                           type-name ->* type-qualifier
+                // type-name ->* type-qualifier
                 case Keyword_const:
                 case Keyword_volatile:
                 case Keyword_restrict:
                 case Keyword__Atomic:
 
-                // postfix-expression -> `(' type-name ...
-                //                           type-name ->* alignment-specifier
+                // type-name ->* alignment-specifier
                 case Keyword__Alignas:
 
-                // postfix-expression -> `(' type-name ...
-                //                           type-name ->* GNU-typeof-specifier ->
+                // type-name ->* GNU-typeof-specifier
                 case Keyword_ExtGNU___typeof__:
 
-                // postfix-expression -> `(' type-name ...
-                //                           type-name ->* type-specifier
+                // type-name ->* type-specifier
                 case Keyword_void:
                 case Keyword_char:
                 case Keyword_short:
@@ -397,9 +396,12 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
                 case Keyword_enum:
                     return parseCompoundLiteral_AtOpenParen(expr);
 
-                // postfix-expression -> `(' type-name ...
-                //                           type-name -> type-specifier -> typedef-name -> identifier
-                // postfix-expression -> primary-expression -> `(' expression ...
+                // GNU
+                case OpenBraceToken:
+                    return parseExtGNU_StatementExpression_AtFirst(expr);
+
+                // type-name -> type-specifier -> typedef-name -> identifier
+                // expression ->* identifier
                 case IdentifierToken: {
                     Backtracker BT(this);
                     auto openParenTkIdx = consume();
@@ -414,13 +416,8 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
                                                                 closeParenTkIdx);
                     }
                     BT.backtrack();
-
-                    return parseParenthesizedExpression_AtFirst(expr)
-                        && parsePostfixExpression_AtFollowOfPrimary(expr);
+                    [[fallthrough]];
                 }
-
-                case OpenBraceToken:
-                    return parseExtGNU_StatementExpression_AtFirst(expr);
 
                 default:
                     return parseParenthesizedExpression_AtFirst(expr)
