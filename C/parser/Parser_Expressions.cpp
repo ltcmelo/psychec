@@ -953,20 +953,22 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
 
     switch (peek().kind()) {
         case OpenParenToken: {
+            // cast-expression -> unary-expression ->* `(' expression `)'
+            //                  | `(' type-name `)' cast-expression
             switch (peek(2).kind()) {
-                // cast-expression -> `(' type-name ->* type-qualifier ->
+                // type-name ->* type-qualifier
                 case Keyword_const:
                 case Keyword_volatile:
                 case Keyword_restrict:
                 case Keyword__Atomic:
 
-                // cast-expression -> `(' type-name ->* alignment-specifier ->
+                // type-name ->* alignment-specifier
                 case Keyword__Alignas:
 
-                // cast-expression -> `(' type-name ->* GNU-typeof-specifier ->
+                // type-name ->* GNU-typeof-specifier ->
                 case Keyword_ExtGNU___typeof__:
 
-                // cast-expression -> `(' type-name ->* type-specifier ->
+                // // type-name ->* type-specifier
                 case Keyword_void:
                 case Keyword_char:
                 case Keyword_short:
@@ -986,8 +988,8 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
                 case Keyword_enum:
                     return parseCompoundLiteralOrCastExpression_AtFirst(expr);
 
-                // cast-expression -> `(' type-name ->* type-specifier -> typedef-name ->
-                // cast-expression -> unary-expression ->* `(' expression ->
+                // type-name -> type-specifier -> typedef-name -> identifier
+                // expression ->* identifier
                 case IdentifierToken: {
                     Backtracker BT(this);
                     if (parseCompoundLiteralOrCastExpression_AtFirst(expr)) {
@@ -996,52 +998,13 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
                         return true;
                     }
                     BT.backtrack();
-                    return parseExpressionWithPrecedenceUnary(expr);
+                    [[fallthrough]];
                 }
 
                 default:
-                    [[fallthrough]];
+                    return parseExpressionWithPrecedenceUnary(expr);
             }
         }
-
-        // cast-expression -> unary-expression
-        case PlusPlusToken:
-        case MinusMinusToken:
-        case AmpersandToken:
-        case AsteriskToken:
-        case PlusToken:
-        case MinusToken:
-        case TildeToken:
-        case ExclamationToken:
-        case Keyword_sizeof:
-        case Keyword__Alignof:
-
-        // cast-expression ->* postfix-expression
-        case IdentifierToken:
-        case IntegerConstantToken:
-        case FloatingConstantToken:
-        case CharacterConstantToken:
-        case CharacterConstant_L_Token:
-        case CharacterConstant_u_Token:
-        case CharacterConstant_U_Token:
-        case Keyword_Ext_true:
-        case Keyword_Ext_false:
-        case Keyword_Ext_NULL:
-        case Keyword_Ext_nullptr:
-        case StringLiteralToken:
-        case StringLiteral_L_Token:
-        case StringLiteral_u8_Token:
-        case StringLiteral_u_Token:
-        case StringLiteral_U_Token:
-        case StringLiteral_R_Token:
-        case StringLiteral_LR_Token:
-        case StringLiteral_u8R_Token:
-        case StringLiteral_uR_Token:
-        case StringLiteral_UR_Token:
-        case Keyword__Generic:
-        case Keyword_ExtGNU___builtin_va_arg:
-        case Keyword_MacroStd_va_arg:
-            return parseExpressionWithPrecedenceUnary(expr);
 
         case Keyword_ExtGNU___extension__: {
             auto extKwTkIdx = consume();
@@ -1053,8 +1016,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
         }
 
         default:
-            diagReporter_.ExpectedFIRSTofExpression();
-            return false;
+            return parseExpressionWithPrecedenceUnary(expr);
     }
 }
 
