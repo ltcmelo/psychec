@@ -348,7 +348,7 @@ private:
             LexedTokens::IndexType openParenTkIdx,
             TypeNameSyntax* typeName,
             LexedTokens::IndexType closeParenTkIdx);
-    bool parserVAArgumentExpression_AtFirst(ExpressionSyntax*& expr);
+    bool parseVAArgumentExpression_AtFirst(ExpressionSyntax*& expr);
 
     /* Unary */
     bool parseExpressionWithPrecedenceUnary(ExpressionSyntax*& expr);
