@@ -5,29 +5,60 @@
 
 # Psyche-C
 
-Psyche is a compiler frontend for the C programming language. Psyche-C is specifically designed for the implementation of static analysis tools. These are the distinct features that make Psyche-C rather unique:
+Psyche is a compiler frontend for the C programming language that is specifically designed for the implementation of static analysis tools. These are the distinct features that make Psyche-C rather unique:
 
 - Clean separation between the syntactic and semantic compiler phases.
 - Algorithmic- and heuristic-based syntax disambiguation.
-- Type inference for missing `struct`, `union`, `enum`, and `typedef` (i.e., tolerant against `#include` failures)
+- Type inference for missing `struct`, `union`, `enum`, and `typedef` (i.e., tolerance against `#include` failures)
 - API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn).
-- A parser's AST resembling that of the [LLVM's Clang frontend](https://clang.llvm.org/).
+- Parser's AST resembling that of the [LLVM's Clang frontend](https://clang.llvm.org/).
 
-**NOTE**: The master branch is going through a major overhaul. Syntax analysis (parsing and AST construction) is fully functional; semantic analysis is WIP. The original version of Psyche-C is in [this branch](https://github.com/ltcmelo/psychec/tree/original).
+## Library and API
 
-## Applications
+Implementation of static analysis tools for C are enabled by Psyche-C through a C++ library and API. 
 
-- Enabling, on incomplete source-code, static analysis techniques that require fully-typed programs.
-- Compiling partial code (e.g., a snippet retrieved from a bug tracker) for object-code inspection.
-- Generating test-input data for a function in isolation (without its dependencies).
-- Quick prototyping of an algorithm, without the need of explicit types.
+```
+void analyse()
+{
+    auto compilation = Compilation::create("code-analysis");
+    auto tree = SyntaxTree::parseText(srcText,
+                                      TextPreprocessingState::Preprocessed,
+                                      ParseOptions(),
+                                      fi.fileName());
+    compilation->addSyntaxTrees({ tree.get() });
 
-### The *cnippet* Driver Adaptor
+    CustomSyntaxVisitor analysis(tree.get(), compilation->semanticModel(tree.get()));
+    analysis.run(tree->translationUnitRoot());
+}
+```
 
-While Psyche-C is primarily used as a library for the implementation of static analysis tools, it still is a compiler frontend, and may also be used as an ordinary C parser through the *cnippet* driver adaptor.
+## The *cnippet* Driver
+
+Psyche-C may also be used as an ordinary C parser through the *cnippet* driver.
+
 
 ```c
-// node.c
+void f()
+{
+    int ;
+}
+```
+
+
+```
+~ cnip test.c
+test.c:4:4 error: declaration does not declare anything
+int ;
+    ^
+```
+
+Note: Semantic analysis isn't yet complete.
+
+### Type Inference
+
+*cnippet* understands incomplete code by means of type inference. For instance, if you compile the file below with GCC or Clang, you'll see a diagnostic such as _"declaration for_`T`_is not available"_.
+
+```c
 void f()
 {
     T v = 0;
@@ -36,7 +67,26 @@ void f()
 }
 ```
 
-If you compile the above snippet with GCC or Clang, you'd see the diagnostic _"declaration for_`T`_is not available"_. But with *cnippet* the compilation would succeed: a definition for `T` is inferred.
+With *cnippet*, "compilation" succeeds, as the following definitions are implicitly produced.
+
+```c
+typedef struct TYPE_2__ TYPE_1__;
+struct TYPE_2__ 
+{
+    int value;
+    struct TYPE_2__* next;
+} ;
+typedef TYPE_1__* T;
+```
+
+NOTE: Type inference isn't yet available on master, only in the [original branch](https://github.com/ltcmelo/psychec/tree/original).
+
+#### Applications
+
+- Enabling, on incomplete source-code, static analysis techniques that require fully-typed programs.
+- Compiling partial code (e.g., a snippet retrieved from a bug tracker) for object-code inspection.
+- Generating test-input data for a function in isolation (without its dependencies).
+- Quick prototyping of an algorithm, without the need of explicit types.
 
 ## Documentation and Resources
 
