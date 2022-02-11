@@ -248,13 +248,9 @@ void TestBinder::case1101()
 void TestBinder::case1102()
 {
 }
+
 void TestBinder::case1103()
 {
-    //    bind("const int * const x ;",
-    //         Expectation().SymbolNameKind(
-    //             {
-    //                 std::make_tuple("x", ValueKind::Variable)
-    //             }));
 }
 void TestBinder::case1104()
 {
