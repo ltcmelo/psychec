@@ -45,20 +45,27 @@ public:
 
 
     /*
-        ...:
             + 0000-0099 ->
             + 0100-0199 ->
             + 0200-0299 ->
 
-        ...:
-            + 1000-1099 ->
-            + 1100-1199 ->
-            + 1200-1299 ->
+        Globals and locals:
+            + 1000-1049 -> objects (plain)
+            + 1050-1099 -> `const' objects
+            + 1100-1149 -> pointers
+            + 1150-1199 -> `const' object pointers
+            + 1200-1249 -> `const' object `const' pointers
+            + 1250-1299 -> `const' pointers
+            + 1300-
 
-        ...:
-            + 2000-2099 ->
-            + 2100-2199 ->
-            + 2200-2299 ->
+        Fields:
+            + 1000-1049 -> objects (plain)
+            + 1050-1099 -> `const' objects
+            + 1100-1149 -> pointers
+            + 1150-1199 -> `const' object pointers
+            + 1200-1249 -> `const' object `const' pointers
+            + 1250-1299 -> `const' pointers
+            + 1300-
 
      */
 

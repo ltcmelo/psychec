@@ -97,7 +97,17 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarator
         popSymDEF();
     }
 
-    return visitVariableAndOrFunctionDeclaration_Done(node);
+    return visitVariableAndOrFunctionDeclaration_DONE(node);
+}
+
+SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
+{
+    return visitFieldDeclaration_DONE(node);
+}
+
+SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarators(const ParameterDeclarationSyntax* node)
+{
+    return visitParameterDeclaration_DONE(node);
 }
 
 /* Declarators */

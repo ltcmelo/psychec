@@ -393,6 +393,7 @@ void TestBinder::case1200()
          Expectation()
             .qualObjQualPtr_1("x", ValueKind::Variable, Expectation::Qual::Const, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
+
 void TestBinder::case1201() { }
 void TestBinder::case1202() { }
 void TestBinder::case1203() { }
@@ -442,6 +443,7 @@ void TestBinder::case1246() { }
 void TestBinder::case1247() { }
 void TestBinder::case1248() { }
 void TestBinder::case1249() { }
+
 void TestBinder::case1250() { }
 void TestBinder::case1251() { }
 void TestBinder::case1252() { }
