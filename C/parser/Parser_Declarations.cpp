@@ -384,7 +384,7 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
      however, if a <type-sepcifier> hasn't yet been seen, or
      if an additional identifier wasn't found, then we base
      the decision on other tokens that might be valid within
-     a declartor.
+     a declarator.
      */
 
     auto parenCnt = 0;

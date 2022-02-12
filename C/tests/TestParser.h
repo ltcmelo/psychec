@@ -41,7 +41,8 @@ public:
         Declarations:
             + 0000-0099 -> object declarations
             + 0100-0199 -> object declarations of array and function types
-            + 0200-0299 -> function declarations/definitions
+            + 0200-0279 -> function declarations/definitions
+            + 0280-0299 -> function definitions K&R
             + 0300-0399 -> array declarations
             + 0400-0499 -> `struct' and `union' declarations and type specifiers
             + 0500-0599 -> `enum' declarations and type specifiers
