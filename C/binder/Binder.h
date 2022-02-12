@@ -114,6 +114,9 @@ private:
     template <class DeclT> Action visitDeclaration_AtSpecifiers(
             const DeclT* node,
             Action (Binder::*visit_AtDeclarators)(const DeclT*));
+    template <class DeclT> Action visitDeclaration_AtDeclarators(
+            const DeclT* node,
+            Action (Binder::*visit_DONE)(const DeclT*));
     Action visitVariableAndOrFunctionDeclaration_AtSpecifiers(const VariableAndOrFunctionDeclarationSyntax*);
     Action visitVariableAndOrFunctionDeclaration_AtDeclarators(const VariableAndOrFunctionDeclarationSyntax*);
     Action visitVariableAndOrFunctionDeclaration_DONE(const VariableAndOrFunctionDeclarationSyntax*);

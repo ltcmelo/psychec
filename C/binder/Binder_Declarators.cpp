@@ -38,8 +38,10 @@
 using namespace psy;
 using namespace C;
 
-SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
-        const VariableAndOrFunctionDeclarationSyntax* node)
+template <class DeclT>
+SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators(
+        const DeclT* node,
+        Action (Binder::*visit_DONE)(const DeclT*))
 {
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         auto decltor = decltorIt->value;
@@ -97,12 +99,22 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarator
         popSymDEF();
     }
 
-    return visitVariableAndOrFunctionDeclaration_DONE(node);
+    return ((this)->*(visit_DONE))(node);
+}
+
+SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
+        const VariableAndOrFunctionDeclarationSyntax* node)
+{
+    return visitDeclaration_AtDeclarators(
+                node,
+                &Binder::visitVariableAndOrFunctionDeclaration_DONE);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
 {
-
+    return visitDeclaration_AtDeclarators(
+                node,
+                &Binder::visitFieldDeclaration_DONE);
 
     //    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
     //        auto decltor = SyntaxUtilities::strippedDeclarator(decltorIt->value);

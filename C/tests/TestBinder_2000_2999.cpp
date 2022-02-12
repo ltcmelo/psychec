@@ -47,7 +47,7 @@ struct x
 };
          )",
          Expectation()
-            .obj("x", ValueKind::Variable, "double", TypeKind::Builtin, BuiltinTypeKind::Double));
+            .obj("x", ValueKind::Field, "double", TypeKind::Builtin, BuiltinTypeKind::Double));
 }
 
 void TestBinder::case2001(){ }
