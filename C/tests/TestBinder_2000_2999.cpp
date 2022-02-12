@@ -41,7 +41,7 @@ using namespace C;
 void TestBinder::case2000()
 {
     bind(R"(
-struct x
+struct w
 {
    double x ;
 };
@@ -50,14 +50,108 @@ struct x
             .obj("x", ValueKind::Field, "double", TypeKind::Builtin, BuiltinTypeKind::Double));
 }
 
-void TestBinder::case2001(){ }
-void TestBinder::case2002(){ }
-void TestBinder::case2003(){ }
-void TestBinder::case2004(){ }
-void TestBinder::case2005(){ }
-void TestBinder::case2006(){ }
-void TestBinder::case2007(){ }
-void TestBinder::case2008(){ }
+void TestBinder::case2001()
+{
+    bind(R"(
+struct w
+{
+    int x ;
+};
+         )",
+         Expectation()
+            .obj("x", ValueKind::Field, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case2002()
+{
+    bind(R"(
+struct w
+{
+    int x ;
+    int y ;
+};
+         )",
+         Expectation()
+            .obj("x", ValueKind::Field, "int", TypeKind::Builtin, BuiltinTypeKind::Int)
+            .obj("x", ValueKind::Field, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case2003()
+{
+    bind(R"(
+struct w
+{
+    int x , y ;
+};
+         )",
+         Expectation()
+            .obj("x", ValueKind::Field, "int", TypeKind::Builtin, BuiltinTypeKind::Int)
+            .obj("y", ValueKind::Field, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case2004()
+{
+    bind(R"(
+struct w
+{
+    x y ;
+};
+         )",
+         Expectation()
+            .obj("y", ValueKind::Field, "x", TypeKind::Synonym));
+}
+
+void TestBinder::case2005()
+{
+    bind(R"(
+struct w
+{
+    x y , z ;
+};
+         )",
+         Expectation()
+            .obj("y", ValueKind::Field, "x", TypeKind::Synonym)
+            .obj("z", ValueKind::Field, "x", TypeKind::Synonym));
+}
+
+void TestBinder::case2006()
+{
+    // TODO: Need separate syntax/semantic warn/erro in expectation.
+
+//    bind(R"(
+//struct w
+//{
+//    x y = 1 ;
+//};
+//         )",
+//         );
+}
+
+void TestBinder::case2007()
+{
+    // TODO: Need separate syntax/semantic warn/erro in expectation.
+
+//    bind(R"(
+//struct w
+//{
+//    int x = 1 ;
+//};
+//         )",
+
+}
+
+void TestBinder::case2008()
+{
+    bind(R"(
+struct w
+{
+    int float x ;
+};
+         )",
+         Expectation().addDiagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
+}
 void TestBinder::case2009(){ }
 void TestBinder::case2010(){ }
 void TestBinder::case2011(){ }

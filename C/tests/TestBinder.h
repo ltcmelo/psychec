@@ -41,9 +41,6 @@ public:
     virtual void bind(std::string text,
                       Expectation X = Expectation()) override;
 
-    static void TEMP(Symbol* sym);
-
-
     /*
             + 0000-0099 ->
             + 0100-0199 ->

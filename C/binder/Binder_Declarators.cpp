@@ -80,7 +80,21 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
         case ArrayDeclarator:
         case PointerDeclarator:
         case IdentifierDeclarator:
-            makeAndPushSymDEF<VariableSymbol>();
+            switch (symDEFs_.top()->kind())
+            {
+                case SymbolKind::Type:
+                    makeAndPushSymDEF<FieldSymbol>();
+                    break;
+
+                case SymbolKind::LinkUnit:
+                case SymbolKind::Function:
+                    makeAndPushSymDEF<VariableSymbol>();
+                    break;
+
+                default:
+                    PSYCHE_FAIL_0(return Action::Quit);
+                    break;
+            }
             break;
 
         default:

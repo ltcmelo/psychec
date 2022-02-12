@@ -201,6 +201,8 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_DONE(const FieldDeclarationSyntax*)
 {
+    popTySymUSE();
+
     return Action::Skip;
 }
 
@@ -216,6 +218,8 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration(const ParameterDeclarati
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*)
 {
+    popTySymUSE();
+
     return Action::Skip;
 }
 

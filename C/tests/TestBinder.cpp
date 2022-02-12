@@ -58,11 +58,6 @@ void TestBinder::setUp()
 void TestBinder::tearDown()
 {}
 
-void TestBinder::TEMP(Symbol* sym)
-{
-
-}
-
 void TestBinder::bind(std::string text,
                         Expectation X)
 {
@@ -124,8 +119,6 @@ void TestBinder::bind(std::string text,
                     + (tySymName == "" ? "<unnamed>" : tySymName);
             PSYCHE_TEST_FAIL(s);
         }
-
-        TestBinder::TEMP(sym);
     }
 
     for (auto qualObjData : X.qualObjs_) {
