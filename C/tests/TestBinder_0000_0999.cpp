@@ -292,14 +292,18 @@ void TestBinder::case0097() {}
 void TestBinder::case0098() {}
 void TestBinder::case0099() {}
 
-void TestBinder::case0101()
+void TestBinder::case0100()
 {
     bind("*1;");
 }
 
-void TestBinder::case0102()
+void TestBinder::case0101()
 {
     bind("&1;");
+}
+
+void TestBinder::case0102()
+{
 }
 
 void TestBinder::case0103()

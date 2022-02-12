@@ -38,6 +38,13 @@
 using namespace psy;
 using namespace C;
 
+void TestBinder::case1000()
+{
+    bind("double x ;",
+         Expectation()
+            .obj("x", ValueKind::Variable, "double", TypeKind::Builtin, BuiltinTypeKind::Double));
+}
+
 void TestBinder::case1001()
 {
     bind("int x ;",
@@ -270,6 +277,7 @@ void TestBinder::case1105()
     //                 std::make_tuple("y", ValueKind::Variable)
     //             }));
 }
+
 void TestBinder::case1106() {}
 void TestBinder::case1107() {}
 void TestBinder::case1108() {}
