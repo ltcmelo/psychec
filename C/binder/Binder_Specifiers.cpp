@@ -44,17 +44,8 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         const DeclT* node,
         Action (Binder::*visit_AtDeclarators)(const DeclT*))
 {
-    std::vector<SpecifierSyntax*> tyQualSpecs;
-    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next) {
-        auto spec = specIt->value;
-
-        if (spec->asTypeQualifier()) {
-            tyQualSpecs.push_back(spec);
-            continue;
-        }
-
-        visit(spec);
-    }
+    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
+        actOnTypeSpecifier(specIt->value);
 
     if (tySymUSEs_.empty()) {
         Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
@@ -68,8 +59,8 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         pushTySymUSE(std::move(namedTySym));
     }
 
-    for (auto spec : tyQualSpecs)
-        visit(spec);
+    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
+        actOnTypeQualifier(specIt->value);
 
     return ((this)->*(visit_AtDeclarators))(node);
 }
@@ -97,6 +88,26 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const Param
 }
 
 /* Specifiers */
+SyntaxVisitor::Action Binder::actOnTypeSpecifier(const SpecifierSyntax* spec)
+{
+    if (spec->asTypeQualifier())
+        return Action::Skip;
+
+    visit(spec);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::actOnTypeQualifier(const SpecifierSyntax* spec)
+{
+    if (!spec->asTypeQualifier())
+        return Action::Skip;
+
+    visit(spec);
+
+    return Action::Skip;
+}
+
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
     if (tySymUSEs_.empty()) {

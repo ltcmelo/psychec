@@ -128,6 +128,8 @@ private:
     Action visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*);
 
     /* Specifiers */
+    Action actOnTypeSpecifier(const SpecifierSyntax*);
+    Action actOnTypeQualifier(const SpecifierSyntax*);
     virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) override;
     virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax*) override;
     virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) override;
@@ -135,6 +137,7 @@ private:
     virtual Action visitTypeQualifier(const TypeQualifierSyntax*) override;
 
     /* Declarators */
+    Action actOnDeclarator(const DeclaratorSyntax*);
     virtual Action visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax*) override;
     virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax*) override;
     //virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) override;
