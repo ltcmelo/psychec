@@ -39,8 +39,10 @@
 using namespace psy;
 using namespace C;
 
-SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers(
-        const VariableAndOrFunctionDeclarationSyntax* node)
+template <class DeclT>
+SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
+        const DeclT* node,
+        Action (Binder::*visit_AtDeclarators)(const DeclT*))
 {
     std::vector<SpecifierSyntax*> tyQualSpecs;
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next) {
@@ -69,17 +71,29 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers
     for (auto spec : tyQualSpecs)
         visit(spec);
 
-    return visitVariableAndOrFunctionDeclaration_AtDeclarators(node);
+    return ((this)->*(visit_AtDeclarators))(node);
+}
+
+SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers(
+        const VariableAndOrFunctionDeclarationSyntax* node)
+{
+    return visitDeclaration_AtSpecifiers(
+                node,
+                &Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtSpecifiers(const FieldDeclarationSyntax* node)
 {
-    return visitFieldDeclaration_AtDeclarators(node);
+    return visitDeclaration_AtSpecifiers(
+                node,
+                &Binder::visitFieldDeclaration_AtDeclarators);
 }
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax* node)
 {
-    return visitParameterDeclaration_AtDeclarators(node);
+    return visitDeclaration_AtSpecifiers(
+                node,
+                &Binder::visitParameterDeclaration_AtDeclarators);
 }
 
 /* Specifiers */

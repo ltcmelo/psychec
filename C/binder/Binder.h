@@ -102,23 +102,27 @@ private:
     //--------------//
     virtual Action visitTranslationUnit(const TranslationUnitSyntax*) override;
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax*) override;
-    Action visitTypeDeclaration_COMMON(const TypeDeclarationSyntax*);
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) override;
     virtual Action visitEnumDeclaration(const EnumDeclarationSyntax*) override;
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
+    virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) override;
+    virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
+    virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;
+    virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) override;
+
+    Action visitTypeDeclaration_COMMON(const TypeDeclarationSyntax*);
+    template <class DeclT> Action visitDeclaration_AtSpecifiers(
+            const DeclT* node,
+            Action (Binder::*visit_AtDeclarators)(const DeclT*));
     Action visitVariableAndOrFunctionDeclaration_AtSpecifiers(const VariableAndOrFunctionDeclarationSyntax*);
     Action visitVariableAndOrFunctionDeclaration_AtDeclarators(const VariableAndOrFunctionDeclarationSyntax*);
     Action visitVariableAndOrFunctionDeclaration_DONE(const VariableAndOrFunctionDeclarationSyntax*);
-    virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) override;
     Action visitFieldDeclaration_AtSpecifiers(const FieldDeclarationSyntax*);
     Action visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax*);
     Action visitFieldDeclaration_DONE(const FieldDeclarationSyntax*);
-    virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
     Action visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax*);
     Action visitParameterDeclaration_AtDeclarators(const ParameterDeclarationSyntax*);
     Action visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*);
-    virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;
-    virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) override;
 
     /* Specifiers */
     virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) override;

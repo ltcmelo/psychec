@@ -102,6 +102,31 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarator
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
 {
+
+
+    //    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
+    //        auto decltor = SyntaxUtilities::strippedDeclarator(decltorIt->value);
+    //        switch (decltor->kind()) {
+    //            case ArrayDeclarator:
+    //            case IdentifierDeclarator:
+    //                switch (symDEFs_.top()->kind()) {
+    //                    case SymbolKind::Type:
+    //                        makeAndPushSymDEF<FieldSymbol>();
+    //                        break;
+
+    //                    default:
+    //                        PSYCHE_FAIL(return Action::Quit, "unexpected symbol");
+    //                        return Action::Quit;
+    //                }
+    //                break;
+
+    //            default:
+    //                PSYCHE_FAIL(return Action::Quit, "unexpected declarator");
+    //                break;
+    //        }
+    //    }
+
+    //    return Action::Skip;
     return visitFieldDeclaration_DONE(node);
 }
 

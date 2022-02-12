@@ -197,33 +197,6 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_DONE(
 SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax* node)
 {
     return visitFieldDeclaration_AtSpecifiers(node);
-
-//    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
-//        visit(specIt->value);
-
-//    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
-//        auto decltor = SyntaxUtilities::strippedDeclarator(decltorIt->value);
-//        switch (decltor->kind()) {
-//            case ArrayDeclarator:
-//            case IdentifierDeclarator:
-//                switch (symDEFs_.top()->kind()) {
-//                    case SymbolKind::Type:
-//                        makeAndPushSymDEF<FieldSymbol>();
-//                        break;
-
-//                    default:
-//                        PSYCHE_FAIL(return Action::Quit, "unexpected symbol");
-//                        return Action::Quit;
-//                }
-//                break;
-
-//            default:
-//                PSYCHE_FAIL(return Action::Quit, "unexpected declarator");
-//                break;
-//        }
-//    }
-
-//    return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_DONE(const FieldDeclarationSyntax*)
