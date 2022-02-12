@@ -102,19 +102,34 @@ private:
     //--------------//
     virtual Action visitTranslationUnit(const TranslationUnitSyntax*) override;
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax*) override;
-    Action visitTypeDeclaration_COMMON(const TypeDeclarationSyntax*);
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) override;
     virtual Action visitEnumDeclaration(const EnumDeclarationSyntax*) override;
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
-    Action visitVariableAndOrFunctionDeclaration_AtSpecifiers(const VariableAndOrFunctionDeclarationSyntax*);
-    Action visitVariableAndOrFunctionDeclaration_AtDeclarators(const VariableAndOrFunctionDeclarationSyntax*);
-    Action visitVariableAndOrFunctionDeclaration_Done(const VariableAndOrFunctionDeclarationSyntax*);
     virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) override;
     virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
     virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;
     virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) override;
 
+    Action visitTypeDeclaration_COMMON(const TypeDeclarationSyntax*);
+    template <class DeclT> Action visitDeclaration_AtSpecifiers(
+            const DeclT* node,
+            Action (Binder::*visit_AtDeclarators)(const DeclT*));
+    template <class DeclT> Action visitDeclaration_AtDeclarators(
+            const DeclT* node,
+            Action (Binder::*visit_DONE)(const DeclT*));
+    Action visitVariableAndOrFunctionDeclaration_AtSpecifiers(const VariableAndOrFunctionDeclarationSyntax*);
+    Action visitVariableAndOrFunctionDeclaration_AtDeclarators(const VariableAndOrFunctionDeclarationSyntax*);
+    Action visitVariableAndOrFunctionDeclaration_DONE(const VariableAndOrFunctionDeclarationSyntax*);
+    Action visitFieldDeclaration_AtSpecifiers(const FieldDeclarationSyntax*);
+    Action visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax*);
+    Action visitFieldDeclaration_DONE(const FieldDeclarationSyntax*);
+    Action visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax*);
+    Action visitParameterDeclaration_AtDeclarators(const ParameterDeclarationSyntax*);
+    Action visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*);
+
     /* Specifiers */
+    Action actOnTypeSpecifier(const SpecifierSyntax*);
+    Action actOnTypeQualifier(const SpecifierSyntax*);
     virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) override;
     virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax*) override;
     virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) override;
@@ -122,6 +137,7 @@ private:
     virtual Action visitTypeQualifier(const TypeQualifierSyntax*) override;
 
     /* Declarators */
+    Action actOnDeclarator(const DeclaratorSyntax*);
     virtual Action visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax*) override;
     virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax*) override;
     //virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) override;

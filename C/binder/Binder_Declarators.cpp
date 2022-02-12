@@ -38,69 +38,109 @@
 using namespace psy;
 using namespace C;
 
+template <class DeclT>
+SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators(
+        const DeclT* node,
+        Action (Binder::*visit_DONE)(const DeclT*))
+{
+    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next)
+        actOnDeclarator(decltorIt->value);
+
+    return ((this)->*(visit_DONE))(node);
+}
+
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
-        auto decltor = decltorIt->value;
+    return visitDeclaration_AtDeclarators(
+                node,
+                &Binder::visitVariableAndOrFunctionDeclaration_DONE);
+}
 
-        switch (decltor->kind()) {
-            case FunctionDeclarator:
-                makeAndPushSymDEF<FunctionSymbol>();
-                break;
+SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
+{
+    return visitDeclaration_AtDeclarators(
+                node,
+                &Binder::visitFieldDeclaration_DONE);
+}
 
-            case ArrayDeclarator:
-            case PointerDeclarator:
-            case IdentifierDeclarator:
-                makeAndPushSymDEF<VariableSymbol>();
-                break;
-
-            default:
-                PSYCHE_FAIL_0(return Action::Quit);
-        }
-
-        visit(decltor);
-
-        auto sym = symDEFs_.top();
-        switch (sym->kind()) {
-            case SymbolKind::Function:
-                PSYCHE_ASSERT_0(decltor->kind() == FunctionDeclarator, return Action::Quit);
-                break;
-
-            case SymbolKind::Value: {
-                auto valSym = sym->asValue();
-                valSym->setType(tySymUSEs_.top());
-
-                switch (decltor->kind())
-                {
-                    case ArrayDeclarator:
-                        break;
-
-                    case PointerDeclarator:
-                        popTySymUSE();
-                        break;
-
-                    case IdentifierDeclarator:
-                         break;
-
-                    default:
-                        PSYCHE_FAIL_0(return Action::Quit);
-                }
-
-                break;
-            }
-
-            default:
-                PSYCHE_FAIL_0(return Action::Quit);
-        }
-
-        popSymDEF();
-    }
-
-    return visitVariableAndOrFunctionDeclaration_Done(node);
+SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarators(const ParameterDeclarationSyntax* node)
+{
+    return visitParameterDeclaration_DONE(node);
 }
 
 /* Declarators */
+SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
+{
+    switch (decltor->kind()) {
+        case FunctionDeclarator:
+            makeAndPushSymDEF<FunctionSymbol>();
+            break;
+
+        case ArrayDeclarator:
+        case PointerDeclarator:
+        case IdentifierDeclarator:
+            switch (symDEFs_.top()->kind())
+            {
+                case SymbolKind::Type:
+                    makeAndPushSymDEF<FieldSymbol>();
+                    break;
+
+                case SymbolKind::LinkUnit:
+                case SymbolKind::Function:
+                    makeAndPushSymDEF<VariableSymbol>();
+                    break;
+
+                default:
+                    PSYCHE_FAIL_0(return Action::Quit);
+                    break;
+            }
+            break;
+
+        default:
+            PSYCHE_FAIL_0(return Action::Quit);
+    }
+
+    visit(decltor);
+
+    auto sym = symDEFs_.top();
+    switch (sym->kind()) {
+        case SymbolKind::Function:
+            PSYCHE_ASSERT_0(decltor->kind() == FunctionDeclarator, return Action::Quit);
+            break;
+
+        case SymbolKind::Value: {
+            auto valSym = sym->asValue();
+            valSym->setType(tySymUSEs_.top());
+
+            switch (decltor->kind())
+            {
+                case ArrayDeclarator:
+                    break;
+
+                case PointerDeclarator:
+                    popTySymUSE();
+                    break;
+
+                case IdentifierDeclarator:
+                     break;
+
+                default:
+                    PSYCHE_FAIL_0(return Action::Quit);
+            }
+
+            break;
+        }
+
+        default:
+            PSYCHE_FAIL_0(return Action::Quit);
+    }
+
+    popSymDEF();
+
+    return Action::Skip;
+}
+
 SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node)
 {
     return Action::Skip;

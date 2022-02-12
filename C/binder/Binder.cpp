@@ -186,7 +186,7 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(
     return visitVariableAndOrFunctionDeclaration_AtSpecifiers(node);
 }
 
-SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_Done(
+SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_DONE(
         const VariableAndOrFunctionDeclarationSyntax*)
 {
     popTySymUSE();
@@ -196,30 +196,12 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_Done(
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax* node)
 {
-    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
-        visit(specIt->value);
+    return visitFieldDeclaration_AtSpecifiers(node);
+}
 
-    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
-        auto decltor = SyntaxUtilities::strippedDeclarator(decltorIt->value);
-        switch (decltor->kind()) {
-            case ArrayDeclarator:
-            case IdentifierDeclarator:
-                switch (symDEFs_.top()->kind()) {
-                    case SymbolKind::Type:
-                        makeAndPushSymDEF<FieldSymbol>();
-                        break;
-
-                    default:
-                        PSYCHE_FAIL(return Action::Quit, "unexpected symbol");
-                        return Action::Quit;
-                }
-                break;
-
-            default:
-                PSYCHE_FAIL(return Action::Quit, "unexpected declarator");
-                break;
-        }
-    }
+SyntaxVisitor::Action Binder::visitFieldDeclaration_DONE(const FieldDeclarationSyntax*)
+{
+    popTySymUSE();
 
     return Action::Skip;
 }
@@ -230,6 +212,13 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration(const ParameterDeclarati
         visit(specIt->value);
 
     visit(node->declarator());
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*)
+{
+    popTySymUSE();
 
     return Action::Skip;
 }

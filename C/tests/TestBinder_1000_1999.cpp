@@ -38,6 +38,13 @@
 using namespace psy;
 using namespace C;
 
+void TestBinder::case1000()
+{
+    bind("double x ;",
+         Expectation()
+            .obj("x", ValueKind::Variable, "double", TypeKind::Builtin, BuiltinTypeKind::Double));
+}
+
 void TestBinder::case1001()
 {
     bind("int x ;",
@@ -248,13 +255,9 @@ void TestBinder::case1101()
 void TestBinder::case1102()
 {
 }
+
 void TestBinder::case1103()
 {
-    //    bind("const int * const x ;",
-    //         Expectation().SymbolNameKind(
-    //             {
-    //                 std::make_tuple("x", ValueKind::Variable)
-    //             }));
 }
 void TestBinder::case1104()
 {
@@ -274,6 +277,7 @@ void TestBinder::case1105()
     //                 std::make_tuple("y", ValueKind::Variable)
     //             }));
 }
+
 void TestBinder::case1106() {}
 void TestBinder::case1107() {}
 void TestBinder::case1108() {}
@@ -389,6 +393,7 @@ void TestBinder::case1200()
          Expectation()
             .qualObjQualPtr_1("x", ValueKind::Variable, Expectation::Qual::Const, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
+
 void TestBinder::case1201() { }
 void TestBinder::case1202() { }
 void TestBinder::case1203() { }
@@ -438,6 +443,7 @@ void TestBinder::case1246() { }
 void TestBinder::case1247() { }
 void TestBinder::case1248() { }
 void TestBinder::case1249() { }
+
 void TestBinder::case1250() { }
 void TestBinder::case1251() { }
 void TestBinder::case1252() { }

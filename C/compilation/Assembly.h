@@ -48,7 +48,7 @@ public:
 
 private:
     friend class SemanticModel;
-    friend class TestFrontend;
+    friend class TestBinder;
 
     std::unordered_set<std::unique_ptr<Symbol>> symDEFs_;
     std::vector<std::unique_ptr<Symbol>> symUSEs_;

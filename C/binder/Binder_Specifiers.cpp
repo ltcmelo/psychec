@@ -39,20 +39,13 @@
 using namespace psy;
 using namespace C;
 
-SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers(
-        const VariableAndOrFunctionDeclarationSyntax* node)
+template <class DeclT>
+SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
+        const DeclT* node,
+        Action (Binder::*visit_AtDeclarators)(const DeclT*))
 {
-    std::vector<SpecifierSyntax*> tyQualSpecs;
-    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next) {
-        auto spec = specIt->value;
-
-        if (spec->asTypeQualifier()) {
-            tyQualSpecs.push_back(spec);
-            continue;
-        }
-
-        visit(spec);
-    }
+    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
+        actOnTypeSpecifier(specIt->value);
 
     if (tySymUSEs_.empty()) {
         Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
@@ -66,13 +59,55 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers
         pushTySymUSE(std::move(namedTySym));
     }
 
-    for (auto spec : tyQualSpecs)
-        visit(spec);
+    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
+        actOnTypeQualifier(specIt->value);
 
-    return visitVariableAndOrFunctionDeclaration_AtDeclarators(node);
+    return ((this)->*(visit_AtDeclarators))(node);
+}
+
+SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers(
+        const VariableAndOrFunctionDeclarationSyntax* node)
+{
+    return visitDeclaration_AtSpecifiers(
+                node,
+                &Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators);
+}
+
+SyntaxVisitor::Action Binder::visitFieldDeclaration_AtSpecifiers(const FieldDeclarationSyntax* node)
+{
+    return visitDeclaration_AtSpecifiers(
+                node,
+                &Binder::visitFieldDeclaration_AtDeclarators);
+}
+
+SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax* node)
+{
+    return visitDeclaration_AtSpecifiers(
+                node,
+                &Binder::visitParameterDeclaration_AtDeclarators);
 }
 
 /* Specifiers */
+SyntaxVisitor::Action Binder::actOnTypeSpecifier(const SpecifierSyntax* spec)
+{
+    if (spec->asTypeQualifier())
+        return Action::Skip;
+
+    visit(spec);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::actOnTypeQualifier(const SpecifierSyntax* spec)
+{
+    if (!spec->asTypeQualifier())
+        return Action::Skip;
+
+    visit(spec);
+
+    return Action::Skip;
+}
+
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
     if (tySymUSEs_.empty()) {

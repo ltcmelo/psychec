@@ -180,9 +180,9 @@ protected:
                          Expectation X = Expectation());
     void parseStatement(std::string text,
                         Expectation X = Expectation());
-    void bind(std::string text,
-              Expectation X = Expectation());
-    void typeCheck(std::string text);
+
+    virtual void bind(std::string text,
+                      Expectation X = Expectation()) {}
 
     std::unique_ptr<SyntaxTree> tree_;
     std::unique_ptr<Compilation> compilation_;
