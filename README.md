@@ -46,7 +46,7 @@ void f()
 }
 ```
 
-If you compile the snippet above with *cnippet*, you'll see a diagnostic similar/equal to what you would see with GCC or Clang.
+If you parse the snippet above with *cnippet*, you'll see a diagnostic similar/equal to what you would see with GCC or Clang.
 
 ```
 ~ cnip test.c
