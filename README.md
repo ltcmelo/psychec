@@ -17,10 +17,10 @@ Psyche is a compiler frontend for the C programming language that is specificall
 
 ## Library and API
 
-Implementation of static analysis tools for C are enabled by Psyche-C through a C++ library and API. 
+Psyche-C offers a C++ library/API for the implementation of static analysis tools of C programs.
 
 ```
-void analyse()
+void analyse(const FileInfo& fi)
 {
     auto compilation = Compilation::create("code-analysis");
     auto tree = SyntaxTree::parseText(srcText,
@@ -36,7 +36,7 @@ void analyse()
 
 ## The *cnippet* Driver
 
-Psyche-C may also be used as an ordinary C parser through the *cnippet* driver.
+Psyche-C comes with the *cnippet* driver and may be used as an ordinary C parser.
 
 
 ```c
@@ -46,6 +46,7 @@ void f()
 }
 ```
 
+If you compile the snippet above with *cnippet*, you'll see a diagnostic similar/equal to what you would see with GCC or Clang.
 
 ```
 ~ cnip test.c
@@ -58,7 +59,7 @@ Note: Semantic analysis isn't yet complete.
 
 ### Type Inference
 
-*cnippet* understands incomplete code by means of type inference. For instance, if you compile the file below with GCC or Clang, you'll see a diagnostic such as _"declaration for_`T`_is not available"_.
+*cnippet* understands code snippets (a.k.a. as incomplete programs or program fragments) through Psyche-C's type inference. 
 
 ```c
 void f()
@@ -69,6 +70,7 @@ void f()
 }
 ```
 
+If you compile the snippet above with GCC or Clang, you'll see a diagnostic such as _"declaration for_`T`_is not available"_.  
 With *cnippet*, "compilation" succeeds, as the following definitions are implicitly produced.
 
 ```c
@@ -81,14 +83,14 @@ struct TYPE_2__
 typedef TYPE_1__* T;
 ```
 
-NOTE: Type inference isn't yet available on master, only in the [original branch](https://github.com/ltcmelo/psychec/tree/original).
-
-#### Applications
+These are a few application of type inference for C:
 
 - Enabling, on incomplete source-code, static analysis techniques that require fully-typed programs.
 - Compiling partial code (e.g., a snippet retrieved from a bug tracker) for object-code inspection.
 - Generating test-input data for a function in isolation (without its dependencies).
 - Quick prototyping of an algorithm, without the need of explicit types.
+
+NOTE: Type inference isn't yet available on master, only in the [original branch](https://github.com/ltcmelo/psychec/tree/original).
 
 ## Documentation and Resources
 
