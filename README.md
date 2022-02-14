@@ -3,6 +3,8 @@
 
 ![](https://docs.google.com/drawings/d/e/2PACX-1vT-pCvcuO4U63ERkXWfBzOfVKwMQ_kh-ntzANYyNrnkt8FUV2wRHd5fN6snq33u5hWmnNQR3E3glsnH/pub?w=375&h=150)
 
+Check the [open bounties and tasks](https://docs.google.com/document/d/1_xVLVXnrEJKGOXcJcy78NqdK2vnmIiJO33iOY7xaSGQ/edit?usp=sharing)!
+
 # Psyche-C
 
 Psyche is a compiler frontend for the C programming language that is specifically designed for the implementation of static analysis tools. These are the distinct features that make Psyche-C rather unique:
