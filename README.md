@@ -71,7 +71,7 @@ void f()
 ```
 
 If you compile the snippet above with GCC or Clang, you'll see a diagnostic such as _"declaration for_`T`_is not available"_.  
-With *cnippet*, "compilation" succeeds, as the following definitions are implicitly produced.
+With *cnippet*, "compilation" succeeds, as the following definitions are implicitly synthesised.
 
 ```c
 typedef struct TYPE_2__ TYPE_1__;
