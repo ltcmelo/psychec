@@ -178,8 +178,8 @@ private:
     LanguageDialect dialect_;
     std::vector<SyntaxToken> comments_;
 
-    void linkCompilation(const Compilation*) const;
-    void unlinkCompilation(const Compilation*) const;
+    void attachCompilation(const Compilation*) const;
+    void detachCompilation(const Compilation*) const;
     std::unordered_set<const Compilation*> linkedCompilations() const;
 };
 

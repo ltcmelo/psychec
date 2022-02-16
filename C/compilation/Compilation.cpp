@@ -57,7 +57,7 @@ Compilation::~Compilation()
         auto it = P->semaModels_.find(tree);
         if (it == P->semaModels_.end())
             continue;
-        tree->unlinkCompilation(this);
+        tree->detachCompilation(this);
     }
 }
 
@@ -78,17 +78,21 @@ Assembly* Compilation::assembly()
     return P->assembly_.get();
 }
 
+void Compilation::addSyntaxTree(const SyntaxTree* tree)
+{
+    auto it = P->semaModels_.find(tree);
+    if (it != P->semaModels_.end())
+        return;
+
+    P->semaModels_.insert(it, std::make_pair(tree, nullptr));
+    P->isDirty_[tree] = true;
+    tree->attachCompilation(this);
+}
+
 void Compilation::addSyntaxTrees(std::vector<const SyntaxTree*> trees)
 {
-    for (auto tree : trees) {
-        auto it = P->semaModels_.find(tree);
-        if (it != P->semaModels_.end())
-            continue;
-
-        P->semaModels_.insert(it, std::make_pair(tree, nullptr));
-        P->isDirty_[tree] = true;
-        tree->linkCompilation(this);
-    }
+    for (auto tree : trees)
+        addSyntaxTree(tree);
 }
 
 std::vector<const SyntaxTree*> Compilation::syntaxTree() const

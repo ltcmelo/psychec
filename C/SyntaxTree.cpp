@@ -84,7 +84,7 @@ struct SyntaxTree::SyntaxTreeImpl
 
     std::vector<Diagnostic> diagnostics_;
 
-    std::unordered_set<const Compilation*> linkedCompilations_;
+    std::unordered_set<const Compilation*> attachedCompilations_;
 };
 
 SyntaxTree::SyntaxTree(SourceText text,
@@ -355,17 +355,17 @@ void SyntaxTree::newDiagnostic(DiagnosticDescriptor descriptor,
     P->diagnostics_.emplace_back(descriptor, Location::create(line), snippet);
 }
 
-void SyntaxTree::linkCompilation(const Compilation* compilation) const
+void SyntaxTree::attachCompilation(const Compilation* compilation) const
 {
-    P->linkedCompilations_.insert(compilation);
+    P->attachedCompilations_.insert(compilation);
 }
 
-void SyntaxTree::unlinkCompilation(const Compilation* compilation) const
+void SyntaxTree::detachCompilation(const Compilation* compilation) const
 {
-    P->linkedCompilations_.erase(compilation);
+    P->attachedCompilations_.erase(compilation);
 }
 
 std::unordered_set<const Compilation*> SyntaxTree::linkedCompilations() const
 {
-    return P->linkedCompilations_;
+    return P->attachedCompilations_;
 }

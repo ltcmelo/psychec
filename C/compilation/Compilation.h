@@ -61,6 +61,11 @@ public:
     const Assembly* assembly() const;
 
     /**
+     * Add a SyntaxTree to \c this Compilation.
+     */
+    void addSyntaxTree(const SyntaxTree* tree);
+
+    /**
      * Add SyntaxTrees to \c this Compilation.
      */
     void addSyntaxTrees(std::vector<const SyntaxTree*> trees);
