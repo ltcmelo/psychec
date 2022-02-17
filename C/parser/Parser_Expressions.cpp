@@ -99,6 +99,21 @@ void Parser::parseIdentifierName_AtFirst(ExpressionSyntax*& expr)
 }
 
 /**
+ * Parse a \a predefined name as an \a expression, with LA(1) at first.
+ */
+void Parser::parsePredefinedName_AtFirst(ExpressionSyntax*& expr)
+{
+    DEBUG_THIS_RULE();
+    PSYCHE_ASSERT(SyntaxFacts::isPredefinedToken(peek().kind()),
+                  return,
+                  "assert failure: <predefined-name>");
+
+    auto predefExpr = makeNode<PredefinedNameSyntax>();
+    expr = predefExpr;
+    predefExpr->predefTkIdx_ = consume();
+}
+
+/**
  * Parse a \a constant.
  *
  * \remark 6.4.4 and 6.5.1
@@ -484,6 +499,12 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
         case Keyword_ExtGNU___builtin_va_arg:
         case Keyword_MacroStd_va_arg:
             return parseVAArgumentExpression_AtFirst(expr);
+
+        case Keyword___func__:
+        case Keyword_ExtGNU___FUNCTION__:
+        case Keyword_ExtGNU___PRETTY_FUNCTION__:
+            parsePredefinedName_AtFirst(expr);
+            break;
 
         default:
             diagReporter_.ExpectedFIRSTofExpression();

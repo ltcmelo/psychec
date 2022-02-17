@@ -2638,16 +2638,81 @@ void TestParser::case1977() {}
 void TestParser::case1978() {}
 void TestParser::case1979() {}
 
-void TestParser::case1980() {}
-void TestParser::case1981() {}
-void TestParser::case1982() {}
-void TestParser::case1983() {}
-void TestParser::case1984() {}
-void TestParser::case1985() {}
-void TestParser::case1986() {}
-void TestParser::case1987() {}
-void TestParser::case1988() {}
-void TestParser::case1989() {}
+void TestParser::case1980()
+{
+    parseExpression("__FUNCTION__",
+                    Expectation().AST( { PredefinedName }));
+}
+
+void TestParser::case1981()
+{
+    parseExpression("__PRETTY_FUNCTION__",
+                    Expectation().AST( { PredefinedName }));
+}
+
+void TestParser::case1982()
+{
+    parseExpression("sizeof ( __FUNCTION__ )",
+                    Expectation().AST( { SizeofExpression,
+                                         ExpressionAsTypeReference,
+                                         ParenthesizedExpression,
+                                         PredefinedName }));
+}
+
+void TestParser::case1983()
+{
+    parseExpression("sizeof ( __PRETTY_FUNCTION__ )",
+                    Expectation().AST( { SizeofExpression,
+                                         ExpressionAsTypeReference,
+                                         ParenthesizedExpression,
+                                         PredefinedName}));
+}
+
+void TestParser::case1984()
+{
+    parseExpression("sizeof __FUNCTION__",
+                    Expectation().AST( { SizeofExpression,
+                                         ExpressionAsTypeReference,
+                                         PredefinedName }));
+}
+
+void TestParser::case1985()
+{
+    parseExpression("sizeof __PRETTY_FUNCTION__",
+                    Expectation().AST( { SizeofExpression,
+                                         ExpressionAsTypeReference,
+                                         PredefinedName }));
+}
+
+void TestParser::case1986()
+{
+    parseExpression("( __FUNCTION__ )",
+                    Expectation().AST( { ParenthesizedExpression,
+                                         PredefinedName }));
+}
+
+void TestParser::case1987()
+{
+    parseExpression("( __PRETTY_FUNCTION__ )",
+                    Expectation().AST( { ParenthesizedExpression,
+                                         PredefinedName }));
+}
+
+void TestParser::case1988()
+{
+    parseExpression("s = __FUNCTION__",
+                    Expectation().AST( { BasicAssignmentExpression,
+                                         IdentifierName,
+                                         PredefinedName }));
+}
+
+void TestParser::case1989()
+{
+    parseExpression("s = __PRETTY_FUNCTION__",
+                    Expectation().AST( { BasicAssignmentExpression,
+                                         IdentifierName,
+                                         PredefinedName }));
+}
 
 void TestParser::case1990() {}
 void TestParser::case1991() {}

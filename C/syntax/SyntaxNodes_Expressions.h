@@ -159,6 +159,27 @@ private:
 };
 
 /**
+ * \brief The PredefinedNameSyntax class.
+ *
+ * \code
+ * __func__
+ * __FUNCTION__
+ * __PRETTY_FUNCTION__
+ * \endcode
+ */
+class PSY_C_API PredefinedNameSyntax final : public NameSyntax
+{
+    AST_NODE_1K(PredefinedName, Name)
+
+public:
+    SyntaxToken predefinedToken() const { return tokenAtIndex(predefTkIdx_); }
+
+private:
+    LexedTokens::IndexType predefTkIdx_ = LexedTokens::invalidIndex();
+    AST_CHILD_LST1(predefTkIdx_)
+};
+
+/**
  * \brief The ParenthesizedExpressionSyntax class.
  *
  * \code

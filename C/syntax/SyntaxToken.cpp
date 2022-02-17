@@ -162,6 +162,7 @@ const char* tokenNames[] =
 
     "_Bool",
     "_Complex",
+    "__func__",
 
     "_Alignas",
     "_Alignof",
@@ -194,6 +195,8 @@ const char* tokenNames[] =
     "__builtin_va_arg",
     "__builtin_offsetof",
     "__builtin_tgmath",
+    "__FUNCTION__",
+    "__PRETTY_FUNCTION__",
 
     "va_arg",
 

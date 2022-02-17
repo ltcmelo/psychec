@@ -77,7 +77,7 @@ public:
             + 1950-1959 -> GNU: `__builtin_va_arg'
             + 1960-1969 -> GNU: `__builtin_offsetof'
             + 1970-1979 -> GNU: `__builtin_choose_expr'
-            + 1980-1999 ->
+            + 1980-1989 -> GNU: `__FUNCTION__' and `__PRETTY_FUNCTION__'
             + 1990-1999 ->
 
         Statements:
@@ -96,7 +96,7 @@ public:
         Macro translation:
             + 3000-3009 -> `va_arg'
             + 3010-3019 -> `offsetof'
-            + 3020-3029 ->
+            + 3020-3029 -> `__func__'
             + 3030-3039 ->
             + 3040-3099 ->
             + 3100-3199 ->

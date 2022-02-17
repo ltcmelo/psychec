@@ -380,6 +380,19 @@ public:
         }
     }
 
+    static bool isPredefinedToken(SyntaxKind tkK)
+    {
+        switch(tkK) {
+            case Keyword___func__:
+            case Keyword_ExtGNU___FUNCTION__:
+            case Keyword_ExtGNU___PRETTY_FUNCTION__:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
     //------------//
     // Statements //
     //------------//

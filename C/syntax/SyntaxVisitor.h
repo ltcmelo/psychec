@@ -122,6 +122,7 @@ public:
     // Expressions //
     //-------------//
     virtual Action visitIdentifierName(const IdentifierNameSyntax*) { return Action::Visit; }
+    virtual Action visitPredefinedName(const PredefinedNameSyntax*) { return Action::Visit; }
     virtual Action visitConstantExpression(const ConstantExpressionSyntax*) { return Action::Visit; }
     virtual Action visitStringLiteralExpression(const StringLiteralExpressionSyntax*) { return Action::Visit; }
     virtual Action visitParenthesizedExpression(const ParenthesizedExpressionSyntax*) { return Action::Visit; }

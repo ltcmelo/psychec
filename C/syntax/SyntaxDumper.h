@@ -426,6 +426,13 @@ protected:
         return Action::Skip;
     }
 
+    virtual Action visitPredefinedName(const PredefinedNameSyntax* node) override
+    {
+        traverseExpression(node);
+        terminal(node->predefinedToken(), node);
+        return Action::Skip;
+    }
+
     virtual Action visitConstantExpression(const ConstantExpressionSyntax* node) override
     {
         traverseExpression(node);
