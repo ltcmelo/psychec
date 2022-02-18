@@ -56,13 +56,13 @@ public:
             + 1300-
 
         Fields:
-            + 1000-1049 -> objects (plain)
-            + 1050-1099 -> `const' objects
-            + 1100-1149 -> pointers
-            + 1150-1199 -> `const' object pointers
-            + 1200-1249 -> `const' object `const' pointers
-            + 1250-1299 -> `const' pointers
-            + 1300-
+            + 2000-2049 -> objects (plain)
+            + 2050-2099 -> `const' objects
+            + 2100-2149 -> pointers
+            + 2150-2199 -> `const' object pointers
+            + 2200-2249 -> `const' object `const' pointers
+            + 2250-2299 -> `const' pointers
+            + 2300-
 
      */
 

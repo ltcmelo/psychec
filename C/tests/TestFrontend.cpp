@@ -50,6 +50,12 @@ TestFrontend::TestFrontend()
 TestFrontend::~TestFrontend()
 {}
 
+TestFrontend::Expectation::Expectation(int numE)
+    : numE_(numE)
+    , numW_(0)
+    , hasAmbiguity_(false)
+{}
+
 void TestFrontend::Expectation::setErrorCnt(int numE)
 {
     numE_ = numE;

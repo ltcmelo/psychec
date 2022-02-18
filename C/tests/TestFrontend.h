@@ -47,11 +47,7 @@ class TestFrontend : public TestRunner
 public:
     struct Expectation
     {
-        Expectation(int numE = 0, int numW = 0)
-            : numE_(numE)
-            , numW_(numW)
-            , hasAmbiguity_(false)
-        {}
+        Expectation(int numE = 0);
 
         void setErrorCnt(int numE);
         void setWarnCnt(int numW);
