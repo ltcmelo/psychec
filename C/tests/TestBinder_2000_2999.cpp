@@ -186,8 +186,31 @@ void TestBinder::case2046(){ }
 void TestBinder::case2047(){ }
 void TestBinder::case2048(){ }
 void TestBinder::case2049(){ }
-void TestBinder::case2050(){ }
-void TestBinder::case2051(){ }
+
+void TestBinder::case2050()
+{
+    bind(R"(
+struct x
+{
+    int * const y ;
+};
+         )",
+         Expectation()
+            .qualPtr_1("y", ValueKind::Field, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case2051()
+{
+    bind(R"(
+struct x
+{
+    y * const z ;
+};
+         )",
+         Expectation()
+            .qualPtr_1("z", ValueKind::Field, Expectation::Qual::Const, TypeKind::Synonym));
+}
+
 void TestBinder::case2052(){ }
 void TestBinder::case2053(){ }
 void TestBinder::case2054(){ }
