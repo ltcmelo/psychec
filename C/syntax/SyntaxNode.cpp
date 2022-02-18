@@ -284,6 +284,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
         /* Names */
         case IdentifierName:
             return "IdentifierName";
+        case PredefinedName:
+            return "PredefinedName";
 
         /* Unary */
         case PreIncrementExpression:

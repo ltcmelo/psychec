@@ -244,6 +244,8 @@ public:
     virtual const NameSyntax* asName() const { return nullptr; }
     virtual IdentifierNameSyntax* asIdentifierName() { return nullptr; }
     virtual const IdentifierNameSyntax* asIdentifierName() const { return nullptr; }
+    virtual PredefinedNameSyntax* asPredefinedName() { return nullptr; }
+    virtual const PredefinedNameSyntax* asPredefinedName() const { return nullptr; }
 
     /* Operations */
     virtual UnaryExpressionSyntax* asUnaryExpression() { return nullptr; }

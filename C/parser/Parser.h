@@ -322,6 +322,7 @@ private:
     bool parseExpression(ExpressionSyntax*& expr);
     bool parseIdentifierName(ExpressionSyntax*& expr);
     void parseIdentifierName_AtFirst(ExpressionSyntax*& expr);
+    void parsePredefinedName_AtFirst(ExpressionSyntax*& expr);
     template <class ExprT> bool parseConstant(ExpressionSyntax*& expr, SyntaxKind exprK);
     template <class ExprT> void parseConstant_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK);
     bool parseStringLiteral(ExpressionSyntax*& expr);

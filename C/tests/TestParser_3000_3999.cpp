@@ -141,27 +141,40 @@ void TestParser::case3019()
 
 void TestParser::case3020()
 {
-
+    parseExpression("__func__",
+                    Expectation().AST( { PredefinedName }));
 }
 
 void TestParser::case3021()
 {
-
+    parseExpression("(__func__)",
+                    Expectation().AST( { ParenthesizedExpression,
+                                         PredefinedName }));
 }
 
 void TestParser::case3022()
 {
-
+    parseExpression("sizeof( __func__ )",
+                    Expectation().AST( { SizeofExpression,
+                                         ExpressionAsTypeReference,
+                                         ParenthesizedExpression,
+                                         PredefinedName }));
 }
 
 void TestParser::case3023()
 {
-
+    parseExpression("sizeof __func__",
+                    Expectation().AST( { SizeofExpression,
+                                         ExpressionAsTypeReference,
+                                         PredefinedName }));
 }
 
 void TestParser::case3024()
 {
-
+    parseExpression("s = __func__",
+                    Expectation().AST( { BasicAssignmentExpression,
+                                         IdentifierName,
+                                         PredefinedName }));
 }
 
 void TestParser::case3025()

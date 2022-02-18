@@ -192,6 +192,7 @@ enum SyntaxKind : std::uint16_t
     // ----------- //
     Keyword__Bool,
     Keyword__Complex,
+    Keyword___func__,
 
     // ----------- //
     // --- C11 --- //
@@ -235,6 +236,8 @@ enum SyntaxKind : std::uint16_t
     Keyword_ExtGNU___builtin_va_arg,
     Keyword_ExtGNU___builtin_offsetof,
     Keyword_ExtGNU___builtin_tgmath,
+    Keyword_ExtGNU___FUNCTION__,
+    Keyword_ExtGNU___PRETTY_FUNCTION__,
 
     // --------------------------//
     // --- Translated macros --- //
@@ -376,6 +379,7 @@ enum SyntaxKind : std::uint16_t
 
     /* Names */
     IdentifierName,
+    PredefinedName,
 
     /* Unary */
     PostIncrementExpression,

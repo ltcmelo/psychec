@@ -105,6 +105,16 @@ public:
 
     //!@{
     /**
+     * Whether to enable GNU function names as strings:
+     *
+     * https://gcc.gnu.org/onlinedocs/gcc/Function-Names.html
+     */
+    LanguageExtensions& enable_ExtGNU_FunctionNames(bool enable);
+    bool isEnabled_ExtGNU_FunctionNames() const;
+    //!@}
+
+    //!@{
+    /**
      * Whether to enable GNU statement expressions.
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
@@ -194,6 +204,7 @@ private:
         std::uint64_t ExtGNU_DesignatedInitializers_ : 1;
         std::uint64_t ExtGNU_StatementExpressions_ : 1;
         std::uint64_t ExtGNU_InternalBuiltins_ : 1;
+        std::uint64_t ExtGNU_FunctionNames_ : 1;
 
         /* Psyche */
         std::uint64_t ExtPSY_Generics_ : 1;

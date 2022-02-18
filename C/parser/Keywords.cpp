@@ -588,6 +588,20 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
                     }
                 }
             }
+            else if (s[2] == 'f'
+                     && opts.dialect().std() >= LanguageDialect::Std::C99) {
+                if (s[3] == 'u') {
+                    if (s[4] == 'n') {
+                        if (s[5] == 'c') {
+                            if (s[6] == '_') {
+                                if (s[7] == '_') {
+                                    return Keyword___func__;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             else if (s[2] == 't') {
                 if (s[3] == 'y') {
                     if (s[4] == 'p') {
@@ -1055,6 +1069,28 @@ static inline SyntaxKind classify12(const char* s, const ParseOptions& opts)
                     }
                 }
             }
+            else if (s[2] == 'F'
+                     && opts.extensions().isEnabled_ExtGNU_FunctionNames()) {
+                if (s[3] == 'U') {
+                    if (s[4] == 'N') {
+                        if (s[5] == 'C') {
+                            if (s[6] == 'T') {
+                                if (s[7] == 'I') {
+                                    if (s[8] == 'O') {
+                                        if (s[9] == 'N') {
+                                            if (s[10] == '_') {
+                                                if (s[11] == '_') {
+                                                    return Keyword_ExtGNU___FUNCTION__;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         else if (s[1] == 't'
                  && opts.extensions().translations().isEnabled_Translate_thread_local_AsKeyword()) {
@@ -1330,6 +1366,47 @@ static inline SyntaxKind classify18(const char* s, const ParseOptions& opts)
 
 static inline SyntaxKind classify19(const char* s, const ParseOptions& opts)
 {
+    if (s[0] == '_') {
+        if (s[1] == '_') {
+            if (s[2] == 'P'
+                && opts.extensions().isEnabled_ExtGNU_FunctionNames()) {
+                if (s[3] == 'R') {
+                    if (s[4] == 'E') {
+                        if (s[5] == 'T') {
+                            if (s[6] == 'T') {
+                                if (s[7] == 'Y') {
+                                    if (s[8] == '_') {
+                                        if (s[9] == 'F') {
+                                            if (s[10] == 'U') {
+                                                if (s[11] == 'N') {
+                                                    if (s[12] == 'C') {
+                                                        if (s[13] == 'T') {
+                                                            if (s[14] == 'I') {
+                                                                if (s[15] == 'O') {
+                                                                    if (s[16] == 'N') {
+                                                                        if (s[17] == '_') {
+                                                                            if (s[18] == '_') {
+                                                                                return Keyword_ExtGNU___PRETTY_FUNCTION__;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     return IdentifierToken;
 }
 
