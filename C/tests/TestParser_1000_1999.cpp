@@ -2706,7 +2706,7 @@ void TestParser::case1987()
 
 void TestParser::case1988()
 {
-    parseExpression("s = __FUNCTION__",
+    parseExpression("x = __FUNCTION__",
                     Expectation().AST( { BasicAssignmentExpression,
                                          IdentifierName,
                                          PredefinedName }));
@@ -2714,7 +2714,7 @@ void TestParser::case1988()
 
 void TestParser::case1989()
 {
-    parseExpression("s = __PRETTY_FUNCTION__",
+    parseExpression("x = __PRETTY_FUNCTION__",
                     Expectation().AST( { BasicAssignmentExpression,
                                          IdentifierName,
                                          PredefinedName }));

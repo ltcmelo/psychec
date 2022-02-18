@@ -62,14 +62,16 @@ public:
 
         int numE_;
         int numW_;
+
         std::vector<std::string> descriptorsE_;
         std::vector<std::string> descriptorsW_;
 
         Expectation& AST(std::vector<SyntaxKind>&& v);
         Expectation& replicateAmbiguity(const std::string& s = "");
 
-        bool hasAmbiguity_;
-        std::string ambiguousText_;
+        bool isAmbiguous_;
+        std::string ambiguityText_;
+
         std::vector<SyntaxKind> syntaxKinds_;
 
 

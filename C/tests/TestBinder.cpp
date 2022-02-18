@@ -58,8 +58,7 @@ void TestBinder::setUp()
 void TestBinder::tearDown()
 {}
 
-void TestBinder::bind(std::string text,
-                        Expectation X)
+void TestBinder::bind(std::string text, Expectation X)
 {
     parse(text);
     auto compilation = Compilation::create(tree_->filePath());

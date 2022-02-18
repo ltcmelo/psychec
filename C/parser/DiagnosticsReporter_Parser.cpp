@@ -40,9 +40,10 @@ const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclar
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofSpecifierQualifier = "Parser-203-6.7.2.1";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDesignatedInitializer = "Parser-204-6.7.9";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator = "Parser-205-6.7.6";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofInitializedDeclarator = "Parser-206";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclaratorAndInitializer = "Parser-206";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructOrUnionOrEnum = "Parser-207-6.7.2.1";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofEnum = "Parser-208-6.7.2.1";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructDeclarator = "Parser-208-6.7.2.1-9";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofEnum = "Parser-209-6.7.2.1";
 
 /* Detailed */
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFieldName = "Parser-300-6.5.2";
@@ -289,7 +290,27 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclarator()
                                   DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpectedFOLLOWofInitializedDeclarator()
+void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructDeclarator()
+{
+    auto validTkKinds = { CommaToken,
+                          SemicolonToken,
+                          EqualsToken,
+                          ColonToken };
+
+    std::string s = "expected "
+                + joinTokenNames(validTkKinds)
+                + "after field declarator, got `"
+                + parser_->peek().valueText_c_str()
+                + "'";
+
+    diagnose(DiagnosticDescriptor(ID_of_ExpectedFOLLOWofStructDeclarator,
+                                  "[[unexpected FOLLOW of field declarator]]",
+                                  s,
+                                  DiagnosticSeverity::Error,
+                                  DiagnosticCategory::Syntax));
+}
+
+void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclaratorAndInitializer()
 {
     auto validTkKinds = { CommaToken,
                           SemicolonToken };
@@ -300,7 +321,7 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofInitializedDeclarator()
                 + parser_->peek().valueText_c_str()
                 + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFOLLOWofInitializedDeclarator,
+    diagnose(DiagnosticDescriptor(ID_of_ExpectedFOLLOWofDeclaratorAndInitializer,
                                   "[[unexpected FOLLOW of initialized declarator]]",
                                   s,
                                   DiagnosticSeverity::Error,

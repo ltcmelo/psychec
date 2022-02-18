@@ -53,7 +53,7 @@ TestFrontend::~TestFrontend()
 TestFrontend::Expectation::Expectation()
     : numE_(0)
     , numW_(0)
-    , hasAmbiguity_(false)
+    , isAmbiguous_(false)
 {}
 
 TestFrontend::Expectation& TestFrontend::Expectation::setErrorCnt(int numE)
@@ -70,8 +70,8 @@ TestFrontend::Expectation& TestFrontend::Expectation::setWarnCnt(int numW)
 
 TestFrontend::Expectation& TestFrontend::Expectation::replicateAmbiguity(const std::string& s)
 {
-    ambiguousText_ = s;
-    hasAmbiguity_ = true;
+    isAmbiguous_ = true;
+    ambiguityText_ = s;
     return *this;
 }
 
@@ -302,15 +302,15 @@ void TestFrontend::parse(std::string source,
     textP.erase(std::remove_if(textP.begin(), textP.end(), ::isspace), textP.end());
     text.erase(std::remove_if(text.begin(), text.end(), ::isspace), text.end());
 
-    if (X.hasAmbiguity_) {
-        if (X.ambiguousText_.empty())
+    if (X.isAmbiguous_) {
+        if (X.ambiguityText_.empty())
             PSYCHE_EXPECT_STR_EQ(text + text, textP);
         else {
-            X.ambiguousText_.erase(
-                        std::remove_if(X.ambiguousText_.begin(),
-                                       X.ambiguousText_.end(), ::isspace),
-                        X.ambiguousText_.end());
-            PSYCHE_EXPECT_STR_EQ(X.ambiguousText_, textP);
+            X.ambiguityText_.erase(
+                        std::remove_if(X.ambiguityText_.begin(),
+                                       X.ambiguityText_.end(), ::isspace),
+                        X.ambiguityText_.end());
+            PSYCHE_EXPECT_STR_EQ(X.ambiguityText_, textP);
         }
     }
     else

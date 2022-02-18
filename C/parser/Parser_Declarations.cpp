@@ -353,7 +353,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
 
             default:
                 if (init)
-                    diagReporter_.ExpectedFOLLOWofInitializedDeclarator();
+                    diagReporter_.ExpectedFOLLOWofDeclaratorAndInitializer();
                 else
                     diagReporter_.ExpectedFOLLOWofDeclarator();
                 return false;
@@ -517,7 +517,7 @@ bool Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList(
             }
 
             default:
-                diagReporter_.ExpectedFOLLOWofDeclarator();
+                diagReporter_.ExpectedFOLLOWofStructDeclarator();
                 return false;
         }
 

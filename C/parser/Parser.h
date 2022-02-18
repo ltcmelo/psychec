@@ -119,7 +119,8 @@ private:
         void ExpectedFIRSTofSpecifierQualifier();
         void ExpectedFOLLOWofDesignatedInitializer();
         void ExpectedFOLLOWofDeclarator();
-        void ExpectedFOLLOWofInitializedDeclarator();
+        void ExpectedFOLLOWofStructDeclarator();
+        void ExpectedFOLLOWofDeclaratorAndInitializer();
         void ExpectedFOLLOWofStructOrUnionOrEnum();
         void ExpectedFOLLOWofEnum();
 
@@ -129,7 +130,8 @@ private:
         static const std::string ID_of_ExpectedFIRSTofSpecifierQualifier;
         static const std::string ID_of_ExpectedFOLLOWofDesignatedInitializer;
         static const std::string ID_of_ExpectedFOLLOWofDeclarator;
-        static const std::string ID_of_ExpectedFOLLOWofInitializedDeclarator;
+        static const std::string ID_of_ExpectedFOLLOWofStructDeclarator;
+        static const std::string ID_of_ExpectedFOLLOWofDeclaratorAndInitializer;
         static const std::string ID_of_ExpectedFOLLOWofStructOrUnionOrEnum;
         static const std::string ID_of_ExpectedFOLLOWofEnum;
 

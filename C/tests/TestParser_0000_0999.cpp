@@ -92,7 +92,7 @@ void TestParser::case0007()
 
 void TestParser::case0008()
 {
-    parse("x y = 123;") ;
+    parse("x y = 1 ;") ;
 }
 
 void TestParser::case0009()
@@ -314,7 +314,7 @@ void TestParser::case0030()
 {
     parse("int x = 1 {",
           Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofInitializedDeclarator));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclaratorAndInitializer));
 }
 
 void TestParser::case0031()
@@ -2793,17 +2793,23 @@ void TestParser::case0438()
 
 void TestParser::case0439()
 {
-
+    parse("struct { int x = 1 ; } ;",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructDeclarator));
 }
 
 void TestParser::case0440()
 {
-
+    parse("struct { x y = 1 ; } ;",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructDeclarator));
 }
 
 void TestParser::case0441()
 {
-
+    parse("struct { int x : 1 = 1 ; } ;",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructDeclarator));
 }
 
 void TestParser::case0442()
