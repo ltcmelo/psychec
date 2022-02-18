@@ -46,15 +46,15 @@ public:
             + 0100-0199 ->
             + 0200-0299 ->
 
-        Globals and locals: 1xxx
-        Fields:             2xxx
-            + [1-2]000-[1-2]049 -> objects
-            + [1-2]050-[1-2]099 -> objects with qualified type
-            + [1-2]100-[1-2]149 -> pointers
-            + [1-2]150-[1-2]199 -> pointers to objects of qualified types
-            + [1-2]200-[1-2]249 -> qualified pointers to objects of qualified type
-            + [1-2]250-[1-2]299 -> qualified pointers
-            + [1-2]300-[1-2]399 ->
+        Globals and locals: 1
+        Fields: 2
+            + ?000-?049 -> objects
+            + ?050-?099 -> objects with qualified type
+            + ?100-?149 -> pointers
+            + ?150-?199 -> pointers to objects of qualified types
+            + ?200-?249 -> qualified pointers to objects of qualified type
+            + ?250-?299 -> qualified pointers
+            + ?300-?399 ->
      */
 
     void case0001();
