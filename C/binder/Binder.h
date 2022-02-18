@@ -140,7 +140,7 @@ private:
     Action actOnDeclarator(const DeclaratorSyntax*);
     virtual Action visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax*) override;
     virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax*) override;
-    //virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) override;
+    virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) override;
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
 

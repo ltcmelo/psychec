@@ -163,6 +163,13 @@ SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSynt
     return Action::Skip;
 }
 
+SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax* node)
+{
+    visit(node->innerDeclarator());
+
+    return Action::Skip;
+}
+
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
     std::unique_ptr<SymbolName> name(

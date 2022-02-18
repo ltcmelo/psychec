@@ -54,7 +54,7 @@ public:
             + [1-2]150-[1-2]199 -> `const' object pointers
             + [1-2]200-[1-2]249 -> `const' object `const' pointers
             + [1-2]250-[1-2]299 -> `const' pointers
-            + [1-2]300-
+            + [1-2]300-[1-2]399 ->
      */
 
     void case0001();
