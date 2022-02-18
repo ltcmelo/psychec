@@ -85,16 +85,16 @@ void TestBinder::case1005()
 
 void TestBinder::case1006()
 {
-    bind("x y = 1 ;",
+    bind("int x = 1 ;",
          Expectation()
-            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym));
+            .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1007()
 {
-    bind("int x = 1 ;",
+    bind("x y = 1 ;",
          Expectation()
-            .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym));
 }
 
 void TestBinder::case1008()

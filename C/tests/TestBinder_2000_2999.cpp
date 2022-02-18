@@ -116,28 +116,20 @@ struct w
 
 void TestBinder::case2006()
 {
-    // TODO: Need separate syntax/semantic warn/erro in expectation.
+    // Non-field correspondent
+    CROSS_REFERENCE_TEST(TestBinder::case1006);
 
-//    bind(R"(
-//struct w
-//{
-//    x y = 1 ;
-//};
-//         )",
-//         );
+    // Syntax error
+    CROSS_REFERENCE_TEST(TestParser::case0439);
 }
 
 void TestBinder::case2007()
 {
-    // TODO: Need separate syntax/semantic warn/erro in expectation.
+    // Non-field correspondent
+    CROSS_REFERENCE_TEST(TestBinder::case1007);
 
-//    bind(R"(
-//struct w
-//{
-//    int x = 1 ;
-//};
-//         )",
-
+    // Syntax error
+    CROSS_REFERENCE_TEST(TestParser::case0440);
 }
 
 void TestBinder::case2008()
@@ -152,6 +144,7 @@ struct w
              Expectation::ErrorOrWarn::Error,
              Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
+
 void TestBinder::case2009(){ }
 void TestBinder::case2010(){ }
 void TestBinder::case2011(){ }
