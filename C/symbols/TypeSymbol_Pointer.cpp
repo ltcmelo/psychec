@@ -50,7 +50,7 @@ PointerTypeSymbol::PointerTypeSymbol(const SyntaxTree* tree,
                                            refedTySym))
 {}
 
-const TypeSymbol *PointerTypeSymbol::referencedType() const
+const TypeSymbol* PointerTypeSymbol::referencedType() const
 {
     return P_CAST->refedTySym_;
 }

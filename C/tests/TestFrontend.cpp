@@ -173,6 +173,20 @@ TestFrontend::Expectation::qualObjQualPtr_1(const std::string& valSymName,
     return *this;
 }
 
+TestFrontend::Expectation&
+TestFrontend::Expectation::arr_1(const std::string& valSymName,
+                                 ValueKind valKind,
+                                 TypeKind refedTyKind,
+                                 BuiltinTypeKind refedTyBuiltTyKind)
+{
+    arr_1_.push_back(std::make_tuple(valSymName,
+                                     valKind,
+                                     refedTyKind,
+                                     refedTyBuiltTyKind));
+    return *this;
+}
+
+
 TestFrontend::Expectation& TestFrontend::Expectation::addDiagnostic(ErrorOrWarn v, std::string descriptorId)
 {
     if (v == ErrorOrWarn::Error) {

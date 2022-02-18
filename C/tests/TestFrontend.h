@@ -180,6 +180,20 @@ public:
                                       Qual qualPtr,
                                       TypeKind refedTyKind,
                                       BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
+
+        /*
+         * arrays
+         */
+        using Arr_1_Data = std::tuple<std::string,
+                                      ValueKind,
+                                      TypeKind,
+                                      BuiltinTypeKind>;
+        std::vector<Arr_1_Data> arr_1_;
+        Expectation& arr_1(const std::string& valSymName,
+                           ValueKind valKind,
+                           TypeKind refedTyKind,
+                           BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
+
     };
 
 protected:

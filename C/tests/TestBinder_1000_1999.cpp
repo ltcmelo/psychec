@@ -507,7 +507,13 @@ void TestBinder::case1297() { }
 void TestBinder::case1298() { }
 void TestBinder::case1299() { }
 
-void TestBinder::case1300(){ }
+void TestBinder::case1300()
+{
+    bind("int x [ 1 ] ;",
+         Expectation()
+            .arr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
 void TestBinder::case1301(){ }
 void TestBinder::case1302(){ }
 void TestBinder::case1303(){ }

@@ -26,6 +26,13 @@
 namespace psy {
 namespace C {
 
+/**
+ * \brief The PointerTypeSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IPointerTypeSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
 class PSY_C_API PointerTypeSymbol final : public TypeSymbol
 {
 public:
@@ -33,7 +40,7 @@ public:
     virtual const PointerTypeSymbol* asPointerType() const override { return this; }
 
     /**
-     * The \a referenced TypeSymbol of \c this PointerTypeSymbol.
+     * The <em>referenced type</em> of \c this PointerTypeSymbol.
      *
      * \remark 6.2.5-20
      */

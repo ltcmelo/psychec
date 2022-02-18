@@ -19,15 +19,38 @@
 // THE SOFTWARE.
 
 #include "TypeSymbol_Array.h"
+#include "TypeSymbol__IMPL__.inc"
 
 using namespace psy;
 using namespace C;
 
+struct ArrayTypeSymbol::ArrayTypeSymbolImpl : TypeSymbolImpl
+{
+    ArrayTypeSymbolImpl(const SyntaxTree* tree,
+                          const Scope* outerScope,
+                          const Symbol* containingSym,
+                          const TypeSymbol* elemTySym)
+        : TypeSymbolImpl(tree,
+                         outerScope,
+                         containingSym,
+                         TypeKind::Array)
+        , elemTySym_(elemTySym)
+    {}
+
+    const TypeSymbol* elemTySym_;
+};
+
 ArrayTypeSymbol::ArrayTypeSymbol(const SyntaxTree* tree,
                                  const Scope* scope,
-                                 const Symbol* containingSym)
-    : TypeSymbol(tree,
-                 scope,
-                 containingSym,
-                 TypeKind::Array)
+                                 const Symbol* containingSym,
+                                 const TypeSymbol* elemTySym)
+    : TypeSymbol(new ArrayTypeSymbolImpl(tree,
+                                         scope,
+                                         containingSym,
+                                         elemTySym))
 {}
+
+const TypeSymbol* ArrayTypeSymbol::elementType() const
+{
+    return P_CAST->elemTySym_;
+}

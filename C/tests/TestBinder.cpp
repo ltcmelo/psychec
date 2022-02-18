@@ -464,4 +464,50 @@ void TestBinder::bind(std::string text, Expectation X)
             PSYCHE_TEST_FAIL(s);
         }
     }
+
+    for (auto arr_1_Data : X.arr_1_) {
+        auto valSymName = std::get<0>(arr_1_Data);
+        auto valKind = std::get<1>(arr_1_Data);
+        auto refedTyKind = std::get<2>(arr_1_Data);
+        auto refedTyBuiltTyKind = std::get<3>(arr_1_Data);
+
+        auto sym = compilation->assembly()->findSymDEF(
+                [&] (const auto& v) {
+                    const Symbol* sym = v.get();
+                    if (sym->kind() != SymbolKind::Value)
+                        return false;
+
+                    const ValueSymbol* actualSym = sym->asValue();
+                    if (!(actualSym->name() != nullptr
+                           && to_string(*actualSym->name()) == valSymName
+                           && actualSym->valueKind() == valKind
+                           && actualSym->type() != nullptr
+                           && actualSym->type()->typeKind() == TypeKind::Pointer))
+                        return false;
+
+                    const PointerTypeSymbol* ptrTySym = actualSym->type()->asPointerType();
+                    const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
+
+                    if (namedTySym->typeKind() != refedTyKind)
+                        return false;
+
+                    if (refedTyKind == TypeKind::Builtin) {
+                        if (!(namedTySym->builtinTypeKind() == refedTyBuiltTyKind))
+                            return false;
+                    }
+                    else {
+                        if (refedTyBuiltTyKind != BuiltinTypeKind::None)
+                            return false;
+                    }
+
+                    return true;
+                });
+
+        if (sym == nullptr) {
+            auto s = "cannot find "
+                    + to_string(valKind) + " " + valSymName + " "
+                    + to_string(refedTyKind) + " " + to_string(refedTyBuiltTyKind);
+            PSYCHE_TEST_FAIL(s);
+        }
+    }
 }
