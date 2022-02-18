@@ -235,6 +235,75 @@ void TestBinder::bind(std::string text, Expectation X)
         }
     }
 
+    for (auto qualPtr_1_Data : X.qualPtr_1_) {
+        auto valSymName = std::get<0>(qualPtr_1_Data);
+        auto valKind = std::get<1>(qualPtr_1_Data);
+        auto qual = std::get<2>(qualPtr_1_Data);
+        auto refedTyKind = std::get<3>(qualPtr_1_Data);
+        auto refedTyBuiltTyKind = std::get<4>(qualPtr_1_Data);
+
+        auto sym = compilation->assembly()->findSymDEF(
+                [&] (const auto& v) {
+                    const Symbol* sym = v.get();
+                    if (sym->kind() != SymbolKind::Value)
+                        return false;
+
+                    const ValueSymbol* actualSym = sym->asValue();
+                    if (!(actualSym->name() != nullptr
+                           && to_string(*actualSym->name()) == valSymName
+                           && actualSym->valueKind() == valKind
+                           && actualSym->type() != nullptr
+                           && actualSym->type()->typeKind() == TypeKind::Pointer))
+                        return false;
+
+                    const PointerTypeSymbol* ptrTySym = actualSym->type()->asPointerType();
+                    switch (qual) {
+                        case Expectation::Qual::Const:
+                            if (!ptrTySym->isConstQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::Volatile:
+                            if (!ptrTySym->isVolatileQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::ConstAndVolatile:
+                            if (!(ptrTySym->isConstQualified())
+                                    || !(ptrTySym->isVolatileQualified()))
+                            break;
+
+                        case Expectation::Qual::Restrict:
+                            if (!ptrTySym->isRestrictQualified())
+                                return false;
+                            break;
+                    }
+
+                    const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
+
+                    if (namedTySym->typeKind() != refedTyKind)
+                        return false;
+
+                    if (refedTyKind == TypeKind::Builtin) {
+                        if (!(namedTySym->builtinTypeKind() == refedTyBuiltTyKind))
+                            return false;
+                    }
+                    else {
+                        if (refedTyBuiltTyKind != BuiltinTypeKind::None)
+                            return false;
+                    }
+
+                    return true;
+                });
+
+        if (sym == nullptr) {
+            auto s = "cannot find "
+                    + to_string(valKind) + " " + valSymName + " "
+                    + to_string(refedTyKind) + " " + to_string(refedTyBuiltTyKind);
+            PSYCHE_TEST_FAIL(s);
+        }
+    }
+
     for (auto qualObjPtr_1_Data : X.qualObjsPtr_1_) {
         auto valSymName = std::get<0>(qualObjPtr_1_Data);
         auto valKind = std::get<1>(qualObjPtr_1_Data);

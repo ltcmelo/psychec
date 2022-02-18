@@ -74,9 +74,17 @@ public:
 
         std::vector<SyntaxKind> syntaxKinds_;
 
+        enum class Qual
+        {
+            Const,
+            Volatile,
+            Restrict,
+            ConstAndVolatile,
+        };
 
-        // objects
-
+        /*
+         * objects
+         */
         using ObjData = std::tuple<std::string,
                                    ValueKind,
                                    std::string,
@@ -90,17 +98,9 @@ public:
                          TypeKind tyKind,
                          BuiltinTypeKind builtTyKind = BuiltinTypeKind::None);
 
-
-        // qualified type objects
-
-        enum class Qual
-        {
-            Const,
-            Volatile,
-            Restrict,
-            ConstAndVolatile,
-        };
-
+        /*
+         * objects of a qualified type
+         */
         using QualObjData = std::tuple<std::string,
                                        ValueKind,
                                        std::string,
@@ -117,8 +117,9 @@ public:
                              BuiltinTypeKind builtTyKind = BuiltinTypeKind::None);
 
 
-        // pointer objects
-
+        /*
+         * pointers
+         */
         using ObjPtr_1_Data = std::tuple<std::string,
                                          ValueKind,
                                          TypeKind,
@@ -130,8 +131,25 @@ public:
                               TypeKind refedTyKind,
                               BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
 
-        // qualified type pointer objects
+        /*
+         * qualified pointers
+         */
+        using QualPtr_1_Data = std::tuple<std::string,
+                                          ValueKind,
+                                          Qual,
+                                          TypeKind,
+                                          BuiltinTypeKind>;
+        std::vector<QualPtr_1_Data> qualPtr_1_;
 
+        Expectation& qualPtr_1(const std::string& valSymName,
+                               ValueKind valKind,
+                               Qual qual,
+                               TypeKind refedTyKind,
+                               BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
+
+        /*
+         * pointers to objects with qualified type
+         */
         using QualObjPtr_1_Data = std::tuple<std::string,
                                              ValueKind,
                                              Qual,
@@ -145,8 +163,9 @@ public:
                                   TypeKind refedTyKind,
                                   BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
 
-        // qualified type qualified pointer objects
-
+        /*
+         * qualified pointers to objects with qualified type
+         */
         using QualObjQualPtr_1_Data = std::tuple<std::string,
                                              ValueKind,
                                              Qual,

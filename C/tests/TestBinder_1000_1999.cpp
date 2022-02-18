@@ -444,7 +444,13 @@ void TestBinder::case1247() { }
 void TestBinder::case1248() { }
 void TestBinder::case1249() { }
 
-void TestBinder::case1250() { }
+void TestBinder::case1250()
+{
+    bind("int * const x ;",
+         Expectation()
+            .qualPtr_1("x", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
 void TestBinder::case1251() { }
 void TestBinder::case1252() { }
 void TestBinder::case1253() { }

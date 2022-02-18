@@ -48,12 +48,12 @@ public:
 
         Globals and locals: 1xxx
         Fields:             2xxx
-            + [1-2]000-[1-2]049 -> objects (plain)
-            + [1-2]050-[1-2]099 -> `const' objects
+            + [1-2]000-[1-2]049 -> objects
+            + [1-2]050-[1-2]099 -> objects with qualified type
             + [1-2]100-[1-2]149 -> pointers
-            + [1-2]150-[1-2]199 -> `const' object pointers
-            + [1-2]200-[1-2]249 -> `const' object `const' pointers
-            + [1-2]250-[1-2]299 -> `const' pointers
+            + [1-2]150-[1-2]199 -> pointers to objects of qualified types
+            + [1-2]200-[1-2]249 -> qualified pointers to objects of qualified type
+            + [1-2]250-[1-2]299 -> qualified pointers
             + [1-2]300-[1-2]399 ->
      */
 
