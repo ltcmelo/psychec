@@ -294,7 +294,6 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructDeclarator()
 {
     auto validTkKinds = { CommaToken,
                           SemicolonToken,
-                          EqualsToken,
                           ColonToken };
 
     std::string s = "expected "
