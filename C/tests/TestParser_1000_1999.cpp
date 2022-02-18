@@ -744,7 +744,7 @@ void TestParser::case1209()
                     _Generic( x,
                              default: cbrt
                     )",
-                    1);
+                    Expectation().setErrorCnt(1));
 }
 
 void TestParser::case1210()
@@ -753,7 +753,7 @@ void TestParser::case1210()
                     _Generic( x,
                              default:
                     )",
-                    1);
+                    Expectation().setErrorCnt(1));
 }
 
 void TestParser::case1211()
@@ -761,7 +761,7 @@ void TestParser::case1211()
     parseExpression(R"(
                     _Generic( ( x ), int : 1,)
                     )",
-                    1);
+                    Expectation().setErrorCnt(1));
 }
 
 void TestParser::case1212() {}
@@ -2015,32 +2015,38 @@ void TestParser::case1707()
 
 void TestParser::case1708()
 {
-    parseExpression("( int ) _Generic ( y", 1);
+    parseExpression("( int ) _Generic ( y",
+                    Expectation().setErrorCnt(1));
 }
 
 void TestParser::case1709()
 {
-    parseExpression("( long ) int", 1);
+    parseExpression("( long ) int",
+                    Expectation().setErrorCnt(1));
 }
 
 void TestParser::case1710()
 {
-    parseExpression("( struct x ) -", 1);
+    parseExpression("( struct x ) -",
+                    Expectation().setErrorCnt(1));
 }
 
 void TestParser::case1711()
 {
-    parseExpression("( int ) -", 1);
+    parseExpression("( int ) -",
+                    Expectation().setErrorCnt(1));
 }
 
 void TestParser::case1712()
 {
-    parseExpression("( int ) x +", 1);
+    parseExpression("( int ) x +",
+                    Expectation().setErrorCnt(1));
 }
 
 void TestParser::case1713()
 {
-    parseExpression("( int ) x ( y", 1);
+    parseExpression("( int ) x ( y",
+                    Expectation().setErrorCnt(1));
 }
 
 void TestParser::case1714()

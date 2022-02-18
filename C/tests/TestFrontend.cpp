@@ -56,14 +56,16 @@ TestFrontend::Expectation::Expectation()
     , hasAmbiguity_(false)
 {}
 
-void TestFrontend::Expectation::setErrorCnt(int numE)
+TestFrontend::Expectation& TestFrontend::Expectation::setErrorCnt(int numE)
 {
     numE_ = numE;
+    return *this;
 }
 
-void TestFrontend::Expectation::setWarnCnt(int numW)
+TestFrontend::Expectation& TestFrontend::Expectation::setWarnCnt(int numW)
 {
     numW_ = numW;
+    return *this;
 }
 
 TestFrontend::Expectation& TestFrontend::Expectation::replicateAmbiguity(const std::string& s)

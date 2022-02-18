@@ -49,8 +49,8 @@ public:
     {
         Expectation();
 
-        void setErrorCnt(int numE);
-        void setWarnCnt(int numW);
+        Expectation& setErrorCnt(int numE);
+        Expectation& setWarnCnt(int numW);
 
         enum class ErrorOrWarn
         {

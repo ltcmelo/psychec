@@ -2355,12 +2355,14 @@ void TestParser::case0328()
 
 void TestParser::case0329()
 {
-    parse("int y [ const  * ] ;", 1);
+    parse("int y [ const  * ] ;",
+          Expectation().setErrorCnt(1));
 }
 
 void TestParser::case0330()
 {
-    parse("int y [ * ] ;", 1);
+    parse("int y [ * ] ;",
+          Expectation().setErrorCnt(1));
 }
 
 void TestParser::case0331()
@@ -2602,7 +2604,8 @@ void TestParser::case0413()
 
 void TestParser::case0414()
 {
-    parse("struct x (", 1) ;
+    parse("struct x (",
+          Expectation().setErrorCnt(1)) ;
 }
 
 void TestParser::case0415()
@@ -4659,7 +4662,8 @@ void TestParser::case0782()
 
 void TestParser::case0783()
 {
-    parse("int x __attribute__ (()) asm", 2);
+    parse("int x __attribute__ (()) asm",
+          Expectation().setErrorCnt(2));
 }
 
 void TestParser::case0784()
@@ -5115,12 +5119,14 @@ void TestParser::case0860()
 
 void TestParser::case0861()
 {
-    parse("x y [ ] = { [ 1 ] = } ;", 1);
+    parse("x y [ ] = { [ 1 ] = } ;",
+          Expectation().setErrorCnt(1));
 }
 
 void TestParser::case0862()
 {
-    parse("x y [ ] = { [ ] = 1 } ;", 1);
+    parse("x y [ ] = { [ ] = 1 } ;",
+          Expectation().setErrorCnt(1));
 }
 
 void TestParser::case0863()
