@@ -50,8 +50,8 @@ TestFrontend::TestFrontend()
 TestFrontend::~TestFrontend()
 {}
 
-TestFrontend::Expectation::Expectation(int numE)
-    : numE_(numE)
+TestFrontend::Expectation::Expectation()
+    : numE_(0)
     , numW_(0)
     , hasAmbiguity_(false)
 {}

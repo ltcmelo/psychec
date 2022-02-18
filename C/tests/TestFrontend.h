@@ -47,7 +47,7 @@ class TestFrontend : public TestRunner
 public:
     struct Expectation
     {
-        Expectation(int numE = 0);
+        Expectation();
 
         void setErrorCnt(int numE);
         void setWarnCnt(int numW);
