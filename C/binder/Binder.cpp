@@ -83,16 +83,6 @@ void Binder::makeAndPushSymDEF(TypeKind tyKind)
     pushSymDEF(std::move(sym));
 }
 
-void Binder::makeAndPushTySymUSE(TypeKind tyKind)
-{
-    std::unique_ptr<NamedTypeSymbol> tySym(
-                new NamedTypeSymbol(tree_,
-                                    scopes_.top(),
-                                    symDEFs_.top(),
-                                    tyKind));
-    pushTySymUSE(std::move(tySym));
-}
-
 template <class SymT>
 void Binder::pushSymDEF(std::unique_ptr<SymT> sym)
 {
@@ -137,6 +127,16 @@ void Binder::makeAndPushTySymUSE()
                                              symDEFs_.top(),
                                              tySymUSEs_.top()));
    pushTySymUSE(std::move(tySym));
+}
+
+void Binder::makeAndPushTySymUSE(TypeKind tyKind)
+{
+    std::unique_ptr<NamedTypeSymbol> tySym(
+                new NamedTypeSymbol(tree_,
+                                    scopes_.top(),
+                                    symDEFs_.top(),
+                                    tyKind));
+    pushTySymUSE(std::move(tySym));
 }
 
 template void Binder::makeAndPushTySymUSE<ArrayTypeSymbol>();
