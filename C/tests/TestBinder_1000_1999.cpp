@@ -254,28 +254,26 @@ void TestBinder::case1101()
 
 void TestBinder::case1102()
 {
+    bind("int * x ; y * z ;",
+         Expectation()
+            .objPtr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int)
+            .objPtr_1("z", ValueKind::Variable, TypeKind::Synonym));
 }
 
 void TestBinder::case1103()
 {
+    bind("int * x , * y ;",
+         Expectation()
+            .objPtr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int)
+            .objPtr_1("y", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
+
 void TestBinder::case1104()
 {
-    //    bind("int * x ; int * y ;",
-    //         Expectation().SymbolNameKind(
-    //             {
-    //                 std::make_tuple("x", ValueKind::Variable),
-    //                 std::make_tuple("y", ValueKind::Variable)
-    //             }));
 }
+
 void TestBinder::case1105()
 {
-    //    bind("int x , * y ;",
-    //         Expectation().SymbolNameKind(
-    //             {
-    //                 std::make_tuple("x", ValueKind::Variable),
-    //                 std::make_tuple("y", ValueKind::Variable)
-    //             }));
 }
 
 void TestBinder::case1106() {}
@@ -514,9 +512,29 @@ void TestBinder::case1300()
             .arr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1301(){ }
-void TestBinder::case1302(){ }
-void TestBinder::case1303(){ }
+void TestBinder::case1301()
+{
+    bind("x y [ 1 ] ;",
+         Expectation()
+            .arr_1("y", ValueKind::Variable, TypeKind::Synonym));
+}
+
+void TestBinder::case1302()
+{
+    bind("int x [ 1 ] , y [ 2 ] ;",
+         Expectation()
+            .arr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int)
+            .arr_1("y", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case1303()
+{
+    bind("x y [ 1 ] , z [ 2 ] ;",
+         Expectation()
+            .arr_1("y", ValueKind::Variable, TypeKind::Synonym)
+            .arr_1("z", ValueKind::Variable, TypeKind::Synonym));
+}
+
 void TestBinder::case1304(){ }
 void TestBinder::case1305(){ }
 void TestBinder::case1306(){ }
