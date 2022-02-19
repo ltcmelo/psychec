@@ -534,6 +534,7 @@ void TestBinder::case1303()
             .arr_1("y", ValueKind::Variable, TypeKind::Synonym)
             .arr_1("z", ValueKind::Variable, TypeKind::Synonym));
 }
+
 void TestBinder::case1304(){ }
 void TestBinder::case1305(){ }
 void TestBinder::case1306(){ }
