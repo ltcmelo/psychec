@@ -51,7 +51,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
                     node->lastToken(), &diagReporter_);
 
-        makeAndPushNamedTySymUSE(TypeKind::Builtin);
+        makeAndPushTySymUSE(TypeKind::Builtin);
     }
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
@@ -106,7 +106,7 @@ SyntaxVisitor::Action Binder::actOnTypeQualifier(const SpecifierSyntax* spec)
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
     if (tySymUSEs_.empty())
-        makeAndPushNamedTySymUSE(TypeKind::Builtin);
+        makeAndPushTySymUSE(TypeKind::Builtin);
 
     NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
     if (!namedTySym) {
@@ -146,7 +146,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
             return Action::Quit;
     }
 
-    makeAndPushNamedTySymDEF(tyKind);
+    makeAndPushSymDEF(tyKind);
     std::unique_ptr<SymbolName> name(
                 new TagSymbolName(tyKind,
                                   node->tagToken().valueText_c_str()));
@@ -172,7 +172,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
     if (tySymUSEs_.empty())
-        makeAndPushNamedTySymUSE(TypeKind::Synonym);
+        makeAndPushTySymUSE(TypeKind::Synonym);
 
     NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
     if (!namedTySym) {
