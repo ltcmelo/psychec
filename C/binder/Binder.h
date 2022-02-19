@@ -67,9 +67,6 @@ private:
     void closeScope();
     std::stack<Scope*> scopes_;
 
-    template <class SymT> void makeAndPushSymDEF();
-    void makeAndPushTySymDEF(TypeKind);
-
     template <class SymT> void pushSymDEF(std::unique_ptr<SymT>);
     void popSymDEF();
     using SymDEFs_T = std::stack<Symbol*>;
@@ -79,6 +76,10 @@ private:
     void popTySymUSE();
     using TySymUSEs_T = std::stack<TypeSymbol*>;
     TySymUSEs_T tySymUSEs_;
+
+    template <class SymT> void makeAndPushSymDEF();
+    void makeAndPushTySymDEF(TypeKind);
+    template <class TySymT> void makeAndPushTySymUSE();
 
     struct DiagnosticsReporter
     {

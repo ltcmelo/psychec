@@ -468,8 +468,8 @@ void TestBinder::bind(std::string text, Expectation X)
     for (auto arr_1_Data : X.arr_1_) {
         auto valSymName = std::get<0>(arr_1_Data);
         auto valKind = std::get<1>(arr_1_Data);
-        auto refedTyKind = std::get<2>(arr_1_Data);
-        auto refedTyBuiltTyKind = std::get<3>(arr_1_Data);
+        auto elemTyKind = std::get<2>(arr_1_Data);
+        auto elemTyBuiltTyKind = std::get<3>(arr_1_Data);
 
         auto sym = compilation->assembly()->findSymDEF(
                 [&] (const auto& v) {
@@ -482,21 +482,21 @@ void TestBinder::bind(std::string text, Expectation X)
                            && to_string(*actualSym->name()) == valSymName
                            && actualSym->valueKind() == valKind
                            && actualSym->type() != nullptr
-                           && actualSym->type()->typeKind() == TypeKind::Pointer))
+                           && actualSym->type()->typeKind() == TypeKind::Array))
                         return false;
 
-                    const PointerTypeSymbol* ptrTySym = actualSym->type()->asPointerType();
-                    const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
+                    const ArrayTypeSymbol* arrTySym = actualSym->type()->asArrayType();
+                    const NamedTypeSymbol* namedTySym = arrTySym->elementType()->asNamedType();
 
-                    if (namedTySym->typeKind() != refedTyKind)
+                    if (namedTySym->typeKind() != elemTyKind)
                         return false;
 
-                    if (refedTyKind == TypeKind::Builtin) {
-                        if (!(namedTySym->builtinTypeKind() == refedTyBuiltTyKind))
+                    if (elemTyKind == TypeKind::Builtin) {
+                        if (!(namedTySym->builtinTypeKind() == elemTyBuiltTyKind))
                             return false;
                     }
                     else {
-                        if (refedTyBuiltTyKind != BuiltinTypeKind::None)
+                        if (elemTyBuiltTyKind != BuiltinTypeKind::None)
                             return false;
                     }
 
@@ -506,7 +506,7 @@ void TestBinder::bind(std::string text, Expectation X)
         if (sym == nullptr) {
             auto s = "cannot find "
                     + to_string(valKind) + " " + valSymName + " "
-                    + to_string(refedTyKind) + " " + to_string(refedTyBuiltTyKind);
+                    + to_string(elemTyKind) + " " + to_string(elemTyBuiltTyKind);
             PSYCHE_TEST_FAIL(s);
         }
     }

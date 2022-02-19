@@ -191,8 +191,8 @@ public:
         std::vector<Arr_1_Data> arr_1_;
         Expectation& arr_1(const std::string& valSymName,
                            ValueKind valKind,
-                           TypeKind refedTyKind,
-                           BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
+                           TypeKind elemTyKind,
+                           BuiltinTypeKind elemTyBuiltTyKind = BuiltinTypeKind::None);
 
     };
 

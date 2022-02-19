@@ -176,13 +176,13 @@ TestFrontend::Expectation::qualObjQualPtr_1(const std::string& valSymName,
 TestFrontend::Expectation&
 TestFrontend::Expectation::arr_1(const std::string& valSymName,
                                  ValueKind valKind,
-                                 TypeKind refedTyKind,
-                                 BuiltinTypeKind refedTyBuiltTyKind)
+                                 TypeKind elemTyKind,
+                                 BuiltinTypeKind elemTyBuiltTyKind)
 {
     arr_1_.push_back(std::make_tuple(valSymName,
                                      valKind,
-                                     refedTyKind,
-                                     refedTyBuiltTyKind));
+                                     elemTyKind,
+                                     elemTyBuiltTyKind));
     return *this;
 }
 
