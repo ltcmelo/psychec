@@ -20,6 +20,8 @@
 
 #include "TypeSymbol__IMPL__.inc"
 
+#include <sstream>
+
 using namespace psy;
 using namespace C;
 
@@ -74,3 +76,23 @@ void TypeSymbol::qualifyWithRestrict()
 {
     P->BF_.restrict_ = 1;
 }
+
+namespace psy {
+namespace C {
+
+std::string PSY_C_API to_string(const TypeSymbol& tySym)
+{
+    std::ostringstream oss;
+    oss << '<';
+    oss << "type";
+    oss << '|';
+    oss << "kind:" << to_string(tySym.typeKind());
+    oss << ',';
+    oss << "symbol-kind:" << to_string(tySym.kind());
+    oss << '>';
+
+    return oss.str();
+}
+
+} // C
+} // psy

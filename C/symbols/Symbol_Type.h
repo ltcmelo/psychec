@@ -94,6 +94,8 @@ private:
     void qualifyWithRestrict();
 };
 
+std::string PSY_C_API to_string(const TypeSymbol& tySym);
+
 } // C
 } // psy
 

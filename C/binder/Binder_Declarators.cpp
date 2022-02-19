@@ -116,8 +116,6 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
             switch (decltor->kind())
             {
                 case ArrayDeclarator:
-                    break;
-
                 case PointerDeclarator:
                     popTySymUSE();
                     break;

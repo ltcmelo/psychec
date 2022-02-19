@@ -512,9 +512,28 @@ void TestBinder::case1300()
             .arr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1301(){ }
-void TestBinder::case1302(){ }
-void TestBinder::case1303(){ }
+void TestBinder::case1301()
+{
+    bind("x y [ 1 ] ;",
+         Expectation()
+            .arr_1("y", ValueKind::Variable, TypeKind::Synonym));
+}
+
+void TestBinder::case1302()
+{
+    bind("int x [ 1 ] , y [ 2 ] ;",
+         Expectation()
+            .arr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int)
+            .arr_1("y", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case1303()
+{
+    bind("x y [ 1 ] , z [ 2 ] ;",
+         Expectation()
+            .arr_1("y", ValueKind::Variable, TypeKind::Synonym)
+            .arr_1("z", ValueKind::Variable, TypeKind::Synonym));
+}
 void TestBinder::case1304(){ }
 void TestBinder::case1305(){ }
 void TestBinder::case1306(){ }
