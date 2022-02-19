@@ -254,28 +254,26 @@ void TestBinder::case1101()
 
 void TestBinder::case1102()
 {
+    bind("int * x ; y * z ;",
+         Expectation()
+            .objPtr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int)
+            .objPtr_1("z", ValueKind::Variable, TypeKind::Synonym));
 }
 
 void TestBinder::case1103()
 {
+    bind("int * x , * y ;",
+         Expectation()
+            .objPtr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int)
+            .objPtr_1("y", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
+
 void TestBinder::case1104()
 {
-    //    bind("int * x ; int * y ;",
-    //         Expectation().SymbolNameKind(
-    //             {
-    //                 std::make_tuple("x", ValueKind::Variable),
-    //                 std::make_tuple("y", ValueKind::Variable)
-    //             }));
 }
+
 void TestBinder::case1105()
 {
-    //    bind("int x , * y ;",
-    //         Expectation().SymbolNameKind(
-    //             {
-    //                 std::make_tuple("x", ValueKind::Variable),
-    //                 std::make_tuple("y", ValueKind::Variable)
-    //             }));
 }
 
 void TestBinder::case1106() {}
