@@ -155,7 +155,8 @@ void TestParser::case2021()
 
 void TestParser::case2022()
 {
-    parseStatement("{ / }", 1);
+    parseStatement("{ / }",
+                   Expectation().setErrorCnt(1));
 }
 
 void TestParser::case2023()
@@ -510,7 +511,8 @@ void TestParser::case2112()
 
 void TestParser::case2113()
 {
-    parseStatement("{ 1 ( ; }", 1);
+    parseStatement("{ 1 ( ; }",
+                   Expectation().setErrorCnt(1));
 }
 
 void TestParser::case2114()

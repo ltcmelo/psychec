@@ -26,18 +26,35 @@
 namespace psy {
 namespace C {
 
+/**
+ * \brief The ArrayTypeSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IArrayTypeSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
 class PSY_C_API ArrayTypeSymbol final : public TypeSymbol
 {
 public:
     virtual ArrayTypeSymbol* asArrayType() override { return this; }
     virtual const ArrayTypeSymbol* asArrayType() const override { return this; }
 
+    /**
+     * The <em>element type</em> of \c this ArrayTypeSymbol.
+     *
+     * \remark 6.2.5-20
+     */
+    const TypeSymbol* elementType() const;
+
 private:
+    DECL_PIMPL_SUB(ArrayTypeSymbol)
+
     friend class Binder;
 
     ArrayTypeSymbol(const SyntaxTree* tree,
                     const Scope* outerScope,
-                    const Symbol* containingSym);
+                    const Symbol* containingSym,
+                    const TypeSymbol* elemTySym);
 };
 
 } // C

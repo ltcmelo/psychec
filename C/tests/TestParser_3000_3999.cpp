@@ -171,7 +171,7 @@ void TestParser::case3023()
 
 void TestParser::case3024()
 {
-    parseExpression("s = __func__",
+    parseExpression("x = __func__",
                     Expectation().AST( { BasicAssignmentExpression,
                                          IdentifierName,
                                          PredefinedName }));

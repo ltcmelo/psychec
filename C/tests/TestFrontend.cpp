@@ -50,20 +50,28 @@ TestFrontend::TestFrontend()
 TestFrontend::~TestFrontend()
 {}
 
-void TestFrontend::Expectation::setErrorCnt(int numE)
+TestFrontend::Expectation::Expectation()
+    : numE_(0)
+    , numW_(0)
+    , isAmbiguous_(false)
+{}
+
+TestFrontend::Expectation& TestFrontend::Expectation::setErrorCnt(int numE)
 {
     numE_ = numE;
+    return *this;
 }
 
-void TestFrontend::Expectation::setWarnCnt(int numW)
+TestFrontend::Expectation& TestFrontend::Expectation::setWarnCnt(int numW)
 {
     numW_ = numW;
+    return *this;
 }
 
 TestFrontend::Expectation& TestFrontend::Expectation::replicateAmbiguity(const std::string& s)
 {
-    ambiguousText_ = s;
-    hasAmbiguity_ = true;
+    isAmbiguous_ = true;
+    ambiguityText_ = s;
     return *this;
 }
 
@@ -119,6 +127,21 @@ TestFrontend::Expectation::objPtr_1(const std::string& valSymName,
 }
 
 TestFrontend::Expectation&
+TestFrontend::Expectation::qualPtr_1(const std::string& valSymName,
+                                     ValueKind valKind,
+                                     Qual qual,
+                                     TypeKind refedTyKind,
+                                     BuiltinTypeKind refedTyBuiltTyKind)
+{
+    qualPtr_1_.push_back(std::make_tuple(valSymName,
+                                         valKind,
+                                         qual,
+                                         refedTyKind,
+                                         refedTyBuiltTyKind));
+    return *this;
+}
+
+TestFrontend::Expectation&
 TestFrontend::Expectation::qualObjPtr_1(const std::string& valSymName,
                                         ValueKind valKind,
                                         Qual qual,
@@ -149,6 +172,20 @@ TestFrontend::Expectation::qualObjQualPtr_1(const std::string& valSymName,
                                                  refedTyBuiltTyKind));
     return *this;
 }
+
+TestFrontend::Expectation&
+TestFrontend::Expectation::arr_1(const std::string& valSymName,
+                                 ValueKind valKind,
+                                 TypeKind elemTyKind,
+                                 BuiltinTypeKind elemTyBuiltTyKind)
+{
+    arr_1_.push_back(std::make_tuple(valSymName,
+                                     valKind,
+                                     elemTyKind,
+                                     elemTyBuiltTyKind));
+    return *this;
+}
+
 
 TestFrontend::Expectation& TestFrontend::Expectation::addDiagnostic(ErrorOrWarn v, std::string descriptorId)
 {
@@ -294,15 +331,15 @@ void TestFrontend::parse(std::string source,
     textP.erase(std::remove_if(textP.begin(), textP.end(), ::isspace), textP.end());
     text.erase(std::remove_if(text.begin(), text.end(), ::isspace), text.end());
 
-    if (X.hasAmbiguity_) {
-        if (X.ambiguousText_.empty())
+    if (X.isAmbiguous_) {
+        if (X.ambiguityText_.empty())
             PSYCHE_EXPECT_STR_EQ(text + text, textP);
         else {
-            X.ambiguousText_.erase(
-                        std::remove_if(X.ambiguousText_.begin(),
-                                       X.ambiguousText_.end(), ::isspace),
-                        X.ambiguousText_.end());
-            PSYCHE_EXPECT_STR_EQ(X.ambiguousText_, textP);
+            X.ambiguityText_.erase(
+                        std::remove_if(X.ambiguityText_.begin(),
+                                       X.ambiguityText_.end(), ::isspace),
+                        X.ambiguityText_.end());
+            PSYCHE_EXPECT_STR_EQ(X.ambiguityText_, textP);
         }
     }
     else

@@ -58,8 +58,7 @@ void TestBinder::setUp()
 void TestBinder::tearDown()
 {}
 
-void TestBinder::bind(std::string text,
-                        Expectation X)
+void TestBinder::bind(std::string text, Expectation X)
 {
     parse(text);
     auto compilation = Compilation::create(tree_->filePath());
@@ -211,6 +210,75 @@ void TestBinder::bind(std::string text,
                         return false;
 
                     const PointerTypeSymbol* ptrTySym = actualSym->type()->asPointerType();
+                    const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
+
+                    if (namedTySym->typeKind() != refedTyKind)
+                        return false;
+
+                    if (refedTyKind == TypeKind::Builtin) {
+                        if (!(namedTySym->builtinTypeKind() == refedTyBuiltTyKind))
+                            return false;
+                    }
+                    else {
+                        if (refedTyBuiltTyKind != BuiltinTypeKind::None)
+                            return false;
+                    }
+
+                    return true;
+                });
+
+        if (sym == nullptr) {
+            auto s = "cannot find "
+                    + to_string(valKind) + " " + valSymName + " "
+                    + to_string(refedTyKind) + " " + to_string(refedTyBuiltTyKind);
+            PSYCHE_TEST_FAIL(s);
+        }
+    }
+
+    for (auto qualPtr_1_Data : X.qualPtr_1_) {
+        auto valSymName = std::get<0>(qualPtr_1_Data);
+        auto valKind = std::get<1>(qualPtr_1_Data);
+        auto qual = std::get<2>(qualPtr_1_Data);
+        auto refedTyKind = std::get<3>(qualPtr_1_Data);
+        auto refedTyBuiltTyKind = std::get<4>(qualPtr_1_Data);
+
+        auto sym = compilation->assembly()->findSymDEF(
+                [&] (const auto& v) {
+                    const Symbol* sym = v.get();
+                    if (sym->kind() != SymbolKind::Value)
+                        return false;
+
+                    const ValueSymbol* actualSym = sym->asValue();
+                    if (!(actualSym->name() != nullptr
+                           && to_string(*actualSym->name()) == valSymName
+                           && actualSym->valueKind() == valKind
+                           && actualSym->type() != nullptr
+                           && actualSym->type()->typeKind() == TypeKind::Pointer))
+                        return false;
+
+                    const PointerTypeSymbol* ptrTySym = actualSym->type()->asPointerType();
+                    switch (qual) {
+                        case Expectation::Qual::Const:
+                            if (!ptrTySym->isConstQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::Volatile:
+                            if (!ptrTySym->isVolatileQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::ConstAndVolatile:
+                            if (!(ptrTySym->isConstQualified())
+                                    || !(ptrTySym->isVolatileQualified()))
+                            break;
+
+                        case Expectation::Qual::Restrict:
+                            if (!ptrTySym->isRestrictQualified())
+                                return false;
+                            break;
+                    }
+
                     const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
 
                     if (namedTySym->typeKind() != refedTyKind)
@@ -393,6 +461,52 @@ void TestBinder::bind(std::string text,
             auto s = "cannot find "
                     + to_string(valKind) + " " + valSymName + " "
                     + to_string(refedTyKind) + " " + to_string(refedTyBuiltTyKind);
+            PSYCHE_TEST_FAIL(s);
+        }
+    }
+
+    for (auto arr_1_Data : X.arr_1_) {
+        auto valSymName = std::get<0>(arr_1_Data);
+        auto valKind = std::get<1>(arr_1_Data);
+        auto elemTyKind = std::get<2>(arr_1_Data);
+        auto elemTyBuiltTyKind = std::get<3>(arr_1_Data);
+
+        auto sym = compilation->assembly()->findSymDEF(
+                [&] (const auto& v) {
+                    const Symbol* sym = v.get();
+                    if (sym->kind() != SymbolKind::Value)
+                        return false;
+
+                    const ValueSymbol* actualSym = sym->asValue();
+                    if (!(actualSym->name() != nullptr
+                           && to_string(*actualSym->name()) == valSymName
+                           && actualSym->valueKind() == valKind
+                           && actualSym->type() != nullptr
+                           && actualSym->type()->typeKind() == TypeKind::Array))
+                        return false;
+
+                    const ArrayTypeSymbol* arrTySym = actualSym->type()->asArrayType();
+                    const NamedTypeSymbol* namedTySym = arrTySym->elementType()->asNamedType();
+
+                    if (namedTySym->typeKind() != elemTyKind)
+                        return false;
+
+                    if (elemTyKind == TypeKind::Builtin) {
+                        if (!(namedTySym->builtinTypeKind() == elemTyBuiltTyKind))
+                            return false;
+                    }
+                    else {
+                        if (elemTyBuiltTyKind != BuiltinTypeKind::None)
+                            return false;
+                    }
+
+                    return true;
+                });
+
+        if (sym == nullptr) {
+            auto s = "cannot find "
+                    + to_string(valKind) + " " + valSymName + " "
+                    + to_string(elemTyKind) + " " + to_string(elemTyBuiltTyKind);
             PSYCHE_TEST_FAIL(s);
         }
     }

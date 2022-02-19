@@ -143,21 +143,30 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 
 SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node)
 {
+    makeAndPushTySymUSE<ArrayTypeSymbol>();
+
+    for (auto specIt = node->attributes(); specIt; specIt = specIt->next)
+        visit(specIt->value);
+
+    visit(node->innerDeclarator());
+
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSyntax* node)
 {
-    std::unique_ptr<PointerTypeSymbol> ptrTySym(
-            new PointerTypeSymbol(tree_,
-                                  scopes_.top(),
-                                  symDEFs_.top(),
-                                  tySymUSEs_.top()));
-    pushTySymUSE(std::move(ptrTySym));
+    makeAndPushTySymUSE<PointerTypeSymbol>();
 
     for (auto specIt = node->qualifiersAndAttributes(); specIt; specIt = specIt->next)
         visit(specIt->value);
 
+    visit(node->innerDeclarator());
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax* node)
+{
     visit(node->innerDeclarator());
 
     return Action::Skip;

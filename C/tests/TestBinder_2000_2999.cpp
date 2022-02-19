@@ -116,28 +116,20 @@ struct w
 
 void TestBinder::case2006()
 {
-    // TODO: Need separate syntax/semantic warn/erro in expectation.
+    // Non-field correspondent
+    CROSS_REFERENCE_TEST(TestBinder::case1006);
 
-//    bind(R"(
-//struct w
-//{
-//    x y = 1 ;
-//};
-//         )",
-//         );
+    // Syntax error
+    CROSS_REFERENCE_TEST(TestParser::case0439);
 }
 
 void TestBinder::case2007()
 {
-    // TODO: Need separate syntax/semantic warn/erro in expectation.
+    // Non-field correspondent
+    CROSS_REFERENCE_TEST(TestBinder::case1007);
 
-//    bind(R"(
-//struct w
-//{
-//    int x = 1 ;
-//};
-//         )",
-
+    // Syntax error
+    CROSS_REFERENCE_TEST(TestParser::case0440);
 }
 
 void TestBinder::case2008()
@@ -152,6 +144,7 @@ struct w
              Expectation::ErrorOrWarn::Error,
              Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
+
 void TestBinder::case2009(){ }
 void TestBinder::case2010(){ }
 void TestBinder::case2011(){ }
@@ -193,8 +186,31 @@ void TestBinder::case2046(){ }
 void TestBinder::case2047(){ }
 void TestBinder::case2048(){ }
 void TestBinder::case2049(){ }
-void TestBinder::case2050(){ }
-void TestBinder::case2051(){ }
+
+void TestBinder::case2050()
+{
+    bind(R"(
+struct x
+{
+    int * const y ;
+};
+         )",
+         Expectation()
+            .qualPtr_1("y", ValueKind::Field, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case2051()
+{
+    bind(R"(
+struct x
+{
+    y * const z ;
+};
+         )",
+         Expectation()
+            .qualPtr_1("z", ValueKind::Field, Expectation::Qual::Const, TypeKind::Synonym));
+}
+
 void TestBinder::case2052(){ }
 void TestBinder::case2053(){ }
 void TestBinder::case2054(){ }
@@ -445,3 +461,104 @@ void TestBinder::case2296(){ }
 void TestBinder::case2297(){ }
 void TestBinder::case2298(){ }
 void TestBinder::case2299(){ }
+
+void TestBinder::case2300(){ }
+void TestBinder::case2301(){ }
+void TestBinder::case2302(){ }
+void TestBinder::case2303(){ }
+void TestBinder::case2304(){ }
+void TestBinder::case2305(){ }
+void TestBinder::case2306(){ }
+void TestBinder::case2307(){ }
+void TestBinder::case2308(){ }
+void TestBinder::case2309(){ }
+void TestBinder::case2310(){ }
+void TestBinder::case2311(){ }
+void TestBinder::case2312(){ }
+void TestBinder::case2313(){ }
+void TestBinder::case2314(){ }
+void TestBinder::case2315(){ }
+void TestBinder::case2316(){ }
+void TestBinder::case2317(){ }
+void TestBinder::case2318(){ }
+void TestBinder::case2319(){ }
+void TestBinder::case2320(){ }
+void TestBinder::case2321(){ }
+void TestBinder::case2322(){ }
+void TestBinder::case2323(){ }
+void TestBinder::case2324(){ }
+void TestBinder::case2325(){ }
+void TestBinder::case2326(){ }
+void TestBinder::case2327(){ }
+void TestBinder::case2328(){ }
+void TestBinder::case2329(){ }
+void TestBinder::case2330(){ }
+void TestBinder::case2331(){ }
+void TestBinder::case2332(){ }
+void TestBinder::case2333(){ }
+void TestBinder::case2334(){ }
+void TestBinder::case2335(){ }
+void TestBinder::case2336(){ }
+void TestBinder::case2337(){ }
+void TestBinder::case2338(){ }
+void TestBinder::case2339(){ }
+void TestBinder::case2340(){ }
+void TestBinder::case2341(){ }
+void TestBinder::case2342(){ }
+void TestBinder::case2343(){ }
+void TestBinder::case2344(){ }
+void TestBinder::case2345(){ }
+void TestBinder::case2346(){ }
+void TestBinder::case2347(){ }
+void TestBinder::case2348(){ }
+void TestBinder::case2349(){ }
+void TestBinder::case2350(){ }
+void TestBinder::case2351(){ }
+void TestBinder::case2352(){ }
+void TestBinder::case2353(){ }
+void TestBinder::case2354(){ }
+void TestBinder::case2355(){ }
+void TestBinder::case2356(){ }
+void TestBinder::case2357(){ }
+void TestBinder::case2358(){ }
+void TestBinder::case2359(){ }
+void TestBinder::case2360(){ }
+void TestBinder::case2361(){ }
+void TestBinder::case2362(){ }
+void TestBinder::case2363(){ }
+void TestBinder::case2364(){ }
+void TestBinder::case2365(){ }
+void TestBinder::case2366(){ }
+void TestBinder::case2367(){ }
+void TestBinder::case2368(){ }
+void TestBinder::case2369(){ }
+void TestBinder::case2370(){ }
+void TestBinder::case2371(){ }
+void TestBinder::case2372(){ }
+void TestBinder::case2373(){ }
+void TestBinder::case2374(){ }
+void TestBinder::case2375(){ }
+void TestBinder::case2376(){ }
+void TestBinder::case2377(){ }
+void TestBinder::case2378(){ }
+void TestBinder::case2379(){ }
+void TestBinder::case2380(){ }
+void TestBinder::case2381(){ }
+void TestBinder::case2382(){ }
+void TestBinder::case2383(){ }
+void TestBinder::case2384(){ }
+void TestBinder::case2385(){ }
+void TestBinder::case2386(){ }
+void TestBinder::case2387(){ }
+void TestBinder::case2388(){ }
+void TestBinder::case2389(){ }
+void TestBinder::case2390(){ }
+void TestBinder::case2391(){ }
+void TestBinder::case2392(){ }
+void TestBinder::case2393(){ }
+void TestBinder::case2394(){ }
+void TestBinder::case2395(){ }
+void TestBinder::case2396(){ }
+void TestBinder::case2397(){ }
+void TestBinder::case2398(){ }
+void TestBinder::case2399(){ }

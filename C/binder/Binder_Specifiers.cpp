@@ -51,12 +51,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
                     node->lastToken(), &diagReporter_);
 
-        std::unique_ptr<NamedTypeSymbol> namedTySym(
-                new NamedTypeSymbol(tree_,
-                                    scopes_.top(),
-                                    symDEFs_.top(),
-                                    TypeKind::Builtin));
-        pushTySymUSE(std::move(namedTySym));
+        makeAndPushTySymUSE(TypeKind::Builtin);
     }
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
@@ -110,14 +105,8 @@ SyntaxVisitor::Action Binder::actOnTypeQualifier(const SpecifierSyntax* spec)
 
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
-    if (tySymUSEs_.empty()) {
-        std::unique_ptr<NamedTypeSymbol> namedTySym(
-                new NamedTypeSymbol(tree_,
-                                    scopes_.top(),
-                                    symDEFs_.top(),
-                                    TypeKind::Builtin));
-        pushTySymUSE(std::move(namedTySym));
-    }
+    if (tySymUSEs_.empty())
+        makeAndPushTySymUSE(TypeKind::Builtin);
 
     NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
     if (!namedTySym) {
@@ -157,7 +146,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
             return Action::Quit;
     }
 
-    makeAndPushTySymDEF(tyKind);
+    makeAndPushSymDEF(tyKind);
     std::unique_ptr<SymbolName> name(
                 new TagSymbolName(tyKind,
                                   node->tagToken().valueText_c_str()));
@@ -182,14 +171,8 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
-    if (tySymUSEs_.empty()) {
-        std::unique_ptr<NamedTypeSymbol> namedTySym(
-                new NamedTypeSymbol(tree_,
-                                    scopes_.top(),
-                                    symDEFs_.top(),
-                                    TypeKind::Synonym));
-        pushTySymUSE(std::move(namedTySym));
-    }
+    if (tySymUSEs_.empty())
+        makeAndPushTySymUSE(TypeKind::Synonym);
 
     NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
     if (!namedTySym) {

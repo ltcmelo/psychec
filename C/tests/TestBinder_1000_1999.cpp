@@ -85,16 +85,16 @@ void TestBinder::case1005()
 
 void TestBinder::case1006()
 {
-    bind("x y = 1 ;",
+    bind("int x = 1 ;",
          Expectation()
-            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym));
+            .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
 void TestBinder::case1007()
 {
-    bind("int x = 1 ;",
+    bind("x y = 1 ;",
          Expectation()
-            .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+            .obj("y", ValueKind::Variable, "x", TypeKind::Synonym));
 }
 
 void TestBinder::case1008()
@@ -444,8 +444,20 @@ void TestBinder::case1247() { }
 void TestBinder::case1248() { }
 void TestBinder::case1249() { }
 
-void TestBinder::case1250() { }
-void TestBinder::case1251() { }
+void TestBinder::case1250()
+{
+    bind("int * const x ;",
+         Expectation()
+            .qualPtr_1("x", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case1251()
+{
+    bind("x * const y ;",
+         Expectation()
+            .qualPtr_1("y", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Synonym));
+}
+
 void TestBinder::case1252() { }
 void TestBinder::case1253() { }
 void TestBinder::case1254() { }
@@ -494,3 +506,110 @@ void TestBinder::case1296() { }
 void TestBinder::case1297() { }
 void TestBinder::case1298() { }
 void TestBinder::case1299() { }
+
+void TestBinder::case1300()
+{
+    bind("int x [ 1 ] ;",
+         Expectation()
+            .arr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case1301(){ }
+void TestBinder::case1302(){ }
+void TestBinder::case1303(){ }
+void TestBinder::case1304(){ }
+void TestBinder::case1305(){ }
+void TestBinder::case1306(){ }
+void TestBinder::case1307(){ }
+void TestBinder::case1308(){ }
+void TestBinder::case1309(){ }
+void TestBinder::case1310(){ }
+void TestBinder::case1311(){ }
+void TestBinder::case1312(){ }
+void TestBinder::case1313(){ }
+void TestBinder::case1314(){ }
+void TestBinder::case1315(){ }
+void TestBinder::case1316(){ }
+void TestBinder::case1317(){ }
+void TestBinder::case1318(){ }
+void TestBinder::case1319(){ }
+void TestBinder::case1320(){ }
+void TestBinder::case1321(){ }
+void TestBinder::case1322(){ }
+void TestBinder::case1323(){ }
+void TestBinder::case1324(){ }
+void TestBinder::case1325(){ }
+void TestBinder::case1326(){ }
+void TestBinder::case1327(){ }
+void TestBinder::case1328(){ }
+void TestBinder::case1329(){ }
+void TestBinder::case1330(){ }
+void TestBinder::case1331(){ }
+void TestBinder::case1332(){ }
+void TestBinder::case1333(){ }
+void TestBinder::case1334(){ }
+void TestBinder::case1335(){ }
+void TestBinder::case1336(){ }
+void TestBinder::case1337(){ }
+void TestBinder::case1338(){ }
+void TestBinder::case1339(){ }
+void TestBinder::case1340(){ }
+void TestBinder::case1341(){ }
+void TestBinder::case1342(){ }
+void TestBinder::case1343(){ }
+void TestBinder::case1344(){ }
+void TestBinder::case1345(){ }
+void TestBinder::case1346(){ }
+void TestBinder::case1347(){ }
+void TestBinder::case1348(){ }
+void TestBinder::case1349(){ }
+void TestBinder::case1350(){ }
+void TestBinder::case1351(){ }
+void TestBinder::case1352(){ }
+void TestBinder::case1353(){ }
+void TestBinder::case1354(){ }
+void TestBinder::case1355(){ }
+void TestBinder::case1356(){ }
+void TestBinder::case1357(){ }
+void TestBinder::case1358(){ }
+void TestBinder::case1359(){ }
+void TestBinder::case1360(){ }
+void TestBinder::case1361(){ }
+void TestBinder::case1362(){ }
+void TestBinder::case1363(){ }
+void TestBinder::case1364(){ }
+void TestBinder::case1365(){ }
+void TestBinder::case1366(){ }
+void TestBinder::case1367(){ }
+void TestBinder::case1368(){ }
+void TestBinder::case1369(){ }
+void TestBinder::case1370(){ }
+void TestBinder::case1371(){ }
+void TestBinder::case1372(){ }
+void TestBinder::case1373(){ }
+void TestBinder::case1374(){ }
+void TestBinder::case1375(){ }
+void TestBinder::case1376(){ }
+void TestBinder::case1377(){ }
+void TestBinder::case1378(){ }
+void TestBinder::case1379(){ }
+void TestBinder::case1380(){ }
+void TestBinder::case1381(){ }
+void TestBinder::case1382(){ }
+void TestBinder::case1383(){ }
+void TestBinder::case1384(){ }
+void TestBinder::case1385(){ }
+void TestBinder::case1386(){ }
+void TestBinder::case1387(){ }
+void TestBinder::case1388(){ }
+void TestBinder::case1389(){ }
+void TestBinder::case1390(){ }
+void TestBinder::case1391(){ }
+void TestBinder::case1392(){ }
+void TestBinder::case1393(){ }
+void TestBinder::case1394(){ }
+void TestBinder::case1395(){ }
+void TestBinder::case1396(){ }
+void TestBinder::case1397(){ }
+void TestBinder::case1398(){ }
+void TestBinder::case1399(){ }

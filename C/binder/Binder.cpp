@@ -73,7 +73,7 @@ template void Binder::makeAndPushSymDEF<FunctionSymbol>();
 template void Binder::makeAndPushSymDEF<ParameterSymbol>();
 template void Binder::makeAndPushSymDEF<VariableSymbol>();
 
-void Binder::makeAndPushTySymDEF(TypeKind tyKind)
+void Binder::makeAndPushSymDEF(TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> sym(
                 new NamedTypeSymbol(tree_,
@@ -118,6 +118,29 @@ void Binder::popTySymUSE()
 {
     tySymUSEs_.pop();
 }
+
+template <class TySymT>
+void Binder::makeAndPushTySymUSE()
+{
+    std::unique_ptr<TySymT> tySym(new TySymT(tree_,
+                                             scopes_.top(),
+                                             symDEFs_.top(),
+                                             tySymUSEs_.top()));
+   pushTySymUSE(std::move(tySym));
+}
+
+void Binder::makeAndPushTySymUSE(TypeKind tyKind)
+{
+    std::unique_ptr<NamedTypeSymbol> tySym(
+                new NamedTypeSymbol(tree_,
+                                    scopes_.top(),
+                                    symDEFs_.top(),
+                                    tyKind));
+    pushTySymUSE(std::move(tySym));
+}
+
+template void Binder::makeAndPushTySymUSE<ArrayTypeSymbol>();
+template void Binder::makeAndPushTySymUSE<PointerTypeSymbol>();
 
 template <class ScopeT>
 void Binder::openScope()

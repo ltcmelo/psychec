@@ -67,16 +67,17 @@ private:
     void closeScope();
     std::stack<Scope*> scopes_;
 
-    template <class SymT> void makeAndPushSymDEF();
-    void makeAndPushTySymDEF(TypeKind);
-
     template <class SymT> void pushSymDEF(std::unique_ptr<SymT>);
     void popSymDEF();
+    template <class SymT> void makeAndPushSymDEF();
+    void makeAndPushSymDEF(TypeKind);
     using SymDEFs_T = std::stack<Symbol*>;
     SymDEFs_T symDEFs_;
 
     template <class TySymT> void pushTySymUSE(std::unique_ptr<TySymT>);
     void popTySymUSE();
+    template <class TySymT> void makeAndPushTySymUSE();
+    void makeAndPushTySymUSE(TypeKind);
     using TySymUSEs_T = std::stack<TypeSymbol*>;
     TySymUSEs_T tySymUSEs_;
 
@@ -140,7 +141,7 @@ private:
     Action actOnDeclarator(const DeclaratorSyntax*);
     virtual Action visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax*) override;
     virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax*) override;
-    //virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) override;
+    virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) override;
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
 

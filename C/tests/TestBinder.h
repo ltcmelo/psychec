@@ -46,24 +46,15 @@ public:
             + 0100-0199 ->
             + 0200-0299 ->
 
-        Globals and locals:
-            + 1000-1049 -> objects (plain)
-            + 1050-1099 -> `const' objects
-            + 1100-1149 -> pointers
-            + 1150-1199 -> `const' object pointers
-            + 1200-1249 -> `const' object `const' pointers
-            + 1250-1299 -> `const' pointers
-            + 1300-
-
-        Fields:
-            + 1000-1049 -> objects (plain)
-            + 1050-1099 -> `const' objects
-            + 1100-1149 -> pointers
-            + 1150-1199 -> `const' object pointers
-            + 1200-1249 -> `const' object `const' pointers
-            + 1250-1299 -> `const' pointers
-            + 1300-
-
+        Globals and locals: 1
+        Fields: 2
+            + ?000-?049 -> objects
+            + ?050-?099 -> objects with qualified type
+            + ?100-?149 -> pointers
+            + ?150-?199 -> pointers to objects of qualified types
+            + ?200-?249 -> qualified pointers to objects of qualified type
+            + ?250-?299 -> qualified pointers
+            + ?300-?349 -> arrays
      */
 
     void case0001();
@@ -572,6 +563,107 @@ public:
     void case1298();
     void case1299();
 
+    void case1300();
+    void case1301();
+    void case1302();
+    void case1303();
+    void case1304();
+    void case1305();
+    void case1306();
+    void case1307();
+    void case1308();
+    void case1309();
+    void case1310();
+    void case1311();
+    void case1312();
+    void case1313();
+    void case1314();
+    void case1315();
+    void case1316();
+    void case1317();
+    void case1318();
+    void case1319();
+    void case1320();
+    void case1321();
+    void case1322();
+    void case1323();
+    void case1324();
+    void case1325();
+    void case1326();
+    void case1327();
+    void case1328();
+    void case1329();
+    void case1330();
+    void case1331();
+    void case1332();
+    void case1333();
+    void case1334();
+    void case1335();
+    void case1336();
+    void case1337();
+    void case1338();
+    void case1339();
+    void case1340();
+    void case1341();
+    void case1342();
+    void case1343();
+    void case1344();
+    void case1345();
+    void case1346();
+    void case1347();
+    void case1348();
+    void case1349();
+    void case1350();
+    void case1351();
+    void case1352();
+    void case1353();
+    void case1354();
+    void case1355();
+    void case1356();
+    void case1357();
+    void case1358();
+    void case1359();
+    void case1360();
+    void case1361();
+    void case1362();
+    void case1363();
+    void case1364();
+    void case1365();
+    void case1366();
+    void case1367();
+    void case1368();
+    void case1369();
+    void case1370();
+    void case1371();
+    void case1372();
+    void case1373();
+    void case1374();
+    void case1375();
+    void case1376();
+    void case1377();
+    void case1378();
+    void case1379();
+    void case1380();
+    void case1381();
+    void case1382();
+    void case1383();
+    void case1384();
+    void case1385();
+    void case1386();
+    void case1387();
+    void case1388();
+    void case1389();
+    void case1390();
+    void case1391();
+    void case1392();
+    void case1393();
+    void case1394();
+    void case1395();
+    void case1396();
+    void case1397();
+    void case1398();
+    void case1399();
+
     // 2000-2999
 
     void case2000();
@@ -876,6 +968,107 @@ public:
     void case2297();
     void case2298();
     void case2299();
+
+    void case2300();
+    void case2301();
+    void case2302();
+    void case2303();
+    void case2304();
+    void case2305();
+    void case2306();
+    void case2307();
+    void case2308();
+    void case2309();
+    void case2310();
+    void case2311();
+    void case2312();
+    void case2313();
+    void case2314();
+    void case2315();
+    void case2316();
+    void case2317();
+    void case2318();
+    void case2319();
+    void case2320();
+    void case2321();
+    void case2322();
+    void case2323();
+    void case2324();
+    void case2325();
+    void case2326();
+    void case2327();
+    void case2328();
+    void case2329();
+    void case2330();
+    void case2331();
+    void case2332();
+    void case2333();
+    void case2334();
+    void case2335();
+    void case2336();
+    void case2337();
+    void case2338();
+    void case2339();
+    void case2340();
+    void case2341();
+    void case2342();
+    void case2343();
+    void case2344();
+    void case2345();
+    void case2346();
+    void case2347();
+    void case2348();
+    void case2349();
+    void case2350();
+    void case2351();
+    void case2352();
+    void case2353();
+    void case2354();
+    void case2355();
+    void case2356();
+    void case2357();
+    void case2358();
+    void case2359();
+    void case2360();
+    void case2361();
+    void case2362();
+    void case2363();
+    void case2364();
+    void case2365();
+    void case2366();
+    void case2367();
+    void case2368();
+    void case2369();
+    void case2370();
+    void case2371();
+    void case2372();
+    void case2373();
+    void case2374();
+    void case2375();
+    void case2376();
+    void case2377();
+    void case2378();
+    void case2379();
+    void case2380();
+    void case2381();
+    void case2382();
+    void case2383();
+    void case2384();
+    void case2385();
+    void case2386();
+    void case2387();
+    void case2388();
+    void case2389();
+    void case2390();
+    void case2391();
+    void case2392();
+    void case2393();
+    void case2394();
+    void case2395();
+    void case2396();
+    void case2397();
+    void case2398();
+    void case2399();
 
 private:
     using TestFunction = std::pair<std::function<void(TestBinder*)>, const char*>;
@@ -1391,6 +1584,107 @@ private:
         TEST_BINDER(case1298),
         TEST_BINDER(case1299),
 
+        TEST_BINDER(case1300),
+        TEST_BINDER(case1301),
+        TEST_BINDER(case1302),
+        TEST_BINDER(case1303),
+        TEST_BINDER(case1304),
+        TEST_BINDER(case1305),
+        TEST_BINDER(case1306),
+        TEST_BINDER(case1307),
+        TEST_BINDER(case1308),
+        TEST_BINDER(case1309),
+        TEST_BINDER(case1310),
+        TEST_BINDER(case1311),
+        TEST_BINDER(case1312),
+        TEST_BINDER(case1313),
+        TEST_BINDER(case1314),
+        TEST_BINDER(case1315),
+        TEST_BINDER(case1316),
+        TEST_BINDER(case1317),
+        TEST_BINDER(case1318),
+        TEST_BINDER(case1319),
+        TEST_BINDER(case1320),
+        TEST_BINDER(case1321),
+        TEST_BINDER(case1322),
+        TEST_BINDER(case1323),
+        TEST_BINDER(case1324),
+        TEST_BINDER(case1325),
+        TEST_BINDER(case1326),
+        TEST_BINDER(case1327),
+        TEST_BINDER(case1328),
+        TEST_BINDER(case1329),
+        TEST_BINDER(case1330),
+        TEST_BINDER(case1331),
+        TEST_BINDER(case1332),
+        TEST_BINDER(case1333),
+        TEST_BINDER(case1334),
+        TEST_BINDER(case1335),
+        TEST_BINDER(case1336),
+        TEST_BINDER(case1337),
+        TEST_BINDER(case1338),
+        TEST_BINDER(case1339),
+        TEST_BINDER(case1340),
+        TEST_BINDER(case1341),
+        TEST_BINDER(case1342),
+        TEST_BINDER(case1343),
+        TEST_BINDER(case1344),
+        TEST_BINDER(case1345),
+        TEST_BINDER(case1346),
+        TEST_BINDER(case1347),
+        TEST_BINDER(case1348),
+        TEST_BINDER(case1349),
+        TEST_BINDER(case1350),
+        TEST_BINDER(case1351),
+        TEST_BINDER(case1352),
+        TEST_BINDER(case1353),
+        TEST_BINDER(case1354),
+        TEST_BINDER(case1355),
+        TEST_BINDER(case1356),
+        TEST_BINDER(case1357),
+        TEST_BINDER(case1358),
+        TEST_BINDER(case1359),
+        TEST_BINDER(case1360),
+        TEST_BINDER(case1361),
+        TEST_BINDER(case1362),
+        TEST_BINDER(case1363),
+        TEST_BINDER(case1364),
+        TEST_BINDER(case1365),
+        TEST_BINDER(case1366),
+        TEST_BINDER(case1367),
+        TEST_BINDER(case1368),
+        TEST_BINDER(case1369),
+        TEST_BINDER(case1370),
+        TEST_BINDER(case1371),
+        TEST_BINDER(case1372),
+        TEST_BINDER(case1373),
+        TEST_BINDER(case1374),
+        TEST_BINDER(case1375),
+        TEST_BINDER(case1376),
+        TEST_BINDER(case1377),
+        TEST_BINDER(case1378),
+        TEST_BINDER(case1379),
+        TEST_BINDER(case1380),
+        TEST_BINDER(case1381),
+        TEST_BINDER(case1382),
+        TEST_BINDER(case1383),
+        TEST_BINDER(case1384),
+        TEST_BINDER(case1385),
+        TEST_BINDER(case1386),
+        TEST_BINDER(case1387),
+        TEST_BINDER(case1388),
+        TEST_BINDER(case1389),
+        TEST_BINDER(case1390),
+        TEST_BINDER(case1391),
+        TEST_BINDER(case1392),
+        TEST_BINDER(case1393),
+        TEST_BINDER(case1394),
+        TEST_BINDER(case1395),
+        TEST_BINDER(case1396),
+        TEST_BINDER(case1397),
+        TEST_BINDER(case1398),
+        TEST_BINDER(case1399),
+
         TEST_BINDER(case2000),
         TEST_BINDER(case2001),
         TEST_BINDER(case2002),
@@ -1692,7 +1986,109 @@ private:
         TEST_BINDER(case2296),
         TEST_BINDER(case2297),
         TEST_BINDER(case2298),
-        TEST_BINDER(case2299)
+        TEST_BINDER(case2299),
+
+        TEST_BINDER(case2300),
+        TEST_BINDER(case2301),
+        TEST_BINDER(case2302),
+        TEST_BINDER(case2303),
+        TEST_BINDER(case2304),
+        TEST_BINDER(case2305),
+        TEST_BINDER(case2306),
+        TEST_BINDER(case2307),
+        TEST_BINDER(case2308),
+        TEST_BINDER(case2309),
+        TEST_BINDER(case2310),
+        TEST_BINDER(case2311),
+        TEST_BINDER(case2312),
+        TEST_BINDER(case2313),
+        TEST_BINDER(case2314),
+        TEST_BINDER(case2315),
+        TEST_BINDER(case2316),
+        TEST_BINDER(case2317),
+        TEST_BINDER(case2318),
+        TEST_BINDER(case2319),
+        TEST_BINDER(case2320),
+        TEST_BINDER(case2321),
+        TEST_BINDER(case2322),
+        TEST_BINDER(case2323),
+        TEST_BINDER(case2324),
+        TEST_BINDER(case2325),
+        TEST_BINDER(case2326),
+        TEST_BINDER(case2327),
+        TEST_BINDER(case2328),
+        TEST_BINDER(case2329),
+        TEST_BINDER(case2330),
+        TEST_BINDER(case2331),
+        TEST_BINDER(case2332),
+        TEST_BINDER(case2333),
+        TEST_BINDER(case2334),
+        TEST_BINDER(case2335),
+        TEST_BINDER(case2336),
+        TEST_BINDER(case2337),
+        TEST_BINDER(case2338),
+        TEST_BINDER(case2339),
+        TEST_BINDER(case2340),
+        TEST_BINDER(case2341),
+        TEST_BINDER(case2342),
+        TEST_BINDER(case2343),
+        TEST_BINDER(case2344),
+        TEST_BINDER(case2345),
+        TEST_BINDER(case2346),
+        TEST_BINDER(case2347),
+        TEST_BINDER(case2348),
+        TEST_BINDER(case2349),
+        TEST_BINDER(case2350),
+        TEST_BINDER(case2351),
+        TEST_BINDER(case2352),
+        TEST_BINDER(case2353),
+        TEST_BINDER(case2354),
+        TEST_BINDER(case2355),
+        TEST_BINDER(case2356),
+        TEST_BINDER(case2357),
+        TEST_BINDER(case2358),
+        TEST_BINDER(case2359),
+        TEST_BINDER(case2360),
+        TEST_BINDER(case2361),
+        TEST_BINDER(case2362),
+        TEST_BINDER(case2363),
+        TEST_BINDER(case2364),
+        TEST_BINDER(case2365),
+        TEST_BINDER(case2366),
+        TEST_BINDER(case2367),
+        TEST_BINDER(case2368),
+        TEST_BINDER(case2369),
+        TEST_BINDER(case2370),
+        TEST_BINDER(case2371),
+        TEST_BINDER(case2372),
+        TEST_BINDER(case2373),
+        TEST_BINDER(case2374),
+        TEST_BINDER(case2375),
+        TEST_BINDER(case2376),
+        TEST_BINDER(case2377),
+        TEST_BINDER(case2378),
+        TEST_BINDER(case2379),
+        TEST_BINDER(case2380),
+        TEST_BINDER(case2381),
+        TEST_BINDER(case2382),
+        TEST_BINDER(case2383),
+        TEST_BINDER(case2384),
+        TEST_BINDER(case2385),
+        TEST_BINDER(case2386),
+        TEST_BINDER(case2387),
+        TEST_BINDER(case2388),
+        TEST_BINDER(case2389),
+        TEST_BINDER(case2390),
+        TEST_BINDER(case2391),
+        TEST_BINDER(case2392),
+        TEST_BINDER(case2393),
+        TEST_BINDER(case2394),
+        TEST_BINDER(case2395),
+        TEST_BINDER(case2396),
+        TEST_BINDER(case2397),
+        TEST_BINDER(case2398),
+        TEST_BINDER(case2399)
+
     };
 };
 
