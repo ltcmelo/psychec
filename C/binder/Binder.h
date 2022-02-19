@@ -78,8 +78,9 @@ private:
     TySymUSEs_T tySymUSEs_;
 
     template <class SymT> void makeAndPushSymDEF();
-    void makeAndPushTySymDEF(TypeKind);
     template <class TySymT> void makeAndPushTySymUSE();
+    void makeAndPushNamedTySymDEF(TypeKind);
+    void makeAndPushNamedTySymUSE(TypeKind);
 
     struct DiagnosticsReporter
     {

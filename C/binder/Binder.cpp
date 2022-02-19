@@ -73,7 +73,7 @@ template void Binder::makeAndPushSymDEF<FunctionSymbol>();
 template void Binder::makeAndPushSymDEF<ParameterSymbol>();
 template void Binder::makeAndPushSymDEF<VariableSymbol>();
 
-void Binder::makeAndPushTySymDEF(TypeKind tyKind)
+void Binder::makeAndPushNamedTySymDEF(TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> sym(
                 new NamedTypeSymbol(tree_,
@@ -81,6 +81,16 @@ void Binder::makeAndPushTySymDEF(TypeKind tyKind)
                                     symDEFs_.top(),
                                     tyKind));
     pushSymDEF(std::move(sym));
+}
+
+void Binder::makeAndPushNamedTySymUSE(TypeKind tyKind)
+{
+    std::unique_ptr<NamedTypeSymbol> tySym(
+                new NamedTypeSymbol(tree_,
+                                    scopes_.top(),
+                                    symDEFs_.top(),
+                                    tyKind));
+    pushTySymUSE(std::move(tySym));
 }
 
 template <class SymT>
