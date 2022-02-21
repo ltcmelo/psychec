@@ -743,6 +743,49 @@ private:
     AST_CHILD_LST2(expr_, typeName_)
 };
 
+/**
+ * \brief The ExtGNU_ChooseExprSyntax class.
+ *
+ * \code
+ * __builtin_choose_expr( const_expr, expr1, expr2 )
+ * \endcode
+ *
+ * \remark \c const_expr is an integer constant expression.
+ */
+class PSY_C_API ExtGNU_ChooseExprSyntax final : public ExpressionSyntax
+{
+    AST_NODE_1K(ExtGNU_ChooseExpr, Expression)
+
+public:
+    SyntaxToken keyword() const { return tokenAtIndex(kwTkIdx_); }
+    SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
+    const ExpressionSyntax* constantExpression() const { return constExpr_; }
+    SyntaxToken commaToken1() const { return tokenAtIndex(commaTkIdx1_); }
+    const ExpressionSyntax* expression1() const { return expr1_; }
+    SyntaxToken commaToken2() const { return tokenAtIndex(commaTkIdx2_); }
+    const ExpressionSyntax* expression2() const { return expr2_; }
+    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
+
+private:
+    LexedTokens::IndexType kwTkIdx_ = LexedTokens::invalidIndex();
+    LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
+    ExpressionSyntax* constExpr_ = nullptr;
+    LexedTokens::IndexType commaTkIdx1_ = LexedTokens::invalidIndex();
+    ExpressionSyntax* expr1_ = nullptr;
+    LexedTokens::IndexType commaTkIdx2_ = LexedTokens::invalidIndex();
+    ExpressionSyntax* expr2_ = nullptr;
+    LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
+
+    AST_CHILD_LST8(kwTkIdx_,
+                   openParenTkIdx_,
+                   constExpr_,
+                   commaTkIdx1_,
+                   expr1_,
+                   commaTkIdx2_,
+                   expr2_,
+                   closeParenTkIdx_)
+};
+
 } // C
 } // psy
 

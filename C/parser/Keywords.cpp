@@ -1410,6 +1410,55 @@ static inline SyntaxKind classify19(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
+static inline SyntaxKind classify21(const char* s, const ParseOptions& opts)
+{
+    if (s[0] == '_') {
+        if (s[1] == '_') {
+            if (s[2] == 'b'
+                && opts.extensions().isEnabled_ExtGNU_InternalBuiltins()) {
+                if (s[3] == 'u') {
+                    if (s[4] == 'i') {
+                        if (s[5] == 'l') {
+                            if (s[6] == 't') {
+                                if (s[7] == 'i') {
+                                    if (s[8] == 'n') {
+                                        if (s[9] == '_') {
+                                            if (s[10] == 'c') {
+                                                if (s[11] == 'h') {
+                                                    if (s[12] == 'o') {
+                                                        if (s[13] == 'o') {
+                                                            if (s[14] == 's') {
+                                                                if (s[15] == 'e') {
+                                                                    if (s[16] == '_') {
+                                                                        if (s[17] == 'e') {
+                                                                            if (s[18] == 'x') {
+                                                                                if (s[19] == 'p') {
+                                                                                    if (s[20] == 'r') {
+                                                                                        return Keyword_ExtGNU___builtin_choose_expr;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return IdentifierToken;
+}
+
 SyntaxKind Lexer::classify(const char* s, int n, const ParseOptions& opts)
 {
     switch (n) {
@@ -1431,6 +1480,7 @@ SyntaxKind Lexer::classify(const char* s, int n, const ParseOptions& opts)
         case 17: return classify17(s, opts);
         case 18: return classify18(s, opts);
         case 19: return classify19(s, opts);
+        case 21: return classify21(s, opts);
         default: return IdentifierToken;
     }
 }
