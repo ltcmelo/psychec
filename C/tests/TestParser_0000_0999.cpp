@@ -929,7 +929,7 @@ void TestParser::case0115()
 
 void TestParser::case0116()
 {
-    parse("int ( * x ) [ 9 ] ;",
+    parse("int ( * x ) [ 1 ] ;",
           Expectation().AST({ TranslationUnit,
                               VariableAndOrFunctionDeclaration,
                               BuiltinTypeSpecifier,
@@ -943,7 +943,7 @@ void TestParser::case0116()
 
 void TestParser::case0117()
 {
-    parse("x ( * y ) [ 9 ];",
+    parse("x ( * y ) [ 1 ];",
           Expectation().AST({ TranslationUnit,
                               VariableAndOrFunctionDeclaration,
                               TypedefName,
@@ -957,7 +957,7 @@ void TestParser::case0117()
 
 void TestParser::case0118()
 {
-    parse("int ( * x ) [ 9 ] [ 3 ] ;",
+    parse("int ( * x ) [ 1 ] [ 3 ] ;",
           Expectation().AST({ TranslationUnit,
                               VariableAndOrFunctionDeclaration,
                               BuiltinTypeSpecifier,
@@ -2238,7 +2238,7 @@ void TestParser::case0312()
 
 void TestParser::case0313()
 {
-    parse("int * x [ 9 ];",
+    parse("int * x [ 1 ];",
           Expectation().AST({ TranslationUnit,
                               VariableAndOrFunctionDeclaration,
                               BuiltinTypeSpecifier,
@@ -5090,22 +5090,22 @@ void TestParser::case0853()
 
 void TestParser::case0854()
 {
-    parse("int x [ 9 ] = { [ 1 ] = 1 , [ 2 ] = 2 } ;");
+    parse("int x [ 1 ] = { [ 1 ] = 1 , [ 2 ] = 2 } ;");
 }
 
 void TestParser::case0855()
 {
-    parse("x y [ 9 ] = { [ 1 ] = 1 , 2 , [ 3 ] = 3 } ;");
+    parse("x y [ 1 ] = { [ 1 ] = 1 , 2 , [ 3 ] = 3 } ;");
 }
 
 void TestParser::case0856()
 {
-    parse("x y [ 9 ] = { [ 1 ] = 1 , 2 , [ 3 ] = 3 , z } ;");
+    parse("x y [ 1 ] = { [ 1 ] = 1 , 2 , [ 3 ] = 3 , z } ;");
 }
 
 void TestParser::case0857()
 {
-    parse("x y [ 9 ] = { [ 1 ] = 1 , 2 , [ 3 ] = 3 } ;");
+    parse("x y [ 1 ] = { [ 1 ] = 1 , 2 , [ 3 ] = 3 } ;");
 }
 
 void TestParser::case0858()

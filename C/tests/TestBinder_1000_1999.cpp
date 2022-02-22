@@ -270,6 +270,9 @@ void TestBinder::case1103()
 
 void TestBinder::case1104()
 {
+    bind("int ( * x ) [ 1 ];",
+         Expectation()
+            .objPtr_1("x", ValueKind::Variable, TypeKind::Array));
 }
 
 void TestBinder::case1105()
@@ -535,8 +538,21 @@ void TestBinder::case1303()
             .arr_1("z", ValueKind::Variable, TypeKind::Synonym));
 }
 
-void TestBinder::case1304(){ }
-void TestBinder::case1305(){ }
+void TestBinder::case1304()
+{
+    bind("int * x [ 1 ] ;",
+         Expectation()
+            .arr_1("x", ValueKind::Variable, TypeKind::Pointer));
+}
+
+void TestBinder::case1305()
+{
+    bind("int x [ 1 ] , * y [ 2 ] ;",
+         Expectation()
+            .arr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int)
+            .arr_1("y", ValueKind::Variable, TypeKind::Pointer));
+
+}
 void TestBinder::case1306(){ }
 void TestBinder::case1307(){ }
 void TestBinder::case1308(){ }

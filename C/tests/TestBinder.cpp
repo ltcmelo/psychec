@@ -210,12 +210,13 @@ void TestBinder::bind(std::string text, Expectation X)
                         return false;
 
                     const PointerTypeSymbol* ptrTySym = actualSym->type()->asPointerType();
-                    const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
+                    const TypeSymbol* refedTySym = ptrTySym->referencedType();
 
-                    if (namedTySym->typeKind() != refedTyKind)
+                    if (refedTySym->typeKind() != refedTyKind)
                         return false;
 
                     if (refedTyKind == TypeKind::Builtin) {
+                        const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
                         if (!(namedTySym->builtinTypeKind() == refedTyBuiltTyKind))
                             return false;
                     }
@@ -279,12 +280,13 @@ void TestBinder::bind(std::string text, Expectation X)
                             break;
                     }
 
-                    const NamedTypeSymbol* namedTySym = ptrTySym->referencedType()->asNamedType();
+                    const TypeSymbol* refedTySym = ptrTySym->referencedType();
 
-                    if (namedTySym->typeKind() != refedTyKind)
+                    if (refedTySym->typeKind() != refedTyKind)
                         return false;
 
                     if (refedTyKind == TypeKind::Builtin) {
+                        const NamedTypeSymbol* namedTySym = refedTySym->asNamedType();
                         if (!(namedTySym->builtinTypeKind() == refedTyBuiltTyKind))
                             return false;
                     }
@@ -486,12 +488,13 @@ void TestBinder::bind(std::string text, Expectation X)
                         return false;
 
                     const ArrayTypeSymbol* arrTySym = actualSym->type()->asArrayType();
-                    const NamedTypeSymbol* namedTySym = arrTySym->elementType()->asNamedType();
+                    const TypeSymbol* elemTySym = arrTySym->elementType();
 
-                    if (namedTySym->typeKind() != elemTyKind)
+                    if (elemTySym->typeKind() != elemTyKind)
                         return false;
 
                     if (elemTyKind == TypeKind::Builtin) {
+                        const NamedTypeSymbol* namedTySym = elemTySym->asNamedType();
                         if (!(namedTySym->builtinTypeKind() == elemTyBuiltTyKind))
                             return false;
                     }
@@ -533,34 +536,35 @@ void TestBinder::bind(std::string text, Expectation X)
                         return false;
 
                     const ArrayTypeSymbol* arrTySym = actualSym->type()->asArrayType();
-                    const NamedTypeSymbol* namedTySym = arrTySym->elementType()->asNamedType();
+                    const TypeSymbol* elemTySym = arrTySym->elementType();
 
-                    if (namedTySym->typeKind() != elemTyKind)
+                    if (elemTySym->typeKind() != elemTyKind)
                         return false;
 
                     switch (qual) {
                         case Expectation::Qual::Const:
-                            if (!namedTySym->isConstQualified())
+                            if (!elemTySym->isConstQualified())
                                 return false;
                             break;
 
                         case Expectation::Qual::Volatile:
-                            if (!namedTySym->isVolatileQualified())
+                            if (!elemTySym->isVolatileQualified())
                                 return false;
                             break;
 
                         case Expectation::Qual::ConstAndVolatile:
-                            if (!(namedTySym->isConstQualified())
-                                    || !(namedTySym->isVolatileQualified()))
+                            if (!(elemTySym->isConstQualified())
+                                    || !(elemTySym->isVolatileQualified()))
                             break;
 
                         case Expectation::Qual::Restrict:
-                            if (!namedTySym->isRestrictQualified())
+                            if (!elemTySym->isRestrictQualified())
                                 return false;
                             break;
                     }
 
                     if (elemTyKind == TypeKind::Builtin) {
+                        const NamedTypeSymbol* namedTySym = arrTySym->elementType()->asNamedType();
                         if (!(namedTySym->builtinTypeKind() == elemTyBuiltTyKind))
                             return false;
                     }
