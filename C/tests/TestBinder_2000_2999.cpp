@@ -462,9 +462,44 @@ void TestBinder::case2297(){ }
 void TestBinder::case2298(){ }
 void TestBinder::case2299(){ }
 
-void TestBinder::case2300(){ }
-void TestBinder::case2301(){ }
-void TestBinder::case2302(){ }
+void TestBinder::case2300()
+{
+    bind(R"(
+struct x
+{
+    int y [ 1 ] ;
+};
+         )",
+         Expectation()
+            .arr_1("y", ValueKind::Field, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case2301()
+{
+    bind(R"(
+struct x
+{
+    int y [ 1 ] , z [ 2 ] ;
+};
+         )",
+         Expectation()
+            .arr_1("y", ValueKind::Field, TypeKind::Builtin, BuiltinTypeKind::Int)
+            .arr_1("z", ValueKind::Field, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
+void TestBinder::case2302()
+{
+    bind(R"(
+struct x
+{
+    y z [ 1 ] , w [ 2 ] ;
+};
+         )",
+         Expectation()
+            .arr_1("z", ValueKind::Field, TypeKind::Synonym)
+            .arr_1("w", ValueKind::Field, TypeKind::Synonym));
+}
+
 void TestBinder::case2303(){ }
 void TestBinder::case2304(){ }
 void TestBinder::case2305(){ }
