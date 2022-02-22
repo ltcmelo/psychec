@@ -510,4 +510,73 @@ void TestBinder::bind(std::string text, Expectation X)
             PSYCHE_TEST_FAIL(s);
         }
     }
+
+    for (auto arr_1_QualTyData : X.arr_1_ofQualTy_) {
+        auto valSymName = std::get<0>(arr_1_QualTyData);
+        auto valKind = std::get<1>(arr_1_QualTyData);
+        auto qual = std::get<2>(arr_1_QualTyData);
+        auto elemTyKind = std::get<3>(arr_1_QualTyData);
+        auto elemTyBuiltTyKind = std::get<4>(arr_1_QualTyData);
+
+        auto sym = compilation->assembly()->findSymDEF(
+                [&] (const auto& v) {
+                    const Symbol* sym = v.get();
+                    if (sym->kind() != SymbolKind::Value)
+                        return false;
+
+                    const ValueSymbol* actualSym = sym->asValue();
+                    if (!(actualSym->name() != nullptr
+                           && to_string(*actualSym->name()) == valSymName
+                           && actualSym->valueKind() == valKind
+                           && actualSym->type() != nullptr
+                           && actualSym->type()->typeKind() == TypeKind::Array))
+                        return false;
+
+                    const ArrayTypeSymbol* arrTySym = actualSym->type()->asArrayType();
+                    const NamedTypeSymbol* namedTySym = arrTySym->elementType()->asNamedType();
+
+                    if (namedTySym->typeKind() != elemTyKind)
+                        return false;
+
+                    switch (qual) {
+                        case Expectation::Qual::Const:
+                            if (!namedTySym->isConstQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::Volatile:
+                            if (!namedTySym->isVolatileQualified())
+                                return false;
+                            break;
+
+                        case Expectation::Qual::ConstAndVolatile:
+                            if (!(namedTySym->isConstQualified())
+                                    || !(namedTySym->isVolatileQualified()))
+                            break;
+
+                        case Expectation::Qual::Restrict:
+                            if (!namedTySym->isRestrictQualified())
+                                return false;
+                            break;
+                    }
+
+                    if (elemTyKind == TypeKind::Builtin) {
+                        if (!(namedTySym->builtinTypeKind() == elemTyBuiltTyKind))
+                            return false;
+                    }
+                    else {
+                        if (elemTyBuiltTyKind != BuiltinTypeKind::None)
+                            return false;
+                    }
+
+                    return true;
+                });
+
+        if (sym == nullptr) {
+            auto s = "cannot find "
+                    + to_string(valKind) + " " + valSymName + " "
+                    + to_string(elemTyKind) + " " + to_string(elemTyBuiltTyKind);
+            PSYCHE_TEST_FAIL(s);
+        }
+    }
 }

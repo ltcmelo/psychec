@@ -194,6 +194,20 @@ public:
                            TypeKind elemTyKind,
                            BuiltinTypeKind elemTyBuiltTyKind = BuiltinTypeKind::None);
 
+        /*
+         * arrays of objects with qualified type
+         */
+        using Arr_1_QualTyData = std::tuple<std::string,
+                                            ValueKind,
+                                            Qual,
+                                            TypeKind,
+                                            BuiltinTypeKind>;
+        std::vector<Arr_1_QualTyData> arr_1_ofQualTy_;
+        Expectation& arr_1_ofQualTy(const std::string& valSymName,
+                                    ValueKind valKind,
+                                    Qual qual,
+                                    TypeKind elemTyKind,
+                                    BuiltinTypeKind elemTyBuiltTyKind = BuiltinTypeKind::None);
     };
 
 protected:

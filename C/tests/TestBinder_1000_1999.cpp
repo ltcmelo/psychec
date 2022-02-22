@@ -581,7 +581,14 @@ void TestBinder::case1346(){ }
 void TestBinder::case1347(){ }
 void TestBinder::case1348(){ }
 void TestBinder::case1349(){ }
-void TestBinder::case1350(){ }
+
+void TestBinder::case1350()
+{
+    bind("const int x [ 1 ] ;",
+         Expectation()
+            .arr_1_ofQualTy("x", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+}
+
 void TestBinder::case1351(){ }
 void TestBinder::case1352(){ }
 void TestBinder::case1353(){ }

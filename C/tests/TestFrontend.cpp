@@ -186,6 +186,20 @@ TestFrontend::Expectation::arr_1(const std::string& valSymName,
     return *this;
 }
 
+TestFrontend::Expectation&
+TestFrontend::Expectation::arr_1_ofQualTy(const std::string& valSymName,
+                                          ValueKind valKind,
+                                          Qual qual,
+                                          TypeKind elemTyKind,
+                                          BuiltinTypeKind elemTyBuiltTyKind)
+{
+    arr_1_ofQualTy_.push_back(std::make_tuple(valSymName,
+                                              valKind,
+                                              qual,
+                                              elemTyKind,
+                                              elemTyBuiltTyKind));
+    return *this;
+}
 
 TestFrontend::Expectation& TestFrontend::Expectation::addDiagnostic(ErrorOrWarn v, std::string descriptorId)
 {
