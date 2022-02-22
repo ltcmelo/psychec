@@ -2374,10 +2374,16 @@ void TestParser::case0331()
 
 void TestParser::case0332()
 {
+    parse("int x [ 1 ] const ;",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void TestParser::case0333()
 {
+    parse("int x [ 1 ] y ;",
+          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void TestParser::case0334()
