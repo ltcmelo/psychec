@@ -352,6 +352,7 @@ private:
             TypeNameSyntax* typeName,
             LexedTokens::IndexType closeParenTkIdx);
     bool parseVAArgumentExpression_AtFirst(ExpressionSyntax*& expr);
+    bool parseExtGNU_ChooseExpression_AtFirst(ExpressionSyntax*& expr);
 
     /* Unary */
     bool parseExpressionWithPrecedenceUnary(ExpressionSyntax*& expr);

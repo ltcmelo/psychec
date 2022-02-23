@@ -276,6 +276,8 @@ public:
     virtual const AssignmentExpressionSyntax* asAssignmentExpression() const { return nullptr; }
     virtual SequencingExpressionSyntax* asSequencingExpression() { return nullptr; }
     virtual const SequencingExpressionSyntax* asSequencingExpression() const { return nullptr; }
+    virtual ExtGNU_ChooseExpressionSyntax* asExtGNU_ChooseExpression() { return nullptr; }
+    virtual const ExtGNU_ChooseExpressionSyntax* asExtGNU_ChooseExpression() const { return nullptr; }
 
     //------------//
     // Statements //

@@ -609,6 +609,19 @@ protected:
         return Action::Skip;
     }
 
+    virtual Action visitExtGNU_ChooseExpression(const ExtGNU_ChooseExpressionSyntax* node) override
+    {
+        terminal(node->keyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->constantExpression());
+        terminal(node->commaToken1(), node);
+        nonterminal(node->expression1());
+        terminal(node->commaToken2(), node);
+        nonterminal(node->expression2());
+        terminal(node->closeParenthesisToken(), node);
+        return Action::Skip;
+    }
+
     //------------//
     // Statements //
     //------------//

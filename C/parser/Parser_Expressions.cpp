@@ -500,6 +500,9 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
         case Keyword_MacroStd_va_arg:
             return parseVAArgumentExpression_AtFirst(expr);
 
+        case Keyword_ExtGNU___builtin_choose_expr:
+            return parseExtGNU_ChooseExpression_AtFirst(expr);
+
         case Keyword___func__:
         case Keyword_ExtGNU___FUNCTION__:
         case Keyword_ExtGNU___PRETTY_FUNCTION__:
@@ -710,6 +713,32 @@ bool Parser::parseVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
             && match(CommaToken, &vaArgExpr->commaTkIdx_)
             && parseTypeName(vaArgExpr->typeName_)
             && match(CloseParenToken, &vaArgExpr->closeParenTkIdx_);
+}
+
+/**
+ * Parse the GNU built-in function \c __builtin_choose_expr.
+ *
+ */
+bool Parser::parseExtGNU_ChooseExpression_AtFirst(ExpressionSyntax*& expr)
+{
+    DEBUG_THIS_RULE();
+    PSYCHE_ASSERT(peek().kind() == Keyword_ExtGNU___builtin_choose_expr,
+                  return false,
+                  "assert failure: `__builtin_choose_expr'");
+
+    if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_InternalBuiltins())
+        diagReporter_.ExpectedFeature("GNU internal builtins");
+
+    auto chooseExpr = makeNode<ExtGNU_ChooseExpressionSyntax>();
+    expr = chooseExpr;
+    chooseExpr->kwTkIdx_ = consume();
+    return match(OpenParenToken, &chooseExpr->openParenTkIdx_)
+        && parseConstant<ConstantExpressionSyntax>(chooseExpr->constExpr_, IntegerConstantExpression)
+        && match(CommaToken, &chooseExpr->commaTkIdx1_)
+        && parseExpressionWithPrecedenceAssignment(chooseExpr->expr1_)
+        && match(CommaToken, &chooseExpr->commaTkIdx2_)
+        && parseExpressionWithPrecedenceAssignment(chooseExpr->expr2_)
+        && match(CloseParenToken, &chooseExpr->closeParenTkIdx_);
 }
 
 /**

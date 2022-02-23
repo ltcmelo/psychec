@@ -143,6 +143,7 @@ class BinaryExpressionSyntax;
 class ConditionalExpressionSyntax;
 class AssignmentExpressionSyntax;
 class SequencingExpressionSyntax;
+class ExtGNU_ChooseExpressionSyntax;
 
 //------------//
 // Statements //

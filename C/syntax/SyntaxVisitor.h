@@ -144,6 +144,7 @@ public:
     virtual Action visitConditionalExpression(const ConditionalExpressionSyntax*) { return Action::Visit; }
     virtual Action visitAssignmentExpression(const AssignmentExpressionSyntax*) { return Action::Visit; }
     virtual Action visitSequencingExpression(const SequencingExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_ChooseExpression(const ExtGNU_ChooseExpressionSyntax*) { return Action::Visit; }
 
     //------------//
     // Statements //

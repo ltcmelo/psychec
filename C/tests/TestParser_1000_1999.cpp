@@ -2633,10 +2633,74 @@ void TestParser::case1967() {}
 void TestParser::case1968() {}
 void TestParser::case1969() {}
 
-void TestParser::case1970() {}
-void TestParser::case1971() {}
-void TestParser::case1972() {}
-void TestParser::case1973() {}
+void TestParser::case1970()
+{
+    parseExpression("__builtin_choose_expr ( 0 , x , y )",
+                    Expectation().AST( { ExtGNU_ChooseExpression,
+                                         IntegerConstantExpression,
+                                         IdentifierName,
+                                         IdentifierName }));
+}
+
+void TestParser::case1971()
+{
+    parseExpression("__builtin_choose_expr ( 1 , sizeof ( int ) , sizeof ( double ) )",
+                    Expectation().AST( { ExtGNU_ChooseExpression,
+                                         IntegerConstantExpression,
+                                         SizeofExpression,
+                                         TypeNameAsTypeReference,
+                                         TypeName,
+                                         BuiltinTypeSpecifier,
+                                         AbstractDeclarator,
+                                         SizeofExpression,
+                                         TypeNameAsTypeReference,
+                                         TypeName,
+                                         BuiltinTypeSpecifier,
+                                         AbstractDeclarator }));
+}
+
+void TestParser::case1972()
+{
+    parseExpression(R"(
+                     __builtin_choose_expr ( 0 ,
+                             __builtin_choose_expr ( 1 ,
+                                    sizeof ( int ) ,
+                                    sizeof ( double ) ) ,
+                             __builtin_choose_expr ( 2 , x , y ) )
+                    )",
+                    Expectation().AST( { ExtGNU_ChooseExpression,
+                                         IntegerConstantExpression,
+                                         ExtGNU_ChooseExpression,
+                                         IntegerConstantExpression,
+                                         SizeofExpression,
+                                         TypeNameAsTypeReference,
+                                         TypeName,
+                                         BuiltinTypeSpecifier,
+                                         AbstractDeclarator,
+                                         SizeofExpression,
+                                         TypeNameAsTypeReference,
+                                         TypeName,
+                                         BuiltinTypeSpecifier,
+                                         AbstractDeclarator,
+                                         ExtGNU_ChooseExpression,
+                                         IntegerConstantExpression,
+                                         IdentifierName,
+                                         IdentifierName }));
+}
+
+void TestParser::case1973()
+{
+    parseExpression("__builtin_choose_expr ( 1 , x + y , z + w )",
+                    Expectation().AST( { ExtGNU_ChooseExpression,
+                                         IntegerConstantExpression,
+                                         AddExpression,
+                                         IdentifierName,
+                                         IdentifierName,
+                                         AddExpression,
+                                         IdentifierName,
+                                         IdentifierName }));
+}
+
 void TestParser::case1974() {}
 void TestParser::case1975() {}
 void TestParser::case1976() {}
