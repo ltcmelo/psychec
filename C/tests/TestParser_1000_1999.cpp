@@ -2635,8 +2635,8 @@ void TestParser::case1969() {}
 
 void TestParser::case1970()
 {
-    parseExpression("__builtin_choose_expr ( 0, x, y )",
-                    Expectation().AST( { ExtGNU_ChooseExpr,
+    parseExpression("__builtin_choose_expr ( 0 , x , y )",
+                    Expectation().AST( { ExtGNU_ChooseExpression,
                                          IntegerConstantExpression,
                                          IdentifierName,
                                          IdentifierName }));
@@ -2644,8 +2644,8 @@ void TestParser::case1970()
 
 void TestParser::case1971()
 {
-    parseExpression("__builtin_choose_expr ( 1, sizeof(int), sizeof(double) )",
-                    Expectation().AST( { ExtGNU_ChooseExpr,
+    parseExpression("__builtin_choose_expr ( 1 , sizeof ( int ) , sizeof ( double ) )",
+                    Expectation().AST( { ExtGNU_ChooseExpression,
                                          IntegerConstantExpression,
                                          SizeofExpression,
                                          TypeNameAsTypeReference,
@@ -2662,15 +2662,15 @@ void TestParser::case1971()
 void TestParser::case1972()
 {
     parseExpression(R"(
-                     __builtin_choose_expr ( 0,
-                             __builtin_choose_expr ( 1,
-                                    sizeof( int ),
-                                    sizeof( double ) ),
-                             __builtin_choose_expr ( 2, x, y ) )
+                     __builtin_choose_expr ( 0 ,
+                             __builtin_choose_expr ( 1 ,
+                                    sizeof ( int ) ,
+                                    sizeof ( double ) ) ,
+                             __builtin_choose_expr ( 2 , x , y ) )
                     )",
-                    Expectation().AST( { ExtGNU_ChooseExpr,
+                    Expectation().AST( { ExtGNU_ChooseExpression,
                                          IntegerConstantExpression,
-                                         ExtGNU_ChooseExpr,
+                                         ExtGNU_ChooseExpression,
                                          IntegerConstantExpression,
                                          SizeofExpression,
                                          TypeNameAsTypeReference,
@@ -2682,7 +2682,7 @@ void TestParser::case1972()
                                          TypeName,
                                          BuiltinTypeSpecifier,
                                          AbstractDeclarator,
-                                         ExtGNU_ChooseExpr,
+                                         ExtGNU_ChooseExpression,
                                          IntegerConstantExpression,
                                          IdentifierName,
                                          IdentifierName }));
@@ -2690,8 +2690,8 @@ void TestParser::case1972()
 
 void TestParser::case1973()
 {
-    parseExpression("__builtin_choose_expr ( 1 , x + y, z + w )",
-                    Expectation().AST( { ExtGNU_ChooseExpr,
+    parseExpression("__builtin_choose_expr ( 1 , x + y , z + w )",
+                    Expectation().AST( { ExtGNU_ChooseExpression,
                                          IntegerConstantExpression,
                                          AddExpression,
                                          IdentifierName,

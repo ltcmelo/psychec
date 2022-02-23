@@ -609,7 +609,7 @@ protected:
         return Action::Skip;
     }
 
-    virtual Action visitExtGNU_ChooseExpr(const ExtGNU_ChooseExprSyntax* node) override
+    virtual Action visitExtGNU_ChooseExpression(const ExtGNU_ChooseExpressionSyntax* node) override
     {
         terminal(node->keyword(), node);
         terminal(node->openParenthesisToken(), node);

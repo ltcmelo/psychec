@@ -410,7 +410,7 @@ enum SyntaxKind : std::uint16_t
     CompoundLiteralExpression,
     CastExpression,
     VAArgumentExpression,
-    ExtGNU_ChooseExpr,
+    ExtGNU_ChooseExpression,
 
     /* Binary */
     MultiplyExpression,

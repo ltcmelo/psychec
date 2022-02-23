@@ -729,7 +729,7 @@ bool Parser::parseExtGNU_ChooseExpression_AtFirst(ExpressionSyntax*& expr)
     if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_InternalBuiltins())
         diagReporter_.ExpectedFeature("GNU internal builtins");
 
-    auto chooseExpr = makeNode<ExtGNU_ChooseExprSyntax>();
+    auto chooseExpr = makeNode<ExtGNU_ChooseExpressionSyntax>();
     expr = chooseExpr;
     chooseExpr->kwTkIdx_ = consume();
     return match(OpenParenToken, &chooseExpr->openParenTkIdx_)

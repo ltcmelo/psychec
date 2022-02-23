@@ -744,17 +744,20 @@ private:
 };
 
 /**
- * \brief The ExtGNU_ChooseExprSyntax class.
+ * \brief The ExtGNU_ChooseExpressionSyntax class.
  *
  * \code
  * __builtin_choose_expr( const_expr, expr1, expr2 )
  * \endcode
  *
  * \remark \c const_expr is an integer constant expression.
+ *
+ * \note Similar to:
+ * - \c clang::ChooseExpr of LLVM/Clang.
  */
-class PSY_C_API ExtGNU_ChooseExprSyntax final : public ExpressionSyntax
+class PSY_C_API ExtGNU_ChooseExpressionSyntax final : public ExpressionSyntax
 {
-    AST_NODE_1K(ExtGNU_ChooseExpr, Expression)
+    AST_NODE_1K(ExtGNU_ChooseExpression, Expression)
 
 public:
     SyntaxToken keyword() const { return tokenAtIndex(kwTkIdx_); }

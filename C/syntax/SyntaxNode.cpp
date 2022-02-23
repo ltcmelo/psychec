@@ -334,8 +334,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "CastExpression";
         case VAArgumentExpression:
             return "VAArgumentExpression";
-        case ExtGNU_ChooseExpr:
-            return "ExtGNU_ChooseExpr";
+        case ExtGNU_ChooseExpression:
+            return "ExtGNU_ChooseExpression";
 
         /* Binary */
         case MultiplyExpression:
