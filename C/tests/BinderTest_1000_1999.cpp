@@ -259,37 +259,52 @@ void BinderTest::case1100()
 {
     bind("int * x ;",
          Expectation()
-            .objPtr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case1101()
 {
     bind("x * y ;",
          Expectation()
-            .objPtr_1("y", ValueKind::Variable, TypeKind::Synonym));
+             .binding(Binding("y", ValueKind::Variable)
+                      .specType("x", TypeKind::Synonym)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case1102()
 {
     bind("int * x ; y * z ;",
          Expectation()
-            .objPtr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int)
-            .objPtr_1("z", ValueKind::Variable, TypeKind::Synonym));
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer))
+             .binding(Binding("z", ValueKind::Variable)
+                      .specType("y", TypeKind::Synonym)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case1103()
 {
     bind("int * x , * y ;",
          Expectation()
-            .objPtr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int)
-            .objPtr_1("y", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer))
+             .binding(Binding("y", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case1104()
 {
     bind("int ( * x ) [ 1 ];",
          Expectation()
-            .objPtr_1("x", ValueKind::Variable, TypeKind::Array));
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Array)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case1105()

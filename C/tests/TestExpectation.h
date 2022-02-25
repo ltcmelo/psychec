@@ -52,10 +52,10 @@ struct Binding
     Binding(std::string name, TypeKind kind);
     Binding(std::string funcName);
     Binding& specType(std::string name,
-                      TypeKind kind,
+                      TypeKind tyKind,
                       BuiltinTypeKind builtinKind = BuiltinTypeKind::None,
                       CVR cvr = CVR::None);
-    Binding& type(TypeKind kind, CVR cvr = CVR::None);
+    Binding& derivType(TypeKind tyKind, CVR cvr = CVR::None);
 
     std::string name_;
     SymbolKind symK_;
@@ -64,10 +64,10 @@ struct Binding
 
     std::string specTyName_;
     TypeKind specTyK_;
-    BuiltinTypeKind specBuiltinTyK_;
-    CVR specCVR_;
-    std::vector<TypeKind> tyKs_;
-    std::vector<CVR> CVRs_;
+    BuiltinTypeKind specTyBuiltinK_;
+    CVR specTyCVR_;
+    std::vector<TypeKind> derivTyKs_;
+    std::vector<CVR> derivTyCVRs_;
 };
 
 struct Expectation

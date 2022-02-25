@@ -65,10 +65,47 @@ namespace {
 bool REJECT(const Symbol* sym, std::string msg)
 {
 #ifdef DEBUG_BINDING_SEARCH
-    std::cout << "\n\t\treject " << to_string(*sym)
-              << " because of " << msg;
+    std::cout << "\n\t\treject " << to_string(*sym) << "\t" << msg;
 #endif
     return false;
+}
+
+bool CVRIsExpected(CVR cvr, const TypeSymbol* tySym, const Symbol* candSym)
+{
+    switch (cvr) {
+        case CVR::Const:
+            if (!tySym->isConstQualified())
+                return REJECT(candSym, "not const");
+            break;
+
+        case CVR::Volatile:
+            if (!tySym->isVolatileQualified())
+                return REJECT(candSym, "not volatile");
+            break;
+
+        case CVR::ConstAndVolatile:
+            if (!(tySym->isConstQualified())
+                    || !(tySym->isVolatileQualified())) {
+                return REJECT(candSym, "not const/volatile");
+            }
+            break;
+
+        case CVR::Restrict:
+            if (!tySym->isRestrictQualified())
+                return REJECT(candSym, "not restrict");
+            break;
+
+        case CVR::None:
+            if (tySym->isConstQualified())
+                return REJECT(candSym, "const");
+            if (tySym->isVolatileQualified())
+                return REJECT(candSym, "volatile");
+            if (tySym->isRestrictQualified())
+                return REJECT(candSym, "restrict");
+            break;
+    }
+
+    return true;
 }
 
 } // anonymous
@@ -115,55 +152,50 @@ void BinderTest::bind(std::string text, Expectation X)
                     if (valSym->type() == nullptr)
                         return REJECT(candidateSym, "null type");
 
-                    if (valSym->type()->name() == nullptr)
+                    const TypeSymbol* tySym = valSym->type();
+                    for (auto i = binding.derivTyKs_.size(); i > 0; --i) {
+                        auto derivTyK = binding.derivTyKs_[i - 1];
+                        if (derivTyK != tySym->typeKind())
+                            return REJECT(candidateSym, "(derived) type kind mismatch");
+
+                        switch (tySym->typeKind()) {
+                            case TypeKind::Array:
+                                tySym = tySym->asArrayType()->elementType();
+                                break;
+
+                            case TypeKind::Pointer:
+                                tySym = tySym->asPointerType()->referencedType();
+                                break;
+
+                            default:
+                                PSYCHE_TEST_FAIL("unexpected");
+                                return false;
+                        }
+
+                        auto derivTyCVR = binding.derivTyCVRs_[i - 1];
+                        if (!CVRIsExpected(derivTyCVR, tySym, candidateSym))
+                            return false;
+                    }
+
+                    if (tySym->name() == nullptr)
                         return REJECT(candidateSym, "null type name");
 
-                    if (to_string(*valSym->type()->name()) != binding.specTyName_)
+                    if (to_string(*tySym->name()) != binding.specTyName_)
                         return REJECT(candidateSym, "type name mismatch");
 
-                    if (valSym->type()->typeKind() != binding.specTyK_)
+                    if (tySym->typeKind() != binding.specTyK_)
                         return REJECT(candidateSym, "type kind mismatch");
 
-                    if (binding.specBuiltinTyK_ != BuiltinTypeKind::None) {
-                        if (!valSym->type()->asNamedType())
+                    if (binding.specTyBuiltinK_ != BuiltinTypeKind::None) {
+                        if (!tySym->asNamedType())
                             return REJECT(candidateSym, "not a builtin");
 
-                        if (valSym->type()->asNamedType()->builtinTypeKind() != binding.specBuiltinTyK_)
+                        if (tySym->asNamedType()->builtinTypeKind() != binding.specTyBuiltinK_)
                             return REJECT(candidateSym, "builtin kind mismatch");
                     }
 
-                    switch (binding.specCVR_) {
-                        case CVR::Const:
-                            if (!valSym->type()->isConstQualified())
-                                return REJECT(candidateSym, "not const");
-                            break;
-
-                        case CVR::Volatile:
-                            if (!valSym->type()->isVolatileQualified())
-                                return REJECT(candidateSym, "not volatile");
-                            break;
-
-                        case CVR::ConstAndVolatile:
-                            if (!(valSym->type()->isConstQualified())
-                                    || !(valSym->type()->isVolatileQualified())) {
-                                return REJECT(candidateSym, "not const/volatile");
-                            }
-                            break;
-
-                        case CVR::Restrict:
-                            if (!valSym->type()->isRestrictQualified())
-                                return REJECT(candidateSym, "not restrict");
-                            break;
-
-                        case CVR::None:
-                            if (valSym->type()->isConstQualified())
-                                return REJECT(candidateSym, "const");
-                            if (valSym->type()->isVolatileQualified())
-                                return REJECT(candidateSym, "volatile");
-                            if (valSym->type()->isRestrictQualified())
-                                return REJECT(candidateSym, "restrict");
-                            break;
-                    }
+                    if (!CVRIsExpected(binding.specTyCVR_, tySym, candidateSym))
+                        return false;
 
                     return true;
                 }

@@ -49,15 +49,15 @@ Binding& Binding::specType(std::string name, TypeKind kind, BuiltinTypeKind buil
 {
     specTyName_ = std::move(name);
     specTyK_ = kind;
-    specBuiltinTyK_ = builtinKind;
-    specCVR_ = cvr;
+    specTyBuiltinK_ = builtinKind;
+    specTyCVR_ = cvr;
     return *this;
 }
 
-Binding& Binding::type(TypeKind kind, CVR cvr)
+Binding& Binding::derivType(TypeKind kind, CVR cvr)
 {
-    tyKs_.push_back(kind);
-    CVRs_.push_back(cvr);
+    derivTyKs_.push_back(kind);
+    derivTyCVRs_.push_back(cvr);
     return *this;
 }
 
