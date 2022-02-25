@@ -37,12 +37,37 @@
 namespace psy {
 namespace C {
 
+enum class CVR
+{
+    Const,
+    Volatile,
+    Restrict,
+    ConstAndVolatile,
+    None
+};
+
+struct Binding
+{
+    Binding& nameAndKind(std::string name, ValueKind kind);
+    Binding& specType(std::string name,
+                      TypeKind kind,
+                      BuiltinTypeKind builtinKind = BuiltinTypeKind::None,
+                      CVR cvr = CVR::None);
+    Binding& type(TypeKind kind, CVR cvr = CVR::None);
+
+    std::string name_;
+    ValueKind kind_;
+    std::string specTyName_;
+    TypeKind specTyKind_;
+    BuiltinTypeKind specBuiltinTyKind_;
+    CVR specCVR_;
+    std::vector<TypeKind> tyKinds_;
+    std::vector<CVR> CVRs_;
+};
+
 struct Expectation
 {
     Expectation();
-
-    Expectation& setErrorCnt(int numE);
-    Expectation& setWarnCnt(int numW);
 
     enum class ErrorOrWarn
     {
@@ -50,21 +75,26 @@ struct Expectation
         Warn
     };
 
-    Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
-
     int numE_;
     int numW_;
-
     std::vector<std::string> descriptorsE_;
     std::vector<std::string> descriptorsW_;
 
-    Expectation& AST(std::vector<SyntaxKind>&& v);
-    Expectation& replicateAmbiguity(const std::string& s = "");
+    Expectation& setErrorCnt(int numE);
+    Expectation& setWarnCnt(int numW);
+    Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
 
     bool isAmbiguous_;
     std::string ambiguityText_;
 
     std::vector<SyntaxKind> syntaxKinds_;
+
+    Expectation& AST(std::vector<SyntaxKind>&& v);
+    Expectation& replicateAmbiguity(std::string s = "");
+
+    std::vector<Binding> bindings_;
+
+    Expectation& binding(Binding b);
 
     enum class Qual
     {

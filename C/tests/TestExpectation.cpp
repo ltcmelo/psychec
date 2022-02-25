@@ -23,6 +23,29 @@
 using namespace psy;
 using namespace  C;
 
+Binding& Binding::nameAndKind(std::string name, ValueKind kind)
+{
+    name_ = std::move(name);
+    kind_ = kind;
+    return *this;
+}
+
+Binding& Binding::specType(std::string name, TypeKind kind, BuiltinTypeKind builtinKind, CVR cvr)
+{
+    specTyName_ = std::move(name);
+    specTyKind_ = kind;
+    specBuiltinTyKind_ = builtinKind;
+    specCVR_ = cvr;
+    return *this;
+}
+
+Binding& Binding::type(TypeKind kind, CVR cvr)
+{
+    tyKinds_.push_back(kind);
+    CVRs_.push_back(cvr);
+    return *this;
+}
+
 Expectation::Expectation()
     : numE_(0)
     , numW_(0)
@@ -41,10 +64,16 @@ Expectation& Expectation::setWarnCnt(int numW)
     return *this;
 }
 
-Expectation& Expectation::replicateAmbiguity(const std::string& s)
+Expectation& Expectation::replicateAmbiguity(std::string s)
 {
     isAmbiguous_ = true;
-    ambiguityText_ = s;
+    ambiguityText_ = std::move(s);
+    return *this;
+}
+
+Expectation& Expectation::binding(Binding b)
+{
+    bindings_.emplace_back(std::move(b));
     return *this;
 }
 
