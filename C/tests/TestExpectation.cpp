@@ -64,7 +64,7 @@ Expectation& Expectation::setWarnCnt(int numW)
     return *this;
 }
 
-Expectation& Expectation::replicateAmbiguity(std::string s)
+Expectation& Expectation::ambiguity(std::string s)
 {
     isAmbiguous_ = true;
     ambiguityText_ = std::move(s);
@@ -203,7 +203,7 @@ Expectation::arr_1_ofQualTy(const std::string& valSymName,
     return *this;
 }
 
-Expectation& Expectation::addDiagnostic(ErrorOrWarn v, std::string descriptorId)
+Expectation& Expectation::diagnostic(ErrorOrWarn v, std::string descriptorId)
 {
     if (v == ErrorOrWarn::Error) {
         ++numE_;

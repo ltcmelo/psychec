@@ -39,7 +39,7 @@ void ParserTest::case2000()
 void ParserTest::case2001()
 {
     parseStatement("x : :",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
@@ -52,21 +52,21 @@ void ParserTest::case2002()
 void ParserTest::case2003()
 {
     parseStatement("goto ;",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryIdentifier));
 }
 
 void ParserTest::case2004()
 {
     parseStatement("goto 1 ;",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryIdentifier));
 }
 
 void ParserTest::case2005()
 {
     parseStatement("goto x",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
@@ -149,7 +149,7 @@ void ParserTest::case2020()
 void ParserTest::case2021()
 {
     parseStatement("{",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
@@ -535,7 +535,7 @@ void ParserTest::case2115()
     CROSS_REFERENCE_TEST(ParserTest::case0904);
 
     parseStatement("sizeof ( x ) y ;",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
@@ -750,7 +750,7 @@ void ParserTest::case2211()
                                         MultiplyExpression,
                                         IdentifierName,
                                         IdentifierName })
-                   .replicateAmbiguity("{ x * y ; x * y ; }"));
+                   .ambiguity("{ x * y ; x * y ; }"));
 }
 
 void ParserTest::case2212()
@@ -767,7 +767,7 @@ void ParserTest::case2212()
                                         CallExpression,
                                         IdentifierName,
                                         IdentifierName })
-                   .replicateAmbiguity("{ x ( y ) ; x ( y ) ; }"));
+                   .ambiguity("{ x ( y ) ; x ( y ) ; }"));
 }
 
 void ParserTest::case2213() {}
@@ -921,35 +921,35 @@ void ParserTest::case2311()
 void ParserTest::case2312()
 {
     parseStatement("if ( 1 ) else { }",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void ParserTest::case2313()
 {
     parseStatement("if ( 1 ) 2 else { }",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
 void ParserTest::case2314()
 {
     parseStatement("if else x ;",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
 void ParserTest::case2315()
 {
     parseStatement("if ( 1 ) { } else ",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void ParserTest::case2316()
 {
     parseStatement("if ( 1 ) { } else (",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
@@ -1050,14 +1050,14 @@ void ParserTest::case2355()
 void ParserTest::case2356()
 {
     parseStatement("case 1 : x ;",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_UnexpectedCaseLabelOutsideSwitch));
 }
 
 void ParserTest::case2357()
 {
     parseStatement("default : x ;",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_UnexpectedDefaultLabelOutsideSwitch));
 }
 
@@ -1135,28 +1135,28 @@ void ParserTest::case2404()
 void ParserTest::case2405()
 {
     parseStatement("do { } while ( 1 )",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
 void ParserTest::case2406()
 {
     parseStatement("do { } while ( ) ;",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void ParserTest::case2407()
 {
     parseStatement("while ( )",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void ParserTest::case2408()
 {
     parseStatement("do ; while ( 1 )",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
@@ -1242,7 +1242,7 @@ void ParserTest::case2450()
 void ParserTest::case2451()
 {
     parseStatement("for ( ; ) ;",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
@@ -1257,7 +1257,7 @@ void ParserTest::case2452()
 void ParserTest::case2453()
 {
     parseStatement("for ( ; ; )",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
@@ -1395,14 +1395,14 @@ void ParserTest::case2499() {}
 void ParserTest::case2500()
 {
     parseStatement("break ;",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_UnexpectedBreakOutsideSwitchOrLoop));
 }
 
 void ParserTest::case2501()
 {
     parseStatement("continue ;",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_UnexpectedContinueOutsideLoop));
 }
 
@@ -1517,18 +1517,18 @@ void ParserTest::case2514()
 void ParserTest::case2515()
 {
     parse("break",
-          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+          Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                       Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator)
-                       .addDiagnostic(Expectation::ErrorOrWarn::Warn,
+                       .diagnostic(Expectation::ErrorOrWarn::Warn,
                                       Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
 }
 
 void ParserTest::case2516()
 {
     parse("continue ;",
-          Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+          Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                       Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator)
-                       .addDiagnostic(Expectation::ErrorOrWarn::Warn,
+                       .diagnostic(Expectation::ErrorOrWarn::Warn,
                                       Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
 
 }
@@ -1679,7 +1679,7 @@ void ParserTest::case2602()
     parseStatement(R"(
                    asm ( "nop" )
                    )",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
@@ -1688,7 +1688,7 @@ void ParserTest::case2603()
     parseStatement(R"(
                    asm ( )
                    )",
-                   Expectation().addDiagnostic(Expectation::ErrorOrWarn::Error,
+                   Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryStringLiteral));
 }
 

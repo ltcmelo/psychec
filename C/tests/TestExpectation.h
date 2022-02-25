@@ -79,21 +79,18 @@ struct Expectation
     int numW_;
     std::vector<std::string> descriptorsE_;
     std::vector<std::string> descriptorsW_;
-
     Expectation& setErrorCnt(int numE);
     Expectation& setWarnCnt(int numW);
-    Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
+    Expectation& diagnostic(ErrorOrWarn v, std::string descriptorId = "");
 
     bool isAmbiguous_;
     std::string ambiguityText_;
+    Expectation& ambiguity(std::string s = "");
 
     std::vector<SyntaxKind> syntaxKinds_;
-
     Expectation& AST(std::vector<SyntaxKind>&& v);
-    Expectation& replicateAmbiguity(std::string s = "");
 
     std::vector<Binding> bindings_;
-
     Expectation& binding(Binding b);
 
     enum class Qual

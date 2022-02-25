@@ -100,7 +100,7 @@ void BinderTest::case1007()
 void BinderTest::case1008()
 {
     bind("int float x ;",
-         Expectation().addDiagnostic(
+         Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
              Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
@@ -173,7 +173,7 @@ void BinderTest::case1051()
 void BinderTest::case1052()
 {
     bind("const x ;",
-         Expectation().addDiagnostic(
+         Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
              Semantics_TypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt));
 }
