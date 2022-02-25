@@ -23,7 +23,7 @@
 
 #include "Driver.h"
 
-#include "CompilerFrontEnd.h"
+#include "CompilerFrontend.h"
 #include "Configuration_C.h"
 
 #include "C/SyntaxTree.h"
@@ -34,7 +34,7 @@
 namespace cnip {
 
 /*!
- * \brief The CCompilerFrontEnd class.
+ * \brief The CCompilerFrontend class.
  */
 class CCompilerFrontend : public CompilerFrontend
 {

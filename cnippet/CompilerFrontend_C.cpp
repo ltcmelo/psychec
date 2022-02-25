@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "CompilerFrontEnd_C.h"
+#include "CompilerFrontend_C.h"
 
 #include "FileInfo.h"
 #include "GnuCompilerFacade.h"
