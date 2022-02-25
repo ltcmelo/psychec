@@ -48,7 +48,9 @@ enum class CVR
 
 struct Binding
 {
-    Binding& nameAndKind(std::string name, ValueKind kind);
+    Binding(std::string name, ValueKind kind);
+    Binding(std::string name, TypeKind kind);
+    Binding(std::string funcName);
     Binding& specType(std::string name,
                       TypeKind kind,
                       BuiltinTypeKind builtinKind = BuiltinTypeKind::None,
@@ -56,12 +58,15 @@ struct Binding
     Binding& type(TypeKind kind, CVR cvr = CVR::None);
 
     std::string name_;
-    ValueKind kind_;
+    SymbolKind symK_;
+    ValueKind valK_;
+    TypeKind tyK_;
+
     std::string specTyName_;
-    TypeKind specTyKind_;
-    BuiltinTypeKind specBuiltinTyKind_;
+    TypeKind specTyK_;
+    BuiltinTypeKind specBuiltinTyK_;
     CVR specCVR_;
-    std::vector<TypeKind> tyKinds_;
+    std::vector<TypeKind> tyKs_;
     std::vector<CVR> CVRs_;
 };
 

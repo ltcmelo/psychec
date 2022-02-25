@@ -23,25 +23,40 @@
 using namespace psy;
 using namespace  C;
 
-Binding& Binding::nameAndKind(std::string name, ValueKind kind)
-{
-    name_ = std::move(name);
-    kind_ = kind;
-    return *this;
-}
+Binding::Binding(std::string name, ValueKind kind)
+    : name_(std::move(name))
+    , symK_(SymbolKind::Value)
+    , valK_(kind)
+    , tyK_(TypeKind::None)
+{}
+
+
+Binding::Binding(std::string name, TypeKind kind)
+    : name_(std::move(name))
+    , symK_(SymbolKind::Type)
+    , valK_(ValueKind::None)
+    , tyK_(kind)
+{}
+
+Binding::Binding(std::string funcName)
+    : name_(std::move(funcName))
+    , symK_(SymbolKind::Function)
+    , valK_(ValueKind::None)
+    , tyK_(TypeKind::None)
+{}
 
 Binding& Binding::specType(std::string name, TypeKind kind, BuiltinTypeKind builtinKind, CVR cvr)
 {
     specTyName_ = std::move(name);
-    specTyKind_ = kind;
-    specBuiltinTyKind_ = builtinKind;
+    specTyK_ = kind;
+    specBuiltinTyK_ = builtinKind;
     specCVR_ = cvr;
     return *this;
 }
 
 Binding& Binding::type(TypeKind kind, CVR cvr)
 {
-    tyKinds_.push_back(kind);
+    tyKs_.push_back(kind);
     CVRs_.push_back(cvr);
     return *this;
 }

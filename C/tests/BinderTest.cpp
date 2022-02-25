@@ -30,6 +30,8 @@
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
+#define DEBUG_BINDING_SEARCH
+
 using namespace psy;
 using namespace C;
 
@@ -58,6 +60,19 @@ void BinderTest::setUp()
 void BinderTest::tearDown()
 {}
 
+namespace {
+
+bool REJECT(const Symbol* sym, std::string msg)
+{
+#ifdef DEBUG_BINDING_SEARCH
+    std::cout << "\n\t\treject: " << to_string(*sym)
+              << "  reason: " << msg;
+#endif
+    return false;
+}
+
+} // anonymous
+
 void BinderTest::bind(std::string text, Expectation X)
 {
     parse(text);
@@ -74,6 +89,107 @@ void BinderTest::bind(std::string text, Expectation X)
                 });
     if (sym == nullptr)
         PSYCHE_TEST_FAIL("link unit not found");
+
+    for (const auto& binding : X.bindings_) {
+
+        auto pred = [&binding] (const auto& p)
+        {
+            const Symbol* candidateSym = p.get();
+
+            if (candidateSym->kind() != binding.symK_)
+                return REJECT(candidateSym, "symbol kind mismatch");
+
+            if (!candidateSym->name())
+                return REJECT(candidateSym, "empty name");
+
+            if (to_string(*candidateSym->name()) != binding.name_)
+                return REJECT(candidateSym, "name mistmatch");
+
+            switch (binding.symK_)
+            {
+                case SymbolKind::Value: {
+                    if (candidateSym->asValue()->valueKind() != binding.valK_)
+                        return REJECT(candidateSym, "value kind mismatch");
+
+                    const ValueSymbol* valSym = candidateSym->asValue();
+                    if (valSym->type() == nullptr)
+                        return REJECT(candidateSym, "null type");
+
+                    if (valSym->type()->name() == nullptr)
+                        return REJECT(candidateSym, "null type name");
+
+                    if (to_string(*valSym->type()->name()) != binding.specTyName_)
+                        return REJECT(candidateSym, "type name mismatch");
+
+                    if (valSym->type()->typeKind() != binding.specTyK_)
+                        return REJECT(candidateSym, "type kind mismatch");
+
+                    if (binding.specBuiltinTyK_ != BuiltinTypeKind::None) {
+                        if (!valSym->type()->asNamedType())
+                            return REJECT(candidateSym, "not a builtin");
+
+                        if (valSym->type()->asNamedType()->builtinTypeKind() != binding.specBuiltinTyK_)
+                            return REJECT(candidateSym, "builtin kind mismatch");
+                    }
+
+                    switch (binding.specCVR_) {
+                        case CVR::Const:
+                            if (!valSym->type()->isConstQualified())
+                                return REJECT(candidateSym, "not const");
+                            break;
+
+                        case CVR::Volatile:
+                            if (!valSym->type()->isVolatileQualified())
+                                return REJECT(candidateSym, "not volatile");
+                            break;
+
+                        case CVR::ConstAndVolatile:
+                            if (!(valSym->type()->isConstQualified())
+                                    || !(valSym->type()->isVolatileQualified())) {
+                                return REJECT(candidateSym, "not const/volatile");
+                            }
+                            break;
+
+                        case CVR::Restrict:
+                            if (!valSym->type()->isRestrictQualified())
+                                return REJECT(candidateSym, "not restrict");
+                            break;
+
+                        case CVR::None:
+                            break;
+                    }
+
+                    return true;
+                }
+
+                case SymbolKind::Type: {
+                    if (candidateSym->asType()->typeKind() != binding.tyK_)
+                        return false;
+                    throw std::runtime_error("");
+                }
+
+                case SymbolKind::Function: {
+                    if (!candidateSym->asFunction())
+                        return false;
+                    break;
+                }
+
+                default:
+                    PSYCHE_TEST_FAIL("unknkown symbol kind");
+                    return false;
+            }
+
+            return false;
+        };
+
+        auto sym = compilation->assembly()->findSymDEF(pred);
+
+        if (sym == nullptr) {
+            auto s = "binding doesn't exist: "
+                    + binding.name_ + " " + to_string(binding.valK_);
+            PSYCHE_TEST_FAIL(s);
+        }
+    }
 
     for (auto objData : X.objs_) {
         auto valSymName = std::get<0>(objData);

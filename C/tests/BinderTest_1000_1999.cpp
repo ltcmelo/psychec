@@ -42,7 +42,10 @@ void BinderTest::case1000()
 {
     bind("double x ;",
          Expectation()
-            .obj("x", ValueKind::Variable, "double", TypeKind::Builtin, BuiltinTypeKind::Double));
+            .binding(
+                Binding("x", ValueKind::Variable)
+                    .specType("double", TypeKind::Builtin, BuiltinTypeKind::Double)));
+
 }
 
 void BinderTest::case1001()
