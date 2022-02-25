@@ -21,7 +21,7 @@
 #ifndef PSYCHE_C_TEST_BINDING_H__
 #define PSYCHE_C_TEST_BINDING_H__
 
-#include "TestFrontend.h"
+#include "Test.h"
 #include "C/Fwds.h"
 
 #define TEST_BINDER(Function) TestFunction { &TestBinder::Function, #Function }
@@ -29,7 +29,7 @@
 namespace psy {
 namespace C {
 
-class TestBinder final : public TestFrontend
+class TestBinder final : public Test
 {
 public:
     static const std::string Name;

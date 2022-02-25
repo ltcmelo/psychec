@@ -21,14 +21,14 @@
 #ifndef PSYCHE_C_TEST_TYPING_H__
 #define PSYCHE_C_TEST_TYPING_H__
 
-#include "TestFrontend.h"
+#include "Test.h"
 
 #define TEST_TYPE_CHECKER(Function) TestFunction { &TestTypeChecker::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class TestTypeChecker final : public TestFrontend
+class TestTypeChecker final : public Test
 {
 public:
     static const std::string Name;

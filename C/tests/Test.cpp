@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TestFrontend.h"
+#include "Test.h"
 
 
 #include "compilation/Assembly.h"
@@ -44,45 +44,45 @@
 using namespace psy;
 using namespace C;
 
-TestFrontend::TestFrontend()
+Test::Test()
 {}
 
-TestFrontend::~TestFrontend()
+Test::~Test()
 {}
 
-TestFrontend::Expectation::Expectation()
+Test::Expectation::Expectation()
     : numE_(0)
     , numW_(0)
     , isAmbiguous_(false)
 {}
 
-TestFrontend::Expectation& TestFrontend::Expectation::setErrorCnt(int numE)
+Test::Expectation& Test::Expectation::setErrorCnt(int numE)
 {
     numE_ = numE;
     return *this;
 }
 
-TestFrontend::Expectation& TestFrontend::Expectation::setWarnCnt(int numW)
+Test::Expectation& Test::Expectation::setWarnCnt(int numW)
 {
     numW_ = numW;
     return *this;
 }
 
-TestFrontend::Expectation& TestFrontend::Expectation::replicateAmbiguity(const std::string& s)
+Test::Expectation& Test::Expectation::replicateAmbiguity(const std::string& s)
 {
     isAmbiguous_ = true;
     ambiguityText_ = s;
     return *this;
 }
 
-TestFrontend::Expectation& TestFrontend::Expectation::AST(std::vector<SyntaxKind>&& v)
+Test::Expectation& Test::Expectation::AST(std::vector<SyntaxKind>&& v)
 {
     syntaxKinds_ = std::move(v);
     return *this;
 }
 
-TestFrontend::Expectation&
-TestFrontend::Expectation::obj(const std::string& valSymName,
+Test::Expectation&
+Test::Expectation::obj(const std::string& valSymName,
                                ValueKind valKind,
                                const std::string& tySymName,
                                TypeKind tyKind,
@@ -96,8 +96,8 @@ TestFrontend::Expectation::obj(const std::string& valSymName,
     return *this;
 }
 
-TestFrontend::Expectation&
-TestFrontend::Expectation::qualObj(const std::string& valSymName,
+Test::Expectation&
+Test::Expectation::qualObj(const std::string& valSymName,
                      ValueKind valKind,
                      const std::string& tySymName,
                      Qual qual,
@@ -113,8 +113,8 @@ TestFrontend::Expectation::qualObj(const std::string& valSymName,
     return *this;
 }
 
-TestFrontend::Expectation&
-TestFrontend::Expectation::objPtr_1(const std::string& valSymName,
+Test::Expectation&
+Test::Expectation::objPtr_1(const std::string& valSymName,
                                     ValueKind valKind,
                                     TypeKind refedTyKind,
                                     BuiltinTypeKind refedTyBuiltTyKind)
@@ -126,8 +126,8 @@ TestFrontend::Expectation::objPtr_1(const std::string& valSymName,
     return *this;
 }
 
-TestFrontend::Expectation&
-TestFrontend::Expectation::qualPtr_1(const std::string& valSymName,
+Test::Expectation&
+Test::Expectation::qualPtr_1(const std::string& valSymName,
                                      ValueKind valKind,
                                      Qual qual,
                                      TypeKind refedTyKind,
@@ -141,8 +141,8 @@ TestFrontend::Expectation::qualPtr_1(const std::string& valSymName,
     return *this;
 }
 
-TestFrontend::Expectation&
-TestFrontend::Expectation::qualObjPtr_1(const std::string& valSymName,
+Test::Expectation&
+Test::Expectation::qualObjPtr_1(const std::string& valSymName,
                                         ValueKind valKind,
                                         Qual qual,
                                         TypeKind refedTyKind,
@@ -156,8 +156,8 @@ TestFrontend::Expectation::qualObjPtr_1(const std::string& valSymName,
     return *this;
 }
 
-TestFrontend::Expectation&
-TestFrontend::Expectation::qualObjQualPtr_1(const std::string& valSymName,
+Test::Expectation&
+Test::Expectation::qualObjQualPtr_1(const std::string& valSymName,
                                             ValueKind valKind,
                                             Qual qual,
                                             Qual qualPtr,
@@ -173,8 +173,8 @@ TestFrontend::Expectation::qualObjQualPtr_1(const std::string& valSymName,
     return *this;
 }
 
-TestFrontend::Expectation&
-TestFrontend::Expectation::arr_1(const std::string& valSymName,
+Test::Expectation&
+Test::Expectation::arr_1(const std::string& valSymName,
                                  ValueKind valKind,
                                  TypeKind elemTyKind,
                                  BuiltinTypeKind elemTyBuiltTyKind)
@@ -186,8 +186,8 @@ TestFrontend::Expectation::arr_1(const std::string& valSymName,
     return *this;
 }
 
-TestFrontend::Expectation&
-TestFrontend::Expectation::arr_1_ofQualTy(const std::string& valSymName,
+Test::Expectation&
+Test::Expectation::arr_1_ofQualTy(const std::string& valSymName,
                                           ValueKind valKind,
                                           Qual qual,
                                           TypeKind elemTyKind,
@@ -201,7 +201,7 @@ TestFrontend::Expectation::arr_1_ofQualTy(const std::string& valSymName,
     return *this;
 }
 
-TestFrontend::Expectation& TestFrontend::Expectation::addDiagnostic(ErrorOrWarn v, std::string descriptorId)
+Test::Expectation& Test::Expectation::addDiagnostic(ErrorOrWarn v, std::string descriptorId)
 {
     if (v == ErrorOrWarn::Error) {
         ++numE_;
@@ -216,7 +216,7 @@ TestFrontend::Expectation& TestFrontend::Expectation::addDiagnostic(ErrorOrWarn 
     return *this;
 }
 
-bool TestFrontend::checkErrorAndWarn(Expectation X)
+bool Test::checkErrorAndWarn(Expectation X)
 {
     int E_cnt = 0;
     int W_cnt = 0;
@@ -286,22 +286,22 @@ bool TestFrontend::checkErrorAndWarn(Expectation X)
     return true;
 }
 
-void TestFrontend::parseDeclaration(std::string source, Expectation X)
+void Test::parseDeclaration(std::string source, Expectation X)
 {
     parse(source, X, SyntaxTree::SyntaxCategory::Declarations);
 }
 
-void TestFrontend::parseExpression(std::string source, Expectation X)
+void Test::parseExpression(std::string source, Expectation X)
 {
     parse(source, X, SyntaxTree::SyntaxCategory::Expressions);
 }
 
-void TestFrontend::parseStatement(std::string source, Expectation X)
+void Test::parseStatement(std::string source, Expectation X)
 {
     parse(source, X, SyntaxTree::SyntaxCategory::Statements);
 }
 
-void TestFrontend::parse(std::string source,
+void Test::parse(std::string source,
                          Expectation X,
                          SyntaxTree::SyntaxCategory cat)
 {

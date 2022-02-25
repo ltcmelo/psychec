@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TEST_FRONTEND_H__
-#define PSYCHE_C_TEST_FRONTEND_H__
+#ifndef PSYCHE_C_TEST_H__
+#define PSYCHE_C_TEST_H__
 
 #include "API.h"
 #include "SyntaxTree.h"
@@ -42,7 +42,7 @@
 namespace psy {
 namespace C {
 
-class TestFrontend : public TestRunner
+class Test : public TestRunner
 {
 public:
     struct Expectation
@@ -211,8 +211,8 @@ public:
     };
 
 protected:
-    TestFrontend();
-    ~TestFrontend();
+    Test();
+    ~Test();
 
     bool checkErrorAndWarn(Expectation X);
 

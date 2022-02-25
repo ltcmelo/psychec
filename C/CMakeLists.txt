@@ -185,8 +185,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/tests/TestBinder_0000_0999.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestBinder_1000_1999.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestBinder_2000_2999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestFrontend.h
-    ${PROJECT_SOURCE_DIR}/tests/TestFrontend.cpp
+    ${PROJECT_SOURCE_DIR}/tests/Test.h
+    ${PROJECT_SOURCE_DIR}/tests/Test.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestParser.h
     ${PROJECT_SOURCE_DIR}/tests/TestParser.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestParser_0000_0999.cpp

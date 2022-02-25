@@ -21,14 +21,14 @@
 #ifndef PSYCHE_C_TEST_SYNTAX_H__
 #define PSYCHE_C_TEST_SYNTAX_H__
 
-#include "TestFrontend.h"
+#include "Test.h"
 
 #define TEST_PARSER(Function) TestFunction { &TestParser::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class TestParser final : public TestFrontend
+class TestParser final : public Test
 {
 public:
     static const std::string Name;
