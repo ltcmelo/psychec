@@ -24,8 +24,8 @@
 
 using namespace cnip;
 
-CompilerFrontEnd::~CompilerFrontEnd()
+CompilerFrontend::~CompilerFrontend()
 {}
 
-CompilerFrontEnd::CompilerFrontEnd()
+CompilerFrontend::CompilerFrontend()
 {}

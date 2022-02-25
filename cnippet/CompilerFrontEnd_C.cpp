@@ -43,20 +43,20 @@ namespace
 const char * const kInclude = "#include";
 }
 
-constexpr int CCompilerFrontEnd::ERROR_PreprocessorInvocationFailure;
-constexpr int CCompilerFrontEnd::ERROR_PreprocessedFileWritingFailure;
-constexpr int CCompilerFrontEnd::ERROR_UnsuccessfulParsing;
-constexpr int CCompilerFrontEnd::ERROR_InvalidSyntaxTree;
+constexpr int CCompilerFrontend::ERROR_PreprocessorInvocationFailure;
+constexpr int CCompilerFrontend::ERROR_PreprocessedFileWritingFailure;
+constexpr int CCompilerFrontend::ERROR_UnsuccessfulParsing;
+constexpr int CCompilerFrontend::ERROR_InvalidSyntaxTree;
 
-CCompilerFrontEnd::CCompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine)
-    : CompilerFrontEnd()
+CCompilerFrontend::CCompilerFrontend(const cxxopts::ParseResult& parsedCmdLine)
+    : CompilerFrontend()
     , config_(new ConfigurationForC(parsedCmdLine))
 {}
 
-CCompilerFrontEnd::~CCompilerFrontEnd()
+CCompilerFrontend::~CCompilerFrontend()
 {}
 
-int CCompilerFrontEnd::run(const std::string& srcText, const FileInfo& fi)
+int CCompilerFrontend::run(const std::string& srcText, const FileInfo& fi)
 {
     if (srcText.empty())
          return 0;
@@ -65,7 +65,7 @@ int CCompilerFrontEnd::run(const std::string& srcText, const FileInfo& fi)
                                           : preprocess(srcText, fi);
 }
 
-int CCompilerFrontEnd::extendWithStdLibHeaders(const std::string& srcText,
+int CCompilerFrontend::extendWithStdLibHeaders(const std::string& srcText,
                                                const psy::FileInfo& fi)
 {
     if (!Plugin::isLoaded())
@@ -98,7 +98,7 @@ int CCompilerFrontEnd::extendWithStdLibHeaders(const std::string& srcText,
     return preprocess(srcText_P, fi);
 }
 
-int CCompilerFrontEnd::preprocess(const std::string& srcText,
+int CCompilerFrontend::preprocess(const std::string& srcText,
                                   const psy::FileInfo& fi)
 {
     GnuCompilerFacade cc(config_->hostCompiler,
@@ -128,7 +128,7 @@ int CCompilerFrontEnd::preprocess(const std::string& srcText,
     return constructSyntaxTree(srcText_P, fi);
 }
 
-int CCompilerFrontEnd::constructSyntaxTree(const std::string& srcText,
+int CCompilerFrontend::constructSyntaxTree(const std::string& srcText,
                                            const psy::FileInfo& fi)
 {
     auto tree = SyntaxTree::parseText(srcText,
@@ -166,7 +166,7 @@ int CCompilerFrontEnd::constructSyntaxTree(const std::string& srcText,
     return computeSemanticModel(std::move(tree));
 }
 
-int CCompilerFrontEnd::computeSemanticModel(std::unique_ptr<SyntaxTree> tree)
+int CCompilerFrontend::computeSemanticModel(std::unique_ptr<SyntaxTree> tree)
 {
     auto compilation = Compilation::create(tree->filePath());
     compilation->addSyntaxTrees({ tree.get() });

@@ -36,11 +36,11 @@ namespace cnip {
 /*!
  * \brief The CCompilerFrontEnd class.
  */
-class CCompilerFrontEnd : public CompilerFrontEnd
+class CCompilerFrontend : public CompilerFrontend
 {
 public:
-    CCompilerFrontEnd(const cxxopts::ParseResult& parsedCmdLine);
-    virtual ~CCompilerFrontEnd();
+    CCompilerFrontend(const cxxopts::ParseResult& parsedCmdLine);
+    virtual ~CCompilerFrontend();
 
     int run(const std::string& srcText, const psy::FileInfo& fi) override;
 

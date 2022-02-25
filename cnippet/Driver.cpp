@@ -78,7 +78,7 @@ int Driver::execute(int argc, char* argv[])
 
     ConfigurationForC::extend(cmdLineOpts);
 
-    std::unique_ptr<CompilerFrontEnd> FE;
+    std::unique_ptr<CompilerFrontend> FE;
     std::vector<std::string> filesPaths;
     try {
         cmdLineOpts.parse_positional(std::vector<std::string>{"file"});
@@ -111,7 +111,7 @@ int Driver::execute(int argc, char* argv[])
             return ERROR_LanguageNotRecognized;
         }
 
-        FE.reset(new CCompilerFrontEnd(parsedCmdLine));
+        FE.reset(new CCompilerFrontend(parsedCmdLine));
     }
     catch (...) {
         std::cerr << kCnip << "unrecognized command-line option" << std::endl;
