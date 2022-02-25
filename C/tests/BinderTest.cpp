@@ -65,8 +65,8 @@ namespace {
 bool REJECT(const Symbol* sym, std::string msg)
 {
 #ifdef DEBUG_BINDING_SEARCH
-    std::cout << "\n\t\treject: " << to_string(*sym)
-              << "  reason: " << msg;
+    std::cout << "\n\t\treject " << to_string(*sym)
+              << " because of " << msg;
 #endif
     return false;
 }
@@ -156,6 +156,12 @@ void BinderTest::bind(std::string text, Expectation X)
                             break;
 
                         case CVR::None:
+                            if (valSym->type()->isConstQualified())
+                                return REJECT(candidateSym, "const");
+                            if (valSym->type()->isVolatileQualified())
+                                return REJECT(candidateSym, "volatile");
+                            if (valSym->type()->isRestrictQualified())
+                                return REJECT(candidateSym, "restrict");
                             break;
                     }
 
