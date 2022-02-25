@@ -49,12 +49,13 @@ public:
         Globals and locals: 1
         Fields: 2
             + ?000-?049 -> objects
-            + ?050-?099 -> objects with qualified type
+            + ?050-?099 -> objects of qualified type
             + ?100-?149 -> pointers
-            + ?150-?199 -> pointers to objects of qualified types
+            + ?150-?199 -> pointers to objects of qualified type
             + ?200-?249 -> qualified pointers to objects of qualified type
             + ?250-?299 -> qualified pointers
             + ?300-?349 -> arrays
+            + ?350-?399 -> arrays of objects of qualified type
      */
 
     void case0001();
