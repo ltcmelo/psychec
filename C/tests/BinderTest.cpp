@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TestBinder.h"
+#include "BinderTest.h"
 
 #include "compilation/Assembly.h"
 #include "compilation/Compilation.h"

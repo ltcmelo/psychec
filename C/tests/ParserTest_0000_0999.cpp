@@ -18,9 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TestParser.h"
+#include "ParserTest.h"
 
-#include "TestBinder.h"
+#include "BinderTest.h"
 
 #include "parser/Parser.h"
 #include "parser/Unparser.h"

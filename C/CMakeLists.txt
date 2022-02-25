@@ -180,21 +180,23 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/compilation/SemanticModel.cpp
 
     # Tests
-    ${PROJECT_SOURCE_DIR}/tests/TestBinder.h
-    ${PROJECT_SOURCE_DIR}/tests/TestBinder.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestBinder_0000_0999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestBinder_1000_1999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestBinder_2000_2999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTest.h
+    ${PROJECT_SOURCE_DIR}/tests/BinderTest.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTest_0000_0999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTest_1000_1999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTest_2000_2999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/ParserTest.h
+    ${PROJECT_SOURCE_DIR}/tests/ParserTest.cpp
+    ${PROJECT_SOURCE_DIR}/tests/ParserTest_0000_0999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/ParserTest_1000_1999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/ParserTest_2000_2999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/ParserTest_3000_3999.cpp
     ${PROJECT_SOURCE_DIR}/tests/Test.h
     ${PROJECT_SOURCE_DIR}/tests/Test.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestParser.h
-    ${PROJECT_SOURCE_DIR}/tests/TestParser.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestParser_0000_0999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestParser_1000_1999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestParser_2000_2999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestParser_3000_3999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestTypeChecker.h
-    ${PROJECT_SOURCE_DIR}/tests/TestTypeChecker.cpp
+    ${PROJECT_SOURCE_DIR}/tests/TestExpectation.h
+    ${PROJECT_SOURCE_DIR}/tests/TestExpectation.cpp
+    ${PROJECT_SOURCE_DIR}/tests/TypeCheckerTest.h
+    ${PROJECT_SOURCE_DIR}/tests/TypeCheckerTest.cpp
 )
 
 foreach(file ${PLUGIN_SOURCES})

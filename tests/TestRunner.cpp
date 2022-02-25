@@ -20,9 +20,9 @@
 
 #include "TestRunner.h"
 
-#include "../C/tests/TestBinder.h"
-#include "../C/tests/TestParser.h"
-#include "../C/tests/TestTypeChecker.h"
+#include "../C/tests/BinderTest.h"
+#include "../C/tests/ParserTest.h"
+#include "../C/tests/TypeCheckerTest.h"
 
 #include <iostream>
 

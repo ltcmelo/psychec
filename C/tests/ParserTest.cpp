@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TestParser.h"
+#include "ParserTest.h"
 
 using namespace psy;
 using namespace C;
