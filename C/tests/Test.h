@@ -22,6 +22,9 @@
 #define PSYCHE_C_TEST_H__
 
 #include "API.h"
+
+#include "TestExpectation.h"
+
 #include "SyntaxTree.h"
 
 #include "compilation/Compilation.h"
@@ -45,174 +48,10 @@ namespace C {
 class Test : public TestRunner
 {
 public:
-    struct Expectation
-    {
-        Expectation();
-
-        Expectation& setErrorCnt(int numE);
-        Expectation& setWarnCnt(int numW);
-
-        enum class ErrorOrWarn
-        {
-            Error,
-            Warn
-        };
-
-        Expectation& addDiagnostic(ErrorOrWarn v, std::string descriptorId = "");
-
-        int numE_;
-        int numW_;
-
-        std::vector<std::string> descriptorsE_;
-        std::vector<std::string> descriptorsW_;
-
-        Expectation& AST(std::vector<SyntaxKind>&& v);
-        Expectation& replicateAmbiguity(const std::string& s = "");
-
-        bool isAmbiguous_;
-        std::string ambiguityText_;
-
-        std::vector<SyntaxKind> syntaxKinds_;
-
-        enum class Qual
-        {
-            Const,
-            Volatile,
-            Restrict,
-            ConstAndVolatile,
-        };
-
-        /*
-         * objects
-         */
-        using ObjData = std::tuple<std::string,
-                                   ValueKind,
-                                   std::string,
-                                   TypeKind,
-                                   BuiltinTypeKind>;
-        std::vector<ObjData> objs_;
-
-        Expectation& obj(const std::string& valSymName,
-                         ValueKind valKind,
-                         const std::string& tySymName,
-                         TypeKind tyKind,
-                         BuiltinTypeKind builtTyKind = BuiltinTypeKind::None);
-
-        /*
-         * objects of a qualified type
-         */
-        using QualObjData = std::tuple<std::string,
-                                       ValueKind,
-                                       std::string,
-                                       Qual,
-                                       TypeKind,
-                                       BuiltinTypeKind>;
-        std::vector<QualObjData> qualObjs_;
-
-        Expectation& qualObj(const std::string& valSymName,
-                             ValueKind valKind,
-                             const std::string& tySymName,
-                             Qual qual,
-                             TypeKind tyKind,
-                             BuiltinTypeKind builtTyKind = BuiltinTypeKind::None);
-
-
-        /*
-         * pointers
-         */
-        using ObjPtr_1_Data = std::tuple<std::string,
-                                         ValueKind,
-                                         TypeKind,
-                                         BuiltinTypeKind>;
-        std::vector<ObjPtr_1_Data> objsPtr_1_;
-
-        Expectation& objPtr_1(const std::string& valSymName,
-                              ValueKind valKind,
-                              TypeKind refedTyKind,
-                              BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
-
-        /*
-         * qualified pointers
-         */
-        using QualPtr_1_Data = std::tuple<std::string,
-                                          ValueKind,
-                                          Qual,
-                                          TypeKind,
-                                          BuiltinTypeKind>;
-        std::vector<QualPtr_1_Data> qualPtr_1_;
-
-        Expectation& qualPtr_1(const std::string& valSymName,
-                               ValueKind valKind,
-                               Qual qual,
-                               TypeKind refedTyKind,
-                               BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
-
-        /*
-         * pointers to objects with qualified type
-         */
-        using QualObjPtr_1_Data = std::tuple<std::string,
-                                             ValueKind,
-                                             Qual,
-                                             TypeKind,
-                                             BuiltinTypeKind>;
-        std::vector<QualObjPtr_1_Data> qualObjsPtr_1_;
-
-        Expectation& qualObjPtr_1(const std::string& valSymName,
-                                  ValueKind valKind,
-                                  Qual qual,
-                                  TypeKind refedTyKind,
-                                  BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
-
-        /*
-         * qualified pointers to objects with qualified type
-         */
-        using QualObjQualPtr_1_Data = std::tuple<std::string,
-                                             ValueKind,
-                                             Qual,
-                                             Qual,
-                                             TypeKind,
-                                             BuiltinTypeKind>;
-        std::vector<QualObjQualPtr_1_Data> qualObjsQualPtr_1_;
-
-        Expectation& qualObjQualPtr_1(const std::string& valSymName,
-                                      ValueKind valKind,
-                                      Qual qual,
-                                      Qual qualPtr,
-                                      TypeKind refedTyKind,
-                                      BuiltinTypeKind refedTyBuiltTyKind = BuiltinTypeKind::None);
-
-        /*
-         * arrays
-         */
-        using Arr_1_Data = std::tuple<std::string,
-                                      ValueKind,
-                                      TypeKind,
-                                      BuiltinTypeKind>;
-        std::vector<Arr_1_Data> arr_1_;
-        Expectation& arr_1(const std::string& valSymName,
-                           ValueKind valKind,
-                           TypeKind elemTyKind,
-                           BuiltinTypeKind elemTyBuiltTyKind = BuiltinTypeKind::None);
-
-        /*
-         * arrays of objects with qualified type
-         */
-        using Arr_1_QualTyData = std::tuple<std::string,
-                                            ValueKind,
-                                            Qual,
-                                            TypeKind,
-                                            BuiltinTypeKind>;
-        std::vector<Arr_1_QualTyData> arr_1_ofQualTy_;
-        Expectation& arr_1_ofQualTy(const std::string& valSymName,
-                                    ValueKind valKind,
-                                    Qual qual,
-                                    TypeKind elemTyKind,
-                                    BuiltinTypeKind elemTyBuiltTyKind = BuiltinTypeKind::None);
-    };
+    virtual ~Test();
 
 protected:
     Test();
-    ~Test();
 
     bool checkErrorAndWarn(Expectation X);
 
