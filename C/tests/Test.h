@@ -25,20 +25,8 @@
 
 #include "TestExpectation.h"
 
-#include "SyntaxTree.h"
-
-#include "compilation/Compilation.h"
-#include "symbols/BuiltinTypeKind.h"
-#include "symbols/SymbolKind.h"
-#include "symbols/ValueKind.h"
-#include "symbols/TypeKind.h"
+#include "C/SyntaxTree.h"
 #include "tests/TestRunner.h"
-
-#include <functional>
-#include <string>
-#include <tuple>
-#include <utility>
-#include <vector>
 
 #define CROSS_REFERENCE_TEST(CASE) { auto x = &CASE; (void)x; } \
 
