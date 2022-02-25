@@ -84,7 +84,7 @@ private:
     DECL_PIMPL(Compilation);
 
     friend class SemanticModel;
-    friend class TestBinder;
+    friend class BinderTest;
 
     Compilation();
 

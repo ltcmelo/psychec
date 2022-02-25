@@ -33,9 +33,9 @@
 using namespace psy;
 using namespace C;
 
-const std::string TestBinder::Name = "BINDER";
+const std::string BinderTest::Name = "BINDER";
 
-void TestBinder::testAll()
+void BinderTest::testAll()
 {
     // TEMPORARY
     std::vector<TestFunction> active;
@@ -49,16 +49,16 @@ void TestBinder::testAll()
         active.push_back(testData);
     }
 
-    return run<TestBinder>(active);
+    return run<BinderTest>(active);
 }
 
-void TestBinder::setUp()
+void BinderTest::setUp()
 {}
 
-void TestBinder::tearDown()
+void BinderTest::tearDown()
 {}
 
-void TestBinder::bind(std::string text, Expectation X)
+void BinderTest::bind(std::string text, Expectation X)
 {
     parse(text);
     auto compilation = Compilation::create(tree_->filePath());

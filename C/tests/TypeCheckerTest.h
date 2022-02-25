@@ -18,17 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TEST_TYPING_H__
-#define PSYCHE_C_TEST_TYPING_H__
+#ifndef PSYCHE_C_TYPE_CHECKER_TEST_H__
+#define PSYCHE_C_TYPE_CHECKER_TEST_H__
 
 #include "Test.h"
 
-#define TEST_TYPE_CHECKER(Function) TestFunction { &TestTypeChecker::Function, #Function }
+#define TEST_TYPE_CHECKER(Function) TestFunction { &TypeCheckerTest::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class TestTypeChecker final : public Test
+class TypeCheckerTest final : public Test
 {
 public:
     static const std::string Name;
@@ -48,7 +48,7 @@ public:
     void case0009();
 
 private:
-    using TestFunction = std::pair<std::function<void(TestTypeChecker*)>, const char*>;
+    using TestFunction = std::pair<std::function<void(TypeCheckerTest*)>, const char*>;
 
     void setUp() override;
     void tearDown() override;

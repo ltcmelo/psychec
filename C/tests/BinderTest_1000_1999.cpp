@@ -38,21 +38,21 @@
 using namespace psy;
 using namespace C;
 
-void TestBinder::case1000()
+void BinderTest::case1000()
 {
     bind("double x ;",
          Expectation()
             .obj("x", ValueKind::Variable, "double", TypeKind::Builtin, BuiltinTypeKind::Double));
 }
 
-void TestBinder::case1001()
+void BinderTest::case1001()
 {
     bind("int x ;",
          Expectation()
             .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1002()
+void BinderTest::case1002()
 {
     bind("int x ; int y ;",
          Expectation()
@@ -60,7 +60,7 @@ void TestBinder::case1002()
             .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1003()
+void BinderTest::case1003()
 {
     bind("int x , y ;",
          Expectation()
@@ -68,14 +68,14 @@ void TestBinder::case1003()
             .obj("y", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1004()
+void BinderTest::case1004()
 {
     bind("x y ;",
          Expectation()
             .obj("y", ValueKind::Variable, "x", TypeKind::Synonym));
 }
 
-void TestBinder::case1005()
+void BinderTest::case1005()
 {
     bind("x y , z ;",
          Expectation()
@@ -83,21 +83,21 @@ void TestBinder::case1005()
             .obj("z", ValueKind::Variable, "x", TypeKind::Synonym));
 }
 
-void TestBinder::case1006()
+void BinderTest::case1006()
 {
     bind("int x = 1 ;",
          Expectation()
             .obj("x", ValueKind::Variable, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1007()
+void BinderTest::case1007()
 {
     bind("x y = 1 ;",
          Expectation()
             .obj("y", ValueKind::Variable, "x", TypeKind::Synonym));
 }
 
-void TestBinder::case1008()
+void BinderTest::case1008()
 {
     bind("int float x ;",
          Expectation().addDiagnostic(
@@ -105,72 +105,72 @@ void TestBinder::case1008()
              Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
 
-void TestBinder::case1009()
+void BinderTest::case1009()
 {
 }
 
-void TestBinder::case1010()
+void BinderTest::case1010()
 {
 }
 
-void TestBinder::case1011()
+void BinderTest::case1011()
 {
 }
 
-void TestBinder::case1012() {}
-void TestBinder::case1013() {}
-void TestBinder::case1014() {}
-void TestBinder::case1015() {}
-void TestBinder::case1016() {}
-void TestBinder::case1017() {}
-void TestBinder::case1018() {}
-void TestBinder::case1019() {}
-void TestBinder::case1020() {}
-void TestBinder::case1021() {}
-void TestBinder::case1022() {}
-void TestBinder::case1023() {}
-void TestBinder::case1024() {}
-void TestBinder::case1025() {}
-void TestBinder::case1026() {}
-void TestBinder::case1027() {}
-void TestBinder::case1028() {}
-void TestBinder::case1029() {}
-void TestBinder::case1030() {}
-void TestBinder::case1031() {}
-void TestBinder::case1032() {}
-void TestBinder::case1033() {}
-void TestBinder::case1034() {}
-void TestBinder::case1035() {}
-void TestBinder::case1036() {}
-void TestBinder::case1037() {}
-void TestBinder::case1038() {}
-void TestBinder::case1039() {}
-void TestBinder::case1040() {}
-void TestBinder::case1041() {}
-void TestBinder::case1042() {}
-void TestBinder::case1043() {}
-void TestBinder::case1044() {}
-void TestBinder::case1045() {}
-void TestBinder::case1046() {}
-void TestBinder::case1047() {}
-void TestBinder::case1048() {}
-void TestBinder::case1049() {}
+void BinderTest::case1012() {}
+void BinderTest::case1013() {}
+void BinderTest::case1014() {}
+void BinderTest::case1015() {}
+void BinderTest::case1016() {}
+void BinderTest::case1017() {}
+void BinderTest::case1018() {}
+void BinderTest::case1019() {}
+void BinderTest::case1020() {}
+void BinderTest::case1021() {}
+void BinderTest::case1022() {}
+void BinderTest::case1023() {}
+void BinderTest::case1024() {}
+void BinderTest::case1025() {}
+void BinderTest::case1026() {}
+void BinderTest::case1027() {}
+void BinderTest::case1028() {}
+void BinderTest::case1029() {}
+void BinderTest::case1030() {}
+void BinderTest::case1031() {}
+void BinderTest::case1032() {}
+void BinderTest::case1033() {}
+void BinderTest::case1034() {}
+void BinderTest::case1035() {}
+void BinderTest::case1036() {}
+void BinderTest::case1037() {}
+void BinderTest::case1038() {}
+void BinderTest::case1039() {}
+void BinderTest::case1040() {}
+void BinderTest::case1041() {}
+void BinderTest::case1042() {}
+void BinderTest::case1043() {}
+void BinderTest::case1044() {}
+void BinderTest::case1045() {}
+void BinderTest::case1046() {}
+void BinderTest::case1047() {}
+void BinderTest::case1048() {}
+void BinderTest::case1049() {}
 
-void TestBinder::case1050()
+void BinderTest::case1050()
 {
     bind("const int x ;",
          Expectation()
             .qualObj("x", ValueKind::Variable, "int", Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1051()
+void BinderTest::case1051()
 {
     bind("const x y ;",
          Expectation()
             .qualObj("y", ValueKind::Variable, "x", Expectation::Qual::Const, TypeKind::Synonym));
 }
 
-void TestBinder::case1052()
+void BinderTest::case1052()
 {
     bind("const x ;",
          Expectation().addDiagnostic(
@@ -178,81 +178,81 @@ void TestBinder::case1052()
              Semantics_TypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt));
 }
 
-void TestBinder::case1053()
+void BinderTest::case1053()
 {
     bind("int const x ;",
          Expectation()
             .qualObj("x", ValueKind::Variable, "int", Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1054()
+void BinderTest::case1054()
 {
     bind("x const y ;",
          Expectation()
             .qualObj("y", ValueKind::Variable, "x", Expectation::Qual::Const, TypeKind::Synonym));
 }
 
-void TestBinder::case1055() {}
-void TestBinder::case1056() {}
-void TestBinder::case1057() {}
-void TestBinder::case1058() {}
-void TestBinder::case1059() {}
-void TestBinder::case1060() {}
-void TestBinder::case1061() {}
-void TestBinder::case1062() {}
-void TestBinder::case1063() {}
-void TestBinder::case1064() {}
-void TestBinder::case1065() {}
-void TestBinder::case1066() {}
-void TestBinder::case1067() {}
-void TestBinder::case1068() {}
-void TestBinder::case1069() {}
-void TestBinder::case1070() {}
-void TestBinder::case1071() {}
-void TestBinder::case1072() {}
-void TestBinder::case1073() {}
-void TestBinder::case1074() {}
-void TestBinder::case1075() {}
-void TestBinder::case1076() {}
-void TestBinder::case1077() {}
-void TestBinder::case1078() {}
-void TestBinder::case1079() {}
-void TestBinder::case1080() {}
-void TestBinder::case1081() {}
-void TestBinder::case1082() {}
-void TestBinder::case1083() {}
-void TestBinder::case1084() {}
-void TestBinder::case1085() {}
-void TestBinder::case1086() {}
-void TestBinder::case1087() {}
-void TestBinder::case1088() {}
-void TestBinder::case1089() {}
-void TestBinder::case1090() {}
-void TestBinder::case1091() {}
-void TestBinder::case1092() {}
-void TestBinder::case1093() {}
-void TestBinder::case1094() {}
-void TestBinder::case1095() {}
-void TestBinder::case1096() {}
-void TestBinder::case1097() {}
-void TestBinder::case1098() {}
-void TestBinder::case1099() {}
+void BinderTest::case1055() {}
+void BinderTest::case1056() {}
+void BinderTest::case1057() {}
+void BinderTest::case1058() {}
+void BinderTest::case1059() {}
+void BinderTest::case1060() {}
+void BinderTest::case1061() {}
+void BinderTest::case1062() {}
+void BinderTest::case1063() {}
+void BinderTest::case1064() {}
+void BinderTest::case1065() {}
+void BinderTest::case1066() {}
+void BinderTest::case1067() {}
+void BinderTest::case1068() {}
+void BinderTest::case1069() {}
+void BinderTest::case1070() {}
+void BinderTest::case1071() {}
+void BinderTest::case1072() {}
+void BinderTest::case1073() {}
+void BinderTest::case1074() {}
+void BinderTest::case1075() {}
+void BinderTest::case1076() {}
+void BinderTest::case1077() {}
+void BinderTest::case1078() {}
+void BinderTest::case1079() {}
+void BinderTest::case1080() {}
+void BinderTest::case1081() {}
+void BinderTest::case1082() {}
+void BinderTest::case1083() {}
+void BinderTest::case1084() {}
+void BinderTest::case1085() {}
+void BinderTest::case1086() {}
+void BinderTest::case1087() {}
+void BinderTest::case1088() {}
+void BinderTest::case1089() {}
+void BinderTest::case1090() {}
+void BinderTest::case1091() {}
+void BinderTest::case1092() {}
+void BinderTest::case1093() {}
+void BinderTest::case1094() {}
+void BinderTest::case1095() {}
+void BinderTest::case1096() {}
+void BinderTest::case1097() {}
+void BinderTest::case1098() {}
+void BinderTest::case1099() {}
 
-void TestBinder::case1100()
+void BinderTest::case1100()
 {
     bind("int * x ;",
          Expectation()
             .objPtr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1101()
+void BinderTest::case1101()
 {
     bind("x * y ;",
          Expectation()
             .objPtr_1("y", ValueKind::Variable, TypeKind::Synonym));
 }
 
-void TestBinder::case1102()
+void BinderTest::case1102()
 {
     bind("int * x ; y * z ;",
          Expectation()
@@ -260,7 +260,7 @@ void TestBinder::case1102()
             .objPtr_1("z", ValueKind::Variable, TypeKind::Synonym));
 }
 
-void TestBinder::case1103()
+void BinderTest::case1103()
 {
     bind("int * x , * y ;",
          Expectation()
@@ -268,261 +268,261 @@ void TestBinder::case1103()
             .objPtr_1("y", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1104()
+void BinderTest::case1104()
 {
     bind("int ( * x ) [ 1 ];",
          Expectation()
             .objPtr_1("x", ValueKind::Variable, TypeKind::Array));
 }
 
-void TestBinder::case1105()
+void BinderTest::case1105()
 {
 }
 
-void TestBinder::case1106() {}
-void TestBinder::case1107() {}
-void TestBinder::case1108() {}
-void TestBinder::case1109() {}
-void TestBinder::case1110() {}
-void TestBinder::case1111() {}
-void TestBinder::case1112() {}
-void TestBinder::case1113() {}
-void TestBinder::case1114() {}
-void TestBinder::case1115() {}
-void TestBinder::case1116() {}
-void TestBinder::case1117() {}
-void TestBinder::case1118() {}
-void TestBinder::case1119() {}
-void TestBinder::case1120() {}
-void TestBinder::case1121() {}
-void TestBinder::case1122() {}
-void TestBinder::case1123() {}
-void TestBinder::case1124() {}
-void TestBinder::case1125() {}
-void TestBinder::case1126() {}
-void TestBinder::case1127() {}
-void TestBinder::case1128() {}
-void TestBinder::case1129() {}
-void TestBinder::case1130() {}
-void TestBinder::case1131() {}
-void TestBinder::case1132() {}
-void TestBinder::case1133() {}
-void TestBinder::case1134() {}
-void TestBinder::case1135() {}
-void TestBinder::case1136() {}
-void TestBinder::case1137() {}
-void TestBinder::case1138() {}
-void TestBinder::case1139() {}
-void TestBinder::case1140() {}
-void TestBinder::case1141() {}
-void TestBinder::case1142() {}
-void TestBinder::case1143() {}
-void TestBinder::case1144() {}
-void TestBinder::case1145() {}
-void TestBinder::case1146() {}
-void TestBinder::case1147() {}
-void TestBinder::case1148() {}
-void TestBinder::case1149() {}
+void BinderTest::case1106() {}
+void BinderTest::case1107() {}
+void BinderTest::case1108() {}
+void BinderTest::case1109() {}
+void BinderTest::case1110() {}
+void BinderTest::case1111() {}
+void BinderTest::case1112() {}
+void BinderTest::case1113() {}
+void BinderTest::case1114() {}
+void BinderTest::case1115() {}
+void BinderTest::case1116() {}
+void BinderTest::case1117() {}
+void BinderTest::case1118() {}
+void BinderTest::case1119() {}
+void BinderTest::case1120() {}
+void BinderTest::case1121() {}
+void BinderTest::case1122() {}
+void BinderTest::case1123() {}
+void BinderTest::case1124() {}
+void BinderTest::case1125() {}
+void BinderTest::case1126() {}
+void BinderTest::case1127() {}
+void BinderTest::case1128() {}
+void BinderTest::case1129() {}
+void BinderTest::case1130() {}
+void BinderTest::case1131() {}
+void BinderTest::case1132() {}
+void BinderTest::case1133() {}
+void BinderTest::case1134() {}
+void BinderTest::case1135() {}
+void BinderTest::case1136() {}
+void BinderTest::case1137() {}
+void BinderTest::case1138() {}
+void BinderTest::case1139() {}
+void BinderTest::case1140() {}
+void BinderTest::case1141() {}
+void BinderTest::case1142() {}
+void BinderTest::case1143() {}
+void BinderTest::case1144() {}
+void BinderTest::case1145() {}
+void BinderTest::case1146() {}
+void BinderTest::case1147() {}
+void BinderTest::case1148() {}
+void BinderTest::case1149() {}
 
-void TestBinder::case1150()
+void BinderTest::case1150()
 {
     bind("const int * x ;",
          Expectation()
             .qualObjPtr_1("x", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1151()
+void BinderTest::case1151()
 {
     bind("const x * y ;",
          Expectation()
             .qualObjPtr_1("y", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Synonym));
 }
 
-void TestBinder::case1152() {}
-void TestBinder::case1153() {}
-void TestBinder::case1154() {}
-void TestBinder::case1155() {}
-void TestBinder::case1156() {}
-void TestBinder::case1157() {}
-void TestBinder::case1158() {}
-void TestBinder::case1159() {}
-void TestBinder::case1160() {}
-void TestBinder::case1161() {}
-void TestBinder::case1162() {}
-void TestBinder::case1163() {}
-void TestBinder::case1164() {}
-void TestBinder::case1165() {}
-void TestBinder::case1166() {}
-void TestBinder::case1167() {}
-void TestBinder::case1168() {}
-void TestBinder::case1169() {}
-void TestBinder::case1170() {}
-void TestBinder::case1171() {}
-void TestBinder::case1172() {}
-void TestBinder::case1173() {}
-void TestBinder::case1174() {}
-void TestBinder::case1175() {}
-void TestBinder::case1176() {}
-void TestBinder::case1177() {}
-void TestBinder::case1178() {}
-void TestBinder::case1179() {}
-void TestBinder::case1180() {}
-void TestBinder::case1181() {}
-void TestBinder::case1182() {}
-void TestBinder::case1183() {}
-void TestBinder::case1184() {}
-void TestBinder::case1185() {}
-void TestBinder::case1186() {}
-void TestBinder::case1187() {}
-void TestBinder::case1188() {}
-void TestBinder::case1189() {}
-void TestBinder::case1190() {}
-void TestBinder::case1191() {}
-void TestBinder::case1192() {}
-void TestBinder::case1193() {}
-void TestBinder::case1194() {}
-void TestBinder::case1195() {}
-void TestBinder::case1196() {}
-void TestBinder::case1197() {}
-void TestBinder::case1198() {}
-void TestBinder::case1199()
+void BinderTest::case1152() {}
+void BinderTest::case1153() {}
+void BinderTest::case1154() {}
+void BinderTest::case1155() {}
+void BinderTest::case1156() {}
+void BinderTest::case1157() {}
+void BinderTest::case1158() {}
+void BinderTest::case1159() {}
+void BinderTest::case1160() {}
+void BinderTest::case1161() {}
+void BinderTest::case1162() {}
+void BinderTest::case1163() {}
+void BinderTest::case1164() {}
+void BinderTest::case1165() {}
+void BinderTest::case1166() {}
+void BinderTest::case1167() {}
+void BinderTest::case1168() {}
+void BinderTest::case1169() {}
+void BinderTest::case1170() {}
+void BinderTest::case1171() {}
+void BinderTest::case1172() {}
+void BinderTest::case1173() {}
+void BinderTest::case1174() {}
+void BinderTest::case1175() {}
+void BinderTest::case1176() {}
+void BinderTest::case1177() {}
+void BinderTest::case1178() {}
+void BinderTest::case1179() {}
+void BinderTest::case1180() {}
+void BinderTest::case1181() {}
+void BinderTest::case1182() {}
+void BinderTest::case1183() {}
+void BinderTest::case1184() {}
+void BinderTest::case1185() {}
+void BinderTest::case1186() {}
+void BinderTest::case1187() {}
+void BinderTest::case1188() {}
+void BinderTest::case1189() {}
+void BinderTest::case1190() {}
+void BinderTest::case1191() {}
+void BinderTest::case1192() {}
+void BinderTest::case1193() {}
+void BinderTest::case1194() {}
+void BinderTest::case1195() {}
+void BinderTest::case1196() {}
+void BinderTest::case1197() {}
+void BinderTest::case1198() {}
+void BinderTest::case1199()
 {}
 
-void TestBinder::case1200()
+void BinderTest::case1200()
 {
     bind("const int * const x ;",
          Expectation()
             .qualObjQualPtr_1("x", ValueKind::Variable, Expectation::Qual::Const, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1201() { }
-void TestBinder::case1202() { }
-void TestBinder::case1203() { }
-void TestBinder::case1204() { }
-void TestBinder::case1205() { }
-void TestBinder::case1206() { }
-void TestBinder::case1207() { }
-void TestBinder::case1208() { }
-void TestBinder::case1209() { }
-void TestBinder::case1210() { }
-void TestBinder::case1211() { }
-void TestBinder::case1212() { }
-void TestBinder::case1213() { }
-void TestBinder::case1214() { }
-void TestBinder::case1215() { }
-void TestBinder::case1216() { }
-void TestBinder::case1217() { }
-void TestBinder::case1218() { }
-void TestBinder::case1219() { }
-void TestBinder::case1220() { }
-void TestBinder::case1221() { }
-void TestBinder::case1222() { }
-void TestBinder::case1223() { }
-void TestBinder::case1224() { }
-void TestBinder::case1225() { }
-void TestBinder::case1226() { }
-void TestBinder::case1227() { }
-void TestBinder::case1228() { }
-void TestBinder::case1229() { }
-void TestBinder::case1230() { }
-void TestBinder::case1231() { }
-void TestBinder::case1232() { }
-void TestBinder::case1233() { }
-void TestBinder::case1234() { }
-void TestBinder::case1235() { }
-void TestBinder::case1236() { }
-void TestBinder::case1237() { }
-void TestBinder::case1238() { }
-void TestBinder::case1239() { }
-void TestBinder::case1240() { }
-void TestBinder::case1241() { }
-void TestBinder::case1242() { }
-void TestBinder::case1243() { }
-void TestBinder::case1244() { }
-void TestBinder::case1245() { }
-void TestBinder::case1246() { }
-void TestBinder::case1247() { }
-void TestBinder::case1248() { }
-void TestBinder::case1249() { }
+void BinderTest::case1201() { }
+void BinderTest::case1202() { }
+void BinderTest::case1203() { }
+void BinderTest::case1204() { }
+void BinderTest::case1205() { }
+void BinderTest::case1206() { }
+void BinderTest::case1207() { }
+void BinderTest::case1208() { }
+void BinderTest::case1209() { }
+void BinderTest::case1210() { }
+void BinderTest::case1211() { }
+void BinderTest::case1212() { }
+void BinderTest::case1213() { }
+void BinderTest::case1214() { }
+void BinderTest::case1215() { }
+void BinderTest::case1216() { }
+void BinderTest::case1217() { }
+void BinderTest::case1218() { }
+void BinderTest::case1219() { }
+void BinderTest::case1220() { }
+void BinderTest::case1221() { }
+void BinderTest::case1222() { }
+void BinderTest::case1223() { }
+void BinderTest::case1224() { }
+void BinderTest::case1225() { }
+void BinderTest::case1226() { }
+void BinderTest::case1227() { }
+void BinderTest::case1228() { }
+void BinderTest::case1229() { }
+void BinderTest::case1230() { }
+void BinderTest::case1231() { }
+void BinderTest::case1232() { }
+void BinderTest::case1233() { }
+void BinderTest::case1234() { }
+void BinderTest::case1235() { }
+void BinderTest::case1236() { }
+void BinderTest::case1237() { }
+void BinderTest::case1238() { }
+void BinderTest::case1239() { }
+void BinderTest::case1240() { }
+void BinderTest::case1241() { }
+void BinderTest::case1242() { }
+void BinderTest::case1243() { }
+void BinderTest::case1244() { }
+void BinderTest::case1245() { }
+void BinderTest::case1246() { }
+void BinderTest::case1247() { }
+void BinderTest::case1248() { }
+void BinderTest::case1249() { }
 
-void TestBinder::case1250()
+void BinderTest::case1250()
 {
     bind("int * const x ;",
          Expectation()
             .qualPtr_1("x", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1251()
+void BinderTest::case1251()
 {
     bind("x * const y ;",
          Expectation()
             .qualPtr_1("y", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Synonym));
 }
 
-void TestBinder::case1252() { }
-void TestBinder::case1253() { }
-void TestBinder::case1254() { }
-void TestBinder::case1255() { }
-void TestBinder::case1256() { }
-void TestBinder::case1257() { }
-void TestBinder::case1258() { }
-void TestBinder::case1259() { }
-void TestBinder::case1260() { }
-void TestBinder::case1261() { }
-void TestBinder::case1262() { }
-void TestBinder::case1263() { }
-void TestBinder::case1264() { }
-void TestBinder::case1265() { }
-void TestBinder::case1266() { }
-void TestBinder::case1267() { }
-void TestBinder::case1268() { }
-void TestBinder::case1269() { }
-void TestBinder::case1270() { }
-void TestBinder::case1271() { }
-void TestBinder::case1272() { }
-void TestBinder::case1273() { }
-void TestBinder::case1274() { }
-void TestBinder::case1275() { }
-void TestBinder::case1276() { }
-void TestBinder::case1277() { }
-void TestBinder::case1278() { }
-void TestBinder::case1279() { }
-void TestBinder::case1280() { }
-void TestBinder::case1281() { }
-void TestBinder::case1282() { }
-void TestBinder::case1283() { }
-void TestBinder::case1284() { }
-void TestBinder::case1285() { }
-void TestBinder::case1286() { }
-void TestBinder::case1287() { }
-void TestBinder::case1288() { }
-void TestBinder::case1289() { }
-void TestBinder::case1290() { }
-void TestBinder::case1291() { }
-void TestBinder::case1292() { }
-void TestBinder::case1293() { }
-void TestBinder::case1294() { }
-void TestBinder::case1295() { }
-void TestBinder::case1296() { }
-void TestBinder::case1297() { }
-void TestBinder::case1298() { }
-void TestBinder::case1299() { }
+void BinderTest::case1252() { }
+void BinderTest::case1253() { }
+void BinderTest::case1254() { }
+void BinderTest::case1255() { }
+void BinderTest::case1256() { }
+void BinderTest::case1257() { }
+void BinderTest::case1258() { }
+void BinderTest::case1259() { }
+void BinderTest::case1260() { }
+void BinderTest::case1261() { }
+void BinderTest::case1262() { }
+void BinderTest::case1263() { }
+void BinderTest::case1264() { }
+void BinderTest::case1265() { }
+void BinderTest::case1266() { }
+void BinderTest::case1267() { }
+void BinderTest::case1268() { }
+void BinderTest::case1269() { }
+void BinderTest::case1270() { }
+void BinderTest::case1271() { }
+void BinderTest::case1272() { }
+void BinderTest::case1273() { }
+void BinderTest::case1274() { }
+void BinderTest::case1275() { }
+void BinderTest::case1276() { }
+void BinderTest::case1277() { }
+void BinderTest::case1278() { }
+void BinderTest::case1279() { }
+void BinderTest::case1280() { }
+void BinderTest::case1281() { }
+void BinderTest::case1282() { }
+void BinderTest::case1283() { }
+void BinderTest::case1284() { }
+void BinderTest::case1285() { }
+void BinderTest::case1286() { }
+void BinderTest::case1287() { }
+void BinderTest::case1288() { }
+void BinderTest::case1289() { }
+void BinderTest::case1290() { }
+void BinderTest::case1291() { }
+void BinderTest::case1292() { }
+void BinderTest::case1293() { }
+void BinderTest::case1294() { }
+void BinderTest::case1295() { }
+void BinderTest::case1296() { }
+void BinderTest::case1297() { }
+void BinderTest::case1298() { }
+void BinderTest::case1299() { }
 
-void TestBinder::case1300()
+void BinderTest::case1300()
 {
     bind("int x [ 1 ] ;",
          Expectation()
             .arr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1301()
+void BinderTest::case1301()
 {
     bind("x y [ 1 ] ;",
          Expectation()
             .arr_1("y", ValueKind::Variable, TypeKind::Synonym));
 }
 
-void TestBinder::case1302()
+void BinderTest::case1302()
 {
     bind("int x [ 1 ] , y [ 2 ] ;",
          Expectation()
@@ -530,7 +530,7 @@ void TestBinder::case1302()
             .arr_1("y", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1303()
+void BinderTest::case1303()
 {
     bind("x y [ 1 ] , z [ 2 ] ;",
          Expectation()
@@ -538,14 +538,14 @@ void TestBinder::case1303()
             .arr_1("z", ValueKind::Variable, TypeKind::Synonym));
 }
 
-void TestBinder::case1304()
+void BinderTest::case1304()
 {
     bind("int * x [ 1 ] ;",
          Expectation()
             .arr_1("x", ValueKind::Variable, TypeKind::Pointer));
 }
 
-void TestBinder::case1305()
+void BinderTest::case1305()
 {
     bind("int x [ 1 ] , * y [ 2 ] ;",
          Expectation()
@@ -553,104 +553,104 @@ void TestBinder::case1305()
             .arr_1("y", ValueKind::Variable, TypeKind::Pointer));
 
 }
-void TestBinder::case1306(){ }
-void TestBinder::case1307(){ }
-void TestBinder::case1308(){ }
-void TestBinder::case1309(){ }
-void TestBinder::case1310(){ }
-void TestBinder::case1311(){ }
-void TestBinder::case1312(){ }
-void TestBinder::case1313(){ }
-void TestBinder::case1314(){ }
-void TestBinder::case1315(){ }
-void TestBinder::case1316(){ }
-void TestBinder::case1317(){ }
-void TestBinder::case1318(){ }
-void TestBinder::case1319(){ }
-void TestBinder::case1320(){ }
-void TestBinder::case1321(){ }
-void TestBinder::case1322(){ }
-void TestBinder::case1323(){ }
-void TestBinder::case1324(){ }
-void TestBinder::case1325(){ }
-void TestBinder::case1326(){ }
-void TestBinder::case1327(){ }
-void TestBinder::case1328(){ }
-void TestBinder::case1329(){ }
-void TestBinder::case1330(){ }
-void TestBinder::case1331(){ }
-void TestBinder::case1332(){ }
-void TestBinder::case1333(){ }
-void TestBinder::case1334(){ }
-void TestBinder::case1335(){ }
-void TestBinder::case1336(){ }
-void TestBinder::case1337(){ }
-void TestBinder::case1338(){ }
-void TestBinder::case1339(){ }
-void TestBinder::case1340(){ }
-void TestBinder::case1341(){ }
-void TestBinder::case1342(){ }
-void TestBinder::case1343(){ }
-void TestBinder::case1344(){ }
-void TestBinder::case1345(){ }
-void TestBinder::case1346(){ }
-void TestBinder::case1347(){ }
-void TestBinder::case1348(){ }
-void TestBinder::case1349(){ }
+void BinderTest::case1306(){ }
+void BinderTest::case1307(){ }
+void BinderTest::case1308(){ }
+void BinderTest::case1309(){ }
+void BinderTest::case1310(){ }
+void BinderTest::case1311(){ }
+void BinderTest::case1312(){ }
+void BinderTest::case1313(){ }
+void BinderTest::case1314(){ }
+void BinderTest::case1315(){ }
+void BinderTest::case1316(){ }
+void BinderTest::case1317(){ }
+void BinderTest::case1318(){ }
+void BinderTest::case1319(){ }
+void BinderTest::case1320(){ }
+void BinderTest::case1321(){ }
+void BinderTest::case1322(){ }
+void BinderTest::case1323(){ }
+void BinderTest::case1324(){ }
+void BinderTest::case1325(){ }
+void BinderTest::case1326(){ }
+void BinderTest::case1327(){ }
+void BinderTest::case1328(){ }
+void BinderTest::case1329(){ }
+void BinderTest::case1330(){ }
+void BinderTest::case1331(){ }
+void BinderTest::case1332(){ }
+void BinderTest::case1333(){ }
+void BinderTest::case1334(){ }
+void BinderTest::case1335(){ }
+void BinderTest::case1336(){ }
+void BinderTest::case1337(){ }
+void BinderTest::case1338(){ }
+void BinderTest::case1339(){ }
+void BinderTest::case1340(){ }
+void BinderTest::case1341(){ }
+void BinderTest::case1342(){ }
+void BinderTest::case1343(){ }
+void BinderTest::case1344(){ }
+void BinderTest::case1345(){ }
+void BinderTest::case1346(){ }
+void BinderTest::case1347(){ }
+void BinderTest::case1348(){ }
+void BinderTest::case1349(){ }
 
-void TestBinder::case1350()
+void BinderTest::case1350()
 {
     bind("const int x [ 1 ] ;",
          Expectation()
             .arr_1_ofQualTy("x", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
 }
 
-void TestBinder::case1351(){ }
-void TestBinder::case1352(){ }
-void TestBinder::case1353(){ }
-void TestBinder::case1354(){ }
-void TestBinder::case1355(){ }
-void TestBinder::case1356(){ }
-void TestBinder::case1357(){ }
-void TestBinder::case1358(){ }
-void TestBinder::case1359(){ }
-void TestBinder::case1360(){ }
-void TestBinder::case1361(){ }
-void TestBinder::case1362(){ }
-void TestBinder::case1363(){ }
-void TestBinder::case1364(){ }
-void TestBinder::case1365(){ }
-void TestBinder::case1366(){ }
-void TestBinder::case1367(){ }
-void TestBinder::case1368(){ }
-void TestBinder::case1369(){ }
-void TestBinder::case1370(){ }
-void TestBinder::case1371(){ }
-void TestBinder::case1372(){ }
-void TestBinder::case1373(){ }
-void TestBinder::case1374(){ }
-void TestBinder::case1375(){ }
-void TestBinder::case1376(){ }
-void TestBinder::case1377(){ }
-void TestBinder::case1378(){ }
-void TestBinder::case1379(){ }
-void TestBinder::case1380(){ }
-void TestBinder::case1381(){ }
-void TestBinder::case1382(){ }
-void TestBinder::case1383(){ }
-void TestBinder::case1384(){ }
-void TestBinder::case1385(){ }
-void TestBinder::case1386(){ }
-void TestBinder::case1387(){ }
-void TestBinder::case1388(){ }
-void TestBinder::case1389(){ }
-void TestBinder::case1390(){ }
-void TestBinder::case1391(){ }
-void TestBinder::case1392(){ }
-void TestBinder::case1393(){ }
-void TestBinder::case1394(){ }
-void TestBinder::case1395(){ }
-void TestBinder::case1396(){ }
-void TestBinder::case1397(){ }
-void TestBinder::case1398(){ }
-void TestBinder::case1399(){ }
+void BinderTest::case1351(){ }
+void BinderTest::case1352(){ }
+void BinderTest::case1353(){ }
+void BinderTest::case1354(){ }
+void BinderTest::case1355(){ }
+void BinderTest::case1356(){ }
+void BinderTest::case1357(){ }
+void BinderTest::case1358(){ }
+void BinderTest::case1359(){ }
+void BinderTest::case1360(){ }
+void BinderTest::case1361(){ }
+void BinderTest::case1362(){ }
+void BinderTest::case1363(){ }
+void BinderTest::case1364(){ }
+void BinderTest::case1365(){ }
+void BinderTest::case1366(){ }
+void BinderTest::case1367(){ }
+void BinderTest::case1368(){ }
+void BinderTest::case1369(){ }
+void BinderTest::case1370(){ }
+void BinderTest::case1371(){ }
+void BinderTest::case1372(){ }
+void BinderTest::case1373(){ }
+void BinderTest::case1374(){ }
+void BinderTest::case1375(){ }
+void BinderTest::case1376(){ }
+void BinderTest::case1377(){ }
+void BinderTest::case1378(){ }
+void BinderTest::case1379(){ }
+void BinderTest::case1380(){ }
+void BinderTest::case1381(){ }
+void BinderTest::case1382(){ }
+void BinderTest::case1383(){ }
+void BinderTest::case1384(){ }
+void BinderTest::case1385(){ }
+void BinderTest::case1386(){ }
+void BinderTest::case1387(){ }
+void BinderTest::case1388(){ }
+void BinderTest::case1389(){ }
+void BinderTest::case1390(){ }
+void BinderTest::case1391(){ }
+void BinderTest::case1392(){ }
+void BinderTest::case1393(){ }
+void BinderTest::case1394(){ }
+void BinderTest::case1395(){ }
+void BinderTest::case1396(){ }
+void BinderTest::case1397(){ }
+void BinderTest::case1398(){ }
+void BinderTest::case1399(){ }

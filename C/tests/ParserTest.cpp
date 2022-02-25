@@ -23,16 +23,16 @@
 using namespace psy;
 using namespace C;
 
-const std::string TestParser::Name = "PARSER";
+const std::string ParserTest::Name = "PARSER";
 
-void TestParser::testAll()
+void ParserTest::testAll()
 {
-    return run<TestParser>(tests_);
+    return run<ParserTest>(tests_);
 }
 
-void TestParser::setUp()
+void ParserTest::setUp()
 {}
 
-void TestParser::tearDown()
+void ParserTest::tearDown()
 {
 }

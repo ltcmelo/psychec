@@ -35,10 +35,10 @@ void TestRunner::runSuite()
 
     // C
     std::cout << "  C" << std::endl;
-    TestParser P;
+    ParserTest P;
     P.testAll();
 
-    TestBinder B;
+    BinderTest B;
     B.testAll();
 
     P.summary();

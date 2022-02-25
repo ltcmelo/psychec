@@ -33,55 +33,55 @@
 using namespace psy;
 using namespace C;
 
-const std::string TestTypeChecker::Name = "";
+const std::string TypeCheckerTest::Name = "";
 
-void TestTypeChecker::testAll()
+void TypeCheckerTest::testAll()
 {
-    run<TestTypeChecker>(tests_);
+    run<TypeCheckerTest>(tests_);
     std::cout << std::endl;
 }
 
-void TestTypeChecker::setUp()
+void TypeCheckerTest::setUp()
 {
 }
 
-void TestTypeChecker::tearDown()
+void TypeCheckerTest::tearDown()
 {
 }
 
-void TestTypeChecker::case0001()
+void TypeCheckerTest::case0001()
 {
     //typeCheck("void f() ();");
 }
 
-void TestTypeChecker::case0002()
+void TypeCheckerTest::case0002()
 {
 //    typeCheck("void f() () {}");
 }
 
-void TestTypeChecker::case0003()
+void TypeCheckerTest::case0003()
 {
 //    typeCheck("int k() [];");
 }
 
-void TestTypeChecker::case0004()
+void TypeCheckerTest::case0004()
 {
 //    typeCheck("int k() [] {}");
 }
 
-void TestTypeChecker::case0005()
+void TypeCheckerTest::case0005()
 {
 //    typeCheck("int (k)() [] {}");
 }
 
-void TestTypeChecker::case0006()
+void TypeCheckerTest::case0006()
 {
 //    typeCheck("int (k()) [] {}");
 }
 
-void TestTypeChecker::case0007()
+void TypeCheckerTest::case0007()
 {
 //    typeCheck("void k() {}");
 }
-void TestTypeChecker::case0008() {}
-void TestTypeChecker::case0009() {}
+void TypeCheckerTest::case0008() {}
+void TypeCheckerTest::case0009() {}

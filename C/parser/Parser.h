@@ -58,7 +58,7 @@ private:
 
     friend class SyntaxTree;
     friend class DebugRule;
-    friend class TestParser;
+    friend class ParserTest;
 
     MemoryPool* pool_;
     SyntaxTree* tree_;
