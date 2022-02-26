@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2020/21 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,42 +18,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_ASSEMBLY_H__
-#define PSYCHE_C_ASSEMBLY_H__
+#ifndef PSYCHE_C_TEST_H__
+#define PSYCHE_C_TEST_H__
 
 #include "API.h"
-#include "Fwds.h"
 
-#include "symbols/Symbol.h"
+#include "TestExpectation.h"
 
-#include <functional>
-#include <unordered_set>
-#include <vector>
+#include "C/SyntaxTree.h"
+#include "tests/TestRunner.h"
+
+#define CROSS_REFERENCE_TEST(CASE) { auto x = &CASE; (void)x; } \
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The Assembly class.
- *
- * An assembly is the result produced by a Compilation.
- */
-class PSY_C_API Assembly
+class Test : public TestRunner
 {
 public:
-    /**
-     * The Symbols defined in \c this Assembly.
-     */
-    std::vector<const Symbol*> symbols() const;
+    virtual ~Test();
 
-private:
-    friend class SemanticModel;
-    friend class BinderTest;
+protected:
+    Test();
 
-    std::unordered_set<std::unique_ptr<Symbol>> symDEFs_;
-    std::vector<std::unique_ptr<Symbol>> symUSEs_;
+    bool checkErrorAndWarn(Expectation X);
 
-    Symbol* findSymDEF(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const;
+    void parse(std::string text,
+               Expectation X = Expectation(),
+               SyntaxTree::SyntaxCategory cat = SyntaxTree::SyntaxCategory::Unspecified);
+    void parseDeclaration(std::string text,
+                          Expectation X = Expectation());
+    void parseExpression(std::string text,
+                         Expectation X = Expectation());
+    void parseStatement(std::string text,
+                        Expectation X = Expectation());
+
+    virtual void bind(std::string text,
+                      Expectation X = Expectation()) {}
+
+    std::unique_ptr<SyntaxTree> tree_;
+    std::unique_ptr<Compilation> compilation_;
 };
 
 } // C

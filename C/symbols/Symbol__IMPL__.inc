@@ -61,7 +61,7 @@ struct Symbol::SymbolImpl
     };
     union
     {
-        std::uint16_t BF_all_ : 1;
+        std::uint16_t BF_all_;
         BitFields BF_;
     };
 };

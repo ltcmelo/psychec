@@ -18,17 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TEST_SYNTAX_H__
-#define PSYCHE_C_TEST_SYNTAX_H__
+#ifndef PSYCHE_C_PARSER_TEST_H__
+#define PSYCHE_C_PARSER_TEST_H__
 
-#include "TestFrontend.h"
+#include "Test.h"
 
-#define TEST_PARSER(Function) TestFunction { &TestParser::Function, #Function }
+#define TEST_PARSER(Function) TestFunction { &ParserTest::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class TestParser final : public TestFrontend
+class ParserTest final : public Test
 {
 public:
     static const std::string Name;
@@ -4146,7 +4146,7 @@ public:
     void case3999();
 
 private:
-    using TestFunction = std::pair<std::function<void(TestParser*)>, const char*>;
+    using TestFunction = std::pair<std::function<void(ParserTest*)>, const char*>;
 
     void setUp() override;
     void tearDown() override;

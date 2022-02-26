@@ -20,8 +20,8 @@
 
 #include "Driver.h"
 
-#include "CompilerFrontEnd.h"
-#include "CompilerFrontEnd_C.h"
+#include "CompilerFrontend.h"
+#include "CompilerFrontend_C.h"
 #include "Configuration.h"
 #include "Configuration_C.h"
 #include "FileInfo.h"
@@ -72,13 +72,15 @@ int Driver::execute(int argc, char* argv[])
             ("p,plugin",
                 "Load plugin with the given name.",
                 cxxopts::value<std::string>())
+            ("w,WIP",
+                "Enable Work-In-Progress features.")
             ("h,help",
                 "Print instructions.")
     ;
 
     ConfigurationForC::extend(cmdLineOpts);
 
-    std::unique_ptr<CompilerFrontEnd> FE;
+    std::unique_ptr<CompilerFrontend> FE;
     std::vector<std::string> filesPaths;
     try {
         cmdLineOpts.parse_positional(std::vector<std::string>{"file"});
@@ -111,7 +113,7 @@ int Driver::execute(int argc, char* argv[])
             return ERROR_LanguageNotRecognized;
         }
 
-        FE.reset(new CCompilerFrontEnd(parsedCmdLine));
+        FE.reset(new CCompilerFrontend(parsedCmdLine));
     }
     catch (...) {
         std::cerr << kCnip << "unrecognized command-line option" << std::endl;

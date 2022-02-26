@@ -48,10 +48,10 @@ set(PSYCHEC_SOURCES
 set(CNIPPET_SOURCES
     ${PSYCHEC_SOURCES}
     ${PROJECT_SOURCE_DIR}/cnippet/Main.cpp
-    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontEnd.h
-    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontEnd.cpp
-    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontEnd_C.h
-    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontEnd_C.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontend.h
+    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontend.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontend_C.h
+    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontend_C.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/Configuration.h
     ${PROJECT_SOURCE_DIR}/cnippet/Configuration.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/Configuration_C.h

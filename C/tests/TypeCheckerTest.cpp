@@ -18,21 +18,70 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TestParser.h"
+#include "TypeCheckerTest.h"
+
+#include "parser/Unparser.h"
+#include "syntax/SyntaxLexemes.h"
+#include "syntax/SyntaxNodes.h"
+
+#include <algorithm>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <sstream>
 
 using namespace psy;
 using namespace C;
 
-const std::string TestParser::Name = "PARSER";
+const std::string TypeCheckerTest::Name = "";
 
-void TestParser::testAll()
+void TypeCheckerTest::testAll()
 {
-    return run<TestParser>(tests_);
+    run<TypeCheckerTest>(tests_);
+    std::cout << std::endl;
 }
 
-void TestParser::setUp()
-{}
-
-void TestParser::tearDown()
+void TypeCheckerTest::setUp()
 {
 }
+
+void TypeCheckerTest::tearDown()
+{
+}
+
+void TypeCheckerTest::case0001()
+{
+    //typeCheck("void f() ();");
+}
+
+void TypeCheckerTest::case0002()
+{
+//    typeCheck("void f() () {}");
+}
+
+void TypeCheckerTest::case0003()
+{
+//    typeCheck("int k() [];");
+}
+
+void TypeCheckerTest::case0004()
+{
+//    typeCheck("int k() [] {}");
+}
+
+void TypeCheckerTest::case0005()
+{
+//    typeCheck("int (k)() [] {}");
+}
+
+void TypeCheckerTest::case0006()
+{
+//    typeCheck("int (k()) [] {}");
+}
+
+void TypeCheckerTest::case0007()
+{
+//    typeCheck("void k() {}");
+}
+void TypeCheckerTest::case0008() {}
+void TypeCheckerTest::case0009() {}

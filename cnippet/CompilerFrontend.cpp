@@ -18,33 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_COMPILER_FRONTEND_H__
-#define CNIPPET_COMPILER_FRONTEND_H__
+#include "CompilerFrontend.h"
 
 #include "Configuration.h"
 
-#include "FileInfo.h"
+using namespace cnip;
 
-#include "cxxopts.hpp"
+CompilerFrontend::~CompilerFrontend()
+{}
 
-#include <string>
-
-namespace cnip {
-
-/*!
- * \brief The CompilerFrontEnd class.
- */
-class CompilerFrontEnd
-{
-public:
-    virtual ~CompilerFrontEnd();
-
-    virtual int run(const std::string& srcText, const psy::FileInfo& fi) = 0;
-
-protected:
-    CompilerFrontEnd();
-};
-
-} // cnip
-
-#endif
+CompilerFrontend::CompilerFrontend()
+{}

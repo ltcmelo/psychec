@@ -27,4 +27,5 @@ Configuration::~Configuration()
 
 Configuration::Configuration(const cxxopts::ParseResult& parsedCmdLine)
     : dumpAst(parsedCmdLine.count("dump-AST"))
+    , WIP_(parsedCmdLine.count("WIP"))
 {}

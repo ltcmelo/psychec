@@ -83,13 +83,13 @@ namespace C {
 std::string PSY_C_API to_string(const TypeSymbol& tySym)
 {
     std::ostringstream oss;
-    oss << '<';
+    oss << "<<<";
     oss << "type";
     oss << '|';
     oss << "kind:" << to_string(tySym.typeKind());
     oss << ',';
     oss << "symbol-kind:" << to_string(tySym.kind());
-    oss << '>';
+    oss << ">>>";
 
     return oss.str();
 }

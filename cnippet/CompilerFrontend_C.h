@@ -18,27 +18,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_CONFIGURATION_H__
-#define CNIPPET_CONFIGURATION_H__
+#ifndef CNIPPET_C_COMPILER_FRONTEND_C_H__
+#define CNIPPET_C_COMPILER_FRONTEND_C_H__
 
-#include "cxxopts.hpp"
+#include "Driver.h"
+
+#include "CompilerFrontend.h"
+#include "Configuration_C.h"
+
+#include "C/SyntaxTree.h"
+
+#include <utility>
+#include <string>
 
 namespace cnip {
 
 /*!
- * \brief The Configuration class.
+ * \brief The CCompilerFrontend class.
  */
-class Configuration
+class CCompilerFrontend : public CompilerFrontend
 {
 public:
-    virtual ~Configuration();
+    CCompilerFrontend(const cxxopts::ParseResult& parsedCmdLine);
+    virtual ~CCompilerFrontend();
 
-    // TODO: API
-    bool dumpAst;
-    bool WIP_;
+    int run(const std::string& srcText, const psy::FileInfo& fi) override;
 
-protected:
-    Configuration(const cxxopts::ParseResult& parsedCmdLine);
+private:
+
+    int extendWithStdLibHeaders(const std::string& srcText, const psy::FileInfo& fi);
+    int preprocess(const std::string& srcText, const psy::FileInfo& fi);
+    int constructSyntaxTree(const std::string& srcText, const psy::FileInfo& fi);
+    int computeSemanticModel(std::unique_ptr<psy::C::SyntaxTree> tree);
+
+    static constexpr int ERROR_PreprocessorInvocationFailure = 100;
+    static constexpr int ERROR_PreprocessedFileWritingFailure = 101;
+    static constexpr int ERROR_UnsuccessfulParsing = 102;
+    static constexpr int ERROR_InvalidSyntaxTree = 103;
+
+    std::unique_ptr<ConfigurationForC> config_;
 };
 
 } // cnip

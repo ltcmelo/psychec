@@ -18,18 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TEST_BINDING_H__
-#define PSYCHE_C_TEST_BINDING_H__
+#ifndef PSYCHE_C_BINDER_TEST_H__
+#define PSYCHE_C_BINDER_TEST_H__
 
-#include "TestFrontend.h"
+#include "Test.h"
 #include "C/Fwds.h"
 
-#define TEST_BINDER(Function) TestFunction { &TestBinder::Function, #Function }
+#define TEST_BINDER(Function) TestFunction { &BinderTest::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class TestBinder final : public TestFrontend
+class BinderTest final : public Test
 {
 public:
     static const std::string Name;
@@ -1072,7 +1072,7 @@ public:
     void case2399();
 
 private:
-    using TestFunction = std::pair<std::function<void(TestBinder*)>, const char*>;
+    using TestFunction = std::pair<std::function<void(BinderTest*)>, const char*>;
 
     void setUp() override;
     void tearDown() override;
