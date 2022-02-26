@@ -19,7 +19,7 @@ Psyche is a compiler frontend for the C programming language that is specificall
 
 Psyche-C offers a C++ library/API for the implementation of static analysis tools of C programs.
 
-```
+```cpp
 void analyse(const FileInfo& fi)
 {
     auto compilation = Compilation::create("code-analysis");
