@@ -27,7 +27,7 @@ void analyse(const FileInfo& fi)
                                       TextPreprocessingState::Preprocessed,
                                       ParseOptions(),
                                       fi.fileName());
-    compilation->addSyntaxTrees({ tree.get() });
+    compilation->addSyntaxTree(tree.get());
 
     CustomSyntaxVisitor analysis(tree.get(), compilation->semanticModel(tree.get()));
     analysis.run(tree->translationUnitRoot());
