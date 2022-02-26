@@ -35,6 +35,7 @@ public:
 
     // TODO: API
     bool dumpAst;
+    bool WIP_;
 
 protected:
     Configuration(const cxxopts::ParseResult& parsedCmdLine);

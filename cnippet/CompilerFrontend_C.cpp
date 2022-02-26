@@ -163,7 +163,8 @@ int CCompilerFrontend::constructSyntaxTree(const std::string& srcText,
         std::cout << ossTree.str() << std::endl;
     }
 
-    return computeSemanticModel(std::move(tree));
+    return config_->WIP_ ? computeSemanticModel(std::move(tree))
+                         : 0;
 }
 
 int CCompilerFrontend::computeSemanticModel(std::unique_ptr<SyntaxTree> tree)

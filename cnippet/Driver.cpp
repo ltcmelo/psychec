@@ -72,6 +72,8 @@ int Driver::execute(int argc, char* argv[])
             ("p,plugin",
                 "Load plugin with the given name.",
                 cxxopts::value<std::string>())
+            ("w,WIP",
+                "Enable Work-In-Progress features.")
             ("h,help",
                 "Print instructions.")
     ;
