@@ -126,7 +126,7 @@ struct
 void BinderTest::case2006()
 {
     // Non-field correspondent
-    CROSS_REFERENCE_TEST(BinderTest::case1006);
+    CROSS_REFERENCE_TEST(BinderTest::case2006);
 
     // Syntax error
     CROSS_REFERENCE_TEST(ParserTest::case0439);
@@ -135,7 +135,7 @@ void BinderTest::case2006()
 void BinderTest::case2007()
 {
     // Non-field correspondent
-    CROSS_REFERENCE_TEST(BinderTest::case1007);
+    CROSS_REFERENCE_TEST(BinderTest::case2007);
 
     // Syntax error
     CROSS_REFERENCE_TEST(ParserTest::case0440);
@@ -154,11 +154,73 @@ struct
              Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
 
-void BinderTest::case2009(){ }
-void BinderTest::case2010(){ }
-void BinderTest::case2011(){ }
-void BinderTest::case2012(){ }
-void BinderTest::case2013(){ }
+void BinderTest::case2009()
+{
+    bind(R"(
+struct
+{
+    struct x y ;
+};
+         )",
+         Expectation()
+            .binding(Binding("y", ValueKind::Field)
+                    .specType("struct x", TypeKind::Struct, BuiltinTypeKind::None)));
+}
+
+void BinderTest::case2010()
+{
+    bind(R"(
+struct
+{
+    union x y ;
+};
+         )",
+         Expectation()
+            .binding(Binding("y", ValueKind::Field)
+                    .specType("union x", TypeKind::Union, BuiltinTypeKind::None)));
+}
+
+void BinderTest::case2011()
+{
+    bind(R"(
+struct
+{
+    enum x y ;
+};
+         )",
+         Expectation()
+            .binding(Binding("y", ValueKind::Field)
+                    .specType("enum x", TypeKind::Enum, BuiltinTypeKind::None)));
+}
+
+void BinderTest::case2012()
+{
+    bind(R"(
+struct
+{
+    struct x y , z ;
+};
+         )",
+         Expectation()
+            .binding(Binding("y", ValueKind::Field)
+                    .specType("struct x", TypeKind::Struct, BuiltinTypeKind::None))
+            .binding(Binding("z", ValueKind::Field)
+                    .specType("struct x", TypeKind::Struct, BuiltinTypeKind::None)));
+}
+
+void BinderTest::case2013()
+{
+    bind(R"(
+struct
+{
+    struct x { int y ; } z ;
+};
+         )",
+         Expectation()
+            .binding(Binding("z", ValueKind::Field)
+                    .specType("struct x", TypeKind::Struct, BuiltinTypeKind::None)));
+}
+
 void BinderTest::case2014(){ }
 void BinderTest::case2015(){ }
 void BinderTest::case2016(){ }

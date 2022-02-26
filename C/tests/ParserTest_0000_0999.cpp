@@ -2485,7 +2485,11 @@ void ParserTest::case0399() { }
 
 void ParserTest::case0400()
 {
-    parse("struct x ;") ;
+    parse("struct x ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              StructTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void ParserTest::case0401()

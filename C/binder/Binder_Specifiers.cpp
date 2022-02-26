@@ -48,7 +48,6 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         actOnTypeSpecifier(specIt->value);
 
     if (tySymUSEs_.empty()) {
-        std::cout << "dianogistc\n";
         Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
                     node->lastToken(), &diagReporter_);
 
@@ -152,16 +151,11 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
     }
 
     TypeSymbol* tySym;
-    switch (symDEFs_.top()->kind()) {
-        case SymbolKind::Type:
-            tySym = symDEFs_.top()->asType();
-            break;
-
-        case SymbolKind::LinkUnit:
-        case SymbolKind::Value:
-        case SymbolKind::Function:
-            tySym = makeAndPushTySymUSE(tyKind);
-            break;
+    if (node->declarations()) {
+        tySym = symDEFs_.top()->asType();
+    }
+    else {
+        tySym = makeAndPushTySymUSE(tyKind);
     }
 
     std::unique_ptr<SymbolName> symName(
@@ -188,7 +182,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
 
 SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node)
 {
-    visit(node->typeDeclaration()->typeSpecifier());
+    visit(node->typeDeclaration());
 
     return Action::Skip;
 }
