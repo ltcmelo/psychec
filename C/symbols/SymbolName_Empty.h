@@ -34,6 +34,11 @@ class PSY_C_API EmptySymbolName final : public SymbolName
 public:
     virtual EmptySymbolName* asEmptySymbolName() override { return this; }
     virtual const EmptySymbolName* asEmptySymbolName() const override { return this; }
+
+    /**
+     * The text of \c this SymbolName.
+     */
+    virtual std::string text() const override;
 };
 
 std::string to_string(const EmptySymbolName& name);

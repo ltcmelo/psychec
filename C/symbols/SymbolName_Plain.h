@@ -37,6 +37,11 @@ public:
     virtual PlainSymbolName* asPlainSymbolName() override { return this; }
     virtual const PlainSymbolName* asPlainSymbolName() const override { return this; }
 
+    /**
+     * The text of \c this SymbolName.
+     */
+    virtual std::string text() const override;
+
 private:
     friend class Binder;
 

@@ -41,6 +41,13 @@ protected:
 public:
     virtual ~SymbolName();
 
+    virtual PlainSymbolName* asPlainSymbolName() { return nullptr; }
+    virtual const PlainSymbolName* asPlainSymbolName() const { return nullptr; }
+    virtual TagSymbolName* asTagSymbolName() { return nullptr; }
+    virtual const TagSymbolName* asTagSymbolName() const { return nullptr; }
+    virtual EmptySymbolName* asEmptySymbolName() { return nullptr; }
+    virtual const EmptySymbolName* asEmptySymbolName() const { return nullptr; }
+
     /**
      * \brief The SymbolName::Kind enum.
      */
@@ -56,12 +63,10 @@ public:
      */
     Kind kind() const;
 
-    virtual PlainSymbolName* asPlainSymbolName() { return nullptr; }
-    virtual const PlainSymbolName* asPlainSymbolName() const { return nullptr; }
-    virtual TagSymbolName* asTagSymbolName() { return nullptr; }
-    virtual const TagSymbolName* asTagSymbolName() const { return nullptr; }
-    virtual EmptySymbolName* asEmptySymbolName() { return nullptr; }
-    virtual const EmptySymbolName* asEmptySymbolName() const { return nullptr; }
+    /**
+     * The text of \c this SymbolName.
+     */
+    virtual std::string text() const = 0;
 
 private:
     friend class Symbol;

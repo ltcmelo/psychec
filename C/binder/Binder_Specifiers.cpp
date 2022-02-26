@@ -128,20 +128,21 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
 
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
-//    std::cout << "\ntag type specifier " << node->keyword().valueText()
-//              << " " << node->tagToken().valueText() << std::endl;
-
+    TagSymbolName::NameSpace ns;
     TypeKind tyKind;
     switch (node->kind()) {
         case StructTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Structures;
             tyKind = TypeKind::Struct;
             break;
 
         case UnionTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Unions;
             tyKind = TypeKind::Union;
             break;
 
         case EnumTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Enumerations;
             tyKind = TypeKind::Enum;
             break;
 
@@ -164,7 +165,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
     }
 
     std::unique_ptr<SymbolName> symName(
-            new TagSymbolName(tyKind, node->tagToken().valueText_c_str()));
+            new TagSymbolName(ns, node->tagToken().valueText_c_str()));
     tySym->setName(std::move(symName));
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
@@ -187,9 +188,6 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
 
 SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node)
 {
-//    std::cout << "\ntag type DECLARATION specifier " << node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier()->keyword().valueText()
-//              << " " << node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier()->tagToken().valueText() << std::endl;
-
     visit(node->typeDeclaration()->typeSpecifier());
 
     return Action::Skip;

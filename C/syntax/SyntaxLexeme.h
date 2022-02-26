@@ -42,6 +42,12 @@ public:
     SyntaxLexeme& operator=(const SyntaxLexeme&) = delete;
     virtual ~SyntaxLexeme();
 
+    virtual Identifier* asIdentifier() { return nullptr; }
+    virtual IntegerConstant* asIntegerConstant() { return nullptr; }
+    virtual FloatingConstant* asFloatingConstant() { return nullptr; }
+    virtual CharacterConstant* asCharacterConstant() { return nullptr; }
+    virtual StringLiteral* asStringLiteralExpression() { return nullptr; }
+
     /**
      * \brief The SyntaxLexeme::Kind enumeraiton.
      */
@@ -58,12 +64,6 @@ public:
      * The Kind of \c this SyntaxLexeme.
      */
     Kind kind() const;
-
-    virtual Identifier* asIdentifier() { return nullptr; }
-    virtual IntegerConstant* asIntegerConstant() { return nullptr; }
-    virtual FloatingConstant* asFloatingConstant() { return nullptr; }
-    virtual CharacterConstant* asCharacterConstant() { return nullptr; }
-    virtual StringLiteral* asStringLiteralExpression() { return nullptr; }
 
     /**
      * The value of \c this SyntaxLexeme represented as text, by an \c std::string.

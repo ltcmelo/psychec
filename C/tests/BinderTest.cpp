@@ -65,7 +65,7 @@ namespace {
 bool REJECT(const Symbol* sym, std::string msg)
 {
 #ifdef DEBUG_BINDING_SEARCH
-    std::cout << "\n\t\treject " << to_string(*sym) << "\t" << msg;
+    std::cout << "\n\t\treject " << to_string(*sym) << "\t(" << msg << ")";
 #endif
     return false;
 }
@@ -139,7 +139,7 @@ void BinderTest::bind(std::string text, Expectation X)
             if (!candidateSym->name())
                 return REJECT(candidateSym, "empty name");
 
-            if (to_string(*candidateSym->name()) != binding.name_)
+            if (candidateSym->name()->text() != binding.name_)
                 return REJECT(candidateSym, "name mistmatch");
 
             switch (binding.symK_)
@@ -180,8 +180,10 @@ void BinderTest::bind(std::string text, Expectation X)
                     if (tySym->name() == nullptr)
                         return REJECT(candidateSym, "null type name");
 
-                    if (to_string(*tySym->name()) != binding.specTyName_)
+                    if (to_string(*tySym->name()) != binding.specTyName_) {
+                        std::cout << "\n"<< to_string(*tySym->name())  << std::endl;
                         return REJECT(candidateSym, "type name mismatch");
+                    }
 
                     if (tySym->typeKind() != binding.specTyK_)
                         return REJECT(candidateSym, "type kind mismatch");
