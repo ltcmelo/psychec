@@ -30,7 +30,7 @@
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
-#define DEBUG_BINDING_SEARCH
+//#define DEBUG_BINDING_SEARCH
 
 using namespace psy;
 using namespace C;
@@ -180,10 +180,8 @@ void BinderTest::bind(std::string text, Expectation X)
                     if (tySym->name() == nullptr)
                         return REJECT(candidateSym, "null type name");
 
-                    if (to_string(*tySym->name()) != binding.specTyName_) {
-                        std::cout << "\n"<< to_string(*tySym->name())  << std::endl;
+                    if (to_string(*tySym->name()) != binding.specTyName_)
                         return REJECT(candidateSym, "type name mismatch");
-                    }
 
                     if (tySym->typeKind() != binding.specTyK_)
                         return REJECT(candidateSym, "type kind mismatch");
