@@ -360,14 +360,18 @@ void BinderTest::case1150()
 {
     bind("const int * x ;",
          Expectation()
-            .qualObjPtr_1("x", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case1151()
 {
     bind("const x * y ;",
          Expectation()
-            .qualObjPtr_1("y", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Synonym));
+             .binding(Binding("y", ValueKind::Variable)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case1152() {}
@@ -424,7 +428,9 @@ void BinderTest::case1200()
 {
     bind("const int * const x ;",
          Expectation()
-            .qualObjQualPtr_1("x", ValueKind::Variable, Expectation::Qual::Const, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .derivType(TypeKind::Pointer, CVR::Const)));
 }
 
 void BinderTest::case1201() { }
@@ -481,14 +487,18 @@ void BinderTest::case1250()
 {
     bind("int * const x ;",
          Expectation()
-            .qualPtr_1("x", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::Const)));
 }
 
 void BinderTest::case1251()
 {
     bind("x * const y ;",
          Expectation()
-            .qualPtr_1("y", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Synonym));
+             .binding(Binding("y", ValueKind::Variable)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::Const)));
 }
 
 void BinderTest::case1252() { }
@@ -544,47 +554,67 @@ void BinderTest::case1300()
 {
     bind("int x [ 1 ] ;",
          Expectation()
-            .arr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1301()
 {
     bind("x y [ 1 ] ;",
          Expectation()
-            .arr_1("y", ValueKind::Variable, TypeKind::Synonym));
+             .binding(Binding("y", ValueKind::Variable)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1302()
 {
     bind("int x [ 1 ] , y [ 2 ] ;",
          Expectation()
-            .arr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int)
-            .arr_1("y", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None))
+             .binding(Binding("y", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1303()
 {
     bind("x y [ 1 ] , z [ 2 ] ;",
          Expectation()
-            .arr_1("y", ValueKind::Variable, TypeKind::Synonym)
-            .arr_1("z", ValueKind::Variable, TypeKind::Synonym));
+             .binding(Binding("y", ValueKind::Variable)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None))
+             .binding(Binding("z", ValueKind::Variable)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1304()
 {
     bind("int * x [ 1 ] ;",
          Expectation()
-            .arr_1("x", ValueKind::Variable, TypeKind::Pointer));
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1305()
 {
     bind("int x [ 1 ] , * y [ 2 ] ;",
          Expectation()
-            .arr_1("x", ValueKind::Variable, TypeKind::Builtin, BuiltinTypeKind::Int)
-            .arr_1("y", ValueKind::Variable, TypeKind::Pointer));
-
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None))
+             .binding(Binding("y", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
 }
+
 void BinderTest::case1306(){ }
 void BinderTest::case1307(){ }
 void BinderTest::case1308(){ }
@@ -634,7 +664,9 @@ void BinderTest::case1350()
 {
     bind("const int x [ 1 ] ;",
          Expectation()
-            .arr_1_ofQualTy("x", ValueKind::Variable, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .derivType(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1351(){ }

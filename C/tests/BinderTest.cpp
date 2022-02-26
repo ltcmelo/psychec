@@ -70,7 +70,7 @@ bool REJECT(const Symbol* sym, std::string msg)
     return false;
 }
 
-bool CVRIsExpected(CVR cvr, const TypeSymbol* tySym, const Symbol* candSym)
+bool hasExpectedCVR(CVR cvr, const TypeSymbol* tySym, const Symbol* candSym)
 {
     switch (cvr) {
         case CVR::Const:
@@ -158,6 +158,10 @@ void BinderTest::bind(std::string text, Expectation X)
                         if (derivTyK != tySym->typeKind())
                             return REJECT(candidateSym, "(derived) type kind mismatch");
 
+                        auto derivTyCVR = binding.derivTyCVRs_[i - 1];
+                        if (!hasExpectedCVR(derivTyCVR, tySym, candidateSym))
+                            return false;
+
                         switch (tySym->typeKind()) {
                             case TypeKind::Array:
                                 tySym = tySym->asArrayType()->elementType();
@@ -171,10 +175,6 @@ void BinderTest::bind(std::string text, Expectation X)
                                 PSYCHE_TEST_FAIL("unexpected");
                                 return false;
                         }
-
-                        auto derivTyCVR = binding.derivTyCVRs_[i - 1];
-                        if (!CVRIsExpected(derivTyCVR, tySym, candidateSym))
-                            return false;
                     }
 
                     if (tySym->name() == nullptr)
@@ -194,7 +194,7 @@ void BinderTest::bind(std::string text, Expectation X)
                             return REJECT(candidateSym, "builtin kind mismatch");
                     }
 
-                    if (!CVRIsExpected(binding.specTyCVR_, tySym, candidateSym))
+                    if (!hasExpectedCVR(binding.specTyCVR_, tySym, candidateSym))
                         return false;
 
                     return true;
@@ -223,7 +223,7 @@ void BinderTest::bind(std::string text, Expectation X)
         auto sym = compilation->assembly()->findSymDEF(pred);
 
         if (sym == nullptr) {
-            auto s = "binding doesn't exist: "
+            auto s = "incorrect/non-existing binding: "
                     + binding.name_ + " " + to_string(binding.valK_);
             PSYCHE_TEST_FAIL(s);
         }
