@@ -73,30 +73,30 @@ template void Binder::makeAndPushSymDEF<FunctionSymbol>();
 template void Binder::makeAndPushSymDEF<ParameterSymbol>();
 template void Binder::makeAndPushSymDEF<VariableSymbol>();
 
-void Binder::makeAndPushSymDEF(TypeKind tyKind)
+TypeSymbol* Binder::makeAndPushSymDEF(TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> sym(
                 new NamedTypeSymbol(tree_,
                                     scopes_.top(),
                                     symDEFs_.top(),
                                     tyKind));
-    pushSymDEF(std::move(sym));
+    return pushSymDEF(std::move(sym));
 }
 
 template <class SymT>
-void Binder::pushSymDEF(std::unique_ptr<SymT> sym)
+SymT* Binder::pushSymDEF(std::unique_ptr<SymT> sym)
 {
     symDEFs_.push(sym.get());
-    semaModel_->storeSymDEF(std::move(sym));
+    return static_cast<SymT*>(semaModel_->storeSymDEF(std::move(sym)));
 }
 
-template void Binder::pushSymDEF<FunctionSymbol>(std::unique_ptr<FunctionSymbol>);
-template void Binder::pushSymDEF<FieldSymbol>(std::unique_ptr<FieldSymbol>);
-template void Binder::pushSymDEF<ParameterSymbol>(std::unique_ptr<ParameterSymbol>);
-template void Binder::pushSymDEF<VariableSymbol>(std::unique_ptr<VariableSymbol>);
-template void Binder::pushSymDEF<ArrayTypeSymbol>(std::unique_ptr<ArrayTypeSymbol>);
-template void Binder::pushSymDEF<NamedTypeSymbol>(std::unique_ptr<NamedTypeSymbol>);
-template void Binder::pushSymDEF<PointerTypeSymbol>(std::unique_ptr<PointerTypeSymbol>);
+template FunctionSymbol* Binder::pushSymDEF<FunctionSymbol>(std::unique_ptr<FunctionSymbol>);
+template FieldSymbol* Binder::pushSymDEF<FieldSymbol>(std::unique_ptr<FieldSymbol>);
+template ParameterSymbol* Binder::pushSymDEF<ParameterSymbol>(std::unique_ptr<ParameterSymbol>);
+template VariableSymbol* Binder::pushSymDEF<VariableSymbol>(std::unique_ptr<VariableSymbol>);
+template ArrayTypeSymbol* Binder::pushSymDEF<ArrayTypeSymbol>(std::unique_ptr<ArrayTypeSymbol>);
+template NamedTypeSymbol* Binder::pushSymDEF<NamedTypeSymbol>(std::unique_ptr<NamedTypeSymbol>);
+template PointerTypeSymbol* Binder::pushSymDEF<PointerTypeSymbol>(std::unique_ptr<PointerTypeSymbol>);
 
 void Binder::popSymDEF()
 {
@@ -104,15 +104,15 @@ void Binder::popSymDEF()
 }
 
 template <class TySymT>
-void Binder::pushTySymUSE(std::unique_ptr<TySymT> tySym)
+TySymT* Binder::pushTySymUSE(std::unique_ptr<TySymT> tySym)
 {
     tySymUSEs_.push(tySym.get());
-    semaModel_->storeSymUSE(std::move(tySym));
+    return static_cast<TySymT*>(semaModel_->storeSymUSE(std::move(tySym)));
 }
 
-template void Binder::pushTySymUSE<ArrayTypeSymbol>(std::unique_ptr<ArrayTypeSymbol>);
-template void Binder::pushTySymUSE<NamedTypeSymbol>(std::unique_ptr<NamedTypeSymbol>);
-template void Binder::pushTySymUSE<PointerTypeSymbol>(std::unique_ptr<PointerTypeSymbol>);
+template ArrayTypeSymbol* Binder::pushTySymUSE<ArrayTypeSymbol>(std::unique_ptr<ArrayTypeSymbol>);
+template NamedTypeSymbol* Binder::pushTySymUSE<NamedTypeSymbol>(std::unique_ptr<NamedTypeSymbol>);
+template PointerTypeSymbol* Binder::pushTySymUSE<PointerTypeSymbol>(std::unique_ptr<PointerTypeSymbol>);
 
 void Binder::popTySymUSE()
 {
@@ -126,17 +126,17 @@ void Binder::makeAndPushTySymUSE()
                                              scopes_.top(),
                                              symDEFs_.top(),
                                              tySymUSEs_.top()));
-   pushTySymUSE(std::move(tySym));
+    pushTySymUSE(std::move(tySym));
 }
 
-void Binder::makeAndPushTySymUSE(TypeKind tyKind)
+TypeSymbol* Binder::makeAndPushTySymUSE(TypeKind tyKind)
 {
     std::unique_ptr<NamedTypeSymbol> tySym(
                 new NamedTypeSymbol(tree_,
                                     scopes_.top(),
                                     symDEFs_.top(),
                                     tyKind));
-    pushTySymUSE(std::move(tySym));
+    return pushTySymUSE(std::move(tySym));
 }
 
 template void Binder::makeAndPushTySymUSE<ArrayTypeSymbol>();
@@ -190,16 +190,34 @@ SyntaxVisitor::Action Binder::visitTypeDeclaration_COMMON(const TypeDeclarationS
 {
     visit(node->typeSpecifier());
 
+    popSymDEF();
+
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
 {
+    switch (node->kind()) {
+        case StructDeclaration:
+            makeAndPushSymDEF(TypeKind::Struct);
+            break;
+
+        case UnionDeclaration:
+            makeAndPushSymDEF(TypeKind::Union);
+            break;
+
+        default:
+            PSYCHE_FAIL_0(return Action::Skip);
+            return Action::Skip;
+    }
+
     return visitTypeDeclaration_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
+    makeAndPushSymDEF(TypeKind::Enum);
+
     return visitTypeDeclaration_COMMON(node);
 }
 

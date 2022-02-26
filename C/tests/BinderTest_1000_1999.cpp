@@ -119,6 +119,10 @@ void BinderTest::case1008()
 
 void BinderTest::case1009()
 {
+    bind("struct x y ;",
+         Expectation()
+            .binding(Binding("y", ValueKind::Variable)
+                    .specType("double", TypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
 void BinderTest::case1010()

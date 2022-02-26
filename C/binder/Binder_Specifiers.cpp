@@ -48,6 +48,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         actOnTypeSpecifier(specIt->value);
 
     if (tySymUSEs_.empty()) {
+        std::cout << "dianogistc\n";
         Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
                     node->lastToken(), &diagReporter_);
 
@@ -118,45 +119,65 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
                                       namedTySym,
                                       &diagReporter_);
 
-    std::unique_ptr<SymbolName> name(
-                new PlainSymbolName(node->specifierToken().valueText_c_str()));
-    namedTySym->setName(std::move(name));
+    std::unique_ptr<SymbolName> symName(
+            new PlainSymbolName(node->specifierToken().valueText_c_str()));
+    namedTySym->setName(std::move(symName));
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
+//    std::cout << "\ntag type specifier " << node->keyword().valueText()
+//              << " " << node->tagToken().valueText() << std::endl;
+
     TypeKind tyKind;
-    switch (node->keyword().kind()) {
-        case Keyword_struct:
+    switch (node->kind()) {
+        case StructTypeSpecifier:
             tyKind = TypeKind::Struct;
             break;
 
-        case Keyword_union:
+        case UnionTypeSpecifier:
             tyKind = TypeKind::Union;
             break;
 
-        case Keyword_enum:
+        case EnumTypeSpecifier:
             tyKind = TypeKind::Enum;
             break;
 
         default:
-            PSYCHE_FAIL(return Action::Quit, "unknown keyword");
-            return Action::Quit;
+            PSYCHE_FAIL_0(return Action::Skip);
+            return Action::Skip;
     }
 
-    makeAndPushSymDEF(tyKind);
-    std::unique_ptr<SymbolName> name(
-                new TagSymbolName(tyKind,
-                                  node->tagToken().valueText_c_str()));
-    symDEFs_.top()->setName(std::move(name));
+    TypeSymbol* tySym;
+    switch (symDEFs_.top()->kind()) {
+        case SymbolKind::Type:
+            tySym = symDEFs_.top()->asType();
+            break;
+
+        case SymbolKind::LinkUnit:
+        case SymbolKind::Value:
+        case SymbolKind::Function:
+            tySym = makeAndPushTySymUSE(tyKind);
+            break;
+    }
+
+    std::unique_ptr<SymbolName> symName(
+            new TagSymbolName(tyKind, node->tagToken().valueText_c_str()));
+    tySym->setName(std::move(symName));
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
 
-    for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
+    for (auto declIt = node->declarations(); declIt; declIt = declIt->next) {
+        TySymUSEs_T tySymUSES;
+        std::swap(tySymUSEs_, tySymUSES);
+
         visit(declIt->value);
+
+        std::swap(tySymUSEs_, tySymUSES);
+    }
 
     for (auto attrIt = node->attributes_PostCloseBrace(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
@@ -166,6 +187,11 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
 
 SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node)
 {
+//    std::cout << "\ntag type DECLARATION specifier " << node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier()->keyword().valueText()
+//              << " " << node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier()->tagToken().valueText() << std::endl;
+
+    visit(node->typeDeclaration()->typeSpecifier());
+
     return Action::Skip;
 }
 
@@ -180,9 +206,9 @@ SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
         return Action::Skip;
     }
 
-    std::unique_ptr<SymbolName> name(
-                new PlainSymbolName(node->identifierToken().valueText_c_str()));
-    namedTySym->setName(std::move(name));
+    std::unique_ptr<SymbolName> symName(
+            new PlainSymbolName(node->identifierToken().valueText_c_str()));
+    namedTySym->setName(std::move(symName));
 
     return Action::Skip;
 }
