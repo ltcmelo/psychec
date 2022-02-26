@@ -41,25 +41,27 @@ using namespace C;
 void BinderTest::case2000()
 {
     bind(R"(
-struct w
+struct
 {
    double x ;
 };
          )",
          Expectation()
-            .obj("x", ValueKind::Field, "double", TypeKind::Builtin, BuiltinTypeKind::Double));
+            .binding(Binding("x", ValueKind::Field)
+                    .specType("double", TypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
 void BinderTest::case2001()
 {
     bind(R"(
-struct w
+struct
 {
     int x ;
 };
          )",
          Expectation()
-            .obj("x", ValueKind::Field, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+            .binding(Binding("x", ValueKind::Field)
+                     .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case2002()
@@ -72,46 +74,53 @@ struct w
 };
          )",
          Expectation()
-            .obj("x", ValueKind::Field, "int", TypeKind::Builtin, BuiltinTypeKind::Int)
-            .obj("x", ValueKind::Field, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+            .binding(Binding("x", ValueKind::Field)
+                    .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int))
+            .binding(Binding("y", ValueKind::Field)
+                    .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case2003()
 {
     bind(R"(
-struct w
+struct
 {
     int x , y ;
 };
          )",
          Expectation()
-            .obj("x", ValueKind::Field, "int", TypeKind::Builtin, BuiltinTypeKind::Int)
-            .obj("y", ValueKind::Field, "int", TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("x", ValueKind::Field)
+                     .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int))
+             .binding(Binding("y", ValueKind::Field)
+                     .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case2004()
 {
     bind(R"(
-struct w
+struct
 {
     x y ;
 };
          )",
          Expectation()
-            .obj("y", ValueKind::Field, "x", TypeKind::Synonym));
+             .binding(Binding("y", ValueKind::Field)
+                 .specType("x", TypeKind::Synonym, BuiltinTypeKind::None)));
 }
 
 void BinderTest::case2005()
 {
     bind(R"(
-struct w
+struct
 {
     x y , z ;
 };
          )",
          Expectation()
-            .obj("y", ValueKind::Field, "x", TypeKind::Synonym)
-            .obj("z", ValueKind::Field, "x", TypeKind::Synonym));
+             .binding(Binding("y", ValueKind::Field)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None))
+             .binding(Binding("z", ValueKind::Field)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None)));
 }
 
 void BinderTest::case2006()
@@ -135,7 +144,7 @@ void BinderTest::case2007()
 void BinderTest::case2008()
 {
     bind(R"(
-struct w
+struct
 {
     int float x ;
 };
@@ -189,31 +198,44 @@ void BinderTest::case2049(){ }
 
 void BinderTest::case2050()
 {
-    bind(R"(
-struct x
-{
-    int * const y ;
-};
-         )",
+    bind("struct { const int x ; } ;",
          Expectation()
-            .qualPtr_1("y", ValueKind::Field, Expectation::Qual::Const, TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
 void BinderTest::case2051()
 {
-    bind(R"(
-struct x
-{
-    y * const z ;
-};
-         )",
+    bind("struct { const x y ; } ;",
          Expectation()
-            .qualPtr_1("z", ValueKind::Field, Expectation::Qual::Const, TypeKind::Synonym));
+             .binding(Binding("y", ValueKind::Field)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
 }
 
-void BinderTest::case2052(){ }
-void BinderTest::case2053(){ }
-void BinderTest::case2054(){ }
+void BinderTest::case2052()
+{
+    bind("struct { const x ; } ;",
+         Expectation().diagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Binder::DiagnosticsReporter::ID_of_UselessDeclaration));
+}
+
+void BinderTest::case2053()
+{
+    bind("struct { int const x ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
+}
+
+void BinderTest::case2054()
+{
+    bind("struct { x const y ; } ;",
+         Expectation()
+             .binding(Binding("y", ValueKind::Field)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
+}
+
 void BinderTest::case2055(){ }
 void BinderTest::case2056(){ }
 void BinderTest::case2057(){ }
@@ -260,11 +282,58 @@ void BinderTest::case2097(){ }
 void BinderTest::case2098(){ }
 void BinderTest::case2099(){ }
 
-void BinderTest::case2100(){ }
-void BinderTest::case2101(){ }
-void BinderTest::case2102(){ }
-void BinderTest::case2103(){ }
-void BinderTest::case2104(){ }
+void BinderTest::case2100()
+{
+    bind("struct { int * x ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)));
+}
+
+void BinderTest::case2101()
+{
+    bind("struct { x * y ; } ;",
+         Expectation()
+             .binding(Binding("y", ValueKind::Field)
+                      .specType("x", TypeKind::Synonym)
+                      .derivType(TypeKind::Pointer)));
+}
+
+void BinderTest::case2102()
+{
+    bind("struct { int * x ; y * z ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer))
+             .binding(Binding("z", ValueKind::Field)
+                      .specType("y", TypeKind::Synonym)
+                      .derivType(TypeKind::Pointer)));
+}
+
+void BinderTest::case2103()
+{
+    bind("struct { int * x , * y ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer))
+             .binding(Binding("y", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)));
+}
+
+void BinderTest::case2104()
+{
+    bind("struct { int ( * x ) [ 1 ]; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Array)
+                      .derivType(TypeKind::Pointer)));
+}
+
 void BinderTest::case2105(){ }
 void BinderTest::case2106(){ }
 void BinderTest::case2107(){ }
@@ -310,8 +379,25 @@ void BinderTest::case2146(){ }
 void BinderTest::case2147(){ }
 void BinderTest::case2148(){ }
 void BinderTest::case2149(){ }
-void BinderTest::case2150(){ }
-void BinderTest::case2151(){ }
+
+void BinderTest::case2150()
+{
+    bind("struct { const int * x ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .derivType(TypeKind::Pointer)));
+}
+
+void BinderTest::case2151()
+{
+    bind("struct { const x * y ; } ;",
+         Expectation()
+             .binding(Binding("y", ValueKind::Field)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)
+                      .derivType(TypeKind::Pointer)));
+}
+
 void BinderTest::case2152(){ }
 void BinderTest::case2153(){ }
 void BinderTest::case2154(){ }
@@ -361,7 +447,16 @@ void BinderTest::case2197(){ }
 void BinderTest::case2198(){ }
 void BinderTest::case2199(){ }
 
-void BinderTest::case2200(){ }
+void BinderTest::case2200()
+{
+    bind("struct { const int * const x ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .derivType(TypeKind::Pointer, CVR::Const)));
+}
+
+
 void BinderTest::case2201(){ }
 void BinderTest::case2202(){ }
 void BinderTest::case2203(){ }
@@ -411,8 +506,25 @@ void BinderTest::case2246(){ }
 void BinderTest::case2247(){ }
 void BinderTest::case2248(){ }
 void BinderTest::case2249(){ }
-void BinderTest::case2250(){ }
-void BinderTest::case2251(){ }
+
+void BinderTest::case2250()
+{
+    bind("struct { int * const x ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::Const)));
+}
+
+void BinderTest::case2251()
+{
+    bind("struct { x * const y ; } ;",
+         Expectation()
+             .binding(Binding("y", ValueKind::Field)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::Const)));
+}
+
 void BinderTest::case2252(){ }
 void BinderTest::case2253(){ }
 void BinderTest::case2254(){ }
@@ -465,44 +577,83 @@ void BinderTest::case2299(){ }
 void BinderTest::case2300()
 {
     bind(R"(
-struct x
+struct
 {
-    int y [ 1 ] ;
+    int x [ 1 ] ;
 };
          )",
          Expectation()
-            .arr_1("y", ValueKind::Field, TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case2301()
 {
-    bind(R"(
-struct x
-{
-    int y [ 1 ] , z [ 2 ] ;
-};
-         )",
+    bind("struct { x y [ 1 ] ; } ;",
          Expectation()
-            .arr_1("y", ValueKind::Field, TypeKind::Builtin, BuiltinTypeKind::Int)
-            .arr_1("z", ValueKind::Field, TypeKind::Builtin, BuiltinTypeKind::Int));
+             .binding(Binding("y", ValueKind::Field)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case2302()
 {
     bind(R"(
-struct x
+struct
 {
-    y z [ 1 ] , w [ 2 ] ;
+    int x [ 1 ] , y [ 2 ] ;
 };
          )",
          Expectation()
-            .arr_1("z", ValueKind::Field, TypeKind::Synonym)
-            .arr_1("w", ValueKind::Field, TypeKind::Synonym));
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None))
+             .binding(Binding("y", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case2303(){ }
-void BinderTest::case2304(){ }
-void BinderTest::case2305(){ }
+void BinderTest::case2303()
+{
+    bind(R"(
+struct
+{
+    x y [ 1 ] , z [ 2 ] ;
+};
+         )",
+         Expectation()
+             .binding(Binding("y", ValueKind::Field)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None))
+             .binding(Binding("z", ValueKind::Field)
+                      .specType("x", TypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
+}
+
+void BinderTest::case2304()
+{
+    bind("struct { int * x [ 1 ] ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
+}
+
+void BinderTest::case2305()
+{
+    bind("struct { int x [ 1 ] , * y [ 2 ] ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None))
+             .binding(Binding("y", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
+}
+
 void BinderTest::case2306(){ }
 void BinderTest::case2307(){ }
 void BinderTest::case2308(){ }
@@ -547,7 +698,16 @@ void BinderTest::case2346(){ }
 void BinderTest::case2347(){ }
 void BinderTest::case2348(){ }
 void BinderTest::case2349(){ }
-void BinderTest::case2350(){ }
+
+void BinderTest::case2350()
+{
+    bind("struct { const int x [ 1 ] ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", TypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .derivType(TypeKind::Array, CVR::None)));
+}
+
 void BinderTest::case2351(){ }
 void BinderTest::case2352(){ }
 void BinderTest::case2353(){ }

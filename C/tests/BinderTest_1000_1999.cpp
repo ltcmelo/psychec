@@ -44,7 +44,6 @@ void BinderTest::case1000()
          Expectation()
             .binding(Binding("x", ValueKind::Variable)
                     .specType("double", TypeKind::Builtin, BuiltinTypeKind::Double)));
-
 }
 
 void BinderTest::case1001()

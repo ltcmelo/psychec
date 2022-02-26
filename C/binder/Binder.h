@@ -54,6 +54,7 @@ public:
     void bind();
 
 private:
+    friend class BinderTest;
     friend class SemanticModel;
     friend class Semantics_TypeSpecifiers;
     friend class Semantics_TypeQualifiers;
