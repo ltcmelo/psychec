@@ -200,6 +200,7 @@ const char* tokenNames[] =
     "__PRETTY_FUNCTION__",
 
     "va_arg",
+    "offsetof",
 
     "_Template",
     "_Forall",

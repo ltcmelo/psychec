@@ -221,6 +221,9 @@ public:
     virtual FieldDesignatorSyntax* asFieldDesignator() { return nullptr; }
     virtual const FieldDesignatorSyntax* asFieldDesignator() const { return nullptr; }
 
+    virtual OffsetOfDesignatorSyntax* asOffsetOfDesignator() { return nullptr; }
+    virtual const OffsetOfDesignatorSyntax* asOffsetOfDesignator() const { return nullptr; }
+
     //-------------//
     // Expressions //
     //-------------//
@@ -268,6 +271,8 @@ public:
     virtual const CastExpressionSyntax* asCastExpression() const { return nullptr; }
     virtual VAArgumentExpressionSyntax* asVAArgumentExpression() { return nullptr; }
     virtual const VAArgumentExpressionSyntax* asVAArgumentExpression() const { return nullptr; }
+    virtual OffsetOfExpressionSyntax* asOffsetOfExpression() { return nullptr; }
+    virtual const OffsetOfExpressionSyntax* asOffsetOfExpression() const { return nullptr; }
     virtual BinaryExpressionSyntax* asBinaryExpression() { return nullptr; }
     virtual const BinaryExpressionSyntax* asBinaryExpression() const { return nullptr; }
     virtual ConditionalExpressionSyntax* asConditionalExpression() { return nullptr; }

@@ -112,6 +112,8 @@ class DesignatorSyntax;
 class ArrayDesignatorSyntax;
 class FieldDesignatorSyntax;
 
+class OffsetOfDesignatorSyntax;
+
 //-------------//
 // Expressions //
 //-------------//
@@ -139,6 +141,7 @@ class CallExpressionSyntax;
 class CompoundLiteralExpressionSyntax;
 class CastExpressionSyntax;
 class VAArgumentExpressionSyntax;
+class OffsetOfExpressionSyntax;
 class BinaryExpressionSyntax;
 class ConditionalExpressionSyntax;
 class AssignmentExpressionSyntax;

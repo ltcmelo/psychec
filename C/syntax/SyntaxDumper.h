@@ -411,6 +411,14 @@ protected:
         return Action::Skip;
     }
 
+    virtual Action visitOffsetOfDesignator(const OffsetOfDesignatorSyntax* node) override
+    {
+        terminal(node->identifierToken(), node);
+        for (auto iter = node->designators(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        return Action::Skip;
+    }
+
     //-------------//
     // Expressions //
     //-------------//
@@ -562,6 +570,17 @@ protected:
         nonterminal(node->expression());
         terminal(node->commaToken(), node);
         nonterminal(node->typeName());
+        terminal(node->closeParenthesisToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitOffsetOfExpression(const OffsetOfExpressionSyntax* node) override
+    {
+        terminal(node->keyword(), node);
+        terminal(node->openParenthesisToken(), node);
+        nonterminal(node->typeName());
+        terminal(node->commaToken(), node);
+        nonterminal(node->offsetOfDesignator());
         terminal(node->closeParenthesisToken(), node);
         return Action::Skip;
     }

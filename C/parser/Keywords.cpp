@@ -735,6 +735,24 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
             }
         }
     }
+    else if (s[0] == 'o'
+             && opts.extensions().translations().isEnabled_Translate_offsetof_AsKeyword()) {
+        if (s[1] == 'f') {
+            if (s[2] == 'f') {
+                if (s[3] == 's') {
+                    if (s[4] == 'e') {
+                        if (s[5] == 't') {
+                            if (s[6] == 'o') {
+                                if (s[7] == 'f') {
+                                    return Keyword_MacroStd_offsetof;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     else if (s[0] == 'r') {
         if (s[1] == 'e') {
             if (s[2] == 'g') {

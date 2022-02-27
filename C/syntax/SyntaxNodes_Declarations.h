@@ -1163,6 +1163,26 @@ public:
                    closeBracketTkIdx_);
 };
 
+/**
+ * \brief The OffsetOfDesignatorSyntax class.
+ *
+ */
+class OffsetOfDesignatorSyntax final : public DesignatorSyntax
+{
+    AST_NODE_1K(OffsetOfDesignator, Designator)
+
+public:
+    SyntaxToken identifierToken() const { return tokenAtIndex(identTkIdx_); }
+    const DesignatorListSyntax* designators() const { return desigs_; }
+
+private:
+    LexedTokens::IndexType identTkIdx_ = LexedTokens::invalidIndex();
+    DesignatorListSyntax* desigs_ = nullptr;
+
+    AST_CHILD_LST2(identTkIdx_, desigs_)
+};
+
+
 } // C
 } // psy
 

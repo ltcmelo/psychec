@@ -102,6 +102,16 @@ public:
 
     //!@{
     /**
+     * Whether to translate macro \c offsetof as an internal builtin.
+     * From header <stddef.h>
+     *
+     */
+    MacroTranslations& enable_Translate_offsetof_AsKeyword(bool expand);
+    bool isEnabled_Translate_offsetof_AsKeyword() const;
+    //!@}
+
+    //!@{
+    /**
      * Whether to translate macro \c bool as \c _Bool.
      * From header <stdbool.h>.
      *
@@ -131,6 +141,7 @@ private:
         std::uint64_t Translate_alignas_AsKeyword_ : 1;
         std::uint64_t Translate_alignof_AsKeyword_ : 1;
         std::uint64_t Translate_va_arg_AsKeyword_ : 1;
+        std::uint64_t Translate_offsetof_AsKeyword_ : 1;
         std::uint64_t Translate_bool_AsKeyword_ : 1;
         std::uint64_t Translate_thread_local_AsKeyword_ : 1;
     };

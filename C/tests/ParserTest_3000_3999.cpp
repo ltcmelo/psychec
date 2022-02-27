@@ -91,22 +91,48 @@ void ParserTest::case3009()
 
 void ParserTest::case3010()
 {
-
+    parseExpression("offsetof ( struct x , y )",
+                    Expectation().AST( { OffsetOfExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         OffsetOfDesignator }));
 }
 
 void ParserTest::case3011()
 {
-
+    parseExpression("offsetof ( struct x , y . z )",
+                    Expectation().AST( { OffsetOfExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         OffsetOfDesignator,
+                                         FieldDesignator }));
 }
 
 void ParserTest::case3012()
 {
-
+    parseExpression("offsetof ( struct x , y [ 0 ] )",
+                    Expectation().AST( { OffsetOfExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         OffsetOfDesignator,
+                                         ArrayDesignator,
+                                         IntegerConstantExpression }));
 }
 
 void ParserTest::case3013()
 {
-
+    parseExpression("offsetof ( struct x , y  [ 0 ] . z )",
+                    Expectation().AST( { OffsetOfExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         OffsetOfDesignator,
+                                         ArrayDesignator,
+                                         IntegerConstantExpression,
+                                         FieldDesignator }));
 }
 
 void ParserTest::case3014()
