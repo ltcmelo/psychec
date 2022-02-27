@@ -2248,6 +2248,7 @@ bool Parser::parseDesignatorList_AtFirst(DesignatorListSyntax*& desigList,
             return false;
 
         *desigs_cur = makeNode<DesignatorListSyntax>(desig);
+        desigs_cur = &(*desigs_cur)->next;
 
         switch (peek().kind()) {
             case DotToken:
