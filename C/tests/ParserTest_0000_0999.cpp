@@ -5143,12 +5143,35 @@ void ParserTest::case0862()
 
 void ParserTest::case0863()
 {
-
+    parseExpression("( struct x ) { . y [ 0 ] = 1 }",
+                    Expectation().AST( { CompoundLiteralExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         BraceEnclosedInitializer,
+                                         DesignatedInitializer,
+                                         FieldDesignator,
+                                         ArrayDesignator,
+                                         IntegerConstantExpression,
+                                         ExpressionInitializer,
+                                         IntegerConstantExpression }));
 }
 
 void ParserTest::case0864()
 {
-
+    parseExpression("( struct x ) { . y [ 0 ] . z = 1 }",
+                    Expectation().AST( { CompoundLiteralExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         BraceEnclosedInitializer,
+                                         DesignatedInitializer,
+                                         FieldDesignator,
+                                         ArrayDesignator,
+                                         IntegerConstantExpression,
+                                         FieldDesignator,
+                                         ExpressionInitializer,
+                                         IntegerConstantExpression }));
 }
 
 void ParserTest::case0865()
