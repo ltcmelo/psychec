@@ -2485,7 +2485,10 @@ void ParserTest::case0399() { }
 
 void ParserTest::case0400()
 {
-    parse("struct x ;") ;
+    parse("struct x ;",
+          Expectation().AST({ TranslationUnit,
+                              StructDeclaration,
+                              StructTypeSpecifier }));
 }
 
 void ParserTest::case0401()
@@ -2820,7 +2823,10 @@ void ParserTest::case0441()
 
 void ParserTest::case0442()
 {
-
+    parse("union x ;",
+          Expectation().AST({ TranslationUnit,
+                              UnionDeclaration,
+                              UnionTypeSpecifier }));
 }
 
 void ParserTest::case0443()
@@ -3110,62 +3116,65 @@ void ParserTest::case0499()
 
 void ParserTest::case0500()
 {
-    parse("enum x ;") ;
+    parse("enum x ;",
+          Expectation().AST({ TranslationUnit,
+                              IncompleteDeclaration,
+                              EnumTypeSpecifier }));
 }
 
 void ParserTest::case0501()
 {
-    parse("enum x y ;") ;
+    parse("enum x y ;");
 }
 
 void ParserTest::case0502()
 {
-    parse("enum x { } ;") ;
+    parse("enum x { } ;");
 }
 
 void ParserTest::case0503()
 {
-    parse("enum x { y } ;") ;
+    parse("enum x { y } ;");
 }
 
 void ParserTest::case0504()
 {
-    parse("enum x { y , z } ;") ;
+    parse("enum x { y , z } ;");
 }
 
 void ParserTest::case0505()
 {
-    parse("enum x { y , z, } ;") ;
+    parse("enum x { y , z, } ;");
 }
 
 void ParserTest::case0506()
 {
-    parse("enum x { y , z = w } ;") ;
+    parse("enum x { y , z = w } ;");
 }
 
 void ParserTest::case0507()
 {
-    parse("enum x { y , z = w, } ;") ;
+    parse("enum x { y , z = w, } ;");
 }
 
 void ParserTest::case0508()
 {
-    parse("enum x { y = 1 } ;") ;
+    parse("enum x { y = 1 } ;");
 }
 
 void ParserTest::case0509()
 {
-    parse("enum x { y = 1, } ;") ;
+    parse("enum x { y = 1, } ;");
 }
 
 void ParserTest::case0510()
 {
-    parse("enum x { y = 1, z } ;") ;
+    parse("enum x { y = 1, z } ;");
 }
 
 void ParserTest::case0511()
 {
-    parse("enum x { y = 1, z, w = 3 } ;") ;
+    parse("enum x { y = 1, z, w = 3 } ;");
 }
 
 void ParserTest::case0512()

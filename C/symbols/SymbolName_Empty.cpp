@@ -38,5 +38,10 @@ bool operator!=(const EmptySymbolName& a, const EmptySymbolName& b)
     return !(a == b);
 }
 
+std::string EmptySymbolName::text() const
+{
+    return "";
+}
+
 } // C
 } // psy

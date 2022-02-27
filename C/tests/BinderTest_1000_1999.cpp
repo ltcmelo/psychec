@@ -119,18 +119,46 @@ void BinderTest::case1008()
 
 void BinderTest::case1009()
 {
+    bind("struct x y ;",
+         Expectation()
+            .binding(Binding("y", ValueKind::Variable)
+                    .specType("struct x", TypeKind::Struct, BuiltinTypeKind::None)));
 }
 
 void BinderTest::case1010()
 {
+    bind("union x y ;",
+         Expectation()
+            .binding(Binding("y", ValueKind::Variable)
+                    .specType("union x", TypeKind::Union, BuiltinTypeKind::None)));
 }
 
 void BinderTest::case1011()
 {
+    bind("enum x y ;",
+         Expectation()
+            .binding(Binding("y", ValueKind::Variable)
+                    .specType("enum x", TypeKind::Enum, BuiltinTypeKind::None)));
 }
 
-void BinderTest::case1012() {}
-void BinderTest::case1013() {}
+void BinderTest::case1012()
+{
+    bind("struct x y , z ;",
+         Expectation()
+            .binding(Binding("y", ValueKind::Variable)
+                    .specType("struct x", TypeKind::Struct, BuiltinTypeKind::None))
+            .binding(Binding("z", ValueKind::Variable)
+                    .specType("struct x", TypeKind::Struct, BuiltinTypeKind::None)));
+}
+
+void BinderTest::case1013()
+{
+    bind("struct x { int y ; } z ;",
+         Expectation()
+            .binding(Binding("z", ValueKind::Variable)
+                    .specType("struct x", TypeKind::Struct, BuiltinTypeKind::None)));
+}
+
 void BinderTest::case1014() {}
 void BinderTest::case1015() {}
 void BinderTest::case1016() {}

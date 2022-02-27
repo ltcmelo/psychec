@@ -80,17 +80,6 @@ public:
         }
     }
 
-    static bool isTagTypeSpecifierToken(SyntaxKind tkK)
-    {
-        switch (tkK) {
-            case Keyword_struct:
-            case Keyword_union:
-                return true;
-            default:
-                return false;
-        }
-    }
-
     static bool isTypeQualifierToken(SyntaxKind tkK)
     {
         switch (tkK) {

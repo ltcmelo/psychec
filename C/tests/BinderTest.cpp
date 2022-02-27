@@ -30,7 +30,7 @@
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
-#define DEBUG_BINDING_SEARCH
+//#define DEBUG_BINDING_SEARCH
 
 using namespace psy;
 using namespace C;
@@ -65,7 +65,7 @@ namespace {
 bool REJECT(const Symbol* sym, std::string msg)
 {
 #ifdef DEBUG_BINDING_SEARCH
-    std::cout << "\n\t\treject " << to_string(*sym) << "\t" << msg;
+    std::cout << "\n\t\treject " << to_string(*sym) << "\t(" << msg << ")";
 #endif
     return false;
 }
@@ -139,7 +139,7 @@ void BinderTest::bind(std::string text, Expectation X)
             if (!candidateSym->name())
                 return REJECT(candidateSym, "empty name");
 
-            if (to_string(*candidateSym->name()) != binding.name_)
+            if (candidateSym->name()->text() != binding.name_)
                 return REJECT(candidateSym, "name mistmatch");
 
             switch (binding.symK_)

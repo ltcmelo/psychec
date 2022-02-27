@@ -23,6 +23,11 @@
 using namespace psy;
 using namespace C;
 
+std::string PlainSymbolName::text() const
+{
+    return s_;
+}
+
 PlainSymbolName::PlainSymbolName(std::string s)
     : s_(std::move(s))
 {}

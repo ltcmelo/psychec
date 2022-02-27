@@ -118,45 +118,29 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
                                       namedTySym,
                                       &diagReporter_);
 
-    std::unique_ptr<SymbolName> name(
-                new PlainSymbolName(node->specifierToken().valueText_c_str()));
-    namedTySym->setName(std::move(name));
+    std::unique_ptr<SymbolName> symName(
+            new PlainSymbolName(node->specifierToken().valueText_c_str()));
+    namedTySym->setName(std::move(symName));
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
-    TypeKind tyKind;
-    switch (node->keyword().kind()) {
-        case Keyword_struct:
-            tyKind = TypeKind::Struct;
-            break;
-
-        case Keyword_union:
-            tyKind = TypeKind::Union;
-            break;
-
-        case Keyword_enum:
-            tyKind = TypeKind::Enum;
-            break;
-
-        default:
-            PSYCHE_FAIL(return Action::Quit, "unknown keyword");
-            return Action::Quit;
-    }
-
-    makeAndPushSymDEF(tyKind);
-    std::unique_ptr<SymbolName> name(
-                new TagSymbolName(tyKind,
-                                  node->tagToken().valueText_c_str()));
-    symDEFs_.top()->setName(std::move(name));
+    if (!node->declarations())
+        makeAndPushSymUSE_TagType(node);
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
 
-    for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
+    for (auto declIt = node->declarations(); declIt; declIt = declIt->next) {
+        TySymUSEs_T tySymUSES;
+        std::swap(tySymUSEs_, tySymUSES);
+
         visit(declIt->value);
+
+        std::swap(tySymUSEs_, tySymUSES);
+    }
 
     for (auto attrIt = node->attributes_PostCloseBrace(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
@@ -166,6 +150,10 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
 
 SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node)
 {
+    visit(node->typeDeclaration());
+
+    makeAndPushSymUSE_TagType(node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier());
+
     return Action::Skip;
 }
 
@@ -180,9 +168,9 @@ SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
         return Action::Skip;
     }
 
-    std::unique_ptr<SymbolName> name(
-                new PlainSymbolName(node->identifierToken().valueText_c_str()));
-    namedTySym->setName(std::move(name));
+    std::unique_ptr<SymbolName> symName(
+            new PlainSymbolName(node->identifierToken().valueText_c_str()));
+    namedTySym->setName(std::move(symName));
 
     return Action::Skip;
 }
