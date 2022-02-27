@@ -142,6 +142,38 @@ TypeSymbol* Binder::makeAndPushTySymUSE(TypeKind tyKind)
 template void Binder::makeAndPushTySymUSE<ArrayTypeSymbol>();
 template void Binder::makeAndPushTySymUSE<PointerTypeSymbol>();
 
+void Binder::makeAndPushSymUSE_TagType(const TagTypeSpecifierSyntax* node)
+{
+    TagSymbolName::NameSpace ns;
+    TypeKind tyKind;
+    switch (node->kind()) {
+        case StructTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Structures;
+            tyKind = TypeKind::Struct;
+            break;
+
+        case UnionTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Unions;
+            tyKind = TypeKind::Union;
+            break;
+
+        case EnumTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Enumerations;
+            tyKind = TypeKind::Enum;
+            break;
+
+        default:
+            PSYCHE_FAIL_0(return);
+            return;
+    }
+
+    TypeSymbol* tySym = makeAndPushTySymUSE(tyKind);
+
+    std::unique_ptr<SymbolName> symName(
+            new TagSymbolName(ns, node->tagToken().valueText_c_str()));
+    tySym->setName(std::move(symName));
+}
+
 template <class ScopeT>
 void Binder::openScope()
 {
@@ -197,13 +229,17 @@ SyntaxVisitor::Action Binder::visitTypeDeclaration_COMMON(const TypeDeclarationS
 
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
 {
+    TypeSymbol* tySym;
+    TagSymbolName::NameSpace ns;
     switch (node->kind()) {
         case StructDeclaration:
-            makeAndPushSymDEF(TypeKind::Struct);
+            tySym = makeAndPushSymDEF(TypeKind::Struct);
+            ns = TagSymbolName::NameSpace::Structures;
             break;
 
         case UnionDeclaration:
-            makeAndPushSymDEF(TypeKind::Union);
+            tySym = makeAndPushSymDEF(TypeKind::Union);
+            ns = TagSymbolName::NameSpace::Unions;
             break;
 
         default:
@@ -211,12 +247,22 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
             return Action::Skip;
     }
 
+    std::unique_ptr<SymbolName> symName(
+            new TagSymbolName(ns,
+                              node->typeSpecifier()->asTagTypeSpecifier()->tagToken().valueText_c_str()));
+    tySym->setName(std::move(symName));
+
     return visitTypeDeclaration_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
-    makeAndPushSymDEF(TypeKind::Enum);
+    TypeSymbol* tySym = makeAndPushSymDEF(TypeKind::Enum);
+
+    std::unique_ptr<SymbolName> symName(
+            new TagSymbolName(TagSymbolName::NameSpace::Enumerations,
+                              node->typeSpecifier()->asTagTypeSpecifier()->tagToken().valueText_c_str()));
+    tySym->setName(std::move(symName));
 
     return visitTypeDeclaration_COMMON(node);
 }

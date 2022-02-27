@@ -127,40 +127,8 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
 
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
-    TagSymbolName::NameSpace ns;
-    TypeKind tyKind;
-    switch (node->kind()) {
-        case StructTypeSpecifier:
-            ns = TagSymbolName::NameSpace::Structures;
-            tyKind = TypeKind::Struct;
-            break;
-
-        case UnionTypeSpecifier:
-            ns = TagSymbolName::NameSpace::Unions;
-            tyKind = TypeKind::Union;
-            break;
-
-        case EnumTypeSpecifier:
-            ns = TagSymbolName::NameSpace::Enumerations;
-            tyKind = TypeKind::Enum;
-            break;
-
-        default:
-            PSYCHE_FAIL_0(return Action::Skip);
-            return Action::Skip;
-    }
-
-    TypeSymbol* tySym;
-    if (node->declarations()) {
-        tySym = symDEFs_.top()->asType();
-    }
-    else {
-        tySym = makeAndPushTySymUSE(tyKind);
-    }
-
-    std::unique_ptr<SymbolName> symName(
-            new TagSymbolName(ns, node->tagToken().valueText_c_str()));
-    tySym->setName(std::move(symName));
+    if (!node->declarations())
+        makeAndPushSymUSE_TagType(node);
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
@@ -183,6 +151,8 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
 SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node)
 {
     visit(node->typeDeclaration());
+
+    makeAndPushSymUSE_TagType(node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier());
 
     return Action::Skip;
 }

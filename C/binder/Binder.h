@@ -35,6 +35,7 @@
 #include <memory>
 #include <stack>
 #include <string>
+#include <utility>
 
 namespace psy {
 namespace C {
@@ -81,6 +82,8 @@ private:
     TypeSymbol* makeAndPushTySymUSE(TypeKind);
     using TySymUSEs_T = std::stack<TypeSymbol*>;
     TySymUSEs_T tySymUSEs_;
+
+    void makeAndPushSymUSE_TagType(const TagTypeSpecifierSyntax* node);
 
     struct DiagnosticsReporter
     {
