@@ -1274,6 +1274,7 @@ bool Parser::parseAtomiceTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
  \endverbatim
  *
  * \remark 6.7.2.1
+ * \remark 6.7.2.3-6, 6.7.2.3-8, and 6.7.2.3-8.
  */
 template <class TypeDeclT>
 bool Parser::parseTagTypeSpecifier_AtFirst(
@@ -1286,7 +1287,13 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
     DEBUG_THIS_RULE();
     PSYCHE_ASSERT(peek().kind() == Keyword_struct
                         || peek().kind() == Keyword_union
-                        || peek().kind() == Keyword_enum,
+                        || peek().kind() == Keyword_enum
+                    && (declK == StructDeclaration
+                        || declK == UnionDeclaration
+                        || declK == EnumDeclaration)
+                    && (specK == StructTypeSpecifier
+                        || specK == UnionTypeSpecifier
+                        || specK == EnumTypeSpecifier),
                   return false,
                   "assert failure: `struct', `union', or `enum'");
 
@@ -1297,6 +1304,12 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
     if (peek().kind() == Keyword_ExtGNU___attribute__)
         parseExtGNU_AttributeSpecifierList_AtFirst(tySpec->attrs1_);
 
+    auto wrapTySpecInTyDecl = [&]() {
+        auto tyDecl = makeNode<TypeDeclT>(declK);
+        decl = tyDecl;
+        tyDecl->typeSpec_ = tySpec;
+    };
+
     switch (peek().kind()) {
         case OpenBraceToken:
             tySpec->openBraceTkIdx_ = consume();
@@ -1304,9 +1317,22 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
 
         case IdentifierToken:
             tySpec->tagTkIdx_ = consume();
-            if (peek().kind() != OpenBraceToken)
-                return true;
-            tySpec->openBraceTkIdx_ = consume();
+            switch (peek().kind()) {
+                case OpenBraceToken:
+                    tySpec->openBraceTkIdx_ = consume();
+                    break;
+
+                case SemicolonToken:
+                    if (specK == StructTypeSpecifier
+                            || specK == UnionTypeSpecifier) {
+                        wrapTySpecInTyDecl();
+                        return true;
+                    }
+                    [[fallthrough]];
+
+                default:
+                    return true;
+            }
             break;
 
         default:
@@ -1314,10 +1340,7 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
             return false;
     }
 
-    // See 6.7.2.1-8 and 6.7.2.3-6.
-    auto tyDecl = makeNode<TypeDeclT>(declK);
-    decl = tyDecl;
-    tyDecl->typeSpec_ = tySpec;
+    wrapTySpecInTyDecl();
 
     DeclarationListSyntax** declList_cur = &tySpec->decls_;
 

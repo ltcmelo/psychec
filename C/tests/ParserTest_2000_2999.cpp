@@ -677,7 +677,7 @@ void ParserTest::case2205()
     parseStatement("{ struct x ; }",
                    Expectation().AST( { CompoundStatement,
                                         DeclarationStatement,
-                                        IncompleteDeclaration,
+                                        StructDeclaration,
                                         StructTypeSpecifier }));
 }
 
