@@ -51,7 +51,11 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
                     node->lastToken(), &diagReporter_);
 
-        makeAndPushTySymUSE(TypeKind::Builtin);
+//        makeAndPushTySymUSE(TypeNameKind::Builtin);
+        std::unique_ptr<NamedTypeSymbol> tySym(
+                new NamedTypeSymbol(tree_, scopes_.top(), symDEFs_.top(),
+                                    BuiltinTypeKind::Int));
+        pushTySymUSE(std::move(tySym));
     }
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
@@ -105,8 +109,13 @@ SyntaxVisitor::Action Binder::actOnTypeQualifier(const SpecifierSyntax* spec)
 
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
-    if (tySymUSEs_.empty())
-        makeAndPushTySymUSE(TypeKind::Builtin);
+    if (tySymUSEs_.empty()) {
+//        makeAndPushTySymUSE(TypeNameKind::Builtin);
+        std::unique_ptr<NamedTypeSymbol> tySym(
+                new NamedTypeSymbol(tree_, scopes_.top(), symDEFs_.top(),
+                                    BuiltinTypeKind::Int));
+        pushTySymUSE(std::move(tySym));
+    }
 
     NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
     if (!namedTySym) {
@@ -120,15 +129,41 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
 
     std::unique_ptr<SymbolName> symName(
             new PlainSymbolName(node->specifierToken().valueText_c_str()));
-    namedTySym->setName(std::move(symName));
+//    namedTySym->setName(std::move(symName));
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
-    if (!node->declarations())
-        makeAndPushSymUSE_TagType(node);
+    if (!node->declarations()) {
+//        makeAndPushSymUSE_TagType(node);
+
+        TagSymbolName::NameSpace ns;
+        switch (node->kind()) {
+            case StructTypeSpecifier:
+                ns = TagSymbolName::NameSpace::Structures;
+                break;
+
+            case UnionTypeSpecifier:
+                ns = TagSymbolName::NameSpace::Unions;
+                break;
+
+            case EnumTypeSpecifier:
+                ns = TagSymbolName::NameSpace::Enumerations;
+                break;
+
+            default:
+                PSYCHE_FAIL_0(return Action::Quit);
+                return Action::Quit;
+        }
+
+        std::unique_ptr<NamedTypeSymbol> tySym(
+                new NamedTypeSymbol(tree_, scopes_.top(), symDEFs_.top(),
+                                    ns,
+                                    node->tagToken().valueText_c_str()));
+        pushTySymUSE(std::move(tySym));
+    }
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
@@ -152,15 +187,52 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 {
     visit(node->typeDeclaration());
 
-    makeAndPushSymUSE_TagType(node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier());
+//    makeAndPushSymUSE_TagType(node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier());
+
+
+    PSYCHE_ASSERT(node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier(),
+                  return Action::Quit,
+                  "expected tag type specifier");
+
+    const TagTypeSpecifierSyntax* tySpec = node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier();
+    TagSymbolName::NameSpace ns;
+    switch (tySpec->kind()) {
+        case StructTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Structures;
+            break;
+
+        case UnionTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Unions;
+            break;
+
+        case EnumTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Enumerations;
+            break;
+
+        default:
+            PSYCHE_FAIL_0(return Action::Quit);
+            return Action::Quit;
+    }
+
+    std::unique_ptr<NamedTypeSymbol> tySym(
+            new NamedTypeSymbol(tree_, scopes_.top(), symDEFs_.top(),
+                                ns,
+                                tySpec->tagToken().valueText_c_str()));
+    pushTySymUSE(std::move(tySym));
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
-    if (tySymUSEs_.empty())
-        makeAndPushTySymUSE(TypeKind::Synonym);
+    if (tySymUSEs_.empty()) {
+//        makeAndPushTySymUSE(TypeNameKind::Synonym);
+        std::unique_ptr<NamedTypeSymbol> tySym(
+                new NamedTypeSymbol(tree_, scopes_.top(), symDEFs_.top(),
+                                    node->identifierToken().valueText_c_str()));
+        pushTySymUSE(std::move(tySym));
+
+    }
 
     NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
     if (!namedTySym) {
@@ -168,9 +240,9 @@ SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
         return Action::Skip;
     }
 
-    std::unique_ptr<SymbolName> symName(
-            new PlainSymbolName(node->identifierToken().valueText_c_str()));
-    namedTySym->setName(std::move(symName));
+//    std::unique_ptr<SymbolName> symName(
+//            new PlainSymbolName(node->identifierToken().valueText_c_str()));
+//    namedTySym->setName(std::move(symName));
 
     return Action::Skip;
 }

@@ -30,7 +30,7 @@
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
-//#define DEBUG_BINDING_SEARCH
+#define DEBUG_BINDING_SEARCH
 
 using namespace psy;
 using namespace C;
@@ -131,35 +131,36 @@ void BinderTest::bind(std::string text, Expectation X)
 
         auto pred = [&binding] (const auto& p)
         {
-            const Symbol* candidateSym = p.get();
+            const Symbol* candSym = p.get();
 
-            if (candidateSym->kind() != binding.symK_)
-                return REJECT(candidateSym, "symbol kind mismatch");
-
-            if (!candidateSym->name())
-                return REJECT(candidateSym, "empty name");
-
-            if (candidateSym->name()->text() != binding.name_)
-                return REJECT(candidateSym, "name mistmatch");
+            if (candSym->kind() != binding.symK_)
+                return REJECT(candSym, "symbol kind mismatch");
 
             switch (binding.symK_)
             {
                 case SymbolKind::Value: {
-                    if (candidateSym->asValue()->valueKind() != binding.valK_)
-                        return REJECT(candidateSym, "value kind mismatch");
+                    if (candSym->asValue()->valueKind() != binding.valK_)
+                        return REJECT(candSym, "value kind mismatch");
 
-                    const ValueSymbol* valSym = candidateSym->asValue();
+                    const ValueSymbol* valSym = candSym->asValue();
+
+                    if (!valSym->name())
+                        return REJECT(candSym, "empty name");
+
+                    if (valSym->name()->text() != binding.name_)
+                        return REJECT(candSym, "name mistmatch");
+
                     if (valSym->type() == nullptr)
-                        return REJECT(candidateSym, "null type");
+                        return REJECT(candSym, "null type");
 
                     const TypeSymbol* tySym = valSym->type();
                     for (auto i = binding.derivTyKs_.size(); i > 0; --i) {
                         auto derivTyK = binding.derivTyKs_[i - 1];
                         if (derivTyK != tySym->typeKind())
-                            return REJECT(candidateSym, "(derived) type kind mismatch");
+                            return REJECT(candSym, "(derived) type kind mismatch");
 
                         auto derivTyCVR = binding.derivTyCVRs_[i - 1];
-                        if (!hasExpectedCVR(derivTyCVR, tySym, candidateSym))
+                        if (!hasExpectedCVR(derivTyCVR, tySym, candSym))
                             return false;
 
                         switch (tySym->typeKind()) {
@@ -177,37 +178,38 @@ void BinderTest::bind(std::string text, Expectation X)
                         }
                     }
 
-                    if (tySym->name() == nullptr)
-                        return REJECT(candidateSym, "null type name");
+                    const NamedTypeSymbol* namedTySym = tySym->asNamedType();
+                    if (namedTySym->name() == nullptr)
+                        return REJECT(candSym, "null type name");
 
-                    if (to_string(*tySym->name()) != binding.specTyName_)
-                        return REJECT(candidateSym, "type name mismatch");
+                    if (namedTySym->name()->text() != binding.specTyName_)
+                        return REJECT(candSym, std::string("type name mismatch ") + namedTySym->name()->text() + " " + binding.specTyName_);
 
-                    if (tySym->typeKind() != binding.specTyK_)
-                        return REJECT(candidateSym, "type kind mismatch");
+                    if (namedTySym->typeNameKind() != binding.specTyK_)
+                        return REJECT(candSym, "type kind mismatch");
 
                     if (binding.specTyBuiltinK_ != BuiltinTypeKind::None) {
                         if (!tySym->asNamedType())
-                            return REJECT(candidateSym, "not a builtin");
+                            return REJECT(candSym, "not a builtin");
 
-                        if (tySym->asNamedType()->builtinTypeKind() != binding.specTyBuiltinK_)
-                            return REJECT(candidateSym, "builtin kind mismatch");
+                        if (tySym->asNamedType()->builtinKind() != binding.specTyBuiltinK_)
+                            return REJECT(candSym, "builtin kind mismatch");
                     }
 
-                    if (!hasExpectedCVR(binding.specTyCVR_, tySym, candidateSym))
+                    if (!hasExpectedCVR(binding.specTyCVR_, tySym, candSym))
                         return false;
 
                     return true;
                 }
 
                 case SymbolKind::Type: {
-                    if (candidateSym->asType()->typeKind() != binding.tyK_)
+                    if (candSym->asType()->typeKind() != binding.tyK_)
                         return false;
                     throw std::runtime_error("");
                 }
 
                 case SymbolKind::Function: {
-                    if (!candidateSym->asFunction())
+                    if (!candSym->asFunction())
                         return false;
                     break;
                 }

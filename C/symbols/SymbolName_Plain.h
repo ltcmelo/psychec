@@ -44,6 +44,7 @@ public:
 
 private:
     friend class Binder;
+    friend class NamedTypeSymbol;
 
     PlainSymbolName(std::string s);
 

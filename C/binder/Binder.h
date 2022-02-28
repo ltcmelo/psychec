@@ -71,19 +71,23 @@ private:
 
     template <class SymT> SymT* pushSymDEF(std::unique_ptr<SymT>);
     void popSymDEF();
+
     template <class SymT> void makeAndPushSymDEF();
-    TypeSymbol* makeAndPushSymDEF(TypeKind);
+//    TypeSymbol* makeAndPushSymDEF(TypeNameKind);
+
     using SymDEFs_T = std::stack<Symbol*>;
     SymDEFs_T symDEFs_;
 
     template <class TySymT> TySymT* pushTySymUSE(std::unique_ptr<TySymT>);
     void popTySymUSE();
+
     template <class TySymT> void makeAndPushTySymUSE();
-    TypeSymbol* makeAndPushTySymUSE(TypeKind);
+//    TypeSymbol* makeAndPushTySymUSE(TypeNameKind);
+
     using TySymUSEs_T = std::stack<TypeSymbol*>;
     TySymUSEs_T tySymUSEs_;
 
-    void makeAndPushSymUSE_TagType(const TagTypeSpecifierSyntax* node);
+//    void makeAndPushSymUSE_TagType(const TagTypeSpecifierSyntax* node);
 
     struct DiagnosticsReporter
     {

@@ -172,17 +172,25 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
+    Symbol* sym = symDEFs_.top();
+    auto nameableSym = TypeClass_NameableSymbol::xx(sym);
+
     std::unique_ptr<SymbolName> name(
                 new PlainSymbolName(node->identifierToken().valueText_c_str()));
-    symDEFs_.top()->setName(std::move(name));
+    nameableSym->setName(std::move(name));
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax*)
 {
+    Symbol* sym = symDEFs_.top();
+    auto nameableSym = TypeClass_NameableSymbol::xx(sym);
+
     std::unique_ptr<SymbolName> name(new EmptySymbolName);
-    symDEFs_.top()->setName(std::move(name));
+
+
+    nameableSym->setName(std::move(name));
 
     return Action::Skip;
 }

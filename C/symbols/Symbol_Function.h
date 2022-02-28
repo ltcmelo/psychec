@@ -22,22 +22,33 @@
 #define PSYCHE_C_SYMBOL_FUNCTION_H__
 
 #include "Symbol.h"
+#include "TypeClass_NameableSymbol.h"
 
 namespace psy {
 namespace C {
 
 class PSY_C_API FunctionSymbol final : public Symbol
+                                     , public TypeClass_NameableSymbol
 {
 public:
     virtual FunctionSymbol* asFunction() override { return this; }
     virtual const FunctionSymbol* asFunction() const override { return this; }
 
+    /**
+     * The SymbolName of \c this Symbol.
+     */
+    const SymbolName* name() const;
+
 private:
+    DECL_PIMPL_SUB(FunctionSymbol);
+
     friend class Binder;
 
     FunctionSymbol(const SyntaxTree* tree,
                    const Scope* outerScope,
                    const Symbol* containingSym);
+
+    virtual void setName(std::unique_ptr<SymbolName> symName) override;
 };
 
 } // C

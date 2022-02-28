@@ -18,16 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOLS_H__
-#define PSYCHE_C_SYMBOLS_H__
+#ifndef PSYCHE_C_TYPE_NAME_KIND_H__
+#define PSYCHE_C_TYPE_NAME_KIND_H__
 
-#include "Symbol_Function.h"
-#include "Symbol_LinkUnit.h"
-#include "TypeSymbol_Array.h"
-#include "TypeSymbol_Named.h"
-#include "TypeSymbol_Pointer.h"
-#include "ValueSymbol_Field.h"
-#include "ValueSymbol_Parameter.h"
-#include "ValueSymbol_Variable.h"
+#include "API.h"
+#include "Fwds.h"
+
+#include <cstdint>
+#include <string>
+
+namespace psy {
+namespace C {
+
+/**
+ * \brief The TypeNameKind class.
+ */
+enum class PSY_C_API TypeNameKind : std::uint8_t
+{
+    Builtin,
+    Tag,
+    Synonym
+};
+
+} // C
+} // psy
 
 #endif

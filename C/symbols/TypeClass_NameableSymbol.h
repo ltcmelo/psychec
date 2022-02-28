@@ -18,16 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOLS_H__
-#define PSYCHE_C_SYMBOLS_H__
+#ifndef PSYCHE_C_TYPE_CLASS_NAMEABLE_SYMBOL_H__
+#define PSYCHE_C_TYPE_CLASS_NAMEABLE_SYMBOL_H__
 
-#include "Symbol_Function.h"
-#include "Symbol_LinkUnit.h"
-#include "TypeSymbol_Array.h"
-#include "TypeSymbol_Named.h"
-#include "TypeSymbol_Pointer.h"
-#include "ValueSymbol_Field.h"
-#include "ValueSymbol_Parameter.h"
-#include "ValueSymbol_Variable.h"
+#include "Fwds.h"
+
+#include <memory>
+
+namespace psy {
+namespace C {
+
+class TypeClass_NameableSymbol
+{
+public:
+    virtual ~TypeClass_NameableSymbol() {}
+
+    static TypeClass_NameableSymbol* xx(Symbol*);
+
+    virtual void setName(std::unique_ptr<SymbolName> symName) = 0;
+};
+
+} // C
+} // psy
 
 #endif

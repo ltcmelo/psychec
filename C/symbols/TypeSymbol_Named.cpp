@@ -31,33 +31,74 @@ struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
     NamedTypeSymbolImpl(const SyntaxTree* tree,
                         const Scope* outerScope,
                         const Symbol* containingSym,
-                        TypeKind tyKind)
+                        TypeNameKind typeNameKind)
         : TypeSymbolImpl(tree,
                          outerScope,
                          containingSym,
-                         tyKind)
-        , builtTyKind_(BuiltinTypeKind::None)
+                         TypeKind::Named)
+        , name_(nullptr)
+        , typeNameKind_(typeNameKind)
+        , builtinKind_(BuiltinTypeKind::None)
     {}
 
-    BuiltinTypeKind builtTyKind_;
+    std::unique_ptr<SymbolName> name_;
+    TypeNameKind typeNameKind_;
+    BuiltinTypeKind builtinKind_;
 };
 
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                                  const Scope* outerScope,
                                  const Symbol* containingSym,
-                                 TypeKind tyKind)
+                                 BuiltinTypeKind builtinKind)
     : TypeSymbol(new NamedTypeSymbolImpl(tree,
                                          outerScope,
                                          containingSym,
-                                         tyKind))
-{}
-
-BuiltinTypeKind NamedTypeSymbol::builtinTypeKind() const
+                                         TypeNameKind::Builtin))
 {
-    return P_CAST->builtTyKind_;
+    P_CAST->name_.reset(new PlainSymbolName("int"));
+}
+
+NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
+                                 const Scope* outerScope,
+                                 const Symbol* containingSym,
+                                 const std::string& name)
+    : TypeSymbol(new NamedTypeSymbolImpl(tree,
+                                         outerScope,
+                                         containingSym,
+                                         TypeNameKind::Synonym))
+{
+    P_CAST->name_.reset(new PlainSymbolName(name));
+}
+
+NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
+                                 const Scope* outerScope,
+                                 const Symbol* containingSym,
+                                 TagSymbolName::NameSpace ns,
+                                 const std::string& tag)
+    : TypeSymbol(new NamedTypeSymbolImpl(tree,
+                                         outerScope,
+                                         containingSym,
+                                         TypeNameKind::Tag))
+{
+    P_CAST->name_.reset(new TagSymbolName(ns, tag));
+}
+
+const SymbolName* NamedTypeSymbol::name() const
+{
+    return P_CAST->name_.get();
+}
+
+TypeNameKind NamedTypeSymbol::typeNameKind() const
+{
+    return P_CAST->typeNameKind_;
+}
+
+BuiltinTypeKind NamedTypeSymbol::builtinKind() const
+{
+    return P_CAST->builtinKind_;
 }
 
 void NamedTypeSymbol::patchBuiltinTypeKind(BuiltinTypeKind builtTyKind)
 {
-    P_CAST->builtTyKind_ = builtTyKind;
+    P_CAST->builtinKind_ = builtTyKind;
 }

@@ -22,13 +22,23 @@
 #define PSYCHE_C_SYMBOL_NAMED_TYPE_H__
 
 #include "Symbol_Type.h"
+#include "SymbolName_Tag.h"
 #include "BuiltinTypeKind.h"
+#include "TypeNameKind.h"
 
 #include <memory>
+#include <string>
 
 namespace psy {
 namespace C {
 
+/**
+ * \brief The NamedTypeSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.INamedTypeSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
 class PSY_C_API NamedTypeSymbol final : public TypeSymbol
 {
 public:
@@ -36,9 +46,19 @@ public:
     virtual const NamedTypeSymbol* asNamedType() const override { return this; }
 
     /**
+     * The type name kind of \c this NamedTypeSymbol.
+     */
+    TypeNameKind typeNameKind() const;
+
+    /**
      * The BuiltinTypeKind of \c this type.
      */
-    BuiltinTypeKind builtinTypeKind() const;
+    BuiltinTypeKind builtinKind() const;
+
+    /**
+     * The SymbolName of \c this Symbol.
+     */
+    const SymbolName* name() const;
 
 private:
     DECL_PIMPL_SUB(NamedTypeSymbol)
@@ -49,7 +69,19 @@ private:
     NamedTypeSymbol(const SyntaxTree* tree,
                     const Scope* outerScope,
                     const Symbol* containingSym,
-                    TypeKind tyKind);
+                    BuiltinTypeKind builtinKind);
+
+    NamedTypeSymbol(const SyntaxTree* tree,
+                    const Scope* outerScope,
+                    const Symbol* containingSym,
+                    const std::string& name);
+
+    NamedTypeSymbol(const SyntaxTree* tree,
+                    const Scope* outerScope,
+                    const Symbol* containingSym,
+                    TagSymbolName::NameSpace ns,
+                    const std::string& tag);
+
 
     void patchBuiltinTypeKind(BuiltinTypeKind);
 };

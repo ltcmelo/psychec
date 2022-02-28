@@ -219,6 +219,7 @@ class SymbolVisitor;
 template <class PtrT> class SymbolList;
 
 /* Symbol names */
+class SymbolName;
 class PlainSymbolName;
 class TagSymbolName;
 class EmptySymbolName;

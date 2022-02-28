@@ -23,6 +23,7 @@
 
 #include "compilation/Compilation.h"
 #include "symbols/BuiltinTypeKind.h"
+#include "symbols/TypeNameKind.h"
 #include "symbols/SymbolKind.h"
 #include "symbols/ValueKind.h"
 #include "symbols/TypeKind.h"
@@ -52,7 +53,7 @@ struct Binding
     Binding(std::string name, TypeKind kind);
     Binding(std::string funcName);
     Binding& specType(std::string name,
-                      TypeKind tyKind,
+                      TypeNameKind tyNameK,
                       BuiltinTypeKind builtinKind = BuiltinTypeKind::None,
                       CVR cvr = CVR::None);
     Binding& derivType(TypeKind tyKind, CVR cvr = CVR::None);
@@ -63,7 +64,8 @@ struct Binding
     TypeKind tyK_;
 
     std::string specTyName_;
-    TypeKind specTyK_;
+//    TypeKind specTyK_;
+    TypeNameKind specTyK_;
     BuiltinTypeKind specTyBuiltinK_;
     CVR specTyCVR_;
     std::vector<TypeKind> derivTyKs_;
