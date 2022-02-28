@@ -72,8 +72,11 @@ private:
     template <class SymT> SymT* pushSymDEF(std::unique_ptr<SymT>);
     void popSymDEF();
 
+    template <class SymT, class... Args> std::unique_ptr<SymT> makeSym(Args... args);
+    template <class SymT, class... Args> void makeSymAndPush_DEF(Args... arg);
+    template <class SymT, class... Args> void makeSymAndPush_USE(Args... arg);
+
     template <class SymT> void makeAndPushSymDEF();
-//    TypeSymbol* makeAndPushSymDEF(TypeNameKind);
 
     using SymDEFs_T = std::stack<Symbol*>;
     SymDEFs_T symDEFs_;
@@ -82,12 +85,11 @@ private:
     void popTySymUSE();
 
     template <class TySymT> void makeAndPushTySymUSE();
-//    TypeSymbol* makeAndPushTySymUSE(TypeNameKind);
+
 
     using TySymUSEs_T = std::stack<TypeSymbol*>;
     TySymUSEs_T tySymUSEs_;
 
-//    void makeAndPushSymUSE_TagType(const TagTypeSpecifierSyntax* node);
 
     struct DiagnosticsReporter
     {
@@ -159,6 +161,33 @@ private:
     virtual Action visitCompoundStatement(const CompoundStatementSyntax*) override;
     virtual Action visitDeclarationStatement(const DeclarationStatementSyntax*) override;
 };
+
+template <class SymT, class... Args>
+std::unique_ptr<SymT> Binder::makeSym(Args... args)
+{
+    std::unique_ptr<SymT> sym(
+                new SymT(tree_,
+                         scopes_.top(),
+                         symDEFs_.top(),
+                         std::forward<Args>(args)...));
+    return sym;
+}
+
+template <class SymT, class... Args>
+void Binder::makeSymAndPush_DEF(Args... args)
+{
+    std::unique_ptr<SymT> sym = makeSym<SymT>(std::forward<Args>(args)...);
+    pushSymDEF(std::move(sym));
+}
+
+template <class SymT, class... Args>
+void Binder::makeSymAndPush_USE(Args... args)
+{
+    std::unique_ptr<SymT> sym = makeSym<SymT>(std::forward<Args>(args)...);
+    pushTySymUSE(std::move(sym));
+}
+
+
 
 } // C
 } // psy

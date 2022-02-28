@@ -201,8 +201,8 @@ void BinderTest::case1018()
 
 void BinderTest::case1019()
 {
-
 }
+
 void BinderTest::case1020() {}
 void BinderTest::case1021() {}
 void BinderTest::case1022() {}

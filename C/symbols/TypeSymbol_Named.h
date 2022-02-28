@@ -69,7 +69,7 @@ private:
     NamedTypeSymbol(const SyntaxTree* tree,
                     const Scope* outerScope,
                     const Symbol* containingSym,
-                    BuiltinTypeKind builtinKind);
+                    BuiltinTypeKind builtTyK);
 
     NamedTypeSymbol(const SyntaxTree* tree,
                     const Scope* outerScope,

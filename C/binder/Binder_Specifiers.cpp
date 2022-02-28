@@ -51,11 +51,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
                     node->lastToken(), &diagReporter_);
 
-//        makeAndPushTySymUSE(TypeNameKind::Builtin);
-        std::unique_ptr<NamedTypeSymbol> tySym(
-                new NamedTypeSymbol(tree_, scopes_.top(), symDEFs_.top(),
-                                    BuiltinTypeKind::Int));
-        pushTySymUSE(std::move(tySym));
+        makeSymAndPush_USE<NamedTypeSymbol>(BuiltinTypeKind::Int);
     }
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
@@ -110,8 +106,6 @@ SyntaxVisitor::Action Binder::actOnTypeQualifier(const SpecifierSyntax* spec)
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
     if (tySymUSEs_.empty()) {
-//        makeAndPushTySymUSE(TypeNameKind::Builtin);
-
         BuiltinTypeKind builtTyK;
         switch (node->specifierToken().kind()) {
             case Keyword_void:
@@ -152,14 +146,10 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
                 return Action::Quit;
         }
 
-        std::unique_ptr<NamedTypeSymbol> tySym(
-                new NamedTypeSymbol(tree_, scopes_.top(), symDEFs_.top(), builtTyK));
-        pushTySymUSE(std::move(tySym));
+        makeSymAndPush_USE<NamedTypeSymbol>(builtTyK);
     }
     else {
         NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
-
-
         Semantics_TypeSpecifiers::specify(node->specifierToken(),
                                           namedTySym,
                                           &diagReporter_);
@@ -192,11 +182,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 return Action::Quit;
         }
 
-        std::unique_ptr<NamedTypeSymbol> tySym(
-                new NamedTypeSymbol(tree_, scopes_.top(), symDEFs_.top(),
-                                    ns,
-                                    node->tagToken().valueText_c_str()));
-        pushTySymUSE(std::move(tySym));
+        makeSymAndPush_USE<NamedTypeSymbol>(ns, node->tagToken().valueText_c_str());
     }
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
@@ -259,24 +245,8 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
-    if (tySymUSEs_.empty()) {
-//        makeAndPushTySymUSE(TypeNameKind::Synonym);
-        std::unique_ptr<NamedTypeSymbol> tySym(
-                new NamedTypeSymbol(tree_, scopes_.top(), symDEFs_.top(),
-                                    node->identifierToken().valueText_c_str()));
-        pushTySymUSE(std::move(tySym));
-
-    }
-
-    NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
-    if (!namedTySym) {
-        //error
-        return Action::Skip;
-    }
-
-//    std::unique_ptr<SymbolName> symName(
-//            new PlainSymbolName(node->identifierToken().valueText_c_str()));
-//    namedTySym->setName(std::move(symName));
+    if (tySymUSEs_.empty())
+        makeSymAndPush_USE<NamedTypeSymbol>(node->identifierToken().valueText_c_str());
 
     return Action::Skip;
 }
