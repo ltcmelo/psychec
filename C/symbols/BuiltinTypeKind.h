@@ -135,9 +135,6 @@ PSY_C_API inline std::string PSY_C_API canonicalText(BuiltinTypeKind builtTyKind
         case BuiltinTypeKind::LongDoubleComplex:
                 return "long double _Complex";
 
-        case BuiltinTypeKind::None:
-            return "NONE";
-
         default:
             PSYCHE_FAIL(return "", "unknown builtin");
             return "";
