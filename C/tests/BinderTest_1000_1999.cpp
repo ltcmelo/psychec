@@ -159,11 +159,46 @@ void BinderTest::case1013()
                     .specType("struct x", TypeNameKind::Tag, BuiltinTypeKind::None)));
 }
 
-void BinderTest::case1014() {}
-void BinderTest::case1015() {}
-void BinderTest::case1016() {}
-void BinderTest::case1017() {}
-void BinderTest::case1018() {}
+void BinderTest::case1014()
+{
+    bind("long x ;",
+         Expectation()
+            .binding(Binding("x", ValueKind::Variable)
+                    .specType("long", TypeNameKind::Builtin, BuiltinTypeKind::Long)));
+}
+
+void BinderTest::case1015()
+{
+    bind("long int x ;",
+         Expectation()
+            .binding(Binding("x", ValueKind::Variable)
+                    .specType("long", TypeNameKind::Builtin, BuiltinTypeKind::Long)));
+}
+
+void BinderTest::case1016()
+{
+    bind("int long x ;",
+         Expectation()
+            .binding(Binding("x", ValueKind::Variable)
+                    .specType("long", TypeNameKind::Builtin, BuiltinTypeKind::Long)));
+}
+
+void BinderTest::case1017()
+{
+    bind("signed x ;",
+         Expectation()
+            .binding(Binding("x", ValueKind::Variable)
+                    .specType("signed int", TypeNameKind::Builtin, BuiltinTypeKind::Int_S)));
+}
+
+void BinderTest::case1018()
+{
+    bind("signed int x ;",
+         Expectation()
+            .binding(Binding("x", ValueKind::Variable)
+                    .specType("signed int", TypeNameKind::Builtin, BuiltinTypeKind::Int_S)));
+}
+
 void BinderTest::case1019() {}
 void BinderTest::case1020() {}
 void BinderTest::case1021() {}

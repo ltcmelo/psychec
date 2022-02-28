@@ -144,6 +144,8 @@ BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
 
         case BuiltinTypeKind::Int:
             switch (tkK) {
+                case Keyword_long:
+                    return BuiltinTypeKind::Long;
                 case Keyword_signed:
                     return BuiltinTypeKind::Int_S;
                 case Keyword_unsigned:
@@ -156,6 +158,24 @@ BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
         case BuiltinTypeKind::Int_U:
             // report
             return builtTyKind;
+
+        case BuiltinTypeKind::Long:
+            switch (tkK) {
+                case Keyword_int:
+                    return builtTyKind;
+                case Keyword_signed:
+                    return BuiltinTypeKind::Long_S;
+                case Keyword_unsigned:
+                    return BuiltinTypeKind::Long_U;
+                default:
+                    TwoOrMoreDataTypesInDeclarationSpecifiers(builtTySpecTk, diagReporter);
+                    return builtTyKind;
+            }
+        case BuiltinTypeKind::Long_S:
+        case BuiltinTypeKind::Long_U:
+            // report
+            return builtTyKind;
+
 
         default:
             return BuiltinTypeKind::None;

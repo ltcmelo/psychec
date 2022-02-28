@@ -117,47 +117,36 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
             case Keyword_void:
                 builtTyK = BuiltinTypeKind::Void;
                 break;
-
             case Keyword_char:
                 builtTyK = BuiltinTypeKind::Char;
                 break;
-
             case Keyword_short:
                 builtTyK = BuiltinTypeKind::Short;
                 break;
-
             case Keyword_int:
                 builtTyK = BuiltinTypeKind::Int;
                 break;
-
             case Keyword_long:
                 builtTyK = BuiltinTypeKind::Long;
                 break;
-
             case Keyword_float:
                 builtTyK = BuiltinTypeKind::Float;
                 break;
-
             case Keyword_double:
                 builtTyK = BuiltinTypeKind::Double;
                 break;
-
             case Keyword__Bool:
                 builtTyK = BuiltinTypeKind::Bool;
                 break;
-
             case Keyword__Complex:
                 builtTyK = BuiltinTypeKind::DoubleComplex;
                 break;
-
             case Keyword_signed:
                 builtTyK = BuiltinTypeKind::Int_S;
                 break;
-
             case Keyword_unsigned:
                 builtTyK = BuiltinTypeKind::Int_U;
                 break;
-
             default:
                 PSYCHE_FAIL(return Action::Quit, "expected builtin type specifier");
                 return Action::Quit;
@@ -170,14 +159,11 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
     else {
         NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
 
+
         Semantics_TypeSpecifiers::specify(node->specifierToken(),
                                           namedTySym,
                                           &diagReporter_);
     }
-
-//    std::unique_ptr<SymbolName> symName(
-//            new PlainSymbolName(node->specifierToken().valueText_c_str()));
-//    namedTySym->setName(std::move(symName));
 
     return Action::Skip;
 }
