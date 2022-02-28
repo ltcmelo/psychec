@@ -38,24 +38,24 @@ struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
                          TypeKind::Named)
         , name_(nullptr)
         , typeNameKind_(typeNameKind)
-        , builtinKind_(BuiltinTypeKind::None)
+        , builtTyKind_(BuiltinTypeKind::None)
     {}
 
     std::unique_ptr<SymbolName> name_;
     TypeNameKind typeNameKind_;
-    BuiltinTypeKind builtinKind_;
+    BuiltinTypeKind builtTyKind_;
 };
 
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                                  const Scope* outerScope,
                                  const Symbol* containingSym,
-                                 BuiltinTypeKind builtinKind)
+                                 BuiltinTypeKind builtTyKind)
     : TypeSymbol(new NamedTypeSymbolImpl(tree,
                                          outerScope,
                                          containingSym,
                                          TypeNameKind::Builtin))
 {
-    P_CAST->name_.reset(new PlainSymbolName("int"));
+    patchBuiltinTypeKind(builtTyKind);
 }
 
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
@@ -95,10 +95,11 @@ TypeNameKind NamedTypeSymbol::typeNameKind() const
 
 BuiltinTypeKind NamedTypeSymbol::builtinKind() const
 {
-    return P_CAST->builtinKind_;
+    return P_CAST->builtTyKind_;
 }
 
 void NamedTypeSymbol::patchBuiltinTypeKind(BuiltinTypeKind builtTyKind)
 {
-    P_CAST->builtinKind_ = builtTyKind;
+    P_CAST->name_.reset(new PlainSymbolName(canonicalText(builtTyKind)));
+    P_CAST->builtTyKind_ = builtTyKind;
 }
