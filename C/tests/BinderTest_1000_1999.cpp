@@ -201,10 +201,6 @@ void BinderTest::case1018()
 
 void BinderTest::case1019()
 {
-    bind("int A x ;",
-         Expectation()
-            .binding(Binding("x", ValueKind::Variable)
-                    .specType("signed int", TypeNameKind::Builtin, BuiltinTypeKind::Int_S)));
 
 }
 void BinderTest::case1020() {}
