@@ -48,12 +48,12 @@ public:
     /**
      * The type name kind of \c this NamedTypeSymbol.
      */
-    NamedTypeKind typeNameKind() const;
+    NamedTypeKind namedTypeKind() const;
 
     /**
      * The BuiltinTypeKind of \c this type.
      */
-    BuiltinTypeKind builtinKind() const;
+    BuiltinTypeKind builtinTypeKind() const;
 
     /**
      * The SymbolName of \c this Symbol.

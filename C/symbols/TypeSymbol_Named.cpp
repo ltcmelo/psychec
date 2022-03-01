@@ -31,18 +31,18 @@ struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
     NamedTypeSymbolImpl(const SyntaxTree* tree,
                         const Scope* outerScope,
                         const Symbol* containingSym,
-                        NamedTypeKind typeNameKind)
+                        NamedTypeKind namedTypeKind)
         : TypeSymbolImpl(tree,
                          outerScope,
                          containingSym,
                          TypeKind::Named)
         , name_(nullptr)
-        , typeNameKind_(typeNameKind)
+        , namedTypeKind_(namedTypeKind)
         , builtTyKind_(BuiltinTypeKind::None)
     {}
 
     std::unique_ptr<SymbolName> name_;
-    NamedTypeKind typeNameKind_;
+    NamedTypeKind namedTypeKind_;
     BuiltinTypeKind builtTyKind_;
 };
 
@@ -88,12 +88,12 @@ const SymbolName* NamedTypeSymbol::name() const
     return P_CAST->name_.get();
 }
 
-NamedTypeKind NamedTypeSymbol::typeNameKind() const
+NamedTypeKind NamedTypeSymbol::namedTypeKind() const
 {
-    return P_CAST->typeNameKind_;
+    return P_CAST->namedTypeKind_;
 }
 
-BuiltinTypeKind NamedTypeSymbol::builtinKind() const
+BuiltinTypeKind NamedTypeSymbol::builtinTypeKind() const
 {
     return P_CAST->builtTyKind_;
 }

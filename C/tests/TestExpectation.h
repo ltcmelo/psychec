@@ -54,7 +54,7 @@ struct Binding
     Binding(std::string funcName);
     Binding& specType(std::string name,
                       NamedTypeKind tyNameK,
-                      BuiltinTypeKind builtinKind = BuiltinTypeKind::None,
+                      BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::None,
                       CVR cvr = CVR::None);
     Binding& derivType(TypeKind tyKind, CVR cvr = CVR::None);
 

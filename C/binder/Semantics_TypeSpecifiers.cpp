@@ -65,9 +65,9 @@ void Semantics_TypeSpecifiers::specify(SyntaxToken builtTySpecTk,
                                        Binder::DiagnosticsReporter* diagReporter)
 {
     auto builtTyKind = combine(builtTySpecTk,
-                               namedTySym->builtinKind(),
+                               namedTySym->builtinTypeKind(),
                                diagReporter);
-    if (builtTyKind == namedTySym->builtinKind())
+    if (builtTyKind == namedTySym->builtinTypeKind())
         return;
 
     namedTySym->patchBuiltinTypeKind(builtTyKind);

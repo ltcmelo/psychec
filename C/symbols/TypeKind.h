@@ -43,12 +43,6 @@ enum class TypeKind : std::uint8_t
     Named,
     Array,
     Pointer,
-
-//    Enum,
-//    Builtin,
-//    Struct,
-//    Union,
-//    Synonym,
 };
 
 inline std::string PSY_C_API to_string(TypeKind tyKind)
@@ -56,22 +50,10 @@ inline std::string PSY_C_API to_string(TypeKind tyKind)
     switch (tyKind) {
         case TypeKind::Named:
             return "Named";
-
-//        case NamedTypeKind::Builtin:
-//            return "Builtin";
         case TypeKind::Array:
             return "Array";
-//        case TypeKind::Enum:
-//            return "Enum";
         case TypeKind::Pointer:
             return "Pointer";
-//        case NamedTypeKind::Tag:
-//            return "Struct";
-//        case TypeKind::Union:
-//            return "Union";
-//        case NamedTypeKind::Synonym:
-//            return "Synonym";
-
         default:
             return "<unknown type kind>";
     }

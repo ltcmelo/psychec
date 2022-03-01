@@ -45,11 +45,11 @@ Binding::Binding(std::string funcName)
     , tyK_(TypeKind::None)
 {}
 
-Binding& Binding::specType(std::string name, NamedTypeKind tyNameK, BuiltinTypeKind builtinKind, CVR cvr)
+Binding& Binding::specType(std::string name, NamedTypeKind tyNameK, BuiltinTypeKind builtinTypeKind, CVR cvr)
 {
     specTyName_ = std::move(name);
     specTyK_ = tyNameK;
-    specTyBuiltinK_ = builtinKind;
+    specTyBuiltinK_ = builtinTypeKind;
     specTyCVR_ = cvr;
     return *this;
 }

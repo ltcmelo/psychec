@@ -185,14 +185,14 @@ void BinderTest::bind(std::string text, Expectation X)
                     if (namedTySym->name()->text() != binding.specTyName_)
                         return REJECT(candSym, std::string("type name mismatch ") + namedTySym->name()->text() + " " + binding.specTyName_);
 
-                    if (namedTySym->typeNameKind() != binding.specTyK_)
+                    if (namedTySym->namedTypeKind() != binding.specTyK_)
                         return REJECT(candSym, "type kind mismatch");
 
                     if (binding.specTyBuiltinK_ != BuiltinTypeKind::None) {
                         if (!tySym->asNamedType())
                             return REJECT(candSym, "not a builtin");
 
-                        if (tySym->asNamedType()->builtinKind() != binding.specTyBuiltinK_)
+                        if (tySym->asNamedType()->builtinTypeKind() != binding.specTyBuiltinK_)
                             return REJECT(candSym, "builtin kind mismatch");
                     }
 
