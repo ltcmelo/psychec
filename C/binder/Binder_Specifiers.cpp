@@ -205,11 +205,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 {
     visit(node->typeDeclaration());
 
-    PSYCHE_ASSERT(node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier(),
-                  return Action::Quit,
-                  "expected tag type specifier");
-
-    const TagTypeSpecifierSyntax* tySpec = node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier();
+    const TagTypeSpecifierSyntax* tySpec = node->typeDeclaration()->typeSpecifier();
     TagSymbolName::NameSpace ns;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:

@@ -156,11 +156,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclaration_COMMON(const TypeDeclarationS
 
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
 {
-    PSYCHE_ASSERT(node->typeSpecifier()->asTagTypeSpecifier(),
-                  return Action::Quit,
-                  "expected tag type specifier");
-
-    const TagTypeSpecifierSyntax* tySpec = node->typeSpecifier()->asTagTypeSpecifier();
+    const TagTypeSpecifierSyntax* tySpec = node->typeSpecifier();
     TagSymbolName::NameSpace ns;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:
@@ -184,7 +180,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
     makeSymAndPushIt<NamedTypeSymbol>(TagSymbolName::NameSpace::Enumerations,
-                                      node->typeSpecifier()->asTagTypeSpecifier()->tagToken().valueText_c_str());
+                                      node->typeSpecifier()->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_COMMON(node);
 }
