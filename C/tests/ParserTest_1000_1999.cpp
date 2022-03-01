@@ -2622,11 +2622,62 @@ void ParserTest::case1957() {}
 void ParserTest::case1958() {}
 void ParserTest::case1959() {}
 
-void ParserTest::case1960() {}
-void ParserTest::case1961() {}
-void ParserTest::case1962() {}
-void ParserTest::case1963() {}
-void ParserTest::case1964() {}
+void ParserTest::case1960()
+{
+    parseExpression("__builtin_offsetof ( struct x , y )",
+                    Expectation().AST( { OffsetOfExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         OffsetOfDesignator }));
+}
+
+void ParserTest::case1961()
+{
+    parseExpression("__builtin_offsetof ( struct x , y . z )",
+                    Expectation().AST( { OffsetOfExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         OffsetOfDesignator,
+                                         FieldDesignator }));
+}
+
+void ParserTest::case1962()
+{
+    parseExpression("__builtin_offsetof ( struct x , y [ 0 ] )",
+                    Expectation().AST( { OffsetOfExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         OffsetOfDesignator,
+                                         ArrayDesignator,
+                                         IntegerConstantExpression }));
+}
+
+void ParserTest::case1963()
+{
+    parseExpression("__builtin_offsetof ( struct x , y  [ 0 ] . z )",
+                    Expectation().AST( { OffsetOfExpression,
+                                         TypeName,
+                                         StructTypeSpecifier,
+                                         AbstractDeclarator,
+                                         OffsetOfDesignator,
+                                         ArrayDesignator,
+                                         IntegerConstantExpression,
+                                         FieldDesignator }));
+}
+
+void ParserTest::case1964()
+{
+    parseExpression("__builtin_offsetof ( union x , y )",
+                    Expectation().AST( { OffsetOfExpression,
+                                         TypeName,
+                                         UnionTypeSpecifier,
+                                         AbstractDeclarator,
+                                         OffsetOfDesignator }));
+}
+
 void ParserTest::case1965() {}
 void ParserTest::case1966() {}
 void ParserTest::case1967() {}

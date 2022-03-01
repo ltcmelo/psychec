@@ -500,6 +500,10 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
         case Keyword_MacroStd_va_arg:
             return parseVAArgumentExpression_AtFirst(expr);
 
+        case Keyword_ExtGNU___builtin_offsetof:
+        case Keyword_MacroStd_offsetof:
+            return parseOffsetOfExpression_AtFirst(expr);
+
         case Keyword_ExtGNU___builtin_choose_expr:
             return parseExtGNU_ChooseExpression_AtFirst(expr);
 
@@ -713,6 +717,30 @@ bool Parser::parseVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
             && match(CommaToken, &vaArgExpr->commaTkIdx_)
             && parseTypeName(vaArgExpr->typeName_)
             && match(CloseParenToken, &vaArgExpr->closeParenTkIdx_);
+}
+
+/**
+ * Parse GNU's \c __builtin_offsetof and Standard \c offsetof.
+ */
+bool Parser::parseOffsetOfExpression_AtFirst(ExpressionSyntax*& expr)
+{
+    DEBUG_THIS_RULE();
+    PSYCHE_ASSERT(peek().kind() == Keyword_ExtGNU___builtin_offsetof
+                  || peek().kind() == Keyword_MacroStd_offsetof,
+                  return false,
+                  "assert failure: `__builtin_offsetof'");
+
+    if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_InternalBuiltins())
+        diagReporter_.ExpectedFeature("GNU internal builtins");
+
+    auto offsetOfExpr = makeNode<OffsetOfExpressionSyntax>();
+    expr = offsetOfExpr;
+    offsetOfExpr->kwTkIdx_ = consume();
+    return match(OpenParenToken, &offsetOfExpr->openParenTkIdx_)
+        && parseTypeName(offsetOfExpr->typeName_)
+        && match(CommaToken, &offsetOfExpr->commaTkIdx_)
+        && parseOffsetOfDesignator(offsetOfExpr->offsetOfDesignator_)
+        && match(CloseParenToken, &offsetOfExpr->closeParenTkIdx_);
 }
 
 /**

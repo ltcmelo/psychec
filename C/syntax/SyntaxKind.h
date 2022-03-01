@@ -244,6 +244,7 @@ enum SyntaxKind : std::uint16_t
     // --- Translated macros --- //
     // --------------------------//
     Keyword_MacroStd_va_arg,
+    Keyword_MacroStd_offsetof,
 
     // --------------------------//
     // --- Extension: Psyche --- //
@@ -363,6 +364,8 @@ enum SyntaxKind : std::uint16_t
     FieldDesignator,
     ArrayDesignator,
 
+    OffsetOfDesignator,
+
     //-------------//
     // Expressions //
     //-------------//
@@ -410,6 +413,7 @@ enum SyntaxKind : std::uint16_t
     CompoundLiteralExpression,
     CastExpression,
     VAArgumentExpression,
+    OffsetOfExpression,
     ExtGNU_ChooseExpression,
 
     /* Binary */

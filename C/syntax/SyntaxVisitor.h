@@ -118,6 +118,8 @@ public:
     virtual Action visitFieldDesignator(const FieldDesignatorSyntax*) { return Action::Visit; }
     virtual Action visitArrayDesignator(const ArrayDesignatorSyntax*) { return Action::Visit; }
 
+    virtual Action visitOffsetOfDesignator(const OffsetOfDesignatorSyntax*) { return Action::Visit; }
+
     //-------------//
     // Expressions //
     //-------------//
@@ -139,6 +141,7 @@ public:
     virtual Action visitCastExpression(const CastExpressionSyntax*) { return Action::Visit; }
     virtual Action visitCallExpression(const CallExpressionSyntax*) { return Action::Visit; }
     virtual Action visitVAArgumentExpression(const VAArgumentExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitOffsetOfExpression(const OffsetOfExpressionSyntax*) { return Action::Visit; }
     virtual Action visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax*) { return Action::Visit; }
     virtual Action visitBinaryExpression(const BinaryExpressionSyntax*) { return Action::Visit; }
     virtual Action visitConditionalExpression(const ConditionalExpressionSyntax*) { return Action::Visit; }

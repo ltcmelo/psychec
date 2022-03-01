@@ -2322,3 +2322,39 @@ bool Parser::parseArrayDesignator_AtFirst(DesignatorSyntax*& desig)
     return parseExpressionWithPrecedenceConditional(arrDesig->expr_)
                 && matchOrSkipTo(CloseBracketToken, &arrDesig->closeBracketTkIdx_);
 }
+
+/**
+ * Parse Standard's \c offsetof and GNU's \c __builtin_offsetof \a member-designator.
+ */
+bool Parser::parseOffsetOfDesignator(DesignatorSyntax*& desig)
+{
+    DEBUG_THIS_RULE();
+
+    if (peek().kind() != SyntaxKind::IdentifierToken) {
+        diagReporter_.ExpectedTokenOfCategoryIdentifier();
+        return false;
+    }
+
+    auto offsetOfDesig = makeNode<OffsetOfDesignatorSyntax>();
+    desig = offsetOfDesig;
+    offsetOfDesig->identTkIdx_ = consume();
+
+    DesignatorListSyntax* desigList = nullptr;
+    switch (peek().kind()) {
+        case DotToken:
+            if (!parseDesignatorList_AtFirst(desigList, &Parser::parseFieldDesignator_AtFirst))
+                return false;
+            break;
+
+        case OpenBracketToken:
+            if (!parseDesignatorList_AtFirst(desigList, &Parser::parseArrayDesignator_AtFirst))
+                return false;
+            break;
+
+        default:
+            return true;
+    }
+
+    offsetOfDesig->desigs_ = desigList;
+    return true;
+}

@@ -318,6 +318,8 @@ private:
     bool parseFieldDesignator_AtFirst(DesignatorSyntax*& desig);
     bool parseArrayDesignator_AtFirst(DesignatorSyntax*& desig);
 
+    bool parseOffsetOfDesignator(DesignatorSyntax*& desig);
+
     //-------------//
     // Expressions //
     //-------------//
@@ -352,6 +354,7 @@ private:
             TypeNameSyntax* typeName,
             LexedTokens::IndexType closeParenTkIdx);
     bool parseVAArgumentExpression_AtFirst(ExpressionSyntax*& expr);
+    bool parseOffsetOfExpression_AtFirst(ExpressionSyntax*& expr);
     bool parseExtGNU_ChooseExpression_AtFirst(ExpressionSyntax*& expr);
 
     /* Unary */

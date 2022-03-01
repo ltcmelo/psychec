@@ -255,6 +255,9 @@ std::string PSY_C_API to_string(SyntaxKind kind)
         case ArrayDesignator:
             return "ArrayDesignator";
 
+        case OffsetOfDesignator:
+            return "OffsetOfDesignator";
+
         //-------------//
         // Expressions //
         //-------------//
@@ -334,6 +337,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "CastExpression";
         case VAArgumentExpression:
             return "VAArgumentExpression";
+        case OffsetOfExpression:
+            return "OffsetOfExpression";
         case ExtGNU_ChooseExpression:
             return "ExtGNU_ChooseExpression";
 

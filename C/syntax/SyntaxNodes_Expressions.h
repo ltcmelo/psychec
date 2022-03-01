@@ -742,6 +742,47 @@ private:
 };
 
 /**
+ * \brief The OffsetOfExpressionSyntax class.
+ *
+ * \code
+ * offsetof( type-name, member-designator)
+ * __builtin_offsetof( type-name, member-designator)
+ * \endcode
+ *
+ * \remark 7.19
+ *
+ * \note Similar to:
+ * - \c clang::OffsetOfExpr of LLVM/Clang.
+ */
+class PSY_C_API OffsetOfExpressionSyntax final : public ExpressionSyntax
+{
+    AST_NODE_1K(OffsetOfExpression, Expression)
+
+public:
+    SyntaxToken keyword() const { return tokenAtIndex(kwTkIdx_); }
+    SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
+    const TypeNameSyntax* typeName() const { return typeName_; }
+    SyntaxToken commaToken() const { return tokenAtIndex(commaTkIdx_); }
+    const DesignatorSyntax* offsetOfDesignator() const { return offsetOfDesignator_; }
+    SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
+
+private:
+    LexedTokens::IndexType kwTkIdx_ = LexedTokens::invalidIndex();
+    LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
+    TypeNameSyntax* typeName_ = nullptr;
+    LexedTokens::IndexType commaTkIdx_ = LexedTokens::invalidIndex();
+    DesignatorSyntax* offsetOfDesignator_ = nullptr;
+    LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
+
+    AST_CHILD_LST6(kwTkIdx_,
+                   openParenTkIdx_,
+                   typeName_,
+                   commaTkIdx_,
+                   offsetOfDesignator_,
+                   closeParenTkIdx_)
+};
+
+/**
  * \brief The ExtGNU_ChooseExpressionSyntax class.
  *
  * \code
