@@ -161,8 +161,6 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
     if (!node->declarations()) {
-//        makeAndPushSymUSE_TagType(node);
-
         TagSymbolName::NameSpace ns;
         switch (node->kind()) {
             case StructTypeSpecifier:

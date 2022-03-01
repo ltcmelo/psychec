@@ -56,11 +56,11 @@ void Binder::bind()
 
     visit(tree_->root());
 
-    PSYCHE_ASSERT(scopes_.top() == nullptr, return, "unexpected outermost scope");
+    PSYCHE_ASSERT(scopes_.top() == nullptr, return, "expected outermost scope");
     scopes_.pop();
     PSYCHE_ASSERT(scopes_.empty(), return, "unexpected remaining scope");
 
-//    PSYCHE_ASSERT(symDEFs_.top() == nullptr, return, "unexpected outermost symbol");
+//    PSYCHE_ASSERT(symDEFs_.top() == nullptr, return, "expected outermost symbol");
     syms_.pop();
 //    PSYCHE_ASSERT(symDEFs_.empty(), return, "unexpected remaining symbol");
 }
@@ -125,7 +125,6 @@ void Binder::popTySym()
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     makeSymAndPushIt<LinkUnitSymbol>();
-
     openScope<FileScope>();
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
@@ -185,7 +184,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
     makeSymAndPushIt<NamedTypeSymbol>(TagSymbolName::NameSpace::Enumerations,
-                                        node->typeSpecifier()->asTagTypeSpecifier()->tagToken().valueText_c_str());
+                                      node->typeSpecifier()->asTagTypeSpecifier()->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_COMMON(node);
 }
