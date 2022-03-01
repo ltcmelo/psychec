@@ -751,6 +751,8 @@ private:
  * __builtin_offsetof( type-name, member-designator)
  * \endcode
  *
+ * \remark 7.19
+ *
  * \note Similar to:
  * - \c clang::OffsetOfExpr of LLVM/Clang.
  */

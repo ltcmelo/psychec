@@ -105,6 +105,7 @@ public:
      * Whether to translate macro \c offsetof as an internal builtin.
      * From header <stddef.h>
      *
+     * \remark 7.19
      */
     MacroTranslations& enable_Translate_offsetof_AsKeyword(bool expand);
     bool isEnabled_Translate_offsetof_AsKeyword() const;
