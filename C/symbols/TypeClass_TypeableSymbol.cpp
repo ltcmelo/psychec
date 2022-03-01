@@ -18,14 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeClass_NameableSymbol.h"
+#include "TypeClass_TypeableSymbol.h"
 
 #include "Symbol.h"
 
 using namespace psy;
 using namespace C;
 
-TypeClass_NameableSymbol* TypeClass_NameableSymbol::asInstance(Symbol* sym)
+TypeClass_TypeableSymbol* TypeClass_TypeableSymbol::asInstance(Symbol* sym)
 {
-    return dynamic_cast<TypeClass_NameableSymbol*>(sym);
+    return dynamic_cast<TypeClass_TypeableSymbol*>(sym);
 }

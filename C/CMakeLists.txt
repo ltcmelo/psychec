@@ -133,6 +133,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/SymbolNames.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeClass_NameableSymbol.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeClass_NameableSymbol.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeClass_TypeableSymbol.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeClass_TypeableSymbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeKind.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeKind_Builtin.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeKind_Named.h

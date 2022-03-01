@@ -173,7 +173,7 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
     Symbol* sym = syms_.top();
-    auto nameableSym = TypeClass_NameableSymbol::xx(sym);
+    auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
 
     std::unique_ptr<SymbolName> name(
                 new PlainSymbolName(node->identifierToken().valueText_c_str()));
@@ -185,7 +185,7 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax*)
 {
     Symbol* sym = syms_.top();
-    auto nameableSym = TypeClass_NameableSymbol::xx(sym);
+    auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
 
     std::unique_ptr<SymbolName> name(new EmptySymbolName);
 

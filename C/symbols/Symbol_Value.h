@@ -25,6 +25,7 @@
 #include "Fwds.h"
 #include "Symbol.h"
 #include "TypeClass_NameableSymbol.h"
+#include "TypeClass_TypeableSymbol.h"
 #include "ValueKind.h"
 
 #include <memory>
@@ -37,6 +38,7 @@ namespace C {
  */
 class PSY_C_API ValueSymbol : public Symbol
                             , public TypeClass_NameableSymbol
+                            , public TypeClass_TypeableSymbol
 {
 public:
     virtual ~ValueSymbol();
@@ -77,7 +79,7 @@ protected:
                 ValueKind valKind);
 
 private:
-    void setType(const TypeSymbol* tySym);
+    virtual void setType(const TypeSymbol* tySym) override;
     virtual void setName(std::unique_ptr<SymbolName> symName) override;
 };
 

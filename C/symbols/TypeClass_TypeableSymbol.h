@@ -18,14 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeClass_NameableSymbol.h"
+#ifndef PSYCHE_C_TYPE_CLASS_TYPEABLE_SYMBOL_H__
+#define PSYCHE_C_TYPE_CLASS_TYPEABLE_SYMBOL_H__
 
-#include "Symbol.h"
+#include "Fwds.h"
 
-using namespace psy;
-using namespace C;
+#include <memory>
 
-TypeClass_NameableSymbol* TypeClass_NameableSymbol::asInstance(Symbol* sym)
+namespace psy {
+namespace C {
+
+class TypeClass_TypeableSymbol
 {
-    return dynamic_cast<TypeClass_NameableSymbol*>(sym);
-}
+public:
+    virtual ~TypeClass_TypeableSymbol() {}
+
+    static TypeClass_TypeableSymbol* asInstance(Symbol*);
+
+    virtual void setType(const TypeSymbol* tySym) = 0;
+};
+
+} // C
+} // psy
+
+#endif
