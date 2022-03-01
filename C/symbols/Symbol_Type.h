@@ -50,17 +50,17 @@ public:
     virtual TypeSymbol* asType() override { return this; }
     virtual const TypeSymbol* asType() const override { return this; }
 
-    /**
-     * The TypeKind of \c this type.
-     */
-    TypeKind typeKind() const;
-
     virtual ArrayTypeSymbol* asArrayType() { return nullptr; }
     virtual const ArrayTypeSymbol* asArrayType() const { return nullptr; }
     virtual NamedTypeSymbol* asNamedType() { return nullptr; }
     virtual const NamedTypeSymbol* asNamedType() const { return nullptr; }
     virtual PointerTypeSymbol* asPointerType() { return nullptr; }
     virtual const PointerTypeSymbol* asPointerType() const { return nullptr; }
+
+    /**
+     * The TypeKind of \c this type.
+     */
+    TypeKind typeKind() const;
 
     /**
      * Whether the type is \c const qualified.

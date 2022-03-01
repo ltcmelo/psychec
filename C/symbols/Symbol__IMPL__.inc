@@ -46,7 +46,6 @@ struct Symbol::SymbolImpl
     std::unique_ptr<Scope> innerScope_;
     const Symbol* containingSym_;
     SymbolKind kind_;
-    std::unique_ptr<SymbolName> name_;
     Accessibility access_;
 
     struct BitFields

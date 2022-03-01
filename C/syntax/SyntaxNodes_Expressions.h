@@ -34,7 +34,6 @@ namespace C {
 //-------------//
 // Expressions //
 //-------------//
-
 /**
  * \brief The ConstantExpressionSyntax class.
  *
@@ -292,7 +291,6 @@ private:
 };
 
 /* Operations */
-
 /**
  * \brief The UnaryExpressionSyntax class.
  *

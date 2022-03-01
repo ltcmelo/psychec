@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/PsycheAssert.h"
+
 #include <cstdint>
 #include <string>
 
@@ -83,59 +85,70 @@ enum class PSY_C_API BuiltinTypeKind : std::uint8_t
     LongDoubleComplex
 };
 
+PSY_C_API inline std::string PSY_C_API canonicalText(BuiltinTypeKind builtTyKind)
+{
+    switch (builtTyKind) {
+        case BuiltinTypeKind::Void:
+                return "void";
+        case BuiltinTypeKind::Char:
+                return "char";
+        case BuiltinTypeKind::Char_S:
+                return "signed char";
+        case BuiltinTypeKind::Char_U:
+                return "unsigned char";
+        case BuiltinTypeKind::Short:
+                return "short";
+        case BuiltinTypeKind::Short_S:
+                return "signed short";
+        case BuiltinTypeKind::Short_U:
+                return "unsigned short";
+        case BuiltinTypeKind::Int:
+                return "int";
+        case BuiltinTypeKind::Int_S:
+                return "signed int";
+        case BuiltinTypeKind::Int_U:
+                return "unsigned int";
+        case BuiltinTypeKind::Long:
+                return "long";
+        case BuiltinTypeKind::Long_S:
+                return "signed long";
+        case BuiltinTypeKind::Long_U:
+                return "unsigned long";
+        case BuiltinTypeKind::LongLong:
+                return "long long";
+        case BuiltinTypeKind::LongLong_S:
+                return "signed long long";
+        case BuiltinTypeKind::LongLong_U:
+                return "unsigned long long";
+        case BuiltinTypeKind::Float:
+                return "float";
+        case BuiltinTypeKind::Double:
+                return "double";
+        case BuiltinTypeKind::LongDouble:
+                return "long double";
+        case BuiltinTypeKind::Bool:
+                return "_Bool";
+        case BuiltinTypeKind::FloatComplex:
+                return "float _Complex";
+        case BuiltinTypeKind::DoubleComplex:
+                return "double _Complex";
+        case BuiltinTypeKind::LongDoubleComplex:
+                return "long double _Complex";
+
+        default:
+            PSYCHE_FAIL(return "", "unknown builtin");
+            return "";
+    }
+}
+
 PSY_C_API inline std::string PSY_C_API to_string(BuiltinTypeKind builtTyKind)
 {
     switch (builtTyKind) {
         case BuiltinTypeKind::None:
-            return "None";
-        case BuiltinTypeKind::Void:
-                return "Void";
-        case BuiltinTypeKind::Char:
-                return "Char";
-        case BuiltinTypeKind::Char_S:
-                return "Char_S";
-        case BuiltinTypeKind::Char_U:
-                return "Char_U";
-        case BuiltinTypeKind::Short:
-                return "Short";
-        case BuiltinTypeKind::Short_S:
-                return "Short_S";
-        case BuiltinTypeKind::Short_U:
-                return "Short_U";
-        case BuiltinTypeKind::Int:
-                return "Int";
-        case BuiltinTypeKind::Int_S:
-                return "Int_S";
-        case BuiltinTypeKind::Int_U:
-                return "Int_U";
-        case BuiltinTypeKind::Long:
-                return "Long";
-        case BuiltinTypeKind::Long_S:
-                return "Long_S";
-        case BuiltinTypeKind::Long_U:
-                return "Long_U";
-        case BuiltinTypeKind::LongLong:
-                return "LongLong";
-        case BuiltinTypeKind::LongLong_S:
-                return "LongLong_S";
-        case BuiltinTypeKind::LongLong_U:
-                return "LongLong_U";
-        case BuiltinTypeKind::Float:
-                return "Float";
-        case BuiltinTypeKind::Double:
-                return "Double";
-        case BuiltinTypeKind::LongDouble:
-                return "LongDouble";
-        case BuiltinTypeKind::Bool:
-                return "Bool";
-        case BuiltinTypeKind::FloatComplex:
-                return "FloatComplex";
-        case BuiltinTypeKind::DoubleComplex:
-                return "DoubleComplex";
-        case BuiltinTypeKind::LongDoubleComplex:
-                return "LongDoubleComplex";
+            return "<not a builtin type>";
+
         default:
-            return "<unknown builtin type kind>";
+            return canonicalText(builtTyKind);
     }
 }
 

@@ -75,11 +75,6 @@ SymbolKind Symbol::kind() const
     return P->kind_;
 }
 
-const SymbolName* Symbol::name() const
-{
-    return P->name_.get();
-}
-
 Location Symbol::location() const
 {
     const auto& synRefs = declaringSyntaxReferences();
@@ -108,10 +103,6 @@ template BlockScope* Symbol::makeScope<BlockScope>();
 template FileScope* Symbol::makeScope<FileScope>();
 template FunctionScope* Symbol::makeScope<FunctionScope>();
 
-void Symbol::setName(std::unique_ptr<SymbolName> name)
-{
-    P->name_ = std::move(name);
-}
 
 namespace psy {
 namespace C {
@@ -122,7 +113,6 @@ std::string to_string(const Symbol& sym)
     oss << "<<< ";
     oss << "symbol";
     oss << " | ";
-    oss << to_string(*sym.name()) << " ";
     oss << "kind:" << to_string(sym.kind());
     oss << " >>>";
 

@@ -34,10 +34,12 @@ struct ValueSymbol::ValueSymbolImpl : SymbolImpl
                     ValueKind valKind)
         : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Value)
         , valKind_(valKind)
+        , name_(nullptr)
         , tySym_(nullptr)
     {}
 
     ValueKind valKind_;
+    std::unique_ptr<SymbolName> name_;
     const TypeSymbol* tySym_;
 };
 
@@ -59,6 +61,11 @@ ValueKind ValueSymbol::valueKind() const
     return P_CAST->valKind_;
 }
 
+const SymbolName* ValueSymbol::name() const
+{
+    return P_CAST->name_.get();
+}
+
 const TypeSymbol* ValueSymbol::type() const
 {
     return P_CAST->tySym_;
@@ -67,4 +74,9 @@ const TypeSymbol* ValueSymbol::type() const
 void ValueSymbol::setType(const TypeSymbol* tySym)
 {
     P_CAST->tySym_ = tySym;
+}
+
+void ValueSymbol::setName(std::unique_ptr<SymbolName> symName)
+{
+    P_CAST->name_ = std::move(symName);
 }

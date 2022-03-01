@@ -22,10 +22,11 @@
 #define PSYCHE_C_TEST_EXPECTATION_H__
 
 #include "compilation/Compilation.h"
-#include "symbols/BuiltinTypeKind.h"
 #include "symbols/SymbolKind.h"
 #include "symbols/ValueKind.h"
 #include "symbols/TypeKind.h"
+#include "symbols/TypeKind_Builtin.h"
+#include "symbols/TypeKind_Named.h"
 #include "tests/TestRunner.h"
 
 #include <functional>
@@ -52,8 +53,8 @@ struct Binding
     Binding(std::string name, TypeKind kind);
     Binding(std::string funcName);
     Binding& specType(std::string name,
-                      TypeKind tyKind,
-                      BuiltinTypeKind builtinKind = BuiltinTypeKind::None,
+                      NamedTypeKind tyNameK,
+                      BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::None,
                       CVR cvr = CVR::None);
     Binding& derivType(TypeKind tyKind, CVR cvr = CVR::None);
 
@@ -63,7 +64,8 @@ struct Binding
     TypeKind tyK_;
 
     std::string specTyName_;
-    TypeKind specTyK_;
+//    TypeKind specTyK_;
+    NamedTypeKind specTyK_;
     BuiltinTypeKind specTyBuiltinK_;
     CVR specTyCVR_;
     std::vector<TypeKind> derivTyKs_;

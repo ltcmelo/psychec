@@ -31,26 +31,67 @@ struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
     NamedTypeSymbolImpl(const SyntaxTree* tree,
                         const Scope* outerScope,
                         const Symbol* containingSym,
-                        TypeKind tyKind)
+                        NamedTypeKind namedTypeKind)
         : TypeSymbolImpl(tree,
                          outerScope,
                          containingSym,
-                         tyKind)
+                         TypeKind::Named)
+        , name_(nullptr)
+        , namedTypeKind_(namedTypeKind)
         , builtTyKind_(BuiltinTypeKind::None)
     {}
 
+    std::unique_ptr<SymbolName> name_;
+    NamedTypeKind namedTypeKind_;
     BuiltinTypeKind builtTyKind_;
 };
 
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                                  const Scope* outerScope,
                                  const Symbol* containingSym,
-                                 TypeKind tyKind)
+                                 BuiltinTypeKind builtTyKind)
     : TypeSymbol(new NamedTypeSymbolImpl(tree,
                                          outerScope,
                                          containingSym,
-                                         tyKind))
-{}
+                                         NamedTypeKind::Builtin))
+{
+    patchBuiltinTypeKind(builtTyKind);
+}
+
+NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
+                                 const Scope* outerScope,
+                                 const Symbol* containingSym,
+                                 const std::string& name)
+    : TypeSymbol(new NamedTypeSymbolImpl(tree,
+                                         outerScope,
+                                         containingSym,
+                                         NamedTypeKind::Synonym))
+{
+    P_CAST->name_.reset(new PlainSymbolName(name));
+}
+
+NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
+                                 const Scope* outerScope,
+                                 const Symbol* containingSym,
+                                 TagSymbolName::NameSpace ns,
+                                 const std::string& tag)
+    : TypeSymbol(new NamedTypeSymbolImpl(tree,
+                                         outerScope,
+                                         containingSym,
+                                         NamedTypeKind::Tag))
+{
+    P_CAST->name_.reset(new TagSymbolName(ns, tag));
+}
+
+const SymbolName* NamedTypeSymbol::name() const
+{
+    return P_CAST->name_.get();
+}
+
+NamedTypeKind NamedTypeSymbol::namedTypeKind() const
+{
+    return P_CAST->namedTypeKind_;
+}
 
 BuiltinTypeKind NamedTypeSymbol::builtinTypeKind() const
 {
@@ -59,5 +100,6 @@ BuiltinTypeKind NamedTypeSymbol::builtinTypeKind() const
 
 void NamedTypeSymbol::patchBuiltinTypeKind(BuiltinTypeKind builtTyKind)
 {
+    P_CAST->name_.reset(new PlainSymbolName(canonicalText(builtTyKind)));
     P_CAST->builtTyKind_ = builtTyKind;
 }

@@ -47,11 +47,11 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         actOnTypeSpecifier(specIt->value);
 
-    if (tySymUSEs_.empty()) {
+    if (tySyms_.empty()) {
         Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
                     node->lastToken(), &diagReporter_);
 
-        makeAndPushTySymUSE(TypeKind::Builtin);
+        makeTySymAndPushIt<NamedTypeSymbol>(BuiltinTypeKind::Int);
     }
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
@@ -105,41 +105,94 @@ SyntaxVisitor::Action Binder::actOnTypeQualifier(const SpecifierSyntax* spec)
 
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
-    if (tySymUSEs_.empty())
-        makeAndPushTySymUSE(TypeKind::Builtin);
+    if (tySyms_.empty()) {
+        BuiltinTypeKind builtTyK;
+        switch (node->specifierToken().kind()) {
+            case Keyword_void:
+                builtTyK = BuiltinTypeKind::Void;
+                break;
+            case Keyword_char:
+                builtTyK = BuiltinTypeKind::Char;
+                break;
+            case Keyword_short:
+                builtTyK = BuiltinTypeKind::Short;
+                break;
+            case Keyword_int:
+                builtTyK = BuiltinTypeKind::Int;
+                break;
+            case Keyword_long:
+                builtTyK = BuiltinTypeKind::Long;
+                break;
+            case Keyword_float:
+                builtTyK = BuiltinTypeKind::Float;
+                break;
+            case Keyword_double:
+                builtTyK = BuiltinTypeKind::Double;
+                break;
+            case Keyword__Bool:
+                builtTyK = BuiltinTypeKind::Bool;
+                break;
+            case Keyword__Complex:
+                builtTyK = BuiltinTypeKind::DoubleComplex;
+                break;
+            case Keyword_signed:
+                builtTyK = BuiltinTypeKind::Int_S;
+                break;
+            case Keyword_unsigned:
+                builtTyK = BuiltinTypeKind::Int_U;
+                break;
+            default:
+                PSYCHE_FAIL(return Action::Quit, "expected builtin type specifier");
+                return Action::Quit;
+        }
 
-    NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
-    if (!namedTySym) {
-        //error
-        return Action::Skip;
+        makeTySymAndPushIt<NamedTypeSymbol>(builtTyK);
     }
-
-    Semantics_TypeSpecifiers::specify(node->specifierToken(),
-                                      namedTySym,
-                                      &diagReporter_);
-
-    std::unique_ptr<SymbolName> symName(
-            new PlainSymbolName(node->specifierToken().valueText_c_str()));
-    namedTySym->setName(std::move(symName));
+    else {
+        NamedTypeSymbol* namedTySym = tySyms_.top()->asNamedType();
+        Semantics_TypeSpecifiers::specify(node->specifierToken(),
+                                          namedTySym,
+                                          &diagReporter_);
+    }
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
-    if (!node->declarations())
-        makeAndPushSymUSE_TagType(node);
+    if (!node->declarations()) {
+        TagSymbolName::NameSpace ns;
+        switch (node->kind()) {
+            case StructTypeSpecifier:
+                ns = TagSymbolName::NameSpace::Structures;
+                break;
+
+            case UnionTypeSpecifier:
+                ns = TagSymbolName::NameSpace::Unions;
+                break;
+
+            case EnumTypeSpecifier:
+                ns = TagSymbolName::NameSpace::Enumerations;
+                break;
+
+            default:
+                PSYCHE_FAIL_0(return Action::Quit);
+                return Action::Quit;
+        }
+
+        makeTySymAndPushIt<NamedTypeSymbol>(ns, node->tagToken().valueText_c_str());
+    }
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next) {
-        TySymUSEs_T tySymUSES;
-        std::swap(tySymUSEs_, tySymUSES);
+        TySymCont_T tySymUSES;
+        std::swap(tySyms_, tySymUSES);
 
         visit(declIt->value);
 
-        std::swap(tySymUSEs_, tySymUSES);
+        std::swap(tySyms_, tySymUSES);
     }
 
     for (auto attrIt = node->attributes_PostCloseBrace(); attrIt; attrIt = attrIt->next)
@@ -152,35 +205,45 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 {
     visit(node->typeDeclaration());
 
-    makeAndPushSymUSE_TagType(node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier());
+    const TagTypeSpecifierSyntax* tySpec = node->typeDeclaration()->typeSpecifier();
+    TagSymbolName::NameSpace ns;
+    switch (tySpec->kind()) {
+        case StructTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Structures;
+            break;
+
+        case UnionTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Unions;
+            break;
+
+        case EnumTypeSpecifier:
+            ns = TagSymbolName::NameSpace::Enumerations;
+            break;
+
+        default:
+            PSYCHE_FAIL_0(return Action::Quit);
+            return Action::Quit;
+    }
+
+    makeTySymAndPushIt<NamedTypeSymbol>(ns, tySpec->tagToken().valueText_c_str());
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
-    if (tySymUSEs_.empty())
-        makeAndPushTySymUSE(TypeKind::Synonym);
-
-    NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
-    if (!namedTySym) {
-        //error
-        return Action::Skip;
-    }
-
-    std::unique_ptr<SymbolName> symName(
-            new PlainSymbolName(node->identifierToken().valueText_c_str()));
-    namedTySym->setName(std::move(symName));
+    if (tySyms_.empty())
+        makeTySymAndPushIt<NamedTypeSymbol>(node->identifierToken().valueText_c_str());
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node)
 {
-    PSYCHE_ASSERT_0(!tySymUSEs_.empty(), return Action::Quit);
+    PSYCHE_ASSERT_0(!tySyms_.empty(), return Action::Quit);
 
     Semantics_TypeQualifiers::qualify(node->qualifierKeyword(),
-                                      tySymUSEs_.top(),
+                                      tySyms_.top(),
                                       &diagReporter_);
 
     return Action::Skip;

@@ -102,11 +102,6 @@ public:
     std::vector<SyntaxReference> declaringSyntaxReferences() const;
 
     /**
-     * The SymbolName of \c this Symbol.
-     */
-    const SymbolName* name() const;
-
-    /**
      * The Location where \c this Symbol is \a defined.
      */
     Location location() const;
@@ -121,8 +116,6 @@ protected:
            const Scope* outerScope,
            const Symbol* containingSym,
            SymbolKind kind);
-
-    void setName(std::unique_ptr<SymbolName> name);
 
 private:
     template <class ScopeT> ScopeT* makeScope();

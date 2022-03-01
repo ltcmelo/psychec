@@ -19,9 +19,23 @@
 // THE SOFTWARE.
 
 #include "Symbol_Function.h"
+#include "Symbol__IMPL__.inc"
 
 using namespace psy;
 using namespace C;
+
+struct FunctionSymbol::FunctionSymbolImpl : SymbolImpl
+{
+    FunctionSymbolImpl(const SyntaxTree* tree,
+                       const Scope* outerScope,
+                       const Symbol* containingSym)
+        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Value)
+        , name_(nullptr)
+    {}
+
+    std::unique_ptr<SymbolName> name_;
+};
+
 
 FunctionSymbol::FunctionSymbol(const SyntaxTree* tree,
                                const Scope* scope,
@@ -31,3 +45,13 @@ FunctionSymbol::FunctionSymbol(const SyntaxTree* tree,
             containingSym,
             SymbolKind::Function)
 {}
+
+const SymbolName* FunctionSymbol::name() const
+{
+    return nullptr;
+}
+
+void FunctionSymbol::setName(std::unique_ptr<SymbolName> symName)
+{
+    P_CAST->name_ = std::move(symName);
+}

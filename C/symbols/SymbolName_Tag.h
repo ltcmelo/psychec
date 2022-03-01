@@ -64,7 +64,7 @@ public:
     virtual std::string text() const override;
 
 private:
-    friend class Binder;
+    friend class NamedTypeSymbol;
 
     TagSymbolName(NameSpace ns, std::string tag);
 
