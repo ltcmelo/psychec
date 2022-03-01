@@ -35,7 +35,6 @@ namespace C {
 //------------//
 // Statements //
 //------------//
-
 /**
  * \brief The LabeledStatementSyntax class.
  *
