@@ -57,7 +57,7 @@ inline std::string PSY_C_API to_string(TypeKind tyKind)
         case TypeKind::Named:
             return "Named";
 
-//        case TypeNameKind::Builtin:
+//        case NamedTypeKind::Builtin:
 //            return "Builtin";
         case TypeKind::Array:
             return "Array";
@@ -65,11 +65,11 @@ inline std::string PSY_C_API to_string(TypeKind tyKind)
 //            return "Enum";
         case TypeKind::Pointer:
             return "Pointer";
-//        case TypeNameKind::Tag:
+//        case NamedTypeKind::Tag:
 //            return "Struct";
 //        case TypeKind::Union:
 //            return "Union";
-//        case TypeNameKind::Synonym:
+//        case NamedTypeKind::Synonym:
 //            return "Synonym";
 
         default:

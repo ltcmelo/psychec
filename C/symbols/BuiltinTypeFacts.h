@@ -23,7 +23,7 @@
 
 #include "API.h"
 
-#include "BuiltinTypeKind.h"
+#include "TypeKind_Builtin.h"
 
 namespace psy {
 namespace C {

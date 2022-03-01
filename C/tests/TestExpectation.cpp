@@ -45,7 +45,7 @@ Binding::Binding(std::string funcName)
     , tyK_(TypeKind::None)
 {}
 
-Binding& Binding::specType(std::string name, TypeNameKind tyNameK, BuiltinTypeKind builtinKind, CVR cvr)
+Binding& Binding::specType(std::string name, NamedTypeKind tyNameK, BuiltinTypeKind builtinKind, CVR cvr)
 {
     specTyName_ = std::move(name);
     specTyK_ = tyNameK;

@@ -31,7 +31,7 @@ struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
     NamedTypeSymbolImpl(const SyntaxTree* tree,
                         const Scope* outerScope,
                         const Symbol* containingSym,
-                        TypeNameKind typeNameKind)
+                        NamedTypeKind typeNameKind)
         : TypeSymbolImpl(tree,
                          outerScope,
                          containingSym,
@@ -42,7 +42,7 @@ struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
     {}
 
     std::unique_ptr<SymbolName> name_;
-    TypeNameKind typeNameKind_;
+    NamedTypeKind typeNameKind_;
     BuiltinTypeKind builtTyKind_;
 };
 
@@ -53,7 +53,7 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
     : TypeSymbol(new NamedTypeSymbolImpl(tree,
                                          outerScope,
                                          containingSym,
-                                         TypeNameKind::Builtin))
+                                         NamedTypeKind::Builtin))
 {
     patchBuiltinTypeKind(builtTyKind);
 }
@@ -65,7 +65,7 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
     : TypeSymbol(new NamedTypeSymbolImpl(tree,
                                          outerScope,
                                          containingSym,
-                                         TypeNameKind::Synonym))
+                                         NamedTypeKind::Synonym))
 {
     P_CAST->name_.reset(new PlainSymbolName(name));
 }
@@ -78,7 +78,7 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
     : TypeSymbol(new NamedTypeSymbolImpl(tree,
                                          outerScope,
                                          containingSym,
-                                         TypeNameKind::Tag))
+                                         NamedTypeKind::Tag))
 {
     P_CAST->name_.reset(new TagSymbolName(ns, tag));
 }
@@ -88,7 +88,7 @@ const SymbolName* NamedTypeSymbol::name() const
     return P_CAST->name_.get();
 }
 
-TypeNameKind NamedTypeSymbol::typeNameKind() const
+NamedTypeKind NamedTypeSymbol::typeNameKind() const
 {
     return P_CAST->typeNameKind_;
 }

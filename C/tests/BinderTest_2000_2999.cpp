@@ -48,7 +48,7 @@ struct
          )",
          Expectation()
             .binding(Binding("x", ValueKind::Field)
-                    .specType("double", TypeNameKind::Builtin, BuiltinTypeKind::Double)));
+                    .specType("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
 void BinderTest::case2001()
@@ -61,7 +61,7 @@ struct
          )",
          Expectation()
             .binding(Binding("x", ValueKind::Field)
-                     .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int)));
+                     .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case2002()
@@ -75,9 +75,9 @@ struct w
          )",
          Expectation()
             .binding(Binding("x", ValueKind::Field)
-                    .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int))
+                    .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
             .binding(Binding("y", ValueKind::Field)
-                    .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int)));
+                    .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case2003()
@@ -90,9 +90,9 @@ struct
          )",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                     .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int))
+                     .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
              .binding(Binding("y", ValueKind::Field)
-                     .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int)));
+                     .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case2004()
@@ -105,7 +105,7 @@ struct
          )",
          Expectation()
              .binding(Binding("y", ValueKind::Field)
-                 .specType("x", TypeNameKind::Synonym, BuiltinTypeKind::None)));
+                 .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None)));
 }
 
 void BinderTest::case2005()
@@ -118,9 +118,9 @@ struct
          )",
          Expectation()
              .binding(Binding("y", ValueKind::Field)
-                      .specType("x", TypeNameKind::Synonym, BuiltinTypeKind::None))
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None))
              .binding(Binding("z", ValueKind::Field)
-                      .specType("x", TypeNameKind::Synonym, BuiltinTypeKind::None)));
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None)));
 }
 
 void BinderTest::case2006()
@@ -164,7 +164,7 @@ struct
          )",
          Expectation()
             .binding(Binding("y", ValueKind::Field)
-                    .specType("struct x", TypeNameKind::Tag, BuiltinTypeKind::None)));
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
 }
 
 void BinderTest::case2010()
@@ -177,7 +177,7 @@ struct
          )",
          Expectation()
             .binding(Binding("y", ValueKind::Field)
-                    .specType("union x", TypeNameKind::Tag, BuiltinTypeKind::None)));
+                    .specType("union x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
 }
 
 void BinderTest::case2011()
@@ -190,7 +190,7 @@ struct
          )",
          Expectation()
             .binding(Binding("y", ValueKind::Field)
-                    .specType("enum x", TypeNameKind::Tag, BuiltinTypeKind::None)));
+                    .specType("enum x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
 }
 
 void BinderTest::case2012()
@@ -203,9 +203,9 @@ struct
          )",
          Expectation()
             .binding(Binding("y", ValueKind::Field)
-                    .specType("struct x", TypeNameKind::Tag, BuiltinTypeKind::None))
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None))
             .binding(Binding("z", ValueKind::Field)
-                    .specType("struct x", TypeNameKind::Tag, BuiltinTypeKind::None)));
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
 }
 
 void BinderTest::case2013()
@@ -218,7 +218,7 @@ struct
          )",
          Expectation()
             .binding(Binding("z", ValueKind::Field)
-                    .specType("struct x", TypeNameKind::Tag, BuiltinTypeKind::None)));
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
 }
 
 void BinderTest::case2014(){ }
@@ -263,7 +263,7 @@ void BinderTest::case2050()
     bind("struct { const int x ; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
 void BinderTest::case2051()
@@ -271,7 +271,7 @@ void BinderTest::case2051()
     bind("struct { const x y ; } ;",
          Expectation()
              .binding(Binding("y", ValueKind::Field)
-                      .specType("x", TypeNameKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
 }
 
 void BinderTest::case2052()
@@ -287,7 +287,7 @@ void BinderTest::case2053()
     bind("struct { int const x ; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
 void BinderTest::case2054()
@@ -295,7 +295,7 @@ void BinderTest::case2054()
     bind("struct { x const y ; } ;",
          Expectation()
              .binding(Binding("y", ValueKind::Field)
-                      .specType("x", TypeNameKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
 }
 
 void BinderTest::case2055(){ }
@@ -349,7 +349,7 @@ void BinderTest::case2100()
     bind("struct { int * x ; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)));
 }
 
@@ -358,7 +358,7 @@ void BinderTest::case2101()
     bind("struct { x * y ; } ;",
          Expectation()
              .binding(Binding("y", ValueKind::Field)
-                      .specType("x", TypeNameKind::Synonym)
+                      .specType("x", NamedTypeKind::Synonym)
                       .derivType(TypeKind::Pointer)));
 }
 
@@ -367,10 +367,10 @@ void BinderTest::case2102()
     bind("struct { int * x ; y * z ; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer))
              .binding(Binding("z", ValueKind::Field)
-                      .specType("y", TypeNameKind::Synonym)
+                      .specType("y", NamedTypeKind::Synonym)
                       .derivType(TypeKind::Pointer)));
 }
 
@@ -379,10 +379,10 @@ void BinderTest::case2103()
     bind("struct { int * x , * y ; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer))
              .binding(Binding("y", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)));
 }
 
@@ -391,7 +391,7 @@ void BinderTest::case2104()
     bind("struct { int ( * x ) [ 1 ]; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Array)
                       .derivType(TypeKind::Pointer)));
 }
@@ -447,7 +447,7 @@ void BinderTest::case2150()
     bind("struct { const int * x ; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
                       .derivType(TypeKind::Pointer)));
 }
 
@@ -456,7 +456,7 @@ void BinderTest::case2151()
     bind("struct { const x * y ; } ;",
          Expectation()
              .binding(Binding("y", ValueKind::Field)
-                      .specType("x", TypeNameKind::Synonym, BuiltinTypeKind::None, CVR::Const)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)
                       .derivType(TypeKind::Pointer)));
 }
 
@@ -514,7 +514,7 @@ void BinderTest::case2200()
     bind("struct { const int * const x ; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
                       .derivType(TypeKind::Pointer, CVR::Const)));
 }
 
@@ -574,7 +574,7 @@ void BinderTest::case2250()
     bind("struct { int * const x ; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::Const)));
 }
 
@@ -583,7 +583,7 @@ void BinderTest::case2251()
     bind("struct { x * const y ; } ;",
          Expectation()
              .binding(Binding("y", ValueKind::Field)
-                      .specType("x", TypeNameKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::Const)));
 }
 
@@ -646,7 +646,7 @@ struct
          )",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
 
@@ -655,7 +655,7 @@ void BinderTest::case2301()
     bind("struct { x y [ 1 ] ; } ;",
          Expectation()
              .binding(Binding("y", ValueKind::Field)
-                      .specType("x", TypeNameKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
 
@@ -669,10 +669,10 @@ struct
          )",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Array, CVR::None))
              .binding(Binding("y", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
 
@@ -686,10 +686,10 @@ struct
          )",
          Expectation()
              .binding(Binding("y", ValueKind::Field)
-                      .specType("x", TypeNameKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
                       .derivType(TypeKind::Array, CVR::None))
              .binding(Binding("z", ValueKind::Field)
-                      .specType("x", TypeNameKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
 
@@ -698,7 +698,7 @@ void BinderTest::case2304()
     bind("struct { int * x [ 1 ] ; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
@@ -708,10 +708,10 @@ void BinderTest::case2305()
     bind("struct { int x [ 1 ] , * y [ 2 ] ; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Array, CVR::None))
              .binding(Binding("y", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
@@ -766,7 +766,7 @@ void BinderTest::case2350()
     bind("struct { const int x [ 1 ] ; } ;",
          Expectation()
              .binding(Binding("x", ValueKind::Field)
-                      .specType("int", TypeNameKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
                       .derivType(TypeKind::Array, CVR::None)));
 }
 

@@ -31,9 +31,9 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The TypeNameKind class.
+ * \brief The NamedTypeKind class.
  */
-enum class PSY_C_API TypeNameKind : std::uint8_t
+enum class PSY_C_API NamedTypeKind : std::uint8_t
 {
     Builtin,
     Tag,

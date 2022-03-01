@@ -23,8 +23,8 @@
 
 #include "Symbol_Type.h"
 #include "SymbolName_Tag.h"
-#include "BuiltinTypeKind.h"
-#include "TypeNameKind.h"
+#include "TypeKind_Builtin.h"
+#include "TypeKind_Named.h"
 
 #include <memory>
 #include <string>
@@ -48,7 +48,7 @@ public:
     /**
      * The type name kind of \c this NamedTypeSymbol.
      */
-    TypeNameKind typeNameKind() const;
+    NamedTypeKind typeNameKind() const;
 
     /**
      * The BuiltinTypeKind of \c this type.

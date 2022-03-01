@@ -109,7 +109,6 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
     ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeFacts.h
     ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeFacts.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeKind.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol__IMPL__.inc
@@ -135,7 +134,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TypeClass_NameableSymbol.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeClass_NameableSymbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeNameKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeKind_Builtin.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeKind_Named.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.h
