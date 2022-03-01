@@ -776,7 +776,12 @@ private:
     DesignatorSyntax* offsetOfDesignator_ = nullptr;
     LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
 
-    AST_CHILD_LST2(typeName_, offsetOfDesignator_)
+    AST_CHILD_LST6(kwTkIdx_,
+                   openParenTkIdx_,
+                   typeName_,
+                   commaTkIdx_,
+                   offsetOfDesignator_,
+                   closeParenTkIdx_)
 };
 
 /**
