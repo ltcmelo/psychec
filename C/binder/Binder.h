@@ -69,24 +69,19 @@ private:
     void closeScope();
     std::stack<Scope*> scopes_;
 
-    template <class SymT> SymT* pushSymDEF(std::unique_ptr<SymT>);
-    void popSymDEF();
+    template <class SymT> SymT* pushSym(std::unique_ptr<SymT>);
+    void popSym();
+    using SymCont_T = std::stack<Symbol*>;
+    SymCont_T syms_;
 
-    template <class SymT, class... Args> std::unique_ptr<SymT> makeSym(Args... args);
-    template <class SymT, class... Args> void makeSymAndPush_DEF(Args... arg);
-    template <class SymT, class... Args> void makeSymAndPush_USE(Args... arg);
+    template <class TySymT> TySymT* pushTySym(std::unique_ptr<TySymT>);
+    void popTySym();
+    using TySymCont_T = std::stack<TypeSymbol*>;
+    TySymCont_T tySyms_;
 
-    using SymDEFs_T = std::stack<Symbol*>;
-    SymDEFs_T symDEFs_;
-
-    template <class TySymT> TySymT* pushTySymUSE(std::unique_ptr<TySymT>);
-    void popTySymUSE();
-
-
-
-    using TySymUSEs_T = std::stack<TypeSymbol*>;
-    TySymUSEs_T tySymUSEs_;
-
+    template <class SymT, class... Args> std::unique_ptr<SymT> makeSymOrTySym(Args... args);
+    template <class SymT, class... Args> void makeSymAndPushIt(Args... arg);
+    template <class SymT, class... Args> void makeTySymAndPushIt(Args... arg);
 
     struct DiagnosticsReporter
     {
@@ -160,30 +155,28 @@ private:
 };
 
 template <class SymT, class... Args>
-std::unique_ptr<SymT> Binder::makeSym(Args... args)
+std::unique_ptr<SymT> Binder::makeSymOrTySym(Args... args)
 {
     std::unique_ptr<SymT> sym(new SymT(tree_,
                                        scopes_.top(),
-                                       symDEFs_.top(),
+                                       syms_.top(),
                                        std::forward<Args>(args)...));
     return sym;
 }
 
 template <class SymT, class... Args>
-void Binder::makeSymAndPush_DEF(Args... args)
+void Binder::makeSymAndPushIt(Args... args)
 {
-    std::unique_ptr<SymT> sym = makeSym<SymT>(std::forward<Args>(args)...);
-    pushSymDEF(std::move(sym));
+    std::unique_ptr<SymT> sym = makeSymOrTySym<SymT>(std::forward<Args>(args)...);
+    pushSym(std::move(sym));
 }
 
 template <class SymT, class... Args>
-void Binder::makeSymAndPush_USE(Args... args)
+void Binder::makeTySymAndPushIt(Args... args)
 {
-    std::unique_ptr<SymT> sym = makeSym<SymT>(std::forward<Args>(args)...);
-    pushTySymUSE(std::move(sym));
+    std::unique_ptr<SymT> sym = makeSymOrTySym<SymT>(std::forward<Args>(args)...);
+    pushTySym(std::move(sym));
 }
-
-
 
 } // C
 } // psy

@@ -47,11 +47,11 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         actOnTypeSpecifier(specIt->value);
 
-    if (tySymUSEs_.empty()) {
+    if (tySyms_.empty()) {
         Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
                     node->lastToken(), &diagReporter_);
 
-        makeSymAndPush_USE<NamedTypeSymbol>(BuiltinTypeKind::Int);
+        makeTySymAndPushIt<NamedTypeSymbol>(BuiltinTypeKind::Int);
     }
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
@@ -105,7 +105,7 @@ SyntaxVisitor::Action Binder::actOnTypeQualifier(const SpecifierSyntax* spec)
 
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
-    if (tySymUSEs_.empty()) {
+    if (tySyms_.empty()) {
         BuiltinTypeKind builtTyK;
         switch (node->specifierToken().kind()) {
             case Keyword_void:
@@ -146,10 +146,10 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
                 return Action::Quit;
         }
 
-        makeSymAndPush_USE<NamedTypeSymbol>(builtTyK);
+        makeTySymAndPushIt<NamedTypeSymbol>(builtTyK);
     }
     else {
-        NamedTypeSymbol* namedTySym = tySymUSEs_.top()->asNamedType();
+        NamedTypeSymbol* namedTySym = tySyms_.top()->asNamedType();
         Semantics_TypeSpecifiers::specify(node->specifierToken(),
                                           namedTySym,
                                           &diagReporter_);
@@ -182,19 +182,19 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 return Action::Quit;
         }
 
-        makeSymAndPush_USE<NamedTypeSymbol>(ns, node->tagToken().valueText_c_str());
+        makeTySymAndPushIt<NamedTypeSymbol>(ns, node->tagToken().valueText_c_str());
     }
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next) {
-        TySymUSEs_T tySymUSES;
-        std::swap(tySymUSEs_, tySymUSES);
+        TySymCont_T tySymUSES;
+        std::swap(tySyms_, tySymUSES);
 
         visit(declIt->value);
 
-        std::swap(tySymUSEs_, tySymUSES);
+        std::swap(tySyms_, tySymUSES);
     }
 
     for (auto attrIt = node->attributes_PostCloseBrace(); attrIt; attrIt = attrIt->next)
@@ -231,25 +231,25 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
             return Action::Quit;
     }
 
-    makeSymAndPush_USE<NamedTypeSymbol>(ns, tySpec->tagToken().valueText_c_str());
+    makeTySymAndPushIt<NamedTypeSymbol>(ns, tySpec->tagToken().valueText_c_str());
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
-    if (tySymUSEs_.empty())
-        makeSymAndPush_USE<NamedTypeSymbol>(node->identifierToken().valueText_c_str());
+    if (tySyms_.empty())
+        makeTySymAndPushIt<NamedTypeSymbol>(node->identifierToken().valueText_c_str());
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node)
 {
-    PSYCHE_ASSERT_0(!tySymUSEs_.empty(), return Action::Quit);
+    PSYCHE_ASSERT_0(!tySyms_.empty(), return Action::Quit);
 
     Semantics_TypeQualifiers::qualify(node->qualifierKeyword(),
-                                      tySymUSEs_.top(),
+                                      tySyms_.top(),
                                       &diagReporter_);
 
     return Action::Skip;
