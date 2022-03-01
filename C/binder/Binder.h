@@ -76,15 +76,12 @@ private:
     template <class SymT, class... Args> void makeSymAndPush_DEF(Args... arg);
     template <class SymT, class... Args> void makeSymAndPush_USE(Args... arg);
 
-    template <class SymT> void makeAndPushSymDEF();
-
     using SymDEFs_T = std::stack<Symbol*>;
     SymDEFs_T symDEFs_;
 
     template <class TySymT> TySymT* pushTySymUSE(std::unique_ptr<TySymT>);
     void popTySymUSE();
 
-    template <class TySymT> void makeAndPushTySymUSE();
 
 
     using TySymUSEs_T = std::stack<TypeSymbol*>;
@@ -165,11 +162,10 @@ private:
 template <class SymT, class... Args>
 std::unique_ptr<SymT> Binder::makeSym(Args... args)
 {
-    std::unique_ptr<SymT> sym(
-                new SymT(tree_,
-                         scopes_.top(),
-                         symDEFs_.top(),
-                         std::forward<Args>(args)...));
+    std::unique_ptr<SymT> sym(new SymT(tree_,
+                                       scopes_.top(),
+                                       symDEFs_.top(),
+                                       std::forward<Args>(args)...));
     return sym;
 }
 

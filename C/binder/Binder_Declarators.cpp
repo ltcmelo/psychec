@@ -74,7 +74,7 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 {
     switch (decltor->kind()) {
         case FunctionDeclarator:
-            makeAndPushSymDEF<FunctionSymbol>();
+            makeSymAndPush_DEF<FunctionSymbol>();
             break;
 
         case ArrayDeclarator:
@@ -83,12 +83,12 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
             switch (symDEFs_.top()->kind())
             {
                 case SymbolKind::Type:
-                    makeAndPushSymDEF<FieldSymbol>();
+                    makeSymAndPush_DEF<FieldSymbol>();
                     break;
 
                 case SymbolKind::LinkUnit:
                 case SymbolKind::Function:
-                    makeAndPushSymDEF<VariableSymbol>();
+                    makeSymAndPush_DEF<VariableSymbol>();
                     break;
 
                 default:
@@ -141,7 +141,7 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 
 SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node)
 {
-    makeAndPushTySymUSE<ArrayTypeSymbol>();
+    makeSymAndPush_USE<ArrayTypeSymbol>(tySymUSEs_.top());
 
     for (auto specIt = node->attributes(); specIt; specIt = specIt->next)
         visit(specIt->value);
@@ -153,7 +153,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
 
 SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSyntax* node)
 {
-    makeAndPushTySymUSE<PointerTypeSymbol>();
+    makeSymAndPush_USE<PointerTypeSymbol>(tySymUSEs_.top());
 
     for (auto specIt = node->qualifiersAndAttributes(); specIt; specIt = specIt->next)
         visit(specIt->value);

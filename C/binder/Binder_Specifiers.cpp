@@ -207,9 +207,6 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
 {
     visit(node->typeDeclaration());
 
-//    makeAndPushSymUSE_TagType(node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier());
-
-
     PSYCHE_ASSERT(node->typeDeclaration()->typeSpecifier()->asTagTypeSpecifier(),
                   return Action::Quit,
                   "expected tag type specifier");
@@ -234,11 +231,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
             return Action::Quit;
     }
 
-    std::unique_ptr<NamedTypeSymbol> tySym(
-            new NamedTypeSymbol(tree_, scopes_.top(), symDEFs_.top(),
-                                ns,
-                                tySpec->tagToken().valueText_c_str()));
-    pushTySymUSE(std::move(tySym));
+    makeSymAndPush_USE<NamedTypeSymbol>(ns, tySpec->tagToken().valueText_c_str());
 
     return Action::Skip;
 }

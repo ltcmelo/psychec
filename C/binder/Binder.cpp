@@ -50,31 +50,21 @@ Binder::~Binder()
 
 void Binder::bind()
 {
+    // The outermost scope and symbol.
+    scopes_.push(nullptr);
+    symDEFs_.push(nullptr);
+
     visit(tree_->root());
+
+    PSYCHE_ASSERT(scopes_.top() == nullptr, return, "unexpected outermost scope");
+    scopes_.pop();
+    PSYCHE_ASSERT(scopes_.empty(), return, "unexpected remaining scope");
+
+//    PSYCHE_ASSERT(symDEFs_.top() == nullptr, return, "unexpected outermost symbol");
+    symDEFs_.pop();
+//    PSYCHE_ASSERT(symDEFs_.empty(), return, "unexpected remaining symbol");
 }
 
-
-
-
-template <class SymT>
-void Binder::makeAndPushSymDEF()
-{
-    std::unique_ptr<SymT> sym(new SymT(tree_,
-                                       scopes_.top(),
-                                       symDEFs_.top()));
-    pushSymDEF(std::move(sym));
-}
-
-template void Binder::makeAndPushSymDEF<FieldSymbol>();
-template void Binder::makeAndPushSymDEF<FunctionSymbol>();
-template void Binder::makeAndPushSymDEF<ParameterSymbol>();
-template void Binder::makeAndPushSymDEF<VariableSymbol>();
-
-template <> void Binder::makeAndPushSymDEF<LinkUnitSymbol>()
-{
-    std::unique_ptr<LinkUnitSymbol> sym(new LinkUnitSymbol(tree_, nullptr, nullptr));
-    pushSymDEF(std::move(sym));
-}
 
 
 template <class SymT>
@@ -113,17 +103,6 @@ void Binder::popTySymUSE()
     tySymUSEs_.pop();
 }
 
-template <class TySymT>
-void Binder::makeAndPushTySymUSE()
-{
-    std::unique_ptr<TySymT> tySym(new TySymT(tree_,
-                                             scopes_.top(),
-                                             symDEFs_.top(),
-                                             tySymUSEs_.top()));
-    pushTySymUSE(std::move(tySym));
-}
-template void Binder::makeAndPushTySymUSE<ArrayTypeSymbol>();
-template void Binder::makeAndPushTySymUSE<PointerTypeSymbol>();
 
 template <class ScopeT>
 void Binder::openScope()
@@ -148,7 +127,8 @@ void Binder::closeScope()
 //--------------//
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    makeAndPushSymDEF<LinkUnitSymbol>();
+    makeSymAndPush_DEF<LinkUnitSymbol>();
+
     openScope<FileScope>();
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
