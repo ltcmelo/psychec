@@ -49,6 +49,13 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators(
     return ((this)->*(visit_DONE))(node);
 }
 
+SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarators(const FunctionDefinitionSyntax* node)
+{
+    actOnDeclarator(node->declarator());
+
+    return Binder::visitFunctionDefinition_DONE(node);
+}
+
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
@@ -141,13 +148,25 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 
 SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node)
 {
-    makeTySymAndPushIt<ArrayTypeSymbol>(tySyms_.top());
-
     for (auto specIt = node->attributes(); specIt; specIt = specIt->next)
         visit(specIt->value);
 
     visit(node->innerDeclarator());
 
+    visit(node->suffix());
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* node)
+{
+    makeTySymAndPushIt<ArrayTypeSymbol>(tySyms_.top());
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* node)
+{
     return Action::Skip;
 }
 

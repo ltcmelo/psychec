@@ -235,15 +235,16 @@ SyntaxVisitor::Action Binder::visitStaticAssertDeclaration(const StaticAssertDec
 
 SyntaxVisitor::Action Binder::visitFunctionDefinition(const FunctionDefinitionSyntax* node)
 {
-    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
-        visit(specIt->value);
+    return visitFunctionDefinition_AtSpecifiers(node);
+}
 
-    visit(node->declarator());
-
-    visit(node->body());
+SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinitionSyntax* node)
+{
+    popTySym();
 
     return Action::Skip;
 }
+
 
 //------------//
 // Statements //
