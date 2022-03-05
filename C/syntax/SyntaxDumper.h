@@ -170,6 +170,8 @@ protected:
         for (auto iter = node->specifiers(); iter; iter = iter->next)
             nonterminal(iter->value);
         nonterminal(node->declarator());
+        for (auto iter = node->extKR_params(); iter; iter = iter->next)
+            nonterminal(iter->value);
         nonterminal(node->body());
         return Action::Skip;
     }
@@ -181,6 +183,18 @@ protected:
         terminal(node->openParenthesisToken(), node);
         nonterminal(node->stringLiteral());
         terminal(node->closeParenthesisToken(), node);
+        return Action::Skip;
+    }
+
+    virtual Action visitExtKR_ParameterDeclaration(const ExtKR_ParameterDeclarationSyntax* node) override
+    {
+        for (auto iter = node->specifiers(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        for (auto iter = node->declarators(); iter; iter = iter->next) {
+            nonterminal(iter->value);
+            terminal(iter->delimiterToken(), node);
+        }
+        terminal(node->semicolonToken(), node);
         return Action::Skip;
     }
 

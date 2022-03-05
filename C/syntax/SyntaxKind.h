@@ -317,6 +317,7 @@ enum SyntaxKind : std::uint16_t
     FunctionDefinition,
     ExtGNU_AsmStatementDeclaration,
     ExtPSY_TemplateDeclaration,
+    ExtKR_ParameterDeclaration,
 
     /* Specifiers */
     TypedefStorageClass,
@@ -356,6 +357,7 @@ enum SyntaxKind : std::uint16_t
     SubscriptSuffix,
     ParameterSuffix,
     BitfieldDeclaratorSuffix,
+    ExtKR_IdentifierDeclarator,
 
     /* Initializers */
     ExpressionInitializer,

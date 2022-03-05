@@ -90,6 +90,7 @@ class ExtGNU_AttributeSpecifierSyntax;
 class ExtGNU_AttributeSyntax;
 class ExtGNU_AsmLabelSyntax;
 class ExtPSY_QuantifiedTypeSpecifierSyntax;
+class ExtKR_ParameterDeclarationSyntax;
 
 /* Declarators */
 class DeclaratorSyntax;
@@ -198,6 +199,7 @@ typedef SyntaxNodeSeparatedList<ExpressionSyntax*> ExpressionListSyntax;
 typedef SyntaxNodeSeparatedList<GenericAssociationSyntax*> GenericAssociationListSyntax;
 typedef SyntaxNodePlainList<StatementSyntax*> StatementListSyntax;
 typedef SyntaxNodeSeparatedList<ExtGNU_AsmOperandSyntax*> ExtGNU_AsmOperandListSyntax;
+typedef SyntaxNodePlainList<ExtKR_ParameterDeclarationSyntax*> ExtKR_ParameterDeclarationListSyntax;
 
 //=================================================================== Semantic
 
