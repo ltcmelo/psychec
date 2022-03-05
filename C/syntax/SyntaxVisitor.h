@@ -84,6 +84,7 @@ public:
     virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) { return Action::Visit; }
     virtual Action visitExtPSY_TemplateDeclaration(const ExtPSY_TemplateDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitExtKR_ParameterDeclaration(const ExtKR_ParameterDeclarationSyntax*) { return Action::Visit; }
 
     /* Specifiers */
     virtual Action visitStorageClass(const StorageClassSyntax*) { return Action::Visit; }

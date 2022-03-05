@@ -240,6 +240,10 @@ private:
     bool parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
             DeclarationSyntax*& decl,
             const SpecifierListSyntax* specList);
+    bool parseFunctionDefinition(
+            DeclarationSyntax*& decl,
+            const SpecifierListSyntax* specList,
+            DeclaratorSyntax*& decltor);
     bool parseStructDeclaration(DeclarationSyntax*& decl);
     bool parseStructDeclaration_AtFollowOfSpecifierQualifierList(
             DeclarationSyntax*& decl,
@@ -249,6 +253,8 @@ private:
     bool parseParameterDeclarationList(ParameterDeclarationListSyntax*& paramList);
     bool parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl);
     bool parseExtPSY_TemplateDeclaration_AtFirst(DeclarationSyntax*& decl);
+    bool parseExtKR_ParameterDeclarationList(ExtKR_ParameterDeclarationListSyntax*& paramList);
+    bool parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& paramDecl);
 
     bool ignoreDeclarator();
     bool ignoreDeclarationOrDefinition();
