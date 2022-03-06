@@ -240,10 +240,11 @@ private:
     bool parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
             DeclarationSyntax*& decl,
             const SpecifierListSyntax* specList);
-    bool parseFunctionDefinition(
+    bool parseFunctionDefinition_AtOpenBrace(
             DeclarationSyntax*& decl,
             const SpecifierListSyntax* specList,
-            DeclaratorSyntax*& decltor);
+            DeclaratorSyntax*& decltor,
+            ExtKR_ParameterDeclarationListSyntax* paramKRList);
     bool parseStructDeclaration(DeclarationSyntax*& decl);
     bool parseStructDeclaration_AtFollowOfSpecifierQualifierList(
             DeclarationSyntax*& decl,

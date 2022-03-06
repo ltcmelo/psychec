@@ -814,14 +814,14 @@ void ParserTest::case0102()
 {
     parse("void ( * x ) ( ) { }",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void ParserTest::case0103()
 {
     parse("void ( ( * x ) ) ( ) { }",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void ParserTest::case0104()
@@ -2106,8 +2106,6 @@ void ParserTest::case0283()
 
 void ParserTest::case0284()
 {
-    // TODO: Should be error.
-
     parse("int x ( y , z ) int y , z ; { return y + z ; }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
@@ -2200,7 +2198,6 @@ void ParserTest::case0287()
 
 void ParserTest::case0288()
 {
-    // TODO: Should be error.
     parse("int x ( y , z ) int * y , z ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
@@ -2224,6 +2221,30 @@ void ParserTest::case0288()
 
 void ParserTest::case0289()
 {
+    parse("int x ( y , z ) int * y , * z ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              TypedefName,
+                              AbstractDeclarator,
+                              ParameterDeclaration,
+                              TypedefName,
+                              AbstractDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              PointerDeclarator,
+                              IdentifierDeclarator,
+                              PointerDeclarator,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
+}
+
+void ParserTest::case0290()
+{
     parse("void x ( y ) int y ( float [ 1 ] ) ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
@@ -2245,10 +2266,6 @@ void ParserTest::case0289()
                               SubscriptSuffix,
                               IntegerConstantExpression,
                               CompoundStatement }));
-}
-
-void ParserTest::case0290()
-{
 }
 
 void ParserTest::case0291()
@@ -2325,71 +2342,18 @@ void ParserTest::case0296()
 
 void ParserTest::case0297()
 {
-    parse("int x ( t y ) int y ; { return y ; }",
-          Expectation().diagnostic(
-              Expectation::ErrorOrWarn::Error,
-              Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Warn,
-              Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Error,
-              Parser::DiagnosticsReporter::
-              ID_of_ExpectedFIRSTofDirectDeclarator
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Warn,
-              Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Error,
-              Parser::DiagnosticsReporter::
-              ID_of_ExpectedFIRSTofDirectDeclarator
-          ));
+    // semantic
+    parse("void x ( t y ) int y ; { }");
 }
 
 void ParserTest::case0298()
 {
-    parse("int x ( int y ) int y ; { return y ; }",
-          Expectation().diagnostic(
-              Expectation::ErrorOrWarn::Error,
-              Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Warn,
-              Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Error,
-              Parser::DiagnosticsReporter::
-              ID_of_ExpectedFIRSTofDirectDeclarator
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Warn,
-              Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Error,
-              Parser::DiagnosticsReporter::
-              ID_of_ExpectedFIRSTofDirectDeclarator
-          ));
+    // semantic
+    parse("int x ( int y ) int y ; { }");
 }
 
 void ParserTest::case0299()
 {
-    parse("int x ( int y , ... ) int z ; { return y ; }",
-          Expectation().diagnostic(
-              Expectation::ErrorOrWarn::Error,
-              Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Warn,
-              Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Error,
-              Parser::DiagnosticsReporter::
-              ID_of_ExpectedFIRSTofDirectDeclarator
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Warn,
-              Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier
-          ).diagnostic(
-              Expectation::ErrorOrWarn::Error,
-              Parser::DiagnosticsReporter::
-              ID_of_ExpectedFIRSTofDirectDeclarator
-          ));
 }
 
 void ParserTest::case0300()
@@ -2505,7 +2469,7 @@ void ParserTest::case0311()
 {
     parse("int ( * const [ ] ) ( unsigned int , ... ) ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
 }
 
 void ParserTest::case0312()

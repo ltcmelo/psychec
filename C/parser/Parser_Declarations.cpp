@@ -325,102 +325,69 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
             }
 
             case OpenBraceToken:
-                if (decltorList_cur == &decltorList) {
-                    const DeclaratorSyntax* outerDecltor =
-                            SyntaxUtilities::strippedDeclarator(decltor);
-                    const DeclaratorSyntax* prevDecltor = nullptr;
-                    while (outerDecltor) {
-                        const DeclaratorSyntax* innerDecltor =
-                                SyntaxUtilities::innerDeclarator(outerDecltor);
-                        if (innerDecltor == outerDecltor)
-                            break;
-                        prevDecltor = outerDecltor;
-                        outerDecltor = SyntaxUtilities::strippedDeclarator(innerDecltor);
-                    }
-
-                    if (prevDecltor
-                            && prevDecltor->kind() == FunctionDeclarator
-                            && outerDecltor->kind() == IdentifierDeclarator) {
-                        auto funcDef = makeNode<FunctionDefinitionSyntax>();
-                        decl = funcDef;
-                        funcDef->specs_ = const_cast<SpecifierListSyntax*>(specList);
-                        funcDef->decltor_ = decltor;
-                        parseCompoundStatement_AtFirst(funcDef->body_, StatementContext::None);
-                        return true;
-                    }
-                }
+                if (parseFunctionDefinition_AtOpenBrace(decl, specList, decltor, nullptr))
+                    return true;
                 [[fallthrough]];
 
-            default:
-                if (parseFunctionDefinition(decl, specList, decltor))
-                    return true;
-
-                if (init)
+            default: {
+                if (init) {
                     diagReporter_.ExpectedFOLLOWofDeclaratorAndInitializer();
-                else
-                    diagReporter_.ExpectedFOLLOWofDeclarator();
+                    return false;
+                }
 
+                Backtracker BT(this);
+                ExtKR_ParameterDeclarationListSyntax* paramKRList = nullptr;
+                if (parseExtKR_ParameterDeclarationList(paramKRList)) {
+                    BT.discard();
+                    return parseFunctionDefinition_AtOpenBrace(decl, specList, decltor, paramKRList);
+                }
+                BT.backtrack();
+
+                diagReporter_.ExpectedFOLLOWofDeclarator();
                 return false;
+            }
         }
 
         decltorList_cur = &(*decltorList_cur)->next;
     }
 }
 
-bool Parser::parseFunctionDefinition(
+bool Parser::parseFunctionDefinition_AtOpenBrace(
         DeclarationSyntax*& decl,
         const SpecifierListSyntax* specList,
-        DeclaratorSyntax*& decltor)
+        DeclaratorSyntax*& decltor,
+        ExtKR_ParameterDeclarationListSyntax* paramKRList)
 {
-    const DeclaratorSyntax* outerDecltor =
-        SyntaxUtilities::strippedDeclarator(decltor);
-    const DeclaratorSyntax* prevDecltor = nullptr;
+    DEBUG_THIS_RULE();
+    PSYCHE_ASSERT(peek().kind() == OpenBraceToken,
+                  return false,
+                  "assert failure: `{'");
 
+    const DeclaratorSyntax* prevDecltor = nullptr;
+    const DeclaratorSyntax* outerDecltor =
+            SyntaxUtilities::strippedDeclarator(decltor);
     while (outerDecltor) {
         const DeclaratorSyntax* innerDecltor =
-            SyntaxUtilities::innerDeclarator(outerDecltor);
+                SyntaxUtilities::innerDeclarator(outerDecltor);
         if (innerDecltor == outerDecltor)
             break;
         prevDecltor = outerDecltor;
         outerDecltor = SyntaxUtilities::strippedDeclarator(innerDecltor);
     }
 
-    // Not a function declaration:
-    if (!(prevDecltor && prevDecltor->kind() == FunctionDeclarator &&
-          outerDecltor->kind() == IdentifierDeclarator))
-      return false;
-
-    auto funcDef = makeNode<FunctionDefinitionSyntax>();
-    decl = funcDef;
-
-    funcDef->specs_ = const_cast<SpecifierListSyntax *>(specList);
-    funcDef->decltor_ = decltor;
-
-    // If the function does not have any typed parameter, it is treated
-    // as a K&R-style function:
-    auto paramList_cur = prevDecltor->asArrayOrFunctionDeclarator()
-        ->suffix_->asParameterSuffix()
-        ->decls_;
-
-    bool isExtKR = paramList_cur;
-    while (paramList_cur && isExtKR) {
-        auto spec = paramList_cur->value->specs_;
-        auto paramDecltor = paramList_cur->value->decltor_;
-        isExtKR &= spec->value->kind() == TypedefName && !spec->next &&
-                   paramDecltor->kind() == AbstractDeclarator;
-        paramList_cur = paramList_cur->next;
+    if (prevDecltor
+            && prevDecltor->kind() == FunctionDeclarator
+            && outerDecltor->kind() == IdentifierDeclarator) {
+        auto funcDef = makeNode<FunctionDefinitionSyntax>();
+        decl = funcDef;
+        funcDef->specs_ = const_cast<SpecifierListSyntax*>(specList);
+        funcDef->decltor_ = decltor;
+        funcDef->extKR_params_ = paramKRList;
+        parseCompoundStatement_AtFirst(funcDef->body_, StatementContext::None);
+        return true;
     }
 
-    Backtracker BT(this);
-    if (isExtKR && !parseExtKR_ParameterDeclarationList(funcDef->extKR_params_)) {
-        BT.backtrack();
-        return false;
-    }
-
-    if (peek().kind() != OpenBraceToken) return false;
-
-    parseCompoundStatement_AtFirst(funcDef->body_, StatementContext::None);
-    return true;
+    return false;
 }
 
 Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
@@ -825,31 +792,39 @@ bool Parser::parseExtKR_ParameterDeclarationList(
     DEBUG_THIS_RULE();
 
     ExtKR_ParameterDeclarationListSyntax** paramList_cur = &paramList;
+
     ExtKR_ParameterDeclarationSyntax* paramDecl = nullptr;
+    if (!parseExtKR_ParameterDeclaration(paramDecl))
+        return false;
+
+    *paramList_cur = makeNode<ExtKR_ParameterDeclarationListSyntax>(paramDecl);
 
     while (peek().kind() != OpenBraceToken) {
-        if (!parseExtKR_ParameterDeclaration(paramDecl)) return false;
-        *paramList_cur = makeNode<ExtKR_ParameterDeclarationListSyntax>(paramDecl);
         paramList_cur = &(*paramList_cur)->next;
+
+        ExtKR_ParameterDeclarationSyntax* nextParamDecl = nullptr;
+        if (!parseExtKR_ParameterDeclaration(nextParamDecl))
+            return false;
+
+        *paramList_cur = makeNode<ExtKR_ParameterDeclarationListSyntax>(nextParamDecl);
     }
 
     return true;
 }
 
-bool Parser::parseExtKR_ParameterDeclaration(
-    ExtKR_ParameterDeclarationSyntax *&paramDecl)
+bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& paramDecl)
 {
     DEBUG_THIS_RULE();
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;
-
-    if (!parseDeclarationSpecifiers(decl, specList, false)) return false;
+    if (!parseDeclarationSpecifiers(decl, specList, false))
+        return false;
 
     paramDecl = makeNode<ExtKR_ParameterDeclarationSyntax>();
     paramDecl->specs_ = specList;
 
-    if (!paramDecl->specs_) return false;
+   // if (!paramDecl->specs_) return false;
 
     DeclaratorListSyntax** decltorList_cur = &paramDecl->decltors_;
     while (true) {
@@ -875,7 +850,6 @@ bool Parser::parseExtKR_ParameterDeclaration(
 }
 
 /* Specifiers */
-
 /**
  * Parse a \a declaration-specifiers.
  *
