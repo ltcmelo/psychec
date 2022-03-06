@@ -957,14 +957,13 @@ class PSY_C_API FunctionDefinitionSyntax final : public DeclarationSyntax
 public:
     const SpecifierListSyntax* specifiers() const { return specs_; }
     const DeclaratorSyntax* declarator() const { return decltor_; }
-    const ExtKR_ParameterDeclarationListSyntax *extKR_params()
-        const { return extKR_params_; }
+    const ExtKR_ParameterDeclarationListSyntax* extKR_params() const { return extKR_params_; }
     const StatementSyntax* body() const { return body_; }
 
 private:
     SpecifierListSyntax* specs_ = nullptr;
     DeclaratorSyntax* decltor_ = nullptr;
-    ExtKR_ParameterDeclarationListSyntax *extKR_params_ = nullptr;
+    ExtKR_ParameterDeclarationListSyntax* extKR_params_ = nullptr;
     StatementSyntax* body_ = nullptr;
     AST_CHILD_LST4(specs_, decltor_, extKR_params_, body_);
 
