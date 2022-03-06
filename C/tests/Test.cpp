@@ -39,7 +39,7 @@
 #include <sstream>
 
 #define DEBUG_DIAGNOSTICS
-//#define DUMP_AST
+#define DUMP_AST
 
 using namespace psy;
 using namespace C;

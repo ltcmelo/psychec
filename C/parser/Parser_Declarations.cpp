@@ -61,6 +61,8 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
         *declList_cur = makeNode<DeclarationListSyntax>(decl);
         declList_cur = &(*declList_cur)->next;
     }
+
+    diagReporter_.reportDelayed();
 }
 
 /**
@@ -339,7 +341,11 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
                 ExtKR_ParameterDeclarationListSyntax* paramKRList = nullptr;
                 if (parseExtKR_ParameterDeclarationList(paramKRList)) {
                     BT.discard();
-                    return parseFunctionDefinition_AtOpenBrace(decl, specList, decltor, paramKRList);
+                    if (parseFunctionDefinition_AtOpenBrace(decl, specList, decltor, paramKRList)) {
+                        diagReporter_.delayed_.clear();
+                        return true;
+                    }
+                    return false;
                 }
                 BT.backtrack();
 
@@ -508,6 +514,14 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
                 }
                 ++LA;
                 continue;
+
+            case SemicolonToken:
+                if (parenCnt < 0) {
+                    std::cout << "\nreturn as typedef name\n";
+                    return IdentifierRole::AsTypedefName;
+                }
+                std::cout << "\nreturn as declarator\n";
+                return IdentifierRole::AsDeclarator;
 
             default:
                 return IdentifierRole::AsDeclarator;
@@ -711,6 +725,9 @@ bool Parser::parseParameterDeclarationList(ParameterDeclarationListSyntax*& para
 {
     DEBUG_THIS_RULE();
 
+    DiagnosticsReporterDelayer DRD(&diagReporter_,
+                                   DiagnosticsReporter::ID_of_ExpectedTypeSpecifier);
+
     ParameterDeclarationListSyntax** paramList_cur = &paramList;
 
     ParameterDeclarationSyntax* paramDecl = nullptr;
@@ -755,20 +772,31 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;
-    if (!parseDeclarationSpecifiers(decl, specList, false))
+    if (!parseDeclarationSpecifiers(decl, specList, true))
         return false;
+
+    if (!specList) {
+        switch (peek().kind()) {
+            case IdentifierToken:
+                diagReporter_.ExpectedTypeSpecifier();
+                break;
+
+            default:
+                diagReporter_.ExpectedFIRSTofParameterDeclaration();
+                return false;
+        }
+    }
 
     paramDecl = makeNode<ParameterDeclarationSyntax>();
     paramDecl->specs_ = specList;
-
-    if (!paramDecl->specs_)
-        diagReporter_.ExpectedTypeSpecifier();
 
     Backtracker BT(this);
     if (!parseDeclarator(paramDecl->decltor_, DeclarationScope::FunctionPrototype)) {
         BT.backtrack();
         return parseAbstractDeclarator(paramDecl->decltor_);
     }
+    BT.discard();
+
     return true;
 }
 
@@ -1019,8 +1047,8 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                 if (seenType)
                     return true;
 
-                if (allowIdentAsDecltor
-                        && (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator))
+                if (/*allowIdentAsDecltor
+                        && */(determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator))
                     return true;
 
                 seenType = true;

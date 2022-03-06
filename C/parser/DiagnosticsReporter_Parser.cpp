@@ -37,13 +37,14 @@ const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryIden
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression = "Parser-200-6.5";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofEnumerationConstant= "Parser-201-6.7.2.2";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator = "Parser--202-6.7.6";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofSpecifierQualifier = "Parser-203-6.7.2.1";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDesignatedInitializer = "Parser-204-6.7.9";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator = "Parser-205-6.7.6";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclaratorAndInitializer = "Parser-206";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructOrUnionOrEnum = "Parser-207-6.7.2.1";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructDeclarator = "Parser-208-6.7.2.1-9";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofEnum = "Parser-209-6.7.2.1";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofParameterDeclaration = "Parser-203-6.7.6.3";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofSpecifierQualifier = "Parser-204-6.7.2.1";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDesignatedInitializer = "Parser-205-6.7.9";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator = "Parser-206-6.7.6";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclaratorAndInitializer = "Parser-207";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructOrUnionOrEnum = "Parser-208-6.7.2.1";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructDeclarator = "Parser-209-6.7.2.1-9";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofEnum = "Parser-210-6.7.2.1";
 
 /* Detailed */
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFieldName = "Parser-300-6.5.2";
@@ -95,9 +96,20 @@ std::string Parser::DiagnosticsReporter::joinTokenNames(const std::vector<Syntax
 
 void Parser::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc)
 {
-    if (!parser_->mightBacktrack())
+    if (parser_->mightBacktrack())
+        return;
+
+    if (delayReports_.find(desc.id()) != delayReports_.end())
+        delayed_.push_back(std::make_pair(desc, parser_->curTkIdx_));
+    else
         parser_->tree_->newDiagnostic(desc, parser_->curTkIdx_);
-};
+}
+
+void Parser::DiagnosticsReporter::reportDelayed()
+{
+    for (const auto& p : delayed_)
+        parser_->tree_->newDiagnostic(p.first, p.second);
+}
 
 /* Generic */
 
@@ -340,6 +352,19 @@ void Parser::DiagnosticsReporter::ExpectedFIRSTofDirectDeclarator()
 
     diagnose(DiagnosticDescriptor(ID_of_ExpectedFIRSTofDirectDeclarator,
                                   "[[unexpected FIRST of direct-declarator]]",
+                                  s,
+                                  DiagnosticSeverity::Error,
+                                  DiagnosticCategory::Syntax));
+}
+
+void Parser::DiagnosticsReporter::ExpectedFIRSTofParameterDeclaration()
+{
+    std::string s = "expected declaration specifiers or '...', got `"
+                + parser_->peek().valueText()
+                + "'";
+
+    diagnose(DiagnosticDescriptor(ID_of_ExpectedFIRSTofParameterDeclaration,
+                                  "[[unexpected FIRST of parameter-declaration]]",
                                   s,
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Syntax));

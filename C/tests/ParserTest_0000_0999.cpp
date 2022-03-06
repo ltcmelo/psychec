@@ -1580,14 +1580,14 @@ void ParserTest::case0216()
 {
     parse("x ( int y ) ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
 }
 
 void ParserTest::case0217()
 {
     parse("x ( y z ) ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
 }
 
 void ParserTest::case0218()
@@ -1602,9 +1602,9 @@ void ParserTest::case0219()
 
 void ParserTest::case0220()
 {
-    parse("void x ( ( int z ));",
-          Expectation().diagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+    parse("void x ( ( int z ) ) ;",
+          Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofParameterDeclaration));
 }
 
 void ParserTest::case0221()
@@ -1848,8 +1848,7 @@ void ParserTest::case0245()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               CompoundStatement }));
 }
 
@@ -2033,8 +2032,7 @@ void ParserTest::case0280()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ExtKR_ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               IdentifierDeclarator,
@@ -2051,8 +2049,7 @@ void ParserTest::case0281()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ExtKR_ParameterDeclaration,
                               TypedefName,
                               IdentifierDeclarator,
@@ -2069,11 +2066,9 @@ void ParserTest::case0282()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ExtKR_ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               IdentifierDeclarator,
@@ -2090,11 +2085,9 @@ void ParserTest::case0283()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ExtKR_ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               IdentifierDeclarator,
@@ -2106,7 +2099,7 @@ void ParserTest::case0283()
 
 void ParserTest::case0284()
 {
-    parse("int x ( y , z ) int y , z ; { return y + z ; }",
+    parse("void x ( y , z ) int y , z ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
                               BuiltinTypeSpecifier,
@@ -2114,20 +2107,14 @@ void ParserTest::case0284()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ExtKR_ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               IdentifierDeclarator,
                               IdentifierDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              AddExpression,
-                              IdentifierName,
-                              IdentifierName }));
+                              CompoundStatement }));
 }
 
 void ParserTest::case0285()
@@ -2140,11 +2127,9 @@ void ParserTest::case0285()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ExtKR_ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               IdentifierDeclarator,
@@ -2169,8 +2154,7 @@ void ParserTest::case0286()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ExtKR_ParameterDeclaration,
                               StructTypeSpecifier,
                               IdentifierDeclarator,
@@ -2187,8 +2171,7 @@ void ParserTest::case0287()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ExtKR_ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               PointerDeclarator,
@@ -2206,11 +2189,9 @@ void ParserTest::case0288()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ExtKR_ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               PointerDeclarator,
@@ -2229,11 +2210,9 @@ void ParserTest::case0289()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ExtKR_ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               PointerDeclarator,
@@ -2253,8 +2232,7 @@ void ParserTest::case0290()
                               IdentifierDeclarator,
                               ParameterSuffix,
                               ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
+                              IdentifierDeclarator,
                               ExtKR_ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               FunctionDeclarator,
