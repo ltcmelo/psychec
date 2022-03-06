@@ -824,8 +824,6 @@ bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& 
     paramDecl = makeNode<ExtKR_ParameterDeclarationSyntax>();
     paramDecl->specs_ = specList;
 
-   // if (!paramDecl->specs_) return false;
-
     DeclaratorListSyntax** decltorList_cur = &paramDecl->decltors_;
     while (true) {
         DeclaratorSyntax* decltor = nullptr;
@@ -866,7 +864,7 @@ bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& 
  */
 bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                                         SpecifierListSyntax*& specList,
-                                        bool takeIdentifierAsDecltor)
+                                        bool allowIdentAsDecltor)
 {
     DEBUG_THIS_RULE();
 
@@ -1021,7 +1019,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                 if (seenType)
                     return true;
 
-                if (takeIdentifierAsDecltor
+                if (allowIdentAsDecltor
                         && (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator))
                     return true;
 
@@ -1080,7 +1078,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
  */
 bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                                          SpecifierListSyntax*& specList,
-                                         bool takeIdentifierAsDecltor)
+                                         bool allowIdentAsDecltor)
 {
     DEBUG_THIS_RULE();
 
@@ -1184,7 +1182,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                 if (seenType)
                     return true;
 
-                if (takeIdentifierAsDecltor
+                if (allowIdentAsDecltor
                         && (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator))
                     return true;
 

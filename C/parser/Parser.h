@@ -265,10 +265,10 @@ private:
     /* Specifiers */
     bool parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                                     SpecifierListSyntax*& specList,
-                                    bool takeIdentifierAsDecltor = true);
+                                    bool allowIdentAsDecltor = true);
     bool parseSpecifierQualifierList(DeclarationSyntax*& decl,
                                      SpecifierListSyntax*& specList,
-                                     bool takeIdentifierAsDecltor = true);
+                                     bool allowIdentAsDecltor = true);
     template <class SpecT> void parseTrivialSpecifier_AtFirst(
             SpecifierSyntax*& spec,
             SyntaxKind specK);
