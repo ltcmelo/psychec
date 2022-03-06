@@ -1809,7 +1809,7 @@ void ParserTest::case0243()
 {
     parse("int [ ] x ( ) { }",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
 }
 
 void ParserTest::case0244()
@@ -1840,7 +1840,17 @@ void ParserTest::case0244()
 
 void ParserTest::case0245()
 {
-
+    parse("void x ( y ) { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              TypedefName,
+                              AbstractDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0246()
@@ -2015,7 +2025,7 @@ void ParserTest::case0279()
 
 void ParserTest::case0280()
 {
-    parse("int x ( y ) { return y ; }",
+    parse("void x ( y ) int y ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
                               BuiltinTypeSpecifier,
@@ -2025,14 +2035,15 @@ void ParserTest::case0280()
                               ParameterDeclaration,
                               TypedefName,
                               AbstractDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              IdentifierName }));
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0281()
 {
-    parse("int x ( y ) int y ; { return y ; }",
+    parse("void x ( y ) z y ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
                               BuiltinTypeSpecifier,
@@ -2043,16 +2054,14 @@ void ParserTest::case0281()
                               TypedefName,
                               AbstractDeclarator,
                               ExtKR_ParameterDeclaration,
-                              BuiltinTypeSpecifier,
+                              TypedefName,
                               IdentifierDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              IdentifierName }));
+                              CompoundStatement }));
 }
 
 void ParserTest::case0282()
 {
-    parse("int x ( y , z ) int y ; { return y + z ; }",
+    parse("void x ( y , z ) int y ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
                               BuiltinTypeSpecifier,
@@ -2068,16 +2077,12 @@ void ParserTest::case0282()
                               ExtKR_ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               IdentifierDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              AddExpression,
-                              IdentifierName,
-                              IdentifierName }));
+                              CompoundStatement }));
 }
 
 void ParserTest::case0283()
 {
-    parse("int x ( y , z ) int y ; int z ; { return y + z ; }",
+    parse("void x ( y , z ) int y ; int z ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
                               BuiltinTypeSpecifier,
@@ -2096,15 +2101,13 @@ void ParserTest::case0283()
                               ExtKR_ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               IdentifierDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              AddExpression,
-                              IdentifierName,
-                              IdentifierName }));
+                              CompoundStatement }));
 }
 
 void ParserTest::case0284()
 {
+    // TODO: Should be error.
+
     parse("int x ( y , z ) int y , z ; { return y + z ; }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
@@ -2131,7 +2134,7 @@ void ParserTest::case0284()
 
 void ParserTest::case0285()
 {
-    parse("int x ( y , z ) int y ; int z ( int ) ; { return y + z ( y ) ; }",
+    parse("void x ( y , z ) int y ; int z ( int ) ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
                               BuiltinTypeSpecifier,
@@ -2155,18 +2158,12 @@ void ParserTest::case0285()
                               ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               AbstractDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              AddExpression,
-                              IdentifierName,
-                              CallExpression,
-                              IdentifierName,
-                              IdentifierName }));
+                              CompoundStatement }));
 }
 
 void ParserTest::case0286()
 {
-    parse("int x ( y ) struct t y ; { return y . z ; }",
+    parse("void x ( y ) struct z y ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
                               BuiltinTypeSpecifier,
@@ -2179,16 +2176,12 @@ void ParserTest::case0286()
                               ExtKR_ParameterDeclaration,
                               StructTypeSpecifier,
                               IdentifierDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              DirectMemberAccessExpression,
-                              IdentifierName,
-                              IdentifierName }));
+                              CompoundStatement }));
 }
 
 void ParserTest::case0287()
 {
-    parse("int x ( y ) t y ; { return y . z ; }",
+    parse("void x ( y ) int * y ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
                               BuiltinTypeSpecifier,
@@ -2199,18 +2192,16 @@ void ParserTest::case0287()
                               TypedefName,
                               AbstractDeclarator,
                               ExtKR_ParameterDeclaration,
-                              TypedefName,
+                              BuiltinTypeSpecifier,
+                              PointerDeclarator,
                               IdentifierDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              DirectMemberAccessExpression,
-                              IdentifierName,
-                              IdentifierName }));
+                              CompoundStatement }));
 }
 
 void ParserTest::case0288()
 {
-    parse("int x ( y ) union t y ; { return y . z ; }",
+    // TODO: Should be error.
+    parse("int x ( y , z ) int * y , z ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
                               BuiltinTypeSpecifier,
@@ -2220,104 +2211,26 @@ void ParserTest::case0288()
                               ParameterDeclaration,
                               TypedefName,
                               AbstractDeclarator,
+                              ParameterDeclaration,
+                              TypedefName,
+                              AbstractDeclarator,
                               ExtKR_ParameterDeclaration,
-                              UnionTypeSpecifier,
+                              BuiltinTypeSpecifier,
+                              PointerDeclarator,
                               IdentifierDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              DirectMemberAccessExpression,
-                              IdentifierName,
-                              IdentifierName }));
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0289()
 {
-    parse("int x ( y ) int * y ; { return * y; }",
+    parse("void x ( y ) int y ( float [ 1 ] ) ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
                               BuiltinTypeSpecifier,
                               FunctionDeclarator,
                               IdentifierDeclarator,
                               ParameterSuffix,
-                              ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
-                              ExtKR_ParameterDeclaration,
-                              BuiltinTypeSpecifier,
-                              PointerDeclarator,
-                              IdentifierDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              PointerIndirectionExpression,
-                              IdentifierName }));
-}
-
-void ParserTest::case0290()
-{
-    parse("int x ( y , z ) int * y , z ; { return * y + z ; }",
-          Expectation().AST({ TranslationUnit,
-                              FunctionDefinition,
-                              BuiltinTypeSpecifier,
-                              FunctionDeclarator,
-                              IdentifierDeclarator,
-                              ParameterSuffix,
-                              ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
-                              ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
-                              ExtKR_ParameterDeclaration,
-                              BuiltinTypeSpecifier,
-                              PointerDeclarator,
-                              IdentifierDeclarator,
-                              IdentifierDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              AddExpression,
-                              PointerIndirectionExpression,
-                              IdentifierName,
-                              IdentifierName }));
-
-}
-
-void ParserTest::case0291()
-{
-    parse("_Complex double x ( y ) _Complex double * y ; { return * y ; }",
-          Expectation().AST({ TranslationUnit,
-                              FunctionDefinition,
-                              BuiltinTypeSpecifier,
-                              BuiltinTypeSpecifier,
-                              FunctionDeclarator,
-                              IdentifierDeclarator,
-                              ParameterSuffix,
-                              ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
-                              ExtKR_ParameterDeclaration,
-                              BuiltinTypeSpecifier,
-                              BuiltinTypeSpecifier,
-                              PointerDeclarator,
-                              IdentifierDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              PointerIndirectionExpression,
-                              IdentifierName }));
-
-}
-
-void ParserTest::case0292()
-{
-    parse("float x ( y , z ) int y ( float [ 2 ] ) ; float * z  ; { return y ( z ) ; }",
-          Expectation().AST({ TranslationUnit,
-                              FunctionDefinition,
-                              BuiltinTypeSpecifier,
-                              FunctionDeclarator,
-                              IdentifierDeclarator,
-                              ParameterSuffix,
-                              ParameterDeclaration,
-                              TypedefName,
-                              AbstractDeclarator,
                               ParameterDeclaration,
                               TypedefName,
                               AbstractDeclarator,
@@ -2331,15 +2244,19 @@ void ParserTest::case0292()
                               ArrayDeclarator,
                               SubscriptSuffix,
                               IntegerConstantExpression,
-                              ExtKR_ParameterDeclaration,
-                              BuiltinTypeSpecifier,
-                              PointerDeclarator,
-                              IdentifierDeclarator,
-                              CompoundStatement,
-                              ReturnStatement,
-                              CallExpression,
-                              IdentifierName,
-                              IdentifierName }));
+                              CompoundStatement }));
+}
+
+void ParserTest::case0290()
+{
+}
+
+void ParserTest::case0291()
+{
+}
+
+void ParserTest::case0292()
+{
 }
 
 void ParserTest::case0293()
