@@ -516,11 +516,8 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
                 continue;
 
             case SemicolonToken:
-                if (parenCnt < 0) {
-                    std::cout << "\nreturn as typedef name\n";
+                if (parenCnt < 0)
                     return IdentifierRole::AsTypedefName;
-                }
-                std::cout << "\nreturn as declarator\n";
                 return IdentifierRole::AsDeclarator;
 
             default:
