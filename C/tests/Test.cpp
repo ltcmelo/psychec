@@ -38,8 +38,8 @@
 #include <string>
 #include <sstream>
 
-#define DEBUG_DIAGNOSTICS
-#define DUMP_AST
+//#define DEBUG_DIAGNOSTICS
+//#define DUMP_AST
 
 using namespace psy;
 using namespace C;
