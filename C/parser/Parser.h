@@ -35,6 +35,8 @@
 #include <functional>
 #include <stack>
 #include <vector>
+#include <unordered_set>
+#include <utility>
 
 namespace psy {
 namespace C {
@@ -86,8 +88,15 @@ private:
 
     struct DiagnosticsReporter
     {
-        DiagnosticsReporter(Parser* parser) : parser_(parser) {}
+        DiagnosticsReporter(Parser* parser)
+            : parser_(parser)
+            , delayReports_(false)
+        {}
         Parser* parser_;
+
+        std::unordered_set<std::string> delayReports_;
+        std::vector<std::pair<DiagnosticDescriptor, LexedTokens::IndexType>> delayed_;
+        void reportDelayed();
 
         static std::string joinTokenNames(const std::vector<SyntaxKind>& validTkKinds);
         void diagnose(DiagnosticDescriptor&& desc);
@@ -116,6 +125,7 @@ private:
         void ExpectedFIRSTofExpression();
         void ExpectedFIRSTofEnumerationConstant();
         void ExpectedFIRSTofDirectDeclarator();
+        void ExpectedFIRSTofParameterDeclaration();
         void ExpectedFIRSTofSpecifierQualifier();
         void ExpectedFOLLOWofDesignatedInitializer();
         void ExpectedFOLLOWofDeclarator();
@@ -127,6 +137,7 @@ private:
         static const std::string ID_of_ExpectedFIRSTofExpression;
         static const std::string ID_of_ExpectedFIRSTofEnumerationConstant;
         static const std::string ID_of_ExpectedFIRSTofDirectDeclarator;
+        static const std::string ID_of_ExpectedFIRSTofParameterDeclaration;
         static const std::string ID_of_ExpectedFIRSTofSpecifierQualifier;
         static const std::string ID_of_ExpectedFOLLOWofDesignatedInitializer;
         static const std::string ID_of_ExpectedFOLLOWofDeclarator;
@@ -165,6 +176,25 @@ private:
         static const std::string ID_of_UnexpectedGNUExtensionFlag;
     };
     friend struct DiagnosticsReporter;
+
+    struct DiagnosticsReporterDelayer
+    {
+        DiagnosticsReporterDelayer(DiagnosticsReporter* diagReporter,
+                                   const std::string& diagID)
+            : diagReporter_(diagReporter)
+            , diagID_(diagID)
+        {
+            diagReporter_->delayReports_.insert(diagID);
+        }
+
+        ~DiagnosticsReporterDelayer()
+        {
+            diagReporter_->delayReports_.erase(diagID_);
+        }
+
+        DiagnosticsReporter* diagReporter_;
+        std::string diagID_;
+    };
 
     const SyntaxToken& peek(unsigned int LA = 1) const;
     LexedTokens::IndexType consume();
@@ -233,17 +263,18 @@ private:
     bool parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& decl);
     bool parseDeclaration(
             DeclarationSyntax*& decl,
-            bool (Parser::*parseSpecifiers)(DeclarationSyntax*&, SpecifierListSyntax*&, bool),
+            bool (Parser::*parseSpecifiers)(DeclarationSyntax*&, SpecifierListSyntax*&),
             bool (Parser::*parse_AtFollowOfSpecifiers)(DeclarationSyntax*&, const SpecifierListSyntax*),
             DeclarationScope declScope);
     bool parseDeclarationOrFunctionDefinition(DeclarationSyntax*& decl);
     bool parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
             DeclarationSyntax*& decl,
             const SpecifierListSyntax* specList);
-    bool parseFunctionDefinition(
+    bool parseFunctionDefinition_AtOpenBrace(
             DeclarationSyntax*& decl,
             const SpecifierListSyntax* specList,
-            DeclaratorSyntax*& decltor);
+            DeclaratorSyntax*& decltor,
+            ExtKR_ParameterDeclarationListSyntax* paramKRList);
     bool parseStructDeclaration(DeclarationSyntax*& decl);
     bool parseStructDeclaration_AtFollowOfSpecifierQualifierList(
             DeclarationSyntax*& decl,
@@ -262,12 +293,8 @@ private:
     bool ignoreStatement();
 
     /* Specifiers */
-    bool parseDeclarationSpecifiers(DeclarationSyntax*& decl,
-                                    SpecifierListSyntax*& specList,
-                                    bool takeIdentifierAsDecltor = true);
-    bool parseSpecifierQualifierList(DeclarationSyntax*& decl,
-                                     SpecifierListSyntax*& specList,
-                                     bool takeIdentifierAsDecltor = true);
+    bool parseDeclarationSpecifiers(DeclarationSyntax*& decl, SpecifierListSyntax*& specList);
+    bool parseSpecifierQualifierList(DeclarationSyntax*& decl, SpecifierListSyntax*& specList);
     template <class SpecT> void parseTrivialSpecifier_AtFirst(
             SpecifierSyntax*& spec,
             SyntaxKind specK);
