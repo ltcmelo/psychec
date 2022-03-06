@@ -452,6 +452,7 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
             case Keyword_struct:
             case Keyword_union:
             case Keyword_enum:
+            case Keyword_ExtGNU___complex__:
                 if (seenType)
                     return IdentifierRole::AsDeclarator;
                 seenType = true;
@@ -973,6 +974,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
             case Keyword_Ext_char16_t:
             case Keyword_Ext_char32_t:
             case Keyword_Ext_wchar_t:
+            case Keyword_ExtGNU___complex__:
                 seenType = true;
                 parseTrivialSpecifier_AtFirst<BuiltinTypeSpecifierSyntax>(
                             spec,
@@ -1136,6 +1138,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             case Keyword_Ext_char16_t:
             case Keyword_Ext_char32_t:
             case Keyword_Ext_wchar_t:
+            case Keyword_ExtGNU___complex__:
                 seenType = true;
                 parseTrivialSpecifier_AtFirst<BuiltinTypeSpecifierSyntax>(
                             spec,

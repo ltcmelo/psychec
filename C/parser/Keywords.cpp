@@ -1061,6 +1061,26 @@ static inline SyntaxKind classify11(const char* s, const ParseOptions& opts)
                     }
                 }
             }
+            else if (s[2] == 'c'
+                     && opts.extensions().isEnabled_ExtGNU_Complex()) {
+                if (s[3] == 'o') {
+                    if (s[4] == 'm') {
+                        if (s[5] == 'p') {
+                            if (s[6] == 'l') {
+                                if (s[7] == 'e') {
+                                    if (s[8] == 'x') {
+                                        if (s[9] == '_') {
+                                            if (s[10] == '_') {
+                                                return Keyword_ExtGNU___complex__;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     return IdentifierToken;

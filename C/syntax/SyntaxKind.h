@@ -239,7 +239,7 @@ enum SyntaxKind : std::uint16_t
     Keyword_ExtGNU___builtin_choose_expr,
     Keyword_ExtGNU___FUNCTION__,
     Keyword_ExtGNU___PRETTY_FUNCTION__,
-
+    Keyword_ExtGNU___complex__,
     Keyword_ExtGNU___real__,
     Keyword_ExtGNU___imag__,
 

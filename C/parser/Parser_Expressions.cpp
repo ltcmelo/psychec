@@ -409,6 +409,7 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
                 case Keyword_struct:
                 case Keyword_union:
                 case Keyword_enum:
+                case Keyword_ExtGNU___complex__:
                     return parseCompoundLiteral_AtOpenParen(expr);
 
                 // GNU
@@ -1088,6 +1089,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
                 case Keyword_struct:
                 case Keyword_union:
                 case Keyword_enum:
+                case Keyword_ExtGNU___complex__:
                     return parseCompoundLiteralOrCastExpression_AtFirst(expr);
 
                 // type-name ->* typedef-name -> identifier
