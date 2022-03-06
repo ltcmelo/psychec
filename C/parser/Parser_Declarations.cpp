@@ -324,6 +324,33 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
                 return true;
             }
 
+            case OpenBraceToken:
+                if (decltorList_cur == &decltorList) {
+                    const DeclaratorSyntax* outerDecltor =
+                            SyntaxUtilities::strippedDeclarator(decltor);
+                    const DeclaratorSyntax* prevDecltor = nullptr;
+                    while (outerDecltor) {
+                        const DeclaratorSyntax* innerDecltor =
+                                SyntaxUtilities::innerDeclarator(outerDecltor);
+                        if (innerDecltor == outerDecltor)
+                            break;
+                        prevDecltor = outerDecltor;
+                        outerDecltor = SyntaxUtilities::strippedDeclarator(innerDecltor);
+                    }
+
+                    if (prevDecltor
+                            && prevDecltor->kind() == FunctionDeclarator
+                            && outerDecltor->kind() == IdentifierDeclarator) {
+                        auto funcDef = makeNode<FunctionDefinitionSyntax>();
+                        decl = funcDef;
+                        funcDef->specs_ = const_cast<SpecifierListSyntax*>(specList);
+                        funcDef->decltor_ = decltor;
+                        parseCompoundStatement_AtFirst(funcDef->body_, StatementContext::None);
+                        return true;
+                    }
+                }
+                [[fallthrough]];
+
             default:
                 if (parseFunctionDefinition(decl, specList, decltor))
                     return true;
