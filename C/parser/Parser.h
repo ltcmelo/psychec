@@ -263,7 +263,7 @@ private:
     bool parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& decl);
     bool parseDeclaration(
             DeclarationSyntax*& decl,
-            bool (Parser::*parseSpecifiers)(DeclarationSyntax*&, SpecifierListSyntax*&, bool),
+            bool (Parser::*parseSpecifiers)(DeclarationSyntax*&, SpecifierListSyntax*&),
             bool (Parser::*parse_AtFollowOfSpecifiers)(DeclarationSyntax*&, const SpecifierListSyntax*),
             DeclarationScope declScope);
     bool parseDeclarationOrFunctionDefinition(DeclarationSyntax*& decl);
@@ -293,12 +293,8 @@ private:
     bool ignoreStatement();
 
     /* Specifiers */
-    bool parseDeclarationSpecifiers(DeclarationSyntax*& decl,
-                                    SpecifierListSyntax*& specList,
-                                    bool allowIdentAsDecltor = true);
-    bool parseSpecifierQualifierList(DeclarationSyntax*& decl,
-                                     SpecifierListSyntax*& specList,
-                                     bool allowIdentAsDecltor = true);
+    bool parseDeclarationSpecifiers(DeclarationSyntax*& decl, SpecifierListSyntax*& specList);
+    bool parseSpecifierQualifierList(DeclarationSyntax*& decl, SpecifierListSyntax*& specList);
     template <class SpecT> void parseTrivialSpecifier_AtFirst(
             SpecifierSyntax*& spec,
             SyntaxKind specK);

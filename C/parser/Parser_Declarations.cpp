@@ -178,15 +178,14 @@ bool Parser::parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& dec
 
 bool Parser::parseDeclaration(
         DeclarationSyntax*& decl,
-        bool (Parser::*parseSpecifiers)(DeclarationSyntax*&, SpecifierListSyntax*&, bool),
+        bool (Parser::*parseSpecifiers)(DeclarationSyntax*&, SpecifierListSyntax*&),
         bool (Parser::*parse_AtFollowOfSpecifiers)(DeclarationSyntax*&, const SpecifierListSyntax*),
         DeclarationScope declScope)
 {
     SpecifierListSyntax* specList = nullptr;
     if (!((this)->*(parseSpecifiers))(
                 decl,
-                specList,
-                declScope != DeclarationScope::Block))
+                specList))
         return false;
 
     if (peek().kind() == SemicolonToken) {
@@ -769,7 +768,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;
-    if (!parseDeclarationSpecifiers(decl, specList, true))
+    if (!parseDeclarationSpecifiers(decl, specList))
         return false;
 
     if (!specList) {
@@ -843,7 +842,7 @@ bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& 
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;
-    if (!parseDeclarationSpecifiers(decl, specList, false))
+    if (!parseDeclarationSpecifiers(decl, specList))
         return false;
 
     paramDecl = makeNode<ExtKR_ParameterDeclarationSyntax>();
@@ -888,8 +887,7 @@ bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& 
  * \remark 6.7.1, 6.7.2, 6.7.3, 6.7.4, and 6.7.5
  */
 bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
-                                        SpecifierListSyntax*& specList,
-                                        bool allowIdentAsDecltor)
+                                        SpecifierListSyntax*& specList)
 {
     DEBUG_THIS_RULE();
 
@@ -1044,8 +1042,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                 if (seenType)
                     return true;
 
-                if (/*allowIdentAsDecltor
-                        && */(determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator))
+                if (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator)
                     return true;
 
                 seenType = true;
@@ -1102,8 +1099,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
  * \remark 6.7.2.1
  */
 bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
-                                         SpecifierListSyntax*& specList,
-                                         bool allowIdentAsDecltor)
+                                         SpecifierListSyntax*& specList)
 {
     DEBUG_THIS_RULE();
 
@@ -1205,10 +1201,6 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             // declaration-specifiers -> type-specifier -> typedef-name
             case IdentifierToken: {
                 if (seenType)
-                    return true;
-
-                if (allowIdentAsDecltor
-                        && (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator))
                     return true;
 
                 seenType = true;
