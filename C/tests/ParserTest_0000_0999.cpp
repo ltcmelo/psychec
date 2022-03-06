@@ -2288,6 +2288,8 @@ void ParserTest::case0296()
 
 void ParserTest::case0297()
 {
+    CROSS_REFERENCE_TEST(BinderTest::case0025); // Semantic error.
+
     parse("void x ( int y ) int y ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,
@@ -2306,6 +2308,8 @@ void ParserTest::case0297()
 
 void ParserTest::case0298()
 {
+    CROSS_REFERENCE_TEST(BinderTest::case0026);  // Semantic error.
+
     parse("int x ( int y ) z y ; { }",
           Expectation().AST({ TranslationUnit,
                               FunctionDefinition,

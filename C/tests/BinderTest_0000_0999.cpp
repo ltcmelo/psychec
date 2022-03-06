@@ -209,8 +209,20 @@ void BinderTest::case0024()
     bind("x __attribute__ ( ( ) ) int ;");
 }
 
-void BinderTest::case0025() {}
-void BinderTest::case0026() {}
+void BinderTest::case0025()
+{
+    CROSS_REFERENCE_TEST(ParserTest::case0297);
+
+    bind("void x ( int y ) int y ; { }");
+}
+
+void BinderTest::case0026()
+{
+    CROSS_REFERENCE_TEST(ParserTest::case0298);
+
+    bind("int x ( int y ) z y ; { }");
+}
+
 void BinderTest::case0027() {}
 void BinderTest::case0028() {}
 void BinderTest::case0029() {}
