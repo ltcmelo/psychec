@@ -510,6 +510,13 @@ protected:
         return Action::Skip;
     }
 
+    virtual Action visitExtGNU_RealOrImagExpression(const ExtGNU_RealOrImagExpressionSyntax* node) override
+    {
+        terminal(node->operatorToken(), node);
+        nonterminal(node->expression());
+        return Action::Skip;
+    }
+
     /* Operations */
     virtual Action visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax* node) override
     {

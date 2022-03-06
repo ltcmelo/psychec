@@ -2835,13 +2835,63 @@ void ParserTest::case1989()
                                          PredefinedName }));
 }
 
-void ParserTest::case1990() {}
-void ParserTest::case1991() {}
-void ParserTest::case1992() {}
-void ParserTest::case1993() {}
-void ParserTest::case1994() {}
-void ParserTest::case1995() {}
-void ParserTest::case1996() {}
+void ParserTest::case1990()
+{
+    parseExpression("__real__ x",
+                    Expectation().AST( { ExtGNU_RealExpression,
+                                         IdentifierName }));
+}
+
+void ParserTest::case1991()
+{
+    parseExpression("__real__ ( x )",
+                    Expectation().AST( { ExtGNU_RealExpression,
+                                         ParenthesizedExpression,
+                                         IdentifierName }));
+}
+
+void ParserTest::case1992()
+{
+    parseExpression("__real__ ( __real__ x )",
+                    Expectation().AST( { ExtGNU_RealExpression,
+                                         ParenthesizedExpression,
+                                         ExtGNU_RealExpression,
+                                         IdentifierName }));
+}
+void ParserTest::case1993()
+{
+    parseExpression("__imag__ x",
+                    Expectation().AST( { ExtGNU_ImagExpression,
+                                         IdentifierName }));
+}
+
+void ParserTest::case1994()
+{
+    parseExpression("__imag__ ( x )",
+                    Expectation().AST( { ExtGNU_ImagExpression,
+                                         ParenthesizedExpression,
+                                         IdentifierName }));
+}
+
+void ParserTest::case1995()
+{
+    parseExpression("__imag__ __real__ x",
+                    Expectation().AST( { ExtGNU_ImagExpression,
+                                         ExtGNU_RealExpression,
+                                         IdentifierName }));
+}
+
+void ParserTest::case1996()
+{
+    parseExpression("__real__ ( int ) x",
+                    Expectation().AST( { ExtGNU_RealExpression,
+                                         CastExpression,
+                                         TypeName,
+                                         BuiltinTypeSpecifier,
+                                         AbstractDeclarator,
+                                         IdentifierName }));
+}
+
 void ParserTest::case1997() {}
 void ParserTest::case1998() {}
 void ParserTest::case1999() {}

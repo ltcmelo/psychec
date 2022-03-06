@@ -199,6 +199,9 @@ const char* tokenNames[] =
     "__FUNCTION__",
     "__PRETTY_FUNCTION__",
 
+    "__real__",
+    "__imag__",
+
     "va_arg",
     "offsetof",
 

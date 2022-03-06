@@ -587,6 +587,18 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
                         }
                     }
                 }
+                else if (s[3] == 'm'
+                         && opts.extensions().isEnabled_ExtGNU_Complex()) {
+                    if (s[4] == 'a') {
+                        if (s[5] == 'g') {
+                            if (s[6] == '_') {
+                                if (s[7] == '_') {
+                                    return Keyword_ExtGNU___imag__;
+                                }
+                            }
+                        }
+                    }
+                }
             }
             else if (s[2] == 'f'
                      && opts.dialect().std() >= LanguageDialect::Std::C99) {
@@ -620,6 +632,20 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
                             if (s[6] == 'a') {
                                 if (s[7] == 'd') {
                                     return Keyword_ExtGNU___thread;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (s[2] == 'r'
+                     && opts.extensions().isEnabled_ExtGNU_Complex()) {
+                if (s[3] == 'e') {
+                    if (s[4] == 'a') {
+                        if (s[5] == 'l') {
+                            if (s[6] == '_') {
+                                if (s[7] == '_') {
+                                    return Keyword_ExtGNU___real__;
                                 }
                             }
                         }
