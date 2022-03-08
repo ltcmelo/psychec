@@ -409,6 +409,7 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
                 case Keyword_struct:
                 case Keyword_union:
                 case Keyword_enum:
+                case Keyword_ExtGNU___complex__:
                     return parseCompoundLiteral_AtOpenParen(expr);
 
                 // GNU
@@ -512,6 +513,12 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
         case Keyword_ExtGNU___PRETTY_FUNCTION__:
             parsePredefinedName_AtFirst(expr);
             break;
+
+        case Keyword_ExtGNU___real__:
+            return parseExtGNU_RealOrImagExpression_AtFirst(expr, ExtGNU_RealExpression);
+
+        case Keyword_ExtGNU___imag__:
+            return parseExtGNU_RealOrImagExpression_AtFirst(expr, ExtGNU_ImagExpression);
 
         default:
             diagReporter_.ExpectedFIRSTofExpression();
@@ -767,6 +774,24 @@ bool Parser::parseExtGNU_ChooseExpression_AtFirst(ExpressionSyntax*& expr)
         && match(CommaToken, &chooseExpr->commaTkIdx2_)
         && parseExpressionWithPrecedenceAssignment(chooseExpr->expr2_)
         && match(CloseParenToken, &chooseExpr->closeParenTkIdx_);
+}
+
+/**
+ * Parse the GNU __real__ and __imag__ expressions.
+ *
+ */
+bool Parser::parseExtGNU_RealOrImagExpression_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK)
+{
+    DEBUG_THIS_RULE();
+    PSYCHE_ASSERT(peek().kind() == Keyword_ExtGNU___real__
+                  || peek().kind() == Keyword_ExtGNU___imag__,
+                  return false,
+                  "assert failure: `__real__' or `__imag__'");
+
+    auto realOrImagExpr = makeNode<ExtGNU_RealOrImagExpressionSyntax>(exprK);
+    expr = realOrImagExpr;
+    realOrImagExpr->oprtrTkIdx_ = consume();
+    return parseExpressionWithPrecedenceAssignment(realOrImagExpr->expr_);
 }
 
 /**
@@ -1064,6 +1089,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
                 case Keyword_struct:
                 case Keyword_union:
                 case Keyword_enum:
+                case Keyword_ExtGNU___complex__:
                     return parseCompoundLiteralOrCastExpression_AtFirst(expr);
 
                 // type-name ->* typedef-name -> identifier

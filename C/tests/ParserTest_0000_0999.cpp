@@ -592,34 +592,72 @@ void ParserTest::case0056()
 
 void ParserTest::case0057()
 {
-
+    parse("__complex__ x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0058()
 {
-
+    parse("__complex__ double x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0059()
 {
+    parse("double __complex__ x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0060()
 {
+    parse("__complex__ float x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0061()
 {
+    parse("float __complex__ x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 
 }
 
 void ParserTest::case0062()
 {
-
+    parse("__complex__ int x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0063()
 {
+    parse("int __complex__ x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0064()

@@ -115,6 +115,16 @@ public:
 
     //!@{
     /**
+     * Whether to enable GNU complex numbers extension:
+     *
+     * https://gcc.gnu.org/onlinedocs/gcc/Complex.html
+     */
+    LanguageExtensions& enable_ExtGNU_Complex(bool enable);
+    bool isEnabled_ExtGNU_Complex() const;
+    //!@}
+
+    //!@{
+    /**
      * Whether to enable GNU statement expressions.
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
@@ -205,6 +215,7 @@ private:
         std::uint64_t ExtGNU_StatementExpressions_ : 1;
         std::uint64_t ExtGNU_InternalBuiltins_ : 1;
         std::uint64_t ExtGNU_FunctionNames_ : 1;
+        std::uint64_t ExtGNU_Complex_ : 1;
 
         /* Psyche */
         std::uint64_t ExtPSY_Generics_ : 1;

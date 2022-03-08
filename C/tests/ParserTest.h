@@ -78,7 +78,7 @@ public:
             + 1960-1969 -> GNU: `__builtin_offsetof'
             + 1970-1979 -> GNU: `__builtin_choose_expr'
             + 1980-1989 -> GNU: `__FUNCTION__' and `__PRETTY_FUNCTION__'
-            + 1990-1999 ->
+            + 1990-1999 -> GNU: `__real__' and `__imag__'
 
         Statements:
             + 2000-2019 -> `goto' and identifier labels

@@ -74,6 +74,7 @@ public:
             case Keyword_Ext_char16_t:
             case Keyword_Ext_char32_t:
             case Keyword_Ext_wchar_t:
+            case Keyword_ExtGNU___complex__:
                 return true;
             default:
                 return false;
