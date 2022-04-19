@@ -239,6 +239,9 @@ enum SyntaxKind : std::uint16_t
     Keyword_ExtGNU___builtin_choose_expr,
     Keyword_ExtGNU___FUNCTION__,
     Keyword_ExtGNU___PRETTY_FUNCTION__,
+    Keyword_ExtGNU___complex__,
+    Keyword_ExtGNU___real__,
+    Keyword_ExtGNU___imag__,
 
     // --------------------------//
     // --- Translated macros --- //
@@ -317,6 +320,7 @@ enum SyntaxKind : std::uint16_t
     FunctionDefinition,
     ExtGNU_AsmStatementDeclaration,
     ExtPSY_TemplateDeclaration,
+    ExtKR_ParameterDeclaration,
 
     /* Specifiers */
     TypedefStorageClass,
@@ -356,6 +360,7 @@ enum SyntaxKind : std::uint16_t
     SubscriptSuffix,
     ParameterSuffix,
     BitfieldDeclaratorSuffix,
+    ExtKR_IdentifierDeclarator,
 
     /* Initializers */
     ExpressionInitializer,
@@ -380,6 +385,9 @@ enum SyntaxKind : std::uint16_t
     TypedGenericAssociation,
     DefaultGenericAssociation,
     ExtGNU_EnclosedCompoundStatementExpression,
+    ExtGNU_RealOrImagExpression,
+    ExtGNU_RealExpression,
+    ExtGNU_ImagExpression,
 
     /* Names */
     IdentifierName,

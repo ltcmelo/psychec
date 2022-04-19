@@ -81,6 +81,7 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case Keyword_union:
         case Keyword_enum:
         case Keyword_ExtGNU___typeof__:
+        case Keyword_ExtGNU___complex__:
             return parseDeclarationStatement(
                         stmt,
                         &Parser::parseDeclarationOrFunctionDefinition);
@@ -582,6 +583,7 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
         case Keyword_struct:
         case Keyword_union:
         case Keyword_enum:
+        case Keyword_ExtGNU___complex__:
             if (!parseDeclarationStatement(
                         forStmt->initStmt_,
                         &Parser::parseDeclarationOrFunctionDefinition)) {

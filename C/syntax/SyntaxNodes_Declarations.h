@@ -957,13 +957,15 @@ class PSY_C_API FunctionDefinitionSyntax final : public DeclarationSyntax
 public:
     const SpecifierListSyntax* specifiers() const { return specs_; }
     const DeclaratorSyntax* declarator() const { return decltor_; }
+    const ExtKR_ParameterDeclarationListSyntax* extKR_params() const { return extKR_params_; }
     const StatementSyntax* body() const { return body_; }
 
 private:
     SpecifierListSyntax* specs_ = nullptr;
     DeclaratorSyntax* decltor_ = nullptr;
+    ExtKR_ParameterDeclarationListSyntax* extKR_params_ = nullptr;
     StatementSyntax* body_ = nullptr;
-    AST_CHILD_LST3(specs_, decltor_, body_);
+    AST_CHILD_LST4(specs_, decltor_, extKR_params_, body_);
 
     mutable FunctionSymbol* sym_;
 };
@@ -1016,6 +1018,37 @@ private:
     LexedTokens::IndexType templateTkIdx_ = LexedTokens::invalidIndex();
     DeclarationSyntax* decl_ = nullptr;
     AST_CHILD_LST2(templateTkIdx_, decl_)
+};
+
+/**
+ * \brief The ExtKR_ParameterDeclarationSyntax class.
+ *
+ * Parameter declaration in
+ * <a href="https://jameshfisher.com/2016/11/27/c-k-and-r/">K&R style</a>.
+ *
+ * \code{.c}
+ * int foo(x, y)
+ *     int x;
+ *     float y;
+ * {
+ *     return x + y;
+ * }
+ * \endcode
+ */
+class PSY_C_API ExtKR_ParameterDeclarationSyntax final : public DeclaratorDeclarationSyntax
+{
+    AST_NODE_1K(ExtKR_ParameterDeclaration, DeclaratorDeclaration)
+
+public:
+    const SpecifierListSyntax* specifiers() const { return specs_; }
+    const DeclaratorListSyntax* declarators() const { return decltors_; }
+    SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
+
+private:
+    SpecifierListSyntax* specs_ = nullptr;
+    DeclaratorListSyntax* decltors_ = nullptr;
+    LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
+    AST_CHILD_LST3(specs_, decltors_, semicolonTkIdx_)
 };
 
 /* Initializers */

@@ -44,7 +44,7 @@ bool Parser::parseTypeName(TypeNameSyntax*& typeName)
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;
-    if (!parseSpecifierQualifierList(decl, specList, false))
+    if (!parseSpecifierQualifierList(decl, specList))
         return false;
 
     typeName = makeNode<TypeNameSyntax>();

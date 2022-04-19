@@ -84,6 +84,7 @@ public:
     virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) { return Action::Visit; }
     virtual Action visitExtPSY_TemplateDeclaration(const ExtPSY_TemplateDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitExtKR_ParameterDeclaration(const ExtKR_ParameterDeclarationSyntax*) { return Action::Visit; }
 
     /* Specifiers */
     virtual Action visitStorageClass(const StorageClassSyntax*) { return Action::Visit; }
@@ -131,6 +132,7 @@ public:
     virtual Action visitGenericSelectionExpression(const GenericSelectionExpressionSyntax*) { return Action::Visit; }
     virtual Action visitGenericAssociation(const GenericAssociationSyntax*) { return Action::Visit; }
     virtual Action visitExtGNU_EnclosedCompoundStatementExpression(const ExtGNU_EnclosedCompoundStatementExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_RealOrImagExpression(const ExtGNU_RealOrImagExpressionSyntax*) { return Action::Visit; }
 
     /* Operations */
     virtual Action visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax*) { return Action::Visit; }

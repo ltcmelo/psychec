@@ -148,6 +148,8 @@ public:
     virtual const ExtPSY_TemplateDeclarationSyntax* asExtPSY_TemplateDeclaration() const { return nullptr; }
     virtual ExtGNU_AsmStatementDeclarationSyntax* asExtGNU_AsmStatementDeclaration() { return nullptr; }
     virtual const ExtGNU_AsmStatementDeclarationSyntax* asExtGNU_AsmStatementDeclaration() const { return nullptr; }
+    virtual ExtKR_ParameterDeclarationSyntax* asExtKR_ParameterDeclaration() { return nullptr; }
+    virtual const ExtKR_ParameterDeclarationSyntax* asExtKR_ParameterDeclaration() const { return nullptr; }
 
     /* Specifiers */
     virtual SpecifierSyntax* asSpecifier() { return nullptr; }
@@ -241,6 +243,8 @@ public:
     virtual const GenericAssociationSyntax* asGenericAssociation() const { return nullptr; }
     virtual ExtGNU_EnclosedCompoundStatementExpressionSyntax* asExtGNU_EnclosedCompoundStatementExpression() { return nullptr; }
     virtual const ExtGNU_EnclosedCompoundStatementExpressionSyntax* asExtGNU_EnclosedCompoundStatementExpression() const { return nullptr; }
+    virtual ExtGNU_RealOrImagExpressionSyntax* asExtGNU_RealOrImagExpression() { return nullptr; }
+    virtual const ExtGNU_RealOrImagExpressionSyntax* asExtGNU_RealOrImagExpression() const { return nullptr; }
 
     /* Names */
     virtual NameSyntax* asName() { return nullptr; }

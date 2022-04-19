@@ -828,6 +828,30 @@ private:
                    closeParenTkIdx_)
 };
 
+/**
+ * \brief The ExtGNU_RealOrImagExpressionSyntax class.
+ *
+ * \code
+ * __real__ expr
+ * __imag__ expr
+ * \endcode
+ *
+ */
+class PSY_C_API ExtGNU_RealOrImagExpressionSyntax final : public ExpressionSyntax
+{
+    AST_NODE_NK(ExtGNU_RealOrImagExpression, Expression)
+
+public:
+    SyntaxToken operatorToken() const { return tokenAtIndex(oprtrTkIdx_); }
+    const ExpressionSyntax* expression() const { return expr_; }
+
+private:
+    LexedTokens::IndexType oprtrTkIdx_ = LexedTokens::invalidIndex();
+    ExpressionSyntax* expr_ = nullptr;
+
+    AST_CHILD_LST2(oprtrTkIdx_, expr_)
+};
+
 } // C
 } // psy
 

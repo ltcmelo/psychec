@@ -61,6 +61,8 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
         *declList_cur = makeNode<DeclarationListSyntax>(decl);
         declList_cur = &(*declList_cur)->next;
     }
+
+    diagReporter_.reportDelayed();
 }
 
 /**
@@ -176,15 +178,14 @@ bool Parser::parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& dec
 
 bool Parser::parseDeclaration(
         DeclarationSyntax*& decl,
-        bool (Parser::*parseSpecifiers)(DeclarationSyntax*&, SpecifierListSyntax*&, bool),
+        bool (Parser::*parseSpecifiers)(DeclarationSyntax*&, SpecifierListSyntax*&),
         bool (Parser::*parse_AtFollowOfSpecifiers)(DeclarationSyntax*&, const SpecifierListSyntax*),
         DeclarationScope declScope)
 {
     SpecifierListSyntax* specList = nullptr;
     if (!((this)->*(parseSpecifiers))(
                 decl,
-                specList,
-                declScope != DeclarationScope::Block))
+                specList))
         return false;
 
     if (peek().kind() == SemicolonToken) {
@@ -325,42 +326,73 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
             }
 
             case OpenBraceToken:
-                if (decltorList_cur == &decltorList) {
-                    const DeclaratorSyntax* outerDecltor =
-                            SyntaxUtilities::strippedDeclarator(decltor);
-                    const DeclaratorSyntax* prevDecltor = nullptr;
-                    while (outerDecltor) {
-                        const DeclaratorSyntax* innerDecltor =
-                                SyntaxUtilities::innerDeclarator(outerDecltor);
-                        if (innerDecltor == outerDecltor)
-                            break;
-                        prevDecltor = outerDecltor;
-                        outerDecltor = SyntaxUtilities::strippedDeclarator(innerDecltor);
-                    }
-
-                    if (prevDecltor
-                            && prevDecltor->kind() == FunctionDeclarator
-                            && outerDecltor->kind() == IdentifierDeclarator) {
-                        auto funcDef = makeNode<FunctionDefinitionSyntax>();
-                        decl = funcDef;
-                        funcDef->specs_ = const_cast<SpecifierListSyntax*>(specList);
-                        funcDef->decltor_ = decltor;
-                        parseCompoundStatement_AtFirst(funcDef->body_, StatementContext::None);
-                        return true;
-                    }
-                }
+                if (parseFunctionDefinition_AtOpenBrace(decl, specList, decltor, nullptr))
+                    return true;
                 [[fallthrough]];
 
-            default:
-                if (init)
+            default: {
+                if (init) {
                     diagReporter_.ExpectedFOLLOWofDeclaratorAndInitializer();
-                else
-                    diagReporter_.ExpectedFOLLOWofDeclarator();
+                    return false;
+                }
+
+                Backtracker BT(this);
+                ExtKR_ParameterDeclarationListSyntax* paramKRList = nullptr;
+                if (parseExtKR_ParameterDeclarationList(paramKRList)) {
+                    BT.discard();
+                    if (parseFunctionDefinition_AtOpenBrace(decl, specList, decltor, paramKRList)) {
+                        diagReporter_.delayed_.clear();
+                        return true;
+                    }
+                    return false;
+                }
+                BT.backtrack();
+
+                diagReporter_.ExpectedFOLLOWofDeclarator();
                 return false;
+            }
         }
 
         decltorList_cur = &(*decltorList_cur)->next;
     }
+}
+
+bool Parser::parseFunctionDefinition_AtOpenBrace(
+        DeclarationSyntax*& decl,
+        const SpecifierListSyntax* specList,
+        DeclaratorSyntax*& decltor,
+        ExtKR_ParameterDeclarationListSyntax* paramKRList)
+{
+    DEBUG_THIS_RULE();
+    PSYCHE_ASSERT(peek().kind() == OpenBraceToken,
+                  return false,
+                  "assert failure: `{'");
+
+    const DeclaratorSyntax* prevDecltor = nullptr;
+    const DeclaratorSyntax* outerDecltor =
+            SyntaxUtilities::strippedDeclarator(decltor);
+    while (outerDecltor) {
+        const DeclaratorSyntax* innerDecltor =
+                SyntaxUtilities::innerDeclarator(outerDecltor);
+        if (innerDecltor == outerDecltor)
+            break;
+        prevDecltor = outerDecltor;
+        outerDecltor = SyntaxUtilities::strippedDeclarator(innerDecltor);
+    }
+
+    if (prevDecltor
+            && prevDecltor->kind() == FunctionDeclarator
+            && outerDecltor->kind() == IdentifierDeclarator) {
+        auto funcDef = makeNode<FunctionDefinitionSyntax>();
+        decl = funcDef;
+        funcDef->specs_ = const_cast<SpecifierListSyntax*>(specList);
+        funcDef->decltor_ = decltor;
+        funcDef->extKR_params_ = paramKRList;
+        parseCompoundStatement_AtFirst(funcDef->body_, StatementContext::None);
+        return true;
+    }
+
+    return false;
 }
 
 Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
@@ -419,6 +451,7 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
             case Keyword_struct:
             case Keyword_union:
             case Keyword_enum:
+            case Keyword_ExtGNU___complex__:
                 if (seenType)
                     return IdentifierRole::AsDeclarator;
                 seenType = true;
@@ -481,6 +514,11 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
                 }
                 ++LA;
                 continue;
+
+            case SemicolonToken:
+                if (parenCnt < 0)
+                    return IdentifierRole::AsTypedefName;
+                return IdentifierRole::AsDeclarator;
 
             default:
                 return IdentifierRole::AsDeclarator;
@@ -684,6 +722,9 @@ bool Parser::parseParameterDeclarationList(ParameterDeclarationListSyntax*& para
 {
     DEBUG_THIS_RULE();
 
+    DiagnosticsReporterDelayer DRD(&diagReporter_,
+                                   DiagnosticsReporter::ID_of_ExpectedTypeSpecifier);
+
     ParameterDeclarationListSyntax** paramList_cur = &paramList;
 
     ParameterDeclarationSyntax* paramDecl = nullptr;
@@ -728,20 +769,31 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;
-    if (!parseDeclarationSpecifiers(decl, specList, false))
+    if (!parseDeclarationSpecifiers(decl, specList))
         return false;
+
+    if (!specList) {
+        switch (peek().kind()) {
+            case IdentifierToken:
+                diagReporter_.ExpectedTypeSpecifier();
+                break;
+
+            default:
+                diagReporter_.ExpectedFIRSTofParameterDeclaration();
+                return false;
+        }
+    }
 
     paramDecl = makeNode<ParameterDeclarationSyntax>();
     paramDecl->specs_ = specList;
-
-    if (!paramDecl->specs_)
-        diagReporter_.ExpectedTypeSpecifier();
 
     Backtracker BT(this);
     if (!parseDeclarator(paramDecl->decltor_, DeclarationScope::FunctionPrototype)) {
         BT.backtrack();
         return parseAbstractDeclarator(paramDecl->decltor_);
     }
+    BT.discard();
+
     return true;
 }
 
@@ -759,8 +811,68 @@ bool Parser::parseExtPSY_TemplateDeclaration_AtFirst(DeclarationSyntax*& decl)
     return parseDeclarationOrFunctionDefinition(tmplDecl->decl_);
 }
 
-/* Specifiers */
+bool Parser::parseExtKR_ParameterDeclarationList(
+    ExtKR_ParameterDeclarationListSyntax *&paramList)
+{
+    DEBUG_THIS_RULE();
 
+    ExtKR_ParameterDeclarationListSyntax** paramList_cur = &paramList;
+
+    ExtKR_ParameterDeclarationSyntax* paramDecl = nullptr;
+    if (!parseExtKR_ParameterDeclaration(paramDecl))
+        return false;
+
+    *paramList_cur = makeNode<ExtKR_ParameterDeclarationListSyntax>(paramDecl);
+
+    while (peek().kind() != OpenBraceToken) {
+        paramList_cur = &(*paramList_cur)->next;
+
+        ExtKR_ParameterDeclarationSyntax* nextParamDecl = nullptr;
+        if (!parseExtKR_ParameterDeclaration(nextParamDecl))
+            return false;
+
+        *paramList_cur = makeNode<ExtKR_ParameterDeclarationListSyntax>(nextParamDecl);
+    }
+
+    return true;
+}
+
+bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& paramDecl)
+{
+    DEBUG_THIS_RULE();
+
+    DeclarationSyntax* decl = nullptr;
+    SpecifierListSyntax* specList = nullptr;
+    if (!parseDeclarationSpecifiers(decl, specList))
+        return false;
+
+    paramDecl = makeNode<ExtKR_ParameterDeclarationSyntax>();
+    paramDecl->specs_ = specList;
+
+    DeclaratorListSyntax** decltorList_cur = &paramDecl->decltors_;
+    while (true) {
+        DeclaratorSyntax* decltor = nullptr;
+        if (!parseDeclarator(decltor, DeclarationScope::FunctionPrototype))
+            return false;
+
+        *decltorList_cur = makeNode<DeclaratorListSyntax>(decltor);
+        switch (peek().kind()) {
+            case CommaToken:
+                (*decltorList_cur)->delimTkIdx_ = consume();
+                decltorList_cur = &(*decltorList_cur)->next;
+                break;
+
+            case SemicolonToken:
+                paramDecl->semicolonTkIdx_ = consume();
+                return true;
+
+            default:
+                return false;
+        }
+    }
+}
+
+/* Specifiers */
 /**
  * Parse a \a declaration-specifiers.
  *
@@ -776,8 +888,7 @@ bool Parser::parseExtPSY_TemplateDeclaration_AtFirst(DeclarationSyntax*& decl)
  * \remark 6.7.1, 6.7.2, 6.7.3, 6.7.4, and 6.7.5
  */
 bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
-                                        SpecifierListSyntax*& specList,
-                                        bool takeIdentifierAsDecltor)
+                                        SpecifierListSyntax*& specList)
 {
     DEBUG_THIS_RULE();
 
@@ -885,6 +996,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
             case Keyword_Ext_char16_t:
             case Keyword_Ext_char32_t:
             case Keyword_Ext_wchar_t:
+            case Keyword_ExtGNU___complex__:
                 seenType = true;
                 parseTrivialSpecifier_AtFirst<BuiltinTypeSpecifierSyntax>(
                             spec,
@@ -932,8 +1044,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                 if (seenType)
                     return true;
 
-                if (takeIdentifierAsDecltor
-                        && (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator))
+                if (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator)
                     return true;
 
                 seenType = true;
@@ -990,8 +1101,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
  * \remark 6.7.2.1
  */
 bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
-                                         SpecifierListSyntax*& specList,
-                                         bool takeIdentifierAsDecltor)
+                                         SpecifierListSyntax*& specList)
 {
     DEBUG_THIS_RULE();
 
@@ -1048,6 +1158,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             case Keyword_Ext_char16_t:
             case Keyword_Ext_char32_t:
             case Keyword_Ext_wchar_t:
+            case Keyword_ExtGNU___complex__:
                 seenType = true;
                 parseTrivialSpecifier_AtFirst<BuiltinTypeSpecifierSyntax>(
                             spec,
@@ -1093,10 +1204,6 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             // declaration-specifiers -> type-specifier -> typedef-name
             case IdentifierToken: {
                 if (seenType)
-                    return true;
-
-                if (takeIdentifierAsDecltor
-                        && (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator))
                     return true;
 
                 seenType = true;

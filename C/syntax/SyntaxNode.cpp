@@ -19,6 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include "SyntaxKind.h"
 #include "SyntaxNodes.h"
 #include "SyntaxVisitor.h"
 
@@ -170,6 +171,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "ExtGNU_AsmStatementDeclaration";
         case ExtPSY_TemplateDeclaration:
             return "ExtPSY_TemplateDeclaration";
+        case ExtKR_ParameterDeclaration:
+            return "ExtKR_ParameterDeclaration";
 
         /* Specifiers */
         case TypedefStorageClass:
@@ -283,6 +286,12 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "GenericDefaultAssociation";
         case ExtGNU_EnclosedCompoundStatementExpression:
             return "ExtGNU_EnclosedCompoundStatementExpression";
+        case ExtGNU_RealOrImagExpression:
+            return "ExtGNU_RealOrImagExpression";
+        case ExtGNU_RealExpression:
+            return "ExtGNU_RealExpression";
+        case ExtGNU_ImagExpression:
+            return "ExtGNU_ImagExpression";
 
         /* Names */
         case IdentifierName:

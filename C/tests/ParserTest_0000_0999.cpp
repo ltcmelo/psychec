@@ -592,34 +592,72 @@ void ParserTest::case0056()
 
 void ParserTest::case0057()
 {
-
+    parse("__complex__ x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0058()
 {
-
+    parse("__complex__ double x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0059()
 {
+    parse("double __complex__ x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0060()
 {
+    parse("__complex__ float x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0061()
 {
+    parse("float __complex__ x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 
 }
 
 void ParserTest::case0062()
 {
-
+    parse("__complex__ int x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0063()
 {
+    parse("int __complex__ x ;",
+          Expectation().AST( { TranslationUnit,
+                               VariableAndOrFunctionDeclaration,
+                               BuiltinTypeSpecifier,
+                               BuiltinTypeSpecifier,
+                               IdentifierDeclarator }));
 }
 
 void ParserTest::case0064()
@@ -814,14 +852,14 @@ void ParserTest::case0102()
 {
     parse("void ( * x ) ( ) { }",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void ParserTest::case0103()
 {
     parse("void ( ( * x ) ) ( ) { }",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void ParserTest::case0104()
@@ -1580,14 +1618,14 @@ void ParserTest::case0216()
 {
     parse("x ( int y ) ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
 }
 
 void ParserTest::case0217()
 {
     parse("x ( y z ) ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
 }
 
 void ParserTest::case0218()
@@ -1602,9 +1640,9 @@ void ParserTest::case0219()
 
 void ParserTest::case0220()
 {
-    parse("void x ( ( int z ));",
-          Expectation().diagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+    parse("void x ( ( int z ) ) ;",
+          Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofParameterDeclaration));
 }
 
 void ParserTest::case0221()
@@ -1809,7 +1847,7 @@ void ParserTest::case0243()
 {
     parse("int [ ] x ( ) { }",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
 }
 
 void ParserTest::case0244()
@@ -1840,7 +1878,16 @@ void ParserTest::case0244()
 
 void ParserTest::case0245()
 {
-
+    parse("void x ( y ) { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0246()
@@ -2015,102 +2062,310 @@ void ParserTest::case0279()
 
 void ParserTest::case0280()
 {
-
+    parse("void x ( y ) int y ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0281()
 {
-
+    parse("void x ( y ) z y ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              TypedefName,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0282()
 {
-
+    parse("void x ( y , z ) int y ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0283()
 {
-
+    parse("void x ( y , z ) int y ; int z ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0284()
 {
-
+    parse("void x ( y , z ) int y , z ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0285()
 {
-
+    parse("void x ( y , z ) int y ; int z ( int ) ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              AbstractDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0286()
 {
-
+    parse("void x ( y ) struct z y ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              StructTypeSpecifier,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0287()
 {
-
+    parse("void x ( y ) int * y ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              PointerDeclarator,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0288()
 {
-
+    parse("int x ( y , z ) int * y , z ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              PointerDeclarator,
+                              IdentifierDeclarator,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0289()
 {
-
+    parse("int x ( y , z ) int * y , * z ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              PointerDeclarator,
+                              IdentifierDeclarator,
+                              PointerDeclarator,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0290()
 {
-
+    parse("void x ( y ) int y ( float [ 1 ] ) ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              ArrayDeclarator,
+                              SubscriptSuffix,
+                              IntegerConstantExpression,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0291()
 {
-
 }
 
 void ParserTest::case0292()
 {
-
 }
 
 void ParserTest::case0293()
 {
-
+    parse("void x ( y , z ) int y , int z { }",
+          Expectation()
+              .diagnostic(Expectation::ErrorOrWarn::Error,
+                          Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void ParserTest::case0294()
 {
-
+    parse("int x ( y ) y { }",
+          Expectation()
+              .diagnostic(Expectation::ErrorOrWarn::Error,
+                          Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void ParserTest::case0295()
 {
-
+    parse("int x ( y ) int { }",
+          Expectation()
+              .diagnostic(Expectation::ErrorOrWarn::Error,
+                          Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void ParserTest::case0296()
 {
-
+    parse("int x ( y ) int y { }",
+          Expectation()
+              .diagnostic(Expectation::ErrorOrWarn::Error,
+                          Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void ParserTest::case0297()
 {
+    CROSS_REFERENCE_TEST(BinderTest::case0025); // Semantic error.
 
+    parse("void x ( int y ) int y ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0298()
 {
+    CROSS_REFERENCE_TEST(BinderTest::case0026);  // Semantic error.
 
+    parse("int x ( int y ) z y ; { }",
+          Expectation().AST({ TranslationUnit,
+                              FunctionDefinition,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              ExtKR_ParameterDeclaration,
+                              TypedefName,
+                              IdentifierDeclarator,
+                              CompoundStatement }));
 }
 
 void ParserTest::case0299()
 {
-
 }
 
 void ParserTest::case0300()
@@ -2226,7 +2481,7 @@ void ParserTest::case0311()
 {
     parse("int ( * const [ ] ) ( unsigned int , ... ) ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator));
 }
 
 void ParserTest::case0312()
