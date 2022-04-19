@@ -370,7 +370,7 @@ private:
     bool parseGenericAssociation(GenericAssociationSyntax*& assoc,
                                  GenericAssociationListSyntax*& assocList);
     bool parseExtGNU_StatementExpression_AtFirst(ExpressionSyntax*& expr);
-    bool parseExtGNU_RealOrImagExpression_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK);
+    bool parseExtGNU_ComplexValuedExpression_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK);
 
     /* Postfix */
     bool parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr);

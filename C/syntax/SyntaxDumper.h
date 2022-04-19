@@ -510,7 +510,7 @@ protected:
         return Action::Skip;
     }
 
-    virtual Action visitExtGNU_RealOrImagExpression(const ExtGNU_RealOrImagExpressionSyntax* node) override
+    virtual Action visitExtGNU_ComplexValuedExpression(const ExtGNU_ComplexValuedExpressionSyntax* node) override
     {
         terminal(node->operatorToken(), node);
         nonterminal(node->expression());

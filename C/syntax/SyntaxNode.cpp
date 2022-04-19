@@ -286,8 +286,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "GenericDefaultAssociation";
         case ExtGNU_EnclosedCompoundStatementExpression:
             return "ExtGNU_EnclosedCompoundStatementExpression";
-        case ExtGNU_RealOrImagExpression:
-            return "ExtGNU_RealOrImagExpression";
+        case ExtGNU_ComplexValuedExpression:
+            return "ExtGNU_ComplexValuedExpression";
         case ExtGNU_RealExpression:
             return "ExtGNU_RealExpression";
         case ExtGNU_ImagExpression:
