@@ -385,7 +385,7 @@ enum SyntaxKind : std::uint16_t
     TypedGenericAssociation,
     DefaultGenericAssociation,
     ExtGNU_EnclosedCompoundStatementExpression,
-    ExtGNU_RealOrImagExpression,
+    ExtGNU_ComplexValuedExpression,
     ExtGNU_RealExpression,
     ExtGNU_ImagExpression,
 

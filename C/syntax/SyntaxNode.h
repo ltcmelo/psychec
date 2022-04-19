@@ -243,8 +243,8 @@ public:
     virtual const GenericAssociationSyntax* asGenericAssociation() const { return nullptr; }
     virtual ExtGNU_EnclosedCompoundStatementExpressionSyntax* asExtGNU_EnclosedCompoundStatementExpression() { return nullptr; }
     virtual const ExtGNU_EnclosedCompoundStatementExpressionSyntax* asExtGNU_EnclosedCompoundStatementExpression() const { return nullptr; }
-    virtual ExtGNU_RealOrImagExpressionSyntax* asExtGNU_RealOrImagExpression() { return nullptr; }
-    virtual const ExtGNU_RealOrImagExpressionSyntax* asExtGNU_RealOrImagExpression() const { return nullptr; }
+    virtual ExtGNU_ComplexValuedExpressionSyntax* asExtGNU_ComplexValuedExpression() { return nullptr; }
+    virtual const ExtGNU_ComplexValuedExpressionSyntax* asExtGNU_ComplexValuedExpression() const { return nullptr; }
 
     /* Names */
     virtual NameSyntax* asName() { return nullptr; }

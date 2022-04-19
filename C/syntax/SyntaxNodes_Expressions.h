@@ -829,17 +829,16 @@ private:
 };
 
 /**
- * \brief The ExtGNU_RealOrImagExpressionSyntax class.
+ * \brief The ExtGNU_ComplexValuedExpressionSyntax class.
  *
  * \code
  * __real__ expr
  * __imag__ expr
  * \endcode
- *
  */
-class PSY_C_API ExtGNU_RealOrImagExpressionSyntax final : public ExpressionSyntax
+class PSY_C_API ExtGNU_ComplexValuedExpressionSyntax final : public ExpressionSyntax
 {
-    AST_NODE_NK(ExtGNU_RealOrImagExpression, Expression)
+    AST_NODE_NK(ExtGNU_ComplexValuedExpression, Expression)
 
 public:
     SyntaxToken operatorToken() const { return tokenAtIndex(oprtrTkIdx_); }
