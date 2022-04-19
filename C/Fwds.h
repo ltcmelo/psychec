@@ -125,7 +125,7 @@ class ParenthesizedExpressionSyntax;
 class GenericSelectionExpressionSyntax;
 class GenericAssociationSyntax;
 class ExtGNU_EnclosedCompoundStatementExpressionSyntax;
-class ExtGNU_RealOrImagExpressionSyntax;
+class ExtGNU_ComplexValuedExpressionSyntax;
 
 /* Names */
 class NameSyntax;

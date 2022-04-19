@@ -132,7 +132,7 @@ public:
     virtual Action visitGenericSelectionExpression(const GenericSelectionExpressionSyntax*) { return Action::Visit; }
     virtual Action visitGenericAssociation(const GenericAssociationSyntax*) { return Action::Visit; }
     virtual Action visitExtGNU_EnclosedCompoundStatementExpression(const ExtGNU_EnclosedCompoundStatementExpressionSyntax*) { return Action::Visit; }
-    virtual Action visitExtGNU_RealOrImagExpression(const ExtGNU_RealOrImagExpressionSyntax*) { return Action::Visit; }
+    virtual Action visitExtGNU_ComplexValuedExpression(const ExtGNU_ComplexValuedExpressionSyntax*) { return Action::Visit; }
 
     /* Operations */
     virtual Action visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax*) { return Action::Visit; }
