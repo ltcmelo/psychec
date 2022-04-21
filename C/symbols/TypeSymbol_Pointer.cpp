@@ -21,6 +21,8 @@
 #include "TypeSymbol_Pointer.h"
 #include "TypeSymbol__IMPL__.inc"
 
+#include <sstream>
+
 using namespace psy;
 using namespace C;
 
@@ -54,3 +56,19 @@ const TypeSymbol* PointerTypeSymbol::referencedType() const
 {
     return P_CAST->refedTySym_;
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const PointerTypeSymbol& tySym)
+{
+    std::ostringstream oss;
+    oss << "<<< pointer-to |";
+    oss << " " << to_string(*tySym.referencedType());
+    oss << " >>>";
+
+    return oss.str();
+}
+
+} // C
+} // psy

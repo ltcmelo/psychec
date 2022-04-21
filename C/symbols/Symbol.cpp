@@ -22,6 +22,7 @@
 
 #include "compilation/Assembly.h"
 #include "compilation/Compilation.h"
+#include "symbols/Symbols.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxReference.h"
 
@@ -109,6 +110,20 @@ namespace C {
 
 std::string to_string(const Symbol& sym)
 {
+    switch (sym.kind()) {
+        case SymbolKind::LinkUnit:
+            break;
+
+        case SymbolKind::Function:
+            break;
+
+        case SymbolKind::Value:
+            return to_string(*sym.asValue());
+
+        case SymbolKind::Type:
+            return to_string(*sym.asType());
+    }
+
     std::ostringstream oss;
     oss << "<<< ";
     oss << "symbol";

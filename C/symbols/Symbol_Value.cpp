@@ -21,7 +21,9 @@
 #include "Symbol_Value.h"
 #include "Symbol__IMPL__.inc"
 
-#include "Symbol_Type.h"
+#include "symbols/Symbols.h"
+
+#include <sstream>
 
 using namespace psy;
 using namespace C;
@@ -80,3 +82,24 @@ void ValueSymbol::setName(std::unique_ptr<SymbolName> symName)
 {
     P_CAST->name_ = std::move(symName);
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const ValueSymbol& sym)
+{
+    switch (sym.valueKind()) {
+        case ValueKind::Field:
+            return to_string(*sym.asField());
+        case ValueKind::Parameter:
+            return to_string(*sym.asParameter());
+        case ValueKind::Variable:
+            return to_string(*sym.asVariable());
+        default:
+            PSYCHE_FAIL_0(return "");
+            return "<invalid value kind>";
+    }
+}
+
+} // C
+} // psy

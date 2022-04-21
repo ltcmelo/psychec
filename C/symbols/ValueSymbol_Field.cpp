@@ -20,6 +20,8 @@
 
 #include "ValueSymbol_Field.h"
 
+#include <sstream>
+
 using namespace psy;
 using namespace C;
 
@@ -31,3 +33,21 @@ FieldSymbol::FieldSymbol(const SyntaxTree* tree,
                   containingSym,
                   ValueKind::Field)
 {}
+
+namespace psy {
+namespace C {
+
+std::string to_string(const FieldSymbol& sym)
+{
+    std::ostringstream oss;
+    oss << "<<< ";
+    oss << "field";
+    oss << " |";
+    oss << " name:" << to_string(*sym.name());
+    oss << " >>>";
+
+    return oss.str();
+}
+
+} // C
+} // psy

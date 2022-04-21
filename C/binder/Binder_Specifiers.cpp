@@ -68,6 +68,13 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers
                 &Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators);
 }
 
+SyntaxVisitor::Action Binder::visitFunctionDefinition_AtSpecifiers(const FunctionDefinitionSyntax* node)
+{
+    return visitDeclaration_AtSpecifiers(
+                node,
+                &Binder::visitFunctionDefinition_AtDeclarators);
+}
+
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtSpecifiers(const FieldDeclarationSyntax* node)
 {
     return visitDeclaration_AtSpecifiers(

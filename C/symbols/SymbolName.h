@@ -73,6 +73,7 @@ private:
 };
 
 std::string to_string(const SymbolName& name);
+
 bool operator==(const SymbolName& a, const SymbolName& b);
 bool operator!=(const SymbolName& a, const SymbolName& b);
 

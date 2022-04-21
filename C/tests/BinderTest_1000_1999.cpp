@@ -374,10 +374,36 @@ void BinderTest::case1104()
 
 void BinderTest::case1105()
 {
+    bind("int * * x ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)
+                      .derivType(TypeKind::Pointer)));
 }
 
-void BinderTest::case1106() {}
-void BinderTest::case1107() {}
+void BinderTest::case1106()
+{
+    bind("int * * * x ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)
+                      .derivType(TypeKind::Pointer)
+                      .derivType(TypeKind::Pointer)));
+}
+
+void BinderTest::case1107()
+{
+    bind("int * ( * x ) [ 1 ] ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)));
+}
+
 void BinderTest::case1108() {}
 void BinderTest::case1109() {}
 void BinderTest::case1110() {}
@@ -680,8 +706,21 @@ void BinderTest::case1305()
                       .derivType(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case1306(){ }
-void BinderTest::case1307(){ }
+void BinderTest::case1306()
+{
+    bind("int * * x [ 1 ] ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Variable)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
+}
+
+void BinderTest::case1307()
+{
+}
+
 void BinderTest::case1308(){ }
 void BinderTest::case1309(){ }
 void BinderTest::case1310(){ }

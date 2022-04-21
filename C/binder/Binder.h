@@ -120,6 +120,9 @@ private:
     template <class DeclT> Action visitDeclaration_AtDeclarators(
             const DeclT* node,
             Action (Binder::*visit_DONE)(const DeclT*));
+    Action visitFunctionDefinition_AtSpecifiers(const FunctionDefinitionSyntax*);
+    Action visitFunctionDefinition_AtDeclarators(const FunctionDefinitionSyntax*);
+    Action visitFunctionDefinition_DONE(const FunctionDefinitionSyntax*);
     Action visitVariableAndOrFunctionDeclaration_AtSpecifiers(const VariableAndOrFunctionDeclarationSyntax*);
     Action visitVariableAndOrFunctionDeclaration_AtDeclarators(const VariableAndOrFunctionDeclarationSyntax*);
     Action visitVariableAndOrFunctionDeclaration_DONE(const VariableAndOrFunctionDeclarationSyntax*);
@@ -146,6 +149,8 @@ private:
     virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) override;
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
+    virtual Action visitSubscriptSuffix(const SubscriptSuffixSyntax*) override;
+    virtual Action visitParameterSuffix(const ParameterSuffixSyntax*) override;
 
     //------------//
     // Statements //

@@ -40,6 +40,8 @@ private:
                    const Symbol* containingSym);
 };
 
+std::string PSY_C_API to_string(const VariableSymbol& sym);
+
 } // C
 } // psy
 

@@ -22,6 +22,7 @@
 #include "TypeSymbol__IMPL__.inc"
 
 #include <iostream>
+#include <sstream>
 
 using namespace psy;
 using namespace C;
@@ -103,3 +104,19 @@ void NamedTypeSymbol::patchBuiltinTypeKind(BuiltinTypeKind builtTyKind)
     P_CAST->name_.reset(new PlainSymbolName(canonicalText(builtTyKind)));
     P_CAST->builtTyKind_ = builtTyKind;
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const NamedTypeSymbol& tySym)
+{
+    std::ostringstream oss;
+    oss << "<<< type |";
+    oss << " name:" << to_string(*tySym.name());
+    oss << " >>>";
+
+    return oss.str();
+}
+
+} // C
+} // psy

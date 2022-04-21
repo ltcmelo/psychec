@@ -30,7 +30,7 @@
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
-//#define DEBUG_BINDING_SEARCH
+#define DEBUG_BINDING_SEARCH
 
 using namespace psy;
 using namespace C;
@@ -154,10 +154,11 @@ void BinderTest::bind(std::string text, Expectation X)
                         return REJECT(candSym, "null type");
 
                     const TypeSymbol* tySym = valSym->type();
+
                     for (auto i = binding.derivTyKs_.size(); i > 0; --i) {
                         auto derivTyK = binding.derivTyKs_[i - 1];
                         if (derivTyK != tySym->typeKind())
-                            return REJECT(candSym, "(derived) type kind mismatch");
+                            return REJECT(candSym, "derived type kind mismatch");
 
                         auto derivTyCVR = binding.derivTyCVRs_[i - 1];
                         if (!hasExpectedCVR(derivTyCVR, tySym, candSym))
@@ -179,6 +180,9 @@ void BinderTest::bind(std::string text, Expectation X)
                     }
 
                     const NamedTypeSymbol* namedTySym = tySym->asNamedType();
+                    if (!namedTySym)
+                        return REJECT(tySym, "not a named type");
+
                     if (namedTySym->name() == nullptr)
                         return REJECT(candSym, "null type name");
 

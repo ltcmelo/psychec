@@ -20,6 +20,10 @@
 
 #include "ValueSymbol_Variable.h"
 
+#include "symbols/Symbols.h"
+
+#include <sstream>
+
 using namespace psy;
 using namespace C;
 
@@ -31,3 +35,20 @@ VariableSymbol::VariableSymbol(const SyntaxTree* tree,
                   containingSym,
                   ValueKind::Variable)
 {}
+
+namespace psy {
+namespace C {
+
+std::string to_string(const VariableSymbol& sym)
+{
+    std::ostringstream oss;
+    oss << "<<< variable |";
+    oss << " name:" << to_string(*sym.name());
+    oss << " " << to_string(*sym.type());
+    oss << " >>>";
+
+    return oss.str();
+}
+
+} // C
+} // psy

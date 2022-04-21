@@ -57,6 +57,8 @@ private:
                       const TypeSymbol* refedTySym);
 };
 
+std::string PSY_C_API to_string(const PointerTypeSymbol& tySym);
+
 } // C
 } // psy
 

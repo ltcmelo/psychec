@@ -83,6 +83,8 @@ private:
     virtual void setName(std::unique_ptr<SymbolName> symName) override;
 };
 
+std::string PSY_C_API to_string(const ValueSymbol& sym);
+
 } // C
 } // psy
 

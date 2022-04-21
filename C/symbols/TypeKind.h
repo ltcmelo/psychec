@@ -55,7 +55,7 @@ inline std::string PSY_C_API to_string(TypeKind tyKind)
         case TypeKind::Pointer:
             return "Pointer";
         default:
-            return "<unknown type kind>";
+            return "<invalid type kind>";
     }
 }
 
