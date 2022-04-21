@@ -403,6 +403,7 @@ void BinderTest::case1107()
                       .derivType(TypeKind::Array, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::None)));
 }
+
 void BinderTest::case1108() {}
 void BinderTest::case1109() {}
 void BinderTest::case1110() {}
