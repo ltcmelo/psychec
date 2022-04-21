@@ -30,7 +30,7 @@
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
-//#define DEBUG_BINDING_SEARCH
+#define DEBUG_BINDING_SEARCH
 
 using namespace psy;
 using namespace C;
@@ -157,7 +157,7 @@ void BinderTest::bind(std::string text, Expectation X)
                     for (auto i = binding.derivTyKs_.size(); i > 0; --i) {
                         auto derivTyK = binding.derivTyKs_[i - 1];
                         if (derivTyK != tySym->typeKind())
-                            return REJECT(candSym, "(derived) type kind mismatch");
+                            return REJECT(candSym, "derived type kind mismatch");
 
                         auto derivTyCVR = binding.derivTyCVRs_[i - 1];
                         if (!hasExpectedCVR(derivTyCVR, tySym, candSym))

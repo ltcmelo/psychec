@@ -21,6 +21,8 @@
 #include "TypeSymbol_Array.h"
 #include "TypeSymbol__IMPL__.inc"
 
+#include <sstream>
+
 using namespace psy;
 using namespace C;
 
@@ -54,3 +56,19 @@ const TypeSymbol* ArrayTypeSymbol::elementType() const
 {
     return P_CAST->elemTySym_;
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const ArrayTypeSymbol& tySym)
+{
+    std::ostringstream oss;
+    oss << "<<< array-of |";
+    oss << " " << to_string(*tySym.elementType());
+    oss << " >>>";
+
+    return oss.str();
+}
+
+} // C
+} // psy

@@ -57,6 +57,8 @@ private:
                     const TypeSymbol* elemTySym);
 };
 
+std::string PSY_C_API to_string(const ArrayTypeSymbol& tySym);
+
 } // C
 } // psy
 
