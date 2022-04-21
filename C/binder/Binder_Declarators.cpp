@@ -151,9 +151,9 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
     for (auto specIt = node->attributes(); specIt; specIt = specIt->next)
         visit(specIt->value);
 
-    visit(node->innerDeclarator());
-
     visit(node->suffix());
+
+    visit(node->innerDeclarator());
 
     return Action::Skip;
 }
