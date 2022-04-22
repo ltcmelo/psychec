@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,49 +18,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_KIND_H__
-#define PSYCHE_C_TYPE_KIND_H__
+#ifndef PSYCHE_C_SYMBOL_FUNCTION_TYPE_H__
+#define PSYCHE_C_SYMBOL_FUNCTION_TYPE_H__
 
-#include "API.h"
-#include "Fwds.h"
-
-#include <cstdint>
-#include <string>
+#include "Symbol_Type.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The TypeKind enum.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.TypeKind
- * from Roslyn, the .NET Compiler Platform.
+ * \brief The FunctionTypeSymbol class.
  */
-enum class TypeKind : std::uint8_t
+class PSY_C_API FunctionTypeSymbol final : public TypeSymbol
 {
-    None = 0,
-    Array,
-    Function,
-    Named,
-    Pointer,
+public:
+    virtual FunctionTypeSymbol* asFunctionType() { return this; }
+    virtual const FunctionTypeSymbol* asFunctionType() const { return this; }
+
+    /**
+     * The return type of \c this FunctionTypeSymbol.
+     */
+    const TypeSymbol* returnType() const;
+
+private:
+    DECL_PIMPL_SUB(FunctionTypeSymbol)
+
+    friend class Binder;
 };
 
-inline std::string PSY_C_API to_string(TypeKind tyKind)
-{
-    switch (tyKind) {
-        case TypeKind::Array:
-            return "Array";
-        case TypeKind::Function:
-            return "Function";
-        case TypeKind::Named:
-            return "Named";
-        case TypeKind::Pointer:
-            return "Pointer";
-        default:
-            return "<invalid type kind>";
-    }
-}
+std::string PSY_C_API to_string(const FunctionTypeSymbol& tySym);
 
 } // C
 } // psy

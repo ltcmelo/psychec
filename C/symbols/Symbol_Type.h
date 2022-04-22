@@ -52,6 +52,8 @@ public:
 
     virtual ArrayTypeSymbol* asArrayType() { return nullptr; }
     virtual const ArrayTypeSymbol* asArrayType() const { return nullptr; }
+    virtual FunctionTypeSymbol* asFunctionType() { return nullptr; }
+    virtual const FunctionTypeSymbol* asFunctionType() const { return nullptr; }
     virtual NamedTypeSymbol* asNamedType() { return nullptr; }
     virtual const NamedTypeSymbol* asNamedType() const { return nullptr; }
     virtual PointerTypeSymbol* asPointerType() { return nullptr; }

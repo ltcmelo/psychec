@@ -218,6 +218,7 @@ class ParameterSymbol;
 /* Symbols (types) */
 class TypeSymbol;
 class ArrayTypeSymbol;
+class FunctionTypeSymbol;
 class NamedTypeSymbol;
 class PointerTypeSymbol;
 

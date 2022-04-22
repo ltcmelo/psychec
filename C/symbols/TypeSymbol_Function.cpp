@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,51 +18,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_KIND_H__
-#define PSYCHE_C_TYPE_KIND_H__
+#include "TypeSymbol_Function.h"
+#include "TypeSymbol__IMPL__.inc"
 
-#include "API.h"
-#include "Fwds.h"
+#include <sstream>
 
-#include <cstdint>
-#include <string>
+using namespace psy;
+using namespace C;
+
+struct FunctionTypeSymbol::FunctionTypeSymbolImpl : TypeSymbolImpl
+{
+    FunctionTypeSymbolImpl(const SyntaxTree* tree,
+                           const Scope* outerScope,
+                           const Symbol* containingSym)
+        : TypeSymbolImpl(tree,
+                         outerScope,
+                         containingSym,
+                         TypeKind::Function)
+    {}
+
+    const TypeSymbol* refedTySym_;
+};
+
+const TypeSymbol* FunctionTypeSymbol::returnType() const
+{
+    return nullptr;
+}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The TypeKind enum.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.TypeKind
- * from Roslyn, the .NET Compiler Platform.
- */
-enum class TypeKind : std::uint8_t
+std::string to_string(const FunctionTypeSymbol& tySym)
 {
-    None = 0,
-    Array,
-    Function,
-    Named,
-    Pointer,
-};
+    std::ostringstream oss;
+    oss << "<<< type (function) |";
+    oss << " >>>";
 
-inline std::string PSY_C_API to_string(TypeKind tyKind)
-{
-    switch (tyKind) {
-        case TypeKind::Array:
-            return "Array";
-        case TypeKind::Function:
-            return "Function";
-        case TypeKind::Named:
-            return "Named";
-        case TypeKind::Pointer:
-            return "Pointer";
-        default:
-            return "<invalid type kind>";
-    }
+    return oss.str();
 }
 
 } // C
 } // psy
-
-#endif
