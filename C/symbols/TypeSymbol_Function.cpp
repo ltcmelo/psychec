@@ -30,15 +30,27 @@ struct FunctionTypeSymbol::FunctionTypeSymbolImpl : TypeSymbolImpl
 {
     FunctionTypeSymbolImpl(const SyntaxTree* tree,
                            const Scope* outerScope,
-                           const Symbol* containingSym)
+                           const Symbol* containingSym,
+                           const TypeSymbol* retTySym)
         : TypeSymbolImpl(tree,
                          outerScope,
                          containingSym,
                          TypeKind::Function)
+        , retTySym_(retTySym)
     {}
 
-    const TypeSymbol* refedTySym_;
+    const TypeSymbol* retTySym_;
 };
+
+FunctionTypeSymbol::FunctionTypeSymbol(const SyntaxTree* tree,
+                                       const Scope* scope,
+                                       const Symbol* containingSym,
+                                       const TypeSymbol* retTySym)
+    : TypeSymbol(new FunctionTypeSymbolImpl(tree,
+                                            scope,
+                                            containingSym,
+                                            retTySym))
+{}
 
 const TypeSymbol* FunctionTypeSymbol::returnType() const
 {

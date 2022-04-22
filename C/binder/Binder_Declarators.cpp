@@ -166,6 +166,8 @@ SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* 
 
 SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* node)
 {
+    makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
+
     return Action::Skip;
 }
 

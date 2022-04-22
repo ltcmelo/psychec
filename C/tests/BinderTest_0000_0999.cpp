@@ -38,10 +38,10 @@ using namespace C;
 
 void BinderTest::case0001()
 {
-//    bind("void x ( ) ;",
-//         Expectation()
-//             .binding(Binding("x", ValueKind::Variable)
-//                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+    bind("void x ( ) ;",
+         Expectation()
+             .binding(BindingSummary("x")
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 //                      .derivType(TypeKind::Array, CVR::None)));
 }
 

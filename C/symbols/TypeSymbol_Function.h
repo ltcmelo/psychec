@@ -31,6 +31,8 @@ namespace C {
  */
 class PSY_C_API FunctionTypeSymbol final : public TypeSymbol
 {
+    friend class Binder;
+
 public:
     virtual FunctionTypeSymbol* asFunctionType() { return this; }
     virtual const FunctionTypeSymbol* asFunctionType() const { return this; }
@@ -43,7 +45,10 @@ public:
 private:
     DECL_PIMPL_SUB(FunctionTypeSymbol)
 
-    friend class Binder;
+    FunctionTypeSymbol(const SyntaxTree* tree,
+                       const Scope* outerScope,
+                       const Symbol* containingSym,
+                       const TypeSymbol* retTySym);
 };
 
 std::string PSY_C_API to_string(const FunctionTypeSymbol& tySym);

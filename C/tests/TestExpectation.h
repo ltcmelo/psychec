@@ -47,16 +47,16 @@ enum class CVR
     None
 };
 
-struct Binding
+struct BindingSummary
 {
-    Binding(std::string name, ValueKind kind);
-    Binding(std::string name, TypeKind kind);
-    Binding(std::string funcName);
-    Binding& specType(std::string name,
+    BindingSummary(std::string name, ValueKind kind);
+    BindingSummary(std::string name, TypeKind kind);
+    BindingSummary(std::string funcName);
+    BindingSummary& specType(std::string name,
                       NamedTypeKind tyNameK,
                       BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::None,
                       CVR cvr = CVR::None);
-    Binding& derivType(TypeKind tyKind, CVR cvr = CVR::None);
+    BindingSummary& derivType(TypeKind tyKind, CVR cvr = CVR::None);
 
     std::string name_;
     SymbolKind symK_;
@@ -97,8 +97,8 @@ struct Expectation
     std::vector<SyntaxKind> syntaxKinds_;
     Expectation& AST(std::vector<SyntaxKind>&& v);
 
-    std::vector<Binding> bindings_;
-    Expectation& binding(Binding b);
+    std::vector<BindingSummary> bindings_;
+    Expectation& binding(BindingSummary b);
 };
 
 } // C
