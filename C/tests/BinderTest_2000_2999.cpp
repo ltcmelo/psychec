@@ -396,9 +396,38 @@ void BinderTest::case2104()
                       .derivType(TypeKind::Pointer)));
 }
 
-void BinderTest::case2105(){ }
-void BinderTest::case2106(){ }
-void BinderTest::case2107(){ }
+void BinderTest::case2105()
+{
+    bind("struct { int * * x ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)
+                      .derivType(TypeKind::Pointer)));
+}
+
+void BinderTest::case2106()
+{
+    bind("struct { int * * * x ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)
+                      .derivType(TypeKind::Pointer)
+                      .derivType(TypeKind::Pointer)));
+}
+
+void BinderTest::case2107()
+{
+    bind("struct { int * ( * x ) [ 1 ] ; };",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)));
+}
+
 void BinderTest::case2108(){ }
 void BinderTest::case2109(){ }
 void BinderTest::case2110(){ }
@@ -716,7 +745,17 @@ void BinderTest::case2305()
                       .derivType(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case2306(){ }
+void BinderTest::case2306()
+{
+    bind("struct { int * * x [ 1 ] ; } ;",
+         Expectation()
+             .binding(Binding("x", ValueKind::Field)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)
+                      .derivType(TypeKind::Pointer, CVR::None)
+                      .derivType(TypeKind::Array, CVR::None)));
+}
+
 void BinderTest::case2307(){ }
 void BinderTest::case2308(){ }
 void BinderTest::case2309(){ }
