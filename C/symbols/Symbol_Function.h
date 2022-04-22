@@ -46,7 +46,7 @@ public:
      */
     const SymbolName* name() const;
 
-private:
+protected:
     DECL_PIMPL_SUB(FunctionSymbol);
 
     friend class Binder;

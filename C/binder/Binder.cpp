@@ -245,7 +245,6 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinit
     return Action::Skip;
 }
 
-
 //------------//
 // Statements //
 //------------//

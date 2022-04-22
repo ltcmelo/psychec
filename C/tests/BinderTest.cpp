@@ -43,7 +43,7 @@ void BinderTest::testAll()
     std::vector<TestFunction> active;
     for (auto testData : tests_) {
         auto n = std::string(testData.second);
-        auto p = n.find("case0");
+        auto p = n.find("case09");
         if (p != std::string::npos) {
             std::cout << "\t\tskip (TEMP) " << n << std::endl;
             continue;

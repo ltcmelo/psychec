@@ -128,7 +128,7 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
                     break;
 
                 case IdentifierDeclarator:
-                     break;
+                    break;
 
                 default:
                     PSYCHE_FAIL_0(return Action::Quit);
@@ -152,7 +152,6 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
         visit(specIt->value);
 
     visit(node->suffix());
-
     visit(node->innerDeclarator());
 
     return Action::Skip;

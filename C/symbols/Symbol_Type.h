@@ -81,10 +81,6 @@ protected:
     DECL_PIMPL_SUB(TypeSymbol);
 
     TypeSymbol(TypeSymbolImpl* p);
-    TypeSymbol(const SyntaxTree* tree,
-               const Scope* outerScope,
-               const Symbol* containingSym,
-               TypeKind tyKind);
 
 private:
     friend class Semantics_TypeQualifiers;

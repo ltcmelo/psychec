@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 #include "Symbol_LinkUnit.h"
+#include "Symbol__IMPL__.inc"
 
 #include <sstream>
 
@@ -28,10 +29,10 @@ using namespace C;
 LinkUnitSymbol::LinkUnitSymbol(const SyntaxTree* tree,
                                const Scope* scope,
                                const Symbol* containingSym)
-    : Symbol(tree,
-             scope,
-             containingSym,
-             SymbolKind::LinkUnit)
+    : Symbol(new SymbolImpl(tree,
+                            scope,
+                            containingSym,
+                            SymbolKind::LinkUnit))
 {}
 
 namespace psy {

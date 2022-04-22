@@ -31,16 +31,6 @@
 #include <algorithm>
 #include <sstream>
 
-Symbol::Symbol(const SyntaxTree* tree,
-               const Scope* outerScope,
-               const Symbol* containingSym,
-               SymbolKind kind)
-    : P(new SymbolImpl(tree,
-                       outerScope,
-                       containingSym,
-                       kind))
-{}
-
 Symbol::Symbol(SymbolImpl* p)
     : P(p)
 {}

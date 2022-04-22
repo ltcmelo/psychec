@@ -27,16 +27,6 @@
 using namespace psy;
 using namespace C;
 
-TypeSymbol::TypeSymbol(const SyntaxTree* tree,
-                       const Scope* outerScope,
-                       const Symbol* containingSym,
-                       TypeKind tyKind)
-    : Symbol(new TypeSymbolImpl(tree,
-                                outerScope,
-                                containingSym,
-                                tyKind))
-{}
-
 TypeSymbol::TypeSymbol(TypeSymbolImpl* p)
     : Symbol(p)
 {}

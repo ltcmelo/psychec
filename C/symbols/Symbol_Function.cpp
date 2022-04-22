@@ -31,26 +31,24 @@ struct FunctionSymbol::FunctionSymbolImpl : SymbolImpl
     FunctionSymbolImpl(const SyntaxTree* tree,
                        const Scope* outerScope,
                        const Symbol* containingSym)
-        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Value)
+        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Function)
         , name_(nullptr)
     {}
 
     std::unique_ptr<SymbolName> name_;
 };
 
-
 FunctionSymbol::FunctionSymbol(const SyntaxTree* tree,
                                const Scope* scope,
                                const Symbol* containingSym)
-    : Symbol(tree,
-            scope,
-            containingSym,
-            SymbolKind::Function)
+    : Symbol(new FunctionSymbolImpl(tree,
+                                    scope,
+                                    containingSym))
 {}
 
 const SymbolName* FunctionSymbol::name() const
 {
-    return nullptr;
+    return P_CAST->name_.get();
 }
 
 void FunctionSymbol::setName(std::unique_ptr<SymbolName> symName)
@@ -67,7 +65,8 @@ std::string to_string(const FunctionSymbol& sym)
     oss << "<<< ";
     oss << "function";
     oss << " |";
-    oss << " name:" << to_string(*sym.name());
+    if (sym.name())
+        oss << " name:" << to_string(*sym.name());
     oss << " >>>";
 
     return oss.str();
