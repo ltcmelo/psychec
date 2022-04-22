@@ -26,6 +26,13 @@
 namespace psy {
 namespace C {
 
+/**
+ * \brief The ParameterSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IParameterSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
 class PSY_C_API ParameterSymbol final : public ValueSymbol
 {
 public:

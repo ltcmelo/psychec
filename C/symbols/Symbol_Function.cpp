@@ -21,6 +21,8 @@
 #include "Symbol_Function.h"
 #include "Symbol__IMPL__.inc"
 
+#include <sstream>
+
 using namespace psy;
 using namespace C;
 
@@ -55,3 +57,21 @@ void FunctionSymbol::setName(std::unique_ptr<SymbolName> symName)
 {
     P_CAST->name_ = std::move(symName);
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const FunctionSymbol& sym)
+{
+    std::ostringstream oss;
+    oss << "<<< ";
+    oss << "function";
+    oss << " |";
+    oss << " name:" << to_string(*sym.name());
+    oss << " >>>";
+
+    return oss.str();
+}
+
+} // C
+} // psy

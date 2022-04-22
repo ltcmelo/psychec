@@ -20,6 +20,8 @@
 
 #include "Symbol_LinkUnit.h"
 
+#include <sstream>
+
 using namespace psy;
 using namespace C;
 
@@ -31,3 +33,20 @@ LinkUnitSymbol::LinkUnitSymbol(const SyntaxTree* tree,
              containingSym,
              SymbolKind::LinkUnit)
 {}
+
+namespace psy {
+namespace C {
+
+std::string to_string(const LinkUnitSymbol& sym)
+{
+    std::ostringstream oss;
+    oss << "<<< ";
+    oss << "unit";
+    oss << " >>>";
+
+    return oss.str();
+}
+
+} // C
+} // psy
+

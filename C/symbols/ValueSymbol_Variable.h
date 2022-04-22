@@ -26,6 +26,13 @@
 namespace psy {
 namespace C {
 
+/**
+ * \brief The VariableSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.ILocalSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
 class PSY_C_API VariableSymbol final : public ValueSymbol
 {
 public:
