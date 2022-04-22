@@ -109,15 +109,11 @@ public:
 protected:
     DECL_PIMPL(Symbol);
 
-    friend class Binder;
-
     Symbol(SymbolImpl* p);
-    Symbol(const SyntaxTree* tree,
-           const Scope* outerScope,
-           const Symbol* containingSym,
-           SymbolKind kind);
 
 private:
+    friend class Binder;
+
     template <class ScopeT> ScopeT* makeScope();
 };
 

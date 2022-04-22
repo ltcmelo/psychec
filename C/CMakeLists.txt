@@ -141,6 +141,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Function.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Function.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Named.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Named.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.cpp

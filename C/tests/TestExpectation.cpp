@@ -23,7 +23,7 @@
 using namespace psy;
 using namespace  C;
 
-Binding::Binding(std::string name, ValueKind kind)
+BindingSummary::BindingSummary(std::string name, ValueKind kind)
     : name_(std::move(name))
     , symK_(SymbolKind::Value)
     , valK_(kind)
@@ -31,21 +31,21 @@ Binding::Binding(std::string name, ValueKind kind)
 {}
 
 
-Binding::Binding(std::string name, TypeKind kind)
+BindingSummary::BindingSummary(std::string name, TypeKind kind)
     : name_(std::move(name))
     , symK_(SymbolKind::Type)
     , valK_(ValueKind::None)
     , tyK_(kind)
 {}
 
-Binding::Binding(std::string funcName)
+BindingSummary::BindingSummary(std::string funcName)
     : name_(std::move(funcName))
     , symK_(SymbolKind::Function)
     , valK_(ValueKind::None)
     , tyK_(TypeKind::None)
 {}
 
-Binding& Binding::specType(std::string name, NamedTypeKind tyNameK, BuiltinTypeKind builtinTypeKind, CVR cvr)
+BindingSummary& BindingSummary::specType(std::string name, NamedTypeKind tyNameK, BuiltinTypeKind builtinTypeKind, CVR cvr)
 {
     specTyName_ = std::move(name);
     specTyK_ = tyNameK;
@@ -54,7 +54,7 @@ Binding& Binding::specType(std::string name, NamedTypeKind tyNameK, BuiltinTypeK
     return *this;
 }
 
-Binding& Binding::derivType(TypeKind kind, CVR cvr)
+BindingSummary& BindingSummary::derivType(TypeKind kind, CVR cvr)
 {
     derivTyKs_.push_back(kind);
     derivTyCVRs_.push_back(cvr);
@@ -86,7 +86,7 @@ Expectation& Expectation::ambiguity(std::string s)
     return *this;
 }
 
-Expectation& Expectation::binding(Binding b)
+Expectation& Expectation::binding(BindingSummary b)
 {
     bindings_.emplace_back(std::move(b));
     return *this;

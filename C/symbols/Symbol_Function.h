@@ -27,6 +27,13 @@
 namespace psy {
 namespace C {
 
+/**
+ * \brief The FunctionUnitSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IMethodSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
 class PSY_C_API FunctionSymbol final : public Symbol
                                      , public TypeClass_NameableSymbol
 {
@@ -39,7 +46,7 @@ public:
      */
     const SymbolName* name() const;
 
-private:
+protected:
     DECL_PIMPL_SUB(FunctionSymbol);
 
     friend class Binder;
@@ -50,6 +57,8 @@ private:
 
     virtual void setName(std::unique_ptr<SymbolName> symName) override;
 };
+
+std::string PSY_C_API to_string(const FunctionSymbol& sym);
 
 } // C
 } // psy

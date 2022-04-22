@@ -40,18 +40,21 @@ namespace C {
 enum class TypeKind : std::uint8_t
 {
     None = 0,
-    Named,
     Array,
+    Function,
+    Named,
     Pointer,
 };
 
 inline std::string PSY_C_API to_string(TypeKind tyKind)
 {
     switch (tyKind) {
-        case TypeKind::Named:
-            return "Named";
         case TypeKind::Array:
             return "Array";
+        case TypeKind::Function:
+            return "Function";
+        case TypeKind::Named:
+            return "Named";
         case TypeKind::Pointer:
             return "Pointer";
         default:

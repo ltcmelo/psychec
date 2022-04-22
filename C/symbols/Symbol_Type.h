@@ -52,6 +52,8 @@ public:
 
     virtual ArrayTypeSymbol* asArrayType() { return nullptr; }
     virtual const ArrayTypeSymbol* asArrayType() const { return nullptr; }
+    virtual FunctionTypeSymbol* asFunctionType() { return nullptr; }
+    virtual const FunctionTypeSymbol* asFunctionType() const { return nullptr; }
     virtual NamedTypeSymbol* asNamedType() { return nullptr; }
     virtual const NamedTypeSymbol* asNamedType() const { return nullptr; }
     virtual PointerTypeSymbol* asPointerType() { return nullptr; }
@@ -81,10 +83,6 @@ protected:
     DECL_PIMPL_SUB(TypeSymbol);
 
     TypeSymbol(TypeSymbolImpl* p);
-    TypeSymbol(const SyntaxTree* tree,
-               const Scope* outerScope,
-               const Symbol* containingSym,
-               TypeKind tyKind);
 
 private:
     friend class Semantics_TypeQualifiers;

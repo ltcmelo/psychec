@@ -71,14 +71,14 @@ public:
 protected:
     DECL_PIMPL_SUB(ValueSymbol);
 
-    friend class Binder;
-
     ValueSymbol(const SyntaxTree* tree,
                 const Scope* outerScope,
                 const Symbol* containingSym,
                 ValueKind valKind);
 
 private:
+    friend class Binder;
+
     virtual void setType(const TypeSymbol* tySym) override;
     virtual void setName(std::unique_ptr<SymbolName> symName) override;
 };

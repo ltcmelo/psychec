@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,55 +18,52 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol_Function.h"
-#include "Symbol__IMPL__.inc"
+#include "TypeSymbol_Function.h"
+#include "TypeSymbol__IMPL__.inc"
 
 #include <sstream>
 
 using namespace psy;
 using namespace C;
 
-struct FunctionSymbol::FunctionSymbolImpl : SymbolImpl
+struct FunctionTypeSymbol::FunctionTypeSymbolImpl : TypeSymbolImpl
 {
-    FunctionSymbolImpl(const SyntaxTree* tree,
-                       const Scope* outerScope,
-                       const Symbol* containingSym)
-        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Function)
-        , name_(nullptr)
+    FunctionTypeSymbolImpl(const SyntaxTree* tree,
+                           const Scope* outerScope,
+                           const Symbol* containingSym,
+                           const TypeSymbol* retTySym)
+        : TypeSymbolImpl(tree,
+                         outerScope,
+                         containingSym,
+                         TypeKind::Function)
+        , retTySym_(retTySym)
     {}
 
-    std::unique_ptr<SymbolName> name_;
+    const TypeSymbol* retTySym_;
 };
 
-FunctionSymbol::FunctionSymbol(const SyntaxTree* tree,
-                               const Scope* scope,
-                               const Symbol* containingSym)
-    : Symbol(new FunctionSymbolImpl(tree,
-                                    scope,
-                                    containingSym))
+FunctionTypeSymbol::FunctionTypeSymbol(const SyntaxTree* tree,
+                                       const Scope* scope,
+                                       const Symbol* containingSym,
+                                       const TypeSymbol* retTySym)
+    : TypeSymbol(new FunctionTypeSymbolImpl(tree,
+                                            scope,
+                                            containingSym,
+                                            retTySym))
 {}
 
-const SymbolName* FunctionSymbol::name() const
+const TypeSymbol* FunctionTypeSymbol::returnType() const
 {
-    return P_CAST->name_.get();
-}
-
-void FunctionSymbol::setName(std::unique_ptr<SymbolName> symName)
-{
-    P_CAST->name_ = std::move(symName);
+    return nullptr;
 }
 
 namespace psy {
 namespace C {
 
-std::string to_string(const FunctionSymbol& sym)
+std::string to_string(const FunctionTypeSymbol& tySym)
 {
     std::ostringstream oss;
-    oss << "<<< ";
-    oss << "function";
-    oss << " |";
-    if (sym.name())
-        oss << " name:" << to_string(*sym.name());
+    oss << "<<< type (function) |";
     oss << " >>>";
 
     return oss.str();

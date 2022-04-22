@@ -19,6 +19,9 @@
 // THE SOFTWARE.
 
 #include "Symbol_LinkUnit.h"
+#include "Symbol__IMPL__.inc"
+
+#include <sstream>
 
 using namespace psy;
 using namespace C;
@@ -26,8 +29,25 @@ using namespace C;
 LinkUnitSymbol::LinkUnitSymbol(const SyntaxTree* tree,
                                const Scope* scope,
                                const Symbol* containingSym)
-    : Symbol(tree,
-             scope,
-             containingSym,
-             SymbolKind::LinkUnit)
+    : Symbol(new SymbolImpl(tree,
+                            scope,
+                            containingSym,
+                            SymbolKind::LinkUnit))
 {}
+
+namespace psy {
+namespace C {
+
+std::string to_string(const LinkUnitSymbol& sym)
+{
+    std::ostringstream oss;
+    oss << "<<< ";
+    oss << "unit";
+    oss << " >>>";
+
+    return oss.str();
+}
+
+} // C
+} // psy
+

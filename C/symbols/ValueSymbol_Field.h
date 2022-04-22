@@ -26,6 +26,13 @@
 namespace psy {
 namespace C {
 
+/**
+ * \brief The FieldUnitSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IFieldSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
 class PSY_C_API FieldSymbol final : public ValueSymbol
 {
 public:

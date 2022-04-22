@@ -24,6 +24,7 @@
 #include "Symbol_Function.h"
 #include "Symbol_LinkUnit.h"
 #include "TypeSymbol_Array.h"
+#include "TypeSymbol_Function.h"
 #include "TypeSymbol_Named.h"
 #include "TypeSymbol_Pointer.h"
 #include "ValueSymbol_Field.h"

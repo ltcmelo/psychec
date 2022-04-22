@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,33 +18,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_NAME_EMPTY_H__
-#define PSYCHE_C_SYMBOL_NAME_EMPTY_H__
+#ifndef PSYCHE_C_SYMBOL_FUNCTION_TYPE_H__
+#define PSYCHE_C_SYMBOL_FUNCTION_TYPE_H__
 
-#include "SymbolName.h"
+#include "Symbol_Type.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The EmptySymbolName class.
+ * \brief The FunctionTypeSymbol class.
  */
-class PSY_C_API EmptySymbolName final : public SymbolName
+class PSY_C_API FunctionTypeSymbol final : public TypeSymbol
 {
+    friend class Binder;
+
 public:
-    virtual EmptySymbolName* asEmptySymbolName() override { return this; }
-    virtual const EmptySymbolName* asEmptySymbolName() const override { return this; }
+    virtual FunctionTypeSymbol* asFunctionType() { return this; }
+    virtual const FunctionTypeSymbol* asFunctionType() const { return this; }
 
     /**
-     * The text of \c this SymbolName.
+     * The return type of \c this FunctionTypeSymbol.
      */
-    virtual std::string text() const override;
+    const TypeSymbol* returnType() const;
+
+private:
+    DECL_PIMPL_SUB(FunctionTypeSymbol)
+
+    FunctionTypeSymbol(const SyntaxTree* tree,
+                       const Scope* outerScope,
+                       const Symbol* containingSym,
+                       const TypeSymbol* retTySym);
 };
 
-std::string to_string(const EmptySymbolName& name);
-
-bool operator==(const EmptySymbolName& a, const EmptySymbolName& b);
-bool operator!=(const EmptySymbolName& a, const EmptySymbolName& b);
+std::string PSY_C_API to_string(const FunctionTypeSymbol& tySym);
 
 } // C
 } // psy

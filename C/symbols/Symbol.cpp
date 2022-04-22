@@ -31,16 +31,6 @@
 #include <algorithm>
 #include <sstream>
 
-Symbol::Symbol(const SyntaxTree* tree,
-               const Scope* outerScope,
-               const Symbol* containingSym,
-               SymbolKind kind)
-    : P(new SymbolImpl(tree,
-                       outerScope,
-                       containingSym,
-                       kind))
-{}
-
 Symbol::Symbol(SymbolImpl* p)
     : P(p)
 {}
@@ -112,26 +102,17 @@ std::string to_string(const Symbol& sym)
 {
     switch (sym.kind()) {
         case SymbolKind::LinkUnit:
-            break;
-
+            return to_string(*sym.asLinkUnit());
         case SymbolKind::Function:
-            break;
-
+            return to_string(*sym.asFunction());
         case SymbolKind::Value:
             return to_string(*sym.asValue());
-
         case SymbolKind::Type:
             return to_string(*sym.asType());
+        default:
+            PSYCHE_FAIL_0(return "");
+            return "<invalid symbol kind>";
     }
-
-    std::ostringstream oss;
-    oss << "<<< ";
-    oss << "symbol";
-    oss << " | ";
-    oss << "kind:" << to_string(sym.kind());
-    oss << " >>>";
-
-    return oss.str();
 }
 
 } // C
