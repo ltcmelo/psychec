@@ -42,6 +42,7 @@ public:
 };
 
 std::string to_string(const EmptySymbolName& name);
+
 bool operator==(const EmptySymbolName& a, const EmptySymbolName& b);
 bool operator!=(const EmptySymbolName& a, const EmptySymbolName& b);
 

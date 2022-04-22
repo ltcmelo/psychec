@@ -61,16 +61,5 @@ std::string to_string(const SymbolName& name)
     }
 }
 
-bool operator==(const SymbolName& a, const SymbolName& b)
-{
-    // TODO
-    return false;
-}
-
-bool operator!=(const SymbolName& a, const SymbolName& b)
-{
-    return !(a == b);
-}
-
 } // C
 } // psy
