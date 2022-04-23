@@ -65,15 +65,15 @@ namespace {
 bool REJECT_CANDIDATE(const Symbol* sym, std::string msg)
 {
 #ifdef DEBUG_BINDING_SEARCH
-    std::cout << "\n\t\treject " << to_string(*sym) << "\t(" << msg << ")";
+    std::cout << "\n\t\treject: " << msg << "\t" << to_string(*sym);
 #endif
     return false;
 }
 
-void UNMATCHED_EXPECTATION(std::string msg)
+void DETAIL_MISMATCH(std::string msg)
 {
 #ifdef DEBUG_BINDING_SEARCH
-    std::cout << "\n\t\t\t" << msg << "!";
+    std::cout << "\n\t\t\tmismatch detail: " << msg;
 #endif
 }
 
@@ -82,14 +82,14 @@ bool typeMatchesCVR(const TypeSymbol* tySym, CVR cvr)
     switch (cvr) {
         case CVR::Const:
             if (!tySym->isConstQualified()) {
-                UNMATCHED_EXPECTATION("missing const");
+                DETAIL_MISMATCH("missing const");
                 return false;
             }
             break;
 
         case CVR::Volatile:
             if (!tySym->isVolatileQualified()) {
-                UNMATCHED_EXPECTATION("missing volatile");
+                DETAIL_MISMATCH("missing volatile");
                 return false;
             }
             break;
@@ -97,29 +97,29 @@ bool typeMatchesCVR(const TypeSymbol* tySym, CVR cvr)
         case CVR::ConstAndVolatile:
             if (!(tySym->isConstQualified())
                     || !(tySym->isVolatileQualified())) {
-                UNMATCHED_EXPECTATION("missing const volatile");
+                DETAIL_MISMATCH("missing const volatile");
                 return false;
             }
             break;
 
         case CVR::Restrict:
             if (!tySym->isRestrictQualified()) {
-                UNMATCHED_EXPECTATION("missing restrict");
+                DETAIL_MISMATCH("missing restrict");
                 return false;
             }
             break;
 
         case CVR::None:
             if (tySym->isConstQualified()) {
-                UNMATCHED_EXPECTATION("spurious const");
+                DETAIL_MISMATCH("spurious const");
                 return false;
             }
             if (tySym->isVolatileQualified()) {
-                UNMATCHED_EXPECTATION("spurious volatile");
+                DETAIL_MISMATCH("spurious volatile");
                 return false;
             }
             if (tySym->isRestrictQualified()) {
-                UNMATCHED_EXPECTATION("spurious restrict");
+                DETAIL_MISMATCH("spurious restrict");
                 return false;
             }
             break;
@@ -133,13 +133,13 @@ bool typeMatchesBinding(const TypeSymbol* tySym, const BindingSummary& binding)
     for (auto i = binding.derivTyKs_.size(); i > 0; --i) {
         auto derivTyK = binding.derivTyKs_[i - 1];
         if (derivTyK != tySym->typeKind()) {
-            UNMATCHED_EXPECTATION("derived type kind mismatch");
+            DETAIL_MISMATCH("derived type kind");
             return false;
         }
 
         auto derivTyCVR = binding.derivTyCVRs_[i - 1];
         if (!typeMatchesCVR(tySym, derivTyCVR)) {
-            UNMATCHED_EXPECTATION("derived type CVR mismatch");
+            DETAIL_MISMATCH("derived type CVR");
             return false;
         }
 
@@ -160,39 +160,39 @@ bool typeMatchesBinding(const TypeSymbol* tySym, const BindingSummary& binding)
 
     const NamedTypeSymbol* namedTySym = tySym->asNamedType();
     if (!namedTySym) {
-        UNMATCHED_EXPECTATION("not a named type");
+        DETAIL_MISMATCH("not a named type");
         return false;
     }
 
     if (namedTySym->name() == nullptr) {
-        UNMATCHED_EXPECTATION("null type name");
+        DETAIL_MISMATCH("null type name");
         return false;
     }
 
     if (namedTySym->name()->text() != binding.specTyName_) {
-        UNMATCHED_EXPECTATION("type name mismatch");
+        DETAIL_MISMATCH("type name");
         return false;
     }
 
     if (namedTySym->namedTypeKind() != binding.specTyK_) {
-        UNMATCHED_EXPECTATION("type kind mismatch");
+        DETAIL_MISMATCH("type kind");
         return false;
     }
 
     if (binding.specTyBuiltinK_ != BuiltinTypeKind::None) {
         if (!tySym->asNamedType()) {
-            UNMATCHED_EXPECTATION("not a builtin");
+            DETAIL_MISMATCH("not a builtin");
             return false;
         }
 
         if (tySym->asNamedType()->builtinTypeKind() != binding.specTyBuiltinK_) {
-            UNMATCHED_EXPECTATION("builtin kind mismatch");
+            DETAIL_MISMATCH("builtin kind");
             return false;
         }
     }
 
     if (!typeMatchesCVR(tySym, binding.specTyCVR_)) {
-        UNMATCHED_EXPECTATION("CVR mismatch");
+        DETAIL_MISMATCH("CVR");
         return false;
     }
 

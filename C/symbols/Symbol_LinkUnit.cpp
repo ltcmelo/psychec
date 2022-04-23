@@ -41,7 +41,7 @@ namespace C {
 std::string to_string(const LinkUnitSymbol& sym)
 {
     std::ostringstream oss;
-    oss << "{!unit!}";
+    oss << "{!unit !}";
 
     return oss.str();
 }
