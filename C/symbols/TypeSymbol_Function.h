@@ -23,11 +23,15 @@
 
 #include "Symbol_Type.h"
 
+#include <vector>
+
 namespace psy {
 namespace C {
 
 /**
  * \brief The FunctionTypeSymbol class.
+ *
+ * \remark 6.2.5-20
  */
 class PSY_C_API FunctionTypeSymbol final : public TypeSymbol
 {
@@ -41,6 +45,11 @@ public:
      * The return type of \c this FunctionTypeSymbol.
      */
     const TypeSymbol* returnType() const;
+
+    /**
+     * The parameter types of \c this FunctionTypeSymbol.
+     */
+    std::vector<const TypeSymbol*> parameterTypes() const;
 
 private:
     DECL_PIMPL_SUB(FunctionTypeSymbol)

@@ -21,6 +21,10 @@
 #include "Symbol_Function.h"
 #include "Symbol__IMPL__.inc"
 
+#include "symbols/Symbols.h"
+
+#include "../common/infra/PsycheAssert.h"
+
 #include <sstream>
 
 using namespace psy;
@@ -33,9 +37,11 @@ struct FunctionSymbol::FunctionSymbolImpl : SymbolImpl
                        const Symbol* containingSym)
         : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Function)
         , name_(nullptr)
+        , tySym_(nullptr)
     {}
 
     std::unique_ptr<SymbolName> name_;
+    const TypeSymbol* tySym_;
 };
 
 FunctionSymbol::FunctionSymbol(const SyntaxTree* tree,
@@ -56,18 +62,27 @@ void FunctionSymbol::setName(std::unique_ptr<SymbolName> symName)
     P_CAST->name_ = std::move(symName);
 }
 
+const TypeSymbol* FunctionSymbol::type() const
+{
+    return P_CAST->tySym_;
+}
+
+void FunctionSymbol::setType(const TypeSymbol* tySym)
+{
+    P_CAST->tySym_ = tySym;
+}
+
 namespace psy {
 namespace C {
 
 std::string to_string(const FunctionSymbol& sym)
 {
     std::ostringstream oss;
-    oss << "<<< ";
-    oss << "function";
-    oss << " |";
+    oss << "[@function |";
     if (sym.name())
-        oss << " name:" << to_string(*sym.name());
-    oss << " >>>";
+        oss << " " << to_string(*sym.name());
+    oss << " " << to_string(*sym.type());
+    oss << " @]";
 
     return oss.str();
 }

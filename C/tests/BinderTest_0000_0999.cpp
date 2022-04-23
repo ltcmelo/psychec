@@ -41,42 +41,78 @@ void BinderTest::case0001()
     bind("void x ( ) ;",
          Expectation()
              .binding(BindingSummary("x")
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
-//                      .derivType(TypeKind::Array, CVR::None)));
+                      .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)));
 }
 
 void BinderTest::case0002()
 {
+    bind("int x ( ) ;",
+         Expectation()
+             .binding(BindingSummary("x")
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case0003()
 {
+    bind("void * x ( ) ;",
+         Expectation()
+             .binding(BindingSummary("x")
+                      .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0004()
 {
+    bind("int * x ( ) ;",
+         Expectation()
+             .binding(BindingSummary("x")
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0005()
 {
+    bind("x y ( ) ;",
+         Expectation()
+             .binding(BindingSummary("y")
+                      .specType("x", NamedTypeKind::Synonym)));
 }
 
 void BinderTest::case0006()
 {
-
+    bind("int * ( x ) ( ) ;",
+         Expectation()
+             .binding(BindingSummary("x")
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0007()
 {
-
+    bind("int * ( ( x ) ) ( ) ;",
+         Expectation()
+             .binding(BindingSummary("x")
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0008()
 {
+    bind("int * * x ( ) ;",
+         Expectation()
+             .binding(BindingSummary("x")
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0009()
 {
+    bind("x * y ( ) ;",
+         Expectation()
+             .binding(BindingSummary("y")
+                      .specType("x", NamedTypeKind::Synonym)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0010()

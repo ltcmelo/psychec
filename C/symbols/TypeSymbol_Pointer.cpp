@@ -63,9 +63,9 @@ namespace C {
 std::string to_string(const PointerTypeSymbol& tySym)
 {
     std::ostringstream oss;
-    oss << "<<< pointer-to |";
+    oss << "<*pointer type |";
     oss << " " << to_string(*tySym.referencedType());
-    oss << " >>>";
+    oss << " *>";
 
     return oss.str();
 }

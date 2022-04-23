@@ -79,42 +79,16 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarators(const Para
 /* Declarators */
 SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 {
-    switch (decltor->kind()) {
-        case FunctionDeclarator:
-            makeSymAndPushIt<FunctionSymbol>();
-            break;
-
-        case ArrayDeclarator:
-        case PointerDeclarator:
-        case IdentifierDeclarator:
-            switch (syms_.top()->kind())
-            {
-                case SymbolKind::Type:
-                    makeSymAndPushIt<FieldSymbol>();
-                    break;
-
-                case SymbolKind::LinkUnit:
-                case SymbolKind::Function:
-                    makeSymAndPushIt<VariableSymbol>();
-                    break;
-
-                default:
-                    PSYCHE_FAIL_0(return Action::Quit);
-                    break;
-            }
-            break;
-
-        default:
-            PSYCHE_FAIL_0(return Action::Quit);
-    }
-
     visit(decltor);
 
     auto sym = syms_.top();
     switch (sym->kind()) {
-        case SymbolKind::Function:
-            PSYCHE_ASSERT_0(decltor->kind() == FunctionDeclarator, return Action::Quit);
+        case SymbolKind::Function: {
+            auto funcSym = sym->asFunction();
+            funcSym->setType(tySyms_.top());
+            popTySym();
             break;
+        }
 
         case SymbolKind::Value: {
             auto valSym = sym->asValue();
@@ -122,6 +96,7 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 
             switch (decltor->kind())
             {
+                case FunctionDeclarator:
                 case ArrayDeclarator:
                 case PointerDeclarator:
                     popTySym();
@@ -192,6 +167,37 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
+    auto tySym = tySyms_.top();
+    switch (tySym->typeKind()) {
+        case TypeKind::Function:
+            makeSymAndPushIt<FunctionSymbol>();
+            break;
+
+        case TypeKind::Array:
+        case TypeKind::Named:
+        case TypeKind::Pointer:
+            switch (syms_.top()->kind())
+            {
+                case SymbolKind::Type:
+                    makeSymAndPushIt<FieldSymbol>();
+                    break;
+
+                case SymbolKind::LinkUnit:
+                case SymbolKind::Function:
+                    makeSymAndPushIt<VariableSymbol>();
+                    break;
+
+                default:
+                    PSYCHE_FAIL_0(return Action::Quit);
+                    break;
+            }
+            break;
+
+        default:
+            PSYCHE_FAIL_0(break);
+            break;
+    }
+
     Symbol* sym = syms_.top();
     auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
 

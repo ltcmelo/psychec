@@ -23,12 +23,13 @@
 
 #include "Symbol.h"
 #include "TypeClass_NameableSymbol.h"
+#include "TypeClass_TypeableSymbol.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The FunctionUnitSymbol class.
+ * \brief The FunctionSymbol class.
  *
  * \note
  * This API is inspired by that of \c Microsoft.CodeAnalysis.IMethodSymbol
@@ -36,6 +37,7 @@ namespace C {
  */
 class PSY_C_API FunctionSymbol final : public Symbol
                                      , public TypeClass_NameableSymbol
+                                     , public TypeClass_TypeableSymbol
 {
 public:
     virtual FunctionSymbol* asFunction() override { return this; }
@@ -45,6 +47,20 @@ public:
      * The SymbolName of \c this Symbol.
      */
     const SymbolName* name() const;
+
+    /**
+     * The type of \c this FunctionSymbol.
+     *
+     * \sa FunctionSymbol::returnType
+     */
+    const TypeSymbol* type() const;
+
+    /**
+     * The return type of \c this FunctionSymbol.
+     *
+     * \sa FunctionSymbol::type
+     */
+    const TypeSymbol* returnType() const;
 
 protected:
     DECL_PIMPL_SUB(FunctionSymbol);
@@ -56,6 +72,7 @@ protected:
                    const Symbol* containingSym);
 
     virtual void setName(std::unique_ptr<SymbolName> symName) override;
+    virtual void setType(const TypeSymbol* tySym) override;
 };
 
 std::string PSY_C_API to_string(const FunctionSymbol& sym);

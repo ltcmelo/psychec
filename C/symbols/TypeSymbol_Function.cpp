@@ -40,6 +40,7 @@ struct FunctionTypeSymbol::FunctionTypeSymbolImpl : TypeSymbolImpl
     {}
 
     const TypeSymbol* retTySym_;
+    std::vector<const TypeSymbol*> parmTySyms_;
 };
 
 FunctionTypeSymbol::FunctionTypeSymbol(const SyntaxTree* tree,
@@ -54,7 +55,12 @@ FunctionTypeSymbol::FunctionTypeSymbol(const SyntaxTree* tree,
 
 const TypeSymbol* FunctionTypeSymbol::returnType() const
 {
-    return nullptr;
+    return P_CAST->retTySym_;
+}
+
+std::vector<const TypeSymbol*> FunctionTypeSymbol::parameterTypes() const
+{
+    return P_CAST->parmTySyms_;
 }
 
 namespace psy {
@@ -63,8 +69,9 @@ namespace C {
 std::string to_string(const FunctionTypeSymbol& tySym)
 {
     std::ostringstream oss;
-    oss << "<<< type (function) |";
-    oss << " >>>";
+    oss << "<@function type |";
+    oss << " return:" << to_string(*tySym.returnType());
+    oss << " @>";
 
     return oss.str();
 }
