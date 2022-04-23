@@ -75,10 +75,12 @@ namespace C {
 std::string PSY_C_API to_string(const TypeSymbol& tySym)
 {
     switch (tySym.typeKind()) {
-        case TypeKind::Named:
-            return to_string(*tySym.asNamedType());
         case TypeKind::Array:
             return to_string(*tySym.asArrayType());
+        case TypeKind::Function:
+            return to_string(*tySym.asFunctionType());
+        case TypeKind::Named:
+            return to_string(*tySym.asNamedType());
         case TypeKind::Pointer:
             return to_string(*tySym.asPointerType());
         default:

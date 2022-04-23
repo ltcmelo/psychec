@@ -40,11 +40,10 @@ namespace C {
 std::string to_string(const FieldSymbol& sym)
 {
     std::ostringstream oss;
-    oss << "<<< ";
-    oss << "field";
-    oss << " |";
-    oss << " name:" << to_string(*sym.name());
-    oss << " >>>";
+    oss << "{%field |";
+    if (sym.name())
+        oss << " " << to_string(*sym.name());
+    oss << "%}";
 
     return oss.str();
 }

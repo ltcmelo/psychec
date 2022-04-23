@@ -111,9 +111,10 @@ namespace C {
 std::string to_string(const NamedTypeSymbol& tySym)
 {
     std::ostringstream oss;
-    oss << "<<< type |";
-    oss << " name:" << to_string(*tySym.name());
-    oss << " >>>";
+    oss << "<$named-type |";
+    if (tySym.name())
+        oss << " " << to_string(*tySym.name());
+    oss << " $>";
 
     return oss.str();
 }

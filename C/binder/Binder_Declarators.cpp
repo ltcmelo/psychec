@@ -112,9 +112,14 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 
     auto sym = syms_.top();
     switch (sym->kind()) {
-        case SymbolKind::Function:
+        case SymbolKind::Function: {
             PSYCHE_ASSERT_0(decltor->kind() == FunctionDeclarator, return Action::Quit);
+
+            auto funcSym = sym->asFunction();
+            funcSym->setType(tySyms_.top());
+            popTySym();
             break;
+        }
 
         case SymbolKind::Value: {
             auto valSym = sym->asValue();

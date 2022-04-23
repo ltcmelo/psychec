@@ -42,10 +42,11 @@ namespace C {
 std::string to_string(const VariableSymbol& sym)
 {
     std::ostringstream oss;
-    oss << "<<< variable |";
-    oss << " name:" << to_string(*sym.name());
+    oss << "{`variable |";
+    if (sym.name())
+        oss << " " << to_string(*sym.name());
     oss << " " << to_string(*sym.type());
-    oss << " >>>";
+    oss << "`}";
 
     return oss.str();
 }

@@ -41,7 +41,7 @@ void BinderTest::case0001()
     bind("void x ( ) ;",
          Expectation()
              .binding(BindingSummary("x")
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
+                      .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
 void BinderTest::case0002()

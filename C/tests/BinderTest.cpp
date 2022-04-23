@@ -73,7 +73,7 @@ bool REJECT_CANDIDATE(const Symbol* sym, std::string msg)
 void UNMATCHED_EXPECTATION(std::string msg)
 {
 #ifdef DEBUG_BINDING_SEARCH
-    std::cout << "\n\t\t\tmismatch (" << msg << ")";
+    std::cout << "\n\t\t\t" << msg << "!";
 #endif
 }
 
@@ -216,7 +216,7 @@ bool functionMatchesBinding(const FunctionSymbol* funcSym, const BindingSummary&
     const FunctionTypeSymbol* funcTySym = funcSym->type()->asFunctionType();
 
     if (!typeMatchesBinding(funcTySym->returnType(), binding))
-        return REJECT_CANDIDATE(funcSym, " return type mismatch");
+        return REJECT_CANDIDATE(funcSym, "return type mismatch");
 
     return true;
 }
@@ -296,8 +296,8 @@ void BinderTest::bind(std::string text, Expectation X)
         auto sym = compilation->assembly()->findSymDEF(pred);
 
         if (sym == nullptr) {
-            auto s = "incorrect/non-existing binding: "
-                    + binding.name_ + " " + to_string(binding.valK_);
+            auto s = "no symbol matches the expectation: "
+                    + binding.name_ + " " + to_string(binding.symK_);
             PSYCHE_TEST_FAIL(s);
         }
     }

@@ -40,11 +40,10 @@ namespace C {
 std::string to_string(const ParameterSymbol& sym)
 {
     std::ostringstream oss;
-    oss << "<<< ";
-    oss << "parameter";
-    oss << " |";
-    oss << " name:" << to_string(*sym.name());
-    oss << " >>>";
+    oss << "{~parameter |";
+    if (sym.name())
+        oss << " " << to_string(*sym.name());
+    oss << "~}";
 
     return oss.str();
 }

@@ -78,12 +78,11 @@ namespace C {
 std::string to_string(const FunctionSymbol& sym)
 {
     std::ostringstream oss;
-    oss << "<<< ";
-    oss << "function";
-    oss << " |";
+    oss << "[@function |";
     if (sym.name())
-        oss << " name:" << to_string(*sym.name());
-    oss << " >>>";
+        oss << " " << to_string(*sym.name());
+    oss << " " << to_string(*sym.type());
+    oss << " @]";
 
     return oss.str();
 }
