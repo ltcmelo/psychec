@@ -65,7 +65,7 @@ std::string to_string(const PointerTypeSymbol& tySym)
     std::ostringstream oss;
     oss << "<*pointer-to |";
     oss << " " << to_string(*tySym.referencedType());
-    oss << "*>";
+    oss << " *>";
 
     return oss.str();
 }

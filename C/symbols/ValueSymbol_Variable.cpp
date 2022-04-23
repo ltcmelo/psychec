@@ -46,7 +46,7 @@ std::string to_string(const VariableSymbol& sym)
     if (sym.name())
         oss << " " << to_string(*sym.name());
     oss << " " << to_string(*sym.type());
-    oss << "`}";
+    oss << " `}";
 
     return oss.str();
 }

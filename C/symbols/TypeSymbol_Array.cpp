@@ -65,7 +65,7 @@ std::string to_string(const ArrayTypeSymbol& tySym)
     std::ostringstream oss;
     oss << "<#array type |";
     oss << " " << to_string(*tySym.elementType());
-    oss << "#>";
+    oss << " #>";
 
     return oss.str();
 }

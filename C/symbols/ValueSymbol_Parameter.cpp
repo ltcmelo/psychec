@@ -43,7 +43,7 @@ std::string to_string(const ParameterSymbol& sym)
     oss << "{~parameter |";
     if (sym.name())
         oss << " " << to_string(*sym.name());
-    oss << "~}";
+    oss << " ~}";
 
     return oss.str();
 }

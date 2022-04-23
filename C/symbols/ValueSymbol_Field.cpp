@@ -43,7 +43,7 @@ std::string to_string(const FieldSymbol& sym)
     oss << "{%field |";
     if (sym.name())
         oss << " " << to_string(*sym.name());
-    oss << "%}";
+    oss << " %}";
 
     return oss.str();
 }
