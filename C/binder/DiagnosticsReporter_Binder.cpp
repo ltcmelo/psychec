@@ -25,19 +25,7 @@
 using namespace psy;
 using namespace C;
 
-const std::string Binder::DiagnosticsReporter::ID_of_UselessDeclaration = "Binder-000";
-
-void Binder::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc,
-                                           SyntaxToken tk)
+void Binder::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
 {
     binder_->tree_->newDiagnostic(desc, tk);
 };
-
-void Binder::DiagnosticsReporter::UselessDeclaration(SyntaxToken tk)
-{
-    diagnose(DiagnosticDescriptor(ID_of_UselessDeclaration,
-                                  "[[useless declaration]]",
-                                  "declaration does not declare anything",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Binding), tk);
-}

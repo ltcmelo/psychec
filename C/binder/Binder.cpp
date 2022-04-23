@@ -138,7 +138,7 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 
 SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node)
 {
-    diagReporter_.UselessDeclaration(node->lastToken());
+    Semantics_TypeSpecifiers::UselessDeclaration(node->lastToken(), &diagReporter_);
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         ;
