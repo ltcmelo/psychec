@@ -70,56 +70,78 @@ bool REJECT_CANDIDATE(const Symbol* sym, std::string msg)
     return false;
 }
 
+void UNMATCHED_EXPECTATION(std::string msg)
+{
+#ifdef DEBUG_BINDING_SEARCH
+    std::cout << "\n\t\t\tmismatch (" << msg << ")";
+#endif
+}
+
 bool typeMatchesCVR(const TypeSymbol* tySym, CVR cvr)
 {
     switch (cvr) {
         case CVR::Const:
-            if (!tySym->isConstQualified())
+            if (!tySym->isConstQualified()) {
+                UNMATCHED_EXPECTATION("missing const");
                 return false;
+            }
             break;
 
         case CVR::Volatile:
-            if (!tySym->isVolatileQualified())
+            if (!tySym->isVolatileQualified()) {
+                UNMATCHED_EXPECTATION("missing volatile");
                 return false;
+            }
             break;
 
         case CVR::ConstAndVolatile:
             if (!(tySym->isConstQualified())
                     || !(tySym->isVolatileQualified())) {
+                UNMATCHED_EXPECTATION("missing const volatile");
                 return false;
             }
             break;
 
         case CVR::Restrict:
-            if (!tySym->isRestrictQualified())
+            if (!tySym->isRestrictQualified()) {
+                UNMATCHED_EXPECTATION("missing restrict");
                 return false;
+            }
             break;
 
         case CVR::None:
-            if (tySym->isConstQualified())
+            if (tySym->isConstQualified()) {
+                UNMATCHED_EXPECTATION("spurious const");
                 return false;
-            if (tySym->isVolatileQualified())
+            }
+            if (tySym->isVolatileQualified()) {
+                UNMATCHED_EXPECTATION("spurious volatile");
                 return false;
-            if (tySym->isRestrictQualified())
+            }
+            if (tySym->isRestrictQualified()) {
+                UNMATCHED_EXPECTATION("spurious restrict");
                 return false;
+            }
             break;
     }
 
     return true;
 }
 
-bool typeMatchesBinding(const TypeSymbol* tySym,
-                        const BindingSummary& binding,
-                        const Symbol* sym)
+bool typeMatchesBinding(const TypeSymbol* tySym, const BindingSummary& binding)
 {
     for (auto i = binding.derivTyKs_.size(); i > 0; --i) {
         auto derivTyK = binding.derivTyKs_[i - 1];
-        if (derivTyK != tySym->typeKind())
-            return REJECT_CANDIDATE(sym, "derived type kind mismatch");
+        if (derivTyK != tySym->typeKind()) {
+            UNMATCHED_EXPECTATION("derived type kind mismatch");
+            return false;
+        }
 
         auto derivTyCVR = binding.derivTyCVRs_[i - 1];
-        if (!typeMatchesCVR(tySym, derivTyCVR))
-            return REJECT_CANDIDATE(sym, "CVR mismatch");
+        if (!typeMatchesCVR(tySym, derivTyCVR)) {
+            UNMATCHED_EXPECTATION("derived type CVR mismatch");
+            return false;
+        }
 
         switch (tySym->typeKind()) {
             case TypeKind::Array:
@@ -137,28 +159,42 @@ bool typeMatchesBinding(const TypeSymbol* tySym,
     }
 
     const NamedTypeSymbol* namedTySym = tySym->asNamedType();
-    if (!namedTySym)
-        return REJECT_CANDIDATE(tySym, "not a named type");
-
-    if (namedTySym->name() == nullptr)
-        return REJECT_CANDIDATE(sym, "null type name");
-
-    if (namedTySym->name()->text() != binding.specTyName_)
-        return REJECT_CANDIDATE(sym, "type name mismatch");
-
-    if (namedTySym->namedTypeKind() != binding.specTyK_)
-        return REJECT_CANDIDATE(sym, "type kind mismatch");
-
-    if (binding.specTyBuiltinK_ != BuiltinTypeKind::None) {
-        if (!tySym->asNamedType())
-            return REJECT_CANDIDATE(sym, "not a builtin");
-
-        if (tySym->asNamedType()->builtinTypeKind() != binding.specTyBuiltinK_)
-            return REJECT_CANDIDATE(sym, "builtin kind mismatch");
+    if (!namedTySym) {
+        UNMATCHED_EXPECTATION("not a named type");
+        return false;
     }
 
-    if (!typeMatchesCVR(tySym, binding.specTyCVR_))
-        return REJECT_CANDIDATE(sym, "CVR mismatch");
+    if (namedTySym->name() == nullptr) {
+        UNMATCHED_EXPECTATION("null type name");
+        return false;
+    }
+
+    if (namedTySym->name()->text() != binding.specTyName_) {
+        UNMATCHED_EXPECTATION("type name mismatch");
+        return false;
+    }
+
+    if (namedTySym->namedTypeKind() != binding.specTyK_) {
+        UNMATCHED_EXPECTATION("type kind mismatch");
+        return false;
+    }
+
+    if (binding.specTyBuiltinK_ != BuiltinTypeKind::None) {
+        if (!tySym->asNamedType()) {
+            UNMATCHED_EXPECTATION("not a builtin");
+            return false;
+        }
+
+        if (tySym->asNamedType()->builtinTypeKind() != binding.specTyBuiltinK_) {
+            UNMATCHED_EXPECTATION("builtin kind mismatch");
+            return false;
+        }
+    }
+
+    if (!typeMatchesCVR(tySym, binding.specTyCVR_)) {
+        UNMATCHED_EXPECTATION("CVR mismatch");
+        return false;
+    }
 
     return true;
 }
@@ -178,32 +214,9 @@ bool functionMatchesBinding(const FunctionSymbol* funcSym, const BindingSummary&
         return REJECT_CANDIDATE(funcSym, "not a function type");
 
     const FunctionTypeSymbol* funcTySym = funcSym->type()->asFunctionType();
-    const TypeSymbol* retTySym = funcTySym->returnType();
 
-//    for (auto i = binding.derivTyKs_.size(); i > 0; --i) {
-//        auto derivTyK = binding.derivTyKs_[i - 1];
-//        if (derivTyK != tySym->typeKind())
-//            return REJECT_CANDIDATE(valSym, "derived type kind mismatch");
-
-//        auto derivTyCVR = binding.derivTyCVRs_[i - 1];
-//        if (!typeMatchesCVR(tySym, derivTyCVR))
-//            return REJECT_CANDIDATE(valSym, "CVR mismatch");
-
-//        switch (tySym->typeKind()) {
-//            case TypeKind::Array:
-//                tySym = tySym->asArrayType()->elementType();
-//                break;
-
-//            case TypeKind::Pointer:
-//                tySym = tySym->asPointerType()->referencedType();
-//                break;
-
-//            default:
-//                PSYCHE_TEST_FAIL("unexpected");
-//                return false;
-//        }
-//    }
-
+    if (!typeMatchesBinding(funcTySym->returnType(), binding))
+        return REJECT_CANDIDATE(funcSym, " return type mismatch");
 
     return true;
 }
@@ -222,59 +235,10 @@ bool valueMatchesBinding(const ValueSymbol* valSym, const BindingSummary& bindin
     if (valSym->type() == nullptr)
         return REJECT_CANDIDATE(valSym, "null type");
 
-    const TypeSymbol* tySym = valSym->type();
+    if (!typeMatchesBinding(valSym->type(), binding))
+        return REJECT_CANDIDATE(valSym, "type mismatch");
 
-    return typeMatchesBinding(tySym, binding, valSym);
-
-//    for (auto i = binding.derivTyKs_.size(); i > 0; --i) {
-//        auto derivTyK = binding.derivTyKs_[i - 1];
-//        if (derivTyK != tySym->typeKind())
-//            return REJECT_CANDIDATE(valSym, "derived type kind mismatch");
-
-//        auto derivTyCVR = binding.derivTyCVRs_[i - 1];
-//        if (!typeMatchesCVR(tySym, derivTyCVR))
-//            return REJECT_CANDIDATE(valSym, "CVR mismatch");
-
-//        switch (tySym->typeKind()) {
-//            case TypeKind::Array:
-//                tySym = tySym->asArrayType()->elementType();
-//                break;
-
-//            case TypeKind::Pointer:
-//                tySym = tySym->asPointerType()->referencedType();
-//                break;
-
-//            default:
-//                PSYCHE_TEST_FAIL("unexpected");
-//                return false;
-//        }
-//    }
-
-//    const NamedTypeSymbol* namedTySym = tySym->asNamedType();
-//    if (!namedTySym)
-//        return REJECT_CANDIDATE(tySym, "not a named type");
-
-//    if (namedTySym->name() == nullptr)
-//        return REJECT_CANDIDATE(valSym, "null type name");
-
-//    if (namedTySym->name()->text() != binding.specTyName_)
-//        return REJECT_CANDIDATE(valSym, "type name mismatch");
-
-//    if (namedTySym->namedTypeKind() != binding.specTyK_)
-//        return REJECT_CANDIDATE(valSym, "type kind mismatch");
-
-//    if (binding.specTyBuiltinK_ != BuiltinTypeKind::None) {
-//        if (!tySym->asNamedType())
-//            return REJECT_CANDIDATE(valSym, "not a builtin");
-
-//        if (tySym->asNamedType()->builtinTypeKind() != binding.specTyBuiltinK_)
-//            return REJECT_CANDIDATE(valSym, "builtin kind mismatch");
-//    }
-
-//    if (!typeMatchesCVR(tySym, binding.specTyCVR_))
-//        return REJECT_CANDIDATE(valSym, "CVR mismatch");
-
-//    return true;
+    return true;
 }
 
 bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const BindingSummary& binding)
