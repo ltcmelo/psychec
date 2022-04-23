@@ -29,6 +29,8 @@ namespace C {
 /**
  * \brief The PointerTypeSymbol class.
  *
+ * \remark 6.2.5-20
+ *
  * \note
  * This API is inspired by that of \c Microsoft.CodeAnalysis.IPointerTypeSymbol
  * from Roslyn, the .NET Compiler Platform.

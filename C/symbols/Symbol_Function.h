@@ -55,6 +55,13 @@ public:
      */
     const FunctionTypeSymbol* type() const;
 
+    /**
+     * The return type of \c this FunctionSymbol.
+     *
+     * \sa FunctionSymbol::type
+     */
+    const TypeSymbol* returnType() const;
+
 protected:
     DECL_PIMPL_SUB(FunctionSymbol);
 

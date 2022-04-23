@@ -70,7 +70,7 @@ bool REJECT_CANDIDATE(const Symbol* sym, std::string msg)
     return false;
 }
 
-bool isTypeCompliantOnCVR(const TypeSymbol* tySym, CVR cvr)
+bool typeMatchesCVR(const TypeSymbol* tySym, CVR cvr)
 {
     switch (cvr) {
         case CVR::Const:
@@ -108,7 +108,7 @@ bool isTypeCompliantOnCVR(const TypeSymbol* tySym, CVR cvr)
     return true;
 }
 
-bool isFunctionCompliantWithBinding(const FunctionSymbol* valSym, const BindingSummary& binding)
+bool functionMatchesBinding(const FunctionSymbol* valSym, const BindingSummary& binding)
 {
     if (!valSym->name())
         return REJECT_CANDIDATE(valSym, "empty name");
@@ -122,7 +122,7 @@ bool isFunctionCompliantWithBinding(const FunctionSymbol* valSym, const BindingS
     return true;
 }
 
-bool isValueCompliantWithBinding(const ValueSymbol* valSym, const BindingSummary& binding)
+bool valueMatchesBinding(const ValueSymbol* valSym, const BindingSummary& binding)
 {
     if (valSym->valueKind() != binding.valK_)
         return REJECT_CANDIDATE(valSym, "value kind mismatch");
@@ -144,7 +144,7 @@ bool isValueCompliantWithBinding(const ValueSymbol* valSym, const BindingSummary
             return REJECT_CANDIDATE(valSym, "derived type kind mismatch");
 
         auto derivTyCVR = binding.derivTyCVRs_[i - 1];
-        if (!isTypeCompliantOnCVR(tySym, derivTyCVR))
+        if (!typeMatchesCVR(tySym, derivTyCVR))
             return REJECT_CANDIDATE(valSym, "CVR mismatch");
 
         switch (tySym->typeKind()) {
@@ -183,14 +183,13 @@ bool isValueCompliantWithBinding(const ValueSymbol* valSym, const BindingSummary
             return REJECT_CANDIDATE(valSym, "builtin kind mismatch");
     }
 
-    if (!isTypeCompliantOnCVR(tySym, binding.specTyCVR_))
+    if (!typeMatchesCVR(tySym, binding.specTyCVR_))
         return REJECT_CANDIDATE(valSym, "CVR mismatch");
 
     return true;
 }
 
-bool isSymbolCompliantWithBinding(const std::unique_ptr<Symbol>& sym,
-                                  const BindingSummary& binding)
+bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const BindingSummary& binding)
 {
     const Symbol* candSym = sym.get();
 
@@ -200,7 +199,7 @@ bool isSymbolCompliantWithBinding(const std::unique_ptr<Symbol>& sym,
     switch (binding.symK_)
     {
         case SymbolKind::Value:
-            return isValueCompliantWithBinding(candSym->asValue(), binding);
+            return valueMatchesBinding(candSym->asValue(), binding);
 
         case SymbolKind::Type: {
             if (candSym->asType()->typeKind() != binding.tyK_)
@@ -209,7 +208,7 @@ bool isSymbolCompliantWithBinding(const std::unique_ptr<Symbol>& sym,
         }
 
         case SymbolKind::Function:
-            return isFunctionCompliantWithBinding(candSym->asFunction(), binding);
+            return functionMatchesBinding(candSym->asFunction(), binding);
 
         default:
             PSYCHE_TEST_FAIL("unknkown symbol kind");
@@ -241,7 +240,7 @@ void BinderTest::bind(std::string text, Expectation X)
     for (const auto& binding : X.bindings_) {
         using namespace std::placeholders;
 
-        auto pred = std::bind(isSymbolCompliantWithBinding, _1, binding);
+        auto pred = std::bind(symbolMatchesBinding, _1, binding);
         auto sym = compilation->assembly()->findSymDEF(pred);
 
         if (sym == nullptr) {

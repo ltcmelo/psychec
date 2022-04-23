@@ -28,6 +28,8 @@ namespace C {
 
 /**
  * \brief The FunctionTypeSymbol class.
+ *
+ * \remark 6.2.5-20
  */
 class PSY_C_API FunctionTypeSymbol final : public TypeSymbol
 {
