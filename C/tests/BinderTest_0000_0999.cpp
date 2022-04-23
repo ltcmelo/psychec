@@ -42,7 +42,6 @@ void BinderTest::case0001()
          Expectation()
              .binding(BindingSummary("x")
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
-//                      .derivType(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case0002()

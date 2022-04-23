@@ -64,7 +64,6 @@ struct BindingSummary
     TypeKind tyK_;
 
     std::string specTyName_;
-//    TypeKind specTyK_;
     NamedTypeKind specTyK_;
     BuiltinTypeKind specTyBuiltinK_;
     CVR specTyCVR_;
