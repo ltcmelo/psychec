@@ -49,11 +49,11 @@ public:
     const SymbolName* name() const;
 
     /**
-     * The <em>function type</em> of \c this FunctionSymbol.
+     * The type of \c this FunctionSymbol.
      *
-     * \remark 6.2.5-20
+     * \sa FunctionSymbol::returnType
      */
-    const FunctionTypeSymbol* type() const;
+    const TypeSymbol* type() const;
 
     /**
      * The return type of \c this FunctionSymbol.

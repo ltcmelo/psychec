@@ -37,11 +37,11 @@ struct FunctionSymbol::FunctionSymbolImpl : SymbolImpl
                        const Symbol* containingSym)
         : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Function)
         , name_(nullptr)
-        , funcTySym_(nullptr)
+        , tySym_(nullptr)
     {}
 
     std::unique_ptr<SymbolName> name_;
-    const FunctionTypeSymbol* funcTySym_;
+    const TypeSymbol* tySym_;
 };
 
 FunctionSymbol::FunctionSymbol(const SyntaxTree* tree,
@@ -62,16 +62,14 @@ void FunctionSymbol::setName(std::unique_ptr<SymbolName> symName)
     P_CAST->name_ = std::move(symName);
 }
 
-const FunctionTypeSymbol* FunctionSymbol::type() const
+const TypeSymbol* FunctionSymbol::type() const
 {
-    return P_CAST->funcTySym_;
+    return P_CAST->tySym_;
 }
 
 void FunctionSymbol::setType(const TypeSymbol* tySym)
 {
-    PSYCHE_ASSERT_0(tySym->typeKind() == TypeKind::Function, return);
-
-    P_CAST->funcTySym_ = tySym->asFunctionType();
+    P_CAST->tySym_ = tySym;
 }
 
 namespace psy {
