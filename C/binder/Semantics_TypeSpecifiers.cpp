@@ -29,21 +29,24 @@
 using namespace psy;
 using namespace C;
 
-const std::string Semantics_TypeSpecifiers::ID_of_UselessDeclaration =
+const std::string Semantics_TypeSpecifiers::ID_DeclarationDoesNotDeclareAnything =
         "Binder-100-6.7.2-2";
 const std::string Semantics_TypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt =
         "Binder-100-6.7.2-2-A";
 const std::string Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers =
         "Binder-100-6.7.2-2-B";
 
-void Semantics_TypeSpecifiers::UselessDeclaration(SyntaxToken tk,
-                                                  Binder::DiagnosticsReporter *diagReporter)
+void Semantics_TypeSpecifiers::DeclarationDoesNotDeclareAnything(
+        SyntaxToken tk,
+        Binder::DiagnosticsReporter *diagReporter)
 {
-    diagReporter->diagnose(DiagnosticDescriptor(ID_of_UselessDeclaration,
-                                  "[[useless declaration]]",
-                                  "declaration does not declare anything",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Binding), tk);
+    diagReporter->diagnose(DiagnosticDescriptor(
+                               ID_DeclarationDoesNotDeclareAnything,
+                               "[[useless declaration]]",
+                                "declaration does not declare anything",
+                                DiagnosticSeverity::Error,
+                                DiagnosticCategory::Binding),
+                           tk);
 }
 
 void Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(

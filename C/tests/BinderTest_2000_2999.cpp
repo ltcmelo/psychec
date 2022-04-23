@@ -279,7 +279,7 @@ void BinderTest::case2052()
     bind("struct { const x ; } ;",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Semantics_TypeSpecifiers::ID_of_UselessDeclaration));
+             Semantics_TypeSpecifiers::ID_DeclarationDoesNotDeclareAnything));
 }
 
 void BinderTest::case2053()
