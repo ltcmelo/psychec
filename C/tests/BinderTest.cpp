@@ -65,7 +65,7 @@ namespace {
 bool REJECT_CANDIDATE(const Symbol* sym, std::string msg)
 {
 #ifdef DEBUG_BINDING_SEARCH
-    std::cout << "\n\t\treject: " << msg << "\t" << to_string(*sym);
+    std::cout << "\n\t\tREJECT " << to_string(*sym) << " DUE TO " << msg;
 #endif
     return false;
 }
@@ -205,7 +205,7 @@ bool functionMatchesBinding(const FunctionSymbol* funcSym, const BindingSummary&
         return REJECT_CANDIDATE(funcSym, "empty name");
 
     if (funcSym->name()->text() != binding.name_)
-        return REJECT_CANDIDATE(funcSym, "name mistmatch");
+        return REJECT_CANDIDATE(funcSym, "name mismatch");
 
     if (funcSym->type() == nullptr)
         return REJECT_CANDIDATE(funcSym, "null type");
@@ -230,7 +230,7 @@ bool valueMatchesBinding(const ValueSymbol* valSym, const BindingSummary& bindin
         return REJECT_CANDIDATE(valSym, "empty name");
 
     if (valSym->name()->text() != binding.name_)
-        return REJECT_CANDIDATE(valSym, "name mistmatch");
+        return REJECT_CANDIDATE(valSym, "name mismatch");
 
     if (valSym->type() == nullptr)
         return REJECT_CANDIDATE(valSym, "null type");
