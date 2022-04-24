@@ -221,22 +221,22 @@ bool functionMatchesBinding(const FunctionSymbol* funcSym, const BindingSummary&
     return true;
 }
 
-bool valueMatchesBinding(const ObjectSymbol* valSym, const BindingSummary& binding)
+bool valueMatchesBinding(const ObjectSymbol* objSym, const BindingSummary& binding)
 {
-    if (valSym->valueKind() != binding.valK_)
-        return REJECT_CANDIDATE(valSym, "value kind mismatch");
+    if (objSym->valueKind() != binding.valK_)
+        return REJECT_CANDIDATE(objSym, "value kind mismatch");
 
-    if (!valSym->name())
-        return REJECT_CANDIDATE(valSym, "empty name");
+    if (!objSym->name())
+        return REJECT_CANDIDATE(objSym, "empty name");
 
-    if (valSym->name()->text() != binding.name_)
-        return REJECT_CANDIDATE(valSym, "name mismatch");
+    if (objSym->name()->text() != binding.name_)
+        return REJECT_CANDIDATE(objSym, "name mismatch");
 
-    if (valSym->type() == nullptr)
-        return REJECT_CANDIDATE(valSym, "null type");
+    if (objSym->type() == nullptr)
+        return REJECT_CANDIDATE(objSym, "null type");
 
-    if (!typeMatchesBinding(valSym->type(), binding))
-        return REJECT_CANDIDATE(valSym, "type mismatch");
+    if (!typeMatchesBinding(objSym->type(), binding))
+        return REJECT_CANDIDATE(objSym, "type mismatch");
 
     return true;
 }

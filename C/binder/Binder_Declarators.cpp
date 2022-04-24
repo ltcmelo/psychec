@@ -91,8 +91,8 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
         }
 
         case SymbolKind::Object: {
-            auto valSym = sym->asObject();
-            valSym->setType(tySyms_.top());
+            auto objSym = sym->asObject();
+            objSym->setType(tySyms_.top());
 
             switch (decltor->kind())
             {
