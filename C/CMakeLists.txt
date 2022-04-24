@@ -109,6 +109,13 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
     ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeFacts.h
     ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeFacts.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Field.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Field.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Parameter.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Parameter.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Variable.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Variable.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol__IMPL__.inc
@@ -147,13 +154,6 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Named.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.h
-    ${PROJECT_SOURCE_DIR}/symbols/ValueKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Field.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Field.h
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Parameter.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Parameter.h
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Variable.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Variable.h
 
     # Binder
     ${PROJECT_SOURCE_DIR}/binder/Binder.h

@@ -18,35 +18,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ValueSymbol_Variable.h"
-
-#include "symbols/Symbols.h"
+#include "ObjectSymbol_Field.h"
 
 #include <sstream>
 
 using namespace psy;
 using namespace C;
 
-VariableSymbol::VariableSymbol(const SyntaxTree* tree,
-                               const Scope* scope,
-                               const Symbol* containingSym)
-    : ValueSymbol(tree,
+FieldSymbol::FieldSymbol(const SyntaxTree* tree,
+                         const Scope* scope,
+                         const Symbol* containingSym)
+    : ObjectSymbol(tree,
                   scope,
                   containingSym,
-                  ValueKind::Variable)
+                  ObjectKind::Field)
 {}
 
 namespace psy {
 namespace C {
 
-std::string to_string(const VariableSymbol& sym)
+std::string to_string(const FieldSymbol& sym)
 {
     std::ostringstream oss;
-    oss << "{`variable |";
+    oss << "{%field |";
     if (sym.name())
         oss << " " << to_string(*sym.name());
-    oss << " " << to_string(*sym.type());
-    oss << " `}";
+    oss << " %}";
 
     return oss.str();
 }

@@ -18,36 +18,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_FIELD_H__
-#define PSYCHE_C_SYMBOL_FIELD_H__
+#ifndef PSYCHE_C_OBJECT_KIND_H__
+#define PSYCHE_C_OBJECT_KIND_H__
 
-#include "Symbol_Value.h"
+#include "API.h"
+#include "Fwds.h"
+
+#include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The FieldUnitSymbol class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IFieldSymbol
- * from Roslyn, the .NET Compiler Platform.
+ * \brief The ObjectKind enum.
  */
-class PSY_C_API FieldSymbol final : public ValueSymbol
+enum class ObjectKind : std::uint8_t
 {
-public:
-    virtual FieldSymbol* asField() override { return this; }
-    virtual const FieldSymbol* asField() const override { return this; }
-
-private:
-    friend class Binder;
-
-    FieldSymbol(const SyntaxTree* tree,
-                const Scope* outerScope,
-                const Symbol* containingSym);
+    None = 0,
+    Field,
+    Parameter,
+    Variable
 };
 
-std::string PSY_C_API to_string(const FieldSymbol& sym);
+inline std::string PSY_C_API to_string(ObjectKind valKind)
+{
+    switch (valKind) {
+        case ObjectKind::Field:
+            return "Field";
+        case ObjectKind::Parameter:
+            return "Parameter";
+        case ObjectKind::Variable:
+            return "Variable";
+
+        default:
+            return "<invalid value kind>";
+    }
+}
 
 } // C
 } // psy

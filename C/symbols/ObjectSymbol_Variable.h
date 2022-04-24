@@ -18,35 +18,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ValueSymbol_Field.h"
+#ifndef PSYCHE_C_SYMBOL_VARIABLE_H__
+#define PSYCHE_C_SYMBOL_VARIABLE_H__
 
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-FieldSymbol::FieldSymbol(const SyntaxTree* tree,
-                         const Scope* scope,
-                         const Symbol* containingSym)
-    : ValueSymbol(tree,
-                  scope,
-                  containingSym,
-                  ValueKind::Field)
-{}
+#include "Symbol_Value.h"
 
 namespace psy {
 namespace C {
 
-std::string to_string(const FieldSymbol& sym)
+/**
+ * \brief The VariableSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.ILocalSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
+class PSY_C_API VariableSymbol final : public ObjectSymbol
 {
-    std::ostringstream oss;
-    oss << "{%field |";
-    if (sym.name())
-        oss << " " << to_string(*sym.name());
-    oss << " %}";
+public:
+    virtual VariableSymbol* asVariable() override { return this; }
+    virtual const VariableSymbol* asVariable() const override { return this; }
 
-    return oss.str();
-}
+private:
+    friend class Binder;
+
+    VariableSymbol(const SyntaxTree* tree,
+                   const Scope* outerScope,
+                   const Symbol* containingSym);
+};
+
+std::string PSY_C_API to_string(const VariableSymbol& sym);
 
 } // C
 } // psy
+
+#endif
