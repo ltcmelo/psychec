@@ -105,7 +105,7 @@ std::string to_string(const Symbol& sym)
             return to_string(*sym.asLinkUnit());
         case SymbolKind::Function:
             return to_string(*sym.asFunction());
-        case SymbolKind::Value:
+        case SymbolKind::Object:
             return to_string(*sym.asObject());
         case SymbolKind::Type:
             return to_string(*sym.asType());

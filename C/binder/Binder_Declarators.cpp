@@ -90,7 +90,7 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
             break;
         }
 
-        case SymbolKind::Value: {
+        case SymbolKind::Object: {
             auto valSym = sym->asObject();
             valSym->setType(tySyms_.top());
 

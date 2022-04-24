@@ -21,7 +21,7 @@
 #ifndef PSYCHE_C_SYMBOL_FIELD_H__
 #define PSYCHE_C_SYMBOL_FIELD_H__
 
-#include "Symbol_Value.h"
+#include "Symbol_Object.h"
 
 namespace psy {
 namespace C {

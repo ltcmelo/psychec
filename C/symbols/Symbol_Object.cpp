@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol_Value.h"
+#include "Symbol_Object.h"
 #include "Symbol__IMPL__.inc"
 
 #include "symbols/Symbols.h"
@@ -34,7 +34,7 @@ struct ObjectSymbol::ObjectSymbolImpl : SymbolImpl
                     const Scope* outerScope,
                     const Symbol* containingSym,
                     ObjectKind valKind)
-        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Value)
+        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Object)
         , valKind_(valKind)
         , name_(nullptr)
         , tySym_(nullptr)

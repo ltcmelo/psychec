@@ -25,7 +25,7 @@ using namespace  C;
 
 BindingSummary::BindingSummary(std::string name, ObjectKind kind)
     : name_(std::move(name))
-    , symK_(SymbolKind::Value)
+    , symK_(SymbolKind::Object)
     , valK_(kind)
     , tyK_(TypeKind::None)
 {}

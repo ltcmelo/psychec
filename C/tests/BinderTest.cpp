@@ -250,7 +250,7 @@ bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const BindingSumma
 
     switch (binding.symK_)
     {
-        case SymbolKind::Value:
+        case SymbolKind::Object:
             return valueMatchesBinding(candSym->asObject(), binding);
 
         case SymbolKind::Type: {

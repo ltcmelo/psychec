@@ -124,10 +124,10 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_LinkUnit.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_LinkUnit.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Object.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Object.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName.cpp
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName.h

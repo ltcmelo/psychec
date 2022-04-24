@@ -41,7 +41,7 @@ enum class SymbolKind : std::uint8_t
 {
     LinkUnit = 0,
     Function,
-    Value,
+    Object,
     Type,
 };
 
@@ -52,8 +52,8 @@ inline std::string PSY_C_API to_string(SymbolKind kind)
             return "LinkUnit";
         case SymbolKind::Function:
             return "Function";
-        case SymbolKind::Value:
-            return "Value";
+        case SymbolKind::Object:
+            return "Object";
         case SymbolKind::Type:
             return "Type";
 
