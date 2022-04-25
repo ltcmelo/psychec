@@ -29,7 +29,7 @@ namespace C {
 /**
  * \brief The LibrarySymbol class.
  *
- * A symbol that denotes a library of objects and function.
+ * A symbol that denotes a library of objects and function from a source file.
  *
  * \attention
  * This symbol does not denote a <em>translation unit</em>.
