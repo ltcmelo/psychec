@@ -78,7 +78,7 @@ protected:
     ObjectSymbol(const SyntaxTree* tree,
                 const Scope* outerScope,
                 const Symbol* containingSym,
-                ObjectKind valKind);
+                ObjectKind objKind);
 
 private:
     friend class Binder;

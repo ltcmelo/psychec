@@ -223,7 +223,7 @@ bool functionMatchesBinding(const FunctionSymbol* funcSym, const BindingSummary&
 
 bool valueMatchesBinding(const ObjectSymbol* objSym, const BindingSummary& binding)
 {
-    if (objSym->valueKind() != binding.valK_)
+    if (objSym->valueKind() != binding.objK_)
         return REJECT_CANDIDATE(objSym, "value kind mismatch");
 
     if (!objSym->name())

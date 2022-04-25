@@ -33,14 +33,14 @@ struct ObjectSymbol::ObjectSymbolImpl : SymbolImpl
     ObjectSymbolImpl(const SyntaxTree* tree,
                     const Scope* outerScope,
                     const Symbol* containingSym,
-                    ObjectKind valKind)
+                    ObjectKind objKind)
         : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Object)
-        , valKind_(valKind)
+        , objKind_(objKind)
         , name_(nullptr)
         , tySym_(nullptr)
     {}
 
-    ObjectKind valKind_;
+    ObjectKind objKind_;
     std::unique_ptr<SymbolName> name_;
     const TypeSymbol* tySym_;
 };
@@ -48,11 +48,11 @@ struct ObjectSymbol::ObjectSymbolImpl : SymbolImpl
 ObjectSymbol::ObjectSymbol(const SyntaxTree* tree,
                          const Scope* outerScope,
                          const Symbol* containingSym,
-                         ObjectKind valKind)
+                         ObjectKind objKind)
     : Symbol(new ObjectSymbolImpl(tree,
                                  outerScope,
                                  containingSym,
-                                 valKind))
+                                 objKind))
 {}
 
 ObjectSymbol::~ObjectSymbol()
@@ -60,7 +60,7 @@ ObjectSymbol::~ObjectSymbol()
 
 ObjectKind ObjectSymbol::valueKind() const
 {
-    return P_CAST->valKind_;
+    return P_CAST->objKind_;
 }
 
 const SymbolName* ObjectSymbol::name() const

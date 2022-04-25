@@ -60,7 +60,7 @@ struct BindingSummary
 
     std::string name_;
     SymbolKind symK_;
-    ObjectKind valK_;
+    ObjectKind objK_;
     TypeKind tyK_;
 
     std::string specTyName_;

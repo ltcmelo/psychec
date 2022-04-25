@@ -41,9 +41,9 @@ enum class ObjectKind : std::uint8_t
     Variable
 };
 
-inline std::string PSY_C_API to_string(ObjectKind valKind)
+inline std::string PSY_C_API to_string(ObjectKind objKind)
 {
-    switch (valKind) {
+    switch (objKind) {
         case ObjectKind::Field:
             return "Field";
         case ObjectKind::Parameter:
