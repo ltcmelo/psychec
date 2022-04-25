@@ -69,7 +69,7 @@ $(function() {
 <div class="title">Diagnostic.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2020/21 Leandro T. C. Melo &lt;ltcmelo@gmail.com&gt;</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2020/21/22 Leandro T. C. Melo &lt;ltcmelo@gmail.com&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
@@ -109,7 +109,7 @@ $(function() {
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">namespace </span>psy {</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">namespace </span>C { <span class="keyword">class </span>TestFrontend; }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">namespace </span>C { <span class="keyword">class </span>Test; }</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 <div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classpsy_1_1_diagnostic.html">   46</a></span>&#160;<span class="keyword">class </span>PSY_API <a class="code" href="classpsy_1_1_diagnostic.html">Diagnostic</a></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{</div>
@@ -133,7 +133,7 @@ $(function() {
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    std::string::size_type outputIndent_;</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_diagnostic.html">Diagnostic</a>&amp; diagnostic);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classpsy_1_1_c_1_1_test_frontend.html">C::TestFrontend</a>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classpsy_1_1_c_1_1_test.html">C::Test</a>;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;};</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;PSY_API std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="keyword">const</span> Diagnostic&amp; diagnostic);</div>
@@ -146,9 +146,9 @@ $(function() {
 <div class="ttc" id="aclasspsy_1_1_diagnostic_html_a70daf8dbe50246a031e0a4304397f9cc"><div class="ttname"><a href="classpsy_1_1_diagnostic.html#a70daf8dbe50246a031e0a4304397f9cc">psy::Diagnostic::descriptor</a></div><div class="ttdeci">const DiagnosticDescriptor &amp; descriptor() const</div><div class="ttdef"><b>Definition:</b> Diagnostic.h:56</div></div>
 <div class="ttc" id="aclasspsy_1_1_diagnostic_descriptor_html"><div class="ttname"><a href="classpsy_1_1_diagnostic_descriptor.html">psy::DiagnosticDescriptor</a></div><div class="ttdef"><b>Definition:</b> DiagnosticDescriptor.h:41</div></div>
 <div class="ttc" id="aclasspsy_1_1_diagnostic_html"><div class="ttname"><a href="classpsy_1_1_diagnostic.html">psy::Diagnostic</a></div><div class="ttdef"><b>Definition:</b> Diagnostic.h:47</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_test_frontend_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_test_frontend.html">psy::C::TestFrontend</a></div><div class="ttdef"><b>Definition:</b> TestFrontend.h:46</div></div>
 <div class="ttc" id="aclasspsy_1_1_diagnostic_html_ad5b70b0640a3f2d2bea002cfff80f396"><div class="ttname"><a href="classpsy_1_1_diagnostic.html#ad5b70b0640a3f2d2bea002cfff80f396">psy::Diagnostic::snippet</a></div><div class="ttdeci">const std::string &amp; snippet() const</div><div class="ttdef"><b>Definition:</b> Diagnostic.h:71</div></div>
 <div class="ttc" id="aclasspsy_1_1_location_html"><div class="ttname"><a href="classpsy_1_1_location.html">psy::Location</a></div><div class="ttdoc">The Location class.</div><div class="ttdef"><b>Definition:</b> Location.h:41</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_test_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_test.html">psy::C::Test</a></div><div class="ttdef"><b>Definition:</b> Test.h:37</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

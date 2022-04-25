@@ -71,7 +71,7 @@ $(function() {
 <a href="#friends">Friends</a> &#124;
 <a href="classpsy_1_1_c_1_1_symbol_name-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">psy::C::SymbolName Class Reference</div>  </div>
+<div class="title">psy::C::SymbolName Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -102,8 +102,6 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afa2f66f9f0dfdc10fe02856d963ddba5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_c_1_1_symbol_name.html#a820c2aee9624ad95befc61801327d763">Kind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_symbol_name.html#afa2f66f9f0dfdc10fe02856d963ddba5">kind</a> () const</td></tr>
-<tr class="separator:afa2f66f9f0dfdc10fe02856d963ddba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8df8a0a5a1780c4207a82d1d43459b46"><td class="memItemLeft" align="right" valign="top"><a id="a8df8a0a5a1780c4207a82d1d43459b46"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_plain_symbol_name.html">PlainSymbolName</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>asPlainSymbolName</b> ()</td></tr>
 <tr class="separator:a8df8a0a5a1780c4207a82d1d43459b46"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -122,6 +120,10 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymb
 <tr class="memitem:abc03d7cad63fcdf070d32ac56d2eca91"><td class="memItemLeft" align="right" valign="top"><a id="abc03d7cad63fcdf070d32ac56d2eca91"></a>
 virtual const <a class="el" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>asEmptySymbolName</b> () const</td></tr>
 <tr class="separator:abc03d7cad63fcdf070d32ac56d2eca91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa2f66f9f0dfdc10fe02856d963ddba5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_c_1_1_symbol_name.html#a820c2aee9624ad95befc61801327d763">Kind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_symbol_name.html#afa2f66f9f0dfdc10fe02856d963ddba5">kind</a> () const</td></tr>
+<tr class="separator:afa2f66f9f0dfdc10fe02856d963ddba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a758683c6f67f4688befff91cf520778d"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_symbol_name.html#a758683c6f67f4688befff91cf520778d">text</a> () const =0</td></tr>
+<tr class="separator:a758683c6f67f4688befff91cf520778d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -147,6 +149,34 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Symbol</b></td></tr>
       </table>
 </div><div class="memdoc">
 <p>The Kind of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_symbol_name.html" title="The SymbolName class.">SymbolName</a>. </p>
+
+</div>
+</div>
+<a id="a758683c6f67f4688befff91cf520778d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a758683c6f67f4688befff91cf520778d">&#9670;&nbsp;</a></span>text()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::string psy::C::SymbolName::text </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The text of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_symbol_name.html" title="The SymbolName class.">SymbolName</a>. </p>
+
+<p>Implemented in <a class="el" href="classpsy_1_1_c_1_1_tag_symbol_name.html#a5ee9c6a3548f3b9e4c1bcc40ed159eda">psy::C::TagSymbolName</a>, <a class="el" href="classpsy_1_1_c_1_1_plain_symbol_name.html#ae2cf718f3d08c97582903bccc37a1a75">psy::C::PlainSymbolName</a>, and <a class="el" href="classpsy_1_1_c_1_1_empty_symbol_name.html#a4d1615c4188d8af88695b3c7ca0575e5">psy::C::EmptySymbolName</a>.</p>
 
 </div>
 </div>

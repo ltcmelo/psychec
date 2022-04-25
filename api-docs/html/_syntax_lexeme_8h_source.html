@@ -69,7 +69,7 @@ $(function() {
 <div class="title">SyntaxLexeme.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2016/17/18/19/20/21 Leandro T. C. Melo &lt;ltcmelo@gmail.com&gt;</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo &lt;ltcmelo@gmail.com&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// Copyright (c) 2008 Roberto Raggi &lt;roberto.raggi@gmail.com&gt;</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
@@ -94,7 +94,7 @@ $(function() {
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#define PSYCHE_C_SYNTAX_LEXEME_H__</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;API.h&quot;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;APIFwds.h&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;Fwds.h&quot;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;../common/text/TextElement.h&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
@@ -110,22 +110,22 @@ $(function() {
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_syntax_lexeme.html">SyntaxLexeme</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_lexeme.html">SyntaxLexeme</a>&amp;) = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classpsy_1_1_c_1_1_syntax_lexeme.html">SyntaxLexeme</a>();</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56">   48</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56">Kind</a> : std::uint16_t</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a>,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classpsy_1_1_c_1_1_integer_constant.html">IntegerConstant</a>,</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="classpsy_1_1_c_1_1_floating_constant.html">FloatingConstant</a>,</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classpsy_1_1_c_1_1_character_constant.html">CharacterConstant</a>,</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="classpsy_1_1_c_1_1_string_literal.html">StringLiteral</a></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    };</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    Kind kind() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a>* asIdentifier() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">virtual</span> IntegerConstant* asIntegerConstant() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">virtual</span> FloatingConstant* asFloatingConstant() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">virtual</span> CharacterConstant* asCharacterConstant() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">virtual</span> StringLiteral* asStringLiteralExpression() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a>* asIdentifier() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_integer_constant.html">IntegerConstant</a>* asIntegerConstant() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_floating_constant.html">FloatingConstant</a>* asFloatingConstant() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_character_constant.html">CharacterConstant</a>* asCharacterConstant() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_string_literal.html">StringLiteral</a>* asStringLiteralExpression() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56">   54</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56">Kind</a> : std::uint16_t</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a>,</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="code" href="classpsy_1_1_c_1_1_integer_constant.html">IntegerConstant</a>,</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="code" href="classpsy_1_1_c_1_1_floating_constant.html">FloatingConstant</a>,</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="code" href="classpsy_1_1_c_1_1_character_constant.html">CharacterConstant</a>,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="classpsy_1_1_c_1_1_string_literal.html">StringLiteral</a></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    };</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    Kind kind() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    std::string valueText() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
@@ -164,7 +164,7 @@ $(function() {
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasspsy_1_1_c_1_1_floating_constant_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_floating_constant.html">psy::C::FloatingConstant</a></div><div class="ttdoc">The FloatingConstant class.</div><div class="ttdef"><b>Definition:</b> SyntaxLexemes.h:109</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_lexeme_html_a5c902a23f6287d5f40643bc003721d56"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56">psy::C::SyntaxLexeme::Kind</a></div><div class="ttdeci">Kind</div><div class="ttdoc">The SyntaxLexeme::Kind enumeraiton.</div><div class="ttdef"><b>Definition:</b> SyntaxLexeme.h:49</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_lexeme_html_a5c902a23f6287d5f40643bc003721d56"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56">psy::C::SyntaxLexeme::Kind</a></div><div class="ttdeci">Kind</div><div class="ttdoc">The SyntaxLexeme::Kind enumeraiton.</div><div class="ttdef"><b>Definition:</b> SyntaxLexeme.h:55</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_lexeme_html_a00a7be7320ecab1a96d40c75797aae26"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_lexeme.html#a00a7be7320ecab1a96d40c75797aae26">psy::C::SyntaxLexeme::value</a></div><div class="ttdeci">ValueT value() const</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_identifier_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_identifier.html">psy::C::Identifier</a></div><div class="ttdoc">The Identifier class.</div><div class="ttdef"><b>Definition:</b> SyntaxLexemes.h:41</div></div>
 <div class="ttc" id="astructpsy_1_1_c_1_1_syntax_lexeme_1_1_bit_fields_html"><div class="ttname"><a href="structpsy_1_1_c_1_1_syntax_lexeme_1_1_bit_fields.html">psy::C::SyntaxLexeme::BitFields</a></div><div class="ttdef"><b>Definition:</b> SyntaxLexeme.h:113</div></div>

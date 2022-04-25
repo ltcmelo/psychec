@@ -88,24 +88,27 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a24caf3b0e505dbdf223be34e82a4b2a5"><td class="memItemLeft" align="right" valign="top"><a id="a24caf3b0e505dbdf223be34e82a4b2a5"></a>
-<a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>findSymByPred</b> (std::function&lt; bool(const std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &gt; &amp;)&gt; pred) const</td></tr>
-<tr class="separator:a24caf3b0e505dbdf223be34e82a4b2a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae09052d0cbc2d641ca4b2555e49e5ab9"><td class="memItemLeft" align="right" valign="top"><a id="ae09052d0cbc2d641ca4b2555e49e5ab9"></a>
+<a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>findSymDEF</b> (std::function&lt; bool(const std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &gt; &amp;)&gt; pred) const</td></tr>
+<tr class="separator:ae09052d0cbc2d641ca4b2555e49e5ab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:aa46baa8603ce0454f26ff8542d89c5b2"><td class="memItemLeft" align="right" valign="top"><a id="aa46baa8603ce0454f26ff8542d89c5b2"></a>
-std::unordered_set&lt; std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>syms_</b></td></tr>
-<tr class="separator:aa46baa8603ce0454f26ff8542d89c5b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a3dae5e7210a38383e2f0f2ec6b9cec"><td class="memItemLeft" align="right" valign="top"><a id="a8a3dae5e7210a38383e2f0f2ec6b9cec"></a>
+std::unordered_set&lt; std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>symDEFs_</b></td></tr>
+<tr class="separator:a8a3dae5e7210a38383e2f0f2ec6b9cec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb0ffc864aa290504dc5506cd2407d6c"><td class="memItemLeft" align="right" valign="top"><a id="abb0ffc864aa290504dc5506cd2407d6c"></a>
+std::vector&lt; std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>symUSEs_</b></td></tr>
+<tr class="separator:abb0ffc864aa290504dc5506cd2407d6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a84df906e0ed1f9bd0c19324177982b1d"><td class="memItemLeft" align="right" valign="top"><a id="a84df906e0ed1f9bd0c19324177982b1d"></a>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>SemanticModel</b></td></tr>
 <tr class="separator:a84df906e0ed1f9bd0c19324177982b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8db1914e49ea7a1cd5f44eeb9d2be05"><td class="memItemLeft" align="right" valign="top"><a id="ae8db1914e49ea7a1cd5f44eeb9d2be05"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>TestFrontend</b></td></tr>
-<tr class="separator:ae8db1914e49ea7a1cd5f44eeb9d2be05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72c61b1e17b4d17bfa3eca96f64a802d"><td class="memItemLeft" align="right" valign="top"><a id="a72c61b1e17b4d17bfa3eca96f64a802d"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>BinderTest</b></td></tr>
+<tr class="separator:a72c61b1e17b4d17bfa3eca96f64a802d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_assembly.html" title="The Assembly class.">Assembly</a> class. </p>
@@ -125,7 +128,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>TestFrontend</b></td
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The Symbols in <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_assembly.html" title="The Assembly class.">Assembly</a>. </p>
+<p>The Symbols defined in <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_assembly.html" title="The Assembly class.">Assembly</a>. </p>
 
 </div>
 </div>

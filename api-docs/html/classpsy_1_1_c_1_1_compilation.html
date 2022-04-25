@@ -97,6 +97,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afe0788f9eb42fdcf2e9c99cac2383f75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8917f9ad2efd1966f62d3257a4abea27"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_assembly.html">Assembly</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#a8917f9ad2efd1966f62d3257a4abea27">assembly</a> () const</td></tr>
 <tr class="separator:a8917f9ad2efd1966f62d3257a4abea27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab91c20aa80705d51ad99a3ad6275927e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#ab91c20aa80705d51ad99a3ad6275927e">addSyntaxTree</a> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree)</td></tr>
+<tr class="separator:ab91c20aa80705d51ad99a3ad6275927e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2715cf58e61a7128cc13f4316daf7c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#ab2715cf58e61a7128cc13f4316daf7c6">addSyntaxTrees</a> (std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * &gt; trees)</td></tr>
 <tr class="separator:ab2715cf58e61a7128cc13f4316daf7c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af131b8d675c126e6ffd448e43ad8cb31"><td class="memItemLeft" align="right" valign="top">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#af131b8d675c126e6ffd448e43ad8cb31">syntaxTree</a> () const</td></tr>
@@ -123,14 +125,33 @@ Friends</h2></td></tr>
 <tr class="memitem:a84df906e0ed1f9bd0c19324177982b1d"><td class="memItemLeft" align="right" valign="top"><a id="a84df906e0ed1f9bd0c19324177982b1d"></a>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>SemanticModel</b></td></tr>
 <tr class="separator:a84df906e0ed1f9bd0c19324177982b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8db1914e49ea7a1cd5f44eeb9d2be05"><td class="memItemLeft" align="right" valign="top"><a id="ae8db1914e49ea7a1cd5f44eeb9d2be05"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>TestFrontend</b></td></tr>
-<tr class="separator:ae8db1914e49ea7a1cd5f44eeb9d2be05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72c61b1e17b4d17bfa3eca96f64a802d"><td class="memItemLeft" align="right" valign="top"><a id="a72c61b1e17b4d17bfa3eca96f64a802d"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>BinderTest</b></td></tr>
+<tr class="separator:a72c61b1e17b4d17bfa3eca96f64a802d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a> class. </p>
 <dl class="section note"><dt>Note</dt><dd>This API is inspired by that of <code>Microsoft.CodeAnalysis.Compilation</code> from Roslyn, the .NET Compiler Platform. </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab91c20aa80705d51ad99a3ad6275927e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab91c20aa80705d51ad99a3ad6275927e">&#9670;&nbsp;</a></span>addSyntaxTree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Compilation::addSyntaxTree </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&#160;</td>
+          <td class="paramname"><em>tree</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Add a <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html" title="The SyntaxTree class.">SyntaxTree</a> to <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a>. </p>
+
+</div>
+</div>
 <a id="ab2715cf58e61a7128cc13f4316daf7c6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab2715cf58e61a7128cc13f4316daf7c6">&#9670;&nbsp;</a></span>addSyntaxTrees()</h2>
 

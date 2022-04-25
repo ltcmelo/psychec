@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kind_820',['Kind',['../classpsy_1_1_c_1_1_syntax_lexeme.html#a5c902a23f6287d5f40643bc003721d56',1,'psy::C::SyntaxLexeme']]]
+  ['declarationscope_971',['DeclarationScope',['../classpsy_1_1_c_1_1_parser.html#a846861f4315842abc4c85dd23f57b3dd',1,'psy::C::Parser']]]
 ];

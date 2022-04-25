@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['offset_701',['offset',['../classpsy_1_1_c_1_1_line_directive.html#a00906375ff229516e6d18307fbfc227f',1,'psy::C::LineDirective']]]
+  ['match_833',['match',['../classpsy_1_1_c_1_1_parser.html#abd4fbbe8241093a4db61be3ea92db204',1,'psy::C::Parser']]],
+  ['matchorskipto_834',['matchOrSkipTo',['../classpsy_1_1_c_1_1_parser.html#a50355ed345e8f786649ad3dd70a86df9',1,'psy::C::Parser']]],
+  ['mightbacktrack_835',['mightBacktrack',['../classpsy_1_1_c_1_1_parser.html#a8f262cc92b22513be77df6427fac9a11',1,'psy::C::Parser']]]
 ];

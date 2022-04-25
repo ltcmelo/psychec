@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['handle_496',['Handle',['../classcnippet_1_1_logger_1_1_logger_1_1_handle.html',1,'cnippet::Logger::Logger']]]
+  ['handle_589',['Handle',['../class_python_1_1_logger_1_1_logger_1_1_handle.html',1,'Python::Logger::Logger']]]
 ];

@@ -69,7 +69,7 @@ $(function() {
 <div class="title">SymbolName_Empty.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2021 Leandro T. C. Melo &lt;ltcmelo@gmail.com&gt;</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2021/22 Leandro T. C. Melo &lt;ltcmelo@gmail.com&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
@@ -97,21 +97,24 @@ $(function() {
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>psy {</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>C {</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_empty_symbol_name.html">   32</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_symbol_name.html">SymbolName</a></div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_empty_symbol_name.html">   32</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a> final : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_symbol_name.html">SymbolName</a></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>* asEmptySymbolName()<span class="keyword"> override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>* asEmptySymbolName()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;};</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;std::string to_string(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>&amp; <a class="code" href="classname.html">name</a>);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>&amp; b);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>&amp; b);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">virtual</span> std::string text() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;};</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;std::string to_string(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>&amp; <a class="code" href="classname.html">name</a>);</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>&amp; b);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_empty_symbol_name.html">EmptySymbolName</a>&amp; b);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassname_html"><div class="ttname"><a href="classname.html">name</a></div><div class="ttdef"><b>Definition:</b> test.cpp:4</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_name_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol_name.html">psy::C::SymbolName</a></div><div class="ttdoc">The SymbolName class.</div><div class="ttdef"><b>Definition:</b> SymbolName.h:37</div></div>

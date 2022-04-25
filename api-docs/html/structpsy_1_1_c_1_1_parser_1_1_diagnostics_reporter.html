@@ -81,6 +81,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2933f0bd0e28493e03351a731ebdbf5a"><td class="memItemLeft" align="right" valign="top"><a id="a2933f0bd0e28493e03351a731ebdbf5a"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>DiagnosticsReporter</b> (<a class="el" href="classpsy_1_1_c_1_1_parser.html">Parser</a> *parser)</td></tr>
 <tr class="separator:a2933f0bd0e28493e03351a731ebdbf5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af03e0c9fb1c97bb517225f30bd4c9eee"><td class="memItemLeft" align="right" valign="top"><a id="af03e0c9fb1c97bb517225f30bd4c9eee"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reportDelayed</b> ()</td></tr>
+<tr class="separator:af03e0c9fb1c97bb517225f30bd4c9eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0c80eb58bcaacebf03f87af47e7666b"><td class="memItemLeft" align="right" valign="top"><a id="ad0c80eb58bcaacebf03f87af47e7666b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>diagnose</b> (<a class="el" href="classpsy_1_1_diagnostic_descriptor.html">DiagnosticDescriptor</a> &amp;&amp;desc)</td></tr>
 <tr class="separator:ad0c80eb58bcaacebf03f87af47e7666b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,6 +120,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFIRSTofEnumer
 <tr class="memitem:a5b0eb38552210c92da1f02cce2a762e4"><td class="memItemLeft" align="right" valign="top"><a id="a5b0eb38552210c92da1f02cce2a762e4"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFIRSTofDirectDeclarator</b> ()</td></tr>
 <tr class="separator:a5b0eb38552210c92da1f02cce2a762e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaf88fc0c99b284e15d0379839806d03"><td class="memItemLeft" align="right" valign="top"><a id="acaf88fc0c99b284e15d0379839806d03"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFIRSTofParameterDeclaration</b> ()</td></tr>
+<tr class="separator:acaf88fc0c99b284e15d0379839806d03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff6caf1829365b0a26986202a883a86e"><td class="memItemLeft" align="right" valign="top"><a id="aff6caf1829365b0a26986202a883a86e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFIRSTofSpecifierQualifier</b> ()</td></tr>
 <tr class="separator:aff6caf1829365b0a26986202a883a86e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,9 +132,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofDesig
 <tr class="memitem:ae29ba99bcbe6424fa2eb790c4dfff5d5"><td class="memItemLeft" align="right" valign="top"><a id="ae29ba99bcbe6424fa2eb790c4dfff5d5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofDeclarator</b> ()</td></tr>
 <tr class="separator:ae29ba99bcbe6424fa2eb790c4dfff5d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0dc89456c84a1fe2d610c7eeb3a0995"><td class="memItemLeft" align="right" valign="top"><a id="ad0dc89456c84a1fe2d610c7eeb3a0995"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofInitializedDeclarator</b> ()</td></tr>
-<tr class="separator:ad0dc89456c84a1fe2d610c7eeb3a0995"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e72d5afb26a41deed62a6e354b0feca"><td class="memItemLeft" align="right" valign="top"><a id="a5e72d5afb26a41deed62a6e354b0feca"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofStructDeclarator</b> ()</td></tr>
+<tr class="separator:a5e72d5afb26a41deed62a6e354b0feca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24c4b4c0966d9604c2e5b915d08508b5"><td class="memItemLeft" align="right" valign="top"><a id="a24c4b4c0966d9604c2e5b915d08508b5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofDeclaratorAndInitializer</b> ()</td></tr>
+<tr class="separator:a24c4b4c0966d9604c2e5b915d08508b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35f95bebf00e98ee257fc406ef15ef9c"><td class="memItemLeft" align="right" valign="top"><a id="a35f95bebf00e98ee257fc406ef15ef9c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ExpectedFOLLOWofStructOrUnionOrEnum</b> ()</td></tr>
 <tr class="separator:a35f95bebf00e98ee257fc406ef15ef9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,6 +195,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a59cb0d31335107c5c993c454e528c62e"><td class="memItemLeft" align="right" valign="top"><a id="a59cb0d31335107c5c993c454e528c62e"></a>
 <a class="el" href="classpsy_1_1_c_1_1_parser.html">Parser</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>parser_</b></td></tr>
 <tr class="separator:a59cb0d31335107c5c993c454e528c62e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab37e479f2a1f105d4cbae008ad3cf2cf"><td class="memItemLeft" align="right" valign="top"><a id="ab37e479f2a1f105d4cbae008ad3cf2cf"></a>
+std::unordered_set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>delayReports_</b></td></tr>
+<tr class="separator:ab37e479f2a1f105d4cbae008ad3cf2cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeddfd9b132a32d81552ed7c5285ae10d"><td class="memItemLeft" align="right" valign="top"><a id="aeddfd9b132a32d81552ed7c5285ae10d"></a>
+std::vector&lt; std::pair&lt; <a class="el" href="classpsy_1_1_diagnostic_descriptor.html">DiagnosticDescriptor</a>, LexedTokens::IndexType &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>delayed_</b></td></tr>
+<tr class="separator:aeddfd9b132a32d81552ed7c5285ae10d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -216,23 +231,29 @@ static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>I
 <tr class="memitem:a53b04328b35d223ced5bf62d025a41d9"><td class="memItemLeft" align="right" valign="top"><a id="a53b04328b35d223ced5bf62d025a41d9"></a>
 static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFIRSTofDirectDeclarator</b> = &quot;Parser--202-6.7.6&quot;</td></tr>
 <tr class="separator:a53b04328b35d223ced5bf62d025a41d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6d3d7d2415c297b61f4d5c532ba3047"><td class="memItemLeft" align="right" valign="top"><a id="ad6d3d7d2415c297b61f4d5c532ba3047"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFIRSTofParameterDeclaration</b> = &quot;Parser-203-6.7.6.3&quot;</td></tr>
+<tr class="separator:ad6d3d7d2415c297b61f4d5c532ba3047"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac98628a5b64f00204c07a9b48b0e23f3"><td class="memItemLeft" align="right" valign="top"><a id="ac98628a5b64f00204c07a9b48b0e23f3"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFIRSTofSpecifierQualifier</b> = &quot;Parser-203-6.7.2.1&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFIRSTofSpecifierQualifier</b> = &quot;Parser-204-6.7.2.1&quot;</td></tr>
 <tr class="separator:ac98628a5b64f00204c07a9b48b0e23f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adef2cece1fdda1719ce5bec28a8c86e4"><td class="memItemLeft" align="right" valign="top"><a id="adef2cece1fdda1719ce5bec28a8c86e4"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofDesignatedInitializer</b> = &quot;Parser-204-6.7.9&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofDesignatedInitializer</b> = &quot;Parser-205-6.7.9&quot;</td></tr>
 <tr class="separator:adef2cece1fdda1719ce5bec28a8c86e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafb0d2c1f6891a17b6868bc4cf14d2c0"><td class="memItemLeft" align="right" valign="top"><a id="aafb0d2c1f6891a17b6868bc4cf14d2c0"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofDeclarator</b> = &quot;Parser-205-6.7.6&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofDeclarator</b> = &quot;Parser-206-6.7.6&quot;</td></tr>
 <tr class="separator:aafb0d2c1f6891a17b6868bc4cf14d2c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a366b7863adf08a93495c46a3e69afe2b"><td class="memItemLeft" align="right" valign="top"><a id="a366b7863adf08a93495c46a3e69afe2b"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofInitializedDeclarator</b> = &quot;Parser-206&quot;</td></tr>
-<tr class="separator:a366b7863adf08a93495c46a3e69afe2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0e86c073d878cb28fc02b2dfb56f13f"><td class="memItemLeft" align="right" valign="top"><a id="ac0e86c073d878cb28fc02b2dfb56f13f"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofStructDeclarator</b> = &quot;Parser-209-6.7.2.1-9&quot;</td></tr>
+<tr class="separator:ac0e86c073d878cb28fc02b2dfb56f13f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5f3a8f302f3b083ecfa09ab1a5c657e"><td class="memItemLeft" align="right" valign="top"><a id="ab5f3a8f302f3b083ecfa09ab1a5c657e"></a>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofDeclaratorAndInitializer</b> = &quot;Parser-207&quot;</td></tr>
+<tr class="separator:ab5f3a8f302f3b083ecfa09ab1a5c657e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a235db36396cbf901cb0631a3a854c679"><td class="memItemLeft" align="right" valign="top"><a id="a235db36396cbf901cb0631a3a854c679"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofStructOrUnionOrEnum</b> = &quot;Parser-207-6.7.2.1&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofStructOrUnionOrEnum</b> = &quot;Parser-208-6.7.2.1&quot;</td></tr>
 <tr class="separator:a235db36396cbf901cb0631a3a854c679"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8d39051d63ea1da78e90652ab65dd4c"><td class="memItemLeft" align="right" valign="top"><a id="aa8d39051d63ea1da78e90652ab65dd4c"></a>
-static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofEnum</b> = &quot;Parser-208-6.7.2.1&quot;</td></tr>
+static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFOLLOWofEnum</b> = &quot;Parser-210-6.7.2.1&quot;</td></tr>
 <tr class="separator:aa8d39051d63ea1da78e90652ab65dd4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2e8d54f29e6dcf0f8ba381edda015c4"><td class="memItemLeft" align="right" valign="top"><a id="ad2e8d54f29e6dcf0f8ba381edda015c4"></a>
 static const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ID_of_ExpectedFieldName</b> = &quot;Parser-300-6.5.2&quot;</td></tr>

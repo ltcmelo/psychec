@@ -67,8 +67,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classcnip_1_1_driver-members.html">List of all members</a>  </div>
@@ -88,18 +86,6 @@ Public Member Functions</h2></td></tr>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>execute</b> (int argc, char *argv[])</td></tr>
 <tr class="separator:a686e5357fc4a2198d0d511b1c8e39496"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a217ae1d199985c6d0638a903855a9495"><td class="memItemLeft" align="right" valign="top"><a id="a217ae1d199985c6d0638a903855a9495"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>applyOptions</b> (const cxxopts::ParseResult &amp;opts)</td></tr>
-<tr class="separator:a217ae1d199985c6d0638a903855a9495"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:aaf03b4a8d0441c503da71b33a6c36b4a"><td class="memItemLeft" align="right" valign="top"><a id="aaf03b4a8d0441c503da71b33a6c36b4a"></a>
-std::unique_ptr&lt; <a class="el" href="classcnip_1_1_configuration.html">Configuration</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>config_</b></td></tr>
-<tr class="separator:aaf03b4a8d0441c503da71b33a6c36b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:ad01f08339775ec5798121c92c54c7f17"><td class="memItemLeft" align="right" valign="top"><a id="ad01f08339775ec5798121c92c54c7f17"></a>
@@ -108,33 +94,36 @@ static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>SUCCE
 <tr class="memitem:a36554efd2eb944acfdd800ff03e63148"><td class="memItemLeft" align="right" valign="top"><a id="a36554efd2eb944acfdd800ff03e63148"></a>
 static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR</b> = 1</td></tr>
 <tr class="separator:a36554efd2eb944acfdd800ff03e63148"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a896c841f6148fa525b6b489326200e98"><td class="memItemLeft" align="right" valign="top"><a id="a896c841f6148fa525b6b489326200e98"></a>
-static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_UnrecognizedCommandLine</b> = 2</td></tr>
-<tr class="separator:a896c841f6148fa525b6b489326200e98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32f3ce5dccb4f5c01f661feb8449e1f5"><td class="memItemLeft" align="right" valign="top"><a id="a32f3ce5dccb4f5c01f661feb8449e1f5"></a>
-static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_InputFileUnspecified</b> = 3</td></tr>
-<tr class="separator:a32f3ce5dccb4f5c01f661feb8449e1f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8170381c6649fb7ac695b250d655629"><td class="memItemLeft" align="right" valign="top"><a id="af8170381c6649fb7ac695b250d655629"></a>
-static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_InputFileReadingFailure</b> = 4</td></tr>
-<tr class="separator:af8170381c6649fb7ac695b250d655629"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0ab123529db3cf4722d1c70c92898da"><td class="memItemLeft" align="right" valign="top"><a id="ae0ab123529db3cf4722d1c70c92898da"></a>
+static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_UnrecognizedCmdLineOption</b> = 2</td></tr>
+<tr class="separator:ae0ab123529db3cf4722d1c70c92898da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67fe0ae0b9e30b05ecfb7a06eef254bf"><td class="memItemLeft" align="right" valign="top"><a id="a67fe0ae0b9e30b05ecfb7a06eef254bf"></a>
+static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_NoInputFile</b> = 3</td></tr>
+<tr class="separator:a67fe0ae0b9e30b05ecfb7a06eef254bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3769f5c8c1fb08d3fe630882dea5dd6f"><td class="memItemLeft" align="right" valign="top"><a id="a3769f5c8c1fb08d3fe630882dea5dd6f"></a>
+static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_FileNotFound</b> = 4</td></tr>
+<tr class="separator:a3769f5c8c1fb08d3fe630882dea5dd6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67781aaaf2812a41674b4057d79bab17"><td class="memItemLeft" align="right" valign="top"><a id="a67781aaaf2812a41674b4057d79bab17"></a>
 static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_CannotLoadPluging</b> = 5</td></tr>
 <tr class="separator:a67781aaaf2812a41674b4057d79bab17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae421edbe7094a66a927eb67ade1dcfd3"><td class="memItemLeft" align="right" valign="top"><a id="ae421edbe7094a66a927eb67ade1dcfd3"></a>
-static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_UnsupportedLanguage</b> = 6</td></tr>
-<tr class="separator:ae421edbe7094a66a927eb67ade1dcfd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7840e902068b7ce6aeaf19bd662a681"><td class="memItemLeft" align="right" valign="top"><a id="af7840e902068b7ce6aeaf19bd662a681"></a>
+static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_LanguageNotRecognized</b> = 6</td></tr>
+<tr class="separator:af7840e902068b7ce6aeaf19bd662a681"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:adaec7b9e9ba5c6d7935d22d1aa29af79"><td class="memItemLeft" align="right" valign="top"><a id="adaec7b9e9ba5c6d7935d22d1aa29af79"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Executer_C</b></td></tr>
-<tr class="separator:adaec7b9e9ba5c6d7935d22d1aa29af79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af74518226adb1236715fd7b5b0d89c0a"><td class="memItemLeft" align="right" valign="top"><a id="af74518226adb1236715fd7b5b0d89c0a"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>FrontEnd</b></td></tr>
+<tr class="separator:af74518226adb1236715fd7b5b0d89c0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64eab8112da02a94f75f4d440028147e"><td class="memItemLeft" align="right" valign="top"><a id="a64eab8112da02a94f75f4d440028147e"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>CCompilerFrontEnd</b></td></tr>
+<tr class="separator:a64eab8112da02a94f75f4d440028147e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classcnip_1_1_driver.html" title="The Driver class.">Driver</a> class. </p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
-<li>cnippet/driver/<a class="el" href="_driver_8h_source.html">Driver.h</a></li>
-<li>cnippet/driver/Driver.cpp</li>
+<li>cnippet/<a class="el" href="_driver_8h_source.html">Driver.h</a></li>
+<li>cnippet/Driver.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
