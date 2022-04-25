@@ -182,7 +182,7 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
                     makeSymAndPushIt<FieldSymbol>();
                     break;
 
-                case SymbolKind::LinkUnit:
+                case SymbolKind::Library:
                 case SymbolKind::Function:
                     makeSymAndPushIt<VariableSymbol>();
                     break;

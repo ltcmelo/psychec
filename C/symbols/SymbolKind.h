@@ -41,7 +41,7 @@ namespace C {
  */
 enum class SymbolKind : std::uint8_t
 {
-    LinkUnit = 0,
+    Library = 0,
     Function,
     Object,
     Type,
@@ -50,8 +50,8 @@ enum class SymbolKind : std::uint8_t
 inline std::string PSY_C_API to_string(SymbolKind kind)
 {
     switch (kind) {
-        case SymbolKind::LinkUnit:
-            return "LinkUnit";
+        case SymbolKind::Library:
+            return "Library";
         case SymbolKind::Function:
             return "Function";
         case SymbolKind::Object:

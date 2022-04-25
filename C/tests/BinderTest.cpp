@@ -284,7 +284,7 @@ void BinderTest::bind(std::string text, Expectation X)
 
     auto sym = compilation->assembly()->findSymDEF(
                 [] (const auto& sym) {
-                    return sym->kind() == SymbolKind::LinkUnit;
+                    return sym->kind() == SymbolKind::Library;
                 });
     if (sym == nullptr)
         PSYCHE_TEST_FAIL("link unit not found");

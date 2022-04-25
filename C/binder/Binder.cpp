@@ -125,7 +125,7 @@ void Binder::popTySym()
 //--------------//
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    makeSymAndPushIt<LinkUnitSymbol>();
+    makeSymAndPushIt<LibrarySymbol>();
     openScope<FileScope>();
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
