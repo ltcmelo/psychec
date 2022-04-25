@@ -18,15 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_VALUE_SYMBOL_H__
-#define PSYCHE_C_VALUE_SYMBOL_H__
+#ifndef PSYCHE_C_OBJECT_SYMBOL_H__
+#define PSYCHE_C_OBJECT_SYMBOL_H__
 
 #include "API.h"
 #include "Fwds.h"
 #include "Symbol.h"
 #include "TypeClass_NameableSymbol.h"
 #include "TypeClass_TypeableSymbol.h"
-#include "ValueKind.h"
+#include "ObjectKind.h"
 
 #include <memory>
 
@@ -34,17 +34,21 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The ValueSymbol class.
+ * \brief The ObjectSymbol class.
+ *
+ * A symbol that denotes an <em>object</em>.
+ *
+ * \remark 3.15
  */
-class PSY_C_API ValueSymbol : public Symbol
-                            , public TypeClass_NameableSymbol
-                            , public TypeClass_TypeableSymbol
+class PSY_C_API ObjectSymbol : public Symbol
+                             , public TypeClass_NameableSymbol
+                             , public TypeClass_TypeableSymbol
 {
 public:
-    virtual ~ValueSymbol();
+    virtual ~ObjectSymbol();
 
-    virtual ValueSymbol* asValue() override { return this; }
-    virtual const ValueSymbol* asValue() const override { return this; }
+    virtual ObjectSymbol* asObject() override { return this; }
+    virtual const ObjectSymbol* asObject() const override { return this; }
 
     virtual FieldSymbol* asField() { return nullptr; }
     virtual const FieldSymbol* asField() const { return nullptr; }
@@ -54,9 +58,9 @@ public:
     virtual const ParameterSymbol* asParameter() const { return nullptr; }
 
     /**
-     * The (value) kind of \c this value.
+     * The object kind of \c this symbol.
      */
-    ValueKind valueKind() const;
+    ObjectKind objectKind() const;
 
     /**
      * The SymbolName of \c this Symbol.
@@ -64,17 +68,17 @@ public:
     const SymbolName* name() const;
 
     /**
-     * The type of \c this value.
+     * The type of \c this object.
      */
     const TypeSymbol* type() const;
 
 protected:
-    DECL_PIMPL_SUB(ValueSymbol);
+    DECL_PIMPL_SUB(ObjectSymbol);
 
-    ValueSymbol(const SyntaxTree* tree,
+    ObjectSymbol(const SyntaxTree* tree,
                 const Scope* outerScope,
                 const Symbol* containingSym,
-                ValueKind valKind);
+                ObjectKind objKind);
 
 private:
     friend class Binder;
@@ -83,7 +87,7 @@ private:
     virtual void setType(const TypeSymbol* tySym) override;
 };
 
-std::string PSY_C_API to_string(const ValueSymbol& sym);
+std::string PSY_C_API to_string(const ObjectSymbol& sym);
 
 } // C
 } // psy

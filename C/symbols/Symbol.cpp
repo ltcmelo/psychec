@@ -101,12 +101,12 @@ namespace C {
 std::string to_string(const Symbol& sym)
 {
     switch (sym.kind()) {
-        case SymbolKind::LinkUnit:
-            return to_string(*sym.asLinkUnit());
+        case SymbolKind::Library:
+            return to_string(*sym.asLibrary());
         case SymbolKind::Function:
             return to_string(*sym.asFunction());
-        case SymbolKind::Value:
-            return to_string(*sym.asValue());
+        case SymbolKind::Object:
+            return to_string(*sym.asObject());
         case SymbolKind::Type:
             return to_string(*sym.asType());
         default:

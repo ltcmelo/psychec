@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/PsycheAssert.h"
+
 #include <cstdint>
 #include <string>
 
@@ -39,26 +41,26 @@ namespace C {
  */
 enum class SymbolKind : std::uint8_t
 {
-    LinkUnit = 0,
+    Library = 0,
     Function,
-    Value,
+    Object,
     Type,
 };
 
 inline std::string PSY_C_API to_string(SymbolKind kind)
 {
     switch (kind) {
-        case SymbolKind::LinkUnit:
-            return "LinkUnit";
+        case SymbolKind::Library:
+            return "Library";
         case SymbolKind::Function:
             return "Function";
-        case SymbolKind::Value:
-            return "Value";
+        case SymbolKind::Object:
+            return "Object";
         case SymbolKind::Type:
             return "Type";
-
         default:
-            return "not implemented";
+            PSYCHE_FAIL_0(return "");
+            return "<invalid symbol kind>";
     }
 }
 

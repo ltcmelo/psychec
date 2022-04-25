@@ -31,6 +31,8 @@ namespace C {
 /**
  * \brief The FunctionSymbol class.
  *
+ * A symbol that denotes a <em>function</em>.
+ *
  * \note
  * This API is inspired by that of \c Microsoft.CodeAnalysis.IMethodSymbol
  * from Roslyn, the .NET Compiler Platform.

@@ -18,35 +18,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ValueSymbol_Field.h"
+#ifndef PSYCHE_C_OBJECT_KIND_H__
+#define PSYCHE_C_OBJECT_KIND_H__
 
-#include <sstream>
+#include "API.h"
+#include "Fwds.h"
 
-using namespace psy;
-using namespace C;
-
-FieldSymbol::FieldSymbol(const SyntaxTree* tree,
-                         const Scope* scope,
-                         const Symbol* containingSym)
-    : ValueSymbol(tree,
-                  scope,
-                  containingSym,
-                  ValueKind::Field)
-{}
+#include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
 
-std::string to_string(const FieldSymbol& sym)
+/**
+ * \brief The ObjectKind enum.
+ */
+enum class ObjectKind : std::uint8_t
 {
-    std::ostringstream oss;
-    oss << "{%field |";
-    if (sym.name())
-        oss << " " << to_string(*sym.name());
-    oss << " %}";
+    None = 0,
+    Field,
+    Parameter,
+    Variable
+};
 
-    return oss.str();
+inline std::string PSY_C_API to_string(ObjectKind objKind)
+{
+    switch (objKind) {
+        case ObjectKind::Field:
+            return "Field";
+        case ObjectKind::Parameter:
+            return "Parameter";
+        case ObjectKind::Variable:
+            return "Variable";
+
+        default:
+            return "<invalid value kind>";
+    }
 }
 
 } // C
 } // psy
+
+#endif

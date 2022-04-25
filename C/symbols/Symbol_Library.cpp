@@ -18,38 +18,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_VARIABLE_H__
-#define PSYCHE_C_SYMBOL_VARIABLE_H__
+#include "Symbol_Library.h"
+#include "Symbol__IMPL__.inc"
 
-#include "Symbol_Value.h"
+#include <sstream>
+
+using namespace psy;
+using namespace C;
+
+LibrarySymbol::LibrarySymbol(const SyntaxTree* tree,
+                               const Scope* scope,
+                               const Symbol* containingSym)
+    : Symbol(new SymbolImpl(tree,
+                            scope,
+                            containingSym,
+                            SymbolKind::Library))
+{}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The VariableSymbol class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.ILocalSymbol
- * from Roslyn, the .NET Compiler Platform.
- */
-class PSY_C_API VariableSymbol final : public ValueSymbol
+std::string to_string(const LibrarySymbol& sym)
 {
-public:
-    virtual VariableSymbol* asVariable() override { return this; }
-    virtual const VariableSymbol* asVariable() const override { return this; }
+    std::ostringstream oss;
+    oss << "{!unit !}";
 
-private:
-    friend class Binder;
-
-    VariableSymbol(const SyntaxTree* tree,
-                   const Scope* outerScope,
-                   const Symbol* containingSym);
-};
-
-std::string PSY_C_API to_string(const VariableSymbol& sym);
+    return oss.str();
+}
 
 } // C
 } // psy
 
-#endif

@@ -130,8 +130,8 @@ public:
     virtual const EnumDeclarationSyntax* asEnumDeclaration() const { return nullptr; }
     virtual EnumMemberDeclarationSyntax* asEnumMemberDeclaration() { return nullptr; }
     virtual const EnumMemberDeclarationSyntax* asEnumMemberDeclaration() const { return nullptr; }
-    virtual ValueDeclarationSyntax* asValueDeclaration() { return nullptr; }
-    virtual const ValueDeclarationSyntax* asValueDeclaration() const { return nullptr; }
+    virtual ObjectDeclarationSyntax* asObjectDeclaration() { return nullptr; }
+    virtual const ObjectDeclarationSyntax* asObjectDeclaration() const { return nullptr; }
     virtual DeclaratorDeclarationSyntax* asDeclaratorDeclaration() { return nullptr; }
     virtual const DeclaratorDeclarationSyntax* asDeclaratorDeclaration() const { return nullptr; }
     virtual VariableAndOrFunctionDeclarationSyntax* asVariableAndOrFunctionDeclaration() { return nullptr; }

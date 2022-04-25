@@ -18,36 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_PARAMETER_H__
-#define PSYCHE_C_SYMBOL_PARAMETER_H__
+#ifndef PSYCHE_C_SYMBOL_VARIABLE_H__
+#define PSYCHE_C_SYMBOL_VARIABLE_H__
 
-#include "Symbol_Value.h"
+#include "Symbol_Object.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The ParameterSymbol class.
+ * \brief The VariableSymbol class.
  *
  * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IParameterSymbol
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.ILocalSymbol
  * from Roslyn, the .NET Compiler Platform.
  */
-class PSY_C_API ParameterSymbol final : public ValueSymbol
+class PSY_C_API VariableSymbol final : public ObjectSymbol
 {
 public:
-    virtual ParameterSymbol* asParameter() override { return this; }
-    virtual const ParameterSymbol* asParameter() const override { return this; }
+    virtual VariableSymbol* asVariable() override { return this; }
+    virtual const VariableSymbol* asVariable() const override { return this; }
 
 private:
     friend class Binder;
 
-    ParameterSymbol(const SyntaxTree* tree,
-                    const Scope* outerScope,
-                    const Symbol* containingSym);
+    VariableSymbol(const SyntaxTree* tree,
+                   const Scope* outerScope,
+                   const Symbol* containingSym);
 };
 
-std::string PSY_C_API to_string(const ParameterSymbol& sym);
+std::string PSY_C_API to_string(const VariableSymbol& sym);
 
 } // C
 } // psy

@@ -741,16 +741,16 @@ private:
 
 
 /**
- * \brief The ValueDeclarationSyntax class.
+ * \brief The ObjectDeclarationSyntax class.
  *
- * The base class of a \a declaration whose declared entity is a value.
+ * The base class of a \a declaration that denotes an \a object.
  *
  * \note Similar to:
  * - \c clang::ValueDecl of LLVM/Clang.
  */
-class PSY_C_API ValueDeclarationSyntax : public DeclarationSyntax
+class PSY_C_API ObjectDeclarationSyntax : public DeclarationSyntax
 {
-    AST_NODE(ValueDeclaration, Declaration)
+    AST_NODE(ObjectDeclaration, Declaration)
 };
 
 /**
@@ -762,9 +762,9 @@ class PSY_C_API ValueDeclarationSyntax : public DeclarationSyntax
  * - \c clang::EnumConstantDecl of LLVM/Clang.
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.EnumMemberDeclarationSyntax of Roslyn.
  */
-class PSY_C_API EnumMemberDeclarationSyntax final : public ValueDeclarationSyntax
+class PSY_C_API EnumMemberDeclarationSyntax final : public ObjectDeclarationSyntax
 {
-    AST_NODE_1K(EnumMemberDeclaration, ValueDeclaration)
+    AST_NODE_1K(EnumMemberDeclaration, ObjectDeclaration)
 
 public:
     SyntaxToken identifierToken() const { return tokenAtIndex(identTkIdx_); }
@@ -797,9 +797,9 @@ private:
  * - \c clang::DeclaratorDecl of LLVM/Clang.
  * - \c Microsoft.CodeAnalysis.CSharp.Syntax.VariableDeclaratorSyntax of Roslyn.
  */
-class PSY_C_API DeclaratorDeclarationSyntax : public ValueDeclarationSyntax
+class PSY_C_API DeclaratorDeclarationSyntax : public ObjectDeclarationSyntax
 {
-    AST_NODE(DeclaratorDeclaration, ValueDeclaration)
+    AST_NODE(DeclaratorDeclaration, ObjectDeclaration)
 };
 
 /**

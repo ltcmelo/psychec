@@ -36,20 +36,25 @@ class Binder;
 
 class Semantics_TypeSpecifiers
 {
-public:
-    static const std::string ID_TypeSpecifierMissingDefaultsToInt;
-    static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
+    friend class BinderTest;
 
+public:
+    static void specify(SyntaxToken builtTySpecTk,
+                        NamedTypeSymbol* namedTySym,
+                        Binder::DiagnosticsReporter* diagReporter);
+
+    static void DeclarationDoesNotDeclareAnything(SyntaxToken tk,
+                                                  Binder::DiagnosticsReporter *diagReporter);
     static void TypeSpecifierMissingDefaultsToInt(SyntaxToken declTk,
                                                   Binder::DiagnosticsReporter* diagReporter);
     static void TwoOrMoreDataTypesInDeclarationSpecifiers(SyntaxToken builtTySpecTk,
                                                           Binder::DiagnosticsReporter* diagReporter);
 
-    static void specify(SyntaxToken builtTySpecTk,
-                        NamedTypeSymbol* namedTySym,
-                        Binder::DiagnosticsReporter* diagReporter);
-
 private:
+    static const std::string ID_DeclarationDoesNotDeclareAnything;
+    static const std::string ID_TypeSpecifierMissingDefaultsToInt;
+    static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
+
     static BuiltinTypeKind combine(SyntaxToken builtTySpecTk,
                                    BuiltinTypeKind builtTyK,
                                    Binder::DiagnosticsReporter* diagReporter);

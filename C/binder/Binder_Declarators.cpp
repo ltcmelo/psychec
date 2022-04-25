@@ -90,9 +90,9 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
             break;
         }
 
-        case SymbolKind::Value: {
-            auto valSym = sym->asValue();
-            valSym->setType(tySyms_.top());
+        case SymbolKind::Object: {
+            auto objSym = sym->asObject();
+            objSym->setType(tySyms_.top());
 
             switch (decltor->kind())
             {
@@ -182,7 +182,7 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
                     makeSymAndPushIt<FieldSymbol>();
                     break;
 
-                case SymbolKind::LinkUnit:
+                case SymbolKind::Library:
                 case SymbolKind::Function:
                     makeSymAndPushIt<VariableSymbol>();
                     break;
