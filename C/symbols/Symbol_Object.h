@@ -58,9 +58,9 @@ public:
     virtual const ParameterSymbol* asParameter() const { return nullptr; }
 
     /**
-     * The (value) kind of \c this value.
+     * The object kind of \c this symbol.
      */
-    ObjectKind valueKind() const;
+    ObjectKind objectKind() const;
 
     /**
      * The SymbolName of \c this Symbol.
@@ -68,7 +68,7 @@ public:
     const SymbolName* name() const;
 
     /**
-     * The type of \c this value.
+     * The type of \c this object.
      */
     const TypeSymbol* type() const;
 

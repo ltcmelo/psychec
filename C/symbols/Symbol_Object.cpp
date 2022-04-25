@@ -58,7 +58,7 @@ ObjectSymbol::ObjectSymbol(const SyntaxTree* tree,
 ObjectSymbol::~ObjectSymbol()
 {}
 
-ObjectKind ObjectSymbol::valueKind() const
+ObjectKind ObjectSymbol::objectKind() const
 {
     return P_CAST->objKind_;
 }
@@ -88,7 +88,7 @@ namespace C {
 
 std::string to_string(const ObjectSymbol& sym)
 {
-    switch (sym.valueKind()) {
+    switch (sym.objectKind()) {
         case ObjectKind::Field:
             return to_string(*sym.asField());
         case ObjectKind::Parameter:
@@ -97,7 +97,7 @@ std::string to_string(const ObjectSymbol& sym)
             return to_string(*sym.asVariable());
         default:
             PSYCHE_FAIL_0(return "");
-            return "<invalid value kind>";
+            return "<invalid object kind>";
     }
 }
 
