@@ -86,7 +86,7 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const Param
 {
     return visitDeclaration_AtSpecifiers(
                 node,
-                &Binder::visitParameterDeclaration_AtDeclarators);
+                &Binder::visitParameterDeclaration_AtDeclarator);
 }
 
 /* Specifiers */
@@ -194,12 +194,12 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
         visit(attrIt->value);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next) {
-        TySymCont_T tySymUSES;
-        std::swap(tySyms_, tySymUSES);
+        TySymCont_T tySyms;
+        std::swap(tySyms_, tySyms);
 
         visit(declIt->value);
 
-        std::swap(tySyms_, tySymUSES);
+        std::swap(tySyms_, tySyms);
     }
 
     for (auto attrIt = node->attributes_PostCloseBrace(); attrIt; attrIt = attrIt->next)

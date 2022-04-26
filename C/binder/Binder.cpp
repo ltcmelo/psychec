@@ -214,12 +214,7 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_DONE(const FieldDeclarationS
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration(const ParameterDeclarationSyntax* node)
 {
-    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
-        visit(specIt->value);
-
-    visit(node->declarator());
-
-    return Action::Skip;
+    return visitParameterDeclaration_AtSpecifiers(node);
 }
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*)

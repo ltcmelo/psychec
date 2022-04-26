@@ -71,8 +71,10 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDec
                 &Binder::visitFieldDeclaration_DONE);
 }
 
-SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarators(const ParameterDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax* node)
 {
+    actOnDeclarator(node->declarator());
+
     return visitParameterDeclaration_DONE(node);
 }
 
@@ -143,6 +145,15 @@ SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* 
 {
     makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
 
+    for (auto declIt = node->parameters(); declIt; declIt = declIt->next) {
+        TySymCont_T tySyms;
+        std::swap(tySyms_, tySyms);
+
+        visit(declIt->value);
+
+        std::swap(tySyms_, tySyms);
+    }
+
     return Action::Skip;
 }
 
@@ -167,6 +178,7 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
+    std::cout << "visit identifier " << node->identifierToken().valueText() << std::endl;
     auto tySym = tySyms_.top();
     switch (tySym->typeKind()) {
         case TypeKind::Function:

@@ -125,7 +125,7 @@ private:
     Action visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax*);
     Action visitFieldDeclaration_DONE(const FieldDeclarationSyntax*);
     Action visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax*);
-    Action visitParameterDeclaration_AtDeclarators(const ParameterDeclarationSyntax*);
+    Action visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax*);
     Action visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*);
 
     /* Specifiers */
