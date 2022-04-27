@@ -35,14 +35,14 @@ struct Symbol::SymbolImpl
                const Symbol* containingSym,
                SymbolKind kind)
         : tree_(tree)
-        , outerScope_(outerScope)
+        , containingScope_(outerScope)
         , containingSym_(containingSym)
         , kind_(kind)
         , BF_all_(0)
     {}
 
     const SyntaxTree* tree_;
-    const Scope* outerScope_;
+    const Scope* containingScope_;
     std::unique_ptr<Scope> innerScope_;
     const Symbol* containingSym_;
     SymbolKind kind_;

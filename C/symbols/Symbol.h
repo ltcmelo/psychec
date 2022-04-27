@@ -73,11 +73,11 @@ public:
     const Assembly* assembly() const;
 
     /**
-     * The outer Scope of \c this Symbol.
+     * The containing Scope of \c this Symbol.
      *
      * \remark 6.2.1-4
      */
-    const Scope* outerScope() const;
+    const Scope* containingScope() const;
 
     /**
      * The inner Scope of \c this Symbol.

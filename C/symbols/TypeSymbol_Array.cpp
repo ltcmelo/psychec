@@ -29,11 +29,11 @@ using namespace C;
 struct ArrayTypeSymbol::ArrayTypeSymbolImpl : TypeSymbolImpl
 {
     ArrayTypeSymbolImpl(const SyntaxTree* tree,
-                          const Scope* outerScope,
+                          const Scope* containingScope,
                           const Symbol* containingSym,
                           const TypeSymbol* elemTySym)
         : TypeSymbolImpl(tree,
-                         outerScope,
+                         containingScope,
                          containingSym,
                          TypeKind::Array)
         , elemTySym_(elemTySym)
