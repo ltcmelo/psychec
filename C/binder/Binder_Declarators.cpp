@@ -49,13 +49,6 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators(
     return ((this)->*(visit_DONE))(node);
 }
 
-SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarators(const FunctionDefinitionSyntax* node)
-{
-    actOnDeclarator(node->declarator());
-
-    return Binder::visitFunctionDefinition_DONE(node);
-}
-
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
@@ -76,6 +69,13 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(const Param
     actOnDeclarator(node->declarator());
 
     return visitParameterDeclaration_DONE(node);
+}
+
+SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const FunctionDefinitionSyntax* node)
+{
+    actOnDeclarator(node->declarator());
+
+    return Binder::visitFunctionDefinition_DONE(node);
 }
 
 /* Declarators */
@@ -178,7 +178,6 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    std::cout << "visit identifier " << node->identifierToken().valueText() << std::endl;
     auto tySym = tySyms_.top();
     switch (tySym->typeKind()) {
         case TypeKind::Function:

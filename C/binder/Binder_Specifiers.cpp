@@ -72,7 +72,7 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_AtSpecifiers(const Functio
 {
     return visitDeclaration_AtSpecifiers(
                 node,
-                &Binder::visitFunctionDefinition_AtDeclarators);
+                &Binder::visitFunctionDefinition_AtDeclarator);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtSpecifiers(const FieldDeclarationSyntax* node)
