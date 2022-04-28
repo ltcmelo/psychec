@@ -43,7 +43,7 @@ private:
     friend class Binder;
 
     FieldSymbol(const SyntaxTree* tree,
-                const Scope* containingScope,
+                const Scope* enclosingScope,
                 const Symbol* containingSym);
 };
 

@@ -82,19 +82,6 @@ Location Symbol::location() const
     return locs.front();
 }
 
-template <class ScopeT>
-ScopeT* Symbol::makeScope()
-{
-    std::unique_ptr<ScopeT> scope(new ScopeT());
-    P->innerScope_ = std::move(scope);
-    return static_cast<ScopeT*>(P->innerScope_.get());
-}
-
-template BlockScope* Symbol::makeScope<BlockScope>();
-template FileScope* Symbol::makeScope<FileScope>();
-template FunctionScope* Symbol::makeScope<FunctionScope>();
-
-
 namespace psy {
 namespace C {
 

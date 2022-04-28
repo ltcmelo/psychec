@@ -65,7 +65,6 @@ private:
     SemanticModel* semaModel_;
 
     template <class ScopeT> void openScope();
-    void openNestedScope();
     void closeScope();
     std::stack<Scope*> scopes_;
 

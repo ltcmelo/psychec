@@ -38,21 +38,18 @@ namespace C {
  */
 class PSY_C_API Scope
 {
+    friend class Binder;
+
+public:
+    virtual ~Scope();
+
 protected:
     Scope();
 
-public:
-    /**
-     * The BlockScopes of \c this Scope.
-     */
-    std::vector<const BlockScope*> blocks() const;
-
 private:
-    friend class Binder;
+    void enclose(std::unique_ptr<Scope> scope);
 
-    BlockScope* makeNestedScope();
-
-    std::vector<std::unique_ptr<BlockScope>> blocks_;
+    std::vector<std::unique_ptr<Scope>> scopes_;
 };
 
 } // C

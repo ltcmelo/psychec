@@ -68,14 +68,11 @@ void Binder::bind()
 template <class ScopeT>
 void Binder::openScope()
 {
-    auto scope = syms_.top()->makeScope<ScopeT>();
-    scopes_.push(scope);
-}
+    std::unique_ptr<ScopeT> scope(new ScopeT());
+    scopes_.push(scope.get());
 
-void Binder::openNestedScope()
-{
-    auto scope = scopes_.top()->makeNestedScope();
-    scopes_.push(scope);
+    auto enclosingScope = scopes_.top();
+    enclosingScope->enclose(std::move(scope));
 }
 
 void Binder::closeScope()
@@ -246,7 +243,7 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinit
 //------------//
 SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
-    openNestedScope();
+    openScope<BlockScope>();
 
     for (auto stmtIt = node->statements(); stmtIt; stmtIt = stmtIt->next)
         visit(stmtIt->value);

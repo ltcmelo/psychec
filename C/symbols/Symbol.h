@@ -48,6 +48,8 @@ namespace C {
  */
 class PSY_C_API Symbol
 {
+    friend class Binder;
+
 public:
     Symbol(const Symbol&) = delete;
     Symbol& operator=(const Symbol&) = delete;
@@ -73,21 +75,14 @@ public:
     const Assembly* assembly() const;
 
     /**
-     * The containing Scope of \c this Symbol.
+     * The Scope that encloses \c this Symbol.
      *
      * \remark 6.2.1-4
      */
-    const Scope* containingScope() const;
+    const Scope* enclosingScope() const;
 
     /**
-     * The inner Scope of \c this Symbol.
-     *
-     * \remark 6.2.1-4
-     */
-    const Scope* innerScope() const;
-
-    /**
-     * The Symbol immediately containing \c this Symbol.
+     * The Symbol that contains \c this Symbol.
      */
     const Symbol* containingSymbol() const;
 
@@ -110,11 +105,6 @@ protected:
     DECL_PIMPL(Symbol);
 
     Symbol(SymbolImpl* p);
-
-private:
-    friend class Binder;
-
-    template <class ScopeT> ScopeT* makeScope();
 };
 
 std::string PSY_C_API to_string(const Symbol& sym);

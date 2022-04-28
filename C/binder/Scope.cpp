@@ -28,13 +28,10 @@ using namespace C;
 Scope::Scope()
 {}
 
-std::vector<const BlockScope*> Scope::blocks() const
+void Scope::enclose(std::unique_ptr<Scope> scope)
 {
-    return {};
+    scopes_.push_back(std::move(scope));
 }
 
-BlockScope* Scope::makeNestedScope()
-{
-    blocks_.emplace_back(new BlockScope);
-    return blocks_.back().get();
-}
+Scope::~Scope()
+{}

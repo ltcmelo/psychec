@@ -31,19 +31,18 @@ using namespace C;
 struct Symbol::SymbolImpl
 {
     SymbolImpl(const SyntaxTree* tree,
-               const Scope* outerScope,
+               const Scope* enclosingScope,
                const Symbol* containingSym,
                SymbolKind kind)
         : tree_(tree)
-        , containingScope_(outerScope)
+        , enclosingScope_(enclosingScope)
         , containingSym_(containingSym)
         , kind_(kind)
         , BF_all_(0)
     {}
 
     const SyntaxTree* tree_;
-    const Scope* containingScope_;
-    std::unique_ptr<Scope> innerScope_;
+    const Scope* enclosingScope_;
     const Symbol* containingSym_;
     SymbolKind kind_;
     Accessibility access_;

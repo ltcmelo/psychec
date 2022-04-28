@@ -33,9 +33,9 @@ using namespace C;
 struct FunctionSymbol::FunctionSymbolImpl : SymbolImpl
 {
     FunctionSymbolImpl(const SyntaxTree* tree,
-                       const Scope* containingScope,
+                       const Scope* enclosingScope,
                        const Symbol* containingSym)
-        : SymbolImpl(tree, containingScope, containingSym, SymbolKind::Function)
+        : SymbolImpl(tree, enclosingScope, containingSym, SymbolKind::Function)
         , name_(nullptr)
         , tySym_(nullptr)
     {}
