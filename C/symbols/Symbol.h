@@ -75,11 +75,11 @@ public:
     const Assembly* assembly() const;
 
     /**
-     * The Scope that encloses \c this Symbol.
+     * The Scope of \c this Symbol.
      *
      * \remark 6.2.1-4
      */
-    const Scope* enclosingScope() const;
+    const Scope* scope() const;
 
     /**
      * The Symbol that contains \c this Symbol.

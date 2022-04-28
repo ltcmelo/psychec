@@ -70,7 +70,7 @@ protected:
     friend class Binder;
 
     FunctionSymbol(const SyntaxTree* tree,
-                   const Scope* enclosingScope,
+                   const Scope* scope,
                    const Symbol* containingSym);
 
     virtual void setName(std::unique_ptr<SymbolName> symName) override;

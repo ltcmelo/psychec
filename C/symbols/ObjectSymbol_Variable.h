@@ -43,7 +43,7 @@ private:
     friend class Binder;
 
     VariableSymbol(const SyntaxTree* tree,
-                   const Scope* enclosingScope,
+                   const Scope* scope,
                    const Symbol* containingSym);
 };
 

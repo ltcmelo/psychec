@@ -76,7 +76,7 @@ protected:
     DECL_PIMPL_SUB(ObjectSymbol);
 
     ObjectSymbol(const SyntaxTree* tree,
-                const Scope* enclosingScope,
+                const Scope* scope,
                 const Symbol* containingSym,
                 ObjectKind objKind);
 

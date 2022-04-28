@@ -194,6 +194,9 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
                     break;
 
                 case SymbolKind::Library:
+                    makeSymAndPushIt<VariableSymbol>();
+                    break;
+
                 case SymbolKind::Function:
                     makeSymAndPushIt<VariableSymbol>();
                     break;

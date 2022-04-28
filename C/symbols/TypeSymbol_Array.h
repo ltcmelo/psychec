@@ -54,7 +54,7 @@ private:
     friend class Binder;
 
     ArrayTypeSymbol(const SyntaxTree* tree,
-                    const Scope* enclosingScope,
+                    const Scope* scope,
                     const Symbol* containingSym,
                     const TypeSymbol* elemTySym);
 };

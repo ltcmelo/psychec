@@ -31,10 +31,10 @@ using namespace C;
 struct ObjectSymbol::ObjectSymbolImpl : SymbolImpl
 {
     ObjectSymbolImpl(const SyntaxTree* tree,
-                    const Scope* enclosingScope,
+                    const Scope* scope,
                     const Symbol* containingSym,
                     ObjectKind objKind)
-        : SymbolImpl(tree, enclosingScope, containingSym, SymbolKind::Object)
+        : SymbolImpl(tree, scope, containingSym, SymbolKind::Object)
         , objKind_(objKind)
         , name_(nullptr)
         , tySym_(nullptr)
@@ -46,11 +46,11 @@ struct ObjectSymbol::ObjectSymbolImpl : SymbolImpl
 };
 
 ObjectSymbol::ObjectSymbol(const SyntaxTree* tree,
-                         const Scope* enclosingScope,
+                         const Scope* scope,
                          const Symbol* containingSym,
                          ObjectKind objKind)
     : Symbol(new ObjectSymbolImpl(tree,
-                                 enclosingScope,
+                                 scope,
                                  containingSym,
                                  objKind))
 {}

@@ -29,11 +29,11 @@ using namespace C;
 struct PointerTypeSymbol::PointerTypeSymbolImpl : TypeSymbolImpl
 {
     PointerTypeSymbolImpl(const SyntaxTree* tree,
-                          const Scope* enclosingScope,
+                          const Scope* scope,
                           const Symbol* containingSym,
                           const TypeSymbol* refedTySym)
         : TypeSymbolImpl(tree,
-                         enclosingScope,
+                         scope,
                          containingSym,
                          TypeKind::Pointer)
         , refedTySym_(refedTySym)
