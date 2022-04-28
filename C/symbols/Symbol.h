@@ -70,9 +70,14 @@ public:
     virtual const TypeSymbol* asType() const { return nullptr; }
 
     /**
-     * The Assembly where \c this Symbol is \a defined.
+     * The Assembly that owns \c this Symbol.
      */
-    const Assembly* assembly() const;
+    const Assembly* owningAssembly() const;
+
+    /**
+     * The Symbol that contains \c this Symbol.
+     */
+    const Symbol* containingSymbol() const;
 
     /**
      * The Scope of \c this Symbol.
@@ -82,12 +87,12 @@ public:
     const Scope* scope() const;
 
     /**
-     * The Symbol that contains \c this Symbol.
+     * The Location of \c this Symbol.
      */
-    const Symbol* containingSymbol() const;
+    Location location() const;
 
     /**
-     * The Accessibility declared for \c this Symbol.
+     * The Accessibility \c this Symbol declares.
      */
     Accessibility declaredAccessibility() const;
 
@@ -95,11 +100,6 @@ public:
      * References to the SyntaxNodes that \a declare \c this Symbol.
      */
     std::vector<SyntaxReference> declaringSyntaxReferences() const;
-
-    /**
-     * The Location where \c this Symbol is \a defined.
-     */
-    Location location() const;
 
 protected:
     DECL_PIMPL(Symbol);

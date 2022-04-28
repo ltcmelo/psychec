@@ -38,7 +38,7 @@ Symbol::Symbol(SymbolImpl* p)
 Symbol::~Symbol()
 {}
 
-const Assembly* Symbol::assembly() const
+const Assembly* Symbol::owningAssembly() const
 {
     for (auto compilation : P->tree_->linkedCompilations()) {
         const auto&& syms = compilation->assembly()->symbols();
