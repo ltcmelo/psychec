@@ -49,7 +49,7 @@ protected:
 private:
     void enclose(std::unique_ptr<Scope> scope);
 
-    std::vector<std::unique_ptr<Scope>> scopes_;
+    std::vector<std::unique_ptr<Scope>> enclosedScopes_;
 };
 
 } // C

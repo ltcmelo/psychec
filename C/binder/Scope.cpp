@@ -30,7 +30,7 @@ Scope::Scope()
 
 void Scope::enclose(std::unique_ptr<Scope> scope)
 {
-    scopes_.push_back(std::move(scope));
+    enclosedScopes_.push_back(std::move(scope));
 }
 
 Scope::~Scope()
