@@ -49,13 +49,20 @@ enum class CVR
 
 struct BindingSummary
 {
+    BindingSummary();
+
     BindingSummary(std::string name, ObjectKind kind);
     BindingSummary(std::string name, TypeKind kind);
     BindingSummary(std::string funcName);
+
+    BindingSummary& Object(std::string name, ObjectKind kind);
+    BindingSummary& Type(std::string name, TypeKind kind);
+    BindingSummary& Function(std::string funcName);
+
     BindingSummary& specType(std::string name,
-                      NamedTypeKind tyNameK,
-                      BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::None,
-                      CVR cvr = CVR::None);
+                             NamedTypeKind tyNameK,
+                             BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::None,
+                             CVR cvr = CVR::None);
     BindingSummary& derivType(TypeKind tyKind, CVR cvr = CVR::None);
 
     std::string name_;

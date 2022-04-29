@@ -23,6 +23,36 @@
 using namespace psy;
 using namespace  C;
 
+BindingSummary::BindingSummary()
+{}
+
+BindingSummary& BindingSummary::Object(std::string name, ObjectKind kind)
+{
+    name_ = std::move(name);
+    symK_ = SymbolKind::Object;
+    objK_ = kind;
+    tyK_ = TypeKind::None;
+    return *this;
+}
+
+BindingSummary& BindingSummary::Type(std::string name, TypeKind kind)
+{
+    name_ = std::move(name);
+    symK_ = SymbolKind::Type;
+    objK_ = ObjectKind::None;
+    tyK_ = kind;
+    return *this;
+}
+
+BindingSummary& BindingSummary::Function(std::string funcName)
+{
+    name_ = std::move(funcName);
+    symK_ = SymbolKind::Function;
+    objK_ = ObjectKind::None;
+    tyK_ = TypeKind::None;
+    return *this;
+}
+
 BindingSummary::BindingSummary(std::string name, ObjectKind kind)
     : name_(std::move(name))
     , symK_(SymbolKind::Object)
