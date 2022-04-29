@@ -99,78 +99,76 @@ $(function() {
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;SymbolKind.h&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;SymbolName.h&quot;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;syntax/SyntaxReference.h&quot;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;../common/location/Location.h&quot;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;../common/infra/Pimpl.h&quot;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">namespace </span>psy {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">namespace </span>C {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_symbol.html">   49</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;{</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>();</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    SymbolKind kind() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_library_symbol.html">LibrarySymbol</a>* asLibrary() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_library_symbol.html">LibrarySymbol</a>* asLibrary()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_function_symbol.html">FunctionSymbol</a>* asFunction() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_function_symbol.html">FunctionSymbol</a>* asFunction()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_object_symbol.html">ObjectSymbol</a>* asObject() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_object_symbol.html">ObjectSymbol</a>* asObject()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a>* asType() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a>* asType()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_assembly.html">Assembly</a>* assembly() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_symbol.html#ae348fcb0cb59b49c9aaf7aff8cf548dc">   80</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* <a class="code" href="classpsy_1_1_c_1_1_symbol.html#ae348fcb0cb59b49c9aaf7aff8cf548dc">outerScope</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_symbol.html#a23601ba41feca63424d231473eee7559">   87</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* <a class="code" href="classpsy_1_1_c_1_1_symbol.html#a23601ba41feca63424d231473eee7559">innerScope</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_symbol.html#aac8204996d47d0959549c6232d75ebee">   92</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* <a class="code" href="classpsy_1_1_c_1_1_symbol.html#aac8204996d47d0959549c6232d75ebee">containingSymbol</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    Accessibility declaredAccessibility() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    std::vector&lt;SyntaxReference&gt; declaringSyntaxReferences() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <a class="code" href="classpsy_1_1_location.html">Location</a> location() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    DECL_PIMPL(<a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>);</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>(SymbolImpl* p);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> ScopeT&gt; ScopeT* makeScope();</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;};</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>&amp; sym);</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;binder/NameSpace.h&quot;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &quot;syntax/SyntaxReference.h&quot;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;../common/location/Location.h&quot;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;../common/infra/Pimpl.h&quot;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">namespace </span>psy {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">namespace </span>C {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_symbol.html">   50</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;{</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>();</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    SymbolKind kind() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_library_symbol.html">LibrarySymbol</a>* asLibrary() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_library_symbol.html">LibrarySymbol</a>* asLibrary()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_function_symbol.html">FunctionSymbol</a>* asFunction() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_function_symbol.html">FunctionSymbol</a>* asFunction()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_value_symbol.html">ValueSymbol</a>* asValue() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_value_symbol.html">ValueSymbol</a>* asValue()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a>* asType() { <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a>* asType()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_assembly.html">Assembly</a>* owningAssembly() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_symbol.html#aac8204996d47d0959549c6232d75ebee">   81</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* <a class="code" href="classpsy_1_1_c_1_1_symbol.html#aac8204996d47d0959549c6232d75ebee">containingSymbol</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_symbol.html#ae0da12c2aafb8f135a056efb0dbf1108">   88</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* <a class="code" href="classpsy_1_1_c_1_1_symbol.html#ae0da12c2aafb8f135a056efb0dbf1108">scope</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_name_space.html">NameSpace</a>* nameSpace() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <a class="code" href="classpsy_1_1_location.html">Location</a> location() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    Accessibility declaredAccessibility() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    std::vector&lt;SyntaxReference&gt; declaringSyntaxReferences() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    DECL_PIMPL(<a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>(SymbolImpl* p);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;};</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>&amp; sym);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html_aac8204996d47d0959549c6232d75ebee"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html#aac8204996d47d0959549c6232d75ebee">psy::C::Symbol::containingSymbol</a></div><div class="ttdeci">const Symbol * containingSymbol() const</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_scope_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_scope.html">psy::C::Scope</a></div><div class="ttdoc">The Scope class.</div><div class="ttdef"><b>Definition:</b> Scope.h:40</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html_a23601ba41feca63424d231473eee7559"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html#a23601ba41feca63424d231473eee7559">psy::C::Symbol::innerScope</a></div><div class="ttdeci">const Scope * innerScope() const</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html_ae348fcb0cb59b49c9aaf7aff8cf548dc"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html#ae348fcb0cb59b49c9aaf7aff8cf548dc">psy::C::Symbol::outerScope</a></div><div class="ttdeci">const Scope * outerScope() const</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_type_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type_symbol.html">psy::C::TypeSymbol</a></div><div class="ttdoc">The TypeSymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Type.h:53</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_scope_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_scope.html">psy::C::Scope</a></div><div class="ttdoc">The Scope class.</div><div class="ttdef"><b>Definition:</b> Scope.h:43</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html_ae0da12c2aafb8f135a056efb0dbf1108"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html#ae0da12c2aafb8f135a056efb0dbf1108">psy::C::Symbol::scope</a></div><div class="ttdeci">const Scope * scope() const</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_value_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_value_symbol.html">psy::C::ValueSymbol</a></div><div class="ttdoc">The ValueSymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Value.h:42</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_type_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type_symbol.html">psy::C::TypeSymbol</a></div><div class="ttdoc">The TypeSymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Type.h:46</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_assembly_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_assembly.html">psy::C::Assembly</a></div><div class="ttdoc">The Assembly class.</div><div class="ttdef"><b>Definition:</b> Assembly.h:42</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_object_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_object_symbol.html">psy::C::ObjectSymbol</a></div><div class="ttdoc">The ObjectSymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Object.h:46</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></div><div class="ttdoc">The Symbol class.</div><div class="ttdef"><b>Definition:</b> Symbol.h:50</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_function_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_function_symbol.html">psy::C::FunctionSymbol</a></div><div class="ttdoc">The FunctionSymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Function.h:43</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></div><div class="ttdoc">The Symbol class.</div><div class="ttdef"><b>Definition:</b> Symbol.h:51</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_function_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_function_symbol.html">psy::C::FunctionSymbol</a></div><div class="ttdoc">The FunctionSymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Function.h:41</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_library_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_library_symbol.html">psy::C::LibrarySymbol</a></div><div class="ttdoc">The LibrarySymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Library.h:44</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:49</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_name_space_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_name_space.html">psy::C::NameSpace</a></div><div class="ttdoc">The NameSpace class.</div><div class="ttdef"><b>Definition:</b> NameSpace.h:38</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:50</div></div>
 <div class="ttc" id="aclasspsy_1_1_location_html"><div class="ttname"><a href="classpsy_1_1_location.html">psy::Location</a></div><div class="ttdoc">The Location class.</div><div class="ttdef"><b>Definition:</b> Location.h:41</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

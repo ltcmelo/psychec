@@ -80,34 +80,32 @@ $(function() {
  <a href="classpsy_1_1_c_1_1_scope.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_scope_8h_source.html">Scope.h</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for psy::C::Scope:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="classpsy_1_1_c_1_1_scope.png" usemap="#psy::C::Scope_map" alt=""/>
-  <map id="psy::C::Scope_map" name="psy::C::Scope_map">
-<area href="classpsy_1_1_c_1_1_block_scope.html" alt="psy::C::BlockScope" shape="rect" coords="0,56,138,80"/>
-<area href="classpsy_1_1_c_1_1_file_scope.html" alt="psy::C::FileScope" shape="rect" coords="148,56,286,80"/>
-<area href="classpsy_1_1_c_1_1_function_scope.html" alt="psy::C::FunctionScope" shape="rect" coords="296,56,434,80"/>
-  </map>
-</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad7d7787ec6898711c74ba4106430a7af"><td class="memItemLeft" align="right" valign="top">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_block_scope.html">BlockScope</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_scope.html#ad7d7787ec6898711c74ba4106430a7af">blocks</a> () const</td></tr>
-<tr class="separator:ad7d7787ec6898711c74ba4106430a7af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10dc8ce5e1a088607f1c1f95025dadb4"><td class="memItemLeft" align="right" valign="top">ScopeKind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_scope.html#a10dc8ce5e1a088607f1c1f95025dadb4">kind</a> () const</td></tr>
+<tr class="separator:a10dc8ce5e1a088607f1c1f95025dadb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a84bc96a95fdb3a5b8c507182ece364b7"><td class="memItemLeft" align="right" valign="top"><a id="a84bc96a95fdb3a5b8c507182ece364b7"></a>
-<a class="el" href="classpsy_1_1_c_1_1_block_scope.html">BlockScope</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>makeNestedScope</b> ()</td></tr>
-<tr class="separator:a84bc96a95fdb3a5b8c507182ece364b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a038b74c6842672a500fed67d8cfb9564"><td class="memItemLeft" align="right" valign="top"><a id="a038b74c6842672a500fed67d8cfb9564"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Scope</b> (ScopeKind <a class="el" href="classpsy_1_1_c_1_1_scope.html#a10dc8ce5e1a088607f1c1f95025dadb4">kind</a>)</td></tr>
+<tr class="separator:a038b74c6842672a500fed67d8cfb9564"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d046fbe74bdab888f484e326cb42fcd"><td class="memItemLeft" align="right" valign="top"><a id="a8d046fbe74bdab888f484e326cb42fcd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>enclose</b> (std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> &gt; scope)</td></tr>
+<tr class="separator:a8d046fbe74bdab888f484e326cb42fcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3a1f86e9abcc0920675d6cc9a392a61"><td class="memItemLeft" align="right" valign="top"><a id="ab3a1f86e9abcc0920675d6cc9a392a61"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>morphFrom_FunctionPrototype_to_Block</b> ()</td></tr>
+<tr class="separator:ab3a1f86e9abcc0920675d6cc9a392a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ac5c6dbf0f1a7bd4779d0b714528d217b"><td class="memItemLeft" align="right" valign="top"><a id="ac5c6dbf0f1a7bd4779d0b714528d217b"></a>
-std::vector&lt; std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_block_scope.html">BlockScope</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>blocks_</b></td></tr>
-<tr class="separator:ac5c6dbf0f1a7bd4779d0b714528d217b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ccdb9813c8bbdd56971bd2069651c68"><td class="memItemLeft" align="right" valign="top"><a id="a4ccdb9813c8bbdd56971bd2069651c68"></a>
+ScopeKind&#160;</td><td class="memItemRight" valign="bottom"><b>kind_</b></td></tr>
+<tr class="separator:a4ccdb9813c8bbdd56971bd2069651c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68714e316a3ca3990036e352144c6a22"><td class="memItemLeft" align="right" valign="top"><a id="a68714e316a3ca3990036e352144c6a22"></a>
+std::vector&lt; std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>enclosedScopes_</b></td></tr>
+<tr class="separator:a68714e316a3ca3990036e352144c6a22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -119,21 +117,21 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Binder</b></td></tr>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_scope.html" title="The Scope class.">Scope</a> class. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>6.2.1 </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad7d7787ec6898711c74ba4106430a7af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7d7787ec6898711c74ba4106430a7af">&#9670;&nbsp;</a></span>blocks()</h2>
+<a id="a10dc8ce5e1a088607f1c1f95025dadb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10dc8ce5e1a088607f1c1f95025dadb4">&#9670;&nbsp;</a></span>kind()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_block_scope.html">BlockScope</a> * &gt; Scope::blocks </td>
+          <td class="memname">ScopeKind Scope::kind </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The BlockScopes of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_scope.html" title="The Scope class.">Scope</a>. </p>
+<p>The Kind of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_scope.html" title="The Scope class.">Scope</a>. </p>
 
 </div>
 </div>
