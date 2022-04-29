@@ -24,6 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "binder/Scope.h"
 #include "parser/LexedTokens.h"
 #include "symbols/SymbolName.h"
 #include "symbols/Symbols.h"
@@ -64,19 +65,22 @@ private:
 
     SemanticModel* semaModel_;
 
-    template <class ScopeT> void openScope();
+    void openScope(Scope::Kind scopeK);
     void closeScope();
+    void reopenStashedScope();
+    void closeScopeAndStashIt();
     std::stack<Scope*> scopes_;
+    Scope* stashedScope_;
 
     template <class SymT> SymT* pushSym(std::unique_ptr<SymT>);
     void popSym();
-    using SymCont_T = std::stack<Symbol*>;
-    SymCont_T syms_;
+    using SymContT = std::stack<Symbol*>;
+    SymContT syms_;
 
     template <class TySymT> TySymT* pushTySym(std::unique_ptr<TySymT>);
     void popTySym();
-    using TySymCont_T = std::stack<TypeSymbol*>;
-    TySymCont_T tySyms_;
+    using TySymContT = std::stack<TypeSymbol*>;
+    TySymContT tySyms_;
 
     template <class SymT, class... Args> std::unique_ptr<SymT> makeSymOrTySym(Args... args);
     template <class SymT, class... Args> void makeSymAndPushIt(Args... arg);

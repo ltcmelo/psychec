@@ -194,7 +194,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
         visit(attrIt->value);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next) {
-        TySymCont_T tySyms;
+        TySymContT tySyms;
         std::swap(tySyms_, tySyms);
 
         visit(declIt->value);

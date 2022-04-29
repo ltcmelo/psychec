@@ -75,10 +75,18 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const Functio
 {
     actOnDeclarator(node->declarator());
 
+    reopenStashedScope();
+    scopes_.top()->morphFrom_FunctionPrototype_to_Block();
+
+    auto body = node->body()->asCompoundStatement();
+    for (auto stmtIt = body->statements(); stmtIt; stmtIt = stmtIt->next)
+        visit(stmtIt->value);
+
+    closeScope();
+
     return Binder::visitFunctionDefinition_DONE(node);
 }
 
-/* Declarators */
 SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 {
     visit(decltor);
@@ -123,30 +131,45 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
     return Action::Skip;
 }
 
+/* Declarators */
+
 SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node)
 {
     for (auto specIt = node->attributes(); specIt; specIt = specIt->next)
         visit(specIt->value);
 
-    visit(node->suffix());
+    switch (node->suffix()->kind()) {
+        case SubscriptSuffix:
+            makeTySymAndPushIt<ArrayTypeSymbol>(tySyms_.top());
+            break;
+
+        case ParameterSuffix:
+            makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
+            break;
+
+        default:
+            PSYCHE_FAIL_0(return Action::Quit);
+            return Action::Quit;
+    }
+
     visit(node->innerDeclarator());
+
+    openScope(Scope::Kind::FunctionPrototype);
+    visit(node->suffix());
+    closeScopeAndStashIt();
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* node)
 {
-    makeTySymAndPushIt<ArrayTypeSymbol>(tySyms_.top());
-
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* node)
 {
-    makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
-
     for (auto declIt = node->parameters(); declIt; declIt = declIt->next) {
-        TySymCont_T tySyms;
+        TySymContT tySyms;
         std::swap(tySyms_, tySyms);
 
         visit(declIt->value);
@@ -198,7 +221,20 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
                     break;
 
                 case SymbolKind::Function:
-                    makeSymAndPushIt<VariableSymbol>();
+                    switch (scopes_.top()->kind()) {
+                        case Scope::Kind::FunctionPrototype:
+                            makeSymAndPushIt<ParameterSymbol>();
+                            break;
+
+                        case Scope::Kind::Block:
+                        case Scope::Kind::File:
+                            makeSymAndPushIt<VariableSymbol>();
+                            break;
+
+                        default:
+                            PSYCHE_FAIL_0(return Action::Quit);
+                            break;
+                    }
                     break;
 
                 default:
@@ -228,7 +264,6 @@ SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSy
     auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
 
     std::unique_ptr<SymbolName> name(new EmptySymbolName);
-
 
     nameableSym->setName(std::move(name));
 

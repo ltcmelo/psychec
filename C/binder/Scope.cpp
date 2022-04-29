@@ -22,15 +22,30 @@
 
 #include "Scope_Block.h"
 
+#include "../common/infra/PsycheAssert.h"
+
 using namespace psy;
 using namespace C;
 
-Scope::Scope()
+Scope::Scope(Kind kind)
+    : kind_(kind)
 {}
+
+Scope::Kind Scope::kind() const
+{
+    return kind_;
+}
 
 void Scope::enclose(std::unique_ptr<Scope> scope)
 {
     enclosedScopes_.push_back(std::move(scope));
+}
+
+void Scope::morphFrom_FunctionPrototype_to_Block()
+{
+    PSYCHE_ASSERT_0(kind_ == Kind::FunctionPrototype, return);
+
+    kind_ = Kind::Block;
 }
 
 Scope::~Scope()

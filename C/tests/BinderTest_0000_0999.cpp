@@ -171,7 +171,15 @@ void BinderTest::case0046() {}
 void BinderTest::case0047() {}
 void BinderTest::case0048() {}
 void BinderTest::case0049() {}
-void BinderTest::case0050() {}
+
+void BinderTest::case0050()
+{
+    bind("void x ( int y ) ;",
+         Expectation()
+             .binding(BindingSummary("x")
+                      .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)));
+}
+
 void BinderTest::case0051() {}
 void BinderTest::case0052() {}
 void BinderTest::case0053() {}

@@ -25,6 +25,7 @@
 #include "Fwds.h"
 
 #include <memory>
+#include <cstdint>
 #include <unordered_map>
 #include <vector>
 
@@ -43,12 +44,31 @@ class PSY_C_API Scope
 public:
     virtual ~Scope();
 
-protected:
-    Scope();
+    /**
+     * The Scope kinds.
+     *
+     * \remark 6.2.1-4
+     */
+    enum class Kind : uint8_t
+    {
+        File,
+        Function,
+        FunctionPrototype,
+        Block
+    };
+
+    /**
+     * The Kind of \c this Scope.
+     */
+    Kind kind() const;
 
 private:
-    void enclose(std::unique_ptr<Scope> scope);
+    Scope(Kind kind);
 
+    void enclose(std::unique_ptr<Scope> scope);
+    void morphFrom_FunctionPrototype_to_Block();
+
+    Kind kind_;
     std::vector<std::unique_ptr<Scope>> enclosedScopes_;
 };
 

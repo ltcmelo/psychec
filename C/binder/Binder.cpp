@@ -41,6 +41,7 @@ using namespace C;
 Binder::Binder(SemanticModel* semaModel, const SyntaxTree* tree)
     : SyntaxVisitor(tree)
     , semaModel_(semaModel)
+    , stashedScope_(nullptr)
     , diagReporter_(this)
 {}
 
@@ -65,18 +66,30 @@ void Binder::bind()
 //    PSYCHE_ASSERT(symDEFs_.empty(), return, "unexpected remaining symbol");
 }
 
-template <class ScopeT>
-void Binder::openScope()
+void Binder::openScope(Scope::Kind scopeK)
 {
-    std::unique_ptr<ScopeT> scope(new ScopeT());
+    std::unique_ptr<Scope> scope(new Scope(scopeK));
     scopes_.push(scope.get());
 
     auto enclosingScope = scopes_.top();
     enclosingScope->enclose(std::move(scope));
 }
 
+void Binder::reopenStashedScope()
+{
+    PSYCHE_ASSERT_0(stashedScope_, return);
+
+    scopes_.push(stashedScope_);
+}
+
 void Binder::closeScope()
 {
+    scopes_.pop();
+}
+
+void Binder::closeScopeAndStashIt()
+{
+    stashedScope_ = scopes_.top();
     scopes_.pop();
 }
 
@@ -123,7 +136,8 @@ void Binder::popTySym()
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     makeSymAndPushIt<LibrarySymbol>();
-    openScope<FileScope>();
+
+    openScope(Scope::Kind::File);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
@@ -243,7 +257,7 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinit
 //------------//
 SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
-    openScope<BlockScope>();
+    openScope(Scope::Kind::Block);
 
     for (auto stmtIt = node->statements(); stmtIt; stmtIt = stmtIt->next)
         visit(stmtIt->value);
