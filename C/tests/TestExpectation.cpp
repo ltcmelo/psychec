@@ -26,21 +26,21 @@ using namespace  C;
 BindingSummary::BindingSummary()
 {}
 
-BindingSummary& BindingSummary::Object(std::string name, ObjectKind kind)
+BindingSummary& BindingSummary::Object(std::string name, ValueKind valK)
 {
     name_ = std::move(name);
-    symK_ = SymbolKind::Object;
-    objK_ = kind;
+    symK_ = SymbolKind::Value;
+    valK_ = valK;
     tyK_ = TypeKind::None;
     return *this;
 }
 
-BindingSummary& BindingSummary::Type(std::string name, TypeKind kind)
+BindingSummary& BindingSummary::Type(std::string name, TypeKind tyK)
 {
     name_ = std::move(name);
     symK_ = SymbolKind::Type;
-    objK_ = ObjectKind::None;
-    tyK_ = kind;
+    valK_ = ValueKind::None;
+    tyK_ = tyK;
     return *this;
 }
 
@@ -48,7 +48,7 @@ BindingSummary& BindingSummary::Function(std::string funcName)
 {
     name_ = std::move(funcName);
     symK_ = SymbolKind::Function;
-    objK_ = ObjectKind::None;
+    valK_ = ValueKind::None;
     tyK_ = TypeKind::None;
     return *this;
 }

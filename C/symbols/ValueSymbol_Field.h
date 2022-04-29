@@ -18,36 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_VARIABLE_H__
-#define PSYCHE_C_SYMBOL_VARIABLE_H__
+#ifndef PSYCHE_C_SYMBOL_FIELD_H__
+#define PSYCHE_C_SYMBOL_FIELD_H__
 
-#include "Symbol_Object.h"
+#include "Symbol_Value.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The VariableSymbol class.
+ * \brief The FieldUnitSymbol class.
  *
  * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.ILocalSymbol
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IFieldSymbol
  * from Roslyn, the .NET Compiler Platform.
  */
-class PSY_C_API VariableSymbol final : public ObjectSymbol
+class PSY_C_API FieldSymbol final : public ValueSymbol
 {
 public:
-    virtual VariableSymbol* asVariable() override { return this; }
-    virtual const VariableSymbol* asVariable() const override { return this; }
+    virtual FieldSymbol* asField() override { return this; }
+    virtual const FieldSymbol* asField() const override { return this; }
 
 private:
     friend class Binder;
 
-    VariableSymbol(const SyntaxTree* tree,
-                   const Scope* scope,
-                   const Symbol* containingSym);
+    FieldSymbol(const SyntaxTree* tree,
+                const Scope* scope,
+                const Symbol* containingSym);
 };
 
-std::string PSY_C_API to_string(const VariableSymbol& sym);
+std::string PSY_C_API to_string(const FieldSymbol& sym);
 
 } // C
 } // psy

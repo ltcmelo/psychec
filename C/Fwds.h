@@ -63,7 +63,7 @@ class StructOrUnionDeclarationSyntax;
 class EnumDeclarationSyntax;
 class EnumMemberDeclarationSyntax;
 class DeclaratorDeclarationSyntax;
-class ObjectDeclarationSyntax;
+class ValueDeclarationSyntax;
 class DeclaratorDeclarationSyntax;
 class VariableAndOrFunctionDeclarationSyntax;
 class ParameterDeclarationSyntax;
@@ -210,7 +210,7 @@ class LibrarySymbol;
 class FunctionSymbol;
 
 /* Symbols (values) */
-class ObjectSymbol;
+class ValueSymbol;
 class FieldSymbol;
 class VariableSymbol;
 class ParameterSymbol;

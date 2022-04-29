@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol_Object.h"
+#include "Symbol_Value.h"
 #include "Symbol__IMPL__.inc"
 
 #include "symbols/Symbols.h"
@@ -28,57 +28,57 @@
 using namespace psy;
 using namespace C;
 
-struct ObjectSymbol::ObjectSymbolImpl : SymbolImpl
+struct ValueSymbol::ValueSymbolImpl : SymbolImpl
 {
-    ObjectSymbolImpl(const SyntaxTree* tree,
+    ValueSymbolImpl(const SyntaxTree* tree,
                     const Scope* scope,
                     const Symbol* containingSym,
-                    ObjectKind objKind)
-        : SymbolImpl(tree, scope, containingSym, SymbolKind::Object)
-        , objKind_(objKind)
+                    ValueKind valKind)
+        : SymbolImpl(tree, scope, containingSym, SymbolKind::Value)
+        , valKind_(valKind)
         , name_(nullptr)
         , tySym_(nullptr)
     {}
 
-    ObjectKind objKind_;
+    ValueKind valKind_;
     std::unique_ptr<SymbolName> name_;
     const TypeSymbol* tySym_;
 };
 
-ObjectSymbol::ObjectSymbol(const SyntaxTree* tree,
-                         const Scope* scope,
-                         const Symbol* containingSym,
-                         ObjectKind objKind)
-    : Symbol(new ObjectSymbolImpl(tree,
+ValueSymbol::ValueSymbol(const SyntaxTree* tree,
+                          const Scope* scope,
+                          const Symbol* containingSym,
+                          ValueKind valKind)
+    : Symbol(new ValueSymbolImpl(tree,
                                  scope,
                                  containingSym,
-                                 objKind))
+                                 valKind))
 {}
 
-ObjectSymbol::~ObjectSymbol()
+ValueSymbol::~ValueSymbol()
 {}
 
-ObjectKind ObjectSymbol::objectKind() const
+ValueKind ValueSymbol::valueKind() const
 {
-    return P_CAST->objKind_;
+    return P_CAST->valKind_;
 }
 
-const SymbolName* ObjectSymbol::name() const
+const SymbolName* ValueSymbol::name() const
 {
     return P_CAST->name_.get();
 }
 
-const TypeSymbol* ObjectSymbol::type() const
+const TypeSymbol* ValueSymbol::type() const
 {
     return P_CAST->tySym_;
 }
 
-void ObjectSymbol::setType(const TypeSymbol* tySym)
+void ValueSymbol::setType(const TypeSymbol* tySym)
 {
     P_CAST->tySym_ = tySym;
 }
 
-void ObjectSymbol::setName(std::unique_ptr<SymbolName> symName)
+void ValueSymbol::setName(std::unique_ptr<SymbolName> symName)
 {
     P_CAST->name_ = std::move(symName);
 }
@@ -86,18 +86,18 @@ void ObjectSymbol::setName(std::unique_ptr<SymbolName> symName)
 namespace psy {
 namespace C {
 
-std::string to_string(const ObjectSymbol& sym)
+std::string to_string(const ValueSymbol& sym)
 {
-    switch (sym.objectKind()) {
-        case ObjectKind::Field:
+    switch (sym.valueKind()) {
+        case ValueKind::Field:
             return to_string(*sym.asField());
-        case ObjectKind::Parameter:
+        case ValueKind::Parameter:
             return to_string(*sym.asParameter());
-        case ObjectKind::Variable:
+        case ValueKind::Variable:
             return to_string(*sym.asVariable());
         default:
             PSYCHE_FAIL_0(return "");
-            return "<invalid object kind>";
+            return "<invalid value kind>";
     }
 }
 

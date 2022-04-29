@@ -18,35 +18,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ObjectSymbol_Variable.h"
-
-#include "symbols/Symbols.h"
+#include "ValueSymbol_Parameter.h"
 
 #include <sstream>
 
 using namespace psy;
 using namespace C;
 
-VariableSymbol::VariableSymbol(const SyntaxTree* tree,
-                               const Scope* scope,
-                               const Symbol* containingSym)
-    : ObjectSymbol(tree,
+ParameterSymbol::ParameterSymbol(const SyntaxTree* tree,
+                                 const Scope* scope,
+                                 const Symbol* containingSym)
+    : ValueSymbol(tree,
                   scope,
                   containingSym,
-                  ObjectKind::Variable)
+                  ValueKind::Parameter)
 {}
 
 namespace psy {
 namespace C {
 
-std::string to_string(const VariableSymbol& sym)
+std::string to_string(const ParameterSymbol& sym)
 {
     std::ostringstream oss;
-    oss << "{`variable |";
+    oss << "{~parameter |";
     if (sym.name())
         oss << " " << to_string(*sym.name());
-    oss << " " << to_string(*sym.type());
-    oss << " `}";
+    oss << " ~}";
 
     return oss.str();
 }

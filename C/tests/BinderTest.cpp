@@ -221,22 +221,22 @@ bool functionMatchesBinding(const FunctionSymbol* funcSym, const BindingSummary&
     return true;
 }
 
-bool valueMatchesBinding(const ObjectSymbol* objSym, const BindingSummary& binding)
+bool valueMatchesBinding(const ValueSymbol* valSym, const BindingSummary& binding)
 {
-    if (objSym->objectKind() != binding.objK_)
-        return REJECT_CANDIDATE(objSym, "value kind mismatch");
+    if (valSym->valueKind() != binding.valK_)
+        return REJECT_CANDIDATE(valSym, "value kind mismatch");
 
-    if (!objSym->name())
-        return REJECT_CANDIDATE(objSym, "empty name");
+    if (!valSym->name())
+        return REJECT_CANDIDATE(valSym, "empty name");
 
-    if (objSym->name()->text() != binding.name_)
-        return REJECT_CANDIDATE(objSym, "name mismatch");
+    if (valSym->name()->text() != binding.name_)
+        return REJECT_CANDIDATE(valSym, "name mismatch");
 
-    if (objSym->type() == nullptr)
-        return REJECT_CANDIDATE(objSym, "null type");
+    if (valSym->type() == nullptr)
+        return REJECT_CANDIDATE(valSym, "null type");
 
-    if (!typeMatchesBinding(objSym->type(), binding))
-        return REJECT_CANDIDATE(objSym, "type mismatch");
+    if (!typeMatchesBinding(valSym->type(), binding))
+        return REJECT_CANDIDATE(valSym, "type mismatch");
 
     return true;
 }
@@ -250,8 +250,8 @@ bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const BindingSumma
 
     switch (binding.symK_)
     {
-        case SymbolKind::Object:
-            return valueMatchesBinding(candSym->asObject(), binding);
+        case SymbolKind::Value:
+            return valueMatchesBinding(candSym->asValue(), binding);
 
         case SymbolKind::Type: {
             if (candSym->asType()->typeKind() != binding.tyK_)

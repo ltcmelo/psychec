@@ -34,13 +34,6 @@ namespace C {
 /**
  * \brief The TypeSymbol class.
  *
- * A symbol that denotes a <em>type</em>.
- *
- * "Types are partitioned into object types (types that describe objects)
- * and function types (types that describe functions)."
- *
- * \remark 6.2.5-1
- *
  * \note
  * This API is inspired by that of \c Microsoft.CodeAnalysis.ITypeSymbol
  * from Roslyn, the .NET Compiler Platform.

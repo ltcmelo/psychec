@@ -92,8 +92,8 @@ std::string to_string(const Symbol& sym)
             return to_string(*sym.asLibrary());
         case SymbolKind::Function:
             return to_string(*sym.asFunction());
-        case SymbolKind::Object:
-            return to_string(*sym.asObject());
+        case SymbolKind::Value:
+            return to_string(*sym.asValue());
         case SymbolKind::Type:
             return to_string(*sym.asType());
         default:

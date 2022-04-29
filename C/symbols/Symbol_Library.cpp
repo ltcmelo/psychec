@@ -41,7 +41,7 @@ namespace C {
 std::string to_string(const LibrarySymbol& sym)
 {
     std::ostringstream oss;
-    oss << "{!unit !}";
+    oss << "{!library !}";
 
     return oss.str();
 }

@@ -42,7 +42,7 @@ void BinderTest::case1000()
 {
     bind("double x ;",
          Expectation()
-            .binding(BindingSummary().Object("x", ObjectKind::Variable)
+            .binding(BindingSummary().Object("x", ValueKind::Variable)
                     .specType("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
@@ -50,7 +50,7 @@ void BinderTest::case1001()
 {
     bind("int x ;",
          Expectation()
-            .binding(BindingSummary().Object("x", ObjectKind::Variable)
+            .binding(BindingSummary().Object("x", ValueKind::Variable)
                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
@@ -58,9 +58,9 @@ void BinderTest::case1002()
 {
     bind("int x ; int y ;",
          Expectation()
-            .binding(BindingSummary().Object("x", ObjectKind::Variable)
+            .binding(BindingSummary().Object("x", ValueKind::Variable)
                     .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
-            .binding(BindingSummary().Object("y", ObjectKind::Variable)
+            .binding(BindingSummary().Object("y", ValueKind::Variable)
                     .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
@@ -68,9 +68,9 @@ void BinderTest::case1003()
 {
     bind("int x , y ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
@@ -78,7 +78,7 @@ void BinderTest::case1004()
 {
     bind("x y ;",
          Expectation()
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                  .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None)));
 }
 
@@ -86,9 +86,9 @@ void BinderTest::case1005()
 {
     bind("x y , z ;",
          Expectation()
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None))
-             .binding(BindingSummary().Object("z", ObjectKind::Variable)
+             .binding(BindingSummary().Object("z", ValueKind::Variable)
                       .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None)));
 
 }
@@ -97,7 +97,7 @@ void BinderTest::case1006()
 {
     bind("int x = 1 ;",
          Expectation()
-            .binding(BindingSummary().Object("x", ObjectKind::Variable)
+            .binding(BindingSummary().Object("x", ValueKind::Variable)
                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
@@ -105,7 +105,7 @@ void BinderTest::case1007()
 {
     bind("x y = 1 ;",
          Expectation()
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None)));
 }
 
@@ -121,7 +121,7 @@ void BinderTest::case1009()
 {
     bind("struct x y ;",
          Expectation()
-            .binding(BindingSummary().Object("y", ObjectKind::Variable)
+            .binding(BindingSummary().Object("y", ValueKind::Variable)
                     .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
 }
 
@@ -129,7 +129,7 @@ void BinderTest::case1010()
 {
     bind("union x y ;",
          Expectation()
-            .binding(BindingSummary().Object("y", ObjectKind::Variable)
+            .binding(BindingSummary().Object("y", ValueKind::Variable)
                     .specType("union x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
 }
 
@@ -137,7 +137,7 @@ void BinderTest::case1011()
 {
     bind("enum x y ;",
          Expectation()
-            .binding(BindingSummary().Object("y", ObjectKind::Variable)
+            .binding(BindingSummary().Object("y", ValueKind::Variable)
                     .specType("enum x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
 }
 
@@ -145,9 +145,9 @@ void BinderTest::case1012()
 {
     bind("struct x y , z ;",
          Expectation()
-            .binding(BindingSummary().Object("y", ObjectKind::Variable)
+            .binding(BindingSummary().Object("y", ValueKind::Variable)
                     .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None))
-            .binding(BindingSummary().Object("z", ObjectKind::Variable)
+            .binding(BindingSummary().Object("z", ValueKind::Variable)
                     .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
 }
 
@@ -155,7 +155,7 @@ void BinderTest::case1013()
 {
     bind("struct x { int y ; } z ;",
          Expectation()
-            .binding(BindingSummary().Object("z", ObjectKind::Variable)
+            .binding(BindingSummary().Object("z", ValueKind::Variable)
                     .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
 }
 
@@ -163,7 +163,7 @@ void BinderTest::case1014()
 {
     bind("long x ;",
          Expectation()
-            .binding(BindingSummary().Object("x", ObjectKind::Variable)
+            .binding(BindingSummary().Object("x", ValueKind::Variable)
                     .specType("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
 }
 
@@ -171,7 +171,7 @@ void BinderTest::case1015()
 {
     bind("long int x ;",
          Expectation()
-            .binding(BindingSummary().Object("x", ObjectKind::Variable)
+            .binding(BindingSummary().Object("x", ValueKind::Variable)
                     .specType("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
 }
 
@@ -179,7 +179,7 @@ void BinderTest::case1016()
 {
     bind("int long x ;",
          Expectation()
-            .binding(BindingSummary().Object("x", ObjectKind::Variable)
+            .binding(BindingSummary().Object("x", ValueKind::Variable)
                     .specType("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
 }
 
@@ -187,7 +187,7 @@ void BinderTest::case1017()
 {
     bind("signed x ;",
          Expectation()
-            .binding(BindingSummary().Object("x", ObjectKind::Variable)
+            .binding(BindingSummary().Object("x", ValueKind::Variable)
                     .specType("signed int", NamedTypeKind::Builtin, BuiltinTypeKind::Int_S)));
 }
 
@@ -195,7 +195,7 @@ void BinderTest::case1018()
 {
     bind("signed int x ;",
          Expectation()
-            .binding(BindingSummary().Object("x", ObjectKind::Variable)
+            .binding(BindingSummary().Object("x", ValueKind::Variable)
                     .specType("signed int", NamedTypeKind::Builtin, BuiltinTypeKind::Int_S)));
 }
 
@@ -238,7 +238,7 @@ void BinderTest::case1050()
 {
     bind("const int x ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
@@ -246,7 +246,7 @@ void BinderTest::case1051()
 {
     bind("const x y ;",
          Expectation()
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
 }
 
@@ -262,7 +262,7 @@ void BinderTest::case1053()
 {
     bind("int const x ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
@@ -270,7 +270,7 @@ void BinderTest::case1054()
 {
     bind("x const y ;",
          Expectation()
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
 }
 
@@ -324,7 +324,7 @@ void BinderTest::case1100()
 {
     bind("int * x ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)));
 }
@@ -333,7 +333,7 @@ void BinderTest::case1101()
 {
     bind("x * y ;",
          Expectation()
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("x", NamedTypeKind::Synonym)
                       .derivType(TypeKind::Pointer)));
 }
@@ -342,10 +342,10 @@ void BinderTest::case1102()
 {
     bind("int * x ; y * z ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer))
-             .binding(BindingSummary().Object("z", ObjectKind::Variable)
+             .binding(BindingSummary().Object("z", ValueKind::Variable)
                       .specType("y", NamedTypeKind::Synonym)
                       .derivType(TypeKind::Pointer)));
 }
@@ -354,10 +354,10 @@ void BinderTest::case1103()
 {
     bind("int * x , * y ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer))
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)));
 }
@@ -366,7 +366,7 @@ void BinderTest::case1104()
 {
     bind("int ( * x ) [ 1 ];",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Array)
                       .derivType(TypeKind::Pointer)));
@@ -376,7 +376,7 @@ void BinderTest::case1105()
 {
     bind("int * * x ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)
                       .derivType(TypeKind::Pointer)));
@@ -386,7 +386,7 @@ void BinderTest::case1106()
 {
     bind("int * * * x ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)
                       .derivType(TypeKind::Pointer)
@@ -397,7 +397,7 @@ void BinderTest::case1107()
 {
     bind("int * ( * x ) [ 1 ] ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)
@@ -451,7 +451,7 @@ void BinderTest::case1150()
 {
     bind("const int * x ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
                       .derivType(TypeKind::Pointer)));
 }
@@ -460,7 +460,7 @@ void BinderTest::case1151()
 {
     bind("const x * y ;",
          Expectation()
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)
                       .derivType(TypeKind::Pointer)));
 }
@@ -519,7 +519,7 @@ void BinderTest::case1200()
 {
     bind("const int * const x ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
                       .derivType(TypeKind::Pointer, CVR::Const)));
 }
@@ -578,7 +578,7 @@ void BinderTest::case1250()
 {
     bind("int * const x ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::Const)));
 }
@@ -587,7 +587,7 @@ void BinderTest::case1251()
 {
     bind("x * const y ;",
          Expectation()
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::Const)));
 }
@@ -645,7 +645,7 @@ void BinderTest::case1300()
 {
     bind("int x [ 1 ] ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
@@ -654,7 +654,7 @@ void BinderTest::case1301()
 {
     bind("x y [ 1 ] ;",
          Expectation()
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
@@ -663,10 +663,10 @@ void BinderTest::case1302()
 {
     bind("int x [ 1 ] , y [ 2 ] ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Array, CVR::None))
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
@@ -675,10 +675,10 @@ void BinderTest::case1303()
 {
     bind("x y [ 1 ] , z [ 2 ] ;",
          Expectation()
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
                       .derivType(TypeKind::Array, CVR::None))
-             .binding(BindingSummary().Object("z", ObjectKind::Variable)
+             .binding(BindingSummary().Object("z", ValueKind::Variable)
                       .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
@@ -687,7 +687,7 @@ void BinderTest::case1304()
 {
     bind("int * x [ 1 ] ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
@@ -697,10 +697,10 @@ void BinderTest::case1305()
 {
     bind("int x [ 1 ] , * y [ 2 ] ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Array, CVR::None))
-             .binding(BindingSummary().Object("y", ObjectKind::Variable)
+             .binding(BindingSummary().Object("y", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
@@ -710,7 +710,7 @@ void BinderTest::case1306()
 {
     bind("int * * x [ 1 ] ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::None)
@@ -768,7 +768,7 @@ void BinderTest::case1350()
 {
     bind("const int x [ 1 ] ;",
          Expectation()
-             .binding(BindingSummary().Object("x", ObjectKind::Variable)
+             .binding(BindingSummary().Object("x", ValueKind::Variable)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
                       .derivType(TypeKind::Array, CVR::None)));
 }

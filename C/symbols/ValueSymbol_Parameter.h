@@ -18,35 +18,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ObjectSymbol_Parameter.h"
+#ifndef PSYCHE_C_SYMBOL_PARAMETER_H__
+#define PSYCHE_C_SYMBOL_PARAMETER_H__
 
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-ParameterSymbol::ParameterSymbol(const SyntaxTree* tree,
-                                 const Scope* scope,
-                                 const Symbol* containingSym)
-    : ObjectSymbol(tree,
-                  scope,
-                  containingSym,
-                  ObjectKind::Parameter)
-{}
+#include "Symbol_Value.h"
 
 namespace psy {
 namespace C {
 
-std::string to_string(const ParameterSymbol& sym)
+/**
+ * \brief The ParameterSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IParameterSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
+class PSY_C_API ParameterSymbol final : public ValueSymbol
 {
-    std::ostringstream oss;
-    oss << "{~parameter |";
-    if (sym.name())
-        oss << " " << to_string(*sym.name());
-    oss << " ~}";
+public:
+    virtual ParameterSymbol* asParameter() override { return this; }
+    virtual const ParameterSymbol* asParameter() const override { return this; }
 
-    return oss.str();
-}
+private:
+    friend class Binder;
+
+    ParameterSymbol(const SyntaxTree* tree,
+                    const Scope* scope,
+                    const Symbol* containingSym);
+};
+
+std::string PSY_C_API to_string(const ParameterSymbol& sym);
 
 } // C
 } // psy
+
+#endif

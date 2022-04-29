@@ -24,7 +24,7 @@
 #include "compilation/Compilation.h"
 #include "binder/Scope.h"
 #include "symbols/SymbolKind.h"
-#include "symbols/ObjectKind.h"
+#include "symbols/ValueKind.h"
 #include "symbols/TypeKind.h"
 #include "symbols/TypeKind_Builtin.h"
 #include "symbols/TypeKind_Named.h"
@@ -52,8 +52,8 @@ struct BindingSummary
 {
     BindingSummary();
 
-    BindingSummary& Object(std::string name, ObjectKind kind);
-    BindingSummary& Type(std::string name, TypeKind kind);
+    BindingSummary& Object(std::string name, ValueKind valK);
+    BindingSummary& Type(std::string name, TypeKind tyK);
     BindingSummary& Function(std::string funcName);
 
     BindingSummary& specType(std::string name,
@@ -64,7 +64,7 @@ struct BindingSummary
 
     std::string name_;
     SymbolKind symK_;
-    ObjectKind objK_;
+    ValueKind valK_;
     TypeKind tyK_;
     Scope::Kind scopeK_;
 
