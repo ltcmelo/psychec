@@ -28,6 +28,7 @@
 #include "SymbolKind.h"
 #include "SymbolName.h"
 
+#include "binder/NameSpace.h"
 #include "syntax/SyntaxReference.h"
 
 #include "../common/location/Location.h"
@@ -85,6 +86,11 @@ public:
      * \remark 6.2.1-4
      */
     const Scope* scope() const;
+
+    /**
+     * The NameSpace of \c this Symbol.
+     */
+    NameSpace nameSpace() const;
 
     /**
      * The Location of \c this Symbol.

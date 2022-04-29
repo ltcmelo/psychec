@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,50 +18,53 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol.h"
+#ifndef PSYCHE_C_NAME_SPACE_KIND_H__
+#define PSYCHE_C_NAME_SPACE_KIND_H__
 
-#include "SyntaxTree.h"
+#include "API.h"
+#include "Fwds.h"
 
-#include "binder/Scope.h"
-#include "binder/NameSpace.h"
-#include "symbols/SymbolNames.h"
+#include <cstdint>
+#include <string>
 
-using namespace psy;
-using namespace C;
+namespace psy {
+namespace C {
 
-struct Symbol::SymbolImpl
+/**
+ * \brief The NameSpaceKind enum.
+ *
+ * \remark 6.2.3-1
+ * \remark Footnote 32
+ */
+enum class NameSpaceKind : std::uint8_t
 {
-    SymbolImpl(const SyntaxTree* tree,
-               const Scope* scope,
-               const Symbol* containingSym,
-               SymbolKind kind)
-        : tree_(tree)
-        , scope_(scope)
-        , containingSym_(containingSym)
-        , kind_(kind)
-        , BF_all_(0)
-    {}
-
-    const SyntaxTree* tree_;
-    const Scope* scope_;
-    const Symbol* containingSym_;
-    SymbolKind kind_;
-    NameSpace ns_;
-    Accessibility access_;
-
-    struct BitFields
-    {
-        // Symbol
-        std::uint16_t static_ : 1;
-
-        // TypeSymbol.
-        std::uint16_t const_ : 1;
-        std::uint16_t volatile_ : 1;
-        std::uint16_t restrict_ : 1;
-    };
-    union
-    {
-        std::uint16_t BF_all_;
-        BitFields BF_;
-    };
+    Labels = 0,
+    Tags_Structure,
+    Tags_Union,
+    Tags_Enumeration,
+    Members,
+    Ordinary,
 };
+
+inline std::string PSY_C_API to_string(NameSpaceKind nsK)
+{
+    switch (nsK) {
+        case NameSpaceKind::Labels:
+            return "Labels";
+        case NameSpaceKind::Tags_Structure:
+            return "Structures";
+        case NameSpaceKind::Tags_Union:
+            return "Unions";
+        case NameSpaceKind::Tags_Enumeration:
+            return "Enumerations";
+        case NameSpaceKind::Ordinary:
+            return "Ordinary";
+        default:
+            return "<invalid name space kind>";
+    }
+}
+
+} // C
+} // psy
+
+#endif

@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,50 +18,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol.h"
+#ifndef PSYCHE_C_NAME_SPACE_H__
+#define PSYCHE_C_NAME_SPACE_H__
 
-#include "SyntaxTree.h"
+#include "API.h"
+#include "Fwds.h"
 
-#include "binder/Scope.h"
-#include "binder/NameSpace.h"
-#include "symbols/SymbolNames.h"
+#include "NameSpaceKind.h"
 
-using namespace psy;
-using namespace C;
+namespace psy {
+namespace C {
 
-struct Symbol::SymbolImpl
+/**
+ * \brief The NameSpace class.
+ *
+ * \remark 6.2.3
+ */
+class PSY_C_API NameSpace
 {
-    SymbolImpl(const SyntaxTree* tree,
-               const Scope* scope,
-               const Symbol* containingSym,
-               SymbolKind kind)
-        : tree_(tree)
-        , scope_(scope)
-        , containingSym_(containingSym)
-        , kind_(kind)
-        , BF_all_(0)
-    {}
+public:
+    /**
+     * The NameSpaceKind of \c this NameSpace.
+     */
+    NameSpaceKind kind() const { return  nsK_; }
 
-    const SyntaxTree* tree_;
-    const Scope* scope_;
-    const Symbol* containingSym_;
-    SymbolKind kind_;
-    NameSpace ns_;
-    Accessibility access_;
-
-    struct BitFields
-    {
-        // Symbol
-        std::uint16_t static_ : 1;
-
-        // TypeSymbol.
-        std::uint16_t const_ : 1;
-        std::uint16_t volatile_ : 1;
-        std::uint16_t restrict_ : 1;
-    };
-    union
-    {
-        std::uint16_t BF_all_;
-        BitFields BF_;
-    };
+private:
+    NameSpaceKind nsK_;
 };
+
+} // C
+} // psy
+
+#endif

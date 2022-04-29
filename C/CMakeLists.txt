@@ -162,6 +162,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/Binder_Specifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_TypeChecker.cpp
+    ${PROJECT_SOURCE_DIR}/binder/NameSpaceKind.h
     ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeQualifiers.h
     ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeQualifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeSpecifiers.h

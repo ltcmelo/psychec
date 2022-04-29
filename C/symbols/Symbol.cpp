@@ -66,6 +66,11 @@ SymbolKind Symbol::kind() const
     return P->kind_;
 }
 
+NameSpace Symbol::nameSpace() const
+{
+    return P->ns_;
+}
+
 Location Symbol::location() const
 {
     const auto& synRefs = declaringSyntaxReferences();
