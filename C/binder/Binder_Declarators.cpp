@@ -154,7 +154,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
 
     visit(node->innerDeclarator());
 
-    openScope(Scope::Kind::FunctionPrototype);
+    openScope(ScopeKind::FunctionPrototype);
     visit(node->suffix());
     closeScopeAndStashIt();
 
@@ -222,12 +222,12 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 
                 case SymbolKind::Function:
                     switch (scopes_.top()->kind()) {
-                        case Scope::Kind::FunctionPrototype:
+                        case ScopeKind::FunctionPrototype:
                             makeSymAndPushIt<ParameterSymbol>();
                             break;
 
-                        case Scope::Kind::Block:
-                        case Scope::Kind::File:
+                        case ScopeKind::Block:
+                        case ScopeKind::File:
                             makeSymAndPushIt<VariableSymbol>();
                             break;
 

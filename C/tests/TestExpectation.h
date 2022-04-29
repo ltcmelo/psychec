@@ -66,7 +66,7 @@ struct BindingSummary
     SymbolKind symK_;
     ValueKind valK_;
     TypeKind tyK_;
-    Scope::Kind scopeK_;
+    ScopeKind scopeK_;
 
     std::string specTyName_;
     NamedTypeKind specTyK_;

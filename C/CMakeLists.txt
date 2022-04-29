@@ -168,6 +168,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeSpecifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/Scope.h
     ${PROJECT_SOURCE_DIR}/binder/Scope.cpp
+    ${PROJECT_SOURCE_DIR}/binder/ScopeKind.h
     ${PROJECT_SOURCE_DIR}/binder/TypeChecker.h
     ${PROJECT_SOURCE_DIR}/binder/TypeChecker.cpp
 

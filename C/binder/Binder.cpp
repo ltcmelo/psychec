@@ -66,7 +66,7 @@ void Binder::bind()
 //    PSYCHE_ASSERT(symDEFs_.empty(), return, "unexpected remaining symbol");
 }
 
-void Binder::openScope(Scope::Kind scopeK)
+void Binder::openScope(ScopeKind scopeK)
 {
     std::unique_ptr<Scope> scope(new Scope(scopeK));
     scopes_.push(scope.get());
@@ -137,7 +137,7 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 {
     makeSymAndPushIt<LibrarySymbol>();
 
-    openScope(Scope::Kind::File);
+    openScope(ScopeKind::File);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
@@ -257,7 +257,7 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinit
 //------------//
 SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
-    openScope(Scope::Kind::Block);
+    openScope(ScopeKind::Block);
 
     for (auto stmtIt = node->statements(); stmtIt; stmtIt = stmtIt->next)
         visit(stmtIt->value);

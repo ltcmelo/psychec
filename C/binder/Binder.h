@@ -65,7 +65,7 @@ private:
 
     SemanticModel* semaModel_;
 
-    void openScope(Scope::Kind scopeK);
+    void openScope(ScopeKind scopeK);
     void closeScope();
     void reopenStashedScope();
     void closeScopeAndStashIt();

@@ -41,16 +41,15 @@ enum class ValueKind : std::uint8_t
     Variable
 };
 
-inline std::string PSY_C_API to_string(ValueKind valKind)
+inline std::string PSY_C_API to_string(ValueKind valK)
 {
-    switch (valKind) {
+    switch (valK) {
         case ValueKind::Field:
             return "Field";
         case ValueKind::Parameter:
             return "Parameter";
         case ValueKind::Variable:
             return "Variable";
-
         default:
             return "<invalid value kind>";
     }
