@@ -18,34 +18,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol_LinkUnit.h"
-#include "Symbol__IMPL__.inc"
+#ifndef PSYCHE_C_SYMBOL_LINK_UNIT_H__
+#define PSYCHE_C_SYMBOL_LINK_UNIT_H__
 
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-LinkUnitSymbol::LinkUnitSymbol(const SyntaxTree* tree,
-                               const Scope* scope,
-                               const Symbol* containingSym)
-    : Symbol(new SymbolImpl(tree,
-                            scope,
-                            containingSym,
-                            SymbolKind::LinkUnit))
-{}
+#include "Symbol.h"
 
 namespace psy {
 namespace C {
 
-std::string to_string(const LinkUnitSymbol& sym)
+/**
+ * \brief The LibrarySymbol class.
+ *
+ * A symbol that denotes a library of objects and function from a source file.
+ *
+ * \attention
+ * This symbol does not denote a <em>translation unit</em>.
+ *
+ * \remark 5.1.1.2-1 (8)
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IModuleSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
+class PSY_C_API LibrarySymbol final : public Symbol
 {
-    std::ostringstream oss;
-    oss << "{!unit !}";
+public:
+    virtual LibrarySymbol* asLibrary() override { return this; }
+    virtual const LibrarySymbol* asLibrary() const override { return this; }
 
-    return oss.str();
-}
+private:
+    friend class Binder;
+
+    LibrarySymbol(const SyntaxTree* tree,
+                  const Scope* outerScope,
+                  const Symbol* containingSym);
+};
+
+std::string PSY_C_API to_string(const LibrarySymbol& sym);
 
 } // C
 } // psy
 
+#endif

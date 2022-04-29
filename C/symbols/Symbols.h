@@ -22,7 +22,7 @@
 #define PSYCHE_C_SYMBOLS_H__
 
 #include "Symbol_Function.h"
-#include "Symbol_LinkUnit.h"
+#include "Symbol_Library.h"
 #include "TypeSymbol_Array.h"
 #include "TypeSymbol_Function.h"
 #include "TypeSymbol_Named.h"

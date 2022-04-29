@@ -206,7 +206,7 @@ typedef SyntaxNodePlainList<ExtKR_ParameterDeclarationSyntax*> ExtKR_ParameterDe
 
 /* Symbols */
 class Symbol;
-class LinkUnitSymbol;
+class LibrarySymbol;
 class FunctionSymbol;
 
 /* Symbols (values) */
