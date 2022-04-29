@@ -22,7 +22,7 @@
 
 #include "SyntaxTree.h"
 
-#include "binder/Scopes.h"
+#include "binder/Scope.h"
 #include "binder/Semantics_TypeSpecifiers.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbols.h"

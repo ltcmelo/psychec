@@ -233,9 +233,6 @@ class EmptySymbolName;
 
 /* Scopes */
 class Scope;
-class FileScope;
-class FunctionScope;
-class BlockScope;
 
 /* Compilation */
 class Compilation;

@@ -21,8 +21,5 @@
 #ifndef PSYCHE_C_SCOPES_H__
 #define PSYCHE_C_SCOPES_H__
 
-#include "Scope_Block.h"
-#include "Scope_File.h"
-#include "Scope_Function.h"
 
 #endif

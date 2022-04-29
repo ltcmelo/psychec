@@ -20,8 +20,6 @@
 
 #include "Scope.h"
 
-#include "Scope_Block.h"
-
 #include "../common/infra/PsycheAssert.h"
 
 using namespace psy;
