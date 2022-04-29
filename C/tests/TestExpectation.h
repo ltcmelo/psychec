@@ -22,6 +22,7 @@
 #define PSYCHE_C_TEST_EXPECTATION_H__
 
 #include "compilation/Compilation.h"
+#include "binder/Scope.h"
 #include "symbols/SymbolKind.h"
 #include "symbols/ObjectKind.h"
 #include "symbols/TypeKind.h"
@@ -65,6 +66,7 @@ struct BindingSummary
     SymbolKind symK_;
     ObjectKind objK_;
     TypeKind tyK_;
+    Scope::Kind scopeK_;
 
     std::string specTyName_;
     NamedTypeKind specTyK_;

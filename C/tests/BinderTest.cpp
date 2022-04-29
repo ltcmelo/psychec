@@ -30,7 +30,7 @@
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
-//#define DEBUG_BINDING_SEARCH
+#define DEBUG_BINDING_SEARCH
 
 using namespace psy;
 using namespace C;
