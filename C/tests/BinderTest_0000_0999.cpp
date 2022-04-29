@@ -178,7 +178,7 @@ void BinderTest::case0050()
          Expectation()
              .binding(BindingSummary().Function("x")
                       .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void))
-             .binding(BindingSummary().Object("y", ValueKind::Parameter)
+             .binding(BindingSummary().Value("y", ValueKind::Parameter)
                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 

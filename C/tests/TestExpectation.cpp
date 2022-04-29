@@ -26,7 +26,7 @@ using namespace  C;
 BindingSummary::BindingSummary()
 {}
 
-BindingSummary& BindingSummary::Object(std::string name, ValueKind valK)
+BindingSummary& BindingSummary::Value(std::string name, ValueKind valK)
 {
     name_ = std::move(name);
     symK_ = SymbolKind::Value;

@@ -52,7 +52,7 @@ struct BindingSummary
 {
     BindingSummary();
 
-    BindingSummary& Object(std::string name, ValueKind valK);
+    BindingSummary& Value(std::string name, ValueKind valK);
     BindingSummary& Type(std::string name, TypeKind tyK);
     BindingSummary& Function(std::string funcName);
 
