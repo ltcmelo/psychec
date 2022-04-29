@@ -63,7 +63,7 @@ class StructOrUnionDeclarationSyntax;
 class EnumDeclarationSyntax;
 class EnumMemberDeclarationSyntax;
 class DeclaratorDeclarationSyntax;
-class ObjectDeclarationSyntax;
+class ValueDeclarationSyntax;
 class DeclaratorDeclarationSyntax;
 class VariableAndOrFunctionDeclarationSyntax;
 class ParameterDeclarationSyntax;
@@ -206,11 +206,11 @@ typedef SyntaxNodePlainList<ExtKR_ParameterDeclarationSyntax*> ExtKR_ParameterDe
 
 /* Symbols */
 class Symbol;
-class LibrarySymbol;
+class LinkUnitSymbol;
 class FunctionSymbol;
 
 /* Symbols (values) */
-class ObjectSymbol;
+class ValueSymbol;
 class FieldSymbol;
 class VariableSymbol;
 class ParameterSymbol;

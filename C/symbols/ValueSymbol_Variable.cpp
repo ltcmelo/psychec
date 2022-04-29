@@ -18,45 +18,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_LIBRARY_H__
-#define PSYCHE_C_SYMBOL_LIBRARY_H__
+#include "ValueSymbol_Variable.h"
 
-#include "Symbol.h"
+#include "symbols/Symbols.h"
+
+#include <sstream>
+
+using namespace psy;
+using namespace C;
+
+VariableSymbol::VariableSymbol(const SyntaxTree* tree,
+                               const Scope* scope,
+                               const Symbol* containingSym)
+    : ValueSymbol(tree,
+                  scope,
+                  containingSym,
+                  ValueKind::Variable)
+{}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The LibrarySymbol class.
- *
- * A symbol that denotes a library of objects and function from a source file.
- *
- * \attention
- * This symbol does not denote a <em>translation unit</em>.
- *
- * \remark 5.1.1.2-1 (8)
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IModuleSymbol
- * from Roslyn, the .NET Compiler Platform.
- */
-class PSY_C_API LibrarySymbol final : public Symbol
+std::string to_string(const VariableSymbol& sym)
 {
-public:
-    virtual LibrarySymbol* asLibrary() override { return this; }
-    virtual const LibrarySymbol* asLibrary() const override { return this; }
+    std::ostringstream oss;
+    oss << "{`variable |";
+    if (sym.name())
+        oss << " " << to_string(*sym.name());
+    oss << " " << to_string(*sym.type());
+    oss << " `}";
 
-private:
-    friend class Binder;
-
-    LibrarySymbol(const SyntaxTree* tree,
-                  const Scope* outerScope,
-                  const Symbol* containingSym);
-};
-
-std::string PSY_C_API to_string(const LibrarySymbol& sym);
+    return oss.str();
+}
 
 } // C
 } // psy
-
-#endif

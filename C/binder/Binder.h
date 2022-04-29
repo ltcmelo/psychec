@@ -88,9 +88,14 @@ private:
         DiagnosticsReporter(Binder* binder)
             : binder_(binder)
         {}
+
         Binder* binder_;
 
         void diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk);
+
+        static const std::string ID_of_UselessDeclaration;
+
+        void UselessDeclaration(SyntaxToken tk);
     };
 
     DiagnosticsReporter diagReporter_;

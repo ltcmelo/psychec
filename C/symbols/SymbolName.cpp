@@ -52,11 +52,9 @@ std::string to_string(const SymbolName& name)
 {
     switch (name.kind()) {
         case SymbolName::Kind::Plain:
-            return to_string(*name.asPlainSymbolName());
+            return to_string(static_cast<const PlainSymbolName&>(name));
         case SymbolName::Kind::Tag:
-            return to_string(*name.asTagSymbolName());
-        case SymbolName::Kind::Empty:
-            return to_string(*name.asEmptySymbolName());
+            return to_string(static_cast<const TagSymbolName&>(name));
         default:
             PSYCHE_FAIL_0(return "");
             return "<invalid symbol name>";

@@ -18,38 +18,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_FIELD_H__
-#define PSYCHE_C_SYMBOL_FIELD_H__
+#include "Symbol_LinkUnit.h"
+#include "Symbol__IMPL__.inc"
 
-#include "Symbol_Object.h"
+#include <sstream>
+
+using namespace psy;
+using namespace C;
+
+LinkUnitSymbol::LinkUnitSymbol(const SyntaxTree* tree,
+                               const Scope* scope,
+                               const Symbol* containingSym)
+    : Symbol(new SymbolImpl(tree,
+                            scope,
+                            containingSym,
+                            SymbolKind::LinkUnit))
+{}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The FieldUnitSymbol class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IFieldSymbol
- * from Roslyn, the .NET Compiler Platform.
- */
-class PSY_C_API FieldSymbol final : public ObjectSymbol
+std::string to_string(const LinkUnitSymbol& sym)
 {
-public:
-    virtual FieldSymbol* asField() override { return this; }
-    virtual const FieldSymbol* asField() const override { return this; }
+    std::ostringstream oss;
+    oss << "{!unit !}";
 
-private:
-    friend class Binder;
-
-    FieldSymbol(const SyntaxTree* tree,
-                const Scope* outerScope,
-                const Symbol* containingSym);
-};
-
-std::string PSY_C_API to_string(const FieldSymbol& sym);
+    return oss.str();
+}
 
 } // C
 } // psy
 
-#endif

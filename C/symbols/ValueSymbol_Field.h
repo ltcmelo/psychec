@@ -18,38 +18,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ObjectSymbol_Variable.h"
+#ifndef PSYCHE_C_SYMBOL_FIELD_H__
+#define PSYCHE_C_SYMBOL_FIELD_H__
 
-#include "symbols/Symbols.h"
-
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-VariableSymbol::VariableSymbol(const SyntaxTree* tree,
-                               const Scope* scope,
-                               const Symbol* containingSym)
-    : ObjectSymbol(tree,
-                  scope,
-                  containingSym,
-                  ObjectKind::Variable)
-{}
+#include "Symbol_Value.h"
 
 namespace psy {
 namespace C {
 
-std::string to_string(const VariableSymbol& sym)
+/**
+ * \brief The FieldUnitSymbol class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IFieldSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
+class PSY_C_API FieldSymbol final : public ValueSymbol
 {
-    std::ostringstream oss;
-    oss << "{`variable |";
-    if (sym.name())
-        oss << " " << to_string(*sym.name());
-    oss << " " << to_string(*sym.type());
-    oss << " `}";
+public:
+    virtual FieldSymbol* asField() override { return this; }
+    virtual const FieldSymbol* asField() const override { return this; }
 
-    return oss.str();
-}
+private:
+    friend class Binder;
+
+    FieldSymbol(const SyntaxTree* tree,
+                const Scope* outerScope,
+                const Symbol* containingSym);
+};
+
+std::string PSY_C_API to_string(const FieldSymbol& sym);
 
 } // C
 } // psy
+
+#endif

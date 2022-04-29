@@ -18,36 +18,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_PARAMETER_H__
-#define PSYCHE_C_SYMBOL_PARAMETER_H__
+#ifndef PSYCHE_C_VALUE_KIND_H__
+#define PSYCHE_C_VALUE_KIND_H__
 
-#include "Symbol_Object.h"
+#include "API.h"
+#include "Fwds.h"
+
+#include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The ParameterSymbol class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IParameterSymbol
- * from Roslyn, the .NET Compiler Platform.
+ * \brief The ValueKind enum.
  */
-class PSY_C_API ParameterSymbol final : public ObjectSymbol
+enum class ValueKind : std::uint8_t
 {
-public:
-    virtual ParameterSymbol* asParameter() override { return this; }
-    virtual const ParameterSymbol* asParameter() const override { return this; }
-
-private:
-    friend class Binder;
-
-    ParameterSymbol(const SyntaxTree* tree,
-                    const Scope* outerScope,
-                    const Symbol* containingSym);
+    None = 0,
+    Field,
+    Parameter,
+    Variable
 };
 
-std::string PSY_C_API to_string(const ParameterSymbol& sym);
+inline std::string PSY_C_API to_string(ValueKind valKind)
+{
+    switch (valKind) {
+        case ValueKind::Field:
+            return "Field";
+        case ValueKind::Parameter:
+            return "Parameter";
+        case ValueKind::Variable:
+            return "Variable";
+
+        default:
+            return "<invalid value kind>";
+    }
+}
 
 } // C
 } // psy

@@ -109,25 +109,18 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
     ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeFacts.h
     ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeFacts.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Field.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Field.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Parameter.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Parameter.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Variable.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectSymbol_Variable.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/symbols/SymbolKind.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Library.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Library.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Object.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Object.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_LinkUnit.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_LinkUnit.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName.cpp
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName.h
@@ -154,6 +147,13 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Named.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.h
+    ${PROJECT_SOURCE_DIR}/symbols/ValueKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Field.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Field.h
+    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Parameter.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Parameter.h
+    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Variable.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Variable.h
 
     # Binder
     ${PROJECT_SOURCE_DIR}/binder/Binder.h

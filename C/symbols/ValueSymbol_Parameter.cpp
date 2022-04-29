@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ObjectSymbol_Parameter.h"
+#include "ValueSymbol_Parameter.h"
 
 #include <sstream>
 
@@ -28,10 +28,10 @@ using namespace C;
 ParameterSymbol::ParameterSymbol(const SyntaxTree* tree,
                                  const Scope* scope,
                                  const Symbol* containingSym)
-    : ObjectSymbol(tree,
+    : ValueSymbol(tree,
                   scope,
                   containingSym,
-                  ObjectKind::Parameter)
+                  ValueKind::Parameter)
 {}
 
 namespace psy {

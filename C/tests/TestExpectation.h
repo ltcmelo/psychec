@@ -23,7 +23,7 @@
 
 #include "compilation/Compilation.h"
 #include "symbols/SymbolKind.h"
-#include "symbols/ObjectKind.h"
+#include "symbols/ValueKind.h"
 #include "symbols/TypeKind.h"
 #include "symbols/TypeKind_Builtin.h"
 #include "symbols/TypeKind_Named.h"
@@ -49,7 +49,7 @@ enum class CVR
 
 struct BindingSummary
 {
-    BindingSummary(std::string name, ObjectKind kind);
+    BindingSummary(std::string name, ValueKind kind);
     BindingSummary(std::string name, TypeKind kind);
     BindingSummary(std::string funcName);
     BindingSummary& specType(std::string name,
@@ -60,7 +60,7 @@ struct BindingSummary
 
     std::string name_;
     SymbolKind symK_;
-    ObjectKind objK_;
+    ValueKind valK_;
     TypeKind tyK_;
 
     std::string specTyName_;

@@ -58,12 +58,12 @@ public:
      */
     SymbolKind kind() const;
 
-    virtual LibrarySymbol* asLibrary() { return nullptr; }
-    virtual const LibrarySymbol* asLibrary() const { return nullptr; }
+    virtual LinkUnitSymbol* asLinkUnit() { return nullptr; }
+    virtual const LinkUnitSymbol* asLinkUnit() const { return nullptr; }
     virtual FunctionSymbol* asFunction() { return nullptr; }
     virtual const FunctionSymbol* asFunction() const { return nullptr; }
-    virtual ObjectSymbol* asObject() { return nullptr; }
-    virtual const ObjectSymbol* asObject() const { return nullptr; }
+    virtual ValueSymbol* asValue() { return nullptr; }
+    virtual const ValueSymbol* asValue() const { return nullptr; }
     virtual TypeSymbol* asType() { return nullptr; }
     virtual const TypeSymbol* asType() const { return nullptr; }
 

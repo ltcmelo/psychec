@@ -125,7 +125,7 @@ void Binder::popTySym()
 //--------------//
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    makeSymAndPushIt<LibrarySymbol>();
+    makeSymAndPushIt<LinkUnitSymbol>();
     openScope<FileScope>();
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
@@ -138,7 +138,7 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 
 SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node)
 {
-    Semantics_TypeSpecifiers::DeclarationDoesNotDeclareAnything(node->lastToken(), &diagReporter_);
+    diagReporter_.UselessDeclaration(node->lastToken());
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         ;
