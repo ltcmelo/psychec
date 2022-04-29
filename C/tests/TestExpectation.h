@@ -51,10 +51,6 @@ struct BindingSummary
 {
     BindingSummary();
 
-    BindingSummary(std::string name, ObjectKind kind);
-    BindingSummary(std::string name, TypeKind kind);
-    BindingSummary(std::string funcName);
-
     BindingSummary& Object(std::string name, ObjectKind kind);
     BindingSummary& Type(std::string name, TypeKind kind);
     BindingSummary& Function(std::string funcName);

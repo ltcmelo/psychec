@@ -53,28 +53,6 @@ BindingSummary& BindingSummary::Function(std::string funcName)
     return *this;
 }
 
-BindingSummary::BindingSummary(std::string name, ObjectKind kind)
-    : name_(std::move(name))
-    , symK_(SymbolKind::Object)
-    , objK_(kind)
-    , tyK_(TypeKind::None)
-{}
-
-
-BindingSummary::BindingSummary(std::string name, TypeKind kind)
-    : name_(std::move(name))
-    , symK_(SymbolKind::Type)
-    , objK_(ObjectKind::None)
-    , tyK_(kind)
-{}
-
-BindingSummary::BindingSummary(std::string funcName)
-    : name_(std::move(funcName))
-    , symK_(SymbolKind::Function)
-    , objK_(ObjectKind::None)
-    , tyK_(TypeKind::None)
-{}
-
 BindingSummary& BindingSummary::specType(std::string name, NamedTypeKind tyNameK, BuiltinTypeKind builtinTypeKind, CVR cvr)
 {
     specTyName_ = std::move(name);
