@@ -32,37 +32,29 @@ namespace C {
  */
 class PSY_C_API TagSymbolName final : public SymbolName
 {
+    friend class NamedTypeSymbol;
+    friend std::string to_string(const TagSymbolName& name);
+    friend bool operator==(const TagSymbolName& a, const TagSymbolName& b);
+
 public:
     virtual TagSymbolName* asTagSymbolName() override { return this; }
     virtual const TagSymbolName* asTagSymbolName() const override { return this; }
 
-    enum class Kind : std::uint8_t
-    {
-        Structure,
-        Union,
-        Enumeration
-    };
-
     /**
-     * The Kind of \c this TagSymbolName.
+     * The TagSymbolNameKind of \c this TagSymbolName.
      */
-    Kind kind() const;
+    TagSymbolNameKind kind() const;
 
     /**
-     * The text of \c this SymbolName.
+     * The text of \c this TagSymbolName.
      */
     virtual std::string text() const override;
 
 private:
-    friend class NamedTypeSymbol;
+    TagSymbolName(TagSymbolNameKind tagK, std::string tag);
 
-    TagSymbolName(Kind ns, std::string tag);
-
-    Kind tagK_;
+    TagSymbolNameKind tagK_;
     std::string tag_;
-
-    friend std::string to_string(const TagSymbolName& name);
-    friend bool operator==(const TagSymbolName& a, const TagSymbolName& b);
 };
 
 bool operator!=(const TagSymbolName& a, const TagSymbolName& b);

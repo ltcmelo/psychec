@@ -169,14 +169,14 @@ SyntaxVisitor::Action Binder::visitTypeDeclaration_COMMON(const TypeDeclarationS
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
 {
     const TagTypeSpecifierSyntax* tySpec = node->typeSpecifier();
-    TagSymbolName::Kind ns;
+    TagSymbolNameKind tagK;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:
-            ns = TagSymbolName::Kind::Structure;
+            tagK = TagSymbolNameKind::Structure;
             break;
 
         case UnionTypeSpecifier:
-            ns = TagSymbolName::Kind::Union;
+            tagK = TagSymbolNameKind::Union;
             break;
 
         default:
@@ -184,14 +184,14 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
             return Action::Quit;
     }
 
-    makeSymAndPushIt<NamedTypeSymbol>(ns, tySpec->tagToken().valueText_c_str());
+    makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
-    makeSymAndPushIt<NamedTypeSymbol>(TagSymbolName::Kind::Enumeration,
+    makeSymAndPushIt<NamedTypeSymbol>(TagSymbolNameKind::Enumeration,
                                       node->typeSpecifier()->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_COMMON(node);

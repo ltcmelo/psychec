@@ -51,6 +51,25 @@ inline std::string PSY_C_API to_string(SymbolNameKind symNameK)
     }
 }
 
+enum class TagSymbolNameKind : std::uint8_t
+{
+    Structure,
+    Union,
+    Enumeration
+};
+
+inline std::string PSY_C_API to_string(TagSymbolNameKind tagK)
+{
+    switch (tagK) {
+        case TagSymbolNameKind::Structure:
+            return "Structure";
+        case TagSymbolNameKind::Union:
+            return "Union";
+        case TagSymbolNameKind::Enumeration:
+            return "Enumeration";
+    }
+}
+
 } // C
 } // psy
 

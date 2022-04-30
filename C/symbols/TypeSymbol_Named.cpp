@@ -74,14 +74,14 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                                  const Scope* scope,
                                  const Symbol* containingSym,
-                                 TagSymbolName::Kind ns,
+                                 TagSymbolNameKind tagK,
                                  const std::string& tag)
     : TypeSymbol(new NamedTypeSymbolImpl(tree,
                                          scope,
                                          containingSym,
                                          NamedTypeKind::Tag))
 {
-    P_CAST->name_.reset(new TagSymbolName(ns, tag));
+    P_CAST->name_.reset(new TagSymbolName(tagK, tag));
 }
 
 const SymbolName* NamedTypeSymbol::name() const

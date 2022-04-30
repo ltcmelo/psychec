@@ -79,7 +79,7 @@ private:
     NamedTypeSymbol(const SyntaxTree* tree,
                     const Scope* scope,
                     const Symbol* containingSym,
-                    TagSymbolName::Kind ns,
+                    TagSymbolNameKind tagK,
                     const std::string& tag);
 
 

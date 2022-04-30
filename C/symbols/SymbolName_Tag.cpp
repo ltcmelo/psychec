@@ -25,12 +25,12 @@
 using namespace psy;
 using namespace C;
 
-TagSymbolName::TagSymbolName(Kind ns, std::string tag)
-    : tagK_(ns)
+TagSymbolName::TagSymbolName(TagSymbolNameKind tagK, std::string tag)
+    : tagK_(tagK)
     , tag_(std::move(tag))
 {}
 
-TagSymbolName::Kind TagSymbolName::kind() const
+TagSymbolNameKind TagSymbolName::kind() const
 {
     return tagK_;
 }
@@ -39,19 +39,18 @@ std::string TagSymbolName::text() const
 {
     std::string prefix;
     switch (tagK_) {
-        case Kind::Structure:
+        case TagSymbolNameKind::Structure:
             prefix = "struct ";
             break;
 
-        case Kind::Union:
+        case TagSymbolNameKind::Union:
             prefix = "union ";
             break;
 
-        case Kind::Enumeration:
+        case TagSymbolNameKind::Enumeration:
             prefix = "enum ";
             break;
     }
-
     return prefix + tag_;
 }
 

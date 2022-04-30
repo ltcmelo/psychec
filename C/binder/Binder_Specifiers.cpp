@@ -168,18 +168,18 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
     if (!node->declarations()) {
-        TagSymbolName::Kind ns;
+        TagSymbolNameKind tagK;
         switch (node->kind()) {
             case StructTypeSpecifier:
-                ns = TagSymbolName::Kind::Structure;
+                tagK = TagSymbolNameKind::Structure;
                 break;
 
             case UnionTypeSpecifier:
-                ns = TagSymbolName::Kind::Union;
+                tagK = TagSymbolNameKind::Union;
                 break;
 
             case EnumTypeSpecifier:
-                ns = TagSymbolName::Kind::Enumeration;
+                tagK = TagSymbolNameKind::Enumeration;
                 break;
 
             default:
@@ -187,7 +187,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 return Action::Quit;
         }
 
-        makeTySymAndPushIt<NamedTypeSymbol>(ns, node->tagToken().valueText_c_str());
+        makeTySymAndPushIt<NamedTypeSymbol>(tagK, node->tagToken().valueText_c_str());
     }
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
@@ -213,18 +213,18 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
     visit(node->typeDeclaration());
 
     const TagTypeSpecifierSyntax* tySpec = node->typeDeclaration()->typeSpecifier();
-    TagSymbolName::Kind ns;
+    TagSymbolNameKind tagK;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:
-            ns = TagSymbolName::Kind::Structure;
+            tagK = TagSymbolNameKind::Structure;
             break;
 
         case UnionTypeSpecifier:
-            ns = TagSymbolName::Kind::Union;
+            tagK = TagSymbolNameKind::Union;
             break;
 
         case EnumTypeSpecifier:
-            ns = TagSymbolName::Kind::Enumeration;
+            tagK = TagSymbolNameKind::Enumeration;
             break;
 
         default:
@@ -232,7 +232,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
             return Action::Quit;
     }
 
-    makeTySymAndPushIt<NamedTypeSymbol>(ns, tySpec->tagToken().valueText_c_str());
+    makeTySymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
 
     return Action::Skip;
 }
