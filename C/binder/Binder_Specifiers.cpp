@@ -168,18 +168,18 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
     if (!node->declarations()) {
-        TagSymbolName::NameSpace ns;
+        TagSymbolName::Kind ns;
         switch (node->kind()) {
             case StructTypeSpecifier:
-                ns = TagSymbolName::NameSpace::Structures;
+                ns = TagSymbolName::Kind::Structure;
                 break;
 
             case UnionTypeSpecifier:
-                ns = TagSymbolName::NameSpace::Unions;
+                ns = TagSymbolName::Kind::Union;
                 break;
 
             case EnumTypeSpecifier:
-                ns = TagSymbolName::NameSpace::Enumerations;
+                ns = TagSymbolName::Kind::Enumeration;
                 break;
 
             default:
@@ -213,18 +213,18 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
     visit(node->typeDeclaration());
 
     const TagTypeSpecifierSyntax* tySpec = node->typeDeclaration()->typeSpecifier();
-    TagSymbolName::NameSpace ns;
+    TagSymbolName::Kind ns;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:
-            ns = TagSymbolName::NameSpace::Structures;
+            ns = TagSymbolName::Kind::Structure;
             break;
 
         case UnionTypeSpecifier:
-            ns = TagSymbolName::NameSpace::Unions;
+            ns = TagSymbolName::Kind::Union;
             break;
 
         case EnumTypeSpecifier:
-            ns = TagSymbolName::NameSpace::Enumerations;
+            ns = TagSymbolName::Kind::Enumeration;
             break;
 
         default:

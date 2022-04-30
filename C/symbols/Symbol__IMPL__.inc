@@ -37,6 +37,7 @@ struct Symbol::SymbolImpl
                SymbolKind kind)
         : tree_(tree)
         , scope_(scope)
+        , ns_(nullptr) // TODO
         , containingSym_(containingSym)
         , kind_(kind)
         , BF_all_(0)
@@ -44,9 +45,9 @@ struct Symbol::SymbolImpl
 
     const SyntaxTree* tree_;
     const Scope* scope_;
+    const NameSpace* ns_;
     const Symbol* containingSym_;
     SymbolKind kind_;
-    NameSpace ns_;
     Accessibility access_;
 
     struct BitFields

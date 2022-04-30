@@ -90,7 +90,7 @@ public:
     /**
      * The NameSpace of \c this Symbol.
      */
-    NameSpace nameSpace() const;
+    const NameSpace* nameSpace() const;
 
     /**
      * The Location of \c this Symbol.

@@ -37,6 +37,11 @@ namespace C {
 class PSY_C_API NameSpace
 {
 public:
+
+//    NameSpace(NameSpaceKind nsK)
+//        : nsK_(nsK)
+//    {}
+
     /**
      * The NameSpaceKind of \c this NameSpace.
      */

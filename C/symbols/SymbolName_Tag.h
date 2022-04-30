@@ -36,27 +36,17 @@ public:
     virtual TagSymbolName* asTagSymbolName() override { return this; }
     virtual const TagSymbolName* asTagSymbolName() const override { return this; }
 
-    /**
-     * \brief The TagSymbolName::Namespace enum.
-     *
-     * \remark 6.2.3
-     *
-     * \note
-     * The declaration of a \c struct, \c union, or \c enum may reside altogether
-     * within a single name space or in three separate name spaces (footnote 32).
-     * We adopt the latter alternative.
-     */
-    enum class NameSpace : std::uint8_t
+    enum class Kind : std::uint8_t
     {
-        Structures,
-        Unions,
-        Enumerations
+        Structure,
+        Union,
+        Enumeration
     };
 
     /**
-     * The name space where \c this tag name resides.
+     * The Kind of \c this TagSymbolName.
      */
-    NameSpace nameSpace() const;
+    Kind kind() const;
 
     /**
      * The text of \c this SymbolName.
@@ -66,9 +56,9 @@ public:
 private:
     friend class NamedTypeSymbol;
 
-    TagSymbolName(NameSpace ns, std::string tag);
+    TagSymbolName(Kind ns, std::string tag);
 
-    NameSpace ns_;
+    Kind tagK_;
     std::string tag_;
 
     friend std::string to_string(const TagSymbolName& name);

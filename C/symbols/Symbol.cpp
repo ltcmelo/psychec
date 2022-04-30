@@ -66,7 +66,7 @@ SymbolKind Symbol::kind() const
     return P->kind_;
 }
 
-NameSpace Symbol::nameSpace() const
+const NameSpace* Symbol::nameSpace() const
 {
     return P->ns_;
 }

@@ -33,16 +33,16 @@ SymbolName::SymbolName()
 SymbolName::~SymbolName()
 {}
 
-SymbolName::Kind SymbolName::kind() const
+SymbolNameKind SymbolName::kind() const
 {
     if (asPlainSymbolName())
-        return Kind::Plain;
+        return SymbolNameKind::Plain;
     if (asTagSymbolName())
-        return Kind::Tag;
+        return SymbolNameKind::Tag;
     if (asEmptySymbolName())
-        return Kind::Empty;
+        return SymbolNameKind::Empty;
 
-    PSYCHE_ASSERT(false, return Kind::Plain, "");
+    PSYCHE_ASSERT(false, return SymbolNameKind::Plain, "");
 }
 
 namespace psy {
@@ -51,13 +51,12 @@ namespace C {
 std::string to_string(const SymbolName& name)
 {
     switch (name.kind()) {
-        case SymbolName::Kind::Plain:
+        case SymbolNameKind::Plain:
             return to_string(static_cast<const PlainSymbolName&>(name));
-        case SymbolName::Kind::Tag:
+        case SymbolNameKind::Tag:
             return to_string(static_cast<const TagSymbolName&>(name));
-        default:
-            PSYCHE_FAIL_0(return "");
-            return "<invalid symbol name>";
+        case SymbolNameKind::Empty:
+            return to_string(static_cast<const EmptySymbolName&>(name));
     }
 }
 

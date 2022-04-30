@@ -18,13 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_NAME_H__
-#define PSYCHE_C_SYMBOL_NAME_H__
+#ifndef PSYCHE_C_SYMBOL_NAME_KIND_H__
+#define PSYCHE_C_SYMBOL_NAME_KIND_H__
 
 #include "API.h"
-#include "Fwds.h"
-
-#include "SymbolNameKind.h"
 
 #include <cstdint>
 #include <string>
@@ -33,37 +30,26 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The SymbolName class.
+ * \brief The SymbolNameKind enum.
  */
-class PSY_C_API SymbolName
+enum class SymbolNameKind : std::uint8_t
 {
-    friend class Symbol;
-
-public:
-    virtual ~SymbolName();
-
-    virtual PlainSymbolName* asPlainSymbolName() { return nullptr; }
-    virtual const PlainSymbolName* asPlainSymbolName() const { return nullptr; }
-    virtual TagSymbolName* asTagSymbolName() { return nullptr; }
-    virtual const TagSymbolName* asTagSymbolName() const { return nullptr; }
-    virtual EmptySymbolName* asEmptySymbolName() { return nullptr; }
-    virtual const EmptySymbolName* asEmptySymbolName() const { return nullptr; }
-
-    /**
-     * The SymbolName of \c this SymbolName.
-     */
-    SymbolNameKind kind() const;
-
-    /**
-     * The text of \c this SymbolName.
-     */
-    virtual std::string text() const = 0;
-
-protected:
-    SymbolName();
+    Empty,
+    Plain,
+    Tag
 };
 
-std::string to_string(const SymbolName& name);
+inline std::string PSY_C_API to_string(SymbolNameKind symNameK)
+{
+    switch (symNameK) {
+        case SymbolNameKind::Empty:
+            return "Empty";
+        case SymbolNameKind::Plain:
+            return "Plain";
+        case SymbolNameKind::Tag:
+            return "Tag";
+    }
+}
 
 } // C
 } // psy

@@ -56,9 +56,6 @@ inline std::string PSY_C_API to_string(SymbolKind kind)
             return "Value";
         case SymbolKind::Type:
             return "Type";
-
-        default:
-            return "not implemented";
     }
 }
 
