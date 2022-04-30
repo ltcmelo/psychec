@@ -39,9 +39,7 @@ namespace C {
 enum class NameSpaceKind : std::uint8_t
 {
     Labels = 0,
-    Tags_Structure,
-    Tags_Union,
-    Tags_Enumeration,
+    Tags,
     Members,
     Ordinary,
 };
@@ -51,16 +49,12 @@ inline std::string PSY_C_API to_string(NameSpaceKind nsK)
     switch (nsK) {
         case NameSpaceKind::Labels:
             return "Labels";
-        case NameSpaceKind::Tags_Structure:
-            return "Structures";
-        case NameSpaceKind::Tags_Union:
-            return "Unions";
-        case NameSpaceKind::Tags_Enumeration:
-            return "Enumerations";
+        case NameSpaceKind::Tags:
+            return "Tags";
+        case NameSpaceKind::Members:
+            return "Members";
         case NameSpaceKind::Ordinary:
             return "Ordinary";
-        default:
-            return "<invalid name space kind>";
     }
 }
 
