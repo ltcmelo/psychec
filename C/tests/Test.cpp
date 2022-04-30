@@ -26,7 +26,7 @@
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol.h"
 #include "parser/Unparser.h"
-#include "symbols/Symbols.h"
+#include "symbols/Symbol_ALL.h"
 #include "syntax/SyntaxLexemes.h"
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"

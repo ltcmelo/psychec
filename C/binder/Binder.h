@@ -27,7 +27,7 @@
 #include "binder/Scope.h"
 #include "parser/LexedTokens.h"
 #include "symbols/SymbolName.h"
-#include "symbols/Symbols.h"
+#include "symbols/Symbol_ALL.h"
 #include "symbols/TypeKind.h"
 #include "syntax/SyntaxVisitor.h"
 

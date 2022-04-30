@@ -24,7 +24,7 @@
 #include "Compilation.h"
 
 #include "binder/Binder.h"
-#include "symbols/Symbols.h"
+#include "symbols/Symbol_ALL.h"
 
 #include <unordered_set>
 #include <vector>

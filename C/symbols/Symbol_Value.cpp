@@ -21,7 +21,7 @@
 #include "Symbol_Value.h"
 #include "Symbol__IMPL__.inc"
 
-#include "symbols/Symbols.h"
+#include "symbols/Symbol_ALL.h"
 
 #include <sstream>
 

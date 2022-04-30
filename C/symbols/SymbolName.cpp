@@ -20,7 +20,7 @@
 
 #include "SymbolName.h"
 
-#include "SymbolNames.h"
+#include "SymbolName_ALL.h"
 
 #include "common/infra/PsycheAssert.h"
 

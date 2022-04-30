@@ -121,7 +121,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_ALL.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName.cpp
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Empty.cpp
@@ -130,7 +130,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Plain.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.cpp
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.h
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolNames.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_ALL.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeClass_NameableSymbol.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeClass_NameableSymbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeClass_TypeableSymbol.h

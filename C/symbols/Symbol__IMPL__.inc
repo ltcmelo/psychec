@@ -24,7 +24,7 @@
 
 #include "binder/Scope.h"
 #include "binder/NameSpace.h"
-#include "symbols/SymbolNames.h"
+#include "symbols/SymbolName_ALL.h"
 
 using namespace psy;
 using namespace C;

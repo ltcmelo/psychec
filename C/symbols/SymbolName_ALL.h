@@ -18,17 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOLS_H__
-#define PSYCHE_C_SYMBOLS_H__
+#ifndef PSYCHE_C_SYMBOL_NAME_ALL_H__
+#define PSYCHE_C_SYMBOL_NAME_ALL_H__
 
-#include "Symbol_Function.h"
-#include "Symbol_Library.h"
-#include "TypeSymbol_Array.h"
-#include "TypeSymbol_Function.h"
-#include "TypeSymbol_Named.h"
-#include "TypeSymbol_Pointer.h"
-#include "ValueSymbol_Field.h"
-#include "ValueSymbol_Parameter.h"
-#include "ValueSymbol_Variable.h"
+#include "SymbolName_Empty.h"
+#include "SymbolName_Plain.h"
+#include "SymbolName_Tag.h"
 
 #endif

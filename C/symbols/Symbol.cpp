@@ -22,7 +22,7 @@
 
 #include "compilation/Assembly.h"
 #include "compilation/Compilation.h"
-#include "symbols/Symbols.h"
+#include "symbols/Symbol_ALL.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxReference.h"
 
