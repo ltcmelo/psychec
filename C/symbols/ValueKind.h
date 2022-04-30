@@ -37,7 +37,7 @@ namespace C {
  */
 enum class ValueKind : std::uint8_t
 {
-    None = 0,
+    UNSPECIFIED = 0,
     Field,
     Parameter,
     Variable
@@ -54,7 +54,7 @@ inline std::string PSY_C_API to_string(ValueKind valK)
             return "Variable";
         default:
             PSYCHE_FAIL_0(return "");
-            return "<INVALID ValueKind>";
+            return "<INVALID or UNSPECIFIED ValueKind>";
     }
 }
 

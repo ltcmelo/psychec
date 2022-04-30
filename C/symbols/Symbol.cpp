@@ -103,7 +103,7 @@ std::string to_string(const Symbol& sym)
             return to_string(*sym.asType());
         default:
             PSYCHE_FAIL_0(return "");
-            return "<invalid symbol kind>";
+            return "<INVALID or UNSPECIFIED symbol kind>";
     }
 }
 

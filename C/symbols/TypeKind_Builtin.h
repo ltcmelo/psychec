@@ -52,7 +52,7 @@ namespace C {
  */
 enum class PSY_C_API BuiltinTypeKind : std::uint8_t
 {
-    None = 0,
+    UNSPECIFIED = 0,
 
     Void,
 
@@ -134,22 +134,15 @@ PSY_C_API inline std::string PSY_C_API canonicalText(BuiltinTypeKind builtTyKind
                 return "double _Complex";
         case BuiltinTypeKind::LongDoubleComplex:
                 return "long double _Complex";
-
         default:
-            PSYCHE_FAIL(return "", "unknown builtin");
-            return "";
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID or UNSPECIFIED BuiltinTypeKind>";
     }
 }
 
 PSY_C_API inline std::string PSY_C_API to_string(BuiltinTypeKind builtTyKind)
 {
-    switch (builtTyKind) {
-        case BuiltinTypeKind::None:
-            return "<INVALID BuiltinTypeKind>";
-
-        default:
-            return canonicalText(builtTyKind);
-    }
+    return canonicalText(builtTyKind);
 }
 
 } // C

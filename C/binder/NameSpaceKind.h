@@ -40,7 +40,8 @@ namespace C {
  */
 enum class NameSpaceKind : std::uint8_t
 {
-    Labels = 0,
+    UNSPECIFIED = 0,
+    Labels,
     Tags,
     Members,
     Ordinary,
@@ -59,7 +60,7 @@ inline std::string PSY_C_API to_string(NameSpaceKind nsK)
             return "Ordinary";
         default:
             PSYCHE_FAIL_0(return "");
-            return "<INVALID NameSpaceKind>";
+            return "<INVALID or UNSPECIFIED NameSpaceKind>";
     }
 }
 

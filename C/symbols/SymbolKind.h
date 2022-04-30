@@ -41,7 +41,8 @@ namespace C {
  */
 enum class SymbolKind : std::uint8_t
 {
-    Library = 0,
+    UNSPECIFIED = 0,
+    Library,
     Function,
     Value,
     Type,
@@ -60,7 +61,7 @@ inline std::string PSY_C_API to_string(SymbolKind kind)
             return "Type";
         default:
             PSYCHE_FAIL_0(return "");
-            return "<INVALID SymbolKind>";
+            return "<INVALID or UNSPECIFIED SymbolKind>";
     }
 }
 

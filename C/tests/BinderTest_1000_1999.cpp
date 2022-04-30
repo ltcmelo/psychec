@@ -79,7 +79,7 @@ void BinderTest::case1004()
     bind("x y ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Variable)
-                 .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None)));
+                 .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1005()
@@ -87,9 +87,9 @@ void BinderTest::case1005()
     bind("x y , z ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None))
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED))
              .binding(BindingSummary().Value("z", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None)));
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 
 }
 
@@ -106,7 +106,7 @@ void BinderTest::case1007()
     bind("x y = 1 ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None)));
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1008()
@@ -122,7 +122,7 @@ void BinderTest::case1009()
     bind("struct x y ;",
          Expectation()
             .binding(BindingSummary().Value("y", ValueKind::Variable)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1010()
@@ -130,7 +130,7 @@ void BinderTest::case1010()
     bind("union x y ;",
          Expectation()
             .binding(BindingSummary().Value("y", ValueKind::Variable)
-                    .specType("union x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
+                    .specType("union x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1011()
@@ -138,7 +138,7 @@ void BinderTest::case1011()
     bind("enum x y ;",
          Expectation()
             .binding(BindingSummary().Value("y", ValueKind::Variable)
-                    .specType("enum x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
+                    .specType("enum x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1012()
@@ -146,9 +146,9 @@ void BinderTest::case1012()
     bind("struct x y , z ;",
          Expectation()
             .binding(BindingSummary().Value("y", ValueKind::Variable)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None))
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED))
             .binding(BindingSummary().Value("z", ValueKind::Variable)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1013()
@@ -156,7 +156,7 @@ void BinderTest::case1013()
     bind("struct x { int y ; } z ;",
          Expectation()
             .binding(BindingSummary().Value("z", ValueKind::Variable)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1014()
@@ -247,7 +247,7 @@ void BinderTest::case1051()
     bind("const x y ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
 void BinderTest::case1052()
@@ -271,7 +271,7 @@ void BinderTest::case1054()
     bind("x const y ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
 void BinderTest::case1055() {}
@@ -461,7 +461,7 @@ void BinderTest::case1151()
     bind("const x * y ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
                       .derivType(TypeKind::Pointer)));
 }
 
@@ -588,7 +588,7 @@ void BinderTest::case1251()
     bind("x * const y ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::Const)));
 }
 
@@ -655,7 +655,7 @@ void BinderTest::case1301()
     bind("x y [ 1 ] ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
 
@@ -676,10 +676,10 @@ void BinderTest::case1303()
     bind("x y [ 1 ] , z [ 2 ] ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
                       .derivType(TypeKind::Array, CVR::None))
              .binding(BindingSummary().Value("z", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
 

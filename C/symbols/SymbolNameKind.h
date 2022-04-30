@@ -23,6 +23,8 @@
 
 #include "API.h"
 
+#include "../common/infra/PsycheAssert.h"
+
 #include <cstdint>
 #include <string>
 
@@ -34,6 +36,7 @@ namespace C {
  */
 enum class SymbolNameKind : std::uint8_t
 {
+    UNSPECIFIED = 0,
     Empty,
     Plain,
     Tag
@@ -48,11 +51,15 @@ inline std::string PSY_C_API to_string(SymbolNameKind symNameK)
             return "Plain";
         case SymbolNameKind::Tag:
             return "Tag";
+        default:
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID or UNSPECIFIED SymbolNameKind>";
     }
 }
 
 enum class TagSymbolNameKind : std::uint8_t
 {
+    UNSPECIFIED = 0,
     Structure,
     Union,
     Enumeration
@@ -67,6 +74,9 @@ inline std::string PSY_C_API to_string(TagSymbolNameKind tagK)
             return "Union";
         case TagSymbolNameKind::Enumeration:
             return "Enumeration";
+        default:
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID or UNSPECIFIED TagSymbolNameKind>";
     }
 }
 

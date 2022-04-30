@@ -39,7 +39,6 @@ struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
                          TypeKind::Named)
         , name_(nullptr)
         , namedTypeKind_(namedTypeKind)
-        , builtTyKind_(BuiltinTypeKind::None)
     {}
 
     std::unique_ptr<SymbolName> name_;

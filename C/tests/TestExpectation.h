@@ -58,7 +58,7 @@ struct BindingSummary
 
     BindingSummary& specType(std::string name,
                              NamedTypeKind tyNameK,
-                             BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::None,
+                             BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
                              CVR cvr = CVR::None);
     BindingSummary& derivType(TypeKind tyKind, CVR cvr = CVR::None);
 

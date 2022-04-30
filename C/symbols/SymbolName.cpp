@@ -57,6 +57,9 @@ std::string to_string(const SymbolName& name)
             return to_string(static_cast<const TagSymbolName&>(name));
         case SymbolNameKind::Empty:
             return to_string(static_cast<const EmptySymbolName&>(name));
+        default:
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID or UNSPECIFIED SymbolName>";
     }
 }
 

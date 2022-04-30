@@ -79,7 +79,7 @@ BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
 {
     const auto tkK = builtTySpecTk.kind();
     switch (builtTyKind) {
-        case BuiltinTypeKind::None:
+        case BuiltinTypeKind::UNSPECIFIED:
             switch (tkK) {
                 case Keyword_void:
                     return BuiltinTypeKind::Void;
@@ -178,6 +178,6 @@ BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
 
 
         default:
-            return BuiltinTypeKind::None;
+            return BuiltinTypeKind::UNSPECIFIED;
     }
 }

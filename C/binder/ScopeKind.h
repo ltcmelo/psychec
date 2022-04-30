@@ -39,6 +39,7 @@ namespace C {
  */
 enum class ScopeKind : uint8_t
 {
+    UNSPECIFIED = 0,
     File,
     Function,
     FunctionPrototype,
@@ -58,7 +59,7 @@ inline std::string PSY_C_API to_string(ScopeKind scopeK)
             return "Block";
         default:
             PSYCHE_FAIL_0(return "");
-            return "<INVALID ScopeKind>";
+            return "<INVALID or UNSPECIFIED ScopeKind>";
     }
 }
 

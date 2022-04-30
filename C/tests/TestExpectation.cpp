@@ -31,7 +31,6 @@ BindingSummary& BindingSummary::Value(std::string name, ValueKind valK)
     name_ = std::move(name);
     symK_ = SymbolKind::Value;
     valK_ = valK;
-    tyK_ = TypeKind::None;
     return *this;
 }
 
@@ -39,7 +38,6 @@ BindingSummary& BindingSummary::Type(std::string name, TypeKind tyK)
 {
     name_ = std::move(name);
     symK_ = SymbolKind::Type;
-    valK_ = ValueKind::None;
     tyK_ = tyK;
     return *this;
 }
@@ -48,8 +46,6 @@ BindingSummary& BindingSummary::Function(std::string funcName)
 {
     name_ = std::move(funcName);
     symK_ = SymbolKind::Function;
-    valK_ = ValueKind::None;
-    tyK_ = TypeKind::None;
     return *this;
 }
 

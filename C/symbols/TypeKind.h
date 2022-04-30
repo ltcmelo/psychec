@@ -41,7 +41,7 @@ namespace C {
  */
 enum class TypeKind : std::uint8_t
 {
-    None = 0,
+    UNSPECIFIED = 0,
     Array,
     Function,
     Named,
@@ -61,7 +61,7 @@ inline std::string PSY_C_API to_string(TypeKind tyKind)
             return "Pointer";
         default:
             PSYCHE_FAIL_0(return "");
-            return "<INVALID TypeKind>";
+            return "<INVALID or UNSPECIFIED TypeKind>";
     }
 }
 

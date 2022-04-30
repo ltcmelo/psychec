@@ -105,7 +105,7 @@ struct
          )",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Field)
-                 .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None)));
+                 .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2005()
@@ -118,9 +118,9 @@ struct
          )",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Field)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None))
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED))
              .binding(BindingSummary().Value("z", ValueKind::Field)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None)));
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2006()
@@ -164,7 +164,7 @@ struct
          )",
          Expectation()
             .binding(BindingSummary().Value("y", ValueKind::Field)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2010()
@@ -177,7 +177,7 @@ struct
          )",
          Expectation()
             .binding(BindingSummary().Value("y", ValueKind::Field)
-                    .specType("union x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
+                    .specType("union x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2011()
@@ -190,7 +190,7 @@ struct
          )",
          Expectation()
             .binding(BindingSummary().Value("y", ValueKind::Field)
-                    .specType("enum x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
+                    .specType("enum x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2012()
@@ -203,9 +203,9 @@ struct
          )",
          Expectation()
             .binding(BindingSummary().Value("y", ValueKind::Field)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None))
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED))
             .binding(BindingSummary().Value("z", ValueKind::Field)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2013()
@@ -218,7 +218,7 @@ struct
          )",
          Expectation()
             .binding(BindingSummary().Value("z", ValueKind::Field)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::None)));
+                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2014(){ }
@@ -271,7 +271,7 @@ void BinderTest::case2051()
     bind("struct { const x y ; } ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Field)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
 void BinderTest::case2052()
@@ -295,7 +295,7 @@ void BinderTest::case2054()
     bind("struct { x const y ; } ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Field)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)));
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
 void BinderTest::case2055(){ }
@@ -485,7 +485,7 @@ void BinderTest::case2151()
     bind("struct { const x * y ; } ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Field)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::Const)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
                       .derivType(TypeKind::Pointer)));
 }
 
@@ -612,7 +612,7 @@ void BinderTest::case2251()
     bind("struct { x * const y ; } ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Field)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
                       .derivType(TypeKind::Pointer, CVR::Const)));
 }
 
@@ -684,7 +684,7 @@ void BinderTest::case2301()
     bind("struct { x y [ 1 ] ; } ;",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Field)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
 
@@ -715,10 +715,10 @@ struct
          )",
          Expectation()
              .binding(BindingSummary().Value("y", ValueKind::Field)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
                       .derivType(TypeKind::Array, CVR::None))
              .binding(BindingSummary().Value("z", ValueKind::Field)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::None, CVR::None)
+                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
                       .derivType(TypeKind::Array, CVR::None)));
 }
 

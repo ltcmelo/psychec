@@ -179,7 +179,7 @@ bool typeMatchesBinding(const TypeSymbol* tySym, const BindingSummary& binding)
         return false;
     }
 
-    if (binding.specTyBuiltinK_ != BuiltinTypeKind::None) {
+    if (binding.specTyBuiltinK_ != BuiltinTypeKind::UNSPECIFIED) {
         if (!tySym->asNamedType()) {
             DETAIL_MISMATCH("not a builtin");
             return false;
