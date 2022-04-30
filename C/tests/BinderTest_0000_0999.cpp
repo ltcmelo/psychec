@@ -177,14 +177,27 @@ void BinderTest::case0050()
     bind("void x ( int y ) ;",
          Expectation()
              .binding(BindingSummary()
-                      .Function("x")
-                      .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void))
+                     .Function("x")
+                     .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void))
              .binding(BindingSummary()
-                      .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                     .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                     .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
-void BinderTest::case0051() {}
+void BinderTest::case0051()
+{
+    bind("void x ( int y , double z ) ;",
+         Expectation()
+             .binding(BindingSummary()
+                     .Function("x")
+                     .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void))
+             .binding(BindingSummary()
+                      .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+            .binding(BindingSummary()
+                     .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                     .specType("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
+}
 void BinderTest::case0052() {}
 void BinderTest::case0053() {}
 void BinderTest::case0054() {}
@@ -382,7 +395,21 @@ void BinderTest::case0150()
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
-void BinderTest::case0151() {}
+void BinderTest::case0151()
+{
+    bind("void x ( int y , double z ) { }",
+         Expectation()
+             .binding(BindingSummary()
+                     .Function("x")
+                     .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void))
+             .binding(BindingSummary()
+                      .Value("y", ValueKind::Parameter, ScopeKind::Block)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+            .binding(BindingSummary()
+                     .Value("z", ValueKind::Parameter, ScopeKind::Block)
+                     .specType("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
+
+}
 void BinderTest::case0152() {}
 void BinderTest::case0153() {}
 void BinderTest::case0154() {}

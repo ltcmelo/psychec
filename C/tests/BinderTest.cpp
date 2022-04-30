@@ -296,7 +296,7 @@ void BinderTest::bind(std::string text, Expectation X)
 
     for (const auto& binding : X.bindings_) {
 #ifdef DEBUG_BINDING_SEARCH
-        std::cout << "\n\t\t...";
+        std::cout << "\n";
 #endif
         using namespace std::placeholders;
 
@@ -308,5 +308,10 @@ void BinderTest::bind(std::string text, Expectation X)
                     + binding.name_ + " " + to_string(binding.symK_);
             PSYCHE_TEST_FAIL(s);
         }
+
+#ifdef DEBUG_BINDING_SEARCH
+        std::cout << "\n\t\tmatch!";
+#endif
+
     }
 }
