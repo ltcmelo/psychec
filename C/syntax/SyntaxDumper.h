@@ -45,7 +45,7 @@
 
 #include "API.h"
 
-#include "SyntaxLexemes.h"
+#include "SyntaxLexeme_ALL.h"
 #include "SyntaxNodes.h"
 #include "SyntaxVisitor.h"
 

@@ -1,4 +1,5 @@
 // Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,35 +19,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Unparser.h"
+#ifndef PSYCHE_C_SYNTAX_LEXEME_STRING_LITERAL_H__
+#define PSYCHE_C_SYNTAX_LEXEME_STRING_LITERAL_H__
 
-#include "SyntaxTree.h"
+#include "SyntaxLexeme.h"
 
-#include "syntax/SyntaxLexeme_ALL.h"
-#include "syntax/SyntaxNodes.h"
+#include <cstdint>
+#include <string>
 
-#include <iostream>
+namespace psy {
+namespace C {
 
-using namespace psy;
-using namespace C;
-
-void Unparser::unparse(const SyntaxNode* node, std::ostream& os)
+/**
+ * \brief The StringLiteral class.
+ */
+class PSY_C_API StringLiteral final : public SyntaxLexeme
 {
-    os_ = &os;
-    visit(node);
-}
+public:
+    StringLiteral(const char* chars, unsigned int size);
 
-void Unparser::terminal(const SyntaxToken& tk, const SyntaxNode*)
-{
-    if (tk.kind() == EndOfFile)
-        return;
+    virtual StringLiteral* asStringLiteralExpression() { return nullptr; }
 
-    *os_ << tk.valueText_c_str();
+    /**
+     * \brief The StringLiteral::Variant enumeration.
+     */
+    enum class Variant : std::uint8_t
+    {
+        Plain_char,
+        L_wchar_t,
+        u8_char,
+        u_char16_t,
+        U_char32_t
+    };
 
-    if (tk.kind() == CloseBraceToken
-            || tk.kind() == OpenBraceToken
-            || tk.kind() == SemicolonToken)
-        *os_ << "\n";
-    else
-        *os_ << " ";
-}
+    /**
+     * The Variant of \c this StringLiteral.
+     */
+    Variant variant() const;
+};
+
+} // C
+} // psy
+
+#endif

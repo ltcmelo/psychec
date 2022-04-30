@@ -26,7 +26,7 @@
 #include "parser/Unparser.h"
 #include "symbols/Symbol.h"
 #include "symbols/Symbol_ALL.h"
-#include "syntax/SyntaxLexemes.h"
+#include "syntax/SyntaxLexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 
 #include <algorithm>

@@ -21,7 +21,7 @@
 #include "TypeCheckerTest.h"
 
 #include "parser/Unparser.h"
-#include "syntax/SyntaxLexemes.h"
+#include "syntax/SyntaxLexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 
 #include <algorithm>

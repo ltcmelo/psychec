@@ -1,4 +1,5 @@
 // Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,35 +19,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Unparser.h"
-
-#include "SyntaxTree.h"
-
-#include "syntax/SyntaxLexeme_ALL.h"
-#include "syntax/SyntaxNodes.h"
-
-#include <iostream>
+#include "SyntaxLexeme_StringLiteral.h"
 
 using namespace psy;
 using namespace C;
 
-void Unparser::unparse(const SyntaxNode* node, std::ostream& os)
+StringLiteral::StringLiteral(const char *chars, unsigned int size)
+    : SyntaxLexeme(chars,
+                   size,
+                   Kind::StringLiteral)
 {
-    os_ = &os;
-    visit(node);
+    checkVariousPrefixesAndSuffixes();
 }
 
-void Unparser::terminal(const SyntaxToken& tk, const SyntaxNode*)
+StringLiteral::Variant StringLiteral::variant() const
 {
-    if (tk.kind() == EndOfFile)
-        return;
+    if (BF_.L_)
+        return Variant::L_wchar_t;
 
-    *os_ << tk.valueText_c_str();
+    if (BF_.u8_)
+        return Variant::u8_char;
 
-    if (tk.kind() == CloseBraceToken
-            || tk.kind() == OpenBraceToken
-            || tk.kind() == SemicolonToken)
-        *os_ << "\n";
-    else
-        *os_ << " ";
+    if (BF_.u_)
+        return Variant::u_char16_t;
+
+    if (BF_.U_)
+        return Variant::U_char32_t;
+
+    return Variant::Plain_char;
 }

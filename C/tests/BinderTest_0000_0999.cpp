@@ -22,7 +22,7 @@
 
 #include "ParserTest.h"
 
-#include "syntax/SyntaxLexemes.h"
+#include "syntax/SyntaxLexeme_ALL.h"
 #include "parser/Unparser.h"
 
 #include "syntax/SyntaxNodes.h"

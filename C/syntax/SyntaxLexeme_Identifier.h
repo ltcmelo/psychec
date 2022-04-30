@@ -1,4 +1,5 @@
 // Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,35 +19,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Unparser.h"
+#ifndef PSYCHE_C_SYNTAX_LEXEME_IDENTIFIER_H__
+#define PSYCHE_C_SYNTAX_LEXEME_IDENTIFIER_H__
 
-#include "SyntaxTree.h"
+#include "SyntaxLexeme.h"
 
-#include "syntax/SyntaxLexeme_ALL.h"
-#include "syntax/SyntaxNodes.h"
+#include <cstdint>
+#include <string>
 
-#include <iostream>
+namespace psy {
+namespace C {
 
-using namespace psy;
-using namespace C;
-
-void Unparser::unparse(const SyntaxNode* node, std::ostream& os)
+/**
+ * \brief The Identifier class.
+ */
+class PSY_C_API Identifier final : public SyntaxLexeme
 {
-    os_ = &os;
-    visit(node);
-}
+public:
+    Identifier(const char* chars, unsigned int size);
 
-void Unparser::terminal(const SyntaxToken& tk, const SyntaxNode*)
-{
-    if (tk.kind() == EndOfFile)
-        return;
+    virtual Identifier* asIdentifier() override { return this; }
+};
 
-    *os_ << tk.valueText_c_str();
+} // C
+} // psy
 
-    if (tk.kind() == CloseBraceToken
-            || tk.kind() == OpenBraceToken
-            || tk.kind() == SemicolonToken)
-        *os_ << "\n";
-    else
-        *os_ << " ";
-}
+#endif

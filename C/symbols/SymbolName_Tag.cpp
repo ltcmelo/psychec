@@ -42,14 +42,15 @@ std::string TagSymbolName::text() const
         case TagSymbolNameKind::Structure:
             prefix = "struct ";
             break;
-
         case TagSymbolNameKind::Union:
             prefix = "union ";
             break;
-
         case TagSymbolNameKind::Enumeration:
             prefix = "enum ";
             break;
+        default:
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID or UNSPECIFIED TagSymbolNameKind>";
     }
     return prefix + tag_;
 }

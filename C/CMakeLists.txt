@@ -51,8 +51,13 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxKind.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme.cpp
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexemes.h
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexemes.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Identifier.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Identifier.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Constant.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Constant.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_StringLiteral.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_StringLiteral.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_ALL.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNamePrinter.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNamePrinter.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNode.cpp

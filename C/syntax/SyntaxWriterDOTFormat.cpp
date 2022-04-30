@@ -42,7 +42,7 @@
 
 #include "SyntaxWriterDOTFormat.h"
 
-#include "SyntaxLexemes.h"
+#include "SyntaxLexeme_ALL.h"
 #include "SyntaxVisitor.h"
 #include "SyntaxTree.h"
 
