@@ -23,6 +23,10 @@
 using namespace psy;
 using namespace  C;
 
+TypeSpecSummary::TypeSpecSummary()
+{
+}
+
 DeclSummary::DeclSummary()
     : valK_(ValueKind::UNSPECIFIED)
     , tyK_(TypeKind::UNSPECIFIED)
@@ -54,22 +58,22 @@ DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
     return *this;
 }
 
-DeclSummary& DeclSummary::specType(std::string name,
-                                   NamedTypeKind tyNameK,
-                                   BuiltinTypeKind builtinTypeKind,
-                                   CVR cvr)
+DeclSummary& DeclSummary::baseTySpec(std::string name,
+                                     NamedTypeKind tyNameK,
+                                     BuiltinTypeKind builtinTypeKind,
+                                     CVR cvr)
 {
-    specTyName_ = std::move(name);
-    specTyK_ = tyNameK;
-    specTyBuiltinK_ = builtinTypeKind;
-    specTyCVR_ = cvr;
+    tySpec_.specTyName_ = std::move(name);
+    tySpec_.specTyK_ = tyNameK;
+    tySpec_.specTyBuiltinK_ = builtinTypeKind;
+    tySpec_.specTyCVR_ = cvr;
     return *this;
 }
 
-DeclSummary& DeclSummary::derivType(TypeKind kind, CVR cvr)
+DeclSummary& DeclSummary::derivTySpec(TypeKind kind, CVR cvr)
 {
-    derivTyKs_.push_back(kind);
-    derivTyCVRs_.push_back(cvr);
+    tySpec_.derivTyKs_.push_back(kind);
+    tySpec_.derivTyCVRs_.push_back(cvr);
     return *this;
 }
 

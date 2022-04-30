@@ -43,7 +43,7 @@ void BinderTest::case1000()
     bind("double x ;",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Variable)
-                    .specType("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
+                    .baseTySpec("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
 void BinderTest::case1001()
@@ -51,7 +51,7 @@ void BinderTest::case1001()
     bind("int x ;",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Variable)
-                     .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                     .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case1002()
@@ -59,9 +59,9 @@ void BinderTest::case1002()
     bind("int x ; int y ;",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Variable)
-                    .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+                    .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
             .binding(DeclSummary().Value("y", ValueKind::Variable)
-                    .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                    .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case1003()
@@ -69,9 +69,9 @@ void BinderTest::case1003()
     bind("int x , y ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                     .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+                     .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                     .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                     .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case1004()
@@ -79,7 +79,7 @@ void BinderTest::case1004()
     bind("x y ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                 .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
+                 .baseTySpec("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1005()
@@ -87,9 +87,9 @@ void BinderTest::case1005()
     bind("x y , z ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED))
+                      .baseTySpec("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED))
              .binding(DeclSummary().Value("z", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
+                      .baseTySpec("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 
 }
 
@@ -98,7 +98,7 @@ void BinderTest::case1006()
     bind("int x = 1 ;",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Variable)
-                     .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                     .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case1007()
@@ -106,7 +106,7 @@ void BinderTest::case1007()
     bind("x y = 1 ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
+                      .baseTySpec("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1008()
@@ -122,7 +122,7 @@ void BinderTest::case1009()
     bind("struct x y ;",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Variable)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .baseTySpec("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1010()
@@ -130,7 +130,7 @@ void BinderTest::case1010()
     bind("union x y ;",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Variable)
-                    .specType("union x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .baseTySpec("union x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1011()
@@ -138,7 +138,7 @@ void BinderTest::case1011()
     bind("enum x y ;",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Variable)
-                    .specType("enum x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .baseTySpec("enum x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1012()
@@ -146,9 +146,9 @@ void BinderTest::case1012()
     bind("struct x y , z ;",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Variable)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED))
+                    .baseTySpec("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED))
             .binding(DeclSummary().Value("z", ValueKind::Variable)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .baseTySpec("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1013()
@@ -156,7 +156,7 @@ void BinderTest::case1013()
     bind("struct x { int y ; } z ;",
          Expectation()
             .binding(DeclSummary().Value("z", ValueKind::Variable)
-                    .specType("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .baseTySpec("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case1014()
@@ -164,7 +164,7 @@ void BinderTest::case1014()
     bind("long x ;",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Variable)
-                    .specType("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
+                    .baseTySpec("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
 }
 
 void BinderTest::case1015()
@@ -172,7 +172,7 @@ void BinderTest::case1015()
     bind("long int x ;",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Variable)
-                    .specType("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
+                    .baseTySpec("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
 }
 
 void BinderTest::case1016()
@@ -180,7 +180,7 @@ void BinderTest::case1016()
     bind("int long x ;",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Variable)
-                    .specType("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
+                    .baseTySpec("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
 }
 
 void BinderTest::case1017()
@@ -188,7 +188,7 @@ void BinderTest::case1017()
     bind("signed x ;",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Variable)
-                    .specType("signed int", NamedTypeKind::Builtin, BuiltinTypeKind::Int_S)));
+                    .baseTySpec("signed int", NamedTypeKind::Builtin, BuiltinTypeKind::Int_S)));
 }
 
 void BinderTest::case1018()
@@ -196,7 +196,7 @@ void BinderTest::case1018()
     bind("signed int x ;",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Variable)
-                    .specType("signed int", NamedTypeKind::Builtin, BuiltinTypeKind::Int_S)));
+                    .baseTySpec("signed int", NamedTypeKind::Builtin, BuiltinTypeKind::Int_S)));
 }
 
 void BinderTest::case1019()
@@ -239,7 +239,7 @@ void BinderTest::case1050()
     bind("const int x ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
 void BinderTest::case1051()
@@ -247,7 +247,7 @@ void BinderTest::case1051()
     bind("const x y ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
+                      .baseTySpec("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
 void BinderTest::case1052()
@@ -263,7 +263,7 @@ void BinderTest::case1053()
     bind("int const x ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
 void BinderTest::case1054()
@@ -271,7 +271,7 @@ void BinderTest::case1054()
     bind("x const y ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
+                      .baseTySpec("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
 void BinderTest::case1055() {}
@@ -325,8 +325,8 @@ void BinderTest::case1100()
     bind("int * x ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .derivType(TypeKind::Pointer)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivTySpec(TypeKind::Pointer)));
 }
 
 void BinderTest::case1101()
@@ -334,8 +334,8 @@ void BinderTest::case1101()
     bind("x * y ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym)
-                      .derivType(TypeKind::Pointer)));
+                      .baseTySpec("x", NamedTypeKind::Synonym)
+                      .derivTySpec(TypeKind::Pointer)));
 }
 
 void BinderTest::case1102()
@@ -343,11 +343,11 @@ void BinderTest::case1102()
     bind("int * x ; y * z ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .derivType(TypeKind::Pointer))
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivTySpec(TypeKind::Pointer))
              .binding(DeclSummary().Value("z", ValueKind::Variable)
-                      .specType("y", NamedTypeKind::Synonym)
-                      .derivType(TypeKind::Pointer)));
+                      .baseTySpec("y", NamedTypeKind::Synonym)
+                      .derivTySpec(TypeKind::Pointer)));
 }
 
 void BinderTest::case1103()
@@ -355,11 +355,11 @@ void BinderTest::case1103()
     bind("int * x , * y ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .derivType(TypeKind::Pointer))
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivTySpec(TypeKind::Pointer))
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .derivType(TypeKind::Pointer)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivTySpec(TypeKind::Pointer)));
 }
 
 void BinderTest::case1104()
@@ -367,9 +367,9 @@ void BinderTest::case1104()
     bind("int ( * x ) [ 1 ];",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .derivType(TypeKind::Array)
-                      .derivType(TypeKind::Pointer)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivTySpec(TypeKind::Array)
+                      .derivTySpec(TypeKind::Pointer)));
 }
 
 void BinderTest::case1105()
@@ -377,9 +377,9 @@ void BinderTest::case1105()
     bind("int * * x ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .derivType(TypeKind::Pointer)
-                      .derivType(TypeKind::Pointer)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivTySpec(TypeKind::Pointer)
+                      .derivTySpec(TypeKind::Pointer)));
 }
 
 void BinderTest::case1106()
@@ -387,10 +387,10 @@ void BinderTest::case1106()
     bind("int * * * x ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .derivType(TypeKind::Pointer)
-                      .derivType(TypeKind::Pointer)
-                      .derivType(TypeKind::Pointer)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivTySpec(TypeKind::Pointer)
+                      .derivTySpec(TypeKind::Pointer)
+                      .derivTySpec(TypeKind::Pointer)));
 }
 
 void BinderTest::case1107()
@@ -398,10 +398,10 @@ void BinderTest::case1107()
     bind("int * ( * x ) [ 1 ] ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .derivType(TypeKind::Pointer, CVR::None)
-                      .derivType(TypeKind::Array, CVR::None)
-                      .derivType(TypeKind::Pointer, CVR::None)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivTySpec(TypeKind::Pointer, CVR::None)
+                      .derivTySpec(TypeKind::Array, CVR::None)
+                      .derivTySpec(TypeKind::Pointer, CVR::None)));
 }
 
 void BinderTest::case1108() {}
@@ -452,8 +452,8 @@ void BinderTest::case1150()
     bind("const int * x ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
-                      .derivType(TypeKind::Pointer)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .derivTySpec(TypeKind::Pointer)));
 }
 
 void BinderTest::case1151()
@@ -461,8 +461,8 @@ void BinderTest::case1151()
     bind("const x * y ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
-                      .derivType(TypeKind::Pointer)));
+                      .baseTySpec("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
+                      .derivTySpec(TypeKind::Pointer)));
 }
 
 void BinderTest::case1152() {}
@@ -520,8 +520,8 @@ void BinderTest::case1200()
     bind("const int * const x ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
-                      .derivType(TypeKind::Pointer, CVR::Const)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .derivTySpec(TypeKind::Pointer, CVR::Const)));
 }
 
 void BinderTest::case1201() { }
@@ -579,8 +579,8 @@ void BinderTest::case1250()
     bind("int * const x ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .derivType(TypeKind::Pointer, CVR::Const)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivTySpec(TypeKind::Pointer, CVR::Const)));
 }
 
 void BinderTest::case1251()
@@ -588,8 +588,8 @@ void BinderTest::case1251()
     bind("x * const y ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
-                      .derivType(TypeKind::Pointer, CVR::Const)));
+                      .baseTySpec("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
+                      .derivTySpec(TypeKind::Pointer, CVR::Const)));
 }
 
 void BinderTest::case1252() { }
@@ -646,8 +646,8 @@ void BinderTest::case1300()
     bind("int x [ 1 ] ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .derivType(TypeKind::Array, CVR::None)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivTySpec(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1301()
@@ -655,8 +655,8 @@ void BinderTest::case1301()
     bind("x y [ 1 ] ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
-                      .derivType(TypeKind::Array, CVR::None)));
+                      .baseTySpec("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
+                      .derivTySpec(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1302()
@@ -664,11 +664,11 @@ void BinderTest::case1302()
     bind("int x [ 1 ] , y [ 2 ] ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .derivType(TypeKind::Array, CVR::None))
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivTySpec(TypeKind::Array, CVR::None))
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .derivType(TypeKind::Array, CVR::None)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivTySpec(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1303()
@@ -676,11 +676,11 @@ void BinderTest::case1303()
     bind("x y [ 1 ] , z [ 2 ] ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
-                      .derivType(TypeKind::Array, CVR::None))
+                      .baseTySpec("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
+                      .derivTySpec(TypeKind::Array, CVR::None))
              .binding(DeclSummary().Value("z", ValueKind::Variable)
-                      .specType("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
-                      .derivType(TypeKind::Array, CVR::None)));
+                      .baseTySpec("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
+                      .derivTySpec(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1304()
@@ -688,9 +688,9 @@ void BinderTest::case1304()
     bind("int * x [ 1 ] ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .derivType(TypeKind::Pointer, CVR::None)
-                      .derivType(TypeKind::Array, CVR::None)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivTySpec(TypeKind::Pointer, CVR::None)
+                      .derivTySpec(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1305()
@@ -698,12 +698,12 @@ void BinderTest::case1305()
     bind("int x [ 1 ] , * y [ 2 ] ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .derivType(TypeKind::Array, CVR::None))
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivTySpec(TypeKind::Array, CVR::None))
              .binding(DeclSummary().Value("y", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .derivType(TypeKind::Pointer, CVR::None)
-                      .derivType(TypeKind::Array, CVR::None)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivTySpec(TypeKind::Pointer, CVR::None)
+                      .derivTySpec(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1306()
@@ -711,10 +711,10 @@ void BinderTest::case1306()
     bind("int * * x [ 1 ] ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .derivType(TypeKind::Pointer, CVR::None)
-                      .derivType(TypeKind::Pointer, CVR::None)
-                      .derivType(TypeKind::Array, CVR::None)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .derivTySpec(TypeKind::Pointer, CVR::None)
+                      .derivTySpec(TypeKind::Pointer, CVR::None)
+                      .derivTySpec(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1307()
@@ -769,8 +769,8 @@ void BinderTest::case1350()
     bind("const int x [ 1 ] ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Variable)
-                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
-                      .derivType(TypeKind::Array, CVR::None)));
+                      .baseTySpec("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .derivTySpec(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case1351(){ }

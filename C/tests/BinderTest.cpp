@@ -130,14 +130,14 @@ bool typeMatchesCVR(const TypeSymbol* tySym, CVR cvr)
 
 bool typeMatchesBinding(const TypeSymbol* tySym, const DeclSummary& binding)
 {
-    for (auto i = binding.derivTyKs_.size(); i > 0; --i) {
-        auto derivTyK = binding.derivTyKs_[i - 1];
+    for (auto i = binding.tySpec_.derivTyKs_.size(); i > 0; --i) {
+        auto derivTyK = binding.tySpec_.derivTyKs_[i - 1];
         if (derivTyK != tySym->typeKind()) {
             DETAIL_MISMATCH("derived type kind");
             return false;
         }
 
-        auto derivTyCVR = binding.derivTyCVRs_[i - 1];
+        auto derivTyCVR = binding.tySpec_.derivTyCVRs_[i - 1];
         if (!typeMatchesCVR(tySym, derivTyCVR)) {
             DETAIL_MISMATCH("derived type CVR");
             return false;
@@ -169,29 +169,29 @@ bool typeMatchesBinding(const TypeSymbol* tySym, const DeclSummary& binding)
         return false;
     }
 
-    if (namedTySym->name()->text() != binding.specTyName_) {
+    if (namedTySym->name()->text() != binding.tySpec_.specTyName_) {
         DETAIL_MISMATCH("type name");
         return false;
     }
 
-    if (namedTySym->namedTypeKind() != binding.specTyK_) {
+    if (namedTySym->namedTypeKind() != binding.tySpec_.specTyK_) {
         DETAIL_MISMATCH("type kind");
         return false;
     }
 
-    if (binding.specTyBuiltinK_ != BuiltinTypeKind::UNSPECIFIED) {
+    if (binding.tySpec_.specTyBuiltinK_ != BuiltinTypeKind::UNSPECIFIED) {
         if (!tySym->asNamedType()) {
             DETAIL_MISMATCH("not a builtin");
             return false;
         }
 
-        if (tySym->asNamedType()->builtinTypeKind() != binding.specTyBuiltinK_) {
+        if (tySym->asNamedType()->builtinTypeKind() != binding.tySpec_.specTyBuiltinK_) {
             DETAIL_MISMATCH("builtin kind");
             return false;
         }
     }
 
-    if (!typeMatchesCVR(tySym, binding.specTyCVR_)) {
+    if (!typeMatchesCVR(tySym, binding.tySpec_.specTyCVR_)) {
         DETAIL_MISMATCH("CVR");
         return false;
     }

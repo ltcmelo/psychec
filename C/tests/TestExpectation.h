@@ -48,6 +48,24 @@ enum class CVR
     None
 };
 
+struct TypeSpecSummary
+{
+    TypeSpecSummary();
+
+    TypeSpecSummary& base(std::string name,
+                          NamedTypeKind tyNameK,
+                          BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
+                          CVR cvr = CVR::None);
+    TypeSpecSummary& deriv(TypeKind tyKind, CVR cvr = CVR::None);
+
+    std::string specTyName_;
+    NamedTypeKind specTyK_;
+    BuiltinTypeKind specTyBuiltinK_;
+    CVR specTyCVR_;
+    std::vector<TypeKind> derivTyKs_;
+    std::vector<CVR> derivTyCVRs_;
+};
+
 struct DeclSummary
 {
     DeclSummary();
@@ -65,38 +83,16 @@ struct DeclSummary
     TypeKind tyK_;
     ScopeKind scopeK_;
 
-    DeclSummary& specType(std::string name,
-                          NamedTypeKind tyNameK,
-                          BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
-                          CVR cvr = CVR::None);
-    DeclSummary& derivType(TypeKind tyKind, CVR cvr = CVR::None);
+    DeclSummary& baseTySpec(std::string name,
+                            NamedTypeKind tyNameK,
+                            BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
+                            CVR cvr = CVR::None);
+    DeclSummary& derivTySpec(TypeKind tyKind, CVR cvr = CVR::None);
 
-    std::string specTyName_;
-    NamedTypeKind specTyK_;
-    BuiltinTypeKind specTyBuiltinK_;
-    CVR specTyCVR_;
-    std::vector<TypeKind> derivTyKs_;
-    std::vector<CVR> derivTyCVRs_;
+    TypeSpecSummary tySpec_;
+    TypeSpecSummary parm1TySpec_;
+    TypeSpecSummary parm2TySpec_;
 };
-
-struct TypeSummary
-{
-    TypeSummary();
-
-    TypeSummary& specType(std::string name,
-                          NamedTypeKind tyNameK,
-                          BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
-                          CVR cvr = CVR::None);
-    TypeSummary& derivType(TypeKind tyKind, CVR cvr = CVR::None);
-
-    std::string specTyName_;
-    NamedTypeKind specTyK_;
-    BuiltinTypeKind specTyBuiltinK_;
-    CVR specTyCVR_;
-    std::vector<TypeKind> derivTyKs_;
-    std::vector<CVR> derivTyCVRs_;
-};
-
 
 struct Expectation
 {
