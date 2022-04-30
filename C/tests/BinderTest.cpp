@@ -248,6 +248,11 @@ bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const BindingSumma
     if (candSym->kind() != binding.symK_)
         return REJECT_CANDIDATE(candSym, "symbol kind mismatch");
 
+    if (binding.scopeK_ != ScopeKind::UNSPECIFIED) { // TODO: add scope to test cases
+        if (candSym->scope()->kind() != binding.scopeK_)
+            return REJECT_CANDIDATE(candSym, "scope kind mismatch");
+    }
+
     switch (binding.symK_)
     {
         case SymbolKind::Value:
@@ -290,6 +295,9 @@ void BinderTest::bind(std::string text, Expectation X)
         PSYCHE_TEST_FAIL("link unit not found");
 
     for (const auto& binding : X.bindings_) {
+#ifdef DEBUG_BINDING_SEARCH
+        std::cout << "\n\t\t...";
+#endif
         using namespace std::placeholders;
 
         auto pred = std::bind(symbolMatchesBinding, _1, binding);

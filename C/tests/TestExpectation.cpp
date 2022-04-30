@@ -24,13 +24,17 @@ using namespace psy;
 using namespace  C;
 
 BindingSummary::BindingSummary()
+    : valK_(ValueKind::UNSPECIFIED)
+    , tyK_(TypeKind::UNSPECIFIED)
+    , scopeK_(ScopeKind::UNSPECIFIED)
 {}
 
-BindingSummary& BindingSummary::Value(std::string name, ValueKind valK)
+BindingSummary& BindingSummary::Value(std::string name, ValueKind valK, ScopeKind scopeK)
 {
     name_ = std::move(name);
     symK_ = SymbolKind::Value;
     valK_ = valK;
+    scopeK_ = scopeK;
     return *this;
 }
 
@@ -49,7 +53,10 @@ BindingSummary& BindingSummary::Function(std::string funcName)
     return *this;
 }
 
-BindingSummary& BindingSummary::specType(std::string name, NamedTypeKind tyNameK, BuiltinTypeKind builtinTypeKind, CVR cvr)
+BindingSummary& BindingSummary::specType(std::string name,
+                                         NamedTypeKind tyNameK,
+                                         BuiltinTypeKind builtinTypeKind,
+                                         CVR cvr)
 {
     specTyName_ = std::move(name);
     specTyK_ = tyNameK;

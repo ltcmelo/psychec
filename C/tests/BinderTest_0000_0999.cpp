@@ -176,10 +176,12 @@ void BinderTest::case0050()
 {
     bind("void x ( int y ) ;",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary()
+                      .Function("x")
                       .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void))
-             .binding(BindingSummary().Value("y", ValueKind::Parameter)
-                     .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+             .binding(BindingSummary()
+                      .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case0051() {}
@@ -231,47 +233,85 @@ void BinderTest::case0096() {}
 void BinderTest::case0097() {}
 void BinderTest::case0098() {}
 void BinderTest::case0099() {}
-
-void BinderTest::case0100()
-{
-}
+void BinderTest::case0100() {}
 
 void BinderTest::case0101()
 {
+    bind("void x ( ) { }",
+         Expectation()
+             .binding(BindingSummary().Function("x")
+                      .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)));
 }
 
 void BinderTest::case0102()
 {
+    bind("int x ( ) { return 1 ; }",
+         Expectation()
+             .binding(BindingSummary().Function("x")
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case0103()
 {
+    bind("void * x ( ) { return 1 ; }",
+         Expectation()
+             .binding(BindingSummary().Function("x")
+                      .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0104()
 {
+    bind("int * x ( ) { return 1 ; }",
+         Expectation()
+             .binding(BindingSummary().Function("x")
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0105()
 {
+    bind("x y ( ) { return 1 ; }",
+         Expectation()
+             .binding(BindingSummary().Function("y")
+                      .specType("x", NamedTypeKind::Synonym)));
 }
 
 void BinderTest::case0106()
 {
-
+    bind("int * ( x ) ( ) { return 1 ; }",
+         Expectation()
+             .binding(BindingSummary().Function("x")
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0107()
 {
-
+    bind("int * ( ( x ) ) ( ) { return 1 ; }",
+         Expectation()
+             .binding(BindingSummary().Function("x")
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0108()
 {
+    bind("int * * x ( ) { return 1 ; }",
+         Expectation()
+             .binding(BindingSummary().Function("x")
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .derivType(TypeKind::Pointer)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0109()
 {
+    bind("x * y ( ) { return 1 ; }",
+         Expectation()
+             .binding(BindingSummary().Function("y")
+                      .specType("x", NamedTypeKind::Synonym)
+                      .derivType(TypeKind::Pointer)));
 }
 
 void BinderTest::case0110()
@@ -329,7 +369,19 @@ void BinderTest::case0146() {}
 void BinderTest::case0147() {}
 void BinderTest::case0148() {}
 void BinderTest::case0149() {}
-void BinderTest::case0150() {}
+
+void BinderTest::case0150()
+{
+    bind("void x ( int y ) { }",
+         Expectation()
+             .binding(BindingSummary()
+                      .Function("x")
+                      .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void))
+             .binding(BindingSummary()
+                      .Value("y", ValueKind::Parameter, ScopeKind::Block)
+                      .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+}
+
 void BinderTest::case0151() {}
 void BinderTest::case0152() {}
 void BinderTest::case0153() {}

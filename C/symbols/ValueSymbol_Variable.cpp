@@ -20,6 +20,7 @@
 
 #include "ValueSymbol_Variable.h"
 
+#include "binder/Scope.h"
 #include "symbols/Symbol_ALL.h"
 
 #include <sstream>
@@ -45,6 +46,7 @@ std::string to_string(const VariableSymbol& sym)
     oss << "{`variable |";
     if (sym.name())
         oss << " " << to_string(*sym.name());
+    oss << " scope:" << to_string(sym.scope()->kind());
     oss << " " << to_string(*sym.type());
     oss << " `}";
 

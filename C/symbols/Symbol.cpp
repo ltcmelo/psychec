@@ -51,6 +51,11 @@ const Assembly* Symbol::owningAssembly() const
     return nullptr;
 }
 
+const Scope *Symbol::scope() const
+{
+    return P->scope_;
+}
+
 Accessibility Symbol::declaredAccessibility() const
 {
     return P->access_;
