@@ -46,10 +46,11 @@ BindingSummary& BindingSummary::Type(std::string name, TypeKind tyK)
     return *this;
 }
 
-BindingSummary& BindingSummary::Function(std::string funcName)
+BindingSummary& BindingSummary::Function(std::string funcName, ScopeKind scopeK)
 {
     name_ = std::move(funcName);
     symK_ = SymbolKind::Function;
+    scopeK_ = scopeK;
     return *this;
 }
 

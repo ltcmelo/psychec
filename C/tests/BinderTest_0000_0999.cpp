@@ -40,7 +40,7 @@ void BinderTest::case0001()
 {
     bind("void x ( ) ;",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)));
 }
 
@@ -48,7 +48,7 @@ void BinderTest::case0002()
 {
     bind("int x ( ) ;",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
@@ -56,7 +56,7 @@ void BinderTest::case0003()
 {
     bind("void * x ( ) ;",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                       .derivType(TypeKind::Pointer)));
 }
@@ -65,7 +65,7 @@ void BinderTest::case0004()
 {
     bind("int * x ( ) ;",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)));
 }
@@ -82,7 +82,7 @@ void BinderTest::case0006()
 {
     bind("int * ( x ) ( ) ;",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)));
 }
@@ -91,7 +91,7 @@ void BinderTest::case0007()
 {
     bind("int * ( ( x ) ) ( ) ;",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)));
 }
@@ -100,7 +100,7 @@ void BinderTest::case0008()
 {
     bind("int * * x ( ) ;",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)
                       .derivType(TypeKind::Pointer)));
@@ -177,7 +177,7 @@ void BinderTest::case0050()
     bind("void x ( int y ) ;",
          Expectation()
              .binding(BindingSummary()
-                     .Function("x")
+                     .Function("x", ScopeKind::File)
                      .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void))
              .binding(BindingSummary()
                      .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
@@ -189,7 +189,7 @@ void BinderTest::case0051()
     bind("void x ( int y , double z ) ;",
          Expectation()
              .binding(BindingSummary()
-                     .Function("x")
+                     .Function("x", ScopeKind::File)
                      .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void))
              .binding(BindingSummary()
                       .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
@@ -252,7 +252,7 @@ void BinderTest::case0101()
 {
     bind("void x ( ) { }",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)));
 }
 
@@ -260,7 +260,7 @@ void BinderTest::case0102()
 {
     bind("int x ( ) { return 1 ; }",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
@@ -268,7 +268,7 @@ void BinderTest::case0103()
 {
     bind("void * x ( ) { return 1 ; }",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                       .derivType(TypeKind::Pointer)));
 }
@@ -277,7 +277,7 @@ void BinderTest::case0104()
 {
     bind("int * x ( ) { return 1 ; }",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)));
 }
@@ -294,7 +294,7 @@ void BinderTest::case0106()
 {
     bind("int * ( x ) ( ) { return 1 ; }",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)));
 }
@@ -303,7 +303,7 @@ void BinderTest::case0107()
 {
     bind("int * ( ( x ) ) ( ) { return 1 ; }",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)));
 }
@@ -312,7 +312,7 @@ void BinderTest::case0108()
 {
     bind("int * * x ( ) { return 1 ; }",
          Expectation()
-             .binding(BindingSummary().Function("x")
+             .binding(BindingSummary().Function("x", ScopeKind::File)
                       .specType("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                       .derivType(TypeKind::Pointer)
                       .derivType(TypeKind::Pointer)));
@@ -388,7 +388,7 @@ void BinderTest::case0150()
     bind("void x ( int y ) { }",
          Expectation()
              .binding(BindingSummary()
-                      .Function("x")
+                      .Function("x", ScopeKind::File)
                       .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void))
              .binding(BindingSummary()
                       .Value("y", ValueKind::Parameter, ScopeKind::Block)
@@ -400,7 +400,7 @@ void BinderTest::case0151()
     bind("void x ( int y , double z ) { }",
          Expectation()
              .binding(BindingSummary()
-                     .Function("x")
+                     .Function("x", ScopeKind::File)
                      .specType("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void))
              .binding(BindingSummary()
                       .Value("y", ValueKind::Parameter, ScopeKind::Block)
@@ -410,6 +410,7 @@ void BinderTest::case0151()
                      .specType("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
 
 }
+
 void BinderTest::case0152() {}
 void BinderTest::case0153() {}
 void BinderTest::case0154() {}

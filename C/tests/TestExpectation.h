@@ -56,7 +56,8 @@ struct BindingSummary
                           ValueKind valK,
                           ScopeKind scopeK = ScopeKind::UNSPECIFIED);
     BindingSummary& Type(std::string name, TypeKind tyK);
-    BindingSummary& Function(std::string funcName);
+    BindingSummary& Function(std::string funcName,
+                             ScopeKind scopeK = ScopeKind::UNSPECIFIED);
 
     BindingSummary& specType(std::string name,
                              NamedTypeKind tyNameK,
