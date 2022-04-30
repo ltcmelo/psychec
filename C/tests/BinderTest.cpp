@@ -128,7 +128,7 @@ bool typeMatchesCVR(const TypeSymbol* tySym, CVR cvr)
     return true;
 }
 
-bool typeMatchesBinding(const TypeSymbol* tySym, const BindingSummary& binding)
+bool typeMatchesBinding(const TypeSymbol* tySym, const DeclSummary& binding)
 {
     for (auto i = binding.derivTyKs_.size(); i > 0; --i) {
         auto derivTyK = binding.derivTyKs_[i - 1];
@@ -199,7 +199,7 @@ bool typeMatchesBinding(const TypeSymbol* tySym, const BindingSummary& binding)
     return true;
 }
 
-bool functionMatchesBinding(const FunctionSymbol* funcSym, const BindingSummary& binding)
+bool functionMatchesBinding(const FunctionSymbol* funcSym, const DeclSummary& binding)
 {
     if (!funcSym->name())
         return REJECT_CANDIDATE(funcSym, "empty name");
@@ -221,7 +221,7 @@ bool functionMatchesBinding(const FunctionSymbol* funcSym, const BindingSummary&
     return true;
 }
 
-bool valueMatchesBinding(const ValueSymbol* valSym, const BindingSummary& binding)
+bool valueMatchesBinding(const ValueSymbol* valSym, const DeclSummary& binding)
 {
     if (valSym->valueKind() != binding.valK_)
         return REJECT_CANDIDATE(valSym, "value kind mismatch");
@@ -241,7 +241,7 @@ bool valueMatchesBinding(const ValueSymbol* valSym, const BindingSummary& bindin
     return true;
 }
 
-bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const BindingSummary& binding)
+bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const DeclSummary& binding)
 {
     const Symbol* candSym = sym.get();
 

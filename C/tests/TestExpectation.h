@@ -48,28 +48,28 @@ enum class CVR
     None
 };
 
-struct BindingSummary
+struct DeclSummary
 {
-    BindingSummary();
+    DeclSummary();
 
-    BindingSummary& Value(std::string name,
-                          ValueKind valK,
+    DeclSummary& Value(std::string name,
+                       ValueKind valK,
+                       ScopeKind scopeK = ScopeKind::UNSPECIFIED);
+    DeclSummary& Type(std::string name, TypeKind tyK);
+    DeclSummary& Function(std::string funcName,
                           ScopeKind scopeK = ScopeKind::UNSPECIFIED);
-    BindingSummary& Type(std::string name, TypeKind tyK);
-    BindingSummary& Function(std::string funcName,
-                             ScopeKind scopeK = ScopeKind::UNSPECIFIED);
-
-    BindingSummary& specType(std::string name,
-                             NamedTypeKind tyNameK,
-                             BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
-                             CVR cvr = CVR::None);
-    BindingSummary& derivType(TypeKind tyKind, CVR cvr = CVR::None);
 
     std::string name_;
     SymbolKind symK_;
     ValueKind valK_;
     TypeKind tyK_;
     ScopeKind scopeK_;
+
+    DeclSummary& specType(std::string name,
+                          NamedTypeKind tyNameK,
+                          BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
+                          CVR cvr = CVR::None);
+    DeclSummary& derivType(TypeKind tyKind, CVR cvr = CVR::None);
 
     std::string specTyName_;
     NamedTypeKind specTyK_;
@@ -78,6 +78,25 @@ struct BindingSummary
     std::vector<TypeKind> derivTyKs_;
     std::vector<CVR> derivTyCVRs_;
 };
+
+struct TypeSummary
+{
+    TypeSummary();
+
+    TypeSummary& specType(std::string name,
+                          NamedTypeKind tyNameK,
+                          BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
+                          CVR cvr = CVR::None);
+    TypeSummary& derivType(TypeKind tyKind, CVR cvr = CVR::None);
+
+    std::string specTyName_;
+    NamedTypeKind specTyK_;
+    BuiltinTypeKind specTyBuiltinK_;
+    CVR specTyCVR_;
+    std::vector<TypeKind> derivTyKs_;
+    std::vector<CVR> derivTyCVRs_;
+};
+
 
 struct Expectation
 {
@@ -104,8 +123,8 @@ struct Expectation
     std::vector<SyntaxKind> syntaxKinds_;
     Expectation& AST(std::vector<SyntaxKind>&& v);
 
-    std::vector<BindingSummary> bindings_;
-    Expectation& binding(BindingSummary b);
+    std::vector<DeclSummary> bindings_;
+    Expectation& binding(DeclSummary b);
 };
 
 } // C

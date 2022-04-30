@@ -23,13 +23,13 @@
 using namespace psy;
 using namespace  C;
 
-BindingSummary::BindingSummary()
+DeclSummary::DeclSummary()
     : valK_(ValueKind::UNSPECIFIED)
     , tyK_(TypeKind::UNSPECIFIED)
     , scopeK_(ScopeKind::UNSPECIFIED)
 {}
 
-BindingSummary& BindingSummary::Value(std::string name, ValueKind valK, ScopeKind scopeK)
+DeclSummary& DeclSummary::Value(std::string name, ValueKind valK, ScopeKind scopeK)
 {
     name_ = std::move(name);
     symK_ = SymbolKind::Value;
@@ -38,7 +38,7 @@ BindingSummary& BindingSummary::Value(std::string name, ValueKind valK, ScopeKin
     return *this;
 }
 
-BindingSummary& BindingSummary::Type(std::string name, TypeKind tyK)
+DeclSummary& DeclSummary::Type(std::string name, TypeKind tyK)
 {
     name_ = std::move(name);
     symK_ = SymbolKind::Type;
@@ -46,7 +46,7 @@ BindingSummary& BindingSummary::Type(std::string name, TypeKind tyK)
     return *this;
 }
 
-BindingSummary& BindingSummary::Function(std::string funcName, ScopeKind scopeK)
+DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
 {
     name_ = std::move(funcName);
     symK_ = SymbolKind::Function;
@@ -54,10 +54,10 @@ BindingSummary& BindingSummary::Function(std::string funcName, ScopeKind scopeK)
     return *this;
 }
 
-BindingSummary& BindingSummary::specType(std::string name,
-                                         NamedTypeKind tyNameK,
-                                         BuiltinTypeKind builtinTypeKind,
-                                         CVR cvr)
+DeclSummary& DeclSummary::specType(std::string name,
+                                   NamedTypeKind tyNameK,
+                                   BuiltinTypeKind builtinTypeKind,
+                                   CVR cvr)
 {
     specTyName_ = std::move(name);
     specTyK_ = tyNameK;
@@ -66,7 +66,7 @@ BindingSummary& BindingSummary::specType(std::string name,
     return *this;
 }
 
-BindingSummary& BindingSummary::derivType(TypeKind kind, CVR cvr)
+DeclSummary& DeclSummary::derivType(TypeKind kind, CVR cvr)
 {
     derivTyKs_.push_back(kind);
     derivTyCVRs_.push_back(cvr);
@@ -98,7 +98,7 @@ Expectation& Expectation::ambiguity(std::string s)
     return *this;
 }
 
-Expectation& Expectation::binding(BindingSummary b)
+Expectation& Expectation::binding(DeclSummary b)
 {
     bindings_.emplace_back(std::move(b));
     return *this;
