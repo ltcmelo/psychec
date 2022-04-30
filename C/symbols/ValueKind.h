@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/PsycheAssert.h"
+
 #include <cstdint>
 #include <string>
 
@@ -51,7 +53,8 @@ inline std::string PSY_C_API to_string(ValueKind valK)
         case ValueKind::Variable:
             return "Variable";
         default:
-            return "<invalid value kind>";
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID ValueKind>";
     }
 }
 

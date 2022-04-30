@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/PsycheAssert.h"
+
 #include <cstdint>
 #include <string>
 
@@ -55,7 +57,8 @@ inline std::string PSY_C_API to_string(ScopeKind scopeK)
         case ScopeKind::Block:
             return "Block";
         default:
-            return "<invalid scope kind>";
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID ScopeKind>";
     }
 }
 

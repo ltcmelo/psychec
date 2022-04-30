@@ -145,7 +145,7 @@ PSY_C_API inline std::string PSY_C_API to_string(BuiltinTypeKind builtTyKind)
 {
     switch (builtTyKind) {
         case BuiltinTypeKind::None:
-            return "<not a builtin type>";
+            return "<INVALID BuiltinTypeKind>";
 
         default:
             return canonicalText(builtTyKind);

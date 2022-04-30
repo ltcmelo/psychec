@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/PsycheAssert.h"
+
 #include <cstdint>
 #include <string>
 
@@ -58,7 +60,8 @@ inline std::string PSY_C_API to_string(TypeKind tyKind)
         case TypeKind::Pointer:
             return "Pointer";
         default:
-            return "<invalid type kind>";
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID TypeKind>";
     }
 }
 
