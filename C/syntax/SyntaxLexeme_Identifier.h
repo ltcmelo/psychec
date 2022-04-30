@@ -1,4 +1,5 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,18 +19,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SCOPE_FILE_H__
-#define PSYCHE_C_SCOPE_FILE_H__
+#ifndef PSYCHE_C_SYNTAX_LEXEME_IDENTIFIER_H__
+#define PSYCHE_C_SYNTAX_LEXEME_IDENTIFIER_H__
 
-#include "Scope.h"
+#include "SyntaxLexeme.h"
+
+#include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
 
-class PSY_C_API FileScope final : public Scope
+/**
+ * \brief The Identifier class.
+ */
+class PSY_C_API Identifier final : public SyntaxLexeme
 {
-private:
-    using Scope::Scope;
+public:
+    Identifier(const char* chars, unsigned int size);
+
+    virtual Identifier* asIdentifier() override { return this; }
 };
 
 } // C

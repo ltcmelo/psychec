@@ -18,54 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_NAME_H__
-#define PSYCHE_C_SYMBOL_NAME_H__
+#ifndef PSYCHE_C_SYMBOL_ALL_H__
+#define PSYCHE_C_SYMBOL_ALL_H__
 
-#include "API.h"
-#include "Fwds.h"
-
-#include "SymbolNameKind.h"
-
-#include <cstdint>
-#include <string>
-
-namespace psy {
-namespace C {
-
-/**
- * \brief The SymbolName class.
- */
-class PSY_C_API SymbolName
-{
-    friend class Symbol;
-
-public:
-    virtual ~SymbolName();
-
-    virtual PlainSymbolName* asPlainSymbolName() { return nullptr; }
-    virtual const PlainSymbolName* asPlainSymbolName() const { return nullptr; }
-    virtual TagSymbolName* asTagSymbolName() { return nullptr; }
-    virtual const TagSymbolName* asTagSymbolName() const { return nullptr; }
-    virtual EmptySymbolName* asEmptySymbolName() { return nullptr; }
-    virtual const EmptySymbolName* asEmptySymbolName() const { return nullptr; }
-
-    /**
-     * The SymbolName of \c this SymbolName.
-     */
-    SymbolNameKind kind() const;
-
-    /**
-     * The text of \c this SymbolName.
-     */
-    virtual std::string text() const = 0;
-
-protected:
-    SymbolName();
-};
-
-std::string to_string(const SymbolName& name);
-
-} // C
-} // psy
+#include "Symbol_Function.h"
+#include "Symbol_Library.h"
+#include "TypeSymbol_Array.h"
+#include "TypeSymbol_Function.h"
+#include "TypeSymbol_Named.h"
+#include "TypeSymbol_Pointer.h"
+#include "ValueSymbol_Field.h"
+#include "ValueSymbol_Parameter.h"
+#include "ValueSymbol_Variable.h"
 
 #endif

@@ -20,7 +20,7 @@
 
 #include "TypeSymbol__IMPL__.inc"
 
-#include "symbols/Symbols.h"
+#include "symbols/Symbol_ALL.h"
 
 #include <sstream>
 

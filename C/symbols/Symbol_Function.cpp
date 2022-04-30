@@ -21,7 +21,7 @@
 #include "Symbol_Function.h"
 #include "Symbol__IMPL__.inc"
 
-#include "symbols/Symbols.h"
+#include "symbols/Symbol_ALL.h"
 
 #include "../common/infra/PsycheAssert.h"
 
@@ -33,9 +33,9 @@ using namespace C;
 struct FunctionSymbol::FunctionSymbolImpl : SymbolImpl
 {
     FunctionSymbolImpl(const SyntaxTree* tree,
-                       const Scope* outerScope,
+                       const Scope* scope,
                        const Symbol* containingSym)
-        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Function)
+        : SymbolImpl(tree, scope, containingSym, SymbolKind::Function)
         , name_(nullptr)
         , tySym_(nullptr)
     {}

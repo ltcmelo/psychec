@@ -22,11 +22,11 @@
 
 #include "SyntaxTree.h"
 
-#include "binder/Scopes.h"
+#include "binder/Scope.h"
 #include "binder/Semantics_TypeSpecifiers.h"
 #include "compilation/SemanticModel.h"
-#include "symbols/Symbols.h"
-#include "symbols/SymbolNames.h"
+#include "symbols/Symbol_ALL.h"
+#include "symbols/SymbolName_ALL.h"
 #include "syntax/SyntaxFacts.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
@@ -41,6 +41,7 @@ using namespace C;
 Binder::Binder(SemanticModel* semaModel, const SyntaxTree* tree)
     : SyntaxVisitor(tree)
     , semaModel_(semaModel)
+    , stashedScope_(nullptr)
     , diagReporter_(this)
 {}
 
@@ -65,21 +66,30 @@ void Binder::bind()
 //    PSYCHE_ASSERT(symDEFs_.empty(), return, "unexpected remaining symbol");
 }
 
-template <class ScopeT>
-void Binder::openScope()
+void Binder::openScope(ScopeKind scopeK)
 {
-    auto scope = syms_.top()->makeScope<ScopeT>();
-    scopes_.push(scope);
+    std::unique_ptr<Scope> scope(new Scope(scopeK));
+    scopes_.push(scope.get());
+
+    auto enclosingScope = scopes_.top();
+    enclosingScope->enclose(std::move(scope));
 }
 
-void Binder::openNestedScope()
+void Binder::reopenStashedScope()
 {
-    auto scope = scopes_.top()->makeNestedScope();
-    scopes_.push(scope);
+    PSYCHE_ASSERT_0(stashedScope_, return);
+
+    scopes_.push(stashedScope_);
 }
 
 void Binder::closeScope()
 {
+    scopes_.pop();
+}
+
+void Binder::closeScopeAndStashIt()
+{
+    stashedScope_ = scopes_.top();
     scopes_.pop();
 }
 
@@ -126,7 +136,8 @@ void Binder::popTySym()
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     makeSymAndPushIt<LibrarySymbol>();
-    openScope<FileScope>();
+
+    openScope(ScopeKind::File);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
@@ -158,14 +169,14 @@ SyntaxVisitor::Action Binder::visitTypeDeclaration_COMMON(const TypeDeclarationS
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
 {
     const TagTypeSpecifierSyntax* tySpec = node->typeSpecifier();
-    TagSymbolName::NameSpace ns;
+    TagSymbolNameKind tagK;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:
-            ns = TagSymbolName::NameSpace::Structures;
+            tagK = TagSymbolNameKind::Structure;
             break;
 
         case UnionTypeSpecifier:
-            ns = TagSymbolName::NameSpace::Unions;
+            tagK = TagSymbolNameKind::Union;
             break;
 
         default:
@@ -173,14 +184,14 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
             return Action::Quit;
     }
 
-    makeSymAndPushIt<NamedTypeSymbol>(ns, tySpec->tagToken().valueText_c_str());
+    makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
-    makeSymAndPushIt<NamedTypeSymbol>(TagSymbolName::NameSpace::Enumerations,
+    makeSymAndPushIt<NamedTypeSymbol>(TagSymbolNameKind::Enumeration,
                                       node->typeSpecifier()->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_COMMON(node);
@@ -214,12 +225,7 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_DONE(const FieldDeclarationS
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration(const ParameterDeclarationSyntax* node)
 {
-    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
-        visit(specIt->value);
-
-    visit(node->declarator());
-
-    return Action::Skip;
+    return visitParameterDeclaration_AtSpecifiers(node);
 }
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*)
@@ -251,7 +257,7 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinit
 //------------//
 SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
-    openNestedScope();
+    openScope(ScopeKind::Block);
 
     for (auto stmtIt = node->statements(); stmtIt; stmtIt = stmtIt->next)
         visit(stmtIt->value);

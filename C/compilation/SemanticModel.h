@@ -40,6 +40,9 @@ class Binder;
  */
 class PSY_C_API SemanticModel
 {
+    friend class Binder;
+    friend class Compilation;
+
 public:
     ~SemanticModel();
     SemanticModel(const SemanticModel&) = delete;
@@ -47,9 +50,6 @@ public:
 
 private:
     DECL_PIMPL(SemanticModel)
-
-    friend class Binder;
-    friend class Compilation;
 
     SemanticModel(Compilation* compilation, const SyntaxTree* tree);
 

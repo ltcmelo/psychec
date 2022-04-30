@@ -18,11 +18,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOL_NAMES_H__
-#define PSYCHE_C_SYMBOL_NAMES_H__
+#ifndef PSYCHE_C_NAME_SPACE_H__
+#define PSYCHE_C_NAME_SPACE_H__
 
-#include "SymbolName_Empty.h"
-#include "SymbolName_Plain.h"
-#include "SymbolName_Tag.h"
+#include "API.h"
+#include "Fwds.h"
+
+#include "NameSpaceKind.h"
+
+namespace psy {
+namespace C {
+
+/**
+ * \brief The NameSpace class.
+ *
+ * \remark 6.2.3
+ */
+class PSY_C_API NameSpace
+{
+public:
+
+//    NameSpace(NameSpaceKind nsK)
+//        : nsK_(nsK)
+//    {}
+
+    /**
+     * The NameSpaceKind of \c this NameSpace.
+     */
+    NameSpaceKind kind() const { return  nsK_; }
+
+private:
+    NameSpaceKind nsK_;
+};
+
+} // C
+} // psy
 
 #endif

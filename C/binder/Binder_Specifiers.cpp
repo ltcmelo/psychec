@@ -22,12 +22,12 @@
 
 #include "SyntaxTree.h"
 
-#include "binder/Scopes.h"
+#include "binder/Scope.h"
 #include "binder/Semantics_TypeQualifiers.h"
 #include "binder/Semantics_TypeSpecifiers.h"
 #include "compilation/SemanticModel.h"
-#include "symbols/Symbols.h"
-#include "symbols/SymbolNames.h"
+#include "symbols/Symbol_ALL.h"
+#include "symbols/SymbolName_ALL.h"
 #include "syntax/SyntaxFacts.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
@@ -72,7 +72,7 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_AtSpecifiers(const Functio
 {
     return visitDeclaration_AtSpecifiers(
                 node,
-                &Binder::visitFunctionDefinition_AtDeclarators);
+                &Binder::visitFunctionDefinition_AtDeclarator);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtSpecifiers(const FieldDeclarationSyntax* node)
@@ -86,7 +86,7 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const Param
 {
     return visitDeclaration_AtSpecifiers(
                 node,
-                &Binder::visitParameterDeclaration_AtDeclarators);
+                &Binder::visitParameterDeclaration_AtDeclarator);
 }
 
 /* Specifiers */
@@ -168,18 +168,18 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
     if (!node->declarations()) {
-        TagSymbolName::NameSpace ns;
+        TagSymbolNameKind tagK;
         switch (node->kind()) {
             case StructTypeSpecifier:
-                ns = TagSymbolName::NameSpace::Structures;
+                tagK = TagSymbolNameKind::Structure;
                 break;
 
             case UnionTypeSpecifier:
-                ns = TagSymbolName::NameSpace::Unions;
+                tagK = TagSymbolNameKind::Union;
                 break;
 
             case EnumTypeSpecifier:
-                ns = TagSymbolName::NameSpace::Enumerations;
+                tagK = TagSymbolNameKind::Enumeration;
                 break;
 
             default:
@@ -187,19 +187,19 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 return Action::Quit;
         }
 
-        makeTySymAndPushIt<NamedTypeSymbol>(ns, node->tagToken().valueText_c_str());
+        makeTySymAndPushIt<NamedTypeSymbol>(tagK, node->tagToken().valueText_c_str());
     }
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next) {
-        TySymCont_T tySymUSES;
-        std::swap(tySyms_, tySymUSES);
+        TySymContT tySyms;
+        std::swap(tySyms_, tySyms);
 
         visit(declIt->value);
 
-        std::swap(tySyms_, tySymUSES);
+        std::swap(tySyms_, tySyms);
     }
 
     for (auto attrIt = node->attributes_PostCloseBrace(); attrIt; attrIt = attrIt->next)
@@ -213,18 +213,18 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
     visit(node->typeDeclaration());
 
     const TagTypeSpecifierSyntax* tySpec = node->typeDeclaration()->typeSpecifier();
-    TagSymbolName::NameSpace ns;
+    TagSymbolNameKind tagK;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:
-            ns = TagSymbolName::NameSpace::Structures;
+            tagK = TagSymbolNameKind::Structure;
             break;
 
         case UnionTypeSpecifier:
-            ns = TagSymbolName::NameSpace::Unions;
+            tagK = TagSymbolNameKind::Union;
             break;
 
         case EnumTypeSpecifier:
-            ns = TagSymbolName::NameSpace::Enumerations;
+            tagK = TagSymbolNameKind::Enumeration;
             break;
 
         default:
@@ -232,7 +232,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
             return Action::Quit;
     }
 
-    makeTySymAndPushIt<NamedTypeSymbol>(ns, tySpec->tagToken().valueText_c_str());
+    makeTySymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
 
     return Action::Skip;
 }

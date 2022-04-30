@@ -55,7 +55,7 @@ private:
     DECL_PIMPL_SUB(FunctionTypeSymbol)
 
     FunctionTypeSymbol(const SyntaxTree* tree,
-                       const Scope* outerScope,
+                       const Scope* scope,
                        const Symbol* containingSym,
                        const TypeSymbol* retTySym);
 };

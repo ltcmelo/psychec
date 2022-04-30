@@ -42,8 +42,11 @@ public:
                       Expectation X = Expectation()) override;
 
     /*
-            + 0000-0099 ->
-            + 0100-0199 ->
+        Functions
+            + 0000-0049 -> prototypes w/o parameters
+            + 0050-0099 -> prototypes
+            + 0100-0149 -> definitions w/o parameters
+            + 0150-0199 -> definitions
             + 0200-0299 ->
 
         Globals and locals: 1

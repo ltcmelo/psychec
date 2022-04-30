@@ -24,9 +24,10 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "binder/Scope.h"
 #include "parser/LexedTokens.h"
 #include "symbols/SymbolName.h"
-#include "symbols/Symbols.h"
+#include "symbols/Symbol_ALL.h"
 #include "symbols/TypeKind.h"
 #include "syntax/SyntaxVisitor.h"
 
@@ -64,20 +65,22 @@ private:
 
     SemanticModel* semaModel_;
 
-    template <class ScopeT> void openScope();
-    void openNestedScope();
+    void openScope(ScopeKind scopeK);
     void closeScope();
+    void reopenStashedScope();
+    void closeScopeAndStashIt();
     std::stack<Scope*> scopes_;
+    Scope* stashedScope_;
 
     template <class SymT> SymT* pushSym(std::unique_ptr<SymT>);
     void popSym();
-    using SymCont_T = std::stack<Symbol*>;
-    SymCont_T syms_;
+    using SymContT = std::stack<Symbol*>;
+    SymContT syms_;
 
     template <class TySymT> TySymT* pushTySym(std::unique_ptr<TySymT>);
     void popTySym();
-    using TySymCont_T = std::stack<TypeSymbol*>;
-    TySymCont_T tySyms_;
+    using TySymContT = std::stack<TypeSymbol*>;
+    TySymContT tySyms_;
 
     template <class SymT, class... Args> std::unique_ptr<SymT> makeSymOrTySym(Args... args);
     template <class SymT, class... Args> void makeSymAndPushIt(Args... arg);
@@ -121,7 +124,7 @@ private:
             const DeclT* node,
             Action (Binder::*visit_DONE)(const DeclT*));
     Action visitFunctionDefinition_AtSpecifiers(const FunctionDefinitionSyntax*);
-    Action visitFunctionDefinition_AtDeclarators(const FunctionDefinitionSyntax*);
+    Action visitFunctionDefinition_AtDeclarator(const FunctionDefinitionSyntax*);
     Action visitFunctionDefinition_DONE(const FunctionDefinitionSyntax*);
     Action visitVariableAndOrFunctionDeclaration_AtSpecifiers(const VariableAndOrFunctionDeclarationSyntax*);
     Action visitVariableAndOrFunctionDeclaration_AtDeclarators(const VariableAndOrFunctionDeclarationSyntax*);
@@ -130,7 +133,7 @@ private:
     Action visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax*);
     Action visitFieldDeclaration_DONE(const FieldDeclarationSyntax*);
     Action visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax*);
-    Action visitParameterDeclaration_AtDeclarators(const ParameterDeclarationSyntax*);
+    Action visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax*);
     Action visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*);
 
     /* Specifiers */

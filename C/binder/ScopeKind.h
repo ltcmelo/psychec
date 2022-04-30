@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,11 +18,52 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SCOPES_H__
-#define PSYCHE_C_SCOPES_H__
+#ifndef PSYCHE_C_SCOPE_KIND_H__
+#define PSYCHE_C_SCOPE_KIND_H__
 
-#include "Scope_Block.h"
-#include "Scope_File.h"
-#include "Scope_Function.h"
+#include "API.h"
+#include "Fwds.h"
+
+#include "../common/infra/PsycheAssert.h"
+
+#include <cstdint>
+#include <string>
+
+namespace psy {
+namespace C {
+
+/**
+ * \brief The ScopeKind enum.
+ *
+ * \remark 6.2.1-4
+ */
+enum class ScopeKind : uint8_t
+{
+    UNSPECIFIED = 0,
+    File,
+    Function,
+    FunctionPrototype,
+    Block
+};
+
+inline std::string PSY_C_API to_string(ScopeKind scopeK)
+{
+    switch (scopeK) {
+        case ScopeKind::File:
+            return "File";
+        case ScopeKind::Function:
+            return "Function";
+        case ScopeKind::FunctionPrototype:
+            return "FunctionPrototype";
+        case ScopeKind::Block:
+            return "Block";
+        default:
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID or UNSPECIFIED ScopeKind>";
+    }
+}
+
+} // C
+} // psy
 
 #endif

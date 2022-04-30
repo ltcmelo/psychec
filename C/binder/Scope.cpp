@@ -20,21 +20,31 @@
 
 #include "Scope.h"
 
-#include "Scope_Block.h"
+#include "../common/infra/PsycheAssert.h"
 
 using namespace psy;
 using namespace C;
 
-Scope::Scope()
+Scope::Scope(ScopeKind kind)
+    : kind_(kind)
 {}
 
-std::vector<const BlockScope*> Scope::blocks() const
+ScopeKind Scope::kind() const
 {
-    return {};
+    return kind_;
 }
 
-BlockScope* Scope::makeNestedScope()
+void Scope::enclose(std::unique_ptr<Scope> scope)
 {
-    blocks_.emplace_back(new BlockScope);
-    return blocks_.back().get();
+    enclosedScopes_.push_back(std::move(scope));
 }
+
+void Scope::morphFrom_FunctionPrototype_to_Block()
+{
+    PSYCHE_ASSERT_0(kind_ == ScopeKind::FunctionPrototype, return);
+
+    kind_ = ScopeKind::Block;
+}
+
+Scope::~Scope()
+{}

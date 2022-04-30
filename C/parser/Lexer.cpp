@@ -23,7 +23,7 @@
 
 #include "SyntaxTree.h"
 
-#include "syntax/SyntaxLexemes.h"
+#include "syntax/SyntaxLexeme_ALL.h"
 
 #include <cctype>
 #include <cstring>

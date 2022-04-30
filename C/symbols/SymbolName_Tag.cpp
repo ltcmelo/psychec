@@ -25,33 +25,33 @@
 using namespace psy;
 using namespace C;
 
-TagSymbolName::TagSymbolName(NameSpace ns, std::string tag)
-    : ns_(ns)
+TagSymbolName::TagSymbolName(TagSymbolNameKind tagK, std::string tag)
+    : tagK_(tagK)
     , tag_(std::move(tag))
 {}
 
-TagSymbolName::NameSpace TagSymbolName::nameSpace() const
+TagSymbolNameKind TagSymbolName::kind() const
 {
-    return ns_;
+    return tagK_;
 }
 
 std::string TagSymbolName::text() const
 {
     std::string prefix;
-    switch (ns_) {
-        case NameSpace::Structures:
+    switch (tagK_) {
+        case TagSymbolNameKind::Structure:
             prefix = "struct ";
             break;
-
-        case NameSpace::Unions:
+        case TagSymbolNameKind::Union:
             prefix = "union ";
             break;
-
-        case NameSpace::Enumerations:
+        case TagSymbolNameKind::Enumeration:
             prefix = "enum ";
             break;
+        default:
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID or UNSPECIFIED TagSymbolNameKind>";
     }
-
     return prefix + tag_;
 }
 
@@ -65,7 +65,7 @@ std::string to_string(const TagSymbolName& name)
 
 bool operator==(const TagSymbolName& a, const TagSymbolName& b)
 {
-    return a.nameSpace() == b.nameSpace() && a.tag_ == b.tag_;
+    return a.kind() == b.kind() && a.tag_ == b.tag_;
 }
 
 bool operator!=(const TagSymbolName& a, const TagSymbolName& b)

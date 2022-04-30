@@ -30,16 +30,15 @@ using namespace C;
 struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
 {
     NamedTypeSymbolImpl(const SyntaxTree* tree,
-                        const Scope* outerScope,
+                        const Scope* scope,
                         const Symbol* containingSym,
                         NamedTypeKind namedTypeKind)
         : TypeSymbolImpl(tree,
-                         outerScope,
+                         scope,
                          containingSym,
                          TypeKind::Named)
         , name_(nullptr)
         , namedTypeKind_(namedTypeKind)
-        , builtTyKind_(BuiltinTypeKind::None)
     {}
 
     std::unique_ptr<SymbolName> name_;
@@ -48,11 +47,11 @@ struct NamedTypeSymbol::NamedTypeSymbolImpl : TypeSymbolImpl
 };
 
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
-                                 const Scope* outerScope,
+                                 const Scope* scope,
                                  const Symbol* containingSym,
                                  BuiltinTypeKind builtTyKind)
     : TypeSymbol(new NamedTypeSymbolImpl(tree,
-                                         outerScope,
+                                         scope,
                                          containingSym,
                                          NamedTypeKind::Builtin))
 {
@@ -60,11 +59,11 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
 }
 
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
-                                 const Scope* outerScope,
+                                 const Scope* scope,
                                  const Symbol* containingSym,
                                  const std::string& name)
     : TypeSymbol(new NamedTypeSymbolImpl(tree,
-                                         outerScope,
+                                         scope,
                                          containingSym,
                                          NamedTypeKind::Synonym))
 {
@@ -72,16 +71,16 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
 }
 
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
-                                 const Scope* outerScope,
+                                 const Scope* scope,
                                  const Symbol* containingSym,
-                                 TagSymbolName::NameSpace ns,
+                                 TagSymbolNameKind tagK,
                                  const std::string& tag)
     : TypeSymbol(new NamedTypeSymbolImpl(tree,
-                                         outerScope,
+                                         scope,
                                          containingSym,
                                          NamedTypeKind::Tag))
 {
-    P_CAST->name_.reset(new TagSymbolName(ns, tag));
+    P_CAST->name_.reset(new TagSymbolName(tagK, tag));
 }
 
 const SymbolName* NamedTypeSymbol::name() const

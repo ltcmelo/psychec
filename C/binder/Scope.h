@@ -24,7 +24,10 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "ScopeKind.h"
+
 #include <memory>
+#include <cstdint>
 #include <unordered_map>
 #include <vector>
 
@@ -38,21 +41,24 @@ namespace C {
  */
 class PSY_C_API Scope
 {
-protected:
-    Scope();
-
-public:
-    /**
-     * The BlockScopes of \c this Scope.
-     */
-    std::vector<const BlockScope*> blocks() const;
-
-private:
     friend class Binder;
 
-    BlockScope* makeNestedScope();
+public:
+    virtual ~Scope();
 
-    std::vector<std::unique_ptr<BlockScope>> blocks_;
+    /**
+     * The Kind of \c this Scope.
+     */
+    ScopeKind kind() const;
+
+private:
+    Scope(ScopeKind kind);
+
+    void enclose(std::unique_ptr<Scope> scope);
+    void morphFrom_FunctionPrototype_to_Block();
+
+    ScopeKind kind_;
+    std::vector<std::unique_ptr<Scope>> enclosedScopes_;
 };
 
 } // C

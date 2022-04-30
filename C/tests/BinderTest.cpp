@@ -25,8 +25,8 @@
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol.h"
 #include "parser/Unparser.h"
-#include "symbols/Symbols.h"
-#include "syntax/SyntaxLexemes.h"
+#include "symbols/Symbol_ALL.h"
+#include "syntax/SyntaxLexeme_ALL.h"
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
@@ -179,7 +179,7 @@ bool typeMatchesBinding(const TypeSymbol* tySym, const BindingSummary& binding)
         return false;
     }
 
-    if (binding.specTyBuiltinK_ != BuiltinTypeKind::None) {
+    if (binding.specTyBuiltinK_ != BuiltinTypeKind::UNSPECIFIED) {
         if (!tySym->asNamedType()) {
             DETAIL_MISMATCH("not a builtin");
             return false;

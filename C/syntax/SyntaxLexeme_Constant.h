@@ -19,8 +19,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYNTAX_LEXEMES_H__
-#define PSYCHE_C_SYNTAX_LEXEMES_H__
+#ifndef PSYCHE_C_SYNTAX_LEXEME_CONSTANT_H__
+#define PSYCHE_C_SYNTAX_LEXEME_CONSTANT_H__
 
 #include "SyntaxLexeme.h"
 
@@ -29,25 +29,6 @@
 
 namespace psy {
 namespace C {
-
-//---------------------//
-// Identifier/keywords //
-//---------------------//
-
-/**
- * \brief The Identifier class.
- */
-class PSY_C_API Identifier final : public SyntaxLexeme
-{
-public:
-    Identifier(const char* chars, unsigned int size);
-
-    virtual Identifier* asIdentifier() override { return this; }
-};
-
-//-----------//
-// Constants //
-//-----------//
 
 /**
  * \brief The Constant class.
@@ -128,7 +109,6 @@ public:
     Variant variant() const;
 };
 
-
 /**
  * \brief The CharacterConstant class.
  */
@@ -152,38 +132,6 @@ public:
 
     /**
      * The Variant of \c this CharacterConstant.
-     */
-    Variant variant() const;
-};
-
-//----------------//
-// String literal //
-//----------------//
-
-/**
- * \brief The StringLiteral class.
- */
-class PSY_C_API StringLiteral final : public SyntaxLexeme
-{
-public:
-    StringLiteral(const char* chars, unsigned int size);
-
-    virtual StringLiteral* asStringLiteralExpression() { return nullptr; }
-
-    /**
-     * \brief The StringLiteral::Variant enumeration.
-     */
-    enum class Variant : std::uint8_t
-    {
-        Plain_char,
-        L_wchar_t,
-        u8_char,
-        u_char16_t,
-        U_char32_t
-    };
-
-    /**
-     * The Variant of \c this StringLiteral.
      */
     Variant variant() const;
 };

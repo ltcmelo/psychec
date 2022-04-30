@@ -32,47 +32,29 @@ namespace C {
  */
 class PSY_C_API TagSymbolName final : public SymbolName
 {
+    friend class NamedTypeSymbol;
+    friend std::string to_string(const TagSymbolName& name);
+    friend bool operator==(const TagSymbolName& a, const TagSymbolName& b);
+
 public:
     virtual TagSymbolName* asTagSymbolName() override { return this; }
     virtual const TagSymbolName* asTagSymbolName() const override { return this; }
 
     /**
-     * \brief The TagSymbolName::Namespace enum.
-     *
-     * \remark 6.2.3
-     *
-     * \note
-     * The declaration of a \c struct, \c union, or \c enum may reside altogether
-     * within a single name space or in three separate name spaces (footnote 32).
-     * We adopt the latter alternative.
+     * The TagSymbolNameKind of \c this TagSymbolName.
      */
-    enum class NameSpace : std::uint8_t
-    {
-        Structures,
-        Unions,
-        Enumerations
-    };
+    TagSymbolNameKind kind() const;
 
     /**
-     * The name space where \c this tag name resides.
-     */
-    NameSpace nameSpace() const;
-
-    /**
-     * The text of \c this SymbolName.
+     * The text of \c this TagSymbolName.
      */
     virtual std::string text() const override;
 
 private:
-    friend class NamedTypeSymbol;
+    TagSymbolName(TagSymbolNameKind tagK, std::string tag);
 
-    TagSymbolName(NameSpace ns, std::string tag);
-
-    NameSpace ns_;
+    TagSymbolNameKind tagK_;
     std::string tag_;
-
-    friend std::string to_string(const TagSymbolName& name);
-    friend bool operator==(const TagSymbolName& a, const TagSymbolName& b);
 };
 
 bool operator!=(const TagSymbolName& a, const TagSymbolName& b);

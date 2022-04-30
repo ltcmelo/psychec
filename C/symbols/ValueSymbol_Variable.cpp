@@ -20,7 +20,7 @@
 
 #include "ValueSymbol_Variable.h"
 
-#include "symbols/Symbols.h"
+#include "symbols/Symbol_ALL.h"
 
 #include <sstream>
 

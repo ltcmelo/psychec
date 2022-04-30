@@ -22,7 +22,7 @@
 
 #include "SyntaxTree.h"
 
-#include "syntax/SyntaxLexemes.h"
+#include "syntax/SyntaxLexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 
 #include <iostream>

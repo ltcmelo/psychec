@@ -22,7 +22,7 @@
 
 #include "compilation/Assembly.h"
 #include "compilation/Compilation.h"
-#include "symbols/Symbols.h"
+#include "symbols/Symbol_ALL.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxReference.h"
 
@@ -38,7 +38,7 @@ Symbol::Symbol(SymbolImpl* p)
 Symbol::~Symbol()
 {}
 
-const Assembly* Symbol::assembly() const
+const Assembly* Symbol::owningAssembly() const
 {
     for (auto compilation : P->tree_->linkedCompilations()) {
         const auto&& syms = compilation->assembly()->symbols();
@@ -66,6 +66,11 @@ SymbolKind Symbol::kind() const
     return P->kind_;
 }
 
+const NameSpace* Symbol::nameSpace() const
+{
+    return P->ns_;
+}
+
 Location Symbol::location() const
 {
     const auto& synRefs = declaringSyntaxReferences();
@@ -81,19 +86,6 @@ Location Symbol::location() const
     // TODO
     return locs.front();
 }
-
-template <class ScopeT>
-ScopeT* Symbol::makeScope()
-{
-    std::unique_ptr<ScopeT> scope(new ScopeT());
-    P->innerScope_ = std::move(scope);
-    return static_cast<ScopeT*>(P->innerScope_.get());
-}
-
-template BlockScope* Symbol::makeScope<BlockScope>();
-template FileScope* Symbol::makeScope<FileScope>();
-template FunctionScope* Symbol::makeScope<FunctionScope>();
-
 
 namespace psy {
 namespace C {
@@ -111,7 +103,7 @@ std::string to_string(const Symbol& sym)
             return to_string(*sym.asType());
         default:
             PSYCHE_FAIL_0(return "");
-            return "<invalid symbol kind>";
+            return "<INVALID or UNSPECIFIED symbol kind>";
     }
 }
 

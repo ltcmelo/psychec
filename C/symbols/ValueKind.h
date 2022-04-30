@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/PsycheAssert.h"
+
 #include <cstdint>
 #include <string>
 
@@ -35,24 +37,24 @@ namespace C {
  */
 enum class ValueKind : std::uint8_t
 {
-    None = 0,
+    UNSPECIFIED = 0,
     Field,
     Parameter,
     Variable
 };
 
-inline std::string PSY_C_API to_string(ValueKind valKind)
+inline std::string PSY_C_API to_string(ValueKind valK)
 {
-    switch (valKind) {
+    switch (valK) {
         case ValueKind::Field:
             return "Field";
         case ValueKind::Parameter:
             return "Parameter";
         case ValueKind::Variable:
             return "Variable";
-
         default:
-            return "<invalid value kind>";
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID or UNSPECIFIED ValueKind>";
     }
 }
 

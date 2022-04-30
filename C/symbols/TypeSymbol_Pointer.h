@@ -54,7 +54,7 @@ private:
     friend class Binder;
 
     PointerTypeSymbol(const SyntaxTree* tree,
-                      const Scope* outerScope,
+                      const Scope* scope,
                       const Symbol* containingSym,
                       const TypeSymbol* refedTySym);
 };

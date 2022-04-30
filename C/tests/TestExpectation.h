@@ -22,6 +22,7 @@
 #define PSYCHE_C_TEST_EXPECTATION_H__
 
 #include "compilation/Compilation.h"
+#include "binder/Scope.h"
 #include "symbols/SymbolKind.h"
 #include "symbols/ValueKind.h"
 #include "symbols/TypeKind.h"
@@ -49,19 +50,23 @@ enum class CVR
 
 struct BindingSummary
 {
-    BindingSummary(std::string name, ValueKind kind);
-    BindingSummary(std::string name, TypeKind kind);
-    BindingSummary(std::string funcName);
+    BindingSummary();
+
+    BindingSummary& Value(std::string name, ValueKind valK);
+    BindingSummary& Type(std::string name, TypeKind tyK);
+    BindingSummary& Function(std::string funcName);
+
     BindingSummary& specType(std::string name,
-                      NamedTypeKind tyNameK,
-                      BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::None,
-                      CVR cvr = CVR::None);
+                             NamedTypeKind tyNameK,
+                             BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
+                             CVR cvr = CVR::None);
     BindingSummary& derivType(TypeKind tyKind, CVR cvr = CVR::None);
 
     std::string name_;
     SymbolKind symK_;
     ValueKind valK_;
     TypeKind tyK_;
+    ScopeKind scopeK_;
 
     std::string specTyName_;
     NamedTypeKind specTyK_;

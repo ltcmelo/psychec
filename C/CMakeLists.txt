@@ -51,8 +51,13 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxKind.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme.cpp
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexemes.h
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexemes.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Identifier.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Identifier.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Constant.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Constant.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_StringLiteral.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_StringLiteral.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_ALL.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNamePrinter.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNamePrinter.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNode.cpp
@@ -121,7 +126,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbols.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_ALL.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName.cpp
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Empty.cpp
@@ -130,7 +135,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Plain.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.cpp
     ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.h
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolNames.h
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_ALL.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeClass_NameableSymbol.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeClass_NameableSymbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeClass_TypeableSymbol.h
@@ -162,19 +167,16 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/Binder_Specifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_TypeChecker.cpp
+    ${PROJECT_SOURCE_DIR}/binder/NameSpace.h
+    ${PROJECT_SOURCE_DIR}/binder/NameSpaces.h
+    ${PROJECT_SOURCE_DIR}/binder/NameSpaceKind.h
     ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeQualifiers.h
     ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeQualifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeSpecifiers.h
     ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeSpecifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/Scope.h
     ${PROJECT_SOURCE_DIR}/binder/Scope.cpp
-    ${PROJECT_SOURCE_DIR}/binder/Scope_Block.cpp
-    ${PROJECT_SOURCE_DIR}/binder/Scope_Block.h
-    ${PROJECT_SOURCE_DIR}/binder/Scope_File.cpp
-    ${PROJECT_SOURCE_DIR}/binder/Scope_File.h
-    ${PROJECT_SOURCE_DIR}/binder/Scope_Function.cpp
-    ${PROJECT_SOURCE_DIR}/binder/Scope_Function.h
-    ${PROJECT_SOURCE_DIR}/binder/Scopes.h
+    ${PROJECT_SOURCE_DIR}/binder/ScopeKind.h
     ${PROJECT_SOURCE_DIR}/binder/TypeChecker.h
     ${PROJECT_SOURCE_DIR}/binder/TypeChecker.cpp
 

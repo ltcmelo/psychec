@@ -50,7 +50,7 @@ private:
     friend class Binder;
 
     LibrarySymbol(const SyntaxTree* tree,
-                  const Scope* outerScope,
+                  const Scope* scope,
                   const Symbol* containingSym);
 };
 

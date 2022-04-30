@@ -18,19 +18,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SCOPE_FUNCTION_H__
-#define PSYCHE_C_SCOPE_FUNCTION_H__
+#ifndef PSYCHE_C_NAME_SPACE_KIND_H__
+#define PSYCHE_C_NAME_SPACE_KIND_H__
 
-#include "Scope.h"
+#include "API.h"
+#include "Fwds.h"
+
+#include "../common/infra/PsycheAssert.h"
+
+#include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
 
-class PSY_C_API FunctionScope final : public Scope
+/**
+ * \brief The NameSpaceKind enum.
+ *
+ * \remark 6.2.3-1
+ * \remark Footnote 32
+ */
+enum class NameSpaceKind : std::uint8_t
 {
-private:
-    using Scope::Scope;
+    UNSPECIFIED = 0,
+    Labels,
+    Tags,
+    Members,
+    Ordinary,
 };
+
+inline std::string PSY_C_API to_string(NameSpaceKind nsK)
+{
+    switch (nsK) {
+        case NameSpaceKind::Labels:
+            return "Labels";
+        case NameSpaceKind::Tags:
+            return "Tags";
+        case NameSpaceKind::Members:
+            return "Members";
+        case NameSpaceKind::Ordinary:
+            return "Ordinary";
+        default:
+            PSYCHE_FAIL_0(return "");
+            return "<INVALID or UNSPECIFIED NameSpaceKind>";
+    }
+}
 
 } // C
 } // psy

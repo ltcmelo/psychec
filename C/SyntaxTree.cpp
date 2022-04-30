@@ -27,7 +27,7 @@
 #include "infra/MemoryPool.h"
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
-#include "syntax/SyntaxLexemes.h"
+#include "syntax/SyntaxLexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 
 #include "../common/infra/PsycheAssert.h"

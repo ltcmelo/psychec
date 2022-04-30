@@ -21,7 +21,7 @@
 #include "Symbol_Value.h"
 #include "Symbol__IMPL__.inc"
 
-#include "symbols/Symbols.h"
+#include "symbols/Symbol_ALL.h"
 
 #include <sstream>
 
@@ -31,10 +31,10 @@ using namespace C;
 struct ValueSymbol::ValueSymbolImpl : SymbolImpl
 {
     ValueSymbolImpl(const SyntaxTree* tree,
-                    const Scope* outerScope,
+                    const Scope* scope,
                     const Symbol* containingSym,
                     ValueKind valKind)
-        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Value)
+        : SymbolImpl(tree, scope, containingSym, SymbolKind::Value)
         , valKind_(valKind)
         , name_(nullptr)
         , tySym_(nullptr)
@@ -46,11 +46,11 @@ struct ValueSymbol::ValueSymbolImpl : SymbolImpl
 };
 
 ValueSymbol::ValueSymbol(const SyntaxTree* tree,
-                         const Scope* outerScope,
-                         const Symbol* containingSym,
-                         ValueKind valKind)
+                          const Scope* scope,
+                          const Symbol* containingSym,
+                          ValueKind valKind)
     : Symbol(new ValueSymbolImpl(tree,
-                                 outerScope,
+                                 scope,
                                  containingSym,
                                  valKind))
 {}
@@ -97,7 +97,7 @@ std::string to_string(const ValueSymbol& sym)
             return to_string(*sym.asVariable());
         default:
             PSYCHE_FAIL_0(return "");
-            return "<invalid value kind>";
+            return "<INVALID or UNSPECIFIED value kind>";
     }
 }
 

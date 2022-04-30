@@ -29,11 +29,11 @@ using namespace C;
 struct FunctionTypeSymbol::FunctionTypeSymbolImpl : TypeSymbolImpl
 {
     FunctionTypeSymbolImpl(const SyntaxTree* tree,
-                           const Scope* outerScope,
+                           const Scope* scope,
                            const Symbol* containingSym,
                            const TypeSymbol* retTySym)
         : TypeSymbolImpl(tree,
-                         outerScope,
+                         scope,
                          containingSym,
                          TypeKind::Function)
         , retTySym_(retTySym)

@@ -22,8 +22,9 @@
 
 #include "SyntaxTree.h"
 
-#include "binder/Scopes.h"
-#include "symbols/SymbolNames.h"
+#include "binder/Scope.h"
+#include "binder/NameSpace.h"
+#include "symbols/SymbolName_ALL.h"
 
 using namespace psy;
 using namespace C;
@@ -31,19 +32,20 @@ using namespace C;
 struct Symbol::SymbolImpl
 {
     SymbolImpl(const SyntaxTree* tree,
-               const Scope* outerScope,
+               const Scope* scope,
                const Symbol* containingSym,
                SymbolKind kind)
         : tree_(tree)
-        , outerScope_(outerScope)
+        , scope_(scope)
+        , ns_(nullptr) // TODO
         , containingSym_(containingSym)
         , kind_(kind)
         , BF_all_(0)
     {}
 
     const SyntaxTree* tree_;
-    const Scope* outerScope_;
-    std::unique_ptr<Scope> innerScope_;
+    const Scope* scope_;
+    const NameSpace* ns_;
     const Symbol* containingSym_;
     SymbolKind kind_;
     Accessibility access_;

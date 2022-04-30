@@ -22,11 +22,11 @@
 
 #include "SyntaxTree.h"
 
-#include "binder/Scopes.h"
+#include "binder/Scope.h"
 #include "binder/Semantics_TypeSpecifiers.h"
 #include "compilation/SemanticModel.h"
-#include "symbols/Symbols.h"
-#include "symbols/SymbolNames.h"
+#include "symbols/Symbol_ALL.h"
+#include "symbols/SymbolName_ALL.h"
 #include "syntax/SyntaxFacts.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
@@ -49,13 +49,6 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators(
     return ((this)->*(visit_DONE))(node);
 }
 
-SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarators(const FunctionDefinitionSyntax* node)
-{
-    actOnDeclarator(node->declarator());
-
-    return Binder::visitFunctionDefinition_DONE(node);
-}
-
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
@@ -71,12 +64,29 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDec
                 &Binder::visitFieldDeclaration_DONE);
 }
 
-SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarators(const ParameterDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax* node)
 {
+    actOnDeclarator(node->declarator());
+
     return visitParameterDeclaration_DONE(node);
 }
 
-/* Declarators */
+SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const FunctionDefinitionSyntax* node)
+{
+    actOnDeclarator(node->declarator());
+
+    reopenStashedScope();
+    scopes_.top()->morphFrom_FunctionPrototype_to_Block();
+
+    auto body = node->body()->asCompoundStatement();
+    for (auto stmtIt = body->statements(); stmtIt; stmtIt = stmtIt->next)
+        visit(stmtIt->value);
+
+    closeScope();
+
+    return Binder::visitFunctionDefinition_DONE(node);
+}
+
 SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 {
     visit(decltor);
@@ -121,27 +131,51 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
     return Action::Skip;
 }
 
+/* Declarators */
+
 SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node)
 {
     for (auto specIt = node->attributes(); specIt; specIt = specIt->next)
         visit(specIt->value);
 
-    visit(node->suffix());
+    switch (node->suffix()->kind()) {
+        case SubscriptSuffix:
+            makeTySymAndPushIt<ArrayTypeSymbol>(tySyms_.top());
+            break;
+
+        case ParameterSuffix:
+            makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
+            break;
+
+        default:
+            PSYCHE_FAIL_0(return Action::Quit);
+            return Action::Quit;
+    }
+
     visit(node->innerDeclarator());
+
+    openScope(ScopeKind::FunctionPrototype);
+    visit(node->suffix());
+    closeScopeAndStashIt();
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* node)
 {
-    makeTySymAndPushIt<ArrayTypeSymbol>(tySyms_.top());
-
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* node)
 {
-    makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
+    for (auto declIt = node->parameters(); declIt; declIt = declIt->next) {
+        TySymContT tySyms;
+        std::swap(tySyms_, tySyms);
+
+        visit(declIt->value);
+
+        std::swap(tySyms_, tySyms);
+    }
 
     return Action::Skip;
 }
@@ -183,8 +217,24 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
                     break;
 
                 case SymbolKind::Library:
-                case SymbolKind::Function:
                     makeSymAndPushIt<VariableSymbol>();
+                    break;
+
+                case SymbolKind::Function:
+                    switch (scopes_.top()->kind()) {
+                        case ScopeKind::FunctionPrototype:
+                            makeSymAndPushIt<ParameterSymbol>();
+                            break;
+
+                        case ScopeKind::Block:
+                        case ScopeKind::File:
+                            makeSymAndPushIt<VariableSymbol>();
+                            break;
+
+                        default:
+                            PSYCHE_FAIL_0(return Action::Quit);
+                            break;
+                    }
                     break;
 
                 default:
@@ -214,7 +264,6 @@ SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSy
     auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
 
     std::unique_ptr<SymbolName> name(new EmptySymbolName);
-
 
     nameableSym->setName(std::move(name));
 

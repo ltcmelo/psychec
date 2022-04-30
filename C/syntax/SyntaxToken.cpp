@@ -21,7 +21,7 @@
 
 #include "SyntaxToken.h"
 
-#include "SyntaxLexemes.h"
+#include "SyntaxLexeme_ALL.h"
 #include "SyntaxTree.h"
 
 #include <iostream>

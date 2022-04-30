@@ -1,4 +1,5 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2008 Roberto Raggi <roberto.raggi@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,17 +19,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYMBOLS_H__
-#define PSYCHE_C_SYMBOLS_H__
+#include "SyntaxLexeme_Identifier.h"
 
-#include "Symbol_Function.h"
-#include "Symbol_Library.h"
-#include "TypeSymbol_Array.h"
-#include "TypeSymbol_Function.h"
-#include "TypeSymbol_Named.h"
-#include "TypeSymbol_Pointer.h"
-#include "ValueSymbol_Field.h"
-#include "ValueSymbol_Parameter.h"
-#include "ValueSymbol_Variable.h"
+using namespace psy;
+using namespace C;
 
-#endif
+Identifier::Identifier(const char* chars, unsigned int size)
+    : SyntaxLexeme(chars,
+                   size,
+                   Kind::Identifier)
+{}

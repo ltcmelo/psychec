@@ -23,27 +23,31 @@
 using namespace psy;
 using namespace  C;
 
-BindingSummary::BindingSummary(std::string name, ValueKind kind)
-    : name_(std::move(name))
-    , symK_(SymbolKind::Value)
-    , valK_(kind)
-    , tyK_(TypeKind::None)
+BindingSummary::BindingSummary()
 {}
 
+BindingSummary& BindingSummary::Value(std::string name, ValueKind valK)
+{
+    name_ = std::move(name);
+    symK_ = SymbolKind::Value;
+    valK_ = valK;
+    return *this;
+}
 
-BindingSummary::BindingSummary(std::string name, TypeKind kind)
-    : name_(std::move(name))
-    , symK_(SymbolKind::Type)
-    , valK_(ValueKind::None)
-    , tyK_(kind)
-{}
+BindingSummary& BindingSummary::Type(std::string name, TypeKind tyK)
+{
+    name_ = std::move(name);
+    symK_ = SymbolKind::Type;
+    tyK_ = tyK;
+    return *this;
+}
 
-BindingSummary::BindingSummary(std::string funcName)
-    : name_(std::move(funcName))
-    , symK_(SymbolKind::Function)
-    , valK_(ValueKind::None)
-    , tyK_(TypeKind::None)
-{}
+BindingSummary& BindingSummary::Function(std::string funcName)
+{
+    name_ = std::move(funcName);
+    symK_ = SymbolKind::Function;
+    return *this;
+}
 
 BindingSummary& BindingSummary::specType(std::string name, NamedTypeKind tyNameK, BuiltinTypeKind builtinTypeKind, CVR cvr)
 {

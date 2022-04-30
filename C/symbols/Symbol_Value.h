@@ -72,7 +72,7 @@ protected:
     DECL_PIMPL_SUB(ValueSymbol);
 
     ValueSymbol(const SyntaxTree* tree,
-                const Scope* outerScope,
+                const Scope* scope,
                 const Symbol* containingSym,
                 ValueKind valKind);
 

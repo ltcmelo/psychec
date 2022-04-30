@@ -28,6 +28,7 @@
 #include "SymbolKind.h"
 #include "SymbolName.h"
 
+#include "binder/NameSpace.h"
 #include "syntax/SyntaxReference.h"
 
 #include "../common/location/Location.h"
@@ -48,6 +49,8 @@ namespace C {
  */
 class PSY_C_API Symbol
 {
+    friend class Binder;
+
 public:
     Symbol(const Symbol&) = delete;
     Symbol& operator=(const Symbol&) = delete;
@@ -68,31 +71,34 @@ public:
     virtual const TypeSymbol* asType() const { return nullptr; }
 
     /**
-     * The Assembly where \c this Symbol is \a defined.
+     * The Assembly that owns \c this Symbol.
      */
-    const Assembly* assembly() const;
+    const Assembly* owningAssembly() const;
 
     /**
-     * The outer Scope of \c this Symbol.
-     *
-     * \remark 6.2.1-4
-     */
-    const Scope* outerScope() const;
-
-    /**
-     * The inner Scope of \c this Symbol.
-     *
-     * \remark 6.2.1-4
-     */
-    const Scope* innerScope() const;
-
-    /**
-     * The Symbol immediately containing \c this Symbol.
+     * The Symbol that contains \c this Symbol.
      */
     const Symbol* containingSymbol() const;
 
     /**
-     * The Accessibility declared for \c this Symbol.
+     * The Scope of \c this Symbol.
+     *
+     * \remark 6.2.1-4
+     */
+    const Scope* scope() const;
+
+    /**
+     * The NameSpace of \c this Symbol.
+     */
+    const NameSpace* nameSpace() const;
+
+    /**
+     * The Location of \c this Symbol.
+     */
+    Location location() const;
+
+    /**
+     * The Accessibility \c this Symbol declares.
      */
     Accessibility declaredAccessibility() const;
 
@@ -101,20 +107,10 @@ public:
      */
     std::vector<SyntaxReference> declaringSyntaxReferences() const;
 
-    /**
-     * The Location where \c this Symbol is \a defined.
-     */
-    Location location() const;
-
 protected:
     DECL_PIMPL(Symbol);
 
     Symbol(SymbolImpl* p);
-
-private:
-    friend class Binder;
-
-    template <class ScopeT> ScopeT* makeScope();
 };
 
 std::string PSY_C_API to_string(const Symbol& sym);

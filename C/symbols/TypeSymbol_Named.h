@@ -67,19 +67,19 @@ private:
     friend class Semantics_TypeSpecifiers;
 
     NamedTypeSymbol(const SyntaxTree* tree,
-                    const Scope* outerScope,
+                    const Scope* scope,
                     const Symbol* containingSym,
                     BuiltinTypeKind builtTyK);
 
     NamedTypeSymbol(const SyntaxTree* tree,
-                    const Scope* outerScope,
+                    const Scope* scope,
                     const Symbol* containingSym,
                     const std::string& name);
 
     NamedTypeSymbol(const SyntaxTree* tree,
-                    const Scope* outerScope,
+                    const Scope* scope,
                     const Symbol* containingSym,
-                    TagSymbolName::NameSpace ns,
+                    TagSymbolNameKind tagK,
                     const std::string& tag);
 
 

@@ -18,7 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Scope_Function.h"
+#ifndef PSYCHE_C_NAMES_SPACES_H__
+#define PSYCHE_C_NAMES_SPACES_H__
 
-using namespace psy;
-using namespace C;
+#include "API.h"
+#include "Fwds.h"
+
+namespace psy {
+namespace C {
+
+class PSY_C_API NameSpaces
+{
+private:
+    NameSpaces();
+
+};
+
+} // C
+} // psy
+
+#endif
