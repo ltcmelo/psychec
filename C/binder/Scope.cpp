@@ -41,7 +41,7 @@ void Scope::enclose(std::unique_ptr<Scope> scope)
 
 void Scope::morphFrom_FunctionPrototype_to_Block()
 {
-    PSYCHE_ASSERT_0(kind_ == ScopeKind::FunctionPrototype, return);
+    PSY_ASSERT_0(kind_ == ScopeKind::FunctionPrototype, return);
 
     kind_ = ScopeKind::Block;
 }

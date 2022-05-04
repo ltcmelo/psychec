@@ -40,7 +40,7 @@ void Semantics_TypeQualifiers::qualify(SyntaxToken tyQualTk,
             break;
 
         default:
-            PSYCHE_FAIL_0(break);
+            PSY_FAIL_ASSERT_0(break);
             break;
     }
 }

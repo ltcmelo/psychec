@@ -57,13 +57,13 @@ void Binder::bind()
 
     visit(tree_->root());
 
-    PSYCHE_ASSERT(scopes_.top() == nullptr, return, "expected outermost scope");
+    PSY_ASSERT(scopes_.top() == nullptr, return, "expected outermost scope");
     scopes_.pop();
-    PSYCHE_ASSERT(scopes_.empty(), return, "unexpected remaining scope");
+    PSY_ASSERT(scopes_.empty(), return, "unexpected remaining scope");
 
-//    PSYCHE_ASSERT(symDEFs_.top() == nullptr, return, "expected outermost symbol");
+//    PSY_ASSERT(symDEFs_.top() == nullptr, return, "expected outermost symbol");
     syms_.pop();
-//    PSYCHE_ASSERT(symDEFs_.empty(), return, "unexpected remaining symbol");
+//    PSY_ASSERT(symDEFs_.empty(), return, "unexpected remaining symbol");
 }
 
 void Binder::openScope(ScopeKind scopeK)
@@ -77,7 +77,7 @@ void Binder::openScope(ScopeKind scopeK)
 
 void Binder::reopenStashedScope()
 {
-    PSYCHE_ASSERT_0(stashedScope_, return);
+    PSY_ASSERT_0(stashedScope_, return);
 
     scopes_.push(stashedScope_);
 }
@@ -180,7 +180,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
             break;
 
         default:
-            PSYCHE_FAIL_0(return Action::Quit);
+            PSY_FAIL_ASSERT_0(return Action::Quit);
             return Action::Quit;
     }
 

@@ -306,7 +306,7 @@ void BinderTest::bind(std::string text, Expectation X)
 
     for (const auto& binding : X.bindings_) {
 #ifdef DEBUG_BINDING_SEARCH
-        std::cout << "\n";
+        std::cout << "\n\t\t...";
 #endif
         using namespace std::placeholders;
 
@@ -320,7 +320,7 @@ void BinderTest::bind(std::string text, Expectation X)
         }
 
 #ifdef DEBUG_BINDING_SEARCH
-        std::cout << "\n\t\tmatch!";
+        std::cout << "\n\t\tmatch! ";
 #endif
 
     }

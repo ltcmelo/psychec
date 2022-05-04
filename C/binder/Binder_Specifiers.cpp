@@ -149,7 +149,7 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
                 builtTyK = BuiltinTypeKind::Int_U;
                 break;
             default:
-                PSYCHE_FAIL(return Action::Quit, "expected builtin type specifier");
+                PSY_FAIL_ASSERT(return Action::Quit, "expected builtin type specifier");
                 return Action::Quit;
         }
 
@@ -183,7 +183,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 break;
 
             default:
-                PSYCHE_FAIL_0(return Action::Quit);
+                PSY_FAIL_ASSERT_0(return Action::Quit);
                 return Action::Quit;
         }
 
@@ -228,7 +228,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
             break;
 
         default:
-            PSYCHE_FAIL_0(return Action::Quit);
+            PSY_FAIL_ASSERT_0(return Action::Quit);
             return Action::Quit;
     }
 
@@ -247,7 +247,7 @@ SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 
 SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node)
 {
-    PSYCHE_ASSERT_0(!tySyms_.empty(), return Action::Quit);
+    PSY_ASSERT_0(!tySyms_.empty(), return Action::Quit);
 
     Semantics_TypeQualifiers::qualify(node->qualifierKeyword(),
                                       tySyms_.top(),

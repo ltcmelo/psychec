@@ -23,27 +23,27 @@
 
 #include <iostream>
 
-#define PSYCHE_ASSERT(COND, CODE, MSG) \
+#define PSY_ASSERT(COND, CODE, MSG) \
     do { \
         if (COND) {} \
         else { \
-            std::cout << "[ASSERT] at " \
+            std::cout << "[ASSERT FAILURE] at " \
                       << __FILE__ << ":" << __LINE__ << " " \
                       << MSG << std::endl; \
             CODE; \
         } \
     } while (0)
 
-#define PSYCHE_ASSERT_0(COND, CODE) PSYCHE_ASSERT(COND, CODE, "<empty message>")
+#define PSY_ASSERT_0(COND, CODE) PSY_ASSERT(COND, CODE, "<empty message>")
 
-#define PSYCHE_FAIL(CODE, MSG) \
+#define PSY_FAIL_ASSERT(CODE, MSG) \
     do { \
-        std::cout << "[FAIL] at " \
+        std::cout << "[ASSERT FAILURE] at " \
                   << __FILE__ << ":" << __LINE__ << " " \
                   << MSG << std::endl; \
         CODE; \
     } while (0)
 
-#define PSYCHE_FAIL_0(CODE) PSYCHE_FAIL(CODE, "<empty message>")
+#define PSY_FAIL_ASSERT_0(CODE) PSY_FAIL_ASSERT(CODE, "<empty message>")
 
 #endif

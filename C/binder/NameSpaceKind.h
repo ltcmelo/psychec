@@ -59,7 +59,7 @@ inline std::string PSY_C_API to_string(NameSpaceKind nsK)
         case NameSpaceKind::Ordinary:
             return "Ordinary";
         default:
-            PSYCHE_FAIL_0(return "");
+            PSY_FAIL_ASSERT_0(return "");
             return "<INVALID or UNSPECIFIED NameSpaceKind>";
     }
 }

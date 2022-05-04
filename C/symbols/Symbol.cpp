@@ -47,7 +47,7 @@ const Assembly* Symbol::owningAssembly() const
             return compilation->assembly();
     }
 
-    PSYCHE_FAIL(return nullptr, "expected assembly");
+    PSY_FAIL_ASSERT(return nullptr, "expected assembly");
     return nullptr;
 }
 
@@ -107,7 +107,7 @@ std::string to_string(const Symbol& sym)
         case SymbolKind::Type:
             return to_string(*sym.asType());
         default:
-            PSYCHE_FAIL_0(return "");
+            PSY_FAIL_ASSERT_0(return "");
             return "<INVALID or UNSPECIFIED symbol kind>";
     }
 }

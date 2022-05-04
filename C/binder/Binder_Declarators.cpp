@@ -116,14 +116,14 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
                     break;
 
                 default:
-                    PSYCHE_FAIL_0(return Action::Quit);
+                    PSY_FAIL_ASSERT_0(return Action::Quit);
             }
 
             break;
         }
 
         default:
-            PSYCHE_FAIL_0(return Action::Quit);
+            PSY_FAIL_ASSERT_0(return Action::Quit);
     }
 
     popSym();
@@ -148,7 +148,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             break;
 
         default:
-            PSYCHE_FAIL_0(return Action::Quit);
+            PSY_FAIL_ASSERT_0(return Action::Quit);
             return Action::Quit;
     }
 
@@ -168,7 +168,9 @@ SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* 
 
 SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* node)
 {
-    PSYCHE_ASSERT_0(!tySyms_.empty(), return  Action::Skip);
+    PSY_ASSERT_0(!tySyms_.empty(), return  Action::Skip);
+    PSY_ASSERT_0(tySyms_.top()->typeKind() == TypeKind::Function, return Action::Skip);
+
     auto funcTySym = tySyms_.top()->asFunctionType();
 
     for (auto declIt = node->parameters(); declIt; declIt = declIt->next) {
@@ -239,19 +241,19 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
                             break;
 
                         default:
-                            PSYCHE_FAIL_0(return Action::Quit);
+                            PSY_FAIL_ASSERT_0(return Action::Quit);
                             break;
                     }
                     break;
 
                 default:
-                    PSYCHE_FAIL_0(return Action::Quit);
+                    PSY_FAIL_ASSERT_0(return Action::Quit);
                     break;
             }
             break;
 
         default:
-            PSYCHE_FAIL_0(break);
+            PSY_FAIL_ASSERT_0(break);
             break;
     }
 
