@@ -168,11 +168,18 @@ SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* 
 
 SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* node)
 {
+    PSYCHE_ASSERT_0(!tySyms_.empty(), return  Action::Skip);
+    auto funcTySym = tySyms_.top()->asFunctionType();
+
     for (auto declIt = node->parameters(); declIt; declIt = declIt->next) {
         TySymContT tySyms;
         std::swap(tySyms_, tySyms);
 
         visit(declIt->value);
+
+        auto parmTySym = tySyms_.top();
+        popTySym();
+        funcTySym->addParameter(parmTySym);
 
         std::swap(tySyms_, tySyms);
     }

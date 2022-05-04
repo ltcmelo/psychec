@@ -230,7 +230,7 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration(const ParameterDeclarati
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*)
 {
-    popTySym();
+//    popTySym();
 
     return Action::Skip;
 }

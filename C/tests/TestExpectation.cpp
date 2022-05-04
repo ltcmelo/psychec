@@ -23,14 +23,35 @@
 using namespace psy;
 using namespace  C;
 
-TypeSpecSummary::TypeSpecSummary()
+TypeSpecSummary::TypeSpecSummary(DeclSummary& declSummary)
+    : declSummary_(declSummary)
 {
+}
+
+DeclSummary& TypeSpecSummary::basis(std::string name,
+                                   NamedTypeKind tyNameK,
+                                   BuiltinTypeKind builtinTypeKind,
+                                   CVR cvr)
+{
+    specTyName_ = std::move(name);
+    specTyK_ = tyNameK;
+    specTyBuiltinK_ = builtinTypeKind;
+    specTyCVR_ = cvr;
+    return declSummary_;
+}
+
+DeclSummary &TypeSpecSummary::deriv(TypeKind tyKind, CVR cvr)
+{
+    derivTyKs_.push_back(tyKind);
+    derivTyCVRs_.push_back(cvr);
+    return declSummary_;;
 }
 
 DeclSummary::DeclSummary()
     : valK_(ValueKind::UNSPECIFIED)
     , tyK_(TypeKind::UNSPECIFIED)
     , scopeK_(ScopeKind::UNSPECIFIED)
+    , TypeSpec(*this)
 {}
 
 DeclSummary& DeclSummary::Value(std::string name, ValueKind valK, ScopeKind scopeK)
@@ -58,23 +79,10 @@ DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
     return *this;
 }
 
-DeclSummary& DeclSummary::baseTySpec(std::string name,
-                                     NamedTypeKind tyNameK,
-                                     BuiltinTypeKind builtinTypeKind,
-                                     CVR cvr)
+TypeSpecSummary& DeclSummary::WithParameter()
 {
-    tySpec_.specTyName_ = std::move(name);
-    tySpec_.specTyK_ = tyNameK;
-    tySpec_.specTyBuiltinK_ = builtinTypeKind;
-    tySpec_.specTyCVR_ = cvr;
-    return *this;
-}
-
-DeclSummary& DeclSummary::derivTySpec(TypeKind kind, CVR cvr)
-{
-    tySpec_.derivTyKs_.push_back(kind);
-    tySpec_.derivTyCVRs_.push_back(cvr);
-    return *this;
+    parmsTySpecs_.emplace_back(*this);
+    return parmsTySpecs_.back();
 }
 
 Expectation::Expectation()

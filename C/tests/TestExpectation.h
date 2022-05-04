@@ -48,15 +48,20 @@ enum class CVR
     None
 };
 
+
+struct DeclSummary;
+
 struct TypeSpecSummary
 {
-    TypeSpecSummary();
+    TypeSpecSummary(DeclSummary& declSummary);
 
-    TypeSpecSummary& base(std::string name,
-                          NamedTypeKind tyNameK,
-                          BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
-                          CVR cvr = CVR::None);
-    TypeSpecSummary& deriv(TypeKind tyKind, CVR cvr = CVR::None);
+    DeclSummary& declSummary_;
+
+    DeclSummary& basis(std::string name,
+                      NamedTypeKind tyNameK,
+                      BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
+                      CVR cvr = CVR::None);
+    DeclSummary& deriv(TypeKind tyKind, CVR cvr = CVR::None);
 
     std::string specTyName_;
     NamedTypeKind specTyK_;
@@ -64,6 +69,7 @@ struct TypeSpecSummary
     CVR specTyCVR_;
     std::vector<TypeKind> derivTyKs_;
     std::vector<CVR> derivTyCVRs_;
+
 };
 
 struct DeclSummary
@@ -83,15 +89,10 @@ struct DeclSummary
     TypeKind tyK_;
     ScopeKind scopeK_;
 
-    DeclSummary& baseTySpec(std::string name,
-                            NamedTypeKind tyNameK,
-                            BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
-                            CVR cvr = CVR::None);
-    DeclSummary& derivTySpec(TypeKind tyKind, CVR cvr = CVR::None);
+    TypeSpecSummary TypeSpec;
 
-    TypeSpecSummary tySpec_;
-    TypeSpecSummary parm1TySpec_;
-    TypeSpecSummary parm2TySpec_;
+    TypeSpecSummary& WithParameter();
+    std::vector<TypeSpecSummary> parmsTySpecs_;
 };
 
 struct Expectation
