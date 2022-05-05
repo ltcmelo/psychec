@@ -26,7 +26,7 @@
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxReference.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
 
 #include <algorithm>
 #include <sstream>

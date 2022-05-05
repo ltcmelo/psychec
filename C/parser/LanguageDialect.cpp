@@ -21,7 +21,7 @@
 
 #include "LanguageDialect.h"
 
-#include "common/infra/PsycheAssert.h"
+#include "common/infra/Assertions.h"
 
 #include <type_traits>
 

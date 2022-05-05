@@ -30,7 +30,7 @@
 #include "syntax/SyntaxLexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
 #include "../common/text/TextElementTable.h"
 
 #include <algorithm>

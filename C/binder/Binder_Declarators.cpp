@@ -31,7 +31,7 @@
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
 
 #include <iostream>
 

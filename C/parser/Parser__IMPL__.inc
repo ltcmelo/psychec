@@ -30,7 +30,7 @@
 #include "syntax/SyntaxToken.h"
 #include "syntax/SyntaxUtilities.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
 
 #include <cstring>
 #include <iostream>

@@ -23,7 +23,7 @@
 
 #include "symbols/Symbol_ALL.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
 
 #include <sstream>
 

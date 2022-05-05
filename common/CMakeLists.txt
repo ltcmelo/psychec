@@ -22,7 +22,7 @@ set(COMMON_SOURCES
 
     # Infra
     ${PROJECT_SOURCE_DIR}/infra/Pimpl.h
-    ${PROJECT_SOURCE_DIR}/infra/PsycheAssert.h
+    ${PROJECT_SOURCE_DIR}/infra/Assertions.h
 
     # Text
     ${PROJECT_SOURCE_DIR}/text/SourceText.h

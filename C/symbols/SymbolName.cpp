@@ -22,7 +22,7 @@
 
 #include "SymbolName_ALL.h"
 
-#include "common/infra/PsycheAssert.h"
+#include "common/infra/Assertions.h"
 
 using namespace psy;
 using namespace C;

@@ -23,7 +23,7 @@
 
 #include "API.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
 
 #include <cstdint>
 #include <string>
