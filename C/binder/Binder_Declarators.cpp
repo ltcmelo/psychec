@@ -32,6 +32,7 @@
 #include "syntax/SyntaxUtilities.h"
 
 #include "../common/infra/Assertions.h"
+#include "../common/infra/Traces.h"
 
 #include <iostream>
 
@@ -95,8 +96,13 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
     popSym();
 
     auto tySym = tySyms_.top();
+
+    if (!pendingFunTySyms_.empty())
+        pendingFunTySyms_.top()->addParameter(tySym);
+
     switch (tySym->typeKind()) {
         case TypeKind::UNSPECIFIED:
+            PSY_UNEXPECTED_0(return Action::Quit);
             break;
 
         case TypeKind::Array:
@@ -152,10 +158,11 @@ SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* 
 
 SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* node)
 {
-    PSY_ASSERT_0(!tySyms_.empty(), return  Action::Skip);
-    PSY_ASSERT_0(tySyms_.top()->typeKind() == TypeKind::Function, return Action::Skip);
+    PSY_ASSERT_0(!tySyms_.empty()
+                     && tySyms_.top()->typeKind() == TypeKind::Function,
+                 return Action::Quit);
 
-    auto funcTySym = tySyms_.top()->asFunctionType();
+    pendingFunTySyms_.push(tySyms_.top()->asFunctionType());
 
     for (auto declIt = node->parameters(); declIt; declIt = declIt->next) {
         TySymContT tySyms;
@@ -163,12 +170,10 @@ SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* 
 
         visit(declIt->value);
 
-        auto parmTySym = tySyms_.top();
-        popTySym();
-        funcTySym->addParameter(parmTySym);
-
         std::swap(tySyms_, tySyms);
     }
+
+    pendingFunTySyms_.pop();
 
     return Action::Skip;
 }

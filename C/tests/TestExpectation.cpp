@@ -79,9 +79,14 @@ DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
     return *this;
 }
 
-TypeSpecSummary& DeclSummary::WithParameter()
+TypeSpecSummary& DeclSummary::TypeSpec_NewParameter()
 {
     parmsTySpecs_.emplace_back(*this);
+    return parmsTySpecs_.back();
+}
+
+TypeSpecSummary& DeclSummary::TypeSpec_Continue()
+{
     return parmsTySpecs_.back();
 }
 

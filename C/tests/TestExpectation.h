@@ -90,8 +90,8 @@ struct DeclSummary
     ScopeKind scopeK_;
 
     TypeSpecSummary TypeSpec;
-
-    TypeSpecSummary& WithParameter();
+    TypeSpecSummary& TypeSpec_NewParameter();
+    TypeSpecSummary& TypeSpec_Continue();
     std::vector<TypeSpecSummary> parmsTySpecs_;
 };
 
