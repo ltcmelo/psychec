@@ -161,18 +161,18 @@ SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* 
     PSY_ASSERT_0(!tySyms_.empty()
                      && tySyms_.top()->typeKind() == TypeKind::Function,
                  return Action::Quit);
+    FunctionTypeSymbol* funcTySym = tySyms_.top()->asFunctionType();
 
-    pendingFunTySyms_.push(tySyms_.top()->asFunctionType());
+    pendingFunTySyms_.push(funcTySym);
 
     for (auto declIt = node->parameters(); declIt; declIt = declIt->next) {
         TySymContT tySyms;
         std::swap(tySyms_, tySyms);
-
         visit(declIt->value);
-
         std::swap(tySyms_, tySyms);
     }
 
+    PSY_ASSERT_0(!pendingFunTySyms_.empty(), return Action::Quit);
     pendingFunTySyms_.pop();
 
     return Action::Skip;
