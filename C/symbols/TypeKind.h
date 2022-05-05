@@ -60,7 +60,7 @@ inline std::string PSY_C_API to_string(TypeKind tyKind)
         case TypeKind::Pointer:
             return "Pointer";
         default:
-            PSY_UNEXPECTED_0(return "<INVALID or UNSPECIFIED TypeKind>");
+            PSY_TRACE_ESCAPE_0(return "<INVALID or UNSPECIFIED TypeKind>");
     }
 }
 

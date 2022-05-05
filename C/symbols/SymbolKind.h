@@ -60,7 +60,7 @@ inline std::string PSY_C_API to_string(SymbolKind kind)
         case SymbolKind::Type:
             return "Type";
         default:
-            PSY_UNEXPECTED_0(return "<INVALID or UNSPECIFIED SymbolKind>");
+            PSY_TRACE_ESCAPE_0(return "<INVALID or UNSPECIFIED SymbolKind>");
     }
 }
 

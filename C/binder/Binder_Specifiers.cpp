@@ -149,7 +149,7 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
                 builtTyK = BuiltinTypeKind::Int_U;
                 break;
             default:
-                PSY_UNEXPECTED(return Action::Quit, "expected builtin type specifier");
+                PSY_TRACE_ESCAPE(return Action::Quit, "expected builtin type specifier");
                 return Action::Quit;
         }
 
@@ -183,7 +183,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 break;
 
             default:
-                PSY_UNEXPECTED_0(return Action::Quit);
+                PSY_TRACE_ESCAPE_0(return Action::Quit);
                 return Action::Quit;
         }
 
@@ -228,7 +228,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
             break;
 
         default:
-            PSY_UNEXPECTED_0(return Action::Quit);
+            PSY_TRACE_ESCAPE_0(return Action::Quit);
             return Action::Quit;
     }
 

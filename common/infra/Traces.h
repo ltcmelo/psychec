@@ -23,14 +23,14 @@
 
 #include <iostream>
 
-#define PSY_UNEXPECTED(CODE, MSG) \
+#define PSY_TRACE_ESCAPE(CODE, MSG) \
 do { \
-    std::cout << "[UNEXPECTED] at " \
+    std::cout << "[ESCAPE] at " \
               << __FILE__ << ":" << __LINE__ << " " \
               << MSG << std::endl; \
     CODE; \
 } while (0)
 
-#define PSY_UNEXPECTED_0(CODE) PSY_UNEXPECTED(CODE, "<empty message>")
+#define PSY_TRACE_ESCAPE_0(CODE) PSY_TRACE_ESCAPE(CODE, "<empty message>")
 
 #endif

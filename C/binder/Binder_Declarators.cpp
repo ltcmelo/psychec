@@ -102,8 +102,7 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 
     switch (tySym->typeKind()) {
         case TypeKind::UNSPECIFIED:
-            PSY_UNEXPECTED_0(return Action::Quit);
-            break;
+            PSY_TRACE_ESCAPE_0(return Action::Quit);
 
         case TypeKind::Array:
         case TypeKind::Function:
@@ -138,7 +137,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             break;
 
         default:
-            PSY_UNEXPECTED_0(return Action::Quit);
+            PSY_TRACE_ESCAPE_0(return Action::Quit);
             return Action::Quit;
     }
 
@@ -161,7 +160,7 @@ SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* 
     PSY_ASSERT_0(!tySyms_.empty()
                      && tySyms_.top()->typeKind() == TypeKind::Function,
                  return Action::Quit);
-    FunctionTypeSymbol* funcTySym = tySyms_.top()->asFunctionType();
+    auto funcTySym = tySyms_.top()->asFunctionType();
 
     pendingFunTySyms_.push(funcTySym);
 
@@ -230,20 +229,17 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
                             break;
 
                         default:
-                            PSY_UNEXPECTED_0(return Action::Quit);
-                            break;
+                            PSY_TRACE_ESCAPE_0(return Action::Quit);
                     }
                     break;
 
                 default:
-                    PSY_UNEXPECTED_0(return Action::Quit);
-                    break;
+                    PSY_TRACE_ESCAPE_0(return Action::Quit);
             }
             break;
 
         default:
-            PSY_UNEXPECTED_0(break);
-            break;
+            PSY_TRACE_ESCAPE_0(break);
     }
 
     Symbol* sym = syms_.top();
