@@ -101,9 +101,6 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
         pendingFunTySyms_.top()->addParameter(tySym);
 
     switch (tySym->typeKind()) {
-        case TypeKind::UNSPECIFIED:
-            PSY_TRACE_ESCAPE_0(return Action::Quit);
-
         case TypeKind::Array:
         case TypeKind::Function:
         case TypeKind::Pointer:
@@ -112,6 +109,9 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 
         case TypeKind::Named:
             break;
+
+        default:
+            PSY_TRACE_ESCAPE_0(return Action::Quit);
     }
 
     auto typeableSym = TypeClass_TypeableSymbol::asInstance(sym);
@@ -138,7 +138,6 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
 
         default:
             PSY_TRACE_ESCAPE_0(return Action::Quit);
-            return Action::Quit;
     }
 
     visit(node->innerDeclarator());
