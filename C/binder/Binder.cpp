@@ -180,7 +180,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
             break;
 
         default:
-            PSY_FAIL_ASSERT_0(return Action::Quit);
+            PSY_UNEXPECTED_0(return Action::Quit);
             return Action::Quit;
     }
 

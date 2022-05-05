@@ -23,27 +23,31 @@
 
 #include <iostream>
 
-#define PSY_ASSERT(COND, CODE, MSG) \
-    do { \
-        if (COND) {} \
-        else { \
-            std::cout << "[ASSERT FAILURE] at " \
-                      << __FILE__ << ":" << __LINE__ << " " \
-                      << MSG << std::endl; \
-            CODE; \
-        } \
-    } while (0)
-
-#define PSY_ASSERT_0(COND, CODE) PSY_ASSERT(COND, CODE, "<empty message>")
-
-#define PSY_FAIL_ASSERT(CODE, MSG) \
-    do { \
+#ifndef NDEBUG
+    #define PSY_ASSERT(COND, CODE, MSG) \
+do { \
+    if (COND) {} \
+    else { \
         std::cout << "[ASSERT FAILURE] at " \
                   << __FILE__ << ":" << __LINE__ << " " \
                   << MSG << std::endl; \
         CODE; \
-    } while (0)
+    } \
+} while (0)
+    #define PSY_ASSERT_0(COND, CODE) PSY_ASSERT(COND, CODE, "<empty message>")
+#else
+    #define PSY_ASSERT(COND, CODE, MSG)
+    #define PSY_ASSERT_0(COND, CODE)
+#endif
 
-#define PSY_FAIL_ASSERT_0(CODE) PSY_FAIL_ASSERT(CODE, "<empty message>")
+#define PSY_UNEXPECTED(CODE, MSG) \
+do { \
+    std::cout << "[UNEXPECTED] at " \
+              << __FILE__ << ":" << __LINE__ << " " \
+              << MSG << std::endl; \
+    CODE; \
+} while (0)
+
+#define PSY_UNEXPECTED_0(CODE) PSY_UNEXPECTED(CODE, "<empty message>")
 
 #endif

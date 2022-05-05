@@ -92,41 +92,25 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
     visit(decltor);
 
     auto sym = syms_.top();
-    switch (sym->kind()) {
-        case SymbolKind::Function: {
-            auto funcSym = sym->asFunction();
-            funcSym->setType(tySyms_.top());
+    popSym();
+
+    auto tySym = tySyms_.top();
+    switch (tySym->typeKind()) {
+        case TypeKind::UNSPECIFIED:
+            break;
+
+        case TypeKind::Array:
+        case TypeKind::Function:
+        case TypeKind::Pointer:
             popTySym();
             break;
-        }
 
-        case SymbolKind::Value: {
-            auto valSym = sym->asValue();
-            valSym->setType(tySyms_.top());
-
-            switch (decltor->kind())
-            {
-                case FunctionDeclarator:
-                case ArrayDeclarator:
-                case PointerDeclarator:
-                    popTySym();
-                    break;
-
-                case IdentifierDeclarator:
-                    break;
-
-                default:
-                    PSY_FAIL_ASSERT_0(return Action::Quit);
-            }
-
+        case TypeKind::Named:
             break;
-        }
-
-        default:
-            PSY_FAIL_ASSERT_0(return Action::Quit);
     }
 
-    popSym();
+    auto typeableSym = TypeClass_TypeableSymbol::asInstance(sym);
+    typeableSym->setType(tySym);
 
     return Action::Skip;
 }
@@ -148,7 +132,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             break;
 
         default:
-            PSY_FAIL_ASSERT_0(return Action::Quit);
+            PSY_UNEXPECTED_0(return Action::Quit);
             return Action::Quit;
     }
 
@@ -241,19 +225,19 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
                             break;
 
                         default:
-                            PSY_FAIL_ASSERT_0(return Action::Quit);
+                            PSY_UNEXPECTED_0(return Action::Quit);
                             break;
                     }
                     break;
 
                 default:
-                    PSY_FAIL_ASSERT_0(return Action::Quit);
+                    PSY_UNEXPECTED_0(return Action::Quit);
                     break;
             }
             break;
 
         default:
-            PSY_FAIL_ASSERT_0(break);
+            PSY_UNEXPECTED_0(break);
             break;
     }
 
