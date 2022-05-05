@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_ASSERT_H__
-#define PSYCHE_ASSERT_H__
+#ifndef PSYCHE_ASSERTIONS_H__
+#define PSYCHE_ASSERTIONS_H__
 
 #include <iostream>
 
@@ -39,15 +39,5 @@ do { \
     #define PSY_ASSERT(COND, CODE, MSG)
     #define PSY_ASSERT_0(COND, CODE)
 #endif
-
-#define PSY_UNEXPECTED(CODE, MSG) \
-do { \
-    std::cout << "[UNEXPECTED] at " \
-              << __FILE__ << ":" << __LINE__ << " " \
-              << MSG << std::endl; \
-    CODE; \
-} while (0)
-
-#define PSY_UNEXPECTED_0(CODE) PSY_UNEXPECTED(CODE, "<empty message>")
 
 #endif

@@ -24,7 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/Assertions.h"
+#include "../common/infra/Traces.h"
 
 #include <cstdint>
 #include <string>
@@ -58,8 +58,7 @@ inline std::string PSY_C_API to_string(ScopeKind scopeK)
         case ScopeKind::Block:
             return "Block";
         default:
-            PSY_UNEXPECTED_0(return "");
-            return "<INVALID or UNSPECIFIED ScopeKind>";
+            PSY_UNEXPECTED_0(return "<INVALID or UNSPECIFIED ScopeKind>");
     }
 }
 

@@ -23,7 +23,7 @@
 
 #include "API.h"
 
-#include "../common/infra/Assertions.h"
+#include "../common/infra/Traces.h"
 
 #include <cstdint>
 #include <string>
@@ -75,8 +75,7 @@ inline std::string PSY_C_API to_string(TagSymbolNameKind tagK)
         case TagSymbolNameKind::Enumeration:
             return "Enumeration";
         default:
-            PSY_UNEXPECTED_0(return "");
-            return "<INVALID or UNSPECIFIED TagSymbolNameKind>";
+            PSY_UNEXPECTED_0(return "<INVALID or UNSPECIFIED TagSymbolNameKind>");
     }
 }
 
