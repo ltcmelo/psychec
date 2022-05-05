@@ -18,32 +18,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_ASSERT_H__
-#define PSYCHE_ASSERT_H__
+#ifndef PSYCHE_ASSERTIONS_H__
+#define PSYCHE_ASSERTIONS_H__
 
 #include <iostream>
 
-#define PSYCHE_ASSERT(COND, CODE, MSG) \
-    do { \
-        if (COND) {} \
-        else { \
-            std::cout << "[ASSERT] at " \
-                      << __FILE__ << ":" << __LINE__ << " " \
-                      << MSG << std::endl; \
-            CODE; \
-        } \
-    } while (0)
-
-#define PSYCHE_ASSERT_0(COND, CODE) PSYCHE_ASSERT(COND, CODE, "<empty message>")
-
-#define PSYCHE_FAIL(CODE, MSG) \
-    do { \
-        std::cout << "[FAIL] at " \
+#ifndef NDEBUG
+    #define PSY_ASSERT(COND, CODE, MSG) \
+do { \
+    if (COND) {} \
+    else { \
+        std::cout << "[ASSERT FAILURE] at " \
                   << __FILE__ << ":" << __LINE__ << " " \
                   << MSG << std::endl; \
         CODE; \
-    } while (0)
-
-#define PSYCHE_FAIL_0(CODE) PSYCHE_FAIL(CODE, "<empty message>")
+    } \
+} while (0)
+    #define PSY_ASSERT_0(COND, CODE) PSY_ASSERT(COND, CODE, "<empty message>")
+#else
+    #define PSY_ASSERT(COND, CODE, MSG)
+    #define PSY_ASSERT_0(COND, CODE)
+#endif
 
 #endif

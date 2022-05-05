@@ -20,7 +20,7 @@
 
 #include "SymbolName_Tag.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
 
 using namespace psy;
 using namespace C;
@@ -49,7 +49,7 @@ std::string TagSymbolName::text() const
             prefix = "enum ";
             break;
         default:
-            PSYCHE_FAIL_0(return "");
+            PSY_TRACE_ESCAPE_0(return "");
             return "<INVALID or UNSPECIFIED TagSymbolNameKind>";
     }
     return prefix + tag_;

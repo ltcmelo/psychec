@@ -128,16 +128,16 @@ bool typeMatchesCVR(const TypeSymbol* tySym, CVR cvr)
     return true;
 }
 
-bool typeMatchesBinding(const TypeSymbol* tySym, const BindingSummary& binding)
+bool typeMatchesBinding(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
 {
-    for (auto i = binding.derivTyKs_.size(); i > 0; --i) {
-        auto derivTyK = binding.derivTyKs_[i - 1];
+    for (auto i = tySpec.derivTyKs_.size(); i > 0; --i) {
+        auto derivTyK = tySpec.derivTyKs_[i - 1];
         if (derivTyK != tySym->typeKind()) {
             DETAIL_MISMATCH("derived type kind");
             return false;
         }
 
-        auto derivTyCVR = binding.derivTyCVRs_[i - 1];
+        auto derivTyCVR = tySpec.derivTyCVRs_[i - 1];
         if (!typeMatchesCVR(tySym, derivTyCVR)) {
             DETAIL_MISMATCH("derived type CVR");
             return false;
@@ -169,29 +169,29 @@ bool typeMatchesBinding(const TypeSymbol* tySym, const BindingSummary& binding)
         return false;
     }
 
-    if (namedTySym->name()->text() != binding.specTyName_) {
+    if (namedTySym->name()->text() != tySpec.specTyName_) {
         DETAIL_MISMATCH("type name");
         return false;
     }
 
-    if (namedTySym->namedTypeKind() != binding.specTyK_) {
+    if (namedTySym->namedTypeKind() != tySpec.specTyK_) {
         DETAIL_MISMATCH("type kind");
         return false;
     }
 
-    if (binding.specTyBuiltinK_ != BuiltinTypeKind::UNSPECIFIED) {
+    if (tySpec.specTyBuiltinK_ != BuiltinTypeKind::UNSPECIFIED) {
         if (!tySym->asNamedType()) {
             DETAIL_MISMATCH("not a builtin");
             return false;
         }
 
-        if (tySym->asNamedType()->builtinTypeKind() != binding.specTyBuiltinK_) {
+        if (tySym->asNamedType()->builtinTypeKind() != tySpec.specTyBuiltinK_) {
             DETAIL_MISMATCH("builtin kind");
             return false;
         }
     }
 
-    if (!typeMatchesCVR(tySym, binding.specTyCVR_)) {
+    if (!typeMatchesCVR(tySym, tySpec.specTyCVR_)) {
         DETAIL_MISMATCH("CVR");
         return false;
     }
@@ -199,12 +199,12 @@ bool typeMatchesBinding(const TypeSymbol* tySym, const BindingSummary& binding)
     return true;
 }
 
-bool functionMatchesBinding(const FunctionSymbol* funcSym, const BindingSummary& binding)
+bool functionMatchesBinding(const FunctionSymbol* funcSym, const DeclSummary& decl)
 {
     if (!funcSym->name())
         return REJECT_CANDIDATE(funcSym, "empty name");
 
-    if (funcSym->name()->text() != binding.name_)
+    if (funcSym->name()->text() != decl.name_)
         return REJECT_CANDIDATE(funcSym, "name mismatch");
 
     if (funcSym->type() == nullptr)
@@ -215,38 +215,53 @@ bool functionMatchesBinding(const FunctionSymbol* funcSym, const BindingSummary&
 
     const FunctionTypeSymbol* funcTySym = funcSym->type()->asFunctionType();
 
-    if (!typeMatchesBinding(funcTySym->returnType(), binding))
+    if (!typeMatchesBinding(funcTySym->returnType(), decl.TypeSpec))
         return REJECT_CANDIDATE(funcSym, "return type mismatch");
+
+    const auto parms = funcTySym->parameterTypes();
+    if (parms.size() != decl.parmsTySpecs_.size())
+        return REJECT_CANDIDATE(funcSym, "number of parameters");
+
+    for (auto i = 0U; i < parms.size(); ++i) {
+        const TypeSymbol* funcParmTySym = parms[i];
+        if (!typeMatchesBinding(funcParmTySym, decl.parmsTySpecs_[i]))
+            return REJECT_CANDIDATE(funcSym, "parameter type mismatch");
+    }
 
     return true;
 }
 
-bool valueMatchesBinding(const ValueSymbol* valSym, const BindingSummary& binding)
+bool valueMatchesBinding(const ValueSymbol* valSym, const DeclSummary& decl)
 {
-    if (valSym->valueKind() != binding.valK_)
+    if (valSym->valueKind() != decl.valK_)
         return REJECT_CANDIDATE(valSym, "value kind mismatch");
 
     if (!valSym->name())
         return REJECT_CANDIDATE(valSym, "empty name");
 
-    if (valSym->name()->text() != binding.name_)
+    if (valSym->name()->text() != decl.name_)
         return REJECT_CANDIDATE(valSym, "name mismatch");
 
     if (valSym->type() == nullptr)
         return REJECT_CANDIDATE(valSym, "null type");
 
-    if (!typeMatchesBinding(valSym->type(), binding))
+    if (!typeMatchesBinding(valSym->type(), decl.TypeSpec))
         return REJECT_CANDIDATE(valSym, "type mismatch");
 
     return true;
 }
 
-bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const BindingSummary& binding)
+bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const DeclSummary& binding)
 {
     const Symbol* candSym = sym.get();
 
     if (candSym->kind() != binding.symK_)
         return REJECT_CANDIDATE(candSym, "symbol kind mismatch");
+
+    if (binding.scopeK_ != ScopeKind::UNSPECIFIED) { // TODO: add scope to test cases
+        if (candSym->scope()->kind() != binding.scopeK_)
+            return REJECT_CANDIDATE(candSym, "scope kind mismatch");
+    }
 
     switch (binding.symK_)
     {
@@ -290,6 +305,9 @@ void BinderTest::bind(std::string text, Expectation X)
         PSYCHE_TEST_FAIL("link unit not found");
 
     for (const auto& binding : X.bindings_) {
+#ifdef DEBUG_BINDING_SEARCH
+        std::cout << "\n\t\t...";
+#endif
         using namespace std::placeholders;
 
         auto pred = std::bind(symbolMatchesBinding, _1, binding);
@@ -300,5 +318,10 @@ void BinderTest::bind(std::string text, Expectation X)
                     + binding.name_ + " " + to_string(binding.symK_);
             PSYCHE_TEST_FAIL(s);
         }
+
+#ifdef DEBUG_BINDING_SEARCH
+        std::cout << "\n\t\tmatch! ";
+#endif
+
     }
 }

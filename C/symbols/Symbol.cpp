@@ -26,7 +26,7 @@
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxReference.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
 
 #include <algorithm>
 #include <sstream>
@@ -47,8 +47,13 @@ const Assembly* Symbol::owningAssembly() const
             return compilation->assembly();
     }
 
-    PSYCHE_FAIL(return nullptr, "expected assembly");
+    PSY_TRACE_ESCAPE(return nullptr, "expected assembly");
     return nullptr;
+}
+
+const Scope *Symbol::scope() const
+{
+    return P->scope_;
 }
 
 Accessibility Symbol::declaredAccessibility() const
@@ -102,7 +107,7 @@ std::string to_string(const Symbol& sym)
         case SymbolKind::Type:
             return to_string(*sym.asType());
         default:
-            PSYCHE_FAIL_0(return "");
+            PSY_TRACE_ESCAPE_0(return "");
             return "<INVALID or UNSPECIFIED symbol kind>";
     }
 }

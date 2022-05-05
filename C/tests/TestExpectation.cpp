@@ -23,18 +23,47 @@
 using namespace psy;
 using namespace  C;
 
-BindingSummary::BindingSummary()
+TypeSpecSummary::TypeSpecSummary(DeclSummary& declSummary)
+    : declSummary_(declSummary)
+{
+}
+
+DeclSummary& TypeSpecSummary::basis(std::string name,
+                                   NamedTypeKind tyNameK,
+                                   BuiltinTypeKind builtinTypeKind,
+                                   CVR cvr)
+{
+    specTyName_ = std::move(name);
+    specTyK_ = tyNameK;
+    specTyBuiltinK_ = builtinTypeKind;
+    specTyCVR_ = cvr;
+    return declSummary_;
+}
+
+DeclSummary &TypeSpecSummary::deriv(TypeKind tyKind, CVR cvr)
+{
+    derivTyKs_.push_back(tyKind);
+    derivTyCVRs_.push_back(cvr);
+    return declSummary_;;
+}
+
+DeclSummary::DeclSummary()
+    : valK_(ValueKind::UNSPECIFIED)
+    , tyK_(TypeKind::UNSPECIFIED)
+    , scopeK_(ScopeKind::UNSPECIFIED)
+    , TypeSpec(*this)
 {}
 
-BindingSummary& BindingSummary::Value(std::string name, ValueKind valK)
+DeclSummary& DeclSummary::Value(std::string name, ValueKind valK, ScopeKind scopeK)
 {
     name_ = std::move(name);
     symK_ = SymbolKind::Value;
     valK_ = valK;
+    scopeK_ = scopeK;
     return *this;
 }
 
-BindingSummary& BindingSummary::Type(std::string name, TypeKind tyK)
+DeclSummary& DeclSummary::Type(std::string name, TypeKind tyK)
 {
     name_ = std::move(name);
     symK_ = SymbolKind::Type;
@@ -42,27 +71,23 @@ BindingSummary& BindingSummary::Type(std::string name, TypeKind tyK)
     return *this;
 }
 
-BindingSummary& BindingSummary::Function(std::string funcName)
+DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
 {
     name_ = std::move(funcName);
     symK_ = SymbolKind::Function;
+    scopeK_ = scopeK;
     return *this;
 }
 
-BindingSummary& BindingSummary::specType(std::string name, NamedTypeKind tyNameK, BuiltinTypeKind builtinTypeKind, CVR cvr)
+TypeSpecSummary& DeclSummary::TypeSpec_NewParameter()
 {
-    specTyName_ = std::move(name);
-    specTyK_ = tyNameK;
-    specTyBuiltinK_ = builtinTypeKind;
-    specTyCVR_ = cvr;
-    return *this;
+    parmsTySpecs_.emplace_back(*this);
+    return parmsTySpecs_.back();
 }
 
-BindingSummary& BindingSummary::derivType(TypeKind kind, CVR cvr)
+TypeSpecSummary& DeclSummary::TypeSpec_Continue()
 {
-    derivTyKs_.push_back(kind);
-    derivTyCVRs_.push_back(cvr);
-    return *this;
+    return parmsTySpecs_.back();
 }
 
 Expectation::Expectation()
@@ -90,7 +115,7 @@ Expectation& Expectation::ambiguity(std::string s)
     return *this;
 }
 
-Expectation& Expectation::binding(BindingSummary b)
+Expectation& Expectation::binding(DeclSummary b)
 {
     bindings_.emplace_back(std::move(b));
     return *this;

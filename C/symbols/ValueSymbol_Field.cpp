@@ -20,6 +20,8 @@
 
 #include "ValueSymbol_Field.h"
 
+#include "binder/Scope.h"
+
 #include <sstream>
 
 using namespace psy;
@@ -43,6 +45,7 @@ std::string to_string(const FieldSymbol& sym)
     oss << "{%field |";
     if (sym.name())
         oss << " " << to_string(*sym.name());
+    oss << " scope:" << to_string(sym.scope()->kind());
     oss << " %}";
 
     return oss.str();

@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,47 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_VALUE_KIND_H__
-#define PSYCHE_C_VALUE_KIND_H__
+#ifndef PSYCHE_TRACES_H__
+#define PSYCHE_TRACES_H__
 
-#include "API.h"
-#include "Fwds.h"
+#include <iostream>
 
-#include "../common/infra/Assertions.h"
+#define PSY_TRACE_ESCAPE(CODE, MSG) \
+do { \
+    std::cout << "[ESCAPE] at " \
+              << __FILE__ << ":" << __LINE__ << " " \
+              << MSG << std::endl; \
+    CODE; \
+} while (0)
 
-#include <cstdint>
-#include <string>
-
-namespace psy {
-namespace C {
-
-/**
- * \brief The ValueKind enum.
- */
-enum class ValueKind : std::uint8_t
-{
-    UNSPECIFIED = 0,
-    Field,
-    Parameter,
-    Variable
-};
-
-inline std::string PSY_C_API to_string(ValueKind valK)
-{
-    switch (valK) {
-        case ValueKind::Field:
-            return "Field";
-        case ValueKind::Parameter:
-            return "Parameter";
-        case ValueKind::Variable:
-            return "Variable";
-        default:
-            PSY_TRACE_ESCAPE_0(return "");
-            return "<INVALID or UNSPECIFIED ValueKind>";
-    }
-}
-
-} // C
-} // psy
+#define PSY_TRACE_ESCAPE_0(CODE) PSY_TRACE_ESCAPE(CODE, "<empty message>")
 
 #endif

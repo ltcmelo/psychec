@@ -58,6 +58,8 @@ private:
                        const Scope* scope,
                        const Symbol* containingSym,
                        const TypeSymbol* retTySym);
+
+    void addParameter(const TypeSymbol* parmTySym);
 };
 
 std::string PSY_C_API to_string(const FunctionTypeSymbol& tySym);

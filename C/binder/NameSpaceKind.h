@@ -24,7 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
 
 #include <cstdint>
 #include <string>
@@ -59,8 +59,7 @@ inline std::string PSY_C_API to_string(NameSpaceKind nsK)
         case NameSpaceKind::Ordinary:
             return "Ordinary";
         default:
-            PSYCHE_FAIL_0(return "");
-            return "<INVALID or UNSPECIFIED NameSpaceKind>";
+            PSY_TRACE_ESCAPE_0(return "<INVALID or UNSPECIFIED NameSpaceKind>");
     }
 }
 

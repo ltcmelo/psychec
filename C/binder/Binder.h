@@ -82,6 +82,8 @@ private:
     using TySymContT = std::stack<TypeSymbol*>;
     TySymContT tySyms_;
 
+    std::stack<FunctionTypeSymbol*> pendingFunTySyms_;
+
     template <class SymT, class... Args> std::unique_ptr<SymT> makeSymOrTySym(Args... args);
     template <class SymT, class... Args> void makeSymAndPushIt(Args... arg);
     template <class SymT, class... Args> void makeTySymAndPushIt(Args... arg);

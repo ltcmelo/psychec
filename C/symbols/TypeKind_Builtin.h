@@ -24,7 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Traces.h"
 
 #include <cstdint>
 #include <string>
@@ -135,8 +135,7 @@ PSY_C_API inline std::string PSY_C_API canonicalText(BuiltinTypeKind builtTyKind
         case BuiltinTypeKind::LongDoubleComplex:
                 return "long double _Complex";
         default:
-            PSYCHE_FAIL_0(return "");
-            return "<INVALID or UNSPECIFIED BuiltinTypeKind>";
+            PSY_TRACE_ESCAPE_0(return "<INVALID or UNSPECIFIED BuiltinTypeKind>");
     }
 }
 

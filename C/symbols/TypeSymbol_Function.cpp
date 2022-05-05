@@ -63,6 +63,11 @@ std::vector<const TypeSymbol*> FunctionTypeSymbol::parameterTypes() const
     return P_CAST->parmTySyms_;
 }
 
+void FunctionTypeSymbol::addParameter(const TypeSymbol* parmTySym)
+{
+    P_CAST->parmTySyms_.push_back(parmTySym);
+}
+
 namespace psy {
 namespace C {
 

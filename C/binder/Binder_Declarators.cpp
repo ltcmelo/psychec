@@ -31,7 +31,8 @@
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
+#include "../common/infra/Traces.h"
 
 #include <iostream>
 
@@ -92,41 +93,29 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
     visit(decltor);
 
     auto sym = syms_.top();
-    switch (sym->kind()) {
-        case SymbolKind::Function: {
-            auto funcSym = sym->asFunction();
-            funcSym->setType(tySyms_.top());
+    popSym();
+
+    auto tySym = tySyms_.top();
+
+    if (!pendingFunTySyms_.empty())
+        pendingFunTySyms_.top()->addParameter(tySym);
+
+    switch (tySym->typeKind()) {
+        case TypeKind::Array:
+        case TypeKind::Function:
+        case TypeKind::Pointer:
             popTySym();
             break;
-        }
 
-        case SymbolKind::Value: {
-            auto valSym = sym->asValue();
-            valSym->setType(tySyms_.top());
-
-            switch (decltor->kind())
-            {
-                case FunctionDeclarator:
-                case ArrayDeclarator:
-                case PointerDeclarator:
-                    popTySym();
-                    break;
-
-                case IdentifierDeclarator:
-                    break;
-
-                default:
-                    PSYCHE_FAIL_0(return Action::Quit);
-            }
-
+        case TypeKind::Named:
             break;
-        }
 
         default:
-            PSYCHE_FAIL_0(return Action::Quit);
+            PSY_TRACE_ESCAPE_0(return Action::Quit);
     }
 
-    popSym();
+    auto typeableSym = TypeClass_TypeableSymbol::asInstance(sym);
+    typeableSym->setType(tySym);
 
     return Action::Skip;
 }
@@ -148,8 +137,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             break;
 
         default:
-            PSYCHE_FAIL_0(return Action::Quit);
-            return Action::Quit;
+            PSY_TRACE_ESCAPE_0(return Action::Quit);
     }
 
     visit(node->innerDeclarator());
@@ -168,14 +156,22 @@ SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* 
 
 SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* node)
 {
+    PSY_ASSERT_0(!tySyms_.empty()
+                     && tySyms_.top()->typeKind() == TypeKind::Function,
+                 return Action::Quit);
+    auto funcTySym = tySyms_.top()->asFunctionType();
+
+    pendingFunTySyms_.push(funcTySym);
+
     for (auto declIt = node->parameters(); declIt; declIt = declIt->next) {
         TySymContT tySyms;
         std::swap(tySyms_, tySyms);
-
         visit(declIt->value);
-
         std::swap(tySyms_, tySyms);
     }
+
+    PSY_ASSERT_0(!pendingFunTySyms_.empty(), return Action::Quit);
+    pendingFunTySyms_.pop();
 
     return Action::Skip;
 }
@@ -232,20 +228,17 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
                             break;
 
                         default:
-                            PSYCHE_FAIL_0(return Action::Quit);
-                            break;
+                            PSY_TRACE_ESCAPE_0(return Action::Quit);
                     }
                     break;
 
                 default:
-                    PSYCHE_FAIL_0(return Action::Quit);
-                    break;
+                    PSY_TRACE_ESCAPE_0(return Action::Quit);
             }
             break;
 
         default:
-            PSYCHE_FAIL_0(break);
-            break;
+            PSY_TRACE_ESCAPE_0(break);
     }
 
     Symbol* sym = syms_.top();

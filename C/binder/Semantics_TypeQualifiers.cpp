@@ -22,7 +22,7 @@
 
 #include "SyntaxTree.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
 
 #include <iostream>
 
@@ -40,7 +40,7 @@ void Semantics_TypeQualifiers::qualify(SyntaxToken tyQualTk,
             break;
 
         default:
-            PSYCHE_FAIL_0(break);
+            PSY_TRACE_ESCAPE_0(break);
             break;
     }
 }

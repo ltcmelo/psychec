@@ -48,25 +48,20 @@ enum class CVR
     None
 };
 
-struct BindingSummary
+
+struct DeclSummary;
+
+struct TypeSpecSummary
 {
-    BindingSummary();
+    TypeSpecSummary(DeclSummary& declSummary);
 
-    BindingSummary& Value(std::string name, ValueKind valK);
-    BindingSummary& Type(std::string name, TypeKind tyK);
-    BindingSummary& Function(std::string funcName);
+    DeclSummary& declSummary_;
 
-    BindingSummary& specType(std::string name,
-                             NamedTypeKind tyNameK,
-                             BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
-                             CVR cvr = CVR::None);
-    BindingSummary& derivType(TypeKind tyKind, CVR cvr = CVR::None);
-
-    std::string name_;
-    SymbolKind symK_;
-    ValueKind valK_;
-    TypeKind tyK_;
-    ScopeKind scopeK_;
+    DeclSummary& basis(std::string name,
+                      NamedTypeKind tyNameK,
+                      BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
+                      CVR cvr = CVR::None);
+    DeclSummary& deriv(TypeKind tyKind, CVR cvr = CVR::None);
 
     std::string specTyName_;
     NamedTypeKind specTyK_;
@@ -74,6 +69,30 @@ struct BindingSummary
     CVR specTyCVR_;
     std::vector<TypeKind> derivTyKs_;
     std::vector<CVR> derivTyCVRs_;
+
+};
+
+struct DeclSummary
+{
+    DeclSummary();
+
+    DeclSummary& Value(std::string name,
+                       ValueKind valK,
+                       ScopeKind scopeK = ScopeKind::UNSPECIFIED);
+    DeclSummary& Type(std::string name, TypeKind tyK);
+    DeclSummary& Function(std::string funcName,
+                          ScopeKind scopeK = ScopeKind::UNSPECIFIED);
+
+    std::string name_;
+    SymbolKind symK_;
+    ValueKind valK_;
+    TypeKind tyK_;
+    ScopeKind scopeK_;
+
+    TypeSpecSummary TypeSpec;
+    TypeSpecSummary& TypeSpec_NewParameter();
+    TypeSpecSummary& TypeSpec_Continue();
+    std::vector<TypeSpecSummary> parmsTySpecs_;
 };
 
 struct Expectation
@@ -101,8 +120,8 @@ struct Expectation
     std::vector<SyntaxKind> syntaxKinds_;
     Expectation& AST(std::vector<SyntaxKind>&& v);
 
-    std::vector<BindingSummary> bindings_;
-    Expectation& binding(BindingSummary b);
+    std::vector<DeclSummary> bindings_;
+    Expectation& binding(DeclSummary b);
 };
 
 } // C

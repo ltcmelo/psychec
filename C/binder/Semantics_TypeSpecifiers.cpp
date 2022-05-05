@@ -22,7 +22,7 @@
 
 #include "SyntaxTree.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Assertions.h"
 
 #include <iostream>
 
@@ -104,7 +104,7 @@ BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
                 case Keyword_unsigned:
                     return BuiltinTypeKind::Int_U;
                 default:
-                    PSYCHE_FAIL(return builtTyKind, "expected builtin type specifier");
+                    PSY_TRACE_ESCAPE(return builtTyKind, "expected builtin type specifier");
                     return builtTyKind;
             }
 

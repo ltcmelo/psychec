@@ -24,7 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/PsycheAssert.h"
+#include "../common/infra/Traces.h"
 
 #include <cstdint>
 #include <string>
@@ -60,8 +60,7 @@ inline std::string PSY_C_API to_string(SymbolKind kind)
         case SymbolKind::Type:
             return "Type";
         default:
-            PSYCHE_FAIL_0(return "");
-            return "<INVALID or UNSPECIFIED SymbolKind>";
+            PSY_TRACE_ESCAPE_0(return "<INVALID or UNSPECIFIED SymbolKind>");
     }
 }
 

@@ -84,7 +84,7 @@ std::string PSY_C_API to_string(const TypeSymbol& tySym)
         case TypeKind::Pointer:
             return to_string(*tySym.asPointerType());
         default:
-            PSYCHE_FAIL_0(return "");
+            PSY_TRACE_ESCAPE_0(return "");
             return "<unknown type kind>";
     }
 }
