@@ -93,10 +93,6 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
     visit(decltor);
 
     auto sym = syms_.top();
-
-    std::cout << "\ndeclarator kind " << to_string(decltor->kind())
-              << "\nsymbol on top kind " << to_string(sym->kind()) << std::endl;
-
     popSym();
 
     auto tySym = tySyms_.top();
@@ -138,7 +134,6 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             break;
 
         case ParameterSuffix:
-            std::cout << "\ncreating function type!\n";
             makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
             break;
 
@@ -148,18 +143,32 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
 
     visit(node->innerDeclarator());
 
-    if (tySyms_.top()->typeKind() == TypeKind::Function) {
-        auto funcTySym = tySyms_.top()->asFunctionType();
+    switch (tySyms_.top()->typeKind()) {
+        case TypeKind::Function:
+            pendingFunTySyms_.push(tySyms_.top()->asFunctionType());
+            break;
 
-        pendingFunTySyms_.push(funcTySym);
+        case TypeKind::Array:
+            break;
+
+    default:
+            PSY_TRACE_ESCAPE_0(return Action::Quit);
     }
 
     openScope(ScopeKind::FunctionPrototype);
     visit(node->suffix());
     closeScopeAndStashIt();
 
-    if (tySyms_.top()->typeKind() == TypeKind::Function) {
-        pendingFunTySyms_.pop();
+    switch (tySyms_.top()->typeKind()) {
+        case TypeKind::Function:
+            pendingFunTySyms_.pop();
+            break;
+
+        case TypeKind::Array:
+            break;
+
+        default:
+            PSY_TRACE_ESCAPE_0(return Action::Quit);
     }
 
     return Action::Skip;
@@ -172,29 +181,6 @@ SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* 
 
 SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* node)
 {
-//    switch (tySyms_.top()->typeKind()){
-//    case TypeKind::Function:
-//            std::cout<< "\ntop is function kind\n";
-//        break;
-
-//    case TypeKind::Pointer:
-//            std::cout << "\ntop is pointer\n";
-//        break;
-
-//    default:
-//        std::cout << "\ntop is something else";
-//        break;
-//    }
-
-//    PSY_ASSERT_0(!tySyms_.empty()
-//                     && (tySyms_.top()->typeKind() == TypeKind::Function
-////                            || tySyms_.top()->typeKind() == TypeKind::Pointer
-//                         ),
-//                 return Action::Quit);
-//    auto funcTySym = tySyms_.top()->asFunctionType();
-
-//    pendingFunTySyms_.push(funcTySym);
-
     for (auto declIt = node->parameters(); declIt; declIt = declIt->next) {
         TySymContT tySyms;
         std::swap(tySyms_, tySyms);
@@ -202,15 +188,11 @@ SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* 
         std::swap(tySyms_, tySyms);
     }
 
-//    PSY_ASSERT_0(!pendingFunTySyms_.empty(), return Action::Quit);
-//    pendingFunTySyms_.pop();
-
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSyntax* node)
 {
-    std::cout << "\ncreating pointer type!\n";
     makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
 
     for (auto specIt = node->qualifiersAndAttributes(); specIt; specIt = specIt->next)

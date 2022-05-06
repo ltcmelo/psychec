@@ -864,22 +864,39 @@ void BinderTest::case0202()
 
 void BinderTest::case0203()
 {
-//    bind("void x ( y , int ) ;",
-//         Expectation()
-//             .binding(DeclSummary()
-//                      .Function("x", ScopeKind::File)
-//                      .TypeSpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
-//                      .TypeSpec_NewParameter().basis("y", NamedTypeKind::Synonym)
-//                      .TypeSpec_NewParameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
-//             .binding(DeclSummary()
-//                      .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
-//                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
-//             .binding(DeclSummary()
-//                      .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
-//                      .TypeSpec.basis("y", NamedTypeKind::Synonym)));
+    bind("void x ( y , int ) ;",
+         Expectation()
+             .binding(DeclSummary()
+                      .Function("x", ScopeKind::File)
+                      .TypeSpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                      .TypeSpec_NewParameter().basis("y", NamedTypeKind::Synonym)
+                      .TypeSpec_NewParameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+             .binding(DeclSummary()
+                      .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+             .binding(DeclSummary()
+                      .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                      .TypeSpec.basis("y", NamedTypeKind::Synonym)));
 }
 
-void BinderTest::case0204(){}
+void BinderTest::case0204()
+{
+    bind("void x ( y , z ) ;",
+         Expectation()
+             .binding(DeclSummary()
+                      .Function("x", ScopeKind::File)
+                      .TypeSpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                      .TypeSpec_NewParameter().basis("y", NamedTypeKind::Synonym)
+                      .TypeSpec_NewParameter().basis("z", NamedTypeKind::Synonym))
+             .binding(DeclSummary()
+                      .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                      .TypeSpec.basis("z", NamedTypeKind::Synonym))
+             .binding(DeclSummary()
+                      .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                      .TypeSpec.basis("y", NamedTypeKind::Synonym)));
+
+}
+
 void BinderTest::case0205(){}
 void BinderTest::case0206(){}
 void BinderTest::case0207(){}
