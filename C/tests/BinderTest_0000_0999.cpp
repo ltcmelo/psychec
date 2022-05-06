@@ -809,6 +809,114 @@ void BinderTest::case0197() {}
 void BinderTest::case0198() {}
 void BinderTest::case0199() {}
 
+
+
+void BinderTest::case0200(){}
+void BinderTest::case0201(){}
+void BinderTest::case0202(){}
+void BinderTest::case0203(){}
+void BinderTest::case0204(){}
+void BinderTest::case0205(){}
+void BinderTest::case0206(){}
+void BinderTest::case0207(){}
+void BinderTest::case0208(){}
+void BinderTest::case0209(){}
+void BinderTest::case0210(){}
+void BinderTest::case0211(){}
+void BinderTest::case0212(){}
+void BinderTest::case0213(){}
+void BinderTest::case0214(){}
+void BinderTest::case0215(){}
+void BinderTest::case0216(){}
+void BinderTest::case0217(){}
+void BinderTest::case0218(){}
+void BinderTest::case0219(){}
+void BinderTest::case0220(){}
+void BinderTest::case0221(){}
+void BinderTest::case0222(){}
+void BinderTest::case0223(){}
+void BinderTest::case0224(){}
+void BinderTest::case0225(){}
+void BinderTest::case0226(){}
+void BinderTest::case0227(){}
+void BinderTest::case0228(){}
+void BinderTest::case0229(){}
+void BinderTest::case0230(){}
+void BinderTest::case0231(){}
+void BinderTest::case0232(){}
+void BinderTest::case0233(){}
+void BinderTest::case0234(){}
+void BinderTest::case0235(){}
+void BinderTest::case0236(){}
+void BinderTest::case0237(){}
+void BinderTest::case0238(){}
+void BinderTest::case0239(){}
+void BinderTest::case0240(){}
+void BinderTest::case0241(){}
+void BinderTest::case0242(){}
+void BinderTest::case0243(){}
+void BinderTest::case0244(){}
+void BinderTest::case0245(){}
+void BinderTest::case0246(){}
+void BinderTest::case0247(){}
+void BinderTest::case0248(){}
+void BinderTest::case0249(){}
+void BinderTest::case0250(){}
+void BinderTest::case0251(){}
+void BinderTest::case0252(){}
+void BinderTest::case0253(){}
+void BinderTest::case0254(){}
+void BinderTest::case0255(){}
+void BinderTest::case0256(){}
+void BinderTest::case0257(){}
+void BinderTest::case0258(){}
+void BinderTest::case0259(){}
+void BinderTest::case0260(){}
+void BinderTest::case0261(){}
+void BinderTest::case0262(){}
+void BinderTest::case0263(){}
+void BinderTest::case0264(){}
+void BinderTest::case0265(){}
+void BinderTest::case0266(){}
+void BinderTest::case0267(){}
+void BinderTest::case0268(){}
+void BinderTest::case0269(){}
+void BinderTest::case0270(){}
+void BinderTest::case0271(){}
+void BinderTest::case0272(){}
+void BinderTest::case0273(){}
+void BinderTest::case0274(){}
+void BinderTest::case0275(){}
+void BinderTest::case0276(){}
+void BinderTest::case0277(){}
+void BinderTest::case0278(){}
+void BinderTest::case0279(){}
+void BinderTest::case0280(){}
+void BinderTest::case0281(){}
+void BinderTest::case0282(){}
+void BinderTest::case0283(){}
+void BinderTest::case0284(){}
+void BinderTest::case0285(){}
+void BinderTest::case0286(){}
+void BinderTest::case0287(){}
+void BinderTest::case0288(){}
+void BinderTest::case0289(){}
+void BinderTest::case0290(){}
+void BinderTest::case0291(){}
+void BinderTest::case0292(){}
+void BinderTest::case0293(){}
+void BinderTest::case0294(){}
+void BinderTest::case0295(){}
+void BinderTest::case0296(){}
+void BinderTest::case0297(){}
+void BinderTest::case0298(){}
+void BinderTest::case0299(){}
+
+
+
+
+
+
 void BinderTest::case0901()
 {
     CROSS_REFERENCE_TEST(ParserTest::case0028);
