@@ -53,7 +53,8 @@ public:
         Fields: 2
             + ?000-?049 -> objects
             + ?050-?099 -> objects of qualified type
-            + ?100-?149 -> pointers
+            + ?100-?129 -> pointers
+            + ?130-?149 -> pointers to functions
             + ?150-?199 -> pointers to objects of qualified type
             + ?200-?249 -> qualified pointers to objects of qualified type
             + ?250-?299 -> qualified pointers

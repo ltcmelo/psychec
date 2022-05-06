@@ -57,11 +57,14 @@ struct TypeSpecSummary
 
     DeclSummary& declSummary_;
 
-    DeclSummary& basis(std::string name,
+    DeclSummary& core(std::string name,
                       NamedTypeKind tyNameK,
                       BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
                       CVR cvr = CVR::None);
     DeclSummary& deriv(TypeKind tyKind, CVR cvr = CVR::None);
+
+    TypeSpecSummary& deriveFunc_NEW_PARM();
+    TypeSpecSummary& deriveFunc_AT_PARM();
 
     std::string specTyName_;
     NamedTypeKind specTyK_;
@@ -69,7 +72,7 @@ struct TypeSpecSummary
     CVR specTyCVR_;
     std::vector<TypeKind> derivTyKs_;
     std::vector<CVR> derivTyCVRs_;
-
+    std::vector<TypeSpecSummary> parmsTySpecs2_;
 };
 
 struct DeclSummary
@@ -90,9 +93,6 @@ struct DeclSummary
     ScopeKind scopeK_;
 
     TypeSpecSummary TypeSpec;
-    TypeSpecSummary& TypeSpec_NewParameter();
-    TypeSpecSummary& TypeSpec_Continue();
-    std::vector<TypeSpecSummary> parmsTySpecs_;
 };
 
 struct Expectation
