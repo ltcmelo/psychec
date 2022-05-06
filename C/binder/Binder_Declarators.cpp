@@ -93,6 +93,10 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
     visit(decltor);
 
     auto sym = syms_.top();
+
+    std::cout << "\ndeclarator kind " << to_string(decltor->kind())
+              << "\nsymbol on top kind " << to_string(sym->kind()) << std::endl;
+
     popSym();
 
     auto tySym = tySyms_.top();
@@ -115,6 +119,7 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
     }
 
     auto typeableSym = TypeClass_TypeableSymbol::asInstance(sym);
+    PSY_ASSERT_0(typeableSym, return Action::Quit);
     typeableSym->setType(tySym);
 
     return Action::Skip;
@@ -133,6 +138,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             break;
 
         case ParameterSuffix:
+            std::cout << "\ncreating function type!\n";
             makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
             break;
 
@@ -142,9 +148,19 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
 
     visit(node->innerDeclarator());
 
+    if (tySyms_.top()->typeKind() == TypeKind::Function) {
+        auto funcTySym = tySyms_.top()->asFunctionType();
+
+        pendingFunTySyms_.push(funcTySym);
+    }
+
     openScope(ScopeKind::FunctionPrototype);
     visit(node->suffix());
     closeScopeAndStashIt();
+
+    if (tySyms_.top()->typeKind() == TypeKind::Function) {
+        pendingFunTySyms_.pop();
+    }
 
     return Action::Skip;
 }
@@ -156,12 +172,28 @@ SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* 
 
 SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* node)
 {
-    PSY_ASSERT_0(!tySyms_.empty()
-                     && tySyms_.top()->typeKind() == TypeKind::Function,
-                 return Action::Quit);
-    auto funcTySym = tySyms_.top()->asFunctionType();
+//    switch (tySyms_.top()->typeKind()){
+//    case TypeKind::Function:
+//            std::cout<< "\ntop is function kind\n";
+//        break;
 
-    pendingFunTySyms_.push(funcTySym);
+//    case TypeKind::Pointer:
+//            std::cout << "\ntop is pointer\n";
+//        break;
+
+//    default:
+//        std::cout << "\ntop is something else";
+//        break;
+//    }
+
+//    PSY_ASSERT_0(!tySyms_.empty()
+//                     && (tySyms_.top()->typeKind() == TypeKind::Function
+////                            || tySyms_.top()->typeKind() == TypeKind::Pointer
+//                         ),
+//                 return Action::Quit);
+//    auto funcTySym = tySyms_.top()->asFunctionType();
+
+//    pendingFunTySyms_.push(funcTySym);
 
     for (auto declIt = node->parameters(); declIt; declIt = declIt->next) {
         TySymContT tySyms;
@@ -170,14 +202,15 @@ SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* 
         std::swap(tySyms_, tySyms);
     }
 
-    PSY_ASSERT_0(!pendingFunTySyms_.empty(), return Action::Quit);
-    pendingFunTySyms_.pop();
+//    PSY_ASSERT_0(!pendingFunTySyms_.empty(), return Action::Quit);
+//    pendingFunTySyms_.pop();
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSyntax* node)
 {
+    std::cout << "\ncreating pointer type!\n";
     makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
 
     for (auto specIt = node->qualifiersAndAttributes(); specIt; specIt = specIt->next)
@@ -253,6 +286,50 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 
 SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax*)
 {
+    auto tySym = tySyms_.top();
+    switch (tySym->typeKind()) {
+        case TypeKind::Function:
+            makeSymAndPushIt<FunctionSymbol>();
+            break;
+
+        case TypeKind::Array:
+        case TypeKind::Named:
+        case TypeKind::Pointer:
+            switch (syms_.top()->kind())
+            {
+                case SymbolKind::Type:
+                    makeSymAndPushIt<FieldSymbol>();
+                    break;
+
+                case SymbolKind::Library:
+                    makeSymAndPushIt<VariableSymbol>();
+                    break;
+
+                case SymbolKind::Function:
+                    switch (scopes_.top()->kind()) {
+                        case ScopeKind::FunctionPrototype:
+                            makeSymAndPushIt<ParameterSymbol>();
+                            break;
+
+                        case ScopeKind::Block:
+                        case ScopeKind::File:
+                            makeSymAndPushIt<VariableSymbol>();
+                            break;
+
+                        default:
+                            PSY_TRACE_ESCAPE_0(return Action::Quit);
+                    }
+                    break;
+
+                default:
+                    PSY_TRACE_ESCAPE_0(return Action::Quit);
+            }
+            break;
+
+        default:
+            PSY_TRACE_ESCAPE_0(break);
+    }
+
     Symbol* sym = syms_.top();
     auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
 
