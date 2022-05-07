@@ -63,8 +63,8 @@ struct TypeSpecSummary
                       CVR cvr = CVR::None);
     DeclSummary& deriv(TypeKind tyKind, CVR cvr = CVR::None);
 
-    TypeSpecSummary& deriveFunc_NEW_PARM();
-    TypeSpecSummary& deriveFunc_AT_PARM();
+    TypeSpecSummary& makeParam();
+    TypeSpecSummary& thisParam();
 
     std::string specTyName_;
     NamedTypeKind specTyK_;

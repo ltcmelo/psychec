@@ -47,13 +47,13 @@ DeclSummary& TypeSpecSummary::deriv(TypeKind tyKind, CVR cvr)
     return declSummary_;;
 }
 
-TypeSpecSummary& TypeSpecSummary::deriveFunc_NEW_PARM()
+TypeSpecSummary& TypeSpecSummary::makeParam()
 {
     parmsTySpecs2_.emplace_back(declSummary_);
     return parmsTySpecs2_.back();
 }
 
-TypeSpecSummary& TypeSpecSummary::deriveFunc_AT_PARM()
+TypeSpecSummary& TypeSpecSummary::thisParam()
 {
     return parmsTySpecs2_.back();
 }
