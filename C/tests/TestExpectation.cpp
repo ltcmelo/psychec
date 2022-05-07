@@ -28,7 +28,7 @@ TypeSpecSummary::TypeSpecSummary(DeclSummary& declSummary)
 {
 }
 
-DeclSummary& TypeSpecSummary::core(std::string name,
+DeclSummary& TypeSpecSummary::basis(std::string name,
                                    NamedTypeKind tyNameK,
                                    BuiltinTypeKind builtinTypeKind,
                                    CVR cvr)
@@ -47,22 +47,22 @@ DeclSummary& TypeSpecSummary::deriv(TypeKind tyKind, CVR cvr)
     return declSummary_;;
 }
 
-TypeSpecSummary& TypeSpecSummary::makeParam()
+TypeSpecSummary& TypeSpecSummary::Parameter()
 {
-    parmsTySpecs2_.emplace_back(declSummary_);
-    return parmsTySpecs2_.back();
+    parmsTySpecs_.emplace_back(declSummary_);
+    return parmsTySpecs_.back();
 }
 
-TypeSpecSummary& TypeSpecSummary::thisParam()
+TypeSpecSummary& TypeSpecSummary::_AtParam_()
 {
-    return parmsTySpecs2_.back();
+    return parmsTySpecs_.back();
 }
 
 DeclSummary::DeclSummary()
     : valK_(ValueKind::UNSPECIFIED)
     , tyK_(TypeKind::UNSPECIFIED)
     , scopeK_(ScopeKind::UNSPECIFIED)
-    , TypeSpec(*this)
+    , TySpec(*this)
 {}
 
 DeclSummary& DeclSummary::Value(std::string name, ValueKind valK, ScopeKind scopeK)

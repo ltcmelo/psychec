@@ -192,12 +192,12 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
             case TypeKind::Function: {
                 auto funcTySym = tySym->asFunctionType();
                 auto parms = funcTySym->parameterTypes();
-                if (parms.size() != tySpec.parmsTySpecs2_.size())
+                if (parms.size() != tySpec.parmsTySpecs_.size())
                     return REJECT_CANDIDATE(tySym, "number of parameters");
 
                 for (auto i = 0U; i < parms.size(); ++i) {
                     const TypeSymbol* parmTySym = parms[i];
-                    if (!typeMatches(parmTySym, tySpec.parmsTySpecs2_[i]))
+                    if (!typeMatches(parmTySym, tySpec.parmsTySpecs_[i]))
                         return REJECT_CANDIDATE(tySym, "parameter type mismatch");
                 }
                 tySym = tySym->asFunctionType()->returnType();
@@ -233,7 +233,7 @@ bool functionMatchesBinding(const FunctionSymbol* funcSym, const DeclSummary& de
     if (funcSym->type()->typeKind() != TypeKind::Function)
         return REJECT_CANDIDATE(funcSym, "not a function type");
 
-    if (!typeMatches(funcSym->type(), decl.TypeSpec))
+    if (!typeMatches(funcSym->type(), decl.TySpec))
         return REJECT_CANDIDATE(funcSym, "type mismatch");
 
     return true;
@@ -253,7 +253,7 @@ bool valueMatchesBinding(const ValueSymbol* valSym, const DeclSummary& decl)
     if (valSym->type() == nullptr)
         return REJECT_CANDIDATE(valSym, "null type");
 
-    if (!typeMatches(valSym->type(), decl.TypeSpec))
+    if (!typeMatches(valSym->type(), decl.TySpec))
         return REJECT_CANDIDATE(valSym, "type mismatch");
 
     return true;
