@@ -421,15 +421,17 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
 
     auto parenCnt = 0;
     auto LA = 2;
+    bool maybeKR = false;
     while (true) {
         switch (peek(LA).kind()) {
             case IdentifierToken:
-                if (seenType)
-                    return IdentifierRole::AsDeclarator;
-
-                if (!parenCnt)
-                    return IdentifierRole::AsTypedefName;
-                seenType = true;
+                if (!maybeKR) {
+                    if (seenType)
+                        return IdentifierRole::AsDeclarator;
+                    if (!parenCnt)
+                        return IdentifierRole::AsTypedefName;
+                    seenType = true;
+                }
                 ++LA;
                 continue;
 
@@ -452,9 +454,11 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
             case Keyword_union:
             case Keyword_enum:
             case Keyword_ExtGNU___complex__:
-                if (seenType)
-                    return IdentifierRole::AsDeclarator;
-                seenType = true;
+                if (!maybeKR) {
+                    if (seenType)
+                        return IdentifierRole::AsDeclarator;
+                    seenType = true;
+                }
                 ++LA;
                 continue;
 
@@ -490,8 +494,8 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
 
             // attribute-specifier
             case Keyword_ExtGNU___attribute__:
-                if (!parenCnt)
-                    return IdentifierRole::AsTypedefName;
+                if (!maybeKR && !parenCnt)
+                        return IdentifierRole::AsTypedefName;
                 ++LA;
                 continue;
 
@@ -507,21 +511,46 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
 
             case CloseParenToken:
                 --parenCnt;
-                if (!parenCnt) {
-                    if (seenType)
+                if (!maybeKR) {
+                    if (!parenCnt) {
+                        if (seenType)
+                            return IdentifierRole::AsTypedefName;
+                        return IdentifierRole::AsDeclarator;
+                    }
+                }
+                else {
+                    if (peek(LA + 1).kind() == SemicolonToken)
                         return IdentifierRole::AsTypedefName;
                     return IdentifierRole::AsDeclarator;
                 }
                 ++LA;
                 continue;
 
+            case CommaToken:
+                if (!parenCnt) {
+                    if (seenType)
+                        return IdentifierRole::AsTypedefName;
+                    maybeKR = true;
+                    ++LA;
+                    continue;
+                }
+                return IdentifierRole::AsDeclarator;
+
             case SemicolonToken:
                 if (parenCnt < 0)
                     return IdentifierRole::AsTypedefName;
                 return IdentifierRole::AsDeclarator;
 
+            case EndOfFile:
+                if (seenType)
+                    return IdentifierRole::AsDeclarator;
+                return IdentifierRole::AsTypedefName;
+
             default:
-                return IdentifierRole::AsDeclarator;
+                if (!maybeKR)
+                    return IdentifierRole::AsDeclarator;
+                ++LA;
+                continue;
         }
     }
 }

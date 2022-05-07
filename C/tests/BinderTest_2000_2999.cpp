@@ -48,7 +48,7 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Field)
-                    .TypeSpec.basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
+                    .TySpec.basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
 void BinderTest::case2001()
@@ -61,7 +61,7 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Field)
-                     .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                     .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case2002()
@@ -75,9 +75,9 @@ struct w
          )",
          Expectation()
             .binding(DeclSummary().Value("x", ValueKind::Field)
-                    .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+                    .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
             .binding(DeclSummary().Value("y", ValueKind::Field)
-                    .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                    .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case2003()
@@ -90,9 +90,9 @@ struct
          )",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                     .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+                     .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                     .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                     .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case2004()
@@ -105,7 +105,7 @@ struct
          )",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                 .TypeSpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
+                 .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2005()
@@ -118,9 +118,9 @@ struct
          )",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                      .TypeSpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED))
+                      .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED))
              .binding(DeclSummary().Value("z", ValueKind::Field)
-                      .TypeSpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
+                      .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2006()
@@ -164,7 +164,7 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Field)
-                    .TypeSpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2010()
@@ -177,7 +177,7 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Field)
-                    .TypeSpec.basis("union x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("union x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2011()
@@ -190,7 +190,7 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Field)
-                    .TypeSpec.basis("enum x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("enum x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2012()
@@ -203,9 +203,9 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Field)
-                    .TypeSpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED))
+                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED))
             .binding(DeclSummary().Value("z", ValueKind::Field)
-                    .TypeSpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2013()
@@ -218,7 +218,7 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("z", ValueKind::Field)
-                    .TypeSpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTest::case2014(){ }
@@ -263,7 +263,7 @@ void BinderTest::case2050()
     bind("struct { const int x ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
 void BinderTest::case2051()
@@ -271,7 +271,7 @@ void BinderTest::case2051()
     bind("struct { const x y ; } ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                      .TypeSpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
+                      .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
 void BinderTest::case2052()
@@ -287,7 +287,7 @@ void BinderTest::case2053()
     bind("struct { int const x ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
 void BinderTest::case2054()
@@ -295,7 +295,7 @@ void BinderTest::case2054()
     bind("struct { x const y ; } ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                      .TypeSpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
+                      .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
 void BinderTest::case2055(){ }
@@ -349,8 +349,8 @@ void BinderTest::case2100()
     bind("struct { int * x ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .TypeSpec.deriv(TypeKind::Pointer)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .TySpec.deriv(TypeKind::Pointer)));
 }
 
 void BinderTest::case2101()
@@ -358,8 +358,8 @@ void BinderTest::case2101()
     bind("struct { x * y ; } ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                      .TypeSpec.basis("x", NamedTypeKind::Synonym)
-                      .TypeSpec.deriv(TypeKind::Pointer)));
+                      .TySpec.basis("x", NamedTypeKind::Synonym)
+                      .TySpec.deriv(TypeKind::Pointer)));
 }
 
 void BinderTest::case2102()
@@ -367,11 +367,11 @@ void BinderTest::case2102()
     bind("struct { int * x ; y * z ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .TypeSpec.deriv(TypeKind::Pointer))
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .TySpec.deriv(TypeKind::Pointer))
              .binding(DeclSummary().Value("z", ValueKind::Field)
-                      .TypeSpec.basis("y", NamedTypeKind::Synonym)
-                      .TypeSpec.deriv(TypeKind::Pointer)));
+                      .TySpec.basis("y", NamedTypeKind::Synonym)
+                      .TySpec.deriv(TypeKind::Pointer)));
 }
 
 void BinderTest::case2103()
@@ -379,11 +379,11 @@ void BinderTest::case2103()
     bind("struct { int * x , * y ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .TypeSpec.deriv(TypeKind::Pointer))
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .TySpec.deriv(TypeKind::Pointer))
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .TypeSpec.deriv(TypeKind::Pointer)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .TySpec.deriv(TypeKind::Pointer)));
 }
 
 void BinderTest::case2104()
@@ -391,9 +391,9 @@ void BinderTest::case2104()
     bind("struct { int ( * x ) [ 1 ]; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .TypeSpec.deriv(TypeKind::Array)
-                      .TypeSpec.deriv(TypeKind::Pointer)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .TySpec.deriv(TypeKind::Array)
+                      .TySpec.deriv(TypeKind::Pointer)));
 }
 
 void BinderTest::case2105()
@@ -401,9 +401,9 @@ void BinderTest::case2105()
     bind("struct { int * * x ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .TypeSpec.deriv(TypeKind::Pointer)
-                      .TypeSpec.deriv(TypeKind::Pointer)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .TySpec.deriv(TypeKind::Pointer)
+                      .TySpec.deriv(TypeKind::Pointer)));
 }
 
 void BinderTest::case2106()
@@ -411,10 +411,10 @@ void BinderTest::case2106()
     bind("struct { int * * * x ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                      .TypeSpec.deriv(TypeKind::Pointer)
-                      .TypeSpec.deriv(TypeKind::Pointer)
-                      .TypeSpec.deriv(TypeKind::Pointer)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                      .TySpec.deriv(TypeKind::Pointer)
+                      .TySpec.deriv(TypeKind::Pointer)
+                      .TySpec.deriv(TypeKind::Pointer)));
 }
 
 void BinderTest::case2107()
@@ -422,10 +422,10 @@ void BinderTest::case2107()
     bind("struct { int * ( * x ) [ 1 ] ; };",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Pointer, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Pointer, CVR::None)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::None)
+                      .TySpec.deriv(TypeKind::Array, CVR::None)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::None)));
 }
 
 void BinderTest::case2108(){ }
@@ -476,8 +476,8 @@ void BinderTest::case2150()
     bind("struct { const int * x ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
-                      .TypeSpec.deriv(TypeKind::Pointer)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .TySpec.deriv(TypeKind::Pointer)));
 }
 
 void BinderTest::case2151()
@@ -485,8 +485,8 @@ void BinderTest::case2151()
     bind("struct { const x * y ; } ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                      .TypeSpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
-                      .TypeSpec.deriv(TypeKind::Pointer)));
+                      .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
+                      .TySpec.deriv(TypeKind::Pointer)));
 }
 
 void BinderTest::case2152(){ }
@@ -543,8 +543,8 @@ void BinderTest::case2200()
     bind("struct { const int * const x ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
-                      .TypeSpec.deriv(TypeKind::Pointer, CVR::Const)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::Const)));
 }
 
 
@@ -603,8 +603,8 @@ void BinderTest::case2250()
     bind("struct { int * const x ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Pointer, CVR::Const)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::Const)));
 }
 
 void BinderTest::case2251()
@@ -612,8 +612,8 @@ void BinderTest::case2251()
     bind("struct { x * const y ; } ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                      .TypeSpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Pointer, CVR::Const)));
+                      .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::Const)));
 }
 
 void BinderTest::case2252(){ }
@@ -675,8 +675,8 @@ struct
          )",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case2301()
@@ -684,8 +684,8 @@ void BinderTest::case2301()
     bind("struct { x y [ 1 ] ; } ;",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                      .TypeSpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None)));
+                      .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
+                      .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case2302()
@@ -698,11 +698,11 @@ struct
          )",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None))
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .TySpec.deriv(TypeKind::Array, CVR::None))
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case2303()
@@ -715,11 +715,11 @@ struct
          )",
          Expectation()
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                      .TypeSpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None))
+                      .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
+                      .TySpec.deriv(TypeKind::Array, CVR::None))
              .binding(DeclSummary().Value("z", ValueKind::Field)
-                      .TypeSpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None)));
+                      .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
+                      .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case2304()
@@ -727,9 +727,9 @@ void BinderTest::case2304()
     bind("struct { int * x [ 1 ] ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Pointer, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::None)
+                      .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case2305()
@@ -737,12 +737,12 @@ void BinderTest::case2305()
     bind("struct { int x [ 1 ] , * y [ 2 ] ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None))
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .TySpec.deriv(TypeKind::Array, CVR::None))
              .binding(DeclSummary().Value("y", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Pointer, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::None)
+                      .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case2306()
@@ -750,10 +750,10 @@ void BinderTest::case2306()
     bind("struct { int * * x [ 1 ] ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Pointer, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Pointer, CVR::None)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::None)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::None)
+                      .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case2307(){ }
@@ -805,8 +805,8 @@ void BinderTest::case2350()
     bind("struct { const int x [ 1 ] ; } ;",
          Expectation()
              .binding(DeclSummary().Value("x", ValueKind::Field)
-                      .TypeSpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
-                      .TypeSpec.deriv(TypeKind::Array, CVR::None)));
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
 void BinderTest::case2351(){ }

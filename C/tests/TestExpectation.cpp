@@ -40,18 +40,29 @@ DeclSummary& TypeSpecSummary::basis(std::string name,
     return declSummary_;
 }
 
-DeclSummary &TypeSpecSummary::deriv(TypeKind tyKind, CVR cvr)
+DeclSummary& TypeSpecSummary::deriv(TypeKind tyKind, CVR cvr)
 {
     derivTyKs_.push_back(tyKind);
     derivTyCVRs_.push_back(cvr);
     return declSummary_;;
 }
 
+TypeSpecSummary& TypeSpecSummary::Parameter()
+{
+    parmsTySpecs_.emplace_back(declSummary_);
+    return parmsTySpecs_.back();
+}
+
+TypeSpecSummary& TypeSpecSummary::_AtParam_()
+{
+    return parmsTySpecs_.back();
+}
+
 DeclSummary::DeclSummary()
     : valK_(ValueKind::UNSPECIFIED)
     , tyK_(TypeKind::UNSPECIFIED)
     , scopeK_(ScopeKind::UNSPECIFIED)
-    , TypeSpec(*this)
+    , TySpec(*this)
 {}
 
 DeclSummary& DeclSummary::Value(std::string name, ValueKind valK, ScopeKind scopeK)
@@ -77,17 +88,6 @@ DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
     symK_ = SymbolKind::Function;
     scopeK_ = scopeK;
     return *this;
-}
-
-TypeSpecSummary& DeclSummary::TypeSpec_NewParameter()
-{
-    parmsTySpecs_.emplace_back(*this);
-    return parmsTySpecs_.back();
-}
-
-TypeSpecSummary& DeclSummary::TypeSpec_Continue()
-{
-    return parmsTySpecs_.back();
 }
 
 Expectation::Expectation()
