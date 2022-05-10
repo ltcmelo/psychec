@@ -36,7 +36,7 @@ const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTokenOfCategoryIden
 /* Non-terminal */
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression = "Parser-200-6.5";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofEnumerationConstant= "Parser-201-6.7.2.2";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator = "Parser--202-6.7.6";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator = "Parser-202-6.7.6";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofParameterDeclaration = "Parser-203-6.7.6.3";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofSpecifierQualifier = "Parser-204-6.7.2.1";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDesignatedInitializer = "Parser-205-6.7.9";
