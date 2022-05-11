@@ -501,6 +501,8 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
 
             // pointer-declarator
             case AsteriskToken:
+                if (!parenCnt)
+                    return IdentifierRole::AsTypedefName;
                 ++LA;
                 continue;
 
@@ -534,6 +536,8 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
                     ++LA;
                     continue;
                 }
+                if (parenCnt < 0)
+                    return IdentifierRole::AsTypedefName;
                 return IdentifierRole::AsDeclarator;
 
             case SemicolonToken:
