@@ -1548,14 +1548,153 @@ void BinderTest::case0381(){}
 void BinderTest::case0382(){}
 void BinderTest::case0383(){}
 void BinderTest::case0384(){}
-void BinderTest::case0385(){}
-void BinderTest::case0386(){}
-void BinderTest::case0387(){}
-void BinderTest::case0388(){}
-void BinderTest::case0389(){}
-void BinderTest::case0390(){}
-void BinderTest::case0391(){}
-void BinderTest::case0392(){}
+
+void BinderTest::case0385()
+{
+    bind("void x ( int y [ ] ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec._AtParam_().deriv(TypeKind::Array))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Array)));
+}
+
+void BinderTest::case0386()
+{
+    bind("void x ( y z [ ] ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
+                  .TySpec._AtParam_().deriv(TypeKind::Array))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("y", NamedTypeKind::Synonym)
+                  .TySpec.deriv(TypeKind::Array)));
+}
+
+void BinderTest::case0387()
+{
+    bind("void x ( int * y [ 1 ] ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer)
+                  .TySpec._AtParam_().deriv(TypeKind::Array))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.deriv(TypeKind::Array)));
+}
+
+void BinderTest::case0388()
+{
+    bind("void x ( y * z [ 1 ] ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer)
+                  .TySpec._AtParam_().deriv(TypeKind::Array))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("y", NamedTypeKind::Synonym)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.deriv(TypeKind::Array)));
+}
+
+void BinderTest::case0389()
+{
+    bind("void x ( int * * y [ 1 ] ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer)
+                  .TySpec._AtParam_().deriv(TypeKind::Array))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.deriv(TypeKind::Array)));
+}
+
+void BinderTest::case0390()
+{
+    bind("void x ( y const * z [ 1 ] ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("y", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer)
+                  .TySpec._AtParam_().deriv(TypeKind::Array))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("y", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.deriv(TypeKind::Array)));
+}
+
+void BinderTest::case0391()
+{
+    bind("void x ( y z [ ] , w z ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
+                  .TySpec._AtParam_().deriv(TypeKind::Array)
+                  .TySpec.Parameter().basis("w", NamedTypeKind::Synonym))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("w", NamedTypeKind::Synonym))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("y", NamedTypeKind::Synonym)
+                  .TySpec.deriv(TypeKind::Array)));
+}
+
+void BinderTest::case0392()
+{
+    bind("void x ( w z , y z [ ] ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("w", NamedTypeKind::Synonym)
+                  .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
+                  .TySpec._AtParam_().deriv(TypeKind::Array))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("w", NamedTypeKind::Synonym))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("y", NamedTypeKind::Synonym)
+                  .TySpec.deriv(TypeKind::Array)));
+}
+
 void BinderTest::case0393(){}
 void BinderTest::case0394(){}
 void BinderTest::case0395(){}
