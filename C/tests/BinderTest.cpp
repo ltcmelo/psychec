@@ -184,7 +184,7 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
 
         switch (tySym->typeKind()) {
             case TypeKind::Array:
-                if (derivPtrTyDecay != PtrDecay::None) {
+                if (derivPtrTyDecay != Decay::None) {
                     DETAIL_MISMATCH("arrays don't decay");
                     return false;
                 }
@@ -193,23 +193,23 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
 
             case TypeKind::Pointer:
                 switch (derivPtrTyDecay) {
-                    case PtrDecay::None:
-                        if (tySym->asPointerType()->arisesFromDecay()
-                                    || tySym->asPointerType()->arisesFromArrayTypeDecay()) {
+                    case Decay::None:
+                        if (tySym->asPointerType()->arisesFromFunctionTypeDecay()
+                                    || tySym->asPointerType()->arisesFromArrayOfTypeDecay()) {
                             DETAIL_MISMATCH("pointer type is decayed from array/function");
                             return false;
                         }
                         break;
 
-                    case PtrDecay::Function:
-                        if (!tySym->asPointerType()->arisesFromDecay()) {
+                    case Decay::FunctionType:
+                        if (!tySym->asPointerType()->arisesFromFunctionTypeDecay()) {
                             DETAIL_MISMATCH("pointer type isn't (function) decayed");
                             return false;
                         }
                         break;
 
-                    case PtrDecay::Array:
-                        if (!tySym->asPointerType()->arisesFromArrayTypeDecay()) {
+                    case Decay::ArrayOfType:
+                        if (!tySym->asPointerType()->arisesFromArrayOfTypeDecay()) {
                             DETAIL_MISMATCH("pointer type isn't (array) decayed");
                             return false;
                         }
@@ -219,7 +219,7 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
                 break;
 
             case TypeKind::Function: {
-                if (derivPtrTyDecay != PtrDecay::None) {
+                if (derivPtrTyDecay != Decay::None) {
                     DETAIL_MISMATCH("functions don't decay");
                     return false;
                 }

@@ -48,11 +48,11 @@ enum class CVR
     None
 };
 
-enum class PtrDecay
+enum class Decay
 {
     None,
-    Function,
-    Array
+    ArrayOfType,
+    FunctionType
 };
 
 struct DeclSummary;
@@ -67,7 +67,7 @@ struct TypeSpecSummary
                        NamedTypeKind tyNameK,
                        BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
                        CVR cvr = CVR::None);
-    DeclSummary& deriv(TypeKind tyKind, CVR cvr = CVR::None, PtrDecay decay = PtrDecay::None);
+    DeclSummary& deriv(TypeKind tyKind, CVR cvr = CVR::None, Decay decay = Decay::None);
 
     TypeSpecSummary& Parameter();
     TypeSpecSummary& _AtParam_();
@@ -78,7 +78,7 @@ struct TypeSpecSummary
     CVR specTyCVR_;
     std::vector<TypeKind> derivTyKs_;
     std::vector<CVR> derivTyCVRs_;
-    std::vector<PtrDecay> derivPtrTyDecay_;
+    std::vector<Decay> derivPtrTyDecay_;
     std::vector<TypeSpecSummary> parmsTySpecs_;
 };
 
