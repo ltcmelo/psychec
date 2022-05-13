@@ -44,10 +44,9 @@ std::string to_string(const VariableSymbol& sym)
 {
     std::ostringstream oss;
     oss << "{`variable |";
-    if (sym.name())
-        oss << " " << to_string(*sym.name());
-    oss << " scope:" << to_string(sym.scope()->kind());
-    oss << " " << to_string(*sym.type());
+    oss << " " << (sym.name() ? to_string(*sym.name()) : "name:NULL");
+    oss << " " << (sym.type() ? to_string(*sym.type()) : "type:NULL");
+    oss << " " << (sym.scope() ? to_string(sym.scope()->kind()) : "scope:NULL");
     oss << " `}";
 
     return oss.str();

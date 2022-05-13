@@ -79,8 +79,8 @@ public:
 
     void summary()
     {
-        std::cout << this->name() << " Succeeded: " << cntOK_ << std::endl
-                  << this->name() << " Failed   : " << cntER_ << std::endl;
+        std::cout << this->name() << " passed: " << cntOK_ << std::endl
+                  << std::string(this->name().length(), ' ') << " failed: " << cntER_ << std::endl;
     }
 
     static void runSuite();

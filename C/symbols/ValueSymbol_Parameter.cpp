@@ -20,6 +20,7 @@
 
 #include "ValueSymbol_Parameter.h"
 
+#include "symbols/Symbol_ALL.h"
 #include "binder/Scope.h"
 
 #include <sstream>
@@ -43,9 +44,9 @@ std::string to_string(const ParameterSymbol& sym)
 {
     std::ostringstream oss;
     oss << "{~parameter |";
-    if (sym.name())
-        oss << " " << to_string(*sym.name());
-    oss << " scope:" << to_string(sym.scope()->kind());
+    oss << " " << (sym.name() ? to_string(*sym.name()) : "name:NULL");
+    oss << " " << (sym.type() ? to_string(*sym.type()) : "type:NULL");
+    oss << " " << (sym.scope() ? to_string(sym.scope()->kind()) : "scope:NULL");
     oss << " ~}";
 
     return oss.str();

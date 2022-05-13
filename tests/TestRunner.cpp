@@ -43,7 +43,11 @@ void TestRunner::runSuite()
 
     P.summary();
     B.summary();
-    std::cout << "Succeeded: " << P.cntOK_ + B.cntOK_ << std::endl
-              << "Failed   : " << P.cntER_ + B.cntER_ << std::endl;
 
+    auto totalFail = P.cntER_ + B.cntER_;
+    if (!totalFail)
+        std::cout << "All passed" << std::endl;
+    else
+        std::cout << std::string(17, '.') << " \n"
+                  << "> Total failures: " << P.cntER_ + B.cntER_ << std::endl;
 }

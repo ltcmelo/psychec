@@ -197,34 +197,26 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
 
 TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
 {
-    auto tySym = tySyms_.top();
-    switch (tySym->typeKind()) {
-        case TypeKind::Function:
-            makeSymAndPushIt<FunctionSymbol>();
-            break;
-
-        case TypeKind::Array:
-        case TypeKind::Named:
-        case TypeKind::Pointer:
-            switch (syms_.top()->kind())
-            {
-                case SymbolKind::Type:
-                    makeSymAndPushIt<FieldSymbol>();
+    switch (scopes_.top()->kind()) {
+        case ScopeKind::File:
+        case ScopeKind::Block:
+            switch (tySyms_.top()->typeKind()) {
+                case TypeKind::Function:
+                    makeSymAndPushIt<FunctionSymbol>();
                     break;
 
-                case SymbolKind::Library:
-                    makeSymAndPushIt<VariableSymbol>();
-                    break;
-
-                case SymbolKind::Value:
-                case SymbolKind::Function:
-                    switch (scopes_.top()->kind()) {
-                        case ScopeKind::FunctionPrototype:
-                            makeSymAndPushIt<ParameterSymbol>();
+                case TypeKind::Array:
+                case TypeKind::Pointer:
+                case TypeKind::Named:
+                    switch (syms_.top()->kind())
+                    {
+                        case SymbolKind::Type:
+                            makeSymAndPushIt<FieldSymbol>();
                             break;
 
-                        case ScopeKind::Block:
-                        case ScopeKind::File:
+                        case SymbolKind::Value:
+                        case SymbolKind::Function:
+                        case SymbolKind::Library:
                             makeSymAndPushIt<VariableSymbol>();
                             break;
 
@@ -236,6 +228,46 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                 default:
                     PSY_TRACE_ESCAPE_0(return nullptr);
             }
+            break;
+
+        case ScopeKind::Function:
+            break;
+
+        case ScopeKind::FunctionPrototype:
+            switch (tySyms_.top()->typeKind()) {
+                case TypeKind::Array: {
+                    /*
+                     * 6.7.6.3-7
+                     * A declaration of a parameter as “array of type”
+                     * shall be adjusted to “qualified pointer to type”...
+                     */
+                    popTySym();
+                    makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
+                    auto ptrTySym = tySyms_.top()->asPointerType();
+                    ptrTySym->markAsArisingFromArrayOfTypeDecay();
+                    break;
+                }
+
+                case TypeKind::Function: {
+                    /*
+                     * 6.7.6.3-8
+                     * A declaration of a parameter as “function returning type”
+                     * shall be adjusted to “pointer to function returning type”...
+                     */
+                    makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
+                    auto ptrTySym = tySyms_.top()->asPointerType();
+                    ptrTySym->markAsArisingFromFunctionTypeDecay();
+                    break;
+                }
+
+                case TypeKind::Pointer:
+                case TypeKind::Named:
+                    break;
+
+                default:
+                    PSY_TRACE_ESCAPE_0(return nullptr);
+            }
+            makeSymAndPushIt<ParameterSymbol>();
             break;
 
         default:

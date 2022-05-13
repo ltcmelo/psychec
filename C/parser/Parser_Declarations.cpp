@@ -1920,12 +1920,15 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
 
         case OpenBracketToken:
             if (decltorVariety == DeclaratorVariety::Abstract) {
+                auto absDecltor = makeNode<AbstractDeclaratorSyntax>();
+                decltor = absDecltor;
+                absDecltor->attrs_ = attrList;
                 if (!parseDirectDeclaratorSuffix(
                             decltor,
                             declScope,
                             decltorVariety,
                             attrList,
-                            nullptr))
+                            absDecltor))
                     return false;
                 break;
             }
@@ -1946,9 +1949,9 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
 
         default: {
             if (decltorVariety == DeclaratorVariety::Abstract) {
-                auto annonDecltor = makeNode<AbstractDeclaratorSyntax>();
-                decltor = annonDecltor;
-                annonDecltor->attrs_ = attrList;
+                auto absDecltor = makeNode<AbstractDeclaratorSyntax>();
+                decltor = absDecltor;
+                absDecltor->attrs_ = attrList;
                 break;
             }
             diagReporter_.ExpectedFIRSTofDirectDeclarator();
