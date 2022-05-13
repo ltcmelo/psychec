@@ -40,10 +40,11 @@ DeclSummary& TypeSpecSummary::basis(std::string name,
     return declSummary_;
 }
 
-DeclSummary& TypeSpecSummary::deriv(TypeKind tyKind, CVR cvr)
+DeclSummary& TypeSpecSummary::deriv(TypeKind tyKind, CVR cvr, PtrDecay decay)
 {
     derivTyKs_.push_back(tyKind);
     derivTyCVRs_.push_back(cvr);
+    derivPtrTyDecay_.push_back(decay);
     return declSummary_;;
 }
 

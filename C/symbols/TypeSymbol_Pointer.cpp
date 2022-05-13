@@ -37,9 +37,13 @@ struct PointerTypeSymbol::PointerTypeSymbolImpl : TypeSymbolImpl
                          containingSym,
                          TypeKind::Pointer)
         , refedTySym_(refedTySym)
+        , arisesFromDecay_(false)
+        , arisesFromArrayTypeDecay_(false)
     {}
 
     const TypeSymbol* refedTySym_;
+    bool arisesFromDecay_;
+    bool arisesFromArrayTypeDecay_;
 };
 
 PointerTypeSymbol::PointerTypeSymbol(const SyntaxTree* tree,
@@ -55,6 +59,26 @@ PointerTypeSymbol::PointerTypeSymbol(const SyntaxTree* tree,
 const TypeSymbol* PointerTypeSymbol::referencedType() const
 {
     return P_CAST->refedTySym_;
+}
+
+bool PointerTypeSymbol::arisesFromArrayTypeDecay() const
+{
+    return P_CAST->arisesFromArrayTypeDecay_;
+}
+
+bool PointerTypeSymbol::arisesFromDecay() const
+{
+    return P_CAST->arisesFromDecay_;
+}
+
+void PointerTypeSymbol::markAsArisingFromArrayTypeDecay()
+{
+    P_CAST->arisesFromArrayTypeDecay_ = true;
+}
+
+void PointerTypeSymbol::markAsArisingFromDecay()
+{
+    P_CAST->arisesFromDecay_ = true;
 }
 
 namespace psy {

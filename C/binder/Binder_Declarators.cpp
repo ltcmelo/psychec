@@ -147,7 +147,11 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             PSY_TRACE_ESCAPE_0(return Action::Quit);
     }
 
+    std::cout << "\nvisiting function declarator with inner " << node->innerDeclarator() << std::endl;
+
     visit(node->innerDeclarator());
+
+    std::cout << "type at the top is " << to_string(*tySyms_.top()) << std::endl;
 
     openScope(ScopeKind::FunctionPrototype);
     visit(node->suffix());
@@ -178,6 +182,7 @@ SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* 
 
 SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSyntax* node)
 {
+    std::cout << "\tvisiting pointer declarator\n";
     makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
 
     for (auto specIt = node->qualifiersAndAttributes(); specIt; specIt = specIt->next)
@@ -197,34 +202,30 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
 
 TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
 {
-    auto tySym = tySyms_.top();
-    switch (tySym->typeKind()) {
-        case TypeKind::Function:
-            makeSymAndPushIt<FunctionSymbol>();
-            break;
+    std::cout << "\t\ttop scope is  " << to_string(scopes_.top()->kind()) << std::endl;
+    std::cout << "\t\ttop symbol is " << to_string(*syms_.top()) << std::endl;
+    std::cout << "\t\ttop type   is " << to_string(*tySyms_.top()) << std::endl;
 
-        case TypeKind::Array:
-        case TypeKind::Named:
-        case TypeKind::Pointer:
-            switch (syms_.top()->kind())
-            {
-                case SymbolKind::Type:
-                    makeSymAndPushIt<FieldSymbol>();
+    switch (scopes_.top()->kind()) {
+        case ScopeKind::File:
+        case ScopeKind::Block:
+            switch (tySyms_.top()->typeKind()) {
+                case TypeKind::Function:
+                    makeSymAndPushIt<FunctionSymbol>();
                     break;
 
-                case SymbolKind::Library:
-                    makeSymAndPushIt<VariableSymbol>();
-                    break;
-
-                case SymbolKind::Value:
-                case SymbolKind::Function:
-                    switch (scopes_.top()->kind()) {
-                        case ScopeKind::FunctionPrototype:
-                            makeSymAndPushIt<ParameterSymbol>();
+                case TypeKind::Array:
+                case TypeKind::Pointer:
+                case TypeKind::Named:
+                    switch (syms_.top()->kind())
+                    {
+                        case SymbolKind::Type:
+                            makeSymAndPushIt<FieldSymbol>();
                             break;
 
-                        case ScopeKind::Block:
-                        case ScopeKind::File:
+                        case SymbolKind::Value:
+                        case SymbolKind::Function:
+                        case SymbolKind::Library:
                             makeSymAndPushIt<VariableSymbol>();
                             break;
 
@@ -238,9 +239,114 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
             }
             break;
 
+        case ScopeKind::Function:
+            break;
+
+        case ScopeKind::FunctionPrototype:
+            switch (tySyms_.top()->typeKind()) {
+                case TypeKind::Array: {
+//                    popTySym();
+//                    makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
+//                    auto ptrTySym = tySyms_.top()->asPointerType();
+//                    ptrTySym->markAsArisingFromArrayTypeDecay();
+                    break;
+                }
+
+                case TypeKind::Function: {
+                    /*
+                     * 6.7.6.3-8: A declaration of a parameter as “function returning type”
+                     * shall be adjusted to “pointer to function returning type”...
+                     */
+                    makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
+                    auto ptrTySym = tySyms_.top()->asPointerType();
+                    ptrTySym->markAsArisingFromDecay();
+                    break;
+                }
+
+                case TypeKind::Pointer:
+                case TypeKind::Named:
+                    break;
+
+                default:
+                    PSY_TRACE_ESCAPE_0(return nullptr);
+            }
+            makeSymAndPushIt<ParameterSymbol>();
+            break;
+
         default:
             PSY_TRACE_ESCAPE_0(return nullptr);
     }
+
+
+//    auto tySym = tySyms_.top();
+//    switch (tySym->typeKind()) {
+//        case TypeKind::Function:
+//            std::cout << "\t\t\twithin function type\n";
+//            switch (scopes_.top()->kind()) {
+//                case ScopeKind::File:
+//                case ScopeKind::Block:
+//                    makeSymAndPushIt<FunctionSymbol>();
+//                    break;
+
+//                case ScopeKind::FunctionPrototype: {
+//                    /*
+//                     * 6.7.6.3-8: A declaration of a parameter as “function returning type”
+//                     * shall be adjusted to “pointer to function returning type”, as in 6.3.2.1.
+//                     */
+//                    makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
+//                    PointerTypeSymbol* ptrTySym = tySyms_.top()->asPointerType();
+//                    ptrTySym->markAsArisingFromDecay();
+
+//                    makeSymAndPushIt<ParameterSymbol>();
+//                    break;
+//                }
+
+//                default:
+//                    PSY_TRACE_ESCAPE_0(return nullptr);
+//            }
+//            break;
+
+//        case TypeKind::Array:
+
+
+//        case TypeKind::Named:
+//        case TypeKind::Pointer:
+//            switch (syms_.top()->kind())
+//            {
+//                case SymbolKind::Type:
+//                    makeSymAndPushIt<FieldSymbol>();
+//                    break;
+
+//                case SymbolKind::Library:
+//                    makeSymAndPushIt<VariableSymbol>();
+//                    break;
+
+//                case SymbolKind::Value:
+//                case SymbolKind::Function:
+//                    switch (scopes_.top()->kind()) {
+//                        case ScopeKind::FunctionPrototype:
+//                            std::cout << "\t\t\tcreating parameter\n";
+//                            makeSymAndPushIt<ParameterSymbol>();
+//                            break;
+
+//                        case ScopeKind::Block:
+//                        case ScopeKind::File:
+//                            makeSymAndPushIt<VariableSymbol>();
+//                            break;
+
+//                        default:
+//                            PSY_TRACE_ESCAPE_0(return nullptr);
+//                    }
+//                    break;
+
+//                default:
+//                    PSY_TRACE_ESCAPE_0(return nullptr);
+//            }
+//            break;
+
+//        default:
+//            PSY_TRACE_ESCAPE_0(return nullptr);
+//    }
 
     PSY_ASSERT_0(!syms_.empty(), return nullptr);
     Symbol* sym = syms_.top();

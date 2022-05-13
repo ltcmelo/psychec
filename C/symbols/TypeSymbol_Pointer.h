@@ -48,6 +48,15 @@ public:
      */
     const TypeSymbol* referencedType() const;
 
+    /**
+     * Whether \c this PointerTypeSymbol arises from another type's decay.
+     *
+     * \remark 6.7.6.3-7 and 6.7.6.3-8
+     */
+    bool arisesFromDecay() const;
+
+    bool arisesFromArrayTypeDecay() const;
+
 private:
     DECL_PIMPL_SUB(PointerTypeSymbol)
 
@@ -57,6 +66,9 @@ private:
                       const Scope* scope,
                       const Symbol* containingSym,
                       const TypeSymbol* refedTySym);
+
+    void markAsArisingFromDecay();
+    void markAsArisingFromArrayTypeDecay();
 };
 
 std::string PSY_C_API to_string(const PointerTypeSymbol& tySym);

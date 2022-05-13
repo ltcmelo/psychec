@@ -180,16 +180,49 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
             return false;
         }
 
+        auto derivPtrTyDecay = tySpec.derivPtrTyDecay_[i - 1];
+
         switch (tySym->typeKind()) {
             case TypeKind::Array:
+                if (derivPtrTyDecay != PtrDecay::None) {
+                    DETAIL_MISMATCH("arrays don't decay");
+                    return false;
+                }
                 tySym = tySym->asArrayType()->elementType();
                 break;
 
             case TypeKind::Pointer:
+                switch (derivPtrTyDecay) {
+                    case PtrDecay::None:
+                        if (tySym->asPointerType()->arisesFromDecay()
+                                    || tySym->asPointerType()->arisesFromArrayTypeDecay()) {
+                            DETAIL_MISMATCH("pointer type is decayed from array/function");
+                            return false;
+                        }
+                        break;
+
+                    case PtrDecay::Function:
+                        if (!tySym->asPointerType()->arisesFromDecay()) {
+                            DETAIL_MISMATCH("pointer type isn't (function) decayed");
+                            return false;
+                        }
+                        break;
+
+                    case PtrDecay::Array:
+                        if (!tySym->asPointerType()->arisesFromArrayTypeDecay()) {
+                            DETAIL_MISMATCH("pointer type isn't (array) decayed");
+                            return false;
+                        }
+                        break;
+                }
                 tySym = tySym->asPointerType()->referencedType();
                 break;
 
             case TypeKind::Function: {
+                if (derivPtrTyDecay != PtrDecay::None) {
+                    DETAIL_MISMATCH("functions don't decay");
+                    return false;
+                }
                 auto funcTySym = tySym->asFunctionType();
                 auto parms = funcTySym->parameterTypes();
                 if (parms.size() != tySpec.parmsTySpecs_.size())

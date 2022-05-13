@@ -1361,7 +1361,27 @@ void BinderTest::case0331(){}
 void BinderTest::case0332(){}
 void BinderTest::case0333(){}
 void BinderTest::case0334(){}
-void BinderTest::case0335(){}
+
+void BinderTest::case0335()
+{
+    bind("void x ( int y ( double ) ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec._AtParam_().deriv(TypeKind::Function)
+                  .TySpec._AtParam_().Parameter().basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, PtrDecay::Function))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, PtrDecay::Function)));
+}
+
 void BinderTest::case0336(){}
 void BinderTest::case0337(){}
 void BinderTest::case0338(){}
