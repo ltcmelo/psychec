@@ -1667,22 +1667,59 @@ void ParserTest::case0221()
 
 void ParserTest::case0222()
 {
-    parse("void x ( int * ) ;") ;
+    parse("void x ( int * ) ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              PointerDeclarator,
+                              AbstractDeclarator }));
 }
 
 void ParserTest::case0223()
 {
-    parse("void x ( int ( * ));") ;
+    parse("void x ( int ( * ) ) ;") ;
 }
 
 void ParserTest::case0224()
 {
-    parse("void x ( int * [ 10 ] ) ;") ;
+    parse("void x ( int * [ 1 ] ) ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              PointerDeclarator,
+                              ArrayDeclarator,
+                              AbstractDeclarator,
+                              SubscriptSuffix,
+                              IntegerConstantExpression }));
 }
 
 void ParserTest::case0225()
 {
-    parse("void x (int ( * ) [ 10 ] ) ;") ;
+    parse("void x ( int ( * ) [ 1 ] ) ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              ArrayDeclarator,
+                              ParenthesizedDeclarator,
+                              PointerDeclarator,
+                              AbstractDeclarator,
+                              SubscriptSuffix,
+                              IntegerConstantExpression }));
 }
 
 void ParserTest::case0226()
@@ -2187,12 +2224,35 @@ void ParserTest::case0260()
 
 void ParserTest::case0261()
 {
-
+    parse("void x ( int [ ] ) ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              ArrayDeclarator,
+                              AbstractDeclarator,
+                              SubscriptSuffix })) ;
 }
 
 void ParserTest::case0262()
 {
-
+    parse("void x ( int [ 1 ] ) ;",
+          Expectation().AST({ TranslationUnit,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              FunctionDeclarator,
+                              IdentifierDeclarator,
+                              ParameterSuffix,
+                              ParameterDeclaration,
+                              BuiltinTypeSpecifier,
+                              ArrayDeclarator,
+                              AbstractDeclarator,
+                              SubscriptSuffix,
+                              IntegerConstantExpression })) ;
 }
 
 void ParserTest::case0263()
@@ -2499,6 +2559,7 @@ void ParserTest::case0290()
                               ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               ArrayDeclarator,
+                              AbstractDeclarator,
                               SubscriptSuffix,
                               IntegerConstantExpression,
                               CompoundStatement }));
@@ -2753,6 +2814,7 @@ void ParserTest::case0315()
                               ParameterDeclaration,
                               BuiltinTypeSpecifier,
                               ArrayDeclarator,
+                              AbstractDeclarator,
                               SubscriptSuffix,
                               IntegerConstantExpression }));
 }
