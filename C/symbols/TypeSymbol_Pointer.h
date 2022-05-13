@@ -58,7 +58,7 @@ public:
     /**
      * Whether \c this PointerTypeSymbol arises from a function type decay.
      *
-     * \remark 6.7.6.3-7 and 6.7.6.3-8
+     * \remark 6.7.6.3-8
      */
     bool arisesFromFunctionTypeDecay() const;
 
