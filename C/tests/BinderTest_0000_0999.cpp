@@ -945,9 +945,54 @@ void BinderTest::case0204()
 
 }
 
-void BinderTest::case0205(){}
-void BinderTest::case0206(){}
-void BinderTest::case0207(){}
+void BinderTest::case0205()
+{
+    bind("void x ( int * ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer))
+         .binding(DeclSummary()
+                  .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Pointer)));
+}
+
+void BinderTest::case0206()
+{
+    bind("void x ( int [ ] ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec._AtParam_().deriv(TypeKind::Array))
+         .binding(DeclSummary()
+                  .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Array)));
+}
+
+void BinderTest::case0207()
+{
+    bind("void x ( int [ 1 ] ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec._AtParam_().deriv(TypeKind::Array))
+         .binding(DeclSummary()
+                  .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Array)));
+}
+
 void BinderTest::case0208(){}
 void BinderTest::case0209(){}
 void BinderTest::case0210(){}
