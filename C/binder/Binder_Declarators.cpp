@@ -245,10 +245,10 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
         case ScopeKind::FunctionPrototype:
             switch (tySyms_.top()->typeKind()) {
                 case TypeKind::Array: {
-//                    popTySym();
-//                    makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
-//                    auto ptrTySym = tySyms_.top()->asPointerType();
-//                    ptrTySym->markAsArisingFromArrayTypeDecay();
+                    popTySym();
+                    makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
+                    auto ptrTySym = tySyms_.top()->asPointerType();
+                    ptrTySym->markAsArisingFromArrayTypeDecay();
                     break;
                 }
 
