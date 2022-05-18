@@ -950,7 +950,7 @@ LexExit:
 void Lexer::lexImaginaryConstant(SyntaxToken *tk)
 {
     if (yychar_ == 'i' || yychar_ == 'j') {
-        // if (tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
+        // if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
         //     diagReporter_.IncompatibleLanguageExtension(
         //                 "imaginary constant",
         //                 LanguageExtensions::);
@@ -971,7 +971,7 @@ void Lexer::lexImaginaryConstant(SyntaxToken *tk)
             lexIntegerSuffix();
 
         if (yychar_ == 'i' || yychar_ == 'j') {
-            // if (tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
+            // if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
             //     diagReporter_.IncompatibleLanguageExtension(
             //                 "imaginary constant",
             //                 LanguageExtensions::);
