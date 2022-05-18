@@ -870,10 +870,10 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
 
                 lexHexadecimalDigitSequence();
                 lexBinaryExponentPart();
-                lexFloatingSuffix();
+                lexImaginaryConstant(tk);
             }
             else {
-                lexIntegerSuffix();
+                lexImaginaryConstant(tk);
             }
             goto LexExit;
         }
@@ -882,7 +882,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
                 yyinput();
                 while (yychar_ == '0' || yychar_ == '1')
                     yyinput();
-                lexIntegerSuffix();
+                lexImaginaryConstant(tk);
                 goto LexExit;
             }
             else if (yychar_ >= '0' && yychar_ <= '7') {
@@ -890,7 +890,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
                     yyinput();
                 }
                 while (yychar_ >= '0' && yychar_ <= '7');
-                lexIntegerSuffix();
+                lexImaginaryConstant(tk);
                 goto LexExit;
             }
         }
@@ -902,14 +902,14 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
             yyinput();
             lexDigitSequence();
             lexExponentPart();
-            lexFloatingSuffix();
+            lexImaginaryConstant(tk);
             break;
         }
 
         if (yychar_ == 'e' || yychar_ == 'E') {
             tk->rawSyntaxK_ = FloatingConstantToken;
             lexExponentPart();
-            lexFloatingSuffix();
+            lexImaginaryConstant(tk);
             break;
         }
 
@@ -917,7 +917,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
             yyinput();
         }
         else {
-            lexIntegerSuffix();
+            lexImaginaryConstant(tk);
             break;
         }
     }
@@ -934,10 +934,52 @@ LexExit:
         int yyleng = yytext_ - yytext;
         if (tk->rawSyntaxK_ == FloatingConstantToken)
             tk->floating_ = tree_->floatingConstant(yytext, yyleng);
+        else if (tk->rawSyntaxK_ == ImaginaryConstantToken)
+            tk->imaginary_ = tree_->imaginaryConstant(yytext, yyleng);
         else {
             tk->rawSyntaxK_ = IntegerConstantToken;
             tk->integer_ = tree_->integerConstant(yytext, yyleng);
         }
+    }
+}
+
+/**
+ * Lex an \a imaginary-constant.
+ *
+ */
+void Lexer::lexImaginaryConstant(SyntaxToken *tk)
+{
+    if (yychar_ == 'i' || yychar_ == 'j') {
+        // if (tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
+        //     diagReporter_.IncompatibleLanguageExtension(
+        //                 "imaginary constant",
+        //                 LanguageExtensions::);
+
+        auto previousconstant = tk->rawSyntaxK_;
+
+        tk->rawSyntaxK_ = ImaginaryConstantToken;
+        lexImaginarySuffix();
+        if (previousconstant == FloatingConstantToken)
+            lexFloatingSuffix();
+        else
+            lexIntegerSuffix();
+    }
+    else {
+        if (tk->rawSyntaxK_ == FloatingConstantToken)
+            lexFloatingSuffix();
+        else
+            lexIntegerSuffix();
+
+        if (yychar_ == 'i' || yychar_ == 'j') {
+            // if (tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
+            //     diagReporter_.IncompatibleLanguageExtension(
+            //                 "imaginary constant",
+            //                 LanguageExtensions::);
+
+            tk->rawSyntaxK_ = ImaginaryConstantToken;
+        }
+
+        lexImaginarySuffix();
     }
 }
 
@@ -1056,6 +1098,16 @@ void Lexer::lexFloatingSuffix()
             || yychar_ == 'L') {
         yyinput();
     }
+}
+
+/**
+ * Lex an \a imaginary-suffix
+ *
+ */
+void Lexer::lexImaginarySuffix()
+{
+    if (yychar_ == 'i' || yychar_ == 'j')
+        yyinput();
 }
 
 /**

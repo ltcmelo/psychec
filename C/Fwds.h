@@ -38,6 +38,7 @@ class Identifier;
 class IntegerConstant;
 class FloatingConstant;
 class CharacterConstant;
+class ImaginaryConstant;
 class StringLiteral;
 
 //=================================================================== Nodes

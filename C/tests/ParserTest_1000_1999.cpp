@@ -468,41 +468,144 @@ void ParserTest::case1068()
 
 void ParserTest::case1069()
 {
+    parseExpression("1i",
+                    Expectation().AST( { ImaginaryConstantExpression }));
 }
 
 void ParserTest::case1070()
 {
+    parseExpression(".1i",
+                    Expectation().AST( { ImaginaryConstantExpression }));
 }
 
 void ParserTest::case1071()
 {
+    parseExpression("1.i",
+                    Expectation().AST( { ImaginaryConstantExpression }));
 }
 
 void ParserTest::case1072()
 {
+    parseExpression("1.2i",
+                    Expectation().AST( { ImaginaryConstantExpression }));
 }
 
 void ParserTest::case1073()
 {
+    parseExpression("1.2e3i",
+                    Expectation().AST( { ImaginaryConstantExpression }));
 }
 
-void ParserTest::case1074() {}
-void ParserTest::case1075() {}
-void ParserTest::case1076() {}
-void ParserTest::case1077() {}
-void ParserTest::case1078() {}
-void ParserTest::case1079() {}
-void ParserTest::case1080() {}
-void ParserTest::case1081() {}
-void ParserTest::case1082() {}
-void ParserTest::case1083() {}
-void ParserTest::case1084() {}
-void ParserTest::case1085() {}
-void ParserTest::case1086() {}
-void ParserTest::case1087() {}
-void ParserTest::case1088() {}
-void ParserTest::case1089() {}
-void ParserTest::case1090() {}
+void ParserTest::case1074()
+{
+    parseExpression("1uli",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1075()
+{
+    parseExpression("1j",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1076()
+{
+    parseExpression(".1j",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1077()
+{
+    parseExpression("1.j",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1078()
+{
+    parseExpression("1.2j",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1079()
+{
+    parseExpression("1.2e3j",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1080()
+{
+    parseExpression("1ulj",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1081()
+{
+    parseExpression("1iu",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1082()
+{
+    parseExpression("1ju",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1083()
+{
+    parseExpression("1.2if",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1084()
+{
+    parseExpression("1.2jf",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1085()
+{
+    parseExpression("1.2e3if",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1086()
+{
+    parseExpression("1.2e3jf",
+                    Expectation().AST( { ImaginaryConstantExpression }));
+}
+
+void ParserTest::case1087()
+{
+    parseExpression("1ii",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
+void ParserTest::case1088()
+{
+    parseExpression("1jj",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
+void ParserTest::case1089()
+{
+    parseExpression("1uliul",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
+void ParserTest::case1090()
+{
+    parseExpression("1uljul",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
 void ParserTest::case1091() {}
 void ParserTest::case1092() {}
 void ParserTest::case1093() {}

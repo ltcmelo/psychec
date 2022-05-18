@@ -90,3 +90,9 @@ CharacterConstant::Variant CharacterConstant::variant() const
 
     return Variant::Plain_u_char;
 }
+
+ImaginaryConstant::ImaginaryConstant(const char* chars, unsigned int size)
+    : Constant(chars,
+               size,
+               Kind::ImaginaryConstant)
+{}

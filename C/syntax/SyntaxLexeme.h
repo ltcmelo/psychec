@@ -46,6 +46,7 @@ public:
     virtual IntegerConstant* asIntegerConstant() { return nullptr; }
     virtual FloatingConstant* asFloatingConstant() { return nullptr; }
     virtual CharacterConstant* asCharacterConstant() { return nullptr; }
+    virtual ImaginaryConstant* asImaginaryConstant() { return nullptr; }
     virtual StringLiteral* asStringLiteralExpression() { return nullptr; }
 
     /**
@@ -58,6 +59,7 @@ public:
         IntegerConstant,
         FloatingConstant,
         CharacterConstant,
+        ImaginaryConstant,
         StringLiteral
     };
 

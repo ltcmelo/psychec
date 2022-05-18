@@ -251,6 +251,7 @@ private:
         const IntegerConstant* integer_;
         const FloatingConstant* floating_;
         const CharacterConstant* character_;
+        const ImaginaryConstant* imaginary_;
         const StringLiteral* string_;
     };
 

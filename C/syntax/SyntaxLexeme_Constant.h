@@ -136,6 +136,17 @@ public:
     Variant variant() const;
 };
 
+/**
+ * \brief The ImaginaryConstant class.
+ */
+class PSY_C_API ImaginaryConstant final : public Constant
+{
+public:
+    ImaginaryConstant(const char* chars, unsigned int size);
+
+    virtual ImaginaryConstant* asImaginaryConstant() override { return this; }
+};
+
 } // C
 } // psy
 

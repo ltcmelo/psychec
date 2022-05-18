@@ -270,6 +270,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "FloatingConstantExpression";
         case CharacterConstantExpression:
             return "CharacterConstantExpression";
+        case ImaginaryConstantExpression:
+            return "ImaginaryConstantExpression";
         case BooleanConstantExpression:
             return "BooleanLiteralExpression";
         case NULL_ConstantExpression:

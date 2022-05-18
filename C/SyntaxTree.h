@@ -157,6 +157,7 @@ private:
     const IntegerConstant* integerConstant(const char* s, unsigned int size);
     const FloatingConstant* floatingConstant(const char* s, unsigned int size);
     const CharacterConstant* characterConstant(const char* s, unsigned int size);
+    const ImaginaryConstant* imaginaryConstant(const char* s, unsigned int size);
     const StringLiteral* stringLiteral(const char* s, unsigned size);
 
     void relayLineStart(unsigned int offset);
