@@ -1936,7 +1936,26 @@ void BinderTest::case0410()
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case0411(){}
+void BinderTest::case0411()
+{
+    // The `signal' function: http://c-faq.com/decl/spiral.anderson.html
+
+    bind(" void ( * x ( int , void ( * y ) ( int ) ) ) ( int ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.Parameter().basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec._AtParam_().deriv(TypeKind::Function)
+                  .TySpec._AtParam_().Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer)));
+}
 void BinderTest::case0412(){}
 void BinderTest::case0413(){}
 void BinderTest::case0414(){}
