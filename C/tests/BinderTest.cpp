@@ -185,7 +185,7 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
         switch (tySym->typeKind()) {
             case TypeKind::Array:
                 if (derivPtrTyDecay != Decay::None) {
-                    DETAIL_MISMATCH("arrays don't decay");
+                    DETAIL_MISMATCH("can't happen for array");
                     return false;
                 }
                 tySym = tySym->asArrayType()->elementType();
@@ -220,21 +220,34 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
 
             case TypeKind::Function: {
                 if (derivPtrTyDecay != Decay::None) {
-                    DETAIL_MISMATCH("functions don't decay");
+                    DETAIL_MISMATCH("can't happen for function");
                     return false;
                 }
+
                 auto funcTySym = tySym->asFunctionType();
                 auto parms = funcTySym->parameterTypes();
-                if (parms.size() != tySpec.parmsTySpecs_.size())
-                    return REJECT_CANDIDATE(tySym, "number of parameters");
+                if (parms.size() != tySpec.parmsTySpecs_.size()) {
+                    DETAIL_MISMATCH("number of parameters");
+                    return false;
+                }
 
                 for (auto i = 0U; i < parms.size(); ++i) {
                     const TypeSymbol* parmTySym = parms[i];
-                    if (!typeMatches(parmTySym, tySpec.parmsTySpecs_[i]))
-                        return REJECT_CANDIDATE(tySym, "parameter type mismatch");
+                    if (!typeMatches(parmTySym, tySpec.parmsTySpecs_[i])) {
+                        DETAIL_MISMATCH("parameter type mismatch");
+                        return false;
+                    }
                 }
-                tySym = tySym->asFunctionType()->returnType();
-                break;
+
+                tySym = funcTySym->returnType();
+                if (!tySpec.nestedRetTySpec_)
+                    break;
+
+                if (!typeMatches(tySym, *tySpec.nestedRetTySpec_.get())) {
+                    DETAIL_MISMATCH("nested return type mismatch");
+                    return false;
+                }
+                return true;
             }
 
             default:
