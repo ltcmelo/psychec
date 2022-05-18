@@ -194,22 +194,22 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
             case TypeKind::Pointer:
                 switch (derivPtrTyDecay) {
                     case Decay::None:
-                        if (tySym->asPointerType()->arisesFromFunctionTypeDecay()
-                                    || tySym->asPointerType()->arisesFromArrayOfTypeDecay()) {
+                        if (tySym->asPointerType()->arisesFromFunctionDecay()
+                                    || tySym->asPointerType()->arisesFromArrayDecay()) {
                             DETAIL_MISMATCH("pointer type is decayed from array/function");
                             return false;
                         }
                         break;
 
-                    case Decay::FunctionType:
-                        if (!tySym->asPointerType()->arisesFromFunctionTypeDecay()) {
+                    case Decay::FromFunctionToFunctionPointer:
+                        if (!tySym->asPointerType()->arisesFromFunctionDecay()) {
                             DETAIL_MISMATCH("pointer type isn't (function) decayed");
                             return false;
                         }
                         break;
 
-                    case Decay::ArrayOfType:
-                        if (!tySym->asPointerType()->arisesFromArrayOfTypeDecay()) {
+                    case Decay::FromArrayToPointer:
+                        if (!tySym->asPointerType()->arisesFromArrayDecay()) {
                             DETAIL_MISMATCH("pointer type isn't (array) decayed");
                             return false;
                         }

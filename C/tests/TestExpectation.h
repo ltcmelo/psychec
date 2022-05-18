@@ -51,8 +51,8 @@ enum class CVR
 enum class Decay
 {
     None,
-    ArrayOfType,
-    FunctionType
+    FromArrayToPointer,
+    FromFunctionToFunctionPointer
 };
 
 struct DeclSummary;

@@ -970,11 +970,11 @@ void BinderTest::case0206()
                   .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0207()
@@ -986,11 +986,11 @@ void BinderTest::case0207()
                   .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0208(){}
@@ -1373,13 +1373,13 @@ void BinderTest::case0335()
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec._AtParam_().deriv(TypeKind::Function)
                   .TySpec._AtParam_().Parameter().basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FunctionType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromFunctionToFunctionPointer))
          .binding(DeclSummary()
                   .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FunctionType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromFunctionToFunctionPointer)));
 }
 
 void BinderTest::case0336(){}
@@ -1623,11 +1623,11 @@ void BinderTest::case0385()
                   .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0386()
@@ -1639,11 +1639,11 @@ void BinderTest::case0386()
                   .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("y", NamedTypeKind::Synonym)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0387()
@@ -1656,12 +1656,12 @@ void BinderTest::case0387()
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec.deriv(TypeKind::Pointer)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0388()
@@ -1674,12 +1674,12 @@ void BinderTest::case0388()
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("y", NamedTypeKind::Synonym)
                   .TySpec.deriv(TypeKind::Pointer)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0389()
@@ -1693,13 +1693,13 @@ void BinderTest::case0389()
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec.deriv(TypeKind::Pointer)
                   .TySpec.deriv(TypeKind::Pointer)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0390()
@@ -1712,12 +1712,12 @@ void BinderTest::case0390()
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("y", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("y", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
                   .TySpec.deriv(TypeKind::Pointer)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0391()
@@ -1729,7 +1729,7 @@ void BinderTest::case0391()
                   .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)
                   .TySpec.Parameter().basis("w", NamedTypeKind::Synonym))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
@@ -1737,7 +1737,7 @@ void BinderTest::case0391()
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("y", NamedTypeKind::Synonym)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0392()
@@ -1750,14 +1750,14 @@ void BinderTest::case0392()
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("w", NamedTypeKind::Synonym)
                   .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("w", NamedTypeKind::Synonym))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("y", NamedTypeKind::Synonym)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0393(){}
