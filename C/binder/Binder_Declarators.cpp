@@ -23,7 +23,7 @@
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
-#include "binder/Semantics_TypeSpecifiers.h"
+#include "binder/Semantics_Declarators.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
 #include "symbols/SymbolName_ALL.h"
@@ -138,10 +138,32 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             makeTySymAndPushIt<ArrayTypeSymbol>(tySyms_.top());
             break;
 
-        case ParameterSuffix:
+        case ParameterSuffix: {
+            auto tySym = tySyms_.top();
+            switch (tySym->typeKind()) {
+                case TypeKind::Function:
+                    Semantics_Declarators::FunctionReturningFunction(
+                                node->innerDeclarator()->firstToken(),
+                                &diagReporter_);
+                    break;
+
+                case TypeKind::Array:
+                    Semantics_Declarators::FunctionReturningArray(
+                                node->innerDeclarator()->firstToken(),
+                                &diagReporter_);
+                    break;
+
+                case TypeKind::Pointer:
+                case TypeKind::Named:
+                    break;
+
+                default:
+                    PSY_TRACE_ESCAPE_0(return Action::Quit);
+            }
             makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
             pendingFunTySyms_.push(tySyms_.top()->asFunctionType());
             break;
+        }
 
         default:
             PSY_TRACE_ESCAPE_0(return Action::Quit);

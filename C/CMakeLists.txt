@@ -170,6 +170,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/NameSpace.h
     ${PROJECT_SOURCE_DIR}/binder/NameSpaces.h
     ${PROJECT_SOURCE_DIR}/binder/NameSpaceKind.h
+    ${PROJECT_SOURCE_DIR}/binder/Semantics_Declarators.h
+    ${PROJECT_SOURCE_DIR}/binder/Semantics_Declarators.cpp
     ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeQualifiers.h
     ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeQualifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeSpecifiers.h

@@ -36,7 +36,7 @@ const std::string Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSp
 
 void Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
         SyntaxToken declTk,
-        Binder::DiagnosticsReporter *diagReporter)
+        Binder::DiagnosticsReporter* diagReporter)
 {
     diagReporter->diagnose(DiagnosticDescriptor(
                                ID_TypeSpecifierMissingDefaultsToInt,

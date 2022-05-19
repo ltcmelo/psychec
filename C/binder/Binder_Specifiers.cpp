@@ -48,9 +48,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         actOnTypeSpecifier(specIt->value);
 
     if (tySyms_.empty()) {
-        Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
-                    node->lastToken(), &diagReporter_);
-
+        Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(node->lastToken(), &diagReporter_);
         makeTySymAndPushIt<NamedTypeSymbol>(BuiltinTypeKind::Int);
     }
 
