@@ -23,8 +23,8 @@
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
-#include "binder/Semantics_TypeQualifiers.h"
-#include "binder/Semantics_TypeSpecifiers.h"
+#include "binder/SemanticsOfTypeQualifiers.h"
+#include "binder/ConstraintsInTypeSpecifiers.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
 #include "symbols/SymbolName_ALL.h"
@@ -48,9 +48,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         actOnTypeSpecifier(specIt->value);
 
     if (tySyms_.empty()) {
-        Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
-                    node->lastToken(), &diagReporter_);
-
+        ConstraintsInTypeSpecifiers::TypeSpecifierMissingDefaultsToInt(node->lastToken(), &diagReporter_);
         makeTySymAndPushIt<NamedTypeSymbol>(BuiltinTypeKind::Int);
     }
 
@@ -157,7 +155,7 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
     }
     else {
         NamedTypeSymbol* namedTySym = tySyms_.top()->asNamedType();
-        Semantics_TypeSpecifiers::specify(node->specifierToken(),
+        ConstraintsInTypeSpecifiers::specify(node->specifierToken(),
                                           namedTySym,
                                           &diagReporter_);
     }
@@ -249,7 +247,7 @@ SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node
 {
     PSY_ASSERT_0(!tySyms_.empty(), return Action::Quit);
 
-    Semantics_TypeQualifiers::qualify(node->qualifierKeyword(),
+    SemanticsOfTypeQualifiers::qualify(node->qualifierKeyword(),
                                       tySyms_.top(),
                                       &diagReporter_);
 

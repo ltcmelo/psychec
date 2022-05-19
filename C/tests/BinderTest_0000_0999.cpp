@@ -22,6 +22,7 @@
 
 #include "ParserTest.h"
 
+#include "binder/ConstraintsInDeclarators.h"
 #include "syntax/SyntaxLexeme_ALL.h"
 #include "parser/Unparser.h"
 
@@ -1969,8 +1970,35 @@ void BinderTest::case0412()
                   .TySpec.NestAsReturn()
                   .TySpec.deriv(TypeKind::Function)));
 }
-void BinderTest::case0413(){}
-void BinderTest::case0414(){}
+void BinderTest::case0413()
+{
+    bind("void x ( ) ( ) ;",
+         Expectation()
+         .diagnostic(Expectation::ErrorOrWarn::Error,
+                     ConstraintsInDeclarators::ID_FunctionReturningFunction)
+         .ContinueTestDespiteOfErrors()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
+
+void BinderTest::case0414()
+{
+    bind("void ( x ( ) ) ( ) ;",
+         Expectation()
+         .diagnostic(Expectation::ErrorOrWarn::Error,
+                     ConstraintsInDeclarators::ID_FunctionReturningFunction)
+         .ContinueTestDespiteOfErrors()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
 void BinderTest::case0415(){}
 void BinderTest::case0416(){}
 void BinderTest::case0417(){}
@@ -2008,8 +2036,36 @@ void BinderTest::case0426()
                   .TySpec.deriv(TypeKind::Function)));
 }
 
-void BinderTest::case0427(){}
-void BinderTest::case0428(){}
+void BinderTest::case0427()
+{
+    bind("int x ( ) [] ;",
+         Expectation()
+         .diagnostic(Expectation::ErrorOrWarn::Error,
+                     ConstraintsInDeclarators::ID_FunctionReturningArray)
+         .ContinueTestDespiteOfErrors()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Array)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
+
+void BinderTest::case0428()
+{
+    bind("int ( x ) ( ) [] ;",
+         Expectation()
+         .diagnostic(Expectation::ErrorOrWarn::Error,
+                     ConstraintsInDeclarators::ID_FunctionReturningArray)
+         .ContinueTestDespiteOfErrors()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Array)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
+
 void BinderTest::case0429(){}
 void BinderTest::case0430(){}
 void BinderTest::case0431(){}

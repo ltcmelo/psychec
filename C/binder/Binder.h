@@ -48,6 +48,12 @@ class SemanticModel;
  */
 class PSY_C_API Binder final : protected SyntaxVisitor
 {
+    friend class BinderTest;
+    friend class SemanticModel;
+    friend class ConstraintsInTypeSpecifiers;
+    friend class ConstraintsInDeclarators;
+    friend class SemanticsOfTypeQualifiers;
+
 public:
     Binder(const Binder&) = delete;
     void operator=(const Binder&) = delete;
@@ -56,11 +62,6 @@ public:
     void bind();
 
 private:
-    friend class BinderTest;
-    friend class SemanticModel;
-    friend class Semantics_TypeSpecifiers;
-    friend class Semantics_TypeQualifiers;
-
     Binder(SemanticModel* semaModel, const SyntaxTree* tree);
 
     SemanticModel* semaModel_;

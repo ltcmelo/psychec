@@ -44,6 +44,8 @@ namespace C {
  */
 class PSY_C_API TypeSymbol : public Symbol
 {
+    friend class SemanticsOfTypeQualifiers;
+
 public:
     virtual ~TypeSymbol();
 
@@ -85,8 +87,6 @@ protected:
     TypeSymbol(TypeSymbolImpl* p);
 
 private:
-    friend class Semantics_TypeQualifiers;
-
     void qualifyWithConst();
     void qualifyWithVolatile();
     void qualifyWithRestrict();

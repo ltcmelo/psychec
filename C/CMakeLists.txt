@@ -165,15 +165,17 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Declarators.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Specifiers.cpp
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarators.h
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarators.cpp
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInTypeSpecifiers.h
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInTypeSpecifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_TypeChecker.cpp
     ${PROJECT_SOURCE_DIR}/binder/NameSpace.h
     ${PROJECT_SOURCE_DIR}/binder/NameSpaces.h
     ${PROJECT_SOURCE_DIR}/binder/NameSpaceKind.h
-    ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeQualifiers.h
-    ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeQualifiers.cpp
-    ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeSpecifiers.h
-    ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeSpecifiers.cpp
+    ${PROJECT_SOURCE_DIR}/binder/SemanticsOfTypeQualifiers.h
+    ${PROJECT_SOURCE_DIR}/binder/SemanticsOfTypeQualifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/Scope.h
     ${PROJECT_SOURCE_DIR}/binder/Scope.cpp
     ${PROJECT_SOURCE_DIR}/binder/ScopeKind.h

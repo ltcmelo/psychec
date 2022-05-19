@@ -127,6 +127,9 @@ struct Expectation
     Expectation& setWarnCnt(int numW);
     Expectation& diagnostic(ErrorOrWarn v, std::string descriptorId = "");
 
+    bool continueTestDespiteOfErrors_;
+    Expectation& ContinueTestDespiteOfErrors();
+
     bool isAmbiguous_;
     std::string ambiguityText_;
     Expectation& ambiguity(std::string s = "");

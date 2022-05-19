@@ -116,8 +116,15 @@ DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
 Expectation::Expectation()
     : numE_(0)
     , numW_(0)
+    , continueTestDespiteOfErrors_(false)
     , isAmbiguous_(false)
 {}
+
+Expectation &Expectation::ContinueTestDespiteOfErrors()
+{
+    continueTestDespiteOfErrors_ = true;
+    return *this;
+}
 
 Expectation& Expectation::setErrorCnt(int numE)
 {

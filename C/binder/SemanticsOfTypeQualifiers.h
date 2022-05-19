@@ -18,29 +18,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Semantics_TypeQualifiers.h"
+#ifndef PSYCHE_C_SEMANTICS_OF_TYPE_QUALIFIERS_H__
+#define PSYCHE_C_SEMANTICS_OF_TYPE_QUALIFIERS_H__
 
-#include "SyntaxTree.h"
+#include "Fwds.h"
 
-#include "../common/infra/Assertions.h"
+#include "binder/Binder.h"
+#include "symbols/Symbol_Type.h"
+#include "syntax/SyntaxKind.h"
 
-#include <iostream>
+#include <vector>
 
-using namespace psy;
-using namespace C;
+namespace psy {
+namespace C {
 
-void Semantics_TypeQualifiers::qualify(SyntaxToken tyQualTk,
-                                       TypeSymbol* tySym,
-                                       Binder::DiagnosticsReporter* diagReporter)
+class Binder;
+
+class SemanticsOfTypeQualifiers
 {
-    const auto tkK = tyQualTk.kind();
-    switch (tkK) {
-        case Keyword_const:
-            tySym->qualifyWithConst();
-            break;
+public:
+    static void qualify(SyntaxToken tyQualTk,
+                        TypeSymbol* tySym,
+                        Binder::DiagnosticsReporter* diagReporter);
+};
 
-        default:
-            PSY_TRACE_ESCAPE_0(break);
-            break;
-    }
-}
+} // C
+} // psy
+
+#endif

@@ -114,7 +114,7 @@ bool Test::checkErrorAndWarn(Expectation X)
         }
     }
 
-    if (X.numE_)
+    if (X.numE_ && !X.continueTestDespiteOfErrors_)
         return false;
 
     return true;
