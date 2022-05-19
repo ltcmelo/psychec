@@ -947,13 +947,14 @@ LexExit:
  * Lex an \a imaginary-constant.
  *
  */
-void Lexer::lexImaginaryConstant(SyntaxToken *tk)
+void Lexer::lexImaginaryConstant(SyntaxToken* tk)
 {
     if (yychar_ == 'i' || yychar_ == 'j') {
-        // if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
-        //     diagReporter_.IncompatibleLanguageExtension(
-        //                 "imaginary constant",
-        //                 LanguageExtensions::);
+        if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
+            diagReporter_.IncompatibleLanguageExtension(
+                        "imaginary constant",
+                        LanguageExtensions::Ext::GNU_Complex);
+        }
 
         auto previousconstant = tk->rawSyntaxK_;
 
@@ -971,10 +972,11 @@ void Lexer::lexImaginaryConstant(SyntaxToken *tk)
             lexIntegerSuffix();
 
         if (yychar_ == 'i' || yychar_ == 'j') {
-            // if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
-            //     diagReporter_.IncompatibleLanguageExtension(
-            //                 "imaginary constant",
-            //                 LanguageExtensions::);
+            if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
+                diagReporter_.IncompatibleLanguageExtension(
+                            "imaginary constant",
+                            LanguageExtensions::Ext::GNU_Complex);
+            }
 
             tk->rawSyntaxK_ = ImaginaryConstantToken;
         }

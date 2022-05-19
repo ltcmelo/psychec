@@ -117,10 +117,10 @@ private:
         Lexer* lexer_;
 
         void IncompatibleLanguageDialect(const std::string& feature, LanguageDialect::Std expectedStd);
-        //void IncompatibleLanguageExtension(const std::string& feature, LanguageExtension:: expectedExt);
+        void IncompatibleLanguageExtension(const std::string& feature, LanguageExtensions::Ext expectedExt);
 
         static const std::string ID_of_IncompatibleLanguageDialect;
-        //static const std::string ID_of_IncompatibleLanguageExtension;
+        static const std::string ID_of_IncompatibleLanguageExtension;
     };
     friend struct DiagnosticsReporter;
 

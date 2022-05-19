@@ -21,6 +21,8 @@
 
 #include "LanguageExtensions.h"
 
+#include "common/infra/Assertions.h"
+
 #include <utility>
 
 #define DEFINE_ENABLE_ISENABLED(FLAG) \
@@ -76,3 +78,69 @@ DEFINE_ENABLE_ISENABLED(NativeBooleans)
 DEFINE_ENABLE_ISENABLED(NULLAsBuiltin)
 
 #undef DEFINE_ENABLE_ISENABLED
+
+namespace psy {
+namespace C {
+
+std::string PSY_C_API to_string(LanguageExtensions::Ext ext)
+{
+    switch (ext) {
+        /* GNU */
+    case LanguageExtensions::Ext::GNU_AlternateKeywords:
+        return "GNU Alternate Keywords";
+
+    case LanguageExtensions::Ext::GNU_AttributeSpecifiers:
+        return "GNU Attribute Specifiers";
+
+    case LanguageExtensions::Ext::GNU_Alignment:
+        return "GNU Alignment";
+
+    case LanguageExtensions::Ext::GNU_CompoundLiterals:
+        return "GNU Compound Literals";
+
+    case LanguageExtensions::Ext::GNU_Conditionals:
+        return "GNU Conditionals";
+
+    case LanguageExtensions::Ext::GNU_DesignatedInitializers:
+        return "GNU Designated Initializers";
+
+    case LanguageExtensions::Ext::GNU_FunctionNames:
+        return "GNU Function Names";
+
+    case LanguageExtensions::Ext::GNU_Complex:
+        return "GNU Complex";
+
+    case LanguageExtensions::Ext::GNU_StatementExpressions:
+        return "GNU Statement Expressions";
+
+    case LanguageExtensions::Ext::GNU_Asm:
+        return "GNU Asm";
+
+    case LanguageExtensions::Ext::GNU_InternalBuiltins:
+        return "GNU Internal Builtins";
+
+    case LanguageExtensions::Ext::GNU_AttributeSpecifiersLLVM:
+        return "GNU Attribute Specifiers LLVM";
+
+        /* Psyche */
+    case LanguageExtensions::Ext::PSY_Generics:
+        return "PSY Generics";
+
+        /* C++ */
+    case LanguageExtensions::Ext::CPP_nullptr:
+        return "CPP nullptr";
+
+        /* Custom */
+    case LanguageExtensions::Ext::NativeBooleans:
+        return "Native Booleans";
+
+    case LanguageExtensions::Ext::NULLAsBuiltin:
+        return "NULL As Builtin";
+
+    default:
+        PSY_ASSERT(false, return "", "");
+    }
+}
+
+} // C
+} // psy

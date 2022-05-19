@@ -28,6 +28,7 @@
 #include "SyntaxKind.h"
 
 #include "parser/LanguageDialect.h"
+#include "parser/LanguageExtensions.h"
 
 #include "../common/location/Location.h"
 #include "../common/text/TextSpan.h"

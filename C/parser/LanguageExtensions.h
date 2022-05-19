@@ -24,7 +24,10 @@
 
 #include "MacroTranslations.h"
 
+#include "API.h"
+
 #include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
@@ -42,6 +45,36 @@ public:
      * The MacroTranslations of \c this LanguageExtensions.
      */
     const MacroTranslations& translations() const;
+
+    /**
+     * \brief The C language extensions enumeration.
+     */
+    enum class Ext : std::uint8_t
+    {
+        /* GNU */
+        GNU_AlternateKeywords,
+        GNU_AttributeSpecifiers,
+        GNU_Alignment,
+        GNU_CompoundLiterals,
+        GNU_Conditionals,
+        GNU_DesignatedInitializers,
+        GNU_FunctionNames,
+        GNU_Complex,
+        GNU_StatementExpressions,
+        GNU_Asm,
+        GNU_InternalBuiltins,
+        GNU_AttributeSpecifiersLLVM,
+
+        /* Psyche */
+        PSY_Generics,
+
+        /* C++ */
+        CPP_nullptr,
+
+        /* Custom */
+        NativeBooleans,
+        NULLAsBuiltin,
+    };
 
     //!@{
     /**
@@ -233,6 +266,8 @@ private:
         BitFields BF_;
     };
 };
+
+std::string PSY_C_API to_string(LanguageExtensions::Ext ext);
 
 } // C
 } // psy
