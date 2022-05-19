@@ -31,6 +31,7 @@
 #include "tests/TestRunner.h"
 
 #include <functional>
+#include <memory>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -51,8 +52,8 @@ enum class CVR
 enum class Decay
 {
     None,
-    ArrayOfType,
-    FunctionType
+    FromArrayToPointer,
+    FromFunctionToFunctionPointer
 };
 
 struct DeclSummary;
@@ -60,6 +61,9 @@ struct DeclSummary;
 struct TypeSpecSummary
 {
     TypeSpecSummary(DeclSummary& declSummary);
+    TypeSpecSummary(TypeSpecSummary&& tySpec) = default;
+    TypeSpecSummary(const TypeSpecSummary& tySpec) = default;
+    ~TypeSpecSummary();
 
     DeclSummary& declSummary_;
 
@@ -72,6 +76,9 @@ struct TypeSpecSummary
     TypeSpecSummary& Parameter();
     TypeSpecSummary& _AtParam_();
 
+    DeclSummary& NestAsReturn();
+
+    std::shared_ptr<TypeSpecSummary> nestedRetTySpec_;
     std::string specTyName_;
     NamedTypeKind specTyK_;
     BuiltinTypeKind specTyBuiltinK_;

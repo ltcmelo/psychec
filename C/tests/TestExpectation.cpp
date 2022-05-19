@@ -25,13 +25,19 @@ using namespace  C;
 
 TypeSpecSummary::TypeSpecSummary(DeclSummary& declSummary)
     : declSummary_(declSummary)
-{
-}
+    , nestedRetTySpec_(nullptr)
+    , specTyK_(NamedTypeKind::UNSPECIFIED)
+    , specTyBuiltinK_(BuiltinTypeKind::UNSPECIFIED)
+    , specTyCVR_(CVR::None)
+{}
+
+TypeSpecSummary::~TypeSpecSummary()
+{}
 
 DeclSummary& TypeSpecSummary::basis(std::string name,
-                                   NamedTypeKind tyNameK,
-                                   BuiltinTypeKind builtinTypeKind,
-                                   CVR cvr)
+                                    NamedTypeKind tyNameK,
+                                    BuiltinTypeKind builtinTypeKind,
+                                    CVR cvr)
 {
     specTyName_ = std::move(name);
     specTyK_ = tyNameK;
@@ -45,7 +51,7 @@ DeclSummary& TypeSpecSummary::deriv(TypeKind tyKind, CVR cvr, Decay decay)
     derivTyKs_.push_back(tyKind);
     derivTyCVRs_.push_back(cvr);
     derivPtrTyDecay_.push_back(decay);
-    return declSummary_;;
+    return declSummary_;
 }
 
 TypeSpecSummary& TypeSpecSummary::Parameter()
@@ -57,6 +63,22 @@ TypeSpecSummary& TypeSpecSummary::Parameter()
 TypeSpecSummary& TypeSpecSummary::_AtParam_()
 {
     return parmsTySpecs_.back();
+}
+
+DeclSummary& TypeSpecSummary::NestAsReturn()
+{
+    nestedRetTySpec_.reset(new TypeSpecSummary(*this));
+
+    specTyName_.clear();
+    specTyK_ = NamedTypeKind::UNSPECIFIED;
+    specTyBuiltinK_ = BuiltinTypeKind::UNSPECIFIED;
+    specTyCVR_ = CVR::None;
+    derivTyKs_.clear();
+    derivTyCVRs_.clear();
+    derivPtrTyDecay_.clear();
+    parmsTySpecs_.clear();
+
+    return declSummary_;
 }
 
 DeclSummary::DeclSummary()
@@ -118,7 +140,7 @@ Expectation& Expectation::ambiguity(std::string s)
 
 Expectation& Expectation::binding(DeclSummary b)
 {
-    bindings_.emplace_back(std::move(b));
+    bindings_.push_back(b);
     return *this;
 }
 

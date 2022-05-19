@@ -37,13 +37,13 @@ struct PointerTypeSymbol::PointerTypeSymbolImpl : TypeSymbolImpl
                          containingSym,
                          TypeKind::Pointer)
         , refedTySym_(refedTySym)
-        , arisesFromArrayOfTypeDecay_(false)
-        , arisesFromFunctionTypeDecay_(false)
+        , arrayDecay_(false)
+        , functionDecay_(false)
     {}
 
     const TypeSymbol* refedTySym_;
-    bool arisesFromArrayOfTypeDecay_;
-    bool arisesFromFunctionTypeDecay_;
+    bool arrayDecay_;
+    bool functionDecay_;
 };
 
 PointerTypeSymbol::PointerTypeSymbol(const SyntaxTree* tree,
@@ -61,24 +61,24 @@ const TypeSymbol* PointerTypeSymbol::referencedType() const
     return P_CAST->refedTySym_;
 }
 
-bool PointerTypeSymbol::arisesFromArrayOfTypeDecay() const
+bool PointerTypeSymbol::arisesFromArrayDecay() const
 {
-    return P_CAST->arisesFromArrayOfTypeDecay_;
+    return P_CAST->arrayDecay_;
 }
 
-bool PointerTypeSymbol::arisesFromFunctionTypeDecay() const
+bool PointerTypeSymbol::arisesFromFunctionDecay() const
 {
-    return P_CAST->arisesFromFunctionTypeDecay_;
+    return P_CAST->functionDecay_;
 }
 
-void PointerTypeSymbol::markAsArisingFromArrayOfTypeDecay()
+void PointerTypeSymbol::markAsArisingFromArrayDecay()
 {
-    P_CAST->arisesFromArrayOfTypeDecay_ = true;
+    P_CAST->arrayDecay_ = true;
 }
 
-void PointerTypeSymbol::markAsArisingFromFunctionTypeDecay()
+void PointerTypeSymbol::markAsArisingFromFunctionDecay()
 {
-    P_CAST->arisesFromFunctionTypeDecay_ = true;
+    P_CAST->functionDecay_ = true;
 }
 
 namespace psy {

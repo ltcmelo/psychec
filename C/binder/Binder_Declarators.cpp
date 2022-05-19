@@ -244,7 +244,7 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                     popTySym();
                     makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
                     auto ptrTySym = tySyms_.top()->asPointerType();
-                    ptrTySym->markAsArisingFromArrayOfTypeDecay();
+                    ptrTySym->markAsArisingFromArrayDecay();
                     break;
                 }
 
@@ -256,7 +256,7 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                      */
                     makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
                     auto ptrTySym = tySyms_.top()->asPointerType();
-                    ptrTySym->markAsArisingFromFunctionTypeDecay();
+                    ptrTySym->markAsArisingFromFunctionDecay();
                     break;
                 }
 

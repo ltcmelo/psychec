@@ -151,42 +151,42 @@ void BinderTest::case0014()
 {
 }
 
-void BinderTest::case0015() {}
-void BinderTest::case0016() {}
-void BinderTest::case0017() {}
-void BinderTest::case0018() {}
-void BinderTest::case0019() {}
-void BinderTest::case0020() {}
-void BinderTest::case0021() {}
-void BinderTest::case0022() {}
-void BinderTest::case0023() {}
-void BinderTest::case0024() {}
-void BinderTest::case0025() {}
-void BinderTest::case0026() {}
+void BinderTest::case0015(){}
+void BinderTest::case0016(){}
+void BinderTest::case0017(){}
+void BinderTest::case0018(){}
+void BinderTest::case0019(){}
+void BinderTest::case0020(){}
+void BinderTest::case0021(){}
+void BinderTest::case0022(){}
+void BinderTest::case0023(){}
+void BinderTest::case0024(){}
+void BinderTest::case0025(){}
+void BinderTest::case0026(){}
 
-void BinderTest::case0027() {}
-void BinderTest::case0028() {}
-void BinderTest::case0029() {}
-void BinderTest::case0030() {}
-void BinderTest::case0031() {}
-void BinderTest::case0032() {}
-void BinderTest::case0033() {}
-void BinderTest::case0034() {}
-void BinderTest::case0035() {}
-void BinderTest::case0036() {}
-void BinderTest::case0037() {}
-void BinderTest::case0038() {}
-void BinderTest::case0039() {}
-void BinderTest::case0040() {}
-void BinderTest::case0041() {}
-void BinderTest::case0042() {}
-void BinderTest::case0043() {}
-void BinderTest::case0044() {}
-void BinderTest::case0045() {}
-void BinderTest::case0046() {}
-void BinderTest::case0047() {}
-void BinderTest::case0048() {}
-void BinderTest::case0049() {}
+void BinderTest::case0027(){}
+void BinderTest::case0028(){}
+void BinderTest::case0029(){}
+void BinderTest::case0030(){}
+void BinderTest::case0031(){}
+void BinderTest::case0032(){}
+void BinderTest::case0033(){}
+void BinderTest::case0034(){}
+void BinderTest::case0035(){}
+void BinderTest::case0036(){}
+void BinderTest::case0037(){}
+void BinderTest::case0038(){}
+void BinderTest::case0039(){}
+void BinderTest::case0040(){}
+void BinderTest::case0041(){}
+void BinderTest::case0042(){}
+void BinderTest::case0043(){}
+void BinderTest::case0044(){}
+void BinderTest::case0045(){}
+void BinderTest::case0046(){}
+void BinderTest::case0047(){}
+void BinderTest::case0048(){}
+void BinderTest::case0049(){}
 
 void BinderTest::case0050()
 {
@@ -409,46 +409,46 @@ void BinderTest::case0060()
                   .TySpec.basis("z", NamedTypeKind::Synonym)));
 }
 
-void BinderTest::case0061() {}
-void BinderTest::case0062() {}
-void BinderTest::case0063() {}
-void BinderTest::case0064() {}
-void BinderTest::case0065() {}
-void BinderTest::case0066() {}
-void BinderTest::case0067() {}
-void BinderTest::case0068() {}
-void BinderTest::case0069() {}
-void BinderTest::case0070() {}
-void BinderTest::case0071() {}
-void BinderTest::case0072() {}
-void BinderTest::case0073() {}
-void BinderTest::case0074() {}
-void BinderTest::case0075() {}
-void BinderTest::case0076() {}
-void BinderTest::case0077() {}
-void BinderTest::case0078() {}
-void BinderTest::case0079() {}
-void BinderTest::case0080() {}
-void BinderTest::case0081() {}
-void BinderTest::case0082() {}
-void BinderTest::case0083() {}
-void BinderTest::case0084() {}
-void BinderTest::case0085() {}
-void BinderTest::case0086() {}
-void BinderTest::case0087() {}
-void BinderTest::case0088() {}
-void BinderTest::case0089() {}
-void BinderTest::case0090() {}
-void BinderTest::case0091() {}
-void BinderTest::case0092() {}
-void BinderTest::case0093() {}
-void BinderTest::case0094() {}
-void BinderTest::case0095() {}
-void BinderTest::case0096() {}
-void BinderTest::case0097() {}
-void BinderTest::case0098() {}
-void BinderTest::case0099() {}
-void BinderTest::case0100() {}
+void BinderTest::case0061(){}
+void BinderTest::case0062(){}
+void BinderTest::case0063(){}
+void BinderTest::case0064(){}
+void BinderTest::case0065(){}
+void BinderTest::case0066(){}
+void BinderTest::case0067(){}
+void BinderTest::case0068(){}
+void BinderTest::case0069(){}
+void BinderTest::case0070(){}
+void BinderTest::case0071(){}
+void BinderTest::case0072(){}
+void BinderTest::case0073(){}
+void BinderTest::case0074(){}
+void BinderTest::case0075(){}
+void BinderTest::case0076(){}
+void BinderTest::case0077(){}
+void BinderTest::case0078(){}
+void BinderTest::case0079(){}
+void BinderTest::case0080(){}
+void BinderTest::case0081(){}
+void BinderTest::case0082(){}
+void BinderTest::case0083(){}
+void BinderTest::case0084(){}
+void BinderTest::case0085(){}
+void BinderTest::case0086(){}
+void BinderTest::case0087(){}
+void BinderTest::case0088(){}
+void BinderTest::case0089(){}
+void BinderTest::case0090(){}
+void BinderTest::case0091(){}
+void BinderTest::case0092(){}
+void BinderTest::case0093(){}
+void BinderTest::case0094(){}
+void BinderTest::case0095(){}
+void BinderTest::case0096(){}
+void BinderTest::case0097(){}
+void BinderTest::case0098(){}
+void BinderTest::case0099(){}
+void BinderTest::case0100(){}
 
 void BinderTest::case0101()
 {
@@ -564,41 +564,41 @@ void BinderTest::case0114()
 {
 }
 
-void BinderTest::case0115() {}
-void BinderTest::case0116() {}
-void BinderTest::case0117() {}
-void BinderTest::case0118() {}
-void BinderTest::case0119() {}
-void BinderTest::case0120() {}
-void BinderTest::case0121() {}
-void BinderTest::case0122() {}
-void BinderTest::case0123() {}
-void BinderTest::case0124() {}
-void BinderTest::case0125() {}
-void BinderTest::case0126() {}
-void BinderTest::case0127() {}
-void BinderTest::case0128() {}
-void BinderTest::case0129() {}
-void BinderTest::case0130() {}
-void BinderTest::case0131() {}
-void BinderTest::case0132() {}
-void BinderTest::case0133() {}
-void BinderTest::case0134() {}
-void BinderTest::case0135() {}
-void BinderTest::case0136() {}
-void BinderTest::case0137() {}
-void BinderTest::case0138() {}
-void BinderTest::case0139() {}
-void BinderTest::case0140() {}
-void BinderTest::case0141() {}
-void BinderTest::case0142() {}
-void BinderTest::case0143() {}
-void BinderTest::case0144() {}
-void BinderTest::case0145() {}
-void BinderTest::case0146() {}
-void BinderTest::case0147() {}
-void BinderTest::case0148() {}
-void BinderTest::case0149() {}
+void BinderTest::case0115(){}
+void BinderTest::case0116(){}
+void BinderTest::case0117(){}
+void BinderTest::case0118(){}
+void BinderTest::case0119(){}
+void BinderTest::case0120(){}
+void BinderTest::case0121(){}
+void BinderTest::case0122(){}
+void BinderTest::case0123(){}
+void BinderTest::case0124(){}
+void BinderTest::case0125(){}
+void BinderTest::case0126(){}
+void BinderTest::case0127(){}
+void BinderTest::case0128(){}
+void BinderTest::case0129(){}
+void BinderTest::case0130(){}
+void BinderTest::case0131(){}
+void BinderTest::case0132(){}
+void BinderTest::case0133(){}
+void BinderTest::case0134(){}
+void BinderTest::case0135(){}
+void BinderTest::case0136(){}
+void BinderTest::case0137(){}
+void BinderTest::case0138(){}
+void BinderTest::case0139(){}
+void BinderTest::case0140(){}
+void BinderTest::case0141(){}
+void BinderTest::case0142(){}
+void BinderTest::case0143(){}
+void BinderTest::case0144(){}
+void BinderTest::case0145(){}
+void BinderTest::case0146(){}
+void BinderTest::case0147(){}
+void BinderTest::case0148(){}
+void BinderTest::case0149(){}
 
 void BinderTest::case0150()
 {
@@ -822,45 +822,45 @@ void BinderTest::case0160()
                   .TySpec.basis("z", NamedTypeKind::Synonym)));
 }
 
-void BinderTest::case0161() {}
-void BinderTest::case0162() {}
-void BinderTest::case0163() {}
-void BinderTest::case0164() {}
-void BinderTest::case0165() {}
-void BinderTest::case0166() {}
-void BinderTest::case0167() {}
-void BinderTest::case0168() {}
-void BinderTest::case0169() {}
-void BinderTest::case0170() {}
-void BinderTest::case0171() {}
-void BinderTest::case0172() {}
-void BinderTest::case0173() {}
-void BinderTest::case0174() {}
-void BinderTest::case0175() {}
-void BinderTest::case0176() {}
-void BinderTest::case0177() {}
-void BinderTest::case0178() {}
-void BinderTest::case0179() {}
-void BinderTest::case0180() {}
-void BinderTest::case0181() {}
-void BinderTest::case0182() {}
-void BinderTest::case0183() {}
-void BinderTest::case0184() {}
-void BinderTest::case0185() {}
-void BinderTest::case0186() {}
-void BinderTest::case0187() {}
-void BinderTest::case0188() {}
-void BinderTest::case0189() {}
-void BinderTest::case0190() {}
-void BinderTest::case0191() {}
-void BinderTest::case0192() {}
-void BinderTest::case0193() {}
-void BinderTest::case0194() {}
-void BinderTest::case0195() {}
-void BinderTest::case0196() {}
-void BinderTest::case0197() {}
-void BinderTest::case0198() {}
-void BinderTest::case0199() {}
+void BinderTest::case0161(){}
+void BinderTest::case0162(){}
+void BinderTest::case0163(){}
+void BinderTest::case0164(){}
+void BinderTest::case0165(){}
+void BinderTest::case0166(){}
+void BinderTest::case0167(){}
+void BinderTest::case0168(){}
+void BinderTest::case0169(){}
+void BinderTest::case0170(){}
+void BinderTest::case0171(){}
+void BinderTest::case0172(){}
+void BinderTest::case0173(){}
+void BinderTest::case0174(){}
+void BinderTest::case0175(){}
+void BinderTest::case0176(){}
+void BinderTest::case0177(){}
+void BinderTest::case0178(){}
+void BinderTest::case0179(){}
+void BinderTest::case0180(){}
+void BinderTest::case0181(){}
+void BinderTest::case0182(){}
+void BinderTest::case0183(){}
+void BinderTest::case0184(){}
+void BinderTest::case0185(){}
+void BinderTest::case0186(){}
+void BinderTest::case0187(){}
+void BinderTest::case0188(){}
+void BinderTest::case0189(){}
+void BinderTest::case0190(){}
+void BinderTest::case0191(){}
+void BinderTest::case0192(){}
+void BinderTest::case0193(){}
+void BinderTest::case0194(){}
+void BinderTest::case0195(){}
+void BinderTest::case0196(){}
+void BinderTest::case0197(){}
+void BinderTest::case0198(){}
+void BinderTest::case0199(){}
 
 void BinderTest::case0200()
 {
@@ -970,11 +970,11 @@ void BinderTest::case0206()
                   .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0207()
@@ -986,11 +986,11 @@ void BinderTest::case0207()
                   .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0208(){}
@@ -1373,13 +1373,13 @@ void BinderTest::case0335()
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec._AtParam_().deriv(TypeKind::Function)
                   .TySpec._AtParam_().Parameter().basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FunctionType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromFunctionToFunctionPointer))
          .binding(DeclSummary()
                   .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FunctionType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromFunctionToFunctionPointer)));
 }
 
 void BinderTest::case0336(){}
@@ -1623,11 +1623,11 @@ void BinderTest::case0385()
                   .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0386()
@@ -1639,11 +1639,11 @@ void BinderTest::case0386()
                   .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("y", NamedTypeKind::Synonym)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0387()
@@ -1656,12 +1656,12 @@ void BinderTest::case0387()
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec.deriv(TypeKind::Pointer)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0388()
@@ -1674,12 +1674,12 @@ void BinderTest::case0388()
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("y", NamedTypeKind::Synonym)
                   .TySpec.deriv(TypeKind::Pointer)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0389()
@@ -1693,13 +1693,13 @@ void BinderTest::case0389()
                   .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("y", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec.deriv(TypeKind::Pointer)
                   .TySpec.deriv(TypeKind::Pointer)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0390()
@@ -1712,12 +1712,12 @@ void BinderTest::case0390()
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("y", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("y", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)
                   .TySpec.deriv(TypeKind::Pointer)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0391()
@@ -1729,7 +1729,7 @@ void BinderTest::case0391()
                   .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)
                   .TySpec.Parameter().basis("w", NamedTypeKind::Synonym))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
@@ -1737,7 +1737,7 @@ void BinderTest::case0391()
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("y", NamedTypeKind::Synonym)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0392()
@@ -1750,14 +1750,14 @@ void BinderTest::case0392()
                   .TySpec.deriv(TypeKind::Function)
                   .TySpec.Parameter().basis("w", NamedTypeKind::Synonym)
                   .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
-                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType))
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("w", NamedTypeKind::Synonym))
          .binding(DeclSummary()
                   .Value("z", ValueKind::Parameter, ScopeKind::FunctionPrototype)
                   .TySpec.basis("y", NamedTypeKind::Synonym)
-                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::ArrayOfType)));
+                  .TySpec.deriv(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTest::case0393(){}
@@ -1767,6 +1767,434 @@ void BinderTest::case0396(){}
 void BinderTest::case0397(){}
 void BinderTest::case0398(){}
 void BinderTest::case0399(){}
+
+void BinderTest::case0400()
+{
+    bind("void ( * x ( ) ) ( ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
+
+void BinderTest::case0401()
+{
+    bind("void ( * x ( ) ) ( int ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
+
+void BinderTest::case0402()
+{
+    bind("void ( * x ( int ) ) ( ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+}
+
+void BinderTest::case0403()
+{
+    bind("void ( * x ( double ) ) ( int ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
+}
+
+void BinderTest::case0404()
+{
+    bind("void * ( * x ( double ) ) ( int ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
+}
+
+void BinderTest::case0405()
+{
+    bind("void * ( * x ( double , char ) ) ( int , long ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.Parameter().basis("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)
+                  .TySpec.Parameter().basis("char", NamedTypeKind::Builtin, BuiltinTypeKind::Char)));
+}
+
+void BinderTest::case0406()
+{
+    bind("void * ( * x ( double * , char ) ) ( void * ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer)
+                  .TySpec.Parameter().basis("char", NamedTypeKind::Builtin, BuiltinTypeKind::Char)));
+}
+
+void BinderTest::case0407()
+{
+    bind("void ( * x ( ) ) ( y ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
+
+void BinderTest::case0408()
+{
+    bind("void ( * x ( y ) ) ( ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)));
+}
+
+void BinderTest::case0409()
+{
+    bind("void ( * x ( y ) ) ( z ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("z", NamedTypeKind::Synonym)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)));
+}
+
+void BinderTest::case0410()
+{
+    bind("void ( * x ( y * ) ) ( z ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("z", NamedTypeKind::Synonym)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("y", NamedTypeKind::Synonym)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer)));
+}
+
+void BinderTest::case0411()
+{
+    // The `signal' function: http://c-faq.com/decl/spiral.anderson.html
+
+    bind(" void ( * x ( int , void ( * y ) ( int ) ) ) ( int ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.Parameter().basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec._AtParam_().deriv(TypeKind::Function)
+                  .TySpec._AtParam_().Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec._AtParam_().deriv(TypeKind::Pointer)));
+}
+
+void BinderTest::case0412()
+{
+    bind("x ( * y ( ) ) ( ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("y", ScopeKind::File)
+                  .TySpec.basis("x", NamedTypeKind::Synonym)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
+void BinderTest::case0413(){}
+void BinderTest::case0414(){}
+void BinderTest::case0415(){}
+void BinderTest::case0416(){}
+void BinderTest::case0417(){}
+void BinderTest::case0418(){}
+void BinderTest::case0419(){}
+void BinderTest::case0420(){}
+void BinderTest::case0421(){}
+void BinderTest::case0422(){}
+void BinderTest::case0423(){}
+void BinderTest::case0424(){}
+
+void BinderTest::case0425()
+{
+    bind("int ( * x ( ) ) [] ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Array)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
+
+void BinderTest::case0426()
+{
+    bind("x ( * y ( ) ) [] ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("y", ScopeKind::File)
+                  .TySpec.basis("x", NamedTypeKind::Synonym)
+                  .TySpec.deriv(TypeKind::Array)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
+
+void BinderTest::case0427(){}
+void BinderTest::case0428(){}
+void BinderTest::case0429(){}
+void BinderTest::case0430(){}
+void BinderTest::case0431(){}
+void BinderTest::case0432(){}
+void BinderTest::case0433(){}
+void BinderTest::case0434(){}
+void BinderTest::case0435(){}
+void BinderTest::case0436(){}
+void BinderTest::case0437(){}
+void BinderTest::case0438(){}
+void BinderTest::case0439(){}
+void BinderTest::case0440()
+{
+}
+
+void BinderTest::case0441(){}
+void BinderTest::case0442(){}
+void BinderTest::case0443(){}
+void BinderTest::case0444(){}
+void BinderTest::case0445(){}
+void BinderTest::case0446(){}
+void BinderTest::case0447(){}
+void BinderTest::case0448(){}
+void BinderTest::case0449(){}
+
+void BinderTest::case0450()
+{
+}
+
+void BinderTest::case0451()
+{
+}
+
+void BinderTest::case0452(){}
+void BinderTest::case0453(){}
+void BinderTest::case0454(){}
+void BinderTest::case0455(){}
+void BinderTest::case0456(){}
+void BinderTest::case0457(){}
+void BinderTest::case0458(){}
+void BinderTest::case0459(){}
+void BinderTest::case0460(){}
+void BinderTest::case0461(){}
+void BinderTest::case0462(){}
+void BinderTest::case0463(){}
+void BinderTest::case0464(){}
+void BinderTest::case0465(){}
+void BinderTest::case0466(){}
+void BinderTest::case0467(){}
+void BinderTest::case0468(){}
+void BinderTest::case0469(){}
+void BinderTest::case0470(){}
+void BinderTest::case0471(){}
+void BinderTest::case0472(){}
+void BinderTest::case0473(){}
+void BinderTest::case0474(){}
+void BinderTest::case0475(){}
+void BinderTest::case0476(){}
+void BinderTest::case0477(){}
+void BinderTest::case0478(){}
+void BinderTest::case0479(){}
+void BinderTest::case0480(){}
+void BinderTest::case0481(){}
+void BinderTest::case0482(){}
+void BinderTest::case0483(){}
+void BinderTest::case0484(){}
+void BinderTest::case0485(){}
+void BinderTest::case0486(){}
+void BinderTest::case0487(){}
+void BinderTest::case0488(){}
+void BinderTest::case0489(){}
+void BinderTest::case0490(){}
+void BinderTest::case0491(){}
+void BinderTest::case0492(){}
+void BinderTest::case0493(){}
+void BinderTest::case0494(){}
+void BinderTest::case0495(){}
+void BinderTest::case0496(){}
+void BinderTest::case0497(){}
+void BinderTest::case0498(){}
+void BinderTest::case0499(){}
+
+void BinderTest::case0500(){}
+void BinderTest::case0501(){}
+void BinderTest::case0502(){}
+void BinderTest::case0503(){}
+void BinderTest::case0504(){}
+void BinderTest::case0505(){}
+void BinderTest::case0506(){}
+void BinderTest::case0507(){}
+void BinderTest::case0508(){}
+void BinderTest::case0509(){}
+void BinderTest::case0510(){}
+void BinderTest::case0511(){}
+void BinderTest::case0512(){}
+void BinderTest::case0513(){}
+void BinderTest::case0514(){}
+void BinderTest::case0515(){}
+void BinderTest::case0516(){}
+void BinderTest::case0517(){}
+void BinderTest::case0518(){}
+void BinderTest::case0519(){}
+void BinderTest::case0520(){}
+void BinderTest::case0521(){}
+void BinderTest::case0522(){}
+void BinderTest::case0523(){}
+void BinderTest::case0524(){}
+void BinderTest::case0525(){}
+void BinderTest::case0526(){}
+void BinderTest::case0527(){}
+void BinderTest::case0528(){}
+void BinderTest::case0529(){}
+void BinderTest::case0530(){}
+void BinderTest::case0531(){}
+void BinderTest::case0532(){}
+void BinderTest::case0533(){}
+void BinderTest::case0534(){}
+void BinderTest::case0535(){}
+void BinderTest::case0536(){}
+void BinderTest::case0537(){}
+void BinderTest::case0538(){}
+void BinderTest::case0539(){}
+void BinderTest::case0540(){}
+void BinderTest::case0541(){}
+void BinderTest::case0542(){}
+void BinderTest::case0543(){}
+void BinderTest::case0544(){}
+void BinderTest::case0545(){}
+void BinderTest::case0546(){}
+void BinderTest::case0547(){}
+void BinderTest::case0548(){}
+void BinderTest::case0549(){}
+void BinderTest::case0550(){}
+void BinderTest::case0551(){}
+void BinderTest::case0552(){}
+void BinderTest::case0553(){}
+void BinderTest::case0554(){}
+void BinderTest::case0555(){}
+void BinderTest::case0556(){}
+void BinderTest::case0557(){}
+void BinderTest::case0558(){}
+void BinderTest::case0559(){}
+void BinderTest::case0560(){}
+void BinderTest::case0561(){}
+void BinderTest::case0562(){}
+void BinderTest::case0563(){}
+void BinderTest::case0564(){}
+void BinderTest::case0565(){}
+void BinderTest::case0566(){}
+void BinderTest::case0567(){}
+void BinderTest::case0568(){}
+void BinderTest::case0569(){}
+void BinderTest::case0570(){}
+void BinderTest::case0571(){}
+void BinderTest::case0572(){}
+void BinderTest::case0573(){}
+void BinderTest::case0574(){}
+void BinderTest::case0575(){}
+void BinderTest::case0576(){}
+void BinderTest::case0577(){}
+void BinderTest::case0578(){}
+void BinderTest::case0579(){}
+void BinderTest::case0580(){}
+void BinderTest::case0581(){}
+void BinderTest::case0582(){}
+void BinderTest::case0583(){}
+void BinderTest::case0584(){}
+void BinderTest::case0585(){}
+void BinderTest::case0586(){}
+void BinderTest::case0587(){}
+void BinderTest::case0588(){}
+void BinderTest::case0589(){}
+void BinderTest::case0590(){}
+void BinderTest::case0591(){}
+void BinderTest::case0592(){}
+void BinderTest::case0593(){}
+void BinderTest::case0594(){}
+void BinderTest::case0595(){}
+void BinderTest::case0596(){}
+void BinderTest::case0597(){}
+void BinderTest::case0598(){}
+void BinderTest::case0599(){}
+
+
+
 
 
 
