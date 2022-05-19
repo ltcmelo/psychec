@@ -29,7 +29,7 @@
 using namespace psy;
 using namespace C;
 
-void Semantics_TypeQualifiers::qualify(SyntaxToken tyQualTk,
+void SemanticsOfTypeQualifiers::qualify(SyntaxToken tyQualTk,
                                        TypeSymbol* tySym,
                                        Binder::DiagnosticsReporter* diagReporter)
 {

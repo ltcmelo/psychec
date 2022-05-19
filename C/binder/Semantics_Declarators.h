@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SEMANTICS_DECLARATORS_H__
-#define PSYCHE_C_SEMANTICS_DECLARATORS_H__
+#ifndef PSYCHE_C_CONSTRAINTS_IN_DECLARATORS_H__
+#define PSYCHE_C_CONSTRAINTS_IN_DECLARATORS_H__
 
 #include "Fwds.h"
 
@@ -31,7 +31,7 @@
 namespace psy {
 namespace C {
 
-class Semantics_Declarators
+class ConstraintsInDeclarators
 {
 public:
     static const std::string ID_FunctionReturningFunction;

@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SEMANTICS_TYPE_SPECIFIERS_H__
-#define PSYCHE_C_SEMANTICS_TYPE_SPECIFIERS_H__
+#ifndef PSYCHE_C_CONSTRAINTS_IN_TYPE_SPECIFIERS_H__
+#define PSYCHE_C_CONSTRAINTS_IN_TYPE_SPECIFIERS_H__
 
 #include "Fwds.h"
 
@@ -34,7 +34,7 @@ namespace C {
 
 class Binder;
 
-class Semantics_TypeSpecifiers
+class ConstraintsInTypeSpecifiers
 {
 public:
     static const std::string ID_TypeSpecifierMissingDefaultsToInt;

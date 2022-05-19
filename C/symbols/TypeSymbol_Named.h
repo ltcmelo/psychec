@@ -41,6 +41,9 @@ namespace C {
  */
 class PSY_C_API NamedTypeSymbol final : public TypeSymbol
 {
+    friend class Binder;
+    friend class ConstraintsInTypeSpecifiers;
+
 public:
     virtual NamedTypeSymbol* asNamedType() override { return this; }
     virtual const NamedTypeSymbol* asNamedType() const override { return this; }
@@ -62,9 +65,6 @@ public:
 
 private:
     DECL_PIMPL_SUB(NamedTypeSymbol)
-
-    friend class Binder;
-    friend class Semantics_TypeSpecifiers;
 
     NamedTypeSymbol(const SyntaxTree* tree,
                     const Scope* scope,

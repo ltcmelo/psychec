@@ -114,7 +114,7 @@ void BinderTest::case1008()
     bind("int float x ;",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
+             ConstraintsInTypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
 
 void BinderTest::case1009()
@@ -255,7 +255,7 @@ void BinderTest::case1052()
     bind("const x ;",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Semantics_TypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt));
+             ConstraintsInTypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt));
 }
 
 void BinderTest::case1053()

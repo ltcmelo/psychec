@@ -142,13 +142,13 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             auto tySym = tySyms_.top();
             switch (tySym->typeKind()) {
                 case TypeKind::Function:
-                    Semantics_Declarators::FunctionReturningFunction(
+                    ConstraintsInDeclarators::FunctionReturningFunction(
                                 node->innerDeclarator()->firstToken(),
                                 &diagReporter_);
                     break;
 
                 case TypeKind::Array:
-                    Semantics_Declarators::FunctionReturningArray(
+                    ConstraintsInDeclarators::FunctionReturningArray(
                                 node->innerDeclarator()->firstToken(),
                                 &diagReporter_);
                     break;

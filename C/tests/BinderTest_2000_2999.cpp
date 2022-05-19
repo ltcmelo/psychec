@@ -151,7 +151,7 @@ struct
          )",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
+             ConstraintsInTypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
 
 void BinderTest::case2009()

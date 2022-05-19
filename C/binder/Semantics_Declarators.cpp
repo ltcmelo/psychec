@@ -23,10 +23,10 @@
 using namespace psy;
 using namespace C;
 
-const std::string Semantics_Declarators::ID_FunctionReturningFunction = "Binder-200-6.7.6.3-1-A";
-const std::string Semantics_Declarators::ID_FunctionReturningArray = "Binder-200-6.7.6.3-1-B";
+const std::string ConstraintsInDeclarators::ID_FunctionReturningFunction = "Binder-200-6.7.6.3-1-A";
+const std::string ConstraintsInDeclarators::ID_FunctionReturningArray = "Binder-200-6.7.6.3-1-B";
 
-void Semantics_Declarators::FunctionReturningFunction(
+void ConstraintsInDeclarators::FunctionReturningFunction(
         SyntaxToken decltorTk,
         Binder::DiagnosticsReporter* diagReporter)
 {
@@ -43,7 +43,7 @@ void Semantics_Declarators::FunctionReturningFunction(
                            decltorTk);
 }
 
-void Semantics_Declarators::FunctionReturningArray(
+void ConstraintsInDeclarators::FunctionReturningArray(
         SyntaxToken decltorTk,
         Binder::DiagnosticsReporter* diagReporter)
 {
@@ -52,7 +52,7 @@ void Semantics_Declarators::FunctionReturningArray(
             + "' declared as function returning an array";
 
     diagReporter->diagnose(DiagnosticDescriptor(
-                               ID_FunctionReturningFunction,
+                               ID_FunctionReturningArray,
                                "[[function returning array]]",
                                s,
                                DiagnosticSeverity::Error,

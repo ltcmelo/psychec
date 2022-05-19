@@ -1975,7 +1975,7 @@ void BinderTest::case0413()
     bind("void x ( ) ( ) ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     Semantics_Declarators::ID_FunctionReturningFunction)
+                     ConstraintsInDeclarators::ID_FunctionReturningFunction)
          .ContinueTestDespiteOfErrors()
          .binding(DeclSummary()
                   .Function("x", ScopeKind::File)
@@ -1990,7 +1990,7 @@ void BinderTest::case0414()
     bind("void ( x ( ) ) ( ) ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     Semantics_Declarators::ID_FunctionReturningFunction)
+                     ConstraintsInDeclarators::ID_FunctionReturningFunction)
          .ContinueTestDespiteOfErrors()
          .binding(DeclSummary()
                   .Function("x", ScopeKind::File)
@@ -2041,7 +2041,7 @@ void BinderTest::case0427()
     bind("int x ( ) [] ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     Semantics_Declarators::ID_FunctionReturningArray)
+                     ConstraintsInDeclarators::ID_FunctionReturningArray)
          .ContinueTestDespiteOfErrors()
          .binding(DeclSummary()
                   .Function("x", ScopeKind::File)
@@ -2056,7 +2056,7 @@ void BinderTest::case0428()
     bind("int ( x ) ( ) [] ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     Semantics_Declarators::ID_FunctionReturningArray)
+                     ConstraintsInDeclarators::ID_FunctionReturningArray)
          .ContinueTestDespiteOfErrors()
          .binding(DeclSummary()
                   .Function("x", ScopeKind::File)

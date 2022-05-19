@@ -29,12 +29,12 @@
 using namespace psy;
 using namespace C;
 
-const std::string Semantics_TypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt =
+const std::string ConstraintsInTypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt =
         "Binder-100-6.7.2-2-A";
-const std::string Semantics_TypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers =
+const std::string ConstraintsInTypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers =
         "Binder-100-6.7.2-2-B";
 
-void Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
+void ConstraintsInTypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
         SyntaxToken declTk,
         Binder::DiagnosticsReporter* diagReporter)
 {
@@ -47,7 +47,7 @@ void Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
                            declTk);
 }
 
-void Semantics_TypeSpecifiers::TwoOrMoreDataTypesInDeclarationSpecifiers(
+void ConstraintsInTypeSpecifiers::TwoOrMoreDataTypesInDeclarationSpecifiers(
         SyntaxToken builtTySpecTk,
         Binder::DiagnosticsReporter* diagReporter)
 {
@@ -60,7 +60,7 @@ void Semantics_TypeSpecifiers::TwoOrMoreDataTypesInDeclarationSpecifiers(
                            builtTySpecTk);
 }
 
-void Semantics_TypeSpecifiers::specify(SyntaxToken builtTySpecTk,
+void ConstraintsInTypeSpecifiers::specify(SyntaxToken builtTySpecTk,
                                        NamedTypeSymbol* namedTySym,
                                        Binder::DiagnosticsReporter* diagReporter)
 {
@@ -73,7 +73,7 @@ void Semantics_TypeSpecifiers::specify(SyntaxToken builtTySpecTk,
     namedTySym->patchBuiltinTypeKind(builtTyKind);
 }
 
-BuiltinTypeKind Semantics_TypeSpecifiers::combine(SyntaxToken builtTySpecTk,
+BuiltinTypeKind ConstraintsInTypeSpecifiers::combine(SyntaxToken builtTySpecTk,
                                                   BuiltinTypeKind builtTyKind,
                                                   Binder::DiagnosticsReporter* diagReporter)
 {

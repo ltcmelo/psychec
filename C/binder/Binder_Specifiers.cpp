@@ -48,7 +48,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         actOnTypeSpecifier(specIt->value);
 
     if (tySyms_.empty()) {
-        Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(node->lastToken(), &diagReporter_);
+        ConstraintsInTypeSpecifiers::TypeSpecifierMissingDefaultsToInt(node->lastToken(), &diagReporter_);
         makeTySymAndPushIt<NamedTypeSymbol>(BuiltinTypeKind::Int);
     }
 
@@ -155,7 +155,7 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
     }
     else {
         NamedTypeSymbol* namedTySym = tySyms_.top()->asNamedType();
-        Semantics_TypeSpecifiers::specify(node->specifierToken(),
+        ConstraintsInTypeSpecifiers::specify(node->specifierToken(),
                                           namedTySym,
                                           &diagReporter_);
     }
@@ -247,7 +247,7 @@ SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node
 {
     PSY_ASSERT_0(!tySyms_.empty(), return Action::Quit);
 
-    Semantics_TypeQualifiers::qualify(node->qualifierKeyword(),
+    SemanticsOfTypeQualifiers::qualify(node->qualifierKeyword(),
                                       tySyms_.top(),
                                       &diagReporter_);
 

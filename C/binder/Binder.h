@@ -50,9 +50,9 @@ class PSY_C_API Binder final : protected SyntaxVisitor
 {
     friend class BinderTest;
     friend class SemanticModel;
-    friend class Semantics_TypeSpecifiers;
-    friend class Semantics_TypeQualifiers;
-    friend class Semantics_Declarators;
+    friend class ConstraintsInTypeSpecifiers;
+    friend class ConstraintsInDeclarators;
+    friend class SemanticsOfTypeQualifiers;
 
 public:
     Binder(const Binder&) = delete;

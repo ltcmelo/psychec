@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SEMANTICS_TYPE_QUALIFIERS_H__
-#define PSYCHE_C_SEMANTICS_TYPE_QUALIFIERS_H__
+#ifndef PSYCHE_C_SEMANTICS_OF_TYPE_QUALIFIERS_H__
+#define PSYCHE_C_SEMANTICS_OF_TYPE_QUALIFIERS_H__
 
 #include "Fwds.h"
 
@@ -34,7 +34,7 @@ namespace C {
 
 class Binder;
 
-class Semantics_TypeQualifiers
+class SemanticsOfTypeQualifiers
 {
 public:
     static void qualify(SyntaxToken tyQualTk,
