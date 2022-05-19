@@ -22,7 +22,7 @@
 
 #include "ParserTest.h"
 
-#include "binder/Semantics_TypeSpecifiers.h"
+#include "binder/ConstraintsInTypeSpecifiers.h"
 #include "parser/Unparser.h"
 #include "symbols/Symbol.h"
 #include "symbols/Symbol_ALL.h"

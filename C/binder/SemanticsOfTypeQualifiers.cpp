@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Semantics_TypeQualifiers.h"
+#include "SemanticsOfTypeQualifiers.h"
 
 #include "SyntaxTree.h"
 

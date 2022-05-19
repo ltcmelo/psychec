@@ -23,7 +23,7 @@
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
-#include "binder/Semantics_Declarators.h"
+#include "binder/ConstraintsInDeclarators.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
 #include "symbols/SymbolName_ALL.h"

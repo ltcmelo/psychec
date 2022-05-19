@@ -22,7 +22,7 @@
 
 #include "ParserTest.h"
 
-#include "binder/Semantics_Declarators.h"
+#include "binder/ConstraintsInDeclarators.h"
 #include "syntax/SyntaxLexeme_ALL.h"
 #include "parser/Unparser.h"
 
