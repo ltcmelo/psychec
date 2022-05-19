@@ -1956,7 +1956,19 @@ void BinderTest::case0411()
                   .TySpec._AtParam_().Parameter().basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
                   .TySpec._AtParam_().deriv(TypeKind::Pointer)));
 }
-void BinderTest::case0412(){}
+
+void BinderTest::case0412()
+{
+    bind("x ( * y ( ) ) ( ) ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("y", ScopeKind::File)
+                  .TySpec.basis("x", NamedTypeKind::Synonym)
+                  .TySpec.deriv(TypeKind::Function)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
 void BinderTest::case0413(){}
 void BinderTest::case0414(){}
 void BinderTest::case0415(){}
@@ -1969,8 +1981,33 @@ void BinderTest::case0421(){}
 void BinderTest::case0422(){}
 void BinderTest::case0423(){}
 void BinderTest::case0424(){}
-void BinderTest::case0425(){}
-void BinderTest::case0426(){}
+
+void BinderTest::case0425()
+{
+    bind("int ( * x ( ) ) [] ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Array)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
+
+void BinderTest::case0426()
+{
+    bind("x ( * y ( ) ) [] ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("y", ScopeKind::File)
+                  .TySpec.basis("x", NamedTypeKind::Synonym)
+                  .TySpec.deriv(TypeKind::Array)
+                  .TySpec.deriv(TypeKind::Pointer)
+                  .TySpec.NestAsReturn()
+                  .TySpec.deriv(TypeKind::Function)));
+}
+
 void BinderTest::case0427(){}
 void BinderTest::case0428(){}
 void BinderTest::case0429(){}
@@ -1984,7 +2021,10 @@ void BinderTest::case0436(){}
 void BinderTest::case0437(){}
 void BinderTest::case0438(){}
 void BinderTest::case0439(){}
-void BinderTest::case0440(){}
+void BinderTest::case0440()
+{
+}
+
 void BinderTest::case0441(){}
 void BinderTest::case0442(){}
 void BinderTest::case0443(){}
@@ -1994,8 +2034,15 @@ void BinderTest::case0446(){}
 void BinderTest::case0447(){}
 void BinderTest::case0448(){}
 void BinderTest::case0449(){}
-void BinderTest::case0450(){}
-void BinderTest::case0451(){}
+
+void BinderTest::case0450()
+{
+}
+
+void BinderTest::case0451()
+{
+}
+
 void BinderTest::case0452(){}
 void BinderTest::case0453(){}
 void BinderTest::case0454(){}

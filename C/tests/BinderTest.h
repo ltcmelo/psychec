@@ -48,10 +48,13 @@ public:
             + 0100-0149 -> definitions w/o parameters
             + 0150-0199 -> definitions
             + 0200-0299 -> "signatures"
-            + 0300-0334 -> prototypes/definitions with function (pointer) parameters
-            + 0335-0349 -> prototypes/definitions with function (decayed) parameters
-            + 0350-0384 -> prototypes/definitions with array (pointer) parameters
-            + 0385-0399 -> prototypes/definitions with array (decayed) parameters
+            + 0300-0334 -> pointer to function as parameter
+            + 0335-0349 -> (decayed) function as parameter
+            + 0350-0384 -> pointer to array as parameter
+            + 0385-0399 -> (decayed) array as parameter
+            + 0400-0424 -> function/pointer to function as return
+            + 0425-0449 -> array/pointer to array as return
+            + 0450-0499 ->
 
         Globals and locals: 1
         Fields: 2
