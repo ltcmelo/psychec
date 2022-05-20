@@ -37,7 +37,14 @@ using namespace C;
 
 void BinderTest::case3001()
 {
-
+    bind("struct x { int y ; } ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Type("struct x", NamedTypeKind::Tag)
+                  .withNameKind(SymbolNameKind::Tag)
+                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withTagKind(TagSymbolNameKind::Structure)
+                  .withScopeKind(ScopeKind::File)));
 }
 
 void BinderTest::case3002(){}

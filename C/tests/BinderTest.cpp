@@ -140,7 +140,7 @@ bool namedTypeMatches(const NamedTypeSymbol* namedTySym, const TypeSpecSummary& 
         return false;
     }
 
-    if (namedTySym->namedTypeKind() != tySpec.specTyK_) {
+    if (namedTySym->namedTypeKind() != tySpec.namedTyK_) {
         DETAIL_MISMATCH("type kind");
         return false;
     }
@@ -305,31 +305,60 @@ bool valueMatchesBinding(const ValueSymbol* valSym, const DeclSummary& decl)
     return true;
 }
 
-bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const DeclSummary& binding)
+bool typeMatchesBinding(const TypeSymbol* tySym, const DeclSummary& decl)
+{
+    const NamedTypeSymbol* namedTySym = tySym->asNamedType();
+    if (!namedTySym)
+        return REJECT_CANDIDATE(tySym, "not a declarable type");
+
+    if (namedTySym->namedTypeKind() != decl.namedTyDeclK_)
+        return REJECT_CANDIDATE(tySym, "named type kind mismatch");
+
+    if (!namedTySym->name())
+        return REJECT_CANDIDATE(tySym, "empty type name");
+
+    if (namedTySym->name()->kind() != decl.nameK_)
+        return REJECT_CANDIDATE(tySym, "name kind mismatch");
+
+    if (namedTySym->name()->kind() == SymbolNameKind::Tag) {
+        if (namedTySym->name()->asTagSymbolName()->kind() != decl.tagK_)
+            return REJECT_CANDIDATE(tySym, "tag kind mismatch");
+    }
+
+    if (namedTySym->name()->text() != decl.name_)
+        return REJECT_CANDIDATE(tySym, "type name mismatch");
+
+    return true;
+}
+
+bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const DeclSummary& summary)
 {
     const Symbol* candSym = sym.get();
 
-    if (candSym->kind() != binding.symK_)
+    if (candSym->kind() != summary.symK_)
         return REJECT_CANDIDATE(candSym, "symbol kind mismatch");
 
-    if (binding.scopeK_ != ScopeKind::UNSPECIFIED) { // TODO: add scope to test cases
-        if (candSym->scope()->kind() != binding.scopeK_)
+    if (summary.scopeK_ != ScopeKind::UNSPECIFIED) {
+        if (candSym->scope()->kind() != summary.scopeK_)
             return REJECT_CANDIDATE(candSym, "scope kind mismatch");
     }
 
-    switch (binding.symK_)
+//    if (summary.nsK_ != NameSpaceKind::UNSPECIFIED) {
+//        if (candSym->nameSpace()->kind() != summary.nsK_)
+//            return REJECT_CANDIDATE(candSym, "name space kind mismatch");
+//    }
+
+    switch (summary.symK_)
     {
         case SymbolKind::Value:
-            return valueMatchesBinding(candSym->asValue(), binding);
+            return valueMatchesBinding(candSym->asValue(), summary);
 
         case SymbolKind::Type: {
-            if (candSym->asType()->typeKind() != binding.tyK_)
-                return false;
-            throw std::runtime_error("");
+            return typeMatchesBinding(candSym->asType(), summary);
         }
 
         case SymbolKind::Function:
-            return functionMatchesBinding(candSym->asFunction(), binding);
+            return functionMatchesBinding(candSym->asFunction(), summary);
 
         default:
             PSYCHE_TEST_FAIL("unknkown symbol kind");

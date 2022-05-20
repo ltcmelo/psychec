@@ -25,6 +25,7 @@
 #include "Fwds.h"
 
 #include "../common/infra/Assertions.h"
+#include "../common/infra/Traces.h"
 
 #include <cstdint>
 #include <string>
