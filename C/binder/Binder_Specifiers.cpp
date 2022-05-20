@@ -39,6 +39,46 @@
 using namespace psy;
 using namespace C;
 
+SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
+        const StructOrUnionDeclarationSyntax* node)
+{
+    const TagTypeSpecifierSyntax* tySpec = node->typeSpecifier();
+    TagSymbolNameKind tagK;
+    switch (tySpec->kind()) {
+        case StructTypeSpecifier:
+            tagK = TagSymbolNameKind::Structure;
+            break;
+
+        case UnionTypeSpecifier:
+            tagK = TagSymbolNameKind::Union;
+            break;
+
+        default:
+            PSY_TRACE_ESCAPE_0(return Action::Quit);
+    }
+
+    makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
+
+
+
+    visit(node->typeSpecifier());
+    popSym();
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax* node)
+{
+    makeSymAndPushIt<NamedTypeSymbol>(TagSymbolNameKind::Enumeration,
+                                      node->typeSpecifier()->tagToken().valueText_c_str());
+
+
+
+    visit(node->typeSpecifier());
+    popSym();
+    return Action::Skip;
+}
+
 template <class DeclT>
 SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         const DeclT* node,
@@ -87,7 +127,6 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const Param
                 &Binder::visitParameterDeclaration_AtDeclarator);
 }
 
-/* Specifiers */
 SyntaxVisitor::Action Binder::actOnTypeSpecifier(const SpecifierSyntax* spec)
 {
     if (spec->asTypeQualifier())

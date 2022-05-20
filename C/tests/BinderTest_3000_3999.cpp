@@ -35,7 +35,11 @@
 using namespace psy;
 using namespace C;
 
-void BinderTest::case3001(){}
+void BinderTest::case3001()
+{
+
+}
+
 void BinderTest::case3002(){}
 void BinderTest::case3003(){}
 void BinderTest::case3004(){}

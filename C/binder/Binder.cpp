@@ -158,44 +158,24 @@ SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclara
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitTypeDeclaration_COMMON(const TypeDeclarationSyntax* node)
-{
-    visit(node->typeSpecifier());
-
-    popSym();
-
-    return Action::Skip;
-}
-
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
 {
-    const TagTypeSpecifierSyntax* tySpec = node->typeSpecifier();
-    TagSymbolNameKind tagK;
-    switch (tySpec->kind()) {
-        case StructTypeSpecifier:
-            tagK = TagSymbolNameKind::Structure;
-            break;
+    return visitStructOrUnionDeclaration_AtSpecifier(node);
+}
 
-        case UnionTypeSpecifier:
-            tagK = TagSymbolNameKind::Union;
-            break;
-
-        default:
-            PSY_TRACE_ESCAPE_0(return Action::Quit);
-            return Action::Quit;
-    }
-
-    makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
-
-    return visitTypeDeclaration_COMMON(node);
+SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_DONE(const StructOrUnionDeclarationSyntax* node)
+{
+    return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
-    makeSymAndPushIt<NamedTypeSymbol>(TagSymbolNameKind::Enumeration,
-                                      node->typeSpecifier()->tagToken().valueText_c_str());
+    return visitEnumDeclaration_AtSpecifier(node);
+}
 
-    return visitTypeDeclaration_COMMON(node);
+SyntaxVisitor::Action Binder::visitEnumDeclaration_DONE(const EnumDeclarationSyntax* node)
+{
+    return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(
