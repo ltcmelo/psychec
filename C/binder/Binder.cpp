@@ -23,7 +23,7 @@
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
-#include "binder/ConstraintsInTypeSpecifiers.h"
+#include "binder/ConstraintsInDeclarations.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
 #include "symbols/SymbolName_ALL.h"
@@ -130,9 +130,10 @@ void Binder::popTySym()
     tySyms_.pop();
 }
 
-//--------------//
-// Declarations //
-//--------------//
+    //--------------//
+    // Declarations //
+    //--------------//
+
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     makeSymAndPushIt<LibrarySymbol>();
@@ -149,7 +150,7 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 
 SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node)
 {
-    diagReporter_.UselessDeclaration(node->lastToken());
+    ConstraintsInDeclarations::UselessDeclaration(node->lastToken(), &diagReporter_);
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         ;
@@ -157,44 +158,24 @@ SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclara
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitTypeDeclaration_COMMON(const TypeDeclarationSyntax* node)
-{
-    visit(node->typeSpecifier());
-
-    popSym();
-
-    return Action::Skip;
-}
-
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node)
 {
-    const TagTypeSpecifierSyntax* tySpec = node->typeSpecifier();
-    TagSymbolNameKind tagK;
-    switch (tySpec->kind()) {
-        case StructTypeSpecifier:
-            tagK = TagSymbolNameKind::Structure;
-            break;
+    return visitStructOrUnionDeclaration_AtSpecifier(node);
+}
 
-        case UnionTypeSpecifier:
-            tagK = TagSymbolNameKind::Union;
-            break;
-
-        default:
-            PSY_TRACE_ESCAPE_0(return Action::Quit);
-            return Action::Quit;
-    }
-
-    makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
-
-    return visitTypeDeclaration_COMMON(node);
+SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_DONE(const StructOrUnionDeclarationSyntax* node)
+{
+    return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
-    makeSymAndPushIt<NamedTypeSymbol>(TagSymbolNameKind::Enumeration,
-                                      node->typeSpecifier()->tagToken().valueText_c_str());
+    return visitEnumDeclaration_AtSpecifier(node);
+}
 
-    return visitTypeDeclaration_COMMON(node);
+SyntaxVisitor::Action Binder::visitEnumDeclaration_DONE(const EnumDeclarationSyntax* node)
+{
+    return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(
@@ -230,8 +211,6 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration(const ParameterDeclarati
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*)
 {
-//    popTySym();
-
     return Action::Skip;
 }
 
@@ -252,9 +231,10 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinit
     return Action::Skip;
 }
 
-//------------//
-// Statements //
-//------------//
+    //------------//
+    // Statements //
+    //------------//
+
 SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
     openScope(ScopeKind::Block);

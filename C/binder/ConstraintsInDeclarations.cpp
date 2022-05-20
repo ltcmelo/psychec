@@ -18,50 +18,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "SymbolName.h"
-
-#include "SymbolName_ALL.h"
-
-#include "common/infra/Assertions.h"
+#include "ConstraintsInDeclarations.h"
 
 using namespace psy;
 using namespace C;
 
-SymbolName::SymbolName()
-{}
+const std::string ConstraintsInDeclarations::ID_of_UselessDeclaration = "Binder-000";
 
-SymbolName::~SymbolName()
-{}
-
-SymbolNameKind SymbolName::kind() const
+void ConstraintsInDeclarations::UselessDeclaration(SyntaxToken tk,
+                                                   Binder::DiagnosticsReporter* diagReporter)
 {
-    if (asPlainSymbolName())
-        return SymbolNameKind::Plain;
-    if (asTagSymbolName())
-        return SymbolNameKind::Tagged;
-    if (asEmptySymbolName())
-        return SymbolNameKind::Empty;
-
-    PSY_ASSERT(false, return SymbolNameKind::Plain, "");
+    diagReporter->diagnose(DiagnosticDescriptor(
+                               ID_of_UselessDeclaration,
+                               "[[useless declaration]]",
+                               "declaration does not declare anything",
+                               DiagnosticSeverity::Error,
+                               DiagnosticCategory::Binding),
+                           tk);
 }
-
-namespace psy {
-namespace C {
-
-std::string to_string(const SymbolName& name)
-{
-    switch (name.kind()) {
-        case SymbolNameKind::Plain:
-            return to_string(static_cast<const PlainSymbolName&>(name));
-        case SymbolNameKind::Tagged:
-            return to_string(static_cast<const TagSymbolName&>(name));
-        case SymbolNameKind::Empty:
-            return to_string(static_cast<const EmptySymbolName&>(name));
-        default:
-            PSY_TRACE_ESCAPE_0(return "");
-            return "<INVALID or UNSPECIFIED SymbolName>";
-    }
-}
-
-} // C
-} // psy

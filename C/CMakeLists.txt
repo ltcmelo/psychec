@@ -165,6 +165,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Declarators.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Specifiers.cpp
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarations.h
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarations.cpp
     ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarators.h
     ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarators.cpp
     ${PROJECT_SOURCE_DIR}/binder/ConstraintsInTypeSpecifiers.h
@@ -196,6 +198,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/tests/BinderTest_0000_0999.cpp
     ${PROJECT_SOURCE_DIR}/tests/BinderTest_1000_1999.cpp
     ${PROJECT_SOURCE_DIR}/tests/BinderTest_2000_2999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTest_3000_3999.cpp
     ${PROJECT_SOURCE_DIR}/tests/ParserTest.h
     ${PROJECT_SOURCE_DIR}/tests/ParserTest.cpp
     ${PROJECT_SOURCE_DIR}/tests/ParserTest_0000_0999.cpp

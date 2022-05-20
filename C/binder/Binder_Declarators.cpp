@@ -40,7 +40,7 @@ using namespace psy;
 using namespace C;
 
 template <class DeclT>
-SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators(
+SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators_COMMON(
         const DeclT* node,
         Action (Binder::*visit_DONE)(const DeclT*))
 {
@@ -53,14 +53,14 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators(
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    return visitDeclaration_AtDeclarators(
+    return visitDeclaration_AtDeclarators_COMMON(
                 node,
                 &Binder::visitVariableAndOrFunctionDeclaration_DONE);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
 {
-    return visitDeclaration_AtDeclarators(
+    return visitDeclaration_AtDeclarators_COMMON(
                 node,
                 &Binder::visitFieldDeclaration_DONE);
 }

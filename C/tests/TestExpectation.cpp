@@ -26,7 +26,7 @@ using namespace  C;
 TypeSpecSummary::TypeSpecSummary(DeclSummary& declSummary)
     : declSummary_(declSummary)
     , nestedRetTySpec_(nullptr)
-    , specTyK_(NamedTypeKind::UNSPECIFIED)
+    , namedTyK_(NamedTypeKind::UNSPECIFIED)
     , specTyBuiltinK_(BuiltinTypeKind::UNSPECIFIED)
     , specTyCVR_(CVR::None)
 {}
@@ -35,12 +35,12 @@ TypeSpecSummary::~TypeSpecSummary()
 {}
 
 DeclSummary& TypeSpecSummary::basis(std::string name,
-                                    NamedTypeKind tyNameK,
+                                    NamedTypeKind namedTyK,
                                     BuiltinTypeKind builtinTypeKind,
                                     CVR cvr)
 {
     specTyName_ = std::move(name);
-    specTyK_ = tyNameK;
+    namedTyK_ = namedTyK;
     specTyBuiltinK_ = builtinTypeKind;
     specTyCVR_ = cvr;
     return declSummary_;
@@ -70,7 +70,7 @@ DeclSummary& TypeSpecSummary::NestAsReturn()
     nestedRetTySpec_.reset(new TypeSpecSummary(*this));
 
     specTyName_.clear();
-    specTyK_ = NamedTypeKind::UNSPECIFIED;
+    namedTyK_ = NamedTypeKind::UNSPECIFIED;
     specTyBuiltinK_ = BuiltinTypeKind::UNSPECIFIED;
     specTyCVR_ = CVR::None;
     derivTyKs_.clear();
@@ -97,11 +97,11 @@ DeclSummary& DeclSummary::Value(std::string name, ValueKind valK, ScopeKind scop
     return *this;
 }
 
-DeclSummary& DeclSummary::Type(std::string name, TypeKind tyK)
+DeclSummary& DeclSummary::Type(std::string name, NamedTypeKind namedTyDeclK)
 {
     name_ = std::move(name);
     symK_ = SymbolKind::Type;
-    tyK_ = tyK;
+    namedTyDeclK_ = namedTyDeclK;
     return *this;
 }
 
@@ -110,6 +110,30 @@ DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
     name_ = std::move(funcName);
     symK_ = SymbolKind::Function;
     scopeK_ = scopeK;
+    return *this;
+}
+
+DeclSummary& DeclSummary::withScopeKind(ScopeKind scopeK)
+{
+    scopeK_ = scopeK;
+    return *this;
+}
+
+DeclSummary& DeclSummary::withNameSpaceKind(NameSpaceKind nsK)
+{
+    nsK_ = nsK;
+    return *this;
+}
+
+DeclSummary& DeclSummary::withNameKind(SymbolNameKind nameK)
+{
+    nameK_ = nameK;
+    return *this;
+}
+
+DeclSummary& DeclSummary::withTagKind(TagSymbolNameKind tagK)
+{
+    tagK_ = tagK;
     return *this;
 }
 
