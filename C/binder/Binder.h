@@ -119,10 +119,10 @@ private:
     Action visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax*);
     Action visitEnumDeclaration_DONE(const EnumDeclarationSyntax*);
 
-    template <class DeclT> Action visitDeclaration_AtSpecifiers(
+    template <class DeclT> Action visitDeclaration_AtSpecifiers_COMMON(
             const DeclT* node,
             Action (Binder::*visit_AtDeclarators)(const DeclT*));
-    template <class DeclT> Action visitDeclaration_AtDeclarators(
+    template <class DeclT> Action visitDeclaration_AtDeclarators_COMMON(
             const DeclT* node,
             Action (Binder::*visit_DONE)(const DeclT*));
 

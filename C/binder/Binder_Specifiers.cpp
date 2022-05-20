@@ -88,7 +88,7 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclara
 }
 
 template <class DeclT>
-SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
+SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers_COMMON(
         const DeclT* node,
         Action (Binder::*visit_AtDeclarators)(const DeclT*))
 {
@@ -109,28 +109,28 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    return visitDeclaration_AtSpecifiers(
+    return visitDeclaration_AtSpecifiers_COMMON(
                 node,
                 &Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators);
 }
 
 SyntaxVisitor::Action Binder::visitFunctionDefinition_AtSpecifiers(const FunctionDefinitionSyntax* node)
 {
-    return visitDeclaration_AtSpecifiers(
+    return visitDeclaration_AtSpecifiers_COMMON(
                 node,
                 &Binder::visitFunctionDefinition_AtDeclarator);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtSpecifiers(const FieldDeclarationSyntax* node)
 {
-    return visitDeclaration_AtSpecifiers(
+    return visitDeclaration_AtSpecifiers_COMMON(
                 node,
                 &Binder::visitFieldDeclaration_AtDeclarators);
 }
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax* node)
 {
-    return visitDeclaration_AtSpecifiers(
+    return visitDeclaration_AtSpecifiers_COMMON(
                 node,
                 &Binder::visitParameterDeclaration_AtDeclarator);
 }
