@@ -165,6 +165,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Declarators.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Specifiers.cpp
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarations.h
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarations.cpp
     ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarators.h
     ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarators.cpp
     ${PROJECT_SOURCE_DIR}/binder/ConstraintsInTypeSpecifiers.h

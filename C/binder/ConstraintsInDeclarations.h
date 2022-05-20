@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,14 +18,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Binder.h"
+#ifndef PSYCHE_C_CONSTRAINTS_IN_DECLARATIONS_H__
+#define PSYCHE_C_CONSTRAINTS_IN_DECLARATIONS_H__
 
-#include "SyntaxTree.h"
+#include "Fwds.h"
 
-using namespace psy;
-using namespace C;
+#include "binder/Binder.h"
+#include "syntax/SyntaxKind.h"
 
-void Binder::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
+namespace psy {
+namespace C {
+
+class ConstraintsInDeclarations
 {
-    binder_->tree_->newDiagnostic(desc, tk);
+public:
+    static const std::string ID_of_UselessDeclaration;
+
+    static void UselessDeclaration(SyntaxToken declTk, Binder::DiagnosticsReporter* diagReporter);
 };
+
+} // C
+} // psy
+
+#endif

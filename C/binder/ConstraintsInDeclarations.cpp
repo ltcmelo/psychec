@@ -18,14 +18,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Binder.h"
-
-#include "SyntaxTree.h"
+#include "ConstraintsInDeclarations.h"
 
 using namespace psy;
 using namespace C;
 
-void Binder::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
+const std::string ConstraintsInDeclarations::ID_of_UselessDeclaration = "Binder-000";
+
+void ConstraintsInDeclarations::UselessDeclaration(SyntaxToken tk,
+                                                   Binder::DiagnosticsReporter* diagReporter)
 {
-    binder_->tree_->newDiagnostic(desc, tk);
-};
+    diagReporter->diagnose(DiagnosticDescriptor(
+                               ID_of_UselessDeclaration,
+                               "[[useless declaration]]",
+                               "declaration does not declare anything",
+                               DiagnosticSeverity::Error,
+                               DiagnosticCategory::Binding),
+                           tk);
+}

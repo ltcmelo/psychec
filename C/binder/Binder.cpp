@@ -23,7 +23,7 @@
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
-#include "binder/ConstraintsInTypeSpecifiers.h"
+#include "binder/ConstraintsInDeclarations.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
 #include "symbols/SymbolName_ALL.h"
@@ -130,9 +130,10 @@ void Binder::popTySym()
     tySyms_.pop();
 }
 
-//--------------//
-// Declarations //
-//--------------//
+    //--------------//
+    // Declarations //
+    //--------------//
+
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     makeSymAndPushIt<LibrarySymbol>();
@@ -149,7 +150,7 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 
 SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node)
 {
-    diagReporter_.UselessDeclaration(node->lastToken());
+    ConstraintsInDeclarations::UselessDeclaration(node->lastToken(), &diagReporter_);
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         ;
@@ -230,8 +231,6 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration(const ParameterDeclarati
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*)
 {
-//    popTySym();
-
     return Action::Skip;
 }
 
@@ -252,9 +251,10 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinit
     return Action::Skip;
 }
 
-//------------//
-// Statements //
-//------------//
+    //------------//
+    // Statements //
+    //------------//
+
 SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
     openScope(ScopeKind::Block);

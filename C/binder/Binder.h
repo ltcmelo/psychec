@@ -50,6 +50,7 @@ class PSY_C_API Binder final : protected SyntaxVisitor
 {
     friend class BinderTest;
     friend class SemanticModel;
+    friend class ConstraintsInDeclarations;
     friend class ConstraintsInTypeSpecifiers;
     friend class ConstraintsInDeclarators;
     friend class SemanticsOfTypeQualifiers;
@@ -94,14 +95,8 @@ private:
         DiagnosticsReporter(Binder* binder)
             : binder_(binder)
         {}
-
         Binder* binder_;
-
         void diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk);
-
-        static const std::string ID_of_UselessDeclaration;
-
-        void UselessDeclaration(SyntaxToken tk);
     };
 
     DiagnosticsReporter diagReporter_;
