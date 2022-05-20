@@ -77,6 +77,10 @@ public:
             + 2250-2299 -> qualified pointers
             + 2300-2349 -> arrays
             + 2350-2399 -> arrays of objects of qualified type
+
+        Types
+            + 0000-0049 -> structures and unions
+            + 0050-0099 -> enumerations (and enumerators)
      */
 
     void case0001();

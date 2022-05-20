@@ -41,13 +41,24 @@ void BinderTest::case3001()
          Expectation()
          .binding(DeclSummary()
                   .Type("struct x", NamedTypeKind::Tag)
-                  .withNameKind(SymbolNameKind::Tag)
+                  .withNameKind(SymbolNameKind::Tagged)
                   .withNameSpaceKind(NameSpaceKind::Tags)
                   .withTagKind(TagSymbolNameKind::Structure)
                   .withScopeKind(ScopeKind::File)));
 }
 
-void BinderTest::case3002(){}
+void BinderTest::case3002()
+{
+    bind("union x { int y ; } ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Type("union x", NamedTypeKind::Tag)
+                  .withNameKind(SymbolNameKind::Tagged)
+                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withTagKind(TagSymbolNameKind::Union)
+                  .withScopeKind(ScopeKind::File)));
+}
+
 void BinderTest::case3003(){}
 void BinderTest::case3004(){}
 void BinderTest::case3005(){}
