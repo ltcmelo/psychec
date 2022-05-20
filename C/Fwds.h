@@ -37,8 +37,9 @@ class SyntaxLexeme;
 class Identifier;
 class IntegerConstant;
 class FloatingConstant;
+class ImaginaryIntegerConstant;
+class ImaginaryFloatingConstant;
 class CharacterConstant;
-class ImaginaryConstant;
 class StringLiteral;
 
 //=================================================================== Nodes

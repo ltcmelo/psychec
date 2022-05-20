@@ -48,7 +48,8 @@ enum SyntaxKind : std::uint16_t
 
     IntegerConstantToken,
     FloatingConstantToken,
-    ImaginaryConstantToken,
+    ImaginaryIntegerConstantToken,
+    ImaginaryFloatingConstantToken,
 
     CharacterConstantToken,
     CharacterConstant_L_Token,
@@ -377,7 +378,8 @@ enum SyntaxKind : std::uint16_t
     //-------------//
     IntegerConstantExpression,
     FloatingConstantExpression,
-    ImaginaryConstantExpression,
+    ImaginaryIntegerConstantExpression,
+    ImaginaryFloatingConstantExpression,
     CharacterConstantExpression,
     BooleanConstantExpression,
     NULL_ConstantExpression,

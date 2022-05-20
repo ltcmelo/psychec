@@ -72,8 +72,9 @@ struct SyntaxTree::SyntaxTreeImpl
     TextElementTable<Identifier> identifiers_;
     TextElementTable<IntegerConstant> integers_;
     TextElementTable<FloatingConstant> floatings_;
+    TextElementTable<ImaginaryIntegerConstant> imaginaryIntegers_;
+    TextElementTable<ImaginaryFloatingConstant> imaginaryFloatings_;
     TextElementTable<CharacterConstant> characters_;
-    TextElementTable<ImaginaryConstant> imaginaries_;
     TextElementTable<StringLiteral> strings_;
 
     SyntaxNode* rootNode_;
@@ -248,9 +249,14 @@ const CharacterConstant* SyntaxTree::characterConstant(const char* s, unsigned i
     return P->characters_.findOrInsert(s, size);
 }
 
-const ImaginaryConstant* SyntaxTree::imaginaryConstant(const char* s, unsigned int size)
+const ImaginaryIntegerConstant* SyntaxTree::imaginaryIntegerConstant(const char* s, unsigned int size)
 {
-    return P->imaginaries_.findOrInsert(s, size);
+    return P->imaginaryIntegers_.findOrInsert(s, size);
+}
+
+const ImaginaryFloatingConstant* SyntaxTree::imaginaryFloatingConstant(const char* s, unsigned int size)
+{
+    return P->imaginaryFloatings_.findOrInsert(s, size);
 }
 
 

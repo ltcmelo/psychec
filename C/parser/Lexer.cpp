@@ -934,8 +934,10 @@ LexExit:
         int yyleng = yytext_ - yytext;
         if (tk->rawSyntaxK_ == FloatingConstantToken)
             tk->floating_ = tree_->floatingConstant(yytext, yyleng);
-        else if (tk->rawSyntaxK_ == ImaginaryConstantToken)
-            tk->imaginary_ = tree_->imaginaryConstant(yytext, yyleng);
+        else if (tk->rawSyntaxK_ == ImaginaryIntegerConstantToken)
+            tk->imaginaryInteger_ = tree_->imaginaryIntegerConstant(yytext, yyleng);
+        else if (tk->rawSyntaxK_ == ImaginaryFloatingConstantToken)
+            tk->imaginaryFloating_ = tree_->imaginaryFloatingConstant(yytext, yyleng);
         else {
             tk->rawSyntaxK_ = IntegerConstantToken;
             tk->integer_ = tree_->integerConstant(yytext, yyleng);
@@ -956,29 +958,44 @@ void Lexer::lexImaginaryConstant(SyntaxToken* tk)
                         LanguageExtensions::Ext::GNU_Complex);
         }
 
-        auto previousconstant = tk->rawSyntaxK_;
-
-        tk->rawSyntaxK_ = ImaginaryConstantToken;
         lexImaginarySuffix();
-        if (previousconstant == FloatingConstantToken)
+
+        if (tk->rawSyntaxK_ == FloatingConstantToken) {
+            tk->rawSyntaxK_ = ImaginaryFloatingConstantToken;
             lexFloatingSuffix();
-        else
+        }
+        else {
+            tk->rawSyntaxK_ = ImaginaryIntegerConstantToken;
             lexIntegerSuffix();
+        }
     }
     else {
-        if (tk->rawSyntaxK_ == FloatingConstantToken)
+        if (tk->rawSyntaxK_ == FloatingConstantToken) {
             lexFloatingSuffix();
-        else
+
+            if (yychar_ == 'i' || yychar_ == 'j') {
+                if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
+                    diagReporter_.IncompatibleLanguageExtension(
+                                "imaginary constant",
+                                LanguageExtensions::Ext::GNU_Complex);
+                }
+
+                tk->rawSyntaxK_ = ImaginaryFloatingConstantToken;
+            }
+        }
+        else {
             lexIntegerSuffix();
 
-        if (yychar_ == 'i' || yychar_ == 'j') {
-            if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
-                diagReporter_.IncompatibleLanguageExtension(
-                            "imaginary constant",
-                            LanguageExtensions::Ext::GNU_Complex);
+            if (yychar_ == 'i' || yychar_ == 'j') {
+                if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
+                    diagReporter_.IncompatibleLanguageExtension(
+                        "imaginary constant",
+                        LanguageExtensions::Ext::GNU_Complex);
+                }
+
+                tk->rawSyntaxK_ = ImaginaryIntegerConstantToken;
             }
 
-            tk->rawSyntaxK_ = ImaginaryConstantToken;
         }
 
         lexImaginarySuffix();
