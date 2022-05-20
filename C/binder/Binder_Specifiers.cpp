@@ -39,6 +39,19 @@
 using namespace psy;
 using namespace C;
 
+template <class TyDeclT>
+SyntaxVisitor::Action Binder::visitTypeDeclaration_AtSpecfierMembers_COMMON(
+        const TyDeclT* node,
+        Action (Binder::*visit_DONE)(const TyDeclT*))
+{
+    for (auto declIt = node->typeSpecifier()->declarations(); declIt; declIt = declIt->next)
+        visit(declIt->value);
+
+    popSym();
+
+    return ((this)->*(visit_DONE))(node);
+}
+
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
         const StructOrUnionDeclarationSyntax* node)
 {
@@ -59,12 +72,9 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
 
     makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
 
-
-
-    visit(node->typeSpecifier());
-    popSym();
-
-    return Action::Skip;
+    return visitTypeDeclaration_AtSpecfierMembers_COMMON(
+                node,
+                &Binder::visitStructOrUnionDeclaration_DONE);
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax* node)
@@ -72,11 +82,9 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclara
     makeSymAndPushIt<NamedTypeSymbol>(TagSymbolNameKind::Enumeration,
                                       node->typeSpecifier()->tagToken().valueText_c_str());
 
-
-
-    visit(node->typeSpecifier());
-    popSym();
-    return Action::Skip;
+    return visitTypeDeclaration_AtSpecfierMembers_COMMON(
+                node,
+                &Binder::visitEnumDeclaration_DONE);
 }
 
 template <class DeclT>

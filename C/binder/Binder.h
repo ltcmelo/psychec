@@ -108,6 +108,10 @@ private:
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax*) override;
     virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;
 
+    template <class TyDeclT> Action visitTypeDeclaration_AtSpecfierMembers_COMMON(
+            const TyDeclT* node,
+            Action (Binder::*visit_DONE)(const TyDeclT*));
+
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) override;
     Action visitStructOrUnionDeclaration_AtSpecifier(const StructOrUnionDeclarationSyntax*);
     Action visitStructOrUnionDeclaration_DONE(const StructOrUnionDeclarationSyntax*);
