@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 
 #include "BinderTest.h"
-
 #include "ParserTest.h"
 
 #include "binder/ConstraintsInDeclarators.h"
