@@ -622,8 +622,18 @@ void ParserTest::case1092()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1093() {}
-void ParserTest::case1094() {}
+void ParserTest::case1093()
+{
+    parseExpression(".1f",
+                    Expectation().AST( { FloatingConstantExpression }));
+}
+
+void ParserTest::case1094()
+{
+    parseExpression(".1l",
+                    Expectation().AST( { FloatingConstantExpression }));
+}
+
 void ParserTest::case1095() {}
 void ParserTest::case1096() {}
 void ParserTest::case1097() {}

@@ -65,7 +65,10 @@ private:
 
     /* 6.4.4 Constants */
     void lexIntegerOrFloatingConstant(SyntaxToken* tk);
-    void lexImaginaryConstant(SyntaxToken* tk);
+    void lexFloatingSuffixAndMaybeImaginary(SyntaxToken* tk);
+    void lexImaginaryFloatingSuffix(SyntaxToken* tk);
+    void lexIntegerSuffixAndMaybeImaginary(SyntaxToken* tk);
+    void lexImaginaryIntegerSuffix(SyntaxToken* tk);
     void lexIntegerSuffix(int suffixCnt = 2);
     void lexDigitSequence();
     void lexHexadecimalDigitSequence();
@@ -73,7 +76,6 @@ private:
     void lexBinaryExponentPart();
     void lexSign();
     void lexFloatingSuffix();
-    void lexImaginarySuffix();
     void lexCharacterConstant(SyntaxToken* tk, unsigned char prefix = 0);
 
     /* 6.4.5 String literals */
