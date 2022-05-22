@@ -65,6 +65,9 @@ private:
 
     /* 6.4.4 Constants */
     void lexIntegerOrFloatingConstant(SyntaxToken* tk);
+    void lexFloatingConstant_AtFollowOfPeriod(SyntaxToken* tk, unsigned int prefixSize);
+    void lexFloatingConstant_AtExponent(SyntaxToken* tk, unsigned int prefixSize);
+    void lexFloatingConstant_AtSuffix(SyntaxToken* tk, unsigned int prefixSize);
     void lexIntegerSuffix(int suffixCnt = 2);
     void lexDigitSequence();
     void lexHexadecimalDigitSequence();

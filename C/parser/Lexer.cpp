@@ -409,8 +409,7 @@ LexEntry:
                 }
             }
             else if (std::isdigit(yychar_)) {
-                tk->rawSyntaxK_ = FloatingConstantToken;
-                lexIntegerOrFloatingConstant(tk);
+                lexFloatingConstant_AtFollowOfPeriod(tk, 1);
             }
             else {
                 tk->rawSyntaxK_ = DotToken;
@@ -870,11 +869,10 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
 
                 lexHexadecimalDigitSequence();
                 lexBinaryExponentPart();
-                lexFloatingSuffix();
+                lexFloatingConstant_AtSuffix(tk, yytext_ - yytext);
+                return;
             }
-            else {
-                lexIntegerSuffix();
-            }
+            lexIntegerSuffix();
             goto LexExit;
         }
         else {
@@ -898,19 +896,14 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
 
     while (yychar_) {
         if (yychar_ == '.') {
-            tk->rawSyntaxK_ = FloatingConstantToken;
             yyinput();
-            lexDigitSequence();
-            lexExponentPart();
-            lexFloatingSuffix();
-            break;
+            lexFloatingConstant_AtFollowOfPeriod(tk, yytext_ - yytext);
+            return;
         }
 
         if (yychar_ == 'e' || yychar_ == 'E') {
-            tk->rawSyntaxK_ = FloatingConstantToken;
-            lexExponentPart();
-            lexFloatingSuffix();
-            break;
+            lexFloatingConstant_AtExponent(tk, yytext_ - yytext);
+            return;
         }
 
         if (std::isdigit(yychar_)) {
@@ -931,14 +924,32 @@ LexExit:
         while (std::isalnum(yychar_) || yychar_ == '_');
     }
     else {
-        int yyleng = yytext_ - yytext;
-        if (tk->rawSyntaxK_ == FloatingConstantToken)
-            tk->floating_ = tree_->floatingConstant(yytext, yyleng);
-        else {
-            tk->rawSyntaxK_ = IntegerConstantToken;
-            tk->integer_ = tree_->integerConstant(yytext, yyleng);
-        }
+        tk->rawSyntaxK_ = IntegerConstantToken;
+        tk->integer_ = tree_->integerConstant(yytext, yytext_ - yytext);
     }
+}
+
+void Lexer::lexFloatingConstant_AtFollowOfPeriod(SyntaxToken* tk, unsigned int prefixSize)
+{
+    const char* yytext = yytext_ - prefixSize;
+    lexDigitSequence();
+    lexFloatingConstant_AtExponent(tk, yytext_ - yytext);
+}
+
+void Lexer::lexFloatingConstant_AtExponent(SyntaxToken* tk, unsigned int prefixSize)
+{
+    const char* yytext = yytext_ - prefixSize;
+    lexExponentPart();
+    lexFloatingConstant_AtSuffix(tk, yytext_ - yytext);
+}
+
+void Lexer::lexFloatingConstant_AtSuffix(SyntaxToken* tk, unsigned int prefixSize)
+{
+    const char* yytext = yytext_ - prefixSize;
+    lexFloatingSuffix();
+
+    tk->rawSyntaxK_ = FloatingConstantToken;
+    tk->floating_ = tree_->floatingConstant(yytext, yytext_ - yytext);
 }
 
 /**
