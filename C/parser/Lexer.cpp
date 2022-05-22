@@ -873,7 +873,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
                 return;
             }
             lexIntegerSuffix();
-            goto LexExit;
+            goto LocalExit;
         }
         else {
             if (yychar_ == 'b' || yychar_ == 'B') {
@@ -881,7 +881,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
                 while (yychar_ == '0' || yychar_ == '1')
                     yyinput();
                 lexIntegerSuffix();
-                goto LexExit;
+                goto LocalExit;
             }
             else if (yychar_ >= '0' && yychar_ <= '7') {
                 do {
@@ -889,7 +889,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
                 }
                 while (yychar_ >= '0' && yychar_ <= '7');
                 lexIntegerSuffix();
-                goto LexExit;
+                goto LocalExit;
             }
         }
     }
@@ -915,7 +915,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
         }
     }
 
-LexExit:
+LocalExit:
     if (std::isalnum(yychar_) || yychar_ == '_') {
         tk->rawSyntaxK_ = Error;
         do {
