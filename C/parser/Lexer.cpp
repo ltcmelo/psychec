@@ -409,8 +409,7 @@ LexEntry:
                 }
             }
             else if (std::isdigit(yychar_)) {
-                tk->rawSyntaxK_ = FloatingConstantToken;
-                lexIntegerOrFloatingConstant(tk);
+                lexFloatingConstant_AtFollowOfPeriod(tk, 1);
             }
             else {
                 tk->rawSyntaxK_ = DotToken;
@@ -870,12 +869,11 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
 
                 lexHexadecimalDigitSequence();
                 lexBinaryExponentPart();
-                lexFloatingSuffix();
+                lexFloatingConstant_AtSuffix(tk, yytext_ - yytext);
+                return;
             }
-            else {
-                lexIntegerSuffix();
-            }
-            goto LexExit;
+            lexIntegerSuffix();
+            goto LocalExit;
         }
         else {
             if (yychar_ == 'b' || yychar_ == 'B') {
@@ -883,7 +881,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
                 while (yychar_ == '0' || yychar_ == '1')
                     yyinput();
                 lexIntegerSuffix();
-                goto LexExit;
+                goto LocalExit;
             }
             else if (yychar_ >= '0' && yychar_ <= '7') {
                 do {
@@ -891,26 +889,21 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
                 }
                 while (yychar_ >= '0' && yychar_ <= '7');
                 lexIntegerSuffix();
-                goto LexExit;
+                goto LocalExit;
             }
         }
     }
 
     while (yychar_) {
         if (yychar_ == '.') {
-            tk->rawSyntaxK_ = FloatingConstantToken;
             yyinput();
-            lexDigitSequence();
-            lexExponentPart();
-            lexFloatingSuffix();
-            break;
+            lexFloatingConstant_AtFollowOfPeriod(tk, yytext_ - yytext);
+            return;
         }
 
         if (yychar_ == 'e' || yychar_ == 'E') {
-            tk->rawSyntaxK_ = FloatingConstantToken;
-            lexExponentPart();
-            lexFloatingSuffix();
-            break;
+            lexFloatingConstant_AtExponent(tk, yytext_ - yytext);
+            return;
         }
 
         if (std::isdigit(yychar_)) {
@@ -922,7 +915,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
         }
     }
 
-LexExit:
+LocalExit:
     if (std::isalnum(yychar_) || yychar_ == '_') {
         tk->rawSyntaxK_ = Error;
         do {
@@ -931,14 +924,32 @@ LexExit:
         while (std::isalnum(yychar_) || yychar_ == '_');
     }
     else {
-        int yyleng = yytext_ - yytext;
-        if (tk->rawSyntaxK_ == FloatingConstantToken)
-            tk->floating_ = tree_->floatingConstant(yytext, yyleng);
-        else {
-            tk->rawSyntaxK_ = IntegerConstantToken;
-            tk->integer_ = tree_->integerConstant(yytext, yyleng);
-        }
+        tk->rawSyntaxK_ = IntegerConstantToken;
+        tk->integer_ = tree_->integerConstant(yytext, yytext_ - yytext);
     }
+}
+
+void Lexer::lexFloatingConstant_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng)
+{
+    const char* yytext = yytext_ - accLeng;
+    lexDigitSequence();
+    lexFloatingConstant_AtExponent(tk, yytext_ - yytext);
+}
+
+void Lexer::lexFloatingConstant_AtExponent(SyntaxToken* tk, unsigned int accLeng)
+{
+    const char* yytext = yytext_ - accLeng;
+    lexExponentPart();
+    lexFloatingConstant_AtSuffix(tk, yytext_ - yytext);
+}
+
+void Lexer::lexFloatingConstant_AtSuffix(SyntaxToken* tk, unsigned int accLeng)
+{
+    const char* yytext = yytext_ - accLeng;
+    lexFloatingSuffix();
+
+    tk->rawSyntaxK_ = FloatingConstantToken;
+    tk->floating_ = tree_->floatingConstant(yytext, yytext_ - yytext);
 }
 
 /**
@@ -1233,10 +1244,10 @@ void Lexer::lexBackslash(std::uint16_t rawSyntaxK)
     }
 }
 
-void Lexer::lexUntilQuote(SyntaxToken* tk, unsigned char quote, unsigned int prefixSize)
+void Lexer::lexUntilQuote(SyntaxToken* tk, unsigned char quote, unsigned int accLeng)
 {
     const char* yytext = yytext_ - 1;
-    yytext -= prefixSize;
+    yytext -= accLeng;
 
     while (yychar_
                && yychar_ != quote
@@ -1248,7 +1259,7 @@ void Lexer::lexUntilQuote(SyntaxToken* tk, unsigned char quote, unsigned int pre
     }
 
     int yyleng = yytext_ - yytext + 1;
-    yyleng += prefixSize;
+    yyleng += accLeng;
 
     if (yychar_ == quote)
         yyinput();
