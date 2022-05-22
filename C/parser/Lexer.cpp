@@ -916,10 +916,6 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
         if (std::isdigit(yychar_)) {
             yyinput();
         }
-        else if (tk->rawSyntaxK_ == FloatingConstantToken) {
-            lexFloatingSuffixAndMaybeImaginary(tk);
-            break;
-        }
         else {
             lexIntegerSuffixAndMaybeImaginary(tk);
             break;
