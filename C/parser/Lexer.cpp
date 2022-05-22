@@ -929,23 +929,23 @@ LocalExit:
     }
 }
 
-void Lexer::lexFloatingConstant_AtFollowOfPeriod(SyntaxToken* tk, unsigned int prefixSize)
+void Lexer::lexFloatingConstant_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng)
 {
-    const char* yytext = yytext_ - prefixSize;
+    const char* yytext = yytext_ - accLeng;
     lexDigitSequence();
     lexFloatingConstant_AtExponent(tk, yytext_ - yytext);
 }
 
-void Lexer::lexFloatingConstant_AtExponent(SyntaxToken* tk, unsigned int prefixSize)
+void Lexer::lexFloatingConstant_AtExponent(SyntaxToken* tk, unsigned int accLeng)
 {
-    const char* yytext = yytext_ - prefixSize;
+    const char* yytext = yytext_ - accLeng;
     lexExponentPart();
     lexFloatingConstant_AtSuffix(tk, yytext_ - yytext);
 }
 
-void Lexer::lexFloatingConstant_AtSuffix(SyntaxToken* tk, unsigned int prefixSize)
+void Lexer::lexFloatingConstant_AtSuffix(SyntaxToken* tk, unsigned int accLeng)
 {
-    const char* yytext = yytext_ - prefixSize;
+    const char* yytext = yytext_ - accLeng;
     lexFloatingSuffix();
 
     tk->rawSyntaxK_ = FloatingConstantToken;
@@ -1244,10 +1244,10 @@ void Lexer::lexBackslash(std::uint16_t rawSyntaxK)
     }
 }
 
-void Lexer::lexUntilQuote(SyntaxToken* tk, unsigned char quote, unsigned int prefixSize)
+void Lexer::lexUntilQuote(SyntaxToken* tk, unsigned char quote, unsigned int accLeng)
 {
     const char* yytext = yytext_ - 1;
-    yytext -= prefixSize;
+    yytext -= accLeng;
 
     while (yychar_
                && yychar_ != quote
@@ -1259,7 +1259,7 @@ void Lexer::lexUntilQuote(SyntaxToken* tk, unsigned char quote, unsigned int pre
     }
 
     int yyleng = yytext_ - yytext + 1;
-    yyleng += prefixSize;
+    yyleng += accLeng;
 
     if (yychar_ == quote)
         yyinput();

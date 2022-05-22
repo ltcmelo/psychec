@@ -65,9 +65,9 @@ private:
 
     /* 6.4.4 Constants */
     void lexIntegerOrFloatingConstant(SyntaxToken* tk);
-    void lexFloatingConstant_AtFollowOfPeriod(SyntaxToken* tk, unsigned int prefixSize);
-    void lexFloatingConstant_AtExponent(SyntaxToken* tk, unsigned int prefixSize);
-    void lexFloatingConstant_AtSuffix(SyntaxToken* tk, unsigned int prefixSize);
+    void lexFloatingConstant_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng);
+    void lexFloatingConstant_AtExponent(SyntaxToken* tk, unsigned int accLeng);
+    void lexFloatingConstant_AtSuffix(SyntaxToken* tk, unsigned int accLeng);
     void lexIntegerSuffix(int suffixCnt = 2);
     void lexDigitSequence();
     void lexHexadecimalDigitSequence();
@@ -79,10 +79,10 @@ private:
 
     /* 6.4.5 String literals */
     void lexStringLiteral(SyntaxToken* tk, unsigned char prefix = 0);
-    void lexRawStringLiteral(SyntaxToken* tk, unsigned char hint = 0);
+    void lexRawStringLiteral(SyntaxToken* tk, unsigned char prefix = 0);
     bool lexContinuedRawStringLiteral();
 
-    void lexUntilQuote(SyntaxToken* tk, unsigned char quote, unsigned int prefixSize);
+    void lexUntilQuote(SyntaxToken* tk, unsigned char quote, unsigned int accLeng);
     void lexBackslash(std::uint16_t rawSyntaxK);
     void lexSingleLineComment(std::uint16_t rawSyntaxK);
 
