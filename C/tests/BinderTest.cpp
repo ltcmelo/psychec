@@ -140,7 +140,7 @@ bool namedTypeMatches(const NamedTypeSymbol* namedTySym, const TypeSpecSummary& 
         return false;
     }
 
-    if (namedTySym->namedTypeKind() != tySpec.specTyK_) {
+    if (namedTySym->namedTypeKind() != tySpec.namedTyK_) {
         DETAIL_MISMATCH("type kind");
         return false;
     }
@@ -185,7 +185,7 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
         switch (tySym->typeKind()) {
             case TypeKind::Array:
                 if (derivPtrTyDecay != Decay::None) {
-                    DETAIL_MISMATCH("arrays don't decay");
+                    DETAIL_MISMATCH("can't happen for array");
                     return false;
                 }
                 tySym = tySym->asArrayType()->elementType();
@@ -194,22 +194,22 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
             case TypeKind::Pointer:
                 switch (derivPtrTyDecay) {
                     case Decay::None:
-                        if (tySym->asPointerType()->arisesFromFunctionTypeDecay()
-                                    || tySym->asPointerType()->arisesFromArrayOfTypeDecay()) {
+                        if (tySym->asPointerType()->arisesFromFunctionDecay()
+                                    || tySym->asPointerType()->arisesFromArrayDecay()) {
                             DETAIL_MISMATCH("pointer type is decayed from array/function");
                             return false;
                         }
                         break;
 
-                    case Decay::FunctionType:
-                        if (!tySym->asPointerType()->arisesFromFunctionTypeDecay()) {
+                    case Decay::FromFunctionToFunctionPointer:
+                        if (!tySym->asPointerType()->arisesFromFunctionDecay()) {
                             DETAIL_MISMATCH("pointer type isn't (function) decayed");
                             return false;
                         }
                         break;
 
-                    case Decay::ArrayOfType:
-                        if (!tySym->asPointerType()->arisesFromArrayOfTypeDecay()) {
+                    case Decay::FromArrayToPointer:
+                        if (!tySym->asPointerType()->arisesFromArrayDecay()) {
                             DETAIL_MISMATCH("pointer type isn't (array) decayed");
                             return false;
                         }
@@ -220,21 +220,34 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
 
             case TypeKind::Function: {
                 if (derivPtrTyDecay != Decay::None) {
-                    DETAIL_MISMATCH("functions don't decay");
+                    DETAIL_MISMATCH("can't happen for function");
                     return false;
                 }
+
                 auto funcTySym = tySym->asFunctionType();
                 auto parms = funcTySym->parameterTypes();
-                if (parms.size() != tySpec.parmsTySpecs_.size())
-                    return REJECT_CANDIDATE(tySym, "number of parameters");
+                if (parms.size() != tySpec.parmsTySpecs_.size()) {
+                    DETAIL_MISMATCH("number of parameters");
+                    return false;
+                }
 
                 for (auto i = 0U; i < parms.size(); ++i) {
                     const TypeSymbol* parmTySym = parms[i];
-                    if (!typeMatches(parmTySym, tySpec.parmsTySpecs_[i]))
-                        return REJECT_CANDIDATE(tySym, "parameter type mismatch");
+                    if (!typeMatches(parmTySym, tySpec.parmsTySpecs_[i])) {
+                        DETAIL_MISMATCH("parameter type mismatch");
+                        return false;
+                    }
                 }
-                tySym = tySym->asFunctionType()->returnType();
-                break;
+
+                tySym = funcTySym->returnType();
+                if (!tySpec.nestedRetTySpec_)
+                    break;
+
+                if (!typeMatches(tySym, *tySpec.nestedRetTySpec_.get())) {
+                    DETAIL_MISMATCH("nested return type mismatch");
+                    return false;
+                }
+                return true;
             }
 
             default:
@@ -292,31 +305,60 @@ bool valueMatchesBinding(const ValueSymbol* valSym, const DeclSummary& decl)
     return true;
 }
 
-bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const DeclSummary& binding)
+bool typeMatchesBinding(const TypeSymbol* tySym, const DeclSummary& decl)
+{
+    const NamedTypeSymbol* namedTySym = tySym->asNamedType();
+    if (!namedTySym)
+        return REJECT_CANDIDATE(tySym, "not a declarable type");
+
+    if (namedTySym->namedTypeKind() != decl.namedTyDeclK_)
+        return REJECT_CANDIDATE(tySym, "named type kind mismatch");
+
+    if (!namedTySym->name())
+        return REJECT_CANDIDATE(tySym, "empty type name");
+
+    if (namedTySym->name()->kind() != decl.nameK_)
+        return REJECT_CANDIDATE(tySym, "name kind mismatch");
+
+    if (namedTySym->name()->kind() == SymbolNameKind::Tagged) {
+        if (namedTySym->name()->asTagSymbolName()->kind() != decl.tagK_)
+            return REJECT_CANDIDATE(tySym, "tag kind mismatch");
+    }
+
+    if (namedTySym->name()->text() != decl.name_)
+        return REJECT_CANDIDATE(tySym, "type name mismatch");
+
+    return true;
+}
+
+bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const DeclSummary& summary)
 {
     const Symbol* candSym = sym.get();
 
-    if (candSym->kind() != binding.symK_)
+    if (candSym->kind() != summary.symK_)
         return REJECT_CANDIDATE(candSym, "symbol kind mismatch");
 
-    if (binding.scopeK_ != ScopeKind::UNSPECIFIED) { // TODO: add scope to test cases
-        if (candSym->scope()->kind() != binding.scopeK_)
+    if (summary.scopeK_ != ScopeKind::UNSPECIFIED) {
+        if (candSym->scope()->kind() != summary.scopeK_)
             return REJECT_CANDIDATE(candSym, "scope kind mismatch");
     }
 
-    switch (binding.symK_)
+//    if (summary.nsK_ != NameSpaceKind::UNSPECIFIED) {
+//        if (candSym->nameSpace()->kind() != summary.nsK_)
+//            return REJECT_CANDIDATE(candSym, "name space kind mismatch");
+//    }
+
+    switch (summary.symK_)
     {
         case SymbolKind::Value:
-            return valueMatchesBinding(candSym->asValue(), binding);
+            return valueMatchesBinding(candSym->asValue(), summary);
 
         case SymbolKind::Type: {
-            if (candSym->asType()->typeKind() != binding.tyK_)
-                return false;
-            throw std::runtime_error("");
+            return typeMatchesBinding(candSym->asType(), summary);
         }
 
         case SymbolKind::Function:
-            return functionMatchesBinding(candSym->asFunction(), binding);
+            return functionMatchesBinding(candSym->asFunction(), summary);
 
         default:
             PSYCHE_TEST_FAIL("unknkown symbol kind");

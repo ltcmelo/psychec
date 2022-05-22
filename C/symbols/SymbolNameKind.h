@@ -39,7 +39,7 @@ enum class SymbolNameKind : std::uint8_t
     UNSPECIFIED = 0,
     Empty,
     Plain,
-    Tag
+    Tagged
 };
 
 inline std::string PSY_C_API to_string(SymbolNameKind symNameK)
@@ -49,8 +49,8 @@ inline std::string PSY_C_API to_string(SymbolNameKind symNameK)
             return "Empty";
         case SymbolNameKind::Plain:
             return "Plain";
-        case SymbolNameKind::Tag:
-            return "Tag";
+        case SymbolNameKind::Tagged:
+            return "Tagged";
         default:
             PSY_TRACE_ESCAPE_0(return "");
             return "<INVALID or UNSPECIFIED SymbolNameKind>";

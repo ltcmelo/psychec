@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,50 +18,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "SymbolName.h"
+#ifndef PSYCHE_C_CONSTRAINTS_IN_DECLARATIONS_H__
+#define PSYCHE_C_CONSTRAINTS_IN_DECLARATIONS_H__
 
-#include "SymbolName_ALL.h"
+#include "Fwds.h"
 
-#include "common/infra/Assertions.h"
-
-using namespace psy;
-using namespace C;
-
-SymbolName::SymbolName()
-{}
-
-SymbolName::~SymbolName()
-{}
-
-SymbolNameKind SymbolName::kind() const
-{
-    if (asPlainSymbolName())
-        return SymbolNameKind::Plain;
-    if (asTagSymbolName())
-        return SymbolNameKind::Tagged;
-    if (asEmptySymbolName())
-        return SymbolNameKind::Empty;
-
-    PSY_ASSERT(false, return SymbolNameKind::Plain, "");
-}
+#include "binder/Binder.h"
+#include "syntax/SyntaxKind.h"
 
 namespace psy {
 namespace C {
 
-std::string to_string(const SymbolName& name)
+class ConstraintsInDeclarations
 {
-    switch (name.kind()) {
-        case SymbolNameKind::Plain:
-            return to_string(static_cast<const PlainSymbolName&>(name));
-        case SymbolNameKind::Tagged:
-            return to_string(static_cast<const TagSymbolName&>(name));
-        case SymbolNameKind::Empty:
-            return to_string(static_cast<const EmptySymbolName&>(name));
-        default:
-            PSY_TRACE_ESCAPE_0(return "");
-            return "<INVALID or UNSPECIFIED SymbolName>";
-    }
-}
+public:
+    static const std::string ID_of_UselessDeclaration;
+
+    static void UselessDeclaration(SyntaxToken declTk, Binder::DiagnosticsReporter* diagReporter);
+};
 
 } // C
 } // psy
+
+#endif

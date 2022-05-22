@@ -23,7 +23,7 @@
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
-#include "binder/Semantics_TypeSpecifiers.h"
+#include "binder/ConstraintsInDeclarators.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
 #include "symbols/SymbolName_ALL.h"
@@ -40,7 +40,7 @@ using namespace psy;
 using namespace C;
 
 template <class DeclT>
-SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators(
+SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators_COMMON(
         const DeclT* node,
         Action (Binder::*visit_DONE)(const DeclT*))
 {
@@ -53,14 +53,14 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators(
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    return visitDeclaration_AtDeclarators(
+    return visitDeclaration_AtDeclarators_COMMON(
                 node,
                 &Binder::visitVariableAndOrFunctionDeclaration_DONE);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
 {
-    return visitDeclaration_AtDeclarators(
+    return visitDeclaration_AtDeclarators_COMMON(
                 node,
                 &Binder::visitFieldDeclaration_DONE);
 }
@@ -138,10 +138,32 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             makeTySymAndPushIt<ArrayTypeSymbol>(tySyms_.top());
             break;
 
-        case ParameterSuffix:
+        case ParameterSuffix: {
+            auto tySym = tySyms_.top();
+            switch (tySym->typeKind()) {
+                case TypeKind::Function:
+                    ConstraintsInDeclarators::FunctionReturningFunction(
+                                node->innerDeclarator()->firstToken(),
+                                &diagReporter_);
+                    break;
+
+                case TypeKind::Array:
+                    ConstraintsInDeclarators::FunctionReturningArray(
+                                node->innerDeclarator()->firstToken(),
+                                &diagReporter_);
+                    break;
+
+                case TypeKind::Pointer:
+                case TypeKind::Named:
+                    break;
+
+                default:
+                    PSY_TRACE_ESCAPE_0(return Action::Quit);
+            }
             makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
             pendingFunTySyms_.push(tySyms_.top()->asFunctionType());
             break;
+        }
 
         default:
             PSY_TRACE_ESCAPE_0(return Action::Quit);
@@ -244,7 +266,7 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                     popTySym();
                     makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
                     auto ptrTySym = tySyms_.top()->asPointerType();
-                    ptrTySym->markAsArisingFromArrayOfTypeDecay();
+                    ptrTySym->markAsArisingFromArrayDecay();
                     break;
                 }
 
@@ -256,7 +278,7 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                      */
                     makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
                     auto ptrTySym = tySyms_.top()->asPointerType();
-                    ptrTySym->markAsArisingFromFunctionTypeDecay();
+                    ptrTySym->markAsArisingFromFunctionDecay();
                     break;
                 }
 

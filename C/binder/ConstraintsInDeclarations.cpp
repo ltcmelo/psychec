@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,31 +18,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SEMANTICS_TYPE_QUALIFIERS_H__
-#define PSYCHE_C_SEMANTICS_TYPE_QUALIFIERS_H__
+#include "ConstraintsInDeclarations.h"
 
-#include "Fwds.h"
+using namespace psy;
+using namespace C;
 
-#include "binder/Binder.h"
-#include "symbols/Symbol_Type.h"
-#include "syntax/SyntaxKind.h"
+const std::string ConstraintsInDeclarations::ID_of_UselessDeclaration = "Binder-000";
 
-#include <vector>
-
-namespace psy {
-namespace C {
-
-class Binder;
-
-class Semantics_TypeQualifiers
+void ConstraintsInDeclarations::UselessDeclaration(SyntaxToken tk,
+                                                   Binder::DiagnosticsReporter* diagReporter)
 {
-public:
-    static void qualify(SyntaxToken tyQualTk,
-                        TypeSymbol* tySym,
-                        Binder::DiagnosticsReporter* diagReporter);
-};
-
-} // C
-} // psy
-
-#endif
+    diagReporter->diagnose(DiagnosticDescriptor(
+                               ID_of_UselessDeclaration,
+                               "[[useless declaration]]",
+                               "declaration does not declare anything",
+                               DiagnosticSeverity::Error,
+                               DiagnosticCategory::Binding),
+                           tk);
+}

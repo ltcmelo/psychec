@@ -468,14 +468,14 @@ void ParserTest::case1068()
 
 void ParserTest::case1069()
 {
-    parseExpression("1i",
-                    Expectation().AST( { ImaginaryIntegerConstantExpression }));
+    parseExpression(".1f",
+                    Expectation().AST( { FloatingConstantExpression }));
 }
 
 void ParserTest::case1070()
 {
-    parseExpression(".1i",
-                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
+    parseExpression(".1l",
+                    Expectation().AST( { FloatingConstantExpression }));
 }
 
 void ParserTest::case1071()

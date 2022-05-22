@@ -25,16 +25,22 @@ using namespace  C;
 
 TypeSpecSummary::TypeSpecSummary(DeclSummary& declSummary)
     : declSummary_(declSummary)
-{
-}
+    , nestedRetTySpec_(nullptr)
+    , namedTyK_(NamedTypeKind::UNSPECIFIED)
+    , specTyBuiltinK_(BuiltinTypeKind::UNSPECIFIED)
+    , specTyCVR_(CVR::None)
+{}
+
+TypeSpecSummary::~TypeSpecSummary()
+{}
 
 DeclSummary& TypeSpecSummary::basis(std::string name,
-                                   NamedTypeKind tyNameK,
-                                   BuiltinTypeKind builtinTypeKind,
-                                   CVR cvr)
+                                    NamedTypeKind namedTyK,
+                                    BuiltinTypeKind builtinTypeKind,
+                                    CVR cvr)
 {
     specTyName_ = std::move(name);
-    specTyK_ = tyNameK;
+    namedTyK_ = namedTyK;
     specTyBuiltinK_ = builtinTypeKind;
     specTyCVR_ = cvr;
     return declSummary_;
@@ -45,7 +51,7 @@ DeclSummary& TypeSpecSummary::deriv(TypeKind tyKind, CVR cvr, Decay decay)
     derivTyKs_.push_back(tyKind);
     derivTyCVRs_.push_back(cvr);
     derivPtrTyDecay_.push_back(decay);
-    return declSummary_;;
+    return declSummary_;
 }
 
 TypeSpecSummary& TypeSpecSummary::Parameter()
@@ -57,6 +63,22 @@ TypeSpecSummary& TypeSpecSummary::Parameter()
 TypeSpecSummary& TypeSpecSummary::_AtParam_()
 {
     return parmsTySpecs_.back();
+}
+
+DeclSummary& TypeSpecSummary::NestAsReturn()
+{
+    nestedRetTySpec_.reset(new TypeSpecSummary(*this));
+
+    specTyName_.clear();
+    namedTyK_ = NamedTypeKind::UNSPECIFIED;
+    specTyBuiltinK_ = BuiltinTypeKind::UNSPECIFIED;
+    specTyCVR_ = CVR::None;
+    derivTyKs_.clear();
+    derivTyCVRs_.clear();
+    derivPtrTyDecay_.clear();
+    parmsTySpecs_.clear();
+
+    return declSummary_;
 }
 
 DeclSummary::DeclSummary()
@@ -75,11 +97,11 @@ DeclSummary& DeclSummary::Value(std::string name, ValueKind valK, ScopeKind scop
     return *this;
 }
 
-DeclSummary& DeclSummary::Type(std::string name, TypeKind tyK)
+DeclSummary& DeclSummary::Type(std::string name, NamedTypeKind namedTyDeclK)
 {
     name_ = std::move(name);
     symK_ = SymbolKind::Type;
-    tyK_ = tyK;
+    namedTyDeclK_ = namedTyDeclK;
     return *this;
 }
 
@@ -91,11 +113,42 @@ DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
     return *this;
 }
 
+DeclSummary& DeclSummary::withScopeKind(ScopeKind scopeK)
+{
+    scopeK_ = scopeK;
+    return *this;
+}
+
+DeclSummary& DeclSummary::withNameSpaceKind(NameSpaceKind nsK)
+{
+    nsK_ = nsK;
+    return *this;
+}
+
+DeclSummary& DeclSummary::withNameKind(SymbolNameKind nameK)
+{
+    nameK_ = nameK;
+    return *this;
+}
+
+DeclSummary& DeclSummary::withTagKind(TagSymbolNameKind tagK)
+{
+    tagK_ = tagK;
+    return *this;
+}
+
 Expectation::Expectation()
     : numE_(0)
     , numW_(0)
+    , continueTestDespiteOfErrors_(false)
     , isAmbiguous_(false)
 {}
+
+Expectation &Expectation::ContinueTestDespiteOfErrors()
+{
+    continueTestDespiteOfErrors_ = true;
+    return *this;
+}
 
 Expectation& Expectation::setErrorCnt(int numE)
 {
@@ -118,7 +171,7 @@ Expectation& Expectation::ambiguity(std::string s)
 
 Expectation& Expectation::binding(DeclSummary b)
 {
-    bindings_.emplace_back(std::move(b));
+    bindings_.push_back(b);
     return *this;
 }
 

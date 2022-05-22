@@ -165,15 +165,19 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Declarators.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Specifiers.cpp
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarations.h
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarations.cpp
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarators.h
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInDeclarators.cpp
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInTypeSpecifiers.h
+    ${PROJECT_SOURCE_DIR}/binder/ConstraintsInTypeSpecifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_TypeChecker.cpp
     ${PROJECT_SOURCE_DIR}/binder/NameSpace.h
     ${PROJECT_SOURCE_DIR}/binder/NameSpaces.h
     ${PROJECT_SOURCE_DIR}/binder/NameSpaceKind.h
-    ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeQualifiers.h
-    ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeQualifiers.cpp
-    ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeSpecifiers.h
-    ${PROJECT_SOURCE_DIR}/binder/Semantics_TypeSpecifiers.cpp
+    ${PROJECT_SOURCE_DIR}/binder/SemanticsOfTypeQualifiers.h
+    ${PROJECT_SOURCE_DIR}/binder/SemanticsOfTypeQualifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/Scope.h
     ${PROJECT_SOURCE_DIR}/binder/Scope.cpp
     ${PROJECT_SOURCE_DIR}/binder/ScopeKind.h
@@ -194,6 +198,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/tests/BinderTest_0000_0999.cpp
     ${PROJECT_SOURCE_DIR}/tests/BinderTest_1000_1999.cpp
     ${PROJECT_SOURCE_DIR}/tests/BinderTest_2000_2999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTest_3000_3999.cpp
     ${PROJECT_SOURCE_DIR}/tests/ParserTest.h
     ${PROJECT_SOURCE_DIR}/tests/ParserTest.cpp
     ${PROJECT_SOURCE_DIR}/tests/ParserTest_0000_0999.cpp

@@ -18,42 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SEMANTICS_TYPE_SPECIFIERS_H__
-#define PSYCHE_C_SEMANTICS_TYPE_SPECIFIERS_H__
+#ifndef PSYCHE_C_CONSTRAINTS_IN_DECLARATORS_H__
+#define PSYCHE_C_CONSTRAINTS_IN_DECLARATORS_H__
 
 #include "Fwds.h"
 
 #include "binder/Binder.h"
-#include "symbols/Symbol_Type.h"
 #include "syntax/SyntaxKind.h"
 
-#include <vector>
+#include <string>
 
 namespace psy {
 namespace C {
 
-class Binder;
-
-class Semantics_TypeSpecifiers
+class ConstraintsInDeclarators
 {
 public:
-    static const std::string ID_TypeSpecifierMissingDefaultsToInt;
-    static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
+    static const std::string ID_FunctionReturningFunction;
+    static const std::string ID_FunctionReturningArray;
 
-    static void TypeSpecifierMissingDefaultsToInt(SyntaxToken declTk,
-                                                  Binder::DiagnosticsReporter* diagReporter);
-    static void TwoOrMoreDataTypesInDeclarationSpecifiers(SyntaxToken builtTySpecTk,
-                                                          Binder::DiagnosticsReporter* diagReporter);
-
-    static void specify(SyntaxToken builtTySpecTk,
-                        NamedTypeSymbol* namedTySym,
-                        Binder::DiagnosticsReporter* diagReporter);
-
-private:
-    static BuiltinTypeKind combine(SyntaxToken builtTySpecTk,
-                                   BuiltinTypeKind builtTyK,
-                                   Binder::DiagnosticsReporter* diagReporter);
-
+    static void FunctionReturningFunction(SyntaxToken decltorTk, Binder::DiagnosticsReporter* diagReporter);
+    static void FunctionReturningArray(SyntaxToken decltorTk, Binder::DiagnosticsReporter* diagReporter);
 };
 
 } // C

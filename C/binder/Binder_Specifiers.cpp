@@ -23,8 +23,8 @@
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
-#include "binder/Semantics_TypeQualifiers.h"
-#include "binder/Semantics_TypeSpecifiers.h"
+#include "binder/SemanticsOfTypeQualifiers.h"
+#include "binder/ConstraintsInTypeSpecifiers.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
 #include "symbols/SymbolName_ALL.h"
@@ -39,8 +39,56 @@
 using namespace psy;
 using namespace C;
 
+template <class TyDeclT>
+SyntaxVisitor::Action Binder::visitTypeDeclaration_AtSpecfierMembers_COMMON(
+        const TyDeclT* node,
+        Action (Binder::*visit_DONE)(const TyDeclT*))
+{
+    for (auto declIt = node->typeSpecifier()->declarations(); declIt; declIt = declIt->next)
+        visit(declIt->value);
+
+    popSym();
+
+    return ((this)->*(visit_DONE))(node);
+}
+
+SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
+        const StructOrUnionDeclarationSyntax* node)
+{
+    const TagTypeSpecifierSyntax* tySpec = node->typeSpecifier();
+    TagSymbolNameKind tagK;
+    switch (tySpec->kind()) {
+        case StructTypeSpecifier:
+            tagK = TagSymbolNameKind::Structure;
+            break;
+
+        case UnionTypeSpecifier:
+            tagK = TagSymbolNameKind::Union;
+            break;
+
+        default:
+            PSY_TRACE_ESCAPE_0(return Action::Quit);
+    }
+
+    makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
+
+    return visitTypeDeclaration_AtSpecfierMembers_COMMON(
+                node,
+                &Binder::visitStructOrUnionDeclaration_DONE);
+}
+
+SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax* node)
+{
+    makeSymAndPushIt<NamedTypeSymbol>(TagSymbolNameKind::Enumeration,
+                                      node->typeSpecifier()->tagToken().valueText_c_str());
+
+    return visitTypeDeclaration_AtSpecfierMembers_COMMON(
+                node,
+                &Binder::visitEnumDeclaration_DONE);
+}
+
 template <class DeclT>
-SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
+SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers_COMMON(
         const DeclT* node,
         Action (Binder::*visit_AtDeclarators)(const DeclT*))
 {
@@ -48,9 +96,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
         actOnTypeSpecifier(specIt->value);
 
     if (tySyms_.empty()) {
-        Semantics_TypeSpecifiers::TypeSpecifierMissingDefaultsToInt(
-                    node->lastToken(), &diagReporter_);
-
+        ConstraintsInTypeSpecifiers::TypeSpecifierMissingDefaultsToInt(node->lastToken(), &diagReporter_);
         makeTySymAndPushIt<NamedTypeSymbol>(BuiltinTypeKind::Int);
     }
 
@@ -63,33 +109,32 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers(
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    return visitDeclaration_AtSpecifiers(
+    return visitDeclaration_AtSpecifiers_COMMON(
                 node,
                 &Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators);
 }
 
 SyntaxVisitor::Action Binder::visitFunctionDefinition_AtSpecifiers(const FunctionDefinitionSyntax* node)
 {
-    return visitDeclaration_AtSpecifiers(
+    return visitDeclaration_AtSpecifiers_COMMON(
                 node,
                 &Binder::visitFunctionDefinition_AtDeclarator);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtSpecifiers(const FieldDeclarationSyntax* node)
 {
-    return visitDeclaration_AtSpecifiers(
+    return visitDeclaration_AtSpecifiers_COMMON(
                 node,
                 &Binder::visitFieldDeclaration_AtDeclarators);
 }
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax* node)
 {
-    return visitDeclaration_AtSpecifiers(
+    return visitDeclaration_AtSpecifiers_COMMON(
                 node,
                 &Binder::visitParameterDeclaration_AtDeclarator);
 }
 
-/* Specifiers */
 SyntaxVisitor::Action Binder::actOnTypeSpecifier(const SpecifierSyntax* spec)
 {
     if (spec->asTypeQualifier())
@@ -157,7 +202,7 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
     }
     else {
         NamedTypeSymbol* namedTySym = tySyms_.top()->asNamedType();
-        Semantics_TypeSpecifiers::specify(node->specifierToken(),
+        ConstraintsInTypeSpecifiers::specify(node->specifierToken(),
                                           namedTySym,
                                           &diagReporter_);
     }
@@ -249,7 +294,7 @@ SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node
 {
     PSY_ASSERT_0(!tySyms_.empty(), return Action::Quit);
 
-    Semantics_TypeQualifiers::qualify(node->qualifierKeyword(),
+    SemanticsOfTypeQualifiers::qualify(node->qualifierKeyword(),
                                       tySyms_.top(),
                                       &diagReporter_);
 
