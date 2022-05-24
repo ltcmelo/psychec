@@ -136,6 +136,72 @@ public:
     Variant variant() const;
 };
 
+/**
+ * \brief The ImaginaryIntegerConstant class.
+ */
+class PSY_C_API ImaginaryIntegerConstant final : public Constant
+{
+public:
+    ImaginaryIntegerConstant(const char* chars, unsigned int size);
+
+    virtual ImaginaryIntegerConstant* asImaginaryIntegerConstant() override { return this; }
+
+    /**
+     * \brief The ImaginaryIntegerConstant::Signedness enumeration.
+     */
+    enum class Signedness : std::uint8_t
+    {
+        Signed,
+        Unsigned,
+    };
+
+    /**
+     * The Signedness of \c this ImaginaryIntegerConstant.
+     */
+    Signedness signedness() const;
+
+    /**
+     * \brief The ImaginaryIntegerConstant::Variant enumeration.
+     */
+    enum class Variant : std::uint8_t
+    {
+        Int,
+        Long,
+        LongLong
+    };
+
+    /**
+     * The Variant of \c this ImaginaryIntegerConstant.
+     */
+    Variant variant() const;
+};
+
+/**
+ * \brief The ImaginaryFloatingConstant class.
+ */
+class PSY_C_API ImaginaryFloatingConstant final : public Constant
+{
+public:
+    ImaginaryFloatingConstant(const char* chars, unsigned int size);
+
+    virtual ImaginaryFloatingConstant* asImaginaryFloatingConstant() override { return this; }
+
+    /**
+     * \brief The ImaginaryFloatingConstant::Variant enumeration.
+     */
+    enum class Variant : std::uint8_t
+    {
+        Float,
+        Double,
+        LongDouble
+    };
+
+    /**
+     * The Variant of \c this ImaginaryFloatingConstant.
+     */
+    Variant variant() const;
+};
+
 } // C
 } // psy
 

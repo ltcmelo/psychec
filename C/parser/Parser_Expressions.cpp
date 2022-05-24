@@ -456,6 +456,18 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
                     FloatingConstantExpression);
             break;
 
+        case ImaginaryIntegerConstantToken:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    ImaginaryIntegerConstantExpression);
+            break;
+
+        case ImaginaryFloatingConstantToken:
+            parseConstant_AtFirst<ConstantExpressionSyntax>(
+                    expr,
+                    ImaginaryFloatingConstantExpression);
+            break;
+
         case CharacterConstantToken:
         case CharacterConstant_L_Token:
         case CharacterConstant_u_Token:

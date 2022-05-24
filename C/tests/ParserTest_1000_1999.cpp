@@ -480,37 +480,160 @@ void ParserTest::case1070()
 
 void ParserTest::case1071()
 {
+    parseExpression("1i",
+                    Expectation().AST( { ImaginaryIntegerConstantExpression }));
 }
 
 void ParserTest::case1072()
 {
+    parseExpression(".1i",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
 void ParserTest::case1073()
 {
+    parseExpression("1.i",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1074() {}
-void ParserTest::case1075() {}
-void ParserTest::case1076() {}
-void ParserTest::case1077() {}
-void ParserTest::case1078() {}
-void ParserTest::case1079() {}
-void ParserTest::case1080() {}
-void ParserTest::case1081() {}
-void ParserTest::case1082() {}
-void ParserTest::case1083() {}
-void ParserTest::case1084() {}
-void ParserTest::case1085() {}
-void ParserTest::case1086() {}
-void ParserTest::case1087() {}
-void ParserTest::case1088() {}
-void ParserTest::case1089() {}
-void ParserTest::case1090() {}
-void ParserTest::case1091() {}
-void ParserTest::case1092() {}
-void ParserTest::case1093() {}
-void ParserTest::case1094() {}
+void ParserTest::case1074()
+{
+    parseExpression("1.2i",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
+}
+
+void ParserTest::case1075()
+{
+    parseExpression("1.2e3i",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
+}
+
+void ParserTest::case1076()
+{
+    parseExpression("1uli",
+                    Expectation().AST( { ImaginaryIntegerConstantExpression }));
+}
+
+void ParserTest::case1077()
+{
+    parseExpression("1j",
+                    Expectation().AST( { ImaginaryIntegerConstantExpression }));
+}
+
+void ParserTest::case1078()
+{
+    parseExpression(".1j",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
+}
+
+void ParserTest::case1079()
+{
+    parseExpression("1.j",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
+}
+
+void ParserTest::case1080()
+{
+    parseExpression("1.2j",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
+}
+
+void ParserTest::case1081()
+{
+    parseExpression("1.2e3j",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
+}
+
+void ParserTest::case1082()
+{
+    parseExpression("1ulj",
+                    Expectation().AST( { ImaginaryIntegerConstantExpression }));
+}
+
+void ParserTest::case1083()
+{
+    parseExpression("1iu",
+                    Expectation().AST( { ImaginaryIntegerConstantExpression }));
+}
+
+void ParserTest::case1084()
+{
+    parseExpression("1ju",
+                    Expectation().AST( { ImaginaryIntegerConstantExpression }));
+}
+
+void ParserTest::case1085()
+{
+    parseExpression("1.2if",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
+}
+
+void ParserTest::case1086()
+{
+    parseExpression("1.2jf",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
+}
+
+void ParserTest::case1087()
+{
+    parseExpression("1.2e3if",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
+}
+
+void ParserTest::case1088()
+{
+    parseExpression("1.2e3jf",
+                    Expectation().AST( { ImaginaryFloatingConstantExpression }));
+}
+
+void ParserTest::case1089()
+{
+    parseExpression("1ii",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
+void ParserTest::case1090()
+{
+    parseExpression("1jj",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
+void ParserTest::case1091()
+{
+    parseExpression("1ij",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
+void ParserTest::case1092()
+{
+    parseExpression("1ji",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
+void ParserTest::case1093()
+{
+    parseExpression("1uliul",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
+void ParserTest::case1094()
+{
+    parseExpression("1uljul",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
 void ParserTest::case1095() {}
 void ParserTest::case1096() {}
 void ParserTest::case1097() {}

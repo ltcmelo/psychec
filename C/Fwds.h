@@ -37,6 +37,8 @@ class SyntaxLexeme;
 class Identifier;
 class IntegerConstant;
 class FloatingConstant;
+class ImaginaryIntegerConstant;
+class ImaginaryFloatingConstant;
 class CharacterConstant;
 class StringLiteral;
 

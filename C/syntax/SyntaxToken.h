@@ -28,6 +28,7 @@
 #include "SyntaxKind.h"
 
 #include "parser/LanguageDialect.h"
+#include "parser/LanguageExtensions.h"
 
 #include "../common/location/Location.h"
 #include "../common/text/TextSpan.h"
@@ -251,6 +252,8 @@ private:
         const IntegerConstant* integer_;
         const FloatingConstant* floating_;
         const CharacterConstant* character_;
+        const ImaginaryIntegerConstant* imaginaryInteger_;
+        const ImaginaryFloatingConstant* imaginaryFloating_;
         const StringLiteral* string_;
     };
 

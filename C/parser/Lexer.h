@@ -65,8 +65,13 @@ private:
 
     /* 6.4.4 Constants */
     void lexIntegerOrFloatingConstant(SyntaxToken* tk);
-    void lexFloatingConstant_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng);
-    void lexFloatingConstant_AtExponent(SyntaxToken* tk, unsigned int accLeng);
+    void lexFloatingConstantAndMaybeImaginary_AtSuffix(SyntaxToken* tk, unsigned int accLeng);
+    void lexImaginaryFloatingConstant_AtFirstSuffix(SyntaxToken* tk, unsigned int accLeng);
+    void lexImaginaryFloatingConstant_AtFollowSuffix(SyntaxToken* tk, unsigned int accLeng);
+    void lexIntegerSuffixAndMaybeImaginary(SyntaxToken* tk);
+    void lexImaginaryIntegerSuffix(SyntaxToken* tk);
+    void lexFloatingConstantAndMaybeImaginary_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng);
+    void lexFloatingConstantAndMaybeImaginary_AtExponent(SyntaxToken* tk, unsigned int accLeng);
     void lexFloatingConstant_AtSuffix(SyntaxToken* tk, unsigned int accLeng);
     void lexIntegerSuffix(int suffixCnt = 2);
     void lexDigitSequence();
@@ -118,8 +123,10 @@ private:
         Lexer* lexer_;
 
         void IncompatibleLanguageDialect(const std::string& feature, LanguageDialect::Std expectedStd);
+        void IncompatibleLanguageExtension(const std::string& feature, LanguageExtensions::Ext expectedExt);
 
         static const std::string ID_of_IncompatibleLanguageDialect;
+        static const std::string ID_of_IncompatibleLanguageExtension;
     };
     friend struct DiagnosticsReporter;
 

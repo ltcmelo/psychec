@@ -90,3 +90,42 @@ CharacterConstant::Variant CharacterConstant::variant() const
 
     return Variant::Plain_u_char;
 }
+
+ImaginaryIntegerConstant::ImaginaryIntegerConstant(const char* chars, unsigned int size)
+    : Constant::Constant(chars,
+                         size,
+                         Kind::ImaginaryIntegerConstant)
+{}
+
+ImaginaryIntegerConstant::Signedness ImaginaryIntegerConstant::signedness() const
+{
+    return (BF_.u_ || BF_.U_) ? Signedness::Unsigned : Signedness::Signed;
+}
+
+ImaginaryIntegerConstant::Variant ImaginaryIntegerConstant::variant() const
+{
+    if (BF_.llOrLL_)
+        return Variant::LongLong;
+
+    if (BF_.l_ or BF_.L_)
+        return Variant::Long;
+
+    return Variant::Int;
+}
+
+ImaginaryFloatingConstant::ImaginaryFloatingConstant(const char* chars, unsigned int size)
+    : Constant::Constant(chars,
+                         size,
+                         Kind::ImaginaryFloatingConstant)
+{}
+
+ImaginaryFloatingConstant::Variant ImaginaryFloatingConstant::variant() const
+{
+    if (BF_.fOrF_)
+        return Variant::Float;
+
+    if (BF_.l_ or BF_.L_)
+        return Variant::LongDouble;
+
+    return Variant::Double;
+}

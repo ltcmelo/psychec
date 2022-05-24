@@ -117,6 +117,8 @@ public:
             case CharacterConstant_L_Token:
             case CharacterConstant_u_Token:
             case CharacterConstant_U_Token:
+            case ImaginaryIntegerConstantToken:
+            case ImaginaryFloatingConstantToken:
             case Keyword_Ext_true:
             case Keyword_Ext_false:
             case Keyword_Ext_NULL:

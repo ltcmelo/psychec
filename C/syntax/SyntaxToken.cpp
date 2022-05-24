@@ -47,6 +47,8 @@ const char* tokenNames[] =
 
     "<integer constant>",
     "<floating constant>",
+    "<imaginary integer constant>",
+    "<imaginary floating constant>",
 
     "<character constant>",
     "<L character constant>",
@@ -284,6 +286,8 @@ SyntaxToken::Category SyntaxToken::category(SyntaxKind k)
         case CharacterConstant_L_Token:
         case CharacterConstant_u_Token:
         case CharacterConstant_U_Token:
+        case ImaginaryIntegerConstantToken:
+        case ImaginaryFloatingConstantToken:
             return Category::Constants;
 
         case StringLiteralToken:
@@ -386,6 +390,8 @@ const char* SyntaxToken::valueText_c_str() const
         case CharacterConstant_L_Token:
         case CharacterConstant_u_Token:
         case CharacterConstant_U_Token:
+        case ImaginaryIntegerConstantToken:
+        case ImaginaryFloatingConstantToken:
         case StringLiteralToken:
         case StringLiteral_L_Token:
         case StringLiteral_u8_Token:

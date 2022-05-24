@@ -28,6 +28,7 @@ using namespace psy;
 using namespace C;
 
 const std::string Lexer::DiagnosticsReporter::ID_of_IncompatibleLanguageDialect = "Lexer-001";
+const std::string Lexer::DiagnosticsReporter::ID_of_IncompatibleLanguageExtension = "Lexer-002";
 
 void Lexer::DiagnosticsReporter::IncompatibleLanguageDialect(
         const std::string& feature,
@@ -36,6 +37,19 @@ void Lexer::DiagnosticsReporter::IncompatibleLanguageDialect(
     DiagnosticDescriptor descriptor(ID_of_IncompatibleLanguageDialect,
                                     "Incompatible language dialect",
                                     feature + " is available in " + to_string(expectedStd),
+                                    DiagnosticSeverity::Warning,
+                                    DiagnosticCategory::Syntax);
+
+    lexer_->tree_->newDiagnostic(descriptor, lexer_->tree_->freeTokenSlot());
+}
+
+void Lexer::DiagnosticsReporter::IncompatibleLanguageExtension(
+        const std::string& feature,
+        LanguageExtensions::Ext expectedExt)
+{
+    DiagnosticDescriptor descriptor(ID_of_IncompatibleLanguageExtension,
+                                    "Incompatible language extension",
+                                    feature + " is available in " + to_string(expectedExt),
                                     DiagnosticSeverity::Warning,
                                     DiagnosticCategory::Syntax);
 
