@@ -634,8 +634,22 @@ void ParserTest::case1094()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1095() {}
-void ParserTest::case1096() {}
+void ParserTest::case1095()
+{
+    parseExpression(".1fllf",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
+void ParserTest::case1096()
+{
+    parseExpression("0.1fllf",
+                    Expectation().diagnostic(
+                        Expectation::ErrorOrWarn::Error,
+                        Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+}
+
 void ParserTest::case1097() {}
 void ParserTest::case1098() {}
 void ParserTest::case1099() {}
