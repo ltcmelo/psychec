@@ -64,26 +64,30 @@ private:
     void lexIdentifier(SyntaxToken* tk, int advanced = 0);
 
     /* 6.4.4 Constants */
+    void lexCharacterConstant(SyntaxToken* tk, unsigned char prefix = 0);
+
     void lexIntegerOrFloatingConstant(SyntaxToken* tk);
     void lexIntegerOrFloating_AtFollowOfSuffix(SyntaxToken* tk, std::function<void ()>);
 
-    void lexIntegerSuffixAndMaybeImaginary(SyntaxToken* tk, unsigned int accLeng);
-
-    void lexFloatingConstantAndMaybeImaginary_AtSuffix(SyntaxToken* tk, unsigned int accLeng);
-    void lexImaginaryFloatingConstant_AtFirstSuffix(SyntaxToken* tk, unsigned int accLeng);
-    void lexImaginaryFloatingConstant_AtFollowSuffix_TOCHANGE(SyntaxToken* tk, unsigned int accLeng);
+    void lexIntegerOrImaginaryIntegerSuffix(SyntaxToken* tk, unsigned int accLeng);
+    void lexIntegerSuffix(int suffixCnt = 2);
     void lexImaginaryIntegerSuffix(SyntaxToken* tk);
+    void lexImaginaryIntegerSuffix_AtFirst(SyntaxToken* tk);
+
+    void lexFloatingOrImaginaryFloatingSuffix(SyntaxToken* tk, unsigned int accLeng);
+    void lexFloatingSuffix();
+    void lexImaginaryFloatingSuffix(SyntaxToken* tk);
+    void lexImaginaryFloatingSuffix_AtFirst(SyntaxToken* tk);
+
     void lexFloatingConstantAndMaybeImaginary_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng);
     void lexFloatingConstantAndMaybeImaginary_AtExponent(SyntaxToken* tk, unsigned int accLeng);
     void lexFloatingConstant_AtSuffix(SyntaxToken* tk, unsigned int accLeng);
-    void lexIntegerSuffix(int suffixCnt = 2);
+
     void lexDigitSequence();
     void lexHexadecimalDigitSequence();
     void lexExponentPart();
     void lexBinaryExponentPart();
     void lexSign();
-    void lexFloatingSuffix();
-    void lexCharacterConstant(SyntaxToken* tk, unsigned char prefix = 0);
 
     /* 6.4.5 String literals */
     void lexStringLiteral(SyntaxToken* tk, unsigned char prefix = 0);
