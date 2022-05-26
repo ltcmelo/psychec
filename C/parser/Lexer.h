@@ -65,10 +65,13 @@ private:
 
     /* 6.4.4 Constants */
     void lexIntegerOrFloatingConstant(SyntaxToken* tk);
+    void lexIntegerOrFloating_AtFollowOfSuffix(SyntaxToken* tk, std::function<void ()>);
+
+    void lexIntegerSuffixAndMaybeImaginary(SyntaxToken* tk, unsigned int accLeng);
+
     void lexFloatingConstantAndMaybeImaginary_AtSuffix(SyntaxToken* tk, unsigned int accLeng);
     void lexImaginaryFloatingConstant_AtFirstSuffix(SyntaxToken* tk, unsigned int accLeng);
-    void lexImaginaryFloatingConstant_AtFollowSuffix(SyntaxToken* tk, unsigned int accLeng);
-    void lexIntegerSuffixAndMaybeImaginary(SyntaxToken* tk);
+    void lexImaginaryFloatingConstant_AtFollowSuffix_TOCHANGE(SyntaxToken* tk, unsigned int accLeng);
     void lexImaginaryIntegerSuffix(SyntaxToken* tk);
     void lexFloatingConstantAndMaybeImaginary_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng);
     void lexFloatingConstantAndMaybeImaginary_AtExponent(SyntaxToken* tk, unsigned int accLeng);
