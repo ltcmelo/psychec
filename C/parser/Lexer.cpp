@@ -409,7 +409,7 @@ LexEntry:
                 }
             }
             else if (std::isdigit(yychar_)) {
-                lexFloatingConstantAndMaybeImaginary_AtFollowOfPeriod(tk, 1);
+                lexFloatingOrImaginaryFloating_AtFollowOfPeriod(tk, 1);
             }
             else {
                 tk->rawSyntaxK_ = DotToken;
@@ -898,12 +898,12 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
     while (yychar_) {
         if (yychar_ == '.') {
             yyinput();
-            lexFloatingConstantAndMaybeImaginary_AtFollowOfPeriod(tk, yytext_ - yytext);
+            lexFloatingOrImaginaryFloating_AtFollowOfPeriod(tk, yytext_ - yytext);
             return;
         }
 
         if (yychar_ == 'e' || yychar_ == 'E') {
-            lexFloatingConstantAndMaybeImaginary_AtExponent(tk, yytext_ - yytext);
+            lexFloatingOrImaginaryFloating_AtExponent(tk, yytext_ - yytext);
             return;
         }
 
@@ -1022,14 +1022,14 @@ void Lexer::lexImaginaryIntegerSuffix_AtFirst(SyntaxToken* tk)
     tk->rawSyntaxK_ = ImaginaryIntegerConstantToken;
 }
 
-void Lexer::lexFloatingConstantAndMaybeImaginary_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng)
+void Lexer::lexFloatingOrImaginaryFloating_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng)
 {
     const char* yytext = yytext_ - accLeng;
     lexDigitSequence();
-    lexFloatingConstantAndMaybeImaginary_AtExponent(tk, yytext_ - yytext);
+    lexFloatingOrImaginaryFloating_AtExponent(tk, yytext_ - yytext);
 }
 
-void Lexer::lexFloatingConstantAndMaybeImaginary_AtExponent(SyntaxToken* tk, unsigned int accLeng)
+void Lexer::lexFloatingOrImaginaryFloating_AtExponent(SyntaxToken* tk, unsigned int accLeng)
 {
     const char* yytext = yytext_ - accLeng;
     lexExponentPart();

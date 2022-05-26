@@ -74,13 +74,12 @@ private:
     void lexImaginaryIntegerSuffix(SyntaxToken* tk);
     void lexImaginaryIntegerSuffix_AtFirst(SyntaxToken* tk);
 
+    void lexFloatingOrImaginaryFloating_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng);
+    void lexFloatingOrImaginaryFloating_AtExponent(SyntaxToken* tk, unsigned int accLeng);
     void lexFloatingOrImaginaryFloatingSuffix(SyntaxToken* tk, unsigned int accLeng);
     void lexFloatingSuffix();
     void lexImaginaryFloatingSuffix(SyntaxToken* tk);
     void lexImaginaryFloatingSuffix_AtFirst(SyntaxToken* tk);
-
-    void lexFloatingConstantAndMaybeImaginary_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng);
-    void lexFloatingConstantAndMaybeImaginary_AtExponent(SyntaxToken* tk, unsigned int accLeng);
 
     void lexDigitSequence();
     void lexHexadecimalDigitSequence();
