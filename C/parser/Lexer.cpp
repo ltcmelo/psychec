@@ -1036,14 +1036,6 @@ void Lexer::lexFloatingConstantAndMaybeImaginary_AtExponent(SyntaxToken* tk, uns
     lexFloatingOrImaginaryFloatingSuffix(tk, yytext_ - yytext);
 }
 
-void Lexer::lexFloatingConstant_AtSuffix(SyntaxToken* tk, unsigned int accLeng)
-{
-    const char* yytext = yytext_ - accLeng;
-    lexFloatingSuffix();
-    tk->rawSyntaxK_ = FloatingConstantToken;
-    tk->floating_ = tree_->floatingConstant(yytext, yytext_ - yytext);
-}
-
 void Lexer::lexFloatingOrImaginaryFloatingSuffix(SyntaxToken* tk, unsigned int accLeng)
 {
     const char* yytext = yytext_ - accLeng;

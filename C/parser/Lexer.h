@@ -81,7 +81,6 @@ private:
 
     void lexFloatingConstantAndMaybeImaginary_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng);
     void lexFloatingConstantAndMaybeImaginary_AtExponent(SyntaxToken* tk, unsigned int accLeng);
-    void lexFloatingConstant_AtSuffix(SyntaxToken* tk, unsigned int accLeng);
 
     void lexDigitSequence();
     void lexHexadecimalDigitSequence();
