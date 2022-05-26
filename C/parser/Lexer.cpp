@@ -930,7 +930,6 @@ void Lexer::lexIntegerOrFloating_AtFollowOfSuffix(SyntaxToken* tk,
     makeLexeme();
 }
 
-
 void Lexer::lexIntegerOrImaginaryIntegerSuffix(SyntaxToken* tk, unsigned int accLeng)
 {
     const char* yytext = yytext_ - accLeng;

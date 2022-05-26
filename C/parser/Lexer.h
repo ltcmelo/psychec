@@ -28,6 +28,7 @@
 #include "syntax/SyntaxToken.h"
 
 #include <cstdint>
+#include <functional>
 #include <string>
 
 namespace psy {
