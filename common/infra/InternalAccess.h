@@ -18,51 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SCOPE_KIND_H__
-#define PSYCHE_C_SCOPE_KIND_H__
+#ifndef PSYCHE_INTERNAL_ACCESS_H__
+#define PSYCHE_INTERNAL_ACCESS_H__
 
-#include "API.h"
-#include "Fwds.h"
-
-#include "../common/infra/Escape.h"
-
-#include <cstdint>
-#include <string>
-
-namespace psy {
-namespace C {
-
-/**
- * \brief The ScopeKind enum.
- *
- * \remark 6.2.1-4
- */
-enum class PSY_C_API ScopeKind : uint8_t
-{
-    UNSPECIFIED = 0,
-    File,
-    Function,
-    FunctionPrototype,
-    Block
-};
-
-inline std::string PSY_C_API to_string(ScopeKind scopeK)
-{
-    switch (scopeK) {
-        case ScopeKind::File:
-            return "File";
-        case ScopeKind::Function:
-            return "Function";
-        case ScopeKind::FunctionPrototype:
-            return "FunctionPrototype";
-        case ScopeKind::Block:
-            return "Block";
-        default:
-            PSY_ESCAPE_VIA_RETURN("<INVALID or UNSPECIFIED ScopeKind>");
-    }
-}
-
-} // C
-} // psy
+#define PSY_INTERNAL private
+#define PSY_GRANT_ACCESS(NAME) friend class NAME
 
 #endif

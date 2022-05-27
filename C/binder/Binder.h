@@ -32,6 +32,7 @@
 #include "syntax/SyntaxVisitor.h"
 
 #include "../common/diagnostics/DiagnosticDescriptor.h"
+#include "../common/infra/InternalAccess.h"
 
 #include <memory>
 #include <stack>
@@ -46,24 +47,26 @@ class SemanticModel;
 /**
  * \brief The Binder class.
  */
-class PSY_C_API Binder final : protected SyntaxVisitor
+class PSY_C_API_RESTRICTED Binder final : protected SyntaxVisitor
 {
     friend class BinderTest;
-    friend class SemanticModel;
-    friend class ConstraintsInDeclarations;
-    friend class ConstraintsInTypeSpecifiers;
-    friend class ConstraintsInDeclarators;
-    friend class SemanticsOfTypeQualifiers;
 
-public:
-    Binder(const Binder&) = delete;
-    void operator=(const Binder&) = delete;
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(SemanticModel);
+    PSY_GRANT_ACCESS(ConstraintsInDeclarations);
+    PSY_GRANT_ACCESS(ConstraintsInTypeSpecifiers);
+    PSY_GRANT_ACCESS(ConstraintsInDeclarators);
+    PSY_GRANT_ACCESS(SemanticsOfTypeQualifiers);
+
+    Binder(SemanticModel* semaModel, const SyntaxTree* tree);
     ~Binder();
 
     void bind();
 
 private:
-    Binder(SemanticModel* semaModel, const SyntaxTree* tree);
+    // Unavailable
+    Binder(const Binder&) = delete;
+    void operator=(const Binder&) = delete;
 
     SemanticModel* semaModel_;
 

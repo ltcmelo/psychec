@@ -21,6 +21,7 @@
 #ifndef PSYCHE_C_CONSTRAINTS_IN_DECLARATIONS_H__
 #define PSYCHE_C_CONSTRAINTS_IN_DECLARATIONS_H__
 
+#include "API.h"
 #include "Fwds.h"
 
 #include "binder/Binder.h"
@@ -29,12 +30,15 @@
 namespace psy {
 namespace C {
 
-class ConstraintsInDeclarations
+class PSY_C_API_RESTRICTED ConstraintsInDeclarations
 {
-public:
-    static const std::string ID_of_UselessDeclaration;
+    friend class BinderTest;
 
+public:
     static void UselessDeclaration(SyntaxToken declTk, Binder::DiagnosticsReporter* diagReporter);
+
+private:
+    static const std::string ID_of_UselessDeclaration;
 };
 
 } // C

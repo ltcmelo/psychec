@@ -24,6 +24,8 @@
 
 #include "API.h"
 
+#include "../common/infra/InternalAccess.h"
+
 #include <cstdint>
 #include <string>
 
@@ -38,8 +40,9 @@ namespace C {
  * \note
  * Additional information at https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html.
  */
-struct PSY_C_API LanguageDialect
+class PSY_C_API LanguageDialect
 {
+public:
     /**
      * \brief The C Standard enumeration.
      */
@@ -51,11 +54,18 @@ struct PSY_C_API LanguageDialect
         C17_18
     };
 
+    /**
+     * The C Standard of \c this LanguageDialect.
+     */
+    Std std() const { return std_; }
+
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(ParseOptions);
+    PSY_GRANT_ACCESS(SyntaxTree);
+
     LanguageDialect(Std std = Std::C11)
         : std_(std)
     {}
-
-    Std std() const { return std_; }
 
 private:
     Std std_;

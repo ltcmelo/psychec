@@ -30,6 +30,14 @@
 #include <iostream>
 #include <stack>
 
+#ifndef UNLIKELY
+  #ifdef __GNUC__
+    #define UNLIKELY(expr) __builtin_expect(!!(expr), false)
+  #else
+    #define UNLIKELY(expr) (expr)
+  #endif
+#endif
+
 using namespace psy;
 using namespace C;
 

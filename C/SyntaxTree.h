@@ -32,6 +32,7 @@
 #include "syntax/SyntaxToken.h"
 
 #include "../common/diagnostics/Diagnostic.h"
+#include "../common/infra/InternalAccess.h"
 #include "../common/infra/Pimpl.h"
 #include "../common/text/SourceText.h"
 
@@ -58,9 +59,7 @@ namespace C {
 class PSY_C_API SyntaxTree
 {
 public:
-    SyntaxTree(const SyntaxTree&) = delete;
     ~SyntaxTree();
-    void operator=(const SyntaxTree&) = delete;
 
     /**
      * \brief The SyntaxCategory enumeration.
@@ -71,7 +70,7 @@ public:
      */
     enum class SyntaxCategory : uint8_t
     {
-        Unspecified,
+        UNSPECIFIED = 0,
         Declarations,
         Expressions,
         Statements,
@@ -85,7 +84,7 @@ public:
                                                  TextPreprocessingState textPPState,
                                                  ParseOptions parseOptions = ParseOptions(),
                                                  const std::string& path = "",
-                                                 SyntaxCategory syntaxCategory = SyntaxCategory::Unspecified);
+                                                 SyntaxCategory syntaxCategory = SyntaxCategory::UNSPECIFIED);
 
     /**
      * The path of the file associated to \c this SyntaxTree.
@@ -117,12 +116,15 @@ public:
      */
     std::vector<Diagnostic> diagnostics() const;
 
-private:
-    SyntaxTree(SourceText text,
-               ParseOptions parseOptions,
-               const std::string& path);
-
-    DECL_PIMPL(SyntaxTree)
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(SyntaxNode);
+    PSY_GRANT_ACCESS(SyntaxNodeList);
+    PSY_GRANT_ACCESS(Lexer);
+    PSY_GRANT_ACCESS(Parser);
+    PSY_GRANT_ACCESS(Binder);
+    PSY_GRANT_ACCESS(Symbol);
+    PSY_GRANT_ACCESS(Compilation);
+    PSY_GRANT_ACCESS(SyntaxWriterDOTFormat); // TODO: Remove this friend.
 
     MemoryPool* unitPool() const;
 
@@ -130,28 +132,12 @@ private:
     using LineColum = std::pair<unsigned int, unsigned int>;
     using ExpansionsTable = std::unordered_map<unsigned int, LineColum>;
 
-    friend class SyntaxNode;
-    friend class SyntaxNodeList;
-    friend class Lexer;
-    friend class Parser;
-    friend class Binder;
-    friend class Symbol;
-    friend class Compilation;
-
-    // TODO: To be removed.
-    friend class Unparser;
-    friend class SyntaxWriterDOTFormat;
-
     /* Lexed-tokens access and manipulation */
     void addToken(SyntaxToken tk);
     SyntaxToken& tokenAt(LexedTokens::IndexType tkIdx);
     const SyntaxToken& tokenAt(LexedTokens::IndexType tkIdx) const;
     TokenSequenceType::size_type tokenCount() const;
     LexedTokens::IndexType freeTokenSlot() const;
-
-    const ParseOptions& parseOptions() const;
-
-    void buildTree(SyntaxCategory syntaxCat);
 
     const Identifier* identifier(const char* s, unsigned int size);
     const IntegerConstant* integerConstant(const char* s, unsigned int size);
@@ -165,24 +151,39 @@ private:
     void relayExpansion(unsigned int offset, std::pair<unsigned, unsigned> p);
     void relayLineDirective(unsigned int offset, unsigned int lineno, const std::string& filePath);
 
+    const ParseOptions& parseOptions() const;
+
+    LanguageDialect dialect() const { return dialect_; }
+    void setDialect(LanguageDialect dialect) { dialect_ = dialect; }
+
+    void newDiagnostic(DiagnosticDescriptor descriptor, LexedTokens::IndexType tkIdx) const;
+    void newDiagnostic(DiagnosticDescriptor descriptor, SyntaxToken tk) const;
+
+    void attachCompilation(const Compilation*) const;
+    void detachCompilation(const Compilation*) const;
+    std::unordered_set<const Compilation*> linkedCompilations() const;
+
+private:
+    SyntaxTree(SourceText text,
+               ParseOptions parseOptions,
+               const std::string& path);
+
+    // Unavailable
+    SyntaxTree(const SyntaxTree&) = delete;
+    SyntaxTree& operator=(const SyntaxTree&) = delete;
+
+    DECL_PIMPL(SyntaxTree)
+
+    void buildTree(SyntaxCategory syntaxCat);
+
     LinePosition computePosition(unsigned int offset) const;
     unsigned int searchForLineno(unsigned int offset) const;
     unsigned int searchForColumn(unsigned int offset, unsigned int lineno) const;
     LineDirective searchForLineDirective(unsigned int offset) const;
 
-    void newDiagnostic(DiagnosticDescriptor descriptor, LexedTokens::IndexType tkIdx) const;
-    void newDiagnostic(DiagnosticDescriptor descriptor, SyntaxToken tk) const;
-
-    LanguageDialect dialect() const { return dialect_; }
-    void setDialect(LanguageDialect dialect) { dialect_ = dialect; }
-
     // TODO: Move to implementaiton.
     LanguageDialect dialect_;
     std::vector<SyntaxToken> comments_;
-
-    void attachCompilation(const Compilation*) const;
-    void detachCompilation(const Compilation*) const;
-    std::unordered_set<const Compilation*> linkedCompilations() const;
 };
 
 } // C

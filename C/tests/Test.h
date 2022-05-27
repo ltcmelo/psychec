@@ -45,7 +45,7 @@ protected:
 
     void parse(std::string text,
                Expectation X = Expectation(),
-               SyntaxTree::SyntaxCategory cat = SyntaxTree::SyntaxCategory::Unspecified);
+               SyntaxTree::SyntaxCategory cat = SyntaxTree::SyntaxCategory::UNSPECIFIED);
     void parseDeclaration(std::string text,
                           Expectation X = Expectation());
     void parseExpression(std::string text,

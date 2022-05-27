@@ -22,9 +22,11 @@
 #ifndef PSYCHE_C_LANGUAGE_EXTENSIONS_H__
 #define PSYCHE_C_LANGUAGE_EXTENSIONS_H__
 
+#include "API.h"
+
 #include "MacroTranslations.h"
 
-#include "API.h"
+#include "../common/infra/InternalAccess.h"
 
 #include <cstdint>
 #include <string>
@@ -35,12 +37,9 @@ namespace C {
 /**
  * \brief The LanguageExtensions class.
  */
-class LanguageExtensions final
+class PSY_C_API LanguageExtensions final
 {
 public:
-    LanguageExtensions();
-    LanguageExtensions(MacroTranslations translations);
-
     /**
      * The MacroTranslations of \c this LanguageExtensions.
      */
@@ -230,6 +229,12 @@ public:
     LanguageExtensions& enable_ExtPSY_Generics(bool yes);
     bool isEnabled_ExtPSY_Generics() const;
     //!@}
+
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(ParseOptions);
+
+    LanguageExtensions();
+    LanguageExtensions(MacroTranslations translations);
 
 private:
     MacroTranslations translations_;

@@ -26,6 +26,8 @@
 
 #include "ScopeKind.h"
 
+#include "../common/infra/InternalAccess.h"
+
 #include <memory>
 #include <cstdint>
 #include <unordered_map>
@@ -41,8 +43,6 @@ namespace C {
  */
 class PSY_C_API Scope
 {
-    friend class Binder;
-
 public:
     virtual ~Scope();
 
@@ -51,12 +51,15 @@ public:
      */
     ScopeKind kind() const;
 
-private:
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
+
     Scope(ScopeKind kind);
 
     void enclose(std::unique_ptr<Scope> scope);
     void morphFrom_FunctionPrototype_to_Block();
 
+private:
     ScopeKind kind_;
     std::vector<std::unique_ptr<Scope>> enclosedScopes_;
 };

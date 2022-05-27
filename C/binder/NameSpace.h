@@ -24,7 +24,9 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "NameSpaceKind.h"
+#include "binder/NameSpaceKind.h"
+
+#include "../common/infra/InternalAccess.h"
 
 namespace psy {
 namespace C {
@@ -37,15 +39,15 @@ namespace C {
 class PSY_C_API NameSpace
 {
 public:
-
-//    NameSpace(NameSpaceKind nsK)
-//        : nsK_(nsK)
-//    {}
-
     /**
      * The NameSpaceKind of \c this NameSpace.
      */
     NameSpaceKind kind() const { return  nsK_; }
+
+PSY_INTERNAL:
+    NameSpace(NameSpaceKind nsK)
+        : nsK_(nsK)
+    {}
 
 private:
     NameSpaceKind nsK_;

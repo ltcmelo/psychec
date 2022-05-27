@@ -21,6 +21,7 @@
 #ifndef PSYCHE_C_CONSTRAINTS_IN_TYPE_SPECIFIERS_H__
 #define PSYCHE_C_CONSTRAINTS_IN_TYPE_SPECIFIERS_H__
 
+#include "API.h"
 #include "Fwds.h"
 
 #include "binder/Binder.h"
@@ -34,12 +35,11 @@ namespace C {
 
 class Binder;
 
-class ConstraintsInTypeSpecifiers
+class PSY_C_API_RESTRICTED ConstraintsInTypeSpecifiers
 {
-public:
-    static const std::string ID_TypeSpecifierMissingDefaultsToInt;
-    static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
+    friend class BinderTest;
 
+public:
     static void TypeSpecifierMissingDefaultsToInt(SyntaxToken declTk,
                                                   Binder::DiagnosticsReporter* diagReporter);
     static void TwoOrMoreDataTypesInDeclarationSpecifiers(SyntaxToken builtTySpecTk,
@@ -50,6 +50,9 @@ public:
                         Binder::DiagnosticsReporter* diagReporter);
 
 private:
+    static const std::string ID_TypeSpecifierMissingDefaultsToInt;
+    static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
+
     static BuiltinTypeKind combine(SyntaxToken builtTySpecTk,
                                    BuiltinTypeKind builtTyK,
                                    Binder::DiagnosticsReporter* diagReporter);

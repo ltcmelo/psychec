@@ -21,6 +21,7 @@
 #ifndef PSYCHE_C_CONSTRAINTS_IN_DECLARATORS_H__
 #define PSYCHE_C_CONSTRAINTS_IN_DECLARATORS_H__
 
+#include "API.h"
 #include "Fwds.h"
 
 #include "binder/Binder.h"
@@ -31,14 +32,17 @@
 namespace psy {
 namespace C {
 
-class ConstraintsInDeclarators
+class PSY_C_API_RESTRICTED ConstraintsInDeclarators
 {
-public:
-    static const std::string ID_FunctionReturningFunction;
-    static const std::string ID_FunctionReturningArray;
+    friend class BinderTest;
 
+public:
     static void FunctionReturningFunction(SyntaxToken decltorTk, Binder::DiagnosticsReporter* diagReporter);
     static void FunctionReturningArray(SyntaxToken decltorTk, Binder::DiagnosticsReporter* diagReporter);
+
+private:
+    static const std::string ID_FunctionReturningFunction;
+    static const std::string ID_FunctionReturningArray;
 };
 
 } // C
