@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_TRACES_H__
-#define PSYCHE_TRACES_H__
+#ifndef PSYCHE_ESCAPE_H__
+#define PSYCHE_ESCAPE_H__
 
 #include <iostream>
 
-#define PSY_TRACE_ESCAPE(CODE, MSG) \
+#define PSY_ESCAPE(CODE, MSG) \
 do { \
     std::cout << "[ESCAPE] at " \
               << __FILE__ << ":" << __LINE__ << " " \
@@ -31,6 +31,6 @@ do { \
     CODE; \
 } while (0)
 
-#define PSY_TRACE_ESCAPE_0(CODE) PSY_TRACE_ESCAPE(CODE, "<empty message>")
+#define PSY_ESCAPE_0(CODE) PSY_ESCAPE(CODE, "<empty message>")
 
 #endif

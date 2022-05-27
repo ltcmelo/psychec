@@ -32,7 +32,7 @@
 #include "syntax/SyntaxUtilities.h"
 
 #include "../common/infra/Assertions.h"
-#include "../common/infra/Traces.h"
+#include "../common/infra/Escape.h"
 
 #include <iostream>
 
@@ -112,7 +112,7 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
             break;
 
         default:
-            PSY_TRACE_ESCAPE_0(return Action::Quit);
+            PSY_ESCAPE_0(return Action::Quit);
     }
 
     typeableSym->setType(tySym);
@@ -158,7 +158,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
                     break;
 
                 default:
-                    PSY_TRACE_ESCAPE_0(return Action::Quit);
+                    PSY_ESCAPE_0(return Action::Quit);
             }
             makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
             pendingFunTySyms_.push(tySyms_.top()->asFunctionType());
@@ -166,7 +166,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
         }
 
         default:
-            PSY_TRACE_ESCAPE_0(return Action::Quit);
+            PSY_ESCAPE_0(return Action::Quit);
     }
 
     visit(node->innerDeclarator());
@@ -243,12 +243,12 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                             break;
 
                         default:
-                            PSY_TRACE_ESCAPE_0(return nullptr);
+                            PSY_ESCAPE_0(return nullptr);
                     }
                     break;
 
                 default:
-                    PSY_TRACE_ESCAPE_0(return nullptr);
+                    PSY_ESCAPE_0(return nullptr);
             }
             break;
 
@@ -287,13 +287,13 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                     break;
 
                 default:
-                    PSY_TRACE_ESCAPE_0(return nullptr);
+                    PSY_ESCAPE_0(return nullptr);
             }
             makeSymAndPushIt<ParameterSymbol>();
             break;
 
         default:
-            PSY_TRACE_ESCAPE_0(return nullptr);
+            PSY_ESCAPE_0(return nullptr);
     }
 
     PSY_ASSERT_0(!syms_.empty(), return nullptr);
