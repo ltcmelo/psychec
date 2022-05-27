@@ -47,8 +47,7 @@ const Assembly* Symbol::owningAssembly() const
             return compilation->assembly();
     }
 
-    PSY_TRACE_ESCAPE(return nullptr, "expected assembly");
-    return nullptr;
+    PSY_ESCAPE_VIA_RETURN(nullptr);
 }
 
 const Scope *Symbol::scope() const
@@ -107,7 +106,7 @@ std::string to_string(const Symbol& sym)
         case SymbolKind::Type:
             return to_string(*sym.asType());
         default:
-            PSY_TRACE_ESCAPE_0(return "");
+            PSY_ESCAPE_VIA_RETURN("");
             return "<INVALID or UNSPECIFIED symbol kind>";
     }
 }

@@ -42,7 +42,7 @@ SymbolNameKind SymbolName::kind() const
     if (asEmptySymbolName())
         return SymbolNameKind::Empty;
 
-    PSY_ASSERT(false, return SymbolNameKind::Plain, "");
+    PSY_ASSERT_W_MSG(false, return SymbolNameKind::Plain, "");
 }
 
 namespace psy {
@@ -58,7 +58,7 @@ std::string to_string(const SymbolName& name)
         case SymbolNameKind::Empty:
             return to_string(static_cast<const EmptySymbolName&>(name));
         default:
-            PSY_TRACE_ESCAPE_0(return "");
+            PSY_ESCAPE_VIA_RETURN("");
             return "<INVALID or UNSPECIFIED SymbolName>";
     }
 }

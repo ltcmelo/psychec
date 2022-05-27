@@ -32,7 +32,7 @@
 #include "syntax/SyntaxUtilities.h"
 
 #include "../common/infra/Assertions.h"
-#include "../common/infra/Traces.h"
+#include "../common/infra/Escape.h"
 
 #include <iostream>
 
@@ -93,9 +93,9 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
     visit(decltor);
 
     auto typeableSym = typeableSymForDeclarator();
-    PSY_ASSERT_0(typeableSym, return Action::Quit);
+    PSY_ASSERT(typeableSym, return Action::Quit);
 
-    PSY_ASSERT_0(!tySyms_.empty(), return Action::Quit);
+    PSY_ASSERT(!tySyms_.empty(), return Action::Quit);
     auto tySym = tySyms_.top();
 
     if (!pendingFunTySyms_.empty())
@@ -112,7 +112,7 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
             break;
 
         default:
-            PSY_TRACE_ESCAPE_0(return Action::Quit);
+            PSY_ESCAPE_VIA_RETURN(Action::Quit);
     }
 
     typeableSym->setType(tySym);
@@ -122,7 +122,7 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 
 TypeClass_TypeableSymbol* Binder::typeableSymForDeclarator()
 {
-    PSY_ASSERT_0(!syms_.empty(), return nullptr);
+    PSY_ASSERT(!syms_.empty(), return nullptr);
     auto sym = syms_.top();
     popSym();
     return TypeClass_TypeableSymbol::asInstance(sym);
@@ -158,7 +158,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
                     break;
 
                 default:
-                    PSY_TRACE_ESCAPE_0(return Action::Quit);
+                    PSY_ESCAPE_VIA_RETURN(Action::Quit);
             }
             makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
             pendingFunTySyms_.push(tySyms_.top()->asFunctionType());
@@ -166,7 +166,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
         }
 
         default:
-            PSY_TRACE_ESCAPE_0(return Action::Quit);
+            PSY_ESCAPE_VIA_RETURN(Action::Quit);
     }
 
     visit(node->innerDeclarator());
@@ -243,12 +243,12 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                             break;
 
                         default:
-                            PSY_TRACE_ESCAPE_0(return nullptr);
+                            PSY_ESCAPE_VIA_RETURN(nullptr);
                     }
                     break;
 
                 default:
-                    PSY_TRACE_ESCAPE_0(return nullptr);
+                    PSY_ESCAPE_VIA_RETURN(nullptr);
             }
             break;
 
@@ -287,16 +287,16 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                     break;
 
                 default:
-                    PSY_TRACE_ESCAPE_0(return nullptr);
+                    PSY_ESCAPE_VIA_RETURN(nullptr);
             }
             makeSymAndPushIt<ParameterSymbol>();
             break;
 
         default:
-            PSY_TRACE_ESCAPE_0(return nullptr);
+            PSY_ESCAPE_VIA_RETURN(nullptr);
     }
 
-    PSY_ASSERT_0(!syms_.empty(), return nullptr);
+    PSY_ASSERT(!syms_.empty(), return nullptr);
     Symbol* sym = syms_.top();
     return TypeClass_NameableSymbol::asInstance(sym);
 }
@@ -304,7 +304,7 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
     auto nameableSym = nameableSymForIdentifierOrAbstractDeclarator();
-    PSY_ASSERT_0(nameableSym, return Action::Quit);
+    PSY_ASSERT(nameableSym, return Action::Quit);
 
     std::unique_ptr<SymbolName> name(
                 new PlainSymbolName(node->identifierToken().valueText_c_str()));
@@ -316,7 +316,7 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax*)
 {
     auto nameableSym = nameableSymForIdentifierOrAbstractDeclarator();
-    PSY_ASSERT_0(nameableSym, return Action::Quit);
+    PSY_ASSERT(nameableSym, return Action::Quit);
 
     std::unique_ptr<SymbolName> name(new EmptySymbolName);
     nameableSym->setName(std::move(name));

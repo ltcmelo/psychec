@@ -24,20 +24,20 @@
 #include <iostream>
 
 #ifndef NDEBUG
-    #define PSY_ASSERT(COND, CODE, MSG) \
+    #define PSY_ASSERT_W_MSG(COND_EXPR, STMT, MSG) \
 do { \
-    if (COND) {} \
+    if (COND_EXPR) {} \
     else { \
-        std::cout << "[ASSERT FAILURE] at " \
+        std::cout << "[ASSERT] at " \
                   << __FILE__ << ":" << __LINE__ << " " \
                   << MSG << std::endl; \
-        CODE; \
+        STMT; \
     } \
 } while (0)
-    #define PSY_ASSERT_0(COND, CODE) PSY_ASSERT(COND, CODE, "<empty message>")
+    #define PSY_ASSERT(COND_EXPR, STMT) PSY_ASSERT_W_MSG(COND_EXPR, STMT, "<empty message>")
 #else
-    #define PSY_ASSERT(COND, CODE, MSG)
-    #define PSY_ASSERT_0(COND, CODE)
+    #define PSY_ASSERT_W_MSG(COND_EXPR, STMT, MSG)
+    #define PSY_ASSERT(COND_EXPR, STMT)
 #endif
 
 #endif

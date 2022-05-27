@@ -24,7 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/Traces.h"
+#include "../common/infra/Escape.h"
 
 #include <cstdint>
 #include <string>
@@ -135,7 +135,7 @@ PSY_C_API inline std::string PSY_C_API canonicalText(BuiltinTypeKind builtTyKind
         case BuiltinTypeKind::LongDoubleComplex:
                 return "long double _Complex";
         default:
-            PSY_TRACE_ESCAPE_0(return "<INVALID or UNSPECIFIED BuiltinTypeKind>");
+            PSY_ESCAPE_VIA_RETURN("<INVALID or UNSPECIFIED BuiltinTypeKind>");
     }
 }
 

@@ -57,13 +57,13 @@ void Binder::bind()
 
     visit(tree_->root());
 
-    PSY_ASSERT(scopes_.top() == nullptr, return, "expected outermost scope");
+    PSY_ASSERT_W_MSG(scopes_.top() == nullptr, return, "expected outermost scope");
     scopes_.pop();
-    PSY_ASSERT(scopes_.empty(), return, "unexpected remaining scope");
+    PSY_ASSERT_W_MSG(scopes_.empty(), return, "unexpected remaining scope");
 
-//    PSY_ASSERT(symDEFs_.top() == nullptr, return, "expected outermost symbol");
+//    PSY_ASSERT_W_MSG(symDEFs_.top() == nullptr, return, "expected outermost symbol");
     syms_.pop();
-//    PSY_ASSERT(symDEFs_.empty(), return, "unexpected remaining symbol");
+//    PSY_ASSERT_W_MSG(symDEFs_.empty(), return, "unexpected remaining symbol");
 }
 
 void Binder::openScope(ScopeKind scopeK)
@@ -77,7 +77,7 @@ void Binder::openScope(ScopeKind scopeK)
 
 void Binder::reopenStashedScope()
 {
-    PSY_ASSERT_0(stashedScope_, return);
+    PSY_ASSERT(stashedScope_, return);
 
     scopes_.push(stashedScope_);
 }
