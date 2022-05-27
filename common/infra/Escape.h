@@ -31,6 +31,6 @@ do { \
     CODE; \
 } while (0)
 
-#define PSY_ESCAPE_0(CODE) PSY_ESCAPE(CODE, "<empty message>")
+#define PSY_ESCAP(CODE) PSY_ESCAPE(CODE, "<empty message>")
 
 #endif

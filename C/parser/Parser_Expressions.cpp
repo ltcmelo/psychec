@@ -89,7 +89,7 @@ bool Parser::parseIdentifierName(ExpressionSyntax*& expr)
 void Parser::parseIdentifierName_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == IdentifierToken,
+    PSY_ASSERT_W_MSG(peek().kind() == IdentifierToken,
                   return,
                   "assert failure: <identifier>");
 
@@ -104,7 +104,7 @@ void Parser::parseIdentifierName_AtFirst(ExpressionSyntax*& expr)
 void Parser::parsePredefinedName_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(SyntaxFacts::isPredefinedToken(peek().kind()),
+    PSY_ASSERT_W_MSG(SyntaxFacts::isPredefinedToken(peek().kind()),
                   return,
                   "assert failure: <predefined-name>");
 
@@ -144,7 +144,7 @@ template <class ExprT>
 void Parser::parseConstant_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(SyntaxFacts::isConstantToken(peek().kind()),
+    PSY_ASSERT_W_MSG(SyntaxFacts::isConstantToken(peek().kind()),
                   return,
                   "assert failure: <constant>");
 
@@ -180,7 +180,7 @@ bool Parser::parseStringLiteral(ExpressionSyntax*& expr)
 void Parser::parseStringLiteral_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(SyntaxFacts::isStringLiteralToken(peek().kind()),
+    PSY_ASSERT_W_MSG(SyntaxFacts::isStringLiteralToken(peek().kind()),
                   return,
                   "assert failure: <string-literal>");
 
@@ -205,7 +205,7 @@ void Parser::parseStringLiteral_AtFirst(ExpressionSyntax*& expr)
 bool Parser::parseParenthesizedExpression_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == OpenParenToken,
+    PSY_ASSERT_W_MSG(peek().kind() == OpenParenToken,
                   return false,
                   "assert failure: `('");
 
@@ -225,7 +225,7 @@ bool Parser::parseParenthesizedExpression_AtFirst(ExpressionSyntax*& expr)
 bool Parser::parseExtGNU_StatementExpression_AtFirst(ExpressionSyntax *&expr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == OpenParenToken
+    PSY_ASSERT_W_MSG(peek().kind() == OpenParenToken
                         && peek(2).kind() == OpenBraceToken,
                   return false,
                   "assert failure: `(' then `{'");
@@ -257,7 +257,7 @@ bool Parser::parseExtGNU_StatementExpression_AtFirst(ExpressionSyntax *&expr)
 bool Parser::parseGenericSelectionExpression_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == Keyword__Generic,
+    PSY_ASSERT_W_MSG(peek().kind() == Keyword__Generic,
                   return false,
                   "assert failure: `_Generic'");
 
@@ -672,7 +672,7 @@ bool Parser::parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr,
                                               std::function<bool(ExprT*&)> parsePostfix)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == OpenBracketToken
+    PSY_ASSERT_W_MSG(peek().kind() == OpenBracketToken
                         || peek().kind() == OpenParenToken
                         || peek().kind() == DotToken
                         || peek().kind() == ArrowToken
@@ -720,7 +720,7 @@ bool Parser::parseCallArgument(ExpressionSyntax*&expr, ExpressionListSyntax*&)
 bool Parser::parseVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == Keyword_ExtGNU___builtin_va_arg
+    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtGNU___builtin_va_arg
                     || peek().kind() == Keyword_MacroStd_va_arg,
                   return false,
                   "assert failure: `__builtin_va_arg'");
@@ -744,7 +744,7 @@ bool Parser::parseVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
 bool Parser::parseOffsetOfExpression_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == Keyword_ExtGNU___builtin_offsetof
+    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtGNU___builtin_offsetof
                   || peek().kind() == Keyword_MacroStd_offsetof,
                   return false,
                   "assert failure: `__builtin_offsetof'");
@@ -769,7 +769,7 @@ bool Parser::parseOffsetOfExpression_AtFirst(ExpressionSyntax*& expr)
 bool Parser::parseExtGNU_ChooseExpression_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == Keyword_ExtGNU___builtin_choose_expr,
+    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtGNU___builtin_choose_expr,
                   return false,
                   "assert failure: `__builtin_choose_expr'");
 
@@ -794,7 +794,7 @@ bool Parser::parseExtGNU_ChooseExpression_AtFirst(ExpressionSyntax*& expr)
 bool Parser::parseExtGNU_ComplexValuedExpression_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == Keyword_ExtGNU___real__
+    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtGNU___real__
                       || peek().kind() == Keyword_ExtGNU___imag__,
                   return false,
                   "assert failure: `__real__' or `__imag__'");
@@ -819,7 +819,7 @@ bool Parser::parseExtGNU_ComplexValuedExpression_AtFirst(ExpressionSyntax*& expr
 bool Parser::parseCompoundLiteral_AtOpenParen(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == OpenParenToken,
+    PSY_ASSERT_W_MSG(peek().kind() == OpenParenToken,
                   return false,
                   "assert failure: `('");
 
@@ -859,7 +859,7 @@ bool Parser::parseCompoundLiteral_AtOpenBrace(
         LexedTokens::IndexType closeParenTkIdx)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == OpenBraceToken,
+    PSY_ASSERT_W_MSG(peek().kind() == OpenBraceToken,
                   return false,
                   "assert failure: `{'");
 
@@ -999,7 +999,7 @@ bool Parser::parsePrefixUnaryExpression_AtFirst(
         bool (Parser::*parseOperand)(ExpressionSyntax*&))
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == PlusPlusToken
+    PSY_ASSERT_W_MSG(peek().kind() == PlusPlusToken
                     || peek().kind() == MinusMinusToken
                     || peek().kind() == AmpersandToken
                     || peek().kind() == AsteriskToken
@@ -1034,7 +1034,7 @@ bool Parser::parsePrefixUnaryExpression_AtFirst(
 bool Parser::parseTypeTraitExpression_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == Keyword_sizeof
+    PSY_ASSERT_W_MSG(peek().kind() == Keyword_sizeof
                     || peek().kind() == Keyword__Alignof,
                   return false,
                   "assert failure: `sizeof' or `_Alignof'");
@@ -1125,7 +1125,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
             auto extKwTkIdx = consume();
             if (!parseExpressionWithPrecedenceCast(expr))
                 return false;
-            PSY_ASSERT(expr, return false, "invalid expression");
+            PSY_ASSERT_W_MSG(expr, return false, "invalid expression");
             expr->extKwTkIdx_ = extKwTkIdx;
             return true;
         }
@@ -1138,7 +1138,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
 bool Parser::parseCompoundLiteralOrCastExpression_AtFirst(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT(peek().kind() == OpenParenToken,
+    PSY_ASSERT_W_MSG(peek().kind() == OpenParenToken,
                   return false,
                   "assert failure: `('");
 
@@ -1167,7 +1167,7 @@ bool Parser::parseCompoundLiteralOrCastExpression_AtFirst(ExpressionSyntax*& exp
 
 void Parser::maybeAmbiguateCastExpression(ExpressionSyntax*& expr)
 {
-    PSY_ASSERT(expr->kind() == CastExpression,
+    PSY_ASSERT_W_MSG(expr->kind() == CastExpression,
                   return, "");
 
     auto castExpr = expr->asCastExpression();
@@ -1206,7 +1206,7 @@ void Parser::maybeAmbiguateCastExpression(ExpressionSyntax*& expr)
             break;
 
         default:
-            PSY_ASSERT(false, return, "");
+            PSY_ASSERT_W_MSG(false, return, "");
     }
 
     auto nameExpr = makeNode<IdentifierNameSyntax>();

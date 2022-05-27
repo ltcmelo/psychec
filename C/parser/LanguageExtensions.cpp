@@ -138,7 +138,7 @@ std::string PSY_C_API to_string(LanguageExtensions::Ext ext)
         return "NULL As Builtin";
 
     default:
-        PSY_ASSERT(false, return "", "");
+        PSY_ASSERT_W_MSG(false, return "", "");
     }
 }
 

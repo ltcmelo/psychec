@@ -58,7 +58,7 @@ inline std::string PSY_C_API to_string(ScopeKind scopeK)
         case ScopeKind::Block:
             return "Block";
         default:
-            PSY_ESCAPE_0(return "<INVALID or UNSPECIFIED ScopeKind>");
+            PSY_ESCAP(return "<INVALID or UNSPECIFIED ScopeKind>");
     }
 }
 

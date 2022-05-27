@@ -49,7 +49,7 @@ std::string TagSymbolName::text() const
             prefix = "enum ";
             break;
         default:
-            PSY_ESCAPE_0(return "");
+            PSY_ESCAP(return "");
             return "<INVALID or UNSPECIFIED TagSymbolNameKind>";
     }
     return prefix + tag_;

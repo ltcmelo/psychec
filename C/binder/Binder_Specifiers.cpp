@@ -67,7 +67,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
             break;
 
         default:
-            PSY_ESCAPE_0(return Action::Quit);
+            PSY_ESCAP(return Action::Quit);
     }
 
     makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
@@ -228,7 +228,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 break;
 
             default:
-                PSY_ESCAPE_0(return Action::Quit);
+                PSY_ESCAP(return Action::Quit);
                 return Action::Quit;
         }
 
@@ -273,7 +273,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
             break;
 
         default:
-            PSY_ESCAPE_0(return Action::Quit);
+            PSY_ESCAP(return Action::Quit);
             return Action::Quit;
     }
 
@@ -292,7 +292,7 @@ SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 
 SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node)
 {
-    PSY_ASSERT_0(!tySyms_.empty(), return Action::Quit);
+    PSY_ASSERT(!tySyms_.empty(), return Action::Quit);
 
     SemanticsOfTypeQualifiers::qualify(node->qualifierKeyword(),
                                       tySyms_.top(),

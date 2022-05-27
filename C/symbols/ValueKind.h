@@ -53,7 +53,7 @@ inline std::string PSY_C_API to_string(ValueKind valK)
         case ValueKind::Variable:
             return "Variable";
         default:
-            PSY_ESCAPE_0(return "");
+            PSY_ESCAP(return "");
             return "<INVALID or UNSPECIFIED ValueKind>";
     }
 }

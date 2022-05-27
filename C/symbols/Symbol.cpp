@@ -107,7 +107,7 @@ std::string to_string(const Symbol& sym)
         case SymbolKind::Type:
             return to_string(*sym.asType());
         default:
-            PSY_ESCAPE_0(return "");
+            PSY_ESCAP(return "");
             return "<INVALID or UNSPECIFIED symbol kind>";
     }
 }
