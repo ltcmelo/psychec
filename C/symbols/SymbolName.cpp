@@ -58,7 +58,7 @@ std::string to_string(const SymbolName& name)
         case SymbolNameKind::Empty:
             return to_string(static_cast<const EmptySymbolName&>(name));
         default:
-            PSY_ESCAPE(return "");
+            PSY_ESCAPE_VIA_RETURN("");
             return "<INVALID or UNSPECIFIED SymbolName>";
     }
 }

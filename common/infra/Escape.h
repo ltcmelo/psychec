@@ -23,14 +23,15 @@
 
 #include <iostream>
 
-#define PSY_ESCAPE_W_MSG(STMT, MSG) \
+#define PSY_ESCAPE_W_MSG(STMT) \
 do { \
     std::cout << "[ESCAPE] at " \
               << __FILE__ << ":" << __LINE__ << " " \
-              << MSG << std::endl; \
+              << std::endl; \
     STMT; \
 } while (0)
 
-#define PSY_ESCAPE(CODE) PSY_ESCAPE_W_MSG(CODE, "<empty message>")
+#define PSY_ESCAPE(CODE) PSY_ESCAPE_W_MSG(CODE)
+#define PSY_ESCAPE_VIA_RETURN(EXPR) PSY_ESCAPE_W_MSG(return EXPR)
 
 #endif

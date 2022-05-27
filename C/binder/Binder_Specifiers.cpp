@@ -67,7 +67,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
             break;
 
         default:
-            PSY_ESCAPE(return Action::Quit);
+            PSY_ESCAPE_VIA_RETURN(Action::Quit);
     }
 
     makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
@@ -194,8 +194,7 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
                 builtTyK = BuiltinTypeKind::Int_U;
                 break;
             default:
-                PSY_ESCAPE_W_MSG(return Action::Quit, "expected builtin type specifier");
-                return Action::Quit;
+                PSY_ESCAPE_VIA_RETURN(Action::Quit);
         }
 
         makeTySymAndPushIt<NamedTypeSymbol>(builtTyK);
@@ -228,7 +227,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 break;
 
             default:
-                PSY_ESCAPE(return Action::Quit);
+                PSY_ESCAPE_VIA_RETURN(Action::Quit);
                 return Action::Quit;
         }
 
@@ -273,7 +272,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
             break;
 
         default:
-            PSY_ESCAPE(return Action::Quit);
+            PSY_ESCAPE_VIA_RETURN(Action::Quit);
             return Action::Quit;
     }
 

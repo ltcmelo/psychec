@@ -104,8 +104,7 @@ BuiltinTypeKind ConstraintsInTypeSpecifiers::combine(SyntaxToken builtTySpecTk,
                 case Keyword_unsigned:
                     return BuiltinTypeKind::Int_U;
                 default:
-                    PSY_ESCAPE_W_MSG(return builtTyKind, "expected builtin type specifier");
-                    return builtTyKind;
+                    PSY_ESCAPE_VIA_RETURN(builtTyKind);
             }
 
         case BuiltinTypeKind::Void:

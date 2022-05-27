@@ -52,7 +52,7 @@ inline std::string PSY_C_API to_string(SymbolNameKind symNameK)
         case SymbolNameKind::Tagged:
             return "Tagged";
         default:
-            PSY_ESCAPE(return "");
+            PSY_ESCAPE_VIA_RETURN("");
             return "<INVALID or UNSPECIFIED SymbolNameKind>";
     }
 }
@@ -75,7 +75,7 @@ inline std::string PSY_C_API to_string(TagSymbolNameKind tagK)
         case TagSymbolNameKind::Enumeration:
             return "Enumeration";
         default:
-            PSY_ESCAPE(return "<INVALID or UNSPECIFIED TagSymbolNameKind>");
+            PSY_ESCAPE_VIA_RETURN("<INVALID or UNSPECIFIED TagSymbolNameKind>");
     }
 }
 
