@@ -40,7 +40,7 @@ void SemanticsOfTypeQualifiers::qualify(SyntaxToken tyQualTk,
             break;
 
         default:
-            PSY_ESCAP(break);
+            PSY_ESCAPE(break);
             break;
     }
 }

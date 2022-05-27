@@ -28,7 +28,7 @@
 do { \
     if (COND_EXPR) {} \
     else { \
-        std::cout << "[ASSERT FAILURE] at " \
+        std::cout << "[ASSERT] at " \
                   << __FILE__ << ":" << __LINE__ << " " \
                   << MSG << std::endl; \
         STMT; \

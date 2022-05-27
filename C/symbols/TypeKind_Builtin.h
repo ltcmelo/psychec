@@ -135,7 +135,7 @@ PSY_C_API inline std::string PSY_C_API canonicalText(BuiltinTypeKind builtTyKind
         case BuiltinTypeKind::LongDoubleComplex:
                 return "long double _Complex";
         default:
-            PSY_ESCAP(return "<INVALID or UNSPECIFIED BuiltinTypeKind>");
+            PSY_ESCAPE(return "<INVALID or UNSPECIFIED BuiltinTypeKind>");
     }
 }
 

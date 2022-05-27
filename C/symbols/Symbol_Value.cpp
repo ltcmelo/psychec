@@ -96,7 +96,7 @@ std::string to_string(const ValueSymbol& sym)
         case ValueKind::Variable:
             return to_string(*sym.asVariable());
         default:
-            PSY_ESCAP(return "");
+            PSY_ESCAPE(return "");
             return "<INVALID or UNSPECIFIED value kind>";
     }
 }

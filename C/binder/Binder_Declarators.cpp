@@ -112,7 +112,7 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
             break;
 
         default:
-            PSY_ESCAP(return Action::Quit);
+            PSY_ESCAPE(return Action::Quit);
     }
 
     typeableSym->setType(tySym);
@@ -158,7 +158,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
                     break;
 
                 default:
-                    PSY_ESCAP(return Action::Quit);
+                    PSY_ESCAPE(return Action::Quit);
             }
             makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
             pendingFunTySyms_.push(tySyms_.top()->asFunctionType());
@@ -166,7 +166,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
         }
 
         default:
-            PSY_ESCAP(return Action::Quit);
+            PSY_ESCAPE(return Action::Quit);
     }
 
     visit(node->innerDeclarator());
@@ -243,12 +243,12 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                             break;
 
                         default:
-                            PSY_ESCAP(return nullptr);
+                            PSY_ESCAPE(return nullptr);
                     }
                     break;
 
                 default:
-                    PSY_ESCAP(return nullptr);
+                    PSY_ESCAPE(return nullptr);
             }
             break;
 
@@ -287,13 +287,13 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                     break;
 
                 default:
-                    PSY_ESCAP(return nullptr);
+                    PSY_ESCAPE(return nullptr);
             }
             makeSymAndPushIt<ParameterSymbol>();
             break;
 
         default:
-            PSY_ESCAP(return nullptr);
+            PSY_ESCAPE(return nullptr);
     }
 
     PSY_ASSERT(!syms_.empty(), return nullptr);
