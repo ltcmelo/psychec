@@ -22,11 +22,11 @@ Psyche-C offers a C++ library/API for the implementation of static analysis tool
 ```cpp
 void analyse(const FileInfo& fi)
 {
-    auto compilation = Compilation::create("code-analysis");
     auto tree = SyntaxTree::parseText(srcText,
                                       TextPreprocessingState::Preprocessed,
                                       ParseOptions(),
                                       fi.fileName());
+    auto compilation = Compilation::create("code-analysis");
     compilation->addSyntaxTree(tree.get());
 
     CustomSyntaxVisitor analysis(tree.get(), compilation->semanticModel(tree.get()));
