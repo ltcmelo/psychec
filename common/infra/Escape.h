@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-#define PSY_ESCAPE_W_MSG(STMT) \
+#define PSY_ESCAPE(STMT) \
 do { \
     std::cout << "[ESCAPE] at " \
               << __FILE__ << ":" << __LINE__ << " " \
@@ -31,7 +31,8 @@ do { \
     STMT; \
 } while (0)
 
-#define PSY_ESCAPE(CODE) PSY_ESCAPE_W_MSG(CODE)
-#define PSY_ESCAPE_VIA_RETURN(EXPR) PSY_ESCAPE_W_MSG(return EXPR)
+#define PSY_ESCAPE_VIA_RETURN(EXPR) PSY_ESCAPE(return EXPR)
+#define PSY_ESCAPE_VIA_BREAK PSY_ESCAPE(break)
+#define PSY_ESCAPE_VIA_CONTINUE PSY_ESCAPE(continue)
 
 #endif
