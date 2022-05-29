@@ -37,7 +37,7 @@ namespace C {
  *
  * The container of all tokens lexed by the Lexer.
  */
-class PSY_C_API_RESTRICTED LexedTokens
+class PSY_C_NON_API LexedTokens
 {
 public:
     using SizeType = std::vector<SyntaxToken>::size_type;

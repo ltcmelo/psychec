@@ -35,7 +35,7 @@ namespace C {
 
 class Binder;
 
-class PSY_C_API_RESTRICTED ConstraintsInTypeSpecifiers
+class PSY_C_NON_API ConstraintsInTypeSpecifiers
 {
     friend class BinderTest;
 

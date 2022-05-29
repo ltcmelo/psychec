@@ -32,7 +32,7 @@ namespace C {
 
 class MemoryPool;
 
-class PSY_C_API_RESTRICTED Managed
+class PSY_C_NON_API Managed
 {
 public:
     Managed();

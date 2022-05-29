@@ -30,7 +30,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API_RESTRICTED ConstraintsInDeclarations
+class PSY_C_NON_API ConstraintsInDeclarations
 {
     friend class BinderTest;
 

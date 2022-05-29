@@ -36,7 +36,7 @@ namespace C {
  */
 template <class ValueT,
           class DerivedListT>
-class PSY_C_API_RESTRICTED List : public Managed
+class PSY_C_NON_API List : public Managed
 {
 public:
     List()

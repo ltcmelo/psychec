@@ -47,7 +47,7 @@ class SemanticModel;
 /**
  * \brief The Binder class.
  */
-class PSY_C_API_RESTRICTED Binder final : protected SyntaxVisitor
+class PSY_C_NON_API Binder final : protected SyntaxVisitor
 {
     friend class BinderTest;
 

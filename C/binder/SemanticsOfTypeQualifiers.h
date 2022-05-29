@@ -35,7 +35,7 @@ namespace C {
 
 class Binder;
 
-class PSY_C_API_RESTRICTED SemanticsOfTypeQualifiers
+class PSY_C_NON_API SemanticsOfTypeQualifiers
 {
 public:
     static void qualify(SyntaxToken tyQualTk,
