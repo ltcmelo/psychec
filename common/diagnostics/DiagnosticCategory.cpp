@@ -37,7 +37,7 @@ std::ostream& operator<<(std::ostream& os, DiagnosticCategory category)
             os << "typing";
             break;
 
-        case DiagnosticCategory::Unspecified:
+        case DiagnosticCategory::UNSPECIFIED:
             os << "generic";
             break;
     }

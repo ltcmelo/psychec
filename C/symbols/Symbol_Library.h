@@ -23,6 +23,8 @@
 
 #include "Symbol.h"
 
+#include "../common/infra/InternalAccess.h"
+
 namespace psy {
 namespace C {
 
@@ -43,11 +45,16 @@ namespace C {
 class PSY_C_API LibrarySymbol final : public Symbol
 {
 public:
+    //!@{
+    /**
+     * Cast \c this Symbol as a LibrarySymbol.
+     */
     virtual LibrarySymbol* asLibrary() override { return this; }
     virtual const LibrarySymbol* asLibrary() const override { return this; }
+    //!@}
 
-private:
-    friend class Binder;
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
 
     LibrarySymbol(const SyntaxTree* tree,
                   const Scope* scope,

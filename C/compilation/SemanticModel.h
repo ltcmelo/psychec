@@ -24,6 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/InternalAccess.h"
 #include "../common/infra/Pimpl.h"
 
 namespace psy {
@@ -41,17 +42,21 @@ class Binder;
 class PSY_C_API SemanticModel
 {
     friend class Binder;
-    friend class Compilation;
 
 public:
     ~SemanticModel();
+
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Compilation);
+
+    SemanticModel(Compilation* compilation, const SyntaxTree* tree);
+
+private:
+    // Unavailable
     SemanticModel(const SemanticModel&) = delete;
     SemanticModel& operator=(const SemanticModel&) = delete;
 
-private:
     DECL_PIMPL(SemanticModel)
-
-    SemanticModel(Compilation* compilation, const SyntaxTree* tree);
 
     Symbol* storeSymDEF(std::unique_ptr<Symbol> sym);
     Symbol* storeSymUSE(std::unique_ptr<Symbol> sym);

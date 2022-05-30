@@ -38,8 +38,13 @@ namespace C {
 class PSY_C_API ArrayTypeSymbol final : public TypeSymbol
 {
 public:
+    //!@{
+    /**
+     * Cast \c this TypeSymbol as a ArrayTypeSymbol.
+     */
     virtual ArrayTypeSymbol* asArrayType() override { return this; }
     virtual const ArrayTypeSymbol* asArrayType() const override { return this; }
+    //!@}
 
     /**
      * The <em>element type</em> of \c this ArrayTypeSymbol.
@@ -48,15 +53,16 @@ public:
      */
     const TypeSymbol* elementType() const;
 
-private:
-    DECL_PIMPL_SUB(ArrayTypeSymbol)
-
-    friend class Binder;
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
 
     ArrayTypeSymbol(const SyntaxTree* tree,
                     const Scope* scope,
                     const Symbol* containingSym,
                     const TypeSymbol* elemTySym);
+
+private:
+    DECL_PIMPL_SUB(ArrayTypeSymbol)
 };
 
 std::string PSY_C_API to_string(const ArrayTypeSymbol& tySym);

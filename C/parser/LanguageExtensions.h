@@ -22,9 +22,11 @@
 #ifndef PSYCHE_C_LANGUAGE_EXTENSIONS_H__
 #define PSYCHE_C_LANGUAGE_EXTENSIONS_H__
 
+#include "API.h"
+
 #include "MacroTranslations.h"
 
-#include "API.h"
+#include "../common/infra/InternalAccess.h"
 
 #include <cstdint>
 #include <string>
@@ -35,11 +37,16 @@ namespace C {
 /**
  * \brief The LanguageExtensions class.
  */
-class LanguageExtensions final
+class PSY_C_API LanguageExtensions final
 {
 public:
+    //!@{
+    /**
+     * Create LanguageExtensions.
+     */
     LanguageExtensions();
     LanguageExtensions(MacroTranslations translations);
+    //!@}
 
     /**
      * The MacroTranslations of \c this LanguageExtensions.

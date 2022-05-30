@@ -36,11 +36,16 @@ namespace C {
 class PSY_C_API ParameterSymbol final : public ValueSymbol
 {
 public:
+    //!@{
+    /**
+     * Cast \c this Symbol as a ParameterSymbol.
+     */
     virtual ParameterSymbol* asParameter() override { return this; }
     virtual const ParameterSymbol* asParameter() const override { return this; }
+    //!@}
 
-private:
-    friend class Binder;
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
 
     ParameterSymbol(const SyntaxTree* tree,
                     const Scope* scope,

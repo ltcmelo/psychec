@@ -26,6 +26,8 @@
 
 #include "symbols/Symbol.h"
 
+#include "../common/infra/InternalAccess.h"
+
 #include <functional>
 #include <unordered_set>
 #include <vector>
@@ -40,20 +42,22 @@ namespace C {
  */
 class PSY_C_API Assembly
 {
+    friend class BinderTest;
+
 public:
     /**
      * The Symbols defined in \c this Assembly.
      */
     std::vector<const Symbol*> symbols() const;
 
-private:
-    friend class SemanticModel;
-    friend class BinderTest;
-
-    std::unordered_set<std::unique_ptr<Symbol>> symDEFs_;
-    std::vector<std::unique_ptr<Symbol>> symUSEs_;
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(SemanticModel);
 
     Symbol* findSymDEF(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const;
+
+private:
+    std::unordered_set<std::unique_ptr<Symbol>> symDEFs_;
+    std::vector<std::unique_ptr<Symbol>> symUSEs_;
 };
 
 } // C

@@ -36,7 +36,7 @@ namespace C {
  */
 template <class ValueT,
           class DerivedListT>
-class PSY_C_API List : public Managed
+class PSY_C_NON_API List : public Managed
 {
 public:
     List()
@@ -48,9 +48,6 @@ public:
         : value(value)
         , next(nullptr)
     {}
-
-    List(const List&) = delete;
-    List& operator=(const List&) = delete;
 
     DerivedListT** skipToLast()
     {
@@ -74,6 +71,11 @@ public:
 
     ValueT value;
     DerivedListT* next;
+
+private:
+    // Unavailable
+    List(const List&) = delete;
+    List& operator=(const List&) = delete;
 };
 
 } // C

@@ -35,7 +35,7 @@ namespace C {
 /**
  * \brief The ValueKind enum.
  */
-enum class ValueKind : std::uint8_t
+enum class PSY_C_API ValueKind : std::uint8_t
 {
     UNSPECIFIED = 0,
     Field,

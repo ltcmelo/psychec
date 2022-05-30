@@ -34,7 +34,7 @@ namespace C {
 /**
  * \brief The LineDirective class.
  */
-class PSY_C_API LineDirective
+class PSY_C_NON_API LineDirective
 {
 public:
     LineDirective(unsigned int lineno,

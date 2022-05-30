@@ -31,7 +31,6 @@ class PSY_C_API NameSpaces
 {
 private:
     NameSpaces();
-
 };
 
 } // C

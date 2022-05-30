@@ -38,10 +38,12 @@ namespace C {
 class PSY_C_API SyntaxLexeme : public TextElement
 {
 public:
-    SyntaxLexeme(const SyntaxLexeme&) = delete;
-    SyntaxLexeme& operator=(const SyntaxLexeme&) = delete;
     virtual ~SyntaxLexeme();
 
+    //!@{
+    /**
+     * Cast \c this SyntaxLexeme.
+     */
     virtual Identifier* asIdentifier() { return nullptr; }
     virtual IntegerConstant* asIntegerConstant() { return nullptr; }
     virtual FloatingConstant* asFloatingConstant() { return nullptr; }
@@ -49,6 +51,7 @@ public:
     virtual ImaginaryIntegerConstant* asImaginaryIntegerConstant() { return nullptr; }
     virtual ImaginaryFloatingConstant* asImaginaryFloatingConstant() { return nullptr; }
     virtual StringLiteral* asStringLiteralExpression() { return nullptr; }
+    //!@}
 
     /**
      * \brief The SyntaxLexeme::Kind enumeraiton.
@@ -110,6 +113,10 @@ protected:
     SyntaxLexeme(const char* chars,
                  unsigned int size,
                  Kind kind);
+
+    // Unavailable
+    SyntaxLexeme(const SyntaxLexeme&) = delete;
+    SyntaxLexeme& operator=(const SyntaxLexeme&) = delete;
 
     void checkHexPrefix();
     void checkVariousPrefixesAndSuffixes();

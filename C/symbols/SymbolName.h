@@ -26,6 +26,8 @@
 
 #include "SymbolNameKind.h"
 
+#include "../common/infra/InternalAccess.h"
+
 #include <cstdint>
 #include <string>
 
@@ -37,11 +39,13 @@ namespace C {
  */
 class PSY_C_API SymbolName
 {
-    friend class Symbol;
-
 public:
     virtual ~SymbolName();
 
+    //!@{
+    /**
+     * Cast \c this SymbolName.
+     */
     virtual PlainSymbolName* asPlainSymbolName() { return nullptr; }
     virtual const PlainSymbolName* asPlainSymbolName() const { return nullptr; }
     virtual TagSymbolName* asTagSymbolName() { return nullptr; }

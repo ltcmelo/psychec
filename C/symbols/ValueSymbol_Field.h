@@ -36,11 +36,16 @@ namespace C {
 class PSY_C_API FieldSymbol final : public ValueSymbol
 {
 public:
+    //!@{
+    /**
+     * Cast \c this Symbol as a FieldSymbol.
+     */
     virtual FieldSymbol* asField() override { return this; }
     virtual const FieldSymbol* asField() const override { return this; }
+    //!@}
 
-private:
-    friend class Binder;
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
 
     FieldSymbol(const SyntaxTree* tree,
                 const Scope* scope,

@@ -32,13 +32,15 @@ namespace C {
 
 class MemoryPool;
 
-class PSY_C_API Managed
+class PSY_C_NON_API Managed
 {
 public:
     Managed();
-    Managed(const Managed&) = delete;
-    void operator=(const Managed&) = delete;
     virtual ~Managed();
+
+    // Unavailable
+    Managed(const Managed&) = delete;
+    Managed& operator=(const Managed&) = delete;
 
     void* operator new(size_t size, MemoryPool* pool);
     void operator delete(void*);

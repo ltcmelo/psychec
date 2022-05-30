@@ -21,6 +21,7 @@
 #ifndef PSYCHE_C_TYPE_CLASS_TYPEABLE_SYMBOL_H__
 #define PSYCHE_C_TYPE_CLASS_TYPEABLE_SYMBOL_H__
 
+#include "API.h"
 #include "Fwds.h"
 
 #include <memory>
@@ -28,7 +29,7 @@
 namespace psy {
 namespace C {
 
-class TypeClass_TypeableSymbol
+class PSY_C_NON_API TypeClass_TypeableSymbol
 {
 public:
     virtual ~TypeClass_TypeableSymbol() {}

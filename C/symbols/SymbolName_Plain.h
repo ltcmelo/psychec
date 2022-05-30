@@ -33,25 +33,31 @@ namespace C {
  */
 class PSY_C_API PlainSymbolName final : public SymbolName
 {
+    friend std::string to_string(const PlainSymbolName& name);
+    friend bool operator==(const PlainSymbolName& a, const PlainSymbolName& b);
+
 public:
+    //!@{
+    /**
+     * Cast \c this SymbolName as a PlainSymbolName.
+     */
     virtual PlainSymbolName* asPlainSymbolName() override { return this; }
     virtual const PlainSymbolName* asPlainSymbolName() const override { return this; }
+    //!@}
 
     /**
      * The text of \c this SymbolName.
      */
     virtual std::string text() const override;
 
-private:
-    friend class Binder;
-    friend class NamedTypeSymbol;
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
+    PSY_GRANT_ACCESS(NamedTypeSymbol);
 
     PlainSymbolName(std::string s);
 
+private:
     std::string s_;
-
-    friend std::string to_string(const PlainSymbolName& name);
-    friend bool operator==(const PlainSymbolName& a, const PlainSymbolName& b);
 };
 
 bool operator!=(const PlainSymbolName& a, const PlainSymbolName& b);

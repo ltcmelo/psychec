@@ -24,6 +24,10 @@
 #include "SymbolName.h"
 #include "TypeKind.h"
 
+#include "../common/infra/InternalAccess.h"
+
+#include <string>
+
 namespace psy {
 namespace C {
 
@@ -32,13 +36,17 @@ namespace C {
  */
 class PSY_C_API TagSymbolName final : public SymbolName
 {
-    friend class NamedTypeSymbol;
     friend std::string to_string(const TagSymbolName& name);
     friend bool operator==(const TagSymbolName& a, const TagSymbolName& b);
 
 public:
+    //!@{
+    /**
+     * Cast \c this SymbolNanem as a TagSymbolName.
+     */
     virtual TagSymbolName* asTagSymbolName() override { return this; }
     virtual const TagSymbolName* asTagSymbolName() const override { return this; }
+    //!@}
 
     /**
      * The TagSymbolNameKind of \c this TagSymbolName.
@@ -50,9 +58,12 @@ public:
      */
     virtual std::string text() const override;
 
-private:
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(NamedTypeSymbol);
+
     TagSymbolName(TagSymbolNameKind tagK, std::string tag);
 
+private:
     TagSymbolNameKind tagK_;
     std::string tag_;
 };

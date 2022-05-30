@@ -41,12 +41,14 @@ namespace C {
  */
 class PSY_C_API NamedTypeSymbol final : public TypeSymbol
 {
-    friend class Binder;
-    friend class ConstraintsInTypeSpecifiers;
-
 public:
+    //!@{
+    /**
+     * Cast \c this TypeSymbol as a NamedTypeSymbol.
+     */
     virtual NamedTypeSymbol* asNamedType() override { return this; }
     virtual const NamedTypeSymbol* asNamedType() const override { return this; }
+    //!@}
 
     /**
      * The type name kind of \c this NamedTypeSymbol.
@@ -63,8 +65,9 @@ public:
      */
     const SymbolName* name() const;
 
-private:
-    DECL_PIMPL_SUB(NamedTypeSymbol)
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
+    PSY_GRANT_ACCESS(ConstraintsInTypeSpecifiers);
 
     NamedTypeSymbol(const SyntaxTree* tree,
                     const Scope* scope,
@@ -82,8 +85,10 @@ private:
                     TagSymbolNameKind tagK,
                     const std::string& tag);
 
-
     void patchBuiltinTypeKind(BuiltinTypeKind);
+
+private:
+    DECL_PIMPL_SUB(NamedTypeSymbol)
 };
 
 std::string PSY_C_API to_string(const NamedTypeSymbol& tySym);

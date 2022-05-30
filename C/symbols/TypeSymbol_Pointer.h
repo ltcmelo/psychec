@@ -38,8 +38,13 @@ namespace C {
 class PSY_C_API PointerTypeSymbol final : public TypeSymbol
 {
 public:
+    //!@{
+    /**
+     * Cast \c this TypeSymbol as a PointerTypeSymbol.
+     */
     virtual PointerTypeSymbol* asPointerType() override { return this; }
     virtual const PointerTypeSymbol* asPointerType() const override { return this; }
+    //!@}
 
     /**
      * The <em>referenced type</em> of \c this PointerTypeSymbol.
@@ -62,10 +67,8 @@ public:
      */
     bool arisesFromFunctionDecay() const;
 
-private:
-    DECL_PIMPL_SUB(PointerTypeSymbol)
-
-    friend class Binder;
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
 
     PointerTypeSymbol(const SyntaxTree* tree,
                       const Scope* scope,
@@ -74,6 +77,9 @@ private:
 
     void markAsArisingFromArrayDecay();
     void markAsArisingFromFunctionDecay();
+
+private:
+    DECL_PIMPL_SUB(PointerTypeSymbol)
 };
 
 std::string PSY_C_API to_string(const PointerTypeSymbol& tySym);

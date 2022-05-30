@@ -25,27 +25,27 @@ using namespace C;
 
 void LexedTokens::add(SyntaxToken tk)
 {
-    v_.emplace_back(tk);
+    tks_.emplace_back(tk);
 }
 
 SyntaxToken& LexedTokens::tokenAt(LexedTokens::IndexType tkIdx)
 {
-    return v_[tkIdx];
+    return tks_[tkIdx];
 }
 
 LexedTokens::IndexType LexedTokens::freeSlot() const
 {
-    return IndexType(v_.size() - 1);
+    return IndexType(tks_.size() - 1);
 }
 
 LexedTokens::SizeType LexedTokens::count() const
 {
-    return v_.size();
+    return tks_.size();
 }
 
 void LexedTokens::clear()
 {
-    v_.clear();
+    tks_.clear();
 }
 
 LexedTokens::IndexType LexedTokens::invalidIndex()

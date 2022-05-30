@@ -39,7 +39,7 @@ namespace C {
  * \remark 6.2.3-1
  * \remark Footnote 32
  */
-enum class NameSpaceKind : std::uint8_t
+enum class PSY_C_API NameSpaceKind : std::uint8_t
 {
     UNSPECIFIED = 0,
     Labels,

@@ -37,7 +37,7 @@ namespace C {
  *
  * \remark 6.2.1-4
  */
-enum class ScopeKind : uint8_t
+enum class PSY_C_API ScopeKind : uint8_t
 {
     UNSPECIFIED = 0,
     File,

@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,33 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_ACCESSIBILITY_H__
-#define PSYCHE_C_ACCESSIBILITY_H__
+#ifndef PSYCHE_INTERNAL_ACCESS_H__
+#define PSYCHE_INTERNAL_ACCESS_H__
 
-#include "API.h"
-#include "Fwds.h"
-
-#include <cstdint>
-
-namespace psy {
-namespace C {
-
-/**
- * \brief The Accessibility enum.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.Accessibility
- * from Roslyn, the .NET Compiler Platform.
- */
-enum class PSY_C_API Accessibility : std::uint8_t
-{
-    Unknown,
-    Private,
-    Protected,
-    Public
-};
-
-} // C
-} // psy
+#define PSY_INTERNAL private
+#define PSY_GRANT_ACCESS(NAME) friend class NAME
 
 #endif

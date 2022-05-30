@@ -21,6 +21,7 @@
 #ifndef PSYCHE_C_SEMANTICS_OF_TYPE_QUALIFIERS_H__
 #define PSYCHE_C_SEMANTICS_OF_TYPE_QUALIFIERS_H__
 
+#include "API.h"
 #include "Fwds.h"
 
 #include "binder/Binder.h"
@@ -34,7 +35,7 @@ namespace C {
 
 class Binder;
 
-class SemanticsOfTypeQualifiers
+class PSY_C_NON_API SemanticsOfTypeQualifiers
 {
 public:
     static void qualify(SyntaxToken tyQualTk,

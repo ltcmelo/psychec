@@ -36,7 +36,7 @@ namespace C {
  *
  * A wrapper for any syntax form (or a handle to it).
  */
-class PSY_C_API SyntaxHolder
+class PSY_C_NON_API SyntaxHolder
 {
 public:
     enum class Variant : char

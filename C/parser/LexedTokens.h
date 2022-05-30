@@ -25,6 +25,8 @@
 
 #include "syntax/SyntaxToken.h"
 
+#include "../common/infra/InternalAccess.h"
+
 #include <vector>
 
 namespace psy {
@@ -35,22 +37,27 @@ namespace C {
  *
  * The container of all tokens lexed by the Lexer.
  */
-class PSY_C_API LexedTokens
+class PSY_C_NON_API LexedTokens
 {
 public:
     using SizeType = std::vector<SyntaxToken>::size_type;
     using IndexType = SizeType;
 
-    void add(SyntaxToken tk);
     SyntaxToken& tokenAt(IndexType tkIdx);
-    IndexType freeSlot() const;
     SizeType count() const;
-    void clear();
 
     static IndexType invalidIndex();
 
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(SyntaxTree);
+
+    IndexType freeSlot() const;
+    void add(SyntaxToken tk);
+
 private:
-    std::vector<SyntaxToken> v_;
+    std::vector<SyntaxToken> tks_;
+
+    void clear();
 };
 
 } // C

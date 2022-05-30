@@ -26,6 +26,7 @@
 #include "Fwds.h"
 #include "SyntaxTree.h"
 
+#include "../common/infra/InternalAccess.h"
 #include "../common/infra/Pimpl.h"
 
 #include <string>
@@ -45,9 +46,9 @@ class SemanticModel;
  */
 class PSY_C_API Compilation
 {
+    friend class BinderTest;
+
 public:
-    Compilation(const Compilation&) = delete;
-    Compilation& operator=(const Compilation&) = delete;
     ~Compilation();
 
     /**
@@ -80,15 +81,19 @@ public:
      */
     const SemanticModel* semanticModel(const SyntaxTree* tree) const;
 
-private:
-    DECL_PIMPL(Compilation);
-
-    friend class SemanticModel;
-    friend class BinderTest;
-
-    Compilation();
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(SemanticModel);
 
     Assembly* assembly();
+
+private:
+    Compilation();
+
+    // Unavailable
+    Compilation(const Compilation&) = delete;
+    Compilation& operator=(const Compilation&) = delete;
+
+    DECL_PIMPL(Compilation);
 };
 
 } // C

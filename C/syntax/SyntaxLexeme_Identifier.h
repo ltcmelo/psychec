@@ -36,9 +36,15 @@ namespace C {
 class PSY_C_API Identifier final : public SyntaxLexeme
 {
 public:
-    Identifier(const char* chars, unsigned int size);
-
+    //!@{
+    /**
+     * Cast \c this SyntaxLexeme as an Identifier.
+     */
     virtual Identifier* asIdentifier() override { return this; }
+    //!@}
+
+    // TODO: Make internal.
+    Identifier(const char* chars, unsigned int size);
 };
 
 } // C

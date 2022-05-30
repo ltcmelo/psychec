@@ -29,13 +29,15 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API MemoryPool
+class PSY_C_NON_API MemoryPool
 {
 public:
     MemoryPool();
+    ~MemoryPool();
+
+    // Unavailable
     MemoryPool(const MemoryPool&) = delete;
     void operator=(const MemoryPool&) = delete;
-    ~MemoryPool();
 
     void reset();
 
