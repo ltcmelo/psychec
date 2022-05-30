@@ -27,6 +27,8 @@
 
 #include "syntax/SyntaxToken.h"
 
+#include "../common/infra/InternalAccess.h"
+
 #include <cstdint>
 #include <functional>
 #include <string>
@@ -39,19 +41,22 @@ class ParseOptions;
 /**
  * \brief The C Lexer class.
  */
-class PSY_C_API Lexer
+class PSY_C_NON_API Lexer
 {
 public:
-    Lexer(const Lexer&) = delete;
-    void operator=(const Lexer&) = delete;
     ~Lexer();
 
     void lex();
 
-private:
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(SyntaxTree);
+
     Lexer(SyntaxTree* tree);
 
-    friend class SyntaxTree;
+private:
+    // Unavailable
+    Lexer(const Lexer&) = delete;
+    void operator=(const Lexer&) = delete;
 
     void yylex(SyntaxToken* tk);
     void yylex_core(SyntaxToken* tk);

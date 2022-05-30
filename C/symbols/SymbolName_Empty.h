@@ -32,6 +32,10 @@ namespace C {
 class PSY_C_API EmptySymbolName final : public SymbolName
 {
 public:
+    //!@{
+    /**
+     * Cast \c this SymbolName as an EmptySymbolName.
+     */
     virtual EmptySymbolName* asEmptySymbolName() override { return this; }
     virtual const EmptySymbolName* asEmptySymbolName() const override { return this; }
 

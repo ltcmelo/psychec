@@ -25,11 +25,13 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "LexedTokens.h"
 #include "SyntaxTree.h"
+#include "LexedTokens.h"
 
 #include "infra/MemoryPool.h"
 #include "syntax/SyntaxToken.h"
+
+#include "../common/infra/InternalAccess.h"
 
 #include <cstdint>
 #include <functional>
@@ -46,21 +48,26 @@ class Lexer;
 /**
  * \brief The C Parser class.
  */
-class PSY_C_API Parser
+class PSY_C_NON_API Parser
 {
+    friend class ParserTest;
+
 public:
-    Parser(const Parser&) = delete;
-    void operator=(const Parser&) = delete;
     ~Parser();
+
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(SyntaxTree);
+    PSY_GRANT_ACCESS(DebugRule);
+
+    Parser(SyntaxTree* tree);
 
     TranslationUnitSyntax* parse();
 
 private:
-    Parser(SyntaxTree* tree);
 
-    friend class SyntaxTree;
-    friend class DebugRule;
-    friend class ParserTest;
+    // Unavailable
+    Parser(const Parser&) = delete;
+    void operator=(const Parser&) = delete;
 
     MemoryPool* pool_;
     SyntaxTree* tree_;

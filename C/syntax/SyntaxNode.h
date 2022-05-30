@@ -55,8 +55,6 @@ class PSY_C_API SyntaxNode : public Managed
 {
 public:
     virtual ~SyntaxNode();
-    SyntaxNode(const SyntaxNode& other) = delete;
-    SyntaxNode& operator=(const SyntaxNode& other) = delete;
 
     /**
      * The SyntaxTree to which \c this SyntaxNode belongs to.
@@ -350,6 +348,10 @@ public:
 
 protected:
     SyntaxNode(SyntaxTree* tree, SyntaxKind kind = Error);
+
+    // Unavailable
+    SyntaxNode(const SyntaxNode& other) = delete;
+    SyntaxNode& operator=(const SyntaxNode& other) = delete;
 
     SyntaxToken tokenAtIndex(LexedTokens::IndexType tkIdx) const;
     SyntaxToken findValidToken(const std::vector<SyntaxHolder>& syntaxHolders) const;

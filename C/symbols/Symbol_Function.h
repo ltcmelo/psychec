@@ -25,6 +25,8 @@
 #include "TypeClass_NameableSymbol.h"
 #include "TypeClass_TypeableSymbol.h"
 
+#include "../common/infra/InternalAccess.h"
+
 namespace psy {
 namespace C {
 
@@ -40,8 +42,13 @@ class PSY_C_API FunctionSymbol final : public Symbol
                                      , public TypeClass_TypeableSymbol
 {
 public:
+    //!@{
+    /**
+     * Cast \c this Symbol as a FunctionSymbol.
+     */
     virtual FunctionSymbol* asFunction() override { return this; }
     virtual const FunctionSymbol* asFunction() const override { return this; }
+    //!@}
 
     /**
      * The SymbolName of \c this Symbol.
@@ -62,10 +69,8 @@ public:
      */
     const TypeSymbol* returnType() const;
 
-protected:
-    DECL_PIMPL_SUB(FunctionSymbol);
-
-    friend class Binder;
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
 
     FunctionSymbol(const SyntaxTree* tree,
                    const Scope* scope,
@@ -73,6 +78,9 @@ protected:
 
     virtual void setName(std::unique_ptr<SymbolName> symName) override;
     virtual void setType(const TypeSymbol* tySym) override;
+
+protected:
+    DECL_PIMPL_SUB(FunctionSymbol);
 };
 
 std::string PSY_C_API to_string(const FunctionSymbol& sym);

@@ -49,11 +49,7 @@ namespace C {
  */
 class PSY_C_API Symbol
 {
-    friend class Binder;
-
 public:
-    Symbol(const Symbol&) = delete;
-    Symbol& operator=(const Symbol&) = delete;
     virtual ~Symbol();
 
     /**
@@ -111,6 +107,10 @@ protected:
     DECL_PIMPL(Symbol);
 
     Symbol(SymbolImpl* p);
+
+    // Unavailable
+    Symbol(const Symbol&) = delete;
+    Symbol& operator=(const Symbol&) = delete;
 };
 
 std::string PSY_C_API to_string(const Symbol& sym);

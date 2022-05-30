@@ -54,18 +54,14 @@ public:
         C17_18
     };
 
+    LanguageDialect(Std std = Std::C11)
+        : std_(std)
+    {}
+
     /**
      * The C Standard of \c this LanguageDialect.
      */
     Std std() const { return std_; }
-
-PSY_INTERNAL:
-    PSY_GRANT_ACCESS(ParseOptions);
-    PSY_GRANT_ACCESS(SyntaxTree);
-
-    LanguageDialect(Std std = Std::C11)
-        : std_(std)
-    {}
 
 private:
     Std std_;

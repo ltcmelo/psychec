@@ -27,6 +27,8 @@
 #include "LanguageDialect.h"
 #include "LanguageExtensions.h"
 
+#include "../common/infra/InternalAccess.h"
+
 #include <cstdint>
 
 namespace psy {
@@ -40,9 +42,14 @@ namespace C {
 class PSY_C_API ParseOptions
 {
 public:
+    //!@{
+    /**
+     * Create ParseOptions.
+     */
     ParseOptions();
     ParseOptions(LanguageDialect dialect,
                  LanguageExtensions extensions);
+    //!@}
 
     /**
      * The LanguageDialect used for parsing with \c this options.

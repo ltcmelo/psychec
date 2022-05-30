@@ -21,6 +21,10 @@
 #ifndef PSYCHE_C_MACRO_TRANSLATIONS_H__
 #define PSYCHE_C_MACRO_TRANSLATIONS_H__
 
+#include "API.h"
+
+#include "../common/infra/InternalAccess.h"
+
 #include <cstdint>
 
 namespace psy {
@@ -29,10 +33,15 @@ namespace C {
 /**
  * \brief The MacroTranslations class.
  */
-class MacroTranslations final
+class PSY_C_API MacroTranslations final
 {
 public:
+    //!@{
+    /**
+     * Create MacroTranslations.
+     */
     MacroTranslations();
+    //!@}
 
     //!@{
     /**

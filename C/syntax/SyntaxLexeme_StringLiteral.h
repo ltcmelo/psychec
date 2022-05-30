@@ -36,8 +36,10 @@ namespace C {
 class PSY_C_API StringLiteral final : public SyntaxLexeme
 {
 public:
-    StringLiteral(const char* chars, unsigned int size);
-
+    //!@{
+    /**
+     * Cast \c this SyntaxLexeme as an StringLiteral.
+     */
     virtual StringLiteral* asStringLiteralExpression() { return nullptr; }
 
     /**
@@ -56,6 +58,9 @@ public:
      * The Variant of \c this StringLiteral.
      */
     Variant variant() const;
+
+    // TODO: Make internal.
+    StringLiteral(const char* chars, unsigned int size);
 };
 
 } // C

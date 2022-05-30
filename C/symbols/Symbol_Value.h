@@ -23,10 +23,13 @@
 
 #include "API.h"
 #include "Fwds.h"
+
 #include "Symbol.h"
 #include "TypeClass_NameableSymbol.h"
 #include "TypeClass_TypeableSymbol.h"
 #include "ValueKind.h"
+
+#include "../common/infra/InternalAccess.h"
 
 #include <memory>
 
@@ -43,15 +46,24 @@ class PSY_C_API ValueSymbol : public Symbol
 public:
     virtual ~ValueSymbol();
 
+    //!@{
+    /**
+     * Cast \c this Symbol as a ValueSymbol.
+     */
     virtual ValueSymbol* asValue() override { return this; }
     virtual const ValueSymbol* asValue() const override { return this; }
 
+    //!@{
+    /**
+     * Cast \c this ValueSymbol.
+     */
     virtual FieldSymbol* asField() { return nullptr; }
     virtual const FieldSymbol* asField() const { return nullptr; }
     virtual VariableSymbol* asVariable() { return nullptr; }
     virtual const VariableSymbol* asVariable() const { return nullptr; }
     virtual ParameterSymbol* asParameter() { return nullptr; }
     virtual const ParameterSymbol* asParameter() const { return nullptr; }
+    //!@}
 
     /**
      * The (value) kind of \c this value.
@@ -68,6 +80,12 @@ public:
      */
     const TypeSymbol* type() const;
 
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
+
+    virtual void setName(std::unique_ptr<SymbolName> symName) override;
+    virtual void setType(const TypeSymbol* tySym) override;
+
 protected:
     DECL_PIMPL_SUB(ValueSymbol);
 
@@ -75,12 +93,6 @@ protected:
                 const Scope* scope,
                 const Symbol* containingSym,
                 ValueKind valKind);
-
-private:
-    friend class Binder;
-
-    virtual void setName(std::unique_ptr<SymbolName> symName) override;
-    virtual void setType(const TypeSymbol* tySym) override;
 };
 
 std::string PSY_C_API to_string(const ValueSymbol& sym);

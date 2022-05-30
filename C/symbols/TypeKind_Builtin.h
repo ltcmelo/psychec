@@ -85,7 +85,7 @@ enum class PSY_C_API BuiltinTypeKind : std::uint8_t
     LongDoubleComplex
 };
 
-PSY_C_API inline std::string PSY_C_API canonicalText(BuiltinTypeKind builtTyKind)
+inline std::string PSY_C_API canonicalText(BuiltinTypeKind builtTyKind)
 {
     switch (builtTyKind) {
         case BuiltinTypeKind::Void:
@@ -139,7 +139,7 @@ PSY_C_API inline std::string PSY_C_API canonicalText(BuiltinTypeKind builtTyKind
     }
 }
 
-PSY_C_API inline std::string PSY_C_API to_string(BuiltinTypeKind builtTyKind)
+inline std::string PSY_C_API to_string(BuiltinTypeKind builtTyKind)
 {
     return canonicalText(builtTyKind);
 }

@@ -52,6 +52,8 @@ namespace C {
  */
 class PSY_C_API SyntaxToken
 {
+    friend bool operator==(const SyntaxToken& a, const SyntaxToken& b);
+
 public:
     ~SyntaxToken();
 
@@ -198,15 +200,16 @@ public:
      */
     static SyntaxToken invalid();
 
-private:
-    SyntaxToken(SyntaxTree* tree);
-    void setup();
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(SyntaxTree);
+    PSY_GRANT_ACCESS(SyntaxTree);
+    PSY_GRANT_ACCESS(SyntaxNode);
+    PSY_GRANT_ACCESS(Lexer);
+    PSY_GRANT_ACCESS(Parser);
 
-    friend class SyntaxTree;
-    friend class SyntaxNode;
-    friend class Lexer;
-    friend class Parser;
-    friend class Binder;
+    SyntaxToken(SyntaxTree* tree);
+
+    void setup();
 
     unsigned int byteStart() const { return byteOffset_; }
     unsigned int byteEnd() const { return byteOffset_ + byteSize_; }
@@ -256,8 +259,6 @@ private:
         const ImaginaryFloatingConstant* imaginaryFloating_;
         const StringLiteral* string_;
     };
-
-    friend bool operator==(const SyntaxToken& a, const SyntaxToken& b);
 };
 
 /**

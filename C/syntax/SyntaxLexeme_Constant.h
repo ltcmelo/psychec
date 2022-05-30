@@ -24,6 +24,8 @@
 
 #include "SyntaxLexeme.h"
 
+#include "../common/infra/InternalAccess.h"
+
 #include <cstdint>
 #include <string>
 
@@ -49,9 +51,12 @@ protected:
 class PSY_C_API IntegerConstant final : public Constant
 {
 public:
-    IntegerConstant(const char* chars, unsigned int size);
-
+    //!@{
+    /**
+     * Cast \c this SyntaxLexeme as an IntegerConstant.
+     */
     virtual IntegerConstant* asIntegerConstant() override { return this; }
+    //!@}
 
     /**
      * \brief The IntegerConstant::Signedness enumeration.
@@ -81,6 +86,9 @@ public:
      * The Variant of \c this IntegerConstant.
      */
     Variant variant() const;
+
+    // TODO: Make internal.
+    IntegerConstant(const char* chars, unsigned int size);
 };
 
 /**
@@ -89,9 +97,12 @@ public:
 class PSY_C_API FloatingConstant final : public Constant
 {
 public:
-    FloatingConstant(const char* chars, unsigned int size);
-
-    virtual FloatingConstant* asFloatingConstant()  override { return this; }
+    //!@{
+    /**
+     * Cast \c this SyntaxLexeme as a FloatingConstant.
+     */
+    virtual FloatingConstant* asFloatingConstant() override { return this; }
+    //!@}
 
     /**
      * \brief The FloatingConstant::Variant enumeration.
@@ -107,6 +118,9 @@ public:
      * The Variant of \c this FloatingConstant.
      */
     Variant variant() const;
+
+    // TODO: Make internal.
+    FloatingConstant(const char* chars, unsigned int size);
 };
 
 /**
@@ -115,9 +129,12 @@ public:
 class PSY_C_API CharacterConstant final : public Constant
 {
 public:
-    CharacterConstant(const char* chars, unsigned int size);
-
-    virtual CharacterConstant* asCharacterConstant()  override { return this; }
+    //!@{
+    /**
+     * Cast \c this SyntaxLexeme as a CharacterConstant.
+     */
+    virtual CharacterConstant* asCharacterConstant() override { return this; }
+    //!@}
 
     /**
      * \brief The CharacterConstant::Variant enumeration.
@@ -134,6 +151,9 @@ public:
      * The Variant of \c this CharacterConstant.
      */
     Variant variant() const;
+
+    // TODO: Make internal.
+    CharacterConstant(const char* chars, unsigned int size);
 };
 
 /**
@@ -142,9 +162,12 @@ public:
 class PSY_C_API ImaginaryIntegerConstant final : public Constant
 {
 public:
-    ImaginaryIntegerConstant(const char* chars, unsigned int size);
-
+    //!@{
+    /**
+     * Cast \c this SyntaxLexeme as an ImaginaryIntegerConstant.
+     */
     virtual ImaginaryIntegerConstant* asImaginaryIntegerConstant() override { return this; }
+    //!@}
 
     /**
      * \brief The ImaginaryIntegerConstant::Signedness enumeration.
@@ -174,6 +197,9 @@ public:
      * The Variant of \c this ImaginaryIntegerConstant.
      */
     Variant variant() const;
+
+    // TODO: Make internal.
+    ImaginaryIntegerConstant(const char* chars, unsigned int size);
 };
 
 /**
@@ -182,9 +208,12 @@ public:
 class PSY_C_API ImaginaryFloatingConstant final : public Constant
 {
 public:
-    ImaginaryFloatingConstant(const char* chars, unsigned int size);
-
+    //!@{
+    /**
+     * Cast \c this SyntaxLexemeas an ImaginaryFloatingConstant.
+     */
     virtual ImaginaryFloatingConstant* asImaginaryFloatingConstant() override { return this; }
+    //!@}
 
     /**
      * \brief The ImaginaryFloatingConstant::Variant enumeration.
@@ -200,6 +229,9 @@ public:
      * The Variant of \c this ImaginaryFloatingConstant.
      */
     Variant variant() const;
+
+    // TODO: Make internal.
+    ImaginaryFloatingConstant(const char* chars, unsigned int size);
 };
 
 } // C

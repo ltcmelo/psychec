@@ -30,7 +30,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API Unparser : public SyntaxDumper
+class PSY_C_NON_API Unparser : public SyntaxDumper
 {
 public:
     using SyntaxDumper::SyntaxDumper;

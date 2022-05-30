@@ -23,8 +23,11 @@
 
 #include "API.h"
 #include "Fwds.h"
+
 #include "TypeKind.h"
 #include "Symbol.h"
+
+#include "../common/infra/InternalAccess.h"
 
 #include <memory>
 
@@ -44,14 +47,21 @@ namespace C {
  */
 class PSY_C_API TypeSymbol : public Symbol
 {
-    friend class SemanticsOfTypeQualifiers;
-
 public:
     virtual ~TypeSymbol();
 
+    //!@{
+    /**
+     * Cast \c this Symbol as a TypeSymbol.
+     */
     virtual TypeSymbol* asType() override { return this; }
     virtual const TypeSymbol* asType() const override { return this; }
+    //!@}
 
+    //!@{
+    /**
+     * Cast \c this TypeSymbol.
+     */
     virtual ArrayTypeSymbol* asArrayType() { return nullptr; }
     virtual const ArrayTypeSymbol* asArrayType() const { return nullptr; }
     virtual FunctionTypeSymbol* asFunctionType() { return nullptr; }
@@ -60,6 +70,7 @@ public:
     virtual const NamedTypeSymbol* asNamedType() const { return nullptr; }
     virtual PointerTypeSymbol* asPointerType() { return nullptr; }
     virtual const PointerTypeSymbol* asPointerType() const { return nullptr; }
+    //!@}
 
     /**
      * The TypeKind of \c this type.
@@ -81,15 +92,17 @@ public:
      */
     bool isRestrictQualified() const;
 
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(SemanticsOfTypeQualifiers);
+
+    void qualifyWithConst();
+    void qualifyWithVolatile();
+    void qualifyWithRestrict();
+
 protected:
     DECL_PIMPL_SUB(TypeSymbol);
 
     TypeSymbol(TypeSymbolImpl* p);
-
-private:
-    void qualifyWithConst();
-    void qualifyWithVolatile();
-    void qualifyWithRestrict();
 };
 
 std::string PSY_C_API to_string(const TypeSymbol& tySym);

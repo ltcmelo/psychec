@@ -35,11 +35,14 @@ namespace C {
  */
 class PSY_C_API FunctionTypeSymbol final : public TypeSymbol
 {
-    friend class Binder;
-
 public:
+    //!@{
+    /**
+     * Cast \c this TypeSymbol as a FunctionTypeSymbol.
+     */
     virtual FunctionTypeSymbol* asFunctionType() { return this; }
     virtual const FunctionTypeSymbol* asFunctionType() const { return this; }
+    //!@}
 
     /**
      * The return type of \c this FunctionTypeSymbol.
@@ -51,8 +54,8 @@ public:
      */
     std::vector<const TypeSymbol*> parameterTypes() const;
 
-private:
-    DECL_PIMPL_SUB(FunctionTypeSymbol)
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
 
     FunctionTypeSymbol(const SyntaxTree* tree,
                        const Scope* scope,
@@ -60,6 +63,9 @@ private:
                        const TypeSymbol* retTySym);
 
     void addParameter(const TypeSymbol* parmTySym);
+
+private:
+    DECL_PIMPL_SUB(FunctionTypeSymbol)
 };
 
 std::string PSY_C_API to_string(const FunctionTypeSymbol& tySym);
