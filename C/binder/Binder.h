@@ -111,7 +111,7 @@ private:
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax*) override;
     virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;
 
-    template <class TyDeclT> Action visitTypeDeclaration_AtSpecfierMembers_COMMON(
+    template <class TyDeclT> Action visitTypeDeclaration_AtInternalDeclarations_COMMON(
             const TyDeclT* node,
             Action (Binder::*visit_DONE)(const TyDeclT*));
 

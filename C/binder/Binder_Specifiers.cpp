@@ -40,7 +40,7 @@ using namespace psy;
 using namespace C;
 
 template <class TyDeclT>
-SyntaxVisitor::Action Binder::visitTypeDeclaration_AtSpecfierMembers_COMMON(
+SyntaxVisitor::Action Binder::visitTypeDeclaration_AtInternalDeclarations_COMMON(
         const TyDeclT* node,
         Action (Binder::*visit_DONE)(const TyDeclT*))
 {
@@ -72,7 +72,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
 
     makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
 
-    return visitTypeDeclaration_AtSpecfierMembers_COMMON(
+    return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,
                 &Binder::visitStructOrUnionDeclaration_DONE);
 }
@@ -82,7 +82,7 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclara
     makeSymAndPushIt<NamedTypeSymbol>(TagSymbolNameKind::Enumeration,
                                       node->typeSpecifier()->tagToken().valueText_c_str());
 
-    return visitTypeDeclaration_AtSpecfierMembers_COMMON(
+    return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,
                 &Binder::visitEnumDeclaration_DONE);
 }
