@@ -106,7 +106,19 @@ void BinderTest::case3046(){}
 void BinderTest::case3047(){}
 void BinderTest::case3048(){}
 void BinderTest::case3049(){}
-void BinderTest::case3050(){}
+
+void BinderTest::case3050()
+{
+    bind("enum x { y } ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Type("enum x", NamedTypeKind::Tag)
+                  .withNameKind(SymbolNameKind::Tagged)
+                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withTagKind(TagSymbolNameKind::Enumeration)
+                  .withScopeKind(ScopeKind::File)));
+}
+
 void BinderTest::case3051(){}
 void BinderTest::case3052(){}
 void BinderTest::case3053(){}
