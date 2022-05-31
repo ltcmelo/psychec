@@ -31,7 +31,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API SyntaxDisambiguator final : public SyntaxVisitor
+class PSY_C_NON_API SyntaxDisambiguator final : public SyntaxVisitor
 {
 };
 

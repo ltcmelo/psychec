@@ -37,8 +37,14 @@ namespace C {
 class PSY_C_API SyntaxReference
 {
 public:
+    /**
+     * The SyntaxTree referenced by \c this SyntaxReference.
+     */
     const SyntaxTree* syntaxTree() const;
 
+    /**
+     * The SyntaxNode referenced by \c this SyntaxReference.
+     */
     const SyntaxNode* syntax() const;
 };
 

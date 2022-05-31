@@ -52,7 +52,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API SyntaxDumper : protected SyntaxVisitor
+class PSY_C_NON_API SyntaxDumper : protected SyntaxVisitor
 {
 public:
     SyntaxDumper(SyntaxTree* tree)

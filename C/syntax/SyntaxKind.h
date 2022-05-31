@@ -22,6 +22,8 @@
 #ifndef PSYCHE_C_SYNTAX_KIND_H__
 #define PSYCHE_C_SYNTAX_KIND_H__
 
+#include "API.h"
+
 #include <cstdint>
 
 namespace psy {
@@ -30,7 +32,7 @@ namespace C {
 /**
  * \brief The SyntaxKind enumeration.
  */
-enum SyntaxKind : std::uint16_t
+enum PSY_C_API SyntaxKind : std::uint16_t
 {
     EndOfFile = 0,
     Error,
