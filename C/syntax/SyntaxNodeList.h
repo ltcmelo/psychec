@@ -115,7 +115,7 @@ public:
 template <class SyntaxNodeT>
 class PSY_C_API SyntaxNodePlainList final
         : public CoreSyntaxNodeList<SyntaxNodeT,
-                                         SyntaxNodePlainList<SyntaxNodeT>>
+                                    SyntaxNodePlainList<SyntaxNodeT>>
 {
 public:
     using CoreSyntaxNodeList<SyntaxNodeT, SyntaxNodePlainList<SyntaxNodeT>>::CoreSyntaxNodeList;
