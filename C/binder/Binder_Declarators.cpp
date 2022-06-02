@@ -47,7 +47,11 @@ SyntaxVisitor::Action Binder::nameSymAtTop(const char* s)
     auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
     PSY_ASSERT(nameableSym, return Action::Quit);
 
-    std::unique_ptr<SymbolName> name(new PlainSymbolName(s));
+    std::unique_ptr<SymbolName> name;
+    if (s)
+        name.reset(new PlainSymbolName(s));
+    else
+        name.reset(new EmptySymbolName);
     nameableSym->setName(std::move(name));
 
     return Action::Skip;
@@ -120,7 +124,6 @@ SyntaxVisitor::Action Binder::visitEnumMemberDeclaration_AtDeclarator(const Enum
 {
     determineContextAndMakeSym();
     nameSymAtTop(node->identifierToken().valueText_c_str());
-
     typeSymAtTopAndPopIt();
 
     return visitEnumMemberDeclaration_DONE(node);
@@ -358,7 +361,6 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym()
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
     determineContextAndMakeSym();
-
     nameSymAtTop(node->identifierToken().valueText_c_str());
 
     return Action::Skip;
@@ -367,15 +369,7 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax*)
 {
     determineContextAndMakeSym();
-
-    PSY_ASSERT(!syms_.empty(), return Action::Quit);
-    Symbol* sym = syms_.top();
-
-    auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
-    PSY_ASSERT(nameableSym, return Action::Quit);
-
-    std::unique_ptr<SymbolName> name(new EmptySymbolName);
-    nameableSym->setName(std::move(name));
+    nameSymAtTop(nullptr);
 
     return Action::Skip;
 }
