@@ -39,76 +39,24 @@
 using namespace psy;
 using namespace C;
 
-template <class DeclT>
-SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators_COMMON(
-        const DeclT* node,
-        Action (Binder::*visit_DONE)(const DeclT*))
+SyntaxVisitor::Action Binder::nameSymAtTop(const char* s)
 {
-    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
-        visit(decltorIt->value);
-        typeSym();
-    }
+    PSY_ASSERT(!syms_.empty(), return Action::Quit);
+    Symbol* sym = syms_.top();
 
-    return ((this)->*(visit_DONE))(node);
+    auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
+    PSY_ASSERT(nameableSym, return Action::Quit);
+
+    std::unique_ptr<SymbolName> name(new PlainSymbolName(s));
+    nameableSym->setName(std::move(name));
+
+    return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
-        const VariableAndOrFunctionDeclarationSyntax* node)
-{
-    return visitDeclaration_AtDeclarators_COMMON(
-                node,
-                &Binder::visitVariableAndOrFunctionDeclaration_DONE);
-}
-
-SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
-{
-    return visitDeclaration_AtDeclarators_COMMON(
-                node,
-                &Binder::visitFieldDeclaration_DONE);
-}
-
-SyntaxVisitor::Action Binder::visitEnumMemberDeclaration_AtDeclarator(const EnumMemberDeclarationSyntax* node)
-{
-    determineContextAndMakeSym();
-
-    nameSym(node->identifierToken().valueText_c_str());
-    typeSym();
-
-    return visitEnumMemberDeclaration_DONE(node);
-}
-
-SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax* node)
-{
-    visit(node->declarator());
-
-    typeSym();
-
-    return visitParameterDeclaration_DONE(node);
-}
-
-SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const FunctionDefinitionSyntax* node)
-{
-    visit(node->declarator());
-
-    typeSym();
-
-    reopenStashedScope();
-    scopes_.top()->morphFrom_FunctionPrototype_to_Block();
-
-    auto body = node->body()->asCompoundStatement();
-    for (auto stmtIt = body->statements(); stmtIt; stmtIt = stmtIt->next)
-        visit(stmtIt->value);
-
-    closeScope();
-
-    return Binder::visitFunctionDefinition_DONE(node);
-}
-
-SyntaxVisitor::Action Binder::typeSym()
+SyntaxVisitor::Action Binder::typeSymAtTopAndPopIt()
 {
     PSY_ASSERT(!syms_.empty(), return Action::Quit);
     auto sym = syms_.top();
-    popSym();
 
     auto typeableSym = TypeClass_TypeableSymbol::asInstance(sym);
     PSY_ASSERT(typeableSym, return Action::Quit);
@@ -135,7 +83,74 @@ SyntaxVisitor::Action Binder::typeSym()
 
     typeableSym->setType(tySym);
 
+    popSym();
+
     return Action::Skip;
+}
+
+template <class DeclT>
+SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators_COMMON(
+        const DeclT* node,
+        Action (Binder::*visit_DONE)(const DeclT*))
+{
+    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
+        visit(decltorIt->value);
+        typeSymAtTopAndPopIt();
+    }
+
+    return ((this)->*(visit_DONE))(node);
+}
+
+SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
+        const VariableAndOrFunctionDeclarationSyntax* node)
+{
+    return visitDeclaration_AtDeclarators_COMMON(
+                node,
+                &Binder::visitVariableAndOrFunctionDeclaration_DONE);
+}
+
+SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
+{
+    return visitDeclaration_AtDeclarators_COMMON(
+                node,
+                &Binder::visitFieldDeclaration_DONE);
+}
+
+SyntaxVisitor::Action Binder::visitEnumMemberDeclaration_AtDeclarator(const EnumMemberDeclarationSyntax* node)
+{
+    determineContextAndMakeSym();
+    nameSymAtTop(node->identifierToken().valueText_c_str());
+
+    typeSymAtTopAndPopIt();
+
+    return visitEnumMemberDeclaration_DONE(node);
+}
+
+SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax* node)
+{
+    visit(node->declarator());
+
+    typeSymAtTopAndPopIt();
+
+    return visitParameterDeclaration_DONE(node);
+}
+
+SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const FunctionDefinitionSyntax* node)
+{
+    visit(node->declarator());
+
+    typeSymAtTopAndPopIt();
+
+    reopenStashedScope();
+    scopes_.top()->morphFrom_FunctionPrototype_to_Block();
+
+    auto body = node->body()->asCompoundStatement();
+    for (auto stmtIt = body->statements(); stmtIt; stmtIt = stmtIt->next)
+        visit(stmtIt->value);
+
+    closeScope();
+
+    return Binder::visitFunctionDefinition_DONE(node);
 }
 
 SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node)
@@ -340,25 +355,11 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym()
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::nameSym(const char* s)
-{
-    PSY_ASSERT(!syms_.empty(), return Action::Quit);
-    Symbol* sym = syms_.top();
-
-    auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
-    PSY_ASSERT(nameableSym, return Action::Quit);
-
-    std::unique_ptr<SymbolName> name(new PlainSymbolName(s));
-    nameableSym->setName(std::move(name));
-
-    return Action::Skip;
-}
-
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
     determineContextAndMakeSym();
 
-    nameSym(node->identifierToken().valueText_c_str());
+    nameSymAtTop(node->identifierToken().valueText_c_str());
 
     return Action::Skip;
 }

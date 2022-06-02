@@ -172,8 +172,8 @@ private:
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
     Action determineContextAndMakeSym();
-    Action nameSym(const char* s);
-    Action typeSym();
+    Action nameSymAtTop(const char* s);
+    Action typeSymAtTopAndPopIt();
 
     //------------//
     // Statements //
