@@ -27,6 +27,7 @@
 #include "TypeSymbol_Function.h"
 #include "TypeSymbol_Named.h"
 #include "TypeSymbol_Pointer.h"
+#include "ValueSymbol_Enumerator.h"
 #include "ValueSymbol_Field.h"
 #include "ValueSymbol_Parameter.h"
 #include "ValueSymbol_Variable.h"

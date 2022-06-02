@@ -89,6 +89,8 @@ namespace C {
 std::string to_string(const ValueSymbol& sym)
 {
     switch (sym.valueKind()) {
+        case ValueKind::Enumerator:
+            return to_string(*sym.asEnumerator());
         case ValueKind::Field:
             return to_string(*sym.asField());
         case ValueKind::Parameter:

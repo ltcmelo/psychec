@@ -102,6 +102,7 @@ SymT* Binder::pushSym(std::unique_ptr<SymT> sym)
 
 template FunctionSymbol* Binder::pushSym<FunctionSymbol>(std::unique_ptr<FunctionSymbol>);
 template FieldSymbol* Binder::pushSym<FieldSymbol>(std::unique_ptr<FieldSymbol>);
+template EnumeratorSymbol* Binder::pushSym<EnumeratorSymbol>(std::unique_ptr<EnumeratorSymbol>);
 template ParameterSymbol* Binder::pushSym<ParameterSymbol>(std::unique_ptr<ParameterSymbol>);
 template VariableSymbol* Binder::pushSym<VariableSymbol>(std::unique_ptr<VariableSymbol>);
 template ArrayTypeSymbol* Binder::pushSym<ArrayTypeSymbol>(std::unique_ptr<ArrayTypeSymbol>);
@@ -198,6 +199,18 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_DONE(const FieldDeclarationSyntax*)
+{
+    popTySym();
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax* node)
+{
+    return visitEnumMemberDeclaration_AtImplicitSpecifier(node);
+}
+
+SyntaxVisitor::Action Binder::visitEnumMemberDeclaration_DONE(const EnumMemberDeclarationSyntax* node)
 {
     popTySym();
 

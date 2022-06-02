@@ -57,6 +57,8 @@ public:
     /**
      * Cast \c this ValueSymbol.
      */
+    virtual EnumeratorSymbol* asEnumerator() { return nullptr; }
+    virtual const EnumeratorSymbol* asEnumerator() const { return nullptr; }
     virtual FieldSymbol* asField() { return nullptr; }
     virtual const FieldSymbol* asField() const { return nullptr; }
     virtual VariableSymbol* asVariable() { return nullptr; }

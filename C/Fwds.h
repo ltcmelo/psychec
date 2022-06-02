@@ -213,6 +213,7 @@ class FunctionSymbol;
 
 /* Symbols (values) */
 class ValueSymbol;
+class EnumeratorSymbol;
 class FieldSymbol;
 class VariableSymbol;
 class ParameterSymbol;

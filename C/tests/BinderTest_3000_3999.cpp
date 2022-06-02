@@ -106,11 +106,100 @@ void BinderTest::case3046(){}
 void BinderTest::case3047(){}
 void BinderTest::case3048(){}
 void BinderTest::case3049(){}
-void BinderTest::case3050(){}
-void BinderTest::case3051(){}
-void BinderTest::case3052(){}
-void BinderTest::case3053(){}
-void BinderTest::case3054(){}
+
+void BinderTest::case3050()
+{
+    bind("enum x { y } ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Type("enum x", NamedTypeKind::Tag)
+                  .withNameKind(SymbolNameKind::Tagged)
+                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withTagKind(TagSymbolNameKind::Enumeration)
+                  .withScopeKind(ScopeKind::File))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+}
+
+void BinderTest::case3051()
+{
+    bind("enum x { y , z } ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Type("enum x", NamedTypeKind::Tag)
+                  .withNameKind(SymbolNameKind::Tagged)
+                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withTagKind(TagSymbolNameKind::Enumeration)
+                  .withScopeKind(ScopeKind::File))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+}
+
+void BinderTest::case3052()
+{
+    bind("enum x { y = 0 , z } ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Type("enum x", NamedTypeKind::Tag)
+                  .withNameKind(SymbolNameKind::Tagged)
+                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withTagKind(TagSymbolNameKind::Enumeration)
+                  .withScopeKind(ScopeKind::File))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+}
+
+void BinderTest::case3053()
+{
+    bind("enum x { y , z , w } ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Type("enum x", NamedTypeKind::Tag)
+                  .withNameKind(SymbolNameKind::Tagged)
+                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withTagKind(TagSymbolNameKind::Enumeration)
+                  .withScopeKind(ScopeKind::File))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+         .binding(DeclSummary()
+                  .Value("w", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+}
+
+void BinderTest::case3054()
+{
+    bind("enum x { y , z = 0 , w } ;",
+         Expectation()
+         .binding(DeclSummary()
+                  .Type("enum x", NamedTypeKind::Tag)
+                  .withNameKind(SymbolNameKind::Tagged)
+                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withTagKind(TagSymbolNameKind::Enumeration)
+                  .withScopeKind(ScopeKind::File))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+         .binding(DeclSummary()
+                  .Value("w", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+}
+
 void BinderTest::case3055(){}
 void BinderTest::case3056(){}
 void BinderTest::case3057(){}

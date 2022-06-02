@@ -40,7 +40,7 @@ using namespace psy;
 using namespace C;
 
 template <class TyDeclT>
-SyntaxVisitor::Action Binder::visitTypeDeclaration_AtSpecfierMembers_COMMON(
+SyntaxVisitor::Action Binder::visitTypeDeclaration_AtInternalDeclarations_COMMON(
         const TyDeclT* node,
         Action (Binder::*visit_DONE)(const TyDeclT*))
 {
@@ -72,7 +72,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
 
     makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
 
-    return visitTypeDeclaration_AtSpecfierMembers_COMMON(
+    return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,
                 &Binder::visitStructOrUnionDeclaration_DONE);
 }
@@ -82,7 +82,7 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclara
     makeSymAndPushIt<NamedTypeSymbol>(TagSymbolNameKind::Enumeration,
                                       node->typeSpecifier()->tagToken().valueText_c_str());
 
-    return visitTypeDeclaration_AtSpecfierMembers_COMMON(
+    return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,
                 &Binder::visitEnumDeclaration_DONE);
 }
@@ -93,7 +93,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers_COMMON(
         Action (Binder::*visit_AtDeclarators)(const DeclT*))
 {
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
-        actOnTypeSpecifier(specIt->value);
+        visitIfNotTypeQualifier(specIt->value);
 
     if (tySyms_.empty()) {
         ConstraintsInTypeSpecifiers::TypeSpecifierMissingDefaultsToInt(node->lastToken(), &diagReporter_);
@@ -101,7 +101,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers_COMMON(
     }
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
-        actOnTypeQualifier(specIt->value);
+        visitIfTypeQualifier(specIt->value);
 
     return ((this)->*(visit_AtDeclarators))(node);
 }
@@ -128,6 +128,13 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_AtSpecifiers(const FieldDecl
                 &Binder::visitFieldDeclaration_AtDeclarators);
 }
 
+SyntaxVisitor::Action Binder::visitEnumMemberDeclaration_AtImplicitSpecifier(const EnumMemberDeclarationSyntax* node)
+{
+    makeTySymAndPushIt<NamedTypeSymbol>(BuiltinTypeKind::Int);
+
+    return visitEnumMemberDeclaration_AtDeclarator(node);
+}
+
 SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax* node)
 {
     return visitDeclaration_AtSpecifiers_COMMON(
@@ -135,7 +142,7 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const Param
                 &Binder::visitParameterDeclaration_AtDeclarator);
 }
 
-SyntaxVisitor::Action Binder::actOnTypeSpecifier(const SpecifierSyntax* spec)
+SyntaxVisitor::Action Binder::visitIfNotTypeQualifier(const SpecifierSyntax* spec)
 {
     if (spec->asTypeQualifier())
         return Action::Skip;
@@ -145,7 +152,7 @@ SyntaxVisitor::Action Binder::actOnTypeSpecifier(const SpecifierSyntax* spec)
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::actOnTypeQualifier(const SpecifierSyntax* spec)
+SyntaxVisitor::Action Binder::visitIfTypeQualifier(const SpecifierSyntax* spec)
 {
     if (!spec->asTypeQualifier())
         return Action::Skip;

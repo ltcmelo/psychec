@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,49 +18,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_VALUE_KIND_H__
-#define PSYCHE_C_VALUE_KIND_H__
+#ifndef PSYCHE_C_SYMBOL_ENUMERATOR_H__
+#define PSYCHE_C_SYMBOL_ENUMERATOR_H__
 
-#include "API.h"
-#include "Fwds.h"
-
-#include "../common/infra/Assertions.h"
-#include "../common/infra/Escape.h"
-
-#include <cstdint>
-#include <string>
+#include "Symbol_Value.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The ValueKind enum.
+ * \brief The EnumeratorSymbol class.
  */
-enum class PSY_C_API ValueKind : std::uint8_t
+class PSY_C_API EnumeratorSymbol final : public ValueSymbol
 {
-    UNSPECIFIED = 0,
-    Enumerator,
-    Field,
-    Parameter,
-    Variable
+public:
+    //!@{
+    /**
+     * Cast \c this ValueSymbol as a EnumeratorSymbol.
+     */
+    virtual EnumeratorSymbol* asEnumerator() { return this; }
+    virtual const EnumeratorSymbol* asEnumerator() const { return this; }
+    //!@}
+
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
+
+    EnumeratorSymbol(const SyntaxTree* tree,
+                     const Scope* scope,
+                     const Symbol* containingSym);
 };
 
-inline std::string PSY_C_API to_string(ValueKind valK)
-{
-    switch (valK) {
-        case ValueKind::Enumerator:
-            return "Enumerator";
-        case ValueKind::Field:
-            return "Field";
-        case ValueKind::Parameter:
-            return "Parameter";
-        case ValueKind::Variable:
-            return "Variable";
-        default:
-            PSY_ESCAPE_VIA_RETURN("");
-            return "<INVALID or UNSPECIFIED ValueKind>";
-    }
-}
+std::string PSY_C_API to_string(const EnumeratorSymbol& sym);
 
 } // C
 } // psy

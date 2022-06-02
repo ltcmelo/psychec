@@ -39,60 +39,30 @@
 using namespace psy;
 using namespace C;
 
-template <class DeclT>
-SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators_COMMON(
-        const DeclT* node,
-        Action (Binder::*visit_DONE)(const DeclT*))
+SyntaxVisitor::Action Binder::nameSymAtTop(const char* s)
 {
-    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next)
-        actOnDeclarator(decltorIt->value);
+    PSY_ASSERT(!syms_.empty(), return Action::Quit);
+    Symbol* sym = syms_.top();
 
-    return ((this)->*(visit_DONE))(node);
+    auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
+    PSY_ASSERT(nameableSym, return Action::Quit);
+
+    std::unique_ptr<SymbolName> name;
+    if (s)
+        name.reset(new PlainSymbolName(s));
+    else
+        name.reset(new EmptySymbolName);
+    nameableSym->setName(std::move(name));
+
+    return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
-        const VariableAndOrFunctionDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::typeSymAtTopAndPopIt()
 {
-    return visitDeclaration_AtDeclarators_COMMON(
-                node,
-                &Binder::visitVariableAndOrFunctionDeclaration_DONE);
-}
+    PSY_ASSERT(!syms_.empty(), return Action::Quit);
+    auto sym = syms_.top();
 
-SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
-{
-    return visitDeclaration_AtDeclarators_COMMON(
-                node,
-                &Binder::visitFieldDeclaration_DONE);
-}
-
-SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax* node)
-{
-    actOnDeclarator(node->declarator());
-
-    return visitParameterDeclaration_DONE(node);
-}
-
-SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const FunctionDefinitionSyntax* node)
-{
-    actOnDeclarator(node->declarator());
-
-    reopenStashedScope();
-    scopes_.top()->morphFrom_FunctionPrototype_to_Block();
-
-    auto body = node->body()->asCompoundStatement();
-    for (auto stmtIt = body->statements(); stmtIt; stmtIt = stmtIt->next)
-        visit(stmtIt->value);
-
-    closeScope();
-
-    return Binder::visitFunctionDefinition_DONE(node);
-}
-
-SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
-{
-    visit(decltor);
-
-    auto typeableSym = typeableSymForDeclarator();
+    auto typeableSym = TypeClass_TypeableSymbol::asInstance(sym);
     PSY_ASSERT(typeableSym, return Action::Quit);
 
     PSY_ASSERT(!tySyms_.empty(), return Action::Quit);
@@ -117,15 +87,73 @@ SyntaxVisitor::Action Binder::actOnDeclarator(const DeclaratorSyntax* decltor)
 
     typeableSym->setType(tySym);
 
+    popSym();
+
     return Action::Skip;
 }
 
-TypeClass_TypeableSymbol* Binder::typeableSymForDeclarator()
+template <class DeclT>
+SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators_COMMON(
+        const DeclT* node,
+        Action (Binder::*visit_DONE)(const DeclT*))
 {
-    PSY_ASSERT(!syms_.empty(), return nullptr);
-    auto sym = syms_.top();
-    popSym();
-    return TypeClass_TypeableSymbol::asInstance(sym);
+    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
+        visit(decltorIt->value);
+        typeSymAtTopAndPopIt();
+    }
+
+    return ((this)->*(visit_DONE))(node);
+}
+
+SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
+        const VariableAndOrFunctionDeclarationSyntax* node)
+{
+    return visitDeclaration_AtDeclarators_COMMON(
+                node,
+                &Binder::visitVariableAndOrFunctionDeclaration_DONE);
+}
+
+SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
+{
+    return visitDeclaration_AtDeclarators_COMMON(
+                node,
+                &Binder::visitFieldDeclaration_DONE);
+}
+
+SyntaxVisitor::Action Binder::visitEnumMemberDeclaration_AtDeclarator(const EnumMemberDeclarationSyntax* node)
+{
+    determineContextAndMakeSym();
+    nameSymAtTop(node->identifierToken().valueText_c_str());
+    typeSymAtTopAndPopIt();
+
+    return visitEnumMemberDeclaration_DONE(node);
+}
+
+SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax* node)
+{
+    visit(node->declarator());
+
+    typeSymAtTopAndPopIt();
+
+    return visitParameterDeclaration_DONE(node);
+}
+
+SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const FunctionDefinitionSyntax* node)
+{
+    visit(node->declarator());
+
+    typeSymAtTopAndPopIt();
+
+    reopenStashedScope();
+    scopes_.top()->morphFrom_FunctionPrototype_to_Block();
+
+    auto body = node->body()->asCompoundStatement();
+    for (auto stmtIt = body->statements(); stmtIt; stmtIt = stmtIt->next)
+        visit(stmtIt->value);
+
+    closeScope();
+
+    return Binder::visitFunctionDefinition_DONE(node);
 }
 
 SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node)
@@ -217,23 +245,42 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
     return Action::Skip;
 }
 
-TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
+SyntaxVisitor::Action Binder::determineContextAndMakeSym()
 {
     switch (scopes_.top()->kind()) {
         case ScopeKind::File:
-        case ScopeKind::Block:
-            switch (tySyms_.top()->typeKind()) {
+        case ScopeKind::Block: {
+            TypeSymbol* contTySym = tySyms_.top();
+            switch (contTySym->typeKind()) {
                 case TypeKind::Function:
                     makeSymAndPushIt<FunctionSymbol>();
                     break;
 
                 case TypeKind::Array:
                 case TypeKind::Pointer:
-                case TypeKind::Named:
-                    switch (syms_.top()->kind())
-                    {
+                case TypeKind::Named: {
+                    Symbol* contSym = syms_.top();
+                    switch (contSym->kind()) {
                         case SymbolKind::Type:
-                            makeSymAndPushIt<FieldSymbol>();
+                            if (!(contSym->asType()->asNamedType()
+                                     && contSym->asType()->asNamedType()->name()
+                                     && contSym->asType()->asNamedType()->name()->asTagSymbolName())) {
+                                PSY_ESCAPE_VIA_RETURN(Action::Quit);
+                            }
+
+                            switch (contSym->asType()->asNamedType()->name()->asTagSymbolName()->kind()) {
+                                case TagSymbolNameKind::Union:
+                                case TagSymbolNameKind::Structure:
+                                    makeSymAndPushIt<FieldSymbol>();
+                                    break;
+
+                                case TagSymbolNameKind::Enumeration:
+                                    makeSymAndPushIt<EnumeratorSymbol>();
+                                    break;
+
+                                default:
+                                    PSY_ESCAPE_VIA_RETURN(Action::Quit);
+                            }
                             break;
 
                         case SymbolKind::Value:
@@ -243,20 +290,23 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                             break;
 
                         default:
-                            PSY_ESCAPE_VIA_RETURN(nullptr);
+                            PSY_ESCAPE_VIA_RETURN(Action::Quit);
                     }
                     break;
+                }
 
                 default:
-                    PSY_ESCAPE_VIA_RETURN(nullptr);
+                    PSY_ESCAPE_VIA_RETURN(Action::Quit);
             }
             break;
+        }
 
         case ScopeKind::Function:
             break;
 
-        case ScopeKind::FunctionPrototype:
-            switch (tySyms_.top()->typeKind()) {
+        case ScopeKind::FunctionPrototype: {
+            TypeSymbol* tySym = tySyms_.top();
+            switch (tySym->typeKind()) {
                 case TypeKind::Array: {
                     /*
                      * 6.7.6.3-7
@@ -287,39 +337,31 @@ TypeClass_NameableSymbol* Binder::nameableSymForIdentifierOrAbstractDeclarator()
                     break;
 
                 default:
-                    PSY_ESCAPE_VIA_RETURN(nullptr);
+                    PSY_ESCAPE_VIA_RETURN(Action::Quit);
             }
             makeSymAndPushIt<ParameterSymbol>();
             break;
+        }
 
         default:
-            PSY_ESCAPE_VIA_RETURN(nullptr);
+            PSY_ESCAPE_VIA_RETURN(Action::Quit);
     }
 
-    PSY_ASSERT(!syms_.empty(), return nullptr);
-    Symbol* sym = syms_.top();
-    return TypeClass_NameableSymbol::asInstance(sym);
+    return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    auto nameableSym = nameableSymForIdentifierOrAbstractDeclarator();
-    PSY_ASSERT(nameableSym, return Action::Quit);
-
-    std::unique_ptr<SymbolName> name(
-                new PlainSymbolName(node->identifierToken().valueText_c_str()));
-    nameableSym->setName(std::move(name));
+    determineContextAndMakeSym();
+    nameSymAtTop(node->identifierToken().valueText_c_str());
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax*)
 {
-    auto nameableSym = nameableSymForIdentifierOrAbstractDeclarator();
-    PSY_ASSERT(nameableSym, return Action::Quit);
-
-    std::unique_ptr<SymbolName> name(new EmptySymbolName);
-    nameableSym->setName(std::move(name));
+    determineContextAndMakeSym();
+    nameSymAtTop(nullptr);
 
     return Action::Skip;
 }
