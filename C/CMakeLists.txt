@@ -153,6 +153,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.h
     ${PROJECT_SOURCE_DIR}/symbols/ValueKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Enumerator.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Enumerator.h
     ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Field.cpp
     ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Field.h
     ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Parameter.cpp

@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,51 +18,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_VALUE_KIND_H__
-#define PSYCHE_C_VALUE_KIND_H__
+#include "ValueSymbol_Enumerator.h"
 
-#include "API.h"
-#include "Fwds.h"
+#include "symbols/Symbol_ALL.h"
+#include "binder/Scope.h"
 
-#include "../common/infra/Assertions.h"
-#include "../common/infra/Escape.h"
+#include <sstream>
 
-#include <cstdint>
-#include <string>
+using namespace psy;
+using namespace C;
+
+EnumeratorSymbol::EnumeratorSymbol(const SyntaxTree* tree,
+                                   const Scope* scope,
+                                   const Symbol* containingSym)
+    : ValueSymbol(tree,
+                  scope,
+                  containingSym,
+                  ValueKind::Enumerator)
+{}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The ValueKind enum.
- */
-enum class PSY_C_API ValueKind : std::uint8_t
+std::string to_string(const EnumeratorSymbol& sym)
 {
-    UNSPECIFIED = 0,
-    Enumerator,
-    Field,
-    Parameter,
-    Variable
-};
+    std::ostringstream oss;
+    oss << "{^enumerator |";
+    oss << " " << (sym.name() ? to_string(*sym.name()) : "name:NULL");
+    oss << " " << (sym.type() ? to_string(*sym.type()) : "type:NULL");
+    oss << " " << (sym.scope() ? to_string(sym.scope()->kind()) : "scope:NULL");
+    oss << " ^}";
 
-inline std::string PSY_C_API to_string(ValueKind valK)
-{
-    switch (valK) {
-        case ValueKind::Enumerator:
-            return "Enumerator";
-        case ValueKind::Field:
-            return "Field";
-        case ValueKind::Parameter:
-            return "Parameter";
-        case ValueKind::Variable:
-            return "Variable";
-        default:
-            PSY_ESCAPE_VIA_RETURN("");
-            return "<INVALID or UNSPECIFIED ValueKind>";
-    }
+    return oss.str();
 }
 
 } // C
-} // psy
-
-#endif
+} // psi

@@ -263,7 +263,8 @@ void BinderTest::case2050()
 {
     bind("struct { const int x ; } ;",
          Expectation()
-             .binding(DeclSummary().Value("x", ValueKind::Field)
+             .binding(DeclSummary()
+                      .Value("x", ValueKind::Field)
                       .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
@@ -271,7 +272,8 @@ void BinderTest::case2051()
 {
     bind("struct { const x y ; } ;",
          Expectation()
-             .binding(DeclSummary().Value("y", ValueKind::Field)
+             .binding(DeclSummary()
+                      .Value("y", ValueKind::Field)
                       .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
@@ -287,7 +289,8 @@ void BinderTest::case2053()
 {
     bind("struct { int const x ; } ;",
          Expectation()
-             .binding(DeclSummary().Value("x", ValueKind::Field)
+             .binding(DeclSummary()
+                      .Value("x", ValueKind::Field)
                       .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
@@ -295,7 +298,8 @@ void BinderTest::case2054()
 {
     bind("struct { x const y ; } ;",
          Expectation()
-             .binding(DeclSummary().Value("y", ValueKind::Field)
+             .binding(DeclSummary()
+                      .Value("y", ValueKind::Field)
                       .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 

@@ -116,7 +116,10 @@ void BinderTest::case3050()
                   .withNameKind(SymbolNameKind::Tagged)
                   .withNameSpaceKind(NameSpaceKind::Tags)
                   .withTagKind(TagSymbolNameKind::Enumeration)
-                  .withScopeKind(ScopeKind::File)));
+                  .withScopeKind(ScopeKind::File))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Enumerator)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTest::case3051(){}

@@ -139,6 +139,11 @@ private:
     Action visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax*);
     Action visitFieldDeclaration_DONE(const FieldDeclarationSyntax*);
 
+    virtual Action visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax*) override;
+    Action visitEnumMemberDeclaration_AtImplicitSpecifier(const EnumMemberDeclarationSyntax*);
+    Action visitEnumMemberDeclaration_AtDeclarator(const EnumMemberDeclarationSyntax*);
+    Action visitEnumMemberDeclaration_DONE(const EnumMemberDeclarationSyntax*);
+
     virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
     Action visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax*);
     Action visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax*);
@@ -150,16 +155,15 @@ private:
     Action visitFunctionDefinition_DONE(const FunctionDefinitionSyntax*);
 
     /* Specifiers */
-    Action actOnTypeSpecifier(const SpecifierSyntax*);
-    Action actOnTypeQualifier(const SpecifierSyntax*);
     virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) override;
     virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax*) override;
     virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) override;
     virtual Action visitTypedefName(const TypedefNameSyntax*) override;
     virtual Action visitTypeQualifier(const TypeQualifierSyntax*) override;
+    Action visitIfNotTypeQualifier(const SpecifierSyntax*);
+    Action visitIfTypeQualifier(const SpecifierSyntax*);
 
     /* Declarators */
-    Action actOnDeclarator(const DeclaratorSyntax*);
     virtual Action visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax*) override;
     virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax*) override;
     virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) override;
@@ -167,8 +171,9 @@ private:
     virtual Action visitParameterSuffix(const ParameterSuffixSyntax*) override;
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
-    TypeClass_TypeableSymbol* typeableSymForDeclarator();
-    TypeClass_NameableSymbol* nameableSymForIdentifierOrAbstractDeclarator();
+    Action determineContextAndMakeSym();
+    Action nameSym(const char* s);
+    Action typeSym();
 
     //------------//
     // Statements //
