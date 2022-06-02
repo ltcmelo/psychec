@@ -262,28 +262,20 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym()
                     Symbol* contSym = syms_.top();
                     switch (contSym->kind()) {
                         case SymbolKind::Type:
-                            switch (contSym->asType()->typeKind()) {
-                                case TypeKind::Named:
-                                    switch (contSym->asType()->asNamedType()->name()->kind()) {
-                                        case SymbolNameKind::Tagged:
-                                            switch (contSym->asType()->asNamedType()->name()->asTagSymbolName()->kind()) {
-                                                case TagSymbolNameKind::Union:
-                                                case TagSymbolNameKind::Structure:
-                                                    makeSymAndPushIt<FieldSymbol>();
-                                                    break;
+                            if (!(contSym->asType()->asNamedType()
+                                     && contSym->asType()->asNamedType()->name()
+                                     && contSym->asType()->asNamedType()->name()->asTagSymbolName())) {
+                                PSY_ESCAPE_VIA_RETURN(Action::Quit);
+                            }
 
-                                                case TagSymbolNameKind::Enumeration:
-                                                    makeSymAndPushIt<EnumeratorSymbol>();
-                                                    break;
+                            switch (contSym->asType()->asNamedType()->name()->asTagSymbolName()->kind()) {
+                                case TagSymbolNameKind::Union:
+                                case TagSymbolNameKind::Structure:
+                                    makeSymAndPushIt<FieldSymbol>();
+                                    break;
 
-                                                default:
-                                                    PSY_ESCAPE_VIA_RETURN(Action::Quit);
-                                            }
-                                            break;
-
-                                        default:
-                                            PSY_ESCAPE_VIA_RETURN(Action::Quit);
-                                    }
+                                case TagSymbolNameKind::Enumeration:
+                                    makeSymAndPushIt<EnumeratorSymbol>();
                                     break;
 
                                 default:
