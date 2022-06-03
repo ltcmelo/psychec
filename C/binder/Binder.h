@@ -77,7 +77,7 @@ private:
     std::stack<Scope*> scopes_;
     Scope* stashedScope_;
 
-    template <class SymT> SymT* pushSym(std::unique_ptr<SymT>);
+    template <class SymT> SymT* pushSym(const SyntaxNode* node, std::unique_ptr<SymT>);
     void popSym();
     using SymContT = std::stack<Symbol*>;
     SymContT syms_;
@@ -197,7 +197,7 @@ template <class SymT, class... SymTArgs>
 void Binder::makeSymAndPushIt(const SyntaxNode* node, SymTArgs... args)
 {
     std::unique_ptr<SymT> sym = makeSymOrTySym<SymT>(std::forward<SymTArgs>(args)...);
-    pushSym(std::move(sym));
+    pushSym(node, std::move(sym));
 }
 
 template <class SymT, class... SymTArgs>
