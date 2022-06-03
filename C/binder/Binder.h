@@ -89,9 +89,10 @@ private:
 
     std::stack<FunctionTypeSymbol*> pendingFunTySyms_;
 
-    template <class SymT, class... Args> std::unique_ptr<SymT> makeSymOrTySym(Args... args);
-    template <class SymT, class... Args> void makeSymAndPushIt(Args... arg);
-    template <class SymT, class... Args> void makeTySymAndPushIt(Args... arg);
+    template <class SymT, class... SymTArgs> std::unique_ptr<SymT> makeSymOrTySym(SymTArgs... args);
+    template <class DeclT, class SymT, class... SymTArgs> void makeSymAndPushIt(
+            const DeclT* node, SymTArgs... arg);
+    template <class SymT, class... SymTArgs> void makeTySymAndPushIt(SymTArgs... arg);
 
     struct DiagnosticsReporter
     {
@@ -171,9 +172,10 @@ private:
     virtual Action visitParameterSuffix(const ParameterSuffixSyntax*) override;
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
-    Action determineContextAndMakeSym();
     Action nameSymAtTop(const char* s);
     Action typeSymAtTopAndPopIt();
+
+    template <class DeclT> Action determineContextAndMakeSym(const DeclT* node);
 
     //------------//
     // Statements //
@@ -182,27 +184,29 @@ private:
     virtual Action visitDeclarationStatement(const DeclarationStatementSyntax*) override;
 };
 
-template <class SymT, class... Args>
-std::unique_ptr<SymT> Binder::makeSymOrTySym(Args... args)
+template <class SymT, class... SymTArgs>
+std::unique_ptr<SymT> Binder::makeSymOrTySym(SymTArgs... args)
 {
     std::unique_ptr<SymT> sym(new SymT(tree_,
                                        scopes_.top(),
                                        syms_.top(),
-                                       std::forward<Args>(args)...));
+                                       std::forward<SymTArgs>(args)...));
     return sym;
 }
 
-template <class SymT, class... Args>
-void Binder::makeSymAndPushIt(Args... args)
+template <class DeclT,
+          class SymT,
+          class... SymTArgs>
+void Binder::makeSymAndPushIt(const DeclT* node, SymTArgs... args)
 {
-    std::unique_ptr<SymT> sym = makeSymOrTySym<SymT>(std::forward<Args>(args)...);
+    std::unique_ptr<SymT> sym = makeSymOrTySym<SymT>(std::forward<SymTArgs>(args)...);
     pushSym(std::move(sym));
 }
 
-template <class SymT, class... Args>
-void Binder::makeTySymAndPushIt(Args... args)
+template <class SymT, class... SymTArgs>
+void Binder::makeTySymAndPushIt(SymTArgs... args)
 {
-    std::unique_ptr<SymT> sym = makeSymOrTySym<SymT>(std::forward<Args>(args)...);
+    std::unique_ptr<SymT> sym = makeSymOrTySym<SymT>(std::forward<SymTArgs>(args)...);
     pushTySym(std::move(sym));
 }
 

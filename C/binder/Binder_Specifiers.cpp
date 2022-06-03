@@ -70,7 +70,10 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
             PSY_ESCAPE_VIA_RETURN(Action::Quit);
     }
 
-    makeSymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
+    makeSymAndPushIt<StructOrUnionDeclarationSyntax, NamedTypeSymbol>(
+                node,
+                tagK,
+                tySpec->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,
@@ -79,8 +82,10 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax* node)
 {
-    makeSymAndPushIt<NamedTypeSymbol>(TagSymbolNameKind::Enumeration,
-                                      node->typeSpecifier()->tagToken().valueText_c_str());
+    makeSymAndPushIt<EnumDeclarationSyntax, NamedTypeSymbol>(
+                node,
+                TagSymbolNameKind::Enumeration,
+                node->typeSpecifier()->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,

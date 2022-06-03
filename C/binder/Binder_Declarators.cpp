@@ -122,7 +122,7 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDec
 
 SyntaxVisitor::Action Binder::visitEnumMemberDeclaration_AtDeclarator(const EnumMemberDeclarationSyntax* node)
 {
-    determineContextAndMakeSym();
+    determineContextAndMakeSym(node);
     nameSymAtTop(node->identifierToken().valueText_c_str());
     typeSymAtTopAndPopIt();
 
@@ -245,7 +245,8 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::determineContextAndMakeSym()
+template <class DeclT>
+SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DeclT* node)
 {
     switch (scopes_.top()->kind()) {
         case ScopeKind::File:
@@ -253,7 +254,7 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym()
             TypeSymbol* tySym = tySyms_.top();
             switch (tySym->typeKind()) {
                 case TypeKind::Function:
-                    makeSymAndPushIt<FunctionSymbol>();
+                    makeSymAndPushIt<DeclT, FunctionSymbol>(node);
                     break;
 
                 case TypeKind::Array:
@@ -270,11 +271,11 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym()
                             switch (sym->asType()->asNamedType()->name()->asTagSymbolName()->kind()) {
                                 case TagSymbolNameKind::Union:
                                 case TagSymbolNameKind::Structure:
-                                    makeSymAndPushIt<FieldSymbol>();
+                                    makeSymAndPushIt<DeclT, FieldSymbol>(node);
                                     break;
 
                                 case TagSymbolNameKind::Enumeration:
-                                    makeSymAndPushIt<EnumeratorSymbol>();
+                                    makeSymAndPushIt<DeclT, EnumeratorSymbol>(node);
                                     break;
 
                                 default:
@@ -285,7 +286,7 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym()
                         case SymbolKind::Value:
                         case SymbolKind::Function:
                         case SymbolKind::Library:
-                            makeSymAndPushIt<VariableSymbol>();
+                            makeSymAndPushIt<DeclT, VariableSymbol>(node);
                             break;
 
                         default:
@@ -338,7 +339,7 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym()
                 default:
                     PSY_ESCAPE_VIA_RETURN(Action::Quit);
             }
-            makeSymAndPushIt<ParameterSymbol>();
+            makeSymAndPushIt<DeclT, ParameterSymbol>(node);
             break;
         }
 
@@ -351,15 +352,15 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym()
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    determineContextAndMakeSym();
+    determineContextAndMakeSym(node);
     nameSymAtTop(node->identifierToken().valueText_c_str());
 
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax*)
+SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax* node)
 {
-    determineContextAndMakeSym();
+    determineContextAndMakeSym(node);
     nameSymAtTop(nullptr);
 
     return Action::Skip;
