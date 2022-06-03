@@ -65,6 +65,8 @@ PSY_INTERNAL:
     Symbol* storeSymDEF(std::unique_ptr<Symbol> sym);
     Symbol* storeSymUSE(std::unique_ptr<Symbol> sym);
 
+    void associateSym();
+
 private:
     // Unavailable
     SemanticModel(const SemanticModel&) = delete;

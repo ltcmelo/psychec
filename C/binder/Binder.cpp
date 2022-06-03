@@ -137,7 +137,7 @@ void Binder::popTySym()
 
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    makeSymAndPushIt<TranslationUnitSyntax, LibrarySymbol>(node);
+    makeSymAndPushIt<LibrarySymbol>(node);
 
     openScope(ScopeKind::File);
 

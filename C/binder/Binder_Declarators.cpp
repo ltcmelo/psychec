@@ -254,7 +254,7 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DeclT* node)
             TypeSymbol* tySym = tySyms_.top();
             switch (tySym->typeKind()) {
                 case TypeKind::Function:
-                    makeSymAndPushIt<DeclT, FunctionSymbol>(node);
+                    makeSymAndPushIt<FunctionSymbol>(node);
                     break;
 
                 case TypeKind::Array:
@@ -271,11 +271,11 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DeclT* node)
                             switch (sym->asType()->asNamedType()->name()->asTagSymbolName()->kind()) {
                                 case TagSymbolNameKind::Union:
                                 case TagSymbolNameKind::Structure:
-                                    makeSymAndPushIt<DeclT, FieldSymbol>(node);
+                                    makeSymAndPushIt<FieldSymbol>(node);
                                     break;
 
                                 case TagSymbolNameKind::Enumeration:
-                                    makeSymAndPushIt<DeclT, EnumeratorSymbol>(node);
+                                    makeSymAndPushIt<EnumeratorSymbol>(node);
                                     break;
 
                                 default:
@@ -286,7 +286,7 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DeclT* node)
                         case SymbolKind::Value:
                         case SymbolKind::Function:
                         case SymbolKind::Library:
-                            makeSymAndPushIt<DeclT, VariableSymbol>(node);
+                            makeSymAndPushIt<VariableSymbol>(node);
                             break;
 
                         default:
@@ -339,7 +339,7 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DeclT* node)
                 default:
                     PSY_ESCAPE_VIA_RETURN(Action::Quit);
             }
-            makeSymAndPushIt<DeclT, ParameterSymbol>(node);
+            makeSymAndPushIt<ParameterSymbol>(node);
             break;
         }
 

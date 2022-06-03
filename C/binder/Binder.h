@@ -90,8 +90,7 @@ private:
     std::stack<FunctionTypeSymbol*> pendingFunTySyms_;
 
     template <class SymT, class... SymTArgs> std::unique_ptr<SymT> makeSymOrTySym(SymTArgs... args);
-    template <class DeclT, class SymT, class... SymTArgs> void makeSymAndPushIt(
-            const DeclT* node, SymTArgs... arg);
+    template <class SymT, class... SymTArgs> void makeSymAndPushIt(const SyntaxNode* node, SymTArgs... arg);
     template <class SymT, class... SymTArgs> void makeTySymAndPushIt(SymTArgs... arg);
 
     struct DiagnosticsReporter
@@ -194,10 +193,8 @@ std::unique_ptr<SymT> Binder::makeSymOrTySym(SymTArgs... args)
     return sym;
 }
 
-template <class DeclT,
-          class SymT,
-          class... SymTArgs>
-void Binder::makeSymAndPushIt(const DeclT* node, SymTArgs... args)
+template <class SymT, class... SymTArgs>
+void Binder::makeSymAndPushIt(const SyntaxNode* node, SymTArgs... args)
 {
     std::unique_ptr<SymT> sym = makeSymOrTySym<SymT>(std::forward<SymTArgs>(args)...);
     pushSym(std::move(sym));
