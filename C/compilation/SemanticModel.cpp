@@ -51,6 +51,16 @@ SemanticModel::SemanticModel(Compilation* compilation, const SyntaxTree* tree)
 SemanticModel::~SemanticModel()
 {}
 
+const Compilation* SemanticModel::compilation() const
+{
+    return P->compilation_;
+}
+
+const Symbol *SemanticModel::declaredSymbol(const DeclaratorSyntax* node) const
+{
+    return nullptr;
+}
+
 Symbol* SemanticModel::storeSymDEF(std::unique_ptr<Symbol> sym)
 {
     auto& syms = P->compilation_->assembly()->symDEFs_;

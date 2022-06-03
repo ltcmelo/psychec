@@ -44,6 +44,18 @@ class PSY_C_API SemanticModel
 public:
     ~SemanticModel();
 
+    /**
+     * The Compilation which \c this SemanticModel was computed from.
+     */
+    const Compilation* compilation() const;
+
+    //!@{
+    /**
+     * The Symbol declared by the given by SyntaxNode \p node.
+     */
+    const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
+    //!@}
+
 PSY_INTERNAL:
     PSY_GRANT_ACCESS(Binder);
     PSY_GRANT_ACCESS(Compilation);
