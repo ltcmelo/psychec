@@ -41,15 +41,17 @@ class Binder;
  */
 class PSY_C_API SemanticModel
 {
-    friend class Binder;
-
 public:
     ~SemanticModel();
 
 PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
     PSY_GRANT_ACCESS(Compilation);
 
     SemanticModel(Compilation* compilation, const SyntaxTree* tree);
+
+    Symbol* storeSymDEF(std::unique_ptr<Symbol> sym);
+    Symbol* storeSymUSE(std::unique_ptr<Symbol> sym);
 
 private:
     // Unavailable
@@ -57,9 +59,6 @@ private:
     SemanticModel& operator=(const SemanticModel&) = delete;
 
     DECL_PIMPL(SemanticModel)
-
-    Symbol* storeSymDEF(std::unique_ptr<Symbol> sym);
-    Symbol* storeSymUSE(std::unique_ptr<Symbol> sym);
 };
 
 } // C
