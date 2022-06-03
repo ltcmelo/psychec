@@ -62,10 +62,8 @@ PSY_INTERNAL:
 
     SemanticModel(Compilation* compilation, const SyntaxTree* tree);
 
-    Symbol* storeSymDEF(std::unique_ptr<Symbol> sym);
-    Symbol* storeSymUSE(std::unique_ptr<Symbol> sym);
-
-    void associateSym();
+    Symbol* storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym);
+    Symbol* storeUsedSym(std::unique_ptr<Symbol> sym);
 
 private:
     // Unavailable

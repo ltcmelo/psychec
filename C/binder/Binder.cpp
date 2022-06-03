@@ -97,7 +97,7 @@ template <class SymT>
 SymT* Binder::pushSym(const SyntaxNode* node, std::unique_ptr<SymT> sym)
 {
     syms_.push(sym.get());
-    return static_cast<SymT*>(semaModel_->storeSymDEF(std::move(sym)));
+    return static_cast<SymT*>(semaModel_->storeDeclaredSym(node, std::move(sym)));
 }
 
 template FunctionSymbol* Binder::pushSym<FunctionSymbol>(const SyntaxNode*, std::unique_ptr<FunctionSymbol>);
@@ -118,7 +118,7 @@ template <class TySymT>
 TySymT* Binder::pushTySym(std::unique_ptr<TySymT> tySym)
 {
     tySyms_.push(tySym.get());
-    return static_cast<TySymT*>(semaModel_->storeSymUSE(std::move(tySym)));
+    return static_cast<TySymT*>(semaModel_->storeUsedSym(std::move(tySym)));
 }
 
 template ArrayTypeSymbol* Binder::pushTySym<ArrayTypeSymbol>(std::unique_ptr<ArrayTypeSymbol>);
