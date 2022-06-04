@@ -70,7 +70,7 @@ class TestSuite
 {
 public:
     virtual ~TestSuite() {}
-    virtual std::string name() const = 0;
+    virtual std::string description() const = 0;
     virtual std::tuple<int, int> testAll() = 0;
     virtual void printSummary() const = 0;
 

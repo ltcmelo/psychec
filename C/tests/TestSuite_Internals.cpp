@@ -47,8 +47,6 @@
 using namespace psy;
 using namespace C;
 
-const std::string InternalsTestSuite::Name = "C internals test suite";
-
 InternalsTestSuite::InternalsTestSuite()
 {}
 
@@ -72,12 +70,17 @@ std::tuple<int, int> InternalsTestSuite::testAll()
     return res;
 }
 
+std::string InternalsTestSuite::description() const
+{
+    return "C internals test suite";
+}
+
 void InternalsTestSuite::printSummary() const
 {
-    std::cout << name() << std::endl;
+    std::cout << description() << std::endl;
     for (auto const& tester : testers_) {
-        std::cout << tester->name() << " passed: " << tester->totalPassed() << std::endl
-                  << std::string(tester->name().length(), ' ') << " failed: " << tester->totalFailed() << std::endl;
+        std::cout << "    " << tester->name() << " passed: " << tester->totalPassed() << std::endl
+                  << "    " << std::string(tester->name().length(), ' ') << " failed: " << tester->totalFailed() << std::endl;
     }
 }
 

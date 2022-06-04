@@ -49,10 +49,7 @@ public:
     InternalsTestSuite();
 
     virtual std::tuple<int, int> testAll() override;
-
-    static const std::string Name;
-    virtual std::string name() const override { return Name; }
-
+    virtual std::string description() const override;
     virtual void printSummary() const override;
 
 private:
