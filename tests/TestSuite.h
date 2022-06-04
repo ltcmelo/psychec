@@ -83,7 +83,7 @@ public:
                   << std::string(this->name().length(), ' ') << " failed: " << cntER_ << std::endl;
     }
 
-    static void runSuite();
+    static void runTests();
 
 protected:
     virtual std::string name() const = 0;

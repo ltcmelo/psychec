@@ -18,8 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Test.h"
-
+#include "TestSuite_Internals.h"
 
 #include "compilation/Assembly.h"
 #include "compilation/Compilation.h"
@@ -44,13 +43,13 @@
 using namespace psy;
 using namespace C;
 
-Test::Test()
+InternalsTestSuite::InternalsTestSuite()
 {}
 
-Test::~Test()
+InternalsTestSuite::~InternalsTestSuite()
 {}
 
-bool Test::checkErrorAndWarn(Expectation X)
+bool InternalsTestSuite::checkErrorAndWarn(Expectation X)
 {
     int E_cnt = 0;
     int W_cnt = 0;
@@ -120,22 +119,22 @@ bool Test::checkErrorAndWarn(Expectation X)
     return true;
 }
 
-void Test::parseDeclaration(std::string source, Expectation X)
+void InternalsTestSuite::parseDeclaration(std::string source, Expectation X)
 {
     parse(source, X, SyntaxTree::SyntaxCategory::Declarations);
 }
 
-void Test::parseExpression(std::string source, Expectation X)
+void InternalsTestSuite::parseExpression(std::string source, Expectation X)
 {
     parse(source, X, SyntaxTree::SyntaxCategory::Expressions);
 }
 
-void Test::parseStatement(std::string source, Expectation X)
+void InternalsTestSuite::parseStatement(std::string source, Expectation X)
 {
     parse(source, X, SyntaxTree::SyntaxCategory::Statements);
 }
 
-void Test::parse(std::string source,
+void InternalsTestSuite::parse(std::string source,
                          Expectation X,
                          SyntaxTree::SyntaxCategory cat)
 {

@@ -29,7 +29,7 @@
 using namespace psy;
 using namespace C;
 
-void TestSuite::runSuite()
+void TestSuite::runTests()
 {
     std::cout << "TESTS..." << std::endl;
 

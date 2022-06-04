@@ -33,28 +33,25 @@
 namespace psy {
 namespace C {
 
-class Test : public TestSuite
+class InternalsTestSuite : public TestSuite
 {
 public:
-    virtual ~Test();
+    virtual ~InternalsTestSuite();
 
 protected:
-    Test();
+    InternalsTestSuite();
 
     bool checkErrorAndWarn(Expectation X);
 
-    void parse(std::string text,
-               Expectation X = Expectation(),
-               SyntaxTree::SyntaxCategory cat = SyntaxTree::SyntaxCategory::UNSPECIFIED);
-    void parseDeclaration(std::string text,
-                          Expectation X = Expectation());
-    void parseExpression(std::string text,
-                         Expectation X = Expectation());
-    void parseStatement(std::string text,
-                        Expectation X = Expectation());
+    void parseDeclaration(std::string text, Expectation X = Expectation());
+    void parseExpression(std::string text, Expectation X = Expectation());
+    void parseStatement(std::string text, Expectation X = Expectation());
 
-    virtual void bind(std::string text,
-                      Expectation X = Expectation()) {}
+    virtual void parse(std::string text,
+                       Expectation X = Expectation(),
+                       SyntaxTree::SyntaxCategory synCat = SyntaxTree::SyntaxCategory::UNSPECIFIED);
+
+    virtual void bind(std::string text, Expectation X = Expectation()) {}
 
     std::unique_ptr<SyntaxTree> tree_;
     std::unique_ptr<Compilation> compilation_;

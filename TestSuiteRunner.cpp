@@ -28,7 +28,7 @@ int main()
 {
     try
     {
-        TestSuite::runSuite();
+        TestSuite::runTests();
     }
     catch (...)
     {

@@ -21,14 +21,14 @@
 #ifndef PSYCHE_C_TYPE_CHECKER_TEST_H__
 #define PSYCHE_C_TYPE_CHECKER_TEST_H__
 
-#include "Test.h"
+#include "TestSuite_Internals.h"
 
 #define TEST_TYPE_CHECKER(Function) TestFunction { &TypeCheckerTest::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class TypeCheckerTest final : public Test
+class TypeCheckerTest final : public InternalsTestSuite
 {
 public:
     static const std::string Name;

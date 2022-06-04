@@ -21,15 +21,15 @@
 #ifndef PSYCHE_C_BINDER_TEST_H__
 #define PSYCHE_C_BINDER_TEST_H__
 
-#include "Test.h"
-#include "C/Fwds.h"
+#include "Fwds.h"
+#include "TestSuite_Internals.h"
 
 #define TEST_BINDER(Function) TestFunction { &BinderTest::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class BinderTest final : public Test
+class BinderTest final : public InternalsTestSuite
 {
 public:
     static const std::string Name;

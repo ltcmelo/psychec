@@ -38,7 +38,7 @@
 
 namespace psy {
 
-namespace C { class Test; }
+namespace C { class InternalsTestSuite; }
 
 /**
  * The Diagnostics class.
@@ -77,7 +77,7 @@ private:
     std::string::size_type outputIndent_;
 
     friend std::ostream& operator<<(std::ostream& os, const Diagnostic& diagnostic);
-    friend class C::Test;
+    friend class C::InternalsTestSuite;
 };
 
 PSY_API std::ostream& operator<<(std::ostream& os, const Diagnostic& diagnostic);

@@ -21,14 +21,14 @@
 #ifndef PSYCHE_C_PARSER_TEST_H__
 #define PSYCHE_C_PARSER_TEST_H__
 
-#include "Test.h"
+#include "TestSuite_Internals.h"
 
 #define TEST_PARSER(Function) TestFunction { &ParserTest::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class ParserTest final : public Test
+class ParserTest final : public InternalsTestSuite
 {
 public:
     static const std::string Name;
