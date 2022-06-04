@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TestRunner.h"
+#include "TestSuite.h"
 
 #include "../C/tests/BinderTest.h"
 #include "../C/tests/ParserTest.h"
@@ -29,7 +29,7 @@
 using namespace psy;
 using namespace C;
 
-void TestRunner::runSuite()
+void TestSuite::runSuite()
 {
     std::cout << "TESTS..." << std::endl;
 

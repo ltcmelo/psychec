@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_TEST_RUNNER_H__
-#define PSYCHE_TEST_RUNNER_H__
+#ifndef PSYCHE_TEST_SUITE_H__
+#define PSYCHE_TEST_SUITE_H__
 
 #include <iostream>
 #include <string>
@@ -67,15 +67,15 @@ namespace psy {
 
 struct TestFailed {};
 
-class TestRunner
+class TestSuite
 {
 public:
-    TestRunner()
+    TestSuite()
         : cntOK_(0)
         , cntER_(0)
     {}
 
-    virtual ~TestRunner() {}
+    virtual ~TestSuite() {}
 
     void summary()
     {

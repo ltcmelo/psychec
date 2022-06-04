@@ -26,14 +26,14 @@
 #include "TestExpectation.h"
 
 #include "C/SyntaxTree.h"
-#include "tests/TestRunner.h"
+#include "tests/TestSuite.h"
 
 #define CROSS_REFERENCE_TEST(CASE) { auto x = &CASE; (void)x; } \
 
 namespace psy {
 namespace C {
 
-class Test : public TestRunner
+class Test : public TestSuite
 {
 public:
     virtual ~Test();

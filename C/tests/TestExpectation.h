@@ -30,7 +30,7 @@
 #include "symbols/TypeKind.h"
 #include "symbols/TypeKind_Builtin.h"
 #include "symbols/TypeKind_Named.h"
-#include "tests/TestRunner.h"
+#include "tests/TestSuite.h"
 
 #include <functional>
 #include <memory>
