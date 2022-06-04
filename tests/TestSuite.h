@@ -25,45 +25,6 @@
 #include <string>
 #include <tuple>
 
-#define PSYCHE_TEST_FAIL(MSG) \
-    do { \
-        std::cout << "\n!\tFAIL\n" \
-                  << "\tReason: " << MSG << "\n" \
-                  << "\t\t" << __FILE__ << ":" << __LINE__ << std::endl; \
-        throw TestFailed(); \
-    } while (0)
-
-#define PSYCHE_EXPECT_EQ(EXPECTED, ACTUAL, EQ) \
-    do { \
-        if (!(EQ(EXPECTED, ACTUAL))) { \
-            std::cout << "\n!\tFAIL\n" \
-                      << "\t\tExpected: " << EXPECTED << "\n" \
-                      << "\t\tActual  : " << ACTUAL << "\n" \
-                      << "\t\t" << __FILE__ << ":" << __LINE__ << std::endl; \
-            throw TestFailed(); \
-        } \
-    } while (0)
-
-#define PSYCHE_EXPECT(EXPR, BOOLEAN) \
-    do { \
-        if (bool(EXPR) != BOOLEAN) { \
-            std::cout << "\n!\tFAIL\n" \
-                      << "\t\tExpression is NOT " << #BOOLEAN << "\n" \
-                      << "\t\t" << __FILE__ << ":" << __LINE__ << std::endl; \
-            throw TestFailed(); \
-        } \
-    } while (0)
-
-#define PSYCHE_EQ_OPR(A, B) A == B
-#define PSYCHE_STD_EQUAL(A, B) std::equal(A.begin(), A.end(), B.begin())
-#define PSYCHE_EXPECT_PTR_EQ(EXPECTED, ACTUAL) PSYCHE_EXPECT_EQ(EXPECTED, ACTUAL, PSYCHE_EQ_OPR)
-#define PSYCHE_EXPECT_STR_EQ(EXPECTED, ACTUAL) PSYCHE_EXPECT_EQ(EXPECTED, ACTUAL, PSYCHE_EQ_OPR)
-#define PSYCHE_EXPECT_INT_EQ(EXPECTED, ACTUAL) PSYCHE_EXPECT_EQ(EXPECTED, ACTUAL, PSYCHE_EQ_OPR)
-#define PSYCHE_EXPECT_CONTAINER_EQ(EXPECTED, ACTUAL) PSYCHE_EXPECT_EQ(EXPECTED, ACTUAL, PSYCHE_STD_EQUAL)
-#define PSYCHE_EXPECT_TRUE(EXPR) PSYCHE_EXPECT(EXPR, true)
-#define PSYCHE_EXPECT_FALSE(EXPR) PSYCHE_EXPECT(EXPR, false)
-
-
 namespace psy {
 
 class TestSuite
