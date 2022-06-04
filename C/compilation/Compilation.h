@@ -46,7 +46,7 @@ class SemanticModel;
  */
 class PSY_C_API Compilation
 {
-    friend class BinderTest;
+    friend class InternalsTestSuite;
 
 public:
     ~Compilation();

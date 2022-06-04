@@ -23,23 +23,30 @@
 
 #include "Fwds.h"
 #include "TestSuite_Internals.h"
+#include "tests/Tester.h"
 
 #define TEST_BINDER(Function) TestFunction { &BinderTest::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class BinderTest final : public InternalsTestSuite
+class BinderTest final : public Tester
 {
 public:
+    BinderTest(TestSuite* suite)
+        : Tester(suite)
+    {}
+
     static const std::string Name;
-
     virtual std::string name() const override { return Name; }
+    void setUp() override;
+    void tearDown() override;
 
-    void testAll() override;
+    void testBinder();
 
-    virtual void bind(std::string text,
-                      Expectation X = Expectation()) override;
+    void bind(std::string text, Expectation X = Expectation());
+
+    using TestFunction = std::pair<std::function<void(BinderTest*)>, const char*>;
 
     /*
         Functions
@@ -2207,15 +2214,6 @@ public:
     void case3597();
     void case3598();
     void case3599();
-
-
-private:
-    using TestFunction = std::pair<std::function<void(BinderTest*)>, const char*>;
-
-    void setUp() override;
-    void tearDown() override;
-
-    void f();
 
     std::vector<TestFunction> tests_
     {

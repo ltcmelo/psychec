@@ -20,34 +20,28 @@
 
 #include "TestSuite.h"
 
-#include "../C/tests/BinderTest.h"
-#include "../C/tests/ParserTest.h"
-#include "../C/tests/TypeCheckerTest.h"
+#include "C/tests/TestSuite_Internals.h"
 
 #include <iostream>
 
 using namespace psy;
-using namespace C;
 
 void TestSuite::runTests()
 {
     std::cout << "TESTS..." << std::endl;
 
-    // C
-    std::cout << "  C" << std::endl;
-    ParserTest P;
-    P.testAll();
+    C::InternalsTestSuite suite0;
+    auto [passed0, failed0] = suite0.testAll();
 
-    BinderTest B;
-    B.testAll();
 
-    P.summary();
-    B.summary();
+    suite0.printSummary();
 
-    auto totalFail = P.cntER_ + B.cntER_;
-    if (!totalFail)
+    auto accErrorCnt = failed0; //+ B.cntER_;
+    if (!accErrorCnt)
         std::cout << "All passed" << std::endl;
     else
         std::cout << std::string(17, '.') << " \n"
-                  << "> Total failures: " << P.cntER_ + B.cntER_ << std::endl;
+                  << "> Total failures: "
+                  << failed0 // + B.cntER_
+                  << std::endl;
 }

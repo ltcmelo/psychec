@@ -25,9 +25,29 @@ using namespace C;
 
 const std::string ParserTest::Name = "PARSER";
 
-void ParserTest::testAll()
+void ParserTest::testParser()
 {
     return run<ParserTest>(tests_);
+}
+
+void ParserTest::parseDeclaration(std::string text, Expectation X)
+{
+    (static_cast<InternalsTestSuite*>(suite_)->parseDeclaration(text, X));
+}
+
+void ParserTest::parseExpression(std::string text, Expectation X)
+{
+    (static_cast<InternalsTestSuite*>(suite_)->parseExpression(text, X));
+}
+
+void ParserTest::parseStatement(std::string text, Expectation X)
+{
+    (static_cast<InternalsTestSuite*>(suite_)->parseStatement(text, X));
+}
+
+void ParserTest::parse(std::string text, Expectation X, SyntaxTree::SyntaxCategory synCat)
+{
+    (static_cast<InternalsTestSuite*>(suite_)->parse(text, X, synCat));
 }
 
 void ParserTest::setUp()

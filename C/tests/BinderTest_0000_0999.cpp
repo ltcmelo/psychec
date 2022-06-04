@@ -2402,14 +2402,14 @@ void BinderTest::case0921()
 {
     CROSS_REFERENCE_TEST(ParserTest::case0437);
 
-    parse("int struct x y ;");
+    bind("int struct x y ;");
 }
 
 void BinderTest::case0922()
 {
     CROSS_REFERENCE_TEST(ParserTest::case0438);
 
-    parse("struct x int y ;");
+    bind("struct x int y ;");
 }
 
 void BinderTest::case0923()

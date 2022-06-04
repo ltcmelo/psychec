@@ -23,6 +23,7 @@
 
 #include <iostream>
 #include <string>
+#include <tuple>
 
 #define PSYCHE_TEST_FAIL(MSG) \
     do { \
@@ -65,60 +66,15 @@
 
 namespace psy {
 
-struct TestFailed {};
-
 class TestSuite
 {
 public:
-    TestSuite()
-        : cntOK_(0)
-        , cntER_(0)
-    {}
-
     virtual ~TestSuite() {}
-
-    void summary()
-    {
-        std::cout << this->name() << " passed: " << cntOK_ << std::endl
-                  << std::string(this->name().length(), ' ') << " failed: " << cntER_ << std::endl;
-    }
+    virtual std::string name() const = 0;
+    virtual std::tuple<int, int> testAll() = 0;
+    virtual void printSummary() const = 0;
 
     static void runTests();
-
-protected:
-    virtual std::string name() const = 0;
-
-    template <class TesterT, class TestContT>
-    void run(const TestContT& tests)
-    {
-        for (auto testData : tests) {
-            setUp();
-
-            curTestName_ = testData.second;
-            std::cout << "\t" << TesterT::Name << "-" << curTestName_ << "... ";
-
-            try {
-                auto curTestFunc = testData.first;
-                curTestFunc(static_cast<TesterT*>(this));
-                std::cout << "OK";
-                ++cntOK_;
-            } catch (const TestFailed&) {
-                ++cntER_;
-            }
-            std::cout << "\n\t-------------------------------------------------" << std::endl;
-
-            tearDown();
-        }
-    }
-
-    virtual void testAll() = 0;
-
-    virtual void setUp() {}
-    virtual void tearDown() {}
-
-    int cntOK_;
-    int cntER_;
-    std::string curTestName_;
 };
 
 } // psy

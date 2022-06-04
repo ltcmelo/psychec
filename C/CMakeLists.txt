@@ -207,12 +207,12 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/tests/ParserTest_1000_1999.cpp
     ${PROJECT_SOURCE_DIR}/tests/ParserTest_2000_2999.cpp
     ${PROJECT_SOURCE_DIR}/tests/ParserTest_3000_3999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestSuite_Internals.h
-    ${PROJECT_SOURCE_DIR}/tests/TestSuite_Internals.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestExpectation.h
     ${PROJECT_SOURCE_DIR}/tests/TestExpectation.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TypeCheckerTest.h
-    ${PROJECT_SOURCE_DIR}/tests/TypeCheckerTest.cpp
+    ${PROJECT_SOURCE_DIR}/tests/TestSuite_API.h
+    ${PROJECT_SOURCE_DIR}/tests/TestSuite_API.cpp
+    ${PROJECT_SOURCE_DIR}/tests/TestSuite_Internals.h
+    ${PROJECT_SOURCE_DIR}/tests/TestSuite_Internals.cpp
 )
 
 foreach(file ${PLUGIN_SOURCES})
