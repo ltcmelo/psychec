@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2020/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,49 +18,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_ASSEMBLY_H__
-#define PSYCHE_C_ASSEMBLY_H__
-
-#include "API.h"
-#include "Fwds.h"
+#include "BinderTester.h"
 
 #include "symbols/Symbol.h"
+#include "parser/Unparser.h"
+#include "symbols/Symbol_ALL.h"
+#include "syntax/SyntaxLexeme_ALL.h"
+#include "syntax/SyntaxNamePrinter.h"
+#include "syntax/SyntaxNodes.h"
 
-#include "../common/infra/InternalAccess.h"
+using namespace psy;
+using namespace C;
 
-#include <functional>
-#include <unordered_set>
-#include <vector>
+const std::string BinderTester::Name = "BINDER";
 
-namespace psy {
-namespace C {
-
-/**
- * \brief The Assembly class.
- *
- * An assembly is the result produced by a Compilation.
- */
-class PSY_C_API Assembly
+void BinderTester::testBinder()
 {
-    friend class InternalsTestSuite;
+    // TEMPORARY
+    std::vector<TestFunction> active;
+    for (auto testData : tests_) {
+        auto n = std::string(testData.second);
+        auto p = n.find("case09");
+        if (p != std::string::npos) {
+            std::cout << "\t\tskip (TEMP) " << n << std::endl;
+            continue;
+        }
+        active.push_back(testData);
+    }
 
-public:
-    /**
-     * The Symbols defined in \c this Assembly.
-     */
-    std::vector<const Symbol*> symbols() const;
+    return run<BinderTester>(active);
+}
 
-PSY_INTERNAL:
-    PSY_GRANT_ACCESS(SemanticModel);
+void BinderTester::bind(std::string text, Expectation X)
+{
+    (static_cast<InternalsTestSuite*>(suite_)->bind(text, X));
+}
 
-    Symbol* findSymDEF(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const;
+void BinderTester::setUp()
+{}
 
-private:
-    std::unordered_set<std::unique_ptr<Symbol>> symDEFs_;
-    std::vector<std::unique_ptr<Symbol>> symUSEs_;
-};
-
-} // C
-} // psy
-
-#endif
+void BinderTester::tearDown()
+{}

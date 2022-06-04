@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "tests/TestRunner.h"
+#include "tests/TestSuite.h"
 
 #include <iostream>
 
@@ -28,7 +28,7 @@ int main()
 {
     try
     {
-        TestRunner::runSuite();
+        TestSuite::runTests();
     }
     catch (...)
     {

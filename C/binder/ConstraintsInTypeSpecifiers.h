@@ -37,7 +37,7 @@ class Binder;
 
 class PSY_C_NON_API ConstraintsInTypeSpecifiers
 {
-    friend class BinderTest;
+    friend class BinderTester;
 
 public:
     static void TypeSpecifierMissingDefaultsToInt(SyntaxToken declTk,

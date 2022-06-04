@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2020 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,11 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_TEST_RUNNER_H__
-#define PSYCHE_TEST_RUNNER_H__
+#ifndef PSYCHE_TESTER_H__
+#define PSYCHE_TESTER_H__
 
-#include <iostream>
 #include <string>
+#include <iostream>
 
 #define PSYCHE_TEST_FAIL(MSG) \
     do { \
@@ -62,31 +62,35 @@
 #define PSYCHE_EXPECT_TRUE(EXPR) PSYCHE_EXPECT(EXPR, true)
 #define PSYCHE_EXPECT_FALSE(EXPR) PSYCHE_EXPECT(EXPR, false)
 
-
 namespace psy {
 
 struct TestFailed {};
 
-class TestRunner
+class TestSuite;
+
+class Tester
 {
 public:
-    TestRunner()
-        : cntOK_(0)
-        , cntER_(0)
-    {}
+    virtual ~Tester() {}
 
-    virtual ~TestRunner() {}
+    virtual std::string name() const = 0;
 
-    void summary()
-    {
-        std::cout << this->name() << " passed: " << cntOK_ << std::endl
-                  << std::string(this->name().length(), ' ') << " failed: " << cntER_ << std::endl;
-    }
+    virtual void setUp() {}
+    virtual void tearDown() {}
 
-    static void runSuite();
+    int totalPassed() const { return cntPassed_; }
+    int totalFailed() const { return cntFailed_; }
 
 protected:
-    virtual std::string name() const = 0;
+    Tester(TestSuite* suite)
+        : suite_(suite)
+        , cntPassed_(0)
+        , cntFailed_(0)
+    {}
+
+    TestSuite* suite_;
+    int cntPassed_;
+    int cntFailed_;
 
     template <class TesterT, class TestContT>
     void run(const TestContT& tests)
@@ -94,16 +98,16 @@ protected:
         for (auto testData : tests) {
             setUp();
 
-            curTestName_ = testData.second;
-            std::cout << "\t" << TesterT::Name << "-" << curTestName_ << "... ";
+            curTestFunc_ = testData.second;
+            std::cout << "\t" << TesterT::Name << "-" << curTestFunc_ << "... ";
 
             try {
                 auto curTestFunc = testData.first;
                 curTestFunc(static_cast<TesterT*>(this));
                 std::cout << "OK";
-                ++cntOK_;
+                ++cntPassed_;
             } catch (const TestFailed&) {
-                ++cntER_;
+                ++cntFailed_;
             }
             std::cout << "\n\t-------------------------------------------------" << std::endl;
 
@@ -111,14 +115,7 @@ protected:
         }
     }
 
-    virtual void testAll() = 0;
-
-    virtual void setUp() {}
-    virtual void tearDown() {}
-
-    int cntOK_;
-    int cntER_;
-    std::string curTestName_;
+    std::string curTestFunc_;
 };
 
 } // psy

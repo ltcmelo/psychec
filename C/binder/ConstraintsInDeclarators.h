@@ -34,7 +34,7 @@ namespace C {
 
 class PSY_C_NON_API ConstraintsInDeclarators
 {
-    friend class BinderTest;
+    friend class BinderTester;
 
 public:
     static void FunctionReturningFunction(SyntaxToken decltorTk, Binder::DiagnosticsReporter* diagReporter);

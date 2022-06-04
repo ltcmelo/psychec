@@ -41,15 +41,29 @@ class Binder;
  */
 class PSY_C_API SemanticModel
 {
-    friend class Binder;
-
 public:
     ~SemanticModel();
 
+    /**
+     * The Compilation which \c this SemanticModel was computed from.
+     */
+    const Compilation* compilation() const;
+
+    //!@{
+    /**
+     * The Symbol declared by the given by SyntaxNode \p node.
+     */
+    const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
+    //!@}
+
 PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Binder);
     PSY_GRANT_ACCESS(Compilation);
 
     SemanticModel(Compilation* compilation, const SyntaxTree* tree);
+
+    Symbol* storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym);
+    Symbol* storeUsedSym(std::unique_ptr<Symbol> sym);
 
 private:
     // Unavailable
@@ -57,9 +71,6 @@ private:
     SemanticModel& operator=(const SemanticModel&) = delete;
 
     DECL_PIMPL(SemanticModel)
-
-    Symbol* storeSymDEF(std::unique_ptr<Symbol> sym);
-    Symbol* storeSymUSE(std::unique_ptr<Symbol> sym);
 };
 
 } // C

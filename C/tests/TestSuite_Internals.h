@@ -18,46 +18,55 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TEST_H__
-#define PSYCHE_C_TEST_H__
+#ifndef PSYCHE_C_INTERNALS_TEST_SUITE_H__
+#define PSYCHE_C_INTERNALS_TEST_SUITE_H__
 
 #include "API.h"
 
 #include "TestExpectation.h"
 
 #include "C/SyntaxTree.h"
-#include "tests/TestRunner.h"
+#include "tests/TestSuite.h"
+
+#include <memory>
+#include <vector>
 
 #define CROSS_REFERENCE_TEST(CASE) { auto x = &CASE; (void)x; } \
 
 namespace psy {
+
+class Tester;
+
 namespace C {
 
-class Test : public TestRunner
+class InternalsTestSuite : public TestSuite
 {
+    friend class ParserTester;
+    friend class BinderTester;
+
 public:
-    virtual ~Test();
+    virtual ~InternalsTestSuite();
+    InternalsTestSuite();
 
-protected:
-    Test();
+    virtual std::tuple<int, int> testAll() override;
+    virtual std::string description() const override;
+    virtual void printSummary() const override;
 
+private:
     bool checkErrorAndWarn(Expectation X);
 
+    void parseDeclaration(std::string text, Expectation X = Expectation());
+    void parseExpression(std::string text, Expectation X = Expectation());
+    void parseStatement(std::string text, Expectation X = Expectation());
     void parse(std::string text,
                Expectation X = Expectation(),
-               SyntaxTree::SyntaxCategory cat = SyntaxTree::SyntaxCategory::UNSPECIFIED);
-    void parseDeclaration(std::string text,
-                          Expectation X = Expectation());
-    void parseExpression(std::string text,
-                         Expectation X = Expectation());
-    void parseStatement(std::string text,
-                        Expectation X = Expectation());
+               SyntaxTree::SyntaxCategory synCat = SyntaxTree::SyntaxCategory::UNSPECIFIED);
 
-    virtual void bind(std::string text,
-                      Expectation X = Expectation()) {}
+    void bind(std::string text, Expectation X = Expectation());
 
     std::unique_ptr<SyntaxTree> tree_;
     std::unique_ptr<Compilation> compilation_;
+    std::vector<std::unique_ptr<Tester>> testers_;
 };
 
 } // C

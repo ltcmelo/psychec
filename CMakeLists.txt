@@ -64,8 +64,9 @@ set(CNIPPET_SOURCES
 
 set(PSYCHE_TESTS_SOURCES
     ${PROJECT_SOURCE_DIR}/TestSuiteRunner.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TestRunner.h
-    ${PROJECT_SOURCE_DIR}/tests/TestRunner.cpp
+    ${PROJECT_SOURCE_DIR}/tests/Tester.h
+    ${PROJECT_SOURCE_DIR}/tests/TestSuite.h
+    ${PROJECT_SOURCE_DIR}/tests/TestSuite.cpp
 )
 
 foreach(file ${CNIPPET_SOURCES} ${PSYCHE_TESTS_SOURCES})

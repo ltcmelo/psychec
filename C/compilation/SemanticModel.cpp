@@ -26,6 +26,9 @@
 #include "binder/Binder.h"
 #include "symbols/Symbol_ALL.h"
 
+#include "../common/infra/Assertions.h"
+
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -39,6 +42,7 @@ struct SemanticModel::SemanticModelImpl
     {}
 
     Compilation* compilation_;
+    std::unordered_map<const SyntaxNode*, Symbol*> declSyms_;
 };
 
 SemanticModel::SemanticModel(Compilation* compilation, const SyntaxTree* tree)
@@ -51,14 +55,30 @@ SemanticModel::SemanticModel(Compilation* compilation, const SyntaxTree* tree)
 SemanticModel::~SemanticModel()
 {}
 
-Symbol* SemanticModel::storeSymDEF(std::unique_ptr<Symbol> sym)
+const Compilation* SemanticModel::compilation() const
 {
-    auto& syms = P->compilation_->assembly()->symDEFs_;
-    auto [it, _] = syms.insert(std::move(sym));
-    return it->get();
+    return P->compilation_;
 }
 
-Symbol* SemanticModel::storeSymUSE(std::unique_ptr<Symbol> sym)
+const Symbol *SemanticModel::declaredSymbol(const DeclaratorSyntax* node) const
+{
+    return nullptr;
+}
+
+Symbol* SemanticModel::storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym)
+{
+    auto& allSyms = P->compilation_->assembly()->symDEFs_;
+
+    auto [it, _] = allSyms.insert(std::move(sym));
+    Symbol* rawSym = it->get();
+
+    PSY_ASSERT(P->declSyms_.count(node) == 0, return rawSym);
+    P->declSyms_[node] = rawSym;
+
+    return rawSym;
+}
+
+Symbol* SemanticModel::storeUsedSym(std::unique_ptr<Symbol> sym)
 {
     auto& syms = P->compilation_->assembly()->symUSEs_;
     syms.emplace_back(sym.release());

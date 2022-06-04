@@ -122,7 +122,7 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDec
 
 SyntaxVisitor::Action Binder::visitEnumMemberDeclaration_AtDeclarator(const EnumMemberDeclarationSyntax* node)
 {
-    determineContextAndMakeSym();
+    determineContextAndMakeSym(node);
     nameSymAtTop(node->identifierToken().valueText_c_str());
     typeSymAtTopAndPopIt();
 
@@ -245,37 +245,37 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::determineContextAndMakeSym()
+template <class DeclT>
+SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DeclT* node)
 {
     switch (scopes_.top()->kind()) {
         case ScopeKind::File:
         case ScopeKind::Block: {
-            TypeSymbol* contTySym = tySyms_.top();
-            switch (contTySym->typeKind()) {
+            TypeSymbol* tySym = tySyms_.top();
+            switch (tySym->typeKind()) {
                 case TypeKind::Function:
-                    makeSymAndPushIt<FunctionSymbol>();
+                    makeSymAndPushIt<FunctionSymbol>(node);
                     break;
 
                 case TypeKind::Array:
                 case TypeKind::Pointer:
                 case TypeKind::Named: {
-                    Symbol* contSym = syms_.top();
-                    switch (contSym->kind()) {
+                    Symbol* sym = syms_.top();
+                    switch (sym->kind()) {
                         case SymbolKind::Type:
-                            if (!(contSym->asType()->asNamedType()
-                                     && contSym->asType()->asNamedType()->name()
-                                     && contSym->asType()->asNamedType()->name()->asTagSymbolName())) {
-                                PSY_ESCAPE_VIA_RETURN(Action::Quit);
-                            }
+                            PSY_ASSERT(sym->asType()->asNamedType()
+                                            && sym->asType()->asNamedType()->name()
+                                            && sym->asType()->asNamedType()->name()->asTagSymbolName(),
+                                       return Action::Quit);
 
-                            switch (contSym->asType()->asNamedType()->name()->asTagSymbolName()->kind()) {
+                            switch (sym->asType()->asNamedType()->name()->asTagSymbolName()->kind()) {
                                 case TagSymbolNameKind::Union:
                                 case TagSymbolNameKind::Structure:
-                                    makeSymAndPushIt<FieldSymbol>();
+                                    makeSymAndPushIt<FieldSymbol>(node);
                                     break;
 
                                 case TagSymbolNameKind::Enumeration:
-                                    makeSymAndPushIt<EnumeratorSymbol>();
+                                    makeSymAndPushIt<EnumeratorSymbol>(node);
                                     break;
 
                                 default:
@@ -286,7 +286,7 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym()
                         case SymbolKind::Value:
                         case SymbolKind::Function:
                         case SymbolKind::Library:
-                            makeSymAndPushIt<VariableSymbol>();
+                            makeSymAndPushIt<VariableSymbol>(node);
                             break;
 
                         default:
@@ -339,7 +339,7 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym()
                 default:
                     PSY_ESCAPE_VIA_RETURN(Action::Quit);
             }
-            makeSymAndPushIt<ParameterSymbol>();
+            makeSymAndPushIt<ParameterSymbol>(node);
             break;
         }
 
@@ -352,15 +352,15 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym()
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    determineContextAndMakeSym();
+    determineContextAndMakeSym(node);
     nameSymAtTop(node->identifierToken().valueText_c_str());
 
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax*)
+SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax* node)
 {
-    determineContextAndMakeSym();
+    determineContextAndMakeSym(node);
     nameSymAtTop(nullptr);
 
     return Action::Skip;

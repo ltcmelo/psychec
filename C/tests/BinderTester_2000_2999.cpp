@@ -18,9 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "BinderTest.h"
+#include "BinderTester.h"
 
-#include "ParserTest.h"
+#include "ParserTester.h"
 
 #include "binder/ConstraintsInDeclarations.h"
 #include "binder/ConstraintsInTypeSpecifiers.h"
@@ -39,7 +39,7 @@
 using namespace psy;
 using namespace C;
 
-void BinderTest::case2000()
+void BinderTester::case2000()
 {
     bind(R"(
 struct
@@ -52,7 +52,7 @@ struct
                     .TySpec.basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
-void BinderTest::case2001()
+void BinderTester::case2001()
 {
     bind(R"(
 struct
@@ -65,7 +65,7 @@ struct
                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
-void BinderTest::case2002()
+void BinderTester::case2002()
 {
     bind(R"(
 struct w
@@ -81,7 +81,7 @@ struct w
                     .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
-void BinderTest::case2003()
+void BinderTester::case2003()
 {
     bind(R"(
 struct
@@ -96,7 +96,7 @@ struct
                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
-void BinderTest::case2004()
+void BinderTester::case2004()
 {
     bind(R"(
 struct
@@ -109,7 +109,7 @@ struct
                  .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case2005()
+void BinderTester::case2005()
 {
     bind(R"(
 struct
@@ -124,25 +124,25 @@ struct
                       .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case2006()
+void BinderTester::case2006()
 {
     // Non-field correspondent
-    CROSS_REFERENCE_TEST(BinderTest::case2006);
+    CROSS_REFERENCE_TEST(BinderTester::case2006);
 
     // Syntax error
-    CROSS_REFERENCE_TEST(ParserTest::case0439);
+    CROSS_REFERENCE_TEST(ParserTester::case0439);
 }
 
-void BinderTest::case2007()
+void BinderTester::case2007()
 {
     // Non-field correspondent
-    CROSS_REFERENCE_TEST(BinderTest::case2007);
+    CROSS_REFERENCE_TEST(BinderTester::case2007);
 
     // Syntax error
-    CROSS_REFERENCE_TEST(ParserTest::case0440);
+    CROSS_REFERENCE_TEST(ParserTester::case0440);
 }
 
-void BinderTest::case2008()
+void BinderTester::case2008()
 {
     bind(R"(
 struct
@@ -155,7 +155,7 @@ struct
              ConstraintsInTypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
 
-void BinderTest::case2009()
+void BinderTester::case2009()
 {
     bind(R"(
 struct
@@ -168,7 +168,7 @@ struct
                     .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case2010()
+void BinderTester::case2010()
 {
     bind(R"(
 struct
@@ -181,7 +181,7 @@ struct
                     .TySpec.basis("union x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case2011()
+void BinderTester::case2011()
 {
     bind(R"(
 struct
@@ -194,7 +194,7 @@ struct
                     .TySpec.basis("enum x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case2012()
+void BinderTester::case2012()
 {
     bind(R"(
 struct
@@ -209,7 +209,7 @@ struct
                     .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case2013()
+void BinderTester::case2013()
 {
     bind(R"(
 struct
@@ -222,44 +222,44 @@ struct
                     .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case2014(){ }
-void BinderTest::case2015(){ }
-void BinderTest::case2016(){ }
-void BinderTest::case2017(){ }
-void BinderTest::case2018(){ }
-void BinderTest::case2019(){ }
-void BinderTest::case2020(){ }
-void BinderTest::case2021(){ }
-void BinderTest::case2022(){ }
-void BinderTest::case2023(){ }
-void BinderTest::case2024(){ }
-void BinderTest::case2025(){ }
-void BinderTest::case2026(){ }
-void BinderTest::case2027(){ }
-void BinderTest::case2028(){ }
-void BinderTest::case2029(){ }
-void BinderTest::case2030(){ }
-void BinderTest::case2031(){ }
-void BinderTest::case2032(){ }
-void BinderTest::case2033(){ }
-void BinderTest::case2034(){ }
-void BinderTest::case2035(){ }
-void BinderTest::case2036(){ }
-void BinderTest::case2037(){ }
-void BinderTest::case2038(){ }
-void BinderTest::case2039(){ }
-void BinderTest::case2040(){ }
-void BinderTest::case2041(){ }
-void BinderTest::case2042(){ }
-void BinderTest::case2043(){ }
-void BinderTest::case2044(){ }
-void BinderTest::case2045(){ }
-void BinderTest::case2046(){ }
-void BinderTest::case2047(){ }
-void BinderTest::case2048(){ }
-void BinderTest::case2049(){ }
+void BinderTester::case2014(){ }
+void BinderTester::case2015(){ }
+void BinderTester::case2016(){ }
+void BinderTester::case2017(){ }
+void BinderTester::case2018(){ }
+void BinderTester::case2019(){ }
+void BinderTester::case2020(){ }
+void BinderTester::case2021(){ }
+void BinderTester::case2022(){ }
+void BinderTester::case2023(){ }
+void BinderTester::case2024(){ }
+void BinderTester::case2025(){ }
+void BinderTester::case2026(){ }
+void BinderTester::case2027(){ }
+void BinderTester::case2028(){ }
+void BinderTester::case2029(){ }
+void BinderTester::case2030(){ }
+void BinderTester::case2031(){ }
+void BinderTester::case2032(){ }
+void BinderTester::case2033(){ }
+void BinderTester::case2034(){ }
+void BinderTester::case2035(){ }
+void BinderTester::case2036(){ }
+void BinderTester::case2037(){ }
+void BinderTester::case2038(){ }
+void BinderTester::case2039(){ }
+void BinderTester::case2040(){ }
+void BinderTester::case2041(){ }
+void BinderTester::case2042(){ }
+void BinderTester::case2043(){ }
+void BinderTester::case2044(){ }
+void BinderTester::case2045(){ }
+void BinderTester::case2046(){ }
+void BinderTester::case2047(){ }
+void BinderTester::case2048(){ }
+void BinderTester::case2049(){ }
 
-void BinderTest::case2050()
+void BinderTester::case2050()
 {
     bind("struct { const int x ; } ;",
          Expectation()
@@ -268,7 +268,7 @@ void BinderTest::case2050()
                       .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
-void BinderTest::case2051()
+void BinderTester::case2051()
 {
     bind("struct { const x y ; } ;",
          Expectation()
@@ -277,7 +277,7 @@ void BinderTest::case2051()
                       .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
-void BinderTest::case2052()
+void BinderTester::case2052()
 {
     bind("struct { const x ; } ;",
          Expectation().diagnostic(
@@ -285,7 +285,7 @@ void BinderTest::case2052()
              ConstraintsInDeclarations::ID_of_UselessDeclaration));
 }
 
-void BinderTest::case2053()
+void BinderTester::case2053()
 {
     bind("struct { int const x ; } ;",
          Expectation()
@@ -294,7 +294,7 @@ void BinderTest::case2053()
                       .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
-void BinderTest::case2054()
+void BinderTester::case2054()
 {
     bind("struct { x const y ; } ;",
          Expectation()
@@ -303,53 +303,53 @@ void BinderTest::case2054()
                       .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
-void BinderTest::case2055(){ }
-void BinderTest::case2056(){ }
-void BinderTest::case2057(){ }
-void BinderTest::case2058(){ }
-void BinderTest::case2059(){ }
-void BinderTest::case2060(){ }
-void BinderTest::case2061(){ }
-void BinderTest::case2062(){ }
-void BinderTest::case2063(){ }
-void BinderTest::case2064(){ }
-void BinderTest::case2065(){ }
-void BinderTest::case2066(){ }
-void BinderTest::case2067(){ }
-void BinderTest::case2068(){ }
-void BinderTest::case2069(){ }
-void BinderTest::case2070(){ }
-void BinderTest::case2071(){ }
-void BinderTest::case2072(){ }
-void BinderTest::case2073(){ }
-void BinderTest::case2074(){ }
-void BinderTest::case2075(){ }
-void BinderTest::case2076(){ }
-void BinderTest::case2077(){ }
-void BinderTest::case2078(){ }
-void BinderTest::case2079(){ }
-void BinderTest::case2080(){ }
-void BinderTest::case2081(){ }
-void BinderTest::case2082(){ }
-void BinderTest::case2083(){ }
-void BinderTest::case2084(){ }
-void BinderTest::case2085(){ }
-void BinderTest::case2086(){ }
-void BinderTest::case2087(){ }
-void BinderTest::case2088(){ }
-void BinderTest::case2089(){ }
-void BinderTest::case2090(){ }
-void BinderTest::case2091(){ }
-void BinderTest::case2092(){ }
-void BinderTest::case2093(){ }
-void BinderTest::case2094(){ }
-void BinderTest::case2095(){ }
-void BinderTest::case2096(){ }
-void BinderTest::case2097(){ }
-void BinderTest::case2098(){ }
-void BinderTest::case2099(){ }
+void BinderTester::case2055(){ }
+void BinderTester::case2056(){ }
+void BinderTester::case2057(){ }
+void BinderTester::case2058(){ }
+void BinderTester::case2059(){ }
+void BinderTester::case2060(){ }
+void BinderTester::case2061(){ }
+void BinderTester::case2062(){ }
+void BinderTester::case2063(){ }
+void BinderTester::case2064(){ }
+void BinderTester::case2065(){ }
+void BinderTester::case2066(){ }
+void BinderTester::case2067(){ }
+void BinderTester::case2068(){ }
+void BinderTester::case2069(){ }
+void BinderTester::case2070(){ }
+void BinderTester::case2071(){ }
+void BinderTester::case2072(){ }
+void BinderTester::case2073(){ }
+void BinderTester::case2074(){ }
+void BinderTester::case2075(){ }
+void BinderTester::case2076(){ }
+void BinderTester::case2077(){ }
+void BinderTester::case2078(){ }
+void BinderTester::case2079(){ }
+void BinderTester::case2080(){ }
+void BinderTester::case2081(){ }
+void BinderTester::case2082(){ }
+void BinderTester::case2083(){ }
+void BinderTester::case2084(){ }
+void BinderTester::case2085(){ }
+void BinderTester::case2086(){ }
+void BinderTester::case2087(){ }
+void BinderTester::case2088(){ }
+void BinderTester::case2089(){ }
+void BinderTester::case2090(){ }
+void BinderTester::case2091(){ }
+void BinderTester::case2092(){ }
+void BinderTester::case2093(){ }
+void BinderTester::case2094(){ }
+void BinderTester::case2095(){ }
+void BinderTester::case2096(){ }
+void BinderTester::case2097(){ }
+void BinderTester::case2098(){ }
+void BinderTester::case2099(){ }
 
-void BinderTest::case2100()
+void BinderTester::case2100()
 {
     bind("struct { int * x ; } ;",
          Expectation()
@@ -358,7 +358,7 @@ void BinderTest::case2100()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case2101()
+void BinderTester::case2101()
 {
     bind("struct { x * y ; } ;",
          Expectation()
@@ -367,7 +367,7 @@ void BinderTest::case2101()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case2102()
+void BinderTester::case2102()
 {
     bind("struct { int * x ; y * z ; } ;",
          Expectation()
@@ -379,7 +379,7 @@ void BinderTest::case2102()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case2103()
+void BinderTester::case2103()
 {
     bind("struct { int * x , * y ; } ;",
          Expectation()
@@ -391,7 +391,7 @@ void BinderTest::case2103()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case2104()
+void BinderTester::case2104()
 {
     bind("struct { int ( * x ) [ 1 ]; } ;",
          Expectation()
@@ -401,7 +401,7 @@ void BinderTest::case2104()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case2105()
+void BinderTester::case2105()
 {
     bind("struct { int * * x ; } ;",
          Expectation()
@@ -411,7 +411,7 @@ void BinderTest::case2105()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case2106()
+void BinderTester::case2106()
 {
     bind("struct { int * * * x ; } ;",
          Expectation()
@@ -422,7 +422,7 @@ void BinderTest::case2106()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case2107()
+void BinderTester::case2107()
 {
     bind("struct { int * ( * x ) [ 1 ] ; };",
          Expectation()
@@ -433,50 +433,50 @@ void BinderTest::case2107()
                       .TySpec.deriv(TypeKind::Pointer, CVR::None)));
 }
 
-void BinderTest::case2108(){ }
-void BinderTest::case2109(){ }
-void BinderTest::case2110(){ }
-void BinderTest::case2111(){ }
-void BinderTest::case2112(){ }
-void BinderTest::case2113(){ }
-void BinderTest::case2114(){ }
-void BinderTest::case2115(){ }
-void BinderTest::case2116(){ }
-void BinderTest::case2117(){ }
-void BinderTest::case2118(){ }
-void BinderTest::case2119(){ }
-void BinderTest::case2120(){ }
-void BinderTest::case2121(){ }
-void BinderTest::case2122(){ }
-void BinderTest::case2123(){ }
-void BinderTest::case2124(){ }
-void BinderTest::case2125(){ }
-void BinderTest::case2126(){ }
-void BinderTest::case2127(){ }
-void BinderTest::case2128(){ }
-void BinderTest::case2129(){ }
-void BinderTest::case2130(){ }
-void BinderTest::case2131(){ }
-void BinderTest::case2132(){ }
-void BinderTest::case2133(){ }
-void BinderTest::case2134(){ }
-void BinderTest::case2135(){ }
-void BinderTest::case2136(){ }
-void BinderTest::case2137(){ }
-void BinderTest::case2138(){ }
-void BinderTest::case2139(){ }
-void BinderTest::case2140(){ }
-void BinderTest::case2141(){ }
-void BinderTest::case2142(){ }
-void BinderTest::case2143(){ }
-void BinderTest::case2144(){ }
-void BinderTest::case2145(){ }
-void BinderTest::case2146(){ }
-void BinderTest::case2147(){ }
-void BinderTest::case2148(){ }
-void BinderTest::case2149(){ }
+void BinderTester::case2108(){ }
+void BinderTester::case2109(){ }
+void BinderTester::case2110(){ }
+void BinderTester::case2111(){ }
+void BinderTester::case2112(){ }
+void BinderTester::case2113(){ }
+void BinderTester::case2114(){ }
+void BinderTester::case2115(){ }
+void BinderTester::case2116(){ }
+void BinderTester::case2117(){ }
+void BinderTester::case2118(){ }
+void BinderTester::case2119(){ }
+void BinderTester::case2120(){ }
+void BinderTester::case2121(){ }
+void BinderTester::case2122(){ }
+void BinderTester::case2123(){ }
+void BinderTester::case2124(){ }
+void BinderTester::case2125(){ }
+void BinderTester::case2126(){ }
+void BinderTester::case2127(){ }
+void BinderTester::case2128(){ }
+void BinderTester::case2129(){ }
+void BinderTester::case2130(){ }
+void BinderTester::case2131(){ }
+void BinderTester::case2132(){ }
+void BinderTester::case2133(){ }
+void BinderTester::case2134(){ }
+void BinderTester::case2135(){ }
+void BinderTester::case2136(){ }
+void BinderTester::case2137(){ }
+void BinderTester::case2138(){ }
+void BinderTester::case2139(){ }
+void BinderTester::case2140(){ }
+void BinderTester::case2141(){ }
+void BinderTester::case2142(){ }
+void BinderTester::case2143(){ }
+void BinderTester::case2144(){ }
+void BinderTester::case2145(){ }
+void BinderTester::case2146(){ }
+void BinderTester::case2147(){ }
+void BinderTester::case2148(){ }
+void BinderTester::case2149(){ }
 
-void BinderTest::case2150()
+void BinderTester::case2150()
 {
     bind("struct { const int * x ; } ;",
          Expectation()
@@ -485,7 +485,7 @@ void BinderTest::case2150()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case2151()
+void BinderTester::case2151()
 {
     bind("struct { const x * y ; } ;",
          Expectation()
@@ -494,56 +494,56 @@ void BinderTest::case2151()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case2152(){ }
-void BinderTest::case2153(){ }
-void BinderTest::case2154(){ }
-void BinderTest::case2155(){ }
-void BinderTest::case2156(){ }
-void BinderTest::case2157(){ }
-void BinderTest::case2158(){ }
-void BinderTest::case2159(){ }
-void BinderTest::case2160(){ }
-void BinderTest::case2161(){ }
-void BinderTest::case2162(){ }
-void BinderTest::case2163(){ }
-void BinderTest::case2164(){ }
-void BinderTest::case2165(){ }
-void BinderTest::case2166(){ }
-void BinderTest::case2167(){ }
-void BinderTest::case2168(){ }
-void BinderTest::case2169(){ }
-void BinderTest::case2170(){ }
-void BinderTest::case2171(){ }
-void BinderTest::case2172(){ }
-void BinderTest::case2173(){ }
-void BinderTest::case2174(){ }
-void BinderTest::case2175(){ }
-void BinderTest::case2176(){ }
-void BinderTest::case2177(){ }
-void BinderTest::case2178(){ }
-void BinderTest::case2179(){ }
-void BinderTest::case2180(){ }
-void BinderTest::case2181(){ }
-void BinderTest::case2182(){ }
-void BinderTest::case2183(){ }
-void BinderTest::case2184(){ }
-void BinderTest::case2185(){ }
-void BinderTest::case2186(){ }
-void BinderTest::case2187(){ }
-void BinderTest::case2188(){ }
-void BinderTest::case2189(){ }
-void BinderTest::case2190(){ }
-void BinderTest::case2191(){ }
-void BinderTest::case2192(){ }
-void BinderTest::case2193(){ }
-void BinderTest::case2194(){ }
-void BinderTest::case2195(){ }
-void BinderTest::case2196(){ }
-void BinderTest::case2197(){ }
-void BinderTest::case2198(){ }
-void BinderTest::case2199(){ }
+void BinderTester::case2152(){ }
+void BinderTester::case2153(){ }
+void BinderTester::case2154(){ }
+void BinderTester::case2155(){ }
+void BinderTester::case2156(){ }
+void BinderTester::case2157(){ }
+void BinderTester::case2158(){ }
+void BinderTester::case2159(){ }
+void BinderTester::case2160(){ }
+void BinderTester::case2161(){ }
+void BinderTester::case2162(){ }
+void BinderTester::case2163(){ }
+void BinderTester::case2164(){ }
+void BinderTester::case2165(){ }
+void BinderTester::case2166(){ }
+void BinderTester::case2167(){ }
+void BinderTester::case2168(){ }
+void BinderTester::case2169(){ }
+void BinderTester::case2170(){ }
+void BinderTester::case2171(){ }
+void BinderTester::case2172(){ }
+void BinderTester::case2173(){ }
+void BinderTester::case2174(){ }
+void BinderTester::case2175(){ }
+void BinderTester::case2176(){ }
+void BinderTester::case2177(){ }
+void BinderTester::case2178(){ }
+void BinderTester::case2179(){ }
+void BinderTester::case2180(){ }
+void BinderTester::case2181(){ }
+void BinderTester::case2182(){ }
+void BinderTester::case2183(){ }
+void BinderTester::case2184(){ }
+void BinderTester::case2185(){ }
+void BinderTester::case2186(){ }
+void BinderTester::case2187(){ }
+void BinderTester::case2188(){ }
+void BinderTester::case2189(){ }
+void BinderTester::case2190(){ }
+void BinderTester::case2191(){ }
+void BinderTester::case2192(){ }
+void BinderTester::case2193(){ }
+void BinderTester::case2194(){ }
+void BinderTester::case2195(){ }
+void BinderTester::case2196(){ }
+void BinderTester::case2197(){ }
+void BinderTester::case2198(){ }
+void BinderTester::case2199(){ }
 
-void BinderTest::case2200()
+void BinderTester::case2200()
 {
     bind("struct { const int * const x ; } ;",
          Expectation()
@@ -553,57 +553,57 @@ void BinderTest::case2200()
 }
 
 
-void BinderTest::case2201(){ }
-void BinderTest::case2202(){ }
-void BinderTest::case2203(){ }
-void BinderTest::case2204(){ }
-void BinderTest::case2205(){ }
-void BinderTest::case2206(){ }
-void BinderTest::case2207(){ }
-void BinderTest::case2208(){ }
-void BinderTest::case2209(){ }
-void BinderTest::case2210(){ }
-void BinderTest::case2211(){ }
-void BinderTest::case2212(){ }
-void BinderTest::case2213(){ }
-void BinderTest::case2214(){ }
-void BinderTest::case2215(){ }
-void BinderTest::case2216(){ }
-void BinderTest::case2217(){ }
-void BinderTest::case2218(){ }
-void BinderTest::case2219(){ }
-void BinderTest::case2220(){ }
-void BinderTest::case2221(){ }
-void BinderTest::case2222(){ }
-void BinderTest::case2223(){ }
-void BinderTest::case2224(){ }
-void BinderTest::case2225(){ }
-void BinderTest::case2226(){ }
-void BinderTest::case2227(){ }
-void BinderTest::case2228(){ }
-void BinderTest::case2229(){ }
-void BinderTest::case2230(){ }
-void BinderTest::case2231(){ }
-void BinderTest::case2232(){ }
-void BinderTest::case2233(){ }
-void BinderTest::case2234(){ }
-void BinderTest::case2235(){ }
-void BinderTest::case2236(){ }
-void BinderTest::case2237(){ }
-void BinderTest::case2238(){ }
-void BinderTest::case2239(){ }
-void BinderTest::case2240(){ }
-void BinderTest::case2241(){ }
-void BinderTest::case2242(){ }
-void BinderTest::case2243(){ }
-void BinderTest::case2244(){ }
-void BinderTest::case2245(){ }
-void BinderTest::case2246(){ }
-void BinderTest::case2247(){ }
-void BinderTest::case2248(){ }
-void BinderTest::case2249(){ }
+void BinderTester::case2201(){ }
+void BinderTester::case2202(){ }
+void BinderTester::case2203(){ }
+void BinderTester::case2204(){ }
+void BinderTester::case2205(){ }
+void BinderTester::case2206(){ }
+void BinderTester::case2207(){ }
+void BinderTester::case2208(){ }
+void BinderTester::case2209(){ }
+void BinderTester::case2210(){ }
+void BinderTester::case2211(){ }
+void BinderTester::case2212(){ }
+void BinderTester::case2213(){ }
+void BinderTester::case2214(){ }
+void BinderTester::case2215(){ }
+void BinderTester::case2216(){ }
+void BinderTester::case2217(){ }
+void BinderTester::case2218(){ }
+void BinderTester::case2219(){ }
+void BinderTester::case2220(){ }
+void BinderTester::case2221(){ }
+void BinderTester::case2222(){ }
+void BinderTester::case2223(){ }
+void BinderTester::case2224(){ }
+void BinderTester::case2225(){ }
+void BinderTester::case2226(){ }
+void BinderTester::case2227(){ }
+void BinderTester::case2228(){ }
+void BinderTester::case2229(){ }
+void BinderTester::case2230(){ }
+void BinderTester::case2231(){ }
+void BinderTester::case2232(){ }
+void BinderTester::case2233(){ }
+void BinderTester::case2234(){ }
+void BinderTester::case2235(){ }
+void BinderTester::case2236(){ }
+void BinderTester::case2237(){ }
+void BinderTester::case2238(){ }
+void BinderTester::case2239(){ }
+void BinderTester::case2240(){ }
+void BinderTester::case2241(){ }
+void BinderTester::case2242(){ }
+void BinderTester::case2243(){ }
+void BinderTester::case2244(){ }
+void BinderTester::case2245(){ }
+void BinderTester::case2246(){ }
+void BinderTester::case2247(){ }
+void BinderTester::case2248(){ }
+void BinderTester::case2249(){ }
 
-void BinderTest::case2250()
+void BinderTester::case2250()
 {
     bind("struct { int * const x ; } ;",
          Expectation()
@@ -612,7 +612,7 @@ void BinderTest::case2250()
                       .TySpec.deriv(TypeKind::Pointer, CVR::Const)));
 }
 
-void BinderTest::case2251()
+void BinderTester::case2251()
 {
     bind("struct { x * const y ; } ;",
          Expectation()
@@ -621,56 +621,56 @@ void BinderTest::case2251()
                       .TySpec.deriv(TypeKind::Pointer, CVR::Const)));
 }
 
-void BinderTest::case2252(){ }
-void BinderTest::case2253(){ }
-void BinderTest::case2254(){ }
-void BinderTest::case2255(){ }
-void BinderTest::case2256(){ }
-void BinderTest::case2257(){ }
-void BinderTest::case2258(){ }
-void BinderTest::case2259(){ }
-void BinderTest::case2260(){ }
-void BinderTest::case2261(){ }
-void BinderTest::case2262(){ }
-void BinderTest::case2263(){ }
-void BinderTest::case2264(){ }
-void BinderTest::case2265(){ }
-void BinderTest::case2266(){ }
-void BinderTest::case2267(){ }
-void BinderTest::case2268(){ }
-void BinderTest::case2269(){ }
-void BinderTest::case2270(){ }
-void BinderTest::case2271(){ }
-void BinderTest::case2272(){ }
-void BinderTest::case2273(){ }
-void BinderTest::case2274(){ }
-void BinderTest::case2275(){ }
-void BinderTest::case2276(){ }
-void BinderTest::case2277(){ }
-void BinderTest::case2278(){ }
-void BinderTest::case2279(){ }
-void BinderTest::case2280(){ }
-void BinderTest::case2281(){ }
-void BinderTest::case2282(){ }
-void BinderTest::case2283(){ }
-void BinderTest::case2284(){ }
-void BinderTest::case2285(){ }
-void BinderTest::case2286(){ }
-void BinderTest::case2287(){ }
-void BinderTest::case2288(){ }
-void BinderTest::case2289(){ }
-void BinderTest::case2290(){ }
-void BinderTest::case2291(){ }
-void BinderTest::case2292(){ }
-void BinderTest::case2293(){ }
-void BinderTest::case2294(){ }
-void BinderTest::case2295(){ }
-void BinderTest::case2296(){ }
-void BinderTest::case2297(){ }
-void BinderTest::case2298(){ }
-void BinderTest::case2299(){ }
+void BinderTester::case2252(){ }
+void BinderTester::case2253(){ }
+void BinderTester::case2254(){ }
+void BinderTester::case2255(){ }
+void BinderTester::case2256(){ }
+void BinderTester::case2257(){ }
+void BinderTester::case2258(){ }
+void BinderTester::case2259(){ }
+void BinderTester::case2260(){ }
+void BinderTester::case2261(){ }
+void BinderTester::case2262(){ }
+void BinderTester::case2263(){ }
+void BinderTester::case2264(){ }
+void BinderTester::case2265(){ }
+void BinderTester::case2266(){ }
+void BinderTester::case2267(){ }
+void BinderTester::case2268(){ }
+void BinderTester::case2269(){ }
+void BinderTester::case2270(){ }
+void BinderTester::case2271(){ }
+void BinderTester::case2272(){ }
+void BinderTester::case2273(){ }
+void BinderTester::case2274(){ }
+void BinderTester::case2275(){ }
+void BinderTester::case2276(){ }
+void BinderTester::case2277(){ }
+void BinderTester::case2278(){ }
+void BinderTester::case2279(){ }
+void BinderTester::case2280(){ }
+void BinderTester::case2281(){ }
+void BinderTester::case2282(){ }
+void BinderTester::case2283(){ }
+void BinderTester::case2284(){ }
+void BinderTester::case2285(){ }
+void BinderTester::case2286(){ }
+void BinderTester::case2287(){ }
+void BinderTester::case2288(){ }
+void BinderTester::case2289(){ }
+void BinderTester::case2290(){ }
+void BinderTester::case2291(){ }
+void BinderTester::case2292(){ }
+void BinderTester::case2293(){ }
+void BinderTester::case2294(){ }
+void BinderTester::case2295(){ }
+void BinderTester::case2296(){ }
+void BinderTester::case2297(){ }
+void BinderTester::case2298(){ }
+void BinderTester::case2299(){ }
 
-void BinderTest::case2300()
+void BinderTester::case2300()
 {
     bind(R"(
 struct
@@ -684,7 +684,7 @@ struct
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case2301()
+void BinderTester::case2301()
 {
     bind("struct { x y [ 1 ] ; } ;",
          Expectation()
@@ -693,7 +693,7 @@ void BinderTest::case2301()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case2302()
+void BinderTester::case2302()
 {
     bind(R"(
 struct
@@ -710,7 +710,7 @@ struct
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case2303()
+void BinderTester::case2303()
 {
     bind(R"(
 struct
@@ -727,7 +727,7 @@ struct
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case2304()
+void BinderTester::case2304()
 {
     bind("struct { int * x [ 1 ] ; } ;",
          Expectation()
@@ -737,7 +737,7 @@ void BinderTest::case2304()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case2305()
+void BinderTester::case2305()
 {
     bind("struct { int x [ 1 ] , * y [ 2 ] ; } ;",
          Expectation()
@@ -750,7 +750,7 @@ void BinderTest::case2305()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case2306()
+void BinderTester::case2306()
 {
     bind("struct { int * * x [ 1 ] ; } ;",
          Expectation()
@@ -761,51 +761,51 @@ void BinderTest::case2306()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case2307(){ }
-void BinderTest::case2308(){ }
-void BinderTest::case2309(){ }
-void BinderTest::case2310(){ }
-void BinderTest::case2311(){ }
-void BinderTest::case2312(){ }
-void BinderTest::case2313(){ }
-void BinderTest::case2314(){ }
-void BinderTest::case2315(){ }
-void BinderTest::case2316(){ }
-void BinderTest::case2317(){ }
-void BinderTest::case2318(){ }
-void BinderTest::case2319(){ }
-void BinderTest::case2320(){ }
-void BinderTest::case2321(){ }
-void BinderTest::case2322(){ }
-void BinderTest::case2323(){ }
-void BinderTest::case2324(){ }
-void BinderTest::case2325(){ }
-void BinderTest::case2326(){ }
-void BinderTest::case2327(){ }
-void BinderTest::case2328(){ }
-void BinderTest::case2329(){ }
-void BinderTest::case2330(){ }
-void BinderTest::case2331(){ }
-void BinderTest::case2332(){ }
-void BinderTest::case2333(){ }
-void BinderTest::case2334(){ }
-void BinderTest::case2335(){ }
-void BinderTest::case2336(){ }
-void BinderTest::case2337(){ }
-void BinderTest::case2338(){ }
-void BinderTest::case2339(){ }
-void BinderTest::case2340(){ }
-void BinderTest::case2341(){ }
-void BinderTest::case2342(){ }
-void BinderTest::case2343(){ }
-void BinderTest::case2344(){ }
-void BinderTest::case2345(){ }
-void BinderTest::case2346(){ }
-void BinderTest::case2347(){ }
-void BinderTest::case2348(){ }
-void BinderTest::case2349(){ }
+void BinderTester::case2307(){ }
+void BinderTester::case2308(){ }
+void BinderTester::case2309(){ }
+void BinderTester::case2310(){ }
+void BinderTester::case2311(){ }
+void BinderTester::case2312(){ }
+void BinderTester::case2313(){ }
+void BinderTester::case2314(){ }
+void BinderTester::case2315(){ }
+void BinderTester::case2316(){ }
+void BinderTester::case2317(){ }
+void BinderTester::case2318(){ }
+void BinderTester::case2319(){ }
+void BinderTester::case2320(){ }
+void BinderTester::case2321(){ }
+void BinderTester::case2322(){ }
+void BinderTester::case2323(){ }
+void BinderTester::case2324(){ }
+void BinderTester::case2325(){ }
+void BinderTester::case2326(){ }
+void BinderTester::case2327(){ }
+void BinderTester::case2328(){ }
+void BinderTester::case2329(){ }
+void BinderTester::case2330(){ }
+void BinderTester::case2331(){ }
+void BinderTester::case2332(){ }
+void BinderTester::case2333(){ }
+void BinderTester::case2334(){ }
+void BinderTester::case2335(){ }
+void BinderTester::case2336(){ }
+void BinderTester::case2337(){ }
+void BinderTester::case2338(){ }
+void BinderTester::case2339(){ }
+void BinderTester::case2340(){ }
+void BinderTester::case2341(){ }
+void BinderTester::case2342(){ }
+void BinderTester::case2343(){ }
+void BinderTester::case2344(){ }
+void BinderTester::case2345(){ }
+void BinderTester::case2346(){ }
+void BinderTester::case2347(){ }
+void BinderTester::case2348(){ }
+void BinderTester::case2349(){ }
 
-void BinderTest::case2350()
+void BinderTester::case2350()
 {
     bind("struct { const int x [ 1 ] ; } ;",
          Expectation()
@@ -814,52 +814,52 @@ void BinderTest::case2350()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case2351(){ }
-void BinderTest::case2352(){ }
-void BinderTest::case2353(){ }
-void BinderTest::case2354(){ }
-void BinderTest::case2355(){ }
-void BinderTest::case2356(){ }
-void BinderTest::case2357(){ }
-void BinderTest::case2358(){ }
-void BinderTest::case2359(){ }
-void BinderTest::case2360(){ }
-void BinderTest::case2361(){ }
-void BinderTest::case2362(){ }
-void BinderTest::case2363(){ }
-void BinderTest::case2364(){ }
-void BinderTest::case2365(){ }
-void BinderTest::case2366(){ }
-void BinderTest::case2367(){ }
-void BinderTest::case2368(){ }
-void BinderTest::case2369(){ }
-void BinderTest::case2370(){ }
-void BinderTest::case2371(){ }
-void BinderTest::case2372(){ }
-void BinderTest::case2373(){ }
-void BinderTest::case2374(){ }
-void BinderTest::case2375(){ }
-void BinderTest::case2376(){ }
-void BinderTest::case2377(){ }
-void BinderTest::case2378(){ }
-void BinderTest::case2379(){ }
-void BinderTest::case2380(){ }
-void BinderTest::case2381(){ }
-void BinderTest::case2382(){ }
-void BinderTest::case2383(){ }
-void BinderTest::case2384(){ }
-void BinderTest::case2385(){ }
-void BinderTest::case2386(){ }
-void BinderTest::case2387(){ }
-void BinderTest::case2388(){ }
-void BinderTest::case2389(){ }
-void BinderTest::case2390(){ }
-void BinderTest::case2391(){ }
-void BinderTest::case2392(){ }
-void BinderTest::case2393(){ }
-void BinderTest::case2394(){ }
-void BinderTest::case2395(){ }
-void BinderTest::case2396(){ }
-void BinderTest::case2397(){ }
-void BinderTest::case2398(){ }
-void BinderTest::case2399(){ }
+void BinderTester::case2351(){ }
+void BinderTester::case2352(){ }
+void BinderTester::case2353(){ }
+void BinderTester::case2354(){ }
+void BinderTester::case2355(){ }
+void BinderTester::case2356(){ }
+void BinderTester::case2357(){ }
+void BinderTester::case2358(){ }
+void BinderTester::case2359(){ }
+void BinderTester::case2360(){ }
+void BinderTester::case2361(){ }
+void BinderTester::case2362(){ }
+void BinderTester::case2363(){ }
+void BinderTester::case2364(){ }
+void BinderTester::case2365(){ }
+void BinderTester::case2366(){ }
+void BinderTester::case2367(){ }
+void BinderTester::case2368(){ }
+void BinderTester::case2369(){ }
+void BinderTester::case2370(){ }
+void BinderTester::case2371(){ }
+void BinderTester::case2372(){ }
+void BinderTester::case2373(){ }
+void BinderTester::case2374(){ }
+void BinderTester::case2375(){ }
+void BinderTester::case2376(){ }
+void BinderTester::case2377(){ }
+void BinderTester::case2378(){ }
+void BinderTester::case2379(){ }
+void BinderTester::case2380(){ }
+void BinderTester::case2381(){ }
+void BinderTester::case2382(){ }
+void BinderTester::case2383(){ }
+void BinderTester::case2384(){ }
+void BinderTester::case2385(){ }
+void BinderTester::case2386(){ }
+void BinderTester::case2387(){ }
+void BinderTester::case2388(){ }
+void BinderTester::case2389(){ }
+void BinderTester::case2390(){ }
+void BinderTester::case2391(){ }
+void BinderTester::case2392(){ }
+void BinderTester::case2393(){ }
+void BinderTester::case2394(){ }
+void BinderTester::case2395(){ }
+void BinderTester::case2396(){ }
+void BinderTester::case2397(){ }
+void BinderTester::case2398(){ }
+void BinderTester::case2399(){ }

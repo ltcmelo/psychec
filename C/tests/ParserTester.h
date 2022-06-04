@@ -21,21 +21,37 @@
 #ifndef PSYCHE_C_PARSER_TEST_H__
 #define PSYCHE_C_PARSER_TEST_H__
 
-#include "Test.h"
+#include "Fwds.h"
+#include "TestSuite_Internals.h"
+#include "tests/Tester.h"
 
-#define TEST_PARSER(Function) TestFunction { &ParserTest::Function, #Function }
+#define TEST_PARSER(Function) TestFunction { &ParserTester::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class ParserTest final : public Test
+class ParserTester final : public Tester
 {
 public:
+    ParserTester(TestSuite* suite)
+        : Tester(suite)
+    {}
+
     static const std::string Name;
-
     virtual std::string name() const override { return Name; }
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
-    void testAll() override;
+    void testParser();
+
+    void parseDeclaration(std::string text, Expectation X = Expectation());
+    void parseExpression(std::string text, Expectation X = Expectation());
+    void parseStatement(std::string text, Expectation X = Expectation());
+    void parse(std::string text,
+               Expectation X = Expectation(),
+               SyntaxTree::SyntaxCategory synCat = SyntaxTree::SyntaxCategory::UNSPECIFIED);
+
+    using TestFunction = std::pair<std::function<void(ParserTester*)>, const char*>;
 
     /*
         Declarations:
@@ -4144,12 +4160,6 @@ public:
     void case3997();
     void case3998();
     void case3999();
-
-private:
-    using TestFunction = std::pair<std::function<void(ParserTest*)>, const char*>;
-
-    void setUp() override;
-    void tearDown() override;
 
     std::vector<TestFunction> tests_
     {

@@ -18,9 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "BinderTest.h"
+#include "BinderTester.h"
 
-#include "ParserTest.h"
+#include "ParserTester.h"
 
 #include "binder/ConstraintsInTypeSpecifiers.h"
 #include "parser/Unparser.h"
@@ -38,7 +38,7 @@
 using namespace psy;
 using namespace C;
 
-void BinderTest::case1000()
+void BinderTester::case1000()
 {
     bind("double x ;",
          Expectation()
@@ -46,7 +46,7 @@ void BinderTest::case1000()
                     .TySpec.basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
-void BinderTest::case1001()
+void BinderTester::case1001()
 {
     bind("int x ;",
          Expectation()
@@ -54,7 +54,7 @@ void BinderTest::case1001()
                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
-void BinderTest::case1002()
+void BinderTester::case1002()
 {
     bind("int x ; int y ;",
          Expectation()
@@ -64,7 +64,7 @@ void BinderTest::case1002()
                     .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
-void BinderTest::case1003()
+void BinderTester::case1003()
 {
     bind("int x , y ;",
          Expectation()
@@ -74,7 +74,7 @@ void BinderTest::case1003()
                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
-void BinderTest::case1004()
+void BinderTester::case1004()
 {
     bind("x y ;",
          Expectation()
@@ -82,7 +82,7 @@ void BinderTest::case1004()
                  .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case1005()
+void BinderTester::case1005()
 {
     bind("x y , z ;",
          Expectation()
@@ -93,7 +93,7 @@ void BinderTest::case1005()
 
 }
 
-void BinderTest::case1006()
+void BinderTester::case1006()
 {
     bind("int x = 1 ;",
          Expectation()
@@ -101,7 +101,7 @@ void BinderTest::case1006()
                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
-void BinderTest::case1007()
+void BinderTester::case1007()
 {
     bind("x y = 1 ;",
          Expectation()
@@ -109,7 +109,7 @@ void BinderTest::case1007()
                       .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case1008()
+void BinderTester::case1008()
 {
     bind("int float x ;",
          Expectation().diagnostic(
@@ -117,7 +117,7 @@ void BinderTest::case1008()
              ConstraintsInTypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
 
-void BinderTest::case1009()
+void BinderTester::case1009()
 {
     bind("struct x y ;",
          Expectation()
@@ -125,7 +125,7 @@ void BinderTest::case1009()
                     .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case1010()
+void BinderTester::case1010()
 {
     bind("union x y ;",
          Expectation()
@@ -133,7 +133,7 @@ void BinderTest::case1010()
                     .TySpec.basis("union x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case1011()
+void BinderTester::case1011()
 {
     bind("enum x y ;",
          Expectation()
@@ -141,7 +141,7 @@ void BinderTest::case1011()
                     .TySpec.basis("enum x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case1012()
+void BinderTester::case1012()
 {
     bind("struct x y , z ;",
          Expectation()
@@ -151,7 +151,7 @@ void BinderTest::case1012()
                     .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case1013()
+void BinderTester::case1013()
 {
     bind("struct x { int y ; } z ;",
          Expectation()
@@ -159,7 +159,7 @@ void BinderTest::case1013()
                     .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
 }
 
-void BinderTest::case1014()
+void BinderTester::case1014()
 {
     bind("long x ;",
          Expectation()
@@ -167,7 +167,7 @@ void BinderTest::case1014()
                     .TySpec.basis("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
 }
 
-void BinderTest::case1015()
+void BinderTester::case1015()
 {
     bind("long int x ;",
          Expectation()
@@ -175,7 +175,7 @@ void BinderTest::case1015()
                     .TySpec.basis("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
 }
 
-void BinderTest::case1016()
+void BinderTester::case1016()
 {
     bind("int long x ;",
          Expectation()
@@ -183,7 +183,7 @@ void BinderTest::case1016()
                     .TySpec.basis("long", NamedTypeKind::Builtin, BuiltinTypeKind::Long)));
 }
 
-void BinderTest::case1017()
+void BinderTester::case1017()
 {
     bind("signed x ;",
          Expectation()
@@ -191,7 +191,7 @@ void BinderTest::case1017()
                     .TySpec.basis("signed int", NamedTypeKind::Builtin, BuiltinTypeKind::Int_S)));
 }
 
-void BinderTest::case1018()
+void BinderTester::case1018()
 {
     bind("signed int x ;",
          Expectation()
@@ -199,42 +199,42 @@ void BinderTest::case1018()
                     .TySpec.basis("signed int", NamedTypeKind::Builtin, BuiltinTypeKind::Int_S)));
 }
 
-void BinderTest::case1019()
+void BinderTester::case1019()
 {
 }
 
-void BinderTest::case1020() {}
-void BinderTest::case1021() {}
-void BinderTest::case1022() {}
-void BinderTest::case1023() {}
-void BinderTest::case1024() {}
-void BinderTest::case1025() {}
-void BinderTest::case1026() {}
-void BinderTest::case1027() {}
-void BinderTest::case1028() {}
-void BinderTest::case1029() {}
-void BinderTest::case1030() {}
-void BinderTest::case1031() {}
-void BinderTest::case1032() {}
-void BinderTest::case1033() {}
-void BinderTest::case1034() {}
-void BinderTest::case1035() {}
-void BinderTest::case1036() {}
-void BinderTest::case1037() {}
-void BinderTest::case1038() {}
-void BinderTest::case1039() {}
-void BinderTest::case1040() {}
-void BinderTest::case1041() {}
-void BinderTest::case1042() {}
-void BinderTest::case1043() {}
-void BinderTest::case1044() {}
-void BinderTest::case1045() {}
-void BinderTest::case1046() {}
-void BinderTest::case1047() {}
-void BinderTest::case1048() {}
-void BinderTest::case1049() {}
+void BinderTester::case1020() {}
+void BinderTester::case1021() {}
+void BinderTester::case1022() {}
+void BinderTester::case1023() {}
+void BinderTester::case1024() {}
+void BinderTester::case1025() {}
+void BinderTester::case1026() {}
+void BinderTester::case1027() {}
+void BinderTester::case1028() {}
+void BinderTester::case1029() {}
+void BinderTester::case1030() {}
+void BinderTester::case1031() {}
+void BinderTester::case1032() {}
+void BinderTester::case1033() {}
+void BinderTester::case1034() {}
+void BinderTester::case1035() {}
+void BinderTester::case1036() {}
+void BinderTester::case1037() {}
+void BinderTester::case1038() {}
+void BinderTester::case1039() {}
+void BinderTester::case1040() {}
+void BinderTester::case1041() {}
+void BinderTester::case1042() {}
+void BinderTester::case1043() {}
+void BinderTester::case1044() {}
+void BinderTester::case1045() {}
+void BinderTester::case1046() {}
+void BinderTester::case1047() {}
+void BinderTester::case1048() {}
+void BinderTester::case1049() {}
 
-void BinderTest::case1050()
+void BinderTester::case1050()
 {
     bind("const int x ;",
          Expectation()
@@ -242,7 +242,7 @@ void BinderTest::case1050()
                       .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
-void BinderTest::case1051()
+void BinderTester::case1051()
 {
     bind("const x y ;",
          Expectation()
@@ -250,7 +250,7 @@ void BinderTest::case1051()
                       .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
-void BinderTest::case1052()
+void BinderTester::case1052()
 {
     bind("const x ;",
          Expectation().diagnostic(
@@ -258,7 +258,7 @@ void BinderTest::case1052()
              ConstraintsInTypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt));
 }
 
-void BinderTest::case1053()
+void BinderTester::case1053()
 {
     bind("int const x ;",
          Expectation()
@@ -266,7 +266,7 @@ void BinderTest::case1053()
                       .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)));
 }
 
-void BinderTest::case1054()
+void BinderTester::case1054()
 {
     bind("x const y ;",
          Expectation()
@@ -274,53 +274,53 @@ void BinderTest::case1054()
                       .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
-void BinderTest::case1055() {}
-void BinderTest::case1056() {}
-void BinderTest::case1057() {}
-void BinderTest::case1058() {}
-void BinderTest::case1059() {}
-void BinderTest::case1060() {}
-void BinderTest::case1061() {}
-void BinderTest::case1062() {}
-void BinderTest::case1063() {}
-void BinderTest::case1064() {}
-void BinderTest::case1065() {}
-void BinderTest::case1066() {}
-void BinderTest::case1067() {}
-void BinderTest::case1068() {}
-void BinderTest::case1069() {}
-void BinderTest::case1070() {}
-void BinderTest::case1071() {}
-void BinderTest::case1072() {}
-void BinderTest::case1073() {}
-void BinderTest::case1074() {}
-void BinderTest::case1075() {}
-void BinderTest::case1076() {}
-void BinderTest::case1077() {}
-void BinderTest::case1078() {}
-void BinderTest::case1079() {}
-void BinderTest::case1080() {}
-void BinderTest::case1081() {}
-void BinderTest::case1082() {}
-void BinderTest::case1083() {}
-void BinderTest::case1084() {}
-void BinderTest::case1085() {}
-void BinderTest::case1086() {}
-void BinderTest::case1087() {}
-void BinderTest::case1088() {}
-void BinderTest::case1089() {}
-void BinderTest::case1090() {}
-void BinderTest::case1091() {}
-void BinderTest::case1092() {}
-void BinderTest::case1093() {}
-void BinderTest::case1094() {}
-void BinderTest::case1095() {}
-void BinderTest::case1096() {}
-void BinderTest::case1097() {}
-void BinderTest::case1098() {}
-void BinderTest::case1099() {}
+void BinderTester::case1055() {}
+void BinderTester::case1056() {}
+void BinderTester::case1057() {}
+void BinderTester::case1058() {}
+void BinderTester::case1059() {}
+void BinderTester::case1060() {}
+void BinderTester::case1061() {}
+void BinderTester::case1062() {}
+void BinderTester::case1063() {}
+void BinderTester::case1064() {}
+void BinderTester::case1065() {}
+void BinderTester::case1066() {}
+void BinderTester::case1067() {}
+void BinderTester::case1068() {}
+void BinderTester::case1069() {}
+void BinderTester::case1070() {}
+void BinderTester::case1071() {}
+void BinderTester::case1072() {}
+void BinderTester::case1073() {}
+void BinderTester::case1074() {}
+void BinderTester::case1075() {}
+void BinderTester::case1076() {}
+void BinderTester::case1077() {}
+void BinderTester::case1078() {}
+void BinderTester::case1079() {}
+void BinderTester::case1080() {}
+void BinderTester::case1081() {}
+void BinderTester::case1082() {}
+void BinderTester::case1083() {}
+void BinderTester::case1084() {}
+void BinderTester::case1085() {}
+void BinderTester::case1086() {}
+void BinderTester::case1087() {}
+void BinderTester::case1088() {}
+void BinderTester::case1089() {}
+void BinderTester::case1090() {}
+void BinderTester::case1091() {}
+void BinderTester::case1092() {}
+void BinderTester::case1093() {}
+void BinderTester::case1094() {}
+void BinderTester::case1095() {}
+void BinderTester::case1096() {}
+void BinderTester::case1097() {}
+void BinderTester::case1098() {}
+void BinderTester::case1099() {}
 
-void BinderTest::case1100()
+void BinderTester::case1100()
 {
     bind("int * x ;",
          Expectation()
@@ -329,7 +329,7 @@ void BinderTest::case1100()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case1101()
+void BinderTester::case1101()
 {
     bind("x * y ;",
          Expectation()
@@ -338,7 +338,7 @@ void BinderTest::case1101()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case1102()
+void BinderTester::case1102()
 {
     bind("int * x ; y * z ;",
          Expectation()
@@ -350,7 +350,7 @@ void BinderTest::case1102()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case1103()
+void BinderTester::case1103()
 {
     bind("int * x , * y ;",
          Expectation()
@@ -362,7 +362,7 @@ void BinderTest::case1103()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case1104()
+void BinderTester::case1104()
 {
     bind("int ( * x ) [ 1 ];",
          Expectation()
@@ -372,7 +372,7 @@ void BinderTest::case1104()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case1105()
+void BinderTester::case1105()
 {
     bind("int * * x ;",
          Expectation()
@@ -382,7 +382,7 @@ void BinderTest::case1105()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case1106()
+void BinderTester::case1106()
 {
     bind("int * * * x ;",
          Expectation()
@@ -393,7 +393,7 @@ void BinderTest::case1106()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case1107()
+void BinderTester::case1107()
 {
     bind("int * ( * x ) [ 1 ] ;",
          Expectation()
@@ -404,30 +404,30 @@ void BinderTest::case1107()
                       .TySpec.deriv(TypeKind::Pointer, CVR::None)));
 }
 
-void BinderTest::case1108() {}
-void BinderTest::case1109() {}
-void BinderTest::case1110() {}
-void BinderTest::case1111() {}
-void BinderTest::case1112() {}
-void BinderTest::case1113() {}
-void BinderTest::case1114() {}
-void BinderTest::case1115() {}
-void BinderTest::case1116() {}
-void BinderTest::case1117() {}
-void BinderTest::case1118() {}
-void BinderTest::case1119() {}
-void BinderTest::case1120() {}
-void BinderTest::case1121() {}
-void BinderTest::case1122() {}
-void BinderTest::case1123() {}
-void BinderTest::case1124() {}
-void BinderTest::case1125() {}
-void BinderTest::case1126() {}
-void BinderTest::case1127() {}
-void BinderTest::case1128() {}
-void BinderTest::case1129() {}
+void BinderTester::case1108() {}
+void BinderTester::case1109() {}
+void BinderTester::case1110() {}
+void BinderTester::case1111() {}
+void BinderTester::case1112() {}
+void BinderTester::case1113() {}
+void BinderTester::case1114() {}
+void BinderTester::case1115() {}
+void BinderTester::case1116() {}
+void BinderTester::case1117() {}
+void BinderTester::case1118() {}
+void BinderTester::case1119() {}
+void BinderTester::case1120() {}
+void BinderTester::case1121() {}
+void BinderTester::case1122() {}
+void BinderTester::case1123() {}
+void BinderTester::case1124() {}
+void BinderTester::case1125() {}
+void BinderTester::case1126() {}
+void BinderTester::case1127() {}
+void BinderTester::case1128() {}
+void BinderTester::case1129() {}
 
-void BinderTest::case1130()
+void BinderTester::case1130()
 {
     bind("int ( * x ) ( ) ;",
          Expectation()
@@ -438,7 +438,7 @@ void BinderTest::case1130()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case1131()
+void BinderTester::case1131()
 {
     bind("x ( * y ) ( ) ;",
          Expectation()
@@ -449,7 +449,7 @@ void BinderTest::case1131()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case1132()
+void BinderTester::case1132()
 {
     bind("int ( * x ) ( double ) ;",
          Expectation()
@@ -464,7 +464,7 @@ void BinderTest::case1132()
                      .TySpec.basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
-void BinderTest::case1133()
+void BinderTester::case1133()
 {
     bind("x ( * y ) ( double ) ;",
          Expectation()
@@ -479,7 +479,7 @@ void BinderTest::case1133()
                   .TySpec.basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
-void BinderTest::case1134()
+void BinderTester::case1134()
 {
     bind("int ( * x ) ( double , char ) ;",
          Expectation()
@@ -498,7 +498,7 @@ void BinderTest::case1134()
                  .TySpec.basis("char", NamedTypeKind::Builtin, BuiltinTypeKind::Char)));
 }
 
-void BinderTest::case1135()
+void BinderTester::case1135()
 {
     bind("int ( * x ) ( y , char ) ;",
          Expectation()
@@ -517,7 +517,7 @@ void BinderTest::case1135()
                  .TySpec.basis("char", NamedTypeKind::Builtin, BuiltinTypeKind::Char)));
 }
 
-void BinderTest::case1136()
+void BinderTester::case1136()
 {
     bind("void ( * x ) ( int ( * ) ( double) ) ;",
          Expectation()
@@ -541,21 +541,21 @@ void BinderTest::case1136()
                     .TySpec.basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
-void BinderTest::case1137() {}
-void BinderTest::case1138() {}
-void BinderTest::case1139() {}
-void BinderTest::case1140() {}
-void BinderTest::case1141() {}
-void BinderTest::case1142() {}
-void BinderTest::case1143() {}
-void BinderTest::case1144() {}
-void BinderTest::case1145() {}
-void BinderTest::case1146() {}
-void BinderTest::case1147() {}
-void BinderTest::case1148() {}
-void BinderTest::case1149() {}
+void BinderTester::case1137() {}
+void BinderTester::case1138() {}
+void BinderTester::case1139() {}
+void BinderTester::case1140() {}
+void BinderTester::case1141() {}
+void BinderTester::case1142() {}
+void BinderTester::case1143() {}
+void BinderTester::case1144() {}
+void BinderTester::case1145() {}
+void BinderTester::case1146() {}
+void BinderTester::case1147() {}
+void BinderTester::case1148() {}
+void BinderTester::case1149() {}
 
-void BinderTest::case1150()
+void BinderTester::case1150()
 {
     bind("const int * x ;",
          Expectation()
@@ -564,7 +564,7 @@ void BinderTest::case1150()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case1151()
+void BinderTester::case1151()
 {
     bind("const x * y ;",
          Expectation()
@@ -573,57 +573,57 @@ void BinderTest::case1151()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTest::case1152() {}
-void BinderTest::case1153() {}
-void BinderTest::case1154() {}
-void BinderTest::case1155() {}
-void BinderTest::case1156() {}
-void BinderTest::case1157() {}
-void BinderTest::case1158() {}
-void BinderTest::case1159() {}
-void BinderTest::case1160() {}
-void BinderTest::case1161() {}
-void BinderTest::case1162() {}
-void BinderTest::case1163() {}
-void BinderTest::case1164() {}
-void BinderTest::case1165() {}
-void BinderTest::case1166() {}
-void BinderTest::case1167() {}
-void BinderTest::case1168() {}
-void BinderTest::case1169() {}
-void BinderTest::case1170() {}
-void BinderTest::case1171() {}
-void BinderTest::case1172() {}
-void BinderTest::case1173() {}
-void BinderTest::case1174() {}
-void BinderTest::case1175() {}
-void BinderTest::case1176() {}
-void BinderTest::case1177() {}
-void BinderTest::case1178() {}
-void BinderTest::case1179() {}
-void BinderTest::case1180() {}
-void BinderTest::case1181() {}
-void BinderTest::case1182() {}
-void BinderTest::case1183() {}
-void BinderTest::case1184() {}
-void BinderTest::case1185() {}
-void BinderTest::case1186() {}
-void BinderTest::case1187() {}
-void BinderTest::case1188() {}
-void BinderTest::case1189() {}
-void BinderTest::case1190() {}
-void BinderTest::case1191() {}
-void BinderTest::case1192() {}
-void BinderTest::case1193() {}
-void BinderTest::case1194() {}
-void BinderTest::case1195() {}
-void BinderTest::case1196() {}
-void BinderTest::case1197() {}
-void BinderTest::case1198() {}
-void BinderTest::case1199()
+void BinderTester::case1152() {}
+void BinderTester::case1153() {}
+void BinderTester::case1154() {}
+void BinderTester::case1155() {}
+void BinderTester::case1156() {}
+void BinderTester::case1157() {}
+void BinderTester::case1158() {}
+void BinderTester::case1159() {}
+void BinderTester::case1160() {}
+void BinderTester::case1161() {}
+void BinderTester::case1162() {}
+void BinderTester::case1163() {}
+void BinderTester::case1164() {}
+void BinderTester::case1165() {}
+void BinderTester::case1166() {}
+void BinderTester::case1167() {}
+void BinderTester::case1168() {}
+void BinderTester::case1169() {}
+void BinderTester::case1170() {}
+void BinderTester::case1171() {}
+void BinderTester::case1172() {}
+void BinderTester::case1173() {}
+void BinderTester::case1174() {}
+void BinderTester::case1175() {}
+void BinderTester::case1176() {}
+void BinderTester::case1177() {}
+void BinderTester::case1178() {}
+void BinderTester::case1179() {}
+void BinderTester::case1180() {}
+void BinderTester::case1181() {}
+void BinderTester::case1182() {}
+void BinderTester::case1183() {}
+void BinderTester::case1184() {}
+void BinderTester::case1185() {}
+void BinderTester::case1186() {}
+void BinderTester::case1187() {}
+void BinderTester::case1188() {}
+void BinderTester::case1189() {}
+void BinderTester::case1190() {}
+void BinderTester::case1191() {}
+void BinderTester::case1192() {}
+void BinderTester::case1193() {}
+void BinderTester::case1194() {}
+void BinderTester::case1195() {}
+void BinderTester::case1196() {}
+void BinderTester::case1197() {}
+void BinderTester::case1198() {}
+void BinderTester::case1199()
 {}
 
-void BinderTest::case1200()
+void BinderTester::case1200()
 {
     bind("const int * const x ;",
          Expectation()
@@ -632,57 +632,57 @@ void BinderTest::case1200()
                       .TySpec.deriv(TypeKind::Pointer, CVR::Const)));
 }
 
-void BinderTest::case1201() { }
-void BinderTest::case1202() { }
-void BinderTest::case1203() { }
-void BinderTest::case1204() { }
-void BinderTest::case1205() { }
-void BinderTest::case1206() { }
-void BinderTest::case1207() { }
-void BinderTest::case1208() { }
-void BinderTest::case1209() { }
-void BinderTest::case1210() { }
-void BinderTest::case1211() { }
-void BinderTest::case1212() { }
-void BinderTest::case1213() { }
-void BinderTest::case1214() { }
-void BinderTest::case1215() { }
-void BinderTest::case1216() { }
-void BinderTest::case1217() { }
-void BinderTest::case1218() { }
-void BinderTest::case1219() { }
-void BinderTest::case1220() { }
-void BinderTest::case1221() { }
-void BinderTest::case1222() { }
-void BinderTest::case1223() { }
-void BinderTest::case1224() { }
-void BinderTest::case1225() { }
-void BinderTest::case1226() { }
-void BinderTest::case1227() { }
-void BinderTest::case1228() { }
-void BinderTest::case1229() { }
-void BinderTest::case1230() { }
-void BinderTest::case1231() { }
-void BinderTest::case1232() { }
-void BinderTest::case1233() { }
-void BinderTest::case1234() { }
-void BinderTest::case1235() { }
-void BinderTest::case1236() { }
-void BinderTest::case1237() { }
-void BinderTest::case1238() { }
-void BinderTest::case1239() { }
-void BinderTest::case1240() { }
-void BinderTest::case1241() { }
-void BinderTest::case1242() { }
-void BinderTest::case1243() { }
-void BinderTest::case1244() { }
-void BinderTest::case1245() { }
-void BinderTest::case1246() { }
-void BinderTest::case1247() { }
-void BinderTest::case1248() { }
-void BinderTest::case1249() { }
+void BinderTester::case1201() { }
+void BinderTester::case1202() { }
+void BinderTester::case1203() { }
+void BinderTester::case1204() { }
+void BinderTester::case1205() { }
+void BinderTester::case1206() { }
+void BinderTester::case1207() { }
+void BinderTester::case1208() { }
+void BinderTester::case1209() { }
+void BinderTester::case1210() { }
+void BinderTester::case1211() { }
+void BinderTester::case1212() { }
+void BinderTester::case1213() { }
+void BinderTester::case1214() { }
+void BinderTester::case1215() { }
+void BinderTester::case1216() { }
+void BinderTester::case1217() { }
+void BinderTester::case1218() { }
+void BinderTester::case1219() { }
+void BinderTester::case1220() { }
+void BinderTester::case1221() { }
+void BinderTester::case1222() { }
+void BinderTester::case1223() { }
+void BinderTester::case1224() { }
+void BinderTester::case1225() { }
+void BinderTester::case1226() { }
+void BinderTester::case1227() { }
+void BinderTester::case1228() { }
+void BinderTester::case1229() { }
+void BinderTester::case1230() { }
+void BinderTester::case1231() { }
+void BinderTester::case1232() { }
+void BinderTester::case1233() { }
+void BinderTester::case1234() { }
+void BinderTester::case1235() { }
+void BinderTester::case1236() { }
+void BinderTester::case1237() { }
+void BinderTester::case1238() { }
+void BinderTester::case1239() { }
+void BinderTester::case1240() { }
+void BinderTester::case1241() { }
+void BinderTester::case1242() { }
+void BinderTester::case1243() { }
+void BinderTester::case1244() { }
+void BinderTester::case1245() { }
+void BinderTester::case1246() { }
+void BinderTester::case1247() { }
+void BinderTester::case1248() { }
+void BinderTester::case1249() { }
 
-void BinderTest::case1250()
+void BinderTester::case1250()
 {
     bind("int * const x ;",
          Expectation()
@@ -691,7 +691,7 @@ void BinderTest::case1250()
                       .TySpec.deriv(TypeKind::Pointer, CVR::Const)));
 }
 
-void BinderTest::case1251()
+void BinderTester::case1251()
 {
     bind("x * const y ;",
          Expectation()
@@ -700,56 +700,56 @@ void BinderTest::case1251()
                       .TySpec.deriv(TypeKind::Pointer, CVR::Const)));
 }
 
-void BinderTest::case1252() { }
-void BinderTest::case1253() { }
-void BinderTest::case1254() { }
-void BinderTest::case1255() { }
-void BinderTest::case1256() { }
-void BinderTest::case1257() { }
-void BinderTest::case1258() { }
-void BinderTest::case1259() { }
-void BinderTest::case1260() { }
-void BinderTest::case1261() { }
-void BinderTest::case1262() { }
-void BinderTest::case1263() { }
-void BinderTest::case1264() { }
-void BinderTest::case1265() { }
-void BinderTest::case1266() { }
-void BinderTest::case1267() { }
-void BinderTest::case1268() { }
-void BinderTest::case1269() { }
-void BinderTest::case1270() { }
-void BinderTest::case1271() { }
-void BinderTest::case1272() { }
-void BinderTest::case1273() { }
-void BinderTest::case1274() { }
-void BinderTest::case1275() { }
-void BinderTest::case1276() { }
-void BinderTest::case1277() { }
-void BinderTest::case1278() { }
-void BinderTest::case1279() { }
-void BinderTest::case1280() { }
-void BinderTest::case1281() { }
-void BinderTest::case1282() { }
-void BinderTest::case1283() { }
-void BinderTest::case1284() { }
-void BinderTest::case1285() { }
-void BinderTest::case1286() { }
-void BinderTest::case1287() { }
-void BinderTest::case1288() { }
-void BinderTest::case1289() { }
-void BinderTest::case1290() { }
-void BinderTest::case1291() { }
-void BinderTest::case1292() { }
-void BinderTest::case1293() { }
-void BinderTest::case1294() { }
-void BinderTest::case1295() { }
-void BinderTest::case1296() { }
-void BinderTest::case1297() { }
-void BinderTest::case1298() { }
-void BinderTest::case1299() { }
+void BinderTester::case1252() { }
+void BinderTester::case1253() { }
+void BinderTester::case1254() { }
+void BinderTester::case1255() { }
+void BinderTester::case1256() { }
+void BinderTester::case1257() { }
+void BinderTester::case1258() { }
+void BinderTester::case1259() { }
+void BinderTester::case1260() { }
+void BinderTester::case1261() { }
+void BinderTester::case1262() { }
+void BinderTester::case1263() { }
+void BinderTester::case1264() { }
+void BinderTester::case1265() { }
+void BinderTester::case1266() { }
+void BinderTester::case1267() { }
+void BinderTester::case1268() { }
+void BinderTester::case1269() { }
+void BinderTester::case1270() { }
+void BinderTester::case1271() { }
+void BinderTester::case1272() { }
+void BinderTester::case1273() { }
+void BinderTester::case1274() { }
+void BinderTester::case1275() { }
+void BinderTester::case1276() { }
+void BinderTester::case1277() { }
+void BinderTester::case1278() { }
+void BinderTester::case1279() { }
+void BinderTester::case1280() { }
+void BinderTester::case1281() { }
+void BinderTester::case1282() { }
+void BinderTester::case1283() { }
+void BinderTester::case1284() { }
+void BinderTester::case1285() { }
+void BinderTester::case1286() { }
+void BinderTester::case1287() { }
+void BinderTester::case1288() { }
+void BinderTester::case1289() { }
+void BinderTester::case1290() { }
+void BinderTester::case1291() { }
+void BinderTester::case1292() { }
+void BinderTester::case1293() { }
+void BinderTester::case1294() { }
+void BinderTester::case1295() { }
+void BinderTester::case1296() { }
+void BinderTester::case1297() { }
+void BinderTester::case1298() { }
+void BinderTester::case1299() { }
 
-void BinderTest::case1300()
+void BinderTester::case1300()
 {
     bind("int x [ 1 ] ;",
          Expectation()
@@ -758,7 +758,7 @@ void BinderTest::case1300()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case1301()
+void BinderTester::case1301()
 {
     bind("x y [ 1 ] ;",
          Expectation()
@@ -767,7 +767,7 @@ void BinderTest::case1301()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case1302()
+void BinderTester::case1302()
 {
     bind("int x [ 1 ] , y [ 2 ] ;",
          Expectation()
@@ -779,7 +779,7 @@ void BinderTest::case1302()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case1303()
+void BinderTester::case1303()
 {
     bind("x y [ 1 ] , z [ 2 ] ;",
          Expectation()
@@ -791,7 +791,7 @@ void BinderTest::case1303()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case1304()
+void BinderTester::case1304()
 {
     bind("int * x [ 1 ] ;",
          Expectation()
@@ -801,7 +801,7 @@ void BinderTest::case1304()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case1305()
+void BinderTester::case1305()
 {
     bind("int x [ 1 ] , * y [ 2 ] ;",
          Expectation()
@@ -814,7 +814,7 @@ void BinderTest::case1305()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case1306()
+void BinderTester::case1306()
 {
     bind("int * * x [ 1 ] ;",
          Expectation()
@@ -825,54 +825,54 @@ void BinderTest::case1306()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case1307()
+void BinderTester::case1307()
 {
 }
 
-void BinderTest::case1308(){ }
-void BinderTest::case1309(){ }
-void BinderTest::case1310(){ }
-void BinderTest::case1311(){ }
-void BinderTest::case1312(){ }
-void BinderTest::case1313(){ }
-void BinderTest::case1314(){ }
-void BinderTest::case1315(){ }
-void BinderTest::case1316(){ }
-void BinderTest::case1317(){ }
-void BinderTest::case1318(){ }
-void BinderTest::case1319(){ }
-void BinderTest::case1320(){ }
-void BinderTest::case1321(){ }
-void BinderTest::case1322(){ }
-void BinderTest::case1323(){ }
-void BinderTest::case1324(){ }
-void BinderTest::case1325(){ }
-void BinderTest::case1326(){ }
-void BinderTest::case1327(){ }
-void BinderTest::case1328(){ }
-void BinderTest::case1329(){ }
-void BinderTest::case1330(){ }
-void BinderTest::case1331(){ }
-void BinderTest::case1332(){ }
-void BinderTest::case1333(){ }
-void BinderTest::case1334(){ }
-void BinderTest::case1335(){ }
-void BinderTest::case1336(){ }
-void BinderTest::case1337(){ }
-void BinderTest::case1338(){ }
-void BinderTest::case1339(){ }
-void BinderTest::case1340(){ }
-void BinderTest::case1341(){ }
-void BinderTest::case1342(){ }
-void BinderTest::case1343(){ }
-void BinderTest::case1344(){ }
-void BinderTest::case1345(){ }
-void BinderTest::case1346(){ }
-void BinderTest::case1347(){ }
-void BinderTest::case1348(){ }
-void BinderTest::case1349(){ }
+void BinderTester::case1308(){ }
+void BinderTester::case1309(){ }
+void BinderTester::case1310(){ }
+void BinderTester::case1311(){ }
+void BinderTester::case1312(){ }
+void BinderTester::case1313(){ }
+void BinderTester::case1314(){ }
+void BinderTester::case1315(){ }
+void BinderTester::case1316(){ }
+void BinderTester::case1317(){ }
+void BinderTester::case1318(){ }
+void BinderTester::case1319(){ }
+void BinderTester::case1320(){ }
+void BinderTester::case1321(){ }
+void BinderTester::case1322(){ }
+void BinderTester::case1323(){ }
+void BinderTester::case1324(){ }
+void BinderTester::case1325(){ }
+void BinderTester::case1326(){ }
+void BinderTester::case1327(){ }
+void BinderTester::case1328(){ }
+void BinderTester::case1329(){ }
+void BinderTester::case1330(){ }
+void BinderTester::case1331(){ }
+void BinderTester::case1332(){ }
+void BinderTester::case1333(){ }
+void BinderTester::case1334(){ }
+void BinderTester::case1335(){ }
+void BinderTester::case1336(){ }
+void BinderTester::case1337(){ }
+void BinderTester::case1338(){ }
+void BinderTester::case1339(){ }
+void BinderTester::case1340(){ }
+void BinderTester::case1341(){ }
+void BinderTester::case1342(){ }
+void BinderTester::case1343(){ }
+void BinderTester::case1344(){ }
+void BinderTester::case1345(){ }
+void BinderTester::case1346(){ }
+void BinderTester::case1347(){ }
+void BinderTester::case1348(){ }
+void BinderTester::case1349(){ }
 
-void BinderTest::case1350()
+void BinderTester::case1350()
 {
     bind("const int x [ 1 ] ;",
          Expectation()
@@ -881,52 +881,52 @@ void BinderTest::case1350()
                       .TySpec.deriv(TypeKind::Array, CVR::None)));
 }
 
-void BinderTest::case1351(){ }
-void BinderTest::case1352(){ }
-void BinderTest::case1353(){ }
-void BinderTest::case1354(){ }
-void BinderTest::case1355(){ }
-void BinderTest::case1356(){ }
-void BinderTest::case1357(){ }
-void BinderTest::case1358(){ }
-void BinderTest::case1359(){ }
-void BinderTest::case1360(){ }
-void BinderTest::case1361(){ }
-void BinderTest::case1362(){ }
-void BinderTest::case1363(){ }
-void BinderTest::case1364(){ }
-void BinderTest::case1365(){ }
-void BinderTest::case1366(){ }
-void BinderTest::case1367(){ }
-void BinderTest::case1368(){ }
-void BinderTest::case1369(){ }
-void BinderTest::case1370(){ }
-void BinderTest::case1371(){ }
-void BinderTest::case1372(){ }
-void BinderTest::case1373(){ }
-void BinderTest::case1374(){ }
-void BinderTest::case1375(){ }
-void BinderTest::case1376(){ }
-void BinderTest::case1377(){ }
-void BinderTest::case1378(){ }
-void BinderTest::case1379(){ }
-void BinderTest::case1380(){ }
-void BinderTest::case1381(){ }
-void BinderTest::case1382(){ }
-void BinderTest::case1383(){ }
-void BinderTest::case1384(){ }
-void BinderTest::case1385(){ }
-void BinderTest::case1386(){ }
-void BinderTest::case1387(){ }
-void BinderTest::case1388(){ }
-void BinderTest::case1389(){ }
-void BinderTest::case1390(){ }
-void BinderTest::case1391(){ }
-void BinderTest::case1392(){ }
-void BinderTest::case1393(){ }
-void BinderTest::case1394(){ }
-void BinderTest::case1395(){ }
-void BinderTest::case1396(){ }
-void BinderTest::case1397(){ }
-void BinderTest::case1398(){ }
-void BinderTest::case1399(){ }
+void BinderTester::case1351(){ }
+void BinderTester::case1352(){ }
+void BinderTester::case1353(){ }
+void BinderTester::case1354(){ }
+void BinderTester::case1355(){ }
+void BinderTester::case1356(){ }
+void BinderTester::case1357(){ }
+void BinderTester::case1358(){ }
+void BinderTester::case1359(){ }
+void BinderTester::case1360(){ }
+void BinderTester::case1361(){ }
+void BinderTester::case1362(){ }
+void BinderTester::case1363(){ }
+void BinderTester::case1364(){ }
+void BinderTester::case1365(){ }
+void BinderTester::case1366(){ }
+void BinderTester::case1367(){ }
+void BinderTester::case1368(){ }
+void BinderTester::case1369(){ }
+void BinderTester::case1370(){ }
+void BinderTester::case1371(){ }
+void BinderTester::case1372(){ }
+void BinderTester::case1373(){ }
+void BinderTester::case1374(){ }
+void BinderTester::case1375(){ }
+void BinderTester::case1376(){ }
+void BinderTester::case1377(){ }
+void BinderTester::case1378(){ }
+void BinderTester::case1379(){ }
+void BinderTester::case1380(){ }
+void BinderTester::case1381(){ }
+void BinderTester::case1382(){ }
+void BinderTester::case1383(){ }
+void BinderTester::case1384(){ }
+void BinderTester::case1385(){ }
+void BinderTester::case1386(){ }
+void BinderTester::case1387(){ }
+void BinderTester::case1388(){ }
+void BinderTester::case1389(){ }
+void BinderTester::case1390(){ }
+void BinderTester::case1391(){ }
+void BinderTester::case1392(){ }
+void BinderTester::case1393(){ }
+void BinderTester::case1394(){ }
+void BinderTester::case1395(){ }
+void BinderTester::case1396(){ }
+void BinderTester::case1397(){ }
+void BinderTester::case1398(){ }
+void BinderTester::case1399(){ }

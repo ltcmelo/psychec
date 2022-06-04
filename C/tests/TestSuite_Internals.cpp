@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "BinderTest.h"
+#include "TestSuite_Internals.h"
 
 #include "compilation/Assembly.h"
 #include "compilation/Compilation.h"
@@ -30,35 +30,213 @@
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
+#include "BinderTester.h"
+#include "ParserTester.h"
+
+#include <algorithm>
+#include <cstring>
+#include <iostream>
+#include <unordered_set>
+#include <string>
+#include <sstream>
+
+//#define DUMP_AST
+//#define DEBUG_DIAGNOSTICS
 //#define DEBUG_BINDING_SEARCH
 
 using namespace psy;
 using namespace C;
 
-const std::string BinderTest::Name = "BINDER";
+InternalsTestSuite::InternalsTestSuite()
+{}
 
-void BinderTest::testAll()
+InternalsTestSuite::~InternalsTestSuite()
+{}
+
+std::tuple<int, int> InternalsTestSuite::testAll()
 {
-    // TEMPORARY
-    std::vector<TestFunction> active;
-    for (auto testData : tests_) {
-        auto n = std::string(testData.second);
-        auto p = n.find("case09");
-        if (p != std::string::npos) {
-            std::cout << "\t\tskip (TEMP) " << n << std::endl;
-            continue;
-        }
-        active.push_back(testData);
-    }
+    auto P = std::make_unique<ParserTester>(this);
+    P->testParser();
 
-    return run<BinderTest>(active);
+    auto B = std::make_unique<BinderTester>(this);
+    B->testBinder();
+
+    auto res = std::make_tuple(P->totalPassed() + B->totalPassed(),
+                               P->totalFailed() + B->totalFailed());
+
+    testers_.emplace_back(P.release());
+    testers_.emplace_back(B.release());
+
+    return res;
 }
 
-void BinderTest::setUp()
-{}
+std::string InternalsTestSuite::description() const
+{
+    return "C internals test suite";
+}
 
-void BinderTest::tearDown()
-{}
+void InternalsTestSuite::printSummary() const
+{
+    for (auto const& tester : testers_) {
+        std::cout << "    " << tester->name() << " passed: " << tester->totalPassed() << std::endl
+                  << "    " << std::string(tester->name().length(), ' ') << " failed: " << tester->totalFailed() << std::endl;
+    }
+}
+
+bool InternalsTestSuite::checkErrorAndWarn(Expectation X)
+{
+    int E_cnt = 0;
+    int W_cnt = 0;
+    std::unordered_set<std::string> E_IDs;
+    std::unordered_set<std::string> W_IDs;
+    for (const auto& diagnostic : tree_->diagnostics()) {
+        if (diagnostic.severity() == DiagnosticSeverity::Error) {
+            ++E_cnt;
+            E_IDs.insert(diagnostic.descriptor().id());
+        }
+        else if (diagnostic.severity() == DiagnosticSeverity::Warning) {
+            ++W_cnt;
+            W_IDs.insert(diagnostic.descriptor().id());
+        }
+    }
+
+#ifdef DEBUG_DIAGNOSTICS
+    if (!tree_->diagnostics().empty()) {
+        for (auto& diagnostic : tree_->diagnostics()) {
+            diagnostic.outputIndent_ = 2;
+            std::cout << std::endl << diagnostic << std::endl;
+        }
+        std::cout << "\t";
+    }
+#endif
+
+    if (X.numW_ != W_cnt || X.numE_ != E_cnt) {
+#ifdef DEBUG_DIAGNOSTICS
+        std::cout << "\n\t" << std::string(25, '%') << "\n\t";
+#endif
+        std::cout << "mismatch in ";
+        if (X.numW_ != W_cnt)
+            std::cout << "WARNING";
+        else
+            std::cout << "ERROR";
+        std::cout << " count";
+
+#ifdef DEBUG_DIAGNOSTICS
+        std::cout << "\n\t" << std::string(25, '%');
+#endif
+    }
+
+    PSYCHE_EXPECT_INT_EQ(X.numW_, W_cnt);
+    PSYCHE_EXPECT_INT_EQ(X.numE_, E_cnt);
+
+    for (const auto& id : X.descriptorsW_) {
+        if (!W_IDs.count(id)) {
+            std::string msg = "WARNING " + id + " not found, got:";
+            for (const auto& idP : W_IDs)
+                msg += "\n\t\t- " + idP;
+            PSYCHE_TEST_FAIL(msg);
+        }
+    }
+
+    for (const auto& id : X.descriptorsE_) {
+        if (!E_IDs.count(id)) {
+            std::string msg = "ERROR " + id + " not found, got:";
+            for (const auto& idP : E_IDs)
+                msg += "\n\t\t- " + idP;
+            PSYCHE_TEST_FAIL(msg);
+        }
+    }
+
+    if (X.numE_ && !X.continueTestDespiteOfErrors_)
+        return false;
+
+    return true;
+}
+
+void InternalsTestSuite::parseDeclaration(std::string source, Expectation X)
+{
+    parse(source, X, SyntaxTree::SyntaxCategory::Declarations);
+}
+
+void InternalsTestSuite::parseExpression(std::string source, Expectation X)
+{
+    parse(source, X, SyntaxTree::SyntaxCategory::Expressions);
+}
+
+void InternalsTestSuite::parseStatement(std::string source, Expectation X)
+{
+    parse(source, X, SyntaxTree::SyntaxCategory::Statements);
+}
+
+void InternalsTestSuite::parse(std::string source,
+                               Expectation X,
+                               SyntaxTree::SyntaxCategory cat)
+{
+    auto text = source;
+
+#ifdef DEBUG_DIAGNOSTICS
+    if (X.numW_ > 0 || X.numE_ > 0) {
+        std::cout << std::endl;
+        if (X.numW_ > 0)
+            std::cout << "\t\t[expect (parser) WARNING]\n";
+        if (X.numE_ > 0)
+            std::cout << "\t\t[expect (parser) ERROR]\n";
+    }
+#endif
+
+    tree_ = SyntaxTree::parseText(text, TextPreprocessingState::Unknown, ParseOptions(), "", cat);
+
+    if (!checkErrorAndWarn(X))
+        return;
+
+    std::ostringstream ossTree;
+    SyntaxNamePrinter printer(tree_.get());
+    printer.print(tree_->root(),
+                  SyntaxNamePrinter::Style::Plain,
+                  ossTree);
+
+#ifdef DUMP_AST
+    std::cout << "\n\n"
+              << "========================== AST ==================================\n"
+              << source << "\n"
+              << "-----------------------------------------------------------------"
+              << ossTree.str()
+              << "=================================================================\n";
+#endif
+
+    std::ostringstream ossText;
+    Unparser unparser(tree_.get());
+    unparser.unparse(tree_->root(), ossText);
+
+    std::string textP = ossText.str();
+    textP.erase(std::remove_if(textP.begin(), textP.end(), ::isspace), textP.end());
+    text.erase(std::remove_if(text.begin(), text.end(), ::isspace), text.end());
+
+    if (X.isAmbiguous_) {
+        if (X.ambiguityText_.empty())
+            PSYCHE_EXPECT_STR_EQ(text + text, textP);
+        else {
+            X.ambiguityText_.erase(
+                        std::remove_if(X.ambiguityText_.begin(),
+                                       X.ambiguityText_.end(), ::isspace),
+                        X.ambiguityText_.end());
+            PSYCHE_EXPECT_STR_EQ(X.ambiguityText_, textP);
+        }
+    }
+    else
+        PSYCHE_EXPECT_STR_EQ(text, textP);
+
+    if (X.syntaxKinds_.empty())
+        return;
+
+    std::string names;
+    for (auto k : X.syntaxKinds_)
+        names += to_string(k);
+
+    std::string namesP = ossTree.str();
+    namesP.erase(std::remove_if(namesP.begin(), namesP.end(), ::isspace), namesP.end());
+    PSYCHE_EXPECT_STR_EQ(names, namesP);
+}
 
 namespace {
 
@@ -370,7 +548,7 @@ bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const DeclSummary&
 
 } // anonymous
 
-void BinderTest::bind(std::string text, Expectation X)
+void InternalsTestSuite::bind(std::string text, Expectation X)
 {
     parse(text);
     auto compilation = Compilation::create(tree_->filePath());

@@ -32,7 +32,7 @@ namespace C {
 
 class PSY_C_NON_API ConstraintsInDeclarations
 {
-    friend class BinderTest;
+    friend class BinderTester;
 
 public:
     static void UselessDeclaration(SyntaxToken declTk, Binder::DiagnosticsReporter* diagReporter);

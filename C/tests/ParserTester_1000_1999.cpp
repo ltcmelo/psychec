@@ -18,9 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ParserTest.h"
+#include "ParserTester.h"
 
-#include "BinderTest.h"
+#include "BinderTester.h"
 
 #include "parser/Parser.h"
 #include "parser/Unparser.h"
@@ -36,389 +36,389 @@
 using namespace psy;
 using namespace C;
 
-void ParserTest::case1000()
+void ParserTester::case1000()
 {
     parseExpression("1",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1001()
+void ParserTester::case1001()
 {
     parseExpression(".1",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1002()
+void ParserTester::case1002()
 {
     parseExpression("1.",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1003()
+void ParserTester::case1003()
 {
     parseExpression("1.2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1004()
+void ParserTester::case1004()
 {
     parseExpression("1.2e3",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1005()
+void ParserTester::case1005()
 {
     parseExpression("1.2E3",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1006()
+void ParserTester::case1006()
 {
     parseExpression("1.2e+3",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1007()
+void ParserTester::case1007()
 {
     parseExpression("1.2E+3",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1008()
+void ParserTester::case1008()
 {
     parseExpression("1.2e-3",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1009()
+void ParserTester::case1009()
 {
     parseExpression("1.2E-3",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1010()
+void ParserTester::case1010()
 {
     parseExpression("1e2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1011()
+void ParserTester::case1011()
 {
     parseExpression("1E2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1012()
+void ParserTester::case1012()
 {
     parseExpression("1e+2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1013()
+void ParserTester::case1013()
 {
     parseExpression("1e-2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1014()
+void ParserTester::case1014()
 {
     parseExpression("1E+2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1015()
+void ParserTester::case1015()
 {
     parseExpression("1E-2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1016()
+void ParserTester::case1016()
 {
     parseExpression("1E+2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1017()
+void ParserTester::case1017()
 {
     parseExpression("1.e2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1018()
+void ParserTester::case1018()
 {
     parseExpression("1.E2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1019()
+void ParserTester::case1019()
 {
     parseExpression("0",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1020()
+void ParserTester::case1020()
 {
     parseExpression("0L",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1021()
+void ParserTester::case1021()
 {
     parseExpression("int",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1022()
+void ParserTester::case1022()
 {
     parseExpression("{",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1023()
+void ParserTester::case1023()
 {
     parseExpression("0x1.2p3",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1024()
+void ParserTester::case1024()
 {
     parseExpression("0x1.ap2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1025()
+void ParserTester::case1025()
 {
     parseExpression("0x1.Ap2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1026()
+void ParserTester::case1026()
 {
     parseExpression("0x1.fp2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1027()
+void ParserTester::case1027()
 {
     parseExpression("0x1.Fp2",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1028()
+void ParserTester::case1028()
 {
     parseExpression("0x1.2p3f",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1029()
+void ParserTester::case1029()
 {
     parseExpression("0x1.2p3F",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1030()
+void ParserTester::case1030()
 {
     parseExpression("x",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1031()
+void ParserTester::case1031()
 {
     parseExpression("_x",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1032()
+void ParserTester::case1032()
 {
     parseExpression("x_y",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1033()
+void ParserTester::case1033()
 {
     parseExpression("x1",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1034()
+void ParserTester::case1034()
 {
     parseExpression("x1_",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1035()
+void ParserTester::case1035()
 {
     parseExpression("x1y2",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1036()
+void ParserTester::case1036()
 {
     parseExpression("_x1y2_",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1037()
+void ParserTester::case1037()
 {
     parseExpression("X",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1038()
+void ParserTester::case1038()
 {
     parseExpression("_X",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1039()
+void ParserTester::case1039()
 {
     parseExpression("X1",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1040()
+void ParserTester::case1040()
 {
     parseExpression("_X1",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1041()
+void ParserTester::case1041()
 {
     parseExpression("xYz1",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1042()
+void ParserTester::case1042()
 {
     parseExpression("xYz1_",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1043()
+void ParserTester::case1043()
 {
     parseExpression("xY_z1",
                     Expectation().AST( { IdentifierName }));
 }
 
-void ParserTest::case1044()
+void ParserTester::case1044()
 {
     parseExpression("1l",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1045()
+void ParserTester::case1045()
 {
     parseExpression("1ll",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1046()
+void ParserTester::case1046()
 {
     parseExpression("1L",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1047()
+void ParserTester::case1047()
 {
     parseExpression("1LL",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1048()
+void ParserTester::case1048()
 {
     parseExpression("1u",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1049()
+void ParserTester::case1049()
 {
     parseExpression("1U",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1050()
+void ParserTester::case1050()
 {
     parseExpression("1uL",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1051()
+void ParserTester::case1051()
 {
     parseExpression("1ul",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1052()
+void ParserTester::case1052()
 {
     parseExpression("0x1u",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1053()
+void ParserTester::case1053()
 {
     parseExpression("0x1Ul",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1054()
+void ParserTester::case1054()
 {
     parseExpression("L'x'",
                     Expectation().AST( { CharacterConstantExpression }));
 }
 
-void ParserTest::case1055()
+void ParserTester::case1055()
 {
     parseExpression("u'x'",
                     Expectation().AST( { CharacterConstantExpression }));
 }
 
-void ParserTest::case1056()
+void ParserTester::case1056()
 {
     parseExpression("U'x'",
                     Expectation().AST( { CharacterConstantExpression }));
 }
 
-void ParserTest::case1057()
+void ParserTester::case1057()
 {
     parseExpression("'x'",
                     Expectation().AST( { CharacterConstantExpression }));
 }
 
-void ParserTest::case1058()
+void ParserTester::case1058()
 {
     parseExpression("u\"xyz\"",
                     Expectation().AST( { StringLiteralExpression }));
 }
 
-void ParserTest::case1059()
+void ParserTester::case1059()
 {
     parseExpression("\"xyz\"",
                     Expectation().AST( { StringLiteralExpression }));
 }
 
-void ParserTest::case1060()
+void ParserTester::case1060()
 {
     parseExpression("\"x\" \"y\"",
                     Expectation().AST( { StringLiteralExpression,
                                          StringLiteralExpression}));
 }
 
-void ParserTest::case1061()
+void ParserTester::case1061()
 {
     parseExpression("1Lu",
                     Expectation().AST( { IntegerConstantExpression }));
 
 }
 
-void ParserTest::case1062()
+void ParserTester::case1062()
 {
     parseExpression("0x1lU",
                     Expectation().AST( { IntegerConstantExpression }));
 }
 
-void ParserTest::case1063()
+void ParserTester::case1063()
 {
     parseExpression("0x1lUll",
                     Expectation().diagnostic(
@@ -426,7 +426,7 @@ void ParserTest::case1063()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1064()
+void ParserTester::case1064()
 {
     parseExpression("1lul",
                     Expectation().diagnostic(
@@ -434,7 +434,7 @@ void ParserTest::case1064()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1065()
+void ParserTester::case1065()
 {
     parseExpression("1ulu",
                     Expectation().diagnostic(
@@ -442,7 +442,7 @@ void ParserTest::case1065()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1066()
+void ParserTester::case1066()
 {
     parseExpression("1ullu",
                     Expectation().diagnostic(
@@ -450,7 +450,7 @@ void ParserTest::case1066()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1067()
+void ParserTester::case1067()
 {
     parseExpression("1uu",
                     Expectation().diagnostic(
@@ -458,7 +458,7 @@ void ParserTest::case1067()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1068()
+void ParserTester::case1068()
 {
     parseExpression("1lll",
                     Expectation().diagnostic(
@@ -466,127 +466,127 @@ void ParserTest::case1068()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1069()
+void ParserTester::case1069()
 {
     parseExpression(".1f",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1070()
+void ParserTester::case1070()
 {
     parseExpression(".1l",
                     Expectation().AST( { FloatingConstantExpression }));
 }
 
-void ParserTest::case1071()
+void ParserTester::case1071()
 {
     parseExpression("1i",
                     Expectation().AST( { ImaginaryIntegerConstantExpression }));
 }
 
-void ParserTest::case1072()
+void ParserTester::case1072()
 {
     parseExpression(".1i",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1073()
+void ParserTester::case1073()
 {
     parseExpression("1.i",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1074()
+void ParserTester::case1074()
 {
     parseExpression("1.2i",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1075()
+void ParserTester::case1075()
 {
     parseExpression("1.2e3i",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1076()
+void ParserTester::case1076()
 {
     parseExpression("1uli",
                     Expectation().AST( { ImaginaryIntegerConstantExpression }));
 }
 
-void ParserTest::case1077()
+void ParserTester::case1077()
 {
     parseExpression("1j",
                     Expectation().AST( { ImaginaryIntegerConstantExpression }));
 }
 
-void ParserTest::case1078()
+void ParserTester::case1078()
 {
     parseExpression(".1j",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1079()
+void ParserTester::case1079()
 {
     parseExpression("1.j",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1080()
+void ParserTester::case1080()
 {
     parseExpression("1.2j",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1081()
+void ParserTester::case1081()
 {
     parseExpression("1.2e3j",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1082()
+void ParserTester::case1082()
 {
     parseExpression("1ulj",
                     Expectation().AST( { ImaginaryIntegerConstantExpression }));
 }
 
-void ParserTest::case1083()
+void ParserTester::case1083()
 {
     parseExpression("1iu",
                     Expectation().AST( { ImaginaryIntegerConstantExpression }));
 }
 
-void ParserTest::case1084()
+void ParserTester::case1084()
 {
     parseExpression("1ju",
                     Expectation().AST( { ImaginaryIntegerConstantExpression }));
 }
 
-void ParserTest::case1085()
+void ParserTester::case1085()
 {
     parseExpression("1.2if",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1086()
+void ParserTester::case1086()
 {
     parseExpression("1.2jf",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1087()
+void ParserTester::case1087()
 {
     parseExpression("1.2e3if",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1088()
+void ParserTester::case1088()
 {
     parseExpression("1.2e3jf",
                     Expectation().AST( { ImaginaryFloatingConstantExpression }));
 }
 
-void ParserTest::case1089()
+void ParserTester::case1089()
 {
     parseExpression("1ii",
                     Expectation().diagnostic(
@@ -594,7 +594,7 @@ void ParserTest::case1089()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1090()
+void ParserTester::case1090()
 {
     parseExpression("1jj",
                     Expectation().diagnostic(
@@ -602,7 +602,7 @@ void ParserTest::case1090()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1091()
+void ParserTester::case1091()
 {
     parseExpression("1ij",
                     Expectation().diagnostic(
@@ -610,7 +610,7 @@ void ParserTest::case1091()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1092()
+void ParserTester::case1092()
 {
     parseExpression("1ji",
                     Expectation().diagnostic(
@@ -618,7 +618,7 @@ void ParserTest::case1092()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1093()
+void ParserTester::case1093()
 {
     parseExpression("1uliul",
                     Expectation().diagnostic(
@@ -626,7 +626,7 @@ void ParserTest::case1093()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1094()
+void ParserTester::case1094()
 {
     parseExpression("1uljul",
                     Expectation().diagnostic(
@@ -634,7 +634,7 @@ void ParserTest::case1094()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1095()
+void ParserTester::case1095()
 {
     parseExpression(".1fllf",
                     Expectation().diagnostic(
@@ -642,7 +642,7 @@ void ParserTest::case1095()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1096()
+void ParserTester::case1096()
 {
     parseExpression("0.1fllf",
                     Expectation().diagnostic(
@@ -650,25 +650,25 @@ void ParserTest::case1096()
                         Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1097() {}
-void ParserTest::case1098() {}
-void ParserTest::case1099() {}
+void ParserTester::case1097() {}
+void ParserTester::case1098() {}
+void ParserTester::case1099() {}
 
-void ParserTest::case1100()
+void ParserTester::case1100()
 {
     parseExpression("( 1 )",
                     Expectation().AST( { ParenthesizedExpression,
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1101()
+void ParserTester::case1101()
 {
     parseExpression("( x )",
                     Expectation().AST( { ParenthesizedExpression,
                                          IdentifierName }));
 }
 
-void ParserTest::case1102()
+void ParserTester::case1102()
 {
     parseExpression("( ( x ) )",
                     Expectation().AST( { ParenthesizedExpression,
@@ -676,135 +676,135 @@ void ParserTest::case1102()
                                          IdentifierName }));
 }
 
-void ParserTest::case1103()
+void ParserTester::case1103()
 {
     parseExpression("( 'x' )",
                     Expectation().AST( { ParenthesizedExpression,
                                          CharacterConstantExpression }));
 }
 
-void ParserTest::case1104()
+void ParserTester::case1104()
 {
     parseExpression("( x",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
-void ParserTest::case1105()
+void ParserTester::case1105()
 {
     parseExpression("( ( x )",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
-void ParserTest::case1106()
+void ParserTester::case1106()
 {
     parseExpression("( int",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
-void ParserTest::case1107()
+void ParserTester::case1107()
 {
     parseExpression("( int )",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1108() {}
-void ParserTest::case1109() {}
-void ParserTest::case1110() {}
-void ParserTest::case1111() {}
-void ParserTest::case1112() {}
-void ParserTest::case1113() {}
-void ParserTest::case1114() {}
-void ParserTest::case1115() {}
-void ParserTest::case1116() {}
-void ParserTest::case1117() {}
-void ParserTest::case1118() {}
-void ParserTest::case1119() {}
-void ParserTest::case1120() {}
-void ParserTest::case1121() {}
-void ParserTest::case1122() {}
-void ParserTest::case1123() {}
-void ParserTest::case1124() {}
-void ParserTest::case1125() {}
-void ParserTest::case1126() {}
-void ParserTest::case1127() {}
-void ParserTest::case1128() {}
-void ParserTest::case1129() {}
-void ParserTest::case1130() {}
-void ParserTest::case1131() {}
-void ParserTest::case1132() {}
-void ParserTest::case1133() {}
-void ParserTest::case1134() {}
-void ParserTest::case1135() {}
-void ParserTest::case1136() {}
-void ParserTest::case1137() {}
-void ParserTest::case1138() {}
-void ParserTest::case1139() {}
-void ParserTest::case1140() {}
-void ParserTest::case1141() {}
-void ParserTest::case1142() {}
-void ParserTest::case1143() {}
-void ParserTest::case1144() {}
-void ParserTest::case1145() {}
-void ParserTest::case1146() {}
-void ParserTest::case1147() {}
-void ParserTest::case1148() {}
-void ParserTest::case1149() {}
-void ParserTest::case1150() {}
-void ParserTest::case1151() {}
-void ParserTest::case1152() {}
-void ParserTest::case1153() {}
-void ParserTest::case1154() {}
-void ParserTest::case1155() {}
-void ParserTest::case1156() {}
-void ParserTest::case1157() {}
-void ParserTest::case1158() {}
-void ParserTest::case1159() {}
-void ParserTest::case1160() {}
-void ParserTest::case1161() {}
-void ParserTest::case1162() {}
-void ParserTest::case1163() {}
-void ParserTest::case1164() {}
-void ParserTest::case1165() {}
-void ParserTest::case1166() {}
-void ParserTest::case1167() {}
-void ParserTest::case1168() {}
-void ParserTest::case1169() {}
-void ParserTest::case1170() {}
-void ParserTest::case1171() {}
-void ParserTest::case1172() {}
-void ParserTest::case1173() {}
-void ParserTest::case1174() {}
-void ParserTest::case1175() {}
-void ParserTest::case1176() {}
-void ParserTest::case1177() {}
-void ParserTest::case1178() {}
-void ParserTest::case1179() {}
-void ParserTest::case1180() {}
-void ParserTest::case1181() {}
-void ParserTest::case1182() {}
-void ParserTest::case1183() {}
-void ParserTest::case1184() {}
-void ParserTest::case1185() {}
-void ParserTest::case1186() {}
-void ParserTest::case1187() {}
-void ParserTest::case1188() {}
-void ParserTest::case1189() {}
-void ParserTest::case1190() {}
-void ParserTest::case1191() {}
-void ParserTest::case1192() {}
-void ParserTest::case1193() {}
-void ParserTest::case1194() {}
-void ParserTest::case1195() {}
-void ParserTest::case1196() {}
-void ParserTest::case1197() {}
-void ParserTest::case1198() {}
-void ParserTest::case1199() {}
+void ParserTester::case1108() {}
+void ParserTester::case1109() {}
+void ParserTester::case1110() {}
+void ParserTester::case1111() {}
+void ParserTester::case1112() {}
+void ParserTester::case1113() {}
+void ParserTester::case1114() {}
+void ParserTester::case1115() {}
+void ParserTester::case1116() {}
+void ParserTester::case1117() {}
+void ParserTester::case1118() {}
+void ParserTester::case1119() {}
+void ParserTester::case1120() {}
+void ParserTester::case1121() {}
+void ParserTester::case1122() {}
+void ParserTester::case1123() {}
+void ParserTester::case1124() {}
+void ParserTester::case1125() {}
+void ParserTester::case1126() {}
+void ParserTester::case1127() {}
+void ParserTester::case1128() {}
+void ParserTester::case1129() {}
+void ParserTester::case1130() {}
+void ParserTester::case1131() {}
+void ParserTester::case1132() {}
+void ParserTester::case1133() {}
+void ParserTester::case1134() {}
+void ParserTester::case1135() {}
+void ParserTester::case1136() {}
+void ParserTester::case1137() {}
+void ParserTester::case1138() {}
+void ParserTester::case1139() {}
+void ParserTester::case1140() {}
+void ParserTester::case1141() {}
+void ParserTester::case1142() {}
+void ParserTester::case1143() {}
+void ParserTester::case1144() {}
+void ParserTester::case1145() {}
+void ParserTester::case1146() {}
+void ParserTester::case1147() {}
+void ParserTester::case1148() {}
+void ParserTester::case1149() {}
+void ParserTester::case1150() {}
+void ParserTester::case1151() {}
+void ParserTester::case1152() {}
+void ParserTester::case1153() {}
+void ParserTester::case1154() {}
+void ParserTester::case1155() {}
+void ParserTester::case1156() {}
+void ParserTester::case1157() {}
+void ParserTester::case1158() {}
+void ParserTester::case1159() {}
+void ParserTester::case1160() {}
+void ParserTester::case1161() {}
+void ParserTester::case1162() {}
+void ParserTester::case1163() {}
+void ParserTester::case1164() {}
+void ParserTester::case1165() {}
+void ParserTester::case1166() {}
+void ParserTester::case1167() {}
+void ParserTester::case1168() {}
+void ParserTester::case1169() {}
+void ParserTester::case1170() {}
+void ParserTester::case1171() {}
+void ParserTester::case1172() {}
+void ParserTester::case1173() {}
+void ParserTester::case1174() {}
+void ParserTester::case1175() {}
+void ParserTester::case1176() {}
+void ParserTester::case1177() {}
+void ParserTester::case1178() {}
+void ParserTester::case1179() {}
+void ParserTester::case1180() {}
+void ParserTester::case1181() {}
+void ParserTester::case1182() {}
+void ParserTester::case1183() {}
+void ParserTester::case1184() {}
+void ParserTester::case1185() {}
+void ParserTester::case1186() {}
+void ParserTester::case1187() {}
+void ParserTester::case1188() {}
+void ParserTester::case1189() {}
+void ParserTester::case1190() {}
+void ParserTester::case1191() {}
+void ParserTester::case1192() {}
+void ParserTester::case1193() {}
+void ParserTester::case1194() {}
+void ParserTester::case1195() {}
+void ParserTester::case1196() {}
+void ParserTester::case1197() {}
+void ParserTester::case1198() {}
+void ParserTester::case1199() {}
 
-void ParserTest::case1200()
+void ParserTester::case1200()
 {
     parseExpression(R"(
                     _Generic( x,
@@ -812,7 +812,7 @@ void ParserTest::case1200()
                     )");
 }
 
-void ParserTest::case1201()
+void ParserTester::case1201()
 {
     parseExpression(R"(
                     _Generic( x,
@@ -822,7 +822,7 @@ void ParserTest::case1201()
                     )");
 }
 
-void ParserTest::case1202()
+void ParserTester::case1202()
 {
     parseExpression(R"(
                     _Generic( x,
@@ -830,7 +830,7 @@ void ParserTest::case1202()
                     )");
 }
 
-void ParserTest::case1203()
+void ParserTester::case1203()
 {
     parseExpression(R"(
                     _Generic( ( x ),
@@ -839,7 +839,7 @@ void ParserTest::case1203()
                     )");
 }
 
-void ParserTest::case1204()
+void ParserTester::case1204()
 {
     parseExpression(R"(
                     _Generic( x float: cbrtf)
@@ -848,28 +848,28 @@ void ParserTest::case1204()
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
-void ParserTest::case1205()
+void ParserTester::case1205()
 {
     parseExpression("_Generic( x, float, cbrtf)",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
-void ParserTest::case1206()
+void ParserTester::case1206()
 {
     parseExpression("_Generic( x : cbrtf)",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
-void ParserTest::case1207()
+void ParserTester::case1207()
 {
     parseExpression("_Generic(float: cbrtf)",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1208()
+void ParserTester::case1208()
 {
     parseExpression(R"(
                     _Generic( x,
@@ -879,7 +879,7 @@ void ParserTest::case1208()
                     )");
 }
 
-void ParserTest::case1209()
+void ParserTester::case1209()
 {
     parseExpression(R"(
                     _Generic( x,
@@ -888,7 +888,7 @@ void ParserTest::case1209()
                     Expectation().setErrorCnt(1));
 }
 
-void ParserTest::case1210()
+void ParserTester::case1210()
 {
     parseExpression(R"(
                     _Generic( x,
@@ -897,7 +897,7 @@ void ParserTest::case1210()
                     Expectation().setErrorCnt(1));
 }
 
-void ParserTest::case1211()
+void ParserTester::case1211()
 {
     parseExpression(R"(
                     _Generic( ( x ), int : 1,)
@@ -905,46 +905,46 @@ void ParserTest::case1211()
                     Expectation().setErrorCnt(1));
 }
 
-void ParserTest::case1212() {}
-void ParserTest::case1213() {}
-void ParserTest::case1214() {}
-void ParserTest::case1215() {}
-void ParserTest::case1216() {}
-void ParserTest::case1217() {}
-void ParserTest::case1218() {}
-void ParserTest::case1219() {}
-void ParserTest::case1220() {}
-void ParserTest::case1221() {}
-void ParserTest::case1222() {}
-void ParserTest::case1223() {}
-void ParserTest::case1224() {}
-void ParserTest::case1225() {}
-void ParserTest::case1226() {}
-void ParserTest::case1227() {}
-void ParserTest::case1228() {}
-void ParserTest::case1229() {}
-void ParserTest::case1230() {}
-void ParserTest::case1231() {}
-void ParserTest::case1232() {}
-void ParserTest::case1233() {}
-void ParserTest::case1234() {}
-void ParserTest::case1235() {}
-void ParserTest::case1236() {}
-void ParserTest::case1237() {}
-void ParserTest::case1238() {}
-void ParserTest::case1239() {}
-void ParserTest::case1240() {}
-void ParserTest::case1241() {}
-void ParserTest::case1242() {}
-void ParserTest::case1243() {}
-void ParserTest::case1244() {}
-void ParserTest::case1245() {}
-void ParserTest::case1246() {}
-void ParserTest::case1247() {}
-void ParserTest::case1248() {}
-void ParserTest::case1249() {}
+void ParserTester::case1212() {}
+void ParserTester::case1213() {}
+void ParserTester::case1214() {}
+void ParserTester::case1215() {}
+void ParserTester::case1216() {}
+void ParserTester::case1217() {}
+void ParserTester::case1218() {}
+void ParserTester::case1219() {}
+void ParserTester::case1220() {}
+void ParserTester::case1221() {}
+void ParserTester::case1222() {}
+void ParserTester::case1223() {}
+void ParserTester::case1224() {}
+void ParserTester::case1225() {}
+void ParserTester::case1226() {}
+void ParserTester::case1227() {}
+void ParserTester::case1228() {}
+void ParserTester::case1229() {}
+void ParserTester::case1230() {}
+void ParserTester::case1231() {}
+void ParserTester::case1232() {}
+void ParserTester::case1233() {}
+void ParserTester::case1234() {}
+void ParserTester::case1235() {}
+void ParserTester::case1236() {}
+void ParserTester::case1237() {}
+void ParserTester::case1238() {}
+void ParserTester::case1239() {}
+void ParserTester::case1240() {}
+void ParserTester::case1241() {}
+void ParserTester::case1242() {}
+void ParserTester::case1243() {}
+void ParserTester::case1244() {}
+void ParserTester::case1245() {}
+void ParserTester::case1246() {}
+void ParserTester::case1247() {}
+void ParserTester::case1248() {}
+void ParserTester::case1249() {}
 
-void ParserTest::case1250()
+void ParserTester::case1250()
 {
     parseExpression("( struct x ) { y++ }",
                     Expectation().AST( { CompoundLiteralExpression,
@@ -957,7 +957,7 @@ void ParserTest::case1250()
                                          IdentifierName }));
 }
 
-void ParserTest::case1251()
+void ParserTester::case1251()
 {
     parseExpression("( int ) { 1 }",
                     Expectation().AST( { CompoundLiteralExpression,
@@ -969,7 +969,7 @@ void ParserTest::case1251()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1252()
+void ParserTester::case1252()
 {
     parseExpression("( x ) { 1, 2 }",
                     Expectation().AST( { CompoundLiteralExpression,
@@ -983,113 +983,113 @@ void ParserTest::case1252()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1253()
+void ParserTester::case1253()
 {
     parseExpression("( struct x ) {",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1254()
+void ParserTester::case1254()
 {
     parseExpression("( struct x ) { 1,",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1255()
+void ParserTester::case1255()
 {
     parseExpression("( struct x ) { 1",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
-void ParserTest::case1256()
+void ParserTester::case1256()
 {
     parseExpression("( long ) {",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1257()
+void ParserTester::case1257()
 {
 }
 
-void ParserTest::case1258()
+void ParserTester::case1258()
 {
 }
 
-void ParserTest::case1259() {}
-void ParserTest::case1260() {}
-void ParserTest::case1261() {}
-void ParserTest::case1262() {}
-void ParserTest::case1263() {}
-void ParserTest::case1264() {}
-void ParserTest::case1265() {}
-void ParserTest::case1266() {}
-void ParserTest::case1267() {}
-void ParserTest::case1268() {}
-void ParserTest::case1269() {}
-void ParserTest::case1270() {}
-void ParserTest::case1271() {}
-void ParserTest::case1272() {}
-void ParserTest::case1273() {}
-void ParserTest::case1274() {}
-void ParserTest::case1275() {}
-void ParserTest::case1276() {}
-void ParserTest::case1277() {}
-void ParserTest::case1278() {}
-void ParserTest::case1279() {}
-void ParserTest::case1280() {}
-void ParserTest::case1281() {}
-void ParserTest::case1282() {}
-void ParserTest::case1283() {}
-void ParserTest::case1284() {}
-void ParserTest::case1285() {}
-void ParserTest::case1286() {}
-void ParserTest::case1287() {}
-void ParserTest::case1288() {}
-void ParserTest::case1289() {}
-void ParserTest::case1290() {}
-void ParserTest::case1291() {}
-void ParserTest::case1292() {}
-void ParserTest::case1293() {}
-void ParserTest::case1294() {}
-void ParserTest::case1295() {}
-void ParserTest::case1296() {}
-void ParserTest::case1297() {}
-void ParserTest::case1298() {}
-void ParserTest::case1299() {}
+void ParserTester::case1259() {}
+void ParserTester::case1260() {}
+void ParserTester::case1261() {}
+void ParserTester::case1262() {}
+void ParserTester::case1263() {}
+void ParserTester::case1264() {}
+void ParserTester::case1265() {}
+void ParserTester::case1266() {}
+void ParserTester::case1267() {}
+void ParserTester::case1268() {}
+void ParserTester::case1269() {}
+void ParserTester::case1270() {}
+void ParserTester::case1271() {}
+void ParserTester::case1272() {}
+void ParserTester::case1273() {}
+void ParserTester::case1274() {}
+void ParserTester::case1275() {}
+void ParserTester::case1276() {}
+void ParserTester::case1277() {}
+void ParserTester::case1278() {}
+void ParserTester::case1279() {}
+void ParserTester::case1280() {}
+void ParserTester::case1281() {}
+void ParserTester::case1282() {}
+void ParserTester::case1283() {}
+void ParserTester::case1284() {}
+void ParserTester::case1285() {}
+void ParserTester::case1286() {}
+void ParserTester::case1287() {}
+void ParserTester::case1288() {}
+void ParserTester::case1289() {}
+void ParserTester::case1290() {}
+void ParserTester::case1291() {}
+void ParserTester::case1292() {}
+void ParserTester::case1293() {}
+void ParserTester::case1294() {}
+void ParserTester::case1295() {}
+void ParserTester::case1296() {}
+void ParserTester::case1297() {}
+void ParserTester::case1298() {}
+void ParserTester::case1299() {}
 
-void ParserTest::case1300()
+void ParserTester::case1300()
 {
     parseExpression("++x",
                     Expectation().AST({ PreIncrementExpression,
                                         IdentifierName }));
 }
 
-void ParserTest::case1301()
+void ParserTester::case1301()
 {
     parseExpression("--x",
                     Expectation().AST({ PreDecrementExpression,
                                         IdentifierName }));;
 }
 
-void ParserTest::case1302()
+void ParserTester::case1302()
 {
     parseExpression("x++",
                     Expectation().AST({ PostIncrementExpression,
                                         IdentifierName }));
 }
 
-void ParserTest::case1303()
+void ParserTester::case1303()
 {
     parseExpression("x--",
                     Expectation().AST({ PostDecrementExpression,
                                         IdentifierName }));
 }
 
-void ParserTest::case1304()
+void ParserTester::case1304()
 {
     parseExpression("++( x )",
                     Expectation().AST({ PreIncrementExpression,
@@ -1097,7 +1097,7 @@ void ParserTest::case1304()
                                         IdentifierName }));
 }
 
-void ParserTest::case1305()
+void ParserTester::case1305()
 {
     parseExpression("++( ( x ))",
                     Expectation().AST({ PreIncrementExpression,
@@ -1106,7 +1106,7 @@ void ParserTest::case1305()
                                         IdentifierName }));
 }
 
-void ParserTest::case1306()
+void ParserTester::case1306()
 {
     parseExpression("( x )++",
                     Expectation().AST({ PostIncrementExpression,
@@ -1114,7 +1114,7 @@ void ParserTest::case1306()
                                         IdentifierName }));
 }
 
-void ParserTest::case1307()
+void ParserTester::case1307()
 {
     parseExpression("( ( x ))++",
                     Expectation().AST({ PostIncrementExpression,
@@ -1123,137 +1123,137 @@ void ParserTest::case1307()
                                         IdentifierName }));
 }
 
-void ParserTest::case1308()
+void ParserTester::case1308()
 {
     parseExpression("x+",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1309() {}
-void ParserTest::case1310() {}
-void ParserTest::case1311() {}
-void ParserTest::case1312() {}
-void ParserTest::case1313() {}
-void ParserTest::case1314() {}
-void ParserTest::case1315() {}
-void ParserTest::case1316() {}
-void ParserTest::case1317() {}
-void ParserTest::case1318() {}
-void ParserTest::case1319() {}
-void ParserTest::case1320() {}
-void ParserTest::case1321() {}
-void ParserTest::case1322() {}
-void ParserTest::case1323() {}
-void ParserTest::case1324() {}
-void ParserTest::case1325() {}
-void ParserTest::case1326() {}
-void ParserTest::case1327() {}
-void ParserTest::case1328() {}
-void ParserTest::case1329() {}
-void ParserTest::case1330() {}
-void ParserTest::case1331() {}
-void ParserTest::case1332() {}
-void ParserTest::case1333() {}
-void ParserTest::case1334() {}
-void ParserTest::case1335() {}
-void ParserTest::case1336() {}
-void ParserTest::case1337() {}
-void ParserTest::case1338() {}
-void ParserTest::case1339() {}
-void ParserTest::case1340() {}
-void ParserTest::case1341() {}
-void ParserTest::case1342() {}
-void ParserTest::case1343() {}
-void ParserTest::case1344() {}
-void ParserTest::case1345() {}
-void ParserTest::case1346() {}
-void ParserTest::case1347() {}
-void ParserTest::case1348() {}
-void ParserTest::case1349() {}
+void ParserTester::case1309() {}
+void ParserTester::case1310() {}
+void ParserTester::case1311() {}
+void ParserTester::case1312() {}
+void ParserTester::case1313() {}
+void ParserTester::case1314() {}
+void ParserTester::case1315() {}
+void ParserTester::case1316() {}
+void ParserTester::case1317() {}
+void ParserTester::case1318() {}
+void ParserTester::case1319() {}
+void ParserTester::case1320() {}
+void ParserTester::case1321() {}
+void ParserTester::case1322() {}
+void ParserTester::case1323() {}
+void ParserTester::case1324() {}
+void ParserTester::case1325() {}
+void ParserTester::case1326() {}
+void ParserTester::case1327() {}
+void ParserTester::case1328() {}
+void ParserTester::case1329() {}
+void ParserTester::case1330() {}
+void ParserTester::case1331() {}
+void ParserTester::case1332() {}
+void ParserTester::case1333() {}
+void ParserTester::case1334() {}
+void ParserTester::case1335() {}
+void ParserTester::case1336() {}
+void ParserTester::case1337() {}
+void ParserTester::case1338() {}
+void ParserTester::case1339() {}
+void ParserTester::case1340() {}
+void ParserTester::case1341() {}
+void ParserTester::case1342() {}
+void ParserTester::case1343() {}
+void ParserTester::case1344() {}
+void ParserTester::case1345() {}
+void ParserTester::case1346() {}
+void ParserTester::case1347() {}
+void ParserTester::case1348() {}
+void ParserTester::case1349() {}
 
-void ParserTest::case1350()
+void ParserTester::case1350()
 {
     parseExpression("-1",
                     Expectation().AST( { UnaryMinusExpression,
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1351()
+void ParserTester::case1351()
 {
     parseExpression("+1",
                     Expectation().AST( { UnaryPlusExpression,
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1352()
+void ParserTester::case1352()
 {
     parseExpression("-1.2",
                     Expectation().AST( { UnaryMinusExpression,
                                          FloatingConstantExpression }));
 }
 
-void ParserTest::case1353()
+void ParserTester::case1353()
 {
     parseExpression("-.1",
                     Expectation().AST( { UnaryMinusExpression,
                                          FloatingConstantExpression }));
 }
 
-void ParserTest::case1354()
+void ParserTester::case1354()
 {
     parseExpression("-1.2e3",
                     Expectation().AST( { UnaryMinusExpression,
                                          FloatingConstantExpression }));
 }
 
-void ParserTest::case1355() {}
-void ParserTest::case1356() {}
-void ParserTest::case1357() {}
-void ParserTest::case1358() {}
-void ParserTest::case1359() {}
-void ParserTest::case1360() {}
-void ParserTest::case1361() {}
-void ParserTest::case1362() {}
-void ParserTest::case1363() {}
-void ParserTest::case1364() {}
-void ParserTest::case1365() {}
-void ParserTest::case1366() {}
-void ParserTest::case1367() {}
-void ParserTest::case1368() {}
-void ParserTest::case1369() {}
-void ParserTest::case1370() {}
-void ParserTest::case1371() {}
-void ParserTest::case1372() {}
-void ParserTest::case1373() {}
-void ParserTest::case1374() {}
-void ParserTest::case1375() {}
-void ParserTest::case1376() {}
-void ParserTest::case1377() {}
-void ParserTest::case1378() {}
-void ParserTest::case1379() {}
-void ParserTest::case1380() {}
-void ParserTest::case1381() {}
-void ParserTest::case1382() {}
-void ParserTest::case1383() {}
-void ParserTest::case1384() {}
-void ParserTest::case1385() {}
-void ParserTest::case1386() {}
-void ParserTest::case1387() {}
-void ParserTest::case1388() {}
-void ParserTest::case1389() {}
-void ParserTest::case1390() {}
-void ParserTest::case1391() {}
-void ParserTest::case1392() {}
-void ParserTest::case1393() {}
-void ParserTest::case1394() {}
-void ParserTest::case1395() {}
-void ParserTest::case1396() {}
-void ParserTest::case1397() {}
-void ParserTest::case1398() {}
-void ParserTest::case1399() {}
+void ParserTester::case1355() {}
+void ParserTester::case1356() {}
+void ParserTester::case1357() {}
+void ParserTester::case1358() {}
+void ParserTester::case1359() {}
+void ParserTester::case1360() {}
+void ParserTester::case1361() {}
+void ParserTester::case1362() {}
+void ParserTester::case1363() {}
+void ParserTester::case1364() {}
+void ParserTester::case1365() {}
+void ParserTester::case1366() {}
+void ParserTester::case1367() {}
+void ParserTester::case1368() {}
+void ParserTester::case1369() {}
+void ParserTester::case1370() {}
+void ParserTester::case1371() {}
+void ParserTester::case1372() {}
+void ParserTester::case1373() {}
+void ParserTester::case1374() {}
+void ParserTester::case1375() {}
+void ParserTester::case1376() {}
+void ParserTester::case1377() {}
+void ParserTester::case1378() {}
+void ParserTester::case1379() {}
+void ParserTester::case1380() {}
+void ParserTester::case1381() {}
+void ParserTester::case1382() {}
+void ParserTester::case1383() {}
+void ParserTester::case1384() {}
+void ParserTester::case1385() {}
+void ParserTester::case1386() {}
+void ParserTester::case1387() {}
+void ParserTester::case1388() {}
+void ParserTester::case1389() {}
+void ParserTester::case1390() {}
+void ParserTester::case1391() {}
+void ParserTester::case1392() {}
+void ParserTester::case1393() {}
+void ParserTester::case1394() {}
+void ParserTester::case1395() {}
+void ParserTester::case1396() {}
+void ParserTester::case1397() {}
+void ParserTester::case1398() {}
+void ParserTester::case1399() {}
 
-void ParserTest::case1400()
+void ParserTester::case1400()
 {
     parseExpression("sizeof x",
                     Expectation().AST( { SizeofExpression,
@@ -1261,7 +1261,7 @@ void ParserTest::case1400()
                                          IdentifierName }));
 }
 
-void ParserTest::case1401()
+void ParserTester::case1401()
 {
     parseExpression("sizeof ( x )",
                     Expectation().AST( { SizeofExpression,
@@ -1275,7 +1275,7 @@ void ParserTest::case1401()
                                  .ambiguity("sizeof ( x ) ( x )"));
 }
 
-void ParserTest::case1402()
+void ParserTester::case1402()
 {
     parseExpression("sizeof ( const x )",
                     Expectation().AST( { SizeofExpression,
@@ -1286,7 +1286,7 @@ void ParserTest::case1402()
                                          AbstractDeclarator }));
 }
 
-void ParserTest::case1403()
+void ParserTester::case1403()
 {
     parseExpression("sizeof ( x * )",
                     Expectation().AST( { SizeofExpression,
@@ -1297,14 +1297,14 @@ void ParserTest::case1403()
                                          AbstractDeclarator }));
 }
 
-void ParserTest::case1404()
+void ParserTester::case1404()
 {
     parseExpression("sizeof int",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1405()
+void ParserTester::case1405()
 {
     parseExpression("sizeof * x",
                     Expectation().AST( { SizeofExpression,
@@ -1313,7 +1313,7 @@ void ParserTest::case1405()
                                          IdentifierName }));
 }
 
-void ParserTest::case1406()
+void ParserTester::case1406()
 {
     parseExpression("sizeof x [ 0 ]",
                     Expectation().AST( { SizeofExpression,
@@ -1323,7 +1323,7 @@ void ParserTest::case1406()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1407()
+void ParserTester::case1407()
 {
     parseExpression("sizeof ( int )",
                     Expectation().AST( { SizeofExpression,
@@ -1334,7 +1334,7 @@ void ParserTest::case1407()
                                        }));
 }
 
-void ParserTest::case1408()
+void ParserTester::case1408()
 {
     parseExpression("sizeof ( int * )",
                     Expectation().AST( { SizeofExpression,
@@ -1345,7 +1345,7 @@ void ParserTest::case1408()
                                          AbstractDeclarator }));
 }
 
-void ParserTest::case1409()
+void ParserTester::case1409()
 {
     parseExpression("sizeof x . y",
                     Expectation().AST( { SizeofExpression,
@@ -1355,27 +1355,27 @@ void ParserTest::case1409()
                                          IdentifierName }));
 }
 
-void ParserTest::case1410()
+void ParserTester::case1410()
 {
     parseExpression("sizeof ( x . y )");
 }
 
-void ParserTest::case1411()
+void ParserTester::case1411()
 {
     parseExpression("sizeof x [ 0 ]");
 }
 
-void ParserTest::case1412()
+void ParserTester::case1412()
 {
     parseExpression("sizeof ( x [ 0 ] )");
 }
 
-void ParserTest::case1413()
+void ParserTester::case1413()
 {
     parseExpression("sizeof ( x + 1 )");
 }
 
-void ParserTest::case1414()
+void ParserTester::case1414()
 {
     parseExpression("sizeof ( int ) { 1 , 2 } ",
                     Expectation().AST( { SizeofExpression,
@@ -1391,7 +1391,7 @@ void ParserTest::case1414()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1415()
+void ParserTester::case1415()
 {
     parseExpression("sizeof ( x ) { 1 , 2 } ",
                     Expectation().AST( { SizeofExpression,
@@ -1407,50 +1407,50 @@ void ParserTest::case1415()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1416()
+void ParserTester::case1416()
 {
     parseExpression("sizeof ( _Atomic ( int ) )");
 }
 
-void ParserTest::case1417()
+void ParserTester::case1417()
 {
     parseExpression("sizeof ( _Atomic ( x ) )");
 }
 
-void ParserTest::case1418() {}
-void ParserTest::case1419() {}
-void ParserTest::case1420() {}
-void ParserTest::case1421() {}
-void ParserTest::case1422() {}
-void ParserTest::case1423() {}
-void ParserTest::case1424() {}
-void ParserTest::case1425() {}
-void ParserTest::case1426() {}
-void ParserTest::case1427() {}
-void ParserTest::case1428() {}
-void ParserTest::case1429() {}
-void ParserTest::case1430() {}
-void ParserTest::case1431() {}
-void ParserTest::case1432() {}
-void ParserTest::case1433() {}
-void ParserTest::case1434() {}
-void ParserTest::case1435() {}
-void ParserTest::case1436() {}
-void ParserTest::case1437() {}
-void ParserTest::case1438() {}
-void ParserTest::case1439() {}
-void ParserTest::case1440() {}
-void ParserTest::case1441() {}
-void ParserTest::case1442() {}
-void ParserTest::case1443() {}
-void ParserTest::case1444() {}
-void ParserTest::case1445() {}
-void ParserTest::case1446() {}
-void ParserTest::case1447() {}
-void ParserTest::case1448() {}
-void ParserTest::case1449() {}
+void ParserTester::case1418() {}
+void ParserTester::case1419() {}
+void ParserTester::case1420() {}
+void ParserTester::case1421() {}
+void ParserTester::case1422() {}
+void ParserTester::case1423() {}
+void ParserTester::case1424() {}
+void ParserTester::case1425() {}
+void ParserTester::case1426() {}
+void ParserTester::case1427() {}
+void ParserTester::case1428() {}
+void ParserTester::case1429() {}
+void ParserTester::case1430() {}
+void ParserTester::case1431() {}
+void ParserTester::case1432() {}
+void ParserTester::case1433() {}
+void ParserTester::case1434() {}
+void ParserTester::case1435() {}
+void ParserTester::case1436() {}
+void ParserTester::case1437() {}
+void ParserTester::case1438() {}
+void ParserTester::case1439() {}
+void ParserTester::case1440() {}
+void ParserTester::case1441() {}
+void ParserTester::case1442() {}
+void ParserTester::case1443() {}
+void ParserTester::case1444() {}
+void ParserTester::case1445() {}
+void ParserTester::case1446() {}
+void ParserTester::case1447() {}
+void ParserTester::case1448() {}
+void ParserTester::case1449() {}
 
-void ParserTest::case1450()
+void ParserTester::case1450()
 {
     parseExpression("_Alignof ( x )",
                     Expectation().AST( { AlignofExpression,
@@ -1464,7 +1464,7 @@ void ParserTest::case1450()
                                  .ambiguity("_Alignof ( x ) ( x )"));
 }
 
-void ParserTest::case1451()
+void ParserTester::case1451()
 {
     parseExpression("_Alignof ( int )",
                     Expectation().AST( { AlignofExpression,
@@ -1474,7 +1474,7 @@ void ParserTest::case1451()
                                          AbstractDeclarator }));
 }
 
-void ParserTest::case1452()
+void ParserTester::case1452()
 {
     parseExpression("_Alignof ( int * )",
                     Expectation().AST( { AlignofExpression,
@@ -1485,7 +1485,7 @@ void ParserTest::case1452()
                                          AbstractDeclarator }));
 }
 
-void ParserTest::case1453()
+void ParserTester::case1453()
 {
     // See LanguageExtensions.
 
@@ -1495,66 +1495,66 @@ void ParserTest::case1453()
                                          IdentifierName }));
 }
 
-void ParserTest::case1454()
+void ParserTester::case1454()
 {
 }
 
-void ParserTest::case1455()
+void ParserTester::case1455()
 {
 }
 
-void ParserTest::case1456()
+void ParserTester::case1456()
 {
 }
 
-void ParserTest::case1457()
+void ParserTester::case1457()
 {
 }
 
-void ParserTest::case1458() {}
-void ParserTest::case1459() {}
-void ParserTest::case1460() {}
-void ParserTest::case1461() {}
-void ParserTest::case1462() {}
-void ParserTest::case1463() {}
-void ParserTest::case1464() {}
-void ParserTest::case1465() {}
-void ParserTest::case1466() {}
-void ParserTest::case1467() {}
-void ParserTest::case1468() {}
-void ParserTest::case1469() {}
-void ParserTest::case1470() {}
-void ParserTest::case1471() {}
-void ParserTest::case1472() {}
-void ParserTest::case1473() {}
-void ParserTest::case1474() {}
-void ParserTest::case1475() {}
-void ParserTest::case1476() {}
-void ParserTest::case1477() {}
-void ParserTest::case1478() {}
-void ParserTest::case1479() {}
-void ParserTest::case1480() {}
-void ParserTest::case1481() {}
-void ParserTest::case1482() {}
-void ParserTest::case1483() {}
-void ParserTest::case1484() {}
-void ParserTest::case1485() {}
-void ParserTest::case1486() {}
-void ParserTest::case1487() {}
-void ParserTest::case1488() {}
-void ParserTest::case1489() {}
-void ParserTest::case1490() {}
-void ParserTest::case1491() {}
-void ParserTest::case1492() {}
-void ParserTest::case1493() {}
-void ParserTest::case1494() {}
-void ParserTest::case1495() {}
-void ParserTest::case1496() {}
-void ParserTest::case1497() {}
-void ParserTest::case1498() {}
-void ParserTest::case1499() {}
+void ParserTester::case1458() {}
+void ParserTester::case1459() {}
+void ParserTester::case1460() {}
+void ParserTester::case1461() {}
+void ParserTester::case1462() {}
+void ParserTester::case1463() {}
+void ParserTester::case1464() {}
+void ParserTester::case1465() {}
+void ParserTester::case1466() {}
+void ParserTester::case1467() {}
+void ParserTester::case1468() {}
+void ParserTester::case1469() {}
+void ParserTester::case1470() {}
+void ParserTester::case1471() {}
+void ParserTester::case1472() {}
+void ParserTester::case1473() {}
+void ParserTester::case1474() {}
+void ParserTester::case1475() {}
+void ParserTester::case1476() {}
+void ParserTester::case1477() {}
+void ParserTester::case1478() {}
+void ParserTester::case1479() {}
+void ParserTester::case1480() {}
+void ParserTester::case1481() {}
+void ParserTester::case1482() {}
+void ParserTester::case1483() {}
+void ParserTester::case1484() {}
+void ParserTester::case1485() {}
+void ParserTester::case1486() {}
+void ParserTester::case1487() {}
+void ParserTester::case1488() {}
+void ParserTester::case1489() {}
+void ParserTester::case1490() {}
+void ParserTester::case1491() {}
+void ParserTester::case1492() {}
+void ParserTester::case1493() {}
+void ParserTester::case1494() {}
+void ParserTester::case1495() {}
+void ParserTester::case1496() {}
+void ParserTester::case1497() {}
+void ParserTester::case1498() {}
+void ParserTester::case1499() {}
 
-void ParserTest::case1500()
+void ParserTester::case1500()
 {
     parseExpression("x . y",
                     Expectation().AST( { DirectMemberAccessExpression,
@@ -1562,21 +1562,21 @@ void ParserTest::case1500()
                                          IdentifierName }));
 }
 
-void ParserTest::case1501()
+void ParserTester::case1501()
 {
     parseExpression("x .",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
 }
 
-void ParserTest::case1502()
+void ParserTester::case1502()
 {
     parseExpression("x . 'y'",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
 }
 
-void ParserTest::case1503()
+void ParserTester::case1503()
 {
     parseExpression("x ( ) . y",
                     Expectation().AST( { DirectMemberAccessExpression,
@@ -1585,7 +1585,7 @@ void ParserTest::case1503()
                                          IdentifierName }));
 }
 
-void ParserTest::case1504()
+void ParserTester::case1504()
 {
     parseExpression("x -> y",
                     Expectation().AST( { IndirectMemberAccessExpression,
@@ -1593,21 +1593,21 @@ void ParserTest::case1504()
                                          IdentifierName }));
 }
 
-void ParserTest::case1505()
+void ParserTester::case1505()
 {
     parseExpression("x -> ",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
 }
 
-void ParserTest::case1506()
+void ParserTester::case1506()
 {
     parseExpression("x -> 'y'",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
 }
 
-void ParserTest::case1507()
+void ParserTester::case1507()
 {
     parseExpression("x . y . z",
                     Expectation().AST( { DirectMemberAccessExpression,
@@ -1617,7 +1617,7 @@ void ParserTest::case1507()
                                          IdentifierName }));
 }
 
-void ParserTest::case1508()
+void ParserTester::case1508()
 {
     parseExpression("x . y -> z",
                     Expectation().AST( { IndirectMemberAccessExpression,
@@ -1627,7 +1627,7 @@ void ParserTest::case1508()
                                          IdentifierName }));
 }
 
-void ParserTest::case1509()
+void ParserTester::case1509()
 {
     parseExpression("x -> y -> z",
                     Expectation().AST( { IndirectMemberAccessExpression,
@@ -1637,7 +1637,7 @@ void ParserTest::case1509()
                                          IdentifierName }));
 }
 
-void ParserTest::case1510()
+void ParserTester::case1510()
 {
     parseExpression("( x . y ) -> z",
                     Expectation().AST( { IndirectMemberAccessExpression,
@@ -1648,7 +1648,7 @@ void ParserTest::case1510()
                                          IdentifierName }));
 }
 
-void ParserTest::case1511()
+void ParserTester::case1511()
 {
     parseExpression("x . y . z . w",
                     Expectation().AST( { DirectMemberAccessExpression,
@@ -1660,7 +1660,7 @@ void ParserTest::case1511()
                                          IdentifierName }));
 }
 
-void ParserTest::case1512()
+void ParserTester::case1512()
 {
     parseExpression("x [ 0 ] . y",
                     Expectation().AST( { DirectMemberAccessExpression,
@@ -1671,7 +1671,7 @@ void ParserTest::case1512()
 
 }
 
-void ParserTest::case1513()
+void ParserTester::case1513()
 {
     parseExpression("( struct x ) { . y = 1 } . z",
                     Expectation().AST( { DirectMemberAccessExpression,
@@ -1688,7 +1688,7 @@ void ParserTest::case1513()
 
 }
 
-void ParserTest::case1514()
+void ParserTester::case1514()
 {
     parseExpression("( struct x ) { 1 } . z",
                     Expectation().AST( { DirectMemberAccessExpression,
@@ -1702,100 +1702,100 @@ void ParserTest::case1514()
                                          IdentifierName }));
 }
 
-void ParserTest::case1515() {}
-void ParserTest::case1516() {}
-void ParserTest::case1517() {}
-void ParserTest::case1518() {}
-void ParserTest::case1519() {}
-void ParserTest::case1520() {}
-void ParserTest::case1521() {}
-void ParserTest::case1522() {}
-void ParserTest::case1523() {}
-void ParserTest::case1524() {}
-void ParserTest::case1525() {}
-void ParserTest::case1526() {}
-void ParserTest::case1527() {}
-void ParserTest::case1528() {}
-void ParserTest::case1529() {}
-void ParserTest::case1530() {}
-void ParserTest::case1531() {}
-void ParserTest::case1532() {}
-void ParserTest::case1533() {}
-void ParserTest::case1534() {}
-void ParserTest::case1535() {}
-void ParserTest::case1536() {}
-void ParserTest::case1537() {}
-void ParserTest::case1538() {}
-void ParserTest::case1539() {}
-void ParserTest::case1540() {}
-void ParserTest::case1541() {}
-void ParserTest::case1542() {}
-void ParserTest::case1543() {}
-void ParserTest::case1544() {}
-void ParserTest::case1545() {}
-void ParserTest::case1546() {}
-void ParserTest::case1547() {}
-void ParserTest::case1548() {}
-void ParserTest::case1549() {}
-void ParserTest::case1550() {}
-void ParserTest::case1551() {}
-void ParserTest::case1552() {}
-void ParserTest::case1553() {}
-void ParserTest::case1554() {}
-void ParserTest::case1555() {}
-void ParserTest::case1556() {}
-void ParserTest::case1557() {}
-void ParserTest::case1558() {}
-void ParserTest::case1559() {}
-void ParserTest::case1560() {}
-void ParserTest::case1561() {}
-void ParserTest::case1562() {}
-void ParserTest::case1563() {}
-void ParserTest::case1564() {}
-void ParserTest::case1565() {}
-void ParserTest::case1566() {}
-void ParserTest::case1567() {}
-void ParserTest::case1568() {}
-void ParserTest::case1569() {}
-void ParserTest::case1570() {}
-void ParserTest::case1571() {}
-void ParserTest::case1572() {}
-void ParserTest::case1573() {}
-void ParserTest::case1574() {}
-void ParserTest::case1575() {}
-void ParserTest::case1576() {}
-void ParserTest::case1577() {}
-void ParserTest::case1578() {}
-void ParserTest::case1579() {}
-void ParserTest::case1580() {}
-void ParserTest::case1581() {}
-void ParserTest::case1582() {}
-void ParserTest::case1583() {}
-void ParserTest::case1584() {}
-void ParserTest::case1585() {}
-void ParserTest::case1586() {}
-void ParserTest::case1587() {}
-void ParserTest::case1588() {}
-void ParserTest::case1589() {}
-void ParserTest::case1590() {}
-void ParserTest::case1591() {}
-void ParserTest::case1592() {}
-void ParserTest::case1593() {}
-void ParserTest::case1594() {}
-void ParserTest::case1595() {}
-void ParserTest::case1596() {}
-void ParserTest::case1597() {}
-void ParserTest::case1598() {}
-void ParserTest::case1599() {}
+void ParserTester::case1515() {}
+void ParserTester::case1516() {}
+void ParserTester::case1517() {}
+void ParserTester::case1518() {}
+void ParserTester::case1519() {}
+void ParserTester::case1520() {}
+void ParserTester::case1521() {}
+void ParserTester::case1522() {}
+void ParserTester::case1523() {}
+void ParserTester::case1524() {}
+void ParserTester::case1525() {}
+void ParserTester::case1526() {}
+void ParserTester::case1527() {}
+void ParserTester::case1528() {}
+void ParserTester::case1529() {}
+void ParserTester::case1530() {}
+void ParserTester::case1531() {}
+void ParserTester::case1532() {}
+void ParserTester::case1533() {}
+void ParserTester::case1534() {}
+void ParserTester::case1535() {}
+void ParserTester::case1536() {}
+void ParserTester::case1537() {}
+void ParserTester::case1538() {}
+void ParserTester::case1539() {}
+void ParserTester::case1540() {}
+void ParserTester::case1541() {}
+void ParserTester::case1542() {}
+void ParserTester::case1543() {}
+void ParserTester::case1544() {}
+void ParserTester::case1545() {}
+void ParserTester::case1546() {}
+void ParserTester::case1547() {}
+void ParserTester::case1548() {}
+void ParserTester::case1549() {}
+void ParserTester::case1550() {}
+void ParserTester::case1551() {}
+void ParserTester::case1552() {}
+void ParserTester::case1553() {}
+void ParserTester::case1554() {}
+void ParserTester::case1555() {}
+void ParserTester::case1556() {}
+void ParserTester::case1557() {}
+void ParserTester::case1558() {}
+void ParserTester::case1559() {}
+void ParserTester::case1560() {}
+void ParserTester::case1561() {}
+void ParserTester::case1562() {}
+void ParserTester::case1563() {}
+void ParserTester::case1564() {}
+void ParserTester::case1565() {}
+void ParserTester::case1566() {}
+void ParserTester::case1567() {}
+void ParserTester::case1568() {}
+void ParserTester::case1569() {}
+void ParserTester::case1570() {}
+void ParserTester::case1571() {}
+void ParserTester::case1572() {}
+void ParserTester::case1573() {}
+void ParserTester::case1574() {}
+void ParserTester::case1575() {}
+void ParserTester::case1576() {}
+void ParserTester::case1577() {}
+void ParserTester::case1578() {}
+void ParserTester::case1579() {}
+void ParserTester::case1580() {}
+void ParserTester::case1581() {}
+void ParserTester::case1582() {}
+void ParserTester::case1583() {}
+void ParserTester::case1584() {}
+void ParserTester::case1585() {}
+void ParserTester::case1586() {}
+void ParserTester::case1587() {}
+void ParserTester::case1588() {}
+void ParserTester::case1589() {}
+void ParserTester::case1590() {}
+void ParserTester::case1591() {}
+void ParserTester::case1592() {}
+void ParserTester::case1593() {}
+void ParserTester::case1594() {}
+void ParserTester::case1595() {}
+void ParserTester::case1596() {}
+void ParserTester::case1597() {}
+void ParserTester::case1598() {}
+void ParserTester::case1599() {}
 
-void ParserTest::case1600()
+void ParserTester::case1600()
 {
     parseExpression("x ( )",
                     Expectation().AST( { CallExpression,
                                          IdentifierName }));
 }
 
-void ParserTest::case1601()
+void ParserTester::case1601()
 {
     parseExpression("( x ) ( )",
                     Expectation().AST( { CallExpression,
@@ -1803,7 +1803,7 @@ void ParserTest::case1601()
                                          IdentifierName }));
 }
 
-void ParserTest::case1602()
+void ParserTester::case1602()
 {
     parseExpression("x ( 1 )",
                     Expectation().AST( { CallExpression,
@@ -1811,7 +1811,7 @@ void ParserTest::case1602()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1603()
+void ParserTester::case1603()
 {
     parseExpression("x ( y )",
                     Expectation().AST( { CallExpression,
@@ -1819,7 +1819,7 @@ void ParserTest::case1603()
                                          IdentifierName }));
 }
 
-void ParserTest::case1604()
+void ParserTester::case1604()
 {
     parseExpression("x ( y , 1 )",
                     Expectation().AST( { CallExpression,
@@ -1828,7 +1828,7 @@ void ParserTest::case1604()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1605()
+void ParserTester::case1605()
 {
     parseExpression("( & x ) ( )",
                     Expectation().AST( { CallExpression,
@@ -1837,7 +1837,7 @@ void ParserTest::case1605()
                                          IdentifierName }));
 }
 
-void ParserTest::case1606()
+void ParserTester::case1606()
 {
     parseExpression("( * x ) ( )",
                     Expectation().AST( { CallExpression,
@@ -1846,7 +1846,7 @@ void ParserTest::case1606()
                                          IdentifierName }));
 }
 
-void ParserTest::case1607()
+void ParserTester::case1607()
 {
     parseExpression("( * * x ) ( )",
                     Expectation().AST( { CallExpression,
@@ -1856,7 +1856,7 @@ void ParserTest::case1607()
                                          IdentifierName }));
 }
 
-void ParserTest::case1608()
+void ParserTester::case1608()
 {
     parseExpression("x ( y ( ), \"z\" )",
                     Expectation().AST( { CallExpression,
@@ -1866,28 +1866,28 @@ void ParserTest::case1608()
                                          StringLiteralExpression }));
 }
 
-void ParserTest::case1609()
+void ParserTester::case1609()
 {
     parseExpression("x ( y",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
-void ParserTest::case1610()
+void ParserTester::case1610()
 {
     parseExpression("x (",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1611()
+void ParserTester::case1611()
 {
     parseExpression("x ( y , )",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
                                                 Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
-void ParserTest::case1612()
+void ParserTester::case1612()
 {
     parseExpression("x ( ( 1 ) )",
                     Expectation().AST( { CallExpression,
@@ -1896,7 +1896,7 @@ void ParserTest::case1612()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1613()
+void ParserTester::case1613()
 {
     parseExpression("x ( ( ( y ) ) )",
                     Expectation().AST( { CallExpression,
@@ -1906,7 +1906,7 @@ void ParserTest::case1613()
                                          IdentifierName }));
 }
 
-void ParserTest::case1614()
+void ParserTester::case1614()
 {
     parseExpression("( x ( ) )",
                     Expectation().AST( { ParenthesizedExpression,
@@ -1914,7 +1914,7 @@ void ParserTest::case1614()
                                          IdentifierName }));
 }
 
-void ParserTest::case1615()
+void ParserTester::case1615()
 {
     parseExpression("( ( x ( ) ) )",
                     Expectation().AST( { ParenthesizedExpression,
@@ -1923,7 +1923,7 @@ void ParserTest::case1615()
                                          IdentifierName }));
 }
 
-void ParserTest::case1616()
+void ParserTester::case1616()
 {
     parseExpression("( x ( 1 ) )",
                     Expectation().AST( { ParenthesizedExpression,
@@ -1932,7 +1932,7 @@ void ParserTest::case1616()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1617()
+void ParserTester::case1617()
 {
     parseExpression("( x ( 1 , y ) )",
                     Expectation().AST( { ParenthesizedExpression,
@@ -1942,47 +1942,47 @@ void ParserTest::case1617()
                                          IdentifierName }));
 }
 
-void ParserTest::case1618() {}
-void ParserTest::case1619() {}
-void ParserTest::case1620() {}
-void ParserTest::case1621() {}
-void ParserTest::case1622() {}
-void ParserTest::case1623() {}
-void ParserTest::case1624() {}
-void ParserTest::case1625() {}
-void ParserTest::case1626() {}
-void ParserTest::case1627() {}
-void ParserTest::case1628() {}
-void ParserTest::case1629() {}
-void ParserTest::case1630() {}
-void ParserTest::case1631() {}
-void ParserTest::case1632() {}
-void ParserTest::case1633() {}
-void ParserTest::case1634() {}
-void ParserTest::case1635() {}
-void ParserTest::case1636() {}
-void ParserTest::case1637() {}
-void ParserTest::case1638() {}
-void ParserTest::case1639() {}
-void ParserTest::case1640() {}
-void ParserTest::case1641() {}
-void ParserTest::case1642() {}
-void ParserTest::case1643() {}
-void ParserTest::case1644() {}
-void ParserTest::case1645() {}
-void ParserTest::case1646() {}
-void ParserTest::case1647() {}
-void ParserTest::case1648() {}
-void ParserTest::case1649() {}
+void ParserTester::case1618() {}
+void ParserTester::case1619() {}
+void ParserTester::case1620() {}
+void ParserTester::case1621() {}
+void ParserTester::case1622() {}
+void ParserTester::case1623() {}
+void ParserTester::case1624() {}
+void ParserTester::case1625() {}
+void ParserTester::case1626() {}
+void ParserTester::case1627() {}
+void ParserTester::case1628() {}
+void ParserTester::case1629() {}
+void ParserTester::case1630() {}
+void ParserTester::case1631() {}
+void ParserTester::case1632() {}
+void ParserTester::case1633() {}
+void ParserTester::case1634() {}
+void ParserTester::case1635() {}
+void ParserTester::case1636() {}
+void ParserTester::case1637() {}
+void ParserTester::case1638() {}
+void ParserTester::case1639() {}
+void ParserTester::case1640() {}
+void ParserTester::case1641() {}
+void ParserTester::case1642() {}
+void ParserTester::case1643() {}
+void ParserTester::case1644() {}
+void ParserTester::case1645() {}
+void ParserTester::case1646() {}
+void ParserTester::case1647() {}
+void ParserTester::case1648() {}
+void ParserTester::case1649() {}
 
-void ParserTest::case1650()
+void ParserTester::case1650()
 {
     parseExpression("* x",
                     Expectation().AST( { PointerIndirectionExpression,
                                          IdentifierName }));
 }
 
-void ParserTest::case1651()
+void ParserTester::case1651()
 {
     parseExpression("* ( x )",
                     Expectation().AST( { PointerIndirectionExpression,
@@ -1990,82 +1990,82 @@ void ParserTest::case1651()
                                          IdentifierName }));
 }
 
-void ParserTest::case1652()
+void ParserTester::case1652()
 {
     parseExpression("& x",
                     Expectation().AST( { AddressOfExpression,
                                          IdentifierName }));
 }
 
-void ParserTest::case1653()
+void ParserTester::case1653()
 {
     // Syntax OK, semantics invalid.
 
-    CROSS_REFERENCE_TEST(BinderTest::case0101);
+    CROSS_REFERENCE_TEST(BinderTester::case0101);
 
     parseExpression("* 1",
                     Expectation().AST( { PointerIndirectionExpression,
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1654()
+void ParserTester::case1654()
 {
     // Syntax OK, semantics invalid.
 
-    CROSS_REFERENCE_TEST(BinderTest::case0102);
+    CROSS_REFERENCE_TEST(BinderTester::case0102);
 
     parseExpression("& 1",
                     Expectation().AST( { AddressOfExpression,
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1655() {}
-void ParserTest::case1656() {}
-void ParserTest::case1657() {}
-void ParserTest::case1658() {}
-void ParserTest::case1659() {}
-void ParserTest::case1660() {}
-void ParserTest::case1661() {}
-void ParserTest::case1662() {}
-void ParserTest::case1663() {}
-void ParserTest::case1664() {}
-void ParserTest::case1665() {}
-void ParserTest::case1666() {}
-void ParserTest::case1667() {}
-void ParserTest::case1668() {}
-void ParserTest::case1669() {}
-void ParserTest::case1670() {}
-void ParserTest::case1671() {}
-void ParserTest::case1672() {}
-void ParserTest::case1673() {}
-void ParserTest::case1674() {}
-void ParserTest::case1675() {}
-void ParserTest::case1676() {}
-void ParserTest::case1677() {}
-void ParserTest::case1678() {}
-void ParserTest::case1679() {}
-void ParserTest::case1680() {}
-void ParserTest::case1681() {}
-void ParserTest::case1682() {}
-void ParserTest::case1683() {}
-void ParserTest::case1684() {}
-void ParserTest::case1685() {}
-void ParserTest::case1686() {}
-void ParserTest::case1687() {}
-void ParserTest::case1688() {}
-void ParserTest::case1689() {}
-void ParserTest::case1690() {}
-void ParserTest::case1691() {}
-void ParserTest::case1692() {}
-void ParserTest::case1693() {}
-void ParserTest::case1694() {}
-void ParserTest::case1695() {}
-void ParserTest::case1696() {}
-void ParserTest::case1697() {}
-void ParserTest::case1698() {}
-void ParserTest::case1699() {}
+void ParserTester::case1655() {}
+void ParserTester::case1656() {}
+void ParserTester::case1657() {}
+void ParserTester::case1658() {}
+void ParserTester::case1659() {}
+void ParserTester::case1660() {}
+void ParserTester::case1661() {}
+void ParserTester::case1662() {}
+void ParserTester::case1663() {}
+void ParserTester::case1664() {}
+void ParserTester::case1665() {}
+void ParserTester::case1666() {}
+void ParserTester::case1667() {}
+void ParserTester::case1668() {}
+void ParserTester::case1669() {}
+void ParserTester::case1670() {}
+void ParserTester::case1671() {}
+void ParserTester::case1672() {}
+void ParserTester::case1673() {}
+void ParserTester::case1674() {}
+void ParserTester::case1675() {}
+void ParserTester::case1676() {}
+void ParserTester::case1677() {}
+void ParserTester::case1678() {}
+void ParserTester::case1679() {}
+void ParserTester::case1680() {}
+void ParserTester::case1681() {}
+void ParserTester::case1682() {}
+void ParserTester::case1683() {}
+void ParserTester::case1684() {}
+void ParserTester::case1685() {}
+void ParserTester::case1686() {}
+void ParserTester::case1687() {}
+void ParserTester::case1688() {}
+void ParserTester::case1689() {}
+void ParserTester::case1690() {}
+void ParserTester::case1691() {}
+void ParserTester::case1692() {}
+void ParserTester::case1693() {}
+void ParserTester::case1694() {}
+void ParserTester::case1695() {}
+void ParserTester::case1696() {}
+void ParserTester::case1697() {}
+void ParserTester::case1698() {}
+void ParserTester::case1699() {}
 
-void ParserTest::case1700()
+void ParserTester::case1700()
 {
     parseExpression("( int ) x",
                     Expectation().AST({ CastExpression,
@@ -2075,7 +2075,7 @@ void ParserTest::case1700()
                                         IdentifierName }));
 }
 
-void ParserTest::case1701()
+void ParserTester::case1701()
 {
     parseExpression("( int * ) x",
                     Expectation().AST({ CastExpression,
@@ -2086,7 +2086,7 @@ void ParserTest::case1701()
                                         IdentifierName }));
 }
 
-void ParserTest::case1702()
+void ParserTester::case1702()
 {
     parseExpression("( int const * ) x",
                     Expectation().AST({ CastExpression,
@@ -2098,7 +2098,7 @@ void ParserTest::case1702()
                                         IdentifierName }));
 }
 
-void ParserTest::case1703()
+void ParserTester::case1703()
 {
     parseExpression("( struct x ) y",
                     Expectation().AST({ CastExpression,
@@ -2108,7 +2108,7 @@ void ParserTest::case1703()
                                         IdentifierName }));
 }
 
-void ParserTest::case1704()
+void ParserTester::case1704()
 {
     parseExpression("( unsigned long ) + x",
                     Expectation().AST({ CastExpression,
@@ -2120,7 +2120,7 @@ void ParserTest::case1704()
                                         IdentifierName }));
 }
 
-void ParserTest::case1705()
+void ParserTester::case1705()
 {
     parseExpression("( unsigned long ) - x",
                     Expectation().AST({ CastExpression,
@@ -2132,7 +2132,7 @@ void ParserTest::case1705()
                                         IdentifierName }));
 }
 
-void ParserTest::case1706()
+void ParserTester::case1706()
 {
     parseExpression("( int ) ++ x",
                     Expectation().AST({ CastExpression,
@@ -2143,7 +2143,7 @@ void ParserTest::case1706()
                                         IdentifierName }));
 }
 
-void ParserTest::case1707()
+void ParserTester::case1707()
 {
     parseExpression("( int ) x ++",
                     Expectation().AST({ CastExpression,
@@ -2154,43 +2154,43 @@ void ParserTest::case1707()
                                         IdentifierName }));
 }
 
-void ParserTest::case1708()
+void ParserTester::case1708()
 {
     parseExpression("( int ) _Generic ( y",
                     Expectation().setErrorCnt(1));
 }
 
-void ParserTest::case1709()
+void ParserTester::case1709()
 {
     parseExpression("( long ) int",
                     Expectation().setErrorCnt(1));
 }
 
-void ParserTest::case1710()
+void ParserTester::case1710()
 {
     parseExpression("( struct x ) -",
                     Expectation().setErrorCnt(1));
 }
 
-void ParserTest::case1711()
+void ParserTester::case1711()
 {
     parseExpression("( int ) -",
                     Expectation().setErrorCnt(1));
 }
 
-void ParserTest::case1712()
+void ParserTester::case1712()
 {
     parseExpression("( int ) x +",
                     Expectation().setErrorCnt(1));
 }
 
-void ParserTest::case1713()
+void ParserTester::case1713()
 {
     parseExpression("( int ) x ( y",
                     Expectation().setErrorCnt(1));
 }
 
-void ParserTest::case1714()
+void ParserTester::case1714()
 {
     parseExpression("( x ) y ( z )",
                     Expectation().AST({ CastExpression,
@@ -2202,7 +2202,7 @@ void ParserTest::case1714()
                                         IdentifierName }));
 }
 
-void ParserTest::case1715()
+void ParserTester::case1715()
 {
     parseExpression("( x ) ( y ( z ) )",
                     Expectation().AST({ CastExpression,
@@ -2215,7 +2215,7 @@ void ParserTest::case1715()
                                         IdentifierName }));
 }
 
-void ParserTest::case1716()
+void ParserTester::case1716()
 {
     parseExpression("( int ) - 1",
                     Expectation().AST( { CastExpression,
@@ -2226,7 +2226,7 @@ void ParserTest::case1716()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1717()
+void ParserTester::case1717()
 {
     parseExpression("( x ) - 1",
                     Expectation().ambiguity()
@@ -2243,7 +2243,7 @@ void ParserTest::case1717()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1718()
+void ParserTester::case1718()
 {
     parseExpression("( x ) + y",
                     Expectation().ambiguity()
@@ -2260,7 +2260,7 @@ void ParserTest::case1718()
                                          IdentifierName }));
 }
 
-void ParserTest::case1719()
+void ParserTester::case1719()
 {
     parseExpression("( const x ) - 1",
                     Expectation().AST( { CastExpression,
@@ -2272,7 +2272,7 @@ void ParserTest::case1719()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1720()
+void ParserTester::case1720()
 {
     parseExpression("( x * ) - 1",
                     Expectation().AST( { CastExpression,
@@ -2283,37 +2283,37 @@ void ParserTest::case1720()
                                          UnaryMinusExpression,
                                          IntegerConstantExpression }));
 }
-void ParserTest::case1721() {}
-void ParserTest::case1722() {}
-void ParserTest::case1723() {}
-void ParserTest::case1724() {}
-void ParserTest::case1725() {}
-void ParserTest::case1726() {}
-void ParserTest::case1727() {}
-void ParserTest::case1728() {}
-void ParserTest::case1729() {}
-void ParserTest::case1730() {}
-void ParserTest::case1731() {}
-void ParserTest::case1732() {}
-void ParserTest::case1733() {}
-void ParserTest::case1734() {}
-void ParserTest::case1735() {}
-void ParserTest::case1736() {}
-void ParserTest::case1737() {}
-void ParserTest::case1738() {}
-void ParserTest::case1739() {}
-void ParserTest::case1740() {}
-void ParserTest::case1741() {}
-void ParserTest::case1742() {}
-void ParserTest::case1743() {}
-void ParserTest::case1744() {}
-void ParserTest::case1745() {}
-void ParserTest::case1746() {}
-void ParserTest::case1747() {}
-void ParserTest::case1748() {}
-void ParserTest::case1749() {}
+void ParserTester::case1721() {}
+void ParserTester::case1722() {}
+void ParserTester::case1723() {}
+void ParserTester::case1724() {}
+void ParserTester::case1725() {}
+void ParserTester::case1726() {}
+void ParserTester::case1727() {}
+void ParserTester::case1728() {}
+void ParserTester::case1729() {}
+void ParserTester::case1730() {}
+void ParserTester::case1731() {}
+void ParserTester::case1732() {}
+void ParserTester::case1733() {}
+void ParserTester::case1734() {}
+void ParserTester::case1735() {}
+void ParserTester::case1736() {}
+void ParserTester::case1737() {}
+void ParserTester::case1738() {}
+void ParserTester::case1739() {}
+void ParserTester::case1740() {}
+void ParserTester::case1741() {}
+void ParserTester::case1742() {}
+void ParserTester::case1743() {}
+void ParserTester::case1744() {}
+void ParserTester::case1745() {}
+void ParserTester::case1746() {}
+void ParserTester::case1747() {}
+void ParserTester::case1748() {}
+void ParserTester::case1749() {}
 
-void ParserTest::case1750()
+void ParserTester::case1750()
 {
     parseExpression("x ? y : z",
                     Expectation().AST( { ConditionalExpression,
@@ -2323,7 +2323,7 @@ void ParserTest::case1750()
 
 }
 
-void ParserTest::case1751()
+void ParserTester::case1751()
 {
     parseExpression("x ? y + z : w",
                     Expectation().AST( { ConditionalExpression,
@@ -2334,7 +2334,7 @@ void ParserTest::case1751()
                                          IdentifierName } ));
 }
 
-void ParserTest::case1752()
+void ParserTester::case1752()
 {
     // See ExtGNU_Conditionals in LanguageExtensions.
 
@@ -2344,58 +2344,58 @@ void ParserTest::case1752()
                                          IdentifierName } ));
 }
 
-void ParserTest::case1753()
+void ParserTester::case1753()
 {
 }
 
-void ParserTest::case1754() {}
-void ParserTest::case1755() {}
-void ParserTest::case1756() {}
-void ParserTest::case1757() {}
-void ParserTest::case1758() {}
-void ParserTest::case1759() {}
-void ParserTest::case1760() {}
-void ParserTest::case1761() {}
-void ParserTest::case1762() {}
-void ParserTest::case1763() {}
-void ParserTest::case1764() {}
-void ParserTest::case1765() {}
-void ParserTest::case1766() {}
-void ParserTest::case1767() {}
-void ParserTest::case1768() {}
-void ParserTest::case1769() {}
-void ParserTest::case1770() {}
-void ParserTest::case1771() {}
-void ParserTest::case1772() {}
-void ParserTest::case1773() {}
-void ParserTest::case1774() {}
-void ParserTest::case1775() {}
-void ParserTest::case1776() {}
-void ParserTest::case1777() {}
-void ParserTest::case1778() {}
-void ParserTest::case1779() {}
-void ParserTest::case1780() {}
-void ParserTest::case1781() {}
-void ParserTest::case1782() {}
-void ParserTest::case1783() {}
-void ParserTest::case1784() {}
-void ParserTest::case1785() {}
-void ParserTest::case1786() {}
-void ParserTest::case1787() {}
-void ParserTest::case1788() {}
-void ParserTest::case1789() {}
-void ParserTest::case1790() {}
-void ParserTest::case1791() {}
-void ParserTest::case1792() {}
-void ParserTest::case1793() {}
-void ParserTest::case1794() {}
-void ParserTest::case1795() {}
-void ParserTest::case1796() {}
-void ParserTest::case1797() {}
-void ParserTest::case1798() {}
-void ParserTest::case1799() {}
+void ParserTester::case1754() {}
+void ParserTester::case1755() {}
+void ParserTester::case1756() {}
+void ParserTester::case1757() {}
+void ParserTester::case1758() {}
+void ParserTester::case1759() {}
+void ParserTester::case1760() {}
+void ParserTester::case1761() {}
+void ParserTester::case1762() {}
+void ParserTester::case1763() {}
+void ParserTester::case1764() {}
+void ParserTester::case1765() {}
+void ParserTester::case1766() {}
+void ParserTester::case1767() {}
+void ParserTester::case1768() {}
+void ParserTester::case1769() {}
+void ParserTester::case1770() {}
+void ParserTester::case1771() {}
+void ParserTester::case1772() {}
+void ParserTester::case1773() {}
+void ParserTester::case1774() {}
+void ParserTester::case1775() {}
+void ParserTester::case1776() {}
+void ParserTester::case1777() {}
+void ParserTester::case1778() {}
+void ParserTester::case1779() {}
+void ParserTester::case1780() {}
+void ParserTester::case1781() {}
+void ParserTester::case1782() {}
+void ParserTester::case1783() {}
+void ParserTester::case1784() {}
+void ParserTester::case1785() {}
+void ParserTester::case1786() {}
+void ParserTester::case1787() {}
+void ParserTester::case1788() {}
+void ParserTester::case1789() {}
+void ParserTester::case1790() {}
+void ParserTester::case1791() {}
+void ParserTester::case1792() {}
+void ParserTester::case1793() {}
+void ParserTester::case1794() {}
+void ParserTester::case1795() {}
+void ParserTester::case1796() {}
+void ParserTester::case1797() {}
+void ParserTester::case1798() {}
+void ParserTester::case1799() {}
 
-void ParserTest::case1800()
+void ParserTester::case1800()
 {
     parseExpression("x / y",
                     Expectation().AST( { DivideExpression,
@@ -2403,7 +2403,7 @@ void ParserTest::case1800()
                                          IdentifierName } ));
 }
 
-void ParserTest::case1801()
+void ParserTester::case1801()
 {
     parseExpression("x << y",
                     Expectation().AST( { LeftShiftExpression,
@@ -2412,7 +2412,7 @@ void ParserTest::case1801()
 
 }
 
-void ParserTest::case1802()
+void ParserTester::case1802()
 {
     parseExpression("x + y",
                     Expectation().AST( { AddExpression,
@@ -2421,7 +2421,7 @@ void ParserTest::case1802()
 
 }
 
-void ParserTest::case1803()
+void ParserTester::case1803()
 {
     parseExpression("x || y",
                     Expectation().AST( { LogicalORExpression,
@@ -2429,7 +2429,7 @@ void ParserTest::case1803()
                                          IdentifierName } ));
 }
 
-void ParserTest::case1804()
+void ParserTester::case1804()
 {
     // No ambiguity here, this is an expression (not an statement).
 
@@ -2440,7 +2440,7 @@ void ParserTest::case1804()
 
 }
 
-void ParserTest::case1805()
+void ParserTester::case1805()
 {
     parseExpression("( x * y ) + z",
                     Expectation().AST( { AddExpression,
@@ -2451,7 +2451,7 @@ void ParserTest::case1805()
                                          IdentifierName }));
 }
 
-void ParserTest::case1806()
+void ParserTester::case1806()
 {
     parseExpression("x * ( y + z)",
                     Expectation().AST( { MultiplyExpression,
@@ -2462,7 +2462,7 @@ void ParserTest::case1806()
                                          IdentifierName }));
 }
 
-void ParserTest::case1807()
+void ParserTester::case1807()
 {
     parseExpression("x + y * z",
                     Expectation().AST( { AddExpression,
@@ -2472,7 +2472,7 @@ void ParserTest::case1807()
                                          IdentifierName }));
 }
 
-void ParserTest::case1808()
+void ParserTester::case1808()
 {
     parseExpression("x * y + z",
                     Expectation().AST( { AddExpression,
@@ -2482,7 +2482,7 @@ void ParserTest::case1808()
                                          IdentifierName }));
 }
 
-void ParserTest::case1809()
+void ParserTester::case1809()
 {
     parseExpression("x , y",
                     Expectation().AST( { SequencingExpression,
@@ -2490,7 +2490,7 @@ void ParserTest::case1809()
                                          IdentifierName }));
 }
 
-void ParserTest::case1810()
+void ParserTester::case1810()
 {
     parseExpression("x , 1, y",
                     Expectation().AST( { SequencingExpression,
@@ -2500,49 +2500,49 @@ void ParserTest::case1810()
                                          IdentifierName }));
 }
 
-void ParserTest::case1811()
+void ParserTester::case1811()
 {
 }
-void ParserTest::case1812() {}
-void ParserTest::case1813() {}
-void ParserTest::case1814() {}
-void ParserTest::case1815() {}
-void ParserTest::case1816() {}
-void ParserTest::case1817() {}
-void ParserTest::case1818() {}
-void ParserTest::case1819() {}
-void ParserTest::case1820() {}
-void ParserTest::case1821() {}
-void ParserTest::case1822() {}
-void ParserTest::case1823() {}
-void ParserTest::case1824() {}
-void ParserTest::case1825() {}
-void ParserTest::case1826() {}
-void ParserTest::case1827() {}
-void ParserTest::case1828() {}
-void ParserTest::case1829() {}
-void ParserTest::case1830() {}
-void ParserTest::case1831() {}
-void ParserTest::case1832() {}
-void ParserTest::case1833() {}
-void ParserTest::case1834() {}
-void ParserTest::case1835() {}
-void ParserTest::case1836() {}
-void ParserTest::case1837() {}
-void ParserTest::case1838() {}
-void ParserTest::case1839() {}
-void ParserTest::case1840() {}
-void ParserTest::case1841() {}
-void ParserTest::case1842() {}
-void ParserTest::case1843() {}
-void ParserTest::case1844() {}
-void ParserTest::case1845() {}
-void ParserTest::case1846() {}
-void ParserTest::case1847() {}
-void ParserTest::case1848() {}
-void ParserTest::case1849() {}
+void ParserTester::case1812() {}
+void ParserTester::case1813() {}
+void ParserTester::case1814() {}
+void ParserTester::case1815() {}
+void ParserTester::case1816() {}
+void ParserTester::case1817() {}
+void ParserTester::case1818() {}
+void ParserTester::case1819() {}
+void ParserTester::case1820() {}
+void ParserTester::case1821() {}
+void ParserTester::case1822() {}
+void ParserTester::case1823() {}
+void ParserTester::case1824() {}
+void ParserTester::case1825() {}
+void ParserTester::case1826() {}
+void ParserTester::case1827() {}
+void ParserTester::case1828() {}
+void ParserTester::case1829() {}
+void ParserTester::case1830() {}
+void ParserTester::case1831() {}
+void ParserTester::case1832() {}
+void ParserTester::case1833() {}
+void ParserTester::case1834() {}
+void ParserTester::case1835() {}
+void ParserTester::case1836() {}
+void ParserTester::case1837() {}
+void ParserTester::case1838() {}
+void ParserTester::case1839() {}
+void ParserTester::case1840() {}
+void ParserTester::case1841() {}
+void ParserTester::case1842() {}
+void ParserTester::case1843() {}
+void ParserTester::case1844() {}
+void ParserTester::case1845() {}
+void ParserTester::case1846() {}
+void ParserTester::case1847() {}
+void ParserTester::case1848() {}
+void ParserTester::case1849() {}
 
-void ParserTest::case1850()
+void ParserTester::case1850()
 {
     parseExpression("x = y",
                     Expectation().AST( { BasicAssignmentExpression,
@@ -2550,7 +2550,7 @@ void ParserTest::case1850()
                                          IdentifierName } ));
 }
 
-void ParserTest::case1851()
+void ParserTester::case1851()
 {
     parseExpression("x %= y",
                     Expectation().AST( { ModuloAssignmentExpression,
@@ -2558,7 +2558,7 @@ void ParserTest::case1851()
                                          IdentifierName } ));
 }
 
-void ParserTest::case1852()
+void ParserTester::case1852()
 {
     parseExpression("x = y = 1",
                     Expectation().AST( { BasicAssignmentExpression,
@@ -2569,7 +2569,7 @@ void ParserTest::case1852()
 
 }
 
-void ParserTest::case1853()
+void ParserTester::case1853()
 {
     parseExpression("x = ( y = 1)",
                     Expectation().AST( { BasicAssignmentExpression,
@@ -2580,7 +2580,7 @@ void ParserTest::case1853()
                                          IntegerConstantExpression } ));
 }
 
-void ParserTest::case1854()
+void ParserTester::case1854()
 {
     parseExpression("x = 0",
                     Expectation().AST( { BasicAssignmentExpression,
@@ -2588,7 +2588,7 @@ void ParserTest::case1854()
                                          IntegerConstantExpression } ));
 }
 
-void ParserTest::case1855()
+void ParserTester::case1855()
 {
     parseExpression("x = ( void * ) 0",
                     Expectation().AST( { BasicAssignmentExpression,
@@ -2601,7 +2601,7 @@ void ParserTest::case1855()
                                          IntegerConstantExpression} ));
 }
 
-void ParserTest::case1856()
+void ParserTester::case1856()
 {
     parseExpression("x = ( ( void * ) 0 )",
                     Expectation().AST( { BasicAssignmentExpression,
@@ -2615,126 +2615,126 @@ void ParserTest::case1856()
                                          IntegerConstantExpression} ));
 }
 
-void ParserTest::case1857() {}
-void ParserTest::case1858() {}
-void ParserTest::case1859() {}
-void ParserTest::case1860() {}
-void ParserTest::case1861() {}
-void ParserTest::case1862() {}
-void ParserTest::case1863() {}
-void ParserTest::case1864() {}
-void ParserTest::case1865() {}
-void ParserTest::case1866() {}
-void ParserTest::case1867() {}
-void ParserTest::case1868() {}
-void ParserTest::case1869() {}
-void ParserTest::case1870() {}
-void ParserTest::case1871() {}
-void ParserTest::case1872() {}
-void ParserTest::case1873() {}
-void ParserTest::case1874() {}
-void ParserTest::case1875() {}
-void ParserTest::case1876() {}
-void ParserTest::case1877() {}
-void ParserTest::case1878() {}
-void ParserTest::case1879() {}
-void ParserTest::case1880() {}
-void ParserTest::case1881() {}
-void ParserTest::case1882() {}
-void ParserTest::case1883() {}
-void ParserTest::case1884() {}
-void ParserTest::case1885() {}
-void ParserTest::case1886() {}
-void ParserTest::case1887() {}
-void ParserTest::case1888() {}
-void ParserTest::case1889() {}
-void ParserTest::case1890() {}
-void ParserTest::case1891() {}
-void ParserTest::case1892() {}
-void ParserTest::case1893() {}
-void ParserTest::case1894() {}
-void ParserTest::case1895() {}
-void ParserTest::case1896() {}
-void ParserTest::case1897() {}
-void ParserTest::case1898() {}
-void ParserTest::case1899() {}
+void ParserTester::case1857() {}
+void ParserTester::case1858() {}
+void ParserTester::case1859() {}
+void ParserTester::case1860() {}
+void ParserTester::case1861() {}
+void ParserTester::case1862() {}
+void ParserTester::case1863() {}
+void ParserTester::case1864() {}
+void ParserTester::case1865() {}
+void ParserTester::case1866() {}
+void ParserTester::case1867() {}
+void ParserTester::case1868() {}
+void ParserTester::case1869() {}
+void ParserTester::case1870() {}
+void ParserTester::case1871() {}
+void ParserTester::case1872() {}
+void ParserTester::case1873() {}
+void ParserTester::case1874() {}
+void ParserTester::case1875() {}
+void ParserTester::case1876() {}
+void ParserTester::case1877() {}
+void ParserTester::case1878() {}
+void ParserTester::case1879() {}
+void ParserTester::case1880() {}
+void ParserTester::case1881() {}
+void ParserTester::case1882() {}
+void ParserTester::case1883() {}
+void ParserTester::case1884() {}
+void ParserTester::case1885() {}
+void ParserTester::case1886() {}
+void ParserTester::case1887() {}
+void ParserTester::case1888() {}
+void ParserTester::case1889() {}
+void ParserTester::case1890() {}
+void ParserTester::case1891() {}
+void ParserTester::case1892() {}
+void ParserTester::case1893() {}
+void ParserTester::case1894() {}
+void ParserTester::case1895() {}
+void ParserTester::case1896() {}
+void ParserTester::case1897() {}
+void ParserTester::case1898() {}
+void ParserTester::case1899() {}
 
-void ParserTest::case1900()
+void ParserTester::case1900()
 {
     // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
 
     parseExpression("({ int x; })");
 }
 
-void ParserTest::case1901()
+void ParserTester::case1901()
 {
     // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
 
     parseExpression("({ int x; x; })");
 }
 
-void ParserTest::case1902()
+void ParserTester::case1902()
 {
     // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
 
     parseExpression("({ x y; })");
 }
 
-void ParserTest::case1903()
+void ParserTester::case1903()
 {
     // https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
 
     parseExpression("({ x y; y; })");
 }
 
-void ParserTest::case1904() {}
-void ParserTest::case1905() {}
-void ParserTest::case1906() {}
-void ParserTest::case1907() {}
-void ParserTest::case1908() {}
-void ParserTest::case1909() {}
-void ParserTest::case1910() {}
-void ParserTest::case1911() {}
-void ParserTest::case1912() {}
-void ParserTest::case1913() {}
-void ParserTest::case1914() {}
-void ParserTest::case1915() {}
-void ParserTest::case1916() {}
-void ParserTest::case1917() {}
-void ParserTest::case1918() {}
-void ParserTest::case1919() {}
-void ParserTest::case1920() {}
-void ParserTest::case1921() {}
-void ParserTest::case1922() {}
-void ParserTest::case1923() {}
-void ParserTest::case1924() {}
-void ParserTest::case1925() {}
-void ParserTest::case1926() {}
-void ParserTest::case1927() {}
-void ParserTest::case1928() {}
-void ParserTest::case1929() {}
-void ParserTest::case1930() {}
-void ParserTest::case1931() {}
-void ParserTest::case1932() {}
-void ParserTest::case1933() {}
-void ParserTest::case1934() {}
-void ParserTest::case1935() {}
-void ParserTest::case1936() {}
-void ParserTest::case1937() {}
-void ParserTest::case1938() {}
-void ParserTest::case1939() {}
-void ParserTest::case1940() {}
-void ParserTest::case1941() {}
-void ParserTest::case1942() {}
-void ParserTest::case1943() {}
-void ParserTest::case1944() {}
-void ParserTest::case1945() {}
-void ParserTest::case1946() {}
-void ParserTest::case1947() {}
-void ParserTest::case1948() {}
-void ParserTest::case1949() {}
+void ParserTester::case1904() {}
+void ParserTester::case1905() {}
+void ParserTester::case1906() {}
+void ParserTester::case1907() {}
+void ParserTester::case1908() {}
+void ParserTester::case1909() {}
+void ParserTester::case1910() {}
+void ParserTester::case1911() {}
+void ParserTester::case1912() {}
+void ParserTester::case1913() {}
+void ParserTester::case1914() {}
+void ParserTester::case1915() {}
+void ParserTester::case1916() {}
+void ParserTester::case1917() {}
+void ParserTester::case1918() {}
+void ParserTester::case1919() {}
+void ParserTester::case1920() {}
+void ParserTester::case1921() {}
+void ParserTester::case1922() {}
+void ParserTester::case1923() {}
+void ParserTester::case1924() {}
+void ParserTester::case1925() {}
+void ParserTester::case1926() {}
+void ParserTester::case1927() {}
+void ParserTester::case1928() {}
+void ParserTester::case1929() {}
+void ParserTester::case1930() {}
+void ParserTester::case1931() {}
+void ParserTester::case1932() {}
+void ParserTester::case1933() {}
+void ParserTester::case1934() {}
+void ParserTester::case1935() {}
+void ParserTester::case1936() {}
+void ParserTester::case1937() {}
+void ParserTester::case1938() {}
+void ParserTester::case1939() {}
+void ParserTester::case1940() {}
+void ParserTester::case1941() {}
+void ParserTester::case1942() {}
+void ParserTester::case1943() {}
+void ParserTester::case1944() {}
+void ParserTester::case1945() {}
+void ParserTester::case1946() {}
+void ParserTester::case1947() {}
+void ParserTester::case1948() {}
+void ParserTester::case1949() {}
 
-void ParserTest::case1950()
+void ParserTester::case1950()
 {
     parseExpression("__builtin_va_arg ( x , int )",
                     Expectation().AST( { VAArgumentExpression,
@@ -2744,7 +2744,7 @@ void ParserTest::case1950()
                                          AbstractDeclarator }));
 }
 
-void ParserTest::case1951()
+void ParserTester::case1951()
 {
     parseExpression("__builtin_va_arg ( x , y )",
                     Expectation().AST( { VAArgumentExpression,
@@ -2754,16 +2754,16 @@ void ParserTest::case1951()
                                          AbstractDeclarator }));
 }
 
-void ParserTest::case1952() {}
-void ParserTest::case1953() {}
-void ParserTest::case1954() {}
-void ParserTest::case1955() {}
-void ParserTest::case1956() {}
-void ParserTest::case1957() {}
-void ParserTest::case1958() {}
-void ParserTest::case1959() {}
+void ParserTester::case1952() {}
+void ParserTester::case1953() {}
+void ParserTester::case1954() {}
+void ParserTester::case1955() {}
+void ParserTester::case1956() {}
+void ParserTester::case1957() {}
+void ParserTester::case1958() {}
+void ParserTester::case1959() {}
 
-void ParserTest::case1960()
+void ParserTester::case1960()
 {
     parseExpression("__builtin_offsetof ( struct x , y )",
                     Expectation().AST( { OffsetOfExpression,
@@ -2773,7 +2773,7 @@ void ParserTest::case1960()
                                          OffsetOfDesignator }));
 }
 
-void ParserTest::case1961()
+void ParserTester::case1961()
 {
     parseExpression("__builtin_offsetof ( struct x , y . z )",
                     Expectation().AST( { OffsetOfExpression,
@@ -2784,7 +2784,7 @@ void ParserTest::case1961()
                                          FieldDesignator }));
 }
 
-void ParserTest::case1962()
+void ParserTester::case1962()
 {
     parseExpression("__builtin_offsetof ( struct x , y [ 0 ] )",
                     Expectation().AST( { OffsetOfExpression,
@@ -2796,7 +2796,7 @@ void ParserTest::case1962()
                                          IntegerConstantExpression }));
 }
 
-void ParserTest::case1963()
+void ParserTester::case1963()
 {
     parseExpression("__builtin_offsetof ( struct x , y  [ 0 ] . z )",
                     Expectation().AST( { OffsetOfExpression,
@@ -2809,7 +2809,7 @@ void ParserTest::case1963()
                                          FieldDesignator }));
 }
 
-void ParserTest::case1964()
+void ParserTester::case1964()
 {
     parseExpression("__builtin_offsetof ( union x , y )",
                     Expectation().AST( { OffsetOfExpression,
@@ -2819,13 +2819,13 @@ void ParserTest::case1964()
                                          OffsetOfDesignator }));
 }
 
-void ParserTest::case1965() {}
-void ParserTest::case1966() {}
-void ParserTest::case1967() {}
-void ParserTest::case1968() {}
-void ParserTest::case1969() {}
+void ParserTester::case1965() {}
+void ParserTester::case1966() {}
+void ParserTester::case1967() {}
+void ParserTester::case1968() {}
+void ParserTester::case1969() {}
 
-void ParserTest::case1970()
+void ParserTester::case1970()
 {
     parseExpression("__builtin_choose_expr ( 0 , x , y )",
                     Expectation().AST( { ExtGNU_ChooseExpression,
@@ -2834,7 +2834,7 @@ void ParserTest::case1970()
                                          IdentifierName }));
 }
 
-void ParserTest::case1971()
+void ParserTester::case1971()
 {
     parseExpression("__builtin_choose_expr ( 1 , sizeof ( int ) , sizeof ( double ) )",
                     Expectation().AST( { ExtGNU_ChooseExpression,
@@ -2851,7 +2851,7 @@ void ParserTest::case1971()
                                          AbstractDeclarator }));
 }
 
-void ParserTest::case1972()
+void ParserTester::case1972()
 {
     parseExpression(R"(
                      __builtin_choose_expr ( 0 ,
@@ -2880,7 +2880,7 @@ void ParserTest::case1972()
                                          IdentifierName }));
 }
 
-void ParserTest::case1973()
+void ParserTester::case1973()
 {
     parseExpression("__builtin_choose_expr ( 1 , x + y , z + w )",
                     Expectation().AST( { ExtGNU_ChooseExpression,
@@ -2893,26 +2893,26 @@ void ParserTest::case1973()
                                          IdentifierName }));
 }
 
-void ParserTest::case1974() {}
-void ParserTest::case1975() {}
-void ParserTest::case1976() {}
-void ParserTest::case1977() {}
-void ParserTest::case1978() {}
-void ParserTest::case1979() {}
+void ParserTester::case1974() {}
+void ParserTester::case1975() {}
+void ParserTester::case1976() {}
+void ParserTester::case1977() {}
+void ParserTester::case1978() {}
+void ParserTester::case1979() {}
 
-void ParserTest::case1980()
+void ParserTester::case1980()
 {
     parseExpression("__FUNCTION__",
                     Expectation().AST( { PredefinedName }));
 }
 
-void ParserTest::case1981()
+void ParserTester::case1981()
 {
     parseExpression("__PRETTY_FUNCTION__",
                     Expectation().AST( { PredefinedName }));
 }
 
-void ParserTest::case1982()
+void ParserTester::case1982()
 {
     parseExpression("sizeof ( __FUNCTION__ )",
                     Expectation().AST( { SizeofExpression,
@@ -2921,7 +2921,7 @@ void ParserTest::case1982()
                                          PredefinedName }));
 }
 
-void ParserTest::case1983()
+void ParserTester::case1983()
 {
     parseExpression("sizeof ( __PRETTY_FUNCTION__ )",
                     Expectation().AST( { SizeofExpression,
@@ -2930,7 +2930,7 @@ void ParserTest::case1983()
                                          PredefinedName}));
 }
 
-void ParserTest::case1984()
+void ParserTester::case1984()
 {
     parseExpression("sizeof __FUNCTION__",
                     Expectation().AST( { SizeofExpression,
@@ -2938,7 +2938,7 @@ void ParserTest::case1984()
                                          PredefinedName }));
 }
 
-void ParserTest::case1985()
+void ParserTester::case1985()
 {
     parseExpression("sizeof __PRETTY_FUNCTION__",
                     Expectation().AST( { SizeofExpression,
@@ -2946,21 +2946,21 @@ void ParserTest::case1985()
                                          PredefinedName }));
 }
 
-void ParserTest::case1986()
+void ParserTester::case1986()
 {
     parseExpression("( __FUNCTION__ )",
                     Expectation().AST( { ParenthesizedExpression,
                                          PredefinedName }));
 }
 
-void ParserTest::case1987()
+void ParserTester::case1987()
 {
     parseExpression("( __PRETTY_FUNCTION__ )",
                     Expectation().AST( { ParenthesizedExpression,
                                          PredefinedName }));
 }
 
-void ParserTest::case1988()
+void ParserTester::case1988()
 {
     parseExpression("x = __FUNCTION__",
                     Expectation().AST( { BasicAssignmentExpression,
@@ -2968,7 +2968,7 @@ void ParserTest::case1988()
                                          PredefinedName }));
 }
 
-void ParserTest::case1989()
+void ParserTester::case1989()
 {
     parseExpression("x = __PRETTY_FUNCTION__",
                     Expectation().AST( { BasicAssignmentExpression,
@@ -2976,14 +2976,14 @@ void ParserTest::case1989()
                                          PredefinedName }));
 }
 
-void ParserTest::case1990()
+void ParserTester::case1990()
 {
     parseExpression("__real__ x",
                     Expectation().AST( { ExtGNU_RealExpression,
                                          IdentifierName }));
 }
 
-void ParserTest::case1991()
+void ParserTester::case1991()
 {
     parseExpression("__real__ ( x )",
                     Expectation().AST( { ExtGNU_RealExpression,
@@ -2991,7 +2991,7 @@ void ParserTest::case1991()
                                          IdentifierName }));
 }
 
-void ParserTest::case1992()
+void ParserTester::case1992()
 {
     parseExpression("__real__ ( __real__ x )",
                     Expectation().AST( { ExtGNU_RealExpression,
@@ -2999,14 +2999,14 @@ void ParserTest::case1992()
                                          ExtGNU_RealExpression,
                                          IdentifierName }));
 }
-void ParserTest::case1993()
+void ParserTester::case1993()
 {
     parseExpression("__imag__ x",
                     Expectation().AST( { ExtGNU_ImagExpression,
                                          IdentifierName }));
 }
 
-void ParserTest::case1994()
+void ParserTester::case1994()
 {
     parseExpression("__imag__ ( x )",
                     Expectation().AST( { ExtGNU_ImagExpression,
@@ -3014,7 +3014,7 @@ void ParserTest::case1994()
                                          IdentifierName }));
 }
 
-void ParserTest::case1995()
+void ParserTester::case1995()
 {
     parseExpression("__imag__ __real__ x",
                     Expectation().AST( { ExtGNU_ImagExpression,
@@ -3022,7 +3022,7 @@ void ParserTest::case1995()
                                          IdentifierName }));
 }
 
-void ParserTest::case1996()
+void ParserTester::case1996()
 {
     parseExpression("__real__ ( int ) x",
                     Expectation().AST( { ExtGNU_RealExpression,
@@ -3033,6 +3033,6 @@ void ParserTest::case1996()
                                          IdentifierName }));
 }
 
-void ParserTest::case1997() {}
-void ParserTest::case1998() {}
-void ParserTest::case1999() {}
+void ParserTester::case1997() {}
+void ParserTester::case1998() {}
+void ParserTester::case1999() {}

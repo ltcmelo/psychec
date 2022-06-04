@@ -94,20 +94,20 @@ void Binder::closeScopeAndStashIt()
 }
 
 template <class SymT>
-SymT* Binder::pushSym(std::unique_ptr<SymT> sym)
+SymT* Binder::pushSym(const SyntaxNode* node, std::unique_ptr<SymT> sym)
 {
     syms_.push(sym.get());
-    return static_cast<SymT*>(semaModel_->storeSymDEF(std::move(sym)));
+    return static_cast<SymT*>(semaModel_->storeDeclaredSym(node, std::move(sym)));
 }
 
-template FunctionSymbol* Binder::pushSym<FunctionSymbol>(std::unique_ptr<FunctionSymbol>);
-template FieldSymbol* Binder::pushSym<FieldSymbol>(std::unique_ptr<FieldSymbol>);
-template EnumeratorSymbol* Binder::pushSym<EnumeratorSymbol>(std::unique_ptr<EnumeratorSymbol>);
-template ParameterSymbol* Binder::pushSym<ParameterSymbol>(std::unique_ptr<ParameterSymbol>);
-template VariableSymbol* Binder::pushSym<VariableSymbol>(std::unique_ptr<VariableSymbol>);
-template ArrayTypeSymbol* Binder::pushSym<ArrayTypeSymbol>(std::unique_ptr<ArrayTypeSymbol>);
-template NamedTypeSymbol* Binder::pushSym<NamedTypeSymbol>(std::unique_ptr<NamedTypeSymbol>);
-template PointerTypeSymbol* Binder::pushSym<PointerTypeSymbol>(std::unique_ptr<PointerTypeSymbol>);
+template FunctionSymbol* Binder::pushSym<FunctionSymbol>(const SyntaxNode*, std::unique_ptr<FunctionSymbol>);
+template FieldSymbol* Binder::pushSym<FieldSymbol>(const SyntaxNode*, std::unique_ptr<FieldSymbol>);
+template EnumeratorSymbol* Binder::pushSym<EnumeratorSymbol>(const SyntaxNode*, std::unique_ptr<EnumeratorSymbol>);
+template ParameterSymbol* Binder::pushSym<ParameterSymbol>(const SyntaxNode*, std::unique_ptr<ParameterSymbol>);
+template VariableSymbol* Binder::pushSym<VariableSymbol>(const SyntaxNode*, std::unique_ptr<VariableSymbol>);
+template ArrayTypeSymbol* Binder::pushSym<ArrayTypeSymbol>(const SyntaxNode*, std::unique_ptr<ArrayTypeSymbol>);
+template NamedTypeSymbol* Binder::pushSym<NamedTypeSymbol>(const SyntaxNode*, std::unique_ptr<NamedTypeSymbol>);
+template PointerTypeSymbol* Binder::pushSym<PointerTypeSymbol>(const SyntaxNode*, std::unique_ptr<PointerTypeSymbol>);
 
 void Binder::popSym()
 {
@@ -118,7 +118,7 @@ template <class TySymT>
 TySymT* Binder::pushTySym(std::unique_ptr<TySymT> tySym)
 {
     tySyms_.push(tySym.get());
-    return static_cast<TySymT*>(semaModel_->storeSymUSE(std::move(tySym)));
+    return static_cast<TySymT*>(semaModel_->storeUsedSym(std::move(tySym)));
 }
 
 template ArrayTypeSymbol* Binder::pushTySym<ArrayTypeSymbol>(std::unique_ptr<ArrayTypeSymbol>);
@@ -137,7 +137,7 @@ void Binder::popTySym()
 
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    makeSymAndPushIt<LibrarySymbol>();
+    makeSymAndPushIt<LibrarySymbol>(node);
 
     openScope(ScopeKind::File);
 

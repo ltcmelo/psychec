@@ -1,4 +1,4 @@
-// Copyright (c) 2020/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,21 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ParserTest.h"
+#ifndef PSYCHE_C_API_TEST_SUITE_H__
+#define PSYCHE_C_API_TEST_SUITE_H__
 
-using namespace psy;
-using namespace C;
+#include "Fwds.h"
 
-const std::string ParserTest::Name = "PARSER";
+#include "tests/TestSuite.h"
 
-void ParserTest::testAll()
+namespace psy {
+namespace C {
+
+class APITestSuite : public TestSuite
 {
-    return run<ParserTest>(tests_);
-}
+public:
+    virtual ~APITestSuite();
 
-void ParserTest::setUp()
-{}
+    virtual std::tuple<int, int> testAll() override;
+    virtual std::string description() const override;
+    virtual void printSummary() const override;
+};
 
-void ParserTest::tearDown()
-{
-}
+} // C
+} // psy
+
+#endif

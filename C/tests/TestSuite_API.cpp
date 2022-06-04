@@ -1,4 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,36 +18,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TestRunner.h"
-
-#include "../C/tests/BinderTest.h"
-#include "../C/tests/ParserTest.h"
-#include "../C/tests/TypeCheckerTest.h"
-
-#include <iostream>
+#include "TestSuite_API.h"
 
 using namespace psy;
 using namespace C;
 
-void TestRunner::runSuite()
+APITestSuite::~APITestSuite()
+{}
+
+std::tuple<int, int> APITestSuite::testAll()
 {
-    std::cout << "TESTS..." << std::endl;
+    return std::make_tuple(0, 0);
+}
 
-    // C
-    std::cout << "  C" << std::endl;
-    ParserTest P;
-    P.testAll();
+std::string APITestSuite::description() const
+{
+    return "C API test suite";
+}
 
-    BinderTest B;
-    B.testAll();
-
-    P.summary();
-    B.summary();
-
-    auto totalFail = P.cntER_ + B.cntER_;
-    if (!totalFail)
-        std::cout << "All passed" << std::endl;
-    else
-        std::cout << std::string(17, '.') << " \n"
-                  << "> Total failures: " << P.cntER_ + B.cntER_ << std::endl;
+void APITestSuite::printSummary() const
+{
 }
