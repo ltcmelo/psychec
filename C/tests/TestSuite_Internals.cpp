@@ -77,7 +77,6 @@ std::string InternalsTestSuite::description() const
 
 void InternalsTestSuite::printSummary() const
 {
-    std::cout << description() << std::endl;
     for (auto const& tester : testers_) {
         std::cout << "    " << tester->name() << " passed: " << tester->totalPassed() << std::endl
                   << "    " << std::string(tester->name().length(), ' ') << " failed: " << tester->totalFailed() << std::endl;

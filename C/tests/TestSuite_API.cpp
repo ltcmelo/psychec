@@ -25,3 +25,17 @@ using namespace C;
 
 APITestSuite::~APITestSuite()
 {}
+
+std::tuple<int, int> APITestSuite::testAll()
+{
+    return std::make_tuple(0, 0);
+}
+
+std::string APITestSuite::description() const
+{
+    return "C API test suite";
+}
+
+void APITestSuite::printSummary() const
+{
+}

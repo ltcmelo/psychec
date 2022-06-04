@@ -32,6 +32,10 @@ class APITestSuite : public TestSuite
 {
 public:
     virtual ~APITestSuite();
+
+    virtual std::tuple<int, int> testAll() override;
+    virtual std::string description() const override;
+    virtual void printSummary() const override;
 };
 
 } // C
