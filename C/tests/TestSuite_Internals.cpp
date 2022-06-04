@@ -30,8 +30,8 @@
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
-#include "BinderTest.h"
-#include "ParserTest.h"
+#include "BinderTester.h"
+#include "ParserTester.h"
 
 #include <algorithm>
 #include <cstring>
@@ -55,10 +55,10 @@ InternalsTestSuite::~InternalsTestSuite()
 
 std::tuple<int, int> InternalsTestSuite::testAll()
 {
-    auto P = std::make_unique<ParserTest>(this);
+    auto P = std::make_unique<ParserTester>(this);
     P->testParser();
 
-    auto B = std::make_unique<BinderTest>(this);
+    auto B = std::make_unique<BinderTester>(this);
     B->testBinder();
 
     auto res = std::make_tuple(P->totalPassed() + B->totalPassed(),

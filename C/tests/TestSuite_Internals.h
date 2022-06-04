@@ -41,8 +41,8 @@ namespace C {
 
 class InternalsTestSuite : public TestSuite
 {
-    friend class ParserTest;
-    friend class BinderTest;
+    friend class ParserTester;
+    friend class BinderTester;
 
 public:
     virtual ~InternalsTestSuite();

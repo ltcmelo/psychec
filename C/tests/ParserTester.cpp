@@ -18,41 +18,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ParserTest.h"
+#include "ParserTester.h"
 
 using namespace psy;
 using namespace C;
 
-const std::string ParserTest::Name = "PARSER";
+const std::string ParserTester::Name = "PARSER";
 
-void ParserTest::testParser()
+void ParserTester::testParser()
 {
-    return run<ParserTest>(tests_);
+    return run<ParserTester>(tests_);
 }
 
-void ParserTest::parseDeclaration(std::string text, Expectation X)
+void ParserTester::parseDeclaration(std::string text, Expectation X)
 {
     (static_cast<InternalsTestSuite*>(suite_)->parseDeclaration(text, X));
 }
 
-void ParserTest::parseExpression(std::string text, Expectation X)
+void ParserTester::parseExpression(std::string text, Expectation X)
 {
     (static_cast<InternalsTestSuite*>(suite_)->parseExpression(text, X));
 }
 
-void ParserTest::parseStatement(std::string text, Expectation X)
+void ParserTester::parseStatement(std::string text, Expectation X)
 {
     (static_cast<InternalsTestSuite*>(suite_)->parseStatement(text, X));
 }
 
-void ParserTest::parse(std::string text, Expectation X, SyntaxTree::SyntaxCategory synCat)
+void ParserTester::parse(std::string text, Expectation X, SyntaxTree::SyntaxCategory synCat)
 {
     (static_cast<InternalsTestSuite*>(suite_)->parse(text, X, synCat));
 }
 
-void ParserTest::setUp()
+void ParserTester::setUp()
 {}
 
-void ParserTest::tearDown()
+void ParserTester::tearDown()
 {
 }

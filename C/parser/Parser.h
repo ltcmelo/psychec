@@ -50,7 +50,7 @@ class Lexer;
  */
 class PSY_C_NON_API Parser
 {
-    friend class ParserTest;
+    friend class ParserTester;
 
 public:
     ~Parser();

@@ -25,15 +25,15 @@
 #include "TestSuite_Internals.h"
 #include "tests/Tester.h"
 
-#define TEST_BINDER(Function) TestFunction { &BinderTest::Function, #Function }
+#define TEST_BINDER(Function) TestFunction { &BinderTester::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class BinderTest final : public Tester
+class BinderTester final : public Tester
 {
 public:
-    BinderTest(TestSuite* suite)
+    BinderTester(TestSuite* suite)
         : Tester(suite)
     {}
 
@@ -46,7 +46,7 @@ public:
 
     void bind(std::string text, Expectation X = Expectation());
 
-    using TestFunction = std::pair<std::function<void(BinderTest*)>, const char*>;
+    using TestFunction = std::pair<std::function<void(BinderTester*)>, const char*>;
 
     /*
         Functions

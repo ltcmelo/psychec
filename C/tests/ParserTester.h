@@ -25,15 +25,15 @@
 #include "TestSuite_Internals.h"
 #include "tests/Tester.h"
 
-#define TEST_PARSER(Function) TestFunction { &ParserTest::Function, #Function }
+#define TEST_PARSER(Function) TestFunction { &ParserTester::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class ParserTest final : public Tester
+class ParserTester final : public Tester
 {
 public:
-    ParserTest(TestSuite* suite)
+    ParserTester(TestSuite* suite)
         : Tester(suite)
     {}
 
@@ -51,7 +51,7 @@ public:
                Expectation X = Expectation(),
                SyntaxTree::SyntaxCategory synCat = SyntaxTree::SyntaxCategory::UNSPECIFIED);
 
-    using TestFunction = std::pair<std::function<void(ParserTest*)>, const char*>;
+    using TestFunction = std::pair<std::function<void(ParserTester*)>, const char*>;
 
     /*
         Declarations:

@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "BinderTest.h"
+#include "BinderTester.h"
 
 #include "symbols/Symbol.h"
 #include "parser/Unparser.h"
@@ -30,9 +30,9 @@
 using namespace psy;
 using namespace C;
 
-const std::string BinderTest::Name = "BINDER";
+const std::string BinderTester::Name = "BINDER";
 
-void BinderTest::testBinder()
+void BinderTester::testBinder()
 {
     // TEMPORARY
     std::vector<TestFunction> active;
@@ -46,16 +46,16 @@ void BinderTest::testBinder()
         active.push_back(testData);
     }
 
-    return run<BinderTest>(active);
+    return run<BinderTester>(active);
 }
 
-void BinderTest::bind(std::string text, Expectation X)
+void BinderTester::bind(std::string text, Expectation X)
 {
     (static_cast<InternalsTestSuite*>(suite_)->bind(text, X));
 }
 
-void BinderTest::setUp()
+void BinderTester::setUp()
 {}
 
-void BinderTest::tearDown()
+void BinderTester::tearDown()
 {}

@@ -195,18 +195,18 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/compilation/SemanticModel.cpp
 
     # Tests
-    ${PROJECT_SOURCE_DIR}/tests/BinderTest.h
-    ${PROJECT_SOURCE_DIR}/tests/BinderTest.cpp
-    ${PROJECT_SOURCE_DIR}/tests/BinderTest_0000_0999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/BinderTest_1000_1999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/BinderTest_2000_2999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/BinderTest_3000_3999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/ParserTest.h
-    ${PROJECT_SOURCE_DIR}/tests/ParserTest.cpp
-    ${PROJECT_SOURCE_DIR}/tests/ParserTest_0000_0999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/ParserTest_1000_1999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/ParserTest_2000_2999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/ParserTest_3000_3999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTester.h
+    ${PROJECT_SOURCE_DIR}/tests/BinderTester.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTester_0000_0999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTester_1000_1999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTester_2000_2999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTester_3000_3999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/ParserTester.h
+    ${PROJECT_SOURCE_DIR}/tests/ParserTester.cpp
+    ${PROJECT_SOURCE_DIR}/tests/ParserTester_0000_0999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/ParserTester_1000_1999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/ParserTester_2000_2999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/ParserTester_3000_3999.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestExpectation.h
     ${PROJECT_SOURCE_DIR}/tests/TestExpectation.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestSuite_API.h

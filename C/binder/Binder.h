@@ -49,7 +49,7 @@ class SemanticModel;
  */
 class PSY_C_NON_API Binder final : protected SyntaxVisitor
 {
-    friend class BinderTest;
+    friend class BinderTester;
 
 PSY_INTERNAL:
     PSY_GRANT_ACCESS(SemanticModel);
