@@ -20,6 +20,8 @@
 
 #include "TestSuite_API.h"
 
+#include "SemanticModelTester.h"
+
 using namespace psy;
 using namespace C;
 
@@ -28,7 +30,15 @@ APITestSuite::~APITestSuite()
 
 std::tuple<int, int> APITestSuite::testAll()
 {
-    return std::make_tuple(0, 0);
+    auto SM = std::make_unique<SemanticModelTester>(this);
+    SM->testSemanticModel();
+
+    auto res = std::make_tuple(SM->totalPassed(),
+                               SM->totalFailed());
+
+    testers_.emplace_back(SM.release());
+
+    return res;
 }
 
 std::string APITestSuite::description() const
@@ -38,4 +48,8 @@ std::string APITestSuite::description() const
 
 void APITestSuite::printSummary() const
 {
+    for (auto const& tester : testers_) {
+        std::cout << "    " << tester->name() << " passed: " << tester->totalPassed() << std::endl
+                  << "    " << std::string(tester->name().length(), ' ') << " failed: " << tester->totalFailed() << std::endl;
+    }
 }

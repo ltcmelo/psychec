@@ -21,10 +21,14 @@
 #ifndef PSYCHE_TESTER_H__
 #define PSYCHE_TESTER_H__
 
-#include <string>
 #include <iostream>
+#include <string>
+#include <type_traits>
 
-#define PSYCHE_TEST_FAIL(MSG) \
+#define PSY__internals__EQ_OPTR(A, B) A == B
+#define PSY__internals__EQ_STD(A, B) std::equal(A.begin(), A.end(), B.begin())
+
+#define PSY__internals__FAIL(MSG) \
     do { \
         std::cout << "\n!\tFAIL\n" \
                   << "\tReason: " << MSG << "\n" \
@@ -32,7 +36,8 @@
         throw TestFailed(); \
     } while (0)
 
-#define PSYCHE_EXPECT_EQ(EXPECTED, ACTUAL, EQ) \
+
+#define PSY__internals__EXPECT_EQ(EXPECTED, ACTUAL, EQ) \
     do { \
         if (!(EQ(EXPECTED, ACTUAL))) { \
             std::cout << "\n!\tFAIL\n" \
@@ -43,7 +48,7 @@
         } \
     } while (0)
 
-#define PSYCHE_EXPECT(EXPR, BOOLEAN) \
+#define PSY__internals__EXPECT_BOOL(EXPR, BOOLEAN) \
     do { \
         if (bool(EXPR) != BOOLEAN) { \
             std::cout << "\n!\tFAIL\n" \
@@ -53,14 +58,14 @@
         } \
     } while (0)
 
-#define PSYCHE_EQ_OPR(A, B) A == B
-#define PSYCHE_STD_EQUAL(A, B) std::equal(A.begin(), A.end(), B.begin())
-#define PSYCHE_EXPECT_PTR_EQ(EXPECTED, ACTUAL) PSYCHE_EXPECT_EQ(EXPECTED, ACTUAL, PSYCHE_EQ_OPR)
-#define PSYCHE_EXPECT_STR_EQ(EXPECTED, ACTUAL) PSYCHE_EXPECT_EQ(EXPECTED, ACTUAL, PSYCHE_EQ_OPR)
-#define PSYCHE_EXPECT_INT_EQ(EXPECTED, ACTUAL) PSYCHE_EXPECT_EQ(EXPECTED, ACTUAL, PSYCHE_EQ_OPR)
-#define PSYCHE_EXPECT_CONTAINER_EQ(EXPECTED, ACTUAL) PSYCHE_EXPECT_EQ(EXPECTED, ACTUAL, PSYCHE_STD_EQUAL)
-#define PSYCHE_EXPECT_TRUE(EXPR) PSYCHE_EXPECT(EXPR, true)
-#define PSYCHE_EXPECT_FALSE(EXPR) PSYCHE_EXPECT(EXPR, false)
+#define PSY_EXPECT_EQ_PTR(EXPECTED, ACTUAL) PSY__internals__EXPECT_EQ(EXPECTED, ACTUAL, PSY__internals__EQ_OPTR)
+#define PSY_EXPECT_EQ_STR(EXPECTED, ACTUAL) PSY__internals__EXPECT_EQ(EXPECTED, ACTUAL, PSY__internals__EQ_OPTR)
+#define PSY_EXPECT_EQ_INT(EXPECTED, ACTUAL) PSY__internals__EXPECT_EQ(EXPECTED, ACTUAL, PSY__internals__EQ_OPTR)
+#define PSY_EXPECT_EQ_ENUM(EXPECTED, ACTUAL, ENUM_TYPE) PSY_EXPECT_EQ_INT(std::underlying_type_t<ENUM_TYPE>(EXPECTED), std::underlying_type_t<ENUM_TYPE>(ACTUAL))
+#define PSY_EXPECT_EQ_CONT(EXPECTED, ACTUAL) PSY__internals__EXPECT_EQ(EXPECTED, ACTUAL, PSY__internals__EQ_STD)
+
+#define PSY_EXPECT_TRUE(EXPR) PSY__internals__EXPECT_BOOL(EXPR, true)
+#define PSY_EXPECT_FALSE(EXPR) PSY__internals__EXPECT_BOOL(EXPR, false)
 
 namespace psy {
 

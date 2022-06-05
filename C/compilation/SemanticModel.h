@@ -51,7 +51,7 @@ public:
 
     //!@{
     /**
-     * The Symbol declared by the given by SyntaxNode \p node.
+     * The Symbol declared by the given by DeclaratorSyntax \p node.
      */
     const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
     //!@}
