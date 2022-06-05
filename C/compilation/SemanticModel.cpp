@@ -25,6 +25,7 @@
 
 #include "binder/Binder.h"
 #include "syntax/SyntaxNodes.h"
+#include "syntax/SyntaxUtilities.h"
 #include "symbols/Symbol_ALL.h"
 
 #include "../common/infra/Assertions.h"
@@ -32,7 +33,6 @@
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
-#include <vector>
 
 using namespace psy;
 using namespace C;
@@ -64,8 +64,24 @@ const Compilation* SemanticModel::compilation() const
 
 const Symbol* SemanticModel::declaredSymbol(const DeclaratorSyntax* node) const
 {
-    auto it = P->declSyms_.find(node);
+    auto node_P = SyntaxUtilities::strippedDeclaratorOrSelf(node);
+    auto node_PP = SyntaxUtilities::innermostDeclaratorOrSelf(node_P);
+    auto it = P->declSyms_.find(node_PP);
     return it != P->declSyms_.end() ? it->second : nullptr;
+}
+
+std::vector<const Symbol*> SemanticModel::declaredSymbols(
+        const VariableAndOrFunctionDeclarationSyntax* node) const
+{
+    std::vector<const Symbol*> syms;
+    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next)
+        syms.push_back(declaredSymbol(decltorIt->value));
+    return syms;
+}
+
+const Symbol* SemanticModel::declaredSymbol(const FunctionDefinitionSyntax* node) const
+{
+    return nullptr;
 }
 
 Symbol* SemanticModel::storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym)

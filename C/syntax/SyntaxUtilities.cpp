@@ -26,10 +26,10 @@
 using namespace psy;
 using namespace C;
 
-const DeclaratorSyntax* SyntaxUtilities::innermostDeclarator(const DeclaratorSyntax* decltor)
+const DeclaratorSyntax* SyntaxUtilities::innermostDeclaratorOrSelf(const DeclaratorSyntax* decltor)
 {
     while (decltor) {
-        const DeclaratorSyntax* innerDecltor = innerDeclarator(decltor);
+        const DeclaratorSyntax* innerDecltor = innerDeclaratorOrSelf(decltor);
         if (innerDecltor == decltor)
             break;
         decltor = innerDecltor;
@@ -37,7 +37,7 @@ const DeclaratorSyntax* SyntaxUtilities::innermostDeclarator(const DeclaratorSyn
     return decltor;
 }
 
-const DeclaratorSyntax* SyntaxUtilities::innerDeclarator(const DeclaratorSyntax* decltor)
+const DeclaratorSyntax* SyntaxUtilities::innerDeclaratorOrSelf(const DeclaratorSyntax* decltor)
 {
     switch (decltor->kind()) {
         case PointerDeclarator:
@@ -55,7 +55,7 @@ const DeclaratorSyntax* SyntaxUtilities::innerDeclarator(const DeclaratorSyntax*
     }
 }
 
-const DeclaratorSyntax* SyntaxUtilities::strippedDeclarator(const DeclaratorSyntax* decltor)
+const DeclaratorSyntax* SyntaxUtilities::strippedDeclaratorOrSelf(const DeclaratorSyntax* decltor)
 {
     while (decltor && decltor->asParenthesizedDeclarator())
         decltor = decltor->asParenthesizedDeclarator()->innerDeclarator();

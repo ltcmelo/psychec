@@ -27,6 +27,8 @@
 #include "../common/infra/InternalAccess.h"
 #include "../common/infra/Pimpl.h"
 
+#include <vector>
+
 namespace psy {
 namespace C {
 
@@ -54,6 +56,14 @@ public:
      * The Symbol declared by the given by DeclaratorSyntax \p node.
      */
     const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
+    //!@}
+
+    //!@{
+    /**
+     * The Symbol(s) declared by the given DeclarationSyntax \p node.
+     */
+    std::vector<const Symbol*> declaredSymbols(const VariableAndOrFunctionDeclarationSyntax* node) const;
+    const Symbol* declaredSymbol(const FunctionDefinitionSyntax* node) const;
     //!@}
 
 PSY_INTERNAL:
