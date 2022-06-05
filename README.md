@@ -31,13 +31,13 @@ void analyse(const FileInfo& fi)
     auto compilation = Compilation::create("code-analysis");
     compilation->addSyntaxTree(tree.get());
 
-    AnalysisSyntaxVisitor analysis(tree.get(), compilation->semanticModel(tree.get()));
+    AnalysisVisitor analysis(tree.get(), compilation->semanticModel(tree.get()));
     analysis.run(tree->translationUnitRoot());
 }
 ```
 
 ```cpp
-SyntaxVisitor::Action AnalysisSyntaxVisitor::visitFunctionDefinition(const FunctionDefinitionSyntax* node) override
+SyntaxVisitor::Action AnalysisVisitor::visitFunctionDefinition(const FunctionDefinitionSyntax* node) override
 {
     const sym = semaModel->declaredSymbol(node);
     if (sym->kind() == SymbolKind::Function) {
