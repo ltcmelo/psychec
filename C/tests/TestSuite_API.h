@@ -26,7 +26,13 @@
 #include "tests/TestSuite.h"
 #include "tests/Tester.h"
 
+#include "C/SyntaxTree.h"
+#include "C/syntax/SyntaxNodes.h"
+#include "C/compilation/Compilation.h"
+#include "C/compilation/SemanticModel.h"
+
 #include <memory>
+#include <tuple>
 #include <vector>
 
 namespace psy {
@@ -34,6 +40,8 @@ namespace C {
 
 class APITestSuite : public TestSuite
 {
+    friend class SemanticModelTester;
+
 public:
     virtual ~APITestSuite();
 

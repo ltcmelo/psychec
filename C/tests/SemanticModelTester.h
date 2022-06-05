@@ -25,18 +25,34 @@
 #include "TestSuite_Internals.h"
 #include "tests/Tester.h"
 
+#include "C/SyntaxTree.h"
+#include "C/syntax/SyntaxNodes.h"
+#include "C/compilation/SemanticModel.h"
+
 #define TEST_SEMANTIC_MODEL(Function) TestFunction { &SemanticModelTester::Function, #Function }
 
 namespace psy {
 namespace C {
+
+class APITestSuite;
 
 class SemanticModelTester final : public Tester
 {
 public:
     SemanticModelTester(TestSuite* suite) : Tester(suite) {}
 
+    APITestSuite* suite();
+
     static const std::string Name;
     virtual std::string name() const override { return Name; }
+    virtual void setUp() override;
+    virtual void tearDown() override;
+
+    std::unique_ptr<SyntaxTree> tree_;
+    std::unique_ptr<Compilation> compilation_;
+
+    template <class DeclT>
+    std::tuple<const DeclT*,const SemanticModel*> declAndSemaModel(const std::string& s);
 
     void testSemanticModel();
 

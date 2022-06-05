@@ -20,15 +20,57 @@
 
 #include "SemanticModelTester.h"
 
-#include "C/SyntaxTree.h"
-#include "C/syntax/SyntaxNodes.h"
-#include "C/compilation/SemanticModel.h"
+#include "TestSuite_API.h"
+
+#include "C/symbols/Symbol_ALL.h"
 
 using namespace psy;
 using namespace C;
 
 const std::string SemanticModelTester::Name = "SEMANTIC MODEL";
 
+
+APITestSuite* SemanticModelTester::suite()
+{
+    return static_cast<APITestSuite*>(suite_);
+}
+
+void SemanticModelTester::setUp()
+{
+}
+
+void SemanticModelTester::tearDown()
+{
+    compilation_.reset(nullptr);
+    tree_.reset(nullptr);
+}
+
+template <class DeclT>
+std::tuple<const DeclT*, const SemanticModel*>
+SemanticModelTester::declAndSemaModel(const std::string& s)
+{
+    tree_ = SyntaxTree::parseText(SourceText("int x ;"),
+                                  TextPreprocessingState::Preprocessed,
+                                  ParseOptions(),
+                                  "<test>");
+
+    auto TU = tree_->translationUnitRoot();
+    PSY_EXPECT_TRUE(TU);
+
+    auto anyDecl = TU->declarations()->value;
+    PSY_EXPECT_TRUE(anyDecl);
+    PSY_EXPECT_TRUE(anyDecl->asDeclaration());
+
+    auto decl = dynamic_cast<DeclT*>(anyDecl);
+    PSY_EXPECT_TRUE(decl);
+
+    compilation_ = Compilation::create(tree_->filePath());
+    compilation_->addSyntaxTrees({ tree_.get() });
+    auto semaModel = compilation_->semanticModel(tree_.get());
+    PSY_EXPECT_TRUE(semaModel);
+
+    return std::make_tuple(decl, semaModel);
+}
 
 void SemanticModelTester::testSemanticModel()
 {
@@ -37,19 +79,8 @@ void SemanticModelTester::testSemanticModel()
 
 void SemanticModelTester::case0001()
 {
-    auto tree = SyntaxTree::parseText(SourceText("int x ;"),
-                                      TextPreprocessingState::Preprocessed,
-                                      ParseOptions(),
-                                      "<test>");
-
-    auto TU = tree->translationUnitRoot();
-    PSY_EXPECT_TRUE(TU);
-
-    auto decl = TU->declarations()->value;
-    PSY_EXPECT_TRUE(decl);
-
-    auto varAndOrFunDecl = decl->asVariableAndOrFunctionDeclaration();
-    PSY_EXPECT_TRUE(varAndOrFunDecl);
+    auto [varAndOrFunDecl, semaModel] =
+            declAndSemaModel<VariableAndOrFunctionDeclarationSyntax>("int x ;");
 
     auto decltor = varAndOrFunDecl->declarators()->value;
     PSY_EXPECT_TRUE(decltor);
@@ -57,13 +88,11 @@ void SemanticModelTester::case0001()
     auto identDecltor = decltor->asIdentifierDeclarator();
     PSY_EXPECT_TRUE(identDecltor);
 
-    auto compilation = Compilation::create(tree->filePath());
-    compilation->addSyntaxTrees({ tree.get() });
-    auto semaModel = compilation->semanticModel(tree.get());
-
     auto sym = semaModel->declaredSymbol(identDecltor);
     PSY_EXPECT_TRUE(sym);
-
+    PSY_EXPECT_TRUE(sym->kind() == SymbolKind::Value);
+    PSY_EXPECT_TRUE(sym->asValue()->valueKind() == ValueKind::Variable);
+    PSY_EXPECT_TRUE(sym->asValue()->asVariable());
 }
 
 void SemanticModelTester::case0002(){}

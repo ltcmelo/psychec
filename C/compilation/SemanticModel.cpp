@@ -24,10 +24,12 @@
 #include "Compilation.h"
 
 #include "binder/Binder.h"
+#include "syntax/SyntaxNodes.h"
 #include "symbols/Symbol_ALL.h"
 
 #include "../common/infra/Assertions.h"
 
+#include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -60,15 +62,15 @@ const Compilation* SemanticModel::compilation() const
     return P->compilation_;
 }
 
-const Symbol *SemanticModel::declaredSymbol(const DeclaratorSyntax* node) const
+const Symbol* SemanticModel::declaredSymbol(const DeclaratorSyntax* node) const
 {
-    return nullptr;
+    auto it = P->declSyms_.find(node);
+    return it != P->declSyms_.end() ? it->second : nullptr;
 }
 
 Symbol* SemanticModel::storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym)
 {
     auto& allSyms = P->compilation_->assembly()->symDEFs_;
-
     auto [it, _] = allSyms.insert(std::move(sym));
     Symbol* rawSym = it->get();
 
