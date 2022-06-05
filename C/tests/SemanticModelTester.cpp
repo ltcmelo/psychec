@@ -49,7 +49,7 @@ template <class DeclT>
 std::tuple<const DeclT*, const SemanticModel*>
 SemanticModelTester::declAndSemaModel(const std::string& s)
 {
-    tree_ = SyntaxTree::parseText(SourceText("int x ;"),
+    tree_ = SyntaxTree::parseText(SourceText(s),
                                   TextPreprocessingState::Preprocessed,
                                   ParseOptions(),
                                   "<test>");
@@ -94,11 +94,86 @@ void SemanticModelTester::case0001()
     PSY_EXPECT_TRUE(sym->asValue());
     PSY_EXPECT_TRUE(sym->asValue()->valueKind() == ValueKind::Variable);
     PSY_EXPECT_TRUE(sym->asValue()->asVariable());
+
+    PSY_EXPECT_EQ_STR(sym->asValue()->name()->text(), "x");
+    PSY_EXPECT_TRUE(sym->asValue()->type()->typeKind() == TypeKind::Named);
+    PSY_EXPECT_EQ_STR(sym->asValue()->type()->asNamedType()->name()->text(), "int");
 }
 
-void SemanticModelTester::case0002(){}
-void SemanticModelTester::case0003(){}
-void SemanticModelTester::case0004(){}
+void SemanticModelTester::case0002()
+{
+    auto [varAndOrFunDecl, semaModel] =
+            declAndSemaModel<VariableAndOrFunctionDeclarationSyntax>("int ( x ) ;");
+
+    auto decltor = varAndOrFunDecl->declarators()->value;
+    PSY_EXPECT_TRUE(decltor);
+
+    auto parenDecltor = decltor->asParenthesizedDeclarator();
+    PSY_EXPECT_TRUE(parenDecltor);
+
+    auto sym = semaModel->declaredSymbol(parenDecltor);
+    PSY_EXPECT_TRUE(sym);
+    PSY_EXPECT_TRUE(sym->kind() == SymbolKind::Value);
+    PSY_EXPECT_TRUE(sym->asValue());
+    PSY_EXPECT_TRUE(sym->asValue()->valueKind() == ValueKind::Variable);
+    PSY_EXPECT_TRUE(sym->asValue()->asVariable());
+
+    PSY_EXPECT_EQ_STR(sym->asValue()->name()->text(), "x");
+    PSY_EXPECT_TRUE(sym->asValue()->type()->typeKind() == TypeKind::Named);
+    PSY_EXPECT_EQ_STR(sym->asValue()->type()->asNamedType()->name()->text(), "int");
+}
+
+void SemanticModelTester::case0003()
+{
+    auto [varAndOrFunDecl, semaModel] =
+            declAndSemaModel<VariableAndOrFunctionDeclarationSyntax>("int x ;");
+
+    auto syms = semaModel->declaredSymbols(varAndOrFunDecl);
+    PSY_EXPECT_EQ_INT(syms.size(), 1);
+
+    auto sym1 = syms[0];
+    PSY_EXPECT_TRUE(sym1);
+    PSY_EXPECT_TRUE(sym1->kind() == SymbolKind::Value);
+    PSY_EXPECT_TRUE(sym1->asValue());
+    PSY_EXPECT_TRUE(sym1->asValue()->valueKind() == ValueKind::Variable);
+    PSY_EXPECT_TRUE(sym1->asValue()->asVariable());
+
+    PSY_EXPECT_EQ_STR(sym1->asValue()->name()->text(), "x");
+    PSY_EXPECT_TRUE(sym1->asValue()->type()->typeKind() == TypeKind::Named);
+    PSY_EXPECT_EQ_STR(sym1->asValue()->type()->asNamedType()->name()->text(), "int");
+}
+
+void SemanticModelTester::case0004()
+{
+    auto [varAndOrFunDecl, semaModel] =
+            declAndSemaModel<VariableAndOrFunctionDeclarationSyntax>("x y , z ;");
+
+    auto syms = semaModel->declaredSymbols(varAndOrFunDecl);
+    PSY_EXPECT_EQ_INT(syms.size(), 2);
+
+    auto sym1 = syms[0];
+    PSY_EXPECT_TRUE(sym1);
+    PSY_EXPECT_TRUE(sym1->kind() == SymbolKind::Value);
+    PSY_EXPECT_TRUE(sym1->asValue());
+    PSY_EXPECT_TRUE(sym1->asValue()->valueKind() == ValueKind::Variable);
+    PSY_EXPECT_TRUE(sym1->asValue()->asVariable());
+
+    PSY_EXPECT_EQ_STR(sym1->asValue()->name()->text(), "y");
+    PSY_EXPECT_TRUE(sym1->asValue()->type()->typeKind() == TypeKind::Named);
+    PSY_EXPECT_EQ_STR(sym1->asValue()->type()->asNamedType()->name()->text(), "x");
+
+    auto sym2 = syms[1];
+    PSY_EXPECT_TRUE(sym2);
+    PSY_EXPECT_TRUE(sym2->kind() == SymbolKind::Value);
+    PSY_EXPECT_TRUE(sym2->asValue());
+    PSY_EXPECT_TRUE(sym2->asValue()->valueKind() == ValueKind::Variable);
+    PSY_EXPECT_TRUE(sym2->asValue()->asVariable());
+
+    PSY_EXPECT_EQ_STR(sym2->asValue()->name()->text(), "z");
+    PSY_EXPECT_TRUE(sym2->asValue()->type()->typeKind() == TypeKind::Named);
+    PSY_EXPECT_EQ_STR(sym2->asValue()->type()->asNamedType()->name()->text(), "x");
+}
+
 void SemanticModelTester::case0005(){}
 void SemanticModelTester::case0006(){}
 void SemanticModelTester::case0007(){}
