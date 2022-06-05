@@ -12,7 +12,7 @@ This is what makes Psyche-C unique:
 
 - Clean separation between the syntactic and semantic compiler phases.
 - Algorithmic- and heuristic-based syntax disambiguation.
-- Type inference for missing `struct`, `union`, `enum`, and `typedef` (i.e., tolerance/"recovery" against `#include` failures).
+- Type inference for missing `struct`, `union`, `enum`, and `typedef` (i.e., tolerance and "recovery" against `#include` failures).
 - API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn).
 - AST resembling that of the [LLVM's Clang frontend](https://clang.llvm.org/).
 
