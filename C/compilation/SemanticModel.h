@@ -27,6 +27,8 @@
 #include "../common/infra/InternalAccess.h"
 #include "../common/infra/Pimpl.h"
 
+#include <vector>
+
 namespace psy {
 namespace C {
 
