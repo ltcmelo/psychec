@@ -48,16 +48,26 @@ void SemanticModelTester::case0001()
                                       "<test>");
 
     auto TU = tree->translationUnitRoot();
+    PSY_EXPECT_TRUE(TU);
+
     auto decl = TU->declarations()->value;
+    PSY_EXPECT_TRUE(decl);
 
-    PSY_EXPECT_EQ_ENUM(decl->kind(), SyntaxKind::VariableAndOrFunctionDeclaration, SyntaxKind);
+    auto varAndOrFunDecl = decl->asVariableAndOrFunctionDeclaration();
+    PSY_EXPECT_TRUE(varAndOrFunDecl);
 
-    std::cout << "\n\ndeclaration : " << to_string(decl->kind()) << "\n\n";
+    auto decltor = varAndOrFunDecl->declarators()->value;
+    PSY_EXPECT_TRUE(decltor);
+
+    auto identDecltor = decltor->asIdentifierDeclarator();
+    PSY_EXPECT_TRUE(identDecltor);
 
     auto compilation = Compilation::create(tree->filePath());
     compilation->addSyntaxTrees({ tree.get() });
-
     auto semaModel = compilation->semanticModel(tree.get());
+
+    auto sym = semaModel->declaredSymbol(identDecltor);
+    PSY_EXPECT_TRUE(sym);
 
 }
 
