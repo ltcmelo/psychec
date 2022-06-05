@@ -7,17 +7,19 @@ Check the [open bounties and tasks](https://docs.google.com/document/d/1_xVLVXnr
 
 # Psyche-C
 
-Psyche is a compiler frontend for the C programming language that is specifically designed for the implementation of static analysis tools. These are the distinct features that make Psyche-C rather unique:
+Psyche is a compiler frontend for the C programming language that is specifically designed for the implementation of static analysis tools.  
+This is what makes Psyche-C unique:
 
 - Clean separation between the syntactic and semantic compiler phases.
 - Algorithmic- and heuristic-based syntax disambiguation.
-- Type inference for missing `struct`, `union`, `enum`, and `typedef` (i.e., tolerance against `#include` failures).
+- Type inference for missing `struct`, `union`, `enum`, and `typedef` (i.e., tolerance/"recovery" against `#include` failures).
 - API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn).
-- Parser's AST resembling that of the [LLVM's Clang frontend](https://clang.llvm.org/).
+- AST resembling that of the [LLVM's Clang frontend](https://clang.llvm.org/).
 
 ## Library and API
 
-Psyche-C offers a C++ library/API for the implementation of static analysis tools of C programs.
+Psyche-C is a C++ library for the implementation of static analysis tools of C programs.  
+Psyche-C's native API is in C++; APIs for other languages are [on the way](https://github.com/ltcmelo/psychec/issues/112).
 
 ```cpp
 void analyse(const FileInfo& fi)
@@ -29,14 +31,28 @@ void analyse(const FileInfo& fi)
     auto compilation = Compilation::create("code-analysis");
     compilation->addSyntaxTree(tree.get());
 
-    CustomSyntaxVisitor analysis(tree.get(), compilation->semanticModel(tree.get()));
+    AnalysisSyntaxVisitor analysis(tree.get(), compilation->semanticModel(tree.get()));
     analysis.run(tree->translationUnitRoot());
 }
 ```
 
+```cpp
+SyntaxVisitor::Action AnalysisSyntaxVisitor::visitFunctionDefinition(const FunctionDefinitionSyntax* node) override
+{
+    const sym = semaModel->declaredSymbol(node);
+    if (sym->kind() == SymbolKind::Function) {
+        const FunctionSymbol* funSym = sym->asFunction();
+        // ...
+    }
+    return Action::Skip;
+}
+
+```
+
+
 ## The *cnippet* Driver
 
-Psyche-C comes with the *cnippet* driver and may be used as an ordinary C parser.
+Psyche-C comes with the *cnippet* driver so that it can also be used as an ordinary C parser.
 
 
 ```c
@@ -46,7 +62,7 @@ void f()
 }
 ```
 
-If you parse the snippet above with *cnippet*, you'll see a diagnostic similar/equal to what you would see with GCC or Clang.
+If you "compile" the snippet above with *cnippet*, you'll see a diagnostic similar/equal to what you would see with GCC or Clang.
 
 ```
 ~ cnip test.c
@@ -55,7 +71,7 @@ int ;
     ^
 ```
 
-Note: Semantic analysis isn't yet complete.
+NOTE: Semantic analysis isn't yet complete.
 
 ### Type Inference
 
@@ -71,7 +87,7 @@ void f()
 ```
 
 If you compile the snippet above with GCC or Clang, you'll see a diagnostic such as _"declaration for_`T`_is not available"_.  
-With *cnippet*, "compilation" succeeds, as the following definitions are implicitly synthesised.
+With *cnippet*, "compilation" succeeds, as the following definitions are (implicitly) synthesised.
 
 ```c
 typedef struct TYPE_2__ TYPE_1__;
@@ -97,12 +113,11 @@ NOTE: Type inference isn't yet available on master, only in the [original branch
 - The Doxygen-generated [API](https://ltcmelo.github.io/psychec/api-docs/html/index.html).
 - A contributor's [wiki](https://github.com/ltcmelo/psychec/wiki).
 - An [online interface](http://cuda.dcc.ufmg.br/psyche-c/) that offers a glimpse of Psyche-C's type inference functionality.
-- Blogs:
-  - [Dumping a C program’s AST with Psyche-C](https://ltcmelo.github.io/psychec/2021/03/03/c-ast-dump-psyche.html) /
-    [Visualizando a AST de um programa C com o Psyche-C](https://www.embarcados.com.br/visualizando-a-ast-psyche-c/)
-- Articles:
-  - [Programming in C with type inference](https://www.codeproject.com/Articles/1238603/Programming-in-C-with-Type-Inference) /
-    [Programando em C com inferência de tipos usando PsycheC](https://www.embarcados.com.br/inferencia-de-tipos-em-c-usando-psychec/)
+- Articles/blogs:
+  - [Dumping a C program’s AST with Psyche-C](https://ltcmelo.github.io/psychec/2021/03/03/c-ast-dump-psyche.html)  
+    (pt-BR) [Visualizando a AST de um programa C com o Psyche-C](https://www.embarcados.com.br/visualizando-a-ast-psyche-c/)
+  - [Programming in C with type inference](https://www.codeproject.com/Articles/1238603/Programming-in-C-with-Type-Inference)  
+    (pt-BR) [Programando em C com inferência de tipos usando PsycheC](https://www.embarcados.com.br/inferencia-de-tipos-em-c-usando-psychec/)
 
 ## Building and Testing
 
