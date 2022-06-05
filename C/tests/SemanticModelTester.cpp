@@ -24,11 +24,6 @@
 #include "C/syntax/SyntaxNodes.h"
 #include "C/compilation/SemanticModel.h"
 
-
-
-
-#include <type_traits>
-
 using namespace psy;
 using namespace C;
 
