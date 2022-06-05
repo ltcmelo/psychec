@@ -70,10 +70,9 @@ $(function() {
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pri-types">Private Types</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="classpsy_1_1_c_1_1_syntax_tree-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">psy::C::SyntaxTree Class Reference</div>  </div>
@@ -92,22 +91,25 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a11822481a97691e544c3583fd76a8e0d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a11822481a97691e544c3583fd76a8e0d">SyntaxCategory</a> : uint8_t { <b>Unspecified</b>, 
+<tr class="memitem:a11822481a97691e544c3583fd76a8e0d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a11822481a97691e544c3583fd76a8e0d">SyntaxCategory</a> : uint8_t { <b>UNSPECIFIED</b> = 0, 
 <b>Declarations</b>, 
 <b>Expressions</b>, 
 <b>Statements</b>
  }</td></tr>
 <tr class="memdesc:a11822481a97691e544c3583fd76a8e0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The SyntaxCategory enumeration.  <a href="classpsy_1_1_c_1_1_syntax_tree.html#a11822481a97691e544c3583fd76a8e0d">More...</a><br /></td></tr>
 <tr class="separator:a11822481a97691e544c3583fd76a8e0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab887c6460b79cd86613899ceace6a363"><td class="memItemLeft" align="right" valign="top"><a id="ab887c6460b79cd86613899ceace6a363"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>TokenSequenceType</b> = std::vector&lt; <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> &gt;</td></tr>
+<tr class="separator:ab887c6460b79cd86613899ceace6a363"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef5af7829d5e48faf302dd30206a47df"><td class="memItemLeft" align="right" valign="top"><a id="aef5af7829d5e48faf302dd30206a47df"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>LineColum</b> = std::pair&lt; unsigned int, unsigned int &gt;</td></tr>
+<tr class="separator:aef5af7829d5e48faf302dd30206a47df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe88bdbedd2ba3acedc2a99bf518e711"><td class="memItemLeft" align="right" valign="top"><a id="afe88bdbedd2ba3acedc2a99bf518e711"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>ExpansionsTable</b> = std::unordered_map&lt; unsigned int, LineColum &gt;</td></tr>
+<tr class="separator:afe88bdbedd2ba3acedc2a99bf518e711"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3769efa1dbbb623c8b0a0347c8ac6885"><td class="memItemLeft" align="right" valign="top"><a id="a3769efa1dbbb623c8b0a0347c8ac6885"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxTree</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> &amp;)=delete</td></tr>
-<tr class="separator:a3769efa1dbbb623c8b0a0347c8ac6885"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9fbff641c736b1e071933b2e49c7e10"><td class="memItemLeft" align="right" valign="top"><a id="aa9fbff641c736b1e071933b2e49c7e10"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> &amp;)=delete</td></tr>
-<tr class="separator:aa9fbff641c736b1e071933b2e49c7e10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a388e4eb39a93f55301b0029e5df8aabc"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a388e4eb39a93f55301b0029e5df8aabc">filePath</a> () const</td></tr>
 <tr class="separator:a388e4eb39a93f55301b0029e5df8aabc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38fa1cba21856c2ea4ae605c6ec21d96"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_source_text.html">SourceText</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a38fa1cba21856c2ea4ae605c6ec21d96">text</a> () const</td></tr>
@@ -120,29 +122,27 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const 
 <tr class="separator:a707e12922729b70e5c1e94810c879174"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8aacc354296633c7aa937c6b111fd99"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classpsy_1_1_diagnostic.html">Diagnostic</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#af8aacc354296633c7aa937c6b111fd99">diagnostics</a> () const</td></tr>
 <tr class="separator:af8aacc354296633c7aa937c6b111fd99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ac2ceef889c6bc50c5a6611210dbf406a"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#ac2ceef889c6bc50c5a6611210dbf406a">parseText</a> (<a class="el" href="classpsy_1_1_source_text.html">SourceText</a> <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a38fa1cba21856c2ea4ae605c6ec21d96">text</a>, TextPreprocessingState textPPState, <a class="el" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a> parseOptions=<a class="el" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>(), const std::string &amp;path=&quot;&quot;, <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a11822481a97691e544c3583fd76a8e0d">SyntaxCategory</a> syntaxCategory=SyntaxCategory::Unspecified)</td></tr>
-<tr class="separator:ac2ceef889c6bc50c5a6611210dbf406a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
-Private Types</h2></td></tr>
-<tr class="memitem:ab887c6460b79cd86613899ceace6a363"><td class="memItemLeft" align="right" valign="top"><a id="ab887c6460b79cd86613899ceace6a363"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>TokenSequenceType</b> = std::vector&lt; <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> &gt;</td></tr>
-<tr class="separator:ab887c6460b79cd86613899ceace6a363"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef5af7829d5e48faf302dd30206a47df"><td class="memItemLeft" align="right" valign="top"><a id="aef5af7829d5e48faf302dd30206a47df"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>LineColum</b> = std::pair&lt; unsigned int, unsigned int &gt;</td></tr>
-<tr class="separator:aef5af7829d5e48faf302dd30206a47df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe88bdbedd2ba3acedc2a99bf518e711"><td class="memItemLeft" align="right" valign="top"><a id="afe88bdbedd2ba3acedc2a99bf518e711"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>ExpansionsTable</b> = std::unordered_map&lt; unsigned int, LineColum &gt;</td></tr>
-<tr class="separator:afe88bdbedd2ba3acedc2a99bf518e711"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a1ffc29ec8c45e75a6e4a0bcce9e5108c"><td class="memItemLeft" align="right" valign="top"><a id="a1ffc29ec8c45e75a6e4a0bcce9e5108c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxTree</b> (<a class="el" href="classpsy_1_1_source_text.html">SourceText</a> <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a38fa1cba21856c2ea4ae605c6ec21d96">text</a>, <a class="el" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a> parseOptions, const std::string &amp;path)</td></tr>
-<tr class="separator:a1ffc29ec8c45e75a6e4a0bcce9e5108c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7afdbda1cdfe9d694e0295a0e339b1b3"><td class="memItemLeft" align="right" valign="top"><a id="a7afdbda1cdfe9d694e0295a0e339b1b3"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_node_list.html">SyntaxNodeList</a>)</td></tr>
+<tr class="separator:a7afdbda1cdfe9d694e0295a0e339b1b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7b31710072505791bc580811c754bfd"><td class="memItemLeft" align="right" valign="top"><a id="aa7b31710072505791bc580811c754bfd"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_lexer.html">Lexer</a>)</td></tr>
+<tr class="separator:aa7b31710072505791bc580811c754bfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93f3905758010b48baae0c35b6e344d7"><td class="memItemLeft" align="right" valign="top"><a id="a93f3905758010b48baae0c35b6e344d7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_parser.html">Parser</a>)</td></tr>
+<tr class="separator:a93f3905758010b48baae0c35b6e344d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa10e06d109f3b85c5754c6bddd7bcf39"><td class="memItemLeft" align="right" valign="top"><a id="aa10e06d109f3b85c5754c6bddd7bcf39"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_binder.html">Binder</a>)</td></tr>
+<tr class="separator:aa10e06d109f3b85c5754c6bddd7bcf39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7c5f508c116919661c7576beb55f66c"><td class="memItemLeft" align="right" valign="top"><a id="af7c5f508c116919661c7576beb55f66c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>)</td></tr>
+<tr class="separator:af7c5f508c116919661c7576beb55f66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d88d44c78fb4d84ad9f11a13af01ea9"><td class="memItemLeft" align="right" valign="top"><a id="a6d88d44c78fb4d84ad9f11a13af01ea9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>)</td></tr>
+<tr class="separator:a6d88d44c78fb4d84ad9f11a13af01ea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fe27f1102f8c7b1f27ac0c09fdc809e"><td class="memItemLeft" align="right" valign="top"><a id="a2fe27f1102f8c7b1f27ac0c09fdc809e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_writer_d_o_t_format.html">SyntaxWriterDOTFormat</a>)</td></tr>
+<tr class="separator:a2fe27f1102f8c7b1f27ac0c09fdc809e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b95f49ad8d4fe817ffa5d1f81f90402"><td class="memItemLeft" align="right" valign="top"><a id="a4b95f49ad8d4fe817ffa5d1f81f90402"></a>
 <a class="el" href="classpsy_1_1_c_1_1_memory_pool.html">MemoryPool</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>unitPool</b> () const</td></tr>
 <tr class="separator:a4b95f49ad8d4fe817ffa5d1f81f90402"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,12 +161,6 @@ TokenSequenceType::size_type&#160;</td><td class="memItemRight" valign="bottom">
 <tr class="memitem:a2a7604a732fb13531c9a2a4f43e8fe94"><td class="memItemLeft" align="right" valign="top"><a id="a2a7604a732fb13531c9a2a4f43e8fe94"></a>
 LexedTokens::IndexType&#160;</td><td class="memItemRight" valign="bottom"><b>freeTokenSlot</b> () const</td></tr>
 <tr class="separator:a2a7604a732fb13531c9a2a4f43e8fe94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0a534fd2023602c678fa0cb285007a6"><td class="memItemLeft" align="right" valign="top"><a id="af0a534fd2023602c678fa0cb285007a6"></a>
-const <a class="el" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>parseOptions</b> () const</td></tr>
-<tr class="separator:af0a534fd2023602c678fa0cb285007a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9313225b7a854deab764242fc4e769e2"><td class="memItemLeft" align="right" valign="top"><a id="a9313225b7a854deab764242fc4e769e2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>buildTree</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a11822481a97691e544c3583fd76a8e0d">SyntaxCategory</a> syntaxCat)</td></tr>
-<tr class="separator:a9313225b7a854deab764242fc4e769e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a728a992545e1291865fc5fd1a1cf8e6d"><td class="memItemLeft" align="right" valign="top"><a id="a728a992545e1291865fc5fd1a1cf8e6d"></a>
 const <a class="el" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>identifier</b> (const char *s, unsigned int size)</td></tr>
 <tr class="separator:a728a992545e1291865fc5fd1a1cf8e6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,6 +170,12 @@ const <a class="el" href="classpsy_1_1_c_1_1_integer_constant.html">IntegerConst
 <tr class="memitem:a0d3142a9160e207df1984fd5f2802dd3"><td class="memItemLeft" align="right" valign="top"><a id="a0d3142a9160e207df1984fd5f2802dd3"></a>
 const <a class="el" href="classpsy_1_1_c_1_1_floating_constant.html">FloatingConstant</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>floatingConstant</b> (const char *s, unsigned int size)</td></tr>
 <tr class="separator:a0d3142a9160e207df1984fd5f2802dd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa81c64423b2096953516d61881379f00"><td class="memItemLeft" align="right" valign="top"><a id="aa81c64423b2096953516d61881379f00"></a>
+const <a class="el" href="classpsy_1_1_c_1_1_imaginary_integer_constant.html">ImaginaryIntegerConstant</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>imaginaryIntegerConstant</b> (const char *s, unsigned int size)</td></tr>
+<tr class="separator:aa81c64423b2096953516d61881379f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f9aee381187d153451b9e57f5918364"><td class="memItemLeft" align="right" valign="top"><a id="a5f9aee381187d153451b9e57f5918364"></a>
+const <a class="el" href="classpsy_1_1_c_1_1_imaginary_floating_constant.html">ImaginaryFloatingConstant</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>imaginaryFloatingConstant</b> (const char *s, unsigned int size)</td></tr>
+<tr class="separator:a5f9aee381187d153451b9e57f5918364"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade73d4e349d94538371a4f9b276528c6"><td class="memItemLeft" align="right" valign="top"><a id="ade73d4e349d94538371a4f9b276528c6"></a>
 const <a class="el" href="classpsy_1_1_c_1_1_character_constant.html">CharacterConstant</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>characterConstant</b> (const char *s, unsigned int size)</td></tr>
 <tr class="separator:ade73d4e349d94538371a4f9b276528c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,6 +191,56 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>relayExpansion</b> (u
 <tr class="memitem:a131c2ff94670159c45e805a0f8e94809"><td class="memItemLeft" align="right" valign="top"><a id="a131c2ff94670159c45e805a0f8e94809"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>relayLineDirective</b> (unsigned int offset, unsigned int lineno, const std::string &amp;<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a388e4eb39a93f55301b0029e5df8aabc">filePath</a>)</td></tr>
 <tr class="separator:a131c2ff94670159c45e805a0f8e94809"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0a534fd2023602c678fa0cb285007a6"><td class="memItemLeft" align="right" valign="top"><a id="af0a534fd2023602c678fa0cb285007a6"></a>
+const <a class="el" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>parseOptions</b> () const</td></tr>
+<tr class="separator:af0a534fd2023602c678fa0cb285007a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9663f70eece3c076a458ae9c865d1a2"><td class="memItemLeft" align="right" valign="top"><a id="ac9663f70eece3c076a458ae9c865d1a2"></a>
+<a class="el" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a>&#160;</td><td class="memItemRight" valign="bottom"><b>dialect</b> () const</td></tr>
+<tr class="separator:ac9663f70eece3c076a458ae9c865d1a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33cac4b3e7614956803ac4b2bd5dc902"><td class="memItemLeft" align="right" valign="top"><a id="a33cac4b3e7614956803ac4b2bd5dc902"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setDialect</b> (<a class="el" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a> dialect)</td></tr>
+<tr class="separator:a33cac4b3e7614956803ac4b2bd5dc902"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afaa053f355cee3a1e0924877af4fafe1"><td class="memItemLeft" align="right" valign="top"><a id="afaa053f355cee3a1e0924877af4fafe1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>newDiagnostic</b> (<a class="el" href="classpsy_1_1_diagnostic_descriptor.html">DiagnosticDescriptor</a> descriptor, LexedTokens::IndexType tkIdx) const</td></tr>
+<tr class="separator:afaa053f355cee3a1e0924877af4fafe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73487cf0ff0394618d825a33ec2ab395"><td class="memItemLeft" align="right" valign="top"><a id="a73487cf0ff0394618d825a33ec2ab395"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>newDiagnostic</b> (<a class="el" href="classpsy_1_1_diagnostic_descriptor.html">DiagnosticDescriptor</a> descriptor, <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> tk) const</td></tr>
+<tr class="separator:a73487cf0ff0394618d825a33ec2ab395"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f9f4ddafdbe000b95893b3116616e4f"><td class="memItemLeft" align="right" valign="top"><a id="a6f9f4ddafdbe000b95893b3116616e4f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>attachCompilation</b> (const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> *) const</td></tr>
+<tr class="separator:a6f9f4ddafdbe000b95893b3116616e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a810904d43c1d2ae319718c17285beeea"><td class="memItemLeft" align="right" valign="top"><a id="a810904d43c1d2ae319718c17285beeea"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>detachCompilation</b> (const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> *) const</td></tr>
+<tr class="separator:a810904d43c1d2ae319718c17285beeea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa682b201cefa24de5483e8d74551fe10"><td class="memItemLeft" align="right" valign="top"><a id="aa682b201cefa24de5483e8d74551fe10"></a>
+std::unordered_set&lt; const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>linkedCompilations</b> () const</td></tr>
+<tr class="separator:aa682b201cefa24de5483e8d74551fe10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a774d4e728fa9ce0b88235d9740318c1f"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a774d4e728fa9ce0b88235d9740318c1f">parseText</a> (<a class="el" href="classpsy_1_1_source_text.html">SourceText</a> <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a38fa1cba21856c2ea4ae605c6ec21d96">text</a>, TextPreprocessingState textPPState, <a class="el" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a> parseOptions=<a class="el" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>(), const std::string &amp;path=&quot;&quot;, <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a11822481a97691e544c3583fd76a8e0d">SyntaxCategory</a> syntaxCategory=SyntaxCategory::UNSPECIFIED)</td></tr>
+<tr class="separator:a774d4e728fa9ce0b88235d9740318c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a9e52eec5fc807e2cf43a64c355f5807e"><td class="memItemLeft" align="right" valign="top"><a id="a9e52eec5fc807e2cf43a64c355f5807e"></a>
+PSY_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>__pad0__</b>: PSY_GRANT_ACCESS(<a class="el" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a>)</td></tr>
+<tr class="separator:a9e52eec5fc807e2cf43a64c355f5807e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a1ffc29ec8c45e75a6e4a0bcce9e5108c"><td class="memItemLeft" align="right" valign="top"><a id="a1ffc29ec8c45e75a6e4a0bcce9e5108c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxTree</b> (<a class="el" href="classpsy_1_1_source_text.html">SourceText</a> <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a38fa1cba21856c2ea4ae605c6ec21d96">text</a>, <a class="el" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a> parseOptions, const std::string &amp;path)</td></tr>
+<tr class="separator:a1ffc29ec8c45e75a6e4a0bcce9e5108c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3769efa1dbbb623c8b0a0347c8ac6885"><td class="memItemLeft" align="right" valign="top"><a id="a3769efa1dbbb623c8b0a0347c8ac6885"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxTree</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> &amp;)=delete</td></tr>
+<tr class="separator:a3769efa1dbbb623c8b0a0347c8ac6885"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab02936bf9e0815ca929e177295557980"><td class="memItemLeft" align="right" valign="top"><a id="ab02936bf9e0815ca929e177295557980"></a>
+<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> &amp;)=delete</td></tr>
+<tr class="separator:ab02936bf9e0815ca929e177295557980"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9313225b7a854deab764242fc4e769e2"><td class="memItemLeft" align="right" valign="top"><a id="a9313225b7a854deab764242fc4e769e2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>buildTree</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a11822481a97691e544c3583fd76a8e0d">SyntaxCategory</a> syntaxCat)</td></tr>
+<tr class="separator:a9313225b7a854deab764242fc4e769e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af02db93b1585ffb5425cccc115962125"><td class="memItemLeft" align="right" valign="top"><a id="af02db93b1585ffb5425cccc115962125"></a>
 <a class="el" href="classpsy_1_1_line_position.html">LinePosition</a>&#160;</td><td class="memItemRight" valign="bottom"><b>computePosition</b> (unsigned int offset) const</td></tr>
 <tr class="separator:af02db93b1585ffb5425cccc115962125"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,66 +253,15 @@ unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>searchForColu
 <tr class="memitem:a1bb699e2e5edb7088d530a2634c2d925"><td class="memItemLeft" align="right" valign="top"><a id="a1bb699e2e5edb7088d530a2634c2d925"></a>
 <a class="el" href="classpsy_1_1_c_1_1_line_directive.html">LineDirective</a>&#160;</td><td class="memItemRight" valign="bottom"><b>searchForLineDirective</b> (unsigned int offset) const</td></tr>
 <tr class="separator:a1bb699e2e5edb7088d530a2634c2d925"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afaa053f355cee3a1e0924877af4fafe1"><td class="memItemLeft" align="right" valign="top"><a id="afaa053f355cee3a1e0924877af4fafe1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>newDiagnostic</b> (<a class="el" href="classpsy_1_1_diagnostic_descriptor.html">DiagnosticDescriptor</a> descriptor, LexedTokens::IndexType tkIdx) const</td></tr>
-<tr class="separator:afaa053f355cee3a1e0924877af4fafe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73487cf0ff0394618d825a33ec2ab395"><td class="memItemLeft" align="right" valign="top"><a id="a73487cf0ff0394618d825a33ec2ab395"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>newDiagnostic</b> (<a class="el" href="classpsy_1_1_diagnostic_descriptor.html">DiagnosticDescriptor</a> descriptor, <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> tk) const</td></tr>
-<tr class="separator:a73487cf0ff0394618d825a33ec2ab395"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9663f70eece3c076a458ae9c865d1a2"><td class="memItemLeft" align="right" valign="top"><a id="ac9663f70eece3c076a458ae9c865d1a2"></a>
-<a class="el" href="structpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a>&#160;</td><td class="memItemRight" valign="bottom"><b>dialect</b> () const</td></tr>
-<tr class="separator:ac9663f70eece3c076a458ae9c865d1a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33cac4b3e7614956803ac4b2bd5dc902"><td class="memItemLeft" align="right" valign="top"><a id="a33cac4b3e7614956803ac4b2bd5dc902"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setDialect</b> (<a class="el" href="structpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a> dialect)</td></tr>
-<tr class="separator:a33cac4b3e7614956803ac4b2bd5dc902"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f9f4ddafdbe000b95893b3116616e4f"><td class="memItemLeft" align="right" valign="top"><a id="a6f9f4ddafdbe000b95893b3116616e4f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>attachCompilation</b> (const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> *) const</td></tr>
-<tr class="separator:a6f9f4ddafdbe000b95893b3116616e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a810904d43c1d2ae319718c17285beeea"><td class="memItemLeft" align="right" valign="top"><a id="a810904d43c1d2ae319718c17285beeea"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>detachCompilation</b> (const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> *) const</td></tr>
-<tr class="separator:a810904d43c1d2ae319718c17285beeea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa682b201cefa24de5483e8d74551fe10"><td class="memItemLeft" align="right" valign="top"><a id="aa682b201cefa24de5483e8d74551fe10"></a>
-std::unordered_set&lt; const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>linkedCompilations</b> () const</td></tr>
-<tr class="separator:aa682b201cefa24de5483e8d74551fe10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a5e3be922f81cadf08425477e48715c0a"><td class="memItemLeft" align="right" valign="top"><a id="a5e3be922f81cadf08425477e48715c0a"></a>
-<a class="el" href="structpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a>&#160;</td><td class="memItemRight" valign="bottom"><b>dialect_</b></td></tr>
+<a class="el" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a>&#160;</td><td class="memItemRight" valign="bottom"><b>dialect_</b></td></tr>
 <tr class="separator:a5e3be922f81cadf08425477e48715c0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6204c781141597c5897f8f977c27313"><td class="memItemLeft" align="right" valign="top"><a id="ad6204c781141597c5897f8f977c27313"></a>
 std::vector&lt; <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>comments_</b></td></tr>
 <tr class="separator:ad6204c781141597c5897f8f977c27313"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a38bfefd90db1a6a5e2f46b6b322275b2"><td class="memItemLeft" align="right" valign="top"><a id="a38bfefd90db1a6a5e2f46b6b322275b2"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxNode</b></td></tr>
-<tr class="separator:a38bfefd90db1a6a5e2f46b6b322275b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad43d82e2302df656bbd1109602ee473c"><td class="memItemLeft" align="right" valign="top"><a id="ad43d82e2302df656bbd1109602ee473c"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxNodeList</b></td></tr>
-<tr class="separator:ad43d82e2302df656bbd1109602ee473c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e54c4809acbcd06c4bd4f186ad91584"><td class="memItemLeft" align="right" valign="top"><a id="a2e54c4809acbcd06c4bd4f186ad91584"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Lexer</b></td></tr>
-<tr class="separator:a2e54c4809acbcd06c4bd4f186ad91584"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab80291af9c262f63b83fa9c16f12014d"><td class="memItemLeft" align="right" valign="top"><a id="ab80291af9c262f63b83fa9c16f12014d"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Parser</b></td></tr>
-<tr class="separator:ab80291af9c262f63b83fa9c16f12014d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1477f45573f7be56ec13bb35c0041b9"><td class="memItemLeft" align="right" valign="top"><a id="ac1477f45573f7be56ec13bb35c0041b9"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Binder</b></td></tr>
-<tr class="separator:ac1477f45573f7be56ec13bb35c0041b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7a97c38971298d83708ab27e74bf607"><td class="memItemLeft" align="right" valign="top"><a id="af7a97c38971298d83708ab27e74bf607"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Symbol</b></td></tr>
-<tr class="separator:af7a97c38971298d83708ab27e74bf607"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3da9c668a9722780fb894a20a8dbf95f"><td class="memItemLeft" align="right" valign="top"><a id="a3da9c668a9722780fb894a20a8dbf95f"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Compilation</b></td></tr>
-<tr class="separator:a3da9c668a9722780fb894a20a8dbf95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afcc08cce1234cbbe4c612e43f0ef0858"><td class="memItemLeft" align="right" valign="top"><a id="afcc08cce1234cbbe4c612e43f0ef0858"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Unparser</b></td></tr>
-<tr class="separator:afcc08cce1234cbbe4c612e43f0ef0858"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a282c4d0d77904d52e2bbc5654c598462"><td class="memItemLeft" align="right" valign="top"><a id="a282c4d0d77904d52e2bbc5654c598462"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxWriterDOTFormat</b></td></tr>
-<tr class="separator:a282c4d0d77904d52e2bbc5654c598462"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html" title="The SyntaxTree class.">SyntaxTree</a> class. </p>
@@ -348,8 +347,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxWriterDOTForma
 
 </div>
 </div>
-<a id="ac2ceef889c6bc50c5a6611210dbf406a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac2ceef889c6bc50c5a6611210dbf406a">&#9670;&nbsp;</a></span>parseText()</h2>
+<a id="a774d4e728fa9ce0b88235d9740318c1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a774d4e728fa9ce0b88235d9740318c1f">&#9670;&nbsp;</a></span>parseText()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -385,7 +384,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxWriterDOTForma
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a11822481a97691e544c3583fd76a8e0d">SyntaxCategory</a>&#160;</td>
-          <td class="paramname"><em>syntaxCategory</em> = <code>SyntaxCategory::Unspecified</code>&#160;</td>
+          <td class="paramname"><em>syntaxCategory</em> = <code>SyntaxCategory::UNSPECIFIED</code>&#160;</td>
         </tr>
         <tr>
           <td></td>

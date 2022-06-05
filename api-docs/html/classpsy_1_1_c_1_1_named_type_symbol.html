@@ -68,8 +68,7 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#friends">Friends</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classpsy_1_1_c_1_1_named_type_symbol-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">psy::C::NamedTypeSymbol Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
@@ -98,27 +97,57 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aeea2fa19fb97933a5c8af6ccd22014d9"><td class="memItemLeft" align="right" valign="top"><a id="aeea2fa19fb97933a5c8af6ccd22014d9"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>asNamedType</b> () override</td></tr>
-<tr class="separator:aeea2fa19fb97933a5c8af6ccd22014d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab546f55d60ed7fcea4c67720f89da26"><td class="memItemLeft" align="right" valign="top"><a id="aab546f55d60ed7fcea4c67720f89da26"></a>
-virtual const <a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>asNamedType</b> () const override</td></tr>
-<tr class="separator:aab546f55d60ed7fcea4c67720f89da26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4de111c5f9fafde300e232d7ad9ff173"><td class="memItemLeft" align="right" valign="top">NamedTypeKind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html#a4de111c5f9fafde300e232d7ad9ff173">namedTypeKind</a> () const</td></tr>
 <tr class="separator:a4de111c5f9fafde300e232d7ad9ff173"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb9d8581a0a572e31a07c5939073e370"><td class="memItemLeft" align="right" valign="top">BuiltinTypeKind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html#aeb9d8581a0a572e31a07c5939073e370">builtinTypeKind</a> () const</td></tr>
 <tr class="separator:aeb9d8581a0a572e31a07c5939073e370"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac80be2fb2d8fa9e8194f32b774ccef09"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_symbol_name.html">SymbolName</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html#ac80be2fb2d8fa9e8194f32b774ccef09">name</a> () const</td></tr>
 <tr class="separator:ac80be2fb2d8fa9e8194f32b774ccef09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add830d806c096b405d5cb6ba157894ba"><td class="memItemLeft" align="right" valign="top"><a id="add830d806c096b405d5cb6ba157894ba"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_constraints_in_type_specifiers.html">ConstraintsInTypeSpecifiers</a>)</td></tr>
+<tr class="separator:add830d806c096b405d5cb6ba157894ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3955c1787b990fb0a20f964b4ffd8525"><td class="memItemLeft" align="right" valign="top"><a id="a3955c1787b990fb0a20f964b4ffd8525"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NamedTypeSymbol</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree, const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> *<a class="el" href="classpsy_1_1_c_1_1_symbol.html#a9794142ef7ea778c6609c01e85250de7">scope</a>, const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *containingSym, BuiltinTypeKind builtTyK)</td></tr>
+<tr class="separator:a3955c1787b990fb0a20f964b4ffd8525"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe1375c4946e06f13867048bec27c742"><td class="memItemLeft" align="right" valign="top"><a id="afe1375c4946e06f13867048bec27c742"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NamedTypeSymbol</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree, const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> *<a class="el" href="classpsy_1_1_c_1_1_symbol.html#a9794142ef7ea778c6609c01e85250de7">scope</a>, const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *containingSym, const std::string &amp;<a class="el" href="classname.html">name</a>)</td></tr>
+<tr class="separator:afe1375c4946e06f13867048bec27c742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7d4f724e1c89c9dabbb0e27ea89e929"><td class="memItemLeft" align="right" valign="top"><a id="ab7d4f724e1c89c9dabbb0e27ea89e929"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>NamedTypeSymbol</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree, const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> *<a class="el" href="classpsy_1_1_c_1_1_symbol.html#a9794142ef7ea778c6609c01e85250de7">scope</a>, const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *containingSym, TagSymbolNameKind tagK, const std::string &amp;tag)</td></tr>
+<tr class="separator:ab7d4f724e1c89c9dabbb0e27ea89e929"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae202f4a3eab2ab74d40b500d527799fb"><td class="memItemLeft" align="right" valign="top"><a id="ae202f4a3eab2ab74d40b500d527799fb"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>patchBuiltinTypeKind</b> (BuiltinTypeKind)</td></tr>
+<tr class="separator:ae202f4a3eab2ab74d40b500d527799fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:aeea2fa19fb97933a5c8af6ccd22014d9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html#aeea2fa19fb97933a5c8af6ccd22014d9">asNamedType</a> () override</td></tr>
+<tr class="separator:aeea2fa19fb97933a5c8af6ccd22014d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab546f55d60ed7fcea4c67720f89da26"><td class="memItemLeft" align="right" valign="top"><a id="aab546f55d60ed7fcea4c67720f89da26"></a>
+virtual const <a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>asNamedType</b> () const override</td></tr>
+<tr class="separator:aab546f55d60ed7fcea4c67720f89da26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classpsy_1_1_c_1_1_type_symbol"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classpsy_1_1_c_1_1_type_symbol')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classpsy_1_1_c_1_1_type_symbol.html">psy::C::TypeSymbol</a></td></tr>
-<tr class="memitem:a7fa43a68bcc9373d236c6f68b4227cd7 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top"><a id="a7fa43a68bcc9373d236c6f68b4227cd7"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>asType</b> () override</td></tr>
+<tr class="memitem:a54afe534b7e811e2273816a2ec640fa2 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top">TypeKind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_type_symbol.html#a54afe534b7e811e2273816a2ec640fa2">typeKind</a> () const</td></tr>
+<tr class="separator:a54afe534b7e811e2273816a2ec640fa2 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ebb1f3a83e5e0fc41c8f5831681f2c6 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_type_symbol.html#a9ebb1f3a83e5e0fc41c8f5831681f2c6">isConstQualified</a> () const</td></tr>
+<tr class="separator:a9ebb1f3a83e5e0fc41c8f5831681f2c6 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0992ad84b8f6ffdb1d74308ea55e078e inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_type_symbol.html#a0992ad84b8f6ffdb1d74308ea55e078e">isVolatileQualified</a> () const</td></tr>
+<tr class="separator:a0992ad84b8f6ffdb1d74308ea55e078e inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8d361b67f3540a21505d9c81ce4e0b1 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_type_symbol.html#ad8d361b67f3540a21505d9c81ce4e0b1">isRestrictQualified</a> () const</td></tr>
+<tr class="separator:ad8d361b67f3540a21505d9c81ce4e0b1 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc3ee89eac21e08828111019a45f22a9 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top"><a id="afc3ee89eac21e08828111019a45f22a9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>qualifyWithConst</b> ()</td></tr>
+<tr class="separator:afc3ee89eac21e08828111019a45f22a9 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16303a1b258243735806ead154af2a90 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top"><a id="a16303a1b258243735806ead154af2a90"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>qualifyWithVolatile</b> ()</td></tr>
+<tr class="separator:a16303a1b258243735806ead154af2a90 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a841ee3a0a6d61b2f12fb56174e9e437d inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top"><a id="a841ee3a0a6d61b2f12fb56174e9e437d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>qualifyWithRestrict</b> ()</td></tr>
+<tr class="separator:a841ee3a0a6d61b2f12fb56174e9e437d inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fa43a68bcc9373d236c6f68b4227cd7 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_type_symbol.html#a7fa43a68bcc9373d236c6f68b4227cd7">asType</a> () override</td></tr>
 <tr class="separator:a7fa43a68bcc9373d236c6f68b4227cd7 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac184d9dbdc0460761d79a497e52f8671 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top"><a id="ac184d9dbdc0460761d79a497e52f8671"></a>
 virtual const <a class="el" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>asType</b> () const override</td></tr>
 <tr class="separator:ac184d9dbdc0460761d79a497e52f8671 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdb254196e0279a5e78eef215fb97f46 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top"><a id="afdb254196e0279a5e78eef215fb97f46"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_array_type_symbol.html">ArrayTypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>asArrayType</b> ()</td></tr>
+<tr class="memitem:afdb254196e0279a5e78eef215fb97f46 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classpsy_1_1_c_1_1_array_type_symbol.html">ArrayTypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_type_symbol.html#afdb254196e0279a5e78eef215fb97f46">asArrayType</a> ()</td></tr>
 <tr class="separator:afdb254196e0279a5e78eef215fb97f46 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdd7587f2aead92cfc285bb84084f245 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top"><a id="afdd7587f2aead92cfc285bb84084f245"></a>
 virtual const <a class="el" href="classpsy_1_1_c_1_1_array_type_symbol.html">ArrayTypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>asArrayType</b> () const</td></tr>
@@ -135,21 +164,7 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_pointer_type_symbol.html">Pointer
 <tr class="memitem:a5d48bdd374e4207ff04860ff2c2a8d3f inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top"><a id="a5d48bdd374e4207ff04860ff2c2a8d3f"></a>
 virtual const <a class="el" href="classpsy_1_1_c_1_1_pointer_type_symbol.html">PointerTypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>asPointerType</b> () const</td></tr>
 <tr class="separator:a5d48bdd374e4207ff04860ff2c2a8d3f inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54afe534b7e811e2273816a2ec640fa2 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top">TypeKind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_type_symbol.html#a54afe534b7e811e2273816a2ec640fa2">typeKind</a> () const</td></tr>
-<tr class="separator:a54afe534b7e811e2273816a2ec640fa2 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ebb1f3a83e5e0fc41c8f5831681f2c6 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_type_symbol.html#a9ebb1f3a83e5e0fc41c8f5831681f2c6">isConstQualified</a> () const</td></tr>
-<tr class="separator:a9ebb1f3a83e5e0fc41c8f5831681f2c6 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0992ad84b8f6ffdb1d74308ea55e078e inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_type_symbol.html#a0992ad84b8f6ffdb1d74308ea55e078e">isVolatileQualified</a> () const</td></tr>
-<tr class="separator:a0992ad84b8f6ffdb1d74308ea55e078e inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8d361b67f3540a21505d9c81ce4e0b1 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_type_symbol.html#ad8d361b67f3540a21505d9c81ce4e0b1">isRestrictQualified</a> () const</td></tr>
-<tr class="separator:ad8d361b67f3540a21505d9c81ce4e0b1 inherit pub_methods_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classpsy_1_1_c_1_1_symbol"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classpsy_1_1_c_1_1_symbol')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></td></tr>
-<tr class="memitem:ad95076d6dabebb0f587aacb66c2f569a inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top"><a id="ad95076d6dabebb0f587aacb66c2f569a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Symbol</b> (const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &amp;)=delete</td></tr>
-<tr class="separator:ad95076d6dabebb0f587aacb66c2f569a inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36d86cd14cf85234267ca06959180541 inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top"><a id="a36d86cd14cf85234267ca06959180541"></a>
-<a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &amp;)=delete</td></tr>
-<tr class="separator:a36d86cd14cf85234267ca06959180541 inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0f974e5c6f902ad3dea32057505dc1e inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top">SymbolKind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_symbol.html#ac0f974e5c6f902ad3dea32057505dc1e">kind</a> () const</td></tr>
 <tr class="separator:ac0f974e5c6f902ad3dea32057505dc1e inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9a289ecb280e68e858cea74550d3b94 inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top"><a id="aa9a289ecb280e68e858cea74550d3b94"></a>
@@ -174,8 +189,8 @@ virtual const <a class="el" href="classpsy_1_1_c_1_1_value_symbol.html">ValueSym
 <tr class="separator:a25c849e9d1a7892663438086fcdfefed inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac8204996d47d0959549c6232d75ebee inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_symbol.html#aac8204996d47d0959549c6232d75ebee">containingSymbol</a> () const</td></tr>
 <tr class="separator:aac8204996d47d0959549c6232d75ebee inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0da12c2aafb8f135a056efb0dbf1108 inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_symbol.html#ae0da12c2aafb8f135a056efb0dbf1108">scope</a> () const</td></tr>
-<tr class="separator:ae0da12c2aafb8f135a056efb0dbf1108 inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9794142ef7ea778c6609c01e85250de7 inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_symbol.html#a9794142ef7ea778c6609c01e85250de7">scope</a> () const</td></tr>
+<tr class="separator:a9794142ef7ea778c6609c01e85250de7 inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3434076ded86daf3f7d3ae04dca70e3 inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_name_space.html">NameSpace</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_symbol.html#ad3434076ded86daf3f7d3ae04dca70e3">nameSpace</a> () const</td></tr>
 <tr class="separator:ad3434076ded86daf3f7d3ae04dca70e3 inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46d07263e061c6c11d17b35d4b54f525 inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_location.html">Location</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_symbol.html#a46d07263e061c6c11d17b35d4b54f525">location</a> () const</td></tr>
@@ -185,29 +200,15 @@ virtual const <a class="el" href="classpsy_1_1_c_1_1_value_symbol.html">ValueSym
 <tr class="memitem:a98a62d247a0f9f3426814cdfe20efa0a inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classpsy_1_1_c_1_1_syntax_reference.html">SyntaxReference</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_symbol.html#a98a62d247a0f9f3426814cdfe20efa0a">declaringSyntaxReferences</a> () const</td></tr>
 <tr class="separator:a98a62d247a0f9f3426814cdfe20efa0a inherit pub_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a3955c1787b990fb0a20f964b4ffd8525"><td class="memItemLeft" align="right" valign="top"><a id="a3955c1787b990fb0a20f964b4ffd8525"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>NamedTypeSymbol</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree, const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> *<a class="el" href="classpsy_1_1_c_1_1_symbol.html#ae0da12c2aafb8f135a056efb0dbf1108">scope</a>, const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *containingSym, BuiltinTypeKind builtTyK)</td></tr>
-<tr class="separator:a3955c1787b990fb0a20f964b4ffd8525"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe1375c4946e06f13867048bec27c742"><td class="memItemLeft" align="right" valign="top"><a id="afe1375c4946e06f13867048bec27c742"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>NamedTypeSymbol</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree, const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> *<a class="el" href="classpsy_1_1_c_1_1_symbol.html#ae0da12c2aafb8f135a056efb0dbf1108">scope</a>, const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *containingSym, const std::string &amp;<a class="el" href="classname.html">name</a>)</td></tr>
-<tr class="separator:afe1375c4946e06f13867048bec27c742"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43a1864a194870171f1bf922f773d224"><td class="memItemLeft" align="right" valign="top"><a id="a43a1864a194870171f1bf922f773d224"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>NamedTypeSymbol</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree, const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> *<a class="el" href="classpsy_1_1_c_1_1_symbol.html#ae0da12c2aafb8f135a056efb0dbf1108">scope</a>, const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *containingSym, <a class="el" href="classpsy_1_1_c_1_1_tag_symbol_name.html#ae82342e178924c25d358019e54ab2498">TagSymbolName::NameSpace</a> ns, const std::string &amp;tag)</td></tr>
-<tr class="separator:a43a1864a194870171f1bf922f773d224"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae202f4a3eab2ab74d40b500d527799fb"><td class="memItemLeft" align="right" valign="top"><a id="ae202f4a3eab2ab74d40b500d527799fb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>patchBuiltinTypeKind</b> (BuiltinTypeKind)</td></tr>
-<tr class="separator:ae202f4a3eab2ab74d40b500d527799fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:ac1477f45573f7be56ec13bb35c0041b9"><td class="memItemLeft" align="right" valign="top"><a id="ac1477f45573f7be56ec13bb35c0041b9"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Binder</b></td></tr>
-<tr class="separator:ac1477f45573f7be56ec13bb35c0041b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32096f769e750573dbc1dc5563061cb7"><td class="memItemLeft" align="right" valign="top"><a id="a32096f769e750573dbc1dc5563061cb7"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Semantics_TypeSpecifiers</b></td></tr>
-<tr class="separator:a32096f769e750573dbc1dc5563061cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a830431dc594273ddcad9d42cec20e390"><td class="memItemLeft" align="right" valign="top"><a id="a830431dc594273ddcad9d42cec20e390"></a>
+PSY_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>__pad0__</b>: PSY_GRANT_ACCESS(<a class="el" href="classpsy_1_1_c_1_1_binder.html">Binder</a>)</td></tr>
+<tr class="separator:a830431dc594273ddcad9d42cec20e390"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_classpsy_1_1_c_1_1_type_symbol"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classpsy_1_1_c_1_1_type_symbol')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classpsy_1_1_c_1_1_type_symbol.html">psy::C::TypeSymbol</a></td></tr>
+<tr class="memitem:aad9357cb6b2e7fad8177674c5045199f inherit pub_attribs_classpsy_1_1_c_1_1_type_symbol"><td class="memItemLeft" align="right" valign="top"><a id="aad9357cb6b2e7fad8177674c5045199f"></a>
+PSY_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>__pad0__</b>: PSY_GRANT_ACCESS(<a class="el" href="classpsy_1_1_c_1_1_semantics_of_type_qualifiers.html">SemanticsOfTypeQualifiers</a>)</td></tr>
+<tr class="separator:aad9357cb6b2e7fad8177674c5045199f inherit pub_attribs_classpsy_1_1_c_1_1_type_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -225,11 +226,45 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a00b91edb4bc21fcdba70de03eff45368 inherit pro_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top"><a id="a00b91edb4bc21fcdba70de03eff45368"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Symbol</b> (SymbolImpl *p)</td></tr>
 <tr class="separator:a00b91edb4bc21fcdba70de03eff45368 inherit pro_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad95076d6dabebb0f587aacb66c2f569a inherit pro_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top"><a id="ad95076d6dabebb0f587aacb66c2f569a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Symbol</b> (const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &amp;)=delete</td></tr>
+<tr class="separator:ad95076d6dabebb0f587aacb66c2f569a inherit pro_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36d86cd14cf85234267ca06959180541 inherit pro_methods_classpsy_1_1_c_1_1_symbol"><td class="memItemLeft" align="right" valign="top"><a id="a36d86cd14cf85234267ca06959180541"></a>
+<a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &amp;)=delete</td></tr>
+<tr class="separator:a36d86cd14cf85234267ca06959180541 inherit pro_methods_classpsy_1_1_c_1_1_symbol"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html" title="The NamedTypeSymbol class.">NamedTypeSymbol</a> class. </p>
 <dl class="section note"><dt>Note</dt><dd>This API is inspired by that of <code>Microsoft.CodeAnalysis.INamedTypeSymbol</code> from Roslyn, the .NET Compiler Platform. </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="aeea2fa19fb97933a5c8af6ccd22014d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeea2fa19fb97933a5c8af6ccd22014d9">&#9670;&nbsp;</a></span>asNamedType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a>* psy::C::NamedTypeSymbol::asNamedType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Cast <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_type_symbol.html" title="The TypeSymbol class.">TypeSymbol</a> as a <a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html" title="The NamedTypeSymbol class.">NamedTypeSymbol</a>. </p>
+
+<p>Reimplemented from <a class="el" href="classpsy_1_1_c_1_1_type_symbol.html">psy::C::TypeSymbol</a>.</p>
+
+</div>
+</div>
 <a id="aeb9d8581a0a572e31a07c5939073e370"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeb9d8581a0a572e31a07c5939073e370">&#9670;&nbsp;</a></span>builtinTypeKind()</h2>
 

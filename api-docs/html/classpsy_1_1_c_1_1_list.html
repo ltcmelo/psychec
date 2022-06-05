@@ -68,6 +68,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classpsy_1_1_c_1_1_list-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">psy::C::List&lt; ValueT, DerivedListT &gt; Class Template Reference</div>  </div>
@@ -93,12 +94,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad61ea19242abb071e532dd2417656e3f"><td class="memItemLeft" align="right" valign="top"><a id="ad61ea19242abb071e532dd2417656e3f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>List</b> (const ValueT &amp;value)</td></tr>
 <tr class="separator:ad61ea19242abb071e532dd2417656e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac10e5e003b2cb252aa5ab66c0cfb357a"><td class="memItemLeft" align="right" valign="top"><a id="ac10e5e003b2cb252aa5ab66c0cfb357a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>List</b> (const <a class="el" href="classpsy_1_1_c_1_1_list.html">List</a> &amp;)=delete</td></tr>
-<tr class="separator:ac10e5e003b2cb252aa5ab66c0cfb357a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a836f267d79b8c59c82e40991d3d08912"><td class="memItemLeft" align="right" valign="top"><a id="a836f267d79b8c59c82e40991d3d08912"></a>
-<a class="el" href="classpsy_1_1_c_1_1_list.html">List</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_list.html">List</a> &amp;)=delete</td></tr>
-<tr class="separator:a836f267d79b8c59c82e40991d3d08912"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b8be3b6f642f75aaebfd54d9fdca4c5"><td class="memItemLeft" align="right" valign="top"><a id="a6b8be3b6f642f75aaebfd54d9fdca4c5"></a>
 DerivedListT **&#160;</td><td class="memItemRight" valign="bottom"><b>skipToLast</b> ()</td></tr>
 <tr class="separator:a6b8be3b6f642f75aaebfd54d9fdca4c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -109,9 +104,9 @@ ValueT&#160;</td><td class="memItemRight" valign="bottom"><b>lastValue</b> () co
 <tr class="memitem:af3b3cfe127847d0b552b1d4e8c224734 inherit pub_methods_classpsy_1_1_c_1_1_managed"><td class="memItemLeft" align="right" valign="top"><a id="af3b3cfe127847d0b552b1d4e8c224734"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Managed</b> (const <a class="el" href="classpsy_1_1_c_1_1_managed.html">Managed</a> &amp;)=delete</td></tr>
 <tr class="separator:af3b3cfe127847d0b552b1d4e8c224734 inherit pub_methods_classpsy_1_1_c_1_1_managed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26a1ded153b6ff0d7c74d16ab01f2988 inherit pub_methods_classpsy_1_1_c_1_1_managed"><td class="memItemLeft" align="right" valign="top"><a id="a26a1ded153b6ff0d7c74d16ab01f2988"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_managed.html">Managed</a> &amp;)=delete</td></tr>
-<tr class="separator:a26a1ded153b6ff0d7c74d16ab01f2988 inherit pub_methods_classpsy_1_1_c_1_1_managed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f7ab1b278c1fc78ef37544e2d8d9883 inherit pub_methods_classpsy_1_1_c_1_1_managed"><td class="memItemLeft" align="right" valign="top"><a id="a4f7ab1b278c1fc78ef37544e2d8d9883"></a>
+<a class="el" href="classpsy_1_1_c_1_1_managed.html">Managed</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_managed.html">Managed</a> &amp;)=delete</td></tr>
+<tr class="separator:a4f7ab1b278c1fc78ef37544e2d8d9883 inherit pub_methods_classpsy_1_1_c_1_1_managed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ad3405e5782a7a84088887c481d77d6 inherit pub_methods_classpsy_1_1_c_1_1_managed"><td class="memItemLeft" align="right" valign="top"><a id="a3ad3405e5782a7a84088887c481d77d6"></a>
 void *&#160;</td><td class="memItemRight" valign="bottom"><b>operator new</b> (size_t size, <a class="el" href="classpsy_1_1_c_1_1_memory_pool.html">MemoryPool</a> *pool)</td></tr>
 <tr class="separator:a3ad3405e5782a7a84088887c481d77d6 inherit pub_methods_classpsy_1_1_c_1_1_managed"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,6 +125,15 @@ ValueT&#160;</td><td class="memItemRight" valign="bottom"><b>value</b></td></tr>
 <tr class="memitem:ae35c36c2283e28e5cbc528096f8aa29f"><td class="memItemLeft" align="right" valign="top"><a id="ae35c36c2283e28e5cbc528096f8aa29f"></a>
 DerivedListT *&#160;</td><td class="memItemRight" valign="bottom"><b>next</b></td></tr>
 <tr class="separator:ae35c36c2283e28e5cbc528096f8aa29f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ac10e5e003b2cb252aa5ab66c0cfb357a"><td class="memItemLeft" align="right" valign="top"><a id="ac10e5e003b2cb252aa5ab66c0cfb357a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>List</b> (const <a class="el" href="classpsy_1_1_c_1_1_list.html">List</a> &amp;)=delete</td></tr>
+<tr class="separator:ac10e5e003b2cb252aa5ab66c0cfb357a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a836f267d79b8c59c82e40991d3d08912"><td class="memItemLeft" align="right" valign="top"><a id="a836f267d79b8c59c82e40991d3d08912"></a>
+<a class="el" href="classpsy_1_1_c_1_1_list.html">List</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_list.html">List</a> &amp;)=delete</td></tr>
+<tr class="separator:a836f267d79b8c59c82e40991d3d08912"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;class ValueT, class DerivedListT&gt;<br />

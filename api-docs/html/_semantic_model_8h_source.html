@@ -95,42 +95,61 @@ $(function() {
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;API.h&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;Fwds.h&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;../common/infra/Pimpl.h&quot;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span>psy {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>C {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;../common/infra/InternalAccess.h&quot;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;../common/infra/Pimpl.h&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">class </span>Binder;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_semantic_model.html">   41</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span>psy {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span>C {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">class </span>Binder;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_semantic_model.html">   44</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    ~<a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>();</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    DECL_PIMPL(<a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>)</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>* compilation() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>(<a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>* compilation, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree);</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* storeSymDEF(std::unique_ptr&lt;Symbol&gt; sym);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* storeSymUSE(std::unique_ptr&lt;Symbol&gt; sym);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;};</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* declaredSymbol(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a>* node) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    std::vector&lt;const Symbol*&gt; declaredSymbols(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_variable_and_or_function_declaration_syntax.html">VariableAndOrFunctionDeclarationSyntax</a>* node) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* declaredSymbol(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_function_definition_syntax.html">FunctionDefinitionSyntax</a>* node) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;PSY_INTERNAL:</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>(<a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>* compilation, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* storeDeclaredSym(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a>* node, std::unique_ptr&lt;Symbol&gt; sym);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* storeUsedSym(std::unique_ptr&lt;Symbol&gt; sym);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="comment">// Unavailable</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    DECL_PIMPL(<a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>)</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;};</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasspsy_1_1_c_1_1_semantic_model_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_semantic_model.html">psy::C::SemanticModel</a></div><div class="ttdoc">The SemanticModel class.</div><div class="ttdef"><b>Definition:</b> SemanticModel.h:42</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_compilation_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_compilation.html">psy::C::Compilation</a></div><div class="ttdoc">The Compilation class.</div><div class="ttdef"><b>Definition:</b> Compilation.h:47</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:59</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_semantic_model_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_semantic_model.html">psy::C::SemanticModel</a></div><div class="ttdoc">The SemanticModel class.</div><div class="ttdef"><b>Definition:</b> SemanticModel.h:45</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_node_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_node.html">psy::C::SyntaxNode</a></div><div class="ttdoc">The SyntaxNode class.</div><div class="ttdef"><b>Definition:</b> SyntaxNode.h:55</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_variable_and_or_function_declaration_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_variable_and_or_function_declaration_syntax.html">psy::C::VariableAndOrFunctionDeclarationSyntax</a></div><div class="ttdoc">The VariableAndOrFunctionDeclarationSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes_Declarations.h:838</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_compilation_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_compilation.html">psy::C::Compilation</a></div><div class="ttdoc">The Compilation class.</div><div class="ttdef"><b>Definition:</b> Compilation.h:48</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:60</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></div><div class="ttdoc">The Symbol class.</div><div class="ttdef"><b>Definition:</b> Symbol.h:51</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:50</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_function_definition_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_function_definition_syntax.html">psy::C::FunctionDefinitionSyntax</a></div><div class="ttdoc">The FunctionDefinitionSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes_Declarations.h:954</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_declarator_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_declarator_syntax.html">psy::C::DeclaratorSyntax</a></div><div class="ttdoc">The DeclaratorSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:219</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:51</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

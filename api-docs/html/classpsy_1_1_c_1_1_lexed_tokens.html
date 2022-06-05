@@ -69,6 +69,8 @@ $(function() {
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classpsy_1_1_c_1_1_lexed_tokens-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -92,21 +94,18 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>IndexType</b> = Size
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab723d54155182a73f009118f0987923c"><td class="memItemLeft" align="right" valign="top"><a id="ab723d54155182a73f009118f0987923c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> tk)</td></tr>
-<tr class="separator:ab723d54155182a73f009118f0987923c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67f6b7618ca2a49cc8e2ee0df751c400"><td class="memItemLeft" align="right" valign="top"><a id="a67f6b7618ca2a49cc8e2ee0df751c400"></a>
 <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>tokenAt</b> (IndexType tkIdx)</td></tr>
 <tr class="separator:a67f6b7618ca2a49cc8e2ee0df751c400"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f7f1ada419c8bfc6e4cbda0c3c95444"><td class="memItemLeft" align="right" valign="top"><a id="a2f7f1ada419c8bfc6e4cbda0c3c95444"></a>
-IndexType&#160;</td><td class="memItemRight" valign="bottom"><b>freeSlot</b> () const</td></tr>
-<tr class="separator:a2f7f1ada419c8bfc6e4cbda0c3c95444"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0df60dcd32222719e1dba75f62336a21"><td class="memItemLeft" align="right" valign="top"><a id="a0df60dcd32222719e1dba75f62336a21"></a>
 SizeType&#160;</td><td class="memItemRight" valign="bottom"><b>count</b> () const</td></tr>
 <tr class="separator:a0df60dcd32222719e1dba75f62336a21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a895698472bd4b1bbbcdf3f901510cf63"><td class="memItemLeft" align="right" valign="top"><a id="a895698472bd4b1bbbcdf3f901510cf63"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
-<tr class="separator:a895698472bd4b1bbbcdf3f901510cf63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f7f1ada419c8bfc6e4cbda0c3c95444"><td class="memItemLeft" align="right" valign="top"><a id="a2f7f1ada419c8bfc6e4cbda0c3c95444"></a>
+IndexType&#160;</td><td class="memItemRight" valign="bottom"><b>freeSlot</b> () const</td></tr>
+<tr class="separator:a2f7f1ada419c8bfc6e4cbda0c3c95444"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab723d54155182a73f009118f0987923c"><td class="memItemLeft" align="right" valign="top"><a id="ab723d54155182a73f009118f0987923c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> tk)</td></tr>
+<tr class="separator:ab723d54155182a73f009118f0987923c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -114,11 +113,23 @@ Static Public Member Functions</h2></td></tr>
 static IndexType&#160;</td><td class="memItemRight" valign="bottom"><b>invalidIndex</b> ()</td></tr>
 <tr class="separator:a0f1dcb0ccde833ea8210f866bb87c787"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a6f8c853d5af62faba0459d982cbe3b49"><td class="memItemLeft" align="right" valign="top"><a id="a6f8c853d5af62faba0459d982cbe3b49"></a>
+PSY_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>__pad0__</b>: PSY_GRANT_ACCESS(<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>)</td></tr>
+<tr class="separator:a6f8c853d5af62faba0459d982cbe3b49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a895698472bd4b1bbbcdf3f901510cf63"><td class="memItemLeft" align="right" valign="top"><a id="a895698472bd4b1bbbcdf3f901510cf63"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+<tr class="separator:a895698472bd4b1bbbcdf3f901510cf63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ac479619b6fed03c513871b0477a25475"><td class="memItemLeft" align="right" valign="top"><a id="ac479619b6fed03c513871b0477a25475"></a>
-std::vector&lt; <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>v_</b></td></tr>
-<tr class="separator:ac479619b6fed03c513871b0477a25475"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7c435d2e91430fe68bec1780ede51ab"><td class="memItemLeft" align="right" valign="top"><a id="aa7c435d2e91430fe68bec1780ede51ab"></a>
+std::vector&lt; <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tks_</b></td></tr>
+<tr class="separator:aa7c435d2e91430fe68bec1780ede51ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_lexed_tokens.html" title="The LexedTokens class.">LexedTokens</a> class. </p>

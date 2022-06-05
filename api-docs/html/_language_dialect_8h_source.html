@@ -95,48 +95,52 @@ $(function() {
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;API.h&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>psy {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span>C {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="structpsy_1_1_c_1_1_language_dialect.html">   41</a></span>&#160;<span class="keyword">struct </span>PSY_C_API <a class="code" href="structpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">   46</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">Std</a> : std::uint8_t</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        C89_90,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        C99,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        C11,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        C17_18</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    };</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="structpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a>(Std std = Std::C11)</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        : std_(std)</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    {}</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    Std std()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> std_; }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    Std std_;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;};</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator==(<a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator!=(<a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator&lt;(<a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator&lt;=(<a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator&gt;(<a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator&gt;=(<a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;std::string PSY_C_API to_string(<a class="code" href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> std);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;../common/infra/InternalAccess.h&quot;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span>psy {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span>C {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_language_dialect.html">   43</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;{</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">   49</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">Std</a> : std::uint8_t</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    {</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        C89_90,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        C99,</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        C11,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        C17_18</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    };</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a>(Std std = Std::C11)</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        : std_(std)</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    {}</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_language_dialect.html#a6a30fce69504648d7f889bfa4a85b1f9">   64</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">Std</a> <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#a6a30fce69504648d7f889bfa4a85b1f9">std</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> std_; }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    Std std_;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;};</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator==(<a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator!=(<a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator&lt;(<a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator&lt;=(<a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator&gt;(<a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="keywordtype">bool</span> PSY_C_API operator&gt;=(<a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> a, <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> b);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;std::string PSY_C_API to_string(<a class="code" href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">LanguageDialect::Std</a> std);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="astructpsy_1_1_c_1_1_language_dialect_html"><div class="ttname"><a href="structpsy_1_1_c_1_1_language_dialect.html">psy::C::LanguageDialect</a></div><div class="ttdoc">The LanguageDialect class.</div><div class="ttdef"><b>Definition:</b> LanguageDialect.h:42</div></div>
-<div class="ttc" id="astructpsy_1_1_c_1_1_language_dialect_html_add3c5a89ff4b0defa9a2c6f336a4a847"><div class="ttname"><a href="structpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">psy::C::LanguageDialect::Std</a></div><div class="ttdeci">Std</div><div class="ttdoc">The C Standard enumeration.</div><div class="ttdef"><b>Definition:</b> LanguageDialect.h:47</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_language_dialect_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_language_dialect.html">psy::C::LanguageDialect</a></div><div class="ttdoc">The LanguageDialect class.</div><div class="ttdef"><b>Definition:</b> LanguageDialect.h:44</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_language_dialect_html_a6a30fce69504648d7f889bfa4a85b1f9"><div class="ttname"><a href="classpsy_1_1_c_1_1_language_dialect.html#a6a30fce69504648d7f889bfa4a85b1f9">psy::C::LanguageDialect::std</a></div><div class="ttdeci">Std std() const</div><div class="ttdef"><b>Definition:</b> LanguageDialect.h:64</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_language_dialect_html_add3c5a89ff4b0defa9a2c6f336a4a847"><div class="ttname"><a href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">psy::C::LanguageDialect::Std</a></div><div class="ttdeci">Std</div><div class="ttdoc">The C Standard enumeration.</div><div class="ttdef"><b>Definition:</b> LanguageDialect.h:50</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

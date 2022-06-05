@@ -92,81 +92,86 @@ $(function() {
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#ifndef PSYCHE_C_MACRO_TRANSLATIONS_H__</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define PSYCHE_C_MACRO_TRANSLATIONS_H__</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;API.h&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>psy {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>C {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html">   32</a></span>&#160;<span class="keyword">class </span><a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a> final</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>();</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#ac5a01f859e803bc7f00639f842555bde">   44</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#ac5a01f859e803bc7f00639f842555bde">enable_Translate_static_assert_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_static_assert_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;../common/infra/InternalAccess.h&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>psy {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span>C {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html">   36</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a> final</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#acae47772f5689860da11dce18074674e">   55</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#acae47772f5689860da11dce18074674e">enable_Translate_complex_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_complex_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#ac5a01f859e803bc7f00639f842555bde">   53</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#ac5a01f859e803bc7f00639f842555bde">enable_Translate_static_assert_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_static_assert_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#ab0cf7061758a1e7ff01f2e4deec19ba5">   66</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#ab0cf7061758a1e7ff01f2e4deec19ba5">enable_Translate_operatorNames</a>(<span class="keywordtype">bool</span> expand);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_operatorNames() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#acae47772f5689860da11dce18074674e">   64</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#acae47772f5689860da11dce18074674e">enable_Translate_complex_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_complex_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#a86cbab2e57e52fd62b49fb63fb74cea8">   77</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#a86cbab2e57e52fd62b49fb63fb74cea8">enable_Translate_alignas_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_alignas_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#ab0cf7061758a1e7ff01f2e4deec19ba5">   75</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#ab0cf7061758a1e7ff01f2e4deec19ba5">enable_Translate_operatorNames</a>(<span class="keywordtype">bool</span> expand);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_operatorNames() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#a5482931711232ec3ebfe6ad6bfd7430b">   88</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#a5482931711232ec3ebfe6ad6bfd7430b">enable_Translate_alignof_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_alignof_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#a86cbab2e57e52fd62b49fb63fb74cea8">   86</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#a86cbab2e57e52fd62b49fb63fb74cea8">enable_Translate_alignas_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_alignas_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#a6b1503dcc4590ac8ccb6a4c3b077c1f7">   99</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#a6b1503dcc4590ac8ccb6a4c3b077c1f7">enable_Translate_va_arg_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_va_arg_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#a5482931711232ec3ebfe6ad6bfd7430b">   97</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#a5482931711232ec3ebfe6ad6bfd7430b">enable_Translate_alignof_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_alignof_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#a35a92f97fbc08666a4df224013c590f2">  110</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#a35a92f97fbc08666a4df224013c590f2">enable_Translate_offsetof_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_offsetof_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#a6b1503dcc4590ac8ccb6a4c3b077c1f7">  108</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#a6b1503dcc4590ac8ccb6a4c3b077c1f7">enable_Translate_va_arg_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_va_arg_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#aa109b655f03f5479fca67c24d32b5b7b">  121</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#aa109b655f03f5479fca67c24d32b5b7b">enable_Translate_bool_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_bool_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#a35a92f97fbc08666a4df224013c590f2">  119</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#a35a92f97fbc08666a4df224013c590f2">enable_Translate_offsetof_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_offsetof_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#a488b7018ee4da375f9e71395752dc0b2">  132</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#a488b7018ee4da375f9e71395752dc0b2">enable_Translate_thread_local_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_thread_local_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#aa109b655f03f5479fca67c24d32b5b7b">  130</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#aa109b655f03f5479fca67c24d32b5b7b">enable_Translate_bool_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_bool_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00137"></a><span class="lineno"><a class="line" href="structpsy_1_1_c_1_1_macro_translations_1_1_bit_fields.html">  137</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpsy_1_1_c_1_1_macro_translations_1_1_bit_fields.html">BitFields</a></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    {</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        std::uint64_t Translate_static_assert_AsKeyword_: 1;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        std::uint64_t Translate_complex_AsKeyword_: 1;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        std::uint64_t Translate_operatorNames_ : 1;</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        std::uint64_t Translate_alignas_AsKeyword_ : 1;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        std::uint64_t Translate_alignof_AsKeyword_ : 1;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        std::uint64_t Translate_va_arg_AsKeyword_ : 1;</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        std::uint64_t Translate_offsetof_AsKeyword_ : 1;</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        std::uint64_t Translate_bool_AsKeyword_ : 1;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        std::uint64_t Translate_thread_local_AsKeyword_ : 1;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    };</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keyword">union</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    {</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        std::uint64_t BF_all_;</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <a class="code" href="structpsy_1_1_c_1_1_macro_translations_1_1_bit_fields.html">BitFields</a> BF_;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    };</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;};</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_macro_translations.html#a488b7018ee4da375f9e71395752dc0b2">  141</a></span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html">MacroTranslations</a>&amp; <a class="code" href="classpsy_1_1_c_1_1_macro_translations.html#a488b7018ee4da375f9e71395752dc0b2">enable_Translate_thread_local_AsKeyword</a>(<span class="keywordtype">bool</span> expand);</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordtype">bool</span> isEnabled_Translate_thread_local_AsKeyword() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00146"></a><span class="lineno"><a class="line" href="structpsy_1_1_c_1_1_macro_translations_1_1_bit_fields.html">  146</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpsy_1_1_c_1_1_macro_translations_1_1_bit_fields.html">BitFields</a></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    {</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        std::uint64_t Translate_static_assert_AsKeyword_: 1;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        std::uint64_t Translate_complex_AsKeyword_: 1;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        std::uint64_t Translate_operatorNames_ : 1;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        std::uint64_t Translate_alignas_AsKeyword_ : 1;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        std::uint64_t Translate_alignof_AsKeyword_ : 1;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        std::uint64_t Translate_va_arg_AsKeyword_ : 1;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        std::uint64_t Translate_offsetof_AsKeyword_ : 1;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        std::uint64_t Translate_bool_AsKeyword_ : 1;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        std::uint64_t Translate_thread_local_AsKeyword_ : 1;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    };</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keyword">union</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    {</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        std::uint64_t BF_all_;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <a class="code" href="structpsy_1_1_c_1_1_macro_translations_1_1_bit_fields.html">BitFields</a> BF_;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    };</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;};</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasspsy_1_1_c_1_1_macro_translations_html_a86cbab2e57e52fd62b49fb63fb74cea8"><div class="ttname"><a href="classpsy_1_1_c_1_1_macro_translations.html#a86cbab2e57e52fd62b49fb63fb74cea8">psy::C::MacroTranslations::enable_Translate_alignas_AsKeyword</a></div><div class="ttdeci">MacroTranslations &amp; enable_Translate_alignas_AsKeyword(bool expand)</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_macro_translations_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_macro_translations.html">psy::C::MacroTranslations</a></div><div class="ttdoc">The MacroTranslations class.</div><div class="ttdef"><b>Definition:</b> MacroTranslations.h:33</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_macro_translations_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_macro_translations.html">psy::C::MacroTranslations</a></div><div class="ttdoc">The MacroTranslations class.</div><div class="ttdef"><b>Definition:</b> MacroTranslations.h:37</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_macro_translations_html_a488b7018ee4da375f9e71395752dc0b2"><div class="ttname"><a href="classpsy_1_1_c_1_1_macro_translations.html#a488b7018ee4da375f9e71395752dc0b2">psy::C::MacroTranslations::enable_Translate_thread_local_AsKeyword</a></div><div class="ttdeci">MacroTranslations &amp; enable_Translate_thread_local_AsKeyword(bool expand)</div></div>
-<div class="ttc" id="astructpsy_1_1_c_1_1_macro_translations_1_1_bit_fields_html"><div class="ttname"><a href="structpsy_1_1_c_1_1_macro_translations_1_1_bit_fields.html">psy::C::MacroTranslations::BitFields</a></div><div class="ttdef"><b>Definition:</b> MacroTranslations.h:138</div></div>
+<div class="ttc" id="astructpsy_1_1_c_1_1_macro_translations_1_1_bit_fields_html"><div class="ttname"><a href="structpsy_1_1_c_1_1_macro_translations_1_1_bit_fields.html">psy::C::MacroTranslations::BitFields</a></div><div class="ttdef"><b>Definition:</b> MacroTranslations.h:147</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_macro_translations_html_aa109b655f03f5479fca67c24d32b5b7b"><div class="ttname"><a href="classpsy_1_1_c_1_1_macro_translations.html#aa109b655f03f5479fca67c24d32b5b7b">psy::C::MacroTranslations::enable_Translate_bool_AsKeyword</a></div><div class="ttdeci">MacroTranslations &amp; enable_Translate_bool_AsKeyword(bool expand)</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_macro_translations_html_ab0cf7061758a1e7ff01f2e4deec19ba5"><div class="ttname"><a href="classpsy_1_1_c_1_1_macro_translations.html#ab0cf7061758a1e7ff01f2e4deec19ba5">psy::C::MacroTranslations::enable_Translate_operatorNames</a></div><div class="ttdeci">MacroTranslations &amp; enable_Translate_operatorNames(bool expand)</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_macro_translations_html_a6b1503dcc4590ac8ccb6a4c3b077c1f7"><div class="ttname"><a href="classpsy_1_1_c_1_1_macro_translations.html#a6b1503dcc4590ac8ccb6a4c3b077c1f7">psy::C::MacroTranslations::enable_Translate_va_arg_AsKeyword</a></div><div class="ttdeci">MacroTranslations &amp; enable_Translate_va_arg_AsKeyword(bool expand)</div></div>

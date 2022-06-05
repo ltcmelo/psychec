@@ -93,15 +93,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad11e3857a6ba362d781dafb94f3f49e8"><td class="memItemLeft" align="right" valign="top"><a id="ad11e3857a6ba362d781dafb94f3f49e8"></a>
 <a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>diagnostic</b> (ErrorOrWarn v, std::string descriptorId=&quot;&quot;)</td></tr>
 <tr class="separator:ad11e3857a6ba362d781dafb94f3f49e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62518c22ba3f18189c1013a55ac0b1d0"><td class="memItemLeft" align="right" valign="top"><a id="a62518c22ba3f18189c1013a55ac0b1d0"></a>
+<a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>ContinueTestDespiteOfErrors</b> ()</td></tr>
+<tr class="separator:a62518c22ba3f18189c1013a55ac0b1d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac927c8f45534e74ff66836d980cf79fb"><td class="memItemLeft" align="right" valign="top"><a id="ac927c8f45534e74ff66836d980cf79fb"></a>
 <a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>ambiguity</b> (std::string s=&quot;&quot;)</td></tr>
 <tr class="separator:ac927c8f45534e74ff66836d980cf79fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a862bd3085616caded7eba00b2199a850"><td class="memItemLeft" align="right" valign="top"><a id="a862bd3085616caded7eba00b2199a850"></a>
 <a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>AST</b> (std::vector&lt; SyntaxKind &gt; &amp;&amp;v)</td></tr>
 <tr class="separator:a862bd3085616caded7eba00b2199a850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbb310c73aff273bc1f1816bb464b5c6"><td class="memItemLeft" align="right" valign="top"><a id="abbb310c73aff273bc1f1816bb464b5c6"></a>
-<a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>binding</b> (<a class="el" href="structpsy_1_1_c_1_1_binding_summary.html">BindingSummary</a> b)</td></tr>
-<tr class="separator:abbb310c73aff273bc1f1816bb464b5c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b661e62750f3f76f6724a2edc64d4a4"><td class="memItemLeft" align="right" valign="top"><a id="a3b661e62750f3f76f6724a2edc64d4a4"></a>
+<a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>binding</b> (<a class="el" href="structpsy_1_1_c_1_1_decl_summary.html">DeclSummary</a> b)</td></tr>
+<tr class="separator:a3b661e62750f3f76f6724a2edc64d4a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -117,6 +120,9 @@ std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bott
 <tr class="memitem:a89f5a47c27fcc8a05a37d0c7624b6883"><td class="memItemLeft" align="right" valign="top"><a id="a89f5a47c27fcc8a05a37d0c7624b6883"></a>
 std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>descriptorsW_</b></td></tr>
 <tr class="separator:a89f5a47c27fcc8a05a37d0c7624b6883"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a505d9882e0775cd2c774802cb4eff2eb"><td class="memItemLeft" align="right" valign="top"><a id="a505d9882e0775cd2c774802cb4eff2eb"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>continueTestDespiteOfErrors_</b></td></tr>
+<tr class="separator:a505d9882e0775cd2c774802cb4eff2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31f773e9b3b01065be1065616af1883b"><td class="memItemLeft" align="right" valign="top"><a id="a31f773e9b3b01065be1065616af1883b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isAmbiguous_</b></td></tr>
 <tr class="separator:a31f773e9b3b01065be1065616af1883b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,9 +132,9 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ambiguityText_
 <tr class="memitem:a12b95dd63e03e82fbc368875b18c4fa0"><td class="memItemLeft" align="right" valign="top"><a id="a12b95dd63e03e82fbc368875b18c4fa0"></a>
 std::vector&lt; SyntaxKind &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>syntaxKinds_</b></td></tr>
 <tr class="separator:a12b95dd63e03e82fbc368875b18c4fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f321c08a254322e7e06d05df97f521d"><td class="memItemLeft" align="right" valign="top"><a id="a8f321c08a254322e7e06d05df97f521d"></a>
-std::vector&lt; <a class="el" href="structpsy_1_1_c_1_1_binding_summary.html">BindingSummary</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>bindings_</b></td></tr>
-<tr class="separator:a8f321c08a254322e7e06d05df97f521d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc7065874dc8d2d5d3b2f31392671638"><td class="memItemLeft" align="right" valign="top"><a id="adc7065874dc8d2d5d3b2f31392671638"></a>
+std::vector&lt; <a class="el" href="structpsy_1_1_c_1_1_decl_summary.html">DeclSummary</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>bindings_</b></td></tr>
+<tr class="separator:adc7065874dc8d2d5d3b2f31392671638"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following files:<ul>
 <li>C/tests/<a class="el" href="_test_expectation_8h_source.html">TestExpectation.h</a></li>
