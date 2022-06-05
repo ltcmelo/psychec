@@ -21,12 +21,12 @@
 #ifndef PSYCHE_C_INTERNALS_TEST_SUITE_H__
 #define PSYCHE_C_INTERNALS_TEST_SUITE_H__
 
-#include "API.h"
+#include "tests/TestSuite.h"
+#include "tests/Tester.h"
 
 #include "TestExpectation.h"
 
 #include "C/SyntaxTree.h"
-#include "tests/TestSuite.h"
 
 #include <memory>
 #include <vector>
@@ -34,8 +34,6 @@
 #define CROSS_REFERENCE_TEST(CASE) { auto x = &CASE; (void)x; } \
 
 namespace psy {
-
-class Tester;
 
 namespace C {
 

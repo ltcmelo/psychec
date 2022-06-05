@@ -18,38 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TestSuite_API.h"
-
 #include "SemanticModelTester.h"
 
 using namespace psy;
 using namespace C;
 
-APITestSuite::~APITestSuite()
-{}
+const std::string SemanticModelTester::Name = "SEMANTIC MODEL";
 
-std::tuple<int, int> APITestSuite::testAll()
+
+void SemanticModelTester::testSemanticModel()
 {
-    auto SM = std::make_unique<SemanticModelTester>(this);
-    SM->testSemanticModel();
-
-    auto res = std::make_tuple(SM->totalPassed(),
-                               SM->totalFailed());
-
-    testers_.emplace_back(SM.release());
-
-    return res;
+    return run<SemanticModelTester>(tests_);
 }
 
-std::string APITestSuite::description() const
+void SemanticModelTester::case0001()
 {
-    return "C API test suite";
+
 }
 
-void APITestSuite::printSummary() const
-{
-    for (auto const& tester : testers_) {
-        std::cout << "    " << tester->name() << " passed: " << tester->totalPassed() << std::endl
-                  << "    " << std::string(tester->name().length(), ' ') << " failed: " << tester->totalFailed() << std::endl;
-    }
-}
+void SemanticModelTester::case0002(){}
+void SemanticModelTester::case0003(){}
+void SemanticModelTester::case0004(){}
+void SemanticModelTester::case0005(){}
+void SemanticModelTester::case0006(){}
+void SemanticModelTester::case0007(){}
+void SemanticModelTester::case0008(){}
+void SemanticModelTester::case0009(){}
+void SemanticModelTester::case0010(){}

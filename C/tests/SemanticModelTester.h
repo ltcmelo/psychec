@@ -18,31 +18,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_API_TEST_SUITE_H__
-#define PSYCHE_C_API_TEST_SUITE_H__
+#ifndef PSYCHE_C_SEMANTIC_MODEL_TESTER_H__
+#define PSYCHE_C_SEMANTIC_MODEL_TESTER_H__
 
 #include "Fwds.h"
-
-#include "tests/TestSuite.h"
+#include "TestSuite_Internals.h"
 #include "tests/Tester.h"
 
-#include <memory>
-#include <vector>
+#define TEST_SEMANTIC_MODEL(Function) TestFunction { &SemanticModelTester::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class APITestSuite : public TestSuite
+class SemanticModelTester final : public Tester
 {
 public:
-    virtual ~APITestSuite();
+    SemanticModelTester(TestSuite* suite) : Tester(suite) {}
 
-    virtual std::tuple<int, int> testAll() override;
-    virtual std::string description() const override;
-    virtual void printSummary() const override;
+    static const std::string Name;
+    virtual std::string name() const override { return Name; }
 
-private:
-    std::vector<std::unique_ptr<Tester>> testers_;
+    void testSemanticModel();
+
+    using TestFunction = std::pair<std::function<void(SemanticModelTester*)>, const char*>;
+
+    void case0001();
+    void case0002();
+    void case0003();
+    void case0004();
+    void case0005();
+    void case0006();
+    void case0007();
+    void case0008();
+    void case0009();
+    void case0010();
+
+    std::vector<TestFunction> tests_
+    {
+        TEST_SEMANTIC_MODEL(case0001),
+        TEST_SEMANTIC_MODEL(case0002),
+        TEST_SEMANTIC_MODEL(case0003),
+        TEST_SEMANTIC_MODEL(case0004),
+        TEST_SEMANTIC_MODEL(case0005),
+        TEST_SEMANTIC_MODEL(case0006),
+        TEST_SEMANTIC_MODEL(case0007),
+        TEST_SEMANTIC_MODEL(case0008),
+        TEST_SEMANTIC_MODEL(case0009),
+        TEST_SEMANTIC_MODEL(case0010),
+    };
 };
 
 } // C
