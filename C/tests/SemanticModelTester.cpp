@@ -91,6 +91,7 @@ void SemanticModelTester::case0001()
     auto sym = semaModel->declaredSymbol(identDecltor);
     PSY_EXPECT_TRUE(sym);
     PSY_EXPECT_TRUE(sym->kind() == SymbolKind::Value);
+    PSY_EXPECT_TRUE(sym->asValue());
     PSY_EXPECT_TRUE(sym->asValue()->valueKind() == ValueKind::Variable);
     PSY_EXPECT_TRUE(sym->asValue()->asVariable());
 }
