@@ -18,8 +18,7 @@ This is what makes Psyche-C unique:
 
 ## Library and API
 
-Psyche-C is a C++ library for the implementation of static analysis tools of C programs.  
-Psyche-C's native API is in C++; APIs for other languages are [on the way](https://github.com/ltcmelo/psychec/issues/112).
+Psyche-C is implemented as a library. Its native API is in C++; APIs for other languages are [on the way](https://github.com/ltcmelo/psychec/issues/112).
 
 ```cpp
 void analyse(const FileInfo& fi)
