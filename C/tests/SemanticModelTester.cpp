@@ -20,6 +20,15 @@
 
 #include "SemanticModelTester.h"
 
+#include "C/SyntaxTree.h"
+#include "C/syntax/SyntaxNodes.h"
+#include "C/compilation/SemanticModel.h"
+
+
+
+
+#include <type_traits>
+
 using namespace psy;
 using namespace C;
 
@@ -33,6 +42,22 @@ void SemanticModelTester::testSemanticModel()
 
 void SemanticModelTester::case0001()
 {
+    auto tree = SyntaxTree::parseText(SourceText("int x ;"),
+                                      TextPreprocessingState::Preprocessed,
+                                      ParseOptions(),
+                                      "<test>");
+
+    auto TU = tree->translationUnitRoot();
+    auto decl = TU->declarations()->value;
+
+    PSY_EXPECT_EQ_ENUM(decl->kind(), SyntaxKind::VariableAndOrFunctionDeclaration, SyntaxKind);
+
+    std::cout << "\n\ndeclaration : " << to_string(decl->kind()) << "\n\n";
+
+    auto compilation = Compilation::create(tree->filePath());
+    compilation->addSyntaxTrees({ tree.get() });
+
+    auto semaModel = compilation->semanticModel(tree.get());
 
 }
 

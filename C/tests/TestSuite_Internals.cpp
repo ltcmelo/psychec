@@ -126,15 +126,15 @@ bool InternalsTestSuite::checkErrorAndWarn(Expectation X)
 #endif
     }
 
-    PSYCHE_EXPECT_INT_EQ(X.numW_, W_cnt);
-    PSYCHE_EXPECT_INT_EQ(X.numE_, E_cnt);
+    PSY_EXPECT_EQ_INT(X.numW_, W_cnt);
+    PSY_EXPECT_EQ_INT(X.numE_, E_cnt);
 
     for (const auto& id : X.descriptorsW_) {
         if (!W_IDs.count(id)) {
             std::string msg = "WARNING " + id + " not found, got:";
             for (const auto& idP : W_IDs)
                 msg += "\n\t\t- " + idP;
-            PSYCHE_TEST_FAIL(msg);
+            PSY__internals__FAIL(msg);
         }
     }
 
@@ -143,7 +143,7 @@ bool InternalsTestSuite::checkErrorAndWarn(Expectation X)
             std::string msg = "ERROR " + id + " not found, got:";
             for (const auto& idP : E_IDs)
                 msg += "\n\t\t- " + idP;
-            PSYCHE_TEST_FAIL(msg);
+            PSY__internals__FAIL(msg);
         }
     }
 
@@ -214,17 +214,17 @@ void InternalsTestSuite::parse(std::string source,
 
     if (X.isAmbiguous_) {
         if (X.ambiguityText_.empty())
-            PSYCHE_EXPECT_STR_EQ(text + text, textP);
+            PSY_EXPECT_EQ_STR(text + text, textP);
         else {
             X.ambiguityText_.erase(
                         std::remove_if(X.ambiguityText_.begin(),
                                        X.ambiguityText_.end(), ::isspace),
                         X.ambiguityText_.end());
-            PSYCHE_EXPECT_STR_EQ(X.ambiguityText_, textP);
+            PSY_EXPECT_EQ_STR(X.ambiguityText_, textP);
         }
     }
     else
-        PSYCHE_EXPECT_STR_EQ(text, textP);
+        PSY_EXPECT_EQ_STR(text, textP);
 
     if (X.syntaxKinds_.empty())
         return;
@@ -235,7 +235,7 @@ void InternalsTestSuite::parse(std::string source,
 
     std::string namesP = ossTree.str();
     namesP.erase(std::remove_if(namesP.begin(), namesP.end(), ::isspace), namesP.end());
-    PSYCHE_EXPECT_STR_EQ(names, namesP);
+    PSY_EXPECT_EQ_STR(names, namesP);
 }
 
 namespace {
@@ -429,7 +429,7 @@ bool typeMatches(const TypeSymbol* tySym, const TypeSpecSummary& tySpec)
             }
 
             default:
-                PSYCHE_TEST_FAIL("unexpected");
+                PSY__internals__FAIL("unexpected");
                 return false;
         }
     }
@@ -539,7 +539,7 @@ bool symbolMatchesBinding(const std::unique_ptr<Symbol>& sym, const DeclSummary&
             return functionMatchesBinding(candSym->asFunction(), summary);
 
         default:
-            PSYCHE_TEST_FAIL("unknkown symbol kind");
+            PSY__internals__FAIL("unknkown symbol kind");
             return false;
     }
 
@@ -563,7 +563,7 @@ void InternalsTestSuite::bind(std::string text, Expectation X)
                     return sym->kind() == SymbolKind::Library;
                 });
     if (sym == nullptr)
-        PSYCHE_TEST_FAIL("link unit not found");
+        PSY__internals__FAIL("link unit not found");
 
     for (const auto& binding : X.bindings_) {
 #ifdef DEBUG_BINDING_SEARCH
@@ -577,7 +577,7 @@ void InternalsTestSuite::bind(std::string text, Expectation X)
         if (sym == nullptr) {
             auto s = "no symbol matches the expectation: "
                     + binding.name_ + " " + to_string(binding.symK_);
-            PSYCHE_TEST_FAIL(s);
+            PSY__internals__FAIL(s);
         }
 
 #ifdef DEBUG_BINDING_SEARCH
