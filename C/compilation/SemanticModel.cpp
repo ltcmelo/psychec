@@ -80,6 +80,11 @@ std::vector<const Symbol*> SemanticModel::declaredSymbols(
     return syms;
 }
 
+const Symbol* SemanticModel::declaredSymbol(const FunctionDefinitionSyntax* node) const
+{
+    return nullptr;
+}
+
 Symbol* SemanticModel::storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym)
 {
     auto& allSyms = P->compilation_->assembly()->symDEFs_;

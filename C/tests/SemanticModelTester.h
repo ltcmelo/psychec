@@ -58,6 +58,15 @@ public:
 
     using TestFunction = std::pair<std::function<void(SemanticModelTester*)>, const char*>;
 
+    /*
+        + 0000-0099 -> variable and/or function
+        + 0100-0199 -> function (definition)
+        + 0200-0279 ->
+        + 0280-0299 ->
+        + 0300-0399 ->
+
+     */
+
     void case0001();
     void case0002();
     void case0003();
@@ -68,6 +77,17 @@ public:
     void case0008();
     void case0009();
     void case0010();
+
+    void case0101();
+    void case0102();
+    void case0103();
+    void case0104();
+    void case0105();
+    void case0106();
+    void case0107();
+    void case0108();
+    void case0109();
+    void case0110();
 
     std::vector<TestFunction> tests_
     {
@@ -81,6 +101,17 @@ public:
         TEST_SEMANTIC_MODEL(case0008),
         TEST_SEMANTIC_MODEL(case0009),
         TEST_SEMANTIC_MODEL(case0010),
+
+        TEST_SEMANTIC_MODEL(case0101),
+        TEST_SEMANTIC_MODEL(case0102),
+        TEST_SEMANTIC_MODEL(case0103),
+        TEST_SEMANTIC_MODEL(case0104),
+        TEST_SEMANTIC_MODEL(case0105),
+        TEST_SEMANTIC_MODEL(case0106),
+        TEST_SEMANTIC_MODEL(case0107),
+        TEST_SEMANTIC_MODEL(case0108),
+        TEST_SEMANTIC_MODEL(case0109),
+        TEST_SEMANTIC_MODEL(case0110),
     };
 };
 

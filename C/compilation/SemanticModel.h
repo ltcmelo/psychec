@@ -56,7 +56,13 @@ public:
     const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
     //!@}
 
+    //!@{
+    /**
+     * The Symbol(s) declared by the given DeclarationSyntax \p node.
+     */
     std::vector<const Symbol*> declaredSymbols(const VariableAndOrFunctionDeclarationSyntax* node) const;
+    const Symbol* declaredSymbol(const FunctionDefinitionSyntax* node) const;
+    //!@}
 
 PSY_INTERNAL:
     PSY_GRANT_ACCESS(Binder);

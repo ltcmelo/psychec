@@ -180,3 +180,36 @@ void SemanticModelTester::case0007(){}
 void SemanticModelTester::case0008(){}
 void SemanticModelTester::case0009(){}
 void SemanticModelTester::case0010(){}
+
+void SemanticModelTester::case0101()
+{
+    auto [funDef, semaModel] =
+            declAndSemaModel<FunctionDefinitionSyntax>("void x () { }");
+
+    auto decltor = funDef->declarator();
+    PSY_EXPECT_TRUE(decltor);
+
+    auto arrOrFunDecltor = decltor->asArrayOrFunctionDeclarator();
+    PSY_EXPECT_TRUE(arrOrFunDecltor);
+    PSY_EXPECT_TRUE(arrOrFunDecltor->suffix()->kind() == SyntaxKind::ParameterSuffix);
+    PSY_EXPECT_TRUE(arrOrFunDecltor->suffix()->asParameterSuffix());
+
+    auto sym = semaModel->declaredSymbol(arrOrFunDecltor);
+    PSY_EXPECT_TRUE(sym);
+    PSY_EXPECT_TRUE(sym->kind() == SymbolKind::Function);
+    PSY_EXPECT_TRUE(sym->asFunction());
+
+    PSY_EXPECT_EQ_STR(sym->asFunction()->name()->text(), "x");
+    PSY_EXPECT_TRUE(sym->asFunction()->type()->typeKind() == TypeKind::Function);
+    PSY_EXPECT_TRUE(sym->asFunction()->type()->asFunctionType());
+}
+
+void SemanticModelTester::case0102(){}
+void SemanticModelTester::case0103(){}
+void SemanticModelTester::case0104(){}
+void SemanticModelTester::case0105(){}
+void SemanticModelTester::case0106(){}
+void SemanticModelTester::case0107(){}
+void SemanticModelTester::case0108(){}
+void SemanticModelTester::case0109(){}
+void SemanticModelTester::case0110(){}
