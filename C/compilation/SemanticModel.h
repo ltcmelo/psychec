@@ -53,17 +53,16 @@ public:
 
     //!@{
     /**
-     * The Symbol declared by the given by DeclaratorSyntax \p node.
+     * The Symbol declared by the given by SyntaxNode \p node.
      */
     const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
-    //!@}
+    const Symbol* declaredSymbol(const FunctionDefinitionSyntax* node) const;
+    const Symbol* declaredSymbol(const ParameterDeclarationSyntax* node) const;
 
-    //!@{
     /**
      * The Symbol(s) declared by the given DeclarationSyntax \p node.
      */
     std::vector<const Symbol*> declaredSymbols(const VariableAndOrFunctionDeclarationSyntax* node) const;
-    const Symbol* declaredSymbol(const FunctionDefinitionSyntax* node) const;
     //!@}
 
 PSY_INTERNAL:
