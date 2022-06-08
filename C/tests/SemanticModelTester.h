@@ -61,9 +61,9 @@ public:
     /*
         + 0000-0099 -> variable and/or function
         + 0100-0199 -> function (definition)
-        + 0200-0279 ->
-        + 0280-0299 ->
-        + 0300-0399 ->
+        + 0200-0299 -> parameter
+        + 0300-0399 -> enumeration and enumerators
+        + 0400-0499 -> struct/union and fields
 
      */
 
@@ -89,6 +89,69 @@ public:
     void case0109();
     void case0110();
 
+    void case0201();
+    void case0202();
+    void case0203();
+    void case0204();
+    void case0205();
+    void case0206();
+    void case0207();
+    void case0208();
+    void case0209();
+    void case0210();
+    void case0211();
+    void case0212();
+    void case0213();
+    void case0214();
+    void case0215();
+    void case0216();
+    void case0217();
+    void case0218();
+    void case0219();
+    void case0220();
+
+    void case0301();
+    void case0302();
+    void case0303();
+    void case0304();
+    void case0305();
+    void case0306();
+    void case0307();
+    void case0308();
+    void case0309();
+    void case0310();
+    void case0311();
+    void case0312();
+    void case0313();
+    void case0314();
+    void case0315();
+    void case0316();
+    void case0317();
+    void case0318();
+    void case0319();
+    void case0320();
+
+    void case0401();
+    void case0402();
+    void case0403();
+    void case0404();
+    void case0405();
+    void case0406();
+    void case0407();
+    void case0408();
+    void case0409();
+    void case0410();
+    void case0411();
+    void case0412();
+    void case0413();
+    void case0414();
+    void case0415();
+    void case0416();
+    void case0417();
+    void case0418();
+    void case0419();
+    void case0420();
+
     std::vector<TestFunction> tests_
     {
         TEST_SEMANTIC_MODEL(case0001),
@@ -112,6 +175,69 @@ public:
         TEST_SEMANTIC_MODEL(case0108),
         TEST_SEMANTIC_MODEL(case0109),
         TEST_SEMANTIC_MODEL(case0110),
+
+        TEST_SEMANTIC_MODEL(case0201),
+        TEST_SEMANTIC_MODEL(case0202),
+        TEST_SEMANTIC_MODEL(case0203),
+        TEST_SEMANTIC_MODEL(case0204),
+        TEST_SEMANTIC_MODEL(case0205),
+        TEST_SEMANTIC_MODEL(case0206),
+        TEST_SEMANTIC_MODEL(case0207),
+        TEST_SEMANTIC_MODEL(case0208),
+        TEST_SEMANTIC_MODEL(case0209),
+        TEST_SEMANTIC_MODEL(case0210),
+        TEST_SEMANTIC_MODEL(case0211),
+        TEST_SEMANTIC_MODEL(case0212),
+        TEST_SEMANTIC_MODEL(case0213),
+        TEST_SEMANTIC_MODEL(case0214),
+        TEST_SEMANTIC_MODEL(case0215),
+        TEST_SEMANTIC_MODEL(case0216),
+        TEST_SEMANTIC_MODEL(case0217),
+        TEST_SEMANTIC_MODEL(case0218),
+        TEST_SEMANTIC_MODEL(case0219),
+        TEST_SEMANTIC_MODEL(case0220),
+
+        TEST_SEMANTIC_MODEL(case0301),
+        TEST_SEMANTIC_MODEL(case0302),
+        TEST_SEMANTIC_MODEL(case0303),
+        TEST_SEMANTIC_MODEL(case0304),
+        TEST_SEMANTIC_MODEL(case0305),
+        TEST_SEMANTIC_MODEL(case0306),
+        TEST_SEMANTIC_MODEL(case0307),
+        TEST_SEMANTIC_MODEL(case0308),
+        TEST_SEMANTIC_MODEL(case0309),
+        TEST_SEMANTIC_MODEL(case0310),
+        TEST_SEMANTIC_MODEL(case0311),
+        TEST_SEMANTIC_MODEL(case0312),
+        TEST_SEMANTIC_MODEL(case0313),
+        TEST_SEMANTIC_MODEL(case0314),
+        TEST_SEMANTIC_MODEL(case0315),
+        TEST_SEMANTIC_MODEL(case0316),
+        TEST_SEMANTIC_MODEL(case0317),
+        TEST_SEMANTIC_MODEL(case0318),
+        TEST_SEMANTIC_MODEL(case0319),
+        TEST_SEMANTIC_MODEL(case0320),
+
+        TEST_SEMANTIC_MODEL(case0401),
+        TEST_SEMANTIC_MODEL(case0402),
+        TEST_SEMANTIC_MODEL(case0403),
+        TEST_SEMANTIC_MODEL(case0404),
+        TEST_SEMANTIC_MODEL(case0405),
+        TEST_SEMANTIC_MODEL(case0406),
+        TEST_SEMANTIC_MODEL(case0407),
+        TEST_SEMANTIC_MODEL(case0408),
+        TEST_SEMANTIC_MODEL(case0409),
+        TEST_SEMANTIC_MODEL(case0410),
+        TEST_SEMANTIC_MODEL(case0411),
+        TEST_SEMANTIC_MODEL(case0412),
+        TEST_SEMANTIC_MODEL(case0413),
+        TEST_SEMANTIC_MODEL(case0414),
+        TEST_SEMANTIC_MODEL(case0415),
+        TEST_SEMANTIC_MODEL(case0416),
+        TEST_SEMANTIC_MODEL(case0417),
+        TEST_SEMANTIC_MODEL(case0418),
+        TEST_SEMANTIC_MODEL(case0419),
+        TEST_SEMANTIC_MODEL(case0420),
     };
 };
 
