@@ -81,7 +81,12 @@ std::vector<const Symbol*> SemanticModel::declaredSymbols(
 
 const Symbol* SemanticModel::declaredSymbol(const FunctionDefinitionSyntax* node) const
 {
-    return nullptr;
+    return declaredSymbol(node->declarator());
+}
+
+const Symbol* SemanticModel::declaredSymbol(const ParameterDeclarationSyntax* node) const
+{
+    return declaredSymbol(node->declarator());
 }
 
 Symbol* SemanticModel::storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym)
