@@ -56,8 +56,8 @@ public:
      * The Symbol declared by the given by SyntaxNode \p node.
      */
     const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
-    const Symbol* declaredSymbol(const FunctionDefinitionSyntax* node) const;
-    const Symbol* declaredSymbol(const ParameterDeclarationSyntax* node) const;
+    const FunctionSymbol* declaredSymbol(const FunctionDefinitionSyntax* node) const;
+    const ParameterSymbol* declaredSymbol(const ParameterDeclarationSyntax* node) const;
 
     /**
      * The Symbol(s) declared by the given DeclarationSyntax \p node.
