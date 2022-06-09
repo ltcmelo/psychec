@@ -53,16 +53,27 @@ public:
 
     //!@{
     /**
-     * The Symbol declared by the given by SyntaxNode \p node.
+     * The Symbol declared by the given TranslationUnitSyntax \p node.
      */
-    const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
+    const LibrarySymbol* declaredSymbol(const TranslationUnitSyntax* node) const;
+
+    /**
+     * The Symbol declared by the given DeclarationSyntax \p node.
+     */
     const FunctionSymbol* declaredSymbol(const FunctionDefinitionSyntax* node) const;
     const ParameterSymbol* declaredSymbol(const ParameterDeclarationSyntax* node) const;
+    const EnumeratorSymbol* declaredSymbol(const EnumMemberDeclarationSyntax* node) const;
 
     /**
      * The Symbol(s) declared by the given DeclarationSyntax \p node.
      */
     std::vector<const Symbol*> declaredSymbols(const VariableAndOrFunctionDeclarationSyntax* node) const;
+    std::vector<const FieldSymbol*> declaredSymbols(const FieldDeclarationSyntax* node) const;
+
+    /**
+     * The Symbol declared by the given DeclaratorSyntax \p node.
+     */
+    const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
     //!@}
 
 PSY_INTERNAL:

@@ -319,7 +319,12 @@ void SemanticModelTester::case0218(){}
 void SemanticModelTester::case0219(){}
 void SemanticModelTester::case0220(){}
 
-void SemanticModelTester::case0301(){}
+void SemanticModelTester::case0301()
+{
+    auto [tyDecl, semaModel] =
+            declAndSemaModel<StructOrUnionDeclarationSyntax>("struct x { } ;");
+
+}
 void SemanticModelTester::case0302(){}
 void SemanticModelTester::case0303(){}
 void SemanticModelTester::case0304(){}
@@ -340,7 +345,28 @@ void SemanticModelTester::case0318(){}
 void SemanticModelTester::case0319(){}
 void SemanticModelTester::case0320(){}
 
-void SemanticModelTester::case0401(){}
+void SemanticModelTester::case0401()
+{
+    auto [tyDecl, semaModel] =
+            declAndSemaModel<StructOrUnionDeclarationSyntax>("struct x { int y ; } ;");
+
+    auto tySpec = tyDecl->typeSpecifier();
+
+    auto fldDecl0 = tySpec->declarations()->value->asFieldDeclaration();
+    std::vector<const FieldSymbol*> fldSyms = semaModel->declaredSymbols(fldDecl0);
+    PSY_EXPECT_EQ_INT(fldSyms.size(), 1);
+
+    const FieldSymbol* fldSym0_0 = fldSyms[0];
+    PSY_EXPECT_TRUE(fldSym0_0);
+    PSY_EXPECT_TRUE(fldSym0_0->kind() == SymbolKind::Value);
+    PSY_EXPECT_TRUE(fldSym0_0->asValue());
+    PSY_EXPECT_TRUE(fldSym0_0->asValue()->valueKind() == ValueKind::Field);
+    PSY_EXPECT_TRUE(fldSym0_0->asValue()->asField());
+    PSY_EXPECT_EQ_STR(fldSym0_0->asValue()->name()->text(), "y");
+    PSY_EXPECT_TRUE(fldSym0_0->asValue()->type()->typeKind() == TypeKind::Named);
+    PSY_EXPECT_EQ_STR(fldSym0_0->asValue()->type()->asNamedType()->name()->text(), "int");
+}
+
 void SemanticModelTester::case0402(){}
 void SemanticModelTester::case0403(){}
 void SemanticModelTester::case0404(){}

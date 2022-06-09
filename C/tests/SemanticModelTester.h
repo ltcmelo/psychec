@@ -62,8 +62,8 @@ public:
         + 0000-0099 -> variable and/or function
         + 0100-0199 -> function (definition)
         + 0200-0299 -> parameter
-        + 0300-0399 -> enumeration and enumerators
-        + 0400-0499 -> struct/union and fields
+        + 0300-0399 -> struct/union and enumeration
+        + 0400-0499 -> field and enumerator
 
      */
 
