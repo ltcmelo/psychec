@@ -59,7 +59,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
     TagSymbolName::TagChoice tagChoice;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:
-            tagChoice = TagSymbolName::TagChoice::Structure;
+            tagChoice = TagSymbolName::TagChoice::Struct;
             break;
 
         case UnionTypeSpecifier:
@@ -82,7 +82,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
 SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax* node)
 {
     makeSymAndPushIt<NamedTypeSymbol>(node,
-                                      TagSymbolName::TagChoice::Enumeration,
+                                      TagSymbolName::TagChoice::Enum,
                                       node->typeSpecifier()->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_AtInternalDeclarations_COMMON(
@@ -225,7 +225,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
         TagSymbolName::TagChoice tagChoice;
         switch (node->kind()) {
             case StructTypeSpecifier:
-                tagChoice = TagSymbolName::TagChoice::Structure;
+                tagChoice = TagSymbolName::TagChoice::Struct;
                 break;
 
             case UnionTypeSpecifier:
@@ -233,7 +233,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 break;
 
             case EnumTypeSpecifier:
-                tagChoice = TagSymbolName::TagChoice::Enumeration;
+                tagChoice = TagSymbolName::TagChoice::Enum;
                 break;
 
             default:
@@ -270,7 +270,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
     TagSymbolName::TagChoice tagChoice;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:
-            tagChoice = TagSymbolName::TagChoice::Structure;
+            tagChoice = TagSymbolName::TagChoice::Struct;
             break;
 
         case UnionTypeSpecifier:
@@ -278,7 +278,7 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
             break;
 
         case EnumTypeSpecifier:
-            tagChoice = TagSymbolName::TagChoice::Enumeration;
+            tagChoice = TagSymbolName::TagChoice::Enum;
             break;
 
         default:

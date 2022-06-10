@@ -79,11 +79,11 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                         tree,
                         scope,
                         containingSym,
-                        tagChoice == TagSymbolName::TagChoice::Structure
+                        tagChoice == TagSymbolName::TagChoice::Struct
                             ? NamedTypeKind::Structure
                             : tagChoice == TagSymbolName::TagChoice::Union
                                 ? NamedTypeKind::Union
-                                : tagChoice == TagSymbolName::TagChoice::Enumeration
+                                : tagChoice == TagSymbolName::TagChoice::Enum
                                     ? NamedTypeKind::Enumeration
                                     : NamedTypeKind::UNSPECIFIED))
 {

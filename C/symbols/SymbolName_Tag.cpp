@@ -39,13 +39,13 @@ std::string TagSymbolName::text() const
 {
     std::string prefix;
     switch (tagChoice_) {
-        case TagChoice::Structure:
+        case TagChoice::Struct:
             prefix = "struct ";
             break;
         case TagChoice::Union:
             prefix = "union ";
             break;
-        case TagChoice::Enumeration:
+        case TagChoice::Enum:
             prefix = "enum ";
             break;
         default:
