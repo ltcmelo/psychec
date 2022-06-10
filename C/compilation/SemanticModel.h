@@ -85,6 +85,10 @@ PSY_INTERNAL:
     Symbol* storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym);
     Symbol* storeUsedSym(std::unique_ptr<Symbol> sym);
 
+    template <class SymCastT, class SymOriT> const SymCastT* validateSym(
+            const SymOriT* sym,
+            const SymCastT* (SymOriT::*cast)() const) const;
+
 private:
     // Unavailable
     SemanticModel(const SemanticModel&) = delete;
