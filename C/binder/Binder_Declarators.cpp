@@ -268,13 +268,13 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DeclT* node)
                                             && sym->asType()->asNamedType()->name()->asTagSymbolName(),
                                        return Action::Quit);
 
-                            switch (sym->asType()->asNamedType()->name()->asTagSymbolName()->kind()) {
-                                case TagSymbolNameKind::Union:
-                                case TagSymbolNameKind::Structure:
+                            switch (sym->asType()->asNamedType()->name()->asTagSymbolName()->tagChoice()) {
+                                case TagSymbolName::TagChoice::Union:
+                                case TagSymbolName::TagChoice::Structure:
                                     makeSymAndPushIt<FieldSymbol>(node);
                                     break;
 
-                                case TagSymbolNameKind::Enumeration:
+                                case TagSymbolName::TagChoice::Enumeration:
                                     makeSymAndPushIt<EnumeratorSymbol>(node);
                                     break;
 

@@ -498,9 +498,9 @@ bool typeMatchesBinding(const TypeSymbol* tySym, const DeclSummary& decl)
     if (namedTySym->name()->kind() != decl.nameK_)
         return REJECT_CANDIDATE(tySym, "name kind mismatch");
 
-    if (namedTySym->name()->kind() == SymbolNameKind::Tagged) {
-        if (namedTySym->name()->asTagSymbolName()->kind() != decl.tagK_)
-            return REJECT_CANDIDATE(tySym, "tag kind mismatch");
+    if (namedTySym->name()->kind() == SymbolNameKind::Tag) {
+        if (namedTySym->name()->asTagSymbolName()->tagChoice() != decl.tagChoice_)
+            return REJECT_CANDIDATE(tySym, "tag choice mismatch");
     }
 
     if (namedTySym->name()->text() != decl.name_)

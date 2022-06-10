@@ -39,7 +39,7 @@ enum class SymbolNameKind : std::uint8_t
     UNSPECIFIED = 0,
     Empty,
     Plain,
-    Tagged
+    Tag
 };
 
 inline std::string PSY_C_API to_string(SymbolNameKind symNameK)
@@ -49,33 +49,11 @@ inline std::string PSY_C_API to_string(SymbolNameKind symNameK)
             return "Empty";
         case SymbolNameKind::Plain:
             return "Plain";
-        case SymbolNameKind::Tagged:
-            return "Tagged";
+        case SymbolNameKind::Tag:
+            return "Tag";
         default:
             PSY_ESCAPE_VIA_RETURN("");
             return "<INVALID or UNSPECIFIED SymbolNameKind>";
-    }
-}
-
-enum class TagSymbolNameKind : std::uint8_t
-{
-    UNSPECIFIED = 0,
-    Structure,
-    Union,
-    Enumeration
-};
-
-inline std::string PSY_C_API to_string(TagSymbolNameKind tagK)
-{
-    switch (tagK) {
-        case TagSymbolNameKind::Structure:
-            return "Structure";
-        case TagSymbolNameKind::Union:
-            return "Union";
-        case TagSymbolNameKind::Enumeration:
-            return "Enumeration";
-        default:
-            PSY_ESCAPE_VIA_RETURN("<INVALID or UNSPECIFIED TagSymbolNameKind>");
     }
 }
 

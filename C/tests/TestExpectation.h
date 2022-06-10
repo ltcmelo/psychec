@@ -25,6 +25,7 @@
 #include "binder/NameSpaceKind.h"
 #include "binder/Scope.h"
 #include "symbols/SymbolNameKind.h"
+#include "symbols/SymbolName_Tag.h"
 #include "symbols/SymbolKind.h"
 #include "symbols/ValueKind.h"
 #include "symbols/TypeKind.h"
@@ -105,7 +106,7 @@ struct DeclSummary
     DeclSummary& withScopeKind(ScopeKind scopeK);
     DeclSummary& withNameSpaceKind(NameSpaceKind nsK);
     DeclSummary& withNameKind(SymbolNameKind nameK);
-    DeclSummary& withTagKind(TagSymbolNameKind tagK);
+    DeclSummary& withTagChoice(TagSymbolName::TagChoice tagChoice);
 
     std::string name_;
     SymbolKind symK_;
@@ -115,7 +116,7 @@ struct DeclSummary
     ScopeKind scopeK_;
     NameSpaceKind nsK_;
     SymbolNameKind nameK_;
-    TagSymbolNameKind tagK_;
+    TagSymbolName::TagChoice tagChoice_;
 
     TypeSpecSummary TySpec;
 };

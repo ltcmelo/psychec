@@ -38,7 +38,7 @@ SymbolNameKind SymbolName::kind() const
     if (asPlainSymbolName())
         return SymbolNameKind::Plain;
     if (asTagSymbolName())
-        return SymbolNameKind::Tagged;
+        return SymbolNameKind::Tag;
     if (asEmptySymbolName())
         return SymbolNameKind::Empty;
 
@@ -53,7 +53,7 @@ std::string to_string(const SymbolName& name)
     switch (name.kind()) {
         case SymbolNameKind::Plain:
             return to_string(static_cast<const PlainSymbolName&>(name));
-        case SymbolNameKind::Tagged:
+        case SymbolNameKind::Tag:
             return to_string(static_cast<const TagSymbolName&>(name));
         case SymbolNameKind::Empty:
             return to_string(static_cast<const EmptySymbolName&>(name));
