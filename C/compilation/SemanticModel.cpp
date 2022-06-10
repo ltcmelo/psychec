@@ -66,7 +66,7 @@ const Compilation* SemanticModel::compilation() const
 }
 
 template <class SymCastT, class SymOriT>
-const SymCastT* SemanticModel::validateSym(const SymOriT* symOri, const SymCastT* (SymOriT::*cast)() const) const
+const SymCastT* SemanticModel::validateSymCast(const SymOriT* symOri, const SymCastT* (SymOriT::*cast)() const) const
 {
     auto symCast = ((symOri)->*(cast))();
     if (!symCast) {
@@ -85,7 +85,7 @@ const LibrarySymbol* SemanticModel::declaredSymbol(const TranslationUnitSyntax* 
         return nullptr;
     }
 
-    auto libSym = validateSym(it->second, &Symbol::asLibrary);
+    auto libSym = validateSymCast(it->second, &Symbol::asLibrary);
     if (!libSym)
         return nullptr;
 
@@ -98,7 +98,7 @@ const FunctionSymbol* SemanticModel::declaredSymbol(const FunctionDefinitionSynt
     if (!sym)
         return nullptr;
 
-    auto funcSym = validateSym(sym, &Symbol::asFunction);
+    auto funcSym = validateSymCast(sym, &Symbol::asFunction);
     if (!funcSym)
         return nullptr;
 
@@ -111,11 +111,11 @@ const ParameterSymbol* SemanticModel::declaredSymbol(const ParameterDeclarationS
     if (!sym)
         return nullptr;
 
-    auto valSym = validateSym(sym, &Symbol::asValue);
+    auto valSym = validateSymCast(sym, &Symbol::asValue);
     if (!valSym)
         return nullptr;
 
-    auto parmSym = validateSym(valSym, &ValueSymbol::asParameter);
+    auto parmSym = validateSymCast(valSym, &ValueSymbol::asParameter);
     if (!parmSym)
         return nullptr;
 
@@ -135,11 +135,11 @@ std::vector<const FieldSymbol*> SemanticModel::declaredSymbols(const FieldDeclar
         if (!sym)
             continue;
 
-        auto valSym = validateSym(sym, &Symbol::asValue);
+        auto valSym = validateSymCast(sym, &Symbol::asValue);
         if (!valSym)
             continue;
 
-        auto fldSym = validateSym(valSym, &ValueSymbol::asField);
+        auto fldSym = validateSymCast(valSym, &ValueSymbol::asField);
         if (!fldSym)
             continue;
 

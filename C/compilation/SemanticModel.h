@@ -85,7 +85,7 @@ PSY_INTERNAL:
     Symbol* storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym);
     Symbol* storeUsedSym(std::unique_ptr<Symbol> sym);
 
-    template <class SymCastT, class SymOriT> const SymCastT* validateSym(
+    template <class SymCastT, class SymOriT> const SymCastT* validateSymCast(
             const SymOriT* sym,
             const SymCastT* (SymOriT::*cast)() const) const;
 
