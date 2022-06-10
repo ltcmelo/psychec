@@ -87,13 +87,11 @@ void SemanticModelTester::case0001()
 
     auto sym = semaModel->declaredSymbol(identDecltor);
     PSY_EXPECT_TRUE(sym);
-    PSY_EXPECT_TRUE(sym->kind() == SymbolKind::Value);
-    PSY_EXPECT_TRUE(sym->asValue());
-    PSY_EXPECT_TRUE(sym->asValue()->valueKind() == ValueKind::Variable);
-    PSY_EXPECT_TRUE(sym->asValue()->asVariable());
-    PSY_EXPECT_EQ_STR(sym->asValue()->asVariable()->name()->text(), "x");
-    PSY_EXPECT_TRUE(sym->asValue()->asVariable()->type()->typeKind() == TypeKind::Named);
-    PSY_EXPECT_EQ_STR(sym->asValue()->asVariable()->type()->asNamedType()->name()->text(), "int");
+    PSY_EXPECT_EQ_ENU(sym->kind(), SymbolKind::Value, SymbolKind);
+    PSY_EXPECT_EQ_ENU(sym->asValue()->valueKind(), ValueKind::Variable, ValueKind);
+    const VariableSymbol* varsym = sym->asValue()->asVariable();
+    PSY_EXPECT_EQ_STR(varsym->name()->text(), "x");
+    PSY_EXPECT_EQ_ENU(varsym->type()->typeKind(), TypeKind::Named, TypeKind);
 }
 
 void SemanticModelTester::case0002()
@@ -106,13 +104,11 @@ void SemanticModelTester::case0002()
 
     auto sym = semaModel->declaredSymbol(parenDecltor);
     PSY_EXPECT_TRUE(sym);
-    PSY_EXPECT_TRUE(sym->kind() == SymbolKind::Value);
-    PSY_EXPECT_TRUE(sym->asValue());
-    PSY_EXPECT_TRUE(sym->asValue()->valueKind() == ValueKind::Variable);
-    PSY_EXPECT_TRUE(sym->asValue()->asVariable());
-    PSY_EXPECT_EQ_STR(sym->asValue()->asVariable()->name()->text(), "x");
-    PSY_EXPECT_TRUE(sym->asValue()->asVariable()->type()->typeKind() == TypeKind::Named);
-    PSY_EXPECT_EQ_STR(sym->asValue()->asVariable()->type()->asNamedType()->name()->text(), "int");
+    PSY_EXPECT_EQ_ENU(sym->kind(), SymbolKind::Value, SymbolKind);
+    PSY_EXPECT_EQ_ENU(sym->asValue()->valueKind(), ValueKind::Variable, ValueKind);
+    const VariableSymbol* varsym = sym->asValue()->asVariable();
+    PSY_EXPECT_EQ_STR(varsym->name()->text(), "x");
+    PSY_EXPECT_EQ_ENU(varsym->type()->typeKind(), TypeKind::Named, TypeKind);
 }
 
 void SemanticModelTester::case0003()
@@ -125,13 +121,11 @@ void SemanticModelTester::case0003()
 
     auto sym1 = syms[0];
     PSY_EXPECT_TRUE(sym1);
-    PSY_EXPECT_TRUE(sym1->kind() == SymbolKind::Value);
-    PSY_EXPECT_TRUE(sym1->asValue());
-    PSY_EXPECT_TRUE(sym1->asValue()->valueKind() == ValueKind::Variable);
-    PSY_EXPECT_TRUE(sym1->asValue()->asVariable());
-    PSY_EXPECT_EQ_STR(sym1->asValue()->name()->text(), "x");
-    PSY_EXPECT_TRUE(sym1->asValue()->type()->typeKind() == TypeKind::Named);
-    PSY_EXPECT_EQ_STR(sym1->asValue()->type()->asNamedType()->name()->text(), "int");
+    PSY_EXPECT_EQ_ENU(sym1->kind(), SymbolKind::Value, SymbolKind);
+    PSY_EXPECT_EQ_ENU(sym1->asValue()->valueKind(), ValueKind::Variable, ValueKind);
+    const VariableSymbol* varSym1 = sym1->asValue()->asVariable();
+    PSY_EXPECT_EQ_STR(varSym1->name()->text(), "x");
+    PSY_EXPECT_EQ_ENU(varSym1->type()->typeKind(), TypeKind::Named, TypeKind);
 }
 
 void SemanticModelTester::case0004()
@@ -144,23 +138,19 @@ void SemanticModelTester::case0004()
 
     auto sym1 = syms[0];
     PSY_EXPECT_TRUE(sym1);
-    PSY_EXPECT_TRUE(sym1->kind() == SymbolKind::Value);
-    PSY_EXPECT_TRUE(sym1->asValue());
-    PSY_EXPECT_TRUE(sym1->asValue()->valueKind() == ValueKind::Variable);
-    PSY_EXPECT_TRUE(sym1->asValue()->asVariable());
-    PSY_EXPECT_EQ_STR(sym1->asValue()->name()->text(), "y");
-    PSY_EXPECT_TRUE(sym1->asValue()->type()->typeKind() == TypeKind::Named);
-    PSY_EXPECT_EQ_STR(sym1->asValue()->type()->asNamedType()->name()->text(), "x");
+    PSY_EXPECT_EQ_ENU(sym1->kind(), SymbolKind::Value, SymbolKind);
+    PSY_EXPECT_EQ_ENU(sym1->asValue()->valueKind(), ValueKind::Variable, ValueKind);
+    const VariableSymbol* varSym1 = sym1->asValue()->asVariable();
+    PSY_EXPECT_EQ_STR(varSym1->name()->text(), "y");
+    PSY_EXPECT_EQ_ENU(varSym1->type()->typeKind(), TypeKind::Named, TypeKind);
 
     auto sym2 = syms[1];
     PSY_EXPECT_TRUE(sym2);
-    PSY_EXPECT_TRUE(sym2->kind() == SymbolKind::Value);
-    PSY_EXPECT_TRUE(sym2->asValue());
-    PSY_EXPECT_TRUE(sym2->asValue()->valueKind() == ValueKind::Variable);
-    PSY_EXPECT_TRUE(sym2->asValue()->asVariable());
-    PSY_EXPECT_EQ_STR(sym2->asValue()->name()->text(), "z");
-    PSY_EXPECT_TRUE(sym2->asValue()->type()->typeKind() == TypeKind::Named);
-    PSY_EXPECT_EQ_STR(sym2->asValue()->type()->asNamedType()->name()->text(), "x");
+    PSY_EXPECT_EQ_ENU(sym2->kind(), SymbolKind::Value, SymbolKind);
+    PSY_EXPECT_EQ_ENU(sym2->asValue()->valueKind(), ValueKind::Variable, ValueKind);
+    const VariableSymbol* varSym2 = sym2->asValue()->asVariable();
+    PSY_EXPECT_EQ_STR(varSym2->name()->text(), "z");
+    PSY_EXPECT_EQ_ENU(varSym2->type()->typeKind(), TypeKind::Named, TypeKind);
 }
 
 void SemanticModelTester::case0005(){}
