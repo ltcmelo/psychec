@@ -29,6 +29,7 @@
 #include "symbols/Symbol_ALL.h"
 
 #include "../common/infra/Assertions.h"
+#include "../common/infra/Escape.h"
 
 #include <iostream>
 #include <unordered_map>
@@ -40,9 +41,11 @@ using namespace C;
 struct SemanticModel::SemanticModelImpl
 {
     SemanticModelImpl(Compilation* compilation)
-        : compilation_(compilation)
+        : expectValidSyms_(true)
+        , compilation_(compilation)
     {}
 
+    bool expectValidSyms_;
     Compilation* compilation_;
     std::unordered_map<const SyntaxNode*, Symbol*> declSyms_;
 };
@@ -62,31 +65,137 @@ const Compilation* SemanticModel::compilation() const
     return P->compilation_;
 }
 
-const Symbol* SemanticModel::declaredSymbol(const DeclaratorSyntax* node) const
+template <class SymCastT, class SymOriT>
+const SymCastT* SemanticModel::castSym(const SymOriT* symOri,
+                                       const SymCastT* (SymOriT::*cast)() const) const
 {
-    auto node_P = SyntaxUtilities::strippedDeclaratorOrSelf(node);
-    auto node_PP = SyntaxUtilities::innermostDeclaratorOrSelf(node_P);
-    auto it = P->declSyms_.find(node_PP);
-    return it != P->declSyms_.end() ? it->second : nullptr;
+    auto symCast = ((symOri)->*(cast))();
+    if (!symCast) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    return symCast;
+}
+
+const LibrarySymbol* SemanticModel::declaredSymbol(const TranslationUnitSyntax* node) const
+{
+    auto it = P->declSyms_.find(node);
+    if (it == P->declSyms_.end()) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    auto libSym = castSym(it->second, &Symbol::asLibrary);
+    if (!libSym)
+        return nullptr;
+
+    return libSym;
+}
+
+const FunctionSymbol* SemanticModel::declaredSymbol(const FunctionDefinitionSyntax* node) const
+{
+    auto sym = declaredSymbol(node->declarator());
+    if (!sym)
+        return nullptr;
+
+    auto funcSym = castSym(sym, &Symbol::asFunction);
+    if (!funcSym)
+        return nullptr;
+
+    return funcSym;
+}
+
+const ParameterSymbol* SemanticModel::declaredSymbol(const ParameterDeclarationSyntax* node) const
+{
+    auto sym = declaredSymbol(node->declarator());
+    if (!sym)
+        return nullptr;
+
+    auto valSym = castSym(sym, &Symbol::asValue);
+    if (!valSym)
+        return nullptr;
+
+    auto parmSym = castSym(valSym, &ValueSymbol::asParameter);
+    if (!parmSym)
+        return nullptr;
+
+    return parmSym;
+}
+
+const NamedTypeSymbol* SemanticModel::declaredSymbol(const TypeDeclarationSyntax* node) const
+{
+    auto it = P->declSyms_.find(node);
+    if (it == P->declSyms_.end()) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    auto tySym = castSym(it->second, &Symbol::asType);
+    if (!tySym)
+        return nullptr;
+
+    auto namedTySym = castSym(tySym, &TypeSymbol::asNamedType);
+    if (!namedTySym)
+        return nullptr;
+
+    return namedTySym;
+}
+
+const EnumeratorSymbol* SemanticModel::declaredSymbol(const EnumMemberDeclarationSyntax* node) const
+{
+    return nullptr;
+}
+
+std::vector<const FieldSymbol*> SemanticModel::declaredSymbols(const FieldDeclarationSyntax* node) const
+{
+    std::vector<const FieldSymbol*> fldSyms;
+    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
+        auto sym = declaredSymbol(decltorIt->value);
+        if (!sym)
+            continue;
+
+        auto valSym = castSym(sym, &Symbol::asValue);
+        if (!valSym)
+            continue;
+
+        auto fldSym = castSym(valSym, &ValueSymbol::asField);
+        if (!fldSym)
+            continue;
+
+        fldSyms.push_back(fldSym);
+    }
+    return fldSyms;
 }
 
 std::vector<const Symbol*> SemanticModel::declaredSymbols(
         const VariableAndOrFunctionDeclarationSyntax* node) const
 {
     std::vector<const Symbol*> syms;
-    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next)
-        syms.push_back(declaredSymbol(decltorIt->value));
+    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
+        auto sym = declaredSymbol(decltorIt->value);
+        if (!sym) {
+            PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+            continue;
+        }
+
+        syms.push_back(sym);
+    }
     return syms;
 }
 
-const Symbol* SemanticModel::declaredSymbol(const FunctionDefinitionSyntax* node) const
+const Symbol* SemanticModel::declaredSymbol(const DeclaratorSyntax* node) const
 {
-    return declaredSymbol(node->declarator());
-}
+    auto node_P = SyntaxUtilities::strippedDeclaratorOrSelf(node);
+    auto node_PP = SyntaxUtilities::innermostDeclaratorOrSelf(node_P);
 
-const Symbol* SemanticModel::declaredSymbol(const ParameterDeclarationSyntax* node) const
-{
-    return declaredSymbol(node->declarator());
+    auto it = P->declSyms_.find(node_PP);
+    if (it == P->declSyms_.end()) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    return it->second;
 }
 
 Symbol* SemanticModel::storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym)

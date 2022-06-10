@@ -33,6 +33,5 @@ do { \
 
 #define PSY_ESCAPE_VIA_RETURN(EXPR) PSY_ESCAPE(return EXPR)
 #define PSY_ESCAPE_VIA_BREAK PSY_ESCAPE(break)
-#define PSY_ESCAPE_VIA_CONTINUE PSY_ESCAPE(continue)
 
 #endif

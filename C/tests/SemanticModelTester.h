@@ -62,8 +62,10 @@ public:
         + 0000-0099 -> variable and/or function
         + 0100-0199 -> function (definition)
         + 0200-0299 -> parameter
-        + 0300-0399 -> enumeration and enumerators
-        + 0400-0499 -> struct/union and fields
+        + 0300-0349 -> struct/union/enumeration
+        + 0350-0399 -> field
+        + 0400-0449 -> enumerator
+        + 0450-0499 ->
 
      */
 
@@ -110,6 +112,7 @@ public:
     void case0219();
     void case0220();
 
+    void case0300();
     void case0301();
     void case0302();
     void case0303();
@@ -130,7 +133,87 @@ public:
     void case0318();
     void case0319();
     void case0320();
+    void case0321();
+    void case0322();
+    void case0323();
+    void case0324();
+    void case0325();
+    void case0326();
+    void case0327();
+    void case0328();
+    void case0329();
+    void case0330();
+    void case0331();
+    void case0332();
+    void case0333();
+    void case0334();
+    void case0335();
+    void case0336();
+    void case0337();
+    void case0338();
+    void case0339();
+    void case0340();
+    void case0341();
+    void case0342();
+    void case0343();
+    void case0344();
+    void case0345();
+    void case0346();
+    void case0347();
+    void case0348();
+    void case0349();
+    void case0350();
+    void case0351();
+    void case0352();
+    void case0353();
+    void case0354();
+    void case0355();
+    void case0356();
+    void case0357();
+    void case0358();
+    void case0359();
+    void case0360();
+    void case0361();
+    void case0362();
+    void case0363();
+    void case0364();
+    void case0365();
+    void case0366();
+    void case0367();
+    void case0368();
+    void case0369();
+    void case0370();
+    void case0371();
+    void case0372();
+    void case0373();
+    void case0374();
+    void case0375();
+    void case0376();
+    void case0377();
+    void case0378();
+    void case0379();
+    void case0380();
+    void case0381();
+    void case0382();
+    void case0383();
+    void case0384();
+    void case0385();
+    void case0386();
+    void case0387();
+    void case0388();
+    void case0389();
+    void case0390();
+    void case0391();
+    void case0392();
+    void case0393();
+    void case0394();
+    void case0395();
+    void case0396();
+    void case0397();
+    void case0398();
+    void case0399();
 
+    void case0400();
     void case0401();
     void case0402();
     void case0403();
@@ -151,6 +234,85 @@ public:
     void case0418();
     void case0419();
     void case0420();
+    void case0421();
+    void case0422();
+    void case0423();
+    void case0424();
+    void case0425();
+    void case0426();
+    void case0427();
+    void case0428();
+    void case0429();
+    void case0430();
+    void case0431();
+    void case0432();
+    void case0433();
+    void case0434();
+    void case0435();
+    void case0436();
+    void case0437();
+    void case0438();
+    void case0439();
+    void case0440();
+    void case0441();
+    void case0442();
+    void case0443();
+    void case0444();
+    void case0445();
+    void case0446();
+    void case0447();
+    void case0448();
+    void case0449();
+    void case0450();
+    void case0451();
+    void case0452();
+    void case0453();
+    void case0454();
+    void case0455();
+    void case0456();
+    void case0457();
+    void case0458();
+    void case0459();
+    void case0460();
+    void case0461();
+    void case0462();
+    void case0463();
+    void case0464();
+    void case0465();
+    void case0466();
+    void case0467();
+    void case0468();
+    void case0469();
+    void case0470();
+    void case0471();
+    void case0472();
+    void case0473();
+    void case0474();
+    void case0475();
+    void case0476();
+    void case0477();
+    void case0478();
+    void case0479();
+    void case0480();
+    void case0481();
+    void case0482();
+    void case0483();
+    void case0484();
+    void case0485();
+    void case0486();
+    void case0487();
+    void case0488();
+    void case0489();
+    void case0490();
+    void case0491();
+    void case0492();
+    void case0493();
+    void case0494();
+    void case0495();
+    void case0496();
+    void case0497();
+    void case0498();
+    void case0499();
 
     std::vector<TestFunction> tests_
     {
@@ -197,6 +359,7 @@ public:
         TEST_SEMANTIC_MODEL(case0219),
         TEST_SEMANTIC_MODEL(case0220),
 
+        TEST_SEMANTIC_MODEL(case0300),
         TEST_SEMANTIC_MODEL(case0301),
         TEST_SEMANTIC_MODEL(case0302),
         TEST_SEMANTIC_MODEL(case0303),
@@ -217,7 +380,87 @@ public:
         TEST_SEMANTIC_MODEL(case0318),
         TEST_SEMANTIC_MODEL(case0319),
         TEST_SEMANTIC_MODEL(case0320),
+        TEST_SEMANTIC_MODEL(case0321),
+        TEST_SEMANTIC_MODEL(case0322),
+        TEST_SEMANTIC_MODEL(case0323),
+        TEST_SEMANTIC_MODEL(case0324),
+        TEST_SEMANTIC_MODEL(case0325),
+        TEST_SEMANTIC_MODEL(case0326),
+        TEST_SEMANTIC_MODEL(case0327),
+        TEST_SEMANTIC_MODEL(case0328),
+        TEST_SEMANTIC_MODEL(case0329),
+        TEST_SEMANTIC_MODEL(case0330),
+        TEST_SEMANTIC_MODEL(case0331),
+        TEST_SEMANTIC_MODEL(case0332),
+        TEST_SEMANTIC_MODEL(case0333),
+        TEST_SEMANTIC_MODEL(case0334),
+        TEST_SEMANTIC_MODEL(case0335),
+        TEST_SEMANTIC_MODEL(case0336),
+        TEST_SEMANTIC_MODEL(case0337),
+        TEST_SEMANTIC_MODEL(case0338),
+        TEST_SEMANTIC_MODEL(case0339),
+        TEST_SEMANTIC_MODEL(case0340),
+        TEST_SEMANTIC_MODEL(case0341),
+        TEST_SEMANTIC_MODEL(case0342),
+        TEST_SEMANTIC_MODEL(case0343),
+        TEST_SEMANTIC_MODEL(case0344),
+        TEST_SEMANTIC_MODEL(case0345),
+        TEST_SEMANTIC_MODEL(case0346),
+        TEST_SEMANTIC_MODEL(case0347),
+        TEST_SEMANTIC_MODEL(case0348),
+        TEST_SEMANTIC_MODEL(case0349),
+        TEST_SEMANTIC_MODEL(case0350),
+        TEST_SEMANTIC_MODEL(case0351),
+        TEST_SEMANTIC_MODEL(case0352),
+        TEST_SEMANTIC_MODEL(case0353),
+        TEST_SEMANTIC_MODEL(case0354),
+        TEST_SEMANTIC_MODEL(case0355),
+        TEST_SEMANTIC_MODEL(case0356),
+        TEST_SEMANTIC_MODEL(case0357),
+        TEST_SEMANTIC_MODEL(case0358),
+        TEST_SEMANTIC_MODEL(case0359),
+        TEST_SEMANTIC_MODEL(case0360),
+        TEST_SEMANTIC_MODEL(case0361),
+        TEST_SEMANTIC_MODEL(case0362),
+        TEST_SEMANTIC_MODEL(case0363),
+        TEST_SEMANTIC_MODEL(case0364),
+        TEST_SEMANTIC_MODEL(case0365),
+        TEST_SEMANTIC_MODEL(case0366),
+        TEST_SEMANTIC_MODEL(case0367),
+        TEST_SEMANTIC_MODEL(case0368),
+        TEST_SEMANTIC_MODEL(case0369),
+        TEST_SEMANTIC_MODEL(case0370),
+        TEST_SEMANTIC_MODEL(case0371),
+        TEST_SEMANTIC_MODEL(case0372),
+        TEST_SEMANTIC_MODEL(case0373),
+        TEST_SEMANTIC_MODEL(case0374),
+        TEST_SEMANTIC_MODEL(case0375),
+        TEST_SEMANTIC_MODEL(case0376),
+        TEST_SEMANTIC_MODEL(case0377),
+        TEST_SEMANTIC_MODEL(case0378),
+        TEST_SEMANTIC_MODEL(case0379),
+        TEST_SEMANTIC_MODEL(case0380),
+        TEST_SEMANTIC_MODEL(case0381),
+        TEST_SEMANTIC_MODEL(case0382),
+        TEST_SEMANTIC_MODEL(case0383),
+        TEST_SEMANTIC_MODEL(case0384),
+        TEST_SEMANTIC_MODEL(case0385),
+        TEST_SEMANTIC_MODEL(case0386),
+        TEST_SEMANTIC_MODEL(case0387),
+        TEST_SEMANTIC_MODEL(case0388),
+        TEST_SEMANTIC_MODEL(case0389),
+        TEST_SEMANTIC_MODEL(case0390),
+        TEST_SEMANTIC_MODEL(case0391),
+        TEST_SEMANTIC_MODEL(case0392),
+        TEST_SEMANTIC_MODEL(case0393),
+        TEST_SEMANTIC_MODEL(case0394),
+        TEST_SEMANTIC_MODEL(case0395),
+        TEST_SEMANTIC_MODEL(case0396),
+        TEST_SEMANTIC_MODEL(case0397),
+        TEST_SEMANTIC_MODEL(case0398),
+        TEST_SEMANTIC_MODEL(case0399),
 
+        TEST_SEMANTIC_MODEL(case0400),
         TEST_SEMANTIC_MODEL(case0401),
         TEST_SEMANTIC_MODEL(case0402),
         TEST_SEMANTIC_MODEL(case0403),
@@ -238,6 +481,85 @@ public:
         TEST_SEMANTIC_MODEL(case0418),
         TEST_SEMANTIC_MODEL(case0419),
         TEST_SEMANTIC_MODEL(case0420),
+        TEST_SEMANTIC_MODEL(case0421),
+        TEST_SEMANTIC_MODEL(case0422),
+        TEST_SEMANTIC_MODEL(case0423),
+        TEST_SEMANTIC_MODEL(case0424),
+        TEST_SEMANTIC_MODEL(case0425),
+        TEST_SEMANTIC_MODEL(case0426),
+        TEST_SEMANTIC_MODEL(case0427),
+        TEST_SEMANTIC_MODEL(case0428),
+        TEST_SEMANTIC_MODEL(case0429),
+        TEST_SEMANTIC_MODEL(case0430),
+        TEST_SEMANTIC_MODEL(case0431),
+        TEST_SEMANTIC_MODEL(case0432),
+        TEST_SEMANTIC_MODEL(case0433),
+        TEST_SEMANTIC_MODEL(case0434),
+        TEST_SEMANTIC_MODEL(case0435),
+        TEST_SEMANTIC_MODEL(case0436),
+        TEST_SEMANTIC_MODEL(case0437),
+        TEST_SEMANTIC_MODEL(case0438),
+        TEST_SEMANTIC_MODEL(case0439),
+        TEST_SEMANTIC_MODEL(case0440),
+        TEST_SEMANTIC_MODEL(case0441),
+        TEST_SEMANTIC_MODEL(case0442),
+        TEST_SEMANTIC_MODEL(case0443),
+        TEST_SEMANTIC_MODEL(case0444),
+        TEST_SEMANTIC_MODEL(case0445),
+        TEST_SEMANTIC_MODEL(case0446),
+        TEST_SEMANTIC_MODEL(case0447),
+        TEST_SEMANTIC_MODEL(case0448),
+        TEST_SEMANTIC_MODEL(case0449),
+        TEST_SEMANTIC_MODEL(case0450),
+        TEST_SEMANTIC_MODEL(case0451),
+        TEST_SEMANTIC_MODEL(case0452),
+        TEST_SEMANTIC_MODEL(case0453),
+        TEST_SEMANTIC_MODEL(case0454),
+        TEST_SEMANTIC_MODEL(case0455),
+        TEST_SEMANTIC_MODEL(case0456),
+        TEST_SEMANTIC_MODEL(case0457),
+        TEST_SEMANTIC_MODEL(case0458),
+        TEST_SEMANTIC_MODEL(case0459),
+        TEST_SEMANTIC_MODEL(case0460),
+        TEST_SEMANTIC_MODEL(case0461),
+        TEST_SEMANTIC_MODEL(case0462),
+        TEST_SEMANTIC_MODEL(case0463),
+        TEST_SEMANTIC_MODEL(case0464),
+        TEST_SEMANTIC_MODEL(case0465),
+        TEST_SEMANTIC_MODEL(case0466),
+        TEST_SEMANTIC_MODEL(case0467),
+        TEST_SEMANTIC_MODEL(case0468),
+        TEST_SEMANTIC_MODEL(case0469),
+        TEST_SEMANTIC_MODEL(case0470),
+        TEST_SEMANTIC_MODEL(case0471),
+        TEST_SEMANTIC_MODEL(case0472),
+        TEST_SEMANTIC_MODEL(case0473),
+        TEST_SEMANTIC_MODEL(case0474),
+        TEST_SEMANTIC_MODEL(case0475),
+        TEST_SEMANTIC_MODEL(case0476),
+        TEST_SEMANTIC_MODEL(case0477),
+        TEST_SEMANTIC_MODEL(case0478),
+        TEST_SEMANTIC_MODEL(case0479),
+        TEST_SEMANTIC_MODEL(case0480),
+        TEST_SEMANTIC_MODEL(case0481),
+        TEST_SEMANTIC_MODEL(case0482),
+        TEST_SEMANTIC_MODEL(case0483),
+        TEST_SEMANTIC_MODEL(case0484),
+        TEST_SEMANTIC_MODEL(case0485),
+        TEST_SEMANTIC_MODEL(case0486),
+        TEST_SEMANTIC_MODEL(case0487),
+        TEST_SEMANTIC_MODEL(case0488),
+        TEST_SEMANTIC_MODEL(case0489),
+        TEST_SEMANTIC_MODEL(case0490),
+        TEST_SEMANTIC_MODEL(case0491),
+        TEST_SEMANTIC_MODEL(case0492),
+        TEST_SEMANTIC_MODEL(case0493),
+        TEST_SEMANTIC_MODEL(case0494),
+        TEST_SEMANTIC_MODEL(case0495),
+        TEST_SEMANTIC_MODEL(case0496),
+        TEST_SEMANTIC_MODEL(case0497),
+        TEST_SEMANTIC_MODEL(case0498),
+        TEST_SEMANTIC_MODEL(case0499),
     };
 };
 
