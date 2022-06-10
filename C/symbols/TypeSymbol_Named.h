@@ -82,7 +82,7 @@ PSY_INTERNAL:
     NamedTypeSymbol(const SyntaxTree* tree,
                     const Scope* scope,
                     const Symbol* containingSym,
-                    TagSymbolNameKind tagK,
+                    TagSymbolNameKind tagChoiceK,
                     const std::string& tag);
 
     void patchBuiltinTypeKind(BuiltinTypeKind);

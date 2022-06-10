@@ -165,7 +165,7 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Field)
-                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("struct x", NamedTypeKind::Structure, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTester::case2010()
@@ -178,7 +178,7 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Field)
-                    .TySpec.basis("union x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("union x", NamedTypeKind::Union, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTester::case2011()
@@ -191,7 +191,7 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Field)
-                    .TySpec.basis("enum x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("enum x", NamedTypeKind::Enumeration, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTester::case2012()
@@ -204,9 +204,9 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Field)
-                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED))
+                    .TySpec.basis("struct x", NamedTypeKind::Structure, BuiltinTypeKind::UNSPECIFIED))
             .binding(DeclSummary().Value("z", ValueKind::Field)
-                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("struct x", NamedTypeKind::Structure, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTester::case2013()
@@ -219,7 +219,7 @@ struct
          )",
          Expectation()
             .binding(DeclSummary().Value("z", ValueKind::Field)
-                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("struct x", NamedTypeKind::Structure, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTester::case2014(){ }

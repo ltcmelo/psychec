@@ -24,6 +24,9 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/Assertions.h"
+#include "../common/infra/Escape.h"
+
 #include <cstdint>
 #include <string>
 
@@ -37,9 +40,29 @@ enum class PSY_C_API NamedTypeKind : std::uint8_t
 {
     UNSPECIFIED = 0,
     Builtin,
-    Tag,
+    Structure,
+    Union,
+    Enumeration,
     Synonym
 };
+
+inline std::string PSY_C_API to_string(NamedTypeKind namedTyK)
+{
+    switch (namedTyK) {
+        case NamedTypeKind::Builtin:
+            return "Builtin";
+        case NamedTypeKind::Structure:
+            return "Structure";
+        case NamedTypeKind::Union:
+            return "Union";
+        case NamedTypeKind::Enumeration:
+            return "Enumeration";
+        case NamedTypeKind::Synonym:
+            return "Synonym";
+        default:
+            PSY_ESCAPE_VIA_RETURN("<INVALID or UNSPECIFIED NamedTypeKind>");
+    }
+}
 
 } // C
 } // psy

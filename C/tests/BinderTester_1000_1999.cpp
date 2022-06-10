@@ -122,7 +122,7 @@ void BinderTester::case1009()
     bind("struct x y ;",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Variable)
-                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("struct x", NamedTypeKind::Structure, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTester::case1010()
@@ -130,7 +130,7 @@ void BinderTester::case1010()
     bind("union x y ;",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Variable)
-                    .TySpec.basis("union x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("union x", NamedTypeKind::Union, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTester::case1011()
@@ -138,7 +138,7 @@ void BinderTester::case1011()
     bind("enum x y ;",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Variable)
-                    .TySpec.basis("enum x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("enum x", NamedTypeKind::Enumeration, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTester::case1012()
@@ -146,9 +146,9 @@ void BinderTester::case1012()
     bind("struct x y , z ;",
          Expectation()
             .binding(DeclSummary().Value("y", ValueKind::Variable)
-                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED))
+                    .TySpec.basis("struct x", NamedTypeKind::Structure, BuiltinTypeKind::UNSPECIFIED))
             .binding(DeclSummary().Value("z", ValueKind::Variable)
-                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("struct x", NamedTypeKind::Structure, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTester::case1013()
@@ -156,7 +156,7 @@ void BinderTester::case1013()
     bind("struct x { int y ; } z ;",
          Expectation()
             .binding(DeclSummary().Value("z", ValueKind::Variable)
-                    .TySpec.basis("struct x", NamedTypeKind::Tag, BuiltinTypeKind::UNSPECIFIED)));
+                    .TySpec.basis("struct x", NamedTypeKind::Structure, BuiltinTypeKind::UNSPECIFIED)));
 }
 
 void BinderTester::case1014()
