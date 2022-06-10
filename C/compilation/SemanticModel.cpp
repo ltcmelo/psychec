@@ -68,13 +68,35 @@ const Compilation* SemanticModel::compilation() const
 const LibrarySymbol* SemanticModel::declaredSymbol(const TranslationUnitSyntax* node) const
 {
     auto it = P->declSyms_.find(node);
-    return it != P->declSyms_.end() ? it->second->asLibrary() : nullptr;
+    if (it == P->declSyms_.end()) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    auto libSym = it->second->asLibrary();
+    if (!libSym) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    return libSym;
 }
 
 const FunctionSymbol* SemanticModel::declaredSymbol(const FunctionDefinitionSyntax* node) const
 {
     auto sym = declaredSymbol(node->declarator());
-    return sym ? sym->asFunction() : nullptr;
+    if (!sym) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    auto funcSym = sym->asFunction();
+    if (!funcSym) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    return funcSym;
 }
 
 const ParameterSymbol* SemanticModel::declaredSymbol(const ParameterDeclarationSyntax* node) const
@@ -86,7 +108,18 @@ const ParameterSymbol* SemanticModel::declaredSymbol(const ParameterDeclarationS
     }
 
     auto valSym = sym->asValue();
-    return valSym ? valSym->asParameter() : nullptr;
+    if (!valSym) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    auto parmSym = valSym->asParameter();
+    if (!parmSym) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    return parmSym;
 }
 
 
