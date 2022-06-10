@@ -316,7 +316,7 @@ enum PSY_C_API SyntaxKind : std::uint16_t
     StructDeclaration,
     UnionDeclaration,
     EnumDeclaration,
-    EnumMemberDeclaration,
+    EnumeratorDeclaration,
     VariableAndOrFunctionDeclaration,
     FieldDeclaration,
     ParameterDeclaration,

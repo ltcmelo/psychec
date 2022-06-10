@@ -754,17 +754,17 @@ class PSY_C_API ValueDeclarationSyntax : public DeclarationSyntax
 };
 
 /**
- * \brief The EnumMemberDeclarationSyntax class.
+ * \brief The EnumeratorDeclarationSyntax class.
  *
  * \remark 6.7.2.2-3
  *
  * \note Similar to:
  * - \c clang::EnumConstantDecl of LLVM/Clang.
- * - \c Microsoft.CodeAnalysis.CSharp.Syntax.EnumMemberDeclarationSyntax of Roslyn.
+ * - \c Microsoft.CodeAnalysis.CSharp.Syntax.EnumeratorDeclarationSyntax of Roslyn.
  */
-class PSY_C_API EnumMemberDeclarationSyntax final : public ValueDeclarationSyntax
+class PSY_C_API EnumeratorDeclarationSyntax final : public ValueDeclarationSyntax
 {
-    AST_NODE_1K(EnumMemberDeclaration, ValueDeclaration)
+    AST_NODE_1K(EnumeratorDeclaration, ValueDeclaration)
 
 public:
     SyntaxToken identifierToken() const { return tokenAtIndex(identTkIdx_); }

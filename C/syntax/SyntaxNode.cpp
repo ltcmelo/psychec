@@ -155,8 +155,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "UnionDeclaration";
         case EnumDeclaration:
             return "EnumDeclaration";
-        case EnumMemberDeclaration:
-            return "EnumMemberDeclaration";
+        case EnumeratorDeclaration:
+            return "EnumeratorDeclaration";
         case VariableAndOrFunctionDeclaration:
             return "VariableAndOrFunctionDeclaration";
         case ParameterDeclaration:

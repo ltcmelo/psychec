@@ -63,7 +63,7 @@ class TypeDeclarationSyntax;
 class TagDeclarationSyntax;
 class StructOrUnionDeclarationSyntax;
 class EnumDeclarationSyntax;
-class EnumMemberDeclarationSyntax;
+class EnumeratorDeclarationSyntax;
 class DeclaratorDeclarationSyntax;
 class ValueDeclarationSyntax;
 class DeclaratorDeclarationSyntax;
@@ -190,7 +190,7 @@ class AmbiguousExpressionOrDeclarationStatementSyntax;
 
 /* Lists */
 typedef SyntaxNodePlainList<DeclarationSyntax*> DeclarationListSyntax;
-typedef SyntaxNodeSeparatedList<EnumMemberDeclarationSyntax*> EnumMemberListSyntax;
+typedef SyntaxNodeSeparatedList<EnumeratorDeclarationSyntax*> EnumeratorListSyntax;
 typedef SyntaxNodeSeparatedList<ParameterDeclarationSyntax*> ParameterDeclarationListSyntax;
 typedef SyntaxNodePlainList<SpecifierSyntax*> SpecifierListSyntax;
 typedef SyntaxNodeSeparatedList<ExtGNU_AttributeSyntax*> ExtGNU_AttributeListSyntax;

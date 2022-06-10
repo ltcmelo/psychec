@@ -139,10 +139,10 @@ private:
     Action visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax*);
     Action visitFieldDeclaration_DONE(const FieldDeclarationSyntax*);
 
-    virtual Action visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax*) override;
-    Action visitEnumMemberDeclaration_AtImplicitSpecifier(const EnumMemberDeclarationSyntax*);
-    Action visitEnumMemberDeclaration_AtDeclarator(const EnumMemberDeclarationSyntax*);
-    Action visitEnumMemberDeclaration_DONE(const EnumMemberDeclarationSyntax*);
+    virtual Action visitEnumeratorDeclaration(const EnumeratorDeclarationSyntax*) override;
+    Action visitEnumeratorDeclaration_AtImplicitSpecifier(const EnumeratorDeclarationSyntax*);
+    Action visitEnumeratorDeclaration_AtDeclarator(const EnumeratorDeclarationSyntax*);
+    Action visitEnumeratorDeclaration_DONE(const EnumeratorDeclarationSyntax*);
 
     virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
     Action visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax*);

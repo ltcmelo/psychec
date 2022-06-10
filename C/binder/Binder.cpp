@@ -205,12 +205,12 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_DONE(const FieldDeclarationS
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitEnumeratorDeclaration(const EnumeratorDeclarationSyntax* node)
 {
-    return visitEnumMemberDeclaration_AtImplicitSpecifier(node);
+    return visitEnumeratorDeclaration_AtImplicitSpecifier(node);
 }
 
-SyntaxVisitor::Action Binder::visitEnumMemberDeclaration_DONE(const EnumMemberDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_DONE(const EnumeratorDeclarationSyntax* node)
 {
     popTySym();
 

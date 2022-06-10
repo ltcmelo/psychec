@@ -43,7 +43,7 @@ SyntaxNodeSeparatedList<SyntaxNodeT>::delimiterToken() const
 namespace psy {
 namespace C {
 
-template class SyntaxNodeSeparatedList<EnumMemberDeclarationSyntax*>;
+template class SyntaxNodeSeparatedList<EnumeratorDeclarationSyntax*>;
 template class SyntaxNodeSeparatedList<ParameterDeclarationSyntax*>;
 template class SyntaxNodeSeparatedList<ExtGNU_AttributeSyntax*>;
 template class SyntaxNodeSeparatedList<DeclaratorSyntax*>;

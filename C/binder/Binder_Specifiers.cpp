@@ -131,11 +131,11 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_AtSpecifiers(const FieldDecl
                 &Binder::visitFieldDeclaration_AtDeclarators);
 }
 
-SyntaxVisitor::Action Binder::visitEnumMemberDeclaration_AtImplicitSpecifier(const EnumMemberDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtImplicitSpecifier(const EnumeratorDeclarationSyntax* node)
 {
     makeTySymAndPushIt<NamedTypeSymbol>(BuiltinTypeKind::Int);
 
-    return visitEnumMemberDeclaration_AtDeclarator(node);
+    return visitEnumeratorDeclaration_AtDeclarator(node);
 }
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax* node)
