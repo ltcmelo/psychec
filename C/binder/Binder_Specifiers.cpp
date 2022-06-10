@@ -56,14 +56,14 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
         const StructOrUnionDeclarationSyntax* node)
 {
     const TagTypeSpecifierSyntax* tySpec = node->typeSpecifier();
-    TagSymbolNameKind tagK;
+    TagSymbolName::TagChoice tagChoice;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:
-            tagK = TagSymbolNameKind::Structure;
+            tagChoice = TagSymbolName::TagChoice::Struct;
             break;
 
         case UnionTypeSpecifier:
-            tagK = TagSymbolNameKind::Union;
+            tagChoice = TagSymbolName::TagChoice::Union;
             break;
 
         default:
@@ -71,7 +71,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
     }
 
     makeSymAndPushIt<NamedTypeSymbol>(node,
-                                      tagK,
+                                      tagChoice,
                                       tySpec->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_AtInternalDeclarations_COMMON(
@@ -82,7 +82,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
 SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax* node)
 {
     makeSymAndPushIt<NamedTypeSymbol>(node,
-                                      TagSymbolNameKind::Enumeration,
+                                      TagSymbolName::TagChoice::Enum,
                                       node->typeSpecifier()->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_AtInternalDeclarations_COMMON(
@@ -222,18 +222,18 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
     if (!node->declarations()) {
-        TagSymbolNameKind tagK;
+        TagSymbolName::TagChoice tagChoice;
         switch (node->kind()) {
             case StructTypeSpecifier:
-                tagK = TagSymbolNameKind::Structure;
+                tagChoice = TagSymbolName::TagChoice::Struct;
                 break;
 
             case UnionTypeSpecifier:
-                tagK = TagSymbolNameKind::Union;
+                tagChoice = TagSymbolName::TagChoice::Union;
                 break;
 
             case EnumTypeSpecifier:
-                tagK = TagSymbolNameKind::Enumeration;
+                tagChoice = TagSymbolName::TagChoice::Enum;
                 break;
 
             default:
@@ -241,7 +241,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 return Action::Quit;
         }
 
-        makeTySymAndPushIt<NamedTypeSymbol>(tagK, node->tagToken().valueText_c_str());
+        makeTySymAndPushIt<NamedTypeSymbol>(tagChoice, node->tagToken().valueText_c_str());
     }
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
@@ -267,26 +267,25 @@ SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarat
     visit(node->typeDeclaration());
 
     const TagTypeSpecifierSyntax* tySpec = node->typeDeclaration()->typeSpecifier();
-    TagSymbolNameKind tagK;
+    TagSymbolName::TagChoice tagChoice;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:
-            tagK = TagSymbolNameKind::Structure;
+            tagChoice = TagSymbolName::TagChoice::Struct;
             break;
 
         case UnionTypeSpecifier:
-            tagK = TagSymbolNameKind::Union;
+            tagChoice = TagSymbolName::TagChoice::Union;
             break;
 
         case EnumTypeSpecifier:
-            tagK = TagSymbolNameKind::Enumeration;
+            tagChoice = TagSymbolName::TagChoice::Enum;
             break;
 
         default:
             PSY_ESCAPE_VIA_RETURN(Action::Quit);
-            return Action::Quit;
     }
 
-    makeTySymAndPushIt<NamedTypeSymbol>(tagK, tySpec->tagToken().valueText_c_str());
+    makeTySymAndPushIt<NamedTypeSymbol>(tagChoice, tySpec->tagToken().valueText_c_str());
 
     return Action::Skip;
 }

@@ -73,14 +73,21 @@ NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
 NamedTypeSymbol::NamedTypeSymbol(const SyntaxTree* tree,
                                  const Scope* scope,
                                  const Symbol* containingSym,
-                                 TagSymbolNameKind tagK,
+                                 TagSymbolName::TagChoice tagChoice,
                                  const std::string& tag)
-    : TypeSymbol(new NamedTypeSymbolImpl(tree,
-                                         scope,
-                                         containingSym,
-                                         NamedTypeKind::Tag))
+    : TypeSymbol(new NamedTypeSymbolImpl(
+                        tree,
+                        scope,
+                        containingSym,
+                        tagChoice == TagSymbolName::TagChoice::Struct
+                            ? NamedTypeKind::Structure
+                            : tagChoice == TagSymbolName::TagChoice::Union
+                                ? NamedTypeKind::Union
+                                : tagChoice == TagSymbolName::TagChoice::Enum
+                                    ? NamedTypeKind::Enumeration
+                                    : NamedTypeKind::UNSPECIFIED))
 {
-    P_CAST->name_.reset(new TagSymbolName(tagK, tag));
+    P_CAST->name_.reset(new TagSymbolName(tagChoice, tag));
 }
 
 const SymbolName* NamedTypeSymbol::name() const

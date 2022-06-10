@@ -131,9 +131,9 @@ DeclSummary& DeclSummary::withNameKind(SymbolNameKind nameK)
     return *this;
 }
 
-DeclSummary& DeclSummary::withTagKind(TagSymbolNameKind tagK)
+DeclSummary& DeclSummary::withTagChoice(TagSymbolName::TagChoice tagChoice)
 {
-    tagK_ = tagK;
+    tagChoice_ = tagChoice;
     return *this;
 }
 

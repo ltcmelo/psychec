@@ -25,32 +25,32 @@
 using namespace psy;
 using namespace C;
 
-TagSymbolName::TagSymbolName(TagSymbolNameKind tagK, std::string tag)
-    : tagK_(tagK)
+TagSymbolName::TagSymbolName(TagChoice tagChoice, std::string tag)
+    : tagChoice_(tagChoice)
     , tag_(std::move(tag))
 {}
 
-TagSymbolNameKind TagSymbolName::kind() const
+TagSymbolName::TagChoice TagSymbolName::tagChoice() const
 {
-    return tagK_;
+    return tagChoice_;
 }
 
 std::string TagSymbolName::text() const
 {
     std::string prefix;
-    switch (tagK_) {
-        case TagSymbolNameKind::Structure:
+    switch (tagChoice_) {
+        case TagChoice::Struct:
             prefix = "struct ";
             break;
-        case TagSymbolNameKind::Union:
+        case TagChoice::Union:
             prefix = "union ";
             break;
-        case TagSymbolNameKind::Enumeration:
+        case TagChoice::Enum:
             prefix = "enum ";
             break;
         default:
             PSY_ESCAPE_VIA_RETURN("");
-            return "<INVALID or UNSPECIFIED TagSymbolNameKind>";
+            return "<INVALID or UNSPECIFIED TagChoice>";
     }
     return prefix + tag_;
 }
