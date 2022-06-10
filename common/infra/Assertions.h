@@ -36,9 +36,11 @@
             } \
         } while (0)
     #define PSY_ASSERT(COND_EXPR, STMT) PSY_ASSERT_W_MSG(COND_EXPR, STMT, "<empty message>")
+    #define PSY_ASSERT_NO_STMT(COND_EXPR) PSY_ASSERT_W_MSG(COND_EXPR, {}, "<empty message>")
 #else
     #define PSY_ASSERT_W_MSG(COND_EXPR, STMT, MSG)
     #define PSY_ASSERT(COND_EXPR, STMT)
+    #define PSY_ASSERT_NO_STMT(COND_EXPR)
 #endif
 
 #endif

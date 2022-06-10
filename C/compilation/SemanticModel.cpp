@@ -41,9 +41,11 @@ using namespace C;
 struct SemanticModel::SemanticModelImpl
 {
     SemanticModelImpl(Compilation* compilation)
-        : compilation_(compilation)
+        : expectValidSyms_(true)
+        , compilation_(compilation)
     {}
 
+    bool expectValidSyms_;
     Compilation* compilation_;
     std::unordered_map<const SyntaxNode*, Symbol*> declSyms_;
 };
@@ -78,8 +80,10 @@ const FunctionSymbol* SemanticModel::declaredSymbol(const FunctionDefinitionSynt
 const ParameterSymbol* SemanticModel::declaredSymbol(const ParameterDeclarationSyntax* node) const
 {
     auto sym = declaredSymbol(node->declarator());
-    if (!sym)
+    if (!sym) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
         return nullptr;
+    }
 
     auto valSym = sym->asValue();
     return valSym ? valSym->asParameter() : nullptr;
@@ -96,16 +100,22 @@ std::vector<const FieldSymbol*> SemanticModel::declaredSymbols(const FieldDeclar
     std::vector<const FieldSymbol*> fldSyms;
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         auto sym = declaredSymbol(decltorIt->value);
-        if (!sym)
+        if (!sym) {
+            PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
             continue;
+        }
 
         auto valSym = sym->asValue();
-        if (!valSym)
+        if (!valSym) {
+            PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
             continue;
+        }
 
         auto fldSym = valSym->asField();
-        if (!fldSym)
+        if (!fldSym) {
+            PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
             continue;
+        }
 
         fldSyms.push_back(fldSym);
     }
@@ -118,8 +128,10 @@ std::vector<const Symbol*> SemanticModel::declaredSymbols(
     std::vector<const Symbol*> syms;
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         auto sym = declaredSymbol(decltorIt->value);
-        if (!sym)
+        if (!sym) {
+            PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
             continue;
+        }
 
         syms.push_back(sym);
     }
