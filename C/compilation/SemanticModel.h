@@ -62,6 +62,7 @@ public:
      */
     const FunctionSymbol* declaredSymbol(const FunctionDefinitionSyntax* node) const;
     const ParameterSymbol* declaredSymbol(const ParameterDeclarationSyntax* node) const;
+    const NamedTypeSymbol* declaredSymbol(const TypeDeclarationSyntax* node) const;
     const EnumeratorSymbol* declaredSymbol(const EnumMemberDeclarationSyntax* node) const;
 
     /**

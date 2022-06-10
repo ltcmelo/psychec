@@ -287,8 +287,14 @@ void SemanticModelTester::case0220(){}
 
 void SemanticModelTester::case0300()
 {
+    auto [tyDecl, semaModel] =
+            declAndSemaModel<StructOrUnionDeclarationSyntax>("struct x { int _ ; } ;");
 
+    const NamedTypeSymbol* namedTySym = semaModel->declaredSymbol(tyDecl);
+    PSY_EXPECT_TRUE(namedTySym);
+    PSY_EXPECT_EQ_STR(namedTySym->name()->text(), "struct x");
 }
+
 void SemanticModelTester::case0301()
 {
 

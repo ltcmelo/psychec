@@ -123,6 +123,25 @@ const ParameterSymbol* SemanticModel::declaredSymbol(const ParameterDeclarationS
     return parmSym;
 }
 
+const NamedTypeSymbol* SemanticModel::declaredSymbol(const TypeDeclarationSyntax* node) const
+{
+    auto it = P->declSyms_.find(node);
+    if (it == P->declSyms_.end()) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    auto tySym = castSym(it->second, &Symbol::asType);
+    if (!tySym)
+        return nullptr;
+
+    auto namedTySym = castSym(tySym, &TypeSymbol::asNamedType);
+    if (!namedTySym)
+        return nullptr;
+
+    return namedTySym;
+}
+
 const EnumeratorSymbol* SemanticModel::declaredSymbol(const EnumMemberDeclarationSyntax* node) const
 {
     return nullptr;
