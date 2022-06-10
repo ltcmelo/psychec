@@ -106,7 +106,7 @@ protected:
         return Action::Skip;
     }
 
-    virtual Action visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax* node) override
+    virtual Action visitEnumeratorDeclaration(const EnumeratorDeclarationSyntax* node) override
     {
         traverseDeclaration(node);
         terminal(node->identifierToken(), node);

@@ -74,7 +74,7 @@ public:
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitEnumDeclaration(const EnumDeclarationSyntax*) { return Action::Visit; }
-    virtual Action visitEnumMemberDeclaration(const EnumMemberDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitEnumeratorDeclaration(const EnumeratorDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) { return Action::Visit; }

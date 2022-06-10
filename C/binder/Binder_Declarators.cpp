@@ -120,13 +120,13 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDec
                 &Binder::visitFieldDeclaration_DONE);
 }
 
-SyntaxVisitor::Action Binder::visitEnumMemberDeclaration_AtDeclarator(const EnumMemberDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtDeclarator(const EnumeratorDeclarationSyntax* node)
 {
     determineContextAndMakeSym(node);
     nameSymAtTop(node->identifierToken().valueText_c_str());
     typeSymAtTopAndPopIt();
 
-    return visitEnumMemberDeclaration_DONE(node);
+    return visitEnumeratorDeclaration_DONE(node);
 }
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax* node)

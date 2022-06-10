@@ -142,7 +142,7 @@ const NamedTypeSymbol* SemanticModel::declaredSymbol(const TypeDeclarationSyntax
     return namedTySym;
 }
 
-const EnumeratorSymbol* SemanticModel::declaredSymbol(const EnumMemberDeclarationSyntax* node) const
+const EnumeratorSymbol* SemanticModel::declaredSymbol(const EnumeratorDeclarationSyntax* node) const
 {
     return nullptr;
 }

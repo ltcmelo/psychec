@@ -652,11 +652,11 @@ bool Parser::parseEnumerator(DeclarationSyntax*& decl)
 {
     DEBUG_THIS_RULE();
 
-    EnumMemberDeclarationSyntax* enumMembDecl = nullptr;
+    EnumeratorDeclarationSyntax* enumMembDecl = nullptr;
 
     switch (peek().kind()) {
         case IdentifierToken: {
-            enumMembDecl = makeNode<EnumMemberDeclarationSyntax>();
+            enumMembDecl = makeNode<EnumeratorDeclarationSyntax>();
             decl = enumMembDecl;
             enumMembDecl->identTkIdx_ = consume();
             break;
