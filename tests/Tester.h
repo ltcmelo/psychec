@@ -37,12 +37,24 @@
     } while (0)
 
 
-#define PSY__internals__EXPECT_EQ(EXPECTED, ACTUAL, EQ) \
+#define PSY__internals__EXPECT_EQ(ACTUAL, EXPECTED, EQ) \
     do { \
-        if (!(EQ(EXPECTED, ACTUAL))) { \
+        if (!(EQ(ACTUAL, EXPECTED))) { \
             std::cout << "\n!\tFAIL\n" \
-                      << "\t\tExpected: " << EXPECTED << "\n" \
                       << "\t\tActual  : " << ACTUAL << "\n" \
+                      << "\t\tExpected: " << EXPECTED << "\n" \
+                      << "\t\t" << __FILE__ << ":" << __LINE__ << std::endl; \
+            throw TestFailed(); \
+        } \
+    } while (0)
+
+#define PSY__internals__EXPECT_EQ_UNDER_TYPE(ACTUAL, EXPECTED, UNDER_TYPE) \
+    do { \
+        if (!(PSY__internals__EQ_OPTR(std::underlying_type_t<UNDER_TYPE>(ACTUAL), \
+                                      std::underlying_type_t<UNDER_TYPE>(EXPECTED)))) { \
+            std::cout << "\n!\tFAIL\n" \
+                      << "\t\tActual  : " << to_string(ACTUAL) << "\n" \
+                      << "\t\tExpected: " << to_string(EXPECTED) << "\n" \
                       << "\t\t" << __FILE__ << ":" << __LINE__ << std::endl; \
             throw TestFailed(); \
         } \
@@ -58,11 +70,11 @@
         } \
     } while (0)
 
-#define PSY_EXPECT_EQ_PTR(EXPECTED, ACTUAL) PSY__internals__EXPECT_EQ(EXPECTED, ACTUAL, PSY__internals__EQ_OPTR)
-#define PSY_EXPECT_EQ_STR(EXPECTED, ACTUAL) PSY__internals__EXPECT_EQ(EXPECTED, ACTUAL, PSY__internals__EQ_OPTR)
-#define PSY_EXPECT_EQ_INT(EXPECTED, ACTUAL) PSY__internals__EXPECT_EQ(EXPECTED, ACTUAL, PSY__internals__EQ_OPTR)
-#define PSY_EXPECT_EQ_ENUM(EXPECTED, ACTUAL, ENUM_TYPE) PSY_EXPECT_EQ_INT(std::underlying_type_t<ENUM_TYPE>(EXPECTED), std::underlying_type_t<ENUM_TYPE>(ACTUAL))
-#define PSY_EXPECT_EQ_CONT(EXPECTED, ACTUAL) PSY__internals__EXPECT_EQ(EXPECTED, ACTUAL, PSY__internals__EQ_STD)
+#define PSY_EXPECT_EQ_PTR(ACTUAL, EXPECTED) PSY__internals__EXPECT_EQ(EXPACTUAL, EXPECTED, PSY__internals__EQ_OPTR)
+#define PSY_EXPECT_EQ_STR(ACTUAL, EXPECTED) PSY__internals__EXPECT_EQ(ACTUAL, EXPECTED, PSY__internals__EQ_OPTR)
+#define PSY_EXPECT_EQ_INT(ACTUAL, EXPECTED) PSY__internals__EXPECT_EQ(ACTUAL, EXPECTED, PSY__internals__EQ_OPTR)
+#define PSY_EXPECT_EQ_ENUM(ACTUAL, EXPECTED, ENUM_TYPE) PSY__internals__EXPECT_EQ_UNDER_TYPE(ACTUAL, EXPECTED, ENUM_TYPE)
+#define PSY_EXPECT_EQ_CONT(ACTUAL, EXPECTED) PSY__internals__EXPECT_EQ(ACTUAL, EXPECTED, PSY__internals__EQ_STD)
 
 #define PSY_EXPECT_TRUE(EXPR) PSY__internals__EXPECT_BOOL(EXPR, true)
 #define PSY_EXPECT_FALSE(EXPR) PSY__internals__EXPECT_BOOL(EXPR, false)

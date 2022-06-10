@@ -178,13 +178,13 @@ void SemanticModelTester::case0101()
     auto decltor = funcDef->declarator();
     auto arrOrFunDecltor = decltor->asArrayOrFunctionDeclarator();
 
-    const Symbol* sym = semaModel->declaredSymbol(arrOrFunDecltor);
+    auto sym = semaModel->declaredSymbol(arrOrFunDecltor);
     PSY_EXPECT_TRUE(sym);
     PSY_EXPECT_TRUE(sym->kind() == SymbolKind::Function);
-    PSY_EXPECT_TRUE(sym->asFunction());
-    PSY_EXPECT_EQ_STR(sym->asFunction()->name()->text(), "x");
-    PSY_EXPECT_TRUE(sym->asFunction()->type()->typeKind() == TypeKind::Function);
-    PSY_EXPECT_TRUE(sym->asFunction()->type()->asFunctionType());
+    const FunctionSymbol* funcSym = semaModel->declaredSymbol(funcDef);
+    PSY_EXPECT_TRUE(funcSym);
+    PSY_EXPECT_EQ_STR(funcSym->name()->text(), "x");
+    PSY_EXPECT_EQ_ENUM(funcSym->type()->typeKind(), TypeKind::Function, TypeKind);
 }
 
 void SemanticModelTester::case0102()
@@ -194,11 +194,8 @@ void SemanticModelTester::case0102()
 
     const FunctionSymbol* funcSym = semaModel->declaredSymbol(funcDef);
     PSY_EXPECT_TRUE(funcSym);
-    PSY_EXPECT_TRUE(funcSym->kind() == SymbolKind::Function);
-    PSY_EXPECT_TRUE(funcSym->asFunction());
-    PSY_EXPECT_EQ_STR(funcSym->asFunction()->name()->text(), "x");
-    PSY_EXPECT_TRUE(funcSym->asFunction()->type()->typeKind() == TypeKind::Function);
-    PSY_EXPECT_TRUE(funcSym->asFunction()->type()->asFunctionType());
+    PSY_EXPECT_EQ_STR(funcSym->name()->text(), "x");
+    PSY_EXPECT_EQ_ENUM(funcSym->type()->typeKind(), TypeKind::Function, TypeKind);
 }
 
 void SemanticModelTester::case0103(){}
@@ -223,13 +220,12 @@ void SemanticModelTester::case0201()
 
     auto sym = semaModel->declaredSymbol(identDecltor);
     PSY_EXPECT_TRUE(sym);
-    PSY_EXPECT_TRUE(sym->kind() == SymbolKind::Value);
-    PSY_EXPECT_TRUE(sym->asValue());
-    PSY_EXPECT_TRUE(sym->asValue()->valueKind() == ValueKind::Parameter);
-    PSY_EXPECT_TRUE(sym->asValue()->asParameter());
-    PSY_EXPECT_EQ_STR(sym->asValue()->asParameter()->name()->text(), "y");
-    PSY_EXPECT_TRUE(sym->asValue()->type()->typeKind() == TypeKind::Named);
-    PSY_EXPECT_EQ_STR(sym->asValue()->type()->asNamedType()->name()->text(), "int");
+    PSY_EXPECT_EQ_ENUM(sym->kind(), SymbolKind::Value, SymbolKind);
+    PSY_EXPECT_EQ_ENUM(sym->asValue()->valueKind(), ValueKind::Parameter, ValueKind);
+    const ParameterSymbol* parmSym = sym->asValue()->asParameter();
+    PSY_EXPECT_TRUE(parmSym);
+    PSY_EXPECT_EQ_STR(parmSym->name()->text(), "y");
+    PSY_EXPECT_EQ_ENUM(parmSym->type()->typeKind(), TypeKind::Named, TypeKind);
 }
 
 void SemanticModelTester::case0202()
@@ -243,13 +239,8 @@ void SemanticModelTester::case0202()
 
     const ParameterSymbol* parmSym = semaModel->declaredSymbol(parmDecls->value);
     PSY_EXPECT_TRUE(parmSym);
-    PSY_EXPECT_TRUE(parmSym->kind() == SymbolKind::Value);
-    PSY_EXPECT_TRUE(parmSym->asValue());
-    PSY_EXPECT_TRUE(parmSym->asValue()->valueKind() == ValueKind::Parameter);
-    PSY_EXPECT_TRUE(parmSym->asValue()->asParameter());
-    PSY_EXPECT_EQ_STR(parmSym->asValue()->asParameter()->name()->text(), "y");
-    PSY_EXPECT_TRUE(parmSym->asValue()->type()->typeKind() == TypeKind::Named);
-    PSY_EXPECT_EQ_STR(parmSym->asValue()->type()->asNamedType()->name()->text(), "int");
+    PSY_EXPECT_EQ_STR(parmSym->name()->text(), "y");
+    PSY_EXPECT_EQ_ENUM(parmSym->type()->typeKind(), TypeKind::Named, TypeKind);
 }
 
 void SemanticModelTester::case0203()
@@ -263,13 +254,8 @@ void SemanticModelTester::case0203()
 
     const ParameterSymbol* parmSym = semaModel->declaredSymbol(parmDecls->value);
     PSY_EXPECT_TRUE(parmSym);
-    PSY_EXPECT_TRUE(parmSym->kind() == SymbolKind::Value);
-    PSY_EXPECT_TRUE(parmSym->asValue());
-    PSY_EXPECT_TRUE(parmSym->asValue()->valueKind() == ValueKind::Parameter);
-    PSY_EXPECT_TRUE(parmSym->asValue()->asParameter());
-    PSY_EXPECT_EQ_STR(parmSym->asValue()->asParameter()->name()->text(), "z");
-    PSY_EXPECT_TRUE(parmSym->asValue()->type()->typeKind() == TypeKind::Named);
-    PSY_EXPECT_EQ_STR(parmSym->asValue()->type()->asNamedType()->name()->text(), "y");
+    PSY_EXPECT_EQ_STR(parmSym->name()->text(), "z");
+    PSY_EXPECT_EQ_ENUM(parmSym->type()->typeKind(), TypeKind::Named, TypeKind);
 }
 
 void SemanticModelTester::case0204()
@@ -283,23 +269,13 @@ void SemanticModelTester::case0204()
 
     const ParameterSymbol* parmSym0 = semaModel->declaredSymbol(parmDecls->value);
     PSY_EXPECT_TRUE(parmSym0);
-    PSY_EXPECT_TRUE(parmSym0->kind() == SymbolKind::Value);
-    PSY_EXPECT_TRUE(parmSym0->asValue());
-    PSY_EXPECT_TRUE(parmSym0->asValue()->valueKind() == ValueKind::Parameter);
-    PSY_EXPECT_TRUE(parmSym0->asValue()->asParameter());
-    PSY_EXPECT_EQ_STR(parmSym0->asValue()->asParameter()->name()->text(), "z");
-    PSY_EXPECT_TRUE(parmSym0->asValue()->type()->typeKind() == TypeKind::Named);
-    PSY_EXPECT_EQ_STR(parmSym0->asValue()->type()->asNamedType()->name()->text(), "y");
+    PSY_EXPECT_EQ_STR(parmSym0->name()->text(), "z");
+    PSY_EXPECT_EQ_ENUM(parmSym0->type()->typeKind(), TypeKind::Named, TypeKind);
 
     const ParameterSymbol* parmSym1 = semaModel->declaredSymbol(parmDecls->next->value);
     PSY_EXPECT_TRUE(parmSym1);
-    PSY_EXPECT_TRUE(parmSym1->kind() == SymbolKind::Value);
-    PSY_EXPECT_TRUE(parmSym1->asValue());
-    PSY_EXPECT_TRUE(parmSym1->asValue()->valueKind() == ValueKind::Parameter);
-    PSY_EXPECT_TRUE(parmSym1->asValue()->asParameter());
-    PSY_EXPECT_EQ_STR(parmSym1->asValue()->asParameter()->name()->text(), "w");
-    PSY_EXPECT_TRUE(parmSym1->asValue()->type()->typeKind() == TypeKind::Named);
-    PSY_EXPECT_EQ_STR(parmSym1->asValue()->type()->asNamedType()->name()->text(), "int");
+    PSY_EXPECT_EQ_STR(parmSym1->name()->text(), "w");
+    PSY_EXPECT_EQ_ENUM(parmSym1->type()->typeKind(), TypeKind::Named, TypeKind);
 }
 
 void SemanticModelTester::case0205(){}
@@ -321,8 +297,6 @@ void SemanticModelTester::case0220(){}
 
 void SemanticModelTester::case0301()
 {
-    auto [tyDecl, semaModel] =
-            declAndSemaModel<StructOrUnionDeclarationSyntax>("struct x { } ;");
 
 }
 void SemanticModelTester::case0302(){}
@@ -353,22 +327,60 @@ void SemanticModelTester::case0401()
     auto tySpec = tyDecl->typeSpecifier();
 
     auto fldDecl0 = tySpec->declarations()->value->asFieldDeclaration();
-    std::vector<const FieldSymbol*> fldSyms = semaModel->declaredSymbols(fldDecl0);
-    PSY_EXPECT_EQ_INT(fldSyms.size(), 1);
+    std::vector<const FieldSymbol*> fldSyms0 = semaModel->declaredSymbols(fldDecl0);
+    PSY_EXPECT_EQ_INT(fldSyms0.size(), 1);
 
-    const FieldSymbol* fldSym0_0 = fldSyms[0];
+    const FieldSymbol* fldSym0_0 = fldSyms0[0];
     PSY_EXPECT_TRUE(fldSym0_0);
-    PSY_EXPECT_TRUE(fldSym0_0->kind() == SymbolKind::Value);
-    PSY_EXPECT_TRUE(fldSym0_0->asValue());
-    PSY_EXPECT_TRUE(fldSym0_0->asValue()->valueKind() == ValueKind::Field);
-    PSY_EXPECT_TRUE(fldSym0_0->asValue()->asField());
-    PSY_EXPECT_EQ_STR(fldSym0_0->asValue()->name()->text(), "y");
-    PSY_EXPECT_TRUE(fldSym0_0->asValue()->type()->typeKind() == TypeKind::Named);
-    PSY_EXPECT_EQ_STR(fldSym0_0->asValue()->type()->asNamedType()->name()->text(), "int");
+    PSY_EXPECT_EQ_STR(fldSym0_0->name()->text(), "y");
+    PSY_EXPECT_EQ_ENUM(fldSym0_0->type()->typeKind(), TypeKind::Named, TypeKind);
 }
 
-void SemanticModelTester::case0402(){}
-void SemanticModelTester::case0403(){}
+void SemanticModelTester::case0402()
+{
+    auto [tyDecl, semaModel] =
+            declAndSemaModel<StructOrUnionDeclarationSyntax>("struct x { int y , z ; } ;");
+
+    auto tySpec = tyDecl->typeSpecifier();
+
+    auto fldDecl0 = tySpec->declarations()->value->asFieldDeclaration();
+    std::vector<const FieldSymbol*> fldSyms0 = semaModel->declaredSymbols(fldDecl0);
+    PSY_EXPECT_EQ_INT(fldSyms0.size(), 2);
+    const FieldSymbol* fldSym0_0 = fldSyms0[0];
+    PSY_EXPECT_TRUE(fldSym0_0);
+    PSY_EXPECT_EQ_STR(fldSym0_0->name()->text(), "y");
+    PSY_EXPECT_EQ_ENUM(fldSym0_0->type()->typeKind(), TypeKind::Named, TypeKind);
+    const FieldSymbol* fldSym0_1 = fldSyms0[1];
+    PSY_EXPECT_TRUE(fldSym0_1);
+    PSY_EXPECT_EQ_STR(fldSym0_1->name()->text(), "z");
+    PSY_EXPECT_EQ_ENUM(fldSym0_1->type()->typeKind(), TypeKind::Named, TypeKind);
+}
+
+void SemanticModelTester::case0403()
+{
+    auto [tyDecl, semaModel] =
+            declAndSemaModel<StructOrUnionDeclarationSyntax>("struct x { int y ; double * z ; } ;");
+
+    auto tySpec = tyDecl->typeSpecifier();
+
+    auto fldDecl0 = tySpec->declarations()->value->asFieldDeclaration();
+    std::vector<const FieldSymbol*> fldSyms0 = semaModel->declaredSymbols(fldDecl0);
+    PSY_EXPECT_EQ_INT(fldSyms0.size(), 1);
+    const FieldSymbol* fldSym0_0 = fldSyms0[0];
+    PSY_EXPECT_TRUE(fldSym0_0);
+    PSY_EXPECT_EQ_STR(fldSym0_0->name()->text(), "y");
+    PSY_EXPECT_EQ_ENUM(fldSym0_0->type()->typeKind(), TypeKind::Named, TypeKind);
+
+    auto fldDecl1 = tySpec->declarations()->next->value->asFieldDeclaration();
+    std::vector<const FieldSymbol*> fldSyms1 = semaModel->declaredSymbols(fldDecl1);
+    PSY_EXPECT_EQ_INT(fldSyms1.size(), 1);
+    const FieldSymbol* fldSym1_0 = fldSyms1[0];
+    PSY_EXPECT_TRUE(fldSym1_0);
+    PSY_EXPECT_EQ_STR(fldSym1_0->name()->text(), "z");
+    PSY_EXPECT_EQ_ENUM(fldSym1_0->type()->typeKind(), TypeKind::Pointer, TypeKind);
+
+}
+
 void SemanticModelTester::case0404(){}
 void SemanticModelTester::case0405(){}
 void SemanticModelTester::case0406(){}
