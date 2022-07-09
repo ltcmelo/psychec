@@ -2450,8 +2450,13 @@ void BinderTester::case0928()
     bind("&1;");
 }
 
+void BinderTester::case0929()
+{
+    CROSS_REFERENCE_TEST(ParserTester::case0446);
 
-void BinderTester::case0929(){}
+    bind("struct x { struct y { int z ; } ; } ;");
+}
+
 void BinderTester::case0930(){}
 void BinderTester::case0931(){}
 void BinderTester::case0932(){}

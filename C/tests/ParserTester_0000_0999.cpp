@@ -3368,22 +3368,58 @@ void ParserTester::case0442()
 
 void ParserTester::case0443()
 {
-
+    parse("struct x { int y ; } ;",
+          Expectation().AST({ TranslationUnit,
+                              StructDeclaration,
+                              StructTypeSpecifier,
+                              FieldDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void ParserTester::case0444()
 {
-
+    parse("struct x { int y ; double z ; } ;",
+          Expectation().AST({ TranslationUnit,
+                              StructDeclaration,
+                              StructTypeSpecifier,
+                              FieldDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              FieldDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void ParserTester::case0445()
 {
-
+    parse("struct x { struct y { int z ; } w ; } ;",
+          Expectation().AST({ TranslationUnit,
+                              StructDeclaration,
+                              StructTypeSpecifier,
+                              FieldDeclaration,
+                              TypeDeclarationAsSpecifier,
+                              StructTypeSpecifier,
+                              FieldDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              IdentifierDeclarator }));
 }
 
 void ParserTester::case0446()
 {
+    // Covered as a semantic error.
+    CROSS_REFERENCE_TEST(BinderTester::case0015);
 
+    parse("struct x { struct y { int z ; } ; } ;",
+          Expectation().AST({ TranslationUnit,
+                              StructDeclaration,
+                              StructTypeSpecifier,
+                              StructDeclaration,
+                              StructTypeSpecifier,
+                              FieldDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator }));
 }
 
 void ParserTester::case0447()

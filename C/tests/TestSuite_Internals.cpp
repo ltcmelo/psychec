@@ -41,7 +41,7 @@
 #include <sstream>
 
 //#define DUMP_AST
-//#define DEBUG_DIAGNOSTICS
+#define DEBUG_DIAGNOSTICS
 //#define DEBUG_BINDING_SEARCH
 
 using namespace psy;
@@ -126,8 +126,8 @@ bool InternalsTestSuite::checkErrorAndWarn(Expectation X)
 #endif
     }
 
-    PSY_EXPECT_EQ_INT(X.numW_, W_cnt);
-    PSY_EXPECT_EQ_INT(X.numE_, E_cnt);
+    PSY_EXPECT_EQ_INT(W_cnt, X.numW_);
+    PSY_EXPECT_EQ_INT(E_cnt, X.numE_);
 
     for (const auto& id : X.descriptorsW_) {
         if (!W_IDs.count(id)) {
@@ -214,17 +214,17 @@ void InternalsTestSuite::parse(std::string source,
 
     if (X.isAmbiguous_) {
         if (X.ambiguityText_.empty())
-            PSY_EXPECT_EQ_STR(text + text, textP);
+            PSY_EXPECT_EQ_STR(textP, text + text);
         else {
             X.ambiguityText_.erase(
                         std::remove_if(X.ambiguityText_.begin(),
                                        X.ambiguityText_.end(), ::isspace),
                         X.ambiguityText_.end());
-            PSY_EXPECT_EQ_STR(X.ambiguityText_, textP);
+            PSY_EXPECT_EQ_STR(textP, X.ambiguityText_);
         }
     }
     else
-        PSY_EXPECT_EQ_STR(text, textP);
+        PSY_EXPECT_EQ_STR(textP, text);
 
     if (X.syntaxKinds_.empty())
         return;
@@ -235,7 +235,7 @@ void InternalsTestSuite::parse(std::string source,
 
     std::string namesP = ossTree.str();
     namesP.erase(std::remove_if(namesP.begin(), namesP.end(), ::isspace), namesP.end());
-    PSY_EXPECT_EQ_STR(names, namesP);
+    PSY_EXPECT_EQ_STR(namesP, names);
 }
 
 namespace {
