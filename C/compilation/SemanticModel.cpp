@@ -62,6 +62,11 @@ SemanticModel::SemanticModel(const SyntaxTree* tree, Compilation* compilation)
 SemanticModel::~SemanticModel()
 {}
 
+const SyntaxTree* SemanticModel::syntaxTree() const
+{
+    return P->tree_;
+}
+
 const Compilation* SemanticModel::compilation() const
 {
     return P->compilation_;

@@ -95,7 +95,7 @@ void Compilation::addSyntaxTrees(std::vector<const SyntaxTree*> trees)
         addSyntaxTree(tree);
 }
 
-std::vector<const SyntaxTree*> Compilation::syntaxTree() const
+std::vector<const SyntaxTree*> Compilation::syntaxTrees() const
 {
     std::vector<const SyntaxTree*> trees(P->semaModels_.size());
     std::transform(P->semaModels_.begin(),

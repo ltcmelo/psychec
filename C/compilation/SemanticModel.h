@@ -47,7 +47,12 @@ public:
     ~SemanticModel();
 
     /**
-     * The Compilation which \c this SemanticModel was computed from.
+     * The SyntaxTree from which \c this SemanticModel was computed.
+     */
+    const SyntaxTree* syntaxTree() const;
+
+    /**
+     * The Compilation from which \c this SemanticModel was computed.
      */
     const Compilation* compilation() const;
 
