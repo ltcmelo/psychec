@@ -68,6 +68,7 @@ public:
         + 0350-0399 -> field
         + 0400-0449 -> enum
         + 0450-0499 -> enumerator
+        + 0500-0509 -> library
      */
 
     void case0001();
@@ -337,6 +338,17 @@ public:
     void case0498();
     void case0499();
 
+    void case0500();
+    void case0501();
+    void case0502();
+    void case0503();
+    void case0504();
+    void case0505();
+    void case0506();
+    void case0507();
+    void case0508();
+    void case0509();
+
     std::vector<TestFunction> tests_
     {
         TEST_SEMANTIC_MODEL(case0001),
@@ -605,6 +617,17 @@ public:
         TEST_SEMANTIC_MODEL(case0497),
         TEST_SEMANTIC_MODEL(case0498),
         TEST_SEMANTIC_MODEL(case0499),
+
+        TEST_SEMANTIC_MODEL(case0500),
+        TEST_SEMANTIC_MODEL(case0501),
+        TEST_SEMANTIC_MODEL(case0502),
+        TEST_SEMANTIC_MODEL(case0503),
+        TEST_SEMANTIC_MODEL(case0504),
+        TEST_SEMANTIC_MODEL(case0505),
+        TEST_SEMANTIC_MODEL(case0506),
+        TEST_SEMANTIC_MODEL(case0507),
+        TEST_SEMANTIC_MODEL(case0508),
+        TEST_SEMANTIC_MODEL(case0509),
     };
 };
 
