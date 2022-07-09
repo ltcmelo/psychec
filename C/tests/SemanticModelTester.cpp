@@ -909,3 +909,34 @@ void SemanticModelTester::case0496(){}
 void SemanticModelTester::case0497(){}
 void SemanticModelTester::case0498(){}
 void SemanticModelTester::case0499(){}
+
+void SemanticModelTester::case0500()
+{
+    auto s = "int x ; ";
+
+    tree_ = SyntaxTree::parseText(SourceText(s),
+                                  TextPreprocessingState::Preprocessed,
+                                  ParseOptions(),
+                                  "<test>");
+
+    auto TU = tree_->translationUnitRoot();
+    PSY_EXPECT_TRUE(TU);
+
+    compilation_ = Compilation::create(tree_->filePath());
+    compilation_->addSyntaxTrees({ tree_.get() });
+    auto semaModel = compilation_->semanticModel(tree_.get());
+    PSY_EXPECT_TRUE(semaModel);
+
+    const LibrarySymbol* libSym = semaModel->declaredSymbol(TU);
+    PSY_EXPECT_TRUE(libSym);
+
+}
+void SemanticModelTester::case0501(){}
+void SemanticModelTester::case0502(){}
+void SemanticModelTester::case0503(){}
+void SemanticModelTester::case0504(){}
+void SemanticModelTester::case0505(){}
+void SemanticModelTester::case0506(){}
+void SemanticModelTester::case0507(){}
+void SemanticModelTester::case0508(){}
+void SemanticModelTester::case0509(){}
