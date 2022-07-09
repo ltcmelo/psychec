@@ -174,7 +174,7 @@ private:
     Action nameSymAtTop(const char* s);
     Action typeSymAtTopAndPopIt();
 
-    template <class DeclT> Action determineContextAndMakeSym(const DeclT* node);
+    template <class DecltrT> Action determineContextAndMakeSym(const DecltrT* node);
 
     //------------//
     // Statements //

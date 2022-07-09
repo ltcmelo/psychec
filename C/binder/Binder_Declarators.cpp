@@ -245,8 +245,8 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
     return Action::Skip;
 }
 
-template <class DeclT>
-SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DeclT* node)
+template <class DecltrT>
+SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DecltrT* node)
 {
     switch (scopes_.top()->kind()) {
         case ScopeKind::File:

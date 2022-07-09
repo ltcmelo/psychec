@@ -63,15 +63,11 @@ public:
         + 0090-0099 -> variable and function (declaration)
         + 0100-0149 -> function (declaration)
         + 0150-0199 -> function (definition)
-
-
-
         + 0200-0299 -> parameter
-        + 0300-0349 -> struct/union/enumeration
+        + 0300-0349 -> struct/union
         + 0350-0399 -> field
-        + 0400-0449 -> enumerator
-        + 0450-0499 ->
-
+        + 0400-0449 -> enum
+        + 0450-0499 -> enumerator
      */
 
     void case0001();
