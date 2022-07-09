@@ -86,8 +86,8 @@ public:
             + 2350-2399 -> arrays of objects of qualified type
 
         Types
-            + 0000-0049 -> structures and unions
-            + 0050-0099 -> enumerations (and enumerators)
+            + 3000-0049 -> structures and unions
+            + 3050-0099 -> enumerations (and enumerators)
      */
 
     void case0001();

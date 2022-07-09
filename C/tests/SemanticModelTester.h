@@ -59,14 +59,15 @@ public:
     using TestFunction = std::pair<std::function<void(SemanticModelTester*)>, const char*>;
 
     /*
-        + 0000-0099 -> variable and/or function
-        + 0100-0199 -> function (definition)
+        + 0000-0089 -> variable
+        + 0090-0099 -> variable and function (declaration)
+        + 0100-0149 -> function (declaration)
+        + 0150-0199 -> function (definition)
         + 0200-0299 -> parameter
-        + 0300-0349 -> struct/union/enumeration
+        + 0300-0349 -> struct/union
         + 0350-0399 -> field
-        + 0400-0449 -> enumerator
-        + 0450-0499 ->
-
+        + 0400-0449 -> enum
+        + 0450-0499 -> enumerator
      */
 
     void case0001();
@@ -79,6 +80,17 @@ public:
     void case0008();
     void case0009();
     void case0010();
+    //...
+    void case0090();
+    void case0091();
+    void case0092();
+    void case0093();
+    void case0094();
+    void case0095();
+    void case0096();
+    void case0097();
+    void case0098();
+    void case0099();
 
     void case0101();
     void case0102();
@@ -90,6 +102,17 @@ public:
     void case0108();
     void case0109();
     void case0110();
+    //...
+    void case0150();
+    void case0151();
+    void case0152();
+    void case0153();
+    void case0154();
+    void case0155();
+    void case0156();
+    void case0157();
+    void case0158();
+    void case0159();
 
     void case0201();
     void case0202();
@@ -326,6 +349,17 @@ public:
         TEST_SEMANTIC_MODEL(case0008),
         TEST_SEMANTIC_MODEL(case0009),
         TEST_SEMANTIC_MODEL(case0010),
+        //...
+        TEST_SEMANTIC_MODEL(case0090),
+        TEST_SEMANTIC_MODEL(case0091),
+        TEST_SEMANTIC_MODEL(case0092),
+        TEST_SEMANTIC_MODEL(case0093),
+        TEST_SEMANTIC_MODEL(case0094),
+        TEST_SEMANTIC_MODEL(case0095),
+        TEST_SEMANTIC_MODEL(case0096),
+        TEST_SEMANTIC_MODEL(case0097),
+        TEST_SEMANTIC_MODEL(case0098),
+        TEST_SEMANTIC_MODEL(case0099),
 
         TEST_SEMANTIC_MODEL(case0101),
         TEST_SEMANTIC_MODEL(case0102),
@@ -337,6 +371,17 @@ public:
         TEST_SEMANTIC_MODEL(case0108),
         TEST_SEMANTIC_MODEL(case0109),
         TEST_SEMANTIC_MODEL(case0110),
+        //...
+        TEST_SEMANTIC_MODEL(case0150),
+        TEST_SEMANTIC_MODEL(case0151),
+        TEST_SEMANTIC_MODEL(case0152),
+        TEST_SEMANTIC_MODEL(case0153),
+        TEST_SEMANTIC_MODEL(case0154),
+        TEST_SEMANTIC_MODEL(case0155),
+        TEST_SEMANTIC_MODEL(case0156),
+        TEST_SEMANTIC_MODEL(case0157),
+        TEST_SEMANTIC_MODEL(case0158),
+        TEST_SEMANTIC_MODEL(case0159),
 
         TEST_SEMANTIC_MODEL(case0201),
         TEST_SEMANTIC_MODEL(case0202),

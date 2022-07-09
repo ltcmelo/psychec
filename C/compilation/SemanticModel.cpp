@@ -144,7 +144,21 @@ const NamedTypeSymbol* SemanticModel::declaredSymbol(const TypeDeclarationSyntax
 
 const EnumeratorSymbol* SemanticModel::declaredSymbol(const EnumeratorDeclarationSyntax* node) const
 {
-    return nullptr;
+    auto it = P->declSyms_.find(node);
+    if (it == P->declSyms_.end()) {
+        PSY_ASSERT_NO_STMT(!P->expectValidSyms_);
+        return nullptr;
+    }
+
+    auto valSym = castSym(it->second, &Symbol::asValue);
+    if (!valSym)
+        return nullptr;
+
+    auto enumtrSym = castSym(valSym, &ValueSymbol::asEnumerator);
+    if (!enumtrSym)
+        return nullptr;
+
+    return enumtrSym;
 }
 
 std::vector<const FieldSymbol*> SemanticModel::declaredSymbols(const FieldDeclarationSyntax* node) const
