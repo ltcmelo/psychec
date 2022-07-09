@@ -40,18 +40,20 @@ using namespace C;
 
 struct SemanticModel::SemanticModelImpl
 {
-    SemanticModelImpl(Compilation* compilation)
+    SemanticModelImpl(const SyntaxTree* tree, Compilation* compilation)
         : expectValidSyms_(true)
+        , tree_(tree)
         , compilation_(compilation)
     {}
 
     bool expectValidSyms_;
+    const SyntaxTree* tree_;
     Compilation* compilation_;
     std::unordered_map<const SyntaxNode*, Symbol*> declSyms_;
 };
 
-SemanticModel::SemanticModel(Compilation* compilation, const SyntaxTree* tree)
-    : P(new SemanticModelImpl(compilation))
+SemanticModel::SemanticModel(const SyntaxTree* tree, Compilation* compilation)
+    : P(new SemanticModelImpl(tree, compilation))
 {
     Binder binder(this, tree);
     binder.bind();

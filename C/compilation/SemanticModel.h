@@ -81,7 +81,7 @@ PSY_INTERNAL:
     PSY_GRANT_ACCESS(Binder);
     PSY_GRANT_ACCESS(Compilation);
 
-    SemanticModel(Compilation* compilation, const SyntaxTree* tree);
+    SemanticModel(const SyntaxTree* tree, Compilation* compilation);
 
     Symbol* storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym);
     Symbol* storeUsedSym(std::unique_ptr<Symbol> sym);

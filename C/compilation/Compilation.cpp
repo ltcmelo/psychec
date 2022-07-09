@@ -110,7 +110,7 @@ const SemanticModel* Compilation::semanticModel(const SyntaxTree* tree) const
     if (P->isDirty_[tree]) {
         // TODO: Remove from the assembly the symbols associated
         // with the given syntax tree.
-        P->semaModels_[tree].reset(new SemanticModel(const_cast<Compilation*>(this), tree));
+        P->semaModels_[tree].reset(new SemanticModel(tree, const_cast<Compilation*>(this)));
         P->isDirty_[tree] = false;
     }
 
