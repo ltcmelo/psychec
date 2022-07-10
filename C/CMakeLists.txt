@@ -42,8 +42,6 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/infra/MemoryPool.cpp
 
     # Syntax
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.h
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDumper.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxFacts.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxHolder.h
@@ -84,6 +82,14 @@ set(CFE_SOURCES
     # Parser
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Lexer.cpp
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Parser.cpp
+    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCatalogue.h
+    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCatalogue.cpp
+    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCataloguer.h
+    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCataloguer.cpp
+    ${PROJECT_SOURCE_DIR}/parser/DisambiguationReparser.h
+    ${PROJECT_SOURCE_DIR}/parser/DisambiguationReparser.cpp
+    ${PROJECT_SOURCE_DIR}/parser/Disambiguator.h
+    ${PROJECT_SOURCE_DIR}/parser/Disambiguator.cpp
     ${PROJECT_SOURCE_DIR}/parser/Keywords.cpp
     ${PROJECT_SOURCE_DIR}/parser/LanguageDialect.h
     ${PROJECT_SOURCE_DIR}/parser/LanguageDialect.cpp
@@ -185,6 +191,12 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/ScopeKind.h
     ${PROJECT_SOURCE_DIR}/binder/TypeChecker.h
     ${PROJECT_SOURCE_DIR}/binder/TypeChecker.cpp
+
+    # Typing
+    ${PROJECT_SOURCE_DIR}/typing/Shape.h
+    ${PROJECT_SOURCE_DIR}/typing/Shape.cpp
+    ${PROJECT_SOURCE_DIR}/typing/Shape_ALL.h
+    ${PROJECT_SOURCE_DIR}/typing/ShapeKind.h
 
     # Compilation
     ${PROJECT_SOURCE_DIR}/compilation/Assembly.cpp

@@ -1,4 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,24 +18,57 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYNTAX_DISAMBIGUATOR_H__
-#define PSYCHE_C_SYNTAX_DISAMBIGUATOR_H__
+#ifndef PSYCHE_C_DISAMBIGUATION_CATALOGUE_H__
+#define PSYCHE_C_DISAMBIGUATION_CATALOGUE_H__
 
 #include "API.h"
 #include "Fwds.h"
 
-#include "SyntaxVisitor.h"
+#include "../common/infra/InternalAccess.h"
 
-#include <iostream>
+#include <ostream>
+#include <stack>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
 
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API SyntaxDisambiguator final : public SyntaxVisitor
+class PSY_C_NON_API DisambiguationCatalogue
 {
+    friend std::ostream& operator<<(const DisambiguationCatalogue dc, std::ostream& os);
+
+public:
+    ~DisambiguationCatalogue();
+
+PSY_INTERNAL:
+    void createLevelAndEnter(const SyntaxNode*);
+    void enterLevel(const SyntaxNode*);
+    void exitLevel();
+
+    void addT(std::string s);
+    void addV(std::string s);
+
+private:
+    using T = std::unordered_set<std::string>;
+    using V = std::unordered_set<std::string>;
+    using TV = std::pair<T, V>;
+
+    using Levels = std::unordered_map<const SyntaxNode*, TV>;
+
+    Levels levels_;
+    std::stack<const SyntaxNode*> levelKeys_;
+
+    bool levelExists(const SyntaxNode*) const;
+    TV* currentLevel();
 };
+
+std::ostream& operator<<(const DisambiguationCatalogue dc, std::ostream& os);
 
 } // C
 } // psy
 
 #endif
+

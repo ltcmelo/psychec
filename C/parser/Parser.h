@@ -64,7 +64,6 @@ PSY_INTERNAL:
     TranslationUnitSyntax* parse();
 
 private:
-
     // Unavailable
     Parser(const Parser&) = delete;
     void operator=(const Parser&) = delete;
