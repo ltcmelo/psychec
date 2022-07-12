@@ -20,8 +20,19 @@
 
 #include "Disambiguator.h"
 
+#include "DisambiguationCataloguer.h"
+#include "SyntaxTree.h"
+
+#include "syntax/SyntaxNode.h"
+
 using namespace psy;
 using namespace C;
 
 Disambiguator::~Disambiguator()
 {}
+
+void Disambiguator::disambiguate(SyntaxTree *tree)
+{
+    DisambiguationCataloguer cataloguer(tree);
+    cataloguer.visit(tree->root());
+}

@@ -23,6 +23,8 @@
 
 #include "API.h"
 
+#include "DisambiguationCatalogue.h"
+
 #include "syntax/SyntaxVisitor.h"
 
 #include <ostream>
@@ -35,12 +37,18 @@ class PSY_C_NON_API DisambiguationCataloguer : public SyntaxVisitor
 public:
     DisambiguationCataloguer(SyntaxTree* tree);
 
-protected:
+private:
+    DisambiguationCatalogue disambigCatalog_;
+    void (DisambiguationCatalogue::*addTorV_)(std::string) = nullptr;
+    void catalogue(std::string s);
+
     using Base = SyntaxVisitor;
 
     //--------------//
     // Declarations //
     //--------------//
+
+    Action visitTranslationUnit(const TranslationUnitSyntax*) override;
 
     /* Declarators */
     Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;

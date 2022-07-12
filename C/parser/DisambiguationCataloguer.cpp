@@ -20,6 +20,8 @@
 
 #include "DisambiguationCataloguer.h"
 
+#include "syntax/SyntaxNodes.h"
+
 using namespace psy;
 using namespace C;
 
@@ -27,12 +29,38 @@ DisambiguationCataloguer::DisambiguationCataloguer(SyntaxTree* tree)
     : SyntaxVisitor(tree)
 {}
 
-SyntaxVisitor::Action DisambiguationCataloguer::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax *)
+void DisambiguationCataloguer::catalogue(std::string s)
 {
+    ((disambigCatalog_).*(addTorV_))(s);
+}
+
+SyntaxVisitor::Action DisambiguationCataloguer::visitTranslationUnit(const TranslationUnitSyntax* node)
+{
+    disambigCatalog_.createLevelAndEnter(node);
+
+    for (auto iter = node->declarations(); iter; iter = iter->next) {
+        addTorV_ = &DisambiguationCatalogue::addT;
+        visit(iter->value);
+    }
+
+    disambigCatalog_.exitLevel();
+
+    std::cout << "catalogue : "<< disambigCatalog_ << std::endl;
+
     return Action::Skip;
 }
 
-SyntaxVisitor::Action DisambiguationCataloguer::visitIdentifierName(const IdentifierNameSyntax *)
+SyntaxVisitor::Action DisambiguationCataloguer::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
+{
+    catalogue(node->identifierToken().valueText());
+
+//    addTorV_ = &DisambiguationCatalogue::addV;
+    visit(node->initializer());
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action DisambiguationCataloguer::visitIdentifierName(const IdentifierNameSyntax* node)
 {
     return Action::Skip;
 }

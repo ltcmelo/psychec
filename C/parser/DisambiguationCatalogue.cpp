@@ -94,7 +94,7 @@ DisambiguationCatalogue::TV* DisambiguationCatalogue::currentLevel()
 namespace psy {
 namespace C {
 
-std::ostream& operator<<(const DisambiguationCatalogue dc, std::ostream& os)
+std::ostream& operator<<(std::ostream& os, const DisambiguationCatalogue dc)
 {
     for (const auto& p : dc.levels_) {
         os << to_string(p.first->kind()) << std::endl;

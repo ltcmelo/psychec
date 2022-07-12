@@ -22,6 +22,7 @@
 #define PSYCHE_C_DISAMBIGUATOR_H__
 
 #include "API.h"
+#include "Fwds.h"
 
 #include "../common/infra/InternalAccess.h"
 
@@ -34,8 +35,9 @@ public:
     ~Disambiguator();
 
 PSY_INTERNAL:
+    PSY_GRANT_ACCESS(SyntaxTree);
 
-
+    void disambiguate(SyntaxTree* tree);
 };
 
 } // C

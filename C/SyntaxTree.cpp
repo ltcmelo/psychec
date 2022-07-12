@@ -25,6 +25,7 @@
 #include "binder/TypeChecker.h"
 #include "compilation/Compilation.h"
 #include "infra/MemoryPool.h"
+#include "parser/Disambiguator.h"
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
 #include "syntax/SyntaxLexeme_ALL.h"
@@ -217,6 +218,10 @@ void SyntaxTree::buildTree(SyntaxCategory syntaxCat)
         default:
             P->rootNode_ = parser.parse();
     }
+
+    // TEMP
+    Disambiguator disambiguator;
+    disambiguator.disambiguate(this);
 }
 
 const ParseOptions& SyntaxTree::parseOptions() const

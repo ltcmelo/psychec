@@ -38,12 +38,14 @@ namespace C {
 
 class PSY_C_NON_API DisambiguationCatalogue
 {
-    friend std::ostream& operator<<(const DisambiguationCatalogue dc, std::ostream& os);
+    friend std::ostream& operator<<(std::ostream& os, const DisambiguationCatalogue dc);
 
 public:
     ~DisambiguationCatalogue();
 
 PSY_INTERNAL:
+    PSY_GRANT_ACCESS(DisambiguationCataloguer);
+
     void createLevelAndEnter(const SyntaxNode*);
     void enterLevel(const SyntaxNode*);
     void exitLevel();
@@ -65,7 +67,7 @@ private:
     TV* currentLevel();
 };
 
-std::ostream& operator<<(const DisambiguationCatalogue dc, std::ostream& os);
+std::ostream& operator<<(std::ostream& os, const DisambiguationCatalogue dc);
 
 } // C
 } // psy
