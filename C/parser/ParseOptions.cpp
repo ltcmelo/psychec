@@ -51,8 +51,24 @@ const LanguageExtensions& ParseOptions::extensions() const
 
 ParseOptions& ParseOptions::setCommentMode(CommentMode mode)
 {
-    BF_.commentMode_ =  static_cast<int>(mode);
+    BF_.commentMode_ = static_cast<int>(mode);
     return *this;
+}
+
+ParseOptions::CommentMode ParseOptions::commentMode() const
+{
+    return static_cast<CommentMode>(BF_.commentMode_);
+}
+
+ParseOptions &ParseOptions::setDisambiguationStrategy(DisambiguationStrategy strategy)
+{
+    BF_.disambiguationStrategy_ = static_cast<int>(strategy);
+    return *this;
+}
+
+ParseOptions::DisambiguationStrategy ParseOptions::disambiguatinStrategy() const
+{
+    return static_cast<DisambiguationStrategy>(BF_.disambiguationStrategy_);
 }
 
 ParseOptions& ParseOptions::classifyKeywordIdentifiers(bool yes)

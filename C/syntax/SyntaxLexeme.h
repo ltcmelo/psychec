@@ -59,6 +59,7 @@ public:
     enum class Kind : std::uint16_t
     {
         UNSPECIFIED = 0,
+
         Identifier,
         IntegerConstant,
         FloatingConstant,

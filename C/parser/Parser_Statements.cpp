@@ -276,6 +276,8 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
     auto declStmt = makeNode<DeclarationStatementSyntax>();
     declStmt->decl_ = varDecl;
     ambiStmt->declStmt_ = declStmt;
+
+    detectedAmbiguities_ = true;
 }
 
 /**

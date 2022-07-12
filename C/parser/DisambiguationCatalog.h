@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_DISAMBIGUATION_CATALOGUE_H__
-#define PSYCHE_C_DISAMBIGUATION_CATALOGUE_H__
+#ifndef PSYCHE_C_DISAMBIGUATION_CATALOG_H__
+#define PSYCHE_C_DISAMBIGUATION_CATALOG_H__
 
 #include "API.h"
 #include "Fwds.h"
@@ -36,38 +36,38 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API DisambiguationCatalogue
+class PSY_C_NON_API DisambiguationCatalog
 {
-    friend std::ostream& operator<<(std::ostream& os, const DisambiguationCatalogue dc);
+    friend std::ostream& operator<<(std::ostream& os, const DisambiguationCatalog& disambigCatalog);
 
 public:
-    ~DisambiguationCatalogue();
+    ~DisambiguationCatalog();
 
 PSY_INTERNAL:
-    PSY_GRANT_ACCESS(DisambiguationCataloguer);
+    PSY_GRANT_ACCESS(DisambiguationCataloger);
 
     void createLevelAndEnter(const SyntaxNode*);
     void enterLevel(const SyntaxNode*);
     void exitLevel();
 
-    void addT(std::string s);
-    void addV(std::string s);
+    void catalogAsType(std::string s);
+    void catalogAsNonType(std::string s);
 
 private:
-    using T = std::unordered_set<std::string>;
-    using V = std::unordered_set<std::string>;
-    using TV = std::pair<T, V>;
+    using TypeNames = std::unordered_set<std::string>;
+    using NonTypeNames = std::unordered_set<std::string>;
+    using Names = std::pair<TypeNames, NonTypeNames>;
 
-    using Levels = std::unordered_map<const SyntaxNode*, TV>;
+    using Levels = std::unordered_map<const SyntaxNode*, Names>;
 
     Levels levels_;
     std::stack<const SyntaxNode*> levelKeys_;
 
     bool levelExists(const SyntaxNode*) const;
-    TV* currentLevel();
+    Names* currentLevel();
 };
 
-std::ostream& operator<<(std::ostream& os, const DisambiguationCatalogue dc);
+std::ostream& operator<<(std::ostream& os, const DisambiguationCatalog& disambigCatalog);
 
 } // C
 } // psy

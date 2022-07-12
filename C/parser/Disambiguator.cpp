@@ -20,7 +20,8 @@
 
 #include "Disambiguator.h"
 
-#include "DisambiguationCataloguer.h"
+#include "DisambiguationCataloger.h"
+#include "DisambiguationReparser.h"
 #include "SyntaxTree.h"
 
 #include "syntax/SyntaxNode.h"
@@ -31,8 +32,9 @@ using namespace C;
 Disambiguator::~Disambiguator()
 {}
 
-void Disambiguator::disambiguate(SyntaxTree *tree)
+void Disambiguator::disambiguate(SyntaxTree* tree)
 {
-    DisambiguationCataloguer cataloguer(tree);
-    cataloguer.visit(tree->root());
+    DisambiguationCataloger cataloger(tree);
+    auto catalog = cataloger.catalogFrom(tree->root());
+
 }

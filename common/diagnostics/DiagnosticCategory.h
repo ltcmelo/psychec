@@ -28,6 +28,7 @@ namespace psy {
 enum class DiagnosticCategory : char
 {
     UNSPECIFIED = 0,
+
     Syntax,
     Binding,
     Typing,

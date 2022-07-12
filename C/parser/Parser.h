@@ -63,6 +63,8 @@ PSY_INTERNAL:
 
     TranslationUnitSyntax* parse();
 
+    bool detectedAmbiguities() const;
+
 private:
     // Unavailable
     Parser(const Parser&) = delete;
@@ -70,6 +72,8 @@ private:
 
     MemoryPool* pool_;
     SyntaxTree* tree_;
+
+    bool detectedAmbiguities_;
 
     // While the parser is in backtracking mode, diagnostics are disabled.
     // To avoid unintended omission of syntax errors, the backtracker

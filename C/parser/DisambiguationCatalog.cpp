@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "DisambiguationCatalogue.h"
+#include "DisambiguationCatalog.h"
 
 #include "syntax/SyntaxNode.h"
 
@@ -30,30 +30,30 @@ using namespace C;
 
 #include <algorithm>
 
-DisambiguationCatalogue::~DisambiguationCatalogue()
+DisambiguationCatalog::~DisambiguationCatalog()
 {}
 
-void DisambiguationCatalogue::createLevelAndEnter(const SyntaxNode* node)
+void DisambiguationCatalog::createLevelAndEnter(const SyntaxNode* node)
 {
     PSY_ASSERT(node, return);
     PSY_ASSERT(!levelExists(node), return);
 
-    T t;
-    V v;
+    TypeNames types;
+    NonTypeNames nonTypes;
     if (!levelKeys_.empty()) {
         auto levelIt = levels_.find(levelKeys_.top());
         PSY_ASSERT(levelIt != levels_.end(), return);
 
-        t = levelIt->second.first;
-        v = levelIt->second.second;
+        types = levelIt->second.first;
+        nonTypes = levelIt->second.second;
     }
 
-    levels_.insert(std::make_pair(node, std::make_pair(t, v)));
+    levels_.insert(std::make_pair(node, std::make_pair(types, nonTypes)));
 
     enterLevel(node);
 }
 
-void DisambiguationCatalogue::enterLevel(const SyntaxNode* node)
+void DisambiguationCatalog::enterLevel(const SyntaxNode* node)
 {
     PSY_ASSERT(node, return);
     PSY_ASSERT(levelExists(node), return);
@@ -61,29 +61,29 @@ void DisambiguationCatalogue::enterLevel(const SyntaxNode* node)
     levelKeys_.push(node);
 }
 
-void DisambiguationCatalogue::exitLevel()
+void DisambiguationCatalog::exitLevel()
 {
     levelKeys_.pop();
 }
 
-void DisambiguationCatalogue::addT(std::string s)
+void DisambiguationCatalog::catalogAsType(std::string s)
 {
     auto level = currentLevel();
-    level->first.insert(s);
+    level->first.insert(std::move(s));
 }
 
-void DisambiguationCatalogue::addV(std::string s)
+void DisambiguationCatalog::catalogAsNonType(std::string s)
 {
     auto level = currentLevel();
-    level->second.insert(s);
+    level->second.insert(std::move(s));
 }
 
-bool DisambiguationCatalogue::levelExists(const SyntaxNode* node) const
+bool DisambiguationCatalog::levelExists(const SyntaxNode* node) const
 {
     return levels_.count(node) != 0;
 }
 
-DisambiguationCatalogue::TV* DisambiguationCatalogue::currentLevel()
+DisambiguationCatalog::Names* DisambiguationCatalog::currentLevel()
 {
     PSY_ASSERT(!levelKeys_.empty(), return nullptr);
     PSY_ASSERT(levelExists(levelKeys_.top()), return nullptr);
@@ -94,16 +94,17 @@ DisambiguationCatalogue::TV* DisambiguationCatalogue::currentLevel()
 namespace psy {
 namespace C {
 
-std::ostream& operator<<(std::ostream& os, const DisambiguationCatalogue dc)
+std::ostream& operator<<(std::ostream& os, const DisambiguationCatalog& disambigCatalog)
 {
-    for (const auto& p : dc.levels_) {
+    for (const auto& p : disambigCatalog.levels_) {
         os << to_string(p.first->kind()) << std::endl;
-        os << "\tT" << std::endl;
+        os << "\tTypes: ";
         for (const auto& t : p.second.first)
-            os << "\t\t" << t << std::endl;
-        os << "\tV" << std::endl;
+            os << t << " ";
+        std::cout << std::endl;
+        os << "\tNon-types: ";
         for (const auto& v : p.second.second)
-            os << "\t\t" << v << std::endl;
+            os << v << " ";
         os << std::endl;
     }
     return os;

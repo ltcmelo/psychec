@@ -106,6 +106,7 @@ Parser::DepthControl::~DepthControl()
 Parser::Parser(SyntaxTree* tree)
     : pool_(tree->unitPool())
     , tree_(tree)
+    , detectedAmbiguities_(false)
     , backtracker_(nullptr)
     , diagReporter_(this)
     , curTkIdx_(1)
@@ -192,6 +193,11 @@ TranslationUnitSyntax* Parser::parse()
     auto unit = makeNode<TranslationUnitSyntax>();
     parseTranslationUnit(unit);
     return unit;
+}
+
+bool Parser::detectedAmbiguities() const
+{
+    return detectedAmbiguities_;
 }
 
 bool Parser::ignoreDeclarator()

@@ -40,6 +40,7 @@ namespace C {
 enum class PSY_C_API ScopeKind : uint8_t
 {
     UNSPECIFIED = 0,
+
     File,
     Function,
     FunctionPrototype,

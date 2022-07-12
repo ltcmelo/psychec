@@ -27,7 +27,8 @@ namespace psy {
 
 enum class DiagnosticSeverity : char
 {
-    Info,
+    UNSPECIFIED = 0,
+
     Warning,
     Error
 };

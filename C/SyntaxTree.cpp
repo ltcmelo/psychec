@@ -107,12 +107,12 @@ MemoryPool* SyntaxTree::unitPool() const
 
 std::unique_ptr<SyntaxTree> SyntaxTree::parseText(SourceText text,
                                                   TextPreprocessingState textPPState,
-                                                  ParseOptions options,
-                                                  const std::string& path,
+                                                  ParseOptions parseOptions,
+                                                  const std::string& filePath,
                                                   SyntaxCategory syntaxCategory)
 {
-    std::unique_ptr<SyntaxTree> tree(new SyntaxTree(text, options, path));
-    tree->buildTree(syntaxCategory);
+    std::unique_ptr<SyntaxTree> tree(new SyntaxTree(text, parseOptions, filePath));
+    tree->buildFor(syntaxCategory);
     return tree;
 }
 
@@ -155,7 +155,7 @@ const SyntaxToken& SyntaxTree::tokenAt(LexedTokens::IndexType tkIdx) const { ret
 SyntaxTree::TokenSequenceType::size_type SyntaxTree::tokenCount() const { return P->tokens_.count(); }
 LexedTokens::IndexType SyntaxTree::freeTokenSlot() const { return P->tokens_.freeSlot(); }
 
-void SyntaxTree::buildTree(SyntaxCategory syntaxCat)
+void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
 {
     Lexer lexer(this);
     lexer.lex();
@@ -193,7 +193,7 @@ void SyntaxTree::buildTree(SyntaxCategory syntaxCat)
 #endif
 
     Parser parser(this);
-    switch (syntaxCat) {
+    switch (syntaxCategory) {
         case SyntaxCategory::Declarations: {
             DeclarationSyntax* decl = nullptr;
             parser.parseExternalDeclaration(decl);
@@ -219,7 +219,9 @@ void SyntaxTree::buildTree(SyntaxCategory syntaxCat)
             P->rootNode_ = parser.parse();
     }
 
-    // TEMP
+    if (!parser.detectedAmbiguities())
+        return;
+
     Disambiguator disambiguator;
     disambiguator.disambiguate(this);
 }

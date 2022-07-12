@@ -71,6 +71,7 @@ public:
     enum class SyntaxCategory : uint8_t
     {
         UNSPECIFIED = 0,
+
         Declarations,
         Expressions,
         Statements,
@@ -83,7 +84,7 @@ public:
     static std::unique_ptr<SyntaxTree> parseText(SourceText text,
                                                  TextPreprocessingState textPPState,
                                                  ParseOptions parseOptions = ParseOptions(),
-                                                 const std::string& path = "",
+                                                 const std::string& filePath = "",
                                                  SyntaxCategory syntaxCategory = SyntaxCategory::UNSPECIFIED);
 
     /**
@@ -174,7 +175,7 @@ private:
 
     DECL_PIMPL(SyntaxTree)
 
-    void buildTree(SyntaxCategory syntaxCat);
+    void buildFor(SyntaxCategory syntaxCategory);
 
     LinePosition computePosition(unsigned int offset) const;
     unsigned int searchForLineno(unsigned int offset) const;

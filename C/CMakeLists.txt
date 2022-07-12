@@ -82,10 +82,10 @@ set(CFE_SOURCES
     # Parser
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Lexer.cpp
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Parser.cpp
-    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCatalogue.h
-    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCatalogue.cpp
-    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCataloguer.h
-    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCataloguer.cpp
+    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCatalog.h
+    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCatalog.cpp
+    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCataloger.h
+    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCataloger.cpp
     ${PROJECT_SOURCE_DIR}/parser/DisambiguationReparser.h
     ${PROJECT_SOURCE_DIR}/parser/DisambiguationReparser.cpp
     ${PROJECT_SOURCE_DIR}/parser/Disambiguator.h

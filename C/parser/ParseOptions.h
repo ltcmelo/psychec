@@ -70,8 +70,8 @@ public:
     //!@}
 
     /**
-     * The CommentMode enumeration contains alternatives for treating
-     * comments during parse.
+     * The CommentMode enumeration contains alternatives for
+     * treating comments during parse.
      */
     enum class CommentMode : std::uint8_t
     {
@@ -85,7 +85,26 @@ public:
      * The comment mode.
      */
     ParseOptions& setCommentMode(CommentMode mode);
-    CommentMode commentMode() const { return static_cast<CommentMode>(BF_.commentMode_); }
+    CommentMode commentMode() const;
+    //!@}
+
+    /**
+     * The DisambiguationStrategy enumeration contains alternatives for
+     * disambiguating ambiguous syntax during parse.
+     */
+    enum class DisambiguationStrategy : std::uint8_t
+    {
+        AlgorithmicAndHeuristic,
+        Algorithmic,
+        None,
+    };
+
+    //!@{
+    /**
+     * The DisambiguationStrategy of \c this ParserOptions.
+     */
+    ParseOptions& setDisambiguationStrategy(DisambiguationStrategy strategy);
+    DisambiguationStrategy disambiguatinStrategy() const;
     //!@}
 
 private:
@@ -95,6 +114,7 @@ private:
     struct BitFields
     {
         std::uint16_t commentMode_ : 2;
+        std::uint16_t disambiguationStrategy_ : 2;
         std::uint16_t keywordIdentifiersClassified_ : 1;
     };
     union
