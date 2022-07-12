@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "parser/ParseOptions.h"
+
 #include "../common/infra/InternalAccess.h"
 
 namespace psy {
@@ -31,13 +33,11 @@ namespace C {
 
 class PSY_C_NON_API Disambiguator
 {
-public:
-    ~Disambiguator();
-
 PSY_INTERNAL:
     PSY_GRANT_ACCESS(SyntaxTree);
 
-    void disambiguate(SyntaxTree* tree);
+    Disambiguator();
+    void disambiguate(SyntaxTree* tree, ParseOptions::DisambiguationStrategy strategy);
 };
 
 } // C

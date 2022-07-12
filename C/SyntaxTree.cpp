@@ -222,8 +222,22 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
     if (!parser.detectedAmbiguities())
         return;
 
-    Disambiguator disambiguator;
-    disambiguator.disambiguate(this);
+    switch (P->parseOptions_.disambiguationStrategy()) {
+        case ParseOptions::DisambiguationStrategy::None:
+            // TODO: Diagnose ambiguities.
+            break;
+
+        case ParseOptions::DisambiguationStrategy::AlgorithmicAndHeuristic:
+        case ParseOptions::DisambiguationStrategy::Algorithmic:
+            if (P->diagnostics_.empty()) {
+                Disambiguator disambiguator;
+                disambiguator.disambiguate(this, P->parseOptions_.disambiguationStrategy());
+            }
+            break;
+
+        default:
+            PSY_ESCAPE_VIA_RETURN();
+    }
 }
 
 const ParseOptions& SyntaxTree::parseOptions() const

@@ -66,7 +66,7 @@ ParseOptions &ParseOptions::setDisambiguationStrategy(DisambiguationStrategy str
     return *this;
 }
 
-ParseOptions::DisambiguationStrategy ParseOptions::disambiguatinStrategy() const
+ParseOptions::DisambiguationStrategy ParseOptions::disambiguationStrategy() const
 {
     return static_cast<DisambiguationStrategy>(BF_.disambiguationStrategy_);
 }

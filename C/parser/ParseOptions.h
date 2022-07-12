@@ -104,7 +104,7 @@ public:
      * The DisambiguationStrategy of \c this ParserOptions.
      */
     ParseOptions& setDisambiguationStrategy(DisambiguationStrategy strategy);
-    DisambiguationStrategy disambiguatinStrategy() const;
+    DisambiguationStrategy disambiguationStrategy() const;
     //!@}
 
 private:
