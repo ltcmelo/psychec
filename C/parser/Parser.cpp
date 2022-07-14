@@ -106,7 +106,6 @@ Parser::DepthControl::~DepthControl()
 Parser::Parser(SyntaxTree* tree)
     : pool_(tree->unitPool())
     , tree_(tree)
-    , detectedAmbiguities_(false)
     , backtracker_(nullptr)
     , diagReporter_(this)
     , curTkIdx_(1)
@@ -195,9 +194,16 @@ TranslationUnitSyntax* Parser::parse()
     return unit;
 }
 
-bool Parser::detectedAmbiguities() const
+bool Parser::detectedAnyAmbiguity() const
 {
-    return detectedAmbiguities_;
+    return !diagReporter_.retainedAmbiguityDiags_.empty();
+}
+
+std::vector<
+    std::pair<DiagnosticDescriptor,
+              LexedTokens::IndexType>> Parser::releaseRetainedAmbiguityDiags() const
+{
+    return std::move(diagReporter_.retainedAmbiguityDiags_);
 }
 
 bool Parser::ignoreDeclarator()

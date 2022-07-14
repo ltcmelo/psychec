@@ -118,5 +118,5 @@ void Parser::maybeAmbiguateTypeReference(TypeReferenceSyntax*& tyRef)
     ambiTyRef->exprAsTyRef_ = exprAsTyRef;
     ambiTyRef->tyNameAsTyRef_ = tyNameAsTyRef;
 
-    detectedAmbiguities_ = true;
+    diagReporter_.AmbiguousTypeNameOrExpressionAsTypeReference();
 }

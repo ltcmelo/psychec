@@ -62,7 +62,7 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
         declList_cur = &(*declList_cur)->next;
     }
 
-    diagReporter_.reportDelayed();
+    diagReporter_.diagnoseDelayed();
 }
 
 /**
@@ -341,7 +341,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
                 if (parseExtKR_ParameterDeclarationList(paramKRList)) {
                     BT.discard();
                     if (parseFunctionDefinition_AtOpenBrace(decl, specList, decltor, paramKRList)) {
-                        diagReporter_.delayed_.clear();
+                        diagReporter_.delayedDiags_.clear();
                         return true;
                     }
                     return false;

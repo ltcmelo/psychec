@@ -52,59 +52,64 @@ public:
     //!@}
 
     /**
-     * The LanguageDialect used for parsing with \c this options.
+     * The LanguageDialect of \c this ParseOptions.
      */
     const LanguageDialect& dialect() const;
 
     /**
-     * The LanguageExtensions used for parsing with \c this options.
+     * The LanguageExtensions of \c this ParseOptions.
      */
     const LanguageExtensions& extensions() const;
 
     //!@{
     /**
-     * Whether to classify identifiers that are keywords.
+     * \brief The alternatives for TreatmentOfIdentifiers during parse.
      */
-    ParseOptions& classifyKeywordIdentifiers(bool yes);
-    bool IsKeywordsIdentifiersClassified() const { return BF_.keywordIdentifiersClassified_; }
-    //!@}
-
-    /**
-     * The CommentMode enumeration contains alternatives for
-     * treating comments during parse.
-     */
-    enum class CommentMode : std::uint8_t
+    enum class TreatmentOfIdentifiers : std::uint8_t
     {
-        Discard,                  /**< Discard every comment. */
-        KeepAll,                  /**< Keep all comments. */
-        KeepDocumentationOnly     /**< Only keep documentation comments. */
+        None,    /**< No special treatment. */
+        Classify /**< Classify into keywords and non-keywords ("plain identifiers"). */
     };
+    /**
+     * The TreatmentOfIdentifiers of \c this ParserOptions.
+     */
+    ParseOptions& setTreatmentOfIdentifiers(TreatmentOfIdentifiers treatOfIdent);
+    TreatmentOfIdentifiers treatmentOfIdentifiers() const;
+    //!@}
 
     //!@{
     /**
-     * The comment mode.
+     * \brief The alternatives for TreatmentOfComments during parse.
      */
-    ParseOptions& setCommentMode(CommentMode mode);
-    CommentMode commentMode() const;
+    enum class TreatmentOfComments : std::uint8_t
+    {
+        None,                 /**< No special treatment. */
+        Keep,                 /**< Keep comments. */
+        KeepDocumentationOnly /**< Keep documentation comments only. */
+    };
+    /**
+     * The TreatmentOfComments of \c this ParserOptions.
+     */
+    ParseOptions& setTreatmentOfComments(TreatmentOfComments treatOfComments);
+    TreatmentOfComments treatmentOfComments() const;
     //!@}
 
+    //!@{
     /**
-     * The DisambiguationStrategy enumeration contains alternatives for
-     * disambiguating ambiguous syntax during parse.
+     * * \brief The alternatives for TreatmentOfAmbiguities during parse.
      */
-    enum class DisambiguationStrategy : std::uint8_t
+    enum class TreatmentOfAmbiguities : std::uint8_t
     {
-        AlgorithmicAndHeuristic,
-        Algorithmic,
         None,
+        DisambiguateAlgorithmically,
+        DisambiguateAlgorithmicallyOrHeuristically,
+        DisambiguateHeuristically,
     };
-
-    //!@{
     /**
-     * The DisambiguationStrategy of \c this ParserOptions.
+     * The TreatmentOfAmbiguities of \c this ParserOptions.
      */
-    ParseOptions& setDisambiguationStrategy(DisambiguationStrategy strategy);
-    DisambiguationStrategy disambiguationStrategy() const;
+    ParseOptions& setTreatmentOfAmbiguities(TreatmentOfAmbiguities treatOfAmbigs);
+    TreatmentOfAmbiguities treatmentOfAmbiguities() const;
     //!@}
 
 private:
@@ -113,9 +118,9 @@ private:
 
     struct BitFields
     {
-        std::uint16_t commentMode_ : 2;
-        std::uint16_t disambiguationStrategy_ : 2;
-        std::uint16_t keywordIdentifiersClassified_ : 1;
+        std::uint16_t treatmentOfIdentifiers_ : 2;
+        std::uint16_t treatmentOfComments_ : 2;
+        std::uint16_t treatmentOfAmbiguities_ : 2;
     };
     union
     {

@@ -219,25 +219,42 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
             P->rootNode_ = parser.parse();
     }
 
-    if (!parser.detectedAmbiguities())
+    if (!parser.detectedAnyAmbiguity())
         return;
 
-    switch (P->parseOptions_.disambiguationStrategy()) {
-        case ParseOptions::DisambiguationStrategy::None:
-            // TODO: Diagnose ambiguities.
+    auto disambigStrategy = Disambiguator::DisambiguationStrategy::UNSPECIFIED;
+    switch (P->parseOptions_.treatmentOfAmbiguities()) {
+        case ParseOptions::TreatmentOfAmbiguities::None:
+            for (const auto& diag : parser.releaseRetainedAmbiguityDiags())
+                newDiagnostic(diag.first, diag.second);
+            return;
+
+        case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically:
+            if (!P->diagnostics_.empty())
+                return;
+            // TODO: Complete program x program fragment
+            disambigStrategy = Disambiguator::DisambiguationStrategy::Contextual;
             break;
 
-        case ParseOptions::DisambiguationStrategy::AlgorithmicAndHeuristic:
-        case ParseOptions::DisambiguationStrategy::Algorithmic:
-            if (P->diagnostics_.empty()) {
-                Disambiguator disambiguator;
-                disambiguator.disambiguate(this, P->parseOptions_.disambiguationStrategy());
-            }
+        case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically:
+            if (!P->diagnostics_.empty())
+                return;
+            // TODO: Complete program x program fragment
+            disambigStrategy = Disambiguator::DisambiguationStrategy::ContextualWithHeuristic;
+            break;
+
+        case ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically:
+            if (!P->diagnostics_.empty())
+                return;
+            disambigStrategy = Disambiguator::DisambiguationStrategy::Heuristic;
             break;
 
         default:
             PSY_ESCAPE_VIA_RETURN();
     }
+
+    Disambiguator disambiguator(disambigStrategy);
+    disambiguator.disambiguate(this);
 }
 
 const ParseOptions& SyntaxTree::parseOptions() const

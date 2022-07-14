@@ -29,11 +29,11 @@
 using namespace psy;
 using namespace C;
 
-Disambiguator::Disambiguator()
+Disambiguator::Disambiguator(DisambiguationStrategy strategy)
+    : strategy_(strategy)
 {}
 
-void Disambiguator::disambiguate(SyntaxTree* tree,
-                                 ParseOptions::DisambiguationStrategy strategy)
+void Disambiguator::disambiguate(SyntaxTree* tree)
 {
     DisambiguationCataloger cataloger(tree);
     auto catalog = cataloger.catalogFrom(tree->root());

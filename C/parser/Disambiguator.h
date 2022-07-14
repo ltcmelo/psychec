@@ -28,6 +28,8 @@
 
 #include "../common/infra/InternalAccess.h"
 
+#include <cstdint>
+
 namespace psy {
 namespace C {
 
@@ -36,8 +38,22 @@ class PSY_C_NON_API Disambiguator
 PSY_INTERNAL:
     PSY_GRANT_ACCESS(SyntaxTree);
 
-    Disambiguator();
-    void disambiguate(SyntaxTree* tree, ParseOptions::DisambiguationStrategy strategy);
+    enum class DisambiguationStrategy : std::uint8_t
+    {
+        UNSPECIFIED = 0,
+
+        Symbolic,
+        SymbolicWithHeuristic,
+        Contextual,
+        ContextualWithHeuristic,
+        Heuristic
+    };
+
+    Disambiguator(DisambiguationStrategy strategy);
+    void disambiguate(SyntaxTree* tree);
+
+private:
+    DisambiguationStrategy strategy_;
 };
 
 } // C

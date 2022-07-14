@@ -63,7 +63,7 @@ PSY_INTERNAL:
 
     TranslationUnitSyntax* parse();
 
-    bool detectedAmbiguities() const;
+    bool detectedAnyAmbiguity() const;
 
 private:
     // Unavailable
@@ -72,8 +72,6 @@ private:
 
     MemoryPool* pool_;
     SyntaxTree* tree_;
-
-    bool detectedAmbiguities_;
 
     // While the parser is in backtracking mode, diagnostics are disabled.
     // To avoid unintended omission of syntax errors, the backtracker
@@ -100,16 +98,19 @@ private:
     {
         DiagnosticsReporter(Parser* parser)
             : parser_(parser)
-            , delayReports_(false)
+            , IDsForDelay_(false)
         {}
         Parser* parser_;
 
-        std::unordered_set<std::string> delayReports_;
-        std::vector<std::pair<DiagnosticDescriptor, LexedTokens::IndexType>> delayed_;
-        void reportDelayed();
-
         static std::string joinTokenNames(const std::vector<SyntaxKind>& validTkKinds);
+
+        std::unordered_set<std::string> IDsForDelay_;
+        std::vector<std::pair<DiagnosticDescriptor, LexedTokens::IndexType>> delayedDiags_;
+        std::vector<std::pair<DiagnosticDescriptor, LexedTokens::IndexType>> retainedAmbiguityDiags_;
+
         void diagnose(DiagnosticDescriptor&& desc);
+        void diagnoseDelayed();
+        void diagnoseAmbiguityButRetainIt(DiagnosticDescriptor&& desc);
 
         /* General */
         void ExpectedFeature(const std::string& name);
@@ -184,8 +185,23 @@ private:
         static const std::string ID_of_UnexpectedContinueOutsideLoop;
         static const std::string ID_of_UnexpectedBreakOutsideSwitchOrLoop;
         static const std::string ID_of_UnexpectedGNUExtensionFlag;
+
+        /* Ambiguities */
+        void AmbiguousTypeNameOrExpressionAsTypeReference();
+        void AmbiguousCastOrBinaryExpression();
+        void AmbiguousExpressionOrDeclarationStatement();
+
+        static const std::string ID_of_AmbiguousTypeNameOrExpressionAsTypeReference;
+        static const std::string ID_of_AmbiguousCastOrBinaryExpression;
+        static const std::string ID_of_AmbiguousExpressionOrDeclarationStatement;
     };
     friend struct DiagnosticsReporter;
+
+    DiagnosticsReporter diagReporter_;
+
+    std::vector<
+        std::pair<DiagnosticDescriptor,
+                  LexedTokens::IndexType>> releaseRetainedAmbiguityDiags() const;
 
     struct DiagnosticsReporterDelayer
     {
@@ -194,12 +210,12 @@ private:
             : diagReporter_(diagReporter)
             , diagID_(diagID)
         {
-            diagReporter_->delayReports_.insert(diagID);
+            diagReporter_->IDsForDelay_.insert(diagID);
         }
 
         ~DiagnosticsReporterDelayer()
         {
-            diagReporter_->delayReports_.erase(diagID_);
+            diagReporter_->IDsForDelay_.erase(diagID_);
         }
 
         DiagnosticsReporter* diagReporter_;
@@ -211,8 +227,6 @@ private:
     bool match(SyntaxKind expectedTkK, LexedTokens::IndexType* tkIdx);
     bool matchOrSkipTo(SyntaxKind expectedTkK, LexedTokens::IndexType* tkIdx);
     void skipTo(SyntaxKind tkK);
-
-    DiagnosticsReporter diagReporter_;
     unsigned int curTkIdx_;
 
     int depthOfExprs_;

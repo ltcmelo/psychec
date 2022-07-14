@@ -277,7 +277,7 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
     declStmt->decl_ = varDecl;
     ambiStmt->declStmt_ = declStmt;
 
-    detectedAmbiguities_ = true;
+    diagReporter_.AmbiguousExpressionOrDeclarationStatement();
 }
 
 /**
