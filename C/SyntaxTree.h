@@ -28,6 +28,7 @@
 #include "parser/LexedTokens.h"
 #include "parser/LineDirective.h"
 #include "parser/ParseOptions.h"
+#include "parser/TextCompleteness.h"
 #include "parser/TextPreprocessingState.h"
 #include "syntax/SyntaxToken.h"
 
@@ -83,6 +84,7 @@ public:
      */
     static std::unique_ptr<SyntaxTree> parseText(SourceText text,
                                                  TextPreprocessingState textPPState,
+                                                 TextCompleteness textCompleteness,
                                                  ParseOptions parseOptions = ParseOptions(),
                                                  const std::string& filePath = "",
                                                  SyntaxCategory syntaxCategory = SyntaxCategory::UNSPECIFIED);
@@ -166,6 +168,8 @@ PSY_INTERNAL:
 
 private:
     SyntaxTree(SourceText text,
+               TextPreprocessingState textPPState,
+               TextCompleteness textCompleteness,
                ParseOptions parseOptions,
                const std::string& path);
 

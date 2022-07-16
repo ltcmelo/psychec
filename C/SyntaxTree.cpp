@@ -52,23 +52,29 @@ using namespace C;
 struct SyntaxTree::SyntaxTreeImpl
 {
     SyntaxTreeImpl(SourceText text,
+                   TextPreprocessingState textPPState,
+                   TextCompleteness textCompleteness,
                    ParseOptions parseOptions,
-                   const std::string& path)
+                   const std::string& filePath)
         : pool_(new MemoryPool())
         , text_(std::move(text))
+        , textCompleteness_(textCompleteness)
+        , textPPState_(textPPState)
         , parseOptions_(std::move(parseOptions))
-        , path_(path)
+        , filePath_(filePath)
         , rootNode_(nullptr)
     {
-        if (path_.empty())
-            path_ = "<buffer>";
+        if (filePath_.empty())
+            filePath_ = "<buffer>";
     }
 
     std::unique_ptr<MemoryPool> pool_;
 
     SourceText text_;
+    TextCompleteness textCompleteness_;
+    TextPreprocessingState textPPState_;
     ParseOptions parseOptions_;
-    std::string path_;
+    std::string filePath_;
 
     TextElementTable<Identifier> identifiers_;
     TextElementTable<IntegerConstant> integers_;
@@ -91,9 +97,15 @@ struct SyntaxTree::SyntaxTreeImpl
 };
 
 SyntaxTree::SyntaxTree(SourceText text,
-                       ParseOptions options,
-                       const std::string& path)
-    : P(new SyntaxTreeImpl(text, options, path))
+                       TextPreprocessingState textPPState,
+                       TextCompleteness textCompleteness,
+                       ParseOptions parseOptions,
+                       const std::string& filePath)
+    : P(new SyntaxTreeImpl(text,
+                           textPPState,
+                           textCompleteness,
+                           parseOptions,
+                           filePath))
 {}
 
 SyntaxTree::~SyntaxTree()
@@ -107,18 +119,24 @@ MemoryPool* SyntaxTree::unitPool() const
 
 std::unique_ptr<SyntaxTree> SyntaxTree::parseText(SourceText text,
                                                   TextPreprocessingState textPPState,
+                                                  TextCompleteness textCompleteness,
                                                   ParseOptions parseOptions,
                                                   const std::string& filePath,
                                                   SyntaxCategory syntaxCategory)
 {
-    std::unique_ptr<SyntaxTree> tree(new SyntaxTree(text, parseOptions, filePath));
+    std::unique_ptr<SyntaxTree> tree(
+                new SyntaxTree(text,
+                               textPPState,
+                               textCompleteness,
+                               parseOptions,
+                               filePath));
     tree->buildFor(syntaxCategory);
     return tree;
 }
 
 std::string SyntaxTree::filePath() const
 {
-    return P->path_;
+    return P->filePath_;
 }
 
 const SourceText& SyntaxTree::text() const
@@ -222,38 +240,39 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
     if (!parser.detectedAnyAmbiguity())
         return;
 
-    auto disambigStrategy = Disambiguator::DisambiguationStrategy::UNSPECIFIED;
+    if (P->parseOptions_.treatmentOfAmbiguities() == ParseOptions
+            ::TreatmentOfAmbiguities::None) {
+        for (const auto& diag : parser.releaseRetainedAmbiguityDiags())
+            newDiagnostic(diag.first, diag.second);
+        return;
+    }
+
+    if (!P->diagnostics_.empty())
+        return;
+
+    Disambiguator disambiguator;
     switch (P->parseOptions_.treatmentOfAmbiguities()) {
-        case ParseOptions::TreatmentOfAmbiguities::None:
-            for (const auto& diag : parser.releaseRetainedAmbiguityDiags())
-                newDiagnostic(diag.first, diag.second);
-            return;
-
-        case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically:
-            if (!P->diagnostics_.empty())
-                return;
-            // TODO: Complete program x program fragment
-            disambigStrategy = Disambiguator::DisambiguationStrategy::Contextual;
-            break;
-
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically:
-            if (!P->diagnostics_.empty())
-                return;
-            // TODO: Complete program x program fragment
-            disambigStrategy = Disambiguator::DisambiguationStrategy::ContextualWithHeuristic;
+            disambiguator.permitHeuristic(true);
+            [[fallthrough]];
+
+        case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically: {
+            auto strategy = P->textCompleteness_ == TextCompleteness::Full
+                    ? Disambiguator::DisambiguationStrategy::TypeSynonymsVerification
+                    : Disambiguator::DisambiguationStrategy::SyntaxCorrelation;
+            disambiguator.chooseStrategy(strategy);
             break;
+        }
 
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically:
-            if (!P->diagnostics_.empty())
-                return;
-            disambigStrategy = Disambiguator::DisambiguationStrategy::Heuristic;
+            disambiguator.chooseStrategy(Disambiguator::DisambiguationStrategy::GuidelineImposition);
+            disambiguator.permitHeuristic(true);
             break;
 
         default:
             PSY_ESCAPE_VIA_RETURN();
     }
 
-    Disambiguator disambiguator(disambigStrategy);
     disambiguator.disambiguate(this);
 }
 
@@ -381,7 +400,7 @@ void SyntaxTree::newDiagnostic(DiagnosticDescriptor descriptor,
 {
     LinePosition start = computePosition(tk.charStart());
     LinePosition end = computePosition(tk.charEnd());
-    FileLinePositionSpan line(P->path_, start, end);
+    FileLinePositionSpan line(P->filePath_, start, end);
     std::string snippet;
 
     auto it = std::lower_bound(P->startOfLineOffsets_.begin(), P->startOfLineOffsets_.end(), tk.charStart());

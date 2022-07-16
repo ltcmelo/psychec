@@ -38,22 +38,25 @@ class PSY_C_NON_API Disambiguator
 PSY_INTERNAL:
     PSY_GRANT_ACCESS(SyntaxTree);
 
+    Disambiguator();
+
     enum class DisambiguationStrategy : std::uint8_t
     {
         UNSPECIFIED = 0,
 
-        Symbolic,
-        SymbolicWithHeuristic,
-        Contextual,
-        ContextualWithHeuristic,
-        Heuristic
+        TypeSynonymsVerification,
+        SyntaxCorrelation,
+        GuidelineImposition
     };
 
-    Disambiguator(DisambiguationStrategy strategy);
+    void chooseStrategy(DisambiguationStrategy strategy);
+    void permitHeuristic(bool heuristic);
+
     void disambiguate(SyntaxTree* tree);
 
 private:
     DisambiguationStrategy strategy_;
+    bool heuristic_;
 };
 
 } // C

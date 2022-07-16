@@ -18,7 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_DISAMBIGUATION_REPARSER_H__
-#define PSYCHE_C_DISAMBIGUATION_REPARSER_H__
+#ifndef PSYCHE_C_TYPE_SYNONYS_VERIFICATION_REPARSER_H__
+#define PSYCHE_C_TYPE_SYNONYS_VERIFICATION_REPARSER_H__
+
+#include "API.h"
+
+#include "syntax/SyntaxVisitor.h"
+
+namespace psy {
+namespace C {
+
+class PSY_C_NON_API TypeSynonymsVerificationReparser : public SyntaxVisitor
+{
+public:
+    TypeSynonymsVerificationReparser(SyntaxTree* tree);
+};
+
+} // C
+} // psy
 
 #endif

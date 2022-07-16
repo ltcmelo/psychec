@@ -18,37 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Disambiguator.h"
+#ifndef PSYCHE_C_GUIDELINE_IMPOSITION_REPARSER_H__
+#define PSYCHE_C_GUIDELINE_IMPOSITION_REPARSER_H__
 
-#include "SyntaxTree.h"
+#include "API.h"
 
-#include "parser/DisambiguationCataloger.h"
-#include "reparser/Reparser_GuidelineImposition.h"
-#include "reparser/Reparser_SyntaxCorrelation.h"
-#include "reparser/Reparser_TypeSynonymsVerification.h"
+#include "syntax/SyntaxVisitor.h"
 
-#include "syntax/SyntaxNode.h"
+namespace psy {
+namespace C {
 
-using namespace psy;
-using namespace C;
-
-Disambiguator::Disambiguator()
-    : strategy_(DisambiguationStrategy::SyntaxCorrelation)
-    , heuristic_(false)
-{}
-
-void Disambiguator::chooseStrategy(DisambiguationStrategy strategy)
+class PSY_C_NON_API GuidelineImpositionReparser : public SyntaxVisitor
 {
-    strategy_ = strategy;
-}
+public:
+    GuidelineImpositionReparser(SyntaxTree* tree);
+};
 
-void Disambiguator::permitHeuristic(bool heuristic)
-{
-    heuristic_ = heuristic;
-}
+} // C
+} // psy
 
-void Disambiguator::disambiguate(SyntaxTree* tree)
-{
-    DisambiguationCataloger cataloger(tree);
-    auto catalog = cataloger.catalogFrom(tree->root());
-}
+#endif

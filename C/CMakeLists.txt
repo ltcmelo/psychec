@@ -86,8 +86,6 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/DisambiguationCatalog.cpp
     ${PROJECT_SOURCE_DIR}/parser/DisambiguationCataloger.h
     ${PROJECT_SOURCE_DIR}/parser/DisambiguationCataloger.cpp
-    ${PROJECT_SOURCE_DIR}/parser/DisambiguationReparser.h
-    ${PROJECT_SOURCE_DIR}/parser/DisambiguationReparser.cpp
     ${PROJECT_SOURCE_DIR}/parser/Disambiguator.h
     ${PROJECT_SOURCE_DIR}/parser/Disambiguator.cpp
     ${PROJECT_SOURCE_DIR}/parser/Keywords.cpp
@@ -112,9 +110,18 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Parser_Statements.cpp
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.h
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.cpp
+    ${PROJECT_SOURCE_DIR}/parser/TextCompleteness.h
     ${PROJECT_SOURCE_DIR}/parser/TextPreprocessingState.h
     ${PROJECT_SOURCE_DIR}/parser/Unparser.h
     ${PROJECT_SOURCE_DIR}/parser/Unparser.cpp
+
+    # Reparser
+    ${PROJECT_SOURCE_DIR}/reparser/Reparser_GuidelineImposition.h
+    ${PROJECT_SOURCE_DIR}/reparser/Reparser_GuidelineImposition.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/Reparser_SyntaxCorrelation.h
+    ${PROJECT_SOURCE_DIR}/reparser/Reparser_SyntaxCorrelation.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/Reparser_TypeSynonymsVerification.h
+    ${PROJECT_SOURCE_DIR}/reparser/Reparser_TypeSynonymsVerification.cpp
 
     # Symbols
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h

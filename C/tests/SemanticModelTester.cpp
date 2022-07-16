@@ -51,6 +51,7 @@ SemanticModelTester::declAndSemaModel(const std::string& s)
 {
     tree_ = SyntaxTree::parseText(SourceText(s),
                                   TextPreprocessingState::Preprocessed,
+                                  TextCompleteness::Fragment,
                                   ParseOptions(),
                                   "<test>");
 
@@ -916,6 +917,7 @@ void SemanticModelTester::case0500()
 
     tree_ = SyntaxTree::parseText(SourceText(s),
                                   TextPreprocessingState::Preprocessed,
+                                  TextCompleteness::Fragment,
                                   ParseOptions(),
                                   "<test>");
 

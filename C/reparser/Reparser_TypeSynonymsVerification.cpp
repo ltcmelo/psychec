@@ -17,38 +17,3 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-#include "Disambiguator.h"
-
-#include "SyntaxTree.h"
-
-#include "parser/DisambiguationCataloger.h"
-#include "reparser/Reparser_GuidelineImposition.h"
-#include "reparser/Reparser_SyntaxCorrelation.h"
-#include "reparser/Reparser_TypeSynonymsVerification.h"
-
-#include "syntax/SyntaxNode.h"
-
-using namespace psy;
-using namespace C;
-
-Disambiguator::Disambiguator()
-    : strategy_(DisambiguationStrategy::SyntaxCorrelation)
-    , heuristic_(false)
-{}
-
-void Disambiguator::chooseStrategy(DisambiguationStrategy strategy)
-{
-    strategy_ = strategy;
-}
-
-void Disambiguator::permitHeuristic(bool heuristic)
-{
-    heuristic_ = heuristic;
-}
-
-void Disambiguator::disambiguate(SyntaxTree* tree)
-{
-    DisambiguationCataloger cataloger(tree);
-    auto catalog = cataloger.catalogFrom(tree->root());
-}
