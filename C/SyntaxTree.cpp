@@ -25,9 +25,9 @@
 #include "binder/TypeChecker.h"
 #include "compilation/Compilation.h"
 #include "infra/MemoryPool.h"
-#include "parser/Disambiguator.h"
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
+#include "reparser/Disambiguator.h"
 #include "syntax/SyntaxLexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 

@@ -82,12 +82,6 @@ set(CFE_SOURCES
     # Parser
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Lexer.cpp
     ${PROJECT_SOURCE_DIR}/parser/DiagnosticsReporter_Parser.cpp
-    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCatalog.h
-    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCatalog.cpp
-    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCataloger.h
-    ${PROJECT_SOURCE_DIR}/parser/DisambiguationCataloger.cpp
-    ${PROJECT_SOURCE_DIR}/parser/Disambiguator.h
-    ${PROJECT_SOURCE_DIR}/parser/Disambiguator.cpp
     ${PROJECT_SOURCE_DIR}/parser/Keywords.cpp
     ${PROJECT_SOURCE_DIR}/parser/LanguageDialect.h
     ${PROJECT_SOURCE_DIR}/parser/LanguageDialect.cpp
@@ -116,6 +110,12 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Unparser.cpp
 
     # Reparser
+    ${PROJECT_SOURCE_DIR}/reparser/DisambiguationCatalog.h
+    ${PROJECT_SOURCE_DIR}/reparser/DisambiguationCatalog.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/DisambiguationCataloger.h
+    ${PROJECT_SOURCE_DIR}/reparser/DisambiguationCataloger.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator.h
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator.cpp
     ${PROJECT_SOURCE_DIR}/reparser/Reparser_GuidelineImposition.h
     ${PROJECT_SOURCE_DIR}/reparser/Reparser_GuidelineImposition.cpp
     ${PROJECT_SOURCE_DIR}/reparser/Reparser_SyntaxCorrelation.h

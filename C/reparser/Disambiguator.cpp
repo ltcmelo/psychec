@@ -22,7 +22,7 @@
 
 #include "SyntaxTree.h"
 
-#include "parser/DisambiguationCataloger.h"
+#include "reparser/DisambiguationCataloger.h"
 #include "reparser/Reparser_GuidelineImposition.h"
 #include "reparser/Reparser_SyntaxCorrelation.h"
 #include "reparser/Reparser_TypeSynonymsVerification.h"
