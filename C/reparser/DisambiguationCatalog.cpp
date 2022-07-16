@@ -78,12 +78,24 @@ void DisambiguationCatalog::catalogAsNonType(std::string s)
     level->second.insert(std::move(s));
 }
 
+bool DisambiguationCatalog::isCatalogedAsType(const std::string& s) const
+{
+    auto level = currentLevel();
+    return level->first.find(s) != level->first.end();
+}
+
+bool DisambiguationCatalog::isCatalogedAsnonType(const std::string &s) const
+{
+    auto level = currentLevel();
+    return level->second.find(s) != level->first.end();
+}
+
 bool DisambiguationCatalog::levelExists(const SyntaxNode* node) const
 {
     return levels_.count(node) != 0;
 }
 
-DisambiguationCatalog::Names* DisambiguationCatalog::currentLevel()
+DisambiguationCatalog::Names* DisambiguationCatalog::currentLevel() const
 {
     PSY_ASSERT(!levelKeys_.empty(), return nullptr);
     PSY_ASSERT(levelExists(levelKeys_.top()), return nullptr);

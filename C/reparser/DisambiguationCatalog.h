@@ -45,6 +45,7 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_ACCESS(DisambiguationCataloger);
+    PSY_GRANT_ACCESS(SyntaxCorrelationReparser);
 
     void createLevelAndEnter(const SyntaxNode*);
     void enterLevel(const SyntaxNode*);
@@ -53,6 +54,9 @@ PSY_INTERNAL:
     void catalogAsType(std::string s);
     void catalogAsNonType(std::string s);
 
+    bool isCatalogedAsType(const std::string& s) const;
+    bool isCatalogedAsnonType(const std::string& s) const;
+
 private:
     using TypeNames = std::unordered_set<std::string>;
     using NonTypeNames = std::unordered_set<std::string>;
@@ -60,11 +64,11 @@ private:
 
     using Levels = std::unordered_map<const SyntaxNode*, Names>;
 
-    Levels levels_;
+    mutable Levels levels_;
     std::stack<const SyntaxNode*> levelKeys_;
 
     bool levelExists(const SyntaxNode*) const;
-    Names* currentLevel();
+    Names* currentLevel() const;
 };
 
 std::ostream& operator<<(std::ostream& os, const DisambiguationCatalog& disambigCatalog);

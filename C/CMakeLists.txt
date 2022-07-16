@@ -116,6 +116,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/reparser/DisambiguationCataloger.cpp
     ${PROJECT_SOURCE_DIR}/reparser/Disambiguator.h
     ${PROJECT_SOURCE_DIR}/reparser/Disambiguator.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/Reparser.h
+    ${PROJECT_SOURCE_DIR}/reparser/Reparser.cpp
     ${PROJECT_SOURCE_DIR}/reparser/Reparser_GuidelineImposition.h
     ${PROJECT_SOURCE_DIR}/reparser/Reparser_GuidelineImposition.cpp
     ${PROJECT_SOURCE_DIR}/reparser/Reparser_SyntaxCorrelation.h

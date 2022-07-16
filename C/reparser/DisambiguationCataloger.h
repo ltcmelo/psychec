@@ -38,7 +38,7 @@ class PSY_C_NON_API DisambiguationCataloger : public SyntaxVisitor
 public:
     DisambiguationCataloger(SyntaxTree* tree);
 
-    std::unique_ptr<DisambiguationCatalog> catalogFrom(const SyntaxNode*);
+    std::unique_ptr<DisambiguationCatalog> catalogFor(const SyntaxNode*);
 
 private:
     std::unique_ptr<DisambiguationCatalog> disambigCatalog_;
@@ -49,7 +49,6 @@ private:
     //--------------//
     // Declarations //
     //--------------//
-
     Action visitTranslationUnit(const TranslationUnitSyntax*) override;
 
     /* Specifiers */
@@ -61,13 +60,11 @@ private:
     //-------------//
     // Expressions //
     //-------------//
-
     Action visitIdentifierName(const IdentifierNameSyntax*) override;
 
     //-------------//
     // Ambiguities //
     //-------------//
-
     Action visitAmbiguousTypeNameOrExpressionAsTypeReference(const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) override;
     Action visitAmbiguousCastOrBinaryExpression(const AmbiguousCastOrBinaryExpressionSyntax*) override;
     Action visitAmbiguousExpressionOrDeclarationStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) override;

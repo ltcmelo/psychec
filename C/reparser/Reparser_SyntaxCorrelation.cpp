@@ -17,3 +17,56 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
+#include "Reparser_SyntaxCorrelation.h"
+
+#include "syntax/SyntaxNodes.h"
+
+#include "../common/infra/Assertions.h"
+#include "../common/infra/Escape.h"
+
+#include <iostream>
+
+using namespace psy;
+using namespace C;
+
+SyntaxCorrelationReparser::SyntaxCorrelationReparser(SyntaxTree* tree)
+    : Reparser(tree)
+    , pendingAmbigs_(0)
+{}
+
+void SyntaxCorrelationReparser::acquireCatalog(std::unique_ptr<DisambiguationCatalog> catalog)
+{
+    catalog_ = std::move(catalog);
+}
+
+unsigned int SyntaxCorrelationReparser::reparse()
+{
+    visit(tree_->root());
+
+    return pendingAmbigs_;
+}
+
+SyntaxVisitor::Action SyntaxCorrelationReparser::visitTranslationUnit(const TranslationUnitSyntax* node)
+{
+    catalog_->enterLevel(node);
+
+    for (auto iter = node->declarations(); iter; iter = iter->next)
+        visit(iter->value);
+
+    catalog_->exitLevel();
+
+    return Action::Skip;
+}
+
+Reparser::ExpressionOrDeclarationStatement
+SyntaxCorrelationReparser::keepExpressionOrDeclarationStatement(const std::string& maybeTyName)
+{
+    if (catalog_->isCatalogedAsType(maybeTyName)) {
+        std::cout << "catalog contains as type " << maybeTyName << std::endl;
+        return Reparser::ExpressionOrDeclarationStatement::Declaration;
+    }
+
+    std::cout << "catalog DOES NOT contain as type " << maybeTyName << std::endl;
+    return Reparser::ExpressionOrDeclarationStatement::Expression;
+}

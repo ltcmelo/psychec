@@ -26,8 +26,9 @@
 #include "reparser/Reparser_GuidelineImposition.h"
 #include "reparser/Reparser_SyntaxCorrelation.h"
 #include "reparser/Reparser_TypeSynonymsVerification.h"
-
 #include "syntax/SyntaxNode.h"
+
+#include "../common/infra/Escape.h"
 
 using namespace psy;
 using namespace C;
@@ -49,6 +50,26 @@ void Disambiguator::permitHeuristic(bool heuristic)
 
 void Disambiguator::disambiguate(SyntaxTree* tree)
 {
+    if (strategy_ == Disambiguator::DisambiguationStrategy::GuidelineImposition) {
+        // TODO
+        return;
+    }
+
     DisambiguationCataloger cataloger(tree);
-    auto catalog = cataloger.catalogFrom(tree->root());
+    auto catalog = cataloger.catalogFor(tree->root());
+
+    switch (strategy_) {
+        case Disambiguator::DisambiguationStrategy::SyntaxCorrelation: {
+            SyntaxCorrelationReparser reparser(tree);
+            reparser.acquireCatalog(std::move(catalog));
+            reparser.reparse();
+            break;
+        }
+
+        case Disambiguator::DisambiguationStrategy::TypeSynonymsVerification:
+            break;
+
+        default:
+            PSY_ESCAPE();
+    }
 }

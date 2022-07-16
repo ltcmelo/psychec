@@ -23,15 +23,40 @@
 
 #include "API.h"
 
-#include "syntax/SyntaxVisitor.h"
+#include "reparser/DisambiguationCatalog.h"
+#include "reparser/Reparser.h"
+
+#include "../common/infra/InternalAccess.h"
+
+#include <memory>
 
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API SyntaxCorrelationReparser : public SyntaxVisitor
+class PSY_C_NON_API SyntaxCorrelationReparser final : public Reparser
 {
-public:
+    friend class DebugReparser;
+
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Disambiguator);
+
     SyntaxCorrelationReparser(SyntaxTree* tree);
+
+    void acquireCatalog(std::unique_ptr<DisambiguationCatalog> catalog);
+
+    unsigned int reparse() override;
+
+private:
+    unsigned int pendingAmbigs_;
+    std::unique_ptr<DisambiguationCatalog> catalog_;
+
+    ExpressionOrDeclarationStatement keepExpressionOrDeclarationStatement(
+            const std::string& maybeTyName) override;
+
+    //--------------//
+    // Declarations //
+    //--------------//
+    Action visitTranslationUnit(const TranslationUnitSyntax*) override;
 };
 
 } // C

@@ -33,7 +33,7 @@ DisambiguationCataloger::DisambiguationCataloger(SyntaxTree* tree)
     , disambigCatalog_(new DisambiguationCatalog)
 {}
 
-std::unique_ptr<DisambiguationCatalog> DisambiguationCataloger::catalogFrom(const SyntaxNode* node)
+std::unique_ptr<DisambiguationCatalog> DisambiguationCataloger::catalogFor(const SyntaxNode* node)
 {
     visit(node);
     return std::move(disambigCatalog_);
