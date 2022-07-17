@@ -101,6 +101,7 @@ public:
     enum class TreatmentOfAmbiguities : std::uint8_t
     {
         None,
+        Diagnose,
         DisambiguateAlgorithmically,
         DisambiguateAlgorithmicallyOrHeuristically,
         DisambiguateHeuristically,

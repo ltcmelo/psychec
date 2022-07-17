@@ -240,39 +240,43 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
     if (!parser.detectedAnyAmbiguity())
         return;
 
-    if (P->parseOptions_.treatmentOfAmbiguities() == ParseOptions
-            ::TreatmentOfAmbiguities::None) {
-        for (const auto& diag : parser.releaseRetainedAmbiguityDiags())
-            newDiagnostic(diag.first, diag.second);
-        return;
-    }
-
-    if (!P->diagnostics_.empty())
-        return;
-
-    Reparser reparser;
+    auto disambiguationStrategy = Reparser::DisambiguationStrategy::UNSPECIFIED;
+    auto permitHeuristic = false;
     switch (P->parseOptions_.treatmentOfAmbiguities()) {
+        case ParseOptions::TreatmentOfAmbiguities::None:
+            return;
+
+        case ParseOptions::TreatmentOfAmbiguities::Diagnose:
+            for (const auto& diag : parser.releaseRetainedAmbiguityDiags())
+                newDiagnostic(diag.first, diag.second);
+            return;
+
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically:
-            reparser.setPermitHeuristic(true);
+            permitHeuristic = true;
             [[fallthrough]];
 
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically: {
-            auto strategy = P->textCompleteness_ == TextCompleteness::Full
+            disambiguationStrategy = P->textCompleteness_ == TextCompleteness::Full
                     ? Reparser::DisambiguationStrategy::TypeSynonymsVerification
                     : Reparser::DisambiguationStrategy::SyntaxCorrelation;
-            reparser.setDisambiguationStrategy(strategy);
             break;
         }
 
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically:
-            reparser.setDisambiguationStrategy(Reparser::DisambiguationStrategy::GuidelineImposition);
-            reparser.setPermitHeuristic(true);
+            disambiguationStrategy = Reparser::DisambiguationStrategy::GuidelineImposition;
+            permitHeuristic = true;
             break;
 
         default:
             PSY_ESCAPE_VIA_RETURN();
     }
 
+    if (!P->diagnostics_.empty())
+        return;
+
+    Reparser reparser;
+    reparser.setDisambiguationStrategy(disambiguationStrategy);
+    reparser.setPermitHeuristic(permitHeuristic);
     reparser.reparse(this);
 }
 
