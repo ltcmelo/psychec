@@ -42,7 +42,7 @@ PSY_INTERNAL:
 
     void acquireCatalog(std::unique_ptr<DisambiguationCatalog> catalog);
 
-    unsigned int reparse() override;
+    unsigned int disambiguate() override;
 
 private:
     unsigned int pendingAmbigs_;

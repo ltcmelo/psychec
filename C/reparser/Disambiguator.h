@@ -41,7 +41,9 @@ public:
 protected:
     Disambiguator(SyntaxTree* tree);
 
-    virtual unsigned int reparse() = 0;
+    virtual unsigned int disambiguate() = 0;
+
+    virtual bool isTypeName(const std::string& name) = 0;
 
     enum class Disambiguation : std::int8_t
     {
@@ -52,8 +54,6 @@ protected:
 
     Disambiguation disambiguateAmbiguousExpressionOrDeclarationStatement(
             const AmbiguousExpressionOrDeclarationStatementSyntax*);
-
-    virtual bool isTypeName(const std::string& name) = 0;
 
     //--------------//
     // Declarations //

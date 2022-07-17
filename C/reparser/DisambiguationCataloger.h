@@ -41,7 +41,7 @@ public:
     std::unique_ptr<DisambiguationCatalog> catalogFor(const SyntaxNode*);
 
 private:
-    std::unique_ptr<DisambiguationCatalog> disambigCatalog_;
+    std::unique_ptr<DisambiguationCatalog> catalog_;
 
     using SyntaxVisitor::visit;
     using Base = SyntaxVisitor;

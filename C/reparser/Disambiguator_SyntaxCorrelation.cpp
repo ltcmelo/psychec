@@ -40,7 +40,7 @@ void SyntaxCorrelationDisambiguator::acquireCatalog(std::unique_ptr<Disambiguati
     catalog_ = std::move(catalog);
 }
 
-unsigned int SyntaxCorrelationDisambiguator::reparse()
+unsigned int SyntaxCorrelationDisambiguator::disambiguate()
 {
     visit(tree_->root());
 

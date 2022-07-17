@@ -62,7 +62,7 @@ void Reparser::reparse(SyntaxTree* tree)
         case Reparser::DisambiguationStrategy::SyntaxCorrelation: {
             SyntaxCorrelationDisambiguator disambiguator(tree);
             disambiguator.acquireCatalog(std::move(catalog));
-            disambiguator.reparse();
+            disambiguator.disambiguate();
             break;
         }
 

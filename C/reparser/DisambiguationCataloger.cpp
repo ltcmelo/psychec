@@ -30,39 +30,39 @@ using namespace C;
 
 DisambiguationCataloger::DisambiguationCataloger(SyntaxTree* tree)
     : SyntaxVisitor(tree)
-    , disambigCatalog_(new DisambiguationCatalog)
+    , catalog_(new DisambiguationCatalog)
 {}
 
 std::unique_ptr<DisambiguationCatalog> DisambiguationCataloger::catalogFor(const SyntaxNode* node)
 {
     visit(node);
-    return std::move(disambigCatalog_);
+    return std::move(catalog_);
 }
 
 SyntaxVisitor::Action DisambiguationCataloger::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    disambigCatalog_->createLevelAndEnter(node);
+    catalog_->createLevelAndEnter(node);
 
     for (auto iter = node->declarations(); iter; iter = iter->next)
         visit(iter->value);
 
-    disambigCatalog_->exitLevel();
+    catalog_->exitLevel();
 
-    std::cout << "CATALOG\n" << *disambigCatalog_ << std::endl;
+    std::cout << "CATALOG\n" << *catalog_ << std::endl;
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action DisambiguationCataloger::visitTypedefName(const TypedefNameSyntax* node)
 {
-    disambigCatalog_->catalogAsType(node->identifierToken().valueText());
+    catalog_->catalogAsType(node->identifierToken().valueText());
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action DisambiguationCataloger::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    disambigCatalog_->catalogAsNonType(node->identifierToken().valueText());
+    catalog_->catalogAsNonType(node->identifierToken().valueText());
 
     visit(node->initializer());
 
@@ -71,7 +71,7 @@ SyntaxVisitor::Action DisambiguationCataloger::visitIdentifierDeclarator(const I
 
 SyntaxVisitor::Action DisambiguationCataloger::visitIdentifierName(const IdentifierNameSyntax* node)
 {
-    disambigCatalog_->catalogAsNonType(node->identifierToken().valueText());
+    catalog_->catalogAsNonType(node->identifierToken().valueText());
 
     return Action::Skip;
 }
