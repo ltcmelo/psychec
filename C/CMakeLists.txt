@@ -116,14 +116,14 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/reparser/DisambiguationCataloger.cpp
     ${PROJECT_SOURCE_DIR}/reparser/Disambiguator.h
     ${PROJECT_SOURCE_DIR}/reparser/Disambiguator.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_GuidelineImposition.h
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_GuidelineImposition.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_SyntaxCorrelation.h
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_SyntaxCorrelation.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_TypeSynonymsVerification.h
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_TypeSynonymsVerification.cpp
     ${PROJECT_SOURCE_DIR}/reparser/Reparser.h
     ${PROJECT_SOURCE_DIR}/reparser/Reparser.cpp
-    ${PROJECT_SOURCE_DIR}/reparser/Reparser_GuidelineImposition.h
-    ${PROJECT_SOURCE_DIR}/reparser/Reparser_GuidelineImposition.cpp
-    ${PROJECT_SOURCE_DIR}/reparser/Reparser_SyntaxCorrelation.h
-    ${PROJECT_SOURCE_DIR}/reparser/Reparser_SyntaxCorrelation.cpp
-    ${PROJECT_SOURCE_DIR}/reparser/Reparser_TypeSynonymsVerification.h
-    ${PROJECT_SOURCE_DIR}/reparser/Reparser_TypeSynonymsVerification.cpp
 
     # Symbols
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h

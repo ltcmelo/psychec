@@ -23,9 +23,9 @@
 #include "SyntaxTree.h"
 
 #include "reparser/DisambiguationCataloger.h"
-#include "reparser/Reparser_GuidelineImposition.h"
-#include "reparser/Reparser_SyntaxCorrelation.h"
-#include "reparser/Reparser_TypeSynonymsVerification.h"
+#include "reparser/Disambiguator_GuidelineImposition.h"
+#include "reparser/Disambiguator_SyntaxCorrelation.h"
+#include "reparser/Disambiguator_TypeSynonymsVerification.h"
 #include "syntax/SyntaxNode.h"
 
 #include "../common/infra/Escape.h"

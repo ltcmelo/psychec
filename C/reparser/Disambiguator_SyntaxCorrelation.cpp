@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Reparser_SyntaxCorrelation.h"
+#include "Disambiguator_SyntaxCorrelation.h"
 
 #include "syntax/SyntaxNodes.h"
 
