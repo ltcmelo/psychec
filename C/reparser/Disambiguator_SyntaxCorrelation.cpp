@@ -35,7 +35,7 @@ SyntaxCorrelationDisambiguator::SyntaxCorrelationDisambiguator(SyntaxTree* tree)
     , pendingAmbigs_(0)
 {}
 
-void SyntaxCorrelationDisambiguator::acquireCatalog(std::unique_ptr<DisambiguationCatalog> catalog)
+void SyntaxCorrelationDisambiguator::acquireCatalog(std::unique_ptr<NameCatalog> catalog)
 {
     catalog_ = std::move(catalog);
 }
@@ -61,5 +61,5 @@ SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitTranslationUnit(const
 
 bool SyntaxCorrelationDisambiguator::isTypeName(const std::string& name)
 {
-    return catalog_->isCatalogedAsType(name);
+    return catalog_->containsTypeName(name);
 }

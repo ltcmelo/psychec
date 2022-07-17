@@ -110,10 +110,6 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Unparser.cpp
 
     # Reparser
-    ${PROJECT_SOURCE_DIR}/reparser/DisambiguationCatalog.h
-    ${PROJECT_SOURCE_DIR}/reparser/DisambiguationCatalog.cpp
-    ${PROJECT_SOURCE_DIR}/reparser/DisambiguationCataloger.h
-    ${PROJECT_SOURCE_DIR}/reparser/DisambiguationCataloger.cpp
     ${PROJECT_SOURCE_DIR}/reparser/Disambiguator.h
     ${PROJECT_SOURCE_DIR}/reparser/Disambiguator.cpp
     ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_GuidelineImposition.h
@@ -122,6 +118,10 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_SyntaxCorrelation.cpp
     ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_TypeSynonymsVerification.h
     ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_TypeSynonymsVerification.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/NameCatalog.h
+    ${PROJECT_SOURCE_DIR}/reparser/NameCatalog.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/NameCataloger.h
+    ${PROJECT_SOURCE_DIR}/reparser/NameCataloger.cpp
     ${PROJECT_SOURCE_DIR}/reparser/Reparser.h
     ${PROJECT_SOURCE_DIR}/reparser/Reparser.cpp
 

@@ -24,7 +24,7 @@
 #include "API.h"
 
 #include "reparser/Disambiguator.h"
-#include "reparser/DisambiguationCatalog.h"
+#include "reparser/NameCatalog.h"
 
 #include "../common/infra/InternalAccess.h"
 
@@ -40,13 +40,13 @@ PSY_INTERNAL:
 
     SyntaxCorrelationDisambiguator(SyntaxTree* tree);
 
-    void acquireCatalog(std::unique_ptr<DisambiguationCatalog> catalog);
+    void acquireCatalog(std::unique_ptr<NameCatalog> catalog);
 
     unsigned int disambiguate() override;
 
 private:
     unsigned int pendingAmbigs_;
-    std::unique_ptr<DisambiguationCatalog> catalog_;
+    std::unique_ptr<NameCatalog> catalog_;
 
     bool isTypeName(const std::string& name) override;
 

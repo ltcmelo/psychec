@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "DisambiguationCataloger.h"
+#include "NameCataloger.h"
 
 #include "../common/infra/Assertions.h"
 #include "../common/infra/Escape.h"
@@ -28,18 +28,18 @@
 using namespace psy;
 using namespace C;
 
-DisambiguationCataloger::DisambiguationCataloger(SyntaxTree* tree)
+NameCataloger::NameCataloger(SyntaxTree* tree)
     : SyntaxVisitor(tree)
-    , catalog_(new DisambiguationCatalog)
+    , catalog_(new NameCatalog)
 {}
 
-std::unique_ptr<DisambiguationCatalog> DisambiguationCataloger::catalogFor(const SyntaxNode* node)
+std::unique_ptr<NameCatalog> NameCataloger::catalogFor(const SyntaxNode* node)
 {
     visit(node);
     return std::move(catalog_);
 }
 
-SyntaxVisitor::Action DisambiguationCataloger::visitTranslationUnit(const TranslationUnitSyntax* node)
+SyntaxVisitor::Action NameCataloger::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     catalog_->createLevelAndEnter(node);
 
@@ -53,36 +53,36 @@ SyntaxVisitor::Action DisambiguationCataloger::visitTranslationUnit(const Transl
     return Action::Skip;
 }
 
-SyntaxVisitor::Action DisambiguationCataloger::visitTypedefName(const TypedefNameSyntax* node)
+SyntaxVisitor::Action NameCataloger::visitTypedefName(const TypedefNameSyntax* node)
 {
-    catalog_->catalogAsType(node->identifierToken().valueText());
+    catalog_->catalogTypeName(node->identifierToken().valueText());
 
     return Action::Skip;
 }
 
-SyntaxVisitor::Action DisambiguationCataloger::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
+SyntaxVisitor::Action NameCataloger::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    catalog_->catalogAsNonType(node->identifierToken().valueText());
+    catalog_->catalogName(node->identifierToken().valueText());
 
     visit(node->initializer());
 
     return Action::Skip;
 }
 
-SyntaxVisitor::Action DisambiguationCataloger::visitIdentifierName(const IdentifierNameSyntax* node)
+SyntaxVisitor::Action NameCataloger::visitIdentifierName(const IdentifierNameSyntax* node)
 {
-    catalog_->catalogAsNonType(node->identifierToken().valueText());
+    catalog_->catalogName(node->identifierToken().valueText());
 
     return Action::Skip;
 }
 
-SyntaxVisitor::Action DisambiguationCataloger::visitAmbiguousTypeNameOrExpressionAsTypeReference(
+SyntaxVisitor::Action NameCataloger::visitAmbiguousTypeNameOrExpressionAsTypeReference(
         const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node)
 {
     return Action::Skip;
 }
 
-SyntaxVisitor::Action DisambiguationCataloger::visitAmbiguousCastOrBinaryExpression(
+SyntaxVisitor::Action NameCataloger::visitAmbiguousCastOrBinaryExpression(
         const AmbiguousCastOrBinaryExpressionSyntax* node)
 {
     visit(node->binaryExpression()->right());
@@ -90,7 +90,7 @@ SyntaxVisitor::Action DisambiguationCataloger::visitAmbiguousCastOrBinaryExpress
     return Action::Skip;
 }
 
-SyntaxVisitor::Action DisambiguationCataloger::visitAmbiguousExpressionOrDeclarationStatement(
+SyntaxVisitor::Action NameCataloger::visitAmbiguousExpressionOrDeclarationStatement(
         const AmbiguousExpressionOrDeclarationStatementSyntax* node)
 {
     auto expr = node->expressionStatement()->expression();

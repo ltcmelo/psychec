@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_DISAMBIGUATION_CATALOGER_H__
-#define PSYCHE_C_DISAMBIGUATION_CATALOGER_H__
+#ifndef PSYCHE_C_NAME_CATALOGER_H__
+#define PSYCHE_C_NAME_CATALOGER_H__
 
 #include "API.h"
 
-#include "DisambiguationCatalog.h"
+#include "NameCatalog.h"
 
 #include "syntax/SyntaxVisitor.h"
 
@@ -33,15 +33,15 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API DisambiguationCataloger : public SyntaxVisitor
+class PSY_C_NON_API NameCataloger : public SyntaxVisitor
 {
 public:
-    DisambiguationCataloger(SyntaxTree* tree);
+    NameCataloger(SyntaxTree* tree);
 
-    std::unique_ptr<DisambiguationCatalog> catalogFor(const SyntaxNode*);
+    std::unique_ptr<NameCatalog> catalogFor(const SyntaxNode*);
 
 private:
-    std::unique_ptr<DisambiguationCatalog> catalog_;
+    std::unique_ptr<NameCatalog> catalog_;
 
     using SyntaxVisitor::visit;
     using Base = SyntaxVisitor;

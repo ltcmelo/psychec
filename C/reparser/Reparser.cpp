@@ -22,7 +22,7 @@
 
 #include "SyntaxTree.h"
 
-#include "reparser/DisambiguationCataloger.h"
+#include "reparser/NameCataloger.h"
 #include "reparser/Disambiguator_GuidelineImposition.h"
 #include "reparser/Disambiguator_SyntaxCorrelation.h"
 #include "reparser/Disambiguator_TypeSynonymsVerification.h"
@@ -55,7 +55,7 @@ void Reparser::reparse(SyntaxTree* tree)
         return;
     }
 
-    DisambiguationCataloger cataloger(tree);
+    NameCataloger cataloger(tree);
     auto catalog = cataloger.catalogFor(tree->root());
 
     switch (disambigStrategy_) {

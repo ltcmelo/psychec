@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_DISAMBIGUATION_CATALOG_H__
-#define PSYCHE_C_DISAMBIGUATION_CATALOG_H__
+#ifndef PSYCHE_C_NAME_CATALOG_H__
+#define PSYCHE_C_NAME_CATALOG_H__
 
 #include "API.h"
 #include "Fwds.h"
@@ -36,42 +36,42 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API DisambiguationCatalog
+class PSY_C_NON_API NameCatalog
 {
-    friend std::ostream& operator<<(std::ostream& os, const DisambiguationCatalog& disambigCatalog);
+    friend std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog);
 
 public:
-    ~DisambiguationCatalog();
+    ~NameCatalog();
 
 PSY_INTERNAL:
-    PSY_GRANT_ACCESS(DisambiguationCataloger);
+    PSY_GRANT_ACCESS(NameCataloger);
     PSY_GRANT_ACCESS(SyntaxCorrelationDisambiguator);
 
     void createLevelAndEnter(const SyntaxNode*);
     void enterLevel(const SyntaxNode*);
     void exitLevel();
 
-    void catalogAsType(std::string s);
-    void catalogAsNonType(std::string s);
+    void catalogTypeName(std::string s);
+    void catalogName(std::string s);
 
-    bool isCatalogedAsType(const std::string& s) const;
-    bool isCatalogedAsnonType(const std::string& s) const;
+    bool containsTypeName(const std::string& s) const;
+    bool containsName(const std::string& s) const;
 
 private:
     using TypeNames = std::unordered_set<std::string>;
-    using NonTypeNames = std::unordered_set<std::string>;
-    using Names = std::pair<TypeNames, NonTypeNames>;
+    using Names = std::unordered_set<std::string>;
+    using NameIndex = std::pair<TypeNames, Names>;
 
-    using Levels = std::unordered_map<const SyntaxNode*, Names>;
+    using Levels = std::unordered_map<const SyntaxNode*, NameIndex>;
 
     mutable Levels levels_;
     std::stack<const SyntaxNode*> levelKeys_;
 
     bool levelExists(const SyntaxNode*) const;
-    Names* currentLevel() const;
+    NameIndex* currentLevel() const;
 };
 
-std::ostream& operator<<(std::ostream& os, const DisambiguationCatalog& disambigCatalog);
+std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog);
 
 } // C
 } // psy

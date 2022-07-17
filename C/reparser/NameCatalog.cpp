@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "DisambiguationCatalog.h"
+#include "NameCatalog.h"
 
 #include "syntax/SyntaxNode.h"
 
@@ -30,16 +30,16 @@ using namespace C;
 
 #include <algorithm>
 
-DisambiguationCatalog::~DisambiguationCatalog()
+NameCatalog::~NameCatalog()
 {}
 
-void DisambiguationCatalog::createLevelAndEnter(const SyntaxNode* node)
+void NameCatalog::createLevelAndEnter(const SyntaxNode* node)
 {
     PSY_ASSERT(node, return);
     PSY_ASSERT(!levelExists(node), return);
 
     TypeNames types;
-    NonTypeNames nonTypes;
+    Names nonTypes;
     if (!levelKeys_.empty()) {
         auto levelIt = levels_.find(levelKeys_.top());
         PSY_ASSERT(levelIt != levels_.end(), return);
@@ -53,7 +53,7 @@ void DisambiguationCatalog::createLevelAndEnter(const SyntaxNode* node)
     enterLevel(node);
 }
 
-void DisambiguationCatalog::enterLevel(const SyntaxNode* node)
+void NameCatalog::enterLevel(const SyntaxNode* node)
 {
     PSY_ASSERT(node, return);
     PSY_ASSERT(levelExists(node), return);
@@ -61,41 +61,41 @@ void DisambiguationCatalog::enterLevel(const SyntaxNode* node)
     levelKeys_.push(node);
 }
 
-void DisambiguationCatalog::exitLevel()
+void NameCatalog::exitLevel()
 {
     levelKeys_.pop();
 }
 
-void DisambiguationCatalog::catalogAsType(std::string s)
+void NameCatalog::catalogTypeName(std::string s)
 {
     auto level = currentLevel();
     level->first.insert(std::move(s));
 }
 
-void DisambiguationCatalog::catalogAsNonType(std::string s)
+void NameCatalog::catalogName(std::string s)
 {
     auto level = currentLevel();
     level->second.insert(std::move(s));
 }
 
-bool DisambiguationCatalog::isCatalogedAsType(const std::string& s) const
+bool NameCatalog::containsTypeName(const std::string& s) const
 {
     auto level = currentLevel();
     return level->first.find(s) != level->first.end();
 }
 
-bool DisambiguationCatalog::isCatalogedAsnonType(const std::string &s) const
+bool NameCatalog::containsName(const std::string &s) const
 {
     auto level = currentLevel();
     return level->second.find(s) != level->first.end();
 }
 
-bool DisambiguationCatalog::levelExists(const SyntaxNode* node) const
+bool NameCatalog::levelExists(const SyntaxNode* node) const
 {
     return levels_.count(node) != 0;
 }
 
-DisambiguationCatalog::Names* DisambiguationCatalog::currentLevel() const
+NameCatalog::NameIndex* NameCatalog::currentLevel() const
 {
     PSY_ASSERT(!levelKeys_.empty(), return nullptr);
     PSY_ASSERT(levelExists(levelKeys_.top()), return nullptr);
@@ -106,7 +106,7 @@ DisambiguationCatalog::Names* DisambiguationCatalog::currentLevel() const
 namespace psy {
 namespace C {
 
-std::ostream& operator<<(std::ostream& os, const DisambiguationCatalog& disambigCatalog)
+std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog)
 {
     for (const auto& p : disambigCatalog.levels_) {
         os << to_string(p.first->kind()) << std::endl;
