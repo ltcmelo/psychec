@@ -27,7 +27,7 @@
 #include "infra/MemoryPool.h"
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
-#include "reparser/Disambiguator.h"
+#include "reparser/Reparser.h"
 #include "syntax/SyntaxLexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 

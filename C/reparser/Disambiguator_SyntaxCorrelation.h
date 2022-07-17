@@ -23,8 +23,8 @@
 
 #include "API.h"
 
+#include "reparser/Disambiguator.h"
 #include "reparser/DisambiguationCatalog.h"
-#include "reparser/Reparser.h"
 
 #include "../common/infra/InternalAccess.h"
 
