@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,55 +18,53 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_NAME_SPACE_KIND_H__
-#define PSYCHE_C_NAME_SPACE_KIND_H__
+#include "Disambiguator_SyntaxCorrelation.h"
 
-#include "API.h"
-#include "Fwds.h"
+#include "syntax/SyntaxNodes.h"
 
 #include "../common/infra/Assertions.h"
 #include "../common/infra/Escape.h"
 
-#include <cstdint>
-#include <string>
+#include <iostream>
 
-namespace psy {
-namespace C {
+using namespace psy;
+using namespace C;
 
-/**
- * \brief The NameSpaceKind enum.
- *
- * \remark 6.2.3-1
- * \remark Footnote 32
- */
-enum class PSY_C_API NameSpaceKind : std::uint8_t
+SyntaxCorrelationDisambiguator::SyntaxCorrelationDisambiguator(SyntaxTree* tree)
+    : Disambiguator(tree)
+    , pendingAmbigs_(0)
+{}
+
+void SyntaxCorrelationDisambiguator::acquireCatalog(std::unique_ptr<NameCatalog> catalog)
 {
-    UNSPECIFIED = 0,
-
-    Labels,
-    Tags,
-    Members,
-    Ordinary,
-};
-
-inline std::string PSY_C_API to_string(NameSpaceKind nsK)
-{
-    switch (nsK) {
-        case NameSpaceKind::Labels:
-            return "Labels";
-        case NameSpaceKind::Tags:
-            return "Tags";
-        case NameSpaceKind::Members:
-            return "Members";
-        case NameSpaceKind::Ordinary:
-            return "Ordinary";
-
-        default:
-            PSY_ESCAPE_VIA_RETURN("<INVALID or UNSPECIFIED NameSpaceKind>");
-    }
+    catalog_ = std::move(catalog);
 }
 
-} // C
-} // psy
+unsigned int SyntaxCorrelationDisambiguator::disambiguate()
+{
+    visit(tree_->root());
 
-#endif
+    return pendingAmbigs_;
+}
+
+SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitTranslationUnit(const TranslationUnitSyntax* node)
+{
+    catalog_->enterLevel(node);
+
+    for (auto iter = node->declarations(); iter; iter = iter->next)
+        visit(iter->value);
+
+    catalog_->exitLevel();
+
+    return Action::Skip;
+}
+
+bool SyntaxCorrelationDisambiguator::recognizesTypeName(const std::string& name) const
+{
+    return catalog_->containsTypeName(name);
+}
+
+bool SyntaxCorrelationDisambiguator::recognizesName(const std::string& name) const
+{
+    return catalog_->containsName(name);
+}

@@ -42,8 +42,6 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/infra/MemoryPool.cpp
 
     # Syntax
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.h
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxDisambiguator.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDumper.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxFacts.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxHolder.h
@@ -106,9 +104,26 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/parser/Parser_Statements.cpp
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.h
     ${PROJECT_SOURCE_DIR}/parser/ParseOptions.cpp
+    ${PROJECT_SOURCE_DIR}/parser/TextCompleteness.h
     ${PROJECT_SOURCE_DIR}/parser/TextPreprocessingState.h
     ${PROJECT_SOURCE_DIR}/parser/Unparser.h
     ${PROJECT_SOURCE_DIR}/parser/Unparser.cpp
+
+    # Reparser
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator.h
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_GuidelineImposition.h
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_GuidelineImposition.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_SyntaxCorrelation.h
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_SyntaxCorrelation.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_TypeSynonymsVerification.h
+    ${PROJECT_SOURCE_DIR}/reparser/Disambiguator_TypeSynonymsVerification.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/NameCatalog.h
+    ${PROJECT_SOURCE_DIR}/reparser/NameCatalog.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/NameCataloger.h
+    ${PROJECT_SOURCE_DIR}/reparser/NameCataloger.cpp
+    ${PROJECT_SOURCE_DIR}/reparser/Reparser.h
+    ${PROJECT_SOURCE_DIR}/reparser/Reparser.cpp
 
     # Symbols
     ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
@@ -185,6 +200,12 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/ScopeKind.h
     ${PROJECT_SOURCE_DIR}/binder/TypeChecker.h
     ${PROJECT_SOURCE_DIR}/binder/TypeChecker.cpp
+
+    # Typing
+    ${PROJECT_SOURCE_DIR}/typing/Shape.h
+    ${PROJECT_SOURCE_DIR}/typing/Shape.cpp
+    ${PROJECT_SOURCE_DIR}/typing/Shape_ALL.h
+    ${PROJECT_SOURCE_DIR}/typing/ShapeKind.h
 
     # Compilation
     ${PROJECT_SOURCE_DIR}/compilation/Assembly.cpp

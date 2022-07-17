@@ -18,28 +18,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
-#define PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
+#ifndef PSYCHE_C_SYNTAX_CORRELATION_DISAMBIGUATOR_H__
+#define PSYCHE_C_SYNTAX_CORRELATION_DISAMBIGUATOR_H__
 
 #include "API.h"
 
-#include <cstdint>
+#include "reparser/Disambiguator.h"
+#include "reparser/NameCatalog.h"
+
+#include "../common/infra/InternalAccess.h"
+
+#include <memory>
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The alternatives for the TextPreprocessingState of the parsed text.
- */
-enum class PSY_C_API TextPreprocessingState : std::uint8_t
+class PSY_C_NON_API SyntaxCorrelationDisambiguator final : public Disambiguator
 {
-    Unknown,
-    Preprocessed,
-    Unpreprocessed
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(Reparser);
+
+    SyntaxCorrelationDisambiguator(SyntaxTree* tree);
+
+    void acquireCatalog(std::unique_ptr<NameCatalog> catalog);
+
+    unsigned int disambiguate() override;
+
+private:
+    unsigned int pendingAmbigs_;
+    std::unique_ptr<NameCatalog> catalog_;
+
+    bool recognizesTypeName(const std::string& name) const override;
+    bool recognizesName(const std::string& name) const override;
+
+    //--------------//
+    // Declarations //
+    //--------------//
+    Action visitTranslationUnit(const TranslationUnitSyntax*) override;
 };
 
 } // C
 } // psy
 
 #endif
-

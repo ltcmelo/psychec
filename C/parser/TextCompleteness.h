@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
-#define PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
+#ifndef PSYCHE_C_TEXT_COMPLETENESS_H__
+#define PSYCHE_C_TEXT_COMPLETENESS_H__
 
 #include "API.h"
 
@@ -29,13 +29,13 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The alternatives for the TextPreprocessingState of the parsed text.
+ * \brief The alternatives for the TextCompleteness of the parsed text.
  */
-enum class PSY_C_API TextPreprocessingState : std::uint8_t
+enum class PSY_C_API TextCompleteness : std::uint8_t
 {
     Unknown,
-    Preprocessed,
-    Unpreprocessed
+    Full,
+    Fragment
 };
 
 } // C

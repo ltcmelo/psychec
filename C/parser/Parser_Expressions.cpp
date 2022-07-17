@@ -1225,6 +1225,8 @@ void Parser::maybeAmbiguateCastExpression(ExpressionSyntax*& expr)
     expr = ambiExpr;
     ambiExpr->castExpr_ = castExpr;
     ambiExpr->binExpr_ = binExpr;
+
+    diagReporter_.AmbiguousCastOrBinaryExpression();
 }
 
 /* N-ary */

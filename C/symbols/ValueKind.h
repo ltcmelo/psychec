@@ -39,6 +39,7 @@ namespace C {
 enum class PSY_C_API ValueKind : std::uint8_t
 {
     UNSPECIFIED = 0,
+
     Enumerator,
     Field,
     Parameter,

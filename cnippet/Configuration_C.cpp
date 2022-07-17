@@ -66,6 +66,13 @@ void ConfigurationForC::extend(cxxopts::Options& cmdLineOpts)
                 cxxopts::value<std::vector<std::string>>(),
                 "<name>")
 
+        /* Ambiguity */
+            ("C-ParseOptions-TreatmentOfAmbiguities",
+                "Treatment of ambiguities.",
+                cxxopts::value<std::string>()
+                    ->default_value("DisambiguateAlgorithmicallyOrHeuristically"),
+                "<None|Diagnose|DisambiguateAlgorithmically|DisambiguateAlgorithmicallyOrHeuristically|DisambiguateHeuristically>")
+
         /* Type inference */
             ("C-infer", "Infer the definition of missing types.")
             ("o,output", "Specify output file",
@@ -99,6 +106,8 @@ ConfigurationForC::ConfigurationForC(const cxxopts::ParseResult& parsedCmdLine)
 
     if (parsedCmdLine.count(kAddDirToCPPSearchPath))
         headerSearchPaths = parsedCmdLine[kAddDirToCPPSearchPath].as<std::vector<std::string>>();
+
+    ParseOptions_TreatmentOfAmbiguities = parsedCmdLine["C-ParseOptions-TreatmentOfAmbiguities"].as<std::string>();
 
     inferMissingTypes = parsedCmdLine.count("infer");
 }

@@ -131,9 +131,30 @@ int CCompilerFrontend::preprocess(const std::string& srcText,
 int CCompilerFrontend::constructSyntaxTree(const std::string& srcText,
                                            const psy::FileInfo& fi)
 {
+    ParseOptions parseOpts;
+
+    // TODO: Move to driver/config.
+    if (!config_->ParseOptions_TreatmentOfAmbiguities.empty()) {
+        if (config_->ParseOptions_TreatmentOfAmbiguities == "None")
+            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::None);
+        else if (config_->ParseOptions_TreatmentOfAmbiguities == "Diagnose")
+            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::Diagnose);
+        else if (config_->ParseOptions_TreatmentOfAmbiguities == "DisambiguateAlgorithmically")
+            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically);
+        else if (config_->ParseOptions_TreatmentOfAmbiguities == "DisambiguateAlgorithmicallyOrHeuristically")
+            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically);
+        else if (config_->ParseOptions_TreatmentOfAmbiguities == "DisambiguateHeuristically")
+            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically);
+        else {
+            std::cerr << "unrecognized --C-ParseOptions-TreatmentOfAmbiguities" << std::endl;
+            return 1;
+        }
+    }
+
     auto tree = SyntaxTree::parseText(srcText,
                                       TextPreprocessingState::Preprocessed,
-                                      ParseOptions(),
+                                      TextCompleteness::Fragment,
+                                      parseOpts,
                                       fi.fileName());
 
     if (!tree) {

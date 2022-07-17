@@ -41,6 +41,7 @@ public:
     //--------------//
     // Declarations //
     //--------------//
+
     static bool isStorageClassToken(SyntaxKind tkK)
     {
         switch (tkK) {
@@ -108,6 +109,7 @@ public:
     //-------------//
     // Expressions //
     //-------------//
+
     static bool isConstantToken(SyntaxKind tkK)
     {
         switch (tkK) {
@@ -388,6 +390,7 @@ public:
     //------------//
     // Statements //
     //------------//
+
     static bool isExtGNU_AsmQualifierToken(SyntaxKind tkK)
     {
         switch (tkK) {

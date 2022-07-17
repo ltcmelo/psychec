@@ -25,10 +25,9 @@ using namespace psy;
 using namespace C;
 
 ParseOptions::ParseOptions()
-    : bits_(0)
-{
-    BF_.keywordIdentifiersClassified_ = true;
-}
+    : ParseOptions(LanguageDialect(),
+                   LanguageExtensions())
+{}
 
 ParseOptions::ParseOptions(LanguageDialect dialect,
                            LanguageExtensions extensions)
@@ -36,7 +35,9 @@ ParseOptions::ParseOptions(LanguageDialect dialect,
     , extensions_(std::move(extensions))
     , bits_(0)
 {
-    BF_.keywordIdentifiersClassified_ = true;
+    setTreatmentOfIdentifiers(TreatmentOfIdentifiers::Classify);
+    setTreatmentOfComments(TreatmentOfComments::None);
+    setTreatmentOfAmbiguities(TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically);
 }
 
 const LanguageDialect& ParseOptions::dialect() const
@@ -49,14 +50,35 @@ const LanguageExtensions& ParseOptions::extensions() const
     return extensions_;
 }
 
-ParseOptions& ParseOptions::setCommentMode(CommentMode mode)
+ParseOptions& ParseOptions::setTreatmentOfIdentifiers(TreatmentOfIdentifiers treatOfIdent)
 {
-    BF_.commentMode_ =  static_cast<int>(mode);
+    BF_.treatmentOfIdentifiers_ = static_cast<int>(treatOfIdent);
     return *this;
 }
 
-ParseOptions& ParseOptions::classifyKeywordIdentifiers(bool yes)
+ParseOptions::TreatmentOfIdentifiers ParseOptions::treatmentOfIdentifiers() const
 {
-    BF_.keywordIdentifiersClassified_ = yes;
+    return static_cast<TreatmentOfIdentifiers>(BF_.treatmentOfIdentifiers_);
+}
+
+ParseOptions& ParseOptions::setTreatmentOfComments(TreatmentOfComments treatOfComments)
+{
+    BF_.treatmentOfComments_ = static_cast<int>(treatOfComments);
     return *this;
+}
+
+ParseOptions::TreatmentOfComments ParseOptions::treatmentOfComments() const
+{
+    return static_cast<TreatmentOfComments>(BF_.treatmentOfComments_);
+}
+
+ParseOptions &ParseOptions::setTreatmentOfAmbiguities(TreatmentOfAmbiguities treatOfAmbigs)
+{
+    BF_.treatmentOfAmbiguities_ = static_cast<int>(treatOfAmbigs);
+    return *this;
+}
+
+ParseOptions::TreatmentOfAmbiguities ParseOptions::treatmentOfAmbiguities() const
+{
+    return static_cast<TreatmentOfAmbiguities>(BF_.treatmentOfAmbiguities_);
 }

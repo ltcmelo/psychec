@@ -170,7 +170,7 @@ void InternalsTestSuite::parseStatement(std::string source, Expectation X)
 
 void InternalsTestSuite::parse(std::string source,
                                Expectation X,
-                               SyntaxTree::SyntaxCategory cat)
+                               SyntaxTree::SyntaxCategory syntaxCat)
 {
     auto text = source;
 
@@ -184,7 +184,16 @@ void InternalsTestSuite::parse(std::string source,
     }
 #endif
 
-    tree_ = SyntaxTree::parseText(text, TextPreprocessingState::Unknown, ParseOptions(), "", cat);
+    ParseOptions parseOpts;
+    if (X.isAmbiguous_)
+            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::None);
+
+    tree_ = SyntaxTree::parseText(text,
+                                  TextPreprocessingState::Unknown,
+                                  TextCompleteness::Fragment,
+                                  parseOpts,
+                                  "",
+                                  syntaxCat);
 
     if (!checkErrorAndWarn(X))
         return;

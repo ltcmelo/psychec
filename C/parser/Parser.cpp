@@ -194,6 +194,18 @@ TranslationUnitSyntax* Parser::parse()
     return unit;
 }
 
+bool Parser::detectedAnyAmbiguity() const
+{
+    return !diagReporter_.retainedAmbiguityDiags_.empty();
+}
+
+std::vector<
+    std::pair<DiagnosticDescriptor,
+              LexedTokens::IndexType>> Parser::releaseRetainedAmbiguityDiags() const
+{
+    return std::move(diagReporter_.retainedAmbiguityDiags_);
+}
+
 bool Parser::ignoreDeclarator()
 {
     while (true) {

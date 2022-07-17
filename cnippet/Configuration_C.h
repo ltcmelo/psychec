@@ -51,6 +51,8 @@ public:
     std::vector<std::string> macrosToUndef;
     std::vector<std::string> headerSearchPaths;
 
+    std::string ParseOptions_TreatmentOfAmbiguities;
+
     // TODO: Bit fields.
     bool expandIncludes;
     bool inferMissingTypes;

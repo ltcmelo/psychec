@@ -18,28 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
-#define PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
+#ifndef PSYCHE_C_TYPE_SYNONYS_VERIFICATION_DISAMBIGUATOR_H__
+#define PSYCHE_C_TYPE_SYNONYS_VERIFICATION_DISAMBIGUATOR_H__
 
 #include "API.h"
 
-#include <cstdint>
+#include "syntax/SyntaxVisitor.h"
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The alternatives for the TextPreprocessingState of the parsed text.
- */
-enum class PSY_C_API TextPreprocessingState : std::uint8_t
+class PSY_C_NON_API TypeSynonymsVerificationReparser : public SyntaxVisitor
 {
-    Unknown,
-    Preprocessed,
-    Unpreprocessed
+public:
+    TypeSynonymsVerificationReparser(SyntaxTree* tree);
 };
 
 } // C
 } // psy
 
 #endif
-

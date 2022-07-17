@@ -18,28 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
-#define PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
+#include "Shape.h"
 
-#include "API.h"
+using namespace psy;
+using namespace C;
 
-#include <cstdint>
-
-namespace psy {
-namespace C {
-
-/**
- * \brief The alternatives for the TextPreprocessingState of the parsed text.
- */
-enum class PSY_C_API TextPreprocessingState : std::uint8_t
-{
-    Unknown,
-    Preprocessed,
-    Unpreprocessed
-};
-
-} // C
-} // psy
-
-#endif
-
+Shape::~Shape() {}

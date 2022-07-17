@@ -1,4 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,24 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYNTAX_DISAMBIGUATOR_H__
-#define PSYCHE_C_SYNTAX_DISAMBIGUATOR_H__
-
-#include "API.h"
-#include "Fwds.h"
-
-#include "SyntaxVisitor.h"
-
-#include <iostream>
-
-namespace psy {
-namespace C {
-
-class PSY_C_NON_API SyntaxDisambiguator final : public SyntaxVisitor
-{
-};
-
-} // C
-} // psy
+#ifndef PSYCHE_C_SHAPE_KIND_H__
+#define PSYCHE_C_SHAPE_KIND_H__
 
 #endif

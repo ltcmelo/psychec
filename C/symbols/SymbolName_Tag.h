@@ -56,6 +56,7 @@ public:
     enum class TagChoice : std::uint8_t
     {
         UNSPECIFIED = 0,
+
         Struct,
         Union,
         Enum

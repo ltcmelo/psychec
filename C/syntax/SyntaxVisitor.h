@@ -116,7 +116,6 @@ public:
     virtual Action visitDesignatedInitializer(const DesignatedInitializerSyntax*) { return Action::Visit; }
     virtual Action visitFieldDesignator(const FieldDesignatorSyntax*) { return Action::Visit; }
     virtual Action visitArrayDesignator(const ArrayDesignatorSyntax*) { return Action::Visit; }
-
     virtual Action visitOffsetOfDesignator(const OffsetOfDesignatorSyntax*) { return Action::Visit; }
 
     //-------------//

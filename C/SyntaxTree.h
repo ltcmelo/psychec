@@ -28,6 +28,7 @@
 #include "parser/LexedTokens.h"
 #include "parser/LineDirective.h"
 #include "parser/ParseOptions.h"
+#include "parser/TextCompleteness.h"
 #include "parser/TextPreprocessingState.h"
 #include "syntax/SyntaxToken.h"
 
@@ -71,6 +72,7 @@ public:
     enum class SyntaxCategory : uint8_t
     {
         UNSPECIFIED = 0,
+
         Declarations,
         Expressions,
         Statements,
@@ -82,8 +84,9 @@ public:
      */
     static std::unique_ptr<SyntaxTree> parseText(SourceText text,
                                                  TextPreprocessingState textPPState,
+                                                 TextCompleteness textCompleteness,
                                                  ParseOptions parseOptions = ParseOptions(),
-                                                 const std::string& path = "",
+                                                 const std::string& filePath = "",
                                                  SyntaxCategory syntaxCategory = SyntaxCategory::UNSPECIFIED);
 
     /**
@@ -165,6 +168,8 @@ PSY_INTERNAL:
 
 private:
     SyntaxTree(SourceText text,
+               TextPreprocessingState textPPState,
+               TextCompleteness textCompleteness,
                ParseOptions parseOptions,
                const std::string& path);
 
@@ -174,7 +179,7 @@ private:
 
     DECL_PIMPL(SyntaxTree)
 
-    void buildTree(SyntaxCategory syntaxCat);
+    void buildFor(SyntaxCategory syntaxCategory);
 
     LinePosition computePosition(unsigned int offset) const;
     unsigned int searchForLineno(unsigned int offset) const;

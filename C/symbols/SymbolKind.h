@@ -42,6 +42,7 @@ namespace C {
 enum class PSY_C_API SymbolKind : std::uint8_t
 {
     UNSPECIFIED = 0,
+
     Library,
     Function,
     Value,

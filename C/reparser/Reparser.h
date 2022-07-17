@@ -1,4 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,4 +18,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "SyntaxDisambiguator.h"
+#ifndef PSYCHE_C_DISAMBIGUATOR_H__
+#define PSYCHE_C_DISAMBIGUATOR_H__
+
+#include "API.h"
+#include "Fwds.h"
+
+#include "parser/ParseOptions.h"
+
+#include "../common/infra/InternalAccess.h"
+
+#include <cstdint>
+
+namespace psy {
+namespace C {
+
+class PSY_C_NON_API Reparser
+{
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(SyntaxTree);
+
+    Reparser();
+
+    enum class DisambiguationStrategy : std::uint8_t
+    {
+        UNSPECIFIED = 0,
+
+        TypeSynonymsVerification,
+        SyntaxCorrelation,
+        GuidelineImposition
+    };
+
+    void setDisambiguationStrategy(DisambiguationStrategy strategy);
+
+    void setPermitHeuristic(bool heuristic);
+
+    void reparse(SyntaxTree* tree);
+
+private:
+    DisambiguationStrategy disambigStrategy_;
+    bool permitHeuristic_;
+};
+
+} // C
+} // psy
+
+#endif

@@ -18,52 +18,63 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SCOPE_KIND_H__
-#define PSYCHE_C_SCOPE_KIND_H__
+#ifndef PSYCHE_C_NAME_CATALOG_H__
+#define PSYCHE_C_NAME_CATALOG_H__
 
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/Escape.h"
+#include "../common/infra/InternalAccess.h"
 
-#include <cstdint>
+#include <ostream>
+#include <stack>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The ScopeKind enum.
- *
- * \remark 6.2.1-4
- */
-enum class PSY_C_API ScopeKind : uint8_t
+class PSY_C_NON_API NameCatalog
 {
-    UNSPECIFIED = 0,
+    friend std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog);
 
-    File,
-    Function,
-    FunctionPrototype,
-    Block
+public:
+    ~NameCatalog();
+
+PSY_INTERNAL:
+    PSY_GRANT_ACCESS(NameCataloger);
+    PSY_GRANT_ACCESS(SyntaxCorrelationDisambiguator);
+
+    void createLevelAndEnter(const SyntaxNode*);
+    void enterLevel(const SyntaxNode*);
+    void exitLevel();
+
+    void catalogTypeName(std::string s);
+    void catalogName(std::string s);
+
+    bool containsTypeName(const std::string& s) const;
+    bool containsName(const std::string& s) const;
+
+private:
+    using TypeNames = std::unordered_set<std::string>;
+    using Names = std::unordered_set<std::string>;
+    using NameIndex = std::pair<TypeNames, Names>;
+
+    using Levels = std::unordered_map<const SyntaxNode*, NameIndex>;
+
+    mutable Levels levels_;
+    std::stack<const SyntaxNode*> levelKeys_;
+
+    bool levelExists(const SyntaxNode*) const;
+    NameIndex* currentLevel() const;
 };
 
-inline std::string PSY_C_API to_string(ScopeKind scopeK)
-{
-    switch (scopeK) {
-        case ScopeKind::File:
-            return "File";
-        case ScopeKind::Function:
-            return "Function";
-        case ScopeKind::FunctionPrototype:
-            return "FunctionPrototype";
-        case ScopeKind::Block:
-            return "Block";
-        default:
-            PSY_ESCAPE_VIA_RETURN("<INVALID or UNSPECIFIED ScopeKind>");
-    }
-}
+std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog);
 
 } // C
 } // psy
 
 #endif
+

@@ -17,29 +17,3 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-#ifndef PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
-#define PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
-
-#include "API.h"
-
-#include <cstdint>
-
-namespace psy {
-namespace C {
-
-/**
- * \brief The alternatives for the TextPreprocessingState of the parsed text.
- */
-enum class PSY_C_API TextPreprocessingState : std::uint8_t
-{
-    Unknown,
-    Preprocessed,
-    Unpreprocessed
-};
-
-} // C
-} // psy
-
-#endif
-

@@ -61,6 +61,11 @@ const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedContinueOutsideLo
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedBreakOutsideSwitchOrLoop = "Parser-311-6.8.6.3-1";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedGNUExtensionFlag = "Parser-312-GNU";
 
+/* Ambiguities */
+const std::string Parser::DiagnosticsReporter::ID_of_AmbiguousTypeNameOrExpressionAsTypeReference = "Parser-A1";
+const std::string Parser::DiagnosticsReporter::ID_of_AmbiguousCastOrBinaryExpression = "Parser-A2";
+const std::string Parser::DiagnosticsReporter::ID_of_AmbiguousExpressionOrDeclarationStatement = "Parser-A3";
+
 
 std::string Parser::DiagnosticsReporter::joinTokenNames(const std::vector<SyntaxKind>& validTkKinds)
 {
@@ -99,16 +104,21 @@ void Parser::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc)
     if (parser_->mightBacktrack())
         return;
 
-    if (delayReports_.find(desc.id()) != delayReports_.end())
-        delayed_.push_back(std::make_pair(desc, parser_->curTkIdx_));
+    if (IDsForDelay_.find(desc.id()) != IDsForDelay_.end())
+        delayedDiags_.push_back(std::make_pair(desc, parser_->curTkIdx_));
     else
         parser_->tree_->newDiagnostic(desc, parser_->curTkIdx_);
 }
 
-void Parser::DiagnosticsReporter::reportDelayed()
+void Parser::DiagnosticsReporter::diagnoseDelayed()
 {
-    for (const auto& p : delayed_)
+    for (const auto& p : delayedDiags_)
         parser_->tree_->newDiagnostic(p.first, p.second);
+}
+
+void Parser::DiagnosticsReporter::diagnoseAmbiguityButRetainIt(DiagnosticDescriptor&& desc)
+{
+    retainedAmbiguityDiags_.push_back(std::make_pair(desc, parser_->curTkIdx_ - 1));
 }
 
 /* Generic */
@@ -462,4 +472,48 @@ void Parser::DiagnosticsReporter::UnexpectedGNUExtensionFlag()
                                   "unrecognized `__extension__'",
                                   DiagnosticSeverity::Error,
                                   DiagnosticCategory::Syntax));
+}
+
+/* Ambiguities */
+
+void Parser::DiagnosticsReporter::AmbiguousTypeNameOrExpressionAsTypeReference()
+{
+    std::string s = "ambiguous type name or expression `"
+                + parser_->peek().valueText()
+                + "'";
+
+    diagnoseAmbiguityButRetainIt(
+                DiagnosticDescriptor(ID_of_AmbiguousTypeNameOrExpressionAsTypeReference,
+                                     "[[ambiguous type name or expression]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
+}
+
+void Parser::DiagnosticsReporter::AmbiguousCastOrBinaryExpression()
+{
+    std::string s = "ambiguous cast or binary expression `"
+                + parser_->peek().valueText()
+                + "'";
+
+    diagnoseAmbiguityButRetainIt(
+                DiagnosticDescriptor(ID_of_AmbiguousCastOrBinaryExpression,
+                                     "[[ambiguous cast or binary expression]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
+}
+
+void Parser::DiagnosticsReporter::AmbiguousExpressionOrDeclarationStatement()
+{
+    std::string s = "ambiguous expression- or declaration-statement `"
+                + parser_->peek().valueText()
+                + "'";
+
+    diagnoseAmbiguityButRetainIt(
+                DiagnosticDescriptor(ID_of_AmbiguousExpressionOrDeclarationStatement,
+                                     "[[ambiguous expression- or declaration-statement]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }

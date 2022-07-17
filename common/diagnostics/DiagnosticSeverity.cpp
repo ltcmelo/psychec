@@ -20,16 +20,14 @@
 
 #include "DiagnosticSeverity.h"
 
+#include "../infra/Escape.h"
+
 namespace psy {
 
 std::ostream& operator<<(std::ostream& os, DiagnosticSeverity severity)
 {
     switch (severity)
     {
-        case DiagnosticSeverity::Info:
-            os << "info";
-            break;
-
         case DiagnosticSeverity::Warning:
             os << "warning";
             break;
@@ -37,6 +35,9 @@ std::ostream& operator<<(std::ostream& os, DiagnosticSeverity severity)
         case DiagnosticSeverity::Error:
             os << "error";
             break;
+
+        default:
+            PSY_ESCAPE_VIA_RETURN(os);
     }
 
     return os;

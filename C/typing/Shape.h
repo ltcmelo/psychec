@@ -18,28 +18,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
-#define PSYCHE_C_TEXT_PREPROCESSING_STATE_H__
+#ifndef PSYCHE_C_SHAPES_H__
+#define PSYCHE_C_SHAPES_H__
 
 #include "API.h"
-
-#include <cstdint>
+#include "Fwds.h"
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The alternatives for the TextPreprocessingState of the parsed text.
- */
-enum class PSY_C_API TextPreprocessingState : std::uint8_t
+class PSY_C_NON_API Shape
 {
-    Unknown,
-    Preprocessed,
-    Unpreprocessed
+public:
+    virtual ~Shape();
 };
 
 } // C
 } // psy
 
 #endif
-

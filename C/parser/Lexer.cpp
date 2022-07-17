@@ -302,7 +302,7 @@ LexEntry:
             }
         }
 
-        if (tree_->parseOptions().commentMode() == ParseOptions::CommentMode::Discard)
+        if (tree_->parseOptions().treatmentOfComments() == ParseOptions::TreatmentOfComments::None)
             goto LexEntry;
 
         tk->rawSyntaxK_ = tkRawKind;
@@ -313,7 +313,7 @@ LexEntry:
             || rawSyntaxK_splitTk == SingleLineDocumentationCommentTrivia) {
         auto syntaxK = rawSyntaxK_splitTk;
         tk->BF_.joined_ = true;
-        if (tree_->parseOptions().commentMode() != ParseOptions::CommentMode::Discard)
+        if (tree_->parseOptions().treatmentOfComments() != ParseOptions::TreatmentOfComments::None)
             tk->rawSyntaxK_ = syntaxK;
         withinLogicalLine_ = false;
         lexSingleLineComment(syntaxK);
@@ -502,7 +502,7 @@ LexEntry:
                 }
                 lexSingleLineComment(syntaxK);
 
-                if (tree_->parseOptions().commentMode() == ParseOptions::CommentMode::Discard)
+                if (tree_->parseOptions().treatmentOfComments() == ParseOptions::TreatmentOfComments::None)
                     goto LexEntry;
 
                 tk->rawSyntaxK_ = syntaxK;
@@ -548,7 +548,7 @@ LocalExit:
                 else
                     rawSyntaxK_splitTk = syntaxK;
 
-                if (tree_->parseOptions().commentMode() == ParseOptions::CommentMode::Discard)
+                if (tree_->parseOptions().treatmentOfComments() == ParseOptions::TreatmentOfComments::None)
                     goto LexEntry;
 
                 tk->rawSyntaxK_ = syntaxK;
@@ -840,8 +840,10 @@ void Lexer::lexIdentifier(SyntaxToken* tk, int advanced)
 
     int yyleng = yytext_ - yytext;
 
-    if (tree_->parseOptions().IsKeywordsIdentifiersClassified())
+    if (tree_->parseOptions().treatmentOfIdentifiers() == ParseOptions
+            ::TreatmentOfIdentifiers::Classify) {
         tk->rawSyntaxK_ = classify(yytext, yyleng, tree_->parseOptions());
+    }
     else
         tk->rawSyntaxK_ = IdentifierToken;
 

@@ -27,6 +27,7 @@
 #include "infra/MemoryPool.h"
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
+#include "reparser/Reparser.h"
 #include "syntax/SyntaxLexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 
@@ -51,23 +52,29 @@ using namespace C;
 struct SyntaxTree::SyntaxTreeImpl
 {
     SyntaxTreeImpl(SourceText text,
+                   TextPreprocessingState textPPState,
+                   TextCompleteness textCompleteness,
                    ParseOptions parseOptions,
-                   const std::string& path)
+                   const std::string& filePath)
         : pool_(new MemoryPool())
         , text_(std::move(text))
+        , textCompleteness_(textCompleteness)
+        , textPPState_(textPPState)
         , parseOptions_(std::move(parseOptions))
-        , path_(path)
+        , filePath_(filePath)
         , rootNode_(nullptr)
     {
-        if (path_.empty())
-            path_ = "<buffer>";
+        if (filePath_.empty())
+            filePath_ = "<buffer>";
     }
 
     std::unique_ptr<MemoryPool> pool_;
 
     SourceText text_;
+    TextCompleteness textCompleteness_;
+    TextPreprocessingState textPPState_;
     ParseOptions parseOptions_;
-    std::string path_;
+    std::string filePath_;
 
     TextElementTable<Identifier> identifiers_;
     TextElementTable<IntegerConstant> integers_;
@@ -90,9 +97,15 @@ struct SyntaxTree::SyntaxTreeImpl
 };
 
 SyntaxTree::SyntaxTree(SourceText text,
-                       ParseOptions options,
-                       const std::string& path)
-    : P(new SyntaxTreeImpl(text, options, path))
+                       TextPreprocessingState textPPState,
+                       TextCompleteness textCompleteness,
+                       ParseOptions parseOptions,
+                       const std::string& filePath)
+    : P(new SyntaxTreeImpl(text,
+                           textPPState,
+                           textCompleteness,
+                           parseOptions,
+                           filePath))
 {}
 
 SyntaxTree::~SyntaxTree()
@@ -106,18 +119,24 @@ MemoryPool* SyntaxTree::unitPool() const
 
 std::unique_ptr<SyntaxTree> SyntaxTree::parseText(SourceText text,
                                                   TextPreprocessingState textPPState,
-                                                  ParseOptions options,
-                                                  const std::string& path,
+                                                  TextCompleteness textCompleteness,
+                                                  ParseOptions parseOptions,
+                                                  const std::string& filePath,
                                                   SyntaxCategory syntaxCategory)
 {
-    std::unique_ptr<SyntaxTree> tree(new SyntaxTree(text, options, path));
-    tree->buildTree(syntaxCategory);
+    std::unique_ptr<SyntaxTree> tree(
+                new SyntaxTree(text,
+                               textPPState,
+                               textCompleteness,
+                               parseOptions,
+                               filePath));
+    tree->buildFor(syntaxCategory);
     return tree;
 }
 
 std::string SyntaxTree::filePath() const
 {
-    return P->path_;
+    return P->filePath_;
 }
 
 const SourceText& SyntaxTree::text() const
@@ -154,7 +173,7 @@ const SyntaxToken& SyntaxTree::tokenAt(LexedTokens::IndexType tkIdx) const { ret
 SyntaxTree::TokenSequenceType::size_type SyntaxTree::tokenCount() const { return P->tokens_.count(); }
 LexedTokens::IndexType SyntaxTree::freeTokenSlot() const { return P->tokens_.freeSlot(); }
 
-void SyntaxTree::buildTree(SyntaxCategory syntaxCat)
+void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
 {
     Lexer lexer(this);
     lexer.lex();
@@ -192,7 +211,7 @@ void SyntaxTree::buildTree(SyntaxCategory syntaxCat)
 #endif
 
     Parser parser(this);
-    switch (syntaxCat) {
+    switch (syntaxCategory) {
         case SyntaxCategory::Declarations: {
             DeclarationSyntax* decl = nullptr;
             parser.parseExternalDeclaration(decl);
@@ -217,6 +236,48 @@ void SyntaxTree::buildTree(SyntaxCategory syntaxCat)
         default:
             P->rootNode_ = parser.parse();
     }
+
+    if (!parser.detectedAnyAmbiguity())
+        return;
+
+    auto disambiguationStrategy = Reparser::DisambiguationStrategy::UNSPECIFIED;
+    auto permitHeuristic = false;
+    switch (P->parseOptions_.treatmentOfAmbiguities()) {
+        case ParseOptions::TreatmentOfAmbiguities::None:
+            return;
+
+        case ParseOptions::TreatmentOfAmbiguities::Diagnose:
+            for (const auto& diag : parser.releaseRetainedAmbiguityDiags())
+                newDiagnostic(diag.first, diag.second);
+            return;
+
+        case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically:
+            permitHeuristic = true;
+            [[fallthrough]];
+
+        case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically: {
+            disambiguationStrategy = P->textCompleteness_ == TextCompleteness::Full
+                    ? Reparser::DisambiguationStrategy::TypeSynonymsVerification
+                    : Reparser::DisambiguationStrategy::SyntaxCorrelation;
+            break;
+        }
+
+        case ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically:
+            disambiguationStrategy = Reparser::DisambiguationStrategy::GuidelineImposition;
+            permitHeuristic = true;
+            break;
+
+        default:
+            PSY_ESCAPE_VIA_RETURN();
+    }
+
+    if (!P->diagnostics_.empty())
+        return;
+
+    Reparser reparser;
+    reparser.setDisambiguationStrategy(disambiguationStrategy);
+    reparser.setPermitHeuristic(permitHeuristic);
+    reparser.reparse(this);
 }
 
 const ParseOptions& SyntaxTree::parseOptions() const
@@ -343,7 +404,7 @@ void SyntaxTree::newDiagnostic(DiagnosticDescriptor descriptor,
 {
     LinePosition start = computePosition(tk.charStart());
     LinePosition end = computePosition(tk.charEnd());
-    FileLinePositionSpan line(P->path_, start, end);
+    FileLinePositionSpan line(P->filePath_, start, end);
     std::string snippet;
 
     auto it = std::lower_bound(P->startOfLineOffsets_.begin(), P->startOfLineOffsets_.end(), tk.charStart());
