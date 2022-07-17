@@ -38,9 +38,12 @@ Disambiguator::Disambiguator(SyntaxTree* tree)
 Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousExpressionOrDeclarationStatement(
         const AmbiguousExpressionOrDeclarationStatementSyntax* node)
 {
+    std::string name;
+
     auto expr = node->expressionStatement()->expression();
     switch (expr->kind()) {
-        case MultiplyExpression: {
+        case MultiplyExpression:
+        case CallExpression: {
             auto decl = node->declarationStatement()->declaration();
             PSY_ASSERT(decl->kind() == VariableAndOrFunctionDeclaration, return Disambiguation::Undetermined);
 
@@ -51,24 +54,20 @@ Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousExpressionOrDe
                        return Disambiguation::Undetermined);
 
             auto typedefName = varDecl->specifiers()->value->asTypedefName();
-            auto ident = typedefName->identifierToken().valueText();
-
-            return recognizesTypeName(ident)
-                    ? Disambiguation::DeclarationStatement
-                    : Disambiguation::ExpressionStatement;
-        }
-
-        case CallExpression: {
-            auto callExpr = expr->asCallExpression();
-            visit(callExpr->arguments()->value);
-            return Disambiguation::Undetermined;
+            name = typedefName->identifierToken().valueText();
+            break;
         }
 
         default:
             PSY_ESCAPE_VIA_RETURN(Disambiguation::Undetermined);
     }
-}
 
+    return recognizesTypeName(name)
+            ? Disambiguation::DeclarationStatement
+            : recognizesName(name)
+                    ? Disambiguation::ExpressionStatement
+                    : Disambiguation::Undetermined;
+}
 
 SyntaxVisitor::Action Disambiguator::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node) { return Action::Visit; }
 
@@ -205,7 +204,8 @@ SyntaxVisitor::Action Disambiguator::visitCompoundStatement(const CompoundStatem
     for (auto iter = node->statements(); iter; iter = iter->next) {
         auto iter_P = const_cast<StatementListSyntax*>(iter);
         switch (iter->value->kind()) {
-            case AmbiguousMultiplicationOrPointerDeclaration: {
+            case AmbiguousMultiplicationOrPointerDeclaration:
+            case AmbiguousCallOrVariableDeclaration: {
                 auto ambigNode = iter->value->asAmbiguousExpressionOrDeclarationStatement();
                 auto disambig = disambiguateAmbiguousExpressionOrDeclarationStatement(ambigNode);
                 switch (disambig) {

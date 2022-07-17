@@ -114,7 +114,7 @@ std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog)
         for (const auto& t : p.second.first)
             os << t << " ";
         std::cout << std::endl;
-        os << "\tNon-types: ";
+        os << "\tAny: ";
         for (const auto& v : p.second.second)
             os << v << " ";
         os << std::endl;
