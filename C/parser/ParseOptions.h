@@ -100,11 +100,11 @@ public:
      */
     enum class TreatmentOfAmbiguities : std::uint8_t
     {
-        None,
-        Diagnose,
-        DisambiguateAlgorithmically,
-        DisambiguateAlgorithmicallyOrHeuristically,
-        DisambiguateHeuristically,
+        None,                                       /**< No special treatment (ambiguities are preserved). */
+        Diagnose,                                   /**< Diagnose ambiguities. */
+        DisambiguateAlgorithmically,                /**< Disambiguate ambiguities algorithmically. */
+        DisambiguateAlgorithmicallyOrHeuristically, /**< Disambiguate ambiguities algorithmically/heristically. */
+        DisambiguateHeuristically,                  /**< Disambiguate ambiguities heuristically. */
     };
     /**
      * The TreatmentOfAmbiguities of \c this ParserOptions.
