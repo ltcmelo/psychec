@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['keepall_828',['KeepAll',['../classpsy_1_1_c_1_1_parse_options.html#af365b284966b30d83aec4a63c5180e67a98e4e92f8ed10755a2fde1531cf6593f',1,'psy::C::ParseOptions']]],
-  ['keepdocumentationonly_829',['KeepDocumentationOnly',['../classpsy_1_1_c_1_1_parse_options.html#af365b284966b30d83aec4a63c5180e67a74d3421f8816e871754d7ff2f4af1b76',1,'psy::C::ParseOptions']]]
+  ['none_908',['None',['../classpsy_1_1_c_1_1_parse_options.html#ab0356651dea4e1d4c89ed0e990e7623ca6adf97f83acf6453d4a6a4b1070f3754',1,'psy::C::ParseOptions::None()'],['../classpsy_1_1_c_1_1_parse_options.html#a8174d8fb7d6fa5bae95a5f7b101f5fe9a6adf97f83acf6453d4a6a4b1070f3754',1,'psy::C::ParseOptions::None()']]]
 ];

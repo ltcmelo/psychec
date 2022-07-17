@@ -102,27 +102,27 @@ $(function() {
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 <div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_pointer_type_symbol.html#a20127a27b5b530eb4d2588dbbaabf57a">   45</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_pointer_type_symbol.html">PointerTypeSymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_pointer_type_symbol.html#a20127a27b5b530eb4d2588dbbaabf57a">asPointerType</a>()<span class="keyword"> override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_pointer_type_symbol.html">PointerTypeSymbol</a>* asPointerType()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_pointer_type_symbol.html#a66752f46d4010bf4995c09e617678194">   46</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_pointer_type_symbol.html">PointerTypeSymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_pointer_type_symbol.html#a66752f46d4010bf4995c09e617678194">asPointerType</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">const</span> TypeSymbol* referencedType() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a>* referencedType() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">bool</span> arisesFromArrayDecay() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">bool</span> arisesFromFunctionDecay() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;PSY_INTERNAL:</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    PSY_GRANT_ACCESS(Binder);</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>);</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    PointerTypeSymbol(<span class="keyword">const</span> SyntaxTree* tree,</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                      <span class="keyword">const</span> Scope* scope,</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                      <span class="keyword">const</span> Symbol* containingSym,</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                      <span class="keyword">const</span> TypeSymbol* refedTySym);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_pointer_type_symbol.html">PointerTypeSymbol</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree,</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                      <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* scope,</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                      <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* containingSym,</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                      <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a>* refedTySym);</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">void</span> markAsArisingFromArrayDecay();</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> markAsArisingFromFunctionDecay();</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    DECL_PIMPL_SUB(PointerTypeSymbol)</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    DECL_PIMPL_SUB(<a class="code" href="classpsy_1_1_c_1_1_pointer_type_symbol.html">PointerTypeSymbol</a>)</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;};</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> PointerTypeSymbol&amp; tySym);</div>
@@ -133,8 +133,13 @@ $(function() {
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasspsy_1_1_c_1_1_pointer_type_symbol_html_a20127a27b5b530eb4d2588dbbaabf57a"><div class="ttname"><a href="classpsy_1_1_c_1_1_pointer_type_symbol.html#a20127a27b5b530eb4d2588dbbaabf57a">psy::C::PointerTypeSymbol::asPointerType</a></div><div class="ttdeci">virtual PointerTypeSymbol * asPointerType() override</div><div class="ttdef"><b>Definition:</b> TypeSymbol_Pointer.h:45</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_scope_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_scope.html">psy::C::Scope</a></div><div class="ttdoc">The Scope class.</div><div class="ttdef"><b>Definition:</b> Scope.h:45</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_pointer_type_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_pointer_type_symbol.html">psy::C::PointerTypeSymbol</a></div><div class="ttdoc">The PointerTypeSymbol class.</div><div class="ttdef"><b>Definition:</b> TypeSymbol_Pointer.h:39</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_type_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type_symbol.html">psy::C::TypeSymbol</a></div><div class="ttdoc">The TypeSymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Type.h:49</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:61</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></div><div class="ttdoc">The Symbol class.</div><div class="ttdef"><b>Definition:</b> Symbol.h:51</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_pointer_type_symbol_html_a66752f46d4010bf4995c09e617678194"><div class="ttname"><a href="classpsy_1_1_c_1_1_pointer_type_symbol.html#a66752f46d4010bf4995c09e617678194">psy::C::PointerTypeSymbol::asPointerType</a></div><div class="ttdeci">virtual const PointerTypeSymbol * asPointerType() const override</div><div class="ttdef"><b>Definition:</b> TypeSymbol_Pointer.h:46</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:51</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

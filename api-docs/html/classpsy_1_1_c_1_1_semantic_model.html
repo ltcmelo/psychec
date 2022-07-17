@@ -68,8 +68,6 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classpsy_1_1_c_1_1_semantic_model-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">psy::C::SemanticModel Class Reference</div>  </div>
@@ -88,44 +86,27 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a0e1422906c4b043e07eadf8f5cd25bde"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#a0e1422906c4b043e07eadf8f5cd25bde">syntaxTree</a> () const</td></tr>
+<tr class="separator:a0e1422906c4b043e07eadf8f5cd25bde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4e44d73bcf110b31bb109a9398d2ef0"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#ac4e44d73bcf110b31bb109a9398d2ef0">compilation</a> () const</td></tr>
 <tr class="separator:ac4e44d73bcf110b31bb109a9398d2ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c21a95e1df875223878727449cc9af2"><td class="memItemLeft" align="right" valign="top"><a id="a6c21a95e1df875223878727449cc9af2"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>)</td></tr>
-<tr class="separator:a6c21a95e1df875223878727449cc9af2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26ed3fa08325fbc3bb508851fea2a0a6"><td class="memItemLeft" align="right" valign="top"><a id="a26ed3fa08325fbc3bb508851fea2a0a6"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SemanticModel</b> (<a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> *<a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#ac4e44d73bcf110b31bb109a9398d2ef0">compilation</a>, const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree)</td></tr>
-<tr class="separator:a26ed3fa08325fbc3bb508851fea2a0a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3a94d0416f88f093413843a1c5b558d"><td class="memItemLeft" align="right" valign="top"><a id="aa3a94d0416f88f093413843a1c5b558d"></a>
-<a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>storeDeclaredSym</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a> *node, std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &gt; sym)</td></tr>
-<tr class="separator:aa3a94d0416f88f093413843a1c5b558d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1882c52f8af66ddd4cf70e13dec7b4b"><td class="memItemLeft" align="right" valign="top"><a id="ab1882c52f8af66ddd4cf70e13dec7b4b"></a>
-<a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>storeUsedSym</b> (std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> &gt; sym)</td></tr>
-<tr class="separator:ab1882c52f8af66ddd4cf70e13dec7b4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
-<tr class="memitem:a4dd415b3dac8d757c5a10df85d5e60db"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#a4dd415b3dac8d757c5a10df85d5e60db">declaredSymbol</a> (const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *node) const</td></tr>
-<tr class="separator:a4dd415b3dac8d757c5a10df85d5e60db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a9231c63b296e0c573912aa36d554c0c7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_library_symbol.html">LibrarySymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#a9231c63b296e0c573912aa36d554c0c7">declaredSymbol</a> (const <a class="el" href="classpsy_1_1_c_1_1_translation_unit_syntax.html">TranslationUnitSyntax</a> *node) const</td></tr>
+<tr class="separator:a9231c63b296e0c573912aa36d554c0c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fc76a06ff8a7d0a31ff9040be7d510f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_function_symbol.html">FunctionSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#a3fc76a06ff8a7d0a31ff9040be7d510f">declaredSymbol</a> (const <a class="el" href="classpsy_1_1_c_1_1_function_definition_syntax.html">FunctionDefinitionSyntax</a> *node) const</td></tr>
+<tr class="separator:a3fc76a06ff8a7d0a31ff9040be7d510f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5961e350b54201a72af39e300264c39"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_parameter_symbol.html">ParameterSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#ab5961e350b54201a72af39e300264c39">declaredSymbol</a> (const <a class="el" href="classpsy_1_1_c_1_1_parameter_declaration_syntax.html">ParameterDeclarationSyntax</a> *node) const</td></tr>
+<tr class="separator:ab5961e350b54201a72af39e300264c39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab29230ad7c44e122788494ceffa8337c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#ab29230ad7c44e122788494ceffa8337c">declaredSymbol</a> (const <a class="el" href="classpsy_1_1_c_1_1_type_declaration_syntax.html">TypeDeclarationSyntax</a> *node) const</td></tr>
+<tr class="separator:ab29230ad7c44e122788494ceffa8337c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3110aa5dfc8973411fd7525c3276be7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_enumerator_symbol.html">EnumeratorSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#af3110aa5dfc8973411fd7525c3276be7">declaredSymbol</a> (const <a class="el" href="classpsy_1_1_c_1_1_enumerator_declaration_syntax.html">EnumeratorDeclarationSyntax</a> *node) const</td></tr>
+<tr class="separator:af3110aa5dfc8973411fd7525c3276be7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06af265909651c54c19a725b39be0739"><td class="memItemLeft" align="right" valign="top">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#a06af265909651c54c19a725b39be0739">declaredSymbols</a> (const <a class="el" href="classpsy_1_1_c_1_1_variable_and_or_function_declaration_syntax.html">VariableAndOrFunctionDeclarationSyntax</a> *node) const</td></tr>
 <tr class="separator:a06af265909651c54c19a725b39be0739"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae98d8438a097b934d861402ed0ce9c9d"><td class="memItemLeft" align="right" valign="top"><a id="ae98d8438a097b934d861402ed0ce9c9d"></a>
-const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>declaredSymbol</b> (const <a class="el" href="classpsy_1_1_c_1_1_function_definition_syntax.html">FunctionDefinitionSyntax</a> *node) const</td></tr>
-<tr class="separator:ae98d8438a097b934d861402ed0ce9c9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a79d97e627a8a4c5dffe6a4a6295d2fa6"><td class="memItemLeft" align="right" valign="top"><a id="a79d97e627a8a4c5dffe6a4a6295d2fa6"></a>
-PSY_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>__pad0__</b>: PSY_GRANT_ACCESS(<a class="el" href="classpsy_1_1_c_1_1_binder.html">Binder</a>)</td></tr>
-<tr class="separator:a79d97e627a8a4c5dffe6a4a6295d2fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a6a4f3d7664b16b7a9826de69aaf3341b"><td class="memItemLeft" align="right" valign="top"><a id="a6a4f3d7664b16b7a9826de69aaf3341b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SemanticModel</b> (const <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> &amp;)=delete</td></tr>
-<tr class="separator:a6a4f3d7664b16b7a9826de69aaf3341b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad03c4def2d375b5e624f25ffb07f58df"><td class="memItemLeft" align="right" valign="top"><a id="ad03c4def2d375b5e624f25ffb07f58df"></a>
-<a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> &amp;)=delete</td></tr>
-<tr class="separator:ad03c4def2d375b5e624f25ffb07f58df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4865c676006128072accd0c9c5e2d52d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_field_symbol.html">FieldSymbol</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#a4865c676006128072accd0c9c5e2d52d">declaredSymbols</a> (const <a class="el" href="classpsy_1_1_c_1_1_field_declaration_syntax.html">FieldDeclarationSyntax</a> *node) const</td></tr>
+<tr class="separator:a4865c676006128072accd0c9c5e2d52d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dd415b3dac8d757c5a10df85d5e60db"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_semantic_model.html#a4dd415b3dac8d757c5a10df85d5e60db">declaredSymbol</a> (const <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> *node) const</td></tr>
+<tr class="separator:a4dd415b3dac8d757c5a10df85d5e60db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html" title="The SemanticModel class.">SemanticModel</a> class. </p>
@@ -145,12 +126,12 @@ Private Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a> which <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html" title="The SemanticModel class.">SemanticModel</a> was computed from. </p>
+<p>The <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a> from which <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html" title="The SemanticModel class.">SemanticModel</a> was computed. </p>
 
 </div>
 </div>
 <a id="a4dd415b3dac8d757c5a10df85d5e60db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4dd415b3dac8d757c5a10df85d5e60db">&#9670;&nbsp;</a></span>declaredSymbol()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4dd415b3dac8d757c5a10df85d5e60db">&#9670;&nbsp;</a></span>declaredSymbol() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -164,12 +145,126 @@ Private Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The <a class="el" href="classpsy_1_1_c_1_1_symbol.html" title="The Symbol class.">Symbol</a> declared by the given by <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> <code>node</code>. </p>
+<p>The <a class="el" href="classpsy_1_1_c_1_1_symbol.html" title="The Symbol class.">Symbol</a> declared by <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> <code>node</code>. </p>
+
+</div>
+</div>
+<a id="af3110aa5dfc8973411fd7525c3276be7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3110aa5dfc8973411fd7525c3276be7">&#9670;&nbsp;</a></span>declaredSymbol() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_enumerator_symbol.html">EnumeratorSymbol</a> * SemanticModel::declaredSymbol </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_enumerator_declaration_syntax.html">EnumeratorDeclarationSyntax</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <a class="el" href="classpsy_1_1_c_1_1_symbol.html" title="The Symbol class.">Symbol</a> declared by <a class="el" href="classpsy_1_1_c_1_1_translation_unit_syntax.html" title="The TranslationUnitSyntax class.">TranslationUnitSyntax</a> <code>node</code>. </p>
+
+</div>
+</div>
+<a id="a3fc76a06ff8a7d0a31ff9040be7d510f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fc76a06ff8a7d0a31ff9040be7d510f">&#9670;&nbsp;</a></span>declaredSymbol() <span class="overload">[3/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_function_symbol.html">FunctionSymbol</a> * SemanticModel::declaredSymbol </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_function_definition_syntax.html">FunctionDefinitionSyntax</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <a class="el" href="classpsy_1_1_c_1_1_symbol.html" title="The Symbol class.">Symbol</a> declared by <a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html" title="The DeclarationSyntax class.">DeclarationSyntax</a> <code>node</code>. </p>
+
+</div>
+</div>
+<a id="ab5961e350b54201a72af39e300264c39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5961e350b54201a72af39e300264c39">&#9670;&nbsp;</a></span>declaredSymbol() <span class="overload">[4/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_parameter_symbol.html">ParameterSymbol</a> * SemanticModel::declaredSymbol </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_parameter_declaration_syntax.html">ParameterDeclarationSyntax</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <a class="el" href="classpsy_1_1_c_1_1_symbol.html" title="The Symbol class.">Symbol</a> declared by <a class="el" href="classpsy_1_1_c_1_1_translation_unit_syntax.html" title="The TranslationUnitSyntax class.">TranslationUnitSyntax</a> <code>node</code>. </p>
+
+</div>
+</div>
+<a id="a9231c63b296e0c573912aa36d554c0c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9231c63b296e0c573912aa36d554c0c7">&#9670;&nbsp;</a></span>declaredSymbol() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_library_symbol.html">LibrarySymbol</a> * SemanticModel::declaredSymbol </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_translation_unit_syntax.html">TranslationUnitSyntax</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <a class="el" href="classpsy_1_1_c_1_1_symbol.html" title="The Symbol class.">Symbol</a> declared by <a class="el" href="classpsy_1_1_c_1_1_translation_unit_syntax.html" title="The TranslationUnitSyntax class.">TranslationUnitSyntax</a> <code>node</code>. </p>
+
+</div>
+</div>
+<a id="ab29230ad7c44e122788494ceffa8337c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab29230ad7c44e122788494ceffa8337c">&#9670;&nbsp;</a></span>declaredSymbol() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a> * SemanticModel::declaredSymbol </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_type_declaration_syntax.html">TypeDeclarationSyntax</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <a class="el" href="classpsy_1_1_c_1_1_symbol.html" title="The Symbol class.">Symbol</a> declared by <a class="el" href="classpsy_1_1_c_1_1_translation_unit_syntax.html" title="The TranslationUnitSyntax class.">TranslationUnitSyntax</a> <code>node</code>. </p>
+
+</div>
+</div>
+<a id="a4865c676006128072accd0c9c5e2d52d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4865c676006128072accd0c9c5e2d52d">&#9670;&nbsp;</a></span>declaredSymbols() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_field_symbol.html">FieldSymbol</a> * &gt; SemanticModel::declaredSymbols </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_field_declaration_syntax.html">FieldDeclarationSyntax</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <a class="el" href="classpsy_1_1_c_1_1_symbol.html" title="The Symbol class.">Symbol</a> declared by <a class="el" href="classpsy_1_1_c_1_1_translation_unit_syntax.html" title="The TranslationUnitSyntax class.">TranslationUnitSyntax</a> <code>node</code>. </p>
 
 </div>
 </div>
 <a id="a06af265909651c54c19a725b39be0739"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06af265909651c54c19a725b39be0739">&#9670;&nbsp;</a></span>declaredSymbols()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a06af265909651c54c19a725b39be0739">&#9670;&nbsp;</a></span>declaredSymbols() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -183,7 +278,25 @@ Private Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The Symbol(s) declared by the given <a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html" title="The DeclarationSyntax class.">DeclarationSyntax</a> <code>node</code>. </p>
+<p>The Symbol(s) declared by <a class="el" href="classpsy_1_1_c_1_1_declaration_syntax.html" title="The DeclarationSyntax class.">DeclarationSyntax</a> <code>node</code>. </p>
+
+</div>
+</div>
+<a id="a0e1422906c4b043e07eadf8f5cd25bde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e1422906c4b043e07eadf8f5cd25bde">&#9670;&nbsp;</a></span>syntaxTree()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * SemanticModel::syntaxTree </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html" title="The SyntaxTree class.">SyntaxTree</a> from which <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html" title="The SemanticModel class.">SemanticModel</a> was computed. </p>
 
 </div>
 </div>

@@ -69,9 +69,6 @@ $(function() {
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="classpsy_1_1_c_1_1_compilation-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">psy::C::Compilation Class Reference</div>  </div>
@@ -96,42 +93,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab91c20aa80705d51ad99a3ad6275927e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2715cf58e61a7128cc13f4316daf7c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#ab2715cf58e61a7128cc13f4316daf7c6">addSyntaxTrees</a> (std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * &gt; trees)</td></tr>
 <tr class="separator:ab2715cf58e61a7128cc13f4316daf7c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af131b8d675c126e6ffd448e43ad8cb31"><td class="memItemLeft" align="right" valign="top">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#af131b8d675c126e6ffd448e43ad8cb31">syntaxTree</a> () const</td></tr>
-<tr class="separator:af131b8d675c126e6ffd448e43ad8cb31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea9c6e81d7d046ad4a6eaac76346ac9e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#aea9c6e81d7d046ad4a6eaac76346ac9e">syntaxTrees</a> () const</td></tr>
+<tr class="separator:aea9c6e81d7d046ad4a6eaac76346ac9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62d2e2c699ccef99d3afd6b7c870bc48"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#a62d2e2c699ccef99d3afd6b7c870bc48">semanticModel</a> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree) const</td></tr>
 <tr class="separator:a62d2e2c699ccef99d3afd6b7c870bc48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1a28cd1facd5d22cb999bc826dc0e1b"><td class="memItemLeft" align="right" valign="top"><a id="ad1a28cd1facd5d22cb999bc826dc0e1b"></a>
-<a class="el" href="classpsy_1_1_c_1_1_assembly.html">Assembly</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>assembly</b> ()</td></tr>
-<tr class="separator:ad1a28cd1facd5d22cb999bc826dc0e1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a6050028af0c15e55fdfcc95cd95dd6f4"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_compilation.html#a6050028af0c15e55fdfcc95cd95dd6f4">create</a> (const std::string &amp;id)</td></tr>
 <tr class="separator:a6050028af0c15e55fdfcc95cd95dd6f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a245bd251fb1807e0ce845fa173bbc085"><td class="memItemLeft" align="right" valign="top"><a id="a245bd251fb1807e0ce845fa173bbc085"></a>
-PSY_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>__pad0__</b>: PSY_GRANT_ACCESS(<a class="el" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>)</td></tr>
-<tr class="separator:a245bd251fb1807e0ce845fa173bbc085"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:ac84c68e400e57e6a3223f521dd11df90"><td class="memItemLeft" align="right" valign="top"><a id="ac84c68e400e57e6a3223f521dd11df90"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Compilation</b> (const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> &amp;)=delete</td></tr>
-<tr class="separator:ac84c68e400e57e6a3223f521dd11df90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe0788f9eb42fdcf2e9c99cac2383f75"><td class="memItemLeft" align="right" valign="top"><a id="afe0788f9eb42fdcf2e9c99cac2383f75"></a>
-<a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> &amp;)=delete</td></tr>
-<tr class="separator:afe0788f9eb42fdcf2e9c99cac2383f75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa67b882bc5e64f9c0cab21fe76bb20ec"><td class="memItemLeft" align="right" valign="top"><a id="aa67b882bc5e64f9c0cab21fe76bb20ec"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>DECL_PIMPL</b> (<a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>)</td></tr>
-<tr class="separator:aa67b882bc5e64f9c0cab21fe76bb20ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:af3b357c7970846ae913ae94fc12661f0"><td class="memItemLeft" align="right" valign="top"><a id="af3b357c7970846ae913ae94fc12661f0"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>InternalsTestSuite</b></td></tr>
-<tr class="separator:af3b357c7970846ae913ae94fc12661f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a> class. </p>
@@ -235,25 +205,25 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>InternalsTestSuite</
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html" title="The SemanticModel class.">SemanticModel</a> associated to the <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html" title="The SyntaxTree class.">SyntaxTree</a> <code>tree</code> of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a>. </p>
+<p>The <a class="el" href="classpsy_1_1_c_1_1_semantic_model.html" title="The SemanticModel class.">SemanticModel</a> for the <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html" title="The SyntaxTree class.">SyntaxTree</a> <code>tree</code> in <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a>. </p>
 
 </div>
 </div>
-<a id="af131b8d675c126e6ffd448e43ad8cb31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af131b8d675c126e6ffd448e43ad8cb31">&#9670;&nbsp;</a></span>syntaxTree()</h2>
+<a id="aea9c6e81d7d046ad4a6eaac76346ac9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea9c6e81d7d046ad4a6eaac76346ac9e">&#9670;&nbsp;</a></span>syntaxTrees()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * &gt; Compilation::syntaxTree </td>
+          <td class="memname">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> * &gt; Compilation::syntaxTrees </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html" title="The SyntaxTree class.">SyntaxTree</a> associated to <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a>. </p>
+<p>The SyntaxTrees in <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_compilation.html" title="The Compilation class.">Compilation</a>. </p>
 
 </div>
 </div>

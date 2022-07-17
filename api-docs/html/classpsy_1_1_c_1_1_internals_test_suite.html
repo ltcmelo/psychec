@@ -67,9 +67,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="classpsy_1_1_c_1_1_internals_test_suite-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">psy::C::InternalsTestSuite Class Reference</div>  </div>
@@ -96,48 +93,6 @@ virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><b>descri
 <tr class="memitem:a27c8ae4d0c694c1fc1f1e7b70bbcedf7"><td class="memItemLeft" align="right" valign="top"><a id="a27c8ae4d0c694c1fc1f1e7b70bbcedf7"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>printSummary</b> () const override</td></tr>
 <tr class="separator:a27c8ae4d0c694c1fc1f1e7b70bbcedf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:ae5df2d519311861e0ffb02ac513ec737"><td class="memItemLeft" align="right" valign="top"><a id="ae5df2d519311861e0ffb02ac513ec737"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkErrorAndWarn</b> (<a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> X)</td></tr>
-<tr class="separator:ae5df2d519311861e0ffb02ac513ec737"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bde155e435e17e17fab02333008ff46"><td class="memItemLeft" align="right" valign="top"><a id="a2bde155e435e17e17fab02333008ff46"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>parseDeclaration</b> (std::string text, <a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> X=<a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a>())</td></tr>
-<tr class="separator:a2bde155e435e17e17fab02333008ff46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f0d22028eb2605161650bfc87ec05f6"><td class="memItemLeft" align="right" valign="top"><a id="a8f0d22028eb2605161650bfc87ec05f6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>parseExpression</b> (std::string text, <a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> X=<a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a>())</td></tr>
-<tr class="separator:a8f0d22028eb2605161650bfc87ec05f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae00ff0e5ee6282220a84a70934ef86c1"><td class="memItemLeft" align="right" valign="top"><a id="ae00ff0e5ee6282220a84a70934ef86c1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>parseStatement</b> (std::string text, <a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> X=<a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a>())</td></tr>
-<tr class="separator:ae00ff0e5ee6282220a84a70934ef86c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b6cd7640fe9aa4edd8ebe0d085e8703"><td class="memItemLeft" align="right" valign="top"><a id="a7b6cd7640fe9aa4edd8ebe0d085e8703"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> (std::string text, <a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> X=<a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a>(), <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html#a11822481a97691e544c3583fd76a8e0d">SyntaxTree::SyntaxCategory</a> synCat=SyntaxTree::SyntaxCategory::UNSPECIFIED)</td></tr>
-<tr class="separator:a7b6cd7640fe9aa4edd8ebe0d085e8703"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b03b07daf894b99a595e9cdcbbd778e"><td class="memItemLeft" align="right" valign="top"><a id="a3b03b07daf894b99a595e9cdcbbd778e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>bind</b> (std::string text, <a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a> X=<a class="el" href="structpsy_1_1_c_1_1_expectation.html">Expectation</a>())</td></tr>
-<tr class="separator:a3b03b07daf894b99a595e9cdcbbd778e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a2fdbc6912e1c59a9c0f780db0bf39cac"><td class="memItemLeft" align="right" valign="top"><a id="a2fdbc6912e1c59a9c0f780db0bf39cac"></a>
-std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tree_</b></td></tr>
-<tr class="separator:a2fdbc6912e1c59a9c0f780db0bf39cac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53e795d34b0637718779ddb9cfe78c06"><td class="memItemLeft" align="right" valign="top"><a id="a53e795d34b0637718779ddb9cfe78c06"></a>
-std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>compilation_</b></td></tr>
-<tr class="separator:a53e795d34b0637718779ddb9cfe78c06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4a8b45ac083467b84858386f8721107"><td class="memItemLeft" align="right" valign="top"><a id="ad4a8b45ac083467b84858386f8721107"></a>
-std::vector&lt; std::unique_ptr&lt; <a class="el" href="classpsy_1_1_tester.html">Tester</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>testers_</b></td></tr>
-<tr class="separator:ad4a8b45ac083467b84858386f8721107"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:af8f8d76e5cfc64c1c5a935995b139e3d"><td class="memItemLeft" align="right" valign="top"><a id="af8f8d76e5cfc64c1c5a935995b139e3d"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>ParserTester</b></td></tr>
-<tr class="separator:af8f8d76e5cfc64c1c5a935995b139e3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade4455f997af39f61578481444b023b6"><td class="memItemLeft" align="right" valign="top"><a id="ade4455f997af39f61578481444b023b6"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>BinderTester</b></td></tr>
-<tr class="separator:ade4455f997af39f61578481444b023b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>

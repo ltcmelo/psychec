@@ -104,24 +104,24 @@ $(function() {
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
 <div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_function_type_symbol.html#ad57527900e325d93d9e7ba3ca9b7433e">   43</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_function_type_symbol.html">FunctionTypeSymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_function_type_symbol.html#ad57527900e325d93d9e7ba3ca9b7433e">asFunctionType</a>() { <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_function_type_symbol.html">FunctionTypeSymbol</a>* asFunctionType()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_function_type_symbol.html#a6b99ef624d1ac47e665ecd26264a15ac">   44</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_function_type_symbol.html">FunctionTypeSymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_function_type_symbol.html#a6b99ef624d1ac47e665ecd26264a15ac">asFunctionType</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">const</span> TypeSymbol* returnType() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a>* returnType() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    std::vector&lt;const TypeSymbol*&gt; parameterTypes() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;PSY_INTERNAL:</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    PSY_GRANT_ACCESS(Binder);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>);</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    FunctionTypeSymbol(<span class="keyword">const</span> SyntaxTree* tree,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                       <span class="keyword">const</span> Scope* scope,</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                       <span class="keyword">const</span> Symbol* containingSym,</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                       <span class="keyword">const</span> TypeSymbol* retTySym);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_function_type_symbol.html">FunctionTypeSymbol</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                       <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* scope,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                       <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* containingSym,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                       <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a>* retTySym);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> addParameter(<span class="keyword">const</span> TypeSymbol* parmTySym);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> addParameter(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type_symbol.html">TypeSymbol</a>* parmTySym);</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    DECL_PIMPL_SUB(FunctionTypeSymbol)</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    DECL_PIMPL_SUB(<a class="code" href="classpsy_1_1_c_1_1_function_type_symbol.html">FunctionTypeSymbol</a>)</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;};</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> FunctionTypeSymbol&amp; tySym);</div>
@@ -131,9 +131,14 @@ $(function() {
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasspsy_1_1_c_1_1_scope_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_scope.html">psy::C::Scope</a></div><div class="ttdoc">The Scope class.</div><div class="ttdef"><b>Definition:</b> Scope.h:45</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_type_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type_symbol.html">psy::C::TypeSymbol</a></div><div class="ttdoc">The TypeSymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Type.h:49</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_function_type_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_function_type_symbol.html">psy::C::FunctionTypeSymbol</a></div><div class="ttdoc">The FunctionTypeSymbol class.</div><div class="ttdef"><b>Definition:</b> TypeSymbol_Function.h:37</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_function_type_symbol_html_ad57527900e325d93d9e7ba3ca9b7433e"><div class="ttname"><a href="classpsy_1_1_c_1_1_function_type_symbol.html#ad57527900e325d93d9e7ba3ca9b7433e">psy::C::FunctionTypeSymbol::asFunctionType</a></div><div class="ttdeci">virtual FunctionTypeSymbol * asFunctionType()</div><div class="ttdef"><b>Definition:</b> TypeSymbol_Function.h:43</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:61</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></div><div class="ttdoc">The Symbol class.</div><div class="ttdef"><b>Definition:</b> Symbol.h:51</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_function_type_symbol_html_a6b99ef624d1ac47e665ecd26264a15ac"><div class="ttname"><a href="classpsy_1_1_c_1_1_function_type_symbol.html#a6b99ef624d1ac47e665ecd26264a15ac">psy::C::FunctionTypeSymbol::asFunctionType</a></div><div class="ttdeci">virtual const FunctionTypeSymbol * asFunctionType() const</div><div class="ttdef"><b>Definition:</b> TypeSymbol_Function.h:44</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:51</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

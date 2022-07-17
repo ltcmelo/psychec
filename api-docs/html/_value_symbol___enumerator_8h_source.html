@@ -102,14 +102,14 @@ $(function() {
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_enumerator_symbol.html#a8e5f209fcbfc8ab6bac7b395e3854c14">   39</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_enumerator_symbol.html">EnumeratorSymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_enumerator_symbol.html#a8e5f209fcbfc8ab6bac7b395e3854c14">asEnumerator</a>() { <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_enumerator_symbol.html">EnumeratorSymbol</a>* asEnumerator()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_enumerator_symbol.html#a538be56d43ebbeb53ad2ca346c7fc221">   40</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_enumerator_symbol.html">EnumeratorSymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_enumerator_symbol.html#a538be56d43ebbeb53ad2ca346c7fc221">asEnumerator</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;PSY_INTERNAL:</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    PSY_GRANT_ACCESS(Binder);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>);</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    EnumeratorSymbol(<span class="keyword">const</span> SyntaxTree* tree,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                     <span class="keyword">const</span> Scope* scope,</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                     <span class="keyword">const</span> Symbol* containingSym);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_enumerator_symbol.html">EnumeratorSymbol</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                     <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* scope,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                     <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* containingSym);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;};</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> EnumeratorSymbol&amp; sym);</div>
@@ -119,9 +119,14 @@ $(function() {
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasspsy_1_1_c_1_1_scope_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_scope.html">psy::C::Scope</a></div><div class="ttdoc">The Scope class.</div><div class="ttdef"><b>Definition:</b> Scope.h:45</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_enumerator_symbol_html_a8e5f209fcbfc8ab6bac7b395e3854c14"><div class="ttname"><a href="classpsy_1_1_c_1_1_enumerator_symbol.html#a8e5f209fcbfc8ab6bac7b395e3854c14">psy::C::EnumeratorSymbol::asEnumerator</a></div><div class="ttdeci">virtual EnumeratorSymbol * asEnumerator()</div><div class="ttdef"><b>Definition:</b> ValueSymbol_Enumerator.h:39</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_value_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_value_symbol.html">psy::C::ValueSymbol</a></div><div class="ttdoc">The ValueSymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Value.h:45</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_enumerator_symbol_html_a538be56d43ebbeb53ad2ca346c7fc221"><div class="ttname"><a href="classpsy_1_1_c_1_1_enumerator_symbol.html#a538be56d43ebbeb53ad2ca346c7fc221">psy::C::EnumeratorSymbol::asEnumerator</a></div><div class="ttdeci">virtual const EnumeratorSymbol * asEnumerator() const</div><div class="ttdef"><b>Definition:</b> ValueSymbol_Enumerator.h:40</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:61</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></div><div class="ttdoc">The Symbol class.</div><div class="ttdef"><b>Definition:</b> Symbol.h:51</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_enumerator_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_enumerator_symbol.html">psy::C::EnumeratorSymbol</a></div><div class="ttdoc">The EnumeratorSymbol class.</div><div class="ttdef"><b>Definition:</b> ValueSymbol_Enumerator.h:33</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:51</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

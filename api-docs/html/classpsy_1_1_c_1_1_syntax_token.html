@@ -70,8 +70,6 @@ $(function() {
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="classpsy_1_1_c_1_1_syntax_token-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">psy::C::SyntaxToken Class Reference</div>  </div>
@@ -83,11 +81,6 @@ $(function() {
 
 <p><code>#include &lt;<a class="el" href="_syntax_token_8h_source.html">SyntaxToken.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structpsy_1_1_c_1_1_syntax_token_1_1_bit_fields.html">BitFields</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a1c34af83d1ca3481777b12a8c046d02b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a1c34af83d1ca3481777b12a8c046d02b">Category</a> { <br />
@@ -141,36 +134,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8922ec2e872cbd8039b624a40715ce96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada461574de2ecdfb2be33f6fd2cdb207"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_text_span.html">TextSpan</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#ada461574de2ecdfb2be33f6fd2cdb207">span</a> () const</td></tr>
 <tr class="separator:ada461574de2ecdfb2be33f6fd2cdb207"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10a4842f21d51d0048f623c1a36ebcfa"><td class="memItemLeft" align="right" valign="top"><a id="a10a4842f21d51d0048f623c1a36ebcfa"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>)</td></tr>
-<tr class="separator:a10a4842f21d51d0048f623c1a36ebcfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a886f793dd5f40928e03f4b50025cfb"><td class="memItemLeft" align="right" valign="top"><a id="a2a886f793dd5f40928e03f4b50025cfb"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a>)</td></tr>
-<tr class="separator:a2a886f793dd5f40928e03f4b50025cfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5720c49de22054165ff0464661d95fe"><td class="memItemLeft" align="right" valign="top"><a id="ab5720c49de22054165ff0464661d95fe"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_lexer.html">Lexer</a>)</td></tr>
-<tr class="separator:ab5720c49de22054165ff0464661d95fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca375bb71886f798c53b9d7cecca11e6"><td class="memItemLeft" align="right" valign="top"><a id="aca375bb71886f798c53b9d7cecca11e6"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>PSY_GRANT_ACCESS</b> (<a class="el" href="classpsy_1_1_c_1_1_parser.html">Parser</a>)</td></tr>
-<tr class="separator:aca375bb71886f798c53b9d7cecca11e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa8fa97f79f507bc927791ae2982946e"><td class="memItemLeft" align="right" valign="top"><a id="afa8fa97f79f507bc927791ae2982946e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxToken</b> (<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *tree)</td></tr>
-<tr class="separator:afa8fa97f79f507bc927791ae2982946e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fd8ce68a382b5169953485414a56e4a"><td class="memItemLeft" align="right" valign="top"><a id="a4fd8ce68a382b5169953485414a56e4a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setup</b> ()</td></tr>
-<tr class="separator:a4fd8ce68a382b5169953485414a56e4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43753c076dc7e005033e896af7b69fff"><td class="memItemLeft" align="right" valign="top"><a id="a43753c076dc7e005033e896af7b69fff"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>byteStart</b> () const</td></tr>
-<tr class="separator:a43753c076dc7e005033e896af7b69fff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef07f4a888763d364de115090e9e88a2"><td class="memItemLeft" align="right" valign="top"><a id="aef07f4a888763d364de115090e9e88a2"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>byteEnd</b> () const</td></tr>
-<tr class="separator:aef07f4a888763d364de115090e9e88a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a996054f33a025e1c6676010731a85574"><td class="memItemLeft" align="right" valign="top"><a id="a996054f33a025e1c6676010731a85574"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>charStart</b> () const</td></tr>
-<tr class="separator:a996054f33a025e1c6676010731a85574"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5ea328effff6b2171f2a769ad3461f9"><td class="memItemLeft" align="right" valign="top"><a id="ac5ea328effff6b2171f2a769ad3461f9"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>charEnd</b> () const</td></tr>
-<tr class="separator:ac5ea328effff6b2171f2a769ad3461f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -178,83 +141,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:ad8a110a1f1262a01befb4bc0a3bb0e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a704754eb1dd6b2650967964ea9722662"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a704754eb1dd6b2650967964ea9722662">invalid</a> ()</td></tr>
 <tr class="separator:a704754eb1dd6b2650967964ea9722662"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a30d843e1e2a253aabc5dabc1223ef658"><td class="memItemLeft" align="right" valign="top"><a id="a30d843e1e2a253aabc5dabc1223ef658"></a>
-PSY_INTERNAL&#160;</td><td class="memItemRight" valign="bottom"><b>__pad0__</b>: PSY_GRANT_ACCESS(<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>)</td></tr>
-<tr class="separator:a30d843e1e2a253aabc5dabc1223ef658"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39357238c80b6b48fda47a80c1698cb0"><td class="memItemLeft" align="right" valign="top"><a id="a39357238c80b6b48fda47a80c1698cb0"></a>
-<a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>tree_</b></td></tr>
-<tr class="separator:a39357238c80b6b48fda47a80c1698cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a170c32988c512c4192e0f6ec93fa8178"><td class="memItemLeft" align="right" valign="top"><a id="a170c32988c512c4192e0f6ec93fa8178"></a>
-std::uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>rawSyntaxK_</b></td></tr>
-<tr class="separator:a170c32988c512c4192e0f6ec93fa8178"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac638a963fe510354a3896d732b2f8c8d"><td class="memItemLeft" align="right" valign="top"><a id="ac638a963fe510354a3896d732b2f8c8d"></a>
-std::uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>byteSize_</b></td></tr>
-<tr class="separator:ac638a963fe510354a3896d732b2f8c8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6220dcb1c6e819b5755539f29609ea9"><td class="memItemLeft" align="right" valign="top"><a id="ad6220dcb1c6e819b5755539f29609ea9"></a>
-std::uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>charSize_</b></td></tr>
-<tr class="separator:ad6220dcb1c6e819b5755539f29609ea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48c2a960eee0cfbc0159b59a013ae296"><td class="memItemLeft" align="right" valign="top"><a id="a48c2a960eee0cfbc0159b59a013ae296"></a>
-std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>byteOffset_</b></td></tr>
-<tr class="separator:a48c2a960eee0cfbc0159b59a013ae296"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a644516145a246afc07429fb52c5408cb"><td class="memItemLeft" align="right" valign="top"><a id="a644516145a246afc07429fb52c5408cb"></a>
-std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>charOffset_</b></td></tr>
-<tr class="separator:a644516145a246afc07429fb52c5408cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9be09aa96d42c9d1e5399c66b457d0bb"><td class="memItemLeft" align="right" valign="top"><a id="a9be09aa96d42c9d1e5399c66b457d0bb"></a>
-std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>matchingBracket_</b></td></tr>
-<tr class="separator:a9be09aa96d42c9d1e5399c66b457d0bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a105735876c749167fbf558ed03d5b608"><td class="memItemLeft" ><a id="a105735876c749167fbf558ed03d5b608"></a>
-union {</td></tr>
-<tr class="memitem:a0ba20f910ba11150dce09fbf4a168b3a"><td class="memItemLeft" >
-&#160;&#160;&#160;std::uint16_t&#160;&#160;&#160;<b>BF_all_</b></td></tr>
-<tr class="separator:a0ba20f910ba11150dce09fbf4a168b3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a2ddd7d49c0e2c29ffcd889e779464e"><td class="memItemLeft" >
-&#160;&#160;&#160;<a class="el" href="structpsy_1_1_c_1_1_syntax_token_1_1_bit_fields.html">BitFields</a>&#160;&#160;&#160;<b>BF_</b></td></tr>
-<tr class="separator:a2a2ddd7d49c0e2c29ffcd889e779464e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a105735876c749167fbf558ed03d5b608"><td class="memItemLeft" valign="top">};&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
-<tr class="separator:a105735876c749167fbf558ed03d5b608"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bde22a308d7764310fe1b9acc70297c"><td class="memItemLeft" align="right" valign="top"><a id="a2bde22a308d7764310fe1b9acc70297c"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>lineno_</b></td></tr>
-<tr class="separator:a2bde22a308d7764310fe1b9acc70297c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ec02a2c0310e7a418139d8f93faa910"><td class="memItemLeft" align="right" valign="top"><a id="a3ec02a2c0310e7a418139d8f93faa910"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>column_</b></td></tr>
-<tr class="separator:a3ec02a2c0310e7a418139d8f93faa910"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab170d276f17e8fa5624250575d44c419"><td class="memItemLeft" ><a id="ab170d276f17e8fa5624250575d44c419"></a>
-union {</td></tr>
-<tr class="memitem:a5b9d5eff78c5c00e4365ca1e03983ba0"><td class="memItemLeft" >
-&#160;&#160;&#160;<a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html">SyntaxLexeme</a> *&#160;&#160;&#160;<b>lexeme_</b></td></tr>
-<tr class="separator:a5b9d5eff78c5c00e4365ca1e03983ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af639fc214ed5e727feea7132d56780c6"><td class="memItemLeft" >
-&#160;&#160;&#160;const <a class="el" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a> *&#160;&#160;&#160;<b>identifier_</b></td></tr>
-<tr class="separator:af639fc214ed5e727feea7132d56780c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7428b6157bed154ad90a1dbb2c63c613"><td class="memItemLeft" >
-&#160;&#160;&#160;const <a class="el" href="classpsy_1_1_c_1_1_integer_constant.html">IntegerConstant</a> *&#160;&#160;&#160;<b>integer_</b></td></tr>
-<tr class="separator:a7428b6157bed154ad90a1dbb2c63c613"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba16046c703b6d6a994f47798eff9b8b"><td class="memItemLeft" >
-&#160;&#160;&#160;const <a class="el" href="classpsy_1_1_c_1_1_floating_constant.html">FloatingConstant</a> *&#160;&#160;&#160;<b>floating_</b></td></tr>
-<tr class="separator:aba16046c703b6d6a994f47798eff9b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:addc4124805f702132e8361cea4e29f80"><td class="memItemLeft" >
-&#160;&#160;&#160;const <a class="el" href="classpsy_1_1_c_1_1_character_constant.html">CharacterConstant</a> *&#160;&#160;&#160;<b>character_</b></td></tr>
-<tr class="separator:addc4124805f702132e8361cea4e29f80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac558e22b71e8678df18ed4bf2cf3de18"><td class="memItemLeft" >
-&#160;&#160;&#160;const <a class="el" href="classpsy_1_1_c_1_1_imaginary_integer_constant.html">ImaginaryIntegerConstant</a> *&#160;&#160;&#160;<b>imaginaryInteger_</b></td></tr>
-<tr class="separator:ac558e22b71e8678df18ed4bf2cf3de18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56db8c67e23c6383817423f700e7c4be"><td class="memItemLeft" >
-&#160;&#160;&#160;const <a class="el" href="classpsy_1_1_c_1_1_imaginary_floating_constant.html">ImaginaryFloatingConstant</a> *&#160;&#160;&#160;<b>imaginaryFloating_</b></td></tr>
-<tr class="separator:a56db8c67e23c6383817423f700e7c4be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac510eb34905b4fd692c332d144d8e89"><td class="memItemLeft" >
-&#160;&#160;&#160;const <a class="el" href="classpsy_1_1_c_1_1_string_literal.html">StringLiteral</a> *&#160;&#160;&#160;<b>string_</b></td></tr>
-<tr class="separator:aac510eb34905b4fd692c332d144d8e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab170d276f17e8fa5624250575d44c419"><td class="memItemLeft" valign="top">};&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
-<tr class="separator:ab170d276f17e8fa5624250575d44c419"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a0b337788d755e8fb3e16428f3ad01361"><td class="memItemLeft" align="right" valign="top"><a id="a0b337788d755e8fb3e16428f3ad01361"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> &amp;a, const <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> &amp;b)</td></tr>
-<tr class="separator:a0b337788d755e8fb3e16428f3ad01361"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html" title="The SyntaxToken class.">SyntaxToken</a> class. </p>

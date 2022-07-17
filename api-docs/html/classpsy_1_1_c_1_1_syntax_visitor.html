@@ -86,13 +86,17 @@ Inheritance diagram for psy::C::SyntaxVisitor:</div>
  <div class="center">
   <img src="classpsy_1_1_c_1_1_syntax_visitor.png" usemap="#psy::C::SyntaxVisitor_map" alt=""/>
   <map id="psy::C::SyntaxVisitor_map" name="psy::C::SyntaxVisitor_map">
-<area href="classpsy_1_1_c_1_1_binder.html" title="The Binder class." alt="psy::C::Binder" shape="rect" coords="0,56,190,80"/>
-<area href="classpsy_1_1_c_1_1_syntax_disambiguator.html" alt="psy::C::SyntaxDisambiguator" shape="rect" coords="200,56,390,80"/>
-<area href="classpsy_1_1_c_1_1_syntax_dumper.html" alt="psy::C::SyntaxDumper" shape="rect" coords="400,56,590,80"/>
-<area href="classpsy_1_1_c_1_1_type_checker.html" alt="psy::C::TypeChecker" shape="rect" coords="600,56,790,80"/>
-<area href="classpsy_1_1_c_1_1_syntax_name_printer.html" alt="psy::C::SyntaxNamePrinter" shape="rect" coords="200,112,390,136"/>
-<area href="classpsy_1_1_c_1_1_syntax_writer_d_o_t_format.html" alt="psy::C::SyntaxWriterDOTFormat" shape="rect" coords="400,112,590,136"/>
-<area href="classpsy_1_1_c_1_1_unparser.html" alt="psy::C::Unparser" shape="rect" coords="600,112,790,136"/>
+<area href="classpsy_1_1_c_1_1_binder.html" title="The Binder class." alt="psy::C::Binder" shape="rect" coords="0,56,256,80"/>
+<area href="classpsy_1_1_c_1_1_disambiguator.html" alt="psy::C::Disambiguator" shape="rect" coords="266,56,522,80"/>
+<area href="classpsy_1_1_c_1_1_guideline_imposition_reparser.html" alt="psy::C::GuidelineImpositionReparser" shape="rect" coords="532,56,788,80"/>
+<area href="classpsy_1_1_c_1_1_name_cataloger.html" alt="psy::C::NameCataloger" shape="rect" coords="798,56,1054,80"/>
+<area href="classpsy_1_1_c_1_1_syntax_dumper.html" alt="psy::C::SyntaxDumper" shape="rect" coords="1064,56,1320,80"/>
+<area href="classpsy_1_1_c_1_1_type_checker.html" alt="psy::C::TypeChecker" shape="rect" coords="1330,56,1586,80"/>
+<area href="classpsy_1_1_c_1_1_type_synonyms_verification_reparser.html" alt="psy::C::TypeSynonymsVerificationReparser" shape="rect" coords="1596,56,1852,80"/>
+<area href="classpsy_1_1_c_1_1_syntax_correlation_disambiguator.html" alt="psy::C::SyntaxCorrelationDisambiguator" shape="rect" coords="266,112,522,136"/>
+<area href="classpsy_1_1_c_1_1_syntax_name_printer.html" alt="psy::C::SyntaxNamePrinter" shape="rect" coords="798,112,1054,136"/>
+<area href="classpsy_1_1_c_1_1_syntax_writer_d_o_t_format.html" alt="psy::C::SyntaxWriterDOTFormat" shape="rect" coords="1064,112,1320,136"/>
+<area href="classpsy_1_1_c_1_1_unparser.html" alt="psy::C::Unparser" shape="rect" coords="1330,112,1586,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -133,9 +137,9 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5
 <tr class="memitem:a86036c3e4343d11867f82d06aa23849a"><td class="memItemLeft" align="right" valign="top"><a id="a86036c3e4343d11867f82d06aa23849a"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitEnumDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_enum_declaration_syntax.html">EnumDeclarationSyntax</a> *)</td></tr>
 <tr class="separator:a86036c3e4343d11867f82d06aa23849a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53ee35afe7a9fa51efcce7bf6b95748d"><td class="memItemLeft" align="right" valign="top"><a id="a53ee35afe7a9fa51efcce7bf6b95748d"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitEnumMemberDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_enum_member_declaration_syntax.html">EnumMemberDeclarationSyntax</a> *)</td></tr>
-<tr class="separator:a53ee35afe7a9fa51efcce7bf6b95748d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fd853d186f0ba2ca4f7dcf27521b67b"><td class="memItemLeft" align="right" valign="top"><a id="a4fd853d186f0ba2ca4f7dcf27521b67b"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitEnumeratorDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_enumerator_declaration_syntax.html">EnumeratorDeclarationSyntax</a> *)</td></tr>
+<tr class="separator:a4fd853d186f0ba2ca4f7dcf27521b67b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa29652c2caf3874a61c9a5ab7e8e2f7"><td class="memItemLeft" align="right" valign="top"><a id="afa29652c2caf3874a61c9a5ab7e8e2f7"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitVariableAndOrFunctionDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_variable_and_or_function_declaration_syntax.html">VariableAndOrFunctionDeclarationSyntax</a> *)</td></tr>
 <tr class="separator:afa29652c2caf3874a61c9a5ab7e8e2f7"><td class="memSeparator" colspan="2">&#160;</td></tr>

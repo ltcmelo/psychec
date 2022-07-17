@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['declarationscope_1045',['DeclarationScope',['../classpsy_1_1_c_1_1_parser.html#a846861f4315842abc4c85dd23f57b3dd',1,'psy::C::Parser']]]
+  ['ext_895',['Ext',['../classpsy_1_1_c_1_1_language_extensions.html#a983d0c2e802c4f814611b516891c3587',1,'psy::C::LanguageExtensions']]]
 ];

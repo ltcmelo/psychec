@@ -108,38 +108,38 @@ $(function() {
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_named_type_symbol.html#aeea2fa19fb97933a5c8af6ccd22014d9">   49</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_named_type_symbol.html#aeea2fa19fb97933a5c8af6ccd22014d9">asNamedType</a>()<span class="keyword"> override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a>* asNamedType()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_named_type_symbol.html#aab546f55d60ed7fcea4c67720f89da26">   50</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_named_type_symbol.html#aab546f55d60ed7fcea4c67720f89da26">asNamedType</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    NamedTypeKind namedTypeKind() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    BuiltinTypeKind builtinTypeKind() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">const</span> SymbolName* <a class="code" href="classname.html">name</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol_name.html">SymbolName</a>* <a class="code" href="classname.html">name</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;PSY_INTERNAL:</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    PSY_GRANT_ACCESS(Binder);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    PSY_GRANT_ACCESS(ConstraintsInTypeSpecifiers);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_constraints_in_type_specifiers.html">ConstraintsInTypeSpecifiers</a>);</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    NamedTypeSymbol(<span class="keyword">const</span> SyntaxTree* tree,</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                    <span class="keyword">const</span> Scope* scope,</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                    <span class="keyword">const</span> Symbol* containingSym,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree,</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* scope,</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* containingSym,</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                    BuiltinTypeKind builtTyK);</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    NamedTypeSymbol(<span class="keyword">const</span> SyntaxTree* tree,</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                    <span class="keyword">const</span> Scope* scope,</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                    <span class="keyword">const</span> Symbol* containingSym,</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree,</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* scope,</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* containingSym,</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                    <span class="keyword">const</span> std::string&amp; <a class="code" href="classname.html">name</a>);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    NamedTypeSymbol(<span class="keyword">const</span> SyntaxTree* tree,</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                    <span class="keyword">const</span> Scope* scope,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                    <span class="keyword">const</span> Symbol* containingSym,</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                    TagSymbolNameKind tagK,</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree,</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* scope,</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* containingSym,</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                    <a class="code" href="classpsy_1_1_c_1_1_tag_symbol_name.html#acf04936e60f71c6c7d42fb0f99e0ca67">TagSymbolName::TagChoice</a> tagChoice,</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                    <span class="keyword">const</span> std::string&amp; tag);</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordtype">void</span> patchBuiltinTypeKind(BuiltinTypeKind);</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    DECL_PIMPL_SUB(NamedTypeSymbol)</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    DECL_PIMPL_SUB(<a class="code" href="classpsy_1_1_c_1_1_named_type_symbol.html">NamedTypeSymbol</a>)</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;};</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> NamedTypeSymbol&amp; tySym);</div>
@@ -150,9 +150,17 @@ $(function() {
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassname_html"><div class="ttname"><a href="classname.html">name</a></div><div class="ttdef"><b>Definition:</b> test.cpp:4</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_scope_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_scope.html">psy::C::Scope</a></div><div class="ttdoc">The Scope class.</div><div class="ttdef"><b>Definition:</b> Scope.h:45</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_constraints_in_type_specifiers_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_constraints_in_type_specifiers.html">psy::C::ConstraintsInTypeSpecifiers</a></div><div class="ttdef"><b>Definition:</b> ConstraintsInTypeSpecifiers.h:39</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_name_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol_name.html">psy::C::SymbolName</a></div><div class="ttdoc">The SymbolName class.</div><div class="ttdef"><b>Definition:</b> SymbolName.h:41</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_type_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type_symbol.html">psy::C::TypeSymbol</a></div><div class="ttdoc">The TypeSymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Type.h:49</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:61</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></div><div class="ttdoc">The Symbol class.</div><div class="ttdef"><b>Definition:</b> Symbol.h:51</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_named_type_symbol_html_aab546f55d60ed7fcea4c67720f89da26"><div class="ttname"><a href="classpsy_1_1_c_1_1_named_type_symbol.html#aab546f55d60ed7fcea4c67720f89da26">psy::C::NamedTypeSymbol::asNamedType</a></div><div class="ttdeci">virtual const NamedTypeSymbol * asNamedType() const override</div><div class="ttdef"><b>Definition:</b> TypeSymbol_Named.h:50</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_tag_symbol_name_html_acf04936e60f71c6c7d42fb0f99e0ca67"><div class="ttname"><a href="classpsy_1_1_c_1_1_tag_symbol_name.html#acf04936e60f71c6c7d42fb0f99e0ca67">psy::C::TagSymbolName::TagChoice</a></div><div class="ttdeci">TagChoice</div><div class="ttdef"><b>Definition:</b> SymbolName_Tag.h:57</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_named_type_symbol_html_aeea2fa19fb97933a5c8af6ccd22014d9"><div class="ttname"><a href="classpsy_1_1_c_1_1_named_type_symbol.html#aeea2fa19fb97933a5c8af6ccd22014d9">psy::C::NamedTypeSymbol::asNamedType</a></div><div class="ttdeci">virtual NamedTypeSymbol * asNamedType() override</div><div class="ttdef"><b>Definition:</b> TypeSymbol_Named.h:49</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_named_type_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_named_type_symbol.html">psy::C::NamedTypeSymbol</a></div><div class="ttdoc">The NamedTypeSymbol class.</div><div class="ttdef"><b>Definition:</b> TypeSymbol_Named.h:43</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:51</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

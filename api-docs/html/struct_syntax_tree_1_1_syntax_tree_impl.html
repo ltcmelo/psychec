@@ -76,9 +76,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a17e4f5185fa1ea7bd5338dfea96a4a5c"><td class="memItemLeft" align="right" valign="top"><a id="a17e4f5185fa1ea7bd5338dfea96a4a5c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxTreeImpl</b> (<a class="el" href="classpsy_1_1_source_text.html">SourceText</a> text, <a class="el" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a> parseOptions, const std::string &amp;path)</td></tr>
-<tr class="separator:a17e4f5185fa1ea7bd5338dfea96a4a5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57f3080a086a551cf4ddfd1de222f81a"><td class="memItemLeft" align="right" valign="top"><a id="a57f3080a086a551cf4ddfd1de222f81a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SyntaxTreeImpl</b> (<a class="el" href="classpsy_1_1_source_text.html">SourceText</a> text, TextPreprocessingState textPPState, TextCompleteness textCompleteness, <a class="el" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a> parseOptions, const std::string &amp;filePath)</td></tr>
+<tr class="separator:a57f3080a086a551cf4ddfd1de222f81a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -88,12 +88,18 @@ std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_memory_pool.html">Mem
 <tr class="memitem:a95f6a35703119114b9a790ddcdc56444"><td class="memItemLeft" align="right" valign="top"><a id="a95f6a35703119114b9a790ddcdc56444"></a>
 <a class="el" href="classpsy_1_1_source_text.html">SourceText</a>&#160;</td><td class="memItemRight" valign="bottom"><b>text_</b></td></tr>
 <tr class="separator:a95f6a35703119114b9a790ddcdc56444"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1503249e795b61b13fe4dab89396e8bd"><td class="memItemLeft" align="right" valign="top"><a id="a1503249e795b61b13fe4dab89396e8bd"></a>
+TextCompleteness&#160;</td><td class="memItemRight" valign="bottom"><b>textCompleteness_</b></td></tr>
+<tr class="separator:a1503249e795b61b13fe4dab89396e8bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9971f3f8891229a4776045d0169c840e"><td class="memItemLeft" align="right" valign="top"><a id="a9971f3f8891229a4776045d0169c840e"></a>
+TextPreprocessingState&#160;</td><td class="memItemRight" valign="bottom"><b>textPPState_</b></td></tr>
+<tr class="separator:a9971f3f8891229a4776045d0169c840e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a980af7a0705f5edad7a387b5da13ea22"><td class="memItemLeft" align="right" valign="top"><a id="a980af7a0705f5edad7a387b5da13ea22"></a>
 <a class="el" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><b>parseOptions_</b></td></tr>
 <tr class="separator:a980af7a0705f5edad7a387b5da13ea22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c2ef44501dda9b893357c3c7bace2ec"><td class="memItemLeft" align="right" valign="top"><a id="a1c2ef44501dda9b893357c3c7bace2ec"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>path_</b></td></tr>
-<tr class="separator:a1c2ef44501dda9b893357c3c7bace2ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5967f2e7280f9bb1d012569b416feee3"><td class="memItemLeft" align="right" valign="top"><a id="a5967f2e7280f9bb1d012569b416feee3"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>filePath_</b></td></tr>
+<tr class="separator:a5967f2e7280f9bb1d012569b416feee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6751de58a2cfb7c889ead67957e993d"><td class="memItemLeft" align="right" valign="top"><a id="ad6751de58a2cfb7c889ead67957e993d"></a>
 <a class="el" href="classpsy_1_1_text_element_table.html">TextElementTable</a>&lt; <a class="el" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>identifiers_</b></td></tr>
 <tr class="separator:ad6751de58a2cfb7c889ead67957e993d"><td class="memSeparator" colspan="2">&#160;</td></tr>

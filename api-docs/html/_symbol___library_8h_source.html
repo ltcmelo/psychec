@@ -104,14 +104,14 @@ $(function() {
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
 <div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_library_symbol.html#a7201c05438c279ff440500e118a17ab4">   52</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_library_symbol.html">LibrarySymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_library_symbol.html#a7201c05438c279ff440500e118a17ab4">asLibrary</a>()<span class="keyword"> override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_library_symbol.html">LibrarySymbol</a>* asLibrary()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_library_symbol.html#ae1b7fb85a99ef9642954853792980f0a">   53</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_library_symbol.html">LibrarySymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_library_symbol.html#ae1b7fb85a99ef9642954853792980f0a">asLibrary</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;PSY_INTERNAL:</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    PSY_GRANT_ACCESS(Binder);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>);</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    LibrarySymbol(<span class="keyword">const</span> SyntaxTree* tree,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                  <span class="keyword">const</span> Scope* scope,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                  <span class="keyword">const</span> Symbol* containingSym);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_library_symbol.html">LibrarySymbol</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                  <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* scope,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                  <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* containingSym);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;};</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> LibrarySymbol&amp; sym);</div>
@@ -121,9 +121,13 @@ $(function() {
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasspsy_1_1_c_1_1_scope_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_scope.html">psy::C::Scope</a></div><div class="ttdoc">The Scope class.</div><div class="ttdef"><b>Definition:</b> Scope.h:45</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_library_symbol_html_a7201c05438c279ff440500e118a17ab4"><div class="ttname"><a href="classpsy_1_1_c_1_1_library_symbol.html#a7201c05438c279ff440500e118a17ab4">psy::C::LibrarySymbol::asLibrary</a></div><div class="ttdeci">virtual LibrarySymbol * asLibrary() override</div><div class="ttdef"><b>Definition:</b> Symbol_Library.h:52</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_library_symbol_html_ae1b7fb85a99ef9642954853792980f0a"><div class="ttname"><a href="classpsy_1_1_c_1_1_library_symbol.html#ae1b7fb85a99ef9642954853792980f0a">psy::C::LibrarySymbol::asLibrary</a></div><div class="ttdeci">virtual const LibrarySymbol * asLibrary() const override</div><div class="ttdef"><b>Definition:</b> Symbol_Library.h:53</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:61</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></div><div class="ttdoc">The Symbol class.</div><div class="ttdef"><b>Definition:</b> Symbol.h:51</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_library_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_library_symbol.html">psy::C::LibrarySymbol</a></div><div class="ttdoc">The LibrarySymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Library.h:46</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:51</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

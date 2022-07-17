@@ -68,9 +68,6 @@ $(function() {
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-types">Private Types</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classpsy_1_1_c_1_1_std_lib_index-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">psy::C::StdLibIndex Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
@@ -96,85 +93,7 @@ std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bott
 <tr class="memitem:afdc5b8c0d82b524a6138324f6e23f39f"><td class="memItemLeft" align="right" valign="top"><a id="afdc5b8c0d82b524a6138324f6e23f39f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>recognizes</b> (const char *ident) const</td></tr>
 <tr class="separator:afdc5b8c0d82b524a6138324f6e23f39f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
-Private Types</h2></td></tr>
-<tr class="memitem:a339453cb61cf05ffb31b2cd41c1e46d6"><td class="memItemLeft" align="right" valign="top"><a id="a339453cb61cf05ffb31b2cd41c1e46d6"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>SymbolKind</b> : char { <b>Type</b>, 
-<b>Value</b>
- }</td></tr>
-<tr class="separator:a339453cb61cf05ffb31b2cd41c1e46d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade37e8fdc39175456e45e890a37ddd9a"><td class="memItemLeft" align="right" valign="top"><a id="ade37e8fdc39175456e45e890a37ddd9a"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>StdSymbol</b> = std::pair&lt; const char *, SymbolKind &gt;</td></tr>
-<tr class="separator:ade37e8fdc39175456e45e890a37ddd9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb5be7eefbb7f7cc56e7083008b72964"><td class="memItemLeft" align="right" valign="top"><a id="acb5be7eefbb7f7cc56e7083008b72964"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>Index</b> = std::unordered_map&lt; const char *, std::vector&lt; StdSymbol &gt; &gt;</td></tr>
-<tr class="separator:acb5be7eefbb7f7cc56e7083008b72964"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:a40b86e75efedb25a6835de4847a0b61a"><td class="memItemLeft" align="right" valign="top"><a id="a40b86e75efedb25a6835de4847a0b61a"></a>
-Version&#160;</td><td class="memItemRight" valign="bottom"><b>std_</b></td></tr>
-<tr class="separator:a40b86e75efedb25a6835de4847a0b61a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
-Static Private Attributes</h2></td></tr>
-<tr class="memitem:a52b0572476280e73d953aced0b8edab3"><td class="memItemLeft" align="right" valign="top"><a id="a52b0572476280e73d953aced0b8edab3"></a>
-static const Index&#160;</td><td class="memItemRight" valign="bottom"><b>c89idx_</b></td></tr>
-<tr class="separator:a52b0572476280e73d953aced0b8edab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07daa0a1c58a526b1b4a4454ced93b52"><td class="memItemLeft" align="right" valign="top">static const Index&#160;</td><td class="memItemRight" valign="bottom"><b>c99idx_</b></td></tr>
-<tr class="separator:a07daa0a1c58a526b1b4a4454ced93b52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2641f22ee64b842c5e9c128947d52f06"><td class="memItemLeft" align="right" valign="top"><a id="a2641f22ee64b842c5e9c128947d52f06"></a>
-static const Index&#160;</td><td class="memItemRight" valign="bottom"><b>c11idx_</b></td></tr>
-<tr class="separator:a2641f22ee64b842c5e9c128947d52f06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a07daa0a1c58a526b1b4a4454ced93b52"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07daa0a1c58a526b1b4a4454ced93b52">&#9670;&nbsp;</a></span>c99idx_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const StdLibIndex::Index StdLibIndex::c99idx_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">{</div>
-<div class="line">        { <span class="stringliteral">&quot;ctype.h&quot;</span>,</div>
-<div class="line">            {</div>
-<div class="line">                { <span class="stringliteral">&quot;isblank&quot;</span>, SymbolKind::Value }</div>
-<div class="line">            }</div>
-<div class="line">        },</div>
-<div class="line">        { <span class="stringliteral">&quot;stdlib.h&quot;</span>,</div>
-<div class="line">            {</div>
-<div class="line">                { <span class="stringliteral">&quot;_Exit&quot;</span>, SymbolKind::Value },</div>
-<div class="line">                { <span class="stringliteral">&quot;atoll&quot;</span>, SymbolKind::Value },</div>
-<div class="line">                { <span class="stringliteral">&quot;strtoll&quot;</span>, SymbolKind::Value },</div>
-<div class="line">                { <span class="stringliteral">&quot;strtoull&quot;</span>, SymbolKind::Value },</div>
-<div class="line">                { <span class="stringliteral">&quot;strtof&quot;</span>, SymbolKind::Value },</div>
-<div class="line">                { <span class="stringliteral">&quot;strtold&quot;</span>, SymbolKind::Value },</div>
-<div class="line">                { <span class="stringliteral">&quot;strtoimax&quot;</span>, SymbolKind::Value },</div>
-<div class="line">                { <span class="stringliteral">&quot;strtoumax&quot;</span>, SymbolKind::Value }</div>
-<div class="line">            }</div>
-<div class="line">        },</div>
-<div class="line">        { <span class="stringliteral">&quot;inttypes.h&quot;</span>,</div>
-<div class="line">            {</div>
-<div class="line">                { <span class="stringliteral">&quot;strtoimax&quot;</span>, SymbolKind::Value },</div>
-<div class="line">                { <span class="stringliteral">&quot;strtoumax&quot;</span>, SymbolKind::Value }</div>
-<div class="line">            }</div>
-<div class="line">        }</div>
-<div class="line">    }</div>
-</div><!-- fragment -->
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>C/stdlib-support/<a class="el" href="_std_lib_index_8h_source.html">StdLibIndex.h</a></li>
 <li>C/stdlib-support/StdLibIndex.cpp</li>

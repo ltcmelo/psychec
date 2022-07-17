@@ -115,21 +115,21 @@ $(function() {
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">void</span> insertOrAssign(<span class="keyword">const</span> KeyT&amp; key, ValueT&amp;&amp; value);</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">void</span> applyRevision(uint32_t revision);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    uint32_t revision()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classpsy_1_1_versioned_map.html#a6527c10eb1708b4c4959f0deaad11068">curRevision_</a>; }</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    uint32_t revision()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> curRevision_; }</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">// Basic traversal.</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    const_iterator begin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classpsy_1_1_versioned_map.html#a61bf2ff82024babebaef87e80e5fee29">map_</a>.begin(); }</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    const_iterator end()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classpsy_1_1_versioned_map.html#a61bf2ff82024babebaef87e80e5fee29">map_</a>.end(); }</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    const_iterator cbegin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classpsy_1_1_versioned_map.html#a61bf2ff82024babebaef87e80e5fee29">map_</a>.begin(); }</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    const_iterator cend()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classpsy_1_1_versioned_map.html#a61bf2ff82024babebaef87e80e5fee29">map_</a>.end(); }</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    const_iterator find(<span class="keyword">const</span> KeyT&amp; key)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classpsy_1_1_versioned_map.html#a61bf2ff82024babebaef87e80e5fee29">map_</a>.find(key); }</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    const_iterator begin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> map_.begin(); }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    const_iterator end()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> map_.end(); }</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    const_iterator cbegin()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> map_.begin(); }</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    const_iterator cend()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> map_.end(); }</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    const_iterator find(<span class="keyword">const</span> KeyT&amp; key)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> map_.find(key); }</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">void</span> insertOrAssignCore(<span class="keyword">const</span> KeyT&amp; key, <span class="keyword">const</span> ValueT&amp; value);</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> insertOrAssignCore(<span class="keyword">const</span> KeyT&amp; key, ValueT&amp;&amp; value);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="comment">// Encapsulates the action, as GoF&#39;s command other.</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="structpsy_1_1_versioned_map_1_1_command.html">   64</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structpsy_1_1_versioned_map_1_1_command.html">Command</a></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">struct </span>Command</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    {</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keyword">enum</span> OpCode</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        {</div>
@@ -137,7 +137,7 @@ $(function() {
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            Remove</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        };</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <a class="code" href="structpsy_1_1_versioned_map_1_1_command.html">Command</a>(<span class="keyword">const</span> KeyT&amp; key, <span class="keyword">const</span> ValueT&amp; value, OpCode code)</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        Command(<span class="keyword">const</span> KeyT&amp; key, <span class="keyword">const</span> ValueT&amp; value, OpCode code)</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            : key_(key), value_(value), opCode_(code)</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        {}</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keyword">const</span> KeyT key_;</div>
@@ -145,16 +145,16 @@ $(function() {
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        OpCode opCode_;</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    };</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordtype">void</span> storeCommand(<span class="keyword">const</span> <a class="code" href="structpsy_1_1_versioned_map_1_1_command.html">Command</a>&amp; command);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordtype">void</span> storeCommand(<span class="keyword">const</span> Command&amp; command);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classpsy_1_1_versioned_map.html#a65a7bc8c592f97fb04b2a68d3d864624">   83</a></span>&#160;    std::vector&lt;Command&gt; <a class="code" href="classpsy_1_1_versioned_map.html#a65a7bc8c592f97fb04b2a68d3d864624">commands_</a>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    std::vector&lt;Command&gt; commands_;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classpsy_1_1_versioned_map.html#a6527c10eb1708b4c4959f0deaad11068">   89</a></span>&#160;    uint32_t <a class="code" href="classpsy_1_1_versioned_map.html#a6527c10eb1708b4c4959f0deaad11068">curRevision_</a> { 0 };</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    uint32_t curRevision_ { 0 };</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    uint32_t revisionCnt_ { 0 };</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    std::unordered_map&lt;uint32_t, uint32_t&gt; reverts_;</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classpsy_1_1_versioned_map.html#a61bf2ff82024babebaef87e80e5fee29">   95</a></span>&#160;    BaseMap <a class="code" href="classpsy_1_1_versioned_map.html#a61bf2ff82024babebaef87e80e5fee29">map_</a>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    BaseMap map_;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;};</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> KeyT, <span class="keyword">class</span> ValueT&gt;</div>
@@ -230,11 +230,7 @@ $(function() {
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasspsy_1_1_versioned_map_html_a65a7bc8c592f97fb04b2a68d3d864624"><div class="ttname"><a href="classpsy_1_1_versioned_map.html#a65a7bc8c592f97fb04b2a68d3d864624">psy::VersionedMap::commands_</a></div><div class="ttdeci">std::vector&lt; Command &gt; commands_</div><div class="ttdoc">Commands for each given revision.</div><div class="ttdef"><b>Definition:</b> VersionedMap.h:83</div></div>
 <div class="ttc" id="aclasspsy_1_1_versioned_map_html"><div class="ttname"><a href="classpsy_1_1_versioned_map.html">psy::VersionedMap</a></div><div class="ttdef"><b>Definition:</b> VersionedMap.h:36</div></div>
-<div class="ttc" id="aclasspsy_1_1_versioned_map_html_a6527c10eb1708b4c4959f0deaad11068"><div class="ttname"><a href="classpsy_1_1_versioned_map.html#a6527c10eb1708b4c4959f0deaad11068">psy::VersionedMap::curRevision_</a></div><div class="ttdeci">uint32_t curRevision_</div><div class="ttdef"><b>Definition:</b> VersionedMap.h:89</div></div>
-<div class="ttc" id="aclasspsy_1_1_versioned_map_html_a61bf2ff82024babebaef87e80e5fee29"><div class="ttname"><a href="classpsy_1_1_versioned_map.html#a61bf2ff82024babebaef87e80e5fee29">psy::VersionedMap::map_</a></div><div class="ttdeci">BaseMap map_</div><div class="ttdoc">The actual underlying map.</div><div class="ttdef"><b>Definition:</b> VersionedMap.h:95</div></div>
-<div class="ttc" id="astructpsy_1_1_versioned_map_1_1_command_html"><div class="ttname"><a href="structpsy_1_1_versioned_map_1_1_command.html">psy::VersionedMap::Command</a></div><div class="ttdef"><b>Definition:</b> VersionedMap.h:65</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

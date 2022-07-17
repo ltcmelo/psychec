@@ -102,14 +102,14 @@ $(function() {
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
 <div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_field_symbol.html#aad13c2dabe886a1da42c28ad8061057d">   43</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_field_symbol.html">FieldSymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_field_symbol.html#aad13c2dabe886a1da42c28ad8061057d">asField</a>()<span class="keyword"> override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_field_symbol.html">FieldSymbol</a>* asField()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_field_symbol.html#ad69455f9c6239675c99ff4534ab3ad7c">   44</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_field_symbol.html">FieldSymbol</a>* <a class="code" href="classpsy_1_1_c_1_1_field_symbol.html#ad69455f9c6239675c99ff4534ab3ad7c">asField</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;PSY_INTERNAL:</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    PSY_GRANT_ACCESS(Binder);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    FieldSymbol(<span class="keyword">const</span> SyntaxTree* tree,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keyword">const</span> Scope* scope,</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                <span class="keyword">const</span> Symbol* containingSym);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_field_symbol.html">FieldSymbol</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree,</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* scope,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>* containingSym);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;};</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> FieldSymbol&amp; sym);</div>
@@ -120,8 +120,13 @@ $(function() {
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasspsy_1_1_c_1_1_field_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_field_symbol.html">psy::C::FieldSymbol</a></div><div class="ttdoc">The FieldSymbol class.</div><div class="ttdef"><b>Definition:</b> ValueSymbol_Field.h:37</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_scope_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_scope.html">psy::C::Scope</a></div><div class="ttdoc">The Scope class.</div><div class="ttdef"><b>Definition:</b> Scope.h:45</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_value_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_value_symbol.html">psy::C::ValueSymbol</a></div><div class="ttdoc">The ValueSymbol class.</div><div class="ttdef"><b>Definition:</b> Symbol_Value.h:45</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_field_symbol_html_aad13c2dabe886a1da42c28ad8061057d"><div class="ttname"><a href="classpsy_1_1_c_1_1_field_symbol.html#aad13c2dabe886a1da42c28ad8061057d">psy::C::FieldSymbol::asField</a></div><div class="ttdeci">virtual FieldSymbol * asField() override</div><div class="ttdef"><b>Definition:</b> ValueSymbol_Field.h:43</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:61</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></div><div class="ttdoc">The Symbol class.</div><div class="ttdef"><b>Definition:</b> Symbol.h:51</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:51</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_field_symbol_html_ad69455f9c6239675c99ff4534ab3ad7c"><div class="ttname"><a href="classpsy_1_1_c_1_1_field_symbol.html#ad69455f9c6239675c99ff4534ab3ad7c">psy::C::FieldSymbol::asField</a></div><div class="ttdeci">virtual const FieldSymbol * asField() const override</div><div class="ttdef"><b>Definition:</b> ValueSymbol_Field.h:44</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
