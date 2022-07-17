@@ -53,7 +53,7 @@ Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousExpressionOrDe
             auto typedefName = varDecl->specifiers()->value->asTypedefName();
             auto ident = typedefName->identifierToken().valueText();
 
-            return isTypeName(ident)
+            return recognizesTypeName(ident)
                     ? Disambiguation::DeclarationStatement
                     : Disambiguation::ExpressionStatement;
         }

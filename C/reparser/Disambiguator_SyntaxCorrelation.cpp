@@ -59,12 +59,12 @@ SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitTranslationUnit(const
     return Action::Skip;
 }
 
-bool SyntaxCorrelationDisambiguator::isTypeName(const std::string& name) const
+bool SyntaxCorrelationDisambiguator::recognizesTypeName(const std::string& name) const
 {
     return catalog_->containsTypeName(name);
 }
 
-bool SyntaxCorrelationDisambiguator::isName(const std::string& name) const
+bool SyntaxCorrelationDisambiguator::recognizesName(const std::string& name) const
 {
     return catalog_->containsName(name);
 }

@@ -48,8 +48,8 @@ private:
     unsigned int pendingAmbigs_;
     std::unique_ptr<NameCatalog> catalog_;
 
-    bool isTypeName(const std::string& name) const override;
-    bool isName(const std::string& name) const override;
+    bool recognizesTypeName(const std::string& name) const override;
+    bool recognizesName(const std::string& name) const override;
 
     //--------------//
     // Declarations //

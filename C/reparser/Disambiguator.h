@@ -43,8 +43,8 @@ protected:
 
     virtual unsigned int disambiguate() = 0;
 
-    virtual bool isTypeName(const std::string& name) const = 0;
-    virtual bool isName(const std::string& name) const = 0;
+    virtual bool recognizesTypeName(const std::string& name) const = 0;
+    virtual bool recognizesName(const std::string& name) const = 0;
 
     enum class Disambiguation : std::int8_t
     {
