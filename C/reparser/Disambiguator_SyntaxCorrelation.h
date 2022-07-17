@@ -45,7 +45,6 @@ PSY_INTERNAL:
     unsigned int disambiguate() override;
 
 private:
-    unsigned int pendingAmbigs_;
     std::unique_ptr<NameCatalog> catalog_;
 
     bool recognizesTypeName(const std::string& name) const override;

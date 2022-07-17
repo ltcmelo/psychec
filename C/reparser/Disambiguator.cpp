@@ -33,34 +33,48 @@ Disambiguator::~Disambiguator()
 
 Disambiguator::Disambiguator(SyntaxTree* tree)
     : SyntaxVisitor(tree)
+    , pendingAmbigs_(0)
 {}
 
-Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousExpressionOrDeclarationStatement(
-        const AmbiguousExpressionOrDeclarationStatementSyntax* node)
+Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousTypeNameOrExpressionAsTypeReferenceSyntax(
+        const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) const
 {
-    std::string name;
+    return Disambiguation::Undetermined;
+}
 
-    auto expr = node->expressionStatement()->expression();
-    switch (expr->kind()) {
-        case MultiplyExpression:
-        case CallExpression: {
-            auto decl = node->declarationStatement()->declaration();
-            PSY_ASSERT(decl->kind() == VariableAndOrFunctionDeclaration, return Disambiguation::Undetermined);
+Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousCastOrBinaryExpressionSyntax(
+        const AmbiguousCastOrBinaryExpressionSyntax* node) const
+{
+    auto typeName = node->castExpression()->typeName();
+    PSY_ASSERT(typeName->specifiers()
+                   && typeName->specifiers()->value
+                   && typeName->specifiers()->value->kind() == TypedefName,
+               return Disambiguation::Undetermined);
 
-            auto varDecl = decl->asVariableAndOrFunctionDeclaration();
-            PSY_ASSERT(varDecl->specifiers()
-                           && varDecl->specifiers()->value
-                           && varDecl->specifiers()->value->kind() == TypedefName,
-                       return Disambiguation::Undetermined);
+    auto typedefName = typeName->specifiers()->value->asTypedefName();
+    auto name = typedefName->identifierToken().valueText();
 
-            auto typedefName = varDecl->specifiers()->value->asTypedefName();
-            name = typedefName->identifierToken().valueText();
-            break;
-        }
+    return recognizesTypeName(name)
+            ? Disambiguation::CastExpression
+            : recognizesName(name)
+                    ? Disambiguation::BinaryExpression
+                    : Disambiguation::Undetermined;
+}
 
-        default:
-            PSY_ESCAPE_VIA_RETURN(Disambiguation::Undetermined);
-    }
+Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousExpressionOrDeclarationStatement(
+        const AmbiguousExpressionOrDeclarationStatementSyntax* node) const
+{
+    auto decl = node->declarationStatement()->declaration();
+    PSY_ASSERT(decl->kind() == VariableAndOrFunctionDeclaration, return Disambiguation::Undetermined);
+
+    auto varDecl = decl->asVariableAndOrFunctionDeclaration();
+    PSY_ASSERT(varDecl->specifiers()
+                   && varDecl->specifiers()->value
+                   && varDecl->specifiers()->value->kind() == TypedefName,
+               return Disambiguation::Undetermined);
+
+    auto typedefName = varDecl->specifiers()->value->asTypedefName();
+    auto name = typedefName->identifierToken().valueText();
 
     return recognizesTypeName(name)
             ? Disambiguation::DeclarationStatement
@@ -68,12 +82,6 @@ Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousExpressionOrDe
                     ? Disambiguation::ExpressionStatement
                     : Disambiguation::Undetermined;
 }
-
-SyntaxVisitor::Action Disambiguator::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitEnumDeclaration(const EnumDeclarationSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitEnumeratorDeclaration(const EnumeratorDeclarationSyntax* node) { return Action::Visit; }
 
 SyntaxVisitor::Action Disambiguator::visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) { return Action::Visit; }
 
@@ -201,23 +209,24 @@ SyntaxVisitor::Action Disambiguator::visitExtGNU_ChooseExpression(const ExtGNU_C
 
 SyntaxVisitor::Action Disambiguator::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
-    for (auto iter = node->statements(); iter; iter = iter->next) {
-        auto iter_P = const_cast<StatementListSyntax*>(iter);
+    for (auto iter = node->stmts_; iter; iter = iter->next) {
         switch (iter->value->kind()) {
             case AmbiguousMultiplicationOrPointerDeclaration:
             case AmbiguousCallOrVariableDeclaration: {
+                auto iter_P = const_cast<StatementListSyntax*>(iter);
                 auto ambigNode = iter->value->asAmbiguousExpressionOrDeclarationStatement();
                 auto disambig = disambiguateAmbiguousExpressionOrDeclarationStatement(ambigNode);
                 switch (disambig) {
                     case Disambiguation::DeclarationStatement:
-                        iter_P->value = const_cast<DeclarationStatementSyntax*>(ambigNode->declarationStatement());
+                        iter_P->value = ambigNode->declStmt_;
                         break;
 
                     case Disambiguation::ExpressionStatement:
-                        iter_P->value = const_cast<ExpressionStatementSyntax*>(ambigNode->expressionStatement());
+                        iter_P->value = ambigNode->exprStmt_;
                         break;
 
                     case Disambiguation::Undetermined:
+                        ++pendingAmbigs_;
                         break;
 
                     default:
@@ -231,12 +240,45 @@ SyntaxVisitor::Action Disambiguator::visitCompoundStatement(const CompoundStatem
                 break;
         }
     }
+
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Disambiguator::visitDeclarationStatement(const DeclarationStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Disambiguator::visitExpressionStatement(const ExpressionStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExpressionStatement(const ExpressionStatementSyntax* node)
+{
+    switch (node->expr_->kind()) {
+        case AmbiguousCastOrBinaryExpression: {
+            auto node_P = const_cast<ExpressionStatementSyntax*>(node);
+            auto ambigNode = node_P->expr_->asAmbiguousCastOrBinaryExpression();
+            auto disambig = disambiguateAmbiguousCastOrBinaryExpressionSyntax(ambigNode);
+            switch (disambig) {
+                case Disambiguation::CastExpression:
+                    node_P->expr_ = ambigNode->castExpr_;
+                    break;
+
+                case Disambiguation::ExpressionStatement:
+                    node_P->expr_ = ambigNode->binExpr_;
+                    break;
+
+                case Disambiguation::Undetermined:
+                    ++pendingAmbigs_;
+                    break;
+
+                default:
+                    PSY_ESCAPE_VIA_RETURN(Action::Skip);
+            }
+            break;
+        }
+
+        default:
+            visit(node->expr_);
+            break;
+    }
+
+    return Action::Skip;
+}
 
 SyntaxVisitor::Action Disambiguator::visitLabeledStatement(const LabeledStatementSyntax* node) { return Action::Visit; }
 

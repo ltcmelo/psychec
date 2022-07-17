@@ -32,6 +32,7 @@ class MIXIN_LeftExpressionInfixOperatorRightExpression
 {
 protected:
     friend class Parser;
+    friend class Disambiguator;
 
     virtual const ExpressionSyntax* left() const = 0;
     virtual SyntaxToken operatorToken() const = 0;
@@ -46,6 +47,7 @@ class MIXIN_GNUExtensionFlag
 {
 protected:
     friend class Parser;
+    friend class Disambiguator;
 
     virtual SyntaxToken extensionKeyword() const = 0;
 

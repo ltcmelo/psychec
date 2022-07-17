@@ -32,7 +32,6 @@ using namespace C;
 
 SyntaxCorrelationDisambiguator::SyntaxCorrelationDisambiguator(SyntaxTree* tree)
     : Disambiguator(tree)
-    , pendingAmbigs_(0)
 {}
 
 void SyntaxCorrelationDisambiguator::acquireCatalog(std::unique_ptr<NameCatalog> catalog)
