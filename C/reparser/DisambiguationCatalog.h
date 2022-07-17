@@ -45,7 +45,7 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_ACCESS(DisambiguationCataloger);
-    PSY_GRANT_ACCESS(SyntaxCorrelationReparser);
+    PSY_GRANT_ACCESS(SyntaxCorrelationDisambiguator);
 
     void createLevelAndEnter(const SyntaxNode*);
     void enterLevel(const SyntaxNode*);

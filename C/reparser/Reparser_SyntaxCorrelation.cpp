@@ -30,24 +30,24 @@
 using namespace psy;
 using namespace C;
 
-SyntaxCorrelationReparser::SyntaxCorrelationReparser(SyntaxTree* tree)
+SyntaxCorrelationDisambiguator::SyntaxCorrelationDisambiguator(SyntaxTree* tree)
     : Disambiguator(tree)
     , pendingAmbigs_(0)
 {}
 
-void SyntaxCorrelationReparser::acquireCatalog(std::unique_ptr<DisambiguationCatalog> catalog)
+void SyntaxCorrelationDisambiguator::acquireCatalog(std::unique_ptr<DisambiguationCatalog> catalog)
 {
     catalog_ = std::move(catalog);
 }
 
-unsigned int SyntaxCorrelationReparser::reparse()
+unsigned int SyntaxCorrelationDisambiguator::reparse()
 {
     visit(tree_->root());
 
     return pendingAmbigs_;
 }
 
-SyntaxVisitor::Action SyntaxCorrelationReparser::visitTranslationUnit(const TranslationUnitSyntax* node)
+SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     catalog_->enterLevel(node);
 
@@ -59,7 +59,7 @@ SyntaxVisitor::Action SyntaxCorrelationReparser::visitTranslationUnit(const Tran
     return Action::Skip;
 }
 
-bool SyntaxCorrelationReparser::isTypeName(const std::string& name)
+bool SyntaxCorrelationDisambiguator::isTypeName(const std::string& name)
 {
     return catalog_->isCatalogedAsType(name);
 }

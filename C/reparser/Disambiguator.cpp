@@ -60,7 +60,7 @@ void Reparser::disambiguate(SyntaxTree* tree)
 
     switch (strategy_) {
         case Reparser::DisambiguationStrategy::SyntaxCorrelation: {
-            SyntaxCorrelationReparser reparser(tree);
+            SyntaxCorrelationDisambiguator reparser(tree);
             reparser.acquireCatalog(std::move(catalog));
             reparser.reparse();
             break;

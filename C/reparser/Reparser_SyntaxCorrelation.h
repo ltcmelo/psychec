@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_SYNTAX_CORRELATION_REPARSER_H__
-#define PSYCHE_C_SYNTAX_CORRELATION_REPARSER_H__
+#ifndef PSYCHE_C_SYNTAX_CORRELATION_DISAMBIGUATOR_H__
+#define PSYCHE_C_SYNTAX_CORRELATION_DISAMBIGUATOR_H__
 
 #include "API.h"
 
@@ -33,12 +33,12 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API SyntaxCorrelationReparser final : public Disambiguator
+class PSY_C_NON_API SyntaxCorrelationDisambiguator final : public Disambiguator
 {
 PSY_INTERNAL:
     PSY_GRANT_ACCESS(Reparser);
 
-    SyntaxCorrelationReparser(SyntaxTree* tree);
+    SyntaxCorrelationDisambiguator(SyntaxTree* tree);
 
     void acquireCatalog(std::unique_ptr<DisambiguationCatalog> catalog);
 
