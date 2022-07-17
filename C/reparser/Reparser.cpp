@@ -35,15 +35,40 @@ Reparser::Reparser(SyntaxTree* tree)
     : SyntaxVisitor(tree)
 {}
 
-SyntaxVisitor::Action Reparser::visitTranslationUnit(const TranslationUnitSyntax* node)
+Reparser::Disambiguation Reparser::disambiguateAmbiguousExpressionOrDeclarationStatement(
+        const AmbiguousExpressionOrDeclarationStatementSyntax* node)
 {
-    for (auto iter = node->declarations(); iter; iter = iter->next)
-        visit(iter->value);
+    auto expr = node->expressionStatement()->expression();
+    switch (expr->kind()) {
+        case MultiplyExpression: {
+            auto decl = node->declarationStatement()->declaration();
+            PSY_ASSERT(decl->kind() == VariableAndOrFunctionDeclaration, return Disambiguation::Undetermined);
 
-    return Action::Skip;
+            auto varDecl = decl->asVariableAndOrFunctionDeclaration();
+            PSY_ASSERT(varDecl->specifiers()
+                           && varDecl->specifiers()->value
+                           && varDecl->specifiers()->value->kind() == TypedefName,
+                       return Disambiguation::Undetermined);
+
+            auto typedefName = varDecl->specifiers()->value->asTypedefName();
+            auto ident = typedefName->identifierToken().valueText();
+
+            return isTypeName(ident)
+                    ? Disambiguation::DeclarationStatement
+                    : Disambiguation::ExpressionStatement;
+        }
+
+        case CallExpression: {
+            auto callExpr = expr->asCallExpression();
+            visit(callExpr->arguments()->value);
+            return Disambiguation::Undetermined;
+        }
+
+        default:
+            PSY_ESCAPE_VIA_RETURN(Disambiguation::Undetermined);
+    }
 }
 
-SyntaxVisitor::Action Reparser::visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node) { return Action::Visit; }
 
 SyntaxVisitor::Action Reparser::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node) { return Action::Visit; }
 
@@ -171,7 +196,43 @@ SyntaxVisitor::Action Reparser::visitSequencingExpression(const SequencingExpres
 
 SyntaxVisitor::Action Reparser::visitExtGNU_ChooseExpression(const ExtGNU_ChooseExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitCompoundStatement(const CompoundStatementSyntax* node) { return Action::Visit; }
+//------------//
+// Statements //
+//------------//
+
+SyntaxVisitor::Action Reparser::visitCompoundStatement(const CompoundStatementSyntax* node)
+{
+    for (auto iter = node->statements(); iter; iter = iter->next) {
+        auto iter_P = const_cast<StatementListSyntax*>(iter);
+        switch (iter->value->kind()) {
+            case AmbiguousMultiplicationOrPointerDeclaration: {
+                auto ambigNode = iter->value->asAmbiguousExpressionOrDeclarationStatement();
+                auto disambig = disambiguateAmbiguousExpressionOrDeclarationStatement(ambigNode);
+                switch (disambig) {
+                    case Disambiguation::DeclarationStatement:
+                        iter_P->value = const_cast<DeclarationStatementSyntax*>(ambigNode->declarationStatement());
+                        break;
+
+                    case Disambiguation::ExpressionStatement:
+                        iter_P->value = const_cast<ExpressionStatementSyntax*>(ambigNode->expressionStatement());
+                        break;
+
+                    case Disambiguation::Undetermined:
+                        break;
+
+                    default:
+                        PSY_ESCAPE_VIA_RETURN(Action::Skip);
+                }
+                break;
+            }
+
+            default:
+                visit(iter->value);
+                break;
+        }
+    }
+    return Action::Skip;
+}
 
 SyntaxVisitor::Action Reparser::visitDeclarationStatement(const DeclarationStatementSyntax* node) { return Action::Visit; }
 
@@ -210,50 +271,19 @@ SyntaxVisitor::Action Reparser::visitExpressionAsTypeReference(const ExpressionA
 SyntaxVisitor::Action Reparser::visitTypeNameAsTypeReference(const TypeNameAsTypeReferenceSyntax* node) { return Action::Visit; }
 
 SyntaxVisitor::Action Reparser::visitAmbiguousTypeNameOrExpressionAsTypeReference(
-        const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node)
+        const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*)
 {
-    SyntaxVisitor::visitAmbiguousTypeNameOrExpressionAsTypeReference(node);
-    return Action::Skip;
+    PSY_ESCAPE_VIA_RETURN(Action::Quit);
 }
 
 SyntaxVisitor::Action Reparser::visitAmbiguousCastOrBinaryExpression(
-        const AmbiguousCastOrBinaryExpressionSyntax* node)
+        const AmbiguousCastOrBinaryExpressionSyntax*)
 {
-    SyntaxVisitor::visitAmbiguousCastOrBinaryExpression(node);
-    return Action::Skip;
+    PSY_ESCAPE_VIA_RETURN(Action::Quit);
 }
 
 SyntaxVisitor::Action Reparser::visitAmbiguousExpressionOrDeclarationStatement(
-        const AmbiguousExpressionOrDeclarationStatementSyntax* node)
+        const AmbiguousExpressionOrDeclarationStatementSyntax*)
 {
-    auto expr = node->expressionStatement()->expression();
-    switch (expr->kind()) {
-        case MultiplyExpression: {
-            auto decl = node->declarationStatement()->declaration();
-            PSY_ASSERT(decl->kind() == VariableAndOrFunctionDeclaration, return Action::Skip);
-
-            auto varDecl = decl->asVariableAndOrFunctionDeclaration();
-            PSY_ASSERT(varDecl->specifiers()
-                           && varDecl->specifiers()->value
-                           && varDecl->specifiers()->value->kind() == TypedefName,
-                       return Action::Skip);
-
-            auto typedefName = varDecl->specifiers()->value->asTypedefName();
-            auto ident = typedefName->identifierToken().valueText();
-
-            auto exprOrDecl = keepExpressionOrDeclarationStatement(ident);
-            break;
-        }
-
-        case CallExpression: {
-            auto callExpr = expr->asCallExpression();
-            visit(callExpr->arguments()->value);
-            break;
-        }
-
-        default:
-            PSY_ESCAPE_VIA_RETURN(Action::Skip);
-    }
-
-    return Action::Skip;
+    PSY_ESCAPE_VIA_RETURN(Action::Quit);
 }

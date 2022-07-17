@@ -50,8 +50,7 @@ private:
     unsigned int pendingAmbigs_;
     std::unique_ptr<DisambiguationCatalog> catalog_;
 
-    ExpressionOrDeclarationStatement keepExpressionOrDeclarationStatement(
-            const std::string& maybeTyName) override;
+    bool isTypeName(const std::string& name) override;
 
     //--------------//
     // Declarations //

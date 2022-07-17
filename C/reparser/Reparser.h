@@ -43,20 +43,21 @@ protected:
 
     virtual unsigned int reparse() = 0;
 
-    enum class ExpressionOrDeclarationStatement : std::int8_t
+    enum class Disambiguation : std::int8_t
     {
-        Expression,
-        Declaration
+        Undetermined,
+        ExpressionStatement,
+        DeclarationStatement
     };
 
-    virtual ExpressionOrDeclarationStatement keepExpressionOrDeclarationStatement(
-            const std::string& maybeTyName) = 0;
+    Disambiguation disambiguateAmbiguousExpressionOrDeclarationStatement(
+            const AmbiguousExpressionOrDeclarationStatementSyntax*);
+
+    virtual bool isTypeName(const std::string& name) = 0;
 
     //--------------//
     // Declarations //
     //--------------//
-    Action visitTranslationUnit(const TranslationUnitSyntax*) override;
-    Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax*) override;
     Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) override;
     Action visitEnumDeclaration(const EnumDeclarationSyntax*) override;
     Action visitEnumeratorDeclaration(const EnumeratorDeclarationSyntax*) override;
@@ -101,7 +102,6 @@ protected:
     Action visitDesignatedInitializer(const DesignatedInitializerSyntax*) override;
     Action visitFieldDesignator(const FieldDesignatorSyntax*) override;
     Action visitArrayDesignator(const ArrayDesignatorSyntax*) override;
-
     Action visitOffsetOfDesignator(const OffsetOfDesignatorSyntax*) override;
 
     //-------------//

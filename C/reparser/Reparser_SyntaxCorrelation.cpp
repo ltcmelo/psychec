@@ -59,14 +59,7 @@ SyntaxVisitor::Action SyntaxCorrelationReparser::visitTranslationUnit(const Tran
     return Action::Skip;
 }
 
-Reparser::ExpressionOrDeclarationStatement
-SyntaxCorrelationReparser::keepExpressionOrDeclarationStatement(const std::string& maybeTyName)
+bool SyntaxCorrelationReparser::isTypeName(const std::string& name)
 {
-    if (catalog_->isCatalogedAsType(maybeTyName)) {
-        std::cout << "catalog contains as type " << maybeTyName << std::endl;
-        return Reparser::ExpressionOrDeclarationStatement::Declaration;
-    }
-
-    std::cout << "catalog DOES NOT contain as type " << maybeTyName << std::endl;
-    return Reparser::ExpressionOrDeclarationStatement::Expression;
+    return catalog_->isCatalogedAsType(name);
 }
