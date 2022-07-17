@@ -49,14 +49,15 @@ PSY_INTERNAL:
         GuidelineImposition
     };
 
-    void chooseStrategy(DisambiguationStrategy strategy);
-    void permitHeuristic(bool heuristic);
+    void setDisambiguationStrategy(DisambiguationStrategy strategy);
 
-    void disambiguate(SyntaxTree* tree);
+    void setPermitHeuristic(bool heuristic);
+
+    void reparse(SyntaxTree* tree);
 
 private:
-    DisambiguationStrategy strategy_;
-    bool heuristic_;
+    DisambiguationStrategy disambigStrategy_;
+    bool permitHeuristic_;
 };
 
 } // C

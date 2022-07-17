@@ -34,23 +34,23 @@ using namespace psy;
 using namespace C;
 
 Reparser::Reparser()
-    : strategy_(DisambiguationStrategy::SyntaxCorrelation)
-    , heuristic_(false)
+    : disambigStrategy_(DisambiguationStrategy::SyntaxCorrelation)
+    , permitHeuristic_(false)
 {}
 
-void Reparser::chooseStrategy(DisambiguationStrategy strategy)
+void Reparser::setDisambiguationStrategy(DisambiguationStrategy strategy)
 {
-    strategy_ = strategy;
+    disambigStrategy_ = strategy;
 }
 
-void Reparser::permitHeuristic(bool heuristic)
+void Reparser::setPermitHeuristic(bool heuristic)
 {
-    heuristic_ = heuristic;
+    permitHeuristic_ = heuristic;
 }
 
-void Reparser::disambiguate(SyntaxTree* tree)
+void Reparser::reparse(SyntaxTree* tree)
 {
-    if (strategy_ == Reparser::DisambiguationStrategy::GuidelineImposition) {
+    if (disambigStrategy_ == Reparser::DisambiguationStrategy::GuidelineImposition) {
         // TODO
         return;
     }
@@ -58,11 +58,11 @@ void Reparser::disambiguate(SyntaxTree* tree)
     DisambiguationCataloger cataloger(tree);
     auto catalog = cataloger.catalogFor(tree->root());
 
-    switch (strategy_) {
+    switch (disambigStrategy_) {
         case Reparser::DisambiguationStrategy::SyntaxCorrelation: {
-            SyntaxCorrelationDisambiguator reparser(tree);
-            reparser.acquireCatalog(std::move(catalog));
-            reparser.reparse();
+            SyntaxCorrelationDisambiguator disambiguator(tree);
+            disambiguator.acquireCatalog(std::move(catalog));
+            disambiguator.reparse();
             break;
         }
 

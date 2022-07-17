@@ -250,30 +250,30 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
     if (!P->diagnostics_.empty())
         return;
 
-    Reparser disambiguator;
+    Reparser reparser;
     switch (P->parseOptions_.treatmentOfAmbiguities()) {
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically:
-            disambiguator.permitHeuristic(true);
+            reparser.setPermitHeuristic(true);
             [[fallthrough]];
 
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically: {
             auto strategy = P->textCompleteness_ == TextCompleteness::Full
                     ? Reparser::DisambiguationStrategy::TypeSynonymsVerification
                     : Reparser::DisambiguationStrategy::SyntaxCorrelation;
-            disambiguator.chooseStrategy(strategy);
+            reparser.setDisambiguationStrategy(strategy);
             break;
         }
 
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically:
-            disambiguator.chooseStrategy(Reparser::DisambiguationStrategy::GuidelineImposition);
-            disambiguator.permitHeuristic(true);
+            reparser.setDisambiguationStrategy(Reparser::DisambiguationStrategy::GuidelineImposition);
+            reparser.setPermitHeuristic(true);
             break;
 
         default:
             PSY_ESCAPE_VIA_RETURN();
     }
 
-    disambiguator.disambiguate(this);
+    reparser.reparse(this);
 }
 
 const ParseOptions& SyntaxTree::parseOptions() const
