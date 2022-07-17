@@ -31,7 +31,7 @@ using namespace psy;
 using namespace C;
 
 SyntaxCorrelationReparser::SyntaxCorrelationReparser(SyntaxTree* tree)
-    : Reparser(tree)
+    : Disambiguator(tree)
     , pendingAmbigs_(0)
 {}
 

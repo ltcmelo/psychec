@@ -33,12 +33,10 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API SyntaxCorrelationReparser final : public Reparser
+class PSY_C_NON_API SyntaxCorrelationReparser final : public Disambiguator
 {
-    friend class DebugReparser;
-
 PSY_INTERNAL:
-    PSY_GRANT_ACCESS(Disambiguator);
+    PSY_GRANT_ACCESS(Reparser);
 
     SyntaxCorrelationReparser(SyntaxTree* tree);
 

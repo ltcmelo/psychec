@@ -33,12 +33,12 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API Disambiguator
+class PSY_C_NON_API Reparser
 {
 PSY_INTERNAL:
     PSY_GRANT_ACCESS(SyntaxTree);
 
-    Disambiguator();
+    Reparser();
 
     enum class DisambiguationStrategy : std::uint8_t
     {

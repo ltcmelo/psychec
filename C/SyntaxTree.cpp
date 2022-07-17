@@ -250,7 +250,7 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
     if (!P->diagnostics_.empty())
         return;
 
-    Disambiguator disambiguator;
+    Reparser disambiguator;
     switch (P->parseOptions_.treatmentOfAmbiguities()) {
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically:
             disambiguator.permitHeuristic(true);
@@ -258,14 +258,14 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
 
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically: {
             auto strategy = P->textCompleteness_ == TextCompleteness::Full
-                    ? Disambiguator::DisambiguationStrategy::TypeSynonymsVerification
-                    : Disambiguator::DisambiguationStrategy::SyntaxCorrelation;
+                    ? Reparser::DisambiguationStrategy::TypeSynonymsVerification
+                    : Reparser::DisambiguationStrategy::SyntaxCorrelation;
             disambiguator.chooseStrategy(strategy);
             break;
         }
 
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically:
-            disambiguator.chooseStrategy(Disambiguator::DisambiguationStrategy::GuidelineImposition);
+            disambiguator.chooseStrategy(Reparser::DisambiguationStrategy::GuidelineImposition);
             disambiguator.permitHeuristic(true);
             break;
 

@@ -33,13 +33,13 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API Reparser : public SyntaxVisitor
+class PSY_C_NON_API Disambiguator : public SyntaxVisitor
 {
 public:
-    virtual ~Reparser();
+    virtual ~Disambiguator();
 
 protected:
-    Reparser(SyntaxTree* tree);
+    Disambiguator(SyntaxTree* tree);
 
     virtual unsigned int reparse() = 0;
 

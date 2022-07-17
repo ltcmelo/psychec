@@ -28,14 +28,14 @@
 using namespace psy;
 using namespace C;
 
-Reparser::~Reparser()
+Disambiguator::~Disambiguator()
 {}
 
-Reparser::Reparser(SyntaxTree* tree)
+Disambiguator::Disambiguator(SyntaxTree* tree)
     : SyntaxVisitor(tree)
 {}
 
-Reparser::Disambiguation Reparser::disambiguateAmbiguousExpressionOrDeclarationStatement(
+Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousExpressionOrDeclarationStatement(
         const AmbiguousExpressionOrDeclarationStatementSyntax* node)
 {
     auto expr = node->expressionStatement()->expression();
@@ -70,137 +70,137 @@ Reparser::Disambiguation Reparser::disambiguateAmbiguousExpressionOrDeclarationS
 }
 
 
-SyntaxVisitor::Action Reparser::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitEnumDeclaration(const EnumDeclarationSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitEnumDeclaration(const EnumDeclarationSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitEnumeratorDeclaration(const EnumeratorDeclarationSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitEnumeratorDeclaration(const EnumeratorDeclarationSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitFieldDeclaration(const FieldDeclarationSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitFieldDeclaration(const FieldDeclarationSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitParameterDeclaration(const ParameterDeclarationSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitParameterDeclaration(const ParameterDeclarationSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitFunctionDefinition(const FunctionDefinitionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitFunctionDefinition(const FunctionDefinitionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtPSY_TemplateDeclaration(const ExtPSY_TemplateDeclarationSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtPSY_TemplateDeclaration(const ExtPSY_TemplateDeclarationSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtKR_ParameterDeclaration(const ExtKR_ParameterDeclarationSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtKR_ParameterDeclaration(const ExtKR_ParameterDeclarationSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitStorageClass(const StorageClassSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitStorageClass(const StorageClassSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitAtomicTypeSpecifier(const AtomicTypeSpecifierSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitAtomicTypeSpecifier(const AtomicTypeSpecifierSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitTypedefName(const TypedefNameSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitTypedefName(const TypedefNameSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitTypeQualifier(const TypeQualifierSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitTypeQualifier(const TypeQualifierSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitFunctionSpecifier(const FunctionSpecifierSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitFunctionSpecifier(const FunctionSpecifierSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitAlignmentSpecifier(const AlignmentSpecifierSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitAlignmentSpecifier(const AlignmentSpecifierSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtGNU_Typeof(const ExtGNU_TypeofSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtGNU_Typeof(const ExtGNU_TypeofSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtGNU_AttributeSpecifier(const ExtGNU_AttributeSpecifierSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtGNU_AttributeSpecifier(const ExtGNU_AttributeSpecifierSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtGNU_Attribute(const ExtGNU_AttributeSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtGNU_Attribute(const ExtGNU_AttributeSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtGNU_AsmLabel(const ExtGNU_AsmLabelSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtGNU_AsmLabel(const ExtGNU_AsmLabelSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtPSY_QuantifiedTypeSpecifier(const ExtPSY_QuantifiedTypeSpecifierSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtPSY_QuantifiedTypeSpecifier(const ExtPSY_QuantifiedTypeSpecifierSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitPointerDeclarator(const PointerDeclaratorSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitPointerDeclarator(const PointerDeclaratorSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitAbstractDeclarator(const AbstractDeclaratorSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitAbstractDeclarator(const AbstractDeclaratorSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitSubscriptSuffix(const SubscriptSuffixSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitSubscriptSuffix(const SubscriptSuffixSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitParameterSuffix(const ParameterSuffixSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitParameterSuffix(const ParameterSuffixSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitBitfieldDeclarator(const BitfieldDeclaratorSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitBitfieldDeclarator(const BitfieldDeclaratorSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExpressionInitializer(const ExpressionInitializerSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExpressionInitializer(const ExpressionInitializerSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitBraceEnclosedInitializer(const BraceEnclosedInitializerSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitBraceEnclosedInitializer(const BraceEnclosedInitializerSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitDesignatedInitializer(const DesignatedInitializerSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitDesignatedInitializer(const DesignatedInitializerSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitFieldDesignator(const FieldDesignatorSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitFieldDesignator(const FieldDesignatorSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitArrayDesignator(const ArrayDesignatorSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitArrayDesignator(const ArrayDesignatorSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitOffsetOfDesignator(const OffsetOfDesignatorSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitOffsetOfDesignator(const OffsetOfDesignatorSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitIdentifierName(const IdentifierNameSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitIdentifierName(const IdentifierNameSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitPredefinedName(const PredefinedNameSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitPredefinedName(const PredefinedNameSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitConstantExpression(const ConstantExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitConstantExpression(const ConstantExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitStringLiteralExpression(const StringLiteralExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitStringLiteralExpression(const StringLiteralExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitParenthesizedExpression(const ParenthesizedExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitParenthesizedExpression(const ParenthesizedExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitGenericSelectionExpression(const GenericSelectionExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitGenericSelectionExpression(const GenericSelectionExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitGenericAssociation(const GenericAssociationSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitGenericAssociation(const GenericAssociationSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtGNU_EnclosedCompoundStatementExpression(const ExtGNU_EnclosedCompoundStatementExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtGNU_EnclosedCompoundStatementExpression(const ExtGNU_EnclosedCompoundStatementExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtGNU_ComplexValuedExpression(const ExtGNU_ComplexValuedExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtGNU_ComplexValuedExpression(const ExtGNU_ComplexValuedExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitPostfixUnaryExpression(const PostfixUnaryExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitPostfixUnaryExpression(const PostfixUnaryExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitMemberAccessExpression(const MemberAccessExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitMemberAccessExpression(const MemberAccessExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitArraySubscriptExpression(const ArraySubscriptExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitArraySubscriptExpression(const ArraySubscriptExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitTypeTraitExpression(const TypeTraitExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitTypeTraitExpression(const TypeTraitExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitCastExpression(const CastExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitCastExpression(const CastExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitCallExpression(const CallExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitCallExpression(const CallExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitVAArgumentExpression(const VAArgumentExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitVAArgumentExpression(const VAArgumentExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitOffsetOfExpression(const OffsetOfExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitOffsetOfExpression(const OffsetOfExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitBinaryExpression(const BinaryExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitBinaryExpression(const BinaryExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitConditionalExpression(const ConditionalExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitConditionalExpression(const ConditionalExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitAssignmentExpression(const AssignmentExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitAssignmentExpression(const AssignmentExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitSequencingExpression(const SequencingExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitSequencingExpression(const SequencingExpressionSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtGNU_ChooseExpression(const ExtGNU_ChooseExpressionSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtGNU_ChooseExpression(const ExtGNU_ChooseExpressionSyntax* node) { return Action::Visit; }
 
 //------------//
 // Statements //
 //------------//
 
-SyntaxVisitor::Action Reparser::visitCompoundStatement(const CompoundStatementSyntax* node)
+SyntaxVisitor::Action Disambiguator::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
     for (auto iter = node->statements(); iter; iter = iter->next) {
         auto iter_P = const_cast<StatementListSyntax*>(iter);
@@ -234,55 +234,55 @@ SyntaxVisitor::Action Reparser::visitCompoundStatement(const CompoundStatementSy
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Reparser::visitDeclarationStatement(const DeclarationStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitDeclarationStatement(const DeclarationStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExpressionStatement(const ExpressionStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExpressionStatement(const ExpressionStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitLabeledStatement(const LabeledStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitLabeledStatement(const LabeledStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitIfStatement(const IfStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitIfStatement(const IfStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitSwitchStatement(const SwitchStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitSwitchStatement(const SwitchStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitWhileStatement(const WhileStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitWhileStatement(const WhileStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitDoStatement(const DoStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitDoStatement(const DoStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitForStatement(const ForStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitForStatement(const ForStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitGotoStatement(const GotoStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitGotoStatement(const GotoStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitContinueStatement(const ContinueStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitContinueStatement(const ContinueStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitBreakStatement(const BreakStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitBreakStatement(const BreakStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitReturnStatement(const ReturnStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitReturnStatement(const ReturnStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitTypeName(const TypeNameSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitTypeName(const TypeNameSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitExpressionAsTypeReference(const ExpressionAsTypeReferenceSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitExpressionAsTypeReference(const ExpressionAsTypeReferenceSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitTypeNameAsTypeReference(const TypeNameAsTypeReferenceSyntax* node) { return Action::Visit; }
+SyntaxVisitor::Action Disambiguator::visitTypeNameAsTypeReference(const TypeNameAsTypeReferenceSyntax* node) { return Action::Visit; }
 
-SyntaxVisitor::Action Reparser::visitAmbiguousTypeNameOrExpressionAsTypeReference(
+SyntaxVisitor::Action Disambiguator::visitAmbiguousTypeNameOrExpressionAsTypeReference(
         const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*)
 {
     PSY_ESCAPE_VIA_RETURN(Action::Quit);
 }
 
-SyntaxVisitor::Action Reparser::visitAmbiguousCastOrBinaryExpression(
+SyntaxVisitor::Action Disambiguator::visitAmbiguousCastOrBinaryExpression(
         const AmbiguousCastOrBinaryExpressionSyntax*)
 {
     PSY_ESCAPE_VIA_RETURN(Action::Quit);
 }
 
-SyntaxVisitor::Action Reparser::visitAmbiguousExpressionOrDeclarationStatement(
+SyntaxVisitor::Action Disambiguator::visitAmbiguousExpressionOrDeclarationStatement(
         const AmbiguousExpressionOrDeclarationStatementSyntax*)
 {
     PSY_ESCAPE_VIA_RETURN(Action::Quit);

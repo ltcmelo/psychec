@@ -33,24 +33,24 @@
 using namespace psy;
 using namespace C;
 
-Disambiguator::Disambiguator()
+Reparser::Reparser()
     : strategy_(DisambiguationStrategy::SyntaxCorrelation)
     , heuristic_(false)
 {}
 
-void Disambiguator::chooseStrategy(DisambiguationStrategy strategy)
+void Reparser::chooseStrategy(DisambiguationStrategy strategy)
 {
     strategy_ = strategy;
 }
 
-void Disambiguator::permitHeuristic(bool heuristic)
+void Reparser::permitHeuristic(bool heuristic)
 {
     heuristic_ = heuristic;
 }
 
-void Disambiguator::disambiguate(SyntaxTree* tree)
+void Reparser::disambiguate(SyntaxTree* tree)
 {
-    if (strategy_ == Disambiguator::DisambiguationStrategy::GuidelineImposition) {
+    if (strategy_ == Reparser::DisambiguationStrategy::GuidelineImposition) {
         // TODO
         return;
     }
@@ -59,14 +59,14 @@ void Disambiguator::disambiguate(SyntaxTree* tree)
     auto catalog = cataloger.catalogFor(tree->root());
 
     switch (strategy_) {
-        case Disambiguator::DisambiguationStrategy::SyntaxCorrelation: {
+        case Reparser::DisambiguationStrategy::SyntaxCorrelation: {
             SyntaxCorrelationReparser reparser(tree);
             reparser.acquireCatalog(std::move(catalog));
             reparser.reparse();
             break;
         }
 
-        case Disambiguator::DisambiguationStrategy::TypeSynonymsVerification:
+        case Reparser::DisambiguationStrategy::TypeSynonymsVerification:
             break;
 
         default:
