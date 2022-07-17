@@ -29,6 +29,7 @@
 
 #define AST__COMMON__(NODE, BASE_NODE) \
     friend class Parser; \
+    friend class Disambiguator; \
     friend class Binder; \
     public: \
         virtual NODE##Syntax* as##NODE() override { return this; } \

@@ -49,19 +49,24 @@ protected:
     enum class Disambiguation : std::int8_t
     {
         Undetermined,
+        CastExpression,
+        BinaryExpression,
         ExpressionStatement,
         DeclarationStatement
     };
 
+    Disambiguation disambiguateAmbiguousTypeNameOrExpressionAsTypeReferenceSyntax(
+            const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) const;
+    Disambiguation disambiguateAmbiguousCastOrBinaryExpressionSyntax(
+            const AmbiguousCastOrBinaryExpressionSyntax*) const;
     Disambiguation disambiguateAmbiguousExpressionOrDeclarationStatement(
-            const AmbiguousExpressionOrDeclarationStatementSyntax*);
+            const AmbiguousExpressionOrDeclarationStatementSyntax*) const;
+
+    unsigned int pendingAmbigs_;
 
     //--------------//
     // Declarations //
     //--------------//
-    Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) override;
-    Action visitEnumDeclaration(const EnumDeclarationSyntax*) override;
-    Action visitEnumeratorDeclaration(const EnumeratorDeclarationSyntax*) override;
     Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
     Action visitFieldDeclaration(const FieldDeclarationSyntax*) override;
     Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
