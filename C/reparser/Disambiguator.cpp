@@ -236,9 +236,10 @@ SyntaxVisitor::Action Disambiguator::visitCompoundStatement(const CompoundStatem
             }
 
             default:
-                visit(iter->value);
                 break;
         }
+
+        visit(iter->value);
     }
 
     return Action::Skip;
@@ -273,9 +274,10 @@ SyntaxVisitor::Action Disambiguator::visitExpressionStatement(const ExpressionSt
         }
 
         default:
-            visit(node->expr_);
             break;
     }
+
+    visit(node->expr_);
 
     return Action::Skip;
 }
