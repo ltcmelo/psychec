@@ -63,6 +63,7 @@ struct SyntaxTree::SyntaxTreeImpl
         , parseOptions_(std::move(parseOptions))
         , filePath_(filePath)
         , rootNode_(nullptr)
+        , parseExitedEarly_(false)
     {
         if (filePath_.empty())
             filePath_ = "<buffer>";
@@ -90,6 +91,8 @@ struct SyntaxTree::SyntaxTreeImpl
     std::vector<LineDirective> lineDirectives_;
     std::vector<unsigned int> startOfLineOffsets_;
     SyntaxTree::ExpansionsTable expansions_;
+
+    bool parseExitedEarly_;
 
     std::vector<Diagnostic> diagnostics_;
 
@@ -173,6 +176,11 @@ const SyntaxToken& SyntaxTree::tokenAt(LexedTokens::IndexType tkIdx) const { ret
 SyntaxTree::TokenSequenceType::size_type SyntaxTree::tokenCount() const { return P->tokens_.count(); }
 LexedTokens::IndexType SyntaxTree::freeTokenSlot() const { return P->tokens_.freeSlot(); }
 
+bool SyntaxTree::parseExitedEarly() const
+{
+    return P->parseExitedEarly_;
+}
+
 void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
 {
     Lexer lexer(this);
@@ -236,6 +244,8 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
         default:
             P->rootNode_ = parser.parse();
     }
+
+    P->parseExitedEarly_ = parser.peek().kind() != EndOfFile;
 
     if (!parser.detectedAnyAmbiguity())
         return;

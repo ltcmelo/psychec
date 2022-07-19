@@ -1603,18 +1603,18 @@ bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
 {
     DEBUG_THIS_RULE();
 
-    auto curExprDepth = depthOfExprs_;
+    auto CUR_DEPTH_OF_EXPR = depthOfExprs_;
 
     while (precedenceOf(peek().kind()) >= cutoffPrecedence) {
-        if (++curExprDepth > MAX_DEPTH_OF_EXPRS)
+        if (++CUR_DEPTH_OF_EXPR > MAX_DEPTH_OF_EXPRS)
             throw std::runtime_error("maximum depth of expressions reached");
 
-        auto curTkK = peek().kind();
-        auto exprK = SyntaxFacts::NAryExpressionKind(curTkK);
+        auto tkK = peek().kind();
+        auto exprK = SyntaxFacts::NAryExpressionKind(tkK);
         auto oprtrTkIdx = consume();
 
         ConditionalExpressionSyntax* condExpr = nullptr;
-        if (curTkK == QuestionToken) {
+        if (tkK == QuestionToken) {
             condExpr = makeNode<ConditionalExpressionSyntax>();
             condExpr->questionTkIdx_ = oprtrTkIdx;
 
@@ -1634,19 +1634,28 @@ bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
         if (!parseExpressionWithPrecedenceCast(nextExpr))
              return false;
 
-        auto refPrec = precedenceOf(curTkK);
-        curTkK = peek().kind();
-        auto nextPrec = precedenceOf(curTkK);
-        while ((nextPrec > refPrec
-                        && SyntaxFacts::isNAryOperatorToken(curTkK))
-                   || (nextPrec == refPrec
-                        && isRightAssociative(curTkK))) {
-            if (!parseNAryExpression_AtOperator(nextExpr, nextPrec))
+        auto prevPrec = precedenceOf(tkK);
+        tkK = peek().kind();
+        auto precAhead = precedenceOf(tkK);
+
+        while ((precAhead > prevPrec
+                        && SyntaxFacts::isNAryOperatorToken(tkK))
+                   || (precAhead == prevPrec
+                        && isRightAssociative(tkK))) {
+            if (!parseNAryExpression_AtOperator(nextExpr, precAhead))
                 return false;
 
-            curTkK = peek().kind();
-            nextPrec = precedenceOf(curTkK);
+            tkK = peek().kind();
+            precAhead = precedenceOf(tkK);
         }
+
+        /*
+         * An "usual" N-ary expression E can be produced with a FIRST that is another N-ary
+         * expression with same precedence of E or a tighter one. An assignment expression
+         * is different in that its LHS may not be a N-ary expression: it must a unary one.
+         */
+        if (precAhead == NAryPrecedence::Assignment && prevPrec > precAhead)
+            return false;
 
         if (condExpr) {
             condExpr->condExpr_ = baseExpr;
@@ -1657,17 +1666,23 @@ bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
             if (SyntaxFacts::isAssignmentExpression(exprK)) {
                 baseExpr = fill_LeftOperandInfixOperatorRightOperand_MIXIN(
                                 makeNode<AssignmentExpressionSyntax>(exprK),
-                                baseExpr, oprtrTkIdx, nextExpr);
+                                baseExpr,
+                                oprtrTkIdx,
+                                nextExpr);
             }
             else if (SyntaxFacts::isBinaryExpression(exprK)) {
                 baseExpr = fill_LeftOperandInfixOperatorRightOperand_MIXIN(
                                 makeNode<BinaryExpressionSyntax>(exprK),
-                                baseExpr, oprtrTkIdx, nextExpr);
+                                baseExpr,
+                                oprtrTkIdx,
+                                nextExpr);
             }
             else {
                 baseExpr = fill_LeftOperandInfixOperatorRightOperand_MIXIN(
                                 makeNode<SequencingExpressionSyntax>(),
-                                baseExpr, oprtrTkIdx, nextExpr);
+                                baseExpr,
+                                oprtrTkIdx,
+                                nextExpr);
             }
         }
     }

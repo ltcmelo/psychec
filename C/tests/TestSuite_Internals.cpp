@@ -185,7 +185,7 @@ void InternalsTestSuite::parse(std::string source,
 #endif
 
     ParseOptions parseOpts;
-    if (X.isAmbiguous_)
+    if (X.containsAmbiguity_)
             parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::None);
 
     tree_ = SyntaxTree::parseText(text,
@@ -194,6 +194,11 @@ void InternalsTestSuite::parse(std::string source,
                                   parseOpts,
                                   "",
                                   syntaxCat);
+
+    if (X.numE_ == 0 && X.numW_ == 0 && tree_->parseExitedEarly()) {
+        PSY_EXPECT_TRUE(X.unfinishedParse_);
+        return;
+    }
 
     if (!checkErrorAndWarn(X))
         return;
@@ -221,7 +226,7 @@ void InternalsTestSuite::parse(std::string source,
     textP.erase(std::remove_if(textP.begin(), textP.end(), ::isspace), textP.end());
     text.erase(std::remove_if(text.begin(), text.end(), ::isspace), text.end());
 
-    if (X.isAmbiguous_) {
+    if (X.containsAmbiguity_) {
         if (X.ambiguityText_.empty())
             PSY_EXPECT_EQ_STR(textP, text + text);
         else {

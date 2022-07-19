@@ -687,28 +687,28 @@ void ParserTester::case1104()
 {
     parseExpression("( x",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
 void ParserTester::case1105()
 {
     parseExpression("( ( x )",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
 void ParserTester::case1106()
 {
     parseExpression("( int",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
 void ParserTester::case1107()
 {
     parseExpression("( int )",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void ParserTester::case1108() {}
@@ -845,28 +845,28 @@ void ParserTester::case1204()
                     _Generic( x float: cbrtf)
                     )",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
 void ParserTester::case1205()
 {
     parseExpression("_Generic( x, float, cbrtf)",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
 void ParserTester::case1206()
 {
     parseExpression("_Generic( x : cbrtf)",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
 void ParserTester::case1207()
 {
     parseExpression("_Generic(float: cbrtf)",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void ParserTester::case1208()
@@ -987,28 +987,28 @@ void ParserTester::case1253()
 {
     parseExpression("( struct x ) {",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void ParserTester::case1254()
 {
     parseExpression("( struct x ) { 1,",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void ParserTester::case1255()
 {
     parseExpression("( struct x ) { 1",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedToken));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedToken));
 }
 
 void ParserTester::case1256()
 {
     parseExpression("( long ) {",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void ParserTester::case1257()
@@ -1125,9 +1125,9 @@ void ParserTester::case1307()
 
 void ParserTester::case1308()
 {
-    parseExpression("x+",
+    parseExpression("x +",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
 
 void ParserTester::case1309() {}
@@ -1566,14 +1566,14 @@ void ParserTester::case1501()
 {
     parseExpression("x .",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
 }
 
 void ParserTester::case1502()
 {
     parseExpression("x . 'y'",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
 }
 
 void ParserTester::case1503()
@@ -1597,14 +1597,14 @@ void ParserTester::case1505()
 {
     parseExpression("x -> ",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
 }
 
 void ParserTester::case1506()
 {
     parseExpression("x -> 'y'",
                     Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                                Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
+                                             Parser::DiagnosticsReporter::ID_of_ExpectedFieldName));
 }
 
 void ParserTester::case1507()
@@ -2502,9 +2502,45 @@ void ParserTester::case1810()
 
 void ParserTester::case1811()
 {
+    parseExpression("x * y + z >> w",
+                    Expectation().AST( { RightShiftExpression,
+                                         AddExpression,
+                                         MultiplyExpression,
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName,
+                                         IdentifierName }));
 }
-void ParserTester::case1812() {}
-void ParserTester::case1813() {}
+
+void ParserTester::case1812()
+{
+    parseExpression("x >> y + z * w",
+                    Expectation().AST( { RightShiftExpression,
+                                         IdentifierName,
+                                         AddExpression,
+                                         IdentifierName,
+                                         MultiplyExpression,
+                                         IdentifierName,
+                                         IdentifierName }));
+}
+
+void ParserTester::case1813()
+{
+    /*
+     * Can't be parsed as an assignment-expression.
+     * Should only parse till `x'.
+     *
+     * (6.5.16) assignment-expression:
+     *     conditional-expression
+     *     unary-expression assignment-operator assignment-expression
+     */
+
+    CROSS_REFERENCE_TEST(ParserTester::case2213);
+
+    parseExpression("x * y = z",
+                    Expectation().unfinishedParse());
+}
+
 void ParserTester::case1814() {}
 void ParserTester::case1815() {}
 void ParserTester::case1816() {}

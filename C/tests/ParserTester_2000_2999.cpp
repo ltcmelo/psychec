@@ -770,7 +770,22 @@ void ParserTester::case2212()
                    .ambiguity("{ x ( y ) ; x ( y ) ; }"));
 }
 
-void ParserTester::case2213() {}
+void ParserTester::case2213()
+{
+    CROSS_REFERENCE_TEST(ParserTester::case1813);
+
+    parseStatement("{ x * y = 0 ; }",
+                   Expectation().AST( { CompoundStatement,
+                                        DeclarationStatement,
+                                        VariableAndOrFunctionDeclaration,
+                                        TypedefName,
+                                        PointerDeclarator,
+                                        IdentifierDeclarator,
+                                        ExpressionInitializer,
+                                        IntegerConstantExpression }));
+
+}
+
 void ParserTester::case2214() {}
 void ParserTester::case2215() {}
 void ParserTester::case2216() {}
