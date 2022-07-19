@@ -59,7 +59,7 @@ bool Parser::parseExpression(ExpressionSyntax*& expr)
 {
     DEBUG_THIS_RULE();
 
-    DepthControl _(depthOfExprs_);
+    DepthControl _(DEPTH_OF_EXPRS_);
     return parseExpressionWithPrecedenceComma(expr);
 }
 
@@ -1603,7 +1603,7 @@ bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
 {
     DEBUG_THIS_RULE();
 
-    auto CUR_DEPTH_OF_EXPR = depthOfExprs_;
+    auto CUR_DEPTH_OF_EXPR = DEPTH_OF_EXPRS_;
 
     while (precedenceOf(peek().kind()) >= cutoffPrecedence) {
         if (++CUR_DEPTH_OF_EXPR > MAX_DEPTH_OF_EXPRS)

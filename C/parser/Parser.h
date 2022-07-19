@@ -229,8 +229,8 @@ private:
     void skipTo(SyntaxKind tkK);
     unsigned int curTkIdx_;
 
-    int depthOfExprs_;
-    int depthOfStmts_;
+    int DEPTH_OF_EXPRS_;
+    int DEPTH_OF_STMTS_;
 
     struct DepthControl
     {
