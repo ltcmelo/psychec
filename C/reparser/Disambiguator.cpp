@@ -36,234 +36,26 @@ Disambiguator::Disambiguator(SyntaxTree* tree)
     , pendingAmbigs_(0)
 {}
 
-Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousTypeNameOrExpressionAsTypeReferenceSyntax(
-        const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) const
+template <class ExprT>
+SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousExpression(ExprT* const& node)
 {
-    return Disambiguation::Undetermined;
-}
-
-Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousCastOrBinaryExpressionSyntax(
-        const AmbiguousCastOrBinaryExpressionSyntax* node) const
-{
-    auto typeName = node->castExpression()->typeName();
-    PSY_ASSERT(typeName->specifiers()
-                   && typeName->specifiers()->value
-                   && typeName->specifiers()->value->kind() == TypedefName,
-               return Disambiguation::Undetermined);
-
-    auto typedefName = typeName->specifiers()->value->asTypedefName();
-    auto name = typedefName->identifierToken().valueText();
-
-    return recognizesTypeName(name)
-            ? Disambiguation::CastExpression
-            : recognizesName(name)
-                    ? Disambiguation::BinaryExpression
-                    : Disambiguation::Undetermined;
-}
-
-Disambiguator::Disambiguation Disambiguator::disambiguateAmbiguousExpressionOrDeclarationStatement(
-        const AmbiguousExpressionOrDeclarationStatementSyntax* node) const
-{
-    auto decl = node->declarationStatement()->declaration();
-    PSY_ASSERT(decl->kind() == VariableAndOrFunctionDeclaration, return Disambiguation::Undetermined);
-
-    auto varDecl = decl->asVariableAndOrFunctionDeclaration();
-    PSY_ASSERT(varDecl->specifiers()
-                   && varDecl->specifiers()->value
-                   && varDecl->specifiers()->value->kind() == TypedefName,
-               return Disambiguation::Undetermined);
-
-    auto typedefName = varDecl->specifiers()->value->asTypedefName();
-    auto name = typedefName->identifierToken().valueText();
-
-    return recognizesTypeName(name)
-            ? Disambiguation::DeclarationStatement
-            : recognizesName(name)
-                    ? Disambiguation::ExpressionStatement
-                    : Disambiguation::Undetermined;
-}
-
-SyntaxVisitor::Action Disambiguator::visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitFieldDeclaration(const FieldDeclarationSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitParameterDeclaration(const ParameterDeclarationSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitFunctionDefinition(const FunctionDefinitionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExtPSY_TemplateDeclaration(const ExtPSY_TemplateDeclarationSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExtKR_ParameterDeclaration(const ExtKR_ParameterDeclarationSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitStorageClass(const StorageClassSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitAtomicTypeSpecifier(const AtomicTypeSpecifierSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitTypedefName(const TypedefNameSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitTypeQualifier(const TypeQualifierSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitFunctionSpecifier(const FunctionSpecifierSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitAlignmentSpecifier(const AlignmentSpecifierSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExtGNU_Typeof(const ExtGNU_TypeofSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExtGNU_AttributeSpecifier(const ExtGNU_AttributeSpecifierSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExtGNU_Attribute(const ExtGNU_AttributeSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExtGNU_AsmLabel(const ExtGNU_AsmLabelSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExtPSY_QuantifiedTypeSpecifier(const ExtPSY_QuantifiedTypeSpecifierSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitPointerDeclarator(const PointerDeclaratorSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitAbstractDeclarator(const AbstractDeclaratorSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitSubscriptSuffix(const SubscriptSuffixSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitParameterSuffix(const ParameterSuffixSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitBitfieldDeclarator(const BitfieldDeclaratorSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExpressionInitializer(const ExpressionInitializerSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitBraceEnclosedInitializer(const BraceEnclosedInitializerSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitDesignatedInitializer(const DesignatedInitializerSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitFieldDesignator(const FieldDesignatorSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitArrayDesignator(const ArrayDesignatorSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitOffsetOfDesignator(const OffsetOfDesignatorSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitIdentifierName(const IdentifierNameSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitPredefinedName(const PredefinedNameSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitConstantExpression(const ConstantExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitStringLiteralExpression(const StringLiteralExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitParenthesizedExpression(const ParenthesizedExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitGenericSelectionExpression(const GenericSelectionExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitGenericAssociation(const GenericAssociationSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExtGNU_EnclosedCompoundStatementExpression(const ExtGNU_EnclosedCompoundStatementExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExtGNU_ComplexValuedExpression(const ExtGNU_ComplexValuedExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitPostfixUnaryExpression(const PostfixUnaryExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitMemberAccessExpression(const MemberAccessExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitArraySubscriptExpression(const ArraySubscriptExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitTypeTraitExpression(const TypeTraitExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitCastExpression(const CastExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitCallExpression(const CallExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitVAArgumentExpression(const VAArgumentExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitOffsetOfExpression(const OffsetOfExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitBinaryExpression(const BinaryExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitConditionalExpression(const ConditionalExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitAssignmentExpression(const AssignmentExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitSequencingExpression(const SequencingExpressionSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExtGNU_ChooseExpression(const ExtGNU_ChooseExpressionSyntax* node) { return Action::Visit; }
-
-//------------//
-// Statements //
-//------------//
-
-SyntaxVisitor::Action Disambiguator::visitCompoundStatement(const CompoundStatementSyntax* node)
-{
-    for (auto iter = node->stmts_; iter; iter = iter->next) {
-        switch (iter->value->kind()) {
-            case AmbiguousMultiplicationOrPointerDeclaration:
-            case AmbiguousCallOrVariableDeclaration: {
-                auto iter_P = const_cast<StatementListSyntax*>(iter);
-                auto ambigNode = iter->value->asAmbiguousExpressionOrDeclarationStatement();
-                auto disambig = disambiguateAmbiguousExpressionOrDeclarationStatement(ambigNode);
-                switch (disambig) {
-                    case Disambiguation::DeclarationStatement:
-                        iter_P->value = ambigNode->declStmt_;
-                        break;
-
-                    case Disambiguation::ExpressionStatement:
-                        iter_P->value = ambigNode->exprStmt_;
-                        break;
-
-                    case Disambiguation::Undetermined:
-                        ++pendingAmbigs_;
-                        break;
-
-                    default:
-                        PSY_ESCAPE_VIA_RETURN(Action::Skip);
-                }
-                break;
-            }
-
-            default:
-                break;
-        }
-
-        visit(iter->value);
-    }
-
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Disambiguator::visitDeclarationStatement(const DeclarationStatementSyntax* node) { return Action::Visit; }
-
-SyntaxVisitor::Action Disambiguator::visitExpressionStatement(const ExpressionStatementSyntax* node)
-{
-    switch (node->expr_->kind()) {
+    ExprT*& node_P = const_cast<ExprT*&>(node);
+    switch (node->kind()) {
         case AmbiguousCastOrBinaryExpression: {
-            auto node_P = const_cast<ExpressionStatementSyntax*>(node);
-            auto ambigNode = node_P->expr_->asAmbiguousCastOrBinaryExpression();
-            auto disambig = disambiguateAmbiguousCastOrBinaryExpressionSyntax(ambigNode);
+            auto ambigNode = node->asAmbiguousCastOrBinaryExpression();
+            auto disambig = disambiguateExpression(ambigNode);
             switch (disambig) {
-                case Disambiguation::CastExpression:
-                    node_P->expr_ = ambigNode->castExpr_;
+                case Disambiguation::KeepCastExpression:
+                    node_P = ambigNode->castExpr_;
+                    visit(node_P);
                     break;
 
-                case Disambiguation::ExpressionStatement:
-                    node_P->expr_ = ambigNode->binExpr_;
+                case Disambiguation::KeepExpressionStatement:
+                    node_P = ambigNode->binExpr_;
+                    visit(node_P);
                     break;
 
-                case Disambiguation::Undetermined:
+                case Disambiguation::Inconclusive:
                     ++pendingAmbigs_;
                     break;
 
@@ -274,45 +66,430 @@ SyntaxVisitor::Action Disambiguator::visitExpressionStatement(const ExpressionSt
         }
 
         default:
+            visit(node);
             break;
     }
-
-    visit(node->expr_);
 
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Disambiguator::visitLabeledStatement(const LabeledStatementSyntax* node) { return Action::Visit; }
+Disambiguator::Disambiguation Disambiguator::disambiguateExpression(
+        const AmbiguousCastOrBinaryExpressionSyntax* node) const
+{
+    auto typeName = node->castExpression()->typeName();
+    PSY_ASSERT(typeName->specifiers()
+                   && typeName->specifiers()->value
+                   && typeName->specifiers()->value->kind() == TypedefName,
+               return Disambiguation::Inconclusive);
 
-SyntaxVisitor::Action Disambiguator::visitIfStatement(const IfStatementSyntax* node) { return Action::Visit; }
+    auto typedefName = typeName->specifiers()->value->asTypedefName();
+    auto name = typedefName->identifierToken().valueText();
 
-SyntaxVisitor::Action Disambiguator::visitSwitchStatement(const SwitchStatementSyntax* node) { return Action::Visit; }
+    return recognizesTypeName(name)
+            ? Disambiguation::KeepCastExpression
+            : recognizesName(name)
+                    ? Disambiguation::KeepBinaryExpression
+                    : Disambiguation::Inconclusive;
+}
 
-SyntaxVisitor::Action Disambiguator::visitWhileStatement(const WhileStatementSyntax* node) { return Action::Visit; }
+template <class StmtT>
+SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousStatement(StmtT* const& node)
+{
+    StmtT*& node_P = const_cast<StmtT*&>(node);
+    switch (node->kind()) {
+        case AmbiguousMultiplicationOrPointerDeclaration:
+        case AmbiguousCallOrVariableDeclaration: {
+            auto ambigNode = node->asAmbiguousExpressionOrDeclarationStatement();
+            auto disambig = disambiguateStatement(ambigNode);
+            switch (disambig) {
+                case Disambiguation::KeepDeclarationStatement:
+                    node_P = ambigNode->declStmt_;
+                    visit(node_P);
+                    break;
 
-SyntaxVisitor::Action Disambiguator::visitDoStatement(const DoStatementSyntax* node) { return Action::Visit; }
+                case Disambiguation::KeepExpressionStatement:
+                    node_P = ambigNode->exprStmt_;
+                    visit(node_P);
+                    break;
 
-SyntaxVisitor::Action Disambiguator::visitForStatement(const ForStatementSyntax* node) { return Action::Visit; }
+                case Disambiguation::Inconclusive:
+                    ++pendingAmbigs_;
+                    break;
 
-SyntaxVisitor::Action Disambiguator::visitGotoStatement(const GotoStatementSyntax* node) { return Action::Visit; }
+                default:
+                    PSY_ESCAPE_VIA_RETURN(Action::Skip);
+            }
+            break;
+        }
 
-SyntaxVisitor::Action Disambiguator::visitContinueStatement(const ContinueStatementSyntax* node) { return Action::Visit; }
+        default:
+            visit(node);
+            break;
+    }
 
-SyntaxVisitor::Action Disambiguator::visitBreakStatement(const BreakStatementSyntax* node) { return Action::Visit; }
+    return Action::Skip;
+}
 
-SyntaxVisitor::Action Disambiguator::visitReturnStatement(const ReturnStatementSyntax* node) { return Action::Visit; }
+Disambiguator::Disambiguation Disambiguator::disambiguateStatement(
+        const AmbiguousExpressionOrDeclarationStatementSyntax* node) const
+{
+    auto decl = node->declarationStatement()->declaration();
+    PSY_ASSERT(decl->kind() == VariableAndOrFunctionDeclaration, return Disambiguation::Inconclusive);
 
-SyntaxVisitor::Action Disambiguator::visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax* node) { return Action::Visit; }
+    auto varDecl = decl->asVariableAndOrFunctionDeclaration();
+    PSY_ASSERT(varDecl->specifiers()
+                   && varDecl->specifiers()->value
+                   && varDecl->specifiers()->value->kind() == TypedefName,
+               return Disambiguation::Inconclusive);
 
-SyntaxVisitor::Action Disambiguator::visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax* node) { return Action::Visit; }
+    auto typedefName = varDecl->specifiers()->value->asTypedefName();
+    auto name = typedefName->identifierToken().valueText();
 
-SyntaxVisitor::Action Disambiguator::visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax* node) { return Action::Visit; }
+    return recognizesTypeName(name)
+            ? Disambiguation::KeepDeclarationStatement
+            : recognizesName(name)
+                    ? Disambiguation::KeepExpressionStatement
+                    : Disambiguation::Inconclusive;
+}
 
-SyntaxVisitor::Action Disambiguator::visitTypeName(const TypeNameSyntax* node) { return Action::Visit; }
+template <class TypeRefT>
+SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousTypeReference(TypeRefT* const& node)
+{
+    TypeRefT*& node_P = const_cast<TypeRefT*&>(node);
+    switch (node->kind()) {
+        case AmbiguousTypeNameOrExpressionAsTypeReference: {
+            auto ambigNode = node->asAmbiguousTypeNameOrExpressionAsTypeReference();
+            auto disambig = disambiguateTypeReference(ambigNode);
+            switch (disambig) {
+                case Disambiguation::KeepTypeName:
+                    node_P = ambigNode->tyNameAsTyRef_;
+                    visit(node_P);
+                    break;
 
-SyntaxVisitor::Action Disambiguator::visitExpressionAsTypeReference(const ExpressionAsTypeReferenceSyntax* node) { return Action::Visit; }
+                case Disambiguation::KeepExpressionStatement:
+                    node_P = ambigNode->exprAsTyRef_;
+                    visit(node_P);
+                    break;
 
-SyntaxVisitor::Action Disambiguator::visitTypeNameAsTypeReference(const TypeNameAsTypeReferenceSyntax* node) { return Action::Visit; }
+                case Disambiguation::Inconclusive:
+                    ++pendingAmbigs_;
+                    break;
+
+                default:
+                    PSY_ESCAPE_VIA_RETURN(Action::Skip);
+            }
+            break;
+        }
+
+        default:
+            visit(node);
+            break;
+    }
+
+    return Action::Skip;
+}
+
+Disambiguator::Disambiguation Disambiguator::disambiguateTypeReference(
+        const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node) const
+{
+    auto typeName = node->typeNameAsTypeReference()->typeName_;
+    PSY_ASSERT(typeName->specifiers()
+                   && typeName->specifiers()->value
+                   && typeName->specifiers()->value->kind() == TypedefName,
+               return Disambiguation::Inconclusive);
+
+    auto typedefName = typeName->specifiers()->value->asTypedefName();
+    auto name = typedefName->identifierToken().valueText();
+
+    return recognizesTypeName(name)
+            ? Disambiguation::KeepTypeName
+            : recognizesName(name)
+                    ? Disambiguation::KeepExpression
+                    : Disambiguation::Inconclusive;
+}
+
+//--------------//
+// Declarations //
+//--------------//
+
+SyntaxVisitor::Action Disambiguator::visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitAlignmentSpecifier(const AlignmentSpecifierSyntax* node)
+{
+    visitMaybeAmbiguousTypeReference(node->tyRef_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitExtGNU_Typeof(const ExtGNU_TypeofSyntax* node)
+{
+    visitMaybeAmbiguousTypeReference(node->tyRef_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitSubscriptSuffix(const SubscriptSuffixSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitExpressionInitializer(const ExpressionInitializerSyntax* node)
+{
+    return visitMaybeAmbiguousExpression(node->expr_);
+}
+
+SyntaxVisitor::Action Disambiguator::visitArrayDesignator(const ArrayDesignatorSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+//-------------//
+// Expressions //
+//-------------//
+
+SyntaxVisitor::Action Disambiguator::visitParenthesizedExpression(const ParenthesizedExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitGenericSelectionExpression(const GenericSelectionExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+    for (auto it = node->associations(); it; it = it->next)
+        visit(it->value);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitGenericAssociation(const GenericAssociationSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitExtGNU_EnclosedCompoundStatementExpression(
+        const ExtGNU_EnclosedCompoundStatementExpressionSyntax* node)
+{
+    visit(node->stmt_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitExtGNU_ComplexValuedExpression(
+        const ExtGNU_ComplexValuedExpressionSyntax* node)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitPostfixUnaryExpression(const PostfixUnaryExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitMemberAccessExpression(const MemberAccessExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitArraySubscriptExpression(const ArraySubscriptExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitTypeTraitExpression(const TypeTraitExpressionSyntax* node)
+{
+    return visitMaybeAmbiguousTypeReference(node->tyRef_);
+}
+
+SyntaxVisitor::Action Disambiguator::visitCastExpression(const CastExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitCallExpression(const CallExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitVAArgumentExpression(const VAArgumentExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitBinaryExpression(const BinaryExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->leftExpr_);
+    visitMaybeAmbiguousExpression(node->rightExpr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitConditionalExpression(const ConditionalExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->condExpr_);
+    visitMaybeAmbiguousExpression(node->whenTrueExpr_);
+    visitMaybeAmbiguousExpression(node->whenFalseExpr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitAssignmentExpression(const AssignmentExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->leftExpr_);
+    visitMaybeAmbiguousExpression(node->rightExpr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitSequencingExpression(const SequencingExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->leftExpr_);
+    visitMaybeAmbiguousExpression(node->rightExpr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitExtGNU_ChooseExpression(const ExtGNU_ChooseExpressionSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr1_);
+    visitMaybeAmbiguousExpression(node->expr2_);
+
+    return Action::Skip;
+}
+
+//------------//
+// Statements //
+//------------//
+
+SyntaxVisitor::Action Disambiguator::visitCompoundStatement(const CompoundStatementSyntax* node)
+{
+    for (auto iter = node->stmts_; iter; iter = iter->next)
+        visitMaybeAmbiguousStatement(iter->value);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitDeclarationStatement(const DeclarationStatementSyntax* node)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitExpressionStatement(const ExpressionStatementSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitLabeledStatement(const LabeledStatementSyntax* node)
+{
+    visitMaybeAmbiguousStatement(node->stmt_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitIfStatement(const IfStatementSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->cond_);
+    visitMaybeAmbiguousStatement(node->stmt_);
+    visitMaybeAmbiguousStatement(node->elseStmt_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitSwitchStatement(const SwitchStatementSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->cond_);
+    visitMaybeAmbiguousStatement(node->stmt_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitWhileStatement(const WhileStatementSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->cond_);
+    visitMaybeAmbiguousStatement(node->stmt_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitDoStatement(const DoStatementSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->cond_);
+    visitMaybeAmbiguousStatement(node->stmt_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitForStatement(const ForStatementSyntax* node)
+{
+    visit(node->initStmt_);
+    visitMaybeAmbiguousExpression(node->cond_);
+    visitMaybeAmbiguousExpression(node->expr_);
+    visitMaybeAmbiguousStatement(node->stmt_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitReturnStatement(const ReturnStatementSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Disambiguator::visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+//--------//
+// Common //
+//--------//
+
+SyntaxVisitor::Action Disambiguator::visitExpressionAsTypeReference(const ExpressionAsTypeReferenceSyntax* node)
+{
+    visitMaybeAmbiguousExpression(node->expr_);
+
+    return Action::Skip;
+}
+
+//-------------//
+// Ambiguities //
+//-------------//
 
 SyntaxVisitor::Action Disambiguator::visitAmbiguousTypeNameOrExpressionAsTypeReference(
         const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*)

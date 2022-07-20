@@ -48,75 +48,45 @@ protected:
 
     enum class Disambiguation : std::int8_t
     {
-        Undetermined,
-        CastExpression,
-        BinaryExpression,
-        ExpressionStatement,
-        DeclarationStatement
+        Inconclusive,
+        KeepCastExpression,
+        KeepBinaryExpression,
+        KeepExpressionStatement,
+        KeepDeclarationStatement,
+        KeepTypeName,
+        KeepExpression,
     };
 
-    Disambiguation disambiguateAmbiguousTypeNameOrExpressionAsTypeReferenceSyntax(
-            const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) const;
-    Disambiguation disambiguateAmbiguousCastOrBinaryExpressionSyntax(
-            const AmbiguousCastOrBinaryExpressionSyntax*) const;
-    Disambiguation disambiguateAmbiguousExpressionOrDeclarationStatement(
-            const AmbiguousExpressionOrDeclarationStatementSyntax*) const;
+    template <class ExprT> Action visitMaybeAmbiguousExpression(ExprT* const&);
+    Disambiguation disambiguateExpression(const AmbiguousCastOrBinaryExpressionSyntax*) const;
+
+    template <class StmtT> Action visitMaybeAmbiguousStatement(StmtT* const&);
+    Disambiguation disambiguateStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) const;
+
+    template <class TypeRefT> Action visitMaybeAmbiguousTypeReference(TypeRefT* const&);
+    Disambiguation disambiguateTypeReference(const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) const;
 
     unsigned int pendingAmbigs_;
 
     //--------------//
     // Declarations //
     //--------------//
-    Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
-    Action visitFieldDeclaration(const FieldDeclarationSyntax*) override;
-    Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
     Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;
-    Action visitFunctionDefinition(const FunctionDefinitionSyntax*) override;
-    Action visitExtPSY_TemplateDeclaration(const ExtPSY_TemplateDeclarationSyntax*) override;
-    Action visitExtGNU_AsmStatementDeclaration(const ExtGNU_AsmStatementDeclarationSyntax*) override;
-    Action visitExtKR_ParameterDeclaration(const ExtKR_ParameterDeclarationSyntax*) override;
 
     /* Specifiers */
-    Action visitStorageClass(const StorageClassSyntax*) override;
-    Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) override;
-    Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax*) override;
-    Action visitAtomicTypeSpecifier(const AtomicTypeSpecifierSyntax*) override;
-    Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) override;
-    Action visitTypedefName(const TypedefNameSyntax*) override;
-    Action visitTypeQualifier(const TypeQualifierSyntax*) override;
-    Action visitFunctionSpecifier(const FunctionSpecifierSyntax*) override;
     Action visitAlignmentSpecifier(const AlignmentSpecifierSyntax*) override;
     Action visitExtGNU_Typeof(const ExtGNU_TypeofSyntax*) override;
-    Action visitExtGNU_AttributeSpecifier(const ExtGNU_AttributeSpecifierSyntax*) override;
-    Action visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*) override;
-    Action visitExtGNU_AsmLabel(const ExtGNU_AsmLabelSyntax*) override;
-    Action visitExtPSY_QuantifiedTypeSpecifier(const ExtPSY_QuantifiedTypeSpecifierSyntax*) override;
 
     /* Declarators */
-    Action visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax*) override;
-    Action visitPointerDeclarator(const PointerDeclaratorSyntax*) override;
-    Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) override;
-    Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
-    Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
     Action visitSubscriptSuffix(const SubscriptSuffixSyntax*) override;
-    Action visitParameterSuffix(const ParameterSuffixSyntax*) override;
-    Action visitBitfieldDeclarator(const BitfieldDeclaratorSyntax*) override;
 
     /* Initializers */
     Action visitExpressionInitializer(const ExpressionInitializerSyntax*) override;
-    Action visitBraceEnclosedInitializer(const BraceEnclosedInitializerSyntax*) override;
-    Action visitDesignatedInitializer(const DesignatedInitializerSyntax*) override;
-    Action visitFieldDesignator(const FieldDesignatorSyntax*) override;
     Action visitArrayDesignator(const ArrayDesignatorSyntax*) override;
-    Action visitOffsetOfDesignator(const OffsetOfDesignatorSyntax*) override;
 
     //-------------//
     // Expressions //
     //-------------//
-    Action visitIdentifierName(const IdentifierNameSyntax*) override;
-    Action visitPredefinedName(const PredefinedNameSyntax*) override;
-    Action visitConstantExpression(const ConstantExpressionSyntax*) override;
-    Action visitStringLiteralExpression(const StringLiteralExpressionSyntax*) override;
     Action visitParenthesizedExpression(const ParenthesizedExpressionSyntax*) override;
     Action visitGenericSelectionExpression(const GenericSelectionExpressionSyntax*) override;
     Action visitGenericAssociation(const GenericAssociationSyntax*) override;
@@ -132,8 +102,6 @@ protected:
     Action visitCastExpression(const CastExpressionSyntax*) override;
     Action visitCallExpression(const CallExpressionSyntax*) override;
     Action visitVAArgumentExpression(const VAArgumentExpressionSyntax*) override;
-    Action visitOffsetOfExpression(const OffsetOfExpressionSyntax*) override;
-    Action visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax*) override;
     Action visitBinaryExpression(const BinaryExpressionSyntax*) override;
     Action visitConditionalExpression(const ConditionalExpressionSyntax*) override;
     Action visitAssignmentExpression(const AssignmentExpressionSyntax*) override;
@@ -152,20 +120,13 @@ protected:
     Action visitWhileStatement(const WhileStatementSyntax*) override;
     Action visitDoStatement(const DoStatementSyntax*) override;
     Action visitForStatement(const ForStatementSyntax*) override;
-    Action visitGotoStatement(const GotoStatementSyntax*) override;
-    Action visitContinueStatement(const ContinueStatementSyntax*) override;
-    Action visitBreakStatement(const BreakStatementSyntax*) override;
     Action visitReturnStatement(const ReturnStatementSyntax*) override;
-    Action visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax*) override;
-    Action visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax*) override;
     Action visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax*) override;
 
     //--------//
     // Common //
     //--------//
-    Action visitTypeName(const TypeNameSyntax*) override;
     Action visitExpressionAsTypeReference(const ExpressionAsTypeReferenceSyntax*) override;
-    Action visitTypeNameAsTypeReference(const TypeNameAsTypeReferenceSyntax*) override;
 
     //-------------//
     // Ambiguities //
