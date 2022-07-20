@@ -127,7 +127,8 @@ PSY_INTERNAL:
     PSY_GRANT_ACCESS(Binder);
     PSY_GRANT_ACCESS(Symbol);
     PSY_GRANT_ACCESS(Compilation);
-    PSY_GRANT_ACCESS(SyntaxWriterDOTFormat); // TODO: Remove this friend.
+    PSY_GRANT_ACCESS(InternalsTestSuite);
+    PSY_GRANT_ACCESS(SyntaxWriterDOTFormat); // TODO: Remove this grant.
 
     MemoryPool* unitPool() const;
 
@@ -141,6 +142,8 @@ PSY_INTERNAL:
     const SyntaxToken& tokenAt(LexedTokens::IndexType tkIdx) const;
     TokenSequenceType::size_type tokenCount() const;
     LexedTokens::IndexType freeTokenSlot() const;
+
+    bool parseExitedEarly() const;
 
     const Identifier* identifier(const char* s, unsigned int size);
     const IntegerConstant* integerConstant(const char* s, unsigned int size);

@@ -293,7 +293,7 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
                   return false,
                   "assert failure: `{'");
 
-    DepthControl _(depthOfStmts_);
+    DepthControl _(DEPTH_OF_STMTS_);
 
     auto block = makeNode<CompoundStatementSyntax>();
     stmt = block;

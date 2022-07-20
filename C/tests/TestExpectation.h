@@ -142,9 +142,12 @@ struct Expectation
     bool continueTestDespiteOfErrors_;
     Expectation& ContinueTestDespiteOfErrors();
 
-    bool isAmbiguous_;
+    bool containsAmbiguity_;
     std::string ambiguityText_;
     Expectation& ambiguity(std::string s = "");
+
+    bool unfinishedParse_;
+    Expectation& unfinishedParse();
 
     std::vector<SyntaxKind> syntaxKinds_;
     Expectation& AST(std::vector<SyntaxKind>&& v);
