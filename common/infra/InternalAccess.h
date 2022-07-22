@@ -23,5 +23,6 @@
 
 #define PSY_INTERNAL private
 #define PSY_GRANT_ACCESS(NAME) friend class NAME
+#define PSY_INTERNAL_AND_EXTENSIBLE protected
 
 #endif
