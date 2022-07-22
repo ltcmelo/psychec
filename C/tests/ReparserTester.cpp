@@ -30,7 +30,34 @@ void ReparserTester::testReparser()
     return run<ReparserTester>(tests_);
 }
 
-void ReparserTester::case0001(){}
+void ReparserTester::reparse_withSyntaxCorrelation(std::string text, Expectation X)
+{
+    (static_cast<InternalsTestSuite*>(suite_)->reparse_withSyntaxCorrelation(text, X));
+}
+
+void ReparserTester::reparse_withTypeSynonymVerification(std::string text, Expectation X)
+{
+    (static_cast<InternalsTestSuite*>(suite_)->reparse_withTypeSynonymVerification(text, X));
+}
+
+void ReparserTester::reparse_withGuidelineImposition(std::string text, Expectation X)
+{
+    (static_cast<InternalsTestSuite*>(suite_)->reparse_withGuidelineImposition(text, X));
+}
+
+void ReparserTester::case0001()
+{
+    auto s = R"(
+               )";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST({ TranslationUnit,
+                                    VariableAndOrFunctionDeclaration,
+                                    BuiltinTypeSpecifier,
+                                    IdentifierDeclarator }));
+}
+
 void ReparserTester::case0002(){}
 void ReparserTester::case0003(){}
 void ReparserTester::case0004(){}

@@ -42,7 +42,20 @@ public:
 
     void testReparser();
 
+    void reparse_withSyntaxCorrelation(std::string text, Expectation X = Expectation());
+    void reparse_withTypeSynonymVerification(std::string text, Expectation X = Expectation());
+    void reparse_withGuidelineImposition(std::string text, Expectation X = Expectation());
+
     using TestFunction = std::pair<std::function<void(ReparserTester*)>, const char*>;
+
+    /*
+        Syntax Correlation
+            + 0000-0019 -> multiplication x pointer declaration
+            + 0020-0039 -> call x variable declaration
+            + 0040-0059 -> cast x binary expression
+            + 0060-0069 -> type name x expression (as type reference)
+
+     */
 
     void case0001();
     void case0002();
