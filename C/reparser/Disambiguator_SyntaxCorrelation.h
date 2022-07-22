@@ -35,7 +35,7 @@ namespace C {
 
 class PSY_C_NON_API SyntaxCorrelationDisambiguator final : public Disambiguator
 {
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Reparser);
 
     SyntaxCorrelationDisambiguator(SyntaxTree* tree);

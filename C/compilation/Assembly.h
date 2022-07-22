@@ -50,7 +50,7 @@ public:
      */
     std::vector<const Symbol*> symbols() const;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(SemanticModel);
 
     Symbol* findSymDEF(std::function<bool (const std::unique_ptr<Symbol>&)> pred) const;

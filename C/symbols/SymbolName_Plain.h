@@ -50,7 +50,7 @@ public:
      */
     virtual std::string text() const override;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Binder);
     PSY_GRANT_ACCESS(NamedTypeSymbol);
 

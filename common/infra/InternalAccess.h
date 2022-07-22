@@ -21,7 +21,7 @@
 #ifndef PSYCHE_INTERNAL_ACCESS_H__
 #define PSYCHE_INTERNAL_ACCESS_H__
 
-#define PSY_INTERNAL private
+#define PSY_INTERNAL_AND_RESTRICTED private
 #define PSY_GRANT_ACCESS(NAME) friend class NAME
 #define PSY_INTERNAL_AND_EXTENSIBLE protected
 

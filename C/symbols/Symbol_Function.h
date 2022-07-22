@@ -69,7 +69,7 @@ public:
      */
     const TypeSymbol* returnType() const;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Binder);
 
     FunctionSymbol(const SyntaxTree* tree,

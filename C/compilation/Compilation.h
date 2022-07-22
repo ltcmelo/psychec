@@ -81,7 +81,7 @@ public:
      */
     const SemanticModel* semanticModel(const SyntaxTree* tree) const;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(SemanticModel);
 
     Assembly* assembly();

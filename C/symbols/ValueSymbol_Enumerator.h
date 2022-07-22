@@ -40,7 +40,7 @@ public:
     virtual const EnumeratorSymbol* asEnumerator() const { return this; }
     //!@}
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Binder);
 
     EnumeratorSymbol(const SyntaxTree* tree,

@@ -54,7 +54,7 @@ public:
      */
     std::vector<const TypeSymbol*> parameterTypes() const;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Binder);
 
     FunctionTypeSymbol(const SyntaxTree* tree,

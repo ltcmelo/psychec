@@ -92,7 +92,7 @@ public:
      */
     bool isRestrictQualified() const;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(SemanticsOfTypeQualifiers);
 
     void qualifyWithConst();

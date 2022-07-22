@@ -53,7 +53,7 @@ public:
      */
     const TypeSymbol* elementType() const;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Binder);
 
     ArrayTypeSymbol(const SyntaxTree* tree,

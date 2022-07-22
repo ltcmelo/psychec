@@ -82,7 +82,7 @@ public:
     const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
     //!@}
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Binder);
     PSY_GRANT_ACCESS(Compilation);
 

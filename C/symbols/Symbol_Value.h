@@ -82,7 +82,7 @@ public:
      */
     const TypeSymbol* type() const;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Binder);
 
     virtual void setName(std::unique_ptr<SymbolName> symName) override;

@@ -44,7 +44,7 @@ public:
      */
     NameSpaceKind kind() const { return  nsK_; }
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     NameSpace(NameSpaceKind nsK)
         : nsK_(nsK)
     {}

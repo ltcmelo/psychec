@@ -38,7 +38,7 @@ class PSY_C_NON_API Disambiguator : public SyntaxVisitor
 public:
     virtual ~Disambiguator();
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Reparser);
 
     unsigned int disambiguate();

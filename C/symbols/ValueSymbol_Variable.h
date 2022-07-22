@@ -44,7 +44,7 @@ public:
     virtual const VariableSymbol* asVariable() const override { return this; }
     //!@}
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Binder);
 
     VariableSymbol(const SyntaxTree* tree,
