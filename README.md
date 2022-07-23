@@ -5,8 +5,7 @@
 
 # Psyche-C
 
-Psyche is a compiler frontend for the C programming language that is specifically designed for the implementation of static analysis tools.  
-This is what makes Psyche-C unique:
+Psyche is a rather unique compiler frontend for the C programming language that is specifically designed for the implementation of static analysis tools. This is where the "uniqueness" of Psyche-C comes from:
 
 - Clean separation between the syntactic and semantic compiler phases.
 - Algorithmic and heuristic syntax disambiguation.
