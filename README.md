@@ -77,7 +77,7 @@ NOTE: Semantic analysis isn't yet complete.
 
 ## Type Inference
 
-Psyche-C can infer the missing types of code snippet (a.k.a. as an incomplete program or program fragment).
+Psyche-C can infer the missing types of a code snippet (a.k.a. as an incomplete program or program fragment).
 
 ```c
 void f()
