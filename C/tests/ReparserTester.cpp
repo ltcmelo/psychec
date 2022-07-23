@@ -61,12 +61,12 @@ static std::vector<SyntaxKind> body(std::vector<SyntaxKind>&& v)
 void ReparserTester::case0001()
 {
     auto s = R"(
-int x ( )
+int _ ( )
 {
-    y z ;
-    y * w ;
+    x z ;
+    x * y ;
 }
-               )";
+)";
 
     reparse_withSyntaxCorrelation(
                 s,
@@ -81,9 +81,73 @@ int x ( )
                                          IdentifierDeclarator })));
 }
 
-void ReparserTester::case0002(){}
-void ReparserTester::case0003(){}
-void ReparserTester::case0004(){}
+void ReparserTester::case0002()
+{
+    auto s = R"(
+int _ ( )
+{
+    x * y ;
+    x z ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(body({ DeclarationStatement,
+                                         VariableAndOrFunctionDeclaration,
+                                         TypedefName,
+                                         PointerDeclarator,
+                                         IdentifierDeclarator,
+                                         DeclarationStatement,
+                                         VariableAndOrFunctionDeclaration,
+                                         TypedefName,
+                                         IdentifierDeclarator })));
+}
+
+void ReparserTester::case0003()
+{
+    auto s = R"(
+int _ ( )
+{
+    x * y ;
+    x + y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(body({ ExpressionStatement,
+                                         MultiplyExpression,
+                                         IdentifierName,
+                                         IdentifierName,
+                                         ExpressionStatement,
+                                         AddExpression,
+                                         IdentifierName,
+                                         IdentifierName })));
+}
+
+void ReparserTester::case0004()
+{
+    auto s = R"(
+int _ ( )
+{
+    x + y ;
+    x * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(body({ ExpressionStatement,
+                                         AddExpression,
+                                         IdentifierName,
+                                         IdentifierName,
+                                         ExpressionStatement,
+                                         MultiplyExpression,
+                                         IdentifierName,
+                                         IdentifierName })));
+}
+
 void ReparserTester::case0005(){}
 void ReparserTester::case0006(){}
 void ReparserTester::case0007(){}
