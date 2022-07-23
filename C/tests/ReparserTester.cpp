@@ -45,17 +45,40 @@ void ReparserTester::reparse_withGuidelineImposition(std::string text, Expectati
     (static_cast<InternalsTestSuite*>(suite_)->reparse_withGuidelineImposition(text, X));
 }
 
+static std::vector<SyntaxKind> body(std::vector<SyntaxKind>&& v)
+{
+    std::vector<SyntaxKind> w = { TranslationUnit,
+                                  FunctionDefinition,
+                                  BuiltinTypeSpecifier,
+                                  FunctionDeclarator,
+                                  IdentifierDeclarator,
+                                  ParameterSuffix,
+                                  CompoundStatement };
+    w.insert(w.end(), v.begin(), v.end());
+    return w;
+}
+
 void ReparserTester::case0001()
 {
     auto s = R"(
+int x ( )
+{
+    y z ;
+    y * w ;
+}
                )";
 
     reparse_withSyntaxCorrelation(
                 s,
-                Expectation().AST({ TranslationUnit,
-                                    VariableAndOrFunctionDeclaration,
-                                    BuiltinTypeSpecifier,
-                                    IdentifierDeclarator }));
+                Expectation().AST(body({ DeclarationStatement,
+                                         VariableAndOrFunctionDeclaration,
+                                         TypedefName,
+                                         IdentifierDeclarator,
+                                         DeclarationStatement,
+                                         VariableAndOrFunctionDeclaration,
+                                         TypedefName,
+                                         PointerDeclarator,
+                                         IdentifierDeclarator })));
 }
 
 void ReparserTester::case0002(){}

@@ -59,11 +59,11 @@ std::tuple<int, int> InternalsTestSuite::testAll()
     auto P = std::make_unique<ParserTester>(this);
     P->testParser();
 
-    auto B = std::make_unique<BinderTester>(this);
-    B->testBinder();
+    auto B = std::make_unique<ReparserTester>(this);
+    B->testReparser();
 
-    auto C = std::make_unique<ReparserTester>(this);
-    C->testReparser();
+    auto C = std::make_unique<BinderTester>(this);
+    C->testBinder();
 
     auto res = std::make_tuple(P->totalPassed()
                                     + B->totalPassed()
