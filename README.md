@@ -19,7 +19,7 @@ Psyche is a rather unique compiler frontend for the C programming language that 
 Psyche-C is implemented as a library. Its native API is in C++ (APIs for other languages are [on the way](https://github.com/ltcmelo/psychec/issues/112)).
 
 ```cpp
-void analyse(const FileInfo& fi)
+void analyse(const SourceText& srcText, const FileInfo& fi)
 {
     ParseOptions parseOpts;
     parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically);
