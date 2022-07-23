@@ -38,13 +38,13 @@ class PSY_C_NON_API Disambiguator : public SyntaxVisitor
 public:
     virtual ~Disambiguator();
 
-protected:
+PSY_INTERNAL_AND_RESTRICTED:
+    PSY_GRANT_ACCESS(Reparser);
+
+    unsigned int disambiguate();
+
+PSY_INTERNAL_AND_EXTENSIBLE:
     Disambiguator(SyntaxTree* tree);
-
-    virtual unsigned int disambiguate() = 0;
-
-    virtual bool recognizesTypeName(const std::string& name) const = 0;
-    virtual bool recognizesName(const std::string& name) const = 0;
 
     enum class Disambiguation : std::int8_t
     {
@@ -57,17 +57,18 @@ protected:
         KeepExpression,
     };
 
+    virtual Disambiguation disambiguateExpression(const AmbiguousCastOrBinaryExpressionSyntax*) const = 0;
+    virtual Disambiguation disambiguateStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) const = 0;
+    virtual Disambiguation disambiguateTypeReference(const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) const = 0;
+
+private:
     template <class ExprT> Action visitMaybeAmbiguousExpression(ExprT* const&);
-    Disambiguation disambiguateExpression(const AmbiguousCastOrBinaryExpressionSyntax*) const;
-
     template <class StmtT> Action visitMaybeAmbiguousStatement(StmtT* const&);
-    Disambiguation disambiguateStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) const;
-
     template <class TypeRefT> Action visitMaybeAmbiguousTypeReference(TypeRefT* const&);
-    Disambiguation disambiguateTypeReference(const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) const;
 
     unsigned int pendingAmbigs_;
 
+protected:
     //--------------//
     // Declarations //
     //--------------//

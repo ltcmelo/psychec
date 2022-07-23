@@ -51,7 +51,7 @@ class PSY_C_NON_API Binder final : protected SyntaxVisitor
 {
     friend class BinderTester;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(SemanticModel);
     PSY_GRANT_ACCESS(ConstraintsInDeclarations);
     PSY_GRANT_ACCESS(ConstraintsInTypeSpecifiers);

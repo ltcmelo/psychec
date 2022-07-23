@@ -55,7 +55,7 @@ class PSY_C_NON_API Parser
 public:
     ~Parser();
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(SyntaxTree);
     PSY_GRANT_ACCESS(DebugRule);
 

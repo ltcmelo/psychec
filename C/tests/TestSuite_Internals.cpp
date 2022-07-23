@@ -32,6 +32,7 @@
 
 #include "BinderTester.h"
 #include "ParserTester.h"
+#include "ReparserTester.h"
 
 #include <algorithm>
 #include <cstring>
@@ -58,14 +59,22 @@ std::tuple<int, int> InternalsTestSuite::testAll()
     auto P = std::make_unique<ParserTester>(this);
     P->testParser();
 
-    auto B = std::make_unique<BinderTester>(this);
-    B->testBinder();
+    auto B = std::make_unique<ReparserTester>(this);
+    B->testReparser();
 
-    auto res = std::make_tuple(P->totalPassed() + B->totalPassed(),
-                               P->totalFailed() + B->totalFailed());
+    auto C = std::make_unique<BinderTester>(this);
+    C->testBinder();
+
+    auto res = std::make_tuple(P->totalPassed()
+                                    + B->totalPassed()
+                                    + C->totalPassed(),
+                               P->totalFailed()
+                                    + B->totalFailed()
+                                    + C->totalFailed());
 
     testers_.emplace_back(P.release());
     testers_.emplace_back(B.release());
+    testers_.emplace_back(C.release());
 
     return res;
 }
@@ -250,6 +259,109 @@ void InternalsTestSuite::parse(std::string source,
     std::string namesP = ossTree.str();
     namesP.erase(std::remove_if(namesP.begin(), namesP.end(), ::isspace), namesP.end());
     PSY_EXPECT_EQ_STR(namesP, names);
+}
+
+void InternalsTestSuite::reparse(std::string source,
+                                 Expectation X,
+                                 Reparser::DisambiguationStrategy strategy)
+{
+    auto text = source;
+
+    PSY_EXPECT_TRUE(strategy != Reparser::DisambiguationStrategy::UNSPECIFIED);
+
+    ParseOptions parseOpts;
+    TextCompleteness textCompleness;
+    switch (strategy) {
+        case Reparser::DisambiguationStrategy::SyntaxCorrelation:
+            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically);
+            textCompleness = TextCompleteness::Fragment;
+            break;
+
+        case Reparser::DisambiguationStrategy::TypeSynonymsVerification:
+            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically);
+            textCompleness = TextCompleteness::Full;
+            break;
+
+        case Reparser::DisambiguationStrategy::GuidelineImposition:
+            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically);
+            textCompleness = TextCompleteness::Unknown;
+            break;
+
+        default:
+            PSY__internals__FAIL("unknown strategy");
+    }
+
+    tree_ = SyntaxTree::parseText(text,
+                                  TextPreprocessingState::Unknown,
+                                  textCompleness,
+                                  parseOpts,
+                                  "");
+
+    if (!checkErrorAndWarn(X))
+        return;
+
+    std::ostringstream ossTree;
+    SyntaxNamePrinter printer(tree_.get());
+    printer.print(tree_->root(),
+                  SyntaxNamePrinter::Style::Plain,
+                  ossTree);
+
+#ifdef DUMP_AST
+    std::cout << "\n\n"
+              << "========================== AST ==================================\n"
+              << source << "\n"
+              << "-----------------------------------------------------------------"
+              << ossTree.str()
+              << "=================================================================\n";
+#endif
+
+    std::ostringstream ossText;
+    Unparser unparser(tree_.get());
+    unparser.unparse(tree_->root(), ossText);
+
+    std::string textP = ossText.str();
+    textP.erase(std::remove_if(textP.begin(), textP.end(), ::isspace), textP.end());
+    text.erase(std::remove_if(text.begin(), text.end(), ::isspace), text.end());
+
+    if (X.containsAmbiguity_) {
+        if (X.ambiguityText_.empty())
+            PSY_EXPECT_EQ_STR(textP, text + text);
+        else {
+            X.ambiguityText_.erase(
+                        std::remove_if(X.ambiguityText_.begin(),
+                                       X.ambiguityText_.end(), ::isspace),
+                        X.ambiguityText_.end());
+            PSY_EXPECT_EQ_STR(textP, X.ambiguityText_);
+        }
+    }
+    else
+        PSY_EXPECT_EQ_STR(textP, text);
+
+    if (X.syntaxKinds_.empty())
+        return;
+
+    std::string names;
+    for (auto k : X.syntaxKinds_)
+        names += to_string(k);
+
+    std::string namesP = ossTree.str();
+    namesP.erase(std::remove_if(namesP.begin(), namesP.end(), ::isspace), namesP.end());
+    PSY_EXPECT_EQ_STR(namesP, names);
+}
+
+void InternalsTestSuite::reparse_withSyntaxCorrelation(std::string text, Expectation X)
+{
+    reparse(text, X, Reparser::DisambiguationStrategy::SyntaxCorrelation);
+}
+
+void InternalsTestSuite::reparse_withTypeSynonymVerification(std::string text, Expectation X)
+{
+    reparse(text, X, Reparser::DisambiguationStrategy::TypeSynonymsVerification);
+}
+
+void InternalsTestSuite::reparse_withGuidelineImposition(std::string text, Expectation X)
+{
+    reparse(text, X, Reparser::DisambiguationStrategy::GuidelineImposition);
 }
 
 namespace {

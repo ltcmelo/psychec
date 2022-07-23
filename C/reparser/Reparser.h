@@ -35,8 +35,9 @@ namespace C {
 
 class PSY_C_NON_API Reparser
 {
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(SyntaxTree);
+    PSY_GRANT_ACCESS(InternalsTestSuite);
 
     Reparser();
 

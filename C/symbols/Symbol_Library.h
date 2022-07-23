@@ -53,7 +53,7 @@ public:
     virtual const LibrarySymbol* asLibrary() const override { return this; }
     //!@}
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Binder);
 
     LibrarySymbol(const SyntaxTree* tree,

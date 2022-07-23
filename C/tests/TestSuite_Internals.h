@@ -27,6 +27,7 @@
 #include "TestExpectation.h"
 
 #include "C/SyntaxTree.h"
+#include "C/reparser/Reparser.h"
 
 #include <memory>
 #include <vector>
@@ -40,6 +41,7 @@ namespace C {
 class InternalsTestSuite : public TestSuite
 {
     friend class ParserTester;
+    friend class ReparserTester;
     friend class BinderTester;
 
 public:
@@ -59,6 +61,13 @@ private:
     void parse(std::string text,
                Expectation X = Expectation(),
                SyntaxTree::SyntaxCategory synCat = SyntaxTree::SyntaxCategory::UNSPECIFIED);
+
+    void reparse_withSyntaxCorrelation(std::string text, Expectation X = Expectation());
+    void reparse_withTypeSynonymVerification(std::string text, Expectation X = Expectation());
+    void reparse_withGuidelineImposition(std::string text, Expectation X = Expectation());
+    void reparse(std::string text,
+                 Expectation X = Expectation(),
+                 Reparser::DisambiguationStrategy strategy = Reparser::DisambiguationStrategy::UNSPECIFIED);
 
     void bind(std::string text, Expectation X = Expectation());
 

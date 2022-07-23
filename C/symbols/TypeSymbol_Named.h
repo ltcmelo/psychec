@@ -65,7 +65,7 @@ public:
      */
     const SymbolName* name() const;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Binder);
     PSY_GRANT_ACCESS(ConstraintsInTypeSpecifiers);
 

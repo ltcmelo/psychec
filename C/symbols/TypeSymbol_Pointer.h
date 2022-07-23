@@ -67,7 +67,7 @@ public:
      */
     bool arisesFromFunctionDecay() const;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Binder);
 
     PointerTypeSymbol(const SyntaxTree* tree,

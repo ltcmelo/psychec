@@ -43,7 +43,7 @@ class PSY_C_NON_API NameCatalog
 public:
     ~NameCatalog();
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(NameCataloger);
     PSY_GRANT_ACCESS(SyntaxCorrelationDisambiguator);
 

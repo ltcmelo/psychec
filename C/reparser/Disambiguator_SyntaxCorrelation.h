@@ -35,20 +35,22 @@ namespace C {
 
 class PSY_C_NON_API SyntaxCorrelationDisambiguator final : public Disambiguator
 {
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Reparser);
 
     SyntaxCorrelationDisambiguator(SyntaxTree* tree);
 
     void acquireCatalog(std::unique_ptr<NameCatalog> catalog);
 
-    unsigned int disambiguate() override;
-
 private:
     std::unique_ptr<NameCatalog> catalog_;
 
-    bool recognizesTypeName(const std::string& name) const override;
-    bool recognizesName(const std::string& name) const override;
+    virtual Disambiguation disambiguateExpression(const AmbiguousCastOrBinaryExpressionSyntax*) const override;
+    virtual Disambiguation disambiguateStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) const override;
+    virtual Disambiguation disambiguateTypeReference(const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) const override;
+
+    bool recognizesTypeName(const std::string& name) const;
+    bool recognizesName(const std::string& name) const;
 
     //--------------//
     // Declarations //

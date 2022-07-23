@@ -119,7 +119,7 @@ public:
      */
     std::vector<Diagnostic> diagnostics() const;
 
-PSY_INTERNAL:
+PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(SyntaxNode);
     PSY_GRANT_ACCESS(SyntaxNodeList);
     PSY_GRANT_ACCESS(Lexer);
