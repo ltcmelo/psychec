@@ -41,12 +41,18 @@ void SyntaxCorrelationDisambiguator::acquireCatalog(std::unique_ptr<NameCatalog>
 
 SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    catalog_->enterLevel(node);
+    catalog_->markMappedNodeAsEncloser(node);
+    Disambiguator::visitTranslationUnit(node);
+    catalog_->dropEncloser();
 
-    for (auto iter = node->declarations(); iter; iter = iter->next)
-        visit(iter->value);
+    return Action::Skip;
+}
 
-    catalog_->exitLevel();
+SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitCompoundStatement(const CompoundStatementSyntax* node)
+{
+    catalog_->markMappedNodeAsEncloser(node);
+    Disambiguator::visitCompoundStatement(node);
+    catalog_->dropEncloser();
 
     return Action::Skip;
 }
@@ -113,10 +119,10 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateTypeRe
 
 bool SyntaxCorrelationDisambiguator::recognizesTypeName(const std::string& name) const
 {
-    return catalog_->containsTypeName(name);
+    return catalog_->isNameEnclosedAsTypeName(name);
 }
 
 bool SyntaxCorrelationDisambiguator::recognizesName(const std::string& name) const
 {
-    return catalog_->containsName(name);
+    return catalog_->isNameEnclosedAsNonTypeName(name);
 }

@@ -47,28 +47,30 @@ PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(NameCataloger);
     PSY_GRANT_ACCESS(SyntaxCorrelationDisambiguator);
 
-    void createLevelAndEnter(const SyntaxNode*);
-    void enterLevel(const SyntaxNode*);
-    void exitLevel();
+    void mapNodeAndMarkAsEncloser(const SyntaxNode*);
+    void markMappedNodeAsEncloser(const SyntaxNode*);
+    void dropEncloser();
 
-    void catalogTypeName(std::string s);
-    void catalogName(std::string s);
+    void catalogTypeName(const std::string& s);
+    void catalogNonTypeName(const std::string& s);
 
-    bool containsTypeName(const std::string& s) const;
-    bool containsName(const std::string& s) const;
+    bool isNameEnclosedAsTypeName(const std::string& s) const;
+    bool isNameEnclosedAsNonTypeName(const std::string& s) const;
 
 private:
-    using TypeNames = std::unordered_set<std::string>;
-    using Names = std::unordered_set<std::string>;
-    using NameIndex = std::pair<TypeNames, Names>;
+    std::stack<const SyntaxNode*> enclosersStack_;
 
-    using Levels = std::unordered_map<const SyntaxNode*, NameIndex>;
+    using NameContainer = std::unordered_set<std::string>;
+    using TypeNamesAndNames = std::pair<NameContainer, NameContainer>;
 
-    mutable Levels levels_;
-    std::stack<const SyntaxNode*> levelKeys_;
+    TypeNamesAndNames* enclosedNames() const;
+    void catalogName(const std::string& s, NameContainer& in, NameContainer& out);
+    bool isNameEnclosed(const std::string& s, const NameContainer& container) const;
 
-    bool levelExists(const SyntaxNode*) const;
-    NameIndex* currentLevel() const;
+    using NamesByNode = std::unordered_map<const SyntaxNode*, TypeNamesAndNames>;
+
+    mutable NamesByNode namesByNode_;
+    bool isNodeMapped(const SyntaxNode*) const;
 };
 
 std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog);

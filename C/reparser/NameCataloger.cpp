@@ -25,6 +25,8 @@
 
 #include "syntax/SyntaxNodes.h"
 
+//#define DEBUG_CATALOG
+
 using namespace psy;
 using namespace C;
 
@@ -33,7 +35,7 @@ NameCataloger::NameCataloger(SyntaxTree* tree)
     , catalog_(new NameCatalog)
 {}
 
-std::unique_ptr<NameCatalog> NameCataloger::catalogFor(const SyntaxNode* node)
+std::unique_ptr<NameCatalog> NameCataloger::catalogNamesWithinNode(const SyntaxNode* node)
 {
     visit(node);
     return std::move(catalog_);
@@ -41,14 +43,14 @@ std::unique_ptr<NameCatalog> NameCataloger::catalogFor(const SyntaxNode* node)
 
 SyntaxVisitor::Action NameCataloger::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    catalog_->createLevelAndEnter(node);
-
+    catalog_->mapNodeAndMarkAsEncloser(node);
     for (auto iter = node->declarations(); iter; iter = iter->next)
         visit(iter->value);
+    catalog_->dropEncloser();
 
-    catalog_->exitLevel();
-
-    std::cout << "CATALOG\n" << *catalog_ << std::endl;
+#ifdef DEBUG_CATALOG
+    std::cout << *catalog_ << std::endl;
+#endif
 
     return Action::Skip;
 }
@@ -62,7 +64,7 @@ SyntaxVisitor::Action NameCataloger::visitTypedefName(const TypedefNameSyntax* n
 
 SyntaxVisitor::Action NameCataloger::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    catalog_->catalogName(node->identifierToken().valueText());
+    catalog_->catalogNonTypeName(node->identifierToken().valueText());
 
     visit(node->initializer());
 
@@ -71,7 +73,17 @@ SyntaxVisitor::Action NameCataloger::visitIdentifierDeclarator(const IdentifierD
 
 SyntaxVisitor::Action NameCataloger::visitIdentifierName(const IdentifierNameSyntax* node)
 {
-    catalog_->catalogName(node->identifierToken().valueText());
+    catalog_->catalogNonTypeName(node->identifierToken().valueText());
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action NameCataloger::visitCompoundStatement(const CompoundStatementSyntax* node)
+{
+    catalog_->mapNodeAndMarkAsEncloser(node);
+    for (auto iter = node->statements(); iter; iter = iter->next)
+        visit(iter->value);
+    catalog_->dropEncloser();
 
     return Action::Skip;
 }

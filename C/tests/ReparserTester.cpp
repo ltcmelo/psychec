@@ -45,9 +45,73 @@ void ReparserTester::reparse_withGuidelineImposition(std::string text, Expectati
     (static_cast<InternalsTestSuite*>(suite_)->reparse_withGuidelineImposition(text, X));
 }
 
-static std::vector<SyntaxKind> body(std::vector<SyntaxKind>&& v)
+static std::vector<SyntaxKind> preamble_clean(std::vector<SyntaxKind>&& v)
 {
     std::vector<SyntaxKind> w = { TranslationUnit,
+                                  FunctionDefinition,
+                                  BuiltinTypeSpecifier,
+                                  FunctionDeclarator,
+                                  IdentifierDeclarator,
+                                  ParameterSuffix,
+                                  CompoundStatement };
+    w.insert(w.end(), v.begin(), v.end());
+    return w;
+}
+
+static std::vector<SyntaxKind> preamble_x_TypeNameInParam(std::vector<SyntaxKind>&& v)
+{
+    std::vector<SyntaxKind> w = { TranslationUnit,
+                                  FunctionDefinition,
+                                  BuiltinTypeSpecifier,
+                                  FunctionDeclarator,
+                                  IdentifierDeclarator,
+                                  ParameterSuffix,
+                                  ParameterDeclaration,
+                                  TypedefName,
+                                  IdentifierDeclarator,
+                                  CompoundStatement };
+    w.insert(w.end(), v.begin(), v.end());
+    return w;
+}
+
+static std::vector<SyntaxKind> preamble_x_NonTypeNameInParam(std::vector<SyntaxKind>&& v)
+{
+    std::vector<SyntaxKind> w = { TranslationUnit,
+                                  FunctionDefinition,
+                                  BuiltinTypeSpecifier,
+                                  FunctionDeclarator,
+                                  IdentifierDeclarator,
+                                  ParameterSuffix,
+                                  ParameterDeclaration,
+                                  BuiltinTypeSpecifier,
+                                  IdentifierDeclarator,
+                                  CompoundStatement };
+    w.insert(w.end(), v.begin(), v.end());
+    return w;
+}
+
+static std::vector<SyntaxKind> preamble_x_TypeNameInFile(std::vector<SyntaxKind>&& v)
+{
+    std::vector<SyntaxKind> w = { TranslationUnit,
+                                  VariableAndOrFunctionDeclaration,
+                                  TypedefName,
+                                  IdentifierDeclarator,
+                                  FunctionDefinition,
+                                  BuiltinTypeSpecifier,
+                                  FunctionDeclarator,
+                                  IdentifierDeclarator,
+                                  ParameterSuffix,
+                                  CompoundStatement };
+    w.insert(w.end(), v.begin(), v.end());
+    return w;
+}
+
+static std::vector<SyntaxKind> preamble_x_NonTypeNameInFile(std::vector<SyntaxKind>&& v)
+{
+    std::vector<SyntaxKind> w = { TranslationUnit,
+                                  VariableAndOrFunctionDeclaration,
+                                  BuiltinTypeSpecifier,
+                                  IdentifierDeclarator,
                                   FunctionDefinition,
                                   BuiltinTypeSpecifier,
                                   FunctionDeclarator,
@@ -70,15 +134,17 @@ int _ ( )
 
     reparse_withSyntaxCorrelation(
                 s,
-                Expectation().AST(body({ DeclarationStatement,
-                                         VariableAndOrFunctionDeclaration,
-                                         TypedefName,
-                                         IdentifierDeclarator,
-                                         DeclarationStatement,
-                                         VariableAndOrFunctionDeclaration,
-                                         TypedefName,
-                                         PointerDeclarator,
-                                         IdentifierDeclarator })));
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          IdentifierDeclarator })));
 }
 
 void ReparserTester::case0002()
@@ -93,15 +159,17 @@ int _ ( )
 
     reparse_withSyntaxCorrelation(
                 s,
-                Expectation().AST(body({ DeclarationStatement,
-                                         VariableAndOrFunctionDeclaration,
-                                         TypedefName,
-                                         PointerDeclarator,
-                                         IdentifierDeclarator,
-                                         DeclarationStatement,
-                                         VariableAndOrFunctionDeclaration,
-                                         TypedefName,
-                                         IdentifierDeclarator })));
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          IdentifierDeclarator })));
 }
 
 void ReparserTester::case0003()
@@ -116,14 +184,16 @@ int _ ( )
 
     reparse_withSyntaxCorrelation(
                 s,
-                Expectation().AST(body({ ExpressionStatement,
-                                         MultiplyExpression,
-                                         IdentifierName,
-                                         IdentifierName,
-                                         ExpressionStatement,
-                                         AddExpression,
-                                         IdentifierName,
-                                         IdentifierName })));
+                Expectation().AST(
+                    preamble_clean(
+                        { ExpressionStatement,
+                          MultiplyExpression,
+                          IdentifierName,
+                          IdentifierName,
+                          ExpressionStatement,
+                          AddExpression,
+                          IdentifierName,
+                          IdentifierName })));
 }
 
 void ReparserTester::case0004()
@@ -138,25 +208,234 @@ int _ ( )
 
     reparse_withSyntaxCorrelation(
                 s,
-                Expectation().AST(body({ ExpressionStatement,
-                                         AddExpression,
-                                         IdentifierName,
-                                         IdentifierName,
-                                         ExpressionStatement,
-                                         MultiplyExpression,
-                                         IdentifierName,
-                                         IdentifierName })));
+                Expectation().AST(
+                    preamble_clean(
+                        { ExpressionStatement,
+                          AddExpression,
+                          IdentifierName,
+                          IdentifierName,
+                          ExpressionStatement,
+                          MultiplyExpression,
+                          IdentifierName,
+                          IdentifierName })));
 }
 
-void ReparserTester::case0005(){}
-void ReparserTester::case0006(){}
-void ReparserTester::case0007(){}
-void ReparserTester::case0008(){}
-void ReparserTester::case0009(){}
-void ReparserTester::case0010(){}
-void ReparserTester::case0011(){}
-void ReparserTester::case0012(){}
-void ReparserTester::case0013(){}
+void ReparserTester::case0005()
+{
+    auto s = R"(
+int _ ( )
+{
+    {
+        x z ;
+        x * y ;
+    }
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { CompoundStatement,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0006()
+{
+    auto s = R"(
+int _ ( )
+{
+    x z ;
+    {
+        x * y ;
+    }
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          CompoundStatement,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0007()
+{
+    auto s = R"(
+int _ ( )
+{
+    x z ;
+    {
+        int x ;
+        x * y ;
+    }
+}
+)";
+
+        reparse_withSyntaxCorrelation(
+                    s,
+                    Expectation().AST(
+                        preamble_clean(
+                            { DeclarationStatement,
+                              VariableAndOrFunctionDeclaration,
+                              TypedefName,
+                              IdentifierDeclarator,
+                              CompoundStatement,
+                              DeclarationStatement,
+                              VariableAndOrFunctionDeclaration,
+                              BuiltinTypeSpecifier,
+                              IdentifierDeclarator,
+                              ExpressionStatement,
+                              MultiplyExpression,
+                              IdentifierName,
+                              IdentifierName })));
+}
+
+void ReparserTester::case0008()
+{
+    auto s = R"(
+int _ ( )
+{
+    int x ;
+    x * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          MultiplyExpression,
+                          IdentifierName,
+                          IdentifierName })));
+}
+
+void ReparserTester::case0009()
+{
+    auto s = R"(
+int _ ( )
+{
+    z x ;
+    x * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          MultiplyExpression,
+                          IdentifierName,
+                          IdentifierName })));
+}
+
+void ReparserTester::case0010()
+{
+    auto s = R"(
+int _ (x z)
+{
+    x * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_x_TypeNameInParam(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0011()
+{
+    auto s = R"(
+int _ (int x)
+{
+    x * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_x_NonTypeNameInParam(
+                        { ExpressionStatement,
+                          MultiplyExpression,
+                          IdentifierName,
+                          IdentifierName })));
+}
+
+void ReparserTester::case0012()
+{
+    auto s = R"(
+x z;
+int _ ()
+{
+    x * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_x_TypeNameInFile(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0013()
+{
+    auto s = R"(
+int x;
+int _ ()
+{
+    x * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_x_NonTypeNameInFile(
+                        { ExpressionStatement,
+                          MultiplyExpression,
+                          IdentifierName,
+                          IdentifierName })));
+}
+
 void ReparserTester::case0014(){}
 void ReparserTester::case0015(){}
 void ReparserTester::case0016(){}

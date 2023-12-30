@@ -72,6 +72,7 @@ protected:
     //--------------//
     // Declarations //
     //--------------//
+    Action visitTranslationUnit(const TranslationUnitSyntax*) override;
     Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;
 
     /* Specifiers */

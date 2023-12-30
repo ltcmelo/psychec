@@ -50,10 +50,10 @@ public:
 
     /*
         Syntax Correlation
-            + 0000-0019 -> multiplication x pointer declaration
-            + 0020-0039 -> call x variable declaration
-            + 0040-0059 -> cast x binary expression
-            + 0060-0069 -> type name x expression (as type reference)
+            + 0000-0029 -> multiplication x pointer declaration
+            + 0030-0049 -> call x variable declaration
+            + 0050-0079 -> cast x binary expression
+            + 0080-0099 -> type name x expression (as type reference)
 
      */
 

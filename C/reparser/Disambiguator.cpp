@@ -159,6 +159,14 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousTypeReference(TypeRefT* 
 // Declarations //
 //--------------//
 
+SyntaxVisitor::Action Disambiguator::visitTranslationUnit(const TranslationUnitSyntax* node)
+{
+    for (auto iter = node->declarations(); iter; iter = iter->next)
+        visit(iter->value);
+
+    return Action::Skip;
+}
+
 SyntaxVisitor::Action Disambiguator::visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax* node)
 {
     visitMaybeAmbiguousExpression(node->expr_);
