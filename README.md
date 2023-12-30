@@ -25,7 +25,7 @@ void analyse(const SourceText& srcText, const FileInfo& fi)
 {
     ParseOptions parseOpts;
     parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically);
-    
+
     auto tree = SyntaxTree::parseText(srcText,
                                       TextPreprocessingState::Preprocessed,
                                       TextCompleteness::Fragment,
