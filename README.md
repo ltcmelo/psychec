@@ -3,7 +3,7 @@
 
 ![](https://docs.google.com/drawings/d/e/2PACX-1vT-pCvcuO4U63ERkXWfBzOfVKwMQ_kh-ntzANYyNrnkt8FUV2wRHd5fN6snq33u5hWmnNQR3E3glsnH/pub?w=375&h=150)
 
-_Note_: C language (draft) proposal [Enabling Generic Functions and Parametric Types in C](https://ltcmelo.com/n2698.pdf); prototype available (here)[http://www.genericsinc.info/index.php].
+_Note_: C language (draft) proposal [Enabling Generic Functions and Parametric Types in C](https://ltcmelo.com/n2698.pdf); prototype available [here](http://www.genericsinc.info/index.php).
 
 # Psyche-C
 
