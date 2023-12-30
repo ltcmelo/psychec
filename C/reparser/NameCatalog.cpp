@@ -29,78 +29,96 @@ using namespace psy;
 using namespace C;
 
 #include <algorithm>
+#include <iostream>
 
 NameCatalog::~NameCatalog()
 {}
 
-void NameCatalog::createLevelAndEnter(const SyntaxNode* node)
+void NameCatalog::mapNodeAndMarkAsEncloser(const SyntaxNode* node)
 {
     PSY_ASSERT(node, return);
-    PSY_ASSERT(!levelExists(node), return);
+    PSY_ASSERT(!isNodeMapped(node), return);
 
-    TypeNames types;
-    Names nonTypes;
-    if (!levelKeys_.empty()) {
-        auto levelIt = levels_.find(levelKeys_.top());
-        PSY_ASSERT(levelIt != levels_.end(), return);
+    NameContainer tyNames;
+    NameContainer nonTyNames;
+    if (!enclosersStack_.empty()) {
+        auto levelIt = namesByNode_.find(enclosersStack_.top());
+        PSY_ASSERT(levelIt != namesByNode_.end(), return);
 
-        types = levelIt->second.first;
-        nonTypes = levelIt->second.second;
+        tyNames = levelIt->second.first;
+        nonTyNames = levelIt->second.second;
     }
 
-    levels_.insert(std::make_pair(node, std::make_pair(types, nonTypes)));
+    namesByNode_.insert(std::make_pair(node, std::make_pair(tyNames, nonTyNames)));
 
-    enterLevel(node);
+    markMappedNodeAsEncloser(node);
 }
 
-void NameCatalog::enterLevel(const SyntaxNode* node)
+void NameCatalog::markMappedNodeAsEncloser(const SyntaxNode* node)
 {
     PSY_ASSERT(node, return);
-    PSY_ASSERT(levelExists(node), return);
+    PSY_ASSERT(isNodeMapped(node), return);
 
-    levelKeys_.push(node);
+    enclosersStack_.push(node);
 }
 
-void NameCatalog::exitLevel()
+void NameCatalog::dropEncloser()
 {
-    levelKeys_.pop();
+    enclosersStack_.pop();
 }
 
-void NameCatalog::catalogTypeName(std::string s)
+void NameCatalog::catalogTypeName(const std::string& s)
 {
-    auto level = currentLevel();
-    level->first.insert(std::move(s));
+    auto names = enclosedNames();
+    catalogName(s, names->first, names->second);
 }
 
-void NameCatalog::catalogName(std::string s)
+void NameCatalog::catalogNonTypeName(const std::string& s)
 {
-    auto level = currentLevel();
-    level->second.insert(std::move(s));
+    auto names = enclosedNames();
+    catalogName(s, names->second, names->first);
 }
 
-bool NameCatalog::containsTypeName(const std::string& s) const
+void NameCatalog::catalogName(const std::string& s,
+                              NameCatalog::NameContainer& toInclude,
+                              NameCatalog::NameContainer& toExclude)
 {
-    auto level = currentLevel();
-    return level->first.find(s) != level->first.end();
+    toInclude.insert(s);
+
+    auto excludeIt = toExclude.find(s);
+    if (excludeIt != toExclude.end())
+        toExclude.erase(excludeIt);
 }
 
-bool NameCatalog::containsName(const std::string &s) const
+bool NameCatalog::isNameEnclosedAsTypeName(const std::string& s) const
 {
-    auto level = currentLevel();
-    return level->second.find(s) != level->first.end();
+    auto names = enclosedNames();
+    return isNameEnclosed(s, names->first);
 }
 
-bool NameCatalog::levelExists(const SyntaxNode* node) const
+bool NameCatalog::isNameEnclosedAsNonTypeName(const std::string &s) const
 {
-    return levels_.count(node) != 0;
+    auto names = enclosedNames();
+    return isNameEnclosed(s, names->second);
 }
 
-NameCatalog::NameIndex* NameCatalog::currentLevel() const
+bool NameCatalog::isNameEnclosed(const std::string& s,
+                                 const NameCatalog::NameContainer& names) const
 {
-    PSY_ASSERT(!levelKeys_.empty(), return nullptr);
-    PSY_ASSERT(levelExists(levelKeys_.top()), return nullptr);
+    return names.find(s) != names.end();
+}
 
-    return &levels_[levelKeys_.top()];
+bool NameCatalog::isNodeMapped(const SyntaxNode* node) const
+{
+    return namesByNode_.count(node) != 0;
+}
+
+NameCatalog::TypeNamesAndNames* NameCatalog::enclosedNames() const
+{
+    PSY_ASSERT(!enclosersStack_.empty(), return nullptr);
+    PSY_ASSERT(isNodeMapped(enclosersStack_.top()), return nullptr);
+
+    return &namesByNode_[enclosersStack_.top()];
 }
 
 namespace psy {
@@ -108,17 +126,21 @@ namespace C {
 
 std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog)
 {
-    for (const auto& p : disambigCatalog.levels_) {
-        os << to_string(p.first->kind()) << std::endl;
-        os << "\tTypes: ";
+    os << "\n----------------------------------"
+       << "\n---------- Name Catalog ----------"
+       << "\n----------------------------------";
+    for (const auto& p : disambigCatalog.namesByNode_) {
+        os << "\n-" << to_string(p.first->kind()) << std::endl;
+        os << "\tType names: ";
         for (const auto& t : p.second.first)
             os << t << " ";
         std::cout << std::endl;
-        os << "\tAny: ";
+        os << "\tNames: ";
         for (const auto& v : p.second.second)
             os << v << " ";
-        os << std::endl;
     }
+    os << "\n----------------------------------";
+
     return os;
 }
 

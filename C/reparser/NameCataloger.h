@@ -38,7 +38,7 @@ class PSY_C_NON_API NameCataloger : public SyntaxVisitor
 public:
     NameCataloger(SyntaxTree* tree);
 
-    std::unique_ptr<NameCatalog> catalogFor(const SyntaxNode*);
+    std::unique_ptr<NameCatalog> catalogNamesWithinNode(const SyntaxNode*);
 
 private:
     std::unique_ptr<NameCatalog> catalog_;
@@ -61,6 +61,11 @@ private:
     // Expressions //
     //-------------//
     Action visitIdentifierName(const IdentifierNameSyntax*) override;
+
+    //------------//
+    // Statements //
+    //------------//
+    Action visitCompoundStatement(const CompoundStatementSyntax*) override;
 
     //-------------//
     // Ambiguities //

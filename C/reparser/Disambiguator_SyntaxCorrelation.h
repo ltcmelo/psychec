@@ -56,6 +56,11 @@ private:
     // Declarations //
     //--------------//
     Action visitTranslationUnit(const TranslationUnitSyntax*) override;
+
+    //------------//
+    // Statements //
+    //------------//
+    Action visitCompoundStatement(const CompoundStatementSyntax*) override;
 };
 
 } // C

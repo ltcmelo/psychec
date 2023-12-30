@@ -56,7 +56,7 @@ void Reparser::reparse(SyntaxTree* tree)
     }
 
     NameCataloger cataloger(tree);
-    auto catalog = cataloger.catalogFor(tree->root());
+    auto catalog = cataloger.catalogNamesWithinNode(tree->root());
 
     switch (disambigStrategy_) {
         case Reparser::DisambiguationStrategy::SyntaxCorrelation: {
