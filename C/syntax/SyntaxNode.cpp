@@ -491,7 +491,7 @@ std::string PSY_C_API to_string(SyntaxKind kind)
         case AmbiguousCallOrVariableDeclaration:
             return "AmbiguousCallOrVariableDeclaration";
         case AmbiguousMultiplicationOrPointerDeclaration:
-            return "AmbiguousCallOrVariableDeclaration";
+            return "AmbiguousMultiplicationOrPointerDeclaration";
 
 //=================================================================== Misc
 

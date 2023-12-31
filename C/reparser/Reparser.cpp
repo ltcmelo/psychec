@@ -67,6 +67,7 @@ void Reparser::reparse(SyntaxTree* tree)
         }
 
         case Reparser::DisambiguationStrategy::TypeSynonymsVerification:
+            // TODO
             break;
 
         default:
