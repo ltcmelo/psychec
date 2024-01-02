@@ -28,6 +28,7 @@
 #include "reparser/Disambiguator_TypeSynonymsVerification.h"
 #include "syntax/SyntaxNode.h"
 
+#include "../common/infra/Assertions.h"
 #include "../common/infra/Escape.h"
 
 using namespace psy;
@@ -55,6 +56,12 @@ bool Reparser::eliminatedAllAmbiguities() const
 
 bool Reparser::ambiguityPersists(const SyntaxNode* node) const
 {
+    PSY_ASSERT_W_MSG(node->asAmbiguousCastOrBinaryExpression()
+                        || node->asAmbiguousExpressionOrDeclarationStatement()
+                        || node->asAmbiguousTypeNameOrExpressionAsTypeReference(),
+                     return false,
+                     "not an ambiguity node");
+
     for (auto ambig : persistentAmbigs_) {
         if (node == ambig)
             return true;
