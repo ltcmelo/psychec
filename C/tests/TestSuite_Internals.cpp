@@ -196,7 +196,7 @@ void InternalsTestSuite::parse(std::string source,
 
     ParseOptions parseOpts;
     if (X.containsAmbiguity_)
-            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::None);
+            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::Ignore);
 
     tree_ = SyntaxTree::parseText(text,
                                   TextPreprocessingState::Unknown,

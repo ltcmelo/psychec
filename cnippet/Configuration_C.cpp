@@ -71,7 +71,7 @@ void ConfigurationForC::extend(cxxopts::Options& cmdLineOpts)
                 "Treatment of ambiguities.",
                 cxxopts::value<std::string>()
                     ->default_value("DisambiguateAlgorithmicallyOrHeuristically"),
-                "<None|Diagnose|DisambiguateAlgorithmically|DisambiguateAlgorithmicallyOrHeuristically|DisambiguateHeuristically>")
+                "<None|DisambiguateAlgorithmically|DisambiguateAlgorithmicallyOrHeuristically|DisambiguateHeuristically>")
 
         /* Type inference */
             ("C-infer", "Infer the definition of missing types.")

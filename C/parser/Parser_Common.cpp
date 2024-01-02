@@ -113,10 +113,10 @@ void Parser::maybeAmbiguateTypeReference(TypeReferenceSyntax*& tyRef)
     tyNameAsTyRef->typeName_ = tyName;
     tyNameAsTyRef->closeParenTkIdx_ = parenExpr->closeParenTkIdx_;
 
-    auto ambiTyRef = makeNode<AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax>();
-    tyRef = ambiTyRef;
-    ambiTyRef->exprAsTyRef_ = exprAsTyRef;
-    ambiTyRef->tyNameAsTyRef_ = tyNameAsTyRef;
+    auto ambigTyRef = makeNode<AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax>();
+    tyRef = ambigTyRef;
+    ambigTyRef->exprAsTyRef_ = exprAsTyRef;
+    ambigTyRef->tyNameAsTyRef_ = tyNameAsTyRef;
 
-    diagReporter_.AmbiguousTypeNameOrExpressionAsTypeReference();
+    diagReporter_.AmbiguousTypeNameOrExpressionAsTypeReference(ambigTyRef);
 }

@@ -30,11 +30,10 @@
 using namespace psy;
 using namespace C;
 
-SyntaxCorrelationDisambiguator::SyntaxCorrelationDisambiguator(SyntaxTree* tree)
+SyntaxCorrelationDisambiguator::SyntaxCorrelationDisambiguator(
+        SyntaxTree* tree,
+        std::unique_ptr<NameCatalog> catalog)
     : Disambiguator(tree)
-{}
-
-void SyntaxCorrelationDisambiguator::acquireCatalog(std::unique_ptr<NameCatalog> catalog)
 {
     catalog_ = std::move(catalog);
 }

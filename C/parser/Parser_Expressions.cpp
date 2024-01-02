@@ -1221,12 +1221,12 @@ void Parser::maybeAmbiguateCastExpression(ExpressionSyntax*& expr)
     binExpr->oprtrTkIdx_ = prefixExpr->oprtrTkIdx_;
     binExpr->rightExpr_ = prefixExpr->expr_;
 
-    auto ambiExpr = makeNode<AmbiguousCastOrBinaryExpressionSyntax>(AmbiguousCastOrBinaryExpression);
-    expr = ambiExpr;
-    ambiExpr->castExpr_ = castExpr;
-    ambiExpr->binExpr_ = binExpr;
+    auto ambigExpr = makeNode<AmbiguousCastOrBinaryExpressionSyntax>(AmbiguousCastOrBinaryExpression);
+    expr = ambigExpr;
+    ambigExpr->castExpr_ = castExpr;
+    ambigExpr->binExpr_ = binExpr;
 
-    diagReporter_.AmbiguousCastOrBinaryExpression();
+    diagReporter_.AmbiguousCastOrBinaryExpression(ambigExpr);
 }
 
 /* N-ary */

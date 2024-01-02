@@ -33,14 +33,18 @@ Disambiguator::~Disambiguator()
 
 Disambiguator::Disambiguator(SyntaxTree* tree)
     : SyntaxVisitor(tree)
-    , pendingAmbigs_(0)
 {}
 
-unsigned int Disambiguator::disambiguate()
+bool Disambiguator::disambiguate()
 {
     visit(tree_->root());
 
-    return pendingAmbigs_;
+    return inconclusiveDisambigs_.empty();
+}
+
+std::vector<const SyntaxNode*> Disambiguator::persistentAmbiguities() const
+{
+    return inconclusiveDisambigs_;
 }
 
 template <class ExprT>
@@ -63,7 +67,7 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousExpression(ExprT* const&
                     break;
 
                 case Disambiguation::Inconclusive:
-                    ++pendingAmbigs_;
+                    inconclusiveDisambigs_.push_back(node);
                     break;
 
                 default:
@@ -101,7 +105,7 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousStatement(StmtT* const& 
                     break;
 
                 case Disambiguation::Inconclusive:
-                    ++pendingAmbigs_;
+                    inconclusiveDisambigs_.push_back(node);
                     break;
 
                 default:
@@ -138,7 +142,7 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousTypeReference(TypeRefT* 
                     break;
 
                 case Disambiguation::Inconclusive:
-                    ++pendingAmbigs_;
+                    inconclusiveDisambigs_.push_back(node);
                     break;
 
                 default:

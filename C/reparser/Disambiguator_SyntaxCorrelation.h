@@ -38,9 +38,7 @@ class PSY_C_NON_API SyntaxCorrelationDisambiguator final : public Disambiguator
 PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Reparser);
 
-    SyntaxCorrelationDisambiguator(SyntaxTree* tree);
-
-    void acquireCatalog(std::unique_ptr<NameCatalog> catalog);
+    SyntaxCorrelationDisambiguator(SyntaxTree* tree, std::unique_ptr<NameCatalog> catalog);
 
 private:
     std::unique_ptr<NameCatalog> catalog_;

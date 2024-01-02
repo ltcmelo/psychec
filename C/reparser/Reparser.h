@@ -28,6 +28,7 @@
 
 #include "../common/infra/InternalAccess.h"
 
+#include <unordered_set>
 #include <cstdint>
 
 namespace psy {
@@ -51,14 +52,17 @@ PSY_INTERNAL_AND_RESTRICTED:
     };
 
     void setDisambiguationStrategy(DisambiguationStrategy strategy);
-
-    void setPermitHeuristic(bool heuristic);
+    void setAllowHeuristics(bool allow);
 
     void reparse(SyntaxTree* tree);
 
+    bool eliminatedAllAmbiguities() const;
+    bool ambiguityPersists(const SyntaxNode* node) const;
+
 private:
     DisambiguationStrategy disambigStrategy_;
-    bool permitHeuristic_;
+    bool allowHeuristics_;
+    std::unordered_set<const SyntaxNode*> persistentAmbigs_;
 };
 
 } // C

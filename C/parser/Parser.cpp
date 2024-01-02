@@ -177,7 +177,7 @@ void Parser::skipTo(SyntaxKind tkK)
 /**
  * Whether the parser is in backtracking mode.
  */
-bool Parser::mightBacktrack() const
+bool Parser::willBacktrack() const
 {
     return static_cast<bool>(backtracker_);
 }
@@ -200,8 +200,9 @@ bool Parser::detectedAnyAmbiguity() const
 }
 
 std::vector<
-    std::pair<DiagnosticDescriptor,
-              LexedTokens::IndexType>> Parser::releaseRetainedAmbiguityDiags() const
+    std::tuple<DiagnosticDescriptor,
+               LexedTokens::IndexType,
+               const SyntaxNode*>> Parser::releaseRetainedAmbiguityDiags() const
 {
     return std::move(diagReporter_.retainedAmbiguityDiags_);
 }

@@ -137,8 +137,6 @@ int CCompilerFrontend::constructSyntaxTree(const std::string& srcText,
     if (!config_->ParseOptions_TreatmentOfAmbiguities.empty()) {
         if (config_->ParseOptions_TreatmentOfAmbiguities == "None")
             parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::None);
-        else if (config_->ParseOptions_TreatmentOfAmbiguities == "Diagnose")
-            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::Diagnose);
         else if (config_->ParseOptions_TreatmentOfAmbiguities == "DisambiguateAlgorithmically")
             parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically);
         else if (config_->ParseOptions_TreatmentOfAmbiguities == "DisambiguateAlgorithmicallyOrHeuristically")

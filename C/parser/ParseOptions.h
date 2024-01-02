@@ -100,8 +100,8 @@ public:
      */
     enum class TreatmentOfAmbiguities : std::uint8_t
     {
-        None,                                       /**< No special treatment (ambiguities are preserved). */
-        Diagnose,                                   /**< Diagnose ambiguities. */
+        None,                                       /**< No special treatment: ambiguities are diagnosed (and preserved). */
+        Ignore,                                     /**< Ignore ambiguities. */
         DisambiguateAlgorithmically,                /**< Disambiguate ambiguities algorithmically. */
         DisambiguateAlgorithmicallyOrHeuristically, /**< Disambiguate ambiguities algorithmically/heristically. */
         DisambiguateHeuristically,                  /**< Disambiguate ambiguities heuristically. */

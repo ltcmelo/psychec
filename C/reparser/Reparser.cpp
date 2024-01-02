@@ -35,7 +35,7 @@ using namespace C;
 
 Reparser::Reparser()
     : disambigStrategy_(DisambiguationStrategy::SyntaxCorrelation)
-    , permitHeuristic_(false)
+    , allowHeuristics_(false)
 {}
 
 void Reparser::setDisambiguationStrategy(DisambiguationStrategy strategy)
@@ -43,9 +43,23 @@ void Reparser::setDisambiguationStrategy(DisambiguationStrategy strategy)
     disambigStrategy_ = strategy;
 }
 
-void Reparser::setPermitHeuristic(bool heuristic)
+void Reparser::setAllowHeuristics(bool allow)
 {
-    permitHeuristic_ = heuristic;
+    allowHeuristics_ = allow;
+}
+
+bool Reparser::eliminatedAllAmbiguities() const
+{
+    return persistentAmbigs_.empty();
+}
+
+bool Reparser::ambiguityPersists(const SyntaxNode* node) const
+{
+    for (auto ambig : persistentAmbigs_) {
+        if (node == ambig)
+            return true;
+    }
+    return false;
 }
 
 void Reparser::reparse(SyntaxTree* tree)
@@ -57,12 +71,11 @@ void Reparser::reparse(SyntaxTree* tree)
 
     NameCataloger cataloger(tree);
     auto catalog = cataloger.catalogNamesWithinNode(tree->root());
-
+    std::unique_ptr<Disambiguator> disambiguator_;
     switch (disambigStrategy_) {
         case Reparser::DisambiguationStrategy::SyntaxCorrelation: {
-            SyntaxCorrelationDisambiguator disambiguator(tree);
-            disambiguator.acquireCatalog(std::move(catalog));
-            disambiguator.disambiguate();
+            disambiguator_.reset(
+                new SyntaxCorrelationDisambiguator(tree, std::move(catalog)));
             break;
         }
 
@@ -71,6 +84,13 @@ void Reparser::reparse(SyntaxTree* tree)
             break;
 
         default:
-            PSY_ESCAPE();
+            PSY_ESCAPE_VIA_RETURN();
+    }
+
+    auto ok = disambiguator_->disambiguate();
+    if (!ok) {
+        const auto& persistentAmbigs = disambiguator_->persistentAmbiguities();
+        for (const auto& ambig : persistentAmbigs)
+            persistentAmbigs_.insert(ambig);
     }
 }

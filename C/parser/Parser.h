@@ -92,7 +92,7 @@ private:
     };
     friend struct Backtracker;
     const Backtracker* backtracker_;
-    bool mightBacktrack() const;
+    bool willBacktrack() const;
 
     struct DiagnosticsReporter
     {
@@ -106,11 +106,14 @@ private:
 
         std::unordered_set<std::string> IDsForDelay_;
         std::vector<std::pair<DiagnosticDescriptor, LexedTokens::IndexType>> delayedDiags_;
-        std::vector<std::pair<DiagnosticDescriptor, LexedTokens::IndexType>> retainedAmbiguityDiags_;
+        std::vector<std::tuple<
+            DiagnosticDescriptor,
+            LexedTokens::IndexType,
+            const SyntaxNode*>> retainedAmbiguityDiags_;
 
         void diagnose(DiagnosticDescriptor&& desc);
         void diagnoseDelayed();
-        void diagnoseAmbiguityButRetainIt(DiagnosticDescriptor&& desc);
+        void diagnoseAmbiguityButRetainIt(DiagnosticDescriptor&& desc, const SyntaxNode* node);
 
         /* General */
         void ExpectedFeature(const std::string& name);
@@ -187,9 +190,12 @@ private:
         static const std::string ID_of_UnexpectedGNUExtensionFlag;
 
         /* Ambiguities */
-        void AmbiguousTypeNameOrExpressionAsTypeReference();
-        void AmbiguousCastOrBinaryExpression();
-        void AmbiguousExpressionOrDeclarationStatement();
+        void AmbiguousTypeNameOrExpressionAsTypeReference(
+                const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*);
+        void AmbiguousCastOrBinaryExpression(
+                const AmbiguousCastOrBinaryExpressionSyntax*);
+        void AmbiguousExpressionOrDeclarationStatement(
+                const AmbiguousExpressionOrDeclarationStatementSyntax*);
 
         static const std::string ID_of_AmbiguousTypeNameOrExpressionAsTypeReference;
         static const std::string ID_of_AmbiguousCastOrBinaryExpression;
@@ -200,8 +206,9 @@ private:
     DiagnosticsReporter diagReporter_;
 
     std::vector<
-        std::pair<DiagnosticDescriptor,
-                  LexedTokens::IndexType>> releaseRetainedAmbiguityDiags() const;
+        std::tuple<DiagnosticDescriptor,
+                   LexedTokens::IndexType,
+                   const SyntaxNode*>> releaseRetainedAmbiguityDiags() const;
 
     struct DiagnosticsReporterDelayer
     {

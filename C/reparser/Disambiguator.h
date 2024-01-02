@@ -29,6 +29,7 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 namespace psy {
 namespace C {
@@ -41,7 +42,9 @@ public:
 PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(Reparser);
 
-    unsigned int disambiguate();
+    bool disambiguate();
+
+    std::vector<const SyntaxNode*> persistentAmbiguities() const;
 
 PSY_INTERNAL_AND_EXTENSIBLE:
     Disambiguator(SyntaxTree* tree);
@@ -66,7 +69,7 @@ private:
     template <class StmtT> Action visitMaybeAmbiguousStatement(StmtT* const&);
     template <class TypeRefT> Action visitMaybeAmbiguousTypeReference(TypeRefT* const&);
 
-    unsigned int pendingAmbigs_;
+    std::vector<const SyntaxNode*> inconclusiveDisambigs_;
 
 protected:
     //--------------//

@@ -270,14 +270,14 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
     varDecl->semicolonTkIdx_ = exprStmt->semicolonTkIdx_;
     varDecl->decltors_ = makeNode<DeclaratorListSyntax>(decltor);
 
-    auto ambiStmt = makeNode<AmbiguousExpressionOrDeclarationStatementSyntax>(stmtK);
-    stmt = ambiStmt;
-    ambiStmt->exprStmt_ = exprStmt;
+    auto ambigStmt = makeNode<AmbiguousExpressionOrDeclarationStatementSyntax>(stmtK);
+    stmt = ambigStmt;
+    ambigStmt->exprStmt_ = exprStmt;
     auto declStmt = makeNode<DeclarationStatementSyntax>();
     declStmt->decl_ = varDecl;
-    ambiStmt->declStmt_ = declStmt;
+    ambigStmt->declStmt_ = declStmt;
 
-    diagReporter_.AmbiguousExpressionOrDeclarationStatement();
+    diagReporter_.AmbiguousExpressionOrDeclarationStatement(ambigStmt);
 }
 
 /**

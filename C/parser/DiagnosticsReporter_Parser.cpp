@@ -20,6 +20,8 @@
 
 #include "Parser.h"
 
+#include "syntax/SyntaxNodes.h"
+
 using namespace psy;
 using namespace C;
 
@@ -101,7 +103,7 @@ std::string Parser::DiagnosticsReporter::joinTokenNames(const std::vector<Syntax
 
 void Parser::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc)
 {
-    if (parser_->mightBacktrack())
+    if (parser_->willBacktrack())
         return;
 
     if (IDsForDelay_.find(desc.id()) != IDsForDelay_.end())
@@ -116,12 +118,14 @@ void Parser::DiagnosticsReporter::diagnoseDelayed()
         parser_->tree_->newDiagnostic(p.first, p.second);
 }
 
-void Parser::DiagnosticsReporter::diagnoseAmbiguityButRetainIt(DiagnosticDescriptor&& desc)
+void Parser::DiagnosticsReporter::diagnoseAmbiguityButRetainIt(
+        DiagnosticDescriptor&& desc,
+        const SyntaxNode* node)
 {
-    retainedAmbiguityDiags_.push_back(std::make_pair(desc, parser_->curTkIdx_ - 1));
+    retainedAmbiguityDiags_.push_back(std::make_tuple(desc, parser_->curTkIdx_ - 1, node));
 }
 
-/* Generic */
+/* General */
 
 void Parser::DiagnosticsReporter::ExpectedFeature(const std::string& name)
 {
@@ -476,7 +480,8 @@ void Parser::DiagnosticsReporter::UnexpectedGNUExtensionFlag()
 
 /* Ambiguities */
 
-void Parser::DiagnosticsReporter::AmbiguousTypeNameOrExpressionAsTypeReference()
+void Parser::DiagnosticsReporter::AmbiguousTypeNameOrExpressionAsTypeReference(
+        const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node)
 {
     std::string s = "ambiguous type name or expression `"
                 + parser_->peek().valueText()
@@ -487,10 +492,12 @@ void Parser::DiagnosticsReporter::AmbiguousTypeNameOrExpressionAsTypeReference()
                                      "[[ambiguous type name or expression]]",
                                      s,
                                      DiagnosticSeverity::Error,
-                                     DiagnosticCategory::Syntax));
+                                     DiagnosticCategory::Syntax),
+                node);
 }
 
-void Parser::DiagnosticsReporter::AmbiguousCastOrBinaryExpression()
+void Parser::DiagnosticsReporter::AmbiguousCastOrBinaryExpression(
+        const AmbiguousCastOrBinaryExpressionSyntax* node)
 {
     std::string s = "ambiguous cast or binary expression `"
                 + parser_->peek().valueText()
@@ -501,10 +508,12 @@ void Parser::DiagnosticsReporter::AmbiguousCastOrBinaryExpression()
                                      "[[ambiguous cast or binary expression]]",
                                      s,
                                      DiagnosticSeverity::Error,
-                                     DiagnosticCategory::Syntax));
+                                     DiagnosticCategory::Syntax),
+                node);
 }
 
-void Parser::DiagnosticsReporter::AmbiguousExpressionOrDeclarationStatement()
+void Parser::DiagnosticsReporter::AmbiguousExpressionOrDeclarationStatement(
+        const AmbiguousExpressionOrDeclarationStatementSyntax* node)
 {
     std::string s = "ambiguous expression- or declaration-statement `"
                 + parser_->peek().valueText()
@@ -515,5 +524,6 @@ void Parser::DiagnosticsReporter::AmbiguousExpressionOrDeclarationStatement()
                                      "[[ambiguous expression- or declaration-statement]]",
                                      s,
                                      DiagnosticSeverity::Error,
-                                     DiagnosticCategory::Syntax));
+                                     DiagnosticCategory::Syntax),
+                node);
 }

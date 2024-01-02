@@ -251,18 +251,18 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
         return;
 
     auto disambiguationStrategy = Reparser::DisambiguationStrategy::UNSPECIFIED;
-    auto permitHeuristic = false;
+    auto allowHeuristics = false;
     switch (P->parseOptions_.treatmentOfAmbiguities()) {
         case ParseOptions::TreatmentOfAmbiguities::None:
+            for (const auto& diag : parser.releaseRetainedAmbiguityDiags())
+                newDiagnostic(std::get<0>(diag), std::get<1>(diag));
             return;
 
-        case ParseOptions::TreatmentOfAmbiguities::Diagnose:
-            for (const auto& diag : parser.releaseRetainedAmbiguityDiags())
-                newDiagnostic(diag.first, diag.second);
+        case ParseOptions::TreatmentOfAmbiguities::Ignore:
             return;
 
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically:
-            permitHeuristic = true;
+            allowHeuristics = true;
             [[fallthrough]];
 
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically: {
@@ -274,7 +274,7 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
 
         case ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically:
             disambiguationStrategy = Reparser::DisambiguationStrategy::GuidelineImposition;
-            permitHeuristic = true;
+            allowHeuristics = true;
             break;
 
         default:
@@ -286,8 +286,14 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
 
     Reparser reparser;
     reparser.setDisambiguationStrategy(disambiguationStrategy);
-    reparser.setPermitHeuristic(permitHeuristic);
+    reparser.setAllowHeuristics(allowHeuristics);
     reparser.reparse(this);
+    if (!reparser.eliminatedAllAmbiguities()) {
+        for (const auto& diag : parser.releaseRetainedAmbiguityDiags()) {
+            if (reparser.ambiguityPersists(std::get<2>(diag)))
+                newDiagnostic(std::get<0>(diag), std::get<1>(diag));
+        }
+    }
 }
 
 const ParseOptions& SyntaxTree::parseOptions() const
