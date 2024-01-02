@@ -111,9 +111,9 @@ private:
             LexedTokens::IndexType,
             const SyntaxNode*>> retainedAmbiguityDiags_;
 
-        void diagnose(DiagnosticDescriptor&& desc);
-        void diagnoseDelayed();
-        void diagnoseAmbiguityButRetainIt(DiagnosticDescriptor&& desc, const SyntaxNode* node);
+        void diagnoseOrDelayDiagnostic(DiagnosticDescriptor&& desc);
+        void diagnoseDelayedDiagnostics();
+        void retainAmbiguityDiagnostic(DiagnosticDescriptor&& desc, const SyntaxNode* node);
 
         /* General */
         void ExpectedFeature(const std::string& name);
@@ -208,7 +208,7 @@ private:
     std::vector<
         std::tuple<DiagnosticDescriptor,
                    LexedTokens::IndexType,
-                   const SyntaxNode*>> releaseRetainedAmbiguityDiags() const;
+                   const SyntaxNode*>> releaseRetainedAmbiguityDiagnostics() const;
 
     struct DiagnosticsReporterDelayer
     {

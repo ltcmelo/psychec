@@ -62,7 +62,7 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
         declList_cur = &(*declList_cur)->next;
     }
 
-    diagReporter_.diagnoseDelayed();
+    diagReporter_.diagnoseDelayedDiagnostics();
 }
 
 /**

@@ -202,7 +202,7 @@ bool Parser::detectedAnyAmbiguity() const
 std::vector<
     std::tuple<DiagnosticDescriptor,
                LexedTokens::IndexType,
-               const SyntaxNode*>> Parser::releaseRetainedAmbiguityDiags() const
+               const SyntaxNode*>> Parser::releaseRetainedAmbiguityDiagnostics() const
 {
     return std::move(diagReporter_.retainedAmbiguityDiags_);
 }

@@ -101,7 +101,7 @@ std::string Parser::DiagnosticsReporter::joinTokenNames(const std::vector<Syntax
     return s;
 }
 
-void Parser::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc)
+void Parser::DiagnosticsReporter::diagnoseOrDelayDiagnostic(DiagnosticDescriptor&& desc)
 {
     if (parser_->willBacktrack())
         return;
@@ -112,13 +112,13 @@ void Parser::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc)
         parser_->tree_->newDiagnostic(desc, parser_->curTkIdx_);
 }
 
-void Parser::DiagnosticsReporter::diagnoseDelayed()
+void Parser::DiagnosticsReporter::diagnoseDelayedDiagnostics()
 {
     for (const auto& p : delayedDiags_)
         parser_->tree_->newDiagnostic(p.first, p.second);
 }
 
-void Parser::DiagnosticsReporter::diagnoseAmbiguityButRetainIt(
+void Parser::DiagnosticsReporter::retainAmbiguityDiagnostic(
         DiagnosticDescriptor&& desc,
         const SyntaxNode* node)
 {
@@ -129,11 +129,12 @@ void Parser::DiagnosticsReporter::diagnoseAmbiguityButRetainIt(
 
 void Parser::DiagnosticsReporter::ExpectedFeature(const std::string& name)
 {
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFeature,
-                                  "[[unexpected extension or C dialect]]",
-                                  name + " is either an extension or unsupported in this dialect",
-                                  DiagnosticSeverity::Warning,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedFeature,
+                                     "[[unexpected extension or C dialect]]",
+                                     name + " is either an extension or unsupported in this dialect",
+                                     DiagnosticSeverity::Warning,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedToken(SyntaxKind tkK)
@@ -144,11 +145,12 @@ void Parser::DiagnosticsReporter::ExpectedToken(SyntaxKind tkK)
             + parser_->peek().valueText_c_str()
             + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedToken,
-                                  "[[expected token]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedToken,
+                                     "[[expected token]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedTokenWithin(const std::vector<SyntaxKind>& validTkKinds)
@@ -159,26 +161,28 @@ void Parser::DiagnosticsReporter::ExpectedTokenWithin(const std::vector<SyntaxKi
             + parser_->peek().valueText()
             + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedTokenWithin,
-                                  "[[expected one of tokens]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedTokenWithin,
+                                     "[[expected one of tokens]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedTokenOfCategory(SyntaxToken::Category category,
                                                           const std::string& id)
 {
     std::string s = "expected "
-                + to_string(category)
-                + " got `"
-                + parser_->peek().valueText() + "'";
+            + to_string(category)
+            + " got `"
+            + parser_->peek().valueText() + "'";
 
-    diagnose(DiagnosticDescriptor(id,
-                                  "[[expected token of category]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(id,
+                                     "[[expected token of category]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedTokenOfCategoryIdentifier()
@@ -202,15 +206,16 @@ void Parser::DiagnosticsReporter::ExpectedFIRSTof(const std::string& rule,
                                                   const std::string& id)
 {
     std::string s = "expected "
-                + rule
-                + " got `"
-                + parser_->peek().valueText() + "'";
+            + rule
+            + " got `"
+            + parser_->peek().valueText() + "'";
 
-    diagnose(DiagnosticDescriptor(id,
-                                  "[[expected FIRST of]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(id,
+                                     "[[expected FIRST of]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 
 }
 
@@ -227,74 +232,80 @@ void Parser::DiagnosticsReporter::ExpectedFIRSTofEnumerationConstant()
 void Parser::DiagnosticsReporter::ExpectedFieldName()
 {
     auto s = "expected field name, got `"
-           + parser_->peek().valueText()
-           + "'";
+            + parser_->peek().valueText()
+            + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFieldName,
-                                  "[[expected field name]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedFieldName,
+                                     "[[expected field name]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedBraceEnclosedInitializerList()
 {
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedBraceEnclosedInitializerList,
-                                  "[[unexpected empty brace-enclosed initializer]]",
-                                  "ISO C forbids empty initializer braces",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedBraceEnclosedInitializerList,
+                                     "[[unexpected empty brace-enclosed initializer]]",
+                                     "ISO C forbids empty initializer braces",
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedFieldDesignator()
 {
     auto s = "expected field designator, got `"
-           + parser_->peek().valueText()
-           + "'";
+            + parser_->peek().valueText()
+            + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFieldDesignator,
-                                  "[[expected field designator]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedFieldDesignator,
+                                     "[[expected field designator]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::UnexpectedInitializerOfDeclarator()
 {
-    diagnose(DiagnosticDescriptor(ID_of_UnexpectedInitializerOfDeclarator,
-                                  "[[unexpected initializer for declarator]]",
-                                  "declarator may not be initialized",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_UnexpectedInitializerOfDeclarator,
+                                     "[[unexpected initializer for declarator]]",
+                                     "declarator may not be initialized",
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedFOLLOWofDesignatedInitializer()
 {
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFOLLOWofDesignatedInitializer,
-                                  "[[obsolete array designator syntax]]",
-                                  "obsolete array designator without `='",
-                                  DiagnosticSeverity::Warning,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(DiagnosticDescriptor(ID_of_ExpectedFOLLOWofDesignatedInitializer,
+                                                   "[[obsolete array designator syntax]]",
+                                                   "obsolete array designator without `='",
+                                                   DiagnosticSeverity::Warning,
+                                                   DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::UnexpectedStaticOrTypeQualifiersInArrayDeclarator()
 {
-    diagnose(DiagnosticDescriptor(ID_of_UnexpectedStaticOrTypeQualifierInArrayDeclarator,
-                                  "[[unexpected static or type qualifier in array declarator]]",
-                                  "`static' and type-qualifiers are only allowed in array declarators "
-                                  "within function parameters",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_UnexpectedStaticOrTypeQualifierInArrayDeclarator,
+                                     "[[unexpected static or type qualifier in array declarator]]",
+                                     "`static' and type-qualifiers are only allowed in array declarators "
+                                     "within function parameters",
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::UnexpectedPointerInArrayDeclarator()
 {
-    diagnose(DiagnosticDescriptor(ID_of_UnexpectedPointerInArrayDeclarator,
-                                  "[[unexpected pointer in array declarator]]",
-                                  "`*' is only allowed in array declarators "
-                                  "within function parameters",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_UnexpectedPointerInArrayDeclarator,
+                                     "[[unexpected pointer in array declarator]]",
+                                     "`*' is only allowed in array declarators "
+                                     "within function parameters",
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclarator()
@@ -304,16 +315,17 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclarator()
                           EqualsToken };
 
     std::string s = "expected "
-                + joinTokenNames(validTkKinds)
-                + "after declarator, got `"
-                + parser_->peek().valueText_c_str()
-                + "'";
+            + joinTokenNames(validTkKinds)
+            + "after declarator, got `"
+            + parser_->peek().valueText_c_str()
+            + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFOLLOWofDeclarator,
-                                  "[[unexpected FOLLOW of declarator]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedFOLLOWofDeclarator,
+                                     "[[unexpected FOLLOW of declarator]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructDeclarator()
@@ -323,16 +335,17 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructDeclarator()
                           ColonToken };
 
     std::string s = "expected "
-                + joinTokenNames(validTkKinds)
-                + "after field declarator, got `"
-                + parser_->peek().valueText_c_str()
-                + "'";
+            + joinTokenNames(validTkKinds)
+            + "after field declarator, got `"
+            + parser_->peek().valueText_c_str()
+            + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFOLLOWofStructDeclarator,
-                                  "[[unexpected FOLLOW of field declarator]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedFOLLOWofStructDeclarator,
+                                     "[[unexpected FOLLOW of field declarator]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclaratorAndInitializer()
@@ -341,16 +354,17 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclaratorAndInitializer()
                           SemicolonToken };
 
     std::string s = "expected "
-                + joinTokenNames(validTkKinds)
-                + "after initialized declarator, got `"
-                + parser_->peek().valueText_c_str()
-                + "'";
+            + joinTokenNames(validTkKinds)
+            + "after initialized declarator, got `"
+            + parser_->peek().valueText_c_str()
+            + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFOLLOWofDeclaratorAndInitializer,
-                                  "[[unexpected FOLLOW of initialized declarator]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedFOLLOWofDeclaratorAndInitializer,
+                                     "[[unexpected FOLLOW of initialized declarator]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedFIRSTofDirectDeclarator()
@@ -359,42 +373,45 @@ void Parser::DiagnosticsReporter::ExpectedFIRSTofDirectDeclarator()
                           OpenParenToken };
 
     std::string s = "expected "
-                + joinTokenNames(validTkKinds)
-                + "starting direct-declarator, got `"
-                + parser_->peek().valueText_c_str()
-                + "'";
+            + joinTokenNames(validTkKinds)
+            + "starting direct-declarator, got `"
+            + parser_->peek().valueText_c_str()
+            + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFIRSTofDirectDeclarator,
-                                  "[[unexpected FIRST of direct-declarator]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedFIRSTofDirectDeclarator,
+                                     "[[unexpected FIRST of direct-declarator]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedFIRSTofParameterDeclaration()
 {
     std::string s = "expected declaration specifiers or '...', got `"
-                + parser_->peek().valueText()
-                + "'";
+            + parser_->peek().valueText()
+            + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFIRSTofParameterDeclaration,
-                                  "[[unexpected FIRST of parameter-declaration]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedFIRSTofParameterDeclaration,
+                                     "[[unexpected FIRST of parameter-declaration]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedFIRSTofSpecifierQualifier()
 {
     std::string s = "expected specifier-qualifier-list, got `"
-                + parser_->peek().valueText()
-                + "'";
+            + parser_->peek().valueText()
+            + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFIRSTofSpecifierQualifier,
-                                  "[[unexpected FIRST of specifier-qualifier-list]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedFIRSTofSpecifierQualifier,
+                                     "[[unexpected FIRST of specifier-qualifier-list]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructOrUnionOrEnum()
@@ -403,79 +420,87 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructOrUnionOrEnum()
                           OpenBraceToken };
 
     std::string s = "expected "
-                + joinTokenNames(validTkKinds)
-                + "following struct-or-union or enum, got `"
-                + parser_->peek().valueText_c_str()
-                + "'";
+            + joinTokenNames(validTkKinds)
+            + "following struct-or-union or enum, got `"
+            + parser_->peek().valueText_c_str()
+            + "'";
 
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedFOLLOWofStructOrUnionOrEnum,
-                                  "[[unexpected struct-or-union or enum FOLLOW]]",
-                                  s,
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedFOLLOWofStructOrUnionOrEnum,
+                                     "[[unexpected struct-or-union or enum FOLLOW]]",
+                                     s,
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedNamedParameterBeforeEllipsis()
 {
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedNamedParameterBeforeEllipsis,
-                                  "[[unexpected ellipsis before named parameter]]",
-                                  "ISO C requires a named parameter before `...'",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedNamedParameterBeforeEllipsis,
+                                     "[[unexpected ellipsis before named parameter]]",
+                                     "ISO C requires a named parameter before `...'",
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::ExpectedTypeSpecifier()
 {
-    diagnose(DiagnosticDescriptor(ID_of_ExpectedTypeSpecifier,
-                                  "[[declaration without type specifier]]",
-                                  "missing type specifier, assume `int'",
-                                  DiagnosticSeverity::Warning,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_ExpectedTypeSpecifier,
+                                     "[[declaration without type specifier]]",
+                                     "missing type specifier, assume `int'",
+                                     DiagnosticSeverity::Warning,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::UnexpectedCaseLabelOutsideSwitch()
 {
-    diagnose(DiagnosticDescriptor(ID_of_UnexpectedCaseLabelOutsideSwitch,
-                                  "[[case label outside switch-statement]]",
-                                  "`case' label not within a switch",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_UnexpectedCaseLabelOutsideSwitch,
+                                     "[[case label outside switch-statement]]",
+                                     "`case' label not within a switch",
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::UnexpectedDefaultLabelOutsideSwitch()
 {
-    diagnose(DiagnosticDescriptor(ID_of_UnexpectedDefaultLabelOutsideSwitch,
-                                  "[[default label outside switch-statement]]",
-                                  "`default' label not within a switch",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_UnexpectedDefaultLabelOutsideSwitch,
+                                     "[[default label outside switch-statement]]",
+                                     "`default' label not within a switch",
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::UnexpectedContinueOutsideLoop()
 {
-    diagnose(DiagnosticDescriptor(ID_of_UnexpectedContinueOutsideLoop,
-                                  "[[continue outside iteration-statement]]",
-                                  "`continue' not within a loop",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_UnexpectedContinueOutsideLoop,
+                                     "[[continue outside iteration-statement]]",
+                                     "`continue' not within a loop",
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::UnexpectedBreakOutsideSwitchOrLoop()
 {
-    diagnose(DiagnosticDescriptor(ID_of_UnexpectedBreakOutsideSwitchOrLoop,
-                                  "[[break outside iteration- or switch-statement]]",
-                                  "`break' not within a loop or switch",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_UnexpectedBreakOutsideSwitchOrLoop,
+                                     "[[break outside iteration- or switch-statement]]",
+                                     "`break' not within a loop or switch",
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 void Parser::DiagnosticsReporter::UnexpectedGNUExtensionFlag()
 {
-    diagnose(DiagnosticDescriptor(ID_of_UnexpectedGNUExtensionFlag,
-                                  "[[unexpected `__extension__']]",
-                                  "unrecognized `__extension__'",
-                                  DiagnosticSeverity::Error,
-                                  DiagnosticCategory::Syntax));
+    diagnoseOrDelayDiagnostic(
+                DiagnosticDescriptor(ID_of_UnexpectedGNUExtensionFlag,
+                                     "[[unexpected `__extension__']]",
+                                     "unrecognized `__extension__'",
+                                     DiagnosticSeverity::Error,
+                                     DiagnosticCategory::Syntax));
 }
 
 /* Ambiguities */
@@ -484,10 +509,10 @@ void Parser::DiagnosticsReporter::AmbiguousTypeNameOrExpressionAsTypeReference(
         const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node)
 {
     std::string s = "ambiguous type name or expression `"
-                + parser_->peek().valueText()
-                + "'";
+            + parser_->peek().valueText()
+            + "'";
 
-    diagnoseAmbiguityButRetainIt(
+    retainAmbiguityDiagnostic(
                 DiagnosticDescriptor(ID_of_AmbiguousTypeNameOrExpressionAsTypeReference,
                                      "[[ambiguous type name or expression]]",
                                      s,
@@ -500,10 +525,10 @@ void Parser::DiagnosticsReporter::AmbiguousCastOrBinaryExpression(
         const AmbiguousCastOrBinaryExpressionSyntax* node)
 {
     std::string s = "ambiguous cast or binary expression `"
-                + parser_->peek().valueText()
-                + "'";
+            + parser_->peek().valueText()
+            + "'";
 
-    diagnoseAmbiguityButRetainIt(
+    retainAmbiguityDiagnostic(
                 DiagnosticDescriptor(ID_of_AmbiguousCastOrBinaryExpression,
                                      "[[ambiguous cast or binary expression]]",
                                      s,
@@ -516,10 +541,10 @@ void Parser::DiagnosticsReporter::AmbiguousExpressionOrDeclarationStatement(
         const AmbiguousExpressionOrDeclarationStatementSyntax* node)
 {
     std::string s = "ambiguous expression- or declaration-statement `"
-                + parser_->peek().valueText()
-                + "'";
+            + parser_->peek().valueText()
+            + "'";
 
-    diagnoseAmbiguityButRetainIt(
+    retainAmbiguityDiagnostic(
                 DiagnosticDescriptor(ID_of_AmbiguousExpressionOrDeclarationStatement,
                                      "[[ambiguous expression- or declaration-statement]]",
                                      s,

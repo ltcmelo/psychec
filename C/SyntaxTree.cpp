@@ -254,7 +254,7 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
     auto allowHeuristics = false;
     switch (P->parseOptions_.treatmentOfAmbiguities()) {
         case ParseOptions::TreatmentOfAmbiguities::None:
-            for (const auto& diag : parser.releaseRetainedAmbiguityDiags())
+            for (const auto& diag : parser.releaseRetainedAmbiguityDiagnostics())
                 newDiagnostic(std::get<0>(diag), std::get<1>(diag));
             return;
 
@@ -289,7 +289,7 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
     reparser.setAllowHeuristics(allowHeuristics);
     reparser.reparse(this);
     if (!reparser.eliminatedAllAmbiguities()) {
-        for (const auto& diag : parser.releaseRetainedAmbiguityDiags()) {
+        for (const auto& diag : parser.releaseRetainedAmbiguityDiagnostics()) {
             if (reparser.ambiguityPersists(std::get<2>(diag)))
                 newDiagnostic(std::get<0>(diag), std::get<1>(diag));
         }
