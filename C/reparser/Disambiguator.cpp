@@ -382,7 +382,8 @@ SyntaxVisitor::Action Disambiguator::visitIfStatement(const IfStatementSyntax* n
 {
     visitMaybeAmbiguousExpression(node->cond_);
     visitMaybeAmbiguousStatement(node->stmt_);
-    visitMaybeAmbiguousStatement(node->elseStmt_);
+    if (node->elseStmt_)
+        visitMaybeAmbiguousStatement(node->elseStmt_);
 
     return Action::Skip;
 }
