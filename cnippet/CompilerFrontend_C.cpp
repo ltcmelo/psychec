@@ -29,6 +29,8 @@
 #include "plugin-api/SourceInspector.h"
 #include "syntax/SyntaxNamePrinter.h"
 
+#include <iterator>
+
 using namespace cnip;
 using namespace psy;
 using namespace C;
