@@ -21,6 +21,7 @@
 #include "Disambiguator_SyntaxCorrelation.h"
 
 #include "syntax/SyntaxNodes.h"
+#include "syntax/SyntaxUtilities.h"
 
 #include "../common/infra/Assertions.h"
 #include "../common/infra/Escape.h"
@@ -59,6 +60,9 @@ SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitCompoundStatement(con
 Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateExpression(
         const AmbiguousCastOrBinaryExpressionSyntax* node) const
 {
+    PSY_ASSERT(node->kind() == AmbiguousCastOrBinaryExpression,
+               return Disambiguation::Inconclusive);
+
     auto typeName = node->castExpression()->typeName();
     PSY_ASSERT(typeName->specifiers()
                    && typeName->specifiers()->value
@@ -68,9 +72,9 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateExpres
     auto typedefName = typeName->specifiers()->value->asTypedefName();
     auto name = typedefName->identifierToken().valueText();
 
-    return recognizesTypeName(name)
+    return catalog_->isNameEnclosedAsTypeName(name)
             ? Disambiguation::KeepCastExpression
-            : recognizesName(name)
+            : catalog_->isNameEnclosedAsNonTypeName(name)
                     ? Disambiguation::KeepBinaryExpression
                     : Disambiguation::Inconclusive;
 }
@@ -78,28 +82,57 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateExpres
 Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatement(
         const AmbiguousExpressionOrDeclarationStatementSyntax* node) const
 {
+    PSY_ASSERT(node->kind() == AmbiguousMultiplicationOrPointerDeclaration
+                   || node->kind() == AmbiguousCallOrVariableDeclaration,
+               return Disambiguation::Inconclusive);
+
     auto decl = node->declarationStatement()->declaration();
-    PSY_ASSERT(decl->kind() == VariableAndOrFunctionDeclaration, return Disambiguation::Inconclusive);
+    PSY_ASSERT(decl->kind() == VariableAndOrFunctionDeclaration,
+               return Disambiguation::Inconclusive);
 
     auto varDecl = decl->asVariableAndOrFunctionDeclaration();
+
     PSY_ASSERT(varDecl->specifiers()
                    && varDecl->specifiers()->value
                    && varDecl->specifiers()->value->kind() == TypedefName,
                return Disambiguation::Inconclusive);
 
     auto typedefName = varDecl->specifiers()->value->asTypedefName();
-    auto name = typedefName->identifierToken().valueText();
+    auto lhsName = typedefName->identifierToken().valueText();
 
-    return recognizesTypeName(name)
-            ? Disambiguation::KeepDeclarationStatement
-            : recognizesName(name)
-                    ? Disambiguation::KeepExpressionStatement
-                    : Disambiguation::Inconclusive;
+    if (catalog_->isNameEnclosedAsTypeName(lhsName))
+        return Disambiguation::KeepDeclarationStatement;
+
+    if (catalog_->isNameEnclosedAsNonTypeName(lhsName))
+        return Disambiguation::KeepExpressionStatement;
+
+    if (node->kind() == AmbiguousMultiplicationOrPointerDeclaration)
+        return Disambiguation::Inconclusive;
+
+    PSY_ASSERT(varDecl->declarators()
+                   && varDecl->declarators()->value,
+               return Disambiguation::Inconclusive);
+
+    auto decltor = SyntaxUtilities::strippedDeclaratorOrSelf(varDecl->declarators()->value);
+    PSY_ASSERT(decltor->kind() == IdentifierDeclarator,
+               return Disambiguation::Inconclusive);
+
+    auto rhsName = decltor->asIdentifierDeclarator()->identifierToken().valueText();
+
+    if (catalog_->isNameEnclosedAsNonTypeName(rhsName)
+            && catalog_->isVariableName(rhsName)) {
+        return Disambiguation::KeepExpressionStatement;
+    }
+
+    return Disambiguation::Inconclusive;
 }
 
 Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateTypeReference(
         const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node) const
 {
+    PSY_ASSERT(node->kind() == AmbiguousTypeNameOrExpressionAsTypeReference,
+               return Disambiguation::Inconclusive);
+
     auto typeName = node->typeNameAsTypeReference()->typeName();
     PSY_ASSERT(typeName->specifiers()
                    && typeName->specifiers()->value
@@ -109,19 +142,9 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateTypeRe
     auto typedefName = typeName->specifiers()->value->asTypedefName();
     auto name = typedefName->identifierToken().valueText();
 
-    return recognizesTypeName(name)
+    return catalog_->isNameEnclosedAsTypeName(name)
             ? Disambiguation::KeepTypeName
-            : recognizesName(name)
+            : catalog_->isNameEnclosedAsNonTypeName(name)
                     ? Disambiguation::KeepExpression
                     : Disambiguation::Inconclusive;
-}
-
-bool SyntaxCorrelationDisambiguator::recognizesTypeName(const std::string& name) const
-{
-    return catalog_->isNameEnclosedAsTypeName(name);
-}
-
-bool SyntaxCorrelationDisambiguator::recognizesName(const std::string& name) const
-{
-    return catalog_->isNameEnclosedAsNonTypeName(name);
 }

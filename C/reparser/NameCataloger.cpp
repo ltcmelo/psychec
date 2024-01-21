@@ -41,6 +41,10 @@ std::unique_ptr<NameCatalog> NameCataloger::catalogNamesWithinNode(const SyntaxN
     return std::move(catalog_);
 }
 
+//--------------//
+// Declarations //
+//--------------//
+
 SyntaxVisitor::Action NameCataloger::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     catalog_->mapNodeAndMarkAsEncloser(node);
@@ -64,12 +68,18 @@ SyntaxVisitor::Action NameCataloger::visitTypedefName(const TypedefNameSyntax* n
 
 SyntaxVisitor::Action NameCataloger::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    catalog_->catalogNonTypeName(node->identifierToken().valueText());
+    const auto& name = node->identifierToken().valueText();
+    catalog_->catalogNonTypeName(name);
+    catalog_->flagAsVariableName(name);
 
     visit(node->initializer());
 
     return Action::Skip;
 }
+
+//-------------//
+// Expressions //
+//-------------//
 
 SyntaxVisitor::Action NameCataloger::visitIdentifierName(const IdentifierNameSyntax* node)
 {
@@ -77,6 +87,10 @@ SyntaxVisitor::Action NameCataloger::visitIdentifierName(const IdentifierNameSyn
 
     return Action::Skip;
 }
+
+//------------//
+// Statements //
+//------------//
 
 SyntaxVisitor::Action NameCataloger::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
@@ -87,6 +101,10 @@ SyntaxVisitor::Action NameCataloger::visitCompoundStatement(const CompoundStatem
 
     return Action::Skip;
 }
+
+//-------------//
+// Ambiguities //
+//-------------//
 
 SyntaxVisitor::Action NameCataloger::visitAmbiguousTypeNameOrExpressionAsTypeReference(
         const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node)

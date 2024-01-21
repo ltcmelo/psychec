@@ -47,9 +47,6 @@ private:
     virtual Disambiguation disambiguateStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) const override;
     virtual Disambiguation disambiguateTypeReference(const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) const override;
 
-    bool recognizesTypeName(const std::string& name) const;
-    bool recognizesName(const std::string& name) const;
-
     //--------------//
     // Declarations //
     //--------------//

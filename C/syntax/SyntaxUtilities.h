@@ -43,11 +43,16 @@ public:
     /**
      * Return the \a inner DeclaratorSyntax of the given \p decltor.
      *
-     * A DeclaratorSyntax has an \a inner DeclaratorSyntax if it's one the following:
-     *   - a PointerDeclaratorSyntax;
-     *   - an ArrayDeclaratorSyntax;
-     *   - a FunctionDeclaratorSyntax;
-     *   - or a BitfieldDeclaratorSyntax.
+     * The declarators with an \a inner declarator are:
+     *   - PointerDeclaratorSyntax;
+     *   - ArrayDeclaratorSyntax;
+     *   - FunctionDeclaratorSyntax;
+     *   - BitfieldDeclaratorSyntax.
+     *
+     * \note
+     * A ParenthesizedDeclarator doesn't have an inner declarator, but it can be stripped.
+     *
+     * \see SyntaxUtilities::strippedDeclaratorOrSelf
      */
     static const DeclaratorSyntax* innerDeclaratorOrSelf(const DeclaratorSyntax* decltor);
 

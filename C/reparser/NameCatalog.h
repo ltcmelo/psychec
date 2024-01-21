@@ -29,6 +29,7 @@
 #include <ostream>
 #include <stack>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -53,24 +54,24 @@ PSY_INTERNAL_AND_RESTRICTED:
 
     void catalogTypeName(const std::string& s);
     void catalogNonTypeName(const std::string& s);
+    void flagAsVariableName(const std::string& s);
 
     bool isNameEnclosedAsTypeName(const std::string& s) const;
     bool isNameEnclosedAsNonTypeName(const std::string& s) const;
+    bool isVariableName(const std::string& s) const;
 
 private:
-    std::stack<const SyntaxNode*> enclosersStack_;
+    using NameSet = std::unordered_set<std::string>;
+    using NameEnclosure = std::tuple<NameSet, NameSet, bool>;
+    using NamesByNode = std::unordered_map<const SyntaxNode*, NameEnclosure>;
 
-    using NameContainer = std::unordered_set<std::string>;
-    using TypeNamesAndNames = std::pair<NameContainer, NameContainer>;
-
-    TypeNamesAndNames* enclosedNames() const;
-    void catalogName(const std::string& s, NameContainer& in, NameContainer& out);
-    bool isNameEnclosed(const std::string& s, const NameContainer& container) const;
-
-    using NamesByNode = std::unordered_map<const SyntaxNode*, TypeNamesAndNames>;
-
-    mutable NamesByNode namesByNode_;
+    NameEnclosure* currentNameEnclosure() const;
+    void catalogName(const std::string& s, NameSet& in, NameSet& out);
+    bool isNameEnclosed(const std::string& s, const NameSet& names) const;
     bool isNodeMapped(const SyntaxNode*) const;
+
+    std::stack<const SyntaxNode*> enclosersStack_;
+    mutable NamesByNode namesByNode_;
 };
 
 std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog);

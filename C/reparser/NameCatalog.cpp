@@ -39,17 +39,20 @@ void NameCatalog::mapNodeAndMarkAsEncloser(const SyntaxNode* node)
     PSY_ASSERT(node, return);
     PSY_ASSERT(!isNodeMapped(node), return);
 
-    NameContainer tyNames;
-    NameContainer nonTyNames;
+    NameSet tyNames;
+    NameSet nonTyNames;
     if (!enclosersStack_.empty()) {
-        auto levelIt = namesByNode_.find(enclosersStack_.top());
-        PSY_ASSERT(levelIt != namesByNode_.end(), return);
+        auto iter = namesByNode_.find(enclosersStack_.top());
+        PSY_ASSERT(iter != namesByNode_.end(), return);
 
-        tyNames = levelIt->second.first;
-        nonTyNames = levelIt->second.second;
+        tyNames = std::get<0>(iter->second);
+        nonTyNames = std::get<1>(iter->second);
     }
 
-    namesByNode_.insert(std::make_pair(node, std::make_pair(tyNames, nonTyNames)));
+    namesByNode_.insert(
+            std::make_pair(
+                    node,
+                    std::make_tuple(tyNames, nonTyNames, false)));
 
     markMappedNodeAsEncloser(node);
 }
@@ -69,19 +72,27 @@ void NameCatalog::dropEncloser()
 
 void NameCatalog::catalogTypeName(const std::string& s)
 {
-    auto names = enclosedNames();
-    catalogName(s, names->first, names->second);
+    auto enclosure = currentNameEnclosure();
+    catalogName(s, std::get<0>(*enclosure), std::get<1>(*enclosure));
 }
 
 void NameCatalog::catalogNonTypeName(const std::string& s)
 {
-    auto names = enclosedNames();
-    catalogName(s, names->second, names->first);
+    auto enclosure = currentNameEnclosure();
+    catalogName(s, std::get<1>(*enclosure), std::get<0>(*enclosure));
+}
+
+void NameCatalog::flagAsVariableName(const std::string& s)
+{
+    PSY_ASSERT(isNameEnclosedAsNonTypeName(s), return);
+
+    auto enclosure = currentNameEnclosure();
+    std::get<2>(*enclosure) = true;
 }
 
 void NameCatalog::catalogName(const std::string& s,
-                              NameCatalog::NameContainer& toInclude,
-                              NameCatalog::NameContainer& toExclude)
+                              NameCatalog::NameSet& toInclude,
+                              NameCatalog::NameSet& toExclude)
 {
     toInclude.insert(s);
 
@@ -92,20 +103,29 @@ void NameCatalog::catalogName(const std::string& s,
 
 bool NameCatalog::isNameEnclosedAsTypeName(const std::string& s) const
 {
-    auto names = enclosedNames();
-    return isNameEnclosed(s, names->first);
+    auto enclosure = currentNameEnclosure();
+    return isNameEnclosed(s, std::get<0>(*enclosure));
 }
 
 bool NameCatalog::isNameEnclosedAsNonTypeName(const std::string &s) const
 {
-    auto names = enclosedNames();
-    return isNameEnclosed(s, names->second);
+    auto enclosure = currentNameEnclosure();
+    return isNameEnclosed(s, std::get<1>(*enclosure));
 }
 
 bool NameCatalog::isNameEnclosed(const std::string& s,
-                                 const NameCatalog::NameContainer& names) const
+                                 const NameCatalog::NameSet& names) const
 {
     return names.find(s) != names.end();
+}
+
+bool NameCatalog::isVariableName(const std::string& s) const
+{
+    if (!isNameEnclosedAsNonTypeName(s))
+        return false;
+
+    auto enclosure = currentNameEnclosure();
+    return std::get<2>(*enclosure);
 }
 
 bool NameCatalog::isNodeMapped(const SyntaxNode* node) const
@@ -113,7 +133,7 @@ bool NameCatalog::isNodeMapped(const SyntaxNode* node) const
     return namesByNode_.count(node) != 0;
 }
 
-NameCatalog::TypeNamesAndNames* NameCatalog::enclosedNames() const
+NameCatalog::NameEnclosure* NameCatalog::currentNameEnclosure() const
 {
     PSY_ASSERT(!enclosersStack_.empty(), return nullptr);
     PSY_ASSERT(isNodeMapped(enclosersStack_.top()), return nullptr);
@@ -132,11 +152,11 @@ std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog)
     for (const auto& p : disambigCatalog.namesByNode_) {
         os << "\n-" << to_string(p.first->kind()) << std::endl;
         os << "\tType names: ";
-        for (const auto& t : p.second.first)
+        for (const auto& t : std::get<0>(p.second))
             os << t << " ";
         std::cout << std::endl;
         os << "\tNames: ";
-        for (const auto& v : p.second.second)
+        for (const auto& v : std::get<1>(p.second))
             os << v << " ";
     }
     os << "\n----------------------------------";

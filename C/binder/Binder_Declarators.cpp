@@ -264,8 +264,8 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DecltrT* node)
                     switch (sym->kind()) {
                         case SymbolKind::Type:
                             PSY_ASSERT(sym->asType()->asNamedType()
-                                            && sym->asType()->asNamedType()->name()
-                                            && sym->asType()->asNamedType()->name()->asTagSymbolName(),
+                                           && sym->asType()->asNamedType()->name()
+                                           && sym->asType()->asNamedType()->name()->asTagSymbolName(),
                                        return Action::Quit);
 
                             switch (sym->asType()->asNamedType()->name()->asTagSymbolName()->tagChoice()) {
