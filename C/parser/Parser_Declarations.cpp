@@ -46,7 +46,7 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
                 auto extKwTkIdx = consume();
                 if (!parseExternalDeclaration(decl))
                     break;;
-                PSY_ASSERT_W_MSG(decl, break, "invalid declaration");
+                PSY_ASSERT(decl, break);
                 decl->extKwTkIdx_ = extKwTkIdx;
                 break;
             }
@@ -317,11 +317,23 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
                 break;
 
             case SemicolonToken: {
-                auto nameDecl = makeNode<VariableAndOrFunctionDeclarationSyntax>();
-                decl = nameDecl;
-                nameDecl->semicolonTkIdx_ = consume();
-                nameDecl->specs_ = const_cast<SpecifierListSyntax*>(specList);
-                nameDecl->decltors_ = decltorList;
+                for (auto iter = specList; iter; iter = iter->next) {
+                    PSY_ASSERT(iter->value, return false);
+                    if (iter->value->kind() == TypedefStorageClass) {
+                        auto tydefDecl = makeNode<TypedefDeclarationSyntax>();
+                        decl = tydefDecl;
+                        tydefDecl->semicolonTkIdx_ = consume();
+                        tydefDecl->specs_ = const_cast<SpecifierListSyntax*>(specList);
+                        tydefDecl->decltors_ = decltorList;
+                        return true;
+                    }
+                }
+
+                auto varAndOrFuncDecl = makeNode<VariableAndOrFunctionDeclarationSyntax>();
+                decl = varAndOrFuncDecl;
+                varAndOrFuncDecl->semicolonTkIdx_ = consume();
+                varAndOrFuncDecl->specs_ = const_cast<SpecifierListSyntax*>(specList);
+                varAndOrFuncDecl->decltors_ = decltorList;
                 return true;
             }
 
@@ -623,7 +635,7 @@ bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
                         &Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList,
                         DeclarationScope::Block))
                 return false;
-            PSY_ASSERT_W_MSG(decl, return false, "invalid declaration");
+            PSY_ASSERT(decl, return false);
             decl->extKwTkIdx_ = extKwTkIdx;
             return true;
         }

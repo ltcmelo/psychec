@@ -163,6 +163,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "ParameterDeclaration";
         case FieldDeclaration:
             return "FieldDeclaration";
+        case TypedefDeclaration:
+            return "TypedefDeclaration";
         case StaticAssertDeclaration:
             return "StaticAssertDeclaration";
         case FunctionDefinition:

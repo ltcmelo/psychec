@@ -70,6 +70,7 @@ class DeclaratorDeclarationSyntax;
 class VariableAndOrFunctionDeclarationSyntax;
 class ParameterDeclarationSyntax;
 class FieldDeclarationSyntax;
+class TypedefDeclarationSyntax;
 class StaticAssertDeclarationSyntax;
 class FunctionDefinitionSyntax;
 class ExtGNU_AsmStatementDeclarationSyntax;

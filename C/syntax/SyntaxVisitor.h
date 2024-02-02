@@ -78,6 +78,7 @@ public:
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) { return Action::Visit; }
+    virtual Action visitTypedefDeclaration(const TypedefDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) { return Action::Visit; }
     virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) { return Action::Visit; }
     virtual Action visitExtPSY_TemplateDeclaration(const ExtPSY_TemplateDeclarationSyntax*) { return Action::Visit; }

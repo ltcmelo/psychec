@@ -28,7 +28,7 @@ using namespace psy;
 
 namespace {
 
-std::pair<int, std::string> executeCore(const char* cmd)
+std::pair<int, std::string> execute_CORE(const char* cmd)
 {
     FILE* pipe = popen(cmd, "r");
     if (!pipe)
@@ -48,10 +48,10 @@ std::pair<int, std::string> executeCore(const char* cmd)
 
 std::pair<int, std::string> Process::execute(std::string&& s)
 {
-    return executeCore(s.c_str());
+    return execute_CORE(s.c_str());
 }
 
 std::pair<int, std::string> Process::execute(const std::string &s)
 {
-    return executeCore(s.c_str());
+    return execute_CORE(s.c_str());
 }

@@ -59,7 +59,7 @@ public:
     /**
      * Return the \a stripped DeclaratorSyntax of the given \p decltor.
      *
-     * A DeclaratorSyntax is \a stripped if it's not a ParenthesizedDeclaratorSyntax.
+     * A DeclaratorSyntax is \a stripped when it isn't a ParenthesizedDeclaratorSyntax.
      */
     static const DeclaratorSyntax* strippedDeclaratorOrSelf(const DeclaratorSyntax* decltor);
 };

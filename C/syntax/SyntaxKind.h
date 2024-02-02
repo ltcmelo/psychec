@@ -320,6 +320,7 @@ enum PSY_C_API SyntaxKind : std::uint16_t
     VariableAndOrFunctionDeclaration,
     FieldDeclaration,
     ParameterDeclaration,
+    TypedefDeclaration,
     StaticAssertDeclaration,
     FunctionDefinition,
     ExtGNU_AsmStatementDeclaration,

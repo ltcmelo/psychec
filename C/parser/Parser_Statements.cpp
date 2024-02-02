@@ -217,8 +217,11 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
     switch (expr->kind()) {
         case MultiplyExpression: {
             auto binExpr = expr->asBinaryExpression();
-            if (!(binExpr->leftExpr_->kind() == IdentifierName
-                    && binExpr->rightExpr_->kind() == IdentifierName))
+            if (binExpr->leftExpr_->kind() != IdentifierName)
+                return;
+
+            // TODO: Account for non-trivial expressions.
+            if (binExpr->rightExpr_->kind() != IdentifierName)
                 return;
 
             stmtK = AmbiguousMultiplicationOrPointerDeclaration;
@@ -237,6 +240,7 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
         }
 
         case CallExpression: {
+            // TODO: Account for nested parenthesis.
             auto callExpr = expr->asCallExpression();
             if (!(callExpr->expr_->kind() == IdentifierName
                     && callExpr->args_

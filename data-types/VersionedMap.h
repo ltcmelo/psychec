@@ -57,8 +57,8 @@ public:
     const_iterator find(const KeyT& key) const { return map_.find(key); }
 
 private:
-    void insertOrAssignCore(const KeyT& key, const ValueT& value);
-    void insertOrAssignCore(const KeyT& key, ValueT&& value);
+    void insertOrAssign_CORE(const KeyT& key, const ValueT& value);
+    void insertOrAssign_CORE(const KeyT& key, ValueT&& value);
 
     // Encapsulates the action, as GoF's command other.
     struct Command
@@ -100,11 +100,11 @@ void VersionedMap<KeyT, ValueT>::insertOrAssign(const KeyT& key,
                                                 const ValueT& value)
 {
     storeCommand(Command(key, value, Command::Insert));
-    insertOrAssignCore(key, value);
+    insertOrAssign_CORE(key, value);
 }
 
 template <class KeyT, class ValueT>
-void VersionedMap<KeyT, ValueT>::insertOrAssignCore(const KeyT& key,
+void VersionedMap<KeyT, ValueT>::insertOrAssign_CORE(const KeyT& key,
                                                     const ValueT& value)
 {
     map_[key] = value;
@@ -115,11 +115,11 @@ void VersionedMap<KeyT, ValueT>::insertOrAssign(const KeyT& key,
                                                 ValueT&& value)
 {
     storeCommand(Command(key, value, Command::Insert));
-    insertOrAssignCore(key, std::move(value));
+    insertOrAssign_CORE(key, std::move(value));
 }
 
 template <class KeyT, class ValueT>
-void VersionedMap<KeyT, ValueT>::insertOrAssignCore(const KeyT& key,
+void VersionedMap<KeyT, ValueT>::insertOrAssign_CORE(const KeyT& key,
                                                     ValueT&& value)
 {
     // We don't want to use operator[] because this would require ValueT to
@@ -160,7 +160,7 @@ void VersionedMap<KeyT, ValueT>::applyRevision(uint32_t revision)
         const auto& command = commands_[current];
         ValueT value = command.value_;
         if (command.opCode_ == Command::Insert)
-            insertOrAssignCore(command.key_, std::move(value));
+            insertOrAssign_CORE(command.key_, std::move(value));
     }
 }
 

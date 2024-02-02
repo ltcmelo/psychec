@@ -138,6 +138,8 @@ public:
     virtual const ParameterDeclarationSyntax* asParameterDeclaration() const { return nullptr; }
     virtual FieldDeclarationSyntax* asFieldDeclaration() { return nullptr; }
     virtual const FieldDeclarationSyntax* asFieldDeclaration() const { return nullptr; }
+    virtual TypedefDeclarationSyntax* asTypedefDeclaration() { return nullptr; }
+    virtual const TypedefDeclarationSyntax* asTypedefDeclaration() const { return nullptr; }
     virtual StaticAssertDeclarationSyntax* asStaticAssertDeclaration() { return nullptr; }
     virtual const StaticAssertDeclarationSyntax* asStaticAssertDeclaration() const { return nullptr; }
     virtual FunctionDefinitionSyntax* asFunctionDefinition() { return nullptr; }

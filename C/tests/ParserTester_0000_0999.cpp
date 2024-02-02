@@ -4374,12 +4374,12 @@ void ParserTester::case0632()
 
 void ParserTester::case0633()
 {
-
+    parse("int typedef x ;");
 }
 
 void ParserTester::case0634()
 {
-
+    parse("x typedef y ;");
 }
 
 void ParserTester::case0635()

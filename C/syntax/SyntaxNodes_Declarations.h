@@ -908,6 +908,22 @@ private:
     mutable ParameterSymbol* sym_ = nullptr;
 };
 
+class PSY_C_API TypedefDeclarationSyntax final : public DeclaratorDeclarationSyntax
+{
+    AST_NODE_1K(TypedefDeclaration, DeclaratorDeclaration)
+
+public:
+    const SpecifierListSyntax* specifiers() const { return specs_; }
+    const DeclaratorListSyntax* declarators() const { return decltors_; }
+    SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
+
+private:
+    SpecifierListSyntax* specs_ = nullptr;
+    DeclaratorListSyntax* decltors_ = nullptr;
+    LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
+    AST_CHILD_LST3(specs_, decltors_, semicolonTkIdx_)
+};
+
 /**
  * \brief The StaticAssertDeclarationSyntax class
  *

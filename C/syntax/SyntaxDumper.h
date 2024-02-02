@@ -152,6 +152,19 @@ protected:
         return Action::Skip;
     }
 
+    virtual Action visitTypedefDeclaration(const TypedefDeclarationSyntax* node) override
+    {
+        traverseDeclaration(node);
+        for (auto iter = node->specifiers(); iter; iter = iter->next)
+            nonterminal(iter->value);
+        for (auto iter = node->declarators(); iter; iter = iter->next) {
+            nonterminal(iter->value);
+            terminal(iter->delimiterToken(), node);
+        }
+        terminal(node->semicolonToken(), node);
+        return Action::Skip;
+    }
+
     virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax* node) override
     {
         terminal(node->staticAssertKeyword(), node);

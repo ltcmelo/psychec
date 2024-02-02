@@ -20,6 +20,8 @@
 
 #include "NameCataloger.h"
 
+#include "syntax/SyntaxUtilities.h"
+
 #include "../common/infra/Assertions.h"
 #include "../common/infra/Escape.h"
 
@@ -33,6 +35,7 @@ using namespace C;
 NameCataloger::NameCataloger(SyntaxTree* tree)
     : SyntaxVisitor(tree)
     , catalog_(new NameCatalog)
+    , withinTypedef_(false)
 {}
 
 std::unique_ptr<NameCatalog> NameCataloger::catalogNamesWithinNode(const SyntaxNode* node)
@@ -59,9 +62,19 @@ SyntaxVisitor::Action NameCataloger::visitTranslationUnit(const TranslationUnitS
     return Action::Skip;
 }
 
+SyntaxVisitor::Action NameCataloger::visitTypedefDeclaration(const TypedefDeclarationSyntax* node)
+{
+    withinTypedef_ = true;
+    for (auto iter = node->declarators(); iter; iter = iter->next)
+        visit(iter->value);
+    withinTypedef_ = false;
+
+    return Action::Skip;
+}
+
 SyntaxVisitor::Action NameCataloger::visitTypedefName(const TypedefNameSyntax* node)
 {
-    catalog_->catalogTypeName(node->identifierToken().valueText());
+    catalog_->catalogUseAsTypeName(node->identifierToken().valueText());
 
     return Action::Skip;
 }
@@ -69,8 +82,13 @@ SyntaxVisitor::Action NameCataloger::visitTypedefName(const TypedefNameSyntax* n
 SyntaxVisitor::Action NameCataloger::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
     const auto& name = node->identifierToken().valueText();
-    catalog_->catalogNonTypeName(name);
-    catalog_->flagAsVariableName(name);
+    if (withinTypedef_) {
+        catalog_->catalogUseAsTypeName(name);
+        catalog_->catalogDefAsTypeName(name);
+    } else {
+        catalog_->catalogUseAsNonTypeName(name);
+        catalog_->catalogDefAsNonTypeName(name);
+    }
 
     visit(node->initializer());
 
@@ -83,7 +101,7 @@ SyntaxVisitor::Action NameCataloger::visitIdentifierDeclarator(const IdentifierD
 
 SyntaxVisitor::Action NameCataloger::visitIdentifierName(const IdentifierNameSyntax* node)
 {
-    catalog_->catalogNonTypeName(node->identifierToken().valueText());
+    catalog_->catalogUseAsNonTypeName(node->identifierToken().valueText());
 
     return Action::Skip;
 }

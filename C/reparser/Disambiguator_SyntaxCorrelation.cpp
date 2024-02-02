@@ -72,9 +72,9 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateExpres
     auto typedefName = typeName->specifiers()->value->asTypedefName();
     auto name = typedefName->identifierToken().valueText();
 
-    return catalog_->isNameEnclosedAsTypeName(name)
+    return catalog_->hasUseAsTypeName(name)
             ? Disambiguation::KeepCastExpression
-            : catalog_->isNameEnclosedAsNonTypeName(name)
+            : catalog_->hasUseAsNonTypeName(name)
                     ? Disambiguation::KeepBinaryExpression
                     : Disambiguation::Inconclusive;
 }
@@ -100,10 +100,10 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatem
     auto typedefName = varDecl->specifiers()->value->asTypedefName();
     auto lhsName = typedefName->identifierToken().valueText();
 
-    if (catalog_->isNameEnclosedAsTypeName(lhsName))
+    if (catalog_->hasUseAsTypeName(lhsName))
         return Disambiguation::KeepDeclarationStatement;
 
-    if (catalog_->isNameEnclosedAsNonTypeName(lhsName))
+    if (catalog_->hasUseAsNonTypeName(lhsName))
         return Disambiguation::KeepExpressionStatement;
 
     if (node->kind() == AmbiguousMultiplicationOrPointerDeclaration)
@@ -119,10 +119,8 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatem
 
     auto rhsName = decltor->asIdentifierDeclarator()->identifierToken().valueText();
 
-    if (catalog_->isNameEnclosedAsNonTypeName(rhsName)
-            && catalog_->isVariableName(rhsName)) {
+    if (catalog_->hasDefAsNonTypeName(rhsName))
         return Disambiguation::KeepExpressionStatement;
-    }
 
     return Disambiguation::Inconclusive;
 }
@@ -142,9 +140,9 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateTypeRe
     auto typedefName = typeName->specifiers()->value->asTypedefName();
     auto name = typedefName->identifierToken().valueText();
 
-    return catalog_->isNameEnclosedAsTypeName(name)
+    return catalog_->hasUseAsTypeName(name)
             ? Disambiguation::KeepTypeName
-            : catalog_->isNameEnclosedAsNonTypeName(name)
+            : catalog_->hasUseAsNonTypeName(name)
                     ? Disambiguation::KeepExpression
                     : Disambiguation::Inconclusive;
 }

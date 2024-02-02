@@ -252,7 +252,7 @@ LexEntry:
     }
 }
 
-void Lexer::yylex_core(SyntaxToken* tk)
+void Lexer::yylex_CORE(SyntaxToken* tk)
 {
 LexEntry:
     while (yychar_ && std::isspace(yychar_)) {
@@ -773,7 +773,7 @@ void Lexer::yylex(SyntaxToken* tk)
 {
     tk->setup();
 
-    yylex_core(tk);
+    yylex_CORE(tk);
 
     tk->byteSize_ = yytext_ - yy_;
     tk->charSize_ = offset_ - tk->charOffset_;
@@ -785,7 +785,7 @@ void Lexer::yylex(SyntaxToken* tk)
  * to the value pointed by the updated \c yychar; \c offset will be
  * incremented by the number of UTF-16 code units that were needed.
  */
-void Lexer::yyinput_core(const char*& yy,
+void Lexer::yyinput_CORE(const char*& yy,
                          unsigned char& yychar,
                          unsigned int& yycolumn,
                          unsigned int& offset)
@@ -814,7 +814,7 @@ void Lexer::yyinput_core(const char*& yy,
 
 void Lexer::yyinput()
 {
-    yyinput_core(yytext_, yychar_, yycolumn_, offset_);
+    yyinput_CORE(yytext_, yychar_, yycolumn_, offset_);
 
     if (UNLIKELY(yychar_ == '\n')) {
         ++yylineno_;

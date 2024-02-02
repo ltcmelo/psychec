@@ -298,7 +298,7 @@ void InternalsTestSuite::reparse(std::string source,
                                   parseOpts,
                                   "");
 
-    if (!checkErrorAndWarn(X))
+    if (!X.containsAmbiguity_ && !checkErrorAndWarn(X))
         return;
 
     std::ostringstream ossTree;

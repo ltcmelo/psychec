@@ -42,6 +42,7 @@ public:
 
 private:
     std::unique_ptr<NameCatalog> catalog_;
+    bool withinTypedef_;
 
     using SyntaxVisitor::visit;
     using Base = SyntaxVisitor;
@@ -50,6 +51,7 @@ private:
     // Declarations //
     //--------------//
     Action visitTranslationUnit(const TranslationUnitSyntax*) override;
+    Action visitTypedefDeclaration(const TypedefDeclarationSyntax*) override;
 
     /* Specifiers */
     Action visitTypedefName(const TypedefNameSyntax*) override;

@@ -31,7 +31,6 @@
 #include <string>
 #include <tuple>
 #include <unordered_map>
-#include <unordered_set>
 #include <utility>
 
 namespace psy {
@@ -48,33 +47,44 @@ PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(NameCataloger);
     PSY_GRANT_ACCESS(SyntaxCorrelationDisambiguator);
 
-    void mapNodeAndMarkAsEncloser(const SyntaxNode*);
-    void markMappedNodeAsEncloser(const SyntaxNode*);
+    void mapNodeAndMarkAsEncloser(const SyntaxNode* node);
+    void markMappedNodeAsEncloser(const SyntaxNode* node);
     void dropEncloser();
 
-    void catalogTypeName(const std::string& s);
-    void catalogNonTypeName(const std::string& s);
-    void flagAsVariableName(const std::string& s);
+    void catalogUseAsTypeName(const std::string& name);
+    void catalogUseAsNonTypeName(const std::string& name);
+    void catalogDefAsTypeName(const std::string& name);
+    void catalogDefAsNonTypeName(const std::string& name);
 
-    bool isNameEnclosedAsTypeName(const std::string& s) const;
-    bool isNameEnclosedAsNonTypeName(const std::string& s) const;
-    bool isVariableName(const std::string& s) const;
+    bool hasUseAsTypeName(const std::string& name) const;
+    bool hasUseAsNonTypeName(const std::string& name) const;
+    bool hasDefAsTypeName(const std::string& name) const;
+    bool hasDefAsNonTypeName(const std::string& name) const;
 
 private:
-    using NameSet = std::unordered_set<std::string>;
-    using NameEnclosure = std::tuple<NameSet, NameSet, bool>;
-    using NamesByNode = std::unordered_map<const SyntaxNode*, NameEnclosure>;
+    using NameUseAndDef = std::unordered_map<std::string, bool>;
+    using Enclosure = std::tuple<NameUseAndDef, NameUseAndDef>;
+    using NamesByNode = std::unordered_map<const SyntaxNode*, Enclosure>;
 
-    NameEnclosure* currentNameEnclosure() const;
-    void catalogName(const std::string& s, NameSet& in, NameSet& out);
-    bool isNameEnclosed(const std::string& s, const NameSet& names) const;
-    bool isNodeMapped(const SyntaxNode*) const;
+    static constexpr int tyIdx_ = 0;
+    static constexpr int nonTyIdx_ = 1;
 
     std::stack<const SyntaxNode*> enclosersStack_;
     mutable NamesByNode namesByNode_;
+
+    Enclosure* currentEnclosure() const;
+    bool isNodeMapped(const SyntaxNode*node) const;
+
+    template <size_t, size_t> void catalogUse_CORE(const std::string& name);
+    template <size_t> void catalogDef_CORE(const std::string& name);
+    void catalogUseWithMutualExclusion(const std::string& name,
+                                       NameUseAndDef& in,
+                                       NameUseAndDef& out);
+    template <size_t> bool hasUseAs_CORE(const std::string& name) const;
+    template <size_t> bool hasDefAs_CORE(const std::string& name) const;
 };
 
-std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog);
+std::ostream& operator<<(std::ostream& os, const NameCatalog& catalog);
 
 } // C
 } // psy

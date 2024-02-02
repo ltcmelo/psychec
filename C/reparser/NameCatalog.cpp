@@ -31,6 +31,9 @@ using namespace C;
 #include <algorithm>
 #include <iostream>
 
+constexpr int NameCatalog::tyIdx_;
+constexpr int NameCatalog::nonTyIdx_;
+
 NameCatalog::~NameCatalog()
 {}
 
@@ -39,20 +42,19 @@ void NameCatalog::mapNodeAndMarkAsEncloser(const SyntaxNode* node)
     PSY_ASSERT(node, return);
     PSY_ASSERT(!isNodeMapped(node), return);
 
-    NameSet tyNames;
-    NameSet nonTyNames;
+    NameUseAndDef tyUseAndDef;
+    NameUseAndDef nonTyUseAndDef;
     if (!enclosersStack_.empty()) {
         auto iter = namesByNode_.find(enclosersStack_.top());
         PSY_ASSERT(iter != namesByNode_.end(), return);
-
-        tyNames = std::get<0>(iter->second);
-        nonTyNames = std::get<1>(iter->second);
+        tyUseAndDef = std::get<tyIdx_>(iter->second);
+        nonTyUseAndDef = std::get<nonTyIdx_>(iter->second);
     }
 
     namesByNode_.insert(
             std::make_pair(
                     node,
-                    std::make_tuple(tyNames, nonTyNames, false)));
+                    std::make_tuple(tyUseAndDef, nonTyUseAndDef)));
 
     markMappedNodeAsEncloser(node);
 }
@@ -70,62 +72,97 @@ void NameCatalog::dropEncloser()
     enclosersStack_.pop();
 }
 
-void NameCatalog::catalogTypeName(const std::string& s)
+void NameCatalog::catalogUseAsTypeName(const std::string& name)
 {
-    auto enclosure = currentNameEnclosure();
-    catalogName(s, std::get<0>(*enclosure), std::get<1>(*enclosure));
+    catalogUse_CORE<tyIdx_, nonTyIdx_>(name);
 }
 
-void NameCatalog::catalogNonTypeName(const std::string& s)
+void NameCatalog::catalogUseAsNonTypeName(const std::string& name)
 {
-    auto enclosure = currentNameEnclosure();
-    catalogName(s, std::get<1>(*enclosure), std::get<0>(*enclosure));
+    catalogUse_CORE<nonTyIdx_, tyIdx_>(name);
 }
 
-void NameCatalog::flagAsVariableName(const std::string& s)
+template <size_t inIdx, size_t outIdx>
+void NameCatalog::catalogUse_CORE(const std::string& name)
 {
-    PSY_ASSERT(isNameEnclosedAsNonTypeName(s), return);
-
-    auto enclosure = currentNameEnclosure();
-    std::get<2>(*enclosure) = true;
+    auto enclosure = currentEnclosure();
+    catalogUseWithMutualExclusion(
+                name,
+                std::get<inIdx>(*enclosure),
+                std::get<outIdx>(*enclosure));
 }
 
-void NameCatalog::catalogName(const std::string& s,
-                              NameCatalog::NameSet& toInclude,
-                              NameCatalog::NameSet& toExclude)
+void NameCatalog::catalogUseWithMutualExclusion(const std::string& name,
+                                                NameCatalog::NameUseAndDef& in,
+                                                NameCatalog::NameUseAndDef& out)
 {
-    toInclude.insert(s);
+    in.insert(std::make_pair(name, false));
 
-    auto excludeIt = toExclude.find(s);
-    if (excludeIt != toExclude.end())
-        toExclude.erase(excludeIt);
+    auto iter = out.find(name);
+    if (iter != out.end())
+        out.erase(iter);
 }
 
-bool NameCatalog::isNameEnclosedAsTypeName(const std::string& s) const
+void NameCatalog::catalogDefAsTypeName(const std::string& name)
 {
-    auto enclosure = currentNameEnclosure();
-    return isNameEnclosed(s, std::get<0>(*enclosure));
+    PSY_ASSERT(hasUseAsTypeName(name), return);
+    catalogDef_CORE<tyIdx_>(name);
 }
 
-bool NameCatalog::isNameEnclosedAsNonTypeName(const std::string &s) const
+void NameCatalog::catalogDefAsNonTypeName(const std::string& name)
 {
-    auto enclosure = currentNameEnclosure();
-    return isNameEnclosed(s, std::get<1>(*enclosure));
+    PSY_ASSERT(hasUseAsNonTypeName(name), return);
+    catalogDef_CORE<nonTyIdx_>(name);
 }
 
-bool NameCatalog::isNameEnclosed(const std::string& s,
-                                 const NameCatalog::NameSet& names) const
+template <size_t idx>
+void NameCatalog::catalogDef_CORE(const std::string& name)
 {
-    return names.find(s) != names.end();
+    auto enclosure = currentEnclosure();
+    std::get<idx>(*enclosure)[name] = true;
 }
 
-bool NameCatalog::isVariableName(const std::string& s) const
+bool NameCatalog::hasUseAsTypeName(const std::string& name) const
 {
-    if (!isNameEnclosedAsNonTypeName(s))
+    return hasUseAs_CORE<tyIdx_>(name);
+}
+
+bool NameCatalog::hasUseAsNonTypeName(const std::string &name) const
+{
+    return hasUseAs_CORE<nonTyIdx_>(name);
+}
+
+template <size_t idx>
+bool NameCatalog::hasUseAs_CORE(const std::string& name) const
+{
+    auto enclosure = currentEnclosure();
+    const auto& useAndDef = std::get<idx>(*enclosure);
+    return useAndDef.find(name) != useAndDef.end();
+}
+
+bool NameCatalog::hasDefAsNonTypeName(const std::string& name) const
+{
+    if (!hasUseAsNonTypeName(name))
         return false;
+    return hasDefAs_CORE<nonTyIdx_>(name);
+}
 
-    auto enclosure = currentNameEnclosure();
-    return std::get<2>(*enclosure);
+bool NameCatalog::hasDefAsTypeName(const std::string& name) const
+{
+    if (!hasUseAsTypeName(name))
+        return false;
+    return hasDefAs_CORE<tyIdx_>(name);
+}
+
+template <size_t idx>
+bool NameCatalog::hasDefAs_CORE(const std::string& name) const
+{
+    auto enclosure = currentEnclosure();
+    const auto& useAndDef = std::get<idx>(*enclosure);
+    auto iter = useAndDef.find(name);
+    if (iter == useAndDef.end())
+        return false;
+    return iter->second;
 }
 
 bool NameCatalog::isNodeMapped(const SyntaxNode* node) const
@@ -133,7 +170,7 @@ bool NameCatalog::isNodeMapped(const SyntaxNode* node) const
     return namesByNode_.count(node) != 0;
 }
 
-NameCatalog::NameEnclosure* NameCatalog::currentNameEnclosure() const
+NameCatalog::Enclosure* NameCatalog::currentEnclosure() const
 {
     PSY_ASSERT(!enclosersStack_.empty(), return nullptr);
     PSY_ASSERT(isNodeMapped(enclosersStack_.top()), return nullptr);
@@ -144,20 +181,20 @@ NameCatalog::NameEnclosure* NameCatalog::currentNameEnclosure() const
 namespace psy {
 namespace C {
 
-std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog)
+std::ostream& operator<<(std::ostream& os, const NameCatalog& catalog)
 {
     os << "\n----------------------------------"
        << "\n---------- Name Catalog ----------"
        << "\n----------------------------------";
-    for (const auto& p : disambigCatalog.namesByNode_) {
+    for (const auto& p : catalog.namesByNode_) {
         os << "\n-" << to_string(p.first->kind()) << std::endl;
         os << "\tType names: ";
-        for (const auto& t : std::get<0>(p.second))
-            os << t << " ";
+        for (const auto& t : std::get<NameCatalog::tyIdx_>(p.second))
+            os << t.first << " ";
         std::cout << std::endl;
-        os << "\tNames: ";
-        for (const auto& v : std::get<1>(p.second))
-            os << v << " ";
+        os << "\tNon-type names: ";
+        for (const auto& v : std::get<NameCatalog::nonTyIdx_>(p.second))
+            os << v.first << " ";
     }
     os << "\n----------------------------------";
 

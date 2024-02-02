@@ -58,7 +58,7 @@ static std::vector<SyntaxKind> preamble_clean(std::vector<SyntaxKind>&& v)
     return w;
 }
 
-static std::vector<SyntaxKind> preamble_x_TypeNameInParam(std::vector<SyntaxKind>&& v)
+static std::vector<SyntaxKind> preamble_x_y_ParamDecl(std::vector<SyntaxKind>&& v)
 {
     std::vector<SyntaxKind> w = { TranslationUnit,
                                   FunctionDefinition,
@@ -74,7 +74,7 @@ static std::vector<SyntaxKind> preamble_x_TypeNameInParam(std::vector<SyntaxKind
     return w;
 }
 
-static std::vector<SyntaxKind> preamble_x_NonTypeNameInParam(std::vector<SyntaxKind>&& v)
+static std::vector<SyntaxKind> preamble_int_x_ParamDecl(std::vector<SyntaxKind>&& v)
 {
     std::vector<SyntaxKind> w = { TranslationUnit,
                                   FunctionDefinition,
@@ -90,7 +90,7 @@ static std::vector<SyntaxKind> preamble_x_NonTypeNameInParam(std::vector<SyntaxK
     return w;
 }
 
-static std::vector<SyntaxKind> preamble_x_TypeNameInFile(std::vector<SyntaxKind>&& v)
+static std::vector<SyntaxKind> preamble_x_z_VarDecl(std::vector<SyntaxKind>&& v)
 {
     std::vector<SyntaxKind> w = { TranslationUnit,
                                   VariableAndOrFunctionDeclaration,
@@ -106,10 +106,27 @@ static std::vector<SyntaxKind> preamble_x_TypeNameInFile(std::vector<SyntaxKind>
     return w;
 }
 
-static std::vector<SyntaxKind> preamble_x_NonTypeNameInFile(std::vector<SyntaxKind>&& v)
+static std::vector<SyntaxKind> preamble_int_x_VarDecl(std::vector<SyntaxKind>&& v)
 {
     std::vector<SyntaxKind> w = { TranslationUnit,
                                   VariableAndOrFunctionDeclaration,
+                                  BuiltinTypeSpecifier,
+                                  IdentifierDeclarator,
+                                  FunctionDefinition,
+                                  BuiltinTypeSpecifier,
+                                  FunctionDeclarator,
+                                  IdentifierDeclarator,
+                                  ParameterSuffix,
+                                  CompoundStatement };
+    w.insert(w.end(), v.begin(), v.end());
+    return w;
+}
+
+static std::vector<SyntaxKind> preamble_int_x_TypedefDecl(std::vector<SyntaxKind>&& v)
+{
+    std::vector<SyntaxKind> w = { TranslationUnit,
+                                  TypedefDeclaration,
+                                  TypedefStorageClass,
                                   BuiltinTypeSpecifier,
                                   IdentifierDeclarator,
                                   FunctionDefinition,
@@ -368,7 +385,7 @@ int _ (x z)
     reparse_withSyntaxCorrelation(
                 s,
                 Expectation().AST(
-                    preamble_x_TypeNameInParam(
+                    preamble_x_y_ParamDecl(
                         { DeclarationStatement,
                           VariableAndOrFunctionDeclaration,
                           TypedefName,
@@ -388,7 +405,7 @@ int _ (int x)
     reparse_withSyntaxCorrelation(
                 s,
                 Expectation().AST(
-                    preamble_x_NonTypeNameInParam(
+                    preamble_int_x_ParamDecl(
                         { ExpressionStatement,
                           MultiplyExpression,
                           IdentifierName,
@@ -408,7 +425,7 @@ int _ ()
     reparse_withSyntaxCorrelation(
                 s,
                 Expectation().AST(
-                    preamble_x_TypeNameInFile(
+                    preamble_x_z_VarDecl(
                         { DeclarationStatement,
                           VariableAndOrFunctionDeclaration,
                           TypedefName,
@@ -429,19 +446,173 @@ int _ ()
     reparse_withSyntaxCorrelation(
                 s,
                 Expectation().AST(
-                    preamble_x_NonTypeNameInFile(
+                    preamble_int_x_VarDecl(
                         { ExpressionStatement,
                           MultiplyExpression,
                           IdentifierName,
                           IdentifierName })));
 }
 
-void ReparserTester::case0014(){}
-void ReparserTester::case0015(){}
-void ReparserTester::case0016(){}
-void ReparserTester::case0017(){}
-void ReparserTester::case0018(){}
-void ReparserTester::case0019(){}
+void ReparserTester::case0014()
+{
+    auto s = R"(
+int _ ( )
+{
+    typedef int x ;
+    x * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          TypedefDeclaration,
+                          TypedefStorageClass,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0015()
+{
+    auto s = R"(
+int _ ( )
+{
+    typedef x y ;
+    y * z ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          TypedefDeclaration,
+                          TypedefStorageClass,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0016()
+{
+    auto s = R"(
+typedef int x ;
+int _ ( )
+{
+    x * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_int_x_TypedefDecl(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0017()
+{
+    auto s = R"(
+typedef int x ;
+int _ ( )
+{
+    {
+        int x ;
+        x * y ;
+    }
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_int_x_TypedefDecl(
+                        { CompoundStatement,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          MultiplyExpression,
+                          IdentifierName,
+                          IdentifierName })));
+}
+
+void ReparserTester::case0018()
+{
+    auto s = R"(
+int x ;
+int _ ( )
+{
+    typedef int x ;
+    x * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_int_x_VarDecl(
+                        { DeclarationStatement,
+                          TypedefDeclaration,
+                          TypedefStorageClass,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0019()
+{
+    auto s = R"(
+int _ ( )
+{
+    x * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { AmbiguousMultiplicationOrPointerDeclaration,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          MultiplyExpression,
+                          IdentifierName,
+                          IdentifierName }))
+                .ambiguity(R"(
+int _ ( )
+{
+    x * y ;
+    x * y ;
+}
+)"));
+}
+
 void ReparserTester::case0020(){}
 void ReparserTester::case0021(){}
 void ReparserTester::case0022(){}
@@ -472,105 +643,10 @@ void ReparserTester::case0046(){}
 void ReparserTester::case0047(){}
 void ReparserTester::case0048(){}
 void ReparserTester::case0049(){}
-
-void ReparserTester::case0050()
-{
-    auto s = R"(
-int _ ( )
-{
-    x z ;
-    x ( y ) ;
-}
-)";
-
-    reparse_withSyntaxCorrelation(
-                s,
-                Expectation().AST(
-                    preamble_clean(
-                        { DeclarationStatement,
-                          VariableAndOrFunctionDeclaration,
-                          TypedefName,
-                          IdentifierDeclarator,
-                          DeclarationStatement,
-                          VariableAndOrFunctionDeclaration,
-                          TypedefName,
-                          ParenthesizedDeclarator,
-                          IdentifierDeclarator })));
-}
-
-void ReparserTester::case0051()
-{
-    auto s = R"(
-int _ ( )
-{
-    x ( y ) ;
-    x z ;
-}
-)";
-
-    reparse_withSyntaxCorrelation(
-                s,
-                Expectation().AST(
-                    preamble_clean(
-                        { DeclarationStatement,
-                          VariableAndOrFunctionDeclaration,
-                          TypedefName,
-                          ParenthesizedDeclarator,
-                          IdentifierDeclarator,
-                          DeclarationStatement,
-                          VariableAndOrFunctionDeclaration,
-                          TypedefName,
-                          IdentifierDeclarator })));
-}
-
-void ReparserTester::case0052()
-{
-    auto s = R"(
-int _ ( )
-{
-    z x ;
-    y ( x ) ;
-}
-)";
-
-    reparse_withSyntaxCorrelation(
-                s,
-                Expectation().AST(
-                    preamble_clean(
-                        { DeclarationStatement,
-                          VariableAndOrFunctionDeclaration,
-                          TypedefName,
-                          IdentifierDeclarator,
-                          ExpressionStatement,
-                          CallExpression,
-                          IdentifierName,
-                          IdentifierName })));
-}
-
-void ReparserTester::case0053()
-{
-    auto s = R"(
-int _ ( )
-{
-    int x ;
-    y ( x ) ;
-}
-)";
-
-    reparse_withSyntaxCorrelation(
-                s,
-                Expectation().AST(
-                    preamble_clean(
-                        { DeclarationStatement,
-                          VariableAndOrFunctionDeclaration,
-                          BuiltinTypeSpecifier,
-                          IdentifierDeclarator,
-                          ExpressionStatement,
-                          CallExpression,
-                          IdentifierName,
-                          IdentifierName })));
-}
-
+void ReparserTester::case0050(){}
+void ReparserTester::case0051(){}
+void ReparserTester::case0052(){}
+void ReparserTester::case0053(){}
 void ReparserTester::case0054(){}
 void ReparserTester::case0055(){}
 void ReparserTester::case0056(){}
@@ -618,14 +694,224 @@ void ReparserTester::case0097(){}
 void ReparserTester::case0098(){}
 void ReparserTester::case0099(){}
 
-void ReparserTester::case0100(){}
-void ReparserTester::case0101(){}
-void ReparserTester::case0102(){}
-void ReparserTester::case0103(){}
-void ReparserTester::case0104(){}
-void ReparserTester::case0105(){}
-void ReparserTester::case0106(){}
-void ReparserTester::case0107(){}
+void ReparserTester::case0100()
+{
+    auto s = R"(
+int _ ( )
+{
+    x z ;
+    x ( y ) ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          ParenthesizedDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0101()
+{
+    auto s = R"(
+int _ ( )
+{
+    x ( y ) ;
+    x z ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          ParenthesizedDeclarator,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0102()
+{
+    auto s = R"(
+int _ ( )
+{
+    z x ;
+    y ( x ) ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          CallExpression,
+                          IdentifierName,
+                          IdentifierName })));
+}
+
+void ReparserTester::case0103()
+{
+    auto s = R"(
+int _ ( )
+{
+    int x ;
+    y ( x ) ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          CallExpression,
+                          IdentifierName,
+                          IdentifierName })));
+}
+
+void ReparserTester::case0104()
+{
+    auto s = R"(
+int _ ( )
+{
+    x ( y , z ) ;
+    x ( w ) ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { ExpressionStatement,
+                          CallExpression,
+                          IdentifierName,
+                          IdentifierName,
+                          IdentifierName,
+                          ExpressionStatement,
+                          CallExpression,
+                          IdentifierName,
+                          IdentifierName })));
+}
+
+void ReparserTester::case0105()
+{
+    auto s = R"(
+int _ ( )
+{
+    x ( w ) ;
+    x ( y , z ) ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { ExpressionStatement,
+                          CallExpression,
+                          IdentifierName,
+                          IdentifierName,
+                          ExpressionStatement,
+                          CallExpression,
+                          IdentifierName,
+                          IdentifierName,
+                          IdentifierName })));
+}
+
+void ReparserTester::case0106()
+{
+    auto s = R"(
+int _ ( )
+{
+    typedef int x ;
+    x ( y ) ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          TypedefDeclaration,
+                          TypedefStorageClass,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          ParenthesizedDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0107()
+{
+    auto s = R"(
+int _ ( )
+{
+    int z ;
+    y ( x ) ;
+    x = z ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          AmbiguousCallOrVariableDeclaration,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          ParenthesizedDeclarator,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          CallExpression,
+                          IdentifierName,
+                          IdentifierName,
+                          ExpressionStatement,
+                          BasicAssignmentExpression,
+                          IdentifierName,
+                          IdentifierName }))
+                .ambiguity(R"(
+int _ ( )
+{
+    int z ;
+    y ( x ) ;
+    y ( x ) ;
+    x = z ;
+}
+)"));
+}
+
 void ReparserTester::case0108(){}
 void ReparserTester::case0109(){}
 void ReparserTester::case0110(){}

@@ -59,9 +59,9 @@ private:
     void operator=(const Lexer&) = delete;
 
     void yylex(SyntaxToken* tk);
-    void yylex_core(SyntaxToken* tk);
+    void yylex_CORE(SyntaxToken* tk);
     void yyinput();
-    void yyinput_core(const char*& yy,
+    void yyinput_CORE(const char*& yy,
                       unsigned char& yychar,
                       unsigned int& yycolumn,
                       unsigned int& offset);
