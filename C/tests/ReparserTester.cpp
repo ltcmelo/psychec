@@ -613,9 +613,84 @@ int _ ( )
 )"));
 }
 
-void ReparserTester::case0020(){}
-void ReparserTester::case0021(){}
-void ReparserTester::case0022(){}
+void ReparserTester::case0020()
+{
+    auto s = R"(
+int _ ( )
+{
+    x z ;
+    x * * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          PointerDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0021()
+{
+    auto s = R"(
+int _ ( )
+{
+    x z ;
+    x * * * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          PointerDeclarator,
+                          PointerDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0022()
+{
+    auto s = R"(
+int _ ( )
+{
+    int x ;
+    x * * y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          MultiplyExpression,
+                          IdentifierName,
+                          PointerIndirectionExpression,
+                          IdentifierName })));
+}
+
 void ReparserTester::case0023(){}
 void ReparserTester::case0024(){}
 void ReparserTester::case0025(){}

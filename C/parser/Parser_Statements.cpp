@@ -220,22 +220,58 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
             if (binExpr->leftExpr_->kind() != IdentifierName)
                 return;
 
-            // TODO: Account for non-trivial expressions.
-            if (binExpr->rightExpr_->kind() != IdentifierName)
-                return;
+            IdentifierDeclaratorSyntax* identDecltor = nullptr;
+            std::stack<ExpressionSyntax*> exprs;
+            auto expr = binExpr->rightExpr_;
+            while (true) {
+                switch (expr->kind()) {
+                    case PointerIndirectionExpression:
+                        exprs.push(expr);
+                        expr = expr->asPrefixUnaryExpression()->expr_;
+                        break;
 
-            stmtK = AmbiguousMultiplicationOrPointerDeclaration;
+                    // TODO: Account for postfix expression.
+
+                    case IdentifierName:
+                        identDecltor = makeNode<IdentifierDeclaratorSyntax>();
+                        identDecltor->identTkIdx_ = expr->asIdentifierName()->identTkIdx_;
+                        break;
+
+                    default:
+                        return;
+                }
+
+                if (identDecltor)
+                    break;
+            }
+
             typedefName = makeNode<TypedefNameSyntax>();
             typedefName->identTkIdx_ =
                     binExpr->leftExpr_->asIdentifierName()->identTkIdx_;
 
-            auto identDecltor = makeNode<IdentifierDeclaratorSyntax>();
-            identDecltor->identTkIdx_ =
-                    binExpr->rightExpr_->asIdentifierName()->identTkIdx_;
+            DeclaratorSyntax* innerDecltor = identDecltor;
+            while (!exprs.empty()) {
+                auto expr = exprs.top();
+                exprs.pop();
+                switch (expr->kind()) {
+                    case PointerIndirectionExpression: {
+                        auto ptrDecltor = makeNode<PointerDeclaratorSyntax>();
+                        ptrDecltor->asteriskTkIdx_ = expr->asPrefixUnaryExpression()->oprtrTkIdx_;
+                        ptrDecltor->innerDecltor_ = innerDecltor;
+                        innerDecltor = ptrDecltor;
+                        break;
+                    }
+
+                    default:
+                        PSY_ASSERT(false, return);
+                }
+            }
             auto ptrDecltor = makeNode<PointerDeclaratorSyntax>();
-            decltor = ptrDecltor;
             ptrDecltor->asteriskTkIdx_ = binExpr->oprtrTkIdx_;
-            ptrDecltor->innerDecltor_ = identDecltor;
+            ptrDecltor->innerDecltor_ = innerDecltor;
+            decltor = ptrDecltor;
+
+            stmtK = AmbiguousMultiplicationOrPointerDeclaration;
             break;
         }
 
@@ -248,7 +284,6 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
                     && !callExpr->args_->next))
                 return;
 
-            stmtK = AmbiguousCallOrVariableDeclaration;
             typedefName = makeNode<TypedefNameSyntax>();
             typedefName->identTkIdx_ =
                     callExpr->expr_->asIdentifierName()->identTkIdx_;
@@ -261,6 +296,8 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
             parenDecltor->openParenTkIdx_ = callExpr->openParenTkIdx_;
             parenDecltor->innerDecltor_ = identDecltor;
             parenDecltor->closeParenTkIdx_ = callExpr->closeParenTkIdx_;
+
+            stmtK = AmbiguousCallOrVariableDeclaration;
             break;
         }
 

@@ -786,8 +786,46 @@ void ParserTester::case2213()
 
 }
 
-void ParserTester::case2214() {}
-void ParserTester::case2215() {}
+void ParserTester::case2214()
+{
+    parseStatement("{ x * * y ; }",
+                   Expectation().AST( { CompoundStatement,
+                                        AmbiguousMultiplicationOrPointerDeclaration,
+                                        DeclarationStatement,
+                                        VariableAndOrFunctionDeclaration,
+                                        TypedefName,
+                                        PointerDeclarator,
+                                        PointerDeclarator,
+                                        IdentifierDeclarator,
+                                        ExpressionStatement,
+                                        MultiplyExpression,
+                                        IdentifierName,
+                                        PointerIndirectionExpression,
+                                        IdentifierName })
+                   .ambiguity("{ x * * y ; x * * y ; }"));
+}
+
+void ParserTester::case2215()
+{
+    parseStatement("{ x * * * y ; }",
+                   Expectation().AST( { CompoundStatement,
+                                        AmbiguousMultiplicationOrPointerDeclaration,
+                                        DeclarationStatement,
+                                        VariableAndOrFunctionDeclaration,
+                                        TypedefName,
+                                        PointerDeclarator,
+                                        PointerDeclarator,
+                                        PointerDeclarator,
+                                        IdentifierDeclarator,
+                                        ExpressionStatement,
+                                        MultiplyExpression,
+                                        IdentifierName,
+                                        PointerIndirectionExpression,
+                                        PointerIndirectionExpression,
+                                        IdentifierName })
+                   .ambiguity("{ x * * * y ; x * * * y ; }"));
+}
+
 void ParserTester::case2216() {}
 void ParserTester::case2217() {}
 void ParserTester::case2218() {}
