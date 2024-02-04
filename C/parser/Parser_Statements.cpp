@@ -167,15 +167,15 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
             switch (stmt->kind()) {
                 case ExpressionStatement:
                     PSY_ASSERT_W_MSG(stmt->asExpressionStatement(),
-                                  return false,
-                                  "invalid expression-statement");
+                                     return false,
+                                     "invalid expression-statement");
                     stmt->asExpressionStatement()->expr_->extKwTkIdx_ = extKwTkIdx;
                     break;
 
                 case DeclarationStatement:
                     PSY_ASSERT_W_MSG(stmt->asDeclarationStatement(),
-                                  return false,
-                                  "invalid expression-statement");
+                                     return false,
+                                     "invalid expression-statement");
                     stmt->asDeclarationStatement()->decl_->extKwTkIdx_ = extKwTkIdx;
                     break;
 
@@ -202,8 +202,8 @@ bool Parser::parseDeclarationStatement(StatementSyntax*& stmt,
 void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
 {
     PSY_ASSERT_W_MSG(stmt->kind() == ExpressionStatement,
-                  return,
-                  to_string(stmt->kind()));
+                     return,
+                     to_string(stmt->kind()));
 
     auto exprStmt = stmt->asExpressionStatement();
     auto expr = exprStmt->expr_;
@@ -331,8 +331,8 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
 {
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == OpenBraceToken,
-                  return false,
-                  "assert failure: `{'");
+                     return false,
+                     "assert failure: `{'");
 
     DepthControl _(DEPTH_OF_STMTS_);
 
@@ -406,8 +406,8 @@ bool Parser::parseIfStatement_AtFirst(StatementSyntax*& stmt, StatementContext s
 {
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == Keyword_if,
-                  return false,
-                  "assert failure: `if'");
+                     return false,
+                     "assert failure: `if'");
 
     auto ifStmt = makeNode<IfStatementSyntax>();
     stmt = ifStmt;
@@ -439,8 +439,8 @@ bool Parser::parseSwitchStatement_AtFirst(StatementSyntax*& stmt,
 {
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == Keyword_switch,
-                  return false,
-                  "assert failure: `switch'");
+                     return false,
+                     "assert failure: `switch'");
 
     auto switchStmt = makeNode<SwitchStatementSyntax>();
     stmt = switchStmt;
@@ -466,16 +466,16 @@ bool Parser::parseLabeledStatement_AtFirst(StatementSyntax*& stmt,
     PSY_ASSERT_W_MSG(peek().kind() == IdentifierToken
                         || peek().kind() == Keyword_case
                         || peek().kind() == Keyword_default,
-                  return false,
-                  "assert failure: <identifier>, `case', or `default'");
+                     return false,
+                     "assert failure: <identifier>, `case', or `default'");
 
     LabeledStatementSyntax* labelStmt = nullptr;
 
     switch (peek().kind()) {
         case IdentifierToken:
             PSY_ASSERT_W_MSG(peek(2).kind() == ColonToken,
-                          return false,
-                          "assert failure: `:'");
+                             return false,
+                             "assert failure: `:'");
 
             labelStmt = makeNode<LabeledStatementSyntax>(IdentifierLabelStatement);
             stmt = labelStmt;
@@ -519,8 +519,8 @@ bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt,
 {
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == Keyword_while,
-                  return false,
-                  "assert failure: `while'");
+                     return false,
+                     "assert failure: `while'");
 
     auto whileStmt = makeNode<WhileStatementSyntax>();
     stmt = whileStmt;
@@ -545,8 +545,8 @@ bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt,
 {
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == Keyword_do,
-                  return false,
-                  "assert failure: `do'");
+                     return false,
+                     "assert failure: `do'");
 
     auto doStmt = makeNode<DoStatementSyntax>();
     stmt = doStmt;
@@ -573,8 +573,8 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
 {
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == Keyword_for,
-                  return false,
-                  "assert failure: `for'");
+                     return false,
+                     "assert failure: `for'");
 
     auto forStmt = makeNode<ForStatementSyntax>();
     stmt = forStmt;
@@ -688,8 +688,8 @@ bool Parser::parseGotoStatement_AtFirst(StatementSyntax*& stmt)
 {
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == Keyword_goto,
-                  return false,
-                  "assert failure: `goto'");
+                     return false,
+                     "assert failure: `goto'");
 
     auto gotoStmt = makeNode<GotoStatementSyntax>();
     stmt = gotoStmt;
@@ -717,8 +717,8 @@ bool Parser::parseContinueStatement_AtFirst(StatementSyntax*& stmt,
 {
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == Keyword_continue,
-                  return false,
-                  "assert failure: `continue'");
+                     return false,
+                     "assert failure: `continue'");
 
     auto continueStmt = makeNode<ContinueStatementSyntax>();
     stmt = continueStmt;
@@ -739,8 +739,8 @@ bool Parser::parseBreakStatement_AtFirst(StatementSyntax*& stmt,
 {
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == Keyword_break,
-                  return false,
-                  "assert failure: `break'");
+                     return false,
+                     "assert failure: `break'");
 
     auto breakStmt = makeNode<BreakStatementSyntax>();
     stmt = breakStmt;
@@ -785,8 +785,8 @@ bool Parser::parseExtGNU_AsmStatement(StatementSyntax*& stmt)
 {
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtGNU___asm__,
-                  return false,
-                  "assert failure: `asm'");
+                     return false,
+                     "assert failure: `asm'");
 
     if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Asm())
         diagReporter_.ExpectedFeature("GNU asm");
@@ -895,8 +895,8 @@ bool Parser::parseExtGNU_AsmOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOprd,
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == StringLiteralToken
                         || peek().kind() == OpenBracketToken,
-                  return false,
-                  "assert failure: `[' or `<string-literal>'");
+                     return false,
+                     "assert failure: `[' or `<string-literal>'");
 
     auto oprd = makeNode<ExtGNU_AsmOperandSyntax>(oprdK);
     asmOprd = oprd;
