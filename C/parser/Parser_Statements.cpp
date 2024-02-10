@@ -230,7 +230,10 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
                         expr = expr->asPrefixUnaryExpression()->expr_;
                         break;
 
-                    // TODO: Account for postfix expression.
+                    case ElementAccessExpression:
+                        exprs.push(expr);
+                        expr = expr->asArraySubscriptExpression()->expr_;
+                        break;
 
                     case IdentifierName:
                         identDecltor = makeNode<IdentifierDeclaratorSyntax>();
@@ -259,6 +262,20 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
                         ptrDecltor->asteriskTkIdx_ = expr->asPrefixUnaryExpression()->oprtrTkIdx_;
                         ptrDecltor->innerDecltor_ = innerDecltor;
                         innerDecltor = ptrDecltor;
+                        break;
+                    }
+
+                    case ElementAccessExpression: {
+                        auto arrDecltorSx = makeNode<SubscriptSuffixSyntax>();
+                        arrDecltorSx->openBracketTkIdx_ =
+                                expr->asArraySubscriptExpression()->openBracketTkIdx_;
+                        arrDecltorSx->expr_ = expr->asArraySubscriptExpression()->arg_;
+                        arrDecltorSx->closeBracketTkIdx_ =
+                                expr->asArraySubscriptExpression()->closeBracketTkIdx_;
+                        auto arrDecltor = makeNode<ArrayOrFunctionDeclaratorSyntax>(ArrayDeclarator);
+                        arrDecltor->asArrayOrFunctionDeclarator()->suffix_ = arrDecltorSx;
+                        arrDecltor->innerDecltor_ = innerDecltor;
+                        innerDecltor = arrDecltor;
                         break;
                     }
 

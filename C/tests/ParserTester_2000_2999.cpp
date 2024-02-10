@@ -826,8 +826,52 @@ void ParserTester::case2215()
                    .ambiguity("{ x * * * y ; x * * * y ; }"));
 }
 
-void ParserTester::case2216() {}
-void ParserTester::case2217() {}
+void ParserTester::case2216()
+{
+    parseStatement("{ x * y [ 1 ] ; }",
+                   Expectation().AST( { CompoundStatement,
+                                        AmbiguousMultiplicationOrPointerDeclaration,
+                                        DeclarationStatement,
+                                        VariableAndOrFunctionDeclaration,
+                                        TypedefName,
+                                        PointerDeclarator,
+                                        ArrayDeclarator,
+                                        IdentifierDeclarator,
+                                        SubscriptSuffix,
+                                        IntegerConstantExpression,
+                                        ExpressionStatement,
+                                        MultiplyExpression,
+                                        IdentifierName,
+                                        ElementAccessExpression,
+                                        IdentifierName,
+                                        IntegerConstantExpression, })
+                   .ambiguity("{ x * y [ 1 ] ; x * y [ 1 ] ; }"));
+}
+
+void ParserTester::case2217()
+{
+    parseStatement("{ x * * y [ 1 ] ; }",
+                   Expectation().AST( { CompoundStatement,
+                                        AmbiguousMultiplicationOrPointerDeclaration,
+                                        DeclarationStatement,
+                                        VariableAndOrFunctionDeclaration,
+                                        TypedefName,
+                                        PointerDeclarator,
+                                        PointerDeclarator,
+                                        ArrayDeclarator,
+                                        IdentifierDeclarator,
+                                        SubscriptSuffix,
+                                        IntegerConstantExpression,
+                                        ExpressionStatement,
+                                        MultiplyExpression,
+                                        IdentifierName,
+                                        PointerIndirectionExpression,
+                                        ElementAccessExpression,
+                                        IdentifierName,
+                                        IntegerConstantExpression, })
+                   .ambiguity("{ x * * y [ 1 ] ; x * * y [ 1 ] ; }"));
+}
+
 void ParserTester::case2218() {}
 void ParserTester::case2219() {}
 void ParserTester::case2220() {}

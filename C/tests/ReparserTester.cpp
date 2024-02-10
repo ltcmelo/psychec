@@ -691,9 +691,92 @@ int _ ( )
                           IdentifierName })));
 }
 
-void ReparserTester::case0023(){}
-void ReparserTester::case0024(){}
-void ReparserTester::case0025(){}
+void ReparserTester::case0023()
+{
+    auto s = R"(
+int _ ( )
+{
+    int x ;
+    x * * y [ 1 ] ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          MultiplyExpression,
+                          IdentifierName,
+                          PointerIndirectionExpression,
+                          ElementAccessExpression,
+                          IdentifierName,
+                          IntegerConstantExpression })));
+}
+
+void ReparserTester::case0024()
+{
+    auto s = R"(
+int _ ( )
+{
+    typedef x y ;
+    y * z [ 1 ] ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          TypedefDeclaration,
+                          TypedefStorageClass,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          ArrayDeclarator,
+                          IdentifierDeclarator,
+                          SubscriptSuffix,
+                          IntegerConstantExpression })));
+}
+
+void ReparserTester::case0025()
+{
+    auto s = R"(
+int _ ( )
+{
+    typedef x y ;
+    y * * z [ 1 ] ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          TypedefDeclaration,
+                          TypedefStorageClass,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          PointerDeclarator,
+                          PointerDeclarator,
+                          ArrayDeclarator,
+                          IdentifierDeclarator,
+                          SubscriptSuffix,
+                          IntegerConstantExpression })));
+}
+
 void ReparserTester::case0026(){}
 void ReparserTester::case0027(){}
 void ReparserTester::case0028(){}
