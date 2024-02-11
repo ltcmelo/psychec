@@ -293,26 +293,65 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
         }
 
         case CallExpression: {
-            // TODO: Account for nested parenthesis.
             auto callExpr = expr->asCallExpression();
             if (!(callExpr->expr_->kind() == IdentifierName
                     && callExpr->args_
-                    && callExpr->args_->value->kind() == IdentifierName
-                    && !callExpr->args_->next))
+                    && !callExpr->args_->next)) {
                 return;
+            }
+
+            IdentifierDeclaratorSyntax* identDecltor = nullptr;
+            std::stack<ExpressionSyntax*> exprs;
+            auto expr = callExpr->args_->value;
+            while (true) {
+                switch (expr->kind()) {
+                    case ParenthesizedExpression:
+                        exprs.push(expr);
+                        expr = expr->asParenthesizedExpression()->expr_;
+                        break;
+
+                    case IdentifierName:
+                        identDecltor = makeNode<IdentifierDeclaratorSyntax>();
+                        identDecltor->identTkIdx_ = expr->asIdentifierName()->identTkIdx_;
+                        break;
+
+                    default:
+                        return;
+                }
+
+                if (identDecltor)
+                    break;
+            }
 
             typedefName = makeNode<TypedefNameSyntax>();
             typedefName->identTkIdx_ =
                     callExpr->expr_->asIdentifierName()->identTkIdx_;
 
-            auto identDecltor = makeNode<IdentifierDeclaratorSyntax>();
-            identDecltor->identTkIdx_ =
-                    callExpr->args_->value->asIdentifierName()->identTkIdx_;
+            DeclaratorSyntax* innerDecltor = identDecltor;
+            while (!exprs.empty()) {
+                auto expr = exprs.top();
+                exprs.pop();
+                switch (expr->kind_) {
+                    case ParenthesizedExpression: {
+                        auto parenDecltor = makeNode<ParenthesizedDeclaratorSyntax>();
+                        parenDecltor->openParenTkIdx_ =
+                                expr->asParenthesizedExpression()->openParenTkIdx_;
+                        parenDecltor->closeParenTkIdx_ =
+                                expr->asParenthesizedExpression()->closeParenTkIdx_;
+                        parenDecltor->innerDecltor_ = innerDecltor;
+                        innerDecltor = parenDecltor;
+                        break;
+                    }
+
+                    default:
+                        PSY_ASSERT(false, return);
+                }
+            }
             auto parenDecltor = makeNode<ParenthesizedDeclaratorSyntax>();
-            decltor = parenDecltor;
             parenDecltor->openParenTkIdx_ = callExpr->openParenTkIdx_;
-            parenDecltor->innerDecltor_ = identDecltor;
             parenDecltor->closeParenTkIdx_ = callExpr->closeParenTkIdx_;
+            parenDecltor->innerDecltor_ = innerDecltor;
+            decltor = parenDecltor;
 
             stmtK = AmbiguousCallOrVariableDeclaration;
             break;

@@ -1070,8 +1070,57 @@ int _ ( )
 )"));
 }
 
-void ReparserTester::case0108(){}
-void ReparserTester::case0109(){}
+void ReparserTester::case0108()
+{
+    auto s = R"(
+int _ ( )
+{
+    x z ;
+    x ( ( y ) ) ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          IdentifierDeclarator,
+                          DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          TypedefName,
+                          ParenthesizedDeclarator,
+                          ParenthesizedDeclarator,
+                          IdentifierDeclarator })));
+}
+
+void ReparserTester::case0109()
+{
+    auto s = R"(
+int _ ( )
+{
+    int x ;
+    y ( ( x ) ) ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          CallExpression,
+                          IdentifierName,
+                          ParenthesizedExpression,
+                          IdentifierName })));
+}
+
 void ReparserTester::case0110(){}
 void ReparserTester::case0111(){}
 void ReparserTester::case0112(){}

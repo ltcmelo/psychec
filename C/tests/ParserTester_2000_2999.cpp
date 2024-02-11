@@ -872,7 +872,25 @@ void ParserTester::case2217()
                    .ambiguity("{ x * * y [ 1 ] ; x * * y [ 1 ] ; }"));
 }
 
-void ParserTester::case2218() {}
+void ParserTester::case2218()
+{
+    parseStatement("{ x ( ( y ) ) ; }",
+                   Expectation().AST( { CompoundStatement,
+                                        AmbiguousCallOrVariableDeclaration,
+                                        DeclarationStatement,
+                                        VariableAndOrFunctionDeclaration,
+                                        TypedefName,
+                                        ParenthesizedDeclarator,
+                                        ParenthesizedDeclarator,
+                                        IdentifierDeclarator,
+                                        ExpressionStatement,
+                                        CallExpression,
+                                        IdentifierName,
+                                        ParenthesizedExpression,
+                                        IdentifierName })
+                   .ambiguity("{ x ( ( y ) ) ; x ( ( y ) ) ; }"));
+}
+
 void ParserTester::case2219() {}
 void ParserTester::case2220() {}
 void ParserTester::case2221() {}
