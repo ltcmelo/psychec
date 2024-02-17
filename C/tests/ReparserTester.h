@@ -359,6 +359,107 @@ public:
     void case0298();
     void case0299();
 
+    void case0300();
+    void case0301();
+    void case0302();
+    void case0303();
+    void case0304();
+    void case0305();
+    void case0306();
+    void case0307();
+    void case0308();
+    void case0309();
+    void case0310();
+    void case0311();
+    void case0312();
+    void case0313();
+    void case0314();
+    void case0315();
+    void case0316();
+    void case0317();
+    void case0318();
+    void case0319();
+    void case0320();
+    void case0321();
+    void case0322();
+    void case0323();
+    void case0324();
+    void case0325();
+    void case0326();
+    void case0327();
+    void case0328();
+    void case0329();
+    void case0330();
+    void case0331();
+    void case0332();
+    void case0333();
+    void case0334();
+    void case0335();
+    void case0336();
+    void case0337();
+    void case0338();
+    void case0339();
+    void case0340();
+    void case0341();
+    void case0342();
+    void case0343();
+    void case0344();
+    void case0345();
+    void case0346();
+    void case0347();
+    void case0348();
+    void case0349();
+    void case0350();
+    void case0351();
+    void case0352();
+    void case0353();
+    void case0354();
+    void case0355();
+    void case0356();
+    void case0357();
+    void case0358();
+    void case0359();
+    void case0360();
+    void case0361();
+    void case0362();
+    void case0363();
+    void case0364();
+    void case0365();
+    void case0366();
+    void case0367();
+    void case0368();
+    void case0369();
+    void case0370();
+    void case0371();
+    void case0372();
+    void case0373();
+    void case0374();
+    void case0375();
+    void case0376();
+    void case0377();
+    void case0378();
+    void case0379();
+    void case0380();
+    void case0381();
+    void case0382();
+    void case0383();
+    void case0384();
+    void case0385();
+    void case0386();
+    void case0387();
+    void case0388();
+    void case0389();
+    void case0390();
+    void case0391();
+    void case0392();
+    void case0393();
+    void case0394();
+    void case0395();
+    void case0396();
+    void case0397();
+    void case0398();
+    void case0399();
+
     std::vector<TestFunction> tests_
     {
         TEST_REPARSER(case0001),
@@ -663,6 +764,106 @@ public:
         TEST_REPARSER(case0298),
         TEST_REPARSER(case0299),
 
+        TEST_REPARSER(case0300),
+        TEST_REPARSER(case0301),
+        TEST_REPARSER(case0302),
+        TEST_REPARSER(case0303),
+        TEST_REPARSER(case0304),
+        TEST_REPARSER(case0305),
+        TEST_REPARSER(case0306),
+        TEST_REPARSER(case0307),
+        TEST_REPARSER(case0308),
+        TEST_REPARSER(case0309),
+        TEST_REPARSER(case0310),
+        TEST_REPARSER(case0311),
+        TEST_REPARSER(case0312),
+        TEST_REPARSER(case0313),
+        TEST_REPARSER(case0314),
+        TEST_REPARSER(case0315),
+        TEST_REPARSER(case0316),
+        TEST_REPARSER(case0317),
+        TEST_REPARSER(case0318),
+        TEST_REPARSER(case0319),
+        TEST_REPARSER(case0320),
+        TEST_REPARSER(case0321),
+        TEST_REPARSER(case0322),
+        TEST_REPARSER(case0323),
+        TEST_REPARSER(case0324),
+        TEST_REPARSER(case0325),
+        TEST_REPARSER(case0326),
+        TEST_REPARSER(case0327),
+        TEST_REPARSER(case0328),
+        TEST_REPARSER(case0329),
+        TEST_REPARSER(case0330),
+        TEST_REPARSER(case0331),
+        TEST_REPARSER(case0332),
+        TEST_REPARSER(case0333),
+        TEST_REPARSER(case0334),
+        TEST_REPARSER(case0335),
+        TEST_REPARSER(case0336),
+        TEST_REPARSER(case0337),
+        TEST_REPARSER(case0338),
+        TEST_REPARSER(case0339),
+        TEST_REPARSER(case0340),
+        TEST_REPARSER(case0341),
+        TEST_REPARSER(case0342),
+        TEST_REPARSER(case0343),
+        TEST_REPARSER(case0344),
+        TEST_REPARSER(case0345),
+        TEST_REPARSER(case0346),
+        TEST_REPARSER(case0347),
+        TEST_REPARSER(case0348),
+        TEST_REPARSER(case0349),
+        TEST_REPARSER(case0350),
+        TEST_REPARSER(case0351),
+        TEST_REPARSER(case0352),
+        TEST_REPARSER(case0353),
+        TEST_REPARSER(case0354),
+        TEST_REPARSER(case0355),
+        TEST_REPARSER(case0356),
+        TEST_REPARSER(case0357),
+        TEST_REPARSER(case0358),
+        TEST_REPARSER(case0359),
+        TEST_REPARSER(case0360),
+        TEST_REPARSER(case0361),
+        TEST_REPARSER(case0362),
+        TEST_REPARSER(case0363),
+        TEST_REPARSER(case0364),
+        TEST_REPARSER(case0365),
+        TEST_REPARSER(case0366),
+        TEST_REPARSER(case0367),
+        TEST_REPARSER(case0368),
+        TEST_REPARSER(case0369),
+        TEST_REPARSER(case0370),
+        TEST_REPARSER(case0371),
+        TEST_REPARSER(case0372),
+        TEST_REPARSER(case0373),
+        TEST_REPARSER(case0374),
+        TEST_REPARSER(case0375),
+        TEST_REPARSER(case0376),
+        TEST_REPARSER(case0377),
+        TEST_REPARSER(case0378),
+        TEST_REPARSER(case0379),
+        TEST_REPARSER(case0380),
+        TEST_REPARSER(case0381),
+        TEST_REPARSER(case0382),
+        TEST_REPARSER(case0383),
+        TEST_REPARSER(case0384),
+        TEST_REPARSER(case0385),
+        TEST_REPARSER(case0386),
+        TEST_REPARSER(case0387),
+        TEST_REPARSER(case0388),
+        TEST_REPARSER(case0389),
+        TEST_REPARSER(case0390),
+        TEST_REPARSER(case0391),
+        TEST_REPARSER(case0392),
+        TEST_REPARSER(case0393),
+        TEST_REPARSER(case0394),
+        TEST_REPARSER(case0395),
+        TEST_REPARSER(case0396),
+        TEST_REPARSER(case0397),
+        TEST_REPARSER(case0398),
+        TEST_REPARSER(case0399),
     };
 };
 

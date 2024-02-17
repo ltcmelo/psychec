@@ -63,14 +63,14 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateExpres
     PSY_ASSERT(node->kind() == AmbiguousCastOrBinaryExpression,
                return Disambiguation::Inconclusive);
 
-    auto typeName = node->castExpression()->typeName();
-    PSY_ASSERT(typeName->specifiers()
-                   && typeName->specifiers()->value
-                   && typeName->specifiers()->value->kind() == TypedefName,
+    auto tyName = node->castExpression()->typeName();
+    PSY_ASSERT(tyName->specifiers()
+                   && tyName->specifiers()->value
+                   && tyName->specifiers()->value->kind() == TypedefName,
                return Disambiguation::Inconclusive);
 
-    auto typedefName = typeName->specifiers()->value->asTypedefName();
-    auto name = typedefName->identifierToken().valueText();
+    auto tydefName = tyName->specifiers()->value->asTypedefName();
+    auto name = tydefName->identifierToken().valueText();
 
     return catalog_->hasUseAsTypeName(name)
             ? Disambiguation::KeepCastExpression
@@ -97,8 +97,8 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatem
                    && varDecl->specifiers()->value->kind() == TypedefName,
                return Disambiguation::Inconclusive);
 
-    auto typedefName = varDecl->specifiers()->value->asTypedefName();
-    auto lhsName = typedefName->identifierToken().valueText();
+    auto tydefName = varDecl->specifiers()->value->asTypedefName();
+    auto lhsName = tydefName->identifierToken().valueText();
 
     if (catalog_->hasUseAsTypeName(lhsName))
         return Disambiguation::KeepDeclarationStatement;

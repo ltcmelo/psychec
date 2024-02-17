@@ -61,7 +61,7 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousExpression(ExprT* const&
                     visit(node_P);
                     break;
 
-                case Disambiguation::KeepExpressionStatement:
+                case Disambiguation::KeepBinaryExpression:
                     node_P = ambigNode->binExpr_;
                     visit(node_P);
                     break;
@@ -136,7 +136,7 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousTypeReference(TypeRefT* 
                     visit(node_P);
                     break;
 
-                case Disambiguation::KeepExpressionStatement:
+                case Disambiguation::KeepExpression:
                     node_P = ambigNode->exprAsTyRef_;
                     visit(node_P);
                     break;

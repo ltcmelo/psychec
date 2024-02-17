@@ -104,10 +104,10 @@ void Parser::maybeAmbiguateTypeReference(TypeReferenceSyntax*& tyRef)
     if (!parenExpr->expr_->asIdentifierName())
         return;
 
-    auto tyDefName = makeNode<TypedefNameSyntax>();
-    tyDefName->identTkIdx_ = parenExpr->expr_->asIdentifierName()->identTkIdx_;
+    auto tydefName = makeNode<TypedefNameSyntax>();
+    tydefName->identTkIdx_ = parenExpr->expr_->asIdentifierName()->identTkIdx_;
     auto tyName = makeNode<TypeNameSyntax>();
-    tyName->specs_ =  makeNode<SpecifierListSyntax>(tyDefName);
+    tyName->specs_ =  makeNode<SpecifierListSyntax>(tydefName);
     auto tyNameAsTyRef = makeNode<TypeNameAsTypeReferenceSyntax>();
     tyNameAsTyRef->openParenTkIdx_ = parenExpr->openParenTkIdx_;
     tyNameAsTyRef->typeName_ = tyName;

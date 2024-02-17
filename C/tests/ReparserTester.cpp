@@ -1212,9 +1212,87 @@ void ReparserTester::case0197(){}
 void ReparserTester::case0198(){}
 void ReparserTester::case0199(){}
 
-void ReparserTester::case0200(){}
-void ReparserTester::case0201(){}
-void ReparserTester::case0202(){}
+void ReparserTester::case0200()
+{
+    auto s = R"(
+int _ ( )
+{
+    typedef int x ;
+    ( x ) - 1 ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          TypedefDeclaration,
+                          TypedefStorageClass,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          CastExpression,
+                          TypeName,
+                          TypedefName,
+                          AbstractDeclarator,
+                          UnaryMinusExpression,
+                          IntegerConstantExpression })));
+}
+
+void ReparserTester::case0201()
+{
+    auto s = R"(
+int _ ( )
+{
+    typedef int x ;
+    ( x ) - y ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          TypedefDeclaration,
+                          TypedefStorageClass,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          CastExpression,
+                          TypeName,
+                          TypedefName,
+                          AbstractDeclarator,
+                          UnaryMinusExpression,
+                          IdentifierName })));
+}
+
+void ReparserTester::case0202()
+{
+    auto s = R"(
+int _ ( )
+{
+    int x ;
+    ( x ) - 1 ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          SubstractExpression,
+                          ParenthesizedExpression,
+                          IdentifierName,
+                          IntegerConstantExpression })));
+}
+
 void ReparserTester::case0203(){}
 void ReparserTester::case0204(){}
 void ReparserTester::case0205(){}
@@ -1312,3 +1390,153 @@ void ReparserTester::case0296(){}
 void ReparserTester::case0297(){}
 void ReparserTester::case0298(){}
 void ReparserTester::case0299(){}
+
+void ReparserTester::case0300()
+{
+    auto s = R"(
+int _ ( )
+{
+    int x ;
+    sizeof ( x ) ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          VariableAndOrFunctionDeclaration,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          SizeofExpression,
+                          ExpressionAsTypeReference,
+                          ParenthesizedExpression,
+                          IdentifierName })));
+}
+
+void ReparserTester::case0301()
+{
+    auto s = R"(
+int _ ( )
+{
+    typedef int x ;
+    sizeof ( x ) ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { DeclarationStatement,
+                          TypedefDeclaration,
+                          TypedefStorageClass,
+                          BuiltinTypeSpecifier,
+                          IdentifierDeclarator,
+                          ExpressionStatement,
+                          SizeofExpression,
+                          TypeNameAsTypeReference,
+                          TypeName,
+                          TypedefName })));
+}
+
+void ReparserTester::case0302(){}
+void ReparserTester::case0303(){}
+void ReparserTester::case0304(){}
+void ReparserTester::case0305(){}
+void ReparserTester::case0306(){}
+void ReparserTester::case0307(){}
+void ReparserTester::case0308(){}
+void ReparserTester::case0309(){}
+void ReparserTester::case0310(){}
+void ReparserTester::case0311(){}
+void ReparserTester::case0312(){}
+void ReparserTester::case0313(){}
+void ReparserTester::case0314(){}
+void ReparserTester::case0315(){}
+void ReparserTester::case0316(){}
+void ReparserTester::case0317(){}
+void ReparserTester::case0318(){}
+void ReparserTester::case0319(){}
+void ReparserTester::case0320(){}
+void ReparserTester::case0321(){}
+void ReparserTester::case0322(){}
+void ReparserTester::case0323(){}
+void ReparserTester::case0324(){}
+void ReparserTester::case0325(){}
+void ReparserTester::case0326(){}
+void ReparserTester::case0327(){}
+void ReparserTester::case0328(){}
+void ReparserTester::case0329(){}
+void ReparserTester::case0330(){}
+void ReparserTester::case0331(){}
+void ReparserTester::case0332(){}
+void ReparserTester::case0333(){}
+void ReparserTester::case0334(){}
+void ReparserTester::case0335(){}
+void ReparserTester::case0336(){}
+void ReparserTester::case0337(){}
+void ReparserTester::case0338(){}
+void ReparserTester::case0339(){}
+void ReparserTester::case0340(){}
+void ReparserTester::case0341(){}
+void ReparserTester::case0342(){}
+void ReparserTester::case0343(){}
+void ReparserTester::case0344(){}
+void ReparserTester::case0345(){}
+void ReparserTester::case0346(){}
+void ReparserTester::case0347(){}
+void ReparserTester::case0348(){}
+void ReparserTester::case0349(){}
+void ReparserTester::case0350(){}
+void ReparserTester::case0351(){}
+void ReparserTester::case0352(){}
+void ReparserTester::case0353(){}
+void ReparserTester::case0354(){}
+void ReparserTester::case0355(){}
+void ReparserTester::case0356(){}
+void ReparserTester::case0357(){}
+void ReparserTester::case0358(){}
+void ReparserTester::case0359(){}
+void ReparserTester::case0360(){}
+void ReparserTester::case0361(){}
+void ReparserTester::case0362(){}
+void ReparserTester::case0363(){}
+void ReparserTester::case0364(){}
+void ReparserTester::case0365(){}
+void ReparserTester::case0366(){}
+void ReparserTester::case0367(){}
+void ReparserTester::case0368(){}
+void ReparserTester::case0369(){}
+void ReparserTester::case0370(){}
+void ReparserTester::case0371(){}
+void ReparserTester::case0372(){}
+void ReparserTester::case0373(){}
+void ReparserTester::case0374(){}
+void ReparserTester::case0375(){}
+void ReparserTester::case0376(){}
+void ReparserTester::case0377(){}
+void ReparserTester::case0378(){}
+void ReparserTester::case0379(){}
+void ReparserTester::case0380(){}
+void ReparserTester::case0381(){}
+void ReparserTester::case0382(){}
+void ReparserTester::case0383(){}
+void ReparserTester::case0384(){}
+void ReparserTester::case0385(){}
+void ReparserTester::case0386(){}
+void ReparserTester::case0387(){}
+void ReparserTester::case0388(){}
+void ReparserTester::case0389(){}
+void ReparserTester::case0390(){}
+void ReparserTester::case0391(){}
+void ReparserTester::case0392(){}
+void ReparserTester::case0393(){}
+void ReparserTester::case0394(){}
+void ReparserTester::case0395(){}
+void ReparserTester::case0396(){}
+void ReparserTester::case0397(){}
+void ReparserTester::case0398(){}
+void ReparserTester::case0399(){}

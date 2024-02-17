@@ -1377,9 +1377,9 @@ void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
                   return,
                   "assert failure: <identifier>");
 
-    auto tyDefName = makeNode<TypedefNameSyntax>();
-    spec = tyDefName;
-    tyDefName->identTkIdx_ = consume();
+    auto tydefName = makeNode<TypedefNameSyntax>();
+    spec = tydefName;
+    tydefName->identTkIdx_ = consume();
 }
 
 /**

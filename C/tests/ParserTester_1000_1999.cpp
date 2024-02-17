@@ -1417,7 +1417,16 @@ void ParserTester::case1417()
     parseExpression("sizeof ( _Atomic ( x ) )");
 }
 
-void ParserTester::case1418() {}
+void ParserTester::case1418()
+{
+    parseExpression("sizeof ( ( x ) )",
+                    Expectation().AST( { SizeofExpression,
+                                         ExpressionAsTypeReference,
+                                         ParenthesizedExpression,
+                                         ParenthesizedExpression,
+                                         IdentifierName }));
+}
+
 void ParserTester::case1419() {}
 void ParserTester::case1420() {}
 void ParserTester::case1421() {}
