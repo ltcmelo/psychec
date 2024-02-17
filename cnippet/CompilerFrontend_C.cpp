@@ -63,8 +63,9 @@ int CCompilerFrontend::run(const std::string& srcText, const FileInfo& fi)
     if (srcText.empty())
          return 0;
 
-    return config_->inferMissingTypes ? extendWithStdLibHeaders(srcText, fi)
-                                          : preprocess(srcText, fi);
+    return config_->inferMissingTypes
+            ? extendWithStdLibHeaders(srcText, fi)
+            : preprocess(srcText, fi);
 }
 
 int CCompilerFrontend::extendWithStdLibHeaders(const std::string& srcText,
@@ -104,9 +105,9 @@ int CCompilerFrontend::preprocess(const std::string& srcText,
                                   const psy::FileInfo& fi)
 {
     GnuCompilerFacade cc(config_->hostCompiler,
-                      to_string(config_->langStd),
-                      config_->macrosToDefine,
-                      config_->macrosToUndef);
+                         to_string(config_->langStd),
+                         config_->macrosToDefine,
+                         config_->macrosToUndef);
 
     std::string srcText_P;
     int exit;
@@ -142,7 +143,7 @@ int CCompilerFrontend::constructSyntaxTree(const std::string& srcText,
         else if (config_->ParseOptions_TreatmentOfAmbiguities == "DisambiguateAlgorithmically")
             parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically);
         else if (config_->ParseOptions_TreatmentOfAmbiguities == "DisambiguateAlgorithmicallyOrHeuristically")
-            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically);
+            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyAndHeuristically);
         else if (config_->ParseOptions_TreatmentOfAmbiguities == "DisambiguateHeuristically")
             parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically);
         else {

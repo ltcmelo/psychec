@@ -51,6 +51,7 @@ class Lexer;
 class PSY_C_NON_API Parser
 {
     friend class ParserTester;
+    friend bool isDiagnosticDescriptorIdOfSyntaxAmbiguity(const std::string&);
 
 public:
     ~Parser();

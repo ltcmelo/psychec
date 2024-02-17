@@ -37,7 +37,7 @@ ParseOptions::ParseOptions(LanguageDialect dialect,
 {
     setTreatmentOfIdentifiers(TreatmentOfIdentifiers::Classify);
     setTreatmentOfComments(TreatmentOfComments::None);
-    setTreatmentOfAmbiguities(TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically);
+    setTreatmentOfAmbiguities(TreatmentOfAmbiguities::DisambiguateAlgorithmicallyAndHeuristically);
 }
 
 const LanguageDialect& ParseOptions::dialect() const

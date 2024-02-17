@@ -100,6 +100,10 @@ bool InternalsTestSuite::checkErrorAndWarn(Expectation X)
     std::unordered_set<std::string> E_IDs;
     std::unordered_set<std::string> W_IDs;
     for (const auto& diagnostic : tree_->diagnostics()) {
+        if (X.containsAmbiguity_
+                && isDiagnosticDescriptorIdOfSyntaxAmbiguity(diagnostic.descriptor().id()))
+            continue;
+
         if (diagnostic.severity() == DiagnosticSeverity::Error) {
             ++E_cnt;
             E_IDs.insert(diagnostic.descriptor().id());
@@ -196,7 +200,7 @@ void InternalsTestSuite::parse(std::string source,
 
     ParseOptions parseOpts;
     if (X.containsAmbiguity_)
-            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::Ignore);
+        parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::None);
 
     tree_ = SyntaxTree::parseText(text,
                                   TextPreprocessingState::Unknown,

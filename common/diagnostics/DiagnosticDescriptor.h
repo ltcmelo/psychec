@@ -47,7 +47,7 @@ public:
                          DiagnosticCategory category);
 
     /**
-     * The ID of \c this DiagnosticDescriptor.
+     * The Id of \c this DiagnosticDescriptor.
      */
     const std::string& id() const;
 

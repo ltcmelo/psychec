@@ -258,10 +258,7 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
                 newDiagnostic(std::get<0>(diag), std::get<1>(diag));
             return;
 
-        case ParseOptions::TreatmentOfAmbiguities::Ignore:
-            return;
-
-        case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyOrHeuristically:
+        case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyAndHeuristically:
             allowHeuristics = true;
             [[fallthrough]];
 
@@ -458,3 +455,16 @@ std::unordered_set<const Compilation*> SyntaxTree::linkedCompilations() const
 {
     return P->attachedCompilations_;
 }
+
+namespace psy {
+namespace C {
+
+bool isDiagnosticDescriptorIdOfSyntaxAmbiguity(const std::string& id)
+{
+    return id == Parser::DiagnosticsReporter::ID_of_AmbiguousCastOrBinaryExpression
+            || id == Parser::DiagnosticsReporter::ID_of_AmbiguousExpressionOrDeclarationStatement
+            || id == Parser::DiagnosticsReporter::ID_of_AmbiguousTypeNameOrExpressionAsTypeReference;
+}
+
+} // C
+} // psy

@@ -52,7 +52,7 @@ public:
     ~Compilation();
 
     /**
-     * Create an empty compilation identified by \p id with SyntaxTree \p tree.
+     * Create an empty compilation identified by \p id.
      */
     static std::unique_ptr<Compilation> create(const std::string& id);
 

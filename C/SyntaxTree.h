@@ -194,6 +194,8 @@ private:
     std::vector<SyntaxToken> comments_;
 };
 
+bool PSY_C_API isDiagnosticDescriptorIdOfSyntaxAmbiguity(const std::string& id);
+
 } // C
 } // psy
 
