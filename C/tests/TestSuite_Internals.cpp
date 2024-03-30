@@ -200,7 +200,7 @@ void InternalsTestSuite::parse(std::string source,
 
     ParseOptions parseOpts;
     if (X.containsAmbiguity_)
-        parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::None);
+        parseOpts.setAmbiguityMode(ParseOptions::AmbiguityMode::Diagnose);
 
     tree_ = SyntaxTree::parseText(text,
                                   TextPreprocessingState::Unknown,
@@ -267,28 +267,29 @@ void InternalsTestSuite::parse(std::string source,
 }
 
 void InternalsTestSuite::reparse(std::string source,
-                                 Expectation X,
-                                 Reparser::DisambiguationStrategy strategy)
+                                 Reparser::DisambiguationStrategy strategy,
+                                 Expectation X)
 {
     auto text = source;
-
-    PSY_EXPECT_TRUE(strategy != Reparser::DisambiguationStrategy::UNSPECIFIED);
 
     ParseOptions parseOpts;
     TextCompleteness textCompleness;
     switch (strategy) {
         case Reparser::DisambiguationStrategy::SyntaxCorrelation:
-            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically);
+            parseOpts.setAmbiguityMode(
+                        ParseOptions::AmbiguityMode::DisambiguateAlgorithmically);
             textCompleness = TextCompleteness::Fragment;
             break;
 
         case Reparser::DisambiguationStrategy::TypeSynonymsVerification:
-            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically);
+            parseOpts.setAmbiguityMode(
+                        ParseOptions::AmbiguityMode::DisambiguateAlgorithmically);
             textCompleness = TextCompleteness::Full;
             break;
 
         case Reparser::DisambiguationStrategy::GuidelineImposition:
-            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically);
+            parseOpts.setAmbiguityMode(
+                        ParseOptions::AmbiguityMode::DisambiguateHeuristically);
             textCompleness = TextCompleteness::Unknown;
             break;
 
@@ -356,17 +357,17 @@ void InternalsTestSuite::reparse(std::string source,
 
 void InternalsTestSuite::reparse_withSyntaxCorrelation(std::string text, Expectation X)
 {
-    reparse(text, X, Reparser::DisambiguationStrategy::SyntaxCorrelation);
+    reparse(text, Reparser::DisambiguationStrategy::SyntaxCorrelation, X);
 }
 
 void InternalsTestSuite::reparse_withTypeSynonymVerification(std::string text, Expectation X)
 {
-    reparse(text, X, Reparser::DisambiguationStrategy::TypeSynonymsVerification);
+    reparse(text, Reparser::DisambiguationStrategy::TypeSynonymsVerification, X);
 }
 
 void InternalsTestSuite::reparse_withGuidelineImposition(std::string text, Expectation X)
 {
-    reparse(text, X, Reparser::DisambiguationStrategy::GuidelineImposition);
+    reparse(text, Reparser::DisambiguationStrategy::GuidelineImposition, X);
 }
 
 namespace {

@@ -302,7 +302,7 @@ LexEntry:
             }
         }
 
-        if (tree_->parseOptions().treatmentOfComments() == ParseOptions::TreatmentOfComments::None)
+        if (tree_->parseOptions().commentMode() == ParseOptions::CommentMode::Discard)
             goto LexEntry;
 
         tk->rawSyntaxK_ = tkRawKind;
@@ -313,7 +313,7 @@ LexEntry:
             || rawSyntaxK_splitTk == SingleLineDocumentationCommentTrivia) {
         auto syntaxK = rawSyntaxK_splitTk;
         tk->BF_.joined_ = true;
-        if (tree_->parseOptions().treatmentOfComments() != ParseOptions::TreatmentOfComments::None)
+        if (tree_->parseOptions().commentMode() != ParseOptions::CommentMode::Discard)
             tk->rawSyntaxK_ = syntaxK;
         withinLogicalLine_ = false;
         lexSingleLineComment(syntaxK);
@@ -502,7 +502,7 @@ LexEntry:
                 }
                 lexSingleLineComment(syntaxK);
 
-                if (tree_->parseOptions().treatmentOfComments() == ParseOptions::TreatmentOfComments::None)
+                if (tree_->parseOptions().commentMode() == ParseOptions::CommentMode::Discard)
                     goto LexEntry;
 
                 tk->rawSyntaxK_ = syntaxK;
@@ -548,7 +548,7 @@ LocalExit:
                 else
                     rawSyntaxK_splitTk = syntaxK;
 
-                if (tree_->parseOptions().treatmentOfComments() == ParseOptions::TreatmentOfComments::None)
+                if (tree_->parseOptions().commentMode() == ParseOptions::CommentMode::Discard)
                     goto LexEntry;
 
                 tk->rawSyntaxK_ = syntaxK;
@@ -840,15 +840,15 @@ void Lexer::lexIdentifier(SyntaxToken* tk, int advanced)
 
     int yyleng = yytext_ - yytext;
 
-    if (tree_->parseOptions().treatmentOfIdentifiers() == ParseOptions
-            ::TreatmentOfIdentifiers::Classify) {
-        tk->rawSyntaxK_ = classify(yytext, yyleng, tree_->parseOptions());
-    }
+    if (tree_->parseOptions().isEnabled_KeywordRecognition())
+        tk->rawSyntaxK_ = recognize(yytext, yyleng, tree_->parseOptions());
     else
         tk->rawSyntaxK_ = IdentifierToken;
 
-    if (tk->rawSyntaxK_ == IdentifierToken) {
-        tk->rawSyntaxK_ = classifyOperator(yytext, yyleng, tree_->parseOptions());
+    if (tk->rawSyntaxK_ == IdentifierToken
+            && tree_->parseOptions().languageExtensions().
+                    translations().isEnabled_Translate_operatorNames()) {
+        tk->rawSyntaxK_ = translate(yytext, yyleng, tree_->parseOptions());
         tk->identifier_ = tree_->identifier(yytext, yyleng);
     }
 }
@@ -871,7 +871,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
                 tk->rawSyntaxK_ = FloatingConstantToken;
                 yyinput();
 
-                if (tree_->parseOptions().dialect().std() < LanguageDialect::Std::C99) {
+                if (tree_->parseOptions().languageDialect().std() < LanguageDialect::Std::C99) {
                     diagReporter_.IncompatibleLanguageDialect(
                                 "hexadecimal floating-point constant",
                                 LanguageDialect::Std::C99);
@@ -1021,7 +1021,7 @@ void Lexer::lexImaginaryIntegerSuffix(SyntaxToken* tk)
 
 void Lexer::lexImaginaryIntegerSuffix_AtFirst(SyntaxToken* tk)
 {
-    if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
+    if (!tree_->parseOptions().languageExtensions().isEnabled_ExtGNU_Complex()) {
         diagReporter_.IncompatibleLanguageExtension(
                     "imaginary constant",
                     LanguageExtensions::Ext::GNU_Complex);
@@ -1078,7 +1078,7 @@ void Lexer::lexImaginaryFloatingSuffix(SyntaxToken* tk)
 
 void Lexer::lexImaginaryFloatingSuffix_AtFirst(SyntaxToken* tk)
 {
-    if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Complex()) {
+    if (!tree_->parseOptions().languageExtensions().isEnabled_ExtGNU_Complex()) {
         diagReporter_.IncompatibleLanguageExtension(
                    "imaginary constant",
                    LanguageExtensions::Ext::GNU_Complex);

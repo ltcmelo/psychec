@@ -102,12 +102,12 @@ private:
     void lexBackslash(std::uint16_t rawSyntaxK);
     void lexSingleLineComment(std::uint16_t rawSyntaxK);
 
-    static SyntaxKind classify(const char* ident,
+    static SyntaxKind recognize(const char* ident,
                                int size,
                                const ParseOptions& options);
-    static SyntaxKind classifyOperator(const char* indent,
-                                       int size,
-                                       const ParseOptions& options);
+    static SyntaxKind translate(const char* indent,
+                                int size,
+                                const ParseOptions& options);
 
     SyntaxTree* tree_;
     std::string text_;

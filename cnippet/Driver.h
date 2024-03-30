@@ -37,17 +37,15 @@ public:
     int execute(int argc, char* argv[]);
 
 private:
-    friend class FrontEnd;
-    friend class CCompilerFrontEnd;
-
     static constexpr int SUCCESS = 0;
 
     static constexpr int ERROR = 1;
-    static constexpr int ERROR_UnrecognizedCmdLineOption = 2;
-    static constexpr int ERROR_NoInputFile = 3;
-    static constexpr int ERROR_FileNotFound = 4;
-    static constexpr int ERROR_CannotLoadPluging = 5;
-    static constexpr int ERROR_LanguageNotRecognized = 6;
+    static constexpr int ERROR_UnrecognizedCmdLineFlag = 2;
+    static constexpr int ERROR_InvalidCmdLineFlagValue = 3;
+    static constexpr int ERROR_NoInputFile = 4;
+    static constexpr int ERROR_FileNotFound = 5;
+    static constexpr int ERROR_CannotLoadPluging = 6;
+    static constexpr int ERROR_LanguageNotRecognized = 7;
 };
 
 } // cnip

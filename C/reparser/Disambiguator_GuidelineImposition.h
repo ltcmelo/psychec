@@ -23,15 +23,24 @@
 
 #include "API.h"
 
-#include "syntax/SyntaxVisitor.h"
+#include "reparser/Disambiguator.h"
+
+#include "../common/infra/InternalAccess.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API GuidelineImpositionReparser : public SyntaxVisitor
+class PSY_C_NON_API GuidelineImpositionDisambiguator : public Disambiguator
 {
-public:
-    GuidelineImpositionReparser(SyntaxTree* tree);
+PSY_INTERNAL_AND_RESTRICTED:
+    PSY_GRANT_ACCESS(Reparser);
+
+private:
+    GuidelineImpositionDisambiguator(SyntaxTree* tree);
+
+    virtual Disambiguation disambiguateExpression(const AmbiguousCastOrBinaryExpressionSyntax*) const override;
+    virtual Disambiguation disambiguateStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) const override;
+    virtual Disambiguation disambiguateTypeReference(const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*) const override;
 };
 
 } // C

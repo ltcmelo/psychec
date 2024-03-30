@@ -28,8 +28,9 @@
 
 #include "../common/infra/InternalAccess.h"
 
-#include <unordered_set>
 #include <cstdint>
+#include <unordered_set>
+#include <vector>
 
 namespace psy {
 namespace C {
@@ -44,15 +45,12 @@ PSY_INTERNAL_AND_RESTRICTED:
 
     enum class DisambiguationStrategy : std::uint8_t
     {
-        UNSPECIFIED = 0,
-
         TypeSynonymsVerification,
         SyntaxCorrelation,
         GuidelineImposition
     };
 
-    void setDisambiguationStrategy(DisambiguationStrategy strategy);
-    void setAllowHeuristics(bool allow);
+    void addDisambiguationStrategy(DisambiguationStrategy strategy);
 
     void reparse(SyntaxTree* tree);
 
@@ -60,8 +58,7 @@ PSY_INTERNAL_AND_RESTRICTED:
     bool ambiguityPersists(const SyntaxNode* node) const;
 
 private:
-    DisambiguationStrategy disambigStrategy_;
-    bool allowHeuristics_;
+    std::vector<DisambiguationStrategy> strategies_;
     std::unordered_set<const SyntaxNode*> persistentAmbigs_;
 };
 

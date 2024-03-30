@@ -37,7 +37,7 @@ namespace C {
 /**
  * \brief The ParseOptions class.
  *
- * Options to the lexer are also specified through this class.
+ * Options of the lexer are also specified through this class.
  */
 class PSY_C_API ParseOptions
 {
@@ -47,80 +47,73 @@ public:
      * Create ParseOptions.
      */
     ParseOptions();
-    ParseOptions(LanguageDialect dialect,
-                 LanguageExtensions extensions);
+    ParseOptions(LanguageDialect langDialect);
+    ParseOptions(LanguageDialect langDialect,
+                 LanguageExtensions langExts);
     //!@}
 
     /**
      * The LanguageDialect of \c this ParseOptions.
      */
-    const LanguageDialect& dialect() const;
+    const LanguageDialect& languageDialect() const;
 
     /**
      * The LanguageExtensions of \c this ParseOptions.
      */
-    const LanguageExtensions& extensions() const;
+    const LanguageExtensions& languageExtensions() const;
 
     //!@{
     /**
-     * \brief The alternatives for TreatmentOfIdentifiers during parse.
+     * Whether to enable the recognition of keywords.
      */
-    enum class TreatmentOfIdentifiers : std::uint8_t
-    {
-        None,    /**< No special treatment. */
-        Classify /**< Classify into keywords and non-keywords ("plain identifiers"). */
-    };
-    /**
-     * The TreatmentOfIdentifiers of \c this ParserOptions.
-     */
-    ParseOptions& setTreatmentOfIdentifiers(TreatmentOfIdentifiers treatOfIdent);
-    TreatmentOfIdentifiers treatmentOfIdentifiers() const;
+    ParseOptions& enable_KeywordRecognition(bool enable);
+    bool isEnabled_KeywordRecognition() const;
     //!@}
 
     //!@{
     /**
-     * \brief The alternatives for TreatmentOfComments during parse.
+     * \brief The CommentMode modes.
      */
-    enum class TreatmentOfComments : std::uint8_t
+    enum class CommentMode : std::uint8_t
     {
-        None,                 /**< No special treatment. */
-        Keep,                 /**< Keep comments. */
-        KeepDocumentationOnly /**< Keep documentation comments only. */
+        Discard,              /**< Discard comments. */
+        KeepAll,              /**< Keep all comments. */
+        KeepOnlyDocumentation /**< keep only documentation comments. */
     };
     /**
-     * The TreatmentOfComments of \c this ParserOptions.
+     * The CommentMode of \c this ParserOptions.
      */
-    ParseOptions& setTreatmentOfComments(TreatmentOfComments treatOfComments);
-    TreatmentOfComments treatmentOfComments() const;
+    ParseOptions& setCommentMode(CommentMode commentMode);
+    CommentMode commentMode() const;
     //!@}
 
     //!@{
     /**
-     * * \brief The alternatives for TreatmentOfAmbiguities during parse.
+     * * \brief The AmbiguityMode modes.
      */
-    enum class TreatmentOfAmbiguities : std::uint8_t
+    enum class AmbiguityMode : std::uint8_t
     {
-        None,                                        /**< No special treatment: ambiguities are diagnosed. */
+        Diagnose,                                    /**< Diagnose ambiguities. */
         DisambiguateAlgorithmically,                 /**< Disambiguate ambiguities algorithmically. */
         DisambiguateAlgorithmicallyAndHeuristically, /**< Disambiguate ambiguities algorithmically and heristically. */
         DisambiguateHeuristically,                   /**< Disambiguate ambiguities heuristically. */
     };
     /**
-     * The TreatmentOfAmbiguities of \c this ParserOptions.
+     * The AmbiguityMode of \c this ParserOptions.
      */
-    ParseOptions& setTreatmentOfAmbiguities(TreatmentOfAmbiguities treatOfAmbigs);
-    TreatmentOfAmbiguities treatmentOfAmbiguities() const;
+    ParseOptions& setAmbiguityMode(AmbiguityMode ambiguityMode);
+    AmbiguityMode ambiguityMode() const;
     //!@}
 
 private:
-    LanguageDialect dialect_;
-    LanguageExtensions extensions_;
+    LanguageDialect langDialect_;
+    LanguageExtensions langExts_;
 
     struct BitFields
     {
-        std::uint16_t treatmentOfIdentifiers_ : 2;
-        std::uint16_t treatmentOfComments_ : 2;
-        std::uint16_t treatmentOfAmbiguities_ : 2;
+        std::uint8_t KeywordRecognition_ : 1;
+        std::uint16_t commentMode_ : 2;
+        std::uint16_t ambigMode_ : 2;
     };
     union
     {

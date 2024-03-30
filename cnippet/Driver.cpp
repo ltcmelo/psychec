@@ -41,7 +41,8 @@ namespace DEBUG { extern bool globalDebugEnabled; }
 
 constexpr int Driver::SUCCESS;
 constexpr int Driver::ERROR_NoInputFile;
-constexpr int Driver::ERROR_UnrecognizedCmdLineOption;
+constexpr int Driver::ERROR_UnrecognizedCmdLineFlag;
+constexpr int Driver::ERROR_InvalidCmdLineFlagValue;
 constexpr int Driver::ERROR_CannotLoadPluging;
 constexpr int Driver::ERROR_LanguageNotRecognized;
 
@@ -64,9 +65,9 @@ int Driver::execute(int argc, char* argv[])
                 "Specify the language.",
                 cxxopts::value<std::string>()->default_value("C"),
                 "<C>")
-            ("z,dump-AST",
+            ("d,dump-AST",
                 "Dump the program's AST to the console.")
-            ("d,debug",
+            ("g,debug",
                 "Enable debugging.",
                 cxxopts::value<bool>(DEBUG::globalDebugEnabled))
             ("p,plugin",
@@ -80,7 +81,7 @@ int Driver::execute(int argc, char* argv[])
 
     ConfigurationForC::extend(cmdLineOpts);
 
-    std::unique_ptr<CompilerFrontend> FE;
+    std::unique_ptr<CompilerFrontend> CFE;
     std::vector<std::string> filesPaths;
     try {
         cmdLineOpts.parse_positional(std::vector<std::string>{"file"});
@@ -113,11 +114,15 @@ int Driver::execute(int argc, char* argv[])
             return ERROR_LanguageNotRecognized;
         }
 
-        FE.reset(new CCompilerFrontend(parsedCmdLine));
+        CFE.reset(new CCompilerFrontend(parsedCmdLine));
+        if (!CFE->setup()) {
+            std::cerr << kCnip << "invalid command-line flag value" << std::endl;
+            return ERROR_InvalidCmdLineFlagValue;
+        }
     }
     catch (...) {
-        std::cerr << kCnip << "unrecognized command-line option" << std::endl;
-        return ERROR_UnrecognizedCmdLineOption;
+        std::cerr << kCnip << "unrecognized command-line flag" << std::endl;
+        return ERROR_UnrecognizedCmdLineFlag;
     }
 
     for (auto filePath : filesPaths) {
@@ -128,7 +133,7 @@ int Driver::execute(int argc, char* argv[])
         FileInfo fi(filePath);
 
         try {
-            exit = FE->run(srcText, fi);
+            exit = CFE->run(srcText, fi);
         }
         catch (...) {
             Plugin::unload();

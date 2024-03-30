@@ -25,60 +25,62 @@ using namespace psy;
 using namespace C;
 
 ParseOptions::ParseOptions()
-    : ParseOptions(LanguageDialect(),
-                   LanguageExtensions())
+    : ParseOptions(LanguageDialect(), LanguageExtensions())
 {}
 
-ParseOptions::ParseOptions(LanguageDialect dialect,
-                           LanguageExtensions extensions)
-    : dialect_(std::move(dialect))
-    , extensions_(std::move(extensions))
+ParseOptions::ParseOptions(LanguageDialect langDialect)
+    : ParseOptions(langDialect, LanguageExtensions())
+{}
+
+ParseOptions::ParseOptions(LanguageDialect langDialect,
+                           LanguageExtensions langExts)
+    : langDialect_(std::move(langDialect))
+    , langExts_(std::move(langExts))
     , bits_(0)
 {
-    setTreatmentOfIdentifiers(TreatmentOfIdentifiers::Classify);
-    setTreatmentOfComments(TreatmentOfComments::None);
-    setTreatmentOfAmbiguities(TreatmentOfAmbiguities::DisambiguateAlgorithmicallyAndHeuristically);
+    enable_KeywordRecognition(true);
+    setCommentMode(CommentMode::Discard);
+    setAmbiguityMode(AmbiguityMode::DisambiguateAlgorithmicallyAndHeuristically);
 }
 
-const LanguageDialect& ParseOptions::dialect() const
+const LanguageDialect& ParseOptions::languageDialect() const
 {
-    return dialect_;
+    return langDialect_;
 }
 
-const LanguageExtensions& ParseOptions::extensions() const
+const LanguageExtensions& ParseOptions::languageExtensions() const
 {
-    return extensions_;
+    return langExts_;
 }
 
-ParseOptions& ParseOptions::setTreatmentOfIdentifiers(TreatmentOfIdentifiers treatOfIdent)
+ParseOptions& ParseOptions::setCommentMode(CommentMode commentMode)
 {
-    BF_.treatmentOfIdentifiers_ = static_cast<int>(treatOfIdent);
+    BF_.commentMode_ = static_cast<int>(commentMode);
     return *this;
 }
 
-ParseOptions::TreatmentOfIdentifiers ParseOptions::treatmentOfIdentifiers() const
+ParseOptions::CommentMode ParseOptions::commentMode() const
 {
-    return static_cast<TreatmentOfIdentifiers>(BF_.treatmentOfIdentifiers_);
+    return static_cast<CommentMode>(BF_.commentMode_);
 }
 
-ParseOptions& ParseOptions::setTreatmentOfComments(TreatmentOfComments treatOfComments)
+ParseOptions &ParseOptions::setAmbiguityMode(AmbiguityMode ambiguityMode)
 {
-    BF_.treatmentOfComments_ = static_cast<int>(treatOfComments);
+    BF_.ambigMode_ = static_cast<int>(ambiguityMode);
     return *this;
 }
 
-ParseOptions::TreatmentOfComments ParseOptions::treatmentOfComments() const
+ParseOptions::AmbiguityMode ParseOptions::ambiguityMode() const
 {
-    return static_cast<TreatmentOfComments>(BF_.treatmentOfComments_);
+    return static_cast<AmbiguityMode>(BF_.ambigMode_);
 }
 
-ParseOptions &ParseOptions::setTreatmentOfAmbiguities(TreatmentOfAmbiguities treatOfAmbigs)
-{
-    BF_.treatmentOfAmbiguities_ = static_cast<int>(treatOfAmbigs);
-    return *this;
-}
+#define DEFINE_ENABLE_ISENABLED(FLAG) \
+    ParseOptions& ParseOptions::enable_##FLAG(bool enable) \
+        { BF_.FLAG##_ = enable; return *this; } \
+    bool ParseOptions::isEnabled_##FLAG() const \
+        { return BF_.FLAG##_; }
 
-ParseOptions::TreatmentOfAmbiguities ParseOptions::treatmentOfAmbiguities() const
-{
-    return static_cast<TreatmentOfAmbiguities>(BF_.treatmentOfAmbiguities_);
-}
+DEFINE_ENABLE_ISENABLED(KeywordRecognition)
+
+#undef DEFINE_ENABLE_ISENABLED

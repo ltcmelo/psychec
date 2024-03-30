@@ -42,6 +42,7 @@ public:
     CCompilerFrontend(const cxxopts::ParseResult& parsedCmdLine);
     virtual ~CCompilerFrontend();
 
+    bool setup() override;
     int run(const std::string& srcText, const psy::FileInfo& fi) override;
 
 private:

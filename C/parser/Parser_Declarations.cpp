@@ -160,7 +160,7 @@ bool Parser::parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& dec
                   return false,
                   "assert failure: `asm'");
 
-    if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_Asm())
+    if (!tree_->parseOptions().languageExtensions().isEnabled_ExtGNU_Asm())
         diagReporter_.ExpectedFeature("GNU assembly in C");
 
     auto asmDecl = makeNode<ExtGNU_AsmStatementDeclarationSyntax>();
@@ -1679,7 +1679,7 @@ bool Parser::parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList)
 {
     DEBUG_THIS_RULE();
 
-    if (!tree_->parseOptions().extensions().isEnabled_ExtGNU_AttributeSpecifiersLLVM())
+    if (!tree_->parseOptions().languageExtensions().isEnabled_ExtGNU_AttributeSpecifiersLLVM())
         diagReporter_.ExpectedFeature("GNU attributes of LLVM");
 
     ExpressionListSyntax** exprList_cur = &exprList;
@@ -2387,7 +2387,7 @@ bool Parser::parseDesignatedInitializer_AtFirst(InitializerSyntax*& init,
                   "assert failure: `.' or `['");
 
     if (tree_->dialect().std() < LanguageDialect::Std::C99
-            && !tree_->parseOptions().extensions().isEnabled_ExtGNU_DesignatedInitializers())
+            && !tree_->parseOptions().languageExtensions().isEnabled_ExtGNU_DesignatedInitializers())
         diagReporter_.ExpectedFeature("GNU/C99 designated initializers");
 
     DesignatorListSyntax* desigList = nullptr;

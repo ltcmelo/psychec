@@ -25,12 +25,6 @@
 
 #include <utility>
 
-#define DEFINE_ENABLE_ISENABLED(FLAG) \
-    LanguageExtensions& LanguageExtensions::enable_##FLAG(bool enable) \
-        { BF_.FLAG##_ = enable; return *this; } \
-    bool LanguageExtensions::isEnabled_##FLAG() const \
-        { return BF_.FLAG##_; }
-
 using namespace psy;
 using namespace C;
 
@@ -56,6 +50,12 @@ const MacroTranslations& LanguageExtensions::translations() const
 {
     return translations_;
 }
+
+#define DEFINE_ENABLE_ISENABLED(FLAG) \
+    LanguageExtensions& LanguageExtensions::enable_##FLAG(bool enable) \
+        { BF_.FLAG##_ = enable; return *this; } \
+    bool LanguageExtensions::isEnabled_##FLAG() const \
+        { return BF_.FLAG##_; }
 
 DEFINE_ENABLE_ISENABLED(ExtGNU_AlternateKeywords)
 DEFINE_ENABLE_ISENABLED(ExtGNU_Asm)

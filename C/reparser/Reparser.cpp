@@ -25,7 +25,6 @@
 #include "reparser/NameCataloger.h"
 #include "reparser/Disambiguator_GuidelineImposition.h"
 #include "reparser/Disambiguator_SyntaxCorrelation.h"
-#include "reparser/Disambiguator_TypeSynonymsVerification.h"
 #include "syntax/SyntaxNode.h"
 
 #include "../common/infra/Assertions.h"
@@ -35,23 +34,18 @@ using namespace psy;
 using namespace C;
 
 Reparser::Reparser()
-    : disambigStrategy_(DisambiguationStrategy::SyntaxCorrelation)
-    , allowHeuristics_(false)
 {}
 
-void Reparser::setDisambiguationStrategy(DisambiguationStrategy strategy)
+void Reparser::addDisambiguationStrategy(DisambiguationStrategy strategy)
 {
-    disambigStrategy_ = strategy;
-}
-
-void Reparser::setAllowHeuristics(bool allow)
-{
-    allowHeuristics_ = allow;
+    strategies_.push_back(strategy);
 }
 
 bool Reparser::eliminatedAllAmbiguities() const
 {
-    return persistentAmbigs_.empty();
+    return strategies_.empty()
+            ? false
+            : persistentAmbigs_.empty();
 }
 
 bool Reparser::ambiguityPersists(const SyntaxNode* node) const
@@ -60,7 +54,10 @@ bool Reparser::ambiguityPersists(const SyntaxNode* node) const
                         || node->asAmbiguousExpressionOrDeclarationStatement()
                         || node->asAmbiguousTypeNameOrExpressionAsTypeReference(),
                      return false,
-                     "not an ambiguity node");
+                     "node isn't ambiguous node");
+
+    if (strategies_.empty())
+        return true;
 
     for (auto ambig : persistentAmbigs_) {
         if (node == ambig)
@@ -71,32 +68,32 @@ bool Reparser::ambiguityPersists(const SyntaxNode* node) const
 
 void Reparser::reparse(SyntaxTree* tree)
 {
-    if (disambigStrategy_ == Reparser::DisambiguationStrategy::GuidelineImposition) {
-        // TODO
-        return;
-    }
+    for (auto strategy : strategies_) {
+        std::unique_ptr<Disambiguator> disambiguator;
+        switch (strategy) {
+            case Reparser::DisambiguationStrategy::SyntaxCorrelation: {
+                NameCataloger cataloger(tree);
+                auto catalog = cataloger.catalogNamesWithinNode(tree->root());
+                disambiguator.reset(new SyntaxCorrelationDisambiguator(tree, std::move(catalog)));
+                break;
+            }
 
-    NameCataloger cataloger(tree);
-    auto catalog = cataloger.catalogNamesWithinNode(tree->root());
-    std::unique_ptr<Disambiguator> disambiguator_;
-    switch (disambigStrategy_) {
-        case Reparser::DisambiguationStrategy::SyntaxCorrelation: {
-            disambiguator_.reset(
-                new SyntaxCorrelationDisambiguator(tree, std::move(catalog)));
-            break;
+            case Reparser::DisambiguationStrategy::GuidelineImposition: {
+                disambiguator.reset(new GuidelineImpositionDisambiguator(tree));
+                break;
+            }
+
+            default:
+                PSY_ESCAPE_VIA_RETURN();
         }
 
-        case Reparser::DisambiguationStrategy::TypeSynonymsVerification:
-            // TODO
-            break;
+        auto ok = disambiguator->disambiguate();
+        if (ok) {
+            persistentAmbigs_.clear();
+            return;
+        }
 
-        default:
-            PSY_ESCAPE_VIA_RETURN();
-    }
-
-    auto ok = disambiguator_->disambiguate();
-    if (!ok) {
-        const auto& persistentAmbigs = disambiguator_->persistentAmbiguities();
+        const auto& persistentAmbigs = disambiguator->persistentAmbiguities();
         for (const auto& ambig : persistentAmbigs)
             persistentAmbigs_.insert(ambig);
     }

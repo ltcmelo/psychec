@@ -39,6 +39,7 @@ class CompilerFrontend
 public:
     virtual ~CompilerFrontend();
 
+    virtual bool setup() = 0;
     virtual int run(const std::string& srcText, const psy::FileInfo& fi) = 0;
 
 protected:

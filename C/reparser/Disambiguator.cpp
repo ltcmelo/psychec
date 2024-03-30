@@ -38,7 +38,6 @@ Disambiguator::Disambiguator(SyntaxTree* tree)
 bool Disambiguator::disambiguate()
 {
     visit(tree_->root());
-
     return inconclusiveDisambigs_.empty();
 }
 

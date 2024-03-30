@@ -66,8 +66,8 @@ private:
     void reparse_withTypeSynonymVerification(std::string text, Expectation X = Expectation());
     void reparse_withGuidelineImposition(std::string text, Expectation X = Expectation());
     void reparse(std::string text,
-                 Expectation X = Expectation(),
-                 Reparser::DisambiguationStrategy strategy = Reparser::DisambiguationStrategy::UNSPECIFIED);
+                 Reparser::DisambiguationStrategy strategy,
+                 Expectation X = Expectation());
 
     void bind(std::string text, Expectation X = Expectation());
 

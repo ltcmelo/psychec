@@ -244,46 +244,42 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
         default:
             P->rootNode_ = parser.parse();
     }
-
     P->parseExitedEarly_ = parser.peek().kind() != EndOfFile;
 
-    if (!parser.detectedAnyAmbiguity())
+    if (!P->diagnostics_.empty() || !parser.detectedAnyAmbiguity())
         return;
 
-    auto disambiguationStrategy = Reparser::DisambiguationStrategy::UNSPECIFIED;
-    auto allowHeuristics = false;
-    switch (P->parseOptions_.treatmentOfAmbiguities()) {
-        case ParseOptions::TreatmentOfAmbiguities::None:
-            for (const auto& diag : parser.releaseRetainedAmbiguityDiagnostics())
-                newDiagnostic(std::get<0>(diag), std::get<1>(diag));
-            return;
+    if (P->parseOptions_.ambiguityMode()
+            == ParseOptions::AmbiguityMode::Diagnose) {
+        for (const auto& diag : parser.releaseRetainedAmbiguityDiagnostics())
+            newDiagnostic(std::get<0>(diag), std::get<1>(diag));
+        return;
+    }
 
-        case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyAndHeuristically:
-            allowHeuristics = true;
-            [[fallthrough]];
+    Reparser reparser;
+    switch (P->parseOptions_.ambiguityMode()) {
+        case ParseOptions::AmbiguityMode::DisambiguateAlgorithmicallyAndHeuristically:
+            reparser.addDisambiguationStrategy(
+                        Reparser::DisambiguationStrategy::SyntaxCorrelation);
+            reparser.addDisambiguationStrategy(
+                        Reparser::DisambiguationStrategy::GuidelineImposition);
+            break;
 
-        case ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically: {
-            disambiguationStrategy = P->textCompleteness_ == TextCompleteness::Full
-                    ? Reparser::DisambiguationStrategy::TypeSynonymsVerification
-                    : Reparser::DisambiguationStrategy::SyntaxCorrelation;
+        case ParseOptions::AmbiguityMode::DisambiguateAlgorithmically: {
+            reparser.addDisambiguationStrategy(
+                        Reparser::DisambiguationStrategy::SyntaxCorrelation);
             break;
         }
 
-        case ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically:
-            disambiguationStrategy = Reparser::DisambiguationStrategy::GuidelineImposition;
-            allowHeuristics = true;
+        case ParseOptions::AmbiguityMode::DisambiguateHeuristically:
+            reparser.addDisambiguationStrategy(
+                        Reparser::DisambiguationStrategy::GuidelineImposition);
             break;
 
         default:
             PSY_ESCAPE_VIA_RETURN();
     }
 
-    if (!P->diagnostics_.empty())
-        return;
-
-    Reparser reparser;
-    reparser.setDisambiguationStrategy(disambiguationStrategy);
-    reparser.setAllowHeuristics(allowHeuristics);
     reparser.reparse(this);
     if (!reparser.eliminatedAllAmbiguities()) {
         for (const auto& diag : parser.releaseRetainedAmbiguityDiagnostics()) {

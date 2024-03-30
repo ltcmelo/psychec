@@ -43,19 +43,25 @@ public:
 
     static void extend(cxxopts::Options& cmdLineOpts);
 
-    // TODO: API
-    LanguageDialect::Std langStd;
+    bool isValid() const;
 
-    std::string hostCompiler;
-    std::vector<std::string> macrosToDefine;
-    std::vector<std::string> macrosToUndef;
-    std::vector<std::string> headerSearchPaths;
+    /* Compiler */
+    std::string compiler_;
 
-    std::string ParseOptions_TreatmentOfAmbiguities;
+    /* Language */
+    std::string std_;
 
-    // TODO: Bit fields.
-    bool expandIncludes;
-    bool inferMissingTypes;
+    /* Preprocessor */
+    bool ppIncludes_;
+    std::vector<std::string> searchPaths_;
+    std::vector<std::string> definedMacros_;
+    std::vector<std::string> undefedMacros_;
+
+    /* Parser */
+    std::string commentMode_;
+    std::string ambigMode_;
+
+    bool inferTypes_;
 };
 
 } // cnip

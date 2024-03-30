@@ -20,18 +20,18 @@
 
 #include "MacroTranslations.h"
 
-#define DEFINE_ENABLE_ISENABLED(FLAG) \
-    MacroTranslations& MacroTranslations::enable_##FLAG(bool enable) \
-        { BF_.FLAG##_ = enable; return *this; } \
-    bool MacroTranslations::isEnabled_##FLAG() const \
-        { return BF_.FLAG##_; }
-
 using namespace psy;
 using namespace C;
 
 MacroTranslations::MacroTranslations()
     : BF_all_(~0)
 {}
+
+#define DEFINE_ENABLE_ISENABLED(FLAG) \
+    MacroTranslations& MacroTranslations::enable_##FLAG(bool enable) \
+        { BF_.FLAG##_ = enable; return *this; } \
+    bool MacroTranslations::isEnabled_##FLAG() const \
+        { return BF_.FLAG##_; }
 
 DEFINE_ENABLE_ISENABLED(Translate_static_assert_AsKeyword)
 DEFINE_ENABLE_ISENABLED(Translate_complex_AsKeyword)

@@ -29,6 +29,8 @@
 #include "plugin-api/SourceInspector.h"
 #include "syntax/SyntaxNamePrinter.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <iterator>
 
 using namespace cnip;
@@ -58,12 +60,17 @@ CCompilerFrontend::CCompilerFrontend(const cxxopts::ParseResult& parsedCmdLine)
 CCompilerFrontend::~CCompilerFrontend()
 {}
 
+bool CCompilerFrontend::setup()
+{
+    return config_->isValid();
+}
+
 int CCompilerFrontend::run(const std::string& srcText, const FileInfo& fi)
 {
     if (srcText.empty())
          return 0;
 
-    return config_->inferMissingTypes
+    return config_->inferTypes_
             ? extendWithStdLibHeaders(srcText, fi)
             : preprocess(srcText, fi);
 }
@@ -104,14 +111,14 @@ int CCompilerFrontend::extendWithStdLibHeaders(const std::string& srcText,
 int CCompilerFrontend::preprocess(const std::string& srcText,
                                   const psy::FileInfo& fi)
 {
-    GnuCompilerFacade cc(config_->hostCompiler,
-                         to_string(config_->langStd),
-                         config_->macrosToDefine,
-                         config_->macrosToUndef);
+    GnuCompilerFacade cc(config_->compiler_,
+                         config_->std_,
+                         config_->definedMacros_,
+                         config_->undefedMacros_);
 
     std::string srcText_P;
     int exit;
-    if (config_->expandIncludes) {
+    if (config_->ppIncludes_) {
         std::tie(exit, srcText_P) = cc.preprocess(srcText);
         if (exit != 0) {
             std::cerr << kCnip << "preprocessor invocation failed" << std::endl;
@@ -134,23 +141,35 @@ int CCompilerFrontend::preprocess(const std::string& srcText,
 int CCompilerFrontend::constructSyntaxTree(const std::string& srcText,
                                            const psy::FileInfo& fi)
 {
-    ParseOptions parseOpts;
 
-    // TODO: Move to driver/config.
-    if (!config_->ParseOptions_TreatmentOfAmbiguities.empty()) {
-        if (config_->ParseOptions_TreatmentOfAmbiguities == "None")
-            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::None);
-        else if (config_->ParseOptions_TreatmentOfAmbiguities == "DisambiguateAlgorithmically")
-            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically);
-        else if (config_->ParseOptions_TreatmentOfAmbiguities == "DisambiguateAlgorithmicallyOrHeuristically")
-            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmicallyAndHeuristically);
-        else if (config_->ParseOptions_TreatmentOfAmbiguities == "DisambiguateHeuristically")
-            parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateHeuristically);
-        else {
-            std::cerr << "unrecognized --C-ParseOptions-TreatmentOfAmbiguities" << std::endl;
-            return 1;
-        }
+    LanguageDialect::Std std;
+    if (config_->std_ == "c89" || config_->std_ == "c90")
+        std = LanguageDialect::Std::C89_90;
+    else if (config_->std_ == "c99")
+        std = LanguageDialect::Std::C99;
+    else if (config_->std_ == "c17" || config_->std_ == "c18")
+        std = LanguageDialect::Std::C17_18;
+    else if (config_->std_ == "c11")
+        std = LanguageDialect::Std::C11;
+    else {
+        PSY_ASSERT(false, return 1);
     }
+
+    ParseOptions::AmbiguityMode ambigMode;
+    if (config_->ambigMode_ == "D")
+        ambigMode = ParseOptions::AmbiguityMode::Diagnose;
+    else if (config_->ambigMode_ == "DA")
+        ambigMode = ParseOptions::AmbiguityMode::DisambiguateAlgorithmically;
+    else if (config_->ambigMode_ == "DAH")
+        ambigMode = ParseOptions::AmbiguityMode::DisambiguateAlgorithmicallyAndHeuristically;
+    else if (config_->ambigMode_ == "DH")
+        ambigMode = ParseOptions::AmbiguityMode::DisambiguateHeuristically;
+    else {
+        PSY_ASSERT(false, return 1);
+    }
+
+    ParseOptions parseOpts{ LanguageDialect(std) };
+    parseOpts.setAmbiguityMode(ambigMode);
 
     auto tree = SyntaxTree::parseText(srcText,
                                       TextPreprocessingState::Preprocessed,

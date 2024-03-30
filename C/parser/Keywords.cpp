@@ -29,7 +29,7 @@
 namespace psy {
 namespace C {
 
-static inline SyntaxKind classify2(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize2(const char* s, const ParseOptions& opts)
 {
     if (s[0] == 'd') {
         if (s[1] == 'o') {
@@ -44,7 +44,7 @@ static inline SyntaxKind classify2(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify3(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize3(const char* s, const ParseOptions& opts)
 {
     if (s[0] == 'a') {
         if (s[1] == 's') {
@@ -70,7 +70,7 @@ static inline SyntaxKind classify3(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify4(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
 {
     if (s[0] == 'a') {
         if (s[1] == 'u') {
@@ -82,7 +82,7 @@ static inline SyntaxKind classify4(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 'b'
-             && opts.extensions().translations().isEnabled_Translate_bool_AsKeyword()) {
+             && opts.languageExtensions().translations().isEnabled_Translate_bool_AsKeyword()) {
         if (s[1] == 'o') {
             if (s[2] == 'o') {
                 if (s[3] == 'l') {
@@ -142,7 +142,7 @@ static inline SyntaxKind classify4(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 'N'
-             && opts.extensions().isEnabled_NULLAsBuiltin()) {
+             && opts.languageExtensions().isEnabled_NULLAsBuiltin()) {
         if (s[1] == 'U') {
             if (s[2] == 'L') {
                 if (s[3] == 'L') {
@@ -152,7 +152,7 @@ static inline SyntaxKind classify4(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 't'
-             && opts.extensions().isEnabled_NativeBooleans()) {
+             && opts.languageExtensions().isEnabled_NativeBooleans()) {
         if (s[1] == 'r') {
             if (s[2] == 'u') {
                 if (s[3] == 'e') {
@@ -173,7 +173,7 @@ static inline SyntaxKind classify4(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify5(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_') {
@@ -186,7 +186,7 @@ static inline SyntaxKind classify5(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'B'
-                 && opts.extensions().translations().isEnabled_Translate_bool_AsKeyword()) {
+                 && opts.languageExtensions().translations().isEnabled_Translate_bool_AsKeyword()) {
             if (s[2] == 'o') {
                 if (s[3] == 'o') {
                     if (s[4] == 'l') {
@@ -220,7 +220,7 @@ static inline SyntaxKind classify5(const char* s, const ParseOptions& opts)
     }
     else if (s[0] == 'f') {
         if (s[1] == 'a'
-                && opts.extensions().isEnabled_NativeBooleans()) {
+                && opts.languageExtensions().isEnabled_NativeBooleans()) {
             if (s[2] == 'l') {
                 if (s[3] == 's') {
                     if (s[4] == 'e') {
@@ -275,7 +275,7 @@ static inline SyntaxKind classify5(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify6(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
 {
     if (s[0] == 'd') {
         if (s[1] == 'o') {
@@ -304,7 +304,7 @@ static inline SyntaxKind classify6(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 'i'
-             && opts.dialect().std() >= LanguageDialect::Std::C99) {
+             && opts.languageDialect().std() >= LanguageDialect::Std::C99) {
         if (s[1] == 'n') {
             if (s[2] == 'l') {
                 if (s[3] == 'i') {
@@ -397,7 +397,7 @@ static inline SyntaxKind classify6(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 'v'
-                && opts.extensions().translations().isEnabled_Translate_va_arg_AsKeyword()) {
+                && opts.languageExtensions().translations().isEnabled_Translate_va_arg_AsKeyword()) {
         if (s[1] == 'a') {
             if (s[2] == '_') {
                 if (s[3] == 'a') {
@@ -413,7 +413,7 @@ static inline SyntaxKind classify6(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify7(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_') {
@@ -441,7 +441,7 @@ static inline SyntaxKind classify7(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'A'
-                 && opts.dialect().std() >= LanguageDialect::Std::C11) {
+                 && opts.languageDialect().std() >= LanguageDialect::Std::C11) {
             if (s[2] == 't') {
                 if (s[3] == 'o') {
                     if (s[4] == 'm') {
@@ -455,7 +455,7 @@ static inline SyntaxKind classify7(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'F'
-                 && opts.extensions().isEnabled_ExtPSY_Generics()) {
+                 && opts.languageExtensions().isEnabled_ExtPSY_Generics()) {
             if (s[2] == 'o') {
                 if (s[3] == 'r') {
                     if (s[4] == 'a') {
@@ -469,7 +469,7 @@ static inline SyntaxKind classify7(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'E'
-                 && opts.extensions().isEnabled_ExtPSY_Generics()) {
+                 && opts.languageExtensions().isEnabled_ExtPSY_Generics()) {
             if (s[2] == 'x') {
                 if (s[3] == 'i') {
                     if (s[4] == 's') {
@@ -484,20 +484,20 @@ static inline SyntaxKind classify7(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 'a'
-                && opts.dialect().std() >= LanguageDialect::Std::C11) {
+                && opts.languageDialect().std() >= LanguageDialect::Std::C11) {
         if (s[1] == 'l') {
             if (s[2] == 'i') {
                 if (s[3] == 'g') {
                     if (s[4] == 'n') {
                         if (s[5] == 'a') {
                             if (s[6] == 's'
-                                    && opts.extensions().translations().isEnabled_Translate_alignas_AsKeyword()) {
+                                    && opts.languageExtensions().translations().isEnabled_Translate_alignas_AsKeyword()) {
                                 return Keyword__Alignas;
                             }
                         }
                         else if (s[5] == 'o') {
                             if (s[6] == 'f'
-                                    && opts.extensions().translations().isEnabled_Translate_alignof_AsKeyword()) {
+                                    && opts.languageExtensions().translations().isEnabled_Translate_alignof_AsKeyword()) {
                                 return Keyword__Alignof;
                             }
                         }
@@ -522,7 +522,7 @@ static inline SyntaxKind classify7(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 'n'
-             && opts.extensions().isEnabled_CPP_nullptr()) {
+             && opts.languageExtensions().isEnabled_CPP_nullptr()) {
         if (s[1] == 'u') {
             if (s[2] == 'l') {
                 if (s[3] == 'l') {
@@ -570,11 +570,11 @@ static inline SyntaxKind classify7(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_'
-                && opts.extensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
             if (s[2] == 'i') {
                 if (s[3] == 'n') {
                     if (s[4] == 'l') {
@@ -588,7 +588,7 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
                     }
                 }
                 else if (s[3] == 'm'
-                         && opts.extensions().isEnabled_ExtGNU_Complex()) {
+                         && opts.languageExtensions().isEnabled_ExtGNU_Complex()) {
                     if (s[4] == 'a') {
                         if (s[5] == 'g') {
                             if (s[6] == '_') {
@@ -601,7 +601,7 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 'f'
-                     && opts.dialect().std() >= LanguageDialect::Std::C99) {
+                     && opts.languageDialect().std() >= LanguageDialect::Std::C99) {
                 if (s[3] == 'u') {
                     if (s[4] == 'n') {
                         if (s[5] == 'c') {
@@ -639,7 +639,7 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 'r'
-                     && opts.extensions().isEnabled_ExtGNU_Complex()) {
+                     && opts.languageExtensions().isEnabled_ExtGNU_Complex()) {
                 if (s[3] == 'e') {
                     if (s[4] == 'a') {
                         if (s[5] == 'l') {
@@ -653,7 +653,7 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 's'
-                     && opts.extensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                     && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
                 if (s[3] == 'i') {
                     if (s[4] == 'g') {
                         if (s[5] == 'n') {
@@ -668,7 +668,7 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'A'
-                 && opts.dialect().std() >= LanguageDialect::Std::C11) {
+                 && opts.languageDialect().std() >= LanguageDialect::Std::C11) {
             if (s[2] == 'l') {
                 if (s[3] == 'i') {
                     if (s[4] == 'g') {
@@ -689,7 +689,7 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'C'
-                    && opts.dialect().std() >= LanguageDialect::Std::C99) {
+                    && opts.languageDialect().std() >= LanguageDialect::Std::C99) {
             if (s[2] == 'o') {
                 if (s[3] == 'm') {
                     if (s[4] == 'p') {
@@ -705,7 +705,7 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'G'
-                    && opts.dialect().std() >= LanguageDialect::Std::C11) {
+                    && opts.languageDialect().std() >= LanguageDialect::Std::C11) {
             if (s[2] == 'e') {
                 if (s[3] == 'n') {
                     if (s[4] == 'e') {
@@ -762,7 +762,7 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 'o'
-             && opts.extensions().translations().isEnabled_Translate_offsetof_AsKeyword()) {
+             && opts.languageExtensions().translations().isEnabled_Translate_offsetof_AsKeyword()) {
         if (s[1] == 'f') {
             if (s[2] == 'f') {
                 if (s[3] == 's') {
@@ -845,11 +845,11 @@ static inline SyntaxKind classify8(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify9(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize9(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == 'N'
-                && opts.dialect().std() >= LanguageDialect::Std::C11) {
+                && opts.languageDialect().std() >= LanguageDialect::Std::C11) {
             if (s[2] == 'o') {
                 if (s[3] == 'r') {
                     if (s[4] == 'e') {
@@ -883,7 +883,7 @@ static inline SyntaxKind classify9(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 'a'
-                     && opts.extensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                     && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
                 if (s[3] == 'l') {
                     if (s[4] == 'i') {
                         if (s[5] == 'g') {
@@ -905,7 +905,7 @@ static inline SyntaxKind classify9(const char* s, const ParseOptions& opts)
             }
         }
         else if(s[1] == 'T'
-                    && opts.extensions().isEnabled_ExtPSY_Generics()) {
+                    && opts.languageExtensions().isEnabled_ExtPSY_Generics()) {
             if (s[2] == 'e') {
                 if (s[3] == 'm') {
                     if (s[4] == 'p') {
@@ -926,7 +926,7 @@ static inline SyntaxKind classify9(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify10(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize10(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_') {
@@ -982,7 +982,7 @@ static inline SyntaxKind classify10(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 's'
-                        && opts.extensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                        && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
                 if (s[3] == 'i') {
                     if (s[4] == 'g') {
                         if (s[5] == 'n') {
@@ -1021,7 +1021,7 @@ static inline SyntaxKind classify10(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify11(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize11(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_') {
@@ -1062,7 +1062,7 @@ static inline SyntaxKind classify11(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 'c'
-                     && opts.extensions().isEnabled_ExtGNU_Complex()) {
+                     && opts.languageExtensions().isEnabled_ExtGNU_Complex()) {
                 if (s[3] == 'o') {
                     if (s[4] == 'm') {
                         if (s[5] == 'p') {
@@ -1086,11 +1086,11 @@ static inline SyntaxKind classify11(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify12(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize12(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_'
-                && opts.extensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
             if (s[2] == 'v') {
                 if (s[3] == 'o') {
                     if (s[4] == 'l') {
@@ -1134,7 +1134,7 @@ static inline SyntaxKind classify12(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 'F'
-                     && opts.extensions().isEnabled_ExtGNU_FunctionNames()) {
+                     && opts.languageExtensions().isEnabled_ExtGNU_FunctionNames()) {
                 if (s[3] == 'U') {
                     if (s[4] == 'N') {
                         if (s[5] == 'C') {
@@ -1157,7 +1157,7 @@ static inline SyntaxKind classify12(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 't'
-                 && opts.extensions().translations().isEnabled_Translate_thread_local_AsKeyword()) {
+                 && opts.languageExtensions().translations().isEnabled_Translate_thread_local_AsKeyword()) {
             if (s[2] == 'h') {
                 if (s[3] == 'r') {
                     if (s[4] == 'e') {
@@ -1186,11 +1186,11 @@ static inline SyntaxKind classify12(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify13(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize13(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_'
-                && opts.extensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
             if (s[2] == 'a') {
                 if (s[3] == 't') {
                     if (s[4] == 't') {
@@ -1215,7 +1215,7 @@ static inline SyntaxKind classify13(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 'e'
-                     && opts.extensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                     && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
                 if (s[3] == 'x') {
                     if (s[4] == 't') {
                         if (s[5] == 'e') {
@@ -1240,7 +1240,7 @@ static inline SyntaxKind classify13(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'T'
-                 && opts.dialect().std() >= LanguageDialect::Std::C11) {
+                 && opts.languageDialect().std() >= LanguageDialect::Std::C11) {
             if (s[2] == 'h') {
                 if (s[3] == 'r') {
                     if (s[4] == 'e') {
@@ -1269,10 +1269,10 @@ static inline SyntaxKind classify13(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify14(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize14(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_'
-            && opts.dialect().std() >= LanguageDialect::Std::C11) {
+            && opts.languageDialect().std() >= LanguageDialect::Std::C11) {
         if (s[1] == 'S') {
             if (s[2] == 't') {
                 if (s[3] == 'a') {
@@ -1305,15 +1305,15 @@ static inline SyntaxKind classify14(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify15(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize15(const char* s, const ParseOptions& opts)
 {
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify16(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize16(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_'
-            && opts.extensions().isEnabled_ExtGNU_InternalBuiltins()) {
+            && opts.languageExtensions().isEnabled_ExtGNU_InternalBuiltins()) {
         if (s[1] == '_') {
             if (s[2] == 'b') {
                 if (s[3] == 'u') {
@@ -1380,15 +1380,15 @@ static inline SyntaxKind classify16(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify17(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize17(const char* s, const ParseOptions& opts)
 {
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify18(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize18(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_'
-            && opts.extensions().isEnabled_ExtGNU_InternalBuiltins()) {
+            && opts.languageExtensions().isEnabled_ExtGNU_InternalBuiltins()) {
         if (s[1] == '_') {
             if (s[2] == 'b') {
                 if (s[3] == 'u') {
@@ -1428,12 +1428,12 @@ static inline SyntaxKind classify18(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify19(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize19(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_') {
             if (s[2] == 'P'
-                && opts.extensions().isEnabled_ExtGNU_FunctionNames()) {
+                && opts.languageExtensions().isEnabled_ExtGNU_FunctionNames()) {
                 if (s[3] == 'R') {
                     if (s[4] == 'E') {
                         if (s[5] == 'T') {
@@ -1474,12 +1474,12 @@ static inline SyntaxKind classify19(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classify21(const char* s, const ParseOptions& opts)
+static inline SyntaxKind recognize21(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_') {
             if (s[2] == 'b'
-                && opts.extensions().isEnabled_ExtGNU_InternalBuiltins()) {
+                && opts.languageExtensions().isEnabled_ExtGNU_InternalBuiltins()) {
                 if (s[3] == 'u') {
                     if (s[4] == 'i') {
                         if (s[5] == 'l') {
@@ -1523,33 +1523,33 @@ static inline SyntaxKind classify21(const char* s, const ParseOptions& opts)
     return IdentifierToken;
 }
 
-SyntaxKind Lexer::classify(const char* s, int n, const ParseOptions& opts)
+SyntaxKind Lexer::recognize(const char* s, int n, const ParseOptions& opts)
 {
     switch (n) {
-        case 2: return classify2(s, opts);
-        case 3: return classify3(s, opts);
-        case 4: return classify4(s, opts);
-        case 5: return classify5(s, opts);
-        case 6: return classify6(s, opts);
-        case 7: return classify7(s, opts);
-        case 8: return classify8(s, opts);
-        case 9: return classify9(s, opts);
-        case 10: return classify10(s, opts);
-        case 11: return classify11(s, opts);
-        case 12: return classify12(s, opts);
-        case 13: return classify13(s, opts);
-        case 14: return classify14(s, opts);
-        case 15: return classify15(s, opts);
-        case 16: return classify16(s, opts);
-        case 17: return classify17(s, opts);
-        case 18: return classify18(s, opts);
-        case 19: return classify19(s, opts);
-        case 21: return classify21(s, opts);
+        case 2: return recognize2(s, opts);
+        case 3: return recognize3(s, opts);
+        case 4: return recognize4(s, opts);
+        case 5: return recognize5(s, opts);
+        case 6: return recognize6(s, opts);
+        case 7: return recognize7(s, opts);
+        case 8: return recognize8(s, opts);
+        case 9: return recognize9(s, opts);
+        case 10: return recognize10(s, opts);
+        case 11: return recognize11(s, opts);
+        case 12: return recognize12(s, opts);
+        case 13: return recognize13(s, opts);
+        case 14: return recognize14(s, opts);
+        case 15: return recognize15(s, opts);
+        case 16: return recognize16(s, opts);
+        case 17: return recognize17(s, opts);
+        case 18: return recognize18(s, opts);
+        case 19: return recognize19(s, opts);
+        case 21: return recognize21(s, opts);
         default: return IdentifierToken;
     }
 }
 
-static inline SyntaxKind classifyOperator2(const char* s)
+static inline SyntaxKind translate2(const char* s)
 {
     if (s[0] == 'o') {
         if (s[1] == 'r') {
@@ -1559,7 +1559,7 @@ static inline SyntaxKind classifyOperator2(const char* s)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classifyOperator3(const char* s)
+static inline SyntaxKind translate3(const char* s)
 {
     if (s[0] == 'a') {
         if (s[1] == 'n') {
@@ -1585,7 +1585,7 @@ static inline SyntaxKind classifyOperator3(const char* s)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classifyOperator5(const char* s)
+static inline SyntaxKind translate5(const char* s)
 {
     if (s[0] == 'b') {
         if (s[1] == 'i') {
@@ -1623,7 +1623,7 @@ static inline SyntaxKind classifyOperator5(const char* s)
     return IdentifierToken;
 }
 
-static inline SyntaxKind classifyOperator6(const char* s)
+static inline SyntaxKind translate6(const char* s)
 {
     if (s[0] == 'a') {
         if (s[1] == 'n') {
@@ -1680,16 +1680,13 @@ static inline SyntaxKind classifyOperator6(const char* s)
     return IdentifierToken;
 }
 
-SyntaxKind Lexer::classifyOperator(const char* s, int n, const ParseOptions& opts)
+SyntaxKind Lexer::translate(const char* s, int n, const ParseOptions& opts)
 {
-    if (!opts.extensions().translations().isEnabled_Translate_operatorNames())
-        return IdentifierToken;
-
     switch (n) {
-        case 2: return classifyOperator2(s);
-        case 3: return classifyOperator3(s);
-        case 5: return classifyOperator5(s);
-        case 6: return classifyOperator6(s);
+        case 2: return translate2(s);
+        case 3: return translate3(s);
+        case 5: return translate5(s);
+        case 6: return translate6(s);
         default: return IdentifierToken;
     }
 }
