@@ -152,7 +152,7 @@ static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
         }
     }
     else if (s[0] == 't'
-             && opts.languageExtensions().isEnabled_NativeBooleans()) {
+             && opts.languageExtensions().isEnabled_nativeBooleans()) {
         if (s[1] == 'r') {
             if (s[2] == 'u') {
                 if (s[3] == 'e') {
@@ -220,7 +220,7 @@ static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
     }
     else if (s[0] == 'f') {
         if (s[1] == 'a'
-                && opts.languageExtensions().isEnabled_NativeBooleans()) {
+                && opts.languageExtensions().isEnabled_nativeBooleans()) {
             if (s[2] == 'l') {
                 if (s[3] == 's') {
                     if (s[4] == 'e') {
@@ -455,7 +455,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'F'
-                 && opts.languageExtensions().isEnabled_ExtPSY_Generics()) {
+                 && opts.languageExtensions().isEnabled_extPSY_Generics()) {
             if (s[2] == 'o') {
                 if (s[3] == 'r') {
                     if (s[4] == 'a') {
@@ -469,7 +469,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
             }
         }
         else if (s[1] == 'E'
-                 && opts.languageExtensions().isEnabled_ExtPSY_Generics()) {
+                 && opts.languageExtensions().isEnabled_extPSY_Generics()) {
             if (s[2] == 'x') {
                 if (s[3] == 'i') {
                     if (s[4] == 's') {
@@ -574,7 +574,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_'
-                && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                && opts.languageExtensions().isEnabled_extGNU_AlternateKeywords()) {
             if (s[2] == 'i') {
                 if (s[3] == 'n') {
                     if (s[4] == 'l') {
@@ -588,7 +588,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                     }
                 }
                 else if (s[3] == 'm'
-                         && opts.languageExtensions().isEnabled_ExtGNU_Complex()) {
+                         && opts.languageExtensions().isEnabled_extGNU_Complex()) {
                     if (s[4] == 'a') {
                         if (s[5] == 'g') {
                             if (s[6] == '_') {
@@ -639,7 +639,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 'r'
-                     && opts.languageExtensions().isEnabled_ExtGNU_Complex()) {
+                     && opts.languageExtensions().isEnabled_extGNU_Complex()) {
                 if (s[3] == 'e') {
                     if (s[4] == 'a') {
                         if (s[5] == 'l') {
@@ -653,7 +653,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 's'
-                     && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                     && opts.languageExtensions().isEnabled_extGNU_AlternateKeywords()) {
                 if (s[3] == 'i') {
                     if (s[4] == 'g') {
                         if (s[5] == 'n') {
@@ -883,7 +883,7 @@ static inline SyntaxKind recognize9(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 'a'
-                     && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                     && opts.languageExtensions().isEnabled_extGNU_AlternateKeywords()) {
                 if (s[3] == 'l') {
                     if (s[4] == 'i') {
                         if (s[5] == 'g') {
@@ -905,7 +905,7 @@ static inline SyntaxKind recognize9(const char* s, const ParseOptions& opts)
             }
         }
         else if(s[1] == 'T'
-                    && opts.languageExtensions().isEnabled_ExtPSY_Generics()) {
+                    && opts.languageExtensions().isEnabled_extPSY_Generics()) {
             if (s[2] == 'e') {
                 if (s[3] == 'm') {
                     if (s[4] == 'p') {
@@ -982,7 +982,7 @@ static inline SyntaxKind recognize10(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 's'
-                        && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                        && opts.languageExtensions().isEnabled_extGNU_AlternateKeywords()) {
                 if (s[3] == 'i') {
                     if (s[4] == 'g') {
                         if (s[5] == 'n') {
@@ -1062,7 +1062,7 @@ static inline SyntaxKind recognize11(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 'c'
-                     && opts.languageExtensions().isEnabled_ExtGNU_Complex()) {
+                     && opts.languageExtensions().isEnabled_extGNU_Complex()) {
                 if (s[3] == 'o') {
                     if (s[4] == 'm') {
                         if (s[5] == 'p') {
@@ -1090,7 +1090,7 @@ static inline SyntaxKind recognize12(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_'
-                && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                && opts.languageExtensions().isEnabled_extGNU_AlternateKeywords()) {
             if (s[2] == 'v') {
                 if (s[3] == 'o') {
                     if (s[4] == 'l') {
@@ -1134,7 +1134,7 @@ static inline SyntaxKind recognize12(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 'F'
-                     && opts.languageExtensions().isEnabled_ExtGNU_FunctionNames()) {
+                     && opts.languageExtensions().isEnabled_extGNU_FunctionNames()) {
                 if (s[3] == 'U') {
                     if (s[4] == 'N') {
                         if (s[5] == 'C') {
@@ -1190,7 +1190,7 @@ static inline SyntaxKind recognize13(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_') {
         if (s[1] == '_'
-                && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                && opts.languageExtensions().isEnabled_extGNU_AlternateKeywords()) {
             if (s[2] == 'a') {
                 if (s[3] == 't') {
                     if (s[4] == 't') {
@@ -1215,7 +1215,7 @@ static inline SyntaxKind recognize13(const char* s, const ParseOptions& opts)
                 }
             }
             else if (s[2] == 'e'
-                     && opts.languageExtensions().isEnabled_ExtGNU_AlternateKeywords()) {
+                     && opts.languageExtensions().isEnabled_extGNU_AlternateKeywords()) {
                 if (s[3] == 'x') {
                     if (s[4] == 't') {
                         if (s[5] == 'e') {
@@ -1313,7 +1313,7 @@ static inline SyntaxKind recognize15(const char* s, const ParseOptions& opts)
 static inline SyntaxKind recognize16(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_'
-            && opts.languageExtensions().isEnabled_ExtGNU_InternalBuiltins()) {
+            && opts.languageExtensions().isEnabled_extGNU_InternalBuiltins()) {
         if (s[1] == '_') {
             if (s[2] == 'b') {
                 if (s[3] == 'u') {
@@ -1388,7 +1388,7 @@ static inline SyntaxKind recognize17(const char* s, const ParseOptions& opts)
 static inline SyntaxKind recognize18(const char* s, const ParseOptions& opts)
 {
     if (s[0] == '_'
-            && opts.languageExtensions().isEnabled_ExtGNU_InternalBuiltins()) {
+            && opts.languageExtensions().isEnabled_extGNU_InternalBuiltins()) {
         if (s[1] == '_') {
             if (s[2] == 'b') {
                 if (s[3] == 'u') {
@@ -1433,7 +1433,7 @@ static inline SyntaxKind recognize19(const char* s, const ParseOptions& opts)
     if (s[0] == '_') {
         if (s[1] == '_') {
             if (s[2] == 'P'
-                && opts.languageExtensions().isEnabled_ExtGNU_FunctionNames()) {
+                && opts.languageExtensions().isEnabled_extGNU_FunctionNames()) {
                 if (s[3] == 'R') {
                     if (s[4] == 'E') {
                         if (s[5] == 'T') {
@@ -1479,7 +1479,7 @@ static inline SyntaxKind recognize21(const char* s, const ParseOptions& opts)
     if (s[0] == '_') {
         if (s[1] == '_') {
             if (s[2] == 'b'
-                && opts.languageExtensions().isEnabled_ExtGNU_InternalBuiltins()) {
+                && opts.languageExtensions().isEnabled_extGNU_InternalBuiltins()) {
                 if (s[3] == 'u') {
                     if (s[4] == 'i') {
                         if (s[5] == 'l') {

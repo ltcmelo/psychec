@@ -38,7 +38,7 @@ ParseOptions::ParseOptions(LanguageDialect langDialect,
     , langExts_(std::move(langExts))
     , bits_(0)
 {
-    enable_KeywordRecognition(true);
+    enable_keywordRecognition(true);
     setCommentMode(CommentMode::Discard);
     setAmbiguityMode(AmbiguityMode::DisambiguateAlgorithmicallyAndHeuristically);
 }
@@ -81,6 +81,6 @@ ParseOptions::AmbiguityMode ParseOptions::ambiguityMode() const
     bool ParseOptions::isEnabled_##FLAG() const \
         { return BF_.FLAG##_; }
 
-DEFINE_ENABLE_ISENABLED(KeywordRecognition)
+DEFINE_ENABLE_ISENABLED(keywordRecognition)
 
 #undef DEFINE_ENABLE_ISENABLED

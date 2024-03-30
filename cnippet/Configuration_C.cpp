@@ -33,7 +33,7 @@ const char* const kAmbigMode = "C-ambiguity-mode";
 
 using namespace cnip;
 
-ConfigurationForC::ConfigurationForC(const cxxopts::ParseResult& parsedCmdLine)
+CConfiguration::CConfiguration(const cxxopts::ParseResult& parsedCmdLine)
     : Configuration(parsedCmdLine)
 {
     compiler_ = parsedCmdLine[kCompiler].as<std::string>();
@@ -60,7 +60,7 @@ ConfigurationForC::ConfigurationForC(const cxxopts::ParseResult& parsedCmdLine)
     inferTypes_ = parsedCmdLine.count("C-infer-types");
 }
 
-bool ConfigurationForC::isValid() const
+bool CConfiguration::isValid() const
 {
     if (!(std_ == "c89"
           || std_ == "c90"
@@ -79,7 +79,7 @@ bool ConfigurationForC::isValid() const
     return true;
 }
 
-void ConfigurationForC::extend(cxxopts::Options& cmdLineOpts)
+void CConfiguration::extend(cxxopts::Options& cmdLineOpts)
 {
     cmdLineOpts.add_options()
 

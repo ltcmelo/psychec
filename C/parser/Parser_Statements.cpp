@@ -844,7 +844,7 @@ bool Parser::parseExtGNU_AsmStatement(StatementSyntax*& stmt)
                      return false,
                      "assert failure: `asm'");
 
-    if (!tree_->parseOptions().languageExtensions().isEnabled_ExtGNU_Asm())
+    if (!tree_->parseOptions().languageExtensions().isEnabled_extGNU_Asm())
         diagReporter_.ExpectedFeature("GNU asm");
 
     auto asmStmt = makeNode<ExtGNU_AsmStatementSyntax>();

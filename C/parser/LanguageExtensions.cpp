@@ -37,13 +37,13 @@ LanguageExtensions::LanguageExtensions(MacroTranslations translations)
     , BF_all_(~0)
 {
     /* Psyche */
-    BF_.ExtPSY_Generics_ = false;
+    BF_.extPSY_Generics_ = false;
 
     /* C++ */
     BF_.CPP_nullptr_ = false;
 
     /* Custom */
-    BF_.NativeBooleans_ = false;
+    BF_.nativeBooleans_ = false;
 }
 
 const MacroTranslations& LanguageExtensions::translations() const
@@ -57,24 +57,24 @@ const MacroTranslations& LanguageExtensions::translations() const
     bool LanguageExtensions::isEnabled_##FLAG() const \
         { return BF_.FLAG##_; }
 
-DEFINE_ENABLE_ISENABLED(ExtGNU_AlternateKeywords)
-DEFINE_ENABLE_ISENABLED(ExtGNU_Asm)
-DEFINE_ENABLE_ISENABLED(ExtGNU_AttributeSpecifiers)
-DEFINE_ENABLE_ISENABLED(ExtGNU_AttributeSpecifiersLLVM)
-DEFINE_ENABLE_ISENABLED(ExtGNU_Alignment)
-DEFINE_ENABLE_ISENABLED(ExtGNU_CompoundLiterals)
-DEFINE_ENABLE_ISENABLED(ExtGNU_Conditionals)
-DEFINE_ENABLE_ISENABLED(ExtGNU_DesignatedInitializers)
-DEFINE_ENABLE_ISENABLED(ExtGNU_FunctionNames)
-DEFINE_ENABLE_ISENABLED(ExtGNU_Complex)
-DEFINE_ENABLE_ISENABLED(ExtGNU_StatementExpressions)
-DEFINE_ENABLE_ISENABLED(ExtGNU_InternalBuiltins)
+DEFINE_ENABLE_ISENABLED(extGNU_AlternateKeywords)
+DEFINE_ENABLE_ISENABLED(extGNU_Asm)
+DEFINE_ENABLE_ISENABLED(extGNU_AttributeSpecifiers)
+DEFINE_ENABLE_ISENABLED(extGNU_AttributeSpecifiersLLVM)
+DEFINE_ENABLE_ISENABLED(extGNU_Alignment)
+DEFINE_ENABLE_ISENABLED(extGNU_CompoundLiterals)
+DEFINE_ENABLE_ISENABLED(extGNU_Conditionals)
+DEFINE_ENABLE_ISENABLED(extGNU_DesignatedInitializers)
+DEFINE_ENABLE_ISENABLED(extGNU_FunctionNames)
+DEFINE_ENABLE_ISENABLED(extGNU_Complex)
+DEFINE_ENABLE_ISENABLED(extGNU_StatementExpressions)
+DEFINE_ENABLE_ISENABLED(extGNU_InternalBuiltins)
 
-DEFINE_ENABLE_ISENABLED(ExtPSY_Generics)
+DEFINE_ENABLE_ISENABLED(extPSY_Generics)
 
 DEFINE_ENABLE_ISENABLED(CPP_nullptr)
 
-DEFINE_ENABLE_ISENABLED(NativeBooleans)
+DEFINE_ENABLE_ISENABLED(nativeBooleans)
 DEFINE_ENABLE_ISENABLED(NULLAsBuiltin)
 
 #undef DEFINE_ENABLE_ISENABLED

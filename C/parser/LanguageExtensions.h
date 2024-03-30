@@ -89,8 +89,8 @@ public:
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Alternate-Keywords.html
      */
-    LanguageExtensions& enable_ExtGNU_AlternateKeywords(bool enable);
-    bool isEnabled_ExtGNU_AlternateKeywords() const;
+    LanguageExtensions& enable_extGNU_AlternateKeywords(bool enable);
+    bool isEnabled_extGNU_AlternateKeywords() const;
     //!@}
 
     //!@{
@@ -99,8 +99,8 @@ public:
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
      */
-    LanguageExtensions& enable_ExtGNU_AttributeSpecifiers(bool enable);
-    bool isEnabled_ExtGNU_AttributeSpecifiers() const;
+    LanguageExtensions& enable_extGNU_AttributeSpecifiers(bool enable);
+    bool isEnabled_extGNU_AttributeSpecifiers() const;
     //!@}
 
     //!@{
@@ -109,8 +109,8 @@ public:
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Alignment.html
      */
-    LanguageExtensions& enable_ExtGNU_Alignment(bool enable);
-    bool isEnabled_ExtGNU_Alignment() const;
+    LanguageExtensions& enable_extGNU_Alignment(bool enable);
+    bool isEnabled_extGNU_Alignment() const;
     //!@}
 
     //!@{
@@ -119,8 +119,8 @@ public:
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Compound-Literals.html
      */
-    LanguageExtensions& enable_ExtGNU_CompoundLiterals(bool enable);
-    bool isEnabled_ExtGNU_CompoundLiterals() const;
+    LanguageExtensions& enable_extGNU_CompoundLiterals(bool enable);
+    bool isEnabled_extGNU_CompoundLiterals() const;
     //!@}
 
     //!@{
@@ -129,8 +129,8 @@ public:
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Conditionals.html
      */
-    LanguageExtensions& enable_ExtGNU_Conditionals(bool enable);
-    bool isEnabled_ExtGNU_Conditionals() const;
+    LanguageExtensions& enable_extGNU_Conditionals(bool enable);
+    bool isEnabled_extGNU_Conditionals() const;
     //!@}
 
     //!@{
@@ -139,8 +139,8 @@ public:
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Designated-Inits.html
      */
-    LanguageExtensions& enable_ExtGNU_DesignatedInitializers(bool enable);
-    bool isEnabled_ExtGNU_DesignatedInitializers() const;
+    LanguageExtensions& enable_extGNU_DesignatedInitializers(bool enable);
+    bool isEnabled_extGNU_DesignatedInitializers() const;
     //!@}
 
     //!@{
@@ -149,8 +149,8 @@ public:
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Function-Names.html
      */
-    LanguageExtensions& enable_ExtGNU_FunctionNames(bool enable);
-    bool isEnabled_ExtGNU_FunctionNames() const;
+    LanguageExtensions& enable_extGNU_FunctionNames(bool enable);
+    bool isEnabled_extGNU_FunctionNames() const;
     //!@}
 
     //!@{
@@ -159,8 +159,8 @@ public:
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Complex.html
      */
-    LanguageExtensions& enable_ExtGNU_Complex(bool enable);
-    bool isEnabled_ExtGNU_Complex() const;
+    LanguageExtensions& enable_extGNU_Complex(bool enable);
+    bool isEnabled_extGNU_Complex() const;
     //!@}
 
     //!@{
@@ -169,8 +169,8 @@ public:
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
      */
-    LanguageExtensions& enable_ExtGNU_StatementExpressions(bool enable);
-    bool isEnabled_ExtGNU_StatementExpressions() const;
+    LanguageExtensions& enable_extGNU_StatementExpressions(bool enable);
+    bool isEnabled_extGNU_StatementExpressions() const;
     //!@}
 
     //!@{
@@ -179,8 +179,8 @@ public:
      *
      * https://gcc.gnu.org/onlinedocs/gcc/Using-Assembly-Language-with-C.html
      */
-    LanguageExtensions& enable_ExtGNU_Asm(bool enable);
-    bool isEnabled_ExtGNU_Asm() const;
+    LanguageExtensions& enable_extGNU_Asm(bool enable);
+    bool isEnabled_extGNU_Asm() const;
     //!@}
 
     //!@{
@@ -191,8 +191,8 @@ public:
      * https://gcc.gnu.org/onlinedocs/gcc/Offsetof.html
      * https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
      */
-    LanguageExtensions& enable_ExtGNU_InternalBuiltins(bool enable);
-    bool isEnabled_ExtGNU_InternalBuiltins() const;
+    LanguageExtensions& enable_extGNU_InternalBuiltins(bool enable);
+    bool isEnabled_extGNU_InternalBuiltins() const;
     //!@}
 
     //!@{
@@ -201,8 +201,8 @@ public:
      *
      * https://clang.llvm.org/docs/AttributeReference.html#availability
      */
-    LanguageExtensions& enable_ExtGNU_AttributeSpecifiersLLVM(bool enable);
-    bool isEnabled_ExtGNU_AttributeSpecifiersLLVM() const;
+    LanguageExtensions& enable_extGNU_AttributeSpecifiersLLVM(bool enable);
+    bool isEnabled_extGNU_AttributeSpecifiersLLVM() const;
     //!@}
 
     //!@{
@@ -218,8 +218,8 @@ public:
      * Whether to allow boolean types natively (even in non-C99 standard),
      * including keywords \c bool, \c false, and \c true,
      */
-    LanguageExtensions& enable_NativeBooleans(bool allow);
-    bool isEnabled_NativeBooleans() const;
+    LanguageExtensions& enable_nativeBooleans(bool allow);
+    bool isEnabled_nativeBooleans() const;
     //!@}
 
     //!@{
@@ -234,8 +234,8 @@ public:
     /**
      * Whether to set experimental generics from Psyche.
      */
-    LanguageExtensions& enable_ExtPSY_Generics(bool yes);
-    bool isEnabled_ExtPSY_Generics() const;
+    LanguageExtensions& enable_extPSY_Generics(bool yes);
+    bool isEnabled_extPSY_Generics() const;
     //!@}
 
 private:
@@ -244,27 +244,27 @@ private:
     struct BitFields
     {
         /* GNU */
-        std::uint64_t ExtGNU_AlternateKeywords_ : 1;
-        std::uint64_t ExtGNU_Asm_: 1;
-        std::uint64_t ExtGNU_AttributeSpecifiers_ : 1;
-        std::uint64_t ExtGNU_AttributeSpecifiersLLVM_ : 1;
-        std::uint64_t ExtGNU_Alignment_ : 1;
-        std::uint64_t ExtGNU_CompoundLiterals_ : 1;
-        std::uint64_t ExtGNU_Conditionals_ : 1;
-        std::uint64_t ExtGNU_DesignatedInitializers_ : 1;
-        std::uint64_t ExtGNU_StatementExpressions_ : 1;
-        std::uint64_t ExtGNU_InternalBuiltins_ : 1;
-        std::uint64_t ExtGNU_FunctionNames_ : 1;
-        std::uint64_t ExtGNU_Complex_ : 1;
+        std::uint64_t extGNU_AlternateKeywords_ : 1;
+        std::uint64_t extGNU_Asm_: 1;
+        std::uint64_t extGNU_AttributeSpecifiers_ : 1;
+        std::uint64_t extGNU_AttributeSpecifiersLLVM_ : 1;
+        std::uint64_t extGNU_Alignment_ : 1;
+        std::uint64_t extGNU_CompoundLiterals_ : 1;
+        std::uint64_t extGNU_Conditionals_ : 1;
+        std::uint64_t extGNU_DesignatedInitializers_ : 1;
+        std::uint64_t extGNU_StatementExpressions_ : 1;
+        std::uint64_t extGNU_InternalBuiltins_ : 1;
+        std::uint64_t extGNU_FunctionNames_ : 1;
+        std::uint64_t extGNU_Complex_ : 1;
 
         /* Psyche */
-        std::uint64_t ExtPSY_Generics_ : 1;
+        std::uint64_t extPSY_Generics_ : 1;
 
         /* C++ */
         std::uint64_t CPP_nullptr_ : 1;
 
         /* Custom */
-        std::uint64_t NativeBooleans_ : 1;
+        std::uint64_t nativeBooleans_ : 1;
         std::uint64_t NULLAsBuiltin_ : 1;
     };
     union

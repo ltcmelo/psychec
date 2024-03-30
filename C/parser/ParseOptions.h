@@ -66,8 +66,8 @@ public:
     /**
      * Whether to enable the recognition of keywords.
      */
-    ParseOptions& enable_KeywordRecognition(bool enable);
-    bool isEnabled_KeywordRecognition() const;
+    ParseOptions& enable_keywordRecognition(bool enable);
+    bool isEnabled_keywordRecognition() const;
     //!@}
 
     //!@{
@@ -111,7 +111,7 @@ private:
 
     struct BitFields
     {
-        std::uint8_t KeywordRecognition_ : 1;
+        std::uint8_t keywordRecognition_ : 1;
         std::uint16_t commentMode_ : 2;
         std::uint16_t ambigMode_ : 2;
     };

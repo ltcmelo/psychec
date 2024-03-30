@@ -57,7 +57,7 @@ private:
     static constexpr int ERROR_UnsuccessfulParsing = 102;
     static constexpr int ERROR_InvalidSyntaxTree = 103;
 
-    std::unique_ptr<ConfigurationForC> config_;
+    std::unique_ptr<CConfiguration> config_;
 };
 
 } // cnip

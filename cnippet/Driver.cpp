@@ -79,7 +79,7 @@ int Driver::execute(int argc, char* argv[])
                 "Print instructions.")
     ;
 
-    ConfigurationForC::extend(cmdLineOpts);
+    CConfiguration::extend(cmdLineOpts);
 
     std::unique_ptr<CompilerFrontend> CFE;
     std::vector<std::string> filesPaths;

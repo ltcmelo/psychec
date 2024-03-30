@@ -840,7 +840,7 @@ void Lexer::lexIdentifier(SyntaxToken* tk, int advanced)
 
     int yyleng = yytext_ - yytext;
 
-    if (tree_->parseOptions().isEnabled_KeywordRecognition())
+    if (tree_->parseOptions().isEnabled_keywordRecognition())
         tk->rawSyntaxK_ = recognize(yytext, yyleng, tree_->parseOptions());
     else
         tk->rawSyntaxK_ = IdentifierToken;
@@ -1021,7 +1021,7 @@ void Lexer::lexImaginaryIntegerSuffix(SyntaxToken* tk)
 
 void Lexer::lexImaginaryIntegerSuffix_AtFirst(SyntaxToken* tk)
 {
-    if (!tree_->parseOptions().languageExtensions().isEnabled_ExtGNU_Complex()) {
+    if (!tree_->parseOptions().languageExtensions().isEnabled_extGNU_Complex()) {
         diagReporter_.IncompatibleLanguageExtension(
                     "imaginary constant",
                     LanguageExtensions::Ext::GNU_Complex);
@@ -1078,7 +1078,7 @@ void Lexer::lexImaginaryFloatingSuffix(SyntaxToken* tk)
 
 void Lexer::lexImaginaryFloatingSuffix_AtFirst(SyntaxToken* tk)
 {
-    if (!tree_->parseOptions().languageExtensions().isEnabled_ExtGNU_Complex()) {
+    if (!tree_->parseOptions().languageExtensions().isEnabled_extGNU_Complex()) {
         diagReporter_.IncompatibleLanguageExtension(
                    "imaginary constant",
                    LanguageExtensions::Ext::GNU_Complex);
