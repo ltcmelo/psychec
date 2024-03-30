@@ -24,7 +24,7 @@ Psyche-C is implemented as a library. Its native API is in C++ (APIs for other l
 void analyse(const SourceText& srcText, const FileInfo& fi)
 {
     ParseOptions parseOpts;
-    parseOpts.setTreatmentOfAmbiguities(ParseOptions::TreatmentOfAmbiguities::DisambiguateAlgorithmically);
+    parseOpts.setAmbiguityMode(AmbiguityMode::DisambiguateAlgorithmically);
     
     auto tree = SyntaxTree::parseText(srcText,
                                       TextPreprocessingState::Preprocessed,
