@@ -34,19 +34,7 @@ const std::string BinderTester::Name = "BINDER";
 
 void BinderTester::testBinder()
 {
-    // TEMPORARY
-    std::vector<TestFunction> active;
-    for (auto testData : tests_) {
-        auto n = std::string(testData.second);
-        auto p = n.find("case09");
-        if (p != std::string::npos) {
-            std::cout << "\t\tskip (TEMP) " << n << std::endl;
-            continue;
-        }
-        active.push_back(testData);
-    }
-
-    return run<BinderTester>(active);
+    return run<BinderTester>(tests_);
 }
 
 void BinderTester::bind(std::string text, Expectation X)
