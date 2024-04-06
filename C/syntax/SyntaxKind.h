@@ -344,7 +344,7 @@ enum PSY_C_API SyntaxKind : std::uint16_t
     EnumTypeSpecifier,
     AtomicTypeSpecifier,
     TypedefName,
-    TypeDeclarationAsSpecifier,
+    TagDeclarationAsSpecifier,
     ExtGNU_Typeof,
     ExtPSY_QuantifiedTypeSpecifier,
     InlineSpecifier,

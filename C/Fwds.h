@@ -82,7 +82,7 @@ class TrivialSpecifierSyntax;
 class StorageClassSyntax;
 class BuiltinTypeSpecifierSyntax;
 class TagTypeSpecifierSyntax;
-class TypeDeclarationAsSpecifierSyntax;
+class TagDeclarationAsSpecifierSyntax;
 class AtomicTypeSpecifierSyntax;
 class TypeQualifierSyntax;
 class FunctionSpecifierSyntax;

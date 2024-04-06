@@ -87,7 +87,7 @@ protected:
         return Action::Skip;
     }
 
-    void traverseTypeDeclaration(const TypeDeclarationSyntax* node)
+    void traverseTagDeclaration(const TagDeclarationSyntax* node)
     {
         traverseDeclaration(node);
         nonterminal(node->typeSpecifier());
@@ -96,13 +96,13 @@ protected:
 
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax* node) override
     {
-        traverseTypeDeclaration(node);
+        traverseTagDeclaration(node);
         return Action::Skip;
     }
 
     virtual Action visitEnumDeclaration(const EnumDeclarationSyntax* node) override
     {
-        traverseTypeDeclaration(node);
+        traverseTagDeclaration(node);
         return Action::Skip;
     }
 

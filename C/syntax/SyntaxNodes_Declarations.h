@@ -652,14 +652,25 @@ class PSY_C_API NamedDeclarationSyntax : public DeclarationSyntax
 class PSY_C_API TypeDeclarationSyntax : public NamedDeclarationSyntax
 {
     AST_NODE(TypeDeclaration, NamedDeclaration)
+};
 
-    const TagTypeSpecifierSyntax* typeSpecifier() const { return typeSpec_; }
+/**
+ * \brief The TypedefDeclarationSyntax class.
+ */
+class PSY_C_API TypedefDeclarationSyntax final : public TypeDeclarationSyntax
+{
+    AST_NODE_1K(TypedefDeclaration, TypeDeclaration)
+
+public:
+    const SpecifierListSyntax* specifiers() const { return specs_; }
+    const DeclaratorListSyntax* declarators() const { return decltors_; }
     SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
 
 private:
-    TagTypeSpecifierSyntax* typeSpec_ = nullptr;
+    SpecifierListSyntax* specs_ = nullptr;
+    DeclaratorListSyntax* decltors_ = nullptr;
     LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
-    AST_CHILD_LST2(typeSpec_, semicolonTkIdx_)
+    AST_CHILD_LST3(specs_, decltors_, semicolonTkIdx_)
 };
 
 /**
@@ -676,6 +687,14 @@ private:
 class PSY_C_API TagDeclarationSyntax : public TypeDeclarationSyntax
 {
     AST_NODE(TagDeclaration, TypeDeclaration)
+
+    const TagTypeSpecifierSyntax* typeSpecifier() const { return typeSpec_; }
+    SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
+
+private:
+    TagTypeSpecifierSyntax* typeSpec_ = nullptr;
+    LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
+    AST_CHILD_LST2(typeSpec_, semicolonTkIdx_)
 };
 
 /**
@@ -710,10 +729,9 @@ class PSY_C_API EnumDeclarationSyntax final : public TagDeclarationSyntax
 };
 
 /**
- * \brief The TypeDeclarationAsSpecifierSyntax class.
+ * \brief The TagDeclarationAsSpecifierSyntax class.
  *
- * A \a type-specifier that consists of a \a declaration. Consider the
- * snippet below:
+ * A \a type-specifier that declares a \a tag, as in the snippet below.
  *
  * \code
  * struct x { int y; } z;
@@ -727,18 +745,17 @@ class PSY_C_API EnumDeclarationSyntax final : public TagDeclarationSyntax
  *
  * \remark 6.7.2.1-8
  */
-class PSY_C_API TypeDeclarationAsSpecifierSyntax final : public SpecifierSyntax
+class PSY_C_API TagDeclarationAsSpecifierSyntax final : public SpecifierSyntax
 {
-    AST_NODE_1K(TypeDeclarationAsSpecifier, Specifier)
+    AST_NODE_1K(TagDeclarationAsSpecifier, Specifier)
 
 public:
-    const TypeDeclarationSyntax* typeDeclaration() const { return typeDecl_; }
+    const TagDeclarationSyntax* tagDeclaration() const { return tagDecl_; }
 
 private:
-    TypeDeclarationSyntax* typeDecl_ = nullptr;
-    AST_CHILD_LST1(typeDecl_);
+    TagDeclarationSyntax* tagDecl_ = nullptr;
+    AST_CHILD_LST1(tagDecl_);
 };
-
 
 /**
  * \brief The ValueDeclarationSyntax class.
@@ -906,22 +923,6 @@ private:
     AST_CHILD_LST2(specs_, decltor_)
 
     mutable ParameterSymbol* sym_ = nullptr;
-};
-
-class PSY_C_API TypedefDeclarationSyntax final : public DeclaratorDeclarationSyntax
-{
-    AST_NODE_1K(TypedefDeclaration, DeclaratorDeclaration)
-
-public:
-    const SpecifierListSyntax* specifiers() const { return specs_; }
-    const DeclaratorListSyntax* declarators() const { return decltors_; }
-    SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
-
-private:
-    SpecifierListSyntax* specs_ = nullptr;
-    DeclaratorListSyntax* decltors_ = nullptr;
-    LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
-    AST_CHILD_LST3(specs_, decltors_, semicolonTkIdx_)
 };
 
 /**

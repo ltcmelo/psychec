@@ -90,7 +90,7 @@ public:
     virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) { return Action::Visit; }
     virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax*) { return Action::Visit; }
     virtual Action visitAtomicTypeSpecifier(const AtomicTypeSpecifierSyntax*) { return Action::Visit; }
-    virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) { return Action::Visit; }
+    virtual Action visitTagDeclarationAsSpecifier(const TagDeclarationAsSpecifierSyntax*) { return Action::Visit; }
     virtual Action visitTypedefName(const TypedefNameSyntax*) { return Action::Visit; }
     virtual Action visitTypeQualifier(const TypeQualifierSyntax*) { return Action::Visit; }
     virtual Action visitFunctionSpecifier(const FunctionSpecifierSyntax*) { return Action::Visit; }

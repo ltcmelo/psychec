@@ -79,6 +79,11 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
                 &Binder::visitStructOrUnionDeclaration_DONE);
 }
 
+SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtSpecifier(const TypedefDeclarationSyntax* node)
+{
+    return Action::Quit;
+}
+
 SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax* node)
 {
     makeSymAndPushIt<NamedTypeSymbol>(node,
@@ -212,8 +217,8 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
     else {
         NamedTypeSymbol* namedTySym = tySyms_.top()->asNamedType();
         ConstraintsInTypeSpecifiers::specify(node->specifierToken(),
-                                          namedTySym,
-                                          &diagReporter_);
+                                             namedTySym,
+                                             &diagReporter_);
     }
 
     return Action::Skip;
@@ -262,11 +267,11 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax* node)
+SyntaxVisitor::Action Binder::visitTagDeclarationAsSpecifier(const TagDeclarationAsSpecifierSyntax* node)
 {
-    visit(node->typeDeclaration());
+    visit(node->tagDeclaration());
 
-    const TagTypeSpecifierSyntax* tySpec = node->typeDeclaration()->typeSpecifier();
+    const TagTypeSpecifierSyntax* tySpec = node->tagDeclaration()->typeSpecifier();
     TagSymbolName::TagChoice tagChoice;
     switch (tySpec->kind()) {
         case StructTypeSpecifier:
@@ -303,8 +308,8 @@ SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node
     PSY_ASSERT(!tySyms_.empty(), return Action::Quit);
 
     SemanticsOfTypeQualifiers::qualify(node->qualifierKeyword(),
-                                      tySyms_.top(),
-                                      &diagReporter_);
+                                       tySyms_.top(),
+                                       &diagReporter_);
 
     return Action::Skip;
 }

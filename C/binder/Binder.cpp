@@ -169,6 +169,16 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_DONE(const StructOrU
     return Action::Skip;
 }
 
+SyntaxVisitor::Action Binder::visitTypedefDeclaration(const TypedefDeclarationSyntax* node)
+{
+    return visitTypedefDeclaration_AtSpecifier(node);
+}
+
+SyntaxVisitor::Action Binder::visitTypedefDeclaration_DONE(const TypedefDeclarationSyntax* node)
+{
+    return Action::Skip;
+}
+
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
     return visitEnumDeclaration_AtSpecifier(node);

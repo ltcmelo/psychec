@@ -190,8 +190,8 @@ bool Parser::parseDeclaration(
 
     if (peek().kind() == SemicolonToken) {
         if (decl) {
-            auto tyDecl = static_cast<TypeDeclarationSyntax*>(decl);
-            tyDecl->semicolonTkIdx_ = consume();
+            auto tagDecl = static_cast<TagDeclarationSyntax*>(decl);
+            tagDecl->semicolonTkIdx_ = consume();
         }
         else
             parseIncompleteDeclaration_AtFirst(decl, specList);
@@ -199,8 +199,8 @@ bool Parser::parseDeclaration(
     }
 
     if (decl) {
-        auto tyDeclSpec = makeNode<TypeDeclarationAsSpecifierSyntax>();
-        tyDeclSpec->typeDecl_ = static_cast<TypeDeclarationSyntax*>(decl);
+        auto tyDeclSpec = makeNode<TagDeclarationAsSpecifierSyntax>();
+        tyDeclSpec->tagDecl_ = static_cast<TagDeclarationSyntax*>(decl);
         decl = nullptr;
 
         if (!specList)
@@ -208,7 +208,7 @@ bool Parser::parseDeclaration(
         else {
             for (auto iter = specList; iter; iter = iter->next) {
                 if (iter->value->asTagTypeSpecifier()
-                        && iter->value == tyDeclSpec->typeDecl_->typeSpec_) {
+                        && iter->value == tyDeclSpec->tagDecl_->typeSpec_) {
                     iter->value = tyDeclSpec;
                     break;
                 }

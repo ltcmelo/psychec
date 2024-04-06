@@ -437,7 +437,7 @@ void SemanticModelTester::case0302()
     PSY_EXPECT_EQ_INT(syms.size(), 1);
 
     auto spec = varAndOrFunDecl->specifiers()->value->asSpecifier();
-    auto tyDecl = spec->asTypeDeclarationAsSpecifier()->typeDeclaration();
+    auto tyDecl = spec->asTagDeclarationAsSpecifier()->tagDeclaration();
 
     const NamedTypeSymbol* namedTySym = semaModel->declaredSymbol(tyDecl);
     PSY_EXPECT_TRUE(namedTySym);
@@ -451,7 +451,7 @@ void SemanticModelTester::case0303()
 
     auto tySpec = tyDecl->typeSpecifier();
     auto fldDecl0 = tySpec->declarations()->value->asFieldDeclaration();
-    auto nestedTyDecl = fldDecl0->specifiers()->value->asTypeDeclarationAsSpecifier()->typeDeclaration();
+    auto nestedTyDecl = fldDecl0->specifiers()->value->asTagDeclarationAsSpecifier()->tagDeclaration();
 
     const NamedTypeSymbol* namedTySym = semaModel->declaredSymbol(nestedTyDecl);
     PSY_EXPECT_TRUE(namedTySym);
@@ -473,11 +473,11 @@ struct x
 
     auto tySpec = tyDecl->typeSpecifier();
     auto fldDecl0 = tySpec->declarations()->value->asFieldDeclaration();
-    auto nestedTyDecl = fldDecl0->specifiers()->value->asTypeDeclarationAsSpecifier()->typeDeclaration();
+    auto nestedTyDecl = fldDecl0->specifiers()->value->asTagDeclarationAsSpecifier()->tagDeclaration();
 
     auto nestedTySpec = nestedTyDecl->typeSpecifier();
     auto nestedFldDecl0 = nestedTySpec->declarations()->value->asFieldDeclaration();
-    auto nestedNestedTyDecl = nestedFldDecl0->specifiers()->value->asTypeDeclarationAsSpecifier()->typeDeclaration();
+    auto nestedNestedTyDecl = nestedFldDecl0->specifiers()->value->asTagDeclarationAsSpecifier()->tagDeclaration();
 
     const NamedTypeSymbol* namedTySym = semaModel->declaredSymbol(nestedNestedTyDecl);
     PSY_EXPECT_TRUE(namedTySym);

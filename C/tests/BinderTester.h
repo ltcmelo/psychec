@@ -88,6 +88,7 @@ public:
         Types
             + 3000-0049 -> structures and unions
             + 3050-0099 -> enumerations (and enumerators)
+            + 3100-3149 ->
      */
 
     void case0001();

@@ -122,6 +122,10 @@ private:
     Action visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax*);
     Action visitEnumDeclaration_DONE(const EnumDeclarationSyntax*);
 
+    virtual Action visitTypedefDeclaration(const TypedefDeclarationSyntax*) override;
+    Action visitTypedefDeclaration_AtSpecifier(const TypedefDeclarationSyntax*);
+    Action visitTypedefDeclaration_DONE(const TypedefDeclarationSyntax*);
+
     template <class DeclT> Action visitDeclaration_AtSpecifiers_COMMON(
             const DeclT* node,
             Action (Binder::*visit_AtDeclarators)(const DeclT*));
@@ -157,7 +161,7 @@ private:
     /* Specifiers */
     virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) override;
     virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax*) override;
-    virtual Action visitTypeDeclarationAsSpecifier(const TypeDeclarationAsSpecifierSyntax*) override;
+    virtual Action visitTagDeclarationAsSpecifier(const TagDeclarationAsSpecifierSyntax*) override;
     virtual Action visitTypedefName(const TypedefNameSyntax*) override;
     virtual Action visitTypeQualifier(const TypeQualifierSyntax*) override;
     Action visitIfNotTypeQualifier(const SpecifierSyntax*);

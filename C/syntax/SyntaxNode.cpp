@@ -207,8 +207,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "EnumTypeSpecifier";
         case AtomicTypeSpecifier:
             return "AtomicTypeSpecifier";
-        case TypeDeclarationAsSpecifier:
-            return "TypeDeclarationAsSpecifier";
+        case TagDeclarationAsSpecifier:
+            return "TagDeclarationAsSpecifier";
         case InlineSpecifier:
             return "InlineSpecifier";
         case NoReturnSpecifier:
