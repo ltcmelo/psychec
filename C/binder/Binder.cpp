@@ -42,6 +42,7 @@ Binder::Binder(SemanticModel* semaModel, const SyntaxTree* tree)
     : SyntaxVisitor(tree)
     , semaModel_(semaModel)
     , stashedScope_(nullptr)
+    , decltorIsOfTypedef_(false)
     , diagReporter_(this)
 {}
 

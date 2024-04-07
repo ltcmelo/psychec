@@ -99,10 +99,31 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators_COMMON(
 {
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         visit(decltorIt->value);
-        typeSymAtTopAndPopIt();
+
+        Symbol* sym = syms_.top();
+        switch (sym->kind()) {
+            case SymbolKind::Function:
+            case SymbolKind::Value:
+                typeSymAtTopAndPopIt();
+                break;
+
+            default:
+                break;
+        }
     }
 
     return ((this)->*(visit_DONE))(node);
+}
+
+SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtDeclarators(
+        const TypedefDeclarationSyntax* node)
+{
+    decltorIsOfTypedef_ = true;
+    auto action = visitDeclaration_AtDeclarators_COMMON(
+                node,
+                &Binder::visitTypedefDeclaration_DONE);
+    decltorIsOfTypedef_ = false;
+    return action;
 }
 
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
@@ -352,8 +373,13 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DecltrT* node)
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    determineContextAndMakeSym(node);
-    nameSymAtTop(node->identifierToken().valueText_c_str());
+    if (decltorIsOfTypedef_) {
+        makeSymAndPushIt<NamedTypeSymbol>(node, node->identifierToken().valueText());
+    }
+    else {
+        determineContextAndMakeSym(node);
+        nameSymAtTop(node->identifierToken().valueText_c_str());
+    }
 
     return Action::Skip;
 }

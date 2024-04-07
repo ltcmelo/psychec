@@ -246,14 +246,104 @@ void BinderTester::case3097(){}
 void BinderTester::case3098(){}
 void BinderTester::case3099(){}
 
-void BinderTester::case3100(){}
-void BinderTester::case3101(){}
-void BinderTester::case3102(){}
-void BinderTester::case3103(){}
-void BinderTester::case3104(){}
-void BinderTester::case3105(){}
-void BinderTester::case3106(){}
-void BinderTester::case3107(){}
+void BinderTester::case3100()
+{
+    bind("typedef int x ;",
+         Expectation()
+             .binding(DeclSummary()
+                          .Type("x", NamedTypeKind::Synonym)
+                          .withNameKind(SymbolNameKind::Plain)
+                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withScopeKind(ScopeKind::File)));
+}
+
+void BinderTester::case3101()
+{
+    bind("typedef int * x ;",
+         Expectation()
+             .binding(DeclSummary()
+                          .Type("x", NamedTypeKind::Synonym)
+                          .withNameKind(SymbolNameKind::Plain)
+                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withScopeKind(ScopeKind::File)));
+}
+
+void BinderTester::case3102()
+{
+    bind("typedef int ( * x ) ( ) ;",
+         Expectation()
+             .binding(DeclSummary()
+                          .Type("x", NamedTypeKind::Synonym)
+                          .withNameKind(SymbolNameKind::Plain)
+                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withScopeKind(ScopeKind::File)));
+}
+
+void BinderTester::case3103()
+{
+    bind("typedef int x , y ;",
+         Expectation()
+             .binding(DeclSummary()
+                          .Type("x", NamedTypeKind::Synonym)
+                          .withNameKind(SymbolNameKind::Plain)
+                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withScopeKind(ScopeKind::File))
+             .binding(DeclSummary()
+                          .Type("y", NamedTypeKind::Synonym)
+                          .withNameKind(SymbolNameKind::Plain)
+                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withScopeKind(ScopeKind::File)));
+}
+
+void BinderTester::case3104()
+{
+    bind("typedef int * x , y ;",
+         Expectation()
+             .binding(DeclSummary()
+                          .Type("x", NamedTypeKind::Synonym)
+                          .withNameKind(SymbolNameKind::Plain)
+                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withScopeKind(ScopeKind::File))
+             .binding(DeclSummary()
+                          .Type("y", NamedTypeKind::Synonym)
+                          .withNameKind(SymbolNameKind::Plain)
+                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withScopeKind(ScopeKind::File)));
+}
+
+void BinderTester::case3105()
+{
+    bind("typedef x y ;",
+         Expectation()
+             .binding(DeclSummary()
+                          .Type("y", NamedTypeKind::Synonym)
+                          .withNameKind(SymbolNameKind::Plain)
+                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withScopeKind(ScopeKind::File)));
+}
+
+void BinderTester::case3106()
+{
+    bind("typedef const int x ;",
+         Expectation()
+             .binding(DeclSummary()
+                          .Type("x", NamedTypeKind::Synonym)
+                          .withNameKind(SymbolNameKind::Plain)
+                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withScopeKind(ScopeKind::File)));
+}
+
+void BinderTester::case3107()
+{
+    bind("typedef int const x ;",
+         Expectation()
+             .binding(DeclSummary()
+                          .Type("x", NamedTypeKind::Synonym)
+                          .withNameKind(SymbolNameKind::Plain)
+                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withScopeKind(ScopeKind::File)));
+}
+
 void BinderTester::case3108(){}
 void BinderTester::case3109(){}
 void BinderTester::case3110(){}

@@ -72,8 +72,8 @@ private:
 
     void openScope(ScopeKind scopeK);
     void closeScope();
-    void reopenStashedScope();
     void closeScopeAndStashIt();
+    void reopenStashedScope();
     std::stack<Scope*> scopes_;
     Scope* stashedScope_;
 
@@ -89,9 +89,12 @@ private:
 
     std::stack<FunctionTypeSymbol*> pendingFunTySyms_;
 
+    bool decltorIsOfTypedef_;
+
     template <class SymT, class... SymTArgs> std::unique_ptr<SymT> makeSymOrTySym(SymTArgs... args);
     template <class SymT, class... SymTArgs> void makeSymAndPushIt(const SyntaxNode* node, SymTArgs... arg);
     template <class SymT, class... SymTArgs> void makeTySymAndPushIt(SymTArgs... arg);
+    template <class DecltrT> Action determineContextAndMakeSym(const DecltrT* node);
 
     struct DiagnosticsReporter
     {
@@ -118,12 +121,14 @@ private:
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) override;
     Action visitStructOrUnionDeclaration_AtSpecifier(const StructOrUnionDeclarationSyntax*);
     Action visitStructOrUnionDeclaration_DONE(const StructOrUnionDeclarationSyntax*);
+
     virtual Action visitEnumDeclaration(const EnumDeclarationSyntax*) override;
     Action visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax*);
     Action visitEnumDeclaration_DONE(const EnumDeclarationSyntax*);
 
     virtual Action visitTypedefDeclaration(const TypedefDeclarationSyntax*) override;
     Action visitTypedefDeclaration_AtSpecifier(const TypedefDeclarationSyntax*);
+    Action visitTypedefDeclaration_AtDeclarators(const TypedefDeclarationSyntax*);
     Action visitTypedefDeclaration_DONE(const TypedefDeclarationSyntax*);
 
     template <class DeclT> Action visitDeclaration_AtSpecifiers_COMMON(
@@ -177,8 +182,6 @@ private:
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
     Action nameSymAtTop(const char* s);
     Action typeSymAtTopAndPopIt();
-
-    template <class DecltrT> Action determineContextAndMakeSym(const DecltrT* node);
 
     //------------//
     // Statements //

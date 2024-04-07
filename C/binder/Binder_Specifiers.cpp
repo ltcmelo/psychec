@@ -79,11 +79,6 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
                 &Binder::visitStructOrUnionDeclaration_DONE);
 }
 
-SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtSpecifier(const TypedefDeclarationSyntax* node)
-{
-    return Action::Quit;
-}
-
 SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax* node)
 {
     makeSymAndPushIt<NamedTypeSymbol>(node,
@@ -93,6 +88,13 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclara
     return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,
                 &Binder::visitEnumDeclaration_DONE);
+}
+
+SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtSpecifier(const TypedefDeclarationSyntax* node)
+{
+    return visitDeclaration_AtSpecifiers_COMMON(
+                node,
+                &Binder::visitTypedefDeclaration_AtDeclarators);
 }
 
 template <class DeclT>
@@ -267,7 +269,8 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitTagDeclarationAsSpecifier(const TagDeclarationAsSpecifierSyntax* node)
+SyntaxVisitor::Action Binder::visitTagDeclarationAsSpecifier(
+        const TagDeclarationAsSpecifierSyntax* node)
 {
     visit(node->tagDeclaration());
 

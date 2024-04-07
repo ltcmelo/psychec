@@ -30,8 +30,8 @@ using namespace psy;
 using namespace C;
 
 void SemanticsOfTypeQualifiers::qualify(SyntaxToken tyQualTk,
-                                       TypeSymbol* tySym,
-                                       Binder::DiagnosticsReporter* diagReporter)
+                                        TypeSymbol* tySym,
+                                        Binder::DiagnosticsReporter* diagReporter)
 {
     const auto tkK = tyQualTk.kind();
     switch (tkK) {
