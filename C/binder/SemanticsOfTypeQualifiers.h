@@ -37,10 +37,18 @@ class Binder;
 
 class PSY_C_NON_API SemanticsOfTypeQualifiers
 {
+    friend class BinderTester;
+
 public:
+    static void InvalidUseOfRestrict(SyntaxToken tyQualTk,
+                                     Binder::DiagnosticsReporter* diagReporter);
+
     static void qualify(SyntaxToken tyQualTk,
                         TypeSymbol* tySym,
                         Binder::DiagnosticsReporter* diagReporter);
+
+private:
+    static const std::string ID_InvalidUseOfRestrict;
 };
 
 } // C

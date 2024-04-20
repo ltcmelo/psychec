@@ -29,6 +29,22 @@
 using namespace psy;
 using namespace C;
 
+const std::string SemanticsOfTypeQualifiers::ID_InvalidUseOfRestrict =
+        "Binder-300-6.7.3-2";
+
+void SemanticsOfTypeQualifiers::InvalidUseOfRestrict(
+        SyntaxToken tyQualTk,
+        Binder::DiagnosticsReporter* diagReporter)
+{
+    diagReporter->diagnose(DiagnosticDescriptor(
+                               ID_InvalidUseOfRestrict,
+                               "[[invalid use of restrict]]",
+                               "invalid use of `restrict'",
+                               DiagnosticSeverity::Error,
+                               DiagnosticCategory::Binding),
+                           tyQualTk);
+}
+
 void SemanticsOfTypeQualifiers::qualify(SyntaxToken tyQualTk,
                                         TypeSymbol* tySym,
                                         Binder::DiagnosticsReporter* diagReporter)
@@ -37,6 +53,21 @@ void SemanticsOfTypeQualifiers::qualify(SyntaxToken tyQualTk,
     switch (tkK) {
         case Keyword_const:
             tySym->qualifyWithConst();
+            break;
+
+        case Keyword_volatile:
+            tySym->qualifyWithVolatile();
+            break;
+
+        case Keyword_restrict:
+            if (tySym->typeKind() == TypeKind::Pointer)
+                tySym->qualifyWithRestrict();
+            else
+                InvalidUseOfRestrict(tyQualTk, diagReporter);
+            break;
+
+        case Keyword__Atomic:
+            tySym->qualifyWithAtomic();
             break;
 
         default:

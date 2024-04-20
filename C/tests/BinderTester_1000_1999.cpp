@@ -23,6 +23,7 @@
 #include "ParserTester.h"
 
 #include "binder/ConstraintsInTypeSpecifiers.h"
+#include "binder/SemanticsOfTypeQualifiers.h"
 #include "parser/Unparser.h"
 #include "symbols/Symbol.h"
 #include "symbols/Symbol_ALL.h"
@@ -274,11 +275,49 @@ void BinderTester::case1054()
                       .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::Const)));
 }
 
-void BinderTester::case1055() {}
-void BinderTester::case1056() {}
-void BinderTester::case1057() {}
-void BinderTester::case1058() {}
-void BinderTester::case1059() {}
+void BinderTester::case1055()
+{
+    bind("int volatile x ;",
+         Expectation()
+             .binding(DeclSummary()
+                      .Value("x", ValueKind::Variable)
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Volatile)));
+}
+
+void BinderTester::case1056()
+{
+    bind("int volatile const x ;",
+         Expectation()
+             .binding(DeclSummary()
+                      .Value("x", ValueKind::Variable)
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::ConstAndVolatile)));
+}
+
+void BinderTester::case1057()
+{
+    bind("int restrict x ;",
+         Expectation().diagnostic(
+             Expectation::ErrorOrWarn::Error,
+             SemanticsOfTypeQualifiers::ID_InvalidUseOfRestrict));
+}
+
+void BinderTester::case1058()
+{
+    bind("int const restrict x ;",
+         Expectation().diagnostic(
+             Expectation::ErrorOrWarn::Error,
+             SemanticsOfTypeQualifiers::ID_InvalidUseOfRestrict));
+
+}
+
+void BinderTester::case1059()
+{
+    bind("_Atomic int x ;",
+         Expectation()
+             .binding(DeclSummary().Value("x", ValueKind::Variable)
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Atomic)));
+}
+
 void BinderTester::case1060() {}
 void BinderTester::case1061() {}
 void BinderTester::case1062() {}
@@ -573,7 +612,10 @@ void BinderTester::case1151()
                       .TySpec.deriv(TypeKind::Pointer)));
 }
 
-void BinderTester::case1152() {}
+void BinderTester::case1152()
+{
+}
+
 void BinderTester::case1153() {}
 void BinderTester::case1154() {}
 void BinderTester::case1155() {}
@@ -632,9 +674,33 @@ void BinderTester::case1200()
                       .TySpec.deriv(TypeKind::Pointer, CVR::Const)));
 }
 
-void BinderTester::case1201() { }
-void BinderTester::case1202() { }
-void BinderTester::case1203() { }
+void BinderTester::case1201()
+{
+    bind("int const * restrict x ;",
+         Expectation()
+             .binding(DeclSummary().Value("x", ValueKind::Variable)
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::Restrict)));
+}
+
+void BinderTester::case1202()
+{
+    bind("const int * restrict x ;",
+         Expectation()
+             .binding(DeclSummary().Value("x", ValueKind::Variable)
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::Restrict)));
+}
+
+void BinderTester::case1203()
+{
+    bind("const int * const restrict x ;",
+         Expectation()
+             .binding(DeclSummary().Value("x", ValueKind::Variable)
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::Const)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::ConstAndRestrict)));
+}
+
 void BinderTester::case1204() { }
 void BinderTester::case1205() { }
 void BinderTester::case1206() { }
@@ -700,8 +766,24 @@ void BinderTester::case1251()
                       .TySpec.deriv(TypeKind::Pointer, CVR::Const)));
 }
 
-void BinderTester::case1252() { }
-void BinderTester::case1253() { }
+void BinderTester::case1252()
+{
+    bind("int * restrict x ;",
+         Expectation()
+             .binding(DeclSummary().Value("x", ValueKind::Variable)
+                      .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int, CVR::None)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::Restrict)));
+}
+
+void BinderTester::case1253()
+{
+    bind("x * restrict y ;",
+         Expectation()
+             .binding(DeclSummary().Value("y", ValueKind::Variable)
+                      .TySpec.basis("x", NamedTypeKind::Synonym, BuiltinTypeKind::UNSPECIFIED, CVR::None)
+                      .TySpec.deriv(TypeKind::Pointer, CVR::Restrict)));
+}
+
 void BinderTester::case1254() { }
 void BinderTester::case1255() { }
 void BinderTester::case1256() { }

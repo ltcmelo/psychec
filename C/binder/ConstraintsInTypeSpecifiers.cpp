@@ -74,8 +74,8 @@ void ConstraintsInTypeSpecifiers::specify(SyntaxToken builtTySpecTk,
 }
 
 BuiltinTypeKind ConstraintsInTypeSpecifiers::combine(SyntaxToken builtTySpecTk,
-                                                  BuiltinTypeKind builtTyKind,
-                                                  Binder::DiagnosticsReporter* diagReporter)
+                                                     BuiltinTypeKind builtTyKind,
+                                                     Binder::DiagnosticsReporter* diagReporter)
 {
     const auto tkK = builtTySpecTk.kind();
     switch (builtTyKind) {

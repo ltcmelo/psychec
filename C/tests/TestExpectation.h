@@ -49,6 +49,8 @@ enum class CVR
     Volatile,
     Restrict,
     ConstAndVolatile,
+    ConstAndRestrict,
+    Atomic,
     None
 };
 

@@ -54,6 +54,11 @@ bool TypeSymbol::isRestrictQualified() const
     return P->BF_.restrict_;
 }
 
+bool TypeSymbol::isAtomicQualified() const
+{
+    return P->BF_.atomic_;
+}
+
 void TypeSymbol::qualifyWithConst()
 {
     P->BF_.const_ = 1;
@@ -67,6 +72,11 @@ void TypeSymbol::qualifyWithVolatile()
 void TypeSymbol::qualifyWithRestrict()
 {
     P->BF_.restrict_ = 1;
+}
+
+void TypeSymbol::qualifyWithAtomic()
+{
+    P->BF_.atomic_ = 1;
 }
 
 namespace psy {

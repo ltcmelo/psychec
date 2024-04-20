@@ -419,6 +419,21 @@ bool CVRMatches(const TypeSymbol* tySym, CVR cvr)
             }
             break;
 
+        case CVR::ConstAndRestrict:
+            if (!(tySym->isConstQualified())
+                    || !(tySym->isRestrictQualified())) {
+                DETAIL_MISMATCH("missing const restrict");
+                return false;
+            }
+            break;
+
+        case CVR::Atomic:
+            if (!tySym->isAtomicQualified()) {
+                DETAIL_MISMATCH("missing _Atomic");
+                return false;
+            }
+            break;
+
         case CVR::None:
             if (tySym->isConstQualified()) {
                 DETAIL_MISMATCH("spurious const");

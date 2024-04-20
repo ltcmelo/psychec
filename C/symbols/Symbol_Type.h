@@ -78,19 +78,24 @@ public:
     TypeKind typeKind() const;
 
     /**
-     * Whether the type is \c const qualified.
+     * Whether \c this type is \c const qualified.
      */
     bool isConstQualified() const;
 
     /**
-     * Whether the type is \c volatile qualified.
+     * Whether \c this type is \c volatile qualified.
      */
     bool isVolatileQualified() const;
 
     /**
-     * Whether the type is \c restrict qualified.
+     * Whether \c this type is \c restrict qualified.
      */
     bool isRestrictQualified() const;
+
+    /**
+     * Whether \c this type is \c _Atomic qualified.
+     */
+    bool isAtomicQualified() const;
 
 PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(SemanticsOfTypeQualifiers);
@@ -98,6 +103,7 @@ PSY_INTERNAL_AND_RESTRICTED:
     void qualifyWithConst();
     void qualifyWithVolatile();
     void qualifyWithRestrict();
+    void qualifyWithAtomic();
 
 protected:
     DECL_PIMPL_SUB(TypeSymbol);

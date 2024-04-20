@@ -59,6 +59,7 @@ struct Symbol::SymbolImpl
         std::uint16_t const_ : 1;
         std::uint16_t volatile_ : 1;
         std::uint16_t restrict_ : 1;
+        std::uint16_t atomic_ : 1;
     };
     union
     {
