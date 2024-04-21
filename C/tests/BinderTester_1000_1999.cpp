@@ -22,8 +22,7 @@
 
 #include "ParserTester.h"
 
-#include "binder/ConstraintsInTypeSpecifiers.h"
-#include "binder/SemanticsOfTypeQualifiers.h"
+#include "binder/Binder.h"
 #include "parser/Unparser.h"
 #include "symbols/Symbol.h"
 #include "symbols/Symbol_ALL.h"
@@ -115,7 +114,7 @@ void BinderTester::case1008()
     bind("int float x ;",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             ConstraintsInTypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
+             Binder::DiagnosticsReporter::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
 
 void BinderTester::case1009()
@@ -256,7 +255,7 @@ void BinderTester::case1052()
     bind("const x ;",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             ConstraintsInTypeSpecifiers::ID_TypeSpecifierMissingDefaultsToInt));
+             Binder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt));
 }
 
 void BinderTester::case1053()
@@ -298,7 +297,7 @@ void BinderTester::case1057()
     bind("int restrict x ;",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             SemanticsOfTypeQualifiers::ID_InvalidUseOfRestrict));
+             Binder::DiagnosticsReporter::ID_InvalidUseOfRestrict));
 }
 
 void BinderTester::case1058()
@@ -306,7 +305,7 @@ void BinderTester::case1058()
     bind("int const restrict x ;",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             SemanticsOfTypeQualifiers::ID_InvalidUseOfRestrict));
+             Binder::DiagnosticsReporter::ID_InvalidUseOfRestrict));
 
 }
 

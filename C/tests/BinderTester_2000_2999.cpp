@@ -22,8 +22,7 @@
 
 #include "ParserTester.h"
 
-#include "binder/ConstraintsInDeclarations.h"
-#include "binder/ConstraintsInTypeSpecifiers.h"
+#include "binder/Binder.h"
 #include "parser/Unparser.h"
 #include "symbols/Symbol.h"
 #include "symbols/Symbol_ALL.h"
@@ -152,7 +151,7 @@ struct
          )",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             ConstraintsInTypeSpecifiers::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
+             Binder::DiagnosticsReporter::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
 }
 
 void BinderTester::case2009()
@@ -282,7 +281,7 @@ void BinderTester::case2052()
     bind("struct { const x ; } ;",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             ConstraintsInDeclarations::ID_of_UselessDeclaration));
+             Binder::DiagnosticsReporter::ID_of_UselessDeclaration));
 }
 
 void BinderTester::case2053()

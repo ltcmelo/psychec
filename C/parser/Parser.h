@@ -118,7 +118,6 @@ private:
 
         /* General */
         void ExpectedFeature(const std::string& name);
-
         static const std::string ID_of_ExpectedFeature;
 
         /* Terminal */
@@ -128,7 +127,6 @@ private:
         void ExpectedTokenOfCategoryIdentifier();
         void ExpectedTokenOfCategoryConstant();
         void ExpectedTokenOfCategoryStringLiteral();
-
         static const std::string ID_of_ExpectedToken;
         static const std::string ID_of_ExpectedTokenWithin;
         static const std::string ID_of_ExpectedTokenOfCategoryIdentifier;
@@ -148,7 +146,6 @@ private:
         void ExpectedFOLLOWofDeclaratorAndInitializer();
         void ExpectedFOLLOWofStructOrUnionOrEnum();
         void ExpectedFOLLOWofEnum();
-
         static const std::string ID_of_ExpectedFIRSTofExpression;
         static const std::string ID_of_ExpectedFIRSTofEnumerationConstant;
         static const std::string ID_of_ExpectedFIRSTofDirectDeclarator;
@@ -175,7 +172,6 @@ private:
         void UnexpectedContinueOutsideLoop();
         void UnexpectedBreakOutsideSwitchOrLoop();
         void UnexpectedGNUExtensionFlag();
-
         static const std::string ID_of_ExpectedFieldName;
         static const std::string ID_of_ExpectedBraceEnclosedInitializerList;
         static const std::string ID_of_ExpectedFieldDesignator;
@@ -197,7 +193,6 @@ private:
                 const AmbiguousCastOrBinaryExpressionSyntax*);
         void AmbiguousExpressionOrDeclarationStatement(
                 const AmbiguousExpressionOrDeclarationStatementSyntax*);
-
         static const std::string ID_of_AmbiguousTypeNameOrExpressionAsTypeReference;
         static const std::string ID_of_AmbiguousCastOrBinaryExpression;
         static const std::string ID_of_AmbiguousExpressionOrDeclarationStatement;

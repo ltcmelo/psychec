@@ -23,7 +23,6 @@
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
-#include "binder/ConstraintsInDeclarations.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
 #include "symbols/SymbolName_ALL.h"
@@ -152,7 +151,7 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 
 SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node)
 {
-    ConstraintsInDeclarations::UselessDeclaration(node->lastToken(), &diagReporter_);
+    diagReporter_.UselessDeclaration(node->lastToken());
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         ;

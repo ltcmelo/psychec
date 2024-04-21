@@ -23,8 +23,6 @@
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
-#include "binder/SemanticsOfTypeQualifiers.h"
-#include "binder/ConstraintsInTypeSpecifiers.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
 #include "symbols/SymbolName_ALL.h"
@@ -106,7 +104,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers_COMMON(
         visitIfNotTypeQualifier(specIt->value);
 
     if (tySyms_.empty()) {
-        ConstraintsInTypeSpecifiers::TypeSpecifierMissingDefaultsToInt(node->lastToken(), &diagReporter_);
+        diagReporter_.TypeSpecifierMissingDefaultsToInt(node->lastToken());
         makeTySymAndPushIt<NamedTypeSymbol>(BuiltinTypeKind::Int);
     }
 
@@ -174,9 +172,11 @@ SyntaxVisitor::Action Binder::visitIfTypeQualifier(const SpecifierSyntax* spec)
 
 SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
 {
+    auto tySpecTk = node->specifierToken();
+
     if (tySyms_.empty()) {
         BuiltinTypeKind builtTyK;
-        switch (node->specifierToken().kind()) {
+        switch (tySpecTk.kind()) {
             case Keyword_void:
                 builtTyK = BuiltinTypeKind::Void;
                 break;
@@ -215,13 +215,144 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
         }
 
         makeTySymAndPushIt<NamedTypeSymbol>(builtTyK);
+        return Action::Skip;
     }
-    else {
-        NamedTypeSymbol* namedTySym = tySyms_.top()->asNamedType();
-        ConstraintsInTypeSpecifiers::specify(node->specifierToken(),
-                                             namedTySym,
-                                             &diagReporter_);
+
+    NamedTypeSymbol* namedTySym = tySyms_.top()->asNamedType();
+    auto curBuiltTyK = namedTySym->builtinTypeKind();
+    BuiltinTypeKind extraBuiltTyK;
+    switch (curBuiltTyK) {
+        case BuiltinTypeKind::UNSPECIFIED:
+            switch (tySpecTk.kind()) {
+                case Keyword_void:
+                    extraBuiltTyK = BuiltinTypeKind::Void;
+                    break;
+                case Keyword_char:
+                    extraBuiltTyK = BuiltinTypeKind::Char;
+                    break;
+                case Keyword_short:
+                    extraBuiltTyK = BuiltinTypeKind::Short;
+                    break;
+                case Keyword_int:
+                    extraBuiltTyK = BuiltinTypeKind::Int;
+                    break;
+                case Keyword_long:
+                    extraBuiltTyK = BuiltinTypeKind::Long;
+                    break;
+                case Keyword_float:
+                    extraBuiltTyK = BuiltinTypeKind::Float;
+                    break;
+                case Keyword_double:
+                    extraBuiltTyK = BuiltinTypeKind::Double;
+                    break;
+                case Keyword__Bool:
+                    extraBuiltTyK = BuiltinTypeKind::Bool;
+                    break;
+                case Keyword__Complex:
+                    extraBuiltTyK = BuiltinTypeKind::DoubleComplex;
+                    break;
+                case Keyword_signed:
+                    extraBuiltTyK = BuiltinTypeKind::Int_S;
+                    break;
+                case Keyword_unsigned:
+                    extraBuiltTyK = BuiltinTypeKind::Int_U;
+                    break;
+                default:
+                    PSY_ESCAPE_VIA_RETURN(Action::Skip);
+            }
+            break;
+
+        case BuiltinTypeKind::Void:
+            // report
+            return Action::Skip;
+
+        case BuiltinTypeKind::Char:
+            switch (tySpecTk.kind()) {
+                case Keyword_signed:
+                    extraBuiltTyK = BuiltinTypeKind::Char_S;
+                    break;
+                case Keyword_unsigned:
+                    extraBuiltTyK = BuiltinTypeKind::Char_U;
+                    break;
+                default:
+                    // report
+                    return Action::Skip;
+            }
+            break;
+
+        case BuiltinTypeKind::Char_S:
+        case BuiltinTypeKind::Char_U:
+            // report
+            return Action::Skip;
+
+        case BuiltinTypeKind::Short:
+            switch (tySpecTk.kind()) {
+                case Keyword_signed:
+                    extraBuiltTyK = BuiltinTypeKind::Short_S;
+                    break;
+                case Keyword_unsigned:
+                    extraBuiltTyK = BuiltinTypeKind::Short_U;
+                    break;
+                default:
+                    // report
+                    return Action::Skip;
+            }
+            break;
+
+        case BuiltinTypeKind::Short_S:
+        case BuiltinTypeKind::Short_U:
+            // report
+            return Action::Skip;
+
+        case BuiltinTypeKind::Int:
+            switch (tySpecTk.kind()) {
+                case Keyword_long:
+                    extraBuiltTyK = BuiltinTypeKind::Long;
+                    break;
+                case Keyword_signed:
+                    extraBuiltTyK = BuiltinTypeKind::Int_S;
+                    break;
+                case Keyword_unsigned:
+                    extraBuiltTyK = BuiltinTypeKind::Int_U;
+                    break;
+                default:
+                    diagReporter_.TwoOrMoreDataTypesInDeclarationSpecifiers(tySpecTk);
+                    return Action::Skip;
+            }
+            break;
+
+        case BuiltinTypeKind::Int_S:
+        case BuiltinTypeKind::Int_U:
+            // report
+            return Action::Skip;
+
+        case BuiltinTypeKind::Long:
+            switch (tySpecTk.kind()) {
+                case Keyword_int:
+                    return Action::Skip;
+                case Keyword_signed:
+                    extraBuiltTyK = BuiltinTypeKind::Long_S;
+                    break;
+                case Keyword_unsigned:
+                    extraBuiltTyK = BuiltinTypeKind::Long_U;
+                    break;
+                default:
+                    diagReporter_.TwoOrMoreDataTypesInDeclarationSpecifiers(tySpecTk);
+                    return Action::Skip;
+            }
+            break;
+
+        case BuiltinTypeKind::Long_S:
+        case BuiltinTypeKind::Long_U:
+            // report
+            return Action::Skip;
+
+        default:
+            PSY_ESCAPE_VIA_RETURN(Action::Skip);
     }
+
+    if (extraBuiltTyK != curBuiltTyK)
+        namedTySym->patchBuiltinTypeKind(extraBuiltTyK);
 
     return Action::Skip;
 }
@@ -257,9 +388,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next) {
         TySymContT tySyms;
         std::swap(tySyms_, tySyms);
-
         visit(declIt->value);
-
         std::swap(tySyms_, tySyms);
     }
 
@@ -309,10 +438,32 @@ SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node)
 {
     PSY_ASSERT(!tySyms_.empty(), return Action::Quit);
+    TypeSymbol* tySym = tySyms_.top();
 
-    SemanticsOfTypeQualifiers::qualify(node->qualifierKeyword(),
-                                       tySyms_.top(),
-                                       &diagReporter_);
+    const auto tyQualTk = node->qualifierKeyword();
+    switch (tyQualTk.kind()) {
+        case Keyword_const:
+            tySym->qualifyWithConst();
+            break;
+
+        case Keyword_volatile:
+            tySym->qualifyWithVolatile();
+            break;
+
+        case Keyword_restrict:
+            if (tySym->typeKind() == TypeKind::Pointer)
+                tySym->qualifyWithRestrict();
+            else
+                diagReporter_.InvalidUseOfRestrict(tyQualTk);
+            break;
+
+        case Keyword__Atomic:
+            tySym->qualifyWithAtomic();
+            break;
+
+        default:
+            PSY_ESCAPE_VIA_BREAK;
+    }
 
     return Action::Skip;
 }

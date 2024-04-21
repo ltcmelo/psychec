@@ -23,7 +23,6 @@
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
-#include "binder/ConstraintsInDeclarators.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
 #include "symbols/SymbolName_ALL.h"
@@ -191,15 +190,13 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             auto tySym = tySyms_.top();
             switch (tySym->typeKind()) {
                 case TypeKind::Function:
-                    ConstraintsInDeclarators::FunctionReturningFunction(
-                                node->innerDeclarator()->firstToken(),
-                                &diagReporter_);
+                    diagReporter_.FunctionReturningFunction(
+                                node->innerDeclarator()->firstToken());
                     break;
 
                 case TypeKind::Array:
-                    ConstraintsInDeclarators::FunctionReturningArray(
-                                node->innerDeclarator()->firstToken(),
-                                &diagReporter_);
+                    diagReporter_.FunctionReturningArray(
+                                node->innerDeclarator()->firstToken());
                     break;
 
                 case TypeKind::Pointer:

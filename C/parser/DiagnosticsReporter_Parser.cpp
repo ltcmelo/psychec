@@ -125,8 +125,6 @@ void Parser::DiagnosticsReporter::retainAmbiguityDiagnostic(
     retainedAmbiguityDiags_.push_back(std::make_tuple(desc, parser_->curTkIdx_ - 1, node));
 }
 
-/* General */
-
 void Parser::DiagnosticsReporter::ExpectedFeature(const std::string& name)
 {
     diagnoseOrDelayDiagnostic(
@@ -502,8 +500,6 @@ void Parser::DiagnosticsReporter::UnexpectedGNUExtensionFlag()
                                      DiagnosticSeverity::Error,
                                      DiagnosticCategory::Syntax));
 }
-
-/* Ambiguities */
 
 void Parser::DiagnosticsReporter::AmbiguousTypeNameOrExpressionAsTypeReference(
         const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node)

@@ -21,7 +21,7 @@
 #include "BinderTester.h"
 #include "ParserTester.h"
 
-#include "binder/ConstraintsInDeclarators.h"
+#include "binder/Binder.h"
 #include "syntax/SyntaxLexeme_ALL.h"
 #include "parser/Unparser.h"
 
@@ -1974,7 +1974,7 @@ void BinderTester::case0413()
     bind("void x ( ) ( ) ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     ConstraintsInDeclarators::ID_FunctionReturningFunction)
+                     Binder::DiagnosticsReporter::ID_FunctionReturningFunction)
          .ContinueTestDespiteOfErrors()
          .binding(DeclSummary()
                   .Function("x", ScopeKind::File)
@@ -1989,7 +1989,7 @@ void BinderTester::case0414()
     bind("void ( x ( ) ) ( ) ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     ConstraintsInDeclarators::ID_FunctionReturningFunction)
+                     Binder::DiagnosticsReporter::ID_FunctionReturningFunction)
          .ContinueTestDespiteOfErrors()
          .binding(DeclSummary()
                   .Function("x", ScopeKind::File)
@@ -2040,7 +2040,7 @@ void BinderTester::case0427()
     bind("int x ( ) [] ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     ConstraintsInDeclarators::ID_FunctionReturningArray)
+                     Binder::DiagnosticsReporter::ID_FunctionReturningArray)
          .ContinueTestDespiteOfErrors()
          .binding(DeclSummary()
                   .Function("x", ScopeKind::File)
@@ -2055,7 +2055,7 @@ void BinderTester::case0428()
     bind("int ( x ) ( ) [] ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     ConstraintsInDeclarators::ID_FunctionReturningArray)
+                     Binder::DiagnosticsReporter::ID_FunctionReturningArray)
          .ContinueTestDespiteOfErrors()
          .binding(DeclSummary()
                   .Function("x", ScopeKind::File)

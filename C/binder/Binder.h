@@ -53,10 +53,6 @@ class PSY_C_NON_API Binder final : protected SyntaxVisitor
 
 PSY_INTERNAL_AND_RESTRICTED:
     PSY_GRANT_ACCESS(SemanticModel);
-    PSY_GRANT_ACCESS(ConstraintsInDeclarations);
-    PSY_GRANT_ACCESS(ConstraintsInTypeSpecifiers);
-    PSY_GRANT_ACCESS(ConstraintsInDeclarators);
-    PSY_GRANT_ACCESS(SemanticsOfTypeQualifiers);
 
     Binder(SemanticModel* semaModel, const SyntaxTree* tree);
     ~Binder();
@@ -102,7 +98,28 @@ private:
             : binder_(binder)
         {}
         Binder* binder_;
+
         void diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk);
+
+        /* Declarations */
+        void UselessDeclaration(SyntaxToken declTk);
+        static const std::string ID_of_UselessDeclaration;
+
+        /* Declarators */
+        void FunctionReturningFunction(SyntaxToken decltorTk);
+        void FunctionReturningArray(SyntaxToken decltorTk);
+        static const std::string ID_FunctionReturningFunction;
+        static const std::string ID_FunctionReturningArray;
+
+        /* Type specifiers */
+        void TypeSpecifierMissingDefaultsToInt(SyntaxToken declTk);
+        void TwoOrMoreDataTypesInDeclarationSpecifiers(SyntaxToken tySpecTk);
+        static const std::string ID_TypeSpecifierMissingDefaultsToInt;
+        static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
+
+        /* Type qualifiers */
+        void InvalidUseOfRestrict(SyntaxToken tyQualTk);
+        static const std::string ID_InvalidUseOfRestrict;
     };
 
     DiagnosticsReporter diagReporter_;

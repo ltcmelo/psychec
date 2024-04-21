@@ -98,7 +98,7 @@ public:
     bool isAtomicQualified() const;
 
 PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(SemanticsOfTypeQualifiers);
+    PSY_GRANT_ACCESS(Binder);
 
     void qualifyWithConst();
     void qualifyWithVolatile();
