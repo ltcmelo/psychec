@@ -28,9 +28,9 @@ set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall \
 # Project sources.
 set(PSYCHEC_SOURCES
     # Abstract data types
-    ${PROJECT_SOURCE_DIR}/data-types/Substitution.h
-    ${PROJECT_SOURCE_DIR}/data-types/Substitution.cpp
-    ${PROJECT_SOURCE_DIR}/data-types/VersionedMap.h
+    ${PROJECT_SOURCE_DIR}/data-structures/Substitution.h
+    ${PROJECT_SOURCE_DIR}/data-structures/Substitution.cpp
+    ${PROJECT_SOURCE_DIR}/data-structures/VersionedMap.h
 
     # Tools
     ${PROJECT_SOURCE_DIR}/tools/GnuCompilerFacade.h
