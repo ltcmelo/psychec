@@ -84,6 +84,7 @@ SyntaxVisitor::Action Binder::typeSymAtTopAndPopIt()
             PSY_ESCAPE_VIA_RETURN(Action::Quit);
     }
 
+    DEBUG_TYPE_SYMBOL(sym, tySym);
     typeableSym->setType(tySym);
 
     popSym();
@@ -163,6 +164,7 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const Functio
     visit(node->declarator());
 
     typeSymAtTopAndPopIt();
+    popTySym();
 
     reopenStashedScope();
     scopes_.top()->morphFrom_FunctionPrototype_to_Block();

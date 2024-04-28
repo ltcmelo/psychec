@@ -51,19 +51,20 @@ Binder::~Binder()
 
 void Binder::bind()
 {
-    // The outermost scope and symbol.
+    // Sentinels for the outermost scope and symbol.
     scopes_.push(nullptr);
     syms_.push(nullptr);
 
     visit(tree_->root());
 
-    PSY_ASSERT_W_MSG(scopes_.top() == nullptr, return, "expected outermost scope");
+    PSY_ASSERT_W_MSG(scopes_.size() == 1 && scopes_.top() == nullptr,
+                     return,
+                     "expected sentinel scope");
+    PSY_ASSERT_W_MSG(syms_.size() == 1 && syms_.top() == nullptr,
+                     return,
+                     "expected sentinel symbol");
     scopes_.pop();
-    PSY_ASSERT_W_MSG(scopes_.empty(), return, "unexpected remaining scope");
-
-//    PSY_ASSERT_W_MSG(symDEFs_.top() == nullptr, return, "expected outermost symbol");
     syms_.pop();
-//    PSY_ASSERT_W_MSG(symDEFs_.empty(), return, "unexpected remaining symbol");
 }
 
 void Binder::openScope(ScopeKind scopeK)
@@ -96,6 +97,7 @@ void Binder::closeScopeAndStashIt()
 template <class SymT>
 SymT* Binder::pushSym(const SyntaxNode* node, std::unique_ptr<SymT> sym)
 {
+    DEBUG_PUSH_POP_SYMBOL(sym);
     syms_.push(sym.get());
     return static_cast<SymT*>(semaModel_->storeDeclaredSym(node, std::move(sym)));
 }
@@ -111,12 +113,14 @@ template PointerTypeSymbol* Binder::pushSym<PointerTypeSymbol>(const SyntaxNode*
 
 void Binder::popSym()
 {
+    DEBUG_PUSH_POP_SYMBOL(syms_.top());
     syms_.pop();
 }
 
 template <class TySymT>
 TySymT* Binder::pushTySym(std::unique_ptr<TySymT> tySym)
 {
+    DEBUG_PUSH_POP_SYMBOL(tySym);
     tySyms_.push(tySym.get());
     return static_cast<TySymT*>(semaModel_->storeUsedSym(std::move(tySym)));
 }
@@ -128,6 +132,7 @@ template PointerTypeSymbol* Binder::pushTySym<PointerTypeSymbol>(std::unique_ptr
 
 void Binder::popTySym()
 {
+    DEBUG_PUSH_POP_SYMBOL(tySyms_.top());
     tySyms_.pop();
 }
 
@@ -138,13 +143,13 @@ void Binder::popTySym()
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     makeSymAndPushIt<LibrarySymbol>(node);
-
     openScope(ScopeKind::File);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
 
     closeScope();
+    popSym();
 
     return Action::Skip;
 }
@@ -249,8 +254,6 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition(const FunctionDefinitionSy
 
 SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinitionSyntax* node)
 {
-    popTySym();
-
     return Action::Skip;
 }
 

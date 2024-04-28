@@ -74,8 +74,10 @@ namespace C {
 std::string to_string(const FunctionTypeSymbol& tySym)
 {
     std::ostringstream oss;
-    oss << "<@function type |";
+    oss << "<@ function type |";
     oss << " return:" << to_string(*tySym.returnType());
+    for (const auto& paramTySym : tySym.parameterTypes())
+        oss << " param:" << to_string(*paramTySym);
     oss << " @>";
 
     return oss.str();

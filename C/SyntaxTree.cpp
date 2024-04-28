@@ -22,7 +22,6 @@
 #include "SyntaxTree.h"
 
 #include "binder/Binder.h"
-#include "binder/TypeChecker.h"
 #include "compilation/Compilation.h"
 #include "infra/MemoryPool.h"
 #include "parser/Lexer.h"

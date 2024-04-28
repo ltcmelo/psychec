@@ -2092,10 +2092,32 @@ void BinderTester::case0449(){}
 
 void BinderTester::case0450()
 {
+    bind("void x ( ) { int y ; }",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Variable, ScopeKind::Block)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
 }
 
 void BinderTester::case0451()
 {
+    bind("void x ( ) { int * y ; double z ; }",
+         Expectation()
+         .binding(DeclSummary()
+                  .Function("x", ScopeKind::File)
+                  .TySpec.basis("void", NamedTypeKind::Builtin, BuiltinTypeKind::Void)
+                  .TySpec.deriv(TypeKind::Function))
+         .binding(DeclSummary()
+                  .Value("y", ValueKind::Variable, ScopeKind::Block)
+                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)
+                  .TySpec.deriv(TypeKind::Pointer))
+         .binding(DeclSummary()
+                  .Value("z", ValueKind::Variable, ScopeKind::Block)
+                  .TySpec.basis("double", NamedTypeKind::Builtin, BuiltinTypeKind::Double)));
 }
 
 void BinderTester::case0452(){}

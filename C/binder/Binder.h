@@ -39,6 +39,28 @@
 #include <string>
 #include <utility>
 
+//#define DEBUG_BINDER
+#ifdef DEBUG_BINDER
+#  define DEBUG_PUSH_POP_SYMBOL_ENABLED
+#  define DEBUG_TYPE_SYMBOL_ENABLED
+#endif
+
+#ifdef DEBUG_PUSH_POP_SYMBOL_ENABLED
+#  define DEBUG_PUSH_POP_SYMBOL(sym) \
+     std::cout << __func__ << " " << std::flush; \
+     std::cout << to_string(*sym) << std::endl
+#else
+#  define DEBUG_PUSH_POP_SYMBOL(sym) do {} while (0)
+#endif
+
+#ifdef DEBUG_TYPE_SYMBOL_ENABLED
+#  define DEBUG_TYPE_SYMBOL(sym, tySym) \
+    std::cout << __func__  << " " << to_string(*sym) << ": " << to_string(*tySym) << std::endl;
+#else
+#  define DEBUG_TYPE_SYMBOL(sym, tySym) do {} while (0);
+#endif
+
+
 namespace psy {
 namespace C {
 
@@ -233,5 +255,8 @@ void Binder::makeTySymAndPushIt(SymTArgs... args)
 
 } // C
 } // psy
+
+#undef DEBUG_PUSH_POP_SYMBOL_ENABLED
+#undef DEBUG_TYPE_SYMBOL_ENABLED
 
 #endif

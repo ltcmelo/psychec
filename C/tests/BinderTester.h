@@ -53,7 +53,7 @@ public:
             + 0000-0049 -> prototypes w/o parameters
             + 0050-0099 -> prototypes
             + 0100-0149 -> definitions w/o parameters
-            + 0150-0199 -> definitions
+            + 0150-0199 -> definitions (empty)
             + 0200-0299 -> "signatures"
             + 0300-0334 -> pointer to function as parameter
             + 0335-0349 -> (decayed) function as parameter
@@ -61,7 +61,7 @@ public:
             + 0385-0399 -> (decayed) array as parameter
             + 0400-0424 -> function/pointer to function as return
             + 0425-0449 -> array/pointer to array as return
-            + 0450-0499 ->
+            + 0450-0499 -> definitions (non-empty)
 
         Variables (globals/locals)
             + 1000-1049 -> objects
