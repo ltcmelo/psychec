@@ -732,7 +732,7 @@ void InternalsTestSuite::bind(std::string text, Expectation X)
     parse(text);
     auto compilation = Compilation::create(tree_->filePath());
     compilation->addSyntaxTrees({ tree_.get() });
-    auto semaModel = compilation->semanticModel(tree_.get());
+    auto semaModel = compilation->computeSemanticModel(tree_.get());
 
     if (!checkErrorAndWarn(X))
         return;

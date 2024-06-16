@@ -28,6 +28,7 @@
 #include "../common/infra/Pimpl.h"
 
 #include <vector>
+#include <functional>
 
 namespace psy {
 namespace C {
@@ -63,36 +64,57 @@ public:
 
     /**
      * The Function declared by the given FunctionDefinitionSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
     const Function* declarationOf(const FunctionDefinitionSyntax* node) const;
 
     /**
      * The Parameter declared by the given ParameterDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
     const Parameter* declarationOf(const ParameterDeclarationSyntax* node) const;
 
     /**
      * The TypeDeclarationSymbol declared by the given TypeDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
     const TypeDeclarationSymbol* declarationOf(const TypeDeclarationSyntax* node) const;
 
     /**
      * The Enumerator declared by the given EnumeratorDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
     const Enumerator* declarationOf(const EnumeratorDeclarationSyntax* node) const;
 
     /**
      * The Field(s) declared by the given FieldDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
     std::vector<const Field*> declarationsOf(const FieldDeclarationSyntax* node) const;
 
     /**
      * The DeclarationSymbol(s) declared by the given VariableAndOrFunctionDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
     std::vector<const DeclarationSymbol*> declarationsOf(const VariableAndOrFunctionDeclarationSyntax* node) const;
 
     /**
      * The DeclarationSymbol declared by the given DeclaratorSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
     const DeclarationSymbol* declarationOf(const DeclaratorSyntax* node) const;
     //!@}

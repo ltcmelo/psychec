@@ -78,8 +78,11 @@ public:
 
     /**
      * The SemanticModel for the SyntaxTree \p tree in \c this Compilation.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.Compilation.GetSemanticModel of Roslyn.
      */
-    const SemanticModel* semanticModel(const SyntaxTree* tree) const;
+    const SemanticModel* computeSemanticModel(const SyntaxTree* tree) const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(SemanticModel);

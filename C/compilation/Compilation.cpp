@@ -105,7 +105,7 @@ std::vector<const SyntaxTree*> Compilation::syntaxTrees() const
     return  trees;
 }
 
-const SemanticModel* Compilation::semanticModel(const SyntaxTree* tree) const
+const SemanticModel* Compilation::computeSemanticModel(const SyntaxTree* tree) const
 {
     if (P->isDirty_[tree]) {
         // TODO: Remove from the program the symbols associated
