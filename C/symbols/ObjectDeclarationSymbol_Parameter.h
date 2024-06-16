@@ -30,7 +30,7 @@ namespace C {
  * \brief The Parameter class.
  *
  * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IParameter
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IParameterSymbol
  * from Roslyn, the .NET Compiler Platform.
  */
 class PSY_C_API Parameter final : public ObjectDeclarationSymbol

@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 
 #include "Type__IMPL__.inc"
-
 #include "Type_ALL.h"
 
 Type::Type(TypeImpl* p)

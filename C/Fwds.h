@@ -215,24 +215,17 @@ class Symbol;
 class Program;
 class TranslationUnit;
 class DeclarationSymbol;
-
-/* Function symbol */
 class Function;
-
-/* Value symbols */
 class ObjectDeclarationSymbol;
 class Enumerator;
 class Field;
 class Variable;
 class Parameter;
-
-/* Type symbols */
 class TypeDeclarationSymbol;
 class Struct;
 class Union;
 class Enum;
 class Typedef;
-
 class SymbolVisitor;
 template <class PtrT> class SymbolList;
 

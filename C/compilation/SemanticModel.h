@@ -59,65 +59,65 @@ public:
     /**
      * The TranslationUnit of \c this SemanticModel.
      */
-    const TranslationUnit* translationUnitSymbol() const;
+    const TranslationUnit* translationUnit() const;
 
     /**
-     * The FunctionSymbol declared by the given FunctionDefinitionSyntax \c node.
+     * The Function declared by the given FunctionDefinitionSyntax \c node.
      */
-    const Function* declaredSymbol(const FunctionDefinitionSyntax* node) const;
+    const Function* declarationOf(const FunctionDefinitionSyntax* node) const;
 
     /**
      * The Parameter declared by the given ParameterDeclarationSyntax \c node.
      */
-    const Parameter* declaredSymbol(const ParameterDeclarationSyntax* node) const;
+    const Parameter* declarationOf(const ParameterDeclarationSyntax* node) const;
 
     /**
      * The TypeDeclarationSymbol declared by the given TypeDeclarationSyntax \c node.
      */
-    const TypeDeclarationSymbol* declaredSymbol(const TypeDeclarationSyntax* node) const;
+    const TypeDeclarationSymbol* declarationOf(const TypeDeclarationSyntax* node) const;
 
     /**
      * The Enumerator declared by the given EnumeratorDeclarationSyntax \c node.
      */
-    const Enumerator* declaredSymbol(const EnumeratorDeclarationSyntax* node) const;
+    const Enumerator* declarationOf(const EnumeratorDeclarationSyntax* node) const;
 
     /**
-     * The Field declared by the given FieldDeclarationSyntax \c node.
+     * The Field(s) declared by the given FieldDeclarationSyntax \c node.
      */
-    std::vector<const Field*> declaredSymbols(const FieldDeclarationSyntax* node) const;
+    std::vector<const Field*> declarationsOf(const FieldDeclarationSyntax* node) const;
 
     /**
-     * The Symbol(s) declared by the given VariableAndOrFunctionDeclarationSyntax \c node.
+     * The DeclarationSymbol(s) declared by the given VariableAndOrFunctionDeclarationSyntax \c node.
      */
-    std::vector<const DeclarationSymbol*> declaredSymbols(const VariableAndOrFunctionDeclarationSyntax* node) const;
+    std::vector<const DeclarationSymbol*> declarationsOf(const VariableAndOrFunctionDeclarationSyntax* node) const;
 
     /**
-     * The Symbol declared by the given DeclaratorSyntax \c node.
+     * The DeclarationSymbol declared by the given DeclaratorSyntax \c node.
      */
-    const DeclarationSymbol* declaredSymbol(const DeclaratorSyntax* node) const;
+    const DeclarationSymbol* declarationOf(const DeclaratorSyntax* node) const;
     //!@}
 
-PSY_INTERNAL:
+    PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
     PSY_GRANT_INTERNAL_ACCESS(Compilation);
     PSY_GRANT_INTERNAL_ACCESS(InternalsTestSuite);
 
     SemanticModel(const SyntaxTree* tree, Compilation* compilation);
 
-    TranslationUnit* keepUnitSym(
+    TranslationUnit* keepTranslationUnit(
             const TranslationUnitSyntax* node,
             std::unique_ptr<TranslationUnit> unitSym);
-    DeclarationSymbol* keepAndBindDeclSym(
+    DeclarationSymbol* keepAndBindDecl(
             const SyntaxNode* node,
             std::unique_ptr<DeclarationSymbol> sym);
     Type* keepType(std::unique_ptr<Type> ty);
 
-    DeclarationSymbol* searchForDeclSym(
+    DeclarationSymbol* searchForDecl(
             std::function<bool (const std::unique_ptr<DeclarationSymbol>&)> pred) const;
 
-    template <class SymCastT, class SymOriT> const SymCastT* castSym(
-            const SymOriT* sym,
-            const SymCastT* (SymOriT::*cast)() const) const;
+    template <class CastT, class OrigT> const CastT* castDecl(
+            const OrigT* origDecl,
+            const CastT* (OrigT::*cast)() const) const;
 
 private:
     SemanticModel(const SemanticModel&) = delete;

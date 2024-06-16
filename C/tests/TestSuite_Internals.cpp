@@ -737,7 +737,7 @@ void InternalsTestSuite::bind(std::string text, Expectation X)
     if (!checkErrorAndWarn(X))
         return;
 
-    auto unitSym = semaModel->translationUnitSymbol();
+    auto unitSym = semaModel->translationUnit();
     if (unitSym == nullptr)
         PSY__internals__FAIL("unit not found");
 
@@ -748,7 +748,7 @@ void InternalsTestSuite::bind(std::string text, Expectation X)
         using namespace std::placeholders;
 
         auto pred = std::bind(symbolMatchesBinding, _1, binding);
-        auto declSym = semaModel->searchForDeclSym(pred);
+        auto declSym = semaModel->searchForDecl(pred);
         if (declSym == nullptr) {
             std::ostringstream oss;
             oss << "no symbol matches the expectation: ";

@@ -141,7 +141,7 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
                 new TranslationUnit(tree_,
                                     scopes_.top(),
                                     syms_.top()));
-    auto rawSym = semaModel_->keepUnitSym(node, std::move(sym));
+    auto rawSym = semaModel_->keepTranslationUnit(node, std::move(sym));
     pushSym(rawSym);
     openScope(ScopeKind::File);
 
