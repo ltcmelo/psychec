@@ -54,7 +54,7 @@ namespace C {
 
 static int depth_;
 
-class DebugRule
+class PSY_C_INTERNAL_API DebugRule
 {
 public:
     const char* ruleID_;

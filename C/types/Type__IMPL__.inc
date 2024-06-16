@@ -51,7 +51,7 @@ struct Type::TypeImpl
     };
     union
     {
-        std::atomic_uint32_t BF_all_;
+        std::uint32_t BF_all_;
         BitFields BF_;
     };
 };

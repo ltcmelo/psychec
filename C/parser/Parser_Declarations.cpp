@@ -1460,9 +1460,9 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
         bool (Parser::*parseMember)(DeclarationSyntax*&))
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_struct
+    PSY_ASSERT_W_MSG((peek().kind() == SyntaxKind::Keyword_struct
                         || peek().kind() == SyntaxKind::Keyword_union
-                        || peek().kind() == SyntaxKind::Keyword_enum
+                        || peek().kind() == SyntaxKind::Keyword_enum)
                     && (declK == SyntaxKind::StructDeclaration
                         || declK == SyntaxKind::UnionDeclaration
                         || declK == SyntaxKind::EnumDeclaration)
