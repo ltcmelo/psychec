@@ -29,7 +29,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API MemoryPool
+class PSY_C_INTERNAL_API MemoryPool
 {
 public:
     MemoryPool();

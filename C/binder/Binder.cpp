@@ -19,16 +19,18 @@
 // THE SOFTWARE.
 
 #include "Binder.h"
+#include "Binder__MACROS__.inc"
 
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
-#include "compilation/SemanticModel.h"
+#include "compilation/Compilation.h"
 #include "symbols/Symbol_ALL.h"
-#include "symbols/SymbolName_ALL.h"
 #include "syntax/SyntaxFacts.h"
+#include "syntax/Lexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
+#include "types/Type_ALL.h"
 
 #include "../common/infra/Assertions.h"
 
@@ -41,7 +43,7 @@ Binder::Binder(SemanticModel* semaModel, const SyntaxTree* tree)
     : SyntaxVisitor(tree)
     , semaModel_(semaModel)
     , stashedScope_(nullptr)
-    , decltorIsOfTypedef_(false)
+    , decltorIsOfTydef_(false)
     , diagReporter_(this)
 {}
 
@@ -57,12 +59,11 @@ void Binder::bind()
 
     visit(tree_->root());
 
-    PSY_ASSERT_W_MSG(scopes_.size() == 1 && scopes_.top() == nullptr,
-                     return,
-                     "expected sentinel scope");
-    PSY_ASSERT_W_MSG(syms_.size() == 1 && syms_.top() == nullptr,
-                     return,
-                     "expected sentinel symbol");
+    PSY_ASSERT_W_MSG(scopes_.size() == 1, return, "expected 1 scope");
+    PSY_ASSERT_W_MSG(scopes_.top() == nullptr, return, "expected sentinel scope");
+    PSY_ASSERT_W_MSG(syms_.size() == 1, return, "expected 1 symbol");
+    PSY_ASSERT_W_MSG(syms_.top() == nullptr, return, "expected sentinel symbol");
+
     scopes_.pop();
     syms_.pop();
 }
@@ -76,10 +77,9 @@ void Binder::openScope(ScopeKind scopeK)
     enclosingScope->enclose(std::move(scope));
 }
 
-void Binder::reopenStashedScope()
+void Binder::openStashedScope()
 {
     PSY_ASSERT(stashedScope_, return);
-
     scopes_.push(stashedScope_);
 }
 
@@ -88,61 +88,61 @@ void Binder::closeScope()
     scopes_.pop();
 }
 
-void Binder::closeScopeAndStashIt()
+void Binder::closeAndStashScope()
 {
     stashedScope_ = scopes_.top();
     scopes_.pop();
 }
 
-template <class SymT>
-SymT* Binder::pushSym(const SyntaxNode* node, std::unique_ptr<SymT> sym)
+void Binder::pushSym(Symbol* sym)
 {
-    DEBUG_PUSH_POP_SYMBOL(sym);
-    syms_.push(sym.get());
-    return static_cast<SymT*>(semaModel_->storeDeclaredSym(node, std::move(sym)));
+    DEBUG_SYM_STACK(sym);
+    syms_.push(sym);
 }
 
-template FunctionSymbol* Binder::pushSym<FunctionSymbol>(const SyntaxNode*, std::unique_ptr<FunctionSymbol>);
-template FieldSymbol* Binder::pushSym<FieldSymbol>(const SyntaxNode*, std::unique_ptr<FieldSymbol>);
-template EnumeratorSymbol* Binder::pushSym<EnumeratorSymbol>(const SyntaxNode*, std::unique_ptr<EnumeratorSymbol>);
-template ParameterSymbol* Binder::pushSym<ParameterSymbol>(const SyntaxNode*, std::unique_ptr<ParameterSymbol>);
-template VariableSymbol* Binder::pushSym<VariableSymbol>(const SyntaxNode*, std::unique_ptr<VariableSymbol>);
-template ArrayTypeSymbol* Binder::pushSym<ArrayTypeSymbol>(const SyntaxNode*, std::unique_ptr<ArrayTypeSymbol>);
-template NamedTypeSymbol* Binder::pushSym<NamedTypeSymbol>(const SyntaxNode*, std::unique_ptr<NamedTypeSymbol>);
-template PointerTypeSymbol* Binder::pushSym<PointerTypeSymbol>(const SyntaxNode*, std::unique_ptr<PointerTypeSymbol>);
-
-void Binder::popSym()
+Symbol* Binder::popSym()
 {
-    DEBUG_PUSH_POP_SYMBOL(syms_.top());
+    PSY_ASSERT(!syms_.empty(), return nullptr);
+    DEBUG_SYM_STACK(syms_.top());
+    auto sym = syms_.top();
     syms_.pop();
+    return sym;
 }
 
-template <class TySymT>
-TySymT* Binder::pushTySym(std::unique_ptr<TySymT> tySym)
+void Binder::pushTy(Type* ty)
 {
-    DEBUG_PUSH_POP_SYMBOL(tySym);
-    tySyms_.push(tySym.get());
-    return static_cast<TySymT*>(semaModel_->storeUsedSym(std::move(tySym)));
+    DEBUG_TY_STACK(ty);
+    tys_.push(ty);
 }
 
-template ArrayTypeSymbol* Binder::pushTySym<ArrayTypeSymbol>(std::unique_ptr<ArrayTypeSymbol>);
-template FunctionTypeSymbol* Binder::pushTySym<FunctionTypeSymbol>(std::unique_ptr<FunctionTypeSymbol>);
-template NamedTypeSymbol* Binder::pushTySym<NamedTypeSymbol>(std::unique_ptr<NamedTypeSymbol>);
-template PointerTypeSymbol* Binder::pushTySym<PointerTypeSymbol>(std::unique_ptr<PointerTypeSymbol>);
-
-void Binder::popTySym()
+Type* Binder::popTy()
 {
-    DEBUG_PUSH_POP_SYMBOL(tySyms_.top());
-    tySyms_.pop();
+    PSY_ASSERT(!tys_.empty(), return nullptr);
+    DEBUG_TY_STACK(tys_.top());
+    auto ty = tys_.top();
+    tys_.pop();
+    return ty;
 }
 
-    //--------------//
-    // Declarations //
-    //--------------//
+const Identifier* Binder::lexemeOrEmptyIdent(const SyntaxToken& tk) const
+{
+    return tk.lexeme()
+            ? tk.lexeme()->asIdentifier()
+            : tree_->findIdentifier("", 0);
+}
+
+//--------------//
+// Declarations //
+//--------------//
 
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    makeSymAndPushIt<LibrarySymbol>(node);
+    std::unique_ptr<TranslationUnit> sym(
+                new TranslationUnit(tree_,
+                                    scopes_.top(),
+                                    syms_.top()));
+    auto rawSym = semaModel_->keepUnitSym(node, std::move(sym));
+    pushSym(rawSym);
     openScope(ScopeKind::File);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
@@ -203,7 +203,7 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_DONE(
         const VariableAndOrFunctionDeclarationSyntax*)
 {
-    popTySym();
+    popTy();
 
     return Action::Skip;
 }
@@ -215,7 +215,7 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_DONE(const FieldDeclarationSyntax*)
 {
-    popTySym();
+    popTy();
 
     return Action::Skip;
 }
@@ -227,7 +227,7 @@ SyntaxVisitor::Action Binder::visitEnumeratorDeclaration(const EnumeratorDeclara
 
 SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_DONE(const EnumeratorDeclarationSyntax* node)
 {
-    popTySym();
+    popTy();
 
     return Action::Skip;
 }
@@ -257,9 +257,9 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinit
     return Action::Skip;
 }
 
-    //------------//
-    // Statements //
-    //------------//
+//------------//
+// Statements //
+//------------//
 
 SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
 {

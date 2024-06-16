@@ -42,20 +42,20 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/infra/MemoryPool.cpp
 
     # Syntax
+    ${PROJECT_SOURCE_DIR}/syntax/Lexeme.h
+    ${PROJECT_SOURCE_DIR}/syntax/Lexeme.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/Lexeme_Identifier.h
+    ${PROJECT_SOURCE_DIR}/syntax/Lexeme_Identifier.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/Lexeme_Constant.h
+    ${PROJECT_SOURCE_DIR}/syntax/Lexeme_Constant.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/Lexeme_StringLiteral.h
+    ${PROJECT_SOURCE_DIR}/syntax/Lexeme_StringLiteral.cpp
+    ${PROJECT_SOURCE_DIR}/syntax/Lexeme_ALL.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxDumper.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxFacts.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxHolder.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxHolder.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxKind.h
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme.h
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme.cpp
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Identifier.h
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Identifier.cpp
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Constant.h
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_Constant.cpp
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_StringLiteral.h
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_StringLiteral.cpp
-    ${PROJECT_SOURCE_DIR}/syntax/SyntaxLexeme_ALL.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNamePrinter.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNamePrinter.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNode.cpp
@@ -126,70 +126,84 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/reparser/Reparser.cpp
 
     # Symbols
-    ${PROJECT_SOURCE_DIR}/symbols/Accessibility.h
-    ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeFacts.h
-    ${PROJECT_SOURCE_DIR}/symbols/BuiltinTypeFacts.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_NameableSymbol.h
+    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_NameableSymbol.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_TypeableSymbol.h
+    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_TypeableSymbol.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol__IMPL__.inc
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_ALL.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol__IMPL__.inc
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Function.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Library.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Library.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Type.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Value.h
-    ${PROJECT_SOURCE_DIR}/symbols/Symbol_ALL.h
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolName.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolName.h
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Empty.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Empty.h
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Plain.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Plain.h
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_Tag.h
-    ${PROJECT_SOURCE_DIR}/symbols/SymbolName_ALL.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeClass_NameableSymbol.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeClass_NameableSymbol.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeClass_TypeableSymbol.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeClass_TypeableSymbol.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeKind_Builtin.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeKind_Named.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol__IMPL__.inc
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Array.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Function.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Function.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Named.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Named.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeSymbol_Pointer.h
-    ${PROJECT_SOURCE_DIR}/symbols/ValueKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Enumerator.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Enumerator.h
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Field.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Field.h
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Parameter.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Parameter.h
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Variable.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ValueSymbol_Variable.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Program.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Program.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_TranslationUnit.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_TranslationUnit.h
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Declaration.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Symbol_Declaration.h
+    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbolKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Function.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Function.h
+    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Object.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Object.h
+    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Type.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Type.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbolKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Enumerator.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Enumerator.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Field.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Field.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Parameter.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Parameter.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Variable.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Variable.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbolKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol__IMPL__.inc
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Enum.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Enum.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Struct.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Struct.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Typedef.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Typedef.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Union.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Union.h
 
     # Binder
     ${PROJECT_SOURCE_DIR}/binder/Binder.h
     ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Binder__MACROS__.inc
     ${PROJECT_SOURCE_DIR}/binder/Binder_Declarators.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Specifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
-    ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_TypeChecker.cpp
     ${PROJECT_SOURCE_DIR}/binder/NameSpace.h
     ${PROJECT_SOURCE_DIR}/binder/NameSpaces.h
     ${PROJECT_SOURCE_DIR}/binder/NameSpaceKind.h
     ${PROJECT_SOURCE_DIR}/binder/Scope.h
     ${PROJECT_SOURCE_DIR}/binder/Scope.cpp
     ${PROJECT_SOURCE_DIR}/binder/ScopeKind.h
+
+    # Types
+    ${PROJECT_SOURCE_DIR}/types/Type.h
+    ${PROJECT_SOURCE_DIR}/types/Type.cpp
+    ${PROJECT_SOURCE_DIR}/types/Type_Array.h
+    ${PROJECT_SOURCE_DIR}/types/Type_Array.cpp
+    ${PROJECT_SOURCE_DIR}/types/Type_Basic.h
+    ${PROJECT_SOURCE_DIR}/types/Type_Basic.cpp
+    ${PROJECT_SOURCE_DIR}/types/Type_Function.h
+    ${PROJECT_SOURCE_DIR}/types/Type_Function.cpp
+    ${PROJECT_SOURCE_DIR}/types/Type_Pointer.h
+    ${PROJECT_SOURCE_DIR}/types/Type_Pointer.cpp
+    ${PROJECT_SOURCE_DIR}/types/Type_Typedef.h
+    ${PROJECT_SOURCE_DIR}/types/Type_Typedef.cpp
+    ${PROJECT_SOURCE_DIR}/types/Type_Tag.h
+    ${PROJECT_SOURCE_DIR}/types/Type_Tag.cpp
+    ${PROJECT_SOURCE_DIR}/types/Type_Void.h
+    ${PROJECT_SOURCE_DIR}/types/Type_Void.cpp
+    ${PROJECT_SOURCE_DIR}/types/Type_ALL.h
+    ${PROJECT_SOURCE_DIR}/types/Type__IMPL__.inc
+    ${PROJECT_SOURCE_DIR}/types/TypeKind.h
+    ${PROJECT_SOURCE_DIR}/types/TypeKind_Basic.h
+    ${PROJECT_SOURCE_DIR}/types/TypeKind_Tag.h
 
     # Typing
     ${PROJECT_SOURCE_DIR}/typing/TypeChecker.h
@@ -200,8 +214,6 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/typing/ShapeKind.h
 
     # Compilation
-    ${PROJECT_SOURCE_DIR}/compilation/Assembly.cpp
-    ${PROJECT_SOURCE_DIR}/compilation/Assembly.h
     ${PROJECT_SOURCE_DIR}/compilation/Compilation.h
     ${PROJECT_SOURCE_DIR}/compilation/Compilation.cpp
     ${PROJECT_SOURCE_DIR}/compilation/SemanticModel.h

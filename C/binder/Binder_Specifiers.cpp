@@ -19,16 +19,18 @@
 // THE SOFTWARE.
 
 #include "Binder.h"
+#include "Binder__MACROS__.inc"
 
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
-#include "symbols/SymbolName_ALL.h"
 #include "syntax/SyntaxFacts.h"
+#include "syntax/Lexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
+#include "types/Type_ALL.h"
 
 #include "../common/infra/Assertions.h"
 
@@ -46,7 +48,6 @@ SyntaxVisitor::Action Binder::visitTypeDeclaration_AtInternalDeclarations_COMMON
         visit(declIt->value);
 
     popSym();
-
     return ((this)->*(visit_DONE))(node);
 }
 
@@ -54,23 +55,26 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
         const StructOrUnionDeclarationSyntax* node)
 {
     const TagTypeSpecifierSyntax* tySpec = node->typeSpecifier();
-    TagSymbolName::TagChoice tagChoice;
     switch (tySpec->kind()) {
-        case StructTypeSpecifier:
-            tagChoice = TagSymbolName::TagChoice::Struct;
+        case SyntaxKind::StructTypeSpecifier: {
+            auto tagTy = makeTy<TagType>(
+                        TagTypeKind::Struct,
+                        lexemeOrEmptyIdent(tySpec->tagToken()));
+            makeBindAndPushSym<Struct>(node, tagTy);
             break;
+        }
 
-        case UnionTypeSpecifier:
-            tagChoice = TagSymbolName::TagChoice::Union;
+        case SyntaxKind::UnionTypeSpecifier:{
+            auto tagTy = makeTy<TagType>(
+                        TagTypeKind::Union,
+                        lexemeOrEmptyIdent(tySpec->tagToken()));
+            makeBindAndPushSym<Union>(node, tagTy);
             break;
+        }
 
         default:
-            PSY_ESCAPE_VIA_RETURN(Action::Quit);
+            PSY_ASSERT(false, return Action::Quit);
     }
-
-    makeSymAndPushIt<NamedTypeSymbol>(node,
-                                      tagChoice,
-                                      tySpec->tagToken().valueText_c_str());
 
     return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,
@@ -79,9 +83,11 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax* node)
 {
-    makeSymAndPushIt<NamedTypeSymbol>(node,
-                                      TagSymbolName::TagChoice::Enum,
-                                      node->typeSpecifier()->tagToken().valueText_c_str());
+    auto tagTy = makeTy<TagType>(
+                TagTypeKind::Enum,
+                lexemeOrEmptyIdent(node->typeSpec_->tagToken()));
+    pushTy(tagTy);
+    makeBindAndPushSym<Enum>(node, tagTy);
 
     return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,
@@ -103,9 +109,9 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers_COMMON(
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         visitIfNotTypeQualifier(specIt->value);
 
-    if (tySyms_.empty()) {
+    if (tys_.empty()) {
         diagReporter_.TypeSpecifierMissingDefaultsToInt(node->lastToken());
-        makeTySymAndPushIt<NamedTypeSymbol>(BuiltinTypeKind::Int);
+        pushTy(makeTy<BasicType>(BasicTypeKind::Int));
     }
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
@@ -138,7 +144,7 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_AtSpecifiers(const FieldDecl
 
 SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtImplicitSpecifier(const EnumeratorDeclarationSyntax* node)
 {
-    makeTySymAndPushIt<NamedTypeSymbol>(BuiltinTypeKind::Int);
+    pushTy(makeTy<BasicType>(BasicTypeKind::Int));
 
     return visitEnumeratorDeclaration_AtDeclarator(node);
 }
@@ -170,109 +176,67 @@ SyntaxVisitor::Action Binder::visitIfTypeQualifier(const SpecifierSyntax* spec)
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node)
+SyntaxVisitor::Action Binder::visitBasicTypeSpecifier(const BasicTypeSpecifierSyntax* node)
 {
     auto tySpecTk = node->specifierToken();
 
-    if (tySyms_.empty()) {
-        BuiltinTypeKind builtTyK;
+    if (tys_.empty()) {
+        BasicTypeKind basicTyK;
         switch (tySpecTk.kind()) {
-            case Keyword_void:
-                builtTyK = BuiltinTypeKind::Void;
+            case SyntaxKind::Keyword_char:
+                basicTyK = BasicTypeKind::Char;
                 break;
-            case Keyword_char:
-                builtTyK = BuiltinTypeKind::Char;
+            case SyntaxKind::Keyword_short:
+                basicTyK = BasicTypeKind::Short;
                 break;
-            case Keyword_short:
-                builtTyK = BuiltinTypeKind::Short;
+            case SyntaxKind::Keyword_int:
+                basicTyK = BasicTypeKind::Int;
                 break;
-            case Keyword_int:
-                builtTyK = BuiltinTypeKind::Int;
+            case SyntaxKind::Keyword_long:
+                basicTyK = BasicTypeKind::Long;
                 break;
-            case Keyword_long:
-                builtTyK = BuiltinTypeKind::Long;
+            case SyntaxKind::Keyword_float:
+                basicTyK = BasicTypeKind::Float;
                 break;
-            case Keyword_float:
-                builtTyK = BuiltinTypeKind::Float;
+            case SyntaxKind::Keyword_double:
+                basicTyK = BasicTypeKind::Double;
                 break;
-            case Keyword_double:
-                builtTyK = BuiltinTypeKind::Double;
+            case SyntaxKind::Keyword__Bool:
+                basicTyK = BasicTypeKind::Bool;
                 break;
-            case Keyword__Bool:
-                builtTyK = BuiltinTypeKind::Bool;
+            case SyntaxKind::Keyword__Complex:
+                basicTyK = BasicTypeKind::DoubleComplex;
                 break;
-            case Keyword__Complex:
-                builtTyK = BuiltinTypeKind::DoubleComplex;
+            case SyntaxKind::Keyword_signed:
+                basicTyK = BasicTypeKind::Int_S;
                 break;
-            case Keyword_signed:
-                builtTyK = BuiltinTypeKind::Int_S;
-                break;
-            case Keyword_unsigned:
-                builtTyK = BuiltinTypeKind::Int_U;
+            case SyntaxKind::Keyword_unsigned:
+                basicTyK = BasicTypeKind::Int_U;
                 break;
             default:
                 PSY_ESCAPE_VIA_RETURN(Action::Quit);
         }
-
-        makeTySymAndPushIt<NamedTypeSymbol>(builtTyK);
+        pushTy(makeTy<BasicType>(basicTyK));
         return Action::Skip;
     }
 
-    NamedTypeSymbol* namedTySym = tySyms_.top()->asNamedType();
-    auto curBuiltTyK = namedTySym->builtinTypeKind();
-    BuiltinTypeKind extraBuiltTyK;
-    switch (curBuiltTyK) {
-        case BuiltinTypeKind::UNSPECIFIED:
-            switch (tySpecTk.kind()) {
-                case Keyword_void:
-                    extraBuiltTyK = BuiltinTypeKind::Void;
-                    break;
-                case Keyword_char:
-                    extraBuiltTyK = BuiltinTypeKind::Char;
-                    break;
-                case Keyword_short:
-                    extraBuiltTyK = BuiltinTypeKind::Short;
-                    break;
-                case Keyword_int:
-                    extraBuiltTyK = BuiltinTypeKind::Int;
-                    break;
-                case Keyword_long:
-                    extraBuiltTyK = BuiltinTypeKind::Long;
-                    break;
-                case Keyword_float:
-                    extraBuiltTyK = BuiltinTypeKind::Float;
-                    break;
-                case Keyword_double:
-                    extraBuiltTyK = BuiltinTypeKind::Double;
-                    break;
-                case Keyword__Bool:
-                    extraBuiltTyK = BuiltinTypeKind::Bool;
-                    break;
-                case Keyword__Complex:
-                    extraBuiltTyK = BuiltinTypeKind::DoubleComplex;
-                    break;
-                case Keyword_signed:
-                    extraBuiltTyK = BuiltinTypeKind::Int_S;
-                    break;
-                case Keyword_unsigned:
-                    extraBuiltTyK = BuiltinTypeKind::Int_U;
-                    break;
-                default:
-                    PSY_ESCAPE_VIA_RETURN(Action::Skip);
-            }
-            break;
+    auto ty = tys_.top();
+    if (ty->kind() != TypeKind::Basic) {
+        //diagReporter_.
+        return Action::Skip;
+    }
 
-        case BuiltinTypeKind::Void:
-            // report
-            return Action::Skip;
-
-        case BuiltinTypeKind::Char:
+    BasicType* builtinTy = ty->asBasicType();
+    auto curBasicTyK = builtinTy->kind();
+    BasicTypeKind extraBasicTyK;
+    switch (curBasicTyK) {
+        case BasicTypeKind::Char:
             switch (tySpecTk.kind()) {
-                case Keyword_signed:
-                    extraBuiltTyK = BuiltinTypeKind::Char_S;
+                case SyntaxKind::Keyword_signed:
+                    extraBasicTyK = BasicTypeKind::Char_S;
                     break;
-                case Keyword_unsigned:
-                    extraBuiltTyK = BuiltinTypeKind::Char_U;
+                case SyntaxKind::Keyword_unsigned:
+                    extraBasicTyK = BasicTypeKind::Char_U;
                     break;
                 default:
                     // report
@@ -280,18 +244,18 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
             }
             break;
 
-        case BuiltinTypeKind::Char_S:
-        case BuiltinTypeKind::Char_U:
+        case BasicTypeKind::Char_S:
+        case BasicTypeKind::Char_U:
             // report
             return Action::Skip;
 
-        case BuiltinTypeKind::Short:
+        case BasicTypeKind::Short:
             switch (tySpecTk.kind()) {
-                case Keyword_signed:
-                    extraBuiltTyK = BuiltinTypeKind::Short_S;
+                case SyntaxKind::Keyword_signed:
+                    extraBasicTyK = BasicTypeKind::Short_S;
                     break;
-                case Keyword_unsigned:
-                    extraBuiltTyK = BuiltinTypeKind::Short_U;
+                case SyntaxKind::Keyword_unsigned:
+                    extraBasicTyK = BasicTypeKind::Short_U;
                     break;
                 default:
                     // report
@@ -299,21 +263,21 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
             }
             break;
 
-        case BuiltinTypeKind::Short_S:
-        case BuiltinTypeKind::Short_U:
+        case BasicTypeKind::Short_S:
+        case BasicTypeKind::Short_U:
             // report
             return Action::Skip;
 
-        case BuiltinTypeKind::Int:
+        case BasicTypeKind::Int:
             switch (tySpecTk.kind()) {
-                case Keyword_long:
-                    extraBuiltTyK = BuiltinTypeKind::Long;
+                case SyntaxKind::Keyword_long:
+                    extraBasicTyK = BasicTypeKind::Long;
                     break;
-                case Keyword_signed:
-                    extraBuiltTyK = BuiltinTypeKind::Int_S;
+                case SyntaxKind::Keyword_signed:
+                    extraBasicTyK = BasicTypeKind::Int_S;
                     break;
-                case Keyword_unsigned:
-                    extraBuiltTyK = BuiltinTypeKind::Int_U;
+                case SyntaxKind::Keyword_unsigned:
+                    extraBasicTyK = BasicTypeKind::Int_U;
                     break;
                 default:
                     diagReporter_.TwoOrMoreDataTypesInDeclarationSpecifiers(tySpecTk);
@@ -321,20 +285,20 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
             }
             break;
 
-        case BuiltinTypeKind::Int_S:
-        case BuiltinTypeKind::Int_U:
+        case BasicTypeKind::Int_S:
+        case BasicTypeKind::Int_U:
             // report
             return Action::Skip;
 
-        case BuiltinTypeKind::Long:
+        case BasicTypeKind::Long:
             switch (tySpecTk.kind()) {
-                case Keyword_int:
+                case SyntaxKind::Keyword_int:
                     return Action::Skip;
-                case Keyword_signed:
-                    extraBuiltTyK = BuiltinTypeKind::Long_S;
+                case SyntaxKind::Keyword_signed:
+                    extraBasicTyK = BasicTypeKind::Long_S;
                     break;
-                case Keyword_unsigned:
-                    extraBuiltTyK = BuiltinTypeKind::Long_U;
+                case SyntaxKind::Keyword_unsigned:
+                    extraBasicTyK = BasicTypeKind::Long_U;
                     break;
                 default:
                     diagReporter_.TwoOrMoreDataTypesInDeclarationSpecifiers(tySpecTk);
@@ -342,8 +306,8 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
             }
             break;
 
-        case BuiltinTypeKind::Long_S:
-        case BuiltinTypeKind::Long_U:
+        case BasicTypeKind::Long_S:
+        case BasicTypeKind::Long_U:
             // report
             return Action::Skip;
 
@@ -351,8 +315,15 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
             PSY_ESCAPE_VIA_RETURN(Action::Skip);
     }
 
-    if (extraBuiltTyK != curBuiltTyK)
-        namedTySym->patchBuiltinTypeKind(extraBuiltTyK);
+    if (extraBasicTyK != curBasicTyK)
+        builtinTy->resetBasicTypeKind(extraBasicTyK);
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitVoidTypeSpecifier(const VoidTypeSpecifierSyntax* node)
+{
+    pushTy(makeTy<VoidType>());
 
     return Action::Skip;
 }
@@ -360,36 +331,34 @@ SyntaxVisitor::Action Binder::visitBuiltinTypeSpecifier(const BuiltinTypeSpecifi
 SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
     if (!node->declarations()) {
-        TagSymbolName::TagChoice tagChoice;
+        TagTypeKind tagTyK;
         switch (node->kind()) {
-            case StructTypeSpecifier:
-                tagChoice = TagSymbolName::TagChoice::Struct;
+            case SyntaxKind::StructTypeSpecifier:
+                tagTyK = TagTypeKind::Struct;
                 break;
 
-            case UnionTypeSpecifier:
-                tagChoice = TagSymbolName::TagChoice::Union;
+            case SyntaxKind::UnionTypeSpecifier:
+                tagTyK = TagTypeKind::Union;
                 break;
 
-            case EnumTypeSpecifier:
-                tagChoice = TagSymbolName::TagChoice::Enum;
+            case SyntaxKind::EnumTypeSpecifier:
+                tagTyK = TagTypeKind::Enum;
                 break;
 
             default:
-                PSY_ESCAPE_VIA_RETURN(Action::Quit);
-                return Action::Quit;
+                PSY_ASSERT(false, return Action::Quit);
         }
-
-        makeTySymAndPushIt<NamedTypeSymbol>(tagChoice, node->tagToken().valueText_c_str());
+        pushTy(makeTy<TagType>(tagTyK, lexemeOrEmptyIdent(node->tagToken())));
     }
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
         visit(attrIt->value);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next) {
-        TySymContT tySyms;
-        std::swap(tySyms_, tySyms);
+        TyContT tys;
+        std::swap(tys_, tys);
         visit(declIt->value);
-        std::swap(tySyms_, tySyms);
+        std::swap(tys_, tys);
     }
 
     for (auto attrIt = node->attributes_PostCloseBrace(); attrIt; attrIt = attrIt->next)
@@ -404,61 +373,60 @@ SyntaxVisitor::Action Binder::visitTagDeclarationAsSpecifier(
     visit(node->tagDeclaration());
 
     const TagTypeSpecifierSyntax* tySpec = node->tagDeclaration()->typeSpecifier();
-    TagSymbolName::TagChoice tagChoice;
     switch (tySpec->kind()) {
-        case StructTypeSpecifier:
-            tagChoice = TagSymbolName::TagChoice::Struct;
+        case SyntaxKind::StructTypeSpecifier: {
+            auto tagTy = makeTy<TagType>(
+                        TagTypeKind::Struct,
+                        lexemeOrEmptyIdent(tySpec->tagToken()));
+            pushTy(tagTy);
             break;
+        }
 
-        case UnionTypeSpecifier:
-            tagChoice = TagSymbolName::TagChoice::Union;
+        case SyntaxKind::UnionTypeSpecifier:{
+            auto tagTy = makeTy<TagType>(
+                        TagTypeKind::Union,
+                        lexemeOrEmptyIdent(tySpec->tagToken()));
+            pushTy(tagTy);
             break;
-
-        case EnumTypeSpecifier:
-            tagChoice = TagSymbolName::TagChoice::Enum;
-            break;
+        }
 
         default:
-            PSY_ESCAPE_VIA_RETURN(Action::Quit);
+            PSY_ASSERT(false, return Action::Quit);
     }
-
-    makeTySymAndPushIt<NamedTypeSymbol>(tagChoice, tySpec->tagToken().valueText_c_str());
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
-    if (tySyms_.empty())
-        makeTySymAndPushIt<NamedTypeSymbol>(node->identifierToken().valueText_c_str());
+    if (tys_.empty())
+        pushTy(makeTy<TypedefType>(lexemeOrEmptyIdent(node->identifierToken())));
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node)
 {
-    PSY_ASSERT(!tySyms_.empty(), return Action::Quit);
-    TypeSymbol* tySym = tySyms_.top();
-
+    TY_AT_TOP(ty);
     const auto tyQualTk = node->qualifierKeyword();
     switch (tyQualTk.kind()) {
-        case Keyword_const:
-            tySym->qualifyWithConst();
+        case SyntaxKind::Keyword_const:
+            ty->qualifyWithConst();
             break;
 
-        case Keyword_volatile:
-            tySym->qualifyWithVolatile();
+        case SyntaxKind::Keyword_volatile:
+            ty->qualifyWithVolatile();
             break;
 
-        case Keyword_restrict:
-            if (tySym->typeKind() == TypeKind::Pointer)
-                tySym->qualifyWithRestrict();
+        case SyntaxKind::Keyword_restrict:
+            if (ty->kind() == TypeKind::Pointer)
+                ty->qualifyWithRestrict();
             else
                 diagReporter_.InvalidUseOfRestrict(tyQualTk);
             break;
 
-        case Keyword__Atomic:
-            tySym->qualifyWithAtomic();
+        case SyntaxKind::Keyword__Atomic:
+            ty->qualifyWithAtomic();
             break;
 
         default:

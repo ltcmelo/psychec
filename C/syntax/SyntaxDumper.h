@@ -45,14 +45,14 @@
 
 #include "API.h"
 
-#include "SyntaxLexeme_ALL.h"
+#include "Lexeme_ALL.h"
 #include "SyntaxNodes.h"
 #include "SyntaxVisitor.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API SyntaxDumper : protected SyntaxVisitor
+class PSY_C_INTERNAL_API SyntaxDumper : protected SyntaxVisitor
 {
 public:
     SyntaxDumper(SyntaxTree* tree)
@@ -223,7 +223,12 @@ protected:
         return visitTrivialSpecifier_Common(node);
     }
 
-    virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax* node) override
+    virtual Action visitBasicTypeSpecifier(const BasicTypeSpecifierSyntax* node) override
+    {
+        return visitTrivialSpecifier_Common(node);
+    }
+
+    virtual Action visitVoidTypeSpecifier(const VoidTypeSpecifierSyntax* node) override
     {
         return visitTrivialSpecifier_Common(node);
     }

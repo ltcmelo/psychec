@@ -24,7 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 #include "../common/infra/Pimpl.h"
 
 #include <vector>
@@ -56,47 +56,70 @@ public:
      */
     const Compilation* compilation() const;
 
-    //!@{
     /**
-     * The Symbol declared by TranslationUnitSyntax \p node.
+     * The TranslationUnit of \c this SemanticModel.
      */
-    const LibrarySymbol* declaredSymbol(const TranslationUnitSyntax* node) const;
+    const TranslationUnit* translationUnitSymbol() const;
 
     /**
-     * The Symbol declared by DeclarationSyntax \p node.
+     * The FunctionSymbol declared by the given FunctionDefinitionSyntax \c node.
      */
-    const FunctionSymbol* declaredSymbol(const FunctionDefinitionSyntax* node) const;
-    const ParameterSymbol* declaredSymbol(const ParameterDeclarationSyntax* node) const;
-    const NamedTypeSymbol* declaredSymbol(const TypeDeclarationSyntax* node) const;
-    const EnumeratorSymbol* declaredSymbol(const EnumeratorDeclarationSyntax* node) const;
+    const Function* declaredSymbol(const FunctionDefinitionSyntax* node) const;
 
     /**
-     * The Symbol(s) declared by DeclarationSyntax \p node.
+     * The Parameter declared by the given ParameterDeclarationSyntax \c node.
      */
-    std::vector<const Symbol*> declaredSymbols(const VariableAndOrFunctionDeclarationSyntax* node) const;
-    std::vector<const FieldSymbol*> declaredSymbols(const FieldDeclarationSyntax* node) const;
+    const Parameter* declaredSymbol(const ParameterDeclarationSyntax* node) const;
 
     /**
-     * The Symbol declared by DeclaratorSyntax \p node.
+     * The TypeDeclarationSymbol declared by the given TypeDeclarationSyntax \c node.
      */
-    const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
+    const TypeDeclarationSymbol* declaredSymbol(const TypeDeclarationSyntax* node) const;
+
+    /**
+     * The Enumerator declared by the given EnumeratorDeclarationSyntax \c node.
+     */
+    const Enumerator* declaredSymbol(const EnumeratorDeclarationSyntax* node) const;
+
+    /**
+     * The Field declared by the given FieldDeclarationSyntax \c node.
+     */
+    std::vector<const Field*> declaredSymbols(const FieldDeclarationSyntax* node) const;
+
+    /**
+     * The Symbol(s) declared by the given VariableAndOrFunctionDeclarationSyntax \c node.
+     */
+    std::vector<const DeclarationSymbol*> declaredSymbols(const VariableAndOrFunctionDeclarationSyntax* node) const;
+
+    /**
+     * The Symbol declared by the given DeclaratorSyntax \c node.
+     */
+    const DeclarationSymbol* declaredSymbol(const DeclaratorSyntax* node) const;
     //!@}
 
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(Binder);
-    PSY_GRANT_ACCESS(Compilation);
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(Compilation);
+    PSY_GRANT_INTERNAL_ACCESS(InternalsTestSuite);
 
     SemanticModel(const SyntaxTree* tree, Compilation* compilation);
 
-    Symbol* storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym);
-    Symbol* storeUsedSym(std::unique_ptr<Symbol> sym);
+    TranslationUnit* keepUnitSym(
+            const TranslationUnitSyntax* node,
+            std::unique_ptr<TranslationUnit> unitSym);
+    DeclarationSymbol* keepAndBindDeclSym(
+            const SyntaxNode* node,
+            std::unique_ptr<DeclarationSymbol> sym);
+    Type* keepType(std::unique_ptr<Type> ty);
+
+    DeclarationSymbol* searchForDeclSym(
+            std::function<bool (const std::unique_ptr<DeclarationSymbol>&)> pred) const;
 
     template <class SymCastT, class SymOriT> const SymCastT* castSym(
             const SymOriT* sym,
             const SymCastT* (SymOriT::*cast)() const) const;
 
 private:
-    // Unavailable
     SemanticModel(const SemanticModel&) = delete;
     SemanticModel& operator=(const SemanticModel&) = delete;
 

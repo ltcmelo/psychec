@@ -45,37 +45,36 @@ public:
     static bool isStorageClassToken(SyntaxKind tkK)
     {
         switch (tkK) {
-            case Keyword_typedef:
-            case Keyword_extern:
-            case Keyword_static:
-            case Keyword__Thread_local:
-            case Keyword_ExtGNU___thread:
-            case Keyword_auto:
-            case Keyword_register:
+            case SyntaxKind::Keyword_typedef:
+            case SyntaxKind::Keyword_extern:
+            case SyntaxKind::Keyword_static:
+            case SyntaxKind::Keyword__Thread_local:
+            case SyntaxKind::Keyword_ExtGNU___thread:
+            case SyntaxKind::Keyword_auto:
+            case SyntaxKind::Keyword_register:
                 return true;
             default:
                 return false;
         }
     }
 
-    static bool isBuiltinTypeSpecifierToken(SyntaxKind tkK)
+    static bool isBasicTypeSpecifierToken(SyntaxKind tkK)
     {
         switch (tkK) {
-            case Keyword_void:
-            case Keyword_char:
-            case Keyword_short:
-            case Keyword_int:
-            case Keyword_long:
-            case Keyword_float:
-            case Keyword_double:
-            case Keyword__Bool:
-            case Keyword__Complex:
-            case Keyword_signed:
-            case Keyword_unsigned:
-            case Keyword_Ext_char16_t:
-            case Keyword_Ext_char32_t:
-            case Keyword_Ext_wchar_t:
-            case Keyword_ExtGNU___complex__:
+            case SyntaxKind::Keyword_char:
+            case SyntaxKind::Keyword_short:
+            case SyntaxKind::Keyword_int:
+            case SyntaxKind::Keyword_long:
+            case SyntaxKind::Keyword_float:
+            case SyntaxKind::Keyword_double:
+            case SyntaxKind::Keyword__Bool:
+            case SyntaxKind::Keyword__Complex:
+            case SyntaxKind::Keyword_signed:
+            case SyntaxKind::Keyword_unsigned:
+            case SyntaxKind::Keyword_Ext_char16_t:
+            case SyntaxKind::Keyword_Ext_char32_t:
+            case SyntaxKind::Keyword_Ext_wchar_t:
+            case SyntaxKind::Keyword_ExtGNU___complex__:
                 return true;
             default:
                 return false;
@@ -85,10 +84,10 @@ public:
     static bool isTypeQualifierToken(SyntaxKind tkK)
     {
         switch (tkK) {
-            case Keyword_const:
-            case Keyword_volatile:
-            case Keyword_restrict:
-            case Keyword__Atomic:
+            case SyntaxKind::Keyword_const:
+            case SyntaxKind::Keyword_volatile:
+            case SyntaxKind::Keyword_restrict:
+            case SyntaxKind::Keyword__Atomic:
                 return true;
             default:
                 return false;
@@ -98,8 +97,8 @@ public:
     static bool isFunctionSpecifierToken(SyntaxKind tkK)
     {
         switch (tkK) {
-            case Keyword_inline:
-            case Keyword__Noreturn:
+            case SyntaxKind::Keyword_inline:
+            case SyntaxKind::Keyword__Noreturn:
                 return true;
             default:
                 return false;
@@ -113,18 +112,18 @@ public:
     static bool isConstantToken(SyntaxKind tkK)
     {
         switch (tkK) {
-            case IntegerConstantToken:
-            case FloatingConstantToken:
-            case CharacterConstantToken:
-            case CharacterConstant_L_Token:
-            case CharacterConstant_u_Token:
-            case CharacterConstant_U_Token:
-            case ImaginaryIntegerConstantToken:
-            case ImaginaryFloatingConstantToken:
-            case Keyword_Ext_true:
-            case Keyword_Ext_false:
-            case Keyword_Ext_NULL:
-            case Keyword_Ext_nullptr:
+            case SyntaxKind::IntegerConstantToken:
+            case SyntaxKind::FloatingConstantToken:
+            case SyntaxKind::CharacterConstantToken:
+            case SyntaxKind::CharacterConstant_L_Token:
+            case SyntaxKind::CharacterConstant_u_Token:
+            case SyntaxKind::CharacterConstant_U_Token:
+            case SyntaxKind::ImaginaryIntegerConstantToken:
+            case SyntaxKind::ImaginaryFloatingConstantToken:
+            case SyntaxKind::Keyword_Ext_true:
+            case SyntaxKind::Keyword_Ext_false:
+            case SyntaxKind::Keyword_Ext_NULL:
+            case SyntaxKind::Keyword_Ext_nullptr:
                 return true;
             default:
                 return false;
@@ -134,16 +133,16 @@ public:
     static bool isStringLiteralToken(SyntaxKind tkK)
     {
         switch (tkK) {
-            case StringLiteralToken:
-            case StringLiteral_L_Token:
-            case StringLiteral_u8_Token:
-            case StringLiteral_u_Token:
-            case StringLiteral_U_Token:
-            case StringLiteral_R_Token:
-            case StringLiteral_LR_Token:
-            case StringLiteral_u8R_Token:
-            case StringLiteral_uR_Token:
-            case StringLiteral_UR_Token:
+            case SyntaxKind::StringLiteralToken:
+            case SyntaxKind::StringLiteral_L_Token:
+            case SyntaxKind::StringLiteral_u8_Token:
+            case SyntaxKind::StringLiteral_u_Token:
+            case SyntaxKind::StringLiteral_U_Token:
+            case SyntaxKind::StringLiteral_R_Token:
+            case SyntaxKind::StringLiteral_LR_Token:
+            case SyntaxKind::StringLiteral_u8R_Token:
+            case SyntaxKind::StringLiteral_uR_Token:
+            case SyntaxKind::StringLiteral_UR_Token:
                 return true;
             default:
                 return false;
@@ -154,43 +153,43 @@ public:
     {
         switch (tkK) {
             /* Binary */
-            case BarBarToken:
-            case AmpersandAmpersandToken:
-            case BarToken:
-            case CaretToken:
-            case AmpersandToken:
-            case EqualsEqualsToken:
-            case ExclamationEqualsToken:
-            case GreaterThanToken:
-            case LessThanToken:
-            case GreaterThanEqualsToken:
-            case LessThanEqualsToken:
-            case LessThanLessThanToken:
-            case GreaterThanGreaterThanToken:
-            case PlusToken:
-            case MinusToken:
-            case AsteriskToken:
-            case SlashToken:
-            case PercentToken:
+            case SyntaxKind::BarBarToken:
+            case SyntaxKind::AmpersandAmpersandToken:
+            case SyntaxKind::BarToken:
+            case SyntaxKind::CaretToken:
+            case SyntaxKind::AmpersandToken:
+            case SyntaxKind::EqualsEqualsToken:
+            case SyntaxKind::ExclamationEqualsToken:
+            case SyntaxKind::GreaterThanToken:
+            case SyntaxKind::LessThanToken:
+            case SyntaxKind::GreaterThanEqualsToken:
+            case SyntaxKind::LessThanEqualsToken:
+            case SyntaxKind::LessThanLessThanToken:
+            case SyntaxKind::GreaterThanGreaterThanToken:
+            case SyntaxKind::PlusToken:
+            case SyntaxKind::MinusToken:
+            case SyntaxKind::AsteriskToken:
+            case SyntaxKind::SlashToken:
+            case SyntaxKind::PercentToken:
 
             /* Conditional */
-            case QuestionToken:
+            case SyntaxKind::QuestionToken:
 
             /* Assignment */
-            case EqualsToken:
-            case AsteriskEqualsToken:
-            case SlashEqualsToken:
-            case PercentEqualsToken:
-            case PlusEqualsToken:
-            case MinusEqualsToken:
-            case LessThanLessThanEqualsToken:
-            case GreaterThanGreaterThanEqualsToken:
-            case AmpersandEqualsToken:
-            case CaretEqualsToken:
-            case BarEqualsToken:
+            case SyntaxKind::EqualsToken:
+            case SyntaxKind::AsteriskEqualsToken:
+            case SyntaxKind::SlashEqualsToken:
+            case SyntaxKind::PercentEqualsToken:
+            case SyntaxKind::PlusEqualsToken:
+            case SyntaxKind::MinusEqualsToken:
+            case SyntaxKind::LessThanLessThanEqualsToken:
+            case SyntaxKind::GreaterThanGreaterThanEqualsToken:
+            case SyntaxKind::AmpersandEqualsToken:
+            case SyntaxKind::CaretEqualsToken:
+            case SyntaxKind::BarEqualsToken:
 
             /* Sequencing */
-            case CommaToken:
+            case SyntaxKind::CommaToken:
                 return true;
 
             default:
@@ -202,94 +201,94 @@ public:
     {
         switch (NAryTkK) {
             /* Binary */
-            case BarBarToken:
-                return LogicalORExpression;
-            case AmpersandAmpersandToken:
-                return LogicalANDExpression;
-            case BarToken:
-                return BitwiseORExpression;
-            case CaretToken:
-                return BitwiseXORExpression;
-            case AmpersandToken:
-                return BitwiseANDExpression;
-            case EqualsEqualsToken:
-                 return EqualsExpression;
-            case ExclamationEqualsToken:
-                return NotEqualsExpression;
-            case GreaterThanToken:
-                return GreaterThanExpression;
-            case LessThanToken:
-                return LessThanExpression;
-            case GreaterThanEqualsToken:
-                return GreaterThanOrEqualExpression;
-            case LessThanEqualsToken:
-                return LessThanOrEqualExpression;
-            case LessThanLessThanToken:
-                return LeftShiftExpression;
-            case GreaterThanGreaterThanToken:
-                return RightShiftExpression;
-            case PlusToken:
-                return AddExpression;
-            case MinusToken:
-                return SubstractExpression;
-            case AsteriskToken:
-                return MultiplyExpression;
-            case SlashToken:
-                return DivideExpression;
-            case PercentToken:
-                return ModuleExpression;
+            case SyntaxKind::BarBarToken:
+                return SyntaxKind::LogicalORExpression;
+            case SyntaxKind::AmpersandAmpersandToken:
+                return SyntaxKind::LogicalANDExpression;
+            case SyntaxKind::BarToken:
+                return SyntaxKind::BitwiseORExpression;
+            case SyntaxKind::CaretToken:
+                return SyntaxKind::BitwiseXORExpression;
+            case SyntaxKind::AmpersandToken:
+                return SyntaxKind::BitwiseANDExpression;
+            case SyntaxKind::EqualsEqualsToken:
+                 return SyntaxKind::EqualsExpression;
+            case SyntaxKind::ExclamationEqualsToken:
+                return SyntaxKind::NotEqualsExpression;
+            case SyntaxKind::GreaterThanToken:
+                return SyntaxKind::GreaterThanExpression;
+            case SyntaxKind::LessThanToken:
+                return SyntaxKind::LessThanExpression;
+            case SyntaxKind::GreaterThanEqualsToken:
+                return SyntaxKind::GreaterThanOrEqualExpression;
+            case SyntaxKind::LessThanEqualsToken:
+                return SyntaxKind::LessThanOrEqualExpression;
+            case SyntaxKind::LessThanLessThanToken:
+                return SyntaxKind::LeftShiftExpression;
+            case SyntaxKind::GreaterThanGreaterThanToken:
+                return SyntaxKind::RightShiftExpression;
+            case SyntaxKind::PlusToken:
+                return SyntaxKind::AddExpression;
+            case SyntaxKind::MinusToken:
+                return SyntaxKind::SubstractExpression;
+            case SyntaxKind::AsteriskToken:
+                return SyntaxKind::MultiplyExpression;
+            case SyntaxKind::SlashToken:
+                return SyntaxKind::DivideExpression;
+            case SyntaxKind::PercentToken:
+                return SyntaxKind::ModuleExpression;
 
             /* Conditional */
-            case QuestionToken:
-                return ConditionalExpression;
+            case SyntaxKind::QuestionToken:
+                return SyntaxKind::ConditionalExpression;
 
             /* Assignment */
-            case EqualsToken:
-                return BasicAssignmentExpression;
-            case AsteriskEqualsToken:
-                return MultiplyAssignmentExpression;
-            case SlashEqualsToken:
-                return DivideAssignmentExpression;
-            case PercentEqualsToken:
-                return ModuloAssignmentExpression;
-            case PlusEqualsToken:
-                return AddAssignmentExpression;
-            case MinusEqualsToken:
-                return SubtractAssignmentExpression;
-            case LessThanLessThanEqualsToken:
-                return LeftShiftAssignmentExpression;
-            case GreaterThanGreaterThanEqualsToken:
-                return RightShiftAssignmentExpression;
-            case AmpersandEqualsToken:
-                return AndAssignmentExpression;
-            case CaretEqualsToken:
-                return ExclusiveOrAssignmentExpression;
-            case BarEqualsToken:
-                return OrAssignmentExpression;
+            case SyntaxKind::EqualsToken:
+                return SyntaxKind::BasicAssignmentExpression;
+            case SyntaxKind::AsteriskEqualsToken:
+                return SyntaxKind::MultiplyAssignmentExpression;
+            case SyntaxKind::SlashEqualsToken:
+                return SyntaxKind::DivideAssignmentExpression;
+            case SyntaxKind::PercentEqualsToken:
+                return SyntaxKind::ModuloAssignmentExpression;
+            case SyntaxKind::PlusEqualsToken:
+                return SyntaxKind::AddAssignmentExpression;
+            case SyntaxKind::MinusEqualsToken:
+                return SyntaxKind::SubtractAssignmentExpression;
+            case SyntaxKind::LessThanLessThanEqualsToken:
+                return SyntaxKind::LeftShiftAssignmentExpression;
+            case SyntaxKind::GreaterThanGreaterThanEqualsToken:
+                return SyntaxKind::RightShiftAssignmentExpression;
+            case SyntaxKind::AmpersandEqualsToken:
+                return SyntaxKind::AndAssignmentExpression;
+            case SyntaxKind::CaretEqualsToken:
+                return SyntaxKind::ExclusiveOrAssignmentExpression;
+            case SyntaxKind::BarEqualsToken:
+                return SyntaxKind::OrAssignmentExpression;
 
             /* Sequencing */
-            case CommaToken:
-                return SequencingExpression;
+            case SyntaxKind::CommaToken:
+                return SyntaxKind::SequencingExpression;
 
             default:
-                return Error;
+                return SyntaxKind::Error;
         }
     }
 
     static bool isAssignmentExpression(SyntaxKind exprK)
     {
         switch (exprK) {
-            case BasicAssignmentExpression:
-            case MultiplyAssignmentExpression:
-            case DivideAssignmentExpression:
-            case ModuloAssignmentExpression:
-            case AddAssignmentExpression:
-            case SubtractAssignmentExpression:
-            case LeftShiftAssignmentExpression:
-            case RightShiftAssignmentExpression:
-            case AndAssignmentExpression:
-            case ExclusiveOrAssignmentExpression:
-            case OrAssignmentExpression:
+            case SyntaxKind::BasicAssignmentExpression:
+            case SyntaxKind::MultiplyAssignmentExpression:
+            case SyntaxKind::DivideAssignmentExpression:
+            case SyntaxKind::ModuloAssignmentExpression:
+            case SyntaxKind::AddAssignmentExpression:
+            case SyntaxKind::SubtractAssignmentExpression:
+            case SyntaxKind::LeftShiftAssignmentExpression:
+            case SyntaxKind::RightShiftAssignmentExpression:
+            case SyntaxKind::AndAssignmentExpression:
+            case SyntaxKind::ExclusiveOrAssignmentExpression:
+            case SyntaxKind::OrAssignmentExpression:
                 return true;
 
             default:
@@ -300,17 +299,17 @@ public:
     static bool isAssignmentExpressionOperatorToken(SyntaxKind tkK)
     {
         switch (tkK) {
-            case EqualsToken:
-            case PlusEqualsToken:
-            case MinusEqualsToken:
-            case AsteriskEqualsToken:
-            case SlashEqualsToken:
-            case PercentEqualsToken:
-            case LessThanLessThanEqualsToken:
-            case GreaterThanGreaterThanEqualsToken:
-            case AmpersandEqualsToken:
-            case CaretEqualsToken:
-            case BarEqualsToken:
+            case SyntaxKind::EqualsToken:
+            case SyntaxKind::PlusEqualsToken:
+            case SyntaxKind::MinusEqualsToken:
+            case SyntaxKind::AsteriskEqualsToken:
+            case SyntaxKind::SlashEqualsToken:
+            case SyntaxKind::PercentEqualsToken:
+            case SyntaxKind::LessThanLessThanEqualsToken:
+            case SyntaxKind::GreaterThanGreaterThanEqualsToken:
+            case SyntaxKind::AmpersandEqualsToken:
+            case SyntaxKind::CaretEqualsToken:
+            case SyntaxKind::BarEqualsToken:
                 return true;
 
             default:
@@ -321,24 +320,24 @@ public:
     static bool isBinaryExpression(SyntaxKind exprK)
     {
         switch (exprK) {
-            case MultiplyExpression:
-            case DivideExpression:
-            case ModuleExpression:
-            case AddExpression:
-            case SubstractExpression:
-            case LeftShiftExpression:
-            case RightShiftExpression:
-            case LessThanExpression:
-            case LessThanOrEqualExpression:
-            case GreaterThanExpression:
-            case GreaterThanOrEqualExpression:
-            case EqualsExpression:
-            case NotEqualsExpression:
-            case BitwiseANDExpression:
-            case BitwiseXORExpression:
-            case BitwiseORExpression:
-            case LogicalANDExpression:
-            case LogicalORExpression:
+            case SyntaxKind::MultiplyExpression:
+            case SyntaxKind::DivideExpression:
+            case SyntaxKind::ModuleExpression:
+            case SyntaxKind::AddExpression:
+            case SyntaxKind::SubstractExpression:
+            case SyntaxKind::LeftShiftExpression:
+            case SyntaxKind::RightShiftExpression:
+            case SyntaxKind::LessThanExpression:
+            case SyntaxKind::LessThanOrEqualExpression:
+            case SyntaxKind::GreaterThanExpression:
+            case SyntaxKind::GreaterThanOrEqualExpression:
+            case SyntaxKind::EqualsExpression:
+            case SyntaxKind::NotEqualsExpression:
+            case SyntaxKind::BitwiseANDExpression:
+            case SyntaxKind::BitwiseXORExpression:
+            case SyntaxKind::BitwiseORExpression:
+            case SyntaxKind::LogicalANDExpression:
+            case SyntaxKind::LogicalORExpression:
                 return true;
 
             default:
@@ -349,24 +348,24 @@ public:
     static bool isBinaryExpressionOperatorToken(SyntaxKind tkK)
     {
         switch (tkK) {
-            case AsteriskToken:
-            case SlashToken:
-            case PercentToken:
-            case PlusToken:
-            case MinusToken:
-            case LessThanLessThanToken:
-            case GreaterThanGreaterThanToken:
-            case LessThanToken:
-            case LessThanEqualsToken:
-            case GreaterThanToken:
-            case GreaterThanEqualsToken:
-            case EqualsEqualsToken:
-            case ExclamationEqualsToken:
-            case AmpersandToken:
-            case CaretToken:
-            case BarToken:
-            case AmpersandAmpersandToken:
-            case BarBarToken:
+            case SyntaxKind::AsteriskToken:
+            case SyntaxKind::SlashToken:
+            case SyntaxKind::PercentToken:
+            case SyntaxKind::PlusToken:
+            case SyntaxKind::MinusToken:
+            case SyntaxKind::LessThanLessThanToken:
+            case SyntaxKind::GreaterThanGreaterThanToken:
+            case SyntaxKind::LessThanToken:
+            case SyntaxKind::LessThanEqualsToken:
+            case SyntaxKind::GreaterThanToken:
+            case SyntaxKind::GreaterThanEqualsToken:
+            case SyntaxKind::EqualsEqualsToken:
+            case SyntaxKind::ExclamationEqualsToken:
+            case SyntaxKind::AmpersandToken:
+            case SyntaxKind::CaretToken:
+            case SyntaxKind::BarToken:
+            case SyntaxKind::AmpersandAmpersandToken:
+            case SyntaxKind::BarBarToken:
                 return true;
 
             default:
@@ -377,9 +376,9 @@ public:
     static bool isPredefinedToken(SyntaxKind tkK)
     {
         switch(tkK) {
-            case Keyword___func__:
-            case Keyword_ExtGNU___FUNCTION__:
-            case Keyword_ExtGNU___PRETTY_FUNCTION__:
+            case SyntaxKind::Keyword___func__:
+            case SyntaxKind::Keyword_ExtGNU___FUNCTION__:
+            case SyntaxKind::Keyword_ExtGNU___PRETTY_FUNCTION__:
                 return true;
 
             default:
@@ -394,9 +393,9 @@ public:
     static bool isExtGNU_AsmQualifierToken(SyntaxKind tkK)
     {
         switch (tkK) {
-            case Keyword_volatile:
-            case Keyword_inline:
-            case Keyword_goto:
+            case SyntaxKind::Keyword_volatile:
+            case SyntaxKind::Keyword_inline:
+            case SyntaxKind::Keyword_goto:
                 return true;
             default:
                 return false;

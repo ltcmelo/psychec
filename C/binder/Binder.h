@@ -25,41 +25,18 @@
 #include "Fwds.h"
 
 #include "binder/Scope.h"
+#include "compilation/SemanticModel.h"
 #include "parser/LexedTokens.h"
-#include "symbols/SymbolName.h"
 #include "symbols/Symbol_ALL.h"
-#include "symbols/TypeKind.h"
 #include "syntax/SyntaxVisitor.h"
 
 #include "../common/diagnostics/DiagnosticDescriptor.h"
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 
 #include <memory>
 #include <stack>
 #include <string>
 #include <utility>
-
-//#define DEBUG_BINDER
-#ifdef DEBUG_BINDER
-#  define DEBUG_PUSH_POP_SYMBOL_ENABLED
-#  define DEBUG_TYPE_SYMBOL_ENABLED
-#endif
-
-#ifdef DEBUG_PUSH_POP_SYMBOL_ENABLED
-#  define DEBUG_PUSH_POP_SYMBOL(sym) \
-     std::cout << __func__ << " " << std::flush; \
-     std::cout << to_string(*sym) << std::endl
-#else
-#  define DEBUG_PUSH_POP_SYMBOL(sym) do {} while (0)
-#endif
-
-#ifdef DEBUG_TYPE_SYMBOL_ENABLED
-#  define DEBUG_TYPE_SYMBOL(sym, tySym) \
-    std::cout << __func__  << " " << to_string(*sym) << ": " << to_string(*tySym) << std::endl;
-#else
-#  define DEBUG_TYPE_SYMBOL(sym, tySym) do {} while (0);
-#endif
-
 
 namespace psy {
 namespace C {
@@ -69,50 +46,52 @@ class SemanticModel;
 /**
  * \brief The Binder class.
  */
-class PSY_C_NON_API Binder final : protected SyntaxVisitor
+class PSY_C_INTERNAL_API Binder final : protected SyntaxVisitor
 {
-    friend class BinderTester;
+public:
+    ~Binder();
 
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(SemanticModel);
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(BinderTester);
+    PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
 
     Binder(SemanticModel* semaModel, const SyntaxTree* tree);
-    ~Binder();
+    Binder(const Binder&) = delete;
+    void operator=(const Binder&) = delete;
 
     void bind();
 
 private:
-    // Unavailable
-    Binder(const Binder&) = delete;
-    void operator=(const Binder&) = delete;
-
     SemanticModel* semaModel_;
 
-    void openScope(ScopeKind scopeK);
-    void closeScope();
-    void closeScopeAndStashIt();
-    void reopenStashedScope();
     std::stack<Scope*> scopes_;
     Scope* stashedScope_;
+    void openScope(ScopeKind scopeK);
+    void closeScope();
+    void closeAndStashScope();
+    void openStashedScope();
 
-    template <class SymT> SymT* pushSym(const SyntaxNode* node, std::unique_ptr<SymT>);
-    void popSym();
     using SymContT = std::stack<Symbol*>;
     SymContT syms_;
+    Symbol* popSym();
+    void pushSym(Symbol*);
+    template <class SymT, class... SymTArgs> SymT* makeAndBindSym(
+            const SyntaxNode* node,
+            SymTArgs... arg);
+    template <class SymT, class... SymTArgs> SymT* makeBindAndPushSym(
+            const SyntaxNode* node,
+            SymTArgs... arg);
+    Action nameSymAtTop(const Identifier* name);
+    Action typeSymAtTopAndPopIt();
 
-    template <class TySymT> TySymT* pushTySym(std::unique_ptr<TySymT>);
-    void popTySym();
-    using TySymContT = std::stack<TypeSymbol*>;
-    TySymContT tySyms_;
+    using TyContT = std::stack<Type*>;
+    TyContT tys_;
+    std::stack<FunctionType*> pendingFunTys_;
+    Type* popTy();
+    void pushTy(Type*);
+    template <class TyT, class... TyTArgs> TyT* makeTy(TyTArgs... args);
 
-    std::stack<FunctionTypeSymbol*> pendingFunTySyms_;
-
-    bool decltorIsOfTypedef_;
-
-    template <class SymT, class... SymTArgs> std::unique_ptr<SymT> makeSymOrTySym(SymTArgs... args);
-    template <class SymT, class... SymTArgs> void makeSymAndPushIt(const SyntaxNode* node, SymTArgs... arg);
-    template <class SymT, class... SymTArgs> void makeTySymAndPushIt(SymTArgs... arg);
-    template <class DecltrT> Action determineContextAndMakeSym(const DecltrT* node);
+    bool decltorIsOfTydef_;
 
     struct DiagnosticsReporter
     {
@@ -145,6 +124,8 @@ private:
     };
 
     DiagnosticsReporter diagReporter_;
+
+    const Identifier* lexemeOrEmptyIdent(const SyntaxToken& tk) const;
 
     //--------------//
     // Declarations //
@@ -203,7 +184,8 @@ private:
     Action visitFunctionDefinition_DONE(const FunctionDefinitionSyntax*);
 
     /* Specifiers */
-    virtual Action visitBuiltinTypeSpecifier(const BuiltinTypeSpecifierSyntax*) override;
+    virtual Action visitBasicTypeSpecifier(const BasicTypeSpecifierSyntax*) override;
+    virtual Action visitVoidTypeSpecifier(const VoidTypeSpecifierSyntax*) override;
     virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax*) override;
     virtual Action visitTagDeclarationAsSpecifier(const TagDeclarationAsSpecifierSyntax*) override;
     virtual Action visitTypedefName(const TypedefNameSyntax*) override;
@@ -219,8 +201,7 @@ private:
     virtual Action visitParameterSuffix(const ParameterSuffixSyntax*) override;
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
-    Action nameSymAtTop(const char* s);
-    Action typeSymAtTopAndPopIt();
+    Action visitSimpleDeclarator_COMMON(const SyntaxNode* node);
 
     //------------//
     // Statements //
@@ -230,33 +211,31 @@ private:
 };
 
 template <class SymT, class... SymTArgs>
-std::unique_ptr<SymT> Binder::makeSymOrTySym(SymTArgs... args)
+SymT* Binder::makeAndBindSym(const SyntaxNode* node, SymTArgs... args)
 {
     std::unique_ptr<SymT> sym(new SymT(tree_,
                                        scopes_.top(),
                                        syms_.top(),
                                        std::forward<SymTArgs>(args)...));
+    return static_cast<SymT*>(semaModel_->keepAndBindDeclSym(node, std::move(sym)));
+}
+
+template <class SymT, class... SymTArgs>
+SymT* Binder::makeBindAndPushSym(const SyntaxNode* node, SymTArgs... args)
+{
+    auto sym = makeAndBindSym<SymT>(node, std::forward<SymTArgs>(args)...);
+    pushSym(sym);
     return sym;
 }
 
-template <class SymT, class... SymTArgs>
-void Binder::makeSymAndPushIt(const SyntaxNode* node, SymTArgs... args)
+template <class TyT, class... TyTArgs>
+TyT* Binder::makeTy(TyTArgs... args)
 {
-    std::unique_ptr<SymT> sym = makeSymOrTySym<SymT>(std::forward<SymTArgs>(args)...);
-    pushSym(node, std::move(sym));
-}
-
-template <class SymT, class... SymTArgs>
-void Binder::makeTySymAndPushIt(SymTArgs... args)
-{
-    std::unique_ptr<SymT> sym = makeSymOrTySym<SymT>(std::forward<SymTArgs>(args)...);
-    pushTySym(std::move(sym));
+    std::unique_ptr<TyT> ty(new TyT(std::forward<TyTArgs>(args)...));
+    return static_cast<TyT*>(semaModel_->keepType(std::move(ty)));
 }
 
 } // C
 } // psy
-
-#undef DEBUG_PUSH_POP_SYMBOL_ENABLED
-#undef DEBUG_TYPE_SYMBOL_ENABLED
 
 #endif

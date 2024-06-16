@@ -145,362 +145,364 @@ std::string PSY_C_API to_string(SyntaxKind kind)
         //--------------//
         // Declarations //
         //--------------//
-        case TranslationUnit:
+        case SyntaxKind::TranslationUnit:
             return "TranslationUnit";
-        case IncompleteDeclaration:
+        case SyntaxKind::IncompleteDeclaration:
             return "IncompleteDeclaration";
-        case StructDeclaration:
+        case SyntaxKind::StructDeclaration:
             return "StructDeclaration";
-        case UnionDeclaration:
+        case SyntaxKind::UnionDeclaration:
             return "UnionDeclaration";
-        case EnumDeclaration:
+        case SyntaxKind::EnumDeclaration:
             return "EnumDeclaration";
-        case EnumeratorDeclaration:
+        case SyntaxKind::EnumeratorDeclaration:
             return "EnumeratorDeclaration";
-        case VariableAndOrFunctionDeclaration:
+        case SyntaxKind::VariableAndOrFunctionDeclaration:
             return "VariableAndOrFunctionDeclaration";
-        case ParameterDeclaration:
+        case SyntaxKind::ParameterDeclaration:
             return "ParameterDeclaration";
-        case FieldDeclaration:
+        case SyntaxKind::FieldDeclaration:
             return "FieldDeclaration";
-        case TypedefDeclaration:
+        case SyntaxKind::TypedefDeclaration:
             return "TypedefDeclaration";
-        case StaticAssertDeclaration:
+        case SyntaxKind::StaticAssertDeclaration:
             return "StaticAssertDeclaration";
-        case FunctionDefinition:
+        case SyntaxKind::FunctionDefinition:
             return "FunctionDefinition";
-        case ExtGNU_AsmStatementDeclaration:
+        case SyntaxKind::ExtGNU_AsmStatementDeclaration:
             return "ExtGNU_AsmStatementDeclaration";
-        case ExtPSY_TemplateDeclaration:
+        case SyntaxKind::ExtPSY_TemplateDeclaration:
             return "ExtPSY_TemplateDeclaration";
-        case ExtKR_ParameterDeclaration:
+        case SyntaxKind::ExtKR_ParameterDeclaration:
             return "ExtKR_ParameterDeclaration";
 
         /* Specifiers */
-        case TypedefStorageClass:
+        case SyntaxKind::TypedefStorageClass:
             return "TypedefStorageClass";
-        case ExternStorageClass:
+        case SyntaxKind::ExternStorageClass:
             return "ExternStorageClass";
-        case StaticStorageClass:
+        case SyntaxKind::StaticStorageClass:
             return "StaticStorageClass";
-        case AutoStorageClass:
+        case SyntaxKind::AutoStorageClass:
             return "AutoStorageClass";
-        case RegisterStorageClass:
+        case SyntaxKind::RegisterStorageClass:
             return "RegisterStorageClass";
-        case ThreadLocalStorageClass:
+        case SyntaxKind::ThreadLocalStorageClass:
             return "ThreadLocalStorageClass";
-        case ConstQualifier:
+        case SyntaxKind::ConstQualifier:
             return "ConstQualifier";
-        case RestrictQualifier:
+        case SyntaxKind::RestrictQualifier:
             return "RestrictQualifier";
-        case VolatileQualifier:
+        case SyntaxKind::VolatileQualifier:
             return "VolatileQualifier";
-        case AtomicQualifier:
+        case SyntaxKind::AtomicQualifier:
             return "AtomicQualifier";
-        case BuiltinTypeSpecifier:
-            return "BuiltinTypeSpecifier";
-        case StructTypeSpecifier:
+        case SyntaxKind::BasicTypeSpecifier:
+            return "BasicTypeSpecifier";
+        case SyntaxKind::VoidTypeSpecifier:
+            return "VoidTypeSpecifier";
+        case SyntaxKind::StructTypeSpecifier:
             return "StructTypeSpecifier";
-        case UnionTypeSpecifier:
+        case SyntaxKind::UnionTypeSpecifier:
             return "UnionTypeSpecifier";
-        case EnumTypeSpecifier:
+        case SyntaxKind::EnumTypeSpecifier:
             return "EnumTypeSpecifier";
-        case AtomicTypeSpecifier:
+        case SyntaxKind::AtomicTypeSpecifier:
             return "AtomicTypeSpecifier";
-        case TagDeclarationAsSpecifier:
+        case SyntaxKind::TagDeclarationAsSpecifier:
             return "TagDeclarationAsSpecifier";
-        case InlineSpecifier:
+        case SyntaxKind::InlineSpecifier:
             return "InlineSpecifier";
-        case NoReturnSpecifier:
+        case SyntaxKind::NoReturnSpecifier:
             return "NoReturnSpecifier";
-        case AlignmentSpecifier:
+        case SyntaxKind::AlignmentSpecifier:
             return "AlignmentSpecifier";
-        case TypedefName:
+        case SyntaxKind::TypedefName:
             return "TypedefName";
-        case ExtGNU_AttributeSpecifier:
+        case SyntaxKind::ExtGNU_AttributeSpecifier:
             return "ExtGNU_AttributeSpecifier";
-        case ExtGNU_Attribute:
+        case SyntaxKind::ExtGNU_Attribute:
             return "ExtGNU_Attribute";
-        case ExtGNU_AsmLabel:
+        case SyntaxKind::ExtGNU_AsmLabel:
             return "ExtGNU_AsmLabel";
-        case ExtGNU_Typeof:
+        case SyntaxKind::ExtGNU_Typeof:
             return "ExtGNU_Typeof";
 
         /* Declarators */
-        case PointerDeclarator:
+        case SyntaxKind::PointerDeclarator:
             return "PointerDeclarator";
-        case IdentifierDeclarator:
+        case SyntaxKind::IdentifierDeclarator:
             return "IdentifierDeclarator";
-        case AbstractDeclarator:
+        case SyntaxKind::AbstractDeclarator:
             return "AbstractDeclarator";
-        case ParenthesizedDeclarator:
+        case SyntaxKind::ParenthesizedDeclarator:
             return "ParenthesizedDeclarator";
-        case ArrayDeclarator:
+        case SyntaxKind::ArrayDeclarator:
             return "ArrayDeclarator";
-        case FunctionDeclarator:
+        case SyntaxKind::FunctionDeclarator:
             return "FunctionDeclarator";
-        case BitfieldDeclarator:
+        case SyntaxKind::BitfieldDeclarator:
             return "BitfieldDeclarator";
-        case SubscriptSuffix:
+        case SyntaxKind::SubscriptSuffix:
             return "SubscriptSuffix";
-        case ParameterSuffix:
+        case SyntaxKind::ParameterSuffix:
             return "ParameterSuffix";
-        case BitfieldDeclaratorSuffix:
+        case SyntaxKind::BitfieldDeclaratorSuffix:
             return "BitfieldDeclaratorSuffix";
 
         /* Initializers */
-        case ExpressionInitializer:
+        case SyntaxKind::ExpressionInitializer:
             return "ExpressionInitializer";
-        case BraceEnclosedInitializer:
+        case SyntaxKind::BraceEnclosedInitializer:
             return "BraceEnclosedInitializer";
-        case DesignatedInitializer:
+        case SyntaxKind::DesignatedInitializer:
             return "DesignatedInitializer";
-        case FieldDesignator:
+        case SyntaxKind::FieldDesignator:
             return "FieldDesignator";
-        case ArrayDesignator:
+        case SyntaxKind::ArrayDesignator:
             return "ArrayDesignator";
 
-        case OffsetOfDesignator:
+        case SyntaxKind::OffsetOfDesignator:
             return "OffsetOfDesignator";
 
         //-------------//
         // Expressions //
         //-------------//
-        case IntegerConstantExpression:
+        case SyntaxKind::IntegerConstantExpression:
             return "IntegerConstantExpression";
-        case FloatingConstantExpression:
+        case SyntaxKind::FloatingConstantExpression:
             return "FloatingConstantExpression";
-        case CharacterConstantExpression:
+        case SyntaxKind::CharacterConstantExpression:
             return "CharacterConstantExpression";
-        case ImaginaryIntegerConstantExpression:
+        case SyntaxKind::ImaginaryIntegerConstantExpression:
             return "ImaginaryIntegerConstantExpression";
-        case ImaginaryFloatingConstantExpression:
+        case SyntaxKind::ImaginaryFloatingConstantExpression:
             return "ImaginaryFloatingConstantExpression";
-        case BooleanConstantExpression:
+        case SyntaxKind::BooleanConstantExpression:
             return "BooleanLiteralExpression";
-        case NULL_ConstantExpression:
+        case SyntaxKind::NULL_ConstantExpression:
             return "NULL_ConstantExpression";
-        case StringLiteralExpression:
+        case SyntaxKind::StringLiteralExpression:
             return "StringLiteralExpression";
-        case ParenthesizedExpression:
+        case SyntaxKind::ParenthesizedExpression:
             return "ParenthesizedExpression";
-        case GenericSelectionExpression:
+        case SyntaxKind::GenericSelectionExpression:
             return "GenericSelectionExpression";
-        case TypedGenericAssociation:
+        case SyntaxKind::TypedGenericAssociation:
             return "GenericTypenameAssociation";
-        case DefaultGenericAssociation:
+        case SyntaxKind::DefaultGenericAssociation:
             return "GenericDefaultAssociation";
-        case ExtGNU_EnclosedCompoundStatementExpression:
+        case SyntaxKind::ExtGNU_EnclosedCompoundStatementExpression:
             return "ExtGNU_EnclosedCompoundStatementExpression";
-        case ExtGNU_ComplexValuedExpression:
+        case SyntaxKind::ExtGNU_ComplexValuedExpression:
             return "ExtGNU_ComplexValuedExpression";
-        case ExtGNU_RealExpression:
+        case SyntaxKind::ExtGNU_RealExpression:
             return "ExtGNU_RealExpression";
-        case ExtGNU_ImagExpression:
+        case SyntaxKind::ExtGNU_ImagExpression:
             return "ExtGNU_ImagExpression";
 
         /* Names */
-        case IdentifierName:
+        case SyntaxKind::IdentifierName:
             return "IdentifierName";
-        case PredefinedName:
+        case SyntaxKind::PredefinedName:
             return "PredefinedName";
 
         /* Unary */
-        case PreIncrementExpression:
+        case SyntaxKind::PreIncrementExpression:
             return "PreIncrementExpression";
-        case PreDecrementExpression:
+        case SyntaxKind::PreDecrementExpression:
             return "PreDecrementExpression";
-        case PostIncrementExpression:
+        case SyntaxKind::PostIncrementExpression:
             return "PostIncrementExpression";
-        case PostDecrementExpression:
+        case SyntaxKind::PostDecrementExpression:
             return "PostDecrementExpression";
-        case UnaryPlusExpression:
+        case SyntaxKind::UnaryPlusExpression:
             return "UnaryPlusExpression";
-        case UnaryMinusExpression:
+        case SyntaxKind::UnaryMinusExpression:
             return "UnaryMinusExpression";
-        case BitwiseNotExpression:
+        case SyntaxKind::BitwiseNotExpression:
             return "BitwiseNotExpression";
-        case LogicalNotExpression:
+        case SyntaxKind::LogicalNotExpression:
             return "LogicalNotExpression";
 
         /* Type trait */
-        case SizeofExpression:
+        case SyntaxKind::SizeofExpression:
             return "SizeofExpression";
-        case AlignofExpression:
+        case SyntaxKind::AlignofExpression:
             return "AlignofExpression";
 
         /* Pointers */
-        case AddressOfExpression:
+        case SyntaxKind::AddressOfExpression:
             return "AddressOfExpression";
-        case PointerIndirectionExpression:
+        case SyntaxKind::PointerIndirectionExpression:
             return "PointerIndirectionExpression";
 
         /* Access */
-        case DirectMemberAccessExpression:
+        case SyntaxKind::DirectMemberAccessExpression:
             return "DirectMemberAccessExpression";
-        case IndirectMemberAccessExpression:
+        case SyntaxKind::IndirectMemberAccessExpression:
             return "IndirectMemberAccessExpression";
-        case ElementAccessExpression:
+        case SyntaxKind::ElementAccessExpression:
             return "ElementAccessExpression";
 
         /* Invocation-like */
-        case CallExpression:
+        case SyntaxKind::CallExpression:
             return "CallExpression";
-        case CompoundLiteralExpression:
+        case SyntaxKind::CompoundLiteralExpression:
             return "CompoundLiteralExpression";
-        case CastExpression:
+        case SyntaxKind::CastExpression:
             return "CastExpression";
-        case VAArgumentExpression:
+        case SyntaxKind::VAArgumentExpression:
             return "VAArgumentExpression";
-        case OffsetOfExpression:
+        case SyntaxKind::OffsetOfExpression:
             return "OffsetOfExpression";
-        case ExtGNU_ChooseExpression:
+        case SyntaxKind::ExtGNU_ChooseExpression:
             return "ExtGNU_ChooseExpression";
 
         /* Binary */
-        case MultiplyExpression:
+        case SyntaxKind::MultiplyExpression:
             return "MultipliyExpression";
-        case DivideExpression:
+        case SyntaxKind::DivideExpression:
             return "DivideExpression";
-        case ModuleExpression:
+        case SyntaxKind::ModuleExpression:
             return "ModuleExpression";
-        case AddExpression:
+        case SyntaxKind::AddExpression:
             return "AddExpression";
-        case SubstractExpression:
+        case SyntaxKind::SubstractExpression:
             return "SubstractExpression";
-        case LeftShiftExpression:
+        case SyntaxKind::LeftShiftExpression:
             return "LeftShiftExpression";
-        case RightShiftExpression:
+        case SyntaxKind::RightShiftExpression:
             return "RightShiftExpression";
-        case LessThanExpression:
+        case SyntaxKind::LessThanExpression:
             return "LessThanExpression";
-        case LessThanOrEqualExpression:
+        case SyntaxKind::LessThanOrEqualExpression:
             return "LessThanOrEqualExpression";
-        case GreaterThanExpression:
+        case SyntaxKind::GreaterThanExpression:
             return "GreaterThanExpression";
-        case GreaterThanOrEqualExpression:
+        case SyntaxKind::GreaterThanOrEqualExpression:
             return "GreaterThanOrEqualExpression";
-        case EqualsExpression:
+        case SyntaxKind::EqualsExpression:
             return "EqualsExpression";
-        case NotEqualsExpression:
+        case SyntaxKind::NotEqualsExpression:
             return "NotEqualsExpression";
-        case BitwiseANDExpression:
+        case SyntaxKind::BitwiseANDExpression:
             return "BitwiseExpression";
-        case BitwiseXORExpression:
+        case SyntaxKind::BitwiseXORExpression:
             return "ExclusiveOrExpression";
-        case BitwiseORExpression:
+        case SyntaxKind::BitwiseORExpression:
             return "BitwiseOrExpression";
-        case LogicalANDExpression:
+        case SyntaxKind::LogicalANDExpression:
             return "LogicalAndExpression";
-        case LogicalORExpression:
+        case SyntaxKind::LogicalORExpression:
             return "LogicalOrExpression";
-        case ConditionalExpression:
+        case SyntaxKind::ConditionalExpression:
             return "ConditionalExpression";
 
         /* Assignment */
-        case BasicAssignmentExpression:
+        case SyntaxKind::BasicAssignmentExpression:
             return "BasicAssignmentExpression";
-        case MultiplyAssignmentExpression:
+        case SyntaxKind::MultiplyAssignmentExpression:
             return "MultiplyAssignmentExpression";
-        case DivideAssignmentExpression:
+        case SyntaxKind::DivideAssignmentExpression:
             return "DivideAssignmentExpression";
-        case ModuloAssignmentExpression:
+        case SyntaxKind::ModuloAssignmentExpression:
             return "ModuloAssignmentExpression";
-        case AddAssignmentExpression:
+        case SyntaxKind::AddAssignmentExpression:
             return "AddAssignmentExpression";
-        case SubtractAssignmentExpression:
+        case SyntaxKind::SubtractAssignmentExpression:
             return "SubtractAssignmentExpression";
-        case LeftShiftAssignmentExpression:
+        case SyntaxKind::LeftShiftAssignmentExpression:
             return "LeftShiftAssignmentExpression";
-        case RightShiftAssignmentExpression:
+        case SyntaxKind::RightShiftAssignmentExpression:
             return "RightShiftAssignmentExpression";
-        case AndAssignmentExpression:
+        case SyntaxKind::AndAssignmentExpression:
             return "AndAssignmentExpression";
-        case ExclusiveOrAssignmentExpression:
+        case SyntaxKind::ExclusiveOrAssignmentExpression:
             return "ExclusiveOrAssignmentExpression";
-        case OrAssignmentExpression:
+        case SyntaxKind::OrAssignmentExpression:
             return "OrAssignmentExpression";
 
         /* Sequencing */
-        case SequencingExpression:
+        case SyntaxKind::SequencingExpression:
             return "SequencingExpression";
 
         //------------//
         // Statements //
         //------------//
-        case CompoundStatement:
+        case SyntaxKind::CompoundStatement:
             return "CompoundStatement";
-        case DeclarationStatement:
+        case SyntaxKind::DeclarationStatement:
             return "DeclarationStatement";
-        case ExpressionStatement:
+        case SyntaxKind::ExpressionStatement:
             return "ExpressionStatement";
-        case IdentifierLabelStatement:
+        case SyntaxKind::IdentifierLabelStatement:
             return "IdentifierLabelStatement";
-        case DefaultLabelStatement:
+        case SyntaxKind::DefaultLabelStatement:
             return "DefaultLabelStatement";
-        case CaseLabelStatement:
+        case SyntaxKind::CaseLabelStatement:
             return "CaseLabelStatement";
-        case DefaultStatement:
+        case SyntaxKind::DefaultStatement:
             return "DefaultStatement";
-        case IfStatement:
+        case SyntaxKind::IfStatement:
             return "IfStatement";
-        case SwitchStatement:
+        case SyntaxKind::SwitchStatement:
             return "SwitchStatement";
-        case WhileStatement:
+        case SyntaxKind::WhileStatement:
             return "WhileStatement";
-        case DoStatement:
+        case SyntaxKind::DoStatement:
             return "DoStatement";
-        case ForStatement:
+        case SyntaxKind::ForStatement:
             return "ForStatement";
-        case GotoStatement:
+        case SyntaxKind::GotoStatement:
             return "GotoStatement";
-        case ContinueStatement:
+        case SyntaxKind::ContinueStatement:
             return "ContinueStatement";
-        case BreakStatement:
+        case SyntaxKind::BreakStatement:
             return "BreakStatement";
-        case ReturnStatement:
+        case SyntaxKind::ReturnStatement:
             return "ReturnStatement";
-        case ExtGNU_AsmStatement:
+        case SyntaxKind::ExtGNU_AsmStatement:
             return "ExtGNU_AsmStatement";
-        case ExtGNU_AsmVolatileQualifier:
+        case SyntaxKind::ExtGNU_AsmVolatileQualifier:
             return "ExtGNU_AsmVolatileQualifier";
-        case ExtGNU_AsmInlineQualifier:
+        case SyntaxKind::ExtGNU_AsmInlineQualifier:
             return "ExtGNU_AsmInlineQualifier";
-        case ExtGNU_AsmGotoQualifier:
+        case SyntaxKind::ExtGNU_AsmGotoQualifier:
             return "ExtGNU_AsmGotoQualifier";
-        case ExtGNU_AsmInputOperand:
+        case SyntaxKind::ExtGNU_AsmInputOperand:
             return "ExtGNU_AsmInputOperand";
-        case ExtGNU_AsmOutputOperand:
+        case SyntaxKind::ExtGNU_AsmOutputOperand:
             return "ExtGNU_AsmOutputOperand";
 
         //--------//
         // Common //
         //--------//
-        case TypeName:
+        case SyntaxKind::TypeName:
             return "TypeName";
-        case ExpressionAsTypeReference:
+        case SyntaxKind::ExpressionAsTypeReference:
             return "ExpressionAsTypeReference";
-        case TypeNameAsTypeReference:
+        case SyntaxKind::TypeNameAsTypeReference:
             return "TypeNameAsTypeReference";
 
         //-------------//
         // Ambiguities //
         //-------------//
-        case AmbiguousTypeNameOrExpressionAsTypeReference:
+        case SyntaxKind::AmbiguousTypeNameOrExpressionAsTypeReference:
             return "AmbiguousTypeNameOrExpressionAsTypeReference";
-        case AmbiguousCastOrBinaryExpression:
+        case SyntaxKind::AmbiguousCastOrBinaryExpression:
             return "AmbiguousCastOrBinaryExpression";
-        case AmbiguousCallOrVariableDeclaration:
+        case SyntaxKind::AmbiguousCallOrVariableDeclaration:
             return "AmbiguousCallOrVariableDeclaration";
-        case AmbiguousMultiplicationOrPointerDeclaration:
+        case SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration:
             return "AmbiguousMultiplicationOrPointerDeclaration";
 
 //=================================================================== Misc
 
-        case UnknownSyntax:
+        case SyntaxKind::UnknownSyntax:
             return "<UNKNOWN>";
         default:
-            return tokenNames[kind];
+            return tokenNames[static_cast<std::uint16_t>(kind)];
     }
 }
 

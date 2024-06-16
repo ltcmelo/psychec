@@ -25,7 +25,7 @@
 
 #include "syntax/SyntaxVisitor.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 
 #include <cstdint>
 #include <string>
@@ -34,19 +34,19 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API Disambiguator : public SyntaxVisitor
+class PSY_C_INTERNAL_API Disambiguator : public SyntaxVisitor
 {
 public:
     virtual ~Disambiguator();
 
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(Reparser);
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Reparser);
 
     bool disambiguate();
 
     std::vector<const SyntaxNode*> persistentAmbiguities() const;
 
-PSY_INTERNAL_AND_EXTENSIBLE:
+protected:
     Disambiguator(SyntaxTree* tree);
 
     enum class Disambiguation : std::int8_t

@@ -21,7 +21,7 @@
 #include "BinderTester.h"
 #include "ParserTester.h"
 
-#include "syntax/SyntaxLexeme_ALL.h"
+#include "syntax/Lexeme_ALL.h"
 #include "parser/Unparser.h"
 
 #include "syntax/SyntaxNodes.h"
@@ -40,10 +40,8 @@ void BinderTester::case3001()
     bind("struct x { int y ; } ;",
          Expectation()
          .binding(DeclSummary()
-                  .Type("struct x", NamedTypeKind::Structure)
-                  .withNameKind(SymbolNameKind::Tag)
+                  .Type("x", TypeDeclarationSymbolKind::Struct)
                   .withNameSpaceKind(NameSpaceKind::Tags)
-                  .withTagChoice(TagSymbolName::TagChoice::Struct)
                   .withScopeKind(ScopeKind::File)));
 }
 
@@ -52,10 +50,8 @@ void BinderTester::case3002()
     bind("union x { int y ; } ;",
          Expectation()
          .binding(DeclSummary()
-                  .Type("union x", NamedTypeKind::Union)
-                  .withNameKind(SymbolNameKind::Tag)
+                  .Type("x", TypeDeclarationSymbolKind::Union)
                   .withNameSpaceKind(NameSpaceKind::Tags)
-                  .withTagChoice(TagSymbolName::TagChoice::Union)
                   .withScopeKind(ScopeKind::File)));
 }
 
@@ -112,14 +108,12 @@ void BinderTester::case3050()
     bind("enum x { y } ;",
          Expectation()
          .binding(DeclSummary()
-                  .Type("enum x", NamedTypeKind::Enumeration)
-                  .withNameKind(SymbolNameKind::Tag)
+                  .Type("x", TypeDeclarationSymbolKind::Enum)
                   .withNameSpaceKind(NameSpaceKind::Tags)
-                  .withTagChoice(TagSymbolName::TagChoice::Enum)
                   .withScopeKind(ScopeKind::File))
          .binding(DeclSummary()
-                  .Value("y", ValueKind::Enumerator)
-                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                  .Value("y", ObjectDeclarationSymbolKind::Enumerator)
+                  .Ty.Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case3051()
@@ -127,17 +121,15 @@ void BinderTester::case3051()
     bind("enum x { y , z } ;",
          Expectation()
          .binding(DeclSummary()
-                  .Type("enum x", NamedTypeKind::Enumeration)
-                  .withNameKind(SymbolNameKind::Tag)
+                  .Type("x", TypeDeclarationSymbolKind::Enum)
                   .withNameSpaceKind(NameSpaceKind::Tags)
-                  .withTagChoice(TagSymbolName::TagChoice::Enum)
                   .withScopeKind(ScopeKind::File))
          .binding(DeclSummary()
-                  .Value("y", ValueKind::Enumerator)
-                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+                  .Value("y", ObjectDeclarationSymbolKind::Enumerator)
+                  .Ty.Basic(BasicTypeKind::Int))
          .binding(DeclSummary()
-                  .Value("z", ValueKind::Enumerator)
-                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                  .Value("z", ObjectDeclarationSymbolKind::Enumerator)
+                  .Ty.Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case3052()
@@ -145,17 +137,15 @@ void BinderTester::case3052()
     bind("enum x { y = 0 , z } ;",
          Expectation()
          .binding(DeclSummary()
-                  .Type("enum x", NamedTypeKind::Enumeration)
-                  .withNameKind(SymbolNameKind::Tag)
+                  .Type("x", TypeDeclarationSymbolKind::Enum)
                   .withNameSpaceKind(NameSpaceKind::Tags)
-                  .withTagChoice(TagSymbolName::TagChoice::Enum)
                   .withScopeKind(ScopeKind::File))
          .binding(DeclSummary()
-                  .Value("y", ValueKind::Enumerator)
-                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+                  .Value("y", ObjectDeclarationSymbolKind::Enumerator)
+                  .Ty.Basic(BasicTypeKind::Int))
          .binding(DeclSummary()
-                  .Value("z", ValueKind::Enumerator)
-                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                  .Value("z", ObjectDeclarationSymbolKind::Enumerator)
+                  .Ty.Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case3053()
@@ -163,20 +153,18 @@ void BinderTester::case3053()
     bind("enum x { y , z , w } ;",
          Expectation()
          .binding(DeclSummary()
-                  .Type("enum x", NamedTypeKind::Enumeration)
-                  .withNameKind(SymbolNameKind::Tag)
+                  .Type("x", TypeDeclarationSymbolKind::Enum)
                   .withNameSpaceKind(NameSpaceKind::Tags)
-                  .withTagChoice(TagSymbolName::TagChoice::Enum)
                   .withScopeKind(ScopeKind::File))
          .binding(DeclSummary()
-                  .Value("y", ValueKind::Enumerator)
-                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+                  .Value("y", ObjectDeclarationSymbolKind::Enumerator)
+                  .Ty.Basic(BasicTypeKind::Int))
          .binding(DeclSummary()
-                  .Value("z", ValueKind::Enumerator)
-                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+                  .Value("z", ObjectDeclarationSymbolKind::Enumerator)
+                  .Ty.Basic(BasicTypeKind::Int))
          .binding(DeclSummary()
-                  .Value("w", ValueKind::Enumerator)
-                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                  .Value("w", ObjectDeclarationSymbolKind::Enumerator)
+                  .Ty.Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case3054()
@@ -184,20 +172,18 @@ void BinderTester::case3054()
     bind("enum x { y , z = 0 , w } ;",
          Expectation()
          .binding(DeclSummary()
-                  .Type("enum x", NamedTypeKind::Enumeration)
-                  .withNameKind(SymbolNameKind::Tag)
+                  .Type("x", TypeDeclarationSymbolKind::Enum)
                   .withNameSpaceKind(NameSpaceKind::Tags)
-                  .withTagChoice(TagSymbolName::TagChoice::Enum)
                   .withScopeKind(ScopeKind::File))
          .binding(DeclSummary()
-                  .Value("y", ValueKind::Enumerator)
-                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+                  .Value("y", ObjectDeclarationSymbolKind::Enumerator)
+                  .Ty.Basic(BasicTypeKind::Int))
          .binding(DeclSummary()
-                  .Value("z", ValueKind::Enumerator)
-                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int))
+                  .Value("z", ObjectDeclarationSymbolKind::Enumerator)
+                  .Ty.Basic(BasicTypeKind::Int))
          .binding(DeclSummary()
-                  .Value("w", ValueKind::Enumerator)
-                  .TySpec.basis("int", NamedTypeKind::Builtin, BuiltinTypeKind::Int)));
+                  .Value("w", ObjectDeclarationSymbolKind::Enumerator)
+                  .Ty.Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case3055(){}
@@ -251,8 +237,7 @@ void BinderTester::case3100()
     bind("typedef int x ;",
          Expectation()
              .binding(DeclSummary()
-                          .Type("x", NamedTypeKind::Synonym)
-                          .withNameKind(SymbolNameKind::Plain)
+                          .Type("x", TypeDeclarationSymbolKind::Typedef)
                           .withNameSpaceKind(NameSpaceKind::Ordinary)
                           .withScopeKind(ScopeKind::File)));
 }
@@ -262,8 +247,7 @@ void BinderTester::case3101()
     bind("typedef int * x ;",
          Expectation()
              .binding(DeclSummary()
-                          .Type("x", NamedTypeKind::Synonym)
-                          .withNameKind(SymbolNameKind::Plain)
+                          .Type("x", TypeDeclarationSymbolKind::Typedef)
                           .withNameSpaceKind(NameSpaceKind::Ordinary)
                           .withScopeKind(ScopeKind::File)));
 }
@@ -273,8 +257,7 @@ void BinderTester::case3102()
     bind("typedef int ( * x ) ( ) ;",
          Expectation()
              .binding(DeclSummary()
-                          .Type("x", NamedTypeKind::Synonym)
-                          .withNameKind(SymbolNameKind::Plain)
+                          .Type("x", TypeDeclarationSymbolKind::Typedef)
                           .withNameSpaceKind(NameSpaceKind::Ordinary)
                           .withScopeKind(ScopeKind::File)));
 }
@@ -284,13 +267,11 @@ void BinderTester::case3103()
     bind("typedef int x , y ;",
          Expectation()
              .binding(DeclSummary()
-                          .Type("x", NamedTypeKind::Synonym)
-                          .withNameKind(SymbolNameKind::Plain)
+                          .Type("x", TypeDeclarationSymbolKind::Typedef)
                           .withNameSpaceKind(NameSpaceKind::Ordinary)
                           .withScopeKind(ScopeKind::File))
              .binding(DeclSummary()
-                          .Type("y", NamedTypeKind::Synonym)
-                          .withNameKind(SymbolNameKind::Plain)
+                          .Type("y", TypeDeclarationSymbolKind::Typedef)
                           .withNameSpaceKind(NameSpaceKind::Ordinary)
                           .withScopeKind(ScopeKind::File)));
 }
@@ -300,13 +281,11 @@ void BinderTester::case3104()
     bind("typedef int * x , y ;",
          Expectation()
              .binding(DeclSummary()
-                          .Type("x", NamedTypeKind::Synonym)
-                          .withNameKind(SymbolNameKind::Plain)
+                          .Type("x", TypeDeclarationSymbolKind::Typedef)
                           .withNameSpaceKind(NameSpaceKind::Ordinary)
                           .withScopeKind(ScopeKind::File))
              .binding(DeclSummary()
-                          .Type("y", NamedTypeKind::Synonym)
-                          .withNameKind(SymbolNameKind::Plain)
+                          .Type("y", TypeDeclarationSymbolKind::Typedef)
                           .withNameSpaceKind(NameSpaceKind::Ordinary)
                           .withScopeKind(ScopeKind::File)));
 }
@@ -316,8 +295,7 @@ void BinderTester::case3105()
     bind("typedef x y ;",
          Expectation()
              .binding(DeclSummary()
-                          .Type("y", NamedTypeKind::Synonym)
-                          .withNameKind(SymbolNameKind::Plain)
+                          .Type("y", TypeDeclarationSymbolKind::Typedef)
                           .withNameSpaceKind(NameSpaceKind::Ordinary)
                           .withScopeKind(ScopeKind::File)));
 }
@@ -327,8 +305,7 @@ void BinderTester::case3106()
     bind("typedef const int x ;",
          Expectation()
              .binding(DeclSummary()
-                          .Type("x", NamedTypeKind::Synonym)
-                          .withNameKind(SymbolNameKind::Plain)
+                          .Type("x", TypeDeclarationSymbolKind::Typedef)
                           .withNameSpaceKind(NameSpaceKind::Ordinary)
                           .withScopeKind(ScopeKind::File)));
 }
@@ -338,8 +315,7 @@ void BinderTester::case3107()
     bind("typedef int const x ;",
          Expectation()
              .binding(DeclSummary()
-                          .Type("x", NamedTypeKind::Synonym)
-                          .withNameKind(SymbolNameKind::Plain)
+                          .Type("x", TypeDeclarationSymbolKind::Typedef)
                           .withNameSpaceKind(NameSpaceKind::Ordinary)
                           .withScopeKind(ScopeKind::File)));
 }

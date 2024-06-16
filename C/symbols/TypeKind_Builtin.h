@@ -50,7 +50,7 @@ namespace C {
  * This API is inspired by that of \c Microsoft.CodeAnalysis.SpecialType
  * from Roslyn, the .NET Compiler Platform.
  */
-enum class PSY_C_API BuiltinTypeKind : std::uint8_t
+enum class PSY_C_API BuiltinTypeKindOLD : std::uint8_t
 {
     UNSPECIFIED = 0,
 
@@ -85,63 +85,63 @@ enum class PSY_C_API BuiltinTypeKind : std::uint8_t
     LongDoubleComplex
 };
 
-inline std::string PSY_C_API canonicalText(BuiltinTypeKind builtTyKind)
+inline std::string PSY_C_API canonicalText(BuiltinTypeKindOLD builtTyK)
 {
-    switch (builtTyKind) {
-        case BuiltinTypeKind::Void:
+    switch (builtTyK) {
+        case BuiltinTypeKindOLD::Void:
                 return "void";
-        case BuiltinTypeKind::Char:
+        case BuiltinTypeKindOLD::Char:
                 return "char";
-        case BuiltinTypeKind::Char_S:
+        case BuiltinTypeKindOLD::Char_S:
                 return "signed char";
-        case BuiltinTypeKind::Char_U:
+        case BuiltinTypeKindOLD::Char_U:
                 return "unsigned char";
-        case BuiltinTypeKind::Short:
+        case BuiltinTypeKindOLD::Short:
                 return "short";
-        case BuiltinTypeKind::Short_S:
+        case BuiltinTypeKindOLD::Short_S:
                 return "signed short";
-        case BuiltinTypeKind::Short_U:
+        case BuiltinTypeKindOLD::Short_U:
                 return "unsigned short";
-        case BuiltinTypeKind::Int:
+        case BuiltinTypeKindOLD::Int:
                 return "int";
-        case BuiltinTypeKind::Int_S:
+        case BuiltinTypeKindOLD::Int_S:
                 return "signed int";
-        case BuiltinTypeKind::Int_U:
+        case BuiltinTypeKindOLD::Int_U:
                 return "unsigned int";
-        case BuiltinTypeKind::Long:
+        case BuiltinTypeKindOLD::Long:
                 return "long";
-        case BuiltinTypeKind::Long_S:
+        case BuiltinTypeKindOLD::Long_S:
                 return "signed long";
-        case BuiltinTypeKind::Long_U:
+        case BuiltinTypeKindOLD::Long_U:
                 return "unsigned long";
-        case BuiltinTypeKind::LongLong:
+        case BuiltinTypeKindOLD::LongLong:
                 return "long long";
-        case BuiltinTypeKind::LongLong_S:
+        case BuiltinTypeKindOLD::LongLong_S:
                 return "signed long long";
-        case BuiltinTypeKind::LongLong_U:
+        case BuiltinTypeKindOLD::LongLong_U:
                 return "unsigned long long";
-        case BuiltinTypeKind::Float:
+        case BuiltinTypeKindOLD::Float:
                 return "float";
-        case BuiltinTypeKind::Double:
+        case BuiltinTypeKindOLD::Double:
                 return "double";
-        case BuiltinTypeKind::LongDouble:
+        case BuiltinTypeKindOLD::LongDouble:
                 return "long double";
-        case BuiltinTypeKind::Bool:
+        case BuiltinTypeKindOLD::Bool:
                 return "_Bool";
-        case BuiltinTypeKind::FloatComplex:
+        case BuiltinTypeKindOLD::FloatComplex:
                 return "float _Complex";
-        case BuiltinTypeKind::DoubleComplex:
+        case BuiltinTypeKindOLD::DoubleComplex:
                 return "double _Complex";
-        case BuiltinTypeKind::LongDoubleComplex:
+        case BuiltinTypeKindOLD::LongDoubleComplex:
                 return "long double _Complex";
         default:
             PSY_ESCAPE_VIA_RETURN("<INVALID or UNSPECIFIED BuiltinTypeKind>");
     }
 }
 
-inline std::string PSY_C_API to_string(BuiltinTypeKind builtTyKind)
+inline std::string PSY_C_API to_string(BuiltinTypeKindOLD builtTyK)
 {
-    return canonicalText(builtTyKind);
+    return canonicalText(builtTyK);
 }
 
 } // C

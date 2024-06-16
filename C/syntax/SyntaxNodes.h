@@ -68,7 +68,7 @@
     using SyntaxNode::SyntaxNode;
 #define AST_G_NODE_1K(NODE) \
     AST_G_NODE__COMMON__(NODE) \
-    NODE##Syntax(SyntaxTree* tree) : SyntaxNode(tree, NODE) {} \
+    NODE##Syntax(SyntaxTree* tree) : SyntaxNode(tree, SyntaxKind::NODE) {} \
     DISPATCH_VISIT(NODE)
 #define AST_G_NODE_NK(NODE) \
     AST_G_NODE__COMMON__(NODE) \
@@ -80,7 +80,7 @@
     using BASE_NODE##Syntax::BASE_NODE##Syntax;
 #define AST_NODE_1K(NODE, BASE_NODE) \
     AST_NODE__COMMON__(NODE, BASE_NODE) \
-    NODE##Syntax(SyntaxTree* tree) : BASE_NODE##Syntax(tree, NODE) {} \
+    NODE##Syntax(SyntaxTree* tree) : BASE_NODE##Syntax(tree, SyntaxKind::NODE) {} \
     DISPATCH_VISIT(NODE)
 #define AST_NODE_NK(NODE, BASE_NODE) \
     AST_NODE__COMMON__(NODE, BASE_NODE) \

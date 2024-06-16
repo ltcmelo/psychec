@@ -21,9 +21,10 @@
 
 #include "Compilation.h"
 
-#include "Assembly.h"
 #include "SemanticModel.h"
 #include "SyntaxTree.h"
+
+#include "symbols/Symbol_ALL.h"
 
 #include <algorithm>
 #include <unordered_map>
@@ -35,12 +36,12 @@ struct Compilation::CompilationImpl
 {
     CompilationImpl(Compilation* q)
         : Q_(q)
-        , assembly_(new Assembly)
+        , program_(new Program)
     {}
 
     Compilation* Q_;
     std::string id_;
-    std::unique_ptr<Assembly> assembly_;
+    std::unique_ptr<Program> program_;
     std::unordered_map<const SyntaxTree*, bool> isDirty_;
     std::unordered_map<const SyntaxTree*, std::unique_ptr<SemanticModel>> semaModels_;
 };
@@ -53,7 +54,6 @@ Compilation::~Compilation()
 {
     for (const auto& kv : P->semaModels_) {
         auto tree = kv.first;
-
         auto it = P->semaModels_.find(tree);
         if (it == P->semaModels_.end())
             continue;
@@ -68,14 +68,14 @@ std::unique_ptr<Compilation> Compilation::create(const std::string& id)
     return compilation;
 }
 
-const Assembly* Compilation::assembly() const
+const Program* Compilation::program() const
 {
-    return P->assembly_.get();
+    return P->program_.get();
 }
 
-Assembly* Compilation::assembly()
+Program* Compilation::program()
 {
-    return P->assembly_.get();
+    return P->program_.get();
 }
 
 void Compilation::addSyntaxTree(const SyntaxTree* tree)
@@ -108,7 +108,7 @@ std::vector<const SyntaxTree*> Compilation::syntaxTrees() const
 const SemanticModel* Compilation::semanticModel(const SyntaxTree* tree) const
 {
     if (P->isDirty_[tree]) {
-        // TODO: Remove from the assembly the symbols associated
+        // TODO: Remove from the program the symbols associated
         // with the given syntax tree.
         P->semaModels_[tree].reset(new SemanticModel(tree, const_cast<Compilation*>(this)));
         P->isDirty_[tree] = false;

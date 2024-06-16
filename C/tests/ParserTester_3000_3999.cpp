@@ -31,22 +31,22 @@ using namespace C;
 void ParserTester::case3000()
 {
     parseExpression("va_arg ( x , int )",
-                    Expectation().AST( { VAArgumentExpression,
-                                         IdentifierName,
-                                         TypeName,
-                                         BuiltinTypeSpecifier,
-                                         AbstractDeclarator }));
+                    Expectation().AST( { SyntaxKind::VAArgumentExpression,
+                                         SyntaxKind::IdentifierName,
+                                         SyntaxKind::TypeName,
+                                         SyntaxKind::BasicTypeSpecifier,
+                                         SyntaxKind::AbstractDeclarator }));
 
 }
 
 void ParserTester::case3001()
 {
     parseExpression("va_arg ( x , y )",
-                    Expectation().AST( { VAArgumentExpression,
-                                         IdentifierName,
-                                         TypeName,
-                                         TypedefName,
-                                         AbstractDeclarator }));
+                    Expectation().AST( { SyntaxKind::VAArgumentExpression,
+                                         SyntaxKind::IdentifierName,
+                                         SyntaxKind::TypeName,
+                                         SyntaxKind::TypedefName,
+                                         SyntaxKind::AbstractDeclarator }));
 }
 
 void ParserTester::case3002()
@@ -92,47 +92,47 @@ void ParserTester::case3009()
 void ParserTester::case3010()
 {
     parseExpression("offsetof ( struct x , y )",
-                    Expectation().AST( { OffsetOfExpression,
-                                         TypeName,
-                                         StructTypeSpecifier,
-                                         AbstractDeclarator,
-                                         OffsetOfDesignator }));
+                    Expectation().AST( { SyntaxKind::OffsetOfExpression,
+                                         SyntaxKind::TypeName,
+                                         SyntaxKind::StructTypeSpecifier,
+                                         SyntaxKind::AbstractDeclarator,
+                                         SyntaxKind::OffsetOfDesignator }));
 }
 
 void ParserTester::case3011()
 {
     parseExpression("offsetof ( struct x , y . z )",
-                    Expectation().AST( { OffsetOfExpression,
-                                         TypeName,
-                                         StructTypeSpecifier,
-                                         AbstractDeclarator,
-                                         OffsetOfDesignator,
-                                         FieldDesignator }));
+                    Expectation().AST( { SyntaxKind::OffsetOfExpression,
+                                         SyntaxKind::TypeName,
+                                         SyntaxKind::StructTypeSpecifier,
+                                         SyntaxKind::AbstractDeclarator,
+                                         SyntaxKind::OffsetOfDesignator,
+                                         SyntaxKind::FieldDesignator }));
 }
 
 void ParserTester::case3012()
 {
     parseExpression("offsetof ( struct x , y [ 0 ] )",
-                    Expectation().AST( { OffsetOfExpression,
-                                         TypeName,
-                                         StructTypeSpecifier,
-                                         AbstractDeclarator,
-                                         OffsetOfDesignator,
-                                         ArrayDesignator,
-                                         IntegerConstantExpression }));
+                    Expectation().AST( { SyntaxKind::OffsetOfExpression,
+                                         SyntaxKind::TypeName,
+                                         SyntaxKind::StructTypeSpecifier,
+                                         SyntaxKind::AbstractDeclarator,
+                                         SyntaxKind::OffsetOfDesignator,
+                                         SyntaxKind::ArrayDesignator,
+                                         SyntaxKind::IntegerConstantExpression }));
 }
 
 void ParserTester::case3013()
 {
     parseExpression("offsetof ( struct x , y  [ 0 ] . z )",
-                    Expectation().AST( { OffsetOfExpression,
-                                         TypeName,
-                                         StructTypeSpecifier,
-                                         AbstractDeclarator,
-                                         OffsetOfDesignator,
-                                         ArrayDesignator,
-                                         IntegerConstantExpression,
-                                         FieldDesignator }));
+                    Expectation().AST( { SyntaxKind::OffsetOfExpression,
+                                         SyntaxKind::TypeName,
+                                         SyntaxKind::StructTypeSpecifier,
+                                         SyntaxKind::AbstractDeclarator,
+                                         SyntaxKind::OffsetOfDesignator,
+                                         SyntaxKind::ArrayDesignator,
+                                         SyntaxKind::IntegerConstantExpression,
+                                         SyntaxKind::FieldDesignator }));
 }
 
 void ParserTester::case3014()
@@ -168,39 +168,39 @@ void ParserTester::case3019()
 void ParserTester::case3020()
 {
     parseExpression("__func__",
-                    Expectation().AST( { PredefinedName }));
+                    Expectation().AST( { SyntaxKind::PredefinedName }));
 }
 
 void ParserTester::case3021()
 {
     parseExpression("(__func__)",
-                    Expectation().AST( { ParenthesizedExpression,
-                                         PredefinedName }));
+                    Expectation().AST( { SyntaxKind::ParenthesizedExpression,
+                                         SyntaxKind::PredefinedName }));
 }
 
 void ParserTester::case3022()
 {
     parseExpression("sizeof( __func__ )",
-                    Expectation().AST( { SizeofExpression,
-                                         ExpressionAsTypeReference,
-                                         ParenthesizedExpression,
-                                         PredefinedName }));
+                    Expectation().AST( { SyntaxKind::SizeofExpression,
+                                         SyntaxKind::ExpressionAsTypeReference,
+                                         SyntaxKind::ParenthesizedExpression,
+                                         SyntaxKind::PredefinedName }));
 }
 
 void ParserTester::case3023()
 {
     parseExpression("sizeof __func__",
-                    Expectation().AST( { SizeofExpression,
-                                         ExpressionAsTypeReference,
-                                         PredefinedName }));
+                    Expectation().AST( { SyntaxKind::SizeofExpression,
+                                         SyntaxKind::ExpressionAsTypeReference,
+                                         SyntaxKind::PredefinedName }));
 }
 
 void ParserTester::case3024()
 {
     parseExpression("x = __func__",
-                    Expectation().AST( { BasicAssignmentExpression,
-                                         IdentifierName,
-                                         PredefinedName }));
+                    Expectation().AST( { SyntaxKind::BasicAssignmentExpression,
+                                         SyntaxKind::IdentifierName,
+                                         SyntaxKind::PredefinedName }));
 }
 
 void ParserTester::case3025()

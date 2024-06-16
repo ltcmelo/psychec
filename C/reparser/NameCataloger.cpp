@@ -143,13 +143,13 @@ SyntaxVisitor::Action NameCataloger::visitAmbiguousExpressionOrDeclarationStatem
 {
     auto expr = node->expressionStatement()->expression();
     switch (expr->kind()) {
-        case MultiplyExpression: {
+        case SyntaxKind::MultiplyExpression: {
             auto binExpr = expr->asBinaryExpression();
             visit(binExpr->right());
             break;
         }
 
-        case CallExpression: {
+        case SyntaxKind::CallExpression: {
             auto callExpr = expr->asCallExpression();
             visit(callExpr->arguments()->value);
             break;

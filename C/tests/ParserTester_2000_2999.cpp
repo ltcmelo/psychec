@@ -31,9 +31,9 @@ using namespace C;
 void ParserTester::case2000()
 {
     parseStatement("x : 1 ; ",
-                   Expectation().AST( { IdentifierLabelStatement,
-                                        ExpressionStatement,
-                                        IntegerConstantExpression }));
+                   Expectation().AST( { SyntaxKind::IdentifierLabelStatement,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::IntegerConstantExpression }));
 }
 
 void ParserTester::case2001()
@@ -46,7 +46,7 @@ void ParserTester::case2001()
 void ParserTester::case2002()
 {
     parseStatement("goto x ;",
-                   Expectation().AST( { GotoStatement }));
+                   Expectation().AST( { SyntaxKind::GotoStatement }));
 }
 
 void ParserTester::case2003()
@@ -143,7 +143,7 @@ void ParserTester::case2019()
 void ParserTester::case2020()
 {
     parseStatement("{ }",
-                   Expectation().AST( { CompoundStatement }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case2021()
@@ -162,19 +162,19 @@ void ParserTester::case2022()
 void ParserTester::case2023()
 {
     parseStatement("{ { } }",
-                   Expectation().AST( { CompoundStatement,
-                                        CompoundStatement }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case2024()
 {
     parseDeclaration("void x ( ) { }",
-                     Expectation().AST( { FunctionDefinition,
-                                          BuiltinTypeSpecifier,
-                                          FunctionDeclarator,
-                                          IdentifierDeclarator,
-                                          ParameterSuffix,
-                                          CompoundStatement }));
+                     Expectation().AST( { SyntaxKind::FunctionDefinition,
+                                          SyntaxKind::VoidTypeSpecifier,
+                                          SyntaxKind::FunctionDeclarator,
+                                          SyntaxKind::IdentifierDeclarator,
+                                          SyntaxKind::ParameterSuffix,
+                                          SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case2025()
@@ -428,29 +428,29 @@ void ParserTester::case2099() {}
 void ParserTester::case2100()
 {
     parseStatement("{ x ++ ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        ExpressionStatement,
-                                        PostIncrementExpression,
-                                        IdentifierName }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::PostIncrementExpression,
+                                        SyntaxKind::IdentifierName }));
 }
 
 void ParserTester::case2101()
 {
     parseStatement("{ ++ x ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        ExpressionStatement,
-                                        PreIncrementExpression,
-                                        IdentifierName }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::PreIncrementExpression,
+                                        SyntaxKind::IdentifierName }));
 }
 
 void ParserTester::case2102()
 {
     parseStatement("{ x ( 1 ) ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        ExpressionStatement,
-                                        CallExpression,
-                                        IdentifierName,
-                                        IntegerConstantExpression }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::CallExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::IntegerConstantExpression }));
 }
 
 void ParserTester::case2103()
@@ -471,12 +471,12 @@ void ParserTester::case2105()
 void ParserTester::case2106()
 {
     parseStatement("{ ( x ( 1 ) ) ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        ExpressionStatement,
-                                        ParenthesizedExpression,
-                                        CallExpression,
-                                        IdentifierName,
-                                        IntegerConstantExpression }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::ParenthesizedExpression,
+                                        SyntaxKind::CallExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::IntegerConstantExpression }));
 }
 
 void ParserTester::case2107()
@@ -632,141 +632,141 @@ void ParserTester::case2200()
 void ParserTester::case2201()
 {
     parseStatement("{ int x ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        BuiltinTypeSpecifier,
-                                        IdentifierDeclarator }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::BasicTypeSpecifier,
+                                        SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case2202()
 {
     parseStatement("{ int x , y ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        BuiltinTypeSpecifier,
-                                        IdentifierDeclarator,
-                                        IdentifierDeclarator }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::BasicTypeSpecifier,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case2203()
 {
     parseStatement("{ const int x ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        ConstQualifier,
-                                        BuiltinTypeSpecifier,
-                                        IdentifierDeclarator }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::ConstQualifier,
+                                        SyntaxKind::BasicTypeSpecifier,
+                                        SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case2204()
 {
     parseStatement("{ int * x ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        BuiltinTypeSpecifier,
-                                        PointerDeclarator,
-                                        IdentifierDeclarator }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::BasicTypeSpecifier,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case2205()
 {
     parseStatement("{ struct x ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        DeclarationStatement,
-                                        StructDeclaration,
-                                        StructTypeSpecifier }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::StructDeclaration,
+                                        SyntaxKind::StructTypeSpecifier }));
 }
 
 void ParserTester::case2206()
 {
     parseStatement("{ union x y ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        UnionTypeSpecifier,
-                                        IdentifierDeclarator }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::UnionTypeSpecifier,
+                                        SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case2207()
 {
     parseStatement("{ x y ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        IdentifierDeclarator }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case2208()
 {
     parseStatement("{ x y , z ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        IdentifierDeclarator,
-                                        IdentifierDeclarator }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case2209()
 {
     parseStatement("{ const x y ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        ConstQualifier,
-                                        TypedefName,
-                                        IdentifierDeclarator }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::ConstQualifier,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case2210()
 {
     parseStatement("{ const x * const y ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        ConstQualifier,
-                                        TypedefName,
-                                        PointerDeclarator,
-                                        ConstQualifier,
-                                        IdentifierDeclarator }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::ConstQualifier,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::ConstQualifier,
+                                        SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case2211()
 {
     parseStatement("{ x * y ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        AmbiguousMultiplicationOrPointerDeclaration,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        PointerDeclarator,
-                                        IdentifierDeclarator,
-                                        ExpressionStatement,
-                                        MultiplyExpression,
-                                        IdentifierName,
-                                        IdentifierName })
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::MultiplyExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::IdentifierName })
                    .ambiguity("{ x * y ; x * y ; }"));
 }
 
 void ParserTester::case2212()
 {
     parseStatement("{ x ( y ) ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        AmbiguousCallOrVariableDeclaration,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        ParenthesizedDeclarator,
-                                        IdentifierDeclarator,
-                                        ExpressionStatement,
-                                        CallExpression,
-                                        IdentifierName,
-                                        IdentifierName })
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::AmbiguousCallOrVariableDeclaration,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::ParenthesizedDeclarator,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::CallExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::IdentifierName })
                    .ambiguity("{ x ( y ) ; x ( y ) ; }"));
 }
 
@@ -775,119 +775,119 @@ void ParserTester::case2213()
     CROSS_REFERENCE_TEST(ParserTester::case1813);
 
     parseStatement("{ x * y = 0 ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        PointerDeclarator,
-                                        IdentifierDeclarator,
-                                        ExpressionInitializer,
-                                        IntegerConstantExpression }));
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::ExpressionInitializer,
+                                        SyntaxKind::IntegerConstantExpression }));
 
 }
 
 void ParserTester::case2214()
 {
     parseStatement("{ x * * y ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        AmbiguousMultiplicationOrPointerDeclaration,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        PointerDeclarator,
-                                        PointerDeclarator,
-                                        IdentifierDeclarator,
-                                        ExpressionStatement,
-                                        MultiplyExpression,
-                                        IdentifierName,
-                                        PointerIndirectionExpression,
-                                        IdentifierName })
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::MultiplyExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::PointerIndirectionExpression,
+                                        SyntaxKind::IdentifierName })
                    .ambiguity("{ x * * y ; x * * y ; }"));
 }
 
 void ParserTester::case2215()
 {
     parseStatement("{ x * * * y ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        AmbiguousMultiplicationOrPointerDeclaration,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        PointerDeclarator,
-                                        PointerDeclarator,
-                                        PointerDeclarator,
-                                        IdentifierDeclarator,
-                                        ExpressionStatement,
-                                        MultiplyExpression,
-                                        IdentifierName,
-                                        PointerIndirectionExpression,
-                                        PointerIndirectionExpression,
-                                        IdentifierName })
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::MultiplyExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::PointerIndirectionExpression,
+                                        SyntaxKind::PointerIndirectionExpression,
+                                        SyntaxKind::IdentifierName })
                    .ambiguity("{ x * * * y ; x * * * y ; }"));
 }
 
 void ParserTester::case2216()
 {
     parseStatement("{ x * y [ 1 ] ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        AmbiguousMultiplicationOrPointerDeclaration,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        PointerDeclarator,
-                                        ArrayDeclarator,
-                                        IdentifierDeclarator,
-                                        SubscriptSuffix,
-                                        IntegerConstantExpression,
-                                        ExpressionStatement,
-                                        MultiplyExpression,
-                                        IdentifierName,
-                                        ElementAccessExpression,
-                                        IdentifierName,
-                                        IntegerConstantExpression, })
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::ArrayDeclarator,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::SubscriptSuffix,
+                                        SyntaxKind::IntegerConstantExpression,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::MultiplyExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::ElementAccessExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::IntegerConstantExpression, })
                    .ambiguity("{ x * y [ 1 ] ; x * y [ 1 ] ; }"));
 }
 
 void ParserTester::case2217()
 {
     parseStatement("{ x * * y [ 1 ] ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        AmbiguousMultiplicationOrPointerDeclaration,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        PointerDeclarator,
-                                        PointerDeclarator,
-                                        ArrayDeclarator,
-                                        IdentifierDeclarator,
-                                        SubscriptSuffix,
-                                        IntegerConstantExpression,
-                                        ExpressionStatement,
-                                        MultiplyExpression,
-                                        IdentifierName,
-                                        PointerIndirectionExpression,
-                                        ElementAccessExpression,
-                                        IdentifierName,
-                                        IntegerConstantExpression, })
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::PointerDeclarator,
+                                        SyntaxKind::ArrayDeclarator,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::SubscriptSuffix,
+                                        SyntaxKind::IntegerConstantExpression,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::MultiplyExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::PointerIndirectionExpression,
+                                        SyntaxKind::ElementAccessExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::IntegerConstantExpression, })
                    .ambiguity("{ x * * y [ 1 ] ; x * * y [ 1 ] ; }"));
 }
 
 void ParserTester::case2218()
 {
     parseStatement("{ x ( ( y ) ) ; }",
-                   Expectation().AST( { CompoundStatement,
-                                        AmbiguousCallOrVariableDeclaration,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        ParenthesizedDeclarator,
-                                        ParenthesizedDeclarator,
-                                        IdentifierDeclarator,
-                                        ExpressionStatement,
-                                        CallExpression,
-                                        IdentifierName,
-                                        ParenthesizedExpression,
-                                        IdentifierName })
+                   Expectation().AST( { SyntaxKind::CompoundStatement,
+                                        SyntaxKind::AmbiguousCallOrVariableDeclaration,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::ParenthesizedDeclarator,
+                                        SyntaxKind::ParenthesizedDeclarator,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::CallExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::ParenthesizedExpression,
+                                        SyntaxKind::IdentifierName })
                    .ambiguity("{ x ( ( y ) ) ; x ( ( y ) ) ; }"));
 }
 
@@ -1348,10 +1348,10 @@ void ParserTester::case2449() {}
 void ParserTester::case2450()
 {
     parseStatement("for ( ; ; ) 1 ;",
-                   Expectation().AST( { ForStatement,
-                                        ExpressionStatement,
-                                        ExpressionStatement,
-                                        IntegerConstantExpression }));
+                   Expectation().AST( { SyntaxKind::ForStatement,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::IntegerConstantExpression }));
 }
 
 void ParserTester::case2451()
@@ -1364,9 +1364,9 @@ void ParserTester::case2451()
 void ParserTester::case2452()
 {
     parseStatement("for ( ; ; ) { }",
-                   Expectation().AST( { ForStatement,
-                                        ExpressionStatement,
-                                        CompoundStatement }));
+                   Expectation().AST( { SyntaxKind::ForStatement,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case2453()
@@ -1379,92 +1379,92 @@ void ParserTester::case2453()
 void ParserTester::case2454()
 {
     parseStatement("for ( x ; y ; z ) { }",
-                   Expectation().AST( { ForStatement,
-                                        ExpressionStatement,
-                                        IdentifierName,
-                                        IdentifierName,
-                                        IdentifierName,
-                                        CompoundStatement }));
+                   Expectation().AST( { SyntaxKind::ForStatement,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case2455()
 {
     parseStatement("for ( int x ; y ; z ) { }",
-                   Expectation().AST( { ForStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        BuiltinTypeSpecifier,
-                                        IdentifierDeclarator,
-                                        IdentifierName,
-                                        IdentifierName,
-                                        CompoundStatement }));
+                   Expectation().AST( { SyntaxKind::ForStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::BasicTypeSpecifier,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case2456()
 {
     parseStatement("for ( x y ; 1 ; 2 ) { }",
-                   Expectation().AST( { ForStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        IdentifierDeclarator,
-                                        IntegerConstantExpression,
-                                        IntegerConstantExpression,
-                                        CompoundStatement }));
+                   Expectation().AST( { SyntaxKind::ForStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::IntegerConstantExpression,
+                                        SyntaxKind::IntegerConstantExpression,
+                                        SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case2457()
 {
     parseStatement("for ( x y ; 1 ; ) { }",
-                   Expectation().AST( { ForStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        IdentifierDeclarator,
-                                        IntegerConstantExpression,
-                                        CompoundStatement }));
+                   Expectation().AST( { SyntaxKind::ForStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::IntegerConstantExpression,
+                                        SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case2458()
 {
     parseStatement("for ( x y ; ; ) { }",
-                   Expectation().AST( { ForStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        TypedefName,
-                                        IdentifierDeclarator,
-                                        CompoundStatement }));
+                   Expectation().AST( { SyntaxKind::ForStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::TypedefName,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case2459()
 {
     parseStatement("for ( 1 ; x != 0 ; ++ y ) { }",
-                   Expectation().AST( { ForStatement,
-                                        ExpressionStatement,
-                                        IntegerConstantExpression,
-                                        NotEqualsExpression,
-                                        IdentifierName,
-                                        IntegerConstantExpression,
-                                        PreIncrementExpression,
-                                        IdentifierName,
-                                        CompoundStatement }));
+                   Expectation().AST( { SyntaxKind::ForStatement,
+                                        SyntaxKind::ExpressionStatement,
+                                        SyntaxKind::IntegerConstantExpression,
+                                        SyntaxKind::NotEqualsExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::IntegerConstantExpression,
+                                        SyntaxKind::PreIncrementExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::CompoundStatement }));
 }
 void ParserTester::case2460()
 {
     parseStatement("for ( int x = 1 ; y != 0 ; ++ z ) { }",
-                   Expectation().AST( { ForStatement,
-                                        DeclarationStatement,
-                                        VariableAndOrFunctionDeclaration,
-                                        BuiltinTypeSpecifier,
-                                        IdentifierDeclarator,
-                                        ExpressionInitializer,
-                                        IntegerConstantExpression,
-                                        NotEqualsExpression,
-                                        IdentifierName,
-                                        IntegerConstantExpression,
-                                        PreIncrementExpression,
-                                        IdentifierName,
-                                        CompoundStatement }));
+                   Expectation().AST( { SyntaxKind::ForStatement,
+                                        SyntaxKind::DeclarationStatement,
+                                        SyntaxKind::VariableAndOrFunctionDeclaration,
+                                        SyntaxKind::BasicTypeSpecifier,
+                                        SyntaxKind::IdentifierDeclarator,
+                                        SyntaxKind::ExpressionInitializer,
+                                        SyntaxKind::IntegerConstantExpression,
+                                        SyntaxKind::NotEqualsExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::IntegerConstantExpression,
+                                        SyntaxKind::PreIncrementExpression,
+                                        SyntaxKind::IdentifierName,
+                                        SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case2461() {}

@@ -24,7 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 
 #include <ostream>
 #include <stack>
@@ -36,16 +36,16 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API NameCatalog
+class PSY_C_INTERNAL_API NameCatalog
 {
     friend std::ostream& operator<<(std::ostream& os, const NameCatalog& disambigCatalog);
 
 public:
     ~NameCatalog();
 
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(NameCataloger);
-    PSY_GRANT_ACCESS(SyntaxCorrelationDisambiguator);
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(NameCataloger);
+    PSY_GRANT_INTERNAL_ACCESS(SyntaxCorrelationDisambiguator);
 
     void mapNodeAndMarkAsEncloser(const SyntaxNode* node);
     void markMappedNodeAsEncloser(const SyntaxNode* node);

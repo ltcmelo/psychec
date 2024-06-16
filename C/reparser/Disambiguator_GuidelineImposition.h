@@ -25,15 +25,15 @@
 
 #include "reparser/Disambiguator.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API GuidelineImpositionDisambiguator : public Disambiguator
+class PSY_C_INTERNAL_API GuidelineImpositionDisambiguator : public Disambiguator
 {
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(Reparser);
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Reparser);
 
 private:
     GuidelineImpositionDisambiguator(SyntaxTree* tree);

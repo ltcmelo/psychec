@@ -33,7 +33,7 @@ class Compilation;
 
 class SyntaxToken;
 
-class SyntaxLexeme;
+class Lexeme;
 class Identifier;
 class IntegerConstant;
 class FloatingConstant;
@@ -80,7 +80,8 @@ class ExtPSY_TemplateDeclarationSyntax;
 class SpecifierSyntax;
 class TrivialSpecifierSyntax;
 class StorageClassSyntax;
-class BuiltinTypeSpecifierSyntax;
+class BasicTypeSpecifierSyntax;
+class VoidTypeSpecifierSyntax;
 class TagTypeSpecifierSyntax;
 class TagDeclarationAsSpecifierSyntax;
 class AtomicTypeSpecifierSyntax;
@@ -207,40 +208,51 @@ typedef SyntaxNodePlainList<ExtKR_ParameterDeclarationSyntax*> ExtKR_ParameterDe
 
 //=================================================================== Semantic
 
-/* Symbols */
+//---------//
+// Symbols //
+//---------//
 class Symbol;
-class LibrarySymbol;
-class FunctionSymbol;
+class Program;
+class TranslationUnit;
+class DeclarationSymbol;
 
-/* Symbols (values) */
-class ValueSymbol;
-class EnumeratorSymbol;
-class FieldSymbol;
-class VariableSymbol;
-class ParameterSymbol;
+/* Function symbol */
+class Function;
 
-/* Symbols (types) */
-class TypeSymbol;
-class ArrayTypeSymbol;
-class FunctionTypeSymbol;
-class NamedTypeSymbol;
-class PointerTypeSymbol;
+/* Value symbols */
+class ObjectDeclarationSymbol;
+class Enumerator;
+class Field;
+class Variable;
+class Parameter;
+
+/* Type symbols */
+class TypeDeclarationSymbol;
+class Struct;
+class Union;
+class Enum;
+class Typedef;
 
 class SymbolVisitor;
 template <class PtrT> class SymbolList;
 
-/* Symbol names */
-class SymbolName;
-class PlainSymbolName;
-class TagSymbolName;
-class EmptySymbolName;
+//-------//
+// Types //
+//-------//
+class Type;
+class ArrayType;
+class BasicType;
+class FunctionType;
+class PointerType;
+class TypedefType;
+class TagType;
+class VoidType;
 
 /* Scopes */
 class Scope;
 
 /* Compilation */
 class Compilation;
-class Assembly;
 class SemanticModel;
 
 } // C

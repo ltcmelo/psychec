@@ -38,56 +38,56 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
     DEBUG_THIS_RULE();
 
     switch (peek().kind()) {
-        case Keyword__Static_assert:
+        case SyntaxKind::Keyword__Static_assert:
             return parseDeclarationStatement(
                         stmt,
                         &Parser::parseStaticAssertDeclaration_AtFirst);
 
         // storage-class-specifier
-        case Keyword_typedef:
-        case Keyword_extern:
-        case Keyword_static:
-        case Keyword_auto:
-        case Keyword_register:
-        case Keyword__Thread_local:
-        case Keyword_ExtGNU___thread:
+        case SyntaxKind::Keyword_typedef:
+        case SyntaxKind::Keyword_extern:
+        case SyntaxKind::Keyword_static:
+        case SyntaxKind::Keyword_auto:
+        case SyntaxKind::Keyword_register:
+        case SyntaxKind::Keyword__Thread_local:
+        case SyntaxKind::Keyword_ExtGNU___thread:
 
         // type-qualifier
-        case Keyword_const:
-        case Keyword_volatile:
-        case Keyword_restrict:
-        case Keyword__Atomic:
+        case SyntaxKind::Keyword_const:
+        case SyntaxKind::Keyword_volatile:
+        case SyntaxKind::Keyword_restrict:
+        case SyntaxKind::Keyword__Atomic:
 
         // function-specifier
-        case Keyword_inline:
-        case Keyword__Noreturn:
+        case SyntaxKind::Keyword_inline:
+        case SyntaxKind::Keyword__Noreturn:
 
         // type-specifier
-        case Keyword_void:
-        case Keyword_char:
-        case Keyword_short:
-        case Keyword_int:
-        case Keyword_long:
-        case Keyword_float:
-        case Keyword_double:
-        case Keyword__Bool:
-        case Keyword__Complex:
-        case Keyword_signed:
-        case Keyword_unsigned:
-        case Keyword_Ext_char16_t:
-        case Keyword_Ext_char32_t:
-        case Keyword_Ext_wchar_t:
-        case Keyword_struct:
-        case Keyword_union:
-        case Keyword_enum:
-        case Keyword_ExtGNU___typeof__:
-        case Keyword_ExtGNU___complex__:
+        case SyntaxKind::Keyword_void:
+        case SyntaxKind::Keyword_char:
+        case SyntaxKind::Keyword_short:
+        case SyntaxKind::Keyword_int:
+        case SyntaxKind::Keyword_long:
+        case SyntaxKind::Keyword_float:
+        case SyntaxKind::Keyword_double:
+        case SyntaxKind::Keyword__Bool:
+        case SyntaxKind::Keyword__Complex:
+        case SyntaxKind::Keyword_signed:
+        case SyntaxKind::Keyword_unsigned:
+        case SyntaxKind::Keyword_Ext_char16_t:
+        case SyntaxKind::Keyword_Ext_char32_t:
+        case SyntaxKind::Keyword_Ext_wchar_t:
+        case SyntaxKind::Keyword_struct:
+        case SyntaxKind::Keyword_union:
+        case SyntaxKind::Keyword_enum:
+        case SyntaxKind::Keyword_ExtGNU___typeof__:
+        case SyntaxKind::Keyword_ExtGNU___complex__:
             return parseDeclarationStatement(
                         stmt,
                         &Parser::parseDeclarationOrFunctionDefinition);
 
-        case IdentifierToken: {
-            if (peek(2).kind() == ColonToken)
+        case SyntaxKind::IdentifierToken: {
+            if (peek(2).kind() == SyntaxKind::ColonToken)
                 return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
             Backtracker BT(this);
@@ -101,78 +101,78 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
             return true;
         }
 
-        case OpenBraceToken:
+        case SyntaxKind::OpenBraceToken:
             return parseCompoundStatement_AtFirst(stmt, stmtCtx);
 
-        case Keyword_if:
+        case SyntaxKind::Keyword_if:
             return parseIfStatement_AtFirst(stmt, stmtCtx);
 
-        case Keyword_switch:
+        case SyntaxKind::Keyword_switch:
             return parseSwitchStatement_AtFirst(stmt, stmtCtx);
 
-        case Keyword_case:
+        case SyntaxKind::Keyword_case:
             if (stmtCtx != StatementContext::Switch
                     && stmtCtx != StatementContext::SwitchAndLoop)
                 diagReporter_.UnexpectedCaseLabelOutsideSwitch();
             return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
-        case Keyword_default:
+        case SyntaxKind::Keyword_default:
             if (stmtCtx != StatementContext::Switch
                     && stmtCtx != StatementContext::SwitchAndLoop)
                 diagReporter_.UnexpectedDefaultLabelOutsideSwitch();
             return parseLabeledStatement_AtFirst(stmt, stmtCtx);
 
-        case Keyword_while:
+        case SyntaxKind::Keyword_while:
             return parseWhileStatement_AtFirst(stmt, stmtCtx);
 
-        case Keyword_do:
+        case SyntaxKind::Keyword_do:
             return parseDoStatement_AtFirst(stmt, stmtCtx);
 
-        case Keyword_for:
+        case SyntaxKind::Keyword_for:
             return parseForStatement_AtFirst(stmt, stmtCtx);
 
-        case Keyword_goto:
+        case SyntaxKind::Keyword_goto:
             return parseGotoStatement_AtFirst(stmt);
 
-        case Keyword_continue:
+        case SyntaxKind::Keyword_continue:
             if (stmtCtx != StatementContext::Loop
                     && stmtCtx != StatementContext::SwitchAndLoop)
                 diagReporter_.UnexpectedContinueOutsideLoop();
             return parseContinueStatement_AtFirst(stmt, stmtCtx);
 
-        case Keyword_break:
+        case SyntaxKind::Keyword_break:
             if (stmtCtx == StatementContext::None)
                 diagReporter_.UnexpectedBreakOutsideSwitchOrLoop();
             return parseBreakStatement_AtFirst(stmt, stmtCtx);
 
-        case Keyword_return:
+        case SyntaxKind::Keyword_return:
             return parseReturnStatement_AtFirst(stmt);
 
-        case SemicolonToken: {
+        case SyntaxKind::SemicolonToken: {
             auto exprStmt = makeNode<ExpressionStatementSyntax>();
             stmt = exprStmt;
             exprStmt->semicolonTkIdx_ = consume();
             return true;
         }
 
-        case Keyword_ExtGNU___asm__:
+        case SyntaxKind::Keyword_ExtGNU___asm__:
             return parseExtGNU_AsmStatement(stmt);
 
-        case Keyword_ExtGNU___extension__: {
+        case SyntaxKind::Keyword_ExtGNU___extension__: {
             auto extKwTkIdx = consume();
             if (!parseStatement(stmt, stmtCtx))
                 return false;
 
             PSY_ASSERT_W_MSG(stmt, return false, "invalid declaration");
             switch (stmt->kind()) {
-                case ExpressionStatement:
+                case SyntaxKind::ExpressionStatement:
                     PSY_ASSERT_W_MSG(stmt->asExpressionStatement(),
                                      return false,
                                      "invalid expression-statement");
                     stmt->asExpressionStatement()->expr_->extKwTkIdx_ = extKwTkIdx;
                     break;
 
-                case DeclarationStatement:
+                case SyntaxKind::DeclarationStatement:
                     PSY_ASSERT_W_MSG(stmt->asDeclarationStatement(),
                                      return false,
                                      "invalid expression-statement");
@@ -201,23 +201,23 @@ bool Parser::parseDeclarationStatement(StatementSyntax*& stmt,
 
 void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
 {
-    PSY_ASSERT_W_MSG(stmt->kind() == ExpressionStatement,
+    PSY_ASSERT_W_MSG(stmt->kind() == SyntaxKind::ExpressionStatement,
                      return,
                      to_string(stmt->kind()));
 
     auto exprStmt = stmt->asExpressionStatement();
     auto expr = exprStmt->expr_;
-    if (!(expr->kind() == MultiplyExpression
-            || expr->kind() == CallExpression))
+    if (!(expr->kind() == SyntaxKind::MultiplyExpression
+            || expr->kind() == SyntaxKind::CallExpression))
         return;
 
     SyntaxKind stmtK;
     TypedefNameSyntax* typedefName;
     DeclaratorSyntax* decltor;
     switch (expr->kind()) {
-        case MultiplyExpression: {
+        case SyntaxKind::MultiplyExpression: {
             auto binExpr = expr->asBinaryExpression();
-            if (binExpr->leftExpr_->kind() != IdentifierName)
+            if (binExpr->leftExpr_->kind() != SyntaxKind::IdentifierName)
                 return;
 
             IdentifierDeclaratorSyntax* identDecltor = nullptr;
@@ -225,17 +225,17 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
             auto expr = binExpr->rightExpr_;
             while (true) {
                 switch (expr->kind()) {
-                    case PointerIndirectionExpression:
+                    case SyntaxKind::PointerIndirectionExpression:
                         exprs.push(expr);
                         expr = expr->asPrefixUnaryExpression()->expr_;
                         break;
 
-                    case ElementAccessExpression:
+                    case SyntaxKind::ElementAccessExpression:
                         exprs.push(expr);
                         expr = expr->asArraySubscriptExpression()->expr_;
                         break;
 
-                    case IdentifierName:
+                    case SyntaxKind::IdentifierName:
                         identDecltor = makeNode<IdentifierDeclaratorSyntax>();
                         identDecltor->identTkIdx_ = expr->asIdentifierName()->identTkIdx_;
                         break;
@@ -257,7 +257,7 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
                 auto expr = exprs.top();
                 exprs.pop();
                 switch (expr->kind()) {
-                    case PointerIndirectionExpression: {
+                    case SyntaxKind::PointerIndirectionExpression: {
                         auto ptrDecltor = makeNode<PointerDeclaratorSyntax>();
                         ptrDecltor->asteriskTkIdx_ = expr->asPrefixUnaryExpression()->oprtrTkIdx_;
                         ptrDecltor->innerDecltor_ = innerDecltor;
@@ -265,14 +265,14 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
                         break;
                     }
 
-                    case ElementAccessExpression: {
+                    case SyntaxKind::ElementAccessExpression: {
                         auto arrDecltorSx = makeNode<SubscriptSuffixSyntax>();
                         arrDecltorSx->openBracketTkIdx_ =
                                 expr->asArraySubscriptExpression()->openBracketTkIdx_;
                         arrDecltorSx->expr_ = expr->asArraySubscriptExpression()->arg_;
                         arrDecltorSx->closeBracketTkIdx_ =
                                 expr->asArraySubscriptExpression()->closeBracketTkIdx_;
-                        auto arrDecltor = makeNode<ArrayOrFunctionDeclaratorSyntax>(ArrayDeclarator);
+                        auto arrDecltor = makeNode<ArrayOrFunctionDeclaratorSyntax>(SyntaxKind::ArrayDeclarator);
                         arrDecltor->asArrayOrFunctionDeclarator()->suffix_ = arrDecltorSx;
                         arrDecltor->innerDecltor_ = innerDecltor;
                         innerDecltor = arrDecltor;
@@ -288,13 +288,13 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
             ptrDecltor->innerDecltor_ = innerDecltor;
             decltor = ptrDecltor;
 
-            stmtK = AmbiguousMultiplicationOrPointerDeclaration;
+            stmtK = SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration;
             break;
         }
 
-        case CallExpression: {
+        case SyntaxKind::CallExpression: {
             auto callExpr = expr->asCallExpression();
-            if (!(callExpr->expr_->kind() == IdentifierName
+            if (!(callExpr->expr_->kind() == SyntaxKind::IdentifierName
                     && callExpr->args_
                     && !callExpr->args_->next)) {
                 return;
@@ -305,12 +305,12 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
             auto expr = callExpr->args_->value;
             while (true) {
                 switch (expr->kind()) {
-                    case ParenthesizedExpression:
+                    case SyntaxKind::ParenthesizedExpression:
                         exprs.push(expr);
                         expr = expr->asParenthesizedExpression()->expr_;
                         break;
 
-                    case IdentifierName:
+                    case SyntaxKind::IdentifierName:
                         identDecltor = makeNode<IdentifierDeclaratorSyntax>();
                         identDecltor->identTkIdx_ = expr->asIdentifierName()->identTkIdx_;
                         break;
@@ -332,7 +332,7 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
                 auto expr = exprs.top();
                 exprs.pop();
                 switch (expr->kind_) {
-                    case ParenthesizedExpression: {
+                    case SyntaxKind::ParenthesizedExpression: {
                         auto parenDecltor = makeNode<ParenthesizedDeclaratorSyntax>();
                         parenDecltor->openParenTkIdx_ =
                                 expr->asParenthesizedExpression()->openParenTkIdx_;
@@ -353,7 +353,7 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
             parenDecltor->innerDecltor_ = innerDecltor;
             decltor = parenDecltor;
 
-            stmtK = AmbiguousCallOrVariableDeclaration;
+            stmtK = SyntaxKind::AmbiguousCallOrVariableDeclaration;
             break;
         }
 
@@ -386,7 +386,7 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
                                             StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == OpenBraceToken,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBraceToken,
                      return false,
                      "assert failure: `{'");
 
@@ -401,17 +401,17 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
     while (true) {
         StatementSyntax* innerStmt = nullptr;
         switch (peek().kind()) {
-            case EndOfFile:
-                diagReporter_.ExpectedToken(CloseBraceToken);
+            case SyntaxKind::EndOfFile:
+                diagReporter_.ExpectedToken(SyntaxKind::CloseBraceToken);
                 return false;
 
-            case CloseBraceToken:
+            case SyntaxKind::CloseBraceToken:
                 block->closeBraceTkIdx_ = consume();
                 return true;
 
             default: {
                 if (!parseStatement(innerStmt, stmtCtx)) {
-                    skipTo(CloseBraceToken);
+                    skipTo(SyntaxKind::CloseBraceToken);
                     continue;
                 }
                 break;
@@ -422,7 +422,7 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
         stmtList_cur = &(*stmtList_cur)->next;
     }
 
-    return matchOrSkipTo(CloseBraceToken, &block->closeBraceTkIdx_);
+    return matchOrSkipTo(SyntaxKind::CloseBraceToken, &block->closeBraceTkIdx_);
 }
 
 /**
@@ -434,7 +434,7 @@ bool Parser::parseExpressionStatement(StatementSyntax*& stmt)
 {
     DEBUG_THIS_RULE();
 
-    if (peek().kind() == SemicolonToken) {
+    if (peek().kind() == SyntaxKind::SemicolonToken) {
         auto exprStmt = makeNode<ExpressionStatementSyntax>();
         stmt = exprStmt;
         exprStmt->semicolonTkIdx_ = consume();
@@ -449,7 +449,7 @@ bool Parser::parseExpressionStatement(StatementSyntax*& stmt)
     stmt = exprStmt;
     exprStmt->expr_ = expr;
 
-    return matchOrSkipTo(SemicolonToken, &exprStmt->semicolonTkIdx_);
+    return matchOrSkipTo(SyntaxKind::SemicolonToken, &exprStmt->semicolonTkIdx_);
 }
 
 /**
@@ -461,7 +461,7 @@ bool Parser::parseExpressionStatement(StatementSyntax*& stmt)
 bool Parser::parseIfStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_if,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_if,
                      return false,
                      "assert failure: `if'");
 
@@ -469,14 +469,14 @@ bool Parser::parseIfStatement_AtFirst(StatementSyntax*& stmt, StatementContext s
     stmt = ifStmt;
     ifStmt->ifKwTkIdx_ = consume();
 
-    if (!(match(OpenParenToken, &ifStmt->openParenTkIdx_)
+    if (!(match(SyntaxKind::OpenParenToken, &ifStmt->openParenTkIdx_)
             && parseExpression(ifStmt->cond_)
-            && match(CloseParenToken, &ifStmt->closeParenTkIdx_)
+            && match(SyntaxKind::CloseParenToken, &ifStmt->closeParenTkIdx_)
             && parseStatement(ifStmt->stmt_, stmtCtx))) {
         return ignoreStatement();
     }
 
-    if (peek().kind() == Keyword_else) {
+    if (peek().kind() == SyntaxKind::Keyword_else) {
         ifStmt->elseKwTkIdx_ = consume();
         return checkStatementParse(
                     parseStatement(ifStmt->elseStmt_, stmtCtx));
@@ -494,7 +494,7 @@ bool Parser::parseSwitchStatement_AtFirst(StatementSyntax*& stmt,
                                           StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_switch,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_switch,
                      return false,
                      "assert failure: `switch'");
 
@@ -503,9 +503,9 @@ bool Parser::parseSwitchStatement_AtFirst(StatementSyntax*& stmt,
     switchStmt->switchKwTkIdx_ = consume();
 
     return checkStatementParse(
-                match(OpenParenToken, &switchStmt->openParenTkIdx_)
+                match(SyntaxKind::OpenParenToken, &switchStmt->openParenTkIdx_)
                 && parseExpression(switchStmt->cond_)
-                && match(CloseParenToken, &switchStmt->closeParenTkIdx_)
+                && match(SyntaxKind::CloseParenToken, &switchStmt->closeParenTkIdx_)
                 && parseStatement(switchStmt->stmt_,
                                   stmtCtx + StatementContext::Switch));
 }
@@ -519,40 +519,40 @@ bool Parser::parseLabeledStatement_AtFirst(StatementSyntax*& stmt,
                                            StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == IdentifierToken
-                        || peek().kind() == Keyword_case
-                        || peek().kind() == Keyword_default,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::IdentifierToken
+                        || peek().kind() == SyntaxKind::Keyword_case
+                        || peek().kind() == SyntaxKind::Keyword_default,
                      return false,
                      "assert failure: <identifier>, `case', or `default'");
 
     LabeledStatementSyntax* labelStmt = nullptr;
 
     switch (peek().kind()) {
-        case IdentifierToken:
-            PSY_ASSERT_W_MSG(peek(2).kind() == ColonToken,
+        case SyntaxKind::IdentifierToken:
+            PSY_ASSERT_W_MSG(peek(2).kind() == SyntaxKind::ColonToken,
                              return false,
                              "assert failure: `:'");
 
-            labelStmt = makeNode<LabeledStatementSyntax>(IdentifierLabelStatement);
+            labelStmt = makeNode<LabeledStatementSyntax>(SyntaxKind::IdentifierLabelStatement);
             stmt = labelStmt;
             labelStmt->labelTkIdx_ = consume();
             labelStmt->colonTkIdx_ = consume();
             break;
 
-        case Keyword_default:
-            labelStmt = makeNode<LabeledStatementSyntax>(DefaultLabelStatement);
+        case SyntaxKind::Keyword_default:
+            labelStmt = makeNode<LabeledStatementSyntax>(SyntaxKind::DefaultLabelStatement);
             stmt = labelStmt;
             labelStmt->labelTkIdx_ = consume();
-            if (!match(ColonToken, &labelStmt->colonTkIdx_))
+            if (!match(SyntaxKind::ColonToken, &labelStmt->colonTkIdx_))
                 return false;
             break;
 
-        case Keyword_case:
-            labelStmt = makeNode<LabeledStatementSyntax>(DefaultLabelStatement);
+        case SyntaxKind::Keyword_case:
+            labelStmt = makeNode<LabeledStatementSyntax>(SyntaxKind::DefaultLabelStatement);
             stmt = labelStmt;
             labelStmt->labelTkIdx_ = consume();
             if (!(parseExpressionWithPrecedenceConditional(labelStmt->expr_)
-                    && match(ColonToken, &labelStmt->colonTkIdx_)))
+                    && match(SyntaxKind::ColonToken, &labelStmt->colonTkIdx_)))
                 return false;
             break;
 
@@ -574,7 +574,7 @@ bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt,
                                          StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_while,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_while,
                      return false,
                      "assert failure: `while'");
 
@@ -583,9 +583,9 @@ bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt,
     whileStmt->whileKwTkIdx_ = consume();
 
     return checkStatementParse(
-                match(OpenParenToken, &whileStmt->openParenTkIdx_)
+                match(SyntaxKind::OpenParenToken, &whileStmt->openParenTkIdx_)
                 && parseExpression(whileStmt->cond_)
-                && match(CloseParenToken, &whileStmt->closeParenTkIdx_)
+                && match(SyntaxKind::CloseParenToken, &whileStmt->closeParenTkIdx_)
                 && parseStatement(whileStmt->stmt_,
                                   stmtCtx + StatementContext::Loop));
 }
@@ -600,7 +600,7 @@ bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt,
                                       StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_do,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_do,
                      return false,
                      "assert failure: `do'");
 
@@ -611,11 +611,11 @@ bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt,
     return checkStatementParse(
                 parseStatement(doStmt->stmt_,
                                stmtCtx + StatementContext::Loop)
-                && match(Keyword_while, &doStmt->whileKwTkIdx_)
-                && match(OpenParenToken, &doStmt->openParenTkIdx_)
+                && match(SyntaxKind::Keyword_while, &doStmt->whileKwTkIdx_)
+                && match(SyntaxKind::OpenParenToken, &doStmt->openParenTkIdx_)
                 && parseExpression(doStmt->cond_)
-                && match(CloseParenToken, &doStmt->closeParenTkIdx_)
-                && match(SemicolonToken, &doStmt->semicolonTkIdx_));
+                && match(SyntaxKind::CloseParenToken, &doStmt->closeParenTkIdx_)
+                && match(SyntaxKind::SemicolonToken, &doStmt->semicolonTkIdx_));
 }
 
 /**
@@ -628,7 +628,7 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
                                        StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_for,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_for,
                      return false,
                      "assert failure: `for'");
 
@@ -636,62 +636,62 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
     stmt = forStmt;
     forStmt->forKwTkIdx_ = consume();
 
-    if (!match(OpenParenToken, &forStmt->openParenTkIdx_)) {
-        skipTo(CloseParenToken);
+    if (!match(SyntaxKind::OpenParenToken, &forStmt->openParenTkIdx_)) {
+        skipTo(SyntaxKind::CloseParenToken);
         return false;
     }
 
-    if (peek().kind() == Keyword_ExtGNU___extension__)
+    if (peek().kind() == SyntaxKind::Keyword_ExtGNU___extension__)
         forStmt->extKwTkIdx_ = consume();
 
     switch (peek().kind()) {
         // storage-class-specifier
-        case Keyword_typedef:
-        case Keyword_extern:
-        case Keyword_static:
-        case Keyword_auto:
-        case Keyword_register:
-        case Keyword__Thread_local:
-        case Keyword_ExtGNU___thread:
+        case SyntaxKind::Keyword_typedef:
+        case SyntaxKind::Keyword_extern:
+        case SyntaxKind::Keyword_static:
+        case SyntaxKind::Keyword_auto:
+        case SyntaxKind::Keyword_register:
+        case SyntaxKind::Keyword__Thread_local:
+        case SyntaxKind::Keyword_ExtGNU___thread:
 
         // type-qualifier
-        case Keyword_const:
-        case Keyword_volatile:
-        case Keyword_restrict:
-        case Keyword__Atomic:
+        case SyntaxKind::Keyword_const:
+        case SyntaxKind::Keyword_volatile:
+        case SyntaxKind::Keyword_restrict:
+        case SyntaxKind::Keyword__Atomic:
 
         // function-specifier
-        case Keyword_inline:
-        case Keyword__Noreturn:
+        case SyntaxKind::Keyword_inline:
+        case SyntaxKind::Keyword__Noreturn:
 
         // type-specifier
-        case Keyword_void:
-        case Keyword_char:
-        case Keyword_short:
-        case Keyword_int:
-        case Keyword_long:
-        case Keyword_float:
-        case Keyword_double:
-        case Keyword__Bool:
-        case Keyword__Complex:
-        case Keyword_signed:
-        case Keyword_unsigned:
-        case Keyword_Ext_char16_t:
-        case Keyword_Ext_char32_t:
-        case Keyword_Ext_wchar_t:
-        case Keyword_struct:
-        case Keyword_union:
-        case Keyword_enum:
-        case Keyword_ExtGNU___complex__:
+        case SyntaxKind::Keyword_void:
+        case SyntaxKind::Keyword_char:
+        case SyntaxKind::Keyword_short:
+        case SyntaxKind::Keyword_int:
+        case SyntaxKind::Keyword_long:
+        case SyntaxKind::Keyword_float:
+        case SyntaxKind::Keyword_double:
+        case SyntaxKind::Keyword__Bool:
+        case SyntaxKind::Keyword__Complex:
+        case SyntaxKind::Keyword_signed:
+        case SyntaxKind::Keyword_unsigned:
+        case SyntaxKind::Keyword_Ext_char16_t:
+        case SyntaxKind::Keyword_Ext_char32_t:
+        case SyntaxKind::Keyword_Ext_wchar_t:
+        case SyntaxKind::Keyword_struct:
+        case SyntaxKind::Keyword_union:
+        case SyntaxKind::Keyword_enum:
+        case SyntaxKind::Keyword_ExtGNU___complex__:
             if (!parseDeclarationStatement(
                         forStmt->initStmt_,
                         &Parser::parseDeclarationOrFunctionDefinition)) {
-                skipTo(CloseParenToken);
+                skipTo(SyntaxKind::CloseParenToken);
                 return false;
             }
             break;
 
-        case IdentifierToken: {
+        case SyntaxKind::IdentifierToken: {
             Backtracker BT(this);
             if (!parseExpressionStatement(forStmt->initStmt_)) {
                 BT.backtrack();
@@ -700,7 +700,7 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
                             &Parser::parseDeclarationOrFunctionDefinition)) {
                     break;
                 }
-                skipTo(CloseParenToken);
+                skipTo(SyntaxKind::CloseParenToken);
                 return false;
             }
             maybeAmbiguateStatement(forStmt->initStmt_);
@@ -709,23 +709,23 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
 
         default:
             if (!parseExpressionStatement(forStmt->initStmt_)) {
-                skipTo(CloseParenToken);
+                skipTo(SyntaxKind::CloseParenToken);
                 return false;
             }
     }
 
-    if (peek().kind() != SemicolonToken
+    if (peek().kind() != SyntaxKind::SemicolonToken
             && !parseExpression(forStmt->cond_)) {
-        skipTo(CloseParenToken);
+        skipTo(SyntaxKind::CloseParenToken);
         return false;
     }
 
     forStmt->semicolonTkIdx_ = consume();
-    if (peek().kind() == CloseParenToken)
+    if (peek().kind() == SyntaxKind::CloseParenToken)
         forStmt->closeParenTkIdx_ = consume();
     else if (!(parseExpression(forStmt->expr_)
-                && match(CloseParenToken, &forStmt->closeParenTkIdx_))) {
-        skipTo(CloseParenToken);
+                && match(SyntaxKind::CloseParenToken, &forStmt->closeParenTkIdx_))) {
+        skipTo(SyntaxKind::CloseParenToken);
         return false;
     }
 
@@ -743,7 +743,7 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
 bool Parser::parseGotoStatement_AtFirst(StatementSyntax*& stmt)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_goto,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_goto,
                      return false,
                      "assert failure: `goto'");
 
@@ -751,7 +751,7 @@ bool Parser::parseGotoStatement_AtFirst(StatementSyntax*& stmt)
     stmt = gotoStmt;
     gotoStmt->gotoKwTkIdx_ = consume();
 
-    if (peek().kind() != IdentifierToken) {
+    if (peek().kind() != SyntaxKind::IdentifierToken) {
         diagReporter_.ExpectedTokenOfCategoryIdentifier();
         return ignoreStatement();
     }
@@ -759,7 +759,7 @@ bool Parser::parseGotoStatement_AtFirst(StatementSyntax*& stmt)
     gotoStmt->identTkIdx_ = consume();
 
     return checkStatementParse(
-                match(SemicolonToken, &gotoStmt->semicolonTkIdx_));
+                match(SyntaxKind::SemicolonToken, &gotoStmt->semicolonTkIdx_));
 }
 
 /**
@@ -772,7 +772,7 @@ bool Parser::parseContinueStatement_AtFirst(StatementSyntax*& stmt,
                                             StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_continue,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_continue,
                      return false,
                      "assert failure: `continue'");
 
@@ -781,7 +781,7 @@ bool Parser::parseContinueStatement_AtFirst(StatementSyntax*& stmt,
     continueStmt->continueKwTkIdx_ = consume();
 
     return checkStatementParse(
-                match(SemicolonToken, &continueStmt->semicolonTkIdx_));
+                match(SyntaxKind::SemicolonToken, &continueStmt->semicolonTkIdx_));
 }
 
 /**
@@ -794,7 +794,7 @@ bool Parser::parseBreakStatement_AtFirst(StatementSyntax*& stmt,
                                          StatementContext stmtCtx)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_break,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_break,
                      return false,
                      "assert failure: `break'");
 
@@ -803,7 +803,7 @@ bool Parser::parseBreakStatement_AtFirst(StatementSyntax*& stmt,
     breakStmt->breakKwTkIdx_ = consume();
 
     return checkStatementParse(
-                match(SemicolonToken, &breakStmt->semicolonTkIdx_));
+                match(SyntaxKind::SemicolonToken, &breakStmt->semicolonTkIdx_));
 }
 
 /**
@@ -820,14 +820,14 @@ bool Parser::parseReturnStatement_AtFirst(StatementSyntax*& stmt)
     stmt = retStmt;
     retStmt->returnKwTkIdx_ = consume();
 
-    if (peek().kind() == SemicolonToken) {
+    if (peek().kind() == SyntaxKind::SemicolonToken) {
         retStmt->semicolonTkIdx_ = consume();
         return true;
     }
 
     return checkStatementParse(
                 parseExpression(retStmt->expr_)
-                && match(SemicolonToken, &retStmt->semicolonTkIdx_));
+                && match(SyntaxKind::SemicolonToken, &retStmt->semicolonTkIdx_));
 }
 
 /**
@@ -835,12 +835,12 @@ bool Parser::parseReturnStatement_AtFirst(StatementSyntax*& stmt)
  *
  * \remark J.5.10.
  *
- * \see https://gcc.gnu.org/onlinedocs/gcc/Using-Assembly-Language-with-C.html#Using-Assembly-Language-with-C
+ * \see https://gcc.gnu.org/onlinedocs/gcc/Using-Program-Language-with-C.html#Using-Program-Language-with-C
  */
 bool Parser::parseExtGNU_AsmStatement(StatementSyntax*& stmt)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtGNU___asm__,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
                      return false,
                      "assert failure: `asm'");
 
@@ -853,15 +853,15 @@ bool Parser::parseExtGNU_AsmStatement(StatementSyntax*& stmt)
 
     parseExtGNU_AsmQualifiers(asmStmt->asmQuals_);
 
-    if (!(match(OpenParenToken, &asmStmt->openParenTkIdx_)
+    if (!(match(SyntaxKind::OpenParenToken, &asmStmt->openParenTkIdx_)
               && parseStringLiteral(asmStmt->strLit_))) {
         return ignoreStatement();
     }
 
-    if (peek().kind() == ColonToken) {
+    if (peek().kind() == SyntaxKind::ColonToken) {
         asmStmt->colon1TkIdx_ = consume();
-        if ((peek().kind() == StringLiteralToken
-                    || peek().kind() == OpenBracketToken)
+        if ((peek().kind() == SyntaxKind::StringLiteralToken
+                    || peek().kind() == SyntaxKind::OpenBracketToken)
                 && !parseCommaSeparatedItems<ExtGNU_AsmOperandSyntax>(
                         asmStmt->outOprds_,
                         &Parser::parseExtGNU_AsmOutputOperand_AtFirst)) {
@@ -869,10 +869,10 @@ bool Parser::parseExtGNU_AsmStatement(StatementSyntax*& stmt)
         }
     }
 
-    if (peek().kind() == ColonToken) {
+    if (peek().kind() == SyntaxKind::ColonToken) {
         asmStmt->colon2TkIdx_ = consume();
-        if ((peek().kind() == StringLiteralToken
-                    || peek().kind() == OpenBracketToken)
+        if ((peek().kind() == SyntaxKind::StringLiteralToken
+                    || peek().kind() == SyntaxKind::OpenBracketToken)
                 && !parseCommaSeparatedItems<ExtGNU_AsmOperandSyntax>(
                         asmStmt->inOprds_,
                         &Parser::parseExtGNU_AsmInputOperand_AtFirst)) {
@@ -880,21 +880,21 @@ bool Parser::parseExtGNU_AsmStatement(StatementSyntax*& stmt)
         }
     }
 
-    if (peek().kind() == ColonToken) {
+    if (peek().kind() == SyntaxKind::ColonToken) {
         asmStmt->colon3TkIdx_ = consume();
         if (!parseExtGNU_AsmClobbers(asmStmt->clobs_))
             return ignoreStatement();
     }
 
-    if (peek().kind() == ColonToken) {
+    if (peek().kind() == SyntaxKind::ColonToken) {
         asmStmt->colon4TkIdx_ = consume();
         if (!parseExtGNU_AsmGotoLabels(asmStmt->labels_))
             return ignoreStatement();
     }
 
     return checkStatementParse(
-                match(CloseParenToken, &asmStmt->closeParenTkIdx_)
-                && match(SemicolonToken, &asmStmt->semicolonTkIdx_));
+                match(SyntaxKind::CloseParenToken, &asmStmt->closeParenTkIdx_)
+                && match(SyntaxKind::SemicolonToken, &asmStmt->semicolonTkIdx_));
 }
 
 void Parser::parseExtGNU_AsmQualifiers(SpecifierListSyntax*& specList)
@@ -906,22 +906,22 @@ void Parser::parseExtGNU_AsmQualifiers(SpecifierListSyntax*& specList)
     while (true) {
         SpecifierSyntax* qual = nullptr;
         switch (peek().kind()) {
-            case Keyword_volatile:
+            case SyntaxKind::Keyword_volatile:
                 parseTrivialSpecifier_AtFirst<ExtGNU_AsmQualifierSyntax>(
                         qual,
-                        ExtGNU_AsmVolatileQualifier);
+                        SyntaxKind::ExtGNU_AsmVolatileQualifier);
                 break;
 
-            case Keyword_inline:
+            case SyntaxKind::Keyword_inline:
                 parseTrivialSpecifier_AtFirst<ExtGNU_AsmQualifierSyntax>(
                         qual,
-                        ExtGNU_AsmInlineQualifier);
+                        SyntaxKind::ExtGNU_AsmInlineQualifier);
                 break;
 
-            case Keyword_goto:
+            case SyntaxKind::Keyword_goto:
                 parseTrivialSpecifier_AtFirst<ExtGNU_AsmQualifierSyntax>(
                         qual,
-                        ExtGNU_AsmGotoQualifier);
+                        SyntaxKind::ExtGNU_AsmGotoQualifier);
                 break;
 
             default:
@@ -936,45 +936,45 @@ void Parser::parseExtGNU_AsmQualifiers(SpecifierListSyntax*& specList)
 bool Parser::parseExtGNU_AsmOutputOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOprd,
                                                   ExtGNU_AsmOperandListSyntax*&)
 {
-    return parseExtGNU_AsmOperand_AtFirst(asmOprd, ExtGNU_AsmOutputOperand);
+    return parseExtGNU_AsmOperand_AtFirst(asmOprd, SyntaxKind::ExtGNU_AsmOutputOperand);
 }
 
 bool Parser::parseExtGNU_AsmInputOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOprd,
                                                  ExtGNU_AsmOperandListSyntax*&)
 {
-    return parseExtGNU_AsmOperand_AtFirst(asmOprd, ExtGNU_AsmInputOperand);
+    return parseExtGNU_AsmOperand_AtFirst(asmOprd, SyntaxKind::ExtGNU_AsmInputOperand);
 }
 
 bool Parser::parseExtGNU_AsmOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOprd,
                                             SyntaxKind oprdK)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == StringLiteralToken
-                        || peek().kind() == OpenBracketToken,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::StringLiteralToken
+                        || peek().kind() == SyntaxKind::OpenBracketToken,
                      return false,
                      "assert failure: `[' or `<string-literal>'");
 
     auto oprd = makeNode<ExtGNU_AsmOperandSyntax>(oprdK);
     asmOprd = oprd;
 
-    if (peek().kind() == OpenBracketToken) {
+    if (peek().kind() == SyntaxKind::OpenBracketToken) {
         oprd->openBracketTkIdx_ = consume();
         if (!(parseIdentifierName(oprd->identExpr_)
-                && match(CloseBracketToken, &oprd->closeBracketTkIdx_)))
+                && match(SyntaxKind::CloseBracketToken, &oprd->closeBracketTkIdx_)))
             return false;
     }
 
     return parseStringLiteral(oprd->strLit_)
-        && match(OpenParenToken, &oprd->openParenTkIdx_)
+        && match(SyntaxKind::OpenParenToken, &oprd->openParenTkIdx_)
         && parseExpression(oprd->expr_)
-        && match(CloseParenToken, &oprd->closeParenTkIdx_);
+        && match(SyntaxKind::CloseParenToken, &oprd->closeParenTkIdx_);
 }
 
 bool Parser::parseExtGNU_AsmClobbers(ExpressionListSyntax*& clobList)
 {
     DEBUG_THIS_RULE();
 
-    if (peek().kind() != StringLiteralToken)
+    if (peek().kind() != SyntaxKind::StringLiteralToken)
         return true;
 
     return parseCommaSeparatedItems<ExpressionSyntax>(
@@ -993,7 +993,7 @@ bool Parser::parseExtGNU_AsmGotoLabels(ExpressionListSyntax*& labelList)
 {
     DEBUG_THIS_RULE();
 
-    if (peek().kind() != IdentifierToken)
+    if (peek().kind() != SyntaxKind::IdentifierToken)
         return true;
 
     return parseCommaSeparatedItems<ExpressionSyntax>(

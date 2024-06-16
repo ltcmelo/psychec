@@ -23,7 +23,7 @@
 
 #include "SyntaxTree.h"
 
-#include "syntax/SyntaxLexeme_ALL.h"
+#include "syntax/Lexeme_ALL.h"
 
 #include <cctype>
 #include <cstring>
@@ -65,7 +65,7 @@ Lexer::Lexer(SyntaxTree* tree)
     , yycolumn_(0)
     , offset_(~0)  // Start immediately "before" 0.
     , withinLogicalLine_(false)
-    , rawSyntaxK_splitTk(0)
+    , syntaxK_splitTk(SyntaxKind::EndOfFile)
     , diagReporter_(this)
 {}
 
@@ -80,27 +80,27 @@ bool isByteOfMultiByteCP(unsigned char byte)
     return byte & 0x80;
 }
 
-bool isRawStringLiteral(std::uint16_t rawSyntaxK)
+bool isRawStringLiteral(SyntaxKind syntaxK)
 {
-    switch (rawSyntaxK) {
-        case StringLiteral_R_Token:
-        case StringLiteral_LR_Token:
-        case StringLiteral_u8R_Token:
-        case StringLiteral_uR_Token:
-        case StringLiteral_UR_Token:
+    switch (syntaxK) {
+        case SyntaxKind::StringLiteral_R_Token:
+        case SyntaxKind::StringLiteral_LR_Token:
+        case SyntaxKind::StringLiteral_u8R_Token:
+        case SyntaxKind::StringLiteral_uR_Token:
+        case SyntaxKind::StringLiteral_UR_Token:
             return true;
         default:
             return false;
     }
 }
 
-bool isMultiLineToken(std::uint16_t rawSyntaxK)
+bool isMultiLineToken(SyntaxKind syntaxK)
 {
-    return rawSyntaxK == EndOfFile
-            || rawSyntaxK == MultiLineCommentTrivia
-            || rawSyntaxK == MultiLineDocumentationCommentTrivia
-            || rawSyntaxK == Keyword_ExtPSY_omission
-            || isRawStringLiteral(rawSyntaxK);
+    return syntaxK == SyntaxKind::EndOfFile
+            || syntaxK == SyntaxKind::MultiLineCommentTrivia
+            || syntaxK == SyntaxKind::MultiLineDocumentationCommentTrivia
+            || syntaxK == SyntaxKind::Keyword_ExtPSY_omission
+            || isRawStringLiteral(syntaxK);
 }
 
 } // anonymous
@@ -116,7 +116,7 @@ void Lexer::lex()
     std::vector<std::pair<unsigned int, unsigned int>> expansions;
     unsigned int curExpansionIdx = 0;
 
-    // Open/close brace tracking.
+    // SyntaxKind::Open/close brace tracking.
     std::stack<unsigned> braces;
 
     SyntaxToken tk(tree_);
@@ -125,17 +125,17 @@ void Lexer::lex()
         yylex(&tk);
 
 LexEntry:
-        if (tk.isAtStartOfLine() && tk.isKind(HashToken)) {
+        if (tk.isAtStartOfLine() && tk.isKind(SyntaxKind::HashToken)) {
             auto offset = tk.charOffset_;
             yylex(&tk);
 
             if (!tk.isAtStartOfLine()
-                    && tk.isKind(IdentifierToken)
+                    && tk.isKind(SyntaxKind::IdentifierToken)
                     && !strcmp(tk.identifier_->c_str(), kExpansion)) {
                 // A Qt Creator-specific macro mark.
                 yylex(&tk);
 
-                if (!tk.isAtStartOfLine() && tk.isKind(IdentifierToken)) {
+                if (!tk.isAtStartOfLine() && tk.isKind(SyntaxKind::IdentifierToken)) {
                     if (!strcmp(tk.identifier_->c_str(), kBegin)) {
                         // The start of an expansion section.
                         yylex(&tk);
@@ -147,11 +147,11 @@ LexEntry:
 
                         // Gather the real line and column from the upcoming tokens; only
                         // relevant for tokens which are expanded but not generated.
-                        while (!tk.isKind(EndOfFile)
+                        while (!tk.isKind(SyntaxKind::EndOfFile)
                                     && !tk.isAtStartOfLine()) {
                             // A ~ means that the a number of generated tokens follows;
                             // otherwise, what follows is data.
-                            if (tk.isKind(TildeToken)) {
+                            if (tk.isKind(SyntaxKind::TildeToken)) {
                                 yylex(&tk);
 
                                 // Get the total number of generated tokens and specify "null"
@@ -165,7 +165,7 @@ LexEntry:
 
                                 yylex(&tk);
                             }
-                            else if (tk.isKind(IntegerConstantToken)) {
+                            else if (tk.isKind(SyntaxKind::IntegerConstantToken)) {
                                 auto lineno = strtoul(tk.valueText_c_str(), 0, 0);
                                 yylex(&tk);
                                 yylex(&tk); // Skip the separating colon.
@@ -188,35 +188,35 @@ LexEntry:
             else {
                 // A regular preprocessor directive.
                 if (!tk.isAtStartOfLine()
-                        && tk.isKind(IdentifierToken)
+                        && tk.isKind(SyntaxKind::IdentifierToken)
                         && !strcmp(tk.identifier_->c_str(), kLine)) {
                     yylex(&tk);
                 }
 
                 if (!tk.isAtStartOfLine()
-                        && tk.isKind(IntegerConstantToken)) {
+                        && tk.isKind(SyntaxKind::IntegerConstantToken)) {
                     auto lineno = strtoul(tk.valueText_c_str(), 0, 0);
                     yylex(&tk);
 
                     if (!tk.isAtStartOfLine()
-                            && tk.isKind(StringLiteralToken)) {
-                        auto fileName = tree_->stringLiteral(tk.string_->c_str(), tk.string_->size());
+                            && tk.isKind(SyntaxKind::StringLiteralToken)) {
+                        auto fileName = tree_->findOrInsertStringLiteral(tk.string_->c_str(), tk.string_->size());
                         tree_->relayLineDirective(offset, lineno, fileName->c_str());
                         yylex(&tk);
                     }
                 }
 
-                while (!tk.isAtStartOfLine() && !tk.isKind(EndOfFile)) {
+                while (!tk.isAtStartOfLine() && !tk.isKind(SyntaxKind::EndOfFile)) {
                     // Skip the remaining of the line, ignoring a possible include.
                     yylex(&tk);
                 }
             }
             goto LexEntry;
         }
-        else if (tk.kind() == OpenBraceToken) {
+        else if (tk.kind() == SyntaxKind::OpenBraceToken) {
             braces.push(tree_->tokenCount());
         }
-        else if (tk.kind() == CloseBraceToken && !braces.empty()) {
+        else if (tk.kind() == SyntaxKind::CloseBraceToken && !braces.empty()) {
             auto idx = braces.top();
             braces.pop();
             if (idx < tree_->tokenCount())
@@ -224,7 +224,7 @@ LexEntry:
         }
         else if (tk.isComment()) {
             tree_->comments_.push_back(tk);
-            if (tk.kind() != Keyword_ExtPSY_omission)
+            if (tk.kind() != SyntaxKind::Keyword_ExtPSY_omission)
                 continue;
         }
 
@@ -244,7 +244,7 @@ LexEntry:
 
         tree_->addToken(tk);
     }
-    while (tk.kind());
+    while (tk.kind() != SyntaxKind::EndOfFile);
 
     for (; !braces.empty(); braces.pop()) {
         auto idx = braces.top();
@@ -262,7 +262,7 @@ LexEntry:
 
             if (withinLogicalLine_)
                 withinLogicalLine_ = false;
-            else if (!isMultiLineToken(rawSyntaxK_splitTk))
+            else if (!isMultiLineToken(syntaxK_splitTk))
                 withinLogicalLine_ = 0;
         }
         else {
@@ -280,15 +280,15 @@ LexEntry:
 
     if (yychar_)
         withinLogicalLine_ = false;
-    else if (rawSyntaxK_splitTk) {
-        tk->rawSyntaxK_ = EndOfFile;
+    else if (syntaxK_splitTk != SyntaxKind::EndOfFile) {
+        tk->syntaxK_ = SyntaxKind::EndOfFile;
         return;
     }
 
-    if (rawSyntaxK_splitTk == MultiLineCommentTrivia
-            || rawSyntaxK_splitTk == MultiLineDocumentationCommentTrivia
-            || rawSyntaxK_splitTk == Keyword_ExtPSY_omission) {
-        auto tkRawKind = rawSyntaxK_splitTk;
+    if (syntaxK_splitTk == SyntaxKind::MultiLineCommentTrivia
+            || syntaxK_splitTk == SyntaxKind::MultiLineDocumentationCommentTrivia
+            || syntaxK_splitTk == SyntaxKind::Keyword_ExtPSY_omission) {
+        auto tkRawKind = syntaxK_splitTk;
         while (yychar_) {
             if (yychar_ != '*')
                 yyinput();
@@ -305,38 +305,38 @@ LexEntry:
         if (tree_->parseOptions().commentMode() == ParseOptions::CommentMode::Discard)
             goto LexEntry;
 
-        tk->rawSyntaxK_ = tkRawKind;
+        tk->syntaxK_ = tkRawKind;
         return;
     }
 
-    if (rawSyntaxK_splitTk == SingleLineCommentTrivia
-            || rawSyntaxK_splitTk == SingleLineDocumentationCommentTrivia) {
-        auto syntaxK = rawSyntaxK_splitTk;
+    if (syntaxK_splitTk == SyntaxKind::SingleLineCommentTrivia
+            || syntaxK_splitTk == SyntaxKind::SingleLineDocumentationCommentTrivia) {
+        auto syntaxK = syntaxK_splitTk;
         tk->BF_.joined_ = true;
         if (tree_->parseOptions().commentMode() != ParseOptions::CommentMode::Discard)
-            tk->rawSyntaxK_ = syntaxK;
+            tk->syntaxK_ = syntaxK;
         withinLogicalLine_ = false;
         lexSingleLineComment(syntaxK);
         return;
     }
 
-    if (isRawStringLiteral(rawSyntaxK_splitTk)) {
-        tk->rawSyntaxK_ = rawSyntaxK_splitTk;
+    if (isRawStringLiteral(syntaxK_splitTk)) {
+        tk->syntaxK_ = syntaxK_splitTk;
         if (lexContinuedRawStringLiteral())
             withinLogicalLine_ = false;
         return;
     }
 
-    if (rawSyntaxK_splitTk != EndOfFile) {
+    if (syntaxK_splitTk !=  SyntaxKind::EndOfFile) {
         tk->BF_.joined_ = true;
-        tk->rawSyntaxK_ = rawSyntaxK_splitTk;
+        tk->syntaxK_ = syntaxK_splitTk;
         withinLogicalLine_ = false;
         lexUntilQuote(tk, '"', 1);
         return;
     }
 
     if (!yychar_) {
-        tk->rawSyntaxK_ = EndOfFile;
+        tk->syntaxK_ =  SyntaxKind::EndOfFile;
         return;
     }
 
@@ -357,51 +357,51 @@ LexEntry:
             break;
 
         case '{':
-            tk->rawSyntaxK_ = OpenBraceToken;
+            tk->syntaxK_ = SyntaxKind::OpenBraceToken;
             break;
 
         case '}':
-            tk->rawSyntaxK_ = CloseBraceToken;
+            tk->syntaxK_ = SyntaxKind::CloseBraceToken;
             break;
 
         case '[':
-            tk->rawSyntaxK_ = OpenBracketToken;
+            tk->syntaxK_ = SyntaxKind::OpenBracketToken;
             break;
 
         case ']':
-            tk->rawSyntaxK_ = CloseBracketToken;
+            tk->syntaxK_ = SyntaxKind::CloseBracketToken;
             break;
 
         case '#':
             if (yychar_ == '#') {
-                tk->rawSyntaxK_ = HashHashToken;
+                tk->syntaxK_ = SyntaxKind::HashHashToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = HashToken;
+                tk->syntaxK_ = SyntaxKind::HashToken;
             }
             break;
 
         case '(':
-            tk->rawSyntaxK_ = OpenParenToken;
+            tk->syntaxK_ = SyntaxKind::OpenParenToken;
             break;
 
         case ')':
-            tk->rawSyntaxK_ = CloseParenToken;
+            tk->syntaxK_ = SyntaxKind::CloseParenToken;
             break;
 
         case ';':
-            tk->rawSyntaxK_ = SemicolonToken;
+            tk->syntaxK_ = SyntaxKind::SemicolonToken;
             break;
 
         case ':':
             if (yychar_ == '>') {
                 // Digraph: 6.4.6-3.
-                tk->rawSyntaxK_ = CloseBracketToken;
+                tk->syntaxK_ = SyntaxKind::CloseBracketToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = ColonToken;
+                tk->syntaxK_ = SyntaxKind::ColonToken;
             }
             break;
 
@@ -409,18 +409,18 @@ LexEntry:
             if (yychar_ == '.') {
                 yyinput();
                 if (yychar_ == '.') {
-                    tk->rawSyntaxK_ = EllipsisToken;
+                    tk->syntaxK_ = SyntaxKind::EllipsisToken;
                     yyinput();
                 }
                 else {
-                    tk->rawSyntaxK_ = Error;
+                    tk->syntaxK_ = SyntaxKind::Error;
                 }
             }
             else if (std::isdigit(yychar_)) {
                 lexFloatingOrImaginaryFloating_AtFollowOfPeriod(tk, 1);
             }
             else {
-                tk->rawSyntaxK_ = DotToken;
+                tk->syntaxK_ = SyntaxKind::DotToken;
             }
             break;
 
@@ -428,87 +428,87 @@ LexEntry:
             if (yychar_ == '?') {
                 yyinput();
                 if (yychar_ == '(') {
-                    tk->rawSyntaxK_ = OpenBracketToken;
+                    tk->syntaxK_ = SyntaxKind::OpenBracketToken;
                     yyinput();
                 }
                 else if (yychar_ == ')') {
-                    tk->rawSyntaxK_ = CloseBracketToken;
+                    tk->syntaxK_ = SyntaxKind::CloseBracketToken;
                     yyinput();
                 }
                 else if (yychar_ == '<') {
-                    tk->rawSyntaxK_ = OpenBraceToken;
+                    tk->syntaxK_ = SyntaxKind::OpenBraceToken;
                     yyinput();
                 }
                 else if (yychar_ == '>') {
-                    tk->rawSyntaxK_ = CloseBraceToken;
+                    tk->syntaxK_ = SyntaxKind::CloseBraceToken;
                     yyinput();
                 }
             }
             else {
-                tk->rawSyntaxK_ = QuestionToken;
+                tk->syntaxK_ = SyntaxKind::QuestionToken;
             }
             break;
 
         case '+':
             if (yychar_ == '+') {
-                tk->rawSyntaxK_ = PlusPlusToken;
+                tk->syntaxK_ = SyntaxKind::PlusPlusToken;
                 yyinput();
             }
             else if (yychar_ == '=') {
-                tk->rawSyntaxK_ = PlusEqualsToken;
+                tk->syntaxK_ = SyntaxKind::PlusEqualsToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = PlusToken;
+                tk->syntaxK_ = SyntaxKind::PlusToken;
             }
             break;
 
         case '-':
             if (yychar_ == '-') {
-                tk->rawSyntaxK_ = MinusMinusToken;
+                tk->syntaxK_ = SyntaxKind::MinusMinusToken;
                 yyinput();
             }
             else if (yychar_ == '=') {
-                tk->rawSyntaxK_ = MinusEqualsToken;
+                tk->syntaxK_ = SyntaxKind::MinusEqualsToken;
                 yyinput();
             }
             else if (yychar_ == '>') {
-                tk->rawSyntaxK_ = ArrowToken;
+                tk->syntaxK_ = SyntaxKind::ArrowToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = MinusToken;
+                tk->syntaxK_ = SyntaxKind::MinusToken;
             }
             break;
 
         case '*':
             if (yychar_ == '=') {
-                tk->rawSyntaxK_ = AsteriskEqualsToken;
+                tk->syntaxK_ = SyntaxKind::AsteriskEqualsToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = AsteriskToken;
+                tk->syntaxK_ = SyntaxKind::AsteriskToken;
             }
             break;
 
         case '/':
             if (yychar_ == '/') {
-                SyntaxKind syntaxK = SingleLineCommentTrivia;
+                SyntaxKind syntaxK = SyntaxKind::SingleLineCommentTrivia;
 
                 yyinput();
                 if (yychar_ == '/' || yychar_ == '!') {
                     yyinput();
-                    syntaxK = SingleLineDocumentationCommentTrivia;
+                    syntaxK = SyntaxKind::SingleLineDocumentationCommentTrivia;
                 }
                 lexSingleLineComment(syntaxK);
 
                 if (tree_->parseOptions().commentMode() == ParseOptions::CommentMode::Discard)
                     goto LexEntry;
 
-                tk->rawSyntaxK_ = syntaxK;
+                tk->syntaxK_ = syntaxK;
             }
             else if (yychar_ == '*') {
-                SyntaxKind syntaxK = MultiLineCommentTrivia;
+                SyntaxKind syntaxK = SyntaxKind::MultiLineCommentTrivia;
 
                 yyinput();
                 if (yychar_ == '*' || yychar_ == '!') {
@@ -521,14 +521,14 @@ LexEntry:
                         yyinput();
 
                     if (!yychar_ || std::isspace(yychar_))
-                        syntaxK = MultiLineDocumentationCommentTrivia;
+                        syntaxK = SyntaxKind::MultiLineDocumentationCommentTrivia;
                 }
                 else if (yychar_ == '.') {
                     do {
                         yyinput();
                     }
                     while (yychar_ == '.');
-                    syntaxK = Keyword_ExtPSY_omission;
+                    syntaxK = SyntaxKind::Keyword_ExtPSY_omission;
                 }
 
                 while (yychar_) {
@@ -546,101 +546,101 @@ LocalExit:
                 if (yychar_)
                     yyinput();
                 else
-                    rawSyntaxK_splitTk = syntaxK;
+                    syntaxK_splitTk = syntaxK;
 
                 if (tree_->parseOptions().commentMode() == ParseOptions::CommentMode::Discard)
                     goto LexEntry;
 
-                tk->rawSyntaxK_ = syntaxK;
+                tk->syntaxK_ = syntaxK;
             }
             else if (yychar_ == '=') {
-                tk->rawSyntaxK_ = SlashEqualsToken;
+                tk->syntaxK_ = SyntaxKind::SlashEqualsToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = SlashToken;
+                tk->syntaxK_ = SyntaxKind::SlashToken;
             }
             break;
 
         case '%':
             if (yychar_ == '=') {
-                tk->rawSyntaxK_ = PercentEqualsToken;
+                tk->syntaxK_ = SyntaxKind::PercentEqualsToken;
                 yyinput();
             }
             else if (yychar_ == '>') {
                 // Digraph: 6.4.6-3.
-                tk->rawSyntaxK_ = CloseBraceToken;
+                tk->syntaxK_ = SyntaxKind::CloseBraceToken;
                 yyinput();
             }
             else if (yychar_ == ':') {
                 // Digraph: 6.4.6-3.
-                tk->rawSyntaxK_ = HashToken;
+                tk->syntaxK_ = SyntaxKind::HashToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = PercentToken;
+                tk->syntaxK_ = SyntaxKind::PercentToken;
             }
             break;
 
         case '^':
             if (yychar_ == '=') {
-                tk->rawSyntaxK_ = CaretEqualsToken;
+                tk->syntaxK_ = SyntaxKind::CaretEqualsToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = CaretToken;
+                tk->syntaxK_ = SyntaxKind::CaretToken;
             }
             break;
 
         case '&':
             if (yychar_ == '&') {
-                tk->rawSyntaxK_ = AmpersandAmpersandToken;
+                tk->syntaxK_ = SyntaxKind::AmpersandAmpersandToken;
                 yyinput();
             }
             else if (yychar_ == '=') {
-                tk->rawSyntaxK_ = AmpersandEqualsToken;
+                tk->syntaxK_ = SyntaxKind::AmpersandEqualsToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = AmpersandToken;
+                tk->syntaxK_ = SyntaxKind::AmpersandToken;
             }
             break;
 
         case '|':
             if (yychar_ == '|') {
-                tk->rawSyntaxK_ = BarBarToken;
+                tk->syntaxK_ = SyntaxKind::BarBarToken;
                 yyinput();
             }
             else if (yychar_ == '=') {
-                tk->rawSyntaxK_ = BarEqualsToken;
+                tk->syntaxK_ = SyntaxKind::BarEqualsToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = BarToken;
+                tk->syntaxK_ = SyntaxKind::BarToken;
             }
             break;
 
         case '~':
-            tk->rawSyntaxK_ = TildeToken;
+            tk->syntaxK_ = SyntaxKind::TildeToken;
             break;
 
         case '!':
             if (yychar_ == '=') {
-                tk->rawSyntaxK_ = ExclamationEqualsToken;
+                tk->syntaxK_ = SyntaxKind::ExclamationEqualsToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = ExclamationToken;
+                tk->syntaxK_ = SyntaxKind::ExclamationToken;
             }
             break;
 
         case '=':
             if (yychar_ == '=') {
-                tk->rawSyntaxK_ = EqualsEqualsToken;
+                tk->syntaxK_ = SyntaxKind::EqualsEqualsToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = EqualsToken;
+                tk->syntaxK_ = SyntaxKind::EqualsToken;
             }
             break;
 
@@ -648,28 +648,28 @@ LocalExit:
             if (yychar_ == '<') {
                 yyinput();
                 if (yychar_ == '=') {
-                    tk->rawSyntaxK_ = LessThanLessThanEqualsToken;
+                    tk->syntaxK_ = SyntaxKind::LessThanLessThanEqualsToken;
                     yyinput();
                 }
                 else
-                    tk->rawSyntaxK_ = LessThanLessThanToken;
+                    tk->syntaxK_ = SyntaxKind::LessThanLessThanToken;
             }
             else if (yychar_ == '=') {
-                tk->rawSyntaxK_ = LessThanEqualsToken;
+                tk->syntaxK_ = SyntaxKind::LessThanEqualsToken;
                 yyinput();
             }
             else if (yychar_ == ':') {
                 // Digraph: 6.4.6-3.
-                tk->rawSyntaxK_ = OpenBracketToken;
+                tk->syntaxK_ = SyntaxKind::OpenBracketToken;
                 yyinput();
             }
             else if (yychar_ == '%') {
                 // Digraph: 6.4.6-3.
-                tk->rawSyntaxK_ = OpenBraceToken;
+                tk->syntaxK_ = SyntaxKind::OpenBraceToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = LessThanToken;
+                tk->syntaxK_ = SyntaxKind::LessThanToken;
             }
             break;
 
@@ -678,23 +678,23 @@ LocalExit:
                 yyinput();
                 if (yychar_ == '=') {
                     yyinput();
-                    tk->rawSyntaxK_ = GreaterThanGreaterThanEqualsToken;
+                    tk->syntaxK_ = SyntaxKind::GreaterThanGreaterThanEqualsToken;
                 }
                 else
-                    tk->rawSyntaxK_ = LessThanLessThanToken;
-                tk->rawSyntaxK_ = GreaterThanGreaterThanToken;
+                    tk->syntaxK_ = SyntaxKind::LessThanLessThanToken;
+                tk->syntaxK_ = SyntaxKind::GreaterThanGreaterThanToken;
             }
             else if (yychar_ == '=') {
-                tk->rawSyntaxK_ = GreaterThanEqualsToken;
+                tk->syntaxK_ = SyntaxKind::GreaterThanEqualsToken;
                 yyinput();
             }
             else {
-                tk->rawSyntaxK_ = GreaterThanToken;
+                tk->syntaxK_ = SyntaxKind::GreaterThanToken;
             }
             break;
 
         case ',':
-            tk->rawSyntaxK_ = CommaToken;
+            tk->syntaxK_ = SyntaxKind::CommaToken;
             break;
 
         default: {
@@ -762,7 +762,7 @@ LocalExit:
                 lexIntegerOrFloatingConstant(tk);
             }
             else {
-                tk->rawSyntaxK_ = Error;
+                tk->syntaxK_ = SyntaxKind::Error;
             }
             break;
         }
@@ -780,7 +780,7 @@ void Lexer::yylex(SyntaxToken* tk)
 }
 
 /**
- * Process a single unicode code point in an UTF-8 encoded source.
+ * Process a SyntaxKind::Single unicode code point in an UTF-8 encoded source.
  * Points \c yychar to the byte of the next code point and modifies \a yy
  * to the value pointed by the updated \c yychar; \c offset will be
  * incremented by the number of UTF-16 code units that were needed.
@@ -841,15 +841,15 @@ void Lexer::lexIdentifier(SyntaxToken* tk, int advanced)
     int yyleng = yytext_ - yytext;
 
     if (tree_->parseOptions().isEnabled_keywordRecognition())
-        tk->rawSyntaxK_ = recognize(yytext, yyleng, tree_->parseOptions());
+        tk->syntaxK_ = recognize(yytext, yyleng, tree_->parseOptions());
     else
-        tk->rawSyntaxK_ = IdentifierToken;
+        tk->syntaxK_ = SyntaxKind::IdentifierToken;
 
-    if (tk->rawSyntaxK_ == IdentifierToken
+    if (tk->syntaxK_ == SyntaxKind::IdentifierToken
             && tree_->parseOptions().languageExtensions().
                     translations().isEnabled_Translate_operatorNames()) {
-        tk->rawSyntaxK_ = translate(yytext, yyleng, tree_->parseOptions());
-        tk->identifier_ = tree_->identifier(yytext, yyleng);
+        tk->syntaxK_ = translate(yytext, yyleng, tree_->parseOptions());
+        tk->identifier_ = tree_->findOrInsertIdentifier(yytext, yyleng);
     }
 }
 
@@ -868,7 +868,7 @@ void Lexer::lexIntegerOrFloatingConstant(SyntaxToken* tk)
             lexHexadecimalDigitSequence();
 
             if (yychar_ == '.') {
-                tk->rawSyntaxK_ = FloatingConstantToken;
+                tk->syntaxK_ = SyntaxKind::FloatingConstantToken;
                 yyinput();
 
                 if (tree_->parseOptions().languageDialect().std() < LanguageDialect::Std::C99) {
@@ -929,7 +929,7 @@ void Lexer::lexIntegerOrFloating_AtFollowOfSuffix(SyntaxToken* tk,
                                                   std::function<void ()> makeLexeme)
 {
     if (std::isalnum(yychar_) || yychar_ == '_') {
-        tk->rawSyntaxK_ = Error;
+        tk->syntaxK_ = SyntaxKind::Error;
         do {
             yyinput();
         }
@@ -955,12 +955,12 @@ void Lexer::lexIntegerOrImaginaryIntegerSuffix(SyntaxToken* tk, unsigned int acc
     lexIntegerOrFloating_AtFollowOfSuffix(
             tk,
             [&] () {
-                if (tk->rawSyntaxK_ == ImaginaryIntegerConstantToken) {
-                    tk->imaginaryInteger_ = tree_->imaginaryIntegerConstant(yytext, yytext_ - yytext);
+                if (tk->syntaxK_ == SyntaxKind::ImaginaryIntegerConstantToken) {
+                    tk->imaginaryInteger_ = tree_->findOrInsertImaginaryIntegerConstant(yytext, yytext_ - yytext);
                 }
                 else {
-                    tk->rawSyntaxK_ = IntegerConstantToken;
-                    tk->integer_ = tree_->integerConstant(yytext, yytext_ - yytext);
+                    tk->syntaxK_ = SyntaxKind::IntegerConstantToken;
+                    tk->integer_ = tree_->findOrInsertIntegerConstant(yytext, yytext_ - yytext);
                 }
             });
 }
@@ -1028,7 +1028,7 @@ void Lexer::lexImaginaryIntegerSuffix_AtFirst(SyntaxToken* tk)
     }
 
     yyinput();
-    tk->rawSyntaxK_ = ImaginaryIntegerConstantToken;
+    tk->syntaxK_ = SyntaxKind::ImaginaryIntegerConstantToken;
 }
 
 void Lexer::lexFloatingOrImaginaryFloating_AtFollowOfPeriod(SyntaxToken* tk, unsigned int accLeng)
@@ -1060,12 +1060,12 @@ void Lexer::lexFloatingOrImaginaryFloatingSuffix(SyntaxToken* tk, unsigned int a
     lexIntegerOrFloating_AtFollowOfSuffix(
             tk,
             [&] () {
-                if (tk->rawSyntaxK_ == ImaginaryFloatingConstantToken) {
-                    tk->imaginaryFloating_ = tree_->imaginaryFloatingConstant(yytext, yytext_ - yytext);
+                if (tk->syntaxK_ == SyntaxKind::ImaginaryFloatingConstantToken) {
+                    tk->imaginaryFloating_ = tree_->findOrInsertImaginaryFloatingConstant(yytext, yytext_ - yytext);
                 }
                 else {
-                    tk->rawSyntaxK_ = FloatingConstantToken;
-                    tk->floating_ = tree_->floatingConstant(yytext, yytext_ - yytext);
+                    tk->syntaxK_ = SyntaxKind::FloatingConstantToken;
+                    tk->floating_ = tree_->findOrInsertFloatingConstant(yytext, yytext_ - yytext);
                 }
             });
 }
@@ -1085,7 +1085,7 @@ void Lexer::lexImaginaryFloatingSuffix_AtFirst(SyntaxToken* tk)
     }
 
     yyinput();
-    tk->rawSyntaxK_ = ImaginaryFloatingConstantToken;
+    tk->syntaxK_ = SyntaxKind::ImaginaryFloatingConstantToken;
 }
 
 /**
@@ -1180,13 +1180,13 @@ void Lexer::lexCharacterConstant(SyntaxToken* tk, unsigned char prefix)
 {
     unsigned int prefixSize = 1;
     if (prefix == 'L')
-        tk->rawSyntaxK_ = CharacterConstant_L_Token;
+        tk->syntaxK_ = SyntaxKind::CharacterConstant_L_Token;
     else if (prefix == 'U')
-        tk->rawSyntaxK_ = CharacterConstant_U_Token;
+        tk->syntaxK_ = SyntaxKind::CharacterConstant_U_Token;
     else if (prefix == 'u')
-        tk->rawSyntaxK_ = CharacterConstant_u_Token;
+        tk->syntaxK_ = SyntaxKind::CharacterConstant_u_Token;
     else {
-        tk->rawSyntaxK_ = CharacterConstantToken;
+        tk->syntaxK_ = SyntaxKind::CharacterConstantToken;
         prefixSize = 0;
     }
 
@@ -1202,15 +1202,15 @@ void Lexer::lexStringLiteral(SyntaxToken* tk, unsigned char prefix)
 {
     unsigned int prefixSize = 1;
     if (prefix == 'L')
-        tk->rawSyntaxK_ = StringLiteral_L_Token;
+        tk->syntaxK_ = SyntaxKind::StringLiteral_L_Token;
     else if (prefix == 'U')
-        tk->rawSyntaxK_ = StringLiteral_U_Token;
+        tk->syntaxK_ = SyntaxKind::StringLiteral_U_Token;
     else if (prefix == 'u')
-        tk->rawSyntaxK_ = StringLiteral_u_Token;
+        tk->syntaxK_ = SyntaxKind::StringLiteral_u_Token;
     else if (prefix == '8')
-        tk->rawSyntaxK_ = StringLiteral_u8_Token;
+        tk->syntaxK_ = SyntaxKind::StringLiteral_u8_Token;
     else {
-        tk->rawSyntaxK_ = StringLiteralToken;
+        tk->syntaxK_ = SyntaxKind::StringLiteralToken;
         prefixSize = 0;
     }
 
@@ -1267,21 +1267,21 @@ void Lexer::lexRawStringLiteral(SyntaxToken* tk, unsigned char prefix)
     if (yychar_ == '"')
         yyinput();
 
-    tk->string_ = tree_->stringLiteral(yytext, yyleng);
+    tk->string_ = tree_->findOrInsertStringLiteral(yytext, yyleng);
 
     if (prefix == 'L')
-        tk->rawSyntaxK_ = StringLiteral_LR_Token;
+        tk->syntaxK_ = SyntaxKind::StringLiteral_LR_Token;
     else if (prefix == 'U')
-        tk->rawSyntaxK_ = StringLiteral_UR_Token;
+        tk->syntaxK_ = SyntaxKind::StringLiteral_UR_Token;
     else if (prefix == 'u')
-        tk->rawSyntaxK_ = StringLiteral_uR_Token;
+        tk->syntaxK_ = SyntaxKind::StringLiteral_uR_Token;
     else if (prefix == '8')
-        tk->rawSyntaxK_ = StringLiteral_u8R_Token;
+        tk->syntaxK_ = SyntaxKind::StringLiteral_u8R_Token;
     else
-        tk->rawSyntaxK_ = StringLiteral_R_Token;
+        tk->syntaxK_ = SyntaxKind::StringLiteral_R_Token;
 
     if (!yychar_)
-        rawSyntaxK_splitTk = tk->rawSyntaxK_;
+        syntaxK_splitTk = tk->syntaxK_;
 }
 
 bool Lexer::lexContinuedRawStringLiteral()
@@ -1305,7 +1305,7 @@ bool Lexer::lexContinuedRawStringLiteral()
     return false;
 }
 
-void Lexer::lexBackslash(std::uint16_t rawSyntaxK)
+void Lexer::lexBackslash(SyntaxKind syntaxK)
 {
     yyinput();
     if (yychar_ && !std::isspace(yychar_)) {
@@ -1317,7 +1317,7 @@ void Lexer::lexBackslash(std::uint16_t rawSyntaxK)
         yyinput();
 
     if (!yychar_) {
-        rawSyntaxK_splitTk = rawSyntaxK;
+        syntaxK_splitTk = syntaxK;
         withinLogicalLine_ = true;
         return;
     }
@@ -1328,7 +1328,7 @@ void Lexer::lexBackslash(std::uint16_t rawSyntaxK)
             yyinput();
 
         if (!yychar_)
-            rawSyntaxK_splitTk = rawSyntaxK;
+            syntaxK_splitTk = syntaxK;
     }
 }
 
@@ -1341,7 +1341,7 @@ void Lexer::lexUntilQuote(SyntaxToken* tk, unsigned char quote, unsigned int acc
                && yychar_ != quote
                && yychar_ != '\n') {
         if (yychar_ == '\\')
-            lexBackslash(tk->rawSyntaxK_);
+            lexBackslash(tk->syntaxK_);
         else
             yyinput();
     }
@@ -1353,16 +1353,16 @@ void Lexer::lexUntilQuote(SyntaxToken* tk, unsigned char quote, unsigned int acc
         yyinput();
 
     if (quote == '\'')
-        tk->character_ = tree_->characterConstant(yytext, yyleng);
+        tk->character_ = tree_->findOrInsertCharacterConstant(yytext, yyleng);
     else
-        tk->string_ = tree_->stringLiteral(yytext, yyleng);
+        tk->string_ = tree_->findOrInsertStringLiteral(yytext, yyleng);
 }
 
-void Lexer::lexSingleLineComment(std::uint16_t rawSyntaxK)
+void Lexer::lexSingleLineComment(SyntaxKind syntaxK)
 {
     while (yychar_ && yychar_ != '\n') {
         if (yychar_ == '\\')
-            lexBackslash(rawSyntaxK);
+            lexBackslash(syntaxK);
         else if (yychar_)
             yyinput();
     }

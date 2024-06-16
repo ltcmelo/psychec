@@ -26,7 +26,7 @@
 #include "Fwds.h"
 #include "SyntaxTree.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 #include "../common/infra/Pimpl.h"
 
 #include <string>
@@ -57,9 +57,9 @@ public:
     static std::unique_ptr<Compilation> create(const std::string& id);
 
     /**
-     * The Assembly produced by \c this Compilation.
+     * The Program in \c this Compilation.
      */
-    const Assembly* assembly() const;
+    const Program* program() const;
 
     /**
      * Add a SyntaxTree to \c this Compilation.
@@ -81,10 +81,10 @@ public:
      */
     const SemanticModel* semanticModel(const SyntaxTree* tree) const;
 
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(SemanticModel);
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
 
-    Assembly* assembly();
+    Program* program();
 
 private:
     Compilation();

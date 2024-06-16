@@ -68,7 +68,7 @@ public:
         + 0350-0399 -> field
         + 0400-0449 -> enum
         + 0450-0499 -> enumerator
-        + 0500-0509 -> library
+        + 0500-0509 -> program
      */
 
     void case0001();

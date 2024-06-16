@@ -27,7 +27,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API Shape
+class PSY_C_INTERNAL_API Shape
 {
 public:
     virtual ~Shape();

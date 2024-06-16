@@ -22,7 +22,7 @@
 
 #include "SyntaxTree.h"
 
-#include "syntax/SyntaxLexeme_ALL.h"
+#include "syntax/Lexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 
 #include <iostream>
@@ -38,14 +38,14 @@ void Unparser::unparse(const SyntaxNode* node, std::ostream& os)
 
 void Unparser::terminal(const SyntaxToken& tk, const SyntaxNode*)
 {
-    if (tk.kind() == EndOfFile)
+    if (tk.kind() == SyntaxKind::EndOfFile)
         return;
 
     *os_ << tk.valueText_c_str();
 
-    if (tk.kind() == CloseBraceToken
-            || tk.kind() == OpenBraceToken
-            || tk.kind() == SemicolonToken)
+    if (tk.kind() == SyntaxKind::CloseBraceToken
+            || tk.kind() == SyntaxKind::OpenBraceToken
+            || tk.kind() == SyntaxKind::SemicolonToken)
         *os_ << "\n";
     else
         *os_ << " ";
