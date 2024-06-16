@@ -27,7 +27,7 @@
 #include "parser/Lexer.h"
 #include "parser/Parser.h"
 #include "reparser/Reparser.h"
-#include "syntax/SyntaxLexeme_ALL.h"
+#include "syntax/Lexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 
 #include "../common/infra/Assertions.h"
@@ -66,6 +66,10 @@ struct SyntaxTree::SyntaxTreeImpl
     {
         if (filePath_.empty())
             filePath_ = "<buffer>";
+
+        // A placeholder "identifier" for the empty string, used in contexts where
+        // an identifier is optional but a valid identifier lexeme is expected.
+        identifiers_.findOrInsert("", 0);
     }
 
     std::unique_ptr<MemoryPool> pool_;
@@ -243,7 +247,7 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
         default:
             P->rootNode_ = parser.parse();
     }
-    P->parseExitedEarly_ = parser.peek().kind() != EndOfFile;
+    P->parseExitedEarly_ = parser.peek().kind() != SyntaxKind::EndOfFile;
 
     if (!P->diagnostics_.empty() || !parser.detectedAnyAmbiguity())
         return;
@@ -293,37 +297,42 @@ const ParseOptions& SyntaxTree::parseOptions() const
     return P->parseOptions_;
 }
 
-const Identifier* SyntaxTree::identifier(const char* s, unsigned size)
+const Identifier* SyntaxTree::findIdentifier(const char* s, unsigned size) const
+{
+    return P->identifiers_.find(s, size);
+}
+
+const Identifier* SyntaxTree::findOrInsertIdentifier(const char* s, unsigned size)
 {
     return P->identifiers_.findOrInsert(s, size);
 }
 
-const StringLiteral* SyntaxTree::stringLiteral(const char* s, unsigned size)
+const StringLiteral* SyntaxTree::findOrInsertStringLiteral(const char* s, unsigned size)
 {
     return P->strings_.findOrInsert(s, size);
 }
 
-const IntegerConstant* SyntaxTree::integerConstant(const char* s, unsigned int size)
+const IntegerConstant* SyntaxTree::findOrInsertIntegerConstant(const char* s, unsigned int size)
 {
     return P->integers_.findOrInsert(s, size);
 }
 
-const FloatingConstant* SyntaxTree::floatingConstant(const char* s, unsigned int size)
+const FloatingConstant* SyntaxTree::findOrInsertFloatingConstant(const char* s, unsigned int size)
 {
     return P->floatings_.findOrInsert(s, size);
 }
 
-const CharacterConstant* SyntaxTree::characterConstant(const char* s, unsigned int size)
+const CharacterConstant* SyntaxTree::findOrInsertCharacterConstant(const char* s, unsigned int size)
 {
     return P->characters_.findOrInsert(s, size);
 }
 
-const ImaginaryIntegerConstant* SyntaxTree::imaginaryIntegerConstant(const char* s, unsigned int size)
+const ImaginaryIntegerConstant* SyntaxTree::findOrInsertImaginaryIntegerConstant(const char* s, unsigned int size)
 {
     return P->imaginaryIntegers_.findOrInsert(s, size);
 }
 
-const ImaginaryFloatingConstant* SyntaxTree::imaginaryFloatingConstant(const char* s, unsigned int size)
+const ImaginaryFloatingConstant* SyntaxTree::findOrInsertImaginaryFloatingConstant(const char* s, unsigned int size)
 {
     return P->imaginaryFloatings_.findOrInsert(s, size);
 }

@@ -26,7 +26,7 @@
 
 #include "parser/ParseOptions.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 
 #include <cstdint>
 #include <unordered_set>
@@ -35,11 +35,11 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API Reparser
+class PSY_C_INTERNAL_API Reparser
 {
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(SyntaxTree);
-    PSY_GRANT_ACCESS(InternalsTestSuite);
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(SyntaxTree);
+    PSY_GRANT_INTERNAL_ACCESS(InternalsTestSuite);
 
     Reparser();
 

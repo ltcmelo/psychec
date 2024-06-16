@@ -23,7 +23,7 @@
 #include "symbols/Symbol.h"
 #include "parser/Unparser.h"
 #include "symbols/Symbol_ALL.h"
-#include "syntax/SyntaxLexeme_ALL.h"
+#include "syntax/Lexeme_ALL.h"
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 

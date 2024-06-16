@@ -24,10 +24,11 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 #include "../common/infra/Pimpl.h"
 
 #include <vector>
+#include <functional>
 
 namespace psy {
 namespace C {
@@ -56,47 +57,91 @@ public:
      */
     const Compilation* compilation() const;
 
-    //!@{
     /**
-     * The Symbol declared by TranslationUnitSyntax \p node.
+     * The TranslationUnit of \c this SemanticModel.
      */
-    const LibrarySymbol* declaredSymbol(const TranslationUnitSyntax* node) const;
+    const TranslationUnit* translationUnit() const;
 
     /**
-     * The Symbol declared by DeclarationSyntax \p node.
+     * The Function declared by the given FunctionDefinitionSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    const FunctionSymbol* declaredSymbol(const FunctionDefinitionSyntax* node) const;
-    const ParameterSymbol* declaredSymbol(const ParameterDeclarationSyntax* node) const;
-    const NamedTypeSymbol* declaredSymbol(const TypeDeclarationSyntax* node) const;
-    const EnumeratorSymbol* declaredSymbol(const EnumeratorDeclarationSyntax* node) const;
+    const Function* declarationOf(const FunctionDefinitionSyntax* node) const;
 
     /**
-     * The Symbol(s) declared by DeclarationSyntax \p node.
+     * The Parameter declared by the given ParameterDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    std::vector<const Symbol*> declaredSymbols(const VariableAndOrFunctionDeclarationSyntax* node) const;
-    std::vector<const FieldSymbol*> declaredSymbols(const FieldDeclarationSyntax* node) const;
+    const Parameter* declarationOf(const ParameterDeclarationSyntax* node) const;
 
     /**
-     * The Symbol declared by DeclaratorSyntax \p node.
+     * The TypeDeclarationSymbol declared by the given TypeDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    const Symbol* declaredSymbol(const DeclaratorSyntax* node) const;
+    const TypeDeclarationSymbol* declarationOf(const TypeDeclarationSyntax* node) const;
+
+    /**
+     * The Enumerator declared by the given EnumeratorDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
+     */
+    const Enumerator* declarationOf(const EnumeratorDeclarationSyntax* node) const;
+
+    /**
+     * The Field(s) declared by the given FieldDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
+     */
+    std::vector<const Field*> declarationsOf(const FieldDeclarationSyntax* node) const;
+
+    /**
+     * The DeclarationSymbol(s) declared by the given VariableAndOrFunctionDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
+     */
+    std::vector<const DeclarationSymbol*> declarationsOf(const VariableAndOrFunctionDeclarationSyntax* node) const;
+
+    /**
+     * The DeclarationSymbol declared by the given DeclaratorSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
+     */
+    const DeclarationSymbol* declarationOf(const DeclaratorSyntax* node) const;
     //!@}
 
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(Binder);
-    PSY_GRANT_ACCESS(Compilation);
+    PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(Compilation);
+    PSY_GRANT_INTERNAL_ACCESS(InternalsTestSuite);
 
     SemanticModel(const SyntaxTree* tree, Compilation* compilation);
 
-    Symbol* storeDeclaredSym(const SyntaxNode* node, std::unique_ptr<Symbol> sym);
-    Symbol* storeUsedSym(std::unique_ptr<Symbol> sym);
+    TranslationUnit* keepTranslationUnit(
+            const TranslationUnitSyntax* node,
+            std::unique_ptr<TranslationUnit> unitSym);
+    DeclarationSymbol* keepAndBindDecl(
+            const SyntaxNode* node,
+            std::unique_ptr<DeclarationSymbol> sym);
+    Type* keepType(std::unique_ptr<Type> ty);
 
-    template <class SymCastT, class SymOriT> const SymCastT* castSym(
-            const SymOriT* sym,
-            const SymCastT* (SymOriT::*cast)() const) const;
+    DeclarationSymbol* searchForDecl(
+            std::function<bool (const std::unique_ptr<DeclarationSymbol>&)> pred) const;
+
+    template <class CastT, class OrigT> const CastT* castDecl(
+            const OrigT* origDecl,
+            const CastT* (OrigT::*cast)() const) const;
 
 private:
-    // Unavailable
     SemanticModel(const SemanticModel&) = delete;
     SemanticModel& operator=(const SemanticModel&) = delete;
 

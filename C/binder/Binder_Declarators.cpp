@@ -19,16 +19,18 @@
 // THE SOFTWARE.
 
 #include "Binder.h"
+#include "Binder__MACROS__.inc"
 
 #include "SyntaxTree.h"
 
 #include "binder/Scope.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
-#include "symbols/SymbolName_ALL.h"
 #include "syntax/SyntaxFacts.h"
+#include "syntax/Lexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
+#include "types/Type_ALL.h"
 
 #include "../common/infra/Assertions.h"
 #include "../common/infra/Escape.h"
@@ -38,55 +40,43 @@
 using namespace psy;
 using namespace C;
 
-SyntaxVisitor::Action Binder::nameSymAtTop(const char* s)
+SyntaxVisitor::Action Binder::nameSymAtTop(const Identifier* name)
 {
-    PSY_ASSERT(!syms_.empty(), return Action::Quit);
-    Symbol* sym = syms_.top();
-
-    auto nameableSym = TypeClass_NameableSymbol::asInstance(sym);
+    SYM_AT_TOP(sym);
+    auto nameableSym = MIXIN_NameableSymbol::from(sym);
     PSY_ASSERT(nameableSym, return Action::Quit);
 
-    std::unique_ptr<SymbolName> name;
-    if (s)
-        name.reset(new PlainSymbolName(s));
-    else
-        name.reset(new EmptySymbolName);
-    nameableSym->setName(std::move(name));
+    nameableSym->setName(name);
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::typeSymAtTopAndPopIt()
 {
-    PSY_ASSERT(!syms_.empty(), return Action::Quit);
-    auto sym = syms_.top();
-
-    auto typeableSym = TypeClass_TypeableSymbol::asInstance(sym);
+    SYM_AT_TOP(sym);
+    auto typeableSym = MIXIN_TypeableSymbol::from(sym);
     PSY_ASSERT(typeableSym, return Action::Quit);
 
-    PSY_ASSERT(!tySyms_.empty(), return Action::Quit);
-    auto tySym = tySyms_.top();
+    TY_AT_TOP(ty);
 
-    if (!pendingFunTySyms_.empty())
-        pendingFunTySyms_.top()->addParameter(tySym);
+    if (!pendingFunTys_.empty())
+        pendingFunTys_.top()->addParameterType(ty);
 
-    switch (tySym->typeKind()) {
+    switch (ty->kind()) {
         case TypeKind::Array:
         case TypeKind::Function:
         case TypeKind::Pointer:
-            popTySym();
+            popTy();
             break;
 
-        case TypeKind::Named:
+        case TypeKind::Typedef:
+        case TypeKind::Tag:
+        case TypeKind::Basic:
+        case TypeKind::Void:
             break;
-
-        default:
-            PSY_ESCAPE_VIA_RETURN(Action::Quit);
     }
 
-    DEBUG_TYPE_SYMBOL(sym, tySym);
-    typeableSym->setType(tySym);
-
+    typeableSym->setType(ty);
     popSym();
 
     return Action::Skip;
@@ -100,11 +90,18 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators_COMMON(
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         visit(decltorIt->value);
 
-        Symbol* sym = syms_.top();
+        SYM_AT_TOP(sym);
         switch (sym->kind()) {
-            case SymbolKind::Function:
-            case SymbolKind::Value:
-                typeSymAtTopAndPopIt();
+            case SymbolKind::Declaration:
+                switch (sym->asDeclarationSymbol()->kind()) {
+                    case DeclarationSymbolKind::Function:
+                    case DeclarationSymbolKind::Object:
+                        typeSymAtTopAndPopIt();
+                        break;
+
+                    default:
+                        break;
+                }
                 break;
 
             default:
@@ -118,11 +115,11 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators_COMMON(
 SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtDeclarators(
         const TypedefDeclarationSyntax* node)
 {
-    decltorIsOfTypedef_ = true;
+    decltorIsOfTydef_ = true;
     auto action = visitDeclaration_AtDeclarators_COMMON(
                 node,
                 &Binder::visitTypedefDeclaration_DONE);
-    decltorIsOfTypedef_ = false;
+    decltorIsOfTydef_ = false;
     return action;
 }
 
@@ -143,8 +140,8 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDec
 
 SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtDeclarator(const EnumeratorDeclarationSyntax* node)
 {
-    determineContextAndMakeSym(node);
-    nameSymAtTop(node->identifierToken().valueText_c_str());
+    RETURN_IF_QUIT(visitSimpleDeclarator_COMMON(node));
+    nameSymAtTop(lexemeOrEmptyIdent(node->identifierToken()));
     typeSymAtTopAndPopIt();
 
     return visitEnumeratorDeclaration_DONE(node);
@@ -164,15 +161,13 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const Functio
     visit(node->declarator());
 
     typeSymAtTopAndPopIt();
-    popTySym();
+    popTy();
 
-    reopenStashedScope();
+    openStashedScope();
     scopes_.top()->morphFrom_FunctionPrototype_to_Block();
-
     auto body = node->body()->asCompoundStatement();
     for (auto stmtIt = body->statements(); stmtIt; stmtIt = stmtIt->next)
         visit(stmtIt->value);
-
     closeScope();
 
     return Binder::visitFunctionDefinition_DONE(node);
@@ -184,13 +179,15 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
         visit(specIt->value);
 
     switch (node->suffix()->kind()) {
-        case SubscriptSuffix:
-            makeTySymAndPushIt<ArrayTypeSymbol>(tySyms_.top());
+        case SyntaxKind::SubscriptSuffix: {
+            TY_AT_TOP(ty);
+            pushTy(makeTy<ArrayType>(ty));
             break;
+        }
 
-        case ParameterSuffix: {
-            auto tySym = tySyms_.top();
-            switch (tySym->typeKind()) {
+        case SyntaxKind::ParameterSuffix: {
+            TY_AT_TOP(ty);
+            switch (ty->kind()) {
                 case TypeKind::Function:
                     diagReporter_.FunctionReturningFunction(
                                 node->innerDeclarator()->firstToken());
@@ -202,29 +199,29 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
                     break;
 
                 case TypeKind::Pointer:
-                case TypeKind::Named:
+                case TypeKind::Basic:
+                case TypeKind::Void:
+                case TypeKind::Tag:
+                case TypeKind::Typedef:
                     break;
-
-                default:
-                    PSY_ESCAPE_VIA_RETURN(Action::Quit);
             }
-            makeTySymAndPushIt<FunctionTypeSymbol>(tySyms_.top());
-            pendingFunTySyms_.push(tySyms_.top()->asFunctionType());
+            pushTy(makeTy<FunctionType>(ty));
+            pendingFunTys_.push(tys_.top()->asFunctionType());
             break;
         }
 
         default:
-            PSY_ESCAPE_VIA_RETURN(Action::Quit);
+            PSY_ASSERT(false, return Action::Quit);
     }
 
     visit(node->innerDeclarator());
 
     openScope(ScopeKind::FunctionPrototype);
     visit(node->suffix());
-    closeScopeAndStashIt();
+    closeAndStashScope();
 
-    if (node->suffix()->kind() == ParameterSuffix)
-        pendingFunTySyms_.pop();
+    if (node->suffix()->kind() == SyntaxKind::ParameterSuffix)
+        pendingFunTys_.pop();
 
     return Action::Skip;
 }
@@ -237,10 +234,10 @@ SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* 
 SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* node)
 {
     for (auto declIt = node->parameters(); declIt; declIt = declIt->next) {
-        TySymContT tySyms;
-        std::swap(tySyms_, tySyms);
+        TyContT tys;
+        std::swap(tys_, tys);
         visit(declIt->value);
-        std::swap(tySyms_, tySyms);
+        std::swap(tys_, tys);
     }
 
     return Action::Skip;
@@ -248,7 +245,8 @@ SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* 
 
 SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSyntax* node)
 {
-    makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
+    TY_AT_TOP(ty);
+    pushTy(makeTy<PointerType>(ty));
 
     for (auto specIt = node->qualifiersAndAttributes(); specIt; specIt = specIt->next)
         visit(specIt->value);
@@ -265,52 +263,58 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
     return Action::Skip;
 }
 
-template <class DecltrT>
-SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DecltrT* node)
+SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* node)
 {
-    switch (scopes_.top()->kind()) {
+    SCOPE_AT_TOP(scope);
+    switch (scope->kind()) {
         case ScopeKind::File:
         case ScopeKind::Block: {
-            TypeSymbol* tySym = tySyms_.top();
-            switch (tySym->typeKind()) {
+            TY_AT_TOP(ty);
+            switch (ty->kind()) {
                 case TypeKind::Function:
-                    makeSymAndPushIt<FunctionSymbol>(node);
+                    makeBindAndPushSym<Function>(node);
                     break;
 
                 case TypeKind::Array:
                 case TypeKind::Pointer:
-                case TypeKind::Named: {
-                    Symbol* sym = syms_.top();
+                case TypeKind::Basic:
+                case TypeKind::Typedef:
+                case TypeKind::Tag: {
+                    SYM_AT_TOP(sym);
                     switch (sym->kind()) {
-                        case SymbolKind::Type:
-                            PSY_ASSERT(sym->asType()->asNamedType()
-                                           && sym->asType()->asNamedType()->name()
-                                           && sym->asType()->asNamedType()->name()->asTagSymbolName(),
-                                       return Action::Quit);
+                        case SymbolKind::Declaration: {
+                            auto declSym = sym->asDeclarationSymbol();
+                            switch (declSym->kind()) {
+                                case DeclarationSymbolKind::Type:
+                                    switch (declSym->asTypeDeclarationSymbol()->kind()) {
+                                        case TypeDeclarationSymbolKind::Union:
+                                        case TypeDeclarationSymbolKind::Struct:
+                                            makeBindAndPushSym<Field>(node);
+                                            break;
 
-                            switch (sym->asType()->asNamedType()->name()->asTagSymbolName()->tagChoice()) {
-                                case TagSymbolName::TagChoice::Union:
-                                case TagSymbolName::TagChoice::Struct:
-                                    makeSymAndPushIt<FieldSymbol>(node);
+                                        case TypeDeclarationSymbolKind::Enum:
+                                            makeBindAndPushSym<Enumerator>(node);
+                                            break;
+
+                                        case TypeDeclarationSymbolKind::Typedef:
+                                            PSY_ASSERT(false, return Action::Quit);
+                                    }
                                     break;
 
-                                case TagSymbolName::TagChoice::Enum:
-                                    makeSymAndPushIt<EnumeratorSymbol>(node);
+                                case DeclarationSymbolKind::Object:
+                                case DeclarationSymbolKind::Function:
+                                    makeBindAndPushSym<Variable>(node);
                                     break;
-
-                                default:
-                                    PSY_ESCAPE_VIA_RETURN(Action::Quit);
                             }
                             break;
+                        }
 
-                        case SymbolKind::Value:
-                        case SymbolKind::Function:
-                        case SymbolKind::Library:
-                            makeSymAndPushIt<VariableSymbol>(node);
+                        case SymbolKind::TranslationUnit:
+                            makeBindAndPushSym<Variable>(node);
                             break;
 
                         default:
-                            PSY_ESCAPE_VIA_RETURN(Action::Quit);
+                            PSY_ASSERT(false, return Action::Quit);
                     }
                     break;
                 }
@@ -325,18 +329,19 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DecltrT* node)
             break;
 
         case ScopeKind::FunctionPrototype: {
-            TypeSymbol* tySym = tySyms_.top();
-            switch (tySym->typeKind()) {
+            TY_AT_TOP(ty);
+            switch (ty->kind()) {
                 case TypeKind::Array: {
                     /*
                      * 6.7.6.3-7
                      * A declaration of a parameter as “array of type”
                      * shall be adjusted to “qualified pointer to type”...
                      */
-                    popTySym();
-                    makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
-                    auto ptrTySym = tySyms_.top()->asPointerType();
-                    ptrTySym->markAsArisingFromArrayDecay();
+                    popTy();
+                    TY_AT_TOP(otherTy);
+                    pushTy(makeTy<PointerType>(otherTy));
+                    auto ptrTy = tys_.top()->asPointerType();
+                    ptrTy->markAsArisingFromArrayDecay();
                     break;
                 }
 
@@ -346,20 +351,20 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DecltrT* node)
                      * A declaration of a parameter as “function returning type”
                      * shall be adjusted to “pointer to function returning type”...
                      */
-                    makeTySymAndPushIt<PointerTypeSymbol>(tySyms_.top());
-                    auto ptrTySym = tySyms_.top()->asPointerType();
-                    ptrTySym->markAsArisingFromFunctionDecay();
+                    pushTy(makeTy<PointerType>(ty));
+                    auto ptrTy = tys_.top()->asPointerType();
+                    ptrTy->markAsArisingFromFunctionDecay();
                     break;
                 }
 
                 case TypeKind::Pointer:
-                case TypeKind::Named:
+                case TypeKind::Basic:
+                case TypeKind::Void:
+                case TypeKind::Typedef:
+                case TypeKind::Tag:
                     break;
-
-                default:
-                    PSY_ESCAPE_VIA_RETURN(Action::Quit);
             }
-            makeSymAndPushIt<ParameterSymbol>(node);
+            makeBindAndPushSym<Parameter>(node);
             break;
         }
 
@@ -372,12 +377,13 @@ SyntaxVisitor::Action Binder::determineContextAndMakeSym(const DecltrT* node)
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    if (decltorIsOfTypedef_) {
-        makeSymAndPushIt<NamedTypeSymbol>(node, node->identifierToken().valueText());
+    if (decltorIsOfTydef_) {
+        auto tydefTy = makeTy<TypedefType>(lexemeOrEmptyIdent(node->identifierToken()));
+        makeAndBindSym<Typedef>(node, tydefTy);
     }
     else {
-        determineContextAndMakeSym(node);
-        nameSymAtTop(node->identifierToken().valueText_c_str());
+        RETURN_IF_QUIT(visitSimpleDeclarator_COMMON(node));
+        nameSymAtTop(lexemeOrEmptyIdent(node->identifierToken()));
     }
 
     return Action::Skip;
@@ -385,8 +391,8 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 
 SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax* node)
 {
-    determineContextAndMakeSym(node);
-    nameSymAtTop(nullptr);
+    RETURN_IF_QUIT(visitSimpleDeclarator_COMMON(node));
+    nameSymAtTop(tree_->findIdentifier("", 0));
 
     return Action::Skip;
 }

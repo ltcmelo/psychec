@@ -21,10 +21,11 @@
 
 #include "SyntaxToken.h"
 
-#include "SyntaxLexeme_ALL.h"
+#include "Lexeme_ALL.h"
 #include "SyntaxTree.h"
 
 #include <iostream>
+#include <type_traits>
 
 namespace psy {
 namespace C {
@@ -221,7 +222,7 @@ using namespace C;
 
 SyntaxToken::SyntaxToken(SyntaxTree* tree)
     : tree_(tree)
-    , rawSyntaxK_(0)
+    , syntaxK_(SyntaxKind::EndOfFile)
     , byteSize_(0)
     , charSize_(0)
     , byteOffset_(0)
@@ -241,7 +242,7 @@ SyntaxToken::~SyntaxToken()
 
 void SyntaxToken::setup()
 {
-    rawSyntaxK_ = 0;
+    syntaxK_ = SyntaxKind::UnknownSyntax;
     byteSize_ = 0;
     charSize_ = 0;
     byteOffset_ = 0;
@@ -253,11 +254,11 @@ void SyntaxToken::setup()
 
 bool SyntaxToken::isComment() const
 {
-    return rawSyntaxK_ == MultiLineCommentTrivia
-            || rawSyntaxK_ == MultiLineDocumentationCommentTrivia
-            || rawSyntaxK_ == SingleLineCommentTrivia
-            || rawSyntaxK_ == SingleLineDocumentationCommentTrivia
-            || rawSyntaxK_ == Keyword_ExtPSY_omission;
+    return syntaxK_ == SyntaxKind::MultiLineCommentTrivia
+            || syntaxK_ == SyntaxKind::MultiLineDocumentationCommentTrivia
+            || syntaxK_ == SyntaxKind::SingleLineCommentTrivia
+            || syntaxK_ == SyntaxKind::SingleLineDocumentationCommentTrivia
+            || syntaxK_ == SyntaxKind::Keyword_ExtPSY_omission;
 }
 
 Location SyntaxToken::location() const
@@ -271,106 +272,109 @@ Location SyntaxToken::location() const
 
 SyntaxToken::Category SyntaxToken::category() const
 {
-    return category(SyntaxKind(rawSyntaxK_));
+    return category(SyntaxKind(syntaxK_));
 }
 
 SyntaxToken::Category SyntaxToken::category(SyntaxKind k)
 {
     switch (k) {
-        case IdentifierToken:
+        case SyntaxKind::IdentifierToken:
             return Category::Identifiers;
 
-        case IntegerConstantToken:
-        case FloatingConstantToken:
-        case CharacterConstantToken:
-        case CharacterConstant_L_Token:
-        case CharacterConstant_u_Token:
-        case CharacterConstant_U_Token:
-        case ImaginaryIntegerConstantToken:
-        case ImaginaryFloatingConstantToken:
+        case SyntaxKind::IntegerConstantToken:
+        case SyntaxKind::FloatingConstantToken:
+        case SyntaxKind::CharacterConstantToken:
+        case SyntaxKind::CharacterConstant_L_Token:
+        case SyntaxKind::CharacterConstant_u_Token:
+        case SyntaxKind::CharacterConstant_U_Token:
+        case SyntaxKind::ImaginaryIntegerConstantToken:
+        case SyntaxKind::ImaginaryFloatingConstantToken:
             return Category::Constants;
 
-        case StringLiteralToken:
-        case StringLiteral_L_Token:
-        case StringLiteral_u8_Token:
-        case StringLiteral_u_Token:
-        case StringLiteral_U_Token:
-        case StringLiteral_R_Token:
-        case StringLiteral_LR_Token:
-        case StringLiteral_u8R_Token:
-        case StringLiteral_uR_Token:
-        case StringLiteral_UR_Token:
+        case SyntaxKind::StringLiteralToken:
+        case SyntaxKind::StringLiteral_L_Token:
+        case SyntaxKind::StringLiteral_u8_Token:
+        case SyntaxKind::StringLiteral_u_Token:
+        case SyntaxKind::StringLiteral_U_Token:
+        case SyntaxKind::StringLiteral_R_Token:
+        case SyntaxKind::StringLiteral_LR_Token:
+        case SyntaxKind::StringLiteral_u8R_Token:
+        case SyntaxKind::StringLiteral_uR_Token:
+        case SyntaxKind::StringLiteral_UR_Token:
             return Category::StringLiterals;
 
-        case EllipsisToken:
-        case OpenBraceToken:
-        case CloseBraceToken:
-        case OpenBracketToken:
-        case CloseBracketToken:
-        case OpenParenToken:
-        case CloseParenToken:
+        case SyntaxKind::EllipsisToken:
+        case SyntaxKind::OpenBraceToken:
+        case SyntaxKind::CloseBraceToken:
+        case SyntaxKind::OpenBracketToken:
+        case SyntaxKind::CloseBracketToken:
+        case SyntaxKind::OpenParenToken:
+        case SyntaxKind::CloseParenToken:
 
-        case HashToken:
-        case HashHashToken:
+        case SyntaxKind::HashToken:
+        case SyntaxKind::HashHashToken:
 
-        case SemicolonToken:
+        case SyntaxKind::SemicolonToken:
 
-        case ArrowToken:
-        case DotToken:
+        case SyntaxKind::ArrowToken:
+        case SyntaxKind::DotToken:
 
-        case PlusPlusToken:
-        case MinusMinusToken:
+        case SyntaxKind::PlusPlusToken:
+        case SyntaxKind::MinusMinusToken:
 
-        case AsteriskToken:
-        case AmpersandToken:
+        case SyntaxKind::AsteriskToken:
+        case SyntaxKind::AmpersandToken:
 
-        case PlusToken:
-        case MinusToken:
-        case TildeToken:
-        case SlashToken:
-        case PercentToken:
-        case LessThanLessThanToken:
-        case GreaterThanGreaterThanToken:
-        case BarToken:
-        case CaretToken:
+        case SyntaxKind::PlusToken:
+        case SyntaxKind::MinusToken:
+        case SyntaxKind::TildeToken:
+        case SyntaxKind::SlashToken:
+        case SyntaxKind::PercentToken:
+        case SyntaxKind::LessThanLessThanToken:
+        case SyntaxKind::GreaterThanGreaterThanToken:
+        case SyntaxKind::BarToken:
+        case SyntaxKind::CaretToken:
 
-        case ExclamationToken:
-        case AmpersandAmpersandToken:
-        case BarBarToken:
+        case SyntaxKind::ExclamationToken:
+        case SyntaxKind::AmpersandAmpersandToken:
+        case SyntaxKind::BarBarToken:
 
-        case LessThanToken:
-        case LessThanEqualsToken:
-        case GreaterThanToken:
-        case GreaterThanEqualsToken:
-        case EqualsEqualsToken:
-        case ExclamationEqualsToken:
+        case SyntaxKind::LessThanToken:
+        case SyntaxKind::LessThanEqualsToken:
+        case SyntaxKind::GreaterThanToken:
+        case SyntaxKind::GreaterThanEqualsToken:
+        case SyntaxKind::EqualsEqualsToken:
+        case SyntaxKind::ExclamationEqualsToken:
 
-        case ColonToken:
-        case QuestionToken:
+        case SyntaxKind::ColonToken:
+        case SyntaxKind::QuestionToken:
 
-        case EqualsToken:
-        case AsteriskEqualsToken:
-        case SlashEqualsToken:
-        case PercentEqualsToken:
-        case PlusEqualsToken:
-        case MinusEqualsToken:
-        case LessThanLessThanEqualsToken:
-        case GreaterThanGreaterThanEqualsToken:
-        case AmpersandEqualsToken:
-        case CaretEqualsToken:
-        case BarEqualsToken:
-        case CommaToken:
+        case SyntaxKind::EqualsToken:
+        case SyntaxKind::AsteriskEqualsToken:
+        case SyntaxKind::SlashEqualsToken:
+        case SyntaxKind::PercentEqualsToken:
+        case SyntaxKind::PlusEqualsToken:
+        case SyntaxKind::MinusEqualsToken:
+        case SyntaxKind::LessThanLessThanEqualsToken:
+        case SyntaxKind::GreaterThanGreaterThanEqualsToken:
+        case SyntaxKind::AmpersandEqualsToken:
+        case SyntaxKind::CaretEqualsToken:
+        case SyntaxKind::BarEqualsToken:
+        case SyntaxKind::CommaToken:
             return Category::Punctuators;
 
-        default:
-            if (k > STARTof_KeywordOrPunctuatorToken
-                    && k <= ENDof_KeywordOrPunctuatorToken)
+        default: {
+            auto rawK = static_cast<std::underlying_type_t<SyntaxKind>>(k);
+            if (rawK > static_cast<std::underlying_type_t<SyntaxKind>>(SyntaxKind::STARTof_KeywordOrPunctuatorToken)
+                    && rawK <= static_cast<std::underlying_type_t<SyntaxKind>>(SyntaxKind::ENDof_KeywordOrPunctuatorToken)) {
                 return Category::Keywords;
+            }
             return Category::Unrecognized;
+        }
     }
 }
 
-SyntaxLexeme* SyntaxToken::valueLexeme() const
+Lexeme* SyntaxToken::lexeme() const
 {
     return lexeme_;
 }
@@ -382,30 +386,30 @@ std::string SyntaxToken::valueText() const
 
 const char* SyntaxToken::valueText_c_str() const
 {
-    switch (rawSyntaxK_) {
-        case IdentifierToken:
-        case IntegerConstantToken:
-        case FloatingConstantToken:
-        case CharacterConstantToken:
-        case CharacterConstant_L_Token:
-        case CharacterConstant_u_Token:
-        case CharacterConstant_U_Token:
-        case ImaginaryIntegerConstantToken:
-        case ImaginaryFloatingConstantToken:
-        case StringLiteralToken:
-        case StringLiteral_L_Token:
-        case StringLiteral_u8_Token:
-        case StringLiteral_u_Token:
-        case StringLiteral_U_Token:
-        case StringLiteral_R_Token:
-        case StringLiteral_LR_Token:
-        case StringLiteral_u8R_Token:
-        case StringLiteral_uR_Token:
-        case StringLiteral_UR_Token:
+    switch (syntaxK_) {
+        case SyntaxKind::IdentifierToken:
+        case SyntaxKind::IntegerConstantToken:
+        case SyntaxKind::FloatingConstantToken:
+        case SyntaxKind::CharacterConstantToken:
+        case SyntaxKind::CharacterConstant_L_Token:
+        case SyntaxKind::CharacterConstant_u_Token:
+        case SyntaxKind::CharacterConstant_U_Token:
+        case SyntaxKind::ImaginaryIntegerConstantToken:
+        case SyntaxKind::ImaginaryFloatingConstantToken:
+        case SyntaxKind::StringLiteralToken:
+        case SyntaxKind::StringLiteral_L_Token:
+        case SyntaxKind::StringLiteral_u8_Token:
+        case SyntaxKind::StringLiteral_u_Token:
+        case SyntaxKind::StringLiteral_U_Token:
+        case SyntaxKind::StringLiteral_R_Token:
+        case SyntaxKind::StringLiteral_LR_Token:
+        case SyntaxKind::StringLiteral_u8R_Token:
+        case SyntaxKind::StringLiteral_uR_Token:
+        case SyntaxKind::StringLiteral_UR_Token:
             return lexeme_->c_str();
 
         default:
-            return tokenNames[rawSyntaxK_];
+            return tokenNames[static_cast<std::uint16_t>(syntaxK_)];
     }
 }
 
@@ -430,7 +434,7 @@ namespace C {
 bool operator==(const SyntaxToken& a, const SyntaxToken& b)
 {
     return a.tree_ == b.tree_
-            && a.rawSyntaxK_ == b.rawSyntaxK_
+            && a.syntaxK_ == b.syntaxK_
             && a.byteOffset_ == b.byteOffset_
             && a.byteSize_ == b.byteSize_;
 }

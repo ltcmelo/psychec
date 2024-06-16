@@ -26,7 +26,7 @@
 
 #include "MacroTranslations.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 
 #include <cstdint>
 #include <string>
@@ -177,7 +177,7 @@ public:
     /**
      * Whether to enable GNU assembly in C.
      *
-     * https://gcc.gnu.org/onlinedocs/gcc/Using-Assembly-Language-with-C.html
+     * https://gcc.gnu.org/onlinedocs/gcc/Using-Program-Language-with-C.html
      */
     LanguageExtensions& enable_extGNU_Asm(bool enable);
     bool isEnabled_extGNU_Asm() const;

@@ -26,7 +26,7 @@
 
 #include "binder/NameSpaceKind.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 
 namespace psy {
 namespace C {
@@ -44,7 +44,7 @@ public:
      */
     NameSpaceKind kind() const { return  nsK_; }
 
-PSY_INTERNAL_AND_RESTRICTED:
+PSY_INTERNAL:
     NameSpace(NameSpaceKind nsK)
         : nsK_(nsK)
     {}

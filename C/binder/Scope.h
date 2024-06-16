@@ -26,7 +26,7 @@
 
 #include "ScopeKind.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 
 #include <memory>
 #include <cstdint>
@@ -47,20 +47,20 @@ public:
     virtual ~Scope();
 
     /**
-     * The Kind of \c this Scope.
+     * The ScopeKind of \c this Scope.
      */
     ScopeKind kind() const;
 
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(Binder);
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Binder);
 
-    Scope(ScopeKind kind);
+    Scope(ScopeKind scopeK);
 
     void enclose(std::unique_ptr<Scope> scope);
     void morphFrom_FunctionPrototype_to_Block();
 
 private:
-    ScopeKind kind_;
+    ScopeKind scopeK_;
     std::vector<std::unique_ptr<Scope>> enclosedScopes_;
 };
 

@@ -41,10 +41,10 @@ Disambiguator::Disambiguation GuidelineImpositionDisambiguator::disambiguateStat
         const AmbiguousExpressionOrDeclarationStatementSyntax* node) const
 {
     switch (node->kind()) {
-        case AmbiguousMultiplicationOrPointerDeclaration:
+        case SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration:
             return Disambiguation::KeepDeclarationStatement;
 
-        case AmbiguousCallOrVariableDeclaration:
+        case SyntaxKind::AmbiguousCallOrVariableDeclaration:
             return Disambiguation::KeepExpressionStatement;
 
         default:

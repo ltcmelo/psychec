@@ -60,13 +60,13 @@ SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitCompoundStatement(con
 Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateExpression(
         const AmbiguousCastOrBinaryExpressionSyntax* node) const
 {
-    PSY_ASSERT(node->kind() == AmbiguousCastOrBinaryExpression,
+    PSY_ASSERT(node->kind() == SyntaxKind::AmbiguousCastOrBinaryExpression,
                return Disambiguation::Inconclusive);
 
     auto tyName = node->castExpression()->typeName();
     PSY_ASSERT(tyName->specifiers()
                    && tyName->specifiers()->value
-                   && tyName->specifiers()->value->kind() == TypedefName,
+                   && tyName->specifiers()->value->kind() == SyntaxKind::TypedefName,
                return Disambiguation::Inconclusive);
 
     auto tydefName = tyName->specifiers()->value->asTypedefName();
@@ -82,19 +82,19 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateExpres
 Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatement(
         const AmbiguousExpressionOrDeclarationStatementSyntax* node) const
 {
-    PSY_ASSERT(node->kind() == AmbiguousMultiplicationOrPointerDeclaration
-                   || node->kind() == AmbiguousCallOrVariableDeclaration,
+    PSY_ASSERT(node->kind() == SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration
+                   || node->kind() == SyntaxKind::AmbiguousCallOrVariableDeclaration,
                return Disambiguation::Inconclusive);
 
     auto decl = node->declarationStatement()->declaration();
-    PSY_ASSERT(decl->kind() == VariableAndOrFunctionDeclaration,
+    PSY_ASSERT(decl->kind() == SyntaxKind::VariableAndOrFunctionDeclaration,
                return Disambiguation::Inconclusive);
 
     auto varDecl = decl->asVariableAndOrFunctionDeclaration();
 
     PSY_ASSERT(varDecl->specifiers()
                    && varDecl->specifiers()->value
-                   && varDecl->specifiers()->value->kind() == TypedefName,
+                   && varDecl->specifiers()->value->kind() == SyntaxKind::TypedefName,
                return Disambiguation::Inconclusive);
 
     auto tydefName = varDecl->specifiers()->value->asTypedefName();
@@ -106,7 +106,7 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatem
     if (catalog_->hasUseAsNonTypeName(lhsName))
         return Disambiguation::KeepExpressionStatement;
 
-    if (node->kind() == AmbiguousMultiplicationOrPointerDeclaration)
+    if (node->kind() == SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration)
         return Disambiguation::Inconclusive;
 
     PSY_ASSERT(varDecl->declarators()
@@ -114,7 +114,7 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatem
                return Disambiguation::Inconclusive);
 
     auto decltor = SyntaxUtilities::strippedDeclaratorOrSelf(varDecl->declarators()->value);
-    PSY_ASSERT(decltor->kind() == IdentifierDeclarator,
+    PSY_ASSERT(decltor->kind() == SyntaxKind::IdentifierDeclarator,
                return Disambiguation::Inconclusive);
 
     auto rhsName = decltor->asIdentifierDeclarator()->identifierToken().valueText();
@@ -128,13 +128,13 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatem
 Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateTypeReference(
         const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node) const
 {
-    PSY_ASSERT(node->kind() == AmbiguousTypeNameOrExpressionAsTypeReference,
+    PSY_ASSERT(node->kind() == SyntaxKind::AmbiguousTypeNameOrExpressionAsTypeReference,
                return Disambiguation::Inconclusive);
 
     auto typeName = node->typeNameAsTypeReference()->typeName();
     PSY_ASSERT(typeName->specifiers()
                    && typeName->specifiers()->value
-                   && typeName->specifiers()->value->kind() == TypedefName,
+                   && typeName->specifiers()->value->kind() == SyntaxKind::TypedefName,
                return Disambiguation::Inconclusive);
 
     auto typedefName = typeName->specifiers()->value->asTypedefName();

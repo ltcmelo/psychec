@@ -33,15 +33,15 @@ static inline SyntaxKind recognize2(const char* s, const ParseOptions& opts)
 {
     if (s[0] == 'd') {
         if (s[1] == 'o') {
-            return Keyword_do;
+            return SyntaxKind::Keyword_do;
         }
     }
     else if (s[0] == 'i') {
         if (s[1] == 'f') {
-            return Keyword_if;
+            return SyntaxKind::Keyword_if;
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize3(const char* s, const ParseOptions& opts)
@@ -49,25 +49,25 @@ static inline SyntaxKind recognize3(const char* s, const ParseOptions& opts)
     if (s[0] == 'a') {
         if (s[1] == 's') {
             if (s[2] == 'm') {
-                return KeywordAlias_asm;
+                return SyntaxKind::KeywordAlias_asm;
             }
         }
     }
     else if (s[0] == 'f') {
         if (s[1] == 'o') {
             if (s[2] == 'r') {
-                return Keyword_for;
+                return SyntaxKind::Keyword_for;
             }
         }
     }
     else if (s[0] == 'i') {
         if (s[1] == 'n') {
             if (s[2] == 't') {
-                return Keyword_int;
+                return SyntaxKind::Keyword_int;
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
@@ -76,7 +76,7 @@ static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
         if (s[1] == 'u') {
             if (s[2] == 't') {
                 if (s[3] == 'o') {
-                    return Keyword_auto;
+                    return SyntaxKind::Keyword_auto;
                 }
             }
         }
@@ -86,7 +86,7 @@ static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
         if (s[1] == 'o') {
             if (s[2] == 'o') {
                 if (s[3] == 'l') {
-                    return KeywordAlias_Bool;
+                    return SyntaxKind::KeywordAlias_Bool;
                 }
             }
         }
@@ -95,14 +95,14 @@ static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
         if (s[1] == 'a') {
             if (s[2] == 's') {
                 if (s[3] == 'e') {
-                    return Keyword_case;
+                    return SyntaxKind::Keyword_case;
                 }
             }
         }
         else if (s[1] == 'h') {
             if (s[2] == 'a') {
                 if (s[3] == 'r') {
-                    return Keyword_char;
+                    return SyntaxKind::Keyword_char;
                 }
             }
         }
@@ -111,14 +111,14 @@ static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
         if (s[1] == 'l') {
             if (s[2] == 's') {
                 if (s[3] == 'e') {
-                    return Keyword_else;
+                    return SyntaxKind::Keyword_else;
                 }
             }
         }
         else if (s[1] == 'n') {
             if (s[2] == 'u') {
                 if (s[3] == 'm') {
-                    return Keyword_enum;
+                    return SyntaxKind::Keyword_enum;
                 }
             }
         }
@@ -127,7 +127,7 @@ static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
         if (s[1] == 'o') {
             if (s[2] == 't') {
                 if (s[3] == 'o') {
-                    return Keyword_goto;
+                    return SyntaxKind::Keyword_goto;
                 }
             }
         }
@@ -136,7 +136,7 @@ static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
         if (s[1] == 'o') {
             if (s[2] == 'n') {
                 if (s[3] == 'g') {
-                    return Keyword_long;
+                    return SyntaxKind::Keyword_long;
                 }
             }
         }
@@ -146,7 +146,7 @@ static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
         if (s[1] == 'U') {
             if (s[2] == 'L') {
                 if (s[3] == 'L') {
-                    return Keyword_Ext_NULL;
+                    return SyntaxKind::Keyword_Ext_NULL;
                 }
             }
         }
@@ -156,7 +156,7 @@ static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
         if (s[1] == 'r') {
             if (s[2] == 'u') {
                 if (s[3] == 'e') {
-                    return Keyword_Ext_true;
+                    return SyntaxKind::Keyword_Ext_true;
                 }
             }
         }
@@ -165,12 +165,12 @@ static inline SyntaxKind recognize4(const char* s, const ParseOptions& opts)
         if (s[1] == 'o') {
             if (s[2] == 'i') {
                 if (s[3] == 'd') {
-                    return Keyword_void;
+                    return SyntaxKind::Keyword_void;
                 }
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
@@ -180,7 +180,7 @@ static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
             if (s[2] == 'a') {
                 if (s[3] == 's') {
                     if (s[4] == 'm') {
-                        return KeywordAlias___asm;
+                        return SyntaxKind::KeywordAlias___asm;
                     }
                 }
             }
@@ -190,7 +190,7 @@ static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
             if (s[2] == 'o') {
                 if (s[3] == 'o') {
                     if (s[4] == 'l') {
-                        return Keyword__Bool;
+                        return SyntaxKind::Keyword__Bool;
                     }
                 }
             }
@@ -201,7 +201,7 @@ static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
             if (s[2] == 'e') {
                 if (s[3] == 'a') {
                     if (s[4] == 'k') {
-                        return Keyword_break;
+                        return SyntaxKind::Keyword_break;
                     }
                 }
             }
@@ -212,7 +212,7 @@ static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
             if (s[2] == 'n') {
                 if (s[3] == 's') {
                     if (s[4] == 't') {
-                        return Keyword_const;
+                        return SyntaxKind::Keyword_const;
                     }
                 }
             }
@@ -224,7 +224,7 @@ static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
             if (s[2] == 'l') {
                 if (s[3] == 's') {
                     if (s[4] == 'e') {
-                        return Keyword_Ext_false;
+                        return SyntaxKind::Keyword_Ext_false;
                     }
                 }
             }
@@ -233,7 +233,7 @@ static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
             if (s[2] == 'o') {
                 if (s[3] == 'a') {
                     if (s[4] == 't') {
-                        return Keyword_float;
+                        return SyntaxKind::Keyword_float;
                     }
                 }
             }
@@ -244,7 +244,7 @@ static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
             if (s[2] == 'o') {
                 if (s[3] == 'r') {
                     if (s[4] == 't') {
-                        return Keyword_short;
+                        return SyntaxKind::Keyword_short;
                     }
                 }
             }
@@ -255,7 +255,7 @@ static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
             if (s[2] == 'i') {
                 if (s[3] == 'o') {
                     if (s[4] == 'n') {
-                        return Keyword_union;
+                        return SyntaxKind::Keyword_union;
                     }
                 }
             }
@@ -266,13 +266,13 @@ static inline SyntaxKind recognize5(const char* s, const ParseOptions& opts)
             if (s[2] == 'i') {
                 if (s[3] == 'l') {
                     if (s[4] == 'e') {
-                        return Keyword_while;
+                        return SyntaxKind::Keyword_while;
                     }
                 }
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
@@ -283,7 +283,7 @@ static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
                 if (s[3] == 'b') {
                     if (s[4] == 'l') {
                         if (s[5] == 'e') {
-                            return Keyword_double;
+                            return SyntaxKind::Keyword_double;
                         }
                     }
                 }
@@ -296,7 +296,7 @@ static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
                 if (s[3] == 'e') {
                     if (s[4] == 'r') {
                         if (s[5] == 'n') {
-                            return Keyword_extern;
+                            return SyntaxKind::Keyword_extern;
                         }
                     }
                 }
@@ -310,7 +310,7 @@ static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
                 if (s[3] == 'i') {
                     if (s[4] == 'n') {
                         if (s[5] == 'e') {
-                            return Keyword_inline;
+                            return SyntaxKind::Keyword_inline;
                         }
                     }
                 }
@@ -323,7 +323,7 @@ static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
                 if (s[3] == 'u') {
                     if (s[4] == 'r') {
                         if (s[5] == 'n') {
-                            return Keyword_return;
+                            return SyntaxKind::Keyword_return;
                         }
                     }
                 }
@@ -336,7 +336,7 @@ static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
                 if (s[3] == 'n') {
                     if (s[4] == 'e') {
                         if (s[5] == 'd') {
-                            return Keyword_signed;
+                            return SyntaxKind::Keyword_signed;
                         }
                     }
                 }
@@ -345,7 +345,7 @@ static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
                 if (s[3] == 'e') {
                     if (s[4] == 'o') {
                         if (s[5] == 'f') {
-                            return Keyword_sizeof;
+                            return SyntaxKind::Keyword_sizeof;
                         }
                     }
                 }
@@ -356,7 +356,7 @@ static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
                 if (s[3] == 't') {
                     if (s[4] == 'i') {
                         if (s[5] == 'c') {
-                            return Keyword_static;
+                            return SyntaxKind::Keyword_static;
                         }
                     }
                 }
@@ -365,7 +365,7 @@ static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
                 if (s[3] == 'u') {
                     if (s[4] == 'c') {
                         if (s[5] == 't') {
-                            return Keyword_struct;
+                            return SyntaxKind::Keyword_struct;
                         }
                     }
                 }
@@ -376,7 +376,7 @@ static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
                 if (s[3] == 't') {
                     if (s[4] == 'c') {
                         if (s[5] == 'h') {
-                            return Keyword_switch;
+                            return SyntaxKind::Keyword_switch;
                         }
                     }
                 }
@@ -389,7 +389,7 @@ static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
                 if (s[3] == 'e') {
                     if (s[4] == 'o') {
                         if (s[5] == 'f') {
-                            return KeywordAlias_typeof;
+                            return SyntaxKind::KeywordAlias_typeof;
                         }
                     }
                 }
@@ -403,14 +403,14 @@ static inline SyntaxKind recognize6(const char* s, const ParseOptions& opts)
                 if (s[3] == 'a') {
                     if (s[4] == 'r') {
                         if (s[5] == 'g') {
-                            return Keyword_MacroStd_va_arg;
+                            return SyntaxKind::Keyword_MacroStd_va_arg;
                         }
                     }
                 }
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
@@ -422,7 +422,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
                     if (s[4] == 'm') {
                         if (s[5] == '_') {
                             if (s[6] == '_') {
-                                return Keyword_ExtGNU___asm__;
+                                return SyntaxKind::Keyword_ExtGNU___asm__;
                             }
                         }
                     }
@@ -433,7 +433,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
                     if (s[4] == 'n') {
                         if (s[5] == 's') {
                             if (s[6] == 't') {
-                                return KeywordAlias___const;
+                                return SyntaxKind::KeywordAlias___const;
                             }
                         }
                     }
@@ -447,7 +447,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
                     if (s[4] == 'm') {
                         if (s[5] == 'i') {
                             if (s[6] == 'c') {
-                                return Keyword__Atomic;
+                                return SyntaxKind::Keyword__Atomic;
                             }
                         }
                     }
@@ -461,7 +461,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
                     if (s[4] == 'a') {
                         if (s[5] == 'l') {
                             if (s[6] == 'l') {
-                                return Keyword_ExtPSY__Forall;
+                                return SyntaxKind::Keyword_ExtPSY__Forall;
                             }
                         }
                     }
@@ -475,7 +475,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
                     if (s[4] == 's') {
                         if (s[5] == 't') {
                             if (s[6] == 's') {
-                                return Keyword_ExtPSY__Exists;
+                                return SyntaxKind::Keyword_ExtPSY__Exists;
                             }
                         }
                     }
@@ -492,13 +492,13 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
                         if (s[5] == 'a') {
                             if (s[6] == 's'
                                     && opts.languageExtensions().translations().isEnabled_Translate_alignas_AsKeyword()) {
-                                return Keyword__Alignas;
+                                return SyntaxKind::Keyword__Alignas;
                             }
                         }
                         else if (s[5] == 'o') {
                             if (s[6] == 'f'
                                     && opts.languageExtensions().translations().isEnabled_Translate_alignof_AsKeyword()) {
-                                return Keyword__Alignof;
+                                return SyntaxKind::Keyword__Alignof;
                             }
                         }
                     }
@@ -513,7 +513,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
                     if (s[4] == 'u') {
                         if (s[5] == 'l') {
                             if (s[6] == 't') {
-                                return Keyword_default;
+                                return SyntaxKind::Keyword_default;
                             }
                         }
                     }
@@ -529,7 +529,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
                     if (s[4] == 'p') {
                         if (s[5] == 't') {
                             if (s[6] == 'r') {
-                                return Keyword_Ext_nullptr;
+                                return SyntaxKind::Keyword_Ext_nullptr;
                             }
                         }
                     }
@@ -544,7 +544,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
                     if (s[4] == 'd') {
                         if (s[5] == 'e') {
                             if (s[6] == 'f') {
-                                return Keyword_typedef;
+                                return SyntaxKind::Keyword_typedef;
                             }
                         }
                     }
@@ -559,7 +559,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
                     if (s[4] == 'r') {
                         if (s[5] == '_') {
                             if (s[6] == 't') {
-                                return Keyword_Ext_wchar_t;
+                                return SyntaxKind::Keyword_Ext_wchar_t;
                             }
                         }
                     }
@@ -567,7 +567,7 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
@@ -581,7 +581,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'i') {
                             if (s[6] == 'n') {
                                 if (s[7] == 'e') {
-                                    return KeywordAlias___inline;
+                                    return SyntaxKind::KeywordAlias___inline;
                                 }
                             }
                         }
@@ -593,7 +593,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'g') {
                             if (s[6] == '_') {
                                 if (s[7] == '_') {
-                                    return Keyword_ExtGNU___imag__;
+                                    return SyntaxKind::Keyword_ExtGNU___imag__;
                                 }
                             }
                         }
@@ -607,7 +607,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'c') {
                             if (s[6] == '_') {
                                 if (s[7] == '_') {
-                                    return Keyword___func__;
+                                    return SyntaxKind::Keyword___func__;
                                 }
                             }
                         }
@@ -620,7 +620,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'e') {
                             if (s[6] == 'o') {
                                 if (s[7] == 'f') {
-                                    return KeywordAlias___typeof;
+                                    return SyntaxKind::KeywordAlias___typeof;
                                 }
                             }
                         }
@@ -631,7 +631,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'e') {
                             if (s[6] == 'a') {
                                 if (s[7] == 'd') {
-                                    return Keyword_ExtGNU___thread;
+                                    return SyntaxKind::Keyword_ExtGNU___thread;
                                 }
                             }
                         }
@@ -645,7 +645,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'l') {
                             if (s[6] == '_') {
                                 if (s[7] == '_') {
-                                    return Keyword_ExtGNU___real__;
+                                    return SyntaxKind::Keyword_ExtGNU___real__;
                                 }
                             }
                         }
@@ -659,7 +659,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'n') {
                             if (s[6] == 'e') {
                                 if (s[7] == 'd') {
-                                    return KeywordAlias___signed;
+                                    return SyntaxKind::KeywordAlias___signed;
                                 }
                             }
                         }
@@ -675,12 +675,12 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'n') {
                             if (s[6] == 'a') {
                                 if (s[7] == 's') {
-                                    return Keyword__Alignas;
+                                    return SyntaxKind::Keyword__Alignas;
                                 }
                             }
                             else if (s[6] == 'o') {
                                 if (s[7] == 'f') {
-                                    return Keyword__Alignof;
+                                    return SyntaxKind::Keyword__Alignof;
                                 }
                             }
                         }
@@ -696,7 +696,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'l') {
                             if (s[6] == 'e') {
                                 if (s[7] == 'x') {
-                                    return Keyword__Complex;
+                                    return SyntaxKind::Keyword__Complex;
                                 }
                             }
                         }
@@ -712,7 +712,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'r') {
                             if (s[6] == 'i') {
                                 if (s[7] == 'c') {
-                                    return Keyword__Generic;
+                                    return SyntaxKind::Keyword__Generic;
                                 }
                             }
                         }
@@ -729,7 +729,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'n') {
                             if (s[6] == 'u') {
                                 if (s[7] == 'e') {
-                                    return Keyword_continue;
+                                    return SyntaxKind::Keyword_continue;
                                 }
                             }
                         }
@@ -744,7 +744,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == '6') {
                             if (s[6] == '_') {
                                 if (s[7] == 't') {
-                                    return Keyword_Ext_char16_t;
+                                    return SyntaxKind::Keyword_Ext_char16_t;
                                 }
                             }
                         }
@@ -752,7 +752,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == '2') {
                             if (s[6] == '_') {
                                 if (s[7] == 't') {
-                                    return Keyword_Ext_char32_t;
+                                    return SyntaxKind::Keyword_Ext_char32_t;
                                 }
                             }
                         }
@@ -770,7 +770,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 't') {
                             if (s[6] == 'o') {
                                 if (s[7] == 'f') {
-                                    return Keyword_MacroStd_offsetof;
+                                    return SyntaxKind::Keyword_MacroStd_offsetof;
                                 }
                             }
                         }
@@ -787,7 +787,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 't') {
                             if (s[6] == 'e') {
                                 if (s[7] == 'r') {
-                                    return Keyword_register;
+                                    return SyntaxKind::Keyword_register;
                                 }
                             }
                         }
@@ -799,7 +799,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'i') {
                             if (s[6] == 'c') {
                                 if (s[7] == 't') {
-                                    return Keyword_restrict;
+                                    return SyntaxKind::Keyword_restrict;
                                 }
                             }
                         }
@@ -816,7 +816,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'n') {
                             if (s[6] == 'e') {
                                 if (s[7] == 'd') {
-                                    return Keyword_unsigned;
+                                    return SyntaxKind::Keyword_unsigned;
                                 }
                             }
                         }
@@ -833,7 +833,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
                         if (s[5] == 'i') {
                             if (s[6] == 'l') {
                                 if (s[7] == 'e') {
-                                    return Keyword_volatile;
+                                    return SyntaxKind::Keyword_volatile;
                                 }
                             }
                         }
@@ -842,7 +842,7 @@ static inline SyntaxKind recognize8(const char* s, const ParseOptions& opts)
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize9(const char* s, const ParseOptions& opts)
@@ -857,7 +857,7 @@ static inline SyntaxKind recognize9(const char* s, const ParseOptions& opts)
                             if (s[6] == 'u') {
                                 if (s[7] == 'r') {
                                     if (s[8] == 'n') {
-                                        return Keyword__Noreturn;
+                                        return SyntaxKind::Keyword__Noreturn;
                                     }
                                 }
                             }
@@ -874,7 +874,7 @@ static inline SyntaxKind recognize9(const char* s, const ParseOptions& opts)
                             if (s[6] == 't') {
                                 if (s[7] == '_') {
                                     if (s[8] == '_') {
-                                        return KeywordAlias___const__;
+                                        return SyntaxKind::KeywordAlias___const__;
                                     }
                                 }
                             }
@@ -890,12 +890,12 @@ static inline SyntaxKind recognize9(const char* s, const ParseOptions& opts)
                             if (s[6] == 'n') {
                                 if (s[7] == 'o') {
                                     if (s[8] == 'f') {
-                                        return KeywordAlias___alignof;
+                                        return SyntaxKind::KeywordAlias___alignof;
                                     }
                                 }
                                 else if (s[7] == 'a') {
                                     if (s[8] == 's') {
-                                        return KeywordAlias___alignas;
+                                        return SyntaxKind::KeywordAlias___alignas;
                                     }
                                 }
                             }
@@ -913,7 +913,7 @@ static inline SyntaxKind recognize9(const char* s, const ParseOptions& opts)
                             if (s[6] == 'a') {
                                 if (s[7] == 't') {
                                     if (s[8] == 'e') {
-                                        return Keyword_ExtPSY__Template;
+                                        return SyntaxKind::Keyword_ExtPSY__Template;
                                     }
                                 }
                             }
@@ -923,7 +923,7 @@ static inline SyntaxKind recognize9(const char* s, const ParseOptions& opts)
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize10(const char* s, const ParseOptions& opts)
@@ -938,7 +938,7 @@ static inline SyntaxKind recognize10(const char* s, const ParseOptions& opts)
                                 if (s[7] == 'e') {
                                     if (s[8] == '_') {
                                         if (s[9] == '_') {
-                                            return KeywordAlias___inline__;
+                                            return SyntaxKind::KeywordAlias___inline__;
                                         }
                                     }
                                 }
@@ -955,7 +955,7 @@ static inline SyntaxKind recognize10(const char* s, const ParseOptions& opts)
                                 if (s[7] == 'i') {
                                     if (s[8] == 'c') {
                                         if (s[9] == 't') {
-                                            return KeywordAlias___restrict;
+                                            return SyntaxKind::KeywordAlias___restrict;
                                         }
                                     }
                                 }
@@ -972,7 +972,7 @@ static inline SyntaxKind recognize10(const char* s, const ParseOptions& opts)
                                 if (s[7] == 'f') {
                                     if (s[8] == '_') {
                                         if (s[9] == '_') {
-                                            return Keyword_ExtGNU___typeof__;
+                                            return SyntaxKind::Keyword_ExtGNU___typeof__;
                                         }
                                     }
                                 }
@@ -990,7 +990,7 @@ static inline SyntaxKind recognize10(const char* s, const ParseOptions& opts)
                                 if (s[7] == 'd') {
                                     if (s[8] == '_') {
                                         if (s[9] == '_') {
-                                            return KeywordAlias___signed__;
+                                            return SyntaxKind::KeywordAlias___signed__;
                                         }
                                     }
                                 }
@@ -1007,7 +1007,7 @@ static inline SyntaxKind recognize10(const char* s, const ParseOptions& opts)
                                 if (s[7] == 'i') {
                                     if (s[8] == 'l') {
                                         if (s[9] == 'e') {
-                                            return KeywordAlias___volatile;
+                                            return SyntaxKind::KeywordAlias___volatile;
                                         }
                                     }
                                 }
@@ -1018,7 +1018,7 @@ static inline SyntaxKind recognize10(const char* s, const ParseOptions& opts)
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize11(const char* s, const ParseOptions& opts)
@@ -1034,7 +1034,7 @@ static inline SyntaxKind recognize11(const char* s, const ParseOptions& opts)
                                     if (s[8] == 'u') {
                                         if (s[9] == 't') {
                                             if (s[10] == 'e') {
-                                                return KeywordAlias___attribute;
+                                                return SyntaxKind::KeywordAlias___attribute;
                                             }
                                         }
                                     }
@@ -1051,7 +1051,7 @@ static inline SyntaxKind recognize11(const char* s, const ParseOptions& opts)
                                     if (s[8] == 'f') {
                                         if (s[9] == '_') {
                                             if (s[10] == '_') {
-                                                return KeywordAlias___alignof__;
+                                                return SyntaxKind::KeywordAlias___alignof__;
                                             }
                                         }
                                     }
@@ -1071,7 +1071,7 @@ static inline SyntaxKind recognize11(const char* s, const ParseOptions& opts)
                                     if (s[8] == 'x') {
                                         if (s[9] == '_') {
                                             if (s[10] == '_') {
-                                                return Keyword_ExtGNU___complex__;
+                                                return SyntaxKind::Keyword_ExtGNU___complex__;
                                             }
                                         }
                                     }
@@ -1083,7 +1083,7 @@ static inline SyntaxKind recognize11(const char* s, const ParseOptions& opts)
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize12(const char* s, const ParseOptions& opts)
@@ -1101,7 +1101,7 @@ static inline SyntaxKind recognize12(const char* s, const ParseOptions& opts)
                                         if (s[9] == 'e') {
                                             if (s[10] == '_') {
                                                 if (s[11] == '_') {
-                                                    return KeywordAlias___volatile__;
+                                                    return SyntaxKind::KeywordAlias___volatile__;
                                                 }
                                             }
                                         }
@@ -1122,7 +1122,7 @@ static inline SyntaxKind recognize12(const char* s, const ParseOptions& opts)
                                         if (s[9] == 't') {
                                             if (s[10] == '_') {
                                                 if (s[11] == '_') {
-                                                    return KeywordAlias___restrict__;
+                                                    return SyntaxKind::KeywordAlias___restrict__;
                                                 }
                                             }
                                         }
@@ -1144,7 +1144,7 @@ static inline SyntaxKind recognize12(const char* s, const ParseOptions& opts)
                                         if (s[9] == 'N') {
                                             if (s[10] == '_') {
                                                 if (s[11] == '_') {
-                                                    return Keyword_ExtGNU___FUNCTION__;
+                                                    return SyntaxKind::Keyword_ExtGNU___FUNCTION__;
                                                 }
                                             }
                                         }
@@ -1169,7 +1169,7 @@ static inline SyntaxKind recognize12(const char* s, const ParseOptions& opts)
                                             if (s[10] == 'c') {
                                                 if (s[11] == 'a') {
                                                     if (s[12] == 'l') {
-                                                        return Keyword__Thread_local;
+                                                        return SyntaxKind::Keyword__Thread_local;
                                                     }
                                                 }
                                             }
@@ -1183,7 +1183,7 @@ static inline SyntaxKind recognize12(const char* s, const ParseOptions& opts)
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize13(const char* s, const ParseOptions& opts)
@@ -1202,7 +1202,7 @@ static inline SyntaxKind recognize13(const char* s, const ParseOptions& opts)
                                             if (s[10] == 'e') {
                                                 if (s[11] == '_') {
                                                     if (s[12] == '_') {
-                                                        return Keyword_ExtGNU___attribute__;
+                                                        return SyntaxKind::Keyword_ExtGNU___attribute__;
                                                     }
                                                 }
                                             }
@@ -1226,7 +1226,7 @@ static inline SyntaxKind recognize13(const char* s, const ParseOptions& opts)
                                             if (s[10] == 'n') {
                                                 if (s[11] == '_') {
                                                     if (s[12] == '_') {
-                                                        return Keyword_ExtGNU___extension__;
+                                                        return SyntaxKind::Keyword_ExtGNU___extension__;
                                                     }
                                                 }
                                             }
@@ -1252,7 +1252,7 @@ static inline SyntaxKind recognize13(const char* s, const ParseOptions& opts)
                                             if (s[10] == 'c') {
                                                 if (s[11] == 'a') {
                                                     if (s[12] == 'l') {
-                                                        return Keyword__Thread_local;
+                                                        return SyntaxKind::Keyword__Thread_local;
                                                     }
                                                 }
                                             }
@@ -1266,7 +1266,7 @@ static inline SyntaxKind recognize13(const char* s, const ParseOptions& opts)
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize14(const char* s, const ParseOptions& opts)
@@ -1286,7 +1286,7 @@ static inline SyntaxKind recognize14(const char* s, const ParseOptions& opts)
                                                 if (s[11] == 'e') {
                                                     if (s[12] == 'r') {
                                                         if (s[13] == 't') {
-                                                            return Keyword__Static_assert;
+                                                            return SyntaxKind::Keyword__Static_assert;
                                                         }
                                                     }
                                                 }
@@ -1302,12 +1302,12 @@ static inline SyntaxKind recognize14(const char* s, const ParseOptions& opts)
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize15(const char* s, const ParseOptions& opts)
 {
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize16(const char* s, const ParseOptions& opts)
@@ -1329,7 +1329,7 @@ static inline SyntaxKind recognize16(const char* s, const ParseOptions& opts)
                                                         if (s[13] == 'a') {
                                                             if (s[14] == 'r') {
                                                                 if (s[15] == 'g') {
-                                                                    return Keyword_ExtGNU___builtin_va_arg;
+                                                                    return SyntaxKind::Keyword_ExtGNU___builtin_va_arg;
                                                                 }
                                                             }
                                                         }
@@ -1360,7 +1360,7 @@ static inline SyntaxKind recognize16(const char* s, const ParseOptions& opts)
                                                         if (s[13] == 'a') {
                                                             if (s[14] == 't') {
                                                                 if (s[15] == 'h') {
-                                                                    return Keyword_ExtGNU___builtin_tgmath;
+                                                                    return SyntaxKind::Keyword_ExtGNU___builtin_tgmath;
                                                                 }
                                                             }
                                                         }
@@ -1377,12 +1377,12 @@ static inline SyntaxKind recognize16(const char* s, const ParseOptions& opts)
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize17(const char* s, const ParseOptions& opts)
 {
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize18(const char* s, const ParseOptions& opts)
@@ -1406,7 +1406,7 @@ static inline SyntaxKind recognize18(const char* s, const ParseOptions& opts)
                                                                 if (s[15] == 't') {
                                                                     if (s[16] == 'o') {
                                                                         if (s[17] == 'f') {
-                                                                            return Keyword_ExtGNU___builtin_offsetof;
+                                                                            return SyntaxKind::Keyword_ExtGNU___builtin_offsetof;
                                                                         }
                                                                     }
                                                                 }
@@ -1425,7 +1425,7 @@ static inline SyntaxKind recognize18(const char* s, const ParseOptions& opts)
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize19(const char* s, const ParseOptions& opts)
@@ -1450,7 +1450,7 @@ static inline SyntaxKind recognize19(const char* s, const ParseOptions& opts)
                                                                     if (s[16] == 'N') {
                                                                         if (s[17] == '_') {
                                                                             if (s[18] == '_') {
-                                                                                return Keyword_ExtGNU___PRETTY_FUNCTION__;
+                                                                                return SyntaxKind::Keyword_ExtGNU___PRETTY_FUNCTION__;
                                                                             }
                                                                         }
                                                                     }
@@ -1471,7 +1471,7 @@ static inline SyntaxKind recognize19(const char* s, const ParseOptions& opts)
         }
     }
 
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind recognize21(const char* s, const ParseOptions& opts)
@@ -1498,7 +1498,7 @@ static inline SyntaxKind recognize21(const char* s, const ParseOptions& opts)
                                                                             if (s[18] == 'x') {
                                                                                 if (s[19] == 'p') {
                                                                                     if (s[20] == 'r') {
-                                                                                        return Keyword_ExtGNU___builtin_choose_expr;
+                                                                                        return SyntaxKind::Keyword_ExtGNU___builtin_choose_expr;
                                                                                     }
                                                                                 }
                                                                             }
@@ -1520,7 +1520,7 @@ static inline SyntaxKind recognize21(const char* s, const ParseOptions& opts)
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 SyntaxKind Lexer::recognize(const char* s, int n, const ParseOptions& opts)
@@ -1545,7 +1545,7 @@ SyntaxKind Lexer::recognize(const char* s, int n, const ParseOptions& opts)
         case 18: return recognize18(s, opts);
         case 19: return recognize19(s, opts);
         case 21: return recognize21(s, opts);
-        default: return IdentifierToken;
+        default: return SyntaxKind::IdentifierToken;
     }
 }
 
@@ -1553,10 +1553,10 @@ static inline SyntaxKind translate2(const char* s)
 {
     if (s[0] == 'o') {
         if (s[1] == 'r') {
-            return OperatorName_ORToken;
+            return SyntaxKind::OperatorName_ORToken;
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind translate3(const char* s)
@@ -1564,25 +1564,25 @@ static inline SyntaxKind translate3(const char* s)
     if (s[0] == 'a') {
         if (s[1] == 'n') {
             if (s[2] == 'd') {
-                return OperatorName_ANDToken;
+                return SyntaxKind::OperatorName_ANDToken;
             }
         }
     }
     else if (s[0] == 'n') {
         if (s[1] == 'o') {
             if (s[2] == 't') {
-                return OperatorName_NOTToken;
+                return SyntaxKind::OperatorName_NOTToken;
             }
         }
     }
     else if (s[0] == 'x') {
         if (s[1] == 'o') {
             if (s[2] == 'r') {
-                return OperatorName_XORToken;
+                return SyntaxKind::OperatorName_XORToken;
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind translate5(const char* s)
@@ -1592,7 +1592,7 @@ static inline SyntaxKind translate5(const char* s)
             if (s[2] == 't') {
                 if (s[3] == 'o') {
                     if (s[4] == 'r') {
-                        return OperatorName_BITORToken;
+                        return SyntaxKind::OperatorName_BITORToken;
                     }
                 }
             }
@@ -1603,7 +1603,7 @@ static inline SyntaxKind translate5(const char* s)
             if (s[2] == 'm') {
                 if (s[3] == 'p') {
                     if (s[4] == 'l') {
-                        return OperatorName_COMPLToken;
+                        return SyntaxKind::OperatorName_COMPLToken;
                     }
                 }
             }
@@ -1614,13 +1614,13 @@ static inline SyntaxKind translate5(const char* s)
             if (s[2] == '_') {
                 if (s[3] == 'e') {
                     if (s[4] == 'q') {
-                        return OperatorName_OREQToken;
+                        return SyntaxKind::OperatorName_OREQToken;
                     }
                 }
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 static inline SyntaxKind translate6(const char* s)
@@ -1631,7 +1631,7 @@ static inline SyntaxKind translate6(const char* s)
                 if (s[3] == '_') {
                     if (s[4] == 'e') {
                         if (s[5] == 'q') {
-                            return OperatorName_ANDEQToken;
+                            return SyntaxKind::OperatorName_ANDEQToken;
                         }
                     }
                 }
@@ -1644,7 +1644,7 @@ static inline SyntaxKind translate6(const char* s)
                 if (s[3] == 'a') {
                     if (s[4] == 'n') {
                         if (s[5] == 'd') {
-                            return OperatorName_BITANDToken;
+                            return SyntaxKind::OperatorName_BITANDToken;
                         }
                     }
                 }
@@ -1657,7 +1657,7 @@ static inline SyntaxKind translate6(const char* s)
                 if (s[3] == '_') {
                     if (s[4] == 'e') {
                         if (s[5] == 'q') {
-                            return OperatorName_NOTEQToken;
+                            return SyntaxKind::OperatorName_NOTEQToken;
                         }
                     }
                 }
@@ -1670,14 +1670,14 @@ static inline SyntaxKind translate6(const char* s)
                 if (s[3] == '_') {
                     if (s[4] == 'e') {
                         if (s[5] == 'q') {
-                            return OperatorName_XOREQToken;
+                            return SyntaxKind::OperatorName_XOREQToken;
                         }
                     }
                 }
             }
         }
     }
-    return IdentifierToken;
+    return SyntaxKind::IdentifierToken;
 }
 
 SyntaxKind Lexer::translate(const char* s, int n, const ParseOptions& opts)
@@ -1687,7 +1687,7 @@ SyntaxKind Lexer::translate(const char* s, int n, const ParseOptions& opts)
         case 3: return translate3(s);
         case 5: return translate5(s);
         case 6: return translate6(s);
-        default: return IdentifierToken;
+        default: return SyntaxKind::IdentifierToken;
     }
 }
 

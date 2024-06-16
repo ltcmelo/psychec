@@ -27,7 +27,7 @@
 
 #include "syntax/SyntaxToken.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 
 #include <cstdint>
 #include <functional>
@@ -41,15 +41,15 @@ class ParseOptions;
 /**
  * \brief The C Lexer class.
  */
-class PSY_C_NON_API Lexer
+class PSY_C_INTERNAL_API Lexer
 {
 public:
     ~Lexer();
 
     void lex();
 
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(SyntaxTree);
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(SyntaxTree);
 
     Lexer(SyntaxTree* tree);
 
@@ -99,8 +99,8 @@ private:
     bool lexContinuedRawStringLiteral();
 
     void lexUntilQuote(SyntaxToken* tk, unsigned char quote, unsigned int accLeng);
-    void lexBackslash(std::uint16_t rawSyntaxK);
-    void lexSingleLineComment(std::uint16_t rawSyntaxK);
+    void lexBackslash(SyntaxKind syntaxK);
+    void lexSingleLineComment(SyntaxKind syntaxK);
 
     static SyntaxKind recognize(const char* ident,
                                int size,
@@ -126,7 +126,7 @@ private:
     // Line breaks and continuations aren't strictly correct... (see quirks
     // at https://gcc.gnu.org/onlinedocs/cppinternals/Lexer.html).
     bool withinLogicalLine_;
-    std::uint16_t rawSyntaxK_splitTk;
+    SyntaxKind syntaxK_splitTk;
 
     struct DiagnosticsReporter
     {

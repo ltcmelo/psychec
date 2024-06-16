@@ -24,7 +24,6 @@
 
 #include "binder/Scope.h"
 #include "binder/NameSpace.h"
-#include "symbols/SymbolName_ALL.h"
 
 using namespace psy;
 using namespace C;
@@ -34,36 +33,39 @@ struct Symbol::SymbolImpl
     SymbolImpl(const SyntaxTree* tree,
                const Scope* scope,
                const Symbol* containingSym,
-               SymbolKind kind)
+               SymbolKind symKind)
         : tree_(tree)
         , scope_(scope)
         , ns_(nullptr) // TODO
         , containingSym_(containingSym)
-        , kind_(kind)
         , BF_all_(0)
-    {}
+    {
+        BF_.symK_ = static_cast<std::uint32_t>(symKind);
+    }
 
     const SyntaxTree* tree_;
     const Scope* scope_;
     const NameSpace* ns_;
     const Symbol* containingSym_;
-    SymbolKind kind_;
-    Accessibility access_;
 
     struct BitFields
     {
         // Symbol
-        std::uint16_t static_ : 1;
+        std::uint32_t symK_ : 3;
 
-        // TypeSymbol.
-        std::uint16_t const_ : 1;
-        std::uint16_t volatile_ : 1;
-        std::uint16_t restrict_ : 1;
-        std::uint16_t atomic_ : 1;
+        // DeclarationSymbol
+        std::uint32_t declSymK_: 2;
+        std::uint32_t static_ : 1;
+
+        // ObjectDeclarationSymbol
+        std::uint32_t valSymK_ : 3;
+
+        // TypeDeclarationSymbol
+        std::uint32_t tySymK_ : 3;
     };
     union
     {
-        std::uint16_t BF_all_;
+        std::uint32_t BF_all_;
         BitFields BF_;
     };
 };

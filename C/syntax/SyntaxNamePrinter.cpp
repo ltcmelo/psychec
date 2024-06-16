@@ -105,7 +105,7 @@ void SyntaxNamePrinter::print(const SyntaxNode* node, Style style, std::ostream&
 
         os << to_string(node->kind()) << " ";
 
-        if (node->kind() == TranslationUnit) {
+        if (node->kind() == SyntaxKind::TranslationUnit) {
             os << std::endl;
             continue;
         }

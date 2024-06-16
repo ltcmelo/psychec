@@ -31,7 +31,7 @@
 #include "infra/MemoryPool.h"
 #include "syntax/SyntaxToken.h"
 
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 
 #include <cstdint>
 #include <functional>
@@ -48,7 +48,7 @@ class Lexer;
 /**
  * \brief The C Parser class.
  */
-class PSY_C_NON_API Parser
+class PSY_C_INTERNAL_API Parser
 {
     friend class ParserTester;
     friend bool isDiagnosticDescriptorIdOfSyntaxAmbiguity(const std::string&);
@@ -56,9 +56,9 @@ class PSY_C_NON_API Parser
 public:
     ~Parser();
 
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(SyntaxTree);
-    PSY_GRANT_ACCESS(DebugRule);
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(SyntaxTree);
+    PSY_GRANT_INTERNAL_ACCESS(DebugRule);
 
     Parser(SyntaxTree* tree);
 
@@ -322,6 +322,7 @@ private:
     /* Specifiers */
     bool parseDeclarationSpecifiers(DeclarationSyntax*& decl, SpecifierListSyntax*& specList);
     bool parseSpecifierQualifierList(DeclarationSyntax*& decl, SpecifierListSyntax*& specList);
+    template <class SpecT> void parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec);
     template <class SpecT> void parseTrivialSpecifier_AtFirst(
             SpecifierSyntax*& spec,
             SyntaxKind specK);

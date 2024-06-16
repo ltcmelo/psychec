@@ -39,10 +39,10 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
     while (true) {
         DeclarationSyntax* decl = nullptr;
         switch (peek().kind()) {
-            case EndOfFile:
+            case SyntaxKind::EndOfFile:
                 return;
 
-            case Keyword_ExtGNU___extension__: {
+            case SyntaxKind::Keyword_ExtGNU___extension__: {
                 auto extKwTkIdx = consume();
                 if (!parseExternalDeclaration(decl))
                     break;;
@@ -81,17 +81,17 @@ bool Parser::parseExternalDeclaration(DeclarationSyntax*& decl)
     DEBUG_THIS_RULE();
 
     switch (peek().kind()) {
-        case SemicolonToken:
+        case SyntaxKind::SemicolonToken:
             parseIncompleteDeclaration_AtFirst(decl);
             break;
 
-        case Keyword__Static_assert:
+        case SyntaxKind::Keyword__Static_assert:
             return parseStaticAssertDeclaration_AtFirst(decl);
 
-        case Keyword_ExtGNU___asm__:
+        case SyntaxKind::Keyword_ExtGNU___asm__:
             return parseExtGNU_AsmStatementDeclaration_AtFirst(decl);
 
-        case Keyword_ExtPSY__Template:
+        case SyntaxKind::Keyword_ExtPSY__Template:
             parseExtPSY_TemplateDeclaration_AtFirst(decl);
             break;
 
@@ -106,7 +106,7 @@ void Parser::parseIncompleteDeclaration_AtFirst(DeclarationSyntax*& decl,
                                                 const SpecifierListSyntax* specList)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SemicolonToken,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::SemicolonToken,
                   return,
                   "assert failure: `;'");
 
@@ -129,7 +129,7 @@ void Parser::parseIncompleteDeclaration_AtFirst(DeclarationSyntax*& decl,
 bool Parser::parseStaticAssertDeclaration_AtFirst(DeclarationSyntax*& decl)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword__Static_assert,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword__Static_assert,
                   return false,
                   "assert failure: `_Static_assert'");
 
@@ -137,15 +137,15 @@ bool Parser::parseStaticAssertDeclaration_AtFirst(DeclarationSyntax*& decl)
     decl = assertDecl;
     assertDecl->staticAssertKwTkIdx_ = consume();
 
-    if (match(OpenParenToken, &assertDecl->openParenTkIdx_)
+    if (match(SyntaxKind::OpenParenToken, &assertDecl->openParenTkIdx_)
             && parseExpressionWithPrecedenceConditional(assertDecl->expr_)
-            && match(CommaToken, &assertDecl->commaTkIdx_)
+            && match(SyntaxKind::CommaToken, &assertDecl->commaTkIdx_)
             && parseStringLiteral(assertDecl->strLit_)
-            && match(CloseParenToken, &assertDecl->closeParenTkIdx_)
-            && match(SemicolonToken, &assertDecl->semicolonTkIdx_))
+            && match(SyntaxKind::CloseParenToken, &assertDecl->closeParenTkIdx_)
+            && match(SyntaxKind::SemicolonToken, &assertDecl->semicolonTkIdx_))
         return true;
 
-    skipTo(ColonToken);
+    skipTo(SyntaxKind::ColonToken);
     return false;
 }
 
@@ -156,7 +156,7 @@ bool Parser::parseStaticAssertDeclaration_AtFirst(DeclarationSyntax*& decl)
 bool Parser::parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& decl)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtGNU___asm__,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
                   return false,
                   "assert failure: `asm'");
 
@@ -167,12 +167,12 @@ bool Parser::parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& dec
     decl = asmDecl;
     asmDecl->asmTkIdx_ = consume();
 
-    if (match(OpenParenToken, &asmDecl->openParenTkIdx_)
+    if (match(SyntaxKind::OpenParenToken, &asmDecl->openParenTkIdx_)
             && parseStringLiteral(asmDecl->strLit_)
-            && match(CloseParenToken, &asmDecl->closeParenTkIdx_))
+            && match(SyntaxKind::CloseParenToken, &asmDecl->closeParenTkIdx_))
         return true;
 
-    skipTo(CloseParenToken);
+    skipTo(SyntaxKind::CloseParenToken);
     return false;
 }
 
@@ -188,7 +188,7 @@ bool Parser::parseDeclaration(
                 specList))
         return false;
 
-    if (peek().kind() == SemicolonToken) {
+    if (peek().kind() == SyntaxKind::SemicolonToken) {
         if (decl) {
             auto tagDecl = static_cast<TagDeclarationSyntax*>(decl);
             tagDecl->semicolonTkIdx_ = consume();
@@ -264,37 +264,37 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
         *decltorList_cur = makeNode<DeclaratorListSyntax>(decltor);
 
         InitializerSyntax** init = nullptr;
-        if (peek().kind() == EqualsToken) {
+        if (peek().kind() == SyntaxKind::EqualsToken) {
             DeclaratorSyntax* stripDecltor = const_cast<DeclaratorSyntax*>(
                     SyntaxUtilities::strippedDeclaratorOrSelf(decltor));
             switch (stripDecltor->kind()) {
-                case IdentifierDeclarator: {
+                case SyntaxKind::IdentifierDeclarator: {
                     auto identDecltor = stripDecltor->asIdentifierDeclarator();
                     identDecltor->equalsTkIdx_ = consume();
                     init = &identDecltor->init_;
                     break;
                 }
 
-                case PointerDeclarator: {
+                case SyntaxKind::PointerDeclarator: {
                     auto ptrDecltor = stripDecltor->asPointerDeclarator();
                     ptrDecltor->equalsTkIdx_ = consume();
                     init = &ptrDecltor->init_;
                     break;
                 }
 
-                case ArrayDeclarator: {
+                case SyntaxKind::ArrayDeclarator: {
                     auto arrDecltor = stripDecltor->asArrayOrFunctionDeclarator();
                     arrDecltor->equalsTkIdx_ = consume();
                     init = &arrDecltor->init_;
                     break;
                 }
 
-                case FunctionDeclarator: {
+                case SyntaxKind::FunctionDeclarator: {
                     auto funcDecltor = stripDecltor->asArrayOrFunctionDeclarator();
                     if (funcDecltor->innerDecltor_) {
                         auto stripInnerDecltor = const_cast<DeclaratorSyntax*>(
                                     SyntaxUtilities::strippedDeclaratorOrSelf(funcDecltor->innerDecltor_));
-                        if (stripInnerDecltor->kind() == PointerDeclarator) {
+                        if (stripInnerDecltor->kind() == SyntaxKind::PointerDeclarator) {
                             funcDecltor->equalsTkIdx_ = consume();
                             init = &funcDecltor->init_;
                             break;
@@ -312,14 +312,14 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
         }
 
         switch (peek().kind()) {
-            case CommaToken:
+            case SyntaxKind::CommaToken:
                 (*decltorList_cur)->delimTkIdx_ = consume();
                 break;
 
-            case SemicolonToken: {
+            case SyntaxKind::SemicolonToken: {
                 for (auto iter = specList; iter; iter = iter->next) {
                     PSY_ASSERT(iter->value, return false);
-                    if (iter->value->kind() == TypedefStorageClass) {
+                    if (iter->value->kind() == SyntaxKind::TypedefStorageClass) {
                         auto tydefDecl = makeNode<TypedefDeclarationSyntax>();
                         decl = tydefDecl;
                         tydefDecl->semicolonTkIdx_ = consume();
@@ -337,7 +337,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
                 return true;
             }
 
-            case OpenBraceToken:
+            case SyntaxKind::OpenBraceToken:
                 if (parseFunctionDefinition_AtOpenBrace(decl, specList, decltor, nullptr))
                     return true;
                 [[fallthrough]];
@@ -376,7 +376,7 @@ bool Parser::parseFunctionDefinition_AtOpenBrace(
         ExtKR_ParameterDeclarationListSyntax* paramKRList)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == OpenBraceToken,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBraceToken,
                   return false,
                   "assert failure: `{'");
 
@@ -393,8 +393,8 @@ bool Parser::parseFunctionDefinition_AtOpenBrace(
     }
 
     if (prevDecltor
-            && prevDecltor->kind() == FunctionDeclarator
-            && outerDecltor->kind() == IdentifierDeclarator) {
+            && prevDecltor->kind() == SyntaxKind::FunctionDeclarator
+            && outerDecltor->kind() == SyntaxKind::IdentifierDeclarator) {
         auto funcDef = makeNode<FunctionDefinitionSyntax>();
         decl = funcDef;
         funcDef->specs_ = const_cast<SpecifierListSyntax*>(specList);
@@ -436,7 +436,7 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
     bool maybeKR = false;
     while (true) {
         switch (peek(LA).kind()) {
-            case IdentifierToken:
+            case SyntaxKind::IdentifierToken:
                 if (!maybeKR) {
                     if (seenType)
                         return IdentifierRole::AsDeclarator;
@@ -448,24 +448,24 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
                 continue;
 
             // type-specifier
-            case Keyword_void:
-            case Keyword_char:
-            case Keyword_short:
-            case Keyword_int:
-            case Keyword_long:
-            case Keyword_float:
-            case Keyword_double:
-            case Keyword__Bool:
-            case Keyword__Complex:
-            case Keyword_signed:
-            case Keyword_unsigned:
-            case Keyword_Ext_char16_t:
-            case Keyword_Ext_char32_t:
-            case Keyword_Ext_wchar_t:
-            case Keyword_struct:
-            case Keyword_union:
-            case Keyword_enum:
-            case Keyword_ExtGNU___complex__:
+            case SyntaxKind::Keyword_void:
+            case SyntaxKind::Keyword_char:
+            case SyntaxKind::Keyword_short:
+            case SyntaxKind::Keyword_int:
+            case SyntaxKind::Keyword_long:
+            case SyntaxKind::Keyword_float:
+            case SyntaxKind::Keyword_double:
+            case SyntaxKind::Keyword__Bool:
+            case SyntaxKind::Keyword__Complex:
+            case SyntaxKind::Keyword_signed:
+            case SyntaxKind::Keyword_unsigned:
+            case SyntaxKind::Keyword_Ext_char16_t:
+            case SyntaxKind::Keyword_Ext_char32_t:
+            case SyntaxKind::Keyword_Ext_wchar_t:
+            case SyntaxKind::Keyword_struct:
+            case SyntaxKind::Keyword_union:
+            case SyntaxKind::Keyword_enum:
+            case SyntaxKind::Keyword_ExtGNU___complex__:
                 if (!maybeKR) {
                     if (seenType)
                         return IdentifierRole::AsDeclarator;
@@ -475,55 +475,55 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
                 continue;
 
             // storage-class-specifier
-            case Keyword_typedef:
-            case Keyword_extern:
-            case Keyword_static:
-            case Keyword_auto:
-            case Keyword_register:
-            case Keyword__Thread_local:
-            case Keyword_ExtGNU___thread:
+            case SyntaxKind::Keyword_typedef:
+            case SyntaxKind::Keyword_extern:
+            case SyntaxKind::Keyword_static:
+            case SyntaxKind::Keyword_auto:
+            case SyntaxKind::Keyword_register:
+            case SyntaxKind::Keyword__Thread_local:
+            case SyntaxKind::Keyword_ExtGNU___thread:
                 ++LA;
                 continue;
 
             // type-qualifier
-            case Keyword_const:
-            case Keyword_volatile:
-            case Keyword_restrict:
-            case Keyword__Atomic:
+            case SyntaxKind::Keyword_const:
+            case SyntaxKind::Keyword_volatile:
+            case SyntaxKind::Keyword_restrict:
+            case SyntaxKind::Keyword__Atomic:
                 ++LA;
                 continue;
 
             // function-specifier
-            case Keyword_inline:
-            case Keyword__Noreturn:
+            case SyntaxKind::Keyword_inline:
+            case SyntaxKind::Keyword__Noreturn:
                 ++LA;
                 continue;
 
             // alignment-specifier
-            case Keyword__Alignas:
+            case SyntaxKind::Keyword__Alignas:
                 ++LA;
                 continue;
 
             // attribute-specifier
-            case Keyword_ExtGNU___attribute__:
+            case SyntaxKind::Keyword_ExtGNU___attribute__:
                 if (!maybeKR && !parenCnt)
                         return IdentifierRole::AsTypedefName;
                 ++LA;
                 continue;
 
             // pointer-declarator
-            case AsteriskToken:
+            case SyntaxKind::AsteriskToken:
                 if (!parenCnt)
                     return IdentifierRole::AsTypedefName;
                 ++LA;
                 continue;
 
-            case OpenParenToken:
+            case SyntaxKind::OpenParenToken:
                 ++parenCnt;
                 ++LA;
                 continue;
 
-            case CloseParenToken:
+            case SyntaxKind::CloseParenToken:
                 --parenCnt;
                 if (!maybeKR) {
                     if (!parenCnt) {
@@ -533,14 +533,14 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
                     }
                 }
                 else {
-                    if (peek(LA + 1).kind() == SemicolonToken)
+                    if (peek(LA + 1).kind() == SyntaxKind::SemicolonToken)
                         return IdentifierRole::AsTypedefName;
                     return IdentifierRole::AsDeclarator;
                 }
                 ++LA;
                 continue;
 
-            case CommaToken:
+            case SyntaxKind::CommaToken:
                 if (!parenCnt) {
                     if (seenType)
                         return IdentifierRole::AsTypedefName;
@@ -552,12 +552,12 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
                     return IdentifierRole::AsTypedefName;
                 return IdentifierRole::AsDeclarator;
 
-            case SemicolonToken:
+            case SyntaxKind::SemicolonToken:
                 if (parenCnt < 0)
                     return IdentifierRole::AsTypedefName;
                 return IdentifierRole::AsDeclarator;
 
-            case EndOfFile:
+            case SyntaxKind::EndOfFile:
                 if (seenType)
                     return IdentifierRole::AsDeclarator;
                 return IdentifierRole::AsTypedefName;
@@ -586,11 +586,11 @@ bool Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList(
         *decltorList_cur = makeNode<DeclaratorListSyntax>(decltor);
 
         switch (peek().kind()) {
-            case CommaToken:
+            case SyntaxKind::CommaToken:
                 (*decltorList_cur)->delimTkIdx_ = consume();
                 break;
 
-            case SemicolonToken: {
+            case SyntaxKind::SemicolonToken: {
                 auto memberDecl = makeNode<FieldDeclarationSyntax>();
                 decl = memberDecl;
                 memberDecl->semicolonTkIdx_ = consume();
@@ -624,10 +624,10 @@ bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
     DEBUG_THIS_RULE();
 
     switch (peek().kind()) {
-        case Keyword__Static_assert:
+        case SyntaxKind::Keyword__Static_assert:
             return parseStaticAssertDeclaration_AtFirst(decl);
 
-        case Keyword_ExtGNU___extension__: {
+        case SyntaxKind::Keyword_ExtGNU___extension__: {
             auto extKwTkIdx = consume();
             if (!parseDeclaration(
                         decl,
@@ -667,7 +667,7 @@ bool Parser::parseEnumerator(DeclarationSyntax*& decl)
     EnumeratorDeclarationSyntax* enumMembDecl = nullptr;
 
     switch (peek().kind()) {
-        case IdentifierToken: {
+        case SyntaxKind::IdentifierToken: {
             enumMembDecl = makeNode<EnumeratorDeclarationSyntax>();
             decl = enumMembDecl;
             enumMembDecl->identTkIdx_ = consume();
@@ -679,19 +679,19 @@ bool Parser::parseEnumerator(DeclarationSyntax*& decl)
             return false;
     }
 
-    if (peek().kind() == Keyword_ExtGNU___attribute__)
+    if (peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__)
         parseExtGNU_AttributeSpecifierList_AtFirst(enumMembDecl->attrs_);
 
     switch (peek().kind()) {
-        case EqualsToken:
+        case SyntaxKind::EqualsToken:
             enumMembDecl->equalsTkIdx_ = consume();
             if (!parseExpressionWithPrecedenceConditional(enumMembDecl->expr_))
                 return false;
-            if (peek().kind() != CommaToken)
+            if (peek().kind() != SyntaxKind::CommaToken)
                 break;
             [[fallthrough]];
 
-        case CommaToken:
+        case SyntaxKind::CommaToken:
             enumMembDecl->commaTkIdx_ = consume();
             [[fallthrough]];
 
@@ -719,10 +719,10 @@ bool Parser::parseParameterDeclarationListAndOrEllipsis(ParameterSuffixSyntax*& 
     DEBUG_THIS_RULE();
 
     switch (peek().kind()) {
-        case CloseParenToken:
+        case SyntaxKind::CloseParenToken:
             break;
 
-        case EllipsisToken:
+        case SyntaxKind::EllipsisToken:
             if (!paramDecltorSfx->decls_)
                 diagReporter_.ExpectedNamedParameterBeforeEllipsis();
             paramDecltorSfx->ellipsisTkIdx_ = consume();
@@ -733,12 +733,12 @@ bool Parser::parseParameterDeclarationListAndOrEllipsis(ParameterSuffixSyntax*& 
                 return false;
 
             switch (peek().kind()) {
-                case CommaToken:
+                case SyntaxKind::CommaToken:
                     paramDecltorSfx->decls_->delimTkIdx_ = consume();
-                    match(EllipsisToken, &paramDecltorSfx->ellipsisTkIdx_);
+                    match(SyntaxKind::EllipsisToken, &paramDecltorSfx->ellipsisTkIdx_);
                     break;
 
-                case EllipsisToken:
+                case SyntaxKind::EllipsisToken:
                     paramDecltorSfx->ellipsisTkIdx_ = consume();
                     [[fallthrough]];
 
@@ -778,12 +778,12 @@ bool Parser::parseParameterDeclarationList(ParameterDeclarationListSyntax*& para
 
     *paramList_cur = makeNode<ParameterDeclarationListSyntax>(paramDecl);
 
-    while (peek().kind() == CommaToken) {
+    while (peek().kind() == SyntaxKind::CommaToken) {
         (*paramList_cur)->delimTkIdx_ = consume();
         paramList_cur = &(*paramList_cur)->next;
 
         switch (peek().kind()) {
-            case EllipsisToken:
+            case SyntaxKind::EllipsisToken:
                 return true;
 
             default:
@@ -819,7 +819,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
 
     if (!specList) {
         switch (peek().kind()) {
-            case IdentifierToken:
+            case SyntaxKind::IdentifierToken:
                 diagReporter_.ExpectedTypeSpecifier();
                 break;
 
@@ -845,7 +845,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
 bool Parser::parseExtPSY_TemplateDeclaration_AtFirst(DeclarationSyntax*& decl)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtPSY__Template,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtPSY__Template,
                   return false,
                   "assert failure: `_Template'");
 
@@ -869,7 +869,7 @@ bool Parser::parseExtKR_ParameterDeclarationList(
 
     *paramList_cur = makeNode<ExtKR_ParameterDeclarationListSyntax>(paramDecl);
 
-    while (peek().kind() != OpenBraceToken) {
+    while (peek().kind() != SyntaxKind::OpenBraceToken) {
         paramList_cur = &(*paramList_cur)->next;
 
         ExtKR_ParameterDeclarationSyntax* nextParamDecl = nullptr;
@@ -902,12 +902,12 @@ bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& 
 
         *decltorList_cur = makeNode<DeclaratorListSyntax>(decltor);
         switch (peek().kind()) {
-            case CommaToken:
+            case SyntaxKind::CommaToken:
                 (*decltorList_cur)->delimTkIdx_ = consume();
                 decltorList_cur = &(*decltorList_cur)->next;
                 break;
 
-            case SemicolonToken:
+            case SyntaxKind::SemicolonToken:
                 paramDecl->semicolonTkIdx_ = consume();
                 return true;
 
@@ -944,148 +944,153 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
         SpecifierSyntax* spec = nullptr;
         switch (peek().kind()) {
             // declaration-specifiers -> storage-class-specifier
-            case Keyword_typedef:
+            case SyntaxKind::Keyword_typedef:
                 parseTrivialSpecifier_AtFirst<StorageClassSyntax>(
                             spec,
-                            TypedefStorageClass);
+                            SyntaxKind::TypedefStorageClass);
                 break;
 
-            case Keyword_extern:
+            case SyntaxKind::Keyword_extern:
                 parseTrivialSpecifier_AtFirst<StorageClassSyntax>(
                             spec,
-                            ExternStorageClass);
+                            SyntaxKind::ExternStorageClass);
                 break;
 
-            case Keyword_static:
+            case SyntaxKind::Keyword_static:
                 parseTrivialSpecifier_AtFirst<StorageClassSyntax>(
                             spec,
-                            StaticStorageClass);
+                            SyntaxKind::StaticStorageClass);
                 break;
 
-            case Keyword_auto:
+            case SyntaxKind::Keyword_auto:
                 parseTrivialSpecifier_AtFirst<StorageClassSyntax>(
                             spec,
-                            AutoStorageClass);
+                            SyntaxKind::AutoStorageClass);
                 break;
 
-            case Keyword_register:
+            case SyntaxKind::Keyword_register:
                 parseTrivialSpecifier_AtFirst<StorageClassSyntax>(
                             spec,
-                            RegisterStorageClass);
+                            SyntaxKind::RegisterStorageClass);
                 break;
 
-            case Keyword__Thread_local:
-            case Keyword_ExtGNU___thread:
+            case SyntaxKind::Keyword__Thread_local:
+            case SyntaxKind::Keyword_ExtGNU___thread:
                 parseTrivialSpecifier_AtFirst<StorageClassSyntax>(
                             spec,
-                            ThreadLocalStorageClass);
+                            SyntaxKind::ThreadLocalStorageClass);
                 break;
 
             // declaration-specifiers -> type-qualifier
-            case Keyword_const:
+            case SyntaxKind::Keyword_const:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
-                            ConstQualifier);
+                            SyntaxKind::ConstQualifier);
                 break;
 
-            case Keyword_volatile:
+            case SyntaxKind::Keyword_volatile:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
-                            VolatileQualifier);
+                            SyntaxKind::VolatileQualifier);
                 break;
 
-            case Keyword_restrict:
+            case SyntaxKind::Keyword_restrict:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
-                            RestrictQualifier);
+                            SyntaxKind::RestrictQualifier);
                 break;
 
             // declaration-specifiers -> type-qualifier -> `_Atomic'
             // declaration-specifiers -> type-specifier -> `_Atomic' `('
-            case Keyword__Atomic:
-                if (peek(2).kind() == OpenParenToken) {
+            case SyntaxKind::Keyword__Atomic:
+                if (peek(2).kind() == SyntaxKind::OpenParenToken) {
                     if (!parseAtomiceTypeSpecifier_AtFirst(spec))
                         return false;
                 }
                 else
                     parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                                 spec,
-                                AtomicQualifier);
+                                SyntaxKind::AtomicQualifier);
                 break;
 
             // declaration-specifiers -> function-specifier
-            case Keyword_inline:
+            case SyntaxKind::Keyword_inline:
                 parseTrivialSpecifier_AtFirst<FunctionSpecifierSyntax>(
                             spec,
-                            InlineSpecifier);
+                            SyntaxKind::InlineSpecifier);
                 break;
 
-            case Keyword__Noreturn:
+            case SyntaxKind::Keyword__Noreturn:
                 parseTrivialSpecifier_AtFirst<FunctionSpecifierSyntax>(
                             spec,
-                            NoReturnSpecifier);
+                            SyntaxKind::NoReturnSpecifier);
                 break;
 
-            // declaration-specifiers -> type-specifier -> "builtins"
-            case Keyword_void:
-            case Keyword_char:
-            case Keyword_short:
-            case Keyword_int:
-            case Keyword_long:
-            case Keyword_float:
-            case Keyword_double:
-            case Keyword__Bool:
-            case Keyword__Complex:
-            case Keyword_signed:
-            case Keyword_unsigned:
-            case Keyword_Ext_char16_t:
-            case Keyword_Ext_char32_t:
-            case Keyword_Ext_wchar_t:
-            case Keyword_ExtGNU___complex__:
+            // declaration-specifiers -> type-specifier -> void
+            case SyntaxKind::Keyword_void:
                 seenType = true;
-                parseTrivialSpecifier_AtFirst<BuiltinTypeSpecifierSyntax>(
+                parseTrivialSpecifier_AtFirst<VoidTypeSpecifierSyntax>(spec);
+                break;
+
+            // declaration-specifiers -> type-specifier -> basic types
+            case SyntaxKind::Keyword_char:
+            case SyntaxKind::Keyword_short:
+            case SyntaxKind::Keyword_int:
+            case SyntaxKind::Keyword_long:
+            case SyntaxKind::Keyword_float:
+            case SyntaxKind::Keyword_double:
+            case SyntaxKind::Keyword__Bool:
+            case SyntaxKind::Keyword__Complex:
+            case SyntaxKind::Keyword_signed:
+            case SyntaxKind::Keyword_unsigned:
+            case SyntaxKind::Keyword_Ext_char16_t:
+            case SyntaxKind::Keyword_Ext_char32_t:
+            case SyntaxKind::Keyword_Ext_wchar_t:
+            case SyntaxKind::Keyword_ExtGNU___complex__:
+                seenType = true;
+                parseTrivialSpecifier_AtFirst<BasicTypeSpecifierSyntax>(
                             spec,
-                            BuiltinTypeSpecifier);
+                            SyntaxKind::BasicTypeSpecifier);
                 break;
 
             // declaration-specifiers -> type-specifier ->* `struct'
-            case Keyword_struct:
+            case SyntaxKind::Keyword_struct:
                 seenType = true;
                 if (!parseTagTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
-                            StructDeclaration,
-                            StructTypeSpecifier,
+                            SyntaxKind::StructDeclaration,
+                            SyntaxKind::StructTypeSpecifier,
                             &Parser::parseStructDeclaration))
                     return false;
                 break;
 
             // declaration-specifiers -> type-specifier ->* `union'
-            case Keyword_union:
+            case SyntaxKind::Keyword_union:
                 seenType = true;
                 if (!parseTagTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
-                            UnionDeclaration,
-                            UnionTypeSpecifier,
+                            SyntaxKind::UnionDeclaration,
+                            SyntaxKind::UnionTypeSpecifier,
                             &Parser::parseStructDeclaration))
                     return  false;
                 break;
 
             // declaration-specifiers -> type-specifier -> enum-specifier
-            case Keyword_enum:
+            case SyntaxKind::Keyword_enum:
                 seenType = true;
                 if (!parseTagTypeSpecifier_AtFirst<EnumDeclarationSyntax>(
                             decl,
                             spec,
-                            EnumDeclaration,
-                            EnumTypeSpecifier,
+                            SyntaxKind::EnumDeclaration,
+                            SyntaxKind::EnumTypeSpecifier,
                             &Parser::parseEnumerator))
                     return false;
                 break;
 
             // declaration-specifiers -> type-specifier -> typedef-name
-            case IdentifierToken: {
+            case SyntaxKind::IdentifierToken: {
                 if (seenType)
                     return true;
 
@@ -1098,26 +1103,26 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
             }
 
             // declaration-specifiers -> alignment-specifier
-            case Keyword__Alignas:
+            case SyntaxKind::Keyword__Alignas:
                 if (!parseAlignmentSpecifier_AtFirst(spec))
                     return false;
                 break;
 
             // declaration-specifiers -> GNU-attribute-specifier
-            case Keyword_ExtGNU___attribute__:
+            case SyntaxKind::Keyword_ExtGNU___attribute__:
                 if (!parseExtGNU_AttributeSpecifier_AtFirst(spec))
                     return false;
                 break;
 
             // declaration-specifiers -> GNU-typeof-specifier
-            case Keyword_ExtGNU___typeof__:
+            case SyntaxKind::Keyword_ExtGNU___typeof__:
                 if (!parseExtGNU_Typeof_AtFirst(spec))
                     return false;
                 break;
 
             // declaration-specifiers -> PsycheC
-            case Keyword_ExtPSY__Forall:
-            case Keyword_ExtPSY__Exists:
+            case SyntaxKind::Keyword_ExtPSY__Forall:
+            case SyntaxKind::Keyword_ExtPSY__Exists:
                 if (!parseExtPSY_QuantifiedTypeSpecifier_AtFirst(spec))
                     return false;
                 break;
@@ -1157,97 +1162,102 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
         SpecifierSyntax* spec = nullptr;
         switch (peek().kind()) {
             // declaration-specifiers -> type-qualifier
-            case Keyword_const:
+            case SyntaxKind::Keyword_const:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
-                            ConstQualifier);
+                            SyntaxKind::ConstQualifier);
                 break;
 
-            case Keyword_volatile:
+            case SyntaxKind::Keyword_volatile:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
-                            VolatileQualifier);
+                            SyntaxKind::VolatileQualifier);
                 break;
 
-            case Keyword_restrict:
+            case SyntaxKind::Keyword_restrict:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
-                            RestrictQualifier);
+                            SyntaxKind::RestrictQualifier);
                 break;
 
             // declaration-specifiers -> type-qualifier -> `_Atomic'
             // declaration-specifiers -> type-specifier -> `_Atomic' `('
-            case Keyword__Atomic:
-                if (peek(2).kind() == OpenParenToken) {
+            case SyntaxKind::Keyword__Atomic:
+                if (peek(2).kind() == SyntaxKind::OpenParenToken) {
                     if (!parseAtomiceTypeSpecifier_AtFirst(spec))
                         return false;
                 }
                 else
                     parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                                 spec,
-                                AtomicQualifier);
+                                SyntaxKind::AtomicQualifier);
                 break;
 
-            // declaration-specifiers -> type-specifier -> "builtins"
-            case Keyword_void:
-            case Keyword_char:
-            case Keyword_short:
-            case Keyword_int:
-            case Keyword_long:
-            case Keyword_float:
-            case Keyword_double:
-            case Keyword__Bool:
-            case Keyword__Complex:
-            case Keyword_signed:
-            case Keyword_unsigned:
-            case Keyword_Ext_char16_t:
-            case Keyword_Ext_char32_t:
-            case Keyword_Ext_wchar_t:
-            case Keyword_ExtGNU___complex__:
+            // declaration-specifiers -> type-specifier -> void
+            case SyntaxKind::Keyword_void:
                 seenType = true;
-                parseTrivialSpecifier_AtFirst<BuiltinTypeSpecifierSyntax>(
+                parseTrivialSpecifier_AtFirst<VoidTypeSpecifierSyntax>(spec);
+                break;
+
+            // declaration-specifiers -> type-specifier -> basic types
+            case SyntaxKind::Keyword_char:
+            case SyntaxKind::Keyword_short:
+            case SyntaxKind::Keyword_int:
+            case SyntaxKind::Keyword_long:
+            case SyntaxKind::Keyword_float:
+            case SyntaxKind::Keyword_double:
+            case SyntaxKind::Keyword__Bool:
+            case SyntaxKind::Keyword__Complex:
+            case SyntaxKind::Keyword_signed:
+            case SyntaxKind::Keyword_unsigned:
+            case SyntaxKind::Keyword_Ext_char16_t:
+            case SyntaxKind::Keyword_Ext_char32_t:
+            case SyntaxKind::Keyword_Ext_wchar_t:
+            case SyntaxKind::Keyword_ExtGNU___complex__:
+                seenType = true;
+                parseTrivialSpecifier_AtFirst<BasicTypeSpecifierSyntax>(
                             spec,
-                            BuiltinTypeSpecifier);
+                            SyntaxKind::BasicTypeSpecifier);
                 break;
 
             // declaration-specifiers -> type-specifier ->* `struct'
-            case Keyword_struct:
+            case SyntaxKind::Keyword_struct:
                 seenType = true;
                 if (!parseTagTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
-                            StructDeclaration,
-                            StructTypeSpecifier,
+                            SyntaxKind::StructDeclaration,
+                            SyntaxKind::StructTypeSpecifier,
                             &Parser::parseStructDeclaration))
                     return false;
                 break;
 
             // declaration-specifiers -> type-specifier ->* `union'
-            case Keyword_union:
+            case SyntaxKind::Keyword_union:
                 seenType = true;
                 if (!parseTagTypeSpecifier_AtFirst<StructOrUnionDeclarationSyntax>(
                             decl,
                             spec,
-                            UnionDeclaration,
-                            UnionTypeSpecifier,
+                            SyntaxKind::UnionDeclaration,
+                            SyntaxKind::UnionTypeSpecifier,
                             &Parser::parseStructDeclaration))
                     return false;
                 break;
 
             // declaration-specifiers -> type-specifier -> enum-specifier
-            case Keyword_enum:
+            case SyntaxKind::Keyword_enum:
                 seenType = true;
                 if (!parseTagTypeSpecifier_AtFirst<EnumDeclarationSyntax>(
                             decl,
                             spec,
-                            EnumDeclaration,
-                            EnumTypeSpecifier,
+                            SyntaxKind::EnumDeclaration,
+                            SyntaxKind::EnumTypeSpecifier,
                             &Parser::parseEnumerator))
                     return false;
                 break;
 
             // declaration-specifiers -> type-specifier -> typedef-name
-            case IdentifierToken: {
+            case SyntaxKind::IdentifierToken: {
                 if (seenType)
                     return true;
 
@@ -1257,19 +1267,19 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             }
 
             // declaration-specifiers -> alignment-specifier
-            case Keyword__Alignas:
+            case SyntaxKind::Keyword__Alignas:
                 if (!parseAlignmentSpecifier_AtFirst(spec))
                     return false;
                 break;
 
             // declaration-specifiers -> GNU-attribute-specifier
-            case Keyword_ExtGNU___attribute__:
+            case SyntaxKind::Keyword_ExtGNU___attribute__:
                 if (!parseExtGNU_AttributeSpecifier_AtFirst(spec))
                     return false;
                 break;
 
             // declaration-specifiers -> GNU-typeof-specifier
-            case Keyword_ExtGNU___typeof__:
+            case SyntaxKind::Keyword_ExtGNU___typeof__:
                 if (!parseExtGNU_Typeof_AtFirst(spec))
                     return false;
                 break;
@@ -1294,7 +1304,7 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
  * Parse a "trivial" specifier, which is one of:
  *
  *  a \a storage-class-specifier,
- *  a \a (builtin) type-specifer,
+ *  a \a basic type-specifer,
  *  a \a type-qualifier,
  *  a \a function-specifier, or
  *  a \a GNU ext asm-qualifier.
@@ -1306,7 +1316,7 @@ void Parser::parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec, SyntaxKind sp
 {
     DEBUG_THIS_RULE();
     PSY_ASSERT_W_MSG(SyntaxFacts::isStorageClassToken(peek().kind())
-                        || SyntaxFacts::isBuiltinTypeSpecifierToken(peek().kind())
+                        || SyntaxFacts::isBasicTypeSpecifierToken(peek().kind())
                         || SyntaxFacts::isTypeQualifierToken(peek().kind())
                         || SyntaxFacts::isFunctionSpecifierToken(peek().kind())
                         || SyntaxFacts::isExtGNU_AsmQualifierToken(peek().kind()),
@@ -1318,6 +1328,19 @@ void Parser::parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec, SyntaxKind sp
                                   "<GNU-ext-asm-qualifier>");
 
     auto trivSpec = makeNode<SpecT>(specK);
+    spec = trivSpec;
+    trivSpec->specTkIdx_ = consume();
+}
+
+template <class SpecT>
+void Parser::parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec)
+{
+    DEBUG_THIS_RULE();
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_void,
+                     return,
+                    "assert failure: void type-specifier");
+
+    auto trivSpec = makeNode<VoidTypeSpecifierSyntax>();
     spec = trivSpec;
     trivSpec->specTkIdx_ = consume();
 }
@@ -1339,7 +1362,7 @@ template void Parser::parseTrivialSpecifier_AtFirst<ExtGNU_AsmQualifierSyntax>
 bool Parser::parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword__Alignas,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword__Alignas,
                   return false,
                   "assert failure: `_Alignas'");
 
@@ -1355,7 +1378,7 @@ bool Parser::parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec)
 bool Parser::parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtGNU___typeof__,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___typeof__,
                   return false,
                   "assert failure: `typeof'");
 
@@ -1373,7 +1396,7 @@ bool Parser::parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec)
 void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == IdentifierToken,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::IdentifierToken,
                   return,
                   "assert failure: <identifier>");
 
@@ -1390,7 +1413,7 @@ void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
 bool Parser::parseAtomiceTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword__Atomic,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword__Atomic,
                   return false,
                   "assert failure: `_Atomic'");
 
@@ -1398,9 +1421,9 @@ bool Parser::parseAtomiceTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
     spec = atomTySpec;
     atomTySpec->atomicKwTkIdx_ = consume();
 
-    return match(OpenParenToken, &atomTySpec->openParenTkIdx_)
+    return match(SyntaxKind::OpenParenToken, &atomTySpec->openParenTkIdx_)
         && parseTypeName(atomTySpec->typeName_)
-        && matchOrSkipTo(CloseParenToken, &atomTySpec->closeParenTkIdx_);
+        && matchOrSkipTo(SyntaxKind::CloseParenToken, &atomTySpec->closeParenTkIdx_);
 }
 
 /**
@@ -1437,15 +1460,15 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
         bool (Parser::*parseMember)(DeclarationSyntax*&))
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_struct
-                        || peek().kind() == Keyword_union
-                        || peek().kind() == Keyword_enum
-                    && (declK == StructDeclaration
-                        || declK == UnionDeclaration
-                        || declK == EnumDeclaration)
-                    && (specK == StructTypeSpecifier
-                        || specK == UnionTypeSpecifier
-                        || specK == EnumTypeSpecifier),
+    PSY_ASSERT_W_MSG((peek().kind() == SyntaxKind::Keyword_struct
+                        || peek().kind() == SyntaxKind::Keyword_union
+                        || peek().kind() == SyntaxKind::Keyword_enum)
+                    && (declK == SyntaxKind::StructDeclaration
+                        || declK == SyntaxKind::UnionDeclaration
+                        || declK == SyntaxKind::EnumDeclaration)
+                    && (specK == SyntaxKind::StructTypeSpecifier
+                        || specK == SyntaxKind::UnionTypeSpecifier
+                        || specK == SyntaxKind::EnumTypeSpecifier),
                   return false,
                   "assert failure: `struct', `union', or `enum'");
 
@@ -1453,7 +1476,7 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
     spec = tySpec;
     tySpec->kwTkIdx_ = consume();
 
-    if (peek().kind() == Keyword_ExtGNU___attribute__)
+    if (peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__)
         parseExtGNU_AttributeSpecifierList_AtFirst(tySpec->attrs1_);
 
     auto wrapTySpecInTyDecl = [&]() {
@@ -1463,20 +1486,20 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
     };
 
     switch (peek().kind()) {
-        case OpenBraceToken:
+        case SyntaxKind::OpenBraceToken:
             tySpec->openBraceTkIdx_ = consume();
             break;
 
-        case IdentifierToken:
+        case SyntaxKind::IdentifierToken:
             tySpec->tagTkIdx_ = consume();
             switch (peek().kind()) {
-                case OpenBraceToken:
+                case SyntaxKind::OpenBraceToken:
                     tySpec->openBraceTkIdx_ = consume();
                     break;
 
-                case SemicolonToken:
-                    if (specK == StructTypeSpecifier
-                            || specK == UnionTypeSpecifier) {
+                case SyntaxKind::SemicolonToken:
+                    if (specK == SyntaxKind::StructTypeSpecifier
+                            || specK == SyntaxKind::UnionTypeSpecifier) {
                         wrapTySpecInTyDecl();
                         return true;
                     }
@@ -1499,14 +1522,14 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
     while (true) {
         DeclarationSyntax* memberDecl = nullptr;
         switch (peek().kind()) {
-            case CloseBraceToken:
+            case SyntaxKind::CloseBraceToken:
                 tySpec->closeBraceTkIdx_ = consume();
                 goto MembersParsed;
 
             default:
                 if (!((this)->*(parseMember))(memberDecl)) {
                     ignoreMemberDeclaration();
-                    if (peek().kind() == EndOfFile)
+                    if (peek().kind() == SyntaxKind::EndOfFile)
                         return false;
                 }
                 break;
@@ -1516,7 +1539,7 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
     }
 
 MembersParsed:
-    if (peek().kind() == Keyword_ExtGNU___attribute__)
+    if (peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__)
         parseExtGNU_AttributeSpecifierList_AtFirst(tySpec->attrs2_);
 
     return true;
@@ -1528,7 +1551,7 @@ MembersParsed:
 bool Parser::parseExtGNU_AttributeSpecifierList_AtFirst(SpecifierListSyntax*& specList)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtGNU___attribute__,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__,
                   return false,
                   "assert failure: `__attribute__'");
 
@@ -1542,7 +1565,7 @@ bool Parser::parseExtGNU_AttributeSpecifierList_AtFirst(SpecifierListSyntax*& sp
         *specList_cur = makeNode<SpecifierListSyntax>(spec);
         specList_cur = &(*specList_cur)->next;
     }
-    while (peek().kind() == Keyword_ExtGNU___attribute__);
+    while (peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__);
 
     return true;
 }
@@ -1553,7 +1576,7 @@ bool Parser::parseExtGNU_AttributeSpecifierList_AtFirst(SpecifierListSyntax*& sp
 bool Parser::parseExtGNU_AttributeSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtGNU___attribute__,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__,
                   return false,
                   "assert failure: `__attribute__'");
 
@@ -1561,14 +1584,14 @@ bool Parser::parseExtGNU_AttributeSpecifier_AtFirst(SpecifierSyntax*& spec)
     spec = attrSpec;
     attrSpec->attrKwTkIdx_ = consume();
 
-    if (match(OpenParenToken, &attrSpec->openOuterParenTkIdx_)
-            && match(OpenParenToken, &attrSpec->openInnerParenTkIdx_)
+    if (match(SyntaxKind::OpenParenToken, &attrSpec->openOuterParenTkIdx_)
+            && match(SyntaxKind::OpenParenToken, &attrSpec->openInnerParenTkIdx_)
             && parseExtGNU_AttributeList(attrSpec->attrs_)
-            && match(CloseParenToken, &attrSpec->closeInnerParenTkIdx_)
-            && match(CloseParenToken, &attrSpec->closeOuterParenTkIdx_))
+            && match(SyntaxKind::CloseParenToken, &attrSpec->closeInnerParenTkIdx_)
+            && match(SyntaxKind::CloseParenToken, &attrSpec->closeOuterParenTkIdx_))
         return true;
 
-    skipTo(CloseParenToken);
+    skipTo(SyntaxKind::CloseParenToken);
     return false;
 }
 
@@ -1589,18 +1612,18 @@ bool Parser::parseExtGNU_AttributeList(ExtGNU_AttributeListSyntax*& attrList)
         *attrList_cur = makeNode<ExtGNU_AttributeListSyntax>(attr);
 
         switch (peek().kind()) {
-            case CommaToken:
+            case SyntaxKind::CommaToken:
                 (*attrList_cur)->delimTkIdx_ = consume();
                 attrList_cur = &(*attrList_cur)->next;
                 break;
 
-            case CloseParenToken:
+            case SyntaxKind::CloseParenToken:
                 return true;
 
             default:
                 diagReporter_.ExpectedTokenWithin(
-                    { CommaToken,
-                      CloseParenToken });
+                    { SyntaxKind::CommaToken,
+                      SyntaxKind::CloseParenToken });
                 return false;
         }
     }
@@ -1615,28 +1638,28 @@ bool Parser::parseExtGNU_Attribute(ExtGNU_AttributeSyntax*& attr)
     DEBUG_THIS_RULE();
 
     switch (peek().kind()) {
-        case IdentifierToken:
-        case Keyword_const:
+        case SyntaxKind::IdentifierToken:
+        case SyntaxKind::Keyword_const:
             attr = makeNode<ExtGNU_AttributeSyntax>();
             attr->kwOrIdentTkIdx_ = consume();
             break;
 
-        case CommaToken:
-        case CloseParenToken:
+        case SyntaxKind::CommaToken:
+        case SyntaxKind::CloseParenToken:
             // An empty attribute is valid.
             attr = makeNode<ExtGNU_AttributeSyntax>();
             return true;
 
         default:
             diagReporter_.ExpectedTokenWithin(
-                { IdentifierToken,
-                  Keyword_const,
-                  CommaToken,
-                  CloseParenToken });
+                { SyntaxKind::IdentifierToken,
+                  SyntaxKind::Keyword_const,
+                  SyntaxKind::CommaToken,
+                  SyntaxKind::CloseParenToken });
             return false;
     }
 
-    if (peek().kind() != OpenParenToken)
+    if (peek().kind() != SyntaxKind::OpenParenToken)
         return true;
 
     attr->openParenTkIdx_ = consume();
@@ -1649,7 +1672,7 @@ bool Parser::parseExtGNU_Attribute(ExtGNU_AttributeSyntax*& attr)
         parseAttrArg = &Parser::parseExtGNU_AttributeArguments;
 
     return ((this->*(parseAttrArg))(attr->exprs_))
-        && matchOrSkipTo(CloseParenToken, &attr->closeParenTkIdx_);
+        && matchOrSkipTo(SyntaxKind::CloseParenToken, &attr->closeParenTkIdx_);
 }
 
 /**
@@ -1690,7 +1713,7 @@ bool Parser::parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList)
 
     *exprList_cur = makeNode<ExpressionListSyntax>(platName);
 
-    while (peek().kind() == CommaToken) {
+    while (peek().kind() == SyntaxKind::CommaToken) {
         (*exprList_cur)->delimTkIdx_ = consume();
         exprList_cur = &(*exprList_cur)->next;
 
@@ -1699,23 +1722,23 @@ bool Parser::parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList)
             return false;
 
         switch (peek().kind()) {
-            case EqualsToken: {
+            case SyntaxKind::EqualsToken: {
                 auto equalsTkIdx_ = consume();
                 ExpressionSyntax* versionExpr = nullptr;
-                if (peek().kind() == StringLiteralToken)
+                if (peek().kind() == SyntaxKind::StringLiteralToken)
                     parseStringLiteral_AtFirst(versionExpr);
                 else {
                     if (!parseConstant<ConstantExpressionSyntax>(
                                 versionExpr,
-                                FloatingConstantExpression))
+                                SyntaxKind::FloatingConstantExpression))
                         return false;
 
                     // Discard any (possible) "patch" component of a version.
-                    if (peek().kind() == IntegerConstantToken)
+                    if (peek().kind() == SyntaxKind::IntegerConstantToken)
                         consume();
                 }
 
-                auto assign = makeNode<BinaryExpressionSyntax>(BasicAssignmentExpression);
+                auto assign = makeNode<BinaryExpressionSyntax>(SyntaxKind::BasicAssignmentExpression);
                 assign->leftExpr_ = expr;
                 assign->oprtrTkIdx_ = equalsTkIdx_;
                 assign->rightExpr_ = versionExpr;
@@ -1735,7 +1758,7 @@ bool Parser::parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList)
 bool Parser::parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtGNU___asm__,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
                   return false,
                   "assert failure: `asm'");
 
@@ -1743,9 +1766,9 @@ bool Parser::parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr)
     attr = asmAttr;
     asmAttr->asmKwTkIdx_ = consume();
 
-    if (match(OpenParenToken, &asmAttr->openParenTkIdx_)
+    if (match(SyntaxKind::OpenParenToken, &asmAttr->openParenTkIdx_)
             && parseStringLiteral(asmAttr->strLit_)
-            && match(CloseParenToken, &asmAttr->closeParenTkIdx_))
+            && match(SyntaxKind::CloseParenToken, &asmAttr->closeParenTkIdx_))
         return true;
 
     return false;
@@ -1754,8 +1777,8 @@ bool Parser::parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr)
 bool Parser::parseExtPSY_QuantifiedTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == Keyword_ExtPSY__Exists
-                    || peek().kind() == Keyword_ExtPSY__Forall,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtPSY__Exists
+                    || peek().kind() == SyntaxKind::Keyword_ExtPSY__Forall,
                   return false,
                   "assert failure: `_Exists' or `_Forall'");
 
@@ -1763,9 +1786,9 @@ bool Parser::parseExtPSY_QuantifiedTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
     spec = typeSpec;
     typeSpec->quantifierTkIdx_ = consume();
 
-    if (match(OpenParenToken, &typeSpec->openParenTkIdx_)
-            && match(IdentifierToken, &typeSpec->identTkIdx_)
-            && match(CloseParenToken, &typeSpec->closeParenTkIdx_))
+    if (match(SyntaxKind::OpenParenToken, &typeSpec->openParenTkIdx_)
+            && match(SyntaxKind::IdentifierToken, &typeSpec->identTkIdx_)
+            && match(SyntaxKind::CloseParenToken, &typeSpec->closeParenTkIdx_))
         return true;
 
     return false;
@@ -1798,10 +1821,10 @@ bool Parser::parseDeclarator(DeclaratorSyntax*& decltor,
     DEBUG_THIS_RULE();
 
     SpecifierListSyntax* attrList = nullptr;
-    if (peek().kind() == Keyword_ExtGNU___attribute__)
+    if (peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__)
         parseExtGNU_AttributeSpecifierList_AtFirst(attrList);
 
-    if (peek().kind() == AsteriskToken) {
+    if (peek().kind() == SyntaxKind::AsteriskToken) {
         auto ptrDecltor = makeNode<PointerDeclaratorSyntax>();
         decltor = ptrDecltor;
         ptrDecltor->attrs_ = attrList;
@@ -1822,7 +1845,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
     DEBUG_THIS_RULE();
 
     switch (peek().kind()) {
-        case IdentifierToken: {
+        case SyntaxKind::IdentifierToken: {
             if (decltorVariety == DeclaratorVariety::Abstract)
                 return false;
 
@@ -1841,7 +1864,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
             SpecifierListSyntax** specList_cur = &identDecltor->attrs2_;
 
             switch (peek().kind()) {
-                case Keyword_ExtGNU___asm__: {
+                case SyntaxKind::Keyword_ExtGNU___asm__: {
                     SpecifierSyntax* spec = nullptr;
                     if (!parseExtGNU_AsmLabel_AtFirst(spec))
                         return false;
@@ -1849,12 +1872,12 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                     *specList_cur = makeNode<SpecifierListSyntax>(spec);
                     specList_cur = &(*specList_cur)->next;
 
-                    if (peek().kind() != Keyword_ExtGNU___attribute__)
+                    if (peek().kind() != SyntaxKind::Keyword_ExtGNU___attribute__)
                         break;
                     [[fallthrough]];
                 }
 
-                case Keyword_ExtGNU___attribute__:
+                case SyntaxKind::Keyword_ExtGNU___attribute__:
                     if (!parseExtGNU_AttributeSpecifierList_AtFirst(*specList_cur))
                         return false;
                     break;
@@ -1865,9 +1888,9 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
             break;
         }
 
-        case OpenParenToken: {
+        case SyntaxKind::OpenParenToken: {
             if (decltorVariety == DeclaratorVariety::Abstract) {
-                if (peek(2).kind() == CloseParenToken) {
+                if (peek(2).kind() == SyntaxKind::CloseParenToken) {
                     if (!parseDirectDeclaratorSuffix(
                                 decltor,
                                 declScope,
@@ -1882,7 +1905,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                     auto openParenTkIdx = consume();
                     DeclaratorSyntax* innerDecltor = nullptr;
                     if (!parseAbstractDeclarator(innerDecltor)
-                            || peek().kind() != CloseParenToken) {
+                            || peek().kind() != SyntaxKind::CloseParenToken) {
                         BT.backtrack();
                         auto absDecltor = makeNode<AbstractDeclaratorSyntax>();
                         decltor = absDecltor;
@@ -1917,7 +1940,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
             auto parenDecltor = makeNode<ParenthesizedDeclaratorSyntax>();
             parenDecltor->openParenTkIdx_ = consume();
             if (!parseDeclarator(parenDecltor->innerDecltor_, declScope, decltorVariety)
-                    || !match(CloseParenToken, &parenDecltor->closeParenTkIdx_)
+                    || !match(SyntaxKind::CloseParenToken, &parenDecltor->closeParenTkIdx_)
                     || !parseDirectDeclaratorSuffix(decltor,
                                                     declScope,
                                                     decltorVariety,
@@ -1930,7 +1953,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
             break;
         }
 
-        case OpenBracketToken:
+        case SyntaxKind::OpenBracketToken:
             if (decltorVariety == DeclaratorVariety::Abstract) {
                 auto absDecltor = makeNode<AbstractDeclaratorSyntax>();
                 decltor = absDecltor;
@@ -1947,7 +1970,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
             diagReporter_.ExpectedFIRSTofDirectDeclarator();
             return false;
 
-        case ColonToken:
+        case SyntaxKind::ColonToken:
             if (decltorVariety == DeclaratorVariety::Named
                     && declScope == DeclarationScope::Block) {
                 auto bitFldDecltor = makeNode<BitfieldDeclaratorSyntax>();
@@ -1971,7 +1994,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
         }
     }
 
-    if (peek().kind() == ColonToken
+    if (peek().kind() == SyntaxKind::ColonToken
             && decltorVariety == DeclaratorVariety::Named
             && declScope == DeclarationScope::Block) {
         auto bitFldDecltor = makeNode<BitfieldDeclaratorSyntax>();
@@ -1981,7 +2004,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
         if (!parseExpressionWithPrecedenceConditional(bitFldDecltor->expr_))
             return false;
 
-        if (peek().kind() == Keyword_ExtGNU___attribute__)
+        if (peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__)
             parseExtGNU_AttributeSpecifierList_AtFirst(bitFldDecltor->attrs_);
     }
 
@@ -2011,7 +2034,7 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
             [this, declScope] (void (Parser::DiagnosticsReporter::*report)()) {
                 if (declScope != DeclarationScope::FunctionPrototype) {
                     ((diagReporter_).*(report))();
-                    skipTo(CloseBracketToken);
+                    skipTo(SyntaxKind::CloseBracketToken);
                     return false;
                 }
                 return true;
@@ -2027,59 +2050,59 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
             };
 
     switch (peek().kind()) {
-        case OpenParenToken: {
+        case SyntaxKind::OpenParenToken: {
             auto funcDecltorSfx = makeNode<ParameterSuffixSyntax>();
             funcDecltorSfx->openParenTkIdx_ = consume();
             if (!parseParameterDeclarationListAndOrEllipsis(funcDecltorSfx)
-                    || !match(CloseParenToken, &funcDecltorSfx->closeParenTkIdx_))
+                    || !match(SyntaxKind::CloseParenToken, &funcDecltorSfx->closeParenTkIdx_))
                 return false;
 
-            if (peek().kind() == Keyword_ExtPSY_omission)
+            if (peek().kind() == SyntaxKind::Keyword_ExtPSY_omission)
                 funcDecltorSfx->psyOmitTkIdx_ = consume();
 
-            decltor = makeNode<ArrayOrFunctionDeclaratorSyntax>(FunctionDeclarator);
+            decltor = makeNode<ArrayOrFunctionDeclaratorSyntax>(SyntaxKind::FunctionDeclarator);
             decltor->asArrayOrFunctionDeclarator()->suffix_ = funcDecltorSfx;
             break;
         }
 
-        case OpenBracketToken: {
+        case SyntaxKind::OpenBracketToken: {
             auto arrDecltorSx = makeNode<SubscriptSuffixSyntax>();
             arrDecltorSx->openBracketTkIdx_ = consume();
             switch (peek().kind()) {
-                case CloseBracketToken:
+                case SyntaxKind::CloseBracketToken:
                     break;
 
-                case AsteriskToken:
+                case SyntaxKind::AsteriskToken:
                     checkDialect();
                     if (!validateContext(&Parser::DiagnosticsReporter::
                                          UnexpectedPointerInArrayDeclarator)) {
-                        skipTo(CloseBracketToken);
+                        skipTo(SyntaxKind::CloseBracketToken);
                         return false;
                     }
                     arrDecltorSx->asteriskTkIdx_ = consume();
                     break;
 
-                case Keyword_const:
-                case Keyword_volatile:
-                case Keyword_restrict:
-                case Keyword__Atomic:
-                case Keyword_ExtGNU___attribute__: {
+                case SyntaxKind::Keyword_const:
+                case SyntaxKind::Keyword_volatile:
+                case SyntaxKind::Keyword_restrict:
+                case SyntaxKind::Keyword__Atomic:
+                case SyntaxKind::Keyword_ExtGNU___attribute__: {
                     checkDialect();
                     if (!validateContext(&Parser::DiagnosticsReporter::
                                          UnexpectedStaticOrTypeQualifiersInArrayDeclarator)
                             || !parseTypeQualifiersAndAttributes(arrDecltorSx->qualsAndAttrs1_)) {
-                        skipTo(CloseBracketToken);
+                        skipTo(SyntaxKind::CloseBracketToken);
                         return false;
                     }
 
                     auto tkK = peek().kind();
-                    if (tkK == AsteriskToken) {
+                    if (tkK == SyntaxKind::AsteriskToken) {
                         arrDecltorSx->asteriskTkIdx_ = consume();
                         break;
                     }
-                    else if (tkK != Keyword_static) {
+                    else if (tkK != SyntaxKind::Keyword_static) {
                         if (!parseExpressionWithPrecedenceAssignment(arrDecltorSx->expr_)) {
-                            skipTo(CloseBracketToken);
+                            skipTo(SyntaxKind::CloseBracketToken);
                             return false;
                         }
                         break;
@@ -2087,22 +2110,22 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
                     [[fallthrough]];
                 }
 
-                case Keyword_static:
+                case SyntaxKind::Keyword_static:
                     checkDialect();
                     if (!validateContext(&Parser::DiagnosticsReporter::
                                          UnexpectedStaticOrTypeQualifiersInArrayDeclarator)) {
-                        skipTo(CloseBracketToken);
+                        skipTo(SyntaxKind::CloseBracketToken);
                         return false;
                     }
 
                     arrDecltorSx->staticKwTkIdx_ = consume();
                     switch (peek().kind()) {
-                        case Keyword_const:
-                        case Keyword_volatile:
-                        case Keyword_restrict:
-                        case Keyword_ExtGNU___attribute__:
+                        case SyntaxKind::Keyword_const:
+                        case SyntaxKind::Keyword_volatile:
+                        case SyntaxKind::Keyword_restrict:
+                        case SyntaxKind::Keyword_ExtGNU___attribute__:
                             if (!parseTypeQualifiersAndAttributes(arrDecltorSx->qualsAndAttrs2_)) {
-                                skipTo(CloseBracketToken);
+                                skipTo(SyntaxKind::CloseBracketToken);
                                 return false;
                             }
                             [[fallthrough]];
@@ -2114,16 +2137,16 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
 
                 default:
                     if (!parseExpressionWithPrecedenceAssignment(arrDecltorSx->expr_)) {
-                        skipTo(CloseBracketToken);
+                        skipTo(SyntaxKind::CloseBracketToken);
                         return false;
                     }
                     break;
             }
 
-            if (!matchOrSkipTo(CloseBracketToken, &arrDecltorSx->closeBracketTkIdx_))
+            if (!matchOrSkipTo(SyntaxKind::CloseBracketToken, &arrDecltorSx->closeBracketTkIdx_))
                 return false;
 
-            decltor = makeNode<ArrayOrFunctionDeclaratorSyntax>(ArrayDeclarator);
+            decltor = makeNode<ArrayOrFunctionDeclaratorSyntax>(SyntaxKind::ArrayDeclarator);
             decltor->asArrayOrFunctionDeclarator()->suffix_ = arrDecltorSx;
             break;
         }
@@ -2139,7 +2162,7 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
     SpecifierListSyntax** specList_cur = &arrayOrFuncDecltor->attrs2_;
 
     switch (peek().kind()) {
-        case Keyword_ExtGNU___asm__: {
+        case SyntaxKind::Keyword_ExtGNU___asm__: {
             SpecifierSyntax* spec = nullptr;
             if (!parseExtGNU_AsmLabel_AtFirst(spec))
                 return false;
@@ -2147,12 +2170,12 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
             *specList_cur = makeNode<SpecifierListSyntax>(spec);
             specList_cur = &(*specList_cur)->next;
 
-            if (peek().kind() != Keyword_ExtGNU___attribute__)
+            if (peek().kind() != SyntaxKind::Keyword_ExtGNU___attribute__)
                 break;
             [[fallthrough]];
         }
 
-        case Keyword_ExtGNU___attribute__:
+        case SyntaxKind::Keyword_ExtGNU___attribute__:
             if (!parseExtGNU_AttributeSpecifierList_AtFirst(*specList_cur))
                 return false;
             break;
@@ -2162,8 +2185,8 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
     }
 
     switch (peek().kind()) {
-        case OpenParenToken:
-        case OpenBracketToken: {
+        case SyntaxKind::OpenParenToken:
+        case SyntaxKind::OpenBracketToken: {
             innerDecltor = decltor;
             return parseDirectDeclaratorSuffix(decltor,
                                                declScope,
@@ -2199,36 +2222,36 @@ bool Parser::parseTypeQualifiersAndAttributes(SpecifierListSyntax*& specList)
     while (true) {
         SpecifierSyntax* spec = nullptr;
         switch (peek().kind()) {
-            case Keyword_ExtGNU___attribute__:
+            case SyntaxKind::Keyword_ExtGNU___attribute__:
                 return parseExtGNU_AttributeSpecifierList_AtFirst(specList);
 
-            case Keyword_ExtGNU___asm__:
+            case SyntaxKind::Keyword_ExtGNU___asm__:
                 if (parseExtGNU_AsmLabel_AtFirst(spec))
                     return false;
                 break;
 
-            case Keyword_const:
+            case SyntaxKind::Keyword_const:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
-                            ConstQualifier);
+                            SyntaxKind::ConstQualifier);
                 break;
 
-            case Keyword_volatile:
+            case SyntaxKind::Keyword_volatile:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
-                            VolatileQualifier);
+                            SyntaxKind::VolatileQualifier);
                 break;
 
-            case Keyword_restrict:
+            case SyntaxKind::Keyword_restrict:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
-                            RestrictQualifier);
+                            SyntaxKind::RestrictQualifier);
                 break;
 
-            case Keyword__Atomic:
+            case SyntaxKind::Keyword__Atomic:
                 parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
                             spec,
-                            AtomicQualifier);
+                            SyntaxKind::AtomicQualifier);
                 break;
 
             default:
@@ -2267,7 +2290,7 @@ bool Parser::parseInitializer(InitializerSyntax*& init)
     DEBUG_THIS_RULE();
 
     switch (peek().kind()) {
-        case OpenBraceToken:
+        case SyntaxKind::OpenBraceToken:
             return parseBraceEnclosedInitializer_AtFirst(init);
 
         default:
@@ -2311,7 +2334,7 @@ bool Parser::parseExpressionInitializer(InitializerSyntax*& init)
 bool Parser::parseBraceEnclosedInitializer_AtFirst(InitializerSyntax*& init)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == OpenBraceToken,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBraceToken,
                   return false,
                   "expected `{'");
 
@@ -2319,19 +2342,19 @@ bool Parser::parseBraceEnclosedInitializer_AtFirst(InitializerSyntax*& init)
     init = braceInit;
     braceInit->openBraceTkIdx_ = consume();
 
-    if (peek().kind() == CloseBraceToken) {
+    if (peek().kind() == SyntaxKind::CloseBraceToken) {
         diagReporter_.ExpectedBraceEnclosedInitializerList();
         braceInit->closeBraceTkIdx_ = consume();
         return true;
     }
 
     if (!parseInitializerList(braceInit->initList_)) {
-        skipTo(CloseBraceToken);
+        skipTo(SyntaxKind::CloseBraceToken);
         consume();
         return false;
     }
 
-    return matchOrSkipTo(CloseBraceToken, &braceInit->closeBraceTkIdx_);
+    return matchOrSkipTo(SyntaxKind::CloseBraceToken, &braceInit->closeBraceTkIdx_);
 }
 
 bool Parser::parseInitializerList(InitializerListSyntax*& initList)
@@ -2348,28 +2371,28 @@ bool Parser::parseInitializerListItem(InitializerSyntax*& init, InitializerListS
     DEBUG_THIS_RULE();
 
     switch (peek().kind()) {
-        case CloseBraceToken:
+        case SyntaxKind::CloseBraceToken:
             return true;
 
-        case CommaToken:
-            if (peek(2).kind() == CloseBraceToken) {
+        case SyntaxKind::CommaToken:
+            if (peek(2).kind() == SyntaxKind::CloseBraceToken) {
                 initList->delimTkIdx_ = consume();
                 return true;
             }
             diagReporter_.ExpectedFIRSTofExpression();
             return false;
 
-        case DotToken:
+        case SyntaxKind::DotToken:
             return parseDesignatedInitializer_AtFirst(
                         init,
                         &Parser::parseFieldDesignator_AtFirst);
 
-        case OpenBracketToken:
+        case SyntaxKind::OpenBracketToken:
             return parseDesignatedInitializer_AtFirst(
                         init,
                         &Parser::parseArrayDesignator_AtFirst);
 
-        case OpenBraceToken:
+        case SyntaxKind::OpenBraceToken:
             return parseBraceEnclosedInitializer_AtFirst(init);
 
         default:
@@ -2381,8 +2404,8 @@ bool Parser::parseDesignatedInitializer_AtFirst(InitializerSyntax*& init,
                                                 bool (Parser::*parseDesig)(DesignatorSyntax*& desig))
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == DotToken
-                        || peek().kind() == OpenBracketToken,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::DotToken
+                        || peek().kind() == SyntaxKind::OpenBracketToken,
                   return false,
                   "assert failure: `.' or `['");
 
@@ -2399,7 +2422,7 @@ bool Parser::parseDesignatedInitializer_AtFirst(InitializerSyntax*& init,
     desigInit->desigs_ = desigList;
 
     switch (peek().kind()) {
-        case EqualsToken:
+        case SyntaxKind::EqualsToken:
             desigInit->equalsTkIdx_ = consume();
             return parseInitializer(desigInit->init_);
 
@@ -2413,8 +2436,8 @@ bool Parser::parseDesignatorList_AtFirst(DesignatorListSyntax*& desigList,
                                          bool (Parser::*parseDesig)(DesignatorSyntax*& desig))
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == DotToken
-                        || peek().kind() == OpenBracketToken,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::DotToken
+                        || peek().kind() == SyntaxKind::OpenBracketToken,
                   return false,
                   "assert failure: `.' or `['");
 
@@ -2429,11 +2452,11 @@ bool Parser::parseDesignatorList_AtFirst(DesignatorListSyntax*& desigList,
         desigs_cur = &(*desigs_cur)->next;
 
         switch (peek().kind()) {
-            case DotToken:
+            case SyntaxKind::DotToken:
                 parseDesig = &Parser::parseFieldDesignator_AtFirst;
                 break;
 
-            case OpenBracketToken:
+            case SyntaxKind::OpenBracketToken:
                 parseDesig = &Parser::parseArrayDesignator_AtFirst;
                 break;
 
@@ -2446,7 +2469,7 @@ bool Parser::parseDesignatorList_AtFirst(DesignatorListSyntax*& desigList,
 bool Parser::parseFieldDesignator_AtFirst(DesignatorSyntax*& desig)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == DotToken,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::DotToken,
                   return false,
                   "assert failure: `.'");
 
@@ -2454,7 +2477,7 @@ bool Parser::parseFieldDesignator_AtFirst(DesignatorSyntax*& desig)
     desig = fldDesig;
     fldDesig->dotTkIdx_ = consume();
 
-    if (peek().kind() == IdentifierToken) {
+    if (peek().kind() == SyntaxKind::IdentifierToken) {
         fldDesig->identTkIdx_ = consume();
         return true;
     }
@@ -2466,7 +2489,7 @@ bool Parser::parseFieldDesignator_AtFirst(DesignatorSyntax*& desig)
 bool Parser::parseArrayDesignator_AtFirst(DesignatorSyntax*& desig)
 {
     DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == OpenBracketToken,
+    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBracketToken,
                   return false,
                   "assert failure: `['");
 
@@ -2475,7 +2498,7 @@ bool Parser::parseArrayDesignator_AtFirst(DesignatorSyntax*& desig)
     arrDesig->openBracketTkIdx_ = consume();
 
     return parseExpressionWithPrecedenceConditional(arrDesig->expr_)
-                && matchOrSkipTo(CloseBracketToken, &arrDesig->closeBracketTkIdx_);
+                && matchOrSkipTo(SyntaxKind::CloseBracketToken, &arrDesig->closeBracketTkIdx_);
 }
 
 /**
@@ -2496,12 +2519,12 @@ bool Parser::parseOffsetOfDesignator(DesignatorSyntax*& desig)
 
     DesignatorListSyntax* desigList = nullptr;
     switch (peek().kind()) {
-        case DotToken:
+        case SyntaxKind::DotToken:
             if (!parseDesignatorList_AtFirst(desigList, &Parser::parseFieldDesignator_AtFirst))
                 return false;
             break;
 
-        case OpenBracketToken:
+        case SyntaxKind::OpenBracketToken:
             if (!parseDesignatorList_AtFirst(desigList, &Parser::parseArrayDesignator_AtFirst))
                 return false;
             break;

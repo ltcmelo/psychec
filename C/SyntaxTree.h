@@ -33,7 +33,7 @@
 #include "syntax/SyntaxToken.h"
 
 #include "../common/diagnostics/Diagnostic.h"
-#include "../common/infra/InternalAccess.h"
+#include "../common/infra/AccessSpecifiers.h"
 #include "../common/infra/Pimpl.h"
 #include "../common/text/SourceText.h"
 
@@ -119,16 +119,16 @@ public:
      */
     std::vector<Diagnostic> diagnostics() const;
 
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(SyntaxNode);
-    PSY_GRANT_ACCESS(SyntaxNodeList);
-    PSY_GRANT_ACCESS(Lexer);
-    PSY_GRANT_ACCESS(Parser);
-    PSY_GRANT_ACCESS(Binder);
-    PSY_GRANT_ACCESS(Symbol);
-    PSY_GRANT_ACCESS(Compilation);
-    PSY_GRANT_ACCESS(InternalsTestSuite);
-    PSY_GRANT_ACCESS(SyntaxWriterDOTFormat); // TODO: Remove this grant.
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(SyntaxNode);
+    PSY_GRANT_INTERNAL_ACCESS(SyntaxNodeList);
+    PSY_GRANT_INTERNAL_ACCESS(Lexer);
+    PSY_GRANT_INTERNAL_ACCESS(Parser);
+    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(Symbol);
+    PSY_GRANT_INTERNAL_ACCESS(Compilation);
+    PSY_GRANT_INTERNAL_ACCESS(InternalsTestSuite);
+    PSY_GRANT_INTERNAL_ACCESS(SyntaxWriterDOTFormat); // TODO: Remove this grant.
 
     MemoryPool* unitPool() const;
 
@@ -145,13 +145,15 @@ PSY_INTERNAL_AND_RESTRICTED:
 
     bool parseExitedEarly() const;
 
-    const Identifier* identifier(const char* s, unsigned int size);
-    const IntegerConstant* integerConstant(const char* s, unsigned int size);
-    const FloatingConstant* floatingConstant(const char* s, unsigned int size);
-    const ImaginaryIntegerConstant* imaginaryIntegerConstant(const char* s, unsigned int size);
-    const ImaginaryFloatingConstant* imaginaryFloatingConstant(const char* s, unsigned int size);
-    const CharacterConstant* characterConstant(const char* s, unsigned int size);
-    const StringLiteral* stringLiteral(const char* s, unsigned size);
+    const Identifier* findIdentifier(const char* s, unsigned int size) const;
+
+    const Identifier* findOrInsertIdentifier(const char* s, unsigned int size);
+    const IntegerConstant* findOrInsertIntegerConstant(const char* s, unsigned int size);
+    const FloatingConstant* findOrInsertFloatingConstant(const char* s, unsigned int size);
+    const ImaginaryIntegerConstant* findOrInsertImaginaryIntegerConstant(const char* s, unsigned int size);
+    const ImaginaryFloatingConstant* findOrInsertImaginaryFloatingConstant(const char* s, unsigned int size);
+    const CharacterConstant* findOrInsertCharacterConstant(const char* s, unsigned int size);
+    const StringLiteral* findOrInsertStringLiteral(const char* s, unsigned size);
 
     void relayLineStart(unsigned int offset);
     void relayExpansion(unsigned int offset, std::pair<unsigned, unsigned> p);

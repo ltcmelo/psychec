@@ -24,9 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "Accessibility.h"
 #include "SymbolKind.h"
-#include "SymbolName.h"
 
 #include "binder/NameSpace.h"
 #include "syntax/SyntaxReference.h"
@@ -57,19 +55,12 @@ public:
      */
     SymbolKind kind() const;
 
-    virtual LibrarySymbol* asLibrary() { return nullptr; }
-    virtual const LibrarySymbol* asLibrary() const { return nullptr; }
-    virtual FunctionSymbol* asFunction() { return nullptr; }
-    virtual const FunctionSymbol* asFunction() const { return nullptr; }
-    virtual ValueSymbol* asValue() { return nullptr; }
-    virtual const ValueSymbol* asValue() const { return nullptr; }
-    virtual TypeSymbol* asType() { return nullptr; }
-    virtual const TypeSymbol* asType() const { return nullptr; }
-
-    /**
-     * The Assembly that owns \c this Symbol.
-     */
-    const Assembly* owningAssembly() const;
+    virtual Program* asProgram() { return nullptr; }
+    virtual const Program* asProgram() const { return nullptr; }
+    virtual TranslationUnit* asTranslationUnit() { return nullptr; }
+    virtual const TranslationUnit* asTranslationUnit() const { return nullptr; }
+    virtual DeclarationSymbol* asDeclarationSymbol() { return nullptr; }
+    virtual const DeclarationSymbol* asDeclarationSymbol() const { return nullptr; }
 
     /**
      * The Symbol that contains \c this Symbol.
@@ -77,38 +68,13 @@ public:
     const Symbol* containingSymbol() const;
 
     /**
-     * The Scope of \c this Symbol.
-     *
-     * \remark 6.2.1-4
+     * Compute a displayable string for \c this Symbol.
      */
-    const Scope* scope() const;
-
-    /**
-     * The NameSpace of \c this Symbol.
-     */
-    const NameSpace* nameSpace() const;
-
-    /**
-     * The Location of \c this Symbol.
-     */
-    Location location() const;
-
-    /**
-     * The Accessibility \c this Symbol declares.
-     */
-    Accessibility declaredAccessibility() const;
-
-    /**
-     * References to the SyntaxNodes that \a declare \c this Symbol.
-     */
-    std::vector<SyntaxReference> declaringSyntaxReferences() const;
+    virtual std::string toDisplayString() const = 0;
 
 protected:
     DECL_PIMPL(Symbol);
-
     Symbol(SymbolImpl* p);
-
-    // Unavailable
     Symbol(const Symbol&) = delete;
     Symbol& operator=(const Symbol&) = delete;
 };

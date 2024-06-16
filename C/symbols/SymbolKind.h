@@ -41,27 +41,20 @@ namespace C {
  */
 enum class PSY_C_API SymbolKind : std::uint8_t
 {
-    UNSPECIFIED = 0,
-
-    Library,
-    Function,
-    Value,
-    Type,
+    Program,
+    TranslationUnit,
+    Declaration,
 };
 
 inline std::string PSY_C_API to_string(SymbolKind kind)
 {
     switch (kind) {
-        case SymbolKind::Library:
-            return "Library";
-        case SymbolKind::Function:
-            return "Function";
-        case SymbolKind::Value:
-            return "Value";
-        case SymbolKind::Type:
-            return "Type";
-        default:
-            PSY_ESCAPE_VIA_RETURN("<INVALID or UNSPECIFIED SymbolKind>");
+        case SymbolKind::Program:
+            return "Program";
+        case SymbolKind::TranslationUnit:
+            return "TranslationUnit";
+        case SymbolKind::Declaration:
+            return "Declaration";
     }
 }
 

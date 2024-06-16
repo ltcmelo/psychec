@@ -24,8 +24,8 @@
 #include "Lexer.h"
 
 #include "compilation/Compilation.h"
+#include "syntax/Lexeme_ALL.h"
 #include "syntax/SyntaxFacts.h"
-#include "syntax/SyntaxLexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxToken.h"
 #include "syntax/SyntaxUtilities.h"
@@ -54,7 +54,7 @@ namespace C {
 
 static int depth_;
 
-class DebugRule
+class PSY_C_INTERNAL_API DebugRule
 {
 public:
     const char* ruleID_;
@@ -118,7 +118,7 @@ bool Parser::parseCommaSeparatedItems(NodeListT*& nodeList,
     NodeListT** nodeList_cur = &nodeList;
     *nodeList_cur = makeNode<NodeListT>(node);
 
-    while (peek().kind() == CommaToken) {
+    while (peek().kind() == SyntaxKind::CommaToken) {
         (*nodeList_cur)->delimTkIdx_ = consume();
         nodeList_cur = &(*nodeList_cur)->next;
 

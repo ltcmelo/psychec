@@ -36,14 +36,14 @@
       #define PSY_C_API __declspec(dllimport)
     #endif
   #endif
-  #define PSY_C_NON_API
+  #define PSY_C_INTERNAL_API
 #else
   #if __GNUC__ >= 4
     #define PSY_C_API __attribute__ ((visibility ("default")))
-    #define PSY_C_NON_API __attribute__ ((visibility ("hidden")))
+    #define PSY_C_INTERNAL_API __attribute__ ((visibility ("hidden")))
   #else
     #define PSY_C_API
-    #define PSY_C_NON_API
+    #define PSY_C_INTERNAL_API
   #endif
 #endif
 

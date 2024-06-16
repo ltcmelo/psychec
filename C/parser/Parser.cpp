@@ -142,7 +142,7 @@ bool Parser::match(SyntaxKind expectedTkK, LexedTokens::IndexType* tkIdx)
 
     diagReporter_.ExpectedToken(SyntaxKind(expectedTkK));
 
-    if (curTkK != EndOfFile)
+    if (curTkK != SyntaxKind::EndOfFile)
         consume();
     *tkIdx = LexedTokens::invalidIndex();
     return false;
@@ -167,7 +167,7 @@ void Parser::skipTo(SyntaxKind tkK)
 {
     auto curTkK = peek().kind();
     while (curTkK != tkK) {
-        if (curTkK == EndOfFile)
+        if (curTkK == SyntaxKind::EndOfFile)
             return;
         consume();
         curTkK = peek().kind();
@@ -212,15 +212,15 @@ bool Parser::ignoreDeclarator()
     while (true) {
         switch (peek().kind()) {
             // Just return.
-            case EndOfFile:
-            case CommaToken:
-            case IdentifierToken:
-            case AsteriskToken:
+            case SyntaxKind::EndOfFile:
+            case SyntaxKind::CommaToken:
+            case SyntaxKind::IdentifierToken:
+            case SyntaxKind::AsteriskToken:
                 return false;
 
             // Skip and return.
-            case SemicolonToken:
-            case CloseBraceToken:
+            case SyntaxKind::SemicolonToken:
+            case SyntaxKind::CloseBraceToken:
                 consume();
                 return false;
 
@@ -236,26 +236,26 @@ bool Parser::ignoreDeclarationOrDefinition()
     while (true) {
         switch (peek().kind()) {
             // Just return.
-            case EndOfFile:
-            case Keyword_typedef:
-            case Keyword_extern:
-            case Keyword_static:
-            case Keyword__Thread_local:
-            case Keyword_ExtGNU___thread:
-            case Keyword_auto:
-            case Keyword_register:
-            case Keyword_inline:
-            case Keyword__Noreturn:
-            case Keyword_struct:
-            case Keyword_union:
-            case Keyword_enum:
-            case Keyword__Static_assert:
-            case Keyword_ExtGNU___asm__:
+            case SyntaxKind::EndOfFile:
+            case SyntaxKind::Keyword_typedef:
+            case SyntaxKind::Keyword_extern:
+            case SyntaxKind::Keyword_static:
+            case SyntaxKind::Keyword__Thread_local:
+            case SyntaxKind::Keyword_ExtGNU___thread:
+            case SyntaxKind::Keyword_auto:
+            case SyntaxKind::Keyword_register:
+            case SyntaxKind::Keyword_inline:
+            case SyntaxKind::Keyword__Noreturn:
+            case SyntaxKind::Keyword_struct:
+            case SyntaxKind::Keyword_union:
+            case SyntaxKind::Keyword_enum:
+            case SyntaxKind::Keyword__Static_assert:
+            case SyntaxKind::Keyword_ExtGNU___asm__:
                 return false;
 
             // Skip and return.
-            case SemicolonToken:
-            case CloseBraceToken:
+            case SyntaxKind::SemicolonToken:
+            case SyntaxKind::CloseBraceToken:
                 consume();
                 return false;
 
@@ -271,26 +271,26 @@ bool Parser::ignoreMemberDeclaration()
     while (true) {
         switch (peek().kind()) {
             // Just return.
-            case EndOfFile:
-            case Keyword_typedef:
-            case Keyword_extern:
-            case Keyword_static:
-            case Keyword__Thread_local:
-            case Keyword_ExtGNU___thread:
-            case Keyword_auto:
-            case Keyword_register:
-            case Keyword_inline:
-            case Keyword__Noreturn:
-            case Keyword_struct:
-            case Keyword_union:
-            case Keyword_enum:
-            case Keyword__Static_assert:
-            case Keyword_ExtGNU___asm__:
+            case SyntaxKind::EndOfFile:
+            case SyntaxKind::Keyword_typedef:
+            case SyntaxKind::Keyword_extern:
+            case SyntaxKind::Keyword_static:
+            case SyntaxKind::Keyword__Thread_local:
+            case SyntaxKind::Keyword_ExtGNU___thread:
+            case SyntaxKind::Keyword_auto:
+            case SyntaxKind::Keyword_register:
+            case SyntaxKind::Keyword_inline:
+            case SyntaxKind::Keyword__Noreturn:
+            case SyntaxKind::Keyword_struct:
+            case SyntaxKind::Keyword_union:
+            case SyntaxKind::Keyword_enum:
+            case SyntaxKind::Keyword__Static_assert:
+            case SyntaxKind::Keyword_ExtGNU___asm__:
                 return false;
 
             // Skip and return.
-            case CommaToken:
-            case SemicolonToken:
+            case SyntaxKind::CommaToken:
+            case SyntaxKind::SemicolonToken:
                 consume();
                 return false;
 
@@ -306,26 +306,26 @@ bool Parser::ignoreStatement()
     while (true) {
         switch (peek().kind()) {
             // Just return.
-            case EndOfFile:
-            case Keyword_typedef:
-            case Keyword_extern:
-            case Keyword_static:
-            case Keyword__Thread_local:
-            case Keyword_ExtGNU___thread:
-            case Keyword_auto:
-            case Keyword_register:
-            case Keyword_inline:
-            case Keyword__Noreturn:
-            case Keyword_struct:
-            case Keyword_union:
-            case Keyword_enum:
-            case Keyword__Static_assert:
-            case Keyword_ExtGNU___asm__:
+            case SyntaxKind::EndOfFile:
+            case SyntaxKind::Keyword_typedef:
+            case SyntaxKind::Keyword_extern:
+            case SyntaxKind::Keyword_static:
+            case SyntaxKind::Keyword__Thread_local:
+            case SyntaxKind::Keyword_ExtGNU___thread:
+            case SyntaxKind::Keyword_auto:
+            case SyntaxKind::Keyword_register:
+            case SyntaxKind::Keyword_inline:
+            case SyntaxKind::Keyword__Noreturn:
+            case SyntaxKind::Keyword_struct:
+            case SyntaxKind::Keyword_union:
+            case SyntaxKind::Keyword_enum:
+            case SyntaxKind::Keyword__Static_assert:
+            case SyntaxKind::Keyword_ExtGNU___asm__:
                 return false;
 
             // Skip and return.
-            case CloseBraceToken:
-            case SemicolonToken:
+            case SyntaxKind::CloseBraceToken:
+            case SyntaxKind::SemicolonToken:
                 consume();
                 return false;
 

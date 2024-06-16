@@ -158,8 +158,10 @@ public:
     virtual const TrivialSpecifierSyntax* asTrivialSpecifier() const { return nullptr; }
     virtual StorageClassSyntax* asStorageClass() { return nullptr; }
     virtual const StorageClassSyntax* asStorageClass() const { return nullptr; }
-    virtual BuiltinTypeSpecifierSyntax* asBuiltinTypeSpecifier() { return nullptr; }
-    virtual const BuiltinTypeSpecifierSyntax* asBuiltinTypeSpecifier() const { return nullptr; }
+    virtual BasicTypeSpecifierSyntax* asBasicTypeSpecifier() { return nullptr; }
+    virtual const BasicTypeSpecifierSyntax* asBasicTypeSpecifier() const { return nullptr; }
+    virtual VoidTypeSpecifierSyntax* asVoidTypeSpecifier() { return nullptr; }
+    virtual const VoidTypeSpecifierSyntax* asVoidTypeSpecifier() const { return nullptr; }
     virtual TagTypeSpecifierSyntax* asTagTypeSpecifier() { return nullptr; }
     virtual const TagTypeSpecifierSyntax* asTagTypeSpecifier() const { return nullptr; }
     virtual TagDeclarationAsSpecifierSyntax* asTagDeclarationAsSpecifier() { return nullptr; }
@@ -349,7 +351,7 @@ public:
     virtual const AmbiguousExpressionOrDeclarationStatementSyntax* asAmbiguousExpressionOrDeclarationStatement() const { return nullptr; }
 
 protected:
-    SyntaxNode(SyntaxTree* tree, SyntaxKind kind = Error);
+    SyntaxNode(SyntaxTree* tree, SyntaxKind kind = SyntaxKind::Error);
 
     // Unavailable
     SyntaxNode(const SyntaxNode& other) = delete;

@@ -55,14 +55,14 @@ bool Parser::parseTypeName(TypeNameSyntax*& typeName)
 bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& tyRef)
 {
     switch (peek().kind()) {
-        case OpenParenToken: {
+        case SyntaxKind::OpenParenToken: {
             Backtracker BT(this);
             ExpressionSyntax* expr = nullptr;
             if (parseExpressionWithPrecedenceUnary(expr)) {
                 auto exprAsTyRef = makeNode<ExpressionAsTypeReferenceSyntax>();
                 tyRef = exprAsTyRef;
                 exprAsTyRef->expr_ = expr;
-                if (expr->kind() == ParenthesizedExpression)
+                if (expr->kind() == SyntaxKind::ParenthesizedExpression)
                     maybeAmbiguateTypeReference(tyRef);
                 return true;
             }
@@ -77,7 +77,7 @@ bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& tyRef)
             tyRef = nameAsTyRef;
             nameAsTyRef->openParenTkIdx_ = openParenTkIdx;
             nameAsTyRef->typeName_ = typeName;
-            return matchOrSkipTo(CloseParenToken, &nameAsTyRef->closeParenTkIdx_);
+            return matchOrSkipTo(SyntaxKind::CloseParenToken, &nameAsTyRef->closeParenTkIdx_);
         }
 
         default: {
@@ -94,9 +94,9 @@ bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& tyRef)
 
 void Parser::maybeAmbiguateTypeReference(TypeReferenceSyntax*& tyRef)
 {
-    PSY_ASSERT_W_MSG(tyRef->kind() == ExpressionAsTypeReference
+    PSY_ASSERT_W_MSG(tyRef->kind() == SyntaxKind::ExpressionAsTypeReference
                     && (tyRef->asExpressionAsTypeReference()->expr_->kind()
-                            == ParenthesizedExpression),
+                            == SyntaxKind::ParenthesizedExpression),
                   return, "");
 
     auto exprAsTyRef = tyRef->asExpressionAsTypeReference();

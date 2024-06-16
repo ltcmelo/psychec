@@ -42,7 +42,7 @@
 
 #include "SyntaxWriterDOTFormat.h"
 
-#include "SyntaxLexeme_ALL.h"
+#include "Lexeme_ALL.h"
 #include "SyntaxVisitor.h"
 #include "SyntaxTree.h"
 
@@ -118,7 +118,7 @@ void SyntaxWriterDOTFormat::terminal(const SyntaxToken& tk, const SyntaxNode *no
 
 void SyntaxWriterDOTFormat::generateTokens() {
     for (unsigned token = 1; token < tree_->tokenCount(); ++token) {
-        if (tree_->tokenAt(token).kind() == EndOfFile)
+        if (tree_->tokenAt(token).kind() == SyntaxKind::EndOfFile)
             break;
 
         std::string t;

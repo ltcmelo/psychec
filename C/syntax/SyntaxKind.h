@@ -32,7 +32,7 @@ namespace C {
 /**
  * \brief The SyntaxKind enumeration.
  */
-enum PSY_C_API SyntaxKind : std::uint16_t
+enum class PSY_C_API SyntaxKind : std::uint16_t
 {
     EndOfFile = 0,
     Error,
@@ -338,7 +338,8 @@ enum PSY_C_API SyntaxKind : std::uint16_t
     RestrictQualifier,
     VolatileQualifier,
     AtomicQualifier,
-    BuiltinTypeSpecifier,
+    BasicTypeSpecifier,
+    VoidTypeSpecifier,
     StructTypeSpecifier,
     UnionTypeSpecifier,
     EnumTypeSpecifier,

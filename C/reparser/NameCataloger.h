@@ -33,7 +33,7 @@
 namespace psy {
 namespace C {
 
-class PSY_C_NON_API NameCataloger : public SyntaxVisitor
+class PSY_C_INTERNAL_API NameCataloger : public SyntaxVisitor
 {
 public:
     NameCataloger(SyntaxTree* tree);

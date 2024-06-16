@@ -35,6 +35,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <type_traits>
 
 namespace psy {
 namespace C {
@@ -60,22 +61,12 @@ public:
     /**
      * The SyntaxKind of \c this SyntaxToken.
      */
-    SyntaxKind kind() const { return SyntaxKind(rawSyntaxK_); }
+    SyntaxKind kind() const { return syntaxK_; }
 
     /**
      * Whether \c this SyntaxToken is of SyntaxKind \p k.
      */
     bool isKind(SyntaxKind k) { return kind() == k; }
-
-    /**
-     * The raw kind of \c this SyntaxToken.
-     */
-    unsigned int rawKind() const { return rawSyntaxK_; }
-
-    /**
-     * Whether \c this SyntaxToken is of the given \p rawKind.
-     */
-    bool isRawKind(unsigned int rawKind) const { return rawSyntaxK_ == rawKind; }
 
     /**
      * \brief The existing SyntaxToken categories.
@@ -98,17 +89,14 @@ public:
     Category category() const;
 
     /**
-     * The Category of the SyntaxToken of kind \p k.
+     * The Category of SyntaxKind \p k.
      */
     static Category category(SyntaxKind k);
 
     /**
-     * The value of \c this SyntaxToken represented by a lexeme, from which
-     * the actual value (e.g., an integer such as \c 42) may be obtained.
-     *
-     * \see SyntaxLexeme::value
+     * The Lexeme underneath \c this SyntaxToken.
      */
-    SyntaxLexeme* valueLexeme() const;
+    Lexeme* lexeme() const;
 
     /**
      * The value of \c this SyntaxToken represented as text, by an \c std::string.
@@ -200,12 +188,11 @@ public:
      */
     static SyntaxToken invalid();
 
-PSY_INTERNAL_AND_RESTRICTED:
-    PSY_GRANT_ACCESS(SyntaxTree);
-    PSY_GRANT_ACCESS(SyntaxTree);
-    PSY_GRANT_ACCESS(SyntaxNode);
-    PSY_GRANT_ACCESS(Lexer);
-    PSY_GRANT_ACCESS(Parser);
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(SyntaxTree);
+    PSY_GRANT_INTERNAL_ACCESS(SyntaxNode);
+    PSY_GRANT_INTERNAL_ACCESS(Lexer);
+    PSY_GRANT_INTERNAL_ACCESS(Parser);
 
     SyntaxToken(SyntaxTree* tree);
 
@@ -223,11 +210,13 @@ PSY_INTERNAL_AND_RESTRICTED:
      * Watch for data layout (size) before changing members or their order.
      */
 
-    std::uint16_t rawSyntaxK_;  // Keep the same underlying type of SyntaxKind.
+    SyntaxKind syntaxK_;  // Keep the same underlying type of SyntaxKind.
+
     std::uint16_t byteSize_;
     std::uint16_t charSize_;
     std::uint32_t byteOffset_;
     std::uint32_t charOffset_;  // UTF-16
+
     std::size_t matchingBracket_;
 
     struct BitFields
@@ -250,7 +239,7 @@ PSY_INTERNAL_AND_RESTRICTED:
 
     union
     {
-        SyntaxLexeme* lexeme_;
+        Lexeme* lexeme_;
         const Identifier* identifier_;
         const IntegerConstant* integer_;
         const FloatingConstant* floating_;

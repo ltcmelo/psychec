@@ -23,92 +23,109 @@
 using namespace psy;
 using namespace  C;
 
-TypeSpecSummary::TypeSpecSummary(DeclSummary& declSummary)
-    : declSummary_(declSummary)
-    , nestedRetTySpec_(nullptr)
-    , namedTyK_(NamedTypeKind::UNSPECIFIED)
-    , specTyBuiltinK_(BuiltinTypeKind::UNSPECIFIED)
-    , specTyCVR_(CVR::None)
+TySummary::TySummary(DeclSummary& declSummary)
+    : decl_(declSummary)
+    , CVR_(CVR::None)
+    , nestedRetTy_(nullptr)
 {}
 
-TypeSpecSummary::~TypeSpecSummary()
+TySummary::~TySummary()
 {}
 
-DeclSummary& TypeSpecSummary::basis(std::string name,
-                                    NamedTypeKind namedTyK,
-                                    BuiltinTypeKind builtinTypeKind,
-                                    CVR cvr)
+DeclSummary& TySummary::Void(CVR cvr)
 {
-    specTyName_ = std::move(name);
-    namedTyK_ = namedTyK;
-    specTyBuiltinK_ = builtinTypeKind;
-    specTyCVR_ = cvr;
-    return declSummary_;
+    nameOrTag_ = "void";
+    tyK_ = TypeKind::Void;
+    CVR_ = cvr;
+    return decl_;
 }
 
-DeclSummary& TypeSpecSummary::deriv(TypeKind tyKind, CVR cvr, Decay decay)
+DeclSummary& TySummary::Basic(BasicTypeKind basicTyK, CVR cvr)
+{
+    tyK_ = TypeKind::Basic;
+    basicTyK_ = basicTyK;
+    CVR_ = cvr;
+    return decl_;
+}
+
+DeclSummary& TySummary::Typedef(std::string name,
+                                CVR cvr)
+{
+    nameOrTag_ = std::move(name);
+    tyK_ = TypeKind::Typedef;
+    CVR_ = cvr;
+    return decl_;
+}
+
+DeclSummary& TySummary::Tag(std::string tag,
+                            TagTypeKind tagTyK,
+                            CVR cvr)
+{
+    nameOrTag_ = std::move(tag);
+    tyK_ = TypeKind::Tag;
+    tagTyK_ = tagTyK;
+    CVR_ = cvr;
+    return decl_;
+}
+
+DeclSummary& TySummary::Derived(TypeKind tyKind, CVR cvr, Decay decay)
 {
     derivTyKs_.push_back(tyKind);
     derivTyCVRs_.push_back(cvr);
     derivPtrTyDecay_.push_back(decay);
-    return declSummary_;
+    return decl_;
 }
 
-TypeSpecSummary& TypeSpecSummary::Parameter()
+TySummary& TySummary::addParam()
 {
-    parmsTySpecs_.emplace_back(declSummary_);
-    return parmsTySpecs_.back();
+    parmsTys_.emplace_back(decl_);
+    return parmsTys_.back();
 }
 
-TypeSpecSummary& TypeSpecSummary::_AtParam_()
+TySummary& TySummary::atParam()
 {
-    return parmsTySpecs_.back();
+    return parmsTys_.back();
 }
 
-DeclSummary& TypeSpecSummary::NestAsReturn()
+DeclSummary& TySummary::nestAsReturn()
 {
-    nestedRetTySpec_.reset(new TypeSpecSummary(*this));
+    nestedRetTy_.reset(new TySummary(*this));
 
-    specTyName_.clear();
-    namedTyK_ = NamedTypeKind::UNSPECIFIED;
-    specTyBuiltinK_ = BuiltinTypeKind::UNSPECIFIED;
-    specTyCVR_ = CVR::None;
+    nameOrTag_.clear();
+    CVR_ = CVR::None;
     derivTyKs_.clear();
     derivTyCVRs_.clear();
     derivPtrTyDecay_.clear();
-    parmsTySpecs_.clear();
+    parmsTys_.clear();
 
-    return declSummary_;
+    return decl_;
 }
 
 DeclSummary::DeclSummary()
-    : valK_(ValueKind::UNSPECIFIED)
-    , tyK_(TypeKind::UNSPECIFIED)
-    , scopeK_(ScopeKind::UNSPECIFIED)
-    , TySpec(*this)
+    : Ty(*this)
 {}
 
-DeclSummary& DeclSummary::Value(std::string name, ValueKind valK, ScopeKind scopeK)
+DeclSummary& DeclSummary::Value(std::string name, ObjectDeclarationSymbolKind valK, ScopeKind scopeK)
 {
-    name_ = std::move(name);
-    symK_ = SymbolKind::Value;
-    valK_ = valK;
+    id_ = std::move(name);
+    declK_ = DeclarationSymbolKind::Object;
+    valDeclK_ = valK;
     scopeK_ = scopeK;
     return *this;
 }
 
-DeclSummary& DeclSummary::Type(std::string name, NamedTypeKind namedTyDeclK)
+DeclSummary& DeclSummary::Type(std::string typedefOrTag, TypeDeclarationSymbolKind tyDeclSymK)
 {
-    name_ = std::move(name);
-    symK_ = SymbolKind::Type;
-    namedTyDeclK_ = namedTyDeclK;
+    id_ = std::move(typedefOrTag);
+    declK_ = DeclarationSymbolKind::Type;
+    tyDeclSymK_ = tyDeclSymK;
     return *this;
 }
 
 DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
 {
-    name_ = std::move(funcName);
-    symK_ = SymbolKind::Function;
+    id_ = std::move(funcName);
+    declK_ = DeclarationSymbolKind::Function;
     scopeK_ = scopeK;
     return *this;
 }
@@ -122,18 +139,6 @@ DeclSummary& DeclSummary::withScopeKind(ScopeKind scopeK)
 DeclSummary& DeclSummary::withNameSpaceKind(NameSpaceKind nsK)
 {
     nsK_ = nsK;
-    return *this;
-}
-
-DeclSummary& DeclSummary::withNameKind(SymbolNameKind nameK)
-{
-    nameK_ = nameK;
-    return *this;
-}
-
-DeclSummary& DeclSummary::withTagChoice(TagSymbolName::TagChoice tagChoice)
-{
-    tagChoice_ = tagChoice;
     return *this;
 }
 

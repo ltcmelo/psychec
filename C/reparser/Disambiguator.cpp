@@ -51,7 +51,7 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousExpression(ExprT* const&
 {
     ExprT*& node_P = const_cast<ExprT*&>(node);
     switch (node->kind()) {
-        case AmbiguousCastOrBinaryExpression: {
+        case SyntaxKind::AmbiguousCastOrBinaryExpression: {
             auto ambigNode = node->asAmbiguousCastOrBinaryExpression();
             auto disambig = disambiguateExpression(ambigNode);
             switch (disambig) {
@@ -88,8 +88,8 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousStatement(StmtT* const& 
 {
     StmtT*& node_P = const_cast<StmtT*&>(node);
     switch (node->kind()) {
-        case AmbiguousMultiplicationOrPointerDeclaration:
-        case AmbiguousCallOrVariableDeclaration: {
+        case SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration:
+        case SyntaxKind::AmbiguousCallOrVariableDeclaration: {
             auto ambigNode = node->asAmbiguousExpressionOrDeclarationStatement();
             auto disambig = disambiguateStatement(ambigNode);
             switch (disambig) {
@@ -126,7 +126,7 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousTypeReference(TypeRefT* 
 {
     TypeRefT*& node_P = const_cast<TypeRefT*&>(node);
     switch (node->kind()) {
-        case AmbiguousTypeNameOrExpressionAsTypeReference: {
+        case SyntaxKind::AmbiguousTypeNameOrExpressionAsTypeReference: {
             auto ambigNode = node->asAmbiguousTypeNameOrExpressionAsTypeReference();
             auto disambig = disambiguateTypeReference(ambigNode);
             switch (disambig) {

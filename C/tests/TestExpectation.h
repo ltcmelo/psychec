@@ -24,14 +24,12 @@
 #include "compilation/Compilation.h"
 #include "binder/NameSpaceKind.h"
 #include "binder/Scope.h"
-#include "symbols/SymbolNameKind.h"
-#include "symbols/SymbolName_Tag.h"
 #include "symbols/SymbolKind.h"
-#include "symbols/ValueKind.h"
-#include "symbols/TypeKind.h"
-#include "symbols/TypeKind_Builtin.h"
-#include "symbols/TypeKind_Named.h"
+#include "symbols/DeclarationSymbolKind.h"
+#include "symbols/TypeDeclarationSymbolKind.h"
+#include "symbols/ObjectDeclarationSymbolKind.h"
 #include "tests/TestSuite.h"
+#include "types/Type_ALL.h"
 
 #include <functional>
 #include <memory>
@@ -63,35 +61,35 @@ enum class Decay
 
 struct DeclSummary;
 
-struct TypeSpecSummary
+struct TySummary
 {
-    TypeSpecSummary(DeclSummary& declSummary);
-    TypeSpecSummary(TypeSpecSummary&& tySpec) = default;
-    TypeSpecSummary(const TypeSpecSummary& tySpec) = default;
-    ~TypeSpecSummary();
+    TySummary(DeclSummary& declSummary);
+    TySummary(TySummary&& ty) = default;
+    TySummary(const TySummary& ty) = default;
+    ~TySummary();
 
-    DeclSummary& declSummary_;
+    DeclSummary& Void(CVR cvr = CVR::None);
+    DeclSummary& Basic(BasicTypeKind basicTyK, CVR cvr = CVR::None);
+    DeclSummary& Typedef(std::string name, CVR cvr = CVR::None);
+    DeclSummary& Tag(std::string tag, TagTypeKind tagTyK, CVR cvr = CVR::None);
+    DeclSummary& Derived(TypeKind tyKind, CVR cvr = CVR::None, Decay decay = Decay::None);
+    DeclSummary& nestAsReturn();
+    TySummary& addParam();
+    TySummary& atParam();
 
-    DeclSummary& basis(std::string name,
-                       NamedTypeKind namedTyK,
-                       BuiltinTypeKind builtinTypeKind = BuiltinTypeKind::UNSPECIFIED,
-                       CVR cvr = CVR::None);
-    DeclSummary& deriv(TypeKind tyKind, CVR cvr = CVR::None, Decay decay = Decay::None);
+    DeclSummary& decl_;
 
-    TypeSpecSummary& Parameter();
-    TypeSpecSummary& _AtParam_();
+    std::string nameOrTag_;
+    TypeKind tyK_;
+    BasicTypeKind basicTyK_;
+    TagTypeKind tagTyK_;
+    CVR CVR_;
 
-    DeclSummary& NestAsReturn();
-
-    std::shared_ptr<TypeSpecSummary> nestedRetTySpec_;
-    std::string specTyName_;
-    NamedTypeKind namedTyK_;
-    BuiltinTypeKind specTyBuiltinK_;
-    CVR specTyCVR_;
     std::vector<TypeKind> derivTyKs_;
     std::vector<CVR> derivTyCVRs_;
     std::vector<Decay> derivPtrTyDecay_;
-    std::vector<TypeSpecSummary> parmsTySpecs_;
+    std::shared_ptr<TySummary> nestedRetTy_;
+    std::vector<TySummary> parmsTys_;
 };
 
 struct DeclSummary
@@ -99,28 +97,23 @@ struct DeclSummary
     DeclSummary();
 
     DeclSummary& Value(std::string name,
-                       ValueKind valK,
-                       ScopeKind scopeK = ScopeKind::UNSPECIFIED);
+                       ObjectDeclarationSymbolKind valK,
+                       ScopeKind scopeK = ScopeKind::File);
     DeclSummary& Function(std::string funcName,
-                          ScopeKind scopeK = ScopeKind::UNSPECIFIED);
-    DeclSummary& Type(std::string name, NamedTypeKind namedTyDeclTyK);
+                          ScopeKind scopeK = ScopeKind::File);
+    DeclSummary& Type(std::string typedefOrTag, TypeDeclarationSymbolKind tyDeclSymK);
 
     DeclSummary& withScopeKind(ScopeKind scopeK);
     DeclSummary& withNameSpaceKind(NameSpaceKind nsK);
-    DeclSummary& withNameKind(SymbolNameKind nameK);
-    DeclSummary& withTagChoice(TagSymbolName::TagChoice tagChoice);
 
-    std::string name_;
-    SymbolKind symK_;
-    ValueKind valK_;
-    TypeKind tyK_;
-    NamedTypeKind namedTyDeclK_;
+    std::string id_;
+    DeclarationSymbolKind declK_;
+    ObjectDeclarationSymbolKind valDeclK_;
+    TypeDeclarationSymbolKind tyDeclSymK_;
     ScopeKind scopeK_;
     NameSpaceKind nsK_;
-    SymbolNameKind nameK_;
-    TagSymbolName::TagChoice tagChoice_;
 
-    TypeSpecSummary TySpec;
+    TySummary Ty;
 };
 
 struct Expectation

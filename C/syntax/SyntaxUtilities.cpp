@@ -40,14 +40,14 @@ const DeclaratorSyntax* SyntaxUtilities::innermostDeclaratorOrSelf(const Declara
 const DeclaratorSyntax* SyntaxUtilities::innerDeclaratorOrSelf(const DeclaratorSyntax* decltor)
 {
     switch (decltor->kind()) {
-        case PointerDeclarator:
+        case SyntaxKind::PointerDeclarator:
             return decltor->asPointerDeclarator()->innerDeclarator();
 
-        case ArrayDeclarator:
-        case FunctionDeclarator:
+        case SyntaxKind::ArrayDeclarator:
+        case SyntaxKind::FunctionDeclarator:
             return decltor->asArrayOrFunctionDeclarator()->innerDeclarator();
 
-        case BitfieldDeclarator:
+        case SyntaxKind::BitfieldDeclarator:
             return decltor->asBitfieldDeclarator()->innerDeclarator();
 
         default:

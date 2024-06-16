@@ -68,16 +68,31 @@ public:
 };
 
 /**
- * \brief The BuiltinTypeSpecifierSyntax class.
+ * \brief The BasicTypeSpecifierSyntax class.
  *
+ * \remark 6.2.5-14
  * \remark 6.7.2
  */
-class PSY_C_API BuiltinTypeSpecifierSyntax final : public TrivialSpecifierSyntax
+class PSY_C_API BasicTypeSpecifierSyntax final : public TrivialSpecifierSyntax
 {
-    AST_NODE_NK(BuiltinTypeSpecifier, TrivialSpecifier)
+    AST_NODE_NK(BasicTypeSpecifier, TrivialSpecifier)
 
 public:
-    SyntaxToken builtinTypeKeyword() const { return tokenAtIndex(specTkIdx_); }
+    SyntaxToken typeSpecifierKeyword() const { return tokenAtIndex(specTkIdx_); }
+};
+
+/**
+ * \brief The VoidTypeSpecifierSyntax class.
+ *
+ * \remark 6.2.5-19
+ * \remark 6.7.2
+ */
+class PSY_C_API VoidTypeSpecifierSyntax final : public TrivialSpecifierSyntax
+{
+    AST_NODE_1K(VoidTypeSpecifier, TrivialSpecifier)
+
+public:
+    SyntaxToken voidKeyword() const { return tokenAtIndex(specTkIdx_); }
 };
 
 /**
@@ -922,7 +937,7 @@ private:
     DeclaratorSyntax* decltor_ = nullptr;
     AST_CHILD_LST2(specs_, decltor_)
 
-    mutable ParameterSymbol* sym_ = nullptr;
+    mutable Parameter* sym_ = nullptr;
 };
 
 /**
@@ -984,7 +999,7 @@ private:
     StatementSyntax* body_ = nullptr;
     AST_CHILD_LST4(specs_, decltor_, extKR_params_, body_);
 
-    mutable FunctionSymbol* sym_;
+    mutable Function* sym_;
 };
 
 /**

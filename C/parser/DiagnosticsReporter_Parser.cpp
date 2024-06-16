@@ -308,9 +308,9 @@ void Parser::DiagnosticsReporter::UnexpectedPointerInArrayDeclarator()
 
 void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclarator()
 {
-    auto validTkKinds = { CommaToken,
-                          SemicolonToken,
-                          EqualsToken };
+    auto validTkKinds = { SyntaxKind::CommaToken,
+                          SyntaxKind::SemicolonToken,
+                          SyntaxKind::EqualsToken };
 
     std::string s = "expected "
             + joinTokenNames(validTkKinds)
@@ -328,9 +328,9 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclarator()
 
 void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructDeclarator()
 {
-    auto validTkKinds = { CommaToken,
-                          SemicolonToken,
-                          ColonToken };
+    auto validTkKinds = { SyntaxKind::CommaToken,
+                          SyntaxKind::SemicolonToken,
+                          SyntaxKind::ColonToken };
 
     std::string s = "expected "
             + joinTokenNames(validTkKinds)
@@ -348,8 +348,8 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructDeclarator()
 
 void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclaratorAndInitializer()
 {
-    auto validTkKinds = { CommaToken,
-                          SemicolonToken };
+    auto validTkKinds = { SyntaxKind::CommaToken,
+                          SyntaxKind::SemicolonToken };
 
     std::string s = "expected "
             + joinTokenNames(validTkKinds)
@@ -367,8 +367,8 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclaratorAndInitializer()
 
 void Parser::DiagnosticsReporter::ExpectedFIRSTofDirectDeclarator()
 {
-    auto validTkKinds = { IdentifierToken,
-                          OpenParenToken };
+    auto validTkKinds = { SyntaxKind::IdentifierToken,
+                          SyntaxKind::OpenParenToken };
 
     std::string s = "expected "
             + joinTokenNames(validTkKinds)
@@ -414,8 +414,8 @@ void Parser::DiagnosticsReporter::ExpectedFIRSTofSpecifierQualifier()
 
 void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructOrUnionOrEnum()
 {
-    auto validTkKinds = { IdentifierToken,
-                          OpenBraceToken };
+    auto validTkKinds = { SyntaxKind::IdentifierToken,
+                          SyntaxKind::OpenBraceToken };
 
     std::string s = "expected "
             + joinTokenNames(validTkKinds)
