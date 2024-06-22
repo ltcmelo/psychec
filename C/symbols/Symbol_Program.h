@@ -57,6 +57,8 @@ PSY_INTERNAL:
     Program();
 };
 
+std::string PSY_C_API to_string(const Symbol& prog);
+
 } // C
 } // psy
 

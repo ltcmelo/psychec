@@ -18,8 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "DeclarationSymbol_Type.h"
 #include "Symbol__IMPL__.inc"
+#include "DeclarationSymbol_Type.h"
+
+#include "../common/infra/Assertions.h"
 
 #include <cstdint>
 
@@ -29,14 +31,19 @@ using namespace C;
 struct TypeDeclarationSymbol::TypeDeclarationSymbolImpl : SymbolImpl
 {
     TypeDeclarationSymbolImpl(const SyntaxTree* tree,
-                              const Scope* outerScope,
                               const Symbol* containingSym,
+                              const Scope* scope,
+                              NameSpace ns,
                               Type* ty,
-                              TypeDeclarationSymbolKind tySymKind)
-        : SymbolImpl(tree, outerScope, containingSym, SymbolKind::Declaration)
+                              TypeDeclarationSymbolKind tyDeclK)
+        : SymbolImpl(tree,
+                     containingSym,
+                     scope,
+                     ns,
+                     SymbolKind::Declaration)
         , ty_(ty)
     {
-        BF_.tySymK_ = static_cast<std::uint32_t>(tySymKind);
+        BF_.tyDeclK_ = static_cast<std::uint32_t>(tyDeclK);
     }
 
     Type* ty_;

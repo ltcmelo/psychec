@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol_Enum.h"
 #include "TypeDeclarationSymbol__IMPL__.inc"
+#include "TypeDeclarationSymbol_Enum.h"
 
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_Tag.h"
@@ -31,16 +31,24 @@ using namespace psy;
 using namespace C;
 
 Enum::Enum(const SyntaxTree* tree,
-           const Scope* scope,
            const Symbol* containingSym,
+           const Scope* scope,
            TagType* tagTy)
     : TypeDeclarationSymbol(
           new TypeDeclarationSymbolImpl(tree,
-                                        scope,
                                         containingSym,
+                                        scope,
+                                        NameSpace::Tags,
                                         tagTy,
                                         TypeDeclarationSymbolKind::Enum))
 {
+}
+
+const Identifier* Enum::identifier() const
+{
+    PSY_ASSERT(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
+    PSY_ASSERT(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Enum, return nullptr);
+    return P_CAST->ty_->asTagType()->tag();
 }
 
 std::string Enum::toDisplayString() const
@@ -50,3 +58,18 @@ std::string Enum::toDisplayString() const
     oss << P_CAST->ty_->asTagType()->tag()->valueText();
     return oss.str();
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const Enum& enun)
+{
+    std::ostringstream oss;
+    oss << "<Enum | ";
+    oss << "type:" << to_string(*enun.specifiedType());
+    oss << ">";
+    return oss.str();
+}
+
+} // C
+} // psy

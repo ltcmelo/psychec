@@ -51,12 +51,12 @@ TypedefType::TypedefType(const Identifier* typedefName)
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TypedefType& ty)
+std::string PSY_C_API to_string(const TypedefType& tydefTy)
 {
     std::ostringstream oss;
-    oss << "(TypedefType |";
-    oss << ty.typedefName()->valueText();
-    oss << ")";
+    oss << "<TypedefType | ";
+    oss << "typedef-name:" << tydefTy.typedefName()->valueText();
+    oss << ">";
     return oss.str();
 }
 

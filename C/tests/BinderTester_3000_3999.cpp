@@ -41,7 +41,7 @@ void BinderTester::case3001()
          Expectation()
          .binding(DeclSummary()
                   .Type("x", TypeDeclarationSymbolKind::Struct)
-                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File)));
 }
 
@@ -51,7 +51,7 @@ void BinderTester::case3002()
          Expectation()
          .binding(DeclSummary()
                   .Type("x", TypeDeclarationSymbolKind::Union)
-                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File)));
 }
 
@@ -109,7 +109,7 @@ void BinderTester::case3050()
          Expectation()
          .binding(DeclSummary()
                   .Type("x", TypeDeclarationSymbolKind::Enum)
-                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File))
          .binding(DeclSummary()
                   .Value("y", ObjectDeclarationSymbolKind::Enumerator)
@@ -122,7 +122,7 @@ void BinderTester::case3051()
          Expectation()
          .binding(DeclSummary()
                   .Type("x", TypeDeclarationSymbolKind::Enum)
-                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File))
          .binding(DeclSummary()
                   .Value("y", ObjectDeclarationSymbolKind::Enumerator)
@@ -138,7 +138,7 @@ void BinderTester::case3052()
          Expectation()
          .binding(DeclSummary()
                   .Type("x", TypeDeclarationSymbolKind::Enum)
-                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File))
          .binding(DeclSummary()
                   .Value("y", ObjectDeclarationSymbolKind::Enumerator)
@@ -154,7 +154,7 @@ void BinderTester::case3053()
          Expectation()
          .binding(DeclSummary()
                   .Type("x", TypeDeclarationSymbolKind::Enum)
-                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File))
          .binding(DeclSummary()
                   .Value("y", ObjectDeclarationSymbolKind::Enumerator)
@@ -173,7 +173,7 @@ void BinderTester::case3054()
          Expectation()
          .binding(DeclSummary()
                   .Type("x", TypeDeclarationSymbolKind::Enum)
-                  .withNameSpaceKind(NameSpaceKind::Tags)
+                  .withNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File))
          .binding(DeclSummary()
                   .Value("y", ObjectDeclarationSymbolKind::Enumerator)
@@ -238,7 +238,7 @@ void BinderTester::case3100()
          Expectation()
              .binding(DeclSummary()
                           .Type("x", TypeDeclarationSymbolKind::Typedef)
-                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)));
 }
 
@@ -248,7 +248,7 @@ void BinderTester::case3101()
          Expectation()
              .binding(DeclSummary()
                           .Type("x", TypeDeclarationSymbolKind::Typedef)
-                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)));
 }
 
@@ -258,7 +258,7 @@ void BinderTester::case3102()
          Expectation()
              .binding(DeclSummary()
                           .Type("x", TypeDeclarationSymbolKind::Typedef)
-                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)));
 }
 
@@ -268,11 +268,11 @@ void BinderTester::case3103()
          Expectation()
              .binding(DeclSummary()
                           .Type("x", TypeDeclarationSymbolKind::Typedef)
-                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File))
              .binding(DeclSummary()
                           .Type("y", TypeDeclarationSymbolKind::Typedef)
-                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)));
 }
 
@@ -282,11 +282,11 @@ void BinderTester::case3104()
          Expectation()
              .binding(DeclSummary()
                           .Type("x", TypeDeclarationSymbolKind::Typedef)
-                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File))
              .binding(DeclSummary()
                           .Type("y", TypeDeclarationSymbolKind::Typedef)
-                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)));
 }
 
@@ -296,7 +296,7 @@ void BinderTester::case3105()
          Expectation()
              .binding(DeclSummary()
                           .Type("y", TypeDeclarationSymbolKind::Typedef)
-                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)));
 }
 
@@ -306,7 +306,7 @@ void BinderTester::case3106()
          Expectation()
              .binding(DeclSummary()
                           .Type("x", TypeDeclarationSymbolKind::Typedef)
-                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)));
 }
 
@@ -316,7 +316,7 @@ void BinderTester::case3107()
          Expectation()
              .binding(DeclSummary()
                           .Type("x", TypeDeclarationSymbolKind::Typedef)
-                          .withNameSpaceKind(NameSpaceKind::Ordinary)
+                          .withNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)));
 }
 

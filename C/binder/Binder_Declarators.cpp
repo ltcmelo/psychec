@@ -77,7 +77,6 @@ SyntaxVisitor::Action Binder::typeSymAtTopAndPopIt()
     }
 
     typeableSym->setType(ty);
-    popSym();
 
     return Action::Skip;
 }
@@ -85,31 +84,37 @@ SyntaxVisitor::Action Binder::typeSymAtTopAndPopIt()
 template <class DeclT>
 SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators_COMMON(
         const DeclT* node,
-        Action (Binder::*visit_DONE)(const DeclT*))
+        Action (Binder::*visit_AtEnd)(const DeclT*))
 {
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         visit(decltorIt->value);
 
         SYM_AT_TOP(sym);
         switch (sym->kind()) {
-            case SymbolKind::Declaration:
-                switch (sym->asDeclarationSymbol()->kind()) {
+            case SymbolKind::Declaration: {
+                auto decl = sym->asDeclarationSymbol();
+                switch (decl->kind()) {
                     case DeclarationSymbolKind::Function:
-                    case DeclarationSymbolKind::Object:
+                    case DeclarationSymbolKind::Object: {
                         typeSymAtTopAndPopIt();
+                        popSym();
+                        SCOPE_AT_TOP(scope);
+                        scope->addDeclaration(decl);
                         break;
+                    }
 
                     default:
                         break;
                 }
                 break;
+            }
 
             default:
                 break;
         }
     }
 
-    return ((this)->*(visit_DONE))(node);
+    return ((this)->*(visit_AtEnd))(node);
 }
 
 SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtDeclarators(
@@ -118,7 +123,7 @@ SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtDeclarators(
     decltorIsOfTydef_ = true;
     auto action = visitDeclaration_AtDeclarators_COMMON(
                 node,
-                &Binder::visitTypedefDeclaration_DONE);
+                &Binder::visitTypedefDeclaration_AtEnd);
     decltorIsOfTydef_ = false;
     return action;
 }
@@ -128,32 +133,29 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarator
 {
     return visitDeclaration_AtDeclarators_COMMON(
                 node,
-                &Binder::visitVariableAndOrFunctionDeclaration_DONE);
+                &Binder::visitVariableAndOrFunctionDeclaration_AtEnd);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
 {
     return visitDeclaration_AtDeclarators_COMMON(
                 node,
-                &Binder::visitFieldDeclaration_DONE);
+                &Binder::visitFieldDeclaration_AtEnd);
 }
 
 SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtDeclarator(const EnumeratorDeclarationSyntax* node)
 {
     RETURN_IF_QUIT(visitSimpleDeclarator_COMMON(node));
-    nameSymAtTop(lexemeOrEmptyIdent(node->identifierToken()));
-    typeSymAtTopAndPopIt();
-
-    return visitEnumeratorDeclaration_DONE(node);
+    RETURN_IF_QUIT(nameSymAtTop(lexemeOrEmptyIdent(node->identifierToken())));
+    RETURN_IF_QUIT(typeSymAtTopAndPopIt());
+    return visitEnumeratorDeclaration_AtEnd(node);
 }
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax* node)
 {
     visit(node->declarator());
-
-    typeSymAtTopAndPopIt();
-
-    return visitParameterDeclaration_DONE(node);
+    RETURN_IF_QUIT(typeSymAtTopAndPopIt());
+    return visitParameterDeclaration_AtEnd(node);
 }
 
 SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const FunctionDefinitionSyntax* node)
@@ -161,16 +163,21 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const Functio
     visit(node->declarator());
 
     typeSymAtTopAndPopIt();
+    auto decl = popSymAsDecl();
+    PSY_ASSERT(decl, return Action::Quit);
+    SCOPE_AT_TOP(scope);
+    scope->addDeclaration(decl);
+
     popTy();
 
-    openStashedScope();
+    nestStashedScope();
     scopes_.top()->morphFrom_FunctionPrototype_to_Block();
     auto body = node->body()->asCompoundStatement();
     for (auto stmtIt = body->statements(); stmtIt; stmtIt = stmtIt->next)
         visit(stmtIt->value);
-    closeScope();
+    unnestScope();
 
-    return Binder::visitFunctionDefinition_DONE(node);
+    return Binder::visitFunctionDefinition_AtEnd(node);
 }
 
 SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node)
@@ -216,9 +223,9 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
 
     visit(node->innerDeclarator());
 
-    openScope(ScopeKind::FunctionPrototype);
+    nestNewScope(ScopeKind::FunctionPrototype);
     visit(node->suffix());
-    closeAndStashScope();
+    unnestAndStashScope();
 
     if (node->suffix()->kind() == SyntaxKind::ParameterSuffix)
         pendingFunTys_.pop();
@@ -379,7 +386,9 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 {
     if (decltorIsOfTydef_) {
         auto tydefTy = makeTy<TypedefType>(lexemeOrEmptyIdent(node->identifierToken()));
-        makeAndBindSym<Typedef>(node, tydefTy);
+        auto tydef = makeAndBindSym<Typedef>(node, tydefTy);
+        SCOPE_AT_TOP(scope);
+        scope->addDeclaration(tydef);
     }
     else {
         RETURN_IF_QUIT(visitSimpleDeclarator_COMMON(node));

@@ -49,12 +49,12 @@ const Type* ArrayType::elementType() const
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const ArrayType& ty)
+std::string PSY_C_API to_string(const ArrayType& arrTy)
 {
     std::ostringstream oss;
-    oss << "(ArrayType |";
-    oss << to_string(*ty.elementType());
-    oss << ")";
+    oss << "<ArrayType | ";
+    oss << "element-type:" << to_string(*arrTy.elementType());
+    oss << ">";
     return oss.str();
 }
 

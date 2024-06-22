@@ -23,6 +23,7 @@
 #include "Compilation.h"
 
 #include "binder/Binder.h"
+#include "binder/DeclarationResolver.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
 #include "symbols/Symbol_ALL.h"
@@ -60,6 +61,8 @@ SemanticModel::SemanticModel(const SyntaxTree* tree, Compilation* compilation)
 {
     Binder binder(this, tree);
     binder.bind();
+    DeclarationResolver declResolver(this, tree);
+    declResolver.resolveDeclarations();
 }
 
 SemanticModel::~SemanticModel()

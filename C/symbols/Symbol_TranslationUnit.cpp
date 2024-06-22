@@ -26,12 +26,8 @@
 using namespace psy;
 using namespace C;
 
-TranslationUnit::TranslationUnit(const SyntaxTree* tree,
-                                 const Scope* scope,
-                                 const Symbol* containingSym)
+TranslationUnit::TranslationUnit(const SyntaxTree* tree)
     : Symbol(new SymbolImpl(tree,
-                            scope,
-                            containingSym,
                             SymbolKind::TranslationUnit))
 {}
 
@@ -43,10 +39,10 @@ std::string TranslationUnit::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const TranslationUnit& sym)
+std::string to_string(const TranslationUnit& unit)
 {
     std::ostringstream oss;
-    oss << "<translation-unit>";
+    oss << "<TranslationUnit>";
     return oss.str();
 }
 

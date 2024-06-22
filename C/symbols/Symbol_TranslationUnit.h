@@ -54,12 +54,10 @@ public:
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
-    TranslationUnit(const SyntaxTree* tree,
-                    const Scope* scope,
-                    const Symbol* containingSym);
+    TranslationUnit(const SyntaxTree* tree);
 };
 
-std::string PSY_C_API to_string(const TranslationUnit& sym);
+std::string PSY_C_API to_string(const TranslationUnit& unit);
 
 } // C
 } // psy

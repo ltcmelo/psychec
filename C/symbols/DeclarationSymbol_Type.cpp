@@ -36,7 +36,7 @@ TypeDeclarationSymbol::~TypeDeclarationSymbol()
 
 TypeDeclarationSymbolKind TypeDeclarationSymbol::kind() const
 {
-    return TypeDeclarationSymbolKind(P_CAST->BF_.tySymK_);
+    return TypeDeclarationSymbolKind(P_CAST->BF_.tyDeclK_);
 }
 
 const Type* TypeDeclarationSymbol::specifiedType() const
@@ -47,9 +47,18 @@ const Type* TypeDeclarationSymbol::specifiedType() const
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TypeDeclarationSymbol& tySym)
+std::string PSY_C_API to_string(const TypeDeclarationSymbol& tyDecl)
 {
-    return "";
+    switch (tyDecl.kind()) {
+        case TypeDeclarationSymbolKind::Struct:
+            return to_string(*tyDecl.asStruct());
+        case TypeDeclarationSymbolKind::Union:
+            return to_string(*tyDecl.asUnion());
+        case TypeDeclarationSymbolKind::Enum:
+            return to_string(*tyDecl.asEnum());
+        case TypeDeclarationSymbolKind::Typedef:
+            return to_string(*tyDecl.asTypedef());
+    }
 }
 
 } // C

@@ -66,14 +66,15 @@ private:
 
     std::stack<Scope*> scopes_;
     Scope* stashedScope_;
-    void openScope(ScopeKind scopeK);
-    void closeScope();
-    void closeAndStashScope();
-    void openStashedScope();
+    void nestNewScope(ScopeKind scopeK);
+    void unnestScope();
+    void unnestAndStashScope();
+    void nestStashedScope();
 
     using SymContT = std::stack<Symbol*>;
     SymContT syms_;
     Symbol* popSym();
+    DeclarationSymbol* popSymAsDecl();
     void pushSym(Symbol*);
     template <class SymT, class... SymTArgs> SymT* makeAndBindSym(
             const SyntaxNode* node,
@@ -136,52 +137,53 @@ private:
 
     template <class TyDeclT> Action visitTypeDeclaration_AtInternalDeclarations_COMMON(
             const TyDeclT* node,
-            Action (Binder::*visit_DONE)(const TyDeclT*));
+            Action (Binder::*visit_AtEnd)(const TyDeclT*));
 
     virtual Action visitStructOrUnionDeclaration(const StructOrUnionDeclarationSyntax*) override;
     Action visitStructOrUnionDeclaration_AtSpecifier(const StructOrUnionDeclarationSyntax*);
-    Action visitStructOrUnionDeclaration_DONE(const StructOrUnionDeclarationSyntax*);
+    Action visitStructOrUnionDeclaration_AtEnd(const StructOrUnionDeclarationSyntax*);
 
     virtual Action visitEnumDeclaration(const EnumDeclarationSyntax*) override;
     Action visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax*);
-    Action visitEnumDeclaration_DONE(const EnumDeclarationSyntax*);
+    Action visitEnumDeclaration_AtEnd(const EnumDeclarationSyntax*);
 
     virtual Action visitTypedefDeclaration(const TypedefDeclarationSyntax*) override;
     Action visitTypedefDeclaration_AtSpecifier(const TypedefDeclarationSyntax*);
     Action visitTypedefDeclaration_AtDeclarators(const TypedefDeclarationSyntax*);
-    Action visitTypedefDeclaration_DONE(const TypedefDeclarationSyntax*);
+    Action visitTypedefDeclaration_AtEnd(const TypedefDeclarationSyntax*);
 
     template <class DeclT> Action visitDeclaration_AtSpecifiers_COMMON(
             const DeclT* node,
             Action (Binder::*visit_AtDeclarators)(const DeclT*));
     template <class DeclT> Action visitDeclaration_AtDeclarators_COMMON(
             const DeclT* node,
-            Action (Binder::*visit_DONE)(const DeclT*));
+            Action (Binder::*visit_AtEnd)(const DeclT*));
+    Action visitDeclaration_AtEnd_COMMON(const DeclarationSyntax*);
 
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
     Action visitVariableAndOrFunctionDeclaration_AtSpecifiers(const VariableAndOrFunctionDeclarationSyntax*);
     Action visitVariableAndOrFunctionDeclaration_AtDeclarators(const VariableAndOrFunctionDeclarationSyntax*);
-    Action visitVariableAndOrFunctionDeclaration_DONE(const VariableAndOrFunctionDeclarationSyntax*);
+    Action visitVariableAndOrFunctionDeclaration_AtEnd(const VariableAndOrFunctionDeclarationSyntax*);
 
     virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) override;
     Action visitFieldDeclaration_AtSpecifiers(const FieldDeclarationSyntax*);
     Action visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax*);
-    Action visitFieldDeclaration_DONE(const FieldDeclarationSyntax*);
+    Action visitFieldDeclaration_AtEnd(const FieldDeclarationSyntax*);
 
     virtual Action visitEnumeratorDeclaration(const EnumeratorDeclarationSyntax*) override;
     Action visitEnumeratorDeclaration_AtImplicitSpecifier(const EnumeratorDeclarationSyntax*);
     Action visitEnumeratorDeclaration_AtDeclarator(const EnumeratorDeclarationSyntax*);
-    Action visitEnumeratorDeclaration_DONE(const EnumeratorDeclarationSyntax*);
+    Action visitEnumeratorDeclaration_AtEnd(const EnumeratorDeclarationSyntax*);
 
     virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
     Action visitParameterDeclaration_AtSpecifiers(const ParameterDeclarationSyntax*);
     Action visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax*);
-    Action visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*);
+    Action visitParameterDeclaration_AtEnd(const ParameterDeclarationSyntax*);
 
     virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) override;
     Action visitFunctionDefinition_AtSpecifiers(const FunctionDefinitionSyntax*);
     Action visitFunctionDefinition_AtDeclarator(const FunctionDefinitionSyntax*);
-    Action visitFunctionDefinition_DONE(const FunctionDefinitionSyntax*);
+    Action visitFunctionDefinition_AtEnd(const FunctionDefinitionSyntax*);
 
     /* Specifiers */
     virtual Action visitBasicTypeSpecifier(const BasicTypeSpecifierSyntax*) override;
@@ -214,8 +216,8 @@ template <class SymT, class... SymTArgs>
 SymT* Binder::makeAndBindSym(const SyntaxNode* node, SymTArgs... args)
 {
     std::unique_ptr<SymT> sym(new SymT(tree_,
-                                       scopes_.top(),
                                        syms_.top(),
+                                       scopes_.top(),
                                        std::forward<SymTArgs>(args)...));
     return static_cast<SymT*>(semaModel_->keepAndBindDecl(node, std::move(sym)));
 }
@@ -223,9 +225,9 @@ SymT* Binder::makeAndBindSym(const SyntaxNode* node, SymTArgs... args)
 template <class SymT, class... SymTArgs>
 SymT* Binder::makeBindAndPushSym(const SyntaxNode* node, SymTArgs... args)
 {
-    auto sym = makeAndBindSym<SymT>(node, std::forward<SymTArgs>(args)...);
-    pushSym(sym);
-    return sym;
+    auto rawSym = makeAndBindSym<SymT>(node, std::forward<SymTArgs>(args)...);
+    pushSym(rawSym);
+    return rawSym;
 }
 
 template <class TyT, class... TyTArgs>

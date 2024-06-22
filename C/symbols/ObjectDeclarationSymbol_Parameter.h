@@ -53,11 +53,11 @@ PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
     Parameter(const SyntaxTree* tree,
-              const Scope* scope,
-              const Symbol* containingSym);
+              const Symbol* containingSym,
+              const Scope* scope);
 };
 
-std::string PSY_C_API to_string(const Parameter& sym);
+std::string PSY_C_API to_string(const Parameter& parm);
 
 } // C
 } // psy

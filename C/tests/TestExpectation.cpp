@@ -111,6 +111,7 @@ DeclSummary& DeclSummary::Value(std::string name, ObjectDeclarationSymbolKind va
     declK_ = DeclarationSymbolKind::Object;
     valDeclK_ = valK;
     scopeK_ = scopeK;
+    ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;
 }
 
@@ -127,6 +128,7 @@ DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
     id_ = std::move(funcName);
     declK_ = DeclarationSymbolKind::Function;
     scopeK_ = scopeK;
+    ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;
 }
 
@@ -136,9 +138,9 @@ DeclSummary& DeclSummary::withScopeKind(ScopeKind scopeK)
     return *this;
 }
 
-DeclSummary& DeclSummary::withNameSpaceKind(NameSpaceKind nsK)
+DeclSummary& DeclSummary::withNameSpace(NameSpace ns)
 {
-    nsK_ = nsK;
+    ns_ = ns;
     return *this;
 }
 

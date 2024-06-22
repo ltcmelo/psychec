@@ -18,10 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol_Declaration.h"
 #include "Symbol__IMPL__.inc"
+#include "Symbol_Declaration.h"
 
+#include "binder/Scope.h"
 #include "compilation/Compilation.h"
+#include "symbols/Symbol_ALL.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxReference.h"
 
@@ -36,12 +38,12 @@ using namespace C;
 DeclarationSymbol::DeclarationSymbol(SymbolImpl* p, DeclarationSymbolKind declSymK)
     : Symbol(p)
 {
-    P->BF_.declSymK_ = static_cast<std::uint32_t>(declSymK);
+    P->BF_.declK_ = static_cast<std::uint32_t>(declSymK);
 }
 
 DeclarationSymbolKind DeclarationSymbol::kind() const
 {
-    return DeclarationSymbolKind(P->BF_.declSymK_);
+    return DeclarationSymbolKind(P->BF_.declK_);
 }
 
 const Scope* DeclarationSymbol::scope() const
@@ -51,12 +53,12 @@ const Scope* DeclarationSymbol::scope() const
 
 SymbolKind Symbol::kind() const
 {
-    return SymbolKind(P->BF_.symK_);
+    return SymbolKind(P->BF_.K_);
 }
 
-const NameSpace* DeclarationSymbol::nameSpace() const
+const NameSpace DeclarationSymbol::nameSpace() const
 {
-    return P->ns_;
+    return NameSpace(P->BF_.ns_);
 }
 
 Location DeclarationSymbol::location() const
@@ -78,3 +80,21 @@ std::vector<SyntaxReference> DeclarationSymbol::declaringSyntaxReferences() cons
 {
     return {};
 }
+
+namespace psy {
+namespace C {
+
+std::string PSY_C_API to_string(const DeclarationSymbol& decl)
+{
+    switch (decl.kind()) {
+        case DeclarationSymbolKind::Function:
+            return to_string(*decl.asFunction());
+        case DeclarationSymbolKind::Object:
+            return to_string(*decl.asObjectDeclarationSymbol());
+        case DeclarationSymbolKind::Type:
+            return to_string(*decl.asTypeDeclarationSymbol());
+    }
+}
+
+} // C
+} // psy

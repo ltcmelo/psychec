@@ -49,11 +49,11 @@ PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
     Enumerator(const SyntaxTree* tree,
-               const Scope* scope,
-               const Symbol* containingSym);
+               const Symbol* containingSym,
+               const Scope* scope);
 };
 
-std::string PSY_C_API to_string(const Enumerator& sym);
+std::string PSY_C_API to_string(const Enumerator& enumerator);
 
 } // C
 } // psy

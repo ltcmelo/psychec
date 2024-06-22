@@ -21,7 +21,8 @@
 #include "ObjectDeclarationSymbol_Variable.h"
 
 #include "binder/Scope.h"
-#include "symbols/Symbol_ALL.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_ALL.h"
 
 #include <sstream>
 
@@ -29,11 +30,11 @@ using namespace psy;
 using namespace C;
 
 Variable::Variable(const SyntaxTree* tree,
-                   const Scope* scope,
-                   const Symbol* containingSym)
+                   const Symbol* containingSym,
+                   const Scope* scope)
     : ObjectDeclarationSymbol(tree,
-                              scope,
                               containingSym,
+                              scope,
                               ObjectDeclarationSymbolKind::Variable)
 {}
 
@@ -45,10 +46,13 @@ std::string Variable::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Variable& sym)
+std::string to_string(const Variable& var)
 {
     std::ostringstream oss;
-    oss << "<variable>";
+    oss << "<Variable |";
+    oss << " name:" << var.name()->valueText();
+    oss << " type:" << to_string(*var.type());
+    oss << ">";
     return oss.str();
 }
 

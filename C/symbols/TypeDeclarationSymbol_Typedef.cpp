@@ -24,17 +24,20 @@
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_Typedef.h"
 
+#include <sstream>
+
 using namespace psy;
 using namespace C;
 
 Typedef::Typedef(const SyntaxTree* tree,
-                 const Scope* scope,
                  const Symbol* containingSym,
+                 const Scope* scope,
                  TypedefType* tydefTy)
     : TypeDeclarationSymbol(
           new TypeDeclarationSymbolImpl(tree,
-                                        scope,
                                         containingSym,
+                                        scope,
+                                        NameSpace::OrdinaryIdentifiers,
                                         tydefTy,
                                         TypeDeclarationSymbolKind::Typedef))
 {
@@ -44,3 +47,24 @@ std::string Typedef::toDisplayString() const
 {
     return P_CAST->ty_->asTypedefType()->typedefName()->valueText();
 }
+
+const Identifier* Typedef::identifier() const
+{
+    PSY_ASSERT(P_CAST->ty_->kind() == TypeKind::Typedef, return nullptr);
+    return P_CAST->ty_->asTypedefType()->typedefName();
+}
+
+namespace psy {
+namespace C {
+
+std::string to_string(const Typedef& tydef)
+{
+    std::ostringstream oss;
+    oss << "<Typedef | ";
+    oss << "type:" << to_string(*tydef.specifiedType());
+    oss << ">";
+    return oss.str();
+}
+
+} // C
+} // psy

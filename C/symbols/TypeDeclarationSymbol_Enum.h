@@ -38,6 +38,11 @@ public:
     //!@}
 
     /**
+     * The Identifier with which \c this DeclarationSymbol is declared.
+     */
+    virtual const Identifier* identifier() const override;
+
+    /**
      * Compute a displayable string for \c this Symbol.
      */
     virtual std::string toDisplayString() const override;
@@ -46,10 +51,12 @@ PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
     Enum(const SyntaxTree* tree,
-         const Scope* scope,
          const Symbol* containingSym,
+         const Scope* scope,
          TagType* tagTy);
 };
+
+std::string PSY_C_API to_string(const Enum& enun);
 
 } // C
 } // psy

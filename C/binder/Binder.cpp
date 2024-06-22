@@ -53,42 +53,41 @@ Binder::~Binder()
 
 void Binder::bind()
 {
-    // Sentinels for the outermost scope and symbol.
-    scopes_.push(nullptr);
     syms_.push(nullptr);
 
     visit(tree_->root());
 
-    PSY_ASSERT_W_MSG(scopes_.size() == 1, return, "expected 1 scope");
-    PSY_ASSERT_W_MSG(scopes_.top() == nullptr, return, "expected sentinel scope");
     PSY_ASSERT_W_MSG(syms_.size() == 1, return, "expected 1 symbol");
     PSY_ASSERT_W_MSG(syms_.top() == nullptr, return, "expected sentinel symbol");
-
-    scopes_.pop();
     syms_.pop();
 }
 
-void Binder::openScope(ScopeKind scopeK)
+void Binder::nestNewScope(ScopeKind scopeK)
 {
-    std::unique_ptr<Scope> scope(new Scope(scopeK));
-    scopes_.push(scope.get());
+    PSY_ASSERT(scopeK == ScopeKind::Block
+                   || scopeK == ScopeKind::Function
+                   || scopeK == ScopeKind::FunctionPrototype,
+               return);
+    PSY_ASSERT(!scopes_.empty(), return);
 
-    auto enclosingScope = scopes_.top();
-    enclosingScope->enclose(std::move(scope));
+    std::unique_ptr<Scope> scope(new Scope(scopeK));
+    auto outerScope = scopes_.top();
+    scopes_.push(scope.get());
+    outerScope->encloseScope(std::move(scope));
 }
 
-void Binder::openStashedScope()
+void Binder::nestStashedScope()
 {
     PSY_ASSERT(stashedScope_, return);
     scopes_.push(stashedScope_);
 }
 
-void Binder::closeScope()
+void Binder::unnestScope()
 {
     scopes_.pop();
 }
 
-void Binder::closeAndStashScope()
+void Binder::unnestAndStashScope()
 {
     stashedScope_ = scopes_.top();
     scopes_.pop();
@@ -107,6 +106,13 @@ Symbol* Binder::popSym()
     auto sym = syms_.top();
     syms_.pop();
     return sym;
+}
+
+DeclarationSymbol* Binder::popSymAsDecl()
+{
+    auto sym = popSym();
+    PSY_ASSERT(sym && sym->kind() == SymbolKind::Declaration, return nullptr);
+    return sym->asDeclarationSymbol();
 }
 
 void Binder::pushTy(Type* ty)
@@ -137,19 +143,20 @@ const Identifier* Binder::lexemeOrEmptyIdent(const SyntaxToken& tk) const
 
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    std::unique_ptr<TranslationUnit> sym(
-                new TranslationUnit(tree_,
-                                    scopes_.top(),
-                                    syms_.top()));
-    auto rawSym = semaModel_->keepTranslationUnit(node, std::move(sym));
-    pushSym(rawSym);
-    openScope(ScopeKind::File);
+    scopes_.emplace(new Scope(ScopeKind::File));
+
+    std::unique_ptr<TranslationUnit> unit(new TranslationUnit(tree_));
+    auto rawUnit = semaModel_->keepTranslationUnit(node, std::move(unit));
+    pushSym(rawUnit);
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
 
-    closeScope();
     popSym();
+
+    PSY_ASSERT(scopes_.size() == 1, return Action::Quit);
+    PSY_ASSERT(scopes_.top()->kind() == ScopeKind::File, return Action::Quit);
+    scopes_.pop();
 
     return Action::Skip;
 }
@@ -169,7 +176,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
     return visitStructOrUnionDeclaration_AtSpecifier(node);
 }
 
-SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_DONE(const StructOrUnionDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtEnd(const StructOrUnionDeclarationSyntax* node)
 {
     return Action::Skip;
 }
@@ -179,8 +186,10 @@ SyntaxVisitor::Action Binder::visitTypedefDeclaration(const TypedefDeclarationSy
     return visitTypedefDeclaration_AtSpecifier(node);
 }
 
-SyntaxVisitor::Action Binder::visitTypedefDeclaration_DONE(const TypedefDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtEnd(const TypedefDeclarationSyntax* node)
 {
+    popTy();
+
     return Action::Skip;
 }
 
@@ -189,7 +198,7 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* 
     return visitEnumDeclaration_AtSpecifier(node);
 }
 
-SyntaxVisitor::Action Binder::visitEnumDeclaration_DONE(const EnumDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitEnumDeclaration_AtEnd(const EnumDeclarationSyntax* node)
 {
     return Action::Skip;
 }
@@ -200,8 +209,8 @@ SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(
     return visitVariableAndOrFunctionDeclaration_AtSpecifiers(node);
 }
 
-SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_DONE(
-        const VariableAndOrFunctionDeclarationSyntax*)
+SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtEnd(
+        const VariableAndOrFunctionDeclarationSyntax* node)
 {
     popTy();
 
@@ -213,7 +222,7 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax
     return visitFieldDeclaration_AtSpecifiers(node);
 }
 
-SyntaxVisitor::Action Binder::visitFieldDeclaration_DONE(const FieldDeclarationSyntax*)
+SyntaxVisitor::Action Binder::visitFieldDeclaration_AtEnd(const FieldDeclarationSyntax* node)
 {
     popTy();
 
@@ -225,11 +234,10 @@ SyntaxVisitor::Action Binder::visitEnumeratorDeclaration(const EnumeratorDeclara
     return visitEnumeratorDeclaration_AtImplicitSpecifier(node);
 }
 
-SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_DONE(const EnumeratorDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtEnd(const EnumeratorDeclarationSyntax* node)
 {
     popTy();
-
-    return Action::Skip;
+    return visitDeclaration_AtEnd_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration(const ParameterDeclarationSyntax* node)
@@ -237,9 +245,9 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration(const ParameterDeclarati
     return visitParameterDeclaration_AtSpecifiers(node);
 }
 
-SyntaxVisitor::Action Binder::visitParameterDeclaration_DONE(const ParameterDeclarationSyntax*)
+SyntaxVisitor::Action Binder::visitParameterDeclaration_AtEnd(const ParameterDeclarationSyntax* node)
 {
-    return Action::Skip;
+    return visitDeclaration_AtEnd_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*)
@@ -252,8 +260,18 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition(const FunctionDefinitionSy
     return visitFunctionDefinition_AtSpecifiers(node);
 }
 
-SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinitionSyntax* node)
+SyntaxVisitor::Action Binder::visitFunctionDefinition_AtEnd(const FunctionDefinitionSyntax* node)
 {
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitDeclaration_AtEnd_COMMON(const DeclarationSyntax* node)
+{
+    auto decl = popSymAsDecl();
+    PSY_ASSERT(decl, return Action::Quit);
+    SCOPE_AT_TOP(scope);
+    scope->addDeclaration(decl->asDeclarationSymbol());
+
     return Action::Skip;
 }
 
@@ -263,12 +281,10 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_DONE(const FunctionDefinit
 
 SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
-    openScope(ScopeKind::Block);
-
+    nestNewScope(ScopeKind::Block);
     for (auto stmtIt = node->statements(); stmtIt; stmtIt = stmtIt->next)
         visit(stmtIt->value);
-
-    closeScope();
+    unnestScope();
 
     return Action::Skip;
 }

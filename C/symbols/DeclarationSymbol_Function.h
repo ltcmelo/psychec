@@ -51,6 +51,11 @@ public:
     //!@}
 
     /**
+     * The Identifier with which \c this DeclarationSymbol is declared.
+     */
+    virtual const Identifier* identifier() const override { return name(); }
+
+    /**
      * The Identifier that names \c this FunctionSymbol.
      */
     const Identifier* name() const;
@@ -78,8 +83,8 @@ PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
     Function(const SyntaxTree* tree,
-             const Scope* scope,
-             const Symbol* containingSym);
+             const Symbol* containingSym,
+             const Scope* scope);
 
     virtual void setName(const Identifier* name) override;
     virtual void setType(const Type* ty) override;
@@ -88,7 +93,7 @@ protected:
     DECL_PIMPL_SUB(FunctionSymbol);
 };
 
-std::string PSY_C_API to_string(const Function& sym);
+std::string PSY_C_API to_string(const Function& func);
 
 } // C
 } // psy

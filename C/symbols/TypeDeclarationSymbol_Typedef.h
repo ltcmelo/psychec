@@ -42,14 +42,21 @@ public:
      */
     virtual std::string toDisplayString() const override;
 
+    /**
+     * The Identifier with which \c this DeclarationSymbol is declared.
+     */
+    virtual const Identifier* identifier() const override;
+
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
     Typedef(const SyntaxTree* tree,
-            const Scope* scope,
             const Symbol* containingSym,
+            const Scope* scope,
             TypedefType* tydefTy);
 };
+
+std::string PSY_C_API to_string(const Typedef& tydef);
 
 } // C
 } // psy

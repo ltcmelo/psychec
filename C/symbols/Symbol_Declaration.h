@@ -27,6 +27,8 @@
 #include "Symbol.h"
 #include "DeclarationSymbolKind.h"
 
+#include "binder/NameSpace.h"
+
 namespace psy {
 namespace C {
 
@@ -59,6 +61,11 @@ public:
     //!@}
 
     /**
+     * The Identifier with which \c this DeclarationSymbol is declared.
+     */
+    virtual const Identifier* identifier() const = 0;
+
+    /**
      * The Scope of \c this Symbol.
      *
      * \remark 6.2.1-4
@@ -67,8 +74,10 @@ public:
 
     /**
      * The NameSpace of \c this Symbol.
+     *
+     * \remark 6.2.3
      */
-    const NameSpace* nameSpace() const;
+    const NameSpace nameSpace() const;
 
     /**
      * References to the SyntaxNodes that \a declare \c this Symbol.
@@ -86,6 +95,8 @@ protected:
     DeclarationSymbol(const DeclarationSymbol&) = delete;
     DeclarationSymbol& operator=(const DeclarationSymbol&) = delete;
 };
+
+std::string PSY_C_API to_string(const DeclarationSymbol& decl);
 
 } // C
 } // psy

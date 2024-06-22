@@ -18,11 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "DeclarationSymbol_Function.h"
 #include "Symbol__IMPL__.inc"
+#include "DeclarationSymbol_Function.h"
 
 #include "symbols/Symbol_ALL.h"
-#include "syntax/Lexeme_ALL.h"
+#include "syntax/Lexeme_Identifier.h"
 #include "types/Type_ALL.h"
 
 #include "../common/infra/Assertions.h"
@@ -35,11 +35,12 @@ using namespace C;
 struct Function::FunctionSymbolImpl : SymbolImpl
 {
     FunctionSymbolImpl(const SyntaxTree* tree,
-                       const Scope* scope,
-                       const Symbol* containingSym)
+                       const Symbol* containingSym,
+                       const Scope* scope)
         : SymbolImpl(tree,
-                     scope,
                      containingSym,
+                     scope,
+                     NameSpace::OrdinaryIdentifiers,
                      SymbolKind::Declaration)
         , name_(nullptr)
     {}
@@ -49,12 +50,12 @@ struct Function::FunctionSymbolImpl : SymbolImpl
 };
 
 Function::Function(const SyntaxTree* tree,
-                   const Scope* scope,
-                   const Symbol* containingSym)
+                   const Symbol* containingSym,
+                   const Scope* scope)
     : DeclarationSymbol(
           new FunctionSymbolImpl(tree,
-                                 scope,
-                                 containingSym),
+                                 containingSym,
+                                 scope),
           DeclarationSymbolKind::Function)
 {}
 
@@ -86,15 +87,13 @@ std::string Function::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Function& sym)
+std::string to_string(const Function& func)
 {
     std::ostringstream oss;
-    oss << "<FunctionSymbol |";
-    oss << " " << sym.name()->valueText();
-    oss << " " << to_string(*sym.type());
-    //oss << " " << (sym.scope() ? to_string(sym.scope()->kind()) : "scope:NULL");
+    oss << "<Function |";
+    oss << " name:" << func.name()->valueText();
+    oss << " type:" << to_string(*func.type());
     oss << ">";
-
     return oss.str();
 }
 
