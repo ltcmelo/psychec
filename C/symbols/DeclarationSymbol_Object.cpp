@@ -31,13 +31,17 @@ using namespace C;
 struct ObjectDeclarationSymbol::ObjectDeclarationSymbolImpl : SymbolImpl
 {
     ObjectDeclarationSymbolImpl(const SyntaxTree* tree,
-                                const Scope* scope,
                                 const Symbol* containingSym,
-                                ObjectDeclarationSymbolKind valSymK)
-        : SymbolImpl(tree, scope, containingSym, SymbolKind::Declaration)
+                                const Scope* scope,
+                                ObjectDeclarationSymbolKind objDeclK)
+        : SymbolImpl(tree,
+                     containingSym,
+                     scope,
+                     NameSpace::OrdinaryIdentifiers,
+                     SymbolKind::Declaration)
         , name_(nullptr)
     {
-        BF_.valSymK_ = static_cast<std::uint32_t>(valSymK);
+        BF_.objDeclK_ = static_cast<std::uint32_t>(objDeclK);
     }
 
     const Identifier* name_;
@@ -45,13 +49,13 @@ struct ObjectDeclarationSymbol::ObjectDeclarationSymbolImpl : SymbolImpl
 };
 
 ObjectDeclarationSymbol::ObjectDeclarationSymbol(const SyntaxTree* tree,
-                                                 const Scope* scope,
                                                  const Symbol* containingSym,
+                                                 const Scope* scope,
                                                  ObjectDeclarationSymbolKind valKind)
     : DeclarationSymbol(
           new ObjectDeclarationSymbolImpl(tree,
-                                          scope,
                                           containingSym,
+                                          scope,
                                           valKind),
           DeclarationSymbolKind::Object)
 {}
@@ -61,7 +65,7 @@ ObjectDeclarationSymbol::~ObjectDeclarationSymbol()
 
 ObjectDeclarationSymbolKind ObjectDeclarationSymbol::kind() const
 {
-    return ObjectDeclarationSymbolKind(P_CAST->BF_.valSymK_);
+    return ObjectDeclarationSymbolKind(P_CAST->BF_.objDeclK_);
 }
 
 const Type* ObjectDeclarationSymbol::type() const

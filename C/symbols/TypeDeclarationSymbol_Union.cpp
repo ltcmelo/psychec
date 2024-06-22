@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol_Union.h"
 #include "TypeDeclarationSymbol__IMPL__.inc"
+#include "TypeDeclarationSymbol_Union.h"
 
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_Tag.h"
@@ -31,16 +31,24 @@ using namespace psy;
 using namespace C;
 
 Union::Union(const SyntaxTree* tree,
-             const Scope* scope,
              const Symbol* containingSym,
+             const Scope* scope,
              TagType* tagTy)
     : TypeDeclarationSymbol(
           new TypeDeclarationSymbolImpl(tree,
-                                        scope,
                                         containingSym,
+                                        scope,
+                                        NameSpace::Tags,
                                         tagTy,
                                         TypeDeclarationSymbolKind::Union))
 {
+}
+
+const Identifier* Union::identifier() const
+{
+    PSY_ASSERT(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
+    PSY_ASSERT(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Union, return nullptr);
+    return P_CAST->ty_->asTagType()->tag();
 }
 
 std::string Union::toDisplayString() const
@@ -50,3 +58,18 @@ std::string Union::toDisplayString() const
     oss << P_CAST->ty_->asTagType()->tag()->valueText();
     return oss.str();
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const Union& uniom)
+{
+    std::ostringstream oss;
+    oss << "<Union | ";
+    oss << "type:" << to_string(*uniom.specifiedType());
+    oss << ">";
+    return oss.str();
+}
+
+} // C
+} // psy

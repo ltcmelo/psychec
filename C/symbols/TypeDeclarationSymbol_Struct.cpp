@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol_Struct.h"
 #include "TypeDeclarationSymbol__IMPL__.inc"
+#include "TypeDeclarationSymbol_Struct.h"
 
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_Tag.h"
@@ -31,16 +31,24 @@ using namespace psy;
 using namespace C;
 
 Struct::Struct(const SyntaxTree* tree,
-               const Scope* scope,
                const Symbol* containingSym,
+               const Scope* scope,
                TagType* tagTy)
     : TypeDeclarationSymbol(
           new TypeDeclarationSymbolImpl(tree,
-                                        scope,
                                         containingSym,
+                                        scope,
+                                        NameSpace::Tags,
                                         tagTy,
                                         TypeDeclarationSymbolKind::Struct))
 {
+}
+
+const Identifier* Struct::identifier() const
+{
+    PSY_ASSERT(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
+    PSY_ASSERT(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Struct, return nullptr);
+    return P_CAST->ty_->asTagType()->tag();
 }
 
 std::string Struct::toDisplayString() const
@@ -50,3 +58,18 @@ std::string Struct::toDisplayString() const
     oss << P_CAST->ty_->asTagType()->tag()->valueText();
     return oss.str();
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const Struct& strukt)
+{
+    std::ostringstream oss;
+    oss << "<Struct | ";
+    oss << "type:" << to_string(*strukt.specifiedType());
+    oss << ">";
+    return oss.str();
+}
+
+} // C
+} // psi

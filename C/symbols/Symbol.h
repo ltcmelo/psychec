@@ -26,7 +26,6 @@
 
 #include "SymbolKind.h"
 
-#include "binder/NameSpace.h"
 #include "syntax/SyntaxReference.h"
 
 #include "../common/location/Location.h"

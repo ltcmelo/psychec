@@ -22,6 +22,8 @@
 
 #include "symbols/Symbol_ALL.h"
 #include "binder/Scope.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_ALL.h"
 
 #include <sstream>
 
@@ -29,11 +31,11 @@ using namespace psy;
 using namespace C;
 
 Enumerator::Enumerator(const SyntaxTree* tree,
-                       const Scope* scope,
-                       const Symbol* containingSym)
+                       const Symbol* containingSym,
+                       const Scope* scope)
     : ObjectDeclarationSymbol(tree,
-                              scope,
                               containingSym,
+                              scope,
                               ObjectDeclarationSymbolKind::Enumerator)
 {}
 
@@ -45,10 +47,13 @@ std::string Enumerator::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Enumerator& sym)
+std::string to_string(const Enumerator& enumerator)
 {
     std::ostringstream oss;
-    oss << "<enum>";
+    oss << "<Enumerator | ";
+    oss << "name:" << enumerator.name()->valueText();
+    oss << "type:" << to_string(*enumerator.type());
+    oss << ">";
     return oss.str();
 }
 

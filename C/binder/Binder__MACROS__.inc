@@ -28,7 +28,7 @@
 # define DEBUG_SYM_STACK(sym) \
     do { \
         std::cout << __func__ << " " << std::flush; \
-        std::cout << to_string(*sym) << std::endl; \
+        std::cout << to_string(sym->kind()) << std::endl; \
     } while (0)
 #else
 # define DEBUG_SYM_STACK(sym) do {} while (0)

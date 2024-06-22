@@ -51,7 +51,7 @@ PSY_INTERNAL:
     VoidType();
 };
 
-std::string PSY_C_API to_string(const VoidType& ty);
+std::string PSY_C_API to_string(const VoidType& voidTy);
 
 } // C
 } // psy

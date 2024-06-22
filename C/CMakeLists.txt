@@ -169,18 +169,18 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Union.h
 
     # Binder
+    ${PROJECT_SOURCE_DIR}/binder/Binder__MACROS__.inc
     ${PROJECT_SOURCE_DIR}/binder/Binder.h
     ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
-    ${PROJECT_SOURCE_DIR}/binder/Binder__MACROS__.inc
     ${PROJECT_SOURCE_DIR}/binder/Binder_Declarators.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Specifiers.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/NameSpace.h
-    ${PROJECT_SOURCE_DIR}/binder/NameSpaces.h
-    ${PROJECT_SOURCE_DIR}/binder/NameSpaceKind.h
     ${PROJECT_SOURCE_DIR}/binder/Scope.h
     ${PROJECT_SOURCE_DIR}/binder/Scope.cpp
     ${PROJECT_SOURCE_DIR}/binder/ScopeKind.h
+    ${PROJECT_SOURCE_DIR}/binder/DeclarationResolver.h
+    ${PROJECT_SOURCE_DIR}/binder/DeclarationResolver.cpp
 
     # Types
     ${PROJECT_SOURCE_DIR}/types/Type.h

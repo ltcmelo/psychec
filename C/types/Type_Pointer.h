@@ -73,7 +73,7 @@ private:
     DECL_PIMPL_SUB(PointerType)
 };
 
-std::string PSY_C_API to_string(const PointerType& ty);
+std::string PSY_C_API to_string(const PointerType& ptrTy);
 
 } // C
 } // psy

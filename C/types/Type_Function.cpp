@@ -60,16 +60,16 @@ void FunctionType::addParameterType(const Type *paramTy)
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const FunctionType& ty)
+std::string PSY_C_API to_string(const FunctionType& funcTy)
 {
     std::ostringstream oss;
-    oss << "(FunctionType |";
-    oss << to_string(*ty.returnType());
-    for (const auto& paramTy : ty.parameterTypes()) {
-        oss << " -> ";
+    oss << "<FunctionType |";
+    oss << " return-type:" << to_string(*funcTy.returnType());
+    for (const auto& paramTy : funcTy.parameterTypes()) {
+        oss << " parameter-type:";
         oss << to_string(*paramTy);
     }
-    oss << ")";
+    oss << ">";
     return oss.str();
 }
 

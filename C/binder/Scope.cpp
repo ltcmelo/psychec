@@ -20,30 +20,60 @@
 
 #include "Scope.h"
 
+#include "symbols/Symbol_Declaration.h"
+
 #include "../common/infra/Assertions.h"
+
+#include <iostream>
 
 using namespace psy;
 using namespace C;
 
-Scope::Scope(ScopeKind scopeK)
-    : scopeK_(scopeK)
+Scope::Scope(ScopeKind K)
+    : K_(K)
+    , outerScope_(nullptr)
 {}
 
 ScopeKind Scope::kind() const
 {
-    return scopeK_;
+    return K_;
 }
 
-void Scope::enclose(std::unique_ptr<Scope> scope)
+const DeclarationSymbol* Scope::searchForDeclaration(
+        const Identifier* ident,
+        NameSpace ns) const
 {
-    enclosedScopes_.push_back(std::move(scope));
+    auto key = std::make_pair(ident, ns);
+    auto decl = decls_.find(key);
+    if (decl != decls_.end())
+        return decl->second;
+    return outerScope_ != nullptr
+            ? outerScope_->searchForDeclaration(ident, ns)
+            : nullptr;
+}
+
+void Scope::encloseScope(std::unique_ptr<Scope> innerScope)
+{
+    innerScope->outerScope_ = this;
+    innerScopes_.push_back(std::move(innerScope));
 }
 
 void Scope::morphFrom_FunctionPrototype_to_Block()
 {
-    PSY_ASSERT(scopeK_ == ScopeKind::FunctionPrototype, return);
+    PSY_ASSERT(K_ == ScopeKind::FunctionPrototype, return);
 
-    scopeK_ = ScopeKind::Block;
+    K_ = ScopeKind::Block;
+}
+
+void Scope::addDeclaration(const DeclarationSymbol* decl)
+{
+    auto key = std::make_pair(decl->identifier(), decl->nameSpace());
+    auto it = decls_.find(key);
+    if (it != decls_.end()) {
+        // TODO: Indicate (bool) and report.
+        return;
+    }
+    decls_.insert(std::make_pair(key, decl));
 }
 
 Scope::~Scope()

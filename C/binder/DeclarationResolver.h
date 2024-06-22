@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2024 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,48 +18,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_NAME_SPACE_KIND_H__
-#define PSYCHE_C_NAME_SPACE_KIND_H__
+#ifndef PSYCHE_C_DECLARATION_RESOLVER_H__
+#define PSYCHE_C_DECLARATION_RESOLVER_H__
 
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/Assertions.h"
-#include "../common/infra/Escape.h"
+#include "syntax/SyntaxVisitor.h"
 
-#include <cstdint>
-#include <string>
+#include "../common/infra/AccessSpecifiers.h"
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The NameSpaceKind enum.
- *
- * \remark 6.2.3-1
- * \remark Footnote 32
- */
-enum class PSY_C_API NameSpaceKind : std::uint8_t
+class PSY_C_INTERNAL_API DeclarationResolver final : protected SyntaxVisitor
 {
-    Labels,
-    Tags,
-    Members,
-    Ordinary,
-};
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
 
-inline std::string PSY_C_API to_string(NameSpaceKind nsK)
-{
-    switch (nsK) {
-        case NameSpaceKind::Labels:
-            return "Labels";
-        case NameSpaceKind::Tags:
-            return "Tags";
-        case NameSpaceKind::Members:
-            return "Members";
-        case NameSpaceKind::Ordinary:
-            return "Ordinary";
-    }
-}
+    DeclarationResolver(SemanticModel* semaModel, const SyntaxTree* tree);
+    DeclarationResolver(const DeclarationResolver&) = delete;
+    void operator=(const DeclarationResolver&) = delete;
+
+    void resolveDeclarations();
+
+private:
+    SemanticModel* semaModel_;
+
+    //--------------//
+    // Declarations //
+    //--------------//
+    virtual Action visitTranslationUnit(const TranslationUnitSyntax*) override;
+    virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
+
+    /* Declarators */
+    virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
+};
 
 } // C
 } // psy

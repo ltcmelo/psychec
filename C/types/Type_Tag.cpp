@@ -58,13 +58,13 @@ TagType::TagType(TagTypeKind tagTyK, const Identifier* tag)
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TagType& ty)
+std::string PSY_C_API to_string(const TagType& tagTy)
 {
     std::ostringstream oss;
-    oss << "(TagType |";
-    oss << to_string(ty.kind());
-    oss << ty.tag()->valueText();
-    oss << ")";
+    oss << "<TagType |";
+    oss << to_string(tagTy.kind());
+    oss << " tag:" << tagTy.tag()->valueText();
+    oss << ">";
     return oss.str();
 }
 

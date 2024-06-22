@@ -89,7 +89,7 @@ protected:
     TypeDeclarationSymbol(TypeDeclarationSymbolImpl* p);
 };
 
-std::string PSY_C_API to_string(const TypeDeclarationSymbol& tySym);
+std::string PSY_C_API to_string(const TypeDeclarationSymbol& tyDecl);
 
 } // C
 } // psy

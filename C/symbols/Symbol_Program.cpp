@@ -20,21 +20,30 @@
 
 #include "Symbol__IMPL__.inc"
 #include "Symbol_Program.h"
-#include "Symbol_Declaration.h"
 
-#include <algorithm>
+#include <sstream>
 
 using namespace psy;
 using namespace C;
 
 Program::Program()
-    : Symbol(new SymbolImpl(nullptr,
-                            nullptr,
-                            nullptr,
-                            SymbolKind::Program))
+    : Symbol(new SymbolImpl(SymbolKind::Program))
 {}
 
 std::string Program::toDisplayString() const
 {
     return "";
 }
+
+namespace psy {
+namespace C {
+
+std::string to_string(const Program& prog)
+{
+    std::ostringstream oss;
+    oss << "<Program>";
+    return oss.str();
+}
+
+} // C
+} // psi

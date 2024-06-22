@@ -74,6 +74,11 @@ public:
     //!@}
 
     /**
+     * The Identifier with which \c this DeclarationSymbol is declared.
+     */
+    virtual const Identifier* identifier() const override { return name(); }
+
+    /**
      * The Identifier that names \c this ObjectDeclarationSymbol.
      */
     const Identifier* name() const;
@@ -92,8 +97,8 @@ PSY_INTERNAL:
 protected:
     DECL_PIMPL_SUB(ObjectDeclarationSymbol);
     ObjectDeclarationSymbol(const SyntaxTree* tree,
-                            const Scope* scope,
                             const Symbol* containingSym,
+                            const Scope* scope,
                             ObjectDeclarationSymbolKind valSymK);
 };
 

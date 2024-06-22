@@ -25,13 +25,29 @@
 #include "Fwds.h"
 
 #include "ScopeKind.h"
+#include "NameSpace.h"
 
 #include "../common/infra/AccessSpecifiers.h"
 
-#include <memory>
 #include <cstdint>
+#include <memory>
 #include <unordered_map>
+#include <utility>
 #include <vector>
+
+using namespace psy;
+using namespace C;
+
+template <>
+struct std::hash<std::pair<const Identifier*, NameSpace>>
+{
+     std::size_t operator()(const std::pair<const Identifier*, NameSpace>& k) const
+     {
+        auto h1 = std::hash<const Identifier*>{}(k.first);
+        auto h2 = std::hash<NameSpace>{}(k.second);
+        return h1 ^ (h2 << 1);
+     }
+};
 
 namespace psy {
 namespace C {
@@ -51,17 +67,24 @@ public:
      */
     ScopeKind kind() const;
 
+    const DeclarationSymbol* searchForDeclaration(const Identifier* ident, NameSpace ns) const;
+
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
-    Scope(ScopeKind scopeK);
+    Scope(ScopeKind K);
 
-    void enclose(std::unique_ptr<Scope> scope);
+    void encloseScope(std::unique_ptr<Scope> innerScope);
     void morphFrom_FunctionPrototype_to_Block();
+    void addDeclaration(const DeclarationSymbol*);
 
 private:
-    ScopeKind scopeK_;
-    std::vector<std::unique_ptr<Scope>> enclosedScopes_;
+    ScopeKind K_;
+    Scope* outerScope_;
+    std::vector<std::unique_ptr<Scope>> innerScopes_;
+    std::unordered_map<
+        std::pair<const Identifier*, NameSpace>,
+        const DeclarationSymbol*> decls_;
 };
 
 } // C

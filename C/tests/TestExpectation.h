@@ -22,7 +22,7 @@
 #define PSYCHE_C_TEST_EXPECTATION_H__
 
 #include "compilation/Compilation.h"
-#include "binder/NameSpaceKind.h"
+#include "binder/NameSpace.h"
 #include "binder/Scope.h"
 #include "symbols/SymbolKind.h"
 #include "symbols/DeclarationSymbolKind.h"
@@ -104,14 +104,14 @@ struct DeclSummary
     DeclSummary& Type(std::string typedefOrTag, TypeDeclarationSymbolKind tyDeclSymK);
 
     DeclSummary& withScopeKind(ScopeKind scopeK);
-    DeclSummary& withNameSpaceKind(NameSpaceKind nsK);
+    DeclSummary& withNameSpace(NameSpace ns);
 
     std::string id_;
     DeclarationSymbolKind declK_;
     ObjectDeclarationSymbolKind valDeclK_;
     TypeDeclarationSymbolKind tyDeclSymK_;
     ScopeKind scopeK_;
-    NameSpaceKind nsK_;
+    NameSpace ns_;
 
     TySummary Ty;
 };

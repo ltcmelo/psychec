@@ -22,6 +22,8 @@
 
 #include "symbols/Symbol_ALL.h"
 #include "binder/Scope.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_ALL.h"
 
 #include <sstream>
 
@@ -29,12 +31,12 @@ using namespace psy;
 using namespace C;
 
 Field::Field(const SyntaxTree* tree,
-                         const Scope* scope,
-                         const Symbol* containingSym)
+             const Symbol* containingSym,
+             const Scope* scope)
     : ObjectDeclarationSymbol(tree,
-                  scope,
-                  containingSym,
-                  ObjectDeclarationSymbolKind::Field)
+                              containingSym,
+                              scope,
+                              ObjectDeclarationSymbolKind::Field)
 {}
 
 std::string Field::toDisplayString() const
@@ -45,15 +47,13 @@ std::string Field::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Field& sym)
+std::string to_string(const Field& fld)
 {
     std::ostringstream oss;
-    oss << "{%field |";
-//    oss << " " << (sym.name() ? to_string(*sym.name()) : "name:NULL");
-//    oss << " " << (sym.typeSymbol() ? to_string(*sym.typeSymbol()) : "type:NULL");
-    oss << " " << (sym.scope() ? to_string(sym.scope()->kind()) : "scope:NULL");
-    oss << " %}";
-
+    oss << "<Field | ";
+    oss << "name:" << fld.name()->valueText();
+    oss << "type:" << to_string(*fld.type());
+    oss << ">";
     return oss.str();
 }
 

@@ -24,34 +24,38 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "binder/NameSpaceKind.h"
-
-#include "../common/infra/AccessSpecifiers.h"
+#include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The NameSpace class.
+ * \brief The NameSpace enum.
  *
  * \remark 6.2.3
  */
-class PSY_C_API NameSpace
+enum class PSY_C_API NameSpace : std::uint8_t
 {
-public:
-    /**
-     * The NameSpaceKind of \c this NameSpace.
-     */
-    NameSpaceKind kind() const { return  nsK_; }
-
-PSY_INTERNAL:
-    NameSpace(NameSpaceKind nsK)
-        : nsK_(nsK)
-    {}
-
-private:
-    NameSpaceKind nsK_;
+    LabelNames,
+    Tags,
+    Members,
+    OrdinaryIdentifiers,
 };
+
+inline std::string PSY_C_API to_string(NameSpace ns)
+{
+    switch (ns) {
+        case NameSpace::LabelNames:
+            return "LabelNames";
+        case NameSpace::Tags:
+            return "Tags";
+        case NameSpace::Members:
+            return "Members";
+        case NameSpace::OrdinaryIdentifiers:
+            return "OrdinaryIdentifiers";
+    }
+}
 
 } // C
 } // psy

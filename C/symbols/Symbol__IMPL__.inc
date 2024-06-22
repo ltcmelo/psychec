@@ -22,8 +22,8 @@
 
 #include "SyntaxTree.h"
 
-#include "binder/Scope.h"
 #include "binder/NameSpace.h"
+#include "binder/Scope.h"
 
 using namespace psy;
 using namespace C;
@@ -31,37 +31,52 @@ using namespace C;
 struct Symbol::SymbolImpl
 {
     SymbolImpl(const SyntaxTree* tree,
-               const Scope* scope,
                const Symbol* containingSym,
-               SymbolKind symKind)
+               const Scope* scope,
+               NameSpace ns,
+               SymbolKind K)
         : tree_(tree)
-        , scope_(scope)
-        , ns_(nullptr) // TODO
         , containingSym_(containingSym)
+        , scope_(scope)
         , BF_all_(0)
     {
-        BF_.symK_ = static_cast<std::uint32_t>(symKind);
+        BF_.ns_ = static_cast<std::uint32_t>(ns);
+        BF_.K_ = static_cast<std::uint32_t>(K);
+    }
+
+    SymbolImpl(const SyntaxTree* tree, SymbolKind K)
+        : tree_(tree)
+        , containingSym_(nullptr)
+        , scope_(nullptr)
+        , BF_all_(0)
+    {
+        BF_.K_ = static_cast<std::uint32_t>(K);
+    }
+
+    SymbolImpl(SymbolKind K)
+        : SymbolImpl(nullptr, K)
+    {
     }
 
     const SyntaxTree* tree_;
-    const Scope* scope_;
-    const NameSpace* ns_;
     const Symbol* containingSym_;
+    const Scope* scope_;
 
     struct BitFields
     {
         // Symbol
-        std::uint32_t symK_ : 3;
+        std::uint32_t K_ : 3;
+        std::uint32_t ns_ : 2;
 
         // DeclarationSymbol
-        std::uint32_t declSymK_: 2;
+        std::uint32_t declK_: 2;
         std::uint32_t static_ : 1;
 
         // ObjectDeclarationSymbol
-        std::uint32_t valSymK_ : 3;
+        std::uint32_t objDeclK_ : 3;
 
         // TypeDeclarationSymbol
-        std::uint32_t tySymK_ : 3;
+        std::uint32_t tyDeclK_ : 3;
     };
     union
     {

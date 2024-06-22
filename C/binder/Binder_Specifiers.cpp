@@ -42,13 +42,12 @@ using namespace C;
 template <class TyDeclT>
 SyntaxVisitor::Action Binder::visitTypeDeclaration_AtInternalDeclarations_COMMON(
         const TyDeclT* node,
-        Action (Binder::*visit_DONE)(const TyDeclT*))
+        Action (Binder::*visit_AtEnd)(const TyDeclT*))
 {
     for (auto declIt = node->typeSpecifier()->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
-
     popSym();
-    return ((this)->*(visit_DONE))(node);
+    return ((this)->*(visit_AtEnd))(node);
 }
 
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
@@ -78,7 +77,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
 
     return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,
-                &Binder::visitStructOrUnionDeclaration_DONE);
+                &Binder::visitStructOrUnionDeclaration_AtEnd);
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax* node)
@@ -91,7 +90,7 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclara
 
     return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,
-                &Binder::visitEnumDeclaration_DONE);
+                &Binder::visitEnumDeclaration_AtEnd);
 }
 
 SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtSpecifier(const TypedefDeclarationSyntax* node)

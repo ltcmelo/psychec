@@ -43,8 +43,8 @@
 #include <sstream>
 
 //#define DUMP_AST
-//#define DEBUG_DIAGNOSTICS
-//#define DEBUG_BINDING_SEARCH
+#define DEBUG_DIAGNOSTICS
+#define DEBUG_BINDING_SEARCH
 
 using namespace psy;
 using namespace C;
@@ -701,8 +701,7 @@ bool symbolMatchesBinding(const std::unique_ptr<DeclarationSymbol>& sym, const D
     if (candSym->scope()->kind() != summary.scopeK_)
         return REJECT_CANDIDATE(candSym, "scope kind mismatch");
 
-    // TODO
-    if (candSym->nameSpace() && candSym->nameSpace()->kind() != summary.nsK_)
+    if (candSym->nameSpace() != summary.ns_)
         return REJECT_CANDIDATE(candSym, "name space kind mismatch");
 
     switch (summary.declK_)
