@@ -46,7 +46,6 @@ SyntaxVisitor::Action Binder::visitTypeDeclaration_AtInternalDeclarations_COMMON
 {
     for (auto declIt = node->typeSpecifier()->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
-    popSym();
     return ((this)->*(visit_AtEnd))(node);
 }
 
@@ -62,7 +61,6 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
             makeBindAndPushSym<Struct>(node, tagTy);
             break;
         }
-
         case SyntaxKind::UnionTypeSpecifier:{
             auto tagTy = makeTy<TagType>(
                         TagTypeKind::Union,
@@ -70,11 +68,9 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
             makeBindAndPushSym<Union>(node, tagTy);
             break;
         }
-
         default:
             PSY_ASSERT(false, return Action::Quit);
     }
-
     return visitTypeDeclaration_AtInternalDeclarations_COMMON(
                 node,
                 &Binder::visitStructOrUnionDeclaration_AtEnd);

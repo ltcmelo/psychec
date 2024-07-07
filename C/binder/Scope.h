@@ -67,19 +67,39 @@ public:
      */
     ScopeKind kind() const;
 
+    /**
+     * Search \c this Scope and \a outer \a scopes of \c this Scope for a DeclarationSymbol with
+     * Identifier \p ident in NameSpace \p ns.
+     */
     const DeclarationSymbol* searchForDeclaration(const Identifier* ident, NameSpace ns) const;
+
+    /**
+     * The DeclarationSymbol(s) in \c this Scope.
+     */
+    std::vector<const DeclarationSymbol*> declarations() const;
+
+    /**
+     * The \a inner \a scopes of \c this Scope.
+     */
+    const std::vector<const Scope*> innerScopes() const;
+
+    /**
+     * The \a outer \a scope of \c this Scope.
+     */
+    const Scope* outerScope() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(TranslationUnit);
 
-    Scope(ScopeKind K);
+    Scope(ScopeKind scopeK);
 
     void encloseScope(std::unique_ptr<Scope> innerScope);
     void morphFrom_FunctionPrototype_to_Block();
     void addDeclaration(const DeclarationSymbol*);
 
 private:
-    ScopeKind K_;
+    ScopeKind scopeK_;
     Scope* outerScope_;
     std::vector<std::unique_ptr<Scope>> innerScopes_;
     std::unordered_map<

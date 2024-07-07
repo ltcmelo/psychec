@@ -32,18 +32,18 @@ struct TypeDeclarationSymbol::TypeDeclarationSymbolImpl : SymbolImpl
 {
     TypeDeclarationSymbolImpl(const SyntaxTree* tree,
                               const Symbol* containingSym,
-                              const Scope* scope,
+                              const Scope* enclosingScope,
                               NameSpace ns,
                               Type* ty,
-                              TypeDeclarationSymbolKind tyDeclK)
+                              TypeDeclarationSymbolKind tyDeclSymK)
         : SymbolImpl(tree,
                      containingSym,
-                     scope,
+                     enclosingScope,
                      ns,
                      SymbolKind::Declaration)
         , ty_(ty)
     {
-        BF_.tyDeclK_ = static_cast<std::uint32_t>(tyDeclK);
+        BF_.tyDeclSymK_ = static_cast<std::uint32_t>(tyDeclSymK);
     }
 
     Type* ty_;

@@ -84,7 +84,7 @@ PSY_INTERNAL:
 
     Function(const SyntaxTree* tree,
              const Symbol* containingSym,
-             const Scope* scope);
+             const Scope* enclosingScope);
 
     virtual void setName(const Identifier* name) override;
     virtual void setType(const Type* ty) override;

@@ -43,8 +43,8 @@
 #include <sstream>
 
 //#define DUMP_AST
-#define DEBUG_DIAGNOSTICS
-#define DEBUG_BINDING_SEARCH
+//#define DEBUG_DIAGNOSTICS
+//#define DEBUG_BINDING_SEARCH
 
 using namespace psy;
 using namespace C;
@@ -600,7 +600,7 @@ bool functionMatchesBinding(const Function* funcSym, const DeclSummary& decl)
     if (!funcSym->name())
         return REJECT_CANDIDATE(funcSym, "empty name");
 
-    if (funcSym->name()->valueText() != decl.id_)
+    if (funcSym->name()->valueText() != decl.ident_)
         return REJECT_CANDIDATE(funcSym, "name mismatch");
 
     if (funcSym->type() == nullptr)
@@ -617,13 +617,13 @@ bool functionMatchesBinding(const Function* funcSym, const DeclSummary& decl)
 
 bool valueMatchesBinding(const ObjectDeclarationSymbol* valSym, const DeclSummary& decl)
 {
-    if (valSym->kind() != decl.valDeclK_)
+    if (valSym->kind() != decl.objDeclSymK_)
         return REJECT_CANDIDATE(valSym, "value kind mismatch");
 
     if (!valSym->name())
         return REJECT_CANDIDATE(valSym, "empty value name");
 
-    if (valSym->name()->valueText() != decl.id_)
+    if (valSym->name()->valueText() != decl.ident_)
         return REJECT_CANDIDATE(valSym, "name mismatch");
 
     if (valSym->type() == nullptr)
@@ -649,7 +649,7 @@ bool typeMatchesBinding(const TypeDeclarationSymbol* tySym, const DeclSummary& d
         auto tagTy = tySym->specifiedType()->asTagType();
         if (!tagTy->tag())
             return REJECT_CANDIDATE(tySym, "empty tag");
-        if (tagTy->tag()->valueText() != declSummary.id_)
+        if (tagTy->tag()->valueText() != declSummary.ident_)
             return REJECT_CANDIDATE(tySym, "tag mismatch");
         return true;
     };
@@ -682,7 +682,7 @@ bool typeMatchesBinding(const TypeDeclarationSymbol* tySym, const DeclSummary& d
             auto typedefTy = tySym->specifiedType()->asTypedefType();
             if (!typedefTy->typedefName())
                 return REJECT_CANDIDATE(tySym, "empty typedef name");
-            if (typedefTy->typedefName()->valueText() != declSummary.id_)
+            if (typedefTy->typedefName()->valueText() != declSummary.ident_)
                 return REJECT_CANDIDATE(tySym, "typedef name mismatch");
             break;
         }
@@ -691,20 +691,18 @@ bool typeMatchesBinding(const TypeDeclarationSymbol* tySym, const DeclSummary& d
     return true;
 }
 
-bool symbolMatchesBinding(const std::unique_ptr<DeclarationSymbol>& sym, const DeclSummary& summary)
+bool symbolMatchesBinding(const DeclarationSymbol* candSym, const DeclSummary& summary)
 {
-    const DeclarationSymbol* candSym = sym.get();
-
-    if (candSym->kind() != summary.declK_)
+    if (candSym->kind() != summary.declSymK_)
         return REJECT_CANDIDATE(candSym, "symbol kind mismatch");
 
-    if (candSym->scope()->kind() != summary.scopeK_)
+    if (candSym->enclosingScope()->kind() != summary.scopeK_)
         return REJECT_CANDIDATE(candSym, "scope kind mismatch");
 
     if (candSym->nameSpace() != summary.ns_)
         return REJECT_CANDIDATE(candSym, "name space kind mismatch");
 
-    switch (summary.declK_)
+    switch (summary.declSymK_)
     {
         case DeclarationSymbolKind::Object:
             return valueMatchesBinding(candSym->asObjectDeclarationSymbol(), summary);
@@ -724,6 +722,11 @@ bool symbolMatchesBinding(const std::unique_ptr<DeclarationSymbol>& sym, const D
     return false;
 };
 
+bool symbolMatchesBinding_(const std::unique_ptr<DeclarationSymbol>& sym, const DeclSummary& summary)
+{
+    return symbolMatchesBinding(sym.get(), summary);
+};
+
 } // anonymous
 
 void InternalsTestSuite::bind(std::string text, Expectation X)
@@ -736,29 +739,42 @@ void InternalsTestSuite::bind(std::string text, Expectation X)
     if (!checkErrorAndWarn(X))
         return;
 
-    auto unitSym = semaModel->translationUnit();
-    if (unitSym == nullptr)
+    auto unit = semaModel->translationUnit();
+    if (unit == nullptr)
         PSY__internals__FAIL("unit not found");
 
-    for (const auto& binding : X.bindings_) {
+    for (const auto& declSummary : X.bindings_) {
 #ifdef DEBUG_BINDING_SEARCH
         std::cout << "\n\t\t...";
 #endif
         using namespace std::placeholders;
-
-        auto pred = std::bind(symbolMatchesBinding, _1, binding);
-        auto declSym = semaModel->searchForDecl(pred);
-        if (declSym == nullptr) {
+        auto pred = std::bind(symbolMatchesBinding_, _1, declSummary);
+        auto decl = semaModel->searchForDecl(pred);
+        if (decl == nullptr) {
             std::ostringstream oss;
-            oss << "no symbol matches the expectation: ";
-            oss << " name or tag: " << binding.id_;
-            oss << " decl kind: " << to_string(binding.declK_);
+            oss << "no declaration matches the expectation: ";
+            oss << " name or tag: " << declSummary.ident_;
+            oss << " kind: " << to_string(declSummary.declSymK_);
             PSY__internals__FAIL(oss.str());
         }
-
 #ifdef DEBUG_BINDING_SEARCH
         std::cout << "\n\t\tmatch! ";
 #endif
 
+        if (X.checkScope_) {
+            auto scope = unit->enclosedScope();
+            PSY_EXPECT_TRUE(scope);
+            while (!X.scopePath_.empty()) {
+                std::size_t idx = X.scopePath_.back();
+                X.scopePath_.pop_back();
+                const auto& innerScopes = scope->innerScopes();
+                PSY_EXPECT_TRUE(innerScopes.size() > idx);
+                scope = innerScopes[idx];
+                PSY_EXPECT_TRUE(scope);
+            }
+            auto sameDecl = scope->searchForDeclaration(decl->identifier(), decl->nameSpace());
+            PSY_EXPECT_TRUE(sameDecl);
+            PSY_EXPECT_TRUE(symbolMatchesBinding(sameDecl, declSummary));
+        }
     }
 }

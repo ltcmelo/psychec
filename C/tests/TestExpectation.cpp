@@ -105,11 +105,11 @@ DeclSummary::DeclSummary()
     : Ty(*this)
 {}
 
-DeclSummary& DeclSummary::Value(std::string name, ObjectDeclarationSymbolKind valK, ScopeKind scopeK)
+DeclSummary& DeclSummary::Value(std::string name, ObjectDeclarationSymbolKind objDeclSymK, ScopeKind scopeK)
 {
-    id_ = std::move(name);
-    declK_ = DeclarationSymbolKind::Object;
-    valDeclK_ = valK;
+    ident_ = std::move(name);
+    declSymK_ = DeclarationSymbolKind::Object;
+    objDeclSymK_ = objDeclSymK;
     scopeK_ = scopeK;
     ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;
@@ -117,16 +117,16 @@ DeclSummary& DeclSummary::Value(std::string name, ObjectDeclarationSymbolKind va
 
 DeclSummary& DeclSummary::Type(std::string typedefOrTag, TypeDeclarationSymbolKind tyDeclSymK)
 {
-    id_ = std::move(typedefOrTag);
-    declK_ = DeclarationSymbolKind::Type;
+    ident_ = std::move(typedefOrTag);
+    declSymK_ = DeclarationSymbolKind::Type;
     tyDeclSymK_ = tyDeclSymK;
     return *this;
 }
 
 DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
 {
-    id_ = std::move(funcName);
-    declK_ = DeclarationSymbolKind::Function;
+    ident_ = std::move(funcName);
+    declSymK_ = DeclarationSymbolKind::Function;
     scopeK_ = scopeK;
     ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;
@@ -150,6 +150,7 @@ Expectation::Expectation()
     , continueTestDespiteOfErrors_(false)
     , containsAmbiguity_(false)
     , unfinishedParse_(false)
+    , checkScope_(false)
 {}
 
 Expectation &Expectation::ContinueTestDespiteOfErrors()
@@ -186,6 +187,14 @@ Expectation& Expectation::ambiguity(std::string s)
 Expectation& Expectation::binding(DeclSummary b)
 {
     bindings_.push_back(b);
+    return *this;
+}
+
+Expectation& Expectation::scopePath(std::vector<int>&& v)
+{
+    checkScope_ = true;
+    scopePath_ = std::move(v);
+    std::reverse(scopePath_.begin(), scopePath_.end());
     return *this;
 }
 

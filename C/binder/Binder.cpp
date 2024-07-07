@@ -143,20 +143,18 @@ const Identifier* Binder::lexemeOrEmptyIdent(const SyntaxToken& tk) const
 
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    scopes_.emplace(new Scope(ScopeKind::File));
-
     std::unique_ptr<TranslationUnit> unit(new TranslationUnit(tree_));
     auto rawUnit = semaModel_->keepTranslationUnit(node, std::move(unit));
     pushSym(rawUnit);
+    scopes_.push(rawUnit->enclosedScope_.get());
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
 
-    popSym();
-
     PSY_ASSERT(scopes_.size() == 1, return Action::Quit);
     PSY_ASSERT(scopes_.top()->kind() == ScopeKind::File, return Action::Quit);
     scopes_.pop();
+    popSym();
 
     return Action::Skip;
 }
@@ -178,7 +176,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
 
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtEnd(const StructOrUnionDeclarationSyntax* node)
 {
-    return Action::Skip;
+    return visitDeclaration_AtEnd_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitTypedefDeclaration(const TypedefDeclarationSyntax* node)
@@ -200,7 +198,7 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* 
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration_AtEnd(const EnumDeclarationSyntax* node)
 {
-    return Action::Skip;
+    return visitDeclaration_AtEnd_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(

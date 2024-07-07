@@ -47,14 +47,24 @@ public:
     //!@}
 
     /**
-     * Compute a displayable string for \c this Symbol.
+     * Compute a displayable string for \c this TranslationUnit.
      */
     virtual std::string toDisplayString() const override;
+
+    /**
+     * The Scope that \c this TranslationUnit encloses.
+     *
+     * \remark 6.2.1-4
+     */
+    const Scope* enclosedScope() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
     TranslationUnit(const SyntaxTree* tree);
+
+private:
+    std::unique_ptr<Scope> enclosedScope_;
 };
 
 std::string PSY_C_API to_string(const TranslationUnit& unit);

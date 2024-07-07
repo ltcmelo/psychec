@@ -49,7 +49,7 @@ public:
     using TestFunction = std::pair<std::function<void(BinderTester*)>, const char*>;
 
     /*
-        Functions
+        Functions and parameters
             + 0000-0049 -> prototypes w/o parameters
             + 0050-0099 -> prototypes
             + 0100-0149 -> definitions w/o parameters
@@ -89,6 +89,8 @@ public:
             + 3000-0049 -> structures and unions
             + 3050-0099 -> enumerations (and enumerators)
             + 3100-3149 -> typedefs
+            + ...
+            + 3500-     -> scope
      */
 
     void case0001();

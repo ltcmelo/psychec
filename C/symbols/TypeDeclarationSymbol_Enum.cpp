@@ -32,12 +32,12 @@ using namespace C;
 
 Enum::Enum(const SyntaxTree* tree,
            const Symbol* containingSym,
-           const Scope* scope,
+           const Scope* enclosingScope,
            TagType* tagTy)
     : TypeDeclarationSymbol(
           new TypeDeclarationSymbolImpl(tree,
                                         containingSym,
-                                        scope,
+                                        enclosingScope,
                                         NameSpace::Tags,
                                         tagTy,
                                         TypeDeclarationSymbolKind::Enum))

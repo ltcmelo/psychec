@@ -32,12 +32,12 @@ using namespace C;
 
 Struct::Struct(const SyntaxTree* tree,
                const Symbol* containingSym,
-               const Scope* scope,
+               const Scope* enclosingScope,
                TagType* tagTy)
     : TypeDeclarationSymbol(
           new TypeDeclarationSymbolImpl(tree,
                                         containingSym,
-                                        scope,
+                                        enclosingScope,
                                         NameSpace::Tags,
                                         tagTy,
                                         TypeDeclarationSymbolKind::Struct))
@@ -65,8 +65,10 @@ namespace C {
 std::string to_string(const Struct& strukt)
 {
     std::ostringstream oss;
-    oss << "<Struct | ";
-    oss << "type:" << to_string(*strukt.specifiedType());
+    oss << "<Struct |";
+    oss << " type:" << to_string(*strukt.specifiedType());
+    oss << " scope:" << to_string(strukt.enclosingScope()->kind());
+    oss << "  " << strukt.enclosingScope();
     oss << ">";
     return oss.str();
 }

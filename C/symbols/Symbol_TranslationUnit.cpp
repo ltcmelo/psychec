@@ -29,7 +29,13 @@ using namespace C;
 TranslationUnit::TranslationUnit(const SyntaxTree* tree)
     : Symbol(new SymbolImpl(tree,
                             SymbolKind::TranslationUnit))
+    , enclosedScope_(new Scope(ScopeKind::File))
 {}
+
+const Scope* TranslationUnit::enclosedScope() const
+{
+    return enclosedScope_.get();
+}
 
 std::string TranslationUnit::toDisplayString() const
 {

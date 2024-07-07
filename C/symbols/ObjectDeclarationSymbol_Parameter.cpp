@@ -33,10 +33,10 @@ using namespace C;
 
 Parameter::Parameter(const SyntaxTree* tree,
                      const Symbol* containingSym,
-                     const Scope* scope)
+                     const Scope* enclosingScope)
     : ObjectDeclarationSymbol(tree,
                               containingSym,
-                              scope,
+                              enclosingScope,
                               ObjectDeclarationSymbolKind::Parameter)
 {}
 

@@ -36,10 +36,10 @@ struct Function::FunctionSymbolImpl : SymbolImpl
 {
     FunctionSymbolImpl(const SyntaxTree* tree,
                        const Symbol* containingSym,
-                       const Scope* scope)
+                       const Scope* enclosingScope)
         : SymbolImpl(tree,
                      containingSym,
-                     scope,
+                     enclosingScope,
                      NameSpace::OrdinaryIdentifiers,
                      SymbolKind::Declaration)
         , name_(nullptr)
@@ -51,11 +51,11 @@ struct Function::FunctionSymbolImpl : SymbolImpl
 
 Function::Function(const SyntaxTree* tree,
                    const Symbol* containingSym,
-                   const Scope* scope)
+                   const Scope* enclosingScope)
     : DeclarationSymbol(
           new FunctionSymbolImpl(tree,
                                  containingSym,
-                                 scope),
+                                 enclosingScope),
           DeclarationSymbolKind::Function)
 {}
 

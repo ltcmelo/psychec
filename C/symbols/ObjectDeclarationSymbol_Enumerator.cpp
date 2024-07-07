@@ -32,10 +32,10 @@ using namespace C;
 
 Enumerator::Enumerator(const SyntaxTree* tree,
                        const Symbol* containingSym,
-                       const Scope* scope)
+                       const Scope* enclosingScope)
     : ObjectDeclarationSymbol(tree,
                               containingSym,
-                              scope,
+                              enclosingScope,
                               ObjectDeclarationSymbolKind::Enumerator)
 {}
 

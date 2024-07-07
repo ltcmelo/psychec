@@ -32,16 +32,16 @@ struct ObjectDeclarationSymbol::ObjectDeclarationSymbolImpl : SymbolImpl
 {
     ObjectDeclarationSymbolImpl(const SyntaxTree* tree,
                                 const Symbol* containingSym,
-                                const Scope* scope,
-                                ObjectDeclarationSymbolKind objDeclK)
+                                const Scope* enclosingScope,
+                                ObjectDeclarationSymbolKind objDeclSymK)
         : SymbolImpl(tree,
                      containingSym,
-                     scope,
+                     enclosingScope,
                      NameSpace::OrdinaryIdentifiers,
                      SymbolKind::Declaration)
         , name_(nullptr)
     {
-        BF_.objDeclK_ = static_cast<std::uint32_t>(objDeclK);
+        BF_.objDeclSymK_ = static_cast<std::uint32_t>(objDeclSymK);
     }
 
     const Identifier* name_;
@@ -50,13 +50,13 @@ struct ObjectDeclarationSymbol::ObjectDeclarationSymbolImpl : SymbolImpl
 
 ObjectDeclarationSymbol::ObjectDeclarationSymbol(const SyntaxTree* tree,
                                                  const Symbol* containingSym,
-                                                 const Scope* scope,
-                                                 ObjectDeclarationSymbolKind valKind)
+                                                 const Scope* enclosingScope,
+                                                 ObjectDeclarationSymbolKind objDeclSymK)
     : DeclarationSymbol(
           new ObjectDeclarationSymbolImpl(tree,
                                           containingSym,
-                                          scope,
-                                          valKind),
+                                          enclosingScope,
+                                          objDeclSymK),
           DeclarationSymbolKind::Object)
 {}
 
@@ -65,7 +65,7 @@ ObjectDeclarationSymbol::~ObjectDeclarationSymbol()
 
 ObjectDeclarationSymbolKind ObjectDeclarationSymbol::kind() const
 {
-    return ObjectDeclarationSymbolKind(P_CAST->BF_.objDeclK_);
+    return ObjectDeclarationSymbolKind(P_CAST->BF_.objDeclSymK_);
 }
 
 const Type* ObjectDeclarationSymbol::type() const

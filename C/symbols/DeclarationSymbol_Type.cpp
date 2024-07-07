@@ -36,7 +36,7 @@ TypeDeclarationSymbol::~TypeDeclarationSymbol()
 
 TypeDeclarationSymbolKind TypeDeclarationSymbol::kind() const
 {
-    return TypeDeclarationSymbolKind(P_CAST->BF_.tyDeclK_);
+    return TypeDeclarationSymbolKind(P_CAST->BF_.tyDeclSymK_);
 }
 
 const Type* TypeDeclarationSymbol::specifiedType() const

@@ -73,7 +73,7 @@ SyntaxVisitor::Action DeclarationResolver::visitIdentifierDeclarator(const Ident
                 switch (ty->kind()) {
                     case TypeKind::Typedef: {
                         auto tydefName = ty->asTypedefType()->typedefName();
-                        auto tyDecl = decl->scope()->searchForDeclaration(
+                        auto tyDecl = decl->enclosingScope()->searchForDeclaration(
                                     tydefName,
                                     NameSpace::OrdinaryIdentifiers);
                         if (tyDecl) {

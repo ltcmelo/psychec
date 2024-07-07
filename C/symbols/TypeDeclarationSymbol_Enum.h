@@ -52,7 +52,7 @@ PSY_INTERNAL:
 
     Enum(const SyntaxTree* tree,
          const Symbol* containingSym,
-         const Scope* scope,
+         const Scope* enclosingScope,
          TagType* tagTy);
 };
 
