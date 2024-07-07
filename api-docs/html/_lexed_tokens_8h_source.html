@@ -96,14 +96,14 @@ $(function() {
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;syntax/SyntaxToken.h&quot;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;../common/infra/InternalAccess.h&quot;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;../common/infra/AccessSpecifiers.h&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span>psy {</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span>C {</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_lexed_tokens.html">   40</a></span>&#160;<span class="keyword">class </span>PSY_C_NON_API <a class="code" href="classpsy_1_1_c_1_1_lexed_tokens.html">LexedTokens</a></div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_lexed_tokens.html">   40</a></span>&#160;<span class="keyword">class </span>PSY_C_INTERNAL_API <a class="code" href="classpsy_1_1_c_1_1_lexed_tokens.html">LexedTokens</a></div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">using</span> SizeType = std::vector&lt;SyntaxToken&gt;::size_type;</div>
@@ -115,7 +115,7 @@ $(function() {
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">static</span> IndexType invalidIndex();</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;PSY_INTERNAL:</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    IndexType freeSlot() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">void</span> add(<a class="code" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> tk);</div>
@@ -132,7 +132,7 @@ $(function() {
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasspsy_1_1_c_1_1_lexed_tokens_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_lexed_tokens.html">psy::C::LexedTokens</a></div><div class="ttdoc">The LexedTokens class.</div><div class="ttdef"><b>Definition:</b> LexedTokens.h:41</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_token_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_token.html">psy::C::SyntaxToken</a></div><div class="ttdoc">The SyntaxToken class.</div><div class="ttdef"><b>Definition:</b> SyntaxToken.h:54</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_token_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_token.html">psy::C::SyntaxToken</a></div><div class="ttdoc">The SyntaxToken class.</div><div class="ttdef"><b>Definition:</b> SyntaxToken.h:55</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:61</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

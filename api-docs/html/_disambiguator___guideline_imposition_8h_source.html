@@ -94,25 +94,38 @@ $(function() {
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;API.h&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;syntax/SyntaxVisitor.h&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;reparser/Disambiguator.h&quot;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span>psy {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span>C {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_guideline_imposition_reparser.html">   31</a></span>&#160;<span class="keyword">class </span>PSY_C_NON_API <a class="code" href="classpsy_1_1_c_1_1_guideline_imposition_reparser.html">GuidelineImpositionReparser</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_visitor.html">SyntaxVisitor</a></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;{</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_guideline_imposition_reparser.html">GuidelineImpositionReparser</a>(<a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;};</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;../common/infra/AccessSpecifiers.h&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>psy {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span>C {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_guideline_imposition_disambiguator.html">   33</a></span>&#160;<span class="keyword">class </span>PSY_C_INTERNAL_API <a class="code" href="classpsy_1_1_c_1_1_guideline_imposition_disambiguator.html">GuidelineImpositionDisambiguator</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_disambiguator.html">Disambiguator</a></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;{</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;PSY_INTERNAL:</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_reparser.html">Reparser</a>);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_guideline_imposition_disambiguator.html">GuidelineImpositionDisambiguator</a>(<a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">virtual</span> Disambiguation disambiguateExpression(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_ambiguous_cast_or_binary_expression_syntax.html">AmbiguousCastOrBinaryExpressionSyntax</a>*) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">virtual</span> Disambiguation disambiguateStatement(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_ambiguous_expression_or_declaration_statement_syntax.html">AmbiguousExpressionOrDeclarationStatementSyntax</a>*) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">virtual</span> Disambiguation disambiguateTypeReference(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_ambiguous_type_name_or_expression_as_type_reference_syntax.html">AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax</a>*) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;};</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasspsy_1_1_c_1_1_guideline_imposition_reparser_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_guideline_imposition_reparser.html">psy::C::GuidelineImpositionReparser</a></div><div class="ttdef"><b>Definition:</b> Disambiguator_GuidelineImposition.h:32</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_visitor_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_visitor.html">psy::C::SyntaxVisitor</a></div><div class="ttdoc">The SyntaxVisitor class.</div><div class="ttdef"><b>Definition:</b> SyntaxVisitor.h:37</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_reparser_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_reparser.html">psy::C::Reparser</a></div><div class="ttdef"><b>Definition:</b> Reparser.h:39</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_ambiguous_type_name_or_expression_as_type_reference_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_ambiguous_type_name_or_expression_as_type_reference_syntax.html">psy::C::AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax</a></div><div class="ttdoc">The AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes_Common.h:110</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_ambiguous_expression_or_declaration_statement_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_ambiguous_expression_or_declaration_statement_syntax.html">psy::C::AmbiguousExpressionOrDeclarationStatementSyntax</a></div><div class="ttdoc">The AmbiguousExpressionOrDeclarationStatementSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes_Statements.h:160</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_guideline_imposition_disambiguator_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_guideline_imposition_disambiguator.html">psy::C::GuidelineImpositionDisambiguator</a></div><div class="ttdef"><b>Definition:</b> Disambiguator_GuidelineImposition.h:34</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:61</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_ambiguous_cast_or_binary_expression_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_ambiguous_cast_or_binary_expression_syntax.html">psy::C::AmbiguousCastOrBinaryExpressionSyntax</a></div><div class="ttdoc">The AmbiguousCastOrBinaryExpressionSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes_Expressions.h:701</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_disambiguator_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_disambiguator.html">psy::C::Disambiguator</a></div><div class="ttdef"><b>Definition:</b> Disambiguator.h:38</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

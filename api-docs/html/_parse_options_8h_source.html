@@ -98,7 +98,7 @@ $(function() {
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;LanguageDialect.h&quot;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;LanguageExtensions.h&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;../common/infra/InternalAccess.h&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;../common/infra/AccessSpecifiers.h&quot;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
@@ -110,71 +110,65 @@ $(function() {
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>();</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>(<a class="code" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a> dialect,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                 <a class="code" href="classpsy_1_1_c_1_1_language_extensions.html">LanguageExtensions</a> extensions);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a>&amp; dialect() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_language_extensions.html">LanguageExtensions</a>&amp; extensions() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_parse_options.html#ab0356651dea4e1d4c89ed0e990e7623c">   68</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="classpsy_1_1_c_1_1_parse_options.html#ab0356651dea4e1d4c89ed0e990e7623c">TreatmentOfIdentifiers</a> : std::uint8_t</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        None,    </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        Classify </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    };</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>&amp; setTreatmentOfIdentifiers(TreatmentOfIdentifiers treatOfIdent);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    TreatmentOfIdentifiers treatmentOfIdentifiers() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_parse_options.html#a8174d8fb7d6fa5bae95a5f7b101f5fe9">   84</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="classpsy_1_1_c_1_1_parse_options.html#a8174d8fb7d6fa5bae95a5f7b101f5fe9">TreatmentOfComments</a> : std::uint8_t</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    {</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        None,                 </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        Keep,                 </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        KeepDocumentationOnly </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    };</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>&amp; setTreatmentOfComments(TreatmentOfComments treatOfComments);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    TreatmentOfComments treatmentOfComments() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_parse_options.html#a83625d30d10f21e9937c75dcef53635f">  101</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="classpsy_1_1_c_1_1_parse_options.html#a83625d30d10f21e9937c75dcef53635f">TreatmentOfAmbiguities</a> : std::uint8_t</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    {</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        None,                                       </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        Diagnose,                                   </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        DisambiguateAlgorithmically,                </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        DisambiguateAlgorithmicallyOrHeuristically, </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        DisambiguateHeuristically,                  </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    };</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>&amp; setTreatmentOfAmbiguities(TreatmentOfAmbiguities treatOfAmbigs);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    TreatmentOfAmbiguities treatmentOfAmbiguities() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a> dialect_;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_language_extensions.html">LanguageExtensions</a> extensions_;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keyword">struct </span>BitFields</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    {</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        std::uint16_t treatmentOfIdentifiers_ : 2;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        std::uint16_t treatmentOfComments_ : 2;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        std::uint16_t treatmentOfAmbiguities_ : 2;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    };</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">union</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    {</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        BitFields BF_;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        std::uint16_t bits_;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    };</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;};</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>(<a class="code" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a> langDialect);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>(<a class="code" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a> langDialect,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                 <a class="code" href="classpsy_1_1_c_1_1_language_extensions.html">LanguageExtensions</a> langExts);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a>&amp; languageDialect() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_language_extensions.html">LanguageExtensions</a>&amp; languageExtensions() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>&amp; enable_keywordRecognition(<span class="keywordtype">bool</span> enable);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">bool</span> isEnabled_keywordRecognition() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_parse_options.html#af365b284966b30d83aec4a63c5180e67">   77</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="classpsy_1_1_c_1_1_parse_options.html#af365b284966b30d83aec4a63c5180e67">CommentMode</a> : std::uint8_t</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        Discard,              </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        KeepAll,              </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        KeepOnlyDocumentation </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    };</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>&amp; setCommentMode(CommentMode commentMode);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    CommentMode commentMode() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_parse_options.html#aedf2aeeee7f424afc4f409d504568128">   94</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="classpsy_1_1_c_1_1_parse_options.html#aedf2aeeee7f424afc4f409d504568128">AmbiguityMode</a> : std::uint8_t</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        Diagnose,                                    </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        DisambiguateAlgorithmically,                 </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        DisambiguateAlgorithmicallyAndHeuristically, </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        DisambiguateHeuristically,                   </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    };</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>&amp; setAmbiguityMode(AmbiguityMode ambiguityMode);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    AmbiguityMode ambiguityMode() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_language_dialect.html">LanguageDialect</a> langDialect_;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_language_extensions.html">LanguageExtensions</a> langExts_;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keyword">struct </span>BitFields</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    {</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        std::uint8_t keywordRecognition_ : 1;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        std::uint16_t commentMode_ : 2;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        std::uint16_t ambigMode_ : 2;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    };</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keyword">union</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    {</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        BitFields BF_;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        std::uint16_t bits_;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    };</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;};</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasspsy_1_1_c_1_1_parse_options_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_parse_options.html">psy::C::ParseOptions</a></div><div class="ttdoc">The ParseOptions class.</div><div class="ttdef"><b>Definition:</b> ParseOptions.h:43</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_language_dialect_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_language_dialect.html">psy::C::LanguageDialect</a></div><div class="ttdoc">The LanguageDialect class.</div><div class="ttdef"><b>Definition:</b> LanguageDialect.h:44</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_parse_options_html_a8174d8fb7d6fa5bae95a5f7b101f5fe9"><div class="ttname"><a href="classpsy_1_1_c_1_1_parse_options.html#a8174d8fb7d6fa5bae95a5f7b101f5fe9">psy::C::ParseOptions::TreatmentOfComments</a></div><div class="ttdeci">TreatmentOfComments</div><div class="ttdoc">The alternatives for TreatmentOfComments during parse.</div><div class="ttdef"><b>Definition:</b> ParseOptions.h:85</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_parse_options_html_a83625d30d10f21e9937c75dcef53635f"><div class="ttname"><a href="classpsy_1_1_c_1_1_parse_options.html#a83625d30d10f21e9937c75dcef53635f">psy::C::ParseOptions::TreatmentOfAmbiguities</a></div><div class="ttdeci">TreatmentOfAmbiguities</div><div class="ttdoc">The alternatives for TreatmentOfAmbiguities during parse.</div><div class="ttdef"><b>Definition:</b> ParseOptions.h:102</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_parse_options_html_ab0356651dea4e1d4c89ed0e990e7623c"><div class="ttname"><a href="classpsy_1_1_c_1_1_parse_options.html#ab0356651dea4e1d4c89ed0e990e7623c">psy::C::ParseOptions::TreatmentOfIdentifiers</a></div><div class="ttdeci">TreatmentOfIdentifiers</div><div class="ttdoc">The alternatives for TreatmentOfIdentifiers during parse.</div><div class="ttdef"><b>Definition:</b> ParseOptions.h:69</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_parse_options_html_af365b284966b30d83aec4a63c5180e67"><div class="ttname"><a href="classpsy_1_1_c_1_1_parse_options.html#af365b284966b30d83aec4a63c5180e67">psy::C::ParseOptions::CommentMode</a></div><div class="ttdeci">CommentMode</div><div class="ttdoc">The CommentMode modes.</div><div class="ttdef"><b>Definition:</b> ParseOptions.h:78</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_parse_options_html_aedf2aeeee7f424afc4f409d504568128"><div class="ttname"><a href="classpsy_1_1_c_1_1_parse_options.html#aedf2aeeee7f424afc4f409d504568128">psy::C::ParseOptions::AmbiguityMode</a></div><div class="ttdeci">AmbiguityMode</div><div class="ttdoc">The AmbiguityMode modes.</div><div class="ttdef"><b>Definition:</b> ParseOptions.h:95</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_language_extensions_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_language_extensions.html">psy::C::LanguageExtensions</a></div><div class="ttdoc">The LanguageExtensions class.</div><div class="ttdef"><b>Definition:</b> LanguageExtensions.h:41</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

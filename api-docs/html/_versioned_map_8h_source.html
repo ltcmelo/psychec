@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.18"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>The Psyche Project: data-types/VersionedMap.h Source File</title>
+<title>The Psyche Project: data-structures/VersionedMap.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,7 +61,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_4872fc5d5d99a2ea3bd6697eeeea95a8.html">data-types</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_09d99d517b97f5da94e04e98d7c24c2a.html">data-structures</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -125,8 +125,8 @@ $(function() {
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    const_iterator find(<span class="keyword">const</span> KeyT&amp; key)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> map_.find(key); }</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">void</span> insertOrAssignCore(<span class="keyword">const</span> KeyT&amp; key, <span class="keyword">const</span> ValueT&amp; value);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> insertOrAssignCore(<span class="keyword">const</span> KeyT&amp; key, ValueT&amp;&amp; value);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">void</span> insertOrAssign_CORE(<span class="keyword">const</span> KeyT&amp; key, <span class="keyword">const</span> ValueT&amp; value);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> insertOrAssign_CORE(<span class="keyword">const</span> KeyT&amp; key, ValueT&amp;&amp; value);</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="comment">// Encapsulates the action, as GoF&#39;s command other.</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">struct </span>Command</div>
@@ -162,11 +162,11 @@ $(function() {
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                                                <span class="keyword">const</span> ValueT&amp; value)</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;{</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    storeCommand(Command(key, value, Command::Insert));</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    insertOrAssignCore(key, value);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    insertOrAssign_CORE(key, value);</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;}</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> KeyT, <span class="keyword">class</span> ValueT&gt;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keywordtype">void</span> VersionedMap&lt;KeyT, ValueT&gt;::insertOrAssignCore(<span class="keyword">const</span> KeyT&amp; key,</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keywordtype">void</span> VersionedMap&lt;KeyT, ValueT&gt;::insertOrAssign_CORE(<span class="keyword">const</span> KeyT&amp; key,</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                                                    <span class="keyword">const</span> ValueT&amp; value)</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;{</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    map_[key] = value;</div>
@@ -177,11 +177,11 @@ $(function() {
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                                                ValueT&amp;&amp; value)</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;{</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    storeCommand(Command(key, value, Command::Insert));</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    insertOrAssignCore(key, std::move(value));</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    insertOrAssign_CORE(key, std::move(value));</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;}</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">class</span> KeyT, <span class="keyword">class</span> ValueT&gt;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="keywordtype">void</span> VersionedMap&lt;KeyT, ValueT&gt;::insertOrAssignCore(<span class="keyword">const</span> KeyT&amp; key,</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="keywordtype">void</span> VersionedMap&lt;KeyT, ValueT&gt;::insertOrAssign_CORE(<span class="keyword">const</span> KeyT&amp; key,</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                                                    ValueT&amp;&amp; value)</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;{</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="comment">// We don&#39;t want to use operator[] because this would require ValueT to</span></div>
@@ -222,7 +222,7 @@ $(function() {
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; command = commands_[current];</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        ValueT value = command.value_;</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <span class="keywordflow">if</span> (command.opCode_ == Command::Insert)</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;            insertOrAssignCore(command.key_, std::move(value));</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;            insertOrAssign_CORE(command.key_, std::move(value));</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    }</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;}</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>

@@ -87,16 +87,17 @@ Inheritance diagram for psy::C::SyntaxVisitor:</div>
   <img src="classpsy_1_1_c_1_1_syntax_visitor.png" usemap="#psy::C::SyntaxVisitor_map" alt=""/>
   <map id="psy::C::SyntaxVisitor_map" name="psy::C::SyntaxVisitor_map">
 <area href="classpsy_1_1_c_1_1_binder.html" title="The Binder class." alt="psy::C::Binder" shape="rect" coords="0,56,256,80"/>
-<area href="classpsy_1_1_c_1_1_disambiguator.html" alt="psy::C::Disambiguator" shape="rect" coords="266,56,522,80"/>
-<area href="classpsy_1_1_c_1_1_guideline_imposition_reparser.html" alt="psy::C::GuidelineImpositionReparser" shape="rect" coords="532,56,788,80"/>
+<area href="classpsy_1_1_c_1_1_declaration_resolver.html" alt="psy::C::DeclarationResolver" shape="rect" coords="266,56,522,80"/>
+<area href="classpsy_1_1_c_1_1_disambiguator.html" alt="psy::C::Disambiguator" shape="rect" coords="532,56,788,80"/>
 <area href="classpsy_1_1_c_1_1_name_cataloger.html" alt="psy::C::NameCataloger" shape="rect" coords="798,56,1054,80"/>
-<area href="classpsy_1_1_c_1_1_syntax_dumper.html" alt="psy::C::SyntaxDumper" shape="rect" coords="1064,56,1320,80"/>
-<area href="classpsy_1_1_c_1_1_type_checker.html" alt="psy::C::TypeChecker" shape="rect" coords="1330,56,1586,80"/>
-<area href="classpsy_1_1_c_1_1_type_synonyms_verification_reparser.html" alt="psy::C::TypeSynonymsVerificationReparser" shape="rect" coords="1596,56,1852,80"/>
-<area href="classpsy_1_1_c_1_1_syntax_correlation_disambiguator.html" alt="psy::C::SyntaxCorrelationDisambiguator" shape="rect" coords="266,112,522,136"/>
-<area href="classpsy_1_1_c_1_1_syntax_name_printer.html" alt="psy::C::SyntaxNamePrinter" shape="rect" coords="798,112,1054,136"/>
-<area href="classpsy_1_1_c_1_1_syntax_writer_d_o_t_format.html" alt="psy::C::SyntaxWriterDOTFormat" shape="rect" coords="1064,112,1320,136"/>
-<area href="classpsy_1_1_c_1_1_unparser.html" alt="psy::C::Unparser" shape="rect" coords="1330,112,1586,136"/>
+<area href="classpsy_1_1_c_1_1_syntax_dumper.html" alt="psy::C::SyntaxDumper" shape="rect" coords="1197,56,1453,80"/>
+<area href="classpsy_1_1_c_1_1_type_checker.html" alt="psy::C::TypeChecker" shape="rect" coords="1463,56,1719,80"/>
+<area href="classpsy_1_1_c_1_1_type_synonyms_verification_reparser.html" alt="psy::C::TypeSynonymsVerificationReparser" shape="rect" coords="1729,56,1985,80"/>
+<area href="classpsy_1_1_c_1_1_guideline_imposition_disambiguator.html" alt="psy::C::GuidelineImpositionDisambiguator" shape="rect" coords="399,112,655,136"/>
+<area href="classpsy_1_1_c_1_1_syntax_correlation_disambiguator.html" alt="psy::C::SyntaxCorrelationDisambiguator" shape="rect" coords="665,112,921,136"/>
+<area href="classpsy_1_1_c_1_1_syntax_name_printer.html" alt="psy::C::SyntaxNamePrinter" shape="rect" coords="931,112,1187,136"/>
+<area href="classpsy_1_1_c_1_1_syntax_writer_d_o_t_format.html" alt="psy::C::SyntaxWriterDOTFormat" shape="rect" coords="1197,112,1453,136"/>
+<area href="classpsy_1_1_c_1_1_unparser.html" alt="psy::C::Unparser" shape="rect" coords="1463,112,1719,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -149,6 +150,9 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5
 <tr class="memitem:aa1e51416cba4d895e9f9151b9cc3cf22"><td class="memItemLeft" align="right" valign="top"><a id="aa1e51416cba4d895e9f9151b9cc3cf22"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitParameterDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_parameter_declaration_syntax.html">ParameterDeclarationSyntax</a> *)</td></tr>
 <tr class="separator:aa1e51416cba4d895e9f9151b9cc3cf22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7959ee292f3332536100a627dda030f"><td class="memItemLeft" align="right" valign="top"><a id="ad7959ee292f3332536100a627dda030f"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypedefDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_typedef_declaration_syntax.html">TypedefDeclarationSyntax</a> *)</td></tr>
+<tr class="separator:ad7959ee292f3332536100a627dda030f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83d70d3f89879d628615880ad97443bf"><td class="memItemLeft" align="right" valign="top"><a id="a83d70d3f89879d628615880ad97443bf"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitStaticAssertDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_static_assert_declaration_syntax.html">StaticAssertDeclarationSyntax</a> *)</td></tr>
 <tr class="separator:a83d70d3f89879d628615880ad97443bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,18 +171,21 @@ virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5
 <tr class="memitem:ab6177d3f20c887319b658f4aa595999e"><td class="memItemLeft" align="right" valign="top"><a id="ab6177d3f20c887319b658f4aa595999e"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitStorageClass</b> (const <a class="el" href="classpsy_1_1_c_1_1_storage_class_syntax.html">StorageClassSyntax</a> *)</td></tr>
 <tr class="separator:ab6177d3f20c887319b658f4aa595999e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6229ddb56c73c51c065a93a2844fffb5"><td class="memItemLeft" align="right" valign="top"><a id="a6229ddb56c73c51c065a93a2844fffb5"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitBuiltinTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_builtin_type_specifier_syntax.html">BuiltinTypeSpecifierSyntax</a> *)</td></tr>
-<tr class="separator:a6229ddb56c73c51c065a93a2844fffb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af640f7eecf00c2bc819c8b12b70bff77"><td class="memItemLeft" align="right" valign="top"><a id="af640f7eecf00c2bc819c8b12b70bff77"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitBasicTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_basic_type_specifier_syntax.html">BasicTypeSpecifierSyntax</a> *)</td></tr>
+<tr class="separator:af640f7eecf00c2bc819c8b12b70bff77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2bd5e066ce33332545eb3665f0a62f7"><td class="memItemLeft" align="right" valign="top"><a id="af2bd5e066ce33332545eb3665f0a62f7"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitVoidTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_void_type_specifier_syntax.html">VoidTypeSpecifierSyntax</a> *)</td></tr>
+<tr class="separator:af2bd5e066ce33332545eb3665f0a62f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58ea5d7c23d3f0b51866618674dd68f2"><td class="memItemLeft" align="right" valign="top"><a id="a58ea5d7c23d3f0b51866618674dd68f2"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTagTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_tag_type_specifier_syntax.html">TagTypeSpecifierSyntax</a> *)</td></tr>
 <tr class="separator:a58ea5d7c23d3f0b51866618674dd68f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5374d56309c7eac3c7e89d78fc54df4d"><td class="memItemLeft" align="right" valign="top"><a id="a5374d56309c7eac3c7e89d78fc54df4d"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitAtomicTypeSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_atomic_type_specifier_syntax.html">AtomicTypeSpecifierSyntax</a> *)</td></tr>
 <tr class="separator:a5374d56309c7eac3c7e89d78fc54df4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a45a84988fec36e447af683ed929414"><td class="memItemLeft" align="right" valign="top"><a id="a7a45a84988fec36e447af683ed929414"></a>
-virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypeDeclarationAsSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_type_declaration_as_specifier_syntax.html">TypeDeclarationAsSpecifierSyntax</a> *)</td></tr>
-<tr class="separator:a7a45a84988fec36e447af683ed929414"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8ae5e6543914fff139d5965cd08fff2"><td class="memItemLeft" align="right" valign="top"><a id="ab8ae5e6543914fff139d5965cd08fff2"></a>
+virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTagDeclarationAsSpecifier</b> (const <a class="el" href="classpsy_1_1_c_1_1_tag_declaration_as_specifier_syntax.html">TagDeclarationAsSpecifierSyntax</a> *)</td></tr>
+<tr class="separator:ab8ae5e6543914fff139d5965cd08fff2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac768cad86a75003c4c5b4eec03fa707c"><td class="memItemLeft" align="right" valign="top"><a id="ac768cad86a75003c4c5b4eec03fa707c"></a>
 virtual <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>&#160;</td><td class="memItemRight" valign="bottom"><b>visitTypedefName</b> (const <a class="el" href="classpsy_1_1_c_1_1_typedef_name_syntax.html">TypedefNameSyntax</a> *)</td></tr>
 <tr class="separator:ac768cad86a75003c4c5b4eec03fa707c"><td class="memSeparator" colspan="2">&#160;</td></tr>

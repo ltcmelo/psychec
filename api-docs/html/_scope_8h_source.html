@@ -96,44 +96,69 @@ $(function() {
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;Fwds.h&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;ScopeKind.h&quot;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;../common/infra/InternalAccess.h&quot;</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;NameSpace.h&quot;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;../common/infra/AccessSpecifiers.h&quot;</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span>psy {</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span>C {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_scope.html">   44</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>();</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    ScopeKind kind() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;PSY_INTERNAL:</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>(ScopeKind kind);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">void</span> enclose(std::unique_ptr&lt;Scope&gt; scope);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">void</span> morphFrom_FunctionPrototype_to_Block();</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    ScopeKind kind_;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    std::vector&lt;std::unique_ptr&lt;Scope&gt;&gt; enclosedScopes_;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;};</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &lt;utility&gt;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">using namespace </span>psy;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">using namespace </span>C;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">template</span> &lt;&gt;</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="structstd_1_1hash_3_01std_1_1pair_3_01const_01_identifier_01_5_00_01_name_space_01_4_01_4.html">   42</a></span>&#160;<span class="keyword">struct </span>std::hash&lt;std::pair&lt;const Identifier*, NameSpace&gt;&gt;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;{</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;     std::size_t operator()(<span class="keyword">const</span> std::pair&lt;const Identifier*, NameSpace&gt;&amp; k)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">     </span>{</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">auto</span> h1 = std::hash&lt;const Identifier*&gt;{}(k.first);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">auto</span> h2 = std::hash&lt;NameSpace&gt;{}(k.second);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">return</span> h1 ^ (h2 &lt;&lt; 1);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;     }</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;};</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">namespace </span>psy {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">namespace </span>C {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_scope.html">   60</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;{</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>();</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    ScopeKind kind() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_declaration_symbol.html">DeclarationSymbol</a>* searchForDeclaration(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a>* ident, NameSpace ns) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;PSY_INTERNAL:</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>(ScopeKind K);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">void</span> encloseScope(std::unique_ptr&lt;Scope&gt; innerScope);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">void</span> morphFrom_FunctionPrototype_to_Block();</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> addDeclaration(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_declaration_symbol.html">DeclarationSymbol</a>*);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    ScopeKind K_;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_scope.html">Scope</a>* outerScope_;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    std::vector&lt;std::unique_ptr&lt;Scope&gt;&gt; innerScopes_;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    std::unordered_map&lt;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        std::pair&lt;const Identifier*, NameSpace&gt;,</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_declaration_symbol.html">DeclarationSymbol</a>*&gt; decls_;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;};</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasspsy_1_1_c_1_1_scope_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_scope.html">psy::C::Scope</a></div><div class="ttdoc">The Scope class.</div><div class="ttdef"><b>Definition:</b> Scope.h:45</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:51</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_scope_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_scope.html">psy::C::Scope</a></div><div class="ttdoc">The Scope class.</div><div class="ttdef"><b>Definition:</b> Scope.h:61</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_identifier_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_identifier.html">psy::C::Identifier</a></div><div class="ttdoc">The Identifier class.</div><div class="ttdef"><b>Definition:</b> Lexeme_Identifier.h:37</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:50</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_declaration_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_declaration_symbol.html">psy::C::DeclarationSymbol</a></div><div class="ttdef"><b>Definition:</b> Symbol_Declaration.h:36</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

@@ -100,250 +100,251 @@ $(function() {
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#define AST__COMMON__(NODE, BASE_NODE) \</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">    friend class Parser; \</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">    friend class Binder; \</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">    public: \</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">        virtual NODE##Syntax* as##NODE() override { return this; } \</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">        virtual const NODE##Syntax* as##NODE() const override { return this; }</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> * There are 2 coarse variations of AST nodes:</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"> *   1 - those that inherit directly from `SyntaxNode&#39;, creating a syntactic</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment"> *       category (6.1-1) for the syntax in question;</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment"> *   2 - those that belong to an specific category.</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> * Macros prefixed with `AST_G_NODE&#39; apply on 1, while macros prefixed</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> * with `AST_NODE&#39; apply on 2.</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#define AST_G_NODE__COMMON__(NODE) \</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">    AST__COMMON__(NODE,) \</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">    using BaseSyntax = SyntaxNode;</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#define AST_NODE__COMMON__(NODE, BASE_NODE) \</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">    AST__COMMON__(NODE, BASE_NODE) \</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">    using BaseSyntax = BASE_NODE##Syntax;</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"> * The class of an AST node further varies in respect to whether:</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"> *  - it serves exclusively as base type (not visited during AST traversal);</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"> *  - it is a type for which a single concrete syntax kind exists;</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"> *  - it is a type for which multiple concrete syntax kinds exist.</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment"> * In the last case, the construct for the AST node in question requires</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> * an specific `SyntaxKind&#39; argument.</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#define AST_G_NODE(NODE) \</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">    AST_G_NODE__COMMON__(NODE) \</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">    using SyntaxNode::SyntaxNode;</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#define AST_G_NODE_1K(NODE) \</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">    AST_G_NODE__COMMON__(NODE) \</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">    NODE##Syntax(SyntaxTree* tree) : SyntaxNode(tree, NODE) {} \</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">    DISPATCH_VISIT(NODE)</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#define AST_G_NODE_NK(NODE) \</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">    AST_G_NODE__COMMON__(NODE) \</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">    NODE##Syntax(SyntaxTree* tree, SyntaxKind kind) : SyntaxNode(tree, kind) {} \</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">    DISPATCH_VISIT(NODE)</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#define AST_NODE(NODE, BASE_NODE) \</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">    AST_NODE__COMMON__(NODE, BASE_NODE) \</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">    using BASE_NODE##Syntax::BASE_NODE##Syntax;</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor">#define AST_NODE_1K(NODE, BASE_NODE) \</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">    AST_NODE__COMMON__(NODE, BASE_NODE) \</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">    NODE##Syntax(SyntaxTree* tree) : BASE_NODE##Syntax(tree, NODE) {} \</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">    DISPATCH_VISIT(NODE)</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#define AST_NODE_NK(NODE, BASE_NODE) \</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">    AST_NODE__COMMON__(NODE, BASE_NODE) \</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">    NODE##Syntax(SyntaxTree* tree, SyntaxKind kind) : BASE_NODE##Syntax(tree, kind) {} \</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">    DISPATCH_VISIT(NODE)</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment"> * The children, either nodes or tokens, of an AST node.</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor">#define AST_CHILD_LST1(NAME1) \</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_1(NAME1))</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#define AST_CHILD_LST2(NAME1, NAME2) \</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_2(NAME1, NAME2))</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#define AST_CHILD_LST3(NAME1, NAME2, NAME3) \</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_3(NAME1, NAME2, NAME3))</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor">#define AST_CHILD_LST4(NAME1, NAME2, NAME3, NAME4) \</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_4(NAME1, NAME2, NAME3, NAME4))</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">#define AST_CHILD_LST5(NAME1, NAME2, NAME3, NAME4, NAME5) \</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_5(NAME1, NAME2, NAME3, NAME4, NAME5))</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#define AST_CHILD_LST6(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6) \</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_6(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6))</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">#define AST_CHILD_LST7(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7) \</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_7(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7))</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">#define AST_CHILD_LST8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8) \</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8))</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor">#define AST_CHILD_LST9(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8, NAME9) \</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_9(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8, NAME9))</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="preprocessor">#define CHILD_NAME_1(NAME1) \</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME1)</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor">#define CHILD_NAME_2(NAME1, NAME2) \</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor">    CHILD_NAME_1(NAME1), \</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME2)</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">#define CHILD_NAME_3(NAME1, NAME2, NAME3) \</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">    CHILD_NAME_2(NAME1, NAME2), \</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME3)</span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor">#define CHILD_NAME_4(NAME1, NAME2, NAME3, NAME4) \</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor">    CHILD_NAME_3(NAME1, NAME2, NAME3), \</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME4)</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="preprocessor">#define CHILD_NAME_5(NAME1, NAME2, NAME3, NAME4, NAME5) \</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor">    CHILD_NAME_4(NAME1, NAME2, NAME3, NAME4), \</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME5)</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor">#define CHILD_NAME_6(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6) \</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor">    CHILD_NAME_5(NAME1, NAME2, NAME3, NAME4, NAME5), \</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME6)</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">#define CHILD_NAME_7(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7) \</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">    CHILD_NAME_6(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6), \</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME7)</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">#define CHILD_NAME_8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8) \</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">    CHILD_NAME_7(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7), \</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME8)</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor">#define CHILD_NAME_9(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8, NAME9) \</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">    CHILD_NAME_8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8), \</span></div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME9)</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="comment"> * The default implementation of the visitor dispatching function for</span></div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="comment"> * vising the `this&#39; node.</span></div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="preprocessor">#define DISPATCH_VISIT(NODE) \</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="preprocessor">    protected: \</span></div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="preprocessor">        virtual SyntaxVisitor::Action dispatchVisit(SyntaxVisitor* visitor) const override \</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="preprocessor">            { return visitor-&gt;visit##NODE(this); }</span></div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="comment"> * The default implementation of the function that gather the child</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment"> * nodes and tokens of the `this&#39; node.</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="preprocessor">#define CHILD_NODES_AND_TOKENS(CHILDREN_SYNTAX) \</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor">    public: \</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="preprocessor">        virtual std::vector&lt;SyntaxHolder&gt; childNodesAndTokens() const override \</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="preprocessor">            { auto self = { CHILDREN_SYNTAX }; \</span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="preprocessor">              return merge(BaseSyntax::childNodesAndTokens(), self); }</span></div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="keyword">using namespace </span>psy;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="keyword">using namespace </span>C;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="keyword">inline</span> std::vector&lt;SyntaxHolder&gt; merge(std::vector&lt;SyntaxHolder&gt;&amp;&amp; a,</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                                       std::vector&lt;SyntaxHolder&gt;&amp;&amp; b)</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;{</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    a.insert(a.end(), b.begin(), b.end());</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="keywordflow">return</span> std::move(a);</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;}</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="keyword">namespace </span>psy {</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="keyword">namespace </span>C {</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">    friend class Disambiguator; \</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">    friend class Binder; \</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">    public: \</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">        virtual NODE##Syntax* as##NODE() override { return this; } \</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">        virtual const NODE##Syntax* as##NODE() const override { return this; }</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"> * There are 2 coarse variations of AST nodes:</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment"> *   1 - those that inherit directly from `SyntaxNode&#39;, creating a syntactic</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment"> *       category (6.1-1) for the syntax in question;</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"> *   2 - those that belong to an specific category.</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> * Macros prefixed with `AST_G_NODE&#39; apply on 1, while macros prefixed</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"> * with `AST_NODE&#39; apply on 2.</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">#define AST_G_NODE__COMMON__(NODE) \</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">    AST__COMMON__(NODE,) \</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">    using BaseSyntax = SyntaxNode;</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#define AST_NODE__COMMON__(NODE, BASE_NODE) \</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">    AST__COMMON__(NODE, BASE_NODE) \</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">    using BaseSyntax = BASE_NODE##Syntax;</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"> * The class of an AST node further varies in respect to whether:</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"> *  - it serves exclusively as base type (not visited during AST traversal);</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"> *  - it is a type for which a single concrete syntax kind exists;</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment"> *  - it is a type for which multiple concrete syntax kinds exist.</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> * In the last case, the construct for the AST node in question requires</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"> * an specific `SyntaxKind&#39; argument.</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#define AST_G_NODE(NODE) \</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">    AST_G_NODE__COMMON__(NODE) \</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">    using SyntaxNode::SyntaxNode;</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#define AST_G_NODE_1K(NODE) \</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">    AST_G_NODE__COMMON__(NODE) \</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">    NODE##Syntax(SyntaxTree* tree) : SyntaxNode(tree, SyntaxKind::NODE) {} \</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">    DISPATCH_VISIT(NODE)</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#define AST_G_NODE_NK(NODE) \</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">    AST_G_NODE__COMMON__(NODE) \</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">    NODE##Syntax(SyntaxTree* tree, SyntaxKind kind) : SyntaxNode(tree, kind) {} \</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">    DISPATCH_VISIT(NODE)</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#define AST_NODE(NODE, BASE_NODE) \</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">    AST_NODE__COMMON__(NODE, BASE_NODE) \</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor">    using BASE_NODE##Syntax::BASE_NODE##Syntax;</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">#define AST_NODE_1K(NODE, BASE_NODE) \</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">    AST_NODE__COMMON__(NODE, BASE_NODE) \</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">    NODE##Syntax(SyntaxTree* tree) : BASE_NODE##Syntax(tree, SyntaxKind::NODE) {} \</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">    DISPATCH_VISIT(NODE)</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#define AST_NODE_NK(NODE, BASE_NODE) \</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">    AST_NODE__COMMON__(NODE, BASE_NODE) \</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">    NODE##Syntax(SyntaxTree* tree, SyntaxKind kind) : BASE_NODE##Syntax(tree, kind) {} \</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">    DISPATCH_VISIT(NODE)</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment"> * The children, either nodes or tokens, of an AST node.</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">#define AST_CHILD_LST1(NAME1) \</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_1(NAME1))</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#define AST_CHILD_LST2(NAME1, NAME2) \</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_2(NAME1, NAME2))</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#define AST_CHILD_LST3(NAME1, NAME2, NAME3) \</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_3(NAME1, NAME2, NAME3))</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">#define AST_CHILD_LST4(NAME1, NAME2, NAME3, NAME4) \</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_4(NAME1, NAME2, NAME3, NAME4))</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">#define AST_CHILD_LST5(NAME1, NAME2, NAME3, NAME4, NAME5) \</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_5(NAME1, NAME2, NAME3, NAME4, NAME5))</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">#define AST_CHILD_LST6(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6) \</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_6(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6))</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor">#define AST_CHILD_LST7(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7) \</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_7(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7))</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">#define AST_CHILD_LST8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8) \</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8))</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="preprocessor">#define AST_CHILD_LST9(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8, NAME9) \</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="preprocessor">    CHILD_NODES_AND_TOKENS(CHILD_NAME_9(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8, NAME9))</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor">#define CHILD_NAME_1(NAME1) \</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME1)</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor">#define CHILD_NAME_2(NAME1, NAME2) \</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">    CHILD_NAME_1(NAME1), \</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME2)</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">#define CHILD_NAME_3(NAME1, NAME2, NAME3) \</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">    CHILD_NAME_2(NAME1, NAME2), \</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME3)</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor">#define CHILD_NAME_4(NAME1, NAME2, NAME3, NAME4) \</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="preprocessor">    CHILD_NAME_3(NAME1, NAME2, NAME3), \</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME4)</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="preprocessor">#define CHILD_NAME_5(NAME1, NAME2, NAME3, NAME4, NAME5) \</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="preprocessor">    CHILD_NAME_4(NAME1, NAME2, NAME3, NAME4), \</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME5)</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor">#define CHILD_NAME_6(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6) \</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor">    CHILD_NAME_5(NAME1, NAME2, NAME3, NAME4, NAME5), \</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME6)</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="preprocessor">#define CHILD_NAME_7(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7) \</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="preprocessor">    CHILD_NAME_6(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6), \</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME7)</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">#define CHILD_NAME_8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8) \</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor">    CHILD_NAME_7(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7), \</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME8)</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">#define CHILD_NAME_9(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8, NAME9) \</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">    CHILD_NAME_8(NAME1, NAME2, NAME3, NAME4, NAME5, NAME6, NAME7, NAME8), \</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="preprocessor">    SyntaxHolder(NAME9)</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="comment"> * The default implementation of the visitor dispatching function for</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="comment"> * vising the `this&#39; node.</span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="preprocessor">#define DISPATCH_VISIT(NODE) \</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="preprocessor">    protected: \</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="preprocessor">        virtual SyntaxVisitor::Action dispatchVisit(SyntaxVisitor* visitor) const override \</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="preprocessor">            { return visitor-&gt;visit##NODE(this); }</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment"> * The default implementation of the function that gather the child</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment"> * nodes and tokens of the `this&#39; node.</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor">#define CHILD_NODES_AND_TOKENS(CHILDREN_SYNTAX) \</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="preprocessor">    public: \</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="preprocessor">        virtual std::vector&lt;SyntaxHolder&gt; childNodesAndTokens() const override \</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="preprocessor">            { auto self = { CHILDREN_SYNTAX }; \</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="preprocessor">              return merge(BaseSyntax::childNodesAndTokens(), self); }</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="keyword">using namespace </span>psy;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="keyword">using namespace </span>C;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="keyword">inline</span> std::vector&lt;SyntaxHolder&gt; merge(std::vector&lt;SyntaxHolder&gt;&amp;&amp; a,</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                                       std::vector&lt;SyntaxHolder&gt;&amp;&amp; b)</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;{</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    a.insert(a.end(), b.begin(), b.end());</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <span class="keywordflow">return</span> std::move(a);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;}</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="keyword">namespace </span>psy {</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="keyword">namespace </span>C {</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
-<div class="line"><a name="l00183"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_declaration_syntax.html">  183</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                                  , <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_m_i_x_i_n___g_n_u_extension_flag.html">MIXIN_GNUExtensionFlag</a></div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;{</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    AST_G_NODE(Declaration)</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> extensionKeyword()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> tokenAtIndex(extKwTkIdx_); }</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    AST_CHILD_LST1(extKwTkIdx_);</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;};</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
-<div class="line"><a name="l00202"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_specifier_syntax.html">  202</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_specifier_syntax.html">SpecifierSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;{</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    AST_G_NODE(Specifier)</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;};</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
-<div class="line"><a name="l00218"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_declarator_syntax.html">  218</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;{</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    AST_G_NODE(Declarator)</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;};</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
-<div class="line"><a name="l00230"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_declarator_suffix_syntax.html">  230</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_declarator_suffix_syntax.html">DeclaratorSuffixSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;{</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    AST_G_NODE(DeclaratorSuffix)</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;};</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
-<div class="line"><a name="l00243"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_initializer_syntax.html">  243</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_initializer_syntax.html">InitializerSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;{</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    AST_G_NODE(Initializer)</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;};</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
-<div class="line"><a name="l00270"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_expression_syntax.html">  270</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;                                 , <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_m_i_x_i_n___g_n_u_extension_flag.html">MIXIN_GNUExtensionFlag</a></div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;{</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    AST_G_NODE(Expression)</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> extensionKeyword()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> tokenAtIndex(extKwTkIdx_); }</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    AST_CHILD_LST1(extKwTkIdx_);</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;};</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
-<div class="line"><a name="l00285"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_statement_syntax.html">  285</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;{</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    AST_G_NODE(Statement)</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;};</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
-<div class="line"><a name="l00293"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_type_reference_syntax.html">  293</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_type_reference_syntax.html">TypeReferenceSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;{</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    AST_G_NODE(TypeReference)</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;};</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160; </div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="preprocessor">#include &quot;SyntaxNodes_Common.h&quot;</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="preprocessor">#include &quot;SyntaxNodes_Declarations.h&quot;</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="preprocessor">#include &quot;SyntaxNodes_Expressions.h&quot;</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="preprocessor">#include &quot;SyntaxNodes_Statements.h&quot;</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="preprocessor">#undef AST__COMMON__</span></div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="preprocessor">#undef AST_G_NODE__COMMON__</span></div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;<span class="preprocessor">#undef AST_NODE__COMMON__</span></div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;<span class="preprocessor">#undef AST_G_NODE</span></div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;<span class="preprocessor">#undef AST_G_NODE_1K</span></div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;<span class="preprocessor">#undef AST_G_NODE_NK</span></div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="preprocessor">#undef AST_NODE</span></div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="preprocessor">#undef AST_NODE_1K</span></div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="preprocessor">#undef AST_NODE_NK</span></div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST1</span></div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST2</span></div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST3</span></div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST4</span></div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST5</span></div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST6</span></div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST7</span></div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST8</span></div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="preprocessor">#undef CHILD_NAME_1</span></div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="preprocessor">#undef CHILD_NAME_2</span></div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="preprocessor">#undef CHILD_NAME_3</span></div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="preprocessor">#undef CHILD_NAME_4</span></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="preprocessor">#undef CHILD_NAME_5</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="preprocessor">#undef CHILD_NAME_6</span></div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="preprocessor">#undef CHILD_NAME_7</span></div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="preprocessor">#undef CHILD_NAME_8</span></div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160; </div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="preprocessor">#undef DISPATCH_VISIT</span></div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="preprocessor">#undef CHILD_NODES_AND_TOKENS</span></div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_declaration_syntax.html">  184</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_declaration_syntax.html">DeclarationSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;                                  , <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_m_i_x_i_n___g_n_u_extension_flag.html">MIXIN_GNUExtensionFlag</a></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;{</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    AST_G_NODE(Declaration)</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> extensionKeyword()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> tokenAtIndex(extKwTkIdx_); }</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    AST_CHILD_LST1(extKwTkIdx_);</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;};</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_specifier_syntax.html">  203</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_specifier_syntax.html">SpecifierSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;{</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    AST_G_NODE(Specifier)</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;};</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
+<div class="line"><a name="l00219"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_declarator_syntax.html">  219</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_declarator_syntax.html">DeclaratorSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;{</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    AST_G_NODE(Declarator)</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;};</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_declarator_suffix_syntax.html">  231</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_declarator_suffix_syntax.html">DeclaratorSuffixSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;{</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    AST_G_NODE(DeclaratorSuffix)</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;};</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
+<div class="line"><a name="l00244"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_initializer_syntax.html">  244</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_initializer_syntax.html">InitializerSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;{</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    AST_G_NODE(Initializer)</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;};</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00271"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_expression_syntax.html">  271</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_expression_syntax.html">ExpressionSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;                                 , <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_m_i_x_i_n___g_n_u_extension_flag.html">MIXIN_GNUExtensionFlag</a></div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;{</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    AST_G_NODE(Expression)</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160; </div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a> extensionKeyword()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> tokenAtIndex(extKwTkIdx_); }</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    AST_CHILD_LST1(extKwTkIdx_);</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;};</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
+<div class="line"><a name="l00286"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_statement_syntax.html">  286</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_statement_syntax.html">StatementSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;{</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    AST_G_NODE(Statement)</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;};</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
+<div class="line"><a name="l00294"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_type_reference_syntax.html">  294</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_type_reference_syntax.html">TypeReferenceSyntax</a> : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a></div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;{</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    AST_G_NODE(TypeReference)</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;};</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="preprocessor">#include &quot;SyntaxNodes_Common.h&quot;</span></div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="preprocessor">#include &quot;SyntaxNodes_Declarations.h&quot;</span></div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="preprocessor">#include &quot;SyntaxNodes_Expressions.h&quot;</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="preprocessor">#include &quot;SyntaxNodes_Statements.h&quot;</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="preprocessor">#undef AST__COMMON__</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;<span class="preprocessor">#undef AST_G_NODE__COMMON__</span></div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;<span class="preprocessor">#undef AST_NODE__COMMON__</span></div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;<span class="preprocessor">#undef AST_G_NODE</span></div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;<span class="preprocessor">#undef AST_G_NODE_1K</span></div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="preprocessor">#undef AST_G_NODE_NK</span></div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="preprocessor">#undef AST_NODE</span></div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="preprocessor">#undef AST_NODE_1K</span></div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="preprocessor">#undef AST_NODE_NK</span></div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160; </div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST1</span></div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST2</span></div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST3</span></div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST4</span></div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST5</span></div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST6</span></div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST7</span></div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="preprocessor">#undef AST_CHILD_LST8</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="preprocessor">#undef CHILD_NAME_1</span></div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="preprocessor">#undef CHILD_NAME_2</span></div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="preprocessor">#undef CHILD_NAME_3</span></div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="preprocessor">#undef CHILD_NAME_4</span></div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="preprocessor">#undef CHILD_NAME_5</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="preprocessor">#undef CHILD_NAME_6</span></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="preprocessor">#undef CHILD_NAME_7</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="preprocessor">#undef CHILD_NAME_8</span></div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160; </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="preprocessor">#undef DISPATCH_VISIT</span></div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="preprocessor">#undef CHILD_NODES_AND_TOKENS</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160; </div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_node_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_node.html">psy::C::SyntaxNode</a></div><div class="ttdoc">The SyntaxNode class.</div><div class="ttdef"><b>Definition:</b> SyntaxNode.h:55</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_declarator_suffix_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_declarator_suffix_syntax.html">psy::C::DeclaratorSuffixSyntax</a></div><div class="ttdoc">The DeclaratorSuffixSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:231</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_expression_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_expression_syntax.html">psy::C::ExpressionSyntax</a></div><div class="ttdoc">The ExpressionSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:272</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_initializer_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_initializer_syntax.html">psy::C::InitializerSyntax</a></div><div class="ttdoc">The InitializerSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:244</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_token_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_token.html">psy::C::SyntaxToken</a></div><div class="ttdoc">The SyntaxToken class.</div><div class="ttdef"><b>Definition:</b> SyntaxToken.h:54</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_declaration_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_declaration_syntax.html">psy::C::DeclarationSyntax</a></div><div class="ttdoc">The DeclarationSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:185</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_statement_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_statement_syntax.html">psy::C::StatementSyntax</a></div><div class="ttdoc">The StatementSyntax class: The base class for all statements.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:286</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_specifier_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_specifier_syntax.html">psy::C::SpecifierSyntax</a></div><div class="ttdoc">The SpecifierSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:203</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_type_reference_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type_reference_syntax.html">psy::C::TypeReferenceSyntax</a></div><div class="ttdoc">The TypeReferenceSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:294</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_declarator_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_declarator_syntax.html">psy::C::DeclaratorSyntax</a></div><div class="ttdoc">The DeclaratorSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:219</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_m_i_x_i_n___g_n_u_extension_flag_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_m_i_x_i_n___g_n_u_extension_flag.html">psy::C::MIXIN_GNUExtensionFlag</a></div><div class="ttdef"><b>Definition:</b> SyntaxNodes_MIXIN.h:46</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_declarator_suffix_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_declarator_suffix_syntax.html">psy::C::DeclaratorSuffixSyntax</a></div><div class="ttdoc">The DeclaratorSuffixSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:232</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_expression_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_expression_syntax.html">psy::C::ExpressionSyntax</a></div><div class="ttdoc">The ExpressionSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:273</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_initializer_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_initializer_syntax.html">psy::C::InitializerSyntax</a></div><div class="ttdoc">The InitializerSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:245</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_token_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_token.html">psy::C::SyntaxToken</a></div><div class="ttdoc">The SyntaxToken class.</div><div class="ttdef"><b>Definition:</b> SyntaxToken.h:55</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_declaration_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_declaration_syntax.html">psy::C::DeclarationSyntax</a></div><div class="ttdoc">The DeclarationSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:186</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_statement_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_statement_syntax.html">psy::C::StatementSyntax</a></div><div class="ttdoc">The StatementSyntax class: The base class for all statements.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:287</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_specifier_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_specifier_syntax.html">psy::C::SpecifierSyntax</a></div><div class="ttdoc">The SpecifierSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:204</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_type_reference_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type_reference_syntax.html">psy::C::TypeReferenceSyntax</a></div><div class="ttdoc">The TypeReferenceSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:295</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_declarator_syntax_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_declarator_syntax.html">psy::C::DeclaratorSyntax</a></div><div class="ttdoc">The DeclaratorSyntax class.</div><div class="ttdef"><b>Definition:</b> SyntaxNodes.h:220</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_m_i_x_i_n___g_n_u_extension_flag_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_m_i_x_i_n___g_n_u_extension_flag.html">psy::C::MIXIN_GNUExtensionFlag</a></div><div class="ttdef"><b>Definition:</b> SyntaxNodes_MIXIN.h:47</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

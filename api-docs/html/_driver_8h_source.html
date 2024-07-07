@@ -105,22 +105,20 @@ $(function() {
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordtype">int</span> execute(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span>FrontEnd;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">friend</span> <span class="keyword">class </span>CCompilerFrontEnd;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> SUCCESS = 0;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR = 1;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR_UnrecognizedCmdLineOption = 2;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR_NoInputFile = 3;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR_FileNotFound = 4;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR_CannotLoadPluging = 5;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR_LanguageNotRecognized = 6;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;};</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> SUCCESS = 0;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR = 1;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR_UnrecognizedCmdLineFlag = 2;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR_InvalidCmdLineFlagValue = 3;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR_NoInputFile = 4;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR_FileNotFound = 5;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR_CannotLoadPluging = 6;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> ERROR_LanguageNotRecognized = 7;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;};</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;} <span class="comment">// cnip</span></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;} <span class="comment">// cnip</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasscnip_1_1_driver_html"><div class="ttname"><a href="classcnip_1_1_driver.html">cnip::Driver</a></div><div class="ttdoc">The Driver class.</div><div class="ttdef"><b>Definition:</b> Driver.h:32</div></div>
 <!-- start footer part -->

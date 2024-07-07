@@ -1,14 +1,10 @@
 var searchData=
 [
-  ['name_280',['name',['../classname.html',1,'name'],['../classpsy_1_1_c_1_1_function_symbol.html#a9de55fc4a3fde741ab368cd06aeef44d',1,'psy::C::FunctionSymbol::name()'],['../classpsy_1_1_c_1_1_value_symbol.html#a816cc6be3dc5441c108db7bc9402181f',1,'psy::C::ValueSymbol::name()'],['../classpsy_1_1_c_1_1_named_type_symbol.html#ac80be2fb2d8fa9e8194f32b774ccef09',1,'psy::C::NamedTypeSymbol::name()']]],
-  ['namecatalog_281',['NameCatalog',['../classpsy_1_1_c_1_1_name_catalog.html',1,'psy::C']]],
-  ['namecataloger_282',['NameCataloger',['../classpsy_1_1_c_1_1_name_cataloger.html',1,'psy::C']]],
-  ['nameddeclarationsyntax_283',['NamedDeclarationSyntax',['../classpsy_1_1_c_1_1_named_declaration_syntax.html',1,'psy::C']]],
-  ['namedtypekind_284',['namedTypeKind',['../classpsy_1_1_c_1_1_named_type_symbol.html#a4de111c5f9fafde300e232d7ad9ff173',1,'psy::C::NamedTypeSymbol']]],
-  ['namedtypesymbol_285',['NamedTypeSymbol',['../classpsy_1_1_c_1_1_named_type_symbol.html',1,'psy::C']]],
-  ['namedtypesymbolimpl_286',['NamedTypeSymbolImpl',['../struct_named_type_symbol_1_1_named_type_symbol_impl.html',1,'psy::C::NamedTypeSymbol']]],
-  ['namespace_287',['NameSpace',['../classpsy_1_1_c_1_1_name_space.html',1,'psy::C::NameSpace'],['../classpsy_1_1_c_1_1_symbol.html#ad3434076ded86daf3f7d3ae04dca70e3',1,'psy::C::Symbol::nameSpace()']]],
-  ['namespaces_288',['NameSpaces',['../classpsy_1_1_c_1_1_name_spaces.html',1,'psy::C']]],
-  ['namesyntax_289',['NameSyntax',['../classpsy_1_1_c_1_1_name_syntax.html',1,'psy::C']]],
-  ['none_290',['None',['../classpsy_1_1_c_1_1_parse_options.html#ab0356651dea4e1d4c89ed0e990e7623ca6adf97f83acf6453d4a6a4b1070f3754',1,'psy::C::ParseOptions::None()'],['../classpsy_1_1_c_1_1_parse_options.html#a8174d8fb7d6fa5bae95a5f7b101f5fe9a6adf97f83acf6453d4a6a4b1070f3754',1,'psy::C::ParseOptions::None()'],['../classpsy_1_1_c_1_1_parse_options.html#a83625d30d10f21e9937c75dcef53635fa6adf97f83acf6453d4a6a4b1070f3754',1,'psy::C::ParseOptions::None()']]]
+  ['name_287',['name',['../classpsy_1_1_c_1_1_function.html#a4c6a672b59b066ff07793bc072a5cffc',1,'psy::C::Function::name()'],['../classpsy_1_1_c_1_1_object_declaration_symbol.html#ac58f9f22ad69f616e336c7161bc305ad',1,'psy::C::ObjectDeclarationSymbol::name()']]],
+  ['namecatalog_288',['NameCatalog',['../classpsy_1_1_c_1_1_name_catalog.html',1,'psy::C']]],
+  ['namecataloger_289',['NameCataloger',['../classpsy_1_1_c_1_1_name_cataloger.html',1,'psy::C']]],
+  ['nameddeclarationsyntax_290',['NamedDeclarationSyntax',['../classpsy_1_1_c_1_1_named_declaration_syntax.html',1,'psy::C']]],
+  ['namespace_291',['nameSpace',['../classpsy_1_1_c_1_1_declaration_symbol.html#a97bad1af41a4bd915f2ce215cdebb530',1,'psy::C::DeclarationSymbol']]],
+  ['namespaces_292',['NameSpaces',['../classpsy_1_1_c_1_1_name_spaces.html',1,'psy::C']]],
+  ['namesyntax_293',['NameSyntax',['../classpsy_1_1_c_1_1_name_syntax.html',1,'psy::C']]]
 ];

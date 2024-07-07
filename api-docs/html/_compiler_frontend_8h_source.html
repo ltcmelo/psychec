@@ -107,15 +107,16 @@ $(function() {
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classcnip_1_1_compiler_frontend.html">CompilerFrontend</a>();</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> run(<span class="keyword">const</span> std::string&amp; srcText, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_file_info.html">psy::FileInfo</a>&amp; fi) = 0;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="classcnip_1_1_compiler_frontend.html">CompilerFrontend</a>();</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;};</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;} <span class="comment">// cnip</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> setup() = 0;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> run(<span class="keyword">const</span> std::string&amp; srcText, <span class="keyword">const</span> <a class="code" href="classpsy_1_1_file_info.html">psy::FileInfo</a>&amp; fi) = 0;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="classcnip_1_1_compiler_frontend.html">CompilerFrontend</a>();</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;};</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;} <span class="comment">// cnip</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasscnip_1_1_compiler_frontend_html"><div class="ttname"><a href="classcnip_1_1_compiler_frontend.html">cnip::CompilerFrontend</a></div><div class="ttdoc">The CompilerFrontend class.</div><div class="ttdef"><b>Definition:</b> CompilerFrontend.h:38</div></div>
 <div class="ttc" id="aclasspsy_1_1_file_info_html"><div class="ttname"><a href="classpsy_1_1_file_info.html">psy::FileInfo</a></div><div class="ttdoc">The FileInfo class.</div><div class="ttdef"><b>Definition:</b> FileInfo.h:35</div></div>

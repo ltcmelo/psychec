@@ -1,24 +1,12 @@
 var searchData=
 [
-  ['scope_857',['scope',['../classpsy_1_1_c_1_1_symbol.html#a9794142ef7ea778c6609c01e85250de7',1,'psy::C::Symbol']]],
-  ['semanticmodel_858',['semanticModel',['../classpsy_1_1_c_1_1_compilation.html#a62d2e2c699ccef99d3afd6b7c870bc48',1,'psy::C::Compilation']]],
-  ['settreatmentofambiguities_859',['setTreatmentOfAmbiguities',['../classpsy_1_1_c_1_1_parse_options.html#a44b89ee66ecb778f46d55dcd956a6fc8',1,'psy::C::ParseOptions']]],
-  ['settreatmentofcomments_860',['setTreatmentOfComments',['../classpsy_1_1_c_1_1_parse_options.html#a08f2e65f0445f29651175db7dfdc5f53',1,'psy::C::ParseOptions']]],
-  ['settreatmentofidentifiers_861',['setTreatmentOfIdentifiers',['../classpsy_1_1_c_1_1_parse_options.html#a3f60b1b80d06fa52499af8c7f00d7f32',1,'psy::C::ParseOptions']]],
-  ['severity_862',['severity',['../classpsy_1_1_diagnostic.html#a5481879d6ec0dbfd5a1dc47527d5b8c8',1,'psy::Diagnostic']]],
-  ['signedness_863',['signedness',['../classpsy_1_1_c_1_1_integer_constant.html#abe29e4411c249224ac01bc315a3244d7',1,'psy::C::IntegerConstant::signedness()'],['../classpsy_1_1_c_1_1_imaginary_integer_constant.html#a1d4aea9bb2c147be93b7c1475ce7ee0b',1,'psy::C::ImaginaryIntegerConstant::signedness()']]],
-  ['size_864',['size',['../classpsy_1_1_text_element.html#afc2fb4fdcabd12d9f325acb31ed67dbe',1,'psy::TextElement']]],
-  ['snippet_865',['snippet',['../classpsy_1_1_diagnostic.html#ad5b70b0640a3f2d2bea002cfff80f396',1,'psy::Diagnostic']]],
-  ['solve_5fconstraints_866',['solve_constraints',['../class_python_1_1_psyche_c_facade_1_1_psyche_c_facade.html#a557d8b1c458f37e90e6d58a273bd2af0',1,'Python::PsycheCFacade::PsycheCFacade']]],
-  ['span_867',['span',['../classpsy_1_1_c_1_1_syntax_token.html#ada461574de2ecdfb2be33f6fd2cdb207',1,'psy::C::SyntaxToken::span()'],['../classpsy_1_1_file_line_position_span.html#a2b0fb0f94c125a0398de734e793c131e',1,'psy::FileLinePositionSpan::span()']]],
-  ['starlineposition_868',['starLinePosition',['../classpsy_1_1_file_line_position_span.html#ad79152a1ca8b488ff2bcf571f78d8dcf',1,'psy::FileLinePositionSpan']]],
-  ['start_869',['start',['../classpsy_1_1_line_position_span.html#af3b9b7110b4bb20d6ad5711a8971cd44',1,'psy::LinePositionSpan::start()'],['../classpsy_1_1_text_span.html#ab752009061b48f70d4822fbd2d3d2d17',1,'psy::TextSpan::start()']]],
-  ['std_870',['std',['../classpsy_1_1_c_1_1_language_dialect.html#a6a30fce69504648d7f889bfa4a85b1f9',1,'psy::C::LanguageDialect']]],
-  ['stringliteral_871',['StringLiteral',['../classpsy_1_1_c_1_1_string_literal.html#ad8fc36b1274f8acfaaf31474046fd30a',1,'psy::C::StringLiteral']]],
-  ['strippeddeclaratororself_872',['strippedDeclaratorOrSelf',['../classpsy_1_1_c_1_1_syntax_utilities.html#aba1e40942a48bfa23e130978469f9094',1,'psy::C::SyntaxUtilities']]],
-  ['symbolname_873',['SymbolName',['../classpsy_1_1_c_1_1_symbol_name.html#a7ae655d1bd07d006213ef8b8f62291d3',1,'psy::C::SymbolName']]],
-  ['symbols_874',['symbols',['../classpsy_1_1_c_1_1_assembly.html#a0dc0d9e42aed4292af5264d8b069bcdb',1,'psy::C::Assembly']]],
-  ['syntax_875',['syntax',['../classpsy_1_1_c_1_1_syntax_reference.html#a59c8636012606fe2cacdf85b0692b970',1,'psy::C::SyntaxReference']]],
-  ['syntaxtree_876',['syntaxTree',['../classpsy_1_1_c_1_1_semantic_model.html#a0e1422906c4b043e07eadf8f5cd25bde',1,'psy::C::SemanticModel::syntaxTree()'],['../classpsy_1_1_c_1_1_syntax_node.html#ac4f208c61ff7f684485ea489f4b0ec03',1,'psy::C::SyntaxNode::syntaxTree()'],['../classpsy_1_1_c_1_1_syntax_reference.html#aa88fd381a7a261b0d00abc43f922b2f2',1,'psy::C::SyntaxReference::syntaxTree()']]],
-  ['syntaxtrees_877',['syntaxTrees',['../classpsy_1_1_c_1_1_compilation.html#aea9c6e81d7d046ad4a6eaac76346ac9e',1,'psy::C::Compilation']]]
+  ['tag_886',['tag',['../classpsy_1_1_c_1_1_tag_type.html#a48861caede3a8abb31f0b8508abbbc33',1,'psy::C::TagType']]],
+  ['text_887',['text',['../classpsy_1_1_c_1_1_syntax_tree.html#a38fa1cba21856c2ea4ae605c6ec21d96',1,'psy::C::SyntaxTree']]],
+  ['title_888',['title',['../classpsy_1_1_diagnostic_descriptor.html#ad3b36b0f2577893588dbfe04e0eedf6f',1,'psy::DiagnosticDescriptor']]],
+  ['todisplaystring_889',['toDisplayString',['../classpsy_1_1_c_1_1_function.html#a8c562315a2efe922c46565149ec83db7',1,'psy::C::Function::toDisplayString()'],['../classpsy_1_1_c_1_1_enumerator.html#a9da3bddd0b4b462efa9b2ee4d0497461',1,'psy::C::Enumerator::toDisplayString()'],['../classpsy_1_1_c_1_1_field.html#a531eba9208ca6ab27f1f592a04e23ee3',1,'psy::C::Field::toDisplayString()'],['../classpsy_1_1_c_1_1_parameter.html#aa251606bce94871518973a61df5e3da3',1,'psy::C::Parameter::toDisplayString()'],['../classpsy_1_1_c_1_1_variable.html#ad743db2a85d13762b2eb050857a17a65',1,'psy::C::Variable::toDisplayString()'],['../classpsy_1_1_c_1_1_symbol.html#a065cdae083809acf0a44a85484a1fead',1,'psy::C::Symbol::toDisplayString()'],['../classpsy_1_1_c_1_1_program.html#a526d71d8f4edeb07e9152591264d429b',1,'psy::C::Program::toDisplayString()'],['../classpsy_1_1_c_1_1_translation_unit.html#a92bcce9b11a5f4eec175da79e36a9cfa',1,'psy::C::TranslationUnit::toDisplayString()'],['../classpsy_1_1_c_1_1_enum.html#a343a458a0204b39649a8908e417d2d22',1,'psy::C::Enum::toDisplayString()'],['../classpsy_1_1_c_1_1_struct.html#a6a116b4f98fdd83a68bdabda7a2c9b85',1,'psy::C::Struct::toDisplayString()'],['../classpsy_1_1_c_1_1_typedef.html#a1ffbd534b96251b6412d4bd30a996478',1,'psy::C::Typedef::toDisplayString()'],['../classpsy_1_1_c_1_1_union.html#a56962e41a269c90337031f5d11772b34',1,'psy::C::Union::toDisplayString()']]],
+  ['translations_890',['translations',['../classpsy_1_1_c_1_1_language_extensions.html#ad1960a33abb4dfa54c0005aacdeca40e',1,'psy::C::LanguageExtensions']]],
+  ['translationunit_891',['translationUnit',['../classpsy_1_1_c_1_1_semantic_model.html#a08885d673076635e31222c2695cf1692',1,'psy::C::SemanticModel']]],
+  ['translationunitroot_892',['translationUnitRoot',['../classpsy_1_1_c_1_1_syntax_tree.html#a707e12922729b70e5c1e94810c879174',1,'psy::C::SyntaxTree']]],
+  ['type_893',['type',['../classpsy_1_1_c_1_1_function.html#afcacdbdff3a89bbde7df93372a0cda18',1,'psy::C::Function::type()'],['../classpsy_1_1_c_1_1_object_declaration_symbol.html#a7602cdd14920ccb5647c79b616d49b73',1,'psy::C::ObjectDeclarationSymbol::type()']]],
+  ['typedefname_894',['typedefName',['../classpsy_1_1_c_1_1_typedef_type.html#ac4c5bb553cbfc226e27451e1c790a332',1,'psy::C::TypedefType']]]
 ];

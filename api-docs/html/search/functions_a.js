@@ -1,4 +1,12 @@
 var searchData=
 [
-  ['kind_833',['kind',['../classpsy_1_1_c_1_1_name_space.html#a54897fcdcfe1e47dcfdea611e7635239',1,'psy::C::NameSpace::kind()'],['../classpsy_1_1_c_1_1_scope.html#a10dc8ce5e1a088607f1c1f95025dadb4',1,'psy::C::Scope::kind()'],['../classpsy_1_1_c_1_1_symbol.html#ac0f974e5c6f902ad3dea32057505dc1e',1,'psy::C::Symbol::kind()'],['../classpsy_1_1_c_1_1_symbol_name.html#a49e7c50fe9b61ee9c05031006a6f415c',1,'psy::C::SymbolName::kind()'],['../classpsy_1_1_c_1_1_syntax_lexeme.html#a8403358842bbfd182fb7e5671cb1a64e',1,'psy::C::SyntaxLexeme::kind()'],['../classpsy_1_1_c_1_1_syntax_node.html#a35448ac7a04abcf2ebb1a58e0a94eac3',1,'psy::C::SyntaxNode::kind()'],['../classpsy_1_1_c_1_1_syntax_token.html#abb351c65def5acb1deb74ff6ce758715',1,'psy::C::SyntaxToken::kind()']]]
+  ['languagedialect_845',['languageDialect',['../classpsy_1_1_c_1_1_parse_options.html#a2b07262d4d9e79027b31de41c3994137',1,'psy::C::ParseOptions']]],
+  ['languageextensions_846',['LanguageExtensions',['../classpsy_1_1_c_1_1_language_extensions.html#a2e6c1882b0edce3ceca862affa58df87',1,'psy::C::LanguageExtensions::LanguageExtensions()'],['../classpsy_1_1_c_1_1_language_extensions.html#a910aacc9a9b9c350167371910277e1af',1,'psy::C::LanguageExtensions::LanguageExtensions(MacroTranslations translations)'],['../classpsy_1_1_c_1_1_parse_options.html#a4a6fa2851652e17f6c5d1745485d8420',1,'psy::C::ParseOptions::languageExtensions()']]],
+  ['lasttoken_847',['lastToken',['../classpsy_1_1_c_1_1_syntax_node.html#ac3822462d90c443f489b2b2cffeb7da5',1,'psy::C::SyntaxNode::lastToken()'],['../classpsy_1_1_c_1_1_syntax_node_list.html#af82d1112eee9c607a04ffc6ff5044b84',1,'psy::C::SyntaxNodeList::lastToken()']]],
+  ['length_848',['length',['../classpsy_1_1_text_element.html#a925d9a45b70caeceb13656c71227060b',1,'psy::TextElement']]],
+  ['lexeme_849',['lexeme',['../classpsy_1_1_c_1_1_syntax_token.html#a5783a9cca610ef1998fd9636e7e5d4f4',1,'psy::C::SyntaxToken']]],
+  ['line_850',['line',['../classpsy_1_1_line_position.html#ad324ee7333df61a0ba0127a9d3bc09cc',1,'psy::LinePosition']]],
+  ['lineno_851',['lineno',['../classpsy_1_1_c_1_1_line_directive.html#a2138fe80897543aeee14437ba63354b9',1,'psy::C::LineDirective']]],
+  ['linespan_852',['lineSpan',['../classpsy_1_1_location.html#ae3f175cd2005e86d619f8705c90141d8',1,'psy::Location']]],
+  ['location_853',['location',['../classpsy_1_1_c_1_1_declaration_symbol.html#a2846b579f27333881d80a27ef8874193',1,'psy::C::DeclarationSymbol::location()'],['../classpsy_1_1_c_1_1_syntax_token.html#a8922ec2e872cbd8039b624a40715ce96',1,'psy::C::SyntaxToken::location()'],['../classpsy_1_1_diagnostic.html#af0cc21344588771db47fd1239a3c7e95',1,'psy::Diagnostic::location()']]]
 ];

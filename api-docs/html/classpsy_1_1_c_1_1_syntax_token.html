@@ -102,14 +102,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abb351c65def5acb1deb74ff6ce758715"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac36dc33bcae670b7d65967b7455337b4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#ac36dc33bcae670b7d65967b7455337b4">isKind</a> (SyntaxKind k)</td></tr>
 <tr class="separator:ac36dc33bcae670b7d65967b7455337b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafa257b00a3af9ff1bd21ea5fef38157"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#aafa257b00a3af9ff1bd21ea5fef38157">rawKind</a> () const</td></tr>
-<tr class="separator:aafa257b00a3af9ff1bd21ea5fef38157"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b94c0a837b538b161c61ac8d8a01a9b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a3b94c0a837b538b161c61ac8d8a01a9b">isRawKind</a> (unsigned int <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#aafa257b00a3af9ff1bd21ea5fef38157">rawKind</a>) const</td></tr>
-<tr class="separator:a3b94c0a837b538b161c61ac8d8a01a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a254d6d8e0cd82ec949a5c9e0abfa3bee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a1c34af83d1ca3481777b12a8c046d02b">Category</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a254d6d8e0cd82ec949a5c9e0abfa3bee">category</a> () const</td></tr>
 <tr class="separator:a254d6d8e0cd82ec949a5c9e0abfa3bee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c7ee7286b0763ee722b90442a9528bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html">SyntaxLexeme</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a9c7ee7286b0763ee722b90442a9528bd">valueLexeme</a> () const</td></tr>
-<tr class="separator:a9c7ee7286b0763ee722b90442a9528bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5783a9cca610ef1998fd9636e7e5d4f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_c_1_1_lexeme.html">Lexeme</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a5783a9cca610ef1998fd9636e7e5d4f4">lexeme</a> () const</td></tr>
+<tr class="separator:a5783a9cca610ef1998fd9636e7e5d4f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7125ecdabaef08da39e66a9ca3183e43"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a7125ecdabaef08da39e66a9ca3183e43">valueText</a> () const</td></tr>
 <tr class="separator:a7125ecdabaef08da39e66a9ca3183e43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1096f90c16b50c618fe4a3e4fbcbbcb"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#af1096f90c16b50c618fe4a3e4fbcbbcb">valueText_c_str</a> () const</td></tr>
@@ -215,7 +211,7 @@ Influence by the API of Clang/LLVM is present as well; specifically: <code>clang
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The Category of the <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html" title="The SyntaxToken class.">SyntaxToken</a> of kind <code>k</code>. </p>
+<p>The Category of SyntaxKind <code>k</code>. </p>
 
 </div>
 </div>
@@ -453,33 +449,6 @@ Influence by the API of Clang/LLVM is present as well; specifically: <code>clang
 
 </div>
 </div>
-<a id="a3b94c0a837b538b161c61ac8d8a01a9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b94c0a837b538b161c61ac8d8a01a9b">&#9670;&nbsp;</a></span>isRawKind()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool psy::C::SyntaxToken::isRawKind </td>
-          <td>(</td>
-          <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>rawKind</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Whether <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html" title="The SyntaxToken class.">SyntaxToken</a> is of the given <code>rawKind</code>. </p>
-
-</div>
-</div>
 <a id="a6f13d49e5c66ee6d6ddb2ff5cc3a711c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6f13d49e5c66ee6d6ddb2ff5cc3a711c">&#9670;&nbsp;</a></span>isValid()</h2>
 
@@ -525,6 +494,24 @@ Influence by the API of Clang/LLVM is present as well; specifically: <code>clang
 
 </div>
 </div>
+<a id="a5783a9cca610ef1998fd9636e7e5d4f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5783a9cca610ef1998fd9636e7e5d4f4">&#9670;&nbsp;</a></span>lexeme()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classpsy_1_1_c_1_1_lexeme.html">Lexeme</a> * SyntaxToken::lexeme </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <a class="el" href="classpsy_1_1_c_1_1_lexeme.html" title="The Lexeme class.">Lexeme</a> underneath <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html" title="The SyntaxToken class.">SyntaxToken</a>. </p>
+
+</div>
+</div>
 <a id="a8922ec2e872cbd8039b624a40715ce96"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8922ec2e872cbd8039b624a40715ce96">&#9670;&nbsp;</a></span>location()</h2>
 
@@ -543,32 +530,6 @@ Influence by the API of Clang/LLVM is present as well; specifically: <code>clang
 
 </div>
 </div>
-<a id="aafa257b00a3af9ff1bd21ea5fef38157"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aafa257b00a3af9ff1bd21ea5fef38157">&#9670;&nbsp;</a></span>rawKind()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int psy::C::SyntaxToken::rawKind </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>The raw kind of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html" title="The SyntaxToken class.">SyntaxToken</a>. </p>
-
-</div>
-</div>
 <a id="ada461574de2ecdfb2be33f6fd2cdb207"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ada461574de2ecdfb2be33f6fd2cdb207">&#9670;&nbsp;</a></span>span()</h2>
 
@@ -584,25 +545,6 @@ Influence by the API of Clang/LLVM is present as well; specifically: <code>clang
       </table>
 </div><div class="memdoc">
 <p>The text span of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html" title="The SyntaxToken class.">SyntaxToken</a>. </p>
-
-</div>
-</div>
-<a id="a9c7ee7286b0763ee722b90442a9528bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c7ee7286b0763ee722b90442a9528bd">&#9670;&nbsp;</a></span>valueLexeme()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html">SyntaxLexeme</a> * SyntaxToken::valueLexeme </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>The value of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html" title="The SyntaxToken class.">SyntaxToken</a> represented by a lexeme, from which the actual value (e.g., an integer such as <code>42</code>) may be obtained.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classpsy_1_1_c_1_1_syntax_lexeme.html#a00a7be7320ecab1a96d40c75797aae26">SyntaxLexeme::value</a> </dd></dl>
 
 </div>
 </div>

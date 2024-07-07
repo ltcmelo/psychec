@@ -98,7 +98,7 @@ $(function() {
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;syntax/SyntaxToken.h&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;../common/infra/InternalAccess.h&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;../common/infra/AccessSpecifiers.h&quot;</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;functional&gt;</span></div>
@@ -109,7 +109,7 @@ $(function() {
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">class </span>ParseOptions;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_lexer.html">   44</a></span>&#160;<span class="keyword">class </span>PSY_C_NON_API <a class="code" href="classpsy_1_1_c_1_1_lexer.html">Lexer</a></div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_lexer.html">   44</a></span>&#160;<span class="keyword">class </span>PSY_C_INTERNAL_API <a class="code" href="classpsy_1_1_c_1_1_lexer.html">Lexer</a></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    ~<a class="code" href="classpsy_1_1_c_1_1_lexer.html">Lexer</a>();</div>
@@ -117,7 +117,7 @@ $(function() {
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">void</span> lex();</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;PSY_INTERNAL:</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    PSY_GRANT_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_lexer.html">Lexer</a>(<a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree);</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
@@ -127,9 +127,9 @@ $(function() {
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">void</span> operator=(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_lexer.html">Lexer</a>&amp;) = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> yylex(<a class="code" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a>* tk);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">void</span> yylex_core(<a class="code" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a>* tk);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">void</span> yylex_CORE(<a class="code" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a>* tk);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> yyinput();</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">void</span> yyinput_core(<span class="keyword">const</span> <span class="keywordtype">char</span>*&amp; yy,</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">void</span> yyinput_CORE(<span class="keyword">const</span> <span class="keywordtype">char</span>*&amp; yy,</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                      <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>&amp; yychar,</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                      <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>&amp; yycolumn,</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                      <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>&amp; offset);</div>
@@ -167,15 +167,15 @@ $(function() {
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keywordtype">bool</span> lexContinuedRawStringLiteral();</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordtype">void</span> lexUntilQuote(<a class="code" href="classpsy_1_1_c_1_1_syntax_token.html">SyntaxToken</a>* tk, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> quote, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> accLeng);</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">void</span> lexBackslash(std::uint16_t rawSyntaxK);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">void</span> lexSingleLineComment(std::uint16_t rawSyntaxK);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">void</span> lexBackslash(SyntaxKind syntaxK);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">void</span> lexSingleLineComment(SyntaxKind syntaxK);</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keyword">static</span> SyntaxKind classify(<span class="keyword">const</span> <span class="keywordtype">char</span>* ident,</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keyword">static</span> SyntaxKind recognize(<span class="keyword">const</span> <span class="keywordtype">char</span>* ident,</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                               <span class="keywordtype">int</span> size,</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                               <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>&amp; options);</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keyword">static</span> SyntaxKind classifyOperator(<span class="keyword">const</span> <span class="keywordtype">char</span>* indent,</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                                       <span class="keywordtype">int</span> size,</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                                       <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>&amp; options);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keyword">static</span> SyntaxKind translate(<span class="keyword">const</span> <span class="keywordtype">char</span>* indent,</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                                <span class="keywordtype">int</span> size,</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                                <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_parse_options.html">ParseOptions</a>&amp; options);</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a>* tree_;</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    std::string text_;</div>
@@ -194,7 +194,7 @@ $(function() {
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="comment">// Line breaks and continuations aren&#39;t strictly correct... (see quirks</span></div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="comment">// at https://gcc.gnu.org/onlinedocs/cppinternals/Lexer.html).</span></div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keywordtype">bool</span> withinLogicalLine_;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    std::uint16_t rawSyntaxK_splitTk;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    SyntaxKind syntaxK_splitTk;</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keyword">struct </span>DiagnosticsReporter</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    {</div>
@@ -219,7 +219,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasspsy_1_1_c_1_1_parse_options_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_parse_options.html">psy::C::ParseOptions</a></div><div class="ttdoc">The ParseOptions class.</div><div class="ttdef"><b>Definition:</b> ParseOptions.h:43</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_language_dialect_html_add3c5a89ff4b0defa9a2c6f336a4a847"><div class="ttname"><a href="classpsy_1_1_c_1_1_language_dialect.html#add3c5a89ff4b0defa9a2c6f336a4a847">psy::C::LanguageDialect::Std</a></div><div class="ttdeci">Std</div><div class="ttdoc">The C Standard enumeration.</div><div class="ttdef"><b>Definition:</b> LanguageDialect.h:50</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_token_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_token.html">psy::C::SyntaxToken</a></div><div class="ttdoc">The SyntaxToken class.</div><div class="ttdef"><b>Definition:</b> SyntaxToken.h:54</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_token_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_token.html">psy::C::SyntaxToken</a></div><div class="ttdoc">The SyntaxToken class.</div><div class="ttdef"><b>Definition:</b> SyntaxToken.h:55</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_syntax_tree_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_syntax_tree.html">psy::C::SyntaxTree</a></div><div class="ttdoc">The SyntaxTree class.</div><div class="ttdef"><b>Definition:</b> SyntaxTree.h:61</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_lexer_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_lexer.html">psy::C::Lexer</a></div><div class="ttdoc">The C Lexer class.</div><div class="ttdef"><b>Definition:</b> Lexer.h:45</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_language_extensions_html_a983d0c2e802c4f814611b516891c3587"><div class="ttname"><a href="classpsy_1_1_c_1_1_language_extensions.html#a983d0c2e802c4f814611b516891c3587">psy::C::LanguageExtensions::Ext</a></div><div class="ttdeci">Ext</div><div class="ttdoc">The C language extensions enumeration.</div><div class="ttdef"><b>Definition:</b> LanguageExtensions.h:60</div></div>

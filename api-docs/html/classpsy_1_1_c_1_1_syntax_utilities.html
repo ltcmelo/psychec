@@ -114,12 +114,14 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Return the <em>inner</em> <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> of the given <code>decltor</code>.</p>
-<p>A <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> has an <em>inner</em> <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> if it's one the following:</p><ul>
-<li>a <a class="el" href="classpsy_1_1_c_1_1_pointer_declarator_syntax.html" title="The PointerDeclaratorSyntax class.">PointerDeclaratorSyntax</a>;</li>
-<li>an ArrayDeclaratorSyntax;</li>
-<li>a FunctionDeclaratorSyntax;</li>
-<li>or a <a class="el" href="classpsy_1_1_c_1_1_bitfield_declarator_syntax.html" title="The BitfieldDeclaratorSyntax class.">BitfieldDeclaratorSyntax</a>. </li>
+<p>The declarators with an <em>inner</em> declarator are:</p><ul>
+<li><a class="el" href="classpsy_1_1_c_1_1_pointer_declarator_syntax.html" title="The PointerDeclaratorSyntax class.">PointerDeclaratorSyntax</a>;</li>
+<li>ArrayDeclaratorSyntax;</li>
+<li>FunctionDeclaratorSyntax;</li>
+<li><a class="el" href="classpsy_1_1_c_1_1_bitfield_declarator_syntax.html" title="The BitfieldDeclaratorSyntax class.">BitfieldDeclaratorSyntax</a>.</li>
 </ul>
+<dl class="section note"><dt>Note</dt><dd>A ParenthesizedDeclarator doesn't have an inner declarator, but it can be stripped.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classpsy_1_1_c_1_1_syntax_utilities.html#aba1e40942a48bfa23e130978469f9094">SyntaxUtilities::strippedDeclaratorOrSelf</a> </dd></dl>
 
 </div>
 </div>
@@ -175,7 +177,7 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Return the <em>stripped</em> <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> of the given <code>decltor</code>.</p>
-<p>A <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> is <em>stripped</em> if it's not a <a class="el" href="classpsy_1_1_c_1_1_parenthesized_declarator_syntax.html">ParenthesizedDeclaratorSyntax</a>. </p>
+<p>A <a class="el" href="classpsy_1_1_c_1_1_declarator_syntax.html" title="The DeclaratorSyntax class.">DeclaratorSyntax</a> is <em>stripped</em> when it isn't a <a class="el" href="classpsy_1_1_c_1_1_parenthesized_declarator_syntax.html">ParenthesizedDeclaratorSyntax</a>. </p>
 
 </div>
 </div>
