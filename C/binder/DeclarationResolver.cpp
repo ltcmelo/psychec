@@ -78,6 +78,7 @@ SyntaxVisitor::Action DeclarationResolver::visitIdentifierDeclarator(const Ident
                                     NameSpace::OrdinaryIdentifiers);
                         if (tyDecl) {
                             // TODO
+                            std::cout << "got it " << std::endl;
                         }
                         break;
                     }
