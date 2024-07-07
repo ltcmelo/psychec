@@ -54,7 +54,7 @@ PSY_INTERNAL:
 
     Parameter(const SyntaxTree* tree,
               const Symbol* containingSym,
-              const Scope* scope);
+              const Scope* enclosingScope);
 };
 
 std::string PSY_C_API to_string(const Parameter& parm);

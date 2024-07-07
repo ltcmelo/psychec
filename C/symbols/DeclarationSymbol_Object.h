@@ -98,8 +98,8 @@ protected:
     DECL_PIMPL_SUB(ObjectDeclarationSymbol);
     ObjectDeclarationSymbol(const SyntaxTree* tree,
                             const Symbol* containingSym,
-                            const Scope* scope,
-                            ObjectDeclarationSymbolKind valSymK);
+                            const Scope* enclosingScope,
+                            ObjectDeclarationSymbolKind objDeclSymK);
 };
 
 std::string PSY_C_API to_string(const ObjectDeclarationSymbol& sym);

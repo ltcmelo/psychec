@@ -24,19 +24,21 @@
 
 #include "../common/infra/Assertions.h"
 
+#include <algorithm>
+#include <iterator>
 #include <iostream>
 
 using namespace psy;
 using namespace C;
 
-Scope::Scope(ScopeKind K)
-    : K_(K)
+Scope::Scope(ScopeKind scopeK)
+    : scopeK_(scopeK)
     , outerScope_(nullptr)
 {}
 
 ScopeKind Scope::kind() const
 {
-    return K_;
+    return scopeK_;
 }
 
 const DeclarationSymbol* Scope::searchForDeclaration(
@@ -52,6 +54,33 @@ const DeclarationSymbol* Scope::searchForDeclaration(
             : nullptr;
 }
 
+std::vector<const DeclarationSymbol*> Scope::declarations() const
+{
+    std::vector<const DeclarationSymbol*> decls;
+    decls.reserve(decls_.size());
+    std::transform(decls_.begin(),
+                   decls_.end(),
+                   std::back_inserter(decls),
+                   [] (auto p) { return p.second; });
+    return decls;
+}
+
+const std::vector<const Scope*> Scope::innerScopes() const
+{
+    std::vector<const Scope*> v;
+    v.reserve(innerScopes_.size());
+    std::transform(innerScopes_.begin(),
+                   innerScopes_.end(),
+                   std::back_inserter(v),
+                   [] (const auto& ptr) { return ptr.get(); });
+    return v;
+}
+
+const Scope* Scope::outerScope() const
+{
+    return outerScope_;
+}
+
 void Scope::encloseScope(std::unique_ptr<Scope> innerScope)
 {
     innerScope->outerScope_ = this;
@@ -60,9 +89,9 @@ void Scope::encloseScope(std::unique_ptr<Scope> innerScope)
 
 void Scope::morphFrom_FunctionPrototype_to_Block()
 {
-    PSY_ASSERT(K_ == ScopeKind::FunctionPrototype, return);
+    PSY_ASSERT(scopeK_ == ScopeKind::FunctionPrototype, return);
 
-    K_ = ScopeKind::Block;
+    scopeK_ = ScopeKind::Block;
 }
 
 void Scope::addDeclaration(const DeclarationSymbol* decl)

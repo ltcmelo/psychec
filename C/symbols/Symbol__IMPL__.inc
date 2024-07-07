@@ -32,51 +32,52 @@ struct Symbol::SymbolImpl
 {
     SymbolImpl(const SyntaxTree* tree,
                const Symbol* containingSym,
-               const Scope* scope,
+               const Scope* enclosingScope,
                NameSpace ns,
-               SymbolKind K)
+               SymbolKind symK)
         : tree_(tree)
         , containingSym_(containingSym)
-        , scope_(scope)
+        , enclosingScope_(enclosingScope)
         , BF_all_(0)
     {
         BF_.ns_ = static_cast<std::uint32_t>(ns);
-        BF_.K_ = static_cast<std::uint32_t>(K);
+        BF_.symK_ = static_cast<std::uint32_t>(symK);
     }
 
-    SymbolImpl(const SyntaxTree* tree, SymbolKind K)
+    SymbolImpl(const SyntaxTree* tree,
+               SymbolKind symK)
         : tree_(tree)
         , containingSym_(nullptr)
-        , scope_(nullptr)
+        , enclosingScope_(nullptr)
         , BF_all_(0)
     {
-        BF_.K_ = static_cast<std::uint32_t>(K);
+        BF_.symK_ = static_cast<std::uint32_t>(symK);
     }
 
-    SymbolImpl(SymbolKind K)
-        : SymbolImpl(nullptr, K)
+    SymbolImpl(SymbolKind symK)
+        : SymbolImpl(nullptr, symK)
     {
     }
 
     const SyntaxTree* tree_;
     const Symbol* containingSym_;
-    const Scope* scope_;
+    const Scope* enclosingScope_;
 
     struct BitFields
     {
         // Symbol
-        std::uint32_t K_ : 3;
+        std::uint32_t symK_ : 3;
         std::uint32_t ns_ : 2;
 
         // DeclarationSymbol
-        std::uint32_t declK_: 2;
+        std::uint32_t declSymK_: 2;
         std::uint32_t static_ : 1;
 
         // ObjectDeclarationSymbol
-        std::uint32_t objDeclK_ : 3;
+        std::uint32_t objDeclSymK_ : 3;
 
         // TypeDeclarationSymbol
-        std::uint32_t tyDeclK_ : 3;
+        std::uint32_t tyDeclSymK_ : 3;
     };
     union
     {

@@ -66,14 +66,14 @@ public:
     virtual const Identifier* identifier() const = 0;
 
     /**
-     * The Scope of \c this Symbol.
+     * The Scope that encloses \c this DeclarationSymbol.
      *
      * \remark 6.2.1-4
      */
-    const Scope* scope() const;
+    const Scope* enclosingScope() const;
 
     /**
-     * The NameSpace of \c this Symbol.
+     * The NameSpace of \c this DeclarationSymbol.
      *
      * \remark 6.2.3
      */

@@ -31,10 +31,10 @@ using namespace C;
 
 Variable::Variable(const SyntaxTree* tree,
                    const Symbol* containingSym,
-                   const Scope* scope)
+                   const Scope* enclosingScope)
     : ObjectDeclarationSymbol(tree,
                               containingSym,
-                              scope,
+                              enclosingScope,
                               ObjectDeclarationSymbolKind::Variable)
 {}
 

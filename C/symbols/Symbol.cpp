@@ -28,6 +28,11 @@ Symbol::Symbol(SymbolImpl* p)
 Symbol::~Symbol()
 {}
 
+const Symbol* Symbol::containingSymbol() const
+{
+    return P->containingSym_;
+}
+
 namespace psy {
 namespace C {
 

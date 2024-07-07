@@ -716,13 +716,80 @@ void BinderTester::case3497(){}
 void BinderTester::case3498(){}
 void BinderTester::case3499(){}
 
-void BinderTester::case3500(){}
-void BinderTester::case3501(){}
-void BinderTester::case3502(){}
-void BinderTester::case3503(){}
-void BinderTester::case3504(){}
-void BinderTester::case3505(){}
-void BinderTester::case3506(){}
+void BinderTester::case3500()
+{
+    bind("int x ;",
+         Expectation()
+            .binding(DeclSummary()
+                     .Value("x", ObjectDeclarationSymbolKind::Variable)
+                     .Ty.Basic(BasicTypeKind::Int))
+         .scopePath({}));
+}
+
+void BinderTester::case3501()
+{
+    bind("void f() { int x ; }",
+         Expectation()
+            .binding(DeclSummary()
+                     .Value("x", ObjectDeclarationSymbolKind::Variable, ScopeKind::Block)
+                     .Ty.Basic(BasicTypeKind::Int))
+         .scopePath({0}));
+}
+
+void BinderTester::case3502()
+{
+    bind("void f() { { int x ; } }",
+         Expectation()
+            .binding(DeclSummary()
+                     .Value("x", ObjectDeclarationSymbolKind::Variable, ScopeKind::Block)
+                     .Ty.Basic(BasicTypeKind::Int))
+         .scopePath({0, 0}));
+}
+
+void BinderTester::case3503()
+{
+    bind("void f() { { } { int x ; } }",
+         Expectation()
+            .binding(DeclSummary()
+                     .Value("x", ObjectDeclarationSymbolKind::Variable, ScopeKind::Block)
+                     .Ty.Basic(BasicTypeKind::Int))
+         .scopePath({0, 1}));
+}
+
+void BinderTester::case3504()
+{
+    bind("void f() { } void g() { { } { int x ; } { } }",
+         Expectation()
+            .binding(DeclSummary()
+                     .Value("x", ObjectDeclarationSymbolKind::Variable, ScopeKind::Block)
+                     .Ty.Basic(BasicTypeKind::Int))
+         .scopePath({1, 1}));
+}
+
+void BinderTester::case3505()
+{
+    bind("void f() { } void g() { { } { } { { int x ; } } }",
+         Expectation()
+            .binding(DeclSummary()
+                     .Value("x", ObjectDeclarationSymbolKind::Variable, ScopeKind::Block)
+                     .Ty.Basic(BasicTypeKind::Int))
+         .scopePath({1, 2, 0}));
+}
+
+void BinderTester::case3506()
+{
+    bind(R"(
+struct x { };
+)",
+         Expectation()
+        .binding(DeclSummary()
+             .Type("x", TypeDeclarationSymbolKind::Struct)
+             .withNameSpace(NameSpace::Tags)
+             .withScopeKind(ScopeKind::File))
+         .scopePath({}));
+
+}
+
 void BinderTester::case3507(){}
 void BinderTester::case3508(){}
 void BinderTester::case3509(){}

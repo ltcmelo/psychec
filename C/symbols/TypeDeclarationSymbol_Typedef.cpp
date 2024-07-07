@@ -31,12 +31,12 @@ using namespace C;
 
 Typedef::Typedef(const SyntaxTree* tree,
                  const Symbol* containingSym,
-                 const Scope* scope,
+                 const Scope* enclosingScope,
                  TypedefType* tydefTy)
     : TypeDeclarationSymbol(
           new TypeDeclarationSymbolImpl(tree,
                                         containingSym,
-                                        scope,
+                                        enclosingScope,
                                         NameSpace::OrdinaryIdentifiers,
                                         tydefTy,
                                         TypeDeclarationSymbolKind::Typedef))

@@ -38,22 +38,22 @@ using namespace C;
 DeclarationSymbol::DeclarationSymbol(SymbolImpl* p, DeclarationSymbolKind declSymK)
     : Symbol(p)
 {
-    P->BF_.declK_ = static_cast<std::uint32_t>(declSymK);
+    P->BF_.declSymK_ = static_cast<std::uint32_t>(declSymK);
 }
 
 DeclarationSymbolKind DeclarationSymbol::kind() const
 {
-    return DeclarationSymbolKind(P->BF_.declK_);
+    return DeclarationSymbolKind(P->BF_.declSymK_);
 }
 
-const Scope* DeclarationSymbol::scope() const
+const Scope* DeclarationSymbol::enclosingScope() const
 {
-    return P->scope_;
+    return P->enclosingScope_;
 }
 
 SymbolKind Symbol::kind() const
 {
-    return SymbolKind(P->BF_.K_);
+    return SymbolKind(P->BF_.symK_);
 }
 
 const NameSpace DeclarationSymbol::nameSpace() const

@@ -106,9 +106,9 @@ struct DeclSummary
     DeclSummary& withScopeKind(ScopeKind scopeK);
     DeclSummary& withNameSpace(NameSpace ns);
 
-    std::string id_;
-    DeclarationSymbolKind declK_;
-    ObjectDeclarationSymbolKind valDeclK_;
+    std::string ident_;
+    DeclarationSymbolKind declSymK_;
+    ObjectDeclarationSymbolKind objDeclSymK_;
     TypeDeclarationSymbolKind tyDeclSymK_;
     ScopeKind scopeK_;
     NameSpace ns_;
@@ -149,6 +149,10 @@ struct Expectation
 
     std::vector<DeclSummary> bindings_;
     Expectation& binding(DeclSummary b);
+
+    bool checkScope_;
+    std::vector<int> scopePath_;
+    Expectation& scopePath(std::vector<int>&& v);
 };
 
 } // C
