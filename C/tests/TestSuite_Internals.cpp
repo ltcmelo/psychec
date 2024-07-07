@@ -32,6 +32,7 @@
 #include "BinderTester.h"
 #include "ParserTester.h"
 #include "ReparserTester.h"
+#include "DeclarationResolverTester.h"
 
 #include "../common/infra/Assertions.h"
 
@@ -66,16 +67,22 @@ std::tuple<int, int> InternalsTestSuite::testAll()
     auto C = std::make_unique<BinderTester>(this);
     C->testBinder();
 
+    auto D = std::make_unique<DeclarationResolverTester>(this);
+    D->testDeclarationResolver();
+
     auto res = std::make_tuple(P->totalPassed()
                                     + B->totalPassed()
-                                    + C->totalPassed(),
+                                    + C->totalPassed()
+                                    + D->totalPassed(),
                                P->totalFailed()
                                     + B->totalFailed()
-                                    + C->totalFailed());
+                                    + C->totalFailed()
+                                    + D->totalFailed());
 
     testers_.emplace_back(P.release());
     testers_.emplace_back(B.release());
     testers_.emplace_back(C.release());
+    testers_.emplace_back(D.release());
 
     return res;
 }
@@ -776,5 +783,14 @@ void InternalsTestSuite::bind(std::string text, Expectation X)
             PSY_EXPECT_TRUE(sameDecl);
             PSY_EXPECT_TRUE(symbolMatchesBinding(sameDecl, declSummary));
         }
+
+        // resolution
+        // decl
     }
 }
+
+void InternalsTestSuite::resolve(std::string text, Expectation X)
+{
+    bind(text, X);
+}
+

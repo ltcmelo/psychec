@@ -234,6 +234,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/tests/ParserTester_3000_3999.cpp
     ${PROJECT_SOURCE_DIR}/tests/ReparserTester.h
     ${PROJECT_SOURCE_DIR}/tests/ReparserTester.cpp
+    ${PROJECT_SOURCE_DIR}/tests/DeclarationResolverTester.h
+    ${PROJECT_SOURCE_DIR}/tests/DeclarationResolverTester.cpp
     ${PROJECT_SOURCE_DIR}/tests/SemanticModelTester.h
     ${PROJECT_SOURCE_DIR}/tests/SemanticModelTester.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestExpectation.h

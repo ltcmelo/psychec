@@ -43,6 +43,7 @@ class InternalsTestSuite : public TestSuite
     friend class ParserTester;
     friend class ReparserTester;
     friend class BinderTester;
+    friend class DeclarationResolverTester;
 
 public:
     virtual ~InternalsTestSuite();
@@ -70,6 +71,8 @@ private:
                  Expectation X = Expectation());
 
     void bind(std::string text, Expectation X = Expectation());
+
+    void resolve(std::string text, Expectation X = Expectation());
 
     std::unique_ptr<SyntaxTree> tree_;
     std::unique_ptr<Compilation> compilation_;
