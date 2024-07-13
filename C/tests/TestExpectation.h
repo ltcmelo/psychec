@@ -59,52 +59,48 @@ enum class Decay
     FromFunctionToFunctionPointer
 };
 
-struct DeclSummary;
+struct Decl;
 
-struct TySummary
+struct Ty
 {
-    TySummary(DeclSummary& declSummary);
-    TySummary(TySummary&& ty) = default;
-    TySummary(const TySummary& ty) = default;
-    ~TySummary();
+    Ty(Decl& Decl);
+    Ty(Ty&& ty) = default;
+    Ty(const Ty& ty) = default;
+    ~Ty();
 
-    DeclSummary& Void(CVR cvr = CVR::None);
-    DeclSummary& Basic(BasicTypeKind basicTyK, CVR cvr = CVR::None);
-    DeclSummary& Typedef(std::string name, CVR cvr = CVR::None);
-    DeclSummary& Tag(std::string tag, TagTypeKind tagTyK, CVR cvr = CVR::None);
-    DeclSummary& Derived(TypeKind tyKind, CVR cvr = CVR::None, Decay decay = Decay::None);
-    DeclSummary& nestAsReturn();
-    TySummary& addParam();
-    TySummary& atParam();
+    Decl& Void(CVR cvr = CVR::None);
+    Decl& Basic(BasicTypeKind basicTyK, CVR cvr = CVR::None);
+    Decl& Typedef(std::string typedefName, CVR cvr = CVR::None);
+    Decl& Tag(std::string tag, TagTypeKind tagTyK, CVR cvr = CVR::None);
+    Decl& Derived(TypeKind tyK, CVR cvr = CVR::None, Decay decay = Decay::None);
+    Decl& nestAsReturn();
+    Ty& addParam();
+    Ty& atParam();
 
-    DeclSummary& decl_;
-
-    std::string nameOrTag_;
+    Decl& decl_;
+    std::string ident_;
     TypeKind tyK_;
     BasicTypeKind basicTyK_;
     TagTypeKind tagTyK_;
     CVR CVR_;
-
     std::vector<TypeKind> derivTyKs_;
     std::vector<CVR> derivTyCVRs_;
     std::vector<Decay> derivPtrTyDecay_;
-    std::shared_ptr<TySummary> nestedRetTy_;
-    std::vector<TySummary> parmsTys_;
+    std::shared_ptr<Ty> nestedRetTy_;
+    std::vector<Ty> parmsTys_;
 };
 
-struct DeclSummary
+struct Decl
 {
-    DeclSummary();
+    Decl();
 
-    DeclSummary& Value(std::string name,
-                       ObjectDeclarationSymbolKind valK,
-                       ScopeKind scopeK = ScopeKind::File);
-    DeclSummary& Function(std::string funcName,
-                          ScopeKind scopeK = ScopeKind::File);
-    DeclSummary& Type(std::string typedefOrTag, TypeDeclarationSymbolKind tyDeclSymK);
-
-    DeclSummary& withScopeKind(ScopeKind scopeK);
-    DeclSummary& withNameSpace(NameSpace ns);
+    Decl& Object(std::string name,
+                 ObjectDeclarationSymbolKind objDeclSymK,
+                 ScopeKind scopeK = ScopeKind::File);
+    Decl& Function(std::string name, ScopeKind scopeK = ScopeKind::File);
+    Decl& Type(std::string typedefNameOrTag, TypeDeclarationSymbolKind tyDeclSymK);
+    Decl& withScopeKind(ScopeKind scopeK);
+    Decl& inNameSpace(NameSpace ns);
 
     std::string ident_;
     DeclarationSymbolKind declSymK_;
@@ -112,8 +108,7 @@ struct DeclSummary
     TypeDeclarationSymbolKind tyDeclSymK_;
     ScopeKind scopeK_;
     NameSpace ns_;
-
-    TySummary Ty;
+    Ty ty_;
 };
 
 struct Expectation
@@ -147,8 +142,9 @@ struct Expectation
     std::vector<SyntaxKind> syntaxKinds_;
     Expectation& AST(std::vector<SyntaxKind>&& v);
 
-    std::vector<DeclSummary> bindings_;
-    Expectation& binding(DeclSummary b);
+    std::vector<Decl> declarations_;
+    Expectation& declaration(Decl b);
+    Expectation& declaration(Ty ty);
 
     bool checkScope_;
     std::vector<int> scopePath_;

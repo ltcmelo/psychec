@@ -35,7 +35,24 @@ void DeclarationResolverTester::resolve(std::string text, Expectation X)
     (static_cast<InternalsTestSuite*>(suite_)->resolve(text, X));
 }
 
-void DeclarationResolverTester::case0000(){}
+void DeclarationResolverTester::case0000()
+{
+    auto s = R"(
+typedef int x ;
+x y;
+)";
+
+    resolve(s,
+         Expectation()
+             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Variable)
+                        .ty_.Typedef("x"))
+//             .declaration(Decl()
+//                          .Type("x", TypeDeclarationSymbolKind::Typedef)
+//                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+//                          .withScopeKind(ScopeKind::File))
+            );
+}
+
 void DeclarationResolverTester::case0001(){}
 void DeclarationResolverTester::case0002(){}
 void DeclarationResolverTester::case0003(){}
