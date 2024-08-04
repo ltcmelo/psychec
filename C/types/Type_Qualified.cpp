@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22/23/24 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2024 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Type_Array.h"
 #include "Type__IMPL__.inc"
+#include "Type_Qualified.h"
 
 #include <iostream>
 #include <sstream>
@@ -27,38 +27,78 @@
 using namespace psy;
 using namespace C;
 
-struct ArrayType::ArrayTypeImpl : TypeImpl
+struct QualifiedType::QualifiedTypeImpl : TypeImpl
 {
-    ArrayTypeImpl(const Type* elemTy)
-        : TypeImpl(TypeKind::Array)
-        , elemTy_(elemTy)
+    QualifiedTypeImpl(const Type* unqualTy)
+        : TypeImpl(TypeKind::Qualified)
+        , unqualTy_(unqualTy)
     {}
 
-    const Type* elemTy_;
+    const Type* unqualTy_;
 };
 
-ArrayType::ArrayType(const Type* elemTy)
-    : Type(new ArrayTypeImpl(elemTy))
+QualifiedType::QualifiedType(const Type* unqualTy)
+    : Type(new QualifiedTypeImpl(unqualTy))
 {}
 
-const Type* ArrayType::elementType() const
+const Type* QualifiedType::unqualifiedType() const
 {
-    return P_CAST->elemTy_;
+    return P_CAST->unqualTy_;
 }
 
-void ArrayType::resetElementType(const Type* elemTy) const
+void QualifiedType::resetUnqualifiedType(const Type* unqualTy) const
 {
-    P_CAST->elemTy_ = elemTy;
+    P_CAST->unqualTy_ = unqualTy;
+}
+
+bool QualifiedType::isConstQualified() const
+{
+    return P->BF_.const_;
+}
+
+bool QualifiedType::isVolatileQualified() const
+{
+    return P->BF_.volatile_;
+}
+
+bool QualifiedType::isRestrictQualified() const
+{
+    return P->BF_.restrict_;
+}
+
+bool QualifiedType::isAtomicQualified() const
+{
+    return P->BF_.atomic_;
+}
+
+void QualifiedType::qualifyWithConst()
+{
+    P->BF_.const_ = 1;
+}
+
+void QualifiedType::qualifyWithVolatile()
+{
+    P->BF_.volatile_ = 1;
+}
+
+void QualifiedType::qualifyWithRestrict()
+{
+    P->BF_.restrict_ = 1;
+}
+
+void QualifiedType::qualifyWithAtomic()
+{
+    P->BF_.atomic_ = 1;
 }
 
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const ArrayType& arrTy)
+std::string PSY_C_API to_string(const QualifiedType& qualTy)
 {
     std::ostringstream oss;
-    oss << "<ArrayType | ";
-    oss << "element-type:" << to_string(*arrTy.elementType());
+    oss << "<QualifiedType |";
+    oss << " unqualified-type:" << to_string(*qualTy.unqualifiedType());
     oss << ">";
     return oss.str();
 }

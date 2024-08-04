@@ -215,7 +215,7 @@ SyntaxVisitor::Action Binder::visitBasicTypeSpecifier(const BasicTypeSpecifierSy
         return Action::Skip;
     }
 
-    auto ty = tys_.top();
+    TY_AT_TOP(ty);
     if (ty->kind() != TypeKind::Basic) {
         //diagReporter_.
         return Action::Skip;
@@ -402,26 +402,39 @@ SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 
 SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node)
 {
+    QualifiedType* qualTy = nullptr;
     TY_AT_TOP(ty);
+    switch (ty->kind()) {
+        case TypeKind::Qualified:
+            qualTy = ty->asQualifiedType();
+            break;
+
+        default:
+            qualTy = makeTy<QualifiedType>(ty);
+            pushTy(qualTy);
+            break;
+    }
+    PSY_ASSERT(qualTy, return Action::Quit);
+
     const auto tyQualTk = node->qualifierKeyword();
     switch (tyQualTk.kind()) {
         case SyntaxKind::Keyword_const:
-            ty->qualifyWithConst();
+            qualTy->qualifyWithConst();
             break;
 
         case SyntaxKind::Keyword_volatile:
-            ty->qualifyWithVolatile();
+            qualTy->qualifyWithVolatile();
             break;
 
         case SyntaxKind::Keyword_restrict:
-            if (ty->kind() == TypeKind::Pointer)
-                ty->qualifyWithRestrict();
+            if (qualTy->unqualifiedType()->kind() == TypeKind::Pointer)
+                qualTy->qualifyWithRestrict();
             else
                 diagReporter_.InvalidUseOfRestrict(tyQualTk);
             break;
 
         case SyntaxKind::Keyword__Atomic:
-            ty->qualifyWithAtomic();
+            qualTy->qualifyWithAtomic();
             break;
 
         default:

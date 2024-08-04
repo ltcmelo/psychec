@@ -143,8 +143,8 @@ struct Expectation
     Expectation& AST(std::vector<SyntaxKind>&& v);
 
     std::vector<Decl> declarations_;
-    Expectation& declaration(Decl b);
-    Expectation& declaration(Ty ty);
+    Expectation& declaration(Decl d);
+    Expectation& declaration(Ty t);
 
     bool checkScope_;
     std::vector<int> scopePath_;

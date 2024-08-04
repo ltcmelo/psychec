@@ -36,8 +36,7 @@ namespace C {
  * \brief The Type class.
  *
  * \note Similar to:
- * - \c clang::Type and clang::QualType of LLMV/Clang.
- * - \c Microsoft.CodeAnalysis.ITypeDeclarationSymbol of Roslyn.
+ * - \c clang::Type and clang::Type of LLMV/Clang.
  *
  * \see TypeDeclarationSymbol
  */
@@ -64,6 +63,8 @@ public:
     virtual const TagType* asTagType() const { return nullptr; }
     virtual VoidType* asVoidType() { return nullptr; }
     virtual const VoidType* asVoidType() const { return nullptr; }
+    virtual QualifiedType* asQualifiedType() { return nullptr; }
+    virtual const QualifiedType* asQualifiedType() const { return nullptr; }
     //!@}
 
     /**
@@ -71,33 +72,8 @@ public:
      */
     TypeKind kind() const;
 
-    /**
-     * Whether \c this Type is \c const qualified.
-     */
-    bool isConstQualified() const;
-
-    /**
-     * Whether \c this Type is \c volatile qualified.
-     */
-    bool isVolatileQualified() const;
-
-    /**
-     * Whether \c this Type is \c restrict qualified.
-     */
-    bool isRestrictQualified() const;
-
-    /**
-     * Whether \c this Type is \c _Atomic qualified.
-     */
-    bool isAtomicQualified() const;
-
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
-
-    void qualifyWithConst();
-    void qualifyWithVolatile();
-    void qualifyWithRestrict();
-    void qualifyWithAtomic();
 
 protected:
     DECL_PIMPL(Type);

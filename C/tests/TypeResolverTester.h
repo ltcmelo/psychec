@@ -25,31 +25,26 @@
 #include "TestSuite_Internals.h"
 #include "tests/Tester.h"
 
-#define TEST_DECLARATION_RESOLVER(Function) TestFunction { &DeclarationResolverTester::Function, #Function }
+#define TEST_DECLARATION_RESOLVER(Function) TestFunction { &TypeResolverTester::Function, #Function }
 
 namespace psy {
 namespace C {
 
-class DeclarationResolverTester final : public Tester
+class TypeResolverTester final : public Tester
 {
 public:
-    DeclarationResolverTester(TestSuite* suite)
+    TypeResolverTester(TestSuite* suite)
         : Tester(suite)
     {}
 
     static const std::string Name;
     virtual std::string name() const override { return Name; }
 
-    void testDeclarationResolver();
+    void testTypeResolver();
 
     void resolve(std::string text, Expectation X);
 
-    using TestFunction = std::pair<std::function<void(DeclarationResolverTester*)>, const char*>;
-
-    /*
-        xxxx
-            + 0000-0099 -> multiplication x pointer declaration
-     */
+    using TestFunction = std::pair<std::function<void(TypeResolverTester*)>, const char*>;
 
     void case0000();
     void case0001();

@@ -181,15 +181,15 @@ Expectation& Expectation::ambiguity(std::string s)
     return *this;
 }
 
-Expectation& Expectation::declaration(Decl b)
+Expectation& Expectation::declaration(Decl d)
 {
-    declarations_.push_back(b);
+    declarations_.push_back(d);
     return *this;
 }
 
-Expectation& Expectation::declaration(Ty ty)
+Expectation& Expectation::declaration(Ty t)
 {
-    declarations_.push_back(ty.decl_);
+    declarations_.push_back(t.decl_);
     return *this;
 }
 

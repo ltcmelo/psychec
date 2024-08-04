@@ -32,7 +32,8 @@ using namespace C;
 Typedef::Typedef(const SyntaxTree* tree,
                  const Symbol* containingSym,
                  const Scope* enclosingScope,
-                 TypedefType* tydefTy)
+                 TypedefType* tydefTy,
+                 const Type* synonymizedTy)
     : TypeDeclarationSymbol(
           new TypeDeclarationSymbolImpl(tree,
                                         containingSym,
@@ -40,6 +41,7 @@ Typedef::Typedef(const SyntaxTree* tree,
                                         NameSpace::OrdinaryIdentifiers,
                                         tydefTy,
                                         TypeDeclarationSymbolKind::Typedef))
+    , synonymizedTy_(synonymizedTy)
 {
 }
 
@@ -52,6 +54,11 @@ const Identifier* Typedef::identifier() const
 {
     PSY_ASSERT(P_CAST->ty_->kind() == TypeKind::Typedef, return nullptr);
     return P_CAST->ty_->asTypedefType()->typedefName();
+}
+
+const Type* Typedef::synonymizedType() const
+{
+    return synonymizedTy_;
 }
 
 namespace psy {

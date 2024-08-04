@@ -240,6 +240,7 @@ class PointerType;
 class TypedefType;
 class TagType;
 class VoidType;
+class QualifiedType;
 
 /* Scopes */
 class Scope;

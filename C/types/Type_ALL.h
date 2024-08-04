@@ -28,5 +28,6 @@
 #include "Type_Typedef.h"
 #include "Type_Tag.h"
 #include "Type_Void.h"
+#include "Type_Qualified.h"
 
 #endif

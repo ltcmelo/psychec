@@ -59,8 +59,10 @@ SyntaxVisitor::Action Binder::typeSymAtTopAndPopIt()
 
     TY_AT_TOP(ty);
 
-    if (!pendingFunTys_.empty())
+    if (!pendingFunTys_.empty()) {
+        PSY_ASSERT(!pendingFunTys_.empty(), return Action::Quit);
         pendingFunTys_.top()->addParameterType(ty);
+    }
 
     switch (ty->kind()) {
         case TypeKind::Array:
@@ -73,6 +75,7 @@ SyntaxVisitor::Action Binder::typeSymAtTopAndPopIt()
         case TypeKind::Tag:
         case TypeKind::Basic:
         case TypeKind::Void:
+        case TypeKind::Qualified:
             break;
     }
 
@@ -208,12 +211,14 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
                 case TypeKind::Pointer:
                 case TypeKind::Basic:
                 case TypeKind::Void:
+                case TypeKind::Qualified:
                 case TypeKind::Tag:
                 case TypeKind::Typedef:
                     break;
             }
-            pushTy(makeTy<FunctionType>(ty));
-            pendingFunTys_.push(tys_.top()->asFunctionType());
+            auto funcTy = makeTy<FunctionType>(ty);
+            pushTy(funcTy);
+            pendingFunTys_.push(funcTy);
             break;
         }
 
@@ -285,6 +290,8 @@ SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* nod
                 case TypeKind::Array:
                 case TypeKind::Pointer:
                 case TypeKind::Basic:
+                case TypeKind::Void:
+                case TypeKind::Qualified:
                 case TypeKind::Typedef:
                 case TypeKind::Tag: {
                     SYM_AT_TOP(sym);
@@ -325,9 +332,6 @@ SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* nod
                     }
                     break;
                 }
-
-                default:
-                    PSY_ESCAPE_VIA_RETURN(Action::Quit);
             }
             break;
         }
@@ -346,8 +350,8 @@ SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* nod
                      */
                     popTy();
                     TY_AT_TOP(otherTy);
-                    pushTy(makeTy<PointerType>(otherTy));
-                    auto ptrTy = tys_.top()->asPointerType();
+                    auto ptrTy = makeTy<PointerType>(otherTy);
+                    pushTy(ptrTy);
                     ptrTy->markAsArisingFromArrayDecay();
                     break;
                 }
@@ -358,8 +362,8 @@ SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* nod
                      * A declaration of a parameter as “function returning type”
                      * shall be adjusted to “pointer to function returning type”...
                      */
-                    pushTy(makeTy<PointerType>(ty));
-                    auto ptrTy = tys_.top()->asPointerType();
+                    auto ptrTy = makeTy<PointerType>(ty);
+                    pushTy(ptrTy);
                     ptrTy->markAsArisingFromFunctionDecay();
                     break;
                 }
@@ -367,6 +371,7 @@ SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* nod
                 case TypeKind::Pointer:
                 case TypeKind::Basic:
                 case TypeKind::Void:
+                case TypeKind::Qualified:
                 case TypeKind::Typedef:
                 case TypeKind::Tag:
                     break;
@@ -385,9 +390,10 @@ SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* nod
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
     if (decltorIsOfTydef_) {
-        auto tydefTy = makeTy<TypedefType>(lexemeOrEmptyIdent(node->identifierToken()));
-        auto tydef = makeAndBindSym<Typedef>(node, tydefTy);
+        TY_AT_TOP(ty);
         SCOPE_AT_TOP(scope);
+        auto tydefTy = makeTy<TypedefType>(lexemeOrEmptyIdent(node->identifierToken()));
+        auto tydef = makeAndBindSym<Typedef>(node, tydefTy, ty);
         scope->addDeclaration(tydef);
     }
     else {

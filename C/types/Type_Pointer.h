@@ -36,8 +36,8 @@ public:
     /**
      * Cast \c this Type as an PointerType.
      */
-    virtual PointerType* asPointerType() { return this; }
-    virtual const PointerType* asPointerType() const { return this; }
+    virtual PointerType* asPointerType() override { return this; }
+    virtual const PointerType* asPointerType() const override { return this; }
     //!@}
 
     /**
@@ -63,11 +63,13 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
 
     PointerType(const Type* refedTy);
 
     void markAsArisingFromArrayDecay();
     void markAsArisingFromFunctionDecay();
+    void resetReferencedType(const Type*) const;
 
 private:
     DECL_PIMPL_SUB(PointerType)

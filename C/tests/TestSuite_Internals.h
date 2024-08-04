@@ -43,7 +43,7 @@ class InternalsTestSuite : public TestSuite
     friend class ParserTester;
     friend class ReparserTester;
     friend class BinderTester;
-    friend class DeclarationResolverTester;
+    friend class TypeResolverTester;
 
 public:
     virtual ~InternalsTestSuite();
@@ -70,9 +70,15 @@ private:
                  Reparser::DisambiguationStrategy strategy,
                  Expectation X = Expectation());
 
+    std::unique_ptr<SemanticModel> semanticModel(std::string text);
+    void checkSemanticModel(
+            std::unique_ptr<SemanticModel> semaModel,
+            Expectation X);
+    void matchDeclarations(
+            std::unique_ptr<SemanticModel> semaModel,
+            std::vector<Decl> v);
     void bind(std::string text, Expectation X = Expectation());
-
-    void resolve(std::string text, Expectation X = Expectation());
+    void resolveTypes(std::string text, Expectation X = Expectation());
 
     std::unique_ptr<SyntaxTree> tree_;
     std::unique_ptr<Compilation> compilation_;

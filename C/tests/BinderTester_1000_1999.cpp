@@ -318,7 +318,18 @@ void BinderTester::case1059()
                       .ty_.Basic(BasicTypeKind::Int, CVR::Atomic)));
 }
 
-void BinderTester::case1060() {}
+void BinderTester::case1060()
+{
+    bind("int const x , y ;",
+         Expectation()
+             .declaration(Decl()
+                          .Object("x", ObjectDeclarationSymbolKind::Variable)
+                          .ty_.Basic(BasicTypeKind::Int, CVR::Const))
+         .declaration(Decl()
+                      .Object("y", ObjectDeclarationSymbolKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Int, CVR::Const)));
+}
+
 void BinderTester::case1061() {}
 void BinderTester::case1062() {}
 void BinderTester::case1063() {}
@@ -443,7 +454,17 @@ void BinderTester::case1107()
                       .ty_.Derived(TypeKind::Pointer, CVR::None)));
 }
 
-void BinderTester::case1108() {}
+void BinderTester::case1108()
+{
+    bind("int * x , y ;",
+         Expectation()
+             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Int)
+                      .ty_.Derived(TypeKind::Pointer))
+             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Int)));
+}
+
 void BinderTester::case1109() {}
 void BinderTester::case1110() {}
 void BinderTester::case1111() {}

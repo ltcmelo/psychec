@@ -90,6 +90,7 @@ private:
     std::stack<FunctionType*> pendingFunTys_;
     Type* popTy();
     void pushTy(Type*);
+
     template <class TyT, class... TyTArgs> TyT* makeTy(TyTArgs... args);
 
     bool decltorIsOfTydef_;
@@ -219,7 +220,7 @@ SymT* Binder::makeAndBindSym(const SyntaxNode* node, SymTArgs... args)
                                        syms_.top(),
                                        scopes_.top(),
                                        std::forward<SymTArgs>(args)...));
-    return static_cast<SymT*>(semaModel_->keepAndBindDecl(node, std::move(sym)));
+    return static_cast<SymT*>(semaModel_->keepBinding(node, std::move(sym)));
 }
 
 template <class SymT, class... SymTArgs>

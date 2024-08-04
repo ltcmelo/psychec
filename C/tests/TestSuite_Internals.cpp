@@ -32,7 +32,7 @@
 #include "BinderTester.h"
 #include "ParserTester.h"
 #include "ReparserTester.h"
-#include "DeclarationResolverTester.h"
+#include "TypeResolverTester.h"
 
 #include "../common/infra/Assertions.h"
 
@@ -67,8 +67,8 @@ std::tuple<int, int> InternalsTestSuite::testAll()
     auto C = std::make_unique<BinderTester>(this);
     C->testBinder();
 
-    auto D = std::make_unique<DeclarationResolverTester>(this);
-    D->testDeclarationResolver();
+    auto D = std::make_unique<TypeResolverTester>(this);
+    D->testTypeResolver();
 
     auto res = std::make_tuple(P->totalPassed()
                                     + B->totalPassed()
@@ -399,60 +399,58 @@ bool CVRMatches(const Type* ty, CVR cvr)
 {
     switch (cvr) {
         case CVR::Const:
-            if (!ty->isConstQualified()) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isConstQualified()) {
                 DETAIL_MISMATCH("missing const");
                 return false;
             }
             break;
 
         case CVR::Volatile:
-            if (!ty->isVolatileQualified()) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isVolatileQualified()) {
                 DETAIL_MISMATCH("missing volatile");
                 return false;
             }
             break;
 
         case CVR::ConstAndVolatile:
-            if (!(ty->isConstQualified())
-                    || !(ty->isVolatileQualified())) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isConstQualified()
+                    || !ty->asQualifiedType()->isVolatileQualified()) {
                 DETAIL_MISMATCH("missing const volatile");
                 return false;
             }
             break;
 
         case CVR::Restrict:
-            if (!ty->isRestrictQualified()) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isRestrictQualified()) {
                 DETAIL_MISMATCH("missing restrict");
                 return false;
             }
             break;
 
         case CVR::ConstAndRestrict:
-            if (!(ty->isConstQualified())
-                    || !(ty->isRestrictQualified())) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isConstQualified()
+                    || !ty->asQualifiedType()->isRestrictQualified()) {
                 DETAIL_MISMATCH("missing const restrict");
                 return false;
             }
             break;
 
         case CVR::Atomic:
-            if (!ty->isAtomicQualified()) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isAtomicQualified()) {
                 DETAIL_MISMATCH("missing _Atomic");
                 return false;
             }
             break;
 
         case CVR::None:
-            if (ty->isConstQualified()) {
-                DETAIL_MISMATCH("spurious const");
-                return false;
-            }
-            if (ty->isVolatileQualified()) {
-                DETAIL_MISMATCH("spurious volatile");
-                return false;
-            }
-            if (ty->isRestrictQualified()) {
-                DETAIL_MISMATCH("spurious restrict");
+            if (ty->kind() == TypeKind::Qualified) {
+                DETAIL_MISMATCH("spurious qualified type");
                 return false;
             }
             break;
@@ -468,15 +466,17 @@ bool typeMatches(const Type* ty, const Ty& t)
                return false);
 
     for (auto i = t.derivTyKs_.size(); i > 0; --i) {
-        auto derivTyK = t.derivTyKs_[i - 1];
-        if (derivTyK != ty->kind()) {
-            DETAIL_MISMATCH("derived array/pointer/function type kind");
-            return false;
-        }
-
         auto derivTyCVR = t.derivTyCVRs_[i - 1];
         if (!CVRMatches(ty, derivTyCVR)) {
             DETAIL_MISMATCH("derived type CVR");
+            return false;
+        }
+        if (ty->kind() == TypeKind::Qualified)
+            ty = ty->asQualifiedType()->unqualifiedType();
+
+        auto derivTyK = t.derivTyKs_[i - 1];
+        if (derivTyK != ty->kind()) {
+            DETAIL_MISMATCH("derived array/pointer/function type kind");
             return false;
         }
 
@@ -556,6 +556,13 @@ bool typeMatches(const Type* ty, const Ty& t)
         }
     }
 
+    if (!CVRMatches(ty, t.CVR_)) {
+        DETAIL_MISMATCH("type CVR");
+        return false;
+    }
+    if (ty->kind() == TypeKind::Qualified)
+        ty = ty->asQualifiedType()->unqualifiedType();
+
     if (ty->kind() != t.tyK_) {
         DETAIL_MISMATCH("basic/void/typedef/tag type mismatch");
         return false;
@@ -592,11 +599,6 @@ bool typeMatches(const Type* ty, const Ty& t)
 
         default:
             PSY_ASSERT(false, return false);
-    }
-
-    if (!CVRMatches(ty, t.CVR_)) {
-        DETAIL_MISMATCH("type CVR");
-        return false;
     }
 
     return true;
@@ -736,13 +738,35 @@ bool symbolMatchesBinding_(const std::unique_ptr<DeclarationSymbol>& declSym, co
 
 } // anonymous
 
-void InternalsTestSuite::bind(std::string text, Expectation X)
+void InternalsTestSuite::matchDeclarations(
+        std::unique_ptr<SemanticModel> semaModel,
+        std::vector<Decl> decls)
 {
-    parse(text);
-    auto compilation = Compilation::create(tree_->filePath());
-    compilation->addSyntaxTrees({ tree_.get() });
-    auto semaModel = compilation->computeSemanticModel(tree_.get());
+    for (const auto& Decl : decls) {
+#ifdef DEBUG_BINDING_SEARCH
+        std::cout << "\n\t\t...";
+#endif
+        using namespace std::placeholders;
+        auto pred = std::bind(symbolMatchesBinding_, _1, Decl);
+        auto decl = semaModel->searchForDecl(pred);
+        if (decl == nullptr) {
+            std::ostringstream oss;
+            oss << "no declaration matches the expectation: ";
+            oss << " identifier: " << Decl.ident_;
+            oss << " kind: " << to_string(Decl.declSymK_);
+            PSY__internals__FAIL(oss.str());
+        }
+#ifdef DEBUG_BINDING_SEARCH
+        std::cout << "\n\t\tmatch! ";
+#endif
+    }
 
+}
+
+void InternalsTestSuite::checkSemanticModel(
+        std::unique_ptr<SemanticModel> semaModel,
+        Expectation X)
+{
     if (!checkErrorAndWarn(X))
         return;
 
@@ -760,7 +784,7 @@ void InternalsTestSuite::bind(std::string text, Expectation X)
         if (decl == nullptr) {
             std::ostringstream oss;
             oss << "no declaration matches the expectation: ";
-            oss << " name or tag: " << Decl.ident_;
+            oss << " identifier: " << Decl.ident_;
             oss << " kind: " << to_string(Decl.declSymK_);
             PSY__internals__FAIL(oss.str());
         }
@@ -783,14 +807,31 @@ void InternalsTestSuite::bind(std::string text, Expectation X)
             PSY_EXPECT_TRUE(sameDecl);
             PSY_EXPECT_TRUE(symbolMatchesBinding(sameDecl, Decl));
         }
-
-        // resolution
-        // decl
     }
 }
 
-void InternalsTestSuite::resolve(std::string text, Expectation X)
+std::unique_ptr<SemanticModel> InternalsTestSuite::semanticModel(std::string text)
 {
-    bind(text, X);
+    parse(text);
+    auto compilation = Compilation::create(tree_->filePath());
+    compilation->addSyntaxTrees({ tree_.get() });
+    std::unique_ptr<SemanticModel> semaModel(
+                new SemanticModel(tree_.get(), compilation.get()));
+    return semaModel;
+}
+
+void InternalsTestSuite::bind(std::string text, Expectation X)
+{
+    auto semaModel = semanticModel(text);
+    semaModel->applyBinder();
+    checkSemanticModel(std::move(semaModel), X);
+}
+
+void InternalsTestSuite::resolveTypes(std::string text, Expectation X)
+{
+    auto semaModel = semanticModel(text);
+    semaModel->applyBinder();
+    semaModel->applyTypeResolver();
+    checkSemanticModel(std::move(semaModel), X);
 }
 

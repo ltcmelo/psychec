@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Type_Pointer.h"
 #include "Type__IMPL__.inc"
+#include "Type_Pointer.h"
 
 #include <iostream>
 #include <sstream>
@@ -40,6 +40,11 @@ struct PointerType::PointerTypeImpl : TypeImpl
 PointerType::PointerType(const Type* refedTy)
     : Type(new PointerTypeImpl(refedTy))
 {}
+
+void PointerType::resetReferencedType(const Type* refedTy) const
+{
+    P_CAST->refedTy_ = refedTy;
+}
 
 const Type* PointerType::referencedType() const
 {
@@ -72,8 +77,8 @@ namespace C {
 std::string PSY_C_API to_string(const PointerType& ptrTy)
 {
     std::ostringstream oss;
-    oss << "<PointerType | ";
-    oss << "referenced-type:" << to_string(*ptrTy.referencedType());
+    oss << "<PointerType |";
+    oss << " referenced-type:" << to_string(*ptrTy.referencedType());
     oss << ">";
     return oss.str();
 }

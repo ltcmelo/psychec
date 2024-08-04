@@ -174,13 +174,14 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Declarators.cpp
     ${PROJECT_SOURCE_DIR}/binder/Binder_Specifiers.cpp
+    ${PROJECT_SOURCE_DIR}/binder/Binder_End.cpp
     ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
     ${PROJECT_SOURCE_DIR}/binder/NameSpace.h
     ${PROJECT_SOURCE_DIR}/binder/Scope.h
     ${PROJECT_SOURCE_DIR}/binder/Scope.cpp
     ${PROJECT_SOURCE_DIR}/binder/ScopeKind.h
-    ${PROJECT_SOURCE_DIR}/binder/DeclarationResolver.h
-    ${PROJECT_SOURCE_DIR}/binder/DeclarationResolver.cpp
+    ${PROJECT_SOURCE_DIR}/binder/TypeResolver.h
+    ${PROJECT_SOURCE_DIR}/binder/TypeResolver.cpp
 
     # Types
     ${PROJECT_SOURCE_DIR}/types/Type.h
@@ -191,6 +192,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/types/Type_Basic.cpp
     ${PROJECT_SOURCE_DIR}/types/Type_Function.h
     ${PROJECT_SOURCE_DIR}/types/Type_Function.cpp
+    ${PROJECT_SOURCE_DIR}/types/Type_Qualified.h
+    ${PROJECT_SOURCE_DIR}/types/Type_Qualified.cpp
     ${PROJECT_SOURCE_DIR}/types/Type_Pointer.h
     ${PROJECT_SOURCE_DIR}/types/Type_Pointer.cpp
     ${PROJECT_SOURCE_DIR}/types/Type_Typedef.h
@@ -234,8 +237,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/tests/ParserTester_3000_3999.cpp
     ${PROJECT_SOURCE_DIR}/tests/ReparserTester.h
     ${PROJECT_SOURCE_DIR}/tests/ReparserTester.cpp
-    ${PROJECT_SOURCE_DIR}/tests/DeclarationResolverTester.h
-    ${PROJECT_SOURCE_DIR}/tests/DeclarationResolverTester.cpp
+    ${PROJECT_SOURCE_DIR}/tests/TypeResolverTester.h
+    ${PROJECT_SOURCE_DIR}/tests/TypeResolverTester.cpp
     ${PROJECT_SOURCE_DIR}/tests/SemanticModelTester.h
     ${PROJECT_SOURCE_DIR}/tests/SemanticModelTester.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestExpectation.h

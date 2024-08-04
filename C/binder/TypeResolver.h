@@ -31,19 +31,21 @@
 namespace psy {
 namespace C {
 
-class PSY_C_INTERNAL_API DeclarationResolver final : protected SyntaxVisitor
+class PSY_C_INTERNAL_API TypeResolver final : protected SyntaxVisitor
 {
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
 
-    DeclarationResolver(SemanticModel* semaModel, const SyntaxTree* tree);
-    DeclarationResolver(const DeclarationResolver&) = delete;
-    void operator=(const DeclarationResolver&) = delete;
+    TypeResolver(SemanticModel* semaModel, const SyntaxTree* tree);
+    TypeResolver(const TypeResolver&) = delete;
+    void operator=(const TypeResolver&) = delete;
 
-    void resolveDeclarations();
+    void resolveTypes();
 
 private:
     SemanticModel* semaModel_;
+
+    const Type* resolveType(const Type* ty, const Scope* scope) const;
 
     //--------------//
     // Declarations //
@@ -52,6 +54,9 @@ private:
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
 
     /* Declarators */
+    Action visitDeclarator_COMMON(const DeclaratorSyntax*);
+    virtual Action visitPointerDeclarator(const PointerDeclaratorSyntax*) override;
+    virtual Action visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax*) override;
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
 };
 

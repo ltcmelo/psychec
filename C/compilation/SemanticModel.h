@@ -68,7 +68,7 @@ public:
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    const Function* declarationOf(const FunctionDefinitionSyntax* node) const;
+    const Function* declaredFunction(const FunctionDefinitionSyntax* node) const;
 
     /**
      * The Parameter declared by the given ParameterDeclarationSyntax \c node.
@@ -76,7 +76,31 @@ public:
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    const Parameter* declarationOf(const ParameterDeclarationSyntax* node) const;
+    const Parameter* declaredParameter(const ParameterDeclarationSyntax* node) const;
+
+    /**
+     * The Struct declared by the given StructOrUnionDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
+     */
+    const Struct* declaredStruct(const StructOrUnionDeclarationSyntax* node) const;
+
+    /**
+     * The Union declared by the given StructOrUnionDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
+     */
+    const Union* declaredUnion(const StructOrUnionDeclarationSyntax* node) const;
+
+    /**
+     * The Enum declared by the given EnumDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
+     */
+    const Enum* declaredEnum(const EnumDeclarationSyntax* node) const;
 
     /**
      * The TypeDeclarationSymbol declared by the given TypeDeclarationSyntax \c node.
@@ -84,7 +108,7 @@ public:
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    const TypeDeclarationSymbol* declarationOf(const TypeDeclarationSyntax* node) const;
+    const TypeDeclarationSymbol* declaredTypeDeclaration(const TypeDeclarationSyntax* node) const;
 
     /**
      * The Enumerator declared by the given EnumeratorDeclarationSyntax \c node.
@@ -92,7 +116,7 @@ public:
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    const Enumerator* declarationOf(const EnumeratorDeclarationSyntax* node) const;
+    const Enumerator* declaredEnumerator(const EnumeratorDeclarationSyntax* node) const;
 
     /**
      * The Field(s) declared by the given FieldDeclarationSyntax \c node.
@@ -100,7 +124,7 @@ public:
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    std::vector<const Field*> declarationsOf(const FieldDeclarationSyntax* node) const;
+    std::vector<const Field*> declaredFields(const FieldDeclarationSyntax* node) const;
 
     /**
      * The DeclarationSymbol(s) declared by the given VariableAndOrFunctionDeclarationSyntax \c node.
@@ -108,7 +132,7 @@ public:
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    std::vector<const DeclarationSymbol*> declarationsOf(const VariableAndOrFunctionDeclarationSyntax* node) const;
+    std::vector<const DeclarationSymbol*> declaredDeclarations(const VariableAndOrFunctionDeclarationSyntax* node) const;
 
     /**
      * The DeclarationSymbol declared by the given DeclaratorSyntax \c node.
@@ -116,23 +140,28 @@ public:
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    const DeclarationSymbol* declarationOf(const DeclaratorSyntax* node) const;
+    const DeclarationSymbol* declaredDeclaration(const DeclaratorSyntax* node) const;
     //!@}
 
-    PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Compilation);
+    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
     PSY_GRANT_INTERNAL_ACCESS(InternalsTestSuite);
 
     SemanticModel(const SyntaxTree* tree, Compilation* compilation);
 
+    void applyBinder();
+    void applyTypeResolver();
+
     TranslationUnit* keepTranslationUnit(
             const TranslationUnitSyntax* node,
             std::unique_ptr<TranslationUnit> unitSym);
-    DeclarationSymbol* keepAndBindDecl(
+    DeclarationSymbol* keepBinding(
             const SyntaxNode* node,
             std::unique_ptr<DeclarationSymbol> sym);
     Type* keepType(std::unique_ptr<Type> ty);
+    void dropType(const Type* ty);
 
     DeclarationSymbol* searchForDecl(
             std::function<bool (const std::unique_ptr<DeclarationSymbol>&)> pred) const;
@@ -140,6 +169,18 @@ public:
     template <class CastT, class OrigT> const CastT* castDecl(
             const OrigT* origDecl,
             const CastT* (OrigT::*cast)() const) const;
+
+    Function* declaredFunction(const FunctionDefinitionSyntax* node);
+    Parameter* declaredParameter(const ParameterDeclarationSyntax* node);
+    TypeDeclarationSymbol* declaredDeclaration(const TypeDeclarationSyntax* node); // TODO
+    Enumerator* declaredEnumerator(const EnumeratorDeclarationSyntax* node);
+    std::vector<Field*> declaredFields(const FieldDeclarationSyntax* node);
+    template <class VecT> VecT declaredFields_CORE(const FieldDeclarationSyntax* node, VecT&& decls);
+    std::vector<DeclarationSymbol*> declaredDeclarations(const VariableAndOrFunctionDeclarationSyntax* node);
+    template <class VecT> VecT declaredDeclarations_CORE(
+            const VariableAndOrFunctionDeclarationSyntax* node,
+            VecT&& decls);
+    DeclarationSymbol* declaredDeclaration(const DeclaratorSyntax* node);
 
 private:
     SemanticModel(const SemanticModel&) = delete;

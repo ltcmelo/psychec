@@ -33,46 +33,6 @@ TypeKind Type::kind() const
     return TypeKind(P->BF_.tyK_);
 }
 
-bool Type::isConstQualified() const
-{
-    return P->BF_.const_;
-}
-
-bool Type::isVolatileQualified() const
-{
-    return P->BF_.volatile_;
-}
-
-bool Type::isRestrictQualified() const
-{
-    return P->BF_.restrict_;
-}
-
-bool Type::isAtomicQualified() const
-{
-    return P->BF_.atomic_;
-}
-
-void Type::qualifyWithConst()
-{
-    P->BF_.const_ = 1;
-}
-
-void Type::qualifyWithVolatile()
-{
-    P->BF_.volatile_ = 1;
-}
-
-void Type::qualifyWithRestrict()
-{
-    P->BF_.restrict_ = 1;
-}
-
-void Type::qualifyWithAtomic()
-{
-    P->BF_.atomic_ = 1;
-}
-
 namespace psy {
 namespace C {
 
@@ -93,6 +53,8 @@ std::string PSY_C_API to_string(const Type& ty)
             return to_string(*ty.asTagType());
         case TypeKind::Void:
             return to_string(*ty.asVoidType());
+        case TypeKind::Qualified:
+            return to_string(*ty.asQualifiedType());
     }
 }
 

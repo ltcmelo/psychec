@@ -514,10 +514,59 @@ void BinderTester::case3297(){}
 void BinderTester::case3298(){}
 void BinderTester::case3299(){}
 
-void BinderTester::case3300(){}
-void BinderTester::case3301(){}
-void BinderTester::case3302(){}
-void BinderTester::case3303(){}
+void BinderTester::case3300()
+{
+    bind("typedef int x ; x z ;",
+         Expectation()
+             .declaration(Decl()
+                          .Type("x", TypeDeclarationSymbolKind::Typedef)
+                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                          .withScopeKind(ScopeKind::File))
+            .declaration(Decl()
+                         .Object("z", ObjectDeclarationSymbolKind::Variable)
+                         .ty_.Typedef("x")));
+}
+
+void BinderTester::case3301()
+{
+    bind("typedef int * x ; x z ;",
+         Expectation()
+             .declaration(Decl()
+                          .Type("x", TypeDeclarationSymbolKind::Typedef)
+                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                          .withScopeKind(ScopeKind::File))
+              .declaration(Decl().Object("z", ObjectDeclarationSymbolKind::Variable)
+                           .ty_.Basic(BasicTypeKind::Int)
+                           .ty_.Typedef("x")));
+}
+
+void BinderTester::case3302()
+{
+    bind("int * x ; int y ;",
+         Expectation()
+              .declaration(Decl()
+                           .Object("x", ObjectDeclarationSymbolKind::Variable)
+                           .ty_.Basic(BasicTypeKind::Int)
+                           .ty_.Derived(TypeKind::Pointer))
+              .declaration(Decl()
+                           .Object("y", ObjectDeclarationSymbolKind::Variable)
+                           .ty_.Basic(BasicTypeKind::Int)));
+}
+
+void BinderTester::case3303()
+{
+    bind("int * * x ; int y ;",
+         Expectation()
+              .declaration(Decl()
+                           .Object("x", ObjectDeclarationSymbolKind::Variable)
+                           .ty_.Basic(BasicTypeKind::Int)
+                           .ty_.Derived(TypeKind::Pointer)
+                           .ty_.Derived(TypeKind::Pointer))
+              .declaration(Decl()
+                           .Object("y", ObjectDeclarationSymbolKind::Variable)
+                           .ty_.Basic(BasicTypeKind::Int)));
+}
+
 void BinderTester::case3304(){}
 void BinderTester::case3305(){}
 void BinderTester::case3306(){}

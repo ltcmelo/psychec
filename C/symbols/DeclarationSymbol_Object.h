@@ -90,6 +90,7 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
 
     virtual void setName(const Identifier* name) override;
     virtual void setType(const Type* ty) override;

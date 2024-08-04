@@ -108,11 +108,11 @@ std::vector<const SyntaxTree*> Compilation::syntaxTrees() const
 const SemanticModel* Compilation::computeSemanticModel(const SyntaxTree* tree) const
 {
     if (P->isDirty_[tree]) {
-        // TODO: Remove from the program the symbols associated
-        // with the given syntax tree.
-        P->semaModels_[tree].reset(new SemanticModel(tree, const_cast<Compilation*>(this)));
+        std::unique_ptr<SemanticModel> semaModel(new SemanticModel(tree, const_cast<Compilation*>(this)));
+        semaModel->applyBinder();
+        semaModel->applyTypeResolver();
+        P->semaModels_[tree] = std::move(semaModel);
         P->isDirty_[tree] = false;
     }
-
     return P->semaModels_[tree].get();
 }
