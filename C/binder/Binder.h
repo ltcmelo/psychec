@@ -90,7 +90,6 @@ private:
     std::stack<FunctionType*> pendingFunTys_;
     Type* popTy();
     void pushTy(Type*);
-
     template <class TyT, class... TyTArgs> TyT* makeTy(TyTArgs... args);
 
     bool decltorIsOfTydef_;
