@@ -30,7 +30,7 @@ std::ostream& operator<<(std::ostream& os, DiagnosticCategory category)
             break;
 
         case DiagnosticCategory::Binding:
-            os << "binding";
+            os << "declaration";
             break;
 
         case DiagnosticCategory::Typing:

@@ -219,7 +219,7 @@ SymT* Binder::makeAndBindSym(const SyntaxNode* node, SymTArgs... args)
                                        syms_.top(),
                                        scopes_.top(),
                                        std::forward<SymTArgs>(args)...));
-    return static_cast<SymT*>(semaModel_->keepAndBindDecl(node, std::move(sym)));
+    return static_cast<SymT*>(semaModel_->keepBinding(node, std::move(sym)));
 }
 
 template <class SymT, class... SymTArgs>

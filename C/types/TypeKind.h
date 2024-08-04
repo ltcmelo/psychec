@@ -42,12 +42,13 @@ enum class PSY_C_API TypeKind : std::uint8_t
     Pointer,
     Typedef,
     Tag,
-    Void
+    Void,
+    Qualified
 };
 
-inline std::string PSY_C_API to_string(TypeKind tyKind)
+inline std::string PSY_C_API to_string(TypeKind tyK)
 {
-    switch (tyKind) {
+    switch (tyK) {
         case TypeKind::Array:
             return "Array";
         case TypeKind::Basic:
@@ -62,6 +63,8 @@ inline std::string PSY_C_API to_string(TypeKind tyKind)
             return "Tag";
         case TypeKind::Void:
             return "Void";
+        case TypeKind::Qualified:
+            return "Qualified";
     }
 }
 

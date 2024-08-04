@@ -40,95 +40,95 @@ void BinderTester::case0001()
 {
     bind("void x ( ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0002()
 {
     bind("int x ( ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0003()
 {
     bind("void * x ( ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0004()
 {
     bind("int * x ( ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0005()
 {
     bind("x y ( ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("y")
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0006()
 {
     bind("int * ( x ) ( ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0007()
 {
     bind("int * ( ( x ) ) ( ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0008()
 {
     bind("int * * x ( ) ;",
          Expectation()
-         .binding(DeclSummary().Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+         .declaration(Decl().Function("x", ScopeKind::File)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0009()
 {
     bind("x * y ( ) ;",
          Expectation()
-         .binding(DeclSummary().Function("y")
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+         .declaration(Decl().Function("y")
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0010()
@@ -192,221 +192,221 @@ void BinderTester::case0050()
 {
     bind("void x ( int y ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case0051()
 {
     bind("void x ( int y , double z ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.addParam().Basic(BasicTypeKind::Double))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Double)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.addParam().Basic(BasicTypeKind::Double))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Double)));
 }
 
 void BinderTester::case0052()
 {
     bind("void x ( int * y ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0053()
 {
     bind("void x ( int * y , double * z) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0054()
 {
     bind("void x ( int * * y , double * * z) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0055()
 {
     bind("void x ( int * * y , double z) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Double))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Double)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Double))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Double)));
 }
 
 void BinderTester::case0056()
 {
     bind("void x ( int y , double * * z) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0057()
 {
     bind("void x ( y z , w * * v ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.addParam().Typedef("w")
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y"))
-         .binding(DeclSummary()
-                  .Value("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("w")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.addParam().Typedef("w")
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y"))
+         .declaration(Decl()
+                  .Object("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("w")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0058()
 {
     bind("x y ( z const * w , u * v) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("y", ScopeKind::File)
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("z",  CVR::Const)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Typedef("u")
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("z",  CVR::Const)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("u")
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("z",  CVR::Const)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Typedef("u")
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("z",  CVR::Const)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("u")
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0059()
 {
     bind("x y ( z * const w , u * v) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("y", ScopeKind::File)
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("z")
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::Const)
-                  .Ty.addParam().Typedef("u")
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("z")
-                  .Ty.Derived(TypeKind::Pointer, CVR::Const))
-         .binding(DeclSummary()
-                  .Value("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("u")
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("z")
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::Const)
+                  .ty_.addParam().Typedef("u")
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("z")
+                  .ty_.Derived(TypeKind::Pointer, CVR::Const))
+         .declaration(Decl()
+                  .Object("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("u")
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0060()
 {
     bind("x * y ( z w) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("y", ScopeKind::File)
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("z"))
-         .binding(DeclSummary()
-                  .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("z")));
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("z"))
+         .declaration(Decl()
+                  .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("z")));
 }
 
 void BinderTester::case0061(){}
@@ -454,94 +454,94 @@ void BinderTester::case0101()
 {
     bind("void x ( ) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0102()
 {
     bind("int x ( ) { return 1 ; }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0103()
 {
     bind("void * x ( ) { return 1 ; }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0104()
 {
     bind("int * x ( ) { return 1 ; }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0105()
 {
     bind("x y ( ) { return 1 ; }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("y")
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0106()
 {
     bind("int * ( x ) ( ) { return 1 ; }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0107()
 {
     bind("int * ( ( x ) ) ( ) { return 1 ; }",
          Expectation()
-         .binding(DeclSummary().Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+         .declaration(Decl().Function("x", ScopeKind::File)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0108()
 {
     bind("int * * x ( ) { return 1 ; }",
          Expectation()
-         .binding(DeclSummary().Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+         .declaration(Decl().Function("x", ScopeKind::File)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0109()
 {
     bind("x * y ( ) { return 1 ; }",
          Expectation()
-         .binding(DeclSummary().Function("y")
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)));
+         .declaration(Decl().Function("y")
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0110()
@@ -604,32 +604,32 @@ void BinderTester::case0150()
 {
     bind("void x ( int y ) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Int)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case0151()
 {
     bind("void x ( int y , double z ) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.addParam().Basic(BasicTypeKind::Double))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Double)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.addParam().Basic(BasicTypeKind::Double))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Double)));
 
 }
 
@@ -637,189 +637,189 @@ void BinderTester::case0152()
 {
     bind("void x ( int * y ) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0153()
 {
     bind("void x ( int * y , double * z) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0154()
 {
     bind("void x ( int * * y , double * * z) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0155()
 {
     bind("void x ( int * * y , double z) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Double))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Double)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Double))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Double)));
 }
 
 void BinderTester::case0156()
 {
     bind("void x ( int y , double * * z) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0157()
 {
     bind("void x ( y z , w * * v ) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.addParam().Typedef("w")
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Typedef("y"))
-         .binding(DeclSummary()
-                  .Value("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Typedef("w")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.addParam().Typedef("w")
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Typedef("y"))
+         .declaration(Decl()
+                  .Object("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Typedef("w")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0158()
 {
     bind("x y ( z const * w , u * v) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("y", ScopeKind::File)
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("z",  CVR::Const)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Typedef("u")
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Typedef("z",  CVR::Const)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Typedef("u")
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("z",  CVR::Const)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Typedef("u")
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Typedef("z",  CVR::Const)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Typedef("u")
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0159()
 {
     bind("x y ( z * const w , u * v) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("y", ScopeKind::File)
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("z")
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::Const)
-                  .Ty.addParam().Typedef("u")
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Typedef("z")
-                  .Ty.Derived(TypeKind::Pointer, CVR::Const))
-         .binding(DeclSummary()
-                  .Value("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Typedef("u")
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("z")
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::Const)
+                  .ty_.addParam().Typedef("u")
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Typedef("z")
+                  .ty_.Derived(TypeKind::Pointer, CVR::Const))
+         .declaration(Decl()
+                  .Object("v", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Typedef("u")
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0160()
 {
     bind("x * y ( z w) { }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("y", ScopeKind::File)
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("z"))
-         .binding(DeclSummary()
-                  .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
-                  .Ty.Typedef("z")));
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("z"))
+         .declaration(Decl()
+                  .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::Block)
+                  .ty_.Typedef("z")));
 }
 
 void BinderTester::case0161(){}
@@ -866,82 +866,82 @@ void BinderTester::case0200()
 {
     bind("void x ( int ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case0201()
 {
     bind("void x ( y ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y"))
-         .binding(DeclSummary()
-                  .Value("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y"))
+         .declaration(Decl()
+                  .Object("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")));
 }
 
 void BinderTester::case0202()
 {
     bind("void x ( int , y ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.addParam().Typedef("y"))
-         .binding(DeclSummary()
-                  .Value("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.addParam().Typedef("y"))
+         .declaration(Decl()
+                  .Object("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")));
 }
 
 void BinderTester::case0203()
 {
     bind("void x ( y , int ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.addParam().Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.addParam().Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")));
 }
 
 void BinderTester::case0204()
 {
     bind("void x ( y , z ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.addParam().Typedef("z"))
-         .binding(DeclSummary()
-                  .Value("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("z"))
-         .binding(DeclSummary()
-                  .Value("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.addParam().Typedef("z"))
+         .declaration(Decl()
+                  .Object("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("z"))
+         .declaration(Decl()
+                  .Object("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")));
 
 }
 
@@ -949,48 +949,48 @@ void BinderTester::case0205()
 {
     bind("void x ( int * ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0206()
 {
     bind("void x ( int [ ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
-         .binding(DeclSummary()
-                  .Value("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
+         .declaration(Decl()
+                  .Object("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTester::case0207()
 {
     bind("void x ( int [ 1 ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
-         .binding(DeclSummary()
-                  .Value("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
+         .declaration(Decl()
+                  .Object("", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTester::case0208(){}
@@ -1091,249 +1091,249 @@ void BinderTester::case0300()
 {
     bind("void x ( int ( * y ) ( double ) ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0301()
 {
     bind("void x ( int ( * y ) ( double ) , char ( * z ) ( float ) ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Char)
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Basic(BasicTypeKind::Float)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Char)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Float)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Char)
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Basic(BasicTypeKind::Float)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Char)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Float)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0302()
 {
     bind("void x ( int * ( * y ) ( double ) ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0303()
 {
     bind("void x ( int ( * * y ) ( double ) ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0304()
 {
     bind("void x ( y ( * z ) ( w ) ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Typedef("w")
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("w")
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Typedef("w")
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("w")
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0305()
 {
     bind("void x ( y * * ( * z ) ( w ) ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Typedef("w")
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("w")
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Typedef("w")
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("w")
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0306()
 {
     bind("void x ( y * * ( * z ) ( double ) , int * u ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("u", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("u", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0307()
 {
     bind("void x ( int ( * y ) ( z ) , int * w ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Typedef("z")
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("z")
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Typedef("z")
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("z")
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0308()
 {
     bind("void x ( int * y , int ( * z ) ( w ) ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Typedef("z")
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().addParam().Typedef("w")
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("w")
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Typedef("z")
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().addParam().Typedef("w")
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("w")
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0309()
 {
     bind("void x ( int ( * y ) ( z * ) , int * w ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Typedef("z")
-                  .Ty.atParam().atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("z")
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Typedef("z")
+                  .ty_.atParam().atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("z")
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0310(){}
@@ -1366,20 +1366,20 @@ void BinderTester::case0335()
 {
     bind("void x ( int y ( double ) ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromFunctionToFunctionPointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.Derived(TypeKind::Pointer, CVR::None, Decay::FromFunctionToFunctionPointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromFunctionToFunctionPointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer, CVR::None, Decay::FromFunctionToFunctionPointer)));
 }
 
 void BinderTester::case0336(){}
@@ -1401,190 +1401,190 @@ void BinderTester::case0350()
 {
     bind("void x ( int ( * y ) [ ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Array)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Array)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0351()
 {
     bind("void x ( int ( * y ) [ 1 ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Array)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Array)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0352()
 {
     bind("void x ( int * ( * y ) [ 1 ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Array)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Array)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0353()
 {
     bind("void x ( y ( * z ) [ ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Array)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Array)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0354()
 {
     bind("void x ( y * ( * z ) [ ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Array)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Array)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0355()
 {
     bind("void x ( int w , y * ( * z ) [ 1 ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Array)
-                  .Ty.atParam().Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Array)
+                  .ty_.atParam().Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0356()
 {
     bind("void x ( y * ( * z ) [ 1 ] , int w ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Array)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Array)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0357()
 {
     bind("void x ( v w , y * ( * z ) [ 1 ] ) ;",
           Expectation()
-          .binding(DeclSummary()
+          .declaration(Decl()
                    .Function("x", ScopeKind::File)
-                   .Ty.Void()
-                   .Ty.Derived(TypeKind::Function)
-                   .Ty.addParam().Typedef("v")
-                   .Ty.addParam().Typedef("y")
-                   .Ty.atParam().Derived(TypeKind::Pointer)
-                   .Ty.atParam().Derived(TypeKind::Array)
-                   .Ty.atParam().Derived(TypeKind::Pointer))
-          .binding(DeclSummary()
-                   .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                   .Ty.Typedef("v"))
-          .binding(DeclSummary()
-                   .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                   .Ty.Typedef("y")
-                   .Ty.Derived(TypeKind::Pointer)
-                   .Ty.Derived(TypeKind::Array)
-                   .Ty.Derived(TypeKind::Pointer)));
+                   .ty_.Void()
+                   .ty_.Derived(TypeKind::Function)
+                   .ty_.addParam().Typedef("v")
+                   .ty_.addParam().Typedef("y")
+                   .ty_.atParam().Derived(TypeKind::Pointer)
+                   .ty_.atParam().Derived(TypeKind::Array)
+                   .ty_.atParam().Derived(TypeKind::Pointer))
+          .declaration(Decl()
+                   .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                   .ty_.Typedef("v"))
+          .declaration(Decl()
+                   .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                   .ty_.Typedef("y")
+                   .ty_.Derived(TypeKind::Pointer)
+                   .ty_.Derived(TypeKind::Array)
+                   .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0358()
 {
     bind("void x ( y * ( * z ) [ 1 ] , v w ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Array)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Typedef("v"))
-         .binding(DeclSummary()
-                  .Value("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("v"))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Array)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Typedef("v"))
+         .declaration(Decl()
+                  .Object("w", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("v"))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0359(){}
@@ -1618,146 +1618,146 @@ void BinderTester::case0385()
 {
     bind("void x ( int y [ ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTester::case0386()
 {
     bind("void x ( y z [ ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTester::case0387()
 {
     bind("void x ( int * y [ 1 ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTester::case0388()
 {
     bind("void x ( y * z [ 1 ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTester::case0389()
 {
     bind("void x ( int * * y [ 1 ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTester::case0390()
 {
     bind("void x ( y const * z [ 1 ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y", CVR::Const)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y", CVR::Const)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y", CVR::Const)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y", CVR::Const)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTester::case0391()
 {
     bind("void x ( y z [ ] , w z ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)
-                  .Ty.addParam().Typedef("w"))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("w"))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)
+                  .ty_.addParam().Typedef("w"))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("w"))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTester::case0392()
 {
     bind("void x ( w z , y z [ ] ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("w")
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("w"))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
-                  .Ty.Typedef("y")
-                  .Ty.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("w")
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("w"))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Parameter, ScopeKind::FunctionPrototype)
+                  .ty_.Typedef("y")
+                  .ty_.Derived(TypeKind::Pointer, CVR::None, Decay::FromArrayToPointer)));
 }
 
 void BinderTester::case0393(){}
@@ -1772,168 +1772,168 @@ void BinderTester::case0400()
 {
     bind("void ( * x ( ) ) ( ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0401()
 {
     bind("void ( * x ( ) ) ( int ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0402()
 {
     bind("void ( * x ( int ) ) ( ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case0403()
 {
     bind("void ( * x ( double ) ) ( int ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)));
 }
 
 void BinderTester::case0404()
 {
     bind("void * ( * x ( double ) ) ( int ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)));
 }
 
 void BinderTester::case0405()
 {
     bind("void * ( * x ( double , char ) ) ( int , long ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.addParam().Basic(BasicTypeKind::Long)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.addParam().Basic(BasicTypeKind::Char)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.addParam().Basic(BasicTypeKind::Long)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.addParam().Basic(BasicTypeKind::Char)));
 }
 
 void BinderTester::case0406()
 {
     bind("void * ( * x ( double * , char ) ) ( void * ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Void()
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Double)
-                  .Ty.atParam().Derived(TypeKind::Pointer)
-                  .Ty.addParam().Basic(BasicTypeKind::Char)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Void()
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Double)
+                  .ty_.atParam().Derived(TypeKind::Pointer)
+                  .ty_.addParam().Basic(BasicTypeKind::Char)));
 }
 
 void BinderTester::case0407()
 {
     bind("void ( * x ( ) ) ( y ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0408()
 {
     bind("void ( * x ( y ) ) ( ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")));
 }
 
 void BinderTester::case0409()
 {
     bind("void ( * x ( y ) ) ( z ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("z")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("z")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")));
 }
 
 void BinderTester::case0410()
 {
     bind("void ( * x ( y * ) ) ( z ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("z")
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Typedef("y")
-                  .Ty.atParam().Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("z")
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Typedef("y")
+                  .ty_.atParam().Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0411()
@@ -1942,32 +1942,32 @@ void BinderTester::case0411()
 
     bind(" void ( * x ( int , void ( * y ) ( int ) ) ) ( int ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.addParam().Basic(BasicTypeKind::Int)
-                  .Ty.addParam().Void()
-                  .Ty.atParam().Derived(TypeKind::Function)
-                  .Ty.atParam().addParam().Basic(BasicTypeKind::Int)
-                  .Ty.atParam().Derived(TypeKind::Pointer)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.addParam().Basic(BasicTypeKind::Int)
+                  .ty_.addParam().Void()
+                  .ty_.atParam().Derived(TypeKind::Function)
+                  .ty_.atParam().addParam().Basic(BasicTypeKind::Int)
+                  .ty_.atParam().Derived(TypeKind::Pointer)));
 }
 
 void BinderTester::case0412()
 {
     bind("x ( * y ( ) ) ( ) ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("y", ScopeKind::File)
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)));
 }
 void BinderTester::case0413()
 {
@@ -1976,12 +1976,12 @@ void BinderTester::case0413()
          .diagnostic(Expectation::ErrorOrWarn::Error,
                      Binder::DiagnosticsReporter::ID_FunctionReturningFunction)
          .ContinueTestDespiteOfErrors()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0414()
@@ -1991,12 +1991,12 @@ void BinderTester::case0414()
          .diagnostic(Expectation::ErrorOrWarn::Error,
                      Binder::DiagnosticsReporter::ID_FunctionReturningFunction)
          .ContinueTestDespiteOfErrors()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)));
 }
 void BinderTester::case0415(){}
 void BinderTester::case0416(){}
@@ -2013,26 +2013,26 @@ void BinderTester::case0425()
 {
     bind("int ( * x ( ) ) [] ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0426()
 {
     bind("x ( * y ( ) ) [] ;",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("y", ScopeKind::File)
-                  .Ty.Typedef("x")
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.Derived(TypeKind::Pointer)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Typedef("x")
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.Derived(TypeKind::Pointer)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0427()
@@ -2042,12 +2042,12 @@ void BinderTester::case0427()
          .diagnostic(Expectation::ErrorOrWarn::Error,
                      Binder::DiagnosticsReporter::ID_FunctionReturningArray)
          .ContinueTestDespiteOfErrors()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0428()
@@ -2057,12 +2057,12 @@ void BinderTester::case0428()
          .diagnostic(Expectation::ErrorOrWarn::Error,
                      Binder::DiagnosticsReporter::ID_FunctionReturningArray)
          .ContinueTestDespiteOfErrors()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Array)
-                  .Ty.nestAsReturn()
-                  .Ty.Derived(TypeKind::Function)));
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Array)
+                  .ty_.nestAsReturn()
+                  .ty_.Derived(TypeKind::Function)));
 }
 
 void BinderTester::case0429(){}
@@ -2094,30 +2094,30 @@ void BinderTester::case0450()
 {
     bind("void x ( ) { int y ; }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Variable, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Int)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Variable, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case0451()
 {
     bind("void x ( ) { int * y ; double z ; }",
          Expectation()
-         .binding(DeclSummary()
+         .declaration(Decl()
                   .Function("x", ScopeKind::File)
-                  .Ty.Void()
-                  .Ty.Derived(TypeKind::Function))
-         .binding(DeclSummary()
-                  .Value("y", ObjectDeclarationSymbolKind::Variable, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Int)
-                  .Ty.Derived(TypeKind::Pointer))
-         .binding(DeclSummary()
-                  .Value("z", ObjectDeclarationSymbolKind::Variable, ScopeKind::Block)
-                  .Ty.Basic(BasicTypeKind::Double)));
+                  .ty_.Void()
+                  .ty_.Derived(TypeKind::Function))
+         .declaration(Decl()
+                  .Object("y", ObjectDeclarationSymbolKind::Variable, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Int)
+                  .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", ObjectDeclarationSymbolKind::Variable, ScopeKind::Block)
+                  .ty_.Basic(BasicTypeKind::Double)));
 }
 
 void BinderTester::case0452(){}

@@ -47,13 +47,22 @@ public:
      */
     virtual const Identifier* identifier() const override;
 
+    /**
+     * The Type synonymized by \c this Typedef.
+     */
+    const Type* synonymizedType() const;
+
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
     Typedef(const SyntaxTree* tree,
             const Symbol* containingSym,
             const Scope* enclosingScope,
-            TypedefType* tydefTy);
+            TypedefType* tydefTy,
+            const Type* synonymizedTy);
+
+private:
+    const Type* synonymizedTy_;
 };
 
 std::string PSY_C_API to_string(const Typedef& tydef);

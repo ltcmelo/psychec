@@ -51,9 +51,9 @@ namespace C {
 std::string to_string(const Parameter& parm)
 {
     std::ostringstream oss;
-    oss << "<Parameter | ";
-    oss << "name:" << parm.name()->valueText();
-    oss << "type:" << to_string(*parm.type());
+    oss << "<Parameter |";
+    oss << " name:" << parm.name()->valueText();
+    oss << " type:" << to_string(*parm.type());
     oss << ">";
     return oss.str();
 }

@@ -32,7 +32,7 @@
 #include "BinderTester.h"
 #include "ParserTester.h"
 #include "ReparserTester.h"
-#include "DeclarationResolverTester.h"
+#include "TypeResolverTester.h"
 
 #include "../common/infra/Assertions.h"
 
@@ -67,8 +67,8 @@ std::tuple<int, int> InternalsTestSuite::testAll()
     auto C = std::make_unique<BinderTester>(this);
     C->testBinder();
 
-    auto D = std::make_unique<DeclarationResolverTester>(this);
-    D->testDeclarationResolver();
+    auto D = std::make_unique<TypeResolverTester>(this);
+    D->testTypeResolver();
 
     auto res = std::make_tuple(P->totalPassed()
                                     + B->totalPassed()
@@ -399,60 +399,58 @@ bool CVRMatches(const Type* ty, CVR cvr)
 {
     switch (cvr) {
         case CVR::Const:
-            if (!ty->isConstQualified()) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isConstQualified()) {
                 DETAIL_MISMATCH("missing const");
                 return false;
             }
             break;
 
         case CVR::Volatile:
-            if (!ty->isVolatileQualified()) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isVolatileQualified()) {
                 DETAIL_MISMATCH("missing volatile");
                 return false;
             }
             break;
 
         case CVR::ConstAndVolatile:
-            if (!(ty->isConstQualified())
-                    || !(ty->isVolatileQualified())) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isConstQualified()
+                    || !ty->asQualifiedType()->isVolatileQualified()) {
                 DETAIL_MISMATCH("missing const volatile");
                 return false;
             }
             break;
 
         case CVR::Restrict:
-            if (!ty->isRestrictQualified()) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isRestrictQualified()) {
                 DETAIL_MISMATCH("missing restrict");
                 return false;
             }
             break;
 
         case CVR::ConstAndRestrict:
-            if (!(ty->isConstQualified())
-                    || !(ty->isRestrictQualified())) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isConstQualified()
+                    || !ty->asQualifiedType()->isRestrictQualified()) {
                 DETAIL_MISMATCH("missing const restrict");
                 return false;
             }
             break;
 
         case CVR::Atomic:
-            if (!ty->isAtomicQualified()) {
+            if (ty->kind() != TypeKind::Qualified
+                    || !ty->asQualifiedType()->isAtomicQualified()) {
                 DETAIL_MISMATCH("missing _Atomic");
                 return false;
             }
             break;
 
         case CVR::None:
-            if (ty->isConstQualified()) {
-                DETAIL_MISMATCH("spurious const");
-                return false;
-            }
-            if (ty->isVolatileQualified()) {
-                DETAIL_MISMATCH("spurious volatile");
-                return false;
-            }
-            if (ty->isRestrictQualified()) {
-                DETAIL_MISMATCH("spurious restrict");
+            if (ty->kind() == TypeKind::Qualified) {
+                DETAIL_MISMATCH("spurious qualified type");
                 return false;
             }
             break;
@@ -461,26 +459,28 @@ bool CVRMatches(const Type* ty, CVR cvr)
     return true;
 }
 
-bool typeMatches(const Type* ty, const TySummary& tySummary)
+bool typeMatches(const Type* ty, const Ty& t)
 {
-    PSY_ASSERT(tySummary.derivTyKs_.size() == tySummary.derivTyCVRs_.size()
-               && tySummary.derivTyKs_.size() == tySummary.derivPtrTyDecay_.size(),
+    PSY_ASSERT(t.derivTyKs_.size() == t.derivTyCVRs_.size()
+               && t.derivTyKs_.size() == t.derivPtrTyDecay_.size(),
                return false);
 
-    for (auto i = tySummary.derivTyKs_.size(); i > 0; --i) {
-        auto derivTyK = tySummary.derivTyKs_[i - 1];
+    for (auto i = t.derivTyKs_.size(); i > 0; --i) {
+        auto derivTyCVR = t.derivTyCVRs_[i - 1];
+        if (!CVRMatches(ty, derivTyCVR)) {
+            DETAIL_MISMATCH("derived type CVR");
+            return false;
+        }
+        if (ty->kind() == TypeKind::Qualified)
+            ty = ty->asQualifiedType()->unqualifiedType();
+
+        auto derivTyK = t.derivTyKs_[i - 1];
         if (derivTyK != ty->kind()) {
             DETAIL_MISMATCH("derived array/pointer/function type kind");
             return false;
         }
 
-        auto derivTyCVR = tySummary.derivTyCVRs_[i - 1];
-        if (!CVRMatches(ty, derivTyCVR)) {
-            DETAIL_MISMATCH("derived type CVR");
-            return false;
-        }
-
-        auto derivPtrTyDecay = tySummary.derivPtrTyDecay_[i - 1];
+        auto derivPtrTyDecay = t.derivPtrTyDecay_[i - 1];
 
         switch (ty->kind()) {
             case TypeKind::Array:
@@ -526,24 +526,24 @@ bool typeMatches(const Type* ty, const TySummary& tySummary)
 
                 auto funcTy = ty->asFunctionType();
                 auto parmTys = funcTy->parameterTypes();
-                if (parmTys.size() != tySummary.parmsTys_.size()) {
+                if (parmTys.size() != t.parmsTys_.size()) {
                     DETAIL_MISMATCH("number of parameters");
                     return false;
                 }
 
                 for (auto i = 0U; i < parmTys.size(); ++i) {
                     const Type* parmTy = parmTys[i];
-                    if (!typeMatches(parmTy, tySummary.parmsTys_[i])) {
+                    if (!typeMatches(parmTy, t.parmsTys_[i])) {
                         DETAIL_MISMATCH("parameter type mismatch");
                         return false;
                     }
                 }
 
                 ty = funcTy->returnType();
-                if (!tySummary.nestedRetTy_)
+                if (!t.nestedRetTy_)
                     break;
 
-                if (!typeMatches(ty, *tySummary.nestedRetTy_.get())) {
+                if (!typeMatches(ty, *t.nestedRetTy_.get())) {
                     DETAIL_MISMATCH("nested return type mismatch");
                     return false;
                 }
@@ -556,14 +556,21 @@ bool typeMatches(const Type* ty, const TySummary& tySummary)
         }
     }
 
-    if (ty->kind() != tySummary.tyK_) {
+    if (!CVRMatches(ty, t.CVR_)) {
+        DETAIL_MISMATCH("type CVR");
+        return false;
+    }
+    if (ty->kind() == TypeKind::Qualified)
+        ty = ty->asQualifiedType()->unqualifiedType();
+
+    if (ty->kind() != t.tyK_) {
         DETAIL_MISMATCH("basic/void/typedef/tag type mismatch");
         return false;
     }
 
     switch (ty->kind()) {
         case TypeKind::Basic:
-            if (ty->asBasicType()->kind() != tySummary.basicTyK_) {
+            if (ty->asBasicType()->kind() != t.basicTyK_) {
                 DETAIL_MISMATCH("basic type mismatch");
                 return false;
             }
@@ -573,18 +580,18 @@ bool typeMatches(const Type* ty, const TySummary& tySummary)
             break;
 
         case TypeKind::Typedef:
-            if (ty->asTypedefType()->typedefName()->valueText() != tySummary.nameOrTag_) {
+            if (ty->asTypedefType()->typedefName()->valueText() != t.ident_) {
                 DETAIL_MISMATCH("typedef name mismatch");
                 return false;
             }
             break;
 
         case TypeKind::Tag:
-            if (ty->asTagType()->kind() != tySummary.tagTyK_) {
+            if (ty->asTagType()->kind() != t.tagTyK_) {
                 DETAIL_MISMATCH("tag type mismatch");
                 return false;
             }
-            if (ty->asTagType()->tag()->valueText() != tySummary.nameOrTag_) {
+            if (ty->asTagType()->tag()->valueText() != t.ident_) {
                 DETAIL_MISMATCH("tag mismatch");
                 return false;
             }
@@ -594,103 +601,98 @@ bool typeMatches(const Type* ty, const TySummary& tySummary)
             PSY_ASSERT(false, return false);
     }
 
-    if (!CVRMatches(ty, tySummary.CVR_)) {
-        DETAIL_MISMATCH("type CVR");
-        return false;
-    }
+    return true;
+}
+
+bool functionMatchesBinding(const Function* funcDecl, const Decl& decl)
+{
+    if (!funcDecl->name())
+        return REJECT_CANDIDATE(funcDecl, "empty name");
+
+    if (funcDecl->name()->valueText() != decl.ident_)
+        return REJECT_CANDIDATE(funcDecl, "name mismatch");
+
+    if (funcDecl->type() == nullptr)
+        return REJECT_CANDIDATE(funcDecl, "null type");
+
+    if (funcDecl->type()->kind() != TypeKind::Function)
+        return REJECT_CANDIDATE(funcDecl, "not a function type");
+
+    if (!typeMatches(funcDecl->type(), decl.ty_))
+        return REJECT_CANDIDATE(funcDecl, "type mismatch");
 
     return true;
 }
 
-bool functionMatchesBinding(const Function* funcSym, const DeclSummary& decl)
+bool valueMatchesBinding(const ObjectDeclarationSymbol* objDecl, const Decl& decl)
 {
-    if (!funcSym->name())
-        return REJECT_CANDIDATE(funcSym, "empty name");
+    if (objDecl->kind() != decl.objDeclSymK_)
+        return REJECT_CANDIDATE(objDecl, "value kind mismatch");
 
-    if (funcSym->name()->valueText() != decl.ident_)
-        return REJECT_CANDIDATE(funcSym, "name mismatch");
+    if (!objDecl->name())
+        return REJECT_CANDIDATE(objDecl, "empty value name");
 
-    if (funcSym->type() == nullptr)
-        return REJECT_CANDIDATE(funcSym, "null type");
+    if (objDecl->name()->valueText() != decl.ident_)
+        return REJECT_CANDIDATE(objDecl, "name mismatch");
 
-    if (funcSym->type()->kind() != TypeKind::Function)
-        return REJECT_CANDIDATE(funcSym, "not a function type");
+    if (objDecl->type() == nullptr)
+        return REJECT_CANDIDATE(objDecl, "null type");
 
-    if (!typeMatches(funcSym->type(), decl.Ty))
-        return REJECT_CANDIDATE(funcSym, "type mismatch");
+    if (!typeMatches(objDecl->type(), decl.ty_))
+        return REJECT_CANDIDATE(objDecl, "type mismatch");
 
     return true;
 }
 
-bool valueMatchesBinding(const ObjectDeclarationSymbol* valSym, const DeclSummary& decl)
+bool typeMatchesBinding(const TypeDeclarationSymbol* tyDecl, const Decl& decl)
 {
-    if (valSym->kind() != decl.objDeclSymK_)
-        return REJECT_CANDIDATE(valSym, "value kind mismatch");
+    if (tyDecl->kind() != decl.tyDeclSymK_)
+        return REJECT_CANDIDATE(tyDecl, "type decl kind mismatch");
 
-    if (!valSym->name())
-        return REJECT_CANDIDATE(valSym, "empty value name");
-
-    if (valSym->name()->valueText() != decl.ident_)
-        return REJECT_CANDIDATE(valSym, "name mismatch");
-
-    if (valSym->type() == nullptr)
-        return REJECT_CANDIDATE(valSym, "null type");
-
-    if (!typeMatches(valSym->type(), decl.Ty))
-        return REJECT_CANDIDATE(valSym, "type mismatch");
-
-    return true;
-}
-
-bool typeMatchesBinding(const TypeDeclarationSymbol* tySym, const DeclSummary& declSummary)
-{
-    if (tySym->kind() != declSummary.tyDeclSymK_)
-        return REJECT_CANDIDATE(tySym, "type decl kind mismatch");
-
-    if (!tySym->specifiedType())
-        return REJECT_CANDIDATE(tySym, "no specified type");
+    if (!tyDecl->specifiedType())
+        return REJECT_CANDIDATE(tyDecl, "no specified type");
 
     auto checkTag = [=]() {
-        if (!tySym->specifiedType()->asTagType())
-            return REJECT_CANDIDATE(tySym, "not a tag type");
-        auto tagTy = tySym->specifiedType()->asTagType();
+        if (!tyDecl->specifiedType()->asTagType())
+            return REJECT_CANDIDATE(tyDecl, "not a tag type");
+        auto tagTy = tyDecl->specifiedType()->asTagType();
         if (!tagTy->tag())
-            return REJECT_CANDIDATE(tySym, "empty tag");
-        if (tagTy->tag()->valueText() != declSummary.ident_)
-            return REJECT_CANDIDATE(tySym, "tag mismatch");
+            return REJECT_CANDIDATE(tyDecl, "empty tag");
+        if (tagTy->tag()->valueText() != decl.ident_)
+            return REJECT_CANDIDATE(tyDecl, "tag mismatch");
         return true;
     };
 
-    switch (declSummary.tyDeclSymK_) {
+    switch (decl.tyDeclSymK_) {
         case TypeDeclarationSymbolKind::Struct:
             if (!checkTag())
                 return false;
-            if (tySym->specifiedType()->asTagType()->kind() != TagTypeKind::Struct)
-                return REJECT_CANDIDATE(tySym, "specified type struct mismatch");
+            if (tyDecl->specifiedType()->asTagType()->kind() != TagTypeKind::Struct)
+                return REJECT_CANDIDATE(tyDecl, "specified type struct mismatch");
             break;
 
         case TypeDeclarationSymbolKind::Union:
             if (!checkTag())
                 return false;
-            if (tySym->specifiedType()->asTagType()->kind() != TagTypeKind::Union)
-                return REJECT_CANDIDATE(tySym, "specified type union mismatch");
+            if (tyDecl->specifiedType()->asTagType()->kind() != TagTypeKind::Union)
+                return REJECT_CANDIDATE(tyDecl, "specified type union mismatch");
             break;
 
         case TypeDeclarationSymbolKind::Enum:
             if (!checkTag())
                 return false;
-            if (tySym->specifiedType()->asTagType()->kind() != TagTypeKind::Enum)
-                return REJECT_CANDIDATE(tySym, "specified type enum mismatch");
+            if (tyDecl->specifiedType()->asTagType()->kind() != TagTypeKind::Enum)
+                return REJECT_CANDIDATE(tyDecl, "specified type enum mismatch");
             break;
 
         case TypeDeclarationSymbolKind::Typedef: {
-            if (!tySym->specifiedType()->asTypedefType())
-                return REJECT_CANDIDATE(tySym, "not a typedef type");
-            auto typedefTy = tySym->specifiedType()->asTypedefType();
+            if (!tyDecl->specifiedType()->asTypedefType())
+                return REJECT_CANDIDATE(tyDecl, "not a typedef type");
+            auto typedefTy = tyDecl->specifiedType()->asTypedefType();
             if (!typedefTy->typedefName())
-                return REJECT_CANDIDATE(tySym, "empty typedef name");
-            if (typedefTy->typedefName()->valueText() != declSummary.ident_)
-                return REJECT_CANDIDATE(tySym, "typedef name mismatch");
+                return REJECT_CANDIDATE(tyDecl, "empty typedef name");
+            if (typedefTy->typedefName()->valueText() != decl.ident_)
+                return REJECT_CANDIDATE(tyDecl, "typedef name mismatch");
             break;
         }
     }
@@ -698,28 +700,28 @@ bool typeMatchesBinding(const TypeDeclarationSymbol* tySym, const DeclSummary& d
     return true;
 }
 
-bool symbolMatchesBinding(const DeclarationSymbol* candSym, const DeclSummary& summary)
+bool symbolMatchesBinding(const DeclarationSymbol* declSym, const Decl& decl)
 {
-    if (candSym->kind() != summary.declSymK_)
-        return REJECT_CANDIDATE(candSym, "symbol kind mismatch");
+    if (declSym->kind() != decl.declSymK_)
+        return REJECT_CANDIDATE(declSym, "symbol kind mismatch");
 
-    if (candSym->enclosingScope()->kind() != summary.scopeK_)
-        return REJECT_CANDIDATE(candSym, "scope kind mismatch");
+    if (declSym->enclosingScope()->kind() != decl.scopeK_)
+        return REJECT_CANDIDATE(declSym, "scope kind mismatch");
 
-    if (candSym->nameSpace() != summary.ns_)
-        return REJECT_CANDIDATE(candSym, "name space kind mismatch");
+    if (declSym->nameSpace() != decl.ns_)
+        return REJECT_CANDIDATE(declSym, "name space kind mismatch");
 
-    switch (summary.declSymK_)
+    switch (decl.declSymK_)
     {
         case DeclarationSymbolKind::Object:
-            return valueMatchesBinding(candSym->asObjectDeclarationSymbol(), summary);
+            return valueMatchesBinding(declSym->asObjectDeclarationSymbol(), decl);
 
         case DeclarationSymbolKind::Type: {
-            return typeMatchesBinding(candSym->asTypeDeclarationSymbol(), summary);
+            return typeMatchesBinding(declSym->asTypeDeclarationSymbol(), decl);
         }
 
         case DeclarationSymbolKind::Function:
-            return functionMatchesBinding(candSym->asFunction(), summary);
+            return functionMatchesBinding(declSym->asFunction(), decl);
 
         default:
             PSY__internals__FAIL("unknkown symbol kind");
@@ -729,20 +731,42 @@ bool symbolMatchesBinding(const DeclarationSymbol* candSym, const DeclSummary& s
     return false;
 };
 
-bool symbolMatchesBinding_(const std::unique_ptr<DeclarationSymbol>& sym, const DeclSummary& summary)
+bool symbolMatchesBinding_(const std::unique_ptr<DeclarationSymbol>& declSym, const Decl& decl)
 {
-    return symbolMatchesBinding(sym.get(), summary);
+    return symbolMatchesBinding(declSym.get(), decl);
 };
 
 } // anonymous
 
-void InternalsTestSuite::bind(std::string text, Expectation X)
+void InternalsTestSuite::matchDeclarations(
+        std::unique_ptr<SemanticModel> semaModel,
+        std::vector<Decl> decls)
 {
-    parse(text);
-    auto compilation = Compilation::create(tree_->filePath());
-    compilation->addSyntaxTrees({ tree_.get() });
-    auto semaModel = compilation->computeSemanticModel(tree_.get());
+    for (const auto& Decl : decls) {
+#ifdef DEBUG_BINDING_SEARCH
+        std::cout << "\n\t\t...";
+#endif
+        using namespace std::placeholders;
+        auto pred = std::bind(symbolMatchesBinding_, _1, Decl);
+        auto decl = semaModel->searchForDecl(pred);
+        if (decl == nullptr) {
+            std::ostringstream oss;
+            oss << "no declaration matches the expectation: ";
+            oss << " identifier: " << Decl.ident_;
+            oss << " kind: " << to_string(Decl.declSymK_);
+            PSY__internals__FAIL(oss.str());
+        }
+#ifdef DEBUG_BINDING_SEARCH
+        std::cout << "\n\t\tmatch! ";
+#endif
+    }
 
+}
+
+void InternalsTestSuite::checkSemanticModel(
+        std::unique_ptr<SemanticModel> semaModel,
+        Expectation X)
+{
     if (!checkErrorAndWarn(X))
         return;
 
@@ -750,18 +774,18 @@ void InternalsTestSuite::bind(std::string text, Expectation X)
     if (unit == nullptr)
         PSY__internals__FAIL("unit not found");
 
-    for (const auto& declSummary : X.bindings_) {
+    for (const auto& Decl : X.declarations_) {
 #ifdef DEBUG_BINDING_SEARCH
         std::cout << "\n\t\t...";
 #endif
         using namespace std::placeholders;
-        auto pred = std::bind(symbolMatchesBinding_, _1, declSummary);
+        auto pred = std::bind(symbolMatchesBinding_, _1, Decl);
         auto decl = semaModel->searchForDecl(pred);
         if (decl == nullptr) {
             std::ostringstream oss;
             oss << "no declaration matches the expectation: ";
-            oss << " name or tag: " << declSummary.ident_;
-            oss << " kind: " << to_string(declSummary.declSymK_);
+            oss << " identifier: " << Decl.ident_;
+            oss << " kind: " << to_string(Decl.declSymK_);
             PSY__internals__FAIL(oss.str());
         }
 #ifdef DEBUG_BINDING_SEARCH
@@ -781,16 +805,33 @@ void InternalsTestSuite::bind(std::string text, Expectation X)
             }
             auto sameDecl = scope->searchForDeclaration(decl->identifier(), decl->nameSpace());
             PSY_EXPECT_TRUE(sameDecl);
-            PSY_EXPECT_TRUE(symbolMatchesBinding(sameDecl, declSummary));
+            PSY_EXPECT_TRUE(symbolMatchesBinding(sameDecl, Decl));
         }
-
-        // resolution
-        // decl
     }
 }
 
-void InternalsTestSuite::resolve(std::string text, Expectation X)
+std::unique_ptr<SemanticModel> InternalsTestSuite::semanticModel(std::string text)
 {
-    bind(text, X);
+    parse(text);
+    auto compilation = Compilation::create(tree_->filePath());
+    compilation->addSyntaxTrees({ tree_.get() });
+    std::unique_ptr<SemanticModel> semaModel(
+                new SemanticModel(tree_.get(), compilation.get()));
+    return semaModel;
+}
+
+void InternalsTestSuite::bind(std::string text, Expectation X)
+{
+    auto semaModel = semanticModel(text);
+    semaModel->applyBinder();
+    checkSemanticModel(std::move(semaModel), X);
+}
+
+void InternalsTestSuite::resolveTypes(std::string text, Expectation X)
+{
+    auto semaModel = semanticModel(text);
+    semaModel->applyBinder();
+    semaModel->applyTypeResolver();
+    checkSemanticModel(std::move(semaModel), X);
 }
 

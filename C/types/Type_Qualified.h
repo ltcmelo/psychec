@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22/23/24 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2024 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_ARRAY_H__
-#define PSYCHE_C_TYPE_ARRAY_H__
+#ifndef PSYCHE_C_TYPE_QUALIFIED_H__
+#define PSYCHE_C_TYPE_QUALIFIED_H__
 
 #include "API.h"
 #include "Fwds.h"
@@ -29,37 +29,60 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API ArrayType final : public Type
+class PSY_C_API QualifiedType final : public Type
 {
 public:
     //!@{
     /**
-     * Cast \c this type as an ArrayType.
+     * Cast \c this Type as an QualifiedType.
      */
-    virtual ArrayType* asArrayType() { return this; }
-    virtual const ArrayType* asArrayType() const { return this; }
+    virtual QualifiedType* asQualifiedType() override { return this; }
+    virtual const QualifiedType* asQualifiedType() const override { return this; }
     //!@}
 
     /**
-     * The <em>element type</em> of \c this ArrayType.
-     *
-     * \remark 6.2.5-20
+     * The Type that is the \a unqualified version of \c this QualifiedType.
      */
-    const Type* elementType() const;
+    const Type* unqualifiedType() const;
+
+    /**
+     * Whether \c this Type is \c const qualified.
+     */
+    bool isConstQualified() const;
+
+    /**
+     * Whether \c this Type is \c volatile qualified.
+     */
+    bool isVolatileQualified() const;
+
+    /**
+     * Whether \c this Type is \c restrict qualified.
+     */
+    bool isRestrictQualified() const;
+
+    /**
+     * Whether \c this Type is \c _Atomic qualified.
+     */
+    bool isAtomicQualified() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
     PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
 
-    ArrayType(const Type* elemTy);
+    QualifiedType(const Type* unqualTy);
 
-    void resetElementType(const Type*) const;
+    void qualifyWithConst();
+    void qualifyWithVolatile();
+    void qualifyWithRestrict();
+    void qualifyWithAtomic();
+
+    void resetUnqualifiedType(const Type*) const;
 
 private:
-    DECL_PIMPL_SUB(ArrayType)
+    DECL_PIMPL_SUB(QualifiedType);
 };
 
-std::string PSY_C_API to_string(const ArrayType& arrTy);
+std::string PSY_C_API to_string(const QualifiedType& qualTy);
 
 } // C
 } // psy

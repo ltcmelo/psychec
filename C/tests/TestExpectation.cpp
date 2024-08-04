@@ -23,24 +23,24 @@
 using namespace psy;
 using namespace  C;
 
-TySummary::TySummary(DeclSummary& declSummary)
-    : decl_(declSummary)
+Ty::Ty(Decl& Decl)
+    : decl_(Decl)
     , CVR_(CVR::None)
     , nestedRetTy_(nullptr)
 {}
 
-TySummary::~TySummary()
+Ty::~Ty()
 {}
 
-DeclSummary& TySummary::Void(CVR cvr)
+Decl& Ty::Void(CVR cvr)
 {
-    nameOrTag_ = "void";
+    ident_ = "void";
     tyK_ = TypeKind::Void;
     CVR_ = cvr;
     return decl_;
 }
 
-DeclSummary& TySummary::Basic(BasicTypeKind basicTyK, CVR cvr)
+Decl& Ty::Basic(BasicTypeKind basicTyK, CVR cvr)
 {
     tyK_ = TypeKind::Basic;
     basicTyK_ = basicTyK;
@@ -48,64 +48,61 @@ DeclSummary& TySummary::Basic(BasicTypeKind basicTyK, CVR cvr)
     return decl_;
 }
 
-DeclSummary& TySummary::Typedef(std::string name,
-                                CVR cvr)
+Decl& Ty::Typedef(std::string typedefName, CVR cvr)
 {
-    nameOrTag_ = std::move(name);
+    ident_ = std::move(typedefName);
     tyK_ = TypeKind::Typedef;
     CVR_ = cvr;
     return decl_;
 }
 
-DeclSummary& TySummary::Tag(std::string tag,
-                            TagTypeKind tagTyK,
-                            CVR cvr)
+Decl& Ty::Tag(std::string tag,
+              TagTypeKind tagTyK,
+              CVR cvr)
 {
-    nameOrTag_ = std::move(tag);
+    ident_ = std::move(tag);
     tyK_ = TypeKind::Tag;
     tagTyK_ = tagTyK;
     CVR_ = cvr;
     return decl_;
 }
 
-DeclSummary& TySummary::Derived(TypeKind tyKind, CVR cvr, Decay decay)
+Decl& Ty::Derived(TypeKind tyK, CVR cvr, Decay decay)
 {
-    derivTyKs_.push_back(tyKind);
+    derivTyKs_.push_back(tyK);
     derivTyCVRs_.push_back(cvr);
     derivPtrTyDecay_.push_back(decay);
     return decl_;
 }
 
-TySummary& TySummary::addParam()
+Decl& Ty::nestAsReturn()
 {
-    parmsTys_.emplace_back(decl_);
-    return parmsTys_.back();
-}
-
-TySummary& TySummary::atParam()
-{
-    return parmsTys_.back();
-}
-
-DeclSummary& TySummary::nestAsReturn()
-{
-    nestedRetTy_.reset(new TySummary(*this));
-
-    nameOrTag_.clear();
+    nestedRetTy_.reset(new Ty(*this));
+    ident_.clear();
     CVR_ = CVR::None;
     derivTyKs_.clear();
     derivTyCVRs_.clear();
     derivPtrTyDecay_.clear();
     parmsTys_.clear();
-
     return decl_;
 }
 
-DeclSummary::DeclSummary()
-    : Ty(*this)
+Ty& Ty::addParam()
+{
+    parmsTys_.emplace_back(decl_);
+    return parmsTys_.back();
+}
+
+Ty& Ty::atParam()
+{
+    return parmsTys_.back();
+}
+
+Decl::Decl()
+    : ty_(*this)
 {}
 
-DeclSummary& DeclSummary::Value(std::string name, ObjectDeclarationSymbolKind objDeclSymK, ScopeKind scopeK)
+Decl& Decl::Object(std::string name, ObjectDeclarationSymbolKind objDeclSymK, ScopeKind scopeK)
 {
     ident_ = std::move(name);
     declSymK_ = DeclarationSymbolKind::Object;
@@ -115,30 +112,30 @@ DeclSummary& DeclSummary::Value(std::string name, ObjectDeclarationSymbolKind ob
     return *this;
 }
 
-DeclSummary& DeclSummary::Type(std::string typedefOrTag, TypeDeclarationSymbolKind tyDeclSymK)
+Decl& Decl::Type(std::string typedefNameOrTag, TypeDeclarationSymbolKind tyDeclSymK)
 {
-    ident_ = std::move(typedefOrTag);
+    ident_ = std::move(typedefNameOrTag);
     declSymK_ = DeclarationSymbolKind::Type;
     tyDeclSymK_ = tyDeclSymK;
     return *this;
 }
 
-DeclSummary& DeclSummary::Function(std::string funcName, ScopeKind scopeK)
+Decl& Decl::Function(std::string name, ScopeKind scopeK)
 {
-    ident_ = std::move(funcName);
+    ident_ = std::move(name);
     declSymK_ = DeclarationSymbolKind::Function;
     scopeK_ = scopeK;
     ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;
 }
 
-DeclSummary& DeclSummary::withScopeKind(ScopeKind scopeK)
+Decl& Decl::withScopeKind(ScopeKind scopeK)
 {
     scopeK_ = scopeK;
     return *this;
 }
 
-DeclSummary& DeclSummary::withNameSpace(NameSpace ns)
+Decl& Decl::inNameSpace(NameSpace ns)
 {
     ns_ = ns;
     return *this;
@@ -184,9 +181,15 @@ Expectation& Expectation::ambiguity(std::string s)
     return *this;
 }
 
-Expectation& Expectation::binding(DeclSummary b)
+Expectation& Expectation::declaration(Decl d)
 {
-    bindings_.push_back(b);
+    declarations_.push_back(d);
+    return *this;
+}
+
+Expectation& Expectation::declaration(Ty t)
+{
+    declarations_.push_back(t.decl_);
     return *this;
 }
 

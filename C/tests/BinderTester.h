@@ -88,9 +88,9 @@ public:
         Types
             + 3000-0049 -> structures and unions
             + 3050-0099 -> enumerations (and enumerators)
-            + 3100-3149 -> typedefs
-            + ...
-            + 3500-     -> scope
+            + 3100-3199 -> typedefs
+            + 3300-...-> mixed
+            + 3500 -> scope
      */
 
     void case0001();

@@ -174,21 +174,9 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
     return visitStructOrUnionDeclaration_AtSpecifier(node);
 }
 
-SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtEnd(const StructOrUnionDeclarationSyntax* node)
-{
-    return visitDeclaration_AtEnd_COMMON(node);
-}
-
 SyntaxVisitor::Action Binder::visitTypedefDeclaration(const TypedefDeclarationSyntax* node)
 {
     return visitTypedefDeclaration_AtSpecifier(node);
-}
-
-SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtEnd(const TypedefDeclarationSyntax* node)
-{
-    popTy();
-
-    return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
@@ -196,23 +184,14 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* 
     return visitEnumDeclaration_AtSpecifier(node);
 }
 
-SyntaxVisitor::Action Binder::visitEnumDeclaration_AtEnd(const EnumDeclarationSyntax* node)
-{
-    return visitDeclaration_AtEnd_COMMON(node);
-}
-
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    return visitVariableAndOrFunctionDeclaration_AtSpecifiers(node);
-}
-
-SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtEnd(
-        const VariableAndOrFunctionDeclarationSyntax* node)
-{
-    popTy();
-
-    return Action::Skip;
+    TyContT tys;
+    std::swap(tys_, tys);
+    auto action = visitVariableAndOrFunctionDeclaration_AtSpecifiers(node);
+    std::swap(tys_, tys);
+    return action;
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax* node)
@@ -220,32 +199,14 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax
     return visitFieldDeclaration_AtSpecifiers(node);
 }
 
-SyntaxVisitor::Action Binder::visitFieldDeclaration_AtEnd(const FieldDeclarationSyntax* node)
-{
-    popTy();
-
-    return Action::Skip;
-}
-
 SyntaxVisitor::Action Binder::visitEnumeratorDeclaration(const EnumeratorDeclarationSyntax* node)
 {
     return visitEnumeratorDeclaration_AtImplicitSpecifier(node);
 }
 
-SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtEnd(const EnumeratorDeclarationSyntax* node)
-{
-    popTy();
-    return visitDeclaration_AtEnd_COMMON(node);
-}
-
 SyntaxVisitor::Action Binder::visitParameterDeclaration(const ParameterDeclarationSyntax* node)
 {
     return visitParameterDeclaration_AtSpecifiers(node);
-}
-
-SyntaxVisitor::Action Binder::visitParameterDeclaration_AtEnd(const ParameterDeclarationSyntax* node)
-{
-    return visitDeclaration_AtEnd_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*)
@@ -256,21 +217,6 @@ SyntaxVisitor::Action Binder::visitStaticAssertDeclaration(const StaticAssertDec
 SyntaxVisitor::Action Binder::visitFunctionDefinition(const FunctionDefinitionSyntax* node)
 {
     return visitFunctionDefinition_AtSpecifiers(node);
-}
-
-SyntaxVisitor::Action Binder::visitFunctionDefinition_AtEnd(const FunctionDefinitionSyntax* node)
-{
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitDeclaration_AtEnd_COMMON(const DeclarationSyntax* node)
-{
-    auto decl = popSymAsDecl();
-    PSY_ASSERT(decl, return Action::Quit);
-    SCOPE_AT_TOP(scope);
-    scope->addDeclaration(decl->asDeclarationSymbol());
-
-    return Action::Skip;
 }
 
 //------------//
