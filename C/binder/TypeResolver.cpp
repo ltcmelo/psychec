@@ -27,6 +27,8 @@
 #include "syntax/SyntaxNodes.h"
 #include "types/Type_ALL.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <iostream>
 
 using namespace psy;

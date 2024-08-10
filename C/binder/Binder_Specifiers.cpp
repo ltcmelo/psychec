@@ -204,7 +204,7 @@ SyntaxVisitor::Action Binder::visitBasicTypeSpecifier(const BasicTypeSpecifierSy
                 basicTyK = BasicTypeKind::Int_U;
                 break;
             default:
-                PSY_ESCAPE_VIA_RETURN(Action::Quit);
+                PSY_ASSERT_FAIL_1(return Action::Quit);
         }
         pushType(makeType<BasicType>(basicTyK));
         return Action::Skip;
@@ -302,7 +302,7 @@ SyntaxVisitor::Action Binder::visitBasicTypeSpecifier(const BasicTypeSpecifierSy
             return Action::Skip;
 
         default:
-            PSY_ESCAPE_VIA_RETURN(Action::Skip);
+            PSY_ASSERT_FAIL_1(return Action::Quit);
     }
 
     if (extraBasicTyK != curBasicTyK)
@@ -433,7 +433,7 @@ SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node
             break;
 
         default:
-            PSY_ESCAPE_VIA_BREAK;
+            PSY_ASSERT_FAIL_1(return Action::Quit);
     }
 
     return Action::Skip;

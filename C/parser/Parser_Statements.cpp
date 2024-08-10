@@ -35,7 +35,7 @@ using namespace C;
  */
 bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::Keyword__Static_assert:
@@ -385,7 +385,7 @@ void Parser::maybeAmbiguateStatement(StatementSyntax*& stmt)
 bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
                                             StatementContext stmtCtx)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBraceToken,
                      return false,
                      "assert failure: `{'");
@@ -432,7 +432,7 @@ bool Parser::parseCompoundStatement_AtFirst(StatementSyntax*& stmt,
  */
 bool Parser::parseExpressionStatement(StatementSyntax*& stmt)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     if (peek().kind() == SyntaxKind::SemicolonToken) {
         auto exprStmt = makeNode<ExpressionStatementSyntax>();
@@ -460,7 +460,7 @@ bool Parser::parseExpressionStatement(StatementSyntax*& stmt)
  */
 bool Parser::parseIfStatement_AtFirst(StatementSyntax*& stmt, StatementContext stmtCtx)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_if,
                      return false,
                      "assert failure: `if'");
@@ -493,7 +493,7 @@ bool Parser::parseIfStatement_AtFirst(StatementSyntax*& stmt, StatementContext s
 bool Parser::parseSwitchStatement_AtFirst(StatementSyntax*& stmt,
                                           StatementContext stmtCtx)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_switch,
                      return false,
                      "assert failure: `switch'");
@@ -518,7 +518,7 @@ bool Parser::parseSwitchStatement_AtFirst(StatementSyntax*& stmt,
 bool Parser::parseLabeledStatement_AtFirst(StatementSyntax*& stmt,
                                            StatementContext stmtCtx)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::IdentifierToken
                         || peek().kind() == SyntaxKind::Keyword_case
                         || peek().kind() == SyntaxKind::Keyword_default,
@@ -573,7 +573,7 @@ bool Parser::parseLabeledStatement_AtFirst(StatementSyntax*& stmt,
 bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt,
                                          StatementContext stmtCtx)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_while,
                      return false,
                      "assert failure: `while'");
@@ -599,7 +599,7 @@ bool Parser::parseWhileStatement_AtFirst(StatementSyntax*& stmt,
 bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt,
                                       StatementContext stmtCtx)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_do,
                      return false,
                      "assert failure: `do'");
@@ -627,7 +627,7 @@ bool Parser::parseDoStatement_AtFirst(StatementSyntax*& stmt,
 bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
                                        StatementContext stmtCtx)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_for,
                      return false,
                      "assert failure: `for'");
@@ -742,7 +742,7 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
  */
 bool Parser::parseGotoStatement_AtFirst(StatementSyntax*& stmt)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_goto,
                      return false,
                      "assert failure: `goto'");
@@ -771,7 +771,7 @@ bool Parser::parseGotoStatement_AtFirst(StatementSyntax*& stmt)
 bool Parser::parseContinueStatement_AtFirst(StatementSyntax*& stmt,
                                             StatementContext stmtCtx)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_continue,
                      return false,
                      "assert failure: `continue'");
@@ -793,7 +793,7 @@ bool Parser::parseContinueStatement_AtFirst(StatementSyntax*& stmt,
 bool Parser::parseBreakStatement_AtFirst(StatementSyntax*& stmt,
                                          StatementContext stmtCtx)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_break,
                      return false,
                      "assert failure: `break'");
@@ -814,7 +814,7 @@ bool Parser::parseBreakStatement_AtFirst(StatementSyntax*& stmt,
  */
 bool Parser::parseReturnStatement_AtFirst(StatementSyntax*& stmt)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     auto retStmt = makeNode<ReturnStatementSyntax>();
     stmt = retStmt;
@@ -839,7 +839,7 @@ bool Parser::parseReturnStatement_AtFirst(StatementSyntax*& stmt)
  */
 bool Parser::parseExtGNU_AsmStatement(StatementSyntax*& stmt)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
                      return false,
                      "assert failure: `asm'");
@@ -899,7 +899,7 @@ bool Parser::parseExtGNU_AsmStatement(StatementSyntax*& stmt)
 
 void Parser::parseExtGNU_AsmQualifiers(SpecifierListSyntax*& specList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     SpecifierListSyntax** qualsList_cur = &specList;
 
@@ -948,7 +948,7 @@ bool Parser::parseExtGNU_AsmInputOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOp
 bool Parser::parseExtGNU_AsmOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOprd,
                                             SyntaxKind oprdK)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
     PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::StringLiteralToken
                         || peek().kind() == SyntaxKind::OpenBracketToken,
                      return false,
@@ -972,7 +972,7 @@ bool Parser::parseExtGNU_AsmOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOprd,
 
 bool Parser::parseExtGNU_AsmClobbers(ExpressionListSyntax*& clobList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     if (peek().kind() != SyntaxKind::StringLiteralToken)
         return true;
@@ -984,14 +984,14 @@ bool Parser::parseExtGNU_AsmClobbers(ExpressionListSyntax*& clobList)
 
 bool Parser::parseExtGNU_AsmClobber_AtFirst(ExpressionSyntax*& clob, ExpressionListSyntax*&)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseStringLiteral(clob);
 }
 
 bool Parser::parseExtGNU_AsmGotoLabels(ExpressionListSyntax*& labelList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     if (peek().kind() != SyntaxKind::IdentifierToken)
         return true;
@@ -1005,7 +1005,7 @@ bool Parser::parseExtGNU_AsmGotoLabels(ExpressionListSyntax*& labelList)
 bool Parser::parseExtGNU_AsmGotoLabel_AtFirst(ExpressionSyntax*& label,
                                               ExpressionListSyntax*&)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     parseIdentifierName_AtFirst(label);
     return true;

@@ -18,30 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-//#define DEBUG_BINDER
-#ifdef DEBUG_BINDER
-# define DEBUG_SYM_STACK_ENABLED
-# define DEBUG_TY_STACK_ENABLED
+//#define DBG_BINDER
+#ifdef DBG_BINDER
+# define DBG_SYM_STACK_ENABLED
+# define DBG_TY_STACK_ENABLED
 #endif
 
-#ifdef DEBUG_SYM_STACK_ENABLED
-# define DEBUG_SYM_STACK(sym) \
+#ifdef DBG_SYM_STACK_ENABLED
+# define DBG_SYM_STACK(sym) \
     do { \
         std::cout << __func__ << " " << std::flush; \
         std::cout << to_string(sym->kind()) << std::endl; \
     } while (0)
 #else
-# define DEBUG_SYM_STACK(sym) do {} while (0)
+# define DBG_SYM_STACK(sym) do {} while (0)
 #endif
 
-#ifdef DEBUG_TY_STACK_ENABLED
-# define DEBUG_TY_STACK(ty) \
+#ifdef DBG_TY_STACK_ENABLED
+# define DBG_TY_STACK(ty) \
     do { \
         std::cout << __func__ << " " << std::flush; \
         std::cout << to_string(*ty) << std::endl; \
     } while (0)
 #else
-# define DEBUG_TY_STACK(sym) do {} while (0)
+# define DBG_TY_STACK(sym) do {} while (0)
 #endif
 
 #define SYM_AT_TOP(S) \

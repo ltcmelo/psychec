@@ -40,7 +40,7 @@ using namespace C;
  */
 bool Parser::parseTypeName(TypeNameSyntax*& typeName)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;

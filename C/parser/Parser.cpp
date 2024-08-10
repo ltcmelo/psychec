@@ -65,7 +65,7 @@ void Parser::Backtracker::backtrack()
         return;
     }
 
-#ifdef DEBUG_RULE
+#ifdef DBG_RULE
     std::cerr << std::string(depth_ * 4, ' ')
               << "BACKTRACKING from  "
               << "`" << parser_->peek().valueText() << "'  "
@@ -78,7 +78,7 @@ void Parser::Backtracker::backtrack()
     else
         parser_->curTkIdx_ = tkCnt - 1;
 
-#ifdef DEBUG_RULE
+#ifdef DBG_RULE
     std::cerr << "`" << parser_->peek().valueText() << "'  "
               << parser_->curTkIdx_ << std::endl;
 #endif

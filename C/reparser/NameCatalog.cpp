@@ -23,7 +23,6 @@
 #include "syntax/SyntaxNode.h"
 
 #include "../common/infra/Assertions.h"
-#include "../common/infra/Escape.h"
 
 using namespace psy;
 using namespace C;

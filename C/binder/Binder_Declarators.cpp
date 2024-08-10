@@ -33,7 +33,6 @@
 #include "types/Type_ALL.h"
 
 #include "../common/infra/Assertions.h"
-#include "../common/infra/Escape.h"
 
 #include <iostream>
 
@@ -385,7 +384,7 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
         }
 
         default:
-            PSY_ESCAPE_VIA_RETURN();
+            PSY_ASSERT_FAIL_1(return);
     }
 }
 

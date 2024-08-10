@@ -23,7 +23,6 @@
 #include "syntax/SyntaxNodes.h"
 
 #include "../common/infra/Assertions.h"
-#include "../common/infra/Escape.h"
 
 using namespace psy;
 using namespace C;
@@ -70,7 +69,7 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousExpression(ExprT* const&
                     break;
 
                 default:
-                    PSY_ESCAPE_VIA_RETURN(Action::Skip);
+                    PSY_ASSERT_FAIL_1(return Action::Quit);
             }
             break;
         }
@@ -108,7 +107,7 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousStatement(StmtT* const& 
                     break;
 
                 default:
-                    PSY_ESCAPE_VIA_RETURN(Action::Skip);
+                    PSY_ASSERT_FAIL_1(return Action::Quit);
             }
             break;
         }
@@ -145,7 +144,7 @@ SyntaxVisitor::Action Disambiguator::visitMaybeAmbiguousTypeReference(TypeRefT* 
                     break;
 
                 default:
-                    PSY_ESCAPE_VIA_RETURN(Action::Skip);
+                    PSY_ASSERT_FAIL_1(return Action::Quit);
             }
             break;
         }
@@ -453,17 +452,17 @@ SyntaxVisitor::Action Disambiguator::visitExpressionAsTypeReference(const Expres
 SyntaxVisitor::Action Disambiguator::visitAmbiguousTypeNameOrExpressionAsTypeReference(
         const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax*)
 {
-    PSY_ESCAPE_VIA_RETURN(Action::Quit);
+    PSY_ASSERT_FAIL_1(return Action::Quit);
 }
 
 SyntaxVisitor::Action Disambiguator::visitAmbiguousCastOrBinaryExpression(
         const AmbiguousCastOrBinaryExpressionSyntax*)
 {
-    PSY_ESCAPE_VIA_RETURN(Action::Quit);
+    PSY_ASSERT_FAIL_1(return Action::Quit);
 }
 
 SyntaxVisitor::Action Disambiguator::visitAmbiguousExpressionOrDeclarationStatement(
         const AmbiguousExpressionOrDeclarationStatementSyntax*)
 {
-    PSY_ESCAPE_VIA_RETURN(Action::Quit);
+    PSY_ASSERT_FAIL_1(return Action::Quit);
 }

@@ -95,14 +95,14 @@ void Binder::unnestAndStashScope()
 
 void Binder::pushSymbol(Symbol* sym)
 {
-    DEBUG_SYM_STACK(sym);
+    DBG_SYM_STACK(sym);
     syms_.push(sym);
 }
 
 Symbol* Binder::popSymbol()
 {
     PSY_ASSERT(!syms_.empty(), return nullptr);
-    DEBUG_SYM_STACK(syms_.top());
+    DBG_SYM_STACK(syms_.top());
     auto sym = syms_.top();
     syms_.pop();
     return sym;
@@ -117,14 +117,14 @@ DeclarationSymbol* Binder::popSymbolAsDeclaration()
 
 void Binder::pushType(Type* ty)
 {
-    DEBUG_TY_STACK(ty);
+    DBG_TY_STACK(ty);
     tys_.push(ty);
 }
 
 Type* Binder::popType()
 {
     PSY_ASSERT(!tys_.empty(), return nullptr);
-    DEBUG_TY_STACK(tys_.top());
+    DBG_TY_STACK(tys_.top());
     auto ty = tys_.top();
     tys_.pop();
     return ty;

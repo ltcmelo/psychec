@@ -24,8 +24,6 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/Escape.h"
-
 #include <cstdint>
 #include <string>
 
