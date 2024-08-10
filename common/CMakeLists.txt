@@ -22,7 +22,6 @@ set(COMMON_SOURCES
 
     # Infra
     ${PROJECT_SOURCE_DIR}/infra/Assertions.h
-    ${PROJECT_SOURCE_DIR}/infra/Escape.h
     ${PROJECT_SOURCE_DIR}/infra/AccessSpecifiers.h
     ${PROJECT_SOURCE_DIR}/infra/Pimpl.h
 
