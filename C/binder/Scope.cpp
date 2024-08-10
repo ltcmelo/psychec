@@ -89,7 +89,7 @@ void Scope::encloseScope(std::unique_ptr<Scope> innerScope)
 
 void Scope::morphFrom_FunctionPrototype_to_Block()
 {
-    PSY_ASSERT(scopeK_ == ScopeKind::FunctionPrototype, return);
+    PSY_ASSERT_2(scopeK_ == ScopeKind::FunctionPrototype, return);
 
     scopeK_ = ScopeKind::Block;
 }

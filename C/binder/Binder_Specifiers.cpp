@@ -40,7 +40,7 @@ using namespace psy;
 using namespace C;
 
 template <class TyDeclT>
-SyntaxVisitor::Action Binder::visitTypeDeclaration_AtInternalDeclarations_COMMON(
+SyntaxVisitor::Action Binder::visitTagDeclaration_AtInternalDeclarations_COMMON(
         const TyDeclT* node,
         Action (Binder::*visit_AtEnd)(const TyDeclT*))
 {
@@ -55,45 +55,38 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
     const TagTypeSpecifierSyntax* tySpec = node->typeSpecifier();
     switch (tySpec->kind()) {
         case SyntaxKind::StructTypeSpecifier: {
-            auto tagTy = makeTy<TagType>(
+            auto tagTy = makeType<TagType>(
                         TagTypeKind::Struct,
-                        lexemeOrEmptyIdent(tySpec->tagToken()));
-            makeBindAndPushSym<Struct>(node, tagTy);
+                        identifier(tySpec->tagToken()));
+            bindAndPushSymbol<Struct>(node, tagTy);
             break;
         }
         case SyntaxKind::UnionTypeSpecifier:{
-            auto tagTy = makeTy<TagType>(
+            auto tagTy = makeType<TagType>(
                         TagTypeKind::Union,
-                        lexemeOrEmptyIdent(tySpec->tagToken()));
-            makeBindAndPushSym<Union>(node, tagTy);
+                        identifier(tySpec->tagToken()));
+            bindAndPushSymbol<Union>(node, tagTy);
             break;
         }
         default:
-            PSY_ASSERT(false, return Action::Quit);
+            PSY_ASSERT_2(false, return Action::Quit);
     }
-    return visitTypeDeclaration_AtInternalDeclarations_COMMON(
+    return visitTagDeclaration_AtInternalDeclarations_COMMON(
                 node,
                 &Binder::visitStructOrUnionDeclaration_AtEnd);
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax* node)
 {
-    auto tagTy = makeTy<TagType>(
+    auto tagTy = makeType<TagType>(
                 TagTypeKind::Enum,
-                lexemeOrEmptyIdent(node->typeSpec_->tagToken()));
-    pushTy(tagTy);
-    makeBindAndPushSym<Enum>(node, tagTy);
+                identifier(node->typeSpec_->tagToken()));
+    pushType(tagTy);
+    bindAndPushSymbol<Enum>(node, tagTy);
 
-    return visitTypeDeclaration_AtInternalDeclarations_COMMON(
+    return visitTagDeclaration_AtInternalDeclarations_COMMON(
                 node,
                 &Binder::visitEnumDeclaration_AtEnd);
-}
-
-SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtSpecifier(const TypedefDeclarationSyntax* node)
-{
-    return visitDeclaration_AtSpecifiers_COMMON(
-                node,
-                &Binder::visitTypedefDeclaration_AtDeclarators);
 }
 
 template <class DeclT>
@@ -106,13 +99,20 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtSpecifiers_COMMON(
 
     if (tys_.empty()) {
         diagReporter_.TypeSpecifierMissingDefaultsToInt(node->lastToken());
-        pushTy(makeTy<BasicType>(BasicTypeKind::Int));
+        pushType(makeType<BasicType>(BasicTypeKind::Int));
     }
 
     for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
         visitIfTypeQualifier(specIt->value);
 
     return ((this)->*(visit_AtDeclarators))(node);
+}
+
+SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtSpecifier(const TypedefDeclarationSyntax* node)
+{
+    return visitDeclaration_AtSpecifiers_COMMON(
+                node,
+                &Binder::visitTypedefDeclaration_AtDeclarators);
 }
 
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtSpecifiers(
@@ -139,8 +139,7 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_AtSpecifiers(const FieldDecl
 
 SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtImplicitSpecifier(const EnumeratorDeclarationSyntax* node)
 {
-    pushTy(makeTy<BasicType>(BasicTypeKind::Int));
-
+    pushType(makeType<BasicType>(BasicTypeKind::Int));
     return visitEnumeratorDeclaration_AtDeclarator(node);
 }
 
@@ -153,20 +152,16 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration_AtSpecifiers(const Param
 
 SyntaxVisitor::Action Binder::visitIfNotTypeQualifier(const SpecifierSyntax* spec)
 {
-    if (spec->asTypeQualifier())
-        return Action::Skip;
-
-    visit(spec);
+    if (!spec->asTypeQualifier())
+        visit(spec);
 
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitIfTypeQualifier(const SpecifierSyntax* spec)
 {
-    if (!spec->asTypeQualifier())
-        return Action::Skip;
-
-    visit(spec);
+    if (spec->asTypeQualifier())
+        visit(spec);
 
     return Action::Skip;
 }
@@ -209,9 +204,9 @@ SyntaxVisitor::Action Binder::visitBasicTypeSpecifier(const BasicTypeSpecifierSy
                 basicTyK = BasicTypeKind::Int_U;
                 break;
             default:
-                PSY_ESCAPE_VIA_RETURN(Action::Quit);
+                PSY_ASSERT_FAIL_1(return Action::Quit);
         }
-        pushTy(makeTy<BasicType>(basicTyK));
+        pushType(makeType<BasicType>(basicTyK));
         return Action::Skip;
     }
 
@@ -307,7 +302,7 @@ SyntaxVisitor::Action Binder::visitBasicTypeSpecifier(const BasicTypeSpecifierSy
             return Action::Skip;
 
         default:
-            PSY_ESCAPE_VIA_RETURN(Action::Skip);
+            PSY_ASSERT_FAIL_1(return Action::Quit);
     }
 
     if (extraBasicTyK != curBasicTyK)
@@ -318,7 +313,7 @@ SyntaxVisitor::Action Binder::visitBasicTypeSpecifier(const BasicTypeSpecifierSy
 
 SyntaxVisitor::Action Binder::visitVoidTypeSpecifier(const VoidTypeSpecifierSyntax* node)
 {
-    pushTy(makeTy<VoidType>());
+    pushType(makeType<VoidType>());
 
     return Action::Skip;
 }
@@ -341,9 +336,9 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 break;
 
             default:
-                PSY_ASSERT(false, return Action::Quit);
+                PSY_ASSERT_2(false, return Action::Quit);
         }
-        pushTy(makeTy<TagType>(tagTyK, lexemeOrEmptyIdent(node->tagToken())));
+        pushType(makeType<TagType>(tagTyK, identifier(node->tagToken())));
     }
 
     for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
@@ -370,23 +365,23 @@ SyntaxVisitor::Action Binder::visitTagDeclarationAsSpecifier(
     const TagTypeSpecifierSyntax* tySpec = node->tagDeclaration()->typeSpecifier();
     switch (tySpec->kind()) {
         case SyntaxKind::StructTypeSpecifier: {
-            auto tagTy = makeTy<TagType>(
+            auto tagTy = makeType<TagType>(
                         TagTypeKind::Struct,
-                        lexemeOrEmptyIdent(tySpec->tagToken()));
-            pushTy(tagTy);
+                        identifier(tySpec->tagToken()));
+            pushType(tagTy);
             break;
         }
 
         case SyntaxKind::UnionTypeSpecifier:{
-            auto tagTy = makeTy<TagType>(
+            auto tagTy = makeType<TagType>(
                         TagTypeKind::Union,
-                        lexemeOrEmptyIdent(tySpec->tagToken()));
-            pushTy(tagTy);
+                        identifier(tySpec->tagToken()));
+            pushType(tagTy);
             break;
         }
 
         default:
-            PSY_ASSERT(false, return Action::Quit);
+            PSY_ASSERT_2(false, return Action::Quit);
     }
 
     return Action::Skip;
@@ -395,7 +390,7 @@ SyntaxVisitor::Action Binder::visitTagDeclarationAsSpecifier(
 SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 {
     if (tys_.empty())
-        pushTy(makeTy<TypedefType>(lexemeOrEmptyIdent(node->identifierToken())));
+        pushType(makeType<TypedefType>(identifier(node->identifierToken())));
 
     return Action::Skip;
 }
@@ -410,11 +405,11 @@ SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node
             break;
 
         default:
-            qualTy = makeTy<QualifiedType>(ty);
-            pushTy(qualTy);
+            qualTy = makeType<QualifiedType>(ty);
+            pushType(qualTy);
             break;
     }
-    PSY_ASSERT(qualTy, return Action::Quit);
+    PSY_ASSERT_2(qualTy, return Action::Quit);
 
     const auto tyQualTk = node->qualifierKeyword();
     switch (tyQualTk.kind()) {
@@ -438,7 +433,7 @@ SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node
             break;
 
         default:
-            PSY_ESCAPE_VIA_BREAK;
+            PSY_ASSERT_FAIL_1(return Action::Quit);
     }
 
     return Action::Skip;

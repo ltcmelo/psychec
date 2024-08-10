@@ -40,7 +40,7 @@ using namespace C;
  */
 bool Parser::parseTypeName(TypeNameSyntax*& typeName)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;
@@ -94,7 +94,7 @@ bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& tyRef)
 
 void Parser::maybeAmbiguateTypeReference(TypeReferenceSyntax*& tyRef)
 {
-    PSY_ASSERT_W_MSG(tyRef->kind() == SyntaxKind::ExpressionAsTypeReference
+    PSY_ASSERT_3(tyRef->kind() == SyntaxKind::ExpressionAsTypeReference
                     && (tyRef->asExpressionAsTypeReference()->expr_->kind()
                             == SyntaxKind::ParenthesizedExpression),
                   return, "");

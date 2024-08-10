@@ -57,7 +57,7 @@ using namespace C;
  */
 bool Parser::parseExpression(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     DepthControl _(DEPTH_OF_EXPRS_);
     return parseExpressionWithPrecedenceComma(expr);
@@ -70,7 +70,7 @@ bool Parser::parseExpression(ExpressionSyntax*& expr)
  */
 bool Parser::parseIdentifierName(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     if (peek().kind() != SyntaxKind::IdentifierToken) {
         diagReporter_.ExpectedTokenOfCategoryIdentifier();
@@ -88,8 +88,8 @@ bool Parser::parseIdentifierName(ExpressionSyntax*& expr)
  */
 void Parser::parseIdentifierName_AtFirst(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::IdentifierToken,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::IdentifierToken,
                   return,
                   "assert failure: <identifier>");
 
@@ -103,8 +103,8 @@ void Parser::parseIdentifierName_AtFirst(ExpressionSyntax*& expr)
  */
 void Parser::parsePredefinedName_AtFirst(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(SyntaxFacts::isPredefinedToken(peek().kind()),
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(SyntaxFacts::isPredefinedToken(peek().kind()),
                   return,
                   "assert failure: <predefined-name>");
 
@@ -121,7 +121,7 @@ void Parser::parsePredefinedName_AtFirst(ExpressionSyntax*& expr)
 template <class ExprT>
 bool Parser::parseConstant(ExpressionSyntax*& expr, SyntaxKind exprK)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     if (!SyntaxFacts::isConstantToken(peek().kind())) {
         diagReporter_.ExpectedTokenOfCategoryConstant();
@@ -143,8 +143,8 @@ template bool Parser::parseConstant<ConstantExpressionSyntax>
 template <class ExprT>
 void Parser::parseConstant_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(SyntaxFacts::isConstantToken(peek().kind()),
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(SyntaxFacts::isConstantToken(peek().kind()),
                   return,
                   "assert failure: <constant>");
 
@@ -161,7 +161,7 @@ template void Parser::parseConstant_AtFirst<ConstantExpressionSyntax>
  */
 bool Parser::parseStringLiteral(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     if (!SyntaxFacts::isStringLiteralToken(peek().kind())) {
         diagReporter_.ExpectedTokenOfCategoryStringLiteral();
@@ -179,8 +179,8 @@ bool Parser::parseStringLiteral(ExpressionSyntax*& expr)
  */
 void Parser::parseStringLiteral_AtFirst(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(SyntaxFacts::isStringLiteralToken(peek().kind()),
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(SyntaxFacts::isStringLiteralToken(peek().kind()),
                   return,
                   "assert failure: <string-literal>");
 
@@ -204,8 +204,8 @@ void Parser::parseStringLiteral_AtFirst(ExpressionSyntax*& expr)
  */
 bool Parser::parseParenthesizedExpression_AtFirst(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenParenToken,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenParenToken,
                   return false,
                   "assert failure: `('");
 
@@ -224,8 +224,8 @@ bool Parser::parseParenthesizedExpression_AtFirst(ExpressionSyntax*& expr)
  */
 bool Parser::parseExtGNU_StatementExpression_AtFirst(ExpressionSyntax *&expr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenParenToken
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenParenToken
                         && peek(2).kind() == SyntaxKind::OpenBraceToken,
                   return false,
                   "assert failure: `(' then `{'");
@@ -256,8 +256,8 @@ bool Parser::parseExtGNU_StatementExpression_AtFirst(ExpressionSyntax *&expr)
  */
 bool Parser::parseGenericSelectionExpression_AtFirst(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword__Generic,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword__Generic,
                   return false,
                   "assert failure: `_Generic'");
 
@@ -285,7 +285,7 @@ bool Parser::parseGenericSelectionExpression_AtFirst(ExpressionSyntax*& expr)
  */
 bool Parser::parseGenericAssociationList(GenericAssociationListSyntax*& assocList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseCommaSeparatedItems<GenericAssociationSyntax>(
                 assocList,
@@ -306,7 +306,7 @@ bool Parser::parseGenericAssociationList(GenericAssociationListSyntax*& assocLis
 bool Parser::parseGenericAssociation(GenericAssociationSyntax*& assoc,
                                      GenericAssociationListSyntax*&)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::Keyword_default: {
@@ -371,7 +371,7 @@ bool Parser::parseGenericAssociation(GenericAssociationSyntax*& assoc,
  */
 bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::OpenParenToken:
@@ -671,8 +671,8 @@ bool Parser::parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr,
                                               SyntaxKind exprK,
                                               std::function<bool(ExprT*&)> parsePostfix)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBracketToken
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenBracketToken
                         || peek().kind() == SyntaxKind::OpenParenToken
                         || peek().kind() == SyntaxKind::DotToken
                         || peek().kind() == SyntaxKind::ArrowToken
@@ -700,7 +700,7 @@ bool Parser::parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr,
  */
 bool Parser::parseCallArguments(ExpressionListSyntax*& exprList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseCommaSeparatedItems<ExpressionSyntax>(
                 exprList,
@@ -719,8 +719,8 @@ bool Parser::parseCallArgument(ExpressionSyntax*&expr, ExpressionListSyntax*&)
  */
 bool Parser::parseVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___builtin_va_arg
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___builtin_va_arg
                     || peek().kind() == SyntaxKind::Keyword_MacroStd_va_arg,
                   return false,
                   "assert failure: `__builtin_va_arg'");
@@ -743,8 +743,8 @@ bool Parser::parseVAArgumentExpression_AtFirst(ExpressionSyntax*& expr)
  */
 bool Parser::parseOffsetOfExpression_AtFirst(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___builtin_offsetof
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___builtin_offsetof
                   || peek().kind() == SyntaxKind::Keyword_MacroStd_offsetof,
                   return false,
                   "assert failure: `__builtin_offsetof'");
@@ -768,8 +768,8 @@ bool Parser::parseOffsetOfExpression_AtFirst(ExpressionSyntax*& expr)
  */
 bool Parser::parseExtGNU_ChooseExpression_AtFirst(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___builtin_choose_expr,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___builtin_choose_expr,
                   return false,
                   "assert failure: `__builtin_choose_expr'");
 
@@ -793,8 +793,8 @@ bool Parser::parseExtGNU_ChooseExpression_AtFirst(ExpressionSyntax*& expr)
  */
 bool Parser::parseExtGNU_ComplexValuedExpression_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___real__
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___real__
                       || peek().kind() == SyntaxKind::Keyword_ExtGNU___imag__,
                   return false,
                   "assert failure: `__real__' or `__imag__'");
@@ -818,8 +818,8 @@ bool Parser::parseExtGNU_ComplexValuedExpression_AtFirst(ExpressionSyntax*& expr
  */
 bool Parser::parseCompoundLiteral_AtOpenParen(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenParenToken,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenParenToken,
                   return false,
                   "assert failure: `('");
 
@@ -858,8 +858,8 @@ bool Parser::parseCompoundLiteral_AtOpenBrace(
         TypeNameSyntax* typeName,
         LexedTokens::IndexType closeParenTkIdx)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBraceToken,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenBraceToken,
                   return false,
                   "assert failure: `{'");
 
@@ -910,7 +910,7 @@ bool Parser::parseCompoundLiteral_AtOpenBrace(
  */
 bool Parser::parseExpressionWithPrecedenceUnary(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         /* 6.5.3.1 */
@@ -998,8 +998,8 @@ bool Parser::parsePrefixUnaryExpression_AtFirst(
         SyntaxKind exprK,
         bool (Parser::*parseOperand)(ExpressionSyntax*&))
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::PlusPlusToken
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::PlusPlusToken
                     || peek().kind() == SyntaxKind::MinusMinusToken
                     || peek().kind() == SyntaxKind::AmpersandToken
                     || peek().kind() == SyntaxKind::AsteriskToken
@@ -1033,8 +1033,8 @@ bool Parser::parsePrefixUnaryExpression_AtFirst(
  */
 bool Parser::parseTypeTraitExpression_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_sizeof
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_sizeof
                     || peek().kind() == SyntaxKind::Keyword__Alignof,
                   return false,
                   "assert failure: `sizeof' or `_Alignof'");
@@ -1063,7 +1063,7 @@ bool Parser::parseTypeTraitExpression_AtFirst(ExpressionSyntax*& expr, SyntaxKin
  */
 bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::OpenParenToken: {
@@ -1125,7 +1125,7 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
             auto extKwTkIdx = consume();
             if (!parseExpressionWithPrecedenceCast(expr))
                 return false;
-            PSY_ASSERT_W_MSG(expr, return false, "invalid expression");
+            PSY_ASSERT_3(expr, return false, "invalid expression");
             expr->extKwTkIdx_ = extKwTkIdx;
             return true;
         }
@@ -1137,8 +1137,8 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
 
 bool Parser::parseCompoundLiteralOrCastExpression_AtFirst(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenParenToken,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenParenToken,
                   return false,
                   "assert failure: `('");
 
@@ -1167,7 +1167,7 @@ bool Parser::parseCompoundLiteralOrCastExpression_AtFirst(ExpressionSyntax*& exp
 
 void Parser::maybeAmbiguateCastExpression(ExpressionSyntax*& expr)
 {
-    PSY_ASSERT_W_MSG(expr->kind() == SyntaxKind::CastExpression,
+    PSY_ASSERT_3(expr->kind() == SyntaxKind::CastExpression,
                   return, "");
 
     auto castExpr = expr->asCastExpression();
@@ -1206,7 +1206,7 @@ void Parser::maybeAmbiguateCastExpression(ExpressionSyntax*& expr)
             break;
 
         default:
-            PSY_ASSERT_W_MSG(false, return, "");
+            PSY_ASSERT_3(false, return, "");
     }
 
     auto nameExpr = makeNode<IdentifierNameSyntax>();
@@ -1341,7 +1341,7 @@ bool isRightAssociative(SyntaxKind tkK)
  */
 bool Parser::parseExpressionWithPrecedenceMultiplicative(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::Multiplicative);
 }
@@ -1362,7 +1362,7 @@ bool Parser::parseExpressionWithPrecedenceMultiplicative(ExpressionSyntax*& expr
  */
 bool Parser::parseExpressionWithPrecedenceAdditive(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::Additive);
 }
@@ -1383,7 +1383,7 @@ bool Parser::parseExpressionWithPrecedenceAdditive(ExpressionSyntax*& expr)
  */
 bool Parser::parseExpressionWithPrecedenceShift(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::Shift);
 }
@@ -1406,7 +1406,7 @@ bool Parser::parseExpressionWithPrecedenceShift(ExpressionSyntax*& expr)
  */
 bool Parser::parseExpressionWithPrecedenceRelational(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::Relational);
 }
@@ -1427,7 +1427,7 @@ bool Parser::parseExpressionWithPrecedenceRelational(ExpressionSyntax*& expr)
  */
 bool Parser::parseExpressionWithPrecedenceEquality(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::Equality);
 }
@@ -1447,7 +1447,7 @@ bool Parser::parseExpressionWithPrecedenceEquality(ExpressionSyntax*& expr)
  */
 bool Parser::parseExpressionWithPrecedenceBitwiseAND(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::BitwiseAND);
 }
@@ -1467,7 +1467,7 @@ bool Parser::parseExpressionWithPrecedenceBitwiseAND(ExpressionSyntax*& expr)
  */
 bool Parser::parseExpressionWithPrecedenceBitwiseXOR(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::BitwiseXOR);
 }
@@ -1487,7 +1487,7 @@ bool Parser::parseExpressionWithPrecedenceBitwiseXOR(ExpressionSyntax*& expr)
  */
 bool Parser::parseExpressionWithPrecedenceBitwiseOR(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::BitwiseOR);
 }
@@ -1507,7 +1507,7 @@ bool Parser::parseExpressionWithPrecedenceBitwiseOR(ExpressionSyntax*& expr)
  */
 bool Parser::parseExpressionWithPrecedenceLogicalAND(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::LogicalAND);
 }
@@ -1527,7 +1527,7 @@ bool Parser::parseExpressionWithPrecedenceLogicalAND(ExpressionSyntax*& expr)
  */
 bool Parser::parseExpressionWithPrecedenceLogicalOR(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::LogicalOR);
 }
@@ -1547,7 +1547,7 @@ bool Parser::parseExpressionWithPrecedenceLogicalOR(ExpressionSyntax*& expr)
  */
 bool Parser::parseExpressionWithPrecedenceConditional(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::Conditional);
 }
@@ -1570,7 +1570,7 @@ bool Parser::parseExpressionWithPrecedenceConditional(ExpressionSyntax*& expr)
  */
 bool Parser::parseExpressionWithPrecedenceAssignment(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::Assignment);
 }
@@ -1583,14 +1583,14 @@ bool Parser::parseExpressionWithPrecedenceAssignment(ExpressionSyntax*& expr)
  */
 bool Parser::parseExpressionWithPrecedenceComma(ExpressionSyntax*& expr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseNAryExpression(expr, NAryPrecedence::Sequencing);
 }
 
 bool Parser::parseNAryExpression(ExpressionSyntax*& expr, std::uint8_t cutoffPrecedence)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     if (!parseExpressionWithPrecedenceCast(expr))
         return false;
@@ -1601,7 +1601,7 @@ bool Parser::parseNAryExpression(ExpressionSyntax*& expr, std::uint8_t cutoffPre
 bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
                                             std::uint8_t cutoffPrecedence)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     auto CUR_DEPTH_OF_EXPR = DEPTH_OF_EXPRS_;
 

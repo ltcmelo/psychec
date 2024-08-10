@@ -44,8 +44,8 @@
 #include <sstream>
 
 //#define DUMP_AST
-//#define DEBUG_DIAGNOSTICS
-//#define DEBUG_BINDING_SEARCH
+//#define DBG_DIAGNOSTICS
+//#define DBG_BINDING_SEARCH
 
 using namespace psy;
 using namespace C;
@@ -122,7 +122,7 @@ bool InternalsTestSuite::checkErrorAndWarn(Expectation X)
         }
     }
 
-#ifdef DEBUG_DIAGNOSTICS
+#ifdef DBG_DIAGNOSTICS
     if (!tree_->diagnostics().empty()) {
         for (auto& diagnostic : tree_->diagnostics()) {
             diagnostic.outputIndent_ = 2;
@@ -133,7 +133,7 @@ bool InternalsTestSuite::checkErrorAndWarn(Expectation X)
 #endif
 
     if (X.numW_ != W_cnt || X.numE_ != E_cnt) {
-#ifdef DEBUG_DIAGNOSTICS
+#ifdef DBG_DIAGNOSTICS
         std::cout << "\n\t" << std::string(25, '%') << "\n\t";
 #endif
         std::cout << "mismatch in ";
@@ -143,7 +143,7 @@ bool InternalsTestSuite::checkErrorAndWarn(Expectation X)
             std::cout << "ERROR";
         std::cout << " count";
 
-#ifdef DEBUG_DIAGNOSTICS
+#ifdef DBG_DIAGNOSTICS
         std::cout << "\n\t" << std::string(25, '%');
 #endif
     }
@@ -196,7 +196,7 @@ void InternalsTestSuite::parse(std::string source,
 {
     auto text = source;
 
-#ifdef DEBUG_DIAGNOSTICS
+#ifdef DBG_DIAGNOSTICS
     if (X.numW_ > 0 || X.numE_ > 0) {
         std::cout << std::endl;
         if (X.numW_ > 0)
@@ -382,7 +382,7 @@ namespace {
 
 bool REJECT_CANDIDATE(const Symbol* sym, std::string msg)
 {
-#ifdef DEBUG_BINDING_SEARCH
+#ifdef DBG_BINDING_SEARCH
     std::cout << "\n\t\tREJECT " << to_string(*sym) << " DUE TO " << msg;
 #endif
     return false;
@@ -390,7 +390,7 @@ bool REJECT_CANDIDATE(const Symbol* sym, std::string msg)
 
 void DETAIL_MISMATCH(std::string msg)
 {
-#ifdef DEBUG_BINDING_SEARCH
+#ifdef DBG_BINDING_SEARCH
     std::cout << "\n\t\t\tmismatch detail: " << msg;
 #endif
 }
@@ -461,7 +461,7 @@ bool CVRMatches(const Type* ty, CVR cvr)
 
 bool typeMatches(const Type* ty, const Ty& t)
 {
-    PSY_ASSERT(t.derivTyKs_.size() == t.derivTyCVRs_.size()
+    PSY_ASSERT_2(t.derivTyKs_.size() == t.derivTyCVRs_.size()
                && t.derivTyKs_.size() == t.derivPtrTyDecay_.size(),
                return false);
 
@@ -598,7 +598,7 @@ bool typeMatches(const Type* ty, const Ty& t)
             break;
 
         default:
-            PSY_ASSERT(false, return false);
+            PSY_ASSERT_2(false, return false);
     }
 
     return true;
@@ -743,7 +743,7 @@ void InternalsTestSuite::matchDeclarations(
         std::vector<Decl> decls)
 {
     for (const auto& Decl : decls) {
-#ifdef DEBUG_BINDING_SEARCH
+#ifdef DBG_BINDING_SEARCH
         std::cout << "\n\t\t...";
 #endif
         using namespace std::placeholders;
@@ -756,7 +756,7 @@ void InternalsTestSuite::matchDeclarations(
             oss << " kind: " << to_string(Decl.declSymK_);
             PSY__internals__FAIL(oss.str());
         }
-#ifdef DEBUG_BINDING_SEARCH
+#ifdef DBG_BINDING_SEARCH
         std::cout << "\n\t\tmatch! ";
 #endif
     }
@@ -775,7 +775,7 @@ void InternalsTestSuite::checkSemanticModel(
         PSY__internals__FAIL("unit not found");
 
     for (const auto& Decl : X.declarations_) {
-#ifdef DEBUG_BINDING_SEARCH
+#ifdef DBG_BINDING_SEARCH
         std::cout << "\n\t\t...";
 #endif
         using namespace std::placeholders;
@@ -788,7 +788,7 @@ void InternalsTestSuite::checkSemanticModel(
             oss << " kind: " << to_string(Decl.declSymK_);
             PSY__internals__FAIL(oss.str());
         }
-#ifdef DEBUG_BINDING_SEARCH
+#ifdef DBG_BINDING_SEARCH
         std::cout << "\n\t\tmatch! ";
 #endif
 

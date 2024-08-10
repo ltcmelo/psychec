@@ -23,7 +23,6 @@
 #include "syntax/SyntaxNode.h"
 
 #include "../common/infra/Assertions.h"
-#include "../common/infra/Escape.h"
 
 using namespace psy;
 using namespace C;
@@ -39,14 +38,14 @@ NameCatalog::~NameCatalog()
 
 void NameCatalog::mapNodeAndMarkAsEncloser(const SyntaxNode* node)
 {
-    PSY_ASSERT(node, return);
-    PSY_ASSERT(!isNodeMapped(node), return);
+    PSY_ASSERT_2(node, return);
+    PSY_ASSERT_2(!isNodeMapped(node), return);
 
     NameUseAndDef tyUseAndDef;
     NameUseAndDef nonTyUseAndDef;
     if (!enclosersStack_.empty()) {
         auto iter = namesByNode_.find(enclosersStack_.top());
-        PSY_ASSERT(iter != namesByNode_.end(), return);
+        PSY_ASSERT_2(iter != namesByNode_.end(), return);
         tyUseAndDef = std::get<tyIdx_>(iter->second);
         nonTyUseAndDef = std::get<nonTyIdx_>(iter->second);
     }
@@ -61,8 +60,8 @@ void NameCatalog::mapNodeAndMarkAsEncloser(const SyntaxNode* node)
 
 void NameCatalog::markMappedNodeAsEncloser(const SyntaxNode* node)
 {
-    PSY_ASSERT(node, return);
-    PSY_ASSERT(isNodeMapped(node), return);
+    PSY_ASSERT_2(node, return);
+    PSY_ASSERT_2(isNodeMapped(node), return);
 
     enclosersStack_.push(node);
 }
@@ -105,13 +104,13 @@ void NameCatalog::catalogUseWithMutualExclusion(const std::string& name,
 
 void NameCatalog::catalogDefAsTypeName(const std::string& name)
 {
-    PSY_ASSERT(hasUseAsTypeName(name), return);
+    PSY_ASSERT_2(hasUseAsTypeName(name), return);
     catalogDef_CORE<tyIdx_>(name);
 }
 
 void NameCatalog::catalogDefAsNonTypeName(const std::string& name)
 {
-    PSY_ASSERT(hasUseAsNonTypeName(name), return);
+    PSY_ASSERT_2(hasUseAsNonTypeName(name), return);
     catalogDef_CORE<nonTyIdx_>(name);
 }
 
@@ -172,8 +171,8 @@ bool NameCatalog::isNodeMapped(const SyntaxNode* node) const
 
 NameCatalog::Enclosure* NameCatalog::currentEnclosure() const
 {
-    PSY_ASSERT(!enclosersStack_.empty(), return nullptr);
-    PSY_ASSERT(isNodeMapped(enclosersStack_.top()), return nullptr);
+    PSY_ASSERT_2(!enclosersStack_.empty(), return nullptr);
+    PSY_ASSERT_2(isNodeMapped(enclosersStack_.top()), return nullptr);
 
     return &namesByNode_[enclosersStack_.top()];
 }

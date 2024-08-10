@@ -25,7 +25,7 @@
 #include <stdexcept>
 
 #ifndef NDEBUG
-    #define PSY_ASSERT_W_MSG(COND_EXPR, STMT, MSG) \
+    #define PSY_ASSERT_3(COND_EXPR, STMT, MSG) \
         do { \
             if (COND_EXPR) {} \
             else { \
@@ -35,12 +35,19 @@
                 STMT; \
             } \
         } while (0)
-    #define PSY_ASSERT(COND_EXPR, STMT) PSY_ASSERT_W_MSG(COND_EXPR, STMT, "<empty message>")
-    #define PSY_ASSERT_NO_STMT(COND_EXPR) PSY_ASSERT_W_MSG(COND_EXPR, {}, "<empty message>")
+    #define PSY_ASSERT_2(COND_EXPR, STMT) PSY_ASSERT_3(COND_EXPR, STMT, "<empty message>")
+    #define PSY_ASSERT_1(COND_EXPR) PSY_ASSERT_3(COND_EXPR, {}, "<empty message>")
+    #define PSY_ASSERT_FAIL_1(STMT) \
+        do { \
+                std::cout << "[ASSERT] at " << __FILE__ << ":" << __LINE__ \
+                          << std::endl; \
+            STMT; \
+        } while (0)
 #else
-    #define PSY_ASSERT_W_MSG(COND_EXPR, STMT, MSG)
-    #define PSY_ASSERT(COND_EXPR, STMT)
-    #define PSY_ASSERT_NO_STMT(COND_EXPR)
+    #define PSY_ASSERT_3(COND_EXPR, STMT, MSG)
+    #define PSY_ASSERT_2(COND_EXPR, STMT)
+    #define PSY_ASSERT_1(COND_EXPR)
+    #define PSY_ASSERT_FAIL_1(STMT)
 #endif
 
 #endif

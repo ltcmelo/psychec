@@ -23,11 +23,10 @@
 #include "syntax/SyntaxUtilities.h"
 
 #include "../common/infra/Assertions.h"
-#include "../common/infra/Escape.h"
 
 #include "syntax/SyntaxNodes.h"
 
-//#define DEBUG_CATALOG
+//#define DBG_CATALOG
 
 using namespace psy;
 using namespace C;
@@ -55,7 +54,7 @@ SyntaxVisitor::Action NameCataloger::visitTranslationUnit(const TranslationUnitS
         visit(iter->value);
     catalog_->dropEncloser();
 
-#ifdef DEBUG_CATALOG
+#ifdef DBG_CATALOG
     std::cout << *catalog_ << std::endl;
 #endif
 
@@ -156,7 +155,7 @@ SyntaxVisitor::Action NameCataloger::visitAmbiguousExpressionOrDeclarationStatem
         }
 
         default:
-            PSY_ESCAPE_VIA_RETURN(Action::Skip);
+            PSY_ASSERT_FAIL_1(return Action::Quit);
     }
 
     return Action::Skip;

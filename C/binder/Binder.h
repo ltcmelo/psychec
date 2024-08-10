@@ -73,24 +73,23 @@ private:
 
     using SymContT = std::stack<Symbol*>;
     SymContT syms_;
-    Symbol* popSym();
-    DeclarationSymbol* popSymAsDecl();
-    void pushSym(Symbol*);
-    template <class SymT, class... SymTArgs> SymT* makeAndBindSym(
+    void pushSymbol(Symbol*);
+    Symbol* popSymbol();
+    DeclarationSymbol* popSymbolAsDeclaration();
+    template <class SymT, class... SymTArgs> SymT* bindAndPushSymbol(
             const SyntaxNode* node,
             SymTArgs... arg);
-    template <class SymT, class... SymTArgs> SymT* makeBindAndPushSym(
-            const SyntaxNode* node,
-            SymTArgs... arg);
-    Action nameSymAtTop(const Identifier* name);
-    Action typeSymAtTopAndPopIt();
+    void bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node);
+    void nameDeclarationAtTop(const Identifier* name);
+    void typeDeclarationAtTopWithTypeAtTop();
 
     using TyContT = std::stack<Type*>;
     TyContT tys_;
     std::stack<FunctionType*> pendingFunTys_;
-    Type* popTy();
-    void pushTy(Type*);
-    template <class TyT, class... TyTArgs> TyT* makeTy(TyTArgs... args);
+    void pushType(Type*);
+    Type* popType();
+    void popTypesUntilNonDerivedDeclaratorType();
+    template <class TyT, class... TyTArgs> TyT* makeType(TyTArgs... args);
 
     bool decltorIsOfTydef_;
 
@@ -123,10 +122,9 @@ private:
         void InvalidUseOfRestrict(SyntaxToken tyQualTk);
         static const std::string ID_InvalidUseOfRestrict;
     };
-
     DiagnosticsReporter diagReporter_;
 
-    const Identifier* lexemeOrEmptyIdent(const SyntaxToken& tk) const;
+    const Identifier* identifier(const SyntaxToken& tk) const;
 
     //--------------//
     // Declarations //
@@ -135,7 +133,7 @@ private:
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax*) override;
     virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;
 
-    template <class TyDeclT> Action visitTypeDeclaration_AtInternalDeclarations_COMMON(
+    template <class TyDeclT> Action visitTagDeclaration_AtInternalDeclarations_COMMON(
             const TyDeclT* node,
             Action (Binder::*visit_AtEnd)(const TyDeclT*));
 
@@ -147,18 +145,18 @@ private:
     Action visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax*);
     Action visitEnumDeclaration_AtEnd(const EnumDeclarationSyntax*);
 
+    template <class DeclT> Action visitDeclaration_AtSpecifiers_COMMON(
+            const DeclT* node,
+            Action (Binder::*visit_AtDeclarators)(const DeclT*));
+    template <class DeclT> Action visitDeclaration_AtMultipleDeclarators_COMMON(
+            const DeclT* node,
+            Action (Binder::*visit_AtEnd)(const DeclT*));
+    Action visitDeclaration_AtEnd_COMMON(const DeclarationSyntax*);
+
     virtual Action visitTypedefDeclaration(const TypedefDeclarationSyntax*) override;
     Action visitTypedefDeclaration_AtSpecifier(const TypedefDeclarationSyntax*);
     Action visitTypedefDeclaration_AtDeclarators(const TypedefDeclarationSyntax*);
     Action visitTypedefDeclaration_AtEnd(const TypedefDeclarationSyntax*);
-
-    template <class DeclT> Action visitDeclaration_AtSpecifiers_COMMON(
-            const DeclT* node,
-            Action (Binder::*visit_AtDeclarators)(const DeclT*));
-    template <class DeclT> Action visitDeclaration_AtDeclarators_COMMON(
-            const DeclT* node,
-            Action (Binder::*visit_AtEnd)(const DeclT*));
-    Action visitDeclaration_AtEnd_COMMON(const DeclarationSyntax*);
 
     virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
     Action visitVariableAndOrFunctionDeclaration_AtSpecifiers(const VariableAndOrFunctionDeclarationSyntax*);
@@ -203,7 +201,6 @@ private:
     virtual Action visitParameterSuffix(const ParameterSuffixSyntax*) override;
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
-    Action visitSimpleDeclarator_COMMON(const SyntaxNode* node);
 
     //------------//
     // Statements //
@@ -213,25 +210,19 @@ private:
 };
 
 template <class SymT, class... SymTArgs>
-SymT* Binder::makeAndBindSym(const SyntaxNode* node, SymTArgs... args)
+SymT* Binder::bindAndPushSymbol(const SyntaxNode* node, SymTArgs... args)
 {
     std::unique_ptr<SymT> sym(new SymT(tree_,
                                        syms_.top(),
                                        scopes_.top(),
                                        std::forward<SymTArgs>(args)...));
-    return static_cast<SymT*>(semaModel_->keepBinding(node, std::move(sym)));
-}
-
-template <class SymT, class... SymTArgs>
-SymT* Binder::makeBindAndPushSym(const SyntaxNode* node, SymTArgs... args)
-{
-    auto rawSym = makeAndBindSym<SymT>(node, std::forward<SymTArgs>(args)...);
-    pushSym(rawSym);
+    auto rawSym = static_cast<SymT*>(semaModel_->keepBinding(node, std::move(sym)));
+    pushSymbol(rawSym);
     return rawSym;
 }
 
 template <class TyT, class... TyTArgs>
-TyT* Binder::makeTy(TyTArgs... args)
+TyT* Binder::makeType(TyTArgs... args)
 {
     std::unique_ptr<TyT> ty(new TyT(std::forward<TyTArgs>(args)...));
     return static_cast<TyT*>(semaModel_->keepType(std::move(ty)));

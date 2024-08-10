@@ -28,7 +28,6 @@
 #include "syntax/SyntaxNode.h"
 
 #include "../common/infra/Assertions.h"
-#include "../common/infra/Escape.h"
 
 using namespace psy;
 using namespace C;
@@ -50,7 +49,7 @@ bool Reparser::eliminatedAllAmbiguities() const
 
 bool Reparser::ambiguityPersists(const SyntaxNode* node) const
 {
-    PSY_ASSERT_W_MSG(node->asAmbiguousCastOrBinaryExpression()
+    PSY_ASSERT_3(node->asAmbiguousCastOrBinaryExpression()
                         || node->asAmbiguousExpressionOrDeclarationStatement()
                         || node->asAmbiguousTypeNameOrExpressionAsTypeReference(),
                      return false,
@@ -77,14 +76,12 @@ void Reparser::reparse(SyntaxTree* tree)
                 disambiguator.reset(new SyntaxCorrelationDisambiguator(tree, std::move(catalog)));
                 break;
             }
-
             case Reparser::DisambiguationStrategy::GuidelineImposition: {
                 disambiguator.reset(new GuidelineImpositionDisambiguator(tree));
                 break;
             }
-
             default:
-                PSY_ESCAPE_VIA_RETURN();
+                PSY_ASSERT_FAIL_1(return);
         }
 
         auto ok = disambiguator->disambiguate();

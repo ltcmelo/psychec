@@ -43,7 +43,7 @@
 #include <vector>
 
 // Uncomment to display the sequence of lexed tokens.
-//#define DEBUG_LEXED_TOKENS
+//#define DBG_LEXED_TOKENS
 
 using namespace psy;
 using namespace C;
@@ -189,7 +189,7 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
     Lexer lexer(this);
     lexer.lex();
 
-#ifdef DEBUG_LEXED_TOKENS
+#ifdef DBG_LEXED_TOKENS
     std::cout << "\n\n" << P->text_.rawText() << std::endl;
 
     std::cout.setf(std::ios::left, std::ios::adjustfield);
@@ -280,7 +280,7 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
             break;
 
         default:
-            PSY_ESCAPE_VIA_RETURN();
+            PSY_ASSERT_FAIL_1(return);
     }
 
     reparser.reparse(this);

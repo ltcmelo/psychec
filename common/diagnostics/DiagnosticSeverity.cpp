@@ -20,7 +20,7 @@
 
 #include "DiagnosticSeverity.h"
 
-#include "../infra/Escape.h"
+#include "../infra/Assertions.h"
 
 namespace psy {
 
@@ -31,15 +31,12 @@ std::ostream& operator<<(std::ostream& os, DiagnosticSeverity severity)
         case DiagnosticSeverity::Warning:
             os << "warning";
             break;
-
         case DiagnosticSeverity::Error:
             os << "error";
             break;
-
         default:
-            PSY_ESCAPE_VIA_RETURN(os);
+            PSY_ASSERT_FAIL_1(return os);
     }
-
     return os;
 }
 

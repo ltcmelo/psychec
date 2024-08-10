@@ -46,8 +46,8 @@ Enum::Enum(const SyntaxTree* tree,
 
 const Identifier* Enum::identifier() const
 {
-    PSY_ASSERT(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
-    PSY_ASSERT(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Enum, return nullptr);
+    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
+    PSY_ASSERT_2(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Enum, return nullptr);
     return P_CAST->ty_->asTagType()->tag();
 }
 

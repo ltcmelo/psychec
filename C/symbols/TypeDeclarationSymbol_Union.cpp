@@ -46,8 +46,8 @@ Union::Union(const SyntaxTree* tree,
 
 const Identifier* Union::identifier() const
 {
-    PSY_ASSERT(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
-    PSY_ASSERT(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Union, return nullptr);
+    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
+    PSY_ASSERT_2(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Union, return nullptr);
     return P_CAST->ty_->asTagType()->tag();
 }
 

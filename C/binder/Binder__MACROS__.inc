@@ -18,42 +18,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-//#define DEBUG_BINDER
-#ifdef DEBUG_BINDER
-# define DEBUG_SYM_STACK_ENABLED
-# define DEBUG_TY_STACK_ENABLED
+//#define DBG_BINDER
+#ifdef DBG_BINDER
+# define DBG_SYM_STACK_ENABLED
+# define DBG_TY_STACK_ENABLED
 #endif
 
-#ifdef DEBUG_SYM_STACK_ENABLED
-# define DEBUG_SYM_STACK(sym) \
+#ifdef DBG_SYM_STACK_ENABLED
+# define DBG_SYM_STACK(sym) \
     do { \
         std::cout << __func__ << " " << std::flush; \
         std::cout << to_string(sym->kind()) << std::endl; \
     } while (0)
 #else
-# define DEBUG_SYM_STACK(sym) do {} while (0)
+# define DBG_SYM_STACK(sym) do {} while (0)
 #endif
 
-#ifdef DEBUG_TY_STACK_ENABLED
-# define DEBUG_TY_STACK(ty) \
+#ifdef DBG_TY_STACK_ENABLED
+# define DBG_TY_STACK(ty) \
     do { \
         std::cout << __func__ << " " << std::flush; \
         std::cout << to_string(*ty) << std::endl; \
     } while (0)
 #else
-# define DEBUG_TY_STACK(sym) do {} while (0)
+# define DBG_TY_STACK(sym) do {} while (0)
 #endif
 
 #define SYM_AT_TOP(S) \
-    PSY_ASSERT(!syms_.empty(), return Action::Quit); \
+    PSY_ASSERT_2(!syms_.empty(), return Action::Quit); \
+    auto S = syms_.top();
+#define SYM_AT_TOP_V(S) \
+    PSY_ASSERT_2(!syms_.empty(), return); \
     auto S = syms_.top();
 
 #define TY_AT_TOP(T) \
-    PSY_ASSERT(!tys_.empty(), return Action::Quit); \
+    PSY_ASSERT_2(!tys_.empty(), return Action::Quit); \
+    auto T = tys_.top();
+#define TY_AT_TOP_V(T) \
+    PSY_ASSERT_2(!tys_.empty(), return); \
     auto T = tys_.top();
 
 #define SCOPE_AT_TOP(S) \
-    PSY_ASSERT(!scopes_.empty(), return Action::Quit); \
+    PSY_ASSERT_2(!scopes_.empty(), return Action::Quit); \
+    auto S = scopes_.top();
+#define SCOPE_AT_TOP_V(S) \
+    PSY_ASSERT_2(!scopes_.empty(), return); \
     auto S = scopes_.top();
 
 #define RETURN_IF_QUIT(CALL) \

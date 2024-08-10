@@ -57,18 +57,18 @@ void Binder::bind()
 
     visit(tree_->root());
 
-    PSY_ASSERT_W_MSG(syms_.size() == 1, return, "expected 1 symbol");
-    PSY_ASSERT_W_MSG(syms_.top() == nullptr, return, "expected sentinel symbol");
+    PSY_ASSERT_3(syms_.size() == 1, return, "expected 1 symbol");
+    PSY_ASSERT_3(syms_.top() == nullptr, return, "expected sentinel symbol");
     syms_.pop();
 }
 
 void Binder::nestNewScope(ScopeKind scopeK)
 {
-    PSY_ASSERT(scopeK == ScopeKind::Block
+    PSY_ASSERT_2(scopeK == ScopeKind::Block
                    || scopeK == ScopeKind::Function
                    || scopeK == ScopeKind::FunctionPrototype,
                return);
-    PSY_ASSERT(!scopes_.empty(), return);
+    PSY_ASSERT_2(!scopes_.empty(), return);
 
     std::unique_ptr<Scope> scope(new Scope(scopeK));
     auto outerScope = scopes_.top();
@@ -78,7 +78,7 @@ void Binder::nestNewScope(ScopeKind scopeK)
 
 void Binder::nestStashedScope()
 {
-    PSY_ASSERT(stashedScope_, return);
+    PSY_ASSERT_2(stashedScope_, return);
     scopes_.push(stashedScope_);
 }
 
@@ -93,44 +93,44 @@ void Binder::unnestAndStashScope()
     scopes_.pop();
 }
 
-void Binder::pushSym(Symbol* sym)
+void Binder::pushSymbol(Symbol* sym)
 {
-    DEBUG_SYM_STACK(sym);
+    DBG_SYM_STACK(sym);
     syms_.push(sym);
 }
 
-Symbol* Binder::popSym()
+Symbol* Binder::popSymbol()
 {
-    PSY_ASSERT(!syms_.empty(), return nullptr);
-    DEBUG_SYM_STACK(syms_.top());
+    PSY_ASSERT_2(!syms_.empty(), return nullptr);
+    DBG_SYM_STACK(syms_.top());
     auto sym = syms_.top();
     syms_.pop();
     return sym;
 }
 
-DeclarationSymbol* Binder::popSymAsDecl()
+DeclarationSymbol* Binder::popSymbolAsDeclaration()
 {
-    auto sym = popSym();
-    PSY_ASSERT(sym && sym->kind() == SymbolKind::Declaration, return nullptr);
+    auto sym = popSymbol();
+    PSY_ASSERT_2(sym && sym->kind() == SymbolKind::Declaration, return nullptr);
     return sym->asDeclarationSymbol();
 }
 
-void Binder::pushTy(Type* ty)
+void Binder::pushType(Type* ty)
 {
-    DEBUG_TY_STACK(ty);
+    DBG_TY_STACK(ty);
     tys_.push(ty);
 }
 
-Type* Binder::popTy()
+Type* Binder::popType()
 {
-    PSY_ASSERT(!tys_.empty(), return nullptr);
-    DEBUG_TY_STACK(tys_.top());
+    PSY_ASSERT_2(!tys_.empty(), return nullptr);
+    DBG_TY_STACK(tys_.top());
     auto ty = tys_.top();
     tys_.pop();
     return ty;
 }
 
-const Identifier* Binder::lexemeOrEmptyIdent(const SyntaxToken& tk) const
+const Identifier* Binder::identifier(const SyntaxToken& tk) const
 {
     return tk.lexeme()
             ? tk.lexeme()->asIdentifier()
@@ -145,16 +145,16 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 {
     std::unique_ptr<TranslationUnit> unit(new TranslationUnit(tree_));
     auto rawUnit = semaModel_->keepTranslationUnit(node, std::move(unit));
-    pushSym(rawUnit);
+    pushSymbol(rawUnit);
     scopes_.push(rawUnit->enclosedScope_.get());
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
 
-    PSY_ASSERT(scopes_.size() == 1, return Action::Quit);
-    PSY_ASSERT(scopes_.top()->kind() == ScopeKind::File, return Action::Quit);
+    PSY_ASSERT_2(scopes_.size() == 1, return Action::Quit);
+    PSY_ASSERT_2(scopes_.top()->kind() == ScopeKind::File, return Action::Quit);
     scopes_.pop();
-    popSym();
+    popSymbol();
 
     return Action::Skip;
 }
@@ -174,24 +174,20 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
     return visitStructOrUnionDeclaration_AtSpecifier(node);
 }
 
-SyntaxVisitor::Action Binder::visitTypedefDeclaration(const TypedefDeclarationSyntax* node)
-{
-    return visitTypedefDeclaration_AtSpecifier(node);
-}
-
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
     return visitEnumDeclaration_AtSpecifier(node);
 }
 
+SyntaxVisitor::Action Binder::visitTypedefDeclaration(const TypedefDeclarationSyntax* node)
+{
+    return visitTypedefDeclaration_AtSpecifier(node);
+}
+
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    TyContT tys;
-    std::swap(tys_, tys);
-    auto action = visitVariableAndOrFunctionDeclaration_AtSpecifiers(node);
-    std::swap(tys_, tys);
-    return action;
+    return visitVariableAndOrFunctionDeclaration_AtSpecifiers(node);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax* node)

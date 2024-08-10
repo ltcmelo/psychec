@@ -85,11 +85,11 @@ public:
 } // C
 } // psy
 
-//#define DEBUG_RULE
-#ifdef DEBUG_RULE
-#    define DEBUG_THIS_RULE() DebugRule D__(__func__, this)
+//#define DBG_RULE
+#ifdef DBG_RULE
+#    define DBG_THIS_RULE() DebugRule D__(__func__, this)
 #else
-#    define DEBUG_THIS_RULE() do {} while (0)
+#    define DBG_THIS_RULE() do {} while (0)
 #endif
 
 
@@ -109,7 +109,7 @@ template <class NodeT, class NodeListT>
 bool Parser::parseCommaSeparatedItems(NodeListT*& nodeList,
                                       bool (Parser::*parseItem)(NodeT*& node, NodeListT*& nodeList))
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     NodeT* node = nullptr;
     if (!(((this)->*parseItem)(node, nodeList)))

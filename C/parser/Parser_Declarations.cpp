@@ -32,7 +32,7 @@ using namespace C;
  */
 void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     DeclarationListSyntax** declList_cur = &unit->decls_;
 
@@ -46,7 +46,7 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
                 auto extKwTkIdx = consume();
                 if (!parseExternalDeclaration(decl))
                     break;;
-                PSY_ASSERT(decl, break);
+                PSY_ASSERT_2(decl, break);
                 decl->extKwTkIdx_ = extKwTkIdx;
                 break;
             }
@@ -78,7 +78,7 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
  */
 bool Parser::parseExternalDeclaration(DeclarationSyntax*& decl)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::SemicolonToken:
@@ -105,8 +105,8 @@ bool Parser::parseExternalDeclaration(DeclarationSyntax*& decl)
 void Parser::parseIncompleteDeclaration_AtFirst(DeclarationSyntax*& decl,
                                                 const SpecifierListSyntax* specList)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::SemicolonToken,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::SemicolonToken,
                   return,
                   "assert failure: `;'");
 
@@ -128,8 +128,8 @@ void Parser::parseIncompleteDeclaration_AtFirst(DeclarationSyntax*& decl,
  */
 bool Parser::parseStaticAssertDeclaration_AtFirst(DeclarationSyntax*& decl)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword__Static_assert,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword__Static_assert,
                   return false,
                   "assert failure: `_Static_assert'");
 
@@ -155,8 +155,8 @@ bool Parser::parseStaticAssertDeclaration_AtFirst(DeclarationSyntax*& decl)
  */
 bool Parser::parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& decl)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
                   return false,
                   "assert failure: `asm'");
 
@@ -318,7 +318,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
 
             case SyntaxKind::SemicolonToken: {
                 for (auto iter = specList; iter; iter = iter->next) {
-                    PSY_ASSERT(iter->value, return false);
+                    PSY_ASSERT_2(iter->value, return false);
                     if (iter->value->kind() == SyntaxKind::TypedefStorageClass) {
                         auto tydefDecl = makeNode<TypedefDeclarationSyntax>();
                         decl = tydefDecl;
@@ -375,8 +375,8 @@ bool Parser::parseFunctionDefinition_AtOpenBrace(
         DeclaratorSyntax*& decltor,
         ExtKR_ParameterDeclarationListSyntax* paramKRList)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBraceToken,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenBraceToken,
                   return false,
                   "assert failure: `{'");
 
@@ -621,7 +621,7 @@ bool Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList(
  */
 bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::Keyword__Static_assert:
@@ -635,7 +635,7 @@ bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
                         &Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList,
                         DeclarationScope::Block))
                 return false;
-            PSY_ASSERT(decl, return false);
+            PSY_ASSERT_2(decl, return false);
             decl->extKwTkIdx_ = extKwTkIdx;
             return true;
         }
@@ -662,7 +662,7 @@ bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
  */
 bool Parser::parseEnumerator(DeclarationSyntax*& decl)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     EnumeratorDeclarationSyntax* enumMembDecl = nullptr;
 
@@ -716,7 +716,7 @@ bool Parser::parseEnumerator(DeclarationSyntax*& decl)
  */
 bool Parser::parseParameterDeclarationListAndOrEllipsis(ParameterSuffixSyntax*& paramDecltorSfx)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::CloseParenToken:
@@ -765,7 +765,7 @@ bool Parser::parseParameterDeclarationListAndOrEllipsis(ParameterSuffixSyntax*& 
  */
 bool Parser::parseParameterDeclarationList(ParameterDeclarationListSyntax*& paramList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     DiagnosticsReporterDelayer DRD(&diagReporter_,
                                    DiagnosticsReporter::ID_of_ExpectedTypeSpecifier);
@@ -810,7 +810,7 @@ bool Parser::parseParameterDeclarationList(ParameterDeclarationListSyntax*& para
  */
 bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;
@@ -844,8 +844,8 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
 
 bool Parser::parseExtPSY_TemplateDeclaration_AtFirst(DeclarationSyntax*& decl)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtPSY__Template,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtPSY__Template,
                   return false,
                   "assert failure: `_Template'");
 
@@ -859,7 +859,7 @@ bool Parser::parseExtPSY_TemplateDeclaration_AtFirst(DeclarationSyntax*& decl)
 bool Parser::parseExtKR_ParameterDeclarationList(
     ExtKR_ParameterDeclarationListSyntax *&paramList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     ExtKR_ParameterDeclarationListSyntax** paramList_cur = &paramList;
 
@@ -884,7 +884,7 @@ bool Parser::parseExtKR_ParameterDeclarationList(
 
 bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& paramDecl)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;
@@ -935,7 +935,7 @@ bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& 
 bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                                         SpecifierListSyntax*& specList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     SpecifierListSyntax** specList_cur = &specList;
     bool seenType = false;
@@ -1153,7 +1153,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
 bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
                                          SpecifierListSyntax*& specList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     SpecifierListSyntax** specList_cur = &specList;
     bool seenType = false;
@@ -1314,8 +1314,8 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
 template <class SpecT>
 void Parser::parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec, SyntaxKind specK)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(SyntaxFacts::isStorageClassToken(peek().kind())
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(SyntaxFacts::isStorageClassToken(peek().kind())
                         || SyntaxFacts::isBasicTypeSpecifierToken(peek().kind())
                         || SyntaxFacts::isTypeQualifierToken(peek().kind())
                         || SyntaxFacts::isFunctionSpecifierToken(peek().kind())
@@ -1335,8 +1335,8 @@ void Parser::parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec, SyntaxKind sp
 template <class SpecT>
 void Parser::parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_void,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_void,
                      return,
                     "assert failure: void type-specifier");
 
@@ -1361,8 +1361,8 @@ template void Parser::parseTrivialSpecifier_AtFirst<ExtGNU_AsmQualifierSyntax>
  */
 bool Parser::parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword__Alignas,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword__Alignas,
                   return false,
                   "assert failure: `_Alignas'");
 
@@ -1377,8 +1377,8 @@ bool Parser::parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec)
  */
 bool Parser::parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___typeof__,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___typeof__,
                   return false,
                   "assert failure: `typeof'");
 
@@ -1395,8 +1395,8 @@ bool Parser::parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec)
  */
 void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::IdentifierToken,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::IdentifierToken,
                   return,
                   "assert failure: <identifier>");
 
@@ -1412,8 +1412,8 @@ void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
  */
 bool Parser::parseAtomiceTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword__Atomic,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword__Atomic,
                   return false,
                   "assert failure: `_Atomic'");
 
@@ -1459,8 +1459,8 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
         SyntaxKind specK,
         bool (Parser::*parseMember)(DeclarationSyntax*&))
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG((peek().kind() == SyntaxKind::Keyword_struct
+    DBG_THIS_RULE();
+    PSY_ASSERT_3((peek().kind() == SyntaxKind::Keyword_struct
                         || peek().kind() == SyntaxKind::Keyword_union
                         || peek().kind() == SyntaxKind::Keyword_enum)
                     && (declK == SyntaxKind::StructDeclaration
@@ -1550,8 +1550,8 @@ MembersParsed:
  */
 bool Parser::parseExtGNU_AttributeSpecifierList_AtFirst(SpecifierListSyntax*& specList)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__,
                   return false,
                   "assert failure: `__attribute__'");
 
@@ -1575,8 +1575,8 @@ bool Parser::parseExtGNU_AttributeSpecifierList_AtFirst(SpecifierListSyntax*& sp
  */
 bool Parser::parseExtGNU_AttributeSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__,
                   return false,
                   "assert failure: `__attribute__'");
 
@@ -1600,7 +1600,7 @@ bool Parser::parseExtGNU_AttributeSpecifier_AtFirst(SpecifierSyntax*& spec)
  */
 bool Parser::parseExtGNU_AttributeList(ExtGNU_AttributeListSyntax*& attrList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     ExtGNU_AttributeListSyntax** attrList_cur = &attrList;
 
@@ -1635,7 +1635,7 @@ bool Parser::parseExtGNU_AttributeList(ExtGNU_AttributeListSyntax*& attrList)
  */
 bool Parser::parseExtGNU_Attribute(ExtGNU_AttributeSyntax*& attr)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::IdentifierToken:
@@ -1700,7 +1700,7 @@ bool Parser::parseExtGNU_AttributeArguments(ExpressionListSyntax*& exprList)
  */
 bool Parser::parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     if (!tree_->parseOptions().languageExtensions().isEnabled_extGNU_AttributeSpecifiersLLVM())
         diagReporter_.ExpectedFeature("GNU attributes of LLVM");
@@ -1757,8 +1757,8 @@ bool Parser::parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList)
 
 bool Parser::parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
                   return false,
                   "assert failure: `asm'");
 
@@ -1776,8 +1776,8 @@ bool Parser::parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr)
 
 bool Parser::parseExtPSY_QuantifiedTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtPSY__Exists
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtPSY__Exists
                     || peek().kind() == SyntaxKind::Keyword_ExtPSY__Forall,
                   return false,
                   "assert failure: `_Exists' or `_Forall'");
@@ -1798,7 +1798,7 @@ bool Parser::parseExtPSY_QuantifiedTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
 
 bool Parser::parseAbstractDeclarator(DeclaratorSyntax*& decltor)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseDeclarator(decltor,
                            DeclarationScope::FunctionPrototype,
@@ -1808,7 +1808,7 @@ bool Parser::parseAbstractDeclarator(DeclaratorSyntax*& decltor)
 bool Parser::parseDeclarator(DeclaratorSyntax*& decltor,
                              DeclarationScope declScope)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseDeclarator(decltor, declScope, DeclaratorVariety::Named);
 }
@@ -1818,7 +1818,7 @@ bool Parser::parseDeclarator(DeclaratorSyntax*& decltor,
                              DeclaratorVariety decltorVariety)
 
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     SpecifierListSyntax* attrList = nullptr;
     if (peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__)
@@ -1842,7 +1842,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                                    DeclaratorVariety decltorVariety,
                                    SpecifierListSyntax* attrList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::IdentifierToken: {
@@ -2215,7 +2215,7 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
  */
 bool Parser::parseTypeQualifiersAndAttributes(SpecifierListSyntax*& specList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     SpecifierListSyntax** specList_cur = &specList;
 
@@ -2287,7 +2287,7 @@ bool Parser::parseTypeQualifiersAndAttributes(SpecifierListSyntax*& specList)
  */
 bool Parser::parseInitializer(InitializerSyntax*& init)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::OpenBraceToken:
@@ -2333,8 +2333,8 @@ bool Parser::parseExpressionInitializer(InitializerSyntax*& init)
  */
 bool Parser::parseBraceEnclosedInitializer_AtFirst(InitializerSyntax*& init)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBraceToken,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenBraceToken,
                   return false,
                   "expected `{'");
 
@@ -2359,7 +2359,7 @@ bool Parser::parseBraceEnclosedInitializer_AtFirst(InitializerSyntax*& init)
 
 bool Parser::parseInitializerList(InitializerListSyntax*& initList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     return parseCommaSeparatedItems<InitializerSyntax>(
                 initList,
@@ -2368,7 +2368,7 @@ bool Parser::parseInitializerList(InitializerListSyntax*& initList)
 
 bool Parser::parseInitializerListItem(InitializerSyntax*& init, InitializerListSyntax*& initList)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::CloseBraceToken:
@@ -2403,8 +2403,8 @@ bool Parser::parseInitializerListItem(InitializerSyntax*& init, InitializerListS
 bool Parser::parseDesignatedInitializer_AtFirst(InitializerSyntax*& init,
                                                 bool (Parser::*parseDesig)(DesignatorSyntax*& desig))
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::DotToken
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::DotToken
                         || peek().kind() == SyntaxKind::OpenBracketToken,
                   return false,
                   "assert failure: `.' or `['");
@@ -2435,8 +2435,8 @@ bool Parser::parseDesignatedInitializer_AtFirst(InitializerSyntax*& init,
 bool Parser::parseDesignatorList_AtFirst(DesignatorListSyntax*& desigList,
                                          bool (Parser::*parseDesig)(DesignatorSyntax*& desig))
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::DotToken
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::DotToken
                         || peek().kind() == SyntaxKind::OpenBracketToken,
                   return false,
                   "assert failure: `.' or `['");
@@ -2468,8 +2468,8 @@ bool Parser::parseDesignatorList_AtFirst(DesignatorListSyntax*& desigList,
 
 bool Parser::parseFieldDesignator_AtFirst(DesignatorSyntax*& desig)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::DotToken,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::DotToken,
                   return false,
                   "assert failure: `.'");
 
@@ -2488,8 +2488,8 @@ bool Parser::parseFieldDesignator_AtFirst(DesignatorSyntax*& desig)
 
 bool Parser::parseArrayDesignator_AtFirst(DesignatorSyntax*& desig)
 {
-    DEBUG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBracketToken,
+    DBG_THIS_RULE();
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenBracketToken,
                   return false,
                   "assert failure: `['");
 
@@ -2506,7 +2506,7 @@ bool Parser::parseArrayDesignator_AtFirst(DesignatorSyntax*& desig)
  */
 bool Parser::parseOffsetOfDesignator(DesignatorSyntax*& desig)
 {
-    DEBUG_THIS_RULE();
+    DBG_THIS_RULE();
 
     if (peek().kind() != SyntaxKind::IdentifierToken) {
         diagReporter_.ExpectedTokenOfCategoryIdentifier();

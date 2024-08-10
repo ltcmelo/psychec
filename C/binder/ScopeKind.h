@@ -24,8 +24,6 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/Escape.h"
-
 #include <cstdint>
 #include <string>
 
@@ -56,8 +54,6 @@ inline std::string PSY_C_API to_string(ScopeKind K)
             return "FunctionPrototype";
         case ScopeKind::Block:
             return "Block";
-        default:
-            PSY_ESCAPE_VIA_RETURN("<INVALID or UNSPECIFIED ScopeKind>");
     }
 }
 
