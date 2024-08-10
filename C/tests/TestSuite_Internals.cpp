@@ -688,11 +688,14 @@ bool typeMatchesBinding(const TypeDeclarationSymbol* tyDecl, const Decl& decl)
         case TypeDeclarationSymbolKind::Typedef: {
             if (!tyDecl->specifiedType()->asTypedefType())
                 return REJECT_CANDIDATE(tyDecl, "not a typedef type");
-            auto typedefTy = tyDecl->specifiedType()->asTypedefType();
-            if (!typedefTy->typedefName())
+            auto tydefTy = tyDecl->specifiedType()->asTypedefType();
+            if (!tydefTy->typedefName())
                 return REJECT_CANDIDATE(tyDecl, "empty typedef name");
-            if (typedefTy->typedefName()->valueText() != decl.ident_)
+            if (tydefTy->typedefName()->valueText() != decl.ident_)
                 return REJECT_CANDIDATE(tyDecl, "typedef name mismatch");
+            auto tydefDecl = tyDecl->asTypedef();
+            if (!typeMatches(tydefDecl->synonymizedType(), decl.ty_))
+                return REJECT_CANDIDATE(tyDecl, "synonymized type mismatch");
             break;
         }
     }
