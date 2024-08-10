@@ -152,7 +152,7 @@ int CCompilerFrontend::constructSyntaxTree(const std::string& srcText,
     else if (config_->std_ == "c11")
         std = LanguageDialect::Std::C11;
     else {
-        PSY_ASSERT(false, return 1);
+        PSY_ASSERT_2(false, return 1);
     }
 
     ParseOptions::AmbiguityMode ambigMode;
@@ -165,7 +165,7 @@ int CCompilerFrontend::constructSyntaxTree(const std::string& srcText,
     else if (config_->ambigMode_ == "DH")
         ambigMode = ParseOptions::AmbiguityMode::DisambiguateHeuristically;
     else {
-        PSY_ASSERT(false, return 1);
+        PSY_ASSERT_2(false, return 1);
     }
 
     ParseOptions parseOpts{ LanguageDialect(std) };

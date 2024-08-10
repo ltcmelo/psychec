@@ -82,7 +82,7 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration_AtEnd(const ParameterDec
 SyntaxVisitor::Action Binder::visitDeclaration_AtEnd_COMMON(const DeclarationSyntax* node)
 {
     auto decl = popSymbolAsDeclaration();
-    PSY_ASSERT(decl, return Action::Quit);
+    PSY_ASSERT_2(decl, return Action::Quit);
     SCOPE_AT_TOP(scope);
     scope->addDeclaration(decl->asDeclarationSymbol());
 

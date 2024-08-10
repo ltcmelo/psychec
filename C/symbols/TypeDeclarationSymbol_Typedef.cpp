@@ -52,7 +52,7 @@ std::string Typedef::toDisplayString() const
 
 const Identifier* Typedef::identifier() const
 {
-    PSY_ASSERT(P_CAST->ty_->kind() == TypeKind::Typedef, return nullptr);
+    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Typedef, return nullptr);
     return P_CAST->ty_->asTypedefType()->typedefName();
 }
 

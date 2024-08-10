@@ -57,18 +57,18 @@ void Binder::bind()
 
     visit(tree_->root());
 
-    PSY_ASSERT_W_MSG(syms_.size() == 1, return, "expected 1 symbol");
-    PSY_ASSERT_W_MSG(syms_.top() == nullptr, return, "expected sentinel symbol");
+    PSY_ASSERT_3(syms_.size() == 1, return, "expected 1 symbol");
+    PSY_ASSERT_3(syms_.top() == nullptr, return, "expected sentinel symbol");
     syms_.pop();
 }
 
 void Binder::nestNewScope(ScopeKind scopeK)
 {
-    PSY_ASSERT(scopeK == ScopeKind::Block
+    PSY_ASSERT_2(scopeK == ScopeKind::Block
                    || scopeK == ScopeKind::Function
                    || scopeK == ScopeKind::FunctionPrototype,
                return);
-    PSY_ASSERT(!scopes_.empty(), return);
+    PSY_ASSERT_2(!scopes_.empty(), return);
 
     std::unique_ptr<Scope> scope(new Scope(scopeK));
     auto outerScope = scopes_.top();
@@ -78,7 +78,7 @@ void Binder::nestNewScope(ScopeKind scopeK)
 
 void Binder::nestStashedScope()
 {
-    PSY_ASSERT(stashedScope_, return);
+    PSY_ASSERT_2(stashedScope_, return);
     scopes_.push(stashedScope_);
 }
 
@@ -101,7 +101,7 @@ void Binder::pushSymbol(Symbol* sym)
 
 Symbol* Binder::popSymbol()
 {
-    PSY_ASSERT(!syms_.empty(), return nullptr);
+    PSY_ASSERT_2(!syms_.empty(), return nullptr);
     DBG_SYM_STACK(syms_.top());
     auto sym = syms_.top();
     syms_.pop();
@@ -111,7 +111,7 @@ Symbol* Binder::popSymbol()
 DeclarationSymbol* Binder::popSymbolAsDeclaration()
 {
     auto sym = popSymbol();
-    PSY_ASSERT(sym && sym->kind() == SymbolKind::Declaration, return nullptr);
+    PSY_ASSERT_2(sym && sym->kind() == SymbolKind::Declaration, return nullptr);
     return sym->asDeclarationSymbol();
 }
 
@@ -123,7 +123,7 @@ void Binder::pushType(Type* ty)
 
 Type* Binder::popType()
 {
-    PSY_ASSERT(!tys_.empty(), return nullptr);
+    PSY_ASSERT_2(!tys_.empty(), return nullptr);
     DBG_TY_STACK(tys_.top());
     auto ty = tys_.top();
     tys_.pop();
@@ -151,8 +151,8 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
 
-    PSY_ASSERT(scopes_.size() == 1, return Action::Quit);
-    PSY_ASSERT(scopes_.top()->kind() == ScopeKind::File, return Action::Quit);
+    PSY_ASSERT_2(scopes_.size() == 1, return Action::Quit);
+    PSY_ASSERT_2(scopes_.top()->kind() == ScopeKind::File, return Action::Quit);
     scopes_.pop();
     popSymbol();
 

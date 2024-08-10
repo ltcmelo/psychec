@@ -94,7 +94,7 @@ bool Parser::parseParenthesizedTypeNameOrExpression(TypeReferenceSyntax*& tyRef)
 
 void Parser::maybeAmbiguateTypeReference(TypeReferenceSyntax*& tyRef)
 {
-    PSY_ASSERT_W_MSG(tyRef->kind() == SyntaxKind::ExpressionAsTypeReference
+    PSY_ASSERT_3(tyRef->kind() == SyntaxKind::ExpressionAsTypeReference
                     && (tyRef->asExpressionAsTypeReference()->expr_->kind()
                             == SyntaxKind::ParenthesizedExpression),
                   return, "");

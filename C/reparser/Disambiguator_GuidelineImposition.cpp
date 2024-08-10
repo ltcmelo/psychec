@@ -48,7 +48,7 @@ Disambiguator::Disambiguation GuidelineImpositionDisambiguator::disambiguateStat
             return Disambiguation::KeepExpressionStatement;
 
         default:
-            PSY_ASSERT(false, return Disambiguation::Inconclusive);
+            PSY_ASSERT_2(false, return Disambiguation::Inconclusive);
     }
 }
 

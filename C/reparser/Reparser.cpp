@@ -49,7 +49,7 @@ bool Reparser::eliminatedAllAmbiguities() const
 
 bool Reparser::ambiguityPersists(const SyntaxNode* node) const
 {
-    PSY_ASSERT_W_MSG(node->asAmbiguousCastOrBinaryExpression()
+    PSY_ASSERT_3(node->asAmbiguousCastOrBinaryExpression()
                         || node->asAmbiguousExpressionOrDeclarationStatement()
                         || node->asAmbiguousTypeNameOrExpressionAsTypeReference(),
                      return false,

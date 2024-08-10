@@ -46,8 +46,8 @@ Struct::Struct(const SyntaxTree* tree,
 
 const Identifier* Struct::identifier() const
 {
-    PSY_ASSERT(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
-    PSY_ASSERT(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Struct, return nullptr);
+    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
+    PSY_ASSERT_2(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Struct, return nullptr);
     return P_CAST->ty_->asTagType()->tag();
 }
 

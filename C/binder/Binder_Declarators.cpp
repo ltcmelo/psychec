@@ -43,7 +43,7 @@ void Binder::nameDeclarationAtTop(const Identifier* name)
 {
     SYM_AT_TOP_V(sym);
     auto nameableSym = MIXIN_NameableSymbol::from(sym);
-    PSY_ASSERT(nameableSym, return);
+    PSY_ASSERT_2(nameableSym, return);
     nameableSym->setName(name);
 }
 
@@ -51,20 +51,20 @@ void Binder::typeDeclarationAtTopWithTypeAtTop()
 {
     SYM_AT_TOP_V(sym);
     auto typeableSym = MIXIN_TypeableSymbol::from(sym);
-    PSY_ASSERT(typeableSym, return);
+    PSY_ASSERT_2(typeableSym, return);
 
     TY_AT_TOP_V(ty);
     typeableSym->setType(ty);
 
     if (!pendingFunTys_.empty()) {
-        PSY_ASSERT(!pendingFunTys_.empty(), return);
+        PSY_ASSERT_2(!pendingFunTys_.empty(), return);
         pendingFunTys_.top()->addParameterType(ty);
     }
 }
 
 void Binder::popTypesUntilNonDerivedDeclaratorType()
 {
-    PSY_ASSERT(!tys_.empty(), return);
+    PSY_ASSERT_2(!tys_.empty(), return);
     auto ty = tys_.top();
     while (true) {
         switch (ty->kind()) {
@@ -72,7 +72,7 @@ void Binder::popTypesUntilNonDerivedDeclaratorType()
             case TypeKind::Function:
             case TypeKind::Pointer:
                 popType();
-                PSY_ASSERT(!tys_.empty(), return);
+                PSY_ASSERT_2(!tys_.empty(), return);
                 ty = tys_.top();
                 continue;
             default:
@@ -170,7 +170,7 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const Functio
     popTypesUntilNonDerivedDeclaratorType();
 
     auto decl = popSymbolAsDeclaration();
-    PSY_ASSERT(decl, return Action::Quit);
+    PSY_ASSERT_2(decl, return Action::Quit);
     SCOPE_AT_TOP(scope);
     scope->addDeclaration(decl);
 
@@ -226,7 +226,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
         }
 
         default:
-            PSY_ASSERT(false, return Action::Quit);
+            PSY_ASSERT_2(false, return Action::Quit);
     }
 
     visit(node->innerDeclarator());
@@ -314,7 +314,7 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
                                             break;
 
                                         case TypeDeclarationSymbolKind::Typedef:
-                                            PSY_ASSERT(false, return);
+                                            PSY_ASSERT_2(false, return);
                                     }
                                     break;
 
@@ -331,7 +331,7 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
                             break;
 
                         default:
-                            PSY_ASSERT(false, return);
+                            PSY_ASSERT_2(false, return);
                     }
                     break;
                 }

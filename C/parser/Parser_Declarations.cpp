@@ -46,7 +46,7 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
                 auto extKwTkIdx = consume();
                 if (!parseExternalDeclaration(decl))
                     break;;
-                PSY_ASSERT(decl, break);
+                PSY_ASSERT_2(decl, break);
                 decl->extKwTkIdx_ = extKwTkIdx;
                 break;
             }
@@ -106,7 +106,7 @@ void Parser::parseIncompleteDeclaration_AtFirst(DeclarationSyntax*& decl,
                                                 const SpecifierListSyntax* specList)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::SemicolonToken,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::SemicolonToken,
                   return,
                   "assert failure: `;'");
 
@@ -129,7 +129,7 @@ void Parser::parseIncompleteDeclaration_AtFirst(DeclarationSyntax*& decl,
 bool Parser::parseStaticAssertDeclaration_AtFirst(DeclarationSyntax*& decl)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword__Static_assert,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword__Static_assert,
                   return false,
                   "assert failure: `_Static_assert'");
 
@@ -156,7 +156,7 @@ bool Parser::parseStaticAssertDeclaration_AtFirst(DeclarationSyntax*& decl)
 bool Parser::parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& decl)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
                   return false,
                   "assert failure: `asm'");
 
@@ -318,7 +318,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
 
             case SyntaxKind::SemicolonToken: {
                 for (auto iter = specList; iter; iter = iter->next) {
-                    PSY_ASSERT(iter->value, return false);
+                    PSY_ASSERT_2(iter->value, return false);
                     if (iter->value->kind() == SyntaxKind::TypedefStorageClass) {
                         auto tydefDecl = makeNode<TypedefDeclarationSyntax>();
                         decl = tydefDecl;
@@ -376,7 +376,7 @@ bool Parser::parseFunctionDefinition_AtOpenBrace(
         ExtKR_ParameterDeclarationListSyntax* paramKRList)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBraceToken,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenBraceToken,
                   return false,
                   "assert failure: `{'");
 
@@ -635,7 +635,7 @@ bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
                         &Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList,
                         DeclarationScope::Block))
                 return false;
-            PSY_ASSERT(decl, return false);
+            PSY_ASSERT_2(decl, return false);
             decl->extKwTkIdx_ = extKwTkIdx;
             return true;
         }
@@ -845,7 +845,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
 bool Parser::parseExtPSY_TemplateDeclaration_AtFirst(DeclarationSyntax*& decl)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtPSY__Template,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtPSY__Template,
                   return false,
                   "assert failure: `_Template'");
 
@@ -1315,7 +1315,7 @@ template <class SpecT>
 void Parser::parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec, SyntaxKind specK)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(SyntaxFacts::isStorageClassToken(peek().kind())
+    PSY_ASSERT_3(SyntaxFacts::isStorageClassToken(peek().kind())
                         || SyntaxFacts::isBasicTypeSpecifierToken(peek().kind())
                         || SyntaxFacts::isTypeQualifierToken(peek().kind())
                         || SyntaxFacts::isFunctionSpecifierToken(peek().kind())
@@ -1336,7 +1336,7 @@ template <class SpecT>
 void Parser::parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_void,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_void,
                      return,
                     "assert failure: void type-specifier");
 
@@ -1362,7 +1362,7 @@ template void Parser::parseTrivialSpecifier_AtFirst<ExtGNU_AsmQualifierSyntax>
 bool Parser::parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword__Alignas,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword__Alignas,
                   return false,
                   "assert failure: `_Alignas'");
 
@@ -1378,7 +1378,7 @@ bool Parser::parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec)
 bool Parser::parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___typeof__,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___typeof__,
                   return false,
                   "assert failure: `typeof'");
 
@@ -1396,7 +1396,7 @@ bool Parser::parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec)
 void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::IdentifierToken,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::IdentifierToken,
                   return,
                   "assert failure: <identifier>");
 
@@ -1413,7 +1413,7 @@ void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
 bool Parser::parseAtomiceTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword__Atomic,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword__Atomic,
                   return false,
                   "assert failure: `_Atomic'");
 
@@ -1460,7 +1460,7 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
         bool (Parser::*parseMember)(DeclarationSyntax*&))
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG((peek().kind() == SyntaxKind::Keyword_struct
+    PSY_ASSERT_3((peek().kind() == SyntaxKind::Keyword_struct
                         || peek().kind() == SyntaxKind::Keyword_union
                         || peek().kind() == SyntaxKind::Keyword_enum)
                     && (declK == SyntaxKind::StructDeclaration
@@ -1551,7 +1551,7 @@ MembersParsed:
 bool Parser::parseExtGNU_AttributeSpecifierList_AtFirst(SpecifierListSyntax*& specList)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__,
                   return false,
                   "assert failure: `__attribute__'");
 
@@ -1576,7 +1576,7 @@ bool Parser::parseExtGNU_AttributeSpecifierList_AtFirst(SpecifierListSyntax*& sp
 bool Parser::parseExtGNU_AttributeSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___attribute__,
                   return false,
                   "assert failure: `__attribute__'");
 
@@ -1758,7 +1758,7 @@ bool Parser::parseExtGNU_AttributeArgumentsLLVM(ExpressionListSyntax*& exprList)
 bool Parser::parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtGNU___asm__,
                   return false,
                   "assert failure: `asm'");
 
@@ -1777,7 +1777,7 @@ bool Parser::parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr)
 bool Parser::parseExtPSY_QuantifiedTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::Keyword_ExtPSY__Exists
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword_ExtPSY__Exists
                     || peek().kind() == SyntaxKind::Keyword_ExtPSY__Forall,
                   return false,
                   "assert failure: `_Exists' or `_Forall'");
@@ -2334,7 +2334,7 @@ bool Parser::parseExpressionInitializer(InitializerSyntax*& init)
 bool Parser::parseBraceEnclosedInitializer_AtFirst(InitializerSyntax*& init)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBraceToken,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenBraceToken,
                   return false,
                   "expected `{'");
 
@@ -2404,7 +2404,7 @@ bool Parser::parseDesignatedInitializer_AtFirst(InitializerSyntax*& init,
                                                 bool (Parser::*parseDesig)(DesignatorSyntax*& desig))
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::DotToken
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::DotToken
                         || peek().kind() == SyntaxKind::OpenBracketToken,
                   return false,
                   "assert failure: `.' or `['");
@@ -2436,7 +2436,7 @@ bool Parser::parseDesignatorList_AtFirst(DesignatorListSyntax*& desigList,
                                          bool (Parser::*parseDesig)(DesignatorSyntax*& desig))
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::DotToken
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::DotToken
                         || peek().kind() == SyntaxKind::OpenBracketToken,
                   return false,
                   "assert failure: `.' or `['");
@@ -2469,7 +2469,7 @@ bool Parser::parseDesignatorList_AtFirst(DesignatorListSyntax*& desigList,
 bool Parser::parseFieldDesignator_AtFirst(DesignatorSyntax*& desig)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::DotToken,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::DotToken,
                   return false,
                   "assert failure: `.'");
 
@@ -2489,7 +2489,7 @@ bool Parser::parseFieldDesignator_AtFirst(DesignatorSyntax*& desig)
 bool Parser::parseArrayDesignator_AtFirst(DesignatorSyntax*& desig)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_W_MSG(peek().kind() == SyntaxKind::OpenBracketToken,
+    PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenBracketToken,
                   return false,
                   "assert failure: `['");
 

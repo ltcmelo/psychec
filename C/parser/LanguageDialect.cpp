@@ -76,7 +76,7 @@ std::string to_string(LanguageDialect::Std std)
             return "c17";
 
         default:
-            PSY_ASSERT_W_MSG(false, return "", "");
+            PSY_ASSERT_3(false, return "", "");
     }
 }
 

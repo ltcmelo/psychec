@@ -83,7 +83,7 @@ SyntaxVisitor::Action TypeResolver::visitDeclarator_COMMON(const DeclaratorSynta
 
             case DeclarationSymbolKind::Type: {
                 auto tyDecl = decl->asTypeDeclarationSymbol();
-                PSY_ASSERT(tyDecl->kind() == TypeDeclarationSymbolKind::Typedef,
+                PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Typedef,
                            return Action::Quit);
                 break;
             }
@@ -146,7 +146,7 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope) const
             if (decl) {
                 if (decl->kind() == DeclarationSymbolKind::Type) {
                     auto tyDecl = decl->asTypeDeclarationSymbol();
-                    PSY_ASSERT(tyDecl->kind() == TypeDeclarationSymbolKind::Typedef,
+                    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Typedef,
                                return nullptr);
                     auto tydef = tyDecl->asTypedef();
                     return tydef->synonymizedType();

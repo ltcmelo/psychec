@@ -461,7 +461,7 @@ bool CVRMatches(const Type* ty, CVR cvr)
 
 bool typeMatches(const Type* ty, const Ty& t)
 {
-    PSY_ASSERT(t.derivTyKs_.size() == t.derivTyCVRs_.size()
+    PSY_ASSERT_2(t.derivTyKs_.size() == t.derivTyCVRs_.size()
                && t.derivTyKs_.size() == t.derivPtrTyDecay_.size(),
                return false);
 
@@ -598,7 +598,7 @@ bool typeMatches(const Type* ty, const Ty& t)
             break;
 
         default:
-            PSY_ASSERT(false, return false);
+            PSY_ASSERT_2(false, return false);
     }
 
     return true;

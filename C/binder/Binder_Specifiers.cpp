@@ -69,7 +69,7 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtSpecifier(
             break;
         }
         default:
-            PSY_ASSERT(false, return Action::Quit);
+            PSY_ASSERT_2(false, return Action::Quit);
     }
     return visitTagDeclaration_AtInternalDeclarations_COMMON(
                 node,
@@ -336,7 +336,7 @@ SyntaxVisitor::Action Binder::visitTagTypeSpecifier(const TagTypeSpecifierSyntax
                 break;
 
             default:
-                PSY_ASSERT(false, return Action::Quit);
+                PSY_ASSERT_2(false, return Action::Quit);
         }
         pushType(makeType<TagType>(tagTyK, identifier(node->tagToken())));
     }
@@ -381,7 +381,7 @@ SyntaxVisitor::Action Binder::visitTagDeclarationAsSpecifier(
         }
 
         default:
-            PSY_ASSERT(false, return Action::Quit);
+            PSY_ASSERT_2(false, return Action::Quit);
     }
 
     return Action::Skip;
@@ -409,7 +409,7 @@ SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node
             pushType(qualTy);
             break;
     }
-    PSY_ASSERT(qualTy, return Action::Quit);
+    PSY_ASSERT_2(qualTy, return Action::Quit);
 
     const auto tyQualTk = node->qualifierKeyword();
     switch (tyQualTk.kind()) {

@@ -59,11 +59,11 @@ SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitCompoundStatement(con
 Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateExpression(
         const AmbiguousCastOrBinaryExpressionSyntax* node) const
 {
-    PSY_ASSERT(node->kind() == SyntaxKind::AmbiguousCastOrBinaryExpression,
+    PSY_ASSERT_2(node->kind() == SyntaxKind::AmbiguousCastOrBinaryExpression,
                return Disambiguation::Inconclusive);
 
     auto tyName = node->castExpression()->typeName();
-    PSY_ASSERT(tyName->specifiers()
+    PSY_ASSERT_2(tyName->specifiers()
                    && tyName->specifiers()->value
                    && tyName->specifiers()->value->kind() == SyntaxKind::TypedefName,
                return Disambiguation::Inconclusive);
@@ -81,17 +81,17 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateExpres
 Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatement(
         const AmbiguousExpressionOrDeclarationStatementSyntax* node) const
 {
-    PSY_ASSERT(node->kind() == SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration
+    PSY_ASSERT_2(node->kind() == SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration
                    || node->kind() == SyntaxKind::AmbiguousCallOrVariableDeclaration,
                return Disambiguation::Inconclusive);
 
     auto decl = node->declarationStatement()->declaration();
-    PSY_ASSERT(decl->kind() == SyntaxKind::VariableAndOrFunctionDeclaration,
+    PSY_ASSERT_2(decl->kind() == SyntaxKind::VariableAndOrFunctionDeclaration,
                return Disambiguation::Inconclusive);
 
     auto varDecl = decl->asVariableAndOrFunctionDeclaration();
 
-    PSY_ASSERT(varDecl->specifiers()
+    PSY_ASSERT_2(varDecl->specifiers()
                    && varDecl->specifiers()->value
                    && varDecl->specifiers()->value->kind() == SyntaxKind::TypedefName,
                return Disambiguation::Inconclusive);
@@ -108,12 +108,12 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatem
     if (node->kind() == SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration)
         return Disambiguation::Inconclusive;
 
-    PSY_ASSERT(varDecl->declarators()
+    PSY_ASSERT_2(varDecl->declarators()
                    && varDecl->declarators()->value,
                return Disambiguation::Inconclusive);
 
     auto decltor = SyntaxUtilities::strippedDeclaratorOrSelf(varDecl->declarators()->value);
-    PSY_ASSERT(decltor->kind() == SyntaxKind::IdentifierDeclarator,
+    PSY_ASSERT_2(decltor->kind() == SyntaxKind::IdentifierDeclarator,
                return Disambiguation::Inconclusive);
 
     auto rhsName = decltor->asIdentifierDeclarator()->identifierToken().valueText();
@@ -127,11 +127,11 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatem
 Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateTypeReference(
         const AmbiguousTypeNameOrExpressionAsTypeReferenceSyntax* node) const
 {
-    PSY_ASSERT(node->kind() == SyntaxKind::AmbiguousTypeNameOrExpressionAsTypeReference,
+    PSY_ASSERT_2(node->kind() == SyntaxKind::AmbiguousTypeNameOrExpressionAsTypeReference,
                return Disambiguation::Inconclusive);
 
     auto typeName = node->typeNameAsTypeReference()->typeName();
-    PSY_ASSERT(typeName->specifiers()
+    PSY_ASSERT_2(typeName->specifiers()
                    && typeName->specifiers()->value
                    && typeName->specifiers()->value->kind() == SyntaxKind::TypedefName,
                return Disambiguation::Inconclusive);
