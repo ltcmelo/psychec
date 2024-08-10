@@ -320,8 +320,34 @@ void BinderTester::case3107()
                           .withScopeKind(ScopeKind::File)));
 }
 
-void BinderTester::case3108(){}
-void BinderTester::case3109(){}
+void BinderTester::case3108()
+{
+    bind("typedef int * x , * y ;",
+         Expectation()
+             .declaration(Decl()
+                          .Type("x", TypeDeclarationSymbolKind::Typedef)
+                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                          .withScopeKind(ScopeKind::File))
+             .declaration(Decl()
+                          .Type("y", TypeDeclarationSymbolKind::Typedef)
+                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                          .withScopeKind(ScopeKind::File)));
+}
+
+void BinderTester::case3109()
+{
+    bind("typedef int x , * y ;",
+         Expectation()
+             .declaration(Decl()
+                          .Type("x", TypeDeclarationSymbolKind::Typedef)
+                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                          .withScopeKind(ScopeKind::File))
+             .declaration(Decl()
+                          .Type("y", TypeDeclarationSymbolKind::Typedef)
+                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                          .withScopeKind(ScopeKind::File)));
+}
+
 void BinderTester::case3110(){}
 void BinderTester::case3111(){}
 void BinderTester::case3112(){}
@@ -535,39 +561,23 @@ void BinderTester::case3301()
                           .Type("x", TypeDeclarationSymbolKind::Typedef)
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File))
-              .declaration(Decl().Object("z", ObjectDeclarationSymbolKind::Variable)
-                           .ty_.Basic(BasicTypeKind::Int)
+              .declaration(Decl()
+                           .Object("z", ObjectDeclarationSymbolKind::Variable)
                            .ty_.Typedef("x")));
 }
 
 void BinderTester::case3302()
 {
-    bind("int * x ; int y ;",
-         Expectation()
-              .declaration(Decl()
-                           .Object("x", ObjectDeclarationSymbolKind::Variable)
-                           .ty_.Basic(BasicTypeKind::Int)
-                           .ty_.Derived(TypeKind::Pointer))
-              .declaration(Decl()
-                           .Object("y", ObjectDeclarationSymbolKind::Variable)
-                           .ty_.Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case3303()
 {
-    bind("int * * x ; int y ;",
-         Expectation()
-              .declaration(Decl()
-                           .Object("x", ObjectDeclarationSymbolKind::Variable)
-                           .ty_.Basic(BasicTypeKind::Int)
-                           .ty_.Derived(TypeKind::Pointer)
-                           .ty_.Derived(TypeKind::Pointer))
-              .declaration(Decl()
-                           .Object("y", ObjectDeclarationSymbolKind::Variable)
-                           .ty_.Basic(BasicTypeKind::Int)));
 }
 
-void BinderTester::case3304(){}
+void BinderTester::case3304()
+{
+}
+
 void BinderTester::case3305(){}
 void BinderTester::case3306(){}
 void BinderTester::case3307(){}

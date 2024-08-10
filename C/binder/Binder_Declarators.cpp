@@ -40,83 +40,85 @@
 using namespace psy;
 using namespace C;
 
-SyntaxVisitor::Action Binder::nameSymAtTop(const Identifier* name)
+void Binder::nameDeclarationAtTop(const Identifier* name)
 {
-    SYM_AT_TOP(sym);
+    SYM_AT_TOP_V(sym);
     auto nameableSym = MIXIN_NameableSymbol::from(sym);
-    PSY_ASSERT(nameableSym, return Action::Quit);
-
+    PSY_ASSERT(nameableSym, return);
     nameableSym->setName(name);
-
-    return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::typeSymAtTopAndPopIt()
+void Binder::typeDeclarationAtTopWithTypeAtTop()
 {
-    SYM_AT_TOP(sym);
+    SYM_AT_TOP_V(sym);
     auto typeableSym = MIXIN_TypeableSymbol::from(sym);
-    PSY_ASSERT(typeableSym, return Action::Quit);
+    PSY_ASSERT(typeableSym, return);
 
-    TY_AT_TOP(ty);
-
-    if (!pendingFunTys_.empty()) {
-        PSY_ASSERT(!pendingFunTys_.empty(), return Action::Quit);
-        pendingFunTys_.top()->addParameterType(ty);
-    }
-
-    switch (ty->kind()) {
-        case TypeKind::Array:
-        case TypeKind::Function:
-        case TypeKind::Pointer:
-            popTy();
-            break;
-
-        case TypeKind::Typedef:
-        case TypeKind::Tag:
-        case TypeKind::Basic:
-        case TypeKind::Void:
-        case TypeKind::Qualified:
-            break;
-    }
-
+    TY_AT_TOP_V(ty);
     typeableSym->setType(ty);
 
-    return Action::Skip;
+    if (!pendingFunTys_.empty()) {
+        PSY_ASSERT(!pendingFunTys_.empty(), return);
+        pendingFunTys_.top()->addParameterType(ty);
+    }
+}
+
+void Binder::popTypesUntilNonDerivedDeclaratorType()
+{
+    PSY_ASSERT(!tys_.empty(), return);
+    auto ty = tys_.top();
+    while (true) {
+        switch (ty->kind()) {
+            case TypeKind::Array:
+            case TypeKind::Function:
+            case TypeKind::Pointer:
+                popType();
+                PSY_ASSERT(!tys_.empty(), return);
+                ty = tys_.top();
+                continue;
+            default:
+                return;
+        }
+    }
 }
 
 template <class DeclT>
-SyntaxVisitor::Action Binder::visitDeclaration_AtDeclarators_COMMON(
+SyntaxVisitor::Action Binder::visitDeclaration_AtMultipleDeclarators_COMMON(
         const DeclT* node,
         Action (Binder::*visit_AtEnd)(const DeclT*))
 {
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         visit(decltorIt->value);
-
         SYM_AT_TOP(sym);
         switch (sym->kind()) {
             case SymbolKind::Declaration: {
                 auto decl = sym->asDeclarationSymbol();
                 switch (decl->kind()) {
-                    case DeclarationSymbolKind::Function:
-                    case DeclarationSymbolKind::Object: {
-                        typeSymAtTopAndPopIt();
-                        popSym();
+                    case DeclarationSymbolKind::Type: {
+                        popTypesUntilNonDerivedDeclaratorType();
+                        popSymbol();
                         SCOPE_AT_TOP(scope);
                         scope->addDeclaration(decl);
                         break;
                     }
-
+                    case DeclarationSymbolKind::Function:
+                    case DeclarationSymbolKind::Object: {
+                        typeDeclarationAtTopWithTypeAtTop();
+                        popTypesUntilNonDerivedDeclaratorType();
+                        popSymbol();
+                        SCOPE_AT_TOP(scope);
+                        scope->addDeclaration(decl);
+                        break;
+                    }
                     default:
                         break;
                 }
                 break;
             }
-
             default:
                 break;
         }
     }
-
     return ((this)->*(visit_AtEnd))(node);
 }
 
@@ -124,7 +126,7 @@ SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtDeclarators(
         const TypedefDeclarationSyntax* node)
 {
     decltorIsOfTydef_ = true;
-    auto action = visitDeclaration_AtDeclarators_COMMON(
+    auto action = visitDeclaration_AtMultipleDeclarators_COMMON(
                 node,
                 &Binder::visitTypedefDeclaration_AtEnd);
     decltorIsOfTydef_ = false;
@@ -134,44 +136,46 @@ SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtDeclarators(
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    return visitDeclaration_AtDeclarators_COMMON(
+    return visitDeclaration_AtMultipleDeclarators_COMMON(
                 node,
                 &Binder::visitVariableAndOrFunctionDeclaration_AtEnd);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
 {
-    return visitDeclaration_AtDeclarators_COMMON(
+    return visitDeclaration_AtMultipleDeclarators_COMMON(
                 node,
                 &Binder::visitFieldDeclaration_AtEnd);
 }
 
 SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtDeclarator(const EnumeratorDeclarationSyntax* node)
 {
-    RETURN_IF_QUIT(visitSimpleDeclarator_COMMON(node));
-    RETURN_IF_QUIT(nameSymAtTop(lexemeOrEmptyIdent(node->identifierToken())));
-    RETURN_IF_QUIT(typeSymAtTopAndPopIt());
+    bindObjectOrFunctionAndPushSymbol(node);
+    nameDeclarationAtTop(identifier(node->identifierToken()));
+    typeDeclarationAtTopWithTypeAtTop();
     return visitEnumeratorDeclaration_AtEnd(node);
 }
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax* node)
 {
     visit(node->declarator());
-    RETURN_IF_QUIT(typeSymAtTopAndPopIt());
+    typeDeclarationAtTopWithTypeAtTop();
+    popTypesUntilNonDerivedDeclaratorType();
     return visitParameterDeclaration_AtEnd(node);
 }
 
 SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const FunctionDefinitionSyntax* node)
 {
     visit(node->declarator());
+    typeDeclarationAtTopWithTypeAtTop();
+    popTypesUntilNonDerivedDeclaratorType();
 
-    typeSymAtTopAndPopIt();
-    auto decl = popSymAsDecl();
+    auto decl = popSymbolAsDeclaration();
     PSY_ASSERT(decl, return Action::Quit);
     SCOPE_AT_TOP(scope);
     scope->addDeclaration(decl);
 
-    popTy();
+    popType();
 
     nestStashedScope();
     scopes_.top()->morphFrom_FunctionPrototype_to_Block();
@@ -191,7 +195,7 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
     switch (node->suffix()->kind()) {
         case SyntaxKind::SubscriptSuffix: {
             TY_AT_TOP(ty);
-            pushTy(makeTy<ArrayType>(ty));
+            pushType(makeType<ArrayType>(ty));
             break;
         }
 
@@ -216,8 +220,8 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
                 case TypeKind::Typedef:
                     break;
             }
-            auto funcTy = makeTy<FunctionType>(ty);
-            pushTy(funcTy);
+            auto funcTy = makeType<FunctionType>(ty);
+            pushType(funcTy);
             pendingFunTys_.push(funcTy);
             break;
         }
@@ -258,7 +262,7 @@ SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* 
 SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSyntax* node)
 {
     TY_AT_TOP(ty);
-    pushTy(makeTy<PointerType>(ty));
+    pushType(makeType<PointerType>(ty));
 
     for (auto specIt = node->qualifiersAndAttributes(); specIt; specIt = specIt->next)
         visit(specIt->value);
@@ -275,16 +279,16 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* node)
+void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
 {
-    SCOPE_AT_TOP(scope);
+    SCOPE_AT_TOP_V(scope);
     switch (scope->kind()) {
         case ScopeKind::File:
         case ScopeKind::Block: {
-            TY_AT_TOP(ty);
+            TY_AT_TOP_V(ty);
             switch (ty->kind()) {
                 case TypeKind::Function:
-                    makeBindAndPushSym<Function>(node);
+                    bindAndPushSymbol<Function>(node);
                     break;
 
                 case TypeKind::Array:
@@ -294,41 +298,41 @@ SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* nod
                 case TypeKind::Qualified:
                 case TypeKind::Typedef:
                 case TypeKind::Tag: {
-                    SYM_AT_TOP(sym);
+                    SYM_AT_TOP_V(sym);
                     switch (sym->kind()) {
                         case SymbolKind::Declaration: {
-                            auto declSym = sym->asDeclarationSymbol();
-                            switch (declSym->kind()) {
+                            auto decl = sym->asDeclarationSymbol();
+                            switch (decl->kind()) {
                                 case DeclarationSymbolKind::Type:
-                                    switch (declSym->asTypeDeclarationSymbol()->kind()) {
+                                    switch (decl->asTypeDeclarationSymbol()->kind()) {
                                         case TypeDeclarationSymbolKind::Union:
                                         case TypeDeclarationSymbolKind::Struct:
-                                            makeBindAndPushSym<Field>(node);
+                                            bindAndPushSymbol<Field>(node);
                                             break;
 
                                         case TypeDeclarationSymbolKind::Enum:
-                                            makeBindAndPushSym<Enumerator>(node);
+                                            bindAndPushSymbol<Enumerator>(node);
                                             break;
 
                                         case TypeDeclarationSymbolKind::Typedef:
-                                            PSY_ASSERT(false, return Action::Quit);
+                                            PSY_ASSERT(false, return);
                                     }
                                     break;
 
                                 case DeclarationSymbolKind::Object:
                                 case DeclarationSymbolKind::Function:
-                                    makeBindAndPushSym<Variable>(node);
+                                    bindAndPushSymbol<Variable>(node);
                                     break;
                             }
                             break;
                         }
 
                         case SymbolKind::TranslationUnit:
-                            makeBindAndPushSym<Variable>(node);
+                            bindAndPushSymbol<Variable>(node);
                             break;
 
                         default:
-                            PSY_ASSERT(false, return Action::Quit);
+                            PSY_ASSERT(false, return);
                     }
                     break;
                 }
@@ -340,7 +344,7 @@ SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* nod
             break;
 
         case ScopeKind::FunctionPrototype: {
-            TY_AT_TOP(ty);
+            TY_AT_TOP_V(ty);
             switch (ty->kind()) {
                 case TypeKind::Array: {
                     /*
@@ -348,10 +352,10 @@ SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* nod
                      * A declaration of a parameter as “array of type”
                      * shall be adjusted to “qualified pointer to type”...
                      */
-                    popTy();
-                    TY_AT_TOP(otherTy);
-                    auto ptrTy = makeTy<PointerType>(otherTy);
-                    pushTy(ptrTy);
+                    popType();
+                    TY_AT_TOP_V(otherTy);
+                    auto ptrTy = makeType<PointerType>(otherTy);
+                    pushType(ptrTy);
                     ptrTy->markAsArisingFromArrayDecay();
                     break;
                 }
@@ -362,8 +366,8 @@ SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* nod
                      * A declaration of a parameter as “function returning type”
                      * shall be adjusted to “pointer to function returning type”...
                      */
-                    auto ptrTy = makeTy<PointerType>(ty);
-                    pushTy(ptrTy);
+                    auto ptrTy = makeType<PointerType>(ty);
+                    pushType(ptrTy);
                     ptrTy->markAsArisingFromFunctionDecay();
                     break;
                 }
@@ -376,29 +380,25 @@ SyntaxVisitor::Action Binder::visitSimpleDeclarator_COMMON(const SyntaxNode* nod
                 case TypeKind::Tag:
                     break;
             }
-            makeBindAndPushSym<Parameter>(node);
+            bindAndPushSymbol<Parameter>(node);
             break;
         }
 
         default:
-            PSY_ESCAPE_VIA_RETURN(Action::Quit);
+            PSY_ESCAPE_VIA_RETURN();
     }
-
-    return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
     if (decltorIsOfTydef_) {
         TY_AT_TOP(ty);
-        SCOPE_AT_TOP(scope);
-        auto tydefTy = makeTy<TypedefType>(lexemeOrEmptyIdent(node->identifierToken()));
-        auto tydef = makeAndBindSym<Typedef>(node, tydefTy, ty);
-        scope->addDeclaration(tydef);
+        auto tydefTy = makeType<TypedefType>(identifier(node->identifierToken()));
+        bindAndPushSymbol<Typedef>(node, tydefTy, ty);
     }
     else {
-        RETURN_IF_QUIT(visitSimpleDeclarator_COMMON(node));
-        nameSymAtTop(lexemeOrEmptyIdent(node->identifierToken()));
+        bindObjectOrFunctionAndPushSymbol(node);
+        nameDeclarationAtTop(identifier(node->identifierToken()));
     }
 
     return Action::Skip;
@@ -406,8 +406,8 @@ SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclarat
 
 SyntaxVisitor::Action Binder::visitAbstractDeclarator(const AbstractDeclaratorSyntax* node)
 {
-    RETURN_IF_QUIT(visitSimpleDeclarator_COMMON(node));
-    nameSymAtTop(tree_->findIdentifier("", 0));
+    bindObjectOrFunctionAndPushSymbol(node);
+    nameDeclarationAtTop(tree_->findIdentifier("", 0));
 
     return Action::Skip;
 }

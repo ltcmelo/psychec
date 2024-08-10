@@ -47,13 +47,22 @@
 #define SYM_AT_TOP(S) \
     PSY_ASSERT(!syms_.empty(), return Action::Quit); \
     auto S = syms_.top();
+#define SYM_AT_TOP_V(S) \
+    PSY_ASSERT(!syms_.empty(), return); \
+    auto S = syms_.top();
 
 #define TY_AT_TOP(T) \
     PSY_ASSERT(!tys_.empty(), return Action::Quit); \
     auto T = tys_.top();
+#define TY_AT_TOP_V(T) \
+    PSY_ASSERT(!tys_.empty(), return); \
+    auto T = tys_.top();
 
 #define SCOPE_AT_TOP(S) \
     PSY_ASSERT(!scopes_.empty(), return Action::Quit); \
+    auto S = scopes_.top();
+#define SCOPE_AT_TOP_V(S) \
+    PSY_ASSERT(!scopes_.empty(), return); \
     auto S = scopes_.top();
 
 #define RETURN_IF_QUIT(CALL) \

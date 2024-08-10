@@ -51,26 +51,26 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration_AtEnd(const EnumDeclarationSy
 
 SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtEnd(const TypedefDeclarationSyntax* node)
 {
-    popTy();
+    popType();
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtEnd(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    popTy();
+    popType();
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtEnd(const FieldDeclarationSyntax* node)
 {
-    popTy();
+    popType();
     return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtEnd(const EnumeratorDeclarationSyntax* node)
 {
-    popTy();
+    popType();
     return visitDeclaration_AtEnd_COMMON(node);
 }
 
@@ -81,7 +81,7 @@ SyntaxVisitor::Action Binder::visitParameterDeclaration_AtEnd(const ParameterDec
 
 SyntaxVisitor::Action Binder::visitDeclaration_AtEnd_COMMON(const DeclarationSyntax* node)
 {
-    auto decl = popSymAsDecl();
+    auto decl = popSymbolAsDeclaration();
     PSY_ASSERT(decl, return Action::Quit);
     SCOPE_AT_TOP(scope);
     scope->addDeclaration(decl->asDeclarationSymbol());

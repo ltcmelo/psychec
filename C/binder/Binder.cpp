@@ -93,13 +93,13 @@ void Binder::unnestAndStashScope()
     scopes_.pop();
 }
 
-void Binder::pushSym(Symbol* sym)
+void Binder::pushSymbol(Symbol* sym)
 {
     DEBUG_SYM_STACK(sym);
     syms_.push(sym);
 }
 
-Symbol* Binder::popSym()
+Symbol* Binder::popSymbol()
 {
     PSY_ASSERT(!syms_.empty(), return nullptr);
     DEBUG_SYM_STACK(syms_.top());
@@ -108,20 +108,20 @@ Symbol* Binder::popSym()
     return sym;
 }
 
-DeclarationSymbol* Binder::popSymAsDecl()
+DeclarationSymbol* Binder::popSymbolAsDeclaration()
 {
-    auto sym = popSym();
+    auto sym = popSymbol();
     PSY_ASSERT(sym && sym->kind() == SymbolKind::Declaration, return nullptr);
     return sym->asDeclarationSymbol();
 }
 
-void Binder::pushTy(Type* ty)
+void Binder::pushType(Type* ty)
 {
     DEBUG_TY_STACK(ty);
     tys_.push(ty);
 }
 
-Type* Binder::popTy()
+Type* Binder::popType()
 {
     PSY_ASSERT(!tys_.empty(), return nullptr);
     DEBUG_TY_STACK(tys_.top());
@@ -130,7 +130,7 @@ Type* Binder::popTy()
     return ty;
 }
 
-const Identifier* Binder::lexemeOrEmptyIdent(const SyntaxToken& tk) const
+const Identifier* Binder::identifier(const SyntaxToken& tk) const
 {
     return tk.lexeme()
             ? tk.lexeme()->asIdentifier()
@@ -145,7 +145,7 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 {
     std::unique_ptr<TranslationUnit> unit(new TranslationUnit(tree_));
     auto rawUnit = semaModel_->keepTranslationUnit(node, std::move(unit));
-    pushSym(rawUnit);
+    pushSymbol(rawUnit);
     scopes_.push(rawUnit->enclosedScope_.get());
 
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
@@ -154,7 +154,7 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
     PSY_ASSERT(scopes_.size() == 1, return Action::Quit);
     PSY_ASSERT(scopes_.top()->kind() == ScopeKind::File, return Action::Quit);
     scopes_.pop();
-    popSym();
+    popSymbol();
 
     return Action::Skip;
 }
@@ -174,24 +174,20 @@ SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration(const StructOrUnionD
     return visitStructOrUnionDeclaration_AtSpecifier(node);
 }
 
-SyntaxVisitor::Action Binder::visitTypedefDeclaration(const TypedefDeclarationSyntax* node)
-{
-    return visitTypedefDeclaration_AtSpecifier(node);
-}
-
 SyntaxVisitor::Action Binder::visitEnumDeclaration(const EnumDeclarationSyntax* node)
 {
     return visitEnumDeclaration_AtSpecifier(node);
 }
 
+SyntaxVisitor::Action Binder::visitTypedefDeclaration(const TypedefDeclarationSyntax* node)
+{
+    return visitTypedefDeclaration_AtSpecifier(node);
+}
+
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    TyContT tys;
-    std::swap(tys_, tys);
-    auto action = visitVariableAndOrFunctionDeclaration_AtSpecifiers(node);
-    std::swap(tys_, tys);
-    return action;
+    return visitVariableAndOrFunctionDeclaration_AtSpecifiers(node);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration(const FieldDeclarationSyntax* node)
