@@ -42,19 +42,19 @@ using namespace C;
 void Binder::nameDeclarationAtTop(const Identifier* name)
 {
     SYM_AT_TOP_V(sym);
-    auto nameableSym = MIXIN_NameableSymbol::from(sym);
-    PSY_ASSERT_2(nameableSym, return);
-    nameableSym->setName(name);
+    auto nameableDecl = MIXIN_NameableSymbol::from(sym);
+    PSY_ASSERT_2(nameableDecl, return);
+    nameableDecl->setName(name);
 }
 
 void Binder::typeDeclarationAtTopWithTypeAtTop()
 {
     SYM_AT_TOP_V(sym);
-    auto typeableSym = MIXIN_TypeableSymbol::from(sym);
-    PSY_ASSERT_2(typeableSym, return);
+    auto typeableDecl = MIXIN_TypeableSymbol::from(sym);
+    PSY_ASSERT_2(typeableDecl, return);
 
     TY_AT_TOP_V(ty);
-    typeableSym->setType(ty);
+    typeableDecl->setType(ty);
 
     if (!pendingFunTys_.empty()) {
         PSY_ASSERT_2(!pendingFunTys_.empty(), return);
@@ -93,13 +93,11 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtMultipleDeclarators_COMMON(
             case SymbolKind::Declaration: {
                 auto decl = sym->asDeclarationSymbol();
                 switch (decl->kind()) {
-                    case DeclarationSymbolKind::Type: {
-                        popTypesUntilNonDerivedDeclaratorType();
-                        popSymbol();
-                        SCOPE_AT_TOP(scope);
-                        scope->addDeclaration(decl);
-                        break;
-                    }
+                    case DeclarationSymbolKind::Type:
+                        PSY_ASSERT_1(
+                            decl->asTypeDeclarationSymbol()->kind() == TypeDeclarationSymbolKind::Typedef);
+                        [[fallthrough]];
+
                     case DeclarationSymbolKind::Function:
                     case DeclarationSymbolKind::Object: {
                         typeDeclarationAtTopWithTypeAtTop();
@@ -391,9 +389,8 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
     if (decltorIsOfTydef_) {
-        TY_AT_TOP(ty);
         auto tydefTy = makeType<TypedefType>(identifier(node->identifierToken()));
-        bindAndPushSymbol<Typedef>(node, tydefTy, ty);
+        bindAndPushSymbol<Typedef>(node, tydefTy);
     }
     else {
         bindObjectOrFunctionAndPushSymbol(node);

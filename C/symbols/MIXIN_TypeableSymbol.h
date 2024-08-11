@@ -38,10 +38,12 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
 
     static MIXIN_TypeableSymbol* from(Symbol*);
 
     virtual void setType(const Type* ty) = 0;
+    virtual const Type* retypeableType() const = 0;
 };
 
 } // C

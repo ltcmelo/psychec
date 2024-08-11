@@ -23,10 +23,14 @@
 
 #include "DeclarationSymbol_Type.h"
 
+#include "MIXIN_TypeableSymbol.h"
+
 namespace psy {
 namespace C {
 
-class PSY_C_API Typedef final : public TypeDeclarationSymbol
+class PSY_C_API Typedef final
+        : public TypeDeclarationSymbol
+        , public MIXIN_TypeableSymbol
 {
 public:
     //!@{
@@ -54,12 +58,21 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
 
     Typedef(const SyntaxTree* tree,
             const Symbol* containingSym,
             const Scope* enclosingScope,
             TypedefType* tydefTy,
             const Type* synonymizedTy);
+
+    Typedef(const SyntaxTree* tree,
+            const Symbol* containingSym,
+            const Scope* enclosingScope,
+            TypedefType* tydefTy);
+
+    virtual void setType(const Type* ty) override;
+    virtual const Type* retypeableType() const override;
 
 private:
     const Type* synonymizedTy_;

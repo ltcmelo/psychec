@@ -67,24 +67,16 @@ SyntaxVisitor::Action TypeResolver::visitDeclarator_COMMON(const DeclaratorSynta
     auto decl = semaModel_->declaredDeclaration(node);
     if (decl) {
         switch (decl->kind()) {
+            case DeclarationSymbolKind::Type:
             case DeclarationSymbolKind::Function:
-                break;
-
             case DeclarationSymbolKind::Object: {
-                auto objDecl = decl->asObjectDeclarationSymbol();
-                auto ty = objDecl->type();
+                auto typeableDecl = MIXIN_TypeableSymbol::from(decl);
+                auto ty = typeableDecl->retypeableType();
                 auto resolvedTy = resolveType(ty, decl->enclosingScope());
                 if (resolvedTy != ty) {
-                    objDecl->setType(resolvedTy);
+                    typeableDecl->setType(resolvedTy);
                     semaModel_->dropType(ty);
                 }
-                break;
-            }
-
-            case DeclarationSymbolKind::Type: {
-                auto tyDecl = decl->asTypeDeclarationSymbol();
-                PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Typedef,
-                           return Action::Quit);
                 break;
             }
         }
@@ -126,8 +118,15 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope) const
         case TypeKind::Void:
             break;
 
-        case TypeKind::Function:
+        case TypeKind::Function: {
+            // TODO: parameters
+            auto funcTy = ty->asFunctionType();
+            auto retTy = funcTy->returnType();
+            auto resolvedTy = resolveType(retTy, scope);
+            if (resolvedTy != retTy)
+                funcTy->setReturnType(resolvedTy);
             break;
+        }
 
         case TypeKind::Pointer: {
             auto ptrTy = ty->asPointerType();
@@ -147,7 +146,7 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope) const
                 if (decl->kind() == DeclarationSymbolKind::Type) {
                     auto tyDecl = decl->asTypeDeclarationSymbol();
                     PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Typedef,
-                               return nullptr);
+                                 return nullptr);
                     auto tydef = tyDecl->asTypedef();
                     return tydef->synonymizedType();
                 } else {

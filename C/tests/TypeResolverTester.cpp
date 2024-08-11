@@ -153,8 +153,37 @@ x y ;
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
-void TypeResolverTester::case0008(){}
-void TypeResolverTester::case0009(){}
+
+void TypeResolverTester::case0008()
+{
+    auto s = R"(
+typedef double x ;
+typedef x y ;
+y z ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("z", ObjectDeclarationSymbolKind::Variable)
+                         .ty_.Basic(BasicTypeKind::Double)));
+}
+
+void TypeResolverTester::case0009()
+{
+    auto s = R"(
+typedef double x ;
+x y ( ) ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Function("y")
+                         .ty_.Basic(BasicTypeKind::Double)
+                         .ty_.Derived(TypeKind::Function)));
+}
+
 void TypeResolverTester::case0010(){}
 void TypeResolverTester::case0011(){}
 void TypeResolverTester::case0012(){}
