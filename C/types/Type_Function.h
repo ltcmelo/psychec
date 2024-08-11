@@ -54,10 +54,12 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
 
     FunctionType(const Type* retTy);
 
     void addParameterType(const Type* paramTy);
+    void setReturnType(const Type* retTy) const;
 
 private:
     DECL_PIMPL_SUB(FunctionType)

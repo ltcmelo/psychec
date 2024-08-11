@@ -43,6 +43,7 @@ struct Function::FunctionSymbolImpl : SymbolImpl
                      NameSpace::OrdinaryIdentifiers,
                      SymbolKind::Declaration)
         , name_(nullptr)
+        , ty_(nullptr)
     {}
 
     const Identifier* name_;
@@ -72,6 +73,11 @@ void Function::setName(const Identifier* name)
 const Type* Function::type() const
 {
     return P_CAST->ty_;
+}
+
+const Type* Function::retypeableType() const
+{
+    return type();
 }
 
 void Function::setType(const Type* ty)

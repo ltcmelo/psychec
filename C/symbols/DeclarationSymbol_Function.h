@@ -88,6 +88,7 @@ PSY_INTERNAL:
 
     virtual void setName(const Identifier* name) override;
     virtual void setType(const Type* ty) override;
+    virtual const Type* retypeableType() const override;
 
 protected:
     DECL_PIMPL_SUB(FunctionSymbol);

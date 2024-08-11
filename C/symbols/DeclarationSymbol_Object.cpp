@@ -40,6 +40,7 @@ struct ObjectDeclarationSymbol::ObjectDeclarationSymbolImpl : SymbolImpl
                      NameSpace::OrdinaryIdentifiers,
                      SymbolKind::Declaration)
         , name_(nullptr)
+        , ty_(nullptr)
     {
         BF_.objDeclSymK_ = static_cast<std::uint32_t>(objDeclSymK);
     }
@@ -71,6 +72,11 @@ ObjectDeclarationSymbolKind ObjectDeclarationSymbol::kind() const
 const Type* ObjectDeclarationSymbol::type() const
 {
     return P_CAST->ty_;
+}
+
+const Type* ObjectDeclarationSymbol::retypeableType() const
+{
+    return type();
 }
 
 void ObjectDeclarationSymbol::setType(const Type* ty)

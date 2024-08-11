@@ -47,6 +47,11 @@ const Type* FunctionType::returnType() const
     return P_CAST->retTy_;
 }
 
+void FunctionType::setReturnType(const Type* retTy) const
+{
+    P_CAST->retTy_ = retTy;
+}
+
 std::vector<const Type *> FunctionType::parameterTypes() const
 {
     return P_CAST->paramTys_;
