@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_ENUMERATOR_OBJECT_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_ENUMERATOR_OBJECT_DECLARATION_SYMBOL_H__
+#ifndef PSYCHE_C_ENUMERATOR_H__
+#define PSYCHE_C_ENUMERATOR_H__
 
 #include "Declaration_Object.h"
 
@@ -41,7 +41,7 @@ public:
     //!@}
 
     /**
-     * Compute a displayable string for \c this Symbol.
+     * Compute a displayable string for \c this Enumerator.
      */
     virtual std::string toDisplayString() const override;
 

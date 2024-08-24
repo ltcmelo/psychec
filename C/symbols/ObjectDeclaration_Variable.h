@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_VARIABLE_OBJECT_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_VARIABLE_OBJECT_DECLARATION_SYMBOL_H__
+#ifndef PSYCHE_C_VARIABLE_H__
+#define PSYCHE_C_VARIABLE_H__
 
 #include "Declaration_Object.h"
 
@@ -38,14 +38,14 @@ class PSY_C_API Variable final : public ObjectDeclaration
 public:
     //!@{
     /**
-     * Cast \c this Symbol as a Variable.
+     * Cast \c this ObjectDeclaration as a Variable.
      */
     virtual Variable* asVariable() override { return this; }
     virtual const Variable* asVariable() const override { return this; }
     //!@}
 
     /**
-     * Compute a displayable string for \c this Symbol.
+     * Compute a displayable string for \c this Variable.
      */
     virtual std::string toDisplayString() const override;
 

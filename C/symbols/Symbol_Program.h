@@ -18,13 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_PROGRAM_SYMBOL_H__
-#define PSYCHE_C_PROGRAM_SYMBOL_H__
+#ifndef PSYCHE_C_PROGRAM_H__
+#define PSYCHE_C_PROGRAM_H__
 
 #include "API.h"
 #include "Fwds.h"
 
 #include "symbols/Symbol.h"
+
+#include "../common/infra/AccessSpecifiers.h"
 
 namespace psy {
 namespace C {
