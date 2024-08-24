@@ -82,9 +82,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a04a34f5715eb1db80958636180fcc60a"><td class="memItemLeft" align="right" valign="top"><a id="a04a34f5715eb1db80958636180fcc60a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>expectValidSyms_</b></td></tr>
-<tr class="separator:a04a34f5715eb1db80958636180fcc60a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fb5a0ab105fd7e6924aa0bfa135784b"><td class="memItemLeft" align="right" valign="top"><a id="a2fb5a0ab105fd7e6924aa0bfa135784b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>bindingIsOK_</b></td></tr>
+<tr class="separator:a2fb5a0ab105fd7e6924aa0bfa135784b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefffe64c6064fac502b54c432cd31f6e"><td class="memItemLeft" align="right" valign="top"><a id="aefffe64c6064fac502b54c432cd31f6e"></a>
 const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>tree_</b></td></tr>
 <tr class="separator:aefffe64c6064fac502b54c432cd31f6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -94,15 +94,15 @@ const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&
 <tr class="memitem:a7966143f601b4fe8da8c6e21ba3f0833"><td class="memItemLeft" align="right" valign="top"><a id="a7966143f601b4fe8da8c6e21ba3f0833"></a>
 std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_translation_unit.html">TranslationUnit</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unit_</b></td></tr>
 <tr class="separator:a7966143f601b4fe8da8c6e21ba3f0833"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1e9555f4ed97de6511cda6f9e5770cd"><td class="memItemLeft" align="right" valign="top"><a id="ab1e9555f4ed97de6511cda6f9e5770cd"></a>
-std::vector&lt; std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_declaration_symbol.html">DeclarationSymbol</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>decls_</b></td></tr>
-<tr class="separator:ab1e9555f4ed97de6511cda6f9e5770cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade447c148ac2c8734f4a258a5b2eaf8e"><td class="memItemLeft" align="right" valign="top"><a id="ade447c148ac2c8734f4a258a5b2eaf8e"></a>
-std::vector&lt; std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_type.html">Type</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tys_</b></td></tr>
-<tr class="separator:ade447c148ac2c8734f4a258a5b2eaf8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a7624602300fe47ab35ccb7aa5a1e0c"><td class="memItemLeft" align="right" valign="top"><a id="a0a7624602300fe47ab35ccb7aa5a1e0c"></a>
-std::unordered_map&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a> *, <a class="el" href="classpsy_1_1_c_1_1_declaration_symbol.html">DeclarationSymbol</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>declsBySyntax_</b></td></tr>
-<tr class="separator:a0a7624602300fe47ab35ccb7aa5a1e0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf9a4b429810ae8cbc42c7a8906703f3"><td class="memItemLeft" align="right" valign="top"><a id="aaf9a4b429810ae8cbc42c7a8906703f3"></a>
+std::vector&lt; std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_declaration.html">Declaration</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>decls_</b></td></tr>
+<tr class="separator:aaf9a4b429810ae8cbc42c7a8906703f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b054939b4d79ae57ef92da978276a0b"><td class="memItemLeft" align="right" valign="top"><a id="a7b054939b4d79ae57ef92da978276a0b"></a>
+std::unordered_map&lt; const <a class="el" href="classpsy_1_1_c_1_1_type.html">Type</a> *, std::unique_ptr&lt; <a class="el" href="classpsy_1_1_c_1_1_type.html">Type</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tys_</b></td></tr>
+<tr class="separator:a7b054939b4d79ae57ef92da978276a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf6f29a7b16610b4c9bfa092e2b28d1b"><td class="memItemLeft" align="right" valign="top"><a id="acf6f29a7b16610b4c9bfa092e2b28d1b"></a>
+std::unordered_map&lt; const <a class="el" href="classpsy_1_1_c_1_1_syntax_node.html">SyntaxNode</a> *, <a class="el" href="classpsy_1_1_c_1_1_declaration.html">Declaration</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>declsBySyntax_</b></td></tr>
+<tr class="separator:acf6f29a7b16610b4c9bfa092e2b28d1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>C/compilation/SemanticModel.cpp</li>

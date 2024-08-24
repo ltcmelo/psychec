@@ -115,26 +115,29 @@ $(function() {
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;PSY_INTERNAL:</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_function_type.html">FunctionType</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type.html">Type</a>* retTy);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">void</span> addParameterType(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type.html">Type</a>* paramTy);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    DECL_PIMPL_SUB(<a class="code" href="classpsy_1_1_c_1_1_function_type.html">FunctionType</a>)</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;};</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> FunctionType&amp; funcTy);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_type_resolver.html">TypeResolver</a>);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_function_type.html">FunctionType</a>(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type.html">Type</a>* retTy);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> addParameterType(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type.html">Type</a>* paramTy);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">void</span> setReturnType(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type.html">Type</a>* retTy) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    DECL_PIMPL_SUB(<a class="code" href="classpsy_1_1_c_1_1_function_type.html">FunctionType</a>)</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;};</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> FunctionType&amp; funcTy);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasspsy_1_1_c_1_1_type_resolver_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type_resolver.html">psy::C::TypeResolver</a></div><div class="ttdef"><b>Definition:</b> TypeResolver.h:35</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_function_type_html_abfaa465f9b895c1fc2c03592b0485e16"><div class="ttname"><a href="classpsy_1_1_c_1_1_function_type.html#abfaa465f9b895c1fc2c03592b0485e16">psy::C::FunctionType::asFunctionType</a></div><div class="ttdeci">virtual FunctionType * asFunctionType()</div><div class="ttdef"><b>Definition:</b> Type_Function.h:41</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_function_type_html_a502cc6a77917459fb3be267f7960ef2a"><div class="ttname"><a href="classpsy_1_1_c_1_1_function_type.html#a502cc6a77917459fb3be267f7960ef2a">psy::C::FunctionType::asFunctionType</a></div><div class="ttdeci">virtual const FunctionType * asFunctionType() const</div><div class="ttdef"><b>Definition:</b> Type_Function.h:42</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_function_type_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_function_type.html">psy::C::FunctionType</a></div><div class="ttdef"><b>Definition:</b> Type_Function.h:35</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_type_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type.html">psy::C::Type</a></div><div class="ttdoc">The Type class.</div><div class="ttdef"><b>Definition:</b> Type.h:45</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_type_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type.html">psy::C::Type</a></div><div class="ttdoc">The Type class.</div><div class="ttdef"><b>Definition:</b> Type.h:44</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:50</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

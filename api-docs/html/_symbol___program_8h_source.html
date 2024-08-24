@@ -89,46 +89,48 @@ $(function() {
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">// THE SOFTWARE.</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#ifndef PSYCHE_C_PROGRAM_SYMBOL_H__</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define PSYCHE_C_PROGRAM_SYMBOL_H__</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#ifndef PSYCHE_C_PROGRAM_H__</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define PSYCHE_C_PROGRAM_H__</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;API.h&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;Fwds.h&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;symbols/Symbol.h&quot;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span>psy {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>C {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_program.html">   37</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_program.html">Program</a> final : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;{</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_program.html#ad07bca08448c1fe3a7cf73e1f9a943e5">   44</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_program.html">Program</a>* <a class="code" href="classpsy_1_1_c_1_1_program.html#ad07bca08448c1fe3a7cf73e1f9a943e5">asProgram</a>()<span class="keyword"> override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_program.html#aaa66b88821871cc89173c4e0c9cd83d0">   45</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_program.html">Program</a>* <a class="code" href="classpsy_1_1_c_1_1_program.html#aaa66b88821871cc89173c4e0c9cd83d0">asProgram</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">virtual</span> std::string toDisplayString() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;PSY_INTERNAL:</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_program.html">Program</a>();</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;};</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> Symbol&amp; prog);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;../common/infra/AccessSpecifiers.h&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span>psy {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span>C {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_program.html">   39</a></span>&#160;<span class="keyword">class </span>PSY_C_API <a class="code" href="classpsy_1_1_c_1_1_program.html">Program</a> final : <span class="keyword">public</span> <a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;{</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_program.html#ad07bca08448c1fe3a7cf73e1f9a943e5">   46</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classpsy_1_1_c_1_1_program.html">Program</a>* <a class="code" href="classpsy_1_1_c_1_1_program.html#ad07bca08448c1fe3a7cf73e1f9a943e5">asProgram</a>()<span class="keyword"> override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classpsy_1_1_c_1_1_program.html#aaa66b88821871cc89173c4e0c9cd83d0">   47</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_program.html">Program</a>* <a class="code" href="classpsy_1_1_c_1_1_program.html#aaa66b88821871cc89173c4e0c9cd83d0">asProgram</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">this</span>; }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">virtual</span> std::string toDisplayString() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;PSY_INTERNAL:</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_compilation.html">Compilation</a>);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_semantic_model.html">SemanticModel</a>);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <a class="code" href="classpsy_1_1_c_1_1_program.html">Program</a>();</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;};</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;std::string PSY_C_API to_string(<span class="keyword">const</span> Symbol&amp; prog);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasspsy_1_1_c_1_1_semantic_model_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_semantic_model.html">psy::C::SemanticModel</a></div><div class="ttdoc">The SemanticModel class.</div><div class="ttdef"><b>Definition:</b> SemanticModel.h:46</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_program_html_ad07bca08448c1fe3a7cf73e1f9a943e5"><div class="ttname"><a href="classpsy_1_1_c_1_1_program.html#ad07bca08448c1fe3a7cf73e1f9a943e5">psy::C::Program::asProgram</a></div><div class="ttdeci">virtual Program * asProgram() override</div><div class="ttdef"><b>Definition:</b> Symbol_Program.h:44</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_program_html_ad07bca08448c1fe3a7cf73e1f9a943e5"><div class="ttname"><a href="classpsy_1_1_c_1_1_program.html#ad07bca08448c1fe3a7cf73e1f9a943e5">psy::C::Program::asProgram</a></div><div class="ttdeci">virtual Program * asProgram() override</div><div class="ttdef"><b>Definition:</b> Symbol_Program.h:46</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_compilation_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_compilation.html">psy::C::Compilation</a></div><div class="ttdoc">The Compilation class.</div><div class="ttdef"><b>Definition:</b> Compilation.h:48</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></div><div class="ttdoc">The Symbol class.</div><div class="ttdef"><b>Definition:</b> Symbol.h:48</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_program_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_program.html">psy::C::Program</a></div><div class="ttdoc">The Program class.</div><div class="ttdef"><b>Definition:</b> Symbol_Program.h:38</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_program_html_aaa66b88821871cc89173c4e0c9cd83d0"><div class="ttname"><a href="classpsy_1_1_c_1_1_program.html#aaa66b88821871cc89173c4e0c9cd83d0">psy::C::Program::asProgram</a></div><div class="ttdeci">virtual const Program * asProgram() const override</div><div class="ttdef"><b>Definition:</b> Symbol_Program.h:45</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_program_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_program.html">psy::C::Program</a></div><div class="ttdoc">The Program class.</div><div class="ttdef"><b>Definition:</b> Symbol_Program.h:40</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_program_html_aaa66b88821871cc89173c4e0c9cd83d0"><div class="ttname"><a href="classpsy_1_1_c_1_1_program.html#aaa66b88821871cc89173c4e0c9cd83d0">psy::C::Program::asProgram</a></div><div class="ttdeci">virtual const Program * asProgram() const override</div><div class="ttdef"><b>Definition:</b> Symbol_Program.h:47</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

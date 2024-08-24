@@ -68,19 +68,20 @@ $(function() {
 : <a class="el" href="classpsy_1_1_diagnostic_descriptor.html#af5489367be8c060e0948abc7c5f5991b">psy::DiagnosticDescriptor</a>
 </li>
 <li>identifier()
-: <a class="el" href="classpsy_1_1_c_1_1_declaration_symbol.html#a353ac1f62ed445e1f56a09190b737d05">psy::C::DeclarationSymbol</a>
-, <a class="el" href="classpsy_1_1_c_1_1_enum.html#a75ceb19686deb78706feca86c7d29805">psy::C::Enum</a>
+: <a class="el" href="classpsy_1_1_c_1_1_declaration.html#a2c5ff2de43de4f880f63ce9491a94b01">psy::C::Declaration</a>
 , <a class="el" href="classpsy_1_1_c_1_1_function.html#afd321f9eb06c9ead437d96e441381463">psy::C::Function</a>
-, <a class="el" href="classpsy_1_1_c_1_1_object_declaration_symbol.html#acb4b34f2a06c8308cc3859533ea14d03">psy::C::ObjectDeclarationSymbol</a>
-, <a class="el" href="classpsy_1_1_c_1_1_struct.html#adeaa790106839f24ec2fe2a7b537c47b">psy::C::Struct</a>
+, <a class="el" href="classpsy_1_1_c_1_1_object_declaration.html#adde319fd51bf36487369fc1adad3d192">psy::C::ObjectDeclaration</a>
+, <a class="el" href="classpsy_1_1_c_1_1_tag_type_declaration.html#a5f52381f708bbda95b64501d174377c2">psy::C::TagTypeDeclaration</a>
 , <a class="el" href="classpsy_1_1_c_1_1_typedef.html#aab7a3dd83db7053803fdcf8550f046f9">psy::C::Typedef</a>
-, <a class="el" href="classpsy_1_1_c_1_1_union.html#ae33805deab71731296e8f47067cb0f3f">psy::C::Union</a>
 </li>
 <li>innerDeclaratorOrSelf()
 : <a class="el" href="classpsy_1_1_c_1_1_syntax_utilities.html#a13b8a521ad4f23d4e771c24ff3402f0e">psy::C::SyntaxUtilities</a>
 </li>
 <li>innermostDeclaratorOrSelf()
 : <a class="el" href="classpsy_1_1_c_1_1_syntax_utilities.html#ab550e68a42e2a0631e4b36345c1310f2">psy::C::SyntaxUtilities</a>
+</li>
+<li>innerScopes()
+: <a class="el" href="classpsy_1_1_c_1_1_scope.html#acaa99255693dd7647b8bd9a8d384cce2">psy::C::Scope</a>
 </li>
 <li>invalid()
 : <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a704754eb1dd6b2650967964ea9722662">psy::C::SyntaxToken</a>
@@ -89,7 +90,7 @@ $(function() {
 : <a class="el" href="class_python_1_1_c_compiler_facade_1_1_c_compiler_facade.html#afa782d59172f7e81d294bd1a628f2c99">Python.CCompilerFacade.CCompilerFacade</a>
 </li>
 <li>isAtomicQualified()
-: <a class="el" href="classpsy_1_1_c_1_1_type.html#a26d2923a43c1f308ac0f4f27700ca07f">psy::C::Type</a>
+: <a class="el" href="classpsy_1_1_c_1_1_qualified_type.html#a958b98c989dad85ecacdb498653990a1">psy::C::QualifiedType</a>
 </li>
 <li>isAtStartOfLine()
 : <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a4306ab18c1e91d03be97538a8a69c8d4">psy::C::SyntaxToken</a>
@@ -98,7 +99,7 @@ $(function() {
 : <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#aed99e2976593956da7893a30c372945e">psy::C::SyntaxToken</a>
 </li>
 <li>isConstQualified()
-: <a class="el" href="classpsy_1_1_c_1_1_type.html#a9da45fce7cd3c28430a7797f65c0d601">psy::C::Type</a>
+: <a class="el" href="classpsy_1_1_c_1_1_qualified_type.html#abe41bd95a4a943421c8df9afeec3bd0a">psy::C::QualifiedType</a>
 </li>
 <li>isEnabled_CPP_nullptr()
 : <a class="el" href="classpsy_1_1_c_1_1_language_extensions.html#a14a9d2bc03786b762be4cd443dffa677">psy::C::LanguageExtensions</a>
@@ -195,13 +196,13 @@ $(function() {
 : <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a6710fcca104c5660ad7dea57243b4a60">psy::C::SyntaxToken</a>
 </li>
 <li>isRestrictQualified()
-: <a class="el" href="classpsy_1_1_c_1_1_type.html#a004ac9a004d488a81b56bf576fd370c2">psy::C::Type</a>
+: <a class="el" href="classpsy_1_1_c_1_1_qualified_type.html#a77311576b78711b1374eae5462d7133e">psy::C::QualifiedType</a>
 </li>
 <li>isValid()
 : <a class="el" href="classpsy_1_1_c_1_1_syntax_token.html#a6f13d49e5c66ee6d6ddb2ff5cc3a711c">psy::C::SyntaxToken</a>
 </li>
 <li>isVolatileQualified()
-: <a class="el" href="classpsy_1_1_c_1_1_type.html#ad935ac860ec7e1184c4394d793ee6b31">psy::C::Type</a>
+: <a class="el" href="classpsy_1_1_c_1_1_qualified_type.html#a5abfc4785272e87a79323f37f9bd0e5e">psy::C::QualifiedType</a>
 </li>
 </ul>
 </div><!-- contents -->

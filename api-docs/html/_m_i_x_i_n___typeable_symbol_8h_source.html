@@ -109,19 +109,22 @@ $(function() {
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;PSY_INTERNAL:</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_binder.html">Binder</a>);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">static</span> <a class="code" href="classpsy_1_1_c_1_1_m_i_x_i_n___typeable_symbol.html">MIXIN_TypeableSymbol</a>* from(<a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>*);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> setType(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type.html">Type</a>* ty) = 0;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;};</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;} <span class="comment">// C</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;} <span class="comment">// psy</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    PSY_GRANT_INTERNAL_ACCESS(<a class="code" href="classpsy_1_1_c_1_1_type_resolver.html">TypeResolver</a>);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">static</span> <a class="code" href="classpsy_1_1_c_1_1_m_i_x_i_n___typeable_symbol.html">MIXIN_TypeableSymbol</a>* from(<a class="code" href="classpsy_1_1_c_1_1_symbol.html">Symbol</a>*);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> setType(<span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type.html">Type</a>* ty) = 0;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classpsy_1_1_c_1_1_type.html">Type</a>* retypeableType() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;};</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;} <span class="comment">// C</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;} <span class="comment">// psy</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasspsy_1_1_c_1_1_type_resolver_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type_resolver.html">psy::C::TypeResolver</a></div><div class="ttdef"><b>Definition:</b> TypeResolver.h:35</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_symbol.html">psy::C::Symbol</a></div><div class="ttdoc">The Symbol class.</div><div class="ttdef"><b>Definition:</b> Symbol.h:48</div></div>
-<div class="ttc" id="aclasspsy_1_1_c_1_1_type_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type.html">psy::C::Type</a></div><div class="ttdoc">The Type class.</div><div class="ttdef"><b>Definition:</b> Type.h:45</div></div>
+<div class="ttc" id="aclasspsy_1_1_c_1_1_type_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_type.html">psy::C::Type</a></div><div class="ttdoc">The Type class.</div><div class="ttdef"><b>Definition:</b> Type.h:44</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_m_i_x_i_n___typeable_symbol_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_m_i_x_i_n___typeable_symbol.html">psy::C::MIXIN_TypeableSymbol</a></div><div class="ttdef"><b>Definition:</b> MIXIN_TypeableSymbol.h:35</div></div>
 <div class="ttc" id="aclasspsy_1_1_c_1_1_binder_html"><div class="ttname"><a href="classpsy_1_1_c_1_1_binder.html">psy::C::Binder</a></div><div class="ttdoc">The Binder class.</div><div class="ttdef"><b>Definition:</b> Binder.h:50</div></div>
 <!-- start footer part -->

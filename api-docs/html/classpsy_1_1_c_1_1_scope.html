@@ -82,14 +82,55 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a10dc8ce5e1a088607f1c1f95025dadb4"><td class="memItemLeft" align="right" valign="top">ScopeKind&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_scope.html#a10dc8ce5e1a088607f1c1f95025dadb4">kind</a> () const</td></tr>
 <tr class="separator:a10dc8ce5e1a088607f1c1f95025dadb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d07846779389c8eeb47c09de0b3ebde"><td class="memItemLeft" align="right" valign="top"><a id="a6d07846779389c8eeb47c09de0b3ebde"></a>
-const <a class="el" href="classpsy_1_1_c_1_1_declaration_symbol.html">DeclarationSymbol</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>searchForDeclaration</b> (const <a class="el" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a> *ident, NameSpace ns) const</td></tr>
-<tr class="separator:a6d07846779389c8eeb47c09de0b3ebde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae96fc21ddfcbfd6477ec8d3805ceeacc"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_declaration.html">Declaration</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_scope.html#ae96fc21ddfcbfd6477ec8d3805ceeacc">searchForDeclaration</a> (const <a class="el" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a> *ident, NameSpace ns) const</td></tr>
+<tr class="separator:ae96fc21ddfcbfd6477ec8d3805ceeacc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad16b19afd7cc7c254a87f88c8c831e91"><td class="memItemLeft" align="right" valign="top">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_declaration.html">Declaration</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_scope.html#ad16b19afd7cc7c254a87f88c8c831e91">declarations</a> () const</td></tr>
+<tr class="separator:ad16b19afd7cc7c254a87f88c8c831e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaa99255693dd7647b8bd9a8d384cce2"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_scope.html#acaa99255693dd7647b8bd9a8d384cce2">innerScopes</a> () const</td></tr>
+<tr class="separator:acaa99255693dd7647b8bd9a8d384cce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add33091861e48012fa4fbf5539be5b8b"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpsy_1_1_c_1_1_scope.html#add33091861e48012fa4fbf5539be5b8b">outerScope</a> () const</td></tr>
+<tr class="separator:add33091861e48012fa4fbf5539be5b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classpsy_1_1_c_1_1_scope.html" title="The Scope class.">Scope</a> class. </p>
 <dl class="section remark"><dt>Remarks</dt><dd>6.2.1 </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad16b19afd7cc7c254a87f88c8c831e91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad16b19afd7cc7c254a87f88c8c831e91">&#9670;&nbsp;</a></span>declarations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_declaration.html">Declaration</a> * &gt; Scope::declarations </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The Declaration(s) in <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_scope.html" title="The Scope class.">Scope</a>. </p>
+
+</div>
+</div>
+<a id="acaa99255693dd7647b8bd9a8d384cce2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acaa99255693dd7647b8bd9a8d384cce2">&#9670;&nbsp;</a></span>innerScopes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt; const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> * &gt; Scope::innerScopes </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <em>inner</em> <em>scopes</em> of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_scope.html" title="The Scope class.">Scope</a>. </p>
+
+</div>
+</div>
 <a id="a10dc8ce5e1a088607f1c1f95025dadb4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a10dc8ce5e1a088607f1c1f95025dadb4">&#9670;&nbsp;</a></span>kind()</h2>
 
@@ -105,6 +146,53 @@ const <a class="el" href="classpsy_1_1_c_1_1_declaration_symbol.html">Declaratio
       </table>
 </div><div class="memdoc">
 <p>The ScopeKind of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_scope.html" title="The Scope class.">Scope</a>. </p>
+
+</div>
+</div>
+<a id="add33091861e48012fa4fbf5539be5b8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add33091861e48012fa4fbf5539be5b8b">&#9670;&nbsp;</a></span>outerScope()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_scope.html">Scope</a> * Scope::outerScope </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The <em>outer</em> <em>scope</em> of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_scope.html" title="The Scope class.">Scope</a>. </p>
+
+</div>
+</div>
+<a id="ae96fc21ddfcbfd6477ec8d3805ceeacc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae96fc21ddfcbfd6477ec8d3805ceeacc">&#9670;&nbsp;</a></span>searchForDeclaration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classpsy_1_1_c_1_1_declaration.html">Declaration</a> * Scope::searchForDeclaration </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classpsy_1_1_c_1_1_identifier.html">Identifier</a> *&#160;</td>
+          <td class="paramname"><em>ident</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">NameSpace&#160;</td>
+          <td class="paramname"><em>ns</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Search <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_scope.html" title="The Scope class.">Scope</a> and <em>outer</em> <em>scopes</em> of <code>this</code> <a class="el" href="classpsy_1_1_c_1_1_scope.html" title="The Scope class.">Scope</a> for a <a class="el" href="classpsy_1_1_c_1_1_declaration.html">Declaration</a> with <a class="el" href="classpsy_1_1_c_1_1_identifier.html" title="The Identifier class.">Identifier</a> <code>ident</code> in NameSpace <code>ns</code>. </p>
 
 </div>
 </div>

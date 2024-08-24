@@ -1,13 +1,23 @@
 var searchData=
 [
-  ['declarationof_748',['declarationOf',['../classpsy_1_1_c_1_1_semantic_model.html#ad3b1785891d752982cc7742695983a6c',1,'psy::C::SemanticModel::declarationOf(const FunctionDefinitionSyntax *node) const'],['../classpsy_1_1_c_1_1_semantic_model.html#a02b71ed8b284171ff035b728957b7ef1',1,'psy::C::SemanticModel::declarationOf(const ParameterDeclarationSyntax *node) const'],['../classpsy_1_1_c_1_1_semantic_model.html#abd9677fa56894e30b4b4375c84e5b69d',1,'psy::C::SemanticModel::declarationOf(const TypeDeclarationSyntax *node) const'],['../classpsy_1_1_c_1_1_semantic_model.html#a62c9d9a222034c6e4f1dca309861052e',1,'psy::C::SemanticModel::declarationOf(const EnumeratorDeclarationSyntax *node) const'],['../classpsy_1_1_c_1_1_semantic_model.html#acb45f54834f5f29eb138a939ecb87c55',1,'psy::C::SemanticModel::declarationOf(const DeclaratorSyntax *node) const']]],
-  ['declarationsof_749',['declarationsOf',['../classpsy_1_1_c_1_1_semantic_model.html#aa9b2ccebb6708863cb232ebc43fe19c0',1,'psy::C::SemanticModel::declarationsOf(const FieldDeclarationSyntax *node) const'],['../classpsy_1_1_c_1_1_semantic_model.html#a7cf08c4ea097dcfaeeda473b394ffbe7',1,'psy::C::SemanticModel::declarationsOf(const VariableAndOrFunctionDeclarationSyntax *node) const']]],
-  ['declaringsyntaxreferences_750',['declaringSyntaxReferences',['../classpsy_1_1_c_1_1_declaration_symbol.html#ac910789cc7fc13db9b2f44f3b2c3b295',1,'psy::C::DeclarationSymbol']]],
-  ['defaultseverity_751',['defaultSeverity',['../classpsy_1_1_diagnostic_descriptor.html#a73c662916b43a071c32793396c7c8fcf',1,'psy::DiagnosticDescriptor']]],
-  ['defined_5fmacros_752',['defined_macros',['../class_python_1_1_c_compiler_facade_1_1_c_compiler_facade.html#a9a8e617ddf1f46d7352213205c18fd38',1,'Python::CCompilerFacade::CCompilerFacade']]],
-  ['description_753',['description',['../classpsy_1_1_diagnostic_descriptor.html#aeb86e3e2fc91ff739116129214cc4bc7',1,'psy::DiagnosticDescriptor']]],
-  ['descriptor_754',['descriptor',['../classpsy_1_1_diagnostic.html#a70daf8dbe50246a031e0a4304397f9cc',1,'psy::Diagnostic']]],
-  ['diagnostics_755',['diagnostics',['../classpsy_1_1_c_1_1_syntax_tree.html#af8aacc354296633c7aa937c6b111fd99',1,'psy::C::SyntaxTree']]],
-  ['dir_756',['dir',['../classpsy_1_1_file_info.html#ab369ea480fd1f5d58d77f5c72ee53d60',1,'psy::FileInfo']]],
-  ['dirseparator_757',['dirSeparator',['../classpsy_1_1_file_info.html#a876c090219a8e0409bc49fb0bd722160',1,'psy::FileInfo']]]
+  ['declarations_777',['declarations',['../classpsy_1_1_c_1_1_scope.html#ad16b19afd7cc7c254a87f88c8c831e91',1,'psy::C::Scope']]],
+  ['declareddeclaration_778',['declaredDeclaration',['../classpsy_1_1_c_1_1_semantic_model.html#abf3b734220f2f6fcaa6c86d1c5f081a9',1,'psy::C::SemanticModel']]],
+  ['declareddeclarations_779',['declaredDeclarations',['../classpsy_1_1_c_1_1_semantic_model.html#a8ace10a15ccbfa6ede5a1a2146e03fdf',1,'psy::C::SemanticModel']]],
+  ['declaredenum_780',['declaredEnum',['../classpsy_1_1_c_1_1_semantic_model.html#a6a8411fc1f77b8e89ed069ec892399f2',1,'psy::C::SemanticModel']]],
+  ['declaredenumerator_781',['declaredEnumerator',['../classpsy_1_1_c_1_1_semantic_model.html#ace53682b9ff675b4664211a745ee46e1',1,'psy::C::SemanticModel']]],
+  ['declaredfields_782',['declaredFields',['../classpsy_1_1_c_1_1_semantic_model.html#aba2740c892945e4416f59146e23da17e',1,'psy::C::SemanticModel']]],
+  ['declaredfunction_783',['declaredFunction',['../classpsy_1_1_c_1_1_semantic_model.html#a9fb8dfc0675527bca0d435223038a22c',1,'psy::C::SemanticModel']]],
+  ['declaredparameter_784',['declaredParameter',['../classpsy_1_1_c_1_1_semantic_model.html#a5a98f7718c2de9981369713f1ea31c81',1,'psy::C::SemanticModel']]],
+  ['declaredstruct_785',['declaredStruct',['../classpsy_1_1_c_1_1_semantic_model.html#a72399c523aba7f288c7dfe9052b7c42d',1,'psy::C::SemanticModel']]],
+  ['declaredtypedeclaration_786',['declaredTypeDeclaration',['../classpsy_1_1_c_1_1_semantic_model.html#abcf384f2ee91993b9669fc848695f781',1,'psy::C::SemanticModel']]],
+  ['declaredunion_787',['declaredUnion',['../classpsy_1_1_c_1_1_semantic_model.html#a5ae07bf12c64311e588d603c3a2b3f8e',1,'psy::C::SemanticModel']]],
+  ['declaringsyntaxreferences_788',['declaringSyntaxReferences',['../classpsy_1_1_c_1_1_declaration.html#ac96e0c2d89040dd73195786fc11dafb9',1,'psy::C::Declaration']]],
+  ['defaultseverity_789',['defaultSeverity',['../classpsy_1_1_diagnostic_descriptor.html#a73c662916b43a071c32793396c7c8fcf',1,'psy::DiagnosticDescriptor']]],
+  ['defined_5fmacros_790',['defined_macros',['../class_python_1_1_c_compiler_facade_1_1_c_compiler_facade.html#a9a8e617ddf1f46d7352213205c18fd38',1,'Python::CCompilerFacade::CCompilerFacade']]],
+  ['definedtype_791',['definedType',['../classpsy_1_1_c_1_1_typedef.html#acff54e87de5a64236bd5b0af84164bd2',1,'psy::C::Typedef']]],
+  ['description_792',['description',['../classpsy_1_1_diagnostic_descriptor.html#aeb86e3e2fc91ff739116129214cc4bc7',1,'psy::DiagnosticDescriptor']]],
+  ['descriptor_793',['descriptor',['../classpsy_1_1_diagnostic.html#a70daf8dbe50246a031e0a4304397f9cc',1,'psy::Diagnostic']]],
+  ['diagnostics_794',['diagnostics',['../classpsy_1_1_c_1_1_syntax_tree.html#af8aacc354296633c7aa937c6b111fd99',1,'psy::C::SyntaxTree']]],
+  ['dir_795',['dir',['../classpsy_1_1_file_info.html#ab369ea480fd1f5d58d77f5c72ee53d60',1,'psy::FileInfo']]],
+  ['dirseparator_796',['dirSeparator',['../classpsy_1_1_file_info.html#a876c090219a8e0409bc49fb0bd722160',1,'psy::FileInfo']]]
 ];

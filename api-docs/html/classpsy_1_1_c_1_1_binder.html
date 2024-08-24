@@ -90,14 +90,14 @@ Inheritance diagram for psy::C::Binder:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a91aafb7d737b0a6edd7eeab767f0d1dd"><td class="memTemplParams" colspan="2"><a id="a91aafb7d737b0a6edd7eeab767f0d1dd"></a>
+<tr class="memitem:ac7c3d20244bab1d401959ddcaff120e7"><td class="memTemplParams" colspan="2"><a id="ac7c3d20244bab1d401959ddcaff120e7"></a>
 template&lt;class DeclT &gt; </td></tr>
-<tr class="memitem:a91aafb7d737b0a6edd7eeab767f0d1dd"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">SyntaxVisitor::Action</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitDeclaration_AtDeclarators_COMMON</b> (const DeclT *node, <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>(Binder::*visit_AtEnd)(const DeclT *))</td></tr>
-<tr class="separator:a91aafb7d737b0a6edd7eeab767f0d1dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0a3bfea49f02918f70193cc5e7d8f1a"><td class="memTemplParams" colspan="2"><a id="ab0a3bfea49f02918f70193cc5e7d8f1a"></a>
+<tr class="memitem:ac7c3d20244bab1d401959ddcaff120e7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">SyntaxVisitor::Action</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitDeclaration_AtMultipleDeclarators_COMMON</b> (const DeclT *node, <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>(Binder::*visit_AtEnd)(const DeclT *))</td></tr>
+<tr class="separator:ac7c3d20244bab1d401959ddcaff120e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33b892f6191f4aa967a0a7da921f7bbd"><td class="memTemplParams" colspan="2"><a id="a33b892f6191f4aa967a0a7da921f7bbd"></a>
 template&lt;class TyDeclT &gt; </td></tr>
-<tr class="memitem:ab0a3bfea49f02918f70193cc5e7d8f1a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">SyntaxVisitor::Action</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitTypeDeclaration_AtInternalDeclarations_COMMON</b> (const TyDeclT *node, <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>(Binder::*visit_AtEnd)(const TyDeclT *))</td></tr>
-<tr class="separator:ab0a3bfea49f02918f70193cc5e7d8f1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33b892f6191f4aa967a0a7da921f7bbd"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">SyntaxVisitor::Action</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitTagDeclaration_AtInternalDeclarations_COMMON</b> (const TyDeclT *node, <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>(Binder::*visit_AtEnd)(const TyDeclT *))</td></tr>
+<tr class="separator:a33b892f6191f4aa967a0a7da921f7bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e4093dc0b69633e4a662aabd8397b43"><td class="memTemplParams" colspan="2"><a id="a1e4093dc0b69633e4a662aabd8397b43"></a>
 template&lt;class DeclT &gt; </td></tr>
 <tr class="memitem:a1e4093dc0b69633e4a662aabd8397b43"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">SyntaxVisitor::Action</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitDeclaration_AtSpecifiers_COMMON</b> (const DeclT *node, <a class="el" href="classpsy_1_1_c_1_1_syntax_visitor.html#a557d7f8aa9b5ad0155e4e2b8d3fd3d16">Action</a>(Binder::*visit_AtDeclarators)(const DeclT *))</td></tr>
@@ -333,6 +333,7 @@ const <a class="el" href="classpsy_1_1_c_1_1_syntax_tree.html">SyntaxTree</a> *&
 <li>C/binder/<a class="el" href="_binder_8h_source.html">Binder.h</a></li>
 <li>C/binder/Binder.cpp</li>
 <li>C/binder/Binder_Declarators.cpp</li>
+<li>C/binder/Binder_End.cpp</li>
 <li>C/binder/Binder_Specifiers.cpp</li>
 </ul>
 </div><!-- contents -->
