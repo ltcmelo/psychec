@@ -8,13 +8,12 @@ C language (draft) proposal [Enabling Generic Functions and Parametric Types in 
 
 # Psyche-C
 
-Psyche-C is a compiler frontend for the C language, designed as a library that can be used to implement static analysis tools for C.  
+Psyche-C is a compiler frontend for the C language, designed as a library that can be used to implement static analysis tools for C.
 Bellow are the main characteristics of Psyche-C:
 
 - Clean separation between the syntactic and semantic compiler phases.
 - Algorithmic and heuristic syntax disambiguation.
-- Optional type inference for missing `struct`, `union`, `enum`, and `typedef`.
-  (i.e., tolerance against `#include` failures).
+- Optional type inference for missing `struct`, `union`, `enum`, and `typedef` (due to `#include` failures).
 - API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn) and [LLVM's Clang frontend](https://clang.llvm.org/).
 
 ## Library and API
@@ -57,7 +56,7 @@ SyntaxVisitor::Action AnalysisVisitor::visitFunctionDefinition(const FunctionDef
 
 ## The *cnippet* Driver
 
-Psyche-C comes with the *cnippet* driver and it can be used as an ordinary parser for C snippets.  
+Psyche-C comes with the *cnippet* driver and it can be used as an ordinary parser for C snippets.
 For instance, if you compile the snippet below with *cnippet*, you'll see a diagnostic similar to the one you'd see with GCC or Clang.
 
 ```c
@@ -77,7 +76,7 @@ int ;
 
 ## Type Inference
 
-Psyche-C can optionally (only available in the [original branch](https://github.com/ltcmelo/psychec/tree/original)) infer the missing types of a C snippet.  
+Psyche-C can optionally (only available in the [original branch](https://github.com/ltcmelo/psychec/tree/original)) infer the missing types of a C snippet.
 For instance, for the snippet below, Psyche-C can infer a (compilable) declaration for `T` an synthesize it during compilation.
 
 ```c
