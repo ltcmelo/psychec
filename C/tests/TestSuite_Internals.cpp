@@ -626,7 +626,7 @@ bool functionMatchesBinding(const Function* funcDecl, const Decl& decl)
 
 bool valueMatchesBinding(const ObjectDeclaration* objDecl, const Decl& decl)
 {
-    if (objDecl->kind() != decl.objDeclSymK_)
+    if (objDecl->kind() != decl.objDeclK_)
         return REJECT_CANDIDATE(objDecl, "value kind mismatch");
 
     if (!objDecl->name())
@@ -646,10 +646,10 @@ bool valueMatchesBinding(const ObjectDeclaration* objDecl, const Decl& decl)
 
 bool typeMatchesBinding(const TypeDeclaration* tyDecl, const Decl& decl)
 {
-    if (tyDecl->kind() != decl.tyDeclSymK_)
+    if (tyDecl->kind() != decl.tyDeclK_)
         return REJECT_CANDIDATE(tyDecl, "type decl kind mismatch");
 
-    switch (decl.tyDeclSymK_) {
+    switch (decl.tyDeclK_) {
         case TypeDeclarationKind::Tag: {
             if (tyDecl->kind() != TypeDeclarationKind::Tag)
                 return REJECT_CANDIDATE(tyDecl, "not a tag type");
@@ -710,7 +710,7 @@ bool typeMatchesBinding(const TypeDeclaration* tyDecl, const Decl& decl)
 
 bool symbolMatchesBinding(const Declaration* declSym, const Decl& decl)
 {
-    if (declSym->kind() != decl.declSymK_)
+    if (declSym->kind() != decl.declK_)
         return REJECT_CANDIDATE(declSym, "symbol kind mismatch");
 
     if (declSym->enclosingScope()->kind() != decl.scopeK_)
@@ -719,7 +719,7 @@ bool symbolMatchesBinding(const Declaration* declSym, const Decl& decl)
     if (declSym->nameSpace() != decl.ns_)
         return REJECT_CANDIDATE(declSym, "name space kind mismatch");
 
-    switch (decl.declSymK_)
+    switch (decl.declK_)
     {
         case DeclarationKind::Object:
             return valueMatchesBinding(declSym->asObjectDeclaration(), decl);
@@ -761,7 +761,7 @@ void InternalsTestSuite::matchDeclarations(
             std::ostringstream oss;
             oss << "no declaration matches the expectation: ";
             oss << " identifier: " << Decl.ident_;
-            oss << " kind: " << to_string(Decl.declSymK_);
+            oss << " kind: " << to_string(Decl.declK_);
             PSY__internals__FAIL(oss.str());
         }
 #ifdef DBG_BINDING_SEARCH
@@ -793,7 +793,7 @@ void InternalsTestSuite::checkSemanticModel(
             std::ostringstream oss;
             oss << "no declaration matches the expectation: ";
             oss << " identifier: " << Decl.ident_;
-            oss << " kind: " << to_string(Decl.declSymK_);
+            oss << " kind: " << to_string(Decl.declK_);
             PSY__internals__FAIL(oss.str());
         }
 #ifdef DBG_BINDING_SEARCH

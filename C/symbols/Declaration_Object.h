@@ -101,7 +101,7 @@ protected:
     ObjectDeclaration(const SyntaxTree* tree,
                             const Symbol* containingSym,
                             const Scope* enclosingScope,
-                            ObjectDeclarationKind objDeclSymK);
+                            ObjectDeclarationKind objDeclK);
 };
 
 std::string PSY_C_API to_string(const ObjectDeclaration& sym);

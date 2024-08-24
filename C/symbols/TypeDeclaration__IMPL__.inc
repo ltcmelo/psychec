@@ -61,7 +61,7 @@ struct TypeDeclaration::TypeDeclarationImpl : SymbolImpl
                      SymbolKind::Declaration)
         , ty_(ty)
     {
-        BF_.tyDeclSymK_ = static_cast<std::uint32_t>(tyDeclK);
+        BF_.tyDeclK_ = static_cast<std::uint32_t>(tyDeclK);
     }
 
     Type* ty_;

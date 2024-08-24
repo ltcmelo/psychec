@@ -36,7 +36,7 @@ TypeDeclaration::~TypeDeclaration()
 
 TypeDeclarationKind TypeDeclaration::kind() const
 {
-    return TypeDeclarationKind(P_CAST->BF_.tyDeclSymK_);
+    return TypeDeclarationKind(P_CAST->BF_.tyDeclK_);
 }
 
 namespace psy {

@@ -33,7 +33,7 @@ struct ObjectDeclaration::ObjectDeclarationImpl : SymbolImpl
     ObjectDeclarationImpl(const SyntaxTree* tree,
                                 const Symbol* containingSym,
                                 const Scope* enclosingScope,
-                                ObjectDeclarationKind objDeclSymK)
+                                ObjectDeclarationKind objDeclK)
         : SymbolImpl(tree,
                      containingSym,
                      enclosingScope,
@@ -42,7 +42,7 @@ struct ObjectDeclaration::ObjectDeclarationImpl : SymbolImpl
         , name_(nullptr)
         , ty_(nullptr)
     {
-        BF_.objDeclSymK_ = static_cast<std::uint32_t>(objDeclSymK);
+        BF_.objDeclK_ = static_cast<std::uint32_t>(objDeclK);
     }
 
     const Identifier* name_;
@@ -52,12 +52,12 @@ struct ObjectDeclaration::ObjectDeclarationImpl : SymbolImpl
 ObjectDeclaration::ObjectDeclaration(const SyntaxTree* tree,
                                                  const Symbol* containingSym,
                                                  const Scope* enclosingScope,
-                                                 ObjectDeclarationKind objDeclSymK)
+                                                 ObjectDeclarationKind objDeclK)
     : Declaration(
           new ObjectDeclarationImpl(tree,
                                           containingSym,
                                           enclosingScope,
-                                          objDeclSymK),
+                                          objDeclK),
           DeclarationKind::Object)
 {}
 
@@ -66,7 +66,7 @@ ObjectDeclaration::~ObjectDeclaration()
 
 ObjectDeclarationKind ObjectDeclaration::kind() const
 {
-    return ObjectDeclarationKind(P_CAST->BF_.objDeclSymK_);
+    return ObjectDeclarationKind(P_CAST->BF_.objDeclK_);
 }
 
 const Type* ObjectDeclaration::type() const

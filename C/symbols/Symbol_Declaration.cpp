@@ -35,15 +35,15 @@
 using namespace psy;
 using namespace C;
 
-Declaration::Declaration(SymbolImpl* p, DeclarationKind declSymK)
+Declaration::Declaration(SymbolImpl* p, DeclarationKind declK)
     : Symbol(p)
 {
-    P->BF_.declSymK_ = static_cast<std::uint32_t>(declSymK);
+    P->BF_.declK_ = static_cast<std::uint32_t>(declK);
 }
 
 DeclarationKind Declaration::kind() const
 {
-    return DeclarationKind(P->BF_.declSymK_);
+    return DeclarationKind(P->BF_.declK_);
 }
 
 const Scope* Declaration::enclosingScope() const

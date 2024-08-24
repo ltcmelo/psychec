@@ -96,7 +96,7 @@ struct Decl
     Decl();
 
     Decl& Object(std::string name,
-                 ObjectDeclarationKind objDeclSymK,
+                 ObjectDeclarationKind objDeclK,
                  ScopeKind scopeK = ScopeKind::File);
     Decl& Function(std::string name, ScopeKind scopeK = ScopeKind::File);
     Decl& Type(std::string typedefName);
@@ -105,9 +105,9 @@ struct Decl
     Decl& inNameSpace(NameSpace ns);
 
     std::string ident_;
-    DeclarationKind declSymK_;
-    ObjectDeclarationKind objDeclSymK_;
-    TypeDeclarationKind tyDeclSymK_;
+    DeclarationKind declK_;
+    ObjectDeclarationKind objDeclK_;
+    TypeDeclarationKind tyDeclK_;
     TagTypeDeclarationKind tagTyDeclK_;
     ScopeKind scopeK_;
     NameSpace ns_;

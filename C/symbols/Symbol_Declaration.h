@@ -80,17 +80,17 @@ public:
     const NameSpace nameSpace() const;
 
     /**
-     * References to the SyntaxNodes that \a declare \c this Symbol.
+     * References to the SyntaxNodes that \a declare \c this Declaration.
      */
     std::vector<SyntaxReference> declaringSyntaxReferences() const;
 
     /**
-     * The Location of \c this Symbol.
+     * The Location of \c this Declaration.
      */
     Location location() const;
 
 protected:
-    Declaration(SymbolImpl* p, DeclarationKind declSymK);
+    Declaration(SymbolImpl* p, DeclarationKind declK);
     Declaration(const Declaration&) = delete;
     Declaration& operator=(const Declaration&) = delete;
 };

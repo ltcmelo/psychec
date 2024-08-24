@@ -70,14 +70,14 @@ struct Symbol::SymbolImpl
         std::uint32_t ns_ : 2;
 
         // Declaration
-        std::uint32_t declSymK_: 2;
+        std::uint32_t declK_: 2;
         std::uint32_t static_ : 1;
 
         // ObjectDeclaration
-        std::uint32_t objDeclSymK_ : 3;
+        std::uint32_t objDeclK_ : 3;
 
         // TypeDeclaration
-        std::uint32_t tyDeclSymK_ : 3;
+        std::uint32_t tyDeclK_ : 3;
 
         // TagTypeDeclaration
         std::uint32_t tagTyDeclK_ : 2;

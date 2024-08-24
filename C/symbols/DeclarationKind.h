@@ -40,9 +40,9 @@ enum class PSY_C_API DeclarationKind : std::uint8_t
     Type
 };
 
-inline std::string PSY_C_API to_string(DeclarationKind declSymK)
+inline std::string PSY_C_API to_string(DeclarationKind declK)
 {
-    switch (declSymK) {
+    switch (declK) {
         case DeclarationKind::Function:
             return "Function";
         case DeclarationKind::Object:

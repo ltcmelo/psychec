@@ -102,11 +102,11 @@ Decl::Decl()
     : ty_(*this)
 {}
 
-Decl& Decl::Object(std::string name, ObjectDeclarationKind objDeclSymK, ScopeKind scopeK)
+Decl& Decl::Object(std::string name, ObjectDeclarationKind objDeclK, ScopeKind scopeK)
 {
     ident_ = std::move(name);
-    declSymK_ = DeclarationKind::Object;
-    objDeclSymK_ = objDeclSymK;
+    declK_ = DeclarationKind::Object;
+    objDeclK_ = objDeclK;
     scopeK_ = scopeK;
     ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;
@@ -115,16 +115,16 @@ Decl& Decl::Object(std::string name, ObjectDeclarationKind objDeclSymK, ScopeKin
 Decl& Decl::Type(std::string typedefName)
 {
     ident_ = std::move(typedefName);
-    declSymK_ = DeclarationKind::Type;
-    tyDeclSymK_ = TypeDeclarationKind::Typedef;
+    declK_ = DeclarationKind::Type;
+    tyDeclK_ = TypeDeclarationKind::Typedef;
     return *this;
 }
 
 Decl& Decl::Type(std::string tag, TagTypeDeclarationKind tagTyDeclK)
 {
     ident_ = std::move(tag);
-    declSymK_ = DeclarationKind::Type;
-    tyDeclSymK_ = TypeDeclarationKind::Tag;
+    declK_ = DeclarationKind::Type;
+    tyDeclK_ = TypeDeclarationKind::Tag;
     tagTyDeclK_ = tagTyDeclK;
     return *this;
 }
@@ -132,7 +132,7 @@ Decl& Decl::Type(std::string tag, TagTypeDeclarationKind tagTyDeclK)
 Decl& Decl::Function(std::string name, ScopeKind scopeK)
 {
     ident_ = std::move(name);
-    declSymK_ = DeclarationKind::Function;
+    declK_ = DeclarationKind::Function;
     scopeK_ = scopeK;
     ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;
