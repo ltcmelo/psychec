@@ -18,48 +18,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_FIELD_OBJECT_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_FIELD_OBJECT_DECLARATION_SYMBOL_H__
+#include "TypeDeclaration__IMPL__.inc"
+#include "TagTypeDeclaration_Enum.h"
 
-#include "DeclarationSymbol_Object.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_Tag.h"
+
+#include <iostream>
+#include <sstream>
+
+using namespace psy;
+using namespace C;
+
+Enum::Enum(const SyntaxTree* tree,
+           const Symbol* containingSym,
+           const Scope* enclosingScope,
+           TagType* tagTy)
+    : TagTypeDeclaration(tree,
+                         containingSym,
+                         enclosingScope,
+                         tagTy,
+                         TagTypeDeclarationKind::Enum)
+{
+}
+
+std::string Enum::toDisplayString() const
+{
+    std::ostringstream oss;
+    oss << "enum ";
+    oss << P_CAST->ty_->asTagType()->tag()->valueText();
+    return oss.str();
+}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The Field class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IField
- * from Roslyn, the .NET Compiler Platform.
- */
-class PSY_C_API Field final : public ObjectDeclarationSymbol
+std::string to_string(const Enum& enun)
 {
-public:
-    //!@{
-    /**
-     * Cast \c this ObjectDeclarationSymbol as a Field.
-     */
-    virtual Field* asField() override { return this; }
-    virtual const Field* asField() const override { return this; }
-    //!@}
-
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const override;
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
-
-    Field(const SyntaxTree* tree,
-          const Symbol* containingSym,
-          const Scope* enclosingScope);
-};
-
-std::string PSY_C_API to_string(const Field& fld);
+    std::ostringstream oss;
+    oss << "<Enum | ";
+    oss << "type:" << to_string(*enun.specifiedType());
+    oss << ">";
+    return oss.str();
+}
 
 } // C
 } // psy
-
-#endif

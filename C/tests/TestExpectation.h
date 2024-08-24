@@ -25,10 +25,10 @@
 #include "binder/NameSpace.h"
 #include "binder/Scope.h"
 #include "symbols/SymbolKind.h"
-#include "symbols/DeclarationSymbolKind.h"
-#include "symbols/TagTypeDeclarationSymbolKind.h"
-#include "symbols/TypeDeclarationSymbolKind.h"
-#include "symbols/ObjectDeclarationSymbolKind.h"
+#include "symbols/DeclarationKind.h"
+#include "symbols/TagTypeDeclarationKind.h"
+#include "symbols/TypeDeclarationKind.h"
+#include "symbols/ObjectDeclarationKind.h"
 #include "tests/TestSuite.h"
 #include "types/Type_ALL.h"
 
@@ -96,19 +96,19 @@ struct Decl
     Decl();
 
     Decl& Object(std::string name,
-                 ObjectDeclarationSymbolKind objDeclSymK,
+                 ObjectDeclarationKind objDeclSymK,
                  ScopeKind scopeK = ScopeKind::File);
     Decl& Function(std::string name, ScopeKind scopeK = ScopeKind::File);
     Decl& Type(std::string typedefName);
-    Decl& Type(std::string tag, TagTypeDeclarationSymbolKind tagTyDeclK);
+    Decl& Type(std::string tag, TagTypeDeclarationKind tagTyDeclK);
     Decl& withScopeKind(ScopeKind scopeK);
     Decl& inNameSpace(NameSpace ns);
 
     std::string ident_;
-    DeclarationSymbolKind declSymK_;
-    ObjectDeclarationSymbolKind objDeclSymK_;
-    TypeDeclarationSymbolKind tyDeclSymK_;
-    TagTypeDeclarationSymbolKind tagTyDeclK_;
+    DeclarationKind declSymK_;
+    ObjectDeclarationKind objDeclSymK_;
+    TypeDeclarationKind tyDeclSymK_;
+    TagTypeDeclarationKind tagTyDeclK_;
     ScopeKind scopeK_;
     NameSpace ns_;
     Ty ty_;

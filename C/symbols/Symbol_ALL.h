@@ -21,17 +21,17 @@
 #ifndef PSYCHE_C_SYMBOL_ALL_H__
 #define PSYCHE_C_SYMBOL_ALL_H__
 
-#include "Symbol_Declaration.h"
-#include "DeclarationSymbol_Function.h"
 #include "Symbol_Program.h"
 #include "Symbol_TranslationUnit.h"
-#include "TypeDeclarationSymbol_Struct.h"
-#include "TypeDeclarationSymbol_Union.h"
-#include "TypeDeclarationSymbol_Enum.h"
-#include "TypeDeclarationSymbol_Typedef.h"
-#include "ObjectDeclarationSymbol_Enumerator.h"
-#include "ObjectDeclarationSymbol_Field.h"
-#include "ObjectDeclarationSymbol_Parameter.h"
-#include "ObjectDeclarationSymbol_Variable.h"
+#include "Symbol_Declaration.h"
+#include "Declaration_Function.h"
+#include "TagTypeDeclaration_Struct.h"
+#include "TagTypeDeclaration_Union.h"
+#include "TagTypeDeclaration_Enum.h"
+#include "TypeDeclaration_Typedef.h"
+#include "ObjectDeclaration_Enumerator.h"
+#include "ObjectDeclaration_Field.h"
+#include "ObjectDeclaration_Parameter.h"
+#include "ObjectDeclaration_Variable.h"
 
 #endif

@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol__IMPL__.inc"
+#include "TypeDeclaration__IMPL__.inc"
 #include "TypeDeclaration_Tag.h"
 
 #include "symbols/Symbol_ALL.h"
@@ -31,21 +31,21 @@ TagTypeDeclaration::TagTypeDeclaration(const SyntaxTree* tree,
                                        const Symbol* containingSym,
                                        const Scope* enclosingScope,
                                        TagType* tagTy,
-                                       TagTypeDeclarationSymbolKind tagTyDeclK)
-    : TypeDeclarationSymbol(
-          new TypeDeclarationSymbolImpl(tree,
+                                       TagTypeDeclarationKind tagTyDeclK)
+    : TypeDeclaration(
+          new TypeDeclarationImpl(tree,
                                         containingSym,
                                         enclosingScope,
                                         NameSpace::Tags,
                                         tagTy,
-                                        TypeDeclarationSymbolKind::Tag,
+                                        TypeDeclarationKind::Tag,
                                         tagTyDeclK))
 {
 }
 
-TagTypeDeclarationSymbolKind TagTypeDeclaration::kind() const
+TagTypeDeclarationKind TagTypeDeclaration::kind() const
 {
-    return TagTypeDeclarationSymbolKind(P_CAST->BF_.tagTyDeclK_);
+    return TagTypeDeclarationKind(P_CAST->BF_.tagTyDeclK_);
 }
 
 const Identifier* TagTypeDeclaration::identifier() const
@@ -66,11 +66,11 @@ namespace C {
 std::string PSY_C_API to_string(const TagTypeDeclaration& tagTyDecl)
 {
     switch (tagTyDecl.kind()) {
-        case TagTypeDeclarationSymbolKind::Struct:
+        case TagTypeDeclarationKind::Struct:
             return to_string(*tagTyDecl.asStruct());
-        case TagTypeDeclarationSymbolKind::Union:
+        case TagTypeDeclarationKind::Union:
             return to_string(*tagTyDecl.asUnion());
-        case TagTypeDeclarationSymbolKind::Enum:
+        case TagTypeDeclarationKind::Enum:
             return to_string(*tagTyDecl.asEnum());
     }
 }

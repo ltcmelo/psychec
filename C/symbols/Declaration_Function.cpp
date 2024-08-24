@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 #include "Symbol__IMPL__.inc"
-#include "DeclarationSymbol_Function.h"
+#include "Declaration_Function.h"
 
 #include "symbols/Symbol_ALL.h"
 #include "syntax/Lexeme_Identifier.h"
@@ -53,11 +53,11 @@ struct Function::FunctionSymbolImpl : SymbolImpl
 Function::Function(const SyntaxTree* tree,
                    const Symbol* containingSym,
                    const Scope* enclosingScope)
-    : DeclarationSymbol(
+    : Declaration(
           new FunctionSymbolImpl(tree,
                                  containingSym,
                                  enclosingScope),
-          DeclarationSymbolKind::Function)
+          DeclarationKind::Function)
 {}
 
 const Identifier* Function::name() const

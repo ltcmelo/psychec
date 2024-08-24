@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_DECLARATION_SYMBOL_KIND_H__
-#define PSYCHE_C_DECLARATION_SYMBOL_KIND_H__
+#ifndef PSYCHE_C_TAG_TYPE_DECLARATION_KIND_H__
+#define PSYCHE_C_TAG_TYPE_DECLARATION_KIND_H__
 
 #include "API.h"
 #include "Fwds.h"
@@ -31,24 +31,24 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The DeclarationSymbolKind enum.
+ * \brief The TagTypeDeclarationKind enum.
  */
-enum class PSY_C_API DeclarationSymbolKind : std::uint8_t
+enum class PSY_C_API TagTypeDeclarationKind : std::uint8_t
 {
-    Function,
-    Object,
-    Type
+    Struct,
+    Union,
+    Enum,
 };
 
-inline std::string PSY_C_API to_string(DeclarationSymbolKind declSymK)
+inline std::string PSY_C_API to_string(TagTypeDeclarationKind tagTyDeclK)
 {
-    switch (declSymK) {
-        case DeclarationSymbolKind::Function:
-            return "Function";
-        case DeclarationSymbolKind::Object:
-            return "Object";
-        case DeclarationSymbolKind::Type:
-            return "Type";
+    switch (tagTyDeclK) {
+        case TagTypeDeclarationKind::Struct:
+            return "Struct";
+        case TagTypeDeclarationKind::Union:
+            return "Union";
+        case TagTypeDeclarationKind::Enum:
+            return "Enum";
     }
 }
 

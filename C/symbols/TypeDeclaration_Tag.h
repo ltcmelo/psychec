@@ -21,27 +21,27 @@
 #ifndef PSYCHE_C_TAG_TYPE_DECLARATION_H__
 #define PSYCHE_C_TAG_TYPE_DECLARATION_H__
 
-#include "DeclarationSymbol_Type.h"
-#include "TagTypeDeclarationSymbolKind.h"
+#include "Declaration_Type.h"
+#include "TagTypeDeclarationKind.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_API TagTypeDeclaration : public TypeDeclarationSymbol
+class PSY_C_API TagTypeDeclaration : public TypeDeclaration
 {
 public:
     //!@{
     /**
-     * Cast \c this TypeDeclarationSymbol as a TagTypeDeclaration.
+     * Cast \c this TypeDeclaration as a TagTypeDeclaration.
      */
     virtual TagTypeDeclaration* asTagTypeDeclaration() override { return this; }
     virtual const TagTypeDeclaration* asTagTypeDeclaration() const override { return this; }
     //!@}
 
     /**
-     * The TypeDeclarationSymbolKind of \c this TagTypeDeclaration.
+     * The TypeDeclarationKind of \c this TagTypeDeclaration.
      */
-    TagTypeDeclarationSymbolKind kind() const;
+    TagTypeDeclarationKind kind() const;
 
     //!@{
     /**
@@ -73,7 +73,7 @@ protected:
                        const Symbol* containingSym,
                        const Scope* enclosingScope,
                        TagType* tagTy,
-                       TagTypeDeclarationSymbolKind tagTyDeclK);
+                       TagTypeDeclarationKind tagTyDeclK);
 };
 
 std::string PSY_C_API to_string(const TagTypeDeclaration& tagTyDecl);

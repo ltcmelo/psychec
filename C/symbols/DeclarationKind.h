@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2024 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,13 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_OBJECT_DECLARATION_SYMBOL_KIND_H__
-#define PSYCHE_C_OBJECT_DECLARATION_SYMBOL_KIND_H__
+#ifndef PSYCHE_C_DECLARATION_SYMBOL_KIND_H__
+#define PSYCHE_C_DECLARATION_SYMBOL_KIND_H__
 
 #include "API.h"
 #include "Fwds.h"
-
-#include "../common/infra/Assertions.h"
 
 #include <cstdint>
 #include <string>
@@ -33,27 +31,24 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The ObjectDeclarationSymbolKind enum.
+ * \brief The DeclarationKind enum.
  */
-enum class PSY_C_API ObjectDeclarationSymbolKind : std::uint8_t
+enum class PSY_C_API DeclarationKind : std::uint8_t
 {
-    Enumerator,
-    Field,
-    Parameter,
-    Variable
+    Function,
+    Object,
+    Type
 };
 
-inline std::string PSY_C_API to_string(ObjectDeclarationSymbolKind symK)
+inline std::string PSY_C_API to_string(DeclarationKind declSymK)
 {
-    switch (symK) {
-        case ObjectDeclarationSymbolKind::Enumerator:
-            return "Enumerator";
-        case ObjectDeclarationSymbolKind::Field:
-            return "Field";
-        case ObjectDeclarationSymbolKind::Parameter:
-            return "Parameter";
-        case ObjectDeclarationSymbolKind::Variable:
-            return "Variable";
+    switch (declSymK) {
+        case DeclarationKind::Function:
+            return "Function";
+        case DeclarationKind::Object:
+            return "Object";
+        case DeclarationKind::Type:
+            return "Type";
     }
 }
 

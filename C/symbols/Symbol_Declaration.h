@@ -25,55 +25,55 @@
 #include "Fwds.h"
 
 #include "Symbol.h"
-#include "DeclarationSymbolKind.h"
+#include "DeclarationKind.h"
 
 #include "binder/NameSpace.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_API DeclarationSymbol : public Symbol
+class PSY_C_API Declaration : public Symbol
 {
 public:
     //!@{
     /**
-     * Cast \c this Symbol as a TypeDeclarationSymbol.
+     * Cast \c this Symbol as a Declaration.
      */
-    virtual DeclarationSymbol* asDeclarationSymbol() override { return this; }
-    virtual const DeclarationSymbol* asDeclarationSymbol() const override { return this; }
+    virtual Declaration* asDeclaration() override { return this; }
+    virtual const Declaration* asDeclaration() const override { return this; }
     //!@}
 
     /**
-     * The DeclarationSymbolKind of \c this Symbol.
+     * The DeclarationKind of \c this Symbol.
      */
-    DeclarationSymbolKind kind() const;
+    DeclarationKind kind() const;
 
     //!@{
     /**
-     * Cast \c this DeclarationSymbol.
+     * Cast \c this Declaration.
      */
     virtual Function* asFunction() { return nullptr; }
     virtual const Function* asFunction() const { return nullptr; }
-    virtual ObjectDeclarationSymbol* asObjectDeclarationSymbol() { return nullptr; }
-    virtual const ObjectDeclarationSymbol* asObjectDeclarationSymbol() const { return nullptr; }
-    virtual TypeDeclarationSymbol* asTypeDeclarationSymbol() { return nullptr; }
-    virtual const TypeDeclarationSymbol* asTypeDeclarationSymbol() const { return nullptr; }
+    virtual ObjectDeclaration* asObjectDeclaration() { return nullptr; }
+    virtual const ObjectDeclaration* asObjectDeclaration() const { return nullptr; }
+    virtual TypeDeclaration* asTypeDeclaration() { return nullptr; }
+    virtual const TypeDeclaration* asTypeDeclaration() const { return nullptr; }
     //!@}
 
     /**
-     * The Identifier with which \c this DeclarationSymbol is declared.
+     * The Identifier with which \c this Declaration is declared.
      */
     virtual const Identifier* identifier() const = 0;
 
     /**
-     * The Scope that encloses \c this DeclarationSymbol.
+     * The Scope that encloses \c this Declaration.
      *
      * \remark 6.2.1-4
      */
     const Scope* enclosingScope() const;
 
     /**
-     * The NameSpace of \c this DeclarationSymbol.
+     * The NameSpace of \c this Declaration.
      *
      * \remark 6.2.3
      */
@@ -90,13 +90,12 @@ public:
     Location location() const;
 
 protected:
-    DeclarationSymbol(SymbolImpl* p,
-                      DeclarationSymbolKind declSymK);
-    DeclarationSymbol(const DeclarationSymbol&) = delete;
-    DeclarationSymbol& operator=(const DeclarationSymbol&) = delete;
+    Declaration(SymbolImpl* p, DeclarationKind declSymK);
+    Declaration(const Declaration&) = delete;
+    Declaration& operator=(const Declaration&) = delete;
 };
 
-std::string PSY_C_API to_string(const DeclarationSymbol& decl);
+std::string PSY_C_API to_string(const Declaration& decl);
 
 } // C
 } // psy

@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,39 +18,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol__IMPL__.inc"
+#include "ObjectDeclaration_Enumerator.h"
 
 #include "symbols/Symbol_ALL.h"
+#include "binder/Scope.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_ALL.h"
 
 #include <sstream>
 
 using namespace psy;
 using namespace C;
 
-TypeDeclarationSymbol::TypeDeclarationSymbol(TypeDeclarationSymbolImpl* p)
-    : DeclarationSymbol(p, DeclarationSymbolKind::Type)
+Enumerator::Enumerator(const SyntaxTree* tree,
+                       const Symbol* containingSym,
+                       const Scope* enclosingScope)
+    : ObjectDeclaration(tree,
+                              containingSym,
+                              enclosingScope,
+                              ObjectDeclarationKind::Enumerator)
 {}
 
-TypeDeclarationSymbol::~TypeDeclarationSymbol()
-{}
-
-TypeDeclarationSymbolKind TypeDeclarationSymbol::kind() const
+std::string Enumerator::toDisplayString() const
 {
-    return TypeDeclarationSymbolKind(P_CAST->BF_.tyDeclSymK_);
+    return "";
 }
 
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TypeDeclarationSymbol& tyDecl)
+std::string to_string(const Enumerator& enumerator)
 {
-    switch (tyDecl.kind()) {
-        case TypeDeclarationSymbolKind::Tag:
-            return to_string(*tyDecl.asTagTypeDeclaration());
-        case TypeDeclarationSymbolKind::Typedef:
-            return to_string(*tyDecl.asTypedef());
-    }
+    std::ostringstream oss;
+    oss << "<Enumerator | ";
+    oss << "name:" << enumerator.name()->valueText();
+    oss << "type:" << to_string(*enumerator.type());
+    oss << ">";
+    return oss.str();
 }
 
 } // C
-} // psy
+} // psi

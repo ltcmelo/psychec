@@ -19,8 +19,8 @@
 // THE SOFTWARE.
 
 #include "Symbol__IMPL__.inc"
-#include "DeclarationSymbol_Type.h"
-#include "TagTypeDeclarationSymbolKind.h"
+#include "Declaration_Type.h"
+#include "TagTypeDeclarationKind.h"
 
 #include "../common/infra/Assertions.h"
 
@@ -29,16 +29,16 @@
 using namespace psy;
 using namespace C;
 
-struct TypeDeclarationSymbol::TypeDeclarationSymbolImpl : SymbolImpl
+struct TypeDeclaration::TypeDeclarationImpl : SymbolImpl
 {
-    TypeDeclarationSymbolImpl(const SyntaxTree* tree,
+    TypeDeclarationImpl(const SyntaxTree* tree,
                               const Symbol* containingSym,
                               const Scope* enclosingScope,
                               NameSpace ns,
                               Type* ty,
-                              TypeDeclarationSymbolKind tyDeclK,
-                              TagTypeDeclarationSymbolKind tagTyDeclK)
-        : TypeDeclarationSymbolImpl(tree,
+                              TypeDeclarationKind tyDeclK,
+                              TagTypeDeclarationKind tagTyDeclK)
+        : TypeDeclarationImpl(tree,
                                     containingSym,
                                     enclosingScope,
                                     ns,
@@ -48,12 +48,12 @@ struct TypeDeclarationSymbol::TypeDeclarationSymbolImpl : SymbolImpl
         BF_.tagTyDeclK_ = static_cast<std::uint32_t>(tagTyDeclK);
     }
 
-    TypeDeclarationSymbolImpl(const SyntaxTree* tree,
+    TypeDeclarationImpl(const SyntaxTree* tree,
                               const Symbol* containingSym,
                               const Scope* enclosingScope,
                               NameSpace ns,
                               Type* ty,
-                              TypeDeclarationSymbolKind tyDeclK)
+                              TypeDeclarationKind tyDeclK)
         : SymbolImpl(tree,
                      containingSym,
                      enclosingScope,

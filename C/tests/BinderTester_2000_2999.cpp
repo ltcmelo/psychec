@@ -47,7 +47,7 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+            .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                     .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -60,7 +60,7 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+            .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                      .ty_.Basic(BasicTypeKind::Int)));
 }
 
@@ -74,9 +74,9 @@ struct w
 };
          )",
          Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+            .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                     .ty_.Basic(BasicTypeKind::Int))
-            .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+            .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                     .ty_.Basic(BasicTypeKind::Int)));
 }
 
@@ -89,9 +89,9 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                      .ty_.Basic(BasicTypeKind::Int))
-             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                      .ty_.Basic(BasicTypeKind::Int)));
 }
 
@@ -104,7 +104,7 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                  .ty_.Typedef("x")));
 }
 
@@ -117,9 +117,9 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                       .ty_.Typedef("x"))
-             .declaration(Decl().Object("z", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("z", ObjectDeclarationKind::Field)
                       .ty_.Typedef("x")));
 }
 
@@ -163,7 +163,7 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+            .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                      .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
@@ -176,7 +176,7 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+            .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                      .ty_.Tag("x", TagTypeKind::Union)));
 }
 
@@ -189,7 +189,7 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+            .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                      .ty_.Tag("x", TagTypeKind::Enum)));
 }
 
@@ -202,9 +202,9 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+            .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                      .ty_.Tag("x", TagTypeKind::Struct))
-            .declaration(Decl().Object("z", ObjectDeclarationSymbolKind::Field)
+            .declaration(Decl().Object("z", ObjectDeclarationKind::Field)
                      .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
@@ -217,7 +217,7 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Object("z", ObjectDeclarationSymbolKind::Field)
+            .declaration(Decl().Object("z", ObjectDeclarationKind::Field)
                      .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
@@ -263,7 +263,7 @@ void BinderTester::case2050()
     bind("struct { const int x ; } ;",
          Expectation()
              .declaration(Decl()
-                      .Object("x", ObjectDeclarationSymbolKind::Field)
+                      .Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::Const)));
 }
 
@@ -272,7 +272,7 @@ void BinderTester::case2051()
     bind("struct { const x y ; } ;",
          Expectation()
              .declaration(Decl()
-                      .Object("y", ObjectDeclarationSymbolKind::Field)
+                      .Object("y", ObjectDeclarationKind::Field)
                       .ty_.Typedef("x", CVR::Const)));
 }
 
@@ -289,7 +289,7 @@ void BinderTester::case2053()
     bind("struct { int const x ; } ;",
          Expectation()
              .declaration(Decl()
-                      .Object("x", ObjectDeclarationSymbolKind::Field)
+                      .Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::Const)));
 }
 
@@ -298,7 +298,7 @@ void BinderTester::case2054()
     bind("struct { x const y ; } ;",
          Expectation()
              .declaration(Decl()
-                      .Object("y", ObjectDeclarationSymbolKind::Field)
+                      .Object("y", ObjectDeclarationKind::Field)
                       .ty_.Typedef("x", CVR::Const)));
 }
 
@@ -352,7 +352,7 @@ void BinderTester::case2100()
 {
     bind("struct { int * x ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -361,7 +361,7 @@ void BinderTester::case2101()
 {
     bind("struct { x * y ; } ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                       .ty_.Typedef("x")
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -370,10 +370,10 @@ void BinderTester::case2102()
 {
     bind("struct { int * x ; y * z ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Object("z", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("z", ObjectDeclarationKind::Field)
                       .ty_.Typedef("y")
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -382,10 +382,10 @@ void BinderTester::case2103()
 {
     bind("struct { int * x , * y ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -394,7 +394,7 @@ void BinderTester::case2104()
 {
     bind("struct { int ( * x ) [ 1 ]; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int)
                       .ty_.Derived(TypeKind::Array)
                       .ty_.Derived(TypeKind::Pointer)));
@@ -404,7 +404,7 @@ void BinderTester::case2105()
 {
     bind("struct { int * * x ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)));
@@ -414,7 +414,7 @@ void BinderTester::case2106()
 {
     bind("struct { int * * * x ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)
@@ -425,7 +425,7 @@ void BinderTester::case2107()
 {
     bind("struct { int * ( * x ) [ 1 ] ; };",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)
@@ -479,7 +479,7 @@ void BinderTester::case2150()
 {
     bind("struct { const int * x ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::Const)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -488,7 +488,7 @@ void BinderTester::case2151()
 {
     bind("struct { const x * y ; } ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                       .ty_.Typedef("x", CVR::Const)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -546,7 +546,7 @@ void BinderTester::case2200()
 {
     bind("struct { const int * const x ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::Const)
                       .ty_.Derived(TypeKind::Pointer, CVR::Const)));
 }
@@ -606,7 +606,7 @@ void BinderTester::case2250()
 {
     bind("struct { int * const x ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::Const)));
 }
@@ -615,7 +615,7 @@ void BinderTester::case2251()
 {
     bind("struct { x * const y ; } ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::Const)));
 }
@@ -678,7 +678,7 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -687,7 +687,7 @@ void BinderTester::case2301()
 {
     bind("struct { x y [ 1 ] ; } ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -701,10 +701,10 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None))
-             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -718,10 +718,10 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None))
-             .declaration(Decl().Object("z", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("z", ObjectDeclarationKind::Field)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -730,7 +730,7 @@ void BinderTester::case2304()
 {
     bind("struct { int * x [ 1 ] ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
@@ -740,10 +740,10 @@ void BinderTester::case2305()
 {
     bind("struct { int x [ 1 ] , * y [ 2 ] ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None))
-             .declaration(Decl().Object("y", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("y", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
@@ -753,7 +753,7 @@ void BinderTester::case2306()
 {
     bind("struct { int * * x [ 1 ] ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
@@ -808,7 +808,7 @@ void BinderTester::case2350()
 {
     bind("struct { const int x [ 1 ] ; } ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationSymbolKind::Field)
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Field)
                       .ty_.Basic(BasicTypeKind::Int, CVR::Const)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }

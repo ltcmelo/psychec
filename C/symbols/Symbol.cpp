@@ -44,7 +44,7 @@ std::string to_string(const Symbol& sym)
         case SymbolKind::TranslationUnit:
             return to_string(*sym.asTranslationUnit());
         case SymbolKind::Declaration:
-            return to_string(*sym.asDeclarationSymbol());
+            return to_string(*sym.asDeclaration());
     }
 }
 

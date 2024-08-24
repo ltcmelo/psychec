@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ObjectDeclarationSymbol_Enumerator.h"
+#include "ObjectDeclaration_Field.h"
 
 #include "symbols/Symbol_ALL.h"
 #include "binder/Scope.h"
@@ -30,16 +30,16 @@
 using namespace psy;
 using namespace C;
 
-Enumerator::Enumerator(const SyntaxTree* tree,
-                       const Symbol* containingSym,
-                       const Scope* enclosingScope)
-    : ObjectDeclarationSymbol(tree,
+Field::Field(const SyntaxTree* tree,
+             const Symbol* containingSym,
+             const Scope* enclosingScope)
+    : ObjectDeclaration(tree,
                               containingSym,
                               enclosingScope,
-                              ObjectDeclarationSymbolKind::Enumerator)
+                              ObjectDeclarationKind::Field)
 {}
 
-std::string Enumerator::toDisplayString() const
+std::string Field::toDisplayString() const
 {
     return "";
 }
@@ -47,15 +47,15 @@ std::string Enumerator::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Enumerator& enumerator)
+std::string to_string(const Field& fld)
 {
     std::ostringstream oss;
-    oss << "<Enumerator | ";
-    oss << "name:" << enumerator.name()->valueText();
-    oss << "type:" << to_string(*enumerator.type());
+    oss << "<Field | ";
+    oss << "name:" << fld.name()->valueText();
+    oss << "type:" << to_string(*fld.type());
     oss << ">";
     return oss.str();
 }
 
 } // C
-} // psi
+} // psy

@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 #include "Symbol__IMPL__.inc"
-#include "DeclarationSymbol_Object.h"
+#include "Declaration_Object.h"
 
 #include "symbols/Symbol_ALL.h"
 
@@ -28,12 +28,12 @@
 using namespace psy;
 using namespace C;
 
-struct ObjectDeclarationSymbol::ObjectDeclarationSymbolImpl : SymbolImpl
+struct ObjectDeclaration::ObjectDeclarationImpl : SymbolImpl
 {
-    ObjectDeclarationSymbolImpl(const SyntaxTree* tree,
+    ObjectDeclarationImpl(const SyntaxTree* tree,
                                 const Symbol* containingSym,
                                 const Scope* enclosingScope,
-                                ObjectDeclarationSymbolKind objDeclSymK)
+                                ObjectDeclarationKind objDeclSymK)
         : SymbolImpl(tree,
                      containingSym,
                      enclosingScope,
@@ -49,47 +49,47 @@ struct ObjectDeclarationSymbol::ObjectDeclarationSymbolImpl : SymbolImpl
     const Type* ty_;
 };
 
-ObjectDeclarationSymbol::ObjectDeclarationSymbol(const SyntaxTree* tree,
+ObjectDeclaration::ObjectDeclaration(const SyntaxTree* tree,
                                                  const Symbol* containingSym,
                                                  const Scope* enclosingScope,
-                                                 ObjectDeclarationSymbolKind objDeclSymK)
-    : DeclarationSymbol(
-          new ObjectDeclarationSymbolImpl(tree,
+                                                 ObjectDeclarationKind objDeclSymK)
+    : Declaration(
+          new ObjectDeclarationImpl(tree,
                                           containingSym,
                                           enclosingScope,
                                           objDeclSymK),
-          DeclarationSymbolKind::Object)
+          DeclarationKind::Object)
 {}
 
-ObjectDeclarationSymbol::~ObjectDeclarationSymbol()
+ObjectDeclaration::~ObjectDeclaration()
 {}
 
-ObjectDeclarationSymbolKind ObjectDeclarationSymbol::kind() const
+ObjectDeclarationKind ObjectDeclaration::kind() const
 {
-    return ObjectDeclarationSymbolKind(P_CAST->BF_.objDeclSymK_);
+    return ObjectDeclarationKind(P_CAST->BF_.objDeclSymK_);
 }
 
-const Type* ObjectDeclarationSymbol::type() const
+const Type* ObjectDeclaration::type() const
 {
     return P_CAST->ty_;
 }
 
-const Type* ObjectDeclarationSymbol::retypeableType() const
+const Type* ObjectDeclaration::retypeableType() const
 {
     return type();
 }
 
-void ObjectDeclarationSymbol::setType(const Type* ty)
+void ObjectDeclaration::setType(const Type* ty)
 {
     P_CAST->ty_ = ty;
 }
 
-const Identifier* ObjectDeclarationSymbol::name() const
+const Identifier* ObjectDeclaration::name() const
 {
     return P_CAST->name_;
 }
 
-void ObjectDeclarationSymbol::setName(const Identifier* name)
+void ObjectDeclaration::setName(const Identifier* name)
 {
     P_CAST->name_ = name;
 }
@@ -97,16 +97,16 @@ void ObjectDeclarationSymbol::setName(const Identifier* name)
 namespace psy {
 namespace C {
 
-std::string to_string(const ObjectDeclarationSymbol& sym)
+std::string to_string(const ObjectDeclaration& sym)
 {
     switch (sym.kind()) {
-        case ObjectDeclarationSymbolKind::Enumerator:
+        case ObjectDeclarationKind::Enumerator:
             return to_string(*sym.asEnumerator());
-        case ObjectDeclarationSymbolKind::Field:
+        case ObjectDeclarationKind::Field:
             return to_string(*sym.asField());
-        case ObjectDeclarationSymbolKind::Parameter:
+        case ObjectDeclarationKind::Parameter:
             return to_string(*sym.asParameter());
-        case ObjectDeclarationSymbolKind::Variable:
+        case ObjectDeclarationKind::Variable:
             return to_string(*sym.asVariable());
     }
 }

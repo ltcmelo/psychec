@@ -18,49 +18,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol__IMPL__.inc"
-#include "TypeDeclarationSymbol_Enum.h"
+#ifndef PSYCHE_C_FIELD_OBJECT_DECLARATION_SYMBOL_H__
+#define PSYCHE_C_FIELD_OBJECT_DECLARATION_SYMBOL_H__
 
-#include "syntax/Lexeme_Identifier.h"
-#include "types/Type_Tag.h"
-
-#include <iostream>
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-Enum::Enum(const SyntaxTree* tree,
-           const Symbol* containingSym,
-           const Scope* enclosingScope,
-           TagType* tagTy)
-    : TagTypeDeclaration(tree,
-                         containingSym,
-                         enclosingScope,
-                         tagTy,
-                         TagTypeDeclarationSymbolKind::Enum)
-{
-}
-
-std::string Enum::toDisplayString() const
-{
-    std::ostringstream oss;
-    oss << "enum ";
-    oss << P_CAST->ty_->asTagType()->tag()->valueText();
-    return oss.str();
-}
+#include "Declaration_Object.h"
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Enum& enun)
+/**
+ * \brief The Field class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IField
+ * from Roslyn, the .NET Compiler Platform.
+ */
+class PSY_C_API Field final : public ObjectDeclaration
 {
-    std::ostringstream oss;
-    oss << "<Enum | ";
-    oss << "type:" << to_string(*enun.specifiedType());
-    oss << ">";
-    return oss.str();
-}
+public:
+    //!@{
+    /**
+     * Cast \c this ObjectDeclaration as a Field.
+     */
+    virtual Field* asField() override { return this; }
+    virtual const Field* asField() const override { return this; }
+    //!@}
+
+    /**
+     * Compute a displayable string for \c this Symbol.
+     */
+    virtual std::string toDisplayString() const override;
+
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Binder);
+
+    Field(const SyntaxTree* tree,
+          const Symbol* containingSym,
+          const Scope* enclosingScope);
+};
+
+std::string PSY_C_API to_string(const Field& fld);
 
 } // C
 } // psy
+
+#endif

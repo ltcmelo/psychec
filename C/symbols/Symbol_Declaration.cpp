@@ -35,18 +35,18 @@
 using namespace psy;
 using namespace C;
 
-DeclarationSymbol::DeclarationSymbol(SymbolImpl* p, DeclarationSymbolKind declSymK)
+Declaration::Declaration(SymbolImpl* p, DeclarationKind declSymK)
     : Symbol(p)
 {
     P->BF_.declSymK_ = static_cast<std::uint32_t>(declSymK);
 }
 
-DeclarationSymbolKind DeclarationSymbol::kind() const
+DeclarationKind Declaration::kind() const
 {
-    return DeclarationSymbolKind(P->BF_.declSymK_);
+    return DeclarationKind(P->BF_.declSymK_);
 }
 
-const Scope* DeclarationSymbol::enclosingScope() const
+const Scope* Declaration::enclosingScope() const
 {
     return P->enclosingScope_;
 }
@@ -56,12 +56,12 @@ SymbolKind Symbol::kind() const
     return SymbolKind(P->BF_.symK_);
 }
 
-const NameSpace DeclarationSymbol::nameSpace() const
+const NameSpace Declaration::nameSpace() const
 {
     return NameSpace(P->BF_.ns_);
 }
 
-Location DeclarationSymbol::location() const
+Location Declaration::location() const
 {
     const auto& syntaxRefs = declaringSyntaxReferences();
     std::vector<Location> locs;
@@ -76,7 +76,7 @@ Location DeclarationSymbol::location() const
     return locs.front();
 }
 
-std::vector<SyntaxReference> DeclarationSymbol::declaringSyntaxReferences() const
+std::vector<SyntaxReference> Declaration::declaringSyntaxReferences() const
 {
     return {};
 }
@@ -84,15 +84,15 @@ std::vector<SyntaxReference> DeclarationSymbol::declaringSyntaxReferences() cons
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const DeclarationSymbol& decl)
+std::string PSY_C_API to_string(const Declaration& decl)
 {
     switch (decl.kind()) {
-        case DeclarationSymbolKind::Function:
+        case DeclarationKind::Function:
             return to_string(*decl.asFunction());
-        case DeclarationSymbolKind::Object:
-            return to_string(*decl.asObjectDeclarationSymbol());
-        case DeclarationSymbolKind::Type:
-            return to_string(*decl.asTypeDeclarationSymbol());
+        case DeclarationKind::Object:
+            return to_string(*decl.asObjectDeclaration());
+        case DeclarationKind::Type:
+            return to_string(*decl.asTypeDeclaration());
     }
 }
 

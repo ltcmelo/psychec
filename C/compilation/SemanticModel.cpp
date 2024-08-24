@@ -50,9 +50,9 @@ struct SemanticModel::SemanticModelImpl
     const SyntaxTree* tree_;
     Compilation* compilation_;
     std::unique_ptr<TranslationUnit> unit_;
-    std::vector<std::unique_ptr<DeclarationSymbol>> decls_;
+    std::vector<std::unique_ptr<Declaration>> decls_;
     std::unordered_map<const Type*, std::unique_ptr<Type>> tys_;
-    std::unordered_map<const SyntaxNode*, DeclarationSymbol*> declsBySyntax_;
+    std::unordered_map<const SyntaxNode*, Declaration*> declsBySyntax_;
 };
 
 SemanticModel::SemanticModel(const SyntaxTree* tree, Compilation* compilation)
@@ -98,12 +98,12 @@ TranslationUnit* SemanticModel::keepTranslationUnit(
     return P->unit_.get();
 }
 
-DeclarationSymbol* SemanticModel::keepBinding(
+Declaration* SemanticModel::keepBinding(
         const SyntaxNode* node,
-        std::unique_ptr<DeclarationSymbol> decl)
+        std::unique_ptr<Declaration> decl)
 {
     P->decls_.emplace_back(decl.release());
-    DeclarationSymbol* rawSym = P->decls_.back().get();
+    Declaration* rawSym = P->decls_.back().get();
     PSY_ASSERT_2(P->declsBySyntax_.count(node) == 0, return nullptr);
     P->declsBySyntax_[node] = rawSym;
     return rawSym;
@@ -140,7 +140,7 @@ Function* SemanticModel::declaredFunction(const FunctionDefinitionSyntax* node)
         PSY_ASSERT_1(!P->bindingIsOK_);
         return nullptr;
     }
-    PSY_ASSERT_2(decl->kind() == DeclarationSymbolKind::Function, return nullptr);
+    PSY_ASSERT_2(decl->kind() == DeclarationKind::Function, return nullptr);
     auto funcDecl = decl->asFunction();
     return funcDecl;
 }
@@ -157,9 +157,9 @@ Parameter* SemanticModel::declaredParameter(const ParameterDeclarationSyntax* no
         PSY_ASSERT_1(!P->bindingIsOK_);
         return nullptr;
     }
-    PSY_ASSERT_2(decl->kind() == DeclarationSymbolKind::Object, return nullptr);
-    auto objDecl = decl->asObjectDeclarationSymbol();
-    PSY_ASSERT_2(objDecl->kind() == ObjectDeclarationSymbolKind::Parameter, return nullptr);
+    PSY_ASSERT_2(decl->kind() == DeclarationKind::Object, return nullptr);
+    auto objDecl = decl->asObjectDeclaration();
+    PSY_ASSERT_2(objDecl->kind() == ObjectDeclarationKind::Parameter, return nullptr);
     auto parmDecl = objDecl->asParameter();
     return parmDecl;
 }
@@ -169,42 +169,42 @@ const Parameter* SemanticModel::declaredParameter(const ParameterDeclarationSynt
     return const_cast<SemanticModel*>(this)->declaredParameter(node);
 }
 
-const TypeDeclarationSymbol* SemanticModel::declaredTypeDeclaration(const TypeDeclarationSyntax* node) const
+const TypeDeclaration* SemanticModel::declaredTypeDeclaration(const TypeDeclarationSyntax* node) const
 {
     auto it = P->declsBySyntax_.find(node);
     if (it == P->declsBySyntax_.end()) {
         PSY_ASSERT_1(!P->bindingIsOK_);
         return nullptr;
     }
-    PSY_ASSERT_2(it->second->kind() == DeclarationSymbolKind::Type, return nullptr);
-    auto tyDecl = it->second->asTypeDeclarationSymbol();
+    PSY_ASSERT_2(it->second->kind() == DeclarationKind::Type, return nullptr);
+    auto tyDecl = it->second->asTypeDeclaration();
     return tyDecl;
 }
 
 const Struct* SemanticModel::declaredStruct(const StructOrUnionDeclarationSyntax* node) const
 {
     auto tyDecl = declaredTypeDeclaration(node);
-    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Tag, return nullptr);
+    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationKind::Tag, return nullptr);
     auto tagTyDecl = tyDecl->asTagTypeDeclaration();
-    PSY_ASSERT_2(tagTyDecl->kind() == TagTypeDeclarationSymbolKind::Struct, return nullptr);
+    PSY_ASSERT_2(tagTyDecl->kind() == TagTypeDeclarationKind::Struct, return nullptr);
     return tagTyDecl->asStruct();
 }
 
 const Union* SemanticModel::declaredUnion(const StructOrUnionDeclarationSyntax* node) const
 {
     auto tyDecl = declaredTypeDeclaration(node);
-    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Tag, return nullptr);
+    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationKind::Tag, return nullptr);
     auto tagTyDecl = tyDecl->asTagTypeDeclaration();
-    PSY_ASSERT_2(tagTyDecl->kind() == TagTypeDeclarationSymbolKind::Union, return nullptr);
+    PSY_ASSERT_2(tagTyDecl->kind() == TagTypeDeclarationKind::Union, return nullptr);
     return tagTyDecl->asUnion();
 }
 
 const Enum* SemanticModel::declaredEnum(const EnumDeclarationSyntax* node) const
 {
     auto tyDecl = declaredTypeDeclaration(node);
-    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Tag, return nullptr);
+    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationKind::Tag, return nullptr);
     auto tagTyDecl = tyDecl->asTagTypeDeclaration();
-    PSY_ASSERT_2(tagTyDecl->kind() == TagTypeDeclarationSymbolKind::Enum, return nullptr);
+    PSY_ASSERT_2(tagTyDecl->kind() == TagTypeDeclarationKind::Enum, return nullptr);
     return tagTyDecl->asEnum();
 }
 
@@ -215,10 +215,10 @@ Enumerator* SemanticModel::declaredEnumerator(const EnumeratorDeclarationSyntax*
         PSY_ASSERT_1(!P->bindingIsOK_);
         return nullptr;
     }
-    auto decl = it->second->asDeclarationSymbol();
-    PSY_ASSERT_2(decl->kind() == DeclarationSymbolKind::Object, return nullptr);
-    auto objDecl = decl->asObjectDeclarationSymbol();
-    PSY_ASSERT_2(objDecl->kind() == ObjectDeclarationSymbolKind::Enumerator, return nullptr);
+    auto decl = it->second->asDeclaration();
+    PSY_ASSERT_2(decl->kind() == DeclarationKind::Object, return nullptr);
+    auto objDecl = decl->asObjectDeclaration();
+    PSY_ASSERT_2(objDecl->kind() == ObjectDeclarationKind::Enumerator, return nullptr);
     auto enumeratorDecl = objDecl->asEnumerator();
     return enumeratorDecl;
 }
@@ -238,9 +238,9 @@ template <class VecT> VecT SemanticModel::declaredFields_CORE(
             PSY_ASSERT_1(!P->bindingIsOK_);
             continue;
         }
-        PSY_ASSERT_2(decl->kind() == DeclarationSymbolKind::Object, continue);
-        auto objDecl = decl->asObjectDeclarationSymbol();
-        PSY_ASSERT_2(objDecl->kind() == ObjectDeclarationSymbolKind::Field, continue);
+        PSY_ASSERT_2(decl->kind() == DeclarationKind::Object, continue);
+        auto objDecl = decl->asObjectDeclaration();
+        PSY_ASSERT_2(objDecl->kind() == ObjectDeclarationKind::Field, continue);
         auto fldDecl = objDecl->asField();
         decls.push_back(fldDecl);
     }
@@ -274,21 +274,21 @@ template <class VecT> VecT SemanticModel::declaredDeclarations_CORE(
     return std::move(decls);
 }
 
-std::vector<DeclarationSymbol*> SemanticModel::declaredDeclarations(
+std::vector<Declaration*> SemanticModel::declaredDeclarations(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    std::vector<DeclarationSymbol*> decls;
+    std::vector<Declaration*> decls;
     return declaredDeclarations_CORE(node, std::move(decls));
 }
 
-std::vector<const DeclarationSymbol*> SemanticModel::declaredDeclarations(
+std::vector<const Declaration*> SemanticModel::declaredDeclarations(
         const VariableAndOrFunctionDeclarationSyntax* node) const
 {
-    std::vector<const DeclarationSymbol*> decls;
+    std::vector<const Declaration*> decls;
     return const_cast<SemanticModel*>(this)->declaredDeclarations_CORE(node, std::move(decls));
 }
 
-DeclarationSymbol* SemanticModel::declaredDeclaration(const DeclaratorSyntax* node)
+Declaration* SemanticModel::declaredDeclaration(const DeclaratorSyntax* node)
 {
     auto node_P = SyntaxUtilities::strippedDeclaratorOrSelf(node);
     auto node_PP = SyntaxUtilities::innermostDeclaratorOrSelf(node_P);
@@ -297,16 +297,16 @@ DeclarationSymbol* SemanticModel::declaredDeclaration(const DeclaratorSyntax* no
         PSY_ASSERT_1(!P->bindingIsOK_);
         return nullptr;
     }
-    return it->second->asDeclarationSymbol();
+    return it->second->asDeclaration();
 }
 
-const DeclarationSymbol* SemanticModel::declaredDeclaration(const DeclaratorSyntax* node) const
+const Declaration* SemanticModel::declaredDeclaration(const DeclaratorSyntax* node) const
 {
     return const_cast<SemanticModel*>(this)->declaredDeclaration(node);
 }
 
-DeclarationSymbol* SemanticModel::searchForDecl(
-        std::function<bool (const std::unique_ptr<DeclarationSymbol>&)> pred) const
+Declaration* SemanticModel::searchForDecl(
+        std::function<bool (const std::unique_ptr<Declaration>&)> pred) const
 {
     auto it = std::find_if(P->decls_.begin(), P->decls_.end(), pred);
     return it == P->decls_.end()

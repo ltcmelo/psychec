@@ -18,46 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_VARIABLE_OBJECT_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_VARIABLE_OBJECT_DECLARATION_SYMBOL_H__
+#ifndef PSYCHE_C_TYPE_SYMBOL_KIND_H__
+#define PSYCHE_C_TYPE_SYMBOL_KIND_H__
 
-#include "DeclarationSymbol_Object.h"
+#include "API.h"
+#include "Fwds.h"
+
+#include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The Variable class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.ILocalSymbol
- * from Roslyn, the .NET Compiler Platform.
+ * \brief The TypeDeclarationKind enum.
  */
-class PSY_C_API Variable final : public ObjectDeclarationSymbol
+enum class PSY_C_API TypeDeclarationKind : std::uint8_t
 {
-public:
-    //!@{
-    /**
-     * Cast \c this Symbol as a Variable.
-     */
-    virtual Variable* asVariable() override { return this; }
-    virtual const Variable* asVariable() const override { return this; }
-    //!@}
-
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const override;
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
-
-    Variable(const SyntaxTree* tree,
-             const Symbol* containingSym,
-             const Scope* enclosingScope);
+    Tag,
+    Typedef
 };
 
-std::string PSY_C_API to_string(const Variable& var);
+inline std::string PSY_C_API to_string(TypeDeclarationKind tySymK)
+{
+    switch (tySymK) {
+        case TypeDeclarationKind::Tag:
+            return "Tag";
+        case TypeDeclarationKind::Typedef:
+            return "Typedef";
+    }
+}
 
 } // C
 } // psy

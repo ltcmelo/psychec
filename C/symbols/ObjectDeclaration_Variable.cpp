@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,44 +18,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_ENUMERATOR_OBJECT_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_ENUMERATOR_OBJECT_DECLARATION_SYMBOL_H__
+#include "ObjectDeclaration_Variable.h"
 
-#include "DeclarationSymbol_Object.h"
+#include "binder/Scope.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_ALL.h"
+
+#include <sstream>
+
+using namespace psy;
+using namespace C;
+
+Variable::Variable(const SyntaxTree* tree,
+                   const Symbol* containingSym,
+                   const Scope* enclosingScope)
+    : ObjectDeclaration(tree,
+                              containingSym,
+                              enclosingScope,
+                              ObjectDeclarationKind::Variable)
+{}
+
+std::string Variable::toDisplayString() const
+{
+    return "";
+}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The Enumerator class.
- */
-class PSY_C_API Enumerator final : public ObjectDeclarationSymbol
+std::string to_string(const Variable& var)
 {
-public:
-    //!@{
-    /**
-     * Cast \c this ObjectDeclarationSymbol as a Enumerator.
-     */
-    virtual Enumerator* asEnumerator() override { return this; }
-    virtual const Enumerator* asEnumerator() const override { return this; }
-    //!@}
-
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const override;
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
-
-    Enumerator(const SyntaxTree* tree,
-               const Symbol* containingSym,
-               const Scope* enclosingScope);
-};
-
-std::string PSY_C_API to_string(const Enumerator& enumerator);
+    std::ostringstream oss;
+    oss << "<Variable |";
+    oss << " name:" << var.name()->valueText();
+    oss << " type:" << to_string(*var.type());
+    oss << ">";
+    return oss.str();
+}
 
 } // C
 } // psy
-
-#endif

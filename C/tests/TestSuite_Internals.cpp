@@ -624,7 +624,7 @@ bool functionMatchesBinding(const Function* funcDecl, const Decl& decl)
     return true;
 }
 
-bool valueMatchesBinding(const ObjectDeclarationSymbol* objDecl, const Decl& decl)
+bool valueMatchesBinding(const ObjectDeclaration* objDecl, const Decl& decl)
 {
     if (objDecl->kind() != decl.objDeclSymK_)
         return REJECT_CANDIDATE(objDecl, "value kind mismatch");
@@ -644,14 +644,14 @@ bool valueMatchesBinding(const ObjectDeclarationSymbol* objDecl, const Decl& dec
     return true;
 }
 
-bool typeMatchesBinding(const TypeDeclarationSymbol* tyDecl, const Decl& decl)
+bool typeMatchesBinding(const TypeDeclaration* tyDecl, const Decl& decl)
 {
     if (tyDecl->kind() != decl.tyDeclSymK_)
         return REJECT_CANDIDATE(tyDecl, "type decl kind mismatch");
 
     switch (decl.tyDeclSymK_) {
-        case TypeDeclarationSymbolKind::Tag: {
-            if (tyDecl->kind() != TypeDeclarationSymbolKind::Tag)
+        case TypeDeclarationKind::Tag: {
+            if (tyDecl->kind() != TypeDeclarationKind::Tag)
                 return REJECT_CANDIDATE(tyDecl, "not a tag type");
             auto tagTyDecl = tyDecl->asTagTypeDeclaration();
             if (!tagTyDecl->specifiedType())
@@ -666,20 +666,20 @@ bool typeMatchesBinding(const TypeDeclarationSymbol* tyDecl, const Decl& decl)
             if (tagTy->tag()->valueText() != decl.ident_)
                 return REJECT_CANDIDATE(tyDecl, "tag mismatch");
             switch (decl.tagTyDeclK_) {
-                case TagTypeDeclarationSymbolKind::Struct:
-                    if (tagTyDecl->kind() != TagTypeDeclarationSymbolKind::Struct)
+                case TagTypeDeclarationKind::Struct:
+                    if (tagTyDecl->kind() != TagTypeDeclarationKind::Struct)
                         return REJECT_CANDIDATE(tyDecl, "not a struct");
                     if (tagTy->kind() != TagTypeKind::Struct)
                         return REJECT_CANDIDATE(tyDecl, "not a struct type");
                     break;
-                case TagTypeDeclarationSymbolKind::Union:
-                    if (tagTyDecl->kind() != TagTypeDeclarationSymbolKind::Union)
+                case TagTypeDeclarationKind::Union:
+                    if (tagTyDecl->kind() != TagTypeDeclarationKind::Union)
                         return REJECT_CANDIDATE(tyDecl, "not a union");
                     if (tagTy->kind() != TagTypeKind::Union)
                         return REJECT_CANDIDATE(tyDecl, "not a union type");
                     break;
-                case TagTypeDeclarationSymbolKind::Enum:
-                    if (tagTyDecl->kind() != TagTypeDeclarationSymbolKind::Enum)
+                case TagTypeDeclarationKind::Enum:
+                    if (tagTyDecl->kind() != TagTypeDeclarationKind::Enum)
                         return REJECT_CANDIDATE(tyDecl, "not a enum");
                     if (tagTy->kind() != TagTypeKind::Enum)
                         return REJECT_CANDIDATE(tyDecl, "not a enum type");
@@ -688,7 +688,7 @@ bool typeMatchesBinding(const TypeDeclarationSymbol* tyDecl, const Decl& decl)
             break;
         }
 
-        case TypeDeclarationSymbolKind::Typedef: {
+        case TypeDeclarationKind::Typedef: {
             auto tydefDecl = tyDecl->asTypedef();
             if (!tydefDecl->definedType())
                 return REJECT_CANDIDATE(tyDecl, "no defined type");
@@ -708,7 +708,7 @@ bool typeMatchesBinding(const TypeDeclarationSymbol* tyDecl, const Decl& decl)
     return true;
 }
 
-bool symbolMatchesBinding(const DeclarationSymbol* declSym, const Decl& decl)
+bool symbolMatchesBinding(const Declaration* declSym, const Decl& decl)
 {
     if (declSym->kind() != decl.declSymK_)
         return REJECT_CANDIDATE(declSym, "symbol kind mismatch");
@@ -721,14 +721,14 @@ bool symbolMatchesBinding(const DeclarationSymbol* declSym, const Decl& decl)
 
     switch (decl.declSymK_)
     {
-        case DeclarationSymbolKind::Object:
-            return valueMatchesBinding(declSym->asObjectDeclarationSymbol(), decl);
+        case DeclarationKind::Object:
+            return valueMatchesBinding(declSym->asObjectDeclaration(), decl);
 
-        case DeclarationSymbolKind::Type: {
-            return typeMatchesBinding(declSym->asTypeDeclarationSymbol(), decl);
+        case DeclarationKind::Type: {
+            return typeMatchesBinding(declSym->asTypeDeclaration(), decl);
         }
 
-        case DeclarationSymbolKind::Function:
+        case DeclarationKind::Function:
             return functionMatchesBinding(declSym->asFunction(), decl);
 
         default:
@@ -739,7 +739,7 @@ bool symbolMatchesBinding(const DeclarationSymbol* declSym, const Decl& decl)
     return false;
 };
 
-bool symbolMatchesBinding_(const std::unique_ptr<DeclarationSymbol>& declSym, const Decl& decl)
+bool symbolMatchesBinding_(const std::unique_ptr<Declaration>& declSym, const Decl& decl)
 {
     return symbolMatchesBinding(declSym.get(), decl);
 };

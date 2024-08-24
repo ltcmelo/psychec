@@ -68,15 +68,15 @@ public:
     ScopeKind kind() const;
 
     /**
-     * Search \c this Scope and \a outer \a scopes of \c this Scope for a DeclarationSymbol with
+     * Search \c this Scope and \a outer \a scopes of \c this Scope for a Declaration with
      * Identifier \p ident in NameSpace \p ns.
      */
-    const DeclarationSymbol* searchForDeclaration(const Identifier* ident, NameSpace ns) const;
+    const Declaration* searchForDeclaration(const Identifier* ident, NameSpace ns) const;
 
     /**
-     * The DeclarationSymbol(s) in \c this Scope.
+     * The Declaration(s) in \c this Scope.
      */
-    std::vector<const DeclarationSymbol*> declarations() const;
+    std::vector<const Declaration*> declarations() const;
 
     /**
      * The \a inner \a scopes of \c this Scope.
@@ -96,7 +96,7 @@ PSY_INTERNAL:
 
     void encloseScope(std::unique_ptr<Scope> innerScope);
     void morphFrom_FunctionPrototype_to_Block();
-    void addDeclaration(const DeclarationSymbol*);
+    void addDeclaration(const Declaration*);
 
 private:
     ScopeKind scopeK_;
@@ -104,7 +104,7 @@ private:
     std::vector<std::unique_ptr<Scope>> innerScopes_;
     std::unordered_map<
         std::pair<const Identifier*, NameSpace>,
-        const DeclarationSymbol*> decls_;
+        const Declaration*> decls_;
 };
 
 } // C

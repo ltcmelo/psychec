@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol_Typedef.h"
-#include "TypeDeclarationSymbol__IMPL__.inc"
+#include "TypeDeclaration_Typedef.h"
+#include "TypeDeclaration__IMPL__.inc"
 
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_Typedef.h"
@@ -33,13 +33,13 @@ Typedef::Typedef(const SyntaxTree* tree,
                  const Symbol* containingSym,
                  const Scope* enclosingScope,
                  TypedefType* tydefTy)
-    : TypeDeclarationSymbol(
-          new TypeDeclarationSymbolImpl(tree,
+    : TypeDeclaration(
+          new TypeDeclarationImpl(tree,
                                         containingSym,
                                         enclosingScope,
                                         NameSpace::OrdinaryIdentifiers,
                                         tydefTy,
-                                        TypeDeclarationSymbolKind::Typedef))
+                                        TypeDeclarationKind::Typedef))
     , synonymizedTy_(nullptr)
 {
 }

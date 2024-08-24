@@ -18,51 +18,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol__IMPL__.inc"
-#include "TypeDeclarationSymbol_Struct.h"
+#ifndef PSYCHE_C_OBJECT_DECLARATION_SYMBOL_KIND_H__
+#define PSYCHE_C_OBJECT_DECLARATION_SYMBOL_KIND_H__
 
-#include "syntax/Lexeme_Identifier.h"
-#include "types/Type_Tag.h"
+#include "API.h"
+#include "Fwds.h"
 
-#include <iostream>
-#include <sstream>
+#include "../common/infra/Assertions.h"
 
-using namespace psy;
-using namespace C;
-
-Struct::Struct(const SyntaxTree* tree,
-               const Symbol* containingSym,
-               const Scope* enclosingScope,
-               TagType* tagTy)
-    : TagTypeDeclaration(tree,
-                         containingSym,
-                         enclosingScope,
-                         tagTy,
-                         TagTypeDeclarationSymbolKind::Struct)
-{
-}
-
-std::string Struct::toDisplayString() const
-{
-    std::ostringstream oss;
-    oss << "struct ";
-    oss << P_CAST->ty_->asTagType()->tag()->valueText();
-    return oss.str();
-}
+#include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Struct& strukt)
+/**
+ * \brief The ObjectDeclarationKind enum.
+ */
+enum class PSY_C_API ObjectDeclarationKind : std::uint8_t
 {
-    std::ostringstream oss;
-    oss << "<Struct |";
-    oss << " type:" << to_string(*strukt.specifiedType());
-    oss << " scope:" << to_string(strukt.enclosingScope()->kind());
-    oss << "  " << strukt.enclosingScope();
-    oss << ">";
-    return oss.str();
+    Enumerator,
+    Field,
+    Parameter,
+    Variable
+};
+
+inline std::string PSY_C_API to_string(ObjectDeclarationKind symK)
+{
+    switch (symK) {
+        case ObjectDeclarationKind::Enumerator:
+            return "Enumerator";
+        case ObjectDeclarationKind::Field:
+            return "Field";
+        case ObjectDeclarationKind::Parameter:
+            return "Parameter";
+        case ObjectDeclarationKind::Variable:
+            return "Variable";
+    }
 }
 
 } // C
-} // psi
+} // psy
+
+#endif

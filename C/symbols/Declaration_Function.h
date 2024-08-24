@@ -37,7 +37,7 @@ namespace C {
  * This API is inspired by that of \c Microsoft.CodeAnalysis.IMethodSymbol
  * from Roslyn, the .NET Compiler Platform.
  */
-class PSY_C_API Function final : public DeclarationSymbol
+class PSY_C_API Function final : public Declaration
                                , public MIXIN_NameableSymbol
                                , public MIXIN_TypeableSymbol
 {
@@ -51,7 +51,7 @@ public:
     //!@}
 
     /**
-     * The Identifier with which \c this DeclarationSymbol is declared.
+     * The Identifier with which \c this Declaration is declared.
      */
     virtual const Identifier* identifier() const override { return name(); }
 

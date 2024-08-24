@@ -21,7 +21,7 @@
 #ifndef PSYCHE_C_TYPEDEF_TYPE_DECLARATION_SYMBOL_H__
 #define PSYCHE_C_TYPEDEF_TYPE_DECLARATION_SYMBOL_H__
 
-#include "DeclarationSymbol_Type.h"
+#include "Declaration_Type.h"
 
 #include "MIXIN_TypeableSymbol.h"
 
@@ -29,13 +29,13 @@ namespace psy {
 namespace C {
 
 class PSY_C_API Typedef final
-        : public TypeDeclarationSymbol
+        : public TypeDeclaration
         , public MIXIN_TypeableSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this TypeDeclarationSymbol as a Typedef.
+     * Cast \c this TypeDeclaration as a Typedef.
      */
     virtual Typedef* asTypedef() override { return this; }
     virtual const Typedef* asTypedef() const override { return this; }

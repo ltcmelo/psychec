@@ -38,7 +38,7 @@ namespace C {
  * \note Similar to:
  * - \c clang::Type and clang::Type of LLMV/Clang.
  *
- * \see TypeDeclarationSymbol
+ * \see TypeDeclaration
  */
 class PSY_C_API Type
 {

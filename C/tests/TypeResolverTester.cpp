@@ -45,7 +45,7 @@ x y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationSymbolKind::Variable)
+                         .Object("y", ObjectDeclarationKind::Variable)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -59,7 +59,7 @@ x * y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationSymbolKind::Variable)
+                         .Object("y", ObjectDeclarationKind::Variable)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
@@ -74,7 +74,7 @@ x const y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationSymbolKind::Variable)
+                         .Object("y", ObjectDeclarationKind::Variable)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
@@ -88,7 +88,7 @@ x const y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationSymbolKind::Variable)
+                         .Object("y", ObjectDeclarationKind::Variable)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
@@ -102,7 +102,7 @@ x * * y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationSymbolKind::Variable)
+                         .Object("y", ObjectDeclarationKind::Variable)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
@@ -118,7 +118,7 @@ x y [ 1 ] ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationSymbolKind::Variable)
+                         .Object("y", ObjectDeclarationKind::Variable)
                          .ty_.Derived(TypeKind::Array)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
@@ -133,7 +133,7 @@ x y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationSymbolKind::Variable)
+                         .Object("y", ObjectDeclarationKind::Variable)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
@@ -148,7 +148,7 @@ x y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationSymbolKind::Variable)
+                         .Object("y", ObjectDeclarationKind::Variable)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
@@ -165,7 +165,7 @@ y z ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("z", ObjectDeclarationSymbolKind::Variable)
+                         .Object("z", ObjectDeclarationKind::Variable)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
