@@ -300,22 +300,28 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
                         case SymbolKind::Declaration: {
                             auto decl = sym->asDeclarationSymbol();
                             switch (decl->kind()) {
-                                case DeclarationSymbolKind::Type:
-                                    switch (decl->asTypeDeclarationSymbol()->kind()) {
-                                        case TypeDeclarationSymbolKind::Union:
-                                        case TypeDeclarationSymbolKind::Struct:
-                                            bindAndPushSymbol<Field>(node);
-                                            break;
+                                case DeclarationSymbolKind::Type: {
+                                    auto tyDecl = decl->asTypeDeclarationSymbol();
+                                    switch (tyDecl->kind()) {
+                                        case TypeDeclarationSymbolKind::Tag: {
+                                            auto tagTyDecl = tyDecl->asTagTypeDeclaration();
+                                            switch (tagTyDecl->kind()) {
+                                                case TagTypeDeclarationSymbolKind::Union:
+                                                case TagTypeDeclarationSymbolKind::Struct:
+                                                    bindAndPushSymbol<Field>(node);
+                                                    break;
 
-                                        case TypeDeclarationSymbolKind::Enum:
-                                            bindAndPushSymbol<Enumerator>(node);
+                                                case TagTypeDeclarationSymbolKind::Enum:
+                                                    bindAndPushSymbol<Enumerator>(node);
+                                                    break;
+                                            }
                                             break;
-
+                                        }
                                         case TypeDeclarationSymbolKind::Typedef:
                                             PSY_ASSERT_2(false, return);
                                     }
                                     break;
-
+                                }
                                 case DeclarationSymbolKind::Object:
                                 case DeclarationSymbolKind::Function:
                                     bindAndPushSymbol<Variable>(node);
@@ -323,7 +329,6 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
                             }
                             break;
                         }
-
                         case SymbolKind::TranslationUnit:
                             bindAndPushSymbol<Variable>(node);
                             break;

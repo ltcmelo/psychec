@@ -18,32 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_ENUM_TYPE_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_ENUM_TYPE_DECLARATION_SYMBOL_H__
+#ifndef PSYCHE_C_ENUM_TAG_TYPE_DECLARATION_H__
+#define PSYCHE_C_ENUM_TAG_TYPE_DECLARATION_H__
 
-#include "DeclarationSymbol_Type.h"
+#include "TypeDeclaration_Tag.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_API Enum final : public TypeDeclarationSymbol
+class PSY_C_API Enum final : public TagTypeDeclaration
 {
 public:
     //!@{
     /**
-     * Cast \c this TypeDeclarationSymbol as a Enum.
+     * Cast \c this TagTypeDeclaration as a Enum.
      */
     virtual Enum* asEnum() override { return this; }
     virtual const Enum* asEnum() const override { return this; }
     //!@}
 
     /**
-     * The Identifier with which \c this DeclarationSymbol is declared.
-     */
-    virtual const Identifier* identifier() const override;
-
-    /**
-     * Compute a displayable string for \c this Symbol.
+     * Compute a displayable string for \c this Enum.
      */
     virtual std::string toDisplayString() const override;
 

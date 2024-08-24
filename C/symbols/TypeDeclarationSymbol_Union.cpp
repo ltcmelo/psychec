@@ -34,21 +34,12 @@ Union::Union(const SyntaxTree* tree,
              const Symbol* containingSym,
              const Scope* enclosingScope,
              TagType* tagTy)
-    : TypeDeclarationSymbol(
-          new TypeDeclarationSymbolImpl(tree,
-                                        containingSym,
-                                        enclosingScope,
-                                        NameSpace::Tags,
-                                        tagTy,
-                                        TypeDeclarationSymbolKind::Union))
+    : TagTypeDeclaration(tree,
+                         containingSym,
+                         enclosingScope,
+                         tagTy,
+                         TagTypeDeclarationSymbolKind::Union)
 {
-}
-
-const Identifier* Union::identifier() const
-{
-    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
-    PSY_ASSERT_2(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Union, return nullptr);
-    return P_CAST->ty_->asTagType()->tag();
 }
 
 std::string Union::toDisplayString() const

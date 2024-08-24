@@ -222,6 +222,7 @@ class Field;
 class Variable;
 class Parameter;
 class TypeDeclarationSymbol;
+class TagTypeDeclaration;
 class Struct;
 class Union;
 class Enum;

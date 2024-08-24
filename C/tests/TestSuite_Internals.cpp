@@ -649,51 +649,56 @@ bool typeMatchesBinding(const TypeDeclarationSymbol* tyDecl, const Decl& decl)
     if (tyDecl->kind() != decl.tyDeclSymK_)
         return REJECT_CANDIDATE(tyDecl, "type decl kind mismatch");
 
-    if (!tyDecl->specifiedType())
-        return REJECT_CANDIDATE(tyDecl, "no specified type");
-
-    auto checkTag = [=]() {
-        if (!tyDecl->specifiedType()->asTagType())
-            return REJECT_CANDIDATE(tyDecl, "not a tag type");
-        auto tagTy = tyDecl->specifiedType()->asTagType();
-        if (!tagTy->tag())
-            return REJECT_CANDIDATE(tyDecl, "empty tag");
-        if (tagTy->tag()->valueText() != decl.ident_)
-            return REJECT_CANDIDATE(tyDecl, "tag mismatch");
-        return true;
-    };
-
     switch (decl.tyDeclSymK_) {
-        case TypeDeclarationSymbolKind::Struct:
-            if (!checkTag())
-                return false;
-            if (tyDecl->specifiedType()->asTagType()->kind() != TagTypeKind::Struct)
-                return REJECT_CANDIDATE(tyDecl, "specified type struct mismatch");
+        case TypeDeclarationSymbolKind::Tag: {
+            if (tyDecl->kind() != TypeDeclarationSymbolKind::Tag)
+                return REJECT_CANDIDATE(tyDecl, "not a tag type");
+            auto tagTyDecl = tyDecl->asTagTypeDeclaration();
+            if (!tagTyDecl->specifiedType())
+                return REJECT_CANDIDATE(tyDecl, "no specified type");
+            if (!tagTyDecl->identifier())
+                return REJECT_CANDIDATE(tyDecl, "empty identifier");
+            if (tagTyDecl->identifier()->valueText() != decl.ident_)
+                return REJECT_CANDIDATE(tyDecl, "identifier mismatch");
+            auto tagTy = tagTyDecl->specifiedType();
+            if (!tagTy->tag())
+                return REJECT_CANDIDATE(tyDecl, "empty tag");
+            if (tagTy->tag()->valueText() != decl.ident_)
+                return REJECT_CANDIDATE(tyDecl, "tag mismatch");
+            switch (decl.tagTyDeclK_) {
+                case TagTypeDeclarationSymbolKind::Struct:
+                    if (tagTyDecl->kind() != TagTypeDeclarationSymbolKind::Struct)
+                        return REJECT_CANDIDATE(tyDecl, "not a struct");
+                    if (tagTy->kind() != TagTypeKind::Struct)
+                        return REJECT_CANDIDATE(tyDecl, "not a struct type");
+                    break;
+                case TagTypeDeclarationSymbolKind::Union:
+                    if (tagTyDecl->kind() != TagTypeDeclarationSymbolKind::Union)
+                        return REJECT_CANDIDATE(tyDecl, "not a union");
+                    if (tagTy->kind() != TagTypeKind::Union)
+                        return REJECT_CANDIDATE(tyDecl, "not a union type");
+                    break;
+                case TagTypeDeclarationSymbolKind::Enum:
+                    if (tagTyDecl->kind() != TagTypeDeclarationSymbolKind::Enum)
+                        return REJECT_CANDIDATE(tyDecl, "not a enum");
+                    if (tagTy->kind() != TagTypeKind::Enum)
+                        return REJECT_CANDIDATE(tyDecl, "not a enum type");
+                    break;
+            }
             break;
-
-        case TypeDeclarationSymbolKind::Union:
-            if (!checkTag())
-                return false;
-            if (tyDecl->specifiedType()->asTagType()->kind() != TagTypeKind::Union)
-                return REJECT_CANDIDATE(tyDecl, "specified type union mismatch");
-            break;
-
-        case TypeDeclarationSymbolKind::Enum:
-            if (!checkTag())
-                return false;
-            if (tyDecl->specifiedType()->asTagType()->kind() != TagTypeKind::Enum)
-                return REJECT_CANDIDATE(tyDecl, "specified type enum mismatch");
-            break;
+        }
 
         case TypeDeclarationSymbolKind::Typedef: {
-            if (!tyDecl->specifiedType()->asTypedefType())
+            auto tydefDecl = tyDecl->asTypedef();
+            if (!tydefDecl->definedType())
+                return REJECT_CANDIDATE(tyDecl, "no defined type");
+            if (!tydefDecl->definedType()->asTypedefType())
                 return REJECT_CANDIDATE(tyDecl, "not a typedef type");
-            auto tydefTy = tyDecl->specifiedType()->asTypedefType();
+            auto tydefTy = tydefDecl->definedType()->asTypedefType();
             if (!tydefTy->typedefName())
                 return REJECT_CANDIDATE(tyDecl, "empty typedef name");
             if (tydefTy->typedefName()->valueText() != decl.ident_)
                 return REJECT_CANDIDATE(tyDecl, "typedef name mismatch");
-            auto tydefDecl = tyDecl->asTypedef();
             if (!typeMatches(tydefDecl->synonymizedType(), decl.ty_))
                 return REJECT_CANDIDATE(tyDecl, "synonymized type mismatch");
             break;

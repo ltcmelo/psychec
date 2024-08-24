@@ -184,22 +184,28 @@ const TypeDeclarationSymbol* SemanticModel::declaredTypeDeclaration(const TypeDe
 const Struct* SemanticModel::declaredStruct(const StructOrUnionDeclarationSyntax* node) const
 {
     auto tyDecl = declaredTypeDeclaration(node);
-    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Struct, return nullptr);
-    return tyDecl->asStruct();
+    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Tag, return nullptr);
+    auto tagTyDecl = tyDecl->asTagTypeDeclaration();
+    PSY_ASSERT_2(tagTyDecl->kind() == TagTypeDeclarationSymbolKind::Struct, return nullptr);
+    return tagTyDecl->asStruct();
 }
 
 const Union* SemanticModel::declaredUnion(const StructOrUnionDeclarationSyntax* node) const
 {
     auto tyDecl = declaredTypeDeclaration(node);
-    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Union, return nullptr);
-    return tyDecl->asUnion();
+    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Tag, return nullptr);
+    auto tagTyDecl = tyDecl->asTagTypeDeclaration();
+    PSY_ASSERT_2(tagTyDecl->kind() == TagTypeDeclarationSymbolKind::Union, return nullptr);
+    return tagTyDecl->asUnion();
 }
 
 const Enum* SemanticModel::declaredEnum(const EnumDeclarationSyntax* node) const
 {
     auto tyDecl = declaredTypeDeclaration(node);
-    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Enum, return nullptr);
-    return tyDecl->asEnum();
+    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Tag, return nullptr);
+    auto tagTyDecl = tyDecl->asTagTypeDeclaration();
+    PSY_ASSERT_2(tagTyDecl->kind() == TagTypeDeclarationSymbolKind::Enum, return nullptr);
+    return tagTyDecl->asEnum();
 }
 
 Enumerator* SemanticModel::declaredEnumerator(const EnumeratorDeclarationSyntax* node)

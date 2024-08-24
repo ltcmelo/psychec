@@ -112,11 +112,20 @@ Decl& Decl::Object(std::string name, ObjectDeclarationSymbolKind objDeclSymK, Sc
     return *this;
 }
 
-Decl& Decl::Type(std::string typedefNameOrTag, TypeDeclarationSymbolKind tyDeclSymK)
+Decl& Decl::Type(std::string typedefName)
 {
-    ident_ = std::move(typedefNameOrTag);
+    ident_ = std::move(typedefName);
     declSymK_ = DeclarationSymbolKind::Type;
-    tyDeclSymK_ = tyDeclSymK;
+    tyDeclSymK_ = TypeDeclarationSymbolKind::Typedef;
+    return *this;
+}
+
+Decl& Decl::Type(std::string tag, TagTypeDeclarationSymbolKind tagTyDeclK)
+{
+    ident_ = std::move(tag);
+    declSymK_ = DeclarationSymbolKind::Type;
+    tyDeclSymK_ = TypeDeclarationSymbolKind::Tag;
+    tagTyDeclK_ = tagTyDeclK;
     return *this;
 }
 

@@ -18,49 +18,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol__IMPL__.inc"
-#include "TypeDeclarationSymbol_Enum.h"
+#ifndef PSYCHE_C_TAG_TYPE_DECLARATION_KIND_H__
+#define PSYCHE_C_TAG_TYPE_DECLARATION_KIND_H__
 
-#include "syntax/Lexeme_Identifier.h"
-#include "types/Type_Tag.h"
+#include "API.h"
+#include "Fwds.h"
 
-#include <iostream>
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-Enum::Enum(const SyntaxTree* tree,
-           const Symbol* containingSym,
-           const Scope* enclosingScope,
-           TagType* tagTy)
-    : TagTypeDeclaration(tree,
-                         containingSym,
-                         enclosingScope,
-                         tagTy,
-                         TagTypeDeclarationSymbolKind::Enum)
-{
-}
-
-std::string Enum::toDisplayString() const
-{
-    std::ostringstream oss;
-    oss << "enum ";
-    oss << P_CAST->ty_->asTagType()->tag()->valueText();
-    return oss.str();
-}
+#include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Enum& enun)
+/**
+ * \brief The TagTypeDeclarationSymbolKind enum.
+ */
+enum class PSY_C_API TagTypeDeclarationSymbolKind : std::uint8_t
 {
-    std::ostringstream oss;
-    oss << "<Enum | ";
-    oss << "type:" << to_string(*enun.specifiedType());
-    oss << ">";
-    return oss.str();
+    Struct,
+    Union,
+    Enum,
+};
+
+inline std::string PSY_C_API to_string(TagTypeDeclarationSymbolKind tagTyDeclK)
+{
+    switch (tagTyDeclK) {
+        case TagTypeDeclarationSymbolKind::Struct:
+            return "Struct";
+        case TagTypeDeclarationSymbolKind::Union:
+            return "Union";
+        case TagTypeDeclarationSymbolKind::Enum:
+            return "Enum";
+    }
 }
 
 } // C
 } // psy
+
+#endif

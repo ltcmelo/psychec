@@ -26,6 +26,7 @@
 #include "binder/Scope.h"
 #include "symbols/SymbolKind.h"
 #include "symbols/DeclarationSymbolKind.h"
+#include "symbols/TagTypeDeclarationSymbolKind.h"
 #include "symbols/TypeDeclarationSymbolKind.h"
 #include "symbols/ObjectDeclarationSymbolKind.h"
 #include "tests/TestSuite.h"
@@ -98,7 +99,8 @@ struct Decl
                  ObjectDeclarationSymbolKind objDeclSymK,
                  ScopeKind scopeK = ScopeKind::File);
     Decl& Function(std::string name, ScopeKind scopeK = ScopeKind::File);
-    Decl& Type(std::string typedefNameOrTag, TypeDeclarationSymbolKind tyDeclSymK);
+    Decl& Type(std::string typedefName);
+    Decl& Type(std::string tag, TagTypeDeclarationSymbolKind tagTyDeclK);
     Decl& withScopeKind(ScopeKind scopeK);
     Decl& inNameSpace(NameSpace ns);
 
@@ -106,6 +108,7 @@ struct Decl
     DeclarationSymbolKind declSymK_;
     ObjectDeclarationSymbolKind objDeclSymK_;
     TypeDeclarationSymbolKind tyDeclSymK_;
+    TagTypeDeclarationSymbolKind tagTyDeclK_;
     ScopeKind scopeK_;
     NameSpace ns_;
     Ty ty_;

@@ -39,23 +39,14 @@ TypeDeclarationSymbolKind TypeDeclarationSymbol::kind() const
     return TypeDeclarationSymbolKind(P_CAST->BF_.tyDeclSymK_);
 }
 
-const Type* TypeDeclarationSymbol::specifiedType() const
-{
-    return P_CAST->ty_;
-}
-
 namespace psy {
 namespace C {
 
 std::string PSY_C_API to_string(const TypeDeclarationSymbol& tyDecl)
 {
     switch (tyDecl.kind()) {
-        case TypeDeclarationSymbolKind::Struct:
-            return to_string(*tyDecl.asStruct());
-        case TypeDeclarationSymbolKind::Union:
-            return to_string(*tyDecl.asUnion());
-        case TypeDeclarationSymbolKind::Enum:
-            return to_string(*tyDecl.asEnum());
+        case TypeDeclarationSymbolKind::Tag:
+            return to_string(*tyDecl.asTagTypeDeclaration());
         case TypeDeclarationSymbolKind::Typedef:
             return to_string(*tyDecl.asTypedef());
     }

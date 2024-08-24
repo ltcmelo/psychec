@@ -1,0 +1,79 @@
+// Copyright (c) 2024 Leandro T. C. Melo <ltcmelo@gmail.com>
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+#include "TypeDeclarationSymbol__IMPL__.inc"
+#include "TypeDeclaration_Tag.h"
+
+#include "symbols/Symbol_ALL.h"
+#include "types/Type_Tag.h"
+
+using namespace psy;
+using namespace C;
+
+TagTypeDeclaration::TagTypeDeclaration(const SyntaxTree* tree,
+                                       const Symbol* containingSym,
+                                       const Scope* enclosingScope,
+                                       TagType* tagTy,
+                                       TagTypeDeclarationSymbolKind tagTyDeclK)
+    : TypeDeclarationSymbol(
+          new TypeDeclarationSymbolImpl(tree,
+                                        containingSym,
+                                        enclosingScope,
+                                        NameSpace::Tags,
+                                        tagTy,
+                                        TypeDeclarationSymbolKind::Tag,
+                                        tagTyDeclK))
+{
+}
+
+TagTypeDeclarationSymbolKind TagTypeDeclaration::kind() const
+{
+    return TagTypeDeclarationSymbolKind(P_CAST->BF_.tagTyDeclK_);
+}
+
+const Identifier* TagTypeDeclaration::identifier() const
+{
+    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
+    return P_CAST->ty_->asTagType()->tag();
+}
+
+const TagType* TagTypeDeclaration::specifiedType() const
+{
+    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
+    return P_CAST->ty_->asTagType();
+}
+
+namespace psy {
+namespace C {
+
+std::string PSY_C_API to_string(const TagTypeDeclaration& tagTyDecl)
+{
+    switch (tagTyDecl.kind()) {
+        case TagTypeDeclarationSymbolKind::Struct:
+            return to_string(*tagTyDecl.asStruct());
+        case TagTypeDeclarationSymbolKind::Union:
+            return to_string(*tagTyDecl.asUnion());
+        case TagTypeDeclarationSymbolKind::Enum:
+            return to_string(*tagTyDecl.asEnum());
+    }
+}
+
+} // C
+} // psy

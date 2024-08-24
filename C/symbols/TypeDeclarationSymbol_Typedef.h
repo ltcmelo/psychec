@@ -42,14 +42,19 @@ public:
     //!@}
 
     /**
-     * Compute a displayable string for \c this Symbol.
+     * Compute a displayable string for \c this Typedef.
      */
     virtual std::string toDisplayString() const override;
 
     /**
-     * The Identifier with which \c this DeclarationSymbol is declared.
+     * The Identifier with which \c this Typedef is declared.
      */
     virtual const Identifier* identifier() const override;
+
+    /**
+     * The Type defined by \c this Typedef.
+     */
+    const Type* definedType() const;
 
     /**
      * The Type synonymized by \c this Typedef.

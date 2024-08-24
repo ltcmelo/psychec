@@ -34,21 +34,12 @@ Struct::Struct(const SyntaxTree* tree,
                const Symbol* containingSym,
                const Scope* enclosingScope,
                TagType* tagTy)
-    : TypeDeclarationSymbol(
-          new TypeDeclarationSymbolImpl(tree,
-                                        containingSym,
-                                        enclosingScope,
-                                        NameSpace::Tags,
-                                        tagTy,
-                                        TypeDeclarationSymbolKind::Struct))
+    : TagTypeDeclaration(tree,
+                         containingSym,
+                         enclosingScope,
+                         tagTy,
+                         TagTypeDeclarationSymbolKind::Struct)
 {
-}
-
-const Identifier* Struct::identifier() const
-{
-    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
-    PSY_ASSERT_2(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Struct, return nullptr);
-    return P_CAST->ty_->asTagType()->tag();
 }
 
 std::string Struct::toDisplayString() const

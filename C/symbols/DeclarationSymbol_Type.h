@@ -66,20 +66,11 @@ public:
     /**
      * Cast \c this TypeDeclarationSymbol.
      */
-    virtual Struct* asStruct() { return nullptr; }
-    virtual const Struct* asStruct() const { return nullptr; }
-    virtual Union* asUnion() { return nullptr; }
-    virtual const Union* asUnion() const { return nullptr; }
-    virtual Enum* asEnum() { return nullptr; }
-    virtual const Enum* asEnum() const { return nullptr; }
+    virtual TagTypeDeclaration* asTagTypeDeclaration() { return nullptr; }
+    virtual const TagTypeDeclaration* asTagTypeDeclaration() const { return nullptr; }
     virtual Typedef* asTypedef() { return nullptr; }
     virtual const Typedef* asTypedef() const { return nullptr; }
     //!@}
-
-    /**
-     * The Type specified by \c this TypeDeclarationSymbol.
-     */
-    const Type* specifiedType() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);

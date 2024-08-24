@@ -21,29 +21,24 @@
 #ifndef PSYCHE_C_UNION_TYPE_DECLARATION_SYMBOL_H__
 #define PSYCHE_C_UNION_TYPE_DECLARATION_SYMBOL_H__
 
-#include "DeclarationSymbol_Type.h"
+#include "TypeDeclaration_Tag.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_API Union final : public TypeDeclarationSymbol
+class PSY_C_API Union final : public TagTypeDeclaration
 {
 public:
     //!@{
     /**
-     * Cast \c this TypeDeclarationSymbol as a Union.
+     * Cast \c this TagTypeDeclaration as a Union.
      */
     virtual Union* asUnion() override { return this; }
     virtual const Union* asUnion() const override { return this; }
     //!@}
 
     /**
-     * The Identifier with which \c this DeclarationSymbol is declared.
-     */
-    virtual const Identifier* identifier() const override;
-
-    /**
-     * Compute a displayable string for \c this Symbol.
+     * Compute a displayable string for \c this Union.
      */
     virtual std::string toDisplayString() const override;
 

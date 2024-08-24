@@ -20,6 +20,7 @@
 
 #include "Symbol__IMPL__.inc"
 #include "DeclarationSymbol_Type.h"
+#include "TagTypeDeclarationSymbolKind.h"
 
 #include "../common/infra/Assertions.h"
 
@@ -35,7 +36,24 @@ struct TypeDeclarationSymbol::TypeDeclarationSymbolImpl : SymbolImpl
                               const Scope* enclosingScope,
                               NameSpace ns,
                               Type* ty,
-                              TypeDeclarationSymbolKind tyDeclSymK)
+                              TypeDeclarationSymbolKind tyDeclK,
+                              TagTypeDeclarationSymbolKind tagTyDeclK)
+        : TypeDeclarationSymbolImpl(tree,
+                                    containingSym,
+                                    enclosingScope,
+                                    ns,
+                                    ty,
+                                    tyDeclK)
+    {
+        BF_.tagTyDeclK_ = static_cast<std::uint32_t>(tagTyDeclK);
+    }
+
+    TypeDeclarationSymbolImpl(const SyntaxTree* tree,
+                              const Symbol* containingSym,
+                              const Scope* enclosingScope,
+                              NameSpace ns,
+                              Type* ty,
+                              TypeDeclarationSymbolKind tyDeclK)
         : SymbolImpl(tree,
                      containingSym,
                      enclosingScope,
@@ -43,7 +61,7 @@ struct TypeDeclarationSymbol::TypeDeclarationSymbolImpl : SymbolImpl
                      SymbolKind::Declaration)
         , ty_(ty)
     {
-        BF_.tyDeclSymK_ = static_cast<std::uint32_t>(tyDeclSymK);
+        BF_.tyDeclSymK_ = static_cast<std::uint32_t>(tyDeclK);
     }
 
     Type* ty_;

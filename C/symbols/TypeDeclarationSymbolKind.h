@@ -35,21 +35,15 @@ namespace C {
  */
 enum class PSY_C_API TypeDeclarationSymbolKind : std::uint8_t
 {
-    Struct,
-    Union,
-    Enum,
+    Tag,
     Typedef
 };
 
 inline std::string PSY_C_API to_string(TypeDeclarationSymbolKind tySymK)
 {
     switch (tySymK) {
-        case TypeDeclarationSymbolKind::Struct:
-            return "Struct";
-        case TypeDeclarationSymbolKind::Union:
-            return "Union";
-        case TypeDeclarationSymbolKind::Enum:
-            return "Enum";
+        case TypeDeclarationSymbolKind::Tag:
+            return "Tag";
         case TypeDeclarationSymbolKind::Typedef:
             return "Typedef";
     }

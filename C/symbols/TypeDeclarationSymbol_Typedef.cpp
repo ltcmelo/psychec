@@ -55,6 +55,11 @@ const Identifier* Typedef::identifier() const
     return P_CAST->ty_->asTypedefType()->typedefName();
 }
 
+const Type* Typedef::definedType() const
+{
+    return P_CAST->ty_;
+}
+
 const Type* Typedef::synonymizedType() const
 {
     return synonymizedTy_;
@@ -77,7 +82,8 @@ std::string to_string(const Typedef& tydef)
 {
     std::ostringstream oss;
     oss << "<Typedef | ";
-    oss << "type:" << to_string(*tydef.specifiedType());
+    oss << "defined-type:" << to_string(*tydef.definedType());
+    oss << "synonymized-type:" << to_string(*tydef.synonymizedType());
     oss << ">";
     return oss.str();
 }

@@ -167,6 +167,9 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Typedef.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Union.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Union.h
+    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclarationSymbolKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Tag.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Tag.cpp
 
     # Binder
     ${PROJECT_SOURCE_DIR}/binder/Binder__MACROS__.inc

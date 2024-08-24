@@ -69,15 +69,18 @@ struct Symbol::SymbolImpl
         std::uint32_t symK_ : 3;
         std::uint32_t ns_ : 2;
 
-        // DeclarationSymbol
+        // Declaration
         std::uint32_t declSymK_: 2;
         std::uint32_t static_ : 1;
 
-        // ObjectDeclarationSymbol
+        // ObjectDeclaration
         std::uint32_t objDeclSymK_ : 3;
 
-        // TypeDeclarationSymbol
+        // TypeDeclaration
         std::uint32_t tyDeclSymK_ : 3;
+
+        // TagTypeDeclaration
+        std::uint32_t tagTyDeclK_ : 2;
     };
     union
     {
