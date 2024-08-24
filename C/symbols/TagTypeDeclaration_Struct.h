@@ -18,67 +18,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPEDEF_TYPE_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_TYPEDEF_TYPE_DECLARATION_SYMBOL_H__
+#ifndef PSYCHE_C_STRUCT_H__
+#define PSYCHE_C_STRUCT_H__
 
-#include "DeclarationSymbol_Type.h"
-
-#include "MIXIN_TypeableSymbol.h"
+#include "TypeDeclaration_Tag.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_API Typedef final
-        : public TypeDeclarationSymbol
-        , public MIXIN_TypeableSymbol
+class PSY_C_API Struct final : public TagTypeDeclaration
 {
 public:
     //!@{
     /**
-     * Cast \c this TypeDeclarationSymbol as a Typedef.
+     * Cast \c this TagTypeDeclaration as a Struct.
      */
-    virtual Typedef* asTypedef() override { return this; }
-    virtual const Typedef* asTypedef() const override { return this; }
+    virtual Struct* asStruct() override { return this; }
+    virtual const Struct* asStruct() const override { return this; }
     //!@}
 
     /**
-     * Compute a displayable string for \c this Symbol.
+     * Compute a displayable string for \c this Struct.
      */
     virtual std::string toDisplayString() const override;
 
-    /**
-     * The Identifier with which \c this DeclarationSymbol is declared.
-     */
-    virtual const Identifier* identifier() const override;
-
-    /**
-     * The Type synonymized by \c this Typedef.
-     */
-    const Type* synonymizedType() const;
-
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
-    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
 
-    Typedef(const SyntaxTree* tree,
-            const Symbol* containingSym,
-            const Scope* enclosingScope,
-            TypedefType* tydefTy,
-            const Type* synonymizedTy);
-
-    Typedef(const SyntaxTree* tree,
-            const Symbol* containingSym,
-            const Scope* enclosingScope,
-            TypedefType* tydefTy);
-
-    virtual void setType(const Type* ty) override;
-    virtual const Type* retypeableType() const override;
-
-private:
-    const Type* synonymizedTy_;
+    Struct(const SyntaxTree* tree,
+           const Symbol* containingSym,
+           const Scope* enclosingScope,
+           TagType* tagTy);
 };
 
-std::string PSY_C_API to_string(const Typedef& tydef);
+std::string PSY_C_API to_string(const Struct& strukt);
 
 } // C
 } // psy

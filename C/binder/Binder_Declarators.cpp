@@ -91,15 +91,15 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtMultipleDeclarators_COMMON(
         SYM_AT_TOP(sym);
         switch (sym->kind()) {
             case SymbolKind::Declaration: {
-                auto decl = sym->asDeclarationSymbol();
+                auto decl = sym->asDeclaration();
                 switch (decl->kind()) {
-                    case DeclarationSymbolKind::Type:
+                    case DeclarationKind::Type:
                         PSY_ASSERT_1(
-                            decl->asTypeDeclarationSymbol()->kind() == TypeDeclarationSymbolKind::Typedef);
+                            decl->asTypeDeclaration()->kind() == TypeDeclarationKind::Typedef);
                         [[fallthrough]];
 
-                    case DeclarationSymbolKind::Function:
-                    case DeclarationSymbolKind::Object: {
+                    case DeclarationKind::Function:
+                    case DeclarationKind::Object: {
                         typeDeclarationAtTopWithTypeAtTop();
                         popTypesUntilNonDerivedDeclaratorType();
                         popSymbol();
@@ -298,32 +298,37 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
                     SYM_AT_TOP_V(sym);
                     switch (sym->kind()) {
                         case SymbolKind::Declaration: {
-                            auto decl = sym->asDeclarationSymbol();
+                            auto decl = sym->asDeclaration();
                             switch (decl->kind()) {
-                                case DeclarationSymbolKind::Type:
-                                    switch (decl->asTypeDeclarationSymbol()->kind()) {
-                                        case TypeDeclarationSymbolKind::Union:
-                                        case TypeDeclarationSymbolKind::Struct:
-                                            bindAndPushSymbol<Field>(node);
-                                            break;
+                                case DeclarationKind::Type: {
+                                    auto tyDecl = decl->asTypeDeclaration();
+                                    switch (tyDecl->kind()) {
+                                        case TypeDeclarationKind::Tag: {
+                                            auto tagTyDecl = tyDecl->asTagTypeDeclaration();
+                                            switch (tagTyDecl->kind()) {
+                                                case TagTypeDeclarationKind::Union:
+                                                case TagTypeDeclarationKind::Struct:
+                                                    bindAndPushSymbol<Field>(node);
+                                                    break;
 
-                                        case TypeDeclarationSymbolKind::Enum:
-                                            bindAndPushSymbol<Enumerator>(node);
+                                                case TagTypeDeclarationKind::Enum:
+                                                    bindAndPushSymbol<Enumerator>(node);
+                                                    break;
+                                            }
                                             break;
-
-                                        case TypeDeclarationSymbolKind::Typedef:
+                                        }
+                                        case TypeDeclarationKind::Typedef:
                                             PSY_ASSERT_2(false, return);
                                     }
                                     break;
-
-                                case DeclarationSymbolKind::Object:
-                                case DeclarationSymbolKind::Function:
+                                }
+                                case DeclarationKind::Object:
+                                case DeclarationKind::Function:
                                     bindAndPushSymbol<Variable>(node);
                                     break;
                             }
                             break;
                         }
-
                         case SymbolKind::TranslationUnit:
                             bindAndPushSymbol<Variable>(node);
                             break;

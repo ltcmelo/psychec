@@ -18,74 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol__IMPL__.inc"
-#include "DeclarationSymbol_Function.h"
+#include "ObjectDeclaration_Variable.h"
 
-#include "symbols/Symbol_ALL.h"
+#include "binder/Scope.h"
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_ALL.h"
-
-#include "../common/infra/Assertions.h"
 
 #include <sstream>
 
 using namespace psy;
 using namespace C;
 
-struct Function::FunctionSymbolImpl : SymbolImpl
-{
-    FunctionSymbolImpl(const SyntaxTree* tree,
-                       const Symbol* containingSym,
-                       const Scope* enclosingScope)
-        : SymbolImpl(tree,
-                     containingSym,
-                     enclosingScope,
-                     NameSpace::OrdinaryIdentifiers,
-                     SymbolKind::Declaration)
-        , name_(nullptr)
-        , ty_(nullptr)
-    {}
-
-    const Identifier* name_;
-    const Type* ty_;
-};
-
-Function::Function(const SyntaxTree* tree,
+Variable::Variable(const SyntaxTree* tree,
                    const Symbol* containingSym,
                    const Scope* enclosingScope)
-    : DeclarationSymbol(
-          new FunctionSymbolImpl(tree,
-                                 containingSym,
-                                 enclosingScope),
-          DeclarationSymbolKind::Function)
+    : ObjectDeclaration(tree,
+                              containingSym,
+                              enclosingScope,
+                              ObjectDeclarationKind::Variable)
 {}
 
-const Identifier* Function::name() const
-{
-    return P_CAST->name_;
-}
-
-void Function::setName(const Identifier* name)
-{
-    P_CAST->name_ = name;
-}
-
-const Type* Function::type() const
-{
-    return P_CAST->ty_;
-}
-
-const Type* Function::retypeableType() const
-{
-    return type();
-}
-
-void Function::setType(const Type* ty)
-{
-    P_CAST->ty_ = ty;
-}
-
-std::string Function::toDisplayString() const
+std::string Variable::toDisplayString() const
 {
     return "";
 }
@@ -93,12 +46,12 @@ std::string Function::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Function& func)
+std::string to_string(const Variable& var)
 {
     std::ostringstream oss;
-    oss << "<Function |";
-    oss << " name:" << func.name()->valueText();
-    oss << " type:" << to_string(*func.type());
+    oss << "<Variable |";
+    oss << " name:" << var.name()->valueText();
+    oss << " type:" << to_string(*var.type());
     oss << ">";
     return oss.str();
 }

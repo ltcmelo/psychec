@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_OBJECT_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_OBJECT_DECLARATION_SYMBOL_H__
+#ifndef PSYCHE_C_OBJECT_DECLARATION_H__
+#define PSYCHE_C_OBJECT_DECLARATION_H__
 
 #include "API.h"
 #include "Fwds.h"
@@ -27,7 +27,7 @@
 #include "MIXIN_NameableSymbol.h"
 #include "MIXIN_TypeableSymbol.h"
 #include "Symbol_Declaration.h"
-#include "ObjectDeclarationSymbolKind.h"
+#include "ObjectDeclarationKind.h"
 
 #include "../common/infra/AccessSpecifiers.h"
 
@@ -37,31 +37,31 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The ObjectDeclarationSymbol class.
+ * \brief The ObjectDeclaration class.
  */
-class PSY_C_API ObjectDeclarationSymbol
-        : public DeclarationSymbol
+class PSY_C_API ObjectDeclaration
+        : public Declaration
         , public MIXIN_NameableSymbol
         , public MIXIN_TypeableSymbol
 {
 public:
-    virtual ~ObjectDeclarationSymbol();
+    virtual ~ObjectDeclaration();
 
     //!@{
     /**
-     * Cast \c this Symbol as a ObjectDeclarationSymbol.
+     * Cast \c this Symbol as a ObjectDeclaration.
      */
-    virtual ObjectDeclarationSymbol* asObjectDeclarationSymbol() override { return this; }
-    virtual const ObjectDeclarationSymbol* asObjectDeclarationSymbol() const override { return this; }
+    virtual ObjectDeclaration* asObjectDeclaration() override { return this; }
+    virtual const ObjectDeclaration* asObjectDeclaration() const override { return this; }
 
     /**
-     * The ObjectDeclarationSymbolKind of \c this ObjectDeclarationSymbol.
+     * The ObjectDeclarationKind of \c this ObjectDeclaration.
      */
-    ObjectDeclarationSymbolKind kind() const;
+    ObjectDeclarationKind kind() const;
 
     //!@{
     /**
-     * Cast \c this ObjectDeclarationSymbol.
+     * Cast \c this ObjectDeclaration.
      */
     virtual Enumerator* asEnumerator() { return nullptr; }
     virtual const Enumerator* asEnumerator() const { return nullptr; }
@@ -74,12 +74,12 @@ public:
     //!@}
 
     /**
-     * The Identifier with which \c this DeclarationSymbol is declared.
+     * The Identifier with which \c this Declaration is declared.
      */
     virtual const Identifier* identifier() const override { return name(); }
 
     /**
-     * The Identifier that names \c this ObjectDeclarationSymbol.
+     * The Identifier that names \c this ObjectDeclaration.
      */
     const Identifier* name() const;
 
@@ -97,14 +97,14 @@ PSY_INTERNAL:
     virtual const Type* retypeableType() const override;
 
 protected:
-    DECL_PIMPL_SUB(ObjectDeclarationSymbol);
-    ObjectDeclarationSymbol(const SyntaxTree* tree,
+    DECL_PIMPL_SUB(ObjectDeclaration);
+    ObjectDeclaration(const SyntaxTree* tree,
                             const Symbol* containingSym,
                             const Scope* enclosingScope,
-                            ObjectDeclarationSymbolKind objDeclSymK);
+                            ObjectDeclarationKind objDeclK);
 };
 
-std::string PSY_C_API to_string(const ObjectDeclarationSymbol& sym);
+std::string PSY_C_API to_string(const ObjectDeclaration& sym);
 
 } // C
 } // psy

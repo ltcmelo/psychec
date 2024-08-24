@@ -18,55 +18,72 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol__IMPL__.inc"
-#include "TypeDeclarationSymbol_Enum.h"
+#include "TypeDeclaration_Typedef.h"
+#include "TypeDeclaration__IMPL__.inc"
 
 #include "syntax/Lexeme_Identifier.h"
-#include "types/Type_Tag.h"
+#include "types/Type_Typedef.h"
 
-#include <iostream>
 #include <sstream>
 
 using namespace psy;
 using namespace C;
 
-Enum::Enum(const SyntaxTree* tree,
-           const Symbol* containingSym,
-           const Scope* enclosingScope,
-           TagType* tagTy)
-    : TypeDeclarationSymbol(
-          new TypeDeclarationSymbolImpl(tree,
+Typedef::Typedef(const SyntaxTree* tree,
+                 const Symbol* containingSym,
+                 const Scope* enclosingScope,
+                 TypedefType* tydefTy)
+    : TypeDeclaration(
+          new TypeDeclarationImpl(tree,
                                         containingSym,
                                         enclosingScope,
-                                        NameSpace::Tags,
-                                        tagTy,
-                                        TypeDeclarationSymbolKind::Enum))
+                                        NameSpace::OrdinaryIdentifiers,
+                                        tydefTy,
+                                        TypeDeclarationKind::Typedef))
+    , synonymizedTy_(nullptr)
 {
 }
 
-const Identifier* Enum::identifier() const
+std::string Typedef::toDisplayString() const
 {
-    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
-    PSY_ASSERT_2(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Enum, return nullptr);
-    return P_CAST->ty_->asTagType()->tag();
+    return P_CAST->ty_->asTypedefType()->typedefName()->valueText();
 }
 
-std::string Enum::toDisplayString() const
+const Identifier* Typedef::identifier() const
 {
-    std::ostringstream oss;
-    oss << "enum ";
-    oss << P_CAST->ty_->asTagType()->tag()->valueText();
-    return oss.str();
+    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Typedef, return nullptr);
+    return P_CAST->ty_->asTypedefType()->typedefName();
+}
+
+const Type* Typedef::definedType() const
+{
+    return P_CAST->ty_;
+}
+
+const Type* Typedef::synonymizedType() const
+{
+    return synonymizedTy_;
+}
+
+void Typedef::setType(const Type* synonymizedTy)
+{
+    synonymizedTy_ = synonymizedTy;
+}
+
+const Type* Typedef::retypeableType() const
+{
+    return synonymizedType();
 }
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Enum& enun)
+std::string to_string(const Typedef& tydef)
 {
     std::ostringstream oss;
-    oss << "<Enum | ";
-    oss << "type:" << to_string(*enun.specifiedType());
+    oss << "<Typedef | ";
+    oss << "defined-type:" << to_string(*tydef.definedType());
+    oss << "synonymized-type:" << to_string(*tydef.synonymizedType());
     oss << ">";
     return oss.str();
 }

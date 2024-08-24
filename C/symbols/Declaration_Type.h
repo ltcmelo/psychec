@@ -18,14 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_TYPE_DECLARATION_SYMBOL_H__
+#ifndef PSYCHE_C_TYPE_DECLARATION_H__
+#define PSYCHE_C_TYPE_DECLARATION_H__
 
 #include "API.h"
 #include "Fwds.h"
 
 #include "Symbol_Declaration.h"
-#include "TypeDeclarationSymbolKind.h"
+#include "TypeDeclarationKind.h"
 
 #include "../common/infra/AccessSpecifiers.h"
 
@@ -35,61 +35,52 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The TypeDeclarationSymbol class.
+ * \brief The TypeDeclaration class.
  *
  * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.ITypeDeclarationSymbol
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.ITypeDeclaration
  * from Roslyn, the .NET Compiler Platform. Yet, Psyche-C distinguishes
  * between type symbols and types.
  *
  * \see Type
  */
-class PSY_C_API TypeDeclarationSymbol : public DeclarationSymbol
+class PSY_C_API TypeDeclaration : public Declaration
 {
 public:
-    virtual ~TypeDeclarationSymbol();
+    virtual ~TypeDeclaration();
 
     //!@{
     /**
-     * Cast \c this Symbol as a TypeDeclarationSymbol.
+     * Cast \c this Symbol as a TypeDeclaration.
      */
-    virtual TypeDeclarationSymbol* asTypeDeclarationSymbol() override { return this; }
-    virtual const TypeDeclarationSymbol* asTypeDeclarationSymbol() const override { return this; }
+    virtual TypeDeclaration* asTypeDeclaration() override { return this; }
+    virtual const TypeDeclaration* asTypeDeclaration() const override { return this; }
     //!@}
 
     /**
-     * The TypeDeclarationSymbolKind of \c this TypeDeclarationSymbol.
+     * The TypeDeclarationKind of \c this TypeDeclaration.
      */
-    TypeDeclarationSymbolKind kind() const;
+    TypeDeclarationKind kind() const;
 
     //!@{
     /**
-     * Cast \c this TypeDeclarationSymbol.
+     * Cast \c this TypeDeclaration.
      */
-    virtual Struct* asStruct() { return nullptr; }
-    virtual const Struct* asStruct() const { return nullptr; }
-    virtual Union* asUnion() { return nullptr; }
-    virtual const Union* asUnion() const { return nullptr; }
-    virtual Enum* asEnum() { return nullptr; }
-    virtual const Enum* asEnum() const { return nullptr; }
+    virtual TagTypeDeclaration* asTagTypeDeclaration() { return nullptr; }
+    virtual const TagTypeDeclaration* asTagTypeDeclaration() const { return nullptr; }
     virtual Typedef* asTypedef() { return nullptr; }
     virtual const Typedef* asTypedef() const { return nullptr; }
     //!@}
-
-    /**
-     * The Type specified by \c this TypeDeclarationSymbol.
-     */
-    const Type* specifiedType() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
 protected:
-    DECL_PIMPL_SUB(TypeDeclarationSymbol);
-    TypeDeclarationSymbol(TypeDeclarationSymbolImpl* p);
+    DECL_PIMPL_SUB(TypeDeclaration);
+    TypeDeclaration(TypeDeclarationImpl* p);
 };
 
-std::string PSY_C_API to_string(const TypeDeclarationSymbol& tyDecl);
+std::string PSY_C_API to_string(const TypeDeclaration& tyDecl);
 
 } // C
 } // psy

@@ -18,29 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ObjectDeclarationSymbol_Parameter.h"
+#include "ObjectDeclaration_Field.h"
 
-#include "binder/Scope.h"
 #include "symbols/Symbol_ALL.h"
+#include "binder/Scope.h"
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_ALL.h"
-
 
 #include <sstream>
 
 using namespace psy;
 using namespace C;
 
-Parameter::Parameter(const SyntaxTree* tree,
-                     const Symbol* containingSym,
-                     const Scope* enclosingScope)
-    : ObjectDeclarationSymbol(tree,
+Field::Field(const SyntaxTree* tree,
+             const Symbol* containingSym,
+             const Scope* enclosingScope)
+    : ObjectDeclaration(tree,
                               containingSym,
                               enclosingScope,
-                              ObjectDeclarationSymbolKind::Parameter)
+                              ObjectDeclarationKind::Field)
 {}
 
-std::string Parameter::toDisplayString() const
+std::string Field::toDisplayString() const
 {
     return "";
 }
@@ -48,12 +47,12 @@ std::string Parameter::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Parameter& parm)
+std::string to_string(const Field& fld)
 {
     std::ostringstream oss;
-    oss << "<Parameter |";
-    oss << " name:" << parm.name()->valueText();
-    oss << " type:" << to_string(*parm.type());
+    oss << "<Field | ";
+    oss << "name:" << fld.name()->valueText();
+    oss << "type:" << to_string(*fld.type());
     oss << ">";
     return oss.str();
 }

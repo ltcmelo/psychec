@@ -18,45 +18,72 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_UNION_TYPE_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_UNION_TYPE_DECLARATION_SYMBOL_H__
+#ifndef PSYCHE_C_TYPEDEF_H__
+#define PSYCHE_C_TYPEDEF_H__
 
-#include "DeclarationSymbol_Type.h"
+#include "Declaration_Type.h"
+
+#include "MIXIN_TypeableSymbol.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_API Union final : public TypeDeclarationSymbol
+class PSY_C_API Typedef final
+        : public TypeDeclaration
+        , public MIXIN_TypeableSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this TypeDeclarationSymbol as a Union.
+     * Cast \c this TypeDeclaration as a Typedef.
      */
-    virtual Union* asUnion() override { return this; }
-    virtual const Union* asUnion() const override { return this; }
+    virtual Typedef* asTypedef() override { return this; }
+    virtual const Typedef* asTypedef() const override { return this; }
     //!@}
 
     /**
-     * The Identifier with which \c this DeclarationSymbol is declared.
+     * Compute a displayable string for \c this Typedef.
+     */
+    virtual std::string toDisplayString() const override;
+
+    /**
+     * The Identifier with which \c this Typedef is declared.
      */
     virtual const Identifier* identifier() const override;
 
     /**
-     * Compute a displayable string for \c this Symbol.
+     * The Type defined by \c this Typedef.
      */
-    virtual std::string toDisplayString() const override;
+    const Type* definedType() const;
+
+    /**
+     * The Type synonymized by \c this Typedef.
+     */
+    const Type* synonymizedType() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
 
-    Union(const SyntaxTree* tree,
-          const Symbol* containingSym,
-          const Scope* enclosingScope,
-          TagType* tagTy);
+    Typedef(const SyntaxTree* tree,
+            const Symbol* containingSym,
+            const Scope* enclosingScope,
+            TypedefType* tydefTy,
+            const Type* synonymizedTy);
+
+    Typedef(const SyntaxTree* tree,
+            const Symbol* containingSym,
+            const Scope* enclosingScope,
+            TypedefType* tydefTy);
+
+    virtual void setType(const Type* ty) override;
+    virtual const Type* retypeableType() const override;
+
+private:
+    const Type* synonymizedTy_;
 };
 
-std::string PSY_C_API to_string(const Union& uniom);
+std::string PSY_C_API to_string(const Typedef& tydef);
 
 } // C
 } // psy

@@ -102,28 +102,37 @@ Decl::Decl()
     : ty_(*this)
 {}
 
-Decl& Decl::Object(std::string name, ObjectDeclarationSymbolKind objDeclSymK, ScopeKind scopeK)
+Decl& Decl::Object(std::string name, ObjectDeclarationKind objDeclK, ScopeKind scopeK)
 {
     ident_ = std::move(name);
-    declSymK_ = DeclarationSymbolKind::Object;
-    objDeclSymK_ = objDeclSymK;
+    declK_ = DeclarationKind::Object;
+    objDeclK_ = objDeclK;
     scopeK_ = scopeK;
     ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;
 }
 
-Decl& Decl::Type(std::string typedefNameOrTag, TypeDeclarationSymbolKind tyDeclSymK)
+Decl& Decl::Type(std::string typedefName)
 {
-    ident_ = std::move(typedefNameOrTag);
-    declSymK_ = DeclarationSymbolKind::Type;
-    tyDeclSymK_ = tyDeclSymK;
+    ident_ = std::move(typedefName);
+    declK_ = DeclarationKind::Type;
+    tyDeclK_ = TypeDeclarationKind::Typedef;
+    return *this;
+}
+
+Decl& Decl::Type(std::string tag, TagTypeDeclarationKind tagTyDeclK)
+{
+    ident_ = std::move(tag);
+    declK_ = DeclarationKind::Type;
+    tyDeclK_ = TypeDeclarationKind::Tag;
+    tagTyDeclK_ = tagTyDeclK;
     return *this;
 }
 
 Decl& Decl::Function(std::string name, ScopeKind scopeK)
 {
     ident_ = std::move(name);
-    declSymK_ = DeclarationSymbolKind::Function;
+    declK_ = DeclarationKind::Function;
     scopeK_ = scopeK;
     ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;

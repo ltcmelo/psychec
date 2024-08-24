@@ -75,7 +75,7 @@ private:
     SymContT syms_;
     void pushSymbol(Symbol*);
     Symbol* popSymbol();
-    DeclarationSymbol* popSymbolAsDeclaration();
+    Declaration* popSymbolAsDeclaration();
     template <class SymT, class... SymTArgs> SymT* bindAndPushSymbol(
             const SyntaxNode* node,
             SymTArgs... arg);

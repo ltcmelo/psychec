@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol__IMPL__.inc"
-#include "TypeDeclarationSymbol_Union.h"
+#include "TypeDeclaration__IMPL__.inc"
+#include "TagTypeDeclaration_Union.h"
 
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_Tag.h"
@@ -34,21 +34,12 @@ Union::Union(const SyntaxTree* tree,
              const Symbol* containingSym,
              const Scope* enclosingScope,
              TagType* tagTy)
-    : TypeDeclarationSymbol(
-          new TypeDeclarationSymbolImpl(tree,
-                                        containingSym,
-                                        enclosingScope,
-                                        NameSpace::Tags,
-                                        tagTy,
-                                        TypeDeclarationSymbolKind::Union))
+    : TagTypeDeclaration(tree,
+                         containingSym,
+                         enclosingScope,
+                         tagTy,
+                         TagTypeDeclarationKind::Union)
 {
-}
-
-const Identifier* Union::identifier() const
-{
-    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
-    PSY_ASSERT_2(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Union, return nullptr);
-    return P_CAST->ty_->asTagType()->tag();
 }
 
 std::string Union::toDisplayString() const

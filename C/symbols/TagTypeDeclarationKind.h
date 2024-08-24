@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,31 +18,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_NAMEABLE_SYMBOL_H__
-#define PSYCHE_C_NAMEABLE_SYMBOL_H__
+#ifndef PSYCHE_C_TAG_TYPE_DECLARATION_KIND_H__
+#define PSYCHE_C_TAG_TYPE_DECLARATION_KIND_H__
 
 #include "API.h"
 #include "Fwds.h"
 
-#include "../common/infra/AccessSpecifiers.h"
-
-#include <memory>
+#include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
 
-class PSY_C_INTERNAL_API MIXIN_NameableSymbol
+/**
+ * \brief The TagTypeDeclarationKind enum.
+ */
+enum class PSY_C_API TagTypeDeclarationKind : std::uint8_t
 {
-public:
-    virtual ~MIXIN_NameableSymbol() {}
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
-
-    static MIXIN_NameableSymbol* from(Symbol*);
-
-    virtual void setName(const Identifier* name) = 0;
+    Struct,
+    Union,
+    Enum,
 };
+
+inline std::string PSY_C_API to_string(TagTypeDeclarationKind tagTyDeclK)
+{
+    switch (tagTyDeclK) {
+        case TagTypeDeclarationKind::Struct:
+            return "Struct";
+        case TagTypeDeclarationKind::Union:
+            return "Union";
+        case TagTypeDeclarationKind::Enum:
+            return "Enum";
+    }
+}
 
 } // C
 } // psy

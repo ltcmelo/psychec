@@ -18,44 +18,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_SYMBOL_KIND_H__
-#define PSYCHE_C_TYPE_SYMBOL_KIND_H__
+#include "TypeDeclaration__IMPL__.inc"
 
-#include "API.h"
-#include "Fwds.h"
+#include "symbols/Symbol_ALL.h"
 
-#include <cstdint>
-#include <string>
+#include <sstream>
+
+using namespace psy;
+using namespace C;
+
+TypeDeclaration::TypeDeclaration(TypeDeclarationImpl* p)
+    : Declaration(p, DeclarationKind::Type)
+{}
+
+TypeDeclaration::~TypeDeclaration()
+{}
+
+TypeDeclarationKind TypeDeclaration::kind() const
+{
+    return TypeDeclarationKind(P_CAST->BF_.tyDeclK_);
+}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The TypeDeclarationSymbolKind enum.
- */
-enum class PSY_C_API TypeDeclarationSymbolKind : std::uint8_t
+std::string PSY_C_API to_string(const TypeDeclaration& tyDecl)
 {
-    Struct,
-    Union,
-    Enum,
-    Typedef
-};
-
-inline std::string PSY_C_API to_string(TypeDeclarationSymbolKind tySymK)
-{
-    switch (tySymK) {
-        case TypeDeclarationSymbolKind::Struct:
-            return "Struct";
-        case TypeDeclarationSymbolKind::Union:
-            return "Union";
-        case TypeDeclarationSymbolKind::Enum:
-            return "Enum";
-        case TypeDeclarationSymbolKind::Typedef:
-            return "Typedef";
+    switch (tyDecl.kind()) {
+        case TypeDeclarationKind::Tag:
+            return to_string(*tyDecl.asTagTypeDeclaration());
+        case TypeDeclarationKind::Typedef:
+            return to_string(*tyDecl.asTypedef());
     }
 }
 
 } // C
 } // psy
-
-#endif

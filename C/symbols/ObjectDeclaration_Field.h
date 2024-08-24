@@ -18,43 +18,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ObjectDeclarationSymbol_Variable.h"
+#ifndef PSYCHE_C_FIELD_H__
+#define PSYCHE_C_FIELD_H__
 
-#include "binder/Scope.h"
-#include "syntax/Lexeme_Identifier.h"
-#include "types/Type_ALL.h"
-
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-Variable::Variable(const SyntaxTree* tree,
-                   const Symbol* containingSym,
-                   const Scope* enclosingScope)
-    : ObjectDeclarationSymbol(tree,
-                              containingSym,
-                              enclosingScope,
-                              ObjectDeclarationSymbolKind::Variable)
-{}
-
-std::string Variable::toDisplayString() const
-{
-    return "";
-}
+#include "Declaration_Object.h"
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Variable& var)
+/**
+ * \brief The Field class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IField
+ * from Roslyn, the .NET Compiler Platform.
+ */
+class PSY_C_API Field final : public ObjectDeclaration
 {
-    std::ostringstream oss;
-    oss << "<Variable |";
-    oss << " name:" << var.name()->valueText();
-    oss << " type:" << to_string(*var.type());
-    oss << ">";
-    return oss.str();
-}
+public:
+    //!@{
+    /**
+     * Cast \c this ObjectDeclaration as a Field.
+     */
+    virtual Field* asField() override { return this; }
+    virtual const Field* asField() const override { return this; }
+    //!@}
+
+    /**
+     * Compute a displayable string for \c this Symbol.
+     */
+    virtual std::string toDisplayString() const override;
+
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Binder);
+
+    Field(const SyntaxTree* tree,
+          const Symbol* containingSym,
+          const Scope* enclosingScope);
+};
+
+std::string PSY_C_API to_string(const Field& fld);
 
 } // C
 } // psy
+
+#endif

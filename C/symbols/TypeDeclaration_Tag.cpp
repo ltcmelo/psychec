@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2024 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,60 +18,62 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol__IMPL__.inc"
-#include "TypeDeclarationSymbol_Struct.h"
+#include "TypeDeclaration__IMPL__.inc"
+#include "TypeDeclaration_Tag.h"
 
-#include "syntax/Lexeme_Identifier.h"
+#include "symbols/Symbol_ALL.h"
 #include "types/Type_Tag.h"
-
-#include <iostream>
-#include <sstream>
 
 using namespace psy;
 using namespace C;
 
-Struct::Struct(const SyntaxTree* tree,
-               const Symbol* containingSym,
-               const Scope* enclosingScope,
-               TagType* tagTy)
-    : TypeDeclarationSymbol(
-          new TypeDeclarationSymbolImpl(tree,
+TagTypeDeclaration::TagTypeDeclaration(const SyntaxTree* tree,
+                                       const Symbol* containingSym,
+                                       const Scope* enclosingScope,
+                                       TagType* tagTy,
+                                       TagTypeDeclarationKind tagTyDeclK)
+    : TypeDeclaration(
+          new TypeDeclarationImpl(tree,
                                         containingSym,
                                         enclosingScope,
                                         NameSpace::Tags,
                                         tagTy,
-                                        TypeDeclarationSymbolKind::Struct))
+                                        TypeDeclarationKind::Tag,
+                                        tagTyDeclK))
 {
 }
 
-const Identifier* Struct::identifier() const
+TagTypeDeclarationKind TagTypeDeclaration::kind() const
+{
+    return TagTypeDeclarationKind(P_CAST->BF_.tagTyDeclK_);
+}
+
+const Identifier* TagTypeDeclaration::identifier() const
 {
     PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
-    PSY_ASSERT_2(P_CAST->ty_->asTagType()->kind() == TagTypeKind::Struct, return nullptr);
     return P_CAST->ty_->asTagType()->tag();
 }
 
-std::string Struct::toDisplayString() const
+const TagType* TagTypeDeclaration::specifiedType() const
 {
-    std::ostringstream oss;
-    oss << "struct ";
-    oss << P_CAST->ty_->asTagType()->tag()->valueText();
-    return oss.str();
+    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
+    return P_CAST->ty_->asTagType();
 }
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Struct& strukt)
+std::string PSY_C_API to_string(const TagTypeDeclaration& tagTyDecl)
 {
-    std::ostringstream oss;
-    oss << "<Struct |";
-    oss << " type:" << to_string(*strukt.specifiedType());
-    oss << " scope:" << to_string(strukt.enclosingScope()->kind());
-    oss << "  " << strukt.enclosingScope();
-    oss << ">";
-    return oss.str();
+    switch (tagTyDecl.kind()) {
+        case TagTypeDeclarationKind::Struct:
+            return to_string(*tagTyDecl.asStruct());
+        case TagTypeDeclarationKind::Union:
+            return to_string(*tagTyDecl.asUnion());
+        case TagTypeDeclarationKind::Enum:
+            return to_string(*tagTyDecl.asEnum());
+    }
 }
 
 } // C
-} // psi
+} // psy

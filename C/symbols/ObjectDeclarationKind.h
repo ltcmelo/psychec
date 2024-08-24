@@ -18,46 +18,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_FIELD_OBJECT_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_FIELD_OBJECT_DECLARATION_SYMBOL_H__
+#ifndef PSYCHE_C_OBJECT_DECLARATION_KIND_H__
+#define PSYCHE_C_OBJECT_DECLARATION_KIND_H__
 
-#include "DeclarationSymbol_Object.h"
+#include "API.h"
+#include "Fwds.h"
+
+#include "../common/infra/Assertions.h"
+
+#include <cstdint>
+#include <string>
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The Field class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IField
- * from Roslyn, the .NET Compiler Platform.
+ * \brief The ObjectDeclarationKind enum.
  */
-class PSY_C_API Field final : public ObjectDeclarationSymbol
+enum class PSY_C_API ObjectDeclarationKind : std::uint8_t
 {
-public:
-    //!@{
-    /**
-     * Cast \c this ObjectDeclarationSymbol as a Field.
-     */
-    virtual Field* asField() override { return this; }
-    virtual const Field* asField() const override { return this; }
-    //!@}
-
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const override;
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
-
-    Field(const SyntaxTree* tree,
-          const Symbol* containingSym,
-          const Scope* enclosingScope);
+    Enumerator,
+    Field,
+    Parameter,
+    Variable
 };
 
-std::string PSY_C_API to_string(const Field& fld);
+inline std::string PSY_C_API to_string(ObjectDeclarationKind symK)
+{
+    switch (symK) {
+        case ObjectDeclarationKind::Enumerator:
+            return "Enumerator";
+        case ObjectDeclarationKind::Field:
+            return "Field";
+        case ObjectDeclarationKind::Parameter:
+            return "Parameter";
+        case ObjectDeclarationKind::Variable:
+            return "Variable";
+    }
+}
 
 } // C
 } // psy

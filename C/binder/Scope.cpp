@@ -41,7 +41,7 @@ ScopeKind Scope::kind() const
     return scopeK_;
 }
 
-const DeclarationSymbol* Scope::searchForDeclaration(
+const Declaration* Scope::searchForDeclaration(
         const Identifier* ident,
         NameSpace ns) const
 {
@@ -54,9 +54,9 @@ const DeclarationSymbol* Scope::searchForDeclaration(
             : nullptr;
 }
 
-std::vector<const DeclarationSymbol*> Scope::declarations() const
+std::vector<const Declaration*> Scope::declarations() const
 {
-    std::vector<const DeclarationSymbol*> decls;
+    std::vector<const Declaration*> decls;
     decls.reserve(decls_.size());
     std::transform(decls_.begin(),
                    decls_.end(),
@@ -94,7 +94,7 @@ void Scope::morphFrom_FunctionPrototype_to_Block()
     scopeK_ = ScopeKind::Block;
 }
 
-void Scope::addDeclaration(const DeclarationSymbol* decl)
+void Scope::addDeclaration(const Declaration* decl)
 {
     auto key = std::make_pair(decl->identifier(), decl->nameSpace());
     auto it = decls_.find(key);

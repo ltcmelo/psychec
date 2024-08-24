@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,44 +18,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ObjectDeclarationSymbol_Enumerator.h"
+#ifndef PSYCHE_C_PARAMETER_H__
+#define PSYCHE_C_PARAMETER_H__
 
-#include "symbols/Symbol_ALL.h"
-#include "binder/Scope.h"
-#include "syntax/Lexeme_Identifier.h"
-#include "types/Type_ALL.h"
-
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-Enumerator::Enumerator(const SyntaxTree* tree,
-                       const Symbol* containingSym,
-                       const Scope* enclosingScope)
-    : ObjectDeclarationSymbol(tree,
-                              containingSym,
-                              enclosingScope,
-                              ObjectDeclarationSymbolKind::Enumerator)
-{}
-
-std::string Enumerator::toDisplayString() const
-{
-    return "";
-}
+#include "Declaration_Object.h"
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Enumerator& enumerator)
+/**
+ * \brief The Parameter class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.IParameterSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
+class PSY_C_API Parameter final : public ObjectDeclaration
 {
-    std::ostringstream oss;
-    oss << "<Enumerator | ";
-    oss << "name:" << enumerator.name()->valueText();
-    oss << "type:" << to_string(*enumerator.type());
-    oss << ">";
-    return oss.str();
-}
+public:
+    //!@{
+    /**
+     * Cast \c this Symbol as a Parameter.
+     */
+    virtual Parameter* asParameter() override { return this; }
+    virtual const Parameter* asParameter() const override { return this; }
+    //!@}
+
+    /**
+     * Compute a displayable string for \c this Symbol.
+     */
+    virtual std::string toDisplayString() const override;
+
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Binder);
+
+    Parameter(const SyntaxTree* tree,
+              const Symbol* containingSym,
+              const Scope* enclosingScope);
+};
+
+std::string PSY_C_API to_string(const Parameter& parm);
 
 } // C
-} // psi
+} // psy
+
+#endif

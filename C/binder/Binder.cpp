@@ -108,11 +108,11 @@ Symbol* Binder::popSymbol()
     return sym;
 }
 
-DeclarationSymbol* Binder::popSymbolAsDeclaration()
+Declaration* Binder::popSymbolAsDeclaration()
 {
     auto sym = popSymbol();
     PSY_ASSERT_2(sym && sym->kind() == SymbolKind::Declaration, return nullptr);
-    return sym->asDeclarationSymbol();
+    return sym->asDeclaration();
 }
 
 void Binder::pushType(Type* ty)

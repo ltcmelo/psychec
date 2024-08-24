@@ -43,12 +43,12 @@ public:
     //!@}
 
     /**
-     * The return type of \c this FunctionTypeDeclarationSymbol.
+     * The return type of \c this FunctionTypeDeclaration.
      */
     const Type* returnType() const;
 
     /**
-     * The parameter types of \c this FunctionTypeDeclarationSymbol.
+     * The parameter types of \c this FunctionTypeDeclaration.
      */
     std::vector<const Type*> parameterTypes() const;
 

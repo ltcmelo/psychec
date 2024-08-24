@@ -18,48 +18,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_VARIABLE_OBJECT_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_VARIABLE_OBJECT_DECLARATION_SYMBOL_H__
+#include "TypeDeclaration__IMPL__.inc"
+#include "TagTypeDeclaration_Struct.h"
 
-#include "DeclarationSymbol_Object.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_Tag.h"
+
+#include <iostream>
+#include <sstream>
+
+using namespace psy;
+using namespace C;
+
+Struct::Struct(const SyntaxTree* tree,
+               const Symbol* containingSym,
+               const Scope* enclosingScope,
+               TagType* tagTy)
+    : TagTypeDeclaration(tree,
+                         containingSym,
+                         enclosingScope,
+                         tagTy,
+                         TagTypeDeclarationKind::Struct)
+{
+}
+
+std::string Struct::toDisplayString() const
+{
+    std::ostringstream oss;
+    oss << "struct ";
+    oss << P_CAST->ty_->asTagType()->tag()->valueText();
+    return oss.str();
+}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The Variable class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.ILocalSymbol
- * from Roslyn, the .NET Compiler Platform.
- */
-class PSY_C_API Variable final : public ObjectDeclarationSymbol
+std::string to_string(const Struct& strukt)
 {
-public:
-    //!@{
-    /**
-     * Cast \c this Symbol as a Variable.
-     */
-    virtual Variable* asVariable() override { return this; }
-    virtual const Variable* asVariable() const override { return this; }
-    //!@}
-
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const override;
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
-
-    Variable(const SyntaxTree* tree,
-             const Symbol* containingSym,
-             const Scope* enclosingScope);
-};
-
-std::string PSY_C_API to_string(const Variable& var);
+    std::ostringstream oss;
+    oss << "<Struct |";
+    oss << " type:" << to_string(*strukt.specifiedType());
+    oss << " scope:" << to_string(strukt.enclosingScope()->kind());
+    oss << "  " << strukt.enclosingScope();
+    oss << ">";
+    return oss.str();
+}
 
 } // C
-} // psy
-
-#endif
+} // psi

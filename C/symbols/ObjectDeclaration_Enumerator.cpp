@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,46 +18,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_OBJECT_DECLARATION_SYMBOL_KIND_H__
-#define PSYCHE_C_OBJECT_DECLARATION_SYMBOL_KIND_H__
+#include "ObjectDeclaration_Enumerator.h"
 
-#include "API.h"
-#include "Fwds.h"
+#include "symbols/Symbol_ALL.h"
+#include "binder/Scope.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_ALL.h"
 
-#include "../common/infra/Assertions.h"
+#include <sstream>
 
-#include <cstdint>
-#include <string>
+using namespace psy;
+using namespace C;
+
+Enumerator::Enumerator(const SyntaxTree* tree,
+                       const Symbol* containingSym,
+                       const Scope* enclosingScope)
+    : ObjectDeclaration(tree,
+                              containingSym,
+                              enclosingScope,
+                              ObjectDeclarationKind::Enumerator)
+{}
+
+std::string Enumerator::toDisplayString() const
+{
+    return "";
+}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The ObjectDeclarationSymbolKind enum.
- */
-enum class PSY_C_API ObjectDeclarationSymbolKind : std::uint8_t
+std::string to_string(const Enumerator& enumerator)
 {
-    Enumerator,
-    Field,
-    Parameter,
-    Variable
-};
-
-inline std::string PSY_C_API to_string(ObjectDeclarationSymbolKind symK)
-{
-    switch (symK) {
-        case ObjectDeclarationSymbolKind::Enumerator:
-            return "Enumerator";
-        case ObjectDeclarationSymbolKind::Field:
-            return "Field";
-        case ObjectDeclarationSymbolKind::Parameter:
-            return "Parameter";
-        case ObjectDeclarationSymbolKind::Variable:
-            return "Variable";
-    }
+    std::ostringstream oss;
+    oss << "<Enumerator | ";
+    oss << "name:" << enumerator.name()->valueText();
+    oss << "type:" << to_string(*enumerator.type());
+    oss << ">";
+    return oss.str();
 }
 
 } // C
-} // psy
-
-#endif
+} // psi

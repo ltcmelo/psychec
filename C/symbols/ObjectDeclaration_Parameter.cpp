@@ -18,48 +18,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_PARAMETER_OBJECT_DECLARATION_SYMBOL_H__
-#define PSYCHE_C_PARAMETER_OBJECT_DECLARATION_SYMBOL_H__
+#include "ObjectDeclaration_Parameter.h"
 
-#include "DeclarationSymbol_Object.h"
+#include "binder/Scope.h"
+#include "symbols/Symbol_ALL.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_ALL.h"
+
+
+#include <sstream>
+
+using namespace psy;
+using namespace C;
+
+Parameter::Parameter(const SyntaxTree* tree,
+                     const Symbol* containingSym,
+                     const Scope* enclosingScope)
+    : ObjectDeclaration(tree,
+                              containingSym,
+                              enclosingScope,
+                              ObjectDeclarationKind::Parameter)
+{}
+
+std::string Parameter::toDisplayString() const
+{
+    return "";
+}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The Parameter class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IParameterSymbol
- * from Roslyn, the .NET Compiler Platform.
- */
-class PSY_C_API Parameter final : public ObjectDeclarationSymbol
+std::string to_string(const Parameter& parm)
 {
-public:
-    //!@{
-    /**
-     * Cast \c this Symbol as a Parameter.
-     */
-    virtual Parameter* asParameter() override { return this; }
-    virtual const Parameter* asParameter() const override { return this; }
-    //!@}
-
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const override;
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
-
-    Parameter(const SyntaxTree* tree,
-              const Symbol* containingSym,
-              const Scope* enclosingScope);
-};
-
-std::string PSY_C_API to_string(const Parameter& parm);
+    std::ostringstream oss;
+    oss << "<Parameter |";
+    oss << " name:" << parm.name()->valueText();
+    oss << " type:" << to_string(*parm.type());
+    oss << ">";
+    return oss.str();
+}
 
 } // C
 } // psy
-
-#endif

@@ -141,32 +141,35 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_TranslationUnit.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Declaration.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Declaration.h
-    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbolKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Function.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Function.h
-    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Object.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Object.h
-    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Type.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/DeclarationSymbol_Type.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbolKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Enumerator.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Enumerator.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Field.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Field.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Parameter.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Parameter.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Variable.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationSymbol_Variable.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbolKind.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol__IMPL__.inc
-    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Enum.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Enum.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Struct.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Struct.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Typedef.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Typedef.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Union.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationSymbol_Union.h
+    ${PROJECT_SOURCE_DIR}/symbols/DeclarationKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/Declaration_Function.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Declaration_Function.h
+    ${PROJECT_SOURCE_DIR}/symbols/Declaration_Object.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Declaration_Object.h
+    ${PROJECT_SOURCE_DIR}/symbols/Declaration_Type.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Declaration_Type.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Enumerator.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Enumerator.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Field.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Field.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Parameter.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Parameter.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Variable.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Variable.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration__IMPL__.inc
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Tag.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Tag.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Typedef.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Typedef.h
+    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclarationKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Enum.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Enum.h
+    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Struct.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Struct.h
+    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Union.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Union.h
 
     # Binder
     ${PROJECT_SOURCE_DIR}/binder/Binder__MACROS__.inc

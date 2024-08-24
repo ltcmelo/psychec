@@ -103,12 +103,12 @@ public:
     const Enum* declaredEnum(const EnumDeclarationSyntax* node) const;
 
     /**
-     * The TypeDeclarationSymbol declared by the given TypeDeclarationSyntax \c node.
+     * The TypeDeclaration declared by the given TypeDeclarationSyntax \c node.
      *
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    const TypeDeclarationSymbol* declaredTypeDeclaration(const TypeDeclarationSyntax* node) const;
+    const TypeDeclaration* declaredTypeDeclaration(const TypeDeclarationSyntax* node) const;
 
     /**
      * The Enumerator declared by the given EnumeratorDeclarationSyntax \c node.
@@ -127,20 +127,20 @@ public:
     std::vector<const Field*> declaredFields(const FieldDeclarationSyntax* node) const;
 
     /**
-     * The DeclarationSymbol(s) declared by the given VariableAndOrFunctionDeclarationSyntax \c node.
+     * The Declaration(s) declared by the given VariableAndOrFunctionDeclarationSyntax \c node.
      *
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    std::vector<const DeclarationSymbol*> declaredDeclarations(const VariableAndOrFunctionDeclarationSyntax* node) const;
+    std::vector<const Declaration*> declaredDeclarations(const VariableAndOrFunctionDeclarationSyntax* node) const;
 
     /**
-     * The DeclarationSymbol declared by the given DeclaratorSyntax \c node.
+     * The Declaration declared by the given DeclaratorSyntax \c node.
      *
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
-    const DeclarationSymbol* declaredDeclaration(const DeclaratorSyntax* node) const;
+    const Declaration* declaredDeclaration(const DeclaratorSyntax* node) const;
     //!@}
 
 PSY_INTERNAL:
@@ -157,14 +157,14 @@ PSY_INTERNAL:
     TranslationUnit* keepTranslationUnit(
             const TranslationUnitSyntax* node,
             std::unique_ptr<TranslationUnit> unitSym);
-    DeclarationSymbol* keepBinding(
+    Declaration* keepBinding(
             const SyntaxNode* node,
-            std::unique_ptr<DeclarationSymbol> sym);
+            std::unique_ptr<Declaration> sym);
     Type* keepType(std::unique_ptr<Type> ty);
     void dropType(const Type* ty);
 
-    DeclarationSymbol* searchForDecl(
-            std::function<bool (const std::unique_ptr<DeclarationSymbol>&)> pred) const;
+    Declaration* searchForDecl(
+            std::function<bool (const std::unique_ptr<Declaration>&)> pred) const;
 
     template <class CastT, class OrigT> const CastT* castDecl(
             const OrigT* origDecl,
@@ -172,15 +172,15 @@ PSY_INTERNAL:
 
     Function* declaredFunction(const FunctionDefinitionSyntax* node);
     Parameter* declaredParameter(const ParameterDeclarationSyntax* node);
-    TypeDeclarationSymbol* declaredDeclaration(const TypeDeclarationSyntax* node); // TODO
+    TypeDeclaration* declaredDeclaration(const TypeDeclarationSyntax* node); // TODO
     Enumerator* declaredEnumerator(const EnumeratorDeclarationSyntax* node);
     std::vector<Field*> declaredFields(const FieldDeclarationSyntax* node);
     template <class VecT> VecT declaredFields_CORE(const FieldDeclarationSyntax* node, VecT&& decls);
-    std::vector<DeclarationSymbol*> declaredDeclarations(const VariableAndOrFunctionDeclarationSyntax* node);
+    std::vector<Declaration*> declaredDeclarations(const VariableAndOrFunctionDeclarationSyntax* node);
     template <class VecT> VecT declaredDeclarations_CORE(
             const VariableAndOrFunctionDeclarationSyntax* node,
             VecT&& decls);
-    DeclarationSymbol* declaredDeclaration(const DeclaratorSyntax* node);
+    Declaration* declaredDeclaration(const DeclaratorSyntax* node);
 
 private:
     SemanticModel(const SemanticModel&) = delete;

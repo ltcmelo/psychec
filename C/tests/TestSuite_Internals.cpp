@@ -624,9 +624,9 @@ bool functionMatchesBinding(const Function* funcDecl, const Decl& decl)
     return true;
 }
 
-bool valueMatchesBinding(const ObjectDeclarationSymbol* objDecl, const Decl& decl)
+bool valueMatchesBinding(const ObjectDeclaration* objDecl, const Decl& decl)
 {
-    if (objDecl->kind() != decl.objDeclSymK_)
+    if (objDecl->kind() != decl.objDeclK_)
         return REJECT_CANDIDATE(objDecl, "value kind mismatch");
 
     if (!objDecl->name())
@@ -644,56 +644,61 @@ bool valueMatchesBinding(const ObjectDeclarationSymbol* objDecl, const Decl& dec
     return true;
 }
 
-bool typeMatchesBinding(const TypeDeclarationSymbol* tyDecl, const Decl& decl)
+bool typeMatchesBinding(const TypeDeclaration* tyDecl, const Decl& decl)
 {
-    if (tyDecl->kind() != decl.tyDeclSymK_)
+    if (tyDecl->kind() != decl.tyDeclK_)
         return REJECT_CANDIDATE(tyDecl, "type decl kind mismatch");
 
-    if (!tyDecl->specifiedType())
-        return REJECT_CANDIDATE(tyDecl, "no specified type");
-
-    auto checkTag = [=]() {
-        if (!tyDecl->specifiedType()->asTagType())
-            return REJECT_CANDIDATE(tyDecl, "not a tag type");
-        auto tagTy = tyDecl->specifiedType()->asTagType();
-        if (!tagTy->tag())
-            return REJECT_CANDIDATE(tyDecl, "empty tag");
-        if (tagTy->tag()->valueText() != decl.ident_)
-            return REJECT_CANDIDATE(tyDecl, "tag mismatch");
-        return true;
-    };
-
-    switch (decl.tyDeclSymK_) {
-        case TypeDeclarationSymbolKind::Struct:
-            if (!checkTag())
-                return false;
-            if (tyDecl->specifiedType()->asTagType()->kind() != TagTypeKind::Struct)
-                return REJECT_CANDIDATE(tyDecl, "specified type struct mismatch");
+    switch (decl.tyDeclK_) {
+        case TypeDeclarationKind::Tag: {
+            if (tyDecl->kind() != TypeDeclarationKind::Tag)
+                return REJECT_CANDIDATE(tyDecl, "not a tag type");
+            auto tagTyDecl = tyDecl->asTagTypeDeclaration();
+            if (!tagTyDecl->specifiedType())
+                return REJECT_CANDIDATE(tyDecl, "no specified type");
+            if (!tagTyDecl->identifier())
+                return REJECT_CANDIDATE(tyDecl, "empty identifier");
+            if (tagTyDecl->identifier()->valueText() != decl.ident_)
+                return REJECT_CANDIDATE(tyDecl, "identifier mismatch");
+            auto tagTy = tagTyDecl->specifiedType();
+            if (!tagTy->tag())
+                return REJECT_CANDIDATE(tyDecl, "empty tag");
+            if (tagTy->tag()->valueText() != decl.ident_)
+                return REJECT_CANDIDATE(tyDecl, "tag mismatch");
+            switch (decl.tagTyDeclK_) {
+                case TagTypeDeclarationKind::Struct:
+                    if (tagTyDecl->kind() != TagTypeDeclarationKind::Struct)
+                        return REJECT_CANDIDATE(tyDecl, "not a struct");
+                    if (tagTy->kind() != TagTypeKind::Struct)
+                        return REJECT_CANDIDATE(tyDecl, "not a struct type");
+                    break;
+                case TagTypeDeclarationKind::Union:
+                    if (tagTyDecl->kind() != TagTypeDeclarationKind::Union)
+                        return REJECT_CANDIDATE(tyDecl, "not a union");
+                    if (tagTy->kind() != TagTypeKind::Union)
+                        return REJECT_CANDIDATE(tyDecl, "not a union type");
+                    break;
+                case TagTypeDeclarationKind::Enum:
+                    if (tagTyDecl->kind() != TagTypeDeclarationKind::Enum)
+                        return REJECT_CANDIDATE(tyDecl, "not a enum");
+                    if (tagTy->kind() != TagTypeKind::Enum)
+                        return REJECT_CANDIDATE(tyDecl, "not a enum type");
+                    break;
+            }
             break;
+        }
 
-        case TypeDeclarationSymbolKind::Union:
-            if (!checkTag())
-                return false;
-            if (tyDecl->specifiedType()->asTagType()->kind() != TagTypeKind::Union)
-                return REJECT_CANDIDATE(tyDecl, "specified type union mismatch");
-            break;
-
-        case TypeDeclarationSymbolKind::Enum:
-            if (!checkTag())
-                return false;
-            if (tyDecl->specifiedType()->asTagType()->kind() != TagTypeKind::Enum)
-                return REJECT_CANDIDATE(tyDecl, "specified type enum mismatch");
-            break;
-
-        case TypeDeclarationSymbolKind::Typedef: {
-            if (!tyDecl->specifiedType()->asTypedefType())
+        case TypeDeclarationKind::Typedef: {
+            auto tydefDecl = tyDecl->asTypedef();
+            if (!tydefDecl->definedType())
+                return REJECT_CANDIDATE(tyDecl, "no defined type");
+            if (!tydefDecl->definedType()->asTypedefType())
                 return REJECT_CANDIDATE(tyDecl, "not a typedef type");
-            auto tydefTy = tyDecl->specifiedType()->asTypedefType();
+            auto tydefTy = tydefDecl->definedType()->asTypedefType();
             if (!tydefTy->typedefName())
                 return REJECT_CANDIDATE(tyDecl, "empty typedef name");
             if (tydefTy->typedefName()->valueText() != decl.ident_)
                 return REJECT_CANDIDATE(tyDecl, "typedef name mismatch");
-            auto tydefDecl = tyDecl->asTypedef();
             if (!typeMatches(tydefDecl->synonymizedType(), decl.ty_))
                 return REJECT_CANDIDATE(tyDecl, "synonymized type mismatch");
             break;
@@ -703,9 +708,9 @@ bool typeMatchesBinding(const TypeDeclarationSymbol* tyDecl, const Decl& decl)
     return true;
 }
 
-bool symbolMatchesBinding(const DeclarationSymbol* declSym, const Decl& decl)
+bool symbolMatchesBinding(const Declaration* declSym, const Decl& decl)
 {
-    if (declSym->kind() != decl.declSymK_)
+    if (declSym->kind() != decl.declK_)
         return REJECT_CANDIDATE(declSym, "symbol kind mismatch");
 
     if (declSym->enclosingScope()->kind() != decl.scopeK_)
@@ -714,16 +719,16 @@ bool symbolMatchesBinding(const DeclarationSymbol* declSym, const Decl& decl)
     if (declSym->nameSpace() != decl.ns_)
         return REJECT_CANDIDATE(declSym, "name space kind mismatch");
 
-    switch (decl.declSymK_)
+    switch (decl.declK_)
     {
-        case DeclarationSymbolKind::Object:
-            return valueMatchesBinding(declSym->asObjectDeclarationSymbol(), decl);
+        case DeclarationKind::Object:
+            return valueMatchesBinding(declSym->asObjectDeclaration(), decl);
 
-        case DeclarationSymbolKind::Type: {
-            return typeMatchesBinding(declSym->asTypeDeclarationSymbol(), decl);
+        case DeclarationKind::Type: {
+            return typeMatchesBinding(declSym->asTypeDeclaration(), decl);
         }
 
-        case DeclarationSymbolKind::Function:
+        case DeclarationKind::Function:
             return functionMatchesBinding(declSym->asFunction(), decl);
 
         default:
@@ -734,7 +739,7 @@ bool symbolMatchesBinding(const DeclarationSymbol* declSym, const Decl& decl)
     return false;
 };
 
-bool symbolMatchesBinding_(const std::unique_ptr<DeclarationSymbol>& declSym, const Decl& decl)
+bool symbolMatchesBinding_(const std::unique_ptr<Declaration>& declSym, const Decl& decl)
 {
     return symbolMatchesBinding(declSym.get(), decl);
 };
@@ -756,7 +761,7 @@ void InternalsTestSuite::matchDeclarations(
             std::ostringstream oss;
             oss << "no declaration matches the expectation: ";
             oss << " identifier: " << Decl.ident_;
-            oss << " kind: " << to_string(Decl.declSymK_);
+            oss << " kind: " << to_string(Decl.declK_);
             PSY__internals__FAIL(oss.str());
         }
 #ifdef DBG_BINDING_SEARCH
@@ -788,7 +793,7 @@ void InternalsTestSuite::checkSemanticModel(
             std::ostringstream oss;
             oss << "no declaration matches the expectation: ";
             oss << " identifier: " << Decl.ident_;
-            oss << " kind: " << to_string(Decl.declSymK_);
+            oss << " kind: " << to_string(Decl.declK_);
             PSY__internals__FAIL(oss.str());
         }
 #ifdef DBG_BINDING_SEARCH

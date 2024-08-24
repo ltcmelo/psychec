@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2022 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,44 +18,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ObjectDeclarationSymbol_Field.h"
+#ifndef PSYCHE_C_ENUMERATOR_H__
+#define PSYCHE_C_ENUMERATOR_H__
 
-#include "symbols/Symbol_ALL.h"
-#include "binder/Scope.h"
-#include "syntax/Lexeme_Identifier.h"
-#include "types/Type_ALL.h"
-
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-Field::Field(const SyntaxTree* tree,
-             const Symbol* containingSym,
-             const Scope* enclosingScope)
-    : ObjectDeclarationSymbol(tree,
-                              containingSym,
-                              enclosingScope,
-                              ObjectDeclarationSymbolKind::Field)
-{}
-
-std::string Field::toDisplayString() const
-{
-    return "";
-}
+#include "Declaration_Object.h"
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Field& fld)
+/**
+ * \brief The Enumerator class.
+ */
+class PSY_C_API Enumerator final : public ObjectDeclaration
 {
-    std::ostringstream oss;
-    oss << "<Field | ";
-    oss << "name:" << fld.name()->valueText();
-    oss << "type:" << to_string(*fld.type());
-    oss << ">";
-    return oss.str();
-}
+public:
+    //!@{
+    /**
+     * Cast \c this ObjectDeclaration as a Enumerator.
+     */
+    virtual Enumerator* asEnumerator() override { return this; }
+    virtual const Enumerator* asEnumerator() const override { return this; }
+    //!@}
+
+    /**
+     * Compute a displayable string for \c this Enumerator.
+     */
+    virtual std::string toDisplayString() const override;
+
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Binder);
+
+    Enumerator(const SyntaxTree* tree,
+               const Symbol* containingSym,
+               const Scope* enclosingScope);
+};
+
+std::string PSY_C_API to_string(const Enumerator& enumerator);
 
 } // C
 } // psy
+
+#endif

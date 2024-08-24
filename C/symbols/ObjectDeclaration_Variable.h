@@ -18,48 +18,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclarationSymbol__IMPL__.inc"
+#ifndef PSYCHE_C_VARIABLE_H__
+#define PSYCHE_C_VARIABLE_H__
 
-#include "symbols/Symbol_ALL.h"
-
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-TypeDeclarationSymbol::TypeDeclarationSymbol(TypeDeclarationSymbolImpl* p)
-    : DeclarationSymbol(p, DeclarationSymbolKind::Type)
-{}
-
-TypeDeclarationSymbol::~TypeDeclarationSymbol()
-{}
-
-TypeDeclarationSymbolKind TypeDeclarationSymbol::kind() const
-{
-    return TypeDeclarationSymbolKind(P_CAST->BF_.tyDeclSymK_);
-}
-
-const Type* TypeDeclarationSymbol::specifiedType() const
-{
-    return P_CAST->ty_;
-}
+#include "Declaration_Object.h"
 
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TypeDeclarationSymbol& tyDecl)
+/**
+ * \brief The Variable class.
+ *
+ * \note
+ * This API is inspired by that of \c Microsoft.CodeAnalysis.ILocalSymbol
+ * from Roslyn, the .NET Compiler Platform.
+ */
+class PSY_C_API Variable final : public ObjectDeclaration
 {
-    switch (tyDecl.kind()) {
-        case TypeDeclarationSymbolKind::Struct:
-            return to_string(*tyDecl.asStruct());
-        case TypeDeclarationSymbolKind::Union:
-            return to_string(*tyDecl.asUnion());
-        case TypeDeclarationSymbolKind::Enum:
-            return to_string(*tyDecl.asEnum());
-        case TypeDeclarationSymbolKind::Typedef:
-            return to_string(*tyDecl.asTypedef());
-    }
-}
+public:
+    //!@{
+    /**
+     * Cast \c this ObjectDeclaration as a Variable.
+     */
+    virtual Variable* asVariable() override { return this; }
+    virtual const Variable* asVariable() const override { return this; }
+    //!@}
+
+    /**
+     * Compute a displayable string for \c this Variable.
+     */
+    virtual std::string toDisplayString() const override;
+
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Binder);
+
+    Variable(const SyntaxTree* tree,
+             const Symbol* containingSym,
+             const Scope* enclosingScope);
+};
+
+std::string PSY_C_API to_string(const Variable& var);
 
 } // C
 } // psy
+
+#endif

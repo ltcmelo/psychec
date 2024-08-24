@@ -67,9 +67,9 @@ SyntaxVisitor::Action TypeResolver::visitDeclarator_COMMON(const DeclaratorSynta
     auto decl = semaModel_->declaredDeclaration(node);
     if (decl) {
         switch (decl->kind()) {
-            case DeclarationSymbolKind::Type:
-            case DeclarationSymbolKind::Function:
-            case DeclarationSymbolKind::Object: {
+            case DeclarationKind::Type:
+            case DeclarationKind::Function:
+            case DeclarationKind::Object: {
                 auto typeableDecl = MIXIN_TypeableSymbol::from(decl);
                 auto ty = typeableDecl->retypeableType();
                 auto resolvedTy = resolveType(ty, decl->enclosingScope());
@@ -143,9 +143,9 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope) const
                         tydefName,
                         NameSpace::OrdinaryIdentifiers);
             if (decl) {
-                if (decl->kind() == DeclarationSymbolKind::Type) {
-                    auto tyDecl = decl->asTypeDeclarationSymbol();
-                    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationSymbolKind::Typedef,
+                if (decl->kind() == DeclarationKind::Type) {
+                    auto tyDecl = decl->asTypeDeclaration();
+                    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationKind::Typedef,
                                  return nullptr);
                     auto tydef = tyDecl->asTypedef();
                     return tydef->synonymizedType();

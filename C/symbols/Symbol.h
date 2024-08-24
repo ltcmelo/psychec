@@ -58,8 +58,8 @@ public:
     virtual const Program* asProgram() const { return nullptr; }
     virtual TranslationUnit* asTranslationUnit() { return nullptr; }
     virtual const TranslationUnit* asTranslationUnit() const { return nullptr; }
-    virtual DeclarationSymbol* asDeclarationSymbol() { return nullptr; }
-    virtual const DeclarationSymbol* asDeclarationSymbol() const { return nullptr; }
+    virtual Declaration* asDeclaration() { return nullptr; }
+    virtual const Declaration* asDeclaration() const { return nullptr; }
 
     /**
      * The Symbol that contains \c this Symbol.
