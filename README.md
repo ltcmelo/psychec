@@ -8,7 +8,8 @@ C language (draft) proposal [Enabling Generic Functions and Parametric Types in 
 
 # Psyche-C
 
-Psyche-C is a compiler frontend for the C language, designed as a library that can be used to implement static analysis tools for C.
+Psyche-C is a compiler frontend for the C language.
+It is designed as a library, with a focus on the implementation of static analysis tools of C programs, without requiring understanding of their build setup.
 Bellow are the main characteristics of Psyche-C:
 
 - Clean separation between the syntactic and semantic compiler phases.
