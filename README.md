@@ -76,7 +76,7 @@ int ;
 
 ## Type Inference
 
-Psyche-C can optionally (only available in the [original branch](https://github.com/ltcmelo/psychec/tree/original)) infer the missing types of a C snippet.
+Psyche-C can optionally (so far only available in the [original branch](https://github.com/ltcmelo/psychec/tree/original)) infer the missing types of a C snippet.
 For instance, for the snippet below, Psyche-C can infer a (compilable) declaration for `T` an synthesize it during compilation.
 
 ```c
