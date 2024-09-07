@@ -192,7 +192,8 @@ SyntaxVisitor::Action Disambiguator::visitExtGNU_Typeof(const ExtGNU_TypeofSynta
 
 SyntaxVisitor::Action Disambiguator::visitSubscriptSuffix(const SubscriptSuffixSyntax* node)
 {
-    visitMaybeAmbiguousExpression(node->expr_);
+    if (node->expr_)
+        visitMaybeAmbiguousExpression(node->expr_);
 
     return Action::Skip;
 }
@@ -364,7 +365,8 @@ SyntaxVisitor::Action Disambiguator::visitDeclarationStatement(const Declaration
 
 SyntaxVisitor::Action Disambiguator::visitExpressionStatement(const ExpressionStatementSyntax* node)
 {
-    visitMaybeAmbiguousExpression(node->expr_);
+    if (node->expr_)
+        visitMaybeAmbiguousExpression(node->expr_);
 
     return Action::Skip;
 }
