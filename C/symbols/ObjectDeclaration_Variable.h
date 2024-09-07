@@ -52,8 +52,8 @@ public:
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
-    Variable(const SyntaxTree* tree,
-             const Symbol* containingSym,
+    Variable(const Symbol* containingSym,
+             const SyntaxTree* tree,
              const Scope* enclosingScope);
 };
 

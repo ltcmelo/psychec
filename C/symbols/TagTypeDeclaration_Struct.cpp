@@ -30,12 +30,12 @@
 using namespace psy;
 using namespace C;
 
-Struct::Struct(const SyntaxTree* tree,
-               const Symbol* containingSym,
+Struct::Struct(const Symbol* containingSym,
+               const SyntaxTree* tree,
                const Scope* enclosingScope,
                TagType* tagTy)
-    : TagTypeDeclaration(tree,
-                         containingSym,
+    : TagTypeDeclaration(containingSym,
+                         tree,
                          enclosingScope,
                          tagTy,
                          TagTypeDeclarationKind::Struct)

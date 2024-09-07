@@ -24,6 +24,8 @@
 #include "SemanticModel.h"
 #include "SyntaxTree.h"
 
+#include "binder/Binder.h"
+#include "binder/TypeResolver.h"
 #include "symbols/Symbol_ALL.h"
 
 #include <algorithm>
@@ -84,7 +86,11 @@ void Compilation::addSyntaxTree(const SyntaxTree* tree)
     if (it != P->semaModels_.end())
         return;
 
-    P->semaModels_.insert(it, std::make_pair(tree, nullptr));
+    P->semaModels_.insert(
+        it,
+        std::make_pair(
+            tree,
+            new SemanticModel(tree, const_cast<Compilation*>(this))));
     P->isDirty_[tree] = true;
     tree->attachCompilation(this);
 }
@@ -105,14 +111,35 @@ std::vector<const SyntaxTree*> Compilation::syntaxTrees() const
     return  trees;
 }
 
-const SemanticModel* Compilation::computeSemanticModel(const SyntaxTree* tree) const
+const SemanticModel* Compilation::analyze(const SyntaxTree* tree) const
 {
+    PSY_ASSERT_2(P->isDirty_.count(tree), return nullptr);
     if (P->isDirty_[tree]) {
-        std::unique_ptr<SemanticModel> semaModel(new SemanticModel(tree, const_cast<Compilation*>(this)));
-        semaModel->applyBinder();
-        semaModel->applyTypeResolver();
-        P->semaModels_[tree] = std::move(semaModel);
+        bind();
+        resolveTypes();
         P->isDirty_[tree] = false;
     }
+    return semanticModel(tree);
+}
+
+void Compilation::bind() const
+{
+    for (const auto& p : P->semaModels_) {
+        Binder binder(p.second.get(), p.first);
+        binder.bind();
+    }
+}
+
+void Compilation::resolveTypes() const
+{
+    for (const auto& p : P->semaModels_) {
+        TypeResolver tyResolver(p.second.get(), p.first);
+        tyResolver.resolveTypes();
+    }
+}
+
+const SemanticModel* Compilation::semanticModel(const SyntaxTree* tree) const
+{
+    PSY_ASSERT_2(P->semaModels_.count(tree), return nullptr);
     return P->semaModels_[tree].get();
 }

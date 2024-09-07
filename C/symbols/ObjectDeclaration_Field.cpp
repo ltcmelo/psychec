@@ -30,13 +30,13 @@
 using namespace psy;
 using namespace C;
 
-Field::Field(const SyntaxTree* tree,
-             const Symbol* containingSym,
+Field::Field(const Symbol* containingSym,
+             const SyntaxTree* tree,
              const Scope* enclosingScope)
-    : ObjectDeclaration(tree,
-                              containingSym,
-                              enclosingScope,
-                              ObjectDeclarationKind::Field)
+    : ObjectDeclaration(containingSym,
+                        tree,
+                        enclosingScope,
+                        ObjectDeclarationKind::Field)
 {}
 
 std::string Field::toDisplayString() const

@@ -20,16 +20,17 @@
 
 #include "Symbol__IMPL__.inc"
 #include "Symbol_TranslationUnit.h"
+#include "Symbol_Program.h"
 
 #include <sstream>
 
 using namespace psy;
 using namespace C;
 
-TranslationUnit::TranslationUnit(const SyntaxTree* tree)
-    : Symbol(new SymbolImpl(tree,
-                            SymbolKind::TranslationUnit))
+TranslationUnit::TranslationUnit(const Program* prog, const SyntaxTree* tree)
+    : Symbol(new SymbolImpl(SymbolKind::TranslationUnit, prog))
     , enclosedScope_(new Scope(ScopeKind::File))
+    , tree_(tree)
 {}
 
 const Scope* TranslationUnit::enclosedScope() const

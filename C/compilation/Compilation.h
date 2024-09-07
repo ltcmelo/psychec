@@ -57,11 +57,6 @@ public:
     static std::unique_ptr<Compilation> create(const std::string& id);
 
     /**
-     * The Program in \c this Compilation.
-     */
-    const Program* program() const;
-
-    /**
      * Add a SyntaxTree to \c this Compilation.
      */
     void addSyntaxTree(const SyntaxTree* tree);
@@ -77,26 +72,31 @@ public:
     std::vector<const SyntaxTree*> syntaxTrees() const;
 
     /**
-     * The SemanticModel for the SyntaxTree \p tree in \c this Compilation.
+     * Analyze the SyntaxTree \p tree.
      *
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.Compilation.GetSemanticModel of Roslyn.
      */
-    const SemanticModel* computeSemanticModel(const SyntaxTree* tree) const;
+    const SemanticModel* analyze(const SyntaxTree* tree) const;
+
+    /**
+     * The Program in \c this Compilation.
+     */
+    const Program* program() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
 
     Program* program();
+    void bind() const;
+    void resolveTypes() const;
+    const SemanticModel* semanticModel(const SyntaxTree* tree) const;
 
 private:
     Compilation();
-
-    // Unavailable
+    DECL_PIMPL(Compilation);
     Compilation(const Compilation&) = delete;
     Compilation& operator=(const Compilation&) = delete;
-
-    DECL_PIMPL(Compilation);
 };
 
 } // C

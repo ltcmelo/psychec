@@ -212,7 +212,7 @@ int CCompilerFrontend::computeSemanticModel(std::unique_ptr<SyntaxTree> tree)
 {
     auto compilation = Compilation::create(tree->filePath());
     compilation->addSyntaxTrees({ tree.get() });
-    /*auto semaModel = */compilation->computeSemanticModel(tree.get());
+    /*auto semaModel = */compilation->analyze(tree.get());
 
     // show only not yet shown
     if (!tree->diagnostics().empty()) {

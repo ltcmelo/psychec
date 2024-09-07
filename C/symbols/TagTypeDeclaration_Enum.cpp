@@ -30,12 +30,12 @@
 using namespace psy;
 using namespace C;
 
-Enum::Enum(const SyntaxTree* tree,
-           const Symbol* containingSym,
+Enum::Enum(const Symbol* containingSym,
+           const SyntaxTree* tree,
            const Scope* enclosingScope,
            TagType* tagTy)
-    : TagTypeDeclaration(tree,
-                         containingSym,
+    : TagTypeDeclaration(containingSym,
+                         tree,
                          enclosingScope,
                          tagTy,
                          TagTypeDeclarationKind::Enum)

@@ -28,13 +28,15 @@
 
 #include "../common/infra/AccessSpecifiers.h"
 
+#include <unordered_set>
+
 namespace psy {
 namespace C {
 
 class PSY_C_INTERNAL_API TypeResolver final : protected SyntaxVisitor
 {
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
+    PSY_GRANT_INTERNAL_ACCESS(Compilation);
 
     TypeResolver(SemanticModel* semaModel, const SyntaxTree* tree);
     TypeResolver(const TypeResolver&) = delete;
@@ -44,14 +46,9 @@ PSY_INTERNAL:
 
 private:
     SemanticModel* semaModel_;
+    mutable std::unordered_set<const Type*> discardedTys_;
 
     const Type* resolveType(const Type* ty, const Scope* scope) const;
-
-    //--------------//
-    // Declarations //
-    //--------------//
-    virtual Action visitTranslationUnit(const TranslationUnitSyntax*) override;
-    virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
 
     /* Declarators */
     Action visitDeclarator_COMMON(const DeclaratorSyntax*);

@@ -34,6 +34,8 @@ namespace C {
 class PSY_C_API FunctionType final : public Type
 {
 public:
+    using ParameterTypes = std::vector<const Type*>;
+
     //!@{
     /**
      * Cast \c this type as an FunctionType.
@@ -50,7 +52,7 @@ public:
     /**
      * The parameter types of \c this FunctionTypeDeclaration.
      */
-    std::vector<const Type*> parameterTypes() const;
+    ParameterTypes parameterTypes() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
@@ -59,6 +61,7 @@ PSY_INTERNAL:
     FunctionType(const Type* retTy);
 
     void addParameterType(const Type* paramTy);
+    void setParameterType(ParameterTypes::size_type idx, const Type* paramTy) const;
     void setReturnType(const Type* retTy) const;
 
 private:

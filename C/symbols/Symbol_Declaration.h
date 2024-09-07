@@ -90,7 +90,8 @@ public:
     Location location() const;
 
 protected:
-    Declaration(SymbolImpl* p, DeclarationKind declK);
+    DECL_PIMPL_SUB(Declaration);
+    Declaration(DeclarationImpl* p);
     Declaration(const Declaration&) = delete;
     Declaration& operator=(const Declaration&) = delete;
 };

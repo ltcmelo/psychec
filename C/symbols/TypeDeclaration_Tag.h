@@ -69,8 +69,8 @@ PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
 protected:
-    TagTypeDeclaration(const SyntaxTree* tree,
-                       const Symbol* containingSym,
+    TagTypeDeclaration(const Symbol* containingSym,
+                       const SyntaxTree* tree,
                        const Scope* enclosingScope,
                        TagType* tagTy,
                        TagTypeDeclarationKind tagTyDeclK);

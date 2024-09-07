@@ -22,7 +22,6 @@
 #include "Binder__MACROS__.inc"
 
 #include "SyntaxTree.h"
-
 #include "binder/Scope.h"
 #include "compilation/Compilation.h"
 #include "symbols/Symbol_ALL.h"
@@ -143,7 +142,10 @@ const Identifier* Binder::identifier(const SyntaxToken& tk) const
 
 SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    std::unique_ptr<TranslationUnit> unit(new TranslationUnit(tree_));
+    std::unique_ptr<TranslationUnit> unit(
+                new TranslationUnit(
+                    semaModel_->compilation()->program(),
+                    tree_));
     auto rawUnit = semaModel_->keepTranslationUnit(node, std::move(unit));
     pushSymbol(rawUnit);
     scopes_.push(rawUnit->enclosedScope_.get());

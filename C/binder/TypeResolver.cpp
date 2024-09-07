@@ -21,6 +21,7 @@
 #include "TypeResolver.h"
 
 #include "binder/Scope.h"
+#include "compilation/Compilation.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
 #include "syntax/Lexeme_Identifier.h"
@@ -42,24 +43,9 @@ TypeResolver::TypeResolver(SemanticModel* semaModel, const SyntaxTree* tree)
 void TypeResolver::resolveTypes()
 {
     visit(tree_->root());
-}
 
-SyntaxVisitor::Action TypeResolver::visitTranslationUnit(const TranslationUnitSyntax* node)
-{
-    for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
-        visit(declIt->value);
-
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action TypeResolver::visitVariableAndOrFunctionDeclaration(
-        const VariableAndOrFunctionDeclarationSyntax* node)
-{
-    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
-        visit(decltorIt->value);
-    }
-
-    return Action::Skip;
+    for (const auto& ty : discardedTys_)
+        semaModel_->dropType(ty);
 }
 
 SyntaxVisitor::Action TypeResolver::visitDeclarator_COMMON(const DeclaratorSyntax* node)
@@ -73,10 +59,7 @@ SyntaxVisitor::Action TypeResolver::visitDeclarator_COMMON(const DeclaratorSynta
                 auto typeableDecl = MIXIN_TypeableSymbol::from(decl);
                 auto ty = typeableDecl->retypeableType();
                 auto resolvedTy = resolveType(ty, decl->enclosingScope());
-                if (resolvedTy != ty) {
-                    typeableDecl->setType(resolvedTy);
-                    semaModel_->dropType(ty);
-                }
+                typeableDecl->setType(resolvedTy);
                 break;
             }
         }
@@ -97,7 +80,8 @@ SyntaxVisitor::Action TypeResolver::visitParenthesizedDeclarator(
     return visitDeclarator_COMMON(node->innerDeclarator());
 }
 
-SyntaxVisitor::Action TypeResolver::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
+SyntaxVisitor::Action TypeResolver::visitIdentifierDeclarator(
+        const IdentifierDeclaratorSyntax* node)
 {
     return visitDeclarator_COMMON(node);
 }
@@ -109,22 +93,50 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope) const
             auto arrTy = ty->asArrayType();
             auto elemTy = arrTy->elementType();
             auto resolvedTy = resolveType(elemTy, scope);
-            if (resolvedTy != elemTy)
+            if (resolvedTy != elemTy) {
                 arrTy->resetElementType(resolvedTy);
+                discardedTys_.insert(elemTy);
+            }
             break;
         }
 
-        case TypeKind::Basic:
-        case TypeKind::Void:
+        case TypeKind::Basic: {
+            auto basicTy = ty->asBasicType();
+            auto resolvedTy =
+                semaModel_->compilation()->program()->canonicalBasicType(basicTy->kind());
+            if (resolvedTy != basicTy) {
+                discardedTys_.insert(ty);
+                return resolvedTy;
+            }
             break;
+        }
+
+        case TypeKind::Void: {
+            auto voidTy = ty->asVoidType();
+            auto resolvedTy = semaModel_->compilation()->program()->canonicalVoidType();
+            if (resolvedTy != voidTy) {
+                discardedTys_.insert(ty);
+                return voidTy;
+            }
+            break;
+        }
 
         case TypeKind::Function: {
-            // TODO: parameters
             auto funcTy = ty->asFunctionType();
             auto retTy = funcTy->returnType();
             auto resolvedTy = resolveType(retTy, scope);
             if (resolvedTy != retTy)
                 funcTy->setReturnType(resolvedTy);
+            const auto parms = funcTy->parameterTypes();
+            const auto parmsSize = parms.size();
+            for (FunctionType::ParameterTypes::size_type idx = 0; idx < parmsSize; ++idx) {
+                const Type* parmTy = parms[idx];
+                resolvedTy = resolveType(parmTy, scope);
+                if (resolvedTy != parmTy) {
+                    funcTy->setParameterType(idx, resolvedTy);
+                    discardedTys_.insert(parmTy);
+                }
+            }
             break;
         }
 
@@ -132,8 +144,10 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope) const
             auto ptrTy = ty->asPointerType();
             auto refedTy = ptrTy->referencedType();
             auto resolvedTy = resolveType(refedTy, scope);
-            if (resolvedTy != refedTy)
+            if (resolvedTy != refedTy) {
                 ptrTy->resetReferencedType(resolvedTy);
+                discardedTys_.insert(refedTy);
+            }
             break;
         }
 
@@ -171,6 +185,7 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope) const
                             resolvedTy->kind() == TypeKind::Qualified
                             ? resolvedTy->asQualifiedType()->unqualifiedType()
                             : resolvedTy);
+                discardedTys_.insert(unqualTy);
             }
             break;
         }

@@ -28,7 +28,7 @@ using namespace psy;
 using namespace C;
 
 TypeDeclaration::TypeDeclaration(TypeDeclarationImpl* p)
-    : Declaration(p, DeclarationKind::Type)
+    : Declaration(p)
 {}
 
 TypeDeclaration::~TypeDeclaration()

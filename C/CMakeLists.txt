@@ -142,6 +142,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Declaration.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Declaration.h
     ${PROJECT_SOURCE_DIR}/symbols/DeclarationKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/Declaration__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Function.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Function.h
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Object.cpp

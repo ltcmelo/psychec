@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2021 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,48 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_PARAMETER_H__
-#define PSYCHE_C_PARAMETER_H__
+#include "Symbol__IMPL__.inc"
+#include "Symbol_Declaration.h"
 
-#include "Declaration_Object.h"
+using namespace psy;
+using namespace C;
 
-namespace psy {
-namespace C {
-
-/**
- * \brief The Parameter class.
- *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IParameterSymbol
- * from Roslyn, the .NET Compiler Platform.
- */
-class PSY_C_API Parameter final : public ObjectDeclaration
+struct Declaration::DeclarationImpl : SymbolImpl
 {
-public:
-    //!@{
-    /**
-     * Cast \c this Symbol as a Parameter.
-     */
-    virtual Parameter* asParameter() override { return this; }
-    virtual const Parameter* asParameter() const override { return this; }
-    //!@}
+    DeclarationImpl(const Symbol* containingSym,
+                    DeclarationKind declK,
+                    const SyntaxTree* tree,
+                    const Scope* enclosingScope,
+                    NameSpace ns)
+        : SymbolImpl(SymbolKind::Declaration, containingSym)
+        , tree_(tree)
+        , enclosingScope_(enclosingScope)
+    {
+        BF_.declK_ = static_cast<std::uint32_t>(declK);
+        BF_.ns_ = static_cast<std::uint32_t>(ns);
+    }
 
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const override;
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
-
-    Parameter(const Symbol* containingSym,
-              const SyntaxTree* tree,
-              const Scope* enclosingScope);
+    const SyntaxTree* tree_;
+    const Scope* enclosingScope_;
 };
-
-std::string PSY_C_API to_string(const Parameter& parm);
-
-} // C
-} // psy
-
-#endif

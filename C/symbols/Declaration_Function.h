@@ -44,7 +44,7 @@ class PSY_C_API Function final : public Declaration
 public:
     //!@{
     /**
-     * Cast \c this Symbol as a FunctionSymbol.
+     * Cast \c this Declaration as a Function.
      */
     virtual Function* asFunction() override { return this; }
     virtual const Function* asFunction() const override { return this; }
@@ -56,19 +56,19 @@ public:
     virtual const Identifier* identifier() const override { return name(); }
 
     /**
-     * The Identifier that names \c this FunctionSymbol.
+     * The Identifier that names \c this Function.
      */
     const Identifier* name() const;
 
     /**
-     * The Type of \c this FunctionSymbol.
+     * The Type of \c this Function.
      *
      * \sa FunctionSymbol::returnType
      */
     const Type* type() const;
 
     /**
-     * The Type of the return of \c this FunctionSymbol.
+     * The Type of the return of \c this Function.
      *
      * \sa FunctionSymbol::type
      */
@@ -82,16 +82,14 @@ public:
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
-    Function(const SyntaxTree* tree,
-             const Symbol* containingSym,
+    DECL_PIMPL_SUB(Function);
+    Function(const Symbol* containingSym,
+             const SyntaxTree* tree,
              const Scope* enclosingScope);
 
     virtual void setName(const Identifier* name) override;
     virtual void setType(const Type* ty) override;
     virtual const Type* retypeableType() const override;
-
-protected:
-    DECL_PIMPL_SUB(FunctionSymbol);
 };
 
 std::string PSY_C_API to_string(const Function& func);

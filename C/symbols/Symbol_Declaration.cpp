@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol__IMPL__.inc"
+#include "Declaration__IMPL__.inc"
 #include "Symbol_Declaration.h"
 
 #include "binder/Scope.h"
@@ -35,11 +35,9 @@
 using namespace psy;
 using namespace C;
 
-Declaration::Declaration(SymbolImpl* p, DeclarationKind declK)
+Declaration::Declaration(DeclarationImpl* p)
     : Symbol(p)
-{
-    P->BF_.declK_ = static_cast<std::uint32_t>(declK);
-}
+{}
 
 DeclarationKind Declaration::kind() const
 {
@@ -48,7 +46,7 @@ DeclarationKind Declaration::kind() const
 
 const Scope* Declaration::enclosingScope() const
 {
-    return P->enclosingScope_;
+    return P_CAST->enclosingScope_;
 }
 
 SymbolKind Symbol::kind() const

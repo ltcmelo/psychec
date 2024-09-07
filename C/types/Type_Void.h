@@ -46,6 +46,7 @@ public:
     //!@}
 
 PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Program);
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
     VoidType();

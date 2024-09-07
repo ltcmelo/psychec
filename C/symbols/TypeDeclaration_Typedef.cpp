@@ -24,22 +24,24 @@
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_Typedef.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <sstream>
 
 using namespace psy;
 using namespace C;
 
-Typedef::Typedef(const SyntaxTree* tree,
-                 const Symbol* containingSym,
+Typedef::Typedef(const Symbol* containingSym,
+                 const SyntaxTree* tree,
                  const Scope* enclosingScope,
                  TypedefType* tydefTy)
     : TypeDeclaration(
-          new TypeDeclarationImpl(tree,
-                                        containingSym,
-                                        enclosingScope,
-                                        NameSpace::OrdinaryIdentifiers,
-                                        tydefTy,
-                                        TypeDeclarationKind::Typedef))
+          new TypeDeclarationImpl(containingSym,
+                                  tree,
+                                  enclosingScope,
+                                  NameSpace::OrdinaryIdentifiers,
+                                  TypeDeclarationKind::Typedef,
+                                  tydefTy))
     , synonymizedTy_(nullptr)
 {
 }
@@ -55,9 +57,10 @@ const Identifier* Typedef::identifier() const
     return P_CAST->ty_->asTypedefType()->typedefName();
 }
 
-const Type* Typedef::definedType() const
+const TypedefType* Typedef::definedType() const
 {
-    return P_CAST->ty_;
+    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Typedef, return nullptr);
+    return P_CAST->ty_->asTypedefType();
 }
 
 const Type* Typedef::synonymizedType() const
@@ -81,9 +84,9 @@ namespace C {
 std::string to_string(const Typedef& tydef)
 {
     std::ostringstream oss;
-    oss << "<Typedef | ";
-    oss << "defined-type:" << to_string(*tydef.definedType());
-    oss << "synonymized-type:" << to_string(*tydef.synonymizedType());
+    oss << "<Typedef |";
+    oss << " defined-type:" << to_string(*tydef.definedType());
+    oss << " synonymized-type:" << to_string(*tydef.synonymizedType());
     oss << ">";
     return oss.str();
 }

@@ -49,7 +49,7 @@ public:
 
     //!@{
     /**
-     * Cast \c this Symbol as a ObjectDeclaration.
+     * Cast \c this Declaration as a ObjectDeclaration.
      */
     virtual ObjectDeclaration* asObjectDeclaration() override { return this; }
     virtual const ObjectDeclaration* asObjectDeclaration() const override { return this; }
@@ -74,7 +74,7 @@ public:
     //!@}
 
     /**
-     * The Identifier with which \c this Declaration is declared.
+     * The Identifier with which \c this ObjectDeclaration is declared.
      */
     virtual const Identifier* identifier() const override { return name(); }
 
@@ -84,7 +84,7 @@ public:
     const Identifier* name() const;
 
     /**
-     * The Type of \c this value.
+     * The Type of \c this ObjectDeclaration.
      */
     const Type* type() const;
 
@@ -98,13 +98,13 @@ PSY_INTERNAL:
 
 protected:
     DECL_PIMPL_SUB(ObjectDeclaration);
-    ObjectDeclaration(const SyntaxTree* tree,
-                            const Symbol* containingSym,
-                            const Scope* enclosingScope,
-                            ObjectDeclarationKind objDeclK);
+    ObjectDeclaration(const Symbol* containingSym,
+                      const SyntaxTree* tree,
+                      const Scope* enclosingScope,
+                      ObjectDeclarationKind objDeclK);
 };
 
-std::string PSY_C_API to_string(const ObjectDeclaration& sym);
+std::string PSY_C_API to_string(const ObjectDeclaration& objDecl);
 
 } // C
 } // psy

@@ -406,6 +406,7 @@ SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node
 
         default:
             qualTy = makeType<QualifiedType>(ty);
+            popType();
             pushType(qualTy);
             break;
     }

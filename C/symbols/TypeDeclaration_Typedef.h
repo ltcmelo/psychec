@@ -52,9 +52,9 @@ public:
     virtual const Identifier* identifier() const override;
 
     /**
-     * The Type defined by \c this Typedef.
+     * The TypedefType defined by \c this Typedef.
      */
-    const Type* definedType() const;
+    const TypedefType * definedType() const;
 
     /**
      * The Type synonymized by \c this Typedef.
@@ -65,14 +65,14 @@ PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
     PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
 
-    Typedef(const SyntaxTree* tree,
-            const Symbol* containingSym,
+    Typedef(const Symbol* containingSym,
+            const SyntaxTree* tree,
             const Scope* enclosingScope,
             TypedefType* tydefTy,
             const Type* synonymizedTy);
 
-    Typedef(const SyntaxTree* tree,
-            const Symbol* containingSym,
+    Typedef(const Symbol* containingSym,
+            const SyntaxTree* tree,
             const Scope* enclosingScope,
             TypedefType* tydefTy);
 

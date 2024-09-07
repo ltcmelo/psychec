@@ -27,19 +27,19 @@
 using namespace psy;
 using namespace C;
 
-TagTypeDeclaration::TagTypeDeclaration(const SyntaxTree* tree,
-                                       const Symbol* containingSym,
+TagTypeDeclaration::TagTypeDeclaration(const Symbol* containingSym,
+                                       const SyntaxTree* tree,
                                        const Scope* enclosingScope,
                                        TagType* tagTy,
                                        TagTypeDeclarationKind tagTyDeclK)
     : TypeDeclaration(
-          new TypeDeclarationImpl(tree,
-                                        containingSym,
-                                        enclosingScope,
-                                        NameSpace::Tags,
-                                        tagTy,
-                                        TypeDeclarationKind::Tag,
-                                        tagTyDeclK))
+          new TypeDeclarationImpl(containingSym,
+                                  tree,
+                                  enclosingScope,
+                                  NameSpace::Tags,
+                                  TypeDeclarationKind::Tag,
+                                  tagTy,
+                                  tagTyDeclK))
 {
 }
 

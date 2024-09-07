@@ -30,13 +30,13 @@
 using namespace psy;
 using namespace C;
 
-Enumerator::Enumerator(const SyntaxTree* tree,
-                       const Symbol* containingSym,
+Enumerator::Enumerator(const Symbol* containingSym,
+                       const SyntaxTree* tree,
                        const Scope* enclosingScope)
-    : ObjectDeclaration(tree,
-                              containingSym,
-                              enclosingScope,
-                              ObjectDeclarationKind::Enumerator)
+    : ObjectDeclaration(containingSym,
+                        tree,
+                        enclosingScope,
+                        ObjectDeclarationKind::Enumerator)
 {}
 
 std::string Enumerator::toDisplayString() const

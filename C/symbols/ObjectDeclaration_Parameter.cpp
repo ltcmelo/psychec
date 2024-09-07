@@ -31,13 +31,13 @@
 using namespace psy;
 using namespace C;
 
-Parameter::Parameter(const SyntaxTree* tree,
-                     const Symbol* containingSym,
+Parameter::Parameter(const Symbol* containingSym,
+                     const SyntaxTree* tree,
                      const Scope* enclosingScope)
-    : ObjectDeclaration(tree,
-                              containingSym,
-                              enclosingScope,
-                              ObjectDeclarationKind::Parameter)
+    : ObjectDeclaration(containingSym,
+                        tree,
+                        enclosingScope,
+                        ObjectDeclarationKind::Parameter)
 {}
 
 std::string Parameter::toDisplayString() const
