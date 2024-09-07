@@ -30,12 +30,12 @@
 using namespace psy;
 using namespace C;
 
-Union::Union(const SyntaxTree* tree,
-             const Symbol* containingSym,
+Union::Union(const Symbol* containingSym,
+             const SyntaxTree* tree,
              const Scope* enclosingScope,
              TagType* tagTy)
-    : TagTypeDeclaration(tree,
-                         containingSym,
+    : TagTypeDeclaration(containingSym,
+                         tree,
                          enclosingScope,
                          tagTy,
                          TagTypeDeclarationKind::Union)

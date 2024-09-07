@@ -151,9 +151,6 @@ PSY_INTERNAL:
 
     SemanticModel(const SyntaxTree* tree, Compilation* compilation);
 
-    void applyBinder();
-    void applyTypeResolver();
-
     TranslationUnit* keepTranslationUnit(
             const TranslationUnitSyntax* node,
             std::unique_ptr<TranslationUnit> unitSym);

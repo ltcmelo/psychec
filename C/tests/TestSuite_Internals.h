@@ -70,9 +70,8 @@ private:
                  Reparser::DisambiguationStrategy strategy,
                  Expectation X = Expectation());
 
-    std::unique_ptr<SemanticModel> semanticModel(std::string text);
     void checkSemanticModel(
-            std::unique_ptr<SemanticModel> semaModel,
+            const SemanticModel* semaModel,
             Expectation X);
     void matchDeclarations(
             std::unique_ptr<SemanticModel> semaModel,
@@ -81,7 +80,6 @@ private:
     void resolveTypes(std::string text, Expectation X = Expectation());
 
     std::unique_ptr<SyntaxTree> tree_;
-    std::unique_ptr<Compilation> compilation_;
     std::vector<std::unique_ptr<Tester>> testers_;
 };
 

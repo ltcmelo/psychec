@@ -69,7 +69,7 @@ SemanticModelTester::declAndSemaModel(const std::string& s)
 
     compilation_ = Compilation::create(tree_->filePath());
     compilation_->addSyntaxTrees({ tree_.get() });
-    auto semaModel = compilation_->computeSemanticModel(tree_.get());
+    auto semaModel = compilation_->analyze(tree_.get());
     PSY_EXPECT_TRUE(semaModel);
 
     return std::make_tuple(decl, semaModel);
@@ -964,7 +964,7 @@ void SemanticModelTester::case0500()
 
     compilation_ = Compilation::create(tree_->filePath());
     compilation_->addSyntaxTrees({ tree_.get() });
-    auto semaModel = compilation_->computeSemanticModel(tree_.get());
+    auto semaModel = compilation_->analyze(tree_.get());
     PSY_EXPECT_TRUE(semaModel);
 }
 

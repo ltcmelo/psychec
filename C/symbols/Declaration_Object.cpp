@@ -18,27 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol__IMPL__.inc"
+#include "Declaration__IMPL__.inc"
 #include "Declaration_Object.h"
 
 #include "symbols/Symbol_ALL.h"
+#include "types/Type_ALL.h"
 
 #include <sstream>
 
 using namespace psy;
 using namespace C;
 
-struct ObjectDeclaration::ObjectDeclarationImpl : SymbolImpl
+struct ObjectDeclaration::ObjectDeclarationImpl : DeclarationImpl
 {
-    ObjectDeclarationImpl(const SyntaxTree* tree,
-                                const Symbol* containingSym,
-                                const Scope* enclosingScope,
-                                ObjectDeclarationKind objDeclK)
-        : SymbolImpl(tree,
-                     containingSym,
-                     enclosingScope,
-                     NameSpace::OrdinaryIdentifiers,
-                     SymbolKind::Declaration)
+    ObjectDeclarationImpl(const Symbol* containingSym,
+                          const SyntaxTree* tree,
+                          const Scope* enclosingScope,
+                          ObjectDeclarationKind objDeclK)
+        : DeclarationImpl(containingSym,
+                          DeclarationKind::Object,
+                          tree,
+                          enclosingScope,
+                          NameSpace::OrdinaryIdentifiers)
         , name_(nullptr)
         , ty_(nullptr)
     {
@@ -49,16 +50,15 @@ struct ObjectDeclaration::ObjectDeclarationImpl : SymbolImpl
     const Type* ty_;
 };
 
-ObjectDeclaration::ObjectDeclaration(const SyntaxTree* tree,
-                                                 const Symbol* containingSym,
-                                                 const Scope* enclosingScope,
-                                                 ObjectDeclarationKind objDeclK)
+ObjectDeclaration::ObjectDeclaration(const Symbol* containingSym,
+                                     const SyntaxTree* tree,
+                                     const Scope* enclosingScope,
+                                     ObjectDeclarationKind objDeclK)
     : Declaration(
-          new ObjectDeclarationImpl(tree,
-                                          containingSym,
-                                          enclosingScope,
-                                          objDeclK),
-          DeclarationKind::Object)
+          new ObjectDeclarationImpl(containingSym,
+                                    tree,
+                                    enclosingScope,
+                                    objDeclK))
 {}
 
 ObjectDeclaration::~ObjectDeclaration()
@@ -97,17 +97,17 @@ void ObjectDeclaration::setName(const Identifier* name)
 namespace psy {
 namespace C {
 
-std::string to_string(const ObjectDeclaration& sym)
+std::string to_string(const ObjectDeclaration& objDecl)
 {
-    switch (sym.kind()) {
+    switch (objDecl.kind()) {
         case ObjectDeclarationKind::Enumerator:
-            return to_string(*sym.asEnumerator());
+            return to_string(*objDecl.asEnumerator());
         case ObjectDeclarationKind::Field:
-            return to_string(*sym.asField());
+            return to_string(*objDecl.asField());
         case ObjectDeclarationKind::Parameter:
-            return to_string(*sym.asParameter());
+            return to_string(*objDecl.asParameter());
         case ObjectDeclarationKind::Variable:
-            return to_string(*sym.asVariable());
+            return to_string(*objDecl.asVariable());
     }
 }
 

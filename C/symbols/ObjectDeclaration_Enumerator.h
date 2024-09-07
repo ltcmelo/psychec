@@ -48,8 +48,8 @@ public:
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
-    Enumerator(const SyntaxTree* tree,
-               const Symbol* containingSym,
+    Enumerator(const Symbol* containingSym,
+               const SyntaxTree* tree,
                const Scope* enclosingScope);
 };
 

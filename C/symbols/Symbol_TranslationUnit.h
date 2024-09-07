@@ -61,10 +61,11 @@ public:
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
-    TranslationUnit(const SyntaxTree* tree);
+    TranslationUnit(const Program* prog, const SyntaxTree* tree);
 
 private:
     std::unique_ptr<Scope> enclosedScope_;
+    const SyntaxTree* tree_;
 };
 
 std::string PSY_C_API to_string(const TranslationUnit& unit);

@@ -57,22 +57,11 @@ struct SemanticModel::SemanticModelImpl
 
 SemanticModel::SemanticModel(const SyntaxTree* tree, Compilation* compilation)
     : P(new SemanticModelImpl(tree, compilation))
-{}
+{
+}
 
 SemanticModel::~SemanticModel()
 {}
-
-void SemanticModel::applyBinder()
-{
-    Binder binder(this, P->tree_);
-    binder.bind();
-}
-
-void SemanticModel::applyTypeResolver()
-{
-    TypeResolver tyResolver(this, P->tree_);
-    tyResolver.resolveTypes();
-}
 
 const SyntaxTree* SemanticModel::syntaxTree() const
 {

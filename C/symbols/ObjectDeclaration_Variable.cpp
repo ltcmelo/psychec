@@ -29,13 +29,13 @@
 using namespace psy;
 using namespace C;
 
-Variable::Variable(const SyntaxTree* tree,
-                   const Symbol* containingSym,
+Variable::Variable(const Symbol* containingSym,
+                   const SyntaxTree* tree,
                    const Scope* enclosingScope)
-    : ObjectDeclaration(tree,
-                              containingSym,
-                              enclosingScope,
-                              ObjectDeclarationKind::Variable)
+    : ObjectDeclaration(containingSym,
+                        tree,
+                        enclosingScope,
+                        ObjectDeclarationKind::Variable)
 {}
 
 std::string Variable::toDisplayString() const

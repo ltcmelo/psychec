@@ -45,8 +45,8 @@ public:
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
-    Union(const SyntaxTree* tree,
-          const Symbol* containingSym,
+    Union(const Symbol* containingSym,
+          const SyntaxTree* tree,
           const Scope* enclosingScope,
           TagType* tagTy);
 };

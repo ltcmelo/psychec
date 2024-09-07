@@ -690,17 +690,15 @@ bool typeMatchesBinding(const TypeDeclaration* tyDecl, const Decl& decl)
 
         case TypeDeclarationKind::Typedef: {
             auto tydefDecl = tyDecl->asTypedef();
-            if (!tydefDecl->definedType())
+            if (!typeMatches(tydefDecl->synonymizedType(), decl.ty_))
+                return REJECT_CANDIDATE(tyDecl, "synonymized type mismatch");
+            auto tydefTy = tydefDecl->definedType();
+            if (!tydefTy)
                 return REJECT_CANDIDATE(tyDecl, "no defined type");
-            if (!tydefDecl->definedType()->asTypedefType())
-                return REJECT_CANDIDATE(tyDecl, "not a typedef type");
-            auto tydefTy = tydefDecl->definedType()->asTypedefType();
             if (!tydefTy->typedefName())
                 return REJECT_CANDIDATE(tyDecl, "empty typedef name");
             if (tydefTy->typedefName()->valueText() != decl.ident_)
                 return REJECT_CANDIDATE(tyDecl, "typedef name mismatch");
-            if (!typeMatches(tydefDecl->synonymizedType(), decl.ty_))
-                return REJECT_CANDIDATE(tyDecl, "synonymized type mismatch");
             break;
         }
     }
@@ -772,7 +770,7 @@ void InternalsTestSuite::matchDeclarations(
 }
 
 void InternalsTestSuite::checkSemanticModel(
-        std::unique_ptr<SemanticModel> semaModel,
+        const SemanticModel* semaModel,
         Expectation X)
 {
     if (!checkErrorAndWarn(X))
@@ -818,28 +816,24 @@ void InternalsTestSuite::checkSemanticModel(
     }
 }
 
-std::unique_ptr<SemanticModel> InternalsTestSuite::semanticModel(std::string text)
+void InternalsTestSuite::bind(std::string text, Expectation X)
 {
     parse(text);
     auto compilation = Compilation::create(tree_->filePath());
     compilation->addSyntaxTrees({ tree_.get() });
-    std::unique_ptr<SemanticModel> semaModel(
-                new SemanticModel(tree_.get(), compilation.get()));
-    return semaModel;
-}
-
-void InternalsTestSuite::bind(std::string text, Expectation X)
-{
-    auto semaModel = semanticModel(text);
-    semaModel->applyBinder();
-    checkSemanticModel(std::move(semaModel), X);
+    compilation->bind();
+    auto semaModel = compilation->semanticModel(tree_.get());
+    checkSemanticModel(semaModel, X);
 }
 
 void InternalsTestSuite::resolveTypes(std::string text, Expectation X)
 {
-    auto semaModel = semanticModel(text);
-    semaModel->applyBinder();
-    semaModel->applyTypeResolver();
-    checkSemanticModel(std::move(semaModel), X);
+    parse(text);
+    auto compilation = Compilation::create(tree_->filePath());
+    compilation->addSyntaxTrees({ tree_.get() });
+    compilation->bind();
+    compilation->resolveTypes();
+    auto semaModel = compilation->semanticModel(tree_.get());
+    checkSemanticModel(semaModel, X);
 }
 

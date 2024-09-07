@@ -369,7 +369,22 @@ void BinderTester::case3109()
                           .ty_.Derived(TypeKind::Pointer)));
 }
 
-void BinderTester::case3110(){}
+void BinderTester::case3110()
+{
+    bind("typedef const int x , y ;",
+         Expectation()
+             .declaration(Decl()
+                          .Type("x")
+                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                          .withScopeKind(ScopeKind::File)
+                          .ty_.Basic(BasicTypeKind::Int, CVR::Const))
+             .declaration(Decl()
+                          .Type("x")
+                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                          .withScopeKind(ScopeKind::File)
+                          .ty_.Basic(BasicTypeKind::Int, CVR::Const)));
+}
+
 void BinderTester::case3111(){}
 void BinderTester::case3112(){}
 void BinderTester::case3113(){}

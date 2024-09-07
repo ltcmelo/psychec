@@ -21,6 +21,8 @@
 #include "Type_Function.h"
 #include "Type__IMPL__.inc"
 
+#include "../common/infra/Assertions.h"
+
 #include <iostream>
 #include <sstream>
 
@@ -52,7 +54,7 @@ void FunctionType::setReturnType(const Type* retTy) const
     P_CAST->retTy_ = retTy;
 }
 
-std::vector<const Type *> FunctionType::parameterTypes() const
+std::vector<const Type*> FunctionType::parameterTypes() const
 {
     return P_CAST->paramTys_;
 }
@@ -60,6 +62,12 @@ std::vector<const Type *> FunctionType::parameterTypes() const
 void FunctionType::addParameterType(const Type *paramTy)
 {
     P_CAST->paramTys_.push_back(paramTy);
+}
+
+void FunctionType::setParameterType(ParameterTypes::size_type idx, const Type* paramTy) const
+{
+    PSY_ASSERT_2(P_CAST->paramTys_.size() > idx, return);
+    P_CAST->paramTys_[idx] = paramTy;
 }
 
 namespace psy {

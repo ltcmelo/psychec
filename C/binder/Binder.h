@@ -53,7 +53,7 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(BinderTester);
-    PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
+    PSY_GRANT_INTERNAL_ACCESS(Compilation);
 
     Binder(SemanticModel* semaModel, const SyntaxTree* tree);
     Binder(const Binder&) = delete;
@@ -212,8 +212,8 @@ private:
 template <class SymT, class... SymTArgs>
 SymT* Binder::bindAndPushSymbol(const SyntaxNode* node, SymTArgs... args)
 {
-    std::unique_ptr<SymT> sym(new SymT(tree_,
-                                       syms_.top(),
+    std::unique_ptr<SymT> sym(new SymT(syms_.top(),
+                                       tree_,
                                        scopes_.top(),
                                        std::forward<SymTArgs>(args)...));
     auto rawSym = static_cast<SymT*>(semaModel_->keepBinding(node, std::move(sym)));

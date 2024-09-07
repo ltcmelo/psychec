@@ -18,30 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Symbol__IMPL__.inc"
+#include "Declaration__IMPL__.inc"
 #include "Declaration_Function.h"
 
 #include "symbols/Symbol_ALL.h"
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_ALL.h"
 
-#include "../common/infra/Assertions.h"
-
 #include <sstream>
 
 using namespace psy;
 using namespace C;
 
-struct Function::FunctionSymbolImpl : SymbolImpl
+struct Function::FunctionImpl : DeclarationImpl
 {
-    FunctionSymbolImpl(const SyntaxTree* tree,
-                       const Symbol* containingSym,
-                       const Scope* enclosingScope)
-        : SymbolImpl(tree,
-                     containingSym,
-                     enclosingScope,
-                     NameSpace::OrdinaryIdentifiers,
-                     SymbolKind::Declaration)
+    FunctionImpl(const Symbol* containingSym,
+                 const SyntaxTree* tree,
+                 const Scope* enclosingScope)
+        : DeclarationImpl(containingSym,
+                          DeclarationKind::Function,
+                          tree,
+                          enclosingScope,
+                          NameSpace::OrdinaryIdentifiers)
         , name_(nullptr)
         , ty_(nullptr)
     {}
@@ -50,14 +48,13 @@ struct Function::FunctionSymbolImpl : SymbolImpl
     const Type* ty_;
 };
 
-Function::Function(const SyntaxTree* tree,
-                   const Symbol* containingSym,
+Function::Function(const Symbol* containingSym,
+                   const SyntaxTree* tree,
                    const Scope* enclosingScope)
     : Declaration(
-          new FunctionSymbolImpl(tree,
-                                 containingSym,
-                                 enclosingScope),
-          DeclarationKind::Function)
+          new FunctionImpl(containingSym,
+                           tree,
+                           enclosingScope))
 {}
 
 const Identifier* Function::name() const

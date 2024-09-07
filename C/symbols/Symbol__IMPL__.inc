@@ -30,47 +30,25 @@ using namespace C;
 
 struct Symbol::SymbolImpl
 {
-    SymbolImpl(const SyntaxTree* tree,
-               const Symbol* containingSym,
-               const Scope* enclosingScope,
-               NameSpace ns,
-               SymbolKind symK)
-        : tree_(tree)
-        , containingSym_(containingSym)
-        , enclosingScope_(enclosingScope)
-        , BF_all_(0)
-    {
-        BF_.ns_ = static_cast<std::uint32_t>(ns);
-        BF_.symK_ = static_cast<std::uint32_t>(symK);
-    }
-
-    SymbolImpl(const SyntaxTree* tree,
-               SymbolKind symK)
-        : tree_(tree)
-        , containingSym_(nullptr)
-        , enclosingScope_(nullptr)
-        , BF_all_(0)
+    SymbolImpl(SymbolKind symK, const Symbol* containingSym)
+        : containingSym_(containingSym)
     {
         BF_.symK_ = static_cast<std::uint32_t>(symK);
     }
 
-    SymbolImpl(SymbolKind symK)
-        : SymbolImpl(nullptr, symK)
-    {
-    }
+    SymbolImpl(SymbolKind symK) : SymbolImpl(symK, nullptr)
+    {}
 
-    const SyntaxTree* tree_;
     const Symbol* containingSym_;
-    const Scope* enclosingScope_;
 
     struct BitFields
     {
         // Symbol
         std::uint32_t symK_ : 3;
-        std::uint32_t ns_ : 2;
 
         // Declaration
         std::uint32_t declK_: 2;
+        std::uint32_t ns_ : 2;
         std::uint32_t static_ : 1;
 
         // ObjectDeclaration

@@ -52,6 +52,7 @@ public:
     BasicTypeKind kind() const;
 
 PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Program);
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
     BasicType(BasicTypeKind basicTyK);

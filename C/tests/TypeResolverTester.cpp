@@ -184,17 +184,202 @@ x y ( ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0010(){}
-void TypeResolverTester::case0011(){}
-void TypeResolverTester::case0012(){}
-void TypeResolverTester::case0013(){}
-void TypeResolverTester::case0014(){}
-void TypeResolverTester::case0015(){}
-void TypeResolverTester::case0016(){}
-void TypeResolverTester::case0017(){}
-void TypeResolverTester::case0018(){}
-void TypeResolverTester::case0019(){}
-void TypeResolverTester::case0020(){}
+void TypeResolverTester::case0010()
+{
+    auto s = R"(
+typedef double x ;
+x y ( int w ) ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Function("y")
+                         .ty_.Basic(BasicTypeKind::Double)
+                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.Derived(TypeKind::Function)));
+}
+
+void TypeResolverTester::case0011()
+{
+    auto s = R"(
+typedef double x ;
+x y ( int w , double z ) ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Function("y")
+                         .ty_.Basic(BasicTypeKind::Double)
+                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Double)
+                         .ty_.Derived(TypeKind::Function)));
+}
+
+void TypeResolverTester::case0012()
+{
+    auto s = R"(
+typedef double x ;
+x y ( int w , x z ) ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Function("y")
+                         .ty_.Basic(BasicTypeKind::Double)
+                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Double)
+                         .ty_.Derived(TypeKind::Function)));
+}
+
+void TypeResolverTester::case0013()
+{
+    auto s = R"(
+typedef double x ;
+typedef int t ;
+x y ( t w , double z ) ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Function("y")
+                         .ty_.Basic(BasicTypeKind::Double)
+                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Double)
+                         .ty_.Derived(TypeKind::Function)));
+}
+
+void TypeResolverTester::case0014()
+{
+    auto s = R"(
+typedef double x ;
+typedef int t ;
+x y ( t w , x z ) ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Function("y")
+                         .ty_.Basic(BasicTypeKind::Double)
+                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Double)
+                         .ty_.Derived(TypeKind::Function)));
+}
+
+void TypeResolverTester::case0015()
+{
+    auto s = R"(
+typedef double x ;
+typedef int t ;
+const x y ( t w , x z ) ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Function("y")
+                         .ty_.Basic(BasicTypeKind::Double, CVR::Const)
+                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Double)
+                         .ty_.Derived(TypeKind::Function)));
+}
+
+void TypeResolverTester::case0016()
+{
+    auto s = R"(
+typedef double x ;
+typedef int t ;
+const x y ( t const w , x z ) ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Function("y")
+                         .ty_.Basic(BasicTypeKind::Double, CVR::Const)
+                         .ty_.addParam().Basic(BasicTypeKind::Int, CVR::Const)
+                         .ty_.addParam().Basic(BasicTypeKind::Double)
+                         .ty_.Derived(TypeKind::Function)));
+}
+
+void TypeResolverTester::case0017()
+{
+    auto s = R"(
+typedef double x ;
+typedef int t ;
+x y ( t * * w , x z ) ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Function("y")
+                         .ty_.Basic(BasicTypeKind::Double)
+                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.atParam().Derived(TypeKind::Pointer)
+                         .ty_.atParam().Derived(TypeKind::Pointer)
+                         .ty_.addParam().Basic(BasicTypeKind::Double)
+                         .ty_.Derived(TypeKind::Function)));
+}
+
+void TypeResolverTester::case0018()
+{
+    auto s = R"(
+typedef double x ;
+typedef int t ;
+x y ( t * * w , x * * z ) ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Function("y")
+                         .ty_.Basic(BasicTypeKind::Double)
+                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.atParam().Derived(TypeKind::Pointer)
+                         .ty_.atParam().Derived(TypeKind::Pointer)
+                         .ty_.addParam().Basic(BasicTypeKind::Double)
+                         .ty_.atParam().Derived(TypeKind::Pointer)
+                         .ty_.atParam().Derived(TypeKind::Pointer)
+                         .ty_.Derived(TypeKind::Function)));
+}
+
+void TypeResolverTester::case0019()
+{
+    auto s = R"(
+typedef double x ;
+typedef int t ;
+double y ( t w , x z ) ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Function("y")
+                         .ty_.Basic(BasicTypeKind::Double)
+                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Double)
+                         .ty_.Derived(TypeKind::Function)));
+}
+
+void TypeResolverTester::case0020()
+{
+    auto s = R"(
+typedef double const x ;
+x y ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("y", ObjectDeclarationKind::Variable)
+                         .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
+}
+
 void TypeResolverTester::case0021(){}
 void TypeResolverTester::case0022(){}
 void TypeResolverTester::case0023(){}
