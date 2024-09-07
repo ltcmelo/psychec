@@ -777,7 +777,29 @@ int _ ( )
                           SyntaxKind::IntegerConstantExpression })));
 }
 
-void ReparserTester::case0026(){}
+void ReparserTester::case0026()
+{
+    auto s = R"(
+x z;
+int _ ()
+{
+    x * y ;
+    ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+        s,
+        Expectation().AST(
+            preamble_x_z_VarDecl(
+                { SyntaxKind::DeclarationStatement,
+                  SyntaxKind::VariableAndOrFunctionDeclaration,
+                  SyntaxKind::TypedefName,
+                  SyntaxKind::PointerDeclarator,
+                  SyntaxKind::IdentifierDeclarator,
+                  SyntaxKind::ExpressionStatement })));
+}
+
 void ReparserTester::case0027(){}
 void ReparserTester::case0028(){}
 void ReparserTester::case0029(){}
