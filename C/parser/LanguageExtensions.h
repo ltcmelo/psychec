@@ -58,6 +58,9 @@ public:
      */
     enum class Ext : std::uint8_t
     {
+        /* C */
+        C_wchar_t_Keyword,
+
         /* GNU */
         GNU_AlternateKeywords,
         GNU_AttributeSpecifiers,
@@ -82,6 +85,14 @@ public:
         NativeBooleans,
         NULLAsBuiltin,
     };
+
+    //!@{
+    /**
+     * Whether to enable \c wchar_t as a keyword.
+     */
+    LanguageExtensions& enable_extC_wchar_t_Keyword(bool enable);
+    bool isEnabled_extC_wchar_t_Keyword() const;
+    //!@}
 
     //!@{
     /**
@@ -243,6 +254,9 @@ private:
 
     struct BitFields
     {
+        /* C */
+        std::uint64_t extC_wchar_t_Keyword_ : 1;
+
         /* GNU */
         std::uint64_t extGNU_AlternateKeywords_ : 1;
         std::uint64_t extGNU_Asm_: 1;
