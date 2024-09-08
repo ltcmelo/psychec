@@ -552,7 +552,8 @@ static inline SyntaxKind recognize7(const char* s, const ParseOptions& opts)
             }
         }
     }
-    else if (s[0] == 'w') {
+    else if (s[0] == 'w'
+               && opts.languageExtensions().isEnabled_extC_wchar_t_Keyword()) {
         if (s[1] == 'c') {
             if (s[2] == 'h') {
                 if (s[3] == 'a') {

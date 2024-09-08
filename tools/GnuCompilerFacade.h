@@ -31,20 +31,22 @@ class GnuCompilerFacade
 {
 public:
     GnuCompilerFacade(const std::string& compilerName,
-                   const std::string& std,
-                   const std::vector<std::string>& D,
-                   const std::vector<std::string>& U);
+                      const std::string& std,
+                      const std::vector<std::string>& D,
+                      const std::vector<std::string>& U,
+                      const std::vector<std::string>& I);
 
     std::pair<int, std::string> preprocess(const std::string& srcText);
     std::pair<int, std::string> preprocess_IgnoreIncludes(const std::string& srcText);
 
 private:
-    std::string assembleMacroCmd() const;
+    std::string assemblePPOptions() const;
 
     std::string compilerName_;
     std::string std_;
     std::vector<std::string> D_;
     std::vector<std::string> U_;
+    std::vector<std::string> I_;
 };
 
 } // psy

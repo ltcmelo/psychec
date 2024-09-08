@@ -57,6 +57,7 @@ const MacroTranslations& LanguageExtensions::translations() const
     bool LanguageExtensions::isEnabled_##FLAG() const \
         { return BF_.FLAG##_; }
 
+DEFINE_ENABLE_ISENABLED(extC_wchar_t_Keyword)
 DEFINE_ENABLE_ISENABLED(extGNU_AlternateKeywords)
 DEFINE_ENABLE_ISENABLED(extGNU_Asm)
 DEFINE_ENABLE_ISENABLED(extGNU_AttributeSpecifiers)
@@ -85,6 +86,10 @@ namespace C {
 std::string PSY_C_API to_string(LanguageExtensions::Ext ext)
 {
     switch (ext) {
+        /* C */
+    case LanguageExtensions::Ext::C_wchar_t_Keyword:
+        return "wchar_t as keyword";
+
         /* GNU */
     case LanguageExtensions::Ext::GNU_AlternateKeywords:
         return "GNU Alternate Keywords";

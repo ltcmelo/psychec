@@ -114,7 +114,8 @@ int CCompilerFrontend::preprocess(const std::string& srcText,
     GnuCompilerFacade cc(config_->compiler_,
                          config_->std_,
                          config_->definedMacros_,
-                         config_->undefedMacros_);
+                         config_->undefedMacros_,
+                         config_->searchPaths_);
 
     std::string srcText_P;
     int exit;

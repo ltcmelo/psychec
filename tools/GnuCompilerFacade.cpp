@@ -33,20 +33,22 @@ const char * const kInclude = "#include";
 using namespace psy;
 
 GnuCompilerFacade::GnuCompilerFacade(const std::string& compilerName,
-                               const std::string& std,
-                               const std::vector<std::string>& D,
-                               const std::vector<std::string>& U)
+                                     const std::string& std,
+                                     const std::vector<std::string>& D,
+                                     const std::vector<std::string>& U,
+                                     const std::vector<std::string>& I)
     : compilerName_(compilerName)
     , std_(std)
     , D_(D)
     , U_(U)
+    , I_(I)
 {}
 
 std::pair<int, std::string> GnuCompilerFacade::preprocess(const std::string& srcText)
 {
     std::string in = "cat << 'EOF' | ";
     in += compilerName_;
-    in += assembleMacroCmd();
+    in += assemblePPOptions();
     in += " ";
     in += "-std=" + std_ + " ";
     in += "-E -x c -CC -";
@@ -74,12 +76,14 @@ std::pair<int, std::string> GnuCompilerFacade::preprocess_IgnoreIncludes(const s
     return preprocess(srcText_P);
 }
 
-std::string GnuCompilerFacade::assembleMacroCmd() const
+std::string GnuCompilerFacade::assemblePPOptions() const
 {
     std::string s;
     for (const auto& d : D_)
         s += " -D " + d;
     for (const auto& u : U_)
         s += " -U " + u;
+    for (const auto& i : I_)
+        s += " -I " + i;
     return s;
 }
