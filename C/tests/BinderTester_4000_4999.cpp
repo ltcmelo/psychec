@@ -153,89 +153,133 @@ void BinderTester::case4013()
 void BinderTester::case4014()
 {
     bind("signed double x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
 void BinderTester::case4015()
 {
     bind("double signed x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Double)));
 }
 
 void BinderTester::case4016()
 {
     bind("long double char x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::LongDouble)));
 }
 
 void BinderTester::case4017()
 {
     bind("long double signed x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::LongDouble)));
 }
 
 void BinderTester::case4018()
 {
     bind("signed long double x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Long_S)));
 }
 
 void BinderTester::case4019()
 {
     bind("unsigned double x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Int_U)));
 }
 
 void BinderTester::case4020()
 {
     bind("double unsigned x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Double)));
 }
 
 void BinderTester::case4021()
 {
     bind("double float x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Double)));
 }
 
 void BinderTester::case4022()
 {
     bind("float double x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Float)));
 }
 
 void BinderTester::case4023()
 {
     bind("float unsigned x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Float)));
 }
 
 void BinderTester::case4024()
 {
     bind("float signed x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Float)));
 }
 
 void BinderTester::case4025()
@@ -257,17 +301,25 @@ void BinderTester::case4026()
 void BinderTester::case4027()
 {
     bind("char short x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Char)));
 }
 
 void BinderTester::case4028()
 {
     bind("char long x ;",
-         Expectation().diagnostic(
+         Expectation()
+         .diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_InvalidType));
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Char)));
 }
 
 void BinderTester::case4029()
@@ -454,7 +506,18 @@ void BinderTester::case4050()
                               .ty_.Basic(BasicTypeKind::Bool)));
 }
 
-void BinderTester::case4051(){}
+void BinderTester::case4051()
+{
+    bind("char int x ;",
+         Expectation()
+         .diagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Char)));
+}
+
 void BinderTester::case4052(){}
 void BinderTester::case4053(){}
 void BinderTester::case4054(){}

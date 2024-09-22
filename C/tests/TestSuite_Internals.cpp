@@ -773,8 +773,7 @@ void InternalsTestSuite::checkSemanticModel(
         const SemanticModel* semaModel,
         Expectation X)
 {
-    if (!checkErrorAndWarn(X))
-        return;
+    checkErrorAndWarn(X);
 
     auto unit = semaModel->translationUnit();
     if (unit == nullptr)
