@@ -91,6 +91,9 @@ public:
             + 3100-3199 -> typedefs
             + 3300-...-> mixed
             + 3500 -> scope
+
+        Common
+            + 4000-4099 -> combined type specifiers
      */
 
     void case0001();
@@ -2218,6 +2221,109 @@ public:
     void case3598();
     void case3599();
 
+    // 4000-4999
+
+    void case4000();
+    void case4001();
+    void case4002();
+    void case4003();
+    void case4004();
+    void case4005();
+    void case4006();
+    void case4007();
+    void case4008();
+    void case4009();
+    void case4010();
+    void case4011();
+    void case4012();
+    void case4013();
+    void case4014();
+    void case4015();
+    void case4016();
+    void case4017();
+    void case4018();
+    void case4019();
+    void case4020();
+    void case4021();
+    void case4022();
+    void case4023();
+    void case4024();
+    void case4025();
+    void case4026();
+    void case4027();
+    void case4028();
+    void case4029();
+    void case4030();
+    void case4031();
+    void case4032();
+    void case4033();
+    void case4034();
+    void case4035();
+    void case4036();
+    void case4037();
+    void case4038();
+    void case4039();
+    void case4040();
+    void case4041();
+    void case4042();
+    void case4043();
+    void case4044();
+    void case4045();
+    void case4046();
+    void case4047();
+    void case4048();
+    void case4049();
+    void case4050();
+    void case4051();
+    void case4052();
+    void case4053();
+    void case4054();
+    void case4055();
+    void case4056();
+    void case4057();
+    void case4058();
+    void case4059();
+    void case4060();
+    void case4061();
+    void case4062();
+    void case4063();
+    void case4064();
+    void case4065();
+    void case4066();
+    void case4067();
+    void case4068();
+    void case4069();
+    void case4070();
+    void case4071();
+    void case4072();
+    void case4073();
+    void case4074();
+    void case4075();
+    void case4076();
+    void case4077();
+    void case4078();
+    void case4079();
+    void case4080();
+    void case4081();
+    void case4082();
+    void case4083();
+    void case4084();
+    void case4085();
+    void case4086();
+    void case4087();
+    void case4088();
+    void case4089();
+    void case4090();
+    void case4091();
+    void case4092();
+    void case4093();
+    void case4094();
+    void case4095();
+    void case4096();
+    void case4097();
+    void case4098();
+    void case4099();
+
     std::vector<TestFunction> tests_
     {
         TEST_BINDER(case0001),
@@ -4237,6 +4343,107 @@ public:
         TEST_BINDER(case3597),
         TEST_BINDER(case3598),
         TEST_BINDER(case3599),
+
+        TEST_BINDER(case4000),
+        TEST_BINDER(case4001),
+        TEST_BINDER(case4002),
+        TEST_BINDER(case4003),
+        TEST_BINDER(case4004),
+        TEST_BINDER(case4005),
+        TEST_BINDER(case4006),
+        TEST_BINDER(case4007),
+        TEST_BINDER(case4008),
+        TEST_BINDER(case4009),
+        TEST_BINDER(case4010),
+        TEST_BINDER(case4011),
+        TEST_BINDER(case4012),
+        TEST_BINDER(case4013),
+        TEST_BINDER(case4014),
+        TEST_BINDER(case4015),
+        TEST_BINDER(case4016),
+        TEST_BINDER(case4017),
+        TEST_BINDER(case4018),
+        TEST_BINDER(case4019),
+        TEST_BINDER(case4020),
+        TEST_BINDER(case4021),
+        TEST_BINDER(case4022),
+        TEST_BINDER(case4023),
+        TEST_BINDER(case4024),
+        TEST_BINDER(case4025),
+        TEST_BINDER(case4026),
+        TEST_BINDER(case4027),
+        TEST_BINDER(case4028),
+        TEST_BINDER(case4029),
+        TEST_BINDER(case4030),
+        TEST_BINDER(case4031),
+        TEST_BINDER(case4032),
+        TEST_BINDER(case4033),
+        TEST_BINDER(case4034),
+        TEST_BINDER(case4035),
+        TEST_BINDER(case4036),
+        TEST_BINDER(case4037),
+        TEST_BINDER(case4038),
+        TEST_BINDER(case4039),
+        TEST_BINDER(case4040),
+        TEST_BINDER(case4041),
+        TEST_BINDER(case4042),
+        TEST_BINDER(case4043),
+        TEST_BINDER(case4044),
+        TEST_BINDER(case4045),
+        TEST_BINDER(case4046),
+        TEST_BINDER(case4047),
+        TEST_BINDER(case4048),
+        TEST_BINDER(case4049),
+        TEST_BINDER(case4050),
+        TEST_BINDER(case4051),
+        TEST_BINDER(case4052),
+        TEST_BINDER(case4053),
+        TEST_BINDER(case4054),
+        TEST_BINDER(case4055),
+        TEST_BINDER(case4056),
+        TEST_BINDER(case4057),
+        TEST_BINDER(case4058),
+        TEST_BINDER(case4059),
+        TEST_BINDER(case4060),
+        TEST_BINDER(case4061),
+        TEST_BINDER(case4062),
+        TEST_BINDER(case4063),
+        TEST_BINDER(case4064),
+        TEST_BINDER(case4065),
+        TEST_BINDER(case4066),
+        TEST_BINDER(case4067),
+        TEST_BINDER(case4068),
+        TEST_BINDER(case4069),
+        TEST_BINDER(case4070),
+        TEST_BINDER(case4071),
+        TEST_BINDER(case4072),
+        TEST_BINDER(case4073),
+        TEST_BINDER(case4074),
+        TEST_BINDER(case4075),
+        TEST_BINDER(case4076),
+        TEST_BINDER(case4077),
+        TEST_BINDER(case4078),
+        TEST_BINDER(case4079),
+        TEST_BINDER(case4080),
+        TEST_BINDER(case4081),
+        TEST_BINDER(case4082),
+        TEST_BINDER(case4083),
+        TEST_BINDER(case4084),
+        TEST_BINDER(case4085),
+        TEST_BINDER(case4086),
+        TEST_BINDER(case4087),
+        TEST_BINDER(case4088),
+        TEST_BINDER(case4089),
+        TEST_BINDER(case4090),
+        TEST_BINDER(case4091),
+        TEST_BINDER(case4092),
+        TEST_BINDER(case4093),
+        TEST_BINDER(case4094),
+        TEST_BINDER(case4095),
+        TEST_BINDER(case4096),
+        TEST_BINDER(case4097),
+        TEST_BINDER(case4098),
+        TEST_BINDER(case4099),
 
     };
 };

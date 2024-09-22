@@ -92,6 +92,8 @@ private:
     template <class TyT, class... TyTArgs> TyT* makeType(TyTArgs... args);
 
     bool decltorIsOfTydef_;
+    bool tySpecHasImplicit_int;
+    bool tySpecHasImplicit_double;
 
     struct DiagnosticsReporter
     {
@@ -114,9 +116,9 @@ private:
 
         /* Type specifiers */
         void TypeSpecifierMissingDefaultsToInt(SyntaxToken declTk);
-        void TwoOrMoreDataTypesInDeclarationSpecifiers(SyntaxToken tySpecTk);
+        void InvalidType(SyntaxToken tySpecTk);
         static const std::string ID_TypeSpecifierMissingDefaultsToInt;
-        static const std::string ID_TwoOrMoreDataTypesInDeclarationSpecifiers;
+        static const std::string ID_InvalidType;
 
         /* Type qualifiers */
         void InvalidUseOfRestrict(SyntaxToken tyQualTk);
