@@ -111,10 +111,10 @@ void BinderTester::case1007()
 
 void BinderTester::case1008()
 {
-    bind("int float x ;",
-         Expectation().diagnostic(
-             Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
+    bind("long x ;",
+         Expectation()
+            .declaration(Decl().Object("x", ObjectDeclarationKind::Variable)
+                    .ty_.Basic(BasicTypeKind::Long)));
 }
 
 void BinderTester::case1009()
@@ -160,79 +160,41 @@ void BinderTester::case1013()
                      .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
-void BinderTester::case1014()
-{
-    bind("long x ;",
-         Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationKind::Variable)
-                    .ty_.Basic(BasicTypeKind::Long)));
-}
-
-void BinderTester::case1015()
-{
-    bind("long int x ;",
-         Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationKind::Variable)
-                    .ty_.Basic(BasicTypeKind::Long)));
-}
-
-void BinderTester::case1016()
-{
-    bind("int long x ;",
-         Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationKind::Variable)
-                    .ty_.Basic(BasicTypeKind::Long)));
-}
-
-void BinderTester::case1017()
-{
-    bind("signed x ;",
-         Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationKind::Variable)
-                    .ty_.Basic(BasicTypeKind::Int_S)));
-}
-
-void BinderTester::case1018()
-{
-    bind("signed int x ;",
-         Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationKind::Variable)
-                    .ty_.Basic(BasicTypeKind::Int_S)));
-}
-
-void BinderTester::case1019()
-{
-}
-
-void BinderTester::case1020() {}
-void BinderTester::case1021() {}
-void BinderTester::case1022() {}
-void BinderTester::case1023() {}
-void BinderTester::case1024() {}
-void BinderTester::case1025() {}
-void BinderTester::case1026() {}
-void BinderTester::case1027() {}
-void BinderTester::case1028() {}
-void BinderTester::case1029() {}
-void BinderTester::case1030() {}
-void BinderTester::case1031() {}
-void BinderTester::case1032() {}
-void BinderTester::case1033() {}
-void BinderTester::case1034() {}
-void BinderTester::case1035() {}
-void BinderTester::case1036() {}
-void BinderTester::case1037() {}
-void BinderTester::case1038() {}
-void BinderTester::case1039() {}
-void BinderTester::case1040() {}
-void BinderTester::case1041() {}
-void BinderTester::case1042() {}
-void BinderTester::case1043() {}
-void BinderTester::case1044() {}
-void BinderTester::case1045() {}
-void BinderTester::case1046() {}
-void BinderTester::case1047() {}
-void BinderTester::case1048() {}
+void BinderTester::case1014(){}
+void BinderTester::case1015(){}
+void BinderTester::case1016(){}
+void BinderTester::case1017(){}
+void BinderTester::case1018(){}
+void BinderTester::case1019(){}
+void BinderTester::case1020(){}
+void BinderTester::case1021(){}
+void BinderTester::case1022(){}
+void BinderTester::case1023(){}
+void BinderTester::case1024(){}
+void BinderTester::case1025(){}
+void BinderTester::case1026(){}
+void BinderTester::case1027(){}
+void BinderTester::case1028(){}
+void BinderTester::case1029(){}
+void BinderTester::case1030(){}
+void BinderTester::case1031(){}
+void BinderTester::case1032(){}
+void BinderTester::case1033(){}
+void BinderTester::case1034(){}
+void BinderTester::case1035(){}
+void BinderTester::case1036(){}
+void BinderTester::case1037(){}
+void BinderTester::case1038(){}
+void BinderTester::case1039(){}
+void BinderTester::case1040(){}
+void BinderTester::case1041(){}
+void BinderTester::case1042(){}
+void BinderTester::case1043(){}
+void BinderTester::case1044(){}
+void BinderTester::case1045(){}
+void BinderTester::case1046(){}
+void BinderTester::case1047(){}
+void BinderTester::case1048(){}
 void BinderTester::case1049() {}
 
 void BinderTester::case1050()

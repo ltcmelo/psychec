@@ -43,6 +43,8 @@ Binder::Binder(SemanticModel* semaModel, const SyntaxTree* tree)
     , semaModel_(semaModel)
     , stashedScope_(nullptr)
     , decltorIsOfTydef_(false)
+    , tySpecHasImplicit_int(false)
+    , tySpecHasImplicit_double(false)
     , diagReporter_(this)
 {}
 

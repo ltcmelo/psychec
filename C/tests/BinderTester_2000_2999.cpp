@@ -151,7 +151,7 @@ struct
          )",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             Binder::DiagnosticsReporter::ID_TwoOrMoreDataTypesInDeclarationSpecifiers));
+             Binder::DiagnosticsReporter::ID_InvalidType));
 }
 
 void BinderTester::case2009()

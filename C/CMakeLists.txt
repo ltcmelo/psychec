@@ -233,6 +233,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/tests/BinderTester_1000_1999.cpp
     ${PROJECT_SOURCE_DIR}/tests/BinderTester_2000_2999.cpp
     ${PROJECT_SOURCE_DIR}/tests/BinderTester_3000_3999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/BinderTester_4000_4999.cpp
     ${PROJECT_SOURCE_DIR}/tests/ParserTester.h
     ${PROJECT_SOURCE_DIR}/tests/ParserTester.cpp
     ${PROJECT_SOURCE_DIR}/tests/ParserTester_0000_0999.cpp

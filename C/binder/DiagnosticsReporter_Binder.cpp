@@ -34,7 +34,7 @@ const std::string Binder::DiagnosticsReporter::ID_FunctionReturningArray = "Bind
 
 /* Type specifiers */
 const std::string Binder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt = "Binder-100-6.7.2-2-A";
-const std::string Binder::DiagnosticsReporter::ID_TwoOrMoreDataTypesInDeclarationSpecifiers = "Binder-100-6.7.2-2-B";
+const std::string Binder::DiagnosticsReporter::ID_InvalidType = "Binder-100-6.7.2-2-B";
 
 /* Type qualifiers */
 const std::string Binder::DiagnosticsReporter::ID_InvalidUseOfRestrict = "Binder-300-6.7.3-2";
@@ -96,12 +96,12 @@ void Binder::DiagnosticsReporter::TypeSpecifierMissingDefaultsToInt(SyntaxToken 
              declTk);
 }
 
-void Binder::DiagnosticsReporter::TwoOrMoreDataTypesInDeclarationSpecifiers(SyntaxToken tySpecTk)
+void Binder::DiagnosticsReporter::InvalidType(SyntaxToken tySpecTk)
 {
     diagnose(DiagnosticDescriptor(
-                               ID_TwoOrMoreDataTypesInDeclarationSpecifiers,
-                               "[[two or more data types in declaration specifiers]]",
-                               "two or more data types in declaration specifiers",
+                               ID_InvalidType,
+                               "[[invaid type]]",
+                               "invalid type",
                                DiagnosticSeverity::Error,
                                DiagnosticCategory::Binding),
                            tySpecTk);
