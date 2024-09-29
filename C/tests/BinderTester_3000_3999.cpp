@@ -607,17 +607,68 @@ void BinderTester::case3301()
 
 void BinderTester::case3302()
 {
+    bind(R"(
+struct x
+{
+   short y : 1 , : 7 ;
+};
+int z ;
+         )",
+         Expectation()
+         .declaration(Decl()
+                      .Object("y", ObjectDeclarationKind::Field)
+                      .ty_.Basic(BasicTypeKind::Short))
+         .declaration(Decl()
+                      .Object("z", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Int)));
 }
 
 void BinderTester::case3303()
 {
+    bind(R"(
+struct x { int _ ; } ;
+float y ;
+    )",
+         Expectation()
+         .declaration(Decl()
+                      .Type("x", TagTypeDeclarationKind::Struct)
+                      .inNameSpace(NameSpace::Tags))
+         .declaration(Decl()
+                      .Object("y", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Float)));
 }
 
 void BinderTester::case3304()
 {
+    bind(R"(
+enum x { _ } ;
+float y ;
+    )",
+         Expectation()
+         .declaration(Decl()
+                      .Type("x", TagTypeDeclarationKind::Enum)
+                      .inNameSpace(NameSpace::Tags))
+         .declaration(Decl()
+                      .Object("y", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Float)));
 }
 
-void BinderTester::case3305(){}
+void BinderTester::case3305()
+{
+    bind(R"(
+const char * const x ;
+float y ;
+    )",
+         Expectation()
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Char, CVR::Const)
+                      .ty_.Derived(TypeKind::Pointer, CVR::Const))
+         .declaration(Decl()
+                      .Object("y", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::Float)));
+}
+
 void BinderTester::case3306(){}
 void BinderTester::case3307(){}
 void BinderTester::case3308(){}

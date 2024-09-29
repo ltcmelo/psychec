@@ -23,6 +23,7 @@
 
 #include "SyntaxTree.h"
 
+#include "parser/Unparser.h"
 #include "binder/Scope.h"
 #include "compilation/SemanticModel.h"
 #include "symbols/Symbol_ALL.h"
@@ -35,13 +36,14 @@
 #include "../common/infra/Assertions.h"
 
 #include <iostream>
+#include <sstream>
 
 using namespace psy;
 using namespace C;
 
 void Binder::nameDeclarationAtTop(const Identifier* name)
 {
-    SYM_AT_TOP_V(sym);
+    DECL_TOP_SYM_ret(sym);
     auto nameableDecl = MIXIN_NameableSymbol::from(sym);
     PSY_ASSERT_2(nameableDecl, return);
     nameableDecl->setName(name);
@@ -49,11 +51,11 @@ void Binder::nameDeclarationAtTop(const Identifier* name)
 
 void Binder::typeDeclarationAtTopWithTypeAtTop()
 {
-    SYM_AT_TOP_V(sym);
+    DECL_TOP_SYM_ret(sym);
     auto typeableDecl = MIXIN_TypeableSymbol::from(sym);
     PSY_ASSERT_2(typeableDecl, return);
 
-    TY_AT_TOP_V(ty);
+    DECL_TOP_TY_ret(ty);
     typeableDecl->setType(ty);
 
     if (!pendingFunTys_.empty()) {
@@ -64,16 +66,23 @@ void Binder::typeDeclarationAtTopWithTypeAtTop()
 
 void Binder::popTypesUntilNonDerivedDeclaratorType()
 {
-    PSY_ASSERT_2(!tys_.empty(), return);
-    auto ty = tys_.top();
+    DECL_TOP_TY_ret(ty);
     while (true) {
         switch (ty->kind()) {
+            case TypeKind::Qualified: {
+                auto unqualTyK = ty->asQualifiedType()->unqualifiedType()->kind();
+                if (!(unqualTyK == TypeKind::Array
+                        || unqualTyK == TypeKind::Function
+                        || unqualTyK == TypeKind::Pointer)) {
+                    return;
+                }
+                [[fallthrough]];
+            }
             case TypeKind::Array:
             case TypeKind::Function:
             case TypeKind::Pointer:
                 popType();
-                PSY_ASSERT_2(!tys_.empty(), return);
-                ty = tys_.top();
+                TOP_TY_ret(ty);
                 continue;
             default:
                 return;
@@ -88,7 +97,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtMultipleDeclarators_COMMON(
 {
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         visit(decltorIt->value);
-        SYM_AT_TOP(sym);
+        DECL_TOP_SYM_retQ(sym);
         switch (sym->kind()) {
             case SymbolKind::Declaration: {
                 auto decl = sym->asDeclaration();
@@ -103,7 +112,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtMultipleDeclarators_COMMON(
                         typeDeclarationAtTopWithTypeAtTop();
                         popTypesUntilNonDerivedDeclaratorType();
                         popSymbol();
-                        SCOPE_AT_TOP(scope);
+                        DECL_TOP_SCOPE_retQ(scope);
                         scope->addDeclaration(decl);
                         break;
                     }
@@ -169,7 +178,7 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const Functio
 
     auto decl = popSymbolAsDeclaration();
     PSY_ASSERT_2(decl, return Action::Quit);
-    SCOPE_AT_TOP(scope);
+    DECL_TOP_SCOPE_retQ(scope);
     scope->addDeclaration(decl);
 
     popType();
@@ -191,13 +200,13 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
 
     switch (node->suffix()->kind()) {
         case SyntaxKind::SubscriptSuffix: {
-            TY_AT_TOP(ty);
+            DECL_TOP_TY_retQ(ty);
             pushType(makeType<ArrayType>(ty));
             break;
         }
 
         case SyntaxKind::ParameterSuffix: {
-            TY_AT_TOP(ty);
+            DECL_TOP_TY_retQ(ty);
             switch (ty->kind()) {
                 case TypeKind::Function:
                     diagReporter_.FunctionReturningFunction(
@@ -258,7 +267,7 @@ SyntaxVisitor::Action Binder::visitParameterSuffix(const ParameterSuffixSyntax* 
 
 SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSyntax* node)
 {
-    TY_AT_TOP(ty);
+    DECL_TOP_TY_retQ(ty);
     pushType(makeType<PointerType>(ty));
 
     for (auto specIt = node->qualifiersAndAttributes(); specIt; specIt = specIt->next)
@@ -276,13 +285,25 @@ SyntaxVisitor::Action Binder::visitParenthesizedDeclarator(const ParenthesizedDe
     return Action::Skip;
 }
 
+SyntaxVisitor::Action Binder::visitBitfieldDeclarator(const BitfieldDeclaratorSyntax* node)
+{
+    if (node->innerDeclarator()) {
+        visit(node->innerDeclarator());
+    } else {
+        bindObjectOrFunctionAndPushSymbol(node);
+        nameDeclarationAtTop(tree_->findIdentifier("", 0));
+    }
+
+    return Action::Skip;
+}
+
 void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
 {
-    SCOPE_AT_TOP_V(scope);
+    DECL_TOP_SCOPE_ret(scope);
     switch (scope->kind()) {
         case ScopeKind::File:
         case ScopeKind::Block: {
-            TY_AT_TOP_V(ty);
+            DECL_TOP_TY_ret(ty);
             switch (ty->kind()) {
                 case TypeKind::Function:
                     bindAndPushSymbol<Function>(node);
@@ -295,7 +316,7 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
                 case TypeKind::Qualified:
                 case TypeKind::Typedef:
                 case TypeKind::Tag: {
-                    SYM_AT_TOP_V(sym);
+                    DECL_TOP_SYM_ret(sym);
                     switch (sym->kind()) {
                         case SymbolKind::Declaration: {
                             auto decl = sym->asDeclaration();
@@ -346,7 +367,7 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
             break;
 
         case ScopeKind::FunctionPrototype: {
-            TY_AT_TOP_V(ty);
+            DECL_TOP_TY_ret(ty);
             switch (ty->kind()) {
                 case TypeKind::Array: {
                     /*
@@ -355,7 +376,7 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
                      * shall be adjusted to “qualified pointer to type”...
                      */
                     popType();
-                    TY_AT_TOP_V(otherTy);
+                    DECL_TOP_TY_ret(otherTy);
                     auto ptrTy = makeType<PointerType>(otherTy);
                     pushType(ptrTy);
                     ptrTy->markAsArisingFromArrayDecay();

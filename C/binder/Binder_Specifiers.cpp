@@ -81,7 +81,6 @@ SyntaxVisitor::Action Binder::visitEnumDeclaration_AtSpecifier(const EnumDeclara
     auto tagTy = makeType<TagType>(
                 TagTypeKind::Enum,
                 identifier(node->typeSpec_->tagToken()));
-    pushType(tagTy);
     bindAndPushSymbol<Enum>(node, tagTy);
 
     return visitTagDeclaration_AtInternalDeclarations_COMMON(
@@ -216,201 +215,200 @@ SyntaxVisitor::Action Binder::visitBasicTypeSpecifier(const BasicTypeSpecifierSy
         return Action::Skip;
     }
 
-    TY_AT_TOP(ty);
-    PSY_ASSERT_2(ty->kind() == TypeKind::Basic, return Action::Skip);
-    BasicType* curBasicTy = ty->asBasicType();
-    auto curBasicTyK = ty->asBasicType()->kind();
-    switch (tySpecTk.kind()) {
-        case SyntaxKind::Keyword_char:
-            switch (curBasicTyK) {
-                case BasicTypeKind::Int_S:
-                    if (tySpecHasImplicit_int) {
-                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Char_S);
+    DECL_TOP_TY_retQ(ty);
+    if (ty->kind() == TypeKind::Basic) {
+        BasicType* curBasicTy = ty->asBasicType();
+        auto curBasicTyK = ty->asBasicType()->kind();
+        switch (tySpecTk.kind()) {
+            case SyntaxKind::Keyword_char:
+                switch (curBasicTyK) {
+                    case BasicTypeKind::Int_S:
+                        if (tySpecHasImplicit_int) {
+                            curBasicTy->resetBasicTypeKind(BasicTypeKind::Char_S);
+                            return Action::Skip;
+                        }
+                        break;
+                    case BasicTypeKind::Int_U:
+                        if (tySpecHasImplicit_int) {
+                            curBasicTy->resetBasicTypeKind(BasicTypeKind::Char_U);
+                            return Action::Skip;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case SyntaxKind::Keyword_short:
+                switch (curBasicTyK) {
+                    case BasicTypeKind::Int:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Short);
                         return Action::Skip;
-                    }
-                    break;
-                case BasicTypeKind::Int_U:
-                    if (tySpecHasImplicit_int) {
-                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Char_U);
+                    case BasicTypeKind::Int_S:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Short_S);
                         return Action::Skip;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            break;
-
-        case SyntaxKind::Keyword_short:
-            switch (curBasicTyK) {
-                case BasicTypeKind::Int:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Short);
-                    return Action::Skip;
-                case BasicTypeKind::Int_S:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Short_S);
-                    return Action::Skip;
-                case BasicTypeKind::Int_U:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Short_U);
-                    return Action::Skip;
-                default:
-                    break;
-            }
-            break;
-
-        case SyntaxKind::Keyword_int: {
-            auto allowIdentity = tySpecHasImplicit_int;
-            tySpecHasImplicit_int = false;
-            switch (curBasicTyK) {
-                case BasicTypeKind::Short:
-                case BasicTypeKind::Short_S:
-                case BasicTypeKind::Short_U:
-                case BasicTypeKind::Int_S:
-                case BasicTypeKind::Int_U:
-                case BasicTypeKind::Long_S:
-                case BasicTypeKind::Long_U:
-                case BasicTypeKind::Long:
-                case BasicTypeKind::LongLong:
-                case BasicTypeKind::LongLong_S:
-                case BasicTypeKind::LongLong_U:
-                    if (allowIdentity)
+                    case BasicTypeKind::Int_U:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Short_U);
                         return Action::Skip;
-                    break;
-                default:
-                    break;
-            }
-            break;
-        }
+                    default:
+                        break;
+                }
+                break;
 
-        case SyntaxKind::Keyword_long:
-            switch (curBasicTyK) {
-                case BasicTypeKind::Int:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Long);
-                    return Action::Skip;
-                case BasicTypeKind::Int_S:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Long_S);
-                    return Action::Skip;
-                case BasicTypeKind::Int_U:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Long_U);
-                    return Action::Skip;
-                case BasicTypeKind::Long:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::LongLong);
-                    return Action::Skip;
-                case BasicTypeKind::Long_S:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::LongLong_S);
-                    return Action::Skip;
-                case BasicTypeKind::Long_U:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::LongLong_U);
-                    return Action::Skip;
-                case BasicTypeKind::Double:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::LongDouble);
-                    return Action::Skip;
-                case BasicTypeKind::DoubleComplex:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::LongDoubleComplex);
-                    return Action::Skip;
-                default:
-                    break;
+            case SyntaxKind::Keyword_int: {
+                auto allowIdentity = tySpecHasImplicit_int;
+                tySpecHasImplicit_int = false;
+                switch (curBasicTyK) {
+                    case BasicTypeKind::Short:
+                    case BasicTypeKind::Short_S:
+                    case BasicTypeKind::Short_U:
+                    case BasicTypeKind::Int_S:
+                    case BasicTypeKind::Int_U:
+                    case BasicTypeKind::Long_S:
+                    case BasicTypeKind::Long_U:
+                    case BasicTypeKind::Long:
+                    case BasicTypeKind::LongLong:
+                    case BasicTypeKind::LongLong_S:
+                    case BasicTypeKind::LongLong_U:
+                        if (allowIdentity)
+                            return Action::Skip;
+                        break;
+                    default:
+                        break;
+                }
+                break;
             }
-            break;
-
-        case SyntaxKind::Keyword_float:
-            switch (curBasicTyK) {
-                case BasicTypeKind::DoubleComplex:
-                    if (tySpecHasImplicit_double) {
-                        curBasicTy->resetBasicTypeKind(BasicTypeKind::FloatComplex);
+            case SyntaxKind::Keyword_long:
+                switch (curBasicTyK) {
+                    case BasicTypeKind::Int:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Long);
                         return Action::Skip;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            break;
-
-        case SyntaxKind::Keyword_double: {
-            bool allowIdentity = tySpecHasImplicit_double;
-            tySpecHasImplicit_double = false;
-            switch (curBasicTyK) {
-                case BasicTypeKind::Long:
-                    if (tySpecHasImplicit_int) {
+                    case BasicTypeKind::Int_S:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Long_S);
+                        return Action::Skip;
+                    case BasicTypeKind::Int_U:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Long_U);
+                        return Action::Skip;
+                    case BasicTypeKind::Long:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::LongLong);
+                        return Action::Skip;
+                    case BasicTypeKind::Long_S:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::LongLong_S);
+                        return Action::Skip;
+                    case BasicTypeKind::Long_U:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::LongLong_U);
+                        return Action::Skip;
+                    case BasicTypeKind::Double:
                         curBasicTy->resetBasicTypeKind(BasicTypeKind::LongDouble);
                         return Action::Skip;
-                    }
-                    break;
-                case BasicTypeKind::DoubleComplex:
-                case BasicTypeKind::LongDoubleComplex:
-                    if (allowIdentity)
+                    case BasicTypeKind::DoubleComplex:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::LongDoubleComplex);
                         return Action::Skip;
-                    break;
-                default:
-                    break;
+                    default:
+                        break;
+                }
+                break;
+
+            case SyntaxKind::Keyword_float:
+                switch (curBasicTyK) {
+                    case BasicTypeKind::DoubleComplex:
+                        if (tySpecHasImplicit_double) {
+                            curBasicTy->resetBasicTypeKind(BasicTypeKind::FloatComplex);
+                            return Action::Skip;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case SyntaxKind::Keyword_double: {
+                bool allowIdentity = tySpecHasImplicit_double;
+                tySpecHasImplicit_double = false;
+                switch (curBasicTyK) {
+                    case BasicTypeKind::Long:
+                        if (tySpecHasImplicit_int) {
+                            curBasicTy->resetBasicTypeKind(BasicTypeKind::LongDouble);
+                            return Action::Skip;
+                        }
+                        break;
+                    case BasicTypeKind::DoubleComplex:
+                    case BasicTypeKind::LongDoubleComplex:
+                        if (allowIdentity)
+                            return Action::Skip;
+                        break;
+                    default:
+                        break;
+                }
+                break;
             }
-            break;
+            case SyntaxKind::Keyword__Bool:
+                break;
+
+            case SyntaxKind::Keyword__Complex:
+                switch (curBasicTyK) {
+                    case BasicTypeKind::Long:
+                    case BasicTypeKind::LongDouble:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::LongDoubleComplex);
+                        return Action::Skip;
+                    case BasicTypeKind::Float:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::FloatComplex);
+                        return Action::Skip;
+                    case BasicTypeKind::Double:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::DoubleComplex);
+                        return Action::Skip;
+                    default:
+                        break;
+                }
+                break;
+
+            case SyntaxKind::Keyword_signed:
+                switch (curBasicTyK) {
+                    case BasicTypeKind::Char:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Char_S);
+                        return Action::Skip;
+                    case BasicTypeKind::Short:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Short_S);
+                        return Action::Skip;
+                    case BasicTypeKind::Int:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Int_S);
+                        return Action::Skip;
+                    case BasicTypeKind::Long:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Long_S);
+                        return Action::Skip;
+                    case BasicTypeKind::LongLong:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::LongLong_S);
+                        return Action::Skip;
+                    default:
+                        break;
+                }
+                break;
+
+            case SyntaxKind::Keyword_unsigned:
+                switch (curBasicTyK) {
+                    case BasicTypeKind::Char:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Char_U);
+                        return Action::Skip;
+                    case BasicTypeKind::Short:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Short_U);
+                        return Action::Skip;
+                    case BasicTypeKind::Int:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Int_U);
+                        return Action::Skip;
+                    case BasicTypeKind::Long:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::Long_U);
+                        return Action::Skip;
+                    case BasicTypeKind::LongLong:
+                        curBasicTy->resetBasicTypeKind(BasicTypeKind::LongLong_U);
+                        return Action::Skip;
+                    default:
+                        break;
+                }
+                break;
+
+            default:
+                PSY_ASSERT_FAIL_1(return Action::Quit);
         }
-
-        case SyntaxKind::Keyword__Bool:
-            break;
-
-        case SyntaxKind::Keyword__Complex:
-            switch (curBasicTyK) {
-                case BasicTypeKind::Long:
-                case BasicTypeKind::LongDouble:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::LongDoubleComplex);
-                    return Action::Skip;
-                case BasicTypeKind::Float:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::FloatComplex);
-                    return Action::Skip;
-                case BasicTypeKind::Double:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::DoubleComplex);
-                    return Action::Skip;
-                default:
-                    break;
-            }
-            break;
-
-        case SyntaxKind::Keyword_signed:
-            switch (curBasicTyK) {
-                case BasicTypeKind::Char:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Char_S);
-                    return Action::Skip;
-                case BasicTypeKind::Short:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Short_S);
-                    return Action::Skip;
-                case BasicTypeKind::Int:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Int_S);
-                    return Action::Skip;
-                case BasicTypeKind::Long:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Long_S);
-                    return Action::Skip;
-                case BasicTypeKind::LongLong:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::LongLong_S);
-                    return Action::Skip;
-                default:
-                    break;
-            }
-            break;
-
-        case SyntaxKind::Keyword_unsigned:
-            switch (curBasicTyK) {
-                case BasicTypeKind::Char:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Char_U);
-                    return Action::Skip;
-                case BasicTypeKind::Short:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Short_U);
-                    return Action::Skip;
-                case BasicTypeKind::Int:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Int_U);
-                    return Action::Skip;
-                case BasicTypeKind::Long:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::Long_U);
-                    return Action::Skip;
-                case BasicTypeKind::LongLong:
-                    curBasicTy->resetBasicTypeKind(BasicTypeKind::LongLong_U);
-                    return Action::Skip;
-                default:
-                    break;
-            }
-            break;
-
-        default:
-            PSY_ASSERT_FAIL_1(return Action::Quit);
     }
 
     diagReporter_.InvalidType(tySpecTk);
@@ -469,26 +467,30 @@ SyntaxVisitor::Action Binder::visitTagDeclarationAsSpecifier(
     visit(node->tagDeclaration());
 
     const TagTypeSpecifierSyntax* tySpec = node->tagDeclaration()->typeSpecifier();
+    TagType* tagTy = nullptr;
     switch (tySpec->kind()) {
-        case SyntaxKind::StructTypeSpecifier: {
-            auto tagTy = makeType<TagType>(
+        case SyntaxKind::StructTypeSpecifier:
+            tagTy = makeType<TagType>(
                         TagTypeKind::Struct,
                         identifier(tySpec->tagToken()));
-            pushType(tagTy);
             break;
-        }
 
-        case SyntaxKind::UnionTypeSpecifier:{
-            auto tagTy = makeType<TagType>(
+        case SyntaxKind::UnionTypeSpecifier:
+            tagTy = makeType<TagType>(
                         TagTypeKind::Union,
                         identifier(tySpec->tagToken()));
-            pushType(tagTy);
             break;
-        }
+
+        case SyntaxKind::EnumTypeSpecifier:
+            tagTy = makeType<TagType>(
+                        TagTypeKind::Enum,
+                        identifier(tySpec->tagToken()));
+            break;
 
         default:
             PSY_ASSERT_2(false, return Action::Quit);
     }
+    pushType(tagTy);
 
     return Action::Skip;
 }
@@ -504,7 +506,7 @@ SyntaxVisitor::Action Binder::visitTypedefName(const TypedefNameSyntax* node)
 SyntaxVisitor::Action Binder::visitTypeQualifier(const TypeQualifierSyntax* node)
 {
     QualifiedType* qualTy = nullptr;
-    TY_AT_TOP(ty);
+    DECL_TOP_TY_retQ(ty);
     switch (ty->kind()) {
         case TypeKind::Qualified:
             qualTy = ty->asQualifiedType();

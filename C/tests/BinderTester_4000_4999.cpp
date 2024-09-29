@@ -500,10 +500,11 @@ void BinderTester::case4049()
 
 void BinderTester::case4050()
 {
-    bind("_Bool x ;",
+    bind("struct x int y ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationKind::Variable)
-                              .ty_.Basic(BasicTypeKind::Bool)));
+         .diagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Binder::DiagnosticsReporter::ID_InvalidType));
 }
 
 void BinderTester::case4051()
@@ -518,7 +519,10 @@ void BinderTester::case4051()
                       .ty_.Basic(BasicTypeKind::Char)));
 }
 
-void BinderTester::case4052(){}
+void BinderTester::case4052()
+{
+}
+
 void BinderTester::case4053(){}
 void BinderTester::case4054(){}
 void BinderTester::case4055(){}

@@ -41,7 +41,7 @@ using namespace C;
 struct SemanticModel::SemanticModelImpl
 {
     SemanticModelImpl(const SyntaxTree* tree, Compilation* compilation)
-        : bindingIsOK_(true)
+        : bindingIsOK_(false) // TODO
         , tree_(tree)
         , compilation_(compilation)
     {}

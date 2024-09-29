@@ -398,7 +398,8 @@ SyntaxVisitor::Action Disambiguator::visitSwitchStatement(const SwitchStatementS
 
 SyntaxVisitor::Action Disambiguator::visitWhileStatement(const WhileStatementSyntax* node)
 {
-    visitMaybeAmbiguousExpression(node->cond_);
+    if (node->cond_)
+        visitMaybeAmbiguousExpression(node->cond_);
     visitMaybeAmbiguousStatement(node->stmt_);
 
     return Action::Skip;
@@ -415,8 +416,10 @@ SyntaxVisitor::Action Disambiguator::visitDoStatement(const DoStatementSyntax* n
 SyntaxVisitor::Action Disambiguator::visitForStatement(const ForStatementSyntax* node)
 {
     visit(node->initStmt_);
-    visitMaybeAmbiguousExpression(node->cond_);
-    visitMaybeAmbiguousExpression(node->expr_);
+    if (node->cond_)
+        visitMaybeAmbiguousExpression(node->cond_);
+    if (node->expr_)
+        visitMaybeAmbiguousExpression(node->expr_);
     visitMaybeAmbiguousStatement(node->stmt_);
 
     return Action::Skip;
@@ -424,7 +427,8 @@ SyntaxVisitor::Action Disambiguator::visitForStatement(const ForStatementSyntax*
 
 SyntaxVisitor::Action Disambiguator::visitReturnStatement(const ReturnStatementSyntax* node)
 {
-    visitMaybeAmbiguousExpression(node->expr_);
+    if (node->expr_)
+        visitMaybeAmbiguousExpression(node->expr_);
 
     return Action::Skip;
 }

@@ -1986,7 +1986,7 @@ Options::help_one_group(const std::string& g) const
   longest = (std::min)(longest, static_cast<size_t>(OPTION_LONGEST));
 
   //widest allowed description
-  auto allowed = size_t{180} - longest - OPTION_DESC_GAP;
+  auto allowed = size_t{76} - longest - OPTION_DESC_GAP;
 
   auto fiter = format.begin();
   for (const auto& o : group->second.options)

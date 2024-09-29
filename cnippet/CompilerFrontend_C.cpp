@@ -21,7 +21,7 @@
 #include "CompilerFrontend_C.h"
 
 #include "FileInfo.h"
-#include "GnuCompilerFacade.h"
+#include "GNUCompilerFacade.h"
 #include "IO.h"
 #include "Plugin.h"
 
@@ -31,6 +31,7 @@
 
 #include "../common/infra/Assertions.h"
 
+#include <fstream>
 #include <iterator>
 
 using namespace cnip;
@@ -111,7 +112,7 @@ int CCompilerFrontend::extendWithStdLibHeaders(const std::string& srcText,
 int CCompilerFrontend::preprocess(const std::string& srcText,
                                   const psy::FileInfo& fi)
 {
-    GnuCompilerFacade cc(config_->compiler_,
+    GNUCompilerFacade cc(config_->compiler_,
                          config_->std_,
                          config_->definedMacros_,
                          config_->undefedMacros_,
@@ -120,7 +121,7 @@ int CCompilerFrontend::preprocess(const std::string& srcText,
     std::string srcText_P;
     int exit;
     if (config_->ppIncludes_) {
-        std::tie(exit, srcText_P) = cc.preprocess(srcText);
+        std::tie(exit, srcText_P) = cc.preprocessFile(fi.fullFileName());
         if (exit != 0) {
             std::cerr << kCnip << "preprocessor invocation failed" << std::endl;
             return ERROR_PreprocessorInvocationFailure;

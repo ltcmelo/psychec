@@ -21,22 +21,25 @@
 #ifndef PSYCHE_GNU_COMPILER_FACADE_H__
 #define PSYCHE_GNU_COMPILER_FACADE_H__
 
+#include "FileInfo.h"
+
 #include <string>
 #include <utility>
 #include <vector>
 
 namespace psy {
 
-class GnuCompilerFacade
+class GNUCompilerFacade
 {
 public:
-    GnuCompilerFacade(const std::string& compilerName,
+    GNUCompilerFacade(const std::string& compilerName,
                       const std::string& std,
                       const std::vector<std::string>& D,
                       const std::vector<std::string>& U,
                       const std::vector<std::string>& I);
 
-    std::pair<int, std::string> preprocess(const std::string& srcText);
+    std::pair<int, std::string> preprocessFile(const std::string& filePath);
+    std::pair<int, std::string> preprocessText(const std::string& scrText);
     std::pair<int, std::string> preprocess_IgnoreIncludes(const std::string& srcText);
 
 private:
