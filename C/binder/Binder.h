@@ -203,6 +203,7 @@ private:
     virtual Action visitParameterSuffix(const ParameterSuffixSyntax*) override;
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
     virtual Action visitAbstractDeclarator(const AbstractDeclaratorSyntax*) override;
+    virtual Action visitBitfieldDeclarator(const BitfieldDeclaratorSyntax*) override;
 
     //------------//
     // Statements //

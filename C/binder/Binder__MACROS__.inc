@@ -44,31 +44,24 @@
 # define DBG_TY_STACK(sym) do {} while (0)
 #endif
 
-#define SYM_AT_TOP(S) \
-    PSY_ASSERT_2(!syms_.empty(), return Action::Quit); \
-    auto S = syms_.top();
-#define SYM_AT_TOP_V(S) \
-    PSY_ASSERT_2(!syms_.empty(), return); \
-    auto S = syms_.top();
-
-#define TY_AT_TOP(T) \
-    PSY_ASSERT_2(!tys_.empty(), return Action::Quit); \
-    auto T = tys_.top();
-#define TY_AT_TOP_V(T) \
-    PSY_ASSERT_2(!tys_.empty(), return); \
-    auto T = tys_.top();
-
-#define SCOPE_AT_TOP(S) \
-    PSY_ASSERT_2(!scopes_.empty(), return Action::Quit); \
-    auto S = scopes_.top();
-#define SCOPE_AT_TOP_V(S) \
-    PSY_ASSERT_2(!scopes_.empty(), return); \
-    auto S = scopes_.top();
-
-#define RETURN_IF_QUIT(CALL) \
-    do { \
-        auto action = CALL; \
-        if (action == Action::Quit) \
-            return action; \
-    } while (0)
-
+#define VALID_TOP(STACK, RET) \
+    PSY_ASSERT_2(!STACK.empty(), RET); \
+    PSY_ASSERT_2(STACK.top(), RET);
+#define TOP(V, STACK, RET) \
+    VALID_TOP(STACK, RET); \
+    V = STACK.top();
+#define DECL_TOP(V, STACK, RET) \
+    VALID_TOP(STACK, RET); \
+    auto V = STACK.top();
+#define TOP_SYM_retQ(V) TOP(V, syms_, return Action::Quit)
+#define TOP_SYM_ret(V) TOP(V, syms_, return)
+#define TOP_TY_retQ(V) TOP(V, tys_, return Action::Quit)
+#define TOP_TY_ret(V) TOP(V, tys_, return)
+#define TOP_SCOPE_retQ(V) TOP(V, scopes_, return Action::Quit)
+#define TOP_SCOPE_ret(V) TOP(V, scopes_, return)
+#define DECL_TOP_SYM_retQ(V) DECL_TOP(V, syms_, return Action::Quit)
+#define DECL_TOP_SYM_ret(V) DECL_TOP(V, syms_, return)
+#define DECL_TOP_TY_retQ(V) DECL_TOP(V, tys_, return Action::Quit)
+#define DECL_TOP_TY_ret(V) DECL_TOP(V, tys_, return)
+#define DECL_TOP_SCOPE_retQ(V) DECL_TOP(V, scopes_, return Action::Quit)
+#define DECL_TOP_SCOPE_ret(V) DECL_TOP(V, scopes_, return)

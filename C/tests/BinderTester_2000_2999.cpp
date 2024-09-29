@@ -862,3 +862,96 @@ void BinderTester::case2396(){ }
 void BinderTester::case2397(){ }
 void BinderTester::case2398(){ }
 void BinderTester::case2399(){ }
+
+void BinderTester::case2400()
+{
+    bind(R"(
+struct x
+{
+    short y : 1 ;
+};
+         )",
+         Expectation()
+            .declaration(Decl()
+                         .Object("y", ObjectDeclarationKind::Field)
+                         .ty_.Basic(BasicTypeKind::Short)));
+}
+
+void BinderTester::case2401()
+{
+    bind(R"(
+struct x
+{
+    short y : 1 , z : 1 ;
+};
+         )",
+         Expectation()
+         .declaration(Decl()
+                      .Object("y", ObjectDeclarationKind::Field)
+                      .ty_.Basic(BasicTypeKind::Short))
+         .declaration(Decl()
+                      .Object("z", ObjectDeclarationKind::Field)
+                      .ty_.Basic(BasicTypeKind::Short)));
+}
+
+void BinderTester::case2402()
+{
+    bind(R"(
+struct x
+{
+    short y : 1 , : 7 ;
+};
+         )",
+         Expectation()
+         .declaration(Decl()
+                      .Object("y", ObjectDeclarationKind::Field)
+                      .ty_.Basic(BasicTypeKind::Short)));
+}
+
+void BinderTester::case2403(){}
+void BinderTester::case2404(){}
+void BinderTester::case2405(){}
+void BinderTester::case2406(){}
+void BinderTester::case2407(){}
+void BinderTester::case2408(){}
+void BinderTester::case2409(){}
+void BinderTester::case2410(){}
+void BinderTester::case2411(){}
+void BinderTester::case2412(){}
+void BinderTester::case2413(){}
+void BinderTester::case2414(){}
+void BinderTester::case2415(){}
+void BinderTester::case2416(){}
+void BinderTester::case2417(){}
+void BinderTester::case2418(){}
+void BinderTester::case2419(){}
+void BinderTester::case2420(){}
+void BinderTester::case2421(){}
+void BinderTester::case2422(){}
+void BinderTester::case2423(){}
+void BinderTester::case2424(){}
+void BinderTester::case2425(){}
+void BinderTester::case2426(){}
+void BinderTester::case2427(){}
+void BinderTester::case2428(){}
+void BinderTester::case2429(){}
+void BinderTester::case2430(){}
+void BinderTester::case2431(){}
+void BinderTester::case2432(){}
+void BinderTester::case2433(){}
+void BinderTester::case2434(){}
+void BinderTester::case2435(){}
+void BinderTester::case2436(){}
+void BinderTester::case2437(){}
+void BinderTester::case2438(){}
+void BinderTester::case2439(){}
+void BinderTester::case2440(){}
+void BinderTester::case2441(){}
+void BinderTester::case2442(){}
+void BinderTester::case2443(){}
+void BinderTester::case2444(){}
+void BinderTester::case2445(){}
+void BinderTester::case2446(){}
+void BinderTester::case2447(){}
+void BinderTester::case2448(){}
+void BinderTester::case2449(){}

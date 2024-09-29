@@ -27,14 +27,14 @@ set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall \
 
 # Project sources.
 set(PSYCHEC_SOURCES
-    # Abstract data types
+    # Data structures
     ${PROJECT_SOURCE_DIR}/data-structures/Substitution.h
     ${PROJECT_SOURCE_DIR}/data-structures/Substitution.cpp
     ${PROJECT_SOURCE_DIR}/data-structures/VersionedMap.h
 
     # Tools
-    ${PROJECT_SOURCE_DIR}/tools/GnuCompilerFacade.h
-    ${PROJECT_SOURCE_DIR}/tools/GnuCompilerFacade.cpp
+    ${PROJECT_SOURCE_DIR}/tools/GNUCompilerFacade.h
+    ${PROJECT_SOURCE_DIR}/tools/GNUCompilerFacade.cpp
 
     # Utilities
     ${PROJECT_SOURCE_DIR}/utility/FileInfo.h

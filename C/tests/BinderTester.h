@@ -84,6 +84,7 @@ public:
             + 2250-2299 -> qualified pointers
             + 2300-2349 -> arrays
             + 2350-2399 -> arrays of objects of qualified type
+            + 2400-2449 -> bit fields
 
         Types
             + 3000-0049 -> structures and unions
@@ -1613,6 +1614,56 @@ public:
     void case2397();
     void case2398();
     void case2399();
+    void case2400();
+    void case2401();
+    void case2402();
+    void case2403();
+    void case2404();
+    void case2405();
+    void case2406();
+    void case2407();
+    void case2408();
+    void case2409();
+    void case2410();
+    void case2411();
+    void case2412();
+    void case2413();
+    void case2414();
+    void case2415();
+    void case2416();
+    void case2417();
+    void case2418();
+    void case2419();
+    void case2420();
+    void case2421();
+    void case2422();
+    void case2423();
+    void case2424();
+    void case2425();
+    void case2426();
+    void case2427();
+    void case2428();
+    void case2429();
+    void case2430();
+    void case2431();
+    void case2432();
+    void case2433();
+    void case2434();
+    void case2435();
+    void case2436();
+    void case2437();
+    void case2438();
+    void case2439();
+    void case2440();
+    void case2441();
+    void case2442();
+    void case2443();
+    void case2444();
+    void case2445();
+    void case2446();
+    void case2447();
+    void case2448();
+    void case2449();
 
     // 3000-3999
 
@@ -3738,6 +3789,56 @@ public:
         TEST_BINDER(case2397),
         TEST_BINDER(case2398),
         TEST_BINDER(case2399),
+        TEST_BINDER(case2400),
+        TEST_BINDER(case2401),
+        TEST_BINDER(case2402),
+        TEST_BINDER(case2403),
+        TEST_BINDER(case2404),
+        TEST_BINDER(case2405),
+        TEST_BINDER(case2406),
+        TEST_BINDER(case2407),
+        TEST_BINDER(case2408),
+        TEST_BINDER(case2409),
+        TEST_BINDER(case2410),
+        TEST_BINDER(case2411),
+        TEST_BINDER(case2412),
+        TEST_BINDER(case2413),
+        TEST_BINDER(case2414),
+        TEST_BINDER(case2415),
+        TEST_BINDER(case2416),
+        TEST_BINDER(case2417),
+        TEST_BINDER(case2418),
+        TEST_BINDER(case2419),
+        TEST_BINDER(case2420),
+        TEST_BINDER(case2421),
+        TEST_BINDER(case2422),
+        TEST_BINDER(case2423),
+        TEST_BINDER(case2424),
+        TEST_BINDER(case2425),
+        TEST_BINDER(case2426),
+        TEST_BINDER(case2427),
+        TEST_BINDER(case2428),
+        TEST_BINDER(case2429),
+        TEST_BINDER(case2430),
+        TEST_BINDER(case2431),
+        TEST_BINDER(case2432),
+        TEST_BINDER(case2433),
+        TEST_BINDER(case2434),
+        TEST_BINDER(case2435),
+        TEST_BINDER(case2436),
+        TEST_BINDER(case2437),
+        TEST_BINDER(case2438),
+        TEST_BINDER(case2439),
+        TEST_BINDER(case2440),
+        TEST_BINDER(case2441),
+        TEST_BINDER(case2442),
+        TEST_BINDER(case2443),
+        TEST_BINDER(case2444),
+        TEST_BINDER(case2445),
+        TEST_BINDER(case2446),
+        TEST_BINDER(case2447),
+        TEST_BINDER(case2448),
+        TEST_BINDER(case2449),
 
         TEST_BINDER(case3001),
         TEST_BINDER(case3002),

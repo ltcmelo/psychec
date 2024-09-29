@@ -83,7 +83,7 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtEnd_COMMON(const DeclarationSyn
 {
     auto decl = popSymbolAsDeclaration();
     PSY_ASSERT_2(decl, return Action::Quit);
-    SCOPE_AT_TOP(scope);
+    DECL_TOP_SCOPE_retQ(scope);
     scope->addDeclaration(decl->asDeclaration());
 
     return Action::Skip;

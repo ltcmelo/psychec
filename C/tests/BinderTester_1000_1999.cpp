@@ -160,8 +160,22 @@ void BinderTester::case1013()
                      .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
-void BinderTester::case1014(){}
-void BinderTester::case1015(){}
+void BinderTester::case1014()
+{
+    bind("enum x { y } z ;",
+         Expectation()
+            .declaration(Decl().Object("z", ObjectDeclarationKind::Variable)
+                     .ty_.Tag("x", TagTypeKind::Enum)));
+}
+
+void BinderTester::case1015()
+{
+    bind("_Bool x ;",
+         Expectation()
+             .declaration(Decl().Object("x", ObjectDeclarationKind::Variable)
+                              .ty_.Basic(BasicTypeKind::Bool)));
+}
+
 void BinderTester::case1016(){}
 void BinderTester::case1017(){}
 void BinderTester::case1018(){}

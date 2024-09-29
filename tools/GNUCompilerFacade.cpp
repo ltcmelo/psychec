@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "GnuCompilerFacade.h"
+#include "GNUCompilerFacade.h"
 
 #include "Process.h"
 
@@ -32,7 +32,7 @@ const char * const kInclude = "#include";
 
 using namespace psy;
 
-GnuCompilerFacade::GnuCompilerFacade(const std::string& compilerName,
+GNUCompilerFacade::GNUCompilerFacade(const std::string& compilerName,
                                      const std::string& std,
                                      const std::vector<std::string>& D,
                                      const std::vector<std::string>& U,
@@ -44,20 +44,25 @@ GnuCompilerFacade::GnuCompilerFacade(const std::string& compilerName,
     , I_(I)
 {}
 
-std::pair<int, std::string> GnuCompilerFacade::preprocess(const std::string& srcText)
+std::pair<int, std::string> GNUCompilerFacade::preprocessFile(const std::string& filePath)
+{
+    std::string cmd = compilerName_ + assemblePPOptions();
+    cmd += " -std=" + std_ + " -E -x c -CC ";
+    cmd += filePath;
+    return Process().execute(cmd);
+}
+
+std::pair<int, std::string> GNUCompilerFacade::preprocessText(const std::string& srcText)
 {
     std::string in = "cat << 'EOF' | ";
-    in += compilerName_;
-    in += assemblePPOptions();
-    in += " ";
-    in += "-std=" + std_ + " ";
-    in += "-E -x c -CC -";
-    in += "\n" + srcText + "\nEOF";
-
+    in += compilerName_ + assemblePPOptions();
+    in += " -std=" + std_ + " -E -x c -CC -\n";
+    in += srcText;
+    in += "\nEOF";
     return Process().execute(in);
 }
 
-std::pair<int, std::string> GnuCompilerFacade::preprocess_IgnoreIncludes(const std::string& srcText)
+std::pair<int, std::string> GNUCompilerFacade::preprocess_IgnoreIncludes(const std::string& srcText)
 {
     std::string srcText_P;
     srcText_P.reserve(srcText.length());
@@ -66,17 +71,14 @@ std::pair<int, std::string> GnuCompilerFacade::preprocess_IgnoreIncludes(const s
     std::string line;
     while (std::getline(iss, line)) {
         line.erase(0, line.find_first_not_of(' '));
-
         if (line.find(kInclude) == 0)
             continue;
-
         srcText_P += (line + "\n");
     }
-
-    return preprocess(srcText_P);
+    return preprocessText(srcText_P);
 }
 
-std::string GnuCompilerFacade::assemblePPOptions() const
+std::string GNUCompilerFacade::assemblePPOptions() const
 {
     std::string s;
     for (const auto& d : D_)
