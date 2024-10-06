@@ -345,7 +345,7 @@ private:
     bool parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr);
     bool parseExtPSY_QuantifiedTypeSpecifier_AtFirst(SpecifierSyntax*& spec);
 
-    IdentifierRole determineIdentifierRole(bool seenType) const;
+    IdentifierRole determineIdentifierRole() const;
 
     /* Declarators */
     bool parseAbstractDeclarator(DeclaratorSyntax*& decltor);

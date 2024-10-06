@@ -407,7 +407,7 @@ bool Parser::parseFunctionDefinition_AtOpenBrace(
     return false;
 }
 
-Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
+Parser::IdentifierRole Parser::determineIdentifierRole() const
 {
     /*
      Upon an identifier, when parsing a declaration, we can't
@@ -434,6 +434,7 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
     auto parenCnt = 0;
     auto LA = 2;
     bool maybeKR = false;
+    bool seenType = false;
     while (true) {
         switch (peek(LA).kind()) {
             case SyntaxKind::IdentifierToken:
@@ -526,15 +527,26 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
             case SyntaxKind::CloseParenToken:
                 --parenCnt;
                 if (!maybeKR) {
-                    if (!parenCnt) {
-                        if (seenType)
+                    if (!parenCnt)
                             return IdentifierRole::AsTypedefName;
-                        return IdentifierRole::AsDeclarator;
+                    if (parenCnt < 0) {
+                        switch (peek(LA + 1).kind()) {
+                            case SyntaxKind::SemicolonToken:
+                            case SyntaxKind::Keyword_ExtGNU___asm__:
+                                return IdentifierRole::AsTypedefName;
+                            default:
+                                break;
+                        }
                     }
                 }
                 else {
-                    if (peek(LA + 1).kind() == SyntaxKind::SemicolonToken)
-                        return IdentifierRole::AsTypedefName;
+                    switch (peek(LA + 1).kind()) {
+                        case SyntaxKind::SemicolonToken:
+                        case SyntaxKind::Keyword_ExtGNU___asm__:
+                            return IdentifierRole::AsTypedefName;
+                        default:
+                            break;
+                    }
                     return IdentifierRole::AsDeclarator;
                 }
                 ++LA;
@@ -543,7 +555,7 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
             case SyntaxKind::CommaToken:
                 if (!parenCnt) {
                     if (seenType)
-                        return IdentifierRole::AsTypedefName;
+                        return IdentifierRole::AsDeclarator;
                     maybeKR = true;
                     ++LA;
                     continue;
@@ -1093,10 +1105,8 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
             case SyntaxKind::IdentifierToken: {
                 if (seenType)
                     return true;
-
-                if (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator)
+                if (determineIdentifierRole() == IdentifierRole::AsDeclarator)
                     return true;
-
                 seenType = true;
                 parseTypedefName_AtFirst(spec);
                 break;
@@ -1260,7 +1270,6 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             case SyntaxKind::IdentifierToken: {
                 if (seenType)
                     return true;
-
                 seenType = true;
                 parseTypedefName_AtFirst(spec);
                 break;

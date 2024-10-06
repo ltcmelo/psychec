@@ -229,8 +229,8 @@ void ParserTester::case0022()
      *     - `long int y ;'
      *        Good.
      *
-     *     - `typedef int x ; long x y;'
-     *        Good.
+     *     - `typedef int x ; long x y ;'
+     *        Not good.
      *
      *     - `x ; int y ;'
      *       `x' is missing a type-specifier.
@@ -2257,22 +2257,73 @@ void ParserTester::case0262()
 
 void ParserTester::case0263()
 {
-
+    parse(R"(void x ( y ) asm ( " w " ); )",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ExtGNU_AsmLabel,
+                              SyntaxKind::StringLiteralExpression }));
 }
 
 void ParserTester::case0264()
 {
-
+    parse(R"(void x ( y , z ) asm ( " w " ); )",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ExtGNU_AsmLabel,
+                              SyntaxKind::StringLiteralExpression }));
 }
 
 void ParserTester::case0265()
 {
+    parse(R"(void x ( y z ) asm ( " w " ); )",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ExtGNU_AsmLabel,
+                              SyntaxKind::StringLiteralExpression }));
 
 }
 
 void ParserTester::case0266()
 {
-
+    parse(R"(void x ( y z , p q ) asm ( " w " ); )",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ExtGNU_AsmLabel,
+                              SyntaxKind::StringLiteralExpression }));
 }
 
 void ParserTester::case0267()
