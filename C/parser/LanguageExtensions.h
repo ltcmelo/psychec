@@ -60,6 +60,9 @@ public:
     {
         /* C */
         C_wchar_t_Keyword,
+        C_char8_t_Keyword,
+        C_char16_t_Keyword,
+        C_char32_t_Keyword,
 
         /* GNU */
         GNU_AlternateKeywords,
@@ -92,6 +95,30 @@ public:
      */
     LanguageExtensions& enable_extC_wchar_t_Keyword(bool enable);
     bool isEnabled_extC_wchar_t_Keyword() const;
+    //!@}
+
+    //!@{
+    /**
+     * Whether to enable \c char8_t as a keyword.
+     */
+    LanguageExtensions& enable_extC_char8_t_Keyword(bool enable);
+    bool isEnabled_extC_char8_t_Keyword() const;
+    //!@}
+
+    //!@{
+    /**
+     * Whether to enable \c char16_t as a keyword.
+     */
+    LanguageExtensions& enable_extC_char16_t_Keyword(bool enable);
+    bool isEnabled_extC_char16_t_Keyword() const;
+    //!@}
+
+    //!@{
+    /**
+     * Whether to enable \c char32_t as a keyword.
+     */
+    LanguageExtensions& enable_extC_char32_t_Keyword(bool enable);
+    bool isEnabled_extC_char32_t_Keyword() const;
     //!@}
 
     //!@{
@@ -256,6 +283,9 @@ private:
     {
         /* C */
         std::uint64_t extC_wchar_t_Keyword_ : 1;
+        std::uint64_t extC_char8_t_Keyword_ : 1;
+        std::uint64_t extC_char16_t_Keyword_ : 1;
+        std::uint64_t extC_char32_t_Keyword_ : 1;
 
         /* GNU */
         std::uint64_t extGNU_AlternateKeywords_ : 1;
