@@ -36,6 +36,12 @@ LanguageExtensions::LanguageExtensions(MacroTranslations translations)
     : translations_(std::move(translations))
     , BF_all_(~0)
 {
+    /* C */
+    BF_.extC_wchar_t_Keyword_ = false;
+    BF_.extC_char8_t_Keyword_ = false;
+    BF_.extC_char16_t_Keyword_ = false;
+    BF_.extC_char32_t_Keyword_ = false;
+
     /* Psyche */
     BF_.extPSY_Generics_ = false;
 
@@ -58,6 +64,9 @@ const MacroTranslations& LanguageExtensions::translations() const
         { return BF_.FLAG##_; }
 
 DEFINE_ENABLE_ISENABLED(extC_wchar_t_Keyword)
+DEFINE_ENABLE_ISENABLED(extC_char8_t_Keyword)
+DEFINE_ENABLE_ISENABLED(extC_char16_t_Keyword)
+DEFINE_ENABLE_ISENABLED(extC_char32_t_Keyword)
 DEFINE_ENABLE_ISENABLED(extGNU_AlternateKeywords)
 DEFINE_ENABLE_ISENABLED(extGNU_Asm)
 DEFINE_ENABLE_ISENABLED(extGNU_AttributeSpecifiers)
