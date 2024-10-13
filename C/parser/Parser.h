@@ -166,7 +166,6 @@ private:
         void UnexpectedStaticOrTypeQualifiersInArrayDeclarator();
         void UnexpectedPointerInArrayDeclarator();
         void ExpectedNamedParameterBeforeEllipsis();
-        void ExpectedTypeSpecifier();
         void UnexpectedCaseLabelOutsideSwitch();
         void UnexpectedDefaultLabelOutsideSwitch();
         void UnexpectedContinueOutsideLoop();
@@ -179,7 +178,6 @@ private:
         static const std::string ID_of_UnexpectedStaticOrTypeQualifierInArrayDeclarator;
         static const std::string ID_of_UnexpectedPointerInArrayDeclarator;
         static const std::string ID_of_ExpectedNamedParameterBeforeEllipsis;
-        static const std::string ID_of_ExpectedTypeSpecifier;
         static const std::string ID_of_UnexpectedCaseLabelOutsideSwitch;
         static const std::string ID_of_UnexpectedDefaultLabelOutsideSwitch;
         static const std::string ID_of_UnexpectedContinueOutsideLoop;
@@ -231,6 +229,8 @@ private:
     bool matchOrSkipTo(SyntaxKind expectedTkK, LexedTokens::IndexType* tkIdx);
     void skipTo(SyntaxKind tkK);
     unsigned int curTkIdx_;
+
+    bool isWithinKandRFuncDef_;
 
     int DEPTH_OF_EXPRS_;
     int DEPTH_OF_STMTS_;
@@ -329,7 +329,7 @@ private:
     bool parseAlignmentSpecifier_AtFirst(SpecifierSyntax*& spec);
     bool parseExtGNU_Typeof_AtFirst(SpecifierSyntax*& spec);
     void parseTypedefName_AtFirst(SpecifierSyntax*& spec);
-    bool parseAtomiceTypeSpecifier_AtFirst(SpecifierSyntax*& spec);
+    bool parseAtomicTypeSpecifier_AtFirst(SpecifierSyntax*& spec);
     template <class TypeDeclT> bool parseTagTypeSpecifier_AtFirst(
             DeclarationSyntax*& decl,
             SpecifierSyntax*& spec,
@@ -345,7 +345,7 @@ private:
     bool parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr);
     bool parseExtPSY_QuantifiedTypeSpecifier_AtFirst(SpecifierSyntax*& spec);
 
-    IdentifierRole determineIdentifierRole(bool seenType) const;
+    IdentifierRole guessRoleOfIdentifier() const;
 
     /* Declarators */
     bool parseAbstractDeclarator(DeclaratorSyntax*& decltor);

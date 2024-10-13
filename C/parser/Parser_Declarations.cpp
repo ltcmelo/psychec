@@ -216,11 +216,9 @@ bool Parser::parseDeclaration(
         }
     }
 
-    if (!specList) {
-        if (declScope == DeclarationScope::File)
-            diagReporter_.ExpectedTypeSpecifier();
-        else if (declScope == DeclarationScope::Block)
-            diagReporter_.ExpectedFIRSTofSpecifierQualifier();
+    if (!specList
+            && declScope == DeclarationScope::Block) {
+        diagReporter_.ExpectedFIRSTofSpecifierQualifier();
     }
 
     return ((this)->*(parse_AtFollowOfSpecifiers))(decl, specList);
@@ -393,8 +391,7 @@ bool Parser::parseFunctionDefinition_AtOpenBrace(
     }
 
     if (prevDecltor
-            && prevDecltor->kind() == SyntaxKind::FunctionDeclarator
-            && outerDecltor->kind() == SyntaxKind::IdentifierDeclarator) {
+            && prevDecltor->kind() == SyntaxKind::FunctionDeclarator) {
         auto funcDef = makeNode<FunctionDefinitionSyntax>();
         decl = funcDef;
         funcDef->specs_ = const_cast<SpecifierListSyntax*>(specList);
@@ -407,45 +404,13 @@ bool Parser::parseFunctionDefinition_AtOpenBrace(
     return false;
 }
 
-Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
+Parser::IdentifierRole Parser::guessRoleOfIdentifier() const
 {
-    /*
-     Upon an identifier, when parsing a declaration, we can't
-     tell whether the identifier is <typedef-name> or a
-     <declarator>. Only a "type seen" flag isn't enough to
-     help distinguishing the meaning of such identifier: e.g.,
-     in `x;', where `x' doesn't name a type, `x' is the
-     <declarator> of a variable implicitly typed with `int'
-     (a warning is diagnosed, though), but in `x;', given a
-     previous `typedef int x;', `x' is a <typedef-name> of an
-     empty declaration (again, a warning is diagnosed).
-
-     The way out of this situation, yet allowing valid code
-     to be parsed correctly, without an error, is to look
-     further ahead for another identifier: if one is found,
-     and a <type-specifier> has already been (potentially)
-     seen, the found identifier must be a <declarator>;
-     however, if a <type-sepcifier> hasn't yet been seen, or
-     if an additional identifier wasn't found, then we base
-     the decision on other tokens that might be valid within
-     a declarator.
-     */
-
-    auto parenCnt = 0;
     auto LA = 2;
-    bool maybeKR = false;
     while (true) {
         switch (peek(LA).kind()) {
             case SyntaxKind::IdentifierToken:
-                if (!maybeKR) {
-                    if (seenType)
-                        return IdentifierRole::AsDeclarator;
-                    if (!parenCnt)
-                        return IdentifierRole::AsTypedefName;
-                    seenType = true;
-                }
-                ++LA;
-                continue;
+                return IdentifierRole::AsTypedefName;
 
             // type-specifier
             case SyntaxKind::Keyword_void:
@@ -466,13 +431,7 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
             case SyntaxKind::Keyword_union:
             case SyntaxKind::Keyword_enum:
             case SyntaxKind::Keyword_ExtGNU___complex__:
-                if (!maybeKR) {
-                    if (seenType)
-                        return IdentifierRole::AsDeclarator;
-                    seenType = true;
-                }
-                ++LA;
-                continue;
+                return IdentifierRole::AsDeclarator;
 
             // storage-class-specifier
             case SyntaxKind::Keyword_typedef:
@@ -482,91 +441,133 @@ Parser::IdentifierRole Parser::determineIdentifierRole(bool seenType) const
             case SyntaxKind::Keyword_register:
             case SyntaxKind::Keyword__Thread_local:
             case SyntaxKind::Keyword_ExtGNU___thread:
-                ++LA;
-                continue;
+                return IdentifierRole::AsTypedefName;
 
             // type-qualifier
             case SyntaxKind::Keyword_const:
             case SyntaxKind::Keyword_volatile:
             case SyntaxKind::Keyword_restrict:
             case SyntaxKind::Keyword__Atomic:
-                ++LA;
-                continue;
+                return IdentifierRole::AsTypedefName;
 
             // function-specifier
             case SyntaxKind::Keyword_inline:
             case SyntaxKind::Keyword__Noreturn:
-                ++LA;
-                continue;
+                return IdentifierRole::AsTypedefName;
 
             // alignment-specifier
             case SyntaxKind::Keyword__Alignas:
-                ++LA;
-                continue;
+                return IdentifierRole::AsTypedefName;
 
             // attribute-specifier
             case SyntaxKind::Keyword_ExtGNU___attribute__:
-                if (!maybeKR && !parenCnt)
-                        return IdentifierRole::AsTypedefName;
-                ++LA;
-                continue;
+                return IdentifierRole::AsTypedefName;
 
             // pointer-declarator
             case SyntaxKind::AsteriskToken:
-                if (!parenCnt)
-                    return IdentifierRole::AsTypedefName;
-                ++LA;
-                continue;
-
-            case SyntaxKind::OpenParenToken:
-                ++parenCnt;
-                ++LA;
-                continue;
-
-            case SyntaxKind::CloseParenToken:
-                --parenCnt;
-                if (!maybeKR) {
-                    if (!parenCnt) {
-                        if (seenType)
-                            return IdentifierRole::AsTypedefName;
-                        return IdentifierRole::AsDeclarator;
-                    }
-                }
-                else {
-                    if (peek(LA + 1).kind() == SyntaxKind::SemicolonToken)
-                        return IdentifierRole::AsTypedefName;
-                    return IdentifierRole::AsDeclarator;
-                }
-                ++LA;
-                continue;
-
-            case SyntaxKind::CommaToken:
-                if (!parenCnt) {
-                    if (seenType)
-                        return IdentifierRole::AsTypedefName;
-                    maybeKR = true;
-                    ++LA;
-                    continue;
-                }
-                if (parenCnt < 0)
-                    return IdentifierRole::AsTypedefName;
-                return IdentifierRole::AsDeclarator;
-
-            case SyntaxKind::SemicolonToken:
-                if (parenCnt < 0)
-                    return IdentifierRole::AsTypedefName;
-                return IdentifierRole::AsDeclarator;
-
-            case SyntaxKind::EndOfFile:
-                if (seenType)
-                    return IdentifierRole::AsDeclarator;
                 return IdentifierRole::AsTypedefName;
 
+            case SyntaxKind::OpenParenToken: {
+                auto parens = 1;
+                auto check = 0;
+                while (true) {
+                    switch (peek(LA + 1).kind()) {
+                        case SyntaxKind::OpenParenToken:
+                            ++parens;
+                            ++LA;
+                            continue;
+                        case SyntaxKind::CloseParenToken:
+                            --parens;
+                            if (!parens)
+                                break;
+                            ++LA;
+                            continue;
+                        case SyntaxKind::IdentifierToken:
+                            if (check == 0)
+                                check = -1;
+                            else
+                                check = 1;
+                            ++LA;
+                            continue;
+                        case SyntaxKind::AsteriskToken:
+                            ++LA;
+                            continue;
+                        case SyntaxKind::SemicolonToken:
+                        case SyntaxKind::EndOfFile:
+                            return IdentifierRole::AsDeclarator;
+                        default:
+                            ++check;
+                            ++LA;
+                            continue;
+                    }
+                    break;
+                }
+                return check == -1
+                        ? IdentifierRole::AsTypedefName
+                        : IdentifierRole::AsDeclarator;
+            }
+
+            case SyntaxKind::CloseParenToken:
+                return peek(LA + 1).kind() == SyntaxKind::OpenBraceToken
+                        ? IdentifierRole::AsDeclarator
+                        : isWithinKandRFuncDef_
+                            ? IdentifierRole::AsDeclarator
+                            : IdentifierRole::AsTypedefName;
+
+            case SyntaxKind::OpenBracketToken: {
+                auto brackets = 1;
+                auto check = 0;
+                while (true) {
+                    switch (peek(LA + 1).kind()) {
+                        case SyntaxKind::OpenBracketToken:
+                            ++brackets;
+                            ++LA;
+                            continue;
+                        case SyntaxKind::CloseBracketToken:
+                            --brackets;
+                            if (!brackets)
+                                break;
+                            ++LA;
+                            continue;
+                        case SyntaxKind::IdentifierToken:
+                            if (check == 0)
+                                check = -1;
+                            else
+                                check = 1;
+                            ++LA;
+                            continue;
+                        case SyntaxKind::AsteriskToken:
+                            ++LA;
+                            continue;
+                        case SyntaxKind::SemicolonToken:
+                        case SyntaxKind::EndOfFile:
+                            return IdentifierRole::AsDeclarator;
+                        default:
+                            ++check;
+                            ++LA;
+                            continue;
+                    }
+                    break;
+                }
+                return check == -1
+                        ? IdentifierRole::AsTypedefName
+                        : IdentifierRole::AsDeclarator;
+            }
+
+            case SyntaxKind::CloseBracketToken:
+                return peek(LA + 1).kind() == SyntaxKind::OpenBraceToken
+                        ? IdentifierRole::AsDeclarator
+                        : isWithinKandRFuncDef_
+                            ? IdentifierRole::AsDeclarator
+                            : IdentifierRole::AsTypedefName;
+
+            case SyntaxKind::CommaToken:
+                return isWithinKandRFuncDef_
+                        ? IdentifierRole::AsDeclarator
+                        : IdentifierRole::AsTypedefName;
+
             default:
-                if (!maybeKR)
-                    return IdentifierRole::AsDeclarator;
-                ++LA;
-                continue;
+                return IdentifierRole::AsDeclarator;
         }
     }
 }
@@ -718,6 +719,52 @@ bool Parser::parseParameterDeclarationListAndOrEllipsis(ParameterSuffixSyntax*& 
 {
     DBG_THIS_RULE();
 
+    if (tree_->parseOptions().languageExtensions().isEnabled_extC_KandRStyle()) {
+        auto LA = 1;
+        while (true) {
+            switch (peek(LA).kind()) {
+                case SyntaxKind::CloseParenToken:
+                    ++LA;
+                    switch (peek(LA).kind()) {
+                        case SyntaxKind::Keyword_const:
+                        case SyntaxKind::Keyword_volatile:
+                        case SyntaxKind::Keyword_restrict:
+                        case SyntaxKind::Keyword_void:
+                        case SyntaxKind::Keyword_char:
+                        case SyntaxKind::Keyword_short:
+                        case SyntaxKind::Keyword_int:
+                        case SyntaxKind::Keyword_long:
+                        case SyntaxKind::Keyword_float:
+                        case SyntaxKind::Keyword_double:
+                        case SyntaxKind::Keyword__Bool:
+                        case SyntaxKind::Keyword__Complex:
+                        case SyntaxKind::Keyword_signed:
+                        case SyntaxKind::Keyword_unsigned:
+                        case SyntaxKind::Keyword_Ext_char16_t:
+                        case SyntaxKind::Keyword_Ext_char32_t:
+                        case SyntaxKind::Keyword_Ext_wchar_t:
+                        case SyntaxKind::Keyword_ExtGNU___complex__:
+                        case SyntaxKind::Keyword_struct:
+                        case SyntaxKind::Keyword_union:
+                        case SyntaxKind::Keyword_enum:
+                        case SyntaxKind::IdentifierToken:
+                            isWithinKandRFuncDef_ = true;
+                            break;
+                        default:
+                            isWithinKandRFuncDef_ = false;
+                            break;
+                    }
+                    break;
+                case SyntaxKind::EndOfFile:
+                    break;
+                default:
+                    ++LA;
+                    continue;
+            }
+            break;
+        }
+    }
+
     switch (peek().kind()) {
         case SyntaxKind::CloseParenToken:
             break;
@@ -766,9 +813,6 @@ bool Parser::parseParameterDeclarationListAndOrEllipsis(ParameterSuffixSyntax*& 
 bool Parser::parseParameterDeclarationList(ParameterDeclarationListSyntax*& paramList)
 {
     DBG_THIS_RULE();
-
-    DiagnosticsReporterDelayer DRD(&diagReporter_,
-                                   DiagnosticsReporter::ID_of_ExpectedTypeSpecifier);
 
     ParameterDeclarationListSyntax** paramList_cur = &paramList;
 
@@ -820,7 +864,6 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
     if (!specList) {
         switch (peek().kind()) {
             case SyntaxKind::IdentifierToken:
-                diagReporter_.ExpectedTypeSpecifier();
                 break;
 
             default:
@@ -939,7 +982,6 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
 
     SpecifierListSyntax** specList_cur = &specList;
     bool seenType = false;
-
     while (true) {
         SpecifierSyntax* spec = nullptr;
         switch (peek().kind()) {
@@ -1004,8 +1046,9 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
             // declaration-specifiers -> type-specifier -> `_Atomic' `('
             case SyntaxKind::Keyword__Atomic:
                 if (peek(2).kind() == SyntaxKind::OpenParenToken) {
-                    if (!parseAtomiceTypeSpecifier_AtFirst(spec))
+                    if (!parseAtomicTypeSpecifier_AtFirst(spec))
                         return false;
+                    seenType = true;
                 }
                 else
                     parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
@@ -1093,10 +1136,8 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
             case SyntaxKind::IdentifierToken: {
                 if (seenType)
                     return true;
-
-                if (determineIdentifierRole(seenType) == IdentifierRole::AsDeclarator)
+                if (guessRoleOfIdentifier() == IdentifierRole::AsDeclarator)
                     return true;
-
                 seenType = true;
                 parseTypedefName_AtFirst(spec);
                 break;
@@ -1157,7 +1198,6 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
 
     SpecifierListSyntax** specList_cur = &specList;
     bool seenType = false;
-
     while (true) {
         SpecifierSyntax* spec = nullptr;
         switch (peek().kind()) {
@@ -1184,8 +1224,9 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             // declaration-specifiers -> type-specifier -> `_Atomic' `('
             case SyntaxKind::Keyword__Atomic:
                 if (peek(2).kind() == SyntaxKind::OpenParenToken) {
-                    if (!parseAtomiceTypeSpecifier_AtFirst(spec))
+                    if (!parseAtomicTypeSpecifier_AtFirst(spec))
                         return false;
+                    seenType = true;
                 }
                 else
                     parseTrivialSpecifier_AtFirst<TypeQualifierSyntax>(
@@ -1260,7 +1301,6 @@ bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
             case SyntaxKind::IdentifierToken: {
                 if (seenType)
                     return true;
-
                 seenType = true;
                 parseTypedefName_AtFirst(spec);
                 break;
@@ -1410,7 +1450,7 @@ void Parser::parseTypedefName_AtFirst(SpecifierSyntax*& spec)
  *
  * \remark 6.7.2.4
  */
-bool Parser::parseAtomiceTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
+bool Parser::parseAtomicTypeSpecifier_AtFirst(SpecifierSyntax*& spec)
 {
     DBG_THIS_RULE();
     PSY_ASSERT_3(peek().kind() == SyntaxKind::Keyword__Atomic,

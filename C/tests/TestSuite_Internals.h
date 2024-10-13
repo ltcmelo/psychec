@@ -61,7 +61,8 @@ private:
     void parseStatement(std::string text, Expectation X = Expectation());
     void parse(std::string text,
                Expectation X = Expectation(),
-               SyntaxTree::SyntaxCategory synCat = SyntaxTree::SyntaxCategory::UNSPECIFIED);
+               SyntaxTree::SyntaxCategory synCat = SyntaxTree::SyntaxCategory::Any,
+               ParseOptions parseOpts = ParseOptions());
 
     void reparse_withSyntaxCorrelation(std::string text, Expectation X = Expectation());
     void reparse_withTypeSynonymVerification(std::string text, Expectation X = Expectation());

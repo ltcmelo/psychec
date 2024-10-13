@@ -45,9 +45,13 @@ void ParserTester::parseStatement(std::string text, Expectation X)
     (static_cast<InternalsTestSuite*>(suite_)->parseStatement(text, X));
 }
 
-void ParserTester::parse(std::string text, Expectation X, SyntaxTree::SyntaxCategory synCat)
+void ParserTester::parse(
+        std::string text,
+        Expectation X,
+        SyntaxTree::SyntaxCategory synCat,
+        ParseOptions parseOpts)
 {
-    (static_cast<InternalsTestSuite*>(suite_)->parse(text, X, synCat));
+    (static_cast<InternalsTestSuite*>(suite_)->parse(text, X, synCat, parseOpts));
 }
 
 void ParserTester::setUp()

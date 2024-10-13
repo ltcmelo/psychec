@@ -669,7 +669,20 @@ float y ;
                       .ty_.Basic(BasicTypeKind::Float)));
 }
 
-void BinderTester::case3306(){}
+void BinderTester::case3306()
+{
+    bind(R"(
+void _ ( ) {
+    sizeof ( double ) ;
+    int x ;
+}
+         )",
+         Expectation()
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable, ScopeKind::Block)
+                      .ty_.Basic(BasicTypeKind::Int)));
+}
+
 void BinderTester::case3307(){}
 void BinderTester::case3308(){}
 void BinderTester::case3309(){}

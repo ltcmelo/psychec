@@ -49,7 +49,8 @@ public:
     void parseStatement(std::string text, Expectation X = Expectation());
     void parse(std::string text,
                Expectation X = Expectation(),
-               SyntaxTree::SyntaxCategory synCat = SyntaxTree::SyntaxCategory::UNSPECIFIED);
+               SyntaxTree::SyntaxCategory synCat = SyntaxTree::SyntaxCategory::Any,
+               ParseOptions parseOpts = ParseOptions());
 
     using TestFunction = std::pair<std::function<void(ParserTester*)>, const char*>;
 

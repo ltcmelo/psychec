@@ -52,15 +52,21 @@ public:
                  LanguageExtensions langExts);
     //!@}
 
+    //!@{
     /**
      * The LanguageDialect of \c this ParseOptions.
      */
+    ParseOptions& withLanguageDialect(LanguageDialect langDialect);
     const LanguageDialect& languageDialect() const;
+    //!@}
 
+    //!@{
     /**
      * The LanguageExtensions of \c this ParseOptions.
      */
+    ParseOptions& withLanguageExtensions(LanguageExtensions langExts);
     const LanguageExtensions& languageExtensions() const;
+    //!@}
 
     //!@{
     /**
@@ -80,6 +86,9 @@ public:
         KeepAll,              /**< Keep all comments. */
         KeepOnlyDocumentation /**< keep only documentation comments. */
     };
+    //!@}
+
+    //!@{
     /**
      * The CommentMode of \c this ParserOptions.
      */
@@ -98,6 +107,7 @@ public:
         DisambiguateAlgorithmicallyAndHeuristically, /**< Disambiguate ambiguities algorithmically and heristically. */
         DisambiguateHeuristically,                   /**< Disambiguate ambiguities heuristically. */
     };
+
     /**
      * The AmbiguityMode of \c this ParserOptions.
      */

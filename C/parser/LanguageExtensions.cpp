@@ -37,6 +37,7 @@ LanguageExtensions::LanguageExtensions(MacroTranslations translations)
     , BF_all_(~0)
 {
     /* C */
+    BF_.extC_KandRStyle_ = false;
     BF_.extC_wchar_t_Keyword_ = false;
     BF_.extC_char8_t_Keyword_ = false;
     BF_.extC_char16_t_Keyword_ = false;
@@ -63,6 +64,7 @@ const MacroTranslations& LanguageExtensions::translations() const
     bool LanguageExtensions::isEnabled_##FLAG() const \
         { return BF_.FLAG##_; }
 
+DEFINE_ENABLE_ISENABLED(extC_KandRStyle)
 DEFINE_ENABLE_ISENABLED(extC_wchar_t_Keyword)
 DEFINE_ENABLE_ISENABLED(extC_char8_t_Keyword)
 DEFINE_ENABLE_ISENABLED(extC_char16_t_Keyword)

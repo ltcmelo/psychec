@@ -209,7 +209,21 @@ private:
     // Statements //
     //------------//
     virtual Action visitCompoundStatement(const CompoundStatementSyntax*) override;
+    virtual Action visitLabeledStatement(const LabeledStatementSyntax*) override;
     virtual Action visitDeclarationStatement(const DeclarationStatementSyntax*) override;
+    virtual Action visitExpressionStatement(const ExpressionStatementSyntax*) override;
+    virtual Action visitIfStatement(const IfStatementSyntax*) override;
+    virtual Action visitSwitchStatement(const SwitchStatementSyntax*) override;
+    virtual Action visitWhileStatement(const WhileStatementSyntax*) override;
+    virtual Action visitDoStatement(const DoStatementSyntax*) override;
+    virtual Action visitForStatement(const ForStatementSyntax*) override;
+    virtual Action visitGotoStatement(const GotoStatementSyntax*) override;
+    virtual Action visitContinueStatement(const ContinueStatementSyntax*) override;
+    virtual Action visitBreakStatement(const BreakStatementSyntax*) override;
+    virtual Action visitReturnStatement(const ReturnStatementSyntax*) override;
+    virtual Action visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax*) override;
+    virtual Action visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax*) override;
+    virtual Action visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax*) override;
 };
 
 template <class SymT, class... SymTArgs>

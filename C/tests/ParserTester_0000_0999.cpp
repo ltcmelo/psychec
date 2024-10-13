@@ -229,8 +229,8 @@ void ParserTester::case0022()
      *     - `long int y ;'
      *        Good.
      *
-     *     - `typedef int x ; long x y;'
-     *        Good.
+     *     - `typedef int x ; long x y ;'
+     *        Not good.
      *
      *     - `x ; int y ;'
      *       `x' is missing a type-specifier.
@@ -238,9 +238,7 @@ void ParserTester::case0022()
 
     parse("x int y ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator)
-                       .diagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void ParserTester::case0023()
@@ -369,10 +367,10 @@ void ParserTester::case0035()
 
 void ParserTester::case0036()
 {
+    CROSS_REFERENCE_TEST(BinderTester::case1017);
+
     parse("* x ;",
           Expectation()
-              .diagnostic(Expectation::ErrorOrWarn::Warn,
-                             Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier)
               .AST({ SyntaxKind::TranslationUnit,
                      SyntaxKind::VariableAndOrFunctionDeclaration,
                      SyntaxKind::PointerDeclarator,
@@ -381,10 +379,10 @@ void ParserTester::case0036()
 
 void ParserTester::case0037()
 {
+    CROSS_REFERENCE_TEST(BinderTester::case1018);
+
     parse("* ( x ) ;",
           Expectation()
-              .diagnostic(Expectation::ErrorOrWarn::Warn,
-                             Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier)
               .AST({ SyntaxKind::TranslationUnit,
                      SyntaxKind::VariableAndOrFunctionDeclaration,
                      SyntaxKind::PointerDeclarator,
@@ -416,16 +414,20 @@ void ParserTester::case0039()
 
 void ParserTester::case0040()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case0013); // Semantic warning.
+    CROSS_REFERENCE_TEST(BinderTester::case0013);
 
     parse("int ;");
 }
 
 void ParserTester::case0041()
 {
+    CROSS_REFERENCE_TEST(BinderTester::case1016);
+
     parse("x ;",
-          Expectation().diagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+          Expectation()
+              .AST({ SyntaxKind::TranslationUnit,
+                     SyntaxKind::VariableAndOrFunctionDeclaration,
+                     SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case0042()
@@ -565,9 +567,7 @@ void ParserTester::case0054()
 {
     parse("x int ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator)
-                       .diagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
 }
 
 void ParserTester::case0055()
@@ -1570,8 +1570,7 @@ void ParserTester::case0211()
 
 void ParserTester::case0212()
 {
-    // Not a syntactic error, but a semantic one; covered in:
-    CROSS_REFERENCE_TEST(BinderTester::case0012) ;
+    CROSS_REFERENCE_TEST(BinderTester::case0012);
 
     parse("void x ( int ) { }") ;
 }
@@ -1612,16 +1611,34 @@ void ParserTester::case0215()
 
 void ParserTester::case0216()
 {
+    CROSS_REFERENCE_TEST(BinderTester::case0163);
+
     parse("x ( int y ) ;",
-          Expectation().diagnostic(Expectation::ErrorOrWarn::Warn,
-                                   Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+          Expectation()
+          .AST({ SyntaxKind::TranslationUnit,
+                 SyntaxKind::VariableAndOrFunctionDeclaration,
+                 SyntaxKind::FunctionDeclarator,
+                 SyntaxKind::IdentifierDeclarator,
+                 SyntaxKind::ParameterSuffix,
+                 SyntaxKind::ParameterDeclaration,
+                 SyntaxKind::BasicTypeSpecifier,
+                 SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case0217()
 {
+    CROSS_REFERENCE_TEST(BinderTester::case0164);
+
     parse("x ( y z ) ;",
-          Expectation().diagnostic(Expectation::ErrorOrWarn::Warn,
-                                   Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier));
+          Expectation()
+          .AST({ SyntaxKind::TranslationUnit,
+                 SyntaxKind::VariableAndOrFunctionDeclaration,
+                 SyntaxKind::FunctionDeclarator,
+                 SyntaxKind::IdentifierDeclarator,
+                 SyntaxKind::ParameterSuffix,
+                 SyntaxKind::ParameterDeclaration,
+                 SyntaxKind::TypedefName,
+                 SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case0218()
@@ -1920,6 +1937,8 @@ void ParserTester::case0244()
 
 void ParserTester::case0245()
 {
+    CROSS_REFERENCE_TEST(BinderTester::case0161);
+
     parse("void x ( y ) { }",
           Expectation().AST({ SyntaxKind::TranslationUnit,
                               SyntaxKind::FunctionDefinition,
@@ -2257,22 +2276,73 @@ void ParserTester::case0262()
 
 void ParserTester::case0263()
 {
-
+    parse(R"(void x ( y ) asm ( " w " ); )",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ExtGNU_AsmLabel,
+                              SyntaxKind::StringLiteralExpression }));
 }
 
 void ParserTester::case0264()
 {
-
+    parse(R"(void x ( y , z ) asm ( " w " ); )",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ExtGNU_AsmLabel,
+                              SyntaxKind::StringLiteralExpression }));
 }
 
 void ParserTester::case0265()
 {
+    parse(R"(void x ( y z ) asm ( " w " ); )",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ExtGNU_AsmLabel,
+                              SyntaxKind::StringLiteralExpression }));
 
 }
 
 void ParserTester::case0266()
 {
-
+    parse(R"(void x ( y z , p q ) asm ( " w " ); )",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ExtGNU_AsmLabel,
+                              SyntaxKind::StringLiteralExpression }));
 }
 
 void ParserTester::case0267()
@@ -2354,7 +2424,10 @@ void ParserTester::case0280()
                               SyntaxKind::ExtKR_ParameterDeclaration,
                               SyntaxKind::BasicTypeSpecifier,
                               SyntaxKind::IdentifierDeclarator,
-                              SyntaxKind::CompoundStatement }));
+                              SyntaxKind::CompoundStatement }),
+          SyntaxTree::SyntaxCategory::Any,
+          ParseOptions().withLanguageExtensions(
+              LanguageExtensions().enable_extC_KandRStyle(true)));
 }
 
 void ParserTester::case0281()
@@ -2371,7 +2444,10 @@ void ParserTester::case0281()
                               SyntaxKind::ExtKR_ParameterDeclaration,
                               SyntaxKind::TypedefName,
                               SyntaxKind::IdentifierDeclarator,
-                              SyntaxKind::CompoundStatement }));
+                              SyntaxKind::CompoundStatement }),
+          SyntaxTree::SyntaxCategory::Any,
+          ParseOptions().withLanguageExtensions(
+              LanguageExtensions().enable_extC_KandRStyle(true)));
 }
 
 void ParserTester::case0282()
@@ -2390,7 +2466,10 @@ void ParserTester::case0282()
                               SyntaxKind::ExtKR_ParameterDeclaration,
                               SyntaxKind::BasicTypeSpecifier,
                               SyntaxKind::IdentifierDeclarator,
-                              SyntaxKind::CompoundStatement }));
+                              SyntaxKind::CompoundStatement }),
+          SyntaxTree::SyntaxCategory::Any,
+          ParseOptions().withLanguageExtensions(
+              LanguageExtensions().enable_extC_KandRStyle(true)));
 }
 
 void ParserTester::case0283()
@@ -2412,7 +2491,10 @@ void ParserTester::case0283()
                               SyntaxKind::ExtKR_ParameterDeclaration,
                               SyntaxKind::BasicTypeSpecifier,
                               SyntaxKind::IdentifierDeclarator,
-                              SyntaxKind::CompoundStatement }));
+                              SyntaxKind::CompoundStatement }),
+          SyntaxTree::SyntaxCategory::Any,
+          ParseOptions().withLanguageExtensions(
+              LanguageExtensions().enable_extC_KandRStyle(true)));
 }
 
 void ParserTester::case0284()
@@ -2432,7 +2514,10 @@ void ParserTester::case0284()
                               SyntaxKind::BasicTypeSpecifier,
                               SyntaxKind::IdentifierDeclarator,
                               SyntaxKind::IdentifierDeclarator,
-                              SyntaxKind::CompoundStatement }));
+                              SyntaxKind::CompoundStatement }),
+          SyntaxTree::SyntaxCategory::Any,
+          ParseOptions().withLanguageExtensions(
+              LanguageExtensions().enable_extC_KandRStyle(true)));
 }
 
 void ParserTester::case0285()
@@ -2459,7 +2544,10 @@ void ParserTester::case0285()
                               SyntaxKind::ParameterDeclaration,
                               SyntaxKind::BasicTypeSpecifier,
                               SyntaxKind::AbstractDeclarator,
-                              SyntaxKind::CompoundStatement }));
+                              SyntaxKind::CompoundStatement }),
+          SyntaxTree::SyntaxCategory::Any,
+          ParseOptions().withLanguageExtensions(
+              LanguageExtensions().enable_extC_KandRStyle(true)));
 }
 
 void ParserTester::case0286()
@@ -2476,7 +2564,10 @@ void ParserTester::case0286()
                               SyntaxKind::ExtKR_ParameterDeclaration,
                               SyntaxKind::StructTypeSpecifier,
                               SyntaxKind::IdentifierDeclarator,
-                              SyntaxKind::CompoundStatement }));
+                              SyntaxKind::CompoundStatement }),
+          SyntaxTree::SyntaxCategory::Any,
+          ParseOptions().withLanguageExtensions(
+              LanguageExtensions().enable_extC_KandRStyle(true)));
 }
 
 void ParserTester::case0287()
@@ -2494,7 +2585,10 @@ void ParserTester::case0287()
                               SyntaxKind::BasicTypeSpecifier,
                               SyntaxKind::PointerDeclarator,
                               SyntaxKind::IdentifierDeclarator,
-                              SyntaxKind::CompoundStatement }));
+                              SyntaxKind::CompoundStatement }),
+          SyntaxTree::SyntaxCategory::Any,
+          ParseOptions().withLanguageExtensions(
+              LanguageExtensions().enable_extC_KandRStyle(true)));
 }
 
 void ParserTester::case0288()
@@ -2515,7 +2609,10 @@ void ParserTester::case0288()
                               SyntaxKind::PointerDeclarator,
                               SyntaxKind::IdentifierDeclarator,
                               SyntaxKind::IdentifierDeclarator,
-                              SyntaxKind::CompoundStatement }));
+                              SyntaxKind::CompoundStatement }),
+          SyntaxTree::SyntaxCategory::Any,
+          ParseOptions().withLanguageExtensions(
+              LanguageExtensions().enable_extC_KandRStyle(true)));
 }
 
 void ParserTester::case0289()
@@ -2537,7 +2634,10 @@ void ParserTester::case0289()
                               SyntaxKind::IdentifierDeclarator,
                               SyntaxKind::PointerDeclarator,
                               SyntaxKind::IdentifierDeclarator,
-                              SyntaxKind::CompoundStatement }));
+                              SyntaxKind::CompoundStatement }),
+          SyntaxTree::SyntaxCategory::Any,
+          ParseOptions().withLanguageExtensions(
+              LanguageExtensions().enable_extC_KandRStyle(true)));
 }
 
 void ParserTester::case0290()
@@ -2562,7 +2662,10 @@ void ParserTester::case0290()
                               SyntaxKind::AbstractDeclarator,
                               SyntaxKind::SubscriptSuffix,
                               SyntaxKind::IntegerConstantExpression,
-                              SyntaxKind::CompoundStatement }));
+                              SyntaxKind::CompoundStatement }),
+          SyntaxTree::SyntaxCategory::Any,
+          ParseOptions().withLanguageExtensions(
+              LanguageExtensions().enable_extC_KandRStyle(true)));
 }
 
 void ParserTester::case0291()
@@ -3172,7 +3275,7 @@ void ParserTester::case0416()
      *        Would be invalid, because a specifier-qualifier-list is mandatory.
      */
 
-    CROSS_REFERENCE_TEST(BinderTester::case0006); // Semantic warning.
+    CROSS_REFERENCE_TEST(BinderTester::case0006);
 
     parse("struct x { y ; } ;");
 }
@@ -3236,7 +3339,7 @@ void ParserTester::case0421()
 
 void ParserTester::case0422()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case0007); // Semantic warning.
+    CROSS_REFERENCE_TEST(BinderTester::case0007);
 
     parse("struct x { int ; } ;");
 }

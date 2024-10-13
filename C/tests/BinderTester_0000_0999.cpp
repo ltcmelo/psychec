@@ -822,11 +822,86 @@ void BinderTester::case0160()
                   .ty_.Typedef("z")));
 }
 
-void BinderTester::case0161(){}
-void BinderTester::case0162(){}
-void BinderTester::case0163(){}
-void BinderTester::case0164(){}
-void BinderTester::case0165(){}
+void BinderTester::case0161()
+{
+    bind("void x ( y ) { }",
+         Expectation()
+             .diagnostic(Expectation::ErrorOrWarn::Error,
+                         Binder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+             .declaration(Decl()
+                      .Function("x", ScopeKind::File)
+                      .ty_.Void()
+                      .ty_.Derived(TypeKind::Function)
+                      .ty_.addParam().Basic(BasicTypeKind::Int))
+             .declaration(Decl()
+                      .Object("y", ObjectDeclarationKind::Parameter, ScopeKind::Block)
+                      .ty_.Basic(BasicTypeKind::Int)));
+}
+
+void BinderTester::case0162()
+{
+    bind("x ( int y ) { }",
+         Expectation()
+             .diagnostic(Expectation::ErrorOrWarn::Error,
+                         Binder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+             .declaration(Decl()
+                      .Function("x", ScopeKind::File)
+                      .ty_.Basic(BasicTypeKind::Int)
+                      .ty_.Derived(TypeKind::Function)
+                      .ty_.addParam().Basic(BasicTypeKind::Int))
+             .declaration(Decl()
+                      .Object("y", ObjectDeclarationKind::Parameter, ScopeKind::Block)
+                      .ty_.Basic(BasicTypeKind::Int)));
+}
+
+void BinderTester::case0163()
+{
+    bind("x ( int y ) ;",
+         Expectation()
+             .diagnostic(Expectation::ErrorOrWarn::Error,
+                         Binder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+             .declaration(Decl()
+                      .Function("x", ScopeKind::File)
+                      .ty_.Basic(BasicTypeKind::Int)
+                      .ty_.Derived(TypeKind::Function)
+                      .ty_.addParam().Basic(BasicTypeKind::Int))
+             .declaration(Decl()
+                      .Object("y", ObjectDeclarationKind::Parameter, ScopeKind::FunctionPrototype)
+                      .ty_.Basic(BasicTypeKind::Int)));
+}
+
+void BinderTester::case0164()
+{
+    bind("x ( y z ) { }",
+         Expectation()
+             .diagnostic(Expectation::ErrorOrWarn::Error,
+                         Binder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+             .declaration(Decl()
+                      .Function("x", ScopeKind::File)
+                      .ty_.Basic(BasicTypeKind::Int)
+                      .ty_.Derived(TypeKind::Function)
+                      .ty_.addParam().Typedef("y"))
+             .declaration(Decl()
+                      .Object("z", ObjectDeclarationKind::Parameter, ScopeKind::Block)
+                      .ty_.Typedef("y")));
+}
+
+void BinderTester::case0165()
+{
+    bind("x ( y z ) ;",
+         Expectation()
+             .diagnostic(Expectation::ErrorOrWarn::Error,
+                         Binder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+             .declaration(Decl()
+                      .Function("x", ScopeKind::File)
+                      .ty_.Basic(BasicTypeKind::Int)
+                      .ty_.Derived(TypeKind::Function)
+                      .ty_.addParam().Typedef("y"))
+             .declaration(Decl()
+                      .Object("z", ObjectDeclarationKind::Parameter, ScopeKind::FunctionPrototype)
+                      .ty_.Typedef("y")));
+}
+
 void BinderTester::case0166(){}
 void BinderTester::case0167(){}
 void BinderTester::case0168(){}
