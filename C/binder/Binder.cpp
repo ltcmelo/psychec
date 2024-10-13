@@ -233,9 +233,86 @@ SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSynt
     return Action::Skip;
 }
 
+SyntaxVisitor::Action Binder::visitLabeledStatement(const LabeledStatementSyntax *)
+{
+    return Action::Skip;
+}
+
 SyntaxVisitor::Action Binder::visitDeclarationStatement(const DeclarationStatementSyntax* node)
 {
     visit(node->declaration());
 
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitExpressionStatement(const ExpressionStatementSyntax*)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitIfStatement(const IfStatementSyntax* node)
+{
+    visit(node->statement());
+    visit(node->elseStatement());
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitSwitchStatement(const SwitchStatementSyntax* node)
+{
+    visit(node->statement());
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitWhileStatement(const WhileStatementSyntax* node)
+{
+    visit(node->statement());
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitDoStatement(const DoStatementSyntax* node)
+{
+    visit(node->statement());
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitForStatement(const ForStatementSyntax* node)
+{
+    visit(node->initializer());
+    visit(node->statement());
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitGotoStatement(const GotoStatementSyntax *)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitContinueStatement(const ContinueStatementSyntax *)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitBreakStatement(const BreakStatementSyntax *)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitReturnStatement(const ReturnStatementSyntax*)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax *)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax *)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax *)
+{
     return Action::Skip;
 }

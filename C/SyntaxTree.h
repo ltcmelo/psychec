@@ -64,15 +64,10 @@ public:
 
     /**
      * \brief The SyntaxCategory enumeration.
-     *
-     * The possible categories of syntax that a SyntaxTree
-     * may represent. If unspecified, it is assumed that
-     * a SyntaxTree represents a \a translation-unit.
      */
     enum class SyntaxCategory : uint8_t
     {
-        UNSPECIFIED = 0,
-
+        Any = 0,
         Declarations,
         Expressions,
         Statements,
@@ -87,7 +82,7 @@ public:
                                                  TextCompleteness textCompleteness,
                                                  ParseOptions parseOptions = ParseOptions(),
                                                  const std::string& filePath = "",
-                                                 SyntaxCategory syntaxCategory = SyntaxCategory::UNSPECIFIED);
+                                                 SyntaxCategory syntaxCategory = SyntaxCategory::Any);
 
     /**
      * The path of the file associated to \c this SyntaxTree.

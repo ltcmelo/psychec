@@ -192,7 +192,8 @@ void InternalsTestSuite::parseStatement(std::string source, Expectation X)
 
 void InternalsTestSuite::parse(std::string source,
                                Expectation X,
-                               SyntaxTree::SyntaxCategory syntaxCat)
+                               SyntaxTree::SyntaxCategory syntaxCat,
+                               ParseOptions parseOpts)
 {
     auto text = source;
 
@@ -206,7 +207,6 @@ void InternalsTestSuite::parse(std::string source,
     }
 #endif
 
-    ParseOptions parseOpts;
     if (X.containsAmbiguity_)
         parseOpts.setAmbiguityMode(ParseOptions::AmbiguityMode::Diagnose);
 

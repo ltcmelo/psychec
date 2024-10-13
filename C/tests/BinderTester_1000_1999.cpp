@@ -176,9 +176,41 @@ void BinderTester::case1015()
                               .ty_.Basic(BasicTypeKind::Bool)));
 }
 
-void BinderTester::case1016(){}
-void BinderTester::case1017(){}
-void BinderTester::case1018(){}
+void BinderTester::case1016()
+{
+    bind("x ;",
+         Expectation()
+             .diagnostic(Expectation::ErrorOrWarn::Error,
+                         Binder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+             .declaration(Decl()
+                          .Object("x", ObjectDeclarationKind::Variable)
+                          .ty_.Basic(BasicTypeKind::Int)));
+}
+
+void BinderTester::case1017()
+{
+    bind("* x ;",
+         Expectation()
+             .diagnostic(Expectation::ErrorOrWarn::Error,
+                         Binder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+             .declaration(Decl()
+                          .Object("x", ObjectDeclarationKind::Variable)
+                          .ty_.Basic(BasicTypeKind::Int)
+                          .ty_.Derived(TypeKind::Pointer)));
+}
+
+void BinderTester::case1018()
+{
+    bind("* ( x ) ;",
+         Expectation()
+             .diagnostic(Expectation::ErrorOrWarn::Error,
+                         Binder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+             .declaration(Decl()
+                          .Object("x", ObjectDeclarationKind::Variable)
+                          .ty_.Basic(BasicTypeKind::Int)
+                          .ty_.Derived(TypeKind::Pointer)));
+}
+
 void BinderTester::case1019(){}
 void BinderTester::case1020(){}
 void BinderTester::case1021(){}

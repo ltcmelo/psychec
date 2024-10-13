@@ -59,6 +59,7 @@ public:
     enum class Ext : std::uint8_t
     {
         /* C */
+        C_KandRStyle,
         C_wchar_t_Keyword,
         C_char8_t_Keyword,
         C_char16_t_Keyword,
@@ -88,6 +89,16 @@ public:
         NativeBooleans,
         NULLAsBuiltin,
     };
+
+    //!@{
+    /**
+     * Whether to enable K&R style of function definition syntax.
+     *
+     * https://gcc.gnu.org/onlinedocs/gcc/Function-Prototypes.html
+     */
+    LanguageExtensions& enable_extC_KandRStyle(bool enable);
+    bool isEnabled_extC_KandRStyle() const;
+    //!@}
 
     //!@{
     /**
@@ -282,6 +293,7 @@ private:
     struct BitFields
     {
         /* C */
+        std::uint64_t extC_KandRStyle_ : 1;
         std::uint64_t extC_wchar_t_Keyword_ : 1;
         std::uint64_t extC_char8_t_Keyword_ : 1;
         std::uint64_t extC_char16_t_Keyword_ : 1;

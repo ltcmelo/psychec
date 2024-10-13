@@ -56,7 +56,6 @@ const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedInitializerOfDecl
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedStaticOrTypeQualifierInArrayDeclarator = "Parser-304-6.7.6";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedPointerInArrayDeclarator = "Parser-305-6.7.6";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedNamedParameterBeforeEllipsis = "Parser-306-6.7.6.3";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedTypeSpecifier = "Parser-307-6.7";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedCaseLabelOutsideSwitch = "Parser-308-6.8.1-2";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedDefaultLabelOutsideSwitch = "Parser-309-6.8.1-2";
 const std::string Parser::DiagnosticsReporter::ID_of_UnexpectedContinueOutsideLoop = "Parser-310-6.8.6.2-1";
@@ -438,16 +437,6 @@ void Parser::DiagnosticsReporter::ExpectedNamedParameterBeforeEllipsis()
                                      "[[unexpected ellipsis before named parameter]]",
                                      "ISO C requires a named parameter before `...'",
                                      DiagnosticSeverity::Error,
-                                     DiagnosticCategory::Syntax));
-}
-
-void Parser::DiagnosticsReporter::ExpectedTypeSpecifier()
-{
-    diagnoseOrDelayDiagnostic(
-                DiagnosticDescriptor(ID_of_ExpectedTypeSpecifier,
-                                     "[[declaration without type specifier]]",
-                                     "missing type specifier, assume `int'",
-                                     DiagnosticSeverity::Warning,
                                      DiagnosticCategory::Syntax));
 }
 

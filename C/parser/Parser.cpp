@@ -109,6 +109,7 @@ Parser::Parser(SyntaxTree* tree)
     , backtracker_(nullptr)
     , diagReporter_(this)
     , curTkIdx_(1)
+    , isWithinKandRFuncDef_(false)
     , DEPTH_OF_EXPRS_(0)
     , DEPTH_OF_STMTS_(0)
 {

@@ -43,9 +43,21 @@ ParseOptions::ParseOptions(LanguageDialect langDialect,
     setAmbiguityMode(AmbiguityMode::DisambiguateAlgorithmicallyAndHeuristically);
 }
 
+ParseOptions& ParseOptions::withLanguageDialect(LanguageDialect langDialect)
+{
+    langDialect_ = langDialect_;
+    return *this;
+}
+
 const LanguageDialect& ParseOptions::languageDialect() const
 {
     return langDialect_;
+}
+
+ParseOptions& ParseOptions::withLanguageExtensions(LanguageExtensions langExts)
+{
+    langExts_ = langExts;
+    return *this;
 }
 
 const LanguageExtensions& ParseOptions::languageExtensions() const
