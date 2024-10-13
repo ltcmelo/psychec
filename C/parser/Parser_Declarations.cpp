@@ -751,7 +751,6 @@ bool Parser::parseParameterDeclarationListAndOrEllipsis(ParameterSuffixSyntax*& 
                             isWithinKandRFuncDef_ = true;
                             break;
                         default:
-                            isWithinKandRFuncDef_ = false;
                             break;
                     }
                     break;
@@ -776,8 +775,10 @@ bool Parser::parseParameterDeclarationListAndOrEllipsis(ParameterSuffixSyntax*& 
             break;
 
         default:
-            if (!parseParameterDeclarationList(paramDecltorSfx->decls_))
+            if (!parseParameterDeclarationList(paramDecltorSfx->decls_)) {
+                isWithinKandRFuncDef_ = false;
                 return false;
+            }
 
             switch (peek().kind()) {
                 case SyntaxKind::CommaToken:
@@ -794,6 +795,8 @@ bool Parser::parseParameterDeclarationListAndOrEllipsis(ParameterSuffixSyntax*& 
             }
             break;
     }
+
+    isWithinKandRFuncDef_ = false;
 
     return true;
 }
