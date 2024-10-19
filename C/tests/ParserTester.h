@@ -75,7 +75,8 @@ public:
 
         Expressions:
             + 1000-1099 -> identifiers, constants, and string-literals
-            + 1100-1199 -> parenthesized expression
+            + 1100-1198 -> parenthesized expression
+            + 1199-1199 -> GNU: labels as values
             + 1200-1249 -> generic selection
             + 1250-1299 -> compound literal
             + 1300-1349 -> (pre/post) increment and decrement
@@ -98,7 +99,8 @@ public:
             + 1990-1999 -> GNU: `__real__' and `__imag__'
 
         Statements:
-            + 2000-2019 -> `goto' and identifier labels
+            + 2000-2018 -> `goto'
+            + 2019-2019 -> GNU: label as values `goto'
             + 2020-2099 -> compound statements
             + 2100-2199 -> expression statements
             + 2200-2299 -> declaration statements (w/ ambiguity)

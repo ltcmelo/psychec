@@ -378,12 +378,12 @@ class PSY_C_API GotoStatementSyntax final : public StatementSyntax
 
 public:
     SyntaxToken gotoKeyword() const { return tokenAtIndex(gotoKwTkIdx_); }
-    SyntaxToken identifierToken() const { return tokenAtIndex(identTkIdx_); }
+    const ExpressionSyntax* expression() const { return expr_; }
     SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
 
 private:
     LexedTokens::IndexType gotoKwTkIdx_ = LexedTokens::invalidIndex();
-    LexedTokens::IndexType identTkIdx_ = LexedTokens::invalidIndex();
+    ExpressionSyntax* expr_ = nullptr;
     LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
 };
 

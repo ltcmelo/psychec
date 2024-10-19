@@ -775,7 +775,7 @@ protected:
     virtual Action visitGotoStatement(const GotoStatementSyntax* node) override
     {
         terminal(node->gotoKeyword(), node);
-        terminal(node->identifierToken(), node);
+        nonterminal(node->expression());
         terminal(node->semicolonToken(), node);
         return Action::Skip;
     }

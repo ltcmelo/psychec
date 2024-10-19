@@ -324,6 +324,8 @@ std::string PSY_C_API to_string(SyntaxKind kind)
             return "BitwiseNotExpression";
         case SyntaxKind::LogicalNotExpression:
             return "LogicalNotExpression";
+        case SyntaxKind::ExtGNU_LabelAddress:
+            return "ExtGNU_LabelAddress";
 
         /* Type trait */
         case SyntaxKind::SizeofExpression:

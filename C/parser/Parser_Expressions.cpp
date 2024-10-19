@@ -864,8 +864,9 @@ bool Parser::parseCompoundLiteral_AtOpenBrace(
                   "assert failure: `{'");
 
     if (tree_->dialect().std() < LanguageDialect::Std::C99
-            && !tree_->parseOptions().languageExtensions().isEnabled_extGNU_CompoundLiterals())
+            && !tree_->parseOptions().languageExtensions().isEnabled_extGNU_CompoundLiterals()) {
         diagReporter_.ExpectedFeature("GNU/C99 compound literals");
+    }
 
     auto compLit = makeNode<CompoundLiteralExpressionSyntax>();
     expr = compLit;
@@ -971,6 +972,15 @@ bool Parser::parseExpressionWithPrecedenceUnary(ExpressionSyntax*& expr)
         case SyntaxKind::Keyword__Alignof:
             return parseTypeTraitExpression_AtFirst(expr, SyntaxKind::AlignofExpression);
 
+        /* GNU labels as values */
+        case SyntaxKind::AmpersandAmpersandToken:
+            if (!tree_->parseOptions().languageExtensions().isEnabled_extGNU_LabelsAsValues())
+                diagReporter_.ExpectedFeature("GNU labels as values");
+            return parsePrefixUnaryExpression_AtFirst(
+                        expr,
+                        SyntaxKind::ExtGNU_LabelAddress,
+                        &Parser::parseExpressionWithPrecedenceCast);
+
         default:
             return parseExpressionWithPrecedencePostfix(expr);
     }
@@ -1006,7 +1016,8 @@ bool Parser::parsePrefixUnaryExpression_AtFirst(
                     || peek().kind() == SyntaxKind::PlusToken
                     || peek().kind() == SyntaxKind::MinusToken
                     || peek().kind() == SyntaxKind::TildeToken
-                    || peek().kind() == SyntaxKind::ExclamationToken,
+                    || peek().kind() == SyntaxKind::ExclamationToken
+                    || peek().kind() == SyntaxKind::AmpersandAmpersandToken,
                   return false,
                   "expected `[', `(', `.', `->', '++', or `--'");
 
@@ -1621,7 +1632,6 @@ bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
             if (peek().kind() == SyntaxKind::ColonToken) {
                 if (!tree_->parseOptions().languageExtensions().isEnabled_extGNU_StatementExpressions())
                     diagReporter_.ExpectedFeature("GNU conditionals");
-
                 condExpr->whenTrueExpr_ = nullptr;
             }
             else {

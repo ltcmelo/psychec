@@ -46,7 +46,8 @@ void ParserTester::case2001()
 void ParserTester::case2002()
 {
     parseStatement("goto x ;",
-                   Expectation().AST( { SyntaxKind::GotoStatement }));
+                   Expectation().AST( { SyntaxKind::GotoStatement,
+                                        SyntaxKind::IdentifierName }));
 }
 
 void ParserTester::case2003()
@@ -137,7 +138,10 @@ void ParserTester::case2018()
 
 void ParserTester::case2019()
 {
-
+    parseStatement("goto * x ;",
+                   Expectation().AST( { SyntaxKind::GotoStatement,
+                                        SyntaxKind::PointerIndirectionExpression,
+                                        SyntaxKind::IdentifierName }));
 }
 
 void ParserTester::case2020()

@@ -45,7 +45,7 @@ ParseOptions::ParseOptions(LanguageDialect langDialect,
 
 ParseOptions& ParseOptions::withLanguageDialect(LanguageDialect langDialect)
 {
-    langDialect_ = langDialect_;
+    langDialect_ = langDialect;
     return *this;
 }
 

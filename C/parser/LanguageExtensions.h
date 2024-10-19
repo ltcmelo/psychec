@@ -77,6 +77,7 @@ public:
         GNU_StatementExpressions,
         GNU_Asm,
         GNU_InternalBuiltins,
+        GNU_LabelsAsValues,
         GNU_AttributeSpecifiersLLVM,
 
         /* Psyche */
@@ -246,6 +247,16 @@ public:
 
     //!@{
     /**
+     * Whether to enable GNU labels as values.
+     *
+     * https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html
+     */
+    LanguageExtensions& enable_extGNU_LabelsAsValues(bool enable);
+    bool isEnabled_extGNU_LabelsAsValues() const;
+    //!@}
+
+    //!@{
+    /**
      * Whether to enable LLVM/Clang extensions of GNU attribute:
      *
      * https://clang.llvm.org/docs/AttributeReference.html#availability
@@ -310,6 +321,7 @@ private:
         std::uint64_t extGNU_DesignatedInitializers_ : 1;
         std::uint64_t extGNU_StatementExpressions_ : 1;
         std::uint64_t extGNU_InternalBuiltins_ : 1;
+        std::uint64_t extGNU_LabelsAsValues_ : 1;
         std::uint64_t extGNU_FunctionNames_ : 1;
         std::uint64_t extGNU_Complex_ : 1;
 
