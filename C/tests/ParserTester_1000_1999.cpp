@@ -802,7 +802,11 @@ void ParserTester::case1195() {}
 void ParserTester::case1196() {}
 void ParserTester::case1197() {}
 void ParserTester::case1198() {}
-void ParserTester::case1199() {}
+
+void ParserTester::case1199()
+{
+    parseExpression("&& x ");
+}
 
 void ParserTester::case1200()
 {

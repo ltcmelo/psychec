@@ -410,6 +410,7 @@ enum class PSY_C_API SyntaxKind : std::uint16_t
     UnaryMinusExpression,
     BitwiseNotExpression,
     LogicalNotExpression,
+    ExtGNU_LabelAddress,
 
     /* Type trait */
     SizeofExpression,

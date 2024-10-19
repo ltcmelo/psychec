@@ -751,12 +751,22 @@ bool Parser::parseGotoStatement_AtFirst(StatementSyntax*& stmt)
     stmt = gotoStmt;
     gotoStmt->gotoKwTkIdx_ = consume();
 
-    if (peek().kind() != SyntaxKind::IdentifierToken) {
-        diagReporter_.ExpectedTokenOfCategoryIdentifier();
-        return ignoreStatement();
-    }
+    switch (peek().kind()) {
+        case SyntaxKind::IdentifierToken:
+            parseIdentifierName(gotoStmt->expr_);
+            break;
 
-    gotoStmt->identTkIdx_ = consume();
+        case SyntaxKind::AsteriskToken:
+            if (tree_->parseOptions().languageExtensions().isEnabled_extGNU_LabelsAsValues()
+                    && parseExpression(gotoStmt->expr_)) {
+                break;
+            }
+            [[fallthrough]];
+
+        default:
+            diagReporter_.ExpectedTokenOfCategoryIdentifier();
+            return ignoreStatement();
+    }
 
     return checkStatementParse(
                 match(SyntaxKind::SemicolonToken, &gotoStmt->semicolonTkIdx_));
