@@ -255,9 +255,9 @@ private:
         FunctionPrototype
     };
 
-    enum class DeclaratorVariety : uint8_t
+    enum class DeclaratorKind : uint8_t
     {
-        Named,
+        Concrete,
         Abstract
     };
 
@@ -290,7 +290,10 @@ private:
     bool parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& decl);
     bool parseDeclaration(
             DeclarationSyntax*& decl,
-            bool (Parser::*parseSpecifiers)(DeclarationSyntax*&, SpecifierListSyntax*&),
+            bool (Parser::*parseSpecifiers)(
+                DeclarationSyntax*&,
+                SpecifierListSyntax*&,
+                DeclarationScope declScope),
             bool (Parser::*parse_AtFollowOfSpecifiers)(DeclarationSyntax*&, const SpecifierListSyntax*),
             DeclarationScope declScope);
     bool parseDeclarationOrFunctionDefinition(DeclarationSyntax*& decl);
@@ -320,8 +323,14 @@ private:
     bool ignoreStatement();
 
     /* Specifiers */
-    bool parseDeclarationSpecifiers(DeclarationSyntax*& decl, SpecifierListSyntax*& specList);
-    bool parseSpecifierQualifierList(DeclarationSyntax*& decl, SpecifierListSyntax*& specList);
+    bool parseDeclarationSpecifiers(
+            DeclarationSyntax*& decl,
+            SpecifierListSyntax*& specList,
+            DeclarationScope declScope);
+    bool parseSpecifierQualifierList(
+            DeclarationSyntax*& decl,
+            SpecifierListSyntax*& specList,
+            DeclarationScope);
     template <class SpecT> void parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec);
     template <class SpecT> void parseTrivialSpecifier_AtFirst(
             SpecifierSyntax*& spec,
@@ -345,21 +354,21 @@ private:
     bool parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr);
     bool parseExtPSY_QuantifiedTypeSpecifier_AtFirst(SpecifierSyntax*& spec);
 
-    IdentifierRole guessRoleOfIdentifier() const;
+    IdentifierRole guessRoleOfIdentifier(DeclarationScope declScope) const;
 
     /* Declarators */
     bool parseAbstractDeclarator(DeclaratorSyntax*& decltor);
     bool parseDeclarator(DeclaratorSyntax*& decltor, DeclarationScope declScope);
     bool parseDeclarator(DeclaratorSyntax*& decltor,
                          DeclarationScope declScope,
-                         DeclaratorVariety decltorVariety);
+                         DeclaratorKind decltorKind);
     bool parseDirectDeclarator(DeclaratorSyntax*& decltor,
                                DeclarationScope declScope,
-                               DeclaratorVariety decltorVariety,
+                               DeclaratorKind decltorKind,
                                SpecifierListSyntax* attrList);
     bool parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
                                      DeclarationScope declScope,
-                                     DeclaratorVariety decltorVariety,
+                                     DeclaratorKind decltorKind,
                                      SpecifierListSyntax* attrList,
                                      DeclaratorSyntax* innerDecltor);
     bool parseTypeQualifiersAndAttributes(SpecifierListSyntax*& specList);

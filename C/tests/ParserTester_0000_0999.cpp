@@ -2347,37 +2347,125 @@ void ParserTester::case0266()
 
 void ParserTester::case0267()
 {
-
+    parse("void x ( int , int [ ] ) ;",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::BasicTypeSpecifier,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::BasicTypeSpecifier,
+                              SyntaxKind::ArrayDeclarator,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::SubscriptSuffix }));
 }
 
 void ParserTester::case0268()
 {
-
+    parse("void x ( int , y [ ] ) ;",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::BasicTypeSpecifier,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::ArrayDeclarator,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::SubscriptSuffix }));
 }
 
 void ParserTester::case0269()
 {
-
+    parse("void x ( int , y ( ) ) ;",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::BasicTypeSpecifier,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ParameterSuffix }));
 }
 
 void ParserTester::case0270()
 {
-
+    parse("void x ( y [ ] ) ;",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::ArrayDeclarator,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::SubscriptSuffix }));
 }
 
 void ParserTester::case0271()
 {
-
+    parse("void x ( y ( ) ) ;",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::VariableAndOrFunctionDeclaration,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ParameterSuffix }));
 }
 
 void ParserTester::case0272()
 {
-
+    parse("void x ( y [ ] )  { }",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::FunctionDefinition,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::ArrayDeclarator,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::SubscriptSuffix,
+                              SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case0273()
 {
-
+    parse("void x ( y ( ) ) { }",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::FunctionDefinition,
+                              SyntaxKind::VoidTypeSpecifier,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::IdentifierDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::ParameterDeclaration,
+                              SyntaxKind::TypedefName,
+                              SyntaxKind::FunctionDeclarator,
+                              SyntaxKind::AbstractDeclarator,
+                              SyntaxKind::ParameterSuffix,
+                              SyntaxKind::CompoundStatement }));
 }
 
 void ParserTester::case0274()
