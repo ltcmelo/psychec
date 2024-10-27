@@ -290,14 +290,16 @@ private:
     bool parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& decl);
     bool parseDeclaration(
             DeclarationSyntax*& decl,
-            bool (Parser::*parseSpecifiers)(
-                DeclarationSyntax*&,
-                SpecifierListSyntax*&,
-                DeclarationScope declScope),
-            bool (Parser::*parse_AtFollowOfSpecifiers)(DeclarationSyntax*&, const SpecifierListSyntax*),
+            bool (Parser::*parse_AtDeclarator)(DeclarationSyntax*&, const SpecifierListSyntax*),
             DeclarationScope declScope);
+    bool parseDeclaration_AtFollowOfSpecifiers(
+            DeclarationSyntax*& decl,
+            SpecifierListSyntax*& specList,
+            bool (Parser::*parse_AtDeclarator)(
+                DeclarationSyntax*&,
+                const SpecifierListSyntax*));
     bool parseDeclarationOrFunctionDefinition(DeclarationSyntax*& decl);
-    bool parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
+    bool parseDeclarationOrFunctionDefinition_AtDeclarator(
             DeclarationSyntax*& decl,
             const SpecifierListSyntax* specList);
     bool parseFunctionDefinition_AtOpenBrace(
@@ -306,7 +308,7 @@ private:
             DeclaratorSyntax*& decltor,
             ExtKR_ParameterDeclarationListSyntax* paramKRList);
     bool parseStructDeclaration(DeclarationSyntax*& decl);
-    bool parseStructDeclaration_AtFollowOfSpecifierQualifierList(
+    bool parseStructDeclaration_AtDeclarator(
             DeclarationSyntax*& decl,
             const SpecifierListSyntax* specList);
     bool parseEnumerator(DeclarationSyntax*& decl);
@@ -329,8 +331,7 @@ private:
             DeclarationScope declScope);
     bool parseSpecifierQualifierList(
             DeclarationSyntax*& decl,
-            SpecifierListSyntax*& specList,
-            DeclarationScope);
+            SpecifierListSyntax*& specList);
     template <class SpecT> void parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec);
     template <class SpecT> void parseTrivialSpecifier_AtFirst(
             SpecifierSyntax*& spec,

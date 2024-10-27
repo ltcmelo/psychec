@@ -178,21 +178,26 @@ bool Parser::parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& dec
 
 bool Parser::parseDeclaration(
         DeclarationSyntax*& decl,
-        bool (Parser::*parseSpecifiers)(
-            DeclarationSyntax*&,
-            SpecifierListSyntax*&,
-            DeclarationScope declScope),
-        bool (Parser::*parse_AtFollowOfSpecifiers)(DeclarationSyntax*&, const SpecifierListSyntax*),
+        bool (Parser::*parse_AtDeclarator)(DeclarationSyntax*&, const SpecifierListSyntax*),
         DeclarationScope declScope)
 {
     SpecifierListSyntax* specList = nullptr;
-    if (!((this)->*(parseSpecifiers))(
-                decl,
-                specList,
-                declScope)) {
+    if (!parseDeclarationSpecifiers(decl, specList, declScope)) {
+        skipTo(SyntaxKind::SemicolonToken);
         return false;
     }
 
+    return parseDeclaration_AtFollowOfSpecifiers(
+                    decl,
+                    specList,
+                    parse_AtDeclarator);
+}
+
+bool Parser::parseDeclaration_AtFollowOfSpecifiers(
+        DeclarationSyntax*& decl,
+        SpecifierListSyntax*& specList,
+        bool (Parser::*parse_AtDeclarator)(DeclarationSyntax*&, const SpecifierListSyntax*))
+{
     if (peek().kind() == SyntaxKind::SemicolonToken) {
         if (decl) {
             auto tagDecl = static_cast<TagDeclarationSyntax*>(decl);
@@ -221,12 +226,7 @@ bool Parser::parseDeclaration(
         }
     }
 
-    if (!specList
-            && declScope == DeclarationScope::Block) {
-        diagReporter_.ExpectedFIRSTofSpecifierQualifier();
-    }
-
-    return ((this)->*(parse_AtFollowOfSpecifiers))(decl, specList);
+    return ((this)->*(parse_AtDeclarator))(decl, specList);
 }
 
 /**
@@ -247,12 +247,11 @@ bool Parser::parseDeclarationOrFunctionDefinition(DeclarationSyntax*& decl)
 {
     return parseDeclaration(
                 decl,
-                &Parser::parseDeclarationSpecifiers,
-                &Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers,
+                &Parser::parseDeclarationOrFunctionDefinition_AtDeclarator,
                 DeclarationScope::File);
 }
 
-bool Parser::parseDeclarationOrFunctionDefinition_AtFollowOfSpecifiers(
+bool Parser::parseDeclarationOrFunctionDefinition_AtDeclarator(
         DeclarationSyntax*& decl,
         const SpecifierListSyntax* specList)
 {
@@ -581,7 +580,7 @@ Parser::IdentifierRole Parser::guessRoleOfIdentifier(DeclarationScope declScope)
     }
 }
 
-bool Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList(
+bool Parser::parseStructDeclaration_AtDeclarator(
         DeclarationSyntax*& decl,
         const SpecifierListSyntax* specList)
 {
@@ -633,29 +632,32 @@ bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
 {
     DBG_THIS_RULE();
 
+    auto extKwTkIdx = peek().kind() == SyntaxKind::Keyword_ExtGNU___extension__
+            ? consume()
+            : LexedTokens::invalidIndex();
+
     switch (peek().kind()) {
         case SyntaxKind::Keyword__Static_assert:
             return parseStaticAssertDeclaration_AtFirst(decl);
 
-        case SyntaxKind::Keyword_ExtGNU___extension__: {
-            auto extKwTkIdx = consume();
-            if (!parseDeclaration(
-                        decl,
-                        &Parser::parseSpecifierQualifierList,
-                        &Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList,
-                        DeclarationScope::Block))
+        default: {
+            SpecifierListSyntax* specList = nullptr;
+            if (!parseSpecifierQualifierList(decl, specList)) {
+                skipTo(SyntaxKind::SemicolonToken);
                 return false;
-            PSY_ASSERT_2(decl, return false);
-            decl->extKwTkIdx_ = extKwTkIdx;
+            }
+            if (!parseDeclaration_AtFollowOfSpecifiers(
+                            decl,
+                            specList,
+                            &Parser::parseStructDeclaration_AtDeclarator)) {
+                return false;
+            }
+            if (extKwTkIdx != LexedTokens::invalidIndex()) {
+                PSY_ASSERT_2(decl, return false);
+                decl->extKwTkIdx_ = extKwTkIdx;
+            }
             return true;
         }
-
-        default:
-            return parseDeclaration(
-                        decl,
-                        &Parser::parseSpecifierQualifierList,
-                        &Parser::parseStructDeclaration_AtFollowOfSpecifierQualifierList,
-                        DeclarationScope::Block);
     }
 }
 
@@ -1205,8 +1207,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
  * \remark 6.7.2.1
  */
 bool Parser::parseSpecifierQualifierList(DeclarationSyntax*& decl,
-                                         SpecifierListSyntax*& specList,
-                                         DeclarationScope)
+                                         SpecifierListSyntax*& specList)
 {
     DBG_THIS_RULE();
 
