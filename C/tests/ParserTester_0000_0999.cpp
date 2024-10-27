@@ -4787,7 +4787,7 @@ void ParserTester::case0677()
 {
     parseStatement("__extension__ for ( ; ; ) { } ",
                    Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                               Parser::DiagnosticsReporter::ID_of_UnexpectedGNUExtensionFlag));
+                                            Parser::DiagnosticsReporter::ID_of_UnexpectedGNUExtensionFlag));
 }
 
 void ParserTester::case0678()
@@ -5431,7 +5431,7 @@ void ParserTester::case0779()
 void ParserTester::case0780()
 {
     parse(R"(
-          asm("nop \n");
+          asm ( " nop \n" );
           )");
 }
 

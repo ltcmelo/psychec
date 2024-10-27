@@ -45,7 +45,7 @@ void Parser::parseTranslationUnit(TranslationUnitSyntax*& unit)
             case SyntaxKind::Keyword_ExtGNU___extension__: {
                 auto extKwTkIdx = consume();
                 if (!parseExternalDeclaration(decl))
-                    break;;
+                    break;
                 PSY_ASSERT_2(decl, break);
                 decl->extKwTkIdx_ = extKwTkIdx;
                 break;
@@ -82,7 +82,7 @@ bool Parser::parseExternalDeclaration(DeclarationSyntax*& decl)
 
     switch (peek().kind()) {
         case SyntaxKind::SemicolonToken:
-            parseIncompleteDeclaration_AtFirst(decl);
+            consume();
             break;
 
         case SyntaxKind::Keyword__Static_assert:
@@ -169,10 +169,11 @@ bool Parser::parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& dec
 
     if (match(SyntaxKind::OpenParenToken, &asmDecl->openParenTkIdx_)
             && parseStringLiteral(asmDecl->strLit_)
-            && match(SyntaxKind::CloseParenToken, &asmDecl->closeParenTkIdx_))
+            && match(SyntaxKind::CloseParenToken, &asmDecl->closeParenTkIdx_)
+            && match(SyntaxKind::SemicolonToken, &asmDecl->semicolonTkIdx_))
         return true;
 
-    skipTo(SyntaxKind::CloseParenToken);
+    skipTo(SyntaxKind::SemicolonToken);
     return false;
 }
 
@@ -203,7 +204,7 @@ bool Parser::parseDeclaration_AtFollowOfSpecifiers(
             auto tagDecl = static_cast<TagDeclarationSyntax*>(decl);
             tagDecl->semicolonTkIdx_ = consume();
         }
-        else
+        else if (specList)
             parseIncompleteDeclaration_AtFirst(decl, specList);
         return true;
     }

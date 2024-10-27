@@ -1024,13 +1024,15 @@ public:
     SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
     const SyntaxNode* stringLiteral() const { return strLit_; }
     SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
+    SyntaxToken semicolonToken() const { return tokenAtIndex(semicolonTkIdx_); }
 
 private:
     LexedTokens::IndexType asmTkIdx_ = LexedTokens::invalidIndex();
     LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
     ExpressionSyntax* strLit_ = nullptr;
     LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
-    AST_CHILD_LST4(asmTkIdx_, openParenTkIdx_, strLit_, closeParenTkIdx_);
+    LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
+    AST_CHILD_LST5(asmTkIdx_, openParenTkIdx_, strLit_, closeParenTkIdx_, semicolonTkIdx_);
 };
 
 /**
