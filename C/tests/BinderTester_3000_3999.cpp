@@ -995,8 +995,17 @@ void BinderTester::case3546(){}
 void BinderTester::case3547(){}
 void BinderTester::case3548(){}
 void BinderTester::case3549(){}
-void BinderTester::case3550(){}
-void BinderTester::case3551(){}
+
+void BinderTester::case3550()
+{
+    bind("__extension__ asm ( \"nop\" ) ;");
+}
+
+void BinderTester::case3551()
+{
+    bind("asm ( \"nop\" ) ;");
+}
+
 void BinderTester::case3552(){}
 void BinderTester::case3553(){}
 void BinderTester::case3554(){}

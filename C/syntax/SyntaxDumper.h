@@ -196,6 +196,7 @@ protected:
         terminal(node->openParenthesisToken(), node);
         nonterminal(node->stringLiteral());
         terminal(node->closeParenthesisToken(), node);
+        terminal(node->semicolonToken(), node);
         return Action::Skip;
     }
 

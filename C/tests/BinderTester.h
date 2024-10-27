@@ -91,7 +91,8 @@ public:
             + 3050-0099 -> enumerations (and enumerators)
             + 3100-3199 -> typedefs
             + 3300-...-> mixed
-            + 3500 -> scope
+            + 3500-3549 -> scope
+            + 3550 -> other
 
         Common
             + 4000-4099 -> combined type specifiers
