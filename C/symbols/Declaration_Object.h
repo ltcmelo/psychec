@@ -104,7 +104,7 @@ protected:
                       ObjectDeclarationKind objDeclK);
 };
 
-std::string PSY_C_API to_string(const ObjectDeclaration* objDecl);
+PSY_C_API std::string to_string(const ObjectDeclaration* objDecl);
 
 } // C
 } // psy

@@ -208,9 +208,9 @@ const BasicType* Compilation::canonicalBasicType(BasicTypeKind basicTyK) const
         case BasicTypeKind::Bool:
             return P->tyBool_.get();
     }
+    PSY_ASSERT_1(false);
+    return P->tyIntU_.get();
 }
-
-
 
 void Compilation::bind() const
 {

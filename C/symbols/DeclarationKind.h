@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <cstdint>
 #include <string>
 
@@ -40,7 +42,7 @@ enum class PSY_C_API DeclarationKind : std::uint8_t
     Type
 };
 
-inline std::string PSY_C_API to_string(DeclarationKind declK)
+inline PSY_C_API std::string to_string(DeclarationKind declK)
 {
     switch (declK) {
         case DeclarationKind::Function:
@@ -50,6 +52,8 @@ inline std::string PSY_C_API to_string(DeclarationKind declK)
         case DeclarationKind::Type:
             return "Type";
     }
+    PSY_ASSERT_1(false);
+    return "<invalid DeclarationKind>";
 }
 
 } // C

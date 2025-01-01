@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <cstdint>
 #include <string>
 
@@ -40,7 +42,7 @@ enum class PSY_C_API TagTypeDeclarationKind : std::uint8_t
     Enum,
 };
 
-inline std::string PSY_C_API to_string(TagTypeDeclarationKind tagTyDeclK)
+inline PSY_C_API std::string to_string(TagTypeDeclarationKind tagTyDeclK)
 {
     switch (tagTyDeclK) {
         case TagTypeDeclarationKind::Struct:
@@ -50,6 +52,8 @@ inline std::string PSY_C_API to_string(TagTypeDeclarationKind tagTyDeclK)
         case TagTypeDeclarationKind::Enum:
             return "Enum";
     }
+    PSY_ASSERT_1(false);
+    return "<invalid TagTypeDeclarationKind>";
 }
 
 } // C

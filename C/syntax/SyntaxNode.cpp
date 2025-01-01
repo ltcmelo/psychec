@@ -134,7 +134,7 @@ namespace C {
 
 extern const char* tokenNames[];
 
-std::string PSY_C_API to_string(SyntaxKind kind)
+PSY_C_API std::string to_string(SyntaxKind kind)
 {
     switch (kind) {
 

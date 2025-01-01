@@ -58,7 +58,7 @@ TagType::TagType(TagTypeKind tagTyK, const Identifier* tag)
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TagType* tagTy)
+PSY_C_API std::string to_string(const TagType* tagTy)
 {
     if (!tagTy)
         return "<TagType is null>";

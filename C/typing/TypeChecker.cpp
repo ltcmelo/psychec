@@ -146,6 +146,8 @@ public:
             case ArithmeticIntegerType::Bool:
                 return maxVal_Bool;
         }
+        PSY_ASSERT_1(false);
+        return 0;
     }
 
 private:

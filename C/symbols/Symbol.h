@@ -78,7 +78,7 @@ protected:
     Symbol& operator=(const Symbol&) = delete;
 };
 
-std::string PSY_C_API to_string(const Symbol* sym);
+PSY_C_API std::string to_string(const Symbol* sym);
 
 } // C
 } // psy

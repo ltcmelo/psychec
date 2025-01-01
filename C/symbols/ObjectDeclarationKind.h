@@ -43,9 +43,9 @@ enum class PSY_C_API ObjectDeclarationKind : std::uint8_t
     Variable
 };
 
-inline std::string PSY_C_API to_string(ObjectDeclarationKind symK)
+inline PSY_C_API std::string to_string(ObjectDeclarationKind objDeclK)
 {
-    switch (symK) {
+    switch (objDeclK) {
         case ObjectDeclarationKind::Enumerator:
             return "Enumerator";
         case ObjectDeclarationKind::Field:
@@ -55,6 +55,8 @@ inline std::string PSY_C_API to_string(ObjectDeclarationKind symK)
         case ObjectDeclarationKind::Variable:
             return "Variable";
     }
+    PSY_ASSERT_1(false);
+    return "<invalid ObjectDeclarationKind>";
 }
 
 } // C

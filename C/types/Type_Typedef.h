@@ -62,7 +62,7 @@ private:
     DECL_PIMPL_SUB(TypedefType)
 };
 
-std::string PSY_C_API to_string(const TypedefType* tydefTy);
+PSY_C_API std::string to_string(const TypedefType* tydefTy);
 
 } // C
 } // psy

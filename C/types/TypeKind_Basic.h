@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <cstdint>
 #include <string>
 
@@ -46,15 +48,15 @@ namespace C {
  */
 enum class PSY_C_API BasicTypeKind : std::uint8_t
 {
-    Char, // char
-    Char_S, // signed char
-    Char_U, // unsigned char
-    Short_S, // short, signed short, short int, or signed short int
-    Short_U, // unsigned short, or unsigned short int
-    Int_S, // int, signed, or signed int
-    Int_U, // unsigned, or unsigned int
-    Long_S, // long, signed long, long int, or signed long int
-    Long_U, // unsigned long, or unsigned long int
+    Char,       // char
+    Char_S,     // signed char
+    Char_U,     // unsigned char
+    Short_S,    // short, signed short, short int, or signed short int
+    Short_U,    // unsigned short, or unsigned short int
+    Int_S,      // int, signed, or signed int
+    Int_U,      // unsigned, or unsigned int
+    Long_S,     // long, signed long, long int, or signed long int
+    Long_U,     // unsigned long, or unsigned long int
     LongLong_S, // long long, signed long long, long long int, or signed long long int
     LongLong_U, // unsigned long long, or unsigned long long int
     Bool,
@@ -66,7 +68,7 @@ enum class PSY_C_API BasicTypeKind : std::uint8_t
     LongDoubleComplex
 };
 
-inline std::string PSY_C_API to_string(BasicTypeKind basicTyK)
+inline PSY_C_API std::string to_string(BasicTypeKind basicTyK)
 {
     switch (basicTyK) {
         case BasicTypeKind::Char:
@@ -106,6 +108,8 @@ inline std::string PSY_C_API to_string(BasicTypeKind basicTyK)
         case BasicTypeKind::LongDoubleComplex:
                 return "long double _Complex";
     }
+    PSY_ASSERT_1(false);
+    return "<invalid BasicTypeKind>";
 }
 
 /**

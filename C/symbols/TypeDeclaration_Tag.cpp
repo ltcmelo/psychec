@@ -63,7 +63,7 @@ const TagType* TagTypeDeclaration::specifiedType() const
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TagTypeDeclaration* tagTyDecl)
+PSY_C_API std::string to_string(const TagTypeDeclaration* tagTyDecl)
 {
     if (!tagTyDecl)
         return "<TagTypeDeclaration is null>";
@@ -75,6 +75,8 @@ std::string PSY_C_API to_string(const TagTypeDeclaration* tagTyDecl)
         case TagTypeDeclarationKind::Enum:
             return to_string(tagTyDecl->asEnum());
     }
+    PSY_ASSERT_1(false);
+    return "<invalid TagTypeDeclaration>";
 }
 
 } // C

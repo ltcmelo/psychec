@@ -38,7 +38,7 @@ TypeKind Type::kind() const
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const Type* ty)
+PSY_C_API std::string to_string(const Type* ty)
 {
     if (!ty)
         return "<Type is null>";
@@ -60,6 +60,8 @@ std::string PSY_C_API to_string(const Type* ty)
         case TypeKind::Qualified:
             return to_string(ty->asQualifiedType());
     }
+    PSY_ASSERT_1(false);
+    return "<invalid Type>";
 }
 
 bool isArithmeticType(const Type* ty)

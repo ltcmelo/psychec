@@ -63,7 +63,7 @@ void TypedefType::setDeclaration(const Typedef* tydef)
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TypedefType* tydefTy)
+PSY_C_API std::string to_string(const TypedefType* tydefTy)
 {
     if (!tydefTy)
         return "<TypedefType is null>";

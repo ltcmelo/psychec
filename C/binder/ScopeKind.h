@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <cstdint>
 #include <string>
 
@@ -43,7 +45,7 @@ enum class PSY_C_API ScopeKind : uint8_t
     Block
 };
 
-inline std::string PSY_C_API to_string(ScopeKind K)
+inline PSY_C_API std::string to_string(ScopeKind K)
 {
     switch (K) {
         case ScopeKind::File:
@@ -55,6 +57,8 @@ inline std::string PSY_C_API to_string(ScopeKind K)
         case ScopeKind::Block:
             return "Block";
     }
+    PSY_ASSERT_1(false);
+    return "<invalid ScopeKind>";
 }
 
 } // C

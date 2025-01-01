@@ -74,7 +74,7 @@ void PointerType::markAsArisingFromFunctionDecay()
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const PointerType* ptrTy)
+PSY_C_API std::string to_string(const PointerType* ptrTy)
 {
     if (!ptrTy)
         return "<PointerType is null>";

@@ -82,7 +82,7 @@ std::vector<SyntaxReference> Declaration::declaringSyntaxReferences() const
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const Declaration* decl)
+PSY_C_API std::string to_string(const Declaration* decl)
 {
     if (!decl)
         return "<Declaration is null>";
@@ -94,6 +94,8 @@ std::string PSY_C_API to_string(const Declaration* decl)
         case DeclarationKind::Type:
             return to_string(decl->asTypeDeclaration());
     }
+    PSY_ASSERT_1(false);
+    return "<invalid Declaration>";
 }
 
 } // C

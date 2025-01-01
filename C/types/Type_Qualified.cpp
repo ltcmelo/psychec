@@ -115,7 +115,7 @@ void QualifiedType::qualifyWithAtomic()
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const QualifiedType* qualTy)
+PSY_C_API std::string to_string(const QualifiedType* qualTy)
 {
     if (!qualTy)
         return "<QualifiedType is null>";

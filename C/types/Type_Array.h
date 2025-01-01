@@ -60,7 +60,7 @@ private:
     DECL_PIMPL_SUB(ArrayType)
 };
 
-std::string PSY_C_API to_string(const ArrayType* arrTy);
+PSY_C_API std::string to_string(const ArrayType* arrTy);
 
 } // C
 } // psy

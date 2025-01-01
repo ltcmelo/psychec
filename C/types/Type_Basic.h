@@ -60,7 +60,7 @@ PSY_INTERNAL:
     void resetBasicTypeKind(BasicTypeKind basicTyK);
 };
 
-std::string PSY_C_API to_string(const BasicType* basicTy);
+PSY_C_API std::string to_string(const BasicType* basicTy);
 
 } // C
 } // psy

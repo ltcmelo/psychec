@@ -96,7 +96,7 @@ protected:
     Declaration& operator=(const Declaration&) = delete;
 };
 
-std::string PSY_C_API to_string(const Declaration* decl);
+PSY_C_API std::string to_string(const Declaration* decl);
 
 } // C
 } // psy

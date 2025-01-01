@@ -83,7 +83,7 @@ private:
     const Type* synonymizedTy_;
 };
 
-std::string PSY_C_API to_string(const Typedef* tydef);
+PSY_C_API std::string to_string(const Typedef* tydef);
 
 } // C
 } // psy

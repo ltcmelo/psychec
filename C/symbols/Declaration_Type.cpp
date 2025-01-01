@@ -42,7 +42,7 @@ TypeDeclarationKind TypeDeclaration::kind() const
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TypeDeclaration* tyDecl)
+PSY_C_API std::string to_string(const TypeDeclaration* tyDecl)
 {
     if (!tyDecl)
         return "<TypeDeclaration is null>";
@@ -52,6 +52,8 @@ std::string PSY_C_API to_string(const TypeDeclaration* tyDecl)
         case TypeDeclarationKind::Typedef:
             return to_string(tyDecl->asTypedef());
     }
+    PSY_ASSERT_1(false);
+    return "<invalid TypeDeclaration>";
 }
 
 } // C

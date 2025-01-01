@@ -111,6 +111,8 @@ std::string to_string(const ObjectDeclaration* objDecl)
         case ObjectDeclarationKind::Variable:
             return to_string(objDecl->asVariable());
     }
+    PSY_ASSERT_1(false);
+    return "<invalid ObjectDeclaration>";
 }
 
 } // C

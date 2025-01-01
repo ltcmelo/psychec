@@ -80,7 +80,7 @@ protected:
     TypeDeclaration(TypeDeclarationImpl* p);
 };
 
-std::string PSY_C_API to_string(const TypeDeclaration* tyDecl);
+PSY_C_API std::string to_string(const TypeDeclaration* tyDecl);
 
 } // C
 } // psy

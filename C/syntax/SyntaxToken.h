@@ -253,12 +253,12 @@ PSY_INTERNAL:
 /**
  * The SyntaxKind \p kind as a \c std::string.
  */
-std::string PSY_C_API to_string(SyntaxKind kind); // Definition in SyntaxNode.cpp
+PSY_C_API std::string to_string(SyntaxKind kind); // Definition in SyntaxNode.cpp
 
 /**
  * The SyntaxToken::Category \p category as a \c std::string.
  */
-std::string PSY_C_API to_string(SyntaxToken::Category category);
+PSY_C_API std::string to_string(SyntaxToken::Category category);
 
 bool operator==(const SyntaxToken& a, const SyntaxToken& b);
 bool operator!=(const SyntaxToken& a, const SyntaxToken& b);

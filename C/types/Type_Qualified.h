@@ -123,7 +123,7 @@ private:
     DECL_PIMPL_SUB(QualifiedType);
 };
 
-std::string PSY_C_API to_string(const QualifiedType* qualTy);
+PSY_C_API std::string to_string(const QualifiedType* qualTy);
 
 } // C
 } // psy

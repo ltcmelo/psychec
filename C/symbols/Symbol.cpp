@@ -48,6 +48,8 @@ std::string to_string(const Symbol* sym)
         case SymbolKind::Declaration:
             return to_string(sym->asDeclaration());
     }
+    PSY_ASSERT_1(false);
+    return "<invalid Symbol>";
 }
 
 } // C

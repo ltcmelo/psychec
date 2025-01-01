@@ -39,7 +39,7 @@ enum class PSY_C_API TypeDeclarationKind : std::uint8_t
     Typedef
 };
 
-inline std::string PSY_C_API to_string(TypeDeclarationKind tyK)
+inline PSY_C_API std::string to_string(TypeDeclarationKind tyK)
 {
     switch (tyK) {
         case TypeDeclarationKind::Tag:

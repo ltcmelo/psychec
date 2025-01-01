@@ -51,7 +51,7 @@ PSY_INTERNAL:
            TagType* tagTy);
 };
 
-std::string PSY_C_API to_string(const Struct* strukt);
+PSY_C_API std::string to_string(const Struct* strukt);
 
 } // C
 } // psy

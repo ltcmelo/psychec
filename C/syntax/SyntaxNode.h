@@ -371,7 +371,7 @@ protected:
 /**
  * The SyntaxKind of a given syntax \p kind as a \c std::string.
  */
-std::string PSY_C_API to_string(SyntaxKind kind);
+PSY_C_API std::string to_string(SyntaxKind kind);
 
 } // C
 } // psy

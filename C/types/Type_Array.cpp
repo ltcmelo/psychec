@@ -54,7 +54,7 @@ void ArrayType::resetElementType(const Type* elemTy) const
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const ArrayType* arrTy)
+PSY_C_API std::string to_string(const ArrayType* arrTy)
 {
     if (!arrTy)
         return "<ArrayType is null>";
