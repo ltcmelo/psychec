@@ -35,22 +35,24 @@ BasicType::BasicType(BasicTypeKind basicTyK)
 
 BasicTypeKind BasicType::kind() const
 {
-    return BasicTypeKind(P->BF_.basicTyK_);
+    return BasicTypeKind(P->F_.basicTyK_);
 }
 
 void BasicType::resetBasicTypeKind(BasicTypeKind basicTyK)
 {
-    P->BF_.basicTyK_ = static_cast<std::uint32_t>(basicTyK);
+    P->F_.basicTyK_ = static_cast<std::uint32_t>(basicTyK);
 }
 
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const BasicType& basicTy)
+PSY_C_API std::string to_string(const BasicType* basicTy)
 {
+    if (!basicTy)
+        return "<BasicType is null>";
     std::ostringstream oss;
     oss << "<BasicType | ";
-    oss << to_string(basicTy.kind());
+    oss << to_string(basicTy->kind());
     oss << ">";
     return oss.str();
 }

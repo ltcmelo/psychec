@@ -547,6 +547,31 @@ public:
     SyntaxToken asmQualifier() const { return tokenAtIndex(specTkIdx_); }
 };
 
+/**
+ * \brief The FunctionDefinitionSyntax class.
+ *
+ * The \a declaration and \a definition of a function.
+ *
+ * \remark 6.9.1
+ */
+class PSY_C_API FunctionDefinitionSyntax final : public DeclarationSyntax
+{
+    AST_NODE_1K(FunctionDefinition, Declaration)
+
+public:
+    const SpecifierListSyntax* specifiers() const { return specs_; }
+    const DeclaratorSyntax* declarator() const { return decltor_; }
+    const ExtKR_ParameterDeclarationListSyntax* extKR_params() const { return extKR_params_; }
+    const CompoundStatementSyntax* body() const { return body_; }
+
+private:
+    SpecifierListSyntax* specs_ = nullptr;
+    DeclaratorSyntax* decltor_ = nullptr;
+    ExtKR_ParameterDeclarationListSyntax* extKR_params_ = nullptr;
+    CompoundStatementSyntax* body_ = nullptr;
+    AST_CHILD_LST4(specs_, decltor_, extKR_params_, body_);
+};
+
 } // C
 } // psy
 

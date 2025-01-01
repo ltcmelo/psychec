@@ -51,7 +51,7 @@ void BinderTester::case4001()
     bind("long int x ;",
          Expectation()
             .declaration(Decl().Object("x", ObjectDeclarationKind::Variable)
-                    .ty_.Basic(BasicTypeKind::Long)));
+                    .ty_.Basic(BasicTypeKind::Long_S)));
 }
 
 void BinderTester::case4002()
@@ -59,7 +59,7 @@ void BinderTester::case4002()
     bind("int long x ;",
          Expectation()
             .declaration(Decl().Object("x", ObjectDeclarationKind::Variable)
-                    .ty_.Basic(BasicTypeKind::Long)));
+                    .ty_.Basic(BasicTypeKind::Long_S)));
 }
 
 void BinderTester::case4003()
@@ -83,7 +83,7 @@ void BinderTester::case4005()
     bind("long long x ;",
          Expectation()
              .declaration(Decl().Object("x", ObjectDeclarationKind::Variable)
-                              .ty_.Basic(BasicTypeKind::LongLong)));
+                              .ty_.Basic(BasicTypeKind::LongLong_S)));
 }
 
 void BinderTester::case4006()
@@ -521,12 +521,64 @@ void BinderTester::case4051()
 
 void BinderTester::case4052()
 {
+    bind("long long long x ;",
+         Expectation()
+         .diagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::LongLong_S)));
 }
 
-void BinderTester::case4053(){}
-void BinderTester::case4054(){}
-void BinderTester::case4055(){}
-void BinderTester::case4056(){}
+void BinderTester::case4053()
+{
+    bind("signed long long long x ;",
+         Expectation()
+         .diagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::LongLong_S)));
+}
+
+void BinderTester::case4054()
+{
+    bind("unsigned long long long x ;",
+         Expectation()
+         .diagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::LongLong_U)));
+}
+
+void BinderTester::case4055()
+{
+    bind("long long signed long x ;",
+         Expectation()
+         .diagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::LongLong_S)));
+}
+
+void BinderTester::case4056()
+{
+    bind("long long unsigned long x ;",
+         Expectation()
+         .diagnostic(
+             Expectation::ErrorOrWarn::Error,
+             Binder::DiagnosticsReporter::ID_InvalidType)
+         .declaration(Decl()
+                      .Object("x", ObjectDeclarationKind::Variable)
+                      .ty_.Basic(BasicTypeKind::LongLong_U)));
+}
+
 void BinderTester::case4057(){}
 void BinderTester::case4058(){}
 void BinderTester::case4059(){}

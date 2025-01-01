@@ -55,6 +55,9 @@ namespace C {
 /**
  * \brief The Scope class.
  *
+ * \note Similar to:
+ * - \c clang::Scope of LLVM/Clang.
+ *
  * \remark 6.2.1
  */
 class PSY_C_API Scope
@@ -79,11 +82,6 @@ public:
     std::vector<const Declaration*> declarations() const;
 
     /**
-     * The \a inner \a scopes of \c this Scope.
-     */
-    const std::vector<const Scope*> innerScopes() const;
-
-    /**
      * The \a outer \a scope of \c this Scope.
      */
     const Scope* outerScope() const;
@@ -94,14 +92,13 @@ PSY_INTERNAL:
 
     Scope(ScopeKind scopeK);
 
-    void encloseScope(std::unique_ptr<Scope> innerScope);
+    void encloseScope(Scope* innerScope);
     void morphFrom_FunctionPrototype_to_Block();
     void addDeclaration(const Declaration*);
 
 private:
     ScopeKind scopeK_;
     Scope* outerScope_;
-    std::vector<std::unique_ptr<Scope>> innerScopes_;
     std::unordered_map<
         std::pair<const Identifier*, NameSpace>,
         const Declaration*> decls_;

@@ -41,12 +41,12 @@ const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofEnumerationC
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofDirectDeclarator = "Parser-202-6.7.6";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofParameterDeclaration = "Parser-203-6.7.6.3";
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofSpecifierQualifier = "Parser-204-6.7.2.1";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDesignatedInitializer = "Parser-205-6.7.9";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator = "Parser-206-6.7.6";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclaratorAndInitializer = "Parser-207";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructOrUnionOrEnum = "Parser-208-6.7.2.1";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructDeclarator = "Parser-209-6.7.2.1-9";
-const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofEnum = "Parser-210-6.7.2.1";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDesignatedInitializer = "Parser-205-6.7.9";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator = "Parser-206-6.7.6";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclaratorAndInitializer = "Parser-207";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfStructOrUnionOrEnum = "Parser-208-6.7.2.1";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfStructDeclarator = "Parser-209-6.7.2.1-9";
+const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfEnum = "Parser-210-6.7.2.1";
 
 /* Detailed */
 const std::string Parser::DiagnosticsReporter::ID_of_ExpectedFieldName = "Parser-300-6.5.2";
@@ -274,9 +274,9 @@ void Parser::DiagnosticsReporter::UnexpectedInitializerOfDeclarator()
                                      DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpectedFOLLOWofDesignatedInitializer()
+void Parser::DiagnosticsReporter::ExpectedFollowOfDesignatedInitializer()
 {
-    diagnoseOrDelayDiagnostic(DiagnosticDescriptor(ID_of_ExpectedFOLLOWofDesignatedInitializer,
+    diagnoseOrDelayDiagnostic(DiagnosticDescriptor(ID_of_ExpectedFollowOfDesignatedInitializer,
                                                    "[[obsolete array designator syntax]]",
                                                    "obsolete array designator without `='",
                                                    DiagnosticSeverity::Warning,
@@ -305,7 +305,7 @@ void Parser::DiagnosticsReporter::UnexpectedPointerInArrayDeclarator()
                                      DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclarator()
+void Parser::DiagnosticsReporter::ExpectedFollowOfDeclarator()
 {
     auto validTkKinds = { SyntaxKind::CommaToken,
                           SyntaxKind::SemicolonToken,
@@ -318,14 +318,14 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclarator()
             + "'";
 
     diagnoseOrDelayDiagnostic(
-                DiagnosticDescriptor(ID_of_ExpectedFOLLOWofDeclarator,
-                                     "[[unexpected FOLLOW of declarator]]",
+                DiagnosticDescriptor(ID_of_ExpectedFollowOfDeclarator,
+                                     "[[unexpected Follow of declarator]]",
                                      s,
                                      DiagnosticSeverity::Error,
                                      DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructDeclarator()
+void Parser::DiagnosticsReporter::ExpectedFollowOfStructDeclarator()
 {
     auto validTkKinds = { SyntaxKind::CommaToken,
                           SyntaxKind::SemicolonToken,
@@ -338,14 +338,14 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructDeclarator()
             + "'";
 
     diagnoseOrDelayDiagnostic(
-                DiagnosticDescriptor(ID_of_ExpectedFOLLOWofStructDeclarator,
-                                     "[[unexpected FOLLOW of field declarator]]",
+                DiagnosticDescriptor(ID_of_ExpectedFollowOfStructDeclarator,
+                                     "[[unexpected Follow of field declarator]]",
                                      s,
                                      DiagnosticSeverity::Error,
                                      DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclaratorAndInitializer()
+void Parser::DiagnosticsReporter::ExpectedFollowOfDeclaratorAndInitializer()
 {
     auto validTkKinds = { SyntaxKind::CommaToken,
                           SyntaxKind::SemicolonToken };
@@ -357,8 +357,8 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofDeclaratorAndInitializer()
             + "'";
 
     diagnoseOrDelayDiagnostic(
-                DiagnosticDescriptor(ID_of_ExpectedFOLLOWofDeclaratorAndInitializer,
-                                     "[[unexpected FOLLOW of initialized declarator]]",
+                DiagnosticDescriptor(ID_of_ExpectedFollowOfDeclaratorAndInitializer,
+                                     "[[unexpected Follow of initialized declarator]]",
                                      s,
                                      DiagnosticSeverity::Error,
                                      DiagnosticCategory::Syntax));
@@ -411,7 +411,7 @@ void Parser::DiagnosticsReporter::ExpectedFIRSTofSpecifierQualifier()
                                      DiagnosticCategory::Syntax));
 }
 
-void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructOrUnionOrEnum()
+void Parser::DiagnosticsReporter::ExpectedFollowOfStructOrUnionOrEnum()
 {
     auto validTkKinds = { SyntaxKind::IdentifierToken,
                           SyntaxKind::OpenBraceToken };
@@ -423,8 +423,8 @@ void Parser::DiagnosticsReporter::ExpectedFOLLOWofStructOrUnionOrEnum()
             + "'";
 
     diagnoseOrDelayDiagnostic(
-                DiagnosticDescriptor(ID_of_ExpectedFOLLOWofStructOrUnionOrEnum,
-                                     "[[unexpected struct-or-union or enum FOLLOW]]",
+                DiagnosticDescriptor(ID_of_ExpectedFollowOfStructOrUnionOrEnum,
+                                     "[[unexpected struct-or-union or enum Follow]]",
                                      s,
                                      DiagnosticSeverity::Error,
                                      DiagnosticCategory::Syntax));

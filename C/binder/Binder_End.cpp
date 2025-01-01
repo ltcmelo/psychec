@@ -41,12 +41,12 @@ using namespace C;
 
 SyntaxVisitor::Action Binder::visitStructOrUnionDeclaration_AtEnd(const StructOrUnionDeclarationSyntax* node)
 {
-    return visitDeclaration_AtEnd_COMMON(node);
+    return visit_AtEnd_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitEnumDeclaration_AtEnd(const EnumDeclarationSyntax* node)
 {
-    return visitDeclaration_AtEnd_COMMON(node);
+    return visit_AtEnd_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtEnd(const TypedefDeclarationSyntax* node)
@@ -71,15 +71,16 @@ SyntaxVisitor::Action Binder::visitFieldDeclaration_AtEnd(const FieldDeclaration
 SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtEnd(const EnumeratorDeclarationSyntax* node)
 {
     popType();
-    return visitDeclaration_AtEnd_COMMON(node);
+    return visit_AtEnd_COMMON(node);
 }
 
 SyntaxVisitor::Action Binder::visitParameterDeclaration_AtEnd(const ParameterDeclarationSyntax* node)
 {
-    return visitDeclaration_AtEnd_COMMON(node);
+    return visit_AtEnd_COMMON(node);
 }
 
-SyntaxVisitor::Action Binder::visitDeclaration_AtEnd_COMMON(const DeclarationSyntax* node)
+template <class NodeT>
+SyntaxVisitor::Action Binder::visit_AtEnd_COMMON(const NodeT* node)
 {
     auto decl = popSymbolAsDeclaration();
     PSY_ASSERT_2(decl, return Action::Quit);
@@ -91,5 +92,34 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtEnd_COMMON(const DeclarationSyn
 
 SyntaxVisitor::Action Binder::visitFunctionDefinition_AtEnd(const FunctionDefinitionSyntax* node)
 {
+    auto decl = popSymbolAsDeclaration();
+    PSY_ASSERT_2(decl, return Action::Quit);
+    DECL_TOP_SCOPE_retQ(scope);
+    scope->addDeclaration(decl);
+
+    popType();
+
+    /*
+     * 6.9.2-10 (C23)
+     * The parameter type list, the attribute specifier sequence of the
+     * declarator that follows the parameter type list, and the compound
+     * statement of the function body form a single block.
+     */
+    pushStashedScope();
+    VALID_TOP(scopes_, return Action::Quit);
+    scope = scopes_.top();
+    scope->morphFrom_FunctionPrototype_to_Block();
+
+    for (auto stmtIt = node->body()->statements(); stmtIt; stmtIt = stmtIt->next)
+        visit(stmtIt->value);
+
+    popScope();
+
     return Action::Skip;
+}
+
+SyntaxVisitor::Action Binder::visitTypeName_AtEnd(const TypeNameSyntax* node)
+{
+    popType();
+    return visit_AtEnd_COMMON(node);
 }

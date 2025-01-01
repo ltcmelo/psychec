@@ -73,14 +73,16 @@ void FunctionType::setParameterType(ParameterTypes::size_type idx, const Type* p
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const FunctionType& funcTy)
+PSY_C_API std::string to_string(const FunctionType* funcTy)
 {
+    if (!funcTy)
+        return "<FunctionType is null>";
     std::ostringstream oss;
-    oss << "<FunctionType |";
-    oss << " return-type:" << to_string(*funcTy.returnType());
-    for (const auto& paramTy : funcTy.parameterTypes()) {
+    oss << "<FunctionType | ";
+    oss << " return-type:" << to_string(funcTy->returnType());
+    for (const auto& paramTy : funcTy->parameterTypes()) {
         oss << " parameter-type:";
-        oss << to_string(*paramTy);
+        oss << to_string(paramTy);
     }
     oss << ">";
     return oss.str();

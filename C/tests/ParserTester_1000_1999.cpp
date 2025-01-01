@@ -1275,7 +1275,8 @@ void ParserTester::case1401()
                                          SyntaxKind::IdentifierName,
                                          SyntaxKind::TypeNameAsTypeReference,
                                          SyntaxKind::TypeName,
-                                         SyntaxKind::TypedefName })
+                                         SyntaxKind::TypedefName,
+                                         SyntaxKind::AbstractDeclarator })
                                  .ambiguity("sizeof ( x ) ( x )"));
 }
 
@@ -1473,7 +1474,8 @@ void ParserTester::case1450()
                                          SyntaxKind::IdentifierName,
                                          SyntaxKind::TypeNameAsTypeReference,
                                          SyntaxKind::TypeName,
-                                         SyntaxKind::TypedefName })
+                                         SyntaxKind::TypedefName,
+                                         SyntaxKind::AbstractDeclarator })
                                  .ambiguity("_Alignof ( x ) ( x )"));
 }
 

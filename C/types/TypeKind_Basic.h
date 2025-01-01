@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <cstdint>
 #include <string>
 
@@ -46,27 +48,27 @@ namespace C {
  */
 enum class PSY_C_API BasicTypeKind : std::uint8_t
 {
-    Char, // char
-    Char_S, // signed char
-    Char_U, // unsigned char
-    Short, Short_S, // short, signed short, short int, or signed short int
-    Short_U, // unsigned short, or unsigned short int
-    Int, Int_S, // int, signed, or signed int
-    Int_U, // unsigned, or unsigned int
-    Long, Long_S, // long, signed long, long int, or signed long int
-    Long_U, // unsigned long, or unsigned long int
-    LongLong, LongLong_S, // long long, signed long long, long long int, or signed long long int
+    Char,       // char
+    Char_S,     // signed char
+    Char_U,     // unsigned char
+    Short_S,    // short, signed short, short int, or signed short int
+    Short_U,    // unsigned short, or unsigned short int
+    Int_S,      // int, signed, or signed int
+    Int_U,      // unsigned, or unsigned int
+    Long_S,     // long, signed long, long int, or signed long int
+    Long_U,     // unsigned long, or unsigned long int
+    LongLong_S, // long long, signed long long, long long int, or signed long long int
     LongLong_U, // unsigned long long, or unsigned long long int
+    Bool,
     Float,
     Double,
     LongDouble,
-    Bool,
     FloatComplex,
     DoubleComplex,
     LongDoubleComplex
 };
 
-inline std::string PSY_C_API to_string(BasicTypeKind basicTyK)
+inline PSY_C_API std::string to_string(BasicTypeKind basicTyK)
 {
     switch (basicTyK) {
         case BasicTypeKind::Char:
@@ -75,44 +77,120 @@ inline std::string PSY_C_API to_string(BasicTypeKind basicTyK)
                 return "signed char";
         case BasicTypeKind::Char_U:
                 return "unsigned char";
-        case BasicTypeKind::Short:
-                return "short";
         case BasicTypeKind::Short_S:
                 return "signed short";
         case BasicTypeKind::Short_U:
                 return "unsigned short";
-        case BasicTypeKind::Int:
-                return "int";
         case BasicTypeKind::Int_S:
                 return "signed int";
         case BasicTypeKind::Int_U:
                 return "unsigned int";
-        case BasicTypeKind::Long:
-                return "long";
         case BasicTypeKind::Long_S:
                 return "signed long";
         case BasicTypeKind::Long_U:
                 return "unsigned long";
-        case BasicTypeKind::LongLong:
-                return "long long";
         case BasicTypeKind::LongLong_S:
                 return "signed long long";
         case BasicTypeKind::LongLong_U:
                 return "unsigned long long";
+        case BasicTypeKind::Bool:
+                return "_Bool";
         case BasicTypeKind::Float:
                 return "float";
         case BasicTypeKind::Double:
                 return "double";
         case BasicTypeKind::LongDouble:
                 return "long double";
-        case BasicTypeKind::Bool:
-                return "_Bool";
         case BasicTypeKind::FloatComplex:
                 return "float _Complex";
         case BasicTypeKind::DoubleComplex:
                 return "double _Complex";
         case BasicTypeKind::LongDoubleComplex:
                 return "long double _Complex";
+    }
+    PSY_ASSERT_1(false);
+    return "<invalid BasicTypeKind>";
+}
+
+/**
+ * \remark 6.2.5-4
+ */
+inline bool PSY_C_API isSignedIntegerTypeKind(const BasicTypeKind& basicTyK)
+{
+    switch (basicTyK) {
+        case BasicTypeKind::Char_S:
+        case BasicTypeKind::Short_S:
+        case BasicTypeKind::Int_S:
+        case BasicTypeKind::Long_S:
+        case BasicTypeKind::LongLong_S:
+            return true;
+        default:
+            return false;
+    }
+}
+
+/**
+ * \remark 6.2.5-6
+ */
+inline bool PSY_C_API isUnsignedIntegerTypeKind(const BasicTypeKind& basicTyK)
+{
+    switch (basicTyK) {
+        case BasicTypeKind::Char_U:
+        case BasicTypeKind::Short_U:
+        case BasicTypeKind::Int_U:
+        case BasicTypeKind::Long_U:
+        case BasicTypeKind::LongLong_U:
+        case BasicTypeKind::Bool:
+            return true;
+        default:
+            return false;
+    }
+}
+
+/**
+ * \remark 6.2.5-17
+ */
+inline bool PSY_C_API isIntegerTypeKind(const BasicTypeKind& basicTyK)
+{
+    switch (basicTyK) {
+        case BasicTypeKind::Char:
+        case BasicTypeKind::Char_U:
+        case BasicTypeKind::Char_S:
+        case BasicTypeKind::Short_S:
+        case BasicTypeKind::Short_U:
+        case BasicTypeKind::Int_U:
+        case BasicTypeKind::Int_S:
+        case BasicTypeKind::Long_U:
+        case BasicTypeKind::Long_S:
+        case BasicTypeKind::LongLong_U:
+        case BasicTypeKind::LongLong_S:
+        case BasicTypeKind::Bool:
+            return true;
+        default:
+            return false;
+    }
+}
+
+inline bool PSY_C_API isRealTypeKind(const BasicTypeKind& basicTyK)
+{
+    switch (basicTyK) {
+        case BasicTypeKind::Char_U:
+        case BasicTypeKind::Char_S:
+        case BasicTypeKind::Short_U:
+        case BasicTypeKind::Short_S:
+        case BasicTypeKind::Int_U:
+        case BasicTypeKind::Int_S:
+        case BasicTypeKind::Long_U:
+        case BasicTypeKind::Long_S:
+        case BasicTypeKind::LongLong_U:
+        case BasicTypeKind::LongLong_S:
+        case BasicTypeKind::Bool:
+        case BasicTypeKind::Float:
+        case BasicTypeKind::Double:
+        case BasicTypeKind::LongDouble:
+            return true;
+        default:
+            return false;
     }
 }
 

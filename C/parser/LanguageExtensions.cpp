@@ -95,7 +95,7 @@ DEFINE_ENABLE_ISENABLED(NULLAsBuiltin)
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(LanguageExtensions::Ext ext)
+PSY_C_API std::string to_string(LanguageExtensions::Ext ext)
 {
     switch (ext) {
         /* C */

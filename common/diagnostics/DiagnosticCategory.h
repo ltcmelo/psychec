@@ -31,7 +31,7 @@ enum class DiagnosticCategory : char
 
     Syntax,
     Binding,
-    Typing,
+    TypeChecking,
 };
 
 std::ostream& operator<<(std::ostream& os, DiagnosticCategory category);

@@ -26,10 +26,10 @@
 using namespace psy;
 using namespace C;
 
-const DeclaratorSyntax* SyntaxUtilities::innermostDeclaratorOrSelf(const DeclaratorSyntax* decltor)
+const DeclaratorSyntax* SyntaxUtilities::fullyStripDeclarator(const DeclaratorSyntax* decltor)
 {
     while (decltor) {
-        const DeclaratorSyntax* innerDecltor = innerDeclaratorOrSelf(decltor);
+        const DeclaratorSyntax* innerDecltor = stripDeclarator(decltor);
         if (innerDecltor == decltor)
             break;
         decltor = innerDecltor;
@@ -37,25 +37,25 @@ const DeclaratorSyntax* SyntaxUtilities::innermostDeclaratorOrSelf(const Declara
     return decltor;
 }
 
-const DeclaratorSyntax* SyntaxUtilities::innerDeclaratorOrSelf(const DeclaratorSyntax* decltor)
+const DeclaratorSyntax* SyntaxUtilities::stripDeclarator(const DeclaratorSyntax* decltor)
 {
     switch (decltor->kind()) {
         case SyntaxKind::PointerDeclarator:
             return decltor->asPointerDeclarator()->innerDeclarator();
-
         case SyntaxKind::ArrayDeclarator:
         case SyntaxKind::FunctionDeclarator:
             return decltor->asArrayOrFunctionDeclarator()->innerDeclarator();
-
         case SyntaxKind::BitfieldDeclarator:
             return decltor->asBitfieldDeclarator()->innerDeclarator();
-
+        case SyntaxKind::ParenthesizedDeclarator:
+            return decltor->asParenthesizedDeclarator()->innerDeclarator();
         default:
             return decltor;
     }
 }
 
-const DeclaratorSyntax* SyntaxUtilities::strippedDeclaratorOrSelf(const DeclaratorSyntax* decltor)
+const DeclaratorSyntax* SyntaxUtilities::unparenthesizeDeclarator(
+        const DeclaratorSyntax* decltor)
 {
     while (decltor && decltor->asParenthesizedDeclarator())
         decltor = decltor->asParenthesizedDeclarator()->innerDeclarator();

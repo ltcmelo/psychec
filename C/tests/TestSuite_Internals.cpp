@@ -400,7 +400,7 @@ bool CVRMatches(const Type* ty, CVR cvr)
     switch (cvr) {
         case CVR::Const:
             if (ty->kind() != TypeKind::Qualified
-                    || !ty->asQualifiedType()->isConstQualified()) {
+                    || !ty->asQualifiedType()->qualifiers().hasConst()) {
                 DETAIL_MISMATCH("missing const");
                 return false;
             }
@@ -408,7 +408,7 @@ bool CVRMatches(const Type* ty, CVR cvr)
 
         case CVR::Volatile:
             if (ty->kind() != TypeKind::Qualified
-                    || !ty->asQualifiedType()->isVolatileQualified()) {
+                    || !ty->asQualifiedType()->qualifiers().hasVolatile()) {
                 DETAIL_MISMATCH("missing volatile");
                 return false;
             }
@@ -416,8 +416,8 @@ bool CVRMatches(const Type* ty, CVR cvr)
 
         case CVR::ConstAndVolatile:
             if (ty->kind() != TypeKind::Qualified
-                    || !ty->asQualifiedType()->isConstQualified()
-                    || !ty->asQualifiedType()->isVolatileQualified()) {
+                    || !ty->asQualifiedType()->qualifiers().hasConst()
+                    || !ty->asQualifiedType()->qualifiers().hasVolatile()) {
                 DETAIL_MISMATCH("missing const volatile");
                 return false;
             }
@@ -425,7 +425,7 @@ bool CVRMatches(const Type* ty, CVR cvr)
 
         case CVR::Restrict:
             if (ty->kind() != TypeKind::Qualified
-                    || !ty->asQualifiedType()->isRestrictQualified()) {
+                    || !ty->asQualifiedType()->qualifiers().hasRestrict()) {
                 DETAIL_MISMATCH("missing restrict");
                 return false;
             }
@@ -433,8 +433,8 @@ bool CVRMatches(const Type* ty, CVR cvr)
 
         case CVR::ConstAndRestrict:
             if (ty->kind() != TypeKind::Qualified
-                    || !ty->asQualifiedType()->isConstQualified()
-                    || !ty->asQualifiedType()->isRestrictQualified()) {
+                    || !ty->asQualifiedType()->qualifiers().hasConst()
+                    || !ty->asQualifiedType()->qualifiers().hasRestrict()) {
                 DETAIL_MISMATCH("missing const restrict");
                 return false;
             }
@@ -442,7 +442,7 @@ bool CVRMatches(const Type* ty, CVR cvr)
 
         case CVR::Atomic:
             if (ty->kind() != TypeKind::Qualified
-                    || !ty->asQualifiedType()->isAtomicQualified()) {
+                    || !ty->asQualifiedType()->qualifiers().hasAtomic()) {
                 DETAIL_MISMATCH("missing _Atomic");
                 return false;
             }
@@ -797,21 +797,21 @@ void InternalsTestSuite::checkSemanticModel(
         std::cout << "\n\t\tmatch! ";
 #endif
 
-        if (X.checkScope_) {
-            auto scope = unit->enclosedScope();
-            PSY_EXPECT_TRUE(scope);
-            while (!X.scopePath_.empty()) {
-                std::size_t idx = X.scopePath_.back();
-                X.scopePath_.pop_back();
-                const auto& innerScopes = scope->innerScopes();
-                PSY_EXPECT_TRUE(innerScopes.size() > idx);
-                scope = innerScopes[idx];
-                PSY_EXPECT_TRUE(scope);
-            }
-            auto sameDecl = scope->searchForDeclaration(decl->identifier(), decl->nameSpace());
-            PSY_EXPECT_TRUE(sameDecl);
-            PSY_EXPECT_TRUE(symbolMatchesBinding(sameDecl, Decl));
-        }
+//        if (X.checkScope_) {
+//            auto scope = semaModel->associatedScope(tree_->translationUnitRoot());
+//            PSY_EXPECT_TRUE(scope);
+//            while (!X.scopePath_.empty()) {
+//                std::size_t idx = X.scopePath_.back();
+//                X.scopePath_.pop_back();
+//                const auto& innerScopes = scope->innerScopes();
+//                PSY_EXPECT_TRUE(innerScopes.size() > idx);
+//                scope = innerScopes[idx];
+//                PSY_EXPECT_TRUE(scope);
+//            }
+//            auto sameDecl = scope->searchForDeclaration(decl->identifier(), decl->nameSpace());
+//            PSY_EXPECT_TRUE(sameDecl);
+//            PSY_EXPECT_TRUE(symbolMatchesBinding(sameDecl, Decl));
+//        }
     }
 }
 

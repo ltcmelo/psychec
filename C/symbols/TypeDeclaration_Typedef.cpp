@@ -44,6 +44,7 @@ Typedef::Typedef(const Symbol* containingSym,
                                   tydefTy))
     , synonymizedTy_(nullptr)
 {
+    tydefTy->setDeclaration(this);
 }
 
 std::string Typedef::toDisplayString() const
@@ -81,12 +82,14 @@ const Type* Typedef::retypeableType() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Typedef& tydef)
+std::string to_string(const Typedef* tydef)
 {
+    if (!tydef)
+        return "<Typedef is null>";
     std::ostringstream oss;
     oss << "<Typedef |";
-    oss << " defined-type:" << to_string(*tydef.definedType());
-    oss << " synonymized-type:" << to_string(*tydef.synonymizedType());
+    oss << " defined-type:" << to_string(tydef->definedType());
+    oss << " synonymized-type:" << to_string(tydef->synonymizedType());
     oss << ">";
     return oss.str();
 }

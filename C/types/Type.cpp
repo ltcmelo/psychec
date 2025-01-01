@@ -21,6 +21,8 @@
 #include "Type__IMPL__.inc"
 #include "Type_ALL.h"
 
+#include "../common/infra/Assertions.h"
+
 Type::Type(TypeImpl* p)
     : P(p)
 {}
@@ -30,32 +32,84 @@ Type::~Type()
 
 TypeKind Type::kind() const
 {
-    return TypeKind(P->BF_.tyK_);
+    return TypeKind(P->F_.tyK_);
 }
 
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const Type& ty)
+PSY_C_API std::string to_string(const Type* ty)
 {
-    switch (ty.kind()) {
+    if (!ty)
+        return "<Type is null>";
+    switch (ty->kind()) {
         case TypeKind::Array:
-            return to_string(*ty.asArrayType());
+            return to_string(ty->asArrayType());
         case TypeKind::Basic:
-            return to_string(*ty.asBasicType());
+            return to_string(ty->asBasicType());
         case TypeKind::Function:
-            return to_string(*ty.asFunctionType());
+            return to_string(ty->asFunctionType());
         case TypeKind::Pointer:
-            return to_string(*ty.asPointerType());
+            return to_string(ty->asPointerType());
         case TypeKind::Typedef:
-            return to_string(*ty.asTypedefType());
+            return to_string(ty->asTypedefType());
         case TypeKind::Tag:
-            return to_string(*ty.asTagType());
+            return to_string(ty->asTagType());
         case TypeKind::Void:
-            return to_string(*ty.asVoidType());
+            return to_string(ty->asVoidType());
         case TypeKind::Qualified:
-            return to_string(*ty.asQualifiedType());
+            return to_string(ty->asQualifiedType());
     }
+    PSY_ASSERT_1(false);
+    return "<invalid Type>";
+}
+
+bool isArithmeticType(const Type* ty)
+{
+    PSY_ASSERT_2(ty, return false);
+    return ty->kind() == TypeKind::Basic;
+}
+
+bool isRealType(const Type* ty)
+{
+    PSY_ASSERT_2(ty, return false);
+    return ty->kind() == TypeKind::Basic
+            && isRealTypeKind(ty->asBasicType()->kind());
+}
+
+bool isSignedIntegerType(const Type* ty)
+{
+    PSY_ASSERT_2(ty, return false);
+    return ty->kind() == TypeKind::Basic
+            && isSignedIntegerTypeKind(ty->asBasicType()->kind());
+}
+
+bool isUnsignedIntegerType(const Type* ty)
+{
+    PSY_ASSERT_2(ty, return false);
+    return ty->kind() == TypeKind::Basic
+            && isUnsignedIntegerTypeKind(ty->asBasicType()->kind());
+}
+
+bool isIntegerType(const Type* ty)
+{
+    PSY_ASSERT_2(ty, return false);
+    return ty->kind() == TypeKind::Basic
+            && isIntegerTypeKind(ty->asBasicType()->kind());
+}
+
+bool isScalarType(const Type* ty)
+{
+    PSY_ASSERT_2(ty, return false);
+    return isArithmeticType(ty) || ty->kind() == TypeKind::Pointer;
+}
+
+const Type* unqualifyType(const Type* ty)
+{
+    PSY_ASSERT_2(ty, return nullptr);
+    return ty->kind() == TypeKind::Qualified
+            ? ty->asQualifiedType()->unqualifiedType()
+            : ty;
 }
 
 } // C

@@ -43,7 +43,7 @@ enum class PSY_C_API NameSpace : std::uint8_t
     OrdinaryIdentifiers,
 };
 
-inline std::string PSY_C_API to_string(NameSpace ns)
+inline PSY_C_API std::string to_string(NameSpace ns)
 {
     switch (ns) {
         case NameSpace::LabelNames:

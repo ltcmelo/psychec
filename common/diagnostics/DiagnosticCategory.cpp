@@ -33,8 +33,8 @@ std::ostream& operator<<(std::ostream& os, DiagnosticCategory category)
             os << "declaration";
             break;
 
-        case DiagnosticCategory::Typing:
-            os << "typing";
+        case DiagnosticCategory::TypeChecking:
+            os << "type checking";
             break;
 
         case DiagnosticCategory::UNSPECIFIED:

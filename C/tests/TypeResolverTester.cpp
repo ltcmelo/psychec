@@ -196,7 +196,7 @@ x y ( int w ) ;
             .declaration(Decl()
                          .Function("y")
                          .ty_.Basic(BasicTypeKind::Double)
-                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Int_S)
                          .ty_.Derived(TypeKind::Function)));
 }
 
@@ -212,7 +212,7 @@ x y ( int w , double z ) ;
             .declaration(Decl()
                          .Function("y")
                          .ty_.Basic(BasicTypeKind::Double)
-                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Int_S)
                          .ty_.addParam().Basic(BasicTypeKind::Double)
                          .ty_.Derived(TypeKind::Function)));
 }
@@ -229,7 +229,7 @@ x y ( int w , x z ) ;
             .declaration(Decl()
                          .Function("y")
                          .ty_.Basic(BasicTypeKind::Double)
-                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Int_S)
                          .ty_.addParam().Basic(BasicTypeKind::Double)
                          .ty_.Derived(TypeKind::Function)));
 }
@@ -247,7 +247,7 @@ x y ( t w , double z ) ;
             .declaration(Decl()
                          .Function("y")
                          .ty_.Basic(BasicTypeKind::Double)
-                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Int_S)
                          .ty_.addParam().Basic(BasicTypeKind::Double)
                          .ty_.Derived(TypeKind::Function)));
 }
@@ -265,7 +265,7 @@ x y ( t w , x z ) ;
             .declaration(Decl()
                          .Function("y")
                          .ty_.Basic(BasicTypeKind::Double)
-                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Int_S)
                          .ty_.addParam().Basic(BasicTypeKind::Double)
                          .ty_.Derived(TypeKind::Function)));
 }
@@ -283,7 +283,7 @@ const x y ( t w , x z ) ;
             .declaration(Decl()
                          .Function("y")
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)
-                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Int_S)
                          .ty_.addParam().Basic(BasicTypeKind::Double)
                          .ty_.Derived(TypeKind::Function)));
 }
@@ -301,7 +301,7 @@ const x y ( t const w , x z ) ;
             .declaration(Decl()
                          .Function("y")
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)
-                         .ty_.addParam().Basic(BasicTypeKind::Int, CVR::Const)
+                         .ty_.addParam().Basic(BasicTypeKind::Int_S, CVR::Const)
                          .ty_.addParam().Basic(BasicTypeKind::Double)
                          .ty_.Derived(TypeKind::Function)));
 }
@@ -319,7 +319,7 @@ x y ( t * * w , x z ) ;
             .declaration(Decl()
                          .Function("y")
                          .ty_.Basic(BasicTypeKind::Double)
-                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Int_S)
                          .ty_.atParam().Derived(TypeKind::Pointer)
                          .ty_.atParam().Derived(TypeKind::Pointer)
                          .ty_.addParam().Basic(BasicTypeKind::Double)
@@ -339,7 +339,7 @@ x y ( t * * w , x * * z ) ;
             .declaration(Decl()
                          .Function("y")
                          .ty_.Basic(BasicTypeKind::Double)
-                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Int_S)
                          .ty_.atParam().Derived(TypeKind::Pointer)
                          .ty_.atParam().Derived(TypeKind::Pointer)
                          .ty_.addParam().Basic(BasicTypeKind::Double)
@@ -361,7 +361,7 @@ double y ( t w , x z ) ;
             .declaration(Decl()
                          .Function("y")
                          .ty_.Basic(BasicTypeKind::Double)
-                         .ty_.addParam().Basic(BasicTypeKind::Int)
+                         .ty_.addParam().Basic(BasicTypeKind::Int_S)
                          .ty_.addParam().Basic(BasicTypeKind::Double)
                          .ty_.Derived(TypeKind::Function)));
 }

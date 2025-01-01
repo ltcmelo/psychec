@@ -25,11 +25,13 @@
 namespace psy {
 namespace C {
 
+//=================================================================== Syntax
+
+// Tokens
+
 class MemoryPool;
 class SyntaxTree;
 class Compilation;
-
-//=================================================================== Tokens
 
 class SyntaxToken;
 
@@ -42,7 +44,7 @@ class ImaginaryFloatingConstant;
 class CharacterConstant;
 class StringLiteral;
 
-//=================================================================== Nodes
+// Nodes
 
 class SyntaxNode;
 class SyntaxNodeList;
@@ -208,6 +210,11 @@ typedef SyntaxNodePlainList<ExtKR_ParameterDeclarationSyntax*> ExtKR_ParameterDe
 
 //=================================================================== Semantic
 
+class Compilation;
+class SemanticModel;
+class Scope;
+class Block;
+
 //---------//
 // Symbols //
 //---------//
@@ -227,8 +234,6 @@ class Struct;
 class Union;
 class Enum;
 class Typedef;
-class SymbolVisitor;
-template <class PtrT> class SymbolList;
 
 //-------//
 // Types //
@@ -242,13 +247,6 @@ class TypedefType;
 class TagType;
 class VoidType;
 class QualifiedType;
-
-/* Scopes */
-class Scope;
-
-/* Compilation */
-class Compilation;
-class SemanticModel;
 
 } // C
 } // psy

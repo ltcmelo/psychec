@@ -90,10 +90,10 @@ void Binder::popTypesUntilNonDerivedDeclaratorType()
     }
 }
 
-template <class DeclT>
-SyntaxVisitor::Action Binder::visitDeclaration_AtMultipleDeclarators_COMMON(
-        const DeclT* node,
-        Action (Binder::*visit_AtEnd)(const DeclT*))
+template <class NodeT>
+SyntaxVisitor::Action Binder::visit_AtMultipleDeclarators_COMMON(
+        const NodeT* node,
+        Action (Binder::*visit_AtEnd)(const NodeT*))
 {
     for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
         visit(decltorIt->value);
@@ -131,30 +131,31 @@ SyntaxVisitor::Action Binder::visitDeclaration_AtMultipleDeclarators_COMMON(
 SyntaxVisitor::Action Binder::visitTypedefDeclaration_AtDeclarators(
         const TypedefDeclarationSyntax* node)
 {
-    decltorIsOfTydef_ = true;
-    auto action = visitDeclaration_AtMultipleDeclarators_COMMON(
+    F_.inTydefDecltor_ = true;
+    auto action = visit_AtMultipleDeclarators_COMMON(
                 node,
                 &Binder::visitTypedefDeclaration_AtEnd);
-    decltorIsOfTydef_ = false;
+    F_.inTydefDecltor_ = false;
     return action;
 }
 
 SyntaxVisitor::Action Binder::visitVariableAndOrFunctionDeclaration_AtDeclarators(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    return visitDeclaration_AtMultipleDeclarators_COMMON(
+    return visit_AtMultipleDeclarators_COMMON(
                 node,
                 &Binder::visitVariableAndOrFunctionDeclaration_AtEnd);
 }
 
 SyntaxVisitor::Action Binder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
 {
-    return visitDeclaration_AtMultipleDeclarators_COMMON(
+    return visit_AtMultipleDeclarators_COMMON(
                 node,
                 &Binder::visitFieldDeclaration_AtEnd);
 }
 
-SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtDeclarator(const EnumeratorDeclarationSyntax* node)
+SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtDeclarator(
+        const EnumeratorDeclarationSyntax* node)
 {
     bindObjectOrFunctionAndPushSymbol(node);
     nameDeclarationAtTop(identifier(node->identifierToken()));
@@ -162,47 +163,54 @@ SyntaxVisitor::Action Binder::visitEnumeratorDeclaration_AtDeclarator(const Enum
     return visitEnumeratorDeclaration_AtEnd(node);
 }
 
-SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(const ParameterDeclarationSyntax* node)
+template <class NodeT>
+SyntaxVisitor::Action Binder::visit_AtSingleDeclarator_COMMON(
+        const NodeT* node,
+        Action (Binder::*visit_AtEnd)(const NodeT*))
 {
     visit(node->declarator());
     typeDeclarationAtTopWithTypeAtTop();
     popTypesUntilNonDerivedDeclaratorType();
-    return visitParameterDeclaration_AtEnd(node);
+    return ((this)->*visit_AtEnd)(node);
 }
 
-SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(const FunctionDefinitionSyntax* node)
+SyntaxVisitor::Action Binder::visitParameterDeclaration_AtDeclarator(
+        const ParameterDeclarationSyntax* node)
 {
-    visit(node->declarator());
-    typeDeclarationAtTopWithTypeAtTop();
-    popTypesUntilNonDerivedDeclaratorType();
+    return visit_AtSingleDeclarator_COMMON(
+                node,
+                &Binder::visitParameterDeclaration_AtEnd);
+}
 
-    auto decl = popSymbolAsDeclaration();
-    PSY_ASSERT_2(decl, return Action::Quit);
-    DECL_TOP_SCOPE_retQ(scope);
-    scope->addDeclaration(decl);
+SyntaxVisitor::Action Binder::visitFunctionDefinition_AtDeclarator(
+        const FunctionDefinitionSyntax* node)
+{
+    return visit_AtSingleDeclarator_COMMON(
+                node,
+                &Binder::visitFunctionDefinition_AtEnd);
+}
 
-    popType();
-
-    nestStashedScope();
-    scopes_.top()->morphFrom_FunctionPrototype_to_Block();
-    auto body = node->body()->asCompoundStatement();
-    for (auto stmtIt = body->statements(); stmtIt; stmtIt = stmtIt->next)
-        visit(stmtIt->value);
-    unnestScope();
-
-    return Binder::visitFunctionDefinition_AtEnd(node);
+SyntaxVisitor::Action Binder::visitTypeName_AtDeclarator(const TypeNameSyntax* node)
+{
+    return visit_AtSingleDeclarator_COMMON(
+                node,
+                &Binder::visitTypeName_AtEnd);
 }
 
 SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFunctionDeclaratorSyntax* node)
 {
-    for (auto specIt = node->attributes(); specIt; specIt = specIt->next)
-        visit(specIt->value);
+    for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
+        visit(attrIt->value);
 
     switch (node->suffix()->kind()) {
         case SyntaxKind::SubscriptSuffix: {
             DECL_TOP_TY_retQ(ty);
             pushType(makeType<ArrayType>(ty));
-            break;
+            visit(node->innerDeclarator());
+            for (auto attrIt = node->attributes_PostDeclarator(); attrIt; attrIt = attrIt->next)
+                visit(attrIt->value);
+            visit(node->initializer());
+            return Action::Skip;
         }
 
         case SyntaxKind::ParameterSuffix: {
@@ -229,23 +237,24 @@ SyntaxVisitor::Action Binder::visitArrayOrFunctionDeclarator(const ArrayOrFuncti
             auto funcTy = makeType<FunctionType>(ty);
             pushType(funcTy);
             pendingFunTys_.push(funcTy);
-            break;
+
+            visit(node->innerDeclarator());
+            for (auto attrIt = node->attributes_PostDeclarator(); attrIt; attrIt = attrIt->next)
+                visit(attrIt->value);
+            visit(node->initializer());
+
+            pushNewScope(node, ScopeKind::FunctionPrototype, true);
+            visit(node->suffix());
+            popAndStashScope();
+
+            pendingFunTys_.pop();
+
+            return Action::Skip;
         }
 
         default:
             PSY_ASSERT_2(false, return Action::Quit);
     }
-
-    visit(node->innerDeclarator());
-
-    nestNewScope(ScopeKind::FunctionPrototype);
-    visit(node->suffix());
-    unnestAndStashScope();
-
-    if (node->suffix()->kind() == SyntaxKind::ParameterSuffix)
-        pendingFunTys_.pop();
-
-    return Action::Skip;
 }
 
 SyntaxVisitor::Action Binder::visitSubscriptSuffix(const SubscriptSuffixSyntax* node)
@@ -272,8 +281,8 @@ SyntaxVisitor::Action Binder::visitPointerDeclarator(const PointerDeclaratorSynt
 
     for (auto specIt = node->qualifiersAndAttributes(); specIt; specIt = specIt->next)
         visit(specIt->value);
-
     visit(node->innerDeclarator());
+    visit(node->initializer());
 
     return Action::Skip;
 }
@@ -363,9 +372,6 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
             break;
         }
 
-        case ScopeKind::Function:
-            break;
-
         case ScopeKind::FunctionPrototype: {
             DECL_TOP_TY_ret(ty);
             switch (ty->kind()) {
@@ -414,14 +420,36 @@ void Binder::bindObjectOrFunctionAndPushSymbol(const SyntaxNode* node)
 
 SyntaxVisitor::Action Binder::visitIdentifierDeclarator(const IdentifierDeclaratorSyntax* node)
 {
-    if (decltorIsOfTydef_) {
-        auto tydefTy = makeType<TypedefType>(identifier(node->identifierToken()));
-        bindAndPushSymbol<Typedef>(node, tydefTy);
+    for (auto attrIt = node->attributes(); attrIt; attrIt = attrIt->next)
+        visit(attrIt->value);
+
+    if (F_.inTydefDecltor_) {
+        auto ident = identifier(node->identifierToken());
+        auto tydefTy = makeType<TypedefType>(ident);
+        auto decl = bindAndPushSymbol<Typedef>(node, tydefTy);
+
+        if (ident == ptrdiff_t_)
+            semaModel_->set_ptrdiff_t_Typedef(decl);
+        else if (ident == size_t_)
+            semaModel_->set_size_t_Typedef(decl);
+        else if (ident == max_align_t_)
+            semaModel_->set_max_align_t_Typedef(decl);
+        else if (ident == wchar_t_)
+            semaModel_->set_wchar_t_Typedef(decl);
+        else if (ident == char16_t_)
+            semaModel_->set_char16_t_Typedef(decl);
+        else if (ident == char32_t_)
+            semaModel_->set_char32_t_Typedef(decl);
     }
     else {
         bindObjectOrFunctionAndPushSymbol(node);
         nameDeclarationAtTop(identifier(node->identifierToken()));
     }
+
+    for (auto attrIt = node->attributes_PostIdentifier(); attrIt; attrIt = attrIt->next)
+        visit(attrIt->value);
+
+    visit(node->initializer());
 
     return Action::Skip;
 }

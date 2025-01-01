@@ -27,6 +27,11 @@
 using namespace psy;
 using namespace C;
 
+QualifiedType::Qualifiers::Qualifiers()
+    : BD_(0)
+{
+}
+
 struct QualifiedType::QualifiedTypeImpl : TypeImpl
 {
     QualifiedTypeImpl(const Type* unqualTy)
@@ -35,6 +40,7 @@ struct QualifiedType::QualifiedTypeImpl : TypeImpl
     {}
 
     const Type* unqualTy_;
+    Qualifiers qualifiers_;
 };
 
 QualifiedType::QualifiedType(const Type* unqualTy)
@@ -51,54 +57,71 @@ void QualifiedType::resetUnqualifiedType(const Type* unqualTy) const
     P_CAST->unqualTy_ = unqualTy;
 }
 
-bool QualifiedType::isConstQualified() const
+const QualifiedType::Qualifiers QualifiedType::qualifiers() const
 {
-    return P->BF_.const_;
+    return P_CAST->qualifiers_;
 }
 
-bool QualifiedType::isVolatileQualified() const
+bool QualifiedType::Qualifiers::hasConst() const
 {
-    return P->BF_.volatile_;
+    return F_.const_;
 }
 
-bool QualifiedType::isRestrictQualified() const
+bool QualifiedType::Qualifiers::hasVolatile() const
 {
-    return P->BF_.restrict_;
+    return F_.volatile_;
 }
 
-bool QualifiedType::isAtomicQualified() const
+bool QualifiedType::Qualifiers::hasRestrict() const
 {
-    return P->BF_.atomic_;
+    return F_.restrict_;
+}
+
+bool QualifiedType::Qualifiers::hasAtomic() const
+{
+    return F_.atomic_;
+}
+
+bool QualifiedType::Qualifiers::operator==(const QualifiedType::Qualifiers& other) const
+{
+    return BD_ == other.BD_;
+}
+
+bool QualifiedType::Qualifiers::operator!=(const QualifiedType::Qualifiers& other) const
+{
+    return !(BD_ == other.BD_);
 }
 
 void QualifiedType::qualifyWithConst()
 {
-    P->BF_.const_ = 1;
+    P_CAST->qualifiers_.F_.const_ = 1;
 }
 
 void QualifiedType::qualifyWithVolatile()
 {
-    P->BF_.volatile_ = 1;
+    P_CAST->qualifiers_.F_.volatile_ = 1;
 }
 
 void QualifiedType::qualifyWithRestrict()
 {
-    P->BF_.restrict_ = 1;
+    P_CAST->qualifiers_.F_.restrict_ = 1;
 }
 
 void QualifiedType::qualifyWithAtomic()
 {
-    P->BF_.atomic_ = 1;
+    P_CAST->qualifiers_.F_.atomic_ = 1;
 }
 
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const QualifiedType& qualTy)
+PSY_C_API std::string to_string(const QualifiedType* qualTy)
 {
+    if (!qualTy)
+        return "<QualifiedType is null>";
     std::ostringstream oss;
-    oss << "<QualifiedType |";
-    oss << " unqualified-type:" << to_string(*qualTy.unqualifiedType());
+    oss << "<QualifiedType | ";
+    oss << "unqualified-type:" << to_string(qualTy->unqualifiedType());
     oss << ">";
     return oss.str();
 }

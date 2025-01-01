@@ -53,13 +53,15 @@ std::string Struct::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Struct& strukt)
+std::string to_string(const Struct* strukt)
 {
+    if (!strukt)
+        return "<Struct is null>";
     std::ostringstream oss;
     oss << "<Struct |";
-    oss << " type:" << to_string(*strukt.specifiedType());
-    oss << " scope:" << to_string(strukt.enclosingScope()->kind());
-    oss << "  " << strukt.enclosingScope();
+    oss << " type:" << to_string(strukt->specifiedType());
+    oss << " scope:" << to_string(strukt->enclosingScope()->kind());
+    oss << "  " << strukt->enclosingScope();
     oss << ">";
     return oss.str();
 }

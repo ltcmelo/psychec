@@ -50,6 +50,7 @@ public:
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
     PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
+    PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
 
     ArrayType(const Type* elemTy);
 
@@ -59,7 +60,7 @@ private:
     DECL_PIMPL_SUB(ArrayType)
 };
 
-std::string PSY_C_API to_string(const ArrayType& arrTy);
+PSY_C_API std::string to_string(const ArrayType* arrTy);
 
 } // C
 } // psy

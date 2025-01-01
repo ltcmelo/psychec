@@ -25,19 +25,16 @@ using namespace C;
 
 struct Type::TypeImpl
 {
-    TypeImpl(TypeKind tyKind)
-        : BF_all_(0)
+    TypeImpl(TypeKind tyK)
+        : BD_(0)
     {
-        BF_.tyK_ = static_cast<std::uint32_t>(tyKind);
+        F_.tyK_ = static_cast<std::uint32_t>(tyK);
     }
 
-    struct BitFields
+    struct BD
     {
+        // Type
         std::uint32_t tyK_ : 3;
-        std::uint32_t const_ : 1;
-        std::uint32_t volatile_ : 1;
-        std::uint32_t restrict_ : 1;
-        std::uint32_t atomic_ : 1;
 
         // BasicType
         std::uint32_t basicTyK_: 5;
@@ -51,7 +48,7 @@ struct Type::TypeImpl
     };
     union
     {
-        std::uint32_t BF_all_;
-        BitFields BF_;
+        std::uint32_t BD_;
+        BD F_;
     };
 };

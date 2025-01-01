@@ -78,6 +78,8 @@ public:
         GNU_Asm,
         GNU_InternalBuiltins,
         GNU_LabelsAsValues,
+
+        /* LLVM */
         GNU_AttributeSpecifiersLLVM,
 
         /* Psyche */
@@ -342,7 +344,7 @@ private:
     };
 };
 
-std::string PSY_C_API to_string(LanguageExtensions::Ext ext);
+PSY_C_API std::string to_string(LanguageExtensions::Ext ext);
 
 } // C
 } // psy

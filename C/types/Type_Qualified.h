@@ -29,6 +29,9 @@
 namespace psy {
 namespace C {
 
+/**
+ * \brief The QualifiedType class
+ */
 class PSY_C_API QualifiedType final : public Type
 {
 public:
@@ -46,28 +49,66 @@ public:
     const Type* unqualifiedType() const;
 
     /**
-     * Whether \c this Type is \c const qualified.
+     * \brief The Qualifiers class
      */
-    bool isConstQualified() const;
+    class PSY_C_API Qualifiers
+    {
+    public:
+        /**
+         * Whether \c this Qualifiers has the \c const qualifier.
+         */
+        bool hasConst() const;
 
-    /**
-     * Whether \c this Type is \c volatile qualified.
-     */
-    bool isVolatileQualified() const;
+        /**
+         * Whether \c this Qualifiers has the \c volatile qualifier.
+         */
+        bool hasVolatile() const;
 
-    /**
-     * Whether \c this Type is \c restrict qualified.
-     */
-    bool isRestrictQualified() const;
+        /**
+         * Whether \c this Qualifiers has the \c const restrict.
+         */
+        bool hasRestrict() const;
 
-    /**
-     * Whether \c this Type is \c _Atomic qualified.
-     */
-    bool isAtomicQualified() const;
+        /**
+         * Whether \c this Qualifiers has the \c const _Atomic.
+         */
+        bool hasAtomic() const;
+
+        /**
+         * Wether \c this Qualifiers equals the \c other Qualifiers.
+         */
+        bool operator==(const QualifiedType::Qualifiers& other) const;
+
+        /**
+         * Wether \c this Qualifiers doesn't equal the \c other Qualifiers.
+         */
+        bool operator!=(const QualifiedType::Qualifiers& other) const;
+
+    private:
+        PSY_GRANT_INTERNAL_ACCESS(QualifiedType);
+
+        Qualifiers();
+
+        struct BD
+        {
+            std::uint32_t const_ : 1;
+            std::uint32_t volatile_ : 1;
+            std::uint32_t restrict_ : 1;
+            std::uint32_t atomic_ : 1;
+        };
+        union
+        {
+            std::uint32_t BD_;
+            BD F_;
+        };
+    };
+
+    const Qualifiers qualifiers() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
     PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
+    PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
 
     QualifiedType(const Type* unqualTy);
 
@@ -82,7 +123,7 @@ private:
     DECL_PIMPL_SUB(QualifiedType);
 };
 
-std::string PSY_C_API to_string(const QualifiedType& qualTy);
+PSY_C_API std::string to_string(const QualifiedType* qualTy);
 
 } // C
 } // psy

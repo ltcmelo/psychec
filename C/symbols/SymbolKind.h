@@ -44,7 +44,7 @@ enum class PSY_C_API SymbolKind : std::uint8_t
     Declaration,
 };
 
-inline std::string PSY_C_API to_string(SymbolKind kind)
+inline PSY_C_API std::string to_string(SymbolKind kind)
 {
     switch (kind) {
         case SymbolKind::Program:

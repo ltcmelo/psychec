@@ -140,23 +140,23 @@ private:
         void ExpectedFIRSTofDirectDeclarator();
         void ExpectedFIRSTofParameterDeclaration();
         void ExpectedFIRSTofSpecifierQualifier();
-        void ExpectedFOLLOWofDesignatedInitializer();
-        void ExpectedFOLLOWofDeclarator();
-        void ExpectedFOLLOWofStructDeclarator();
-        void ExpectedFOLLOWofDeclaratorAndInitializer();
-        void ExpectedFOLLOWofStructOrUnionOrEnum();
-        void ExpectedFOLLOWofEnum();
+        void ExpectedFollowOfDesignatedInitializer();
+        void ExpectedFollowOfDeclarator();
+        void ExpectedFollowOfStructDeclarator();
+        void ExpectedFollowOfDeclaratorAndInitializer();
+        void ExpectedFollowOfStructOrUnionOrEnum();
+        void ExpectedFollowOfEnum();
         static const std::string ID_of_ExpectedFIRSTofExpression;
         static const std::string ID_of_ExpectedFIRSTofEnumerationConstant;
         static const std::string ID_of_ExpectedFIRSTofDirectDeclarator;
         static const std::string ID_of_ExpectedFIRSTofParameterDeclaration;
         static const std::string ID_of_ExpectedFIRSTofSpecifierQualifier;
-        static const std::string ID_of_ExpectedFOLLOWofDesignatedInitializer;
-        static const std::string ID_of_ExpectedFOLLOWofDeclarator;
-        static const std::string ID_of_ExpectedFOLLOWofStructDeclarator;
-        static const std::string ID_of_ExpectedFOLLOWofDeclaratorAndInitializer;
-        static const std::string ID_of_ExpectedFOLLOWofStructOrUnionOrEnum;
-        static const std::string ID_of_ExpectedFOLLOWofEnum;
+        static const std::string ID_of_ExpectedFollowOfDesignatedInitializer;
+        static const std::string ID_of_ExpectedFollowOfDeclarator;
+        static const std::string ID_of_ExpectedFollowOfStructDeclarator;
+        static const std::string ID_of_ExpectedFollowOfDeclaratorAndInitializer;
+        static const std::string ID_of_ExpectedFollowOfStructOrUnionOrEnum;
+        static const std::string ID_of_ExpectedFollowOfEnum;
 
         /* Detailed */
         void ExpectedFieldName();

@@ -53,11 +53,13 @@ std::string Enum::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Enum& enun)
+std::string to_string(const Enum* enun)
 {
+    if (!enun)
+        return "<Enum is null>";
     std::ostringstream oss;
     oss << "<Enum | ";
-    oss << "type:" << to_string(*enun.specifiedType());
+    oss << "type:" << to_string(enun->specifiedType());
     oss << ">";
     return oss.str();
 }

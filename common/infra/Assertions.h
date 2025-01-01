@@ -37,6 +37,11 @@
         } while (0)
     #define PSY_ASSERT_2(COND_EXPR, STMT) PSY_ASSERT_3(COND_EXPR, STMT, "<empty message>")
     #define PSY_ASSERT_1(COND_EXPR) PSY_ASSERT_3(COND_EXPR, {}, "<empty message>")
+    #define PSY_ASSERT_FAIL \
+        do { \
+                std::cout << "[ASSERT] at " << __FILE__ << ":" << __LINE__ \
+                          << std::endl; \
+        } while (0)
     #define PSY_ASSERT_FAIL_1(STMT) \
         do { \
                 std::cout << "[ASSERT] at " << __FILE__ << ":" << __LINE__ \
@@ -47,6 +52,7 @@
     #define PSY_ASSERT_3(COND_EXPR, STMT, MSG)
     #define PSY_ASSERT_2(COND_EXPR, STMT)
     #define PSY_ASSERT_1(COND_EXPR)
+    #define PSY_ASSERT_FAIL
     #define PSY_ASSERT_FAIL_1(STMT)
 #endif
 

@@ -143,29 +143,34 @@ public:
     const Declaration* declaredDeclaration(const DeclaratorSyntax* node) const;
     //!@}
 
+    const Scope* associatedScope(const TranslationUnitSyntax* node) const;
+    const Scope* associatedScope(const FunctionDefinitionSyntax* node) const;
+    const Scope* associatedScope(const CompoundStatementSyntax* node) const;
+
+    const Typedef* ptrdiff_t_Typedef() const;
+    const Typedef* size_t_Typedef() const;
+    const Typedef* max_align_t_Typedef() const;
+    const Typedef* wchar_t_Typedef() const;
+    const Typedef* char16_t_Typedef() const;
+    const Typedef* char32_t_Typedef() const;
+
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Compilation);
     PSY_GRANT_INTERNAL_ACCESS(Binder);
     PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
+    PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
     PSY_GRANT_INTERNAL_ACCESS(InternalsTestSuite);
 
     SemanticModel(const SyntaxTree* tree, Compilation* compilation);
 
-    TranslationUnit* keepTranslationUnit(
-            const TranslationUnitSyntax* node,
-            std::unique_ptr<TranslationUnit> unitSym);
-    Declaration* keepBinding(
-            const SyntaxNode* node,
-            std::unique_ptr<Declaration> sym);
+    TranslationUnit* keepTranslationUnit(std::unique_ptr<TranslationUnit> unit);
+    Declaration* mapAndKeepDeclaration(const SyntaxNode* node, std::unique_ptr<Declaration> decl);
     Type* keepType(std::unique_ptr<Type> ty);
     void dropType(const Type* ty);
+    Scope* mapAndKeepScope(const SyntaxNode* node, std::unique_ptr<Scope> scope);
 
     Declaration* searchForDecl(
             std::function<bool (const std::unique_ptr<Declaration>&)> pred) const;
-
-    template <class CastT, class OrigT> const CastT* castDecl(
-            const OrigT* origDecl,
-            const CastT* (OrigT::*cast)() const) const;
 
     Function* declaredFunction(const FunctionDefinitionSyntax* node);
     Parameter* declaredParameter(const ParameterDeclarationSyntax* node);
@@ -179,10 +184,18 @@ PSY_INTERNAL:
             VecT&& decls);
     Declaration* declaredDeclaration(const DeclaratorSyntax* node);
 
+    const Scope* associatedScope_CORE(const SyntaxNode* node) const;
+
+    void set_ptrdiff_t_Typedef(const Typedef*);
+    void set_size_t_Typedef(const Typedef*);
+    void set_max_align_t_Typedef(const Typedef*);
+    void set_wchar_t_Typedef(const Typedef*);
+    void set_char16_t_Typedef(const Typedef*);
+    void set_char32_t_Typedef(const Typedef*);
+
 private:
     SemanticModel(const SemanticModel&) = delete;
     SemanticModel& operator=(const SemanticModel&) = delete;
-
     DECL_PIMPL(SemanticModel)
 };
 

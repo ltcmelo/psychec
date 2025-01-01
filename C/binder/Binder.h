@@ -29,6 +29,7 @@
 #include "parser/LexedTokens.h"
 #include "symbols/Symbol_ALL.h"
 #include "syntax/SyntaxVisitor.h"
+#include "syntax/SyntaxNodes.h"
 
 #include "../common/diagnostics/DiagnosticDescriptor.h"
 #include "../common/infra/AccessSpecifiers.h"
@@ -66,10 +67,10 @@ private:
 
     std::stack<Scope*> scopes_;
     Scope* stashedScope_;
-    void nestNewScope(ScopeKind scopeK);
-    void unnestScope();
-    void unnestAndStashScope();
-    void nestStashedScope();
+    void pushNewScope(const SyntaxNode* node, ScopeKind scopeK, bool encloseInOuterScope);
+    void pushStashedScope();
+    void popScope();
+    void popAndStashScope();
 
     using SymContT = std::stack<Symbol*>;
     SymContT syms_;
@@ -91,9 +92,26 @@ private:
     void popTypesUntilNonDerivedDeclaratorType();
     template <class TyT, class... TyTArgs> TyT* makeType(TyTArgs... args);
 
-    bool decltorIsOfTydef_;
-    bool tySpecHasImplicit_int;
-    bool tySpecHasImplicit_double;
+    struct BD
+    {
+        std::uint32_t inTydefDecltor_: 1;
+        std::uint32_t inImplicitIntTySpec_: 1;
+        std::uint32_t inImplicitDoubleTySpec_: 1;
+        std::uint32_t inExplicitSignedOrUnsignedTySpec_: 1;
+    };
+    union {
+        std::uint32_t BD_;
+        BD F_;
+    };
+
+    // Common definitions <stddef.h>
+    const Identifier* ptrdiff_t_;
+    const Identifier* size_t_;
+    const Identifier* max_align_t_;
+    const Identifier* wchar_t_;
+    // Unicode utilities <uchar.h>
+    const Identifier* char16_t_;
+    const Identifier* char32_t_;
 
     struct DiagnosticsReporter
     {
@@ -147,14 +165,6 @@ private:
     Action visitEnumDeclaration_AtSpecifier(const EnumDeclarationSyntax*);
     Action visitEnumDeclaration_AtEnd(const EnumDeclarationSyntax*);
 
-    template <class DeclT> Action visitDeclaration_AtSpecifiers_COMMON(
-            const DeclT* node,
-            Action (Binder::*visit_AtDeclarators)(const DeclT*));
-    template <class DeclT> Action visitDeclaration_AtMultipleDeclarators_COMMON(
-            const DeclT* node,
-            Action (Binder::*visit_AtEnd)(const DeclT*));
-    Action visitDeclaration_AtEnd_COMMON(const DeclarationSyntax*);
-
     virtual Action visitTypedefDeclaration(const TypedefDeclarationSyntax*) override;
     Action visitTypedefDeclaration_AtSpecifier(const TypedefDeclarationSyntax*);
     Action visitTypedefDeclaration_AtDeclarators(const TypedefDeclarationSyntax*);
@@ -192,6 +202,7 @@ private:
     virtual Action visitTagDeclarationAsSpecifier(const TagDeclarationAsSpecifierSyntax*) override;
     virtual Action visitTypedefName(const TypedefNameSyntax*) override;
     virtual Action visitTypeQualifier(const TypeQualifierSyntax*) override;
+    virtual Action visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*) override;
     Action visitIfNotTypeQualifier(const SpecifierSyntax*);
     Action visitIfTypeQualifier(const SpecifierSyntax*);
 
@@ -209,21 +220,29 @@ private:
     // Statements //
     //------------//
     virtual Action visitCompoundStatement(const CompoundStatementSyntax*) override;
-    virtual Action visitLabeledStatement(const LabeledStatementSyntax*) override;
-    virtual Action visitDeclarationStatement(const DeclarationStatementSyntax*) override;
-    virtual Action visitExpressionStatement(const ExpressionStatementSyntax*) override;
-    virtual Action visitIfStatement(const IfStatementSyntax*) override;
-    virtual Action visitSwitchStatement(const SwitchStatementSyntax*) override;
-    virtual Action visitWhileStatement(const WhileStatementSyntax*) override;
-    virtual Action visitDoStatement(const DoStatementSyntax*) override;
-    virtual Action visitForStatement(const ForStatementSyntax*) override;
-    virtual Action visitGotoStatement(const GotoStatementSyntax*) override;
-    virtual Action visitContinueStatement(const ContinueStatementSyntax*) override;
-    virtual Action visitBreakStatement(const BreakStatementSyntax*) override;
-    virtual Action visitReturnStatement(const ReturnStatementSyntax*) override;
-    virtual Action visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax*) override;
-    virtual Action visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax*) override;
-    virtual Action visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax*) override;
+
+    //--------//
+    // Common //
+    //--------//
+    virtual Action visitTypeName(const TypeNameSyntax*) override;
+    Action visitTypeName_AtSpecifier(const TypeNameSyntax*);
+    Action visitTypeName_AtDeclarator(const TypeNameSyntax*);
+    Action visitTypeName_AtEnd(const TypeNameSyntax*);
+
+    template <class NodeT>
+        Action visit_AtSpecifiers_COMMON(
+            const NodeT* node,
+            Action (Binder::*visit_AtDeclarators)(const NodeT*));
+    template <class NodeT>
+        Action visit_AtMultipleDeclarators_COMMON(
+            const NodeT* node,
+            Action (Binder::*visit_AtEnd)(const NodeT*));
+    template <class NodeT>
+        Action visit_AtSingleDeclarator_COMMON(
+            const NodeT* node,
+            Action (Binder::*visit_AtEnd)(const NodeT*));
+    template <class NodeT>
+        Action visit_AtEnd_COMMON(const NodeT*);
 };
 
 template <class SymT, class... SymTArgs>
@@ -233,7 +252,7 @@ SymT* Binder::bindAndPushSymbol(const SyntaxNode* node, SymTArgs... args)
                                        tree_,
                                        scopes_.top(),
                                        std::forward<SymTArgs>(args)...));
-    auto rawSym = static_cast<SymT*>(semaModel_->keepBinding(node, std::move(sym)));
+    auto rawSym = static_cast<SymT*>(semaModel_->mapAndKeepDeclaration(node, std::move(sym)));
     pushSymbol(rawSym);
     return rawSym;
 }

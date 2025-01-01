@@ -34,34 +34,19 @@ class PSY_C_API SyntaxUtilities
 {
 public:
     /**
-     * Return the \a innermost DeclaratorSyntax of the given \p decltor.
-     *
-     * \see innerDeclaratorOrSelf
+     * Fully strip the given \p decltor and return the stripped \c DeclaratorSyntax.
      */
-    static const DeclaratorSyntax* innermostDeclaratorOrSelf(const DeclaratorSyntax* decltor);
+    static const DeclaratorSyntax* fullyStripDeclarator(const DeclaratorSyntax* decltor);
 
     /**
-     * Return the \a inner DeclaratorSyntax of the given \p decltor.
-     *
-     * The declarators with an \a inner declarator are:
-     *   - PointerDeclaratorSyntax;
-     *   - ArrayDeclaratorSyntax;
-     *   - FunctionDeclaratorSyntax;
-     *   - BitfieldDeclaratorSyntax.
-     *
-     * \note
-     * A ParenthesizedDeclarator doesn't have an inner declarator, but it can be stripped.
-     *
-     * \see SyntaxUtilities::strippedDeclaratorOrSelf
+     * Strip the given \p decltor and return the stripped \c DeclaratorSyntax.
      */
-    static const DeclaratorSyntax* innerDeclaratorOrSelf(const DeclaratorSyntax* decltor);
+    static const DeclaratorSyntax* stripDeclarator(const DeclaratorSyntax* decltor);
 
     /**
-     * Return the \a stripped DeclaratorSyntax of the given \p decltor.
-     *
-     * A DeclaratorSyntax is \a stripped when it isn't a ParenthesizedDeclaratorSyntax.
+     * Unparenthesize the given \p decltor and return the unparenthesized \c DeclaratorSyntax.
      */
-    static const DeclaratorSyntax* strippedDeclaratorOrSelf(const DeclaratorSyntax* decltor);
+    static const DeclaratorSyntax* unparenthesizeDeclarator(const DeclaratorSyntax* decltor);
 };
 
 } // C

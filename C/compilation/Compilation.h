@@ -26,6 +26,8 @@
 #include "Fwds.h"
 #include "SyntaxTree.h"
 
+#include "types/TypeKind_Basic.h"
+
 #include "../common/infra/AccessSpecifiers.h"
 #include "../common/infra/Pimpl.h"
 
@@ -52,17 +54,17 @@ public:
     ~Compilation();
 
     /**
-     * Create an empty compilation identified by \p id.
+     * Create an empty Compilation identified by \p id.
      */
     static std::unique_ptr<Compilation> create(const std::string& id);
 
     /**
-     * Add a SyntaxTree to \c this Compilation.
+     * Add SyntaxTree \p tree to \c this Compilation.
      */
     void addSyntaxTree(const SyntaxTree* tree);
 
     /**
-     * Add SyntaxTrees to \c this Compilation.
+     * Add SyntaxTrees \p trees to \c this Compilation.
      */
     void addSyntaxTrees(std::vector<const SyntaxTree*> trees);
 
@@ -72,17 +74,27 @@ public:
     std::vector<const SyntaxTree*> syntaxTrees() const;
 
     /**
-     * Analyze the SyntaxTree \p tree.
+     * Compute the SemanticModel of the given \p tree SyntaxTree.
      *
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.Compilation.GetSemanticModel of Roslyn.
      */
-    const SemanticModel* analyze(const SyntaxTree* tree) const;
+    const SemanticModel* computeSemanticModel(const SyntaxTree* tree) const;
 
     /**
      * The Program in \c this Compilation.
      */
     const Program* program() const;
+
+    /**
+     * The canonical BasicType of \c basicTyK BasicTypeKind.
+     */
+    const BasicType* canonicalBasicType(BasicTypeKind basicTyK) const;
+
+    /**
+     * The canonical VoidType.
+     */
+    const VoidType* canonicalVoidType() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
@@ -90,6 +102,7 @@ PSY_INTERNAL:
     Program* program();
     void bind() const;
     void resolveTypes() const;
+    void typeCheck() const;
     const SemanticModel* semanticModel(const SyntaxTree* tree) const;
 
 private:

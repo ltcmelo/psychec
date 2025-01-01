@@ -46,12 +46,14 @@ std::string Variable::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Variable& var)
+std::string to_string(const Variable* var)
 {
+    if (!var)
+        return "<Variable is null>";
     std::ostringstream oss;
     oss << "<Variable |";
-    oss << " name:" << var.name()->valueText();
-    oss << " type:" << to_string(*var.type());
+    oss << " name:" << var->name()->valueText();
+    oss << " type:" << to_string(var->type());
     oss << ">";
     return oss.str();
 }

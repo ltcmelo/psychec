@@ -123,9 +123,10 @@ protected:
            unsigned int size,
            LexemeKind kind);
 
-    struct BitFields
+    struct BD
     {
         std::uint16_t kind_   : 3;
+        std::uint16_t octal_  : 1;
         std::uint16_t hex_    : 1;
         std::uint16_t l_      : 1;
         std::uint16_t L_      : 1;
@@ -137,12 +138,12 @@ protected:
     };
     union
     {
-        std::uint16_t BF_all_;
-        BitFields BF_;
+        std::uint16_t BD_;
+        BD F_;
     };
 
 private:
-    void checkHexPrefix();
+    void checkHexAndOctalPrefix();
     void checkVariousPrefixesAndSuffixes();
 };
 

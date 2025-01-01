@@ -104,13 +104,13 @@ void Parser::parseIdentifierName_AtFirst(ExpressionSyntax*& expr)
 void Parser::parsePredefinedName_AtFirst(ExpressionSyntax*& expr)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_3(SyntaxFacts::isPredefinedToken(peek().kind()),
+    PSY_ASSERT_3(SyntaxFacts::isPredefinedSyntax(peek()),
                   return,
                   "assert failure: <predefined-name>");
 
     auto predefExpr = makeNode<PredefinedNameSyntax>();
     expr = predefExpr;
-    predefExpr->predefTkIdx_ = consume();
+    predefExpr->identTkIdx_ = consume();
 }
 
 /**
@@ -123,7 +123,7 @@ bool Parser::parseConstant(ExpressionSyntax*& expr, SyntaxKind exprK)
 {
     DBG_THIS_RULE();
 
-    if (!SyntaxFacts::isConstantToken(peek().kind())) {
+    if (!SyntaxFacts::isConstantSyntax(peek())) {
         diagReporter_.ExpectedTokenOfCategoryConstant();
         return false;
     }
@@ -144,7 +144,7 @@ template <class ExprT>
 void Parser::parseConstant_AtFirst(ExpressionSyntax*& expr, SyntaxKind exprK)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_3(SyntaxFacts::isConstantToken(peek().kind()),
+    PSY_ASSERT_3(SyntaxFacts::isConstantSyntax(peek()),
                   return,
                   "assert failure: <constant>");
 
@@ -163,7 +163,7 @@ bool Parser::parseStringLiteral(ExpressionSyntax*& expr)
 {
     DBG_THIS_RULE();
 
-    if (!SyntaxFacts::isStringLiteralToken(peek().kind())) {
+    if (!SyntaxFacts::isStringLiteralSyntax(peek())) {
         diagReporter_.ExpectedTokenOfCategoryStringLiteral();
         return false;
     }
@@ -180,7 +180,7 @@ bool Parser::parseStringLiteral(ExpressionSyntax*& expr)
 void Parser::parseStringLiteral_AtFirst(ExpressionSyntax*& expr)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_3(SyntaxFacts::isStringLiteralToken(peek().kind()),
+    PSY_ASSERT_3(SyntaxFacts::isStringLiteralSyntax(peek()),
                   return,
                   "assert failure: <string-literal>");
 
@@ -192,7 +192,7 @@ void Parser::parseStringLiteral_AtFirst(ExpressionSyntax*& expr)
         (*strLit_cur)->litTkIdx_ = consume();
         strLit_cur = &(*strLit_cur)->adjacent_;
     }
-    while (SyntaxFacts::isStringLiteralToken(peek().kind()));
+    while (SyntaxFacts::isStringLiteralSyntax(peek()));
 
     expr = strLit;
 }
@@ -523,6 +523,10 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
         case SyntaxKind::Keyword___func__:
         case SyntaxKind::Keyword_ExtGNU___FUNCTION__:
         case SyntaxKind::Keyword_ExtGNU___PRETTY_FUNCTION__:
+        case SyntaxKind::Keyword_ExtGNU___printf__:
+        case SyntaxKind::Keyword_ExtGNU___scanf__:
+        case SyntaxKind::Keyword_ExtGNU___strftime__:
+        case SyntaxKind::Keyword_ExtGNU___strfmon__:
             parsePredefinedName_AtFirst(expr);
             break;
 
@@ -667,9 +671,10 @@ bool Parser::parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr)
  \endverbatim
  */
 template <class ExprT>
-bool Parser::parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr,
-                                              SyntaxKind exprK,
-                                              std::function<bool(ExprT*&)> parsePostfix)
+bool Parser::parsePostfixExpression_AtFollowOfPrimary(
+        ExpressionSyntax*& expr,
+        SyntaxKind exprK,
+        std::function<bool(ExprT*&)> parsePostfix)
 {
     DBG_THIS_RULE();
     PSY_ASSERT_3(peek().kind() == SyntaxKind::OpenBracketToken
@@ -1620,8 +1625,9 @@ bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
         if (++CUR_DEPTH_OF_EXPR > MAX_DEPTH_OF_EXPRS)
             throw std::runtime_error("maximum depth of expressions reached");
 
-        auto tkK = peek().kind();
-        auto exprK = SyntaxFacts::NAryExpressionKind(tkK);
+        auto tk = peek();
+        auto tkK = tk.kind();
+        auto exprK = SyntaxFacts::kindOfNAryOperatorSyntax(tk);
         auto oprtrTkIdx = consume();
 
         ConditionalExpressionSyntax* condExpr = nullptr;
@@ -1645,17 +1651,19 @@ bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
              return false;
 
         auto prevPrec = precedenceOf(tkK);
-        tkK = peek().kind();
+        tk = peek();
+        tkK = tk.kind();
         auto precAhead = precedenceOf(tkK);
 
         while ((precAhead > prevPrec
-                        && SyntaxFacts::isNAryOperatorToken(tkK))
+                        && SyntaxFacts::isNAryOperatorSyntax(tk))
                    || (precAhead == prevPrec
                         && isRightAssociative(tkK))) {
             if (!parseNAryExpression_AtOperator(nextExpr, precAhead))
                 return false;
 
-            tkK = peek().kind();
+            tk = peek();
+            tkK = tk.kind();
             precAhead = precedenceOf(tkK);
         }
 
@@ -1673,14 +1681,14 @@ bool Parser::parseNAryExpression_AtOperator(ExpressionSyntax*& baseExpr,
             baseExpr = condExpr;
         }
         else {
-            if (SyntaxFacts::isAssignmentExpression(exprK)) {
+            if (SyntaxFacts::isKindOfAssignmentExpression(exprK)) {
                 baseExpr = fill_LeftOperandInfixOperatorRightOperand_MIXIN(
                                 makeNode<AssignmentExpressionSyntax>(exprK),
                                 baseExpr,
                                 oprtrTkIdx,
                                 nextExpr);
             }
-            else if (SyntaxFacts::isBinaryExpression(exprK)) {
+            else if (SyntaxFacts::isKindOfBinaryExpression(exprK)) {
                 baseExpr = fill_LeftOperandInfixOperatorRightOperand_MIXIN(
                                 makeNode<BinaryExpressionSyntax>(exprK),
                                 baseExpr,

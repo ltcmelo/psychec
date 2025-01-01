@@ -47,33 +47,29 @@ public:
     //!@}
 
     /**
-     * \brief The IntegerConstant::Signedness enumeration.
+     * The RepresentationSuffix alternatives of an IntegerConstant.
+     *
+     * \remark 6.4.4.1-5
      */
-    enum class Signedness : std::uint8_t
+    enum class RepresentationSuffix : std::uint8_t
     {
-        Signed,
-        Unsigned,
+        None,
+        uOrU,
+        lOrL,
+        lOrLAnduOrU,
+        llOrLL,
+        llOrLLAnduOrU
     };
 
     /**
-     * The Signedness of \c this IntegerConstant.
+     * The RepresentationSuffix of \c this IntegerConstant.
      */
-    Signedness signedness() const;
+    RepresentationSuffix representationSuffix() const;
 
     /**
-     * \brief The IntegerConstant::Variant enumeration.
+     * Whether \c this IntegerConstant is \a octal or \a hexadecimal.
      */
-    enum class Variant : std::uint8_t
-    {
-        Int,
-        Long,
-        LongLong
-    };
-
-    /**
-     * The Variant of \c this IntegerConstant.
-     */
-    Variant variant() const;
+    bool isOctalOrHexadecimal() const;
 
     // TODO: Make internal.
     IntegerConstant(const char* chars, unsigned int size);
@@ -94,19 +90,21 @@ public:
     //!@}
 
     /**
-     * \brief The FloatingConstant::Variant enumeration.
+     * The RepresentationSuffix alternatives of a FloatingConstant.
+     *
+     * \remark 6.4.4.1-5
      */
-    enum class Variant : std::uint8_t
+    enum class RepresentationSuffix : std::uint8_t
     {
-        Float,
-        Double,
-        LongDouble
+        None,
+        lOrL,
+        fOrF,
     };
 
     /**
-     * The Variant of \c this FloatingConstant.
+     * The RepresentationSuffix of \c this FloatingConstant.
      */
-    Variant variant() const;
+    RepresentationSuffix representationSuffix() const;
 
     // TODO: Make internal.
     FloatingConstant(const char* chars, unsigned int size);
@@ -127,20 +125,20 @@ public:
     //!@}
 
     /**
-     * \brief The CharacterConstant::Variant enumeration.
+     * \brief The EncodingPrefix alternatives of a CharacterConstant.
      */
-    enum class Variant : std::uint8_t
+    enum class EncodingPrefix : std::uint8_t
     {
-        Plain_u_char,
-        L_wchar_t,
-        u_char16_t,
-        U_char32_t
+        u,
+        U,
+        L,
+        None
     };
 
     /**
-     * The Variant of \c this CharacterConstant.
+     * The EncodingPrefix of \c this CharacterConstant.
      */
-    Variant variant() const;
+    EncodingPrefix encodingPrefix() const;
 
     // TODO: Make internal.
     CharacterConstant(const char* chars, unsigned int size);
@@ -160,35 +158,6 @@ public:
     virtual const ImaginaryIntegerConstant* asImaginaryIntegerConstant() const override { return this; }
     //!@}
 
-    /**
-     * \brief The ImaginaryIntegerConstant::Signedness enumeration.
-     */
-    enum class Signedness : std::uint8_t
-    {
-        Signed,
-        Unsigned,
-    };
-
-    /**
-     * The Signedness of \c this ImaginaryIntegerConstant.
-     */
-    Signedness signedness() const;
-
-    /**
-     * \brief The ImaginaryIntegerConstant::Variant enumeration.
-     */
-    enum class Variant : std::uint8_t
-    {
-        Int,
-        Long,
-        LongLong
-    };
-
-    /**
-     * The Variant of \c this ImaginaryIntegerConstant.
-     */
-    Variant variant() const;
-
     // TODO: Make internal.
     ImaginaryIntegerConstant(const char* chars, unsigned int size);
 };
@@ -206,21 +175,6 @@ public:
     virtual ImaginaryFloatingConstant* asImaginaryFloatingConstant() override { return this; }
     virtual const ImaginaryFloatingConstant* asImaginaryFloatingConstant() const override { return this; }
     //!@}
-
-    /**
-     * \brief The ImaginaryFloatingConstant::Variant enumeration.
-     */
-    enum class Variant : std::uint8_t
-    {
-        Float,
-        Double,
-        LongDouble
-    };
-
-    /**
-     * The Variant of \c this ImaginaryFloatingConstant.
-     */
-    Variant variant() const;
 
     // TODO: Make internal.
     ImaginaryFloatingConstant(const char* chars, unsigned int size);

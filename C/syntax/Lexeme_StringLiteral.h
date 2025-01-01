@@ -38,27 +38,27 @@ class PSY_C_API StringLiteral final : public Lexeme
 public:
     //!@{
     /**
-     * Cast \c this Lexeme as an StringLiteral.
+     * Cast \c this Lexeme as a StringLiteral.
      */
     virtual StringLiteral* asStringLiteral() override { return this; }
     virtual const StringLiteral* asStringLiteral() const override { return this; }
 
     /**
-     * \brief The Variant enumeration.
+     * \brief The EncodingPrefix alternatives of a StringLiteral.
      */
-    enum class Variant : std::uint8_t
+    enum class EncodingPrefix : std::uint8_t
     {
-        Plain_char,
-        L_wchar_t,
-        u8_char,
-        u_char16_t,
-        U_char32_t
+        u8,
+        u,
+        U,
+        L,
+        None
     };
 
     /**
-     * The Variant of \c this StringLiteral.
+     * The EncodingPrefix of \c this StringLiteral.
      */
-    Variant variant() const;
+    EncodingPrefix encodingPrefix() const;
 
     // TODO: Make internal.
     StringLiteral(const char* chars, unsigned int size);

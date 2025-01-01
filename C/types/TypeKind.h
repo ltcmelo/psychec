@@ -24,6 +24,8 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <cstdint>
 #include <string>
 
@@ -46,7 +48,7 @@ enum class PSY_C_API TypeKind : std::uint8_t
     Qualified
 };
 
-inline std::string PSY_C_API to_string(TypeKind tyK)
+inline PSY_C_API std::string to_string(TypeKind tyK)
 {
     switch (tyK) {
         case TypeKind::Array:
@@ -66,6 +68,8 @@ inline std::string PSY_C_API to_string(TypeKind tyK)
         case TypeKind::Qualified:
             return "Qualified";
     }
+    PSY_ASSERT_1(false);
+    return "<invalid TypeKind>";
 }
 
 #endif

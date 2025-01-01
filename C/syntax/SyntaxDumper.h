@@ -55,7 +55,7 @@ namespace C {
 class PSY_C_INTERNAL_API SyntaxDumper : protected SyntaxVisitor
 {
 public:
-    SyntaxDumper(SyntaxTree* tree)
+    SyntaxDumper(const SyntaxTree* tree)
         : SyntaxVisitor(tree)
     {}
 
@@ -470,7 +470,7 @@ protected:
     virtual Action visitPredefinedName(const PredefinedNameSyntax* node) override
     {
         traverseExpression(node);
-        terminal(node->predefinedToken(), node);
+        terminal(node->identifierToken(), node);
         return Action::Skip;
     }
 

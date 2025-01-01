@@ -65,32 +65,19 @@ std::vector<const Declaration*> Scope::declarations() const
     return decls;
 }
 
-const std::vector<const Scope*> Scope::innerScopes() const
-{
-    std::vector<const Scope*> v;
-    v.reserve(innerScopes_.size());
-    std::transform(innerScopes_.begin(),
-                   innerScopes_.end(),
-                   std::back_inserter(v),
-                   [] (const auto& ptr) { return ptr.get(); });
-    return v;
-}
-
 const Scope* Scope::outerScope() const
 {
     return outerScope_;
 }
 
-void Scope::encloseScope(std::unique_ptr<Scope> innerScope)
+void Scope::encloseScope(Scope* innerScope)
 {
     innerScope->outerScope_ = this;
-    innerScopes_.push_back(std::move(innerScope));
 }
 
 void Scope::morphFrom_FunctionPrototype_to_Block()
 {
     PSY_ASSERT_2(scopeK_ == ScopeKind::FunctionPrototype, return);
-
     scopeK_ = ScopeKind::Block;
 }
 

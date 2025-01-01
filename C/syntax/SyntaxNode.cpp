@@ -102,21 +102,17 @@ void SyntaxNode::visitChildren(SyntaxVisitor* visitor) const
             case SyntaxHolder::Variant::Node: {
                 if (!synH.node())
                     continue;
-
                 auto node = const_cast<SyntaxNode*>(synH.node());
                 node->acceptVisitor(visitor);
                 break;
             }
-
             case SyntaxHolder::Variant::NodeList: {
                 if (!synH.nodeList())
                     continue;
-
                 auto nodeL = const_cast<SyntaxNodeList*>(synH.nodeList());
                 nodeL->acceptVisitor(visitor);
                 break;
             }
-
             default:
                 break;
         }
@@ -138,7 +134,7 @@ namespace C {
 
 extern const char* tokenNames[];
 
-std::string PSY_C_API to_string(SyntaxKind kind)
+PSY_C_API std::string to_string(SyntaxKind kind)
 {
     switch (kind) {
 
@@ -389,15 +385,15 @@ std::string PSY_C_API to_string(SyntaxKind kind)
         case SyntaxKind::NotEqualsExpression:
             return "NotEqualsExpression";
         case SyntaxKind::BitwiseANDExpression:
-            return "BitwiseExpression";
+            return "BitwiseANDExpression";
         case SyntaxKind::BitwiseXORExpression:
-            return "ExclusiveOrExpression";
+            return "ExclusiveXORExpression";
         case SyntaxKind::BitwiseORExpression:
-            return "BitwiseOrExpression";
+            return "BitwiseORExpression";
         case SyntaxKind::LogicalANDExpression:
-            return "LogicalAndExpression";
+            return "LogicalANDExpression";
         case SyntaxKind::LogicalORExpression:
-            return "LogicalOrExpression";
+            return "LogicalORExpression";
         case SyntaxKind::ConditionalExpression:
             return "ConditionalExpression";
 

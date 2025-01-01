@@ -41,20 +41,28 @@ public:
     //!@}
 
     /**
-     * The \a typedef-name Idnetifier of \c this TypedefType.
+     * The \a typedef-name Identifier of \c this TypedefType.
      */
     const Identifier* typedefName() const;
 
+    /**
+     * The Typedef \a declaration of \c this TypedefType.
+     */
+    const Typedef* declaration() const;
+
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(Typedef);
 
     TypedefType(const Identifier* typedefName);
+
+    void setDeclaration(const Typedef* tydef);
 
 private:
     DECL_PIMPL_SUB(TypedefType)
 };
 
-std::string PSY_C_API to_string(const TypedefType& tydefTy);
+PSY_C_API std::string to_string(const TypedefType* tydefTy);
 
 } // C
 } // psy

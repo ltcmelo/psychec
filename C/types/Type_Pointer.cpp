@@ -53,32 +53,34 @@ const Type* PointerType::referencedType() const
 
 bool PointerType::arisesFromArrayDecay() const
 {
-    return P->BF_.arrayDecay_;
+    return P->F_.arrayDecay_;
 }
 
 bool PointerType::arisesFromFunctionDecay() const
 {
-    return P->BF_.funcDecay_;
+    return P->F_.funcDecay_;
 }
 
 void PointerType::markAsArisingFromArrayDecay()
 {
-    P->BF_.arrayDecay_ = true;
+    P->F_.arrayDecay_ = true;
 }
 
 void PointerType::markAsArisingFromFunctionDecay()
 {
-    P->BF_.funcDecay_ = true;
+    P->F_.funcDecay_ = true;
 }
 
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const PointerType& ptrTy)
+PSY_C_API std::string to_string(const PointerType* ptrTy)
 {
+    if (!ptrTy)
+        return "<PointerType is null>";
     std::ostringstream oss;
-    oss << "<PointerType |";
-    oss << " referenced-type:" << to_string(*ptrTy.referencedType());
+    oss << "<PointerType | ";
+    oss << " referenced-type:" << to_string(ptrTy->referencedType());
     oss << ">";
     return oss.str();
 }

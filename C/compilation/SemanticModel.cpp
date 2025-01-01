@@ -44,6 +44,12 @@ struct SemanticModel::SemanticModelImpl
         : bindingIsOK_(false) // TODO
         , tree_(tree)
         , compilation_(compilation)
+        , ptrdiff_t_Tydef_(nullptr)
+        , size_t_Tydef_(nullptr)
+        , max_align_t_Tydef_(nullptr)
+        , wchar_t_Tydef_(nullptr)
+        , char16_t_Tydef_(nullptr)
+        , char32_t_Tydef_(nullptr)
     {}
 
     bool bindingIsOK_;
@@ -53,6 +59,13 @@ struct SemanticModel::SemanticModelImpl
     std::vector<std::unique_ptr<Declaration>> decls_;
     std::unordered_map<const Type*, std::unique_ptr<Type>> tys_;
     std::unordered_map<const SyntaxNode*, Declaration*> declsBySyntax_;
+    std::unordered_map<const SyntaxNode*, std::unique_ptr<Scope>> scopesBySyntax_;
+    const Typedef* ptrdiff_t_Tydef_;
+    const Typedef* size_t_Tydef_;
+    const Typedef* max_align_t_Tydef_;
+    const Typedef* wchar_t_Tydef_;
+    const Typedef* char16_t_Tydef_;
+    const Typedef* char32_t_Tydef_;
 };
 
 SemanticModel::SemanticModel(const SyntaxTree* tree, Compilation* compilation)
@@ -78,16 +91,14 @@ const TranslationUnit *SemanticModel::translationUnit() const
     return P->unit_.get();
 }
 
-TranslationUnit* SemanticModel::keepTranslationUnit(
-        const TranslationUnitSyntax* node,
-        std::unique_ptr<TranslationUnit> unit)
+TranslationUnit* SemanticModel::keepTranslationUnit(std::unique_ptr<TranslationUnit> unit)
 {
     PSY_ASSERT_2(!P->unit_.get(), return nullptr);
     P->unit_ = std::move(unit);
     return P->unit_.get();
 }
 
-Declaration* SemanticModel::keepBinding(
+Declaration* SemanticModel::mapAndKeepDeclaration(
         const SyntaxNode* node,
         std::unique_ptr<Declaration> decl)
 {
@@ -110,16 +121,12 @@ void SemanticModel::dropType(const Type* ty)
     P->tys_.erase(ty);
 }
 
-template <class CastT, class OrigT>
-const CastT* SemanticModel::castDecl(const OrigT* origDecl,
-                                     const CastT* (OrigT::*cast)() const) const
+Scope* SemanticModel::mapAndKeepScope(const SyntaxNode* node,
+                                      std::unique_ptr<Scope> scope)
 {
-    auto decl = ((origDecl)->*(cast))();
-    if (!decl) {
-        PSY_ASSERT_1(!P->bindingIsOK_);
-        return nullptr;
-    }
-    return decl;
+    PSY_ASSERT_2(P->scopesBySyntax_.count(node) == 0, return nullptr);
+    P->scopesBySyntax_[node] = std::move(scope);
+    return P->scopesBySyntax_[node].get();
 }
 
 Function* SemanticModel::declaredFunction(const FunctionDefinitionSyntax* node)
@@ -279,9 +286,8 @@ std::vector<const Declaration*> SemanticModel::declaredDeclarations(
 
 Declaration* SemanticModel::declaredDeclaration(const DeclaratorSyntax* node)
 {
-    auto node_P = SyntaxUtilities::strippedDeclaratorOrSelf(node);
-    auto node_PP = SyntaxUtilities::innermostDeclaratorOrSelf(node_P);
-    auto it = P->declsBySyntax_.find(node_PP);
+    node = SyntaxUtilities::fullyStripDeclarator(node);
+    auto it = P->declsBySyntax_.find(node);
     if (it == P->declsBySyntax_.end()) {
         PSY_ASSERT_1(!P->bindingIsOK_);
         return nullptr;
@@ -301,4 +307,85 @@ Declaration* SemanticModel::searchForDecl(
     return it == P->decls_.end()
             ? nullptr
             : it->get();
+}
+
+const Typedef* SemanticModel::ptrdiff_t_Typedef() const
+{
+    return P->ptrdiff_t_Tydef_;
+}
+
+const Typedef* SemanticModel::size_t_Typedef() const
+{
+    return P->size_t_Tydef_;
+}
+
+const Typedef* SemanticModel::max_align_t_Typedef() const
+{
+    return P->max_align_t_Tydef_;
+}
+
+const Typedef* SemanticModel::wchar_t_Typedef() const
+{
+    return P->wchar_t_Tydef_;
+}
+
+const Typedef* SemanticModel::char16_t_Typedef() const
+{
+    return P->char16_t_Tydef_;
+}
+
+const Typedef* SemanticModel::char32_t_Typedef() const
+{
+    return P->char32_t_Tydef_;
+}
+
+void SemanticModel::set_ptrdiff_t_Typedef(const Typedef* decl)
+{
+    P->ptrdiff_t_Tydef_ = decl;
+}
+
+void SemanticModel::set_size_t_Typedef(const Typedef* decl)
+{
+    P->size_t_Tydef_ = decl;
+}
+
+void SemanticModel::set_max_align_t_Typedef(const Typedef* decl)
+{
+    P->max_align_t_Tydef_ = decl;
+}
+
+void SemanticModel::set_wchar_t_Typedef(const Typedef* decl)
+{
+    P->wchar_t_Tydef_ = decl;
+}
+
+void SemanticModel::set_char16_t_Typedef(const Typedef* decl)
+{
+    P->char16_t_Tydef_ = decl;
+}
+
+void SemanticModel::set_char32_t_Typedef(const Typedef* decl)
+{
+    P->char32_t_Tydef_ = decl;
+}
+
+const Scope* SemanticModel::associatedScope(const TranslationUnitSyntax* node) const
+{
+    return associatedScope_CORE(node);
+}
+
+const Scope* SemanticModel::associatedScope(const FunctionDefinitionSyntax* node) const
+{
+    return associatedScope_CORE(node->declarator());
+}
+
+const Scope* SemanticModel::associatedScope(const CompoundStatementSyntax* node) const
+{
+    return associatedScope_CORE(node);
+}
+
+const Scope* SemanticModel::associatedScope_CORE(const SyntaxNode* node) const
+{
+    PSY_ASSERT_2(P->scopesBySyntax_.count(node) == 1, return nullptr);
+    return P->scopesBySyntax_[node].get();
 }
