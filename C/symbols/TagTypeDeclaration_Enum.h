@@ -51,7 +51,7 @@ PSY_INTERNAL:
          TagType* tagTy);
 };
 
-std::string PSY_C_API to_string(const Enum& enun);
+std::string PSY_C_API to_string(const Enum* enun);
 
 } // C
 } // psy

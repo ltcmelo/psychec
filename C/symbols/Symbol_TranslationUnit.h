@@ -51,24 +51,15 @@ public:
      */
     virtual std::string toDisplayString() const override;
 
-    /**
-     * The Scope that \c this TranslationUnit encloses.
-     *
-     * \remark 6.2.1-4
-     */
-    const Scope* enclosedScope() const;
-
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
-
     TranslationUnit(const Program* prog, const SyntaxTree* tree);
 
 private:
-    std::unique_ptr<Scope> enclosedScope_;
     const SyntaxTree* tree_;
 };
 
-std::string PSY_C_API to_string(const TranslationUnit& unit);
+std::string PSY_C_API to_string(const TranslationUnit* unit);
 
 } // C
 } // psy

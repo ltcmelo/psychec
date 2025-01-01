@@ -92,7 +92,7 @@ PSY_INTERNAL:
     virtual const Type* retypeableType() const override;
 };
 
-std::string PSY_C_API to_string(const Function& func);
+std::string PSY_C_API to_string(const Function* func);
 
 } // C
 } // psy

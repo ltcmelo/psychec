@@ -48,12 +48,14 @@ std::string Parameter::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Parameter& parm)
+std::string to_string(const Parameter* param)
 {
+    if (!param)
+        return "<Parameter is null>";
     std::ostringstream oss;
     oss << "<Parameter |";
-    oss << " name:" << parm.name()->valueText();
-    oss << " type:" << to_string(*parm.type());
+    oss << " name:" << param->name()->valueText();
+    oss << " type:" << to_string(param->type());
     oss << ">";
     return oss.str();
 }

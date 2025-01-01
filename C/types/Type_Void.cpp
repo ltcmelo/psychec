@@ -33,11 +33,11 @@ VoidType::VoidType() : Type(new TypeImpl(TypeKind::Void))
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const VoidType& voidTy)
+std::string PSY_C_API to_string(const VoidType* voidTy)
 {
-    std::ostringstream oss;
-    oss << "<VoidType>";
-    return oss.str();
+    if (!voidTy)
+        return "<VoidType is null>";
+    return "<VoidType>";
 }
 
 } // C

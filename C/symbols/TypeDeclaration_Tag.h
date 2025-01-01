@@ -76,7 +76,7 @@ protected:
                        TagTypeDeclarationKind tagTyDeclK);
 };
 
-std::string PSY_C_API to_string(const TagTypeDeclaration& tagTyDecl);
+std::string PSY_C_API to_string(const TagTypeDeclaration* tagTyDecl);
 
 } // C
 } // psy

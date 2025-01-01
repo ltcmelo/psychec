@@ -82,15 +82,17 @@ std::vector<SyntaxReference> Declaration::declaringSyntaxReferences() const
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const Declaration& decl)
+std::string PSY_C_API to_string(const Declaration* decl)
 {
-    switch (decl.kind()) {
+    if (!decl)
+        return "<Declaration is null>";
+    switch (decl->kind()) {
         case DeclarationKind::Function:
-            return to_string(*decl.asFunction());
+            return to_string(decl->asFunction());
         case DeclarationKind::Object:
-            return to_string(*decl.asObjectDeclaration());
+            return to_string(decl->asObjectDeclaration());
         case DeclarationKind::Type:
-            return to_string(*decl.asTypeDeclaration());
+            return to_string(decl->asTypeDeclaration());
     }
 }
 

@@ -52,7 +52,7 @@ public:
     BasicTypeKind kind() const;
 
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Program);
+    PSY_GRANT_INTERNAL_ACCESS(Compilation);
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
     BasicType(BasicTypeKind basicTyK);
@@ -60,7 +60,7 @@ PSY_INTERNAL:
     void resetBasicTypeKind(BasicTypeKind basicTyK);
 };
 
-std::string PSY_C_API to_string(const BasicType& basicTy);
+std::string PSY_C_API to_string(const BasicType* basicTy);
 
 } // C
 } // psy

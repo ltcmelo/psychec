@@ -246,6 +246,10 @@ enum class PSY_C_API SyntaxKind : std::uint16_t
     Keyword_ExtGNU___complex__,
     Keyword_ExtGNU___real__,
     Keyword_ExtGNU___imag__,
+    Keyword_ExtGNU___printf__,
+    Keyword_ExtGNU___scanf__,
+    Keyword_ExtGNU___strftime__,
+    Keyword_ExtGNU___strfmon__,
 
     // --------------------------//
     // --- Translated macros --- //

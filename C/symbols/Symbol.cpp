@@ -36,15 +36,17 @@ const Symbol* Symbol::containingSymbol() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Symbol& sym)
+std::string to_string(const Symbol* sym)
 {
-    switch (sym.kind()) {
+    if (!sym)
+        return "<Symbol is null>";
+    switch (sym->kind()) {
         case SymbolKind::Program:
-            return to_string(*sym.asProgram());
+            return to_string(sym->asProgram());
         case SymbolKind::TranslationUnit:
-            return to_string(*sym.asTranslationUnit());
+            return to_string(sym->asTranslationUnit());
         case SymbolKind::Declaration:
-            return to_string(*sym.asDeclaration());
+            return to_string(sym->asDeclaration());
     }
 }
 

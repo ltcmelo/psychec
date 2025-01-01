@@ -43,7 +43,6 @@ TypeResolver::TypeResolver(SemanticModel* semaModel, const SyntaxTree* tree)
 void TypeResolver::resolveTypes()
 {
     visit(tree_->root());
-
     for (const auto& ty : discardedTys_)
         semaModel_->dropType(ty);
 }
@@ -51,6 +50,7 @@ void TypeResolver::resolveTypes()
 SyntaxVisitor::Action TypeResolver::visitDeclarator_COMMON(const DeclaratorSyntax* node)
 {
     auto decl = semaModel_->declaredDeclaration(node);
+
     if (decl) {
         switch (decl->kind()) {
             case DeclarationKind::Type:
@@ -63,6 +63,9 @@ SyntaxVisitor::Action TypeResolver::visitDeclarator_COMMON(const DeclaratorSynta
                 break;
             }
         }
+    }
+    else {
+        // TODO
     }
 
     return Action::Skip;
@@ -103,7 +106,7 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope) const
         case TypeKind::Basic: {
             auto basicTy = ty->asBasicType();
             auto resolvedTy =
-                semaModel_->compilation()->program()->canonicalBasicType(basicTy->kind());
+                semaModel_->compilation()->canonicalBasicType(basicTy->kind());
             if (resolvedTy != basicTy) {
                 discardedTys_.insert(ty);
                 return resolvedTy;
@@ -113,10 +116,10 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope) const
 
         case TypeKind::Void: {
             auto voidTy = ty->asVoidType();
-            auto resolvedTy = semaModel_->compilation()->program()->canonicalVoidType();
+            auto resolvedTy = semaModel_->compilation()->canonicalVoidType();
             if (resolvedTy != voidTy) {
                 discardedTys_.insert(ty);
-                return voidTy;
+                return resolvedTy;
             }
             break;
         }
@@ -152,24 +155,28 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope) const
         }
 
         case TypeKind::Typedef: {
-            auto tydefName = ty->asTypedefType()->typedefName();
+            auto tydefTy = ty->asTypedefType();
+            if (tydefTy->declaration())
+                return tydefTy->declaration()->synonymizedType();
+            auto tydefName = tydefTy->typedefName();
             auto decl = scope->searchForDeclaration(
-                        tydefName,
-                        NameSpace::OrdinaryIdentifiers);
+                    tydefName,
+                    NameSpace::OrdinaryIdentifiers);
             if (decl) {
                 if (decl->kind() == DeclarationKind::Type) {
                     auto tyDecl = decl->asTypeDeclaration();
-                    PSY_ASSERT_2(tyDecl->kind() == TypeDeclarationKind::Typedef,
-                                 return nullptr);
+                    PSY_ASSERT_2(
+                        tyDecl->kind() == TypeDeclarationKind::Typedef,
+                        return nullptr);
                     auto tydef = tyDecl->asTypedef();
-                    return tydef->synonymizedType();
-                } else {
-                    // report: not a type declaration
+                    auto resolvedTy = tydef->synonymizedType();
+                    discardedTys_.insert(tydefTy);
+                    return resolvedTy;
                 }
+                // report: not a type declaration
             } else {
                 // report: declaration not found
             }
-            //return nullptr;
             return ty;
         }
 

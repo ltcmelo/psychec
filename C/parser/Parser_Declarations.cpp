@@ -268,36 +268,36 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtDeclarator(
 
         InitializerSyntax** init = nullptr;
         if (peek().kind() == SyntaxKind::EqualsToken) {
-            DeclaratorSyntax* stripDecltor = const_cast<DeclaratorSyntax*>(
-                    SyntaxUtilities::strippedDeclaratorOrSelf(decltor));
-            switch (stripDecltor->kind()) {
+            DeclaratorSyntax* unparenDecltor = const_cast<DeclaratorSyntax*>(
+                    SyntaxUtilities::unparenthesizeDeclarator(decltor));
+            switch (unparenDecltor->kind()) {
                 case SyntaxKind::IdentifierDeclarator: {
-                    auto identDecltor = stripDecltor->asIdentifierDeclarator();
+                    auto identDecltor = unparenDecltor->asIdentifierDeclarator();
                     identDecltor->equalsTkIdx_ = consume();
                     init = &identDecltor->init_;
                     break;
                 }
 
                 case SyntaxKind::PointerDeclarator: {
-                    auto ptrDecltor = stripDecltor->asPointerDeclarator();
+                    auto ptrDecltor = unparenDecltor->asPointerDeclarator();
                     ptrDecltor->equalsTkIdx_ = consume();
                     init = &ptrDecltor->init_;
                     break;
                 }
 
                 case SyntaxKind::ArrayDeclarator: {
-                    auto arrDecltor = stripDecltor->asArrayOrFunctionDeclarator();
+                    auto arrDecltor = unparenDecltor->asArrayOrFunctionDeclarator();
                     arrDecltor->equalsTkIdx_ = consume();
                     init = &arrDecltor->init_;
                     break;
                 }
 
                 case SyntaxKind::FunctionDeclarator: {
-                    auto funcDecltor = stripDecltor->asArrayOrFunctionDeclarator();
+                    auto funcDecltor = unparenDecltor->asArrayOrFunctionDeclarator();
                     if (funcDecltor->innerDecltor_) {
-                        auto stripInnerDecltor = const_cast<DeclaratorSyntax*>(
-                                    SyntaxUtilities::strippedDeclaratorOrSelf(funcDecltor->innerDecltor_));
-                        if (stripInnerDecltor->kind() == SyntaxKind::PointerDeclarator) {
+                        auto unparenInnerDecltor = const_cast<DeclaratorSyntax*>(
+                                    SyntaxUtilities::unparenthesizeDeclarator(funcDecltor->innerDecltor_));
+                        if (unparenInnerDecltor->kind() == SyntaxKind::PointerDeclarator) {
                             funcDecltor->equalsTkIdx_ = consume();
                             init = &funcDecltor->init_;
                             break;
@@ -347,7 +347,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtDeclarator(
 
             default: {
                 if (init) {
-                    diagReporter_.ExpectedFOLLOWofDeclaratorAndInitializer();
+                    diagReporter_.ExpectedFollowOfDeclaratorAndInitializer();
                     return false;
                 }
 
@@ -363,7 +363,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtDeclarator(
                 }
                 BT.backtrack();
 
-                diagReporter_.ExpectedFOLLOWofDeclarator();
+                diagReporter_.ExpectedFollowOfDeclarator();
                 return false;
             }
         }
@@ -384,15 +384,14 @@ bool Parser::parseFunctionDefinition_AtOpenBrace(
                   "assert failure: `{'");
 
     const DeclaratorSyntax* prevDecltor = nullptr;
-    const DeclaratorSyntax* outerDecltor =
-            SyntaxUtilities::strippedDeclaratorOrSelf(decltor);
+    const DeclaratorSyntax* outerDecltor = SyntaxUtilities::unparenthesizeDeclarator(decltor);
     while (outerDecltor) {
         const DeclaratorSyntax* innerDecltor =
-                SyntaxUtilities::innerDeclaratorOrSelf(outerDecltor);
+                SyntaxUtilities::stripDeclarator(outerDecltor);
         if (innerDecltor == outerDecltor)
             break;
         prevDecltor = outerDecltor;
-        outerDecltor = SyntaxUtilities::strippedDeclaratorOrSelf(innerDecltor);
+        outerDecltor = SyntaxUtilities::unparenthesizeDeclarator(innerDecltor);
     }
 
     if (prevDecltor
@@ -402,7 +401,11 @@ bool Parser::parseFunctionDefinition_AtOpenBrace(
         funcDef->specs_ = const_cast<SpecifierListSyntax*>(specList);
         funcDef->decltor_ = decltor;
         funcDef->extKR_params_ = paramKRList;
-        parseCompoundStatement_AtFirst(funcDef->body_, StatementContext::None);
+        StatementSyntax* stmt = nullptr;
+        if (!parseCompoundStatement_AtFirst(stmt, StatementContext::None))
+            return false;
+        PSY_ASSERT_2(stmt->kind() == SyntaxKind::CompoundStatement, return false);
+        funcDef->body_ = stmt->asCompoundStatement();
         return true;
     }
 
@@ -610,7 +613,7 @@ bool Parser::parseStructDeclaration_AtDeclarator(
             }
 
             default:
-                diagReporter_.ExpectedFOLLOWofStructDeclarator();
+                diagReporter_.ExpectedFollowOfStructDeclarator();
                 return false;
         }
 
@@ -1371,11 +1374,11 @@ template <class SpecT>
 void Parser::parseTrivialSpecifier_AtFirst(SpecifierSyntax*& spec, SyntaxKind specK)
 {
     DBG_THIS_RULE();
-    PSY_ASSERT_3(SyntaxFacts::isStorageClassToken(peek().kind())
-                        || SyntaxFacts::isBasicTypeSpecifierToken(peek().kind())
-                        || SyntaxFacts::isTypeQualifierToken(peek().kind())
-                        || SyntaxFacts::isFunctionSpecifierToken(peek().kind())
-                        || SyntaxFacts::isExtGNU_AsmQualifierToken(peek().kind()),
+    PSY_ASSERT_3(SyntaxFacts::isStorageClassSyntax(peek())
+                        || SyntaxFacts::isBasicTypeSpecifierSyntax(peek())
+                        || SyntaxFacts::isTypeQualifierSyntax(peek())
+                        || SyntaxFacts::isFunctionSpecifierSyntax(peek())
+                        || SyntaxFacts::isExtGNU_AsmQualifierSyntax(peek()),
                   return,
                   "assert failure: <storage-class-specifier>, "
                                   "(builtin) <type-specifier>, "
@@ -1567,7 +1570,7 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
             break;
 
         default:
-            diagReporter_.ExpectedFOLLOWofStructOrUnionOrEnum();
+            diagReporter_.ExpectedFollowOfStructOrUnionOrEnum();
             return false;
     }
 
@@ -2483,7 +2486,7 @@ bool Parser::parseDesignatedInitializer_AtFirst(InitializerSyntax*& init,
             return parseInitializer(desigInit->init_);
 
         default:
-            diagReporter_.ExpectedFOLLOWofDesignatedInitializer();
+            diagReporter_.ExpectedFollowOfDesignatedInitializer();
             return parseInitializer(desigInit->init_);
     }
 }

@@ -204,6 +204,10 @@ const char* tokenNames[] =
     "__complex__",
     "__real__",
     "__imag__",
+    "__printf__",
+    "__scanf__",
+    "__strftime__",
+    "__strfmon__",
 
     "va_arg",
     "offsetof",

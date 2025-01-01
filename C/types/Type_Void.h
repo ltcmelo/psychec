@@ -46,13 +46,13 @@ public:
     //!@}
 
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Program);
+    PSY_GRANT_INTERNAL_ACCESS(Compilation);
     PSY_GRANT_INTERNAL_ACCESS(Binder);
 
     VoidType();
 };
 
-std::string PSY_C_API to_string(const VoidType& voidTy);
+std::string PSY_C_API to_string(const VoidType* voidTy);
 
 } // C
 } // psy

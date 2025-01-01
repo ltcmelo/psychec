@@ -238,7 +238,7 @@ void ParserTester::case0022()
 
     parse("x int y ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0023()
@@ -254,7 +254,7 @@ void ParserTester::case0023()
 
     parse("long x y ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                   Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0024()
@@ -268,7 +268,7 @@ void ParserTester::case0025()
 {
     parse("double x * y ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                   Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0026()
@@ -282,7 +282,7 @@ void ParserTester::case0027()
 {
     parse("double * const x y ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                   Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0028()
@@ -308,7 +308,7 @@ void ParserTester::case0030()
 {
     parse("int x = 1 {",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclaratorAndInitializer));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclaratorAndInitializer));
 }
 
 void ParserTester::case0031()
@@ -567,7 +567,7 @@ void ParserTester::case0054()
 {
     parse("x int ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                   Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0055()
@@ -848,14 +848,14 @@ void ParserTester::case0102()
 {
     parse("void ( * x ) ( ) { }",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                   Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0103()
 {
     parse("void ( ( * x ) ) ( ) { }",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                   Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                   Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0104()
@@ -1470,7 +1470,7 @@ void ParserTester::case0202()
 {
     parse("void x { }",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0203()
@@ -2769,7 +2769,7 @@ void ParserTester::case0293()
     parse("void x ( y , z ) int y , int z { }",
           Expectation()
               .diagnostic(Expectation::ErrorOrWarn::Error,
-                          Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                          Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0294()
@@ -2777,7 +2777,7 @@ void ParserTester::case0294()
     parse("int x ( y ) y { }",
           Expectation()
               .diagnostic(Expectation::ErrorOrWarn::Error,
-                          Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                          Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0295()
@@ -2785,7 +2785,7 @@ void ParserTester::case0295()
     parse("int x ( y ) int { }",
           Expectation()
               .diagnostic(Expectation::ErrorOrWarn::Error,
-                          Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                          Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0296()
@@ -2793,7 +2793,7 @@ void ParserTester::case0296()
     parse("int x ( y ) int y { }",
           Expectation()
               .diagnostic(Expectation::ErrorOrWarn::Error,
-                          Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                          Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0297()
@@ -3104,14 +3104,14 @@ void ParserTester::case0332()
 {
     parse("int x [ 1 ] const ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0333()
 {
     parse("int x [ 1 ] y ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDeclarator));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDeclarator));
 }
 
 void ParserTester::case0334()
@@ -3314,7 +3314,7 @@ void ParserTester::case0409()
 {
     parse("struct;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructOrUnionOrEnum));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfStructOrUnionOrEnum));
 }
 
 void ParserTester::case0410()
@@ -3532,21 +3532,21 @@ void ParserTester::case0439()
 {
     parse("struct { int x = 1 ; } ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructDeclarator));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfStructDeclarator));
 }
 
 void ParserTester::case0440()
 {
     parse("struct { x y = 1 ; } ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructDeclarator));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfStructDeclarator));
 }
 
 void ParserTester::case0441()
 {
     parse("struct { int x : 1 = 1 ; } ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Error,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofStructDeclarator));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfStructDeclarator));
 }
 
 void ParserTester::case0442()
@@ -5236,22 +5236,22 @@ void ParserTester::case0740()
 
 void ParserTester::case0741()
 {
-
+    parse("long __max_align_ll __attribute__( ( __aligned__ ( _Alignof ( double ) ) ) ) ;");
 }
 
 void ParserTester::case0742()
 {
-
+    parse("long long __max_align_ll __attribute__( ( __aligned__ ( _Alignof ( long long ) ) ) ) ;");
 }
 
 void ParserTester::case0743()
 {
-
+    parse("long __max_align_ll __attribute__( ( __aligned__ ( _Alignof ( struct x ) ) ) ) ;");
 }
 
 void ParserTester::case0744()
 {
-
+    parse("struct x __max_align_ll __attribute__( ( __aligned__ ( _Alignof ( double ) ) ) ) ;");
 }
 
 void ParserTester::case0745()
@@ -5890,7 +5890,7 @@ void ParserTester::case0859()
 {
     parse("x y [ ] = { [ 1 ] } ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDesignatedInitializer)
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDesignatedInitializer)
                        .diagnostic(Expectation::ErrorOrWarn::Error,
                                       Parser::DiagnosticsReporter::ID_of_ExpectedFIRSTofExpression));
 }
@@ -5899,7 +5899,7 @@ void ParserTester::case0860()
 {
     parse("x y [ ] = { [ 1 ] 2 } ;",
           Expectation().diagnostic(Expectation::ErrorOrWarn::Warn,
-                                      Parser::DiagnosticsReporter::ID_of_ExpectedFOLLOWofDesignatedInitializer));
+                                      Parser::DiagnosticsReporter::ID_of_ExpectedFollowOfDesignatedInitializer));
 }
 
 void ParserTester::case0861()
@@ -6169,6 +6169,7 @@ void ParserTester::case0904()
                                SyntaxKind::TypeNameAsTypeReference,
                                SyntaxKind::TypeName,
                                SyntaxKind::TypedefName,
+                               SyntaxKind::AbstractDeclarator,
                                SyntaxKind::IdentifierDeclarator } ));
 }
 
@@ -6426,6 +6427,7 @@ void ParserTester::case0953()
                                SyntaxKind::TypeNameAsTypeReference,
                                SyntaxKind::TypeName,
                                SyntaxKind::TypedefName,
+                               SyntaxKind::AbstractDeclarator,
                                SyntaxKind::BasicTypeSpecifier,
                                SyntaxKind::IdentifierDeclarator } ));
 }

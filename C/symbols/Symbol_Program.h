@@ -24,7 +24,6 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "types/TypeKind_Basic.h"
 #include "symbols/Symbol.h"
 
 #include "../common/infra/AccessSpecifiers.h"
@@ -54,26 +53,15 @@ public:
      */
     virtual std::string toDisplayString() const override;
 
-    /**
-     * The canonical BasicType of BasicTypeKind \c basicTyK.
-     */
-    const BasicType* canonicalBasicType(BasicTypeKind basicTyK) const;
-
-    /**
-     * The canonical VoidType.
-     */
-    const VoidType* canonicalVoidType() const;
-
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Compilation);
     PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
 
-    Program();
-
     DECL_PIMPL_SUB(Program);
+    Program();
 };
 
-std::string PSY_C_API to_string(const Symbol& prog);
+std::string PSY_C_API to_string(const Symbol* prog);
 
 } // C
 } // psy

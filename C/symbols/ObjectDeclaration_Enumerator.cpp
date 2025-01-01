@@ -47,12 +47,14 @@ std::string Enumerator::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Enumerator& enumerator)
+std::string to_string(const Enumerator* enumerator)
 {
+    if (!enumerator)
+        return "<Enumerator is null>";
     std::ostringstream oss;
-    oss << "<Enumerator | ";
-    oss << "name:" << enumerator.name()->valueText();
-    oss << "type:" << to_string(*enumerator.type());
+    oss << "<Enumerator |";
+    oss << " name:" << enumerator->name()->valueText();
+    oss << " type:" << to_string(enumerator->type());
     oss << ">";
     return oss.str();
 }

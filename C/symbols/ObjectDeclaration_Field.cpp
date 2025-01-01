@@ -47,12 +47,14 @@ std::string Field::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Field& fld)
+std::string to_string(const Field* fld)
 {
+    if (!fld)
+        return "<Field is null>";
     std::ostringstream oss;
-    oss << "<Field | ";
-    oss << "name:" << fld.name()->valueText();
-    oss << "type:" << to_string(*fld.type());
+    oss << "<Field |";
+    oss << " name:" << fld->name()->valueText();
+    oss << " type:" << to_string(fld->type());
     oss << ">";
     return oss.str();
 }

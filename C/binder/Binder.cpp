@@ -42,9 +42,13 @@ Binder::Binder(SemanticModel* semaModel, const SyntaxTree* tree)
     : SyntaxVisitor(tree)
     , semaModel_(semaModel)
     , stashedScope_(nullptr)
-    , decltorIsOfTydef_(false)
-    , tySpecHasImplicit_int(false)
-    , tySpecHasImplicit_double(false)
+    , BD_(0)
+    , ptrdiff_t_(tree->findIdentifier("ptrdiff_t", 9))
+    , size_t_(tree->findIdentifier("size_t", 6))
+    , max_align_t_(tree->findIdentifier("max_align_t", 11))
+    , wchar_t_(tree->findIdentifier("wchar_t", 7))
+    , char16_t_(tree->findIdentifier("char16_t", 8))
+    , char32_t_(tree->findIdentifier("char32_t", 8))
     , diagReporter_(this)
 {}
 
@@ -63,32 +67,40 @@ void Binder::bind()
     syms_.pop();
 }
 
-void Binder::nestNewScope(ScopeKind scopeK)
+void Binder::pushNewScope(const SyntaxNode* node,
+                          ScopeKind scopeK,
+                          bool encloseInOuterScope)
 {
-    PSY_ASSERT_2(scopeK == ScopeKind::Block
+    PSY_ASSERT_2(scopeK == ScopeKind::File
+                   || scopeK == ScopeKind::Block
                    || scopeK == ScopeKind::Function
                    || scopeK == ScopeKind::FunctionPrototype,
                return);
-    PSY_ASSERT_2(!scopes_.empty(), return);
 
     std::unique_ptr<Scope> scope(new Scope(scopeK));
-    auto outerScope = scopes_.top();
-    scopes_.push(scope.get());
-    outerScope->encloseScope(std::move(scope));
+    auto rawScope = semaModel_->mapAndKeepScope(node, std::move(scope));
+    if (!encloseInOuterScope)
+        scopes_.push(rawScope);
+    else {
+        PSY_ASSERT_2(!scopes_.empty(), return);
+        auto outerScope = scopes_.top();
+        scopes_.push(rawScope);
+        outerScope->encloseScope(rawScope);
+    }
 }
 
-void Binder::nestStashedScope()
+void Binder::pushStashedScope()
 {
     PSY_ASSERT_2(stashedScope_, return);
     scopes_.push(stashedScope_);
 }
 
-void Binder::unnestScope()
+void Binder::popScope()
 {
     scopes_.pop();
 }
 
-void Binder::unnestAndStashScope()
+void Binder::popAndStashScope()
 {
     stashedScope_ = scopes_.top();
     scopes_.pop();
@@ -148,16 +160,16 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
                 new TranslationUnit(
                     semaModel_->compilation()->program(),
                     tree_));
-    auto rawUnit = semaModel_->keepTranslationUnit(node, std::move(unit));
+    auto rawUnit = semaModel_->keepTranslationUnit(std::move(unit));
     pushSymbol(rawUnit);
-    scopes_.push(rawUnit->enclosedScope_.get());
 
+    pushNewScope(node, ScopeKind::File, false);
     for (auto declIt = node->declarations(); declIt; declIt = declIt->next)
         visit(declIt->value);
-
     PSY_ASSERT_2(scopes_.size() == 1, return Action::Quit);
     PSY_ASSERT_2(scopes_.top()->kind() == ScopeKind::File, return Action::Quit);
-    scopes_.pop();
+    popScope();
+
     popSymbol();
 
     return Action::Skip;
@@ -166,9 +178,6 @@ SyntaxVisitor::Action Binder::visitTranslationUnit(const TranslationUnitSyntax* 
 SyntaxVisitor::Action Binder::visitIncompleteDeclaration(const IncompleteDeclarationSyntax* node)
 {
     diagReporter_.UselessDeclaration(node->lastToken());
-
-    for (auto specIt = node->specifiers(); specIt; specIt = specIt->next)
-        ;
 
     return Action::Skip;
 }
@@ -225,94 +234,23 @@ SyntaxVisitor::Action Binder::visitFunctionDefinition(const FunctionDefinitionSy
 
 SyntaxVisitor::Action Binder::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
-    nestNewScope(ScopeKind::Block);
+    pushNewScope(node, ScopeKind::Block, true);
     for (auto stmtIt = node->statements(); stmtIt; stmtIt = stmtIt->next)
         visit(stmtIt->value);
-    unnestScope();
+    popScope();
 
     return Action::Skip;
 }
 
-SyntaxVisitor::Action Binder::visitLabeledStatement(const LabeledStatementSyntax *)
-{
-    return Action::Skip;
-}
+//--------//
+// Common //
+//--------//
 
-SyntaxVisitor::Action Binder::visitDeclarationStatement(const DeclarationStatementSyntax* node)
+SyntaxVisitor::Action Binder::visitTypeName(const TypeNameSyntax* node)
 {
-    visit(node->declaration());
-
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitExpressionStatement(const ExpressionStatementSyntax*)
-{
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitIfStatement(const IfStatementSyntax* node)
-{
-    visit(node->statement());
-    visit(node->elseStatement());
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitSwitchStatement(const SwitchStatementSyntax* node)
-{
-    visit(node->statement());
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitWhileStatement(const WhileStatementSyntax* node)
-{
-    visit(node->statement());
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitDoStatement(const DoStatementSyntax* node)
-{
-    visit(node->statement());
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitForStatement(const ForStatementSyntax* node)
-{
-    visit(node->initializer());
-    visit(node->statement());
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitGotoStatement(const GotoStatementSyntax *)
-{
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitContinueStatement(const ContinueStatementSyntax *)
-{
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitBreakStatement(const BreakStatementSyntax *)
-{
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitReturnStatement(const ReturnStatementSyntax*)
-{
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitExtGNU_AsmStatement(const ExtGNU_AsmStatementSyntax *)
-{
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitExtGNU_AsmQualifier(const ExtGNU_AsmQualifierSyntax *)
-{
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action Binder::visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax *)
-{
-    return Action::Skip;
+    TyContT tys;
+    std::swap(tys_, tys);
+    auto action = visitTypeName_AtSpecifier(node);
+    std::swap(tys_, tys);
+    return action;
 }

@@ -26,11 +26,11 @@ using namespace C;
 
 Lexeme::Lexeme(const char* chars, unsigned int size, LexemeKind kind)
     : TextElement(chars, size)
-    , BF_all_(0)
+    , BD_(0)
 {
-    BF_.kind_ = static_cast<std::uint16_t>(kind);
+    F_.kind_ = static_cast<std::uint16_t>(kind);
 
-    checkHexPrefix();
+    checkHexAndOctalPrefix();
     checkVariousPrefixesAndSuffixes();
 }
 
@@ -39,16 +39,23 @@ Lexeme::~Lexeme()
 
 Lexeme::LexemeKind Lexeme::kind() const
 {
-    return LexemeKind(BF_.kind_);
+    return LexemeKind(F_.kind_);
 }
 
-void Lexeme::checkHexPrefix()
+void Lexeme::checkHexAndOctalPrefix()
 {
     const char* chars = begin();
-    if (size() > 1
-            && chars[0] == '0'
-            && (chars[1] == 'x' || chars[1] == 'X')) {
-        BF_.hex_ = 1;
+    if (size() > 0 && chars[0] == '0') {
+        if (size() > 1) {
+            if (chars[1] == 'x' || chars[1] == 'X')
+                F_.hex_ = 1;
+            else if (chars[1] >= '0' && chars[1] <= '7')
+                F_.octal_ = 1;
+            else
+                ; // TODO: Flag as invalid.
+        } else {
+            F_.octal_ = 1;
+        }
     }
 }
 
@@ -59,38 +66,38 @@ void Lexeme::checkVariousPrefixesAndSuffixes()
         switch (*cur) {
             case 'l':
                 if (cur + 1 != kEnd && *(cur + 1 ) == 'l') {
-                    BF_.llOrLL_ = 1;
+                    F_.llOrLL_ = 1;
                     ++cur;
                 }
                 else
-                    BF_.l_ = 1;
+                    F_.l_ = 1;
                 break;
 
             case 'L':
                 if (cur + 1 != kEnd && *(cur + 1) == 'L') {
-                    BF_.llOrLL_ = 1;
+                    F_.llOrLL_ = 1;
                     ++cur;
                 }
                 else
-                    BF_.L_ = 1;
+                    F_.L_ = 1;
                 break;
 
             case 'u':
                 if (cur + 1 != kEnd && *(cur + 1 ) == '8') {
-                    BF_.u8_ = 1;
+                    F_.u8_ = 1;
                     ++cur;
                 }
                 else
-                    BF_.u_ = 1;
+                    F_.u_ = 1;
                 break;
 
             case 'U':
-                BF_.U_ = 1;
+                F_.U_ = 1;
                 break;
 
             case 'f':
             case 'F':
-                BF_.fOrF_ = 1;
+                F_.fOrF_ = 1;
                 break;
         }
     }

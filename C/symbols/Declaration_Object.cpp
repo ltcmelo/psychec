@@ -97,17 +97,19 @@ void ObjectDeclaration::setName(const Identifier* name)
 namespace psy {
 namespace C {
 
-std::string to_string(const ObjectDeclaration& objDecl)
+std::string to_string(const ObjectDeclaration* objDecl)
 {
-    switch (objDecl.kind()) {
+    if (!objDecl)
+        return "<ObjectDeclaration is null>";
+    switch (objDecl->kind()) {
         case ObjectDeclarationKind::Enumerator:
-            return to_string(*objDecl.asEnumerator());
+            return to_string(objDecl->asEnumerator());
         case ObjectDeclarationKind::Field:
-            return to_string(*objDecl.asField());
+            return to_string(objDecl->asField());
         case ObjectDeclarationKind::Parameter:
-            return to_string(*objDecl.asParameter());
+            return to_string(objDecl->asParameter());
         case ObjectDeclarationKind::Variable:
-            return to_string(*objDecl.asVariable());
+            return to_string(objDecl->asVariable());
     }
 }
 

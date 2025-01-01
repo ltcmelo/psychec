@@ -27,6 +27,8 @@
 #include "binder/Binder.h"
 #include "binder/TypeResolver.h"
 #include "symbols/Symbol_ALL.h"
+#include "types/Type_ALL.h"
+#include "typing/TypeChecker.h"
 
 #include <algorithm>
 #include <unordered_map>
@@ -38,11 +40,49 @@ struct Compilation::CompilationImpl
 {
     CompilationImpl(Compilation* q)
         : Q_(q)
+        , tyVoid_(new VoidType)
+        , tyChar_(new BasicType(BasicTypeKind::Char))
+        , tyCharS_(new BasicType(BasicTypeKind::Char_S))
+        , tyCharU_(new BasicType(BasicTypeKind::Char_U))
+        , tyShortS_(new BasicType(BasicTypeKind::Short_S))
+        , tyShortU_(new BasicType(BasicTypeKind::Short_U))
+        , tyIntS_(new BasicType(BasicTypeKind::Int_S))
+        , tyIntU_(new BasicType(BasicTypeKind::Int_U))
+        , tyLongS_(new BasicType(BasicTypeKind::Long_S))
+        , tyLongU_(new BasicType(BasicTypeKind::Long_U))
+        , tyLongLongS_(new BasicType(BasicTypeKind::LongLong_S))
+        , tyLongLongU_(new BasicType(BasicTypeKind::LongLong_U))
+        , tyFloat_(new BasicType(BasicTypeKind::Float))
+        , tyDouble_(new BasicType(BasicTypeKind::Double))
+        , tyLongDouble_(new BasicType(BasicTypeKind::LongDouble))
+        , tyFloatComplex_(new BasicType(BasicTypeKind::FloatComplex))
+        , tyDoubleComplex_(new BasicType(BasicTypeKind::DoubleComplex))
+        , tyLongDoubleComplex_(new BasicType(BasicTypeKind::LongDoubleComplex))
+        , tyBool_(new BasicType(BasicTypeKind::Bool))
         , program_(new Program)
     {}
 
     Compilation* Q_;
     std::string id_;
+    std::unique_ptr<VoidType> tyVoid_;
+    std::unique_ptr<BasicType> tyChar_;
+    std::unique_ptr<BasicType> tyCharS_;
+    std::unique_ptr<BasicType> tyCharU_;
+    std::unique_ptr<BasicType> tyShortS_;
+    std::unique_ptr<BasicType> tyShortU_;
+    std::unique_ptr<BasicType> tyIntS_;
+    std::unique_ptr<BasicType> tyIntU_;
+    std::unique_ptr<BasicType> tyLongS_;
+    std::unique_ptr<BasicType> tyLongU_;
+    std::unique_ptr<BasicType> tyLongLongS_;
+    std::unique_ptr<BasicType> tyLongLongU_;
+    std::unique_ptr<BasicType> tyFloat_;
+    std::unique_ptr<BasicType> tyDouble_;
+    std::unique_ptr<BasicType> tyLongDouble_;
+    std::unique_ptr<BasicType> tyFloatComplex_;
+    std::unique_ptr<BasicType> tyDoubleComplex_;
+    std::unique_ptr<BasicType> tyLongDoubleComplex_;
+    std::unique_ptr<BasicType> tyBool_;
     std::unique_ptr<Program> program_;
     std::unordered_map<const SyntaxTree*, bool> isDirty_;
     std::unordered_map<const SyntaxTree*, std::unique_ptr<SemanticModel>> semaModels_;
@@ -111,16 +151,66 @@ std::vector<const SyntaxTree*> Compilation::syntaxTrees() const
     return  trees;
 }
 
-const SemanticModel* Compilation::analyze(const SyntaxTree* tree) const
+const SemanticModel* Compilation::computeSemanticModel(const SyntaxTree* tree) const
 {
     PSY_ASSERT_2(P->isDirty_.count(tree), return nullptr);
     if (P->isDirty_[tree]) {
         bind();
         resolveTypes();
+        typeCheck();
         P->isDirty_[tree] = false;
     }
     return semanticModel(tree);
 }
+
+const VoidType* Compilation::canonicalVoidType() const
+{
+    return P->tyVoid_.get();
+}
+
+const BasicType* Compilation::canonicalBasicType(BasicTypeKind basicTyK) const
+{
+    switch (basicTyK) {
+        case BasicTypeKind::Char:
+            return P->tyChar_.get();
+        case BasicTypeKind::Char_S:
+            return P->tyCharS_.get();
+        case BasicTypeKind::Char_U:
+            return P->tyCharU_.get();
+        case BasicTypeKind::Short_S:
+            return P->tyShortS_.get();
+        case BasicTypeKind::Short_U:
+            return P->tyShortU_.get();
+        case BasicTypeKind::Int_S:
+            return P->tyIntS_.get();
+        case BasicTypeKind::Int_U:
+            return P->tyIntU_.get();
+        case BasicTypeKind::Long_S:
+            return P->tyLongS_.get();
+        case BasicTypeKind::Long_U:
+            return P->tyLongU_.get();
+        case BasicTypeKind::LongLong_S:
+            return P->tyLongLongS_.get();
+        case BasicTypeKind::LongLong_U:
+            return P->tyLongLongU_.get();
+        case BasicTypeKind::Float:
+            return P->tyFloat_.get();
+        case BasicTypeKind::Double:
+            return P->tyDouble_.get();
+        case BasicTypeKind::LongDouble:
+            return P->tyLongDouble_.get();
+        case BasicTypeKind::FloatComplex:
+            return P->tyFloatComplex_.get();
+        case BasicTypeKind::DoubleComplex:
+            return P->tyDoubleComplex_.get();
+        case BasicTypeKind::LongDoubleComplex:
+            return P->tyLongDoubleComplex_.get();
+        case BasicTypeKind::Bool:
+            return P->tyBool_.get();
+    }
+}
+
+
 
 void Compilation::bind() const
 {
@@ -135,6 +225,14 @@ void Compilation::resolveTypes() const
     for (const auto& p : P->semaModels_) {
         TypeResolver tyResolver(p.second.get(), p.first);
         tyResolver.resolveTypes();
+    }
+}
+
+void Compilation::typeCheck() const
+{
+    for (const auto& p : P->semaModels_) {
+        TypeChecker tyChecker(p.second.get(), p.first);
+        tyChecker.typeCheck();
     }
 }
 

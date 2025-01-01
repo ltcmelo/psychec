@@ -90,12 +90,14 @@ std::string Function::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Function& func)
+std::string to_string(const Function* func)
 {
+    if (!func)
+        return "<Function is null>";
     std::ostringstream oss;
     oss << "<Function |";
-    oss << " name:" << func.name()->valueText();
-    oss << " type:" << to_string(*func.type());
+    oss << " name:" << func->name()->valueText();
+    oss << " type:" << to_string(func->type());
     oss << ">";
     return oss.str();
 }

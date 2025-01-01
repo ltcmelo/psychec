@@ -64,6 +64,7 @@ public:
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Binder);
     PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
+    PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
 
     PointerType(const Type* refedTy);
 
@@ -75,7 +76,7 @@ private:
     DECL_PIMPL_SUB(PointerType)
 };
 
-std::string PSY_C_API to_string(const PointerType& ptrTy);
+std::string PSY_C_API to_string(const PointerType* ptrTy);
 
 } // C
 } // psy

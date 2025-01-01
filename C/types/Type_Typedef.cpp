@@ -33,29 +33,43 @@ struct TypedefType::TypedefTypeImpl : TypeImpl
 {
     TypedefTypeImpl(const Identifier* typedefName)
         : TypeImpl(TypeKind::Typedef)
-        , typedefName_(typedefName)
+        , tydefName_(typedefName)
+        , tydef_(nullptr)
     {}
 
-    const Identifier* typedefName_;
+    const Identifier* tydefName_;
+    const Typedef* tydef_;
 };
 
 const Identifier *TypedefType::typedefName() const
 {
-    return P_CAST->typedefName_;
+    return P_CAST->tydefName_;
 }
 
 TypedefType::TypedefType(const Identifier* typedefName)
     : Type(new TypedefTypeImpl(typedefName))
 {}
 
+const Typedef* TypedefType::declaration() const
+{
+    return P_CAST->tydef_;
+}
+
+void TypedefType::setDeclaration(const Typedef* tydef)
+{
+    P_CAST->tydef_ = tydef;
+}
+
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TypedefType& tydefTy)
+std::string PSY_C_API to_string(const TypedefType* tydefTy)
 {
+    if (!tydefTy)
+        return "<TypedefType is null>";
     std::ostringstream oss;
     oss << "<TypedefType | ";
-    oss << "typedef-name:" << tydefTy.typedefName()->valueText();
+    oss << "typedef-name:" << tydefTy->typedefName()->valueText();
     oss << ">";
     return oss.str();
 }

@@ -883,6 +883,22 @@ static inline SyntaxKind recognize9(const char* s, const ParseOptions& opts)
                     }
                 }
             }
+            else if (s[2] == 's'
+                     && opts.languageExtensions().isEnabled_extGNU_AlternateKeywords()) {
+                if (s[3] == 'c') {
+                    if (s[4] == 'a') {
+                        if (s[5] == 'n') {
+                            if (s[6] == 'f') {
+                                if (s[7] == '_') {
+                                    if (s[8] == '_') {
+                                        return SyntaxKind::Keyword_ExtGNU___scanf__;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             else if (s[2] == 'a'
                      && opts.languageExtensions().isEnabled_extGNU_AlternateKeywords()) {
                 if (s[3] == 'l') {
@@ -940,6 +956,24 @@ static inline SyntaxKind recognize10(const char* s, const ParseOptions& opts)
                                     if (s[8] == '_') {
                                         if (s[9] == '_') {
                                             return SyntaxKind::KeywordAlias___inline__;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (s[2] == 'p'
+                    && opts.languageExtensions().isEnabled_extGNU_AlternateKeywords()) {
+                if (s[3] == 'r') {
+                    if (s[4] == 'i') {
+                        if (s[5] == 'n') {
+                            if (s[6] == 't') {
+                                if (s[7] == 'f') {
+                                    if (s[8] == '_') {
+                                        if (s[9] == '_') {
+                                            return SyntaxKind::Keyword_ExtGNU___printf__;
                                         }
                                     }
                                 }
@@ -1082,6 +1116,26 @@ static inline SyntaxKind recognize11(const char* s, const ParseOptions& opts)
                     }
                 }
             }
+            else if (s[2] == 's'
+                     && opts.languageExtensions().isEnabled_extGNU_AlternateKeywords()) {
+                if (s[3] == 't') {
+                    if (s[4] == 'r') {
+                        if (s[5] == 'f') {
+                            if (s[6] == 'm') {
+                                if (s[7] == 'o') {
+                                    if (s[8] == 'n') {
+                                        if (s[9] == '_') {
+                                            if (s[10] == '_') {
+                                                return SyntaxKind::Keyword_ExtGNU___strfmon__;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     return SyntaxKind::IdentifierToken;
@@ -1134,7 +1188,27 @@ static inline SyntaxKind recognize12(const char* s, const ParseOptions& opts)
                     }
                 }
             }
-            else if (s[2] == 'F'
+            else if (s[2] == 's') {
+                if (s[3] == 't') {
+                    if (s[4] == 'r') {
+                        if (s[5] == 'f') {
+                            if (s[6] == 't') {
+                                if (s[7] == 'i') {
+                                    if (s[8] == 'm') {
+                                        if (s[9] == 'e') {
+                                            if (s[10] == '_') {
+                                                if (s[11] == '_') {
+                                                    return SyntaxKind::Keyword_ExtGNU___strftime__;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }            else if (s[2] == 'F'
                      && opts.languageExtensions().isEnabled_extGNU_FunctionNames()) {
                 if (s[3] == 'U') {
                     if (s[4] == 'N') {

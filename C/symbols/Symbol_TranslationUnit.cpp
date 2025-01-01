@@ -29,14 +29,8 @@ using namespace C;
 
 TranslationUnit::TranslationUnit(const Program* prog, const SyntaxTree* tree)
     : Symbol(new SymbolImpl(SymbolKind::TranslationUnit, prog))
-    , enclosedScope_(new Scope(ScopeKind::File))
     , tree_(tree)
 {}
-
-const Scope* TranslationUnit::enclosedScope() const
-{
-    return enclosedScope_.get();
-}
 
 std::string TranslationUnit::toDisplayString() const
 {
@@ -46,8 +40,10 @@ std::string TranslationUnit::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const TranslationUnit& unit)
+std::string to_string(const TranslationUnit* unit)
 {
+    if (!unit)
+        return "<TranslationUnit is null>";
     std::ostringstream oss;
     oss << "<TranslationUnit>";
     return oss.str();

@@ -32,20 +32,26 @@ IntegerConstant::IntegerConstant(const char* chars, unsigned int size)
 {
 }
 
-IntegerConstant::Signedness IntegerConstant::signedness() const
+IntegerConstant::RepresentationSuffix IntegerConstant::representationSuffix() const
 {
-    return (BF_.u_ || BF_.U_) ? Signedness::Unsigned : Signedness::Signed;
+    if (F_.llOrLL_) {
+        return (F_.u_ || F_.U_)
+                ? RepresentationSuffix::llOrLLAnduOrU
+                : RepresentationSuffix::llOrLL;
+    }
+    if (F_.l_ || F_.L_) {
+        return (F_.u_ || F_.U_)
+                ? RepresentationSuffix::lOrLAnduOrU
+                : RepresentationSuffix::lOrL;
+    }
+    return (F_.u_ || F_.U_)
+            ? RepresentationSuffix::uOrU
+            : RepresentationSuffix::None;
 }
 
-IntegerConstant::Variant IntegerConstant::variant() const
+bool IntegerConstant::isOctalOrHexadecimal() const
 {
-    if (BF_.llOrLL_)
-        return Variant::LongLong;
-
-    if (BF_.l_ or BF_.L_)
-        return Variant::Long;
-
-    return Variant::Int;
+    return F_.octal_ || F_.hex_;
 }
 
 FloatingConstant::FloatingConstant(const char* chars, unsigned int size)
@@ -54,15 +60,13 @@ FloatingConstant::FloatingConstant(const char* chars, unsigned int size)
              LexemeKind::FloatingConstant)
 {}
 
-FloatingConstant::Variant FloatingConstant::variant() const
+FloatingConstant::RepresentationSuffix FloatingConstant::representationSuffix() const
 {
-    if (BF_.fOrF_)
-        return Variant::Float;
-
-    if (BF_.l_ or BF_.L_)
-        return Variant::LongDouble;
-
-    return Variant::Double;
+    if (F_.fOrF_)
+        return RepresentationSuffix::fOrF;
+    if (F_.l_ or F_.L_)
+        return RepresentationSuffix::lOrL;
+    return RepresentationSuffix::None;
 }
 
 CharacterConstant::CharacterConstant(const char* chars, unsigned int size)
@@ -71,18 +75,15 @@ CharacterConstant::CharacterConstant(const char* chars, unsigned int size)
              LexemeKind::CharacterConstant)
 {}
 
-CharacterConstant::Variant CharacterConstant::variant() const
+CharacterConstant::EncodingPrefix CharacterConstant::encodingPrefix() const
 {
-    if (BF_.L_)
-        return Variant::L_wchar_t;
-
-    if (BF_.u_)
-        return Variant::u_char16_t;
-
-    if (BF_.U_)
-        return Variant::U_char32_t;
-
-    return Variant::Plain_u_char;
+    if (F_.L_)
+        return EncodingPrefix::L;
+    if (F_.u_)
+        return EncodingPrefix::u;
+    if (F_.U_)
+        return EncodingPrefix::U;
+    return EncodingPrefix::None;
 }
 
 ImaginaryIntegerConstant::ImaginaryIntegerConstant(const char* chars, unsigned int size)
@@ -91,35 +92,8 @@ ImaginaryIntegerConstant::ImaginaryIntegerConstant(const char* chars, unsigned i
              LexemeKind::ImaginaryIntegerConstant)
 {}
 
-ImaginaryIntegerConstant::Signedness ImaginaryIntegerConstant::signedness() const
-{
-    return (BF_.u_ || BF_.U_) ? Signedness::Unsigned : Signedness::Signed;
-}
-
-ImaginaryIntegerConstant::Variant ImaginaryIntegerConstant::variant() const
-{
-    if (BF_.llOrLL_)
-        return Variant::LongLong;
-
-    if (BF_.l_ or BF_.L_)
-        return Variant::Long;
-
-    return Variant::Int;
-}
-
 ImaginaryFloatingConstant::ImaginaryFloatingConstant(const char* chars, unsigned int size)
     : Lexeme(chars,
              size,
              LexemeKind::ImaginaryFloatingConstant)
 {}
-
-ImaginaryFloatingConstant::Variant ImaginaryFloatingConstant::variant() const
-{
-    if (BF_.fOrF_)
-        return Variant::Float;
-
-    if (BF_.l_ or BF_.L_)
-        return Variant::LongDouble;
-
-    return Variant::Double;
-}

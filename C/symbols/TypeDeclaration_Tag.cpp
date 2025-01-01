@@ -63,15 +63,17 @@ const TagType* TagTypeDeclaration::specifiedType() const
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TagTypeDeclaration& tagTyDecl)
+std::string PSY_C_API to_string(const TagTypeDeclaration* tagTyDecl)
 {
-    switch (tagTyDecl.kind()) {
+    if (!tagTyDecl)
+        return "<TagTypeDeclaration is null>";
+    switch (tagTyDecl->kind()) {
         case TagTypeDeclarationKind::Struct:
-            return to_string(*tagTyDecl.asStruct());
+            return to_string(tagTyDecl->asStruct());
         case TagTypeDeclarationKind::Union:
-            return to_string(*tagTyDecl.asUnion());
+            return to_string(tagTyDecl->asUnion());
         case TagTypeDeclarationKind::Enum:
-            return to_string(*tagTyDecl.asEnum());
+            return to_string(tagTyDecl->asEnum());
     }
 }
 

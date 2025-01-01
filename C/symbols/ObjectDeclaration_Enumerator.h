@@ -53,7 +53,7 @@ PSY_INTERNAL:
                const Scope* enclosingScope);
 };
 
-std::string PSY_C_API to_string(const Enumerator& enumerator);
+std::string PSY_C_API to_string(const Enumerator* enumerator);
 
 } // C
 } // psy

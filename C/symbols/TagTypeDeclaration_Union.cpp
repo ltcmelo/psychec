@@ -53,11 +53,13 @@ std::string Union::toDisplayString() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Union& uniom)
+std::string to_string(const Union* uniom)
 {
+    if (!uniom)
+        return "<Union is null>";
     std::ostringstream oss;
-    oss << "<Union | ";
-    oss << "type:" << to_string(*uniom.specifiedType());
+    oss << "<Union |";
+    oss << " type:" << to_string(uniom->specifiedType());
     oss << ">";
     return oss.str();
 }

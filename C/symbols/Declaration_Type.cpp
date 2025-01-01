@@ -42,13 +42,15 @@ TypeDeclarationKind TypeDeclaration::kind() const
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TypeDeclaration& tyDecl)
+std::string PSY_C_API to_string(const TypeDeclaration* tyDecl)
 {
-    switch (tyDecl.kind()) {
+    if (!tyDecl)
+        return "<TypeDeclaration is null>";
+    switch (tyDecl->kind()) {
         case TypeDeclarationKind::Tag:
-            return to_string(*tyDecl.asTagTypeDeclaration());
+            return to_string(tyDecl->asTagTypeDeclaration());
         case TypeDeclarationKind::Typedef:
-            return to_string(*tyDecl.asTypedef());
+            return to_string(tyDecl->asTypedef());
     }
 }
 

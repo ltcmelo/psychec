@@ -57,7 +57,7 @@ PSY_INTERNAL:
               const Scope* enclosingScope);
 };
 
-std::string PSY_C_API to_string(const Parameter& parm);
+std::string PSY_C_API to_string(const Parameter* param);
 
 } // C
 } // psy

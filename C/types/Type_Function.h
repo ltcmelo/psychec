@@ -68,7 +68,7 @@ private:
     DECL_PIMPL_SUB(FunctionType)
 };
 
-std::string PSY_C_API to_string(const FunctionType& funcTy);
+std::string PSY_C_API to_string(const FunctionType* funcTy);
 
 } // C
 } // psy

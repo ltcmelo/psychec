@@ -1461,7 +1461,8 @@ int _ ( )
                           SyntaxKind::SizeofExpression,
                           SyntaxKind::TypeNameAsTypeReference,
                           SyntaxKind::TypeName,
-                          SyntaxKind::TypedefName })));
+                          SyntaxKind::TypedefName,
+                          SyntaxKind::AbstractDeclarator })));
 }
 
 void ReparserTester::case0302(){}

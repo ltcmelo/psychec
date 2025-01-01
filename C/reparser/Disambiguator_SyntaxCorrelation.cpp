@@ -112,7 +112,7 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatem
                    && varDecl->declarators()->value,
                return Disambiguation::Inconclusive);
 
-    auto decltor = SyntaxUtilities::strippedDeclaratorOrSelf(varDecl->declarators()->value);
+    auto decltor = SyntaxUtilities::unparenthesizeDeclarator(varDecl->declarators()->value);
     PSY_ASSERT_2(decltor->kind() == SyntaxKind::IdentifierDeclarator,
                return Disambiguation::Inconclusive);
 

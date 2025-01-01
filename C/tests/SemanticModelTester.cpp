@@ -69,7 +69,7 @@ SemanticModelTester::declAndSemaModel(const std::string& s)
 
     compilation_ = Compilation::create(tree_->filePath());
     compilation_->addSyntaxTrees({ tree_.get() });
-    auto semaModel = compilation_->analyze(tree_.get());
+    auto semaModel = compilation_->computeSemanticModel(tree_.get());
     PSY_EXPECT_TRUE(semaModel);
 
     return std::make_tuple(decl, semaModel);
@@ -95,7 +95,7 @@ void SemanticModelTester::case0001()
     const Variable* varsym = declSym->asObjectDeclaration()->asVariable();
     PSY_EXPECT_EQ_STR(varsym->name()->valueText(), "x");
     PSY_EXPECT_EQ_ENU(varsym->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(varsym->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(varsym->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0002()
@@ -113,7 +113,7 @@ void SemanticModelTester::case0002()
     const Variable* varsym = sym->asObjectDeclaration()->asVariable();
     PSY_EXPECT_EQ_STR(varsym->name()->valueText(), "x");
     PSY_EXPECT_EQ_ENU(varsym->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(varsym->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(varsym->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0003()
@@ -131,7 +131,7 @@ void SemanticModelTester::case0003()
     const Variable* varSym1 = sym0->asObjectDeclaration()->asVariable();
     PSY_EXPECT_EQ_STR(varSym1->name()->valueText(), "x");
     PSY_EXPECT_EQ_ENU(varSym1->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(varSym1->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(varSym1->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0004()
@@ -174,7 +174,7 @@ void SemanticModelTester::case0090()
     const Variable* varSym1 = sym0->asObjectDeclaration()->asVariable();
     PSY_EXPECT_EQ_STR(varSym1->name()->valueText(), "x");
     PSY_EXPECT_EQ_ENU(varSym1->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(varSym1->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(varSym1->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 
     const Declaration* sym1 = syms[1];
     PSY_EXPECT_TRUE(sym1);
@@ -200,7 +200,7 @@ void SemanticModelTester::case0091()
     const Variable* varSym1 = sym1->asObjectDeclaration()->asVariable();
     PSY_EXPECT_EQ_STR(varSym1->name()->valueText(), "x");
     PSY_EXPECT_EQ_ENU(varSym1->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(varSym1->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(varSym1->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 
     const Declaration* sym2 = syms[1];
     PSY_EXPECT_TRUE(sym2);
@@ -345,7 +345,7 @@ void SemanticModelTester::case0201()
     PSY_EXPECT_TRUE(parmDecl);
     PSY_EXPECT_EQ_STR(parmDecl->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(parmDecl->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(parmDecl->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(parmDecl->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0202()
@@ -361,7 +361,7 @@ void SemanticModelTester::case0202()
     PSY_EXPECT_TRUE(parmDecl);
     PSY_EXPECT_EQ_STR(parmDecl->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(parmDecl->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(parmDecl->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(parmDecl->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0203()
@@ -397,7 +397,7 @@ void SemanticModelTester::case0204()
     PSY_EXPECT_TRUE(parmDecl1);
     PSY_EXPECT_EQ_STR(parmDecl1->name()->valueText(), "w");
     PSY_EXPECT_EQ_ENU(parmDecl1->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(parmDecl1->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(parmDecl1->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0205(){}
@@ -567,7 +567,7 @@ void SemanticModelTester::case0350()
     PSY_EXPECT_TRUE(fldSym0_0);
     PSY_EXPECT_EQ_STR(fldSym0_0->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(fldSym0_0->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(fldSym0_0->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(fldSym0_0->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0351()
@@ -585,13 +585,13 @@ void SemanticModelTester::case0351()
     PSY_EXPECT_TRUE(fldSym0_0);
     PSY_EXPECT_EQ_STR(fldSym0_0->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(fldSym0_0->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(fldSym0_0->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(fldSym0_0->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 
     const Field* fldSym0_1 = fldDecls0[1];
     PSY_EXPECT_TRUE(fldSym0_1);
     PSY_EXPECT_EQ_STR(fldSym0_1->name()->valueText(), "z");
     PSY_EXPECT_EQ_ENU(fldSym0_1->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(fldSym0_1->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(fldSym0_1->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0352()
@@ -609,7 +609,7 @@ void SemanticModelTester::case0352()
     PSY_EXPECT_TRUE(fldSym0_0);
     PSY_EXPECT_EQ_STR(fldSym0_0->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(fldSym0_0->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(fldSym0_0->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(fldSym0_0->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 
     auto fldDecl1 = tySpec->declarations()->next->value->asFieldDeclaration();
     std::vector<const Field*> fldDecls1 = semaModel->declaredFields(fldDecl1);
@@ -636,12 +636,12 @@ void SemanticModelTester::case0353()
     PSY_EXPECT_TRUE(fldSym0_0);
     PSY_EXPECT_EQ_STR(fldSym0_0->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(fldSym0_0->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(fldSym0_0->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(fldSym0_0->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 
     const Field* fldSym0_1 = fldDecls0[1];
     PSY_EXPECT_EQ_STR(fldSym0_1->name()->valueText(), "z");
     PSY_EXPECT_EQ_ENU(fldSym0_1->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(fldSym0_1->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(fldSym0_1->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 
     auto fldDecl1 = tySpec->declarations()->next->value->asFieldDeclaration();
     std::vector<const Field*> fldDecls1 = semaModel->declaredFields(fldDecl1);
@@ -789,7 +789,7 @@ void SemanticModelTester::case0450()
     PSY_EXPECT_TRUE(enumeratorSym);
     PSY_EXPECT_EQ_STR(enumeratorSym->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(enumeratorSym->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(enumeratorSym->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(enumeratorSym->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0451()
@@ -805,7 +805,7 @@ void SemanticModelTester::case0451()
     PSY_EXPECT_TRUE(enumeratorSym);
     PSY_EXPECT_EQ_STR(enumeratorSym->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(enumeratorSym->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(enumeratorSym->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(enumeratorSym->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0452()
@@ -821,7 +821,7 @@ void SemanticModelTester::case0452()
     PSY_EXPECT_TRUE(enumeratorSym0);
     PSY_EXPECT_EQ_STR(enumeratorSym0->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 
     auto enumeratorDecl1 = tySpec->declarations()->next->value->asEnumeratorDeclaration();
 
@@ -829,7 +829,7 @@ void SemanticModelTester::case0452()
     PSY_EXPECT_TRUE(enumeratorSym1);
     PSY_EXPECT_EQ_STR(enumeratorSym1->name()->valueText(), "z");
     PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0453()
@@ -845,7 +845,7 @@ void SemanticModelTester::case0453()
     PSY_EXPECT_TRUE(enumeratorSym0);
     PSY_EXPECT_EQ_STR(enumeratorSym0->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 
     auto enumeratorDecl1 = tySpec->declarations()->next->value->asEnumeratorDeclaration();
 
@@ -853,7 +853,7 @@ void SemanticModelTester::case0453()
     PSY_EXPECT_TRUE(enumeratorSym1);
     PSY_EXPECT_EQ_STR(enumeratorSym1->name()->valueText(), "z");
     PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0454()
@@ -869,7 +869,7 @@ void SemanticModelTester::case0454()
     PSY_EXPECT_TRUE(enumeratorSym0);
     PSY_EXPECT_EQ_STR(enumeratorSym0->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 
     auto enumeratorDecl1 = tySpec->declarations()->next->value->asEnumeratorDeclaration();
 
@@ -877,7 +877,7 @@ void SemanticModelTester::case0454()
     PSY_EXPECT_TRUE(enumeratorSym1);
     PSY_EXPECT_EQ_STR(enumeratorSym1->name()->valueText(), "z");
     PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0455()
@@ -893,7 +893,7 @@ void SemanticModelTester::case0455()
     PSY_EXPECT_TRUE(enumeratorSym0);
     PSY_EXPECT_EQ_STR(enumeratorSym0->name()->valueText(), "y");
     PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(enumeratorSym0->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 
     auto enumeratorDecl1 = tySpec->declarations()->next->value->asEnumeratorDeclaration();
 
@@ -901,7 +901,7 @@ void SemanticModelTester::case0455()
     PSY_EXPECT_TRUE(enumeratorSym1);
     PSY_EXPECT_EQ_STR(enumeratorSym1->name()->valueText(), "z");
     PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->kind(), TypeKind::Basic, TypeKind);
-    PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->asBasicType()->kind(), BasicTypeKind::Int, BasicTypeKind);
+    PSY_EXPECT_EQ_ENU(enumeratorSym1->type()->asBasicType()->kind(), BasicTypeKind::Int_S, BasicTypeKind);
 }
 
 void SemanticModelTester::case0456(){}
@@ -964,7 +964,7 @@ void SemanticModelTester::case0500()
 
     compilation_ = Compilation::create(tree_->filePath());
     compilation_->addSyntaxTrees({ tree_.get() });
-    auto semaModel = compilation_->analyze(tree_.get());
+    auto semaModel = compilation_->computeSemanticModel(tree_.get());
     PSY_EXPECT_TRUE(semaModel);
 }
 

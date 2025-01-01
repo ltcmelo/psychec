@@ -30,19 +30,15 @@ StringLiteral::StringLiteral(const char* chars, unsigned int size)
              LexemeKind::StringLiteral)
 {}
 
-StringLiteral::Variant StringLiteral::variant() const
+StringLiteral::EncodingPrefix StringLiteral::encodingPrefix() const
 {
-    if (BF_.L_)
-        return Variant::L_wchar_t;
-
-    if (BF_.u8_)
-        return Variant::u8_char;
-
-    if (BF_.u_)
-        return Variant::u_char16_t;
-
-    if (BF_.U_)
-        return Variant::U_char32_t;
-
-    return Variant::Plain_char;
+    if (F_.u8_)
+        return EncodingPrefix::u8;
+    if (F_.u_)
+        return EncodingPrefix::u;
+    if (F_.U_)
+        return EncodingPrefix::U;
+    if (F_.L_)
+        return EncodingPrefix::L;
+    return EncodingPrefix::None;
 }

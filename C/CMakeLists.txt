@@ -215,6 +215,7 @@ set(CFE_SOURCES
     # Typing
     ${PROJECT_SOURCE_DIR}/typing/TypeChecker.h
     ${PROJECT_SOURCE_DIR}/typing/TypeChecker.cpp
+    ${PROJECT_SOURCE_DIR}/typing/DiagnosticsReporter_TypeChecker.cpp
     ${PROJECT_SOURCE_DIR}/typing/Shape.h
     ${PROJECT_SOURCE_DIR}/typing/Shape.cpp
     ${PROJECT_SOURCE_DIR}/typing/Shape_ALL.h

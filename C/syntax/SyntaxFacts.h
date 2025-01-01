@@ -22,7 +22,9 @@
 #define PSYCHE_C_SYNTAX_FACTS_H__
 
 #include "API.h"
+#include "Fwds.h"
 #include "SyntaxKind.h"
+#include "SyntaxNodes.h"
 
 namespace psy {
 namespace C {
@@ -42,9 +44,9 @@ public:
     // Declarations //
     //--------------//
 
-    static bool isStorageClassToken(SyntaxKind tkK)
+    static bool isStorageClassSyntax(SyntaxToken tk)
     {
-        switch (tkK) {
+        switch (tk.kind()) {
             case SyntaxKind::Keyword_typedef:
             case SyntaxKind::Keyword_extern:
             case SyntaxKind::Keyword_static:
@@ -58,19 +60,19 @@ public:
         }
     }
 
-    static bool isBasicTypeSpecifierToken(SyntaxKind tkK)
+    static bool isBasicTypeSpecifierSyntax(SyntaxToken tk)
     {
-        switch (tkK) {
+        switch (tk.kind()) {
             case SyntaxKind::Keyword_char:
             case SyntaxKind::Keyword_short:
             case SyntaxKind::Keyword_int:
             case SyntaxKind::Keyword_long:
             case SyntaxKind::Keyword_float:
             case SyntaxKind::Keyword_double:
-            case SyntaxKind::Keyword__Bool:
-            case SyntaxKind::Keyword__Complex:
             case SyntaxKind::Keyword_signed:
             case SyntaxKind::Keyword_unsigned:
+            case SyntaxKind::Keyword__Bool:
+            case SyntaxKind::Keyword__Complex:
             case SyntaxKind::Keyword_Ext_char16_t:
             case SyntaxKind::Keyword_Ext_char32_t:
             case SyntaxKind::Keyword_Ext_wchar_t:
@@ -81,9 +83,9 @@ public:
         }
     }
 
-    static bool isTypeQualifierToken(SyntaxKind tkK)
+    static bool isTypeQualifierSyntax(SyntaxToken tk)
     {
-        switch (tkK) {
+        switch (tk.kind()) {
             case SyntaxKind::Keyword_const:
             case SyntaxKind::Keyword_volatile:
             case SyntaxKind::Keyword_restrict:
@@ -94,11 +96,44 @@ public:
         }
     }
 
-    static bool isFunctionSpecifierToken(SyntaxKind tkK)
+    static bool isFunctionSpecifierSyntax(SyntaxToken tk)
     {
-        switch (tkK) {
+        switch (tk.kind()) {
             case SyntaxKind::Keyword_inline:
             case SyntaxKind::Keyword__Noreturn:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    static bool isPredefinedSyntax(SyntaxToken tk)
+    {
+        switch(tk.kind()) {
+            case SyntaxKind::Keyword___func__:
+            case SyntaxKind::Keyword_ExtGNU___FUNCTION__:
+            case SyntaxKind::Keyword_ExtGNU___PRETTY_FUNCTION__:
+            case SyntaxKind::Keyword_ExtGNU___printf__:
+            case SyntaxKind::Keyword_ExtGNU___scanf__:
+            case SyntaxKind::Keyword_ExtGNU___strftime__:
+            case SyntaxKind::Keyword_ExtGNU___strfmon__:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    static bool isTypeSpecifierSyntax(const SpecifierSyntax* spec)
+    {
+        switch (spec->kind()) {
+            case SyntaxKind::VoidTypeSpecifier:
+            case SyntaxKind::BasicTypeSpecifier:
+            case SyntaxKind::AtomicTypeSpecifier:
+            case SyntaxKind::StructTypeSpecifier:
+            case SyntaxKind::UnionTypeSpecifier:
+            case SyntaxKind::EnumTypeSpecifier:
+            case SyntaxKind::TypedefName:
                 return true;
             default:
                 return false;
@@ -109,9 +144,9 @@ public:
     // Expressions //
     //-------------//
 
-    static bool isConstantToken(SyntaxKind tkK)
+    static bool isConstantSyntax(SyntaxToken tk)
     {
-        switch (tkK) {
+        switch (tk.kind()) {
             case SyntaxKind::IntegerConstantToken:
             case SyntaxKind::FloatingConstantToken:
             case SyntaxKind::CharacterConstantToken:
@@ -130,9 +165,9 @@ public:
         }
     }
 
-    static bool isStringLiteralToken(SyntaxKind tkK)
+    static bool isStringLiteralSyntax(SyntaxToken tk)
     {
-        switch (tkK) {
+        switch (tk.kind()) {
             case SyntaxKind::StringLiteralToken:
             case SyntaxKind::StringLiteral_L_Token:
             case SyntaxKind::StringLiteral_u8_Token:
@@ -149,9 +184,9 @@ public:
         }
     }
 
-    static bool isNAryOperatorToken(SyntaxKind tkK)
+    static bool isNAryOperatorSyntax(SyntaxToken tk)
     {
-        switch (tkK) {
+        switch (tk.kind()) {
             /* Binary */
             case SyntaxKind::BarBarToken:
             case SyntaxKind::AmpersandAmpersandToken:
@@ -197,9 +232,9 @@ public:
         }
     }
 
-    static SyntaxKind NAryExpressionKind(SyntaxKind NAryTkK)
+    static SyntaxKind kindOfNAryOperatorSyntax(SyntaxToken tk)
     {
-        switch (NAryTkK) {
+        switch (tk.kind()) {
             /* Binary */
             case SyntaxKind::BarBarToken:
                 return SyntaxKind::LogicalORExpression;
@@ -275,7 +310,7 @@ public:
         }
     }
 
-    static bool isAssignmentExpression(SyntaxKind exprK)
+    static bool isKindOfAssignmentExpression(SyntaxKind exprK)
     {
         switch (exprK) {
             case SyntaxKind::BasicAssignmentExpression:
@@ -296,28 +331,7 @@ public:
         }
     }
 
-    static bool isAssignmentExpressionOperatorToken(SyntaxKind tkK)
-    {
-        switch (tkK) {
-            case SyntaxKind::EqualsToken:
-            case SyntaxKind::PlusEqualsToken:
-            case SyntaxKind::MinusEqualsToken:
-            case SyntaxKind::AsteriskEqualsToken:
-            case SyntaxKind::SlashEqualsToken:
-            case SyntaxKind::PercentEqualsToken:
-            case SyntaxKind::LessThanLessThanEqualsToken:
-            case SyntaxKind::GreaterThanGreaterThanEqualsToken:
-            case SyntaxKind::AmpersandEqualsToken:
-            case SyntaxKind::CaretEqualsToken:
-            case SyntaxKind::BarEqualsToken:
-                return true;
-
-            default:
-                return false;
-        }
-    }
-
-    static bool isBinaryExpression(SyntaxKind exprK)
+    static bool isKindOfBinaryExpression(SyntaxKind exprK)
     {
         switch (exprK) {
             case SyntaxKind::MultiplyExpression:
@@ -345,54 +359,13 @@ public:
         }
     }
 
-    static bool isBinaryExpressionOperatorToken(SyntaxKind tkK)
-    {
-        switch (tkK) {
-            case SyntaxKind::AsteriskToken:
-            case SyntaxKind::SlashToken:
-            case SyntaxKind::PercentToken:
-            case SyntaxKind::PlusToken:
-            case SyntaxKind::MinusToken:
-            case SyntaxKind::LessThanLessThanToken:
-            case SyntaxKind::GreaterThanGreaterThanToken:
-            case SyntaxKind::LessThanToken:
-            case SyntaxKind::LessThanEqualsToken:
-            case SyntaxKind::GreaterThanToken:
-            case SyntaxKind::GreaterThanEqualsToken:
-            case SyntaxKind::EqualsEqualsToken:
-            case SyntaxKind::ExclamationEqualsToken:
-            case SyntaxKind::AmpersandToken:
-            case SyntaxKind::CaretToken:
-            case SyntaxKind::BarToken:
-            case SyntaxKind::AmpersandAmpersandToken:
-            case SyntaxKind::BarBarToken:
-                return true;
-
-            default:
-                return false;
-        }
-    }
-
-    static bool isPredefinedToken(SyntaxKind tkK)
-    {
-        switch(tkK) {
-            case SyntaxKind::Keyword___func__:
-            case SyntaxKind::Keyword_ExtGNU___FUNCTION__:
-            case SyntaxKind::Keyword_ExtGNU___PRETTY_FUNCTION__:
-                return true;
-
-            default:
-                return false;
-        }
-    }
-
     //------------//
     // Statements //
     //------------//
 
-    static bool isExtGNU_AsmQualifierToken(SyntaxKind tkK)
+    static bool isExtGNU_AsmQualifierSyntax(SyntaxToken tk)
     {
-        switch (tkK) {
+        switch (tk.kind()) {
             case SyntaxKind::Keyword_volatile:
             case SyntaxKind::Keyword_inline:
             case SyntaxKind::Keyword_goto:

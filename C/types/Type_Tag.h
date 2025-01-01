@@ -60,7 +60,7 @@ private:
     DECL_PIMPL_SUB(TagType)
 };
 
-std::string PSY_C_API to_string(const TagType& tagTy);
+std::string PSY_C_API to_string(const TagType* tagTy);
 
 } // C
 } // psy

@@ -78,6 +78,8 @@ public:
         GNU_Asm,
         GNU_InternalBuiltins,
         GNU_LabelsAsValues,
+
+        /* LLVM */
         GNU_AttributeSpecifiersLLVM,
 
         /* Psyche */

@@ -41,7 +41,7 @@ struct TagType::TagTypeImpl : TypeImpl
 
 TagTypeKind TagType::kind() const
 {
-    return TagTypeKind(P->BF_.tagTyK_);
+    return TagTypeKind(P->F_.tagTyK_);
 }
 
 const Identifier *TagType::tag() const
@@ -52,18 +52,20 @@ const Identifier *TagType::tag() const
 TagType::TagType(TagTypeKind tagTyK, const Identifier* tag)
     : Type(new TagTypeImpl(tagTyK, tag))
 {
-    P->BF_.tagTyK_ = static_cast<std::uint32_t>(tagTyK);
+    P->F_.tagTyK_ = static_cast<std::uint32_t>(tagTyK);
 }
 
 namespace psy {
 namespace C {
 
-std::string PSY_C_API to_string(const TagType& tagTy)
+std::string PSY_C_API to_string(const TagType* tagTy)
 {
+    if (!tagTy)
+        return "<TagType is null>";
     std::ostringstream oss;
-    oss << "<TagType |";
-    oss << to_string(tagTy.kind());
-    oss << " tag:" << tagTy.tag()->valueText();
+    oss << "<TagType | ";
+    oss << to_string(tagTy->kind());
+    oss << " tag:" << tagTy->tag()->valueText();
     oss << ">";
     return oss.str();
 }

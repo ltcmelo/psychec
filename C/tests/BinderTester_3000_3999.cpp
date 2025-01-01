@@ -113,7 +113,7 @@ void BinderTester::case3050()
                   .withScopeKind(ScopeKind::File))
          .declaration(Decl()
                   .Object("y", ObjectDeclarationKind::Enumerator)
-                  .ty_.Basic(BasicTypeKind::Int)));
+                  .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
 void BinderTester::case3051()
@@ -126,10 +126,10 @@ void BinderTester::case3051()
                   .withScopeKind(ScopeKind::File))
          .declaration(Decl()
                   .Object("y", ObjectDeclarationKind::Enumerator)
-                  .ty_.Basic(BasicTypeKind::Int))
+                  .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
                   .Object("z", ObjectDeclarationKind::Enumerator)
-                  .ty_.Basic(BasicTypeKind::Int)));
+                  .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
 void BinderTester::case3052()
@@ -142,10 +142,10 @@ void BinderTester::case3052()
                   .withScopeKind(ScopeKind::File))
          .declaration(Decl()
                   .Object("y", ObjectDeclarationKind::Enumerator)
-                  .ty_.Basic(BasicTypeKind::Int))
+                  .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
                   .Object("z", ObjectDeclarationKind::Enumerator)
-                  .ty_.Basic(BasicTypeKind::Int)));
+                  .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
 void BinderTester::case3053()
@@ -158,13 +158,13 @@ void BinderTester::case3053()
                   .withScopeKind(ScopeKind::File))
          .declaration(Decl()
                   .Object("y", ObjectDeclarationKind::Enumerator)
-                  .ty_.Basic(BasicTypeKind::Int))
+                  .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
                   .Object("z", ObjectDeclarationKind::Enumerator)
-                  .ty_.Basic(BasicTypeKind::Int))
+                  .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
                   .Object("w", ObjectDeclarationKind::Enumerator)
-                  .ty_.Basic(BasicTypeKind::Int)));
+                  .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
 void BinderTester::case3054()
@@ -177,13 +177,13 @@ void BinderTester::case3054()
                   .withScopeKind(ScopeKind::File))
          .declaration(Decl()
                   .Object("y", ObjectDeclarationKind::Enumerator)
-                  .ty_.Basic(BasicTypeKind::Int))
+                  .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
                   .Object("z", ObjectDeclarationKind::Enumerator)
-                  .ty_.Basic(BasicTypeKind::Int))
+                  .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
                   .Object("w", ObjectDeclarationKind::Enumerator)
-                  .ty_.Basic(BasicTypeKind::Int)));
+                  .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
 void BinderTester::case3055(){}
@@ -240,7 +240,7 @@ void BinderTester::case3100()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int)));
+                          .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
 void BinderTester::case3101()
@@ -251,7 +251,7 @@ void BinderTester::case3101()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int)
+                          .ty_.Basic(BasicTypeKind::Int_S)
                           .ty_.Derived(TypeKind::Pointer)));
 }
 
@@ -263,7 +263,7 @@ void BinderTester::case3102()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int)
+                          .ty_.Basic(BasicTypeKind::Int_S)
                           .ty_.Derived(TypeKind::Function)
                           .ty_.Derived(TypeKind::Pointer)));
 }
@@ -276,12 +276,12 @@ void BinderTester::case3103()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int))
+                          .ty_.Basic(BasicTypeKind::Int_S))
              .declaration(Decl()
                           .Type("y")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int)));
+                          .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
 void BinderTester::case3104()
@@ -292,13 +292,13 @@ void BinderTester::case3104()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int)
+                          .ty_.Basic(BasicTypeKind::Int_S)
                           .ty_.Derived(TypeKind::Pointer))
              .declaration(Decl()
                           .Type("y")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int)));
+                          .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
 void BinderTester::case3105()
@@ -320,7 +320,7 @@ void BinderTester::case3106()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int, CVR::Const)));
+                          .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)));
 }
 
 void BinderTester::case3107()
@@ -331,7 +331,7 @@ void BinderTester::case3107()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int, CVR::Const)));
+                          .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)));
 }
 
 void BinderTester::case3108()
@@ -342,13 +342,13 @@ void BinderTester::case3108()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int)
+                          .ty_.Basic(BasicTypeKind::Int_S)
                           .ty_.Derived(TypeKind::Pointer))
              .declaration(Decl()
                           .Type("y")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int)
+                          .ty_.Basic(BasicTypeKind::Int_S)
                           .ty_.Derived(TypeKind::Pointer)));
 }
 
@@ -360,12 +360,12 @@ void BinderTester::case3109()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int))
+                          .ty_.Basic(BasicTypeKind::Int_S))
              .declaration(Decl()
                           .Type("y")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int)
+                          .ty_.Basic(BasicTypeKind::Int_S)
                           .ty_.Derived(TypeKind::Pointer)));
 }
 
@@ -377,12 +377,12 @@ void BinderTester::case3110()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int, CVR::Const))
+                          .ty_.Basic(BasicTypeKind::Int_S, CVR::Const))
              .declaration(Decl()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int, CVR::Const)));
+                          .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)));
 }
 
 void BinderTester::case3111(){}
@@ -584,7 +584,7 @@ void BinderTester::case3300()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int))
+                          .ty_.Basic(BasicTypeKind::Int_S))
             .declaration(Decl()
                          .Object("z", ObjectDeclarationKind::Variable)
                          .ty_.Typedef("x")));
@@ -598,7 +598,7 @@ void BinderTester::case3301()
                           .Type("x")
                           .inNameSpace(NameSpace::OrdinaryIdentifiers)
                           .withScopeKind(ScopeKind::File)
-                          .ty_.Basic(BasicTypeKind::Int)
+                          .ty_.Basic(BasicTypeKind::Int_S)
                           .ty_.Derived(TypeKind::Pointer))
               .declaration(Decl()
                            .Object("z", ObjectDeclarationKind::Variable)
@@ -617,10 +617,10 @@ int z ;
          Expectation()
          .declaration(Decl()
                       .Object("y", ObjectDeclarationKind::Field)
-                      .ty_.Basic(BasicTypeKind::Short))
+                      .ty_.Basic(BasicTypeKind::Short_S))
          .declaration(Decl()
                       .Object("z", ObjectDeclarationKind::Variable)
-                      .ty_.Basic(BasicTypeKind::Int)));
+                      .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
 void BinderTester::case3303()
@@ -680,7 +680,7 @@ void _ ( ) {
          Expectation()
          .declaration(Decl()
                       .Object("x", ObjectDeclarationKind::Variable, ScopeKind::Block)
-                      .ty_.Basic(BasicTypeKind::Int)));
+                      .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
 void BinderTester::case3307(){}
@@ -884,7 +884,7 @@ void BinderTester::case3500()
          Expectation()
             .declaration(Decl()
                      .Object("x", ObjectDeclarationKind::Variable)
-                     .ty_.Basic(BasicTypeKind::Int))
+                     .ty_.Basic(BasicTypeKind::Int_S))
          .scopePath({}));
 }
 
@@ -894,8 +894,8 @@ void BinderTester::case3501()
          Expectation()
             .declaration(Decl()
                      .Object("x", ObjectDeclarationKind::Variable, ScopeKind::Block)
-                     .ty_.Basic(BasicTypeKind::Int))
-         .scopePath({0}));
+                     .ty_.Basic(BasicTypeKind::Int_S))
+            .scopePath({0}));
 }
 
 void BinderTester::case3502()
@@ -904,7 +904,7 @@ void BinderTester::case3502()
          Expectation()
             .declaration(Decl()
                      .Object("x", ObjectDeclarationKind::Variable, ScopeKind::Block)
-                     .ty_.Basic(BasicTypeKind::Int))
+                     .ty_.Basic(BasicTypeKind::Int_S))
          .scopePath({0, 0}));
 }
 
@@ -914,8 +914,8 @@ void BinderTester::case3503()
          Expectation()
             .declaration(Decl()
                      .Object("x", ObjectDeclarationKind::Variable, ScopeKind::Block)
-                     .ty_.Basic(BasicTypeKind::Int))
-         .scopePath({0, 1}));
+                     .ty_.Basic(BasicTypeKind::Int_S))
+            .scopePath({0, 1}));
 }
 
 void BinderTester::case3504()
@@ -924,7 +924,7 @@ void BinderTester::case3504()
          Expectation()
             .declaration(Decl()
                      .Object("x", ObjectDeclarationKind::Variable, ScopeKind::Block)
-                     .ty_.Basic(BasicTypeKind::Int))
+                     .ty_.Basic(BasicTypeKind::Int_S))
          .scopePath({1, 1}));
 }
 
@@ -934,7 +934,7 @@ void BinderTester::case3505()
          Expectation()
             .declaration(Decl()
                      .Object("x", ObjectDeclarationKind::Variable, ScopeKind::Block)
-                     .ty_.Basic(BasicTypeKind::Int))
+                     .ty_.Basic(BasicTypeKind::Int_S))
          .scopePath({1, 2, 0}));
 }
 
@@ -952,14 +952,46 @@ struct x { };
 
 }
 
-void BinderTester::case3507(){}
-void BinderTester::case3508(){}
-void BinderTester::case3509(){}
-void BinderTester::case3510(){}
-void BinderTester::case3511(){}
-void BinderTester::case3512(){}
-void BinderTester::case3513(){}
-void BinderTester::case3514(){}
+void BinderTester::case3507()
+{
+    bind("long __max_align_ll __attribute__( ( __aligned__ ( _Alignof ( double ) ) ) ) ;");
+}
+
+void BinderTester::case3508()
+{
+    bind("long long __max_align_ll __attribute__( ( __aligned__ ( _Alignof ( long long ) ) ) ) ;");
+}
+
+void BinderTester::case3509()
+{
+    bind("long __max_align_ll __attribute__( ( __aligned__ ( _Alignof ( struct x ) ) ) ) ;");
+}
+
+void BinderTester::case3510()
+{
+    bind("struct x __max_align_ll __attribute__( ( __aligned__ ( _Alignof ( double ) ) ) ) ;");
+}
+
+void BinderTester::case3511()
+{
+    bind("int x = sizeof ( long ) ;");
+}
+
+void BinderTester::case3512()
+{
+    bind("int x = sizeof ( struct y ) ;");
+}
+
+void BinderTester::case3513()
+{
+    bind("int x = sizeof ( y ) ;");
+}
+
+void BinderTester::case3514()
+{
+    bind("typedef int x ; int y ( ) { return sizeof ( x ) ; }");
+}
+
 void BinderTester::case3515(){}
 void BinderTester::case3516(){}
 void BinderTester::case3517(){}

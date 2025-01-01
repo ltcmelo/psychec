@@ -82,7 +82,39 @@ protected:
     Type& operator=(const Type&) = delete;
 };
 
-std::string PSY_C_API to_string(const Type& ty);
+std::string PSY_C_API to_string(const Type* ty);
+
+const Type* PSY_C_API unqualifyType(const Type* ty);
+
+/**
+ * Return whether the Type is an \a arithmetic \a type.
+ */
+bool PSY_C_API isArithmeticType(const Type* ty);
+
+/**
+ * Return whether the Type is a \a signed \a integer \a type.
+ */
+bool PSY_C_API isSignedIntegerType(const Type* ty);
+
+/**
+ * Return whether the Type is an \a unsigned \a integer \a type.
+ */
+bool PSY_C_API isUnsignedIntegerType(const Type* ty);
+
+/**
+ * Return whether the Type is a \a integer \a type.
+ */
+bool PSY_C_API isIntegerType(const Type* ty);
+
+/**
+ * Return whether the Type is a \a real \a type.
+ */
+bool PSY_C_API isRealType(const Type* ty);
+
+/**
+ * Return whether the Type is a \a scalar \a type.
+ */
+bool PSY_C_API isScalarType(const Type* ty);
 
 } // C
 } // psy
