@@ -34,6 +34,7 @@
 #include "../common/infra/Assertions.h"
 
 #include <cstdint>
+#include <limits>
 
 #define V_(v) if (v == Action::Quit) return Action::Quit
 
