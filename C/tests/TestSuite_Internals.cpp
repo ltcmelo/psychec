@@ -20,8 +20,8 @@
 
 #include "TestSuite_Internals.h"
 
-#include "compilation/Compilation.h"
-#include "compilation/SemanticModel.h"
+#include "sema/Compilation.h"
+#include "sema/SemanticModel.h"
 #include "symbols/Symbol.h"
 #include "parser/Unparser.h"
 #include "symbols/Symbol_ALL.h"
@@ -29,10 +29,11 @@
 #include "syntax/SyntaxNamePrinter.h"
 #include "syntax/SyntaxNodes.h"
 
-#include "BinderTester.h"
+#include "DeclarationBinderTester.h"
 #include "ParserTester.h"
 #include "ReparserTester.h"
 #include "TypeResolverTester.h"
+#include "TypeCheckerTester.h"
 
 #include "../common/infra/Assertions.h"
 
@@ -64,25 +65,31 @@ std::tuple<int, int> InternalsTestSuite::testAll()
     auto B = std::make_unique<ReparserTester>(this);
     B->testReparser();
 
-    auto C = std::make_unique<BinderTester>(this);
-    C->testBinder();
+    auto C = std::make_unique<DeclarationBinderTester>(this);
+    C->testDeclarationBinder();
 
     auto D = std::make_unique<TypeResolverTester>(this);
     D->testTypeResolver();
 
+    auto E = std::make_unique<TypeCheckerTester>(this);
+    E->testTypeChecker();
+
     auto res = std::make_tuple(P->totalPassed()
                                     + B->totalPassed()
                                     + C->totalPassed()
-                                    + D->totalPassed(),
+                                    + D->totalPassed()
+                                    + E->totalPassed(),
                                P->totalFailed()
                                     + B->totalFailed()
                                     + C->totalFailed()
-                                    + D->totalFailed());
+                                    + D->totalFailed()
+                                    + E->totalFailed());
 
     testers_.emplace_back(P.release());
     testers_.emplace_back(B.release());
     testers_.emplace_back(C.release());
     testers_.emplace_back(D.release());
+    testers_.emplace_back(E.release());
 
     return res;
 }
@@ -383,7 +390,7 @@ namespace {
 bool REJECT_CANDIDATE(const Symbol* sym, std::string msg)
 {
 #ifdef DBG_BINDING_SEARCH
-    std::cout << "\n\t\tREJECT " << to_string(*sym) << " DUE TO " << msg;
+    std::cout << "\n\t\tREJECT " << to_string(sym) << " DUE TO " << msg;
 #endif
     return false;
 }
@@ -459,8 +466,22 @@ bool CVRMatches(const Type* ty, CVR cvr)
     return true;
 }
 
-bool typeMatches(const Type* ty, const Ty& t)
+const Type* maybeResolve(const SemanticModel* semaModel, const Type* ty)
 {
+    if (ty->kind() == TypeKind::TypedefName) {
+        auto actualTy = ty->asTypedefNameType()->resolvedSynonymizedType();
+        if (actualTy)
+            return actualTy;
+    }
+    return ty;
+}
+
+bool typeMatches(const SemanticModel* semaModel,
+                 const Type* ty,
+                 const Ty& t)
+{
+    ty = maybeResolve(semaModel, ty);
+
     PSY_ASSERT_2(t.derivTyKs_.size() == t.derivTyCVRs_.size()
                && t.derivTyKs_.size() == t.derivPtrTyDecay_.size(),
                return false);
@@ -473,6 +494,8 @@ bool typeMatches(const Type* ty, const Ty& t)
         }
         if (ty->kind() == TypeKind::Qualified)
             ty = ty->asQualifiedType()->unqualifiedType();
+
+        ty = maybeResolve(semaModel, ty);
 
         auto derivTyK = t.derivTyKs_[i - 1];
         if (derivTyK != ty->kind()) {
@@ -489,6 +512,7 @@ bool typeMatches(const Type* ty, const Ty& t)
                     return false;
                 }
                 ty = ty->asArrayType()->elementType();
+                ty = maybeResolve(semaModel, ty);
                 break;
 
             case TypeKind::Pointer:
@@ -516,6 +540,7 @@ bool typeMatches(const Type* ty, const Ty& t)
                         break;
                 }
                 ty = ty->asPointerType()->referencedType();
+                ty = maybeResolve(semaModel, ty);
                 break;
 
             case TypeKind::Function: {
@@ -533,17 +558,19 @@ bool typeMatches(const Type* ty, const Ty& t)
 
                 for (auto i = 0U; i < parmTys.size(); ++i) {
                     const Type* parmTy = parmTys[i];
-                    if (!typeMatches(parmTy, t.parmsTys_[i])) {
+                    if (!typeMatches(semaModel, parmTy, t.parmsTys_[i])) {
                         DETAIL_MISMATCH("parameter type mismatch");
                         return false;
                     }
                 }
 
                 ty = funcTy->returnType();
+                ty = maybeResolve(semaModel, ty);
+
                 if (!t.nestedRetTy_)
                     break;
 
-                if (!typeMatches(ty, *t.nestedRetTy_.get())) {
+                if (!typeMatches(semaModel, ty, *t.nestedRetTy_.get())) {
                     DETAIL_MISMATCH("nested return type mismatch");
                     return false;
                 }
@@ -560,6 +587,12 @@ bool typeMatches(const Type* ty, const Ty& t)
         DETAIL_MISMATCH("type CVR");
         return false;
     }
+
+    if (ty->kind() == TypeKind::Qualified)
+        ty = ty->asQualifiedType()->unqualifiedType();
+
+    ty = maybeResolve(semaModel, ty);
+
     if (ty->kind() == TypeKind::Qualified)
         ty = ty->asQualifiedType()->unqualifiedType();
 
@@ -577,14 +610,19 @@ bool typeMatches(const Type* ty, const Ty& t)
             break;
 
         case TypeKind::Void:
+            if (t.tyK_ != TypeKind::Void) {
+                DETAIL_MISMATCH("void type mismatch");
+                return false;
+            }
             break;
 
-        case TypeKind::Typedef:
-            if (ty->asTypedefType()->typedefName()->valueText() != t.ident_) {
+        case TypeKind::TypedefName: {
+            if (ty->asTypedefNameType()->typedefName()->valueText() != t.ident_) {
                 DETAIL_MISMATCH("typedef name mismatch");
                 return false;
             }
             break;
+        }
 
         case TypeKind::Tag:
             if (ty->asTagType()->kind() != t.tagTyK_) {
@@ -597,6 +635,13 @@ bool typeMatches(const Type* ty, const Ty& t)
             }
             break;
 
+        case TypeKind::Unknown:
+            if (t.tyK_ != TypeKind::Unknown) {
+                DETAIL_MISMATCH("unknown type mismatch");
+                return false;
+            }
+            break;
+
         default:
             PSY_ASSERT_2(false, return false);
     }
@@ -604,7 +649,10 @@ bool typeMatches(const Type* ty, const Ty& t)
     return true;
 }
 
-bool functionMatchesBinding(const Function* funcDecl, const Decl& decl)
+bool functionMatchesBinding(
+        const SemanticModel* semaModel,
+        const FunctionDeclarationSymbol* funcDecl,
+        const Decl& decl)
 {
     if (!funcDecl->name())
         return REJECT_CANDIDATE(funcDecl, "empty name");
@@ -618,16 +666,19 @@ bool functionMatchesBinding(const Function* funcDecl, const Decl& decl)
     if (funcDecl->type()->kind() != TypeKind::Function)
         return REJECT_CANDIDATE(funcDecl, "not a function type");
 
-    if (!typeMatches(funcDecl->type(), decl.ty_))
+    if (!typeMatches(semaModel, funcDecl->type(), decl.ty_))
         return REJECT_CANDIDATE(funcDecl, "type mismatch");
 
     return true;
 }
 
-bool valueMatchesBinding(const ObjectDeclaration* objDecl, const Decl& decl)
+bool objMatchesBinding(
+        const SemanticModel* semaModel,
+        const ObjectDeclarationSymbol* objDecl,
+        const Decl& decl)
 {
-    if (objDecl->kind() != decl.objDeclK_)
-        return REJECT_CANDIDATE(objDecl, "value kind mismatch");
+    if (objDecl->category() != decl.objDeclK_)
+        return REJECT_CANDIDATE(objDecl, "object category mismatch");
 
     if (!objDecl->name())
         return REJECT_CANDIDATE(objDecl, "empty value name");
@@ -638,48 +689,74 @@ bool valueMatchesBinding(const ObjectDeclaration* objDecl, const Decl& decl)
     if (objDecl->type() == nullptr)
         return REJECT_CANDIDATE(objDecl, "null type");
 
-    if (!typeMatches(objDecl->type(), decl.ty_))
+    if (!typeMatches(semaModel, objDecl->type(), decl.ty_))
         return REJECT_CANDIDATE(objDecl, "type mismatch");
 
     return true;
 }
 
-bool typeMatchesBinding(const TypeDeclaration* tyDecl, const Decl& decl)
+bool membMatchesBinding(
+        const SemanticModel* semaModel,
+        const MemberDeclarationSymbol* membDecl,
+        const Decl& decl)
 {
-    if (tyDecl->kind() != decl.tyDeclK_)
+    if (membDecl->category() != decl.membDeclK_)
+        return REJECT_CANDIDATE(membDecl, "member category mismatch");
+
+    if (!membDecl->name())
+        return REJECT_CANDIDATE(membDecl, "empty value name");
+
+    if (membDecl->name()->valueText() != decl.ident_)
+        return REJECT_CANDIDATE(membDecl, "name mismatch");
+
+    if (membDecl->type() == nullptr)
+        return REJECT_CANDIDATE(membDecl, "null type");
+
+    if (!typeMatches(semaModel, membDecl->type(), decl.ty_))
+        return REJECT_CANDIDATE(membDecl, "type mismatch");
+
+    return true;
+}
+
+bool typeMatchesBinding(
+        const SemanticModel* semaModel,
+        const TypeDeclarationSymbol* tyDecl,
+        const Decl& decl)
+{
+    if (tyDecl->category() != decl.tyDeclK_)
         return REJECT_CANDIDATE(tyDecl, "type decl kind mismatch");
 
     switch (decl.tyDeclK_) {
-        case TypeDeclarationKind::Tag: {
-            if (tyDecl->kind() != TypeDeclarationKind::Tag)
+        case TypeDeclarationCategory::Tag: {
+            if (tyDecl->category() != TypeDeclarationCategory::Tag)
                 return REJECT_CANDIDATE(tyDecl, "not a tag type");
             auto tagTyDecl = tyDecl->asTagTypeDeclaration();
-            if (!tagTyDecl->specifiedType())
+            if (!tagTyDecl->introducedNewType())
                 return REJECT_CANDIDATE(tyDecl, "no specified type");
-            if (!tagTyDecl->identifier())
+            auto tagTy = tagTyDecl->introducedNewType();
+            if (!tagTy->tag())
                 return REJECT_CANDIDATE(tyDecl, "empty identifier");
-            if (tagTyDecl->identifier()->valueText() != decl.ident_)
+            if (tagTy->tag()->valueText() != decl.ident_)
                 return REJECT_CANDIDATE(tyDecl, "identifier mismatch");
-            auto tagTy = tagTyDecl->specifiedType();
             if (!tagTy->tag())
                 return REJECT_CANDIDATE(tyDecl, "empty tag");
             if (tagTy->tag()->valueText() != decl.ident_)
                 return REJECT_CANDIDATE(tyDecl, "tag mismatch");
             switch (decl.tagTyDeclK_) {
-                case TagTypeDeclarationKind::Struct:
-                    if (tagTyDecl->kind() != TagTypeDeclarationKind::Struct)
+                case TagTypeDeclarationCategory::Struct:
+                    if (tagTyDecl->category() != TagTypeDeclarationCategory::Struct)
                         return REJECT_CANDIDATE(tyDecl, "not a struct");
                     if (tagTy->kind() != TagTypeKind::Struct)
                         return REJECT_CANDIDATE(tyDecl, "not a struct type");
                     break;
-                case TagTypeDeclarationKind::Union:
-                    if (tagTyDecl->kind() != TagTypeDeclarationKind::Union)
+                case TagTypeDeclarationCategory::Union:
+                    if (tagTyDecl->category() != TagTypeDeclarationCategory::Union)
                         return REJECT_CANDIDATE(tyDecl, "not a union");
                     if (tagTy->kind() != TagTypeKind::Union)
                         return REJECT_CANDIDATE(tyDecl, "not a union type");
                     break;
-                case TagTypeDeclarationKind::Enum:
-                    if (tagTyDecl->kind() != TagTypeDeclarationKind::Enum)
+                case TagTypeDeclarationCategory::Enum:
+                    if (tagTyDecl->category() != TagTypeDeclarationCategory::Enum)
                         return REJECT_CANDIDATE(tyDecl, "not a enum");
                     if (tagTy->kind() != TagTypeKind::Enum)
                         return REJECT_CANDIDATE(tyDecl, "not a enum type");
@@ -688,16 +765,16 @@ bool typeMatchesBinding(const TypeDeclaration* tyDecl, const Decl& decl)
             break;
         }
 
-        case TypeDeclarationKind::Typedef: {
-            auto tydefDecl = tyDecl->asTypedef();
-            if (!typeMatches(tydefDecl->synonymizedType(), decl.ty_))
+        case TypeDeclarationCategory::Typedef: {
+            auto tydefDecl = tyDecl->asTypedefDeclaration();
+            if (!typeMatches(semaModel, tydefDecl->synonymizedType(), decl.ty_))
                 return REJECT_CANDIDATE(tyDecl, "synonymized type mismatch");
-            auto tydefTy = tydefDecl->definedType();
-            if (!tydefTy)
+            auto tydefNameTy = tydefDecl->introducedSynonymType();
+            if (!tydefNameTy)
                 return REJECT_CANDIDATE(tyDecl, "no defined type");
-            if (!tydefTy->typedefName())
+            if (!tydefNameTy->typedefName())
                 return REJECT_CANDIDATE(tyDecl, "empty typedef name");
-            if (tydefTy->typedefName()->valueText() != decl.ident_)
+            if (tydefNameTy->typedefName()->valueText() != decl.ident_)
                 return REJECT_CANDIDATE(tyDecl, "typedef name mismatch");
             break;
         }
@@ -706,9 +783,12 @@ bool typeMatchesBinding(const TypeDeclaration* tyDecl, const Decl& decl)
     return true;
 }
 
-bool symbolMatchesBinding(const Declaration* declSym, const Decl& decl)
+bool symbolMatchesBinding(
+        const DeclarationSymbol* declSym,
+        const Decl& decl,
+        const SemanticModel* semaModel)
 {
-    if (declSym->kind() != decl.declK_)
+    if (declSym->category() != decl.declK_)
         return REJECT_CANDIDATE(declSym, "symbol kind mismatch");
 
     if (declSym->enclosingScope()->kind() != decl.scopeK_)
@@ -719,15 +799,18 @@ bool symbolMatchesBinding(const Declaration* declSym, const Decl& decl)
 
     switch (decl.declK_)
     {
-        case DeclarationKind::Object:
-            return valueMatchesBinding(declSym->asObjectDeclaration(), decl);
+        case DeclarationCategory::Object:
+            return objMatchesBinding(semaModel, declSym->asObjectDeclaration(), decl);
 
-        case DeclarationKind::Type: {
-            return typeMatchesBinding(declSym->asTypeDeclaration(), decl);
+        case DeclarationCategory::Member:
+            return membMatchesBinding(semaModel, declSym->asMemberDeclaration(), decl);
+
+        case DeclarationCategory::Type: {
+            return typeMatchesBinding(semaModel, declSym->asTypeDeclaration(), decl);
         }
 
-        case DeclarationKind::Function:
-            return functionMatchesBinding(declSym->asFunction(), decl);
+        case DeclarationCategory::Function:
+            return functionMatchesBinding(semaModel, declSym->asFunctionDeclaration(), decl);
 
         default:
             PSY__internals__FAIL("unknkown symbol kind");
@@ -737,9 +820,12 @@ bool symbolMatchesBinding(const Declaration* declSym, const Decl& decl)
     return false;
 };
 
-bool symbolMatchesBinding_(const std::unique_ptr<Declaration>& declSym, const Decl& decl)
+bool symbolMatchesBinding_(
+        const DeclarationSymbol* declSym,
+        const Decl& decl,
+        const SemanticModel* semaModel)
 {
-    return symbolMatchesBinding(declSym.get(), decl);
+    return symbolMatchesBinding(declSym, decl, semaModel);
 };
 
 } // anonymous
@@ -753,13 +839,13 @@ void InternalsTestSuite::matchDeclarations(
         std::cout << "\n\t\t...";
 #endif
         using namespace std::placeholders;
-        auto pred = std::bind(symbolMatchesBinding_, _1, Decl);
-        auto decl = semaModel->searchForDecl(pred);
+        auto pred = std::bind(symbolMatchesBinding_, _1, Decl, semaModel.get());
+        auto decl = semaModel->searchForDeclaration(pred);
         if (decl == nullptr) {
             std::ostringstream oss;
             oss << "no declaration matches the expectation: ";
             oss << " identifier: " << Decl.ident_;
-            oss << " kind: " << to_string(Decl.declK_);
+            oss << " kind: " << Decl.declK_;
             PSY__internals__FAIL(oss.str());
         }
 #ifdef DBG_BINDING_SEARCH
@@ -784,13 +870,13 @@ void InternalsTestSuite::checkSemanticModel(
         std::cout << "\n\t\t...";
 #endif
         using namespace std::placeholders;
-        auto pred = std::bind(symbolMatchesBinding_, _1, Decl);
-        auto decl = semaModel->searchForDecl(pred);
+        auto pred = std::bind(symbolMatchesBinding_, _1, Decl, semaModel);
+        auto decl = semaModel->searchForDeclaration(pred);
         if (decl == nullptr) {
             std::ostringstream oss;
             oss << "no declaration matches the expectation: ";
             oss << " identifier: " << Decl.ident_;
-            oss << " kind: " << to_string(Decl.declK_);
+            oss << " kind: " << Decl.declK_;
             PSY__internals__FAIL(oss.str());
         }
 #ifdef DBG_BINDING_SEARCH
@@ -808,7 +894,7 @@ void InternalsTestSuite::checkSemanticModel(
 //                scope = innerScopes[idx];
 //                PSY_EXPECT_TRUE(scope);
 //            }
-//            auto sameDecl = scope->searchForDeclaration(decl->identifier(), decl->nameSpace());
+//            auto sameDecl = scope->searchForDeclaration(decl->name(), decl->nameSpace());
 //            PSY_EXPECT_TRUE(sameDecl);
 //            PSY_EXPECT_TRUE(symbolMatchesBinding(sameDecl, Decl));
 //        }
@@ -832,6 +918,18 @@ void InternalsTestSuite::resolveTypes(std::string text, Expectation X)
     compilation->addSyntaxTrees({ tree_.get() });
     compilation->bind();
     compilation->resolveTypes();
+    auto semaModel = compilation->semanticModel(tree_.get());
+    checkSemanticModel(semaModel, X);
+}
+
+void InternalsTestSuite::checkTypes(std::string text, Expectation X)
+{
+    parse(text);
+    auto compilation = Compilation::create(tree_->filePath());
+    compilation->addSyntaxTrees({ tree_.get() });
+    compilation->bind();
+    compilation->resolveTypes();
+    compilation->checkTypes();
     auto semaModel = compilation->semanticModel(tree_.get());
     checkSemanticModel(semaModel, X);
 }

@@ -21,38 +21,30 @@
 #include "Symbol__IMPL__.inc"
 #include "Symbol_Program.h"
 
-#include <sstream>
-
 using namespace psy;
 using namespace C;
 
-struct Program::ProgramImpl : SymbolImpl
+struct ProgramSymbol::ProgramImpl : SymbolImpl
 {
     ProgramImpl()
         : SymbolImpl(SymbolKind::Program)
     {}
 };
 
-Program::Program()
+ProgramSymbol::ProgramSymbol()
     : Symbol(new ProgramImpl)
 {
-}
-
-std::string Program::toDisplayString() const
-{
-    return "";
 }
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Program* prog)
+std::ostream& operator<<(std::ostream& os, const ProgramSymbol* prog)
 {
     if (!prog)
-        return "<Program is null>";
-    std::ostringstream oss;
-    oss << "<Program>";
-    return oss.str();
+        return os << "<Program is null>";
+    os << "<Program>";
+    return os;
 }
 
 } // C

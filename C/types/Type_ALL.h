@@ -25,9 +25,10 @@
 #include "Type_Basic.h"
 #include "Type_Function.h"
 #include "Type_Pointer.h"
-#include "Type_Typedef.h"
+#include "Type_TypedefName.h"
 #include "Type_Tag.h"
 #include "Type_Void.h"
 #include "Type_Qualified.h"
+#include "Type_Error.h"
 
 #endif

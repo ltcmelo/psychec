@@ -558,7 +558,7 @@ protected:
         traverseExpression(node);
         nonterminal(node->expression());
         terminal(node->operatorToken(), node);
-        nonterminal(node->identifier());
+        nonterminal(node->memberName());
         return Action::Skip;
     }
 
@@ -844,9 +844,9 @@ protected:
     virtual Action visitExtGNU_AsmOperand(const ExtGNU_AsmOperandSyntax* node) override
     {
         terminal(node->openBracketToken(), node);
-        nonterminal(node->identifier());
+        nonterminal(node->operandName());
         terminal(node->closeBracketToken(), node);
-        nonterminal(node->stringLiteral());
+        nonterminal(node->constraint());
         terminal(node->openParenthesisToken(), node);
         nonterminal(node->expression());
         terminal(node->closeParenthesisToken(), node);

@@ -19,41 +19,62 @@
 // THE SOFTWARE.
 
 #include "TypeDeclaration__IMPL__.inc"
-
 #include "symbols/Symbol_ALL.h"
 
-#include <sstream>
+#include <iostream>
 
 using namespace psy;
 using namespace C;
 
-TypeDeclaration::TypeDeclaration(TypeDeclarationImpl* p)
-    : Declaration(p)
+TypeDeclarationSymbol::TypeDeclarationSymbol(TypeDeclarationImpl* p)
+    : DeclarationSymbol(p)
 {}
 
-TypeDeclaration::~TypeDeclaration()
+TypeDeclarationSymbol::~TypeDeclarationSymbol()
 {}
 
-TypeDeclarationKind TypeDeclaration::kind() const
+TypeDeclarationCategory TypeDeclarationSymbol::category() const
 {
-    return TypeDeclarationKind(P_CAST->BF_.tyDeclK_);
+    switch (kind()) {
+        case SymbolKind::Program:
+        case SymbolKind::TranslationUnit:
+        case SymbolKind::FunctionDeclaration:
+        case SymbolKind::EnumeratorDeclaration:
+        case SymbolKind::FieldDeclaration:
+        case SymbolKind::VariableDeclaration:
+        case SymbolKind::ParameterDeclaration:
+            break;
+        case SymbolKind::TypedefDeclaration:
+            return TypeDeclarationCategory::Typedef;
+        case SymbolKind::StructDeclaration:
+        case SymbolKind::UnionDeclaration:
+        case SymbolKind::EnumDeclaration:
+            return TypeDeclarationCategory::Tag;
+    }
+    PSY_ASSERT_1(false);
+    return TypeDeclarationCategory(~0);
+}
+
+const Type* TypeDeclarationSymbol::introducedType() const
+{
+    return P_CAST->ty_;
 }
 
 namespace psy {
 namespace C {
 
-PSY_C_API std::string to_string(const TypeDeclaration* tyDecl)
+PSY_C_API std::ostream& operator<<(std::ostream& os, const TypeDeclarationSymbol* tyDecl)
 {
     if (!tyDecl)
-        return "<TypeDeclaration is null>";
-    switch (tyDecl->kind()) {
-        case TypeDeclarationKind::Tag:
-            return to_string(tyDecl->asTagTypeDeclaration());
-        case TypeDeclarationKind::Typedef:
-            return to_string(tyDecl->asTypedef());
+        return os << "<TypeDeclaration is null>";
+    switch (tyDecl->category()) {
+        case TypeDeclarationCategory::Tag:
+            return os << tyDecl->asTagTypeDeclaration();
+        case TypeDeclarationCategory::Typedef:
+            return os << tyDecl->asTypedefDeclaration();
     }
     PSY_ASSERT_1(false);
-    return "<invalid TypeDeclaration>";
+    return os << "<invalid TypeDeclaration>";
 }
 
 } // C

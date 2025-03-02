@@ -24,59 +24,95 @@
 #include "symbols/Symbol_ALL.h"
 #include "types/Type_Tag.h"
 
+#include <algorithm>
+
 using namespace psy;
 using namespace C;
 
-TagTypeDeclaration::TagTypeDeclaration(const Symbol* containingSym,
-                                       const SyntaxTree* tree,
-                                       const Scope* enclosingScope,
-                                       TagType* tagTy,
-                                       TagTypeDeclarationKind tagTyDeclK)
-    : TypeDeclaration(
-          new TypeDeclarationImpl(containingSym,
+TagTypeDeclarationSymbol::TagTypeDeclarationSymbol(
+        SymbolKind symK,
+        const Symbol* containingSym,
+        const SyntaxTree* tree,
+        const Scope* enclosingScope,
+        TagType* tagTy)
+    : TypeDeclarationSymbol(
+          new TypeDeclarationImpl(symK,
+                                  containingSym,
                                   tree,
                                   enclosingScope,
                                   NameSpace::Tags,
-                                  TypeDeclarationKind::Tag,
-                                  tagTy,
-                                  tagTyDeclK))
+                                  tagTy))
 {
+    tagTy->setDeclaration(this);
 }
 
-TagTypeDeclarationKind TagTypeDeclaration::kind() const
+TagTypeDeclarationCategory TagTypeDeclarationSymbol::category() const
 {
-    return TagTypeDeclarationKind(P_CAST->BF_.tagTyDeclK_);
+    switch (kind()) {
+        case SymbolKind::Program:
+        case SymbolKind::TranslationUnit:
+        case SymbolKind::FunctionDeclaration:
+        case SymbolKind::EnumeratorDeclaration:
+        case SymbolKind::FieldDeclaration:
+        case SymbolKind::VariableDeclaration:
+        case SymbolKind::ParameterDeclaration:
+        case SymbolKind::TypedefDeclaration:
+            break;
+        case SymbolKind::StructDeclaration:
+            return TagTypeDeclarationCategory::Struct;
+        case SymbolKind::UnionDeclaration:
+            return TagTypeDeclarationCategory::Union;
+        case SymbolKind::EnumDeclaration:
+            return TagTypeDeclarationCategory::Enum;
+    }
+    PSY_ASSERT_1(false);
+    return TagTypeDeclarationCategory(~0);
 }
 
-const Identifier* TagTypeDeclaration::identifier() const
+const Identifier* TagTypeDeclarationSymbol::denotingIdentifier() const
 {
-    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
+    PSY_ASSERT_2(introducedType()->kind() == TypeKind::Tag, return nullptr);
     return P_CAST->ty_->asTagType()->tag();
 }
 
-const TagType* TagTypeDeclaration::specifiedType() const
+void TagTypeDeclarationSymbol::addMember(const MemberDeclarationSymbol* memb)
 {
-    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Tag, return nullptr);
+    membs_.push_back(memb);
+}
+
+const MemberDeclarationSymbol* TagTypeDeclarationSymbol::member(const Identifier* name) const
+{
+    auto it = std::find_if(membs_.begin(),
+                           membs_.end(),
+                           [name] (const MemberDeclarationSymbol* memb) {
+                                return memb->name() == name;
+                           });
+    return it != membs_.end() ? *it : nullptr;
+}
+
+const TagType* TagTypeDeclarationSymbol::introducedNewType() const
+{
+    PSY_ASSERT_2(introducedType()->kind() == TypeKind::Tag, return nullptr);
     return P_CAST->ty_->asTagType();
 }
 
 namespace psy {
 namespace C {
 
-PSY_C_API std::string to_string(const TagTypeDeclaration* tagTyDecl)
+PSY_C_API std::ostream& operator<<(std::ostream& os, const TagTypeDeclarationSymbol* tagTyDecl)
 {
     if (!tagTyDecl)
-        return "<TagTypeDeclaration is null>";
-    switch (tagTyDecl->kind()) {
-        case TagTypeDeclarationKind::Struct:
-            return to_string(tagTyDecl->asStruct());
-        case TagTypeDeclarationKind::Union:
-            return to_string(tagTyDecl->asUnion());
-        case TagTypeDeclarationKind::Enum:
-            return to_string(tagTyDecl->asEnum());
+        return os << "<TagTypeDeclaration is null>";
+    switch (tagTyDecl->category()) {
+        case TagTypeDeclarationCategory::Struct:
+            return os << tagTyDecl->asStructDeclaration();
+        case TagTypeDeclarationCategory::Union:
+            return os << tagTyDecl->asUnionDeclaration();
+        case TagTypeDeclarationCategory::Enum:
+            return os << tagTyDecl->asEnumDeclaration();
     }
     PSY_ASSERT_1(false);
-    return "<invalid TagTypeDeclaration>";
+    return os << "<invalid TagTypeDeclaration>";
 }
 
 } // C

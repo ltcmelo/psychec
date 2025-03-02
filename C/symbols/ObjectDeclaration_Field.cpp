@@ -21,7 +21,7 @@
 #include "ObjectDeclaration_Field.h"
 
 #include "symbols/Symbol_ALL.h"
-#include "binder/Scope.h"
+#include "sema/Scope.h"
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_ALL.h"
 
@@ -30,33 +30,28 @@
 using namespace psy;
 using namespace C;
 
-Field::Field(const Symbol* containingSym,
-             const SyntaxTree* tree,
-             const Scope* enclosingScope)
-    : ObjectDeclaration(containingSym,
-                        tree,
-                        enclosingScope,
-                        ObjectDeclarationKind::Field)
+FieldDeclarationSymbol::FieldDeclarationSymbol(
+        const Symbol* containingSym,
+        const SyntaxTree* tree,
+        const Scope* enclosingScope)
+    : MemberDeclarationSymbol(SymbolKind::FieldDeclaration,
+                              containingSym,
+                              tree,
+                              enclosingScope)
 {}
-
-std::string Field::toDisplayString() const
-{
-    return "";
-}
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Field* fld)
+std::ostream& operator<<(std::ostream& os, const FieldDeclarationSymbol* fld)
 {
     if (!fld)
-        return "<Field is null>";
-    std::ostringstream oss;
-    oss << "<Field |";
-    oss << " name:" << fld->name()->valueText();
-    oss << " type:" << to_string(fld->type());
-    oss << ">";
-    return oss.str();
+        return os << "<Field is null>";
+    os << "<Field |";
+    os << " name:" << fld->name()->valueText();
+    os << " type:" << fld->type();
+    os << ">";
+    return os;
 }
 
 } // C

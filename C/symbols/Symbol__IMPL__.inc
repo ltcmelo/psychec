@@ -20,11 +20,6 @@
 
 #include "Symbol.h"
 
-#include "SyntaxTree.h"
-
-#include "binder/NameSpace.h"
-#include "binder/Scope.h"
-
 using namespace psy;
 using namespace C;
 
@@ -33,7 +28,7 @@ struct Symbol::SymbolImpl
     SymbolImpl(SymbolKind symK, const Symbol* containingSym)
         : containingSym_(containingSym)
     {
-        BF_.symK_ = static_cast<std::uint32_t>(symK);
+        F_.symK_ = static_cast<std::uint32_t>(symK);
     }
 
     SymbolImpl(SymbolKind symK) : SymbolImpl(symK, nullptr)
@@ -41,28 +36,17 @@ struct Symbol::SymbolImpl
 
     const Symbol* containingSym_;
 
-    struct BitFields
+    struct BD
     {
-        // Symbol
-        std::uint32_t symK_ : 3;
+        std::uint32_t symK_ : 8;
 
-        // Declaration
-        std::uint32_t declK_: 2;
+        // Used by DeclarationSymbol.
         std::uint32_t ns_ : 2;
         std::uint32_t static_ : 1;
-
-        // ObjectDeclaration
-        std::uint32_t objDeclK_ : 3;
-
-        // TypeDeclaration
-        std::uint32_t tyDeclK_ : 3;
-
-        // TagTypeDeclaration
-        std::uint32_t tagTyDeclK_ : 2;
     };
     union
     {
-        std::uint32_t BF_all_;
-        BitFields BF_;
+        std::uint32_t BD_;
+        BD F_;
     };
 };

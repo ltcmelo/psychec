@@ -25,9 +25,10 @@
 #include "Fwds.h"
 
 #include "TypeKind.h"
-
 #include "../common/infra/AccessSpecifiers.h"
 #include "../common/infra/Pimpl.h"
+
+#include <iostream>
 
 namespace psy {
 namespace C {
@@ -57,14 +58,16 @@ public:
     virtual const FunctionType* asFunctionType() const { return nullptr; }
     virtual PointerType* asPointerType() { return nullptr; }
     virtual const PointerType* asPointerType() const { return nullptr; }
-    virtual TypedefType* asTypedefType() { return nullptr; }
-    virtual const TypedefType* asTypedefType() const { return nullptr; }
+    virtual TypedefNameType* asTypedefNameType() { return nullptr; }
+    virtual const TypedefNameType* asTypedefNameType() const { return nullptr; }
     virtual TagType* asTagType() { return nullptr; }
     virtual const TagType* asTagType() const { return nullptr; }
     virtual VoidType* asVoidType() { return nullptr; }
     virtual const VoidType* asVoidType() const { return nullptr; }
     virtual QualifiedType* asQualifiedType() { return nullptr; }
     virtual const QualifiedType* asQualifiedType() const { return nullptr; }
+    virtual ErrorType* asErrorType() { return nullptr; }
+    virtual const ErrorType* asErrorType() const { return nullptr; }
     //!@}
 
     /**
@@ -73,7 +76,7 @@ public:
     TypeKind kind() const;
 
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
 protected:
     DECL_PIMPL(Type);
@@ -82,7 +85,7 @@ protected:
     Type& operator=(const Type&) = delete;
 };
 
-PSY_C_API std::string to_string(const Type* ty);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const Type* ty);
 
 PSY_C_API const Type* unqualifyType(const Type* ty);
 

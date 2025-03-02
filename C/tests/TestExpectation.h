@@ -21,14 +21,15 @@
 #ifndef PSYCHE_C_TEST_EXPECTATION_H__
 #define PSYCHE_C_TEST_EXPECTATION_H__
 
-#include "compilation/Compilation.h"
-#include "binder/NameSpace.h"
-#include "binder/Scope.h"
+#include "sema/Compilation.h"
+#include "sema/NameSpace.h"
+#include "sema/Scope.h"
 #include "symbols/SymbolKind.h"
-#include "symbols/DeclarationKind.h"
-#include "symbols/TagTypeDeclarationKind.h"
-#include "symbols/TypeDeclarationKind.h"
-#include "symbols/ObjectDeclarationKind.h"
+#include "symbols/DeclarationCategory.h"
+#include "symbols/TagTypeDeclarationCategory.h"
+#include "symbols/TypeDeclarationCategory.h"
+#include "symbols/ObjectDeclarationCategory.h"
+#include "symbols/MemberDeclarationCategory.h"
 #include "tests/TestSuite.h"
 #include "types/Type_ALL.h"
 
@@ -69,6 +70,7 @@ struct Ty
     Ty(const Ty& ty) = default;
     ~Ty();
 
+    Decl& Unknown();
     Decl& Void(CVR cvr = CVR::None);
     Decl& Basic(BasicTypeKind basicTyK, CVR cvr = CVR::None);
     Decl& Typedef(std::string typedefName, CVR cvr = CVR::None);
@@ -96,19 +98,22 @@ struct Decl
     Decl();
 
     Decl& Object(std::string name,
-                 ObjectDeclarationKind objDeclK,
+                 ObjectDeclarationCategory objDeclK,
                  ScopeKind scopeK = ScopeKind::File);
+    Decl& Member(std::string name,
+                 MemberDeclarationCategory membDeclK);
     Decl& Function(std::string name, ScopeKind scopeK = ScopeKind::File);
     Decl& Type(std::string typedefName);
-    Decl& Type(std::string tag, TagTypeDeclarationKind tagTyDeclK);
+    Decl& Type(std::string tag, TagTypeDeclarationCategory tagTyDeclK);
     Decl& withScopeKind(ScopeKind scopeK);
     Decl& inNameSpace(NameSpace ns);
 
     std::string ident_;
-    DeclarationKind declK_;
-    ObjectDeclarationKind objDeclK_;
-    TypeDeclarationKind tyDeclK_;
-    TagTypeDeclarationKind tagTyDeclK_;
+    DeclarationCategory declK_;
+    ObjectDeclarationCategory objDeclK_;
+    MemberDeclarationCategory membDeclK_;
+    TypeDeclarationCategory tyDeclK_;
+    TagTypeDeclarationCategory tagTyDeclK_;
     ScopeKind scopeK_;
     NameSpace ns_;
     Ty ty_;

@@ -20,6 +20,8 @@
 
 #include "TypeResolverTester.h"
 
+#include "sema/TypeResolver.h"
+
 using namespace psy;
 using namespace C;
 
@@ -45,7 +47,7 @@ x y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationKind::Variable)
+                         .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -59,7 +61,7 @@ x * y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationKind::Variable)
+                         .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
@@ -74,7 +76,7 @@ x const y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationKind::Variable)
+                         .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
@@ -88,7 +90,7 @@ x const y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationKind::Variable)
+                         .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
@@ -102,7 +104,7 @@ x * * y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationKind::Variable)
+                         .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
@@ -118,7 +120,7 @@ x y [ 1 ] ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationKind::Variable)
+                         .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Derived(TypeKind::Array)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
@@ -133,7 +135,7 @@ x y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationKind::Variable)
+                         .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
@@ -148,7 +150,7 @@ x y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationKind::Variable)
+                         .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
@@ -165,7 +167,7 @@ y z ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("z", ObjectDeclarationKind::Variable)
+                         .Object("z", ObjectDeclarationCategory::Variable)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -376,16 +378,134 @@ x y ;
     resolve(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationKind::Variable)
+                         .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
-void TypeResolverTester::case0021(){}
-void TypeResolverTester::case0022(){}
-void TypeResolverTester::case0023(){}
-void TypeResolverTester::case0024(){}
-void TypeResolverTester::case0025(){}
-void TypeResolverTester::case0026(){}
-void TypeResolverTester::case0027(){}
-void TypeResolverTester::case0028(){}
-void TypeResolverTester::case0029(){}
+void TypeResolverTester::case0021()
+{
+    auto s = R"(
+typedef double * x ;
+x * y ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("y", ObjectDeclarationCategory::Variable)
+                         .ty_.Derived(TypeKind::Pointer)
+                         .ty_.Derived(TypeKind::Pointer)
+                         .ty_.Basic(BasicTypeKind::Double)));
+}
+
+void TypeResolverTester::case0022()
+{
+    auto s = R"(
+typedef double * x ;
+typedef x y ;
+y * z ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("z", ObjectDeclarationCategory::Variable)
+                         .ty_.Derived(TypeKind::Pointer)
+                         .ty_.Derived(TypeKind::Pointer)
+                         .ty_.Basic(BasicTypeKind::Double)));
+}
+
+void TypeResolverTester::case0023()
+{
+    auto s = R"(
+typedef double * x ;
+typedef x * y ;
+y * z ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("z", ObjectDeclarationCategory::Variable)
+                         .ty_.Derived(TypeKind::Pointer)
+                         .ty_.Derived(TypeKind::Pointer)
+                         .ty_.Derived(TypeKind::Pointer)
+                         .ty_.Basic(BasicTypeKind::Double)));
+}
+
+void TypeResolverTester::case0024()
+{
+    auto s = R"(
+typedef double x ;
+typedef x y ;
+y z ;
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("z", ObjectDeclarationCategory::Variable)
+                         .ty_.Basic(BasicTypeKind::Double)));
+}
+
+void TypeResolverTester::case0025()
+{
+    auto s = R"(
+void f ( ) { int x ; x y ; }
+)";
+
+    resolve(s,
+            Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeResolver::DiagnosticsReporter::ID_of_ExpectedTypedefDeclaration)
+            .declaration(
+                Decl().Object("y", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                      .ty_.Unknown()));
+}
+
+void TypeResolverTester::case0026()
+{
+    auto s = R"(
+void f ( ) { x y ; }
+)";
+
+    resolve(s,
+            Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeResolver::DiagnosticsReporter::ID_of_TypeDeclarationNotFound)
+            .declaration(
+                Decl().Object("y", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                      .ty_.Unknown()));
+}
+
+void TypeResolverTester::case0027()
+{
+}
+
+void TypeResolverTester::case0028()
+{
+    auto s = R"(
+struct x { int y ; } ; void f ( ) { struct x z ; }
+)";
+
+    resolve(s,
+            Expectation()
+            .declaration(
+                Decl().Object("z", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                      .ty_.Tag("x", TagTypeKind::Struct)));
+}
+
+void TypeResolverTester::case0029()
+{
+    auto s = R"(
+struct x { int y ; } ; void f ( ) { union x z ; }
+)";
+
+    resolve(s,
+            Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeResolver::DiagnosticsReporter::ID_of_TagTypeDoesNotMatchTagDeclaration)
+            .declaration(
+                Decl().Object("z", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                      .ty_.Unknown()));
+}

@@ -22,31 +22,26 @@
 #include "Symbol_TranslationUnit.h"
 #include "Symbol_Program.h"
 
-#include <sstream>
-
 using namespace psy;
 using namespace C;
 
-TranslationUnit::TranslationUnit(const Program* prog, const SyntaxTree* tree)
+TranslationUnitSymbol::TranslationUnitSymbol(
+        const ProgramSymbol* prog,
+        const SyntaxTree* tree)
     : Symbol(new SymbolImpl(SymbolKind::TranslationUnit, prog))
     , tree_(tree)
-{}
 
-std::string TranslationUnit::toDisplayString() const
-{
-    return "";
-}
+{}
 
 namespace psy {
 namespace C {
 
-std::string to_string(const TranslationUnit* unit)
+std::ostream& operator<<(std::ostream& os, const TranslationUnitSymbol* unit)
 {
     if (!unit)
-        return "<TranslationUnit is null>";
-    std::ostringstream oss;
-    oss << "<TranslationUnit>";
-    return oss.str();
+        return os << "<TranslationUnit is null>";
+    os << "<TranslationUnit>";
+    return os;
 }
 
 } // C

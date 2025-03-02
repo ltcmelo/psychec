@@ -51,16 +51,26 @@ public:
      */
     const Identifier* tag() const;
 
+    /**
+     * The \a declaration of \c this TagType, if one exists.
+     */
+    const TagTypeDeclarationSymbol* declaration() const;
+
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
+    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
+    PSY_GRANT_INTERNAL_ACCESS(TagTypeDeclarationSymbol);
+    PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
 
     TagType(TagTypeKind tagTyK, const Identifier* tag);
+
+    void setDeclaration(const TagTypeDeclarationSymbol* tagTyDecl);
 
 private:
     DECL_PIMPL_SUB(TagType)
 };
 
-PSY_C_API std::string to_string(const TagType* tagTy);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const TagType* tagTy);
 
 } // C
 } // psy

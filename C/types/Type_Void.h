@@ -41,18 +41,18 @@ public:
     /**
      * Cast \c this Type as an VoidType.
      */
-    virtual VoidType* asVoidType() { return this; }
-    virtual const VoidType* asVoidType() const { return this; }
+    virtual VoidType* asVoidType() override { return this; }
+    virtual const VoidType* asVoidType() const override { return this; }
     //!@}
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Compilation);
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
     VoidType();
 };
 
-PSY_C_API std::string to_string(const VoidType* voidTy);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const VoidType* voidTy);
 
 } // C
 } // psy

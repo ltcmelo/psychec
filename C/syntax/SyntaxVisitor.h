@@ -25,7 +25,10 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <cstdint>
+#include <iostream>
 
 namespace psy {
 namespace C {
@@ -38,6 +41,11 @@ class PSY_C_API SyntaxVisitor
 public:
     SyntaxVisitor(const SyntaxTree* tree);
     virtual ~SyntaxVisitor();
+    SyntaxVisitor(const SyntaxVisitor&) = delete;
+    void operator=(const SyntaxVisitor&) = delete;
+
+    virtual bool preVisit(const SyntaxNode*) { return true; }
+    virtual void postVisit(const SyntaxNode*) {}
 
     /**
      * \brief The Action enumeration.
@@ -49,23 +57,30 @@ public:
         Quit
     };
 
-    virtual bool preVisit(const SyntaxNode*) { return true; }
-    virtual void postVisit(const SyntaxNode*) {}
-
     /**
      * Visit the SyntaxNode \p node.
      */
-    void visit(const SyntaxNode* node);
+    SyntaxVisitor::Action visit(const SyntaxNode* node);
 
     /**
-     * Visit the SyntaxNodePlainList \p it.
+     * Visit the SyntaxNodeList \p it.
      */
-    template <class PtrT, class DerivedListT>
-    void visit(CoreSyntaxNodeList<PtrT, DerivedListT>* it)
+    template <class SyntaxNodeT, class DerivedListT>
+        SyntaxVisitor::Action
+        visit(const CoreSyntaxNodeList<SyntaxNodeT, DerivedListT>* it)
     {
-        for (; it; it = it->next)
-            visit(it->value);
+        for (; it; it = it->next) {
+            auto action = visit(it->value);
+            if (action == SyntaxVisitor::Action::Quit)
+                return action;
+        }
+        return SyntaxVisitor::Action::Visit;
     }
+
+    /**
+     * Visit the child nodes of the given \p node.
+     */
+    SyntaxVisitor::Action visitChildNodes(const SyntaxNode* node);
 
     //--------------//
     // Declarations //
@@ -185,12 +200,22 @@ public:
     virtual Action visitAmbiguousExpressionOrDeclarationStatement(const AmbiguousExpressionOrDeclarationStatementSyntax*) { return Action::Visit; }
 
 protected:
-    // Unavailable.
-    SyntaxVisitor(const SyntaxVisitor&) = delete;
-    void operator=(const SyntaxVisitor&) = delete;
-
     const SyntaxTree* tree_;
 };
+
+PSY_C_API inline std::ostream& operator<<(std::ostream& os, SyntaxVisitor::Action action)
+{
+    switch (action) {
+        case SyntaxVisitor::Action::Quit:
+            return os << "SyntaxVisitor::Action::Quit";
+        case SyntaxVisitor::Action::Skip:
+            return os << "SyntaxVisitor::Action::Skip";
+        case SyntaxVisitor::Action::Visit:
+            return os << "SyntaxVisitor::Action::Visit";
+    }
+    PSY_ASSERT_1(false);
+    return os << "<invalid SyntaxVisitor::Action>";
+}
 
 } // C
 } // psy

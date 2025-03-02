@@ -29,67 +29,78 @@
 using namespace psy;
 using namespace C;
 
-struct ObjectDeclaration::ObjectDeclarationImpl : DeclarationImpl
+struct ObjectDeclarationSymbol::ObjectDeclarationImpl : DeclarationImpl
 {
-    ObjectDeclarationImpl(const Symbol* containingSym,
+    ObjectDeclarationImpl(SymbolKind symK,
+                          const Symbol* containingSym,
                           const SyntaxTree* tree,
-                          const Scope* enclosingScope,
-                          ObjectDeclarationKind objDeclK)
-        : DeclarationImpl(containingSym,
-                          DeclarationKind::Object,
+                          const Scope* enclosingScope)
+        : DeclarationImpl(symK,
+                          containingSym,
                           tree,
                           enclosingScope,
                           NameSpace::OrdinaryIdentifiers)
         , name_(nullptr)
         , ty_(nullptr)
-    {
-        BF_.objDeclK_ = static_cast<std::uint32_t>(objDeclK);
-    }
+    {}
 
     const Identifier* name_;
     const Type* ty_;
 };
 
-ObjectDeclaration::ObjectDeclaration(const Symbol* containingSym,
-                                     const SyntaxTree* tree,
-                                     const Scope* enclosingScope,
-                                     ObjectDeclarationKind objDeclK)
-    : Declaration(
-          new ObjectDeclarationImpl(containingSym,
+ObjectDeclarationSymbol::ObjectDeclarationSymbol(SymbolKind symK,
+                                                 const Symbol* containingSym,
+                                                 const SyntaxTree* tree,
+                                                 const Scope* enclosingScope)
+    : DeclarationSymbol(
+          new ObjectDeclarationImpl(symK,
+                                    containingSym,
                                     tree,
-                                    enclosingScope,
-                                    objDeclK))
+                                    enclosingScope))
 {}
 
-ObjectDeclaration::~ObjectDeclaration()
+ObjectDeclarationSymbol::~ObjectDeclarationSymbol()
 {}
 
-ObjectDeclarationKind ObjectDeclaration::kind() const
+ObjectDeclarationCategory ObjectDeclarationSymbol::category() const
 {
-    return ObjectDeclarationKind(P_CAST->BF_.objDeclK_);
+    switch (kind()) {
+        case SymbolKind::Program:
+        case SymbolKind::TranslationUnit:
+        case SymbolKind::FunctionDeclaration:
+        case SymbolKind::EnumeratorDeclaration:
+        case SymbolKind::FieldDeclaration:
+            break;
+        case SymbolKind::VariableDeclaration:
+            return ObjectDeclarationCategory::Variable;
+        case SymbolKind::ParameterDeclaration:
+            return ObjectDeclarationCategory::Parameter;
+        case SymbolKind::TypedefDeclaration:
+        case SymbolKind::StructDeclaration:
+        case SymbolKind::UnionDeclaration:
+        case SymbolKind::EnumDeclaration:
+            break;
+    }
+    PSY_ASSERT_1(false);
+    return ObjectDeclarationCategory(~0);
 }
 
-const Type* ObjectDeclaration::type() const
+const Type* ObjectDeclarationSymbol::type() const
 {
     return P_CAST->ty_;
 }
 
-const Type* ObjectDeclaration::retypeableType() const
-{
-    return type();
-}
-
-void ObjectDeclaration::setType(const Type* ty)
+void ObjectDeclarationSymbol::setType(const Type* ty)
 {
     P_CAST->ty_ = ty;
 }
 
-const Identifier* ObjectDeclaration::name() const
+const Identifier* ObjectDeclarationSymbol::name() const
 {
     return P_CAST->name_;
 }
 
-void ObjectDeclaration::setName(const Identifier* name)
+void ObjectDeclarationSymbol::setName(const Identifier* name)
 {
     P_CAST->name_ = name;
 }
@@ -97,22 +108,18 @@ void ObjectDeclaration::setName(const Identifier* name)
 namespace psy {
 namespace C {
 
-std::string to_string(const ObjectDeclaration* objDecl)
+std::ostream& operator<<(std::ostream& os, const ObjectDeclarationSymbol* objDecl)
 {
     if (!objDecl)
-        return "<ObjectDeclaration is null>";
-    switch (objDecl->kind()) {
-        case ObjectDeclarationKind::Enumerator:
-            return to_string(objDecl->asEnumerator());
-        case ObjectDeclarationKind::Field:
-            return to_string(objDecl->asField());
-        case ObjectDeclarationKind::Parameter:
-            return to_string(objDecl->asParameter());
-        case ObjectDeclarationKind::Variable:
-            return to_string(objDecl->asVariable());
+        return os << "<ObjectDeclaration is null>";
+    switch (objDecl->category()) {
+        case ObjectDeclarationCategory::Parameter:
+            return os << objDecl->asParameterDeclaration();
+        case ObjectDeclarationCategory::Variable:
+            return os << objDecl->asVariableDeclaration();
     }
     PSY_ASSERT_1(false);
-    return "<invalid ObjectDeclaration>";
+    return os << "<invalid ObjectDeclaration>";
 }
 
 } // C

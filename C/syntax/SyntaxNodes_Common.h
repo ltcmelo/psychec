@@ -24,7 +24,7 @@
 
 #include "SyntaxNode.h"
 #include "SyntaxToken.h"
-#include "SyntaxTree.h"
+#include "syntax/SyntaxTree.h"
 #include "SyntaxVisitor.h"
 
 #include "parser/LexedTokens.h"

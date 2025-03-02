@@ -27,37 +27,32 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The Variable class.
+ * \brief The VariableDeclarationSymbol class.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.ILocalSymbol
- * from Roslyn, the .NET Compiler Platform.
+ * \note Resembles:
+ * - \c Microsoft.CodeAnalysis.ILocalSymbol from Roslyn.
  */
-class PSY_C_API Variable final : public ObjectDeclaration
+class PSY_C_API VariableDeclarationSymbol final : public ObjectDeclarationSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this ObjectDeclaration as a Variable.
+     * Cast \c this Symbol as a VariableDeclarationSymbol.
      */
-    virtual Variable* asVariable() override { return this; }
-    virtual const Variable* asVariable() const override { return this; }
+    virtual VariableDeclarationSymbol* asVariableDeclaration() override { return this; }
+    virtual const VariableDeclarationSymbol* asVariableDeclaration() const override { return this; }
     //!@}
 
-    /**
-     * Compute a displayable string for \c this Variable.
-     */
-    virtual std::string toDisplayString() const override;
-
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
-    Variable(const Symbol* containingSym,
-             const SyntaxTree* tree,
-             const Scope* enclosingScope);
+    VariableDeclarationSymbol(
+            const Symbol* containingSym,
+            const SyntaxTree* tree,
+            const Scope* enclosingScope);
 };
 
-PSY_C_API std::string to_string(const Variable* var);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const VariableDeclarationSymbol* var);
 
 } // C
 } // psy

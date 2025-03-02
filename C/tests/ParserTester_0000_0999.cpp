@@ -20,7 +20,7 @@
 
 #include "ParserTester.h"
 
-#include "BinderTester.h"
+#include "DeclarationBinderTester.h"
 
 #include "parser/Parser.h"
 #include "parser/Unparser.h"
@@ -217,7 +217,7 @@ void ParserTester::case0020()
 void ParserTester::case0021()
 {
     // Not a syntactic error, but a semantic one; covered in:
-    CROSS_REFERENCE_TEST(BinderTester::case0005);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0005);
 
     parse("int double x ;") ;
 }
@@ -288,7 +288,7 @@ void ParserTester::case0027()
 void ParserTester::case0028()
 {
     // Not a syntactic error, but diagnoses a semantic warning.
-    CROSS_REFERENCE_TEST(BinderTester::case0001) ;
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0001) ;
 
     parse("const int ;",
           Expectation().AST({ SyntaxKind::TranslationUnit,
@@ -367,7 +367,7 @@ void ParserTester::case0035()
 
 void ParserTester::case0036()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case1017);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case1017);
 
     parse("* x ;",
           Expectation()
@@ -379,7 +379,7 @@ void ParserTester::case0036()
 
 void ParserTester::case0037()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case1018);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case1018);
 
     parse("* ( x ) ;",
           Expectation()
@@ -414,14 +414,14 @@ void ParserTester::case0039()
 
 void ParserTester::case0040()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case0013);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0013);
 
     parse("int ;");
 }
 
 void ParserTester::case0041()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case1016);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case1016);
 
     parse("x ;",
           Expectation()
@@ -517,7 +517,7 @@ void ParserTester::case0049()
 void ParserTester::case0050()
 {
     // Not a syntactic error, but a semantic one; covered in:
-    CROSS_REFERENCE_TEST(BinderTester::case0016);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0016);
 
     parse("double _Complex int x ;",
           Expectation().AST({ SyntaxKind::TranslationUnit,
@@ -540,7 +540,7 @@ void ParserTester::case0051()
 void ParserTester::case0052()
 {
     // Not a syntactic error, but a semantic one; covered in:
-    CROSS_REFERENCE_TEST(BinderTester::case0016);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0016);
 
     parse("int int x ;",
           Expectation().AST({ SyntaxKind::TranslationUnit,
@@ -553,7 +553,7 @@ void ParserTester::case0052()
 void ParserTester::case0053()
 {
     // Not a syntactic error, but a semantic one; covered in:
-    CROSS_REFERENCE_TEST(BinderTester::case0018);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0018);
 
     parse("_Complex _Complex x ;",
           Expectation().AST({ SyntaxKind::TranslationUnit,
@@ -1496,7 +1496,7 @@ void ParserTester::case0204()
 void ParserTester::case0205()
 {
     // Not a syntactic error, but a semantic one; covered in:
-    CROSS_REFERENCE_TEST(BinderTester::case0008) ;
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0008) ;
 
     parse("void x ( ) ( ) { }") ;
 }
@@ -1504,7 +1504,7 @@ void ParserTester::case0205()
 void ParserTester::case0206()
 {
     // Not a syntactic error, but a semantic one; covered in:
-    CROSS_REFERENCE_TEST(BinderTester::case0009) ;
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0009) ;
 
     parse("void x ( ) ( ) ;") ;
 }
@@ -1512,7 +1512,7 @@ void ParserTester::case0206()
 void ParserTester::case0207()
 {
     // Not a syntactic error, but a semantic one; covered in:
-    CROSS_REFERENCE_TEST(BinderTester::case0010) ;
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0010) ;
 
     parse("int x ( ) [ ] ;") ;
 }
@@ -1570,7 +1570,7 @@ void ParserTester::case0211()
 
 void ParserTester::case0212()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case0012);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0012);
 
     parse("void x ( int ) { }") ;
 }
@@ -1611,7 +1611,7 @@ void ParserTester::case0215()
 
 void ParserTester::case0216()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case0163);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0163);
 
     parse("x ( int y ) ;",
           Expectation()
@@ -1627,7 +1627,7 @@ void ParserTester::case0216()
 
 void ParserTester::case0217()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case0164);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0164);
 
     parse("x ( y z ) ;",
           Expectation()
@@ -1937,7 +1937,7 @@ void ParserTester::case0244()
 
 void ParserTester::case0245()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case0161);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0161);
 
     parse("void x ( y ) { }",
           Expectation().AST({ SyntaxKind::TranslationUnit,
@@ -2798,7 +2798,7 @@ void ParserTester::case0296()
 
 void ParserTester::case0297()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case0025); // Semantic error.
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0025); // Semantic error.
 
     parse("void x ( int y ) int y ; { }",
           Expectation().AST({ SyntaxKind::TranslationUnit,
@@ -2818,7 +2818,7 @@ void ParserTester::case0297()
 
 void ParserTester::case0298()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case0026);  // Semantic error.
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0026);  // Semantic error.
 
     parse("int x ( int y ) z y ; { }",
           Expectation().AST({ SyntaxKind::TranslationUnit,
@@ -3273,7 +3273,7 @@ void ParserTester::case0405()
 
 void ParserTester::case0406()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case0014) ;
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0014) ;
 
     parse("struct { int x ; } ;",
           Expectation().AST({ SyntaxKind::TranslationUnit,
@@ -3363,7 +3363,7 @@ void ParserTester::case0416()
      *        Would be invalid, because a specifier-qualifier-list is mandatory.
      */
 
-    CROSS_REFERENCE_TEST(BinderTester::case0006);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0006);
 
     parse("struct x { y ; } ;");
 }
@@ -3427,7 +3427,7 @@ void ParserTester::case0421()
 
 void ParserTester::case0422()
 {
-    CROSS_REFERENCE_TEST(BinderTester::case0007);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0007);
 
     parse("struct x { int ; } ;");
 }
@@ -3499,7 +3499,7 @@ void ParserTester::case0434()
 void ParserTester::case0435()
 {
     // Covered as a semantic error.
-    CROSS_REFERENCE_TEST(BinderTester::case0019);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0019);
 
     parse("int struct x { int y ; } z ;");
 }
@@ -3507,7 +3507,7 @@ void ParserTester::case0435()
 void ParserTester::case0436()
 {
     // Covered as a semantic error.
-    CROSS_REFERENCE_TEST(BinderTester::case0020);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0020);
 
     parse("struct x struct { int y ; } z ;");
 }
@@ -3515,7 +3515,7 @@ void ParserTester::case0436()
 void ParserTester::case0437()
 {
     // Covered as a semantic error.
-    CROSS_REFERENCE_TEST(BinderTester::case0021);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0021);
 
     parse("int struct x y ;");
 }
@@ -3523,7 +3523,7 @@ void ParserTester::case0437()
 void ParserTester::case0438()
 {
     // Covered as a semantic error.
-    CROSS_REFERENCE_TEST(BinderTester::case0022);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0022);
 
     parse("struct x int y ;");
 }
@@ -3600,7 +3600,7 @@ void ParserTester::case0445()
 void ParserTester::case0446()
 {
     // Covered as a semantic error.
-    CROSS_REFERENCE_TEST(BinderTester::case0015);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0015);
 
     parse("struct x { struct y { int z ; } ; } ;",
           Expectation().AST({ SyntaxKind::TranslationUnit,
@@ -4558,7 +4558,7 @@ void ParserTester::case0631()
 void ParserTester::case0632()
 {
     // Not a syntactic error, but a semantic one; covered in:
-    CROSS_REFERENCE_TEST(BinderTester::case0015);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0015);
 
     parse("void x ( ) { __thread x y ; }");
 }
@@ -5185,7 +5185,7 @@ void ParserTester::case0736()
 void ParserTester::case0737()
 {
     // Not a syntactic error, but a semantic one; covered in:
-    CROSS_REFERENCE_TEST(BinderTester::case0023);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0023);
 
     // Similar but without the `__attribute__'.
     CROSS_REFERENCE_TEST(ParserTester::case0021);
@@ -5202,7 +5202,7 @@ void ParserTester::case0737()
 void ParserTester::case0738()
 {
     // Not a syntactic error, but a semantic one; covered in:
-    CROSS_REFERENCE_TEST(BinderTester::case0024);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0024);
 
     parse("x __attribute__ ( ( ) ) int ;",
           Expectation().AST( { SyntaxKind::TranslationUnit,

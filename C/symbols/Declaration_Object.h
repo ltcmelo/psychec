@@ -21,13 +21,10 @@
 #ifndef PSYCHE_C_OBJECT_DECLARATION_H__
 #define PSYCHE_C_OBJECT_DECLARATION_H__
 
-#include "API.h"
-#include "Fwds.h"
-
-#include "MIXIN_NameableSymbol.h"
-#include "MIXIN_TypeableSymbol.h"
 #include "Symbol_Declaration.h"
-#include "ObjectDeclarationKind.h"
+#include "ObjectDeclarationCategory.h"
+#include "MIXIN_NameableDeclarationSymbol.h"
+#include "MIXIN_TypeableDeclarationSymbol.h"
 
 #include "../common/infra/AccessSpecifiers.h"
 
@@ -37,74 +34,55 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The ObjectDeclaration class.
+ * \brief The ObjectDeclarationSymbol class.
  */
-class PSY_C_API ObjectDeclaration
-        : public Declaration
-        , public MIXIN_NameableSymbol
-        , public MIXIN_TypeableSymbol
+class PSY_C_API ObjectDeclarationSymbol
+        : public DeclarationSymbol
+        , public MIXIN_NameableDeclarationSymbol
+        , public MIXIN_TypeableDeclarationSymbol
 {
 public:
-    virtual ~ObjectDeclaration();
+    virtual ~ObjectDeclarationSymbol();
 
     //!@{
     /**
-     * Cast \c this Declaration as a ObjectDeclaration.
+     * Cast \c this Symbol as a ObjectDeclarationSymbol.
      */
-    virtual ObjectDeclaration* asObjectDeclaration() override { return this; }
-    virtual const ObjectDeclaration* asObjectDeclaration() const override { return this; }
+    virtual ObjectDeclarationSymbol* asObjectDeclaration() override { return this; }
+    virtual const ObjectDeclarationSymbol* asObjectDeclaration() const override { return this; }
 
     /**
-     * The ObjectDeclarationKind of \c this ObjectDeclaration.
+     * The ObjectDeclarationCategory of \c this ObjectDeclarationSymbol.
      */
-    ObjectDeclarationKind kind() const;
-
-    //!@{
-    /**
-     * Cast \c this ObjectDeclaration.
-     */
-    virtual Enumerator* asEnumerator() { return nullptr; }
-    virtual const Enumerator* asEnumerator() const { return nullptr; }
-    virtual Field* asField() { return nullptr; }
-    virtual const Field* asField() const { return nullptr; }
-    virtual Variable* asVariable() { return nullptr; }
-    virtual const Variable* asVariable() const { return nullptr; }
-    virtual Parameter* asParameter() { return nullptr; }
-    virtual const Parameter* asParameter() const { return nullptr; }
-    //!@}
+    ObjectDeclarationCategory category() const;
 
     /**
-     * The Identifier with which \c this ObjectDeclaration is declared.
+     * The \a name of the \a object declared by \c this ObjectDeclarationSymbol.
      */
-    virtual const Identifier* identifier() const override { return name(); }
+    const Identifier* name() const override;
 
     /**
-     * The Identifier that names \c this ObjectDeclaration.
+     * The \a type of the \a object declared by \c this ObjectDeclarationSymbol.
      */
-    const Identifier* name() const;
-
-    /**
-     * The Type of \c this ObjectDeclaration.
-     */
-    const Type* type() const;
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
-    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
-
-    virtual void setName(const Identifier* name) override;
-    virtual void setType(const Type* ty) override;
-    virtual const Type* retypeableType() const override;
+    const Type* type() const override;
 
 protected:
     DECL_PIMPL_SUB(ObjectDeclaration);
-    ObjectDeclaration(const Symbol* containingSym,
+    ObjectDeclarationSymbol(SymbolKind symK,
+                      const Symbol* containingSym,
                       const SyntaxTree* tree,
-                      const Scope* enclosingScope,
-                      ObjectDeclarationKind objDeclK);
+                      const Scope* enclosingScope);
+
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
+    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
+
+    virtual const Identifier* denotingIdentifier() const override { return name(); }
+    virtual void setName(const Identifier* name) override;
+    virtual void setType(const Type* ty) override;
 };
 
-PSY_C_API std::string to_string(const ObjectDeclaration* objDecl);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const ObjectDeclarationSymbol* objDecl);
 
 } // C
 } // psy

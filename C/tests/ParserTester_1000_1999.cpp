@@ -20,7 +20,7 @@
 
 #include "ParserTester.h"
 
-#include "BinderTester.h"
+#include "DeclarationBinderTester.h"
 
 #include "parser/Parser.h"
 #include "parser/Unparser.h"
@@ -2016,7 +2016,7 @@ void ParserTester::case1653()
 {
     // Syntax OK, semantics invalid.
 
-    CROSS_REFERENCE_TEST(BinderTester::case0101);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0101);
 
     parseExpression("* 1",
                     Expectation().AST( { SyntaxKind::PointerIndirectionExpression,
@@ -2027,7 +2027,7 @@ void ParserTester::case1654()
 {
     // Syntax OK, semantics invalid.
 
-    CROSS_REFERENCE_TEST(BinderTester::case0102);
+    CROSS_REFERENCE_TEST(DeclarationBinderTester::case0102);
 
     parseExpression("& 1",
                     Expectation().AST( { SyntaxKind::AddressOfExpression,

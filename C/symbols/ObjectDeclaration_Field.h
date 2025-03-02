@@ -21,43 +21,37 @@
 #ifndef PSYCHE_C_FIELD_H__
 #define PSYCHE_C_FIELD_H__
 
-#include "Declaration_Object.h"
+#include "Declaration_Member.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The Field class.
+ * \brief The FieldDeclarationSymbol class.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IField
- * from Roslyn, the .NET Compiler Platform.
+ * \note Resembles:
+ * \c Microsoft.CodeAnalysis.IField from Roslyn.
  */
-class PSY_C_API Field final : public ObjectDeclaration
+class PSY_C_API FieldDeclarationSymbol final : public MemberDeclarationSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this ObjectDeclaration as a Field.
+     * Cast \c this Symbol as a FieldDeclarationSymbol.
      */
-    virtual Field* asField() override { return this; }
-    virtual const Field* asField() const override { return this; }
+    virtual FieldDeclarationSymbol* asFieldDeclaration() override { return this; }
+    virtual const FieldDeclarationSymbol* asFieldDeclaration() const override { return this; }
     //!@}
 
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const override;
-
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
-    Field(const Symbol* containingSym,
-          const SyntaxTree* tree,
-          const Scope* enclosingScope);
+    FieldDeclarationSymbol(const Symbol* containingSym,
+                           const SyntaxTree* tree,
+                           const Scope* enclosingScope);
 };
 
-PSY_C_API std::string to_string(const Field* fld);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const FieldDeclarationSymbol* fld);
 
 } // C
 } // psy

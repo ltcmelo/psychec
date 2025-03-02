@@ -23,67 +23,55 @@
 
 #include "Declaration_Type.h"
 
-#include "MIXIN_TypeableSymbol.h"
-
 namespace psy {
 namespace C {
 
-class PSY_C_API Typedef final
-        : public TypeDeclaration
-        , public MIXIN_TypeableSymbol
+/**
+ * \brief The TypedefDeclarationSymbol class.
+ */
+class PSY_C_API TypedefDeclarationSymbol final : public TypeDeclarationSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this TypeDeclaration as a Typedef.
+     * Cast \c this Symbol as a TypedefDeclarationSymbol.
      */
-    virtual Typedef* asTypedef() override { return this; }
-    virtual const Typedef* asTypedef() const override { return this; }
+    virtual TypedefDeclarationSymbol* asTypedefDeclaration() override { return this; }
+    virtual const TypedefDeclarationSymbol* asTypedefDeclaration() const override { return this; }
     //!@}
 
     /**
-     * Compute a displayable string for \c this Typedef.
+     * The \a synonym \a type \a introduced by \c this TypedefDeclarationSymbol.
      */
-    virtual std::string toDisplayString() const override;
+    const TypedefNameType* introducedSynonymType() const;
 
     /**
-     * The Identifier with which \c this Typedef is declared.
-     */
-    virtual const Identifier* identifier() const override;
-
-    /**
-     * The TypedefType defined by \c this Typedef.
-     */
-    const TypedefType * definedType() const;
-
-    /**
-     * The Type synonymized by \c this Typedef.
+     * The (unresolved) \a type \a synonymized by \c this TypedefDeclarationSymbol.
+     *
+     * \sa TypedefNameType::resolvedSynonymizedType
      */
     const Type* synonymizedType() const;
 
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
     PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
 
-    Typedef(const Symbol* containingSym,
+    TypedefDeclarationSymbol(
+            const Symbol* containingSym,
             const SyntaxTree* tree,
             const Scope* enclosingScope,
-            TypedefType* tydefTy,
-            const Type* synonymizedTy);
+            TypedefNameType* tydefNameTy);
 
-    Typedef(const Symbol* containingSym,
-            const SyntaxTree* tree,
-            const Scope* enclosingScope,
-            TypedefType* tydefTy);
+    void setSynonymizedType(const Type* ty);
 
-    virtual void setType(const Type* ty) override;
-    virtual const Type* retypeableType() const override;
+protected:
+    virtual const Identifier* denotingIdentifier() const override;
 
 private:
     const Type* synonymizedTy_;
 };
 
-PSY_C_API std::string to_string(const Typedef* tydef);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const TypedefDeclarationSymbol* tydef);
 
 } // C
 } // psy

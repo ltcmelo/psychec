@@ -22,14 +22,16 @@
 
 #include "SyntaxNode.h"
 #include "SyntaxNodes.h"
+#include "SyntaxToken.h"
+#include "Lexeme_ALL.h"
 
 using namespace psy;
 using namespace C;
 
-const DeclaratorSyntax* SyntaxUtilities::fullyStripDeclarator(const DeclaratorSyntax* decltor)
+const DeclaratorSyntax* SyntaxUtilities::innermostDeclaratorOf(const DeclaratorSyntax* decltor)
 {
     while (decltor) {
-        const DeclaratorSyntax* innerDecltor = stripDeclarator(decltor);
+        const DeclaratorSyntax* innerDecltor = innerDeclaratorOf(decltor);
         if (innerDecltor == decltor)
             break;
         decltor = innerDecltor;
@@ -37,7 +39,7 @@ const DeclaratorSyntax* SyntaxUtilities::fullyStripDeclarator(const DeclaratorSy
     return decltor;
 }
 
-const DeclaratorSyntax* SyntaxUtilities::stripDeclarator(const DeclaratorSyntax* decltor)
+const DeclaratorSyntax* SyntaxUtilities::innerDeclaratorOf(const DeclaratorSyntax* decltor)
 {
     switch (decltor->kind()) {
         case SyntaxKind::PointerDeclarator:
@@ -61,3 +63,19 @@ const DeclaratorSyntax* SyntaxUtilities::unparenthesizeDeclarator(
         decltor = decltor->asParenthesizedDeclarator()->innerDeclarator();
     return decltor;
 }
+
+namespace psy {
+namespace C {
+
+const Identifier* identifierFrom(const IdentifierNameSyntax* node)
+{
+    return node->identifierToken().lexeme()->asIdentifier();
+}
+
+const StringLiteral* literalFrom(const StringLiteralExpressionSyntax* node)
+{
+    return node->literalToken().lexeme()->asStringLiteral();
+}
+
+} // C
+} // psy

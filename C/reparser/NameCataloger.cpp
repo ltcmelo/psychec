@@ -49,7 +49,7 @@ std::unique_ptr<NameCatalog> NameCataloger::catalogNamesWithinNode(const SyntaxN
 
 SyntaxVisitor::Action NameCataloger::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    catalog_->mapNodeAndMarkAsEncloser(node);
+    catalog_->indexNodeAndMarkAsEncloser(node);
     for (auto iter = node->declarations(); iter; iter = iter->next)
         visit(iter->value);
     catalog_->dropEncloser();
@@ -111,7 +111,7 @@ SyntaxVisitor::Action NameCataloger::visitIdentifierName(const IdentifierNameSyn
 
 SyntaxVisitor::Action NameCataloger::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
-    catalog_->mapNodeAndMarkAsEncloser(node);
+    catalog_->indexNodeAndMarkAsEncloser(node);
     for (auto iter = node->statements(); iter; iter = iter->next)
         visit(iter->value);
     catalog_->dropEncloser();
@@ -147,15 +147,14 @@ SyntaxVisitor::Action NameCataloger::visitAmbiguousExpressionOrDeclarationStatem
             visit(binExpr->right());
             break;
         }
-
         case SyntaxKind::CallExpression: {
             auto callExpr = expr->asCallExpression();
             visit(callExpr->arguments()->value);
             break;
         }
-
         default:
-            PSY_ASSERT_FAIL_1(return Action::Quit);
+            PSY_ASSERT_1(false);
+            return Action::Quit;
     }
 
     return Action::Skip;

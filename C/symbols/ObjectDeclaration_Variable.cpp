@@ -20,7 +20,7 @@
 
 #include "ObjectDeclaration_Variable.h"
 
-#include "binder/Scope.h"
+#include "sema/Scope.h"
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_ALL.h"
 
@@ -29,33 +29,28 @@
 using namespace psy;
 using namespace C;
 
-Variable::Variable(const Symbol* containingSym,
-                   const SyntaxTree* tree,
-                   const Scope* enclosingScope)
-    : ObjectDeclaration(containingSym,
-                        tree,
-                        enclosingScope,
-                        ObjectDeclarationKind::Variable)
+VariableDeclarationSymbol::VariableDeclarationSymbol(
+        const Symbol* containingSym,
+        const SyntaxTree* tree,
+        const Scope* enclosingScope)
+    : ObjectDeclarationSymbol(SymbolKind::VariableDeclaration,
+                              containingSym,
+                              tree,
+                              enclosingScope)
 {}
-
-std::string Variable::toDisplayString() const
-{
-    return "";
-}
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Variable* var)
+std::ostream& operator<<(std::ostream& os, const VariableDeclarationSymbol* var)
 {
     if (!var)
-        return "<Variable is null>";
-    std::ostringstream oss;
-    oss << "<Variable |";
-    oss << " name:" << var->name()->valueText();
-    oss << " type:" << to_string(var->type());
-    oss << ">";
-    return oss.str();
+        return os << "<Variable is null>";
+    os << "<Variable |";
+    os << " name:" << var->name()->valueText();
+    os << " type:" << var->type();
+    os << ">";
+    return os;
 }
 
 } // C

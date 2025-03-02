@@ -32,6 +32,13 @@ Ty::Ty(Decl& Decl)
 Ty::~Ty()
 {}
 
+Decl& Ty::Unknown()
+{
+    ident_ = "<unknown>";
+    tyK_ = TypeKind::Unknown;
+    return decl_;
+}
+
 Decl& Ty::Void(CVR cvr)
 {
     ident_ = "void";
@@ -51,7 +58,7 @@ Decl& Ty::Basic(BasicTypeKind basicTyK, CVR cvr)
 Decl& Ty::Typedef(std::string typedefName, CVR cvr)
 {
     ident_ = std::move(typedefName);
-    tyK_ = TypeKind::Typedef;
+    tyK_ = TypeKind::TypedefName;
     CVR_ = cvr;
     return decl_;
 }
@@ -102,29 +109,39 @@ Decl::Decl()
     : ty_(*this)
 {}
 
-Decl& Decl::Object(std::string name, ObjectDeclarationKind objDeclK, ScopeKind scopeK)
+Decl& Decl::Object(std::string name, ObjectDeclarationCategory objDeclK, ScopeKind scopeK)
 {
     ident_ = std::move(name);
-    declK_ = DeclarationKind::Object;
+    declK_ = DeclarationCategory::Object;
     objDeclK_ = objDeclK;
     scopeK_ = scopeK;
     ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;
 }
 
-Decl& Decl::Type(std::string typedefName)
+Decl& Decl::Member(std::string name, MemberDeclarationCategory membDeclK)
 {
-    ident_ = std::move(typedefName);
-    declK_ = DeclarationKind::Type;
-    tyDeclK_ = TypeDeclarationKind::Typedef;
+    ident_ = std::move(name);
+    declK_ = DeclarationCategory::Member;
+    membDeclK_ = membDeclK;
+    scopeK_ = ScopeKind::File;
+    ns_ = NameSpace::Members;
     return *this;
 }
 
-Decl& Decl::Type(std::string tag, TagTypeDeclarationKind tagTyDeclK)
+Decl& Decl::Type(std::string typedefName)
+{
+    ident_ = std::move(typedefName);
+    declK_ = DeclarationCategory::Type;
+    tyDeclK_ = TypeDeclarationCategory::Typedef;
+    return *this;
+}
+
+Decl& Decl::Type(std::string tag, TagTypeDeclarationCategory tagTyDeclK)
 {
     ident_ = std::move(tag);
-    declK_ = DeclarationKind::Type;
-    tyDeclK_ = TypeDeclarationKind::Tag;
+    declK_ = DeclarationCategory::Type;
+    tyDeclK_ = TypeDeclarationCategory::Tag;
     tagTyDeclK_ = tagTyDeclK;
     return *this;
 }
@@ -132,7 +149,7 @@ Decl& Decl::Type(std::string tag, TagTypeDeclarationKind tagTyDeclK)
 Decl& Decl::Function(std::string name, ScopeKind scopeK)
 {
     ident_ = std::move(name);
-    declK_ = DeclarationKind::Function;
+    declK_ = DeclarationCategory::Function;
     scopeK_ = scopeK;
     ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;

@@ -20,7 +20,7 @@
 
 #include "Reparser.h"
 
-#include "SyntaxTree.h"
+#include "syntax/SyntaxTree.h"
 
 #include "reparser/NameCataloger.h"
 #include "reparser/Disambiguator_GuidelineImposition.h"
@@ -76,14 +76,13 @@ void Reparser::reparse(SyntaxTree* tree)
                 disambiguator.reset(new SyntaxCorrelationDisambiguator(tree, std::move(catalog)));
                 break;
             }
-            case Reparser::DisambiguationStrategy::GuidelineImposition: {
+            case Reparser::DisambiguationStrategy::GuidelineImposition:
                 disambiguator.reset(new GuidelineImpositionDisambiguator(tree));
                 break;
-            }
             default:
-                PSY_ASSERT_FAIL_1(return);
+                PSY_ASSERT_1(false);
+                return;
         }
-
         auto ok = disambiguator->disambiguate();
         if (ok) {
             persistentAmbigs_.clear();

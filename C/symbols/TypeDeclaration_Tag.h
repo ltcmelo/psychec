@@ -22,61 +22,62 @@
 #define PSYCHE_C_TAG_TYPE_DECLARATION_H__
 
 #include "Declaration_Type.h"
-#include "TagTypeDeclarationKind.h"
+#include "TagTypeDeclarationCategory.h"
+
+#include <optional>
+#include <vector>
 
 namespace psy {
 namespace C {
 
-class PSY_C_API TagTypeDeclaration : public TypeDeclaration
+/**
+ * \brief The TagTypeDeclarationSymbol class.
+ */
+class PSY_C_API TagTypeDeclarationSymbol : public TypeDeclarationSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this TypeDeclaration as a TagTypeDeclaration.
+     * Cast \c this Symbol as a TagTypeDeclarationSymbol.
      */
-    virtual TagTypeDeclaration* asTagTypeDeclaration() override { return this; }
-    virtual const TagTypeDeclaration* asTagTypeDeclaration() const override { return this; }
+    virtual TagTypeDeclarationSymbol* asTagTypeDeclaration() override { return this; }
+    virtual const TagTypeDeclarationSymbol* asTagTypeDeclaration() const override { return this; }
     //!@}
 
     /**
-     * The TypeDeclarationKind of \c this TagTypeDeclaration.
+     * The TypeDeclarationCategory of \c this TagTypeDeclarationSymbol.
      */
-    TagTypeDeclarationKind kind() const;
-
-    //!@{
-    /**
-     * Cast \c this TagTypeDeclaration.
-     */
-    virtual Struct* asStruct() { return nullptr; }
-    virtual const Struct* asStruct() const { return nullptr; }
-    virtual Union* asUnion() { return nullptr; }
-    virtual const Union* asUnion() const { return nullptr; }
-    virtual Enum* asEnum() { return nullptr; }
-    virtual const Enum* asEnum() const { return nullptr; }
-    //!@}
+    TagTypeDeclarationCategory category() const;
 
     /**
-     * The Identifier with which \c this TagTypeDeclaration is declared.
+     * The \a new \a type introduced by \c this TagTypeDeclarationSymbol.
      */
-    virtual const Identifier* identifier() const override;
+    const TagType* introducedNewType() const;
 
     /**
-     * The TagType specified by \c this TagTypeDeclaration.
+     * The \a member \a declaration of \c this TagTypeDeclarationSymbol with the given \c name.
      */
-    const TagType* specifiedType() const;
+    const MemberDeclarationSymbol* member(const Identifier* name) const;
 
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
+
+    std::vector<const MemberDeclarationSymbol*> membs_;
 
 protected:
-    TagTypeDeclaration(const Symbol* containingSym,
-                       const SyntaxTree* tree,
-                       const Scope* enclosingScope,
-                       TagType* tagTy,
-                       TagTypeDeclarationKind tagTyDeclK);
+    TagTypeDeclarationSymbol(
+            SymbolKind symK,
+            const Symbol* containingSym,
+            const SyntaxTree* tree,
+            const Scope* enclosingScope,
+            TagType* tagTy);
+
+    virtual const Identifier* denotingIdentifier() const override;
+
+    void addMember(const MemberDeclarationSymbol* memb);
 };
 
-PSY_C_API std::string to_string(const TagTypeDeclaration* tagTyDecl);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const TagTypeDeclarationSymbol* tagTyDecl);
 
 } // C
 } // psy

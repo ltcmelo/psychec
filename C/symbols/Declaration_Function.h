@@ -22,77 +22,58 @@
 #define PSYCHE_C_FUNCTION_H__
 
 #include "Symbol_Declaration.h"
-#include "MIXIN_NameableSymbol.h"
-#include "MIXIN_TypeableSymbol.h"
-
-#include "../common/infra/AccessSpecifiers.h"
+#include "MIXIN_NameableDeclarationSymbol.h"
+#include "MIXIN_TypeableDeclarationSymbol.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The FunctionSymbol class.
+ * \brief The FunctionDeclarationSymbol class.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IMethodSymbol
- * from Roslyn, the .NET Compiler Platform.
+ * \note Resembles:
+ * - \c Microsoft.CodeAnalysis.IMethodSymbol from Roslyn.
  */
-class PSY_C_API Function final : public Declaration
-                               , public MIXIN_NameableSymbol
-                               , public MIXIN_TypeableSymbol
+class PSY_C_API FunctionDeclarationSymbol final
+        : public DeclarationSymbol
+        , public MIXIN_NameableDeclarationSymbol
+        , public MIXIN_TypeableDeclarationSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this Declaration as a Function.
+     * Cast \c this Symbol as a FunctionDeclarationSymbol.
      */
-    virtual Function* asFunction() override { return this; }
-    virtual const Function* asFunction() const override { return this; }
+    virtual FunctionDeclarationSymbol* asFunctionDeclaration() override { return this; }
+    virtual const FunctionDeclarationSymbol* asFunctionDeclaration() const override { return this; }
     //!@}
 
     /**
-     * The Identifier with which \c this Declaration is declared.
+     * The \a name of the function declared by \c this FunctionDeclarationSymbol.
      */
-    virtual const Identifier* identifier() const override { return name(); }
+    const Identifier* name() const override;
 
     /**
-     * The Identifier that names \c this Function.
-     */
-    const Identifier* name() const;
-
-    /**
-     * The Type of \c this Function.
+     * The \a type of \c this FunctionDeclarationSymbol.
      *
-     * \sa FunctionSymbol::returnType
+     * \sa FunctionDeclarationSymbol::returnType
      */
-    const Type* type() const;
-
-    /**
-     * The Type of the return of \c this Function.
-     *
-     * \sa FunctionSymbol::type
-     */
-    const Type* returnType() const;
-
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const override;
+    const Type* type() const override;
 
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
     DECL_PIMPL_SUB(Function);
-    Function(const Symbol* containingSym,
-             const SyntaxTree* tree,
-             const Scope* enclosingScope);
+    FunctionDeclarationSymbol(const Symbol* containingSym,
+                              const SyntaxTree* tree,
+                              const Scope* enclosingScope);
 
+    virtual const Identifier* denotingIdentifier() const override { return name(); }
     virtual void setName(const Identifier* name) override;
     virtual void setType(const Type* ty) override;
-    virtual const Type* retypeableType() const override;
 };
 
-PSY_C_API std::string to_string(const Function* func);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const FunctionDeclarationSymbol* func);
 
 } // C
 } // psy

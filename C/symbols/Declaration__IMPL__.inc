@@ -24,21 +24,22 @@
 using namespace psy;
 using namespace C;
 
-struct Declaration::DeclarationImpl : SymbolImpl
+struct DeclarationSymbol::DeclarationImpl : SymbolImpl
 {
-    DeclarationImpl(const Symbol* containingSym,
-                    DeclarationKind declK,
+    DeclarationImpl(SymbolKind symK,
+                    const Symbol* containingSym,
                     const SyntaxTree* tree,
                     const Scope* enclosingScope,
                     NameSpace ns)
-        : SymbolImpl(SymbolKind::Declaration, containingSym)
+        : SymbolImpl(symK, containingSym)
         , tree_(tree)
         , enclosingScope_(enclosingScope)
+        , denotedTy_(nullptr)
     {
-        BF_.declK_ = static_cast<std::uint32_t>(declK);
-        BF_.ns_ = static_cast<std::uint32_t>(ns);
+        F_.ns_ = static_cast<std::uint32_t>(ns);
     }
 
     const SyntaxTree* tree_;
     const Scope* enclosingScope_;
+    const Type* denotedTy_;
 };

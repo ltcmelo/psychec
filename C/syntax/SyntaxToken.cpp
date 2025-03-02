@@ -22,7 +22,7 @@
 #include "SyntaxToken.h"
 
 #include "Lexeme_ALL.h"
-#include "SyntaxTree.h"
+#include "syntax/SyntaxTree.h"
 
 #include <iostream>
 #include <type_traits>

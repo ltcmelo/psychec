@@ -30,9 +30,8 @@ namespace C {
 /**
  * \brief The SyntaxReference class.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.SyntaxReference
- * from Roslyn, the .NET Compiler Platform.
+ * \note Resembles:
+ * \c Microsoft.CodeAnalysis.SyntaxReference from Roslyn.
  */
 class PSY_C_API SyntaxReference
 {

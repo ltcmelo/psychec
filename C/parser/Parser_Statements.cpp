@@ -969,12 +969,12 @@ bool Parser::parseExtGNU_AsmOperand_AtFirst(ExtGNU_AsmOperandSyntax*& asmOprd,
 
     if (peek().kind() == SyntaxKind::OpenBracketToken) {
         oprd->openBracketTkIdx_ = consume();
-        if (!(parseIdentifierName(oprd->identExpr_)
+        if (!(parseIdentifierName(oprd->oprdName_)
                 && match(SyntaxKind::CloseBracketToken, &oprd->closeBracketTkIdx_)))
             return false;
     }
 
-    return parseStringLiteral(oprd->strLit_)
+    return parseStringLiteral(oprd->constr_)
         && match(SyntaxKind::OpenParenToken, &oprd->openParenTkIdx_)
         && parseExpression(oprd->expr_)
         && match(SyntaxKind::CloseParenToken, &oprd->closeParenTkIdx_);

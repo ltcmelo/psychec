@@ -23,6 +23,7 @@
 
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_Tag.h"
+#include "symbols/Symbol_ALL.h"
 
 #include <iostream>
 #include <sstream>
@@ -30,38 +31,35 @@
 using namespace psy;
 using namespace C;
 
-Union::Union(const Symbol* containingSym,
-             const SyntaxTree* tree,
-             const Scope* enclosingScope,
-             TagType* tagTy)
-    : TagTypeDeclaration(containingSym,
-                         tree,
-                         enclosingScope,
-                         tagTy,
-                         TagTypeDeclarationKind::Union)
+UnionDeclarationSymbol::UnionDeclarationSymbol(
+        const Symbol* containingSym,
+        const SyntaxTree* tree,
+        const Scope* enclosingScope,
+        TagType* tagTy)
+    : TagTypeDeclarationSymbol(SymbolKind::UnionDeclaration,
+                               containingSym,
+                               tree,
+                               enclosingScope,
+                               tagTy)
 {
 }
 
-std::string Union::toDisplayString() const
+void UnionDeclarationSymbol::addField(const FieldDeclarationSymbol* fld)
 {
-    std::ostringstream oss;
-    oss << "union ";
-    oss << P_CAST->ty_->asTagType()->tag()->valueText();
-    return oss.str();
+    addMember(fld);
 }
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Union* uniom)
+std::ostream& operator<<(std::ostream& os, const UnionDeclarationSymbol* uniom)
 {
     if (!uniom)
-        return "<Union is null>";
-    std::ostringstream oss;
-    oss << "<Union |";
-    oss << " type:" << to_string(uniom->specifiedType());
-    oss << ">";
-    return oss.str();
+        return os << "<Union is null>";
+    os << "<Union |";
+    os << " type:" << uniom->introducedNewType();
+    os << ">";
+    return os;
 }
 
 } // C

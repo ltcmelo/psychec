@@ -23,7 +23,7 @@
 
 #include "SyntaxNode.h"
 #include "SyntaxToken.h"
-#include "SyntaxTree.h"
+#include "syntax/SyntaxTree.h"
 #include "SyntaxVisitor.h"
 
 #include "parser/LexedTokens.h"
@@ -839,7 +839,7 @@ class PSY_C_API DeclaratorDeclarationSyntax : public ValueDeclarationSyntax
  *
  * It isn't distinguished, by means of a further inherited type, the exact
  * variety of the \a declaration, i.e., there are no \c "VariableDeclarationSyntax"
- * or \c "FunctionDeclarationSyntax" class. Yet, the \a declarator within
+ * or \c "FunctionDeclarationSymbolSyntax" class. Yet, the \a declarator within
  * this \a declaration is refined enough: identifying either an object or
  * a function. The reason for this design is explained through the snippet below:
  *

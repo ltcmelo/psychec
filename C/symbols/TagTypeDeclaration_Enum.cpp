@@ -23,6 +23,7 @@
 
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_Tag.h"
+#include "symbols/Symbol_ALL.h"
 
 #include <iostream>
 #include <sstream>
@@ -30,38 +31,35 @@
 using namespace psy;
 using namespace C;
 
-Enum::Enum(const Symbol* containingSym,
-           const SyntaxTree* tree,
-           const Scope* enclosingScope,
-           TagType* tagTy)
-    : TagTypeDeclaration(containingSym,
-                         tree,
-                         enclosingScope,
-                         tagTy,
-                         TagTypeDeclarationKind::Enum)
+EnumDeclarationSymbol::EnumDeclarationSymbol(
+        const Symbol* containingSym,
+        const SyntaxTree* tree,
+        const Scope* enclosingScope,
+        TagType* tagTy)
+    : TagTypeDeclarationSymbol(SymbolKind::EnumDeclaration,
+                               containingSym,
+                               tree,
+                               enclosingScope,
+                               tagTy)
 {
 }
 
-std::string Enum::toDisplayString() const
+void EnumDeclarationSymbol::addEnumerator(const EnumeratorDeclarationSymbol* enumerator)
 {
-    std::ostringstream oss;
-    oss << "enum ";
-    oss << P_CAST->ty_->asTagType()->tag()->valueText();
-    return oss.str();
+    addMember(enumerator);
 }
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Enum* enun)
+std::ostream& operator<<(std::ostream& os, const EnumDeclarationSymbol* enun)
 {
     if (!enun)
-        return "<Enum is null>";
-    std::ostringstream oss;
-    oss << "<Enum | ";
-    oss << "type:" << to_string(enun->specifiedType());
-    oss << ">";
-    return oss.str();
+        return os << "<Enum is null>";
+    os << "<Enum | ";
+    os << "type:" << enun->introducedNewType();
+    os << ">";
+    return os;
 }
 
 } // C

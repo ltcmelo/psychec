@@ -33,9 +33,8 @@ namespace psy {
 /**
  * \brief The Location class.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.Location
- * from Roslyn, the .NET Compiler Platform.
+ * \note Resembles:
+ * \c Microsoft.CodeAnalysis.Location from Roslyn.
  */
 class PSY_API Location
 {

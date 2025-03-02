@@ -43,13 +43,9 @@ namespace C {
 /**
  * \brief The SyntaxToken class.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.SyntaxToken
- * from Roslyn, the .NET Compiler Platform.
- *
- * \note
- * Influence by the API of Clang/LLVM is present as well; specifically:
- * \c clang::Token and \c clang::Preprocessor.
+ * \note Resembles:
+ * \c Microsoft.CodeAnalysis.SyntaxToken from Roslyn.
+ * \c clang::Token and \c clang::Preprocessor from Clang/LLVM.
  */
 class PSY_C_API SyntaxToken
 {

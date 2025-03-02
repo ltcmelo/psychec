@@ -46,15 +46,14 @@ void BasicType::resetBasicTypeKind(BasicTypeKind basicTyK)
 namespace psy {
 namespace C {
 
-PSY_C_API std::string to_string(const BasicType* basicTy)
+PSY_C_API std::ostream& operator<<(std::ostream& os, const BasicType* basicTy)
 {
     if (!basicTy)
-        return "<BasicType is null>";
-    std::ostringstream oss;
-    oss << "<BasicType | ";
-    oss << to_string(basicTy->kind());
-    oss << ">";
-    return oss.str();
+        return os << "<BasicType is null>";
+    os << "<BasicType | ";
+    os << basicTy->kind();
+    os << ">";
+    return os;
 }
 
 } // C

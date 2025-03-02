@@ -68,48 +68,48 @@ enum class PSY_C_API BasicTypeKind : std::uint8_t
     LongDoubleComplex
 };
 
-inline PSY_C_API std::string to_string(BasicTypeKind basicTyK)
+PSY_C_API inline std::ostream& operator<<(std::ostream& os, BasicTypeKind basicTyK)
 {
     switch (basicTyK) {
         case BasicTypeKind::Char:
-                return "char";
+                return os <<  "char";
         case BasicTypeKind::Char_S:
-                return "signed char";
+                return os <<  "signed char";
         case BasicTypeKind::Char_U:
-                return "unsigned char";
+                return os <<  "unsigned char";
         case BasicTypeKind::Short_S:
-                return "signed short";
+                return os <<  "signed short";
         case BasicTypeKind::Short_U:
-                return "unsigned short";
+                return os <<  "unsigned short";
         case BasicTypeKind::Int_S:
-                return "signed int";
+                return os <<  "signed int";
         case BasicTypeKind::Int_U:
-                return "unsigned int";
+                return os <<  "unsigned int";
         case BasicTypeKind::Long_S:
-                return "signed long";
+                return os <<  "signed long";
         case BasicTypeKind::Long_U:
-                return "unsigned long";
+                return os <<  "unsigned long";
         case BasicTypeKind::LongLong_S:
-                return "signed long long";
+                return os <<  "signed long long";
         case BasicTypeKind::LongLong_U:
-                return "unsigned long long";
+                return os <<  "unsigned long long";
         case BasicTypeKind::Bool:
-                return "_Bool";
+                return os <<  "_Bool";
         case BasicTypeKind::Float:
-                return "float";
+                return os <<  "float";
         case BasicTypeKind::Double:
-                return "double";
+                return os <<  "double";
         case BasicTypeKind::LongDouble:
-                return "long double";
+                return os <<  "long double";
         case BasicTypeKind::FloatComplex:
-                return "float _Complex";
+                return os <<  "float _Complex";
         case BasicTypeKind::DoubleComplex:
-                return "double _Complex";
+                return os <<  "double _Complex";
         case BasicTypeKind::LongDoubleComplex:
-                return "long double _Complex";
+                return os <<  "long double _Complex";
     }
     PSY_ASSERT_1(false);
-    return "<invalid BasicTypeKind>";
+    return os <<  "<invalid BasicTypeKind>";
 }
 
 /**

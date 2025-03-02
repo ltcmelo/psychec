@@ -53,14 +53,14 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Compilation);
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
     BasicType(BasicTypeKind basicTyK);
 
     void resetBasicTypeKind(BasicTypeKind basicTyK);
 };
 
-PSY_C_API std::string to_string(const BasicType* basicTy);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const BasicType* basicTy);
 
 } // C
 } // psy

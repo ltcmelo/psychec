@@ -387,7 +387,7 @@ bool Parser::parseFunctionDefinition_AtOpenBrace(
     const DeclaratorSyntax* outerDecltor = SyntaxUtilities::unparenthesizeDeclarator(decltor);
     while (outerDecltor) {
         const DeclaratorSyntax* innerDecltor =
-                SyntaxUtilities::stripDeclarator(outerDecltor);
+                SyntaxUtilities::innerDeclaratorOf(outerDecltor);
         if (innerDecltor == outerDecltor)
             break;
         prevDecltor = outerDecltor;

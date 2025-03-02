@@ -23,7 +23,7 @@
 
 #include "SyntaxNode.h"
 #include "SyntaxToken.h"
-#include "SyntaxTree.h"
+#include "syntax/SyntaxTree.h"
 
 namespace psy {
 namespace C {

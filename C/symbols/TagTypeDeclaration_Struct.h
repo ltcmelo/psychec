@@ -26,32 +26,30 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API Struct final : public TagTypeDeclaration
+class PSY_C_API StructDeclarationSymbol final : public TagTypeDeclarationSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this TagTypeDeclaration as a Struct.
+     * Cast \c this Symbol as a StructDeclarationSymbol.
      */
-    virtual Struct* asStruct() override { return this; }
-    virtual const Struct* asStruct() const override { return this; }
+    virtual StructDeclarationSymbol* asStructDeclaration() override { return this; }
+    virtual const StructDeclarationSymbol* asStructDeclaration() const override { return this; }
     //!@}
 
-    /**
-     * Compute a displayable string for \c this Struct.
-     */
-    virtual std::string toDisplayString() const override;
-
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
-    Struct(const Symbol* containingSym,
-           const SyntaxTree* tree,
-           const Scope* enclosingScope,
-           TagType* tagTy);
+    StructDeclarationSymbol(
+            const Symbol* containingSym,
+            const SyntaxTree* tree,
+            const Scope* enclosingScope,
+            TagType* tagTy);
+
+    void addField(const FieldDeclarationSymbol* fld);
 };
 
-PSY_C_API std::string to_string(const Struct* strukt);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const StructDeclarationSymbol* strukt);
 
 } // C
 } // psy

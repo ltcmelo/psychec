@@ -31,8 +31,6 @@ set(CFE_SOURCES
     # Main
     ${PROJECT_SOURCE_DIR}/API.h
     ${PROJECT_SOURCE_DIR}/Fwds.h
-    ${PROJECT_SOURCE_DIR}/SyntaxTree.h
-    ${PROJECT_SOURCE_DIR}/SyntaxTree.cpp
 
     # Infra
     ${PROJECT_SOURCE_DIR}/infra/List.h
@@ -70,12 +68,15 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxNodes_MIXIN.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxReference.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxReference.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxTree.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxTree.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxToken.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxToken.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxUtilities.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxUtilities.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxVisitor.cpp
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxVisitor.h
+    ${PROJECT_SOURCE_DIR}/syntax/SyntaxVisitor__MACROS__.inc
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxWriterDOTFormat.h
     ${PROJECT_SOURCE_DIR}/syntax/SyntaxWriterDOTFormat.cpp
 
@@ -126,10 +127,11 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/reparser/Reparser.cpp
 
     # Symbols
-    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_NameableSymbol.h
-    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_NameableSymbol.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_TypeableSymbol.h
-    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_TypeableSymbol.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_NameableDeclarationSymbol.h
+    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_NameableDeclarationSymbol.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_TypeableDeclarationSymbol.h
+    ${PROJECT_SOURCE_DIR}/symbols/MIXIN_TypeableDeclarationSymbol.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/SymbolCategory.h
     ${PROJECT_SOURCE_DIR}/symbols/SymbolKind.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_ALL.h
@@ -141,15 +143,17 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_TranslationUnit.h
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Declaration.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Symbol_Declaration.h
-    ${PROJECT_SOURCE_DIR}/symbols/DeclarationKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/DeclarationCategory.h
     ${PROJECT_SOURCE_DIR}/symbols/Declaration__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Function.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Function.h
+    ${PROJECT_SOURCE_DIR}/symbols/Declaration_Member.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/Declaration_Member.h
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Object.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Object.h
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Type.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Type.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationCategory.h
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Enumerator.cpp
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Enumerator.h
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Field.cpp
@@ -158,13 +162,14 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Parameter.h
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Variable.cpp
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Variable.h
-    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/MemberDeclarationCategory.h
+    ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationCategory.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Tag.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Tag.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Typedef.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Typedef.h
-    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclarationKind.h
+    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclarationCategory.h
     ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Enum.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Enum.h
     ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Struct.cpp
@@ -172,20 +177,32 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Union.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Union.h
 
-    # Binder
-    ${PROJECT_SOURCE_DIR}/binder/Binder__MACROS__.inc
-    ${PROJECT_SOURCE_DIR}/binder/Binder.h
-    ${PROJECT_SOURCE_DIR}/binder/Binder.cpp
-    ${PROJECT_SOURCE_DIR}/binder/Binder_Declarators.cpp
-    ${PROJECT_SOURCE_DIR}/binder/Binder_Specifiers.cpp
-    ${PROJECT_SOURCE_DIR}/binder/Binder_End.cpp
-    ${PROJECT_SOURCE_DIR}/binder/DiagnosticsReporter_Binder.cpp
-    ${PROJECT_SOURCE_DIR}/binder/NameSpace.h
-    ${PROJECT_SOURCE_DIR}/binder/Scope.h
-    ${PROJECT_SOURCE_DIR}/binder/Scope.cpp
-    ${PROJECT_SOURCE_DIR}/binder/ScopeKind.h
-    ${PROJECT_SOURCE_DIR}/binder/TypeResolver.h
-    ${PROJECT_SOURCE_DIR}/binder/TypeResolver.cpp
+    # Semantics
+    ${PROJECT_SOURCE_DIR}/sema/DeclarationBinder__MACROS__.inc
+    ${PROJECT_SOURCE_DIR}/sema/DeclarationBinder.h
+    ${PROJECT_SOURCE_DIR}/sema/DeclarationBinder.cpp
+    ${PROJECT_SOURCE_DIR}/sema/DeclarationBinder_Declarators.cpp
+    ${PROJECT_SOURCE_DIR}/sema/DeclarationBinder_Specifiers.cpp
+    ${PROJECT_SOURCE_DIR}/sema/DeclarationBinder_End.cpp
+    ${PROJECT_SOURCE_DIR}/sema/DiagnosticsReporter_DeclarationBinder.cpp
+    ${PROJECT_SOURCE_DIR}/sema/DiagnosticsReporter_TypeResolver.cpp
+    ${PROJECT_SOURCE_DIR}/sema/DiagnosticsReporter_TypeChecker.cpp
+    ${PROJECT_SOURCE_DIR}/sema/InferenceOptions.h
+    ${PROJECT_SOURCE_DIR}/sema/InferenceOptions.cpp
+    ${PROJECT_SOURCE_DIR}/sema/NameSpace.h
+    ${PROJECT_SOURCE_DIR}/sema/PlatformOptions.h
+    ${PROJECT_SOURCE_DIR}/sema/PlatformOptions.cpp
+    ${PROJECT_SOURCE_DIR}/sema/Scope.h
+    ${PROJECT_SOURCE_DIR}/sema/Scope.cpp
+    ${PROJECT_SOURCE_DIR}/sema/ScopeKind.h
+    ${PROJECT_SOURCE_DIR}/sema/TypeResolver.h
+    ${PROJECT_SOURCE_DIR}/sema/TypeResolver.cpp
+    ${PROJECT_SOURCE_DIR}/sema/TypeChecker.h
+    ${PROJECT_SOURCE_DIR}/sema/TypeChecker.cpp
+    ${PROJECT_SOURCE_DIR}/sema/Compilation.h
+    ${PROJECT_SOURCE_DIR}/sema/Compilation.cpp
+    ${PROJECT_SOURCE_DIR}/sema/SemanticModel.h
+    ${PROJECT_SOURCE_DIR}/sema/SemanticModel.cpp
 
     # Types
     ${PROJECT_SOURCE_DIR}/types/Type.h
@@ -194,14 +211,16 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/types/Type_Array.cpp
     ${PROJECT_SOURCE_DIR}/types/Type_Basic.h
     ${PROJECT_SOURCE_DIR}/types/Type_Basic.cpp
+    ${PROJECT_SOURCE_DIR}/types/Type_Error.h
+    ${PROJECT_SOURCE_DIR}/types/Type_Error.cpp
     ${PROJECT_SOURCE_DIR}/types/Type_Function.h
     ${PROJECT_SOURCE_DIR}/types/Type_Function.cpp
     ${PROJECT_SOURCE_DIR}/types/Type_Qualified.h
     ${PROJECT_SOURCE_DIR}/types/Type_Qualified.cpp
     ${PROJECT_SOURCE_DIR}/types/Type_Pointer.h
     ${PROJECT_SOURCE_DIR}/types/Type_Pointer.cpp
-    ${PROJECT_SOURCE_DIR}/types/Type_Typedef.h
-    ${PROJECT_SOURCE_DIR}/types/Type_Typedef.cpp
+    ${PROJECT_SOURCE_DIR}/types/Type_TypedefName.h
+    ${PROJECT_SOURCE_DIR}/types/Type_TypedefName.cpp
     ${PROJECT_SOURCE_DIR}/types/Type_Tag.h
     ${PROJECT_SOURCE_DIR}/types/Type_Tag.cpp
     ${PROJECT_SOURCE_DIR}/types/Type_Void.h
@@ -212,29 +231,14 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/types/TypeKind_Basic.h
     ${PROJECT_SOURCE_DIR}/types/TypeKind_Tag.h
 
-    # Typing
-    ${PROJECT_SOURCE_DIR}/typing/TypeChecker.h
-    ${PROJECT_SOURCE_DIR}/typing/TypeChecker.cpp
-    ${PROJECT_SOURCE_DIR}/typing/DiagnosticsReporter_TypeChecker.cpp
-    ${PROJECT_SOURCE_DIR}/typing/Shape.h
-    ${PROJECT_SOURCE_DIR}/typing/Shape.cpp
-    ${PROJECT_SOURCE_DIR}/typing/Shape_ALL.h
-    ${PROJECT_SOURCE_DIR}/typing/ShapeKind.h
-
-    # Compilation
-    ${PROJECT_SOURCE_DIR}/compilation/Compilation.h
-    ${PROJECT_SOURCE_DIR}/compilation/Compilation.cpp
-    ${PROJECT_SOURCE_DIR}/compilation/SemanticModel.h
-    ${PROJECT_SOURCE_DIR}/compilation/SemanticModel.cpp
-
     # Tests
-    ${PROJECT_SOURCE_DIR}/tests/BinderTester.h
-    ${PROJECT_SOURCE_DIR}/tests/BinderTester.cpp
-    ${PROJECT_SOURCE_DIR}/tests/BinderTester_0000_0999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/BinderTester_1000_1999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/BinderTester_2000_2999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/BinderTester_3000_3999.cpp
-    ${PROJECT_SOURCE_DIR}/tests/BinderTester_4000_4999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/DeclarationBinderTester.h
+    ${PROJECT_SOURCE_DIR}/tests/DeclarationBinderTester.cpp
+    ${PROJECT_SOURCE_DIR}/tests/DeclarationBinderTester_0000_0999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/DeclarationBinderTester_1000_1999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/DeclarationBinderTester_2000_2999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/DeclarationBinderTester_3000_3999.cpp
+    ${PROJECT_SOURCE_DIR}/tests/DeclarationBinderTester_4000_4999.cpp
     ${PROJECT_SOURCE_DIR}/tests/ParserTester.h
     ${PROJECT_SOURCE_DIR}/tests/ParserTester.cpp
     ${PROJECT_SOURCE_DIR}/tests/ParserTester_0000_0999.cpp
@@ -245,6 +249,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/tests/ReparserTester.cpp
     ${PROJECT_SOURCE_DIR}/tests/TypeResolverTester.h
     ${PROJECT_SOURCE_DIR}/tests/TypeResolverTester.cpp
+    ${PROJECT_SOURCE_DIR}/tests/TypeCheckerTester.h
+    ${PROJECT_SOURCE_DIR}/tests/TypeCheckerTester.cpp
     ${PROJECT_SOURCE_DIR}/tests/SemanticModelTester.h
     ${PROJECT_SOURCE_DIR}/tests/SemanticModelTester.cpp
     ${PROJECT_SOURCE_DIR}/tests/TestExpectation.h

@@ -53,8 +53,8 @@
         if (!(PSY__internals__EQ_OPTR(std::underlying_type_t<UNDER_TYPE>(ACTUAL), \
                                       std::underlying_type_t<UNDER_TYPE>(EXPECTED)))) { \
             std::cout << "\n!\tFAIL\n" \
-                      << "\t\tActual  : " << to_string(ACTUAL) << "\n" \
-                      << "\t\tExpected: " << to_string(EXPECTED) << "\n" \
+                      << "\t\tActual  : " << ACTUAL << "\n" \
+                      << "\t\tExpected: " << EXPECTED << "\n" \
                       << "\t\t" << __FILE__ << ":" << __LINE__ << std::endl; \
             throw TestFailed(); \
         } \

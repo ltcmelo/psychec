@@ -24,7 +24,7 @@
 
 #include "SyntaxNode.h"
 #include "SyntaxToken.h"
-#include "SyntaxTree.h"
+#include "syntax/SyntaxTree.h"
 #include "SyntaxVisitor.h"
 
 #include "parser/LexedTokens.h"
@@ -385,6 +385,10 @@ private:
     LexedTokens::IndexType gotoKwTkIdx_ = LexedTokens::invalidIndex();
     ExpressionSyntax* expr_ = nullptr;
     LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
+    AST_CHILD_LST3(gotoKwTkIdx_,
+                   expr_,
+                   semicolonTkIdx_)
+
 };
 
 /**
@@ -474,21 +478,28 @@ class PSY_C_API ExtGNU_AsmOperandSyntax final : public SyntaxNode
 
 public:
     SyntaxToken openBracketToken() const { return tokenAtIndex(openBracketTkIdx_); }
-    const ExpressionSyntax* identifier() const { return identExpr_; }
+    const ExpressionSyntax* operandName() const { return oprdName_; }
     SyntaxToken closeBracketToken() const { return tokenAtIndex(closeBracketTkIdx_); }
-    const ExpressionSyntax* stringLiteral() const { return strLit_; }
+    const ExpressionSyntax* constraint() const { return constr_; }
     SyntaxToken openParenthesisToken() const { return tokenAtIndex(openParenTkIdx_); }
     const ExpressionSyntax* expression() const { return expr_; }
     SyntaxToken closeParenthesisToken() const { return tokenAtIndex(closeParenTkIdx_); }
 
 private:
     LexedTokens::IndexType openBracketTkIdx_ = LexedTokens::invalidIndex();
-    ExpressionSyntax* identExpr_ = nullptr;
+    ExpressionSyntax* oprdName_ = nullptr;
     LexedTokens::IndexType closeBracketTkIdx_ = LexedTokens::invalidIndex();
-    ExpressionSyntax* strLit_ = nullptr;
+    ExpressionSyntax* constr_ = nullptr;
     LexedTokens::IndexType openParenTkIdx_ = LexedTokens::invalidIndex();
     ExpressionSyntax* expr_ = nullptr;
     LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
+    AST_CHILD_LST7(openBracketTkIdx_,
+                   oprdName_,
+                   closeBracketTkIdx_,
+                   constr_,
+                   openParenTkIdx_,
+                   expr_,
+                   closeParenTkIdx_)
 };
 
 /**
@@ -536,7 +547,20 @@ private:
     ExpressionListSyntax* labels_ = nullptr;
     LexedTokens::IndexType closeParenTkIdx_ = LexedTokens::invalidIndex();
     LexedTokens::IndexType semicolonTkIdx_ = LexedTokens::invalidIndex();
-
+    AST_CHILD_LST14(asmKwTkIdx_,
+                   asmQuals_,
+                   openParenTkIdx_,
+                   strLit_,
+                   colon1TkIdx_,
+                   outOprds_,
+                   colon2TkIdx_,
+                   inOprds_,
+                   colon3TkIdx_,
+                   clobs_,
+                   colon4TkIdx_,
+                   labels_,
+                   closeParenTkIdx_,
+                   semicolonTkIdx_)
 };
 
 class PSY_C_API ExtGNU_AsmQualifierSyntax final : public TrivialSpecifierSyntax

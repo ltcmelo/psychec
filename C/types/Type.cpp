@@ -38,30 +38,32 @@ TypeKind Type::kind() const
 namespace psy {
 namespace C {
 
-PSY_C_API std::string to_string(const Type* ty)
+PSY_C_API std::ostream& operator<<(std::ostream& os, const Type* ty)
 {
     if (!ty)
-        return "<Type is null>";
+        return os << "<Type is null>";
     switch (ty->kind()) {
         case TypeKind::Array:
-            return to_string(ty->asArrayType());
+            return os << ty->asArrayType();
         case TypeKind::Basic:
-            return to_string(ty->asBasicType());
+            return os << ty->asBasicType();
         case TypeKind::Function:
-            return to_string(ty->asFunctionType());
+            return os << ty->asFunctionType();
         case TypeKind::Pointer:
-            return to_string(ty->asPointerType());
-        case TypeKind::Typedef:
-            return to_string(ty->asTypedefType());
+            return os << ty->asPointerType();
+        case TypeKind::TypedefName:
+            return os << ty->asTypedefNameType();
         case TypeKind::Tag:
-            return to_string(ty->asTagType());
+            return os << ty->asTagType();
         case TypeKind::Void:
-            return to_string(ty->asVoidType());
+            return os << ty->asVoidType();
         case TypeKind::Qualified:
-            return to_string(ty->asQualifiedType());
+            return os << ty->asQualifiedType();
+        case TypeKind::Unknown:
+            return os << ty->asErrorType();
     }
     PSY_ASSERT_1(false);
-    return "<invalid Type>";
+    return os << "<invalid Type>";
 }
 
 bool isArithmeticType(const Type* ty)

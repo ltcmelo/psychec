@@ -39,18 +39,18 @@ enum class PSY_C_API TagTypeKind : std::uint8_t
     Enum
 };
 
-inline PSY_C_API std::string to_string(TagTypeKind tagTyK)
+PSY_C_API inline std::ostream& operator<<(std::ostream& os, TagTypeKind tagTyK)
 {
     switch (tagTyK) {
         case TagTypeKind::Struct:
-            return "Struct";
+            return os << "Struct";
         case TagTypeKind::Union:
-            return "Union";
+            return os << "Union";
         case TagTypeKind::Enum:
-            return "Enum";
+            return os << "Enum";
     }
     PSY_ASSERT_1(false);
-    return "<invalid TagTypeKind>";
+    return os << "<invalid TagTypeKind>";
 }
 
 } // C
