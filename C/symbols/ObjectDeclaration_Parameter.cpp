@@ -20,7 +20,7 @@
 
 #include "ObjectDeclaration_Parameter.h"
 
-#include "binder/Scope.h"
+#include "sema/Scope.h"
 #include "symbols/Symbol_ALL.h"
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_ALL.h"
@@ -31,33 +31,28 @@
 using namespace psy;
 using namespace C;
 
-Parameter::Parameter(const Symbol* containingSym,
-                     const SyntaxTree* tree,
-                     const Scope* enclosingScope)
-    : ObjectDeclaration(containingSym,
-                        tree,
-                        enclosingScope,
-                        ObjectDeclarationKind::Parameter)
+ParameterDeclarationSymbol::ParameterDeclarationSymbol(
+        const Symbol* containingSym,
+        const SyntaxTree* tree,
+        const Scope* enclosingScope)
+    : ObjectDeclarationSymbol(SymbolKind::ParameterDeclaration,
+                              containingSym,
+                              tree,
+                              enclosingScope)
 {}
-
-std::string Parameter::toDisplayString() const
-{
-    return "";
-}
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Parameter* param)
+std::ostream& operator<<(std::ostream& os, const ParameterDeclarationSymbol* param)
 {
     if (!param)
-        return "<Parameter is null>";
-    std::ostringstream oss;
-    oss << "<Parameter |";
-    oss << " name:" << param->name()->valueText();
-    oss << " type:" << to_string(param->type());
-    oss << ">";
-    return oss.str();
+        return os << "<Parameter is null>";
+    os << "<Parameter |";
+    os << " name:" << param->name()->valueText();
+    os << " type:" << param->type();
+    os << ">";
+    return os;
 }
 
 } // C

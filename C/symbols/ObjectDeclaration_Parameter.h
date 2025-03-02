@@ -27,37 +27,31 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The Parameter class.
+ * \brief The ParameterDeclarationSymbol class.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IParameterSymbol
- * from Roslyn, the .NET Compiler Platform.
+ * \note Resembles:
+ * \c Microsoft.CodeAnalysis.IParameterSymbol from Roslyn.
  */
-class PSY_C_API Parameter final : public ObjectDeclaration
+class PSY_C_API ParameterDeclarationSymbol final : public ObjectDeclarationSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this Symbol as a Parameter.
+     * Cast \c this Symbol as a ParameterDeclarationSymbol.
      */
-    virtual Parameter* asParameter() override { return this; }
-    virtual const Parameter* asParameter() const override { return this; }
+    virtual ParameterDeclarationSymbol* asParameterDeclaration() override { return this; }
+    virtual const ParameterDeclarationSymbol* asParameterDeclaration() const override { return this; }
     //!@}
 
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const override;
-
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
-    Parameter(const Symbol* containingSym,
+    ParameterDeclarationSymbol(const Symbol* containingSym,
               const SyntaxTree* tree,
               const Scope* enclosingScope);
 };
 
-PSY_C_API std::string to_string(const Parameter* param);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const ParameterDeclarationSymbol* param);
 
 } // C
 } // psy

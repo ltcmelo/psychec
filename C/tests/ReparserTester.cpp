@@ -800,7 +800,53 @@ int _ ()
                   SyntaxKind::ExpressionStatement })));
 }
 
-void ReparserTester::case0027(){}
+void ReparserTester::case0027()
+{
+    // Source-code with error.
+
+    auto s = R"(
+int _ ( )
+{
+    x y ;
+    x * z ;
+    x . m ;
+}
+)";
+
+    reparse_withSyntaxCorrelation(
+                s,
+                Expectation().AST(
+                    preamble_clean(
+                        { SyntaxKind::DeclarationStatement,
+                          SyntaxKind::VariableAndOrFunctionDeclaration,
+                          SyntaxKind::TypedefName,
+                          SyntaxKind::IdentifierDeclarator,
+                          SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration,
+                          SyntaxKind::DeclarationStatement,
+                          SyntaxKind::VariableAndOrFunctionDeclaration,
+                          SyntaxKind::TypedefName,
+                          SyntaxKind::PointerDeclarator,
+                          SyntaxKind::IdentifierDeclarator,
+                          SyntaxKind::ExpressionStatement,
+                          SyntaxKind::MultiplyExpression,
+                          SyntaxKind::IdentifierName,
+                          SyntaxKind::IdentifierName,
+                          SyntaxKind::ExpressionStatement,
+                          SyntaxKind::DirectMemberAccessExpression,
+                          SyntaxKind::IdentifierName,
+                          SyntaxKind::IdentifierName }))
+                .ambiguity(R"(
+int _ ( )
+{
+    x y ;
+    x * z ;
+    x * z ;
+    x . m ;
+}
+)"));
+
+}
+
 void ReparserTester::case0028(){}
 void ReparserTester::case0029(){}
 void ReparserTester::case0030(){}

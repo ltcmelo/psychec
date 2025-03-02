@@ -25,7 +25,7 @@
 #include "Fwds.h"
 
 #include "Symbol_Declaration.h"
-#include "TypeDeclarationKind.h"
+#include "TypeDeclarationCategory.h"
 
 #include "../common/infra/AccessSpecifiers.h"
 
@@ -35,52 +35,50 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The TypeDeclaration class.
+ * \brief The TypeDeclarationSymbol class.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.ITypeDeclaration
- * from Roslyn, the .NET Compiler Platform. Yet, Psyche-C distinguishes
- * between type symbols and types.
+ * \note Resembles:
+ * \c Microsoft.CodeAnalysis.ITypeDeclaration from Roslyn.
  *
  * \see Type
  */
-class PSY_C_API TypeDeclaration : public Declaration
+class PSY_C_API TypeDeclarationSymbol : public DeclarationSymbol
 {
 public:
-    virtual ~TypeDeclaration();
+    virtual ~TypeDeclarationSymbol();
+
+    /**
+     * The TypeDeclarationCategory of \c this TypeDeclarationSymbol.
+     */
+    TypeDeclarationCategory category() const;
 
     //!@{
     /**
-     * Cast \c this Symbol as a TypeDeclaration.
+     * Cast \c this Symbol as a TypeDeclarationSymbol.
      */
-    virtual TypeDeclaration* asTypeDeclaration() override { return this; }
-    virtual const TypeDeclaration* asTypeDeclaration() const override { return this; }
+    virtual TypeDeclarationSymbol* asTypeDeclaration() override { return this; }
+    virtual const TypeDeclarationSymbol* asTypeDeclaration() const override { return this; }
     //!@}
 
     /**
-     * The TypeDeclarationKind of \c this TypeDeclaration.
+     * The \a type introduced by \c this TypeDeclarationSymbol.
+     *
+     * \sa Typedef::synonymType
+     * \sa TagTypeDeclaration::introducedNewType
      */
-    TypeDeclarationKind kind() const;
-
-    //!@{
-    /**
-     * Cast \c this TypeDeclaration.
-     */
-    virtual TagTypeDeclaration* asTagTypeDeclaration() { return nullptr; }
-    virtual const TagTypeDeclaration* asTagTypeDeclaration() const { return nullptr; }
-    virtual Typedef* asTypedef() { return nullptr; }
-    virtual const Typedef* asTypedef() const { return nullptr; }
-    //!@}
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    const Type* introducedType() const;
 
 protected:
     DECL_PIMPL_SUB(TypeDeclaration);
-    TypeDeclaration(TypeDeclarationImpl* p);
+    TypeDeclarationSymbol(TypeDeclarationImpl* p);
+    TypeDeclarationSymbol(const TypeDeclarationSymbol&) = delete;
+    TypeDeclarationSymbol& operator=(const DeclarationSymbol&) = delete;
+
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 };
 
-PSY_C_API std::string to_string(const TypeDeclaration* tyDecl);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const TypeDeclarationSymbol* tyDecl);
 
 } // C
 } // psy

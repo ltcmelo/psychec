@@ -26,32 +26,30 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API Union final : public TagTypeDeclaration
+class PSY_C_API UnionDeclarationSymbol final : public TagTypeDeclarationSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this TagTypeDeclaration as a Union.
+     * Cast \c this Symbol as a UnionDeclarationSymbol.
      */
-    virtual Union* asUnion() override { return this; }
-    virtual const Union* asUnion() const override { return this; }
+    virtual UnionDeclarationSymbol* asUnionDeclaration() override { return this; }
+    virtual const UnionDeclarationSymbol* asUnionDeclaration() const override { return this; }
     //!@}
 
-    /**
-     * Compute a displayable string for \c this Union.
-     */
-    virtual std::string toDisplayString() const override;
-
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
-    Union(const Symbol* containingSym,
-          const SyntaxTree* tree,
-          const Scope* enclosingScope,
-          TagType* tagTy);
+    UnionDeclarationSymbol(
+            const Symbol* containingSym,
+            const SyntaxTree* tree,
+            const Scope* enclosingScope,
+            TagType* tagTy);
+
+    void addField(const FieldDeclarationSymbol* fld);
 };
 
-PSY_C_API std::string to_string(const Union* uniom);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const UnionDeclarationSymbol* uniom);
 
 } // C
 } // psy

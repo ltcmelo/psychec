@@ -21,7 +21,7 @@
 #include "ObjectDeclaration_Enumerator.h"
 
 #include "symbols/Symbol_ALL.h"
-#include "binder/Scope.h"
+#include "sema/Scope.h"
 #include "syntax/Lexeme_Identifier.h"
 #include "types/Type_ALL.h"
 
@@ -30,33 +30,28 @@
 using namespace psy;
 using namespace C;
 
-Enumerator::Enumerator(const Symbol* containingSym,
-                       const SyntaxTree* tree,
-                       const Scope* enclosingScope)
-    : ObjectDeclaration(containingSym,
-                        tree,
-                        enclosingScope,
-                        ObjectDeclarationKind::Enumerator)
+EnumeratorDeclarationSymbol::EnumeratorDeclarationSymbol(
+        const Symbol* containingSym,
+        const SyntaxTree* tree,
+        const Scope* enclosingScope)
+    : MemberDeclarationSymbol(SymbolKind::EnumeratorDeclaration,
+                              containingSym,
+                              tree,
+                              enclosingScope)
 {}
-
-std::string Enumerator::toDisplayString() const
-{
-    return "";
-}
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Enumerator* enumerator)
+std::ostream& operator<<(std::ostream& os, const EnumeratorDeclarationSymbol* enumerator)
 {
     if (!enumerator)
-        return "<Enumerator is null>";
-    std::ostringstream oss;
-    oss << "<Enumerator |";
-    oss << " name:" << enumerator->name()->valueText();
-    oss << " type:" << to_string(enumerator->type());
-    oss << ">";
-    return oss.str();
+        return os << "<Enumerator is null>";
+    os << "<Enumerator |";
+    os << " name:" << enumerator->name()->valueText();
+    os << " type:" << enumerator->type();
+    os << ">";
+    return os;
 }
 
 } // C

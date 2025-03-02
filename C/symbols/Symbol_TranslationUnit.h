@@ -23,43 +23,36 @@
 
 #include "Symbol.h"
 
-#include "../common/infra/AccessSpecifiers.h"
-
 namespace psy {
 namespace C {
 
 /**
  * \brief The TranslationUnit class.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.IModuleSymbol
- * from Roslyn, the .NET Compiler Platform.
+ * \note Resembles:
+ * - \c Microsoft.CodeAnalysis.IModuleSymbol from Roslyn.
  */
-class PSY_C_API TranslationUnit final : public Symbol
+class PSY_C_API TranslationUnitSymbol final : public Symbol
 {
 public:
     //!@{
     /**
-     * Cast \c this Symbol as a TranslationUnit.
+     * Cast \c this Symbol as a TranslationUnitSymbol.
      */
-    virtual TranslationUnit* asTranslationUnit() override { return this; }
-    virtual const TranslationUnit* asTranslationUnit() const override { return this; }
+    virtual TranslationUnitSymbol* asTranslationUnit() override { return this; }
+    virtual const TranslationUnitSymbol* asTranslationUnit() const override { return this; }
     //!@}
 
-    /**
-     * Compute a displayable string for \c this TranslationUnit.
-     */
-    virtual std::string toDisplayString() const override;
-
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
-    TranslationUnit(const Program* prog, const SyntaxTree* tree);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
+
+    TranslationUnitSymbol(const ProgramSymbol* prog, const SyntaxTree* tree);
 
 private:
     const SyntaxTree* tree_;
 };
 
-PSY_C_API std::string to_string(const TranslationUnit* unit);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const TranslationUnitSymbol* unit);
 
 } // C
 } // psy

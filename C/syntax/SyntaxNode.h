@@ -47,9 +47,8 @@ namespace C {
  *
  * The base class of every AST node.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.SyntaxNode
- * from Roslyn, the .NET Compiler Platform.
+ * \note Resembles:
+ * \c Microsoft.CodeAnalysis.SyntaxNode from Roslyn.
  */
 class PSY_C_API SyntaxNode : public Managed
 {
@@ -60,16 +59,6 @@ public:
      * The SyntaxTree to which \c this SyntaxNode belongs to.
      */
     const SyntaxTree* syntaxTree() const;
-
-    /**
-     * The SyntaxKind of \c this SyntaxNode.
-     */
-    SyntaxKind kind() const;
-
-    /**
-     * Whether \c this SyntaxNode is of SyntaxKind \p k.
-     */
-    bool isKind(SyntaxKind k) { return kind() == k; }
 
     /**
      * The first token of \c this SyntaxNode.
@@ -85,27 +74,59 @@ public:
     /**
      * Accept \c this SyntaxNode for traversal by the given \p visitor.
      */
-    void acceptVisitor(SyntaxVisitor* visitor) const;
+    SyntaxVisitor::Action acceptVisitor(SyntaxVisitor* visitor) const;
 
     /**
      * Accept the SyntaxNode \p node for traversal by the given \p visitor.
      */
-    static void acceptVisitor(const SyntaxNode* node, SyntaxVisitor* visitor)
+    static SyntaxVisitor::Action acceptVisitor(const SyntaxNode* node, SyntaxVisitor* visitor)
     {
-        if (node)
-            node->acceptVisitor(visitor);
+        return node
+                ? node->acceptVisitor(visitor)
+                : SyntaxVisitor::Action::Visit;
+    }
+
+    /**
+     * Accept \c this SyntaxNode for traversal of its child nodes by the given \p visitor.
+     */
+    SyntaxVisitor::Action acceptVisitorInChildNodes(SyntaxVisitor* visitor) const;
+
+    /**
+     * Accept the given \p node for traversal of its child nodes by the given \p visitor.
+     */
+    static SyntaxVisitor::Action
+        acceptVisitorInChildNodes(const SyntaxNode* node, SyntaxVisitor* visitor)
+    {
+        return node
+                ? node->acceptVisitorInChildNodes(visitor)
+                : SyntaxVisitor::Action::Visit;
     }
 
     /**
      * Accept the syntax list \p it for traversal by the given \p visitor.
      */
-    template <class PtrT, class DerivedListT>
-    static void acceptVisitor(List<PtrT, DerivedListT>* it, SyntaxVisitor* visitor)
+    template <class ValueT, class DerivedListT>
+    static SyntaxVisitor::Action
+        acceptVisitor(List<ValueT, DerivedListT>* it, SyntaxVisitor* visitor)
     {
-        for (; it; it = it->next)
-            acceptVisitor(it->value, visitor);
+        for (; it; it = it->next) {
+            auto action = acceptVisitor(it->value, visitor);
+            if (action == SyntaxVisitor::Action::Quit)
+                return action;
+        }
+        return SyntaxVisitor::Action::Visit;
     }
     //!@}
+
+    /**
+     * The SyntaxKind of \c this SyntaxNode.
+     */
+    SyntaxKind kind() const;
+
+    /**
+     * Whether \c this SyntaxNode is of SyntaxKind \p k.
+     */
+    bool isKind(SyntaxKind k) { return kind() == k; }
 
     //--------------//
     // Declarations //
@@ -352,17 +373,14 @@ public:
 
 protected:
     SyntaxNode(SyntaxTree* tree, SyntaxKind kind = SyntaxKind::Error);
-
-    // Unavailable
     SyntaxNode(const SyntaxNode& other) = delete;
     SyntaxNode& operator=(const SyntaxNode& other) = delete;
 
     SyntaxToken tokenAtIndex(LexedTokens::IndexType tkIdx) const;
     SyntaxToken findValidToken(const std::vector<SyntaxHolder>& syntaxHolders) const;
-    void visitChildren(SyntaxVisitor* visitor) const;
 
-    virtual std::vector<SyntaxHolder> childNodesAndTokens() const { return {}; }
     virtual SyntaxVisitor::Action dispatchVisit(SyntaxVisitor* visitor) const = 0;
+    virtual std::vector<SyntaxHolder> childNodesAndTokens() const { return {}; }
 
     SyntaxTree* tree_;
     SyntaxKind kind_;
@@ -372,6 +390,7 @@ protected:
  * The SyntaxKind of a given syntax \p kind as a \c std::string.
  */
 PSY_C_API std::string to_string(SyntaxKind kind);
+PSY_C_API std::ostream& operator<<(std::ostream& os, SyntaxKind kind);
 
 } // C
 } // psy

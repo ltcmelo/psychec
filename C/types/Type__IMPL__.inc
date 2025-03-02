@@ -28,13 +28,13 @@ struct Type::TypeImpl
     TypeImpl(TypeKind tyK)
         : BD_(0)
     {
-        F_.tyK_ = static_cast<std::uint32_t>(tyK);
+        F_.tyK_ = static_cast<std::uint8_t>(tyK);
     }
 
     struct BD
     {
         // Type
-        std::uint32_t tyK_ : 3;
+        std::uint32_t tyK_ : 4;
 
         // BasicType
         std::uint32_t basicTyK_: 5;

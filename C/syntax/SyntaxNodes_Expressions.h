@@ -26,7 +26,7 @@
 #include "SyntaxNodes_Statements.h"
 #include "SyntaxNodes_MIXIN.h"
 #include "SyntaxToken.h"
-#include "SyntaxTree.h"
+#include "syntax/SyntaxTree.h"
 
 namespace psy {
 namespace C {
@@ -462,13 +462,13 @@ class PSY_C_API MemberAccessExpressionSyntax final : public ExpressionSyntax
 public:
     const ExpressionSyntax* expression() const { return expr_; }
     SyntaxToken operatorToken() const { return tokenAtIndex(oprtrTkIdx_); }
-    const IdentifierNameSyntax* identifier() const { return identExpr_; }
+    const IdentifierNameSyntax* memberName() const { return memberName_; }
 
 private:
     ExpressionSyntax* expr_ = nullptr;
     LexedTokens::IndexType oprtrTkIdx_ = LexedTokens::invalidIndex();
-    IdentifierNameSyntax* identExpr_ = nullptr;
-    AST_CHILD_LST3(expr_, oprtrTkIdx_, identExpr_)
+    IdentifierNameSyntax* memberName_ = nullptr;
+    AST_CHILD_LST3(expr_, oprtrTkIdx_, memberName_)
 };
 
 /**

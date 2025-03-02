@@ -23,6 +23,8 @@
 #include "SyntaxNodes.h"
 #include "SyntaxVisitor.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <algorithm>
 #include <cstddef>
 
@@ -61,24 +63,24 @@ SyntaxToken SyntaxNode::lastToken() const
 
 SyntaxToken SyntaxNode::findValidToken(const std::vector<SyntaxHolder>& syntaxHolders) const
 {
-    for (const auto& synH : syntaxHolders) {
-        switch (synH.variant()) {
+    for (const auto& holder : syntaxHolders) {
+        switch (holder.variant()) {
             case SyntaxHolder::Variant::Token:
-                if (synH.tokenIndex() != LexedTokens::invalidIndex())
-                    return tokenAtIndex(synH.tokenIndex());
+                if (holder.tokenIndex() != LexedTokens::invalidIndex())
+                    return tokenAtIndex(holder.tokenIndex());
                 break;
 
             case SyntaxHolder::Variant::Node:
-                if (synH.node()) {
-                    auto tk = synH.node()->firstToken();
+                if (holder.node()) {
+                    auto tk = holder.node()->firstToken();
                     if (tk != SyntaxToken::invalid())
                         return tk;
                 }
                 break;
 
             case SyntaxHolder::Variant::NodeList:
-                if (synH.nodeList()) {
-                    auto tk = synH.nodeList()->firstToken();
+                if (holder.nodeList()) {
+                    auto tk = holder.nodeList()->firstToken();
                     if (tk != SyntaxToken::invalid())
                         return tk;
                 }
@@ -95,44 +97,76 @@ SyntaxToken SyntaxNode::tokenAtIndex(LexedTokens::IndexType tkIdx) const
     return tree_->tokenAt(tkIdx);
 }
 
-void SyntaxNode::visitChildren(SyntaxVisitor* visitor) const
+SyntaxVisitor::Action SyntaxNode::acceptVisitorInChildNodes(SyntaxVisitor* visitor) const
 {
-    for (auto synH : childNodesAndTokens()) {
-        switch (synH.variant()) {
+    for (auto holder : childNodesAndTokens()) {
+        SyntaxVisitor::Action action;
+        switch (holder.variant()) {
             case SyntaxHolder::Variant::Node: {
-                if (!synH.node())
+                if (!holder.node())
                     continue;
-                auto node = const_cast<SyntaxNode*>(synH.node());
-                node->acceptVisitor(visitor);
+                auto node = const_cast<SyntaxNode*>(holder.node());
+                action = node->acceptVisitor(visitor);
                 break;
             }
             case SyntaxHolder::Variant::NodeList: {
-                if (!synH.nodeList())
+                if (!holder.nodeList())
                     continue;
-                auto nodeL = const_cast<SyntaxNodeList*>(synH.nodeList());
-                nodeL->acceptVisitor(visitor);
+                auto nodes = const_cast<SyntaxNodeList*>(holder.nodeList());
+                action = nodes->acceptVisitor(visitor);
                 break;
             }
+            case SyntaxHolder::Variant::Token:
+                continue;
+
+            default:
+                PSY_ASSERT_1(false);
+                break;
+        }
+        switch (action) {
+            case SyntaxVisitor::Action::Quit:
+                return action;
+            case SyntaxVisitor::Action::Skip:
+                return SyntaxVisitor::Action::Visit;
             default:
                 break;
         }
     }
+    return SyntaxVisitor::Action::Visit;
 }
 
-void SyntaxNode::acceptVisitor(SyntaxVisitor* visitor) const
+SyntaxVisitor::Action SyntaxNode::acceptVisitor(SyntaxVisitor* visitor) const
 {
     if (visitor->preVisit(this)) {
         auto action = dispatchVisit(visitor);
-        if (action == SyntaxVisitor::Action::Visit)
-            visitChildren(visitor);
+        switch (action) {
+            case SyntaxVisitor::Action::Quit:
+                break;
+            case SyntaxVisitor::Action::Skip:
+                action = SyntaxVisitor::Action::Visit;
+                break;
+            case SyntaxVisitor::Action::Visit:
+                action = acceptVisitorInChildNodes(visitor);
+                break;
+            default:
+                PSY_ASSERT_1(false);
+                return SyntaxVisitor::Action::Quit;
+        }
+        visitor->postVisit(this);
+        return action;
     }
-    visitor->postVisit(this);
+    return SyntaxVisitor::Action::Visit;
 }
 
 namespace psy {
 namespace C {
 
 extern const char* tokenNames[];
+
+PSY_C_API std::ostream& operator<<(std::ostream& os, SyntaxKind kind)
+{
+    return os << to_string(kind);
+}
 
 PSY_C_API std::string to_string(SyntaxKind kind)
 {

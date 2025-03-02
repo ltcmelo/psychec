@@ -617,7 +617,7 @@ bool Parser::parsePostfixExpression_AtFollowOfPrimary(ExpressionSyntax*& expr)
                                 if (peek().kind() == SyntaxKind::IdentifierToken) {
                                     ExpressionSyntax* identExpr = nullptr;
                                     parseIdentifierName_AtFirst(identExpr);
-                                    membAccess->identExpr_ = identExpr->asIdentifierName();
+                                    membAccess->memberName_ = identExpr->asIdentifierName();
                                     return true;
                                 }
 

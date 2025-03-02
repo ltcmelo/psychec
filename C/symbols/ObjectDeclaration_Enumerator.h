@@ -21,39 +21,34 @@
 #ifndef PSYCHE_C_ENUMERATOR_H__
 #define PSYCHE_C_ENUMERATOR_H__
 
-#include "Declaration_Object.h"
+#include "Declaration_Member.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The Enumerator class.
+ * \brief The EnumeratorDeclarationSymbol class.
  */
-class PSY_C_API Enumerator final : public ObjectDeclaration
+class PSY_C_API EnumeratorDeclarationSymbol final : public MemberDeclarationSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this ObjectDeclaration as a Enumerator.
+     * Cast \c this Symbol as a EnumeratorDeclarationSymbol.
      */
-    virtual Enumerator* asEnumerator() override { return this; }
-    virtual const Enumerator* asEnumerator() const override { return this; }
+    virtual EnumeratorDeclarationSymbol* asEnumeratorDeclaration() override { return this; }
+    virtual const EnumeratorDeclarationSymbol* asEnumeratorDeclaration() const override { return this; }
     //!@}
 
-    /**
-     * Compute a displayable string for \c this Enumerator.
-     */
-    virtual std::string toDisplayString() const override;
-
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
-    Enumerator(const Symbol* containingSym,
-               const SyntaxTree* tree,
-               const Scope* enclosingScope);
+    EnumeratorDeclarationSymbol(const Symbol* containingSym,
+                                const SyntaxTree* tree,
+                                const Scope* enclosingScope);
 };
 
-PSY_C_API std::string to_string(const Enumerator* enumerator);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const EnumeratorDeclarationSymbol* enumerator);
 
 } // C
 } // psy

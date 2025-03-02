@@ -62,7 +62,7 @@ public:
     bool arisesFromFunctionDecay() const;
 
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
     PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
     PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
 
@@ -76,7 +76,7 @@ private:
     DECL_PIMPL_SUB(PointerType)
 };
 
-PSY_C_API std::string to_string(const PointerType* ptrTy);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const PointerType* ptrTy);
 
 } // C
 } // psy

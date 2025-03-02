@@ -219,21 +219,22 @@ class Block;
 // Symbols //
 //---------//
 class Symbol;
-class Program;
-class TranslationUnit;
-class Declaration;
-class Function;
-class ObjectDeclaration;
-class Enumerator;
-class Field;
-class Variable;
-class Parameter;
-class TypeDeclaration;
-class TagTypeDeclaration;
-class Struct;
-class Union;
-class Enum;
-class Typedef;
+class ProgramSymbol;
+class TranslationUnitSymbol;
+class DeclarationSymbol;
+class FunctionDeclarationSymbol;
+class ObjectDeclarationSymbol;
+class MemberDeclarationSymbol;
+class EnumeratorDeclarationSymbol;
+class FieldDeclarationSymbol;
+class VariableDeclarationSymbol;
+class ParameterDeclarationSymbol;
+class TypeDeclarationSymbol;
+class TagTypeDeclarationSymbol;
+class StructDeclarationSymbol;
+class UnionDeclarationSymbol;
+class EnumDeclarationSymbol;
+class TypedefDeclarationSymbol;
 
 //-------//
 // Types //
@@ -243,10 +244,11 @@ class ArrayType;
 class BasicType;
 class FunctionType;
 class PointerType;
-class TypedefType;
+class TypedefNameType;
 class TagType;
 class VoidType;
 class QualifiedType;
+class ErrorType;
 
 } // C
 } // psy

@@ -31,6 +31,7 @@ enum class DiagnosticCategory : char
 
     Syntax,
     Binding,
+    TypeResolution,
     TypeChecking,
 };
 

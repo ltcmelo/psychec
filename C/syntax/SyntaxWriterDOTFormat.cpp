@@ -44,7 +44,7 @@
 
 #include "Lexeme_ALL.h"
 #include "SyntaxVisitor.h"
-#include "SyntaxTree.h"
+#include "syntax/SyntaxTree.h"
 
 #ifdef __GNUC__
 #  include <cxxabi.h>

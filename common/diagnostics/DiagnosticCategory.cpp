@@ -20,6 +20,8 @@
 
 #include "DiagnosticCategory.h"
 
+#include "../infra/Assertions.h"
+
 namespace psy {
 
 std::ostream& operator<<(std::ostream& os, DiagnosticCategory category)
@@ -28,20 +30,20 @@ std::ostream& operator<<(std::ostream& os, DiagnosticCategory category)
         case DiagnosticCategory::Syntax:
             os << "syntax";
             break;
-
         case DiagnosticCategory::Binding:
             os << "declaration";
             break;
-
         case DiagnosticCategory::TypeChecking:
             os << "type checking";
             break;
-
+        case DiagnosticCategory::TypeResolution:
+            os << "type resolution";
+            break;
         case DiagnosticCategory::UNSPECIFIED:
             os << "generic";
             break;
     }
-
+    PSY_ASSERT_1(false);
     return os;
 }
 

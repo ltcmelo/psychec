@@ -21,12 +21,41 @@
 #include "Symbol__IMPL__.inc"
 #include "symbols/Symbol_ALL.h"
 
+#include "../common/infra/Assertions.h"
+
 Symbol::Symbol(SymbolImpl* p)
     : P(p)
 {}
 
 Symbol::~Symbol()
 {}
+
+SymbolCategory Symbol::category() const
+{
+    switch (kind()) {
+        case SymbolKind::Program:
+            return SymbolCategory::Program;
+        case SymbolKind::TranslationUnit:
+            return SymbolCategory::TranslationUnit;
+        case SymbolKind::FunctionDeclaration:
+        case SymbolKind::EnumeratorDeclaration:
+        case SymbolKind::FieldDeclaration:
+        case SymbolKind::VariableDeclaration:
+        case SymbolKind::ParameterDeclaration:
+        case SymbolKind::TypedefDeclaration:
+        case SymbolKind::StructDeclaration:
+        case SymbolKind::UnionDeclaration:
+        case SymbolKind::EnumDeclaration:
+            return SymbolCategory::Declaration;
+    }
+    PSY_ASSERT_1(false);
+    return SymbolCategory(-1);
+}
+
+SymbolKind Symbol::kind() const
+{
+    return SymbolKind(P->F_.symK_);
+}
 
 const Symbol* Symbol::containingSymbol() const
 {
@@ -36,20 +65,20 @@ const Symbol* Symbol::containingSymbol() const
 namespace psy {
 namespace C {
 
-std::string to_string(const Symbol* sym)
+std::ostream& operator<<(std::ostream& os, const Symbol* sym)
 {
     if (!sym)
-        return "<Symbol is null>";
-    switch (sym->kind()) {
-        case SymbolKind::Program:
-            return to_string(sym->asProgram());
-        case SymbolKind::TranslationUnit:
-            return to_string(sym->asTranslationUnit());
-        case SymbolKind::Declaration:
-            return to_string(sym->asDeclaration());
+        return os << "<Symbol is null>";
+    switch (sym->category()) {
+        case SymbolCategory::Program:
+            return os << sym->asProgram();
+        case SymbolCategory::TranslationUnit:
+            return os << sym->asTranslationUnit();
+        case SymbolCategory::Declaration:
+            return os << sym->asDeclaration();
     }
     PSY_ASSERT_1(false);
-    return "<invalid Symbol>";
+    return os << "<invalid Symbol>";
 }
 
 } // C

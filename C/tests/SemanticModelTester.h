@@ -25,9 +25,9 @@
 #include "TestSuite_Internals.h"
 #include "tests/Tester.h"
 
-#include "C/SyntaxTree.h"
+#include "C/syntax/SyntaxTree.h"
 #include "C/syntax/SyntaxNodes.h"
-#include "C/compilation/SemanticModel.h"
+#include "C/sema/SemanticModel.h"
 
 #define TEST_SEMANTIC_MODEL(Function) TestFunction { &SemanticModelTester::Function, #Function }
 
@@ -51,8 +51,10 @@ public:
     std::unique_ptr<SyntaxTree> tree_;
     std::unique_ptr<Compilation> compilation_;
 
-    template <class DeclT>
-    std::tuple<const DeclT*,const SemanticModel*> declAndSemaModel(const std::string& s);
+    template <class DeclNodeT>
+    std::tuple<const DeclNodeT*,const SemanticModel*> compile(
+            const std::string& srcText,
+            const std::string& srcTextPrefix = "");
 
     void testSemanticModel();
 

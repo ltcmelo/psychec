@@ -22,7 +22,7 @@
 #include "TypeDeclaration__IMPL__.inc"
 
 #include "syntax/Lexeme_Identifier.h"
-#include "types/Type_Typedef.h"
+#include "types/Type_TypedefName.h"
 
 #include "../common/infra/Assertions.h"
 
@@ -31,67 +31,56 @@
 using namespace psy;
 using namespace C;
 
-Typedef::Typedef(const Symbol* containingSym,
+TypedefDeclarationSymbol::TypedefDeclarationSymbol(const Symbol* containingSym,
                  const SyntaxTree* tree,
                  const Scope* enclosingScope,
-                 TypedefType* tydefTy)
-    : TypeDeclaration(
-          new TypeDeclarationImpl(containingSym,
+                 TypedefNameType* tydefNameTy)
+    : TypeDeclarationSymbol(
+          new TypeDeclarationImpl(SymbolKind::TypedefDeclaration,
+                                  containingSym,
                                   tree,
                                   enclosingScope,
                                   NameSpace::OrdinaryIdentifiers,
-                                  TypeDeclarationKind::Typedef,
-                                  tydefTy))
+                                  tydefNameTy))
     , synonymizedTy_(nullptr)
 {
-    tydefTy->setDeclaration(this);
+    tydefNameTy->setDeclaration(this);
 }
 
-std::string Typedef::toDisplayString() const
+const Identifier* TypedefDeclarationSymbol::denotingIdentifier() const
 {
-    return P_CAST->ty_->asTypedefType()->typedefName()->valueText();
+    PSY_ASSERT_2(introducedType()->kind() == TypeKind::TypedefName, return nullptr);
+    return P_CAST->ty_->asTypedefNameType()->typedefName();
 }
 
-const Identifier* Typedef::identifier() const
+const TypedefNameType* TypedefDeclarationSymbol::introducedSynonymType() const
 {
-    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Typedef, return nullptr);
-    return P_CAST->ty_->asTypedefType()->typedefName();
+    PSY_ASSERT_2(introducedType()->kind() == TypeKind::TypedefName, return nullptr);
+    return P_CAST->ty_->asTypedefNameType();
 }
 
-const TypedefType* Typedef::definedType() const
-{
-    PSY_ASSERT_2(P_CAST->ty_->kind() == TypeKind::Typedef, return nullptr);
-    return P_CAST->ty_->asTypedefType();
-}
-
-const Type* Typedef::synonymizedType() const
+const Type* TypedefDeclarationSymbol::synonymizedType() const
 {
     return synonymizedTy_;
 }
 
-void Typedef::setType(const Type* synonymizedTy)
+void TypedefDeclarationSymbol::setSynonymizedType(const Type* ty)
 {
-    synonymizedTy_ = synonymizedTy;
-}
-
-const Type* Typedef::retypeableType() const
-{
-    return synonymizedType();
+    synonymizedTy_ = ty;
 }
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Typedef* tydef)
+std::ostream& operator<<(std::ostream& os, const TypedefDeclarationSymbol* tydef)
 {
     if (!tydef)
-        return "<Typedef is null>";
-    std::ostringstream oss;
-    oss << "<Typedef |";
-    oss << " defined-type:" << to_string(tydef->definedType());
-    oss << " synonymized-type:" << to_string(tydef->synonymizedType());
-    oss << ">";
-    return oss.str();
+        return os << "<Typedef is null>";
+    os << "<Typedef |";
+    os << " defined-type:" << tydef->introducedSynonymType();
+    os << " synonymized-type:" << tydef->synonymizedType();
+    os << ">";
+    return os;
 }
 
 } // C

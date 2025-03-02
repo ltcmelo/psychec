@@ -26,7 +26,7 @@
 #include "CompilerFrontend.h"
 #include "Configuration_C.h"
 
-#include "C/SyntaxTree.h"
+#include "C/syntax/SyntaxTree.h"
 
 #include <utility>
 #include <string>

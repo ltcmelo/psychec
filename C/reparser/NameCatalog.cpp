@@ -30,105 +30,97 @@ using namespace C;
 #include <algorithm>
 #include <iostream>
 
-constexpr int NameCatalog::tyIdx_;
-constexpr int NameCatalog::nonTyIdx_;
+constexpr int NameCatalog::Types;
+constexpr int NameCatalog::NonTypes;
 
 NameCatalog::~NameCatalog()
 {}
 
-void NameCatalog::mapNodeAndMarkAsEncloser(const SyntaxNode* node)
+void NameCatalog::indexNodeAndMarkAsEncloser(const SyntaxNode* node)
 {
     PSY_ASSERT_2(node, return);
-    PSY_ASSERT_2(!isNodeMapped(node), return);
+    PSY_ASSERT_2(!isIndexed(node), return);
 
     NameUseAndDef tyUseAndDef;
     NameUseAndDef nonTyUseAndDef;
-    if (!enclosersStack_.empty()) {
-        auto iter = namesByNode_.find(enclosersStack_.top());
-        PSY_ASSERT_2(iter != namesByNode_.end(), return);
-        tyUseAndDef = std::get<tyIdx_>(iter->second);
-        nonTyUseAndDef = std::get<nonTyIdx_>(iter->second);
+    if (!enclosureStack_.empty()) {
+        auto iter = enclosureIdx_.find(enclosureStack_.top());
+        PSY_ASSERT_2(iter != enclosureIdx_.end(), return);
+        tyUseAndDef = std::get<Types>(iter->second);
+        nonTyUseAndDef = std::get<NonTypes>(iter->second);
     }
 
-    namesByNode_.insert(
+    enclosureIdx_.insert(
             std::make_pair(
                     node,
                     std::make_tuple(tyUseAndDef, nonTyUseAndDef)));
 
-    markMappedNodeAsEncloser(node);
+    markIndexedNodeAsEncloser(node);
 }
 
-void NameCatalog::markMappedNodeAsEncloser(const SyntaxNode* node)
+void NameCatalog::markIndexedNodeAsEncloser(const SyntaxNode* node)
 {
     PSY_ASSERT_2(node, return);
-    PSY_ASSERT_2(isNodeMapped(node), return);
+    PSY_ASSERT_2(isIndexed(node), return);
 
-    enclosersStack_.push(node);
+    enclosureStack_.push(node);
 }
 
 void NameCatalog::dropEncloser()
 {
-    enclosersStack_.pop();
+    enclosureStack_.pop();
 }
 
 void NameCatalog::catalogUseAsTypeName(const std::string& name)
 {
-    catalogUse_CORE<tyIdx_, nonTyIdx_>(name);
+    catalogUse_CORE<Types, NonTypes>(name);
 }
 
 void NameCatalog::catalogUseAsNonTypeName(const std::string& name)
 {
-    catalogUse_CORE<nonTyIdx_, tyIdx_>(name);
+    catalogUse_CORE<NonTypes, Types>(name);
 }
 
-template <size_t inIdx, size_t outIdx>
+template <size_t UseAndDef, size_t OtherUseAndDef>
 void NameCatalog::catalogUse_CORE(const std::string& name)
 {
     auto enclosure = currentEnclosure();
-    catalogUseWithMutualExclusion(
-                name,
-                std::get<inIdx>(*enclosure),
-                std::get<outIdx>(*enclosure));
-}
-
-void NameCatalog::catalogUseWithMutualExclusion(const std::string& name,
-                                                NameCatalog::NameUseAndDef& in,
-                                                NameCatalog::NameUseAndDef& out)
-{
-    in.insert(std::make_pair(name, false));
-
-    auto iter = out.find(name);
-    if (iter != out.end())
-        out.erase(iter);
+    auto curDepth = enclosureStack_.size();
+    auto& useAndDef = std::get<UseAndDef>(*enclosure);
+    useAndDef.insert(std::make_pair(name, std::make_pair(false, curDepth)));
+    auto& otherUseAndDef = std::get<OtherUseAndDef>(*enclosure);
+    auto iter = otherUseAndDef.find(name);
+    if (iter != otherUseAndDef.end() && curDepth > iter->second.second)
+        otherUseAndDef.erase(iter);
 }
 
 void NameCatalog::catalogDefAsTypeName(const std::string& name)
 {
     PSY_ASSERT_2(hasUseAsTypeName(name), return);
-    catalogDef_CORE<tyIdx_>(name);
+    catalogDef_CORE<Types>(name);
 }
 
 void NameCatalog::catalogDefAsNonTypeName(const std::string& name)
 {
     PSY_ASSERT_2(hasUseAsNonTypeName(name), return);
-    catalogDef_CORE<nonTyIdx_>(name);
+    catalogDef_CORE<NonTypes>(name);
 }
 
 template <size_t idx>
 void NameCatalog::catalogDef_CORE(const std::string& name)
 {
     auto enclosure = currentEnclosure();
-    std::get<idx>(*enclosure)[name] = true;
+    std::get<idx>(*enclosure)[name].first = true;
 }
 
 bool NameCatalog::hasUseAsTypeName(const std::string& name) const
 {
-    return hasUseAs_CORE<tyIdx_>(name);
+    return hasUseAs_CORE<Types>(name);
 }
 
 bool NameCatalog::hasUseAsNonTypeName(const std::string &name) const
 {
-    return hasUseAs_CORE<nonTyIdx_>(name);
+    return hasUseAs_CORE<NonTypes>(name);
 }
 
 template <size_t idx>
@@ -143,14 +135,14 @@ bool NameCatalog::hasDefAsNonTypeName(const std::string& name) const
 {
     if (!hasUseAsNonTypeName(name))
         return false;
-    return hasDefAs_CORE<nonTyIdx_>(name);
+    return hasDefAs_CORE<NonTypes>(name);
 }
 
 bool NameCatalog::hasDefAsTypeName(const std::string& name) const
 {
     if (!hasUseAsTypeName(name))
         return false;
-    return hasDefAs_CORE<tyIdx_>(name);
+    return hasDefAs_CORE<Types>(name);
 }
 
 template <size_t idx>
@@ -161,20 +153,20 @@ bool NameCatalog::hasDefAs_CORE(const std::string& name) const
     auto iter = useAndDef.find(name);
     if (iter == useAndDef.end())
         return false;
-    return iter->second;
+    return iter->second.first;
 }
 
-bool NameCatalog::isNodeMapped(const SyntaxNode* node) const
+bool NameCatalog::isIndexed(const SyntaxNode* node) const
 {
-    return namesByNode_.count(node) != 0;
+    return enclosureIdx_.count(node) != 0;
 }
 
 NameCatalog::Enclosure* NameCatalog::currentEnclosure() const
 {
-    PSY_ASSERT_2(!enclosersStack_.empty(), return nullptr);
-    PSY_ASSERT_2(isNodeMapped(enclosersStack_.top()), return nullptr);
+    PSY_ASSERT_2(!enclosureStack_.empty(), return nullptr);
+    PSY_ASSERT_2(isIndexed(enclosureStack_.top()), return nullptr);
 
-    return &namesByNode_[enclosersStack_.top()];
+    return &enclosureIdx_[enclosureStack_.top()];
 }
 
 namespace psy {
@@ -185,14 +177,14 @@ std::ostream& operator<<(std::ostream& os, const NameCatalog& catalog)
     os << "\n----------------------------------"
        << "\n---------- Name Catalog ----------"
        << "\n----------------------------------";
-    for (const auto& p : catalog.namesByNode_) {
+    for (const auto& p : catalog.enclosureIdx_) {
         os << "\n-" << to_string(p.first->kind()) << std::endl;
         os << "\tType names: ";
-        for (const auto& t : std::get<NameCatalog::tyIdx_>(p.second))
+        for (const auto& t : std::get<NameCatalog::Types>(p.second))
             os << t.first << " ";
         std::cout << std::endl;
         os << "\tNon-type names: ";
-        for (const auto& v : std::get<NameCatalog::nonTyIdx_>(p.second))
+        for (const auto& v : std::get<NameCatalog::NonTypes>(p.second))
             os << v.first << " ";
     }
     os << "\n----------------------------------";

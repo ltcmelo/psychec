@@ -55,7 +55,7 @@ public:
     ParameterTypes parameterTypes() const;
 
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
     PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
 
     FunctionType(const Type* retTy);
@@ -68,7 +68,7 @@ private:
     DECL_PIMPL_SUB(FunctionType)
 };
 
-PSY_C_API std::string to_string(const FunctionType* funcTy);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const FunctionType* funcTy);
 
 } // C
 } // psy

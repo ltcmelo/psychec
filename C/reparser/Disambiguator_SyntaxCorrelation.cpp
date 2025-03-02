@@ -40,7 +40,7 @@ SyntaxCorrelationDisambiguator::SyntaxCorrelationDisambiguator(
 
 SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
-    catalog_->markMappedNodeAsEncloser(node);
+    catalog_->markIndexedNodeAsEncloser(node);
     Disambiguator::visitTranslationUnit(node);
     catalog_->dropEncloser();
 
@@ -49,7 +49,7 @@ SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitTranslationUnit(const
 
 SyntaxVisitor::Action SyntaxCorrelationDisambiguator::visitCompoundStatement(const CompoundStatementSyntax* node)
 {
-    catalog_->markMappedNodeAsEncloser(node);
+    catalog_->markIndexedNodeAsEncloser(node);
     Disambiguator::visitCompoundStatement(node);
     catalog_->dropEncloser();
 
@@ -99,11 +99,14 @@ Disambiguator::Disambiguation SyntaxCorrelationDisambiguator::disambiguateStatem
     auto tydefName = varDecl->specifiers()->value->asTypedefName();
     auto lhsName = tydefName->identifierToken().valueText();
 
-    if (catalog_->hasUseAsTypeName(lhsName))
+    if (catalog_->hasUseAsTypeName(lhsName)
+            && !catalog_->hasUseAsNonTypeName(lhsName)) {
         return Disambiguation::KeepDeclarationStatement;
-
-    if (catalog_->hasUseAsNonTypeName(lhsName))
+    }
+    if (catalog_->hasUseAsNonTypeName(lhsName)
+            && !catalog_->hasUseAsTypeName(lhsName)) {
         return Disambiguation::KeepExpressionStatement;
+    }
 
     if (node->kind() == SyntaxKind::AmbiguousMultiplicationOrPointerDeclaration)
         return Disambiguation::Inconclusive;

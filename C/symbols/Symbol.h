@@ -24,15 +24,13 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "SymbolCategory.h"
 #include "SymbolKind.h"
-
-#include "syntax/SyntaxReference.h"
-
-#include "../common/location/Location.h"
+#include "../common/infra/AccessSpecifiers.h"
 #include "../common/infra/Pimpl.h"
 
+#include <iostream>
 #include <memory>
-#include <vector>
 
 namespace psy {
 namespace C {
@@ -40,9 +38,8 @@ namespace C {
 /**
  * \brief The Symbol class.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.ISymbol
- * from Roslyn, the .NET Compiler Platform.
+ * \note Resembles:
+ * - \c Microsoft.CodeAnalysis.ISymbol from Roslyn.
  */
 class PSY_C_API Symbol
 {
@@ -50,26 +47,57 @@ public:
     virtual ~Symbol();
 
     /**
+     * The SymbolCategory of \c this Symbol.
+     */
+    SymbolCategory category() const;
+
+    /**
      * The SymbolKind of \c this Symbol.
      */
     SymbolKind kind() const;
 
-    virtual Program* asProgram() { return nullptr; }
-    virtual const Program* asProgram() const { return nullptr; }
-    virtual TranslationUnit* asTranslationUnit() { return nullptr; }
-    virtual const TranslationUnit* asTranslationUnit() const { return nullptr; }
-    virtual Declaration* asDeclaration() { return nullptr; }
-    virtual const Declaration* asDeclaration() const { return nullptr; }
+    //!@{
+    /**
+     * Cast \c this Symbol.
+     */
+    virtual ProgramSymbol* asProgram() { return nullptr; }
+    virtual const ProgramSymbol* asProgram() const { return nullptr; }
+    virtual TranslationUnitSymbol* asTranslationUnit() { return nullptr; }
+    virtual const TranslationUnitSymbol* asTranslationUnit() const { return nullptr; }
+    virtual DeclarationSymbol* asDeclaration() { return nullptr; }
+    virtual const DeclarationSymbol* asDeclaration() const { return nullptr; }
+    virtual FunctionDeclarationSymbol* asFunctionDeclaration() { return nullptr; }
+    virtual const FunctionDeclarationSymbol* asFunctionDeclaration() const { return nullptr; }
+    virtual ObjectDeclarationSymbol* asObjectDeclaration() { return nullptr; }
+    virtual const ObjectDeclarationSymbol* asObjectDeclaration() const { return nullptr; }
+    virtual VariableDeclarationSymbol* asVariableDeclaration() { return nullptr; }
+    virtual const VariableDeclarationSymbol* asVariableDeclaration() const { return nullptr; }
+    virtual ParameterDeclarationSymbol* asParameterDeclaration() { return nullptr; }
+    virtual const ParameterDeclarationSymbol* asParameterDeclaration() const { return nullptr; }
+    virtual MemberDeclarationSymbol* asMemberDeclaration() { return nullptr; }
+    virtual const MemberDeclarationSymbol* asMemberDeclaration() const { return nullptr; }
+    virtual EnumeratorDeclarationSymbol* asEnumeratorDeclaration() { return nullptr; }
+    virtual const EnumeratorDeclarationSymbol* asEnumeratorDeclaration() const { return nullptr; }
+    virtual FieldDeclarationSymbol* asFieldDeclaration() { return nullptr; }
+    virtual const FieldDeclarationSymbol* asFieldDeclaration() const { return nullptr; }
+    virtual TypeDeclarationSymbol* asTypeDeclaration() { return nullptr; }
+    virtual const TypeDeclarationSymbol* asTypeDeclaration() const { return nullptr; }
+    virtual TagTypeDeclarationSymbol* asTagTypeDeclaration() { return nullptr; }
+    virtual const TagTypeDeclarationSymbol* asTagTypeDeclaration() const { return nullptr; }
+    virtual StructDeclarationSymbol* asStructDeclaration() { return nullptr; }
+    virtual const StructDeclarationSymbol* asStructDeclaration() const { return nullptr; }
+    virtual UnionDeclarationSymbol* asUnionDeclaration() { return nullptr; }
+    virtual const UnionDeclarationSymbol* asUnionDeclaration() const { return nullptr; }
+    virtual EnumDeclarationSymbol* asEnumDeclaration() { return nullptr; }
+    virtual const EnumDeclarationSymbol* asEnumDeclaration() const { return nullptr; }
+    virtual TypedefDeclarationSymbol* asTypedefDeclaration() { return nullptr; }
+    virtual const TypedefDeclarationSymbol* asTypedefDeclaration() const { return nullptr; }
+    //!@}
 
     /**
-     * The Symbol that contains \c this Symbol.
+     * The Symbol, if any, that contains \c this Symbol.
      */
     const Symbol* containingSymbol() const;
-
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const = 0;
 
 protected:
     DECL_PIMPL(Symbol);
@@ -78,7 +106,7 @@ protected:
     Symbol& operator=(const Symbol&) = delete;
 };
 
-PSY_C_API std::string to_string(const Symbol* sym);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const Symbol* sym);
 
 } // C
 } // psy

@@ -21,8 +21,8 @@
 #include "Declaration__IMPL__.inc"
 #include "Symbol_Declaration.h"
 
-#include "binder/Scope.h"
-#include "compilation/Compilation.h"
+#include "sema/Scope.h"
+#include "sema/Compilation.h"
 #include "symbols/Symbol_ALL.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxReference.h"
@@ -35,67 +35,63 @@
 using namespace psy;
 using namespace C;
 
-Declaration::Declaration(DeclarationImpl* p)
+DeclarationSymbol::DeclarationSymbol(DeclarationImpl* p)
     : Symbol(p)
 {}
 
-DeclarationKind Declaration::kind() const
-{
-    return DeclarationKind(P->BF_.declK_);
-}
-
-const Scope* Declaration::enclosingScope() const
+const Scope* DeclarationSymbol::enclosingScope() const
 {
     return P_CAST->enclosingScope_;
 }
 
-SymbolKind Symbol::kind() const
+const NameSpace DeclarationSymbol::nameSpace() const
 {
-    return SymbolKind(P->BF_.symK_);
+    return NameSpace(P->F_.ns_);
 }
 
-const NameSpace Declaration::nameSpace() const
+DeclarationCategory DeclarationSymbol::category() const
 {
-    return NameSpace(P->BF_.ns_);
-}
-
-Location Declaration::location() const
-{
-    const auto& syntaxRefs = declaringSyntaxReferences();
-    std::vector<Location> locs;
-    std::transform(syntaxRefs.begin(),
-                   syntaxRefs.end(),
-                   std::back_inserter(locs),
-                   [] (auto& synRef) {
-                        return synRef.syntax()->firstToken().location();
-                   });
-
-    // TODO
-    return locs.front();
-}
-
-std::vector<SyntaxReference> Declaration::declaringSyntaxReferences() const
-{
-    return {};
+    switch (kind()) {
+        case SymbolKind::Program:
+        case SymbolKind::TranslationUnit:
+            break;
+        case SymbolKind::FunctionDeclaration:
+            return DeclarationCategory::Function;
+        case SymbolKind::EnumeratorDeclaration:
+        case SymbolKind::FieldDeclaration:
+            return DeclarationCategory::Member;
+        case SymbolKind::VariableDeclaration:
+        case SymbolKind::ParameterDeclaration:
+            return DeclarationCategory::Object;
+        case SymbolKind::TypedefDeclaration:
+        case SymbolKind::StructDeclaration:
+        case SymbolKind::UnionDeclaration:
+        case SymbolKind::EnumDeclaration:
+            return DeclarationCategory::Type;
+    }
+    PSY_ASSERT_1(false);
+    return DeclarationCategory(~0);
 }
 
 namespace psy {
 namespace C {
 
-PSY_C_API std::string to_string(const Declaration* decl)
+PSY_C_API std::ostream& operator<<(std::ostream& os, const DeclarationSymbol* decl)
 {
     if (!decl)
-        return "<Declaration is null>";
-    switch (decl->kind()) {
-        case DeclarationKind::Function:
-            return to_string(decl->asFunction());
-        case DeclarationKind::Object:
-            return to_string(decl->asObjectDeclaration());
-        case DeclarationKind::Type:
-            return to_string(decl->asTypeDeclaration());
+        return os << "<Declaration is null>";
+    switch (decl->category()) {
+        case DeclarationCategory::Function:
+            return os << decl->asFunctionDeclaration();
+        case DeclarationCategory::Object:
+            return os << decl->asObjectDeclaration();
+        case DeclarationCategory::Member:
+            return os << decl->asMemberDeclaration();
+        case DeclarationCategory::Type:
+            return os << decl->asTypeDeclaration();
     }
     PSY_ASSERT_1(false);
-    return "<invalid Declaration>";
+    return os << "<invalid Declaration>";
 }
 
 } // C

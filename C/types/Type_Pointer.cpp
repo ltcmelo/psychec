@@ -74,15 +74,14 @@ void PointerType::markAsArisingFromFunctionDecay()
 namespace psy {
 namespace C {
 
-PSY_C_API std::string to_string(const PointerType* ptrTy)
+PSY_C_API std::ostream& operator<<(std::ostream& os, const PointerType* ptrTy)
 {
     if (!ptrTy)
-        return "<PointerType is null>";
-    std::ostringstream oss;
-    oss << "<PointerType | ";
-    oss << " referenced-type:" << to_string(ptrTy->referencedType());
-    oss << ">";
-    return oss.str();
+        return os << "<PointerType is null>";
+    os << "<PointerType | ";
+    os << " referenced-type:" << ptrTy->referencedType();
+    os << ">";
+    return os;
 }
 
 } // C

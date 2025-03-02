@@ -26,32 +26,30 @@
 namespace psy {
 namespace C {
 
-class PSY_C_API Enum final : public TagTypeDeclaration
+class PSY_C_API EnumDeclarationSymbol final : public TagTypeDeclarationSymbol
 {
 public:
     //!@{
     /**
-     * Cast \c this TagTypeDeclaration as a Enum.
+     * Cast \c this Symbol as a EnumDeclarationSymbol.
      */
-    virtual Enum* asEnum() override { return this; }
-    virtual const Enum* asEnum() const override { return this; }
+    virtual EnumDeclarationSymbol* asEnumDeclaration() override { return this; }
+    virtual const EnumDeclarationSymbol* asEnumDeclaration() const override { return this; }
     //!@}
 
-    /**
-     * Compute a displayable string for \c this Enum.
-     */
-    virtual std::string toDisplayString() const override;
-
 PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(Binder);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
-    Enum(const Symbol* containingSym,
-         const SyntaxTree* tree,
-         const Scope* enclosingScope,
-         TagType* tagTy);
+    EnumDeclarationSymbol(
+            const Symbol* containingSym,
+            const SyntaxTree* tree,
+            const Scope* enclosingScope,
+            TagType* tagTy);
+
+    void addEnumerator(const EnumeratorDeclarationSymbol* enumerator);
 };
 
-PSY_C_API std::string to_string(const Enum* enun);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const EnumDeclarationSymbol* enun);
 
 } // C
 } // psy

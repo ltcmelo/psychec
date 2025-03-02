@@ -47,8 +47,8 @@ PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(NameCataloger);
     PSY_GRANT_INTERNAL_ACCESS(SyntaxCorrelationDisambiguator);
 
-    void mapNodeAndMarkAsEncloser(const SyntaxNode* node);
-    void markMappedNodeAsEncloser(const SyntaxNode* node);
+    void indexNodeAndMarkAsEncloser(const SyntaxNode* node);
+    void markIndexedNodeAsEncloser(const SyntaxNode* node);
     void dropEncloser();
 
     void catalogUseAsTypeName(const std::string& name);
@@ -62,24 +62,22 @@ PSY_INTERNAL:
     bool hasDefAsNonTypeName(const std::string& name) const;
 
 private:
-    using NameUseAndDef = std::unordered_map<std::string, bool>;
+    using NameUseAndDef = std::unordered_map<std::string, std::pair<bool, size_t>>;
     using Enclosure = std::tuple<NameUseAndDef, NameUseAndDef>;
-    using NamesByNode = std::unordered_map<const SyntaxNode*, Enclosure>;
+    using EnclosureIndex = std::unordered_map<const SyntaxNode*, Enclosure>;
 
-    static constexpr int tyIdx_ = 0;
-    static constexpr int nonTyIdx_ = 1;
+    static constexpr int Types = 0;
+    static constexpr int NonTypes = 1;
 
-    std::stack<const SyntaxNode*> enclosersStack_;
-    mutable NamesByNode namesByNode_;
+    std::stack<const SyntaxNode*> enclosureStack_;
+    mutable EnclosureIndex enclosureIdx_;
 
     Enclosure* currentEnclosure() const;
-    bool isNodeMapped(const SyntaxNode*node) const;
+
+    bool isIndexed(const SyntaxNode* node) const;
 
     template <size_t, size_t> void catalogUse_CORE(const std::string& name);
     template <size_t> void catalogDef_CORE(const std::string& name);
-    void catalogUseWithMutualExclusion(const std::string& name,
-                                       NameUseAndDef& in,
-                                       NameUseAndDef& out);
     template <size_t> bool hasUseAs_CORE(const std::string& name) const;
     template <size_t> bool hasDefAs_CORE(const std::string& name) const;
 };

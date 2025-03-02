@@ -20,45 +20,26 @@
 
 #include "Declaration__IMPL__.inc"
 #include "Declaration_Type.h"
-#include "TagTypeDeclarationKind.h"
+#include "TagTypeDeclarationCategory.h"
 
 using namespace psy;
 using namespace C;
 
-struct TypeDeclaration::TypeDeclarationImpl : DeclarationImpl
+struct TypeDeclarationSymbol::TypeDeclarationImpl : DeclarationImpl
 {
-    TypeDeclarationImpl(const Symbol* containingSym,
+    TypeDeclarationImpl(SymbolKind symK,
+                        const Symbol* containingSym,
                         const SyntaxTree* tree,
                         const Scope* enclosingScope,
                         NameSpace ns,
-                        TypeDeclarationKind tyDeclK,
                         Type* ty)
-        : DeclarationImpl(containingSym,
-                          DeclarationKind::Type,
+        : DeclarationImpl(symK,
+                          containingSym,
                           tree,
                           enclosingScope,
                           ns)
         , ty_(ty)
-    {
-        BF_.tyDeclK_ = static_cast<std::uint32_t>(tyDeclK);
-    }
-
-    TypeDeclarationImpl(const Symbol* containingSym,
-                        const SyntaxTree* tree,
-                        const Scope* enclosingScope,
-                        NameSpace ns,
-                        TypeDeclarationKind tyDeclK,
-                        Type* ty,
-                        TagTypeDeclarationKind tagTyDeclK)
-        : TypeDeclarationImpl(containingSym,
-                              tree,
-                              enclosingScope,
-                              ns,
-                              tyDeclK,
-                              ty)
-    {
-        BF_.tagTyDeclK_ = static_cast<std::uint32_t>(tagTyDeclK);
-    }
+    {}
 
     Type* ty_;
 };

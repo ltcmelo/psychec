@@ -37,31 +37,26 @@ namespace C {
  *
  * \remark 5.1.1.1
  */
-class PSY_C_API Program final : public Symbol
+class PSY_C_API ProgramSymbol final : public Symbol
 {
 public:
     //!@{
     /**
-     * Cast \c this Symbol as a Program.
+     * Cast \c this Symbol as a ProgramSymbol.
      */
-    virtual Program* asProgram() override { return this; }
-    virtual const Program* asProgram() const override { return this; }
+    virtual ProgramSymbol* asProgram() override { return this; }
+    virtual const ProgramSymbol* asProgram() const override { return this; }
     //!@}
-
-    /**
-     * Compute a displayable string for \c this Symbol.
-     */
-    virtual std::string toDisplayString() const override;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Compilation);
     PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
 
     DECL_PIMPL_SUB(Program);
-    Program();
+    ProgramSymbol();
 };
 
-PSY_C_API std::string to_string(const Symbol* prog);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const ProgramSymbol* prog);
 
 } // C
 } // psy

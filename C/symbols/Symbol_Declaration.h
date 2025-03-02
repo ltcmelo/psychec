@@ -25,78 +25,63 @@
 #include "Fwds.h"
 
 #include "Symbol.h"
-#include "DeclarationKind.h"
+#include "DeclarationCategory.h"
+#include "sema/NameSpace.h"
+#include "syntax/SyntaxReference.h"
+#include "../common/location/Location.h"
 
-#include "binder/NameSpace.h"
+#include <vector>
 
 namespace psy {
 namespace C {
 
-class PSY_C_API Declaration : public Symbol
+/**
+ * \brief The DeclarationSymbol class.
+ */
+class PSY_C_API DeclarationSymbol : public Symbol
 {
 public:
-    //!@{
     /**
-     * Cast \c this Symbol as a Declaration.
+     * The DeclarationCategory of \c this DeclarationSymbol.
      */
-    virtual Declaration* asDeclaration() override { return this; }
-    virtual const Declaration* asDeclaration() const override { return this; }
-    //!@}
-
-    /**
-     * The DeclarationKind of \c this Symbol.
-     */
-    DeclarationKind kind() const;
+    DeclarationCategory category() const;
 
     //!@{
     /**
-     * Cast \c this Declaration.
+     * Cast \c this Symbol as a DeclarationSymbol.
      */
-    virtual Function* asFunction() { return nullptr; }
-    virtual const Function* asFunction() const { return nullptr; }
-    virtual ObjectDeclaration* asObjectDeclaration() { return nullptr; }
-    virtual const ObjectDeclaration* asObjectDeclaration() const { return nullptr; }
-    virtual TypeDeclaration* asTypeDeclaration() { return nullptr; }
-    virtual const TypeDeclaration* asTypeDeclaration() const { return nullptr; }
+    virtual DeclarationSymbol* asDeclaration() override { return this; }
+    virtual const DeclarationSymbol* asDeclaration() const override { return this; }
     //!@}
 
     /**
-     * The Identifier with which \c this Declaration is declared.
-     */
-    virtual const Identifier* identifier() const = 0;
-
-    /**
-     * The Scope that encloses \c this Declaration.
+     * The Scope that encloses \c this DeclarationSymbol.
      *
      * \remark 6.2.1-4
      */
     const Scope* enclosingScope() const;
 
     /**
-     * The NameSpace of \c this Declaration.
+     * The NameSpace of \c this DeclarationSymbol.
      *
      * \remark 6.2.3
      */
     const NameSpace nameSpace() const;
 
-    /**
-     * References to the SyntaxNodes that \a declare \c this Declaration.
-     */
-    std::vector<SyntaxReference> declaringSyntaxReferences() const;
-
-    /**
-     * The Location of \c this Declaration.
-     */
-    Location location() const;
-
 protected:
     DECL_PIMPL_SUB(Declaration);
-    Declaration(DeclarationImpl* p);
-    Declaration(const Declaration&) = delete;
-    Declaration& operator=(const Declaration&) = delete;
+    DeclarationSymbol(DeclarationImpl* p);
+    DeclarationSymbol(const DeclarationSymbol&) = delete;
+    DeclarationSymbol& operator=(const DeclarationSymbol&) = delete;
+
+    virtual const Identifier* denotingIdentifier() const = 0;
+
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(Scope);
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 };
 
-PSY_C_API std::string to_string(const Declaration* decl);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const DeclarationSymbol* decl);
 
 } // C
 } // psy

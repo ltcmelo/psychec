@@ -32,9 +32,8 @@
 /**
  * \brief The TypeKind enum.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.TypeKind
- * from Roslyn, the .NET Compiler Platform.
+ * \note Resembles:
+ * \c Microsoft.CodeAnalysis.TypeKind from Roslyn.
  */
 enum class PSY_C_API TypeKind : std::uint8_t
 {
@@ -42,34 +41,37 @@ enum class PSY_C_API TypeKind : std::uint8_t
     Basic,
     Function,
     Pointer,
-    Typedef,
+    TypedefName,
     Tag,
     Void,
-    Qualified
+    Qualified,
+    Unknown
 };
 
-inline PSY_C_API std::string to_string(TypeKind tyK)
+inline PSY_C_API std::ostream& operator<<(std::ostream& os, TypeKind tyK)
 {
     switch (tyK) {
         case TypeKind::Array:
-            return "Array";
+            return os << "Array";
         case TypeKind::Basic:
-            return "Basic";
+            return os << "Basic";
         case TypeKind::Function:
-            return "Function";
+            return os << "Function";
         case TypeKind::Pointer:
-            return "Pointer";
-        case TypeKind::Typedef:
-            return "Typedef";
+            return os << "Pointer";
+        case TypeKind::TypedefName:
+            return os << "TypedefName";
         case TypeKind::Tag:
-            return "Tag";
+            return os << "Tag";
         case TypeKind::Void:
-            return "Void";
+            return os << "Void";
         case TypeKind::Qualified:
-            return "Qualified";
+            return os << "Qualified";
+        case TypeKind::Unknown:
+            return os << "Unknown";
     }
     PSY_ASSERT_1(false);
-    return "<invalid TypeKind>";
+    return os << "<invalid TypeKind>";
 }
 
 #endif

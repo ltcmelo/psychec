@@ -26,7 +26,7 @@
 
 #include "TestExpectation.h"
 
-#include "C/SyntaxTree.h"
+#include "C/syntax/SyntaxTree.h"
 #include "C/reparser/Reparser.h"
 
 #include <memory>
@@ -42,8 +42,9 @@ class InternalsTestSuite : public TestSuite
 {
     friend class ParserTester;
     friend class ReparserTester;
-    friend class BinderTester;
+    friend class DeclarationBinderTester;
     friend class TypeResolverTester;
+    friend class TypeCheckerTester;
 
 public:
     virtual ~InternalsTestSuite();
@@ -79,6 +80,7 @@ private:
             std::vector<Decl> v);
     void bind(std::string text, Expectation X = Expectation());
     void resolveTypes(std::string text, Expectation X = Expectation());
+    void checkTypes(std::string text, Expectation X = Expectation());
 
     std::unique_ptr<SyntaxTree> tree_;
     std::vector<std::unique_ptr<Tester>> testers_;

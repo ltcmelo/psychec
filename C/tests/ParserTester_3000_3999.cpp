@@ -20,7 +20,7 @@
 
 #include "ParserTester.h"
 
-#include "BinderTester.h"
+#include "DeclarationBinderTester.h"
 
 #include "parser/Parser.h"
 #include "parser/Unparser.h"

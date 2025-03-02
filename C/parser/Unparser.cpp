@@ -20,7 +20,7 @@
 
 #include "Unparser.h"
 
-#include "SyntaxTree.h"
+#include "syntax/SyntaxTree.h"
 
 #include "syntax/Lexeme_ALL.h"
 #include "syntax/SyntaxNodes.h"

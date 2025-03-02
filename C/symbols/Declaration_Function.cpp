@@ -30,13 +30,13 @@
 using namespace psy;
 using namespace C;
 
-struct Function::FunctionImpl : DeclarationImpl
+struct FunctionDeclarationSymbol::FunctionImpl : DeclarationImpl
 {
     FunctionImpl(const Symbol* containingSym,
                  const SyntaxTree* tree,
                  const Scope* enclosingScope)
-        : DeclarationImpl(containingSym,
-                          DeclarationKind::Function,
+        : DeclarationImpl(SymbolKind::FunctionDeclaration,
+                          containingSym,
                           tree,
                           enclosingScope,
                           NameSpace::OrdinaryIdentifiers)
@@ -48,58 +48,48 @@ struct Function::FunctionImpl : DeclarationImpl
     const Type* ty_;
 };
 
-Function::Function(const Symbol* containingSym,
-                   const SyntaxTree* tree,
-                   const Scope* enclosingScope)
-    : Declaration(
+FunctionDeclarationSymbol::FunctionDeclarationSymbol(
+        const Symbol* containingSym,
+        const SyntaxTree* tree,
+        const Scope* enclosingScope)
+    : DeclarationSymbol(
           new FunctionImpl(containingSym,
                            tree,
                            enclosingScope))
 {}
 
-const Identifier* Function::name() const
+const Identifier* FunctionDeclarationSymbol::name() const
 {
     return P_CAST->name_;
 }
 
-void Function::setName(const Identifier* name)
+void FunctionDeclarationSymbol::setName(const Identifier* name)
 {
     P_CAST->name_ = name;
 }
 
-const Type* Function::type() const
+const Type* FunctionDeclarationSymbol::type() const
 {
     return P_CAST->ty_;
 }
 
-const Type* Function::retypeableType() const
-{
-    return type();
-}
-
-void Function::setType(const Type* ty)
+void FunctionDeclarationSymbol::setType(const Type* ty)
 {
     P_CAST->ty_ = ty;
-}
-
-std::string Function::toDisplayString() const
-{
-    return "";
 }
 
 namespace psy {
 namespace C {
 
-std::string to_string(const Function* func)
+std::ostream& operator<<(std::ostream& os, const FunctionDeclarationSymbol* func)
 {
     if (!func)
-        return "<Function is null>";
-    std::ostringstream oss;
-    oss << "<Function |";
-    oss << " name:" << func->name()->valueText();
-    oss << " type:" << to_string(func->type());
-    oss << ">";
-    return oss.str();
+        return os << "<Function is null>";
+    os << "<Function |";
+    os << " name:" << func->name()->valueText();
+    os << " type:" << func->type();
+    os << ">";
+    return os;
 }
 
 } // C

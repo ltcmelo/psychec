@@ -25,7 +25,7 @@
 #include "API.h"
 #include "Fwds.h"
 
-#include "SyntaxTree.h"
+#include "syntax/SyntaxTree.h"
 #include "LexedTokens.h"
 
 #include "infra/MemoryPool.h"

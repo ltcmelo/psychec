@@ -34,20 +34,33 @@ class PSY_C_API SyntaxUtilities
 {
 public:
     /**
-     * Fully strip the given \p decltor and return the stripped \c DeclaratorSyntax.
+     * The innermost \a declarator of the given \a declarator or, if there isn't any,
+     * the given \a declarator itself.
      */
-    static const DeclaratorSyntax* fullyStripDeclarator(const DeclaratorSyntax* decltor);
+    static const DeclaratorSyntax* innermostDeclaratorOf(const DeclaratorSyntax* decltor);
 
     /**
-     * Strip the given \p decltor and return the stripped \c DeclaratorSyntax.
+     * The inner \a declarator of the given \a declarator or, if there isn't any,
+     * the given \a declarator itself.
      */
-    static const DeclaratorSyntax* stripDeclarator(const DeclaratorSyntax* decltor);
+    static const DeclaratorSyntax* innerDeclaratorOf(const DeclaratorSyntax* decltor);
 
     /**
-     * Unparenthesize the given \p decltor and return the unparenthesized \c DeclaratorSyntax.
+     * If the given \a declarator is a \a parenthesized \a declarator, its inner
+     * declarator; otherwise, the given \a declarator itself.
      */
     static const DeclaratorSyntax* unparenthesizeDeclarator(const DeclaratorSyntax* decltor);
 };
+
+/**
+ * The \a identifier from the given \c node.
+ */
+PSY_C_API const Identifier* identifierFrom(const IdentifierNameSyntax* node);
+
+/**
+ * The \a string \a literal from the given \c node.
+ */
+PSY_C_API const StringLiteral* literalFrom(const StringLiteralExpressionSyntax* node);
 
 } // C
 } // psy

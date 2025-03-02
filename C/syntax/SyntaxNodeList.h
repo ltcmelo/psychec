@@ -25,6 +25,7 @@
 #include "API.h"
 
 #include "SyntaxToken.h"
+#include "SyntaxVisitor.h"
 
 #include "infra/List.h"
 #include "parser/LexedTokens.h"
@@ -36,6 +37,9 @@ namespace C {
 
 class SyntaxTree;
 
+/**
+ * \brief The SyntaxNodeList class.
+ */
 class PSY_C_API SyntaxNodeList
 {
 public:
@@ -52,7 +56,7 @@ public:
 
     static SyntaxToken token(LexedTokens::IndexType tkIdx, SyntaxTree* tree);
 
-    virtual void acceptVisitor(SyntaxVisitor* visitor) = 0;
+    virtual SyntaxVisitor::Action acceptVisitor(SyntaxVisitor* visitor) = 0;
 };
 
 
@@ -96,13 +100,17 @@ public:
         return SyntaxToken::invalid();
     }
 
-    virtual void acceptVisitor(SyntaxVisitor* visitor) override
+    virtual SyntaxVisitor::Action acceptVisitor(SyntaxVisitor* visitor) override
     {
         for (auto it = this; it; it = it->next) {
             SyntaxNodeT node = static_cast<SyntaxNodeT>(it->value);
-            if (node)
-                node->acceptVisitor(visitor);
+            if (node) {
+                auto action = node->acceptVisitor(visitor);
+                if (action == SyntaxVisitor::Action::Quit)
+                    return action;
+            }
         }
+        return SyntaxVisitor::Action::Visit;
     }
 
     SyntaxTree* tree_;

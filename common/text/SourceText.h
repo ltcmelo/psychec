@@ -32,7 +32,7 @@
 namespace psy {
 
 /**
- * The SourceText class.
+ * \brief The SourceText class.
  */
 class PSY_API SourceText
 {

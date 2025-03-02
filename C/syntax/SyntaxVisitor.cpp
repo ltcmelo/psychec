@@ -22,7 +22,7 @@
 #include "SyntaxVisitor.h"
 
 #include "SyntaxNodes.h"
-#include "SyntaxTree.h"
+#include "syntax/SyntaxTree.h"
 
 using namespace psy;
 using namespace C;
@@ -34,7 +34,12 @@ SyntaxVisitor::SyntaxVisitor(const SyntaxTree* tree)
 SyntaxVisitor::~SyntaxVisitor()
 {}
 
-void SyntaxVisitor::visit(const SyntaxNode* node)
+SyntaxVisitor::Action SyntaxVisitor::visit(const SyntaxNode* node)
 {
-    SyntaxNode::acceptVisitor(node, this);
+    return SyntaxNode::acceptVisitor(node, this);
+}
+
+SyntaxVisitor::Action SyntaxVisitor::visitChildNodes(const SyntaxNode* node)
+{
+    return SyntaxNode::acceptVisitorInChildNodes(node, this);
 }

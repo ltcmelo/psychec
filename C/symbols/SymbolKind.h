@@ -24,7 +24,10 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <cstdint>
+#include <iostream>
 #include <string>
 
 namespace psy {
@@ -33,27 +36,52 @@ namespace C {
 /**
  * \brief The SymbolKind enum.
  *
- * \note
- * This API is inspired by that of \c Microsoft.CodeAnalysis.SymbolKind
- * from Roslyn, the .NET Compiler Platform.
+ * \note Resembles:
+ * - \c Microsoft.CodeAnalysis.SymbolKind from Roslyn.
  */
 enum class PSY_C_API SymbolKind : std::uint8_t
 {
     Program,
     TranslationUnit,
-    Declaration,
+    FunctionDeclaration,
+    EnumeratorDeclaration,
+    FieldDeclaration,
+    VariableDeclaration,
+    ParameterDeclaration,
+    TypedefDeclaration,
+    StructDeclaration,
+    UnionDeclaration,
+    EnumDeclaration
 };
 
-inline PSY_C_API std::string to_string(SymbolKind kind)
+PSY_C_API inline std::ostream& operator<<(std::ostream& os, SymbolKind symK)
 {
-    switch (kind) {
+    switch (symK) {
         case SymbolKind::Program:
-            return "Program";
+            return os << "Program";
         case SymbolKind::TranslationUnit:
-            return "TranslationUnit";
-        case SymbolKind::Declaration:
-            return "Declaration";
+            return os << "TranslationUnit";
+        case SymbolKind::FunctionDeclaration:
+            return os << "FunctionDeclaration";
+        case SymbolKind::EnumeratorDeclaration:
+            return os << "EnumeratorDeclaration";
+        case SymbolKind::FieldDeclaration:
+            return os << "FieldDeclaration";
+        case SymbolKind::VariableDeclaration:
+            return os << "VariableDeclaration";
+        case SymbolKind::ParameterDeclaration:
+            return os << "ParameterDeclaration";
+        case SymbolKind::TypedefDeclaration:
+            return os << "TypedefDeclaration";
+        case SymbolKind::StructDeclaration:
+            return os << "StructDeclaration";
+        case SymbolKind::UnionDeclaration:
+            return os << "UnionDeclaration";
+        case SymbolKind::EnumDeclaration:
+            return os << "EnumDeclaration";
     }
+    PSY_ASSERT_1(false);
+    return os << "<invalid SymbolKind>";
 }
 
 } // C

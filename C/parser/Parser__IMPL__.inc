@@ -23,7 +23,7 @@
 
 #include "Lexer.h"
 
-#include "compilation/Compilation.h"
+#include "sema/Compilation.h"
 #include "syntax/Lexeme_ALL.h"
 #include "syntax/SyntaxFacts.h"
 #include "syntax/SyntaxNodes.h"

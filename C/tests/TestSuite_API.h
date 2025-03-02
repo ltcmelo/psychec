@@ -26,10 +26,10 @@
 #include "tests/TestSuite.h"
 #include "tests/Tester.h"
 
-#include "C/SyntaxTree.h"
+#include "C/syntax/SyntaxTree.h"
 #include "C/syntax/SyntaxNodes.h"
-#include "C/compilation/Compilation.h"
-#include "C/compilation/SemanticModel.h"
+#include "C/sema/Compilation.h"
+#include "C/sema/SemanticModel.h"
 
 #include <memory>
 #include <tuple>

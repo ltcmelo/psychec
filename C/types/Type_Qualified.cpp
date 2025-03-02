@@ -115,15 +115,14 @@ void QualifiedType::qualifyWithAtomic()
 namespace psy {
 namespace C {
 
-PSY_C_API std::string to_string(const QualifiedType* qualTy)
+PSY_C_API std::ostream& operator<<(std::ostream& os, const QualifiedType* qualTy)
 {
     if (!qualTy)
-        return "<QualifiedType is null>";
-    std::ostringstream oss;
-    oss << "<QualifiedType | ";
-    oss << "unqualified-type:" << to_string(qualTy->unqualifiedType());
-    oss << ">";
-    return oss.str();
+        return os << "<QualifiedType is null>";
+    os << "<QualifiedType | ";
+    os << "unqualified-type:" << qualTy->unqualifiedType();
+    os << ">";
+    return os;
 }
 
 } // C
