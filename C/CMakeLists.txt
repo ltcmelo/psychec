@@ -185,7 +185,7 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/sema/DeclarationBinder_Specifiers.cpp
     ${PROJECT_SOURCE_DIR}/sema/DeclarationBinder_End.cpp
     ${PROJECT_SOURCE_DIR}/sema/DiagnosticsReporter_DeclarationBinder.cpp
-    ${PROJECT_SOURCE_DIR}/sema/DiagnosticsReporter_TypeResolver.cpp
+    ${PROJECT_SOURCE_DIR}/sema/DiagnosticsReporter_TypeCanonicalizer.cpp
     ${PROJECT_SOURCE_DIR}/sema/DiagnosticsReporter_TypeChecker.cpp
     ${PROJECT_SOURCE_DIR}/sema/InferenceOptions.h
     ${PROJECT_SOURCE_DIR}/sema/InferenceOptions.cpp
@@ -195,8 +195,10 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/sema/Scope.h
     ${PROJECT_SOURCE_DIR}/sema/Scope.cpp
     ${PROJECT_SOURCE_DIR}/sema/ScopeKind.h
-    ${PROJECT_SOURCE_DIR}/sema/TypeResolver.h
-    ${PROJECT_SOURCE_DIR}/sema/TypeResolver.cpp
+    ${PROJECT_SOURCE_DIR}/sema/TypeCanonicalizer.h
+    ${PROJECT_SOURCE_DIR}/sema/TypeCanonicalizer.cpp
+    ${PROJECT_SOURCE_DIR}/sema/TypedefNameTypeResolver.h
+    ${PROJECT_SOURCE_DIR}/sema/TypedefNameTypeResolver.cpp
     ${PROJECT_SOURCE_DIR}/sema/TypeChecker.h
     ${PROJECT_SOURCE_DIR}/sema/TypeChecker.cpp
     ${PROJECT_SOURCE_DIR}/sema/Compilation.h
@@ -247,8 +249,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/tests/ParserTester_3000_3999.cpp
     ${PROJECT_SOURCE_DIR}/tests/ReparserTester.h
     ${PROJECT_SOURCE_DIR}/tests/ReparserTester.cpp
-    ${PROJECT_SOURCE_DIR}/tests/TypeResolverTester.h
-    ${PROJECT_SOURCE_DIR}/tests/TypeResolverTester.cpp
+    ${PROJECT_SOURCE_DIR}/tests/TypeCanonicalizerAndResolverTester.h
+    ${PROJECT_SOURCE_DIR}/tests/TypeCanonicalizerAndResolverTester.cpp
     ${PROJECT_SOURCE_DIR}/tests/TypeCheckerTester.h
     ${PROJECT_SOURCE_DIR}/tests/TypeCheckerTester.cpp
     ${PROJECT_SOURCE_DIR}/tests/SemanticModelTester.h

@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeResolver.h"
+#include "TypeCanonicalizer.h"
 
 #include "sema/Scope.h"
 #include "sema/Compilation.h"
@@ -35,27 +35,21 @@
 using namespace psy;
 using namespace C;
 
-TypeResolver::TypeResolver(SemanticModel* semaModel, const SyntaxTree* tree)
+TypeCanonicalizer::TypeCanonicalizer(SemanticModel* semaModel, const SyntaxTree* tree)
     : SyntaxVisitor(tree)
     , semaModel_(semaModel)
     , tySpecNode_(nullptr)
     , diagReporter_(this)
 {}
 
-void TypeResolver::resolveTypes()
+void TypeCanonicalizer::canonicalizeTypes()
 {
     visit(tree_->root());
     for (const auto& ty : discardedTys_)
         semaModel_->dropType(ty);
 }
 
-const Type* TypeResolver::newErrorType() const
-{
-    std::unique_ptr<ErrorType> ty(new ErrorType());
-    return semaModel_->keepType(std::move(ty));
-}
-
-SyntaxVisitor::Action TypeResolver::visitTranslationUnit(const TranslationUnitSyntax* node)
+SyntaxVisitor::Action TypeCanonicalizer::visitTranslationUnit(const TranslationUnitSyntax* node)
 {
     syms_.push(semaModel_->translationUnit());
     VISIT(node->declarations());
@@ -64,7 +58,7 @@ SyntaxVisitor::Action TypeResolver::visitTranslationUnit(const TranslationUnitSy
     return Action::Skip;
 }
 
-SyntaxVisitor::Action TypeResolver::visitFunctionDefinition(const FunctionDefinitionSyntax* node)
+SyntaxVisitor::Action TypeCanonicalizer::visitFunctionDefinition(const FunctionDefinitionSyntax* node)
 {
     auto decl = semaModel_->functionFor(node);
     PSY_ASSERT_2(decl, return Action::Quit);
@@ -75,19 +69,19 @@ SyntaxVisitor::Action TypeResolver::visitFunctionDefinition(const FunctionDefini
     return Action::Skip;
 }
 
-SyntaxVisitor::Action TypeResolver::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
+SyntaxVisitor::Action TypeCanonicalizer::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
     tySpecNode_ = node;
     return Action::Skip;
 }
 
-SyntaxVisitor::Action TypeResolver::visitTypedefName(const TypedefNameSyntax* node)
+SyntaxVisitor::Action TypeCanonicalizer::visitTypedefName(const TypedefNameSyntax* node)
 {
     tySpecNode_ = node;
     return Action::Skip;
 }
 
-SyntaxVisitor::Action TypeResolver::visitDeclarator_COMMON(const DeclaratorSyntax* node)
+SyntaxVisitor::Action TypeCanonicalizer::visitDeclarator_COMMON(const DeclaratorSyntax* node)
 {
     auto decl = semaModel_->declarationBy(node);
     PSY_ASSERT_2(decl, return Action::Quit);
@@ -95,26 +89,17 @@ SyntaxVisitor::Action TypeResolver::visitDeclarator_COMMON(const DeclaratorSynta
         case DeclarationCategory::Type: {
             PSY_ASSERT_2(decl->kind() == SymbolKind::TypedefDeclaration, return Action::Quit);
             auto tydefDecl = decl->asTypedefDeclaration();
-            auto resolvedTy = resolveType(tydefDecl->synonymizedType(), decl->enclosingScope());
+            auto resolvedTy = canonicalize(tydefDecl->synonymizedType(), decl->enclosingScope());
             tydefDecl->setSynonymizedType(resolvedTy);
-
-            auto fullyResolvedTy = resolveType(resolvedTy, decl->enclosingScope());
-            while (fullyResolvedTy != resolvedTy) {
-                resolvedTy = fullyResolvedTy;
-                fullyResolvedTy = resolveType(fullyResolvedTy, decl->enclosingScope());
-            }
-            auto tydefNameTy = tydefDecl->introducedSynonymType();
-            const_cast<TypedefNameType*>(tydefNameTy)->setResolvedSynonymizedType(fullyResolvedTy);
             break;
         }
-
         case DeclarationCategory::Member:
         case DeclarationCategory::Function:
         case DeclarationCategory::Object: {
             auto typeableDecl = MIXIN_TypeableDeclarationSymbol::from(decl);
             PSY_ASSERT_2(typeableDecl, return Action::Quit);
             auto ty = typeableDecl->type();
-            auto resolvedTy = resolveType(ty, decl->enclosingScope());
+            auto resolvedTy = canonicalize(ty, decl->enclosingScope());
             typeableDecl->setType(resolvedTy);
             break;
         }
@@ -123,31 +108,31 @@ SyntaxVisitor::Action TypeResolver::visitDeclarator_COMMON(const DeclaratorSynta
     return Action::Skip;
 }
 
-SyntaxVisitor::Action TypeResolver::visitPointerDeclarator(
+SyntaxVisitor::Action TypeCanonicalizer::visitPointerDeclarator(
         const PointerDeclaratorSyntax* node)
 {
     return visitDeclarator_COMMON(node);
 }
 
-SyntaxVisitor::Action TypeResolver::visitParenthesizedDeclarator(
+SyntaxVisitor::Action TypeCanonicalizer::visitParenthesizedDeclarator(
         const ParenthesizedDeclaratorSyntax* node)
 {
     return visitDeclarator_COMMON(node->innerDeclarator());
 }
 
-SyntaxVisitor::Action TypeResolver::visitIdentifierDeclarator(
+SyntaxVisitor::Action TypeCanonicalizer::visitIdentifierDeclarator(
         const IdentifierDeclaratorSyntax* node)
 {
     return visitDeclarator_COMMON(node);
 }
 
-const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope)
+const Type* TypeCanonicalizer::canonicalize(const Type* ty, const Scope* scope)
 {
     switch (ty->kind()) {
         case TypeKind::Array: {
             auto arrTy = ty->asArrayType();
             auto elemTy = arrTy->elementType();
-            auto resolvedTy = resolveType(elemTy, scope);
+            auto resolvedTy = canonicalize(elemTy, scope);
             if (resolvedTy != elemTy) {
                 arrTy->resetElementType(resolvedTy);
                 discardedTys_.insert(elemTy);
@@ -179,7 +164,7 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope)
         case TypeKind::Function: {
             auto funcTy = ty->asFunctionType();
             auto retTy = funcTy->returnType();
-            auto resolvedTy = resolveType(retTy, scope);
+            auto resolvedTy = canonicalize(retTy, scope);
             if (resolvedTy != retTy) {
                 funcTy->setReturnType(resolvedTy);
                 discardedTys_.insert(retTy);
@@ -188,7 +173,7 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope)
             const auto parmsSize = parms.size();
             for (FunctionType::ParameterTypes::size_type idx = 0; idx < parmsSize; ++idx) {
                 const Type* parmTy = parms[idx];
-                resolvedTy = resolveType(parmTy, scope);
+                resolvedTy = canonicalize(parmTy, scope);
                 if (resolvedTy != parmTy) {
                     funcTy->setParameterType(idx, resolvedTy);
                     discardedTys_.insert(parmTy);
@@ -200,7 +185,7 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope)
         case TypeKind::Pointer: {
             auto ptrTy = ty->asPointerType();
             auto refedTy = ptrTy->referencedType();
-            auto resolvedTy = resolveType(refedTy, scope);
+            auto resolvedTy = canonicalize(refedTy, scope);
             if (resolvedTy != refedTy) {
                 ptrTy->resetReferencedType(resolvedTy);
                 discardedTys_.insert(refedTy);
@@ -234,7 +219,7 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope)
                 //if (tree_->completeness() == TextCompleteness::Full)
                 diagReporter_.TypeDeclarationNotFound(tySpecNode_->lastToken());
             }
-            return newErrorType();
+            return semaModel_->compilation()->canonicalErrorType();
         }
 
         case TypeKind::Tag: {
@@ -263,13 +248,13 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope)
                 //if (tree_->completeness() == TextCompleteness::Full)
                 diagReporter_.TypeDeclarationNotFound(tySpecNode_->lastToken());
             }
-            return newErrorType();
+            return semaModel_->compilation()->canonicalErrorType();
         }
 
         case TypeKind::Qualified: {
             auto qualTy = ty->asQualifiedType();
             auto unqualTy = qualTy->unqualifiedType();
-            auto resolvedTy = resolveType(unqualTy, scope);
+            auto resolvedTy = canonicalize(unqualTy, scope);
             if (resolvedTy != unqualTy) {
                 qualTy->resetUnqualifiedType(
                         resolvedTy->kind() == TypeKind::Qualified
@@ -280,7 +265,7 @@ const Type* TypeResolver::resolveType(const Type* ty, const Scope* scope)
             break;
         }
 
-        case TypeKind::Unknown:
+        case TypeKind::Error:
             break;
     }
 

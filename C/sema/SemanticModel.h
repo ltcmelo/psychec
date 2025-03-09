@@ -44,6 +44,8 @@ class DeclarationBinder;
 class PSY_C_API SemanticModel
 {
 public:
+    SemanticModel(const SemanticModel&) = delete;
+    SemanticModel& operator=(const SemanticModel&) = delete;
     ~SemanticModel();
 
     /**
@@ -184,7 +186,8 @@ public:
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Compilation);
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
-    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
+    PSY_GRANT_INTERNAL_ACCESS(TypeCanonicalizer);
+    PSY_GRANT_INTERNAL_ACCESS(TypedefNameTypeResolver);
     PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
     PSY_GRANT_INTERNAL_ACCESS(InternalsTestSuite);
 
@@ -224,8 +227,6 @@ PSY_INTERNAL:
     void set_char32_t_typedef(const TypedefDeclarationSymbol*);
 
 private:
-    SemanticModel(const SemanticModel&) = delete;
-    SemanticModel& operator=(const SemanticModel&) = delete;
     DECL_PIMPL(SemanticModel)
 };
 

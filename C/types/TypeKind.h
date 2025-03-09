@@ -45,7 +45,7 @@ enum class PSY_C_API TypeKind : std::uint8_t
     Tag,
     Void,
     Qualified,
-    Unknown
+    Error
 };
 
 inline PSY_C_API std::ostream& operator<<(std::ostream& os, TypeKind tyK)
@@ -67,8 +67,8 @@ inline PSY_C_API std::ostream& operator<<(std::ostream& os, TypeKind tyK)
             return os << "Void";
         case TypeKind::Qualified:
             return os << "Qualified";
-        case TypeKind::Unknown:
-            return os << "Unknown";
+        case TypeKind::Error:
+            return os << "Error";
     }
     PSY_ASSERT_1(false);
     return os << "<invalid TypeKind>";

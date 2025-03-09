@@ -87,8 +87,6 @@ protected:
 
 PSY_C_API std::ostream& operator<<(std::ostream& os, const Type* ty);
 
-PSY_C_API const Type* unqualifyType(const Type* ty);
-
 /**
  * Return whether the Type is an \a arithmetic \a type.
  */

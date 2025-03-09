@@ -32,38 +32,430 @@ void TypeCheckerTester::testTypeChecker()
     return run<TypeCheckerTester>(tests_);
 }
 
-void TypeCheckerTester::check(std::string text, Expectation X)
+void TypeCheckerTester::checkTypes(std::string text, Expectation X)
 {
     (static_cast<InternalsTestSuite*>(suite_)->checkTypes(text, X));
 }
 
-void TypeCheckerTester::case0000(){}
-void TypeCheckerTester::case0001(){}
-void TypeCheckerTester::case0002(){}
-void TypeCheckerTester::case0003(){}
-void TypeCheckerTester::case0004(){}
-void TypeCheckerTester::case0005(){}
-void TypeCheckerTester::case0006(){}
-void TypeCheckerTester::case0007(){}
-void TypeCheckerTester::case0008(){}
-void TypeCheckerTester::case0009(){}
-void TypeCheckerTester::case0010(){}
-void TypeCheckerTester::case0011(){}
-void TypeCheckerTester::case0012(){}
-void TypeCheckerTester::case0013(){}
-void TypeCheckerTester::case0014(){}
-void TypeCheckerTester::case0015(){}
-void TypeCheckerTester::case0016(){}
-void TypeCheckerTester::case0017(){}
-void TypeCheckerTester::case0018(){}
-void TypeCheckerTester::case0019(){}
-void TypeCheckerTester::case0020(){}
-void TypeCheckerTester::case0021(){}
-void TypeCheckerTester::case0022(){}
-void TypeCheckerTester::case0023(){}
-void TypeCheckerTester::case0024(){}
-void TypeCheckerTester::case0025(){}
-void TypeCheckerTester::case0026(){}
+void TypeCheckerTester::case0000()
+{
+    auto s = R"(
+struct s { double m ; } ;
+void _ ( )
+{
+    struct s x ;
+    x . n ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag));
+}
+
+void TypeCheckerTester::case0001()
+{
+    auto s = R"(
+struct s { double m ; } ;
+void _ ( )
+{
+    struct s * x ;
+    x -> n ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag));
+}
+
+void TypeCheckerTester::case0002()
+{
+    auto s = R"(
+struct s { double m ; } ;
+void _ ( )
+{
+    struct s x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0003()
+{
+    auto s = R"(
+struct s { double m ; } ;
+void _ ( )
+{
+    struct s * x ;
+    x . m ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0004()
+{
+    auto s = R"(
+struct s { double m ; } ;
+void _ ( )
+{
+    struct s x ;
+    x . m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0005()
+{
+    auto s = R"(
+struct s { double m ; } ;
+void _ ( )
+{
+    struct s * x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0006()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+void _ ( )
+{
+    t x ;
+    x . m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0007()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+void _ ( )
+{
+    t x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0008()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+void _ ( )
+{
+    t x ;
+    x . n ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag));
+}
+
+void TypeCheckerTester::case0009()
+{
+    auto s = R"(
+typedef struct s { double m ; } * t ;
+void _ ( )
+{
+    t x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0010()
+{
+    auto s = R"(
+typedef struct s { double m ; } * t ;
+void _ ( )
+{
+    t x ;
+    x . m ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0011()
+{
+    auto s = R"(
+typedef struct s { double m ; } * t ;
+void _ ( )
+{
+    t x ;
+    x -> n ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag));
+}
+
+void TypeCheckerTester::case0012()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+typedef t * tp ;
+void _ ( )
+{
+    tp x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0013()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+typedef t * tp ;
+void _ ( )
+{
+    tp x ;
+    x . m ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0014()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+typedef t * tp ;
+void _ ( )
+{
+    tp x ;
+    x -> n ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag));
+}
+
+void TypeCheckerTester::case0015()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+void _ ( )
+{
+    t * x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0016()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+void _ ( )
+{
+    t * x ;
+    x . m ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0017()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+void _ ( )
+{
+    t * x ;
+    x -> n ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag));
+}
+
+void TypeCheckerTester::case0018()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+void _ ( )
+{
+    t const x ;
+    x . m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0019()
+{
+    auto s = R"(
+typedef struct s { double m ; } const t ;
+void _ ( )
+{
+    t const x ;
+    x . m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0020()
+{
+    auto s = R"(
+typedef struct s { double m ; } const t ;
+void _ ( )
+{
+    t x ;
+    x . m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0021()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+typedef const t tc ;
+void _ ( )
+{
+    tc x ;
+    x . m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0022()
+{
+    auto s = R"(
+typedef struct s { double m ; } * const t ;
+void _ ( )
+{
+    t x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0023()
+{
+    auto s = R"(
+typedef struct s { double m ; } const * const t ;
+void _ ( )
+{
+    t x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0024()
+{
+    auto s = R"(
+typedef struct s { double m ; } const * t ;
+void _ ( )
+{
+    t x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0025()
+{
+    auto s = R"(
+typedef struct s { double m ; } const * t ;
+void _ ( )
+{
+    t const x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0026()
+{
+    auto s = R"(
+typedef struct s { double m ; } t ;
+typedef t const * const ctpc ;
+void _ ( )
+{
+    ctpc const x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
 void TypeCheckerTester::case0027(){}
 void TypeCheckerTester::case0028(){}
 void TypeCheckerTester::case0029(){}

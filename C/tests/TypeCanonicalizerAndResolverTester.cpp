@@ -18,47 +18,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeResolverTester.h"
+#include "TypeCanonicalizerAndResolverTester.h"
 
-#include "sema/TypeResolver.h"
+#include "sema/TypeCanonicalizer.h"
 
 using namespace psy;
 using namespace C;
 
-const std::string TypeResolverTester::Name = "TYPE-RESOLVER";
+const std::string TypeCanonicalizerAndResolverTester::Name = "TYPE-RESOLVER";
 
-void TypeResolverTester::testTypeResolver()
+void TypeCanonicalizerAndResolverTester::testTypeCanonicalizerAndResolver()
 {
-    return run<TypeResolverTester>(tests_);
+    return run<TypeCanonicalizerAndResolverTester>(tests_);
 }
 
-void TypeResolverTester::resolve(std::string text, Expectation X)
+void TypeCanonicalizerAndResolverTester::canonicalizerAndResolveTypes(std::string text, Expectation X)
 {
-    (static_cast<InternalsTestSuite*>(suite_)->resolveTypes(text, X));
+    (static_cast<InternalsTestSuite*>(suite_)->canonicalizerAndResolveTypes(text, X));
 }
 
-void TypeResolverTester::case0000()
+void TypeCanonicalizerAndResolverTester::case0000()
 {
     auto s = R"(
 typedef double x ;
 x y ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void TypeResolverTester::case0001()
+void TypeCanonicalizerAndResolverTester::case0001()
 {
     auto s = R"(
 typedef double x ;
 x * y ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("y", ObjectDeclarationCategory::Variable)
@@ -66,42 +66,42 @@ x * y ;
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void TypeResolverTester::case0002()
+void TypeCanonicalizerAndResolverTester::case0002()
 {
     auto s = R"(
 typedef double x ;
 x const y ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
-void TypeResolverTester::case0003()
+void TypeCanonicalizerAndResolverTester::case0003()
 {
     auto s = R"(
 typedef double const x ;
 x const y ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
-void TypeResolverTester::case0004()
+void TypeCanonicalizerAndResolverTester::case0004()
 {
     auto s = R"(
 typedef double x ;
 x * * y ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("y", ObjectDeclarationCategory::Variable)
@@ -110,14 +110,14 @@ x * * y ;
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void TypeResolverTester::case0005()
+void TypeCanonicalizerAndResolverTester::case0005()
 {
     auto s = R"(
 typedef double x ;
 x y [ 1 ] ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("y", ObjectDeclarationCategory::Variable)
@@ -125,14 +125,14 @@ x y [ 1 ] ;
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void TypeResolverTester::case0006()
+void TypeCanonicalizerAndResolverTester::case0006()
 {
     auto s = R"(
 typedef double * x ;
 x y ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("y", ObjectDeclarationCategory::Variable)
@@ -140,14 +140,14 @@ x y ;
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void TypeResolverTester::case0007()
+void TypeCanonicalizerAndResolverTester::case0007()
 {
     auto s = R"(
 typedef double * * x ;
 x y ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("y", ObjectDeclarationCategory::Variable)
@@ -156,7 +156,7 @@ x y ;
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void TypeResolverTester::case0008()
+void TypeCanonicalizerAndResolverTester::case0008()
 {
     auto s = R"(
 typedef double x ;
@@ -164,21 +164,21 @@ typedef x y ;
 y z ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("z", ObjectDeclarationCategory::Variable)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void TypeResolverTester::case0009()
+void TypeCanonicalizerAndResolverTester::case0009()
 {
     auto s = R"(
 typedef double x ;
 x y ( ) ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Function("y")
@@ -186,14 +186,14 @@ x y ( ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0010()
+void TypeCanonicalizerAndResolverTester::case0010()
 {
     auto s = R"(
 typedef double x ;
 x y ( int w ) ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Function("y")
@@ -202,14 +202,14 @@ x y ( int w ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0011()
+void TypeCanonicalizerAndResolverTester::case0011()
 {
     auto s = R"(
 typedef double x ;
 x y ( int w , double z ) ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Function("y")
@@ -219,14 +219,14 @@ x y ( int w , double z ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0012()
+void TypeCanonicalizerAndResolverTester::case0012()
 {
     auto s = R"(
 typedef double x ;
 x y ( int w , x z ) ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Function("y")
@@ -236,7 +236,7 @@ x y ( int w , x z ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0013()
+void TypeCanonicalizerAndResolverTester::case0013()
 {
     auto s = R"(
 typedef double x ;
@@ -244,7 +244,7 @@ typedef int t ;
 x y ( t w , double z ) ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Function("y")
@@ -254,7 +254,7 @@ x y ( t w , double z ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0014()
+void TypeCanonicalizerAndResolverTester::case0014()
 {
     auto s = R"(
 typedef double x ;
@@ -262,7 +262,7 @@ typedef int t ;
 x y ( t w , x z ) ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Function("y")
@@ -272,7 +272,7 @@ x y ( t w , x z ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0015()
+void TypeCanonicalizerAndResolverTester::case0015()
 {
     auto s = R"(
 typedef double x ;
@@ -280,7 +280,7 @@ typedef int t ;
 const x y ( t w , x z ) ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Function("y")
@@ -290,7 +290,7 @@ const x y ( t w , x z ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0016()
+void TypeCanonicalizerAndResolverTester::case0016()
 {
     auto s = R"(
 typedef double x ;
@@ -298,7 +298,7 @@ typedef int t ;
 const x y ( t const w , x z ) ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Function("y")
@@ -308,7 +308,7 @@ const x y ( t const w , x z ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0017()
+void TypeCanonicalizerAndResolverTester::case0017()
 {
     auto s = R"(
 typedef double x ;
@@ -316,7 +316,7 @@ typedef int t ;
 x y ( t * * w , x z ) ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Function("y")
@@ -328,7 +328,7 @@ x y ( t * * w , x z ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0018()
+void TypeCanonicalizerAndResolverTester::case0018()
 {
     auto s = R"(
 typedef double x ;
@@ -336,7 +336,7 @@ typedef int t ;
 x y ( t * * w , x * * z ) ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Function("y")
@@ -350,7 +350,7 @@ x y ( t * * w , x * * z ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0019()
+void TypeCanonicalizerAndResolverTester::case0019()
 {
     auto s = R"(
 typedef double x ;
@@ -358,7 +358,7 @@ typedef int t ;
 double y ( t w , x z ) ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Function("y")
@@ -368,28 +368,28 @@ double y ( t w , x z ) ;
                          .ty_.Derived(TypeKind::Function)));
 }
 
-void TypeResolverTester::case0020()
+void TypeCanonicalizerAndResolverTester::case0020()
 {
     auto s = R"(
 typedef double const x ;
 x y ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("y", ObjectDeclarationCategory::Variable)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
-void TypeResolverTester::case0021()
+void TypeCanonicalizerAndResolverTester::case0021()
 {
     auto s = R"(
 typedef double * x ;
 x * y ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("y", ObjectDeclarationCategory::Variable)
@@ -398,7 +398,7 @@ x * y ;
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void TypeResolverTester::case0022()
+void TypeCanonicalizerAndResolverTester::case0022()
 {
     auto s = R"(
 typedef double * x ;
@@ -406,7 +406,7 @@ typedef x y ;
 y * z ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("z", ObjectDeclarationCategory::Variable)
@@ -415,7 +415,7 @@ y * z ;
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void TypeResolverTester::case0023()
+void TypeCanonicalizerAndResolverTester::case0023()
 {
     auto s = R"(
 typedef double * x ;
@@ -423,7 +423,7 @@ typedef x * y ;
 y * z ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("z", ObjectDeclarationCategory::Variable)
@@ -433,7 +433,7 @@ y * z ;
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void TypeResolverTester::case0024()
+void TypeCanonicalizerAndResolverTester::case0024()
 {
     auto s = R"(
 typedef double x ;
@@ -441,71 +441,238 @@ typedef x y ;
 y z ;
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
                          .Object("z", ObjectDeclarationCategory::Variable)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void TypeResolverTester::case0025()
+void TypeCanonicalizerAndResolverTester::case0025()
 {
     auto s = R"(
 void f ( ) { int x ; x y ; }
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .diagnostic(Expectation::ErrorOrWarn::Error,
-                        TypeResolver::DiagnosticsReporter::ID_of_ExpectedTypedefDeclaration)
+                        TypeCanonicalizer::DiagnosticsReporter::ID_of_ExpectedTypedefDeclaration)
             .declaration(
                 Decl().Object("y", ObjectDeclarationCategory::Variable, ScopeKind::Block)
                       .ty_.Unknown()));
 }
 
-void TypeResolverTester::case0026()
+void TypeCanonicalizerAndResolverTester::case0026()
 {
     auto s = R"(
 void f ( ) { x y ; }
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .diagnostic(Expectation::ErrorOrWarn::Error,
-                        TypeResolver::DiagnosticsReporter::ID_of_TypeDeclarationNotFound)
+                        TypeCanonicalizer::DiagnosticsReporter::ID_of_TypeDeclarationNotFound)
             .declaration(
                 Decl().Object("y", ObjectDeclarationCategory::Variable, ScopeKind::Block)
                       .ty_.Unknown()));
 }
 
-void TypeResolverTester::case0027()
+void TypeCanonicalizerAndResolverTester::case0027()
 {
+    auto s = R"(
+void _ ( )
+{
+    struct s x ;
+    x . m ;
+}
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeCanonicalizer::DiagnosticsReporter::ID_of_TypeDeclarationNotFound));
 }
 
-void TypeResolverTester::case0028()
+void TypeCanonicalizerAndResolverTester::case0028()
 {
     auto s = R"(
 struct x { int y ; } ; void f ( ) { struct x z ; }
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(
                 Decl().Object("z", ObjectDeclarationCategory::Variable, ScopeKind::Block)
                       .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
-void TypeResolverTester::case0029()
+void TypeCanonicalizerAndResolverTester::case0029()
 {
     auto s = R"(
 struct x { int y ; } ; void f ( ) { union x z ; }
 )";
 
-    resolve(s,
+    canonicalizerAndResolveTypes(s,
             Expectation()
             .diagnostic(Expectation::ErrorOrWarn::Error,
-                        TypeResolver::DiagnosticsReporter::ID_of_TagTypeDoesNotMatchTagDeclaration)
+                        TypeCanonicalizer::DiagnosticsReporter::ID_of_TagTypeDoesNotMatchTagDeclaration)
             .declaration(
                 Decl().Object("z", ObjectDeclarationCategory::Variable, ScopeKind::Block)
                       .ty_.Unknown()));
 }
+
+void TypeCanonicalizerAndResolverTester::case0030()
+{
+    auto s = R"(
+typedef double x ;
+typedef x y ;
+typedef y z ;
+z w ;
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("w", ObjectDeclarationCategory::Variable)
+                         .ty_.Basic(BasicTypeKind::Double)));
+}
+
+void TypeCanonicalizerAndResolverTester::case0031()
+{
+    auto s = R"(
+typedef double x ;
+typedef x y ;
+typedef y z ;
+typedef z w ;
+w p ;
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .ty_.Basic(BasicTypeKind::Double)));
+}
+
+void TypeCanonicalizerAndResolverTester::case0032()
+{
+    auto s = R"(
+typedef double x ;
+typedef x y ;
+typedef y z ;
+typedef z w ;
+const w p ;
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
+}
+
+void TypeCanonicalizerAndResolverTester::case0033()
+{
+    auto s = R"(
+typedef const double x ;
+typedef x y ;
+typedef y z ;
+typedef z w ;
+w p ;
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
+}
+
+void TypeCanonicalizerAndResolverTester::case0034()
+{
+    auto s = R"(
+typedef double x ;
+typedef x y ;
+typedef const y z ;
+typedef z w ;
+w p ;
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
+}
+
+void TypeCanonicalizerAndResolverTester::case0035()
+{
+    auto s = R"(
+typedef const double x ;
+typedef x y ;
+typedef y z ;
+typedef z w ;
+const w p ;
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
+}
+
+void TypeCanonicalizerAndResolverTester::case0036()
+{
+    auto s = R"(
+struct t { int m ; } ;
+typedef struct t x ;
+typedef x y ;
+typedef y z ;
+typedef z w ;
+w p ;
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .ty_.Tag("t", TagTypeKind::Struct)));
+}
+
+void TypeCanonicalizerAndResolverTester::case0037()
+{
+    auto s = R"(
+typedef struct t { int m ; } x ;
+typedef x y ;
+typedef y z ;
+typedef z w ;
+w p ;
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .ty_.Tag("t", TagTypeKind::Struct)));
+}
+
+void TypeCanonicalizerAndResolverTester::case0038()
+{
+    auto s = R"(
+typedef struct { int m ; } x ;
+typedef x y ;
+typedef y z ;
+typedef z w ;
+w p ;
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .declaration(Decl()
+                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .ty_.Tag("", TagTypeKind::Struct)));
+}
+
+void TypeCanonicalizerAndResolverTester::case0039(){}

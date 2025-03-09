@@ -75,7 +75,7 @@ protected:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
-    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
+    PSY_GRANT_INTERNAL_ACCESS(TypeCanonicalizer);
 
     virtual const Identifier* denotingIdentifier() const override { return name(); }
     virtual void setName(const Identifier* name) override;

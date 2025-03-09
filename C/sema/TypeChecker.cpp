@@ -91,7 +91,6 @@ TypeChecker::TypeChecker(SemanticModel* semaModel, const SyntaxTree* tree)
     , uStrLitTy_(semaModel_->keepType(std::unique_ptr<ArrayType>(new ArrayType(char16Ty_))))
     , UStrLitTy_(semaModel_->keepType(std::unique_ptr<ArrayType>(new ArrayType(char32Ty_))))
     , LStrLitTy_(semaModel_->keepType(std::unique_ptr<ArrayType>(new ArrayType(wcharTy_))))
-    , errorTy_(new ErrorType())
     , diagReporter_(this)
 {
 }
@@ -102,6 +101,22 @@ TypeChecker::~TypeChecker()
 void TypeChecker::checkTypes()
 {
     visit(tree_->root());
+}
+
+const Type* TypeChecker::unqualifiedAndResolved(const Type* ty)
+{
+    do {
+        switch (ty->kind()) {
+            case TypeKind::Qualified:
+                ty = ty->asQualifiedType()->unqualifiedType();
+                break;
+            case TypeKind::TypedefName:
+                ty = ty->asTypedefNameType()->resolvedSynonymizedType();
+                break;
+            default:
+                return ty;
+        }
+    } while (true);
 }
 
 SyntaxVisitor::Action TypeChecker::visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*)
@@ -343,7 +358,7 @@ bool TypeChecker::typesAreCompatible(
                     return treatVoidAsAny;
                 case TypeKind::Qualified:
                     break;
-                case TypeKind::Unknown:
+                case TypeKind::Error:
                     break;
             }
             break;
@@ -367,7 +382,7 @@ bool TypeChecker::typesAreCompatible(
                     return treatVoidAsAny;
                 case TypeKind::Qualified:
                     break;
-                case TypeKind::Unknown:
+                case TypeKind::Error:
                     break;
             }
             break;
@@ -390,7 +405,7 @@ bool TypeChecker::typesAreCompatible(
                     return treatVoidAsAny;
                 case TypeKind::Qualified:
                     break;
-                case TypeKind::Unknown:
+                case TypeKind::Error:
                     break;
             }
             break;
@@ -421,7 +436,7 @@ bool TypeChecker::typesAreCompatible(
                     return treatVoidAsAny;
                 case TypeKind::Qualified:
                     break;
-                case TypeKind::Unknown:
+                case TypeKind::Error:
                     break;
             }
             break;
@@ -448,7 +463,7 @@ bool TypeChecker::typesAreCompatible(
                     return treatVoidAsAny;
                 case TypeKind::Qualified:
                     break;
-                case TypeKind::Unknown:
+                case TypeKind::Error:
                     break;
             }
             break;
@@ -471,7 +486,7 @@ bool TypeChecker::typesAreCompatible(
                     return true;
                 case TypeKind::Qualified:
                     return treatVoidAsAny;
-                case TypeKind::Unknown:
+                case TypeKind::Error:
                     break;
             }
             break;
@@ -502,12 +517,12 @@ bool TypeChecker::typesAreCompatible(
                                 otherQualTy->unqualifiedType(),
                                 treatVoidAsAny);
                 }
-                case TypeKind::Unknown:
+                case TypeKind::Error:
                     break;
             }
             break;
 
-        case TypeKind::Unknown:
+        case TypeKind::Error:
             break;
     }
     return false;
@@ -541,7 +556,7 @@ SyntaxVisitor::Action TypeChecker::visitIdentifierName(const IdentifierNameSynta
                 identifierFrom(node),
                 NameSpace::OrdinaryIdentifiers);
     if (!decl)
-        ty_ = errorTy_.get();
+        ty_ = semaModel_->compilation()->canonicalErrorType();
     else {
         switch (decl->category()) {
             case DeclarationCategory::Member:
@@ -553,7 +568,7 @@ SyntaxVisitor::Action TypeChecker::visitIdentifierName(const IdentifierNameSynta
                 break;
             }
             case DeclarationCategory::Type:
-                ty_ = errorTy_.get();
+                ty_ = semaModel_->compilation()->canonicalErrorType();
                 break;
         }
     }
@@ -921,35 +936,35 @@ SyntaxVisitor::Action TypeChecker::visitMemberAccessExpression(
         const MemberAccessExpressionSyntax* node)
 {
     VISIT_EXPR(node->expression());
+    auto ty = unqualifiedAndResolved(ty_);
 
     const TagType* tagTy = nullptr;
-    switch (ty_->kind()) {
-        case TypeKind::TypedefName: {
-            auto actualTy = ty_->asTypedefNameType()->resolvedSynonymizedType();
-            if (actualTy->kind() == TypeKind::Tag)
-                tagTy = actualTy->asTagType();
-            break;
-        }
+    switch (ty->kind()) {
+        case TypeKind::TypedefName:
+        case TypeKind::Qualified:
+            PSY_ASSERT_1(false);
+            return Action::Quit;
+
         case TypeKind::Tag:
-            tagTy = ty_->asTagType();
-            break;
-        case TypeKind::Pointer: {
-            auto refedTy = ty_->asPointerType()->referencedType();
-            switch (refedTy->kind()) {
-                case TypeKind::TypedefName: {
-                    auto actualTy = refedTy->asTypedefNameType()->resolvedSynonymizedType();
-                    if (actualTy->kind() == TypeKind::Tag)
-                        tagTy = actualTy->asTagType();
-                    break;
-                }
-                case TypeKind::Tag:
-                    tagTy = refedTy->asTagType();
-                    break;
-                default:
-                    break;
+            if (node->kind() != SyntaxKind::DirectMemberAccessExpression) {
+                diagReporter_.InvalidOperator(node->operatorToken());
+                return Action::Quit;
             }
+            tagTy = ty->asTagType();
+            break;
+
+        case TypeKind::Pointer: {
+            if (node->kind() != SyntaxKind::IndirectMemberAccessExpression) {
+                diagReporter_.InvalidOperator(node->operatorToken());
+                return Action::Quit;
+            }
+            auto refedTy = ty->asPointerType()->referencedType();
+            refedTy = unqualifiedAndResolved(refedTy);
+            if (refedTy->kind() == TypeKind::Tag)
+                tagTy = refedTy->asTagType();
             break;
         }
+
         default:
             break;
     }
@@ -1024,9 +1039,9 @@ SyntaxVisitor::Action TypeChecker::visitCompoundLiteralExpression(const Compound
 SyntaxVisitor::Action TypeChecker::visitBinaryExpression(const BinaryExpressionSyntax* node)
 {
     VISIT_EXPR(node->left());
-    auto leftTy = unqualifyType(ty_);
+    auto leftTy = unqualifiedAndResolved(ty_);
     VISIT_EXPR(node->right());
-    auto rightTy = unqualifyType(ty_);
+    auto rightTy = unqualifiedAndResolved(ty_);
 
     switch (node->operatorToken().kind()) {
         case SyntaxKind::AsteriskToken:

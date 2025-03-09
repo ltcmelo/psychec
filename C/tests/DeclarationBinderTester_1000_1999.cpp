@@ -181,7 +181,7 @@ void DeclarationBinderTester::case1016()
     bind("x ;",
          Expectation()
              .diagnostic(Expectation::ErrorOrWarn::Error,
-                         DeclarationBinder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+                         DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt)
              .declaration(Decl()
                           .Object("x", ObjectDeclarationCategory::Variable)
                           .ty_.Basic(BasicTypeKind::Int_S)));
@@ -192,7 +192,7 @@ void DeclarationBinderTester::case1017()
     bind("* x ;",
          Expectation()
              .diagnostic(Expectation::ErrorOrWarn::Error,
-                         DeclarationBinder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+                         DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt)
              .declaration(Decl()
                           .Object("x", ObjectDeclarationCategory::Variable)
                           .ty_.Basic(BasicTypeKind::Int_S)
@@ -204,7 +204,7 @@ void DeclarationBinderTester::case1018()
     bind("* ( x ) ;",
          Expectation()
              .diagnostic(Expectation::ErrorOrWarn::Error,
-                         DeclarationBinder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+                         DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt)
              .declaration(Decl()
                           .Object("x", ObjectDeclarationCategory::Variable)
                           .ty_.Basic(BasicTypeKind::Int_S)
@@ -264,7 +264,7 @@ void DeclarationBinderTester::case1052()
     bind("const x ;",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             DeclarationBinder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt));
+             DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt));
 }
 
 void DeclarationBinderTester::case1053()
@@ -306,7 +306,7 @@ void DeclarationBinderTester::case1057()
     bind("int restrict x ;",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             DeclarationBinder::DiagnosticsReporter::ID_InvalidUseOfRestrict));
+             DeclarationBinder::DiagnosticsReporter::ID_of_InvalidUseOfRestrict));
 }
 
 void DeclarationBinderTester::case1058()
@@ -314,7 +314,7 @@ void DeclarationBinderTester::case1058()
     bind("int const restrict x ;",
          Expectation().diagnostic(
              Expectation::ErrorOrWarn::Error,
-             DeclarationBinder::DiagnosticsReporter::ID_InvalidUseOfRestrict));
+             DeclarationBinder::DiagnosticsReporter::ID_of_InvalidUseOfRestrict));
 
 }
 

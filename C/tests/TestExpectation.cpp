@@ -35,7 +35,7 @@ Ty::~Ty()
 Decl& Ty::Unknown()
 {
     ident_ = "<unknown>";
-    tyK_ = TypeKind::Unknown;
+    tyK_ = TypeKind::Error;
     return decl_;
 }
 

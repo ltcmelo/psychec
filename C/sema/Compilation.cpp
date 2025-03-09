@@ -25,7 +25,8 @@
 #include "syntax/SyntaxTree.h"
 
 #include "sema/DeclarationBinder.h"
-#include "sema/TypeResolver.h"
+#include "sema/TypeCanonicalizer.h"
+#include "sema/TypedefNameTypeResolver.h"
 #include "symbols/Symbol_ALL.h"
 #include "types/Type_ALL.h"
 #include "sema/TypeChecker.h"
@@ -59,6 +60,7 @@ struct Compilation::CompilationImpl
         , tyDoubleComplex_(new BasicType(BasicTypeKind::DoubleComplex))
         , tyLongDoubleComplex_(new BasicType(BasicTypeKind::LongDoubleComplex))
         , tyBool_(new BasicType(BasicTypeKind::Bool))
+        , tyErr_(new ErrorType())
         , prog_(new ProgramSymbol)
     {}
 
@@ -85,6 +87,7 @@ struct Compilation::CompilationImpl
     std::unique_ptr<BasicType> tyDoubleComplex_;
     std::unique_ptr<BasicType> tyLongDoubleComplex_;
     std::unique_ptr<BasicType> tyBool_;
+    std::unique_ptr<ErrorType> tyErr_;
     std::unique_ptr<ProgramSymbol> prog_;
     std::unordered_map<const SyntaxTree*, bool> isDirty_;
     std::unordered_map<const SyntaxTree*, std::unique_ptr<SemanticModel>> semaModels_;
@@ -177,8 +180,9 @@ const SemanticModel* Compilation::computeSemanticModel(const SyntaxTree* tree) c
 {
     PSY_ASSERT_2(P->isDirty_.count(tree), return nullptr);
     if (P->isDirty_[tree]) {
-        bind();
-        resolveTypes();
+        bindDeclarations();
+        canonicalizerTypes();
+        resolveTypedefNameTypes();
         checkTypes();
         P->isDirty_[tree] = false;
     }
@@ -188,6 +192,11 @@ const SemanticModel* Compilation::computeSemanticModel(const SyntaxTree* tree) c
 const VoidType* Compilation::canonicalVoidType() const
 {
     return P->tyVoid_.get();
+}
+
+const ErrorType* Compilation::canonicalErrorType() const
+{
+    return P->tyErr_.get();
 }
 
 const BasicType* Compilation::canonicalBasicType(BasicTypeKind basicTyK) const
@@ -234,7 +243,7 @@ const BasicType* Compilation::canonicalBasicType(BasicTypeKind basicTyK) const
     return P->tyIntU_.get();
 }
 
-void Compilation::bind() const
+void Compilation::bindDeclarations() const
 {
     for (const auto& p : P->semaModels_) {
         DeclarationBinder binder(p.second.get(), p.first);
@@ -242,19 +251,28 @@ void Compilation::bind() const
     }
 }
 
-void Compilation::resolveTypes() const
+void Compilation::canonicalizerTypes() const
 {
     for (const auto& p : P->semaModels_) {
-        TypeResolver tyResolver(p.second.get(), p.first);
-        tyResolver.resolveTypes();
+        TypeCanonicalizer canonicalizer(p.second.get(), p.first);
+        canonicalizer.canonicalizeTypes();
+    }
+}
+
+
+void Compilation::resolveTypedefNameTypes() const
+{
+    for (const auto& p : P->semaModels_) {
+        TypedefNameTypeResolver resolver(p.second.get(), p.first);
+        resolver.resolveTypedefNameTypes();
     }
 }
 
 void Compilation::checkTypes() const
 {
     for (const auto& p : P->semaModels_) {
-        TypeChecker tyChecker(p.second.get(), p.first);
-        tyChecker.checkTypes();
+        TypeChecker checker(p.second.get(), p.first);
+        checker.checkTypes();
     }
 }
 

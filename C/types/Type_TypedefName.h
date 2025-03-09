@@ -60,7 +60,8 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
-    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
+    PSY_GRANT_INTERNAL_ACCESS(TypeCanonicalizer);
+    PSY_GRANT_INTERNAL_ACCESS(TypedefNameTypeResolver);
     PSY_GRANT_INTERNAL_ACCESS(TypedefDeclarationSymbol);
     PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
 

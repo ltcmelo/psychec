@@ -39,7 +39,7 @@ void DeclarationBinderTester::testDeclarationBinder()
 
 void DeclarationBinderTester::bind(std::string text, Expectation X)
 {
-    (static_cast<InternalsTestSuite*>(suite_)->bind(text, X));
+    (static_cast<InternalsTestSuite*>(suite_)->bindDeclarations(text, X));
 }
 
 void DeclarationBinderTester::setUp()
