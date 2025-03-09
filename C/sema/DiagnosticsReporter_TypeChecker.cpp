@@ -25,16 +25,16 @@
 using namespace psy;
 using namespace C;
 
-const std::string TypeChecker::DiagnosticsReporter::ID_InvalidOperator = "TypeChecker-001";
-const std::string TypeChecker::DiagnosticsReporter::ID_ExpectedExpressionOfArithmeticType = "TypeChecker-001";
-const std::string TypeChecker::DiagnosticsReporter::ID_ExpectedExpressionOfIntegerType = "TypeChecker-002";
-const std::string TypeChecker::DiagnosticsReporter::ID_ExpectedExpressionOfRealType = "TypeChecker-003";
-const std::string TypeChecker::DiagnosticsReporter::ID_ExpectedExpressionOfPointerType = "TypeChecker-004";
-const std::string TypeChecker::DiagnosticsReporter::ID_ExpectedExpressionOfScalarType = "TypeChecker-005";
-const std::string TypeChecker::DiagnosticsReporter::ID_ExpectedExpressionOfStructOrUnionType = "TypeChecker-006";
-const std::string TypeChecker::DiagnosticsReporter::ID_ExpectedExpressionOfPointerToStructOrUnionType = "TypeChecker-007";
-const std::string TypeChecker::DiagnosticsReporter::ID_ExpectedExpression = "TypeChecker-008";
-const std::string TypeChecker::DiagnosticsReporter::ID_UnknownMemberOfTag = "TypeChecker-009";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator = "TypeChecker-001";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfArithmeticType = "TypeChecker-001";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfIntegerType = "TypeChecker-002";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfRealType = "TypeChecker-003";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPointerType = "TypeChecker-004";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfScalarType = "TypeChecker-005";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfStructOrUnionType = "TypeChecker-006";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPointerToStructOrUnionType = "TypeChecker-007";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpression = "TypeChecker-008";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag = "TypeChecker-009";
 
 void TypeChecker::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
 {
@@ -44,7 +44,7 @@ void TypeChecker::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, Syn
 void TypeChecker::DiagnosticsReporter::InvalidOperator(SyntaxToken tk)
 {
     diagnose(DiagnosticDescriptor(
-                 ID_InvalidOperator,
+                 ID_of_InvalidOperator,
                  "[[invalid operator]]",
                  "invalid operator",
                  DiagnosticSeverity::Error,
@@ -73,7 +73,7 @@ void TypeChecker::DiagnosticsReporter::ExpectedExpressionOfArithmeticType(Syntax
 {
     ExpectedExpressionOfType_CORE(
                 tk,
-                ID_ExpectedExpressionOfArithmeticType,
+                ID_of_ExpectedExpressionOfArithmeticType,
                 "arithmetic");
 }
 
@@ -81,7 +81,7 @@ void TypeChecker::DiagnosticsReporter::ExpectedExpressionOfIntegerType(SyntaxTok
 {
     ExpectedExpressionOfType_CORE(
                 tk,
-                ID_ExpectedExpressionOfIntegerType,
+                ID_of_ExpectedExpressionOfIntegerType,
                 "integer");
 }
 
@@ -89,7 +89,7 @@ void TypeChecker::DiagnosticsReporter::ExpectedExpressionOfRealType(SyntaxToken 
 {
     ExpectedExpressionOfType_CORE(
                 tk,
-                ID_ExpectedExpressionOfRealType,
+                ID_of_ExpectedExpressionOfRealType,
                 "real");
 }
 
@@ -97,7 +97,7 @@ void TypeChecker::DiagnosticsReporter::ExpectedExpressionOfPointerType(SyntaxTok
 {
     ExpectedExpressionOfType_CORE(
                 tk,
-                ID_ExpectedExpressionOfPointerType,
+                ID_of_ExpectedExpressionOfPointerType,
                 "pointer");
 }
 
@@ -105,7 +105,7 @@ void TypeChecker::DiagnosticsReporter::ExpectedExpressionOfScalarType(SyntaxToke
 {
     ExpectedExpressionOfType_CORE(
                 tk,
-                ID_ExpectedExpressionOfScalarType,
+                ID_of_ExpectedExpressionOfScalarType,
                 "scalar");
 }
 
@@ -113,7 +113,7 @@ void TypeChecker::DiagnosticsReporter::ExpectedExpressionOfStructOrUnionType(Syn
 {
     ExpectedExpressionOfType_CORE(
                 tk,
-                ID_ExpectedExpressionOfStructOrUnionType,
+                ID_of_ExpectedExpressionOfStructOrUnionType,
                 "structure or union");
 }
 
@@ -121,14 +121,14 @@ void TypeChecker::DiagnosticsReporter::ExpectedExpressionOfPointerToStructOrUnio
 {
     ExpectedExpressionOfType_CORE(
                 tk,
-                ID_ExpectedExpressionOfPointerToStructOrUnionType,
+                ID_of_ExpectedExpressionOfPointerToStructOrUnionType,
                 "pointer to structure or union");
 }
 
 void TypeChecker::DiagnosticsReporter::ExpectedExpression(SyntaxToken tk)
 {
     diagnose(DiagnosticDescriptor(
-                 ID_InvalidOperator,
+                 ID_of_ExpectedExpression,
                  "[[expected expression]]",
                  "expected expression",
                  DiagnosticSeverity::Error,
@@ -139,7 +139,7 @@ void TypeChecker::DiagnosticsReporter::ExpectedExpression(SyntaxToken tk)
 void TypeChecker::DiagnosticsReporter::UnknownMemberOfTag(SyntaxToken tk)
 {
     diagnose(DiagnosticDescriptor(
-                 ID_InvalidOperator,
+                 ID_of_UnknownMemberOfTag,
                  "[[unknown member of tag]]",
                  "unknown member of tag",
                  DiagnosticSeverity::Error,

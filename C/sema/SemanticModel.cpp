@@ -22,7 +22,7 @@
 
 #include "Compilation.h"
 #include "sema/DeclarationBinder.h"
-#include "sema/TypeResolver.h"
+#include "sema/TypeCanonicalizer.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
 #include "symbols/Symbol_ALL.h"

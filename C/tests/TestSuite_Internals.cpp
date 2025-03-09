@@ -32,7 +32,7 @@
 #include "DeclarationBinderTester.h"
 #include "ParserTester.h"
 #include "ReparserTester.h"
-#include "TypeResolverTester.h"
+#include "TypeCanonicalizerAndResolverTester.h"
 #include "TypeCheckerTester.h"
 
 #include "../common/infra/Assertions.h"
@@ -68,8 +68,8 @@ std::tuple<int, int> InternalsTestSuite::testAll()
     auto C = std::make_unique<DeclarationBinderTester>(this);
     C->testDeclarationBinder();
 
-    auto D = std::make_unique<TypeResolverTester>(this);
-    D->testTypeResolver();
+    auto D = std::make_unique<TypeCanonicalizerAndResolverTester>(this);
+    D->testTypeCanonicalizerAndResolver();
 
     auto E = std::make_unique<TypeCheckerTester>(this);
     E->testTypeChecker();
@@ -390,7 +390,7 @@ namespace {
 bool REJECT_CANDIDATE(const Symbol* sym, std::string msg)
 {
 #ifdef DBG_BINDING_SEARCH
-    std::cout << "\n\t\tREJECT " << to_string(sym) << " DUE TO " << msg;
+    std::cout << "\n\t\tREJECT " << sym << " DUE TO " << msg;
 #endif
     return false;
 }
@@ -466,7 +466,18 @@ bool CVRMatches(const Type* ty, CVR cvr)
     return true;
 }
 
-const Type* maybeResolve(const SemanticModel* semaModel, const Type* ty)
+const Type* synonymizedType(const SemanticModel* semaModel, const Type* ty)
+{
+    if (ty->kind() == TypeKind::TypedefName
+            && ty->asTypedefNameType()->declaration()) {
+        auto actualTy = ty->asTypedefNameType()->declaration()->synonymizedType();
+        if (actualTy)
+            return actualTy;
+    }
+    return ty;
+}
+
+const Type* resolvedSynonymizedType(const SemanticModel* semaModel, const Type* ty)
 {
     if (ty->kind() == TypeKind::TypedefName) {
         auto actualTy = ty->asTypedefNameType()->resolvedSynonymizedType();
@@ -480,22 +491,21 @@ bool typeMatches(const SemanticModel* semaModel,
                  const Type* ty,
                  const Ty& t)
 {
-    ty = maybeResolve(semaModel, ty);
-
     PSY_ASSERT_2(t.derivTyKs_.size() == t.derivTyCVRs_.size()
-               && t.derivTyKs_.size() == t.derivPtrTyDecay_.size(),
-               return false);
+                    && t.derivTyKs_.size() == t.derivPtrTyDecay_.size(),
+                 return false);
 
     for (auto i = t.derivTyKs_.size(); i > 0; --i) {
         auto derivTyCVR = t.derivTyCVRs_[i - 1];
+
+        ty = synonymizedType(semaModel, ty);
         if (!CVRMatches(ty, derivTyCVR)) {
             DETAIL_MISMATCH("derived type CVR");
             return false;
         }
         if (ty->kind() == TypeKind::Qualified)
             ty = ty->asQualifiedType()->unqualifiedType();
-
-        ty = maybeResolve(semaModel, ty);
+        ty = synonymizedType(semaModel, ty);
 
         auto derivTyK = t.derivTyKs_[i - 1];
         if (derivTyK != ty->kind()) {
@@ -512,7 +522,7 @@ bool typeMatches(const SemanticModel* semaModel,
                     return false;
                 }
                 ty = ty->asArrayType()->elementType();
-                ty = maybeResolve(semaModel, ty);
+                ty = synonymizedType(semaModel, ty);
                 break;
 
             case TypeKind::Pointer:
@@ -540,7 +550,7 @@ bool typeMatches(const SemanticModel* semaModel,
                         break;
                 }
                 ty = ty->asPointerType()->referencedType();
-                ty = maybeResolve(semaModel, ty);
+                ty = synonymizedType(semaModel, ty);
                 break;
 
             case TypeKind::Function: {
@@ -565,7 +575,7 @@ bool typeMatches(const SemanticModel* semaModel,
                 }
 
                 ty = funcTy->returnType();
-                ty = maybeResolve(semaModel, ty);
+                ty = synonymizedType(semaModel, ty);
 
                 if (!t.nestedRetTy_)
                     break;
@@ -583,16 +593,14 @@ bool typeMatches(const SemanticModel* semaModel,
         }
     }
 
+    ty = resolvedSynonymizedType(semaModel, ty);
     if (!CVRMatches(ty, t.CVR_)) {
         DETAIL_MISMATCH("type CVR");
         return false;
     }
-
     if (ty->kind() == TypeKind::Qualified)
         ty = ty->asQualifiedType()->unqualifiedType();
-
-    ty = maybeResolve(semaModel, ty);
-
+    ty = resolvedSynonymizedType(semaModel, ty);
     if (ty->kind() == TypeKind::Qualified)
         ty = ty->asQualifiedType()->unqualifiedType();
 
@@ -616,13 +624,12 @@ bool typeMatches(const SemanticModel* semaModel,
             }
             break;
 
-        case TypeKind::TypedefName: {
+        case TypeKind::TypedefName:
             if (ty->asTypedefNameType()->typedefName()->valueText() != t.ident_) {
                 DETAIL_MISMATCH("typedef name mismatch");
                 return false;
             }
             break;
-        }
 
         case TypeKind::Tag:
             if (ty->asTagType()->kind() != t.tagTyK_) {
@@ -631,12 +638,13 @@ bool typeMatches(const SemanticModel* semaModel,
             }
             if (ty->asTagType()->tag()->valueText() != t.ident_) {
                 DETAIL_MISMATCH("tag mismatch");
+                std::cout << "the type: " << ty << std::endl;
                 return false;
             }
             break;
 
-        case TypeKind::Unknown:
-            if (t.tyK_ != TypeKind::Unknown) {
+        case TypeKind::Error:
+            if (t.tyK_ != TypeKind::Error) {
                 DETAIL_MISMATCH("unknown type mismatch");
                 return false;
             }
@@ -805,9 +813,8 @@ bool symbolMatchesBinding(
         case DeclarationCategory::Member:
             return membMatchesBinding(semaModel, declSym->asMemberDeclaration(), decl);
 
-        case DeclarationCategory::Type: {
+        case DeclarationCategory::Type:
             return typeMatchesBinding(semaModel, declSym->asTypeDeclaration(), decl);
-        }
 
         case DeclarationCategory::Function:
             return functionMatchesBinding(semaModel, declSym->asFunctionDeclaration(), decl);
@@ -901,23 +908,24 @@ void InternalsTestSuite::checkSemanticModel(
     }
 }
 
-void InternalsTestSuite::bind(std::string text, Expectation X)
+void InternalsTestSuite::bindDeclarations(std::string text, Expectation X)
 {
     parse(text);
     auto compilation = Compilation::create(tree_->filePath());
     compilation->addSyntaxTrees({ tree_.get() });
-    compilation->bind();
+    compilation->bindDeclarations();
     auto semaModel = compilation->semanticModel(tree_.get());
     checkSemanticModel(semaModel, X);
 }
 
-void InternalsTestSuite::resolveTypes(std::string text, Expectation X)
+void InternalsTestSuite::canonicalizerAndResolveTypes(std::string text, Expectation X)
 {
     parse(text);
     auto compilation = Compilation::create(tree_->filePath());
     compilation->addSyntaxTrees({ tree_.get() });
-    compilation->bind();
-    compilation->resolveTypes();
+    compilation->bindDeclarations();
+    compilation->canonicalizerTypes();
+    compilation->resolveTypedefNameTypes();
     auto semaModel = compilation->semanticModel(tree_.get());
     checkSemanticModel(semaModel, X);
 }
@@ -927,8 +935,9 @@ void InternalsTestSuite::checkTypes(std::string text, Expectation X)
     parse(text);
     auto compilation = Compilation::create(tree_->filePath());
     compilation->addSyntaxTrees({ tree_.get() });
-    compilation->bind();
-    compilation->resolveTypes();
+    compilation->bindDeclarations();
+    compilation->canonicalizerTypes();
+    compilation->resolveTypedefNameTypes();
     compilation->checkTypes();
     auto semaModel = compilation->semanticModel(tree_.get());
     checkSemanticModel(semaModel, X);

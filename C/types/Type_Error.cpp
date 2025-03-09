@@ -28,17 +28,8 @@ using namespace C;
 #include <sstream>
 
 ErrorType::ErrorType()
-    : Type(new TypeImpl(TypeKind::Unknown))
+    : Type(new TypeImpl(TypeKind::Error))
 {}
-
-ErrorType::ErrorType(DetectedUse detectedUse)
-    : Type(new TypeImpl(TypeKind::Unknown))
-{}
-
-ErrorType::DetectedUse ErrorType::detectedUse() const
-{
-    return detectedUse_;
-}
 
 namespace psy {
 namespace C {

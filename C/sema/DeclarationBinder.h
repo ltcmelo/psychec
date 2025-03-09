@@ -128,18 +128,18 @@ private:
         /* Declarators */
         void FunctionReturningFunction(SyntaxToken decltorTk);
         void FunctionReturningArray(SyntaxToken decltorTk);
-        static const std::string ID_FunctionReturningFunction;
-        static const std::string ID_FunctionReturningArray;
+        static const std::string ID_of_FunctionReturningFunction;
+        static const std::string ID_of_FunctionReturningArray;
 
         /* Type specifiers */
         void TypeSpecifierMissingDefaultsToInt(SyntaxToken declTk);
         void InvalidType(SyntaxToken tySpecTk);
-        static const std::string ID_TypeSpecifierMissingDefaultsToInt;
-        static const std::string ID_InvalidType;
+        static const std::string ID_of_TypeSpecifierMissingDefaultsToInt;
+        static const std::string ID_of_InvalidType;
 
         /* Type qualifiers */
         void InvalidUseOfRestrict(SyntaxToken tyQualTk);
-        static const std::string ID_InvalidUseOfRestrict;
+        static const std::string ID_of_InvalidUseOfRestrict;
     };
     DiagnosticsReporter diagReporter_;
 

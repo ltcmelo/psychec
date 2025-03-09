@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22/23/24 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2025 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,41 +18,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_ERROR_H__
-#define PSYCHE_C_TYPE_ERROR_H__
+#ifndef PSYCHE_C_TYPEDEF_NAME_TYPE_RESOLVER_H__
+#define PSYCHE_C_TYPEDEF_NAME_TYPE_RESOLVER_H__
 
 #include "API.h"
 #include "Fwds.h"
 
-#include "Type.h"
+#include "syntax/SyntaxVisitor.h"
+#include "../common/infra/AccessSpecifiers.h"
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The ErrorType class.
- */
-class PSY_C_API ErrorType final : public Type
+class PSY_C_INTERNAL_API TypedefNameTypeResolver final : protected SyntaxVisitor
 {
-public:
-    //!@{
-    /**
-     * Cast \c this Type as an ErrorType.
-     */
-    virtual ErrorType* asErrorType() override { return this; }
-    virtual const ErrorType* asErrorType() const override { return this; }
-    //!@}
-
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Compilation);
-    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
-    PSY_GRANT_INTERNAL_ACCESS(TypeCanonicalizer);
-    PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
 
-    ErrorType();
+    TypedefNameTypeResolver(SemanticModel* semaModel, const SyntaxTree* tree);
+    TypedefNameTypeResolver(const TypedefNameTypeResolver&) = delete;
+    void operator=(const TypedefNameTypeResolver&) = delete;
+
+    void resolveTypedefNameTypes();
+
+private:
+    SemanticModel* semaModel_;
+    bool inTydefDecltor_;
+
+    const Type* resolve(const Type* ty);
+
+    //--------------//
+    // Declarations //
+    //--------------//
+    virtual Action visitTypedefDeclaration(const TypedefDeclarationSyntax*) override;
+
+    /* Declarators */
+    virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;
 };
-
-PSY_C_API std::ostream& operator<<(std::ostream& os, const ErrorType* unknownTy);
 
 } // C
 } // psy

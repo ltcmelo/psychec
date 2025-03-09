@@ -42,17 +42,12 @@ public:
 
     void testTypeChecker();
 
-    void check(std::string text, Expectation X);
+    void checkTypes(std::string text, Expectation X);
 
     using TestFunction = std::pair<std::function<void(TypeCheckerTester*)>, const char*>;
 
     /*
-        Error
-            + 0000-0499
-
-        OK
-            + 0500-0699 -> no inspection
-            + 0700-0999 -> inspect type
+        + 0000-00049 -> member access
      */
 
     void case0000();

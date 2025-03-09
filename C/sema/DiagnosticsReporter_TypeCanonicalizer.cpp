@@ -18,23 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeResolver.h"
+#include "TypeCanonicalizer.h"
 
 #include "syntax/SyntaxTree.h"
 
 using namespace psy;
 using namespace C;
 
-const std::string TypeResolver::DiagnosticsReporter::ID_of_TypeDeclarationNotFound = "Resolver - decl not found";
-const std::string TypeResolver::DiagnosticsReporter::ID_of_ExpectedTypedefDeclaration = "Resolver - expected type decl";
-const std::string TypeResolver::DiagnosticsReporter::ID_of_TagTypeDoesNotMatchTagDeclaration = "Resolver - unmatched tag";
+const std::string TypeCanonicalizer::DiagnosticsReporter::ID_of_TypeDeclarationNotFound = "Resolver - decl not found";
+const std::string TypeCanonicalizer::DiagnosticsReporter::ID_of_ExpectedTypedefDeclaration = "Resolver - expected type decl";
+const std::string TypeCanonicalizer::DiagnosticsReporter::ID_of_TagTypeDoesNotMatchTagDeclaration = "Resolver - unmatched tag";
 
-void TypeResolver::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
+void TypeCanonicalizer::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
 {
-    resolver_->tree_->newDiagnostic(desc, tk);
+    canonicalizer_->tree_->newDiagnostic(desc, tk);
 };
 
-void TypeResolver::DiagnosticsReporter::TypeDeclarationNotFound(SyntaxToken tk)
+void TypeCanonicalizer::DiagnosticsReporter::TypeDeclarationNotFound(SyntaxToken tk)
 {
     diagnose(DiagnosticDescriptor(
                  ID_of_TypeDeclarationNotFound,
@@ -45,7 +45,7 @@ void TypeResolver::DiagnosticsReporter::TypeDeclarationNotFound(SyntaxToken tk)
              tk);
 }
 
-void TypeResolver::DiagnosticsReporter::ExpectedTypedefDeclaration(SyntaxToken tk)
+void TypeCanonicalizer::DiagnosticsReporter::ExpectedTypedefDeclaration(SyntaxToken tk)
 {
     diagnose(DiagnosticDescriptor(
                  ID_of_ExpectedTypedefDeclaration,
@@ -56,7 +56,7 @@ void TypeResolver::DiagnosticsReporter::ExpectedTypedefDeclaration(SyntaxToken t
              tk);
 }
 
-void TypeResolver::DiagnosticsReporter::TagTypeDoesNotMatchTagDeclaration(SyntaxToken tk)
+void TypeCanonicalizer::DiagnosticsReporter::TagTypeDoesNotMatchTagDeclaration(SyntaxToken tk)
 {
     diagnose(DiagnosticDescriptor(
                  ID_of_TagTypeDoesNotMatchTagDeclaration,

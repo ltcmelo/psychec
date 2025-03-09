@@ -29,15 +29,15 @@ using namespace C;
 const std::string DeclarationBinder::DiagnosticsReporter::ID_of_UselessDeclaration = "DeclarationBinder-000";
 
 /* Declarators */
-const std::string DeclarationBinder::DiagnosticsReporter::ID_FunctionReturningFunction = "DeclarationBinder-200-6.7.6.3-1-A";
-const std::string DeclarationBinder::DiagnosticsReporter::ID_FunctionReturningArray = "DeclarationBinder-200-6.7.6.3-1-B";
+const std::string DeclarationBinder::DiagnosticsReporter::ID_of_FunctionReturningFunction = "DeclarationBinder-200-6.7.6.3-1-A";
+const std::string DeclarationBinder::DiagnosticsReporter::ID_of_FunctionReturningArray = "DeclarationBinder-200-6.7.6.3-1-B";
 
 /* Type specifiers */
-const std::string DeclarationBinder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt = "DeclarationBinder-100-6.7.2-2-A";
-const std::string DeclarationBinder::DiagnosticsReporter::ID_InvalidType = "DeclarationBinder-100-6.7.2-2-B";
+const std::string DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt = "DeclarationBinder-100-6.7.2-2-A";
+const std::string DeclarationBinder::DiagnosticsReporter::ID_of_InvalidType = "DeclarationBinder-100-6.7.2-2-B";
 
 /* Type qualifiers */
-const std::string DeclarationBinder::DiagnosticsReporter::ID_InvalidUseOfRestrict = "DeclarationBinder-300-6.7.3-2";
+const std::string DeclarationBinder::DiagnosticsReporter::ID_of_InvalidUseOfRestrict = "DeclarationBinder-300-6.7.3-2";
 
 void DeclarationBinder::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
 {
@@ -62,7 +62,7 @@ void DeclarationBinder::DiagnosticsReporter::FunctionReturningFunction(SyntaxTok
             + "' declared as function returning a function";
 
     diagnose(DiagnosticDescriptor(
-                 ID_FunctionReturningFunction,
+                 ID_of_FunctionReturningFunction,
                  "[[function returning function]]",
                  s,
                  DiagnosticSeverity::Error,
@@ -77,7 +77,7 @@ void DeclarationBinder::DiagnosticsReporter::FunctionReturningArray(SyntaxToken 
             + "' declared as function returning an array";
 
     diagnose(DiagnosticDescriptor(
-                 ID_FunctionReturningArray,
+                 ID_of_FunctionReturningArray,
                  "[[function returning array]]",
                  s,
                  DiagnosticSeverity::Error,
@@ -88,7 +88,7 @@ void DeclarationBinder::DiagnosticsReporter::FunctionReturningArray(SyntaxToken 
 void DeclarationBinder::DiagnosticsReporter::TypeSpecifierMissingDefaultsToInt(SyntaxToken declTk)
 {
     diagnose(DiagnosticDescriptor(
-                 ID_TypeSpecifierMissingDefaultsToInt,
+                 ID_of_TypeSpecifierMissingDefaultsToInt,
                  "[[type specifier missing]]",
                  "type specifier missing, defaults to `int'",
                  DiagnosticSeverity::Error,
@@ -99,7 +99,7 @@ void DeclarationBinder::DiagnosticsReporter::TypeSpecifierMissingDefaultsToInt(S
 void DeclarationBinder::DiagnosticsReporter::InvalidType(SyntaxToken tySpecTk)
 {
     diagnose(DiagnosticDescriptor(
-                               ID_InvalidType,
+                               ID_of_InvalidType,
                                "[[invaid type]]",
                                "invalid type",
                                DiagnosticSeverity::Error,
@@ -110,7 +110,7 @@ void DeclarationBinder::DiagnosticsReporter::InvalidType(SyntaxToken tySpecTk)
 void DeclarationBinder::DiagnosticsReporter::InvalidUseOfRestrict(SyntaxToken tyQualTk)
 {
     diagnose(DiagnosticDescriptor(
-                 ID_InvalidUseOfRestrict,
+                 ID_of_InvalidUseOfRestrict,
                  "[[invalid use of restrict]]",
                  "invalid use of `restrict'",
                  DiagnosticSeverity::Error,

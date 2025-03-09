@@ -115,18 +115,25 @@ public:
      */
     const VoidType* canonicalVoidType() const;
 
+    /**
+     * The canonical ErrorType.
+     */
+    const ErrorType* canonicalErrorType() const;
+
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
 
     ProgramSymbol* program();
-    void bind() const;
-    void resolveTypes() const;
-    void checkTypes() const;
+
     const SemanticModel* semanticModel(const SyntaxTree* tree) const;
+    void bindDeclarations() const;
+    void canonicalizerTypes() const;
+    void resolveTypedefNameTypes() const;
+    void checkTypes() const;
 
 private:
-    Compilation();
     DECL_PIMPL(Compilation);
+    Compilation();
     Compilation(const Compilation&) = delete;
     Compilation& operator=(const Compilation&) = delete;
 };

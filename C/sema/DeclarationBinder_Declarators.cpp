@@ -85,7 +85,7 @@ void DeclarationBinder::popTypesUntilNonDerivedDeclaratorType()
                 popType();
                 TY_AT_TOP(ty, );
                 continue;
-            case TypeKind::Unknown:
+            case TypeKind::Error:
                 PSY_ASSERT_1(false);
                 return;
             default:
@@ -236,7 +236,7 @@ SyntaxVisitor::Action DeclarationBinder::visitArrayOrFunctionDeclarator(const Ar
                 case TypeKind::TypedefName:
                     break;
 
-                case TypeKind::Unknown:
+                case TypeKind::Error:
                     PSY_ASSERT_1(false);
                     return Action::Quit;
             }
@@ -385,7 +385,7 @@ void DeclarationBinder::handleNonTypedefDeclarator(const DeclaratorSyntax* node)
                     break;
                 }
 
-                case TypeKind::Unknown:
+                case TypeKind::Error:
                     PSY_ASSERT_1(false);
                     return;
             }
@@ -429,7 +429,7 @@ void DeclarationBinder::handleNonTypedefDeclarator(const DeclaratorSyntax* node)
                 case TypeKind::Tag:
                     break;
 
-                case TypeKind::Unknown:
+                case TypeKind::Error:
                     PSY_ASSERT_1(false);
                     return;
             }

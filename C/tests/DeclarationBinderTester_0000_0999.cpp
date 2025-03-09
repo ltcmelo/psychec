@@ -827,7 +827,7 @@ void DeclarationBinderTester::case0161()
     bind("void x ( y ) { }",
          Expectation()
              .diagnostic(Expectation::ErrorOrWarn::Error,
-                         DeclarationBinder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+                         DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt)
              .declaration(Decl()
                       .Function("x", ScopeKind::File)
                       .ty_.Void()
@@ -843,7 +843,7 @@ void DeclarationBinderTester::case0162()
     bind("x ( int y ) { }",
          Expectation()
              .diagnostic(Expectation::ErrorOrWarn::Error,
-                         DeclarationBinder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+                         DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt)
              .declaration(Decl()
                       .Function("x", ScopeKind::File)
                       .ty_.Basic(BasicTypeKind::Int_S)
@@ -859,7 +859,7 @@ void DeclarationBinderTester::case0163()
     bind("x ( int y ) ;",
          Expectation()
              .diagnostic(Expectation::ErrorOrWarn::Error,
-                         DeclarationBinder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+                         DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt)
              .declaration(Decl()
                       .Function("x", ScopeKind::File)
                       .ty_.Basic(BasicTypeKind::Int_S)
@@ -875,7 +875,7 @@ void DeclarationBinderTester::case0164()
     bind("x ( y z ) { }",
          Expectation()
              .diagnostic(Expectation::ErrorOrWarn::Error,
-                         DeclarationBinder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+                         DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt)
              .declaration(Decl()
                       .Function("x", ScopeKind::File)
                       .ty_.Basic(BasicTypeKind::Int_S)
@@ -891,7 +891,7 @@ void DeclarationBinderTester::case0165()
     bind("x ( y z ) ;",
          Expectation()
              .diagnostic(Expectation::ErrorOrWarn::Error,
-                         DeclarationBinder::DiagnosticsReporter::ID_TypeSpecifierMissingDefaultsToInt)
+                         DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt)
              .declaration(Decl()
                       .Function("x", ScopeKind::File)
                       .ty_.Basic(BasicTypeKind::Int_S)
@@ -2049,7 +2049,7 @@ void DeclarationBinderTester::case0413()
     bind("void x ( ) ( ) ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     DeclarationBinder::DiagnosticsReporter::ID_FunctionReturningFunction)
+                     DeclarationBinder::DiagnosticsReporter::ID_of_FunctionReturningFunction)
          .ContinueTestDespiteOfErrors()
          .declaration(Decl()
                   .Function("x", ScopeKind::File)
@@ -2064,7 +2064,7 @@ void DeclarationBinderTester::case0414()
     bind("void ( x ( ) ) ( ) ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     DeclarationBinder::DiagnosticsReporter::ID_FunctionReturningFunction)
+                     DeclarationBinder::DiagnosticsReporter::ID_of_FunctionReturningFunction)
          .ContinueTestDespiteOfErrors()
          .declaration(Decl()
                   .Function("x", ScopeKind::File)
@@ -2115,7 +2115,7 @@ void DeclarationBinderTester::case0427()
     bind("int x ( ) [] ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     DeclarationBinder::DiagnosticsReporter::ID_FunctionReturningArray)
+                     DeclarationBinder::DiagnosticsReporter::ID_of_FunctionReturningArray)
          .ContinueTestDespiteOfErrors()
          .declaration(Decl()
                   .Function("x", ScopeKind::File)
@@ -2130,7 +2130,7 @@ void DeclarationBinderTester::case0428()
     bind("int ( x ) ( ) [] ;",
          Expectation()
          .diagnostic(Expectation::ErrorOrWarn::Error,
-                     DeclarationBinder::DiagnosticsReporter::ID_FunctionReturningArray)
+                     DeclarationBinder::DiagnosticsReporter::ID_of_FunctionReturningArray)
          .ContinueTestDespiteOfErrors()
          .declaration(Decl()
                   .Function("x", ScopeKind::File)

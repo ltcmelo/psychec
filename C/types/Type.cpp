@@ -59,7 +59,7 @@ PSY_C_API std::ostream& operator<<(std::ostream& os, const Type* ty)
             return os << ty->asVoidType();
         case TypeKind::Qualified:
             return os << ty->asQualifiedType();
-        case TypeKind::Unknown:
+        case TypeKind::Error:
             return os << ty->asErrorType();
     }
     PSY_ASSERT_1(false);
@@ -104,14 +104,6 @@ bool isScalarType(const Type* ty)
 {
     PSY_ASSERT_2(ty, return false);
     return isArithmeticType(ty) || ty->kind() == TypeKind::Pointer;
-}
-
-const Type* unqualifyType(const Type* ty)
-{
-    PSY_ASSERT_2(ty, return nullptr);
-    return ty->kind() == TypeKind::Qualified
-            ? ty->asQualifiedType()->unqualifiedType()
-            : ty;
 }
 
 } // C

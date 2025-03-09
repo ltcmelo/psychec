@@ -41,6 +41,7 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Compilation);
+    PSY_GRANT_INTERNAL_ACCESS(TypeCheckerTester);
 
     TypeChecker(SemanticModel* semaModel, const SyntaxTree* tree);
     TypeChecker(const TypeChecker&) = delete;
@@ -62,7 +63,6 @@ private:
     const Type* uStrLitTy_;
     const Type* UStrLitTy_;
     const Type* LStrLitTy_;
-    std::unique_ptr<ErrorType> errorTy_;
 
     struct DiagnosticsReporter
     {
@@ -88,16 +88,16 @@ private:
         void ExpectedExpression(SyntaxToken tk);
         void UnknownMemberOfTag(SyntaxToken tk);
 
-        static const std::string ID_InvalidOperator;
-        static const std::string ID_ExpectedExpressionOfArithmeticType;
-        static const std::string ID_ExpectedExpressionOfIntegerType;
-        static const std::string ID_ExpectedExpressionOfRealType;
-        static const std::string ID_ExpectedExpressionOfPointerType;
-        static const std::string ID_ExpectedExpressionOfScalarType;
-        static const std::string ID_ExpectedExpressionOfStructOrUnionType;
-        static const std::string ID_ExpectedExpressionOfPointerToStructOrUnionType;
-        static const std::string ID_ExpectedExpression;
-        static const std::string ID_UnknownMemberOfTag;
+        static const std::string ID_of_InvalidOperator;
+        static const std::string ID_of_ExpectedExpressionOfArithmeticType;
+        static const std::string ID_of_ExpectedExpressionOfIntegerType;
+        static const std::string ID_of_ExpectedExpressionOfRealType;
+        static const std::string ID_of_ExpectedExpressionOfPointerType;
+        static const std::string ID_of_ExpectedExpressionOfScalarType;
+        static const std::string ID_of_ExpectedExpressionOfStructOrUnionType;
+        static const std::string ID_of_ExpectedExpressionOfPointerToStructOrUnionType;
+        static const std::string ID_of_ExpectedExpression;
+        static const std::string ID_of_UnknownMemberOfTag;
     };
     DiagnosticsReporter diagReporter_;
 
@@ -195,14 +195,15 @@ private:
     //--------//
     virtual Action visitTypeName(const TypeNameSyntax*) override;
 
+    static const Type* unqualifiedAndResolved(const Type* ty);
+
+    bool isNULLPointerConstant(const SyntaxNode* node);
+    bool typesAreCompatible(const Type* oneTy,
+                            const Type* otherTy,
+                            bool treatVoidAsAny);
     bool satisfyArithmeticTypeConstraint(const Type* ty, const SyntaxNode* node);
     bool satisfyIntegerTypeConstraint(const Type* ty, const SyntaxNode* node);
     bool satisfyRealTypeConstraint(const Type* ty, const SyntaxNode* node);
-    bool typesAreCompatible(
-            const Type* oneTy,
-            const Type* otherTy,
-            bool treatVoidAsAny);
-    bool isNULLPointerConstant(const SyntaxNode* node);
     const BasicType* determineCommonRealType(
             const BasicType* leftTy,
             const BasicType* rightTy) const;

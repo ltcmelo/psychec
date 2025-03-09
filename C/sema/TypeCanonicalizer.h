@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_RESOLVER_H__
-#define PSYCHE_C_TYPE_RESOLVER_H__
+#ifndef PSYCHE_C_TYPE_CANONICALIZER_H__
+#define PSYCHE_C_TYPE_CANONICALIZER_H__
 
 #include "API.h"
 #include "Fwds.h"
@@ -35,17 +35,17 @@
 namespace psy {
 namespace C {
 
-class PSY_C_INTERNAL_API TypeResolver final : protected SyntaxVisitor
+class PSY_C_INTERNAL_API TypeCanonicalizer final : protected SyntaxVisitor
 {
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(Compilation);
-    PSY_GRANT_INTERNAL_ACCESS(TypeResolverTester);
+    PSY_GRANT_INTERNAL_ACCESS(TypeCanonicalizerAndResolverTester);
 
-    TypeResolver(SemanticModel* semaModel, const SyntaxTree* tree);
-    TypeResolver(const TypeResolver&) = delete;
-    void operator=(const TypeResolver&) = delete;
+    TypeCanonicalizer(SemanticModel* semaModel, const SyntaxTree* tree);
+    TypeCanonicalizer(const TypeCanonicalizer&) = delete;
+    void operator=(const TypeCanonicalizer&) = delete;
 
-    void resolveTypes();
+    void canonicalizeTypes();
 
 private:
     SemanticModel* semaModel_;
@@ -55,10 +55,10 @@ private:
 
     struct DiagnosticsReporter
     {
-        DiagnosticsReporter(TypeResolver* resolver)
-            : resolver_(resolver)
+        DiagnosticsReporter(TypeCanonicalizer* canonicalizer)
+            : canonicalizer_(canonicalizer)
         {}
-        TypeResolver* resolver_;
+        TypeCanonicalizer* canonicalizer_;
 
         void diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk);
 
@@ -72,8 +72,7 @@ private:
     };
     DiagnosticsReporter diagReporter_;
 
-    const Type* newErrorType() const;
-    const Type* resolveType(const Type* ty, const Scope* scope);
+    const Type* canonicalize(const Type* ty, const Scope* scope);
 
     //--------------//
     // Declarations //

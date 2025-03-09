@@ -88,7 +88,7 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
-    PSY_GRANT_INTERNAL_ACCESS(TypeResolver);
+    PSY_GRANT_INTERNAL_ACCESS(TypeCanonicalizer);
     PSY_GRANT_INTERNAL_ACCESS(TranslationUnitSymbol);
 
     Scope(ScopeKind scopeK);

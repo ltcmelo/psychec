@@ -180,7 +180,7 @@ void SemanticModelTester::case0005()
     PSY_EXPECT_EQ_ENU(declSym0->kind(), SymbolKind::VariableDeclaration, SymbolKind);
     const VariableDeclarationSymbol* varDeclSym1 = declSym0->asVariableDeclaration();
     PSY_EXPECT_EQ_STR(varDeclSym1->name()->valueText(), "y");
-    PSY_EXPECT_EQ_ENU(varDeclSym1->type()->kind(), TypeKind::Unknown, TypeKind);
+    PSY_EXPECT_EQ_ENU(varDeclSym1->type()->kind(), TypeKind::Error, TypeKind);
 
     const DeclarationSymbol* declSym1 = syms[1];
     PSY_EXPECT_TRUE(declSym1);
@@ -188,7 +188,7 @@ void SemanticModelTester::case0005()
     PSY_EXPECT_EQ_ENU(declSym1->kind(), SymbolKind::VariableDeclaration, SymbolKind);
     const VariableDeclarationSymbol* varDeclSym2 = declSym1->asVariableDeclaration();
     PSY_EXPECT_EQ_STR(varDeclSym2->name()->valueText(), "z");
-    PSY_EXPECT_EQ_ENU(varDeclSym2->type()->kind(), TypeKind::Unknown, TypeKind);
+    PSY_EXPECT_EQ_ENU(varDeclSym2->type()->kind(), TypeKind::Error, TypeKind);
 }
 
 void SemanticModelTester::case0006(){}
