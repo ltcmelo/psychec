@@ -637,7 +637,7 @@ bool typeMatches(const SemanticModel* semaModel,
                 return false;
             }
             if (ty->asTagType()->tag()->valueText() != t.ident_
-                    && !(ty->asTagType()->tag()->valueText().substr(0, 1) == "#"
+                    && !(ty->asTagType()->tag()->valueText()[0] == '#'
                          && t.ident_ == "")) {
                 DETAIL_MISMATCH("tag mismatch");
                 return false;

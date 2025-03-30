@@ -22,7 +22,6 @@
 #include "Type__IMPL__.inc"
 
 #include "syntax/Lexeme_Identifier.h"
-#include "../common/string_utils/predicate.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -60,7 +59,7 @@ const Identifier* TagType::tag() const
 
 bool TagType::isUntagged() const
 {
-    return str::starts_with(P_CAST->tag_->valueText(), "#");
+    return P_CAST->tag_->valueText()[0] == '#';
 }
 
 const TagTypeDeclarationSymbol* TagType::declaration() const
