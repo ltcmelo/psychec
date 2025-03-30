@@ -29,8 +29,8 @@
 #include "TagTypeDeclaration_Union.h"
 #include "TagTypeDeclaration_Enum.h"
 #include "TypeDeclaration_Typedef.h"
-#include "ObjectDeclaration_Enumerator.h"
-#include "ObjectDeclaration_Field.h"
+#include "MemberDeclaration_Enumerator.h"
+#include "MemberDeclaration_Field.h"
 #include "ObjectDeclaration_Parameter.h"
 #include "ObjectDeclaration_Variable.h"
 
