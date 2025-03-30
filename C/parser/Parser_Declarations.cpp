@@ -180,40 +180,36 @@ bool Parser::parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& dec
 bool Parser::parseDeclaration(
         DeclarationSyntax*& decl,
         bool (Parser::*parse_AtDeclarator)(DeclarationSyntax*&, const SpecifierListSyntax*),
-        DeclarationScope declScope)
+        DeclarationContext declCtx)
 {
     SpecifierListSyntax* specList = nullptr;
-    if (!parseDeclarationSpecifiers(decl, specList, declScope)) {
+    if (!parseDeclarationSpecifiers(decl, specList, declCtx)) {
         skipTo(SyntaxKind::SemicolonToken);
         return false;
     }
 
-    return parseDeclaration_AtFollowOfSpecifiers(
-                    decl,
-                    specList,
-                    parse_AtDeclarator);
+    return parseDeclarationOrStructDeclaration_AtFollowOfSpecifiers(
+                decl,
+                specList,
+                parse_AtDeclarator);
 }
 
-bool Parser::parseDeclaration_AtFollowOfSpecifiers(
+bool Parser::parseDeclarationOrStructDeclaration_AtFollowOfSpecifiers(
         DeclarationSyntax*& decl,
         SpecifierListSyntax*& specList,
         bool (Parser::*parse_AtDeclarator)(DeclarationSyntax*&, const SpecifierListSyntax*))
 {
-    if (peek().kind() == SyntaxKind::SemicolonToken) {
-        if (decl) {
+    if (decl) {
+        if (parse_AtDeclarator != &Parser::parseStructDeclaration_AtDeclarator
+                && peek().kind() == SyntaxKind::SemicolonToken) {
             auto tagDecl = static_cast<TagDeclarationSyntax*>(decl);
             tagDecl->semicolonTkIdx_ = consume();
+            return true;
         }
-        else if (specList)
-            parseIncompleteDeclaration_AtFirst(decl, specList);
-        return true;
-    }
 
-    if (decl) {
         auto tyDeclSpec = makeNode<TagDeclarationAsSpecifierSyntax>();
         tyDeclSpec->tagDecl_ = static_cast<TagDeclarationSyntax*>(decl);
         decl = nullptr;
-
         if (!specList)
             specList = makeNode<SpecifierListSyntax>(tyDeclSpec);
         else {
@@ -225,6 +221,9 @@ bool Parser::parseDeclaration_AtFollowOfSpecifiers(
                 }
             }
         }
+    } else if (peek().kind() == SyntaxKind::SemicolonToken) {
+        parseIncompleteDeclaration_AtFirst(decl, specList);
+        return true;
     }
 
     return ((this)->*(parse_AtDeclarator))(decl, specList);
@@ -249,7 +248,7 @@ bool Parser::parseDeclarationOrFunctionDefinition(DeclarationSyntax*& decl)
     return parseDeclaration(
                 decl,
                 &Parser::parseDeclarationOrFunctionDefinition_AtDeclarator,
-                DeclarationScope::File);
+                DeclarationContext::Unspecified);
 }
 
 bool Parser::parseDeclarationOrFunctionDefinition_AtDeclarator(
@@ -261,7 +260,7 @@ bool Parser::parseDeclarationOrFunctionDefinition_AtDeclarator(
 
     while (true) {
         DeclaratorSyntax* decltor = nullptr;
-        if (!parseDeclarator(decltor, DeclarationScope::File))
+        if (!parseDeclarator(decltor, DeclarationContext::Unspecified))
             return false;
 
         *decltorList_cur = makeNode<DeclaratorListSyntax>(decltor);
@@ -412,13 +411,13 @@ bool Parser::parseFunctionDefinition_AtOpenBrace(
     return false;
 }
 
-Parser::IdentifierRole Parser::guessRoleOfIdentifier(DeclarationScope declScope) const
+Parser::IdentifierRole Parser::guessRoleOfIdentifier(DeclarationContext declCtx) const
 {
     auto LA = 2;
     while (true) {
         switch (peek(LA).kind()) {
             case SyntaxKind::IdentifierToken:
-                return IdentifierRole::AsTypedefName;
+                return IdentifierRole::TypedefName;
 
             // type-specifier
             case SyntaxKind::Keyword_void:
@@ -439,7 +438,7 @@ Parser::IdentifierRole Parser::guessRoleOfIdentifier(DeclarationScope declScope)
             case SyntaxKind::Keyword_union:
             case SyntaxKind::Keyword_enum:
             case SyntaxKind::Keyword_ExtGNU___complex__:
-                return IdentifierRole::AsDeclarator;
+                return IdentifierRole::Declarator;
 
             // storage-class-specifier
             case SyntaxKind::Keyword_typedef:
@@ -449,35 +448,35 @@ Parser::IdentifierRole Parser::guessRoleOfIdentifier(DeclarationScope declScope)
             case SyntaxKind::Keyword_register:
             case SyntaxKind::Keyword__Thread_local:
             case SyntaxKind::Keyword_ExtGNU___thread:
-                return IdentifierRole::AsTypedefName;
+                return IdentifierRole::TypedefName;
 
             // type-qualifier
             case SyntaxKind::Keyword_const:
             case SyntaxKind::Keyword_volatile:
             case SyntaxKind::Keyword_restrict:
             case SyntaxKind::Keyword__Atomic:
-                return IdentifierRole::AsTypedefName;
+                return IdentifierRole::TypedefName;
 
             // function-specifier
             case SyntaxKind::Keyword_inline:
             case SyntaxKind::Keyword__Noreturn:
-                return IdentifierRole::AsTypedefName;
+                return IdentifierRole::TypedefName;
 
             // alignment-specifier
             case SyntaxKind::Keyword__Alignas:
-                return IdentifierRole::AsTypedefName;
+                return IdentifierRole::TypedefName;
 
             // attribute-specifier
             case SyntaxKind::Keyword_ExtGNU___attribute__:
-                return IdentifierRole::AsTypedefName;
+                return IdentifierRole::TypedefName;
 
             // pointer-declarator
             case SyntaxKind::AsteriskToken:
-                return IdentifierRole::AsTypedefName;
+                return IdentifierRole::TypedefName;
 
             case SyntaxKind::OpenParenToken: {
-                if (declScope == DeclarationScope::FunctionPrototype)
-                    return IdentifierRole::AsTypedefName;
+                if (declCtx == DeclarationContext::Parameter)
+                    return IdentifierRole::TypedefName;
                 auto parens = 1;
                 auto check = 0;
                 while (true) {
@@ -504,7 +503,7 @@ Parser::IdentifierRole Parser::guessRoleOfIdentifier(DeclarationScope declScope)
                             continue;
                         case SyntaxKind::SemicolonToken:
                         case SyntaxKind::EndOfFile:
-                            return IdentifierRole::AsDeclarator;
+                            return IdentifierRole::Declarator;
                         default:
                             ++check;
                             ++LA;
@@ -513,20 +512,20 @@ Parser::IdentifierRole Parser::guessRoleOfIdentifier(DeclarationScope declScope)
                     break;
                 }
                 return check == -1
-                        ? IdentifierRole::AsTypedefName
-                        : IdentifierRole::AsDeclarator;
+                        ? IdentifierRole::TypedefName
+                        : IdentifierRole::Declarator;
             }
 
             case SyntaxKind::CloseParenToken:
                 return peek(LA + 1).kind() == SyntaxKind::OpenBraceToken
-                        ? IdentifierRole::AsDeclarator
+                        ? IdentifierRole::Declarator
                         : isWithinKandRFuncDef_
-                            ? IdentifierRole::AsDeclarator
-                            : IdentifierRole::AsTypedefName;
+                            ? IdentifierRole::Declarator
+                            : IdentifierRole::TypedefName;
 
             case SyntaxKind::OpenBracketToken: {
-                if (declScope == DeclarationScope::FunctionPrototype)
-                    return IdentifierRole::AsTypedefName;
+                if (declCtx == DeclarationContext::Parameter)
+                    return IdentifierRole::TypedefName;
                 auto brackets = 1;
                 auto check = 0;
                 while (true) {
@@ -553,7 +552,7 @@ Parser::IdentifierRole Parser::guessRoleOfIdentifier(DeclarationScope declScope)
                             continue;
                         case SyntaxKind::SemicolonToken:
                         case SyntaxKind::EndOfFile:
-                            return IdentifierRole::AsDeclarator;
+                            return IdentifierRole::Declarator;
                         default:
                             ++check;
                             ++LA;
@@ -562,24 +561,24 @@ Parser::IdentifierRole Parser::guessRoleOfIdentifier(DeclarationScope declScope)
                     break;
                 }
                 return check == -1
-                        ? IdentifierRole::AsTypedefName
-                        : IdentifierRole::AsDeclarator;
+                        ? IdentifierRole::TypedefName
+                        : IdentifierRole::Declarator;
             }
 
             case SyntaxKind::CloseBracketToken:
                 return peek(LA + 1).kind() == SyntaxKind::OpenBraceToken
-                        ? IdentifierRole::AsDeclarator
+                        ? IdentifierRole::Declarator
                         : isWithinKandRFuncDef_
-                            ? IdentifierRole::AsDeclarator
-                            : IdentifierRole::AsTypedefName;
+                            ? IdentifierRole::Declarator
+                            : IdentifierRole::TypedefName;
 
             case SyntaxKind::CommaToken:
                 return isWithinKandRFuncDef_
-                        ? IdentifierRole::AsDeclarator
-                        : IdentifierRole::AsTypedefName;
+                        ? IdentifierRole::Declarator
+                        : IdentifierRole::TypedefName;
 
             default:
-                return IdentifierRole::AsDeclarator;
+                return IdentifierRole::Declarator;
         }
     }
 }
@@ -591,9 +590,12 @@ bool Parser::parseStructDeclaration_AtDeclarator(
     DeclaratorListSyntax* decltorList = nullptr;
     DeclaratorListSyntax** decltorList_cur = &decltorList;
 
+    if (peek().kind() == SyntaxKind::SemicolonToken)
+        goto FieldsParsed;
+
     while (true) {
         DeclaratorSyntax* decltor = nullptr;
-        if (!parseDeclarator(decltor, DeclarationScope::Block))
+        if (!parseDeclarator(decltor, DeclarationContext::StructOrUnion))
             return false;
 
         *decltorList_cur = makeNode<DeclaratorListSyntax>(decltor);
@@ -603,14 +605,8 @@ bool Parser::parseStructDeclaration_AtDeclarator(
                 (*decltorList_cur)->delimTkIdx_ = consume();
                 break;
 
-            case SyntaxKind::SemicolonToken: {
-                auto memberDecl = makeNode<FieldDeclarationSyntax>();
-                decl = memberDecl;
-                memberDecl->semicolonTkIdx_ = consume();
-                memberDecl->specs_ = const_cast<SpecifierListSyntax*>(specList);
-                memberDecl->decltors_ = decltorList;
-                return true;
-            }
+            case SyntaxKind::SemicolonToken:
+                goto FieldsParsed;
 
             default:
                 diagReporter_.ExpectedFollowOfStructDeclarator();
@@ -619,6 +615,14 @@ bool Parser::parseStructDeclaration_AtDeclarator(
 
         decltorList_cur = &(*decltorList_cur)->next;
     }
+
+FieldsParsed:
+    auto membDecl = makeNode<FieldDeclarationSyntax>();
+    decl = membDecl;
+    membDecl->semicolonTkIdx_ = consume();
+    membDecl->specs_ = const_cast<SpecifierListSyntax*>(specList);
+    membDecl->decltors_ = decltorList;
+    return true;
 }
 
 /**
@@ -650,10 +654,10 @@ bool Parser::parseStructDeclaration(DeclarationSyntax*& decl)
                 skipTo(SyntaxKind::SemicolonToken);
                 return false;
             }
-            if (!parseDeclaration_AtFollowOfSpecifiers(
-                            decl,
-                            specList,
-                            &Parser::parseStructDeclaration_AtDeclarator)) {
+            if (!parseDeclarationOrStructDeclaration_AtFollowOfSpecifiers(
+                        decl,
+                        specList,
+                        &Parser::parseStructDeclaration_AtDeclarator)) {
                 return false;
             }
             if (extKwTkIdx != LexedTokens::invalidIndex()) {
@@ -876,7 +880,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;
-    if (!parseDeclarationSpecifiers(decl, specList, DeclarationScope::FunctionPrototype))
+    if (!parseDeclarationSpecifiers(decl, specList, DeclarationContext::Parameter))
         return false;
 
     if (!specList) {
@@ -894,7 +898,7 @@ bool Parser::parseParameterDeclaration(ParameterDeclarationSyntax*& paramDecl)
     paramDecl->specs_ = specList;
 
     Backtracker BT(this);
-    if (!parseDeclarator(paramDecl->decltor_, DeclarationScope::FunctionPrototype)) {
+    if (!parseDeclarator(paramDecl->decltor_, DeclarationContext::Parameter)) {
         BT.backtrack();
         return parseAbstractDeclarator(paramDecl->decltor_);
     }
@@ -949,7 +953,7 @@ bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& 
 
     DeclarationSyntax* decl = nullptr;
     SpecifierListSyntax* specList = nullptr;
-    if (!parseDeclarationSpecifiers(decl, specList, DeclarationScope::Block))
+    if (!parseDeclarationSpecifiers(decl, specList, DeclarationContext::Unspecified))
         return false;
 
     paramDecl = makeNode<ExtKR_ParameterDeclarationSyntax>();
@@ -958,7 +962,7 @@ bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& 
     DeclaratorListSyntax** decltorList_cur = &paramDecl->decltors_;
     while (true) {
         DeclaratorSyntax* decltor = nullptr;
-        if (!parseDeclarator(decltor, DeclarationScope::FunctionPrototype))
+        if (!parseDeclarator(decltor, DeclarationContext::Parameter))
             return false;
 
         *decltorList_cur = makeNode<DeclaratorListSyntax>(decltor);
@@ -995,7 +999,7 @@ bool Parser::parseExtKR_ParameterDeclaration(ExtKR_ParameterDeclarationSyntax*& 
  */
 bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
                                         SpecifierListSyntax*& specList,
-                                        DeclarationScope declScope)
+                                        DeclarationContext declCtx)
 {
     DBG_THIS_RULE();
 
@@ -1155,7 +1159,7 @@ bool Parser::parseDeclarationSpecifiers(DeclarationSyntax*& decl,
             case SyntaxKind::IdentifierToken: {
                 if (seenType)
                     return true;
-                if (guessRoleOfIdentifier(declScope) == IdentifierRole::AsDeclarator)
+                if (guessRoleOfIdentifier(declCtx) == IdentifierRole::Declarator)
                     return true;
                 seenType = true;
                 parseTypedefName_AtFirst(spec);
@@ -1579,21 +1583,21 @@ bool Parser::parseTagTypeSpecifier_AtFirst(
     DeclarationListSyntax** declList_cur = &tySpec->decls_;
 
     while (true) {
-        DeclarationSyntax* memberDecl = nullptr;
+        DeclarationSyntax* membDecl = nullptr;
         switch (peek().kind()) {
             case SyntaxKind::CloseBraceToken:
                 tySpec->closeBraceTkIdx_ = consume();
                 goto MembersParsed;
 
             default:
-                if (!((this)->*(parseMember))(memberDecl)) {
+                if (!((this)->*(parseMember))(membDecl)) {
                     ignoreMemberDeclaration();
                     if (peek().kind() == SyntaxKind::EndOfFile)
                         return false;
                 }
                 break;
         }
-        *declList_cur = makeNode<DeclarationListSyntax>(memberDecl);
+        *declList_cur = makeNode<DeclarationListSyntax>(membDecl);
         declList_cur = &(*declList_cur)->next;
     }
 
@@ -1860,21 +1864,21 @@ bool Parser::parseAbstractDeclarator(DeclaratorSyntax*& decltor)
     DBG_THIS_RULE();
 
     return parseDeclarator(decltor,
-                           DeclarationScope::FunctionPrototype,
-                           DeclaratorKind::Abstract);
+                           DeclarationContext::Parameter,
+                           DeclaratorForm::Abstract);
 }
 
 bool Parser::parseDeclarator(DeclaratorSyntax*& decltor,
-                             DeclarationScope declScope)
+                             DeclarationContext declCtx)
 {
     DBG_THIS_RULE();
 
-    return parseDeclarator(decltor, declScope, DeclaratorKind::Concrete);
+    return parseDeclarator(decltor, declCtx, DeclaratorForm::Concrete);
 }
 
 bool Parser::parseDeclarator(DeclaratorSyntax*& decltor,
-                             DeclarationScope declScope,
-                             DeclaratorKind decltorKind)
+                             DeclarationContext declCtx,
+                             DeclaratorForm decltorForm)
 
 {
     DBG_THIS_RULE();
@@ -1890,22 +1894,22 @@ bool Parser::parseDeclarator(DeclaratorSyntax*& decltor,
         ptrDecltor->asteriskTkIdx_ = consume();
         if (!parseTypeQualifiersAndAttributes(ptrDecltor->qualsAndAttrs_))
             return false;
-        return parseDeclarator(ptrDecltor->innerDecltor_, declScope, decltorKind);
+        return parseDeclarator(ptrDecltor->innerDecltor_, declCtx, decltorForm);
     }
 
-    return parseDirectDeclarator(decltor, declScope, decltorKind, attrList);
+    return parseDirectDeclarator(decltor, declCtx, decltorForm, attrList);
 }
 
 bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
-                                   DeclarationScope declScope,
-                                   DeclaratorKind decltorKind,
+                                   DeclarationContext declCtx,
+                                   DeclaratorForm decltorForm,
                                    SpecifierListSyntax* attrList)
 {
     DBG_THIS_RULE();
 
     switch (peek().kind()) {
         case SyntaxKind::IdentifierToken: {
-            if (decltorKind == DeclaratorKind::Abstract)
+            if (decltorForm == DeclaratorForm::Abstract)
                 return false;
 
             auto identDecltor = makeNode<IdentifierDeclaratorSyntax>();
@@ -1914,8 +1918,8 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
             identDecltor->attrs1_ = attrList;
             if (!parseDirectDeclaratorSuffix(
                         decltor,
-                        declScope,
-                        decltorKind,
+                        declCtx,
+                        decltorForm,
                         attrList,
                         identDecltor))
                 return false;
@@ -1948,15 +1952,15 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
         }
 
         case SyntaxKind::OpenParenToken: {
-            if (decltorKind == DeclaratorKind::Abstract) {
+            if (decltorForm == DeclaratorForm::Abstract) {
                 auto absDecltor = makeNode<AbstractDeclaratorSyntax>();
                 decltor = absDecltor;
                 absDecltor->attrs_ = attrList;
                 if (peek(2).kind() == SyntaxKind::CloseParenToken) {
                     if (!parseDirectDeclaratorSuffix(
                                 decltor,
-                                declScope,
-                                decltorKind,
+                                declCtx,
+                                decltorForm,
                                 attrList,
                                 absDecltor))
                         return false;
@@ -1971,8 +1975,8 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                         BT.backtrack();
                         if (!parseDirectDeclaratorSuffix(
                                     decltor,
-                                    declScope,
-                                    decltorKind,
+                                    declCtx,
+                                    decltorForm,
                                     attrList,
                                     absDecltor))
                             return false;
@@ -1987,8 +1991,8 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
                     parenDecltor->closeParenTkIdx_ = consume();
                     if (!parseDirectDeclaratorSuffix(
                                 decltor,
-                                declScope,
-                                decltorKind,
+                                declCtx,
+                                decltorForm,
                                 attrList,
                                 parenDecltor))
                         return false;
@@ -1998,11 +2002,11 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
 
             auto parenDecltor = makeNode<ParenthesizedDeclaratorSyntax>();
             parenDecltor->openParenTkIdx_ = consume();
-            if (!parseDeclarator(parenDecltor->innerDecltor_, declScope, decltorKind)
+            if (!parseDeclarator(parenDecltor->innerDecltor_, declCtx, decltorForm)
                     || !match(SyntaxKind::CloseParenToken, &parenDecltor->closeParenTkIdx_)
                     || !parseDirectDeclaratorSuffix(decltor,
-                                                    declScope,
-                                                    decltorKind,
+                                                    declCtx,
+                                                    decltorForm,
                                                     attrList,
                                                     parenDecltor))
                 return false;
@@ -2013,14 +2017,14 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
         }
 
         case SyntaxKind::OpenBracketToken:
-            if (decltorKind == DeclaratorKind::Abstract) {
+            if (decltorForm == DeclaratorForm::Abstract) {
                 auto absDecltor = makeNode<AbstractDeclaratorSyntax>();
                 decltor = absDecltor;
                 absDecltor->attrs_ = attrList;
                 if (!parseDirectDeclaratorSuffix(
                             decltor,
-                            declScope,
-                            decltorKind,
+                            declCtx,
+                            decltorForm,
                             attrList,
                             absDecltor))
                     return false;
@@ -2030,8 +2034,8 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
             return false;
 
         case SyntaxKind::ColonToken:
-            if (decltorKind == DeclaratorKind::Concrete
-                    && declScope == DeclarationScope::Block) {
+            if (decltorForm == DeclaratorForm::Concrete
+                    && declCtx == DeclarationContext::StructOrUnion) {
                 auto bitFldDecltor = makeNode<BitfieldDeclaratorSyntax>();
                 decltor = bitFldDecltor;
                 bitFldDecltor->colonTkIdx_ = consume();
@@ -2042,7 +2046,7 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
             [[fallthrough]];
 
         default: {
-            if (decltorKind == DeclaratorKind::Abstract) {
+            if (decltorForm == DeclaratorForm::Abstract) {
                 auto absDecltor = makeNode<AbstractDeclaratorSyntax>();
                 decltor = absDecltor;
                 absDecltor->attrs_ = attrList;
@@ -2054,8 +2058,8 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
     }
 
     if (peek().kind() == SyntaxKind::ColonToken
-            && decltorKind == DeclaratorKind::Concrete
-            && declScope == DeclarationScope::Block) {
+            && decltorForm == DeclaratorForm::Concrete
+            && declCtx == DeclarationContext::StructOrUnion) {
         auto bitFldDecltor = makeNode<BitfieldDeclaratorSyntax>();
         bitFldDecltor->innerDecltor_ = decltor;
         decltor = bitFldDecltor;
@@ -2084,14 +2088,14 @@ bool Parser::parseDirectDeclarator(DeclaratorSyntax*& decltor,
  * \remark 6.7.6
  */
 bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
-                                         DeclarationScope declScope,
-                                         DeclaratorKind decltorKind,
+                                         DeclarationContext declCtx,
+                                         DeclaratorForm decltorForm,
                                          SpecifierListSyntax* attrList,
                                          DeclaratorSyntax* innerDecltor)
 {
     auto validateContext =
-            [this, declScope] (void (Parser::DiagnosticsReporter::*report)()) {
-                if (declScope != DeclarationScope::FunctionPrototype) {
+            [this, declCtx] (void (Parser::DiagnosticsReporter::*report)()) {
+                if (declCtx != DeclarationContext::Parameter) {
                     ((diagReporter_).*(report))();
                     skipTo(SyntaxKind::CloseBracketToken);
                     return false;
@@ -2248,8 +2252,8 @@ bool Parser::parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
         case SyntaxKind::OpenBracketToken: {
             innerDecltor = decltor;
             return parseDirectDeclaratorSuffix(decltor,
-                                               declScope,
-                                               decltorKind,
+                                               declCtx,
+                                               decltorForm,
                                                nullptr,
                                                innerDecltor);
         }

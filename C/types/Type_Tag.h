@@ -47,9 +47,16 @@ public:
     TagTypeKind kind() const;
 
     /**
-     * The \a tag Identifier of \c this TagType.
+     * The \a tag of \c this TagType, if it isn't untagged.
+     *
+     * \sa isUntagged
      */
     const Identifier* tag() const;
+
+    /**
+     * Whether \c this TagType is untagged (i.e. its tag is empty).
+     */
+    bool isUntagged() const;
 
     /**
      * The \a declaration of \c this TagType, if one exists.

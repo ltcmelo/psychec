@@ -41,6 +41,12 @@ struct TagType::TagTypeImpl : TypeImpl
     const TagTypeDeclarationSymbol* tagTyDecl_;
 };
 
+TagType::TagType(TagTypeKind tagTyK, const Identifier* tag)
+    : Type(new TagTypeImpl(tagTyK, tag))
+{
+    P->F_.tagTyK_ = static_cast<std::uint32_t>(tagTyK);
+}
+
 TagTypeKind TagType::kind() const
 {
     return TagTypeKind(P->F_.tagTyK_);
@@ -51,10 +57,9 @@ const Identifier* TagType::tag() const
     return P_CAST->tag_;
 }
 
-TagType::TagType(TagTypeKind tagTyK, const Identifier* tag)
-    : Type(new TagTypeImpl(tagTyK, tag))
+bool TagType::isUntagged() const
 {
-    P->F_.tagTyK_ = static_cast<std::uint32_t>(tagTyK);
+    return P_CAST->tag_->valueText()[0] == '#';
 }
 
 const TagTypeDeclarationSymbol* TagType::declaration() const

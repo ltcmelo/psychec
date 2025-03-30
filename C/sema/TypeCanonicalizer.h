@@ -74,12 +74,14 @@ private:
 
     const Type* canonicalize(const Type* ty, const Scope* scope);
 
+    void canonicalizeAnonymousFields(FieldDeclarationSymbol* fldDecl);
+
     //--------------//
     // Declarations //
     //--------------//
-
     virtual Action visitTranslationUnit(const TranslationUnitSyntax*) override;
     virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) override;
+    virtual Action visitFieldDeclaration(const FieldDeclarationSyntax*) override;
 
     /* Specifiers */
     virtual Action visitTagTypeSpecifier(const TagTypeSpecifierSyntax*) override;

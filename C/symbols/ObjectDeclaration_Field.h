@@ -43,6 +43,8 @@ public:
     virtual const FieldDeclarationSymbol* asFieldDeclaration() const override { return this; }
     //!@}
 
+    bool isAnonymousStructureOrUnion() const;
+
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 

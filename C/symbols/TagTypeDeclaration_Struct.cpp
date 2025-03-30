@@ -60,7 +60,8 @@ std::ostream& operator<<(std::ostream& os, const StructDeclarationSymbol* strukt
     os << "<Struct |";
     os << " type:" << strukt->introducedNewType();
     os << " scope:" << strukt->enclosingScope()->kind();
-    os << "  " << strukt->enclosingScope();
+    for (const auto& m : strukt->members())
+        os << " member:" << m;
     os << ">";
     return os;
 }

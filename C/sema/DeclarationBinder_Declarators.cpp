@@ -120,9 +120,7 @@ SyntaxVisitor::Action DeclarationBinder::visit_AtMultipleDeclarators_COMMON(
                 return Action::Quit;
         }
         popTypesUntilNonDerivedDeclaratorType();
-        popDeclaration();
-        SCOPE_AT_TOP(auto scope, Action::Quit);
-        scope->addDeclaration(decl);
+        finishDeclaration();
     }
     return ((this)->*(visit_AtEnd))(node);
 }
@@ -146,12 +144,50 @@ SyntaxVisitor::Action DeclarationBinder::visitVariableAndOrFunctionDeclaration_A
                 &DeclarationBinder::visitVariableAndOrFunctionDeclaration_AtEnd);
 }
 
-SyntaxVisitor::Action DeclarationBinder::visitFieldDeclaration_AtDeclarators(const FieldDeclarationSyntax* node)
+void DeclarationBinder::bindAnonymousFieldDeclaration(const SyntaxNode* node)
 {
+    DECL_AT_TOP(auto decl, );
+    PSY_ASSERT_2(decl->kind() == SymbolKind::UnionDeclaration
+                     || decl->kind() == SymbolKind::StructDeclaration,
+                 return);
+    auto tagTyDecl = decl->asTagTypeDeclaration();
+    auto fldDecl = bindDeclaration<FieldDeclarationSymbol>(node);
+    tagTyDecl->addMember(fldDecl);
+    nameDeclarationAtTop(tree_->findIdentifier("", 0));
+}
+
+SyntaxVisitor::Action DeclarationBinder::visitFieldDeclaration_AtDeclarators(
+        const FieldDeclarationSyntax* node)
+{
+    if (!node->declarators()) {
+        TY_AT_TOP(auto ty, Action::Quit);
+        PSY_ASSERT_2(ty->kind() == TypeKind::Tag, return Action::Quit);
+        auto tagTy = ty->asTagType();
+        if (tagTy->isUntagged()) {
+            bindAnonymousFieldDeclaration(node);
+            typeDeclarationAtTopWithTypeAtTop();
+            popTypesUntilNonDerivedDeclaratorType();
+            finishDeclaration();
+            return visitFieldDeclaration_AtEnd(node);
+        }
+    }
+
     return visit_AtMultipleDeclarators_COMMON(
                 node,
                 &DeclarationBinder::visitFieldDeclaration_AtEnd);
 }
+
+SyntaxVisitor::Action DeclarationBinder::visitBitfieldDeclarator(
+        const BitfieldDeclaratorSyntax* node)
+{
+    if (node->innerDeclarator())
+        VISIT(node->innerDeclarator());
+    else
+        bindAnonymousFieldDeclaration(node);
+
+    return Action::Skip;
+}
+
 
 SyntaxVisitor::Action DeclarationBinder::visitEnumeratorDeclaration_AtDeclaratorLike(
         const EnumeratorDeclarationSyntax* node)
@@ -162,7 +198,7 @@ SyntaxVisitor::Action DeclarationBinder::visitEnumeratorDeclaration_AtDeclarator
     auto enumeratorDecl = bindDeclaration<EnumeratorDeclarationSymbol>(node);
     auto tagTyDecl = decl->asTagTypeDeclaration();
     tagTyDecl->addMember(enumeratorDecl);
-    nameDeclarationAtTop(identifier(node->identifierToken()));
+    nameDeclarationAtTop(obtainName(node->identifierToken()));
     typeDeclarationAtTopWithTypeAtTop();
     return visitEnumeratorDeclaration_AtEnd(node);
 }
@@ -290,27 +326,10 @@ SyntaxVisitor::Action DeclarationBinder::visitPointerDeclarator(const PointerDec
     return Action::Skip;
 }
 
-SyntaxVisitor::Action DeclarationBinder::visitParenthesizedDeclarator(const ParenthesizedDeclaratorSyntax* node)
+SyntaxVisitor::Action DeclarationBinder::visitParenthesizedDeclarator(
+        const ParenthesizedDeclaratorSyntax* node)
 {
     VISIT(node->innerDeclarator());
-
-    return Action::Skip;
-}
-
-SyntaxVisitor::Action DeclarationBinder::visitBitfieldDeclarator(const BitfieldDeclaratorSyntax* node)
-{
-    if (node->innerDeclarator())
-        VISIT(node->innerDeclarator());
-    else {
-        DECL_AT_TOP(auto decl, Action::Quit);
-        PSY_ASSERT_2(decl->kind() == SymbolKind::UnionDeclaration
-                         || decl->kind() == SymbolKind::StructDeclaration,
-                     return Action::Quit);
-        auto fldDecl = bindDeclaration<FieldDeclarationSymbol>(node);
-        auto tagTyDecl = decl->asTagTypeDeclaration();
-        tagTyDecl->addMember(fldDecl);
-        nameDeclarationAtTop(tree_->findIdentifier("", 0));
-    }
 
     return Action::Skip;
 }
@@ -448,26 +467,26 @@ SyntaxVisitor::Action DeclarationBinder::visitIdentifierDeclarator(const Identif
     VISIT(node->attributes());
 
     if (F_.inTydefDecltor_) {
-        auto ident = identifier(node->identifierToken());
-        auto tydefNameTy = makeType<TypedefNameType>(ident);
+        auto name = obtainName(node->identifierToken());
+        auto tydefNameTy = makeType<TypedefNameType>(name);
         auto decl = bindDeclaration<TypedefDeclarationSymbol>(node, tydefNameTy);
 
-        if (ident == ptrdiff_t_)
+        if (name == ptrdiff_t_)
             semaModel_->set_ptrdiff_t_typedef(decl);
-        else if (ident == size_t_)
+        else if (name == size_t_)
             semaModel_->set_size_t_typedef(decl);
-        else if (ident == max_align_t_)
+        else if (name == max_align_t_)
             semaModel_->set_max_align_t_typedef(decl);
-        else if (ident == wchar_t_)
+        else if (name == wchar_t_)
             semaModel_->set_wchar_t_typedef(decl);
-        else if (ident == char16_t_)
+        else if (name == char16_t_)
             semaModel_->set_char16_t_typedef(decl);
-        else if (ident == char32_t_)
+        else if (name == char32_t_)
             semaModel_->set_char32_t_typedef(decl);
     }
     else {
         handleNonTypedefDeclarator(node);
-        nameDeclarationAtTop(identifier(node->identifierToken()));
+        nameDeclarationAtTop(obtainName(node->identifierToken()));
     }
 
     VISIT(node->attributes_PostIdentifier());

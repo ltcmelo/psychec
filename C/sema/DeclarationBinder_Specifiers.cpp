@@ -39,7 +39,7 @@ using namespace psy;
 using namespace C;
 
 template <class TyDeclT>
-SyntaxVisitor::Action DeclarationBinder::visitTagDeclaration_AtInternalDeclarations_COMMON(
+SyntaxVisitor::Action DeclarationBinder::visitTagDeclaration_AtMemberDeclarations(
         const TyDeclT* node,
         Action (DeclarationBinder::*visit_AtEnd)(const TyDeclT*))
 {
@@ -55,14 +55,14 @@ SyntaxVisitor::Action DeclarationBinder::visitStructOrUnionDeclaration_AtSpecifi
         case SyntaxKind::StructTypeSpecifier: {
             auto tagTy = makeType<TagType>(
                         TagTypeKind::Struct,
-                        identifier(tySpec->tagToken()));
+                        obtainTag(tySpec->tagToken()));
             bindDeclaration<StructDeclarationSymbol>(node, tagTy);
             break;
         }
         case SyntaxKind::UnionTypeSpecifier:{
             auto tagTy = makeType<TagType>(
                         TagTypeKind::Union,
-                        identifier(tySpec->tagToken()));
+                        obtainTag(tySpec->tagToken()));
             bindDeclaration<UnionDeclarationSymbol>(node, tagTy);
             break;
         }
@@ -71,7 +71,7 @@ SyntaxVisitor::Action DeclarationBinder::visitStructOrUnionDeclaration_AtSpecifi
             return Action::Quit;
     }
 
-    return visitTagDeclaration_AtInternalDeclarations_COMMON(
+    return visitTagDeclaration_AtMemberDeclarations(
                 node,
                 &DeclarationBinder::visitStructOrUnionDeclaration_AtEnd);
 }
@@ -80,10 +80,10 @@ SyntaxVisitor::Action DeclarationBinder::visitEnumDeclaration_AtSpecifier(const 
 {
     auto tagTy = makeType<TagType>(
                 TagTypeKind::Enum,
-                identifier(node->typeSpec_->tagToken()));
+                obtainTag(node->typeSpec_->tagToken()));
     bindDeclaration<EnumDeclarationSymbol>(node, tagTy);
 
-    return visitTagDeclaration_AtInternalDeclarations_COMMON(
+    return visitTagDeclaration_AtMemberDeclarations(
                 node,
                 &DeclarationBinder::visitEnumDeclaration_AtEnd);
 }
@@ -435,7 +435,7 @@ SyntaxVisitor::Action DeclarationBinder::visitTagTypeSpecifier(const TagTypeSpec
                 PSY_ASSERT_1(false);
                 return Action::Quit;
         }
-        pushType(makeType<TagType>(tagTyK, identifier(node->tagToken())));
+        pushType(makeType<TagType>(tagTyK, obtainTag(node->tagToken())));
     }
 
     VISIT(node->attributes());
@@ -461,19 +461,19 @@ SyntaxVisitor::Action DeclarationBinder::visitTagDeclarationAsSpecifier(
         case SyntaxKind::StructTypeSpecifier:
             tagTy = makeType<TagType>(
                         TagTypeKind::Struct,
-                        identifier(tySpec->tagToken()));
+                        obtainKnownTag(tySpec->tagToken()));
             break;
 
         case SyntaxKind::UnionTypeSpecifier:
             tagTy = makeType<TagType>(
                         TagTypeKind::Union,
-                        identifier(tySpec->tagToken()));
+                        obtainKnownTag(tySpec->tagToken()));
             break;
 
         case SyntaxKind::EnumTypeSpecifier:
             tagTy = makeType<TagType>(
                         TagTypeKind::Enum,
-                        identifier(tySpec->tagToken()));
+                        obtainKnownTag(tySpec->tagToken()));
             break;
 
         default:
@@ -488,7 +488,7 @@ SyntaxVisitor::Action DeclarationBinder::visitTagDeclarationAsSpecifier(
 SyntaxVisitor::Action DeclarationBinder::visitTypedefName(const TypedefNameSyntax* node)
 {
     if (tys_.empty())
-        pushType(makeType<TypedefNameType>(identifier(node->identifierToken())));
+        pushType(makeType<TypedefNameType>(obtainName(node->identifierToken())));
 
     return Action::Skip;
 }

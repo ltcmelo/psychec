@@ -243,19 +243,14 @@ private:
     };
     friend struct DepthControl;
 
-    /**
-     * \brief The scope of a declaration.
-     *
-     * \remark 6.2.1-4
-     */
-    enum class DeclarationScope : uint8_t
+    enum class DeclarationContext : uint8_t
     {
-        File,
-        Block,
-        FunctionPrototype
+        Unspecified,
+        StructOrUnion,
+        Parameter,
     };
 
-    enum class DeclaratorKind : uint8_t
+    enum class DeclaratorForm : uint8_t
     {
         Concrete,
         Abstract
@@ -263,8 +258,8 @@ private:
 
     enum class IdentifierRole : uint8_t
     {
-        AsDeclarator,
-        AsTypedefName
+        Declarator,
+        TypedefName
     };
 
     enum class StatementContext : uint8_t
@@ -284,20 +279,15 @@ private:
     //--------------//
     void parseTranslationUnit(TranslationUnitSyntax*& unit);
     bool parseExternalDeclaration(DeclarationSyntax*& decl);
-    void parseIncompleteDeclaration_AtFirst(DeclarationSyntax*& decl,
-                                            const SpecifierListSyntax* specList = nullptr);
+    void parseIncompleteDeclaration_AtFirst(
+            DeclarationSyntax*& decl,
+            const SpecifierListSyntax* specList = nullptr);
     bool parseStaticAssertDeclaration_AtFirst(DeclarationSyntax*& decl);
     bool parseExtGNU_AsmStatementDeclaration_AtFirst(DeclarationSyntax*& decl);
     bool parseDeclaration(
             DeclarationSyntax*& decl,
             bool (Parser::*parse_AtDeclarator)(DeclarationSyntax*&, const SpecifierListSyntax*),
-            DeclarationScope declScope);
-    bool parseDeclaration_AtFollowOfSpecifiers(
-            DeclarationSyntax*& decl,
-            SpecifierListSyntax*& specList,
-            bool (Parser::*parse_AtDeclarator)(
-                DeclarationSyntax*&,
-                const SpecifierListSyntax*));
+            DeclarationContext declCtx);
     bool parseDeclarationOrFunctionDefinition(DeclarationSyntax*& decl);
     bool parseDeclarationOrFunctionDefinition_AtDeclarator(
             DeclarationSyntax*& decl,
@@ -307,6 +297,12 @@ private:
             const SpecifierListSyntax* specList,
             DeclaratorSyntax*& decltor,
             ExtKR_ParameterDeclarationListSyntax* paramKRList);
+    bool parseDeclarationOrStructDeclaration_AtFollowOfSpecifiers(
+            DeclarationSyntax*& decl,
+            SpecifierListSyntax*& specList,
+            bool (Parser::*parse_AtDeclarator)(
+                DeclarationSyntax*&,
+                const SpecifierListSyntax*));
     bool parseStructDeclaration(DeclarationSyntax*& decl);
     bool parseStructDeclaration_AtDeclarator(
             DeclarationSyntax*& decl,
@@ -328,7 +324,7 @@ private:
     bool parseDeclarationSpecifiers(
             DeclarationSyntax*& decl,
             SpecifierListSyntax*& specList,
-            DeclarationScope declScope);
+            DeclarationContext declCtx);
     bool parseSpecifierQualifierList(
             DeclarationSyntax*& decl,
             SpecifierListSyntax*& specList);
@@ -355,21 +351,21 @@ private:
     bool parseExtGNU_AsmLabel_AtFirst(SpecifierSyntax*& attr);
     bool parseExtPSY_QuantifiedTypeSpecifier_AtFirst(SpecifierSyntax*& spec);
 
-    IdentifierRole guessRoleOfIdentifier(DeclarationScope declScope) const;
+    IdentifierRole guessRoleOfIdentifier(DeclarationContext declCtx) const;
 
     /* Declarators */
     bool parseAbstractDeclarator(DeclaratorSyntax*& decltor);
-    bool parseDeclarator(DeclaratorSyntax*& decltor, DeclarationScope declScope);
+    bool parseDeclarator(DeclaratorSyntax*& decltor, DeclarationContext declCtx);
     bool parseDeclarator(DeclaratorSyntax*& decltor,
-                         DeclarationScope declScope,
-                         DeclaratorKind decltorKind);
+                         DeclarationContext declCtx,
+                         DeclaratorForm decltorForm);
     bool parseDirectDeclarator(DeclaratorSyntax*& decltor,
-                               DeclarationScope declScope,
-                               DeclaratorKind decltorKind,
+                               DeclarationContext declCtx,
+                               DeclaratorForm decltorForm,
                                SpecifierListSyntax* attrList);
     bool parseDirectDeclaratorSuffix(DeclaratorSyntax*& decltor,
-                                     DeclarationScope declScope,
-                                     DeclaratorKind decltorKind,
+                                     DeclarationContext declCtx,
+                                     DeclaratorForm decltorForm,
                                      SpecifierListSyntax* attrList,
                                      DeclaratorSyntax* innerDecltor);
     bool parseTypeQualifiersAndAttributes(SpecifierListSyntax*& specList);

@@ -636,9 +636,10 @@ bool typeMatches(const SemanticModel* semaModel,
                 DETAIL_MISMATCH("tag type mismatch");
                 return false;
             }
-            if (ty->asTagType()->tag()->valueText() != t.ident_) {
+            if (ty->asTagType()->tag()->valueText() != t.ident_
+                    && !(ty->asTagType()->tag()->valueText()[0] == '#'
+                         && t.ident_ == "")) {
                 DETAIL_MISMATCH("tag mismatch");
-                std::cout << "the type: " << ty << std::endl;
                 return false;
             }
             break;

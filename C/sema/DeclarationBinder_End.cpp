@@ -41,19 +41,24 @@ using namespace C;
 SyntaxVisitor::Action DeclarationBinder::visitStructOrUnionDeclaration_AtEnd(
         const StructOrUnionDeclarationSyntax* node)
 {
-    return visit_AtEnd_COMMON(node);
+    finishDeclaration();
+
+    return Action::Skip;
 }
 
 SyntaxVisitor::Action DeclarationBinder::visitEnumDeclaration_AtEnd(
         const EnumDeclarationSyntax* node)
 {
-    return visit_AtEnd_COMMON(node);
+    finishDeclaration();
+
+    return Action::Skip;
 }
 
 SyntaxVisitor::Action DeclarationBinder::visitTypedefDeclaration_AtEnd(
         const TypedefDeclarationSyntax* node)
 {
     popType();
+
     return Action::Skip;
 }
 
@@ -61,6 +66,7 @@ SyntaxVisitor::Action DeclarationBinder::visitVariableAndOrFunctionDeclaration_A
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
     popType();
+
     return Action::Skip;
 }
 
@@ -68,40 +74,32 @@ SyntaxVisitor::Action DeclarationBinder::visitFieldDeclaration_AtEnd(
         const FieldDeclarationSyntax* node)
 {
     popType();
+
     return Action::Skip;
 }
 
 SyntaxVisitor::Action DeclarationBinder::visitEnumeratorDeclaration_AtEnd(
         const EnumeratorDeclarationSyntax* node)
 {
+    finishDeclaration();
     popType();
-    return visit_AtEnd_COMMON(node);
+
+    return Action::Skip;
 }
 
 SyntaxVisitor::Action DeclarationBinder::visitParameterDeclaration_AtEnd(
         const ParameterDeclarationSyntax* node)
 {
-    return visit_AtEnd_COMMON(node);
-}
-
-template <class NodeT>
-SyntaxVisitor::Action DeclarationBinder::visit_AtEnd_COMMON(const NodeT* node)
-{
-    auto decl = popDeclaration();
-    PSY_ASSERT_2(decl, return Action::Quit);
-    SCOPE_AT_TOP(auto scope, Action::Quit);
-    scope->addDeclaration(decl->asDeclaration());
+    finishDeclaration();
+    popType();
 
     return Action::Skip;
 }
 
-SyntaxVisitor::Action DeclarationBinder::visitFunctionDefinition_AtEnd(const FunctionDefinitionSyntax* node)
+SyntaxVisitor::Action DeclarationBinder::visitFunctionDefinition_AtEnd(
+        const FunctionDefinitionSyntax* node)
 {
-    auto decl = popDeclaration();
-    PSY_ASSERT_2(decl, return Action::Quit);
-    SCOPE_AT_TOP(auto scope, Action::Quit);
-    scope->addDeclaration(decl);
-
+    finishDeclaration();
     popType();
 
     /*
@@ -112,7 +110,7 @@ SyntaxVisitor::Action DeclarationBinder::visitFunctionDefinition_AtEnd(const Fun
      */
     pushStashedScope();
     VALID_TOP(scopes_, return Action::Quit);
-    scope = scopes_.top();
+    auto scope = scopes_.top();
     scope->morphFrom_FunctionPrototype_to_Block();
     VISIT(node->body()->statements());
     popScope();
@@ -122,6 +120,8 @@ SyntaxVisitor::Action DeclarationBinder::visitFunctionDefinition_AtEnd(const Fun
 
 SyntaxVisitor::Action DeclarationBinder::visitTypeName_AtEnd(const TypeNameSyntax* node)
 {
+    finishDeclaration();
     popType();
-    return visit_AtEnd_COMMON(node);
+
+    return Action::Skip;
 }

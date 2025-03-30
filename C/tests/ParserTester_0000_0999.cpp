@@ -3606,7 +3606,8 @@ void ParserTester::case0446()
           Expectation().AST({ SyntaxKind::TranslationUnit,
                               SyntaxKind::StructDeclaration,
                               SyntaxKind::StructTypeSpecifier,
-                              SyntaxKind::StructDeclaration,
+                              SyntaxKind::FieldDeclaration,
+                              SyntaxKind::TagDeclarationAsSpecifier,
                               SyntaxKind::StructTypeSpecifier,
                               SyntaxKind::FieldDeclaration,
                               SyntaxKind::BasicTypeSpecifier,
@@ -3615,7 +3616,16 @@ void ParserTester::case0446()
 
 void ParserTester::case0447()
 {
-
+    parse("struct x { struct { int z ; } ; } ;",
+          Expectation().AST({ SyntaxKind::TranslationUnit,
+                              SyntaxKind::StructDeclaration,
+                              SyntaxKind::StructTypeSpecifier,
+                              SyntaxKind::FieldDeclaration,
+                              SyntaxKind::TagDeclarationAsSpecifier,
+                              SyntaxKind::StructTypeSpecifier,
+                              SyntaxKind::FieldDeclaration,
+                              SyntaxKind::BasicTypeSpecifier,
+                              SyntaxKind::IdentifierDeclarator }));
 }
 
 void ParserTester::case0448()

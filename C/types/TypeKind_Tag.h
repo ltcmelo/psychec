@@ -39,6 +39,11 @@ enum class PSY_C_API TagTypeKind : std::uint8_t
     Enum
 };
 
+PSY_C_API inline bool isStructureOrUnionTypeKind(TagTypeKind tagTyK)
+{
+    return tagTyK == TagTypeKind::Struct || tagTyK == TagTypeKind::Union;
+}
+
 PSY_C_API inline std::ostream& operator<<(std::ostream& os, TagTypeKind tagTyK)
 {
     switch (tagTyK) {

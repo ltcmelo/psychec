@@ -40,6 +40,13 @@ FieldDeclarationSymbol::FieldDeclarationSymbol(
                               enclosingScope)
 {}
 
+bool FieldDeclarationSymbol::isAnonymousStructureOrUnion() const
+{
+    return name()->asIdentifier()->valueText() == ""
+            && type()->kind() == TypeKind::Tag
+            && type()->asTagType()->isUntagged();
+}
+
 namespace psy {
 namespace C {
 

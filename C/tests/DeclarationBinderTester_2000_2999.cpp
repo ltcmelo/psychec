@@ -217,20 +217,218 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Member("z", MemberDeclarationCategory::Field)
-                     .ty_.Tag("x", TagTypeKind::Struct)));
+            .declaration(
+                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("x", TagTypeKind::Struct))
+            .declaration(
+                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+         );
 }
 
-void DeclarationBinderTester::case2014(){ }
-void DeclarationBinderTester::case2015(){ }
-void DeclarationBinderTester::case2016(){ }
-void DeclarationBinderTester::case2017(){ }
-void DeclarationBinderTester::case2018(){ }
-void DeclarationBinderTester::case2019(){ }
-void DeclarationBinderTester::case2020(){ }
-void DeclarationBinderTester::case2021(){ }
-void DeclarationBinderTester::case2022(){ }
-void DeclarationBinderTester::case2023(){ }
+void DeclarationBinderTester::case2014()
+{
+    bind(R"(
+struct s
+{
+    struct x { int y ; } z ;
+};
+         )",
+         Expectation()
+            .declaration(
+                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("x", TagTypeKind::Struct))
+            .declaration(
+                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+         );
+}
+
+void DeclarationBinderTester::case2015()
+{
+    bind(R"(
+struct x
+{
+    struct { int y ; } z ;
+};
+         )",
+         Expectation()
+            .declaration(Decl().Member("z", MemberDeclarationCategory::Field)
+                     .ty_.Tag("", TagTypeKind::Struct)));
+}
+
+void DeclarationBinderTester::case2016()
+{
+    bind(R"(
+struct
+{
+    struct { int y ; } z ;
+};
+         )",
+         Expectation()
+            .declaration(
+                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+            .declaration(
+                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+         );
+}
+
+void DeclarationBinderTester::case2017()
+{
+    bind(R"(
+struct
+{
+    struct
+    {
+         struct
+         {
+             int x ;
+         } y ;
+    } ;
+};
+         )",
+         Expectation()
+            .declaration(
+                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+            .declaration(
+                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+         );
+}
+
+void DeclarationBinderTester::case2018()
+{
+    bind(R"(
+struct
+{
+    struct
+    {
+         struct
+         {
+             int x ;
+         } y ;
+    } z ;
+};
+         )",
+         Expectation()
+            .declaration(
+                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+            .declaration(
+                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+            .declaration(
+                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+         );
+}
+
+void DeclarationBinderTester::case2019()
+{
+    bind(R"(
+struct
+{
+    struct w
+    {
+         struct { int x ; } y ;
+    } z ;
+};
+         )",
+         Expectation()
+            .declaration(
+                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+            .declaration(
+                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+            .declaration(
+                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("w", TagTypeKind::Struct))
+         );
+}
+
+void DeclarationBinderTester::case2020()
+{
+    bind(R"(
+struct
+{
+    struct w
+    {
+         struct s { int x ; } y ;
+    } z ;
+};
+         )",
+         Expectation()
+            .declaration(
+                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("s", TagTypeKind::Struct))
+            .declaration(
+                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+            .declaration(
+                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("w", TagTypeKind::Struct))
+         );
+}
+
+void DeclarationBinderTester::case2021()
+{
+    bind(R"(
+struct
+{
+    struct w
+    {
+         struct s
+         {
+             int x ;
+         } y ;
+    } z ;
+} _ ;
+         )",
+         Expectation()
+            .declaration(
+                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("s", TagTypeKind::Struct))
+            .declaration(
+                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+            .declaration(
+                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("w", TagTypeKind::Struct))
+         );
+}
+
+void DeclarationBinderTester::case2022()
+{
+    bind(R"(
+struct
+{
+    struct
+    {
+         struct s
+         {
+             int x ;
+         } y ;
+    } z ;
+} _ ;
+         )",
+         Expectation()
+            .declaration(
+                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("s", TagTypeKind::Struct))
+            .declaration(
+                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+            .declaration(
+                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+         );
+}
+
+void DeclarationBinderTester::case2023()
+{
+    bind(R"(
+struct
+{
+    struct
+    {
+         struct
+         {
+             int x ;
+         } y ;
+    } z ;
+} _ ;
+         )",
+         Expectation()
+            .declaration(
+                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+            .declaration(
+                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+            .declaration(
+                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+         );
+}
+
 void DeclarationBinderTester::case2024(){ }
 void DeclarationBinderTester::case2025(){ }
 void DeclarationBinderTester::case2026(){ }
@@ -280,7 +478,7 @@ void DeclarationBinderTester::case2052()
 {
     bind("struct { const x ; } ;",
          Expectation().diagnostic(
-             Expectation::ErrorOrWarn::Error,
+             Expectation::ErrorOrWarn::Warn,
              DeclarationBinder::DiagnosticsReporter::ID_of_UselessDeclaration));
 }
 

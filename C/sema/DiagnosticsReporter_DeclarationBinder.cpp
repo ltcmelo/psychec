@@ -50,7 +50,7 @@ void DeclarationBinder::DiagnosticsReporter::UselessDeclaration(SyntaxToken tk)
                  ID_of_UselessDeclaration,
                  "[[useless declaration]]",
                  "declaration does not declare anything",
-                 DiagnosticSeverity::Error,
+                 DiagnosticSeverity::Warning,
                  DiagnosticCategory::Binding),
              tk);
 }

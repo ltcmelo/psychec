@@ -119,6 +119,34 @@ const Type* TypeChecker::unqualifiedAndResolved(const Type* ty)
     } while (true);
 }
 
+bool TypeChecker::isAssignable(const SyntaxNode* node, const Type* ty)
+{
+    switch (ty->kind()) {
+        case TypeKind::Qualified:
+            diagReporter_.CannotAssignToExpressionOfConstQualifiedType(node->lastToken());
+            return false;
+        case TypeKind::TypedefName:
+            return isAssignable(node, ty->asTypedefNameType()->resolvedSynonymizedType());
+        case TypeKind::Array:
+            diagReporter_.CannotAssignToExpressionOfArrayType(node->lastToken());
+            return false;
+        case TypeKind::Tag: {
+            auto tagTy = ty->asTagType();
+            auto tagTyDecl = tagTy->declaration();
+            if (!tagTyDecl)
+                return false;
+            for (const auto& membDecl : tagTyDecl->members()) {
+                auto membTy = membDecl->type();
+                if (!isAssignable(node, membTy))
+                    return false;
+            }
+            return true;
+        }
+        default:
+            return true;
+    }
+}
+
 SyntaxVisitor::Action TypeChecker::visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*)
 {
     return Action::Quit;
@@ -457,8 +485,12 @@ bool TypeChecker::typesAreCompatible(
                                 oneTy,
                                 otherTy->asTypedefNameType()->resolvedSynonymizedType(),
                                 treatVoidAsAny);
-                case TypeKind::Tag:
-                    break;
+                case TypeKind::Tag: {
+                    auto oneTagTy = oneTy->asTagType();
+                    auto otherTagTy = otherTy->asTagType();
+                    return oneTagTy->kind() == otherTagTy->kind()
+                            && oneTy->asTagType()->tag() == otherTy->asTagType()->tag();
+                }
                 case TypeKind::Void:
                     return treatVoidAsAny;
                 case TypeKind::Qualified:
@@ -804,7 +836,8 @@ SyntaxVisitor::Action TypeChecker::visitConstantExpression(const ConstantExpress
             ty_ = semaModel_->compilation()->canonicalBasicType(BasicTypeKind::Double);
             break;
         case Lexeme::LexemeKind::StringLiteral:
-            return visitStringLiteral(constantTk->asStringLiteral()->encodingPrefix());
+            ty_ = typeOfStringLiteral(constantTk->asStringLiteral()->encodingPrefix());
+            break;
         default:
             PSY_ASSERT_1(false);
             return Action::Quit;
@@ -816,31 +849,28 @@ SyntaxVisitor::Action TypeChecker::visitConstantExpression(const ConstantExpress
 SyntaxVisitor::Action TypeChecker::visitStringLiteralExpression(
         const StringLiteralExpressionSyntax* node)
 {
-    return visitStringLiteral(literalFrom(node)->encodingPrefix());
+    ty_ = typeOfStringLiteral(literalFrom(node)->encodingPrefix());
+
+    return Action::Skip;
 }
 
-SyntaxVisitor::Action TypeChecker::visitStringLiteral(
-        StringLiteral::EncodingPrefix encodingSuffix)
+const Type* TypeChecker::typeOfStringLiteral(StringLiteral::EncodingPrefix encodingSuffix)
 {
     switch (encodingSuffix) {
         case StringLiteral::EncodingPrefix::None:
-            ty_ = strLitTy_;
-            break;
+            return strLitTy_;
         case StringLiteral::EncodingPrefix::u8:
-            ty_ = u8StrLitTy_;
-            break;
+            return u8StrLitTy_;
         case StringLiteral::EncodingPrefix::u:
-            ty_ = uStrLitTy_;
-            break;
+            return uStrLitTy_;
         case StringLiteral::EncodingPrefix::U:
-            ty_ = UStrLitTy_;
-            break;
+            return UStrLitTy_;
         case StringLiteral::EncodingPrefix::L:
-            ty_ = LStrLitTy_;
-            break;
+            return LStrLitTy_;
+        default:
+            PSY_ASSERT_1(false);
+            return nullptr;
     }
-
-    return Action::Skip;
 }
 
 SyntaxVisitor::Action TypeChecker::visitParenthesizedExpression(
@@ -851,10 +881,34 @@ SyntaxVisitor::Action TypeChecker::visitParenthesizedExpression(
     return Action::Skip;
 }
 
-SyntaxVisitor::Action TypeChecker::visitGenericSelectionExpression(const GenericSelectionExpressionSyntax*) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker::visitGenericAssociation(const GenericAssociationSyntax*) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker::visitExtGNU_EnclosedCompoundStatementExpression(const ExtGNU_EnclosedCompoundStatementExpressionSyntax*) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker::visitExtGNU_ComplexValuedExpression(const ExtGNU_ComplexValuedExpressionSyntax*) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker::visitGenericSelectionExpression(
+        const GenericSelectionExpressionSyntax* node)
+{
+    VISIT_EXPR(node->expression());
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action TypeChecker::visitGenericAssociation(const GenericAssociationSyntax*)
+{
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action TypeChecker::visitExtGNU_EnclosedCompoundStatementExpression(
+        const ExtGNU_EnclosedCompoundStatementExpressionSyntax* node)
+{
+    visit(node->statement());
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action TypeChecker::visitExtGNU_ComplexValuedExpression(
+        const ExtGNU_ComplexValuedExpressionSyntax* node)
+{
+    VISIT_EXPR(node->expression());
+
+    return Action::Skip;
+}
 
 /* Operations */
 
@@ -865,44 +919,56 @@ SyntaxVisitor::Action TypeChecker::visitPrefixUnaryExpression(
 
     switch (node->operatorToken().kind()) {
         case SyntaxKind::PlusPlusToken:
-        case SyntaxKind::MinusMinusToken:
-            if (!(isRealType(ty_) || ty_->kind() == TypeKind::Pointer)) {
+        case SyntaxKind::MinusMinusToken: {
+            auto ty = unqualifiedAndResolved(ty_);
+            if (!(isRealType(ty) || ty->kind() == TypeKind::Pointer)) {
                 diagReporter_.InvalidOperator(node->operatorToken());
                 return Action::Quit;
             }
             break;
+        }
         case SyntaxKind::AmpersandToken: {
             std::unique_ptr<PointerType> ptrTy(new PointerType(ty_));
             ty_ = semaModel_->keepType(std::move(ptrTy));
             break;
         }
-        case SyntaxKind::AsteriskToken:
-            if (ty_->kind() != TypeKind::Pointer) {
+        case SyntaxKind::AsteriskToken: {
+            auto ty = unqualifiedAndResolved(ty_);
+            if (ty->kind() != TypeKind::Pointer) {
                 diagReporter_.ExpectedExpressionOfPointerType(node->lastToken());
                 return Action::Quit;
             }
-            ty_ = ty_->asPointerType()->referencedType();
+            ty_ = ty->asPointerType()->referencedType();
             break;
+        }
         case SyntaxKind::PlusToken:
-        case SyntaxKind::MinusToken:
-            if (!isArithmeticType(ty_)) {
+        case SyntaxKind::MinusToken: {
+            auto ty = unqualifiedAndResolved(ty_);
+            if (!isArithmeticType(ty)) {
                 diagReporter_.ExpectedExpressionOfArithmeticType(node->operatorToken());
                 return Action::Quit;
             }
             break;
-        case SyntaxKind::TildeToken:
-            if (!isIntegerType(ty_)) {
+        }
+        case SyntaxKind::TildeToken: {
+            auto ty = unqualifiedAndResolved(ty_);
+            if (!isIntegerType(ty)) {
                 diagReporter_.ExpectedExpressionOfIntegerType(node->operatorToken());
                 return Action::Quit;
             }
             break;
-        case SyntaxKind::ExclamationToken:
-            if (!isScalarType(ty_)) {
+        }
+        case SyntaxKind::ExclamationToken: {
+            auto ty = unqualifiedAndResolved(ty_);
+            if (!isScalarType(ty)) {
                 diagReporter_.ExpectedExpressionOfScalarType(node->operatorToken());
                 return Action::Quit;
             }
+            break;
+        }
         case SyntaxKind::AmpersandAmpersandToken:
             break;
+
         default:
             PSY_ASSERT_1(false);
             return Action::Quit;
@@ -918,12 +984,14 @@ SyntaxVisitor::Action TypeChecker::visitPostfixUnaryExpression(
 
     switch (node->operatorToken().kind()) {
         case SyntaxKind::PlusPlusToken:
-        case SyntaxKind::MinusMinusToken:
-            if (!(isRealType(ty_) || ty_->kind() == TypeKind::Pointer)) {
+        case SyntaxKind::MinusMinusToken: {
+            auto ty = unqualifiedAndResolved(ty_);
+            if (!(isRealType(ty) || ty->kind() == TypeKind::Pointer)) {
                 diagReporter_.InvalidOperator(node->operatorToken());
                 return Action::Quit;
             }
             break;
+        }
         default:
             PSY_ASSERT_1(false);
             return Action::Quit;
@@ -999,7 +1067,11 @@ SyntaxVisitor::Action TypeChecker::visitMemberAccessExpression(
     return Action::Skip;
 }
 
-SyntaxVisitor::Action TypeChecker::visitArraySubscriptExpression(const ArraySubscriptExpressionSyntax*) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker::visitArraySubscriptExpression(
+        const ArraySubscriptExpressionSyntax* node)
+{
+    return Action::Skip;
+}
 
 SyntaxVisitor::Action TypeChecker::visitTypeTraitExpression(
         const TypeTraitExpressionSyntax* node)
@@ -1226,7 +1298,115 @@ SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Logical(
 }
 
 SyntaxVisitor::Action TypeChecker::visitConditionalExpression(const ConditionalExpressionSyntax*) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker::visitAssignmentExpression(const AssignmentExpressionSyntax* node) { return Action::Skip; }
+
+SyntaxVisitor::Action TypeChecker::visitAssignmentExpression(
+        const AssignmentExpressionSyntax* node)
+{
+    VISIT_EXPR(node->left());
+    if (!isAssignable(node->left(), ty_))
+        return Action::Quit;
+    auto leftTy = unqualifiedAndResolved(ty_);
+    VISIT_EXPR(node->right());
+    auto rightTy = unqualifiedAndResolved(ty_);
+
+    switch (node->operatorToken().kind()) {
+        case SyntaxKind::EqualsToken:
+            return visitAssignmentExpression_Basic(node, leftTy, rightTy);
+        case SyntaxKind::AsteriskEqualsToken:
+            return visitAssignmentExpression_Multiply(node, leftTy, rightTy);
+        case SyntaxKind::SlashEqualsToken:
+            return visitAssignmentExpression_Divide(node, leftTy, rightTy);
+        case SyntaxKind::PercentEqualsToken:
+            return visitAssignmentExpression_Modulo(node, leftTy, rightTy);
+        case SyntaxKind::PlusEqualsToken:
+            return visitAssignmentExpression_Add(node, leftTy, rightTy);
+        case SyntaxKind::MinusEqualsToken:
+            return visitAssignmentExpression_Subtract(node, leftTy, rightTy);
+        case SyntaxKind::LessThanEqualsToken:
+            return visitAssignmentExpression_LeftShift(node, leftTy, rightTy);
+        case SyntaxKind::GreaterThanEqualsToken:
+            return visitAssignmentExpression_RightShift(node, leftTy, rightTy);
+        case SyntaxKind::AmpersandEqualsToken:
+            return visitAssignmentExpression_And(node, leftTy, rightTy);
+        case SyntaxKind::ExclamationEqualsToken:
+            return visitAssignmentExpression_Or(node, leftTy, rightTy);
+        case SyntaxKind::CaretEqualsToken:
+            return visitAssignmentExpression_ExclusiveOr(node, leftTy, rightTy);
+        default:
+            PSY_ASSERT_1(false);
+            return Action::Quit;
+    }
+
+    return Action::Skip;
+}
+
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Basic(
+        const AssignmentExpressionSyntax* node,
+        const Type* leftTy,
+        const Type* rightTy)
+{
+    if (!((isArithmeticType(leftTy) && isArithmeticType(rightTy))
+            || (isStructureOrUnionType(leftTy)
+                && typesAreCompatible(leftTy, rightTy, false))
+            || (leftTy->kind() == TypeKind::Pointer
+                && ((rightTy->kind() == TypeKind::Pointer
+                        && typesAreCompatible(
+                                leftTy->asPointerType()->referencedType(),
+                                rightTy->asPointerType()->referencedType(),
+                                true))
+                    || (rightTy->kind() == TypeKind::Basic
+                        && rightTy->asBasicType()->kind() == BasicTypeKind::Int_S
+                        && isNULLPointerConstant(node->right()))))
+            )) {
+        diagReporter_.IncompatibleTypesInAssignment(node->operatorToken());
+        return Action::Quit;
+    }
+    ty_ = leftTy;
+
+    return Action::Skip;
+}
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Multiply(
+        const AssignmentExpressionSyntax* node,
+        const Type* leftTy,
+        const Type* rightTy) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Divide(
+        const AssignmentExpressionSyntax* node,
+        const Type* leftTy,
+        const Type* rightTy) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Modulo(
+        const AssignmentExpressionSyntax* node,
+        const Type* leftTy,
+        const Type* rightTy) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Add(
+        const AssignmentExpressionSyntax* node,
+        const Type* leftTy,
+        const Type* rightTy) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Subtract(
+        const AssignmentExpressionSyntax* node,
+        const Type* leftTy,
+        const Type* rightTy) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_LeftShift(
+        const AssignmentExpressionSyntax* node,
+        const Type* leftTy,
+        const Type* rightTy) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_RightShift(
+        const AssignmentExpressionSyntax* node,
+        const Type* leftTy,
+        const Type* rightTy) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_And(
+        const AssignmentExpressionSyntax* node,
+        const Type* leftTy,
+        const Type* rightTy) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Or(
+        const AssignmentExpressionSyntax* node,
+        const Type* leftTy,
+        const Type* rightTy) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_ExclusiveOr(
+        const AssignmentExpressionSyntax* node,
+        const Type* leftTy,
+        const Type* rightTy) { return Action::Skip; }
+
+
 SyntaxVisitor::Action TypeChecker::visitSequencingExpression(const SequencingExpressionSyntax*) { return Action::Skip; }
 SyntaxVisitor::Action TypeChecker::visitExtGNU_ChooseExpression(const ExtGNU_ChooseExpressionSyntax*) { return Action::Skip; }
 
