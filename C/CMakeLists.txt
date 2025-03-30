@@ -172,6 +172,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclarationCategory.h
     ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Enum.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Enum.h
+    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_StructOrUnion.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_StructOrUnion.h
     ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Struct.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Struct.h
     ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Union.cpp

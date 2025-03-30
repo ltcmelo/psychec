@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2025 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,49 +18,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclaration__IMPL__.inc"
-#include "TagTypeDeclaration_Union.h"
+#include "TagTypeDeclaration_StructOrUnion.h"
 
-#include "sema/Scope.h"
 #include "symbols/Symbol_ALL.h"
-#include "syntax/Lexeme_Identifier.h"
-#include "types/Type_Tag.h"
 
-#include <iostream>
-#include <sstream>
+#include <algorithm>
+#include <iterator>
 
 using namespace psy;
 using namespace C;
 
-UnionDeclarationSymbol::UnionDeclarationSymbol(
+StructOrUnionDeclarationSymbol::StructOrUnionDeclarationSymbol(
+        SymbolKind symK,
         const Symbol* containingSym,
         const SyntaxTree* tree,
         const Scope* enclosingScope,
         TagType* tagTy)
-    : StructOrUnionDeclarationSymbol(
-          SymbolKind::UnionDeclaration,
-          containingSym,
-          tree,
-          enclosingScope,
-          tagTy)
+    : TagTypeDeclarationSymbol(
+              symK,
+              containingSym,
+              tree,
+              enclosingScope,
+              tagTy)
+{}
+
+StructOrUnionDeclarationSymbol::Fields StructOrUnionDeclarationSymbol::fields() const
 {
+    Fields fldDecls;
+    fldDecls.reserve(membDecls_.size());
+    std::transform(membDecls_.begin(),
+                   membDecls_.end(),
+                   std::back_inserter(fldDecls),
+                   [] (const MemberDeclarationSymbol* membDecl) {
+                       PSY_ASSERT_2(
+                           membDecl->kind() == SymbolKind::FieldDeclaration,
+                           continue);
+                       return membDecl->asFieldDeclaration();
+                   });
+    return fldDecls;
 }
 
-namespace psy {
-namespace C {
-
-std::ostream& operator<<(std::ostream& os, const UnionDeclarationSymbol* uniom)
+void StructOrUnionDeclarationSymbol::addField(const FieldDeclarationSymbol* fld)
 {
-    if (!uniom)
-        return os << "<Union is null>";
-    os << "<Union |";
-    os << " type:" << uniom->introducedNewType();
-    os << " scope:" << uniom->enclosingScope()->kind();
-    for (const auto& fld : uniom->fields())
-        os << " field:" << fld;
-    os << ">";
-    return os;
+    addMember(fld);
 }
-
-} // C
-} // psy

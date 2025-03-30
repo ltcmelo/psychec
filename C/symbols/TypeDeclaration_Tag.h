@@ -36,6 +36,8 @@ namespace C {
 class PSY_C_API TagTypeDeclarationSymbol : public TypeDeclarationSymbol
 {
 public:
+    using Members = std::vector<const MemberDeclarationSymbol*>;
+
     //!@{
     /**
      * Cast \c this Symbol as a TagTypeDeclarationSymbol.
@@ -55,11 +57,9 @@ public:
     const TagType* introducedNewType() const;
 
     /**
-     * The \a member of \c this TagTypeDeclarationSymbol with the given \c name.
+     * The \a member of \c this TagTypeDeclarationSymbol by the given \c name.
      */
     const MemberDeclarationSymbol* member(const Identifier* name) const;
-
-    using Members = std::vector<const MemberDeclarationSymbol*>;
 
     /**
      * The \a members of \c this TagTypeDeclarationSymbol.

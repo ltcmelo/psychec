@@ -37,17 +37,13 @@ StructDeclarationSymbol::StructDeclarationSymbol(
         const SyntaxTree* tree,
         const Scope* enclosingScope,
         TagType* tagTy)
-    : TagTypeDeclarationSymbol(SymbolKind::StructDeclaration,
-                               containingSym,
-                               tree,
-                               enclosingScope,
-                               tagTy)
+    : StructOrUnionDeclarationSymbol(
+          SymbolKind::StructDeclaration,
+          containingSym,
+          tree,
+          enclosingScope,
+          tagTy)
 {
-}
-
-void StructDeclarationSymbol::addField(const FieldDeclarationSymbol* fld)
-{
-    addMember(fld);
 }
 
 namespace psy {
@@ -60,8 +56,8 @@ std::ostream& operator<<(std::ostream& os, const StructDeclarationSymbol* strukt
     os << "<Struct |";
     os << " type:" << strukt->introducedNewType();
     os << " scope:" << strukt->enclosingScope()->kind();
-    for (const auto& m : strukt->members())
-        os << " member:" << m;
+    for (const auto& fld : strukt->fields())
+        os << " field:" << fld;
     os << ">";
     return os;
 }

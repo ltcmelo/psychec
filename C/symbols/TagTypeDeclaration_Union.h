@@ -18,15 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_UNION_H__
-#define PSYCHE_C_UNION_H__
+#ifndef PSYCHE_C_UNION_DECLARATION_H__
+#define PSYCHE_C_UNION_DECLARATION_H__
 
-#include "TypeDeclaration_Tag.h"
+#include "TagTypeDeclaration_StructOrUnion.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_API UnionDeclarationSymbol final : public TagTypeDeclarationSymbol
+/**
+ * \brief The UnionDeclarationSymbol class.
+ */
+class PSY_C_API UnionDeclarationSymbol final
+        : public StructOrUnionDeclarationSymbol
 {
 public:
     //!@{
@@ -45,8 +49,6 @@ PSY_INTERNAL:
             const SyntaxTree* tree,
             const Scope* enclosingScope,
             TagType* tagTy);
-
-    void addField(const FieldDeclarationSymbol* fld);
 };
 
 PSY_C_API std::ostream& operator<<(std::ostream& os, const UnionDeclarationSymbol* uniom);

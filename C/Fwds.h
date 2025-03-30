@@ -231,9 +231,10 @@ class VariableDeclarationSymbol;
 class ParameterDeclarationSymbol;
 class TypeDeclarationSymbol;
 class TagTypeDeclarationSymbol;
+class EnumDeclarationSymbol;
+class StructOrUnionDeclarationSymbol;
 class StructDeclarationSymbol;
 class UnionDeclarationSymbol;
-class EnumDeclarationSymbol;
 class TypedefDeclarationSymbol;
 
 //-------//
