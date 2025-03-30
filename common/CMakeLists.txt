@@ -53,14 +53,6 @@ set(COMMON_SOURCES
     ${PROJECT_SOURCE_DIR}/diagnostics/DiagnosticDescriptor.h
     ${PROJECT_SOURCE_DIR}/diagnostics/DiagnosticSeverity.cpp
     ${PROJECT_SOURCE_DIR}/diagnostics/DiagnosticSeverity.h
-
-    # Strings
-    ${PROJECT_SOURCE_DIR}/string_utils/case_conv.hpp
-    ${PROJECT_SOURCE_DIR}/string_utils/config.hpp
-    ${PROJECT_SOURCE_DIR}/string_utils/detail.hpp
-    ${PROJECT_SOURCE_DIR}/string_utils/predicate.hpp
-    ${PROJECT_SOURCE_DIR}/string_utils/string.hpp
-    ${PROJECT_SOURCE_DIR}/string_utils/trim.hpp
 )
 
 foreach(file ${COMMON_SOURCES})
