@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "ObjectDeclaration_Field.h"
+#include "MemberDeclaration_Field.h"
 
 #include "symbols/Symbol_ALL.h"
 #include "sema/Scope.h"

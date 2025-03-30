@@ -154,15 +154,15 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Type.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Type.h
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationCategory.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Enumerator.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Enumerator.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Field.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Field.h
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Parameter.cpp
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Parameter.h
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Variable.cpp
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Variable.h
     ${PROJECT_SOURCE_DIR}/symbols/MemberDeclarationCategory.h
+    ${PROJECT_SOURCE_DIR}/symbols/MemberDeclaration_Enumerator.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/MemberDeclaration_Enumerator.h
+    ${PROJECT_SOURCE_DIR}/symbols/MemberDeclaration_Field.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/MemberDeclaration_Field.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclarationCategory.h
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration__IMPL__.inc
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Tag.h
