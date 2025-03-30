@@ -115,7 +115,7 @@ PSY_C_API inline std::ostream& operator<<(std::ostream& os, BasicTypeKind basicT
 /**
  * \remark 6.2.5-4
  */
-inline bool PSY_C_API isSignedIntegerTypeKind(const BasicTypeKind& basicTyK)
+PSY_C_API inline bool isSignedIntegerTypeKind(const BasicTypeKind& basicTyK)
 {
     switch (basicTyK) {
         case BasicTypeKind::Char_S:
@@ -132,7 +132,7 @@ inline bool PSY_C_API isSignedIntegerTypeKind(const BasicTypeKind& basicTyK)
 /**
  * \remark 6.2.5-6
  */
-inline bool PSY_C_API isUnsignedIntegerTypeKind(const BasicTypeKind& basicTyK)
+PSY_C_API inline bool isUnsignedIntegerTypeKind(const BasicTypeKind& basicTyK)
 {
     switch (basicTyK) {
         case BasicTypeKind::Char_U:
@@ -150,7 +150,7 @@ inline bool PSY_C_API isUnsignedIntegerTypeKind(const BasicTypeKind& basicTyK)
 /**
  * \remark 6.2.5-17
  */
-inline bool PSY_C_API isIntegerTypeKind(const BasicTypeKind& basicTyK)
+PSY_C_API inline bool isIntegerTypeKind(const BasicTypeKind& basicTyK)
 {
     switch (basicTyK) {
         case BasicTypeKind::Char:
@@ -171,7 +171,7 @@ inline bool PSY_C_API isIntegerTypeKind(const BasicTypeKind& basicTyK)
     }
 }
 
-inline bool PSY_C_API isRealTypeKind(const BasicTypeKind& basicTyK)
+PSY_C_API inline bool isRealTypeKind(const BasicTypeKind& basicTyK)
 {
     switch (basicTyK) {
         case BasicTypeKind::Char_U:

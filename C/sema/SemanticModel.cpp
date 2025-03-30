@@ -25,6 +25,7 @@
 #include "sema/TypeCanonicalizer.h"
 #include "syntax/SyntaxNodes.h"
 #include "syntax/SyntaxUtilities.h"
+#include "syntax/Lexeme_Identifier.h"
 #include "symbols/Symbol_ALL.h"
 #include "types/Type_ALL.h"
 #include "../common/infra/Assertions.h"
@@ -56,9 +57,13 @@ struct SemanticModel::SemanticModelImpl
     std::unique_ptr<TranslationUnitSymbol> unit_;
     std::vector<std::unique_ptr<DeclarationSymbol>> decls_;
     std::unordered_map<const Type*, std::unique_ptr<Type>> tys_;
-    std::unordered_map<const SyntaxNode*, DeclarationSymbol*> declsBySyntax_; // bindings
+    std::unordered_map<const SyntaxNode*, DeclarationSymbol*> declsBySyntax_;
     std::unordered_set<std::unique_ptr<Scope>> scopes_;
     std::unordered_map<const SyntaxNode*, const Scope*> nodeScope_;
+
+    inline static const std::string syntheticTagPrefix_ = "#";
+    std::vector<std::pair<std::string, Identifier*>> syntheticTags_;
+
     const TypedefDeclarationSymbol* ptrdiff_t_Tydef_;
     const TypedefDeclarationSymbol* size_t_Tydef_;
     const TypedefDeclarationSymbol* max_align_t_Tydef_;
@@ -230,15 +235,24 @@ template <class VecT> VecT SemanticModel::fieldsFor_CORE(
         const FieldDeclarationSyntax* node,
         VecT&& decls)
 {
-    for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
-        auto decl = declarationBy(decltorIt->value);
-        if (!decl) {
-            PSY_ASSERT_1(!P->bindingIsOK_);
-            continue;
+    // Anonymous structure/union fields are bound to the field declaration
+    // syntax node while regular fields to the declarators syntax nodes.
+    auto it = P->declsBySyntax_.find(node);
+    if (it != P->declsBySyntax_.end()) {
+        auto decl = it->second->asDeclaration();
+        PSY_ASSERT_2(decl->kind() == SymbolKind::FieldDeclaration, return decls);
+        decls.push_back(decl->asFieldDeclaration());
+    }
+    else {
+        for (auto decltorIt = node->declarators(); decltorIt; decltorIt = decltorIt->next) {
+            auto decl = declarationBy(decltorIt->value);
+            if (!decl) {
+                PSY_ASSERT_1(!P->bindingIsOK_);
+                continue;
+            }
+            PSY_ASSERT_2(decl->kind() == SymbolKind::FieldDeclaration, continue);
+            decls.push_back(decl->asFieldDeclaration());
         }
-        PSY_ASSERT_2(decl->kind() == SymbolKind::FieldDeclaration, continue);
-        auto fldDecl = decl->asFieldDeclaration();
-        decls.push_back(fldDecl);
     }
     return std::move(decls);
 }
@@ -371,4 +385,16 @@ void SemanticModel::set_char16_t_typedef(const TypedefDeclarationSymbol* decl)
 void SemanticModel::set_char32_t_typedef(const TypedefDeclarationSymbol* decl)
 {
     P->char32_t_Tydef_ = decl;
+}
+
+const Identifier* SemanticModel::freshSyntheticTag()
+{
+    auto tag = P->syntheticTagPrefix_ + std::to_string(P->syntheticTags_.size());
+    std::pair<std::string, Identifier*> p(std::move(tag), nullptr);
+    P->syntheticTags_.emplace_back(std::move(p));
+    auto ident = new Identifier(
+                P->syntheticTags_.back().first.c_str(),
+                P->syntheticTags_.back().first.length());
+    P->syntheticTags_.back().second = ident;
+    return ident;
 }

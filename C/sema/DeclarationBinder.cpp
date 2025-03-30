@@ -123,6 +123,15 @@ DeclarationSymbol* DeclarationBinder::popDeclaration()
     return decl;
 }
 
+
+void DeclarationBinder::finishDeclaration()
+{
+    auto decl = popDeclaration();
+    PSY_ASSERT_2(decl, return);
+    SCOPE_AT_TOP(auto scope, );
+    scope->addDeclaration(decl->asDeclaration());
+}
+
 void DeclarationBinder::pushType(Type* ty)
 {
     DBG_TY_STACK(ty);
@@ -138,11 +147,32 @@ Type* DeclarationBinder::popType()
     return ty;
 }
 
-const Identifier* DeclarationBinder::identifier(const SyntaxToken& tk) const
+const Identifier* DeclarationBinder::obtainName(const SyntaxToken& tk) const
 {
     return tk.lexeme()
             ? tk.lexeme()->asIdentifier()
             : tree_->findIdentifier("", 0);
+}
+
+const Identifier* DeclarationBinder::obtainTag(const SyntaxToken& tk)
+{
+    if (tk.lexeme())
+        return tk.lexeme()->asIdentifier();
+    auto tag = semaModel_->freshSyntheticTag();
+    syntheticTags_.push(tag);
+    return tag;
+}
+
+const Identifier* DeclarationBinder::obtainKnownTag(const SyntaxToken& tk)
+{
+    if (tk.lexeme())
+        return tk.lexeme()->asIdentifier();
+    PSY_ASSERT_2(!syntheticTags_.empty()
+                    && syntheticTags_.top(),
+                 return nullptr);
+    auto actualTag = syntheticTags_.top();
+    syntheticTags_.pop();
+    return actualTag;
 }
 
 //--------------//

@@ -47,7 +47,9 @@ public:
     using TestFunction = std::pair<std::function<void(TypeCheckerTester*)>, const char*>;
 
     /*
-        + 0000-00049 -> member access
+        + 0000-0099 -> member access
+        + 0100-     -> postfix inc/dec
+        + 0500-0599 -> unary
      */
 
     void case0000();
@@ -111,6 +113,17 @@ public:
     void case0058();
     void case0059();
 
+    void case0100();
+    void case0101();
+    void case0102();
+    void case0103();
+    void case0104();
+    void case0105();
+    void case0106();
+    void case0107();
+    void case0108();
+    void case0109();
+
     void case0500();
     void case0501();
     void case0502();
@@ -171,6 +184,16 @@ public:
     void case0557();
     void case0558();
     void case0559();
+    void case0560();
+    void case0561();
+    void case0562();
+    void case0563();
+    void case0564();
+    void case0565();
+    void case0566();
+    void case0567();
+    void case0568();
+    void case0569();
 
     void case0700();
     void case0701();
@@ -296,6 +319,17 @@ public:
         TEST_DECLARATION_CHECKER(case0058),
         TEST_DECLARATION_CHECKER(case0059),
 
+        TEST_DECLARATION_CHECKER(case0100),
+        TEST_DECLARATION_CHECKER(case0101),
+        TEST_DECLARATION_CHECKER(case0102),
+        TEST_DECLARATION_CHECKER(case0103),
+        TEST_DECLARATION_CHECKER(case0104),
+        TEST_DECLARATION_CHECKER(case0105),
+        TEST_DECLARATION_CHECKER(case0106),
+        TEST_DECLARATION_CHECKER(case0107),
+        TEST_DECLARATION_CHECKER(case0108),
+        TEST_DECLARATION_CHECKER(case0109),
+
         TEST_DECLARATION_CHECKER(case0500),
         TEST_DECLARATION_CHECKER(case0501),
         TEST_DECLARATION_CHECKER(case0502),
@@ -356,6 +390,16 @@ public:
         TEST_DECLARATION_CHECKER(case0557),
         TEST_DECLARATION_CHECKER(case0558),
         TEST_DECLARATION_CHECKER(case0559),
+        TEST_DECLARATION_CHECKER(case0560),
+        TEST_DECLARATION_CHECKER(case0561),
+        TEST_DECLARATION_CHECKER(case0562),
+        TEST_DECLARATION_CHECKER(case0563),
+        TEST_DECLARATION_CHECKER(case0564),
+        TEST_DECLARATION_CHECKER(case0565),
+        TEST_DECLARATION_CHECKER(case0566),
+        TEST_DECLARATION_CHECKER(case0567),
+        TEST_DECLARATION_CHECKER(case0568),
+        TEST_DECLARATION_CHECKER(case0569),
 
         TEST_DECLARATION_CHECKER(case0700),
         TEST_DECLARATION_CHECKER(case0701),

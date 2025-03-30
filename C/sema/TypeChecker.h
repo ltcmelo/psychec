@@ -87,6 +87,10 @@ private:
         void ExpectedExpressionOfPointerToStructOrUnionType(SyntaxToken exprTk);
         void ExpectedExpression(SyntaxToken tk);
         void UnknownMemberOfTag(SyntaxToken tk);
+        void IncompatibleTypesInAssignment(SyntaxToken tk);
+        void CannotAssignToExpressionOfConstQualifiedType(SyntaxToken tk);
+        void CannotAssignToExpressionOfArrayType(SyntaxToken tk);
+        void ConversionBetweenIntegerAndPointerTypesInAssignment(SyntaxToken tk);
 
         static const std::string ID_of_InvalidOperator;
         static const std::string ID_of_ExpectedExpressionOfArithmeticType;
@@ -98,6 +102,10 @@ private:
         static const std::string ID_of_ExpectedExpressionOfPointerToStructOrUnionType;
         static const std::string ID_of_ExpectedExpression;
         static const std::string ID_of_UnknownMemberOfTag;
+        static const std::string ID_of_IncompatibleTypesInAssignment;
+        static const std::string ID_of_CannotAssignToExpressionOfConstQualifiedType;
+        static const std::string ID_of_CannotAssignToExpressionOfArrayType;
+        static const std::string ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment;
     };
     DiagnosticsReporter diagReporter_;
 
@@ -123,8 +131,6 @@ private:
     virtual Action visitGenericAssociation(const GenericAssociationSyntax*) override;
     virtual Action visitExtGNU_EnclosedCompoundStatementExpression(const ExtGNU_EnclosedCompoundStatementExpressionSyntax*) override;
     virtual Action visitExtGNU_ComplexValuedExpression(const ExtGNU_ComplexValuedExpressionSyntax*) override;
-
-    SyntaxVisitor::Action visitStringLiteral(StringLiteral::EncodingPrefix encodingSuffix);
 
     /* Operations */
     virtual Action visitPrefixUnaryExpression(const PrefixUnaryExpressionSyntax*) override;
@@ -181,6 +187,52 @@ private:
             const Type* leftTy,
             const Type* rightTy);
 
+    /* Assignments */
+    Action visitAssignmentExpression_Basic(
+            const AssignmentExpressionSyntax* node,
+            const Type* leftTy,
+            const Type* rightTy);
+    Action visitAssignmentExpression_Multiply(
+            const AssignmentExpressionSyntax* node,
+            const Type* leftTy,
+            const Type* rightTy);
+    Action visitAssignmentExpression_Divide(
+            const AssignmentExpressionSyntax* node,
+            const Type* leftTy,
+            const Type* rightTy);
+    Action visitAssignmentExpression_Modulo(
+            const AssignmentExpressionSyntax* node,
+            const Type* leftTy,
+            const Type* rightTy);
+    Action visitAssignmentExpression_Add(
+            const AssignmentExpressionSyntax* node,
+            const Type* leftTy,
+            const Type* rightTy);
+    Action visitAssignmentExpression_Subtract(
+            const AssignmentExpressionSyntax* node,
+            const Type* leftTy,
+            const Type* rightTy);
+    Action visitAssignmentExpression_LeftShift(
+            const AssignmentExpressionSyntax* node,
+            const Type* leftTy,
+            const Type* rightTy);
+    Action visitAssignmentExpression_RightShift(
+            const AssignmentExpressionSyntax* node,
+            const Type* leftTy,
+            const Type* rightTy);
+    Action visitAssignmentExpression_And(
+            const AssignmentExpressionSyntax* node,
+            const Type* leftTy,
+            const Type* rightTy);
+    Action visitAssignmentExpression_Or(
+            const AssignmentExpressionSyntax* node,
+            const Type* leftTy,
+            const Type* rightTy);
+    Action visitAssignmentExpression_ExclusiveOr(
+            const AssignmentExpressionSyntax* node,
+            const Type* leftTy,
+            const Type* rightTy);
+
     //------------//
     // Statements //
     //------------//
@@ -196,7 +248,8 @@ private:
     virtual Action visitTypeName(const TypeNameSyntax*) override;
 
     static const Type* unqualifiedAndResolved(const Type* ty);
-
+    bool isAssignable(const SyntaxNode* node, const Type* ty);
+    const Type* typeOfStringLiteral(StringLiteral::EncodingPrefix encodingSuffix);
     bool isNULLPointerConstant(const SyntaxNode* node);
     bool typesAreCompatible(const Type* oneTy,
                             const Type* otherTy,

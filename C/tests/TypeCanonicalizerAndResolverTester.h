@@ -86,6 +86,26 @@ public:
     void case0037();
     void case0038();
     void case0039();
+    void case0040();
+    void case0041();
+    void case0042();
+    void case0043();
+    void case0044();
+    void case0045();
+    void case0046();
+    void case0047();
+    void case0048();
+    void case0049();
+    void case0050();
+    void case0051();
+    void case0052();
+    void case0053();
+    void case0054();
+    void case0055();
+    void case0056();
+    void case0057();
+    void case0058();
+    void case0059();
 
     std::vector<TestFunction> tests_
     {
@@ -129,6 +149,26 @@ public:
         TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0037),
         TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0038),
         TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0039),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0040),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0041),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0042),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0043),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0044),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0045),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0046),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0047),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0048),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0049),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0050),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0051),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0052),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0053),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0054),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0055),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0056),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0057),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0058),
+        TEST_TYPE_CANONICALIZER_AND_RESOLVER(case0059),
     };
 };
 

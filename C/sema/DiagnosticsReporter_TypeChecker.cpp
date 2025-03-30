@@ -25,7 +25,7 @@
 using namespace psy;
 using namespace C;
 
-const std::string TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator = "TypeChecker-001";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator = "TypeChecker-000";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfArithmeticType = "TypeChecker-001";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfIntegerType = "TypeChecker-002";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfRealType = "TypeChecker-003";
@@ -35,6 +35,10 @@ const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfSt
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPointerToStructOrUnionType = "TypeChecker-007";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpression = "TypeChecker-008";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag = "TypeChecker-009";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment = "TypeChecker-010";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfConstQualifiedType = "TypeChecker-011";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfArrayType = "TypeChecker-012";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment = "TypeChecker-013";
 
 void TypeChecker::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
 {
@@ -143,6 +147,50 @@ void TypeChecker::DiagnosticsReporter::UnknownMemberOfTag(SyntaxToken tk)
                  "[[unknown member of tag]]",
                  "unknown member of tag",
                  DiagnosticSeverity::Error,
+                 DiagnosticCategory::TypeChecking),
+             tk);
+}
+
+void TypeChecker::DiagnosticsReporter::IncompatibleTypesInAssignment(SyntaxToken tk)
+{
+    diagnose(DiagnosticDescriptor(
+                 ID_of_IncompatibleTypesInAssignment,
+                 "[[incompatible types in assignment]]",
+                 "incompatible types in assignment",
+                 DiagnosticSeverity::Error,
+                 DiagnosticCategory::TypeChecking),
+             tk);
+}
+
+void TypeChecker::DiagnosticsReporter::CannotAssignToExpressionOfConstQualifiedType(SyntaxToken tk)
+{
+    diagnose(DiagnosticDescriptor(
+                 ID_of_CannotAssignToExpressionOfConstQualifiedType,
+                 "[[assignment to expression of const qualified type]]",
+                 "assignment to expression of const qualified type",
+                 DiagnosticSeverity::Error,
+                 DiagnosticCategory::TypeChecking),
+             tk);
+}
+
+void TypeChecker::DiagnosticsReporter::CannotAssignToExpressionOfArrayType(SyntaxToken tk)
+{
+    diagnose(DiagnosticDescriptor(
+                 ID_of_CannotAssignToExpressionOfArrayType,
+                 "[[assignment to expression of array type]]",
+                 "assignment to expression of array type",
+                 DiagnosticSeverity::Error,
+                 DiagnosticCategory::TypeChecking),
+             tk);
+}
+
+void TypeChecker::DiagnosticsReporter::ConversionBetweenIntegerAndPointerTypesInAssignment(SyntaxToken tk)
+{
+    diagnose(DiagnosticDescriptor(
+                 ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment,
+                 "[[conversion between integer and pointer types in assignment]]",
+                 "conversion between integer and pointer types in assignment",
+                 DiagnosticSeverity::Warning,
                  DiagnosticCategory::TypeChecking),
              tk);
 }

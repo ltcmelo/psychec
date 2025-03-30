@@ -55,14 +55,19 @@ public:
     const TagType* introducedNewType() const;
 
     /**
-     * The \a member \a declaration of \c this TagTypeDeclarationSymbol with the given \c name.
+     * The \a member of \c this TagTypeDeclarationSymbol with the given \c name.
      */
     const MemberDeclarationSymbol* member(const Identifier* name) const;
 
+    using Members = std::vector<const MemberDeclarationSymbol*>;
+
+    /**
+     * The \a members of \c this TagTypeDeclarationSymbol.
+     */
+    Members members() const;
+
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
-
-    std::vector<const MemberDeclarationSymbol*> membs_;
 
 protected:
     TagTypeDeclarationSymbol(
@@ -74,6 +79,7 @@ protected:
 
     virtual const Identifier* denotingIdentifier() const override;
 
+    Members membDecls_;
     void addMember(const MemberDeclarationSymbol* memb);
 };
 

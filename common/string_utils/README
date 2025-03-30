@@ -1,0 +1,54 @@
+Basic basic_string String Utils
+(Taken from https://github.com/ltcmelo/string_utils)
+
+Many C++ programmers think that the interface of the std::basic_string [1] class template could be
+a bit more elaborate. Some of them have created their own string utilities component. This is mine!
+
+This is not as fancy and as complete as the Boost String Algorithms Library. I provide only a few
+functions that I use more frequently. In addition, although my implementation is generic, it's not
+as generic as Boost's, since I assume that all string types are an instance of the std::basic_string
+class template. However, there might still be a couple of good reasons for you to use it.
+
+- If you're working only with ASCII [2], there are versions of the functions which accept any type
+that is an instance of std::basic_string parameterized by char and std::char_traits<char> as the
+first two template arguments (the allocator doesn't matter). These versions don't use C++
+localization structures, but a conversion table. This is usually faster because there are no calls
+to virtual functions from the standard facets. Of course, for any other character set, you can use
+versions that accept a std::locale object.
+
+- The other reason is simply if you're not using Boost in your application and you don't want to
+get the whole Boost Library just because of a few string algorithms.
+
+I keep the same interface (and headers) from the Boost String Algorithms Library. Below is what I
+have so far.
+
+Functions in header case_conv.hpp
+to_upper
+to_upper_copy
+to_lower
+to_lower_copy
+
+Functions in header trim.hpp
+trim_left
+trim_left_copy
+trim_right
+trim_right_copy
+trim
+trim_copy
+
+Functions in header predicate.hpp
+starts_with
+istarts_with
+ends_with
+iends_with
+contains
+icontains
+
+Header string.hpp includes all headers above.
+
+[1] For those who don't know, both std::string and std::wstring are instances of the
+std::basic_string class template.
+
+[2] I mean the actual 7-bit ASCII and not extensions of it like, for example, the ISO-8859-x series.
+
+Leandro T. C. Melo

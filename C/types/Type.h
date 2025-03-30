@@ -117,6 +117,11 @@ PSY_C_API bool isRealType(const Type* ty);
  */
 PSY_C_API bool isScalarType(const Type* ty);
 
+/**
+ * Return whether \a type \c ty is a \a structure or \a union \a type.
+ */
+PSY_C_API bool isStructureOrUnionType(const Type* ty);
+
 } // C
 } // psy
 

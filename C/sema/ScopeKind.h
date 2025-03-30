@@ -49,13 +49,13 @@ inline PSY_C_API std::ostream& operator<<(std::ostream& os, ScopeKind K)
 {
     switch (K) {
         case ScopeKind::File:
-            return os << "File";
+            return os << "<FileScopeKind>";
         case ScopeKind::Function:
-            return os << "Function";
+            return os << "<FunctionScopeKind>";
         case ScopeKind::FunctionPrototype:
-            return os << "FunctionPrototype";
+            return os << "<FunctionPrototypeScopeKind>";
         case ScopeKind::Block:
-            return os << "Block";
+            return os << "<BlockScopeKind>";
     }
     PSY_ASSERT_1(false);
     return os << "<invalid ScopeKind>";

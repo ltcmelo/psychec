@@ -69,15 +69,50 @@ SyntaxVisitor::Action TypeCanonicalizer::visitFunctionDefinition(const FunctionD
     return Action::Skip;
 }
 
+void TypeCanonicalizer::canonicalizeAnonymousFields(FieldDeclarationSymbol* fldDecl)
+{
+    auto canonTy = canonicalize(fldDecl->type(), fldDecl->enclosingScope());
+    fldDecl->setType(canonTy);
+
+    if (canonTy->kind() == TypeKind::Tag
+            && canonTy->asTagType()->isUntagged()) {
+        auto tagTyDecl = canonTy->asTagType()->declaration();
+        if (tagTyDecl) {
+            for (auto outerMembDecl : tagTyDecl->members()) {
+                PSY_ASSERT_2(outerMembDecl->kind() == SymbolKind::FieldDeclaration, return);
+                auto outerFldDecl = outerMembDecl->asFieldDeclaration();
+                canonicalizeAnonymousFields(
+                        const_cast<FieldDeclarationSymbol*>(outerFldDecl)->asFieldDeclaration());
+            }
+        }
+    }
+}
+
+SyntaxVisitor::Action TypeCanonicalizer::visitFieldDeclaration(
+        const FieldDeclarationSyntax* node)
+{
+    if (node->declarators())
+        return Action::Visit;
+
+    const auto& fldDecls = semaModel_->fieldsFor(node);
+    PSY_ASSERT_2(fldDecls.size() == 1, return Action::Quit);
+    auto fldDecl = fldDecls[0];
+    canonicalizeAnonymousFields(fldDecl);
+
+    return Action::Skip;
+}
+
 SyntaxVisitor::Action TypeCanonicalizer::visitTagTypeSpecifier(const TagTypeSpecifierSyntax* node)
 {
     tySpecNode_ = node;
-    return Action::Skip;
+
+    return Action::Visit;
 }
 
 SyntaxVisitor::Action TypeCanonicalizer::visitTypedefName(const TypedefNameSyntax* node)
 {
     tySpecNode_ = node;
+
     return Action::Skip;
 }
 
@@ -89,8 +124,8 @@ SyntaxVisitor::Action TypeCanonicalizer::visitDeclarator_COMMON(const Declarator
         case DeclarationCategory::Type: {
             PSY_ASSERT_2(decl->kind() == SymbolKind::TypedefDeclaration, return Action::Quit);
             auto tydefDecl = decl->asTypedefDeclaration();
-            auto resolvedTy = canonicalize(tydefDecl->synonymizedType(), decl->enclosingScope());
-            tydefDecl->setSynonymizedType(resolvedTy);
+            auto canonTy = canonicalize(tydefDecl->synonymizedType(), decl->enclosingScope());
+            tydefDecl->setSynonymizedType(canonTy);
             break;
         }
         case DeclarationCategory::Member:
@@ -99,8 +134,8 @@ SyntaxVisitor::Action TypeCanonicalizer::visitDeclarator_COMMON(const Declarator
             auto typeableDecl = MIXIN_TypeableDeclarationSymbol::from(decl);
             PSY_ASSERT_2(typeableDecl, return Action::Quit);
             auto ty = typeableDecl->type();
-            auto resolvedTy = canonicalize(ty, decl->enclosingScope());
-            typeableDecl->setType(resolvedTy);
+            auto canonTy = canonicalize(ty, decl->enclosingScope());
+            typeableDecl->setType(canonTy);
             break;
         }
     }
@@ -132,9 +167,9 @@ const Type* TypeCanonicalizer::canonicalize(const Type* ty, const Scope* scope)
         case TypeKind::Array: {
             auto arrTy = ty->asArrayType();
             auto elemTy = arrTy->elementType();
-            auto resolvedTy = canonicalize(elemTy, scope);
-            if (resolvedTy != elemTy) {
-                arrTy->resetElementType(resolvedTy);
+            auto canonTy = canonicalize(elemTy, scope);
+            if (canonTy != elemTy) {
+                arrTy->resetElementType(canonTy);
                 discardedTys_.insert(elemTy);
             }
             break;
@@ -142,21 +177,21 @@ const Type* TypeCanonicalizer::canonicalize(const Type* ty, const Scope* scope)
 
         case TypeKind::Basic: {
             auto basicTy = ty->asBasicType();
-            auto resolvedTy =
+            auto canonTy =
                 semaModel_->compilation()->canonicalBasicType(basicTy->kind());
-            if (resolvedTy != basicTy) {
+            if (canonTy != basicTy) {
                 discardedTys_.insert(ty);
-                return resolvedTy;
+                return canonTy;
             }
             break;
         }
 
         case TypeKind::Void: {
             auto voidTy = ty->asVoidType();
-            auto resolvedTy = semaModel_->compilation()->canonicalVoidType();
-            if (resolvedTy != voidTy) {
+            auto canonTy = semaModel_->compilation()->canonicalVoidType();
+            if (canonTy != voidTy) {
                 discardedTys_.insert(ty);
-                return resolvedTy;
+                return canonTy;
             }
             break;
         }
@@ -164,18 +199,18 @@ const Type* TypeCanonicalizer::canonicalize(const Type* ty, const Scope* scope)
         case TypeKind::Function: {
             auto funcTy = ty->asFunctionType();
             auto retTy = funcTy->returnType();
-            auto resolvedTy = canonicalize(retTy, scope);
-            if (resolvedTy != retTy) {
-                funcTy->setReturnType(resolvedTy);
+            auto canonTy = canonicalize(retTy, scope);
+            if (canonTy != retTy) {
+                funcTy->setReturnType(canonTy);
                 discardedTys_.insert(retTy);
             }
             const auto parms = funcTy->parameterTypes();
             const auto parmsSize = parms.size();
             for (FunctionType::ParameterTypes::size_type idx = 0; idx < parmsSize; ++idx) {
                 const Type* parmTy = parms[idx];
-                resolvedTy = canonicalize(parmTy, scope);
-                if (resolvedTy != parmTy) {
-                    funcTy->setParameterType(idx, resolvedTy);
+                canonTy = canonicalize(parmTy, scope);
+                if (canonTy != parmTy) {
+                    funcTy->setParameterType(idx, canonTy);
                     discardedTys_.insert(parmTy);
                 }
             }
@@ -185,9 +220,9 @@ const Type* TypeCanonicalizer::canonicalize(const Type* ty, const Scope* scope)
         case TypeKind::Pointer: {
             auto ptrTy = ty->asPointerType();
             auto refedTy = ptrTy->referencedType();
-            auto resolvedTy = canonicalize(refedTy, scope);
-            if (resolvedTy != refedTy) {
-                ptrTy->resetReferencedType(resolvedTy);
+            auto canonTy = canonicalize(refedTy, scope);
+            if (canonTy != refedTy) {
+                ptrTy->resetReferencedType(canonTy);
                 discardedTys_.insert(refedTy);
             }
             break;
@@ -240,7 +275,7 @@ const Type* TypeCanonicalizer::canonicalize(const Type* ty, const Scope* scope)
                 PSY_ASSERT_2(tagDecl->introducedNewType() != tagTy, return ty);
                 if (tagTy->kind() == tagDecl->introducedNewType()->kind()) {
                     discardedTys_.insert(tagTy);
-                    return tagDecl->introducedNewType();
+                    return canonicalize(tagDecl->introducedNewType(), scope);
                 }
                 //if (tree_->completeness() == TextCompleteness::Full)
                 diagReporter_.TagTypeDoesNotMatchTagDeclaration(tySpecNode_->lastToken());
@@ -254,12 +289,12 @@ const Type* TypeCanonicalizer::canonicalize(const Type* ty, const Scope* scope)
         case TypeKind::Qualified: {
             auto qualTy = ty->asQualifiedType();
             auto unqualTy = qualTy->unqualifiedType();
-            auto resolvedTy = canonicalize(unqualTy, scope);
-            if (resolvedTy != unqualTy) {
+            auto canonTy = canonicalize(unqualTy, scope);
+            if (canonTy != unqualTy) {
                 qualTy->resetUnqualifiedType(
-                        resolvedTy->kind() == TypeKind::Qualified
-                            ? resolvedTy->asQualifiedType()->unqualifiedType()
-                            : resolvedTy);
+                        canonTy->kind() == TypeKind::Qualified
+                            ? canonTy->asQualifiedType()->unqualifiedType()
+                            : canonTy);
                 discardedTys_.insert(unqualTy);
             }
             break;

@@ -74,12 +74,14 @@ private:
     TranslationUnitSymbol* unit_;
     std::stack<DeclarationSymbol*> decls_;
     Symbol* containingUnitOrDeclaration();
-    template <class DeclSymT, class... DeclSymTArgs> DeclSymT*
-        bindDeclaration(const SyntaxNode* node, DeclSymTArgs... arg);
     void pushDeclaration(DeclarationSymbol*);
     DeclarationSymbol* popDeclaration();
+    template <class DeclSymT, class... DeclSymTArgs>
+        DeclSymT* bindDeclaration(const SyntaxNode* node, DeclSymTArgs... arg);
+    void bindAnonymousFieldDeclaration(const SyntaxNode* node);
     void nameDeclarationAtTop(const Identifier* name);
     void typeDeclarationAtTopWithTypeAtTop();
+    void finishDeclaration();
     void handleNonTypedefDeclarator(const DeclaratorSyntax* node);
 
     using TypeStack = std::stack<Type*>;
@@ -143,7 +145,10 @@ private:
     };
     DiagnosticsReporter diagReporter_;
 
-    const Identifier* identifier(const SyntaxToken& tk) const;
+    std::stack<const Identifier*> syntheticTags_;
+    const Identifier* obtainTag(const SyntaxToken& tk);
+    const Identifier* obtainKnownTag(const SyntaxToken& tk);
+    const Identifier* obtainName(const SyntaxToken& tk) const;
 
     //--------------//
     // Declarations //
@@ -152,7 +157,7 @@ private:
     virtual Action visitIncompleteDeclaration(const IncompleteDeclarationSyntax*) override;
     virtual Action visitStaticAssertDeclaration(const StaticAssertDeclarationSyntax*) override;
 
-    template <class TyDeclT> Action visitTagDeclaration_AtInternalDeclarations_COMMON(
+    template <class TyDeclT> Action visitTagDeclaration_AtMemberDeclarations(
             const TyDeclT* node,
             Action (DeclarationBinder::*visit_AtEnd)(const TyDeclT*));
 
@@ -243,8 +248,6 @@ private:
         Action visit_AtSingleDeclarator_COMMON(
             const NodeT* node,
             Action (DeclarationBinder::*visit_AtEnd)(const NodeT*));
-    template <class NodeT>
-        Action visit_AtEnd_COMMON(const NodeT*);
 };
 
 template <class DeclSymT, class... DeclSymTArgs>

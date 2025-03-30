@@ -77,17 +77,39 @@ const Identifier* TagTypeDeclarationSymbol::denotingIdentifier() const
 
 void TagTypeDeclarationSymbol::addMember(const MemberDeclarationSymbol* memb)
 {
-    membs_.push_back(memb);
+    membDecls_.push_back(memb);
 }
 
 const MemberDeclarationSymbol* TagTypeDeclarationSymbol::member(const Identifier* name) const
 {
-    auto it = std::find_if(membs_.begin(),
-                           membs_.end(),
-                           [name] (const MemberDeclarationSymbol* memb) {
-                                return memb->name() == name;
+    auto it = std::find_if(membDecls_.begin(),
+                           membDecls_.end(),
+                           [name] (const MemberDeclarationSymbol* membDecl) {
+                                return membDecl->name() == name;
                            });
-    return it != membs_.end() ? *it : nullptr;
+    if (it != membDecls_.end())
+        return *it;
+
+    for (const auto membDecl : membDecls_) {
+        if (membDecl->kind() != SymbolKind::FieldDeclaration)
+            continue;
+        auto fldDecl = membDecl->asFieldDeclaration();
+        if (fldDecl->isAnonymousStructureOrUnion()) {
+            PSY_ASSERT_2(fldDecl->type()->kind() == TypeKind::Tag, continue);
+            auto tagTyDecl = fldDecl->type()->asTagType()->declaration();
+            if (!tagTyDecl)
+                continue;
+            auto innerMembDecl = tagTyDecl->member(name);
+            if (innerMembDecl)
+                return innerMembDecl;
+        }
+    }
+    return nullptr;
+}
+
+TagTypeDeclarationSymbol::Members TagTypeDeclarationSymbol::members() const
+{
+    return membDecls_;
 }
 
 const TagType* TagTypeDeclarationSymbol::introducedNewType() const

@@ -2447,9 +2447,6 @@ void DeclarationBinderTester::case0914()
 {
     CROSS_REFERENCE_TEST(ParserTester::case0406);
 
-    // Anonymous `struct' declaration without any variable declared
-    // with such type.
-
     bind("struct { int x ; } ;");
 }
 

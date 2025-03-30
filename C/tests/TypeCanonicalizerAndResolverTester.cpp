@@ -25,7 +25,7 @@
 using namespace psy;
 using namespace C;
 
-const std::string TypeCanonicalizerAndResolverTester::Name = "TYPE-RESOLVER";
+const std::string TypeCanonicalizerAndResolverTester::Name = "TYPE-CANONICALIZER-AND-RESOLVER";
 
 void TypeCanonicalizerAndResolverTester::testTypeCanonicalizerAndResolver()
 {
@@ -484,7 +484,6 @@ void TypeCanonicalizerAndResolverTester::case0027()
 void _ ( )
 {
     struct s x ;
-    x . m ;
 }
 )";
 
@@ -675,4 +674,103 @@ w p ;
                          .ty_.Tag("", TagTypeKind::Struct)));
 }
 
-void TypeCanonicalizerAndResolverTester::case0039(){}
+void TypeCanonicalizerAndResolverTester::case0039()
+{
+    auto s = R"(
+struct s { int m ; } ;
+void _ ( )
+{
+    struct s x ;
+}
+)";
+
+    canonicalizerAndResolveTypes(s, Expectation());
+}
+
+void TypeCanonicalizerAndResolverTester::case0040()
+{
+    auto s = R"(
+struct {
+    struct {
+        struct c {
+            const int m ;
+        } ;
+    } ;
+} ;
+void _ ()
+{
+    struct c x ;
+}
+)";
+
+    canonicalizerAndResolveTypes(s, Expectation());
+}
+
+void TypeCanonicalizerAndResolverTester::case0041()
+{
+    auto s = R"(
+struct s { struct t m ; } ;
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeCanonicalizer::DiagnosticsReporter::ID_of_TypeDeclarationNotFound));
+}
+
+void TypeCanonicalizerAndResolverTester::case0042()
+{
+    auto s = R"(
+struct {
+    struct {
+        struct s m ;
+    } ;
+} ;
+)";
+
+    canonicalizerAndResolveTypes(s,
+            Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeCanonicalizer::DiagnosticsReporter::ID_of_TypeDeclarationNotFound));
+}
+
+void TypeCanonicalizerAndResolverTester::case0043()
+{
+    auto s = R"(
+struct t { int _ ; } ;
+struct s { struct t m ; } ;
+)";
+
+    canonicalizerAndResolveTypes(s, Expectation());
+}
+
+void TypeCanonicalizerAndResolverTester::case0044()
+{
+    auto s = R"(
+struct s { int _ ; } ;
+struct {
+    struct {
+        struct s m ;
+    } ;
+} ;
+)";
+
+    canonicalizerAndResolveTypes(s, Expectation());
+}
+
+void TypeCanonicalizerAndResolverTester::case0045(){}
+void TypeCanonicalizerAndResolverTester::case0046(){}
+void TypeCanonicalizerAndResolverTester::case0047(){}
+void TypeCanonicalizerAndResolverTester::case0048(){}
+void TypeCanonicalizerAndResolverTester::case0049(){}
+void TypeCanonicalizerAndResolverTester::case0050(){}
+void TypeCanonicalizerAndResolverTester::case0051(){}
+void TypeCanonicalizerAndResolverTester::case0052(){}
+void TypeCanonicalizerAndResolverTester::case0053(){}
+void TypeCanonicalizerAndResolverTester::case0054(){}
+void TypeCanonicalizerAndResolverTester::case0055(){}
+void TypeCanonicalizerAndResolverTester::case0056(){}
+void TypeCanonicalizerAndResolverTester::case0057(){}
+void TypeCanonicalizerAndResolverTester::case0058(){}
+void TypeCanonicalizerAndResolverTester::case0059(){}
+

@@ -27,6 +27,7 @@
 #include "../common/infra/AccessSpecifiers.h"
 #include "../common/infra/Pimpl.h"
 
+#include <string>
 #include <vector>
 #include <functional>
 
@@ -225,6 +226,8 @@ PSY_INTERNAL:
     void set_wchar_t_typedef(const TypedefDeclarationSymbol*);
     void set_char16_t_typedef(const TypedefDeclarationSymbol*);
     void set_char32_t_typedef(const TypedefDeclarationSymbol*);
+
+    const Identifier* freshSyntheticTag();
 
 private:
     DECL_PIMPL(SemanticModel)

@@ -106,5 +106,12 @@ bool isScalarType(const Type* ty)
     return isArithmeticType(ty) || ty->kind() == TypeKind::Pointer;
 }
 
+bool isStructureOrUnionType(const Type* ty)
+{
+    PSY_ASSERT_2(ty, return false);
+    return ty->kind() == TypeKind::Tag
+            && isStructureOrUnionTypeKind(ty->asTagType()->kind());
+}
+
 } // C
 } // psy
