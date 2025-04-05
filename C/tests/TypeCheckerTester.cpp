@@ -605,21 +605,334 @@ void _ ( )
     checkTypes(s, Expectation());
 }
 
-void TypeCheckerTester::case0034(){}
-void TypeCheckerTester::case0035(){}
-void TypeCheckerTester::case0036(){}
-void TypeCheckerTester::case0037(){}
-void TypeCheckerTester::case0038(){}
-void TypeCheckerTester::case0039(){}
-void TypeCheckerTester::case0040(){}
-void TypeCheckerTester::case0041(){}
-void TypeCheckerTester::case0042(){}
-void TypeCheckerTester::case0043(){}
-void TypeCheckerTester::case0044(){}
-void TypeCheckerTester::case0045(){}
-void TypeCheckerTester::case0046(){}
-void TypeCheckerTester::case0047(){}
-void TypeCheckerTester::case0048(){}
+void TypeCheckerTester::case0034()
+{
+    auto s = R"(
+struct s {
+    struct {
+        struct {
+            const int m ;
+        } ;
+    } ;
+} ;
+void _ ()
+{
+    struct s x ;
+    x . m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+
+void TypeCheckerTester::case0035()
+{
+    auto s = R"(
+struct s {
+    struct {
+        struct {
+            const int m ;
+        } ;
+    } ;
+} ;
+void _ ()
+{
+    struct s * x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0036()
+{
+    auto s = R"(
+struct s {
+    struct {
+        struct {
+            const int m ;
+        } ;
+    } ;
+} ;
+void _ ()
+{
+    struct s x ;
+    x . n ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag));
+}
+
+void TypeCheckerTester::case0037()
+{
+    auto s = R"(
+struct s {
+    struct {
+        struct {
+            const int m ;
+            const double n ;
+        } ;
+    } ;
+} ;
+void _ ()
+{
+    struct s x ;
+    x . n ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0038()
+{
+    auto s = R"(
+struct s {
+    struct {
+        struct {
+            const int m ;
+        } ;
+        const double n ;
+    } ;
+} ;
+void _ ()
+{
+    struct s x ;
+    x . n ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0039()
+{
+    auto s = R"(
+struct s {
+    struct {
+        struct {
+            const int m ;
+        } ;
+    } ;
+    const double n ;
+} ;
+void _ ()
+{
+    struct s x ;
+    x . n ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+void TypeCheckerTester::case0040()
+{
+    auto s = R"(
+struct s {
+    union {
+        struct {
+           int i , j ;
+        } ;
+        struct {
+           long k , l ;
+        } w ;
+    } ;
+    int m ;
+} x ;
+
+void _ ()
+{
+    x . i ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0041()
+{
+    auto s = R"(
+struct {
+    union {
+        struct {
+           int i , j ;
+        } ;
+        struct {
+           long k , l ;
+        } w ;
+    } ;
+    int m ;
+} x ;
+
+void _ ()
+{
+    x . i ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+void TypeCheckerTester::case0042()
+{
+    auto s = R"(
+struct s { double m ; } x ;
+void _ ( )
+{
+    x . m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0043()
+{
+    auto s = R"(
+struct { double m ; } x ;
+void _ ( )
+{
+    x . m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0044()
+{
+    auto s = R"(
+struct s {
+    union {
+        struct {
+           int i , j ;
+        } ;
+        struct {
+           long k , l ;
+        } w ;
+    } ;
+    int m ;
+} x ;
+
+void _ ()
+{
+    x . w . k ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0045()
+{
+    auto s = R"(
+struct s {
+    union {
+        struct {
+           int i , j ;
+        } ;
+        struct {
+           long k , l ;
+        } w ;
+    } ;
+    int m ;
+} x ;
+
+void _ ()
+{
+    x . k ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag));
+}
+
+void TypeCheckerTester::case0046()
+{
+    auto s = R"(
+struct s {
+    struct {
+        struct {
+            struct {
+                const int m ;
+            } ;
+        } ;
+    } ;
+} ;
+void _ ()
+{
+    struct s * x ;
+    x -> m ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0047()
+{
+    auto s = R"(
+struct s {
+    struct {
+        struct {
+            struct {
+                const int m ;
+            } ;
+            struct {
+                const int n ;
+            } ;
+        } ;
+    } ;
+} ;
+void _ ()
+{
+    struct s * x ;
+    x -> m ;
+    x -> n ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0048()
+{
+    auto s = R"(
+struct s {
+    struct {
+        struct {
+            struct {
+                const int m ;
+            } ;
+            struct {
+                const int n ;
+            } ;
+        } ;
+        struct {
+            const int o ;
+        } ;
+    } ;
+} ;
+void _ ()
+{
+    struct s * x ;
+    x -> m ;
+    x -> n ;
+    x -> o ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
 void TypeCheckerTester::case0049(){}
 void TypeCheckerTester::case0050(){}
 void TypeCheckerTester::case0051(){}
@@ -2244,335 +2557,22 @@ void _ ()
                 TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfConstQualifiedType));
 }
 
-void TypeCheckerTester::case0733()
-{
-    auto s = R"(
-struct s {
-    struct {
-        struct {
-            const int m ;
-        } ;
-    } ;
-} ;
-void _ ()
-{
-    struct s x ;
-    x . m ;
-}
-)";
+void TypeCheckerTester::case0733(){}
+void TypeCheckerTester::case0734(){}
+void TypeCheckerTester::case0735(){}
+void TypeCheckerTester::case0736(){}
+void TypeCheckerTester::case0737(){}
+void TypeCheckerTester::case0738(){}
+void TypeCheckerTester::case0739(){}
+void TypeCheckerTester::case0740(){}
+void TypeCheckerTester::case0741(){}
 
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0734()
-{
-    auto s = R"(
-struct s {
-    struct {
-        struct {
-            const int m ;
-        } ;
-    } ;
-} ;
-void _ ()
-{
-    struct s * x ;
-    x -> m ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0735()
-{
-    auto s = R"(
-struct s {
-    struct {
-        struct {
-            const int m ;
-        } ;
-    } ;
-} ;
-void _ ()
-{
-    struct s x ;
-    x . n ;
-}
-)";
-
-    checkTypes(s,
-               Expectation()
-                   .diagnostic(Expectation::ErrorOrWarn::Error,
-                               TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag));
-}
-
-void TypeCheckerTester::case0736()
-{
-    auto s = R"(
-struct s {
-    struct {
-        struct {
-            const int m ;
-            const double n ;
-        } ;
-    } ;
-} ;
-void _ ()
-{
-    struct s x ;
-    x . n ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0737()
-{
-    auto s = R"(
-struct s {
-    struct {
-        struct {
-            const int m ;
-        } ;
-        const double n ;
-    } ;
-} ;
-void _ ()
-{
-    struct s x ;
-    x . n ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0738()
-{
-    auto s = R"(
-struct s {
-    struct {
-        struct {
-            const int m ;
-        } ;
-    } ;
-    const double n ;
-} ;
-void _ ()
-{
-    struct s x ;
-    x . n ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0739()
-{
-    auto s = R"(
-struct s {
-    union {
-        struct {
-           int i , j ;
-        } ;
-        struct {
-           long k , l ;
-        } w ;
-    } ;
-    int m ;
-} x ;
-
-void _ ()
-{
-    x . i ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0740()
-{
-    auto s = R"(
-struct {
-    union {
-        struct {
-           int i , j ;
-        } ;
-        struct {
-           long k , l ;
-        } w ;
-    } ;
-    int m ;
-} x ;
-
-void _ ()
-{
-    x . i ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0741()
-{
-    auto s = R"(
-struct s { double m ; } x ;
-void _ ( )
-{
-    x . m ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0742()
-{
-    auto s = R"(
-struct { double m ; } x ;
-void _ ( )
-{
-    x . m ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0743()
-{
-    auto s = R"(
-struct s {
-    union {
-        struct {
-           int i , j ;
-        } ;
-        struct {
-           long k , l ;
-        } w ;
-    } ;
-    int m ;
-} x ;
-
-void _ ()
-{
-    x . w . k ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0744()
-{
-    auto s = R"(
-struct s {
-    union {
-        struct {
-           int i , j ;
-        } ;
-        struct {
-           long k , l ;
-        } w ;
-    } ;
-    int m ;
-} x ;
-
-void _ ()
-{
-    x . k ;
-}
-)";
-
-    checkTypes(s,
-               Expectation()
-                   .diagnostic(Expectation::ErrorOrWarn::Error,
-                               TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag));
-}
-
-void TypeCheckerTester::case0745()
-{
-    auto s = R"(
-struct s {
-    struct {
-        struct {
-            struct {
-                const int m ;
-            } ;
-        } ;
-    } ;
-} ;
-void _ ()
-{
-    struct s * x ;
-    x -> m ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0746()
-{
-    auto s = R"(
-struct s {
-    struct {
-        struct {
-            struct {
-                const int m ;
-            } ;
-            struct {
-                const int n ;
-            } ;
-        } ;
-    } ;
-} ;
-void _ ()
-{
-    struct s * x ;
-    x -> m ;
-    x -> n ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
-void TypeCheckerTester::case0747()
-{
-    auto s = R"(
-struct s {
-    struct {
-        struct {
-            struct {
-                const int m ;
-            } ;
-            struct {
-                const int n ;
-            } ;
-        } ;
-        struct {
-            const int o ;
-        } ;
-    } ;
-} ;
-void _ ()
-{
-    struct s * x ;
-    x -> m ;
-    x -> n ;
-    x -> o ;
-}
-)";
-
-    checkTypes(s, Expectation());
-}
-
+void TypeCheckerTester::case0742(){}
+void TypeCheckerTester::case0743(){}
+void TypeCheckerTester::case0744(){}
+void TypeCheckerTester::case0745(){}
+void TypeCheckerTester::case0746(){}
+void TypeCheckerTester::case0747(){}
 void TypeCheckerTester::case0748(){}
 void TypeCheckerTester::case0749(){}
 void TypeCheckerTester::case0750(){}

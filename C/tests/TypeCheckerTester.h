@@ -50,6 +50,7 @@ public:
         + 0000-0099 -> member access
         + 0100-     -> postfix inc/dec
         + 0500-0599 -> unary
+        + 0700-0799 -> assignment
      */
 
     void case0000();
