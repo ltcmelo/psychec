@@ -18,46 +18,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TAG_TYPE_DECLARATION_CATEGORY_H__
-#define PSYCHE_C_TAG_TYPE_DECLARATION_CATEGORY_H__
+#include "TypeDeclaration__IMPL__.inc"
+#include "TagDeclaration_Enum.h"
 
-#include "API.h"
-#include "Fwds.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_Tag.h"
+#include "symbols/Symbol_ALL.h"
 
-#include "../common/infra/Assertions.h"
-
-#include <cstdint>
 #include <iostream>
-#include <string>
+#include <sstream>
+
+using namespace psy;
+using namespace C;
+
+EnumDeclarationSymbol::EnumDeclarationSymbol(
+        const Symbol* containingSym,
+        const SyntaxTree* tree,
+        const Scope* enclosingScope,
+        TagType* tagTy)
+    : TagDeclarationSymbol(SymbolKind::EnumDeclaration,
+                               containingSym,
+                               tree,
+                               enclosingScope,
+                               tagTy)
+{
+}
+
+void EnumDeclarationSymbol::addEnumerator(const EnumeratorDeclarationSymbol* enumerator)
+{
+    addMember(enumerator);
+}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The TagTypeDeclarationCategory enum.
- */
-enum class PSY_C_API TagTypeDeclarationCategory : std::uint8_t
+std::ostream& operator<<(std::ostream& os, const EnumDeclarationSymbol* enun)
 {
-    Struct,
-    Union,
-    Enum,
-};
-
-PSY_C_API inline std::ostream& operator<<(std::ostream& os, TagTypeDeclarationCategory tagTyDeclK)
-{
-    switch (tagTyDeclK) {
-        case TagTypeDeclarationCategory::Struct:
-            return os << "Struct";
-        case TagTypeDeclarationCategory::Union:
-            return os << "Union";
-        case TagTypeDeclarationCategory::Enum:
-            return os << "Enum";
-    }
-    PSY_ASSERT_1(false);
-    return os << "<invalid TagTypeDeclarationCategory>";
+    if (!enun)
+        return os << "<Enum is null>";
+    os << "<Enum | ";
+    os << "type:" << enun->introducedNewType();
+    os << ">";
+    return os;
 }
 
 } // C
 } // psy
-
-#endif

@@ -18,41 +18,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_OBJECT_DECLARATION_CATEGORY_H__
-#define PSYCHE_C_OBJECT_DECLARATION_CATEGORY_H__
+#ifndef PSYCHE_C_UNION_DECLARATION_H__
+#define PSYCHE_C_UNION_DECLARATION_H__
 
-#include "API.h"
-#include "Fwds.h"
-
-#include "../common/infra/Assertions.h"
-
-#include <cstdint>
-#include <iostream>
-#include <string>
+#include "TagDeclaration_StructOrUnion.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The ObjectDeclarationCategory enum.
+ * \brief The UnionDeclarationSymbol class.
  */
-enum class PSY_C_API ObjectDeclarationCategory : std::uint8_t
+class PSY_C_API UnionDeclarationSymbol final
+        : public StructOrUnionDeclarationSymbol
 {
-    Parameter,
-    Variable
+public:
+    //!@{
+    /**
+     * Cast \c this Symbol as a UnionDeclarationSymbol.
+     */
+    virtual UnionDeclarationSymbol* asUnionDeclaration() override { return this; }
+    virtual const UnionDeclarationSymbol* asUnionDeclaration() const override { return this; }
+    //!@}
+
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
+
+    UnionDeclarationSymbol(
+            const Symbol* containingSym,
+            const SyntaxTree* tree,
+            const Scope* enclosingScope,
+            TagType* tagTy);
 };
 
-PSY_C_API inline std::ostream& operator<<(std::ostream& os, ObjectDeclarationCategory objDeclK)
-{
-    switch (objDeclK) {
-        case ObjectDeclarationCategory::Parameter:
-            return os << "Parameter";
-        case ObjectDeclarationCategory::Variable:
-            return os << "Variable";
-    }
-    PSY_ASSERT_1(false);
-    return os << "<invalid ObjectDeclarationCategory>";
-}
+PSY_C_API std::ostream& operator<<(std::ostream& os, const UnionDeclarationSymbol* uniom);
 
 } // C
 } // psy

@@ -459,7 +459,6 @@ void SemanticModelTester::case0300()
     PSY_EXPECT_EQ_ENU(tyDeclNode->kind(), SyntaxKind::StructDeclaration, SyntaxKind);
     const StructDeclarationSymbol* strukt = semaModel->structFor(tyDeclNode->asStructOrUnionDeclaration());
     PSY_EXPECT_TRUE(strukt);
-    PSY_EXPECT_EQ_ENU(strukt->category(), TagTypeDeclarationCategory::Struct, TagTypeDeclarationCategory);
     PSY_EXPECT_EQ_STR(strukt->introducedNewType()->tag()->valueText(), "x");
 }
 
@@ -471,7 +470,6 @@ void SemanticModelTester::case0301()
     PSY_EXPECT_EQ_ENU(tyDeclNode->kind(), SyntaxKind::UnionDeclaration, SyntaxKind);
     const UnionDeclarationSymbol* uniom = semaModel->unionFor(tyDeclNode->asStructOrUnionDeclaration());
     PSY_EXPECT_TRUE(uniom);
-    PSY_EXPECT_EQ_ENU(uniom->category(), TagTypeDeclarationCategory::Union, TagTypeDeclarationCategory);
     PSY_EXPECT_EQ_STR(uniom->introducedNewType()->tag()->valueText(), "x");
 }
 
@@ -489,7 +487,6 @@ void SemanticModelTester::case0302()
 
     const StructDeclarationSymbol* strukt = semaModel->structFor(tyDeclNode->asStructOrUnionDeclaration());
     PSY_EXPECT_TRUE(strukt);
-    PSY_EXPECT_EQ_ENU(strukt->category(), TagTypeDeclarationCategory::Struct, TagTypeDeclarationCategory);
     PSY_EXPECT_EQ_STR(strukt->introducedNewType()->tag()->valueText(), "x");
 }
 
@@ -505,7 +502,6 @@ void SemanticModelTester::case0303()
 
     const StructDeclarationSymbol* strukt = semaModel->structFor(nestedtyDeclNode->asStructOrUnionDeclaration());
     PSY_EXPECT_TRUE(strukt);
-    PSY_EXPECT_EQ_ENU(strukt->category(), TagTypeDeclarationCategory::Struct, TagTypeDeclarationCategory);
     PSY_EXPECT_EQ_STR(strukt->introducedNewType()->tag()->valueText(), "y");
 }
 
@@ -536,7 +532,6 @@ struct x
     const StructDeclarationSymbol* strukt =
             semaModel->structFor(nestedNestedtyDeclNode->asStructOrUnionDeclaration());
     PSY_EXPECT_TRUE(strukt);
-    PSY_EXPECT_EQ_ENU(strukt->category(), TagTypeDeclarationCategory::Struct, TagTypeDeclarationCategory);
     PSY_EXPECT_EQ_STR(strukt->introducedNewType()->tag()->valueText(), "z");
 }
 
@@ -742,7 +737,6 @@ void SemanticModelTester::case0400()
 
     const EnumDeclarationSymbol* enun = semaModel->enumFor(enumDeclNode);
     PSY_EXPECT_TRUE(enun);
-    PSY_EXPECT_EQ_ENU(enun->category(), TagTypeDeclarationCategory::Enum, TagTypeDeclarationCategory);
     PSY_EXPECT_EQ_STR(enun->introducedNewType()->tag()->valueText(), "x");
 }
 

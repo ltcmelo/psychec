@@ -74,16 +74,14 @@ void TypeCanonicalizer::canonicalizeAnonymousFields(FieldDeclarationSymbol* fldD
     auto canonTy = canonicalize(fldDecl->type(), fldDecl->enclosingScope());
     fldDecl->setType(canonTy);
 
-    if (canonTy->kind() == TypeKind::Tag
+    if (isStructureOrUnionType(canonTy)
             && canonTy->asTagType()->isUntagged()) {
         auto tagTyDecl = canonTy->asTagType()->declaration();
         if (tagTyDecl) {
-            for (auto outerMembDecl : tagTyDecl->members()) {
-                PSY_ASSERT_2(outerMembDecl->kind() == SymbolKind::FieldDeclaration, return);
-                auto outerFldDecl = outerMembDecl->asFieldDeclaration();
+            auto struOrUnioDecl = tagTyDecl->asStructOrUnionDeclaration();
+            for (auto outerFldDecl : struOrUnioDecl->fields())
                 canonicalizeAnonymousFields(
-                        const_cast<FieldDeclarationSymbol*>(outerFldDecl)->asFieldDeclaration());
-            }
+                        const_cast<FieldDeclarationSymbol*>(outerFldDecl));
         }
     }
 }

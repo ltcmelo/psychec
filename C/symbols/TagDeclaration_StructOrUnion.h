@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22/23/24 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2025 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,66 +18,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_TYPE_TAG_H__
-#define PSYCHE_C_TYPE_TAG_H__
+#ifndef PSYCHE_C_STRUCT_OR_UNION_DECLARATION_H__
+#define PSYCHE_C_STRUCT_OR_UNION_DECLARATION_H__
 
-#include "API.h"
-#include "Fwds.h"
-
-#include "Type.h"
-#include "TypeKind_Tag.h"
+#include "TypeDeclaration_Tag.h"
 
 namespace psy {
 namespace C {
 
-class PSY_C_API TagType final : public Type
+/**
+ * \brief The StructOrUnionDeclarationSymbol class.
+ */
+class PSY_C_API StructOrUnionDeclarationSymbol : public TagDeclarationSymbol
 {
 public:
+    using Fields = std::vector<const FieldDeclarationSymbol*>;
+
     //!@{
     /**
-     * Cast \c this Type as an TagType.
+     * Cast \c this Symbol as a TagDeclarationSymbol.
      */
-    virtual TagType* asTagType() { return this; }
-    virtual const TagType* asTagType() const { return this; }
+    virtual StructOrUnionDeclarationSymbol* asStructOrUnionDeclaration() override { return this; }
+    virtual const StructOrUnionDeclarationSymbol* asStructOrUnionDeclaration() const override { return this; }
     //!@}
 
     /**
-     * The TagTypeKind of \c this TagType.
+     * The \a fields of \c this StructOrUnionDeclarationSymbol.
      */
-    TagTypeKind kind() const;
-
-    /**
-     * The \a tag of \c this TagType, if it isn't untagged.
-     *
-     * \sa isUntagged
-     */
-    const Identifier* tag() const;
-
-    /**
-     * Whether \c this TagType is untagged (i.e. its tag is empty).
-     */
-    bool isUntagged() const;
-
-    /**
-     * The \a declaration of \c this TagType, if one exists.
-     */
-    const TagDeclarationSymbol* declaration() const;
+    Fields fields() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
-    PSY_GRANT_INTERNAL_ACCESS(TypeCanonicalizer);
-    PSY_GRANT_INTERNAL_ACCESS(TagDeclarationSymbol);
-    PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
 
-    TagType(TagTypeKind tagTyK, const Identifier* tag);
+    void addField(const FieldDeclarationSymbol* fld);
 
-    void setDeclaration(const TagDeclarationSymbol* tagTyDecl);
-
-private:
-    DECL_PIMPL_SUB(TagType)
+protected:
+    StructOrUnionDeclarationSymbol(
+            SymbolKind symK,
+            const Symbol* containingSym,
+            const SyntaxTree* tree,
+            const Scope* enclosingScope,
+            TagType* tagTy);
 };
-
-PSY_C_API std::ostream& operator<<(std::ostream& os, const TagType* tagTy);
 
 } // C
 } // psy

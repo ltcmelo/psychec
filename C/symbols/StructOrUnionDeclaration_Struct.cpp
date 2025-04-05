@@ -18,43 +18,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_MEMBER_DECLARATION_CATEGORY_H__
-#define PSYCHE_C_MEMBER_DECLARATION_CATEGORY_H__
+#include "TypeDeclaration__IMPL__.inc"
+#include "StructOrUnionDeclaration_Struct.h"
 
-#include "API.h"
-#include "Fwds.h"
+#include "sema/Scope.h"
+#include "symbols/Symbol_ALL.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_Tag.h"
 
-#include "../common/infra/Assertions.h"
-
-#include <cstdint>
 #include <iostream>
-#include <string>
+#include <sstream>
+
+using namespace psy;
+using namespace C;
+
+StructDeclarationSymbol::StructDeclarationSymbol(
+        const Symbol* containingSym,
+        const SyntaxTree* tree,
+        const Scope* enclosingScope,
+        TagType* tagTy)
+    : StructOrUnionDeclarationSymbol(
+          SymbolKind::StructDeclaration,
+          containingSym,
+          tree,
+          enclosingScope,
+          tagTy)
+{
+}
 
 namespace psy {
 namespace C {
 
-/**
- * \brief The MemberDeclarationCategory enum.
- */
-enum class PSY_C_API MemberDeclarationCategory : std::uint8_t
+std::ostream& operator<<(std::ostream& os, const StructDeclarationSymbol* strukt)
 {
-    Enumerator,
-    Field,
-};
-
-PSY_C_API inline std::ostream& operator<<(std::ostream& os, MemberDeclarationCategory objDeclK)
-{
-    switch (objDeclK) {
-        case MemberDeclarationCategory::Enumerator:
-            return os << "Enumerator";
-        case MemberDeclarationCategory::Field:
-            return os << "Field";
-    }
-    PSY_ASSERT_1(false);
-    return os << "<invalid MemberDeclarationCategory>";
+    if (!strukt)
+        return os << "<Struct is null>";
+    os << "<Struct |";
+    os << " type:" << strukt->introducedNewType();
+    os << " scope:" << strukt->enclosingScope()->kind();
+    for (const auto& fld : strukt->fields())
+        os << " field:" << fld;
+    os << ">";
+    return os;
 }
 
 } // C
-} // psy
-
-#endif
+} // psi

@@ -22,7 +22,7 @@
 #define PSYCHE_C_TAG_TYPE_DECLARATION_H__
 
 #include "Declaration_Type.h"
-#include "TagTypeDeclarationCategory.h"
+#include "TagDeclarationCategory.h"
 
 #include <optional>
 #include <vector>
@@ -31,38 +31,38 @@ namespace psy {
 namespace C {
 
 /**
- * \brief The TagTypeDeclarationSymbol class.
+ * \brief The TagDeclarationSymbol class.
  */
-class PSY_C_API TagTypeDeclarationSymbol : public TypeDeclarationSymbol
+class PSY_C_API TagDeclarationSymbol : public TypeDeclarationSymbol
 {
 public:
+    using Members = std::vector<const MemberDeclarationSymbol*>;
+
     //!@{
     /**
-     * Cast \c this Symbol as a TagTypeDeclarationSymbol.
+     * Cast \c this Symbol as a TagDeclarationSymbol.
      */
-    virtual TagTypeDeclarationSymbol* asTagTypeDeclaration() override { return this; }
-    virtual const TagTypeDeclarationSymbol* asTagTypeDeclaration() const override { return this; }
+    virtual TagDeclarationSymbol* asTagTypeDeclaration() override { return this; }
+    virtual const TagDeclarationSymbol* asTagTypeDeclaration() const override { return this; }
     //!@}
 
     /**
-     * The TypeDeclarationCategory of \c this TagTypeDeclarationSymbol.
+     * The TagDeclarationCategory of \c this TagDeclarationSymbol.
      */
-    TagTypeDeclarationCategory category() const;
+    TagDeclarationCategory category() const;
 
     /**
-     * The \a new \a type introduced by \c this TagTypeDeclarationSymbol.
+     * The \a new \a type introduced by \c this TagDeclarationSymbol.
      */
     const TagType* introducedNewType() const;
 
     /**
-     * The \a member of \c this TagTypeDeclarationSymbol with the given \c name.
+     * The \a member of \c this TagDeclarationSymbol by the given \c name.
      */
     const MemberDeclarationSymbol* member(const Identifier* name) const;
 
-    using Members = std::vector<const MemberDeclarationSymbol*>;
-
     /**
-     * The \a members of \c this TagTypeDeclarationSymbol.
+     * The \a members of \c this TagDeclarationSymbol.
      */
     Members members() const;
 
@@ -70,7 +70,7 @@ PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
 protected:
-    TagTypeDeclarationSymbol(
+    TagDeclarationSymbol(
             SymbolKind symK,
             const Symbol* containingSym,
             const SyntaxTree* tree,
@@ -83,7 +83,7 @@ protected:
     void addMember(const MemberDeclarationSymbol* memb);
 };
 
-PSY_C_API std::ostream& operator<<(std::ostream& os, const TagTypeDeclarationSymbol* tagTyDecl);
+PSY_C_API std::ostream& operator<<(std::ostream& os, const TagDeclarationSymbol* tagTyDecl);
 
 } // C
 } // psy

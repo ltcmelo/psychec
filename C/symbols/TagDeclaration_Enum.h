@@ -18,49 +18,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclaration__IMPL__.inc"
-#include "TagTypeDeclaration_Union.h"
+#ifndef PSYCHE_C_ENUM_H__
+#define PSYCHE_C_ENUM_H__
 
-#include "syntax/Lexeme_Identifier.h"
-#include "types/Type_Tag.h"
-#include "symbols/Symbol_ALL.h"
-
-#include <iostream>
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-UnionDeclarationSymbol::UnionDeclarationSymbol(
-        const Symbol* containingSym,
-        const SyntaxTree* tree,
-        const Scope* enclosingScope,
-        TagType* tagTy)
-    : TagTypeDeclarationSymbol(SymbolKind::UnionDeclaration,
-                               containingSym,
-                               tree,
-                               enclosingScope,
-                               tagTy)
-{
-}
-
-void UnionDeclarationSymbol::addField(const FieldDeclarationSymbol* fld)
-{
-    addMember(fld);
-}
+#include "TypeDeclaration_Tag.h"
 
 namespace psy {
 namespace C {
 
-std::ostream& operator<<(std::ostream& os, const UnionDeclarationSymbol* uniom)
+class PSY_C_API EnumDeclarationSymbol final : public TagDeclarationSymbol
 {
-    if (!uniom)
-        return os << "<Union is null>";
-    os << "<Union |";
-    os << " type:" << uniom->introducedNewType();
-    os << ">";
-    return os;
-}
+public:
+    //!@{
+    /**
+     * Cast \c this Symbol as a EnumDeclarationSymbol.
+     */
+    virtual EnumDeclarationSymbol* asEnumDeclaration() override { return this; }
+    virtual const EnumDeclarationSymbol* asEnumDeclaration() const override { return this; }
+    //!@}
+
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
+
+    EnumDeclarationSymbol(
+            const Symbol* containingSym,
+            const SyntaxTree* tree,
+            const Scope* enclosingScope,
+            TagType* tagTy);
+
+    void addEnumerator(const EnumeratorDeclarationSymbol* enumerator);
+};
+
+PSY_C_API std::ostream& operator<<(std::ostream& os, const EnumDeclarationSymbol* enun);
 
 } // C
 } // psy
+
+#endif

@@ -18,38 +18,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_ENUM_H__
-#define PSYCHE_C_ENUM_H__
+#ifndef PSYCHE_C_TAG_TYPE_DECLARATION_CATEGORY_H__
+#define PSYCHE_C_TAG_TYPE_DECLARATION_CATEGORY_H__
 
-#include "TypeDeclaration_Tag.h"
+#include "API.h"
+#include "Fwds.h"
+
+#include "../common/infra/Assertions.h"
+
+#include <cstdint>
+#include <iostream>
+#include <string>
 
 namespace psy {
 namespace C {
 
-class PSY_C_API EnumDeclarationSymbol final : public TagTypeDeclarationSymbol
+/**
+ * \brief The TagDeclarationCategory enum.
+ */
+enum class PSY_C_API TagDeclarationCategory : std::uint8_t
 {
-public:
-    //!@{
-    /**
-     * Cast \c this Symbol as a EnumDeclarationSymbol.
-     */
-    virtual EnumDeclarationSymbol* asEnumDeclaration() override { return this; }
-    virtual const EnumDeclarationSymbol* asEnumDeclaration() const override { return this; }
-    //!@}
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
-
-    EnumDeclarationSymbol(
-            const Symbol* containingSym,
-            const SyntaxTree* tree,
-            const Scope* enclosingScope,
-            TagType* tagTy);
-
-    void addEnumerator(const EnumeratorDeclarationSymbol* enumerator);
+    StructOrUnion,
+    Enum,
 };
 
-PSY_C_API std::ostream& operator<<(std::ostream& os, const EnumDeclarationSymbol* enun);
+PSY_C_API inline std::ostream& operator<<(
+        std::ostream& os,
+        TagDeclarationCategory tagTyDeclK)
+{
+    switch (tagTyDeclK) {
+        case TagDeclarationCategory::StructOrUnion:
+            return os << "StructOrUnion";
+        case TagDeclarationCategory::Enum:
+            return os << "Enum";
+    }
+    PSY_ASSERT_1(false);
+    return os << "<invalid TagDeclarationCategory>";
+}
 
 } // C
 } // psy

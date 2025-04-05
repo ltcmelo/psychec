@@ -61,29 +61,6 @@ MemberDeclarationSymbol::MemberDeclarationSymbol(SymbolKind symK,
 MemberDeclarationSymbol::~MemberDeclarationSymbol()
 {}
 
-MemberDeclarationCategory MemberDeclarationSymbol::category() const
-{
-    switch (kind()) {
-        case SymbolKind::Program:
-        case SymbolKind::TranslationUnit:
-        case SymbolKind::FunctionDeclaration:
-            break;
-        case SymbolKind::EnumeratorDeclaration:
-            return MemberDeclarationCategory::Enumerator;
-        case SymbolKind::FieldDeclaration:
-            return MemberDeclarationCategory::Field;
-        case SymbolKind::VariableDeclaration:
-        case SymbolKind::ParameterDeclaration:
-        case SymbolKind::TypedefDeclaration:
-        case SymbolKind::StructDeclaration:
-        case SymbolKind::UnionDeclaration:
-        case SymbolKind::EnumDeclaration:
-            break;
-    }
-    PSY_ASSERT_1(false);
-    return MemberDeclarationCategory(~0);
-}
-
 const Type* MemberDeclarationSymbol::type() const
 {
     return P_CAST->ty_;
@@ -111,13 +88,15 @@ std::ostream& operator<<(std::ostream& os, const MemberDeclarationSymbol* membDe
 {
     if (!membDecl)
         return os << "<MemberDeclaration is null>";
-    switch (membDecl->category()) {
-        case MemberDeclarationCategory::Enumerator:
+    switch (membDecl->kind()) {
+        case SymbolKind::EnumeratorDeclaration:
             return os << membDecl->asEnumeratorDeclaration();
-        case MemberDeclarationCategory::Field:
+        case SymbolKind::FieldDeclaration:
             return os << membDecl->asFieldDeclaration();
+        default:
+            PSY_ASSERT_1(false);
+            break;
     }
-    PSY_ASSERT_1(false);
     return os << "<invalid MemberDeclaration>";
 }
 

@@ -42,7 +42,7 @@ void DeclarationBinderTester::case1000()
 {
     bind("double x ;",
          Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                     .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -50,7 +50,7 @@ void DeclarationBinderTester::case1001()
 {
     bind("int x ;",
          Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                      .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -58,9 +58,9 @@ void DeclarationBinderTester::case1002()
 {
     bind("int x ; int y ;",
          Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                     .ty_.Basic(BasicTypeKind::Int_S))
-            .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                     .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -68,9 +68,9 @@ void DeclarationBinderTester::case1003()
 {
     bind("int x , y ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                      .ty_.Basic(BasicTypeKind::Int_S))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                      .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -78,7 +78,7 @@ void DeclarationBinderTester::case1004()
 {
     bind("x y ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                  .ty_.Typedef("x")));
 }
 
@@ -86,9 +86,9 @@ void DeclarationBinderTester::case1005()
 {
     bind("x y , z ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x"))
-             .declaration(Decl().Object("z", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("z", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x")));
 
 }
@@ -97,7 +97,7 @@ void DeclarationBinderTester::case1006()
 {
     bind("int x = 1 ;",
          Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                      .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -105,7 +105,7 @@ void DeclarationBinderTester::case1007()
 {
     bind("x y = 1 ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x")));
 }
 
@@ -113,7 +113,7 @@ void DeclarationBinderTester::case1008()
 {
     bind("long x ;",
          Expectation()
-            .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                     .ty_.Basic(BasicTypeKind::Long_S)));
 }
 
@@ -122,7 +122,7 @@ void DeclarationBinderTester::case1009()
     bind("struct x y ;",
          Expectation()
             .declaration(Decl()
-                     .Object("y", ObjectDeclarationCategory::Variable)
+                     .Object("y", SymbolKind::VariableDeclaration)
                      .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
@@ -130,7 +130,7 @@ void DeclarationBinderTester::case1010()
 {
     bind("union x y ;",
          Expectation()
-            .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                      .ty_.Tag("x", TagTypeKind::Union)));
 }
 
@@ -138,7 +138,7 @@ void DeclarationBinderTester::case1011()
 {
     bind("enum x y ;",
          Expectation()
-            .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                      .ty_.Tag("x", TagTypeKind::Enum)));
 }
 
@@ -146,9 +146,9 @@ void DeclarationBinderTester::case1012()
 {
     bind("struct x y , z ;",
          Expectation()
-            .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                      .ty_.Tag("x", TagTypeKind::Struct))
-            .declaration(Decl().Object("z", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("z", SymbolKind::VariableDeclaration)
                      .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
@@ -156,7 +156,7 @@ void DeclarationBinderTester::case1013()
 {
     bind("struct x { int y ; } z ;",
          Expectation()
-            .declaration(Decl().Object("z", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("z", SymbolKind::VariableDeclaration)
                      .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
@@ -164,7 +164,7 @@ void DeclarationBinderTester::case1014()
 {
     bind("enum x { y } z ;",
          Expectation()
-            .declaration(Decl().Object("z", ObjectDeclarationCategory::Variable)
+            .declaration(Decl().Object("z", SymbolKind::VariableDeclaration)
                      .ty_.Tag("x", TagTypeKind::Enum)));
 }
 
@@ -172,7 +172,7 @@ void DeclarationBinderTester::case1015()
 {
     bind("_Bool x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                               .ty_.Basic(BasicTypeKind::Bool)));
 }
 
@@ -183,7 +183,7 @@ void DeclarationBinderTester::case1016()
              .diagnostic(Expectation::ErrorOrWarn::Error,
                          DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt)
              .declaration(Decl()
-                          .Object("x", ObjectDeclarationCategory::Variable)
+                          .Object("x", SymbolKind::VariableDeclaration)
                           .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -194,7 +194,7 @@ void DeclarationBinderTester::case1017()
              .diagnostic(Expectation::ErrorOrWarn::Error,
                          DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt)
              .declaration(Decl()
-                          .Object("x", ObjectDeclarationCategory::Variable)
+                          .Object("x", SymbolKind::VariableDeclaration)
                           .ty_.Basic(BasicTypeKind::Int_S)
                           .ty_.Derived(TypeKind::Pointer)));
 }
@@ -206,7 +206,7 @@ void DeclarationBinderTester::case1018()
              .diagnostic(Expectation::ErrorOrWarn::Error,
                          DeclarationBinder::DiagnosticsReporter::ID_of_TypeSpecifierMissingDefaultsToInt)
              .declaration(Decl()
-                          .Object("x", ObjectDeclarationCategory::Variable)
+                          .Object("x", SymbolKind::VariableDeclaration)
                           .ty_.Basic(BasicTypeKind::Int_S)
                           .ty_.Derived(TypeKind::Pointer)));
 }
@@ -247,7 +247,7 @@ void DeclarationBinderTester::case1050()
 {
     bind("const int x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)));
 }
 
@@ -255,7 +255,7 @@ void DeclarationBinderTester::case1051()
 {
     bind("const x y ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x", CVR::Const)));
 }
 
@@ -271,7 +271,7 @@ void DeclarationBinderTester::case1053()
 {
     bind("int const x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)));
 }
 
@@ -279,7 +279,7 @@ void DeclarationBinderTester::case1054()
 {
     bind("x const y ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x", CVR::Const)));
 }
 
@@ -288,7 +288,7 @@ void DeclarationBinderTester::case1055()
     bind("int volatile x ;",
          Expectation()
              .declaration(Decl()
-                      .Object("x", ObjectDeclarationCategory::Variable)
+                      .Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Volatile)));
 }
 
@@ -297,7 +297,7 @@ void DeclarationBinderTester::case1056()
     bind("int volatile const x ;",
          Expectation()
              .declaration(Decl()
-                      .Object("x", ObjectDeclarationCategory::Variable)
+                      .Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::ConstAndVolatile)));
 }
 
@@ -322,7 +322,7 @@ void DeclarationBinderTester::case1059()
 {
     bind("_Atomic int x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Atomic)));
 }
 
@@ -331,10 +331,10 @@ void DeclarationBinderTester::case1060()
     bind("int const x , y ;",
          Expectation()
              .declaration(Decl()
-                          .Object("x", ObjectDeclarationCategory::Variable)
+                          .Object("x", SymbolKind::VariableDeclaration)
                           .ty_.Basic(BasicTypeKind::Int_S, CVR::Const))
          .declaration(Decl()
-                      .Object("y", ObjectDeclarationCategory::Variable)
+                      .Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)));
 }
 
@@ -382,7 +382,7 @@ void DeclarationBinderTester::case1100()
 {
     bind("int * x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -391,7 +391,7 @@ void DeclarationBinderTester::case1101()
 {
     bind("x * y ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x")
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -400,10 +400,10 @@ void DeclarationBinderTester::case1102()
 {
     bind("int * x ; y * z ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Object("z", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("z", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("y")
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -412,10 +412,10 @@ void DeclarationBinderTester::case1103()
 {
     bind("int * x , * y ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -424,7 +424,7 @@ void DeclarationBinderTester::case1104()
 {
     bind("int ( * x ) [ 1 ];",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Array)
                       .ty_.Derived(TypeKind::Pointer)));
@@ -434,7 +434,7 @@ void DeclarationBinderTester::case1105()
 {
     bind("int * * x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)));
@@ -444,7 +444,7 @@ void DeclarationBinderTester::case1106()
 {
     bind("int * * * x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)
@@ -455,7 +455,7 @@ void DeclarationBinderTester::case1107()
 {
     bind("int * ( * x ) [ 1 ] ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)
@@ -466,10 +466,10 @@ void DeclarationBinderTester::case1108()
 {
     bind("int * x , y ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -477,11 +477,11 @@ void DeclarationBinderTester::case1109()
 {
     bind("int * * x , * * y ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)));
@@ -491,11 +491,11 @@ void DeclarationBinderTester::case1110()
 {
     bind("int * * x , * y ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -504,11 +504,11 @@ void DeclarationBinderTester::case1111()
 {
     bind("int * * x , * * * y ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)
@@ -519,10 +519,10 @@ void DeclarationBinderTester::case1112()
 {
     bind("int * x , * * * y ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)
@@ -533,12 +533,12 @@ void DeclarationBinderTester::case1113()
 {
     bind("int * * * x , * y ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -547,12 +547,12 @@ void DeclarationBinderTester::case1114()
 {
     bind("int * * * x , y ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -560,9 +560,9 @@ void DeclarationBinderTester::case1115()
 {
     bind("int x , * * * y ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)
@@ -574,11 +574,11 @@ void DeclarationBinderTester::case1116()
     bind("int * x ; int y ;",
          Expectation()
               .declaration(Decl()
-                           .Object("x", ObjectDeclarationCategory::Variable)
+                           .Object("x", SymbolKind::VariableDeclaration)
                            .ty_.Basic(BasicTypeKind::Int_S)
                            .ty_.Derived(TypeKind::Pointer))
               .declaration(Decl()
-                           .Object("y", ObjectDeclarationCategory::Variable)
+                           .Object("y", SymbolKind::VariableDeclaration)
                            .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -587,12 +587,12 @@ void DeclarationBinderTester::case1117()
     bind("int * * x ; int y ;",
          Expectation()
               .declaration(Decl()
-                           .Object("x", ObjectDeclarationCategory::Variable)
+                           .Object("x", SymbolKind::VariableDeclaration)
                            .ty_.Basic(BasicTypeKind::Int_S)
                            .ty_.Derived(TypeKind::Pointer)
                            .ty_.Derived(TypeKind::Pointer))
               .declaration(Decl()
-                           .Object("y", ObjectDeclarationCategory::Variable)
+                           .Object("y", SymbolKind::VariableDeclaration)
                            .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -601,13 +601,13 @@ void DeclarationBinderTester::case1118()
     bind("int * * * x ; int y ;",
          Expectation()
               .declaration(Decl()
-                           .Object("x", ObjectDeclarationCategory::Variable)
+                           .Object("x", SymbolKind::VariableDeclaration)
                            .ty_.Basic(BasicTypeKind::Int_S)
                            .ty_.Derived(TypeKind::Pointer)
                            .ty_.Derived(TypeKind::Pointer)
                            .ty_.Derived(TypeKind::Pointer))
               .declaration(Decl()
-                           .Object("y", ObjectDeclarationCategory::Variable)
+                           .Object("y", SymbolKind::VariableDeclaration)
                            .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -628,7 +628,7 @@ void DeclarationBinderTester::case1130()
     bind("int ( * x ) ( ) ;",
          Expectation()
              .declaration(Decl()
-                      .Object("x", ObjectDeclarationCategory::Variable)
+                      .Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Function)
                       .ty_.Derived(TypeKind::Pointer)));
@@ -639,7 +639,7 @@ void DeclarationBinderTester::case1131()
     bind("x ( * y ) ( ) ;",
          Expectation()
              .declaration(Decl()
-                      .Object("y", ObjectDeclarationCategory::Variable)
+                      .Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x")
                       .ty_.Derived(TypeKind::Function)
                       .ty_.Derived(TypeKind::Pointer)));
@@ -650,13 +650,13 @@ void DeclarationBinderTester::case1132()
     bind("int ( * x ) ( double ) ;",
          Expectation()
               .declaration(Decl()
-                      .Object("x", ObjectDeclarationCategory::Variable)
+                      .Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Function)
                       .ty_.addParam().Basic(BasicTypeKind::Double)
                       .ty_.Derived(TypeKind::Pointer))
               .declaration(Decl()
-                     .Object("", ObjectDeclarationCategory::Parameter, ScopeKind::FunctionPrototype)
+                     .Object("", SymbolKind::ParameterDeclaration, ScopeKind::FunctionPrototype)
                      .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -665,13 +665,13 @@ void DeclarationBinderTester::case1133()
     bind("x ( * y ) ( double ) ;",
          Expectation()
              .declaration(Decl()
-                      .Object("y", ObjectDeclarationCategory::Variable)
+                      .Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x")
                       .ty_.Derived(TypeKind::Function)
                       .ty_.addParam().Basic(BasicTypeKind::Double)
                       .ty_.Derived(TypeKind::Pointer))
          .declaration(Decl()
-                  .Object("", ObjectDeclarationCategory::Parameter, ScopeKind::FunctionPrototype)
+                  .Object("", SymbolKind::ParameterDeclaration, ScopeKind::FunctionPrototype)
                   .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -680,17 +680,17 @@ void DeclarationBinderTester::case1134()
     bind("int ( * x ) ( double , char ) ;",
          Expectation()
              .declaration(Decl()
-                      .Object("x", ObjectDeclarationCategory::Variable)
+                      .Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Function)
                       .ty_.addParam().Basic(BasicTypeKind::Double)
                       .ty_.addParam().Basic(BasicTypeKind::Char)
                       .ty_.Derived(TypeKind::Pointer))
          .declaration(Decl()
-                 .Object("", ObjectDeclarationCategory::Parameter, ScopeKind::FunctionPrototype)
+                 .Object("", SymbolKind::ParameterDeclaration, ScopeKind::FunctionPrototype)
                  .ty_.Basic(BasicTypeKind::Double))
          .declaration(Decl()
-                 .Object("", ObjectDeclarationCategory::Parameter, ScopeKind::FunctionPrototype)
+                 .Object("", SymbolKind::ParameterDeclaration, ScopeKind::FunctionPrototype)
                  .ty_.Basic(BasicTypeKind::Char)));
 }
 
@@ -699,17 +699,17 @@ void DeclarationBinderTester::case1135()
     bind("int ( * x ) ( y , char ) ;",
          Expectation()
              .declaration(Decl()
-                      .Object("x", ObjectDeclarationCategory::Variable)
+                      .Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Function)
                       .ty_.addParam().Typedef("y")
                       .ty_.addParam().Basic(BasicTypeKind::Char)
                       .ty_.Derived(TypeKind::Pointer))
          .declaration(Decl()
-                 .Object("", ObjectDeclarationCategory::Parameter, ScopeKind::FunctionPrototype)
+                 .Object("", SymbolKind::ParameterDeclaration, ScopeKind::FunctionPrototype)
                  .ty_.Typedef("y"))
          .declaration(Decl()
-                 .Object("", ObjectDeclarationCategory::Parameter, ScopeKind::FunctionPrototype)
+                 .Object("", SymbolKind::ParameterDeclaration, ScopeKind::FunctionPrototype)
                  .ty_.Basic(BasicTypeKind::Char)));
 }
 
@@ -718,7 +718,7 @@ void DeclarationBinderTester::case1136()
     bind("void ( * x ) ( int ( * ) ( double) ) ;",
          Expectation()
              .declaration(Decl()
-                      .Object("x", ObjectDeclarationCategory::Variable)
+                      .Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Void()
                       .ty_.Derived(TypeKind::Function)
                       .ty_.addParam().Basic(BasicTypeKind::Int_S)
@@ -727,13 +727,13 @@ void DeclarationBinderTester::case1136()
                       .ty_.atParam().Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer))
              .declaration(Decl()
-                     .Object("", ObjectDeclarationCategory::Parameter, ScopeKind::FunctionPrototype)
+                     .Object("", SymbolKind::ParameterDeclaration, ScopeKind::FunctionPrototype)
                      .ty_.Basic(BasicTypeKind::Int_S)
                      .ty_.Derived(TypeKind::Function)
                      .ty_.addParam().Basic(BasicTypeKind::Double)
                      .ty_.Derived(TypeKind::Pointer))
              .declaration(Decl()
-                    .Object("", ObjectDeclarationCategory::Parameter, ScopeKind::FunctionPrototype)
+                    .Object("", SymbolKind::ParameterDeclaration, ScopeKind::FunctionPrototype)
                     .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -755,7 +755,7 @@ void DeclarationBinderTester::case1150()
 {
     bind("const int * x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -764,7 +764,7 @@ void DeclarationBinderTester::case1151()
 {
     bind("const x * y ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x", CVR::Const)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -826,7 +826,7 @@ void DeclarationBinderTester::case1200()
 {
     bind("const int * const x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)
                       .ty_.Derived(TypeKind::Pointer, CVR::Const)));
 }
@@ -835,7 +835,7 @@ void DeclarationBinderTester::case1201()
 {
     bind("int const * restrict x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)
                       .ty_.Derived(TypeKind::Pointer, CVR::Restrict)));
 }
@@ -844,7 +844,7 @@ void DeclarationBinderTester::case1202()
 {
     bind("const int * restrict x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)
                       .ty_.Derived(TypeKind::Pointer, CVR::Restrict)));
 }
@@ -853,7 +853,7 @@ void DeclarationBinderTester::case1203()
 {
     bind("const int * const restrict x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)
                       .ty_.Derived(TypeKind::Pointer, CVR::ConstAndRestrict)));
 }
@@ -909,7 +909,7 @@ void DeclarationBinderTester::case1250()
 {
     bind("int * const x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::Const)));
 }
@@ -918,7 +918,7 @@ void DeclarationBinderTester::case1251()
 {
     bind("x * const y ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::Const)));
 }
@@ -927,7 +927,7 @@ void DeclarationBinderTester::case1252()
 {
     bind("int * restrict x ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::Restrict)));
 }
@@ -936,7 +936,7 @@ void DeclarationBinderTester::case1253()
 {
     bind("x * restrict y ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::Restrict)));
 }
@@ -992,7 +992,7 @@ void DeclarationBinderTester::case1300()
 {
     bind("int x [ 1 ] ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -1001,7 +1001,7 @@ void DeclarationBinderTester::case1301()
 {
     bind("x y [ 1 ] ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -1010,10 +1010,10 @@ void DeclarationBinderTester::case1302()
 {
     bind("int x [ 1 ] , y [ 2 ] ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -1022,10 +1022,10 @@ void DeclarationBinderTester::case1303()
 {
     bind("x y [ 1 ] , z [ 2 ] ;",
          Expectation()
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None))
-             .declaration(Decl().Object("z", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("z", SymbolKind::VariableDeclaration)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -1034,7 +1034,7 @@ void DeclarationBinderTester::case1304()
 {
     bind("int * x [ 1 ] ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
@@ -1044,10 +1044,10 @@ void DeclarationBinderTester::case1305()
 {
     bind("int x [ 1 ] , * y [ 2 ] ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None))
-             .declaration(Decl().Object("y", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
@@ -1057,7 +1057,7 @@ void DeclarationBinderTester::case1306()
 {
     bind("int * * x [ 1 ] ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
@@ -1115,7 +1115,7 @@ void DeclarationBinderTester::case1350()
 {
     bind("const int x [ 1 ] ;",
          Expectation()
-             .declaration(Decl().Object("x", ObjectDeclarationCategory::Variable)
+             .declaration(Decl().Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }

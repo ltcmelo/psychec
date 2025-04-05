@@ -109,21 +109,21 @@ Decl::Decl()
     : ty_(*this)
 {}
 
-Decl& Decl::Object(std::string name, ObjectDeclarationCategory objDeclK, ScopeKind scopeK)
+Decl& Decl::Object(std::string name, SymbolKind symK, ScopeKind scopeK)
 {
     ident_ = std::move(name);
     declK_ = DeclarationCategory::Object;
-    objDeclK_ = objDeclK;
+    symK_ = symK;
     scopeK_ = scopeK;
     ns_ = NameSpace::OrdinaryIdentifiers;
     return *this;
 }
 
-Decl& Decl::Member(std::string name, MemberDeclarationCategory membDeclK)
+Decl& Decl::Member(std::string name, SymbolKind symK)
 {
     ident_ = std::move(name);
     declK_ = DeclarationCategory::Member;
-    membDeclK_ = membDeclK;
+    symK_ = symK;
     scopeK_ = ScopeKind::File;
     ns_ = NameSpace::Members;
     return *this;
@@ -137,12 +137,12 @@ Decl& Decl::Type(std::string typedefName)
     return *this;
 }
 
-Decl& Decl::Type(std::string tag, TagTypeDeclarationCategory tagTyDeclK)
+Decl& Decl::Type(std::string tag, SymbolKind symK)
 {
     ident_ = std::move(tag);
     declK_ = DeclarationCategory::Type;
     tyDeclK_ = TypeDeclarationCategory::Tag;
-    tagTyDeclK_ = tagTyDeclK;
+    symK_ = symK;
     return *this;
 }
 

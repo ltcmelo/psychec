@@ -38,7 +38,7 @@ struct TagType::TagTypeImpl : TypeImpl
     {}
 
     const Identifier* tag_;
-    const TagTypeDeclarationSymbol* tagTyDecl_;
+    const TagDeclarationSymbol* tagTyDecl_;
 };
 
 TagType::TagType(TagTypeKind tagTyK, const Identifier* tag)
@@ -62,12 +62,12 @@ bool TagType::isUntagged() const
     return P_CAST->tag_->valueText()[0] == '#';
 }
 
-const TagTypeDeclarationSymbol* TagType::declaration() const
+const TagDeclarationSymbol* TagType::declaration() const
 {
     return P_CAST->tagTyDecl_;
 }
 
-void TagType::setDeclaration(const TagTypeDeclarationSymbol* tagTyDecl)
+void TagType::setDeclaration(const TagDeclarationSymbol* tagTyDecl)
 {
     P_CAST->tagTyDecl_ = tagTyDecl;
 }

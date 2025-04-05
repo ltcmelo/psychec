@@ -686,8 +686,8 @@ bool objMatchesBinding(
         const ObjectDeclarationSymbol* objDecl,
         const Decl& decl)
 {
-    if (objDecl->category() != decl.objDeclK_)
-        return REJECT_CANDIDATE(objDecl, "object category mismatch");
+    if (objDecl->kind() != decl.symK_)
+        return REJECT_CANDIDATE(objDecl, "object kind mismatch");
 
     if (!objDecl->name())
         return REJECT_CANDIDATE(objDecl, "empty value name");
@@ -709,8 +709,8 @@ bool membMatchesBinding(
         const MemberDeclarationSymbol* membDecl,
         const Decl& decl)
 {
-    if (membDecl->category() != decl.membDeclK_)
-        return REJECT_CANDIDATE(membDecl, "member category mismatch");
+    if (membDecl->kind() != decl.symK_)
+        return REJECT_CANDIDATE(membDecl, "member kind mismatch");
 
     if (!membDecl->name())
         return REJECT_CANDIDATE(membDecl, "empty value name");
@@ -751,25 +751,28 @@ bool typeMatchesBinding(
                 return REJECT_CANDIDATE(tyDecl, "empty tag");
             if (tagTy->tag()->valueText() != decl.ident_)
                 return REJECT_CANDIDATE(tyDecl, "tag mismatch");
-            switch (decl.tagTyDeclK_) {
-                case TagTypeDeclarationCategory::Struct:
-                    if (tagTyDecl->category() != TagTypeDeclarationCategory::Struct)
+            switch (decl.symK_) {
+                case SymbolKind::StructDeclaration:
+                    if (tagTyDecl->kind() != SymbolKind::StructDeclaration)
                         return REJECT_CANDIDATE(tyDecl, "not a struct");
                     if (tagTy->kind() != TagTypeKind::Struct)
                         return REJECT_CANDIDATE(tyDecl, "not a struct type");
                     break;
-                case TagTypeDeclarationCategory::Union:
-                    if (tagTyDecl->category() != TagTypeDeclarationCategory::Union)
+                case SymbolKind::UnionDeclaration:
+                    if (tagTyDecl->kind() != SymbolKind::UnionDeclaration)
                         return REJECT_CANDIDATE(tyDecl, "not a union");
                     if (tagTy->kind() != TagTypeKind::Union)
                         return REJECT_CANDIDATE(tyDecl, "not a union type");
                     break;
-                case TagTypeDeclarationCategory::Enum:
-                    if (tagTyDecl->category() != TagTypeDeclarationCategory::Enum)
+                case SymbolKind::EnumDeclaration:
+                    if (tagTyDecl->kind() != SymbolKind::EnumDeclaration)
                         return REJECT_CANDIDATE(tyDecl, "not a enum");
                     if (tagTy->kind() != TagTypeKind::Enum)
                         return REJECT_CANDIDATE(tyDecl, "not a enum type");
                     break;
+                default:
+                    PSY_ASSERT_1(false);
+                    return false;
             }
             break;
         }

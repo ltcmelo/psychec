@@ -364,13 +364,12 @@ void DeclarationBinder::handleNonTypedefDeclarator(const DeclaratorSyntax* node)
                                         case TypeDeclarationCategory::Tag: {
                                             auto tagTyDecl = tyDecl->asTagTypeDeclaration();
                                             switch (tagTyDecl->category()) {
-                                                case TagTypeDeclarationCategory::Union:
-                                                case TagTypeDeclarationCategory::Struct: {
+                                                case TagDeclarationCategory::StructOrUnion: {
                                                     auto fldDecl = bindDeclaration<FieldDeclarationSymbol>(node);
                                                     tagTyDecl->addMember(fldDecl);
                                                     break;
                                                 }
-                                                case TagTypeDeclarationCategory::Enum:
+                                                case TagDeclarationCategory::Enum:
                                                     PSY_ASSERT_1(false);
                                                     return;
                                             }

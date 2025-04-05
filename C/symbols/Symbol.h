@@ -82,14 +82,16 @@ public:
     virtual const FieldDeclarationSymbol* asFieldDeclaration() const { return nullptr; }
     virtual TypeDeclarationSymbol* asTypeDeclaration() { return nullptr; }
     virtual const TypeDeclarationSymbol* asTypeDeclaration() const { return nullptr; }
-    virtual TagTypeDeclarationSymbol* asTagTypeDeclaration() { return nullptr; }
-    virtual const TagTypeDeclarationSymbol* asTagTypeDeclaration() const { return nullptr; }
+    virtual TagDeclarationSymbol* asTagTypeDeclaration() { return nullptr; }
+    virtual const TagDeclarationSymbol* asTagTypeDeclaration() const { return nullptr; }
+    virtual EnumDeclarationSymbol* asEnumDeclaration() { return nullptr; }
+    virtual const EnumDeclarationSymbol* asEnumDeclaration() const { return nullptr; }
+    virtual StructOrUnionDeclarationSymbol* asStructOrUnionDeclaration() { return nullptr; }
+    virtual const StructOrUnionDeclarationSymbol* asStructOrUnionDeclaration() const { return nullptr; }
     virtual StructDeclarationSymbol* asStructDeclaration() { return nullptr; }
     virtual const StructDeclarationSymbol* asStructDeclaration() const { return nullptr; }
     virtual UnionDeclarationSymbol* asUnionDeclaration() { return nullptr; }
     virtual const UnionDeclarationSymbol* asUnionDeclaration() const { return nullptr; }
-    virtual EnumDeclarationSymbol* asEnumDeclaration() { return nullptr; }
-    virtual const EnumDeclarationSymbol* asEnumDeclaration() const { return nullptr; }
     virtual TypedefDeclarationSymbol* asTypedefDeclaration() { return nullptr; }
     virtual const TypedefDeclarationSymbol* asTypedefDeclaration() const { return nullptr; }
     //!@}

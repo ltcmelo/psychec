@@ -40,7 +40,7 @@ void DeclarationBinderTester::case3001()
     bind("struct x { int y ; } ;",
          Expectation()
          .declaration(Decl()
-                  .Type("x", TagTypeDeclarationCategory::Struct)
+                  .Type("x", SymbolKind::StructDeclaration)
                   .inNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File)));
 }
@@ -50,7 +50,7 @@ void DeclarationBinderTester::case3002()
     bind("union x { int y ; } ;",
          Expectation()
          .declaration(Decl()
-                  .Type("x", TagTypeDeclarationCategory::Union)
+                  .Type("x", SymbolKind::UnionDeclaration)
                   .inNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File)));
 }
@@ -108,11 +108,11 @@ void DeclarationBinderTester::case3050()
     bind("enum x { y } ;",
          Expectation()
          .declaration(Decl()
-                  .Type("x", TagTypeDeclarationCategory::Enum)
+                  .Type("x", SymbolKind::EnumDeclaration)
                   .inNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File))
          .declaration(Decl()
-                  .Member("y", MemberDeclarationCategory::Enumerator)
+                  .Member("y", SymbolKind::EnumeratorDeclaration)
                   .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -121,14 +121,14 @@ void DeclarationBinderTester::case3051()
     bind("enum x { y , z } ;",
          Expectation()
          .declaration(Decl()
-                  .Type("x", TagTypeDeclarationCategory::Enum)
+                  .Type("x", SymbolKind::EnumDeclaration)
                   .inNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File))
          .declaration(Decl()
-                  .Member("y", MemberDeclarationCategory::Enumerator)
+                  .Member("y", SymbolKind::EnumeratorDeclaration)
                   .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
-                  .Member("z", MemberDeclarationCategory::Enumerator)
+                  .Member("z", SymbolKind::EnumeratorDeclaration)
                   .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -137,14 +137,14 @@ void DeclarationBinderTester::case3052()
     bind("enum x { y = 0 , z } ;",
          Expectation()
          .declaration(Decl()
-                  .Type("x", TagTypeDeclarationCategory::Enum)
+                  .Type("x", SymbolKind::EnumDeclaration)
                   .inNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File))
          .declaration(Decl()
-                  .Member("y", MemberDeclarationCategory::Enumerator)
+                  .Member("y", SymbolKind::EnumeratorDeclaration)
                   .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
-                  .Member("z", MemberDeclarationCategory::Enumerator)
+                  .Member("z", SymbolKind::EnumeratorDeclaration)
                   .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -153,17 +153,17 @@ void DeclarationBinderTester::case3053()
     bind("enum x { y , z , w } ;",
          Expectation()
          .declaration(Decl()
-                  .Type("x", TagTypeDeclarationCategory::Enum)
+                  .Type("x", SymbolKind::EnumDeclaration)
                   .inNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File))
          .declaration(Decl()
-                  .Member("y", MemberDeclarationCategory::Enumerator)
+                  .Member("y", SymbolKind::EnumeratorDeclaration)
                   .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
-                  .Member("z", MemberDeclarationCategory::Enumerator)
+                  .Member("z", SymbolKind::EnumeratorDeclaration)
                   .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
-                  .Member("w", MemberDeclarationCategory::Enumerator)
+                  .Member("w", SymbolKind::EnumeratorDeclaration)
                   .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -172,17 +172,17 @@ void DeclarationBinderTester::case3054()
     bind("enum x { y , z = 0 , w } ;",
          Expectation()
          .declaration(Decl()
-                  .Type("x", TagTypeDeclarationCategory::Enum)
+                  .Type("x", SymbolKind::EnumDeclaration)
                   .inNameSpace(NameSpace::Tags)
                   .withScopeKind(ScopeKind::File))
          .declaration(Decl()
-                  .Member("y", MemberDeclarationCategory::Enumerator)
+                  .Member("y", SymbolKind::EnumeratorDeclaration)
                   .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
-                  .Member("z", MemberDeclarationCategory::Enumerator)
+                  .Member("z", SymbolKind::EnumeratorDeclaration)
                   .ty_.Basic(BasicTypeKind::Int_S))
          .declaration(Decl()
-                  .Member("w", MemberDeclarationCategory::Enumerator)
+                  .Member("w", SymbolKind::EnumeratorDeclaration)
                   .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -586,7 +586,7 @@ void DeclarationBinderTester::case3300()
                           .withScopeKind(ScopeKind::File)
                           .ty_.Basic(BasicTypeKind::Int_S))
             .declaration(Decl()
-                         .Object("z", ObjectDeclarationCategory::Variable)
+                         .Object("z", SymbolKind::VariableDeclaration)
                          .ty_.Typedef("x")));
 }
 
@@ -601,7 +601,7 @@ void DeclarationBinderTester::case3301()
                           .ty_.Basic(BasicTypeKind::Int_S)
                           .ty_.Derived(TypeKind::Pointer))
               .declaration(Decl()
-                           .Object("z", ObjectDeclarationCategory::Variable)
+                           .Object("z", SymbolKind::VariableDeclaration)
                            .ty_.Typedef("x")));
 }
 
@@ -616,10 +616,10 @@ int z ;
          )",
          Expectation()
          .declaration(Decl()
-                      .Member("y", MemberDeclarationCategory::Field)
+                      .Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Short_S))
          .declaration(Decl()
-                      .Object("z", ObjectDeclarationCategory::Variable)
+                      .Object("z", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -631,10 +631,10 @@ float y ;
     )",
          Expectation()
          .declaration(Decl()
-                      .Type("x", TagTypeDeclarationCategory::Struct)
+                      .Type("x", SymbolKind::StructDeclaration)
                       .inNameSpace(NameSpace::Tags))
          .declaration(Decl()
-                      .Object("y", ObjectDeclarationCategory::Variable)
+                      .Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Float)));
 }
 
@@ -646,10 +646,10 @@ float y ;
     )",
          Expectation()
          .declaration(Decl()
-                      .Type("x", TagTypeDeclarationCategory::Enum)
+                      .Type("x", SymbolKind::EnumDeclaration)
                       .inNameSpace(NameSpace::Tags))
          .declaration(Decl()
-                      .Object("y", ObjectDeclarationCategory::Variable)
+                      .Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Float)));
 }
 
@@ -661,11 +661,11 @@ float y ;
     )",
          Expectation()
          .declaration(Decl()
-                      .Object("x", ObjectDeclarationCategory::Variable)
+                      .Object("x", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Char, CVR::Const)
                       .ty_.Derived(TypeKind::Pointer, CVR::Const))
          .declaration(Decl()
-                      .Object("y", ObjectDeclarationCategory::Variable)
+                      .Object("y", SymbolKind::VariableDeclaration)
                       .ty_.Basic(BasicTypeKind::Float)));
 }
 
@@ -679,7 +679,7 @@ void _ ( ) {
          )",
          Expectation()
          .declaration(Decl()
-                      .Object("x", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                      .Object("x", SymbolKind::VariableDeclaration, ScopeKind::Block)
                       .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -883,7 +883,7 @@ void DeclarationBinderTester::case3500()
     bind("int x ;",
          Expectation()
             .declaration(Decl()
-                     .Object("x", ObjectDeclarationCategory::Variable)
+                     .Object("x", SymbolKind::VariableDeclaration)
                      .ty_.Basic(BasicTypeKind::Int_S))
          .scopePath({}));
 }
@@ -893,7 +893,7 @@ void DeclarationBinderTester::case3501()
     bind("void f() { int x ; }",
          Expectation()
             .declaration(Decl()
-                     .Object("x", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                     .Object("x", SymbolKind::VariableDeclaration, ScopeKind::Block)
                      .ty_.Basic(BasicTypeKind::Int_S))
             .scopePath({0}));
 }
@@ -903,7 +903,7 @@ void DeclarationBinderTester::case3502()
     bind("void f() { { int x ; } }",
          Expectation()
             .declaration(Decl()
-                     .Object("x", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                     .Object("x", SymbolKind::VariableDeclaration, ScopeKind::Block)
                      .ty_.Basic(BasicTypeKind::Int_S))
          .scopePath({0, 0}));
 }
@@ -913,7 +913,7 @@ void DeclarationBinderTester::case3503()
     bind("void f() { { } { int x ; } }",
          Expectation()
             .declaration(Decl()
-                     .Object("x", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                     .Object("x", SymbolKind::VariableDeclaration, ScopeKind::Block)
                      .ty_.Basic(BasicTypeKind::Int_S))
             .scopePath({0, 1}));
 }
@@ -923,7 +923,7 @@ void DeclarationBinderTester::case3504()
     bind("void f() { } void g() { { } { int x ; } { } }",
          Expectation()
             .declaration(Decl()
-                     .Object("x", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                     .Object("x", SymbolKind::VariableDeclaration, ScopeKind::Block)
                      .ty_.Basic(BasicTypeKind::Int_S))
          .scopePath({1, 1}));
 }
@@ -933,7 +933,7 @@ void DeclarationBinderTester::case3505()
     bind("void f() { } void g() { { } { } { { int x ; } } }",
          Expectation()
             .declaration(Decl()
-                     .Object("x", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                     .Object("x", SymbolKind::VariableDeclaration, ScopeKind::Block)
                      .ty_.Basic(BasicTypeKind::Int_S))
          .scopePath({1, 2, 0}));
 }
@@ -945,7 +945,7 @@ struct x { };
 )",
          Expectation()
         .declaration(Decl()
-             .Type("x", TagTypeDeclarationCategory::Struct)
+             .Type("x", SymbolKind::StructDeclaration)
              .inNameSpace(NameSpace::Tags)
              .withScopeKind(ScopeKind::File))
          .scopePath({}));

@@ -62,29 +62,6 @@ ObjectDeclarationSymbol::ObjectDeclarationSymbol(SymbolKind symK,
 ObjectDeclarationSymbol::~ObjectDeclarationSymbol()
 {}
 
-ObjectDeclarationCategory ObjectDeclarationSymbol::category() const
-{
-    switch (kind()) {
-        case SymbolKind::Program:
-        case SymbolKind::TranslationUnit:
-        case SymbolKind::FunctionDeclaration:
-        case SymbolKind::EnumeratorDeclaration:
-        case SymbolKind::FieldDeclaration:
-            break;
-        case SymbolKind::VariableDeclaration:
-            return ObjectDeclarationCategory::Variable;
-        case SymbolKind::ParameterDeclaration:
-            return ObjectDeclarationCategory::Parameter;
-        case SymbolKind::TypedefDeclaration:
-        case SymbolKind::StructDeclaration:
-        case SymbolKind::UnionDeclaration:
-        case SymbolKind::EnumDeclaration:
-            break;
-    }
-    PSY_ASSERT_1(false);
-    return ObjectDeclarationCategory(~0);
-}
-
 const Type* ObjectDeclarationSymbol::type() const
 {
     return P_CAST->ty_;
@@ -112,13 +89,15 @@ std::ostream& operator<<(std::ostream& os, const ObjectDeclarationSymbol* objDec
 {
     if (!objDecl)
         return os << "<ObjectDeclaration is null>";
-    switch (objDecl->category()) {
-        case ObjectDeclarationCategory::Parameter:
+    switch (objDecl->kind()) {
+        case SymbolKind::ParameterDeclaration:
             return os << objDecl->asParameterDeclaration();
-        case ObjectDeclarationCategory::Variable:
+        case SymbolKind::VariableDeclaration:
             return os << objDecl->asVariableDeclaration();
+        default:
+            PSY_ASSERT_1(false);
+            break;
     }
-    PSY_ASSERT_1(false);
     return os << "<invalid ObjectDeclaration>";
 }
 
