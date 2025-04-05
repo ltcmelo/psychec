@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TagTypeDeclaration_StructOrUnion.h"
+#include "TagDeclaration_StructOrUnion.h"
 
 #include "symbols/Symbol_ALL.h"
 
@@ -34,7 +34,7 @@ StructOrUnionDeclarationSymbol::StructOrUnionDeclarationSymbol(
         const SyntaxTree* tree,
         const Scope* enclosingScope,
         TagType* tagTy)
-    : TagTypeDeclarationSymbol(
+    : TagDeclarationSymbol(
               symK,
               containingSym,
               tree,

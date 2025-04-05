@@ -230,7 +230,7 @@ class FieldDeclarationSymbol;
 class VariableDeclarationSymbol;
 class ParameterDeclarationSymbol;
 class TypeDeclarationSymbol;
-class TagTypeDeclarationSymbol;
+class TagDeclarationSymbol;
 class EnumDeclarationSymbol;
 class StructOrUnionDeclarationSymbol;
 class StructDeclarationSymbol;

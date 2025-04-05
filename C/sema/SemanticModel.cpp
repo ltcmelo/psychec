@@ -187,34 +187,46 @@ const TypeDeclarationSymbol* SemanticModel::typeDeclarationFor(const TypeDeclara
     return tyDecl;
 }
 
-const StructDeclarationSymbol* SemanticModel::structFor(const StructOrUnionDeclarationSyntax* node) const
+const StructDeclarationSymbol* SemanticModel::structFor(
+        const StructOrUnionDeclarationSyntax* node) const
 {
+    if (node->kind() != SyntaxKind::StructDeclaration)
+        return nullptr;
     auto tyDecl = typeDeclarationFor(node);
-    PSY_ASSERT_2(tyDecl->category() == TypeDeclarationCategory::Tag, return nullptr);
-    auto tagTyDecl = tyDecl->asTagTypeDeclaration();
-    PSY_ASSERT_2(tagTyDecl->category() == TagTypeDeclarationCategory::Struct, return nullptr);
-    return tagTyDecl->asStructDeclaration();
+    PSY_ASSERT_2(tyDecl->kind() == SymbolKind::StructDeclaration, return nullptr);
+    return tyDecl->asStructDeclaration();
 }
 
-const UnionDeclarationSymbol* SemanticModel::unionFor(const StructOrUnionDeclarationSyntax* node) const
+const UnionDeclarationSymbol* SemanticModel::unionFor(
+        const StructOrUnionDeclarationSyntax* node) const
 {
+    if (node->kind() != SyntaxKind::UnionDeclaration)
+        return nullptr;
     auto tyDecl = typeDeclarationFor(node);
-    PSY_ASSERT_2(tyDecl->category() == TypeDeclarationCategory::Tag, return nullptr);
-    auto tagTyDecl = tyDecl->asTagTypeDeclaration();
-    PSY_ASSERT_2(tagTyDecl->category() == TagTypeDeclarationCategory::Union, return nullptr);
-    return tagTyDecl->asUnionDeclaration();
+    PSY_ASSERT_2(tyDecl->kind() == SymbolKind::UnionDeclaration, return nullptr);
+    return tyDecl->asUnionDeclaration();
 }
 
-const EnumDeclarationSymbol* SemanticModel::enumFor(const EnumDeclarationSyntax* node) const
+const StructOrUnionDeclarationSymbol* SemanticModel::structOrUnionFor(
+        const StructOrUnionDeclarationSyntax* node) const
 {
     auto tyDecl = typeDeclarationFor(node);
-    PSY_ASSERT_2(tyDecl->category() == TypeDeclarationCategory::Tag, return nullptr);
-    auto tagTyDecl = tyDecl->asTagTypeDeclaration();
-    PSY_ASSERT_2(tagTyDecl->category() == TagTypeDeclarationCategory::Enum, return nullptr);
-    return tagTyDecl->asEnumDeclaration();
+    PSY_ASSERT_2(tyDecl->kind() == SymbolKind::StructDeclaration
+                    || tyDecl->kind() == SymbolKind::UnionDeclaration,
+                 return nullptr);
+    return tyDecl->asStructOrUnionDeclaration();
 }
 
-EnumeratorDeclarationSymbol* SemanticModel::enumeratorFor(const EnumeratorDeclarationSyntax* node)
+const EnumDeclarationSymbol* SemanticModel::enumFor(
+        const EnumDeclarationSyntax* node) const
+{
+    auto tyDecl = typeDeclarationFor(node);
+    PSY_ASSERT_2(tyDecl->kind() == SymbolKind::EnumDeclaration, return nullptr);
+    return tyDecl->asEnumDeclaration();
+}
+
+EnumeratorDeclarationSymbol* SemanticModel::enumeratorFor(
+        const EnumeratorDeclarationSyntax* node)
 {
     auto it = P->declsBySyntax_.find(node);
     if (it == P->declsBySyntax_.end()) {

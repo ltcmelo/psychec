@@ -22,7 +22,6 @@
 #define PSYCHE_C_MEMBER_DECLARATION_H__
 
 #include "Symbol_Declaration.h"
-#include "MemberDeclarationCategory.h"
 #include "MIXIN_NameableDeclarationSymbol.h"
 #include "MIXIN_TypeableDeclarationSymbol.h"
 
@@ -50,11 +49,6 @@ public:
      */
     virtual MemberDeclarationSymbol* asMemberDeclaration() override { return this; }
     virtual const MemberDeclarationSymbol* asMemberDeclaration() const override { return this; }
-
-    /**
-     * The MemberDeclarationCategory of \c this MemberDeclarationSymbol.
-     */
-    MemberDeclarationCategory category() const;
 
     /**
      * The \a name of the \a Member declared by \c this MemberDeclarationSymbol.

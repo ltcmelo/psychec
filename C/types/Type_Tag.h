@@ -61,17 +61,17 @@ public:
     /**
      * The \a declaration of \c this TagType, if one exists.
      */
-    const TagTypeDeclarationSymbol* declaration() const;
+    const TagDeclarationSymbol* declaration() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
     PSY_GRANT_INTERNAL_ACCESS(TypeCanonicalizer);
-    PSY_GRANT_INTERNAL_ACCESS(TagTypeDeclarationSymbol);
+    PSY_GRANT_INTERNAL_ACCESS(TagDeclarationSymbol);
     PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
 
     TagType(TagTypeKind tagTyK, const Identifier* tag);
 
-    void setDeclaration(const TagTypeDeclarationSymbol* tagTyDecl);
+    void setDeclaration(const TagDeclarationSymbol* tagTyDecl);
 
 private:
     DECL_PIMPL_SUB(TagType)

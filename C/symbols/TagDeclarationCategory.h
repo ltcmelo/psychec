@@ -18,49 +18,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclaration__IMPL__.inc"
-#include "TagTypeDeclaration_Union.h"
+#ifndef PSYCHE_C_TAG_TYPE_DECLARATION_CATEGORY_H__
+#define PSYCHE_C_TAG_TYPE_DECLARATION_CATEGORY_H__
 
-#include "sema/Scope.h"
-#include "symbols/Symbol_ALL.h"
-#include "syntax/Lexeme_Identifier.h"
-#include "types/Type_Tag.h"
+#include "API.h"
+#include "Fwds.h"
 
+#include "../common/infra/Assertions.h"
+
+#include <cstdint>
 #include <iostream>
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-UnionDeclarationSymbol::UnionDeclarationSymbol(
-        const Symbol* containingSym,
-        const SyntaxTree* tree,
-        const Scope* enclosingScope,
-        TagType* tagTy)
-    : StructOrUnionDeclarationSymbol(
-          SymbolKind::UnionDeclaration,
-          containingSym,
-          tree,
-          enclosingScope,
-          tagTy)
-{
-}
+#include <string>
 
 namespace psy {
 namespace C {
 
-std::ostream& operator<<(std::ostream& os, const UnionDeclarationSymbol* uniom)
+/**
+ * \brief The TagDeclarationCategory enum.
+ */
+enum class PSY_C_API TagDeclarationCategory : std::uint8_t
 {
-    if (!uniom)
-        return os << "<Union is null>";
-    os << "<Union |";
-    os << " type:" << uniom->introducedNewType();
-    os << " scope:" << uniom->enclosingScope()->kind();
-    for (const auto& fld : uniom->fields())
-        os << " field:" << fld;
-    os << ">";
-    return os;
+    StructOrUnion,
+    Enum,
+};
+
+PSY_C_API inline std::ostream& operator<<(
+        std::ostream& os,
+        TagDeclarationCategory tagTyDeclK)
+{
+    switch (tagTyDeclK) {
+        case TagDeclarationCategory::StructOrUnion:
+            return os << "StructOrUnion";
+        case TagDeclarationCategory::Enum:
+            return os << "Enum";
+    }
+    PSY_ASSERT_1(false);
+    return os << "<invalid TagDeclarationCategory>";
 }
 
 } // C
 } // psy
+
+#endif

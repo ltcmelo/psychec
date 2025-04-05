@@ -47,7 +47,7 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+            .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                     .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -60,7 +60,7 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+            .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                      .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -74,9 +74,9 @@ struct w
 };
          )",
          Expectation()
-            .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+            .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                     .ty_.Basic(BasicTypeKind::Int_S))
-            .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+            .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                     .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -89,9 +89,9 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                      .ty_.Basic(BasicTypeKind::Int_S))
-             .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                      .ty_.Basic(BasicTypeKind::Int_S)));
 }
 
@@ -104,7 +104,7 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                  .ty_.Typedef("x")));
 }
 
@@ -117,9 +117,9 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Typedef("x"))
-             .declaration(Decl().Member("z", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("z", SymbolKind::FieldDeclaration)
                       .ty_.Typedef("x")));
 }
 
@@ -163,7 +163,7 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+            .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                      .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
@@ -176,7 +176,7 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+            .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                      .ty_.Tag("x", TagTypeKind::Union)));
 }
 
@@ -189,7 +189,7 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+            .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                      .ty_.Tag("x", TagTypeKind::Enum)));
 }
 
@@ -202,9 +202,9 @@ struct
 };
          )",
          Expectation()
-            .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+            .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                      .ty_.Tag("x", TagTypeKind::Struct))
-            .declaration(Decl().Member("z", MemberDeclarationCategory::Field)
+            .declaration(Decl().Member("z", SymbolKind::FieldDeclaration)
                      .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
@@ -218,9 +218,9 @@ struct
          )",
          Expectation()
             .declaration(
-                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("x", TagTypeKind::Struct))
+                Decl().Member("z", SymbolKind::FieldDeclaration).ty_.Tag("x", TagTypeKind::Struct))
             .declaration(
-                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+                Decl().Member("y", SymbolKind::FieldDeclaration).ty_.Basic(BasicTypeKind::Int_S))
          );
 }
 
@@ -234,9 +234,9 @@ struct s
          )",
          Expectation()
             .declaration(
-                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("x", TagTypeKind::Struct))
+                Decl().Member("z", SymbolKind::FieldDeclaration).ty_.Tag("x", TagTypeKind::Struct))
             .declaration(
-                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+                Decl().Member("y", SymbolKind::FieldDeclaration).ty_.Basic(BasicTypeKind::Int_S))
          );
 }
 
@@ -249,7 +249,7 @@ struct x
 };
          )",
          Expectation()
-            .declaration(Decl().Member("z", MemberDeclarationCategory::Field)
+            .declaration(Decl().Member("z", SymbolKind::FieldDeclaration)
                      .ty_.Tag("", TagTypeKind::Struct)));
 }
 
@@ -263,9 +263,9 @@ struct
          )",
          Expectation()
             .declaration(
-                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+                Decl().Member("z", SymbolKind::FieldDeclaration).ty_.Tag("", TagTypeKind::Struct))
             .declaration(
-                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+                Decl().Member("y", SymbolKind::FieldDeclaration).ty_.Basic(BasicTypeKind::Int_S))
          );
 }
 
@@ -285,9 +285,9 @@ struct
          )",
          Expectation()
             .declaration(
-                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+                Decl().Member("y", SymbolKind::FieldDeclaration).ty_.Tag("", TagTypeKind::Struct))
             .declaration(
-                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+                Decl().Member("x", SymbolKind::FieldDeclaration).ty_.Basic(BasicTypeKind::Int_S))
          );
 }
 
@@ -307,11 +307,11 @@ struct
          )",
          Expectation()
             .declaration(
-                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+                Decl().Member("y", SymbolKind::FieldDeclaration).ty_.Tag("", TagTypeKind::Struct))
             .declaration(
-                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+                Decl().Member("x", SymbolKind::FieldDeclaration).ty_.Basic(BasicTypeKind::Int_S))
             .declaration(
-                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+                Decl().Member("z", SymbolKind::FieldDeclaration).ty_.Tag("", TagTypeKind::Struct))
          );
 }
 
@@ -328,11 +328,11 @@ struct
          )",
          Expectation()
             .declaration(
-                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+                Decl().Member("y", SymbolKind::FieldDeclaration).ty_.Tag("", TagTypeKind::Struct))
             .declaration(
-                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+                Decl().Member("x", SymbolKind::FieldDeclaration).ty_.Basic(BasicTypeKind::Int_S))
             .declaration(
-                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("w", TagTypeKind::Struct))
+                Decl().Member("z", SymbolKind::FieldDeclaration).ty_.Tag("w", TagTypeKind::Struct))
          );
 }
 
@@ -349,11 +349,11 @@ struct
          )",
          Expectation()
             .declaration(
-                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("s", TagTypeKind::Struct))
+                Decl().Member("y", SymbolKind::FieldDeclaration).ty_.Tag("s", TagTypeKind::Struct))
             .declaration(
-                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+                Decl().Member("x", SymbolKind::FieldDeclaration).ty_.Basic(BasicTypeKind::Int_S))
             .declaration(
-                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("w", TagTypeKind::Struct))
+                Decl().Member("z", SymbolKind::FieldDeclaration).ty_.Tag("w", TagTypeKind::Struct))
          );
 }
 
@@ -373,11 +373,11 @@ struct
          )",
          Expectation()
             .declaration(
-                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("s", TagTypeKind::Struct))
+                Decl().Member("y", SymbolKind::FieldDeclaration).ty_.Tag("s", TagTypeKind::Struct))
             .declaration(
-                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+                Decl().Member("x", SymbolKind::FieldDeclaration).ty_.Basic(BasicTypeKind::Int_S))
             .declaration(
-                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("w", TagTypeKind::Struct))
+                Decl().Member("z", SymbolKind::FieldDeclaration).ty_.Tag("w", TagTypeKind::Struct))
          );
 }
 
@@ -397,11 +397,11 @@ struct
          )",
          Expectation()
             .declaration(
-                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("s", TagTypeKind::Struct))
+                Decl().Member("y", SymbolKind::FieldDeclaration).ty_.Tag("s", TagTypeKind::Struct))
             .declaration(
-                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+                Decl().Member("x", SymbolKind::FieldDeclaration).ty_.Basic(BasicTypeKind::Int_S))
             .declaration(
-                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+                Decl().Member("z", SymbolKind::FieldDeclaration).ty_.Tag("", TagTypeKind::Struct))
          );
 }
 
@@ -421,11 +421,11 @@ struct
          )",
          Expectation()
             .declaration(
-                Decl().Member("y", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+                Decl().Member("y", SymbolKind::FieldDeclaration).ty_.Tag("", TagTypeKind::Struct))
             .declaration(
-                Decl().Member("x", MemberDeclarationCategory::Field).ty_.Basic(BasicTypeKind::Int_S))
+                Decl().Member("x", SymbolKind::FieldDeclaration).ty_.Basic(BasicTypeKind::Int_S))
             .declaration(
-                Decl().Member("z", MemberDeclarationCategory::Field).ty_.Tag("", TagTypeKind::Struct))
+                Decl().Member("z", SymbolKind::FieldDeclaration).ty_.Tag("", TagTypeKind::Struct))
          );
 }
 
@@ -461,7 +461,7 @@ void DeclarationBinderTester::case2050()
     bind("struct { const int x ; } ;",
          Expectation()
              .declaration(Decl()
-                      .Member("x", MemberDeclarationCategory::Field)
+                      .Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)));
 }
 
@@ -470,7 +470,7 @@ void DeclarationBinderTester::case2051()
     bind("struct { const x y ; } ;",
          Expectation()
              .declaration(Decl()
-                      .Member("y", MemberDeclarationCategory::Field)
+                      .Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Typedef("x", CVR::Const)));
 }
 
@@ -487,7 +487,7 @@ void DeclarationBinderTester::case2053()
     bind("struct { int const x ; } ;",
          Expectation()
              .declaration(Decl()
-                      .Member("x", MemberDeclarationCategory::Field)
+                      .Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)));
 }
 
@@ -496,7 +496,7 @@ void DeclarationBinderTester::case2054()
     bind("struct { x const y ; } ;",
          Expectation()
              .declaration(Decl()
-                      .Member("y", MemberDeclarationCategory::Field)
+                      .Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Typedef("x", CVR::Const)));
 }
 
@@ -550,7 +550,7 @@ void DeclarationBinderTester::case2100()
 {
     bind("struct { int * x ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -559,7 +559,7 @@ void DeclarationBinderTester::case2101()
 {
     bind("struct { x * y ; } ;",
          Expectation()
-             .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Typedef("x")
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -568,10 +568,10 @@ void DeclarationBinderTester::case2102()
 {
     bind("struct { int * x ; y * z ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Member("z", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("z", SymbolKind::FieldDeclaration)
                       .ty_.Typedef("y")
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -580,10 +580,10 @@ void DeclarationBinderTester::case2103()
 {
     bind("struct { int * x , * y ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer))
-             .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -592,7 +592,7 @@ void DeclarationBinderTester::case2104()
 {
     bind("struct { int ( * x ) [ 1 ]; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Array)
                       .ty_.Derived(TypeKind::Pointer)));
@@ -602,7 +602,7 @@ void DeclarationBinderTester::case2105()
 {
     bind("struct { int * * x ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)));
@@ -612,7 +612,7 @@ void DeclarationBinderTester::case2106()
 {
     bind("struct { int * * * x ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S)
                       .ty_.Derived(TypeKind::Pointer)
                       .ty_.Derived(TypeKind::Pointer)
@@ -623,7 +623,7 @@ void DeclarationBinderTester::case2107()
 {
     bind("struct { int * ( * x ) [ 1 ] ; };",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)
@@ -677,7 +677,7 @@ void DeclarationBinderTester::case2150()
 {
     bind("struct { const int * x ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -686,7 +686,7 @@ void DeclarationBinderTester::case2151()
 {
     bind("struct { const x * y ; } ;",
          Expectation()
-             .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Typedef("x", CVR::Const)
                       .ty_.Derived(TypeKind::Pointer)));
 }
@@ -744,7 +744,7 @@ void DeclarationBinderTester::case2200()
 {
     bind("struct { const int * const x ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)
                       .ty_.Derived(TypeKind::Pointer, CVR::Const)));
 }
@@ -804,7 +804,7 @@ void DeclarationBinderTester::case2250()
 {
     bind("struct { int * const x ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::Const)));
 }
@@ -813,7 +813,7 @@ void DeclarationBinderTester::case2251()
 {
     bind("struct { x * const y ; } ;",
          Expectation()
-             .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::Const)));
 }
@@ -876,7 +876,7 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -885,7 +885,7 @@ void DeclarationBinderTester::case2301()
 {
     bind("struct { x y [ 1 ] ; } ;",
          Expectation()
-             .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -899,10 +899,10 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None))
-             .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -916,10 +916,10 @@ struct
 };
          )",
          Expectation()
-             .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None))
-             .declaration(Decl().Member("z", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("z", SymbolKind::FieldDeclaration)
                       .ty_.Typedef("x", CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -928,7 +928,7 @@ void DeclarationBinderTester::case2304()
 {
     bind("struct { int * x [ 1 ] ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
@@ -938,10 +938,10 @@ void DeclarationBinderTester::case2305()
 {
     bind("struct { int x [ 1 ] , * y [ 2 ] ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None))
-             .declaration(Decl().Member("y", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
@@ -951,7 +951,7 @@ void DeclarationBinderTester::case2306()
 {
     bind("struct { int * * x [ 1 ] ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
                       .ty_.Derived(TypeKind::Pointer, CVR::None)
@@ -1006,7 +1006,7 @@ void DeclarationBinderTester::case2350()
 {
     bind("struct { const int x [ 1 ] ; } ;",
          Expectation()
-             .declaration(Decl().Member("x", MemberDeclarationCategory::Field)
+             .declaration(Decl().Member("x", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)
                       .ty_.Derived(TypeKind::Array, CVR::None)));
 }
@@ -1071,7 +1071,7 @@ struct x
          )",
          Expectation()
             .declaration(Decl()
-                         .Member("y", MemberDeclarationCategory::Field)
+                         .Member("y", SymbolKind::FieldDeclaration)
                          .ty_.Basic(BasicTypeKind::Short_S)));
 }
 
@@ -1085,10 +1085,10 @@ struct x
          )",
          Expectation()
          .declaration(Decl()
-                      .Member("y", MemberDeclarationCategory::Field)
+                      .Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Short_S))
          .declaration(Decl()
-                      .Member("z", MemberDeclarationCategory::Field)
+                      .Member("z", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Short_S)));
 }
 
@@ -1102,7 +1102,7 @@ struct x
          )",
          Expectation()
          .declaration(Decl()
-                      .Member("y", MemberDeclarationCategory::Field)
+                      .Member("y", SymbolKind::FieldDeclaration)
                       .ty_.Basic(BasicTypeKind::Short_S)));
 }
 

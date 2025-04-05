@@ -22,7 +22,6 @@
 #define PSYCHE_C_OBJECT_DECLARATION_H__
 
 #include "Symbol_Declaration.h"
-#include "ObjectDeclarationCategory.h"
 #include "MIXIN_NameableDeclarationSymbol.h"
 #include "MIXIN_TypeableDeclarationSymbol.h"
 
@@ -50,11 +49,6 @@ public:
      */
     virtual ObjectDeclarationSymbol* asObjectDeclaration() override { return this; }
     virtual const ObjectDeclarationSymbol* asObjectDeclaration() const override { return this; }
-
-    /**
-     * The ObjectDeclarationCategory of \c this ObjectDeclarationSymbol.
-     */
-    ObjectDeclarationCategory category() const;
 
     /**
      * The \a name of the \a object declared by \c this ObjectDeclarationSymbol.

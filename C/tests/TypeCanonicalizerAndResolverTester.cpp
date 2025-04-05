@@ -47,7 +47,7 @@ x y ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationCategory::Variable)
+                         .Object("y", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -61,7 +61,7 @@ x * y ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationCategory::Variable)
+                         .Object("y", SymbolKind::VariableDeclaration)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
@@ -76,7 +76,7 @@ x const y ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationCategory::Variable)
+                         .Object("y", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
@@ -90,7 +90,7 @@ x const y ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationCategory::Variable)
+                         .Object("y", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
@@ -104,7 +104,7 @@ x * * y ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationCategory::Variable)
+                         .Object("y", SymbolKind::VariableDeclaration)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
@@ -120,7 +120,7 @@ x y [ 1 ] ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationCategory::Variable)
+                         .Object("y", SymbolKind::VariableDeclaration)
                          .ty_.Derived(TypeKind::Array)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
@@ -135,7 +135,7 @@ x y ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationCategory::Variable)
+                         .Object("y", SymbolKind::VariableDeclaration)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
@@ -150,7 +150,7 @@ x y ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationCategory::Variable)
+                         .Object("y", SymbolKind::VariableDeclaration)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
@@ -167,7 +167,7 @@ y z ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("z", ObjectDeclarationCategory::Variable)
+                         .Object("z", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -378,7 +378,7 @@ x y ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationCategory::Variable)
+                         .Object("y", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
@@ -392,7 +392,7 @@ x * y ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("y", ObjectDeclarationCategory::Variable)
+                         .Object("y", SymbolKind::VariableDeclaration)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
@@ -409,7 +409,7 @@ y * z ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("z", ObjectDeclarationCategory::Variable)
+                         .Object("z", SymbolKind::VariableDeclaration)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Basic(BasicTypeKind::Double)));
@@ -426,7 +426,7 @@ y * z ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("z", ObjectDeclarationCategory::Variable)
+                         .Object("z", SymbolKind::VariableDeclaration)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Derived(TypeKind::Pointer)
                          .ty_.Derived(TypeKind::Pointer)
@@ -444,7 +444,7 @@ y z ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("z", ObjectDeclarationCategory::Variable)
+                         .Object("z", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -459,7 +459,7 @@ void f ( ) { int x ; x y ; }
             .diagnostic(Expectation::ErrorOrWarn::Error,
                         TypeCanonicalizer::DiagnosticsReporter::ID_of_ExpectedTypedefDeclaration)
             .declaration(
-                Decl().Object("y", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                Decl().Object("y", SymbolKind::VariableDeclaration, ScopeKind::Block)
                       .ty_.Unknown()));
 }
 
@@ -474,7 +474,7 @@ void f ( ) { x y ; }
             .diagnostic(Expectation::ErrorOrWarn::Error,
                         TypeCanonicalizer::DiagnosticsReporter::ID_of_TypeDeclarationNotFound)
             .declaration(
-                Decl().Object("y", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                Decl().Object("y", SymbolKind::VariableDeclaration, ScopeKind::Block)
                       .ty_.Unknown()));
 }
 
@@ -502,7 +502,7 @@ struct x { int y ; } ; void f ( ) { struct x z ; }
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(
-                Decl().Object("z", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                Decl().Object("z", SymbolKind::VariableDeclaration, ScopeKind::Block)
                       .ty_.Tag("x", TagTypeKind::Struct)));
 }
 
@@ -517,7 +517,7 @@ struct x { int y ; } ; void f ( ) { union x z ; }
             .diagnostic(Expectation::ErrorOrWarn::Error,
                         TypeCanonicalizer::DiagnosticsReporter::ID_of_TagTypeDoesNotMatchTagDeclaration)
             .declaration(
-                Decl().Object("z", ObjectDeclarationCategory::Variable, ScopeKind::Block)
+                Decl().Object("z", SymbolKind::VariableDeclaration, ScopeKind::Block)
                       .ty_.Unknown()));
 }
 
@@ -533,7 +533,7 @@ z w ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("w", ObjectDeclarationCategory::Variable)
+                         .Object("w", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -550,7 +550,7 @@ w p ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .Object("p", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double)));
 }
 
@@ -567,7 +567,7 @@ const w p ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .Object("p", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
@@ -584,7 +584,7 @@ w p ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .Object("p", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
@@ -601,7 +601,7 @@ w p ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .Object("p", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
@@ -618,7 +618,7 @@ const w p ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .Object("p", SymbolKind::VariableDeclaration)
                          .ty_.Basic(BasicTypeKind::Double, CVR::Const)));
 }
 
@@ -636,7 +636,7 @@ w p ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .Object("p", SymbolKind::VariableDeclaration)
                          .ty_.Tag("t", TagTypeKind::Struct)));
 }
 
@@ -653,7 +653,7 @@ w p ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .Object("p", SymbolKind::VariableDeclaration)
                          .ty_.Tag("t", TagTypeKind::Struct)));
 }
 
@@ -670,7 +670,7 @@ w p ;
     canonicalizerAndResolveTypes(s,
             Expectation()
             .declaration(Decl()
-                         .Object("p", ObjectDeclarationCategory::Variable)
+                         .Object("p", SymbolKind::VariableDeclaration)
                          .ty_.Tag("", TagTypeKind::Struct)));
 }
 

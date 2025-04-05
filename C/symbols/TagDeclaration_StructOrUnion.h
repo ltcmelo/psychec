@@ -1,4 +1,4 @@
-// Copyright (c) 2021/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2025 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,40 +18,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_UNION_DECLARATION_H__
-#define PSYCHE_C_UNION_DECLARATION_H__
+#ifndef PSYCHE_C_STRUCT_OR_UNION_DECLARATION_H__
+#define PSYCHE_C_STRUCT_OR_UNION_DECLARATION_H__
 
-#include "TagTypeDeclaration_StructOrUnion.h"
+#include "TypeDeclaration_Tag.h"
 
 namespace psy {
 namespace C {
 
 /**
- * \brief The UnionDeclarationSymbol class.
+ * \brief The StructOrUnionDeclarationSymbol class.
  */
-class PSY_C_API UnionDeclarationSymbol final
-        : public StructOrUnionDeclarationSymbol
+class PSY_C_API StructOrUnionDeclarationSymbol : public TagDeclarationSymbol
 {
 public:
+    using Fields = std::vector<const FieldDeclarationSymbol*>;
+
     //!@{
     /**
-     * Cast \c this Symbol as a UnionDeclarationSymbol.
+     * Cast \c this Symbol as a TagDeclarationSymbol.
      */
-    virtual UnionDeclarationSymbol* asUnionDeclaration() override { return this; }
-    virtual const UnionDeclarationSymbol* asUnionDeclaration() const override { return this; }
+    virtual StructOrUnionDeclarationSymbol* asStructOrUnionDeclaration() override { return this; }
+    virtual const StructOrUnionDeclarationSymbol* asStructOrUnionDeclaration() const override { return this; }
     //!@}
+
+    /**
+     * The \a fields of \c this StructOrUnionDeclarationSymbol.
+     */
+    Fields fields() const;
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
 
-    UnionDeclarationSymbol(
+    void addField(const FieldDeclarationSymbol* fld);
+
+protected:
+    StructOrUnionDeclarationSymbol(
+            SymbolKind symK,
             const Symbol* containingSym,
             const SyntaxTree* tree,
             const Scope* enclosingScope,
             TagType* tagTy);
 };
-
-PSY_C_API std::ostream& operator<<(std::ostream& os, const UnionDeclarationSymbol* uniom);
 
 } // C
 } // psy

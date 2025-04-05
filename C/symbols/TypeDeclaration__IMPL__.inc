@@ -20,7 +20,7 @@
 
 #include "Declaration__IMPL__.inc"
 #include "Declaration_Type.h"
-#include "TagTypeDeclarationCategory.h"
+#include "TagDeclarationCategory.h"
 
 using namespace psy;
 using namespace C;

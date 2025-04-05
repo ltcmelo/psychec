@@ -24,6 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "symbols/SymbolKind.h"
 #include "../common/infra/AccessSpecifiers.h"
 #include "../common/infra/Pimpl.h"
 
@@ -95,6 +96,14 @@ public:
      * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
      */
     const UnionDeclarationSymbol* unionFor(const StructOrUnionDeclarationSyntax* node) const;
+
+    /**
+     * The StructOrUnionDeclarationSymbol declared for the given StructOrUnionDeclarationSyntax \c node.
+     *
+     * \note Similar to:
+     * - \c Microsoft.CodeAnalysis.CSharp.CSharpExtensions.GetDeclaredSymbol of Roslyn.
+     */
+    const StructOrUnionDeclarationSymbol* structOrUnionFor(const StructOrUnionDeclarationSyntax* node) const;
 
     /**
      * The EnumDeclarationSymbol declared for the given EnumDeclarationSyntax \c node.
@@ -196,23 +205,23 @@ PSY_INTERNAL:
 
     TranslationUnitSymbol* setTranslationUnit(std::unique_ptr<TranslationUnitSymbol> unit);
 
-    DeclarationSymbol* addDeclaration(const SyntaxNode* node, std::unique_ptr<DeclarationSymbol> decl);
+    DeclarationSymbol* addDeclaration(
+            const SyntaxNode* node,
+            std::unique_ptr<DeclarationSymbol> decl);
 
     DeclarationSymbol* declarationBy(const DeclaratorSyntax* node);
     FunctionDeclarationSymbol* functionFor(const FunctionDefinitionSyntax* node);
     ParameterDeclarationSymbol* parameterFor(const ParameterDeclarationSyntax* node);
-    TypeDeclarationSymbol* typeDeclarationFor(const TypeDeclarationSyntax* node);
     EnumeratorDeclarationSymbol* enumeratorFor(const EnumeratorDeclarationSyntax* node);
-    std::vector<FieldDeclarationSymbol*>
-        fieldsFor(const FieldDeclarationSyntax* node);
-    template <class VecT> VecT
-        fieldsFor_CORE(const FieldDeclarationSyntax* node, VecT&& decls);
-    std::vector<DeclarationSymbol*>
-        variableAndOrFunctionsFor(const VariableAndOrFunctionDeclarationSyntax* node);
-    template <class VecT> VecT
-        variablesAndOrFunctionsFor_CORE(
+    std::vector<FieldDeclarationSymbol*> fieldsFor(const FieldDeclarationSyntax* node);
+    std::vector<DeclarationSymbol*> variableAndOrFunctionsFor(const VariableAndOrFunctionDeclarationSyntax* node);
+    template <class VecT> VecT fieldsFor_CORE(
+            const FieldDeclarationSyntax* node,
+            VecT&& decls);
+    template <class VecT> VecT variablesAndOrFunctionsFor_CORE(
             const VariableAndOrFunctionDeclarationSyntax* node,
             VecT&& decls);
+    TypeDeclarationSymbol* typeDeclarationFor(const TypeDeclarationSyntax* node);
 
     Scope* keepScope(std::unique_ptr<Scope> scope);
     void setScopeOf(const IdentifierNameSyntax* node, const Scope* scope);

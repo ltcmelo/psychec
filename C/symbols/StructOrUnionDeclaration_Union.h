@@ -18,49 +18,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "TypeDeclaration__IMPL__.inc"
-#include "TagTypeDeclaration_Struct.h"
+#ifndef PSYCHE_C_UNION_DECLARATION_H__
+#define PSYCHE_C_UNION_DECLARATION_H__
 
-#include "sema/Scope.h"
-#include "symbols/Symbol_ALL.h"
-#include "syntax/Lexeme_Identifier.h"
-#include "types/Type_Tag.h"
-
-#include <iostream>
-#include <sstream>
-
-using namespace psy;
-using namespace C;
-
-StructDeclarationSymbol::StructDeclarationSymbol(
-        const Symbol* containingSym,
-        const SyntaxTree* tree,
-        const Scope* enclosingScope,
-        TagType* tagTy)
-    : StructOrUnionDeclarationSymbol(
-          SymbolKind::StructDeclaration,
-          containingSym,
-          tree,
-          enclosingScope,
-          tagTy)
-{
-}
+#include "TagDeclaration_StructOrUnion.h"
 
 namespace psy {
 namespace C {
 
-std::ostream& operator<<(std::ostream& os, const StructDeclarationSymbol* strukt)
+/**
+ * \brief The UnionDeclarationSymbol class.
+ */
+class PSY_C_API UnionDeclarationSymbol final
+        : public StructOrUnionDeclarationSymbol
 {
-    if (!strukt)
-        return os << "<Struct is null>";
-    os << "<Struct |";
-    os << " type:" << strukt->introducedNewType();
-    os << " scope:" << strukt->enclosingScope()->kind();
-    for (const auto& fld : strukt->fields())
-        os << " field:" << fld;
-    os << ">";
-    return os;
-}
+public:
+    //!@{
+    /**
+     * Cast \c this Symbol as a UnionDeclarationSymbol.
+     */
+    virtual UnionDeclarationSymbol* asUnionDeclaration() override { return this; }
+    virtual const UnionDeclarationSymbol* asUnionDeclaration() const override { return this; }
+    //!@}
+
+PSY_INTERNAL:
+    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
+
+    UnionDeclarationSymbol(
+            const Symbol* containingSym,
+            const SyntaxTree* tree,
+            const Scope* enclosingScope,
+            TagType* tagTy);
+};
+
+PSY_C_API std::ostream& operator<<(std::ostream& os, const UnionDeclarationSymbol* uniom);
 
 } // C
-} // psi
+} // psy
+
+#endif

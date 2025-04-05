@@ -29,7 +29,7 @@
 using namespace psy;
 using namespace C;
 
-TagTypeDeclarationSymbol::TagTypeDeclarationSymbol(
+TagDeclarationSymbol::TagDeclarationSymbol(
         SymbolKind symK,
         const Symbol* containingSym,
         const SyntaxTree* tree,
@@ -46,7 +46,7 @@ TagTypeDeclarationSymbol::TagTypeDeclarationSymbol(
     tagTy->setDeclaration(this);
 }
 
-TagTypeDeclarationCategory TagTypeDeclarationSymbol::category() const
+TagDeclarationCategory TagDeclarationSymbol::category() const
 {
     switch (kind()) {
         case SymbolKind::Program:
@@ -59,28 +59,27 @@ TagTypeDeclarationCategory TagTypeDeclarationSymbol::category() const
         case SymbolKind::TypedefDeclaration:
             break;
         case SymbolKind::StructDeclaration:
-            return TagTypeDeclarationCategory::Struct;
         case SymbolKind::UnionDeclaration:
-            return TagTypeDeclarationCategory::Union;
+            return TagDeclarationCategory::StructOrUnion;
         case SymbolKind::EnumDeclaration:
-            return TagTypeDeclarationCategory::Enum;
+            return TagDeclarationCategory::Enum;
     }
     PSY_ASSERT_1(false);
-    return TagTypeDeclarationCategory(~0);
+    return TagDeclarationCategory(~0);
 }
 
-const Identifier* TagTypeDeclarationSymbol::denotingIdentifier() const
+const Identifier* TagDeclarationSymbol::denotingIdentifier() const
 {
     PSY_ASSERT_2(introducedType()->kind() == TypeKind::Tag, return nullptr);
     return P_CAST->ty_->asTagType()->tag();
 }
 
-void TagTypeDeclarationSymbol::addMember(const MemberDeclarationSymbol* memb)
+void TagDeclarationSymbol::addMember(const MemberDeclarationSymbol* memb)
 {
     membDecls_.push_back(memb);
 }
 
-const MemberDeclarationSymbol* TagTypeDeclarationSymbol::member(const Identifier* name) const
+const MemberDeclarationSymbol* TagDeclarationSymbol::member(const Identifier* name) const
 {
     auto it = std::find_if(membDecls_.begin(),
                            membDecls_.end(),
@@ -107,12 +106,12 @@ const MemberDeclarationSymbol* TagTypeDeclarationSymbol::member(const Identifier
     return nullptr;
 }
 
-TagTypeDeclarationSymbol::Members TagTypeDeclarationSymbol::members() const
+TagDeclarationSymbol::Members TagDeclarationSymbol::members() const
 {
     return membDecls_;
 }
 
-const TagType* TagTypeDeclarationSymbol::introducedNewType() const
+const TagType* TagDeclarationSymbol::introducedNewType() const
 {
     PSY_ASSERT_2(introducedType()->kind() == TypeKind::Tag, return nullptr);
     return P_CAST->ty_->asTagType();
@@ -121,16 +120,14 @@ const TagType* TagTypeDeclarationSymbol::introducedNewType() const
 namespace psy {
 namespace C {
 
-PSY_C_API std::ostream& operator<<(std::ostream& os, const TagTypeDeclarationSymbol* tagTyDecl)
+PSY_C_API std::ostream& operator<<(std::ostream& os, const TagDeclarationSymbol* tagTyDecl)
 {
     if (!tagTyDecl)
         return os << "<TagTypeDeclaration is null>";
     switch (tagTyDecl->category()) {
-        case TagTypeDeclarationCategory::Struct:
-            return os << tagTyDecl->asStructDeclaration();
-        case TagTypeDeclarationCategory::Union:
-            return os << tagTyDecl->asUnionDeclaration();
-        case TagTypeDeclarationCategory::Enum:
+        case TagDeclarationCategory::StructOrUnion:
+            return os << tagTyDecl->asStructOrUnionDeclaration();
+        case TagDeclarationCategory::Enum:
             return os << tagTyDecl->asEnumDeclaration();
     }
     PSY_ASSERT_1(false);

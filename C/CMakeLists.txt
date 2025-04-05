@@ -153,12 +153,10 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Object.h
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Type.cpp
     ${PROJECT_SOURCE_DIR}/symbols/Declaration_Type.h
-    ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclarationCategory.h
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Parameter.cpp
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Parameter.h
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Variable.cpp
     ${PROJECT_SOURCE_DIR}/symbols/ObjectDeclaration_Variable.h
-    ${PROJECT_SOURCE_DIR}/symbols/MemberDeclarationCategory.h
     ${PROJECT_SOURCE_DIR}/symbols/MemberDeclaration_Enumerator.cpp
     ${PROJECT_SOURCE_DIR}/symbols/MemberDeclaration_Enumerator.h
     ${PROJECT_SOURCE_DIR}/symbols/MemberDeclaration_Field.cpp
@@ -169,15 +167,15 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Tag.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Typedef.cpp
     ${PROJECT_SOURCE_DIR}/symbols/TypeDeclaration_Typedef.h
-    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclarationCategory.h
-    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Enum.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Enum.h
-    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_StructOrUnion.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_StructOrUnion.h
-    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Struct.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Struct.h
-    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Union.cpp
-    ${PROJECT_SOURCE_DIR}/symbols/TagTypeDeclaration_Union.h
+    ${PROJECT_SOURCE_DIR}/symbols/TagDeclarationCategory.h
+    ${PROJECT_SOURCE_DIR}/symbols/TagDeclaration_Enum.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TagDeclaration_Enum.h
+    ${PROJECT_SOURCE_DIR}/symbols/TagDeclaration_StructOrUnion.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/TagDeclaration_StructOrUnion.h
+    ${PROJECT_SOURCE_DIR}/symbols/StructOrUnionDeclaration_Struct.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/StructOrUnionDeclaration_Struct.h
+    ${PROJECT_SOURCE_DIR}/symbols/StructOrUnionDeclaration_Union.cpp
+    ${PROJECT_SOURCE_DIR}/symbols/StructOrUnionDeclaration_Union.h
 
     # Semantics
     ${PROJECT_SOURCE_DIR}/sema/DeclarationBinder__MACROS__.inc

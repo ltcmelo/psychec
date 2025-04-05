@@ -26,10 +26,8 @@
 #include "sema/Scope.h"
 #include "symbols/SymbolKind.h"
 #include "symbols/DeclarationCategory.h"
-#include "symbols/TagTypeDeclarationCategory.h"
+#include "symbols/TagDeclarationCategory.h"
 #include "symbols/TypeDeclarationCategory.h"
-#include "symbols/ObjectDeclarationCategory.h"
-#include "symbols/MemberDeclarationCategory.h"
 #include "tests/TestSuite.h"
 #include "types/Type_ALL.h"
 
@@ -98,22 +96,19 @@ struct Decl
     Decl();
 
     Decl& Object(std::string name,
-                 ObjectDeclarationCategory objDeclK,
+                 SymbolKind symK,
                  ScopeKind scopeK = ScopeKind::File);
-    Decl& Member(std::string name,
-                 MemberDeclarationCategory membDeclK);
+    Decl& Member(std::string name, SymbolKind symK);
     Decl& Function(std::string name, ScopeKind scopeK = ScopeKind::File);
     Decl& Type(std::string typedefName);
-    Decl& Type(std::string tag, TagTypeDeclarationCategory tagTyDeclK);
+    Decl& Type(std::string tag, SymbolKind symK);
     Decl& withScopeKind(ScopeKind scopeK);
     Decl& inNameSpace(NameSpace ns);
 
     std::string ident_;
     DeclarationCategory declK_;
-    ObjectDeclarationCategory objDeclK_;
-    MemberDeclarationCategory membDeclK_;
     TypeDeclarationCategory tyDeclK_;
-    TagTypeDeclarationCategory tagTyDeclK_;
+    SymbolKind symK_;
     ScopeKind scopeK_;
     NameSpace ns_;
     Ty ty_;

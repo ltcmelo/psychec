@@ -18,40 +18,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_C_ENUM_H__
-#define PSYCHE_C_ENUM_H__
+#include "TypeDeclaration__IMPL__.inc"
+#include "StructOrUnionDeclaration_Union.h"
 
-#include "TypeDeclaration_Tag.h"
+#include "sema/Scope.h"
+#include "symbols/Symbol_ALL.h"
+#include "syntax/Lexeme_Identifier.h"
+#include "types/Type_Tag.h"
+
+#include <iostream>
+#include <sstream>
+
+using namespace psy;
+using namespace C;
+
+UnionDeclarationSymbol::UnionDeclarationSymbol(
+        const Symbol* containingSym,
+        const SyntaxTree* tree,
+        const Scope* enclosingScope,
+        TagType* tagTy)
+    : StructOrUnionDeclarationSymbol(
+          SymbolKind::UnionDeclaration,
+          containingSym,
+          tree,
+          enclosingScope,
+          tagTy)
+{
+}
 
 namespace psy {
 namespace C {
 
-class PSY_C_API EnumDeclarationSymbol final : public TagTypeDeclarationSymbol
+std::ostream& operator<<(std::ostream& os, const UnionDeclarationSymbol* uniom)
 {
-public:
-    //!@{
-    /**
-     * Cast \c this Symbol as a EnumDeclarationSymbol.
-     */
-    virtual EnumDeclarationSymbol* asEnumDeclaration() override { return this; }
-    virtual const EnumDeclarationSymbol* asEnumDeclaration() const override { return this; }
-    //!@}
-
-PSY_INTERNAL:
-    PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
-
-    EnumDeclarationSymbol(
-            const Symbol* containingSym,
-            const SyntaxTree* tree,
-            const Scope* enclosingScope,
-            TagType* tagTy);
-
-    void addEnumerator(const EnumeratorDeclarationSymbol* enumerator);
-};
-
-PSY_C_API std::ostream& operator<<(std::ostream& os, const EnumDeclarationSymbol* enun);
+    if (!uniom)
+        return os << "<Union is null>";
+    os << "<Union |";
+    os << " type:" << uniom->introducedNewType();
+    os << " scope:" << uniom->enclosingScope()->kind();
+    for (const auto& fld : uniom->fields())
+        os << " field:" << fld;
+    os << ">";
+    return os;
+}
 
 } // C
 } // psy
-
-#endif
