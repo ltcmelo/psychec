@@ -357,7 +357,8 @@ bool TypeChecker::satisfyRealTypeConstraint(const Type* ty, const SyntaxNode* no
 bool TypeChecker::typesAreCompatible(
         const Type* oneTy,
         const Type* otherTy,
-        bool treatVoidAsAny)
+        bool treatVoidAsAny,
+        bool ignoreQualifier)
 {
     switch (oneTy->kind()) {
         case TypeKind::Array:
@@ -366,7 +367,8 @@ bool TypeChecker::typesAreCompatible(
                     return typesAreCompatible(
                                 oneTy->asArrayType()->elementType(),
                                 otherTy->asArrayType()->elementType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 case TypeKind::Basic:
                 case TypeKind::Function:
                     break;
@@ -374,12 +376,14 @@ bool TypeChecker::typesAreCompatible(
                     return typesAreCompatible(
                                 oneTy->asArrayType()->elementType(),
                                 otherTy->asPointerType()->referencedType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 case TypeKind::TypedefName:
                     return typesAreCompatible(
                                 oneTy,
                                 otherTy->asTypedefNameType()->resolvedSynonymizedType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 case TypeKind::Tag:
                     break;
                 case TypeKind::Void:
@@ -404,11 +408,18 @@ bool TypeChecker::typesAreCompatible(
                     return typesAreCompatible(
                                 oneTy,
                                 otherTy->asTypedefNameType()->resolvedSynonymizedType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 case TypeKind::Tag:
                 case TypeKind::Void:
                     return treatVoidAsAny;
                 case TypeKind::Qualified:
+                    if (ignoreQualifier)
+                        return typesAreCompatible(
+                                    oneTy,
+                                    otherTy->asQualifiedType()->unqualifiedType(),
+                                    treatVoidAsAny,
+                                    false);
                     break;
                 case TypeKind::Error:
                     break;
@@ -426,7 +437,8 @@ bool TypeChecker::typesAreCompatible(
                     return typesAreCompatible(
                                 oneTy,
                                 otherTy->asTypedefNameType()->resolvedSynonymizedType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 case TypeKind::Tag:
                     break;
                 case TypeKind::Void:
@@ -444,7 +456,8 @@ bool TypeChecker::typesAreCompatible(
                     return typesAreCompatible(
                                 oneTy->asPointerType()->referencedType(),
                                 otherTy->asArrayType()->elementType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 case TypeKind::Basic:
                 case TypeKind::Function:
                     break;
@@ -452,12 +465,14 @@ bool TypeChecker::typesAreCompatible(
                     return typesAreCompatible(
                                 oneTy->asPointerType()->referencedType(),
                                 otherTy->asPointerType()->referencedType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 case TypeKind::TypedefName:
                     return typesAreCompatible(
                                 oneTy,
                                 otherTy->asTypedefNameType()->resolvedSynonymizedType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 case TypeKind::Tag:
                     break;
                 case TypeKind::Void:
@@ -484,7 +499,8 @@ bool TypeChecker::typesAreCompatible(
                     return typesAreCompatible(
                                 oneTy,
                                 otherTy->asTypedefNameType()->resolvedSynonymizedType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 case TypeKind::Tag: {
                     auto oneTagTy = oneTy->asTagType();
                     auto otherTagTy = otherTy->asTagType();
@@ -511,7 +527,8 @@ bool TypeChecker::typesAreCompatible(
                     return typesAreCompatible(
                                 oneTy,
                                 otherTy->asTypedefNameType()->resolvedSynonymizedType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 case TypeKind::Tag:
                     break;
                 case TypeKind::Void:
@@ -524,6 +541,12 @@ bool TypeChecker::typesAreCompatible(
             break;
 
         case TypeKind::Qualified:
+            if (ignoreQualifier)
+                return typesAreCompatible(
+                            oneTy->asQualifiedType()->unqualifiedType(),
+                            otherTy,
+                            treatVoidAsAny,
+                            ignoreQualifier);
             switch (otherTy->kind()) {
                 case TypeKind::Array:
                 case TypeKind::Basic:
@@ -534,7 +557,8 @@ bool TypeChecker::typesAreCompatible(
                     return typesAreCompatible(
                                 oneTy,
                                 otherTy->asTypedefNameType()->resolvedSynonymizedType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 case TypeKind::Tag:
                     break;
                 case TypeKind::Void:
@@ -547,7 +571,8 @@ bool TypeChecker::typesAreCompatible(
                     return typesAreCompatible(
                                 oneQualTy->unqualifiedType(),
                                 otherQualTy->unqualifiedType(),
-                                treatVoidAsAny);
+                                treatVoidAsAny,
+                                ignoreQualifier);
                 }
                 case TypeKind::Error:
                     break;
@@ -572,7 +597,7 @@ bool TypeChecker::isNULLPointerConstant(const SyntaxNode* node)
 // Expressions //
 //-------------//
 
-SyntaxVisitor::Action TypeChecker::visitExpression(const SyntaxNode *node)
+SyntaxVisitor::Action TypeChecker::visitExpression(const SyntaxNode* node)
 {
     VISIT(node);
     PSY_ASSERT_2(ty_, return Action::Quit);
@@ -1149,8 +1174,9 @@ SyntaxVisitor::Action TypeChecker::visitBinaryExpression(const BinaryExpressionS
     }
 }
 
+template <class BinaryLikeExprNodeT>
 SyntaxVisitor::Action TypeChecker::visitBinaryExpression_MultiplicationOrDivision(
-        const BinaryExpressionSyntax* node,
+        const BinaryLikeExprNodeT* node,
         const Type* leftTy,
         const Type* rightTy)
 {
@@ -1163,8 +1189,9 @@ SyntaxVisitor::Action TypeChecker::visitBinaryExpression_MultiplicationOrDivisio
     return Action::Skip;
 }
 
+template <class BinaryLikeExprNodeT>
 SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Remainder(
-        const BinaryExpressionSyntax* node,
+        const BinaryLikeExprNodeT* node,
         const Type* leftTy,
         const Type* rightTy)
 {
@@ -1177,8 +1204,9 @@ SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Remainder(
     return Action::Skip;
 }
 
+template <class BinaryLikeExprNodeT>
 SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Addition(
-        const BinaryExpressionSyntax* node,
+        const BinaryLikeExprNodeT* node,
         const Type* leftTy,
         const Type* rightTy)
 {
@@ -1198,8 +1226,9 @@ SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Addition(
     return Action::Skip;
 }
 
+template <class BinaryLikeExprNodeT>
 SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Subtraction(
-        const BinaryExpressionSyntax* node,
+        const BinaryLikeExprNodeT* node,
         const Type* leftTy,
         const Type* rightTy)
 {
@@ -1222,8 +1251,9 @@ SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Subtraction(
     return Action::Skip;
 }
 
+template <class BinaryLikeExprNodeT>
 SyntaxVisitor::Action TypeChecker::visitBinaryExpression_BitwiseShift(
-        const BinaryExpressionSyntax* node,
+        const BinaryLikeExprNodeT* node,
         const Type* leftTy,
         const Type* rightTy)
 {
@@ -1237,8 +1267,9 @@ SyntaxVisitor::Action TypeChecker::visitBinaryExpression_BitwiseShift(
     return Action::Skip;
 }
 
+template <class BinaryLikeExprNodeT>
 SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Relational(
-        const BinaryExpressionSyntax* node,
+        const BinaryLikeExprNodeT* node,
         const Type* leftTy,
         const Type* rightTy)
 {
@@ -1248,6 +1279,7 @@ SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Relational(
                 && typesAreCompatible(
                     leftTy->asPointerType()->referencedType(),
                     rightTy->asPointerType()->referencedType(),
+                    true,
                     true)))) {
         diagReporter_.InvalidOperator(node->operatorToken());
         return Action::Quit;
@@ -1257,8 +1289,9 @@ SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Relational(
     return Action::Skip;
 }
 
+template <class BinaryLikeExprNodeT>
 SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Equality(
-        const BinaryExpressionSyntax* node,
+        const BinaryLikeExprNodeT* node,
         const Type* leftTy,
         const Type* rightTy)
 {
@@ -1268,11 +1301,15 @@ SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Equality(
                         && typesAreCompatible(
                                 leftTy->asPointerType()->referencedType(),
                                 rightTy->asPointerType()->referencedType(),
+                                true,
                                 true))
                     || (rightTy->kind() == TypeKind::Basic
                         && rightTy->asBasicType()->kind() == BasicTypeKind::Int_S
                         && isNULLPointerConstant(node->right()))))
-            || (false))) {
+            || (leftTy->kind() == TypeKind::Basic
+                    && leftTy->asBasicType()->kind() == BasicTypeKind::Int_S
+                    && isNULLPointerConstant(node->left())
+                && rightTy->kind() == TypeKind::Pointer))) {
         diagReporter_.InvalidOperator(node->operatorToken());
         return Action::Quit;
     }
@@ -1281,16 +1318,18 @@ SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Equality(
     return Action::Skip;
 }
 
+template <class BinaryLikeExprNodeT>
 SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Bitwise(
-        const BinaryExpressionSyntax* node,
+        const BinaryLikeExprNodeT* node,
         const Type* leftTy,
         const Type* rightTy)
 {
     return Action::Skip;
 }
 
+template <class BinaryLikeExprNodeT>
 SyntaxVisitor::Action TypeChecker::visitBinaryExpression_Logical(
-        const BinaryExpressionSyntax* node,
+        const BinaryLikeExprNodeT* node,
         const Type* leftTy,
         const Type* rightTy)
 {
@@ -1311,27 +1350,23 @@ SyntaxVisitor::Action TypeChecker::visitAssignmentExpression(
 
     switch (node->operatorToken().kind()) {
         case SyntaxKind::EqualsToken:
-            return visitAssignmentExpression_Basic(node, leftTy, rightTy);
+            return visitAssignmentExpression_Simple(node, leftTy, rightTy);
         case SyntaxKind::AsteriskEqualsToken:
-            return visitAssignmentExpression_Multiply(node, leftTy, rightTy);
         case SyntaxKind::SlashEqualsToken:
-            return visitAssignmentExpression_Divide(node, leftTy, rightTy);
+            return visitBinaryExpression_MultiplicationOrDivision(node, leftTy, rightTy);
         case SyntaxKind::PercentEqualsToken:
-            return visitAssignmentExpression_Modulo(node, leftTy, rightTy);
+            return visitBinaryExpression_Remainder(node, leftTy, rightTy);
         case SyntaxKind::PlusEqualsToken:
-            return visitAssignmentExpression_Add(node, leftTy, rightTy);
+            return visitBinaryExpression_Addition(node, leftTy, rightTy);
         case SyntaxKind::MinusEqualsToken:
-            return visitAssignmentExpression_Subtract(node, leftTy, rightTy);
+            return visitBinaryExpression_Subtraction(node, leftTy, rightTy);
         case SyntaxKind::LessThanEqualsToken:
-            return visitAssignmentExpression_LeftShift(node, leftTy, rightTy);
         case SyntaxKind::GreaterThanEqualsToken:
-            return visitAssignmentExpression_RightShift(node, leftTy, rightTy);
+            return visitBinaryExpression_BitwiseShift(node, leftTy, rightTy);
         case SyntaxKind::AmpersandEqualsToken:
-            return visitAssignmentExpression_And(node, leftTy, rightTy);
         case SyntaxKind::ExclamationEqualsToken:
-            return visitAssignmentExpression_Or(node, leftTy, rightTy);
         case SyntaxKind::CaretEqualsToken:
-            return visitAssignmentExpression_ExclusiveOr(node, leftTy, rightTy);
+            return visitBinaryExpression_Bitwise(node, leftTy, rightTy);
         default:
             PSY_ASSERT_1(false);
             return Action::Quit;
@@ -1340,19 +1375,20 @@ SyntaxVisitor::Action TypeChecker::visitAssignmentExpression(
     return Action::Skip;
 }
 
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Basic(
+SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Simple(
         const AssignmentExpressionSyntax* node,
         const Type* leftTy,
         const Type* rightTy)
 {
     if (!((isArithmeticType(leftTy) && isArithmeticType(rightTy))
             || (isStructureOrUnionType(leftTy)
-                && typesAreCompatible(leftTy, rightTy, false))
+                && typesAreCompatible(leftTy, rightTy, false, false))
             || (leftTy->kind() == TypeKind::Pointer
                 && ((rightTy->kind() == TypeKind::Pointer
                         && typesAreCompatible(
                                 leftTy->asPointerType()->referencedType(),
                                 rightTy->asPointerType()->referencedType(),
+                                true,
                                 true))
                     || (rightTy->kind() == TypeKind::Basic
                         && rightTy->asBasicType()->kind() == BasicTypeKind::Int_S
@@ -1365,47 +1401,6 @@ SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Basic(
 
     return Action::Skip;
 }
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Multiply(
-        const AssignmentExpressionSyntax* node,
-        const Type* leftTy,
-        const Type* rightTy) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Divide(
-        const AssignmentExpressionSyntax* node,
-        const Type* leftTy,
-        const Type* rightTy) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Modulo(
-        const AssignmentExpressionSyntax* node,
-        const Type* leftTy,
-        const Type* rightTy) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Add(
-        const AssignmentExpressionSyntax* node,
-        const Type* leftTy,
-        const Type* rightTy) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Subtract(
-        const AssignmentExpressionSyntax* node,
-        const Type* leftTy,
-        const Type* rightTy) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_LeftShift(
-        const AssignmentExpressionSyntax* node,
-        const Type* leftTy,
-        const Type* rightTy) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_RightShift(
-        const AssignmentExpressionSyntax* node,
-        const Type* leftTy,
-        const Type* rightTy) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_And(
-        const AssignmentExpressionSyntax* node,
-        const Type* leftTy,
-        const Type* rightTy) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Or(
-        const AssignmentExpressionSyntax* node,
-        const Type* leftTy,
-        const Type* rightTy) { return Action::Skip; }
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_ExclusiveOr(
-        const AssignmentExpressionSyntax* node,
-        const Type* leftTy,
-        const Type* rightTy) { return Action::Skip; }
-
 
 SyntaxVisitor::Action TypeChecker::visitSequencingExpression(const SequencingExpressionSyntax*) { return Action::Skip; }
 SyntaxVisitor::Action TypeChecker::visitExtGNU_ChooseExpression(const ExtGNU_ChooseExpressionSyntax*) { return Action::Skip; }

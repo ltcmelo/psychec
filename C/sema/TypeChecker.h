@@ -149,86 +149,55 @@ private:
     virtual Action visitSequencingExpression(const SequencingExpressionSyntax*) override;
     virtual Action visitExtGNU_ChooseExpression(const ExtGNU_ChooseExpressionSyntax*) override;
 
-    /* Binary expressions */
+    /* Binary-like expressions */
+    template <class BinaryLikeExprNodeT>
     Action visitBinaryExpression_MultiplicationOrDivision(
-            const BinaryExpressionSyntax* node,
+            const BinaryLikeExprNodeT* node,
             const Type* leftTy,
             const Type* rightTy);
+    template <class BinaryLikeExprNodeT>
     Action visitBinaryExpression_Remainder(
-            const BinaryExpressionSyntax* node,
+            const BinaryLikeExprNodeT* node,
             const Type* leftTy,
             const Type* rightTy);
+    template <class BinaryLikeExprNodeT>
     Action visitBinaryExpression_Addition(
-            const BinaryExpressionSyntax* node,
+            const BinaryLikeExprNodeT* node,
             const Type* leftTy,
             const Type* rightTy);
+    template <class BinaryLikeExprNodeT>
     Action visitBinaryExpression_Subtraction(
-            const BinaryExpressionSyntax* node,
+            const BinaryLikeExprNodeT* node,
             const Type* leftTy,
             const Type* rightTy);
+    template <class BinaryLikeExprNodeT>
     Action visitBinaryExpression_BitwiseShift(
-            const BinaryExpressionSyntax* node,
+            const BinaryLikeExprNodeT* node,
             const Type* leftTy,
             const Type* rightTy);
+    template <class BinaryLikeExprNodeT>
     Action visitBinaryExpression_Relational(
-            const BinaryExpressionSyntax* node,
+            const BinaryLikeExprNodeT* node,
             const Type* leftTy,
             const Type* rightTy);
+    template <class BinaryLikeExprNodeT>
     Action visitBinaryExpression_Equality(
-            const BinaryExpressionSyntax* node,
+            const BinaryLikeExprNodeT* node,
             const Type* leftTy,
             const Type* rightTy);
+    template <class BinaryLikeExprNodeT>
     Action visitBinaryExpression_Bitwise(
-            const BinaryExpressionSyntax* node,
+            const BinaryLikeExprNodeT* node,
             const Type* leftTy,
             const Type* rightTy);
+    template <class BinaryLikeExprNodeT>
     Action visitBinaryExpression_Logical(
-            const BinaryExpressionSyntax* node,
+            const BinaryLikeExprNodeT* node,
             const Type* leftTy,
             const Type* rightTy);
 
     /* Assignments */
-    Action visitAssignmentExpression_Basic(
-            const AssignmentExpressionSyntax* node,
-            const Type* leftTy,
-            const Type* rightTy);
-    Action visitAssignmentExpression_Multiply(
-            const AssignmentExpressionSyntax* node,
-            const Type* leftTy,
-            const Type* rightTy);
-    Action visitAssignmentExpression_Divide(
-            const AssignmentExpressionSyntax* node,
-            const Type* leftTy,
-            const Type* rightTy);
-    Action visitAssignmentExpression_Modulo(
-            const AssignmentExpressionSyntax* node,
-            const Type* leftTy,
-            const Type* rightTy);
-    Action visitAssignmentExpression_Add(
-            const AssignmentExpressionSyntax* node,
-            const Type* leftTy,
-            const Type* rightTy);
-    Action visitAssignmentExpression_Subtract(
-            const AssignmentExpressionSyntax* node,
-            const Type* leftTy,
-            const Type* rightTy);
-    Action visitAssignmentExpression_LeftShift(
-            const AssignmentExpressionSyntax* node,
-            const Type* leftTy,
-            const Type* rightTy);
-    Action visitAssignmentExpression_RightShift(
-            const AssignmentExpressionSyntax* node,
-            const Type* leftTy,
-            const Type* rightTy);
-    Action visitAssignmentExpression_And(
-            const AssignmentExpressionSyntax* node,
-            const Type* leftTy,
-            const Type* rightTy);
-    Action visitAssignmentExpression_Or(
-            const AssignmentExpressionSyntax* node,
-            const Type* leftTy,
-            const Type* rightTy);
-    Action visitAssignmentExpression_ExclusiveOr(
+    Action visitAssignmentExpression_Simple(
             const AssignmentExpressionSyntax* node,
             const Type* leftTy,
             const Type* rightTy);
@@ -253,7 +222,8 @@ private:
     bool isNULLPointerConstant(const SyntaxNode* node);
     bool typesAreCompatible(const Type* oneTy,
                             const Type* otherTy,
-                            bool treatVoidAsAny);
+                            bool treatVoidAsAny,
+                            bool ignoreQualifier);
     bool satisfyArithmeticTypeConstraint(const Type* ty, const SyntaxNode* node);
     bool satisfyIntegerTypeConstraint(const Type* ty, const SyntaxNode* node);
     bool satisfyRealTypeConstraint(const Type* ty, const SyntaxNode* node);
