@@ -189,6 +189,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/sema/DiagnosticsReporter_TypeChecker.cpp
     ${PROJECT_SOURCE_DIR}/sema/InferenceOptions.h
     ${PROJECT_SOURCE_DIR}/sema/InferenceOptions.cpp
+    ${PROJECT_SOURCE_DIR}/sema/LegacyOptions.h
+    ${PROJECT_SOURCE_DIR}/sema/LegacyOptions.cpp
     ${PROJECT_SOURCE_DIR}/sema/NameSpace.h
     ${PROJECT_SOURCE_DIR}/sema/PlatformOptions.h
     ${PROJECT_SOURCE_DIR}/sema/PlatformOptions.cpp

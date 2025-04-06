@@ -1042,9 +1042,735 @@ void _ ()
     checkTypes(s, Expectation());
 }
 
-void TypeCheckerTester::case0107(){}
+void TypeCheckerTester::case0107()
+{
+    auto s = R"(
+typedef struct s { int m ; } t ;
+void _ ()
+{
+    t x ;
+    x ++ ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
 void TypeCheckerTester::case0108(){}
 void TypeCheckerTester::case0109(){}
+
+void TypeCheckerTester::case0200()
+{
+    auto s = R"(
+void _ ()
+{
+    int x ;
+    x + 1 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0201()
+{
+    auto s = R"(
+void _ ()
+{
+    int x ;
+    x += 1 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0202()
+{
+    auto s = R"(
+void _ ()
+{
+    int x ;
+    x + "1" ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0203()
+{
+    auto s = R"(
+void _ ()
+{
+    const int x ;
+    x + 1 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0204()
+{
+    auto s = R"(
+void _ ()
+{
+    short x ;
+    x + 1 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0205()
+{
+    auto s = R"(
+void _ ()
+{
+    long long x ;
+    x + 1 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0206()
+{
+    auto s = R"(
+void _ ()
+{
+    long x ;
+    x + "a" ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0207()
+{
+    auto s = R"(
+void _ ()
+{
+    long long x ;
+    x + 1 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0208()
+{
+    auto s = R"(
+void _ ()
+{
+    long long x ;
+    x + 1.0 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0209()
+{
+    auto s = R"(
+void _ ()
+{
+    double x ;
+    x + 1 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0210()
+{
+    auto s = R"(
+void _ ()
+{
+    struct { int m; } x ;
+    x + 1 ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0211()
+{
+    auto s = R"(
+void _ ()
+{
+    double x ;
+    x += 1.0 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0212()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    x + 1 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0213()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x , * y ;
+    x + y ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0214()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x , * y ;
+    x - y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0215()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x , * y ;
+    x -= y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0216()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x , * y ;
+    x < y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0217()
+{
+    auto s = R"(
+void _ ()
+{
+    int x , y ;
+    x <= y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0218()
+{
+    auto s = R"(
+void _ ()
+{
+    long x , y ;
+    x << y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0219()
+{
+    auto s = R"(
+void _ ()
+{
+    long long x ;
+    x * 1 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0220()
+{
+    auto s = R"(
+void _ ()
+{
+    long x ;
+    int y ;
+    x / y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0221()
+{
+    auto s = R"(
+void _ ()
+{
+    long x ;
+    int * y ;
+    x / y ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfArithmeticType));
+}
+
+void TypeCheckerTester::case0222()
+{
+    auto s = R"(
+void _ ()
+{
+    long x ;
+    int * y ;
+    x * y ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfArithmeticType));
+}
+
+void TypeCheckerTester::case0223()
+{
+    auto s = R"(
+void _ ()
+{
+    long x ;
+    int y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0224()
+{
+    auto s = R"(
+void _ ()
+{
+    int x ;
+    int y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0225()
+{
+    auto s = R"(
+void _ ()
+{
+    int x ;
+    int y ;
+    x != y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0226()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    int y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0227()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    int * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0228()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    double * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0229()
+{
+    auto s = R"(
+void _ ()
+{
+    const int * x ;
+    int * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0230()
+{
+    auto s = R"(
+void _ ()
+{
+    const int * x ;
+    const int * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0231()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    int const * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0232()
+{
+    auto s = R"(
+void _ ()
+{
+    void * x ;
+    int * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0233()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    void * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0234()
+{
+    auto s = R"(
+void _ ()
+{
+    const void * x ;
+    void * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0235()
+{
+    auto s = R"(
+void _ ()
+{
+    const void * x ;
+    const void * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0236()
+{
+    auto s = R"(
+void _ ()
+{
+    void * x ;
+    const void * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0237()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    void * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0238()
+{
+    auto s = R"(
+void _ ()
+{
+    void * x ;
+    int * y ;
+    x == y ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0239()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    x == 0 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0240()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    0 == x ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0241()
+{
+    auto s = R"(
+void _ ()
+{
+    void * x ;
+    x == 0 ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0242()
+{
+    auto s = R"(
+void _ ()
+{
+    void * x ;
+    0 == x ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0243()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    x == 1 ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0244()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    x <= 1 ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0245()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    x > 1 ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0246()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    x <= 0 ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0247()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    x > 0 ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0248()
+{
+    auto s = R"(
+void _ ()
+{
+    int * x ;
+    0 < x ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                  .diagnostic(Expectation::ErrorOrWarn::Error,
+                              TypeChecker::DiagnosticsReporter::ID_of_InvalidOperator));
+}
+
+void TypeCheckerTester::case0249(){}
+void TypeCheckerTester::case0250(){}
+void TypeCheckerTester::case0251(){}
+void TypeCheckerTester::case0252(){}
+void TypeCheckerTester::case0253(){}
+void TypeCheckerTester::case0254(){}
+void TypeCheckerTester::case0255(){}
+void TypeCheckerTester::case0256(){}
+void TypeCheckerTester::case0257(){}
+void TypeCheckerTester::case0258(){}
+void TypeCheckerTester::case0259(){}
 
 void TypeCheckerTester::case0500()
 {

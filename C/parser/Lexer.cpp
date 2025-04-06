@@ -956,7 +956,8 @@ void Lexer::lexIntegerOrImaginaryIntegerSuffix(SyntaxToken* tk, unsigned int acc
             tk,
             [&] () {
                 if (tk->syntaxK_ == SyntaxKind::ImaginaryIntegerConstantToken) {
-                    tk->imaginaryInteger_ = tree_->findOrInsertImaginaryIntegerConstant(yytext, yytext_ - yytext);
+                    tk->imaginaryInteger_ =
+                            tree_->findOrInsertImaginaryIntegerConstant(yytext, yytext_ - yytext);
                 }
                 else {
                     tk->syntaxK_ = SyntaxKind::IntegerConstantToken;

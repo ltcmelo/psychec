@@ -121,7 +121,7 @@ private:
 
     struct BitFields
     {
-        std::uint8_t keywordRecognition_ : 1;
+        std::uint16_t keywordRecognition_ : 1;
         std::uint16_t commentMode_ : 2;
         std::uint16_t ambigMode_ : 2;
     };

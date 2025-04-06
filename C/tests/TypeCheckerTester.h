@@ -48,9 +48,12 @@ public:
 
     /*
         + 0000-0099 -> member access
-        + 0100-     -> postfix inc/dec
+        + 0100-0149 -> postfix inc/dec
+        + 0150-0199 ->
+        + 0200-0399 -> binary and compound assignment
         + 0500-0599 -> unary
-        + 0700-0799 -> assignment
+        + 0700-0799 -> simple assignment
+        +
      */
 
     void case0000();
@@ -124,6 +127,67 @@ public:
     void case0107();
     void case0108();
     void case0109();
+
+    void case0200();
+    void case0201();
+    void case0202();
+    void case0203();
+    void case0204();
+    void case0205();
+    void case0206();
+    void case0207();
+    void case0208();
+    void case0209();
+    void case0210();
+    void case0211();
+    void case0212();
+    void case0213();
+    void case0214();
+    void case0215();
+    void case0216();
+    void case0217();
+    void case0218();
+    void case0219();
+    void case0220();
+    void case0221();
+    void case0222();
+    void case0223();
+    void case0224();
+    void case0225();
+    void case0226();
+    void case0227();
+    void case0228();
+    void case0229();
+    void case0230();
+    void case0231();
+    void case0232();
+    void case0233();
+    void case0234();
+    void case0235();
+    void case0236();
+    void case0237();
+    void case0238();
+    void case0239();
+    void case0240();
+    void case0241();
+    void case0242();
+    void case0243();
+    void case0244();
+    void case0245();
+    void case0246();
+    void case0247();
+    void case0248();
+    void case0249();
+    void case0250();
+    void case0251();
+    void case0252();
+    void case0253();
+    void case0254();
+    void case0255();
+    void case0256();
+    void case0257();
+    void case0258();
+    void case0259();
 
     void case0500();
     void case0501();
@@ -330,6 +394,67 @@ public:
         TEST_DECLARATION_CHECKER(case0107),
         TEST_DECLARATION_CHECKER(case0108),
         TEST_DECLARATION_CHECKER(case0109),
+
+        TEST_DECLARATION_CHECKER(case0200),
+        TEST_DECLARATION_CHECKER(case0201),
+        TEST_DECLARATION_CHECKER(case0202),
+        TEST_DECLARATION_CHECKER(case0203),
+        TEST_DECLARATION_CHECKER(case0204),
+        TEST_DECLARATION_CHECKER(case0205),
+        TEST_DECLARATION_CHECKER(case0206),
+        TEST_DECLARATION_CHECKER(case0207),
+        TEST_DECLARATION_CHECKER(case0208),
+        TEST_DECLARATION_CHECKER(case0209),
+        TEST_DECLARATION_CHECKER(case0210),
+        TEST_DECLARATION_CHECKER(case0211),
+        TEST_DECLARATION_CHECKER(case0212),
+        TEST_DECLARATION_CHECKER(case0213),
+        TEST_DECLARATION_CHECKER(case0214),
+        TEST_DECLARATION_CHECKER(case0215),
+        TEST_DECLARATION_CHECKER(case0216),
+        TEST_DECLARATION_CHECKER(case0217),
+        TEST_DECLARATION_CHECKER(case0218),
+        TEST_DECLARATION_CHECKER(case0219),
+        TEST_DECLARATION_CHECKER(case0220),
+        TEST_DECLARATION_CHECKER(case0221),
+        TEST_DECLARATION_CHECKER(case0222),
+        TEST_DECLARATION_CHECKER(case0223),
+        TEST_DECLARATION_CHECKER(case0224),
+        TEST_DECLARATION_CHECKER(case0225),
+        TEST_DECLARATION_CHECKER(case0226),
+        TEST_DECLARATION_CHECKER(case0227),
+        TEST_DECLARATION_CHECKER(case0228),
+        TEST_DECLARATION_CHECKER(case0229),
+        TEST_DECLARATION_CHECKER(case0230),
+        TEST_DECLARATION_CHECKER(case0231),
+        TEST_DECLARATION_CHECKER(case0232),
+        TEST_DECLARATION_CHECKER(case0233),
+        TEST_DECLARATION_CHECKER(case0234),
+        TEST_DECLARATION_CHECKER(case0235),
+        TEST_DECLARATION_CHECKER(case0236),
+        TEST_DECLARATION_CHECKER(case0237),
+        TEST_DECLARATION_CHECKER(case0238),
+        TEST_DECLARATION_CHECKER(case0239),
+        TEST_DECLARATION_CHECKER(case0240),
+        TEST_DECLARATION_CHECKER(case0241),
+        TEST_DECLARATION_CHECKER(case0242),
+        TEST_DECLARATION_CHECKER(case0243),
+        TEST_DECLARATION_CHECKER(case0244),
+        TEST_DECLARATION_CHECKER(case0245),
+        TEST_DECLARATION_CHECKER(case0246),
+        TEST_DECLARATION_CHECKER(case0247),
+        TEST_DECLARATION_CHECKER(case0248),
+        TEST_DECLARATION_CHECKER(case0249),
+        TEST_DECLARATION_CHECKER(case0250),
+        TEST_DECLARATION_CHECKER(case0251),
+        TEST_DECLARATION_CHECKER(case0252),
+        TEST_DECLARATION_CHECKER(case0253),
+        TEST_DECLARATION_CHECKER(case0254),
+        TEST_DECLARATION_CHECKER(case0255),
+        TEST_DECLARATION_CHECKER(case0256),
+        TEST_DECLARATION_CHECKER(case0257),
+        TEST_DECLARATION_CHECKER(case0258),
+        TEST_DECLARATION_CHECKER(case0259),
 
         TEST_DECLARATION_CHECKER(case0500),
         TEST_DECLARATION_CHECKER(case0501),
