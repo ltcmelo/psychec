@@ -33,12 +33,13 @@ const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPo
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfScalarType = "TypeChecker-005";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfStructOrUnionType = "TypeChecker-006";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPointerToStructOrUnionType = "TypeChecker-007";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpression = "TypeChecker-008";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag = "TypeChecker-009";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment = "TypeChecker-010";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfConstQualifiedType = "TypeChecker-011";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfArrayType = "TypeChecker-012";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment = "TypeChecker-013";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPointerOrArrayType = "TypeChecker-008";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpression = "TypeChecker-009";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag = "TypeChecker-010";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment = "TypeChecker-011";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfConstQualifiedType = "TypeChecker-012";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfArrayType = "TypeChecker-013";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment = "TypeChecker-014";
 
 void TypeChecker::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
 {
@@ -128,6 +129,15 @@ void TypeChecker::DiagnosticsReporter::ExpectedExpressionOfPointerToStructOrUnio
                 ID_of_ExpectedExpressionOfPointerToStructOrUnionType,
                 "pointer to structure or union");
 }
+
+void TypeChecker::DiagnosticsReporter::ExpectedExpressionOfPointerOrArrayType(SyntaxToken tk)
+{
+    ExpectedExpressionOfType_CORE(
+                tk,
+                ID_of_ExpectedExpressionOfPointerOrArrayType,
+                "pointer or array");
+}
+
 
 void TypeChecker::DiagnosticsReporter::ExpectedExpression(SyntaxToken tk)
 {

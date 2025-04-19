@@ -85,6 +85,7 @@ private:
         void ExpectedExpressionOfScalarType(SyntaxToken exprTk);
         void ExpectedExpressionOfStructOrUnionType(SyntaxToken exprTk);
         void ExpectedExpressionOfPointerToStructOrUnionType(SyntaxToken exprTk);
+        void ExpectedExpressionOfPointerOrArrayType(SyntaxToken exprTk);
         void ExpectedExpression(SyntaxToken tk);
         void UnknownMemberOfTag(SyntaxToken tk);
         void IncompatibleTypesInAssignment(SyntaxToken tk);
@@ -100,6 +101,7 @@ private:
         static const std::string ID_of_ExpectedExpressionOfScalarType;
         static const std::string ID_of_ExpectedExpressionOfStructOrUnionType;
         static const std::string ID_of_ExpectedExpressionOfPointerToStructOrUnionType;
+        static const std::string ID_of_ExpectedExpressionOfPointerOrArrayType;
         static const std::string ID_of_ExpectedExpression;
         static const std::string ID_of_UnknownMemberOfTag;
         static const std::string ID_of_IncompatibleTypesInAssignment;
