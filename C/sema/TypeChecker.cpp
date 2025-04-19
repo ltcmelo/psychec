@@ -1033,11 +1033,6 @@ SyntaxVisitor::Action TypeChecker::visitMemberAccessExpression(
 
     const TagType* tagTy = nullptr;
     switch (ty->kind()) {
-        case TypeKind::TypedefName:
-        case TypeKind::Qualified:
-            PSY_ASSERT_1(false);
-            return Action::Quit;
-
         case TypeKind::Tag:
             if (node->kind() != SyntaxKind::DirectMemberAccessExpression) {
                 diagReporter_.InvalidOperator(node->operatorToken());
@@ -1095,6 +1090,28 @@ SyntaxVisitor::Action TypeChecker::visitMemberAccessExpression(
 SyntaxVisitor::Action TypeChecker::visitArraySubscriptExpression(
         const ArraySubscriptExpressionSyntax* node)
 {
+    VISIT_EXPR(node->argument());
+    auto argTy = unqualifiedAndResolved(ty_);
+    if (!isIntegerType(argTy)) {
+        diagReporter_.ExpectedExpressionOfIntegerType(node->argument()->lastToken());
+        return Action::Quit;
+    }
+
+    VISIT_EXPR(node->expression());
+    auto exprTy = unqualifiedAndResolved(ty_);
+    switch (exprTy->kind()) {
+        case TypeKind::Array:
+            ty_ = exprTy->asArrayType()->elementType();
+            break;
+        case TypeKind::Pointer:
+            ty_ = exprTy->asPointerType()->referencedType();
+            break;
+        default:
+            diagReporter_.ExpectedExpressionOfPointerOrArrayType(
+                        node->expression()->lastToken());
+            return Action::Quit;
+    }
+
     return Action::Skip;
 }
 

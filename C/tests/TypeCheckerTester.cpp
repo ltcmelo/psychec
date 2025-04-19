@@ -1062,6 +1062,236 @@ void _ ()
 void TypeCheckerTester::case0108(){}
 void TypeCheckerTester::case0109(){}
 
+void TypeCheckerTester::case0130()
+{
+    auto s = R"(
+void _ ( ) {
+    int x ;
+    x [ 0 ] ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPointerOrArrayType));
+}
+
+void TypeCheckerTester::case0131()
+{
+    auto s = R"(
+void _ ( ) {
+    const int x ;
+    x [ 0 ] ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPointerOrArrayType));
+}
+
+void TypeCheckerTester::case0132()
+{
+    auto s = R"(
+void _ ( ) {
+    double * x ;
+    x [ 0 ] ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0133()
+{
+    auto s = R"(
+void _ ( ) {
+    const double * x ;
+    x [ 0 ] ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0134(){
+    auto s = R"(
+void _ ( ) {
+    const double * const x ;
+    x [ 0 ] ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0135()
+{
+    auto s = R"(
+void _ ( ) {
+    double * const x ;
+    x [ 0 ] ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0136()
+{
+    auto s = R"(
+void _ ( ) {
+    double x [ 1 ] ;
+    x [ 0 ] ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0137()
+{
+    auto s = R"(
+void _ ( ) {
+    const double x [ 1 ] ;
+    x [ 0 ] ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0138()
+{
+    auto s = R"(
+void _ ( ) {
+    double * x ;
+    x [ 0 ] [ 1 ] ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPointerOrArrayType));
+}
+
+void TypeCheckerTester::case0139()
+{
+    auto s = R"(
+void _ ( ) {
+    double * * x ;
+    x [ 0 ] [ 1 ] ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0140()
+{
+    auto s = R"(
+void _ ( ) {
+    double x [ 1 ] ;
+    x [ 0 ] [ 1 ] ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPointerOrArrayType));
+}
+
+void TypeCheckerTester::case0141()
+{
+    auto s = R"(
+void _ ( ) {
+    double x [ 1 ] [ 2 ];
+    x [ 0 ] [ 1 ] ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0142()
+{
+    auto s = R"(
+void _ ( ) {
+    double * x ;
+    x [ 1.0 ] ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfIntegerType));
+}
+
+void TypeCheckerTester::case0143()
+{
+    auto s = R"(
+void _ ( ) {
+    double x [ 1 ] ;
+    x [ 1.0 ] ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfIntegerType));
+}
+
+void TypeCheckerTester::case0144()
+{
+    auto s = R"(
+void _ ( ) {
+    double x [ 1 ] ;
+    int y ;
+    x [ y ] ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0145()
+{
+    auto s = R"(
+void _ ( ) {
+    double x [ 1 ] ;
+    double y ;
+    x [ y ] ;
+}
+)";
+
+    checkTypes(s,
+               Expectation()
+                   .diagnostic(Expectation::ErrorOrWarn::Error,
+                               TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfIntegerType));
+}
+
+void TypeCheckerTester::case0146(){}
+void TypeCheckerTester::case0147(){}
+void TypeCheckerTester::case0148(){}
+void TypeCheckerTester::case0149(){}
+void TypeCheckerTester::case0150(){}
+void TypeCheckerTester::case0151(){}
+void TypeCheckerTester::case0152(){}
+void TypeCheckerTester::case0153(){}
+void TypeCheckerTester::case0154(){}
+void TypeCheckerTester::case0155(){}
+void TypeCheckerTester::case0156(){}
+void TypeCheckerTester::case0157(){}
+void TypeCheckerTester::case0158(){}
+void TypeCheckerTester::case0159(){}
+
+
 void TypeCheckerTester::case0200()
 {
     auto s = R"(
