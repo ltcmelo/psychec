@@ -1,0 +1,26 @@
+<Project>
+	<PropertyGroup>
+		<!-- Define default RIDs based on current platform and architecture -->
+		<_PsycheC_Rid Condition="'$(RuntimeIdentifier)' != ''">$(RuntimeIdentifier)</_PsycheC_Rid>
+
+		<!-- Windows detection -->
+		<_PsycheC_Rid Condition="'$(_PsycheC_Rid)'=='' and '$(OS)'=='Windows_NT' and '$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)'=='X64'">win-x64</_PsycheC_Rid>
+		<_PsycheC_Rid Condition="'$(_PsycheC_Rid)'=='' and '$(OS)'=='Windows_NT' and '$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)'=='Arm64'">win-arm64</_PsycheC_Rid>
+
+		<!-- Linux detection -->
+		<_PsycheC_Rid Condition="'$(_PsycheC_Rid)'=='' and '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true' and '$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)'=='X64'">linux-x64</_PsycheC_Rid>
+		<_PsycheC_Rid Condition="'$(_PsycheC_Rid)'=='' and '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true' and '$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)'=='Arm64'">linux-arm64</_PsycheC_Rid>
+
+		<!-- macOS detection -->
+		<_PsycheC_Rid Condition="'$(_PsycheC_Rid)'=='' and '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true' and '$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)'=='X64'">osx-x64</_PsycheC_Rid>
+		<_PsycheC_Rid Condition="'$(_PsycheC_Rid)'=='' and '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true' and '$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)'=='Arm64'">osx-arm64</_PsycheC_Rid>
+
+		<!-- Set NativeLibraries path -->
+		<_PsycheC_NativeRelativeLibPath>runtimes\$(_PsycheC_Rid)\native</_PsycheC_NativeRelativeLibPath>
+		<_PsycheC_NativeLibPath>$(MSBuildThisFileDirectory)\..\$(_PsycheC_NativeRelativeLibPath)</_PsycheC_NativeLibPath>
+	</PropertyGroup>
+
+	<Target Name="ValidatePsycheCRid" BeforeTargets="PrepareForBuild">
+		<Error Condition="'$(_PsycheC_Rid)' == ''" Text="Unsupported OS/architecture: automatic RuntimeIdentifier detection failed. Specify a supported RuntimeIdentifier (e.g., win-x64, linux-x64, osx-arm64) in the project or via CLI." />
+	</Target>
+</Project>

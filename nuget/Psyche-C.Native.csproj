@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<PackageId>Psyche-C.Native</PackageId>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Version>0.0.1</Version>
+		<Description>Cross-platform native binaries for Psyche-C.</Description>
+		<Authors>Denis Kudelin</Authors>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageProjectUrl>https://github.com/Itexoft/psychec</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Itexoft/psychec</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<EnableDefaultItems>false</EnableDefaultItems>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="runtimes/**/native/**/*" Pack="true" PackagePath="runtimes/" Visible="false" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="runtimes/**/native/**/*.pdb"      Pack="false" Visible="false" />
+		<None Update="runtimes/**/native/**/*.debug"    Pack="false" Visible="false" />
+		<None Update="runtimes/**/native/**/*.dSYM/**"  Pack="false" Visible="false" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<None Include="LICENSE" Pack="true" PackagePath=""/>
+		<None Include="README.md" Pack="true" PackagePath=""/>
+		<None Include="docs/**" Pack="true" PackagePath="docs/"/>
+		<None Include="buildTransitive/**" Pack="true" PackagePath="buildTransitive/"/>
+	</ItemGroup>
+</Project>

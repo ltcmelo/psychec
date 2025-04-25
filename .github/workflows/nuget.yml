@@ -1,0 +1,199 @@
+# NuGet package publishing workflow
+name: nuget
+on:
+  workflow_run:
+    workflows: [multi-rid-build]
+    types: [completed]
+  workflow_dispatch:
+
+env:
+  NUGET_SOURCE: https://api.nuget.org/v3/index.json
+  CSPROJ_PATH: nuget/Psyche-C.Native.csproj
+
+jobs:
+  pack:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: determine artifact run id
+        id: run_id
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            RID=$(gh api "/repos/${{ github.repository }}/actions/workflows/multi-rid-build.yml/runs?status=success&per_page=1" --jq '.workflow_runs[0].id')
+            if [ -z "$RID" ]; then
+              echo "::error::No successful multi-rid-build runs found"
+              RID="none"
+            fi
+          else
+            RID=${{ github.event.workflow_run.id }}
+          fi
+          echo "run_id=$RID" >> $GITHUB_OUTPUT
+          echo "Using artifacts from run ID: $RID"
+
+      - uses: actions/download-artifact@v4
+        if: steps.run_id.outputs.run_id != 'none'
+        continue-on-error: true
+        with:
+          path: artifacts
+          run-id: ${{ steps.run_id.outputs.run_id }}
+          github-token: ${{ github.token }}
+
+      - name: Create artifacts directory if it doesn't exist
+        run: mkdir -p artifacts
+
+      - name: Validate artifacts
+        id: validate_artifacts
+        run: |
+          ARTIFACT_COUNT=$(find artifacts -type f | wc -l)
+          if [ "$ARTIFACT_COUNT" -eq 0 ]; then
+            echo "::error::No artifacts found from the build"
+            exit 1
+          fi
+          echo "has_artifacts=true" >> $GITHUB_OUTPUT
+
+      - name: Check version change
+        id: version_check
+        continue-on-error: true
+        run: |
+          if [ ! -f "${{ env.CSPROJ_PATH }}" ]; then
+            echo "::error::Project file not found at ${{ env.CSPROJ_PATH }}"
+            echo "is_master=false" >> $GITHUB_OUTPUT
+            echo "can_publish=false" >> $GITHUB_OUTPUT
+            echo "version_specified=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          CURRENT_VERSION=$(grep -o '<Version>.*</Version>' ${{ env.CSPROJ_PATH }} | sed 's/<Version>\(.*\)<\/Version>/\1/')
+          if [ -z "$CURRENT_VERSION" ]; then
+            echo "::warning::Version tag not found in csproj file"
+            echo "can_publish=false" >> $GITHUB_OUTPUT
+            echo "version_specified=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "version_specified=true" >> $GITHUB_OUTPUT
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          if [[ "${{ github.ref_name }}" == "master" || "${{ github.ref_name }}" == "main" ]]; then
+            echo "is_master=true" >> $GITHUB_OUTPUT
+            git fetch origin
+            if ! git ls-remote --exit-code --quiet origin refs/heads/master || ! git cat-file -e origin/master:${{ env.CSPROJ_PATH }} 2>/dev/null; then
+              echo "version_changed=true" >> $GITHUB_OUTPUT
+              echo "can_publish=true" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+            PREV_VERSION=$(git show origin/master:${{ env.CSPROJ_PATH }} 2>/dev/null | grep -o '<Version>.*</Version>' | sed 's/<Version>\(.*\)<\/Version>/\1/' || echo "")
+            if [ -z "$PREV_VERSION" ] || [ "$PREV_VERSION" != "$CURRENT_VERSION" ]; then
+              echo "version_changed=true" >> $GITHUB_OUTPUT
+            else
+              echo "version_changed=false" >> $GITHUB_OUTPUT
+            fi
+            if [ -n "${{ secrets.NUGET_API_KEY }}" ] && [ "$PREV_VERSION" != "$CURRENT_VERSION" ]; then
+              echo "api_key_available=true" >> $GITHUB_OUTPUT
+              echo "can_publish=true" >> $GITHUB_OUTPUT
+            else
+              echo "api_key_available=false" >> $GITHUB_OUTPUT
+              echo "can_publish=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "is_master=false" >> $GITHUB_OUTPUT
+            echo "can_publish=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: prepare
+        run: |
+          set -e
+          shopt -s nullglob
+          mkdir -p pkg/runtimes
+          mkdir -p pkg/buildTransitive
+          map() {
+            case "$1" in
+              psychec-linux-aarch64*) echo linux-arm64 ;;
+              psychec-linux-x86_64*)  echo linux-x64   ;;
+              psychec-osx-arm64*)     echo osx-arm64   ;;
+              psychec-osx-x86_64*)    echo osx-x64     ;;
+              psychec-win-*ARM64*)    echo win-arm64   ;;
+              psychec-win-*x64*)      echo win-x64     ;;
+              *) return 1;;
+            esac
+          }
+          if [ -d "artifacts" ]; then
+            for dir in artifacts/*; do
+                [ -d "$dir" ] || continue
+                rid=$(map "$(basename "$dir")") || continue
+                native="pkg/runtimes/$rid/native"
+                mkdir -p "$native"
+                if [ -d "$dir/Release" ]; then
+                cp -R "$dir/Release"/. "$native/"
+                else
+                cp -R "$dir"/. "$native/"
+                fi
+            done
+          fi
+          cp ${{ env.CSPROJ_PATH }} pkg/ 2>/dev/null || echo "Project file not found"
+          cp LICENSE pkg/ 2>/dev/null || echo "LICENSE not found"
+          cp README.md pkg/ 2>/dev/null || echo "README.md not found"
+          if [ -d "docs" ]; then
+            mkdir -p pkg/docs
+            cp -R docs/* pkg/docs/ 2>/dev/null || echo "docs not found or empty"
+          fi
+          if [ -d "nuget/buildTransitive" ]; then
+            cp nuget/buildTransitive/*.props pkg/buildTransitive/ 2>/dev/null || echo "Props files not found"
+            cp nuget/buildTransitive/*.targets pkg/buildTransitive/ 2>/dev/null || echo "Targets files not found"
+          fi
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: pack
+        working-directory: pkg
+        run: |
+          if [ ! -f "Psyche-C.Native.csproj" ]; then
+            echo "::error::Project file not copied to package directory"
+            exit 1
+          fi
+          dotnet pack -c Release -o ../out
+
+      - name: Publish to NuGet
+        if: >-
+          steps.version_check.outputs.can_publish == 'true' && 
+          steps.version_check.outputs.is_master == 'true' && 
+          steps.version_check.outputs.version_changed == 'true' && 
+          steps.version_check.outputs.api_key_available == 'true' &&
+          steps.version_check.outputs.version_specified == 'true'
+        run: |
+          set -e
+          if [ -d "out" ] && [ "$(ls -A out 2>/dev/null)" ]; then
+            for pkg in out/*.nupkg; do
+              echo "Publishing package: $pkg"
+              dotnet nuget push "$pkg" --api-key ${{ secrets.NUGET_API_KEY }} --source ${{ env.NUGET_SOURCE }} --skip-duplicate
+            done
+          else
+            echo "::error::No packages found to publish"
+            exit 1
+          fi
+
+      - name: Report publish skip reason
+        if: steps.version_check.outputs.can_publish != 'true'
+        run: |
+          if [ "${{ steps.version_check.outputs.version_specified }}" != "true" ]; then
+            echo "::warning::Publish skipped: version not specified"
+          elif [ "${{ steps.version_check.outputs.is_master }}" != "true" ]; then
+            echo "::warning::Publish skipped: not on master/main branch"
+          elif [ "${{ steps.version_check.outputs.version_changed }}" != "true" ]; then
+            echo "::warning::Publish skipped: version unchanged"
+          elif [ "${{ steps.version_check.outputs.api_key_available }}" != "true" ]; then
+            echo "::warning::Publish skipped: NuGet API key missing"
+          else
+            echo "::warning::Publish skipped: can_publish flag is false"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: psychec-nuget-packages
+          path: out/*.nupkg

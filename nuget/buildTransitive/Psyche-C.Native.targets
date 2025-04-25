@@ -1,0 +1,13 @@
+<Project>
+  <ItemGroup>
+    <_PsycheC_NativeLibs Include="$(_PsycheC_NativeLibPath)\*" />
+  </ItemGroup>
+
+  <Target Name="CopyPsycheCNativeLibraries" AfterTargets="Build">
+    <Copy SourceFiles="@(_PsycheC_NativeLibs)" DestinationFolder="$(OutDir)\$(_PsycheC_NativeRelativeLibPath)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="CopyPsycheCNativeLibrariesOnPublish" AfterTargets="Publish">
+    <Copy SourceFiles="@(_PsycheC_NativeLibs)" DestinationFolder="$(PublishDir)\$(_PsycheC_NativeRelativeLibPath)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

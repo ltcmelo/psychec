@@ -1,0 +1,201 @@
+name: multi-rid-build
+on: [push, pull_request, workflow_dispatch]
+
+env:
+  PROJECT_NAME: psychec
+  BUILD_TARGETS: "psychecommon psychecfe"
+  BUILD_TESTING: OFF
+  DEBUG_SYMBOLS: true
+  CMAKE_BUILD_TYPE: Release
+  CMAKE_CXX_STANDARD: 17
+  CMAKE_CXX_STANDARD_REQUIRED: ON
+  C_FLAGS_COMMON: "-w -fexceptions"
+  CXX_FLAGS_COMMON: "-w -fexceptions"
+  CMAKE_EXTRA_ARGS: ""
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch:
+          - x64
+          - ARM64
+    steps:
+      - uses: actions/checkout@v4
+      - name: prepare-dirs
+        shell: pwsh
+        run: New-Item -ItemType Directory -Force -Path artifacts
+      - id: detect-mingw
+        shell: pwsh
+        run: |
+          if (
+            (Test-Path 'C:\msys64\usr\bin\bash.exe') -and
+            (Get-ChildItem -Recurse 'C:\msys64' -Filter llvm-objcopy.exe | Select-Object -First 1) -and
+            (Get-ChildItem -Recurse 'C:\msys64' -Filter clang.exe | Select-Object -First 1)
+          ) {
+            "full=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          } else {
+            "full=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          }
+      - name: build-mingw
+        if: steps.detect-mingw.outputs.full == 'true'
+        run: |
+          C:\msys64\usr\bin\bash.exe -lc '
+            set -euo pipefail
+            export PATH="$PATH:/c/Program Files/CMake/bin:/c/msys64/usr/bin:/c/msys64/mingw64/bin:/c/msys64/clang-arm64/bin:/c/msys64/ucrt64/bin"
+            mkdir -p artifacts
+            cmake -S . -B build/mingw/${{ matrix.arch }} -G Ninja \
+              -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
+              -DCMAKE_C_COMPILER=clang \
+              -DCMAKE_CXX_COMPILER=clang++ \
+              -DCMAKE_CXX_STANDARD=${{ env.CMAKE_CXX_STANDARD }} \
+              -DCMAKE_CXX_STANDARD_REQUIRED=${{ env.CMAKE_CXX_STANDARD_REQUIRED }} \
+              -DCMAKE_C_FLAGS="$([ "${{ env.DEBUG_SYMBOLS }}" = "true" ] && echo "-g") ${{ env.C_FLAGS_COMMON }}" \
+              -DCMAKE_CXX_FLAGS="$([ "${{ env.DEBUG_SYMBOLS }}" = "true" ] && echo "-g") ${{ env.CXX_FLAGS_COMMON }} -std=c++${{ env.CMAKE_CXX_STANDARD }}" \
+              -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=$(pwd)/artifacts \
+              -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$(pwd)/artifacts \
+              -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=$(pwd)/artifacts \
+              -DBUILD_TESTING=${{ env.BUILD_TESTING }} \
+              ${{ env.CMAKE_EXTRA_ARGS }}
+            for tgt in ${{ env.BUILD_TARGETS }}; do
+              cmake --build build/mingw/${{ matrix.arch }} --parallel --config ${{ env.CMAKE_BUILD_TYPE }} --target $tgt
+            done
+            if [ "${{ env.DEBUG_SYMBOLS }}" = "true" ]; then
+              OBJCOPY=$(command -v llvm-objcopy || command -v objcopy)
+              for f in artifacts/*.dll; do
+                [ -f "$f" ] && "$OBJCOPY" --only-keep-debug "$f" "$f.debug" && "$OBJCOPY" --strip-debug "$f"
+              done
+            fi
+          '
+      - name: configure-vs
+        if: steps.detect-mingw.outputs.full == 'false'
+        shell: pwsh
+        run: |
+          $out = "$(Get-Location)\artifacts"
+          $dbg = if ($env:DEBUG_SYMBOLS -eq 'true') { '/Zi' } else { '' }
+          $linker = if ($env:DEBUG_SYMBOLS -eq 'true') { '/DEBUG' } else { '' }
+          cmake -S . -B build/${{ matrix.arch }} -G "Visual Studio 17 2022" -A ${{ matrix.arch }} -T ClangCL `
+            -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} `
+            -DCMAKE_CXX_STANDARD=${{ env.CMAKE_CXX_STANDARD }} -DCMAKE_CXX_STANDARD_REQUIRED=${{ env.CMAKE_CXX_STANDARD_REQUIRED }} `
+            -DCMAKE_C_FLAGS="/w /EHsc $dbg" `
+            -DCMAKE_CXX_FLAGS="/w /EHsc $dbg /std:c++${{ env.CMAKE_CXX_STANDARD }}" `
+            -DCMAKE_SHARED_LINKER_FLAGS="$linker" `
+            -DCMAKE_RUNTIME_OUTPUT_DIRECTORY="$out" `
+            -DCMAKE_LIBRARY_OUTPUT_DIRECTORY="$out" `
+            -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY="$out" `
+            -DBUILD_TESTING=${{ env.BUILD_TESTING }} `
+            ${{ env.CMAKE_EXTRA_ARGS }}
+      - name: build-vs
+        if: steps.detect-mingw.outputs.full == 'false'
+        shell: pwsh
+        run: |
+          foreach ($t in $env:BUILD_TARGETS.Split()) {
+            cmake --build build/${{ matrix.arch }} --parallel --config ${{ env.CMAKE_BUILD_TYPE }} --target $t
+          }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PROJECT_NAME }}-win-${{ matrix.arch }}
+          path: artifacts/**
+
+  linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        triple:
+          - x86_64-linux-gnu
+          - aarch64-linux-gnu
+    steps:
+      - uses: actions/checkout@v4
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.12.0
+      - name: create-ccc
+        run: |
+          mkdir -p $HOME/bin
+          printf '#!/bin/sh\nexec zig cc "$@"\n' > $HOME/bin/zigcc
+          printf '#!/bin/sh\nexec zig c++ "$@"\n' > $HOME/bin/zigcxx
+          chmod +x $HOME/bin/zigcc $HOME/bin/zigcxx
+          echo "$HOME/bin" >> $GITHUB_PATH
+      - name: configure
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          DBG=$([ "${{ env.DEBUG_SYMBOLS }}" = "true" ] && echo "-g" || echo "-g0")
+          export CFLAGS="-O2 $DBG -ffunction-sections -fdata-sections ${{ env.C_FLAGS_COMMON }}"
+          export CXXFLAGS="-O2 $DBG -ffunction-sections -fdata-sections ${{ env.CXX_FLAGS_COMMON }} -std=c++${{ env.CMAKE_CXX_STANDARD }}"
+          cmake -S . -B build/${{ matrix.triple }} -G Ninja \
+            -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
+            -DCMAKE_C_COMPILER=zigcc \
+            -DCMAKE_CXX_COMPILER=zigcxx \
+            -DCMAKE_C_COMPILER_TARGET=${{ matrix.triple }} \
+            -DCMAKE_CXX_COMPILER_TARGET=${{ matrix.triple }} \
+            -DCMAKE_CXX_STANDARD=${{ env.CMAKE_CXX_STANDARD }} \
+            -DCMAKE_CXX_STANDARD_REQUIRED=${{ env.CMAKE_CXX_STANDARD_REQUIRED }} \
+            -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--gc-sections" \
+            -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=$(pwd)/artifacts \
+            -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$(pwd)/artifacts \
+            -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=$(pwd)/artifacts \
+            -DBUILD_TESTING=${{ env.BUILD_TESTING }} \
+            ${{ env.CMAKE_EXTRA_ARGS }}
+      - name: build
+        run: |
+          for tgt in ${{ env.BUILD_TARGETS }}; do
+            cmake --build build/${{ matrix.triple }} --parallel --config ${{ env.CMAKE_BUILD_TYPE }} --target $tgt
+          done
+      - name: split-debug
+        if: env.DEBUG_SYMBOLS == 'true'
+        run: |
+          set -euo pipefail
+          shopt -s nullglob globstar
+          OBJCOPY=/usr/bin/llvm-objcopy-18
+          for lib in **/*.so; do
+            "$OBJCOPY" --only-keep-debug "$lib" "$lib.debug"
+            "$OBJCOPY" --add-gnu-debuglink="$lib.debug" "$lib"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PROJECT_NAME }}-linux-${{ matrix.triple }}
+          path: artifacts/**
+
+  macos:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        arch:
+          - x86_64
+          - arm64
+    steps:
+      - uses: actions/checkout@v4
+      - name: configure
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          DBG=$([ "${{ env.DEBUG_SYMBOLS }}" = "true" ] && echo "-g" || echo "-g0")
+          cmake -S . -B build/${{ matrix.arch }} -G Ninja \
+            -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
+            -DCMAKE_OSX_ARCHITECTURES=${{ matrix.arch }} \
+            -DCMAKE_CXX_STANDARD=${{ env.CMAKE_CXX_STANDARD }} \
+            -DCMAKE_CXX_STANDARD_REQUIRED=${{ env.CMAKE_CXX_STANDARD_REQUIRED }} \
+            -DCMAKE_C_FLAGS="$DBG ${{ env.C_FLAGS_COMMON }}" \
+            -DCMAKE_CXX_FLAGS="$DBG ${{ env.CXX_FLAGS_COMMON }} -std=c++${{ env.CMAKE_CXX_STANDARD }}" \
+            -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=$(pwd)/artifacts \
+            -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=$(pwd)/artifacts \
+            -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=$(pwd)/artifacts \
+            -DBUILD_TESTING=${{ env.BUILD_TESTING }} \
+            ${{ env.CMAKE_EXTRA_ARGS }}
+      - name: build
+        run: |
+          for tgt in ${{ env.BUILD_TARGETS }}; do
+            cmake --build build/${{ matrix.arch }} --parallel --config ${{ env.CMAKE_BUILD_TYPE }} --target $tgt
+          done
+      - name: dsym
+        if: env.DEBUG_SYMBOLS == 'true'
+        run: |
+          for dylib in artifacts/*.dylib; do
+            [ -f "$dylib" ] && dsymutil "$dylib"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PROJECT_NAME }}-osx-${{ matrix.arch }}
+          path: artifacts/**
