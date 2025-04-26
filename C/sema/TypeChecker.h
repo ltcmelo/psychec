@@ -86,12 +86,14 @@ private:
         void ExpectedExpressionOfStructOrUnionType(SyntaxToken exprTk);
         void ExpectedExpressionOfPointerToStructOrUnionType(SyntaxToken exprTk);
         void ExpectedExpressionOfPointerOrArrayType(SyntaxToken exprTk);
+        void ExpectedExpressionOfFunctionOrFunctionPointerType(SyntaxToken tk);
         void ExpectedExpression(SyntaxToken tk);
         void UnknownMemberOfTag(SyntaxToken tk);
         void IncompatibleTypesInAssignment(SyntaxToken tk);
         void CannotAssignToExpressionOfConstQualifiedType(SyntaxToken tk);
         void CannotAssignToExpressionOfArrayType(SyntaxToken tk);
         void ConversionBetweenIntegerAndPointerTypesInAssignment(SyntaxToken tk);
+        void TooFewArgumentsToFunctionCall(SyntaxToken tk);
 
         static const std::string ID_of_InvalidOperator;
         static const std::string ID_of_ExpectedExpressionOfArithmeticType;
@@ -102,12 +104,14 @@ private:
         static const std::string ID_of_ExpectedExpressionOfStructOrUnionType;
         static const std::string ID_of_ExpectedExpressionOfPointerToStructOrUnionType;
         static const std::string ID_of_ExpectedExpressionOfPointerOrArrayType;
+        static const std::string ID_of_ExpectedExpressionOfFunctionOrFunctionPointerType;
         static const std::string ID_of_ExpectedExpression;
         static const std::string ID_of_UnknownMemberOfTag;
         static const std::string ID_of_IncompatibleTypesInAssignment;
         static const std::string ID_of_CannotAssignToExpressionOfConstQualifiedType;
         static const std::string ID_of_CannotAssignToExpressionOfArrayType;
         static const std::string ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment;
+        static const std::string ID_of_TooFewArgumentsToFunctionCall;
     };
     DiagnosticsReporter diagReporter_;
 

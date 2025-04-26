@@ -959,11 +959,20 @@ SyntaxVisitor::Action TypeChecker::visitPrefixUnaryExpression(
         }
         case SyntaxKind::AsteriskToken: {
             auto ty = unqualifiedAndResolved(ty_);
-            if (ty->kind() != TypeKind::Pointer) {
-                diagReporter_.ExpectedExpressionOfPointerType(node->lastToken());
-                return Action::Quit;
+            switch (ty->kind()) {
+                case TypeKind::Array:
+                    ty_ = ty->asArrayType()->elementType();
+                    break;
+                case TypeKind::Pointer:
+                    ty_ = ty->asPointerType()->referencedType();
+                    break;
+                case TypeKind::Function:
+                    ty_ = ty;
+                    break;
+                default:
+                    diagReporter_.ExpectedExpressionOfPointerType(node->lastToken());
+                    return Action::Quit;
             }
-            ty_ = ty->asPointerType()->referencedType();
             break;
         }
         case SyntaxKind::PlusToken:
@@ -1145,7 +1154,49 @@ SyntaxVisitor::Action TypeChecker::visitCastExpression(
     return Action::Skip;
 }
 
-SyntaxVisitor::Action TypeChecker::visitCallExpression(const CallExpressionSyntax*) { return Action::Skip; }
+SyntaxVisitor::Action TypeChecker::visitCallExpression(
+        const CallExpressionSyntax* node)
+{
+    VISIT_EXPR(node->expression());
+    auto exprTy = unqualifiedAndResolved(ty_);
+
+    const FunctionType* funcTy = nullptr;
+    switch (exprTy->kind()) {
+        case TypeKind::Function:
+            funcTy = exprTy->asFunctionType();
+            break;
+        case TypeKind::Pointer: {
+            auto refedTy = unqualifiedAndResolved(exprTy->asPointerType()->referencedType());
+            while (refedTy->kind() == TypeKind::Pointer)
+                refedTy = unqualifiedAndResolved(refedTy->asPointerType()->referencedType());
+            if (refedTy->kind() == TypeKind::Function)
+                funcTy = refedTy->asFunctionType();
+            break;
+        }
+        default:
+            break;
+    }
+
+    if (!funcTy) {
+        diagReporter_.ExpectedExpressionOfFunctionOrFunctionPointerType(
+            node->expression()->lastToken());
+        return Action::Skip;
+    }
+
+    std::vector<const Type*> argTys;
+    for (auto iter = node->arguments(); iter; iter = iter->next) {
+        VISIT_EXPR(iter->value);
+        argTys.push_back(ty_);
+    }
+    const auto& parmTys = funcTy->parameterTypes();
+    if (argTys.size() < parmTys.size()) {
+        diagReporter_.TooFewArgumentsToFunctionCall(node->expression()->lastToken());
+        return Action::Quit;
+    }
+
+    return Action::Skip;
+}
+
 SyntaxVisitor::Action TypeChecker::visitVAArgumentExpression(const VAArgumentExpressionSyntax*) { return Action::Skip; }
 SyntaxVisitor::Action TypeChecker::visitOffsetOfExpression(const OffsetOfExpressionSyntax*) { return Action::Skip; }
 SyntaxVisitor::Action TypeChecker::visitCompoundLiteralExpression(const CompoundLiteralExpressionSyntax*) { return Action::Skip; }

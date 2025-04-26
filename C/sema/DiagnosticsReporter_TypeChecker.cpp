@@ -34,12 +34,14 @@ const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfSc
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfStructOrUnionType = "TypeChecker-006";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPointerToStructOrUnionType = "TypeChecker-007";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfPointerOrArrayType = "TypeChecker-008";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpression = "TypeChecker-009";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag = "TypeChecker-010";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment = "TypeChecker-011";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfConstQualifiedType = "TypeChecker-012";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfArrayType = "TypeChecker-013";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment = "TypeChecker-014";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfFunctionOrFunctionPointerType = "TypeChecker-009";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpression = "TypeChecker-010";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag = "TypeChecker-011";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment = "TypeChecker-012";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfConstQualifiedType = "TypeChecker-013";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfArrayType = "TypeChecker-014";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment = "TypeChecker-015";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_TooFewArgumentsToFunctionCall = "TypeChecker-016";
 
 void TypeChecker::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
 {
@@ -138,6 +140,13 @@ void TypeChecker::DiagnosticsReporter::ExpectedExpressionOfPointerOrArrayType(Sy
                 "pointer or array");
 }
 
+void TypeChecker::DiagnosticsReporter::ExpectedExpressionOfFunctionOrFunctionPointerType(SyntaxToken tk)
+{
+    ExpectedExpressionOfType_CORE(
+                tk,
+                ID_of_ExpectedExpressionOfFunctionOrFunctionPointerType,
+                "function or function pointer");
+}
 
 void TypeChecker::DiagnosticsReporter::ExpectedExpression(SyntaxToken tk)
 {
@@ -201,6 +210,17 @@ void TypeChecker::DiagnosticsReporter::ConversionBetweenIntegerAndPointerTypesIn
                  "[[conversion between integer and pointer types in assignment]]",
                  "conversion between integer and pointer types in assignment",
                  DiagnosticSeverity::Warning,
+                 DiagnosticCategory::TypeChecking),
+             tk);
+}
+
+void TypeChecker::DiagnosticsReporter::TooFewArgumentsToFunctionCall(SyntaxToken tk)
+{
+    diagnose(DiagnosticDescriptor(
+                 ID_of_TooFewArgumentsToFunctionCall,
+                 "[[too few arguments to function call]]",
+                 "too few arguments to function call",
+                 DiagnosticSeverity::Error,
                  DiagnosticCategory::TypeChecking),
              tk);
 }
