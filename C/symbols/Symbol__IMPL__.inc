@@ -40,7 +40,7 @@ struct Symbol::SymbolImpl
     {
         std::uint32_t symK_ : 8;
 
-        // Used by DeclarationSymbol.
+        // DeclarationSymbol.
         std::uint32_t ns_ : 2;
         std::uint32_t static_ : 1;
     };

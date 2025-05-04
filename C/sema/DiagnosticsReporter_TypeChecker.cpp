@@ -38,10 +38,12 @@ const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpressionOfFu
 const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpression = "TypeChecker-010";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag = "TypeChecker-011";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment = "TypeChecker-012";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfConstQualifiedType = "TypeChecker-013";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfArrayType = "TypeChecker-014";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment = "TypeChecker-015";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_TooFewArgumentsToFunctionCall = "TypeChecker-016";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInArgumentToParameterAssignment = "TypeChecker-013";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfConstQualifiedType = "TypeChecker-014";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfArrayType = "TypeChecker-015";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment = "TypeChecker-016";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_TooFewArgumentsToFunctionCall = "TypeChecker-017";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_TooManyArgumentsToFunctionCall = "TypeChecker-018";
 
 void TypeChecker::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
 {
@@ -181,6 +183,17 @@ void TypeChecker::DiagnosticsReporter::IncompatibleTypesInAssignment(SyntaxToken
              tk);
 }
 
+void TypeChecker::DiagnosticsReporter::IncompatibleTypesInArgumentToParameterAssignment(SyntaxToken tk)
+{
+    diagnose(DiagnosticDescriptor(
+                 ID_of_IncompatibleTypesInArgumentToParameterAssignment,
+                 "[[incompatible types in argument to parameter assignment]]",
+                 "incompatible types in argument to parameter assignment",
+                 DiagnosticSeverity::Error,
+                 DiagnosticCategory::TypeChecking),
+             tk);
+}
+
 void TypeChecker::DiagnosticsReporter::CannotAssignToExpressionOfConstQualifiedType(SyntaxToken tk)
 {
     diagnose(DiagnosticDescriptor(
@@ -220,6 +233,17 @@ void TypeChecker::DiagnosticsReporter::TooFewArgumentsToFunctionCall(SyntaxToken
                  ID_of_TooFewArgumentsToFunctionCall,
                  "[[too few arguments to function call]]",
                  "too few arguments to function call",
+                 DiagnosticSeverity::Error,
+                 DiagnosticCategory::TypeChecking),
+             tk);
+}
+
+void TypeChecker::DiagnosticsReporter::TooManyArgumentsToFunctionCall(SyntaxToken tk)
+{
+    diagnose(DiagnosticDescriptor(
+                 ID_of_TooManyArgumentsToFunctionCall,
+                 "[[too many arguments to function call]]",
+                 "too many arguments to function call",
                  DiagnosticSeverity::Error,
                  DiagnosticCategory::TypeChecking),
              tk);

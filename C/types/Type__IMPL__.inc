@@ -40,11 +40,15 @@ struct Type::TypeImpl
         std::uint32_t basicTyK_: 5;
 
         // PointerType
-        std::uint32_t arrayDecay_ : 1;
-        std::uint32_t funcDecay_ : 1;
+        std::uint32_t ariseFromArrayDecay_ : 1;
+        std::uint32_t ariseFromFuncDecay_ : 1;
 
         // TagType
         std::uint32_t tagTyK_ : 2;
+
+        // FunctionType
+        std::uint32_t parmListForm_ : 2;
+        std::uint32_t isVariadic_ : 1;
     };
     union
     {

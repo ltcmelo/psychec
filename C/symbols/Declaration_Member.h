@@ -53,12 +53,12 @@ public:
     /**
      * The \a name of the \a Member declared by \c this MemberDeclarationSymbol.
      */
-    const Identifier* name() const override;
+    virtual const Identifier* name() const override;
 
     /**
      * The \a type of the \a Member declared by \c this MemberDeclarationSymbol.
      */
-    const Type* type() const override;
+    virtual const Type* type() const override;
 
 protected:
     DECL_PIMPL_SUB(MemberDeclaration);

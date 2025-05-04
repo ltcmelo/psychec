@@ -90,10 +90,12 @@ private:
         void ExpectedExpression(SyntaxToken tk);
         void UnknownMemberOfTag(SyntaxToken tk);
         void IncompatibleTypesInAssignment(SyntaxToken tk);
+        void IncompatibleTypesInArgumentToParameterAssignment(SyntaxToken tk);
         void CannotAssignToExpressionOfConstQualifiedType(SyntaxToken tk);
         void CannotAssignToExpressionOfArrayType(SyntaxToken tk);
         void ConversionBetweenIntegerAndPointerTypesInAssignment(SyntaxToken tk);
         void TooFewArgumentsToFunctionCall(SyntaxToken tk);
+        void TooManyArgumentsToFunctionCall(SyntaxToken tk);
 
         static const std::string ID_of_InvalidOperator;
         static const std::string ID_of_ExpectedExpressionOfArithmeticType;
@@ -108,16 +110,21 @@ private:
         static const std::string ID_of_ExpectedExpression;
         static const std::string ID_of_UnknownMemberOfTag;
         static const std::string ID_of_IncompatibleTypesInAssignment;
+        static const std::string ID_of_IncompatibleTypesInArgumentToParameterAssignment;
         static const std::string ID_of_CannotAssignToExpressionOfConstQualifiedType;
         static const std::string ID_of_CannotAssignToExpressionOfArrayType;
         static const std::string ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment;
         static const std::string ID_of_TooFewArgumentsToFunctionCall;
+        static const std::string ID_of_TooManyArgumentsToFunctionCall;
     };
     DiagnosticsReporter diagReporter_;
 
     //--------------//
     // Declarations //
     //--------------//
+
+    virtual Action visitVariableAndOrFunctionDeclaration(const VariableAndOrFunctionDeclarationSyntax*) override;
+    virtual Action visitFunctionDefinition(const FunctionDefinitionSyntax*) override;
 
     /* Specifiers */
     virtual Action visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*) override;
@@ -202,12 +209,6 @@ private:
             const Type* leftTy,
             const Type* rightTy);
 
-    /* Assignments */
-    Action visitAssignmentExpression_Simple(
-            const AssignmentExpressionSyntax* node,
-            const Type* leftTy,
-            const Type* rightTy);
-
     //------------//
     // Statements //
     //------------//
@@ -222,10 +223,18 @@ private:
     //--------//
     virtual Action visitTypeName(const TypeNameSyntax*) override;
 
+    static const Type* resolved(const Type* ty);
     static const Type* unqualifiedAndResolved(const Type* ty);
-    bool isAssignable(const SyntaxNode* node, const Type* ty);
+
     const Type* typeOfStringLiteral(StringLiteral::EncodingPrefix encodingSuffix);
+
+    void determineParameterListForm(FunctionDeclarationSymbol* func);
+
     bool isNULLPointerConstant(const SyntaxNode* node);
+    bool isAssignableType(const Type* ty, const SyntaxNode* node);
+    bool isTypeAssignableFromOtherType(const Type* ty,
+                                       const Type* otherTy,
+                                       const SyntaxNode* node);
     bool typesAreCompatible(const Type* oneTy,
                             const Type* otherTy,
                             bool treatVoidAsAny,
@@ -233,9 +242,11 @@ private:
     bool satisfyArithmeticTypeConstraint(const Type* ty, const SyntaxNode* node);
     bool satisfyIntegerTypeConstraint(const Type* ty, const SyntaxNode* node);
     bool satisfyRealTypeConstraint(const Type* ty, const SyntaxNode* node);
+
     const BasicType* determineCommonRealType(
             const BasicType* leftTy,
             const BasicType* rightTy) const;
+
     static BasicTypeKind performArithmeticConversions(
             BasicTypeKind leftTyK,
             BasicTypeKind rightTyK);

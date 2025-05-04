@@ -73,6 +73,11 @@ const Type* FunctionDeclarationSymbol::type() const
     return P_CAST->ty_;
 }
 
+Type* FunctionDeclarationSymbol::type()
+{
+    return const_cast<Type*>(P_CAST->ty_);
+}
+
 void FunctionDeclarationSymbol::setType(const Type* ty)
 {
     P_CAST->ty_ = ty;

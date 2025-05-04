@@ -53,12 +53,12 @@ public:
     /**
      * The \a name of the \a object declared by \c this ObjectDeclarationSymbol.
      */
-    const Identifier* name() const override;
+    virtual const Identifier* name() const override;
 
     /**
      * The \a type of the \a object declared by \c this ObjectDeclarationSymbol.
      */
-    const Type* type() const override;
+    virtual const Type* type() const override;
 
 protected:
     DECL_PIMPL_SUB(ObjectDeclaration);

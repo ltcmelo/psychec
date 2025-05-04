@@ -103,6 +103,13 @@ void TypeChecker::checkTypes()
     visit(tree_->root());
 }
 
+const Type* TypeChecker::resolved(const Type* ty)
+{
+    if (ty->kind() == TypeKind::TypedefName)
+        return ty->asTypedefNameType()->resolvedSynonymizedType();
+    return ty;
+}
+
 const Type* TypeChecker::unqualifiedAndResolved(const Type* ty)
 {
     do {
@@ -119,14 +126,14 @@ const Type* TypeChecker::unqualifiedAndResolved(const Type* ty)
     } while (true);
 }
 
-bool TypeChecker::isAssignable(const SyntaxNode* node, const Type* ty)
+bool TypeChecker::isAssignableType(const Type* ty, const SyntaxNode* node)
 {
     switch (ty->kind()) {
         case TypeKind::Qualified:
             diagReporter_.CannotAssignToExpressionOfConstQualifiedType(node->lastToken());
             return false;
         case TypeKind::TypedefName:
-            return isAssignable(node, ty->asTypedefNameType()->resolvedSynonymizedType());
+            return isAssignableType(ty->asTypedefNameType()->resolvedSynonymizedType(), node);
         case TypeKind::Array:
             diagReporter_.CannotAssignToExpressionOfArrayType(node->lastToken());
             return false;
@@ -137,7 +144,7 @@ bool TypeChecker::isAssignable(const SyntaxNode* node, const Type* ty)
                 return false;
             for (const auto& membDecl : tagTyDecl->members()) {
                 auto membTy = membDecl->type();
-                if (!isAssignable(node, membTy))
+                if (!isAssignableType(membTy, node))
                     return false;
             }
             return true;
@@ -145,11 +152,6 @@ bool TypeChecker::isAssignable(const SyntaxNode* node, const Type* ty)
         default:
             return true;
     }
-}
-
-SyntaxVisitor::Action TypeChecker::visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*)
-{
-    return Action::Quit;
 }
 
 BasicTypeKind TypeChecker::performIntegerPromotion(BasicTypeKind basicTyK)
@@ -591,6 +593,69 @@ bool TypeChecker::isNULLPointerConstant(const SyntaxNode* node)
             && node->asConstantExpression()->constantToken().kind()
                 == SyntaxKind::IntegerConstantToken
             && node->asConstantExpression()->constantToken().lexeme()->valueText() == "0";
+}
+
+//--------------//
+// Declarations //
+//--------------//
+
+void TypeChecker::determineParameterListForm(FunctionDeclarationSymbol* func)
+{
+    PSY_ASSERT_2(func->type(), return);
+    PSY_ASSERT_2(func->type()->kind() == TypeKind::Function, return);
+
+    auto funcTy = func->type()->asFunctionType();
+    auto parmTys = funcTy->parameterTypes();
+    if (parmTys.size() == 0)
+        funcTy->setParameterListForm(
+            FunctionType::ParameterListForm::Unspecified);
+    else {
+        if (parmTys.size() == 1) {
+            auto resolvedParmTy = resolved(parmTys[0]);
+            if (resolvedParmTy && resolvedParmTy->kind() == TypeKind::Void)
+                funcTy->setParameterListForm(
+                    FunctionType::ParameterListForm::SpecifiedAsEmpty);
+            else
+                funcTy->setParameterListForm(
+                    FunctionType::ParameterListForm::NonEmpty);
+        }
+        else
+            funcTy->setParameterListForm(
+                FunctionType::ParameterListForm::NonEmpty);
+    }
+}
+
+SyntaxVisitor::Action TypeChecker::visitVariableAndOrFunctionDeclaration(
+        const VariableAndOrFunctionDeclarationSyntax* node)
+{
+    auto decls = semaModel_->variableAndOrFunctionsFor(node);
+    for (auto decl : decls) {
+        PSY_ASSERT_2(decl, continue);
+        switch (decl->kind()) {
+            case SymbolKind::FunctionDeclaration:
+                determineParameterListForm(decl->asFunctionDeclaration());
+                break;
+            default:
+                break;
+        }
+    }
+
+    return Action::Visit;
+}
+
+SyntaxVisitor::Action TypeChecker::visitFunctionDefinition(
+        const FunctionDefinitionSyntax* node)
+{
+    auto func = semaModel_->functionFor(node);
+    PSY_ASSERT_2(func, return Action::Quit);
+    determineParameterListForm(func);
+
+    return Action::Visit;
+}
+
+SyntaxVisitor::Action TypeChecker::visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*)
+{
+    return Action::Quit;
 }
 
 //-------------//
@@ -1183,15 +1248,53 @@ SyntaxVisitor::Action TypeChecker::visitCallExpression(
         return Action::Skip;
     }
 
-    std::vector<const Type*> argTys;
+    std::vector<std::pair<const Type*, const ExpressionSyntax*>> argTysWithNode;
     for (auto iter = node->arguments(); iter; iter = iter->next) {
         VISIT_EXPR(iter->value);
-        argTys.push_back(ty_);
+        argTysWithNode.push_back(std::make_pair(ty_, iter->value));
     }
     const auto& parmTys = funcTy->parameterTypes();
-    if (argTys.size() < parmTys.size()) {
-        diagReporter_.TooFewArgumentsToFunctionCall(node->expression()->lastToken());
-        return Action::Quit;
+    switch (funcTy->parameterListForm()) {
+        case FunctionType::ParameterListForm::SpecifiedAsEmpty:
+            if (argTysWithNode.size() > 0) {
+                diagReporter_.TooManyArgumentsToFunctionCall(
+                    node->expression()->lastToken());
+                return Action::Quit;
+            }
+            break;
+        case FunctionType::ParameterListForm::Unspecified:
+            if (argTysWithNode.size() > 0) {
+                // TODO
+            }
+            break;
+        case FunctionType::ParameterListForm::NonEmpty: {
+            if (argTysWithNode.size() < parmTys.size()) {
+                diagReporter_.TooFewArgumentsToFunctionCall(
+                    node->expression()->lastToken());
+                return Action::Quit;
+            }
+            auto parmTyIdx = 0U;
+            for (; parmTyIdx < parmTys.size(); ++parmTyIdx) {
+                auto parmTy = parmTys[parmTyIdx];
+                auto argTyWithNode = argTysWithNode[parmTyIdx];
+                if (!isTypeAssignableFromOtherType(
+                        parmTy,
+                        argTyWithNode.first,
+                        argTyWithNode.second)) {
+                    diagReporter_.IncompatibleTypesInArgumentToParameterAssignment(
+                        argTyWithNode.second->firstToken());
+                }
+            }
+            if (parmTyIdx < argTysWithNode.size() && !funcTy->isVariadic()) {
+                diagReporter_.TooManyArgumentsToFunctionCall(
+                    node->expression()->lastToken());
+                return Action::Quit;
+            }
+            break;
+        }
+        default:
+            PSY_ASSERT_1(false);
+            return Action::Quit;
     }
 
     return Action::Skip;
@@ -1410,7 +1513,7 @@ SyntaxVisitor::Action TypeChecker::visitAssignmentExpression(
         const AssignmentExpressionSyntax* node)
 {
     VISIT_EXPR(node->left());
-    if (!isAssignable(node->left(), ty_))
+    if (!isAssignableType(ty_, node->left()))
         return Action::Quit;
     auto leftTy = unqualifiedAndResolved(ty_);
     VISIT_EXPR(node->right());
@@ -1418,7 +1521,12 @@ SyntaxVisitor::Action TypeChecker::visitAssignmentExpression(
 
     switch (node->operatorToken().kind()) {
         case SyntaxKind::EqualsToken:
-            return visitAssignmentExpression_Simple(node, leftTy, rightTy);
+            if (!isTypeAssignableFromOtherType(leftTy, rightTy, node->right())) {
+                diagReporter_.IncompatibleTypesInAssignment(node->operatorToken());
+                return Action::Quit;
+            }
+            ty_ = leftTy;
+            break;
         case SyntaxKind::AsteriskEqualsToken:
         case SyntaxKind::SlashEqualsToken:
             return visitBinaryExpression_MultiplicationOrDivision(node, leftTy, rightTy);
@@ -1443,31 +1551,24 @@ SyntaxVisitor::Action TypeChecker::visitAssignmentExpression(
     return Action::Skip;
 }
 
-SyntaxVisitor::Action TypeChecker:: visitAssignmentExpression_Simple(
-        const AssignmentExpressionSyntax* node,
-        const Type* leftTy,
-        const Type* rightTy)
+bool TypeChecker::isTypeAssignableFromOtherType(
+        const Type* ty,
+        const Type* otherTy,
+        const SyntaxNode* node)
 {
-    if (!((isArithmeticType(leftTy) && isArithmeticType(rightTy))
-            || (isStructureOrUnionType(leftTy)
-                && typesAreCompatible(leftTy, rightTy, false, false))
-            || (leftTy->kind() == TypeKind::Pointer
-                && ((rightTy->kind() == TypeKind::Pointer
+    return ((isArithmeticType(ty) && isArithmeticType(otherTy))
+            || (isStructureOrUnionType(ty)
+                && typesAreCompatible(ty, otherTy, false, false))
+            || (ty->kind() == TypeKind::Pointer
+                && ((otherTy->kind() == TypeKind::Pointer
                         && typesAreCompatible(
-                                leftTy->asPointerType()->referencedType(),
-                                rightTy->asPointerType()->referencedType(),
+                                ty->asPointerType()->referencedType(),
+                                otherTy->asPointerType()->referencedType(),
                                 true,
                                 true))
-                    || (rightTy->kind() == TypeKind::Basic
-                        && rightTy->asBasicType()->kind() == BasicTypeKind::Int_S
-                        && isNULLPointerConstant(node->right()))))
-            )) {
-        diagReporter_.IncompatibleTypesInAssignment(node->operatorToken());
-        return Action::Quit;
-    }
-    ty_ = leftTy;
-
-    return Action::Skip;
+                    || (otherTy->kind() == TypeKind::Basic
+                        && otherTy->asBasicType()->kind() == BasicTypeKind::Int_S
+                        && isNULLPointerConstant(node)))));
 }
 
 SyntaxVisitor::Action TypeChecker::visitSequencingExpression(const SequencingExpressionSyntax*) { return Action::Skip; }

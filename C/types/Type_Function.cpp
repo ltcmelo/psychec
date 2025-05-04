@@ -70,6 +70,26 @@ void FunctionType::setParameterType(ParameterTypes::size_type idx, const Type* p
     P_CAST->paramTys_[idx] = paramTy;
 }
 
+void FunctionType::setParameterListForm(ParameterListForm form)
+{
+    P_CAST->F_.parmListForm_ = static_cast<std::uint8_t>(form);
+}
+
+bool FunctionType::isVariadic() const
+{
+    return P_CAST->F_.isVariadic_;
+}
+
+void FunctionType::markAsVariadic()
+{
+    P_CAST->F_.isVariadic_ = true;
+}
+
+FunctionType::ParameterListForm FunctionType::parameterListForm() const
+{
+    return ParameterListForm(P_CAST->F_.parmListForm_);
+}
+
 namespace psy {
 namespace C {
 
