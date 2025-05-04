@@ -53,22 +53,22 @@ const Type* PointerType::referencedType() const
 
 bool PointerType::arisesFromArrayDecay() const
 {
-    return P->F_.arrayDecay_;
+    return P->F_.ariseFromArrayDecay_;
 }
 
 bool PointerType::arisesFromFunctionDecay() const
 {
-    return P->F_.funcDecay_;
+    return P->F_.ariseFromFuncDecay_;
 }
 
 void PointerType::markAsArisingFromArrayDecay()
 {
-    P->F_.arrayDecay_ = true;
+    P->F_.ariseFromArrayDecay_ = true;
 }
 
 void PointerType::markAsArisingFromFunctionDecay()
 {
-    P->F_.funcDecay_ = true;
+    P->F_.ariseFromFuncDecay_ = true;
 }
 
 namespace psy {

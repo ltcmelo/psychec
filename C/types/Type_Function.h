@@ -31,11 +31,12 @@
 namespace psy {
 namespace C {
 
+/**
+ * \brief The FunctionType class.
+ */
 class PSY_C_API FunctionType final : public Type
 {
 public:
-    using ParameterTypes = std::vector<const Type*>;
-
     //!@{
     /**
      * Cast \c this type as an FunctionType.
@@ -49,21 +50,47 @@ public:
      */
     const Type* returnType() const;
 
+    using ParameterTypes = std::vector<const Type*>;
+
     /**
      * The parameter types of \c this FunctionTypeDeclaration.
      */
     ParameterTypes parameterTypes() const;
 
+    /**
+     * The ParameterListForm alternatives of a FunctionType.
+     */
+    enum class ParameterListForm : std::int8_t
+    {
+        Unspecified,
+        SpecifiedAsEmpty,
+        NonEmpty,
+    };
+
+    /**
+     * The ParameterListForm alternative of \c this FunctionType.
+     */
+    ParameterListForm parameterListForm() const;
+
+    /**
+     * Whether \c this FunctionType is \a variadic.
+     */
+    bool isVariadic() const;
+
+
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
     PSY_GRANT_INTERNAL_ACCESS(TypeCanonicalizer);
     PSY_GRANT_INTERNAL_ACCESS(TypedefNameTypeResolver);
+    PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
 
     FunctionType(const Type* retTy);
 
     void addParameterType(const Type* paramTy);
     void setParameterType(ParameterTypes::size_type idx, const Type* paramTy) const;
     void setReturnType(const Type* retTy) const;
+    void setParameterListForm(ParameterListForm form);
+    void markAsVariadic();
 
 private:
     DECL_PIMPL_SUB(FunctionType)

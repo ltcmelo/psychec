@@ -62,6 +62,7 @@ public:
 
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
+    PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
 
     DECL_PIMPL_SUB(Function);
     FunctionDeclarationSymbol(const Symbol* containingSym,
@@ -71,6 +72,7 @@ PSY_INTERNAL:
     virtual const Identifier* denotingIdentifier() const override { return name(); }
     virtual void setName(const Identifier* name) override;
     virtual void setType(const Type* ty) override;
+    Type* type();
 };
 
 PSY_C_API std::ostream& operator<<(std::ostream& os, const FunctionDeclarationSymbol* func);

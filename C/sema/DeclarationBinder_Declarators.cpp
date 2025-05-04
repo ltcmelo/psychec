@@ -59,9 +59,9 @@ void DeclarationBinder::typeDeclarationAtTopWithTypeAtTop()
     TY_AT_TOP(auto ty, );
     typeableDecl->setType(ty);
 
-    if (!pendingFuncTys_.empty()) {
-        PSY_ASSERT_2(!pendingFuncTys_.empty(), return);
-        pendingFuncTys_.top()->addParameterType(ty);
+    if (!openFuncTys_.empty()) {
+        PSY_ASSERT_2(openFuncTys_.top(), return);
+        openFuncTys_.top()->addParameterType(ty);
     }
 }
 
@@ -278,7 +278,7 @@ SyntaxVisitor::Action DeclarationBinder::visitArrayOrFunctionDeclarator(const Ar
             }
             auto funcTy = makeType<FunctionType>(ty);
             pushType(funcTy);
-            pendingFuncTys_.push(funcTy);
+            openFuncTys_.push(funcTy);
 
             VISIT(node->innerDeclarator());
             VISIT(node->attributes_PostDeclarator());
@@ -287,7 +287,7 @@ SyntaxVisitor::Action DeclarationBinder::visitArrayOrFunctionDeclarator(const Ar
             VISIT(node->suffix());
             popAndStashScope();
 
-            pendingFuncTys_.pop();
+            openFuncTys_.pop();
             return Action::Skip;
         }
 
@@ -309,6 +309,13 @@ SyntaxVisitor::Action DeclarationBinder::visitParameterSuffix(const ParameterSuf
         std::swap(tys_, tys);
         VISIT(declIt->value);
         std::swap(tys_, tys);
+    }
+
+    if (node->ellipsisTkIdx_ != LexedTokens::invalidIndex()) {
+        PSY_ASSERT_2(!openFuncTys_.empty(), return Action::Quit);
+        PSY_ASSERT_2(openFuncTys_.top(), return Action::Quit);
+        auto funcTy = openFuncTys_.top();
+        funcTy->markAsVariadic();
     }
 
     return Action::Skip;

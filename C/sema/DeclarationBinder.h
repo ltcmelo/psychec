@@ -86,7 +86,7 @@ private:
 
     using TypeStack = std::stack<Type*>;
     TypeStack tys_;
-    std::stack<FunctionType*> pendingFuncTys_;
+    std::stack<FunctionType*> openFuncTys_;
     template <class TyT, class... TyTArgs> TyT* makeType(TyTArgs... args);
     void pushType(Type*);
     Type* popType();

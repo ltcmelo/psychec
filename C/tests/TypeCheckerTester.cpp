@@ -2248,32 +2248,405 @@ void _ ()
                 TypeChecker::DiagnosticsReporter::ID_of_TooFewArgumentsToFunctionCall));
 }
 
-void TypeCheckerTester::case0316(){}
-void TypeCheckerTester::case0317(){}
-void TypeCheckerTester::case0318(){}
-void TypeCheckerTester::case0319(){}
-void TypeCheckerTester::case0320(){}
-void TypeCheckerTester::case0321(){}
-void TypeCheckerTester::case0322(){}
-void TypeCheckerTester::case0323(){}
-void TypeCheckerTester::case0324(){}
-void TypeCheckerTester::case0325(){}
-void TypeCheckerTester::case0326(){}
-void TypeCheckerTester::case0327(){}
-void TypeCheckerTester::case0328(){}
-void TypeCheckerTester::case0329(){}
-void TypeCheckerTester::case0330(){}
-void TypeCheckerTester::case0331(){}
-void TypeCheckerTester::case0332(){}
-void TypeCheckerTester::case0333(){}
-void TypeCheckerTester::case0334(){}
-void TypeCheckerTester::case0335(){}
-void TypeCheckerTester::case0336(){}
-void TypeCheckerTester::case0337(){}
-void TypeCheckerTester::case0338(){}
-void TypeCheckerTester::case0339(){}
-void TypeCheckerTester::case0340(){}
-void TypeCheckerTester::case0341(){}
+void TypeCheckerTester::case0316()
+{
+    auto s = R"(
+void f ( void ) { }
+void _ ()
+{
+    f ( );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0317()
+{
+    /*
+    auto s = R"(
+typedef void x ;
+void f ( x ) { }
+void _ ()
+{
+    f ( );
+}
+    )";
+    */
+
+    // FIXME: Tweak the parser for this specific case where the identifier
+    // is parsed as a typedef name and only valid if resolved to `void'.
+    // checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0318()
+{
+    auto s = R"(
+void f ( void ) ;
+void _ ()
+{
+    f ( );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0319()
+{
+    auto s = R"(
+typedef void x ;
+void f ( x ) ;
+void _ ()
+{
+    f ( );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0320()
+{
+    auto s = R"(
+void f ( void ) ;
+void _ ()
+{
+    f ( 1 );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_TooManyArgumentsToFunctionCall));
+}
+
+void TypeCheckerTester::case0321()
+{
+    auto s = R"(
+void f ( void ) ;
+void _ ()
+{
+    f ( 1 , 2 );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_TooManyArgumentsToFunctionCall));
+}
+
+void TypeCheckerTester::case0322()
+{
+    auto s = R"(
+void f ( int ) ;
+void _ ()
+{
+    f ( 1 );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0323()
+{
+    auto s = R"(
+void f ( int x ) { }
+void _ ()
+{
+    f ( 1 );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0324()
+{
+    auto s = R"(
+void f ( int x ) { }
+void _ ()
+{
+    f ( 1 , 2 );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_TooManyArgumentsToFunctionCall));
+}
+
+void TypeCheckerTester::case0325()
+{
+    auto s = R"(
+void f ( int ) ;
+void _ ()
+{
+    f ( );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_TooFewArgumentsToFunctionCall));
+}
+
+void TypeCheckerTester::case0326()
+{
+    auto s = R"(
+void f ( int x , double y ) { }
+void _ ()
+{
+    f ( 1 , 1.0 );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0327()
+{
+    auto s = R"(
+void f ( int x , double y ) { }
+void _ ()
+{
+    f ( 1 );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_TooFewArgumentsToFunctionCall));
+}
+
+void TypeCheckerTester::case0328()
+{
+    auto s = R"(
+void f ( int x , double y , char z ) { }
+void _ ()
+{
+    f ( 1 );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_TooFewArgumentsToFunctionCall));
+}
+
+void TypeCheckerTester::case0329()
+{
+    auto s = R"(
+void f ( int x , double y , char z ) { }
+void _ ()
+{
+    f ( 1 , 1.0 , 'a' );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0330()
+{
+    auto s = R"(
+void f ( int x , double y , char z ) { }
+void _ ()
+{
+    f ( 1 , 1.0 , 'a' , 1 );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_TooManyArgumentsToFunctionCall));
+}
+
+void TypeCheckerTester::case0331()
+{
+    auto s = R"(
+void f ( int x , double y , char z , ... ) { }
+void _ ()
+{
+    f ( 1 , 1.0 , 'a' , 1 );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0332()
+{
+    auto s = R"(
+void f ( int x , double y , char z , ... ) { }
+void _ ()
+{
+    f ( 1 , 1.0 , 'a' , 1.0 );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0333()
+{
+    auto s = R"(
+void f ( int x , double y , char z , ... ) { }
+void _ ()
+{
+    f ( 1 , 1.0 , 'a' , 1.0 , 2.0 , 3.0 );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0334()
+{
+    auto s = R"(
+void f ( int x , ... ) { }
+void _ ()
+{
+    f ( 1 , 1.0 , 'a' , 1 );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0335()
+{
+    auto s = R"(
+void f ( int x , ... ) { }
+void _ ()
+{
+    f ( 1 );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0336()
+{
+    auto s = R"(
+void f ( int x , ... ) { }
+void _ ()
+{
+    f ( );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_TooFewArgumentsToFunctionCall));
+}
+
+void TypeCheckerTester::case0337()
+{
+    auto s = R"(
+void f ( float x ) { }
+void _ ()
+{
+    int * x ;
+    f ( x );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInArgumentToParameterAssignment));
+}
+
+void TypeCheckerTester::case0338()
+{
+    auto s = R"(
+void f ( float x , float y ) { }
+void _ ()
+{
+    int * x ;
+    f ( 1.0 , x );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInArgumentToParameterAssignment));
+}
+
+void TypeCheckerTester::case0339()
+{
+    auto s = R"(
+void f ( float x , float y , float z ) { }
+void _ ()
+{
+    int * x ;
+    f ( 1.0 , x , 2.0 );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInArgumentToParameterAssignment));
+}
+
+void TypeCheckerTester::case0340()
+{
+    auto s = R"(
+struct s { int m ; } ;
+void f ( float x , float y ) { }
+void _ ()
+{
+    struct s x ;
+    f ( 1.0 , x );
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(Expectation::ErrorOrWarn::Error,
+                        TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInArgumentToParameterAssignment));
+}
+
+void TypeCheckerTester::case0341()
+{
+    auto s = R"(
+struct s { int m ; } ;
+void f ( float x , struct s y ) { }
+void _ ()
+{
+    struct s x ;
+    f ( 1.0 , x );
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
 void TypeCheckerTester::case0342(){}
 void TypeCheckerTester::case0343(){}
 void TypeCheckerTester::case0344(){}
