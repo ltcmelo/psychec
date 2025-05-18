@@ -24,6 +24,7 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "TypeInfo.h"
 #include "symbols/SymbolKind.h"
 #include "../common/infra/AccessSpecifiers.h"
 #include "../common/infra/Pimpl.h"
@@ -150,13 +151,20 @@ public:
      * The DeclarationSymbol declared by the given DeclaratorSyntax \c node.
      */
     const DeclarationSymbol* declarationBy(const DeclaratorSyntax* node) const;
-    //!@}
 
     /**
      * Search \c this SemanticModel for a DeclarationSymbol with the given predicate.
      */
     const DeclarationSymbol*
         searchForDeclaration(std::function<bool (const DeclarationSymbol*)> pred) const;
+
+    //!@{
+    /**
+     * The TypeInfo of the given \c node.
+     */
+    TypeInfo typeInfoOf(const ExpressionSyntax* node) const;
+    TypeInfo typeInfoOf(const TypeNameSyntax* node) const;
+    //!@}
 
     /**
      * The Scope of the given \c node.
@@ -225,6 +233,9 @@ PSY_INTERNAL:
 
     Scope* keepScope(std::unique_ptr<Scope> scope);
     void setScopeOf(const IdentifierNameSyntax* node, const Scope* scope);
+
+    TypeInfo typeInfoOf_CORE(const SyntaxNode* node);
+    void setTypeInfoOf(const SyntaxNode* node, TypeInfo&& tyInfo);
 
     Type* keepType(std::unique_ptr<Type> ty);
     void dropType(const Type* ty);

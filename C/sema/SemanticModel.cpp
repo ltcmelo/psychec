@@ -57,9 +57,10 @@ struct SemanticModel::SemanticModelImpl
     std::unique_ptr<TranslationUnitSymbol> unit_;
     std::vector<std::unique_ptr<DeclarationSymbol>> decls_;
     std::unordered_map<const Type*, std::unique_ptr<Type>> tys_;
-    std::unordered_map<const SyntaxNode*, DeclarationSymbol*> declsBySyntax_;
+    std::unordered_map<const SyntaxNode*, DeclarationSymbol*> declByNode_;
     std::unordered_set<std::unique_ptr<Scope>> scopes_;
-    std::unordered_map<const SyntaxNode*, const Scope*> nodeScope_;
+    std::unordered_map<const SyntaxNode*, const Scope*> scopeByNode_;
+    std::unordered_map<const SyntaxNode*, TypeInfo> tyInfoByNode_;
 
     inline static const std::string syntheticTagPrefix_ = "#";
     std::vector<std::pair<std::string, Identifier*>> syntheticTags_;
@@ -107,8 +108,8 @@ DeclarationSymbol* SemanticModel::addDeclaration(
 {
     P->decls_.emplace_back(decl.release());
     DeclarationSymbol* addedDecl = P->decls_.back().get();
-    PSY_ASSERT_2(P->declsBySyntax_.count(node) == 0, return nullptr);
-    P->declsBySyntax_[node] = addedDecl;
+    PSY_ASSERT_2(P->declByNode_.count(node) == 0, return nullptr);
+    P->declByNode_[node] = addedDecl;
     return addedDecl;
 }
 
@@ -133,12 +134,36 @@ Scope* SemanticModel::keepScope(std::unique_ptr<Scope> scope)
 
 void SemanticModel::setScopeOf(const IdentifierNameSyntax* node, const Scope* scope)
 {
-    P->nodeScope_[node] = scope;
+    P->scopeByNode_[node] = scope;
+}
+
+TypeInfo SemanticModel::typeInfoOf_CORE(const SyntaxNode* node)
+{
+    auto it = P->tyInfoByNode_.find(node);
+    if (it != P->tyInfoByNode_.end())
+        return it->second;
+    return TypeInfo();
+}
+
+TypeInfo SemanticModel::typeInfoOf(const ExpressionSyntax* node) const
+{
+    return const_cast<SemanticModel*>(this)->typeInfoOf_CORE(node);
+}
+
+TypeInfo SemanticModel::typeInfoOf(const TypeNameSyntax* node) const
+{
+    return const_cast<SemanticModel*>(this)->typeInfoOf_CORE(node);
+}
+
+void SemanticModel::setTypeInfoOf(const SyntaxNode* node, TypeInfo&& tyInfo)
+{
+    PSY_ASSERT_1(!P->tyInfoByNode_.count(node));
+    P->tyInfoByNode_.emplace(node, tyInfo);
 }
 
 const Scope* SemanticModel::scopeOf(const IdentifierNameSyntax* node) const
 {
-    return P->nodeScope_[node];
+    return P->scopeByNode_[node];
 }
 
 FunctionDeclarationSymbol* SemanticModel::functionFor(const FunctionDefinitionSyntax* node)
@@ -177,8 +202,8 @@ const ParameterDeclarationSymbol* SemanticModel::parameterFor(const ParameterDec
 
 const TypeDeclarationSymbol* SemanticModel::typeDeclarationFor(const TypeDeclarationSyntax* node) const
 {
-    auto it = P->declsBySyntax_.find(node);
-    if (it == P->declsBySyntax_.end()) {
+    auto it = P->declByNode_.find(node);
+    if (it == P->declByNode_.end()) {
         PSY_ASSERT_1(!P->bindingIsOK_);
         return nullptr;
     }
@@ -228,8 +253,8 @@ const EnumDeclarationSymbol* SemanticModel::enumFor(
 EnumeratorDeclarationSymbol* SemanticModel::enumeratorFor(
         const EnumeratorDeclarationSyntax* node)
 {
-    auto it = P->declsBySyntax_.find(node);
-    if (it == P->declsBySyntax_.end()) {
+    auto it = P->declByNode_.find(node);
+    if (it == P->declByNode_.end()) {
         PSY_ASSERT_1(!P->bindingIsOK_);
         return nullptr;
     }
@@ -249,8 +274,8 @@ template <class VecT> VecT SemanticModel::fieldsFor_CORE(
 {
     // Anonymous structure/union fields are bound to the field declaration
     // syntax node while regular fields to the declarators syntax nodes.
-    auto it = P->declsBySyntax_.find(node);
-    if (it != P->declsBySyntax_.end()) {
+    auto it = P->declByNode_.find(node);
+    if (it != P->declByNode_.end()) {
         auto decl = it->second->asDeclaration();
         PSY_ASSERT_2(decl->kind() == SymbolKind::FieldDeclaration, return decls);
         decls.push_back(decl->asFieldDeclaration());
@@ -314,8 +339,8 @@ std::vector<const DeclarationSymbol*> SemanticModel::variablesAndOrFunctionsFor(
 DeclarationSymbol* SemanticModel::declarationBy(const DeclaratorSyntax* node)
 {
     node = SyntaxUtilities::innermostDeclaratorOf(node);
-    auto it = P->declsBySyntax_.find(node);
-    if (it == P->declsBySyntax_.end()) {
+    auto it = P->declByNode_.find(node);
+    if (it == P->declByNode_.end()) {
         PSY_ASSERT_1(!P->bindingIsOK_);
         return nullptr;
     }

@@ -203,6 +203,8 @@ set(CFE_SOURCES
     ${PROJECT_SOURCE_DIR}/sema/TypedefNameTypeResolver.cpp
     ${PROJECT_SOURCE_DIR}/sema/TypeChecker.h
     ${PROJECT_SOURCE_DIR}/sema/TypeChecker.cpp
+    ${PROJECT_SOURCE_DIR}/sema/TypeInfo.h
+    ${PROJECT_SOURCE_DIR}/sema/TypeInfo.cpp
     ${PROJECT_SOURCE_DIR}/sema/Compilation.h
     ${PROJECT_SOURCE_DIR}/sema/Compilation.cpp
     ${PROJECT_SOURCE_DIR}/sema/SemanticModel.h

@@ -133,7 +133,7 @@ private:
     // Expressions //
     //-------------//
 
-    Action visitExpression(const SyntaxNode* node);
+    Action visitExpression(const ExpressionSyntax* node);
 
     virtual Action visitIdentifierName(const IdentifierNameSyntax*) override;
     virtual Action visitPredefinedName(const PredefinedNameSyntax*) override;

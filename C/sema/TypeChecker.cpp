@@ -662,10 +662,13 @@ SyntaxVisitor::Action TypeChecker::visitExtGNU_Attribute(const ExtGNU_AttributeS
 // Expressions //
 //-------------//
 
-SyntaxVisitor::Action TypeChecker::visitExpression(const SyntaxNode* node)
+SyntaxVisitor::Action TypeChecker::visitExpression(const ExpressionSyntax* node)
 {
     VISIT(node);
     PSY_ASSERT_2(ty_, return Action::Quit);
+
+    TypeInfo tyInfo(ty_, TypeInfo::TypeOrigin::Expression);
+    semaModel_->setTypeInfoOf(node, std::move(tyInfo));
 
     return Action::Skip;
 }
@@ -1192,7 +1195,22 @@ SyntaxVisitor::Action TypeChecker::visitArraySubscriptExpression(
 SyntaxVisitor::Action TypeChecker::visitTypeTraitExpression(
         const TypeTraitExpressionSyntax* node)
 {
-    VISIT_EXPR(node->tyReference());
+    switch (node->tyReference()->kind()) {
+        case SyntaxKind::ExpressionAsTypeReference: {
+            auto exprAsTy = node->tyReference()->asExpressionAsTypeReference();
+            VISIT_EXPR(exprAsTy->expression());
+            break;
+        }
+        case SyntaxKind::TypeNameAsTypeReference: {
+            auto tyNameAsTy = node->tyReference()->asTypeNameAsTypeReference();
+            VISIT(tyNameAsTy->typeName());
+            break;
+        }
+        default:
+            std::cout << to_string(node->kind()) << std::endl;
+            PSY_ASSERT_1(false);
+            return Action::Quit;
+    }
 
     switch (node->operatorToken().kind()) {
         case SyntaxKind::Keyword_sizeof:
@@ -1214,7 +1232,7 @@ SyntaxVisitor::Action TypeChecker::visitTypeTraitExpression(
 SyntaxVisitor::Action TypeChecker::visitCastExpression(
         const CastExpressionSyntax* node)
 {
-    VISIT_EXPR(node->typeName());
+    VISIT(node->typeName());
 
     return Action::Skip;
 }
@@ -1621,6 +1639,10 @@ SyntaxVisitor::Action TypeChecker::visitTypeName(const TypeNameSyntax* node)
             PSY_ASSERT_1(false);
             return Action::Quit;
     }
+    PSY_ASSERT_2(ty_, return Action::Quit);
+
+    TypeInfo tyInfo(ty_, TypeInfo::TypeOrigin::TypeName);
+    semaModel_->setTypeInfoOf(node, std::move(tyInfo));
 
     return Action::Skip;
 }
