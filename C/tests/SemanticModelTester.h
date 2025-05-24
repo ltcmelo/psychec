@@ -52,9 +52,14 @@ public:
     std::unique_ptr<Compilation> compilation_;
 
     template <class DeclNodeT>
-    std::tuple<const DeclNodeT*,const SemanticModel*> compile(
-            const std::string& srcText,
-            const std::string& srcTextPrefix = "");
+    std::tuple<const DeclNodeT*, const SemanticModel*>
+    compileTestSymbols(const std::string& srcText,
+                       const std::string& srcTextPrefix = "");
+
+    std::tuple<
+        std::unordered_map<std::string, const ExpressionSyntax*>,
+        const SemanticModel*>
+    compileTestTypes(const std::string& srcText);
 
     void testSemanticModel();
 
@@ -70,7 +75,7 @@ public:
         + 0350-0399 -> field
         + 0400-0449 -> enum
         + 0450-0499 -> enumerator
-        + 0500-0509 -> program
+        + 0500-     -> expressions
      */
 
     void case0001();

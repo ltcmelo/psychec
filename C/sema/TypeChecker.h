@@ -23,6 +23,7 @@
 
 #include "API.h"
 
+#include "sema/TypeInfo.h"
 #include "syntax/Lexeme_StringLiteral.h"
 #include "syntax/SyntaxVisitor.h"
 #include "types/TypeKind_Basic.h"
@@ -133,8 +134,6 @@ private:
     // Expressions //
     //-------------//
 
-    Action visitExpression(const ExpressionSyntax* node);
-
     virtual Action visitIdentifierName(const IdentifierNameSyntax*) override;
     virtual Action visitPredefinedName(const PredefinedNameSyntax*) override;
     virtual Action visitConstantExpression(const ConstantExpressionSyntax*) override;
@@ -213,7 +212,6 @@ private:
     // Statements //
     //------------//
 
-    Action visitStatement(const StatementSyntax*);
     virtual Action visitDeclarationStatement(const DeclarationStatementSyntax*) override;
     virtual Action visitExpressionStatement(const ExpressionStatementSyntax*) override;
     virtual Action visitReturnStatement(const ReturnStatementSyntax*) override;
@@ -222,6 +220,12 @@ private:
     // Common //
     //--------//
     virtual Action visitTypeName(const TypeNameSyntax*) override;
+
+    void createTypeInfo(const SyntaxNode*, const Type*, TypeInfo::TypeOrigin);
+    Action typeChecked(const ExpressionSyntax*,
+                       const Type*,
+                       TypeInfo::TypeOrigin = TypeInfo::TypeOrigin::Expression);
+    Action typeCheckError(const SyntaxNode*);
 
     static const Type* resolved(const Type* ty);
     static const Type* unqualifiedAndResolved(const Type* ty);

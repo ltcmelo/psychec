@@ -142,7 +142,8 @@ TypeInfo SemanticModel::typeInfoOf_CORE(const SyntaxNode* node)
     auto it = P->tyInfoByNode_.find(node);
     if (it != P->tyInfoByNode_.end())
         return it->second;
-    return TypeInfo();
+    return TypeInfo(compilation()->canonicalErrorType(),
+                    TypeInfo::TypeOrigin::Error);
 }
 
 TypeInfo SemanticModel::typeInfoOf(const ExpressionSyntax* node) const

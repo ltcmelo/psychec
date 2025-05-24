@@ -44,7 +44,7 @@ public:
      */
     enum class TypeOrigin : std::uint8_t
     {
-        Unspecified,
+        Error,
         Expression,
         TypeName,
     };
@@ -64,7 +64,6 @@ PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
 
 private:
-    TypeInfo();
     TypeInfo(const Type* ty, TypeOrigin tyOrig);
 
     const Type* ty_;

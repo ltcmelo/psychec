@@ -23,11 +23,6 @@
 using namespace psy;
 using namespace C;
 
-TypeInfo::TypeInfo()
-    : ty_(nullptr)
-    , tyOrig_(TypeOrigin::Unspecified)
-{}
-
 TypeInfo::TypeInfo(const Type* ty, TypeOrigin tyOrig)
     : ty_(ty)
     , tyOrig_(tyOrig)
