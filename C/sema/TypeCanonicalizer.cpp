@@ -277,7 +277,8 @@ const Type* TypeCanonicalizer::canonicalize(const Type* ty, const Scope* scope)
                 }
                 //if (tree_->completeness() == TextCompleteness::Full)
                 diagReporter_.TagTypeDoesNotMatchTagDeclaration(tySpecNode_->lastToken());
-            } else {
+            }
+            else {
                 //if (tree_->completeness() == TextCompleteness::Full)
                 diagReporter_.TypeDeclarationNotFound(tySpecNode_->lastToken());
             }
