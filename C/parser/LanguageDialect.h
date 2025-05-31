@@ -74,6 +74,7 @@ bool PSY_C_API operator<=(LanguageDialect::Std a, LanguageDialect::Std b);
 bool PSY_C_API operator>(LanguageDialect::Std a, LanguageDialect::Std b);
 bool PSY_C_API operator>=(LanguageDialect::Std a, LanguageDialect::Std b);
 
+PSY_C_API std::ostream& operator<<(std::ostream& os, const LanguageDialect& langDialect);
 PSY_C_API std::string to_string(LanguageDialect::Std std);
 
 } // C

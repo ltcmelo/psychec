@@ -24,8 +24,11 @@
 #include "API.h"
 #include "Fwds.h"
 
+#include "../common/infra/Assertions.h"
+
 #include <cstdint>
 #include <string>
+#include <iostream>
 
 namespace psy {
 namespace C {
@@ -43,18 +46,20 @@ enum class PSY_C_API NameSpace : std::uint8_t
     OrdinaryIdentifiers,
 };
 
-inline PSY_C_API std::string to_string(NameSpace ns)
+inline PSY_C_API std::ostream& operator<<(std::ostream& os, NameSpace ns)
 {
     switch (ns) {
         case NameSpace::LabelNames:
-            return "LabelNames";
+            return os << "LabelNames";
         case NameSpace::Tags:
-            return "Tags";
+            return os << "Tags";
         case NameSpace::Members:
-            return "Members";
+            return os << "Members";
         case NameSpace::OrdinaryIdentifiers:
-            return "OrdinaryIdentifiers";
+            return os << "OrdinaryIdentifiers";
     }
+    PSY_ASSERT_1(false);
+    return os << "<invalid namespace>";
 }
 
 } // C
