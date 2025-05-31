@@ -60,24 +60,26 @@ bool operator>=(LanguageDialect::Std a, LanguageDialect::Std b)
     return !(a < b);
 }
 
+std::ostream& operator<<(std::ostream& os, const LanguageDialect& langDialect)
+{
+    os << "std:" << to_string(langDialect.std());
+    return os;
+}
+
 std::string to_string(LanguageDialect::Std std)
 {
     switch (std) {
         case LanguageDialect::Std::C89_90:
             return "c89";
-
         case LanguageDialect::Std::C99:
             return "c99";
-
         case LanguageDialect::Std::C11:
             return "c11";
-
         case LanguageDialect::Std::C17_18:
             return "c17";
-
-        default:
-            PSY_ASSERT_3(false, return "", "");
     }
+    PSY_ASSERT_1(false);
+    return "<invalid LanguageDialect>";
 }
 
 } // C

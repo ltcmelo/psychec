@@ -30,6 +30,7 @@
 
 #include <cstdint>
 #include <string>
+#include <iostream>
 
 namespace psy {
 namespace C {
@@ -303,7 +304,7 @@ public:
 private:
     MacroTranslations translations_;
 
-    struct BitFields
+    struct BD
     {
         /* C */
         std::uint64_t extC_KandRStyle_ : 1;
@@ -339,11 +340,14 @@ private:
     };
     union
     {
-        std::uint64_t BF_all_;
-        BitFields BF_;
+        std::uint64_t BD_;
+        BD F_;
     };
+
+    friend std::ostream& operator<<(std::ostream& os, const LanguageExtensions& langExts);
 };
 
+PSY_C_API std::ostream& operator<<(std::ostream& os, const LanguageExtensions& langExts);
 PSY_C_API std::string to_string(LanguageExtensions::Ext ext);
 
 } // C
