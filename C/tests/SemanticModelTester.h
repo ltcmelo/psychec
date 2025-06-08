@@ -48,7 +48,6 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    std::unique_ptr<SyntaxTree> tree_;
     std::unique_ptr<Compilation> compilation_;
 
     template <class DeclNodeT>

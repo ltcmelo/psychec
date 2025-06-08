@@ -1,4 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2025 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,34 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_COMPILER_FRONTEND_H__
-#define CNIPPET_COMPILER_FRONTEND_H__
+#include "GNUPreprocessorCommandOptions.h"
 
-#include "Configuration.h"
+using namespace psy;
+using namespace gnu;
 
-#include "FileInfo.h"
+PreprocessorCommandOptions::PreprocessorCommandOptions() {}
 
-#include "cxxopts.hpp"
-
-#include <string>
-
-namespace cnip {
-
-/*!
- * \brief The CompilerFrontend class.
- */
-class CompilerFrontend
-{
-public:
-    virtual ~CompilerFrontend();
-
-    virtual bool setup() = 0;
-    virtual int run(const std::string& srcText, const psy::FileInfo& fi) = 0;
-
-protected:
-    CompilerFrontend();
-};
-
-} // cnip
-
-#endif
+PreprocessorCommandOptions::~PreprocessorCommandOptions() {}

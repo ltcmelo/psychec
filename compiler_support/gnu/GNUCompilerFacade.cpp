@@ -20,7 +20,7 @@
 
 #include "GNUCompilerFacade.h"
 
-#include "Process.h"
+#include "utility/Process.h"
 
 #include <iostream>
 #include <sstream>
@@ -31,43 +31,43 @@ const char * const kInclude = "#include";
 }
 
 using namespace psy;
+using namespace gnu;
 
-GNUCompilerFacade::GNUCompilerFacade(const std::string& compilerName,
-                                     const std::string& std,
-                                     const std::vector<std::string>& D,
-                                     const std::vector<std::string>& U,
-                                     const std::vector<std::string>& I)
-    : compilerName_(compilerName)
+CompilerFacade::CompilerFacade(
+        const std::string& compiler,
+        const std::string& std,
+        const DirectorySearchOptions& dirSearchOpts,
+        const PreprocessorCommandOptions& ppCmdOpts)
+    : compiler_(compiler)
     , std_(std)
-    , D_(D)
-    , U_(U)
-    , I_(I)
+    , dirSearchOpts_(dirSearchOpts)
+    , ppCmdOpts_(ppCmdOpts)
 {}
 
-std::pair<int, std::string> GNUCompilerFacade::preprocessFile(const std::string& filePath)
+std::pair<int, std::string> CompilerFacade::preprocessFile(const std::string& filePath)
 {
-    std::string cmd = compilerName_ + assemblePPOptions();
-    cmd += " -std=" + std_ + " -E -x c -CC ";
+    std::string cmd = compiler_ + commandOptions();
+    cmd += " -E -x c -CC ";
     cmd += filePath;
     return Process().execute(cmd);
 }
 
-std::pair<int, std::string> GNUCompilerFacade::preprocessText(const std::string& srcText)
+std::pair<int, std::string> CompilerFacade::preprocessText(const std::string& fileText)
 {
     std::string in = "cat << 'EOF' | ";
-    in += compilerName_ + assemblePPOptions();
-    in += " -std=" + std_ + " -E -x c -CC -\n";
-    in += srcText;
+    in += compiler_ + commandOptions();
+    in += " -E -x c -CC -\n";
+    in += fileText;
     in += "\nEOF";
     return Process().execute(in);
 }
 
-std::pair<int, std::string> GNUCompilerFacade::preprocess_IgnoreIncludes(const std::string& srcText)
+std::pair<int, std::string> CompilerFacade::preprocess_IgnoreIncludes(const std::string& fileText)
 {
     std::string srcText_P;
-    srcText_P.reserve(srcText.length());
+    srcText_P.reserve(fileText.length());
 
-    std::istringstream iss(srcText);
+    std::istringstream iss(fileText);
     std::string line;
     while (std::getline(iss, line)) {
         line.erase(0, line.find_first_not_of(' '));
@@ -78,14 +78,32 @@ std::pair<int, std::string> GNUCompilerFacade::preprocess_IgnoreIncludes(const s
     return preprocessText(srcText_P);
 }
 
-std::string GNUCompilerFacade::assemblePPOptions() const
+std::string CompilerFacade::commandOptions() const
 {
-    std::string s;
-    for (const auto& d : D_)
-        s += " -D " + d;
-    for (const auto& u : U_)
-        s += " -U " + u;
-    for (const auto& i : I_)
-        s += " -I " + i;
-    return s;
+    std::string opts;
+    if (!std_.empty())
+        opts += " -std=" + std_;
+    for (const auto& s : dirSearchOpts_.I_)
+        opts += " -I " + s;;
+    for (const auto& s : dirSearchOpts_.iquote_)
+        opts += " -iquote " + s;;
+    for (const auto& s : dirSearchOpts_.isystem_)
+        opts += " -isystem " + s;;
+    if (dirSearchOpts_.nostdinc_)
+        opts += " -nostdinc";
+    for (const auto& s : ppCmdOpts_.D_)
+        opts += " -D " + s;;
+    for (const auto& s : ppCmdOpts_.U_)
+        opts += " -U " + s;;
+    for (const auto& s : ppCmdOpts_.include_)
+        opts += " -include " + s;;
+    for (const auto& s : ppCmdOpts_.imacros_)
+        opts += " -imacros " + s;;
+    if (ppCmdOpts_.undef_)
+        opts += " -undef";
+    if (ppCmdOpts_.C_)
+        opts += " -C";
+    if (ppCmdOpts_.CC_)
+        opts += " -CC";
+    return opts;
 }

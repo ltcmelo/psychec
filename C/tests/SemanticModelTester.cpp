@@ -50,7 +50,6 @@ void SemanticModelTester::setUp()
 void SemanticModelTester::tearDown()
 {
     compilation_.reset(nullptr);
-    tree_.reset(nullptr);
 }
 
 class ExpressionCollector : public SyntaxVisitor
@@ -111,15 +110,15 @@ SemanticModelTester::compileTestSymbols(
         const std::string& srcText,
         const std::string& tydefDeclSrcText)
 {
-    tree_ = SyntaxTree::parseText(SourceText(tydefDeclSrcText.empty()
-                                             ? srcText
-                                             : tydefDeclSrcText + srcText),
-                                  TextPreprocessingState::Preprocessed,
-                                  TextCompleteness::Fragment,
-                                  ParseOptions(),
-                                  "<test>");
+    auto tree = SyntaxTree::parseText(SourceText(tydefDeclSrcText.empty()
+                                                  ? srcText
+                                                  : tydefDeclSrcText + srcText),
+                                       TextPreprocessingState::Preprocessed,
+                                       TextCompleteness::Fragment,
+                                       ParseOptions(),
+                                       "<test>");
 
-    auto TU = tree_->translationUnitRoot();
+    auto TU = tree->translationUnit();
     PSY_EXPECT_TRUE(TU);
     PSY_EXPECT_TRUE(TU->declarations());
 
@@ -134,9 +133,12 @@ SemanticModelTester::compileTestSymbols(
     auto decl = dynamic_cast<DeclNodeT*>(anyDeclNode);
     PSY_EXPECT_TRUE(decl);
 
-    compilation_ = Compilation::create(tree_->filePath());
-    compilation_->addSyntaxTrees({ tree_.get() });
-    auto semaModel = compilation_->computeSemanticModel(tree_.get());
+    compilation_ = Compilation::create(tree->filePath());
+
+    auto tree_RAW = tree.get();
+    compilation_->addSyntaxTree(std::move(tree));
+    compilation_->computeSemanticModel(tree_RAW);
+    auto semaModel = compilation_->semanticModel(tree_RAW);
     PSY_EXPECT_TRUE(semaModel);
 
     return std::make_tuple(decl, semaModel);
@@ -146,18 +148,21 @@ std::tuple<std::unordered_map<std::string, const ExpressionSyntax*>,
            const SemanticModel*>
 SemanticModelTester::compileTestTypes(const std::string& srcText)
 {
-    tree_ = SyntaxTree::parseText(SourceText(srcText),
-                                  TextPreprocessingState::Preprocessed,
-                                  TextCompleteness::Fragment,
-                                  ParseOptions(),
-                                  "<test>");
+    auto tree = SyntaxTree::parseText(SourceText(srcText),
+                                      TextPreprocessingState::Preprocessed,
+                                      TextCompleteness::Fragment,
+                                      ParseOptions(),
+                                      "<test>");
 
-    ExpressionCollector v(tree_.get());
-    v.visit(tree_->translationUnitRoot());
+    ExpressionCollector v(tree.get());
+    v.visit(tree->translationUnit());
 
-    compilation_ = Compilation::create(tree_->filePath());
-    compilation_->addSyntaxTrees({ tree_.get() });
-    auto semaModel = compilation_->computeSemanticModel(tree_.get());
+    compilation_ = Compilation::create(tree->filePath());
+
+    auto tree_RAW = tree.get();
+    compilation_->addSyntaxTree(std::move(tree));
+    compilation_->computeSemanticModel(tree_RAW);
+    auto semaModel = compilation_->semanticModel(tree_RAW);
     PSY_EXPECT_TRUE(semaModel);
 
     return std::make_tuple(v.m, semaModel);

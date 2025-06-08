@@ -150,19 +150,19 @@ const SourceText& SyntaxTree::text() const
     return P->text_;
 }
 
-SyntaxNode* SyntaxTree::root() const
+SyntaxNode* SyntaxTree::rootNode() const
 {
     return P->rootNode_;
 }
 
-bool SyntaxTree::hasTranslationUnitRoot() const
+bool SyntaxTree::hasTranslationUnitAsRootNode() const
 {
     return static_cast<bool>(P->rootNode_->asTranslationUnit());
 }
 
-TranslationUnitSyntax* SyntaxTree::translationUnitRoot() const
+TranslationUnitSyntax* SyntaxTree::translationUnit() const
 {
-    if (hasTranslationUnitRoot())
+    if (hasTranslationUnitAsRootNode())
         return P->rootNode_->asTranslationUnit();
     return nullptr;
 }
@@ -257,29 +257,29 @@ void SyntaxTree::buildFor(SyntaxCategory syntaxCategory)
     if (!P->diagnostics_.empty() || !parser.detectedAnyAmbiguity())
         return;
 
-    if (P->parseOptions_.ambiguityMode()
-            == ParseOptions::AmbiguityMode::Diagnose) {
+    if (P->parseOptions_.disambiguationMode()
+            == ParseOptions::DisambiguationMode::None) {
         for (const auto& diag : parser.releaseRetainedAmbiguityDiagnostics())
             newDiagnostic(std::get<0>(diag), std::get<1>(diag));
         return;
     }
 
     Reparser reparser;
-    switch (P->parseOptions_.ambiguityMode()) {
-        case ParseOptions::AmbiguityMode::DisambiguateAlgorithmicallyAndHeuristically:
+    switch (P->parseOptions_.disambiguationMode()) {
+        case ParseOptions::DisambiguationMode::AlgorithmicAndHeuristic:
             reparser.addDisambiguationStrategy(
                         Reparser::DisambiguationStrategy::SyntaxCorrelation);
             reparser.addDisambiguationStrategy(
                         Reparser::DisambiguationStrategy::GuidelineImposition);
             break;
 
-        case ParseOptions::AmbiguityMode::DisambiguateAlgorithmically: {
+        case ParseOptions::DisambiguationMode::Algorithmic: {
             reparser.addDisambiguationStrategy(
                         Reparser::DisambiguationStrategy::SyntaxCorrelation);
             break;
         }
 
-        case ParseOptions::AmbiguityMode::DisambiguateHeuristically:
+        case ParseOptions::DisambiguationMode::Heuristic:
             reparser.addDisambiguationStrategy(
                         Reparser::DisambiguationStrategy::GuidelineImposition);
             break;

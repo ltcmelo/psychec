@@ -43,7 +43,7 @@ public:
      * Within the docs, suppose an instance of this class is created as:
      *
      * \code
-     * FileInfo fileInfo("/home/user/project/code.cpp");
+     * FileInfo fileInfo("/home/user/project/code.c");
      * \endcode
      */
     FileInfo(const std::string& fullFileName);
@@ -53,7 +53,7 @@ public:
      * \return
      *
      * According to constructor's assumption, return is:
-     * "code.cpp"
+     * "code.c"
      */
     std::string fileName() const;
 
@@ -65,6 +65,15 @@ public:
      * "code"
      */
     std::string fileBaseName() const;
+
+    /*!
+     * \brief fileSuffix
+     * \return
+     *
+     * According to constructor's assumption, return is:
+     * "c"
+     */
+    std::string fileSuffix() const;
 
     /*!
      * \brief fullFileBaseName
@@ -80,7 +89,7 @@ public:
      * \return
      *
      * According to constructor's assumption, return is:
-     * "/home/user/project/code.cpp"
+     * "/home/user/project/code.c"
      */
     std::string fullFileName() const;
 

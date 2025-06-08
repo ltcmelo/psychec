@@ -72,7 +72,7 @@ void Reparser::reparse(SyntaxTree* tree)
         switch (strategy) {
             case Reparser::DisambiguationStrategy::SyntaxCorrelation: {
                 NameCataloger cataloger(tree);
-                auto catalog = cataloger.catalogNamesWithinNode(tree->root());
+                auto catalog = cataloger.catalogNamesWithinNode(tree->rootNode());
                 disambiguator.reset(new SyntaxCorrelationDisambiguator(tree, std::move(catalog)));
                 break;
             }

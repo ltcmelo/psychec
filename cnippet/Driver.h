@@ -21,6 +21,15 @@
 #ifndef CNIPPET_DRIVER_H__
 #define CNIPPET_DRIVER_H__
 
+#include "cnippet/CommandOptions.h"
+#include "sema/Compilation.h"
+#include "utility/FileInfo.h"
+
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
 const char* const kCnip = "cnip: ";
 
 namespace cnip {
@@ -34,18 +43,22 @@ public:
     Driver();
     ~Driver();
 
-    int execute(int argc, char* argv[]);
+    int go(int argc, char* argv[]);
 
 private:
-    static constexpr int SUCCESS = 0;
+    struct FileText
+    {
+        std::string c_;
+        std::string i_;
+    };
+    using Files = std::vector<std::pair<psy::FileInfo, FileText>>;
+    std::unique_ptr<psy::C::Compilation> compilation_;
 
-    static constexpr int ERROR = 1;
-    static constexpr int ERROR_UnrecognizedCmdLineFlag = 2;
-    static constexpr int ERROR_InvalidCmdLineFlagValue = 3;
-    static constexpr int ERROR_NoInputFile = 4;
-    static constexpr int ERROR_FileNotFound = 5;
-    static constexpr int ERROR_CannotLoadPluging = 6;
-    static constexpr int ERROR_LanguageNotRecognized = 7;
+    bool runPreCPP(const CommandOptions& cmdOpts, Files& files) const;
+    bool runCPP(const CommandOptions& cmdOpts, Files& files) const;
+    bool runCFrontEnd(const CommandOptions& cmdOpts, Files& files);
+    bool analyze(const CommandOptions& cmdOpts) const;
+    int executeSubCommand(const std::vector<std::string>& subCmdArgs) const;
 };
 
 } // cnip

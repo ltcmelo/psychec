@@ -55,15 +55,16 @@ public:
     virtual void printSummary() const override;
 
 private:
-    bool checkErrorAndWarn(Expectation X);
+    bool checkErrorAndWarn(const SyntaxTree* tree, Expectation X);
 
     void parseDeclaration(std::string text, Expectation X = Expectation());
     void parseExpression(std::string text, Expectation X = Expectation());
     void parseStatement(std::string text, Expectation X = Expectation());
-    void parse(std::string text,
-               Expectation X = Expectation(),
-               SyntaxTree::SyntaxCategory synCat = SyntaxTree::SyntaxCategory::Any,
-               ParseOptions parseOpts = ParseOptions());
+    std::unique_ptr<const SyntaxTree> parse(
+            std::string text,
+            Expectation X = Expectation(),
+            SyntaxTree::SyntaxCategory synCat = SyntaxTree::SyntaxCategory::Any,
+            ParseOptions parseOpts = ParseOptions());
 
     void reparse_withSyntaxCorrelation(std::string text, Expectation X = Expectation());
     void reparse_withTypeSynonymVerification(std::string text, Expectation X = Expectation());
@@ -77,13 +78,13 @@ private:
     void checkTypes(std::string text, Expectation X = Expectation());
 
     void checkSemanticModel(
+            const SyntaxTree* tree,
             const SemanticModel* semaModel,
             Expectation X);
     void matchDeclarations(
             std::unique_ptr<SemanticModel> semaModel,
             std::vector<Decl> v);
 
-    std::unique_ptr<SyntaxTree> tree_;
     std::vector<std::unique_ptr<Tester>> testers_;
 };
 

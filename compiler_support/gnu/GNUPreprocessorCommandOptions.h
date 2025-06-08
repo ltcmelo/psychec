@@ -1,4 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2025 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,29 +18,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_CONFIGURATION_H__
-#define CNIPPET_CONFIGURATION_H__
+#ifndef PSYCHE_GNU_PREPROCESSOR_COMMAND_OPTIONS_H__
+#define PSYCHE_GNU_PREPROCESSOR_COMMAND_OPTIONS_H__
 
-#include "cxxopts.hpp"
+#include <string>
+#include <utility>
+#include <vector>
 
-namespace cnip {
+namespace psy {
+namespace gnu {
 
-/*!
- * \brief The Configuration class.
+/**
+ * https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html
  */
-class Configuration
+class PreprocessorCommandOptions final
 {
 public:
-    virtual ~Configuration();
+    PreprocessorCommandOptions();
+    ~PreprocessorCommandOptions();
 
-    // TODO: API
-    bool dumpAst;
-    bool WIP_;
-
-protected:
-    Configuration(const cxxopts::ParseResult& parsedCmdLine);
+    std::vector<std::string> D_;
+    std::vector<std::string> U_;
+    std::vector<std::string> include_;
+    std::vector<std::string> imacros_;
+    bool undef_ = false;
+    bool C_ = false;
+    bool CC_ = false;
 };
 
-} // cnip
+} // gnu
+} // psy
 
 #endif

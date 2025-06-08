@@ -41,7 +41,7 @@ TypedefNameTypeResolver::TypedefNameTypeResolver(
 
 void TypedefNameTypeResolver::resolveTypedefNameTypes()
 {
-    visit(tree_->root());
+    visit(tree_->rootNode());
 }
 
 SyntaxVisitor::Action TypedefNameTypeResolver::visitTypedefDeclaration(

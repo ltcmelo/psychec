@@ -839,17 +839,16 @@ void Lexer::lexIdentifier(SyntaxToken* tk, int advanced)
     }
 
     int yyleng = yytext_ - yytext;
+    tk->identifier_ = tree_->findOrInsertIdentifier(yytext, yyleng);
 
     if (tree_->parseOptions().isEnabled_keywordRecognition())
         tk->syntaxK_ = recognize(yytext, yyleng, tree_->parseOptions());
-    else
-        tk->syntaxK_ = SyntaxKind::IdentifierToken;
-
-    if (tk->syntaxK_ == SyntaxKind::IdentifierToken
-            && tree_->parseOptions().languageExtensions().
-                    translations().isEnabled_Translate_operatorNames()) {
-        tk->syntaxK_ = translate(yytext, yyleng, tree_->parseOptions());
-        tk->identifier_ = tree_->findOrInsertIdentifier(yytext, yyleng);
+    else {
+        if (tree_->parseOptions().languageExtensions().
+                    translations().isEnabled_Translate_operatorNames())
+            tk->syntaxK_ = translate(yytext, yyleng, tree_->parseOptions());
+        else
+            tk->syntaxK_ = SyntaxKind::IdentifierToken;
     }
 }
 

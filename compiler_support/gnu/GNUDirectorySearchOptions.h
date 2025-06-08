@@ -1,4 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2025 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,52 +18,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_C_CONFIGURATION_H__
-#define CNIPPET_C_CONFIGURATION_H__
-
-#include "Configuration.h"
-
-#include "C/parser/LanguageDialect.h"
+#ifndef PSYCHE_GNU_DIRECTORY_SEARCH_OPTIONS_H__
+#define PSYCHE_GNU_DIRECTORY_SEARCH_OPTIONS_H__
 
 #include <string>
 #include <vector>
 
-using namespace psy;
-using namespace C;
+namespace psy {
+namespace gnu {
 
-namespace cnip {
-
-/*!
- * \brief The CConfiguration class.
+/**
+ * https://gcc.gnu.org/onlinedocs/gcc/Directory-Options.html
  */
-class CConfiguration : public Configuration
+class DirectorySearchOptions final
 {
 public:
-    CConfiguration(const cxxopts::ParseResult& parsedCmdLine);
+    DirectorySearchOptions();
+    ~DirectorySearchOptions();
 
-    static void extend(cxxopts::Options& cmdLineOpts);
-
-    bool isValid() const;
-
-    /* Compiler */
-    std::string compiler_;
-
-    /* Language */
-    std::string std_;
-
-    /* Preprocessor */
-    bool ppIncludes_;
-    std::vector<std::string> searchPaths_;
-    std::vector<std::string> definedMacros_;
-    std::vector<std::string> undefedMacros_;
-
-    /* Parser */
-    std::string commentMode_;
-    std::string ambigMode_;
-
-    bool inferTypes_;
+    std::vector<std::string> I_;
+    std::vector<std::string> iquote_;
+    std::vector<std::string> isystem_;
+    std::vector<std::string> idirafter_;
+    bool nostdinc_ = false;
 };
 
-} // cnip
+} // gnu
+} // psy
 
 #endif

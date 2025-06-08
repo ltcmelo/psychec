@@ -25,18 +25,21 @@ set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -g")
 set(PSYCHEC_CXX_FLAGS "${PSYCHEC_CXX_FLAGS} -Wall \
                                             -Wsign-compare")
 
-# Project sources.
 set(PSYCHEC_SOURCES
     # Data structures
     ${PROJECT_SOURCE_DIR}/data-structures/Substitution.h
     ${PROJECT_SOURCE_DIR}/data-structures/Substitution.cpp
     ${PROJECT_SOURCE_DIR}/data-structures/VersionedMap.h
 
-    # Tools
-    ${PROJECT_SOURCE_DIR}/tools/GNUCompilerFacade.h
-    ${PROJECT_SOURCE_DIR}/tools/GNUCompilerFacade.cpp
+    # Compiler support
+    ${PROJECT_SOURCE_DIR}/compiler_support/gnu/GNUDirectorySearchOptions.h
+    ${PROJECT_SOURCE_DIR}/compiler_support/gnu/GNUDirectorySearchOptions.cpp
+    ${PROJECT_SOURCE_DIR}/compiler_support/gnu/GNUPreprocessorCommandOptions.h
+    ${PROJECT_SOURCE_DIR}/compiler_support/gnu/GNUPreprocessorCommandOptions.cpp
+    ${PROJECT_SOURCE_DIR}/compiler_support/gnu/GNUCompilerFacade.h
+    ${PROJECT_SOURCE_DIR}/compiler_support/gnu/GNUCompilerFacade.cpp
 
-    # Utilities
+    # Utility
     ${PROJECT_SOURCE_DIR}/utility/FileInfo.h
     ${PROJECT_SOURCE_DIR}/utility/FileInfo.cpp
     ${PROJECT_SOURCE_DIR}/utility/IO.h
@@ -47,17 +50,13 @@ set(PSYCHEC_SOURCES
 
 set(CNIPPET_SOURCES
     ${PSYCHEC_SOURCES}
-    ${PROJECT_SOURCE_DIR}/cnippet/Main.cpp
-    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontend.h
-    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontend.cpp
-    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontend_C.h
-    ${PROJECT_SOURCE_DIR}/cnippet/CompilerFrontend_C.cpp
-    ${PROJECT_SOURCE_DIR}/cnippet/Configuration.h
-    ${PROJECT_SOURCE_DIR}/cnippet/Configuration.cpp
-    ${PROJECT_SOURCE_DIR}/cnippet/Configuration_C.h
-    ${PROJECT_SOURCE_DIR}/cnippet/Configuration_C.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/CommandOptions.h
+    ${PROJECT_SOURCE_DIR}/cnippet/CommandOptions.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/CommandLineParser.h
+    ${PROJECT_SOURCE_DIR}/cnippet/CommandLineParser.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/Driver.h
     ${PROJECT_SOURCE_DIR}/cnippet/Driver.cpp
+    ${PROJECT_SOURCE_DIR}/cnippet/Main.cpp
     ${PROJECT_SOURCE_DIR}/cnippet/Plugin.h
     ${PROJECT_SOURCE_DIR}/cnippet/Plugin.cpp
 )
@@ -78,13 +77,7 @@ endforeach()
 
 include_directories(
     ${PROJECT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/command/cxxopts/include
     ${PROJECT_SOURCE_DIR}/C
-    ${PROJECT_SOURCE_DIR}/adt
-    ${PROJECT_SOURCE_DIR}/cnippet
-    ${PROJECT_SOURCE_DIR}/tester
-    ${PROJECT_SOURCE_DIR}/tools
-    ${PROJECT_SOURCE_DIR}/utility
 )
 
 set(GENERATOR cnip)

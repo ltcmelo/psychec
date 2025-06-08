@@ -108,13 +108,13 @@ void InternalsTestSuite::printSummary() const
     }
 }
 
-bool InternalsTestSuite::checkErrorAndWarn(Expectation X)
+bool InternalsTestSuite::checkErrorAndWarn(const SyntaxTree* tree, Expectation X)
 {
     int E_cnt = 0;
     int W_cnt = 0;
     std::unordered_set<std::string> E_IDs;
     std::unordered_set<std::string> W_IDs;
-    for (const auto& diagnostic : tree_->diagnostics()) {
+    for (const auto& diagnostic : tree->diagnostics()) {
         if (X.containsAmbiguity_
                 && isDiagnosticDescriptorIdOfSyntaxAmbiguity(diagnostic.descriptor().id()))
             continue;
@@ -130,8 +130,8 @@ bool InternalsTestSuite::checkErrorAndWarn(Expectation X)
     }
 
 #ifdef DBG_DIAGNOSTICS
-    if (!tree_->diagnostics().empty()) {
-        for (auto& diagnostic : tree_->diagnostics()) {
+    if (!tree->diagnostics().empty()) {
+        for (auto& diagnostic : tree->diagnostics()) {
             diagnostic.outputIndent_ = 2;
             std::cout << std::endl << diagnostic << std::endl;
         }
@@ -197,10 +197,11 @@ void InternalsTestSuite::parseStatement(std::string source, Expectation X)
     parse(source, X, SyntaxTree::SyntaxCategory::Statements);
 }
 
-void InternalsTestSuite::parse(std::string source,
-                               Expectation X,
-                               SyntaxTree::SyntaxCategory syntaxCat,
-                               ParseOptions parseOpts)
+std::unique_ptr<const SyntaxTree> InternalsTestSuite::parse(
+        std::string source,
+        Expectation X,
+        SyntaxTree::SyntaxCategory syntaxCat,
+        ParseOptions parseOpts)
 {
     auto text = source;
 
@@ -215,26 +216,26 @@ void InternalsTestSuite::parse(std::string source,
 #endif
 
     if (X.containsAmbiguity_)
-        parseOpts.setAmbiguityMode(ParseOptions::AmbiguityMode::Diagnose);
+        parseOpts.setDisambiguationMode(ParseOptions::DisambiguationMode::None);
 
-    tree_ = SyntaxTree::parseText(text,
-                                  TextPreprocessingState::Unknown,
-                                  TextCompleteness::Fragment,
-                                  parseOpts,
-                                  "",
-                                  syntaxCat);
+    auto tree = SyntaxTree::parseText(text,
+                                      TextPreprocessingState::Unknown,
+                                      TextCompleteness::Fragment,
+                                      parseOpts,
+                                      "",
+                                      syntaxCat);
 
-    if (X.numE_ == 0 && X.numW_ == 0 && tree_->parseExitedEarly()) {
+    if (X.numE_ == 0 && X.numW_ == 0 && tree->parseExitedEarly()) {
         PSY_EXPECT_TRUE(X.unfinishedParse_);
-        return;
+        return tree;
     }
 
-    if (!checkErrorAndWarn(X))
-        return;
+    if (!checkErrorAndWarn(tree.get(), X))
+        return tree;
 
     std::ostringstream ossTree;
-    SyntaxNamePrinter printer(tree_.get());
-    printer.print(tree_->root(),
+    SyntaxNamePrinter printer(tree.get());
+    printer.print(tree->rootNode(),
                   SyntaxNamePrinter::Style::Plain,
                   ossTree);
 
@@ -248,8 +249,8 @@ void InternalsTestSuite::parse(std::string source,
 #endif
 
     std::ostringstream ossText;
-    Unparser unparser(tree_.get());
-    unparser.unparse(tree_->root(), ossText);
+    Unparser unparser(tree.get());
+    unparser.unparse(tree->rootNode(), ossText);
 
     std::string textP = ossText.str();
     textP.erase(std::remove_if(textP.begin(), textP.end(), ::isspace), textP.end());
@@ -270,7 +271,7 @@ void InternalsTestSuite::parse(std::string source,
         PSY_EXPECT_EQ_STR(textP, text);
 
     if (X.syntaxKinds_.empty())
-        return;
+        return tree;
 
     std::string names;
     for (auto k : X.syntaxKinds_)
@@ -279,6 +280,8 @@ void InternalsTestSuite::parse(std::string source,
     std::string namesP = ossTree.str();
     namesP.erase(std::remove_if(namesP.begin(), namesP.end(), ::isspace), namesP.end());
     PSY_EXPECT_EQ_STR(namesP, names);
+
+    return tree;
 }
 
 void InternalsTestSuite::reparse(std::string source,
@@ -291,20 +294,20 @@ void InternalsTestSuite::reparse(std::string source,
     TextCompleteness textCompleness;
     switch (strategy) {
         case Reparser::DisambiguationStrategy::SyntaxCorrelation:
-            parseOpts.setAmbiguityMode(
-                        ParseOptions::AmbiguityMode::DisambiguateAlgorithmically);
+            parseOpts.setDisambiguationMode(
+                        ParseOptions::DisambiguationMode::Algorithmic);
             textCompleness = TextCompleteness::Fragment;
             break;
 
         case Reparser::DisambiguationStrategy::TypeSynonymsVerification:
-            parseOpts.setAmbiguityMode(
-                        ParseOptions::AmbiguityMode::DisambiguateAlgorithmically);
+            parseOpts.setDisambiguationMode(
+                        ParseOptions::DisambiguationMode::Algorithmic);
             textCompleness = TextCompleteness::Full;
             break;
 
         case Reparser::DisambiguationStrategy::GuidelineImposition:
-            parseOpts.setAmbiguityMode(
-                        ParseOptions::AmbiguityMode::DisambiguateHeuristically);
+            parseOpts.setDisambiguationMode(
+                        ParseOptions::DisambiguationMode::Heuristic);
             textCompleness = TextCompleteness::Unknown;
             break;
 
@@ -312,18 +315,18 @@ void InternalsTestSuite::reparse(std::string source,
             PSY__internals__FAIL("unknown strategy");
     }
 
-    tree_ = SyntaxTree::parseText(text,
+    auto tree = SyntaxTree::parseText(text,
                                   TextPreprocessingState::Unknown,
                                   textCompleness,
                                   parseOpts,
                                   "");
 
-    if (!X.containsAmbiguity_ && !checkErrorAndWarn(X))
+    if (!X.containsAmbiguity_ && !checkErrorAndWarn(tree.get(), X))
         return;
 
     std::ostringstream ossTree;
-    SyntaxNamePrinter printer(tree_.get());
-    printer.print(tree_->root(),
+    SyntaxNamePrinter printer(tree.get());
+    printer.print(tree->rootNode(),
                   SyntaxNamePrinter::Style::Plain,
                   ossTree);
 
@@ -337,8 +340,8 @@ void InternalsTestSuite::reparse(std::string source,
 #endif
 
     std::ostringstream ossText;
-    Unparser unparser(tree_.get());
-    unparser.unparse(tree_->root(), ossText);
+    Unparser unparser(tree.get());
+    unparser.unparse(tree->rootNode(), ossText);
 
     std::string textP = ossText.str();
     textP.erase(std::remove_if(textP.begin(), textP.end(), ::isspace), textP.end());
@@ -867,10 +870,11 @@ void InternalsTestSuite::matchDeclarations(
 }
 
 void InternalsTestSuite::checkSemanticModel(
+        const SyntaxTree* tree,
         const SemanticModel* semaModel,
         Expectation X)
 {
-    checkErrorAndWarn(X);
+    checkErrorAndWarn(tree, X);
 
     auto unit = semaModel->translationUnit();
     if (unit == nullptr)
@@ -895,7 +899,7 @@ void InternalsTestSuite::checkSemanticModel(
 #endif
 
 //        if (X.checkScope_) {
-//            auto scope = semaModel->associatedScope(tree_->translationUnitRoot());
+//            auto scope = semaModel->associatedScope(tree->translationUnit());
 //            PSY_EXPECT_TRUE(scope);
 //            while (!X.scopePath_.empty()) {
 //                std::size_t idx = X.scopePath_.back();
@@ -914,36 +918,36 @@ void InternalsTestSuite::checkSemanticModel(
 
 void InternalsTestSuite::bindDeclarations(std::string text, Expectation X)
 {
-    parse(text);
-    auto compilation = Compilation::create(tree_->filePath());
-    compilation->addSyntaxTrees({ tree_.get() });
+    auto tree = parse(text).release();
+    auto compilation = Compilation::create(tree->filePath());
+    compilation->addSyntaxTree(std::unique_ptr<const SyntaxTree>(tree));
     compilation->bindDeclarations();
-    auto semaModel = compilation->semanticModel(tree_.get());
-    checkSemanticModel(semaModel, X);
+    auto semaModel = compilation->semanticModel(tree);
+    checkSemanticModel(tree, semaModel, X);
 }
 
 void InternalsTestSuite::canonicalizerAndResolveTypes(std::string text, Expectation X)
 {
-    parse(text);
-    auto compilation = Compilation::create(tree_->filePath());
-    compilation->addSyntaxTrees({ tree_.get() });
+    auto tree = parse(text).release();
+    auto compilation = Compilation::create(tree->filePath());
+    compilation->addSyntaxTree(std::unique_ptr<const SyntaxTree>(tree));
     compilation->bindDeclarations();
     compilation->canonicalizerTypes();
     compilation->resolveTypedefNameTypes();
-    auto semaModel = compilation->semanticModel(tree_.get());
-    checkSemanticModel(semaModel, X);
+    auto semaModel = compilation->semanticModel(tree);
+    checkSemanticModel(tree, semaModel, X);
 }
 
 void InternalsTestSuite::checkTypes(std::string text, Expectation X)
 {
-    parse(text);
-    auto compilation = Compilation::create(tree_->filePath());
-    compilation->addSyntaxTrees({ tree_.get() });
+    auto tree = parse(text).release();
+    auto compilation = Compilation::create(tree->filePath());
+    compilation->addSyntaxTree(std::unique_ptr<const SyntaxTree>(tree));
     compilation->bindDeclarations();
     compilation->canonicalizerTypes();
     compilation->resolveTypedefNameTypes();
     compilation->checkTypes();
-    auto semaModel = compilation->semanticModel(tree_.get());
-    checkSemanticModel(semaModel, X);
+    auto semaModel = compilation->semanticModel(tree);
+    checkSemanticModel(tree, semaModel, X);
 }
 

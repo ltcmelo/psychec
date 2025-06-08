@@ -84,7 +84,7 @@ public:
     {
         Discard,              /**< Discard comments. */
         KeepAll,              /**< Keep all comments. */
-        KeepOnlyDocumentation /**< keep only documentation comments. */
+        KeepDocumentationOnly /**< keep only documentation comments. */
     };
     //!@}
 
@@ -98,21 +98,21 @@ public:
 
     //!@{
     /**
-     * * \brief The AmbiguityMode modes.
+     * * \brief The DisambiguationMode modes.
      */
-    enum class AmbiguityMode : std::uint8_t
+    enum class DisambiguationMode : std::uint8_t
     {
-        Diagnose,                                    /**< Diagnose ambiguities. */
-        DisambiguateAlgorithmically,                 /**< Disambiguate ambiguities algorithmically. */
-        DisambiguateAlgorithmicallyAndHeuristically, /**< Disambiguate ambiguities algorithmically and heristically. */
-        DisambiguateHeuristically,                   /**< Disambiguate ambiguities heuristically. */
+        None,                     /**< Diagnose ambiguities. */
+        Algorithmic,              /**< Disambiguate algorithmically. */
+        AlgorithmicAndHeuristic,  /**< Disambiguate algorithmically and heristically. */
+        Heuristic,                /**< Disambiguate heuristically. */
     };
 
     /**
-     * The AmbiguityMode of \c this ParserOptions.
+     * The DisambiguationMode of \c this ParserOptions.
      */
-    ParseOptions& setAmbiguityMode(AmbiguityMode ambiguityMode);
-    AmbiguityMode ambiguityMode() const;
+    ParseOptions& setDisambiguationMode(DisambiguationMode disambigMode);
+    DisambiguationMode disambiguationMode() const;
     //!@}
 
 private:
@@ -123,7 +123,7 @@ private:
     {
         std::uint16_t keywordRecognition_ : 1;
         std::uint16_t commentMode_ : 2;
-        std::uint16_t ambigMode_ : 2;
+        std::uint16_t disambigMode_ : 2;
     };
     union
     {

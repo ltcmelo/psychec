@@ -91,6 +91,7 @@ struct Compilation::CompilationImpl
     std::unique_ptr<ProgramSymbol> prog_;
     std::unordered_map<const SyntaxTree*, bool> isDirty_;
     std::unordered_map<const SyntaxTree*, std::unique_ptr<SemanticModel>> semaModels_;
+    std::vector<std::unique_ptr<const SyntaxTree>> trees_;
 };
 
 Compilation::Compilation()
@@ -135,6 +136,11 @@ const PlatformOptions& Compilation::platformOptions() const
     return P->platformOpts_;
 }
 
+bool Compilation::isEmpty() const
+{
+    return P->trees_.empty();
+}
+
 const ProgramSymbol* Compilation::program() const
 {
     return P->prog_.get();
@@ -145,40 +151,36 @@ ProgramSymbol* Compilation::program()
     return P->prog_.get();
 }
 
-void Compilation::addSyntaxTree(const SyntaxTree* tree)
+void Compilation::addSyntaxTree(std::unique_ptr<const SyntaxTree> tree)
 {
-    auto it = P->semaModels_.find(tree);
+    auto it = P->semaModels_.find(tree.get());
     if (it != P->semaModels_.end())
         return;
+
+    auto tree_RAW = tree.get();
+    P->trees_.emplace_back(std::move(tree));
 
     P->semaModels_.insert(
         it,
         std::make_pair(
-            tree,
-            new SemanticModel(tree, const_cast<Compilation*>(this))));
-    P->isDirty_[tree] = true;
-    tree->attachCompilation(this);
-}
-
-void Compilation::addSyntaxTrees(std::vector<const SyntaxTree*> trees)
-{
-    for (auto tree : trees)
-        addSyntaxTree(tree);
+            tree_RAW,
+            new SemanticModel(tree_RAW, const_cast<Compilation*>(this))));
+    P->isDirty_[tree_RAW] = true;
+    tree_RAW->attachCompilation(this);
 }
 
 std::vector<const SyntaxTree*> Compilation::syntaxTrees() const
 {
-    std::vector<const SyntaxTree*> trees(P->semaModels_.size());
-    std::transform(P->semaModels_.begin(),
-                   P->semaModels_.end(),
-                   std::back_inserter(trees),
-                   [] (const auto& kv) { return kv.first; });
-    return  trees;
+    std::vector<const SyntaxTree*> trees;
+    trees.reserve(P->trees_.size());
+    for (const auto& tree : P->trees_)
+        trees.push_back(tree.get());
+    return trees;
 }
 
-const SemanticModel* Compilation::computeSemanticModel(const SyntaxTree* tree) const
+void Compilation::computeSemanticModel(const SyntaxTree* tree)
 {
-    PSY_ASSERT_2(P->isDirty_.count(tree), return nullptr);
+    PSY_ASSERT_2(P->isDirty_.count(tree), return);
     if (P->isDirty_[tree]) {
         bindDeclarations();
         canonicalizerTypes();
@@ -186,7 +188,6 @@ const SemanticModel* Compilation::computeSemanticModel(const SyntaxTree* tree) c
         checkTypes();
         P->isDirty_[tree] = false;
     }
-    return semanticModel(tree);
 }
 
 const VoidType* Compilation::canonicalVoidType() const

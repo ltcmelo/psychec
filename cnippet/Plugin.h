@@ -21,50 +21,24 @@
 #ifndef CNIPPET_PLUGIN_H__
 #define CNIPPET_PLUGIN_H__
 
+#include "sema/Compilation.h"
+
 #include <string>
 #include <type_traits>
-
-namespace psy {
-namespace C {
-
-class DeclarationInterceptor;
-class SourceInspector;
-class VisitorObserver;
-
-} // C
-} // psy
 
 namespace cnip {
 
 /*!
  * \brief The Plugin class
- *
- * To be extended...
  */
 class Plugin final
 {
 public:
-    static void load(const std::string& name);
-    static bool isLoaded();
-    static void unload();
-
-    static psy::C::DeclarationInterceptor* createInterceptor();
-    static psy::C::SourceInspector* createInspector();
-    static psy::C::VisitorObserver* createObserver();
+    static void* loadAnalysis(std::string filePath);
+    static int analyze(void* handle, const psy::C::Compilation* compilation);
 
 private:
     Plugin() = delete;
-
-    template <class RetT>
-    static RetT* create(const char* name);
-
-    template <class ParamT>
-    static void destroy(ParamT*, const char* name);
-
-    static void* handle_;
-    static psy::C::DeclarationInterceptor* interceptor_;
-    static psy::C::SourceInspector* inspector_;
-    static psy::C::VisitorObserver* observer_;
 };
 
 } // cnip

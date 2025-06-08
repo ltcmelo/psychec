@@ -40,7 +40,7 @@ ParseOptions::ParseOptions(LanguageDialect langDialect,
 {
     enable_keywordRecognition(true);
     setCommentMode(CommentMode::Discard);
-    setAmbiguityMode(AmbiguityMode::DisambiguateAlgorithmicallyAndHeuristically);
+    setDisambiguationMode(DisambiguationMode::AlgorithmicAndHeuristic);
 }
 
 ParseOptions& ParseOptions::withLanguageDialect(LanguageDialect langDialect)
@@ -76,15 +76,15 @@ ParseOptions::CommentMode ParseOptions::commentMode() const
     return static_cast<CommentMode>(BF_.commentMode_);
 }
 
-ParseOptions &ParseOptions::setAmbiguityMode(AmbiguityMode ambiguityMode)
+ParseOptions& ParseOptions::setDisambiguationMode(DisambiguationMode disambigMode)
 {
-    BF_.ambigMode_ = static_cast<int>(ambiguityMode);
+    BF_.disambigMode_ = static_cast<int>(disambigMode);
     return *this;
 }
 
-ParseOptions::AmbiguityMode ParseOptions::ambiguityMode() const
+ParseOptions::DisambiguationMode ParseOptions::disambiguationMode() const
 {
-    return static_cast<AmbiguityMode>(BF_.ambigMode_);
+    return static_cast<DisambiguationMode>(BF_.disambigMode_);
 }
 
 #define DEFINE_ENABLE_ISENABLED(FLAG) \

@@ -58,7 +58,7 @@ DeclarationBinder::~DeclarationBinder()
 
 void DeclarationBinder::bindDeclarations()
 {
-    visit(tree_->root());
+    visit(tree_->rootNode());
 }
 
 void DeclarationBinder::pushNewScope(

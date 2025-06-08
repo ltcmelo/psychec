@@ -18,48 +18,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef CNIPPET_C_COMPILER_FRONTEND_C_H__
-#define CNIPPET_C_COMPILER_FRONTEND_C_H__
+#ifndef PSYCHE_GNU_COMPILER_FACADE_H__
+#define PSYCHE_GNU_COMPILER_FACADE_H__
 
-#include "Driver.h"
+#include "compiler_support/gnu/GNUDirectorySearchOptions.h"
+#include "compiler_support/gnu/GNUPreprocessorCommandOptions.h"
+#include "utility/FileInfo.h"
 
-#include "CompilerFrontend.h"
-#include "Configuration_C.h"
-
-#include "C/syntax/SyntaxTree.h"
-
-#include <utility>
 #include <string>
+#include <utility>
+#include <vector>
 
-namespace cnip {
+namespace psy {
+namespace gnu {
 
-/*!
- * \brief The CCompilerFrontend class.
- */
-class CCompilerFrontend : public CompilerFrontend
+class CompilerFacade
 {
 public:
-    CCompilerFrontend(const cxxopts::ParseResult& parsedCmdLine);
-    virtual ~CCompilerFrontend();
+    CompilerFacade(const std::string& compiler,
+                      const std::string& std,
+                      const DirectorySearchOptions& dirSearchOpts,
+                      const PreprocessorCommandOptions& ppCmdOpts);
 
-    bool setup() override;
-    int run(const std::string& srcText, const psy::FileInfo& fi) override;
+    std::pair<int, std::string> preprocessFile(const std::string& filePath);
+    std::pair<int, std::string> preprocessText(const std::string& fileText);
+    std::pair<int, std::string> preprocess_IgnoreIncludes(const std::string& fileText);
 
 private:
+    std::string commandOptions() const;
 
-    int extendWithStdLibHeaders(const std::string& srcText, const psy::FileInfo& fi);
-    int preprocess(const std::string& srcText, const psy::FileInfo& fi);
-    int constructSyntaxTree(const std::string& srcText, const psy::FileInfo& fi);
-    int computeSemanticModel(std::unique_ptr<psy::C::SyntaxTree> tree);
-
-    static constexpr int ERROR_PreprocessorInvocationFailure = 100;
-    static constexpr int ERROR_PreprocessedFileWritingFailure = 101;
-    static constexpr int ERROR_UnsuccessfulParsing = 102;
-    static constexpr int ERROR_InvalidSyntaxTree = 103;
-
-    std::unique_ptr<CConfiguration> config_;
+    std::string compiler_;
+    std::string std_;
+    DirectorySearchOptions dirSearchOpts_;
+    PreprocessorCommandOptions ppCmdOpts_;
 };
 
-} // cnip
+} // gnu
+} // psy
 
 #endif
