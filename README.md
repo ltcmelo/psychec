@@ -1,5 +1,6 @@
-C language (draft) proposal [Enabling Generic Functions and Parametric Types in C](https://ltcmelo.com/n2698.pdf); prototype available [here](http://www.genericsinc.info/index.php).
-
+_Note (unrelated to Psyche-C)_  
+C language draft proposal: [Enabling Generic Functions and Parametric Types in C](https://ltcmelo.com/n2698.pdf) ([prototype](http://www.genericsinc.info/index.php)).
+<br><br><br>
 ![](https://github.com/ltcmelo/psychec/workflows/build/badge.svg)
 ![](https://github.com/ltcmelo/psychec/workflows/test-suite/badge.svg)
 
