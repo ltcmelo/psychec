@@ -12,7 +12,8 @@ Psyche-C is a platform for implementing static analysis of C programs.
 At its core, it includes a C compiler frontend that performs both syntactic and semantic analysis.
 Yet, as opposed to actual C compilers, Psyche-C doesn't build a symbol table during parsing.
 Despite this, even with zero setup or in broken build setups,
-Psyche-C still offers accurate syntax analysis (through syntax disambiguation) and partial semantic analysis.
+Psyche-C still offers accurate syntax analysis (through syntax disambiguation) and partial semantic analysis.  
+
 Bellow are the main characteristics of Psyche-C:
 
 - An API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn) and [LLVM's Clang](https://clang.llvm.org/).
@@ -20,7 +21,7 @@ Bellow are the main characteristics of Psyche-C:
 - Algorithmic and heuristic syntax disambiguation.
 - Optional type inference as a recovery mechanism from `#include` failures (not yet in master).
 
-## The *cnippet* Driver
+## Driver
 
 Psyche-C is written as a C++ library, but it comes with a builtin driver: *cnippet*.
 You can use it by passing to it either
@@ -28,15 +29,20 @@ the typical command line arguments of an actual compiler
 or
 the actual compiler's whole invocation as a subcommand.
 
-```
-cnip -analysis /path/to/analysis.dylib -- gcc -I /path/to/whatever file.c
-```
+Example with *cnippet* only:
 
 ```
 cnip -analysis /path/to/analysis.dylib -I/path/to/whatever file.c
 ```
 
-A trivial example analysis is available [here](https://github.com/ltcmelo/psychec-analysis).
+Example with compiler's invocation as a subcommand:
+
+```
+cnip -analysis /path/to/analysis.dylib -- gcc -I/path/to/whatever file.c
+```
+
+
+See [psychec-analysis](https://github.com/ltcmelo/psychec-analysis) for a trivial example of how to implement an analysis.
 
 ### Type Inference
 
@@ -44,7 +50,8 @@ Psyche-C began as a type inference tool for C, aimed at enabling static analysis
 However, the compiler frontend at its core wasn't good enough, so I decided to rewrite it pretty much from scratch.
 I used this rewrite also as an opportunity to extend Psyche-C into a platform for static analysis in general.
 The result of this work is what exists today in the master branch,
-but that doesn't yet include a port of the type inference from the [original branch](https://github.com/ltcmelo/psychec/tree/original)).
+but that doesn't yet include a port of the type inference from the [original branch](https://github.com/ltcmelo/psychec/tree/original).  
+
 With type inference enabled, if you "compile" the snippet below with *cnippet*, Psyche-C will infer `T` and synthesize a declaration for it.
 
 ```c
