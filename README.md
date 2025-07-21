@@ -17,10 +17,10 @@ Psyche-C still offers accurate syntax analysis (through syntax disambiguation) a
 
 Bellow are the main characteristics of Psyche-C:
 
-- An API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn) and [LLVM's Clang](https://clang.llvm.org/).
 - Clean separation between the syntactic and semantic compiler phases.
 - Algorithmic and heuristic syntax disambiguation.
 - Optional type inference as a recovery mechanism from `#include` failures (not yet in master).
+- An API inspired by that of the [Roslyn .NET compiler](https://github.com/dotnet/roslyn) and [LLVM's Clang](https://clang.llvm.org/).
 
 ## Driver
 
