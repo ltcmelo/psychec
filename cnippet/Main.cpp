@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
     try
     {
         Driver driver;
-        return driver.execute(argc, argv);
+        return driver.go(argc, argv);
     }
     catch (...)
     {

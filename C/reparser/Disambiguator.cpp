@@ -36,7 +36,7 @@ Disambiguator::Disambiguator(SyntaxTree* tree)
 
 bool Disambiguator::disambiguate()
 {
-    visit(tree_->root());
+    visit(tree_->rootNode());
     return inconclusiveDisambigs_.empty();
 }
 

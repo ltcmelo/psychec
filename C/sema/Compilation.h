@@ -78,14 +78,14 @@ public:
     const PlatformOptions& platformOptions() const;
 
     /**
-     * Add SyntaxTree \p tree to \c this Compilation.
+     * Whether \c this Compilation contains any SyntaxTrees.
      */
-    void addSyntaxTree(const SyntaxTree* tree);
+    bool isEmpty() const;
 
     /**
-     * Add SyntaxTrees \p trees to \c this Compilation.
+     * Add SyntaxTree \p tree to \c this Compilation.
      */
-    void addSyntaxTrees(std::vector<const SyntaxTree*> trees);
+    void addSyntaxTree(std::unique_ptr<const SyntaxTree> tree);
 
     /**
      * The SyntaxTrees in \c this Compilation.
@@ -93,12 +93,17 @@ public:
     std::vector<const SyntaxTree*> syntaxTrees() const;
 
     /**
-     * Compute the SemanticModel of the given \p tree SyntaxTree.
+     * Compute the SemanticModel of the given \p tree.
+     */
+    void computeSemanticModel(const SyntaxTree* tree);
+
+    /**
+     * The SemanticModel of the given \p tree SyntaxTree.
      *
      * \note Similar to:
      * - \c Microsoft.CodeAnalysis.Compilation.GetSemanticModel of Roslyn.
      */
-    const SemanticModel* computeSemanticModel(const SyntaxTree* tree) const;
+    const SemanticModel* semanticModel(const SyntaxTree* tree) const;
 
     /**
      * The Program in \c this Compilation.
@@ -125,7 +130,6 @@ PSY_INTERNAL:
 
     ProgramSymbol* program();
 
-    const SemanticModel* semanticModel(const SyntaxTree* tree) const;
     void bindDeclarations() const;
     void canonicalizerTypes() const;
     void resolveTypedefNameTypes() const;

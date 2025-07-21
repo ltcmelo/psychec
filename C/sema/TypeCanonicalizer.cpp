@@ -30,6 +30,7 @@
 #include "types/Type_ALL.h"
 #include "../common/infra/Assertions.h"
 
+#include <cstring>
 #include <iostream>
 
 using namespace psy;
@@ -40,11 +41,18 @@ TypeCanonicalizer::TypeCanonicalizer(SemanticModel* semaModel, const SyntaxTree*
     , semaModel_(semaModel)
     , tySpecNode_(nullptr)
     , diagReporter_(this)
-{}
+{
+    const char* internals[] = { "__builtin_va_list" };
+    for (const auto s : internals) {
+        auto ident = semaModel_->syntaxTree()->findIdentifier(s, strlen(s));
+        if (ident)
+            internalTydefNameIdents_.insert(ident);
+    }
+}
 
 void TypeCanonicalizer::canonicalizeTypes()
 {
-    visit(tree_->root());
+    visit(tree_->rootNode());
     for (const auto& ty : discardedTys_)
         semaModel_->dropType(ty);
 }
@@ -250,7 +258,8 @@ const Type* TypeCanonicalizer::canonicalize(const Type* ty, const Scope* scope)
             }
             else {
                 //if (tree_->completeness() == TextCompleteness::Full)
-                diagReporter_.TypeDeclarationNotFound(tySpecNode_->lastToken());
+                if (!internalTydefNameIdents_.count(tydefName))
+                    diagReporter_.TypeDeclarationNotFound(tySpecNode_->lastToken());
             }
             return semaModel_->compilation()->canonicalErrorType();
         }

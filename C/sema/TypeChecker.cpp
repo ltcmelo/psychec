@@ -103,7 +103,7 @@ TypeChecker::~TypeChecker()
 
 void TypeChecker::checkTypes()
 {
-    visit(tree_->root());
+    visit(tree_->rootNode());
 }
 
 const Type* TypeChecker::resolved(const Type* ty)

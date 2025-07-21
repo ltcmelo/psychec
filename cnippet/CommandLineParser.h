@@ -1,4 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2025 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,14 +18,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Configuration.h"
+#ifndef CNIPPET_COMMAND_LINE_PARSER_H__
+#define CNIPPET_COMMAND_LINE_PARSER_H__
 
-using namespace cnip;
+#include "cnippet/CommandOptions.h"
 
-Configuration::~Configuration()
-{}
+#include <map>
+#include <tuple>
+#include <utility>
 
-Configuration::Configuration(const cxxopts::ParseResult& parsedCmdLine)
-    : dumpAst(parsedCmdLine.count("dump-AST"))
-    , WIP_(parsedCmdLine.count("WIP"))
-{}
+namespace cnip {
+
+class CommandLineParser final
+{
+public:
+    std::tuple<CommandOptions, std::vector<std::string>>
+    parseCommandLine(int argc, char* argv[]);
+
+    void printHelp() const;
+
+private:
+    void detectCommandOptions(
+            CommandOptions& cmpOpts,
+            const std::vector<std::string>& cmdArgs,
+            std::vector<std::string>::size_type cmdArgsIdx,
+            bool areArgsOfSubCmd);
+};
+
+} // cnip
+
+#endif

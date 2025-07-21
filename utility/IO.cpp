@@ -29,10 +29,8 @@ namespace psy {
 std::pair<int, std::string> readFile(const std::string& fileName)
 {
     std::ifstream ifs(fileName);
-    if (!ifs) {
-        std::cerr << "file input error: " << fileName << std::endl;
+    if (!ifs)
         return std::make_pair(1, "");
-    }
 
     std::stringstream ss;
     ss << ifs.rdbuf();
@@ -43,10 +41,8 @@ std::pair<int, std::string> readFile(const std::string& fileName)
 int writeFile(const std::string& fileName, const std::string& content)
 {
     std::ofstream ofs(fileName);
-    if (!ofs) {
-        std::cerr << "file output error: " << fileName << std::endl;
+    if (!ofs)
         return 1;
-    }
 
     ofs << content;
     ofs.close();

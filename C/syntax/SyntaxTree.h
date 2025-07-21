@@ -96,20 +96,20 @@ public:
     /**
      * The root node of this \c this SyntaxTree.
      */
-    SyntaxNode* root() const;
+    SyntaxNode* rootNode() const;
 
     /**
      * Whether \c this SyntaxTree has a \c TranslationUnit as the root node.
      */
-    bool hasTranslationUnitRoot() const;
+    bool hasTranslationUnitAsRootNode() const;
 
     /**
-     * The \c TranslationUnit root of \c this SyntaxTree (in one exists).
+     * The \c TranslationUnit of \c this SyntaxTree (if one exists).
      */
-    TranslationUnitSyntax* translationUnitRoot() const;
+    TranslationUnitSyntax* translationUnit() const;
 
     /**
-     * The diagnostics in \c this SyntaxTree.
+     * The diagnostics of \c this SyntaxTree.
      */
     std::vector<Diagnostic> diagnostics() const;
 

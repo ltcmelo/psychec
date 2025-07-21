@@ -68,12 +68,13 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case SyntaxKind::Keyword_short:
         case SyntaxKind::Keyword_int:
         case SyntaxKind::Keyword_long:
+        case SyntaxKind::Keyword_signed:
+        case SyntaxKind::Keyword_unsigned:
         case SyntaxKind::Keyword_float:
         case SyntaxKind::Keyword_double:
         case SyntaxKind::Keyword__Bool:
         case SyntaxKind::Keyword__Complex:
-        case SyntaxKind::Keyword_signed:
-        case SyntaxKind::Keyword_unsigned:
+        case SyntaxKind::Keyword_ExtGNU___complex__:
         case SyntaxKind::Keyword_Ext_char16_t:
         case SyntaxKind::Keyword_Ext_char32_t:
         case SyntaxKind::Keyword_Ext_wchar_t:
@@ -81,7 +82,6 @@ bool Parser::parseStatement(StatementSyntax*& stmt, StatementContext stmtCtx)
         case SyntaxKind::Keyword_union:
         case SyntaxKind::Keyword_enum:
         case SyntaxKind::Keyword_ExtGNU___typeof__:
-        case SyntaxKind::Keyword_ExtGNU___complex__:
             return parseDeclarationStatement(
                         stmt,
                         &Parser::parseDeclarationOrFunctionDefinition);
@@ -670,19 +670,20 @@ bool Parser::parseForStatement_AtFirst(StatementSyntax*& stmt,
         case SyntaxKind::Keyword_short:
         case SyntaxKind::Keyword_int:
         case SyntaxKind::Keyword_long:
+        case SyntaxKind::Keyword_signed:
+        case SyntaxKind::Keyword_unsigned:
         case SyntaxKind::Keyword_float:
         case SyntaxKind::Keyword_double:
         case SyntaxKind::Keyword__Bool:
         case SyntaxKind::Keyword__Complex:
-        case SyntaxKind::Keyword_signed:
-        case SyntaxKind::Keyword_unsigned:
+        case SyntaxKind::Keyword_ExtGNU___complex__:
         case SyntaxKind::Keyword_Ext_char16_t:
         case SyntaxKind::Keyword_Ext_char32_t:
         case SyntaxKind::Keyword_Ext_wchar_t:
         case SyntaxKind::Keyword_struct:
         case SyntaxKind::Keyword_union:
         case SyntaxKind::Keyword_enum:
-        case SyntaxKind::Keyword_ExtGNU___complex__:
+        case SyntaxKind::Keyword_ExtGNU___typeof__:
             if (!parseDeclarationStatement(
                         forStmt->initStmt_,
                         &Parser::parseDeclarationOrFunctionDefinition)) {

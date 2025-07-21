@@ -397,19 +397,19 @@ bool Parser::parseExpressionWithPrecedencePostfix(ExpressionSyntax*& expr)
                 case SyntaxKind::Keyword_short:
                 case SyntaxKind::Keyword_int:
                 case SyntaxKind::Keyword_long:
+                case SyntaxKind::Keyword_signed:
+                case SyntaxKind::Keyword_unsigned:
                 case SyntaxKind::Keyword_float:
                 case SyntaxKind::Keyword_double:
                 case SyntaxKind::Keyword__Bool:
                 case SyntaxKind::Keyword__Complex:
-                case SyntaxKind::Keyword_signed:
-                case SyntaxKind::Keyword_unsigned:
+                case SyntaxKind::Keyword_ExtGNU___complex__:
                 case SyntaxKind::Keyword_Ext_char16_t:
                 case SyntaxKind::Keyword_Ext_char32_t:
                 case SyntaxKind::Keyword_Ext_wchar_t:
                 case SyntaxKind::Keyword_struct:
                 case SyntaxKind::Keyword_union:
                 case SyntaxKind::Keyword_enum:
-                case SyntaxKind::Keyword_ExtGNU___complex__:
                     return parseCompoundLiteral_AtOpenParen(expr);
 
                 // GNU
@@ -1104,19 +1104,19 @@ bool Parser::parseExpressionWithPrecedenceCast(ExpressionSyntax*& expr)
                 case SyntaxKind::Keyword_short:
                 case SyntaxKind::Keyword_int:
                 case SyntaxKind::Keyword_long:
+                case SyntaxKind::Keyword_signed:
+                case SyntaxKind::Keyword_unsigned:
                 case SyntaxKind::Keyword_float:
                 case SyntaxKind::Keyword_double:
                 case SyntaxKind::Keyword__Bool:
                 case SyntaxKind::Keyword__Complex:
-                case SyntaxKind::Keyword_signed:
-                case SyntaxKind::Keyword_unsigned:
+                case SyntaxKind::Keyword_ExtGNU___complex__:
                 case SyntaxKind::Keyword_Ext_char16_t:
                 case SyntaxKind::Keyword_Ext_char32_t:
                 case SyntaxKind::Keyword_Ext_wchar_t:
                 case SyntaxKind::Keyword_struct:
                 case SyntaxKind::Keyword_union:
                 case SyntaxKind::Keyword_enum:
-                case SyntaxKind::Keyword_ExtGNU___complex__:
                     return parseCompoundLiteralOrCastExpression_AtFirst(expr);
 
                 // type-name ->* typedef-name -> identifier

@@ -52,6 +52,7 @@ private:
     const SpecifierSyntax* tySpecNode_;
     std::stack<const Symbol*> syms_;
     mutable std::unordered_set<const Type*> discardedTys_;
+    std::unordered_set<const Identifier*> internalTydefNameIdents_;
 
     struct DiagnosticsReporter
     {

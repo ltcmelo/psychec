@@ -1,4 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2025 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,40 +18,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef PSYCHE_GNU_COMPILER_FACADE_H__
-#define PSYCHE_GNU_COMPILER_FACADE_H__
+#ifndef CNIPPET_COMMAND_OPTIONS_H__
+#define CNIPPET_COMMAND_OPTIONS_H__
 
-#include "FileInfo.h"
+#include "compiler_support/gnu/GNUPreprocessorCommandOptions.h"
+#include "compiler_support/gnu/GNUDirectorySearchOptions.h"
 
 #include <string>
-#include <utility>
 #include <vector>
 
-namespace psy {
+namespace cnip {
 
-class GNUCompilerFacade
+class CommandOptions final
 {
 public:
-    GNUCompilerFacade(const std::string& compilerName,
-                      const std::string& std,
-                      const std::vector<std::string>& D,
-                      const std::vector<std::string>& U,
-                      const std::vector<std::string>& I);
+    CommandOptions();
 
-    std::pair<int, std::string> preprocessFile(const std::string& filePath);
-    std::pair<int, std::string> preprocessText(const std::string& scrText);
-    std::pair<int, std::string> preprocess_IgnoreIncludes(const std::string& srcText);
+    std::vector<std::string> cFilePaths_;
+    std::vector<std::string> iFilePaths_;
 
-private:
-    std::string assemblePPOptions() const;
+    // GNU directory search.
+    psy::gnu::DirectorySearchOptions gnuDirSearchOpts_;
 
-    std::string compilerName_;
-    std::string std_;
-    std::vector<std::string> D_;
-    std::vector<std::string> U_;
-    std::vector<std::string> I_;
+    // GNU preprocessor options
+    psy::gnu::PreprocessorCommandOptions gnuPPCmdOpts_;
+
+    // GNU C dialect
+    std::string std_ = "c17";
+    bool ansi_ = false;
+
+    // GNU Compilation stages
+    bool syntax_only_ = false;
+
+    // Psyche-C
+    bool help_ = false;
+    bool dumpAST_ = false;
+    bool includeStdLibHeaders_ = false;
+    std::string disambigMode_ = "ah";
+    std::string ppMode_ = "s";
+    std::string compiler_ = "gcc";
+    std::string commentMode_ = "d";
+    std::vector<std::string> analysisFilePaths_;
 };
 
-} // psy
+} // cnip
 
 #endif

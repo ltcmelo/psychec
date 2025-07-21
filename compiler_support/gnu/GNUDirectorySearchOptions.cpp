@@ -1,4 +1,4 @@
-// Copyright (c) 2016/17/18/19/20/21/22 Leandro T. C. Melo <ltcmelo@gmail.com>
+// Copyright (c) 2025 Leandro T. C. Melo <ltcmelo@gmail.com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,47 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "Plugin.h"
+#include "GNUDirectorySearchOptions.h"
 
-#include <dlfcn.h>
-#include <iostream>
-
-using namespace cnip;
 using namespace psy;
-using namespace C;
+using namespace gnu;
 
-namespace {
+DirectorySearchOptions::DirectorySearchOptions()
+{}
 
-std::string appendSuffix(std::string s)
-{
-    return s +
-        #if __APPLE__
-            ".dylib";
-        #else
-            ".so";
-        #endif
-}
-
-} // anonymous
-
-void* Plugin::loadAnalysis(std::string filePath)
-{
-    if (filePath.rfind(".") == std::string::npos)
-        filePath = appendSuffix(filePath);
-    return dlopen(filePath.c_str(), RTLD_LOCAL | RTLD_LAZY);
-}
-
-int Plugin::analyze(void* handle, const Compilation* compilation)
-{
-    using FuncT = int (*)(const Compilation*);
-
-    if (!handle)
-        return -1;
-
-    void* func = dlsym(handle, "analyze");
-    if (!func)
-        return -1;
-
-    return reinterpret_cast<FuncT>(func)(compilation);
-}
-
+DirectorySearchOptions::~DirectorySearchOptions()
+{}

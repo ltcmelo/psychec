@@ -188,6 +188,7 @@ SyntaxVisitor::Action DeclarationBinder::visitBasicTypeSpecifier(const BasicType
                 basicTyK = BasicTypeKind::Bool;
                 break;
             case SyntaxKind::Keyword__Complex:
+            case SyntaxKind::Keyword_ExtGNU___complex__:
                 F_.inImplicitDoubleTySpec_ = true;
                 basicTyK = BasicTypeKind::DoubleComplex;
                 break;
@@ -202,7 +203,8 @@ SyntaxVisitor::Action DeclarationBinder::visitBasicTypeSpecifier(const BasicType
                 basicTyK = BasicTypeKind::Int_U;
                 break;
             default:
-                PSY_ASSERT_FAIL_1(return Action::Quit);
+                PSY_ASSERT_1(false);
+                return Action::Quit;
         }
         pushType(makeType<BasicType>(basicTyK));
         return Action::Skip;
@@ -331,6 +333,7 @@ SyntaxVisitor::Action DeclarationBinder::visitBasicTypeSpecifier(const BasicType
                 break;
 
             case SyntaxKind::Keyword__Complex:
+            case SyntaxKind::Keyword_ExtGNU___complex__:
                 switch (curBasicTyK) {
                     case BasicTypeKind::Long_S:
                     case BasicTypeKind::LongDouble:
