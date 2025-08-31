@@ -40,19 +40,19 @@ public:
     ~TypeInfo();
 
     /**
-     * The alternatives of a TypeOrigin.
+     * The alternatives of a type origin.
      */
-    enum class TypeOrigin : std::uint8_t
+    enum class Origin : std::uint8_t
     {
         Error,
-        Expression,
+        ExpressionTyping,
         TypeName,
     };
 
     /**
-     * The TypeOrigin of the Type of \c this TypeInfo.
+     * The origin of the Type of \c this TypeInfo.
      */
-    TypeOrigin typeOrigin() const;
+    Origin origin() const;
 
     /**
      * Wheter the type has undergone conversion.
@@ -77,11 +77,11 @@ PSY_INTERNAL:
     void markAsUndergoneConversion();
 
 private:
-    TypeInfo(const Type* ty, TypeOrigin tyOrig);
-    TypeInfo(const Type* ty, TypeOrigin tyOrig, UndergoneConversion undergoneConv);
+    TypeInfo(const Type* ty, Origin orig);
+    TypeInfo(const Type* ty, Origin orig, UndergoneConversion undergoneConv);
 
     const Type* ty_;
-    TypeOrigin tyOrig_;
+    Origin orig_;
     UndergoneConversion undergoneConv_;
 };
 

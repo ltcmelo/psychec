@@ -221,10 +221,10 @@ private:
     //--------//
     virtual Action visitTypeName(const TypeNameSyntax*) override;
 
-    void createTypeInfo(const SyntaxNode*, const Type*, TypeInfo::TypeOrigin);
+    void createTypeInfo(const SyntaxNode*, const Type*, TypeInfo::Origin);
     Action typeChecked(const ExpressionSyntax*,
                        const Type*,
-                       TypeInfo::TypeOrigin = TypeInfo::TypeOrigin::Expression);
+                       TypeInfo::Origin = TypeInfo::Origin::ExpressionTyping);
     Action typeCheckError(const SyntaxNode*);
 
     static const Type* resolved(const Type* ty);

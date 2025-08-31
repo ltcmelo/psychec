@@ -651,7 +651,7 @@ bool TypeChecker::isNULLPointerConstant(const SyntaxNode* node)
 void TypeChecker::createTypeInfo(
         const SyntaxNode* node,
         const Type* ty,
-        TypeInfo::TypeOrigin tyOrig)
+        TypeInfo::Origin tyOrig)
 {
     auto undergoneConv = TypeInfo::UndergoneConversion::No;
     if (ty->kind() == TypeKind::Function) {
@@ -667,7 +667,7 @@ void TypeChecker::createTypeInfo(
 SyntaxVisitor::Action TypeChecker::typeChecked(
         const ExpressionSyntax* node,
         const Type* ty,
-        TypeInfo::TypeOrigin tyOrig)
+        TypeInfo::Origin tyOrig)
 {
     PSY_ASSERT_2(ty, return Action::Quit);
     createTypeInfo(node, ty, tyOrig);
@@ -679,7 +679,7 @@ SyntaxVisitor::Action TypeChecker::typeCheckError(const SyntaxNode* node)
     createTypeInfo(
         node,
         semaModel_->compilation()->canonicalErrorType(),
-        TypeInfo::TypeOrigin::Error);
+        TypeInfo::Origin::Error);
     return Action::Quit;
 }
 
@@ -1675,7 +1675,7 @@ SyntaxVisitor::Action TypeChecker::visitTypeName(const TypeNameSyntax* node)
             return Action::Quit;
     }
     PSY_ASSERT_2(ty, return Action::Quit);
-    createTypeInfo(node, ty, TypeInfo::TypeOrigin::TypeName);
+    createTypeInfo(node, ty, TypeInfo::Origin::TypeName);
 
     return Action::Skip;
 }
