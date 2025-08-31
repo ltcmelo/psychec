@@ -95,10 +95,10 @@ const Type* TypedefNameTypeResolver::resolve(const Type* ty)
             auto resolvedTy = resolve(retTy);
             if (resolvedTy != retTy)
                 funcTy->setReturnType(resolvedTy);
-            const auto parms = funcTy->parameterTypes();
-            const auto parmsSize = parms.size();
-            for (FunctionType::ParameterTypes::size_type idx = 0; idx < parmsSize; ++idx) {
-                const Type* parmTy = parms[idx];
+            const auto parmsTys = funcTy->parameterTypes();
+            const auto parmsSz = parmsTys.size();
+            for (FunctionType::ParameterTypes::size_type idx = 0; idx < parmsSz; ++idx) {
+                const Type* parmTy = parmsTys[idx];
                 resolvedTy = resolve(parmTy);
                 if (resolvedTy != parmTy)
                     funcTy->setParameterType(idx, resolvedTy);

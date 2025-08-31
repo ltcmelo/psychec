@@ -4223,21 +4223,242 @@ void _ ()
                 TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfConstQualifiedType));
 }
 
-void TypeCheckerTester::case0733(){}
-void TypeCheckerTester::case0734(){}
-void TypeCheckerTester::case0735(){}
-void TypeCheckerTester::case0736(){}
-void TypeCheckerTester::case0737(){}
-void TypeCheckerTester::case0738(){}
-void TypeCheckerTester::case0739(){}
-void TypeCheckerTester::case0740(){}
-void TypeCheckerTester::case0741(){}
+void TypeCheckerTester::case0733()
+{
+    auto s = R"(
+void _ ()
+{
+    typedef void ( * t ) ();
+    t x ;
+    x = _ ;
+}
+    )";
 
-void TypeCheckerTester::case0742(){}
-void TypeCheckerTester::case0743(){}
-void TypeCheckerTester::case0744(){}
-void TypeCheckerTester::case0745(){}
-void TypeCheckerTester::case0746(){}
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0734()
+{
+    auto s = R"(
+void _ ( int * p , int * q )
+{
+    typedef void ( * t ) ( double );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
+void TypeCheckerTester::case0735()
+{
+    auto s = R"(
+void _ ( void )
+{
+    typedef void ( * t ) ( double );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
+void TypeCheckerTester::case0736()
+{
+    auto s = R"(
+void _ ( void )
+{
+    typedef void ( * t ) ( void );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0737()
+{
+    auto s = R"(
+void _ ( int y )
+{
+    typedef void ( * t ) ( void );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
+void TypeCheckerTester::case0738()
+{
+    auto s = R"(
+void _ ( int y )
+{
+    typedef void ( * t ) ( );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0739()
+{
+    auto s = R"(
+double _ ( int y )
+{
+    typedef void ( * t ) ( int );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
+void TypeCheckerTester::case0740()
+{
+    auto s = R"(
+void _ ( int y )
+{
+    typedef double ( * t ) ( int );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
+void TypeCheckerTester::case0741()
+{
+    auto s = R"(
+double _ ( int y )
+{
+    typedef double ( * t ) ( int );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0742()
+{
+    auto s = R"(
+double _ ( int y )
+{
+    typedef double ( * t ) ( short );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
+void TypeCheckerTester::case0743()
+{
+    auto s = R"(
+double _ ( short y )
+{
+    typedef double ( * t ) ( int );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
+void TypeCheckerTester::case0744()
+{
+    auto s = R"(
+void _ ( void )
+{
+    typedef void ( * t ) ( );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0745()
+{
+    auto s = R"(
+void _ ( )
+{
+    typedef void ( * t ) ( void );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0746()
+{
+    auto s = R"(
+double * _ ( int y )
+{
+    typedef void * ( * t ) ( int );
+    t x ;
+    x = _ ;
+}
+    )";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
 void TypeCheckerTester::case0747(){}
 void TypeCheckerTester::case0748(){}
 void TypeCheckerTester::case0749(){}

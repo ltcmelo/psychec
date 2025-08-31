@@ -1179,7 +1179,8 @@ void SemanticModelTester::case0503()
     auto tyInfo = semaModel->typeInfoOf(exprNode);
     auto ty = tyInfo.type();
     PSY_EXPECT_TRUE(ty);
-    PSY_EXPECT_EQ_ENU(ty->kind(), TypeKind::Function, TypeKind);
+    PSY_EXPECT_EQ_ENU(ty->kind(), TypeKind::Pointer, TypeKind);
+    PSY_EXPECT_EQ_ENU(ty->asPointerType()->referencedType()->kind(), TypeKind::Function, TypeKind);
 
     exprNode = exprNodeByText["f ( )"];
     PSY_EXPECT_TRUE(exprNode);
@@ -1199,7 +1200,8 @@ void SemanticModelTester::case0504()
     auto tyInfo = semaModel->typeInfoOf(exprNode);
     auto ty = tyInfo.type();
     PSY_EXPECT_TRUE(ty);
-    PSY_EXPECT_EQ_ENU(ty->kind(), TypeKind::Function, TypeKind);
+    PSY_EXPECT_EQ_ENU(ty->kind(), TypeKind::Pointer, TypeKind);
+    PSY_EXPECT_EQ_ENU(ty->asPointerType()->referencedType()->kind(), TypeKind::Function, TypeKind);
 
     exprNode = exprNodeByText["f ( )"];
     PSY_EXPECT_TRUE(exprNode);

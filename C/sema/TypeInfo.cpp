@@ -23,17 +23,36 @@
 using namespace psy;
 using namespace C;
 
-TypeInfo::TypeInfo(const Type* ty, TypeOrigin tyOrig)
+TypeInfo::TypeInfo(const Type* ty, Origin orig)
     : ty_(ty)
-    , tyOrig_(tyOrig)
+    , orig_(orig)
+    , undergoneConv_(UndergoneConversion::No)
+{}
+
+TypeInfo::TypeInfo(const Type* ty,
+                   Origin tyOrig,
+                   UndergoneConversion undergoneConv)
+    : ty_(ty)
+    , orig_(tyOrig)
+    , undergoneConv_(undergoneConv)
 {}
 
 TypeInfo::~TypeInfo()
 {}
 
-TypeInfo::TypeOrigin TypeInfo::typeOrigin() const
+TypeInfo::Origin TypeInfo::origin() const
 {
-    return tyOrig_;
+    return orig_;
+}
+
+void TypeInfo::markAsUndergoneConversion()
+{
+    undergoneConv_ = UndergoneConversion::Yes;
+}
+
+TypeInfo::UndergoneConversion TypeInfo::undergoneConversion() const
+{
+    return undergoneConv_;
 }
 
 const Type* TypeInfo::type() const
