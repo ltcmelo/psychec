@@ -11,9 +11,10 @@ C language draft proposal: [Enabling Generic Functions and Parametric Types in C
 
 Psyche-C is a platform for implementing static analysis of C programs.
 At its core, it includes a C compiler frontend that performs both syntactic and semantic analysis.
-Yet, as opposed to actual C compilers, Psyche-C doesn't build a symbol table during parsing.
-Despite this, even with zero setup or in broken build setups,
-Psyche-C still offers accurate syntax analysis (through syntax disambiguation) and partial semantic analysis.  
+Yet, as opposed to actual C compilers,
+to provide accurate syntax (through disambiguation) analysis and partial semantic analysis in zero setup or broken build environments,
+Psyche-C doesn't rely on a symbol table during parsing.
+Despite this, it nevertheless provides full syntax and semantic analysis for complete source code.
 
 Bellow are the main characteristics of Psyche-C:
 
@@ -51,9 +52,8 @@ Psyche-C began as a type inference tool for C, aimed at enabling static analysis
 However, the compiler frontend at its core wasn't good enough, so I decided to rewrite it pretty much from scratch.
 I used this rewrite also as an opportunity to extend Psyche-C into a platform for static analysis in general.
 The result of this work is what exists today in the master branch,
-but that doesn't yet include a port of the type inference from the [original branch](https://github.com/ltcmelo/psychec/tree/original).  
-
-With type inference enabled, if you "compile" the snippet below with *cnippet*, Psyche-C will infer `T` and synthesize a declaration for it.
+but that doesn't yet include a port of the type inference from the [original branch](https://github.com/ltcmelo/psychec/tree/original).
+In that branch, if you "compile" the snippet below with *cnippet*, Psyche-C will infer `T` and synthesize a declaration for it as follows.
 
 ```c
 void f()
