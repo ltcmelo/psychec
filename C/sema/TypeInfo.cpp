@@ -26,6 +26,15 @@ using namespace C;
 TypeInfo::TypeInfo(const Type* ty, TypeOrigin tyOrig)
     : ty_(ty)
     , tyOrig_(tyOrig)
+    , undergoneConv_(UndergoneConversion::No)
+{}
+
+TypeInfo::TypeInfo(const Type* ty,
+                   TypeOrigin tyOrig,
+                   UndergoneConversion undergoneConv)
+    : ty_(ty)
+    , tyOrig_(tyOrig)
+    , undergoneConv_(undergoneConv)
 {}
 
 TypeInfo::~TypeInfo()
@@ -34,6 +43,16 @@ TypeInfo::~TypeInfo()
 TypeInfo::TypeOrigin TypeInfo::typeOrigin() const
 {
     return tyOrig_;
+}
+
+void TypeInfo::markAsUndergoneConversion()
+{
+    undergoneConv_ = UndergoneConversion::Yes;
+}
+
+TypeInfo::UndergoneConversion TypeInfo::undergoneConversion() const
+{
+    return undergoneConv_;
 }
 
 const Type* TypeInfo::type() const

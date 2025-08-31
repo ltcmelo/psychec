@@ -232,8 +232,6 @@ private:
 
     const Type* typeOfStringLiteral(StringLiteral::EncodingPrefix encodingSuffix);
 
-    void determineParameterListForm(FunctionDeclarationSymbol* func);
-
     bool isNULLPointerConstant(const SyntaxNode* node);
     bool isAssignableType(const Type* ty, const SyntaxNode* node);
     bool isTypeAssignableFromOtherType(const Type* ty,

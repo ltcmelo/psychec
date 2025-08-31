@@ -55,6 +55,17 @@ public:
     TypeOrigin typeOrigin() const;
 
     /**
+     * Wheter the type has undergone conversion.
+     **/
+    enum class UndergoneConversion : std::uint8_t
+    {
+        No,
+        Yes,
+    };
+
+    UndergoneConversion undergoneConversion() const;
+
+    /**
      * The Type of \c this TypeInfo.
      */
     const Type* type() const;
@@ -63,11 +74,15 @@ PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
     PSY_GRANT_INTERNAL_ACCESS(SemanticModel);
 
+    void markAsUndergoneConversion();
+
 private:
     TypeInfo(const Type* ty, TypeOrigin tyOrig);
+    TypeInfo(const Type* ty, TypeOrigin tyOrig, UndergoneConversion undergoneConv);
 
     const Type* ty_;
     TypeOrigin tyOrig_;
+    UndergoneConversion undergoneConv_;
 };
 
 } // C

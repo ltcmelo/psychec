@@ -47,7 +47,6 @@ struct Type::TypeImpl
         std::uint32_t tagTyK_ : 2;
 
         // FunctionType
-        std::uint32_t parmListForm_ : 2;
         std::uint32_t isVariadic_ : 1;
     };
     union

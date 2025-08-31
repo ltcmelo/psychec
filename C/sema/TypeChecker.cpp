@@ -360,18 +360,18 @@ bool TypeChecker::satisfyRealTypeConstraint(const Type* ty, const SyntaxNode* no
 }
 
 bool TypeChecker::typesAreCompatible(
-        const Type* oneTy,
-        const Type* otherTy,
+        const Type* ty1,
+        const Type* ty2,
         bool treatVoidAsAny,
         bool ignoreQualifier)
 {
-    switch (oneTy->kind()) {
+    switch (ty1->kind()) {
         case TypeKind::Array:
-            switch (otherTy->kind()) {
+            switch (ty2->kind()) {
                 case TypeKind::Array:
                     return typesAreCompatible(
-                                oneTy->asArrayType()->elementType(),
-                                otherTy->asArrayType()->elementType(),
+                                ty1->asArrayType()->elementType(),
+                                ty2->asArrayType()->elementType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 case TypeKind::Basic:
@@ -379,14 +379,14 @@ bool TypeChecker::typesAreCompatible(
                     break;
                 case TypeKind::Pointer:
                     return typesAreCompatible(
-                                oneTy->asArrayType()->elementType(),
-                                otherTy->asPointerType()->referencedType(),
+                                ty1->asArrayType()->elementType(),
+                                ty2->asPointerType()->referencedType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 case TypeKind::TypedefName:
                     return typesAreCompatible(
-                                oneTy,
-                                otherTy->asTypedefNameType()->resolvedSynonymizedType(),
+                                ty1,
+                                ty2->asTypedefNameType()->resolvedSynonymizedType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 case TypeKind::Tag:
@@ -401,18 +401,18 @@ bool TypeChecker::typesAreCompatible(
             break;
 
         case TypeKind::Basic:
-            switch (otherTy->kind()) {
+            switch (ty2->kind()) {
                 case TypeKind::Array:
                     break;
                 case TypeKind::Basic:
-                    return oneTy->asBasicType()->kind() == otherTy->asBasicType()->kind();
+                    return ty1->asBasicType()->kind() == ty2->asBasicType()->kind();
                 case TypeKind::Function:
                 case TypeKind::Pointer:
                     break;
                 case TypeKind::TypedefName:
                     return typesAreCompatible(
-                                oneTy,
-                                otherTy->asTypedefNameType()->resolvedSynonymizedType(),
+                                ty1,
+                                ty2->asTypedefNameType()->resolvedSynonymizedType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 case TypeKind::Tag:
@@ -421,8 +421,8 @@ bool TypeChecker::typesAreCompatible(
                 case TypeKind::Qualified:
                     if (ignoreQualifier)
                         return typesAreCompatible(
-                                    oneTy,
-                                    otherTy->asQualifiedType()->unqualifiedType(),
+                                    ty1,
+                                    ty2->asQualifiedType()->unqualifiedType(),
                                     treatVoidAsAny,
                                     false);
                     break;
@@ -432,16 +432,66 @@ bool TypeChecker::typesAreCompatible(
             break;
 
         case TypeKind::Function:
-            switch (otherTy->kind()) {
+            switch (ty2->kind()) {
                 case TypeKind::Array:
                 case TypeKind::Basic:
-                case TypeKind::Function:
+                case TypeKind::Function: {
+                    auto funcTy1 = ty1->asFunctionType();
+                    auto funcTy2 = ty2->asFunctionType();
+                    if (!typesAreCompatible(
+                                funcTy1->returnType(),
+                                funcTy2->returnType(),
+                                false,
+                                ignoreQualifier)) {
+                        break;
+                    }
+                    auto parmListForm1 = funcTy1->parameterListForm();
+                    auto parmListForm2 = funcTy2->parameterListForm();
+                    switch (parmListForm1) {
+                        case FunctionType::ParameterListForm::SpecifiedAsEmpty:
+                            return parmListForm2 == FunctionType::ParameterListForm::SpecifiedAsEmpty
+                                    || parmListForm2 == FunctionType::ParameterListForm::Unspecified;
+                        case FunctionType::ParameterListForm::Unspecified:
+                            return true;
+                        case FunctionType::ParameterListForm::NonEmpty: {
+                            if (parmListForm2 == FunctionType::ParameterListForm::SpecifiedAsEmpty)
+                                break;
+                            if (parmListForm2 == FunctionType::ParameterListForm::Unspecified)
+                                return true;
+                            auto parmsTys1 = funcTy1->parameterTypes();
+                            auto parmsTys2 = funcTy2->parameterTypes();
+                            auto parmsSz1 = parmsTys1.size();
+                            if (parmsSz1 == parmsTys2.size()) {
+                                auto parmsAreIncompatible = false;
+                                for (auto idx = 0U; idx < parmsSz1; ++idx) {
+                                    auto parmTy1 = parmsTys1[idx];
+                                    auto parmTy2 = parmsTys2[idx];
+                                    if (!typesAreCompatible(
+                                                parmTy1,
+                                                parmTy2,
+                                                treatVoidAsAny,
+                                                ignoreQualifier)) {
+                                        parmsAreIncompatible = true;
+                                        break;
+                                    }
+                                }
+                                if (!parmsAreIncompatible)
+                                    return true;
+                            }
+                            break;
+                        }
+                        default:
+                            PSY_ASSERT_1(false);
+                            break;
+                    }
+                    break;
+                }
                 case TypeKind::Pointer:
                     break;
                 case TypeKind::TypedefName:
                     return typesAreCompatible(
-                                oneTy,
-                                otherTy->asTypedefNameType()->resolvedSynonymizedType(),
+                                ty1,
+                                ty2->asTypedefNameType()->resolvedSynonymizedType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 case TypeKind::Tag:
@@ -456,11 +506,11 @@ bool TypeChecker::typesAreCompatible(
             break;
 
         case TypeKind::Pointer:
-            switch (otherTy->kind()) {
+            switch (ty2->kind()) {
                 case TypeKind::Array:
                     return typesAreCompatible(
-                                oneTy->asPointerType()->referencedType(),
-                                otherTy->asArrayType()->elementType(),
+                                ty1->asPointerType()->referencedType(),
+                                ty2->asArrayType()->elementType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 case TypeKind::Basic:
@@ -468,14 +518,14 @@ bool TypeChecker::typesAreCompatible(
                     break;
                 case TypeKind::Pointer:
                     return typesAreCompatible(
-                                oneTy->asPointerType()->referencedType(),
-                                otherTy->asPointerType()->referencedType(),
+                                ty1->asPointerType()->referencedType(),
+                                ty2->asPointerType()->referencedType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 case TypeKind::TypedefName:
                     return typesAreCompatible(
-                                oneTy,
-                                otherTy->asTypedefNameType()->resolvedSynonymizedType(),
+                                ty1,
+                                ty2->asTypedefNameType()->resolvedSynonymizedType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 case TypeKind::Tag:
@@ -494,7 +544,7 @@ bool TypeChecker::typesAreCompatible(
             break;
 
         case TypeKind::Tag:
-            switch (otherTy->kind()) {
+            switch (ty2->kind()) {
                 case TypeKind::Array:
                 case TypeKind::Basic:
                 case TypeKind::Function:
@@ -502,15 +552,15 @@ bool TypeChecker::typesAreCompatible(
                     break;
                 case TypeKind::TypedefName:
                     return typesAreCompatible(
-                                oneTy,
-                                otherTy->asTypedefNameType()->resolvedSynonymizedType(),
+                                ty1,
+                                ty2->asTypedefNameType()->resolvedSynonymizedType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 case TypeKind::Tag: {
-                    auto oneTagTy = oneTy->asTagType();
-                    auto otherTagTy = otherTy->asTagType();
-                    return oneTagTy->kind() == otherTagTy->kind()
-                            && oneTy->asTagType()->tag() == otherTy->asTagType()->tag();
+                    auto tagTy1 = ty1->asTagType();
+                    auto tagTy2 = ty2->asTagType();
+                    return tagTy1->kind() == tagTy2->kind()
+                            && ty1->asTagType()->tag() == ty2->asTagType()->tag();
                 }
                 case TypeKind::Void:
                     return treatVoidAsAny;
@@ -522,7 +572,7 @@ bool TypeChecker::typesAreCompatible(
             break;
 
         case TypeKind::Void:
-            switch (otherTy->kind()) {
+            switch (ty2->kind()) {
                 case TypeKind::Array:
                 case TypeKind::Basic:
                 case TypeKind::Function:
@@ -530,8 +580,8 @@ bool TypeChecker::typesAreCompatible(
                     return treatVoidAsAny;
                 case TypeKind::TypedefName:
                     return typesAreCompatible(
-                                oneTy,
-                                otherTy->asTypedefNameType()->resolvedSynonymizedType(),
+                                ty1,
+                                ty2->asTypedefNameType()->resolvedSynonymizedType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 case TypeKind::Tag:
@@ -548,11 +598,11 @@ bool TypeChecker::typesAreCompatible(
         case TypeKind::Qualified:
             if (ignoreQualifier)
                 return typesAreCompatible(
-                            oneTy->asQualifiedType()->unqualifiedType(),
-                            otherTy,
+                            ty1->asQualifiedType()->unqualifiedType(),
+                            ty2,
                             treatVoidAsAny,
                             ignoreQualifier);
-            switch (otherTy->kind()) {
+            switch (ty2->kind()) {
                 case TypeKind::Array:
                 case TypeKind::Basic:
                 case TypeKind::Function:
@@ -560,8 +610,8 @@ bool TypeChecker::typesAreCompatible(
                     break;
                 case TypeKind::TypedefName:
                     return typesAreCompatible(
-                                oneTy,
-                                otherTy->asTypedefNameType()->resolvedSynonymizedType(),
+                                ty1,
+                                ty2->asTypedefNameType()->resolvedSynonymizedType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 case TypeKind::Tag:
@@ -569,13 +619,13 @@ bool TypeChecker::typesAreCompatible(
                 case TypeKind::Void:
                     return treatVoidAsAny;
                 case TypeKind::Qualified: {
-                    auto oneQualTy = oneTy->asQualifiedType();
-                    auto otherQualTy = otherTy->asQualifiedType();
-                    if (oneQualTy->qualifiers() != otherQualTy->qualifiers())
+                    auto qualTy1 = ty1->asQualifiedType();
+                    auto qualTy2 = ty2->asQualifiedType();
+                    if (qualTy1->qualifiers() != qualTy2->qualifiers())
                         return false;
                     return typesAreCompatible(
-                                oneQualTy->unqualifiedType(),
-                                otherQualTy->unqualifiedType(),
+                                qualTy1->unqualifiedType(),
+                                qualTy2->unqualifiedType(),
                                 treatVoidAsAny,
                                 ignoreQualifier);
                 }
@@ -603,8 +653,14 @@ void TypeChecker::createTypeInfo(
         const Type* ty,
         TypeInfo::TypeOrigin tyOrig)
 {
+    auto undergoneConv = TypeInfo::UndergoneConversion::No;
+    if (ty->kind() == TypeKind::Function) {
+        std::unique_ptr<PointerType> ptrTy(new PointerType(ty));
+        ty = semaModel_->keepType(std::move(ptrTy));
+        undergoneConv = TypeInfo::UndergoneConversion::Yes;
+    }
     ty_ = ty;
-    TypeInfo tyInfo(ty_, tyOrig);
+    TypeInfo tyInfo(ty_, tyOrig, undergoneConv);
     semaModel_->setTypeInfoOf(node, std::move(tyInfo));
 }
 
@@ -620,9 +676,10 @@ SyntaxVisitor::Action TypeChecker::typeChecked(
 
 SyntaxVisitor::Action TypeChecker::typeCheckError(const SyntaxNode* node)
 {
-    createTypeInfo(node,
-             semaModel_->compilation()->canonicalErrorType(),
-             TypeInfo::TypeOrigin::Error);
+    createTypeInfo(
+        node,
+        semaModel_->compilation()->canonicalErrorType(),
+        TypeInfo::TypeOrigin::Error);
     return Action::Quit;
 }
 
@@ -630,57 +687,15 @@ SyntaxVisitor::Action TypeChecker::typeCheckError(const SyntaxNode* node)
 // Declarations //
 //--------------//
 
-void TypeChecker::determineParameterListForm(FunctionDeclarationSymbol* func)
-{
-    PSY_ASSERT_2(func->type(), return);
-    PSY_ASSERT_2(func->type()->kind() == TypeKind::Function, return);
-
-    auto funcTy = func->type()->asFunctionType();
-    auto parmTys = funcTy->parameterTypes();
-    if (parmTys.size() == 0)
-        funcTy->setParameterListForm(
-            FunctionType::ParameterListForm::Unspecified);
-    else {
-        if (parmTys.size() == 1) {
-            auto resolvedParmTy = resolved(parmTys[0]);
-            if (resolvedParmTy && resolvedParmTy->kind() == TypeKind::Void)
-                funcTy->setParameterListForm(
-                    FunctionType::ParameterListForm::SpecifiedAsEmpty);
-            else
-                funcTy->setParameterListForm(
-                    FunctionType::ParameterListForm::NonEmpty);
-        }
-        else
-            funcTy->setParameterListForm(
-                FunctionType::ParameterListForm::NonEmpty);
-    }
-}
-
 SyntaxVisitor::Action TypeChecker::visitVariableAndOrFunctionDeclaration(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    auto decls = semaModel_->variableAndOrFunctionsFor(node);
-    for (auto decl : decls) {
-        PSY_ASSERT_2(decl, continue);
-        switch (decl->kind()) {
-            case SymbolKind::FunctionDeclaration:
-                determineParameterListForm(decl->asFunctionDeclaration());
-                break;
-            default:
-                break;
-        }
-    }
-
     return Action::Visit;
 }
 
 SyntaxVisitor::Action TypeChecker::visitFunctionDefinition(
         const FunctionDefinitionSyntax* node)
 {
-    auto func = semaModel_->functionFor(node);
-    PSY_ASSERT_2(func, return Action::Quit);
-    determineParameterListForm(func);
-
     return Action::Visit;
 }
 

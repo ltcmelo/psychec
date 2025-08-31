@@ -89,7 +89,6 @@ PSY_INTERNAL:
     void addParameterType(const Type* paramTy);
     void setParameterType(ParameterTypes::size_type idx, const Type* paramTy) const;
     void setReturnType(const Type* retTy) const;
-    void setParameterListForm(ParameterListForm form);
     void markAsVariadic();
 
 private:

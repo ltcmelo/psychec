@@ -21,6 +21,7 @@
 #include "Type_Function.h"
 #include "Type__IMPL__.inc"
 
+#include "types/Type_TypedefName.h"
 #include "../common/infra/Assertions.h"
 
 #include <iostream>
@@ -70,11 +71,6 @@ void FunctionType::setParameterType(ParameterTypes::size_type idx, const Type* p
     P_CAST->paramTys_[idx] = paramTy;
 }
 
-void FunctionType::setParameterListForm(ParameterListForm form)
-{
-    P_CAST->F_.parmListForm_ = static_cast<std::uint8_t>(form);
-}
-
 bool FunctionType::isVariadic() const
 {
     return P_CAST->F_.isVariadic_;
@@ -87,7 +83,17 @@ void FunctionType::markAsVariadic()
 
 FunctionType::ParameterListForm FunctionType::parameterListForm() const
 {
-    return ParameterListForm(P_CAST->F_.parmListForm_);
+    auto sz = P_CAST->paramTys_.size();
+    if (sz == 0)
+        return FunctionType::ParameterListForm::Unspecified;
+    if (sz > 1)
+        return FunctionType::ParameterListForm::NonEmpty;
+    auto parmTy = P_CAST->paramTys_[0];
+    if (parmTy->kind() == TypeKind::TypedefName)
+        parmTy = parmTy->asTypedefNameType()->resolvedSynonymizedType();
+    return parmTy && parmTy->kind() == TypeKind::Void
+        ? FunctionType::ParameterListForm::SpecifiedAsEmpty
+        : FunctionType::ParameterListForm::NonEmpty;
 }
 
 namespace psy {
