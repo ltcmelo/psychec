@@ -130,6 +130,10 @@ private:
     /* Specifiers */
     virtual Action visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*) override;
 
+    /* Initializers */
+    virtual Action visitExpressionInitializer(const ExpressionInitializerSyntax*) override;
+    virtual Action visitBraceEnclosedInitializer(const BraceEnclosedInitializerSyntax*) override;
+
     //-------------//
     // Expressions //
     //-------------//

@@ -4472,3 +4472,140 @@ void TypeCheckerTester::case0756(){}
 void TypeCheckerTester::case0757(){}
 void TypeCheckerTester::case0758(){}
 void TypeCheckerTester::case0759(){}
+
+void TypeCheckerTester::case0800()
+{
+    auto s = R"(
+void _ ()
+{
+    int x ;
+    int y = x;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0801()
+{
+    auto s = R"(
+void _ ()
+{
+    int x ;
+    long y = x;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0802()
+{
+    auto s = R"(
+void _ ()
+{
+    int x ;
+    int * y = x;
+}
+)";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
+void TypeCheckerTester::case0803()
+{
+    auto s = R"(
+void _ ()
+{
+    long x ;
+    int * y = x;
+}
+)";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
+void TypeCheckerTester::case0804()
+{
+    auto s = R"(
+struct s { int m ; } v ;
+void _ ()
+{
+    int x = v ;
+}
+)";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
+void TypeCheckerTester::case0805()
+{
+    auto s = R"(
+struct s { int m ; } ;
+void _ ()
+{
+    int x ;
+    struct s y = x ;
+}
+)";
+
+    checkTypes(
+        s,
+        Expectation()
+            .diagnostic(
+                Expectation::ErrorOrWarn::Error,
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+}
+
+void TypeCheckerTester::case0806()
+{
+    auto s = R"(
+struct s { int m ; } x ;
+void _ ()
+{
+    struct s y = x ;
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0807(){}
+void TypeCheckerTester::case0808(){}
+void TypeCheckerTester::case0809(){}
+void TypeCheckerTester::case0810(){}
+void TypeCheckerTester::case0811(){}
+void TypeCheckerTester::case0812(){}
+void TypeCheckerTester::case0813(){}
+void TypeCheckerTester::case0814(){}
+void TypeCheckerTester::case0815(){}
+void TypeCheckerTester::case0816(){}
+void TypeCheckerTester::case0817(){}
+void TypeCheckerTester::case0818(){}
+void TypeCheckerTester::case0819(){}
+void TypeCheckerTester::case0820(){}
+void TypeCheckerTester::case0821(){}
+void TypeCheckerTester::case0822(){}
+void TypeCheckerTester::case0823(){}
+void TypeCheckerTester::case0824(){}
+void TypeCheckerTester::case0825(){}
+void TypeCheckerTester::case0826(){}
+void TypeCheckerTester::case0827(){}
+void TypeCheckerTester::case0828(){}
+void TypeCheckerTester::case0829(){}
+void TypeCheckerTester::case0830(){}
