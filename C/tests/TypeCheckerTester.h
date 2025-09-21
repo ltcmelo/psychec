@@ -54,7 +54,7 @@ public:
         + 0300-0399 -> function call
         + 0500-0599 -> unary (prefix)
         + 0700-0799 -> simple assignment
-        +
+        + 0800-0899 -> initialization
      */
 
     void case0000();
@@ -422,6 +422,38 @@ public:
     void case0757();
     void case0758();
     void case0759();
+
+    void case0800();
+    void case0801();
+    void case0802();
+    void case0803();
+    void case0804();
+    void case0805();
+    void case0806();
+    void case0807();
+    void case0808();
+    void case0809();
+    void case0810();
+    void case0811();
+    void case0812();
+    void case0813();
+    void case0814();
+    void case0815();
+    void case0816();
+    void case0817();
+    void case0818();
+    void case0819();
+    void case0820();
+    void case0821();
+    void case0822();
+    void case0823();
+    void case0824();
+    void case0825();
+    void case0826();
+    void case0827();
+    void case0828();
+    void case0829();
+    void case0830();
 
     std::vector<TestFunction> tests_
     {
@@ -791,6 +823,37 @@ public:
         TEST_TYPE_CHECKER(case0758),
         TEST_TYPE_CHECKER(case0759),
 
+        TEST_TYPE_CHECKER(case0800),
+        TEST_TYPE_CHECKER(case0801),
+        TEST_TYPE_CHECKER(case0802),
+        TEST_TYPE_CHECKER(case0803),
+        TEST_TYPE_CHECKER(case0804),
+        TEST_TYPE_CHECKER(case0805),
+        TEST_TYPE_CHECKER(case0806),
+        TEST_TYPE_CHECKER(case0807),
+        TEST_TYPE_CHECKER(case0808),
+        TEST_TYPE_CHECKER(case0809),
+        TEST_TYPE_CHECKER(case0810),
+        TEST_TYPE_CHECKER(case0811),
+        TEST_TYPE_CHECKER(case0812),
+        TEST_TYPE_CHECKER(case0813),
+        TEST_TYPE_CHECKER(case0814),
+        TEST_TYPE_CHECKER(case0815),
+        TEST_TYPE_CHECKER(case0816),
+        TEST_TYPE_CHECKER(case0817),
+        TEST_TYPE_CHECKER(case0818),
+        TEST_TYPE_CHECKER(case0819),
+        TEST_TYPE_CHECKER(case0820),
+        TEST_TYPE_CHECKER(case0821),
+        TEST_TYPE_CHECKER(case0822),
+        TEST_TYPE_CHECKER(case0823),
+        TEST_TYPE_CHECKER(case0824),
+        TEST_TYPE_CHECKER(case0825),
+        TEST_TYPE_CHECKER(case0826),
+        TEST_TYPE_CHECKER(case0827),
+        TEST_TYPE_CHECKER(case0828),
+        TEST_TYPE_CHECKER(case0829),
+        TEST_TYPE_CHECKER(case0830),
 
     };
 };

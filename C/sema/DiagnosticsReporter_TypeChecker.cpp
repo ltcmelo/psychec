@@ -39,11 +39,12 @@ const std::string TypeChecker::DiagnosticsReporter::ID_of_ExpectedExpression = "
 const std::string TypeChecker::DiagnosticsReporter::ID_of_UnknownMemberOfTag = "TypeChecker-011";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment = "TypeChecker-012";
 const std::string TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInArgumentToParameterAssignment = "TypeChecker-013";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfConstQualifiedType = "TypeChecker-014";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfArrayType = "TypeChecker-015";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment = "TypeChecker-016";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_TooFewArgumentsToFunctionCall = "TypeChecker-017";
-const std::string TypeChecker::DiagnosticsReporter::ID_of_TooManyArgumentsToFunctionCall = "TypeChecker-018";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInInitialization = "TypeChecker-014";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfConstQualifiedType = "TypeChecker-015";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_CannotAssignToExpressionOfArrayType = "TypeChecker-016";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment = "TypeChecker-017";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_TooFewArgumentsToFunctionCall = "TypeChecker-018";
+const std::string TypeChecker::DiagnosticsReporter::ID_of_TooManyArgumentsToFunctionCall = "TypeChecker-019";
 
 void TypeChecker::DiagnosticsReporter::diagnose(DiagnosticDescriptor&& desc, SyntaxToken tk)
 {
@@ -189,6 +190,17 @@ void TypeChecker::DiagnosticsReporter::IncompatibleTypesInArgumentToParameterAss
                  ID_of_IncompatibleTypesInArgumentToParameterAssignment,
                  "[[incompatible types in argument to parameter assignment]]",
                  "incompatible types in argument to parameter assignment",
+                 DiagnosticSeverity::Error,
+                 DiagnosticCategory::TypeChecking),
+             tk);
+}
+
+void TypeChecker::DiagnosticsReporter::IncompatibleTypesInInitialization(SyntaxToken tk)
+{
+    diagnose(DiagnosticDescriptor(
+                 ID_of_IncompatibleTypesInInitialization,
+                 "[[incompatible types in initialization]]",
+                 "incompatible types in initialization",
                  DiagnosticSeverity::Error,
                  DiagnosticCategory::TypeChecking),
              tk);

@@ -22,6 +22,7 @@
 
 #include "syntax/SyntaxTree.h"
 
+#include "parser/Unparser.h"
 #include "sema/Scope.h"
 #include "sema/PlatformOptions.h"
 #include "sema/Compilation.h"
@@ -651,7 +652,7 @@ bool TypeChecker::isNULLPointerConstant(const SyntaxNode* node)
 void TypeChecker::createTypeInfo(
         const SyntaxNode* node,
         const Type* ty,
-        TypeInfo::Origin tyOrig)
+        TypeInfo::Origin orig)
 {
     auto undergoneConv = TypeInfo::UndergoneConversion::No;
     if (ty->kind() == TypeKind::Function) {
@@ -660,17 +661,17 @@ void TypeChecker::createTypeInfo(
         undergoneConv = TypeInfo::UndergoneConversion::Yes;
     }
     ty_ = ty;
-    TypeInfo tyInfo(ty_, tyOrig, undergoneConv);
+    TypeInfo tyInfo(ty_, orig, undergoneConv);
     semaModel_->setTypeInfoOf(node, std::move(tyInfo));
 }
 
 SyntaxVisitor::Action TypeChecker::typeChecked(
         const ExpressionSyntax* node,
         const Type* ty,
-        TypeInfo::Origin tyOrig)
+        TypeInfo::Origin orig)
 {
     PSY_ASSERT_2(ty, return Action::Quit);
-    createTypeInfo(node, ty, tyOrig);
+    createTypeInfo(node, ty, orig);
     return Action::Skip;
 }
 
@@ -690,7 +691,26 @@ SyntaxVisitor::Action TypeChecker::typeCheckError(const SyntaxNode* node)
 SyntaxVisitor::Action TypeChecker::visitVariableAndOrFunctionDeclaration(
         const VariableAndOrFunctionDeclarationSyntax* node)
 {
-    return Action::Visit;
+    for (auto iter = node->declarators(); iter; iter = iter->next) {
+        auto decltor = iter->value;
+        auto decl = semaModel_->declarationBy(decltor);
+        PSY_ASSERT_2(decl, continue);
+        switch (decl->category()) {
+            case DeclarationCategory::Member:
+            case DeclarationCategory::Function:
+            case DeclarationCategory::Object: {
+                auto typeableDecl = MIXIN_TypeableDeclarationSymbol::from(decl);
+                PSY_ASSERT_2(typeableDecl, return Action::Quit);
+                ty_ = typeableDecl->type();
+                break;
+            }
+            case DeclarationCategory::Type:
+                return typeCheckError(node);
+        }
+        VISIT(decltor);
+    }
+
+    return Action::Skip;
 }
 
 SyntaxVisitor::Action TypeChecker::visitFunctionDefinition(
@@ -699,8 +719,30 @@ SyntaxVisitor::Action TypeChecker::visitFunctionDefinition(
     return Action::Visit;
 }
 
+/* Specifiers */
+
 SyntaxVisitor::Action TypeChecker::visitExtGNU_Attribute(const ExtGNU_AttributeSyntax*)
 {
+    return Action::Quit;
+}
+
+/* Initializers */
+
+SyntaxVisitor::Action TypeChecker::visitExpressionInitializer(
+        const ExpressionInitializerSyntax* node)
+{
+    auto leftTy = unqualifiedAndResolved(ty_);
+    VISIT(node->expression());
+    auto rightTy = unqualifiedAndResolved(ty_);
+    if (!isTypeAssignableFromOtherType(leftTy, rightTy, node->expression()))
+        diagReporter_.IncompatibleTypesInInitialization(node->expression()->firstToken());
+
+    return Action::Quit;
+}
+
+SyntaxVisitor::Action TypeChecker::visitBraceEnclosedInitializer(
+        const BraceEnclosedInitializerSyntax* node) {
+    // TODO
     return Action::Quit;
 }
 
