@@ -92,6 +92,7 @@ private:
         void UnknownMemberOfTag(SyntaxToken tk);
         void IncompatibleTypesInAssignment(SyntaxToken tk);
         void IncompatibleTypesInArgumentToParameterAssignment(SyntaxToken tk);
+        void IncompatibleTypesInInitialization(SyntaxToken tk);
         void CannotAssignToExpressionOfConstQualifiedType(SyntaxToken tk);
         void CannotAssignToExpressionOfArrayType(SyntaxToken tk);
         void ConversionBetweenIntegerAndPointerTypesInAssignment(SyntaxToken tk);
@@ -112,6 +113,7 @@ private:
         static const std::string ID_of_UnknownMemberOfTag;
         static const std::string ID_of_IncompatibleTypesInAssignment;
         static const std::string ID_of_IncompatibleTypesInArgumentToParameterAssignment;
+        static const std::string ID_of_IncompatibleTypesInInitialization;
         static const std::string ID_of_CannotAssignToExpressionOfConstQualifiedType;
         static const std::string ID_of_CannotAssignToExpressionOfArrayType;
         static const std::string ID_of_ConversionBetweenIntegerAndPointerTypesInAssignment;

@@ -4514,7 +4514,7 @@ void _ ()
         Expectation()
             .diagnostic(
                 Expectation::ErrorOrWarn::Error,
-                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInInitialization));
 }
 
 void TypeCheckerTester::case0803()
@@ -4532,7 +4532,7 @@ void _ ()
         Expectation()
             .diagnostic(
                 Expectation::ErrorOrWarn::Error,
-                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInInitialization));
 }
 
 void TypeCheckerTester::case0804()
@@ -4550,7 +4550,7 @@ void _ ()
         Expectation()
             .diagnostic(
                 Expectation::ErrorOrWarn::Error,
-                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInInitialization));
 }
 
 void TypeCheckerTester::case0805()
@@ -4569,7 +4569,7 @@ void _ ()
         Expectation()
             .diagnostic(
                 Expectation::ErrorOrWarn::Error,
-                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInAssignment));
+                TypeChecker::DiagnosticsReporter::ID_of_IncompatibleTypesInInitialization));
 }
 
 void TypeCheckerTester::case0806()
@@ -4585,8 +4585,44 @@ void _ ()
     checkTypes(s, Expectation());
 }
 
-void TypeCheckerTester::case0807(){}
-void TypeCheckerTester::case0808(){}
+void TypeCheckerTester::case0807()
+{
+    auto s = R"(
+typedef struct a {
+    struct b {
+        struct c {
+            const int m ;
+        } xx ;
+    } yy;
+} t;
+void _ ()
+{
+    t x = { { { 42 } } };
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
+void TypeCheckerTester::case0808()
+{
+    auto s = R"(
+typedef struct a {
+    struct b {
+        struct c {
+            int m ;
+        } xx ;
+    } yy;
+} t;
+void _ ()
+{
+    t x = { { { 42 } } };
+}
+)";
+
+    checkTypes(s, Expectation());
+}
+
 void TypeCheckerTester::case0809(){}
 void TypeCheckerTester::case0810(){}
 void TypeCheckerTester::case0811(){}

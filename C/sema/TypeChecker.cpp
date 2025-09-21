@@ -735,7 +735,7 @@ SyntaxVisitor::Action TypeChecker::visitExpressionInitializer(
     VISIT(node->expression());
     auto rightTy = unqualifiedAndResolved(ty_);
     if (!isTypeAssignableFromOtherType(leftTy, rightTy, node->expression()))
-        diagReporter_.IncompatibleTypesInAssignment(node->expression()->firstToken());
+        diagReporter_.IncompatibleTypesInInitialization(node->expression()->firstToken());
 
     return Action::Quit;
 }
