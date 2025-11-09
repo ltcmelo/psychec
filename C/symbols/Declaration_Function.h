@@ -60,6 +60,11 @@ public:
      */
     const Type* type() const override;
 
+    /**
+     * Whether \c this FunctionDeclarationSymbol is of a definition.
+     */
+    bool isDefinition() const;
+
 PSY_INTERNAL:
     PSY_GRANT_INTERNAL_ACCESS(DeclarationBinder);
     PSY_GRANT_INTERNAL_ACCESS(TypeChecker);
@@ -73,6 +78,7 @@ PSY_INTERNAL:
     virtual void setName(const Identifier* name) override;
     virtual void setType(const Type* ty) override;
     Type* type();
+    void setIsDefinition(bool isDef);
 };
 
 PSY_C_API std::ostream& operator<<(std::ostream& os, const FunctionDeclarationSymbol* func);

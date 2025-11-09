@@ -130,9 +130,13 @@ PSY_INTERNAL:
 
     ProgramSymbol* program();
 
+    void bindDeclarations(const SyntaxTree* tree) const;
     void bindDeclarations() const;
-    void canonicalizerTypes() const;
+    void canonicalizeTypes(const SyntaxTree* tree) const;
+    void canonicalizeTypes() const;
+    void resolveTypedefNameTypes(const SyntaxTree* tree) const;
     void resolveTypedefNameTypes() const;
+    void checkTypes(const SyntaxTree* tree) const;
     void checkTypes() const;
 
 private:

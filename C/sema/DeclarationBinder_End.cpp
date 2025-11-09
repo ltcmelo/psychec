@@ -99,7 +99,10 @@ SyntaxVisitor::Action DeclarationBinder::visitParameterDeclaration_AtEnd(
 SyntaxVisitor::Action DeclarationBinder::visitFunctionDefinition_AtEnd(
         const FunctionDefinitionSyntax* node)
 {
-    finishDeclaration();
+    auto decl = finishDeclaration();
+    PSY_ASSERT_2(decl->kind() == SymbolKind::FunctionDeclaration, return Action::Quit);
+    auto funcDecl = decl->asFunctionDeclaration();
+    funcDecl->setIsDefinition(true);
     popType();
 
     /*

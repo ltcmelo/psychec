@@ -81,8 +81,8 @@ private:
     void bindAnonymousFieldDeclaration(const SyntaxNode* node);
     void nameDeclarationAtTop(const Identifier* name);
     void typeDeclarationAtTopWithTypeAtTop();
-    void finishDeclaration();
     void handleNonTypedefDeclarator(const DeclaratorSyntax* node);
+    DeclarationSymbol* finishDeclaration();
 
     using TypeStack = std::stack<Type*>;
     TypeStack tys_;

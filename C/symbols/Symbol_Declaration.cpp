@@ -49,6 +49,11 @@ const NameSpace DeclarationSymbol::nameSpace() const
     return NameSpace(P->F_.ns_);
 }
 
+const SyntaxTree *DeclarationSymbol::declaringTree() const
+{
+    return P_CAST->tree_;
+}
+
 DeclarationCategory DeclarationSymbol::category() const
 {
     switch (kind()) {

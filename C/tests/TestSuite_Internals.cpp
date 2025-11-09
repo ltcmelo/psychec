@@ -932,7 +932,7 @@ void InternalsTestSuite::canonicalizerAndResolveTypes(std::string text, Expectat
     auto compilation = Compilation::create(tree->filePath());
     compilation->addSyntaxTree(std::unique_ptr<const SyntaxTree>(tree));
     compilation->bindDeclarations();
-    compilation->canonicalizerTypes();
+    compilation->canonicalizeTypes();
     compilation->resolveTypedefNameTypes();
     auto semaModel = compilation->semanticModel(tree);
     checkSemanticModel(tree, semaModel, X);
@@ -944,7 +944,7 @@ void InternalsTestSuite::checkTypes(std::string text, Expectation X)
     auto compilation = Compilation::create(tree->filePath());
     compilation->addSyntaxTree(std::unique_ptr<const SyntaxTree>(tree));
     compilation->bindDeclarations();
-    compilation->canonicalizerTypes();
+    compilation->canonicalizeTypes();
     compilation->resolveTypedefNameTypes();
     compilation->checkTypes();
     auto semaModel = compilation->semanticModel(tree);
