@@ -737,8 +737,38 @@ void DeclarationBinderTester::case1136()
                     .ty_.Basic(BasicTypeKind::Double)));
 }
 
-void DeclarationBinderTester::case1137() {}
-void DeclarationBinderTester::case1138() {}
+void DeclarationBinderTester::case1137()
+{
+    bind("x ( * y ) ( double z ) ;",
+         Expectation()
+             .declaration(Decl()
+                      .Object("y", SymbolKind::VariableDeclaration)
+                      .ty_.Typedef("x")
+                      .ty_.Derived(TypeKind::Function)
+                      .ty_.addParam().Basic(BasicTypeKind::Double)
+                      .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", SymbolKind::ParameterDeclaration, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Double)));
+}
+
+void DeclarationBinderTester::case1138()
+{
+    bind("x ( * y ) ( double * z ) ;",
+         Expectation()
+             .declaration(Decl()
+                      .Object("y", SymbolKind::VariableDeclaration)
+                      .ty_.Typedef("x")
+                      .ty_.Derived(TypeKind::Function)
+                      .ty_.addParam().Basic(BasicTypeKind::Double)
+                      .ty_.atParam().Derived(TypeKind::Pointer)
+                      .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                  .Object("z", SymbolKind::ParameterDeclaration, ScopeKind::FunctionPrototype)
+                  .ty_.Basic(BasicTypeKind::Double)
+                  .ty_.Derived(TypeKind::Pointer)));
+}
+
 void DeclarationBinderTester::case1139() {}
 void DeclarationBinderTester::case1140() {}
 void DeclarationBinderTester::case1141() {}

@@ -61,6 +61,8 @@ protected:
             TagType* tagTy);
 };
 
+PSY_C_API std::ostream& operator<<(std::ostream& os, const StructOrUnionDeclarationSymbol* struktOrUnion);
+
 } // C
 } // psy
 

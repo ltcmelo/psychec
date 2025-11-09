@@ -62,3 +62,27 @@ void StructOrUnionDeclarationSymbol::addField(const FieldDeclarationSymbol* fld)
 {
     addMember(fld);
 }
+
+namespace psy {
+namespace C {
+
+PSY_C_API std::ostream& operator<<(
+        std::ostream& os,
+        const StructOrUnionDeclarationSymbol* struktOrUnion)
+{
+    if (!struktOrUnion)
+        return os << "<StructOrUnionDeclaration is null>";
+    switch (struktOrUnion->kind()) {
+        case SymbolKind::StructDeclaration:
+            return os << struktOrUnion->asStructDeclaration();
+        case SymbolKind::UnionDeclaration:
+            return os << struktOrUnion->asUnionDeclaration();
+        default:
+            PSY_ASSERT_1(false);
+            break;
+    }
+    return os << "<invalid StructOrUnionDeclaration>";
+}
+
+} // C
+} // psy

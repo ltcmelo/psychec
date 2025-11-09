@@ -54,6 +54,16 @@ SyntaxVisitor::Action TypedefNameTypeResolver::visitTypedefDeclaration(
     return Action::Skip;
 }
 
+SyntaxVisitor::Action TypedefNameTypeResolver::visitParameterDeclaration(
+        const ParameterDeclarationSyntax* node)
+{
+    auto inTydefDecltor = inTydefDecltor_;
+    inTydefDecltor_ = false;
+    VISIT(node->declarator());
+    inTydefDecltor_ = inTydefDecltor;
+    return Action::Skip;
+}
+
 SyntaxVisitor::Action TypedefNameTypeResolver::visitIdentifierDeclarator(
         const IdentifierDeclaratorSyntax* node)
 {

@@ -385,9 +385,56 @@ void DeclarationBinderTester::case3110()
                           .ty_.Basic(BasicTypeKind::Int_S, CVR::Const)));
 }
 
-void DeclarationBinderTester::case3111(){}
-void DeclarationBinderTester::case3112(){}
-void DeclarationBinderTester::case3113(){}
+void DeclarationBinderTester::case3111()
+{
+    bind("typedef int ( * x ) ( double ) ;",
+         Expectation()
+             .declaration(Decl()
+                          .Type("x")
+                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                          .withScopeKind(ScopeKind::File)
+                          .ty_.Basic(BasicTypeKind::Int_S)
+                          .ty_.Derived(TypeKind::Function)
+                          .ty_.addParam().Basic(BasicTypeKind::Double)
+                          .ty_.Derived(TypeKind::Pointer)));
+}
+
+void DeclarationBinderTester::case3112()
+{
+    bind("typedef int ( * x ) ( double p ) ;",
+         Expectation()
+             .declaration(Decl()
+                          .Type("x")
+                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                          .withScopeKind(ScopeKind::File)
+                          .ty_.Basic(BasicTypeKind::Int_S)
+                          .ty_.Derived(TypeKind::Function)
+                          .ty_.addParam().Basic(BasicTypeKind::Double)
+                          .ty_.Derived(TypeKind::Pointer)));
+}
+
+void DeclarationBinderTester::case3113()
+{
+    bind("typedef int ( * x ) ( double ) , ( * y ) ( double ) ;",
+         Expectation()
+             .declaration(Decl()
+                          .Type("x")
+                          .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                          .withScopeKind(ScopeKind::File)
+                          .ty_.Basic(BasicTypeKind::Int_S)
+                          .ty_.Derived(TypeKind::Function)
+                          .ty_.addParam().Basic(BasicTypeKind::Double)
+                          .ty_.Derived(TypeKind::Pointer))
+         .declaration(Decl()
+                      .Type("y")
+                      .inNameSpace(NameSpace::OrdinaryIdentifiers)
+                      .withScopeKind(ScopeKind::File)
+                      .ty_.Basic(BasicTypeKind::Int_S)
+                      .ty_.Derived(TypeKind::Function)
+                      .ty_.addParam().Basic(BasicTypeKind::Double)
+                      .ty_.Derived(TypeKind::Pointer)));
+}
+
 void DeclarationBinderTester::case3114(){}
 void DeclarationBinderTester::case3115(){}
 void DeclarationBinderTester::case3116(){}
