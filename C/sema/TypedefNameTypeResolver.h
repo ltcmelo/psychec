@@ -51,6 +51,7 @@ private:
     // Declarations //
     //--------------//
     virtual Action visitTypedefDeclaration(const TypedefDeclarationSyntax*) override;
+    virtual Action visitParameterDeclaration(const ParameterDeclarationSyntax*) override;
 
     /* Declarators */
     virtual Action visitIdentifierDeclarator(const IdentifierDeclaratorSyntax*) override;

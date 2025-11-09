@@ -217,9 +217,13 @@ SyntaxVisitor::Action DeclarationBinder::visit_AtSingleDeclarator_COMMON(
 SyntaxVisitor::Action DeclarationBinder::visitParameterDeclaration_AtDeclarator(
         const ParameterDeclarationSyntax* node)
 {
-    return visit_AtSingleDeclarator_COMMON(
+    auto inTydefDecltor = F_.inTydefDecltor_;
+    F_.inTydefDecltor_ = false;
+    auto action = visit_AtSingleDeclarator_COMMON(
                 node,
                 &DeclarationBinder::visitParameterDeclaration_AtEnd);
+    F_.inTydefDecltor_ = inTydefDecltor;
+    return action;
 }
 
 SyntaxVisitor::Action DeclarationBinder::visitFunctionDefinition_AtDeclarator(
