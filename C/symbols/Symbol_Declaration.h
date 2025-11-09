@@ -68,6 +68,11 @@ public:
      */
     const NameSpace nameSpace() const;
 
+    /**
+     * The declaring SyntaxTree of \c this DeclarationSymbol.
+     */
+    const SyntaxTree* declaringTree() const;
+
 protected:
     DECL_PIMPL_SUB(Declaration);
     DeclarationSymbol(DeclarationImpl* p);

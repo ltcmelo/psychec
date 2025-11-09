@@ -42,7 +42,9 @@ struct FunctionDeclarationSymbol::FunctionImpl : DeclarationImpl
                           NameSpace::OrdinaryIdentifiers)
         , name_(nullptr)
         , ty_(nullptr)
-    {}
+    {
+        F_.isDef_ = 0;
+    }
 
     const Identifier* name_;
     const Type* ty_;
@@ -81,6 +83,16 @@ Type* FunctionDeclarationSymbol::type()
 void FunctionDeclarationSymbol::setType(const Type* ty)
 {
     P_CAST->ty_ = ty;
+}
+
+bool FunctionDeclarationSymbol::isDefinition() const
+{
+    return P_CAST->F_.isDef_;
+}
+
+void FunctionDeclarationSymbol::setIsDefinition(bool isDef)
+{
+    P_CAST->F_.isDef_ = static_cast<std::uint32_t>(isDef);
 }
 
 namespace psy {

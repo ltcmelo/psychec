@@ -182,10 +182,10 @@ void Compilation::computeSemanticModel(const SyntaxTree* tree)
 {
     PSY_ASSERT_2(P->isDirty_.count(tree), return);
     if (P->isDirty_[tree]) {
-        bindDeclarations();
-        canonicalizerTypes();
-        resolveTypedefNameTypes();
-        checkTypes();
+        bindDeclarations(tree);
+        canonicalizeTypes(tree);
+        resolveTypedefNameTypes(tree);
+        checkTypes(tree);
         P->isDirty_[tree] = false;
     }
 }
@@ -244,6 +244,14 @@ const BasicType* Compilation::canonicalBasicType(BasicTypeKind basicTyK) const
     return P->tyIntU_.get();
 }
 
+void Compilation::bindDeclarations(const SyntaxTree* tree) const
+{
+    PSY_ASSERT_2(P->semaModels_.count(tree), return);
+    auto model = P->semaModels_[tree].get();
+    DeclarationBinder binder(model, tree);
+    binder.bindDeclarations();
+}
+
 void Compilation::bindDeclarations() const
 {
     for (const auto& p : P->semaModels_) {
@@ -252,7 +260,15 @@ void Compilation::bindDeclarations() const
     }
 }
 
-void Compilation::canonicalizerTypes() const
+void Compilation::canonicalizeTypes(const SyntaxTree* tree) const
+{
+    PSY_ASSERT_2(P->semaModels_.count(tree), return);
+    auto model = P->semaModels_[tree].get();
+    TypeCanonicalizer canonicalizer(model, tree);
+    canonicalizer.canonicalizeTypes();
+}
+
+void Compilation::canonicalizeTypes() const
 {
     for (const auto& p : P->semaModels_) {
         TypeCanonicalizer canonicalizer(p.second.get(), p.first);
@@ -261,12 +277,28 @@ void Compilation::canonicalizerTypes() const
 }
 
 
+void Compilation::resolveTypedefNameTypes(const SyntaxTree* tree) const
+{
+    PSY_ASSERT_2(P->semaModels_.count(tree), return);
+    auto model = P->semaModels_[tree].get();
+    TypedefNameTypeResolver resolver(model, tree);
+    resolver.resolveTypedefNameTypes();
+}
+
 void Compilation::resolveTypedefNameTypes() const
 {
     for (const auto& p : P->semaModels_) {
         TypedefNameTypeResolver resolver(p.second.get(), p.first);
         resolver.resolveTypedefNameTypes();
     }
+}
+
+void Compilation::checkTypes(const SyntaxTree* tree) const
+{
+    PSY_ASSERT_2(P->semaModels_.count(tree), return);
+    auto model = P->semaModels_[tree].get();
+    TypeChecker checker(model, tree);
+    checker.checkTypes();
 }
 
 void Compilation::checkTypes() const

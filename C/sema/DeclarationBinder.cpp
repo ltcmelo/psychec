@@ -124,12 +124,13 @@ DeclarationSymbol* DeclarationBinder::popDeclaration()
 }
 
 
-void DeclarationBinder::finishDeclaration()
+DeclarationSymbol* DeclarationBinder::finishDeclaration()
 {
     auto decl = popDeclaration();
-    PSY_ASSERT_2(decl, return);
-    SCOPE_AT_TOP(auto scope, );
+    PSY_ASSERT_2(decl, return nullptr);
+    SCOPE_AT_TOP(auto scope, nullptr);
     scope->addDeclaration(decl->asDeclaration());
+    return decl;
 }
 
 void DeclarationBinder::pushType(Type* ty)
